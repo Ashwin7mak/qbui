@@ -9,6 +9,8 @@ import Locale from '../../../../../client-react/src/locales/locales';
 import WindowLocationUtils from '../../../../../client-react/src/utils/windowLocationUtils';
 // IMPORTING FROM CLIENT REACT
 
+import './defaultTopNavGlobalActions.scss';
+
 const signOutHref = '/qbase/signout';
 
 /**
@@ -28,8 +30,8 @@ class ReDefaultTopNavGlobalActions extends Component {
 
     render() {
         return (
-            <div className={"globalActions"}>
-                <ul className={"globalActionsList"}>
+            <div className="globalActions defaultTopNavGlobalActions">
+                <ul className="globalActionsList">
                     {this.props.children}
                     {this.props.actions && this.props.actions.map((action, index) => (
                         <GlobalAction
@@ -38,18 +40,20 @@ class ReDefaultTopNavGlobalActions extends Component {
                             linkClass={this.props.linkClass}
                             onSelect={this.props.onSelect}
                             action={action}
+                            shouldOpenMenusUp={this.props.shouldOpenMenusUp}
                         />
                     ))}
-                    <li className={"link globalAction withDropdown"}>
+                    <li className="link globalAction withDropdown">
                         <UserDropDown
                             supportedLocales={Locale.getSupportedLocales()}
                             changeLocale={this.props.changeLocale}
                             startTabIndex={this.props.startTabIndex + this.props.actions.length}
                             signOutUser={this.signOutUser}
                             app={this.props.app}
+                            shouldOpenMenusUp={this.props.shouldOpenMenusUp}
                         />
                     </li>
-                    <li className={"link globalAction"}><HelpButton/></li>
+                    <li className="link globalAction"><HelpButton/></li>
                 </ul>
             </div>
         );
@@ -79,6 +83,12 @@ ReDefaultTopNavGlobalActions.propTypes = {
     /**
      * A callback that will be fired when the user selects a new locale from the user dropdown */
     changeLocale: React.PropTypes.func,
+
+    /**
+     * Determines which direction dropdowns on the global actions should open. For example, on large screens, the
+     * dropdown should open down (false) because the nav is at the top of the screen. However, on small screens, it should be true
+     * because the nav is at the bottom on small screens. */
+    shouldOpenMenusUp: React.PropTypes.bool
 };
 
 ReDefaultTopNavGlobalActions.defaultProps = {
