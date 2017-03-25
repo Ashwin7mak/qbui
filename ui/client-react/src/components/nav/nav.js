@@ -29,6 +29,8 @@ import ButtonGroup from 'react-bootstrap/lib/ButtonGroup';
 import Button from 'react-bootstrap/lib/Button';
 import Tooltip from '../../../../reuse/client/src/components/tooltip/tooltip';
 import Icon from '../../../../reuse/client/src/components/icon/icon';
+import TableCreationDialog from '../table/tableCreationDialog';
+import AppUtils from '../../utils/appUtils';
 
 
 // This shared view with the server layer must be loaded as raw HTML because
@@ -342,7 +344,7 @@ export let Nav = React.createClass({
                 onToggleAppsList={this.toggleAppsList}
                 globalActions={this.getLeftGlobalActions()}
                 onSelect={this.onSelectItem}
-                onCreateNewTable={this.createNewTable}
+                onCreateNewTable={this.allowCreateNewTable() && this.createNewTable}
                 onNavClick={this.toggleNav}/>
 
             <div className="main" >
@@ -401,6 +403,15 @@ export let Nav = React.createClass({
         this.props.dispatch(ShellActions.toggleLeftNav());
     },
 
+    /**
+     * is user able to create a new table from the left nav
+     * @returns {*}
+     */
+    allowCreateNewTable() {
+        const app = this.getSelectedApp();
+
+        return AppUtils.hasAdminAccess(app.accessRights);
+    },
     /**
      * open the create table wizard
      */

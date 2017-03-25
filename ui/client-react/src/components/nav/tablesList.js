@@ -134,7 +134,7 @@ let TablesList = React.createClass({
      * render fixed footer (new table link)
      * @returns {XML}
      */
-    getBottomLinksItem() {
+    getNewTableItem() {
 
         return (
             <li className="newTableItem link">
@@ -165,9 +165,10 @@ let TablesList = React.createClass({
                     {this.tablesList()}
                 </ul>
 
+                {this.props.onCreateNewTable &&
                 <ul className="tablesFooter">
-                    {this.getBottomLinksItem()}
-                </ul>
+                    {this.getNewTableItem()}
+                </ul>}
             </div>
         );
     }
