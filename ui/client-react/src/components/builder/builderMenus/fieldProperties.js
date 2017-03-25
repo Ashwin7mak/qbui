@@ -5,6 +5,7 @@ import './fieldProperties.scss';
 
 let FieldProperties = React.createClass({
     propTypes: {
+        selectedField: PropTypes.object
     },
 
     createPropertiesTitle() {
@@ -25,8 +26,7 @@ let FieldProperties = React.createClass({
     createCheckBoxPropertyContainer(propertyTitle) {
         return (
             <div className="checkboxPropertyContainer">
-                <CheckBoxFieldValueEditor classes="checkboxPropertyValue"/>
-                <div className="checkboxPropertyTitle">{propertyTitle}</div>
+                <CheckBoxFieldValueEditor label={propertyTitle}/>
             </div>
         );
     },
