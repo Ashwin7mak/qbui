@@ -5,6 +5,62 @@
     border-top: none;
     width: 220px;
     background-color: $color-black-250;
+    padding-top: 23px;
+    padding-left: 20px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+
+    .fieldPropertiesTitle {
+        width: 241px;
+        height: 24px;
+        font-size: 20px;
+        color: $default-text-onlight-color;
+    }
+
+    .fieldPropertyContainer {
+        padding-top: 25px;
+
+        .textPropertyTitle {
+            margin-bottom: 7px;
+            width: 190px;
+            height: 17px;
+            font-size: 14px;
+            color: $color-cyan-800;
+        }
+
+        .textPropertyValue {
+            width: 179px;
+            height: 34px;
+            border-radius: 2px;
+            background-color: $color-black-100;
+            border: solid 1px $formBuilder-border-color;
+        }
+    }
+
+    .checkboxPropertyContainer {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        padding-top: 20px;
+
+        .checkboxPropertyTitle {
+            flex: 1 1 auto;
+            width: 190px;
+            height: 17px;
+            font-size: 14px;
+            color: $color-cyan-800;
+        }
+
+        .checkboxPropertyValue {
+            flex: 1 1 auto;
+            width: 16px;
+            height: 16px;
+            border-radius: 2px;
+            background-color: $color-black-100;
+            border: solid 1px $formBuilder-border-color;
+        }
+    }
 
     @include small-breakpoint {
         display: none;
