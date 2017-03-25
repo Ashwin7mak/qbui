@@ -2,7 +2,6 @@ import React, {PropTypes, Component} from 'react';
 import ButtonGroup from 'react-bootstrap/lib/ButtonGroup';
 import Button from 'react-bootstrap/lib/Button';
 import Icon from '../icon/icon';
-import Tooltip from '../tooltip/tooltip';
 
 import './topNav.scss';
 
@@ -11,7 +10,6 @@ class ReTopNav extends Component {
         super(props);
 
         this.getTopTitle = this.getTopTitle.bind(this);
-        this.renderCenterGlobalActions = this.renderCenterGlobalActions.bind(this);
     }
 
     getTopTitle() {
@@ -26,26 +24,6 @@ class ReTopNav extends Component {
         }
 
         return null;
-    }
-
-    renderCenterGlobalActions() {
-        if (this.props.centerGlobalActions) {
-            return this.props.centerGlobalActions;
-        }
-
-        return (
-            <ButtonGroup className="navItem">
-                <Tooltip i18nMessageKey="unimplemented.search" location="bottom">
-                    <Button tabIndex="2" className="disabled">
-                        <Icon icon="search" />
-                    </Button>
-                </Tooltip>
-
-                <Tooltip i18nMessageKey="unimplemented.favorites" location="bottom">
-                    <Button tabIndex="3" className="disabled"><Icon icon="star-full" /></Button>
-                </Tooltip>
-            </ButtonGroup>
-        );
     }
 
     render() {
@@ -67,7 +45,7 @@ class ReTopNav extends Component {
                     </div>
 
                     <div className="navGroup center">
-                        {this.renderCenterGlobalActions()}
+                        {this.props.centerGlobalActions}
                     </div>
 
                     <div className="navGroup right">
