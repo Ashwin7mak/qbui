@@ -410,7 +410,7 @@ export let Nav = React.createClass({
     allowCreateNewTable() {
         const app = this.getSelectedApp();
 
-        return AppUtils.hasAdminAccess(app.accessRights);
+        return app && AppUtils.hasAdminAccess(app.accessRights);
     },
     /**
      * open the create table wizard
