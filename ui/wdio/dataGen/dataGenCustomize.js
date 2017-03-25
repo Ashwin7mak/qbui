@@ -1,26 +1,26 @@
 /**
- * standalone script for generating test data on the backend
+ * Standalone script for generating test data for the UI
  *
- *
- * expects java server running and node server running
- *
+ * expects java server, experience engine and node server running
  * expects NODE_ENV to be defined e.g. NODE_ENV=local
  *
- * run from qbui directory with `node ui/e2e/qbapp/dataGenCustomize.js`
- *
- * */
+ * run from qbui directory with `node ui/wdio/dataGen/dataGenCustomize.js`
+ */
+
 // jshint sub: true
 // jscs:disable requireDotNotation
 
 // if you set realmToUse null it will randomly generated a new realm name
-var realmToUse = 'localhost';       // change this to a string i.e. "myRealm" of an existing realm to use
+// change this to a string i.e. "myRealm" of an existing realm to use
+var realmToUse = 'localhost';
 
+// Get the node config set by your NODE_ENV var
 var config = require('../../server/src/config/environment');
 if (realmToUse) {
     config.realmToUse = realmToUse;
 }
 
-//Require the e2e base class and constants modules
+// Require the e2e base and constants modules
 e2eBase = require('../common/e2eBase.js')(config);
 e2eConsts = require('../common/e2eConsts');
 consts = require('../../common/src/constants.js');
@@ -30,20 +30,23 @@ consts = require('../../common/src/constants.js');
 
     // Bluebird Promise library
     var promise = require('bluebird');
+    // Logging library
+    var log = require('../../server/src/logger').getLogger();
     // Lodash library
     var _ = require('lodash');
     // Chance library
     var chance = require('chance').Chance();
 
+    // App JSON object returned by the createApp API call
     var createdApp;
 
-    //generate an app and console log the app and tables it created when done
+    // Generate an app and console log the app and tables it created when done
     generateNewData(() => {
         createdRecs();
     });
 
+    // Utility function for appending to the table map object
     function addColumn(table, type, name, settings) {
-
         //optionally supplied specific field name otherwise use the fields type
         let fieldName = name || type.columnName;
 
@@ -51,7 +54,6 @@ consts = require('../../common/src/constants.js');
             fieldType: consts.SCALAR,
             dataType: type.name
         };
-
         // optional add supplied attrs
         if (settings) {
             table[fieldName] = Object.assign({}, table[fieldName], settings);
@@ -59,7 +61,12 @@ consts = require('../../common/src/constants.js');
         }
     }
 
+    /**
+     * Creates a map object of the table and field structure for a QuickBase app
+     * @returns Map object to pass into the test generators package to return a JSON app object for the API
+     */
     function makeAppMap() {
+        // Table Names
         var table1Name = 'Table 1 ';
         var table2Name = 'Table 2 ';
         var table3Name = 'Table 3 ';
@@ -72,7 +79,7 @@ consts = require('../../common/src/constants.js');
         var table10Name = 'Parent Table 2';
         var table11Name = 'Child Table 2';
 
-        // convenience reusable settings
+        // Convenience reusable settings
         var baseNumClientRequiredProps = {
             width: 50,
             bold: false,
@@ -90,7 +97,6 @@ consts = require('../../common/src/constants.js');
             word_wrap: false,
             display_graphic: false
         };
-
         let emailOnlyDisplayBeforeAtSymbol = {
             width: 50,
             bold: false,
@@ -113,13 +119,15 @@ consts = require('../../common/src/constants.js');
         let urlOpenInSameWindow = {
             clientSideAttributes: Object.assign({open_in_new_window: false}, baseTextClientRequiredProps)
         };
-
         var emptyChoice = {
             coercedValue: {value: ''},
             displayValue: ''
         };
 
         // Create the table schema (map object) to pass into the app generator
+
+        // Table 1 //
+
         var tableToFieldToFieldTypeMap = {};
         tableToFieldToFieldTypeMap[table1Name] = {};
         addColumn(tableToFieldToFieldTypeMap[table1Name], e2eConsts.dataType.TEXT);
@@ -166,6 +174,8 @@ consts = require('../../common/src/constants.js');
             {dataAttr: urlOpenInSameWindow});
         addColumn(tableToFieldToFieldTypeMap[table1Name], e2eConsts.dataType.USER);
 
+        // Table 2 //
+
         tableToFieldToFieldTypeMap[table2Name] = {};
         var textChoices = e2eBase.tableService.choicesSetUp(consts.TEXT, e2eConsts.DEFAULT_NUM_CHOICES_TO_CREATE, {
             capitalize: true,
@@ -174,7 +184,7 @@ consts = require('../../common/src/constants.js');
             wordType: 'randomLetters',
             wordLength: 6
         });
-        //temporarily add a placeholder blank(unchosen) selection to top of list
+        // Temporarily add a placeholder blank (not chosen) selection to top of list
         textChoices.unshift(emptyChoice);
         addColumn(tableToFieldToFieldTypeMap[table2Name], e2eConsts.dataType.TEXT, "Text MultiChoice",
             {
@@ -185,10 +195,11 @@ consts = require('../../common/src/constants.js');
                     sortAsGiven: false
                 }
             });
-
         addColumn(tableToFieldToFieldTypeMap[table2Name], e2eConsts.dataType.DATE);
         addColumn(tableToFieldToFieldTypeMap[table2Name], e2eConsts.dataType.PHONE_NUMBER, "Phone Number With Ext");
         addColumn(tableToFieldToFieldTypeMap[table2Name], e2eConsts.dataType.PHONE_NUMBER, "Phone Number without Ext", {dataAttr:{clientSideAttributes: baseTextClientRequiredProps, includeExtension: false}});
+
+        // Table 3 //
 
         tableToFieldToFieldTypeMap[table3Name] = {};
         addColumn(tableToFieldToFieldTypeMap[table3Name], e2eConsts.dataType.TEXT);
@@ -196,25 +207,20 @@ consts = require('../../common/src/constants.js');
         addColumn(tableToFieldToFieldTypeMap[table3Name], e2eConsts.dataType.DATE_TIME);
         addColumn(tableToFieldToFieldTypeMap[table3Name], e2eConsts.dataType.CHECKBOX);
 
+        // Table 4 //
+
         tableToFieldToFieldTypeMap[table4Name] = {};
-
         addColumn(tableToFieldToFieldTypeMap[table4Name], e2eConsts.dataType.TEXT, "Single line required", {required: true});
-
         addColumn(tableToFieldToFieldTypeMap[table4Name], e2eConsts.dataType.TEXT, "MultiLine",
             {dataAttr: {clientSideAttributes: Object.assign({}, baseTextClientRequiredProps, {num_lines: 6})}});
-
         addColumn(tableToFieldToFieldTypeMap[table4Name], e2eConsts.dataType.TEXT, "Max 10 chars",
             {dataAttr: {clientSideAttributes: Object.assign({}, baseTextClientRequiredProps, {max_chars: 10})}});
-
         addColumn(tableToFieldToFieldTypeMap[table4Name], e2eConsts.dataType.TEXT, "Wordwrap",
             {dataAttr: {clientSideAttributes: Object.assign({}, baseTextClientRequiredProps, {word_wrap: true})}});
-
         addColumn(tableToFieldToFieldTypeMap[table4Name], e2eConsts.dataType.TEXT, "Input width 10",
             {dataAttr: {clientSideAttributes: Object.assign({}, baseTextClientRequiredProps, {width: 10})}});
-
         addColumn(tableToFieldToFieldTypeMap[table4Name], e2eConsts.dataType.TEXT, "Html allowed single line",
             {dataAttr: {htmlAllowed: true}});
-
         addColumn(tableToFieldToFieldTypeMap[table4Name], e2eConsts.dataType.TEXT, "Html allowed multiLine",
             {
                 dataAttr: {
@@ -222,7 +228,6 @@ consts = require('../../common/src/constants.js');
                     clientSideAttributes: Object.assign({}, baseTextClientRequiredProps, {num_lines: 4})
                 }
             });
-
         var choices = e2eBase.tableService.choicesSetUp(consts.TEXT, e2eConsts.DEFAULT_NUM_CHOICES_TO_CREATE, {
             capitalize: true,
             numWords: 1,
@@ -244,6 +249,7 @@ consts = require('../../common/src/constants.js');
                 }
             });
 
+        // Table 5 //
 
         tableToFieldToFieldTypeMap[table5Name] = {};
         addColumn(tableToFieldToFieldTypeMap[table5Name], e2eConsts.dataType.TEXT, null, {required: true});
@@ -262,7 +268,6 @@ consts = require('../../common/src/constants.js');
                 required: true,
                 dataAttr: {clientSideAttributes: Object.assign({}, baseTextClientRequiredProps, {num_lines: 5})}
             });
-
         addColumn(tableToFieldToFieldTypeMap[table5Name], e2eConsts.dataType.NUMERIC, null, {required: true});
         addColumn(tableToFieldToFieldTypeMap[table5Name], e2eConsts.dataType.NUMERIC, "Numeric MultiChoice",
             {
@@ -290,12 +295,13 @@ consts = require('../../common/src/constants.js');
         addColumn(tableToFieldToFieldTypeMap[table5Name], e2eConsts.dataType.URL, null, {required: true});
         addColumn(tableToFieldToFieldTypeMap[table5Name], e2eConsts.dataType.PHONE_NUMBER, "Phone Number without Ext", {required:true, dataAttr:{clientSideAttributes: baseTextClientRequiredProps, includeExtension: false}});
 
+        // Table 6 //
 
         tableToFieldToFieldTypeMap[table6Name] = {};
         let baseDurationProps = {
             dataAttr: {
                 clientSideAttributes: baseNumClientRequiredProps,
-                type : 'DURATION',
+                type : 'DURATION'
             }
         };
         addColumn(tableToFieldToFieldTypeMap[table6Name], e2eConsts.dataType.DURATION, 'Duration default');
@@ -329,7 +335,6 @@ consts = require('../../common/src/constants.js');
                     scale: consts.DURATION_CONSTS.SCALES.SECONDS
                 }
             }));
-
         addColumn(tableToFieldToFieldTypeMap[table6Name], e2eConsts.dataType.DURATION, 'Duration :HH:MM',
             Object.assign({}, baseDurationProps, {
                 dataAttr: {
@@ -355,6 +360,8 @@ consts = require('../../common/src/constants.js');
                 }
             }));
 
+        // Table 7 //
+
         tableToFieldToFieldTypeMap[table7Name] = {};
         addColumn(tableToFieldToFieldTypeMap[table7Name], e2eConsts.dataType.TEXT, 'Unique Text', {unique: true});
         addColumn(tableToFieldToFieldTypeMap[table7Name], e2eConsts.dataType.TEXT, 'Unique Text MultiChoice',
@@ -372,7 +379,6 @@ consts = require('../../common/src/constants.js');
                 unique: true,
                 dataAttr: {clientSideAttributes: Object.assign({}, baseTextClientRequiredProps, {num_lines: 5})}
             });
-
         addColumn(tableToFieldToFieldTypeMap[table7Name], e2eConsts.dataType.NUMERIC, 'Unique Numeric', {unique: true});
         addColumn(tableToFieldToFieldTypeMap[table7Name], e2eConsts.dataType.NUMERIC, 'Unique Numeric MultiChoice',
             {
@@ -398,6 +404,8 @@ consts = require('../../common/src/constants.js');
         addColumn(tableToFieldToFieldTypeMap[table7Name], e2eConsts.dataType.EMAIL_ADDRESS, 'Unique Email', {unique: true});
         addColumn(tableToFieldToFieldTypeMap[table7Name], e2eConsts.dataType.URL, 'Unique URL', {unique: true});
 
+        // Table 8 //
+
         // Parent table 1 is a parent to child table1 and child table2
         tableToFieldToFieldTypeMap[table8Name] = {};
         addColumn(tableToFieldToFieldTypeMap[table8Name], e2eConsts.dataType.TEXT, 'Text Field', {unique: true});
@@ -419,6 +427,10 @@ consts = require('../../common/src/constants.js');
         return tableToFieldToFieldTypeMap;
     }
 
+    /**
+     * Calls the e2eBase and service classes to create test data via the API
+     * @param _createdRecs - Print function to call when dataGen is finished
+     */
     function generateNewData(_createdRecs) {
         // App setup //
         e2eBase.appService.createAppSchema(makeAppMap()).then(function(appResponse) {
@@ -453,23 +465,23 @@ consts = require('../../common/src/constants.js');
         }).then(function() {
             // Record Creation //
 
+            // Set the number of records to create for each table by default
             var recordsConfig = {numRecordsToCreate: e2eConsts.DEFAULT_NUM_RECORDS_TO_CREATE, tablesConfig: {}};
-            // change # of records for some of the tables
+            // Change # of records for some of the tables
             recordsConfig.tablesConfig[createdApp.tables[e2eConsts.TABLE3].name] = {};
             recordsConfig.tablesConfig[createdApp.tables[e2eConsts.TABLE3].name].numRecordsToCreate = 45;
-            //TODO: Finish this
-            //recordsConfig.tablesConfig[createdApp.tables[e2eConsts.TABLE4].name] = {};
-            //recordsConfig.tablesConfig[createdApp.tables[e2eConsts.TABLE4].name].numRecordsToCreate = 100;
-            //recordsConfig.tablesConfig[createdApp.tables[e2eConsts.TABLE5].name] = {};
-            //recordsConfig.tablesConfig[createdApp.tables[e2eConsts.TABLE5].name].numRecordsToCreate = 3;
-            //recordsConfig.tablesConfig[createdApp.tables[e2eConsts.TABLE7].name] = {};
-            //recordsConfig.tablesConfig[createdApp.tables[e2eConsts.TABLE7].name].numRecordsToCreate = 5;
-            //recordsConfig.tablesConfig[createdApp.tables[e2eConsts.TABLE8].name] = {};
-            //recordsConfig.tablesConfig[createdApp.tables[e2eConsts.TABLE8].name].numRecordsToCreate = 6;
-            //recordsConfig.tablesConfig[createdApp.tables[e2eConsts.TABLE7].name] = {};
-            //recordsConfig.tablesConfig[createdApp.tables[e2eConsts.TABLE7].name].numRecordsToCreate = 5;
-            //recordsConfig.tablesConfig[createdApp.tables[e2eConsts.TABLE8].name] = {};
-            //recordsConfig.tablesConfig[createdApp.tables[e2eConsts.TABLE8].name].numRecordsToCreate = 6;
+            recordsConfig.tablesConfig[createdApp.tables[e2eConsts.TABLE4].name] = {};
+            recordsConfig.tablesConfig[createdApp.tables[e2eConsts.TABLE4].name].numRecordsToCreate = 100;
+            recordsConfig.tablesConfig[createdApp.tables[e2eConsts.TABLE5].name] = {};
+            recordsConfig.tablesConfig[createdApp.tables[e2eConsts.TABLE5].name].numRecordsToCreate = 3;
+            // Table 6 contains records with all unique fields so don't generate any records
+            //TODO: Enhance record data generation to handle unique and all required fields
+            recordsConfig.tablesConfig[createdApp.tables[e2eConsts.TABLE6].name] = {};
+            recordsConfig.tablesConfig[createdApp.tables[e2eConsts.TABLE6].name].numRecordsToCreate = 0;
+            recordsConfig.tablesConfig[createdApp.tables[e2eConsts.TABLE7].name] = {};
+            recordsConfig.tablesConfig[createdApp.tables[e2eConsts.TABLE7].name].numRecordsToCreate = 5;
+            recordsConfig.tablesConfig[createdApp.tables[e2eConsts.TABLE8].name] = {};
+            recordsConfig.tablesConfig[createdApp.tables[e2eConsts.TABLE8].name].numRecordsToCreate = 6;
 
             return e2eBase.recordService.createRecords(createdApp, recordsConfig);
         }).then(function() {
@@ -518,44 +530,44 @@ consts = require('../../common/src/constants.js');
             return e2eBase.formService.createDefaultForms(createdApp);
         }).then(function() {
             //// Relationships Setup //
-            //
+
             //TODO: Finish this
-            //const promises = [];
-            //// Numeric key entry for the relationship's child table corresponds to a parent's recordId.
-            //// These need to be integers in the range of 1~n, n being the number of parent records
-            //// We also want these to be consistent, as opposed to randomly generated numbers, for
-            //// testing purposes.
-            //let fieldToEdit = createdApp.tables[e2eConsts.TABLE8].fields[6];
-            //let editRecords = e2eBase.recordService.generateRecordsFromValues(fieldToEdit, [1, 1, 2, 2, 2, 3]);
-            //promises.push(e2eBase.recordService.editRecords(createdApp.id, createdApp.tables[e2eConsts.TABLE8].id, editRecords));
-            //
-            //// TABLE10 has 2 parents, set first numeric field
-            //fieldToEdit = createdApp.tables[e2eConsts.TABLE10].fields[6];
-            //editRecords = e2eBase.recordService.generateRecordsFromValues(fieldToEdit, [1, 1, 2, 2, 2, 3]);
-            //promises.push(e2eBase.recordService.editRecords(createdApp.id, createdApp.tables[e2eConsts.TABLE10].id, editRecords));
-            //
-            //// TABLE10 has 2 parents, set 2nd numeric field
-            //fieldToEdit = createdApp.tables[e2eConsts.TABLE10].fields[7];
-            //editRecords = e2eBase.recordService.generateRecordsFromValues(fieldToEdit, [1, 1, 2, 2, 2, 3]);
-            //promises.push(e2eBase.recordService.editRecords(createdApp.id, createdApp.tables[e2eConsts.TABLE10].id, editRecords));
-            //
-            //// Create tables relationship, table 8 is a child of table 7
-            //promises.push(e2eBase.relationshipService.createOneToOneRelationship(createdApp, createdApp.tables[e2eConsts.TABLE7], createdApp.tables[e2eConsts.TABLE8], 7));
-            //
-            //// table 10 is a child of both table 7 and table 9
-            //promises.push(e2eBase.relationshipService.createOneToOneRelationship(createdApp, createdApp.tables[e2eConsts.TABLE7], createdApp.tables[e2eConsts.TABLE10], 7));
-            //promises.push(e2eBase.relationshipService.createOneToOneRelationship(createdApp, createdApp.tables[e2eConsts.TABLE9], createdApp.tables[e2eConsts.TABLE10], 8));
-            //return Promise.all(promises);
+            const editRecordPromises = [];
+            // Numeric key entry for the relationship's child table corresponds to a parent's recordId.
+            // These need to be integers in the range of 1~n, n being the number of parent records
+            // We also want these to be consistent, as opposed to randomly generated numbers, for
+            // testing purposes.
+            let fieldToEdit = createdApp.tables[e2eConsts.TABLE8].fields[6];
+            let editRecords = e2eBase.recordService.generateRecordsFromValues(fieldToEdit, [1, 1, 2, 2, 2, 3]);
+            editRecordPromises.push(e2eBase.recordService.editRecords(createdApp.id, createdApp.tables[e2eConsts.TABLE8].id, editRecords));
+
+            // Table 10 has 2 parents, set first numeric field
+            fieldToEdit = createdApp.tables[e2eConsts.TABLE10].fields[6];
+            editRecords = e2eBase.recordService.generateRecordsFromValues(fieldToEdit, [1, 1, 2, 2, 2, 3]);
+            editRecordPromises.push(e2eBase.recordService.editRecords(createdApp.id, createdApp.tables[e2eConsts.TABLE10].id, editRecords));
+
+            // Table 10 has 2 parents, set second numeric field
+            fieldToEdit = createdApp.tables[e2eConsts.TABLE10].fields[7];
+            editRecords = e2eBase.recordService.generateRecordsFromValues(fieldToEdit, [1, 1, 2, 2, 2, 3]);
+            editRecordPromises.push(e2eBase.recordService.editRecords(createdApp.id, createdApp.tables[e2eConsts.TABLE10].id, editRecords));
+
+            // Create table relationship, Table 8 is a child of Table 7
+            editRecordPromises.push(e2eBase.relationshipService.createOneToOneRelationship(createdApp, createdApp.tables[e2eConsts.TABLE7], createdApp.tables[e2eConsts.TABLE8], 7));
+
+            // Table 10 is a child of both Table 7 and Table 9
+            editRecordPromises.push(e2eBase.relationshipService.createOneToOneRelationship(createdApp, createdApp.tables[e2eConsts.TABLE7], createdApp.tables[e2eConsts.TABLE10], 7));
+            editRecordPromises.push(e2eBase.relationshipService.createOneToOneRelationship(createdApp, createdApp.tables[e2eConsts.TABLE9], createdApp.tables[e2eConsts.TABLE10], 8));
+            return Promise.all(editRecordPromises);
         }).then(function() {
             // Print the generated test data and endpoints
             _createdRecs();
         }).catch(function(error) {
             // Global catch that will grab any errors from chain above
             if (error) {
-                console.log('Error during setup  ' + error.message);
-                console.log('stacktrace:' + error.stack);
+                log.error('Error during data setup:  ' + error.message);
+                log.error('Stacktrace: ' + error.stack);
             } else {
-                console.log('exiting on catch null error' + console.trace());
+                log.error('Exiting on catch null error: ' + console.trace());
             }
         });
     }
@@ -567,27 +579,26 @@ consts = require('../../common/src/constants.js');
         var realmName = e2eBase.recordBase.apiBase.realm.subdomain;
         var realmId = e2eBase.recordBase.apiBase.realm.id;
         var appId = createdApp.id;
-        // Protractor tests will launch node at port 9001 by default so do a replace to the default local.js port
-        var ticketEndpointRequest = e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.ticketEndpoint).replace('9001', '9000');
-        var appEndpointRequest = e2eBase.getRequestAppsPageEndpoint(realmName).replace('9001', '9000');
+
+        var ticketEndpointRequest = e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.ticketEndpoint);
+        var appEndpointRequest = e2eBase.getRequestAppsPageEndpoint(realmName);
 
         var tableNames = '';
         createdApp.tables.forEach((table, index) => {
-            tableNames += 'table' + index + ' Id:' + table.id + '\n';
-            tableNames += 'table' + index + ' Name:' + table.name + '\n';
-            tableNames += 'table' + index + ' Report link:' + e2eBase.getRequestReportsPageEndpoint(realmName, appId, table.id, 1)  + '\n';
-
+            tableNames += 'Table ' + index + ' Id: ' + table.id + '\n';
+            tableNames += 'Table ' + index + ' Name: ' + table.name + '\n';
+            tableNames += 'Table ' + index + ' Report link: ' + e2eBase.getRequestReportsPageEndpoint(realmName, appId, table.id, 1)  + '\n';
         });
         console.log('\nHere is your generated test data: \n' +
             'realmName: ' + realmName + '\n' +
             'realmId: ' + realmId + '\n' +
-            'appId: ' + appId + '\n' +
             'appName: ' +  createdApp.name + '\n' +
-            tableNames +
+            'appId: ' + appId + '\n' +
             'To generate a session ticket for your realm paste this into your browser: \n' +
             ticketEndpointRequest + '\n' +
             'Access your test app here (must have generated a ticket first): \n' +
-            appEndpointRequest + '\n'
+            appEndpointRequest + '\n\n' +
+            tableNames
         );
     }
 }());

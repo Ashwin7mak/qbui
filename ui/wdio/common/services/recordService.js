@@ -25,6 +25,8 @@
              * @returns Promise result from the add records API call
              */
             addRecordsToTable: function(createdApp, tableIndex, numRecords, addDupeRecord, addEmptyRecord) {
+                var MIN_RECORDSCOUNT = 5;
+
                 // Variable to determine whether or not we use regular or bulk add record APIs below
                 var totalNumRecords;
 
@@ -67,15 +69,14 @@
                     generatedRecords.push(generatedEmptyRecords[0]);
                 }
 
-                //TODO: Fix this
                 // Based on how many records we are adding either do a couple addRecord calls or one bulk add call
-                //if (numRecords < MIN_RECORDSCOUNT) {
-                //    // Via the API create the records, a new report, then run the report.
-                //    return this.addRecords(createdApp, createdApp.tables[tableIndex], generatedRecords);
-                //} else {
-                    // Via the API create the bulk records
+                if (numRecords <= MIN_RECORDSCOUNT) {
+                    // Via the API create the records, a new report, then run the report.
+                    return this.addRecords(createdApp, createdApp.tables[tableIndex], generatedRecords);
+                } else {
+                    // Via the API create the records via bulk add
                     return this.addBulkRecords(createdApp, createdApp.tables[tableIndex], generatedRecords);
-                //}
+                }
             },
             /**
              * Given an already created app and table, create a list of generated record JSON objects via the API.
@@ -150,7 +151,7 @@
              */
             generateRecords: function(fields, numRecords) {
                 var generatedRecords = [];
-                for (var i = 1; i < numRecords; i++) {
+                for (var i = 0; i < numRecords; i++) {
                     var generatedRecord = recordGenerator.generateRecord(fields);
                     generatedRecords.push(generatedRecord);
                 }
@@ -259,7 +260,6 @@
 
                         tableNumOfRecords = recordsConfig.tablesConfig[table.name].numRecordsToCreate;
                     }
-
                     if (tableNumOfRecords) {
                         // Generate and add records to each table
                         recordCreatePromise.push(function() {
@@ -271,11 +271,6 @@
                             return e2eBase.recordService.addRecordsToTable(createdApp, index, numberOfRecords, false, false);
                         });
                     }
-
-                    // Generate and add records to each table
-                    recordCreatePromise.push(function() {
-                        return e2eBase.recordService.addRecordsToTable(createdApp, index, numberOfRecords, false, false);
-                    });
                 });
 
                 // Bluebird's promise.each function (executes each promise sequentially)
@@ -285,7 +280,7 @@
                         //TODO: Adding records is flaky due to random dataGen
                         //TODO: Need to swallow the error so the rest complete in the array and we don't stop execution
                         //TODO: Implement retry function
-                        log.error('Error creating records (possible random dataGen issue)');
+                        log.error('Error creating records (possible random dataGen issue): ' + JSON.stringify(err));
                     });
                 });
             }

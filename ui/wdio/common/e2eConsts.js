@@ -35,6 +35,7 @@
         TABLE3 : 2,
         TABLE4 : 3,
         TABLE5 : 4,
+        TABLE6 : 5,
         TABLE7 : 7,
         TABLE8 : 8,
         TABLE9 : 9,
