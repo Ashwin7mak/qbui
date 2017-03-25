@@ -486,6 +486,12 @@ let QBForm = React.createClass({
                     {formContent}
                 </form>
             );
+        } else if (this.props.edit) {
+            return (
+                <form className={"editForm"}>
+                    {formContent}
+                </form>
+            );
         } else {
             return (
                 <form className="viewForm">
