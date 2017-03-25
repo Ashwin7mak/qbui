@@ -89,6 +89,12 @@
     .standardLeftNavItems {
         flex: 1 auto;
         width: 100%;
+
+        .standardLeftNavItemsList {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
     }
 
     .branding {

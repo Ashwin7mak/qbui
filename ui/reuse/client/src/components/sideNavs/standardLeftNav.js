@@ -5,7 +5,7 @@ import FlipMove from 'react-flip-move';
 import SideMenuBase from '../sideMenuBase/sideMenuBase';
 import Icon from '../icon/icon';
 import Tooltip from '../tooltip/tooltip';
-import NavItem from '../simpleNavItem/simpleNavItem';
+import SimpleNavItem from '../simpleNavItem/simpleNavItem';
 
 // CLIENT REACT IMPORTS
 import {LEFT_NAV_BAR} from '../../../../../client-react/src/constants/spinnerConfigurations';
@@ -47,9 +47,7 @@ class StandardLeftNav extends Component {
 
         let contextHeaderTitleElement = <span className="contextHeaderTitle">{contextHeaderTitle}</span>;
 
-        console.log(`title legnth: ${contextHeaderTitle.length}`);
-        console.log(`max: ${this.getMaxLengthBeforeTooltip()}`);
-        if (contextHeaderTitle.length > this.getMaxLengthBeforeTooltip()) {
+        if (contextHeaderTitle && contextHeaderTitle.length > this.getMaxLengthBeforeTooltip()) {
             return (
                 <Tooltip plainMessage={contextHeaderTitle} location="bottom">{contextHeaderTitleElement}</Tooltip>
             );
@@ -84,7 +82,7 @@ class StandardLeftNav extends Component {
                 <Loader loadedClassName="standardLeftNavItems" loaded={!showLoadingIndicator} options={LEFT_NAV_BAR}>
                     <FlipMove typeName="ul" className="standardLeftNavItemsList">
                         {navItems.map((navItem, index) => (
-                            <NavItem key={index} item={{id: 1, msg: 'test.testMsg', name: 'testName', icon: 'users', link: 'governance'}} showSecondary={true} secondaryIcon="settings" />
+                            <li key={index}><SimpleNavItem isCollapsed={this.props.isCollapsed} {...navItem} /></li>
                         ))}
                     </FlipMove>
                 </Loader>
@@ -105,6 +103,7 @@ class StandardLeftNav extends Component {
                 isOpen={this.props.isOpen}
                 isCollapsed={this.props.isCollapsed}
                 onUpdateOpenState={this.props.onUpdateOpenState}
+                pullRight={true}
             >
                 {this.props.children}
             </SideMenuBase>
@@ -165,7 +164,7 @@ StandardLeftNav.propTypes = {
     globalActions: PropTypes.element,
 
     /**
-     * Pass in an alternate image for custom branding. E.g., when customers can provide their own branding. */
+     * Pass in an alternate image href for custom branding. E.g., when customers can provide their own branding. */
     brandingImage: PropTypes.string,
 
     /**
@@ -174,7 +173,22 @@ StandardLeftNav.propTypes = {
 
     /**
      * The nav items to be displayed in the main content area of the left nav */
-    navItems: PropTypes.array,
+    navItems: PropTypes.arrayOf(PropTypes.shape({
+        // See SimpleNavItem for more information about these props
+        // isCollapsed will be automatically passed in based on the state of the leftNav
+        isSelected: PropTypes.bool,
+        icon: PropTypes.string,
+        iconFont: PropTypes.string,
+        title: PropTypes.string,
+        onClick: PropTypes.string,
+        link: PropTypes.string,
+        secondaryIcon: PropTypes.string,
+        secondaryIconFont: PropTypes.string,
+        secondaryIconTooltipMsgKey: PropTypes.string,
+        onClickSecondaryIcon: PropTypes.string,
+        disabled: PropTypes.bool,
+        className: PropTypes.string
+    })),
 };
 
 StandardLeftNav.defaultProps = {
