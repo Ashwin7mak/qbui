@@ -1,18 +1,18 @@
 /*
- The purpose of this module is to process governance api requests for users in an account.
+ The purpose of this module is to expose common apis used for governance.
  */
 (function() {
     'use strict';
 
-    let httpStatusCodes = require('../../../constants/httpStatusCodes');
-    let consts = require('../../../../../common/src/constants');
+    let httpStatusCodes = require('../../constants/httpStatusCodes');
+    let consts = require('../../../../common/src/constants');
 
     module.exports = function(config) {
 
-        let requestHelper = require('../../../api/quickbase/requestHelper')(config);
-        let routeHelper = require('../../../routes/routeHelper');
+        let requestHelper = require('../../api/quickbase/requestHelper')(config);
+        let routeHelper = require('../../routes/routeHelper');
 
-        let accountUsersAPI = {
+        let governanceAPI = {
 
             /**
              * Allows you to override the requestHelper object
@@ -23,17 +23,17 @@
             },
 
             /**
-             * Get all the users in the account. Resolve either the dummy data or the actual one
+             * Get the context of the governance. Returns the Realm, Account, User Information
              * @param req
              * @param accountId
              * @returns {Promise}
              */
-            getAccountUsers: function(req, accountId) {
+            getContext: function(req, accountId) {
                 let opts = requestHelper.setOptions(req, false, true);
                 let host = requestHelper.getLegacyRealmBase(req, false);
 
                 opts.headers.host = host;
-                opts.url =  (config.isMockServer ? consts.PROTOCOL.HTTP : consts.PROTOCOL.HTTPS) + host + routeHelper.getAccountUsersLegacyStackRoute(accountId);
+                opts.url = (config.isMockServer ? consts.PROTOCOL.HTTP : consts.PROTOCOL.HTTPS) + host + routeHelper.getGovernanceContextLegacyStackRoute(accountId);
 
                 return requestHelper
                     .executeRequest(req, opts)
@@ -41,13 +41,13 @@
                         return JSON.parse(response.body);
                     })
                     .catch((ex) => {
-                        requestHelper.logUnexpectedError('getAccountUsers.getAccountUsers(): unexpected error retrieving account users.', ex, true);
+                        requestHelper.logUnexpectedError("getContext.getContext(): Error retrieving account users.", ex, true);
                         throw ex;
                     });
             }
         };
 
-        return accountUsersAPI;
+        return governanceAPI;
     };
 
 }());
