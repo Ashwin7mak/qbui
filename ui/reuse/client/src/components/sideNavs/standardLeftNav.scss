@@ -45,6 +45,29 @@
         &.contextHeaderCollapsed {
             max-height: 40px;
 
+            transition: max-height 0.3s 0.1s;
+
+            .contextHeaderButton {
+                padding: 5px 10px;
+            }
+
+            .contextHeaderTitle {
+                opacity: 0;
+
+                transition: opacity 0.1s;
+            }
+
+            .contextHeaderIcon {
+                font-size: 20px;
+                width: 100%;
+
+                transition: font-size 0.2s 0.1s;
+            }
+        }
+
+        &.contextHeaderHidden {
+            max-height: 40px;
+
             transition: max-height 0.3s 0.3s;
 
             .contextHeaderButton {
@@ -59,10 +82,13 @@
         }
 
         .contextHeaderTitle {
+            opacity: 1;
             margin-top: 10px;
             display: block;
             overflow: hidden;
             text-overflow: ellipsis;
+
+            transition: opacity 0.1s 0.2s;
         }
 
         .contextHeaderToggle {

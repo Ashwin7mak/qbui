@@ -57,11 +57,24 @@ class StandardLeftNav extends Component {
     }
 
     renderContextHeader() {
-        const {showContextHeader, contextHeaderIcon, showContextHeaderToggle, isContextToggleDown} = this.props;
+        const {showContextHeader, contextHeaderIcon, showContextHeaderToggle, isContextToggleDown, isCollapsed} = this.props;
+
+        let classes = ['contextHeader'];
+
+        if (!showContextHeader) {
+            classes.push('contextHeaderHidden');
+        }
+
+        if (isCollapsed) {
+            classes.push('contextHeaderCollapsed');
+        }
 
         return (
-            <div className={`contextHeader ${showContextHeader ? '' : 'contextHeaderCollapsed'}`}>
-                <Button className="contextHeaderButton" onClick={this.onClickContextHeader}>
+            <div className={classes.join(' ')}>
+                <Button
+                    className="contextHeaderButton"
+                    onClick={this.onClickContextHeader}
+                >
                     {contextHeaderIcon && <Icon icon={contextHeaderIcon} className="contextHeaderIcon" />}
 
                     {this.renderContextHeaderTitle()}
@@ -89,9 +102,9 @@ class StandardLeftNav extends Component {
 
                 {Breakpoints.isSmallBreakpoint() && globalActions}
 
-                <div className="branding">
+                {!isCollapsed && <div className="branding">
                     <img className="leftNavLogo" alt={brandingImageAltText} src={brandingImage} />
-                </div>
+                </div>}
             </div>
         );
     }
@@ -103,7 +116,7 @@ class StandardLeftNav extends Component {
                 isOpen={this.props.isOpen}
                 isCollapsed={this.props.isCollapsed}
                 onUpdateOpenState={this.props.onUpdateOpenState}
-                pullRight={true}
+                pullRight={false}
             >
                 {this.props.children}
             </SideMenuBase>
