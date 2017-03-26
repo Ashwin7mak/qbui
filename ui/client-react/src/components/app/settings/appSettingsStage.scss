@@ -1,4 +1,28 @@
-@import '../../../assets/css/qbVariables';
+@import '../../../../../reuse/client/src/assets/css/qbVariables';
+
+.appOwnerContainer {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    padding-bottom: $spacing-small;
+
+    .appOwnerName {
+        flex: 1 1 auto;
+        height: 19px;
+        font-size: 16px;
+        text-align: left;
+        color: $default-text-onlight-color;
+    }
+
+    .appUsersManagementContent {
+        padding-top: 14px;
+        width: 597px;
+        height: 63px;
+        font-size: 16px;
+        line-height: 1.25;
+        color: $default-text-onlight-color;
+    }
+}
 
 .appRolesContent {
     display: flex;

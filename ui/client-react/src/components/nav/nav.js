@@ -368,6 +368,7 @@ export let Nav = React.createClass({
                             appUsers: this.state.apps.appUsers,
                             appUsersUnfiltered: this.state.apps.appUsersUnfiltered,
                             appRoles: this.state.apps.appRoles,
+                            appOwner: this.state.apps.appOwner,
                             locale: this.state.nav.locale,
                             pendEdits:this.state.pendEdits,
                             isRowPopUpMenuOpen: this.state.nav.isRowPopUpMenuOpen,
