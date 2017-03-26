@@ -35,7 +35,8 @@ export default {
             users: {
                 addUser: "L'ajout d'un nouvel utilisateur n'est pas encore disponible",
                 users: "Utilisateurs",
-                content: "C'est la liste de toutes les personnes qui ont été ajoutées à votre application. Vous pouvez obtenir quelques idées rapides sur le nombre de personnes dans chaque rôle dans votre application ainsi que de trouver une personne spécifique dans la liste et de les envoyer par courrier électronique."
+                content: "C'est la liste de toutes les personnes qui ont été ajoutées à votre application. Vous pouvez obtenir quelques idées rapides sur le nombre de personnes dans chaque rôle dans votre application ainsi que de trouver une personne spécifique dans la liste et de les envoyer par courrier électronique.",
+                manager: "Gestionnaire d'applications"
             }
         },
         appMenu: {

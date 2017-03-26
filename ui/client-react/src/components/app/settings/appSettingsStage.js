@@ -45,7 +45,7 @@ class AppSettingsStage extends React.Component {
     }
 
     getAppOwnerSection() {
-        let appOwnerTitle = ', Application Manager';
+        let appOwnerTitle = `, ${Locale.getMessage('app.users.manager')}`;
         let appUsersManagementContent = Locale.getMessage('app.users.content');
         return (
             <div className="appOwnerContainer">

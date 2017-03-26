@@ -35,7 +35,8 @@ export default {
             users: {
                 addUser: "Das Hinzufügen eines neuen Benutzers ist noch nicht verfügbar",
                 users: "Benutzer",
-                content: "Dies ist die Liste aller Personen, die zu Ihrer Bewerbung hinzugefügt wurden. Sie können einige kurze Einblicke darüber, wie viele Menschen sind in jeder Rolle in Ihrer Anwendung sowie finden Sie eine bestimmte Person in der Liste und E-Mail sie."
+                content: "Dies ist die Liste aller Personen, die zu Ihrer Bewerbung hinzugefügt wurden. Sie können einige kurze Einblicke darüber, wie viele Menschen sind in jeder Rolle in Ihrer Anwendung sowie finden Sie eine bestimmte Person in der Liste und E-Mail sie.",
+                manager: "Anwendungsmanager"
             }
         },
         appMenu: {
