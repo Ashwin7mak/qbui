@@ -70,16 +70,36 @@ class SimpleNavItem extends Component {
         );
     }
 
-    renderNavItem() {
+    /**
+     * Renders the content of the nav item
+     * If the nav item is collapsed it only renders the icon (or text if no icon)
+     * TODO:: On hover, it will display the full item (navBodyCollapsedHover element)
+     * @param isCollapsed This prop is passed in so that when we render the un-collapsed version using the same function
+     * @returns {XML}
+     */
+    renderNavItem(isCollapsed) {
         const {icon, iconFont, title} = this.props;
 
-        return (
+        const navItemTitle = <span className="navItemContent">{title}</span>;
+
+        const navBody = (
             <div className="navBody">
                 {icon && <Icon className="navItemIcon" iconFont={iconFont} icon={icon} />}
-                <span className="navItemContent">{title}</span>
+                {navItemTitle}
                 {this.renderSecondaryIcon()}
             </div>
         );
+
+        if (isCollapsed) {
+            return (
+                <div className="navBody navBodyCollapsed">
+                    {icon && <Icon className="navItemIcon" iconFont={iconFont} icon={icon} />}
+                    {!icon && navItemTitle}
+                </div>
+            );
+        }
+
+        return navBody;
     }
 
     getClassName() {
@@ -109,15 +129,21 @@ class SimpleNavItem extends Component {
         if (this.props.link) {
             return (
                 <Link className={this.getClassName()} to={this.props.link}>
-                    {this.renderNavItem()}
+                    {this.renderNavItem(this.props.isCollapsed)}
                 </Link>
             );
         }
 
         // Use an <a> tag so that this is still picked up as a navigation element by accessibility tools
         return (
-            <a className={this.getClassName()} tabIndex="0" onClick={this.onClickNavItem} onKeyDown={this.onClickNavItem}>
-                {this.renderNavItem()}
+            <a
+                className={this.getClassName()}
+                tabIndex="0"
+                onClick={this.onClickNavItem}
+                onKeyDown={this.onClickNavItem}
+            >
+
+                {this.renderNavItem(this.props.isCollapsed)}
             </a>
         );
     }
