@@ -64,7 +64,8 @@ const AppUsersRoute = React.createClass({
                 <Stage stageHeadline={this.getStageHeadline()}
                        pageActions={this.getPageActions()}>
 
-                    <AppSettingsStage appUsers={this.props.appUsersUnfiltered} appRoles={this.props.appRoles}
+                    <AppSettingsStage appUsers={this.props.appUsersUnfiltered}
+                                      appRoles={this.props.appRoles}
                                       appOwner={this.props.appOwner}/>
                 </Stage>
                 <div className="userManagementContainer">

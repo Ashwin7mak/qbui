@@ -179,9 +179,7 @@ describe('Test Apps Store', () => {
 
         flux.dispatcher.dispatch(loadAppsAction);
 
-
-        expect(flux.store(STORE_NAME).emit).toHaveBeenCalledWith('change');
-        expect(flux.store(STORE_NAME).emit.calls.count()).toBe(1);
+        expect(flux.store(STORE_NAME).emit.calls.count()).toBe(0);
     });
 
     it('test load app roles failed action', () => {
@@ -192,8 +190,7 @@ describe('Test Apps Store', () => {
 
         flux.dispatcher.dispatch(loadAppsAction);
 
-        expect(flux.store(STORE_NAME).emit).toHaveBeenCalledWith('change');
-        expect(flux.store(STORE_NAME).emit.calls.count()).toBe(1);
+        expect(flux.store(STORE_NAME).emit.calls.count()).toBe(0);
     });
 
     it('test load app roles success action', () => {
@@ -219,9 +216,7 @@ describe('Test Apps Store', () => {
 
         flux.dispatcher.dispatch(loadAppsAction);
 
-
-        expect(flux.store(STORE_NAME).emit).toHaveBeenCalledWith('change');
-        expect(flux.store(STORE_NAME).emit.calls.count()).toBe(1);
+        expect(flux.store(STORE_NAME).emit.calls.count()).toBe(0);
     });
 
     it('test load app owner failed action', () => {
@@ -232,8 +227,7 @@ describe('Test Apps Store', () => {
 
         flux.dispatcher.dispatch(loadAppsAction);
 
-        expect(flux.store(STORE_NAME).emit).toHaveBeenCalledWith('change');
-        expect(flux.store(STORE_NAME).emit.calls.count()).toBe(1);
+        expect(flux.store(STORE_NAME).emit.calls.count()).toBe(0);
     });
 
     it('test load app owner success action', () => {
@@ -250,7 +244,5 @@ describe('Test Apps Store', () => {
         expect(flux.store(STORE_NAME).emit).toHaveBeenCalledWith('change');
         expect(flux.store(STORE_NAME).emit.calls.count()).toBe(1);
     });
-
-
 
 });
