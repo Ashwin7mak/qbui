@@ -81,8 +81,8 @@
         getAllTablesFromLeftNav: {value: function() {
             //filter table names from leftNav links
             var results = [];
-             this.getAllTableLeftNavLinksList.value.map(function(table) {
-                 results.push(table.getAttribute('textContent'));
+            this.getAllTableLeftNavLinksList.value.map(function(table) {
+                results.push(table.getAttribute('textContent'));
             });
             return results;
         }},

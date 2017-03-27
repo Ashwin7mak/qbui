@@ -249,7 +249,7 @@
 
             //Create a user
             browser.call(function() {
-                return e2eBase.recordBase.apiBase.createUser().then(function (userResponse) {
+                return e2eBase.recordBase.apiBase.createUser().then(function(userResponse) {
                     userId = JSON.parse(userResponse.body).id;
                 });
             });
