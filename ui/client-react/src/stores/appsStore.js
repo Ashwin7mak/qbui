@@ -12,6 +12,7 @@ let AppsStore = Fluxxor.createStore({
         this.appUsers = [];
         this.appUsersUnfiltered = {};
         this.appRoles = [];
+        this.appOwner = {};
         // Default is true because the apps must load before the website is usable
         this.loading = true;
         this.loadingAppUsers = false;
@@ -31,6 +32,10 @@ let AppsStore = Fluxxor.createStore({
             actions.LOAD_APP_ROLES, this.onLoadAppRoles,
             actions.LOAD_APP_ROLES_FAILED, this.onLoadAppRolesFailed,
             actions.LOAD_APP_ROLES_SUCCESS, this.onLoadAppRolesSuccess,
+
+            actions.LOAD_APP_OWNER, this.onLoadAppOwner,
+            actions.LOAD_APP_OWNER_FAILED, this.onLoadAppOwnerFailed,
+            actions.LOAD_APP_OWNER_SUCCESS, this.onLoadAppOwnerSuccess,
         );
 
         this.logger = new Logger();
@@ -82,13 +87,23 @@ let AppsStore = Fluxxor.createStore({
         this.emit('change');
     },
     onLoadAppRoles() {
-        this.emit('change');
+        //place holder incase we want to in the future (I know we are going to migrate to redux as well)
     },
     onLoadAppRolesFailed() {
-        this.emit('change');
+        //place holder incase we want to in the future (I know we are going to migrate to redux as well)
     },
     onLoadAppRolesSuccess(roles) {
         this.appRoles = roles;
+        this.emit('change');
+    },
+    onLoadAppOwner() {
+        //place holder incase we want to in the future (I know we are going to migrate to redux as well)
+    },
+    onLoadAppOwnerFailed() {
+        //place holder incase we want to in the future (I know we are going to migrate to redux as well)
+    },
+    onLoadAppOwnerSuccess(appOwner) {
+        this.appOwner = appOwner;
         this.emit('change');
     },
     onSelectApp(appId) {
@@ -108,6 +123,7 @@ let AppsStore = Fluxxor.createStore({
             appUsers: this.appUsers,
             appUsersUnfiltered: this.appUsersUnfiltered,
             appRoles: this.appRoles,
+            appOwner: this.appOwner,
             selectedTableId: this.selectedTableId,
             loading: this.loading,
             loadingAppUsers: this.loadingAppUsers,
