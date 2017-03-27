@@ -36,6 +36,8 @@
 
         //form close button
         formCloseBtn : {get: function() {return browser.element('.trowserHeader .iconUISturdy-close');}},
+        //cancel form button 
+        formCancelBtn: {get: function() {return browser.element('.cancelFormButton');}},
 
         //form error message container
         formErrorMessageContainerEl : {get: function() {return browser.element('div.qbErrorMessage.qbErrorMessageVisible');}},
@@ -90,6 +92,17 @@
             //Click on form Save button
             this.editFormSaveBtns.waitForVisible();
             return this.clickBtnOnForm('Save');
+        }},
+
+        /**
+         * Method to click Camcel button on the form.
+         */
+        clickFormCancelBtn : {value: function() {
+            //Click on form Save button
+            this.formCancelBtn.waitForVisible();
+            this.formCancelBtn.click();
+            //Need this to wait for container to slide away
+            return browser.pause(e2eConsts.shortWaitTimeMs);
         }},
         /**
          * Method to click Save & Add Another button on the form Add.
