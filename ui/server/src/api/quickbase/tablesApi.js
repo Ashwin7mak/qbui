@@ -318,35 +318,26 @@
              * @returns {Promise}
              */
             updateTable: function(req) {
-                return new Promise((resolve, reject) =>{
-                    // this has input for both creating table and props
-                    // core fails if its passed in props that are not recognized for some reason
-                    // so we need to parse this here and send only what's recognized.
-                    let reqPayload = req.body;
+                // this has input for both creating table and props
+                // core fails if its passed in props that are not recognized for some reason
+                // so we need to parse this here and send only what's recognized.
+                let reqPayload = req.body;
 
-                    let promises = [];
-                    if (reqPayload.name) {
-                        let tableReq = _.clone(req);
-                        tableReq.rawBody = JSON.stringify({name: reqPayload.name});
-                        tableReq.headers[constants.CONTENT_LENGTH] = tableReq.rawBody.length;
-                        promises.push(this.patchTable(tableReq, req.params.tableId));
-                    }
+                let promises = [];
+                if (reqPayload.name) {
+                    let tableReq = _.clone(req);
+                    tableReq.rawBody = JSON.stringify({name: reqPayload.name});
+                    tableReq.headers[constants.CONTENT_LENGTH] = tableReq.rawBody.length;
+                    promises.push(this.patchTable(tableReq, req.params.tableId));
+                }
 
-                    let tableProperReq = _.clone(req);
-                    tableProperReq.rawBody = JSON.stringify(_.omit(reqPayload, ['name']));
-                    tableProperReq.headers[constants.CONTENT_LENGTH] = tableProperReq.rawBody.length;
-                    tableProperReq.method = 'put';
-                    promises.push(this.replaceTableProperties(tableProperReq, req.params.tableId));
+                let tableProperReq = _.clone(req);
+                tableProperReq.rawBody = JSON.stringify(_.omit(reqPayload, ['name']));
+                tableProperReq.headers[constants.CONTENT_LENGTH] = tableProperReq.rawBody.length;
+                tableProperReq.method = 'put';
+                promises.push(this.replaceTableProperties(tableProperReq, req.params.tableId));
 
-                    Promise.all(promises).then(
-                        (response) => {
-                            resolve();
-                        },
-                        (error) => {
-                            reject(error);
-                        }
-                    );
-                });
+                return Promise.all(promises);
             }
         };
         return tablesApi;
