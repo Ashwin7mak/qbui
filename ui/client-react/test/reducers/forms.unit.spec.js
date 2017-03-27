@@ -34,43 +34,6 @@ describe('Forms reducer functions', () => {
         expect(reducer(undefined, {})).toEqual(initialState);
     });
 
-    describe('Loading form functions', () => {
-        it('returns correct state when loading view form', () => {
-            expect(reducer(initialState, {type: types.LOADING_FORM, id: 'view'})).toDeepEqual([{
-                id: 'view',
-                syncLoadedForm: false,
-                loading: true,
-                errorStatus: null
-            }]);
-        });
-
-        it('returns correct state when load succeeds', () => {
-            let loadingFormState = [{
-                id: 'view',
-                loading: true,
-                errorStatus: null
-            }];
-            expect(reducer(loadingFormState, {type: types.LOAD_FORM_SUCCESS, id: "view", formData: "someData"})).toDeepEqual([{
-                id: 'view',
-                loading: false,
-                formData: "someData",
-                errorStatus:null
-            }]);
-        });
-
-        it('returns correct state when load error occurs', () => {
-            let loadingFormState = [{
-                id: 'view',
-                loading: true,
-                errorStatus: null
-            }];
-            expect(reducer(loadingFormState, {type: types.LOAD_FORM_ERROR, id: "view", error: "oops"})).toDeepEqual([{
-                id: 'view',
-                loading: false,
-                errorStatus: "oops"
-            }]);
-        });
-    });
 
     describe('Sync form changes functions', () => {
         let syncFormState = [{
@@ -86,6 +49,72 @@ describe('Forms reducer functions', () => {
                 formData:'someData'
             }]);
         });
+    });
+
+
+    describe('Loading form functions', () => {
+        it('returns correct state when loading view form', () => {
+            expect(reducer(initialState, {type: types.LOADING_FORM, id: 'view'})).toDeepEqual([{
+                id: 'view',
+                syncLoadedForm: false,
+                loading: true,
+                errorStatus: null
+            }]);
+        });
+
+        it('returns correct state when load error occurs', () => {
+            let loadingFormState = [{
+                id: 'view',
+                loading: true,
+                errorStatus: null
+            }];
+            expect(reducer(loadingFormState, {type: types.LOAD_FORM_ERROR, id: "view", error: "oops"})).toDeepEqual([{
+                id: 'view',
+                loading: false,
+                errorStatus: "oops"
+            }]);
+        });
+        it('returns correct state when load succeeds', () => {
+            let currentAppId = 'appId';
+            let currentblId = 'tblId';
+            let formData = {formMeta: {appId: currentAppId, tableId: currentblId}};
+            /**
+             * This test checks to be sure the actual appId and tblId from the response are
+             * the ones being used. So here I made the backup id's different for testing purposes.
+             * */
+            let backUpAppId = 'banana';
+            let backUpTblId = 'apple';
+            let loadingFormState = [{
+                id: 'view',
+                loading: true,
+                errorStatus: null
+            }];
+            expect(reducer(loadingFormState, {type: types.LOAD_FORM_SUCCESS, id: "view", formData: formData, appId: backUpAppId, tblId: backUpTblId})).toDeepEqual([{
+                id: 'view',
+                loading: false,
+                formData: {formMeta: {appId: currentAppId, tableId: currentblId}},
+                errorStatus: null
+            }]);
+        });
+
+        it('returns correct appId and tableId if they are missing', () => {
+            let formData = {formMeta: {appId: null, tableId: null}};
+            let backUpAppId = 'banana';
+            let backUpTblId = 'apple';
+            let loadingFormState = [{
+                id: 'view',
+                loading: true,
+                errorStatus: null
+            }];
+
+            expect(reducer(loadingFormState, {type: types.LOAD_FORM_SUCCESS, id: "view", formData: formData, appId: backUpAppId, tblId: backUpTblId})).toDeepEqual([{
+                id: 'view',
+                loading: false,
+                formData: {formMeta: {appId: backUpAppId, tableId: backUpTblId}},
+                errorStatus: null
+            }]);
+        });
+
     });
 
     let VIEW = 'view';

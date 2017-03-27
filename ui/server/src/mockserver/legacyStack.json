@@ -432,5 +432,41 @@
       "realmDirectoryFlags": 0,
       "systemRights": 0
     }
-  ]
+  ],
+  "/qb/governance/context" : {
+    "realm": {
+      "name": "mock_realm",
+      "id": 678,
+      "isAccountURL": false
+    },
+    "account": {
+      "name": "mock_account",
+      "id": 212950,
+      "allowsUserAdmins": false
+    },
+    "user": {
+      "isAccountAdmin": true,
+      "isRealmAdmin": true,
+      "isCSR": false,
+      "isOnDenyList": false
+    }
+  },
+  "/qb/governance/context?accountID=212950" : {
+    "realm": {
+      "name": "mock_realm",
+      "id": 678,
+      "isAccountURL": false
+    },
+    "account": {
+      "name": "mock_account",
+      "id": 212950,
+      "allowsUserAdmins": false
+    },
+    "user": {
+      "isAccountAdmin": true,
+      "isRealmAdmin": true,
+      "isCSR": false,
+      "isOnDenyList": false
+    }
+  }
 }

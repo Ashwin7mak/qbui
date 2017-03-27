@@ -202,4 +202,58 @@ describe("Validate fieldsApi", function() {
         });
     });
 
+    describe("validate createField function", function() {
+        let executeReqStub = null;
+
+        beforeEach(function() {
+            executeReqStub = sinon.stub(requestHelper, "executeRequest");
+            fieldsApi.setRequestHelperObject(requestHelper);
+            req.url = 'tables/123/fields';
+            req.method = 'post';
+            req.rawBody = {name: "test", type: 'TEXT'};
+        });
+
+        afterEach(function() {
+            req.url = '';
+            req.rawBody = {};
+            executeReqStub.restore();
+        });
+
+        it('success return results ', function(done) {
+            executeReqStub.returns(Promise.resolve({'body': '{"id": "6"}'}));
+            let promise = fieldsApi.createField(req);
+
+            promise.then(
+                function(response) {
+                    assert.deepEqual(response, 6);
+                    done();
+                },
+                function(error) {
+                    done(new Error("Unexpected failure promise return when testing createField success"));
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('createField: exception processing success test: ' + JSON.stringify(errorMsg)));
+            });
+        });
+
+        it('fail return results ', function(done) {
+            let error_message = "fail unit test case execution";
+
+            executeReqStub.returns(Promise.reject(new Error(error_message)));
+            let promise = fieldsApi.createField(req);
+
+            promise.then(
+                function() {
+                    done(new Error("Unexpected success promise return when testing createField failure"));
+                },
+                function(error) {
+                    assert.equal(error, "Error: fail unit test case execution");
+                    done();
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('createField: exception processing failure test: ' + JSON.stringify(errorMsg)));
+            });
+        });
+    });
+
 });

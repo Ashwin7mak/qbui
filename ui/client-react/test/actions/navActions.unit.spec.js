@@ -12,6 +12,11 @@ describe('Nav Actions functions', () => {
     let flux = new Fluxxor.Flux(stores);
     flux.addActions(navActions);
 
+    var mockAppsBundleLoader = {
+        changeLocale: function(locale) {
+            return locale;
+        }
+    };
     beforeEach(() => {
         spyOn(flux.dispatchBinder, 'dispatch');
     });
@@ -26,4 +31,15 @@ describe('Nav Actions functions', () => {
         expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(actions.SEARCH_FOR, 'abc');
     });
 
+    it('test change locale action', () => {
+        navActionsRewireAPI.__Rewire__('AppsBundleLoader', mockAppsBundleLoader);
+        spyOn(mockAppsBundleLoader, 'changeLocale');
+
+        flux.actions.changeLocale('en-us');
+
+        expect(mockAppsBundleLoader.changeLocale).toHaveBeenCalledWith('en-us');
+        expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(actions.CHANGE_LOCALE);
+
+        navActionsRewireAPI.__ResetDependency__('AppsBundleLoader');
+    });
 });

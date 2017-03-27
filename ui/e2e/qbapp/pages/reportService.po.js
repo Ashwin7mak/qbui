@@ -91,9 +91,9 @@
         //Report page actions on stage
         this.reportActions = this.reportStageContentEl.all(by.className('pageActions')).first();
         //Add record btn
-        this.reportAddRecordBtn = this.reportActions.element(by.className('iconTableUISturdy-add'));
+        this.reportAddRecordBtn = this.reportActions.element(by.className('iconUISturdy-add'));
         //Edit button
-        this.reportEditRecordBtnOnStage = this.recordContainer.element(by.className('layout-stage')).all(by.className('pageActions')).first().element(by.className('iconTableUISturdy-edit'));
+        this.reportEditRecordBtnOnStage = this.recordContainer.element(by.className('layout-stage')).all(by.className('pageActions')).first().element(by.className('iconUISturdy-edit'));
 
 
         //stage heading
@@ -116,7 +116,7 @@
         // Table actions container
         this.tableActionsContainerEl = this.loadedContentEl.element(by.className('tableActionsContainer'));
         //edit button on tableactions
-        this.reportEditRecordBtnOnReportActions = this.reportToolsAndContentEl.element(by.className('reportActions')).element(by.className('actionIcons')).element(by.className('iconTableUISturdy-edit'));
+        this.reportEditRecordBtnOnReportActions = this.reportToolsAndContentEl.element(by.className('reportActions')).element(by.className('actionIcons')).element(by.className('iconUISturdy-edit'));
 
         // agGrid table
         this.griddleWrapperEl = element(by.className('gridWrapper'));

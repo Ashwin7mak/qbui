@@ -1,0 +1,117 @@
+@import "../../assets/css/qbVariables";
+
+.stageHeader {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+    .navLinks {
+        display: flex;
+        align-items: center;
+        margin-bottom: $spacing-xxx-small;
+
+        .qbIcon {
+            font-size: 28px;
+            margin-right: $spacing-xxx-small;
+        }
+
+        * {
+            color: $stage-headline-icon-color;
+        }
+    }
+
+    .stageLeft {
+        flex: 1 1 auto;
+        padding: $spacing-x-small $spacing-xxx-small $spacing-xxx-small $spacing-xx-small;
+        white-space: nowrap;
+        overflow: hidden;
+        color: $stage-headline-icon-color;
+
+        .stageHeadline {
+            display: flex;
+            align-items: center;
+            font-size: 12px;
+            color: $stage-headline-color;
+
+            .iconActions {
+                margin-right: 0;
+                font-size: 20px;
+            }
+
+            // Need to leave this styling because not all stages are using the StageHeader component
+            h3 {
+                height: 26px;
+                margin: 0;
+                text-overflow: ellipsis;
+                overflow: hidden;
+            }
+        }
+
+        .breadCrumbs {
+            line-height: $spacing-medium2;
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+
+            > .qbIcon {
+                margin-right: $spacing-tiny;
+            }
+
+            > * {
+                flex: 0 0 auto;
+            }
+
+            > *:last-child {
+                flex: 0 1 auto;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            .breadCrumbsSeparator {
+                color: $stage-breadcrumb-separator-color;
+            }
+        }
+    }
+
+    .stageRight {
+        padding-top: $spacing-x-small;
+        flex: 0 0 auto;
+
+        .iconActionButton {
+            font-size: $font-size-h4;
+            color: $page-actions-icon-color;
+        }
+
+        .iconActionButton.disabled {
+            color: $iconfont-on-light-disabled-color;
+        }
+    }
+}
+
+.layout-stage {
+    border-bottom: 1px solid $topnav-header-background-color;
+    position: relative;
+    margin-bottom: $spacing-medium1;
+    background-color: $color-black-100;
+
+    .toggleStage {
+        cursor: pointer;
+        position: absolute;
+        bottom: -24px;
+        right: 4px;
+        height: 24px;
+        border: 1px solid $topnav-header-background-color;
+        border-top: 0;
+        border-radius: 0 0 $spacing-x-tiny $spacing-x-tiny;
+        background-color: $color-black-100;
+        color: $iconfont-on-light-alternate-color;
+    }
+
+    .well {
+        background-color: $color-black-100;
+        border: 0 none transparent;
+        margin: 0;
+        padding: 0 0 $spacing-xxx-small;
+        box-shadow: none;
+    }
+}
