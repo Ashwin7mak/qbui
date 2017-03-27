@@ -129,4 +129,17 @@ describe('Record Model', () => {
         });
     });
 
+    it('delete Report record method', () => {
+        let currentReport = _.cloneDeep(testReport);
+        expect(currentReport.data.records.length).toEqual(1);
+
+        //  delete record id not in report
+        ReportModelHelper.deleteRecordFromReport(currentReport.data, 2);
+        expect(currentReport.data.records.length).toEqual(1);
+
+        //  delete record in report
+        ReportModelHelper.deleteRecordFromReport(currentReport.data, 22);
+        expect(currentReport.data.records.length).toEqual(0);
+    });
+
 });
