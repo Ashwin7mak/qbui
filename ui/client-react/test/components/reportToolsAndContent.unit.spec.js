@@ -7,6 +7,10 @@ import {shallow} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
 import {CONTEXT} from '../../src/actions/context';
 import Promise from 'bluebird';
+
+class WindowLocationUtilsMock {
+    static pushWithQuery(key, recId) { }
+}
 describe('ReportToolsAndContent functions', () => {
     'use strict';
 
@@ -67,6 +71,8 @@ describe('ReportToolsAndContent functions', () => {
     beforeEach(() => {
         jasmineEnzyme();
         ReportToolsAndContentRewireAPI.__Rewire__('ReportContent', ReportContentMock);
+        ReportToolsAndContentRewireAPI.__Rewire__('WindowLocationUtils', WindowLocationUtilsMock);
+        spyOn(WindowLocationUtilsMock, 'pushWithQuery').and.callThrough();
         spyOn(flux.actions, 'selectTableId');
         spyOn(flux.actions, 'loadReport');
         spyOn(flux.actions, 'loadFields');
@@ -80,6 +86,7 @@ describe('ReportToolsAndContent functions', () => {
 
     afterEach(() => {
         ReportToolsAndContentRewireAPI.__ResetDependency__('ReportContent');
+        WindowLocationUtilsMock.pushWithQuery.calls.reset();
         flux.actions.selectTableId.calls.reset();
         flux.actions.loadReport.calls.reset();
         flux.actions.loadFields.calls.reset();
@@ -115,25 +122,11 @@ describe('ReportToolsAndContent functions', () => {
 
         const reportContent = result.find(ReportContentMock);
 
-        expect(reportContent).toBeTruthy();
+        expect(reportContent).toBePresent();
         expect(reportContent).toHaveProp('primaryKeyName', primaryKeyName);
     });
 
-
-    it('verifies if component contains the specific classes and invokes onGridSizeSet method', () => {
-        component = shallow(
-            <ReportToolsAndContent
-                flux={flux}
-                params={reportParams}
-                {...reportDataParams}
-            />);
-
-        expect(component.find('.ag-body-container')).toBeTruthy();
-        expect(component.find('.ag-pinned-left-cols-container')).toBeTruthy();
-        component.instance().onGridSizeSet();
-    });
-
-    it('invokes editNewRecord', () => {
+    it('invoke editNewRecord and verify pushWithQuery method gets called', () => {
         component = shallow(
             <ReportToolsAndContent
                 flux={flux}
@@ -141,6 +134,7 @@ describe('ReportToolsAndContent functions', () => {
                 {...reportDataParams}
             />);
         component.instance().editNewRecord();
+        expect(WindowLocationUtilsMock.pushWithQuery).toHaveBeenCalled();
     });
 
     describe('load dynamic report Action tests', () => {
