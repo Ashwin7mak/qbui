@@ -47,14 +47,14 @@ consts = require('../../common/src/constants.js');
 
     // Utility function for appending to the table map object
     function addColumn(table, type, name, settings) {
-        //optionally supplied specific field name otherwise use the fields type
+        // Optionally supplied specific field name otherwise use the fields type
         let fieldName = name || type.columnName;
 
         table[fieldName] = {
             fieldType: consts.SCALAR,
             dataType: type.name
         };
-        // optional add supplied attrs
+        // Optional add supplied attrs
         if (settings) {
             table[fieldName] = Object.assign({}, table[fieldName], settings);
             console.log('SETTINGS!!: ', table[fieldName]);
@@ -63,7 +63,7 @@ consts = require('../../common/src/constants.js');
 
     /**
      * Creates a map object of the table and field structure for a QuickBase app
-     * @returns Map object to pass into the test generators package to return a JSON app object for the API
+     * @returns Map object to pass into the test generators package to create a JSON app object for the API
      */
     function makeAppMap() {
         // Table Names
@@ -234,9 +234,9 @@ consts = require('../../common/src/constants.js');
             randNumWords: false,
             wordType: 'realEnglishNouns'
         });
-        //temporarily add a placeholder blank(unchosen) selection to top of list
-        //once backend is fixed to support null/empty entry for choice to clear/unset choice then
-        //note numeric will also need a way to support setting null to clear the choice
+        // temporarily add a placeholder blank (unchosen) selection to top of list
+        // once backend is fixed to support null/empty entry for choice to clear/unset choice then
+        // note numeric will also need a way to support setting null to clear the choice
         // this can happen in the client editor component
         choices.unshift(emptyChoice);
         addColumn(tableToFieldToFieldTypeMap[table4Name], e2eConsts.dataType.TEXT, "MultiChoice",
@@ -474,7 +474,7 @@ consts = require('../../common/src/constants.js');
             recordsConfig.tablesConfig[createdApp.tables[e2eConsts.TABLE4].name].numRecordsToCreate = 100;
             recordsConfig.tablesConfig[createdApp.tables[e2eConsts.TABLE5].name] = {};
             recordsConfig.tablesConfig[createdApp.tables[e2eConsts.TABLE5].name].numRecordsToCreate = 3;
-            // Table 6 contains records with all unique fields so don't generate any records
+            //TODO: Table 6 contains records with all unique fields so don't generate any records (currently broken)
             //TODO: Enhance record data generation to handle unique and all required fields
             recordsConfig.tablesConfig[createdApp.tables[e2eConsts.TABLE6].name] = {};
             recordsConfig.tablesConfig[createdApp.tables[e2eConsts.TABLE6].name].numRecordsToCreate = 0;
@@ -488,6 +488,7 @@ consts = require('../../common/src/constants.js');
             // Report Creation //
             let reportSetupPromises = [];
 
+            //TODO: We can change these report create calls to the generic / parameter based function in reportService
             reportSetupPromises.push(function() {
                 // Create a report that includes fields that are not editable by the user in Table 1
                 return e2eBase.reportService.createReportWithFids(createdApp.id, createdApp.tables[e2eConsts.TABLE1].id, [1, 2, 3, 4, 5, 6, 7, 8], null, 'Report with Uneditable Fields');

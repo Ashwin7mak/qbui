@@ -276,6 +276,7 @@
                 // Bluebird's promise.each function (executes each promise sequentially)
                 return promise.each(recordCreatePromise, function(queueItem) {
                     // This is an iterator that executes each Promise function in the array here
+                    // Note that this is how you can catch errors from each promise function if you need to
                     return queueItem().catch(function(err) {
                         //TODO: Adding records is flaky due to random dataGen
                         //TODO: Need to swallow the error so the rest complete in the array and we don't stop execution
