@@ -1,8 +1,13 @@
 import React, {PropTypes} from 'react';
 
-import Locale from '../../locales/locales';
-import {NEW_RECORD_VALUE} from '../../constants/urlConstants';
+import Locale from '../../locales/locale';
+
+// TEMPORARY IMPORTS FROM CLIENT-REACT
+import {NEW_RECORD_VALUE} from '../../../../../client-react/src/constants/urlConstants';
+// TEMPORARY IMPORTS FROM CLIENT-REACT
+
 import PageTitle from './pageTitle';
+
 
 /**
  * # Nav Page Title
