@@ -42,17 +42,49 @@
             //Helper method to create an app, can be used by multiple test cases
             createApp         : function(appToCreate) {
                 var deferred = promise.pending();
+                var self = this;
                 init.then(function() {
-                    apiBase.executeRequest(apiBase.resolveAppsEndpoint(), consts.POST, appToCreate).then(function(appResponse) {
-                        log.debug('App create response: ' + appResponse);
-                        deferred.resolve(appResponse);
-                    }).catch(function(error) {
-                        deferred.reject(error);
-                        //TODO: figure out how we want to handle
-                        assert(false, 'failed to create app: ' + JSON.stringify(error) + ', appToCreate: ' + JSON.stringify(appToCreate));
-                    });
+                    apiBase.executeRequest(apiBase.resolveAppsEndpoint(), consts.POST, appToCreate).then(
+                        (appResponse) => {
+                            log.debug('App create response: ' + appResponse);
+                            var promises = [];
+                            let createdApp = JSON.parse(appResponse.body);
+                            createdApp.tables.forEach(function(table, index) {
+                                promises.push(self.initTableProperties(createdApp.id, table.id, table.name));
+                            });
+                            return Promise.all(promises).then(
+                                () => {
+                                    deferred.resolve(appResponse);
+                                },
+                                (error) => {
+                                    console.log("Error initializing table properties in EE: " + JSON.stringify(error));
+                                    deferred.reject(error);
+                                }
+                            ).catch(function(error) {
+                                console.log("Exception initializing table properties in EE: " + JSON.stringify(error));
+                                deferred.reject(error);
+                            });
+                        },
+                        (error) => {
+                            deferred.reject(error);
+                            assert(false, 'failed to create app: ' + JSON.stringify(error) + ', appToCreate: ' + JSON.stringify(appToCreate));
+                        }).catch(function(error) {
+                            deferred.reject(error);
+                            assert(false, 'failed to create app with exception: ' + JSON.stringify(error) + ', appToCreate: ' + JSON.stringify(appToCreate));
+                        });
                 });
                 return deferred.promise;
+            },
+            initTableProperties: function(appId, tableId, tableNoun) {
+                let propsJson = {tableNoun: tableNoun};
+                const tablePropertiesEndpoint = recordBase.apiBase.resolveTablePropertiesEndpoint(appId, tableId);
+                return recordBase.apiBase.executeRequest(tablePropertiesEndpoint, 'POST', propsJson, null, null, true).then(
+                    function(result) {
+                        return JSON.parse(result.body);
+                    },
+                    (error) => {
+                        console.log("Error initializing table properties in EE");
+                    });
             },
             //Helper method to create a relationship between two tables in an app
             createRelationship: function(relationshipToCreate) {
