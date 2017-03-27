@@ -8,6 +8,7 @@ import {I18nMessage} from '../../../utils/i18nMessage';
 import QbIcon from '../../qbIcon/qbIcon';
 import ReportColumnHeaderMenuContainer from './reportColumnHeaderMenuContainer';
 import FormBuilder from './../../formBuilder/formBuilder';
+import { Draggable, Droppable } from 'react-drag-and-drop';
 
 const SORTING_MESSAGE = 'sort';
 const GROUPING_MESSAGE = 'group';
@@ -187,13 +188,33 @@ export const ReportColumnHeaderMenu = React.createClass({
                     </MenuItem>
                     <MenuItem onSelect={this.groupReportDescending}>
                         <span className="groupDescendMenuText">{this.getSortDescText(GROUPING_MESSAGE)}</span>
-        <FormBuilder />
                     </MenuItem>
             <MenuItem>
-            <h6>abc</h6>
-            <FormBuilder />
+
+          xyz<FormBuilder formId="1" formData={this.props.name}><input name="xyz"/></FormBuilder>
+
             </MenuItem>
 
+            <MenuItem>
+
+            abc<FormBuilder formId="1" formData={this.props.name1}><input name1="abc"/></FormBuilder>
+
+            </MenuItem>
+
+            <MenuItem>
+
+            <div>
+            <ul>
+            <Draggable type="fruit" data="banana"><li>Banana</li></Draggable>
+            <Draggable type="fruit" data="apple"><li>Apple</li></Draggable>
+            <Draggable type="metal" data="silver"><li>Silver</li></Draggable>
+            </ul>
+            <Droppable types={['fruit']}  onDrop={this.onDrop.bind(this)}>
+
+            </Droppable>
+            </div>
+
+            </MenuItem>
 
 
                     <MenuItem divider/>
@@ -206,8 +227,16 @@ export const ReportColumnHeaderMenu = React.createClass({
 
             </Dropdown>
         );
+    },
+
+    onDrop(data) {
+        console.log(data)
+        // => banana
     }
+
 });
+
+
 
 // --- PRIVATE FUNCTIONS
 
