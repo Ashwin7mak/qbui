@@ -17,7 +17,7 @@ import AppHistory from '../../globals/appHistory';
 import Logger from '../../utils/logger';
 import AutoScroll from '../autoScroll/autoScroll';
 import PageTitle from '../pageTitle/pageTitle';
-import {NotificationManager} from 'react-notifications';
+import NotificationManager from '../../../../reuse/client/src/scripts/notificationManager';
 
 import './formBuilderContainer.scss';
 

@@ -98,7 +98,7 @@ class MultiStepDialog extends React.Component {
     }
 
     /**
-     * wrap children (pages) in stepContainer with key for consistent styling and animatio
+     * wrap children (pages) in stepContainer with key for consistent styling and animation
      * @returns {XML[]}
      */
     getWrappedPages() {
@@ -117,6 +117,7 @@ class MultiStepDialog extends React.Component {
                 <Modal className={classes.join(' ')} show={this.props.show}>
 
                         {this.renderIcons()}
+
                         <div className="bodyContainer">
 
                             {this.renderTitle()}
@@ -151,9 +152,21 @@ MultiStepDialog.propTypes = {
      * page index to display
      */
     pageIndex: PropTypes.number.isRequired,
+    /**
+     * cancel callback (client should set show prop to false)
+     */
     onCancel: PropTypes.func.isRequired,
+    /**
+     * next page (client should increment pageIndex)
+     */
     onNext: PropTypes.func.isRequired,
+    /**
+     * previous page (client should decrement pageIndex)
+     */
     onPrevious: PropTypes.func.isRequired,
+    /**
+     * finished callback (client should hide dialog and process it)
+     */
     onFinished: PropTypes.func.isRequired,
     /**
      * enable next/finished button?
