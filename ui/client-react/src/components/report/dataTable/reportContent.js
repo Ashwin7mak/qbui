@@ -17,7 +17,6 @@ import ReportFooter from '../reportFooter';
 import _ from 'lodash';
 import {withRouter} from 'react-router';
 import ReportContentError from './reportContentError';
-import DTSErrorModal from '../../dts/dtsErrorModal';
 import UrlUtils from '../../../utils/urlUtils';
 import QBModal from '../../qbModal/qbModal';
 import * as CompConsts from '../../../constants/componentConstants';
@@ -931,10 +930,7 @@ export const ReportContent = React.createClass({
             addPadding = "reportContent";
         }
 
-        //  TODO: remove
-        let showDTSErrorModal = pendEdits.showDTSErrorModal || false;
         const editErrors = pendEdits.editErrors || null;
-
         let reportContent;
 
         if (this.props.reportData.error) {
@@ -942,7 +938,6 @@ export const ReportContent = React.createClass({
         } else {
             reportContent = (
                     <div className={addPadding}>
-                        <DTSErrorModal show={showDTSErrorModal} tid={pendEdits.dtsErrorModalTID} link={UrlUtils.getQuickBaseClassicLink(this.props.selectedAppId)} />
                         {!isSmall && this.props.reactabular &&
                             <ReportGrid
                                 appId={this.props.reportData.appId}

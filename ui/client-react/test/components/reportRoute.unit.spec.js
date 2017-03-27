@@ -13,7 +13,7 @@ const mockStore = configureMockStore(middlewares);
 
 describe('ReportRoute functions', () => {
     'use strict';
-    const pendEdits = {showDTSErrorModal: false};
+    const pendEdits = {};
     let component;
     let mockNavStore = Fluxxor.createStore({
         getState() {
