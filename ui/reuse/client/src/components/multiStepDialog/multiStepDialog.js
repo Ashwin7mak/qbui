@@ -12,7 +12,17 @@ import {I18nMessage} from '../../../../../client-react/src/utils/i18nMessage';
 
 import './multiStepDialog.scss';
 
-
+/**
+ * # Multi-step Dialog
+ * A dialog containing multiple pages (a wizard)
+ * ## Usage
+ * ```
+ *   <MultiStepDialog ...props>
+ *       <PageOneComponent>
+ *       <PageTwoComponent>
+ *           ...
+ *   </MultiStepDialog>
+ */
 class MultiStepDialog extends React.Component {
 
     constructor(props) {
@@ -81,6 +91,7 @@ class MultiStepDialog extends React.Component {
 
     componentWillReceiveProps(nextProps) {
 
+        /* set transition name based on the navigation direction */
         if (nextProps.pageIndex !== this.props.pageIndex) {
             this.setState({transitionName: nextProps.pageIndex > this.props.pageIndex ? "next" : "previous"});
         }
@@ -129,14 +140,32 @@ class MultiStepDialog extends React.Component {
 }
 
 MultiStepDialog.propTypes = {
+    /**
+     * show the dialog? */
+    show: PropTypes.bool.isRequired,
+    /**
+     * array of page titles (1 per child)
+     */
     titles: PropTypes.arrayOf(PropTypes.string),
+    /**
+     * page index to display
+     */
     pageIndex: PropTypes.number.isRequired,
     onCancel: PropTypes.func.isRequired,
     onNext: PropTypes.func.isRequired,
     onPrevious: PropTypes.func.isRequired,
     onFinished: PropTypes.func.isRequired,
+    /**
+     * enable next/finished button?
+     */
     canProceed: PropTypes.bool,
+    /**
+     * display loading spinner?
+     */
     loading: PropTypes.bool,
+    /**
+     * additional classes
+     */
     classes: PropTypes.string
 };
 
