@@ -10,10 +10,7 @@ const breakWordColumnProps = {
 };
 
 const boolColumnProps = {
-    classes: ['AlignCenter'],
-    style: {
-        maxWidth: 80
-    }
+    classes: ['AlignCenter BoolColumn'],
 };
 
 const columns = [
@@ -58,10 +55,11 @@ const columns = [
     {
         property: 'hasAppAccess',
         header: {
-            label: 'QuickBase Access Status'
+            label: 'QuickBase Access Status',
+            props: boolColumnProps
         },
         cell: {
-            formatters: [Formatters.FormatUserStatusText]
+            formatters: [Formatters.FormatUserStatusHTML]
         }
     },
     {
