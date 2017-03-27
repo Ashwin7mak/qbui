@@ -95,7 +95,7 @@
         }},
 
         /**
-         * Method to click Camcel button on the form.
+         * Method to click Cancel button on the form.
          */
         clickFormCancelBtn : {value: function() {
             //Click on form Save button
