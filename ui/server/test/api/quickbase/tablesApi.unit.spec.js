@@ -136,6 +136,59 @@ describe("Validate tablesApi", function() {
         });
     });
 
+    describe("validate patchTable function", function() {
+        let executeReqStub = null;
+
+        beforeEach(function() {
+            executeReqStub = sinon.stub(requestHelper, "executeRequest");
+            tablesApi.setRequestHelperObject(requestHelper);
+            req.url = 'apps/123/tables/';
+            req.method = 'patch';
+            req.rawBody = {name: "test"};
+        });
+
+        afterEach(function() {
+            req.url = '';
+            req.rawBody = {};
+            executeReqStub.restore();
+        });
+
+        it('success return results ', function(done) {
+            executeReqStub.returns(Promise.resolve({'body':"6"}));
+            let promise = tablesApi.patchTable(req);
+
+            promise.then(
+                function(response) {
+                    assert.deepEqual(response, 6);
+                    done();
+                },
+                function(error) {
+                    done(new Error("Unexpected failure promise return when testing patchTable success"));
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('patchTable: exception processing success test: ' + JSON.stringify(errorMsg)));
+            });
+        });
+        it('fail return results ', function(done) {
+            let error_message = "fail unit test case execution";
+
+            executeReqStub.returns(Promise.reject(new Error(error_message)));
+            let promise = tablesApi.patchTable(req);
+
+            promise.then(
+                function() {
+                    done(new Error("Unexpected success promise return when testing patchTable failure"));
+                },
+                function(error) {
+                    assert.equal(error, "Error: fail unit test case execution");
+                    done();
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('patchTable: exception processing failure test: ' + JSON.stringify(errorMsg)));
+            });
+        });
+    });
+
     describe("validate createTableProperties function", function() {
         let executeReqStub = null;
 
@@ -240,6 +293,60 @@ describe("Validate tablesApi", function() {
             });
         });
     });
+
+    describe("validate replaceTableProperties function", function() {
+        let executeReqStub = null;
+
+        beforeEach(function() {
+            executeReqStub = sinon.stub(requestHelper, "executeRequest");
+            tablesApi.setRequestHelperObject(requestHelper);
+            req.url = 'apps/123/tableproperties/';
+            req.method = 'post';
+            req.rawBody = {tableNoun: "test"};
+        });
+
+        afterEach(function() {
+            req.url = '';
+            req.rawBody = {};
+            executeReqStub.restore();
+        });
+
+        it('success return results ', function(done) {
+            executeReqStub.returns(Promise.resolve({body: '{"tableNoun": "test"}'}));
+            let promise = tablesApi.replaceTableProperties(req);
+
+            promise.then(
+                function(response) {
+                    assert.deepEqual(response, {tableNoun: "test"});
+                    done();
+                },
+                function(error) {
+                    done(new Error("Unexpected failure promise return when testing replaceTableProperties success"));
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('replaceTableProperties: exception processing success test: ' + JSON.stringify(errorMsg)));
+            });
+        });
+        it('fail return results ', function(done) {
+            let error_message = "fail unit test case execution";
+
+            executeReqStub.returns(Promise.reject(new Error(error_message)));
+            let promise = tablesApi.createTableProperties(req);
+
+            promise.then(
+                function() {
+                    done(new Error("Unexpected success promise return when testing replaceTableProperties failure"));
+                },
+                function(error) {
+                    assert.equal(error, "Error: fail unit test case execution");
+                    done();
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('replaceTableProperties: exception processing failure test: ' + JSON.stringify(errorMsg)));
+            });
+        });
+    });
+
 
     describe("validate createTableComponents function", function() {
         let createTableStub = null;
@@ -471,6 +578,96 @@ describe("Validate tablesApi", function() {
                 }
             ).catch(function(errorMsg) {
                 done(new Error('createTableComponents: exception processing success test: ' + JSON.stringify(errorMsg)));
+            });
+        });
+    });
+
+    describe("validate updateTable function", function() {
+        let patchTableStub = null;
+        let replaceTablePropsStub = null;
+        let patchTableResp = {};
+        let replaceTablePropsResp = {body: '{"tableNoun": "test"}'};
+        let errorPromise = Promise.reject({error: "some error"});
+
+        beforeEach(function() {
+            patchTableStub = sinon.stub(tablesApi, "patchTable");
+            replaceTablePropsStub = sinon.stub(tablesApi, "replaceTableProperties");
+            req.body = {name: "name", tableNoun: "noun", description: "desc", tableIcon: "icon"};
+            req.url = 'apps/123/tables/456';
+            req.method = 'patch';
+            patchTableStub.returns(Promise.resolve(patchTableResp));
+            replaceTablePropsStub.returns(Promise.resolve(replaceTablePropsResp));
+        });
+
+        afterEach(function() {
+            req.url = '';
+            req.rawBody = {};
+            patchTableStub.restore();
+            replaceTablePropsStub.restore();
+        });
+
+        it('success return results ', function(done) {
+            let promise = tablesApi.updateTable(req);
+
+            promise.then(
+                function(response) {
+                    done();
+                },
+                function(error) {
+                    done(new Error("Unexpected failure promise return when testing updateTable success"));
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('updateTable: exception processing success test: ' + JSON.stringify(errorMsg)));
+            });
+        });
+        it('doesnt call patchTable if name wasnt updated ', function(done) {
+            patchTableStub.restore();
+            patchTableStub = sinon.spy(tablesApi, "patchTable");
+            req.body = {tableNoun: "noun", description: "desc", tableIcon: "icon"};
+            let promise = tablesApi.updateTable(req);
+
+            promise.then(
+                function(response) {
+                    assert.equal(patchTableStub.callCount, 0);
+                    done();
+                },
+                function(error) {
+                    done(new Error("Unexpected failure promise return when testing updateTable success"));
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('updateTable: exception processing success test: ' + JSON.stringify(errorMsg)));
+            });
+        });
+        it('fails if updateTable fails', function(done) {
+            patchTableStub.returns(errorPromise);
+            req.body = {name: "name", tableNoun: "noun", description: "desc", tableIcon: "icon"};
+            let promise = tablesApi.updateTable(req);
+
+            promise.then(
+                function(response) {
+                    done(new Error("Unexpected success promise return when patchTable failed"));
+                },
+                function(error) {
+                    done();
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('updateTable: exception processing success test: ' + JSON.stringify(errorMsg)));
+            });
+        });
+        it('fails if replaceTableProperties fails', function(done) {
+            replaceTablePropsStub.returns(errorPromise);
+            req.body = {name: "name", tableNoun: "noun", description: "desc", tableIcon: "icon"};
+            let promise = tablesApi.updateTable(req);
+
+            promise.then(
+                function(response) {
+                    done(new Error("Unexpected success promise return when replaceTableProperties failed"));
+                },
+                function(error) {
+                    done();
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('updateTable: exception processing success test: ' + JSON.stringify(errorMsg)));
             });
         });
     });
