@@ -27,6 +27,7 @@
     let tablesApi;
     let featureSwitchesApi;
     let accountUsersApi;
+    let governanceApi;
 
     module.exports = function(config) {
         requestHelper = require('../api/quickbase/requestHelper')(config);
@@ -44,6 +45,7 @@
         usersApi = require('../api/quickbase/usersApi')(config);
         accountUsersApi = require('../governance/account/users/AccountUsersApi')(config);
         tablesApi = require('../api/quickbase/tablesApi')(config);
+        governanceApi = require('../governance/common/GovernanceCommonApi')(config);
 
         /* internal data */
         /*
@@ -56,6 +58,7 @@
 
         // governance endpoints
         routeToGetFunction[routeConsts.GOVERNANCE_ACCOUNT_USERS] = getAccountUsers;
+        routeToGetFunction[routeConsts.GOVERNANCE_CONTEXT] = getGovernanceContext;
 
         //  app endpoints
         routeToGetFunction[routeConsts.APPS] = getApps;
@@ -336,6 +339,36 @@
         }
     }
 
+    /**
+     * Get context of the governance
+     * @param req
+     * @param res
+     */
+    function getGovernanceContext(req, res) {
+        let perfLog = perfLogger.getInstance();
+        perfLog.init('Get governance context', {req:filterNodeReq(req)});
+
+        if (!isRouteEnabled(req)) {
+            routeTo404(req, res);
+        } else {
+            governanceApi.getContext(req, req.query.accountId).then(
+                function(response) {
+                    res.send(response);
+                    logApiSuccess(req, response, perfLog, 'Get governance context');
+                },
+                function(response) {
+                    logApiFailure(req, response, perfLog, 'Get governance context');
+
+                    //  client is waiting for a response..make sure one is always returned
+                    if (response && response.statusCode) {
+                        res.status(response.statusCode).send(response);
+                    } else {
+                        res.status(500).send(response);
+                    }
+                }
+            );
+        }
+    }
 
     /**
      * create new feature switch
