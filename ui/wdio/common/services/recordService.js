@@ -280,7 +280,7 @@
                     return queueItem().catch(function(err) {
                         //TODO: Adding records is flaky due to random dataGen
                         //TODO: Need to swallow the error so the rest complete in the array and we don't stop execution
-                        //TODO: Implement retry function
+                        //TODO: Fix the dataGen or Implement retry function
                         log.error('Error creating records (possible random dataGen issue): ' + JSON.stringify(err));
                     });
                 });
