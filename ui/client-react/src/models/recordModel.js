@@ -27,10 +27,6 @@ class RecordModel {
         this.model.recordChanges = {};
         this.model.commitChanges = [];
 
-        //TODO: remove
-        this.model.showDTSErrorModal = false;
-        this.model.dtsErrorModalTID = "No Transaction ID Available";
-
         this.model.editErrors = {
             ok: true,
             errors:[]
