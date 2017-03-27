@@ -386,7 +386,9 @@ other forever options
 ## Running NODE UI server code with SSL
 By default, the express server will only accept http requests. To also accept https requests, the following setup is required.
 
-CREATE CERTS:
+### Using existing certificate
+
+**Note: Go to next section to create a new certificate**
 
 The two files you need are a PEM encoded SSL certificate and private key.
 
@@ -408,6 +410,7 @@ For more information, click [here](http://security.stackexchange.com/questions/3
 
     openssl pkcs12 -in keystore.p12  -nodes -nocerts -out private.pem
 
+### Creating a new certificate
 
 If you do not have a certificate, you'll need to generate a private key and a certificate signing request, or CSR (which also contains your public key).
 The following highlights how to do so using OpenSSL.
@@ -419,13 +422,13 @@ For more information, click [here](http://stackoverflow.com/questions/12871565/h
 
     You will enter an interactive prompt to generate a 2048-bit RSA private key and a CSR that
     has all the information you choose to enter at the prompts. (Note: Common Name is where you'll want to
-    put the domain name you'll be using to access your site.)
+    put the domain name you'll be using to access your site. e.g., quickbase-dev.com)
 
   b) Generate a self-signed certificate (the below expires in 10 years):
 
     openssl req -newkey rsa:2048 -new -nodes -x509 -days 3650 -keyout private.pem -out cert.pem
 
-LOCALHOST CONFIGURATION
+### LOCALHOST CONFIGURATION
 
 Caution should be taken with your private key. The following highlights a recommended approach as to how a developer's localhost
 environment could be configured.  How other run-time environments like QA, E2E and PROD/AWS are configured/implemented will most likely differ
@@ -433,20 +436,28 @@ based on the security requirements of each.
 
   a) Copy the certificate(cert.pem) and private key(private.pem) to the 'keys' folder within the project.  The path is:
 
-     ../quickbaseui/ui/server/src/config/keys
+     ../quickbaseui/ui/server/src/config/environment/keys
 
      NOTE: this is a new folder intended to hold run-time environments certs.  Given the sensitive nature of the content, other than the
      .gitignore file, all files put into this folder are not tracked by git.
 
-  b) Modify the local.env.js file to define the path where your private key and certificate is located:
+  b) Modify the local.js file to define the path where your private key and certificate is located:
 
+    ```javascript
     SSL_KEY: {
         private: path.normalize(__dirname + '/keys/private.pem'),
         cert: path.normalize(__dirname + '/keys/cert.pem'),
         requireCert: false  // set to false for self signed certs
     },
+    ```
 
-  c) Modify the local.env.js file to change the default port for SSL.  Currently, it is set to 9443.  You can override as follows:
+  c) Modify the local.js file and uncomment the path
+
+    ```javascript
+    var path = require('path');
+    ```
+
+  d) Optional: Modify the local.js file to change the default port for SSL.  Currently, it is set to 9443.  You can override as follows:
 
     sslPort: 9988,
 
@@ -455,8 +466,6 @@ Start up your express server.  In the console, you should see that the server is
 Open a browser to verify.
 
 To stop or not accept SSL requests, comment out/remove the SSL_KEY object in your run-time environment configuration file...(ie: local.env.js).
-
-
 
 ## Access REST endpoints over SSL
 Update the javahost run-time configuration parameter to use the https protocol and appropriate port.  For example, include the following
