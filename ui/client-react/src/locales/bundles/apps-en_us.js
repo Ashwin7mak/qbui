@@ -562,7 +562,7 @@ export default {
             newTableDescription: "Create a new table when you want to collect a new type of information.",
             newTableTitle: "Name your table",
 
-            summaryDescription: "Each bit of information you  want to collect is a field, like Customer Name.",
+            summaryDescription: "Each bit of information you want to collect is a field, like Customer Name.",
             summaryTitle: "Drag and drop fields you want to add to your table onto the form.  You can arrange the fields in the order you want people to use them.",
 
             addFieldsTitle: "Get ready to add fields to your table",
