@@ -1,6 +1,4 @@
-import ReportModel from '../../src/models/reportModel';
 import ReportModelHelper from '../../src/models/reportModelHelper';
-import {__RewireAPI__ as ReportModelRewireAPI} from '../../src/models/reportModel';
 import _ from 'lodash';
 
 describe('Record Model', () => {
@@ -56,14 +54,10 @@ describe('Record Model', () => {
                 {
                     'Record ID#': {
                         id:2, display: '22', value: 22
-                    }
-                },
-                {
+                    },
                     'Numeric': {
                         id:3, display: '3.0', value: 3
-                    }
-                },
-                {
+                    },
                     'Text': {
                         id:6, display: 'TestString', value: 'testString'
                     }
@@ -73,14 +67,10 @@ describe('Record Model', () => {
                 {
                     'Record ID#': {
                         id:2, display: '22', value: 22
-                    }
-                },
-                {
+                    },
                     'Numeric': {
                         id:3, display: '3.0', value: 3
-                    }
-                },
-                {
+                    },
                     'Text': {
                         id:6, display: 'TestString', value: 'testString'
                     }
@@ -89,27 +79,14 @@ describe('Record Model', () => {
             fields: fields
         }
     };
-    const testContent = {
-        recId: 2,
+    const updateTestContent = {
+        recId: 22,
         record: [
             {id:2, display:'22', value: 22},
             {id:3, display:'4.0', value:'4'},
             {id:6, display:'TestingString', value:'TestingString'}
         ]
     };
-
-    beforeEach(() => {
-        //spyOn(mockValidationMessage, 'getMessage').and.callThrough();
-        //spyOn(mockValidationUtils, 'checkFieldValue').and.callThrough();
-        //RecordModelRewireAPI.__Rewire__('ValidationMessage', mockValidationMessage);
-        //RecordModelRewireAPI.__Rewire__('ValidationUtils', mockValidationUtils);
-    });
-    afterEach(() => {
-        //mockValidationMessage.getMessage.calls.reset();
-        //mockValidationUtils.checkFieldValue.calls.reset();
-        //RecordModelRewireAPI.__ResetDependency__('ValidationMessage');
-        //RecordModelRewireAPI.__ResetDependency__('ValidationUtils');
-    });
 
     const reportColumnsTests = [
         {name:'display all field columns', fidList: [2, 3, 4, 6, 8], notInFidList: []},
@@ -133,16 +110,23 @@ describe('Record Model', () => {
 
 
     it('update Report record method', () => {
-        let currentReport = _.deepClone(testReport);
-        let content = _.deepClone(testContent);
+        let currentReport = _.cloneDeep(testReport);
+        let content = _.cloneDeep(updateTestContent);
 
         ReportModelHelper.updateReportRecord(currentReport, content);
-        let dataRecords = currentReport.data.records;
 
-        // test to ensure the currentReport is updated with the content changes
-        expect
+        //  retrieve the updated record
+        let updatedRecord = currentReport.data.records[0];
 
-    })
-
+        // test to ensure each element in the record is updated with new content value
+        Object.keys(updatedRecord).forEach((fieldName) => {
+            let recd = _.find(content.record, function(r) {
+                if (updatedRecord[fieldName].id === r.id) {
+                    expect(updatedRecord[fieldName].value).toEqual(r.value);
+                    expect(updatedRecord[fieldName].display).toEqual(r.display);
+                }
+            });
+        });
+    });
 
 });
