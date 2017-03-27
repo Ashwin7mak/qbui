@@ -166,7 +166,7 @@
             },
 
             /**
-             * Create endpoint for the table object
+             * Patch endpoint for the table object
              * @param req
              * @returns {Promise}
              */
@@ -174,6 +174,7 @@
                 return new Promise((resolve, reject) => {
                     let opts = requestHelper.setOptions(req);
                     opts.url = requestHelper.getRequestJavaHost() + routeHelper.getTablesRoute(req.url, tableId);
+                    opts.method = 'patch';
 
                     requestHelper.executeRequest(req, opts).then(
                         (response) => {
@@ -190,12 +191,13 @@
                 });
             },
             /**
-             * replaceTableProperties
+             * Put endpoint for tableproperties object
              */
             replaceTableProperties: function(req, tableId) {
                 return new Promise((resolve, reject) => {
                     let opts = requestHelper.setOptions(req);
                     opts.url = requestHelper.getRequestEeHost() + routeHelper.getTablePropertiesRoute(req.url, tableId);
+                    opts.method = 'put';
 
                     requestHelper.executeRequest(req, opts).then(
                         (response) => {
@@ -334,7 +336,6 @@
                 let tableProperReq = _.clone(req);
                 tableProperReq.rawBody = JSON.stringify(_.omit(reqPayload, ['name']));
                 tableProperReq.headers[constants.CONTENT_LENGTH] = tableProperReq.rawBody.length;
-                tableProperReq.method = 'put';
                 promises.push(this.replaceTableProperties(tableProperReq, req.params.tableId));
 
                 return Promise.all(promises);
