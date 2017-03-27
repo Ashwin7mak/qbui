@@ -29,6 +29,10 @@ $navitem-primary-hover-border: $color-cyan-300;
         &:hover {
             border-top: 1px solid $navitem-primary-hover-border;
         }
+
+        .navBody.navBodyCollapsed {
+            padding-left: $spacing-xxx-small;
+        }
     }
 
     .navBody {

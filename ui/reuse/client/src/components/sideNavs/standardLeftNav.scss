@@ -77,6 +77,29 @@
             }
         }
 
+        &.contextHeaderSmall {
+            max-height: 40px;
+            display: flex;
+
+            transition: max-height 0.3s 0.1s;
+
+            .contextHeaderButton {
+                display: flex;
+                flex-direction: row;
+                padding: 0;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .contextHeaderIcon {
+                font-size: 24px;
+            }
+
+            .contextHeaderTitle {
+                margin: 0;
+            }
+        }
+
         .contextHeaderIcon {
             font-size: 40px;
             width: 40px;

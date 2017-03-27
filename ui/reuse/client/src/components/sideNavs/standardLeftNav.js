@@ -57,7 +57,7 @@ class StandardLeftNav extends Component {
     }
 
     renderContextHeader() {
-        const {showContextHeader, contextHeaderIcon, showContextHeaderToggle, isContextToggleDown, isCollapsed} = this.props;
+        const {showContextHeader, isContextHeaderSmall, contextHeaderIcon, showContextHeaderToggle, isContextToggleDown, isCollapsed} = this.props;
 
         let classes = ['contextHeader'];
 
@@ -67,6 +67,10 @@ class StandardLeftNav extends Component {
 
         if (isCollapsed) {
             classes.push('contextHeaderCollapsed');
+        }
+
+        if (isContextHeaderSmall && !isCollapsed) {
+            classes.push('contextHeaderSmall');
         }
 
         return (
@@ -163,6 +167,10 @@ StandardLeftNav.propTypes = {
     /**
      * The context header is the top part of the nav bar. It can be used to display the context of the navigation (e.g., the current app). */
     showContextHeader: PropTypes.bool,
+
+    /**
+     * In some XD specs, the contextHeaderIcon and contextHeaderTitle are on the same line. Set this to true to see that effect. */
+    isContextHeaderSmall: PropTypes.bool,
 
     /**
      * The icon for the context header. */

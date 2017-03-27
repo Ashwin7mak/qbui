@@ -19,6 +19,7 @@ class SimpleNavItem extends Component {
 
         this.onClickNavItem = this.onClickNavItem.bind(this);
         this.onClickSecondaryIcon = this.onClickSecondaryIcon.bind(this);
+        this.renderCollapsedIcon = this.renderCollapsedIcon.bind(this);
         this.renderNavItem = this.renderNavItem.bind(this);
     }
 
@@ -71,6 +72,25 @@ class SimpleNavItem extends Component {
     }
 
     /**
+     * Try to render an icon if possible. As a backup, render the text, but it will be difficult to read. Prefer an icon.
+     * @returns {*}
+     */
+    renderCollapsedIcon() {
+        const {icon, iconFont, secondaryIcon, secondaryIconFont, title} = this.props;
+
+        if (icon) {
+            return <Icon className="navItemIcon" iconFont={iconFont} icon={icon} />;
+        }
+
+        if (secondaryIcon) {
+            return <Icon className="navItemIcon" iconFont={secondaryIconFont} icon={secondaryIcon} />
+        }
+
+        // When there are no icons, default to the nav item text
+        return <span className="navItemContent">{title}</span>;
+    }
+
+    /**
      * Renders the content of the nav item
      * If the nav item is collapsed it only renders the icon (or text if no icon)
      * TODO:: On hover, it will display the full item (navBodyCollapsedHover element)
@@ -95,8 +115,7 @@ class SimpleNavItem extends Component {
         if (isCollapsed) {
             return (
                 <div className="navBody navBodyCollapsed">
-                    {icon && <Icon className="navItemIcon" iconFont={iconFont} icon={icon} />}
-                    {!icon && navItemTitle}
+                    {this.renderCollapsedIcon()}
                 </div>
             );
         }
