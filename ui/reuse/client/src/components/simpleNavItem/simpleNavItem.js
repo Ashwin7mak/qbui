@@ -78,14 +78,16 @@ class SimpleNavItem extends Component {
      * @returns {XML}
      */
     renderNavItem(isCollapsed) {
-        const {icon, iconFont, title} = this.props;
+        const {icon, iconFont, title, isPrimaryAction} = this.props;
 
         const navItemTitle = <span className="navItemContent">{title}</span>;
 
         const navBody = (
-            <div className="navBody">
-                {icon && <Icon className="navItemIcon" iconFont={iconFont} icon={icon} />}
-                {navItemTitle}
+            <div className={`navBody ${isPrimaryAction ? 'primaryNavItem' : ''}`}>
+                <div className="navBodyContent">
+                    {icon && <Icon className="navItemIcon" iconFont={iconFont} icon={icon} />}
+                    {navItemTitle}
+                </div>
                 {this.renderSecondaryIcon()}
             </div>
         );
@@ -103,7 +105,7 @@ class SimpleNavItem extends Component {
     }
 
     getClassName() {
-        const {className, isSelected, isDisabled} = this.props;
+        const {className, isSelected, isDisabled, isPrimaryAction} = this.props;
         let instanceClassName = ['simpleNavItem'];
         if(className) {
             instanceClassName.push(className);
@@ -115,6 +117,10 @@ class SimpleNavItem extends Component {
 
         if (isDisabled) {
             instanceClassName.push('navItemDisabled');
+        }
+
+        if (isPrimaryAction) {
+            instanceClassName.push('navItemPrimaryAction');
         }
 
         return instanceClassName.join(' ');
@@ -151,6 +157,12 @@ class SimpleNavItem extends Component {
 
 SimpleNavItem.propTypes = {
     /**
+     * A set of actions that sit above the list of nav items. You can use these to call out
+     * specific actions. For example, in the Client-React app, a link to view the users of an app lives here.
+     * Set to true to designate a nav item as a primary action. */
+    isPrimaryAction: PropTypes.bool,
+
+    /**
      * Shows the navItem is a selected state when true */
     isSelected: PropTypes.bool,
 
@@ -183,7 +195,8 @@ SimpleNavItem.propTypes = {
     link: PropTypes.string,
 
     /**
-     * The icon that appears on hover on the right side of the nav item */
+     * The icon that appears on hover on the right side of the nav item
+     * On a primary action, the secondary icon appears to the left and is always displayed */
     secondaryIcon: PropTypes.string,
 
     /**

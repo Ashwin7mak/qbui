@@ -85,26 +85,39 @@ class StandardLeftNav extends Component {
         );
     }
 
+    renderPrimaryActions() {
+        const {navItems, isCollapsed} = this.props;
+        return (
+            <ul className={`standardLeftNavPrimaryActions ${isCollapsed ? 'standardLeftNavPrimaryActionsCollapsed' : ''}`}>
+                {navItems.filter(navItem => navItem.isPrimaryAction).map((navItem, index) => (
+                    <li key={index} className="primaryAction"><SimpleNavItem isCollapsed={isCollapsed} {...navItem} /></li>
+                ))}
+            </ul>
+        );
+    }
+
     renderNavContent() {
         const {className, isCollapsed, showLoadingIndicator, globalActions, brandingImage, brandingImageAltText, navItems} = this.props;
 
         return (
-            <div className={`standardLeftNav ${className} ${isCollapsed ? 'isCollapsed' : ''}`}>
+            <div className={`standardLeftNav ${className} ${isCollapsed ? 'isCollapsedStandardLeftNav' : ''}`}>
                 {this.renderContextHeader()}
+
+                {this.renderPrimaryActions()}
 
                 <Loader loadedClassName="standardLeftNavItems" loaded={!showLoadingIndicator} options={LEFT_NAV_BAR}>
                     <FlipMove typeName="ul" className="standardLeftNavItemsList">
-                        {navItems.map((navItem, index) => (
-                            <li key={index}><SimpleNavItem isCollapsed={this.props.isCollapsed} {...navItem} /></li>
+                        {navItems.filter(navItem => !navItem.isPrimaryAction).map((navItem, index) => (
+                            <li key={index}><SimpleNavItem isCollapsed={isCollapsed} {...navItem} /></li>
                         ))}
                     </FlipMove>
                 </Loader>
 
                 {Breakpoints.isSmallBreakpoint() && globalActions}
 
-                {!isCollapsed && <div className="branding">
+                <div className="standardLeftNavBranding">
                     <img className="leftNavLogo" alt={brandingImageAltText} src={brandingImage} />
-                </div>}
+                </div>
             </div>
         );
     }
@@ -184,11 +197,14 @@ StandardLeftNav.propTypes = {
      * The alt text to use with the branding image */
     brandingImageAltText: PropTypes.string,
 
+
+
     /**
      * The nav items to be displayed in the main content area of the left nav */
     navItems: PropTypes.arrayOf(PropTypes.shape({
         // See SimpleNavItem for more information about these props
         // isCollapsed will be automatically passed in based on the state of the leftNav
+        isPrimaryAction: PropTypes.bool,
         isSelected: PropTypes.bool,
         icon: PropTypes.string,
         iconFont: PropTypes.string,
@@ -202,6 +218,10 @@ StandardLeftNav.propTypes = {
         disabled: PropTypes.bool,
         className: PropTypes.string
     })),
+
+    /**
+     * Pass in a component to serve as a menu filter */
+    menuFilterElement: PropTypes.element,
 };
 
 StandardLeftNav.defaultProps = {
