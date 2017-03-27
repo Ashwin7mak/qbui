@@ -443,19 +443,15 @@ based on the security requirements of each.
 
   b) Modify the local.js file to define the path where your private key and certificate is located:
 
-    ```javascript
     SSL_KEY: {
         private: path.normalize(__dirname + '/keys/private.pem'),
         cert: path.normalize(__dirname + '/keys/cert.pem'),
         requireCert: false  // set to false for self signed certs
     },
-    ```
 
   c) Modify the local.js file and uncomment the path
 
-    ```javascript
     var path = require('path');
-    ```
 
   d) Optional: Modify the local.js file to change the default port for SSL.  Currently, it is set to 9443.  You can override as follows:
 
