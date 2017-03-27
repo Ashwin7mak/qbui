@@ -27,7 +27,7 @@ describe('BaseService rewire tests', () => {
 
     var simpleSubdomain = {href: "https://team.quickbase.com", hostname: "team.quickbase.com",
         subdomain: "team", domain: "quickbase.com",
-        expectedUrl: 'https://team.quickbase.com/db/main?a=nsredirect&nsurl='};
+        expectedUrl: 'https://team.quickbase.com/db/main?a=NSLoginRedirect&nsurl='};
     var complexSubdomain = {href: "https://team.demo.quickbaserocks.com", hostname: "team.demo.quickbaserocks.com",
         subdomain: "team", domain: "quickbaserocks.com",
         expectedUrl: 'https://team.quickbaserocks.com/db/main?a=nsredirect&nsurl='};
