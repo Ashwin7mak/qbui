@@ -396,6 +396,7 @@ export const Nav = React.createClass({
                             appUsers: this.state.apps.appUsers,
                             appUsersUnfiltered: this.state.apps.appUsersUnfiltered,
                             appRoles: this.state.apps.appRoles,
+                            appOwner: this.state.apps.appOwner,
                             locale: this.state.nav.locale,
                             isRowPopUpMenuOpen: this.props.shell.isRowPopUpMenuOpen,
                             fields: fields,
