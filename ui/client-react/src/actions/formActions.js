@@ -57,11 +57,13 @@ export const loadFormError = (id, error) => {
  * @param formData form data returned from server
  * @returns {{type, container: *, formData: *}}
  */
-export const loadFormSuccess = (id, formData) => {
+export const loadFormSuccess = (id, formData, appId, tblId) => {
     return {
         id,
         type: types.LOAD_FORM_SUCCESS,
-        formData: convertFormToArrayForClient(formData)
+        formData: convertFormToArrayForClient(formData),
+        appId,
+        tblId
     };
 };
 
@@ -97,73 +99,6 @@ export const saveFormComplete = (id) => {
         type: types.SAVE_FORM_COMPLETE
     };
 };
-
-/**
- * save form failed
- * @param container
- * @param error error message from server
- * @returns {{type, container: *, error: *}}
- */
-//TODO: MOVE TO RECORDS ACTION..THIS IS FIRED WHEN SAVING A RECORD
-//export const saveFormError = (id, error) => {
-//    return {
-//        id,
-//        type: types.SAVE_FORM_FAILED,
-//        error
-//    };
-//};
-
-/**
- * save form succeeded
- * @param container
- * @returns {{type, container: *}}
- */
-//TODO: MOVE TO RECORDS ACTION..THIS IS FIRED WHEN SAVING A RECORD
-//export const saveFormSuccess = (id) => {
-//    return {
-//        id,
-//        type: types.SAVE_FORM_SUCCESS
-//    };
-//};
-
-
-/**
- * open an existing record for editing
- * @param recId
- * @returns {{type, recId: *}}
- */
-//export const openRecordForEdit = (recId) => {
-//    // add editRec query param and let the router take action
-//    WindowLocationUtils.pushWithQuery(UrlConsts.EDIT_RECORD_KEY, recId);
-//
-//
-//    // let store know we're editing a record so we can navigate back and forth
-//
-//    return {
-//        type: types.EDIT_REPORT_RECORD,
-//        recId: recId,
-//    };
-//};
-
-/**
- * open a new record for editing
- * @param navigateAfterSave go to the new record after saving
- * @returns {{type, recId, navigateAfterSave: boolean}}
- *
- *
- * * TODO: move to redux record
- */
-//export const editNewRecord = (navigateAfterSave = false) => {
-//
-//    // add editRec=new query param and let the router take action
-//    WindowLocationUtils.pushWithQuery(UrlConsts.EDIT_RECORD_KEY, UrlConsts.NEW_RECORD_VALUE);
-//
-//    return {
-//        type: types.EDIT_REPORT_RECORD,
-//        recId: UrlConsts.NEW_RECORD_VALUE,
-//        navigateAfterSave
-//    };
-//};
 
 /**
  * load a form, optionally with record data
@@ -209,7 +144,7 @@ export const loadForm = (appId, tblId, rptId, formType, recordId) => {
                         response.data.recordId = recordId;
                     }
 
-                    dispatch(loadFormSuccess(formType, response.data));
+                    dispatch(loadFormSuccess(formType, response.data, appId, tblId));
                     resolve(response.data);
                 },
                 (error) => {
@@ -351,5 +286,3 @@ function saveTheForm(appId, tblId, formType, formMeta, isNew) {
         });
     };
 }
-
-

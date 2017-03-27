@@ -6,7 +6,8 @@ class AccountUsersService extends BaseService {
     constructor() {
         super();
         this.API = {
-            GET_USERS               : `${constants.BASE_GOVERNANCE_URL}/{0}/${constants.USERS}`
+            GET_USERS               : `${constants.BASE_GOVERNANCE_URL}/{0}/${constants.USERS}`,
+            GET_CONTEXT             : `${constants.BASE_GOVERNANCE_URL}/{0}/${constants.CONTEXT}`
         };
     }
 

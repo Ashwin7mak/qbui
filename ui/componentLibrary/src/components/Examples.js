@@ -33,6 +33,8 @@ import PhoneFieldValueEditorExample from 'raw!../examples/PhoneFieldValueEditorE
 import PhoneFieldValueRendererExample from 'raw!../examples/PhoneFieldValueRendererExample.js';
 import DurationFieldValueEditorExample from 'raw!../examples/DurationFieldValueEditorExample.js';
 import QbGridExample from 'raw!../examples/QbGridExample.js';
+import SideMenuBaseExample from 'raw!../examples/SideMenuBaseExample.js';
+import SideTrowserBaseExample from 'raw!../examples/SideTrowserBaseExample.js';
 // END OF IMPORT STATEMENTS
 // The comment above is used for a grunt task. Please do not delete.
 
@@ -70,6 +72,8 @@ export default {
     DurationFieldValueRenderer: DurationFieldValueRendererExample,
     DurationFieldValueEditor: DurationFieldValueEditorExample,
     QbGrid: QbGridExample,
+    SideMenuBase: SideMenuBaseExample,
+    SideTrowserBase: SideTrowserBaseExample,
     // END OF EXPORT
     // The comment above is used for a grunt task. Please do not delete.
 };

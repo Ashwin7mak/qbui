@@ -25,7 +25,7 @@ var CardViewNavigation = React.createClass({
                 </div>
                 <div className="cardViewHeader">
                     <button className="fetchPreviousButton" onClick={this.props.getPreviousReportPage}>
-                        <QBicon className="fetchPreviousArrow" icon="iconUiSturdy_ascending" />
+                        <QBicon className="fetchPreviousArrow" icon="ascending" />
                         <I18nMessage message="report.previousPage"/>
                     </button>
                 </div>

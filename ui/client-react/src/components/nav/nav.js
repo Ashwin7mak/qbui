@@ -22,12 +22,15 @@ import NavPageTitle from '../pageTitle/navPageTitle';
 import InvisibleBackdrop from '../qbModal/invisibleBackdrop';
 import AppQbModal from '../qbModal/appQbModal';
 
-import {CONTEXT} from '../../actions/context';
-
 import * as ShellActions from '../../actions/shellActions';
 import * as FormActions from '../../actions/formActions';
 import * as ReportActions from '../../actions/reportActions';
 import {connect} from 'react-redux';
+import {CONTEXT} from '../../actions/context';
+import ButtonGroup from 'react-bootstrap/lib/ButtonGroup';
+import Button from 'react-bootstrap/lib/Button';
+import Tooltip from '../../../../reuse/client/src/components/tooltip/tooltip';
+import Icon from '../../../../reuse/client/src/components/icon/icon';
 
 // This shared view with the server layer must be loaded as raw HTML because
 // the current backend setup cannot handle a react component in a common directory. It is loaded
@@ -46,7 +49,7 @@ const OPEN_APPS_LIST = true;
 let FluxMixin = Fluxxor.FluxMixin(React);
 let StoreWatchMixin = Fluxxor.StoreWatchMixin;
 export const Nav = React.createClass({
-    mixins: [FluxMixin, StoreWatchMixin('NavStore', 'AppsStore' /*'ReportDataStore', 'RecordPendingEditsStore', 'FieldsStore'*/)],
+    mixins: [FluxMixin, StoreWatchMixin('NavStore', 'AppsStore')],
 
     contextTypes: {
         touch: React.PropTypes.bool
@@ -57,10 +60,6 @@ export const Nav = React.createClass({
         return {
             nav: flux.store('NavStore').getState(),
             apps: flux.store('AppsStore').getState()
-            //pendEdits: flux.store('RecordPendingEditsStore').getState(),
-            //reportData: flux.store('ReportDataStore').getState(),
-            //fields: flux.store('FieldsStore').getState()
-            //reportSearchData: flux.store('ReportDataSearchStore').getState()
         };
     },
 
@@ -122,10 +121,10 @@ export const Nav = React.createClass({
                                dropdownIcon="user"
                                dropdownMsg="globalActions.user"
                                startTabIndex={100}
-                               position={"left"}>
+                               position="left">
                     <BuilderDropDownAction recId={recordId}
                                            actions={actions}
-                                           position={"left"}
+                                           position="left"
                                            formBuilderIcon="settings"
                                            navigateToBuilder={this.navigateToBuilder}
                                            startTabIndex={4}/>
@@ -275,6 +274,22 @@ export const Nav = React.createClass({
         return pendEdits;
     },
 
+    getCenterGlobalActions() {
+        return (
+            <ButtonGroup className="navItem">
+                <Tooltip i18nMessageKey="unimplemented.search" location="bottom">
+                    <Button tabIndex="2" className="disabled">
+                        <Icon icon="search" />
+                    </Button>
+                </Tooltip>
+
+                <Tooltip i18nMessageKey="unimplemented.favorites" location="bottom">
+                    <Button tabIndex="3" className="disabled"><Icon icon="star-full" /></Button>
+                </Tooltip>
+            </ButtonGroup>
+        );
+    },
+
     render() {
         if (!this.state.apps || this.state.apps.apps === null) {
             // don't render anything until we've made this first api call without being redirected to V2
@@ -363,9 +378,11 @@ export const Nav = React.createClass({
 
             <div className="main" >
                 <TopNav title={this.state.nav.topTitle}
+                        centerGlobalActions={this.getCenterGlobalActions()}
                         globalActions={this.getTopGlobalActions()}
                         onNavClick={this.toggleNav}
-                        showOnSmall = {this.state.nav.showTopNav}/>
+                        showOnSmall = {this.state.nav.showTopNav}
+                />
                 {this.props.children &&
                     <div className="mainContent" >
                         <TempMainErrorMessages apps={this.state.apps.apps} appsLoading={this.state.apps.loading} selectedAppId={this.state.apps.selectedAppId} />
@@ -379,6 +396,7 @@ export const Nav = React.createClass({
                             appUsers: this.state.apps.appUsers,
                             appUsersUnfiltered: this.state.apps.appUsersUnfiltered,
                             appRoles: this.state.apps.appRoles,
+                            appOwner: this.state.apps.appOwner,
                             locale: this.state.nav.locale,
                             isRowPopUpMenuOpen: this.props.shell.isRowPopUpMenuOpen,
                             fields: fields,

@@ -3,6 +3,7 @@ import {mount} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
 import {AccountUsersGrid} from '../../../../src/account/users/grid/AccountUsersGrid';
 import QbCell from '../../../../../client-react/src/components/dataTable/qbGrid/qbCell';
+import QbHeaderCell from '../../../../../client-react/src/components/dataTable/qbGrid/qbHeaderCell';
 import moment from 'moment';
 
 describe('AccountUsersGrid', () => {
@@ -14,13 +15,39 @@ describe('AccountUsersGrid', () => {
 
         const baseProps = {
             fetchAccountUsers: () => false,
-            accountId: "0"
+            fetchRequestContextIfNeeded: () => false,
+            accountId: "0",
+            loading: false,
+            showAccountColumns: true,
+            showRealmColumns: true
         };
 
         it("should show the correct set of headers", ()=> {
             let component = mount(<AccountUsersGrid {...baseProps} />);
-            let headers = component.find("th").map(node => node.text());
+            let headers = component.find(QbHeaderCell).map(node => node.text());
             expect(headers).toEqual(["First Name", "Last Name", "Email", "User Name", "Last Access", "QuickBase Access Status", "Inactive?", "In Any Group?", "Group Manager?", "Can create apps?", "App Manager?", "In Realm Directory?", "Realm Approved?"]);
+        });
+
+        it("should show the correct set of headers when not account admin", ()=> {
+            let props = {
+                ...baseProps,
+                showAccountColumns: false,
+            };
+
+            let component = mount(<AccountUsersGrid {...props} />);
+            let headers = component.find(QbHeaderCell).map(node => node.text());
+            expect(headers).toEqual(["First Name", "Last Name", "Email", "User Name", "QuickBase Access Status", "In Realm Directory?", "Realm Approved?"]);
+        });
+
+        it("should show the correct set of headers when not a realm admin", ()=> {
+            let props = {
+                ...baseProps,
+                showRealmColumns: false,
+            };
+
+            let component = mount(<AccountUsersGrid {...props} />);
+            let headers = component.find(QbHeaderCell).map(node => node.text());
+            expect(headers).toEqual(["First Name", "Last Name", "Email", "User Name", "Last Access", "QuickBase Access Status", "Inactive?", "In Any Group?", "Group Manager?", "Can create apps?", "App Manager?"]);
         });
 
         it("should should call fetch on mount", ()=> {
@@ -31,6 +58,17 @@ describe('AccountUsersGrid', () => {
             spyOn(props, 'fetchAccountUsers');
             mount(<AccountUsersGrid {...props} />);
             expect(props.fetchAccountUsers.calls.any()).toEqual(true);
+        });
+
+        it("should should render an error state", ()=> {
+            let props = {
+                ...baseProps,
+                dataFetchingError: "Error"
+            };
+
+            let component = mount(<AccountUsersGrid {...props} />);
+            let errorSection = component.find("h1");
+            expect(errorSection.length).toEqual(1);
         });
 
         describe("firstName", () => {

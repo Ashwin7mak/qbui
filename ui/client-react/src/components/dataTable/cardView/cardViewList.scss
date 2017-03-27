@@ -17,7 +17,7 @@ $checkbox-width: $card-view-checkbox-width;
 .reportTable .cardViewListHolder {
     transform: translate3d(-$checkbox-width, 0, 0);
     -webkit-transform: translate3d(-$checkbox-width, 0, 0);
-    width: calc(100% + #{$checkbox-width}) !important;
+    width: calc(100% + #{$checkbox-width} + 10px) !important;
     position: relative;
 
     &.allowCardSelection {
@@ -54,7 +54,7 @@ $checkbox-width: $card-view-checkbox-width;
     }
 
     .qbIcon {
-        &.iconTableUISturdy-caret-filled-down, &.iconTableUISturdy-caret-filled-right {
+        &.iconUISturdy-caret-filled-down, &.iconUISturdy-caret-filled-right {
             font-size: $grid-group-expand-icon-size;
         }
     }

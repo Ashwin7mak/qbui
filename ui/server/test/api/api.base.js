@@ -35,7 +35,6 @@
         var APPS_ENDPOINT = '/apps/';
         var RELATIONSHIPS_ENDPOINT = '/relationships/';
         var TABLES_ENDPOINT = '/tables/';
-        var TABLE_DEFAULT_HOME_PAGE = '/defaulthomepage';
         var FIELDS_ENDPOINT = '/fields/';
         var FORMS_ENDPOINT = '/forms/';
         var FORM_TYPE_ENDPOINT = 'formType/';
@@ -62,6 +61,7 @@
         var ERROR_HPE_INVALID_CONSTANT = 'HPE_INVALID_CONSTANT';
         var ERROR_ENOTFOUND = 'ENOTFOUND';
         var TABLES_PROPERTIES = '/tableproperties/';
+        var TABLE_COMPONENTS = 'tableComponents';
         var REQ_USER = 'reqUser';
         //add comment about this usage
         baseUrl = config === undefined ? '' : config.DOMAIN;
@@ -288,6 +288,9 @@
             },
             resolveGetReqUserEndpoint       : function() {
                 return NODE_BASE_ENDPOINT + USERS_ENDPOINT + REQ_USER;
+            },
+            resolveTableComponentsEndpoint       : function(appId) {
+                return NODE_BASE_ENDPOINT + APPS_ENDPOINT + appId + TABLES_ENDPOINT + TABLE_COMPONENTS;
             },
             defaultHeaders              : DEFAULT_HEADERS,
 
