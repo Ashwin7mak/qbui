@@ -162,7 +162,7 @@ describe('AccountUsersGrid', () => {
 
                 let component = mount(<AccountUsersGrid {...props} />);
                 let cell = component.find(QbCell).at(5);
-                expect(cell.text()).toEqual("No App Access");
+                expect(cell.text().trim()).toEqual("No App Access");
             });
 
             it("should show deactivated above all else", () => {
@@ -179,7 +179,7 @@ describe('AccountUsersGrid', () => {
 
                 let component = mount(<AccountUsersGrid {...props} />);
                 let cell = component.find(QbCell).at(5);
-                expect(cell.text()).toEqual("Deactivated");
+                expect(cell.text().trim()).toEqual("Deactivated");
             });
 
             it("should show denied above everything other than deactivated", () => {
@@ -196,7 +196,7 @@ describe('AccountUsersGrid', () => {
 
                 let component = mount(<AccountUsersGrid {...props} />);
                 let cell = component.find(QbCell).at(5);
-                expect(cell.text()).toEqual("Denied");
+                expect(cell.text().trim()).toEqual("Denied");
             });
 
             it("should quickbase staff above everything but denied and deactivated", () => {
@@ -213,7 +213,7 @@ describe('AccountUsersGrid', () => {
 
                 let component = mount(<AccountUsersGrid {...props} />);
                 let cell = component.find(QbCell).at(5);
-                expect(cell.text()).toEqual("QuickBase Staff");
+                expect(cell.text().trim()).toEqual("QuickBase Staff");
             });
 
             it("should show paid seat if has access", () => {
@@ -230,7 +230,7 @@ describe('AccountUsersGrid', () => {
 
                 let component = mount(<AccountUsersGrid {...props} />);
                 let cell = component.find(QbCell).at(5);
-                expect(cell.text()).toEqual("Paid Seat");
+                expect(cell.text().trim()).toEqual("Paid Seat");
             });
         });
 
