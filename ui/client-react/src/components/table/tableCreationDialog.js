@@ -69,6 +69,8 @@ export class TableCreationDialog extends React.Component {
 
                 const tblId = response.data;
 
+                this.props.onTableCreated(tblId);
+
                 // navigate to form builder (no page reload)
 
                 AppHistory.history.push(UrlUtils.getAfterTableCreatedLink(this.props.app.id, tblId));
@@ -147,6 +149,7 @@ TableCreationDialog.propTypes = {
     previousTableCreationPage: PropTypes.func.isRequired,
     hideTableCreationDialog: PropTypes.func.isRequired,
     createTable: PropTypes.func.isRequired,
+    onTableCreated: PropTypes.func.isRequired,
     notifyTableCreated: PropTypes.func.isRequired
 };
 

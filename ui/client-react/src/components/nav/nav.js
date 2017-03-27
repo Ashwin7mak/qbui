@@ -386,8 +386,17 @@ export let Nav = React.createClass({
                 this.renderSavingModal(this.state.pendEdits.saving)
             }
 
-            {this.state.apps.selectedAppId && <TableCreationDialog app={this.getSelectedApp()}/>}
+            {this.state.apps.selectedAppId && <TableCreationDialog app={this.getSelectedApp()} onTableCreated={this.tableCreated}/>}
         </div>);
+    },
+
+    /**
+     * new table was created, ensure it is displayed available in the UI
+     */
+    tableCreated() {
+        const flux = this.getFlux();
+
+        flux.actions.loadApps(true);
     },
 
     onSelectItem() {

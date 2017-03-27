@@ -6,7 +6,7 @@
 
 @include not-small-breakpoint {
 
-    .multiStepModal .modal-dialog {
+    .multiStepModal.tableCreationDialog .modal-dialog {
 
         .modal-body > *:first-child {
             height: 315px;
@@ -18,7 +18,7 @@
 /* some initial small styles in case we support small */
 @include small-breakpoint {
 
-    .multiStepModal .modal-dialog {
+    .multiStepModal.tableCreationDialog .modal-dialog {
 
         .modal-body > *:first-child {
             height: 550px;

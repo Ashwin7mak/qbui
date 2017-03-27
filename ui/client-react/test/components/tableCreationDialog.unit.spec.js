@@ -14,7 +14,8 @@ const mockParentFunctions = {
     notifyTableCreated() {},
     setEditingProperty() {},
     setTableProperty() {},
-    createTable: () => {return {then: (fn) => fn({data:'tableId'})};}
+    createTable: () => {return {then: (fn) => fn({data:'tableId'})};},
+    tableCreated() {}
 };
 
 let app = {
@@ -60,6 +61,7 @@ function buildMockParent() {
                                      hideTableCreationDialog={mockParentFunctions.hideDialog}
                                      createTable={mockParentFunctions.createTable}
                                      notifyTableCreated={mockParentFunctions.notifyTableCreated}
+                                     onTableCreated={mockParentFunctions.tableCreated}
                 />
             );
         }
