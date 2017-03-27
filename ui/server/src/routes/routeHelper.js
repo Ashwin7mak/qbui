@@ -50,6 +50,10 @@
         return '/qb';
     }
 
+    function getLegacyStackMainHandlerRoot() {
+        return '/db/main';
+    }
+
     /**
      *
      */
@@ -884,6 +888,14 @@
          */
         getGovernanceContextLegacyStackRoute: function(accountId) {
             return `${getLegacyStackDotNetRoot()}/governance/context/${accountId ? accountId : ''}`;
+        },
+
+        /**
+         * Navigate to the legacy stack 'My Apps' page
+         * @returns {string}
+         */
+        getMyAppsLegacyStackRoute: function() {
+            return `${getLegacyStackMainHandlerRoot()}?a=myqb`;
         }
 
 
