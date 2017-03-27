@@ -98,18 +98,27 @@ export let Nav = React.createClass({
         if (this.props.params) {
             recordId = this.props.params.recordId;
         }
+        let selectedApp = this.getSelectedApp();
+        let isUserAdmin = false;
+        if (selectedApp) {
+            isUserAdmin = AppUtils.hasAdminAccess(selectedApp.accessRights);
+        }
         return (<GlobalActions actions={actions}
                                position={"top"}
                                dropdownIcon="user"
                                dropdownMsg="globalActions.user"
                                startTabIndex={4}
                                app={this.getSelectedApp()}>
-                    <BuilderDropDownAction recId={recordId}
-                                           actions={actions}
-                                           position={"top"}
-                                           formBuilderIcon="settings"
-                                           navigateToBuilder={this.navigateToBuilder}
-                                           startTabIndex={4}/>
+            {isUserAdmin ?
+                    <BuilderDropDownAction
+                                selectedAppId={this.state.apps.selectedAppId}
+                                selectedTableId={this.state.apps.selectedTableId}
+                                recId={recordId}
+                                actions={actions}
+                                position={"top"}
+                                formBuilderIcon="settings"
+                                navigateToBuilder={this.navigateToBuilder}
+                                startTabIndex={4}/> : null}
                 </GlobalActions>);
     },
 

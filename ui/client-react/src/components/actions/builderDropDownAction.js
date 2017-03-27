@@ -1,7 +1,8 @@
 import React from 'react';
-import {MenuItem, Dropdown, OverlayTrigger, Tooltip} from 'react-bootstrap';
+import {MenuItem, Dropdown, OverlayTrigger, Tooltip, Popover, Button} from 'react-bootstrap';
 import QBicon from '../qbIcon/qbIcon';
 import {I18nMessage} from '../../utils/i18nMessage';
+import './builderDropDown.scss';
 
 const actionPropType = React.PropTypes.shape({
     icon: React.PropTypes.string.isRequired,
@@ -29,12 +30,13 @@ let BuilderDropDownAction = React.createClass({
     },
 
     getBuilderDropdown() {
-        let eventKeyIdx = 20;
         let isFormView = this.props.recId ? true : false;
-        let isDisabled = isFormView ? "dropdownToggle globalActionLink formBuilder" : "disabled btn btn-default";
+        let isAppView = this.props.selectedAppId !== null;
+        let isTableView = this.props.selectedTableId !== null;
+        let isDisabled = isTableView ? "dropdownToggle globalActionLink formBuilder" : "disabled btn btn-default";
+
 
         let formBuilderDropdown = <Dropdown className={isDisabled} id="nav-right-dropdown" dropup={this.props.position === "left"} >
-
             <a bsRole="toggle"
                className={isDisabled}
                tabIndex={this.props.startTabIndex + this.props.actions.length}>
@@ -42,9 +44,18 @@ let BuilderDropDownAction = React.createClass({
             </a>
 
             <Dropdown.Menu>
-                <MenuItem id="modifyForm" onClick={this.props.navigateToBuilder} eventKey={eventKeyIdx++}><I18nMessage
-                message={"pageActions.configureFormBuilder"}/></MenuItem>
-
+                <div className="configurationMenu">
+                    {isTableView ?
+                    <div>
+                        <li><a className="heading"><I18nMessage message={"pageActions.tableSettingsHeader"}/></a></li>
+                        <li><a id="modifyTableSettings"><I18nMessage message={"pageActions.tableSettings"}/></a></li>
+                    </div> : null}
+                    {isFormView ?
+                    <div>
+                        <li><a id="modifyForm" onClick={this.props.navigateToBuilder}><I18nMessage
+                            message={"pageActions.configureFormBuilder"}/></a></li>
+                    </div> : null}
+                </div>
             </Dropdown.Menu>
         </Dropdown>;
 

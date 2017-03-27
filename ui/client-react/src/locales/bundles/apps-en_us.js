@@ -120,6 +120,8 @@ export default {
         },
         pageActions: {
             addRecord: "Add a record",
+            tableSettingsHeader: 'Table Settings',
+            tableSettings: 'Table Properties & Settings',
             configureFormBuilder: 'Modify this form',
             saveRecord: "Save changes",
             saveAndAddRecord: "Save and add a new row",
