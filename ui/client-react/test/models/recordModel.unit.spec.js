@@ -1,5 +1,5 @@
 import RecordModel from '../../src/models/recordModel';
-import {__RewireAPI__ as ReportModelRewireAPI} from '../../src/models/recordModel';
+import {__RewireAPI__ as RecordModelRewireAPI} from '../../src/models/recordModel';
 import {UNSAVED_RECORD_ID} from "../../src/constants/schema";
 
 const appId = '1';
@@ -27,14 +27,14 @@ describe('Record Model', () => {
     beforeEach(() => {
         spyOn(mockValidationMessage, 'getMessage').and.callThrough();
         spyOn(mockValidationUtils, 'checkFieldValue').and.callThrough();
-        ReportModelRewireAPI.__Rewire__('ValidationMessage', mockValidationMessage);
-        ReportModelRewireAPI.__Rewire__('ValidationUtils', mockValidationUtils);
+        RecordModelRewireAPI.__Rewire__('ValidationMessage', mockValidationMessage);
+        RecordModelRewireAPI.__Rewire__('ValidationUtils', mockValidationUtils);
     });
     afterEach(() => {
         mockValidationMessage.getMessage.calls.reset();
         mockValidationUtils.checkFieldValue.calls.reset();
-        ReportModelRewireAPI.__ResetDependency__('ValidationMessage');
-        ReportModelRewireAPI.__ResetDependency__('ValidationUtils');
+        RecordModelRewireAPI.__ResetDependency__('ValidationMessage');
+        RecordModelRewireAPI.__ResetDependency__('ValidationUtils');
     });
 
     it('Initialize record model object', () => {
