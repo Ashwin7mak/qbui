@@ -7,6 +7,7 @@ import Locale from '../../../locales/locales';
 import {I18nMessage} from '../../../utils/i18nMessage';
 import QbIcon from '../../qbIcon/qbIcon';
 import ReportColumnHeaderMenuContainer from './reportColumnHeaderMenuContainer';
+import FormBuilder from './../../formBuilder/formBuilder';
 
 const SORTING_MESSAGE = 'sort';
 const GROUPING_MESSAGE = 'group';
@@ -161,6 +162,7 @@ export const ReportColumnHeaderMenu = React.createClass({
 
     render() {
         return (
+
             <Dropdown bsStyle="default" noCaret id="dropdown-no-caret">
                 <Button tabIndex="0" bsRole="toggle" className={"dropdownToggle iconActionButton"}>
                     <QbIcon icon="caret-filled-down"/>
@@ -181,17 +183,27 @@ export const ReportColumnHeaderMenu = React.createClass({
 
                     <MenuItem onSelect={this.groupReportAscending}>
                         <span className="groupAscendMenuText">{this.getSortAscText(GROUPING_MESSAGE)}</span>
+
                     </MenuItem>
                     <MenuItem onSelect={this.groupReportDescending}>
                         <span className="groupDescendMenuText">{this.getSortDescText(GROUPING_MESSAGE)}</span>
+        <FormBuilder />
                     </MenuItem>
+            <MenuItem>
+            <h6>abc</h6>
+            <FormBuilder />
+            </MenuItem>
+
+
 
                     <MenuItem divider/>
 
                     <MenuItem disabled><I18nMessage message="report.menu.addColumnBefore"/></MenuItem>
                     <MenuItem disabled><I18nMessage message="report.menu.addColumnAfter"/></MenuItem>
                     <MenuItem disabled><I18nMessage message="report.menu.hideColumn"/></MenuItem>
+
                 </Dropdown.Menu>
+
             </Dropdown>
         );
     }
