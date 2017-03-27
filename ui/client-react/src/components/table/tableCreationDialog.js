@@ -115,7 +115,7 @@ export class TableCreationDialog extends React.Component {
         }
 
         return (<MultiStepDialog show={this.props.tableCreation.dialogOpen}
-                                 loading={this.props.tableCreation.savingTable}
+                                 isLoading={this.props.tableCreation.savingTable}
                                  classes={classes.join(' ')}
                                  pageIndex={this.props.tableCreation.pageIndex}
                                  onCancel={this.onCancel}

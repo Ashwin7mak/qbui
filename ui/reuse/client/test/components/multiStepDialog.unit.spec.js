@@ -23,7 +23,7 @@ describe('MultiStepDialog', () => {
         spyOn(mockParentFunctions, 'onNext');
 
         component = shallow(<MultiStepDialog show={true}
-                                             loading={false}
+                                             isLoading={false}
                                              pageIndex={0}
                                              classes="classOne classTwo"
                                              onCancel={mockParentFunctions.onCancel}
@@ -64,7 +64,7 @@ describe('MultiStepDialog', () => {
         spyOn(mockParentFunctions, 'onFinished');
 
         component = shallow(<MultiStepDialog show={true}
-                                             loading={false}
+                                             isLoading={false}
                                              pageIndex={1}
                                              onCancel={mockParentFunctions.onCancel}
                                              onPrevious={mockParentFunctions.onPrevious}
@@ -101,7 +101,7 @@ describe('MultiStepDialog', () => {
         spyOn(mockParentFunctions, 'onNext');
 
         component = shallow(<MultiStepDialog show={true}
-                                             loading={false}
+                                             isLoading={false}
                                              pageIndex={0}
                                              classes="classOne classTwo"
                                              onCancel={mockParentFunctions.onCancel}

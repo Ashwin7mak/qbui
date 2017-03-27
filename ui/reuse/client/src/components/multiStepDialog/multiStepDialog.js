@@ -27,6 +27,10 @@ class MultiStepDialog extends React.Component {
 
     constructor(props) {
         super(props);
+
+        // use state only to determine which transition classes to apply
+        // to slide right vs slide left - this is an internal rendering
+        // property only and doesn't really belong in the Redux store
         this.state = {
             transitionName: "next"
         };
@@ -45,7 +49,7 @@ class MultiStepDialog extends React.Component {
 
     renderIcons() {
         return (
-            <div className={"rightIcons"}>
+            <div className={"multiStepDialogRightIcons"}>
                 <button className="closeButton" onClick={this.cancelClicked}><Icon icon={"close"}/></button>
             </div>);
     }
@@ -123,7 +127,7 @@ class MultiStepDialog extends React.Component {
                             {this.renderTitle()}
 
                             <Modal.Body>
-                                <Loader loaded={!this.props.loading}>
+                                <Loader loaded={!this.props.isLoading}>
                                     <ReactCSSTransitionGroup transitionName={this.state.transitionName}
                                                              transitionEnterTimeout={300}
                                                              transitionLeaveTimeout={300}>
@@ -184,7 +188,7 @@ MultiStepDialog.propTypes = {
 
 MultiStepDialog.defaultProps = {
     canProceed: true,
-    loading: false
+    isLoading: false
 };
 
 export default MultiStepDialog;
