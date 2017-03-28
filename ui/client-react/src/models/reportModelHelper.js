@@ -158,6 +158,10 @@ class ReportModelHelper {
             let filteredRecord = null;
             let reportData = currentReport.data;
 
+            //  ensure recId is numeric
+            if (content.recId) {
+                content.recId = +content.recId;
+            }
             if (reportData.hasGrouping) {
                 record = ReportUtils.findGroupedRecord(reportData.records, content.recId, reportData.keyField.name);
                 filteredRecord = ReportUtils.findGroupedRecord(reportData.filteredRecords, content.recId, reportData.keyField.name);
@@ -188,6 +192,10 @@ class ReportModelHelper {
         let recordDeleted = false;
         let filteredRecordDeleted = false;
 
+        // ensure recId is numeric
+        if (recId) {
+            recId = +recId;
+        }
         if (reportData.hasGrouping) {
             filteredRecordDeleted = ReportUtils.removeGroupedRecordById(newFilteredRecords, recId, reportData.keyField.name);
             recordDeleted = ReportUtils.removeGroupedRecordById(newRecords, recId, reportData.keyField.name);
@@ -230,6 +238,11 @@ class ReportModelHelper {
  * @returns {*}
  */
 function findRecordById(records, recId, hasGrouping, keyField) {
+    // ensure recId is numeric
+    if (recId) {
+        recId = +recId;
+    }
+
     if (hasGrouping) {
         return ReportUtils.findGroupedRecord(records, recId, keyField.name);
     } else {
@@ -262,6 +275,10 @@ function addRecordToReport(currentReport, content) {
                 // The afterRecId is an object if coming from the grid
                 if (_.has(afterRecId, 'value')) {
                     afterRecId = afterRecId.value;
+                }
+                //  ensure afterRecId is numeric
+                if (afterRecId) {
+                    afterRecId = +afterRecId;
                 }
                 afterRecIndex = ReportUtils.findRecordIndex(reportData.records, afterRecId, reportData.keyField.name);
             }
@@ -378,6 +395,11 @@ function addRecordToGroupedReport(currentReport, content) {
             afterRecordIdValue = content.afterRecId.value;
         }
 
+        // ensure afterRecordId is numeric
+        if (afterRecordIdValue) {
+            afterRecordIdValue = +afterRecordIdValue;
+        }
+
         //  find the first group if no 'after record id' supplied
         let templateRecord;
         if (afterRecordIdValue === -1) {
@@ -450,8 +472,8 @@ function addRecordToGroupedReport(currentReport, content) {
         }
 
         let afterRecIndex = -1;
-        if (content.afterRecId) {
-            afterRecIndex = ReportUtils.findRecordIndex(reportData.filteredRecords, content.afterRecId, reportData.keyField.name);
+        if (afterRecordIdValue) {
+            afterRecIndex = ReportUtils.findRecordIndex(reportData.filteredRecords, afterRecordIdValue, reportData.keyField.name);
         }
 
         //editing index for new blank rows
