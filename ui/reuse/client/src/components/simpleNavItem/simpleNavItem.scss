@@ -19,6 +19,11 @@ $navitem-primary-hover-border: $color-cyan-300;
     cursor: pointer;
     position: relative;
 
+    .tipChildWrapper {
+        cursor: pointer;
+        height: $navitem-height;
+    }
+
     &.navItemPrimaryAction {
         padding-left: 0;
         line-height: 20px;

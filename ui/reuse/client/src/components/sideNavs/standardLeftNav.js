@@ -57,9 +57,9 @@ class StandardLeftNav extends Component {
         if (Breakpoints.isLargeBreakpoint() || Breakpoints.isXLargeBreakpoint()) {
             return 23;
         } else if (Breakpoints.isMediumBreakpoint()) {
-            return (this.props.isContextHeaderSmall ? 17 : 15);
+            return (this.props.isContextHeaderSmall ? 17 : 17);
         } else {
-            return (this.props.isContextHeaderSmall ? 16 : 13);
+            return (this.props.isContextHeaderSmall ? 16 : 17);
         }
     }
 
