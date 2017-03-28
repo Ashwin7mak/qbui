@@ -32,8 +32,8 @@ export class FieldEditingTools extends Component {
     }
 
     onClickDelete(e) {
-        if (this.props.removeField) {
-            return this.props.removeField(this.props.formId, this.props.location);
+        if (this.props.removeFieldFromForm) {
+            return this.props.removeFieldFromForm(this.props.formId, this.props.location);
         }
         e.preventDefault();
     }
@@ -45,8 +45,8 @@ export class FieldEditingTools extends Component {
     }
 
     onClickField(e) {
-        if (this.props.selectField) {
-            this.props.selectField(this.props.formId, this.props.location);
+        if (this.props.selectFieldOnForm) {
+            this.props.selectFieldOnForm(this.props.formId, this.props.location);
             if (e) {
                 e.preventDefault();
             }
@@ -207,15 +207,9 @@ const mapStateToProps = (state, ownProps) => {
     };
 };
 
-const mapDispatchToProps = dispatch => {
-    return {
-        selectField(formId, location) {
-            return dispatch(selectFieldOnForm(formId, location));
-        },
-        removeField(formId, location) {
-            return dispatch(removeFieldFromForm(formId, location));
-        },
-    };
+const mapDispatchToProps ={
+    selectFieldOnForm,
+    removeFieldFromForm
 };
 
 export default connect(

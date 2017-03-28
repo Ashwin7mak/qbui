@@ -38,48 +38,17 @@ const mapStateToProps = state => {
     };
 };
 
-const mapDispatchToProps = dispatch => {
-    return {
-        loadForm(appId, tableId, reportId, formType, recordId) {
-            return dispatch(loadForm(appId, tableId, reportId, formType, recordId));
-        },
-
-        moveField(formId, newLocation, draggedItemProps) {
-            return dispatch(moveFieldOnForm(formId, newLocation, draggedItemProps));
-        },
-
-        updateForm(appId, tblId, formType, form) {
-            return dispatch(updateForm(appId, tblId, formType, form));
-        },
-
-        updateAnimationState(isAnimating) {
-            return dispatch(updateFormAnimationState(isAnimating));
-        },
-
-        toggleFormBuilderChildrenTabIndex(formId, currentTabIndex) {
-            return dispatch(toggleFormBuilderChildrenTabIndex(formId, currentTabIndex));
-        },
-
-        keyboardMoveFieldUp(formId, location) {
-            return dispatch(keyboardMoveFieldUp(formId, location));
-        },
-
-        keyboardMoveFieldDown(formId, location) {
-            return dispatch(keyboardMoveFieldDown(formId, location));
-        },
-
-        deselectField(formId, location) {
-            return dispatch(deselectField(formId, location));
-        },
-
-        removeField(formId, location) {
-            return dispatch(removeFieldFromForm(formId, location));
-        },
-
-        tableCreatedNotificationComplete() {
-            return dispatch(notifyTableCreated(false));
-        }
-    };
+const mapDispatchToProps = {
+        loadForm,
+        moveFieldOnForm,
+        updateForm,
+        updateFormAnimationState,
+        toggleFormBuilderChildrenTabIndex,
+        keyboardMoveFieldUp,
+        keyboardMoveFieldDown,
+        deselectField,
+        removeFieldFromForm,
+        notifyTableCreated
 };
 
 export const FormBuilderContainer = React.createClass({
@@ -109,7 +78,7 @@ export const FormBuilderContainer = React.createClass({
         // if we've been sent here from the table creation flow, show a notification
 
         if (this.props.notifyTableCreated) {
-            this.props.tableCreatedNotificationComplete();
+            this.props.notifyTableCreated(false);
             setTimeout(() => {
                 NotificationManager.success(Locale.getMessage('tableCreation.tableCreated'), Locale.getMessage('success'));
             }, 1000);
@@ -121,8 +90,8 @@ export const FormBuilderContainer = React.createClass({
     },
 
     removeField() {
-        if (this.props.removeField) {
-            return this.props.removeField(this.props.currentForm.id, this.props.selectedField);
+        if (this.props.removeFieldFromForm) {
+            return this.props.removeFieldFromForm(this.props.currentForm.id, this.props.selectedField);
         }
     },
 
@@ -234,8 +203,8 @@ export const FormBuilderContainer = React.createClass({
                                     formBuilderUpdateChildrenTabIndex={this.updateChildrenTabIndex}
                                     formId={formId}
                                     formData={formData}
-                                    moveFieldOnForm={this.props.moveField}
-                                    updateAnimationState={this.props.updateAnimationState}
+                                    moveFieldOnForm={this.props.moveFieldOnForm}
+                                    updateAnimationState={this.props.updateFormAnimationState}
                                 />
                             </Loader>
                         </div>

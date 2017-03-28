@@ -17,9 +17,9 @@ const mockReactDom = {
 };
 
 const mockParentProps = {
-    removeField(_location) {},
+    removeFieldFromForm(_location) {},
     openFieldPreferences(_location) {},
-    selectField(_formId, _location) {}
+    selectFieldOnForm(_formId, _location) {}
 };
 
 const formBuilderChildrenTabIndex = ["0"];
@@ -46,13 +46,13 @@ describe('FieldEditingTools', () => {
     });
 
     it('has a delete button', () => {
-        spyOn(mockParentProps, 'removeField');
+        spyOn(mockParentProps, 'removeFieldFromForm');
 
         component = shallow(<FieldEditingTools
             formBuilderChildrenTabIndex={formBuilderChildrenTabIndex}
             selectedFields={[]}
             location={location}
-            removeField={mockParentProps.removeField}
+            removeFieldFromForm={mockParentProps.removeFieldFromForm}
         />);
 
         let deleteButton = component.find('.deleteFieldIcon button');
@@ -61,7 +61,7 @@ describe('FieldEditingTools', () => {
 
         deleteButton.simulate('click');
 
-        expect(mockParentProps.removeField).toHaveBeenCalledWith(formId, location);
+        expect(mockParentProps.removeFieldFromForm).toHaveBeenCalledWith(formId, location);
     });
 
     it('has a field preferences button', () => {
@@ -84,20 +84,20 @@ describe('FieldEditingTools', () => {
     });
 
     it('selects a field when an element is clicked', () => {
-        spyOn(mockParentProps, 'selectField');
+        spyOn(mockParentProps, 'selectFieldOnForm');
 
         component = shallow(<FieldEditingTools
             formBuilderChildrenTabIndex={formBuilderChildrenTabIndex}
             location={location}
             selectedFields={[location]}
-            selectField={mockParentProps.selectField}
+            selectFieldOnForm={mockParentProps.selectFieldOnForm}
         />);
 
         let onClickField = component.find('.fieldEditingTools');
 
         onClickField.simulate('click');
 
-        expect(mockParentProps.selectField).toHaveBeenCalledWith(formId, location);
+        expect(mockParentProps.selectFieldOnForm).toHaveBeenCalledWith(formId, location);
     });
 
     it('adds a selectedFormElement class to the field that is selected', () => {

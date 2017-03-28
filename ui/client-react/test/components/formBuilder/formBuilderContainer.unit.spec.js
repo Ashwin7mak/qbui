@@ -17,7 +17,7 @@ const mockActions = {
     toggleFormBuilderChildrenTabIndex() {},
     keyboardMoveFieldUp(_formId, _location) {},
     keyboardMoveFieldDown(_formId, _location) {},
-    removeField(_formId, _location) {},
+    removeFieldFromForm(_formId, _location) {},
     deselectField(_formId, _location) {}
 };
 
@@ -32,7 +32,7 @@ describe('FormBuilderContainer', () => {
         spyOn(mockActions, 'toggleFormBuilderChildrenTabIndex');
         spyOn(mockActions, 'keyboardMoveFieldUp');
         spyOn(mockActions, 'keyboardMoveFieldDown');
-        spyOn(mockActions, 'removeField');
+        spyOn(mockActions, 'removeFieldFromForm');
         spyOn(mockActions, 'deselectField');
     });
 
@@ -185,14 +185,14 @@ describe('FormBuilderContainer', () => {
                 selectedField={selectedField}
                 currentForm={currentForm}
                 location={location}
-                removeField={mockActions.removeField}
+                removeFieldFromForm={mockActions.removeFieldFromForm}
             />);
 
             instance = component.instance();
 
             instance.removeField();
 
-            expect(mockActions.removeField).toHaveBeenCalledWith(currentForm.id, selectedField);
+            expect(mockActions.removeFieldFromForm).toHaveBeenCalledWith(currentForm.id, selectedField);
         });
 
         it('will deselect a field', () => {
