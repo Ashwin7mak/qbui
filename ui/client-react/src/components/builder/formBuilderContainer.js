@@ -17,6 +17,7 @@ import Logger from '../../utils/logger';
 import AutoScroll from '../autoScroll/autoScroll';
 import PageTitle from '../pageTitle/pageTitle';
 import ReKeyboardShortcuts from '../../../../reuse/client/src/components/reKeyboardShortcuts/reKeyboardShortcuts';
+import _ from 'lodash';
 
 import './formBuilderContainer.scss';
 
@@ -24,15 +25,12 @@ let logger = new Logger();
 
 const mapStateToProps = state => {
     let currentForm = state.forms ? state.forms[0] : undefined;
-    let selectedField = (_.has(currentForm, 'selectedFields') ? currentForm.selectedFields[0] : []);
-    let tabIndex = (_.has(currentForm, 'formBuilderChildrenTabIndex') ? currentForm.formBuilderChildrenTabIndex[0] : undefined);
-    let formFocus = (_.has(currentForm, 'formFocus') ? currentForm.formFocus[0] : undefined);
 
     return {
         currentForm,
-        tabIndex,
-        selectedField,
-        formFocus
+        selectedField: (_.has(currentForm, 'selectedFields') ? currentForm.selectedFields[0] : []),
+        tabIndex: (_.has(currentForm, 'formBuilderChildrenTabIndex') ? currentForm.formBuilderChildrenTabIndex[0] : undefined),
+        formFocus: (_.has(currentForm, 'formFocus') ? currentForm.formFocus[0] : undefined)
     };
 };
 
