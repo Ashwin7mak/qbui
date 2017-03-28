@@ -17,10 +17,9 @@
         reportFilterSearchBox : {get: function() {
             return this.reportsToolBar.element('.searchInput');
         }},
-
-        clickAndWait: {value: function(button) {
+        clickAndWaitForGrid: {value: function(button) {
             button.click();
-            this.tableBody.waitForVisible();
+            this.qbGridContainer.waitForVisible();
         }},
 
         //Record add button on stage
