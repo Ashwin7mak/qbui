@@ -1,16 +1,16 @@
-import React, {PropTypes, Component} from 'react';
-import AVAILABLE_ICON_FONTS from '../../../constants/iconConstants';
-import QbIcon from '../../qbIcon/qbIcon';
-import QbToolTip from '../../qbToolTip/qbToolTip';
-import DragHandle from '../dragHandle/dragHandle';
-import Device from '../../../utils/device';
-import Breakpoints from '../../../utils/breakpoints';
-import {connect} from 'react-redux';
-import {ENTER_KEY, SPACE_KEY} from '../../../../../reuse/client/src/components/keyboardShortcuts/keyCodeConstants';
-import _ from 'lodash';
-import {selectFieldOnForm, removeFieldFromForm} from '../../../actions/formActions';
+import React, {PropTypes, Component} from "react";
+import AVAILABLE_ICON_FONTS from "../../../constants/iconConstants";
+import QbIcon from "../../qbIcon/qbIcon";
+import QbToolTip from "../../qbToolTip/qbToolTip";
+import DragHandle from "../dragHandle/dragHandle";
+import Device from "../../../utils/device";
+import Breakpoints from "../../../utils/breakpoints";
+import {connect} from "react-redux";
+import {ENTER_KEY, SPACE_KEY} from "../../../../../reuse/client/src/components/keyboardShortcuts/keyCodeConstants";
+import _ from "lodash";
+import {selectFieldOnForm, removeFieldFromForm} from "../../../actions/formActions";
 
-import './fieldEditingTools.scss';
+import "./fieldEditingTools.scss";
 
 /**
  * Adds chrome around a field so that the field can be moved and edited.
@@ -73,16 +73,16 @@ export class FieldEditingTools extends Component {
         }
 
         return (
-            <div className='actionIcons'>
-                    <div className='deleteFieldIcon'>
-                        <QbToolTip i18nMessageKey='builder.formBuilder.removeField'>
-                           <button tabIndex={tabIndex} onClick={this.onClickDelete}> <QbIcon icon='delete' /> </button>
+            <div className="actionIcons">
+                    <div className="deleteFieldIcon">
+                        <QbToolTip i18nMessageKey="builder.formBuilder.removeField">
+                           <button tabIndex={tabIndex} onClick={this.onClickDelete}> <QbIcon icon="delete" /> </button>
                         </QbToolTip>
                     </div>
 
-                    <div  className='fieldPreferencesIcon'>
-                        <QbToolTip i18nMessageKey='builder.formBuilder.unimplemented'>
-                            <button tabIndex={tabIndex} onClick={this.onClickFieldPreferences}> <QbIcon iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY} icon='Dimensions'/> </button>
+                    <div  className="fieldPreferencesIcon">
+                        <QbToolTip i18nMessageKey="builder.formBuilder.unimplemented">
+                            <button tabIndex={tabIndex} onClick={this.onClickFieldPreferences}> <QbIcon iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY} icon="Dimensions"/> </button>
                         </QbToolTip>
                     </div>
             </div>
@@ -94,27 +94,27 @@ export class FieldEditingTools extends Component {
          * For keyboard, we need to reset the focus, to maintain proper tabbing order
          * and we need to keep the current form element in view, by scrolling it into view
          * */
-        if (this.props.previouslySelectedField && this.props.previouslySelectedField[0] && this.props.tabIndex !== '-1') {
-            let previouslySelectedField = document.querySelectorAll('.fieldEditingTools');
+        if (this.props.previouslySelectedField && this.props.previouslySelectedField[0] && this.props.tabIndex !== "-1") {
+            let previouslySelectedField = document.querySelectorAll(".fieldEditingTools");
             previouslySelectedField[this.props.previouslySelectedField[0].elementIndex].focus();
         } else if (this.props.selectedFields && this.props.selectedFields[0]) {
-            let setFocusOnSelectedField = document.querySelectorAll('.fieldEditingTools');
+            let setFocusOnSelectedField = document.querySelectorAll(".fieldEditingTools");
             setFocusOnSelectedField[this.props.selectedFields[0].elementIndex].focus();
         }
         this.updateScrollLocation();
     }
 
     getSelectedFormElementContainer() {
-        let selectedFormElement = document.querySelector('.selectedFormElement');
+        let selectedFormElement = document.querySelector(".selectedFormElement");
         if (selectedFormElement) {
             return selectedFormElement.getBoundingClientRect();
         }
     }
 
     scrollElementIntoView() {
-        let selectedFormElement = document.querySelector('.selectedFormElement');
+        let selectedFormElement = document.querySelector(".selectedFormElement");
         if (selectedFormElement) {
-            document.querySelector('.selectedFormElement').scrollIntoView(true);
+            document.querySelector(".selectedFormElement").scrollIntoView(true);
         }
     }
 
@@ -143,30 +143,30 @@ export class FieldEditingTools extends Component {
     }
 
     render() {
-        let tabIndex = this.props.selectedFields && this.props.selectedFields[0] ? '0' : this.props.tabIndex;
+        let tabIndex = this.props.selectedFields && this.props.selectedFields[0] ? "0" : this.props.tabIndex;
 
         let isSmall = Breakpoints.isSmallBreakpoint();
-        let classNames = ['fieldEditingTools'];
+        let classNames = ["fieldEditingTools"];
         let isTouch = Device.isTouch();
 
         if (isTouch && !isSmall) {
-            classNames.push('isTablet');
+            classNames.push("isTablet");
         } else if (!isTouch) {
-            classNames.push('notTouchDevice');
+            classNames.push("notTouchDevice");
         }
 
         if (this.props.isDragging) {
-            classNames.push('active');
+            classNames.push("active");
         }
 
         if (this.isFieldSelected()) {
-            classNames.push('selectedFormElement');
+            classNames.push("selectedFormElement");
         }
 
         return (
             <div
                 tabIndex={tabIndex}
-                role='button'
+                role="button"
                 className={classNames.join(' ')}
                 onClick={this.onClickField}
                 onKeyDown={this.selectedCurrentField}
@@ -189,16 +189,16 @@ FieldEditingTools.propTypes = {
 };
 
 FieldEditingTools.defaultProps = {
-    formId: 'view',
+    formId: "view",
 };
 
 
 const mapStateToProps = (state, ownProps) => {
-    let formId = (ownProps.formId || 'view');
+    let formId = (ownProps.formId || "view");
     let currentForm = state.forms.find(form => form.id === formId);
     let tabIndex = currentForm.formBuilderChildrenTabIndex ? currentForm.formBuilderChildrenTabIndex[0] : '-1';
-    let selectedFields = (_.has(currentForm, 'selectedFields') ? currentForm.selectedFields : []);
-    let previouslySelectedField = (_.has(currentForm, 'previouslySelectedField') ? currentForm.previouslySelectedField : []);
+    let selectedFields = (_.has(currentForm, "selectedFields") ? currentForm.selectedFields : []);
+    let previouslySelectedField = (_.has(currentForm, "previouslySelectedField") ? currentForm.previouslySelectedField : []);
 
     return {
         selectedFields,

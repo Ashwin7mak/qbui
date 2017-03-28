@@ -71,12 +71,9 @@ const mapDispatchToProps = dispatch => {
         deselectField(formId, location) {
             return dispatch(deselectField(formId, location));
         },
+
         removeField(formId, location) {
             return dispatch(removeFieldFromForm(formId, location));
-        },
-
-        updateAnimationState(isAnimating) {
-            return dispatch(updateFormAnimationState(isAnimating));
         },
 
         tableCreatedNotificationComplete() {
