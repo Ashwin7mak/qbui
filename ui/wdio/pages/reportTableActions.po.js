@@ -22,7 +22,7 @@
         reportSelectAllCheckbox: {get: function() {return browser.element('.selectAllCheckbox');}},
 
         // Records row checkbox on table report
-        reportSelectRowCheckbox: {get: function() {return browser.element('.actionsCol .selectRowCheckbox');}},
+        reportSelectRowCheckbox: {get: function() {return browser.elements('input.selectRowCheckbox');}},
 
         // Records selected count label on table report
         reportSelectedRowLabel: {get: function() {return browser.element('.selectedRowsLabel');}},
@@ -46,23 +46,21 @@
          * Returns report record count text
          */
         getReportRecordsCount: {value: function() {
-            //Get the record count (eg: 25 records).
-            return (browser.element('.rightReportToolbar .recordsCount span').getText());
+            return (this.reportRecordsCount.getText());
         }},
 
         /**
          * Returns report records selected count
          */
         getReportRecordsSelectedCount: {value: function() {
-            //Get the record count (eg: 1).
-            return (browser.element('.selectedRowsLabel').getText());
+            return (this.reportSelectedRowLabel.getText());
         }},
 
         /**
          * Select all records checkbox
          */
         selectAllRecordsCheckbox : {value: function() {
-            return (browser.element('.selectAllCheckbox').click());
+            return (this.reportSelectAllCheckbox.click());
         }},
 
         /**
@@ -70,7 +68,7 @@
          */
         selectRecordRowCheckbox : {value: function(recordRowIndex) {
             //get all checkboxes in the report table first column
-            var getAllCheckBoxs = browser.elements('input.selectRowCheckbox').value.filter(function(checkbox) {
+            var getAllCheckBoxs = this.reportSelectRowCheckbox.value.filter(function(checkbox) {
                 return checkbox.index === recordRowIndex;
             });
 

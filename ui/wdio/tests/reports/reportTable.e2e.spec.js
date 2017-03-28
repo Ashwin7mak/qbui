@@ -61,16 +61,7 @@
 
             // Assert column headers from the UI report table with expected headers. Remove the record ID first element in an array since its not showing up in UI.
             expect(ReportContentPO.getReportColumnHeaders().slice(1)).toEqual(e2eConsts.reportFieldNames.slice(1));
-
-            //TODO: Return recordList work in progress
-            // Check all record values equal the ones we added via the API
-            // var uiRecords = ReportContentPO.qbGridRecordElList.getText();
-            // var recordList = ReportContentPO.qbGridRecordElList.getText();
-            // console.log('these are my UIoutput' + uiRecords);
-            // console.log('these are my APIrecords' +  recordList);
-            //  {
-            //     e2eBase.recordService.assertRecordValues(uiRecords, recordList);
-            // }
+            
         });
 
         /**
