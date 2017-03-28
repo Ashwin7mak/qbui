@@ -92,7 +92,7 @@ export class FieldEditingTools extends Component {
     componentDidMount() {
         /**
          * For keyboard, we need to reset the focus, to maintain proper tabbing order
-         * and wee need to keep the current form element in view, by scrolling it into view
+         * and we need to keep the current form element in view, by scrolling it into view
          * */
         if (this.props.previouslySelectedField && this.props.previouslySelectedField[0] && this.props.tabIndex !== '-1') {
             let previouslySelectedField = document.querySelectorAll('.fieldEditingTools');
