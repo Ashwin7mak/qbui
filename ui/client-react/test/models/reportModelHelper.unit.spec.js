@@ -80,6 +80,45 @@ describe('Record Model', () => {
             fields: fields
         }
     };
+    const testGroupedReport = {
+        data: {
+            hasGrouping: true,
+            groupLevel: 1,
+            groupEls: [
+                {'0':'4:EQUALS'}
+            ],
+            groupFields: [
+                {field: {id:4, builtIn:false, name:'TextMultiChoice', datatypeAttributes:dataTypeAttributesText}}
+            ],
+            keyField: {
+                id: 2,
+                name: 'Record ID#'
+            },
+            records: [
+                {
+                    group: 'groupName',
+                    localized: true,
+                    children: [{
+                        'Record ID#': {id: 2, display: '22', value: 22},
+                        'Numeric': {id: 3, display: '3.0', value: 3},
+                        'Text': {id: 6, display: 'TestString', value: 'testString'}
+                    }]
+                }
+            ],
+            filteredRecords: [
+                {
+                    group: 'groupName',
+                    localized: true,
+                    children: [{
+                        'Record ID#': {id: 2, display: '22', value: 22},
+                        'Numeric': {id: 3, display: '3.0', value: 3},
+                        'Text': {id: 6, display: 'TestString', value: 'testString'}
+                    }]
+                }
+            ],
+            fields: fields
+        }
+    };
     const updateTestContent = {
         recId: 22,
         record: [
@@ -219,6 +258,19 @@ describe('Record Model', () => {
 
         //  expect the new record to be added after the existing
         expect(currentReport.data.records[0][currentReport.data.keyField.name].value).toEqual(content.recId);
+    });
+
+    it('add Grouped Report record method as top row in report', () => {
+        let currentReport = _.cloneDeep(testGroupedReport);
+        let content = _.cloneDeep(addTestContent);
+
+        //  1 record in the report
+        expect(currentReport.data.records.length).toEqual(1);
+
+        ReportModelHelper.addReportRecord(currentReport, content);
+
+        //  expect the new record to be added in the report
+        expect(currentReport.data.filteredRecords.length).toEqual(2);
     });
 
 });

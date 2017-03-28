@@ -285,7 +285,7 @@ function addRecordToReport(currentReport, content) {
             });
 
             // format the values in the new record
-            formatRecordValues(newRecord);
+            formatRecordValues(newRecord, reportData.fields);
             // set id to unsaved
             newRecord[reportData.keyField.name].value = SchemaConstants.UNSAVED_RECORD_ID;
         } else {
@@ -419,7 +419,7 @@ function addRecordToGroupedReport(currentReport, content) {
         });
 
         //format the values in the new record
-        formatRecordValues(record);
+        formatRecordValues(record, reportData.fields);
 
         // set id to unsaved
         record[reportData.keyField.name].value = SchemaConstants.UNSAVED_RECORD_ID;
@@ -462,8 +462,10 @@ function addRecordToGroupedReport(currentReport, content) {
     }
 
     // set the record id
-    if (content.newRecId && record) {
-        record[reportData.keyField.name].value = content.newRecId;
+    if (content.newRecId) {
+        if (record) {
+            record[reportData.keyField.name].value = content.newRecId;
+        }
     }
 
     // skip if adding a blank row to the report list as content.record will not exist
