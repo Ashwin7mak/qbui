@@ -10,7 +10,7 @@
     var errorCodes = require('../../src/api/errorCodes');
     var testUtils = require('./api.test.Utils');
 
-    describe('API - Validate table creation api', function() {
+    describe('API - Validate table apis', function() {
         var app;
 
         // App variable with different data fields
@@ -109,6 +109,44 @@
                     log.error(JSON.stringify(error));
                     done();
                 });
+        });
+
+        it('Should update table', function(done) {
+            this.timeout(testConsts.INTEGRATION_TIMEOUT);
+
+            var tableId = app.tables[0].id;
+            var tablesEndpoint = recordBase.apiBase.resolveTablesEndpoint(app.id, tableId);
+            const payload = {name: "name", description: "desc", tableIcon: "icon", tableNoun: "noun"};
+            recordBase.apiBase.executeRequest(tablesEndpoint, consts.PATCH, payload).then(
+                (response) => {
+                    var promises = [];
+                    var tableEndpoint = recordBase.apiBase.resolveTablesEndpoint(app.id, tableId);
+                    promises.push(recordBase.apiBase.executeRequest(tableEndpoint, consts.GET));
+                    var tablePropsEndpoint = recordBase.apiBase.resolveTablePropertiesEndpoint(app.id, tableId);
+                    promises.push(recordBase.apiBase.executeRequest(tablePropsEndpoint, consts.GET));
+                    Promise.all(promises).then(
+                        (responses) => {
+                            var table = JSON.parse(responses[0].body);
+                            assert.equal(table.name, payload.name, "Unexpected table name returned");
+                            var tableProps = JSON.parse(responses[1].body);
+                            assert.equal(tableProps.tableNoun, payload.tableNoun, "Unexpected table noun returned");
+                            assert.equal(tableProps.tableIcon, payload.tableIcon, "Unexpected table icon returned");
+                            assert.equal(tableProps.description, payload.description, "Unexpected description returned");
+                            done();
+                        },
+                        (error) => {
+                            done(new Error("Unexpected error retrieving table from core"));
+                        }
+                    ).catch((error) => {
+                        done(new Error("Assertion failure: " + JSON.stringify(error)));
+                    });
+                },
+                (error) => {
+                    done(new Error("Error calling update Table " + JSON.stringify(error)));
+                }
+            ).catch((error) => {
+                done(new Error("Unexpected exception calling update Table " + JSON.stringify(error)));
+            });
         });
 
         after(function(done) {
