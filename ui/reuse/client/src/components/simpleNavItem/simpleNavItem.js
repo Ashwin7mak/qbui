@@ -18,7 +18,6 @@ class SimpleNavItem extends Component {
         super(props);
 
         this.onClickNavItem = this.onClickNavItem.bind(this);
-        this.onClickSecondaryIcon = this.onClickSecondaryIcon.bind(this);
         this.renderCollapsedIcon = this.renderCollapsedIcon.bind(this);
         this.renderNavItem = this.renderNavItem.bind(this);
     }
@@ -34,19 +33,13 @@ class SimpleNavItem extends Component {
         }
     }
 
-    onClickSecondaryIcon(evt) {
-        if (this.props.onClickSecondaryIcon) {
-            this.prop.onClickSecondaryIcon(evt);
-        }
-    }
-
     /**
      * Renders the secondary icon. Wraps the icon in a tooltip if secondaryIconTooltip is passed in.
      * Adds a class when on touch devices so the secondary icon is always displayed
      * @returns {XML}
      */
     renderSecondaryIcon() {
-        const {secondaryIcon, secondaryIconFont, secondaryIconTooltipMsgKey} = this.props;
+        const {secondaryIcon, secondaryIconFont, secondaryIconTooltipMsgKey, onClickSecondaryIcon} = this.props;
 
         if (!secondaryIcon) {
             return null;
@@ -64,7 +57,7 @@ class SimpleNavItem extends Component {
                 type="button"
                 tabIndex="0"
                 className={`navItemSecondaryIcon ${Device.isTouch() ? 'navItemSecondaryIconTouch' : ''}`}
-                onClick={this.onClickSecondaryIcon}
+                onClick={onClickSecondaryIcon}
             >
                 {icon}
             </button>

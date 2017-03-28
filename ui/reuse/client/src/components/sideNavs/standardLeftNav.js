@@ -25,12 +25,10 @@ class StandardLeftNav extends Component {
     constructor(props) {
         super(props);
 
-        this.onClickContextHeader = this.onClickContextHeader.bind(this);
         this.renderContextHeaderTitle = this.renderContextHeaderTitle.bind(this);
         this.renderContextHeader = this.renderContextHeader.bind(this);
         this.renderNavContent = this.renderNavContent.bind(this);
         this.screenSizeChanged = this.screenSizeChanged.bind(this);
-        this.getMaxLengthBeforeTooltip = this.getMaxLengthBeforeTooltip.bind(this);
     }
 
     componentDidMount() {
@@ -43,24 +41,15 @@ class StandardLeftNav extends Component {
     }
 
     screenSizeChanged() {
-        // Force a re-render
-        this.setState({reRender: Math.random()});
+        this.forceUpdate();
     }
 
-    onClickContextHeader(evt) {
-        if (this.props.onClickContextHeader) {
-            this.props.onClickContextHeader(evt);
+    getMaxCharactersBeforeTooltip() {
+        if (Breakpoints.isSmallBreakpoint()) {
+            return 27;
         }
-    }
 
-    getMaxLengthBeforeTooltip() {
-        if (Breakpoints.isLargeBreakpoint() || Breakpoints.isXLargeBreakpoint()) {
-            return 23;
-        } else if (Breakpoints.isMediumBreakpoint()) {
-            return (this.props.isContextHeaderSmall ? 17 : 17);
-        } else {
-            return (this.props.isContextHeaderSmall ? 16 : 17);
-        }
+        return 17;
     }
 
     renderContextHeaderTitle() {
@@ -68,7 +57,7 @@ class StandardLeftNav extends Component {
 
         let contextHeaderTitleElement = <span className="contextHeaderTitle">{contextHeaderTitle}</span>;
 
-        if (contextHeaderTitle && contextHeaderTitle.length > this.getMaxLengthBeforeTooltip()) {
+        if (contextHeaderTitle && contextHeaderTitle.length > this.getMaxCharactersBeforeTooltip()) {
             return (
                 <Tooltip plainMessage={contextHeaderTitle} location="bottom">{contextHeaderTitleElement}</Tooltip>
             );
@@ -98,7 +87,7 @@ class StandardLeftNav extends Component {
             <div className={classes.join(' ')}>
                 <Button
                     className="contextHeaderButton"
-                    onClick={this.onClickContextHeader}
+                    onClick={this.props.onClickContextHeader}
                 >
                     {contextHeaderIcon && <Icon icon={contextHeaderIcon} className="contextHeaderIcon" />}
 
