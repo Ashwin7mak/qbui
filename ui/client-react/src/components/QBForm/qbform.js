@@ -487,7 +487,7 @@ let QBForm = React.createClass({
     wrapFormContent(formContent) {
         if (this.props.editingForm) {
             return (
-                <form ref={(editForm) => {formBuilderEditForm = editForm;}}className="editForm" tabIndex="0" role="button" onKeyDown={this.props.formBuilderUpdateChildrenTabIndex}>
+                <form ref={(editForm) => {formBuilderEditForm = editForm;}} className="editForm" tabIndex="0" role="button" onKeyDown={this.props.formBuilderUpdateChildrenTabIndex}>
                     {formContent}
                 </form>
             );

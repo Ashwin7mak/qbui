@@ -34,7 +34,7 @@ const mapStateToProps = state => {
         selectedField: (_.has(currentForm, 'selectedFields') ? currentForm.selectedFields[0] : []),
         tabIndex: (_.has(currentForm, 'formBuilderChildrenTabIndex') ? currentForm.formBuilderChildrenTabIndex[0] : undefined),
         formFocus: (_.has(currentForm, 'formFocus') ? currentForm.formFocus[0] : undefined),
-        notifyTableCreated: state.tableCreation.notifyTableCreated
+        shouldNotifyTableCreated: state.tableCreation.notifyTableCreated
     };
 };
 
@@ -77,7 +77,7 @@ export const FormBuilderContainer = React.createClass({
 
         // if we've been sent here from the table creation flow, show a notification
 
-        if (this.props.notifyTableCreated) {
+        if (this.props.shouldNotifyTableCreated) {
             this.props.notifyTableCreated(false);
             setTimeout(() => {
                 NotificationManager.success(Locale.getMessage('tableCreation.tableCreated'), Locale.getMessage('success'));
