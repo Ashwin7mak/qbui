@@ -39,16 +39,16 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = {
-        loadForm,
-        moveFieldOnForm,
-        updateForm,
-        updateFormAnimationState,
-        toggleFormBuilderChildrenTabIndex,
-        keyboardMoveFieldUp,
-        keyboardMoveFieldDown,
-        deselectField,
-        removeFieldFromForm,
-        notifyTableCreated
+    loadForm,
+    moveFieldOnForm,
+    updateForm,
+    updateFormAnimationState,
+    toggleFormBuilderChildrenTabIndex,
+    keyboardMoveFieldUp,
+    keyboardMoveFieldDown,
+    deselectField,
+    removeFieldFromForm,
+    notifyTableCreated
 };
 
 export const FormBuilderContainer = React.createClass({

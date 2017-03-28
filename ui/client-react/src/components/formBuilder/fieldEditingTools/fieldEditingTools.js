@@ -207,7 +207,7 @@ const mapStateToProps = (state, ownProps) => {
     };
 };
 
-const mapDispatchToProps ={
+const mapDispatchToProps = {
     selectFieldOnForm,
     removeFieldFromForm
 };
