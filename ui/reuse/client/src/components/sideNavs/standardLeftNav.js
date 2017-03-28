@@ -15,6 +15,12 @@ import Breakpoints from '../../../../../client-react/src/utils/breakpoints';
 import QbLogoImage from '../../assets/images/QB-logo.svg';
 import './standardLeftNav.scss';
 
+/**
+ * A common left navigation panel for use across functional areas.
+ * It displays a list of navigation items and optionally has a header that describes the context of the navigation.
+ * Use with the commonNavActions and commonNavReducer to show/hide/collapse the leftNav. The action to toggle
+ * the leftNav is often passed as a prop to the TopNav in the onNavClick prop.
+ */
 class StandardLeftNav extends Component {
     constructor(props) {
         super(props);

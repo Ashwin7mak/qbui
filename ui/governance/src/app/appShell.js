@@ -1,13 +1,17 @@
 import React, {PropTypes, Component} from 'react';
+import {connect} from 'react-redux';
+import {toggleNav} from '../../../reuse/client/src/components/sideNavs/commonNavActions';
 import AppShell from '../../../reuse/client/src/components/appShell/appShell';
 import DefaultTopNavGlobalActions from '../../../reuse/client/src/components/topNav/defaultTopNavGlobalActions';
 import TopNav from '../../../reuse/client/src/components/topNav/topNav';
 import LeftNav from '../../../reuse/client/src/components/sideNavs/standardLeftNav';
 import {AVAILABLE_ICON_FONTS} from '../../../reuse/client/src/components/icon/icon';
 
-const GovernanceAppShell = ({children}) => (
+export const GovernanceAppShell = ({isNavOpen, isNavCollapsed, toggleNav, children}) => (
     <AppShell functionalAreaName="governance">
         <LeftNav
+            isCollapsed={isNavCollapsed}
+            isOpen={isNavOpen}
             isContextHeaderSmall={true}
             showContextHeader={true}
             contextHeaderIcon="settings"
@@ -24,12 +28,9 @@ const GovernanceAppShell = ({children}) => (
                 {icon: 'currency', title: 'Manage billing', isDisabled: true},
                 {icon: 'bell', iconFont: AVAILABLE_ICON_FONTS.TABLE_STURDY, title: 'Contact support'}
             ]}
-            isCollapsed={false}
             globalActions={<DefaultTopNavGlobalActions dropdownIcon="user" dropdownMsg="globalActions.user" shouldOpenMenusUp={true} />}
-            isOpen={true}
-            showLoadingIndicator={false}
         >
-            <TopNav title="Governance" globalActions={
+            <TopNav onNavClick={toggleNav} globalActions={
                 <DefaultTopNavGlobalActions
                     startTabIndex={4}
                     dropdownIcon="user"
@@ -41,4 +42,15 @@ const GovernanceAppShell = ({children}) => (
     </AppShell>
 );
 
-export default GovernanceAppShell;
+GovernanceAppShell.propTypes = {
+    isNavOpen: PropTypes.bool,
+    isNavCollapsed: PropTypes.bool,
+    toggleNav: PropTypes.func,
+};
+
+const mapStateToProps = (state) => ({
+    isNavOpen: state.Nav.isNavOpen,
+    isNavCollapsed: state.Nav.isNavCollapsed
+});
+
+export default connect(mapStateToProps, {toggleNav})(GovernanceAppShell);
