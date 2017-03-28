@@ -34,6 +34,10 @@ let QBForm = React.createClass({
         /**
          * The order index of the tab to display */
         activeTab: PropTypes.string,
+        /**
+         * formBuilderUpdateChildrenTabIndex is used for form builder. It is used to toggle the tab indices of form builder's children.
+         */
+        formBuilderUpdateChildrenTabIndex: PropTypes.func,
 
         /**
          * Data used to display the form. Expect formMeta to be in an array based structure. */
