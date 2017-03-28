@@ -114,7 +114,7 @@ export class FieldEditingTools extends Component {
     scrollElementIntoView() {
         let selectedFormElement = document.querySelector(".selectedFormElement");
         if (selectedFormElement) {
-            document.querySelector(".selectedFormElement").scrollIntoView(true);
+            document.querySelector(".selectedFormElement").scrollIntoView(false);
         }
     }
 
