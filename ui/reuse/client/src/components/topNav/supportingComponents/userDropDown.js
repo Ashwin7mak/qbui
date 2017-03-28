@@ -59,8 +59,8 @@ class UserDropDown extends Component {
         const {startTabIndex, app, signOutUser} = this.props;
 
         return (
-            <DropDown id="nav-right-dropdown" className="userDropDown">
-                <a bsRole="toggle" className="dropdownToggle globalActionLink" tabIndex={startTabIndex}>
+            <DropDown id="nav-right-dropdown" className="userDropDown globalActionLink" dropup={this.props.shouldOpenMenusUp}>
+                <a bsRole="toggle" className="dropdownToggle" tabIndex={startTabIndex}>
                     <Icon icon={dropDownIcon}/>
                     <span className="navLabel"><I18nMessage message={dropDownMessage}/></span>
                 </a>
@@ -88,6 +88,7 @@ UserDropDown.propTypes = {
     startTabIndex: PropTypes.number,
     changeLocale: PropTypes.func,
     signOutUser: PropTypes.func,
+    shouldOpenMenusUp: PropTypes.bool,
 };
 
 UserDropDown.defaultPropTypes = {
