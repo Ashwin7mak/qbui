@@ -55,7 +55,7 @@ const serverTypeConsts = require('../../../../../common/src/constants');
 
 let FluxMixin = Fluxxor.FluxMixin(React);
 function buildIconElement(icon) {
-    return "<span class='qbIcon iconTableUISturdy-" + icon + "'></span>";
+    return "<span class='qbIcon iconUISturdy-" + icon + "'></span>";
 }
 let gridIcons = {
     groupExpanded: buildIconElement("caret-filled-down"),

@@ -50,6 +50,10 @@
         return '/qb';
     }
 
+    function getLegacyStackMainHandlerRoot() {
+        return '/db/main';
+    }
+
     /**
      *
      */
@@ -876,7 +880,25 @@
          */
         getAccountUsersLegacyStackRoute: function(accountId) {
             return `${getLegacyStackDotNetRoot()}/governance/${accountId}/users`;
+        },
+
+        /**
+         * Call .NET handler to return the context of the account and user
+         * @returns {string}
+         */
+        getGovernanceContextLegacyStackRoute: function(accountId) {
+            return `${getLegacyStackDotNetRoot()}/governance/context/${accountId ? accountId : ''}`;
+        },
+
+        /**
+         * Navigate to the legacy stack 'My Apps' page
+         * @returns {string}
+         */
+        getMyAppsLegacyStackRoute: function() {
+            return `${getLegacyStackMainHandlerRoot()}?a=myqb`;
         }
+
+
     };
 
 }());

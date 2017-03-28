@@ -78,10 +78,4 @@ describe('TopNav functions', () => {
         TestUtils.Simulate.click(localeoption);
         expect(flux.actions.changeLocale).toHaveBeenCalledWith(localeoption.title);
     });
-
-    it('test global search renders', () => {
-        let searchInputContainer = TestUtils.scryRenderedDOMComponentsWithClass(component, "iconTableUISturdy-search");
-        expect(searchInputContainer.length).toEqual(1);
-    });
-
 });

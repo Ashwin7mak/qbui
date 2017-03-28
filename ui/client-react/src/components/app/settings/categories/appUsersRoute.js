@@ -3,30 +3,34 @@
  */
 import React from 'react';
 import UserManagement from './userManagement';
-import Stage from '../../../stage/stage';
+import Stage from '../../../../../../reuse/client/src/components/stage/stage';
 import IconActions from '../../../actions/iconActions';
-import QBIcon from '../../../qbIcon/qbIcon';
+import QBIcon from '../../../../../../reuse/client/src/components/icon/icon';
 import AppSettingsStage from '../appSettingsStage';
-import Locale from '../../../../locales/locales';
+import Locale from '../../../../../../reuse/client/src/locales/locale';
 import './appUsersRoute.scss';
 
 const AppUsersRoute = React.createClass({
 
     componentDidMount() {
         this.props.flux.actions.loadAppRoles(this.props.params.appId);
+        this.props.flux.actions.loadAppOwner(this.props.selectedApp.ownerId);
     },
 
     componentWillReceiveProps(props) {
-        if (props.params.appId) {
+        if (props.params.appId && props.selectedApp.ownerId) {
             if (this.props.params.appId !== props.params.appId) {
                 this.props.flux.actions.loadAppRoles(this.props.params.appId);
+                this.props.flux.actions.loadAppOwner(this.props.selectedApp.ownerId);
             }
         } else {
             this.props.flux.actions.loadAppRoles(null);
+            this.props.flux.actions.loadAppOwner(null);
         }
 
-        if (this.props.params.appId !== props.params.appId) {
+        if (this.props.params.appId !== props.params.appId && this.props.selectedApp.ownerId !== props.selectedApp.ownerId) {
             this.props.flux.actions.loadAppRoles(this.props.params.appId);
+            this.props.flux.actions.loadAppOwner(this.props.selectedApp.ownerId);
         }
     },
 
@@ -60,7 +64,9 @@ const AppUsersRoute = React.createClass({
                 <Stage stageHeadline={this.getStageHeadline()}
                        pageActions={this.getPageActions()}>
 
-                    <AppSettingsStage appUsers={this.props.appUsersUnfiltered} appRoles={this.props.appRoles}/>
+                    <AppSettingsStage appUsers={this.props.appUsersUnfiltered}
+                                      appRoles={this.props.appRoles}
+                                      appOwner={this.props.appOwner}/>
                 </Stage>
                 <div className="userManagementContainer">
                     <UserManagement appId={this.props.params.appId}

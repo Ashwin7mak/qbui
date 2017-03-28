@@ -13,7 +13,11 @@ const GlobalActions = React.createClass({
     },
 
     render() {
-        return <DefaultTopNavGlobalActions changeLocale={this.changeLocale} {...this.props} />;
+        return <DefaultTopNavGlobalActions
+            changeLocale={this.changeLocale}
+            shouldOpenMenusUp={this.props.position === 'left'}
+            {...this.props}
+        />;
     }
 });
 

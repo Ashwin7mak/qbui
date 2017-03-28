@@ -1,3 +1,7 @@
+/**
+ * This bundle contains all the strings needed by the "Apps" functional area.
+ * This functional area is for the main app served in client-react at the /qbase/apps route.
+ */
 export default {
     locales: "fr-fr",
     currencyCode: "eur",
@@ -30,7 +34,9 @@ export default {
             settings: "Paramètres",
             users: {
                 addUser: "L'ajout d'un nouvel utilisateur n'est pas encore disponible",
-                users: "Utilisateurs"
+                users: "Utilisateurs",
+                content: "C'est la liste de toutes les personnes qui ont été ajoutées à votre application. Vous pouvez obtenir quelques idées rapides sur le nombre de personnes dans chaque rôle dans votre application ainsi que de trouver une personne spécifique dans la liste et de les envoyer par courrier électronique.",
+                manager: "Gestionnaire d'applications"
             }
         },
         appMenu: {
@@ -94,6 +100,9 @@ export default {
             saveAndNext: "Sauver et prochain",
             saveAndAddAnother: "Sauver et ajouter un autre",
             cancel: "Annuler",
+            next: "Prochain",
+            previous: "Orécédent",
+            finished: "Fini",
             new: "Nouveau"
         },
         field: {
@@ -540,6 +549,31 @@ export default {
             noOverrides: "Aucune substitution n'a été définie",
             featureNameExists: "Les noms des entités doivent être uniques",
             featureNameEmpty: "Les noms des entités doivent être blanc"
+        },
+        tableCreation: {
+            newTablePageTitle: "Nouvelle table",
+            newTableDescription: "Créer une nouvelle table lorsque vous souhaitez collecter un nouveau type d'information.",
+            newTableTitle: "Nommez votre table",
+
+            summaryDescription: "Chaque bit d'information que vous souhaitez collecter est un champ.",
+            summaryTitle: "Faites glisser et déposez les champs que vous souhaitez ajouter à votre table sur le formulaire. Vous pouvez organiser les champs dans l'ordre que vous souhaitez que les gens les utilisent.",
+
+            addFieldsTitle: "Préparez-vous à ajouter des champs à votre table",
+            tableNameHeading: "Nom de la table",
+            recordNameHeading: "Un enregistrement dans le tableau est appelé un",
+            descriptionHeading: "La description",
+            iconHeading: "Icône",
+            suggestedIconsHeading: "Icônes suggérées",
+
+            tableNamePlaceholder: "Par exemple, les clients",
+            recordNamePlaceholder: "Par exemple, client",
+            descriptionPlaceholder: "Texte à afficher en vol stationnaire sur le nom de la table dans la colonne de gauche",
+
+            tableCreated: "Tableau créé",
+            tableCreationFailed: "Impossible de créer une table",
+            validateTableNameEmpty: "Le nom de la table ne doit pas être vide",
+            validateTableNameExists: "Le nom de la table doit être unique pour cette application",
+            validateRecordNameEmpty: "Le nom de l'enregistrement ne doit pas être vide",
         }
     }
 };

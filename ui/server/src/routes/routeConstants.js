@@ -58,8 +58,9 @@
         REPORT_INVOKE_RESULTS       : baseUrl.QUICKBASE + '/apps/:appId/tables/:tableId/reports/:reportId/invoke',
         REPORT_RECORDS_COUNT        : baseUrl.QUICKBASE + '/apps/:appId/tables/:tableId/reports/:reportId/recordsCount',
         TABLE_HOMEPAGE_REPORT       : baseUrl.QUICKBASE + '/apps/:appId/tables/:tableId/homePage',
-        TABLES                      : baseUrl.QUICKBASE + '/apps/:appId/tables',
         TABLE_COMPONENTS            : baseUrl.QUICKBASE + '/apps/:appId/tables/tableComponents',
+        TABLE                       : baseUrl.QUICKBASE + '/apps/:appId/tables/:tableId',
+        TABLES                      : baseUrl.QUICKBASE + '/apps/:appId/tables',
 
         //  APP ENDPOINTS
         APPS                        : baseUrl.QUICKBASE + '/apps',
@@ -86,6 +87,9 @@
         ADMIN                       : baseUrl.QUICKBASE + '/admin',
 
         GOVERNANCE_ACCOUNT_USERS     : baseUrl.GOVERNANCE + '/:accountId/users',
+
+        // the account id is an optional parameter
+        GOVERNANCE_CONTEXT           : baseUrl.GOVERNANCE + '/context',
     };
 
     /*

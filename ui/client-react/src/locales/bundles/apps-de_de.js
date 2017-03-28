@@ -1,3 +1,7 @@
+/**
+ * This bundle contains all the strings needed by the "Apps" functional area.
+ * This functional area is for the main app served in client-react at the /qbase/apps route.
+ */
 export default {
     locales: "de-de",
     currencyCode: "eur",
@@ -30,7 +34,9 @@ export default {
             settings: "Einstellungen",
             users: {
                 addUser: "Das Hinzufügen eines neuen Benutzers ist noch nicht verfügbar",
-                users: "Benutzer"
+                users: "Benutzer",
+                content: "Dies ist die Liste aller Personen, die zu Ihrer Bewerbung hinzugefügt wurden. Sie können einige kurze Einblicke darüber, wie viele Menschen sind in jeder Rolle in Ihrer Anwendung sowie finden Sie eine bestimmte Person in der Liste und E-Mail sie.",
+                manager: "Anwendungsmanager"
             }
         },
         appMenu: {
@@ -94,6 +100,9 @@ export default {
             saveAndNext: "Speichern und Nächster",
             saveAndAddAnother: "Speichern und fügen Sie ein anderes",
             cancel: "Stornieren",
+            next: "Nächster",
+            previous: "Bisherige",
+            finished: "Fertig",
             new: "Neu"
         },
         field: {
@@ -541,6 +550,31 @@ export default {
             noOverrides: "Es wurden keine Overrides gesetzt",
             featureNameExists: "Feature-Namen müssen eindeutig sein",
             featureNameEmpty: "Feature-Namen dürfen nicht leer sein"
+        },
+        tableCreation: {
+            newTablePageTitle: "Neue Tabelle",
+            newTableDescription: "Erstellen Sie eine neue Tabelle, wenn Sie eine neue Art von Informationen sammeln möchten.",
+            newTableTitle: "Nennen Sie Ihren Tisch",
+
+            summaryDescription: "Jedes Bit von Informationen, die Sie sammeln möchten, ist ein Feld.",
+            summaryTitle: "Drag & Drop Felder, die Sie hinzufügen möchten, um Ihre Tabelle auf das Formular. Sie können die Felder in der Reihenfolge anordnen, in der die Leute sie benutzen möchten.",
+
+            addFieldsTitle: "Machen Sie sich bereit, Felder zu Ihrem Tisch hinzuzufügen",
+            tableNameHeading: "Tabellenname",
+            recordNameHeading: "Ein Rekord in der Tabelle heißt a",
+            descriptionHeading: "Beschreibung",
+            iconHeading: "Symbol",
+            suggestedIconsHeading: "Vorgeschlagene Ikonen",
+
+            tableNamePlaceholder: "Zum Beispiel, Kunden",
+            recordNamePlaceholder: "Zum Beispiel, Kunde",
+            descriptionPlaceholder: "Text, der angezeigt wird, wenn er über den Tabellennamen in der linken Spalte schwebt",
+
+            tableCreated: "Tabelle erstellt",
+            tableCreationFailed: "Unable to create table",
+            validateTableNameEmpty: "Kann keine Tabelle erstellen",
+            validateTableNameExists: "Der Tabellenname muss für diese App eindeutig sein",
+            validateRecordNameEmpty: "Tabellenname darf nicht leer sein",
         }
     }
 };
