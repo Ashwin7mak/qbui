@@ -22,7 +22,7 @@
             this.moreFields.click();
             this.recordID.waitForExist();
             this.recordID.click();
-            reportContentPO.clickAndWait(this.applyButton);
+            reportContentPO.clickAndWaitForGrid(this.applyButton);
         }},
 
         /*
