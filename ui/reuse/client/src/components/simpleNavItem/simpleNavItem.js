@@ -162,6 +162,7 @@ class SimpleNavItem extends Component {
         // Use an <a> tag so that this is still picked up as a navigation element by accessibility tools
         return (
             <a
+                href={this.props.onClick ? null : this.props.href}
                 className={this.getClassName()}
                 tabIndex="0"
                 onClick={this.onClickNavItem}
@@ -214,6 +215,11 @@ SimpleNavItem.propTypes = {
     link: PropTypes.string,
 
     /**
+     * If you need a link outside of the current single-page-app/react-router instance, then use href instead.
+     * The link and onClick properties will take precedence over href if multiple are passed in. */
+    href: PropTypes.string,
+
+    /**
      * The icon that appears on hover on the right side of the nav item
      * On a primary action, the secondary icon appears to the left and is always displayed */
     secondaryIcon: PropTypes.string,
@@ -239,6 +245,7 @@ SimpleNavItem.defaultProps = {
     title: '',
     iconFont: AVAILABLE_ICON_FONTS.DEFAULT,
     secondaryIconFont: AVAILABLE_ICON_FONTS.DEFAULT,
+    href: null,
 };
 
 export default SimpleNavItem;
