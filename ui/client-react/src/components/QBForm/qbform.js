@@ -476,9 +476,10 @@ let QBForm = React.createClass({
     },
 
     /**
-     * This is for keyboard navigation for form builder. If we are in form builder this will add forms to the tabbing flow
+     * We normally return a regular form based on whether or not it is in view or edit mode.
+     * However, for form builder we want the form to have a tabIndex.
      * */
-    isEditingForm(formContent) {
+    wrapFormContent(formContent) {
         if (this.props.editingForm) {
             return (
                 <form className="editForm" tabIndex="0" role="button" onKeyDown={this.props.formBuilderUpdateChildrenTabIndex}>
@@ -529,7 +530,7 @@ let QBForm = React.createClass({
 
         return (
             <div className="formContainer">
-                {this.isEditingForm(formContent)}
+                {this.wrapFormContent(formContent)}
                 <div>{formFooter}</div>
             </div>
         );
