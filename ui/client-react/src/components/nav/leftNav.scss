@@ -408,6 +408,10 @@ div.leftNavTooltip {
                 cursor: pointer;
             }
 
+            .globalActionLink .dropdownToggle {
+                color: $leftnav-tablenames-color;
+            }
+
             .qbIcon {
                 width: 28px;
                 vertical-align: middle;

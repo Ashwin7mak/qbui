@@ -136,7 +136,9 @@
         }
     }
 
-    .standardLeftNavPrimaryActions {
+    // NOTE: When global actions are present, they should look very similar to primary actions.
+    // That is why you will see css selectors for globalActions here.
+    .standardLeftNavPrimaryActions, .globalActionsList {
         display: flex;
         flex: 0 0 auto; // don't allow the navItems to overlap this element
         flex-direction: row;
@@ -153,6 +155,32 @@
 
             &:last-child .simpleNavItem {
                 border-right: 0;
+            }
+        }
+    }
+
+    .globalAction {
+        flex: 1 auto;
+        border-top: 1px solid $leftnav-brandarea-stroke-color;
+
+        &:not(:last-child) {
+            border-right: 1px solid $leftnav-brandarea-stroke-color;
+        }
+
+        .globalActionLink, .globalActionLink .dropdownToggle {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: $leftnav-items-color;
+        }
+
+        .globalActionLink {
+            padding-top: $spacing-tiny;
+            padding-bottom: $spacing-tiny;
+
+            .qbIcon {
+                font-size: 18px;
             }
         }
     }
