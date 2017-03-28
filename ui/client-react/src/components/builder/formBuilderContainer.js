@@ -16,7 +16,7 @@ import AppHistory from '../../globals/appHistory';
 import Logger from '../../utils/logger';
 import AutoScroll from '../autoScroll/autoScroll';
 import PageTitle from '../pageTitle/pageTitle';
-import ReKeyboardShortcuts from '../../../../reuse/client/src/components/reKeyboardShortcuts/reKeyboardShortcuts';
+import KeyboardShortcuts from '../../../../reuse/client/src/components/keyboardShortcuts/keyboardShortcuts';
 import _ from 'lodash';
 
 import './formBuilderContainer.scss';
@@ -192,7 +192,7 @@ export const FormBuilderContainer = React.createClass({
         return (
             <div className="formBuilderContainer">
 
-                <ReKeyboardShortcuts id="formBuilderContainer" shortcutBindings={[
+                <KeyboardShortcuts id="formBuilderContainer" shortcutBindings={[
                     {key: 'esc', callback: () => {this.escapeCurrentContext(); return false;}},
                     {key: 'mod+s', callback: () => {this.saveClicked(); return false;}},
                     {key: 'shift+up', callback: () => {this.keyboardMoveFieldUp(); return false;}},

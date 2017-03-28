@@ -1,14 +1,14 @@
 import React from 'react';
 import {shallow} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
-import ReKeyboardShortCuts from '../../src/components/reKeyboardShortcuts/reKeyboardShortcuts';
+import KeyboardShortCuts from '../../src/components/keyboardShortcuts/keyboardShortcuts';
 
 const keyBindings = [{key: 'esc', callback: () => {}}, {key: 'mod+s', callback: () => {}}];
 const testId = "testId";
 
 let component;
 
-describe('ReKeyboardShortCuts', () => {
+describe('KeyboardShortCuts', () => {
     beforeEach(() => {
         jasmineEnzyme();
     });
@@ -17,7 +17,7 @@ describe('ReKeyboardShortCuts', () => {
     });
 
     it('calls addAllKeyBindings when component mounts ', () => {
-        component = shallow(<ReKeyboardShortCuts
+        component = shallow(<KeyboardShortCuts
             shortcutBindings={keyBindings}
             id={testId}
         />);
@@ -30,7 +30,7 @@ describe('ReKeyboardShortCuts', () => {
     });
 
     it('calls removeAllKeyBindings when component unmounts ', () => {
-        component = shallow(<ReKeyboardShortCuts
+        component = shallow(<KeyboardShortCuts
             shortcutBindings={keyBindings}
             id={testId}
         />);

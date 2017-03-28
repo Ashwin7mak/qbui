@@ -1,7 +1,7 @@
 import React, {PropTypes, Component} from 'react';
 import MouseTrap from 'mousetrap';
 
-class ReKeyboardShortcuts extends Component {
+class KeyboardShortcuts extends Component {
     constructor(props) {
         super(props);
 
@@ -36,7 +36,7 @@ class ReKeyboardShortcuts extends Component {
     }
 }
 
-ReKeyboardShortcuts.propTypes = {
+KeyboardShortcuts.propTypes = {
     /**
      * An id that identifies the keyboard shortcuts that belong to this instance of the component */
     id: PropTypes.string.isRequired,
@@ -57,5 +57,5 @@ ReKeyboardShortcuts.propTypes = {
     }))
 };
 
-export default ReKeyboardShortcuts;
+export default KeyboardShortcuts;
 

@@ -1,8 +1,8 @@
-## ReKeyboardShortcuts
+## KeyboardShortcuts
 
 ### Description
 
-The ReKeyboardShortcuts component allows you to quickly add keyboard shortcuts to your app. 
+The KeyboardShortcuts component allows you to quickly add keyboard shortcuts to your app.
 
 The motivation behind setting up keyboard shortcuts was twofold:
 
@@ -15,7 +15,7 @@ for any functional area to use it.
 ### Setup
 ### Setting Keyboard Shortcuts
 
-Using `ReKeyboardShortcuts` is as easy as importing the component and
+Using `KeyboardShortcuts` is as easy as importing the component and
 passing it a list of keyboard shortcuts and callbacks. The component will take care of the rest.
 
 #### Required Props
@@ -26,14 +26,14 @@ passing it a list of keyboard shortcuts and callbacks. The component will take c
   - **content:** Any additional information that will be passed as the first argument to the callback. This is optional.
 
 ```javascript
-import ReKeyboardShortcuts from '../../../../reuse/client/src/components/reKeyboardShortcuts/reKeyboardShortcuts';
+import KeyboardShortcuts from '../../../../reuse/client/src/components/KeyboardShortcuts/KeyboardShortcuts';
 
 // Imports above, example render method below
 class MyComponent extends Component {
     render() {
         return (
             <div className="myComponent">
-                <ReKeyboardShortcuts id="formBuilder" shortcutBindings={[{key: 's', callback: (content) => alert(`You pressed s! Extra info: ${content}`), content: 'Some extra information'}]}/>
+                <KeyboardShortcuts id="formBuilder" shortcutBindings={[{key: 's', callback: (content) => alert(`You pressed s! Extra info: ${content}`), content: 'Some extra information'}]}/>
                 {MyOwnContent}
             </div>
         );
