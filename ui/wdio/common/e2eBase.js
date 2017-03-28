@@ -124,10 +124,6 @@
                     createdApp.tables.forEach(function(table, index) {
                         // Load an array with the promise functions you want to execute
                         tableSetupPromises.push(function() {
-                            // Initialize table properties (via Experience Engine)
-                            return e2eBase.tableService.initTableProperties(createdApp.id, table.id, table.name);
-                        });
-                        tableSetupPromises.push(function() {
                             // Generate and add records to each table (include a dupe and an empty record)
                             return e2eBase.recordService.addRecordsToTable(createdApp, index, numberOfRecords, true, true);
                         });
