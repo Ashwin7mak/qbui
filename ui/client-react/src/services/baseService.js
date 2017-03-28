@@ -189,8 +189,8 @@ class BaseService {
      */
     constructRedirectUrl() {
         let hostname = WindowLocationUtils.getHostname();
-        let currentStackSignInUrl = "/db/main?a=nsredirect&nsurl=";
-        let newStackDestination = WindowLocationUtils.getHref();
+        let currentStackSignInUrl = "/db/main?a=NSLoginRedirect&nsurl=";
+        let newStackDestination = encodeURIComponent(WindowLocationUtils.getHref());
         let currentStackDomain = CommonUrlUtils.getSubdomain(hostname) + "." +  CommonUrlUtils.getDomain(hostname);
         currentStackSignInUrl = "https://" + currentStackDomain + currentStackSignInUrl + newStackDestination;
         return currentStackSignInUrl;
