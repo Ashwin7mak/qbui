@@ -13,7 +13,7 @@
         reportSearchBox: {get: function() {return browser.element('.filterSearchBoxContainer .searchInput');}},
 
         // Sorting and group by button on table report
-        reportSortAndGroupButton: {get: function() {return browswer.element('.sortButton.qbIcon.iconTableUISturdy-sort-az');}},
+        reportSortAndGroupButton: {get: function() {return browswer.element('.sortAndGroupButton');}},
 
         // Records count on table report
         reportRecordsCount: {get: function() {return browser.element('.rightReportToolbar .recordsCount span');}},

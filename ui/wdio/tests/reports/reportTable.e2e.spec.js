@@ -61,7 +61,7 @@
 
             // Assert column headers from the UI report table with expected headers. Remove the record ID first element in an array since its not showing up in UI.
             expect(ReportContentPO.getReportColumnHeaders().slice(1)).toEqual(e2eConsts.reportFieldNames.slice(1));
-            
+
         });
 
         /**
@@ -73,7 +73,7 @@
             expect(browser.isVisible('.filterSearchBoxContainer .searchInput')).toBe(true);
 
             // Assert sort by / group by button is visible
-            expect(browser.isVisible('.sortButton.qbIcon.iconTableUISturdy-sort-az')).toBe(true);
+            expect(browser.isVisible('.sortAndGroupButton')).toBe(true);
 
             // Assert records count total
             expect(ReportTableActionsPO.getReportRecordsCount()).toBe("20 records");
