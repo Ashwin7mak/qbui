@@ -15,6 +15,11 @@
         text-decoration: none;
     }
 
+    // Prevents the nav from collapsing (i.e., branding appears at the top) when loading nav items
+    .loader {
+        flex: 1 auto;
+    }
+
     .contextHeader {
         flex: 0 0 auto; // Don't shrink this on a short window.
         background-color: $leftnav-app-background-color; // Default for the left nav
