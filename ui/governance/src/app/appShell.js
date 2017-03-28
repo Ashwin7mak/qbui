@@ -7,11 +7,11 @@ import TopNav from '../../../reuse/client/src/components/topNav/topNav';
 import LeftNav from '../../../reuse/client/src/components/sideNavs/standardLeftNav';
 import {AVAILABLE_ICON_FONTS} from '../../../reuse/client/src/components/icon/icon';
 
-export const GovernanceAppShell = ({isNavOpen, isNavCollapsed, toggleNav, children}) => (
+export const GovernanceAppShell = (props) => (
     <AppShell functionalAreaName="governance">
         <LeftNav
-            isCollapsed={isNavCollapsed}
-            isOpen={isNavOpen}
+            isCollapsed={props.isNavCollapsed}
+            isOpen={props.isNavOpen}
             isContextHeaderSmall={true}
             showContextHeader={true}
             contextHeaderIcon="settings"
@@ -30,14 +30,14 @@ export const GovernanceAppShell = ({isNavOpen, isNavCollapsed, toggleNav, childr
             ]}
             globalActions={<DefaultTopNavGlobalActions dropdownIcon="user" dropdownMsg="globalActions.user" shouldOpenMenusUp={true} />}
         >
-            <TopNav onNavClick={toggleNav} globalActions={
+            <TopNav onNavClick={props.toggleNav} globalActions={
                 <DefaultTopNavGlobalActions
                     startTabIndex={4}
                     dropdownIcon="user"
                     dropdownMsg="globalActions.user"
                 />
             }/>
-            {children}
+            {props.children}
         </LeftNav>
     </AppShell>
 );

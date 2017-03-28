@@ -5,7 +5,7 @@ import Breakpoints from '../../../../../client-react/src/utils/breakpoints';
 // CLIENT REACT IMPORTS
 
 /**
- * Use this when you setup your root reduces to quickly get a reducer for common nav actions
+ * Use this where you setup your root reducers to quickly get a reducer for common nav actions
  * E.g.,
  * combineReducers({
  *   nav: commonNavReducer('governance'),
@@ -13,7 +13,7 @@ import Breakpoints from '../../../../../client-react/src/utils/breakpoints';
  * })
  * Remember to pass the isNavOpen and isNavCollapsed state to the StandardLeftNav or similar component.
  * Plus it's already tested, so drop it in and attach it to a button and you are ready to go.
- * @param functionalAreaName - Optionally, namespace this reducer to your functional area. However, this will change the expected actions.
+ * @param functionalAreaName - Optionally, namespace this reducer to your functional area. However, this will change the expected actions. TOGGLE_NAV_NAME
  * @returns {function(*=, *)}
  */
 const commonNavReducer = (functionalAreaName = null) => {
