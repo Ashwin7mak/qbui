@@ -535,7 +535,8 @@ module.exports = function(grunt) {
                     './wdio/tests/forms/formAdd*.e2e.spec.js',
                     './wdio/tests/forms/formEdit*.e2e.spec.js',
                     './wdio/tests/forms/formPermissionsParticipantRole.e2e.spec.js',
-                    './wdio/tests/forms/formDragDrop.e2e.spec.js'
+                    './wdio/tests/forms/formDragDrop.e2e.spec.js',
+                    './wdio/tests/tables/tableCreate.e2e.spec.js'
                     // disabling formPermissionsViewerRole test as we are moving to ExperienceEngine,
                     // permission for viewer are not working correctly
                     //'./wdio/tests/forms/formPermissionsViewerRole.e2e.spec.js'

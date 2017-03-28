@@ -1,0 +1,38 @@
+@import '../../assets/css/_qbVariables';
+
+.tableField {
+    min-width: 50%;
+
+    padding-right: 20px;
+    margin-bottom: 30px;
+    .tableFieldTitle {
+        margin-bottom: 4px;
+        color: $field-label-normal-color;
+    }
+
+    input, textarea {
+        padding: 5px;
+        resize: none;
+        width: 100%;
+        border: 1px solid $input-text-normal-border-color;
+        border-radius: $radius-base;
+    }
+
+    input {
+        height: 34px;
+    }
+
+    textarea:focus {
+        outline: -webkit-focus-ring-color auto 5px;
+    }
+    &.validationFailed {
+        .tableFieldTitle {
+            color: $error-color;
+        }
+        input:not(:focus) {
+            border: 1px solid $input-text-error-border-color;
+            border-left-width: 5px;
+            box-shadow: none;
+        }
+    }
+}
