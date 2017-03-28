@@ -115,6 +115,7 @@ const MultiChoiceFieldValueEditor = React.createClass({
                                onBlur={this.onBlur}>
                     <input type="radio" name={this.props.radioGroupName}
                            value={choice.displayValue}
+                           tabIndex={this.props.tabIndex}
                            checked={selectedValue === choice.coercedValue.value}
                            onChange={this.onClick} onBlur={this.onBlur}></input><span className="choiceText">{choice.displayValue}</span>
                     <div className="check"><div className="inside"></div></div>
@@ -129,6 +130,7 @@ const MultiChoiceFieldValueEditor = React.createClass({
                 <input type="radio" name={this.props.radioGroupName}
                        value={CompConstants.MULTICHOICE_RADIOGROUP.NONE_OPTION_VALUE}
                        onChange={this.onClick} onBlur={this.onBlur}
+                       tabIndex={this.props.tabIndex}
                        checked={selectedValue === CompConstants.MULTICHOICE_RADIOGROUP.NONE_OPTION_VALUE}/>
                         <div className="check"><div className="inside"></div></div>
                 <span className="choiceText"><I18nMessage message={"noneOption"}/></span>
@@ -165,7 +167,7 @@ const MultiChoiceFieldValueEditor = React.createClass({
             }) : [];
 
         return <Select
-            tabIndex="0"
+            tabIndex={this.props.tabIndex}
             value={selectedValue && {label: selectedValue}}
             optionRenderer={this.renderOption}
             options={choices}

@@ -3,7 +3,7 @@ import {Button} from 'react-bootstrap';
 import {I18nMessage} from '../../utils/i18nMessage';
 import Locale from '../../locales/locales';
 import {connect} from 'react-redux';
-import {loadForm, updateForm, moveFieldOnForm, removeFieldFromForm} from '../../actions/formActions';
+import {loadForm, updateForm, moveFieldOnForm, toggleFormBuilderChildrenTabIndex, keyboardMoveFieldUp, keyboardMoveFieldDown, deselectField, removeFieldFromForm} from '../../actions/formActions';
 import {notifyTableCreated} from '../../actions/tableCreationActions';
 import {updateFormAnimationState} from '../../actions/animationActions';
 import Loader from 'react-loader';
@@ -17,6 +17,9 @@ import AppHistory from '../../globals/appHistory';
 import Logger from '../../utils/logger';
 import AutoScroll from '../autoScroll/autoScroll';
 import PageTitle from '../pageTitle/pageTitle';
+import {ENTER_KEY, SPACE_KEY} from '../../../../reuse/client/src/components/keyboardShortcuts/keyCodeConstants';
+import KeyboardShortcuts from '../../../../reuse/client/src/components/keyboardShortcuts/keyboardShortcuts';
+import _ from 'lodash';
 import NotificationManager from '../../../../reuse/client/src/scripts/notificationManager';
 
 import './formBuilderContainer.scss';
@@ -24,38 +27,28 @@ import './formBuilderContainer.scss';
 let logger = new Logger();
 
 const mapStateToProps = state => {
+    let currentForm = state.forms ? state.forms[0] : undefined;
+
     return {
-        forms: state.forms,
-        notifyTableCreated: state.tableCreation.notifyTableCreated
+        currentForm,
+        selectedField: (_.has(currentForm, 'selectedFields') ? currentForm.selectedFields[0] : []),
+        tabIndex: (_.has(currentForm, 'formBuilderChildrenTabIndex') ? currentForm.formBuilderChildrenTabIndex[0] : undefined),
+        formFocus: (_.has(currentForm, 'formFocus') ? currentForm.formFocus[0] : undefined),
+        shouldNotifyTableCreated: state.tableCreation.notifyTableCreated
     };
 };
 
-const mapDispatchToProps = dispatch => {
-    return {
-        loadForm(appId, tableId, reportId, formType, recordId) {
-            return dispatch(loadForm(appId, tableId, reportId, formType, recordId));
-        },
-
-        moveField(formId, newLocation, draggedItemProps) {
-            return dispatch(moveFieldOnForm(formId, newLocation, draggedItemProps));
-        },
-
-        updateForm(appId, tblId, formType, form) {
-            return dispatch(updateForm(appId, tblId, formType, form));
-        },
-
-        removeField(formId, location) {
-            return dispatch(removeFieldFromForm(formId, location));
-        },
-
-        updateAnimationState(isAnimating) {
-            return dispatch(updateFormAnimationState(isAnimating));
-        },
-
-        tableCreatedNotificationComplete() {
-            return dispatch(notifyTableCreated(false));
-        }
-    };
+const mapDispatchToProps = {
+    loadForm,
+    moveFieldOnForm,
+    updateForm,
+    updateFormAnimationState,
+    toggleFormBuilderChildrenTabIndex,
+    keyboardMoveFieldUp,
+    keyboardMoveFieldDown,
+    deselectField,
+    removeFieldFromForm,
+    notifyTableCreated
 };
 
 export const FormBuilderContainer = React.createClass({
@@ -84,8 +77,8 @@ export const FormBuilderContainer = React.createClass({
 
         // if we've been sent here from the table creation flow, show a notification
 
-        if (this.props.notifyTableCreated) {
-            this.props.tableCreatedNotificationComplete();
+        if (this.props.shouldNotifyTableCreated) {
+            this.props.notifyTableCreated(false);
             setTimeout(() => {
                 NotificationManager.success(Locale.getMessage('tableCreation.tableCreated'), Locale.getMessage('success'));
             }, 1000);
@@ -96,11 +89,17 @@ export const FormBuilderContainer = React.createClass({
         AppHistory.history.goBack();
     },
 
+    removeField() {
+        if (this.props.removeFieldFromForm) {
+            return this.props.removeFieldFromForm(this.props.currentForm.id, this.props.selectedField);
+        }
+    },
+
     saveClicked() {
         // get the form meta data from the store..hard code offset for now...this is going to change..
-        if (this.props.forms && this.props.forms.length > 0 && this.props.forms[0].formData) {
-            let formMeta = this.props.forms[0].formData.formMeta;
-            let formType = this.props.forms[0].formData.formType;
+        if (this.props.currentForm && this.props.currentForm.formData) {
+            let formMeta = this.props.currentForm.formData.formMeta;
+            let formType = this.props.currentForm.formData.formType;
             this.props.updateForm(formMeta.appId, formMeta.tableId, formType, formMeta);
         }
     },
@@ -130,17 +129,64 @@ export const FormBuilderContainer = React.createClass({
         />;
     },
 
-    render() {
+    updateChildrenTabIndex(e) {
+        let childrenTabIndex = this.props.tabIndex;
 
-        let loaded = (_.has(this.props, 'forms') && this.props.forms.length > 0 && !this.props.forms[0].loading);
+        if ((e.which === ENTER_KEY || e.which === SPACE_KEY) && childrenTabIndex !== "0") {
+            this.props.toggleFormBuilderChildrenTabIndex(this.props.currentForm.id, childrenTabIndex);
+            e.preventDefault();
+        }
+    },
+
+    keyboardMoveFieldUp() {
+        if (this.props.selectedField.elementIndex !== 0) {
+            this.props.keyboardMoveFieldUp(this.props.currentForm.id, this.props.selectedField);
+        }
+    },
+
+    keyboardMoveFieldDown() {
+        if (this.props.selectedField && this.props.selectedField.elementIndex < this.props.currentForm.formData.formMeta.fields.length - 1) {
+            this.props.keyboardMoveFieldDown(this.props.currentForm.id, this.props.selectedField);
+        }
+    },
+
+    deselectField() {
+        if (this.props.deselectField) {
+            this.props.deselectField(this.props.currentForm.id, this.props.selectedField);
+        }
+    },
+
+    escapeCurrentContext() {
+        let childrenTabIndex = this.props.tabIndex;
+        let selectedField = this.props.selectedField;
+        if (selectedField) {
+            this.deselectField();
+        } else if (this.props.tabIndex === "0") {
+            this.props.toggleFormBuilderChildrenTabIndex(this.props.currentForm.id, childrenTabIndex);
+        } else {
+            this.onCancel();
+        }
+    },
+
+    render() {
+        let loaded = (_.has(this.props, 'currentForm') && this.props.currentForm !== undefined && !this.props.currentForm.loading);
         let formData = null;
         let formId = null;
         if (loaded) {
-            formId = this.props.forms[0].id;
-            formData = this.props.forms[0].formData;
+            formId = this.props.currentForm.id;
+            formData = this.props.currentForm.formData;
         }
         return (
             <div className="formBuilderContainer">
+
+                <KeyboardShortcuts id="formBuilderContainer" shortcutBindings={[
+                    {key: 'esc', callback: () => {this.escapeCurrentContext(); return false;}},
+                    {key: 'mod+s', callback: () => {this.saveClicked(); return false;}},
+                    {key: 'shift+up', callback: () => {this.keyboardMoveFieldUp(); return false;}},
+                    {key: 'shift+down', callback: () => {this.keyboardMoveFieldDown(); return false;}},
+                    {key: 'backspace', callback: () => {this.removeField(); return false;}}
+                ]}/>
+
                 <PageTitle title={Locale.getMessage('pageTitles.editForm')}/>
 
                 <div className="toolsAndForm">
@@ -152,11 +198,13 @@ export const FormBuilderContainer = React.createClass({
                         <div className="formBuilderContent">
                             <Loader loaded={loaded} options={LARGE_BREAKPOINT}>
                                 <FormBuilder
+                                    formFocus={this.props.formFocus}
+                                    selectedField={this.props.selectedField}
+                                    formBuilderUpdateChildrenTabIndex={this.updateChildrenTabIndex}
                                     formId={formId}
                                     formData={formData}
-                                    moveFieldOnForm={this.props.moveField}
-                                    removeField={this.props.removeField}
-                                    updateAnimationState={this.props.updateAnimationState}
+                                    moveFieldOnForm={this.props.moveFieldOnForm}
+                                    updateAnimationState={this.props.updateFormAnimationState}
                                 />
                             </Loader>
                         </div>

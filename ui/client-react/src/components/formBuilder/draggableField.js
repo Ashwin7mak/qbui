@@ -3,6 +3,7 @@ import {DragSource} from 'react-dnd';
 import DraggableItemTypes from './draggableItemTypes';
 import {getEmptyImage} from 'react-dnd-html5-backend';
 import FieldEditingTools from './fieldEditingTools/fieldEditingTools';
+import _ from 'lodash';
 
 /**
  * Specifies event handlers and props that are available during dragging events
@@ -73,15 +74,21 @@ const DraggableFieldHoc = FieldComponent => {
         }
 
         render() {
-            const {connectDragSource, isDragging, location, removeField} = this.props;
+            const {connectDragSource, isDragging, location, selectedField} = this.props;
 
             let classNames = ['draggableField'];
+            let draggableFieldWrapper = ['draggableFieldWrapper'];
             classNames.push(isDragging ? 'dragging' : 'notDragging');
+            if (_.isEqual(location, selectedField)) {
+                draggableFieldWrapper.push('selectedFormElement');
+            }
 
             return connectDragSource(
                 <div className={classNames.join(' ')}>
-                    <FieldEditingTools location={location} isDragging={isDragging} removeField={removeField}/>
-                    <FieldComponent {...this.props} />
+                    <div className={draggableFieldWrapper.join(' ')}>
+                        <FieldEditingTools location={location} isDragging={isDragging} />
+                        <FieldComponent {...this.props} />
+                    </div>
                 </div>
             );
         }
