@@ -15,6 +15,7 @@ import FlipMove from 'react-flip-move';
 import './qbform.scss';
 import './tabs.scss';
 
+let formBuilderEditForm = null;
 /*
  Custom QuickBase Form component that has 1 property.
  activeTab: the tab we want to display first when viewing the form, defaults to the first tab
@@ -474,7 +475,7 @@ let QBForm = React.createClass({
      * */
     componentDidUpdate() {
         if (this.props.formFocus) {
-            document.querySelector('.formContainer .editForm').focus();
+            formBuilderEditForm.focus();
             document.querySelector('.qbPanelHeaderTitleText').scrollIntoView(false);
         }
     },
@@ -486,7 +487,7 @@ let QBForm = React.createClass({
     wrapFormContent(formContent) {
         if (this.props.editingForm) {
             return (
-                <form className="editForm" tabIndex="0" role="button" onKeyDown={this.props.formBuilderUpdateChildrenTabIndex}>
+                <form ref={(editForm) => {formBuilderEditForm = editForm;}}className="editForm" tabIndex="0" role="button" onKeyDown={this.props.formBuilderUpdateChildrenTabIndex}>
                     {formContent}
                 </form>
             );
