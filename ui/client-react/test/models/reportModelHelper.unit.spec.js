@@ -1,4 +1,5 @@
 import ReportModelHelper from '../../src/models/reportModelHelper';
+import * as SchemaConstants from '../../src/constants/schema';
 import _ from 'lodash';
 
 describe('Record Model', () => {
@@ -87,6 +88,15 @@ describe('Record Model', () => {
             {id:6, display:'TestingString', value:'TestingString'}
         ]
     };
+    const addTestContent = {
+        newRecId: 30,
+        recId: SchemaConstants.UNSAVED_RECORD_ID,
+        record: [
+            {id:2, display:SchemaConstants.UNSAVED_RECORD_ID, value: SchemaConstants.UNSAVED_RECORD_ID},
+            {id:3, display:'4.0', value:'4'},
+            {id:6, display:'TestingString', value:'TestingString'}
+        ]
+    };
 
     const reportColumnsTests = [
         {name:'display all field columns', fidList: [2, 3, 4, 6, 8], notInFidList: []},
@@ -140,6 +150,75 @@ describe('Record Model', () => {
         //  delete record in report
         ReportModelHelper.deleteRecordFromReport(currentReport.data, 22);
         expect(currentReport.data.records.length).toEqual(0);
+    });
+
+    it('Get Report data method', () => {
+        let reportData = ReportModelHelper.getReportData();
+        expect(reportData.length).toEqual(0);
+
+        reportData = ReportModelHelper.getReportData(fields, []);
+        expect(reportData.length).toEqual(0);
+    });
+
+
+    it('add Report record method after specified row', () => {
+        let currentReport = _.cloneDeep(testReport);
+        let content = _.cloneDeep(addTestContent);
+
+        //  1 record in the report
+        expect(currentReport.data.records.length).toEqual(1);
+
+        //  add the new record after the existing
+        content.afterRecId = 22;
+
+        ReportModelHelper.addReportRecord(currentReport, content);
+
+        //  expect the new record to be added in the report
+        expect(currentReport.data.records.length).toEqual(2);
+        expect(currentReport.data.filteredRecords.length).toEqual(2);
+
+        //  expect the new record to be added after the existing
+        expect(currentReport.data.records[0][currentReport.data.keyField.name].value).toEqual(22);
+        expect(currentReport.data.records[1][currentReport.data.keyField.name].value).toEqual(content.recId);
+    });
+
+    it('add Report record method as top row in report', () => {
+        let currentReport = _.cloneDeep(testReport);
+        let content = _.cloneDeep(addTestContent);
+
+        //  1 record in the report
+        expect(currentReport.data.records.length).toEqual(1);
+
+        ReportModelHelper.addReportRecord(currentReport, content);
+
+        //  expect the new record to be added in the report
+        expect(currentReport.data.records.length).toEqual(2);
+        expect(currentReport.data.filteredRecords.length).toEqual(2);
+
+        //  expect the new record to be added after the existing
+        expect(currentReport.data.records[0][currentReport.data.keyField.name].value).toEqual(content.recId);
+        expect(currentReport.data.records[1][currentReport.data.keyField.name].value).toEqual(22);
+    });
+
+    it('add Report record method to an empty report', () => {
+        let currentReport = _.cloneDeep(testReport);
+        let content = _.cloneDeep(addTestContent);
+
+        // clear out the records
+        currentReport.data.records = [];
+        currentReport.data.filteredRecords = [];
+
+        //  0 record in the report
+        expect(currentReport.data.records.length).toEqual(0);
+
+        ReportModelHelper.addReportRecord(currentReport, content);
+
+        //  expect the new record to be added in the report
+        expect(currentReport.data.records.length).toEqual(1);
+        expect(currentReport.data.filteredRecords.length).toEqual(1);
+
+        //  expect the new record to be added after the existing
+        expect(currentReport.data.records[0][currentReport.data.keyField.name].value).toEqual(content.recId);
     });
 
 });
