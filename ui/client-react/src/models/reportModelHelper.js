@@ -555,8 +555,12 @@ function formatRecordValues(newRecord, fields) {
 function formatFieldValue(recField, fields) {
     let answer = null;
 
-    // THIS CODE IS AN ARTIFACT OF THE FLUX STORE IMPLEMENTED AND HAS BEEN
-    // CARRIED OVER WHEN REFACTORED TO REDUX.
+    // THIS CODE IS AN ARTIFACT OF THE FLUX STORE IMPLEMENTATION AND WAS
+    // CARRIED OVER WHEN REFACTORED TO REDUX.  IT'S BELIEVE THIS METHOD AND
+    // getFormatter() CAN BOTH BE REMOVED AS recField.value IS ALWAYS NULL,
+    // BUT WILL REMAIN AS COMMENTED OUT CODE UNTIL THE NEW REDUX CODE HAS
+    // BEEN EXCERSISED FOR A FEW WEEKS.
+    //
     // RecField.value is always undefined as the method is only called when
     // creating a new record from a template andvalue is explicitly set to
     // null.  If it's determined that this code is unnecessary (ie: nothing
