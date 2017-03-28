@@ -7,11 +7,10 @@ import report from './report';
 import search from './search';
 import shell from './shell';
 import featureSwitches from './featureSwitches';
+import tableCreation from './tableCreation';
 import animation from './animation';
 
 // combine individual reducers into a single root reducer (qbui)
-
-// maps state keys to reducers
 export default combineReducers({
     animation,
     featureSwitches,
@@ -20,6 +19,7 @@ export default combineReducers({
     record,
     report,
     search,
-    shell
+    shell,
+    tableCreation
 });
 

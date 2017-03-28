@@ -31,10 +31,15 @@ var TopNavMock = React.createClass({
     }
 });
 
+var TableCreationDialogMock = React.createClass({
+    render() {
+        return <div>mock table creation dialog</div>;
+    }
+});
+
 class WindowLocationUtilsMock {
     static update(url) { }
 }
-
 
 describe('Nav Unit tests', () => {
     'use strict';
@@ -101,6 +106,7 @@ describe('Nav Unit tests', () => {
         NavRewireAPI.__Rewire__('RecordTrowser', TrowserMock);
         NavRewireAPI.__Rewire__('ReportManagerTrowser', TrowserMock);
         NavRewireAPI.__Rewire__('TopNav', TopNavMock);
+        NavRewireAPI.__Rewire__('TableCreationDialog', TableCreationDialogMock);
         NavRewireAPI.__Rewire__('WindowLocationUtils', WindowLocationUtilsMock);
     });
 
@@ -115,6 +121,7 @@ describe('Nav Unit tests', () => {
         NavRewireAPI.__ResetDependency__('RecordTrowser');
         NavRewireAPI.__ResetDependency__('ReportManagerTrowser');
         NavRewireAPI.__ResetDependency__('TopNav');
+        NavRewireAPI.__ResetDependency__('TableCreationDialog');
         NavRewireAPI.__ResetDependency__('WindowLocationUtils');
     });
 
