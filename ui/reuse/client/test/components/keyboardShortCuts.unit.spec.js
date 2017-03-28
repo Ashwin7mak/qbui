@@ -42,6 +42,3 @@ describe('KeyboardShortCuts', () => {
         expect(instance.removeAllKeyBindings.calls.count()).toBe(1);
     });
 });
-
-
-
