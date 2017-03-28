@@ -60,29 +60,29 @@ export class FieldEditingTools extends Component {
     }
 
     renderActionIcons() {
-        let tabIndex = "-1";
+        let tabIndex = '-1';
 
         if (this.props.isDragging) {
             return null;
         }
 
         if (this.isFieldSelected()) {
-            tabIndex = "0";
+            tabIndex = '0';
         } else {
-            tabIndex = "-1";
+            tabIndex = '-1';
         }
 
         return (
-            <div className="actionIcons">
-                    <div className="deleteFieldIcon">
-                        <QbToolTip i18nMessageKey="builder.formBuilder.removeField">
-                           <button tabIndex={tabIndex} onClick={this.onClickDelete}> <QbIcon icon="delete" /> </button>
+            <div className='actionIcons'>
+                    <div className='deleteFieldIcon'>
+                        <QbToolTip i18nMessageKey='builder.formBuilder.removeField'>
+                           <button tabIndex={tabIndex} onClick={this.onClickDelete}> <QbIcon icon='delete' /> </button>
                         </QbToolTip>
                     </div>
 
-                    <div  className="fieldPreferencesIcon">
-                        <QbToolTip i18nMessageKey="builder.formBuilder.unimplemented">
-                            <button tabIndex={tabIndex} onClick={this.onClickFieldPreferences}> <QbIcon iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY} icon="Dimensions"/> </button>
+                    <div  className='fieldPreferencesIcon'>
+                        <QbToolTip i18nMessageKey='builder.formBuilder.unimplemented'>
+                            <button tabIndex={tabIndex} onClick={this.onClickFieldPreferences}> <QbIcon iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY} icon='Dimensions'/> </button>
                         </QbToolTip>
                     </div>
             </div>
@@ -94,7 +94,7 @@ export class FieldEditingTools extends Component {
          * For keyboard, we need to reset the focus, to maintain proper tabbing order
          * and wee need to keep the current form element in view, by scrolling it into view
          * */
-        if (this.props.previouslySelectedField && this.props.previouslySelectedField[0] && this.props.tabIndex !== "-1") {
+        if (this.props.previouslySelectedField && this.props.previouslySelectedField[0] && this.props.tabIndex !== '-1') {
             let previouslySelectedField = document.querySelectorAll('.fieldEditingTools');
             previouslySelectedField[this.props.previouslySelectedField[0].elementIndex].focus();
         } else if (this.props.selectedFields && this.props.selectedFields[0]) {
@@ -143,7 +143,7 @@ export class FieldEditingTools extends Component {
     }
 
     render() {
-        let tabIndex = this.props.selectedFields && this.props.selectedFields[0] ? "0" : this.props.tabIndex;
+        let tabIndex = this.props.selectedFields && this.props.selectedFields[0] ? '0' : this.props.tabIndex;
 
         let isSmall = Breakpoints.isSmallBreakpoint();
         let classNames = ['fieldEditingTools'];
@@ -166,7 +166,7 @@ export class FieldEditingTools extends Component {
         return (
             <div
                 tabIndex={tabIndex}
-                role="button"
+                role='button'
                 className={classNames.join(' ')}
                 onClick={this.onClickField}
                 onKeyDown={this.selectedCurrentField}
@@ -196,7 +196,7 @@ FieldEditingTools.defaultProps = {
 const mapStateToProps = (state, ownProps) => {
     let formId = (ownProps.formId || 'view');
     let currentForm = state.forms.find(form => form.id === formId);
-    let tabIndex = currentForm.formBuilderChildrenTabIndex ? currentForm.formBuilderChildrenTabIndex[0] : "-1";
+    let tabIndex = currentForm.formBuilderChildrenTabIndex ? currentForm.formBuilderChildrenTabIndex[0] : '-1';
     let selectedFields = (_.has(currentForm, 'selectedFields') ? currentForm.selectedFields : []);
     let previouslySelectedField = (_.has(currentForm, 'previouslySelectedField') ? currentForm.previouslySelectedField : []);
 
