@@ -69,7 +69,9 @@
     &.notTouchDevice {
         //No borders, icon, or drag handles are displayed when it is not a touch device
         //Everything shows up on hover
-        opacity: 1;
+        .dragHandle {
+            opacity: 0;
+        }
 
         .deleteFieldIcon .qbIcon {
             &:hover {

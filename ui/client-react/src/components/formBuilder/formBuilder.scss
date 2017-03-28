@@ -55,6 +55,9 @@
 
                 .fieldEditingTools {
                     opacity: 1;
+                    .dragHandle {
+                        opacity: 1;
+                    }
                     .qbIcon {
                         opacity: 1;
                     }
@@ -88,6 +91,11 @@
                 }
                 background-color: $color-cyan-300;
                 z-index: -1 !important;
+
+                .dragHandle {
+                    opacity: 1;
+                }
+
                 .deleteFieldIcon {
                     .qbIcon {
                         opacity: 1;
