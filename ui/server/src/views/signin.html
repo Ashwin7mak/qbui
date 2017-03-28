@@ -72,7 +72,13 @@
 <script type="text/javascript">
     var currentStackSignInUrl = "/db/main?a=nsredirect&nsurl=";
     var newStackDestination = window.location.href.replace("/signin","/qbase/apps");
-    var currentStackDomain = window.location.hostname.replace(".newstack", "");
+    var currentStackDomain = '<%= legacyBase %>';
+    if (currentStackDomain === null || currentStackDomain === undefined || currentStackDomain.length === 0 )
+    {
+        currentStackDomain = window.location.hostname.replace(".qb3", "");
+    } else {
+        currentStackDomain = `${window.location.hostname.split(".").shift()}${currentStackDomain}`;
+    }
     currentStackSignInUrl = "https://" + currentStackDomain + currentStackSignInUrl + newStackDestination;
     document.getElementById("signin").href = currentStackSignInUrl;
 </script>
