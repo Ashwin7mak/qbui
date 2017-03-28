@@ -71,16 +71,8 @@
              * Given an appId, tableId, tableNoun initialize a table properties object in EE.
              */
             initTableProperties: function(appId, tableId, tableNoun) {
-                //TODO: This is supposed to be like this as we aren't using the tableNoun at the moment. Update when needed.
-                let propsJson = {"tableNoun":"' + tableNoun + '"};
-                const tablePropertiesEndpoint = recordBase.apiBase.resolveTablePropertiesEndpoint(appId, tableId);
-                // Makes use of the isEE param of the executeRequest function
-                return recordBase.apiBase.executeRequest(tablePropertiesEndpoint, 'POST', propsJson, null, null, true).then(function(result) {
-                    return JSON.parse(result.body);
-                }).catch(function(error) {
-                    log.error('Error initializing table properties');
-                    return promise.reject(error);
-                });
+                // Call the initTableProperties function in recordBase
+                return recordBase.initTableProperties(appId, tableId, tableNoun);
             }
         };
         return tableService;
