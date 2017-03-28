@@ -99,8 +99,7 @@ export class FeatureSwitchesRoute extends React.Component {
         // notify of updates if there were any
         if (updatePromises.length > 0) {
             Promise.all(updatePromises).then(() => {
-                NotificationManager.success(Locale.getMessage("featureSwitchAdmin.featureSwitchUpdated"), Locale.getMessage('success'),
-                    CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);
+                NotificationManager.success(Locale.getMessage("featureSwitchAdmin.featureSwitchUpdated"), Locale.getMessage('success'));
             });
         }
     }
