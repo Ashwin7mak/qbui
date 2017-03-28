@@ -6,6 +6,7 @@ import DragHandle from '../dragHandle/dragHandle';
 import Device from '../../../utils/device';
 import Breakpoints from '../../../utils/breakpoints';
 import {connect} from 'react-redux';
+import {ENTER_KEY, SPACE_KEY} from '../../../../../reuse/client/src/components/keyboardShortcuts/keyCodeConstants';
 import _ from 'lodash';
 import {selectFieldOnForm, removeFieldFromForm} from '../../../actions/formActions';
 
@@ -136,7 +137,7 @@ export class FieldEditingTools extends Component {
             isCurrentlySelectedField = !(_.isEqual(this.props.location.elementIndex, this.props.selectedFields[0].elementIndex));
         }
 
-        if ((e.which === 13 || e.which === 32) && isCurrentlySelectedField) {
+        if ((e.which === ENTER_KEY || e.which === SPACE_KEY) && isCurrentlySelectedField) {
             this.onClickField(e);
         }
     }

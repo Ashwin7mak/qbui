@@ -16,6 +16,7 @@ import AppHistory from '../../globals/appHistory';
 import Logger from '../../utils/logger';
 import AutoScroll from '../autoScroll/autoScroll';
 import PageTitle from '../pageTitle/pageTitle';
+import {ENTER_KEY, SPACE_KEY} from '../../../../reuse/client/src/components/keyboardShortcuts/keyCodeConstants';
 import KeyboardShortcuts from '../../../../reuse/client/src/components/keyboardShortcuts/keyboardShortcuts';
 import _ from 'lodash';
 
@@ -145,7 +146,7 @@ export const FormBuilderContainer = React.createClass({
     updateChildrenTabIndex(e) {
         let childrenTabIndex = this.props.tabIndex;
 
-        if ((e.which === 13 || e.which === 32) && childrenTabIndex !== "0") {
+        if ((e.which === ENTER_KEY || e.which === SPACE_KEY) && childrenTabIndex !== "0") {
             this.props.toggleFormBuilderChildrenTabIndex(this.props.currentForm.id, childrenTabIndex);
             e.preventDefault();
         }
