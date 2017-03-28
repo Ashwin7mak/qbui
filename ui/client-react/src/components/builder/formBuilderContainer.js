@@ -4,6 +4,7 @@ import {I18nMessage} from '../../utils/i18nMessage';
 import Locale from '../../locales/locales';
 import {connect} from 'react-redux';
 import {loadForm, updateForm, moveFieldOnForm, toggleFormBuilderChildrenTabIndex, keyboardMoveFieldUp, keyboardMoveFieldDown, deselectField, removeFieldFromForm} from '../../actions/formActions';
+import {notifyTableCreated} from '../../actions/tableCreationActions';
 import {updateFormAnimationState} from '../../actions/animationActions';
 import Loader from 'react-loader';
 import {LARGE_BREAKPOINT} from "../../constants/spinnerConfigurations";
@@ -19,6 +20,7 @@ import PageTitle from '../pageTitle/pageTitle';
 import {ENTER_KEY, SPACE_KEY} from '../../../../reuse/client/src/components/keyboardShortcuts/keyCodeConstants';
 import KeyboardShortcuts from '../../../../reuse/client/src/components/keyboardShortcuts/keyboardShortcuts';
 import _ from 'lodash';
+import NotificationManager from '../../../../reuse/client/src/scripts/notificationManager';
 
 import './formBuilderContainer.scss';
 
@@ -26,12 +28,14 @@ let logger = new Logger();
 
 const mapStateToProps = state => {
     let currentForm = state.forms ? state.forms[0] : undefined;
+    console.log('currentForm: ', currentForm);
 
     return {
         currentForm,
         selectedField: (_.has(currentForm, 'selectedFields') ? currentForm.selectedFields[0] : []),
         tabIndex: (_.has(currentForm, 'formBuilderChildrenTabIndex') ? currentForm.formBuilderChildrenTabIndex[0] : undefined),
-        formFocus: (_.has(currentForm, 'formFocus') ? currentForm.formFocus[0] : undefined)
+        formFocus: (_.has(currentForm, 'formFocus') ? currentForm.formFocus[0] : undefined),
+        notifyTableCreated: state.tableCreation.notifyTableCreated
     };
 };
 
@@ -71,6 +75,14 @@ const mapDispatchToProps = dispatch => {
         removeField(formId, location) {
             return dispatch(removeFieldFromForm(formId, location));
         },
+
+        updateAnimationState(isAnimating) {
+            return dispatch(updateFormAnimationState(isAnimating));
+        },
+
+        tableCreatedNotificationComplete() {
+            return dispatch(notifyTableCreated(false));
+        }
     };
 };
 
@@ -97,6 +109,15 @@ export const FormBuilderContainer = React.createClass({
     componentDidMount() {
         // We use the NEW_FORM_RECORD_ID so that the form does not load any record data
         this.props.loadForm(this.props.appId, this.props.tblId, null, (this.props.formType || 'view'), NEW_FORM_RECORD_ID);
+
+        // if we've been sent here from the table creation flow, show a notification
+
+        if (this.props.notifyTableCreated) {
+            this.props.tableCreatedNotificationComplete();
+            setTimeout(() => {
+                NotificationManager.success(Locale.getMessage('tableCreation.tableCreated'), Locale.getMessage('success'));
+            }, 1000);
+        }
     },
 
     onCancel() {
