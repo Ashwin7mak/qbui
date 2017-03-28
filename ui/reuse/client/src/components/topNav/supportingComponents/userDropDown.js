@@ -56,7 +56,7 @@ class UserDropDown extends Component {
     }
 
     render() {
-        const {startTabIndex, app, signOutUser, position} = this.props;
+        const {startTabIndex, app, signOutUser} = this.props;
 
         return (
             <DropDown id="nav-right-dropdown" className="userDropDown globalActionLink" dropup={this.props.shouldOpenMenusUp}>

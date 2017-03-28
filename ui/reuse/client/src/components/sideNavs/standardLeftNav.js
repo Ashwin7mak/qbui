@@ -220,8 +220,6 @@ StandardLeftNav.propTypes = {
      * The alt text to use with the branding image */
     brandingImageAltText: PropTypes.string,
 
-
-
     /**
      * The nav items to be displayed in the main content area of the left nav */
     navItems: PropTypes.arrayOf(PropTypes.shape({
