@@ -137,9 +137,10 @@
             }
         }
 
-        // Override the not allowed icon on tooltips
+        // Override the not allowed icon on tooltips and allow for long title to have ellipses
         .tipChildWrapper {
             cursor: pointer;
+            width: calc(100% - 40px);
         }
     }
 

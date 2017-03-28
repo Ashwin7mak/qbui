@@ -36,7 +36,7 @@ class SimpleNavItem extends Component {
 
     onClickSecondaryIcon(evt) {
         if (this.props.onClickSecondaryIcon) {
-            this.prop.onClickSecondaryIcon(evt)
+            this.prop.onClickSecondaryIcon(evt);
         }
     }
 
@@ -83,7 +83,7 @@ class SimpleNavItem extends Component {
         }
 
         if (secondaryIcon) {
-            return <Icon className="navItemIcon" iconFont={secondaryIconFont} icon={secondaryIcon} />
+            return <Icon className="navItemIcon" iconFont={secondaryIconFont} icon={secondaryIcon} />;
         }
 
         // When there are no icons, default to the nav item text
@@ -93,7 +93,7 @@ class SimpleNavItem extends Component {
     /**
      * Renders the content of the nav item
      * If the nav item is collapsed it only renders the icon (or text if no icon)
-     * TODO:: On hover, it will display the full item (navBodyCollapsedHover element)
+     * TODO:: On hover, it will display the full item (navBodyCollapsedHover element) - https://quickbase.atlassian.net/browse/MC-1382
      * @param isCollapsed This prop is passed in so that when we render the un-collapsed version using the same function
      * @returns {XML}
      */
@@ -126,7 +126,7 @@ class SimpleNavItem extends Component {
     getClassName() {
         const {className, isSelected, isDisabled, isPrimaryAction} = this.props;
         let instanceClassName = ['simpleNavItem'];
-        if(className) {
+        if (className) {
             instanceClassName.push(className);
         }
 

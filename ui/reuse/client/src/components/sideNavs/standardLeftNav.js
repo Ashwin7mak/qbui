@@ -23,6 +23,22 @@ class StandardLeftNav extends Component {
         this.renderContextHeaderTitle = this.renderContextHeaderTitle.bind(this);
         this.renderContextHeader = this.renderContextHeader.bind(this);
         this.renderNavContent = this.renderNavContent.bind(this);
+        this.screenSizeChanged = this.screenSizeChanged.bind(this);
+        this.getMaxLengthBeforeTooltip = this.getMaxLengthBeforeTooltip.bind(this);
+    }
+
+    componentDidMount() {
+        window.addEventListener('resize', this.screenSizeChanged, false);
+        this.screenSizeChanged(); // Call the function once to initialize
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener('resize', this.screenSizeChanged, false);
+    }
+
+    screenSizeChanged() {
+        // Force a re-render
+        this.setState({reRender: Math.random()});
     }
 
     onClickContextHeader(evt) {
@@ -35,13 +51,12 @@ class StandardLeftNav extends Component {
         if (Breakpoints.isLargeBreakpoint() || Breakpoints.isXLargeBreakpoint()) {
             return 23;
         } else if (Breakpoints.isMediumBreakpoint()) {
-            return 15;
+            return (this.props.isContextHeaderSmall ? 17 : 15);
         } else {
-            return 13;
+            return (this.props.isContextHeaderSmall ? 16 : 13);
         }
     }
 
-    // TODO:: Re-render on page resize so that the presence/absence of tooltip updates when the window changes size
     renderContextHeaderTitle() {
         const {contextHeaderTitle} = this.props;
 
@@ -218,6 +233,7 @@ StandardLeftNav.propTypes = {
         iconFont: PropTypes.string,
         title: PropTypes.string,
         onClick: PropTypes.string,
+        href: PropTypes.string,
         link: PropTypes.string,
         secondaryIcon: PropTypes.string,
         secondaryIconFont: PropTypes.string,

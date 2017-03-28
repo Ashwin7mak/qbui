@@ -22,7 +22,7 @@ const GovernanceAppShell = ({children}) => (
                 {icon: 'selected', title: 'Set realm policies', isDisabled: true},
                 {icon: 'Fountain_Pen', iconFont: AVAILABLE_ICON_FONTS.TABLE_STURDY, title: 'Edit realm branding', isDisabled: true},
                 {icon: 'currency', title: 'Manage billing', isDisabled: true},
-                {icon: 'bell', iconFont: AVAILABLE_ICON_FONTS.TABLE_STURDY, title: 'Contact support'},
+                {icon: 'bell', iconFont: AVAILABLE_ICON_FONTS.TABLE_STURDY, title: 'Contact support'}
             ]}
             isCollapsed={false}
             globalActions={<DefaultTopNavGlobalActions dropdownIcon="user" dropdownMsg="globalActions.user" shouldOpenMenusUp={true} />}
