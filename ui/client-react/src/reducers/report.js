@@ -166,31 +166,32 @@ const report = (state = [], action) => {
                 };
 
                 if (content.newRecId) {
-                    // if the grid has an 'UNSAVED_RECORD_ID' that means we are saving a new
-                    // row from inline editing.  Get the index of the new blank record, get the
-                    // record id of the prior record in the grid array, remove the blank record
-                    // from the array and then add the real report record to the array at that offset.
+                    const keyName = _.has(currentReport, 'data.keyField') ? currentReport.data.keyField.name : '';
                     let records = _.has(currentReport, 'data.records') ? currentReport.data.records : [];
-                    if (records.length > 0) {
-                        const keyName = _.has(currentReport, 'data.keyField') ? currentReport.data.keyField.name : '';
-                        if (keyName) {
-                            const blankRowIdx = ReportUtils.findRecordIndex(records, UNSAVED_RECORD_ID, keyName);
-                            if (blankRowIdx !== -1) {
-                                //  before deleting, get the record that is immediately before the unsaved row
-                                if (records.length > 0) {
-                                    const prevRowIdx = blankRowIdx > 0 ? blankRowIdx - 1 : 0;
-                                    const prevRec = records[prevRowIdx];
-                                    content.afterRecId = prevRec[keyName].value;
-                                } else {
-                                    content.afterRecId = null;
-                                }
-                                // now remove the 'UNSAVED_RECORD_ID' row
-                                ReportModelHelper.deleteRecordFromReport(currentReport, UNSAVED_RECORD_ID);
-                            }
-                        }
+
+                    //  check to see if the new record is getting added from an inline editing blank row
+                    let hasBlankRec = false;
+                    if (currentReport.data.hasGrouping) {
+                        const blankRec = ReportUtils.findGroupedRecord(records, UNSAVED_RECORD_ID, keyName);
+                        hasBlankRec = (blankRec !== null);
+                    } else {
+                        const blankRecIdx = ReportUtils.findRecordIndex(records, UNSAVED_RECORD_ID, keyName);
+                        hasBlankRec = (blankRecIdx !== -1);
                     }
-                    // add the new row to the report array
-                    ReportModelHelper.addReportRecord(currentReport, content);
+
+                    //  if there is a blank record created from inline editing, we'll delete the blank record
+                    //  from the report and then add the new row based on recId supplied when creating the blank row
+                    if (hasBlankRec) {
+                        //  delete the blank row from the report
+                        ReportModelHelper.deleteRecordFromReport(currentReport, UNSAVED_RECORD_ID);
+
+                        //  add the new row where the blank row was sitting...we know where that is because we
+                        //  saved the rec id immediately prior to the blank row when it was added to the report.
+                        content.afterRecId = currentReport.recIdBeforeBlankRow;
+                        ReportModelHelper.addReportRecord(currentReport, content);
+                    } else {
+                        ReportModelHelper.addReportRecord(currentReport, content);
+                    }
                 } else {
                     // update the report row
                     ReportModelHelper.updateReportRecord(currentReport, content);
@@ -259,7 +260,6 @@ const report = (state = [], action) => {
                     currentReport.editingIndex = undefined;
                     currentReport.editingId = undefined;
                 }
-
                 ReportModelHelper.addReportRecord(currentReport, content);
                 return newState(currentReport);
             }

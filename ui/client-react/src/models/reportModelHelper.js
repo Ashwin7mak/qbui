@@ -311,6 +311,7 @@ function addRecordToReport(currentReport, content) {
             // set id to unsaved
             newRecord[reportData.keyField.name].value = SchemaConstants.UNSAVED_RECORD_ID;
         } else {
+            afterRecId = 0;
             //  there are no records in the grid to use as a template..so just convert the
             //  new record into the 'newRecord' format
             newRecord = formatRecord(content.record, reportData.fields);
@@ -353,6 +354,9 @@ function addRecordToReport(currentReport, content) {
         if (newRecId === SchemaConstants.UNSAVED_RECORD_ID) {
             currentReport.editingIndex = newRecordsIndex;
             currentReport.editingId = SchemaConstants.UNSAVED_RECORD_ID;
+            currentReport.recIdBeforeBlankRow = afterRecId;
+        } else {
+            currentReport.recIdBeforeBlankRow = undefined;
         }
 
         reportData.records = newRecords;
@@ -430,13 +434,16 @@ function addRecordToGroupedReport(currentReport, content) {
                 return item === theCorrespondingField.id;
             });
             if (isGroupedFid !== -1) {
-                let fieldValuesForRecord = _.find(record, (item) => item.id === theCorrespondingField.id);
+                let fieldValuesForRecord = _.find(templateRecord, (item) => item.id === theCorrespondingField.id);
                 valueAnswer = {id: obj.id, value: fieldValuesForRecord.value};
             } else if (theCorrespondingField && _.has(theCorrespondingField, 'defaultValue.coercedValue')) {
                 //set the default values in the answer for each field
                 valueAnswer = {id: obj.id, value: theCorrespondingField.defaultValue.coercedValue.value};
             } else {
-                valueAnswer = (obj.id === SchemaConstants.DEFAULT_RECORD_KEY_ID ? {id: obj.id, value: null} : getDefaultValue(obj.id, theCorrespondingField.datatypeAttributes.type));
+                valueAnswer = (obj.id === SchemaConstants.DEFAULT_RECORD_KEY_ID ? {
+                    id: obj.id,
+                    value: null
+                } : getDefaultValue(obj.id, theCorrespondingField.datatypeAttributes.type));
             }
             return valueAnswer;
         });
@@ -482,22 +489,20 @@ function addRecordToGroupedReport(currentReport, content) {
             currentReport.editingIndex = afterRecIndex + 1;
             currentReport.editingId = SchemaConstants.UNSAVED_RECORD_ID;
         }
-    }
 
-    // set the record id
-    if (content.newRecId) {
-        if (record) {
+        // set the record id
+        if (content.newRecId) {
             record[reportData.keyField.name].value = content.newRecId;
         }
-    }
 
-    // skip if adding a blank row to the report list as content.record will not exist
-    if (content.record) {
-        // transform record from format [{id, value}] to [fieldName: {id, value}]
-        let formattedRec = formatRecord(content.record, reportData.fields);
+        // skip if adding a blank row to the report list as content.record will not exist
+        if (content.record) {
+            // transform record from format [{id, value}] to [fieldName: {id, value}]
+            let formattedRec = formatRecord(content.record, reportData.fields);
 
-        //  update the report with the new record data
-        updateReportRecordData(null, record, formattedRec);
+            //  update the report with the new record data
+            updateReportRecordData(null, record, formattedRec);
+        }
     }
 }
 
