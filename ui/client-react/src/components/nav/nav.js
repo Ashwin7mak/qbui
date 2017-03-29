@@ -353,7 +353,7 @@ export let Nav = React.createClass({
                         globalActions={this.getTopGlobalActions()}
                         onNavClick={this.toggleNav}
                         flux={flux}
-                        showOnSmall = {this.state.nav.showTopNav}
+                        showOnSmall={this.state.nav.showTopNav}
                 />
                 {this.props.children &&
                     <div className="mainContent" >

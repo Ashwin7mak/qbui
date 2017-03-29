@@ -188,7 +188,7 @@ const UserFieldValueEditor = React.createClass({
         return (
             <Select
                 className={classes}
-                tabIndex="0"
+                tabIndex={this.props.tabIndex}
                 filterOption={this.filterOption}
                 value={this.state.selectedUserId}
                 optionRenderer={this.renderOption}
