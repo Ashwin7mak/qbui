@@ -55,7 +55,7 @@ let Trowser = React.createClass({
             <div className={trowserClasses} >
                 <div className={"trowserBackground"} onClick={this.props.onCancel}/>
                 <KeyboardShortcuts id="trowser"
-                                   shortcutBindings={[
+                                   shortcutBindingsPreventDefault={[
                                        {key: 'mod+s', callback: () => {this.props.onSave(); return false;}},
                                        {key: 'esc', callback: () => {this.props.onCancel(); return false;}}
                                    ]} />
