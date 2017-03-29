@@ -36,10 +36,13 @@ const IconSwatches = ({cssFileContents}) => {
             let icon = {
                 className: lineData[1],
                 iconName: lineData[1].substring(lineData[1].indexOf('-')+1), // extract the part of the classname after the first hyphen
-                codePoint: lineData[2]
+                charCode: lineData[2]
             };
 
-            //console.log(icon);
+            // calculate the actual unicode character
+            let n = parseInt(icon.charCode, 16);
+            icon.character = String.fromCharCode(n);
+
             icons.push(icon);
         }
     });
@@ -48,8 +51,10 @@ const IconSwatches = ({cssFileContents}) => {
         <ul className="comp-library-icon-grid">
             {icons.map( (icon, index) =>
                 <li key={index} className="comp-library-icon-swatch">
-                    <Tooltip plainMessage={`${icon.iconName} [${icon.codePoint}]`} location="bottom">
-                        <span className={"qbicon " + `${icon.className}`}/>
+                    <Tooltip plainMessage={`${icon.iconName} [${icon.charCode}]`} location="bottom">
+                        <span className={"qbicon " + `${icon.className}`}>
+                            <input type="text" maxlength="1" readonly value={icon.character} className="comp-library-icon-input"/>
+                        </span>
                     </Tooltip>
                     <span className="comp-library-icon-label">{icon.iconName}</span></li>
             )}

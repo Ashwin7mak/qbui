@@ -253,6 +253,7 @@ $bs-table-border-color:                #dddddd;
     $icon-swatch-height: $icon-swatch-width;
     $icon-swatch-margin: 20px;
     $icon-size: 36px;
+    $icon-input-padding: 5px;
 
     .comp-library-icon-grid {
         display:flex;
@@ -278,6 +279,21 @@ $bs-table-border-color:                #dddddd;
                 height: $icon-size;
                 font-size: $icon-size;
                 color: $color-black-700;
+                position: relative;
+            }
+
+            .comp-library-icon-input {
+                width: $icon-size + ($icon-input-padding * 2);
+                height: $icon-size + ($icon-input-padding * 2);
+                font-size: $icon-size;
+                color: $color-black-700;
+                position: absolute;
+                padding: 0;
+                margin: 0;
+                top: -$icon-input-padding;
+                left: -$icon-input-padding;
+                text-align: center;
+                border: 0;
             }
 
             .comp-library-icon-label {
