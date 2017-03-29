@@ -68,8 +68,13 @@ const actionPropType = React.PropTypes.shape({
 
 ReDefaultTopNavGlobalActions.propTypes = {
     linkClass: PropTypes.string,
+
+    /**
+     * A callback that is fired when a global action is selected by the user. */
     onSelect: PropTypes.func,
-    position: PropTypes.string,
+
+    /**
+     * Optionally pass in a different tabIndex to start with */
     startTabIndex: PropTypes.number,
 
     /**
@@ -92,7 +97,6 @@ ReDefaultTopNavGlobalActions.propTypes = {
 };
 
 ReDefaultTopNavGlobalActions.defaultProps = {
-    position: 'bottom',
     startTabIndex: 0,
     actions: [],
 };
