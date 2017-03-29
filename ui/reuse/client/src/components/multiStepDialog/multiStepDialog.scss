@@ -1,0 +1,108 @@
+@import '../../assets/css/_qbVariables';
+
+.multiStepModal {
+
+    .modal-content {
+        border-radius: $radius-base;
+
+        .multiStepDialogRightIcons {
+            font-size: 18px;
+            position: absolute;
+            right: 15px;
+            top: 15px;
+            color: $iconfont-on-light-alternate-color;
+            button {
+                padding-left: 8px;
+                border: 0;
+                background: initial;
+                &:hover {
+                    color: $color-black-500;
+                }
+            }
+        }
+    }
+
+    .modal-title {
+        padding: $spacing-medium1;
+        padding-bottom: 0;
+        color: $color-black-700;
+        font-size: $font-size-h2;
+    }
+
+    .modal-body {
+        padding: $spacing-x-small;
+        padding-top: 10px;
+        padding-left: $spacing-medium1;
+    }
+
+    .modal-body > *:first-child {
+        position: relative;
+        display: block;
+        overflow: hidden;
+    }
+
+    .modal-footer {
+        border-top: 0;
+        .buttons {
+            display: flex;
+
+            .button {
+                flex-grow: 0;
+            }
+            .spacer {
+                flex-grow: 1;
+            }
+        }
+    }
+
+    .pageContainer {
+
+        width: 100%;
+        height: 100%;
+        position: absolute;
+    }
+
+    /* next/prev page transitions */
+
+    .next-enter {
+        transform: translate3d(100%, 0%);
+    }
+
+    .next-enter.next-enter-active {
+        left: 0;
+        transform: translate3d(0%, 0%);
+        transition: all 300ms ease-in-out;
+    }
+
+    .next-leave {
+        left: 0;
+        opacity: 1;
+    }
+
+    .next-leave.next-leave-active {
+        transform: translate3d(-100%, 0%);
+        opacity: 0.1;
+        transition: all 300ms ease-in-out;
+    }
+
+    .previous-enter {
+        transform: translate3d(-100%, 0%);
+    }
+
+    .previous-enter.previous-enter-active {
+        left: 0;
+        transition: all 300ms ease-in-out;
+    }
+
+    .previous-leave {
+        transform: translate3d(0%, 0%);
+        opacity: 1;
+    }
+
+    .previous-leave.previous-leave-active {
+        transform: translate3d(100%, 0%);
+        opacity: 0.1;
+        transition: all 300ms ease-in-out;
+    }
+}
+

@@ -100,6 +100,9 @@ export default {
             saveAndNext: "Sauver et prochain",
             saveAndAddAnother: "Sauver et ajouter un autre",
             cancel: "Annuler",
+            next: "Prochain",
+            previous: "Orécédent",
+            finished: "Fini",
             new: "Nouveau"
         },
         field: {
@@ -546,6 +549,31 @@ export default {
             noOverrides: "Aucune substitution n'a été définie",
             featureNameExists: "Les noms des entités doivent être uniques",
             featureNameEmpty: "Les noms des entités doivent être blanc"
+        },
+        tableCreation: {
+            newTablePageTitle: "Nouvelle table",
+            newTableDescription: "Créer une nouvelle table lorsque vous souhaitez collecter un nouveau type d'information.",
+            newTableTitle: "Nommez votre table",
+
+            summaryDescription: "Chaque bit d'information que vous souhaitez collecter est un champ.",
+            summaryTitle: "Faites glisser et déposez les champs que vous souhaitez ajouter à votre table sur le formulaire. Vous pouvez organiser les champs dans l'ordre que vous souhaitez que les gens les utilisent.",
+
+            addFieldsTitle: "Préparez-vous à ajouter des champs à votre table",
+            tableNameHeading: "Nom de la table",
+            recordNameHeading: "Un enregistrement dans le tableau est appelé un",
+            descriptionHeading: "La description",
+            iconHeading: "Icône",
+            suggestedIconsHeading: "Icônes suggérées",
+
+            tableNamePlaceholder: "Par exemple, les clients",
+            recordNamePlaceholder: "Par exemple, client",
+            descriptionPlaceholder: "Texte à afficher en vol stationnaire sur le nom de la table dans la colonne de gauche",
+
+            tableCreated: "Tableau créé",
+            tableCreationFailed: "Impossible de créer une table",
+            validateTableNameEmpty: "Le nom de la table ne doit pas être vide",
+            validateTableNameExists: "Le nom de la table doit être unique pour cette application",
+            validateRecordNameEmpty: "Le nom de l'enregistrement ne doit pas être vide",
         }
     }
 };

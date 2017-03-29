@@ -158,6 +158,10 @@ class ReportModelHelper {
             let filteredRecord = null;
             let reportData = currentReport.data;
 
+            //  ensure recId is numeric
+            if (content.recId) {
+                content.recId = +content.recId;
+            }
             if (reportData.hasGrouping) {
                 record = ReportUtils.findGroupedRecord(reportData.records, content.recId, reportData.keyField.name);
                 filteredRecord = ReportUtils.findGroupedRecord(reportData.filteredRecords, content.recId, reportData.keyField.name);
@@ -188,6 +192,10 @@ class ReportModelHelper {
         let recordDeleted = false;
         let filteredRecordDeleted = false;
 
+        // ensure recId is numeric
+        if (recId) {
+            recId = +recId;
+        }
         if (reportData.hasGrouping) {
             filteredRecordDeleted = ReportUtils.removeGroupedRecordById(newFilteredRecords, recId, reportData.keyField.name);
             recordDeleted = ReportUtils.removeGroupedRecordById(newRecords, recId, reportData.keyField.name);
@@ -230,6 +238,11 @@ class ReportModelHelper {
  * @returns {*}
  */
 function findRecordById(records, recId, hasGrouping, keyField) {
+    // ensure recId is numeric
+    if (recId) {
+        recId = +recId;
+    }
+
     if (hasGrouping) {
         return ReportUtils.findGroupedRecord(records, recId, keyField.name);
     } else {
@@ -263,6 +276,10 @@ function addRecordToReport(currentReport, content) {
                 if (_.has(afterRecId, 'value')) {
                     afterRecId = afterRecId.value;
                 }
+                //  ensure afterRecId is numeric
+                if (afterRecId) {
+                    afterRecId = +afterRecId;
+                }
                 afterRecIndex = ReportUtils.findRecordIndex(reportData.records, afterRecId, reportData.keyField.name);
             }
 
@@ -285,7 +302,7 @@ function addRecordToReport(currentReport, content) {
             });
 
             // format the values in the new record
-            formatRecordValues(newRecord);
+            formatRecordValues(newRecord, reportData.fields);
             // set id to unsaved
             newRecord[reportData.keyField.name].value = SchemaConstants.UNSAVED_RECORD_ID;
         } else {
@@ -378,6 +395,11 @@ function addRecordToGroupedReport(currentReport, content) {
             afterRecordIdValue = content.afterRecId.value;
         }
 
+        // ensure afterRecordId is numeric
+        if (afterRecordIdValue) {
+            afterRecordIdValue = +afterRecordIdValue;
+        }
+
         //  find the first group if no 'after record id' supplied
         let templateRecord;
         if (afterRecordIdValue === -1) {
@@ -419,7 +441,7 @@ function addRecordToGroupedReport(currentReport, content) {
         });
 
         //format the values in the new record
-        formatRecordValues(record);
+        formatRecordValues(record, reportData.fields);
 
         // set id to unsaved
         record[reportData.keyField.name].value = SchemaConstants.UNSAVED_RECORD_ID;
@@ -450,8 +472,8 @@ function addRecordToGroupedReport(currentReport, content) {
         }
 
         let afterRecIndex = -1;
-        if (content.afterRecId) {
-            afterRecIndex = ReportUtils.findRecordIndex(reportData.filteredRecords, content.afterRecId, reportData.keyField.name);
+        if (afterRecordIdValue) {
+            afterRecIndex = ReportUtils.findRecordIndex(reportData.filteredRecords, afterRecordIdValue, reportData.keyField.name);
         }
 
         //editing index for new blank rows
@@ -462,8 +484,10 @@ function addRecordToGroupedReport(currentReport, content) {
     }
 
     // set the record id
-    if (content.newRecId && record) {
-        record[reportData.keyField.name].value = content.newRecId;
+    if (content.newRecId) {
+        if (record) {
+            record[reportData.keyField.name].value = content.newRecId;
+        }
     }
 
     // skip if adding a blank row to the report list as content.record will not exist
@@ -553,27 +577,38 @@ function formatRecordValues(newRecord, fields) {
 function formatFieldValue(recField, fields) {
     let answer = null;
 
-    if (recField && recField.value) {
-        // assume same raw and formatted
-        answer = recField.value;
-
-        //get the corresponding field meta data
-        let fieldMeta = _.find(fields, (item) => {
-            return (((recField.id !== undefined) && (item.id === recField.id) ||
-            ((recField.fieldName !== undefined) && (item.name === recField.fieldName))));
-        });
-
-        //format the value by field display type
-        if (fieldMeta && fieldMeta.datatypeAttributes && fieldMeta.datatypeAttributes.type) {
-            let formatType = FieldFormats.getFormatType(fieldMeta.datatypeAttributes);
-            let formatter = getFormatter(formatType);
-
-            // if there's a formatter use it to format the display version
-            if (formatter !== null) {
-                answer = formatter.format(recField, fieldMeta.datatypeAttributes);
-            }
-        }
-    }
+    // THIS CODE IS AN ARTIFACT OF THE FLUX STORE IMPLEMENTATION AND WAS
+    // CARRIED OVER WHEN REFACTORED TO REDUX.  IT'S BELIEVE THIS METHOD AND
+    // getFormatter() CAN BOTH BE REMOVED AS recField.value IS ALWAYS NULL,
+    // BUT WILL REMAIN AS COMMENTED OUT CODE UNTIL THE NEW REDUX CODE HAS
+    // BEEN EXCERSISED FOR A FEW WEEKS.
+    //
+    // RecField.value is always undefined as the method is only called when
+    // creating a new record from a template andvalue is explicitly set to
+    // null.  If it's determined that this code is unnecessary (ie: nothing
+    // is broken), please remove...
+    //
+    //if (recField && recField.value) {
+    //    // assume same raw and formatted
+    //    answer = recField.value;
+    //
+    //    //get the corresponding field meta data
+    //    let fieldMeta = _.find(fields, (item) => {
+    //        return (((recField.id !== undefined) && (item.id === recField.id) ||
+    //        ((recField.fieldName !== undefined) && (item.name === recField.fieldName))));
+    //    });
+    //
+    //    //format the value by field display type
+    //    if (fieldMeta && fieldMeta.datatypeAttributes && fieldMeta.datatypeAttributes.type) {
+    //        let formatType = FieldFormats.getFormatType(fieldMeta.datatypeAttributes);
+    //        let formatter = getFormatter(formatType);
+    //
+    //        // if there's a formatter use it to format the display version
+    //        if (formatter !== null) {
+    //            answer = formatter.format(recField, fieldMeta.datatypeAttributes);
+    //        }
+    //    }
+    //}
     return answer;
 }
 
@@ -583,44 +618,44 @@ function formatFieldValue(recField, fields) {
  * @param formatType
  * @returns {*} - a object with a format method
  */
-function getFormatter(formatType) {
-    let answer = textFormatter;
-    switch (formatType) {
-    case FieldFormats.DATETIME_FORMAT:
-    case FieldFormats.DATE_FORMAT:
-        answer = dateTimeFormatter;
-        break;
-    case FieldFormats.EMAIL_ADDRESS:
-        answer = emailFormatter;
-        break;
-    case FieldFormats.PHONE_FORMAT:
-        // All phone formatting happens on the server because of the large library required.
-        // The formatter should only pass through the display value from the server
-        answer = passThroughFormatter;
-        break;
-    case FieldFormats.TIME_FORMAT:
-        answer = timeOfDayFormatter;
-        break;
-    case FieldFormats.TEXT_FORMAT:
-        answer = textFormatter;
-        break;
-    case FieldFormats.USER_FORMAT:
-        answer = userFormatter;
-        break;
-    case FieldFormats.DURATION_FORMAT:
-        answer = durationFormatter;
-        break;
-    case FieldFormats.NUMBER_FORMAT:
-    case FieldFormats.RATING_FORMAT:
-    case FieldFormats.CURRENCY_FORMAT:
-    case FieldFormats.PERCENT_FORMAT:
-        answer = numericFormatter;
-        break;
-    case FieldFormats.URL:
-        answer = urlFormatter;
-        break;
-    }
-    return answer;
-}
+//function getFormatter(formatType) {
+//    let answer = textFormatter;
+//    switch (formatType) {
+//    case FieldFormats.DATETIME_FORMAT:
+//    case FieldFormats.DATE_FORMAT:
+//        answer = dateTimeFormatter;
+//        break;
+//    case FieldFormats.EMAIL_ADDRESS:
+//        answer = emailFormatter;
+//        break;
+//    case FieldFormats.PHONE_FORMAT:
+//        // All phone formatting happens on the server because of the large library required.
+//        // The formatter should only pass through the display value from the server
+//        answer = passThroughFormatter;
+//        break;
+//    case FieldFormats.TIME_FORMAT:
+//        answer = timeOfDayFormatter;
+//        break;
+//    case FieldFormats.TEXT_FORMAT:
+//        answer = textFormatter;
+//        break;
+//    case FieldFormats.USER_FORMAT:
+//        answer = userFormatter;
+//        break;
+//    case FieldFormats.DURATION_FORMAT:
+//        answer = durationFormatter;
+//        break;
+//    case FieldFormats.NUMBER_FORMAT:
+//    case FieldFormats.RATING_FORMAT:
+//    case FieldFormats.CURRENCY_FORMAT:
+//    case FieldFormats.PERCENT_FORMAT:
+//        answer = numericFormatter;
+//        break;
+//    case FieldFormats.URL:
+//        answer = urlFormatter;
+//        break;
+//    }
+//    return answer;
+//}
 
 export default ReportModelHelper;

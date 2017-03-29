@@ -204,13 +204,14 @@ export const ReportToolsAndContent = React.createClass({
      * This function should be called only once when AGGrid is initialized. Find the full width of
      * the table so the ReportToolbar can adjust its width to match the table.
      */
-    onGridSizeSet() {
-        let agGridBody = document.getElementsByClassName('ag-body-container');
-        let leftColumn = document.getElementsByClassName('ag-pinned-left-cols-container');
-        if (_.get(agGridBody, '[0].clientWidth') && _.get(leftColumn, '[0].clientWidth')) {
-            this.setState({gridWidth: agGridBody[0].clientWidth + leftColumn[0].clientWidth});
-        }
-    },
+    /* to be reviewed when working on : https://quickbase.atlassian.net/browse/MC-1115
+     onGridSizeSet() {
+         let agGridBody = document.getElementsByClassName('ag-body-container');
+         let leftColumn = document.getElementsByClassName('ag-pinned-left-cols-container');
+         if (_.get(agGridBody, '[0].clientWidth') && _.get(leftColumn, '[0].clientWidth')) {
+             this.setState({gridWidth: agGridBody[0].clientWidth + leftColumn[0].clientWidth});
+         }
+     },*/
 
     getReportToolbar() {
         let {appId, tblId, rptId,
@@ -411,7 +412,8 @@ export const ReportToolsAndContent = React.createClass({
                                    flux={this.getFlux()}
                                    reactabular={this.state.reactabular}
                                    gridOptions={this.props.gridOptions}
-                                   onGridReady={this.onGridSizeSet}
+                        //to be reviewed when working on : https://quickbase.atlassian.net/browse/MC-1115
+                                  /*{onGridReady={this.onGridSizeSet}*/
                                    {...this.props}
                                    fields={fields}/>
 

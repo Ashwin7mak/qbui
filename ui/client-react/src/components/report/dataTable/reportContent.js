@@ -524,6 +524,7 @@ export const ReportContent = React.createClass({
      * @param data row record data
      */
     openRecordForEditInTrowser(recordId) {
+        this.handleEditRecordStart();
         this.openRow(recordId);
         WindowLocationUtils.pushWithQuery(EDIT_RECORD_KEY, recordId);
     },
