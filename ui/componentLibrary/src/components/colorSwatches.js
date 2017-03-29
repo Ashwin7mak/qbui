@@ -111,9 +111,9 @@ const ColorSwatches = ({scssFileContents}) => {
 
     return (
         <div className="comp-library-color-grid">
-        {groups.map( (group, groupIndex) =>
+        {groups.map((group, groupIndex) =>
             <ul key={groupIndex} className="comp-library-color-group">
-            {group.colors.map( (color, colorIndex) =>
+            {group.colors.map((color, colorIndex) =>
                 <Tooltip key={colorIndex} plainMessage={color.description} location="right">
                     <li key={colorIndex} className={`comp-library-color-swatch ${color.borderClass}`} style={{backgroundColor: color.varValue, color:color.textColor}}>
                         <span className="comp-library-color-swatch-name">{color.varName}</span><span className="comp-library-color-swatch-value">{color.varValue}</span>

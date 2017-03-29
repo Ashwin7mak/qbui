@@ -37,7 +37,7 @@ const IconSwatches = ({cssFileContents}) => {
             // initialize the icon from the data extracted from the regex
             let icon = {
                 className: lineData[1],
-                iconName: lineData[1].substring(lineData[1].indexOf('-')+1), // extract the part of the classname after the first hyphen
+                iconName: lineData[1].substring(lineData[1].indexOf('-') + 1), // extract the part of the classname after the first hyphen
                 charCode: lineData[2]
             };
 
@@ -51,11 +51,11 @@ const IconSwatches = ({cssFileContents}) => {
 
     return (
         <ul className="comp-library-icon-grid">
-            {icons.map( (icon, index) =>
+            {icons.map((icon, index) =>
                 <li key={index} className="comp-library-icon-swatch">
                     <Tooltip plainMessage={`${icon.iconName} [${icon.charCode}]`} location="bottom">
                         <span className={`qbicon ${icon.className}`}>
-                            <input type="text" maxlength="1" readonly value={icon.character} className="comp-library-icon-input"/>
+                            <input type="text" maxlength="1" readOnly="true" value={icon.character} className="comp-library-icon-input"/>
                         </span>
                     </Tooltip>
                     <span className="comp-library-icon-label">{icon.iconName}</span></li>
