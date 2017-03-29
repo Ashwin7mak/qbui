@@ -237,7 +237,8 @@ export const RecordTrowser = React.createClass({
             pendEdits: pendEdits,
             fields: _.has(this.props.editForm, 'formData.fields') ? this.props.editForm.formData.fields : {},
             colList: colList,
-            showNotificationOnSuccess: true
+            showNotificationOnSuccess: true,
+            addNewRow: false
         };
         this.props.dispatch(updateRecord(this.props.appId, this.props.tblId, this.props.recId, params)).then(
             (obj) => {
@@ -288,7 +289,8 @@ export const RecordTrowser = React.createClass({
             recordChanges: recordChanges,
             fields: _.has(this.props.editForm, 'formData.fields') ? this.props.editForm.formData.fields : {},
             colList: colList,
-            showNotificationOnSuccess: true
+            showNotificationOnSuccess: true,
+            addNewRow: false
         };
         this.props.dispatch(createRecord(this.props.appId, this.props.tblId, params)).then(
             (obj) => {

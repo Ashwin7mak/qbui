@@ -213,7 +213,8 @@ class AppHistory {
                     recordChanges: pendEdits.recordChanges,
                     fields: fields,
                     colList: [],
-                    showNotificationOnSuccess: false
+                    showNotificationOnSuccess: false,
+                    addNewRow: false
                 };
                 self.store.dispatch(self.createRecord(appId, tableId, params)).then(
                     () => {
@@ -229,7 +230,8 @@ class AppHistory {
                     pendEdits: pendEdits,
                     fields: fields,
                     colList: null,
-                    showNotificationOnSuccess: false
+                    showNotificationOnSuccess: false,
+                    addNewRow: false
                 };
                 self.store.dispatch(self.updateRecord(appId, tableId, recordId, params)).then(
                     () => {

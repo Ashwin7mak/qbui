@@ -290,7 +290,8 @@ export const createRecord = (appId, tblId, params = {}) => {
                                     newRecId: resJson.id,
                                     record:getResponse.data
                                 };
-                                dispatch(event(recId, types.SAVE_RECORD_SUCCESS, {appId, tblId, recId, report}));
+                                const addNewRow = params.addNewRow || false;
+                                dispatch(event(recId, types.SAVE_RECORD_SUCCESS, {appId, tblId, recId, report, addNewRow}));
 
                                 if (params.showNotificationOnSuccess) {
                                     NotificationManager.success(Locale.getMessage('recordNotifications.recordAdded'), Locale.getMessage('success'),
@@ -491,7 +492,8 @@ export const updateRecord = (appId, tblId, recId, params = {}) => {
                                     recId:recId,
                                     record:getResponse.data
                                 };
-                                dispatch(event(recId, types.SAVE_RECORD_SUCCESS, {appId, tblId, recId, report}));
+                                const addNewRow = params.addNewRow || false;
+                                dispatch(event(recId, types.SAVE_RECORD_SUCCESS, {appId, tblId, recId, report, addNewRow}));
                                 if (params.showNotificationOnSuccess) {
                                     NotificationManager.success(Locale.getMessage('recordNotifications.recordSaved'), Locale.getMessage('success'),
                                         CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);

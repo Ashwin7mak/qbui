@@ -151,6 +151,9 @@ const report = (state = [], action) => {
     case types.SAVE_RECORD_SUCCESS: {
         //  listen to record save event.  If there is a report context
         //  defined, then the report is updated with the new/updated record.
+        //
+        //  NOTE: this record event is listened to in the report reducer
+        //  to avoid multiple renders of the grid.
         let rpt = _.get(action, 'content.report');
         if (rpt && rpt.context) {
             let currentReport = getReportFromState(rpt.context);
@@ -162,13 +165,51 @@ const report = (state = [], action) => {
                     afterRecId: rpt.afterRecId
                 };
 
-                //  if this is a new record, add it to the report; otherwise
-                //  update the report row with the changes
                 if (content.newRecId) {
+                    // if the grid has an 'UNSAVED_RECORD_ID' that means we are saving a new
+                    // row from inline editing.  Get the index of the new blank record, get the
+                    // record id of the prior record in the grid array, remove the blank record
+                    // from the array and then add the real report record to the array at that offset.
+                    let records = _.has(currentReport, 'data.records') ? currentReport.data.records : [];
+                    if (records.length > 0) {
+                        const keyName = _.has(currentReport, 'data.keyField') ? currentReport.data.keyField.name : '';
+                        if (keyName) {
+                            const blankRowIdx = ReportUtils.findRecordIndex(records, UNSAVED_RECORD_ID, keyName);
+                            if (blankRowIdx !== -1) {
+                                //  before deleting, get the record that is immediately before the unsaved row
+                                if (records.length > 0) {
+                                    const prevRowIdx = blankRowIdx > 0 ? blankRowIdx - 1 : 0;
+                                    const prevRec = records[prevRowIdx];
+                                    content.afterRecId = prevRec[keyName].value;
+                                } else {
+                                    content.afterRecId = null;
+                                }
+                                // now remove the 'UNSAVED_RECORD_ID' row
+                                ReportModelHelper.deleteRecordFromReport(currentReport, UNSAVED_RECORD_ID);
+                            }
+                        }
+                    }
+                    // add the new row to the report array
                     ReportModelHelper.addReportRecord(currentReport, content);
                 } else {
+                    // update the report row
                     ReportModelHelper.updateReportRecord(currentReport, content);
                 }
+
+                //  has the user elected to add a new row via inline edit after update/save
+                if (action.content.addNewRow === true) {
+                    let newRowContent = {
+                        newRecId: UNSAVED_RECORD_ID,
+                        afterRecId: content.newRecId || content.recId
+                    };
+                    //  gotta have an id to know where to insert the new record
+                    if (newRowContent.afterRecId !== undefined) {
+                        currentReport.editingIndex = undefined;
+                        currentReport.editingId = undefined;
+                        ReportModelHelper.addReportRecord(currentReport, newRowContent);
+                    }
+                }
+
                 currentReport.loading = false;
                 currentReport.error = false;
                 return newState(currentReport);
@@ -217,7 +258,7 @@ const report = (state = [], action) => {
                     }
                     currentReport.editingIndex = undefined;
                     currentReport.editingId = undefined;
-               }
+                }
 
                 ReportModelHelper.addReportRecord(currentReport, content);
                 return newState(currentReport);

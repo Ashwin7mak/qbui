@@ -417,9 +417,10 @@ export const ReportContent = React.createClass({
             recordChanges: recordChanges,
             fields: fields,
             colList: colList,
-            showNotificationOnSuccess: showNotificationOnSuccess
+            showNotificationOnSuccess: showNotificationOnSuccess,
+            addNewRow: addNewRow
         };
-        this.props.createRecord(this.props.appId, this.props.tblId, params, addNewRow);
+        this.props.createRecord(this.props.appId, this.props.tblId, params);
     },
 
     /**
@@ -446,9 +447,10 @@ export const ReportContent = React.createClass({
                 pendEdits: pendEdits,
                 fields: this.props.fields.fields.data,
                 colList: colList,
-                showNotificationOnSuccess: true
+                showNotificationOnSuccess: true,
+                addNewRow: addNewRow
             };
-            this.props.updateRecord(this.props.appId, this.props.tblId, recordId, params, addNewRow);
+            this.props.updateRecord(this.props.appId, this.props.tblId, recordId, params);
         }
     },
 
@@ -1104,27 +1106,29 @@ const mapDispatchToProps = (dispatch) => {
         deleteRecord:  (appId, tblId, recId, nameForRecords) => {
             dispatch(deleteRecord(appId, tblId, recId, nameForRecords));
         },
-        updateRecord:(appId, tblId, recId, params, addNewRow) => {
-            dispatch(updateRecord(appId, tblId, recId, params)).then(
-                () => {
-                    // NOTE: speed of rendering the blank row after the update is a
-                    // concern; consider adding the row in the update success reducer event
-                    if (addNewRow) {
-                        dispatch(addBlankRecordToReport(CONTEXT.REPORT.NAV, recId));
-                    }
-                }
-            );
+        updateRecord:(appId, tblId, recId, params) => {
+            dispatch(updateRecord(appId, tblId, recId, params));
+            //dispatch(updateRecord(appId, tblId, recId, params)).then(
+            //    () => {
+            //        // NOTE: speed of rendering the blank row after the update is a
+            //        // concern; consider adding the row in the update success reducer event
+            //        if (addNewRow) {
+            //            dispatch(addBlankRecordToReport(CONTEXT.REPORT.NAV, recId));
+            //        }
+            //    }
+            //);
         },
-        createRecord: (appId, tblId, params, addNewRow) => {
-            dispatch(createRecord(appId, tblId, params)).then(
-                (obj) => {
-                    // NOTE: speed of rendering the blank row after the create is a
-                    // concern; consider adding the row in the create success reducer event
-                    if (addNewRow) {
-                        dispatch(addBlankRecordToReport(CONTEXT.REPORT.NAV, obj.recId));
-                    }
-                }
-            );
+        createRecord: (appId, tblId, params) => {
+            dispatch(createRecord(appId, tblId, params));
+            //dispatch(createRecord(appId, tblId, params)).then(
+            //    (obj) => {
+            //        // NOTE: speed of rendering the blank row after the create is a
+            //        // concern; consider adding the row in the create success reducer event
+            //        if (addNewRow) {
+            //            dispatch(addBlankRecordToReport(CONTEXT.REPORT.NAV, obj.recId));
+            //        }
+            //    }
+            //);
         }
     };
 };
