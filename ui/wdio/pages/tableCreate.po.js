@@ -242,7 +242,7 @@
                     console.log("the param is: " + expectedPlaceHolder);
                     expect(results[0].element('.tableFieldInput input').getAttribute('placeholder')).toBe(expectedPlaceHolder);
                     //Enter value of 'a record in the table is called a ' field
-                } else if (tableField.includes('A record in the table is called a')) {
+                } else if (tableField.includes('A record in the table is called')) {
                     //Verify the placeholder inside input
                     expect(results[0].element('.tableFieldInput input').getAttribute('placeholder')).toBe(expectedPlaceHolder);
                     //Enter value for Description field
