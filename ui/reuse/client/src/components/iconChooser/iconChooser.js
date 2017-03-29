@@ -42,7 +42,7 @@ class IconChooser extends React.Component {
         return (
             <div className={classes.join(' ')}>
                 <div className="topRow">
-                    <div className="showAllToggle" onClick={this.props.xxx}>click</div><div><input type="text" cols="20"/></div>
+                    <div className="showAllToggle" onClick={this.toggleAllIcons}>click</div><div><input type="text" cols="20"/></div>
                 </div>
                 <div className="allIcons">
                     {this.props.icons.map((icon) => <Icon key={icon} iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY} icon={icon}/>)}
