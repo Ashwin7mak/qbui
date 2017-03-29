@@ -567,15 +567,16 @@ export default {
 
             addFieldsTitle: "Get ready to add fields to your table",
             tableNameHeading: "Table Name",
-            recordNameHeading: "A record in the table is called a",
+            recordNameHeading: "A record in the table is called",
             descriptionHeading: "Description",
             iconHeading: "Icon",
             suggestedIconsHeading: "Suggested Icons",
 
             tableNamePlaceholder: "For example, Customers",
             recordNamePlaceholder: "For example, customer",
-            descriptionPlaceholder: "Text to show when hovering over the table name in the left-hand column",
+            descriptionPlaceholder: "Text to show when hovering over the table name in the left navigation",
 
+            finishedButtonLabel: "Create table",
             tableCreated: "Table created",
             tableCreationFailed: "Unable to create table",
             validateTableNameEmpty: "Fill in the table name",

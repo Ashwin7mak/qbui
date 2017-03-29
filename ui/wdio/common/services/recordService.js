@@ -28,7 +28,7 @@
                 var MIN_RECORDSCOUNT = 5;
 
                 // Variable to determine whether or not we use regular or bulk add record APIs below
-                var totalNumRecords;
+                var totalNumRecords = numRecords;
 
                 // Include a duplicate or blank record if specified in the method call
                 if (addDupeRecord) {
@@ -36,8 +36,6 @@
                 }
                 if (addEmptyRecord) {
                     totalNumRecords = numRecords - 1;
-                } else {
-                    totalNumRecords = numRecords;
                 }
 
                 // Get the appropriate fields out of the Create App response (specifically the created field Ids)
@@ -151,7 +149,7 @@
              */
             generateRecords: function(fields, numRecords) {
                 var generatedRecords = [];
-                for (var i = 0; i < numRecords; i++) {
+                for (var i = 1; i < numRecords; i++) {
                     var generatedRecord = recordGenerator.generateRecord(fields);
                     generatedRecords.push(generatedRecord);
                 }
