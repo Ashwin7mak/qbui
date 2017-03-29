@@ -445,13 +445,14 @@
       "allowsUserAdmins": false
     },
     "user": {
+      "id": 1000,
       "isAccountAdmin": true,
       "isRealmAdmin": true,
       "isCSR": false,
       "isOnDenyList": false
     }
   },
-  "/qb/governance/context?accountID=212950" : {
+  "/qb/governance/context/212950" : {
     "realm": {
       "name": "mock_realm",
       "id": 678,
@@ -463,6 +464,7 @@
       "allowsUserAdmins": false
     },
     "user": {
+      "id": 1000,
       "isAccountAdmin": true,
       "isRealmAdmin": true,
       "isCSR": false,

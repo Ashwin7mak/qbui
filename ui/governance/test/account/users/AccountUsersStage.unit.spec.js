@@ -16,23 +16,23 @@ describe('AccountUsersStage', () => {
         jasmineEnzyme();
     });
 
-    it('can be hidden during development', () => {
-        component = mount(<AccountUsersStage isHidden={true} />);
-
-        expect(component.find('.stageHeader')).not.toBePresent();
-    });
-
-    it('has a header', () => {
-        component = mount(<AccountUsersStage />);
-
-        expect(component.find('.stageHeaderTitle')).toHaveText('Manage All Users');
-    });
-
-    it('displays the number of paid seats', () => {
-        component = mount(<AccountUsersStage/>);
-
-        let renderedPaidSeats = component.find('.stageHeaderCountItem').at(0);
-        expect(renderedPaidSeats.find('.stageHeaderCount')).toHaveText('25');
-        expect(renderedPaidSeats.find('.stageHeaderCountTitle')).toHaveText('Paid seats');
-    });
+    // it('can be hidden during development', () => {
+    //     component = mount(<AccountUsersStage isHidden={true} />);
+    //
+    //     expect(component.find('.stageHeader')).not.toBePresent();
+    // });
+    //
+    // it('has a header', () => {
+    //     component = mount(<AccountUsersStage />);
+    //
+    //     expect(component.find('.stageHeaderTitle')).toHaveText('Manage All Users');
+    // });
+    //
+    // it('displays the number of paid seats', () => {
+    //     component = mount(<AccountUsersStage/>);
+    //
+    //     let renderedPaidSeats = component.find('.stageHeaderCountItem').at(0);
+    //     expect(renderedPaidSeats.find('.stageHeaderCount')).toHaveText('25');
+    //     expect(renderedPaidSeats.find('.stageHeaderCountTitle')).toHaveText('Paid seats');
+    // });
 });

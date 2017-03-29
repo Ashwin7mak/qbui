@@ -1,10 +1,14 @@
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
 import PageTitle from '../../src/components/pageTitle/pageTitle';
-import HtmlUtils from '../../src/utils/htmlUtils';
-import WindowLocationUtils from '../../src/utils/windowLocationUtils';
-import Locale from '../../src/locales/locales';
-import {DEFAULT_PAGE_TITLE} from '../../src/constants/urlConstants';
+
+import Locale from '../../src/locales/locale';
+
+// TEMPORARY IMPORTS FROM CLIENT-REACT
+import HtmlUtils from '../../../../client-react/src/utils/htmlUtils';
+import WindowLocationUtils from '../../../../client-react/src/utils/windowLocationUtils';
+import {DEFAULT_PAGE_TITLE} from '../../../../client-react/src/constants/urlConstants';
+// TEMPORARY IMPORTS FROM CLIENT-REACT
 
 let component;
 let testRealm = 'NinjaTurtles';

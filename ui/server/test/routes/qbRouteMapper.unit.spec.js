@@ -138,6 +138,14 @@ describe('Qb Route Mapper Unit Test', function() {
 
         ];
     }
+
+    function governanceModificationProvider() {
+        return [
+            {message: 'GET request to governance users endpoint', request: '/api/governance/v1/12345/users', expectedPath: '/api/governance/v1/12345/users', route: routeConsts.GOVERNANCE_ACCOUNT_USERS, method: routeMapper.fetchAllFunctionForRoute(routeConsts.GOVERNANCE_ACCOUNT_USERS), expectedDefined: false, httpVerb: 'GET'},
+            {message: 'GET request to governance context endpoint', request: '/api/governance/v1/context', expectedPath: '/api/governance/v1/context', route: routeConsts.CONTEXTACCOUNT_USERS, method: routeMapper.fetchAllFunctionForRoute(routeConsts.GOVERNANCE_ACCOUNT_CONTEXT), expectedDefined: false, httpVerb: 'GET'},
+        ];
+    }
+
     /**
      * Unit test that validates generating an app with a specified number of tables
      */
@@ -149,6 +157,9 @@ describe('Qb Route Mapper Unit Test', function() {
             runTestCase(entry);
         });
         featureSwitchesPathModificationProvider().forEach(function(entry) {
+            runTestCase(entry);
+        });
+        governanceModificationProvider().forEach(function(entry) {
             runTestCase(entry);
         });
     });

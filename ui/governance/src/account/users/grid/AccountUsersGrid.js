@@ -14,7 +14,7 @@ import * as RequestContextActions from '../../../common/requestContext/RequestCo
 
 import {GetAccountUsersGridColumns} from './AccountUsersGridColumns';
 
-
+import "./AccountUsersGrid.scss";
 
 // Sub-component pieces we will be using to override React Tabular's default components
 const tableSubComponents = {
@@ -82,13 +82,13 @@ class AccountUsersGrid extends Component {
 
 // Provide type checking
 AccountUsersGrid.propTypes = {
-    accountId: React.PropTypes.string.isRequired,
-    users: React.PropTypes.array,
-    showAccountColumns: React.PropTypes.bool,
-    showRealmColumns: React.PropTypes.bool,
-    dataFetchingError: React.PropTypes.any,
-    fetchAccountUsers: React.PropTypes.func.isRequired,
-    fetchRequestContextIfNeeded: React.PropTypes.func.isRequired
+    accountId: PropTypes.string.isRequired,
+    users: PropTypes.array,
+    showAccountColumns: PropTypes.bool,
+    showRealmColumns: PropTypes.bool,
+    dataFetchingError: PropTypes.any,
+    fetchAccountUsers: PropTypes.func.isRequired,
+    fetchRequestContextIfNeeded: PropTypes.func.isRequired
 };
 
 // Provide default val
