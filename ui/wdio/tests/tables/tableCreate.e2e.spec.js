@@ -138,7 +138,7 @@
         }
 
         tableFieldValidationTestCases().forEach(function(testCase) {
-            xit('Create new table ' + testCase.message, function() {
+            it('Create new table ' + testCase.message, function() {
 
                 //Step 1 - get the original count of table links in the left nav
                 tableCreatePO.newTableBtn.waitForVisible();
@@ -171,7 +171,7 @@
             });
         });
 
-        xit('Verify clicking on Previous button brings to previous page', function() {
+        it('Verify clicking on Previous button brings to previous page', function() {
             var tableName = rawValueGenerator.generateStringWithFixLength(10);
             var tableFields = [
                 {fieldTitle: '* Table Name', fieldValue: tableName},
@@ -207,7 +207,7 @@
 
         });
 
-        xit('Verify clicking on close button closes the new table dialogue without saving the table', function() {
+        it('Verify clicking on close button closes the new table dialogue without saving the table', function() {
             var tableName = rawValueGenerator.generateStringWithFixLength(10);
             var tableFields = [
                 {fieldTitle: '* Table Name', fieldValue: tableName},
@@ -245,7 +245,7 @@
 
         });
 
-        xit('Verify that only ADMIN can add a new table', function() {
+        it('Verify that only ADMIN can add a new table', function() {
             var userId;
 
             //Create a user
