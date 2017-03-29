@@ -27,7 +27,7 @@ describe('DraggableField', () => {
     });
 
     it('wraps a FieldComponent in a DragSource to make it draggable', () => {
-        component = shallow(<DraggableComponent connectDragSource={mockConnectDragSource} isDragging={false} selectedFields={[]} />);
+        component = shallow(<DraggableComponent connectDragSource={mockConnectDragSource} isDragging={false} selectedFields={[]} formBuilderChildrenTabIndex={[]} />);
 
         expect(component.find('.notDragging')).toBePresent();
         let parentDiv = component.find('.draggableField');
@@ -36,7 +36,7 @@ describe('DraggableField', () => {
     });
 
     it('adds a dragging class when the component is being dragged', () => {
-        component = shallow(<DraggableComponent connectDragSource={mockConnectDragSource} isDragging={true} selectedFields={[]} />);
+        component = shallow(<DraggableComponent connectDragSource={mockConnectDragSource} isDragging={true} selectedFields={[]} formBuilderChildrenTabIndex={[]}/>);
 
         expect(component.find('.dragging')).toBePresent();
         expect(component.find('.notDragging')).not.toBePresent();

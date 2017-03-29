@@ -34,7 +34,8 @@
             }).catch(function(error) {
                 // Global catch that will grab any errors from chain above
                 // Will appropriately fail the beforeAll method so other tests won't run
-                throw new Error('Error during test setup beforeAll: ' + error.message);
+                browser.logger.error('Error in beforeAll function:' + JSON.stringify(error));
+                return Promise.reject('Error in beforeAll function:' + JSON.stringify(error));
             });
         });
 
@@ -51,8 +52,8 @@
             var tableName = rawValueGenerator.generateStringWithFixLength(10);
             var tableFields = [
                 {fieldTitle: '* Table Name', fieldValue: tableName, placeHolder: 'For example, Customers'},
-                {fieldTitle: '* A record in the table is called a', fieldValue: rawValueGenerator.generateStringWithFixLength(10), placeHolder: 'For example, customer'},
-                {fieldTitle: 'Description', fieldValue: rawValueGenerator.generateStringWithFixLength(50), placeHolder: 'Text to show when hovering over the table name in the left-hand column'}
+                {fieldTitle: '* A record in the table is called', fieldValue: rawValueGenerator.generateStringWithFixLength(10), placeHolder: 'For example, customer'},
+                {fieldTitle: 'Description', fieldValue: rawValueGenerator.generateStringWithFixLength(50), placeHolder: 'Text to show when hovering over the table name in the left navigation'}
             ];
 
             //Step 1 - get the original count of table links in the left nav
@@ -114,19 +115,19 @@
                     message: 'with empty required fields',
                     tableFields: [
                         {fieldTitle: '* Table Name', fieldValue: ' '},
-                        {fieldTitle: '* A record in the table is called a', fieldValue: ' '},
+                        {fieldTitle: '* A record in the table is called', fieldValue: ' '},
                         {fieldTitle: 'Description', fieldValue: 'test Description'}
                     ],
                     tableFieldError: [
                         {fieldTitle: '* Table Name', fieldError: 'Fill in the table name'},
-                        {fieldTitle: '* A record in the table is called a', fieldError: 'Fill in the record name'}
+                        {fieldTitle: '* A record in the table is called', fieldError: 'Fill in the record name'}
                     ]
                 },
                 {
                     message: 'with duplicate table name',
                     tableFields: [
                         {fieldTitle: '* Table Name', fieldValue: 'Table 1'},
-                        {fieldTitle: '* A record in the table is called a', fieldValue: 'Table 1'},
+                        {fieldTitle: '* A record in the table is called', fieldValue: 'Table 1'},
                         {fieldTitle: 'Description', fieldValue: 'test Description'}
                     ],
                     tableFieldError: [
@@ -175,7 +176,7 @@
             var tableFields = [
                 {fieldTitle: '* Table Name', fieldValue: tableName},
                 {
-                    fieldTitle: '* A record in the table is called a',
+                    fieldTitle: '* A record in the table is called',
                     fieldValue: rawValueGenerator.generateStringWithFixLength(10)
                 }
             ];
@@ -210,7 +211,7 @@
             var tableName = rawValueGenerator.generateStringWithFixLength(10);
             var tableFields = [
                 {fieldTitle: '* Table Name', fieldValue: tableName},
-                {fieldTitle: '* A record in the table is called a', fieldValue: rawValueGenerator.generateStringWithFixLength(10)},
+                {fieldTitle: '* A record in the table is called', fieldValue: rawValueGenerator.generateStringWithFixLength(10)},
                 {fieldTitle: 'Description', fieldValue: rawValueGenerator.generateStringWithFixLength(50)}
             ];
 

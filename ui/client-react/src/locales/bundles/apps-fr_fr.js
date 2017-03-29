@@ -560,15 +560,16 @@ export default {
 
             addFieldsTitle: "Préparez-vous à ajouter des champs à votre table",
             tableNameHeading: "Nom de la table",
-            recordNameHeading: "Un enregistrement dans le tableau est appelé un",
+            recordNameHeading: "Un enregistrement dans le tableau est appelé",
             descriptionHeading: "La description",
             iconHeading: "Icône",
             suggestedIconsHeading: "Icônes suggérées",
 
             tableNamePlaceholder: "Par exemple, les clients",
             recordNamePlaceholder: "Par exemple, client",
-            descriptionPlaceholder: "Texte à afficher en vol stationnaire sur le nom de la table dans la colonne de gauche",
+            descriptionPlaceholder: "Texte à afficher en vol stationnaire sur le nom de la table dans la navigation à gauche",
 
+            finishedButtonLabel: "Créer une table",
             tableCreated: "Tableau créé",
             tableCreationFailed: "Impossible de créer une table",
             validateTableNameEmpty: "Le nom de la table ne doit pas être vide",

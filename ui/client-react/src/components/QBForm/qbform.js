@@ -15,6 +15,7 @@ import FlipMove from 'react-flip-move';
 import './qbform.scss';
 import './tabs.scss';
 
+let formBuilderEditForm = null;
 /*
  Custom QuickBase Form component that has 1 property.
  activeTab: the tab we want to display first when viewing the form, defaults to the first tab
@@ -34,6 +35,10 @@ let QBForm = React.createClass({
         /**
          * The order index of the tab to display */
         activeTab: PropTypes.string,
+        /**
+         * formBuilderUpdateChildrenTabIndex is used for form builder. It is used to toggle the tab indices of form builder's children.
+         */
+        formBuilderUpdateChildrenTabIndex: PropTypes.func,
 
         /**
          * Data used to display the form. Expect formMeta to be in an array based structure. */
@@ -305,13 +310,16 @@ let QBForm = React.createClass({
 
         let CurrentFieldElement = (this.props.editingForm ? DragAndDropField(FieldElement) : FieldElement);
 
+        //This tabIndex is for form builder keyboard navigation. It is removing all field value editors from the tabbing flow
+        let tabIndex = (this.props.editingForm ? "-1" : 0);
         return (
             <div key={containingElement.id} className="formElementContainer">
               <CurrentFieldElement
+                  selectedField={this.props.selectedField}
+                  tabIndex={tabIndex}
                   location={location}
                   orderIndex={FormFieldElement.orderIndex}
                   handleFormReorder={this.props.handleFormReorder}
-                  removeField={this.props.removeField}
                   cacheDragElement={this.props.cacheDragElement}
                   clearDragElementCache={this.props.clearDragElementCache}
                   containingElement={containingElement}
@@ -464,6 +472,43 @@ let QBForm = React.createClass({
     },
 
     /**
+     * This is for keyboard navigation, it will add focus to a form only if formFocus is true
+     * formFocus becomes true when a user is hitting escape to remove the children elements form the tabbing flow
+     * */
+    componentDidUpdate() {
+        if (this.props.formFocus) {
+            formBuilderEditForm.focus();
+            document.querySelector('.qbPanelHeaderTitleText').scrollIntoView(false);
+        }
+    },
+
+    /**
+     * We normally return a regular form based on whether or not it is in view or edit mode.
+     * However, for form builder we want the form to have a tabIndex.
+     * */
+    wrapFormContent(formContent) {
+        if (this.props.editingForm) {
+            return (
+                <form ref={(editForm) => {formBuilderEditForm = editForm;}} className="editForm" tabIndex="0" role="button" onKeyDown={this.props.formBuilderUpdateChildrenTabIndex}>
+                    {formContent}
+                </form>
+            );
+        } else if (this.props.edit) {
+            return (
+                <form className="editForm">
+                    {formContent}
+                </form>
+            );
+        } else {
+            return (
+                <form className="viewForm">
+                    {formContent}
+                </form>
+            );
+        }
+    },
+
+    /**
      * render a form as an set of tabs containing HTML tables (a la legacy QuickBase)
      */
     render() {
@@ -492,9 +537,7 @@ let QBForm = React.createClass({
 
         return (
             <div className="formContainer">
-                <form className={this.props.edit ? 'editForm' : 'viewForm'}>
-                    {formContent}
-                </form>
+                {this.wrapFormContent(formContent)}
                 <div>{formFooter}</div>
             </div>
         );

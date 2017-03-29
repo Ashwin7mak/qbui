@@ -88,7 +88,7 @@ UserDropDown.propTypes = {
     startTabIndex: PropTypes.number,
     changeLocale: PropTypes.func,
     signOutUser: PropTypes.func,
-    shouldOpenMenusUp: PropTypes.bool,
+    shouldOpenMenusUp: PropTypes.bool
 };
 
 UserDropDown.defaultPropTypes = {
