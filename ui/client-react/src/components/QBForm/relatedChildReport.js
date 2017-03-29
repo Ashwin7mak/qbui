@@ -1,8 +1,8 @@
 import React, {PropTypes} from 'react';
 import _ from 'lodash';
 
-import EmbeddedReportToolsAndContent from '../report/ebmedded/embeddedReportToolsAndContent';
-import EmbeddedReportLink from '../report/ebmedded/embeddedReportLink';
+import EmbeddedReportToolsAndContent from '../report/embedded/embeddedReportToolsAndContent';
+import EmbeddedReportLink from '../report/embedded/embeddedReportLink';
 
 import Breakpoints from '../../utils/breakpoints';
 
