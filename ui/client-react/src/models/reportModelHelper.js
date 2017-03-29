@@ -269,6 +269,15 @@ function addRecordToReport(currentReport, content) {
 
     if (record === undefined && filtRecord === undefined) {
         let afterRecId = content.afterRecId;
+        // The afterRecId is an object if coming from the grid
+        if (_.has(afterRecId, 'value')) {
+            afterRecId = afterRecId.value;
+        }
+        //  ensure afterRecId is numeric
+        if (afterRecId) {
+            afterRecId = +afterRecId;
+        }
+
         let newRecId = content.newRecId;
 
         let newRecord;
@@ -277,14 +286,6 @@ function addRecordToReport(currentReport, content) {
             //  Unless there is a specified afterRecId, will add the new record to the top of the list.  Currently, only
             //  adding a new record from the grid will include the afterRecId.
             if (afterRecId) {
-                // The afterRecId is an object if coming from the grid
-                if (_.has(afterRecId, 'value')) {
-                    afterRecId = afterRecId.value;
-                }
-                //  ensure afterRecId is numeric
-                if (afterRecId) {
-                    afterRecId = +afterRecId;
-                }
                 afterRecIndex = ReportUtils.findRecordIndex(reportData.records, afterRecId, reportData.keyField.name);
             }
 
@@ -354,6 +355,7 @@ function addRecordToReport(currentReport, content) {
         if (newRecId === SchemaConstants.UNSAVED_RECORD_ID) {
             currentReport.editingIndex = newRecordsIndex;
             currentReport.editingId = SchemaConstants.UNSAVED_RECORD_ID;
+            // keep track of the record id immediately before the blank row
             currentReport.recIdBeforeBlankRow = afterRecId;
         } else {
             currentReport.recIdBeforeBlankRow = undefined;
@@ -488,6 +490,10 @@ function addRecordToGroupedReport(currentReport, content) {
         if (content.newRecId === SchemaConstants.UNSAVED_RECORD_ID) {
             currentReport.editingIndex = afterRecIndex + 1;
             currentReport.editingId = SchemaConstants.UNSAVED_RECORD_ID;
+            // keep track of the record id immediately before the blank row
+            currentReport.recIdBeforeBlankRow = afterRecordIdValue;
+        } else {
+            currentReport.recIdBeforeBlankRow = undefined;
         }
 
         // set the record id

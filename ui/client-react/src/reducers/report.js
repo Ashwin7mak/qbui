@@ -205,8 +205,8 @@ const report = (state = [], action) => {
                     };
                     //  gotta have an id to know where to insert the new record
                     if (newRowContent.afterRecId !== undefined) {
-                        currentReport.editingIndex = undefined;
-                        currentReport.editingId = undefined;
+                        //currentReport.editingIndex = undefined;
+                        //currentReport.editingId = undefined;
                         ReportModelHelper.addReportRecord(currentReport, newRowContent);
                     }
                 }
