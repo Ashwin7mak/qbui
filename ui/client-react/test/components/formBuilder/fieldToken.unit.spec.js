@@ -45,4 +45,16 @@ describe('FieldToken', () => {
         expect(mockFieldUtils.getFieldSpecificIcon).toHaveBeenCalledWith(testFieldType);
         expect(component.find('.fieldTokenIcon')).toHaveText(mockFieldIcon);
     });
+
+    it('displays the icon in a dragging state', () => {
+        component = shallow(<FieldToken isDragging={true} />);
+
+        expect(component.find('.fieldTokenDragging')).toBePresent();
+    });
+
+    it('displays the token in a non-dragging state for use in menus (default)', () => {
+        component = shallow(<FieldToken isDragging={false} />);
+
+        expect(component.find('.fieldTokenDragging')).not.toBePresent();
+    });
 });

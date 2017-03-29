@@ -2,27 +2,44 @@
 
 
 .fieldToken {
-    background-color: $dragtoken-background-color2;
-    border: $stroke-width-thin solid $dragtoken-background-color2;
     border-radius: $radius-base;
-    color: $dragtoken-text-color;
     height: 30px;
     width: 250px;
 
     display: flex;
     align-items: center;
-    box-shadow: 0 2.5px 4px 0 $dragtoken-shadow-color;
+
+    background-color: $fieldtoken-background-color2;
+
+    border: $stroke-width-thin solid $fieldtoken-border-color;
+
+    transition: box-shadow 0.3s;
+
+    &:hover, &.fieldTokenDragging {
+        box-shadow: 0 2.5px 4px 0 $dragtoken-shadow-color;
+    }
 
     .fieldTokenIconContainer {
         width: 35px;
         height: 29px;
         border-radius: 2px;
-        background-color: $dragtoken-background-color1;
+        color: $fieldtoken-icon-color;
+        background-color: $fieldtoken-background-color1;
 
         flex: 0 0 auto;
         display: flex;
         align-items: center;
         justify-content: center;
+    }
+
+    &.fieldTokenDragging {
+        color: $dragtoken-text-color;
+        background-color: $dragtoken-background-color2;
+        border: $stroke-width-thin solid $dragtoken-background-color2;
+
+        .fieldTokenIconContainer {
+            background-color: $dragtoken-background-color1;
+        }
     }
 
     .fieldTokenIcon {

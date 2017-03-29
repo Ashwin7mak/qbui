@@ -10,6 +10,10 @@ const FieldToken = (props) => {
         classes = [...classes, ...props.classes];
     }
 
+    if (props.isDragging) {
+        classes.push('fieldTokenDragging');
+    }
+
     return (
         <div className={classes.join(' ')}>
             <div className="fieldTokenIconContainer">
@@ -27,7 +31,15 @@ const FieldToken = (props) => {
 FieldToken.propTypes = {
     classes: PropTypes.array,
     type: PropTypes.string,
-    title: PropTypes.string
+    title: PropTypes.string,
+
+    /**
+     * Whether the field token should display with its dragging styles applied */
+    isDragging: PropTypes.bool,
+};
+
+FieldToken.defaultProps = {
+    isDragging: false
 };
 
 export default FieldToken;
