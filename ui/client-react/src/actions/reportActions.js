@@ -70,19 +70,18 @@ export const loadReports = (context, appId, tblId) => {
                 dispatch(event(context, types.LOAD_REPORTS, {appId, tblId}));
 
                 let reportService = new ReportService();
-                reportService.getReports(appId, tblId).then(
-                    (response) => {
+                reportService.getReports(appId, tblId)
+                    .then((response) => {
                         logger.debug('ReportService getReports success');
                         //  TODO change to a class like reportModel
                         let model = ReportsModel.set(appId, tblId, response.data);
                         dispatch(event(context, types.LOAD_REPORTS_SUCCESS, model));
                         resolve();
-                    }
-                ).catch((error) => {
-                    logger.parseAndLogError(LogLevel.ERROR, error.response, 'reportService.getReports:');
-                    dispatch(event(context, types.LOAD_REPORTS_FAILED, error));
-                    reject();
-                });
+                    }).catch((error) => {
+                        logger.parseAndLogError(LogLevel.ERROR, error.response, 'reportService.getReports:');
+                        dispatch(event(context, types.LOAD_REPORTS_FAILED, error));
+                        reject();
+                    });
             } else {
                 logger.error(`reportActions.loadReports: Missing required input parameters.  context: ${context}, appId: ${appId}, tableId: ${tblId}`);
                 dispatch(event(null, types.LOAD_REPORTS_FAILED, 500));
@@ -125,18 +124,17 @@ export const loadReport = (context, appId, tblId, rptId, format, offset, rows) =
                 //    - report facets
                 //    - report count
                 //
-                reportService.getReportResults(appId, tblId, rptId, params, format).then(
-                    (reportResponse) => {
+                reportService.getReportResults(appId, tblId, rptId, params, format)
+                    .then((reportResponse) => {
                         let metaData = reportResponse.data ? reportResponse.data.metaData : null;
                         let model = new ReportModel(appId, metaData, reportResponse.data, params);
                         dispatch(event(context, types.LOAD_REPORT_SUCCESS, model.get()));
                         resolve();
-                    }
-                ).catch((reportResponseError) => {
-                    logger.parseAndLogError(LogLevel.ERROR, reportResponseError.response, 'reportService.getReport:');
-                    dispatch(event(context, types.LOAD_REPORT_FAILED, reportResponseError));
-                    reject();
-                });
+                    }).catch((reportResponseError) => {
+                        logger.parseAndLogError(LogLevel.ERROR, reportResponseError.response, 'reportService.getReport:');
+                        dispatch(event(context, types.LOAD_REPORT_FAILED, reportResponseError));
+                        reject();
+                    });
             } else {
                 logger.error(`ReportAction.loadReport: Missing one or more required input parameters.  Context:${context}, AppId:${appId}, tableId:${tblId}, rptId:${rptId}`);
                 dispatch(event(context, types.LOAD_REPORT_FAILED, 500));
@@ -193,8 +191,8 @@ const constructQueryParams = (facetExpression, filter = {}, queryParams) => {
  */
 const getDynamicReportResults = (context, {appId, tblId, rptId, queryParams, format}, filter) => {
     const reportService = new ReportService();
-    return reportService.getDynamicReportResults(appId, tblId, rptId, queryParams, format).then(
-        (reportResponse) => {
+    return reportService.getDynamicReportResults(appId, tblId, rptId, queryParams, format)
+        .then((reportResponse) => {
             const metaData = reportResponse.data ? reportResponse.data.metaData : null;
 
             //  ensure the model includes the input run-time parameters
@@ -206,8 +204,7 @@ const getDynamicReportResults = (context, {appId, tblId, rptId, queryParams, for
 
             const model = new ReportModel(appId, metaData, reportResponse.data, params);
             return model.get();
-        }
-    );
+        });
 };
 
 /**
@@ -279,21 +276,21 @@ export const loadDynamicReport = (context, appId, tblId, rptId, format, filter, 
 
             //  parse the supplied facet expression into a query expression that
             //  can be included on the request.
-            return reportService.parseFacetExpression(filter ? filter.facet : '').then(
-                (facetResponse) => {
+            return reportService.parseFacetExpression(filter ? filter.facet : '')
+                .then((facetResponse) => {
                     const facetExpression = _.get(facetResponse, 'data');
                     return constructQueryParams(facetExpression, filter, queryParams);
-                }
-            ).then((newQueryParams) => {
-                return getDynamicReportResults(context, {appId, tblId, rptId, queryParams: newQueryParams, format}, filter).then((report) => {
-                    dispatch(event(context, actions.LOAD_REPORT_SUCCESS, report));
-                    return; //resolve promise with undefined
+                }).then((newQueryParams) => {
+                    return getDynamicReportResults(context, {appId, tblId, rptId, queryParams: newQueryParams, format}, filter)
+                        .then((report) => {
+                            dispatch(event(context, actions.LOAD_REPORT_SUCCESS, report));
+                            return; //resolve promise with undefined
+                        }).catch(
+                            parseAndLogHandler(actions.LOAD_REPORT_FAILED, `reportActions.getDynamicReportResults, context: ${context}`)
+                        );
                 }).catch(
-                    parseAndLogHandler(actions.LOAD_REPORT_FAILED, `reportActions.getDynamicReportResults, context: ${context}`)
+                    parseAndLogHandler(actions.LOAD_REPORT_FAILED, `reportActions.parseFacetExpression, context: ${context}`)
                 );
-            }).catch(
-                parseAndLogHandler(actions.LOAD_REPORT_FAILED, `reportActions.parseFacetExpression, context: ${context}`)
-            );
         } else {
             logger.error(`reportActions.loadDynamicReport: Missing one or more required input parameters.  AppId:${appId}; TblId:${tblId}; RptId:${rptId}`);
             dispatch(event(context, actions.LOAD_REPORT_FAILED, 500));
@@ -330,12 +327,13 @@ export const loadReportRecordsCount = (context, appId, tblId, rptId, queryParams
             logger.debug(`Loading records count for appId: ${appId}, tblId:${tblId}, rptId:${rptId}, queryParams:${JSON.stringify(queryParams)}`);
 
             const reportService = new ReportService();
-            return reportService.getReportRecordsCount(appId, tblId, rptId, queryParams).then((response) => {
-                dispatch(event(context, types.LOAD_REPORT_RECORDS_COUNT_SUCCESS, Number(response.data.body)));
-                return; //resolve promise with undefined
-            }).catch(
-                parseAndLogError(context, dispatch)(types.LOAD_REPORT_RECORDS_COUNT_FAILED, `reportActions.loadReportRecordsCount, context: ${context}`)
-            );
+            return reportService.getReportRecordsCount(appId, tblId, rptId, queryParams)
+                .then((response) => {
+                    dispatch(event(context, types.LOAD_REPORT_RECORDS_COUNT_SUCCESS, Number(response.data.body)));
+                    return; //resolve promise with undefined
+                }).catch(
+                    parseAndLogError(context, dispatch)(types.LOAD_REPORT_RECORDS_COUNT_FAILED, `reportActions.loadReportRecordsCount, context: ${context}`)
+                );
         } else {
             logger.error(`reportActions.loadReportRecordsCount: Missing one or more required input parameters.  AppId:${appId}; TblId:${tblId}; RptId:${rptId}`);
             dispatch(event(context, types.LOAD_REPORT_RECORDS_COUNT_FAILED, 500));
