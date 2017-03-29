@@ -25,7 +25,6 @@ import SaveOrCancelFooter from '../saveOrCancelFooter/saveOrCancelFooter';
 import './recordTrowser.scss';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
-let currentTrowser = null;
 
 /**
  * trowser containing a record component
@@ -349,7 +348,6 @@ export const RecordTrowser = React.createClass({
     dismissErrorDialog() {
         this.props.hideErrorMsgDialog();
     },
-
     /**
      * trowser to wrap report manager
      */
