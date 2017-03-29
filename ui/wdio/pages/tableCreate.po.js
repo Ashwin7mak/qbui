@@ -206,7 +206,7 @@
                     results[0].element('.tableFieldInput input').setValue(fieldValue);
                     results[0].element('..').click();
                     //Enter value of 'a record in the table is called a ' field
-                } else if (tableField.includes('A record in the table is called a')) {
+                } else if (tableField.includes('A record in the table is called')) {
                     //verify title of the field
                     expect(results[0].element('.tableFieldTitle').getAttribute('textContent')).toBe(tableField);
                     results[0].element('.tableFieldInput input').setValue(fieldValue);
