@@ -1,0 +1,17 @@
+@import '../../assets/css/qbVariables';
+
+.iconChooser {
+    .topRow {
+        display: flex;
+    }
+    .allIcons {
+        display: flex;
+    }
+
+    &.closed {
+        .allIcons {
+            display: none;
+        }
+    }
+}
+

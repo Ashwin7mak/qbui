@@ -1,10 +1,10 @@
 import React from 'react';
 import {PropTypes} from 'react';
-import DropdownButton from 'react-bootstrap/lib/DropdownButton';
-import MenuItem from 'react-bootstrap/lib/MenuItem';
 import TableFieldInput from './tableFieldInput';
 import {I18nMessage} from "../../utils/i18nMessage";
 import Locale from '../../locales/locales';
+import {tableIconNames} from '../../../../reuse/client/src/components/icon/tableIcons';
+import IconChooser from '../../../../reuse/client/src/components/iconChooser/iconChooser';
 import Icon, {AVAILABLE_ICON_FONTS} from '../../../../reuse/client/src/components/icon/icon';
 
 import './tableCreationPanel.scss';
@@ -22,23 +22,6 @@ class TableCreationPanel extends React.Component {
         this.onBlurInput = this.onBlurInput.bind(this);
     }
 
-    /**
-     * get a set of table icon names (this is temporary until the icon chooser is built)
-     * @returns
-     */
-    getIconNames()  {
-        return [
-            "estimates",
-            "projects",
-            "customers",
-            "invoices",
-            "person",
-            "mailbox",
-            "projects",
-            "reports",
-            "schedule"
-        ];
-    }
 
     /**
      * get a table icon with a given name
@@ -71,28 +54,6 @@ class TableCreationPanel extends React.Component {
         this.updateTableProperty('tableIcon', icon);
     }
 
-    /**
-     * get a dropdown containing a set of sample icons (temporary until icon chooser is built)
-     * @returns {XML}
-     */
-    getIconDropdown() {
-
-        // set title to currently selected icon
-        const dropdownTitle = this.getTableIcon(this.props.tableInfo.tableIcon.value);
-
-        const iconNames = this.getIconNames();
-
-        return (
-            <DropdownButton title={dropdownTitle}
-                            id="createTableIconDropdown"
-                            onToggle={this.onToggleDropdown}>
-                {iconNames.map((iconName, i) => (
-                    <MenuItem key={i}
-                              onSelect={() => this.selectIcon(iconName)}>
-                                    {this.getTableIcon(iconName)}
-                    </MenuItem>))}
-            </DropdownButton>);
-    }
 
     /**
      * display suggested icons in a list (temporary until icon chooser is built)
@@ -157,14 +118,13 @@ class TableCreationPanel extends React.Component {
     renderIconSection() {
 
         return (<div className="tableField iconSelection">
-            <div className="iconChooser">
-                <div className="tableFieldTitle"><I18nMessage message="tableCreation.iconHeading"/></div>
-                {this.getIconDropdown()}
-            </div>
-            <div className="suggestedIcons">
-                <div className="tableFieldTitle"><I18nMessage message="tableCreation.suggestedIconsHeading"/></div>
-                {this.getSuggestedIcons()}
-            </div>
+            <IconChooser selected={this.props.tableInfo.tableIcon.value}
+                         isOpen={this.props.iconChooserOpen}
+                         onOpen={this.props.openIconChooser}
+                         onClose={this.props.closeIconChooser}
+                         icons={tableIconNames}
+                         onSelect={this.selectIcon}
+            />
         </div>);
     }
 
@@ -249,8 +209,8 @@ class TableCreationPanel extends React.Component {
 TableCreationPanel.propTypes = {
     appTables: PropTypes.array.isRequired,
     tableInfo: PropTypes.object.isRequired,
-    tableMenuOpened: PropTypes.func,
-    tableMenuClosed: PropTypes.func,
+    openIconChooser: PropTypes.func,
+    closeIconChooser: PropTypes.func,
     setEditingProperty: PropTypes.func.isRequired
 
 };

@@ -20,7 +20,7 @@ const tableCreation = (
         //  default states
         dialogOpen: false,
         pageIndex: 0,
-        menuOpen: false,
+        iconChooserOpen: false,
         savingTable: false,
         tableInfo: defaultTableInfo,
         edited: false,
@@ -35,7 +35,7 @@ const tableCreation = (
             ...state,
             dialogOpen: true,
             pageIndex: 0,
-            menuOpen: false,
+            iconChooserOpen: false,
             savingTable: false,
             tableInfo: {...defaultTableInfo},
             edited: false,
@@ -63,17 +63,10 @@ const tableCreation = (
             pageIndex: state.pageIndex > 0 ? state.pageIndex - 1 : 0
         };
     }
-    case types.TABLE_CREATION_MENU_OPEN: {
+    case types.TABLE_ICON_CHOOSER_OPEN: {
         return {
             ...state,
-            menuOpen: true
-        };
-    }
-
-    case types.TABLE_CREATION_MENU_CLOSED: {
-        return {
-            ...state,
-            menuOpen: false
+            iconChooserOpen: action.isOpen
         };
     }
 

@@ -22,16 +22,15 @@ export const previousTableCreationPage = () => ({
     type: types.PREVIOUS_TABLE_CREATION_PAGE
 });
 
-/**
- * a dropdown menu was opened, UI may need to enable CSS overflow
- * until it closes
- */
-export const tableMenuOpened = () => ({
-    type: types.TABLE_CREATION_MENU_OPEN
+
+export const openIconChooser = () => ({
+    type: types.TABLE_ICON_CHOOSER_OPEN,
+    isOpen: true
 });
 
-export const tableMenuClosed = () => ({
-    type: types.TABLE_CREATION_MENU_CLOSED
+export const closeIconChooser = () => ({
+    type: types.TABLE_ICON_CHOOSER_OPEN,
+    isOpen: false
 });
 
 /**

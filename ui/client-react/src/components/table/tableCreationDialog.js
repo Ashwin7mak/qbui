@@ -126,8 +126,9 @@ export class TableCreationDialog extends React.Component {
                                  titles={[Locale.getMessage("tableCreation.newTablePageTitle"), Locale.getMessage("tableCreation.addFieldsTitle")]}>
 
                 <TableCreationPanel tableInfo={this.props.tableInfo}
-                                    tableMenuOpened={this.props.tableMenuOpened}
-                                    tableMenuClosed={this.props.tableMenuClosed}
+                                    iconChooserOpen={this.props.tableCreation.iconChooserOpen}
+                                    openIconChooser={this.props.openIconChooser}
+                                    closeIconChooser={this.props.closeIconChooser}
                                     setTableProperty={this.props.setTableProperty}
                                     setEditingProperty={this.props.setEditingProperty}
                                     focusOn={this.props.tableCreation.editing}
