@@ -20,8 +20,8 @@ const mapDispatchToProps = dispatch => {
             return dispatch(loadForm(appId, tableId, reportId, formType, recordId));
         },
 
-        updateFieldProps(fieldId, property, value) {
-            return "";
+        updateFieldProps(newValue) {
+            return false;
         }
     };
 };
@@ -54,7 +54,7 @@ let FieldProperties = React.createClass({
             <div className="checkboxPropertyContainer">
                 <CheckBoxFieldValueEditor value={propertyValue}
                                           label={propertyTitle}
-                                          onChange={this.props.updateFieldProps(fieldId, 'required', !propertyValue)}
+                                          onChange={this.props.updateFieldProps}
                 />
             </div>
         );
