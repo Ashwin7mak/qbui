@@ -83,7 +83,7 @@
 
             // Verify nav details on PREVIOUS (original) page
 
-            reportContentPO.clickAndWait(reportNavPO.prevPageButton);
+            reportContentPO.clickAndWaitForGrid(reportNavPO.prevPageButton);
             rows = reportContentPO.getAllRows.value;
             // verify expected # of records is displayed
             expect(rows.length).toBe(e2eConsts.MAX_PAGING_SIZE);
