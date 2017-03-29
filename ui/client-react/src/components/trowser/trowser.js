@@ -1,5 +1,6 @@
 import React from 'react';
 import Button from 'react-bootstrap/lib/Button';
+import KeyboardShortcuts from '../../../../reuse/client/src/components/keyboardShortcuts/keyboardShortcuts';
 import QBicon from '../qbIcon/qbIcon';
 import './trowser.scss';
 
@@ -62,6 +63,10 @@ let Trowser = React.createClass({
         return (
             <div className={trowserClasses} >
                 <div className={"trowserBackground"} onClick={this.props.onCancel}/>
+                <KeyboardShortcuts id="trowser"
+                                   shortcutBindings={[
+                                       {key: 'esc', callback: () => {this.props.onCancel(); return false;}},
+                                   ]} />
                 <div className={"trowserContent"}>
                     <div className={"trowserHeader"}>
                         <div className={"breadcrumbs h4"}>
