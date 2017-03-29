@@ -97,24 +97,25 @@ export let Nav = React.createClass({
             recordId = this.props.params.recordId;
         }
         let selectedApp = this.getSelectedApp();
-        let isUserAdmin = false;
+        let isAdmin = false;
         if (selectedApp) {
-            isUserAdmin = AppUtils.hasAdminAccess(selectedApp.accessRights);
+            isAdmin = AppUtils.hasAdminAccess(selectedApp.accessRights);
         }
         return (<GlobalActions actions={actions}
                                position={"top"}
                                dropdownIcon="user"
                                dropdownMsg="globalActions.user"
                                startTabIndex={4}
-                               app={this.getSelectedApp()}>
-            {isUserAdmin ?
+                               app={selectedApp}>
+            {isAdmin ?
                     <BuilderDropDownAction
-                                selectedAppId={this.state.apps.selectedAppId}
-                                selectedTableId={this.state.apps.selectedTableId}
+                                router={this.props.router}
+                                selectedApp={selectedApp}
+                                selectedTable={this.getSelectedTable(this.state.apps.selectedTableId)}
                                 recId={recordId}
                                 actions={actions}
                                 position={"top"}
-                                formBuilderIcon="settings"
+                                icon="settings"
                                 navigateToBuilder={this.navigateToBuilder}
                                 startTabIndex={4}/> : null}
                 </GlobalActions>);
@@ -132,12 +133,6 @@ export let Nav = React.createClass({
                                dropdownMsg="globalActions.user"
                                startTabIndex={100}
                                position="left">
-                    <BuilderDropDownAction recId={recordId}
-                                           actions={actions}
-                                           position="left"
-                                           formBuilderIcon="settings"
-                                           navigateToBuilder={this.navigateToBuilder}
-                                           startTabIndex={4}/>
                 </GlobalActions>);
     },
 

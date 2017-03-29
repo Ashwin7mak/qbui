@@ -5,6 +5,7 @@ import TableCreationSummaryPanel from './tableCreationSummaryPanel';
 import MultiStepDialog from '../../../../reuse/client/src/components/multiStepDialog/multiStepDialog';
 import {connect} from 'react-redux';
 import {NotificationManager} from 'react-notifications';
+import {I18nMessage} from "../../utils/i18nMessage";
 import * as TableCreationActions from '../../actions/tableCreationActions';
 import Locale from '../../locales/locales';
 import UrlUtils from '../../utils/urlUtils';
@@ -124,16 +125,18 @@ export class TableCreationDialog extends React.Component {
                                  onFinished={this.onFinished}
                                  canProceed={this.isValid()}
                                  titles={[Locale.getMessage("tableCreation.newTablePageTitle"), Locale.getMessage("tableCreation.addFieldsTitle")]}>
-
-                <TableCreationPanel tableInfo={this.props.tableInfo}
-                                    tableMenuOpened={this.props.tableMenuOpened}
-                                    tableMenuClosed={this.props.tableMenuClosed}
-                                    setTableProperty={this.props.setTableProperty}
-                                    setEditingProperty={this.props.setEditingProperty}
-                                    focusOn={this.props.tableCreation.editing}
-                                    validate={this.props.tableCreation.edited}
-                                    appTables={this.getExistingTableNames()} />
-
+                <div className="tableCreationPanel">
+                    <div className="description"><I18nMessage message="tableCreation.newTableDescription"/></div>
+                    <div className="title"><I18nMessage message="tableCreation.newTableTitle"/></div>
+                    <TableCreationPanel tableInfo={this.props.tableInfo}
+                                        tableMenuOpened={this.props.tableMenuOpened}
+                                        tableMenuClosed={this.props.tableMenuClosed}
+                                        setTableProperty={this.props.setTableProperty}
+                                        setEditingProperty={this.props.setEditingProperty}
+                                        focusOn={this.props.tableCreation.editing}
+                                        validate={this.props.tableCreation.edited}
+                                        appTables={this.getExistingTableNames()} />
+                </div>
                 <TableCreationSummaryPanel />
 
             </MultiStepDialog>);

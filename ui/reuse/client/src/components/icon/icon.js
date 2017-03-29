@@ -43,8 +43,8 @@ const Icon = React.createClass({
         };
     },
     render: function() {
-        let {className, iconFont, icon} = this.props;
-        let iconClassName = `${className} qbIcon ${iconFont}-${icon}`;
+        let {className, iconFont, icon, isTableIcon} = this.props;
+        let iconClassName = isTableIcon ? `${className} qbIcon ${icon}` : `${className} qbIcon ${iconFont}-${icon}`;
 
         return (
             <span className={iconClassName} onClick={this.props.onClick}>

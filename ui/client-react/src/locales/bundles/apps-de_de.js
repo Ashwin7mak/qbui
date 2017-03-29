@@ -103,7 +103,8 @@ export default {
             next: "Nächster",
             previous: "Bisherige",
             finished: "Fertig",
-            new: "Neu"
+            new: "Neu",
+            backToApp: "Zurück zur App"
         },
         field: {
             search: "Suche",
@@ -120,6 +121,8 @@ export default {
         },
         pageActions: {
             addRecord: "Datensatz hinzufügen",
+            tableSettingsHeader: 'Table Settings',
+            tableSettings: 'Table Properties & Settings',
             configureFormBuilder: "Ändern Sie dieses Formular",
             saveRecord: "Änderungen speichern",
             saveAndAddRecord: "Speichern und fügen Sie eine neue Zeile",
@@ -133,7 +136,8 @@ export default {
             print: "Drucken",
             customizeReport: "Fertigen Sie diesen Bericht",
             customizeForm: "Fertigen Sie dieses Formular",
-            customizePage: "Fertigen Sie diese Seite"
+            customizePage: "Fertigen Sie diese Seite",
+            deleteTable: "Tabelle löschen"
         },
         recordActions: {
             previous: "Früher",

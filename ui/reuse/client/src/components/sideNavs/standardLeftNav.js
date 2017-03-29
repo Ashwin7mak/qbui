@@ -3,6 +3,7 @@ import Button from 'react-bootstrap/lib/Button';
 import Loader from 'react-loader';
 import FlipMove from 'react-flip-move';
 import SideMenuBase from '../sideMenuBase/sideMenuBase';
+import TableIcon from '../icon/icon';
 import Icon from '../icon/icon';
 import Tooltip from '../tooltip/tooltip';
 import SimpleNavItem from '../simpleNavItem/simpleNavItem';
@@ -67,7 +68,7 @@ class StandardLeftNav extends Component {
     }
 
     renderContextHeader() {
-        const {showContextHeader, isContextHeaderSmall, contextHeaderIcon, showContextHeaderToggle, isContextToggleDown, isCollapsed} = this.props;
+        const {showContextHeader, isContextHeaderSmall, contextHeaderIcon, contextHeaderIconTypeIsTable, showContextHeaderToggle, isContextToggleDown, isCollapsed} = this.props;
 
         let classes = ['contextHeader'];
 
@@ -83,13 +84,15 @@ class StandardLeftNav extends Component {
             classes.push('contextHeaderSmall');
         }
 
+        let icon = null;
+
         return (
             <div className={classes.join(' ')}>
                 <Button
                     className="contextHeaderButton"
                     onClick={this.props.onClickContextHeader}
                 >
-                    {contextHeaderIcon && <Icon icon={contextHeaderIcon} className="contextHeaderIcon" />}
+                    {contextHeaderIcon && <Icon icon={contextHeaderIcon} className="contextHeaderIcon" isTableIcon={contextHeaderIconTypeIsTable}/>}
 
                     {this.renderContextHeaderTitle()}
 
@@ -187,8 +190,12 @@ StandardLeftNav.propTypes = {
     contextHeaderIcon: PropTypes.string,
 
     /**
+     * The icon for the context header is a table icon (false means its a normal QBIcon). Table Icons have a slightly different format */
+    contextHeaderIconTypeIsTable: PropTypes.bool,
+
+    /**
      * The title text for the context header. */
-    contextHeaderTitle: PropTypes.string,
+    contextHeaderTitle: PropTypes.element,
 
     /**
      * Whether to display that toggle button on the context header */

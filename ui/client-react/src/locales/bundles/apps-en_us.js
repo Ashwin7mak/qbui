@@ -106,7 +106,9 @@ export default {
             next: "Next",
             previous: "Previous",
             finished: "Finished",
-            new: "New"
+            new: "New",
+            apply: "Apply",
+            backToApp: "Back to app"
         },
         field: {
             search: "Search",
@@ -138,7 +140,8 @@ export default {
             print: "Print",
             customizeReport: "Customize this Report",
             customizeForm: "Customize this Form",
-            customizePage: "Customize this Page"
+            customizePage: "Customize this Page",
+            deleteTable: "Delete Table"
         },
         recordActions: {
             previous: "Previous",

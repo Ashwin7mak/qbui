@@ -1,7 +1,9 @@
 import React from 'react';
-import {MenuItem, Dropdown, OverlayTrigger, Tooltip, Popover, Button} from 'react-bootstrap';
+import {MenuItem, Dropdown} from 'react-bootstrap';
 import QBicon from '../qbIcon/qbIcon';
 import {I18nMessage} from '../../utils/i18nMessage';
+import * as UrlConsts from "../../constants/urlConstants";
+import TableIcon from '../qbTableIcon/qbTableIcon';
 import './builderDropDown.scss';
 
 const actionPropType = React.PropTypes.shape({
@@ -14,41 +16,41 @@ let BuilderDropDownAction = React.createClass({
 
     propTypes: {
         actions: React.PropTypes.arrayOf(actionPropType),
-        formBuilderIcon: React.PropTypes.string,
+        icon: React.PropTypes.string,
         startTabIndex: React.PropTypes.number.isRequired,
         recId: React.PropTypes.string,
         navigateToBuilder: React.PropTypes.func.isRequired,
         position: React.PropTypes.string.isRequired,
+        selectedApp: React.PropTypes.object,
+        selectedTable: React.PropTypes.object
     },
 
-    hasOverLayTrigger(formBuilderDropDown) {
-        const availableOnFormView = <Tooltip id="unimplemented.formBuilder.tt"><I18nMessage message="unimplemented.formBuilder"/></Tooltip>;
-
-        return <OverlayTrigger placement="bottom" trigger={['hover', 'click']} overlay={availableOnFormView}>
-            {formBuilderDropDown}
-        </OverlayTrigger>;
+    getTableSettingsLink() {
+        let link = `${UrlConsts.SETTINGS_ROUTE}/app/${this.props.selectedApp.id}/table/${this.props.selectedTable.id}/properties`;
+        this.props.router.push(link);
     },
 
-    getBuilderDropdown() {
+    getConfigOptions() {
+        let isAppView = this.props.selectedApp ? true : false;
+        let isTableView = this.props.selectedTable ? true : false;
         let isFormView = this.props.recId ? true : false;
-        let isAppView = this.props.selectedAppId !== null;
-        let isTableView = this.props.selectedTableId !== null;
-        let isDisabled = isTableView ? "dropdownToggle globalActionLink formBuilder" : "disabled btn btn-default";
+        let classes = "dropdownToggle globalActionLink formBuilder";
 
 
-        let formBuilderDropdown = <Dropdown className={isDisabled} id="nav-right-dropdown" dropup={this.props.position === "left"} >
+        let dropDown = <Dropdown className={classes} id="nav-right-dropdown" dropup={this.props.position === "left"} >
             <a bsRole="toggle"
-               className={isDisabled}
+               className={classes}
                tabIndex={this.props.startTabIndex + this.props.actions.length}>
-                <QBicon icon={this.props.formBuilderIcon}/>
+                <QBicon icon={this.props.icon}/>
             </a>
 
             <Dropdown.Menu>
                 <div className="configurationMenu">
                     {isTableView ?
-                    <div>
-                        <li><a className="heading"><I18nMessage message={"pageActions.tableSettingsHeader"}/></a></li>
-                        <li><a id="modifyTableSettings"><I18nMessage message={"pageActions.tableSettings"}/></a></li>
+                    <div className="tableConfig">
+                        <li><a className="heading">{this.props.selectedTable.icon && <TableIcon icon={this.props.selectedTable.icon}/> }
+                            <span>{this.props.selectedTable.name}&nbsp;<I18nMessage message={"pageActions.tableSettingsHeader"}/></span></a></li>
+                        <li><a id="modifyTableSettings" onClick={this.getTableSettingsLink}><I18nMessage message={"pageActions.tableSettings"}/></a></li>
                     </div> : null}
                     {isFormView ?
                     <div>
@@ -59,16 +61,14 @@ let BuilderDropDownAction = React.createClass({
             </Dropdown.Menu>
         </Dropdown>;
 
-        return isFormView ? formBuilderDropdown : this.hasOverLayTrigger(formBuilderDropdown);
+        return dropDown;
 
     },
 
     render() {
-        let isFormView = this.props.recId ? true : false;
-        let isDisabled = isFormView ? "link globalAction withDropdown builder" : "link globalAction disabled withDropdown builder";
-        return (
-            <li className={isDisabled}>{this.getBuilderDropdown()}</li>
-        );
+        let isTableView = this.props.selectedTable ? true : false;
+        //For now this menu only shows for table/form view. Eventually this should show for all views with content dependent on the route.
+        return (isTableView ? <li className="link globalAction withDropdown builder">{this.getConfigOptions()}</li> : null);
     }
 });
 

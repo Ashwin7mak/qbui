@@ -202,10 +202,6 @@ class TableCreationPanel extends React.Component {
     render() {
         return (
             <div className="tableInfo">
-
-                <div className="description"><I18nMessage message="tableCreation.newTableDescription"/></div>
-                <div className="title"><I18nMessage message="tableCreation.newTableTitle"/></div>
-
                 <div className="sections">
                     <TableFieldInput title={Locale.getMessage("tableCreation.tableNameHeading")}
                                      name="name"
@@ -217,7 +213,7 @@ class TableCreationPanel extends React.Component {
                                      required
                                      autofocus
                                      hasFocus={this.props.focusOn === "name"}
-                                     edited={this.props.tableInfo.name.edited}
+                                     edited={this.props.tableInfo ? this.props.tableInfo.name.edited : false}
                                      validationError={this.props.validate ? this.props.tableInfo.name.validationError : null}/>
 
                     <TableFieldInput title={Locale.getMessage("tableCreation.recordNameHeading")}

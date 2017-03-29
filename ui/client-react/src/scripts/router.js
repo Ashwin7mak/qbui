@@ -6,6 +6,7 @@ import AppHistory from '../globals/appHistory';
 import PerfLogUtils from "../utils/perf/perfLogUtils";
 import NavWrapper from "../components/nav/navWrapper";
 import BuilderWrapper from '../components/builder/builderWrapper';
+import SettingsWrapper from '../components/settings/settingsWrapper';
 import AppsRoute from "../components/apps/appsRoute";
 import AppHomePageRoute from "../components/app/appHomePageRoute";
 import ReportRoute from "../components/report/reportRoute";
@@ -18,11 +19,12 @@ import * as FeatureSwitchActions from '../actions/featureSwitchActions';
 import AppSettingsRoute from "../components/app/settings/appSettingsRoute";
 import AppUsersRoute from "../components/app/settings/categories/appUsersRoute";
 import AppPropertiesRoute from "../components/app/settings/categories/appPropertiesRoute";
+import TablePropertiesRoute from "../components/table/settings/tablePropertiesRoute";
 import AppsBundleLoader from '../locales/appsBundleLoader';
 import config from '../config/app.config';
 
 import Logger from "../utils/logger";
-import {APPS_ROUTE, APP_ROUTE, BUILDER_ROUTE, ADMIN_ROUTE} from '../constants/urlConstants';
+import {APPS_ROUTE, APP_ROUTE, BUILDER_ROUTE, ADMIN_ROUTE, SETTINGS_ROUTE} from '../constants/urlConstants';
 
 import "react-fastclick";
 
@@ -45,6 +47,7 @@ const mapStateToProps = (state) => {
 };
 const ConnectedNav = connect(mapStateToProps)(NavWrapper); // pass Redux state as qbui prop
 const ConnectedBuilderNav = connect(mapStateToProps)(BuilderWrapper); // pass Redux state as qbui prop
+const ConnectedSettingsNav = connect(mapStateToProps)(SettingsWrapper); // pass Redux state as qbui prop
 const store = createAppStore();
 
 // init the localization services
@@ -83,6 +86,10 @@ render((
 
             <Route path={`${BUILDER_ROUTE}/app/:appId`} component={ConnectedBuilderNav}>
                 <Route path="table/:tblId/form(/:formId)" component={FormBuilderContainer} />
+            </Route>
+
+            <Route path={`${SETTINGS_ROUTE}`} component={ConnectedSettingsNav}>
+                <Route path="app/:appId/table/:tblId/properties" component={TablePropertiesRoute} />
             </Route>
 
         </Router>

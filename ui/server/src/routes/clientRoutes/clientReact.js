@@ -6,6 +6,7 @@ const routes = [
     '/app/:appId/table/:tblId/record/:recordId',
     '/app/:appId/table/:tblId/reports',
     '/app/:appId/table/:tblId',
+    '/settings/app/:appId/table/:tblId/properties',
     '/app/:appId/table/:tblId/report/:rptId/fieldWithParentId/:fieldWithParentId/masterRecordId/:masterRecordId',
     '/app/:appId/settings',
     '/app/:appId/users',
