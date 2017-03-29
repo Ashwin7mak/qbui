@@ -37,29 +37,35 @@ let FieldProperties = React.createClass({
         );
     },
 
-    createTextPropertyContainer(propertyTitle, propertyValue) {
+    createTextPropertyContainer(fieldId, propertyTitle, propertyValue) {
         return (
             <div className="fieldPropertyContainer">
                 <div className="textPropertyTitle">{propertyTitle}</div>
-                <TextFieldValueEditor value={propertyValue} classes="textPropertyValue"/>
+                <TextFieldValueEditor value={propertyValue}
+                                      classes="textPropertyValue"
+                                      inputType="text"
+                />
             </div>
         );
     },
 
-    createCheckBoxPropertyContainer(propertyTitle, propertyValue) {
+    createCheckBoxPropertyContainer(fieldId, propertyTitle, propertyValue) {
         return (
             <div className="checkboxPropertyContainer">
-                <CheckBoxFieldValueEditor value={propertyValue} label={propertyTitle}/>
+                <CheckBoxFieldValueEditor value={propertyValue}
+                                          label={propertyTitle}
+                                          onChange={this.props.updateFieldProps(fieldId, 'required', !propertyValue)}
+                />
             </div>
         );
     },
 
     createNameProperty(field) {
-        return (this.createTextPropertyContainer("Name", field.name));
+        return (this.createTextPropertyContainer(field.id, "Name", field.name));
     },
 
     createRequiredProperty(field) {
-        return (this.createCheckBoxPropertyContainer("Must be filled in", field.required));
+        return (this.createCheckBoxPropertyContainer(field.id, "Must be filled in", field.required));
     },
 
     getField() {
@@ -73,12 +79,12 @@ let FieldProperties = React.createClass({
 
     render() {
         let field = this.getField();
-        return (field ?
+        return ( field ?
             <div className="fieldPropertiesContainer">
                 {this.createPropertiesTitle(field.name)}
                 {this.createNameProperty(field)}
                 {this.createRequiredProperty(field)}
-            </div> : null
+            </div> : <div className="fieldPropertiesContainer"></div>
         );
     }
 });
