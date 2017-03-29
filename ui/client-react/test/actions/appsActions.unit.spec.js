@@ -37,6 +37,20 @@ describe('Apps Actions functions with Tables', () => {
         }
     }
 
+    class mockUserService {
+        constructor() { }
+        getUser(id) {
+            return Promise.resolve({data: responseData});
+        }
+    }
+
+    class mockUserServiceFailure {
+        constructor() { }
+        getUser(id) {
+            return Promise.reject(null);
+        }
+    }
+
     let stores = {};
     let flux = new Fluxxor.Flux(stores);
     flux.addActions(appsActions);
@@ -47,13 +61,16 @@ describe('Apps Actions functions with Tables', () => {
         spyOn(mockAppService.prototype, 'getApp').and.callThrough();
         spyOn(mockAppService.prototype, 'getAppUsers').and.callThrough();
         spyOn(mockRoleService.prototype, 'getAppRoles').and.callThrough();
+        spyOn(mockUserService.prototype, 'getUser').and.callThrough();
         appsActionsRewireAPI.__Rewire__('AppService', mockAppService);
         appsActionsRewireAPI.__Rewire__('RoleService', mockRoleService);
+        appsActionsRewireAPI.__Rewire__('UserService', mockUserService);
     });
 
     afterEach(() => {
         appsActionsRewireAPI.__Rewire__('AppService', mockAppService);
         appsActionsRewireAPI.__Rewire__('RoleService', mockRoleService);
+        appsActionsRewireAPI.__Rewire__('UserService', mockUserService);
     });
 
     var appsActionTests = [
@@ -144,6 +161,50 @@ describe('Apps Actions functions with Tables', () => {
                 },
                 () => {
                     expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_APP_ROLES_FAILED]);
+                    expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(1);
+                    done();
+                }
+            );
+        });
+    });
+
+    var loadAppOwnerTests = [
+        {name:'load app owner', userId: 187, cached: false}
+    ];
+    loadAppOwnerTests.forEach(function(test) {
+        it(test.name, function(done) {
+            flux.actions.loadAppOwner(test.userId).then(
+                () => {
+                    if (test.cached === true) {
+                        expect(mockUserService.prototype.getUser).not.toHaveBeenCalled();
+                    } else {
+                        expect(mockUserService.prototype.getUser).toHaveBeenCalledWith(test.userId);
+                        expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(1);
+                        expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_APP_OWNER_SUCCESS, responseData]);
+                    }
+                    done();
+                },
+                () => {
+                    expect(false).toBe(true);
+                    done();
+                }
+            );
+        });
+    });
+
+    var loadAppOwnerNegativeTests = [
+        {name:'fail load app owner', userId: 187, cached: false}
+    ];
+    loadAppOwnerNegativeTests.forEach(function(test) {
+        it(test.name, function(done) {
+            appsActionsRewireAPI.__Rewire__('UserService', mockUserServiceFailure);
+            flux.actions.loadAppOwner(test.userId).then(
+                () => {
+                    expect(false).toBe(true);
+                    done();
+                },
+                () => {
+                    expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_APP_OWNER_FAILED]);
                     expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(1);
                     done();
                 }

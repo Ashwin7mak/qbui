@@ -238,7 +238,7 @@ $topnav-title-icon-color:               $badcolor14-top-nav-title-icon-color;   
 $topnav-icon-color:                     $iconfont-on-light-normal-color;        // not in XD spreadsheet
 $topnav-hover-color:                    $color-black-100;                       // not in XD spreadsheet
 $topnav-hover-background-color:         $badcolor10-nav-hover-bg;               // not in XD spreadsheet
-$topnav-header-background-color:        $color-blue-300;                        // not in XD spreadsheet
+$topnav-header-background-color:        $color-black-250;                        // not in XD spreadsheet
 
 // left navigation
 $leftnav-background-color:              $color-black-250;
@@ -251,6 +251,10 @@ $leftnav-table-selected-color:          $color-cyan-500;
 $leftnav-table-default-color:           $color-black-700;
 $leftnav-tablenames-color:              $color-black-700;
 $leftnav-selected-nub-color:            $color-cyan-500;
+$leftnav-item-selected-color:           $color-cyan-500;
+$leftnav-item-disabled-color:           $color-black-600;
+$leftnav-item-default-color:            $color-black-700;
+$leftnav-items-color:                   $color-black-700;
 
 // current left navigation variables to be merged with the new ones above
 $left-nav-color: $color-black-100;                              // not in XD spreadsheet

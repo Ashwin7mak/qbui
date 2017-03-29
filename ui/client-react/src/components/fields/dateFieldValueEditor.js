@@ -189,7 +189,8 @@ const DateFieldValueEditor = React.createClass({
                     onBlur={this.onInputBlur}
                     onChange={this.onInputChange}
                     value={theDate}
-                    placeholder={DATE_FORMATTED}/>
+                    placeholder={DATE_FORMATTED}
+                    tabIndex={this.props.tabIndex}/>
             </div> :
             <div className={classes.join(' ')}>
                 <DatePicker
@@ -202,7 +203,8 @@ const DateFieldValueEditor = React.createClass({
                     onChange={this.onChange}
                     showToday={true}
                     mode="date"
-                    defaultText={theDate ? theDate : DATE_INPUT.toLowerCase()}/>
+                    defaultText={theDate ? theDate : DATE_INPUT.toLowerCase()}
+                    tabIndex={this.props.tabIndex}/>
             </div>
         );
     }

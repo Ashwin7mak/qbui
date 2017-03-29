@@ -4,12 +4,12 @@ import TabContent from 'rc-tabs/lib/TabContent';
 import InkTabBar from 'rc-tabs/lib/InkTabBar';
 
 import 'rc-tabs/assets/index.css';
-import './tabbedSideNav.scss';
+import './tabbedSideMenu.scss';
 
 
 /**
  * Used to create a side nav that has tabbed navigation within it.
- * Pass this component into either SideMenuBase or SideTrowser.
+ * HEADS UP: Pass this component into either SideMenuBase or SideTrowser as the sideMenuContent.
  * TODO:: This is a very basic implementation. Additional styling and behavior will be added once when we have the final spec.
  */
 class TabbedSideNav extends Component {
@@ -62,7 +62,7 @@ class TabbedSideNav extends Component {
 }
 
 TabbedSideNav.propTypes = {
-    /**F
+    /**
      * The key of the tab that should be selected if no activeKey.
      * If not provided, the default tab is the first tab. */
     defaultTab: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
