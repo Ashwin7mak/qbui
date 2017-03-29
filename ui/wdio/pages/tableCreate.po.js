@@ -238,8 +238,6 @@
                 //Enter values for 'table name' field
                 if (tableField.includes('Table Name')) {
                     //Verify the placeholder inside input
-                    console.log("The placeHolder is: " + results[0].element('.tableFieldInput input').getAttribute('placeholder'));
-                    console.log("the param is: " + expectedPlaceHolder);
                     expect(results[0].element('.tableFieldInput input').getAttribute('placeholder')).toBe(expectedPlaceHolder);
                     //Enter value of 'a record in the table is called a ' field
                 } else if (tableField.includes('A record in the table is called')) {

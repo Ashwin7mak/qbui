@@ -53,7 +53,7 @@
             var tableFields = [
                 {fieldTitle: '* Table Name', fieldValue: tableName, placeHolder: 'For example, Customers'},
                 {fieldTitle: '* A record in the table is called', fieldValue: rawValueGenerator.generateStringWithFixLength(10), placeHolder: 'For example, customer'},
-                {fieldTitle: 'Description', fieldValue: rawValueGenerator.generateStringWithFixLength(50), placeHolder: 'Text to show when hovering over the table name in the left-hand column'}
+                {fieldTitle: 'Description', fieldValue: rawValueGenerator.generateStringWithFixLength(50), placeHolder: 'Text to show when hovering over the table name in the left navigation'}
             ];
 
             //Step 1 - get the original count of table links in the left nav
@@ -138,7 +138,7 @@
         }
 
         tableFieldValidationTestCases().forEach(function(testCase) {
-            it('Create new table ' + testCase.message, function() {
+            xit('Create new table ' + testCase.message, function() {
 
                 //Step 1 - get the original count of table links in the left nav
                 tableCreatePO.newTableBtn.waitForVisible();
@@ -171,7 +171,7 @@
             });
         });
 
-        it('Verify clicking on Previous button brings to previous page', function() {
+        xit('Verify clicking on Previous button brings to previous page', function() {
             var tableName = rawValueGenerator.generateStringWithFixLength(10);
             var tableFields = [
                 {fieldTitle: '* Table Name', fieldValue: tableName},
@@ -207,7 +207,7 @@
 
         });
 
-        it('Verify clicking on close button closes the new table dialogue without saving the table', function() {
+        xit('Verify clicking on close button closes the new table dialogue without saving the table', function() {
             var tableName = rawValueGenerator.generateStringWithFixLength(10);
             var tableFields = [
                 {fieldTitle: '* Table Name', fieldValue: tableName},
@@ -245,7 +245,7 @@
 
         });
 
-        it('Verify that only ADMIN can add a new table', function() {
+        xit('Verify that only ADMIN can add a new table', function() {
             var userId;
 
             //Create a user
