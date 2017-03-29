@@ -307,12 +307,11 @@ let RecordPendingEditsStore = Fluxxor.createStore({
      */
     onRecordEditCancel() {
         // record wasn't saved nothing pending
-
+        this._initData();
         if (this.isInlineEditOpen) {
             this.isInlineEditOpen = false;
         }
         this.recordEditOpen = false;
-        this._initData();
         this.emit('change');
     },
 

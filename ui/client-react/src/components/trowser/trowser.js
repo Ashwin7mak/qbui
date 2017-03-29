@@ -29,24 +29,15 @@ let Trowser = React.createClass({
          * cancel trowser callback (ESC key pressed or X icon clicked)
          */
         onCancel: React.PropTypes.func,
+        /**
+         * save trowser callback (CMD/CTRL+S key pressed or save button clicked)
+         */
+        onSave: React.PropTypes.func
     },
     defaultProps: {
         position: "top"
     },
 
-    handleKey(e) {
-        // close trowser when Esc is pressed
-        if (this.props.visible && e.key === 'Escape') {
-            this.props.onCancel();
-        }
-    },
-    componentWillMount() {
-        window.addEventListener("keydown", this.handleKey, false);
-    },
-
-    componentWillUnmount() {
-        window.removeEventListener("keydown", this.handleKey, false);
-    },
     /**
      *
      * render trowser in front of a trowserBackground element (visible when browser is very wide)
@@ -65,7 +56,8 @@ let Trowser = React.createClass({
                 <div className={"trowserBackground"} onClick={this.props.onCancel}/>
                 <KeyboardShortcuts id="trowser"
                                    shortcutBindings={[
-                                       {key: 'esc', callback: () => {this.props.onCancel(); return false;}},
+                                       {key: 'mod+s', callback: () => {this.props.onSave(); return false;}},
+                                       {key: 'esc', callback: () => {this.props.onCancel(); return false;}}
                                    ]} />
                 <div className={"trowserContent"}>
                     <div className={"trowserHeader"}>

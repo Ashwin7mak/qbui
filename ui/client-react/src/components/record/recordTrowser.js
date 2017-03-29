@@ -18,7 +18,6 @@ import * as SpinnerConfigurations from "../../constants/spinnerConfigurations";
 import {HideAppModal} from '../qbModal/appQbModalFunctions';
 import {connect} from 'react-redux';
 import {savingForm, saveFormSuccess, editNewRecord, saveFormError, syncForm, openRecordForEdit} from '../../actions/formActions';
-import KeyboardShortcuts from '../../../../reuse/client/src/components/keyboardShortcuts/keyboardShortcuts';
 import {showErrorMsgDialog, hideErrorMsgDialog} from '../../actions/shellActions';
 import {APP_ROUTE} from '../../constants/urlConstants';
 import SaveOrCancelFooter from '../saveOrCancelFooter/saveOrCancelFooter';
@@ -361,13 +360,8 @@ export const RecordTrowser = React.createClass({
                      visible={this.props.visible}
                      breadcrumbs={this.getTrowserBreadcrumbs()}
                      onCancel={this.cancelEditing}
+                     onSave={this.saveClicked}
                      content={this.getTrowserContent()} >
-
-                <KeyboardShortcuts id="recordTrowser"
-                                   shortcutBindings={[
-                                    {key: 'mod+s', callback: () => {this.saveClicked(); return false;}},
-                                    ]} />
-
                 <SaveOrCancelFooter
                     rightAlignedButtons={this.getTrowserRightIcons()}
                     centerAlignedButtons={this.getTrowserActions()}
