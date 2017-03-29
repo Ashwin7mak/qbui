@@ -1,5 +1,4 @@
 import React from "react";
-import cookie from 'react-cookie';
 import Fluxxor from "fluxxor";
 import LeftNav from "./leftNav";
 import TopNav from "../header/topNav";
@@ -15,25 +14,24 @@ import {withRouter} from 'react-router';
 import _ from 'lodash';
 import "./nav.scss";
 import "react-notifications/lib/notifications.css";
-import AppUtils from '../../utils/appUtils';
-import WindowLocationUtils from '../../utils/windowLocationUtils';
 import "../../assets/css/animate.min.css";
 import * as TrowserConsts from "../../constants/trowserConstants";
 import * as UrlConsts from "../../constants/urlConstants";
 import NavPageTitle from '../pageTitle/navPageTitle';
 import InvisibleBackdrop from '../qbModal/invisibleBackdrop';
 import AppQbModal from '../qbModal/appQbModal';
-import UrlUtils from '../../utils/urlUtils';
-import CookieConstants from '../../../../common/src/constants';
-import CommonCookieUtils from '../../../../common/src/commonCookieUtils';
 import * as ShellActions from '../../actions/shellActions';
 import * as FormActions from '../../actions/formActions';
 import * as ReportActions from '../../actions/reportActions';
+import * as TableCreationActions from '../../actions/tableCreationActions';
 import {CONTEXT} from '../../actions/context';
 import ButtonGroup from 'react-bootstrap/lib/ButtonGroup';
 import Button from 'react-bootstrap/lib/Button';
 import Tooltip from '../../../../reuse/client/src/components/tooltip/tooltip';
 import Icon from '../../../../reuse/client/src/components/icon/icon';
+import TableCreationDialog from '../table/tableCreationDialog';
+import AppUtils from '../../utils/appUtils';
+
 
 // This shared view with the server layer must be loaded as raw HTML because
 // the current backend setup cannot handle a react component in a common directory. It is loaded
@@ -355,6 +353,7 @@ export let Nav = React.createClass({
                 onToggleAppsList={this.toggleAppsList}
                 globalActions={this.getLeftGlobalActions()}
                 onSelect={this.onSelectItem}
+                onCreateNewTable={this.allowCreateNewTable() && this.createNewTable}
                 onNavClick={this.toggleNav}/>
 
             <div className="main" >
@@ -363,7 +362,7 @@ export let Nav = React.createClass({
                         globalActions={this.getTopGlobalActions()}
                         onNavClick={this.toggleNav}
                         flux={flux}
-                        showOnSmall = {this.state.nav.showTopNav}
+                        showOnSmall={this.state.nav.showTopNav}
                 />
                 {this.props.children &&
                     <div className="mainContent" >
@@ -395,7 +394,18 @@ export let Nav = React.createClass({
             {this.state.pendEdits &&
                 this.renderSavingModal(this.state.pendEdits.saving)
             }
+
+            {this.state.apps.selectedAppId && <TableCreationDialog app={this.getSelectedApp()} onTableCreated={this.tableCreated}/>}
         </div>);
+    },
+
+    /**
+     * new table was created, ensure it is displayed available in the UI
+     */
+    tableCreated() {
+        const flux = this.getFlux();
+
+        flux.actions.loadApps(true);
     },
 
     onSelectItem() {
@@ -410,6 +420,22 @@ export let Nav = React.createClass({
      */
     toggleNav() {
         this.props.dispatch(ShellActions.toggleLeftNav());
+    },
+
+    /**
+     * is user able to create a new table from the left nav
+     * @returns {*}
+     */
+    allowCreateNewTable() {
+        const app = this.getSelectedApp();
+
+        return app && AppUtils.hasAdminAccess(app.accessRights);
+    },
+    /**
+     * open the create table wizard
+     */
+    createNewTable() {
+        this.props.dispatch(TableCreationActions.showTableCreationDialog());
     }
 });
 

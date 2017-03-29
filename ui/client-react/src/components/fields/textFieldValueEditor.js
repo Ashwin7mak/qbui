@@ -29,6 +29,7 @@ const TextInput = React.createClass({
                        placeholder={this.props.placeholder}
                        onChange={this.props.onChange}
                        onBlur={this.props.onBlur}
+                       tabIndex={this.props.tabIndex}
                  />);
     }
 });
@@ -138,6 +139,7 @@ const TextFieldValueEditor = React.createClass({
                     classes={classNames.join(' ')}
                     onChange={this.onChange}
                     onBlur={this.onBlur}
+                    tabIndex={this.props.tabIndex}
                 />);
     }
 });

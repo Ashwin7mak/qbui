@@ -153,7 +153,7 @@ const FieldValueEditor = React.createClass({
             onBlur: this.onBlur,
             onValidated: this.props.onValidated,
             placeholder : placeholder,
-            tabIndex: "0",
+            tabIndex: this.props.tabIndex,
             idKey : this.props.idKey,
             ref:"fieldInput",
             required: (this.props.fieldDef ? this.props.fieldDef.required : false),

@@ -129,7 +129,7 @@ describe('Invalid Records Response', function() {
                 assert(false, `${field.name} accepted a blank string and it should have failed`);
             })
             .catch(createRecordError => {
-                assertExpectedError(createRecordError.response);
+                assertExpectedError(createRecordError);
                 return payload;
             });
     }
@@ -167,7 +167,8 @@ describe('Invalid Records Response', function() {
         // But Node response body has correct error code (422)
         // https://quickbase.atlassian.net/browse/CORE-1070
         assert.equal(response.statusCode, 500);
-        var nodeLayerResponse = response.body.response;
+        var nodeLayerResponseBody = JSON.parse(response.body);
+        var nodeLayerResponse = nodeLayerResponseBody.response;
         assert.equal(nodeLayerResponse.status, httpStatusCodeConstants.UNPROCESSABLE_ENTITY, 'The wrong HTTP status code was returned for an invalid record');
         assert.equal(nodeLayerResponse.errors.length, 1, 'An incorrect number of invalid fields was returned');
         assert.equal(nodeLayerResponse.errors[0].error.messageId, 'invalidMsg.api.invalidRecord', 'The wrong I18nMessageKey was returned.');
