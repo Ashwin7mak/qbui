@@ -1,6 +1,42 @@
 import React, {PropTypes, Component} from 'react';
 import MouseTrap from 'mousetrap';
 
+/**
+ * adds a bindGlobal method to Mousetrap that allows you to
+ * bind specific keyboard shortcuts that will still work
+ * inside a text input field
+ *
+ * usage:
+ * Mousetrap.bindGlobal('ctrl+s', _saveChanges);
+ */
+// Mousetrap = (function(Mousetrap) {
+//     var _global_callbacks = {},
+//         _original_stop_callback = Mousetrap.stopCallback;
+//
+//     Mousetrap.stopCallback = function(e, element, combo) {
+//         if (_global_callbacks[combo]) {
+//             return false;
+//         }
+//
+//         return _original_stop_callback(e, element, combo);
+//     };
+//
+//     Mousetrap.bindGlobal = function(keys, callback, action) {
+//         Mousetrap.bind(keys, callback, action);
+//
+//         if (keys instanceof Array) {
+//             for (var i = 0; i < keys.length; i++) {
+//                 _global_callbacks[keys[i]] = true;
+//             }
+//             return;
+//         }
+//
+//         _global_callbacks[keys] = true;
+//     };
+//
+//     return Mousetrap;
+// }) (Mousetrap);
+
 class KeyboardShortcuts extends Component {
     constructor(props) {
         super(props);
@@ -10,6 +46,11 @@ class KeyboardShortcuts extends Component {
     }
 
     componentWillMount() {
+        // if (this.props.stopDefaultCallback) {
+        //     // MouseTrap.prototype.stopCallback = function () {
+        //     //     return false;
+        //     // };
+        // }
         this.addAllKeyBindings(this.props.shortcutBindings);
     }
 
@@ -19,7 +60,7 @@ class KeyboardShortcuts extends Component {
 
     addAllKeyBindings(bindings = []) {
         bindings.forEach(binding => {
-            MouseTrap.bind(binding.key, () => binding.callback(binding.content));
+            MouseTrap(document.body).bind(binding.key, () => binding.callback(binding.content));
         });
     }
 
@@ -53,8 +94,10 @@ KeyboardShortcuts.propTypes = {
         callback: PropTypes.func.isRequired,
 
         /** Content will be passed as the first argument to the callback. It is optional. */
-        content: PropTypes.any
-    }))
+        content: PropTypes.any,
+    })),
+    /** This stops the browser default callbacks */
+    stopDefaultCallback: PropTypes.bool
 };
 
 export default KeyboardShortcuts;

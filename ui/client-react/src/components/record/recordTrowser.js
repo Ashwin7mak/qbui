@@ -26,6 +26,7 @@ import SaveOrCancelFooter from '../saveOrCancelFooter/saveOrCancelFooter';
 import './recordTrowser.scss';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
+let currentTrowser = null;
 
 /**
  * trowser containing a record component
@@ -328,9 +329,12 @@ export const RecordTrowser = React.createClass({
     },
 
     cancelEditing() {
+        console.log('outside');
         if (this.props.pendEdits && this.props.pendEdits.isPendingEdit) {
+            console.log('if');
             AppHistory.showPendingEditsConfirmationModal(this.saveAndClose, this.clearEditsAndClose, function() {HideAppModal();});
         } else {
+            console.log('else');
             // Clean up before exiting the trowser
             this.clearEditsAndClose();
         }
@@ -349,29 +353,54 @@ export const RecordTrowser = React.createClass({
     dismissErrorDialog() {
         this.props.hideErrorMsgDialog();
     },
+
+    // componentDidMount() {
+    //     let editForm = document.querySelector('.editForm');
+    //     console.log(editForm);
+    //     editForm.focus();
+    // },
+
+    cancelWithKeyboard() {
+        let editForm = document.querySelector('.editForm');
+        editForm.focus();
+        console.log(editForm);
+        this.cancelEditing();
+    },
+
+    saveWithKeyboard() {
+        let editForm = document.querySelector('.editForm');
+        editForm.focus();
+        console.log(editForm);
+        this.saveClicked();
+    },
+
     /**
      * trowser to wrap report manager
      */
     render() {
         const errorFlg = this.props.pendEdits && this.props.pendEdits.editErrors && this.props.pendEdits.editErrors.errors.length > 0;
         return (
-            <Trowser className={"recordTrowser " + (errorFlg ? "recordTrowserErrorPopRes" : "")}
-                     visible={this.props.visible}
-                     breadcrumbs={this.getTrowserBreadcrumbs()}
-                     onCancel={this.cancelEditing}
-                     content={this.getTrowserContent()} >
+            <div ref={(trowser) => {currentTrowser = trowser;}} style={{outlineColor: 'hotpink'}}>
+                <Trowser className={"recordTrowser " + (errorFlg ? "recordTrowserErrorPopRes" : "")}
+                         visible={this.props.visible}
+                         breadcrumbs={this.getTrowserBreadcrumbs()}
+                         onCancel={this.cancelEditing}
+                         content={this.getTrowserContent()} >
 
-                <KeyboardShortcuts id="formBuilderContainer" shortcutBindings={[
-                    {key: 'esc', callback: () => {this.cancelEditing(); return false;}},
-                    {key: 'mod+s', callback: () => {this.saveClicked(); return false;}},
-                ]}/>
+                    <KeyboardShortcuts id="formBuilderContainer"
+                                       shortcutBindings={[
+                                        {key: 'esc', callback: () => {this.cancelWithKeyboard(); return false;}},
+                                        {key: 'mod+s', callback: () => {this.saveWithKeyboard(); return false;}},
+                                        ]}
+                                       stopDefaultCallback={true}/>
 
-                <SaveOrCancelFooter
-                    rightAlignedButtons={this.getTrowserRightIcons()}
-                    centerAlignedButtons={this.getTrowserActions()}
-                    leftAlignedButtons={this.getTrowserActions()}
-                />
-            </Trowser>
+                    <SaveOrCancelFooter
+                        rightAlignedButtons={this.getTrowserRightIcons()}
+                        centerAlignedButtons={this.getTrowserActions()}
+                        leftAlignedButtons={this.getTrowserActions()}
+                    />
+                </Trowser>
+            </div>
         );
     }
 });
