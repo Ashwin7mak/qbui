@@ -88,7 +88,6 @@ KeyboardShortcuts.propTypes = {
         /** Content will be passed as the first argument to the callback. It is optional. */
         content: PropTypes.any,
     }))
-
 };
 
 export default KeyboardShortcuts;
