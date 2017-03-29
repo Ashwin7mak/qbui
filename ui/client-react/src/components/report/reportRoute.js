@@ -68,8 +68,6 @@ const ReportRoute = React.createClass({
         //  get the fields for this app/tbl
         this.props.dispatch(loadFields(appId, tblId));
 
-        // TODO: instead of using 0 for the rptID, the node layer should send data when apps have
-        // TODO: tables with relationships
         this.loadDynamicReport(appId, tblId, rptId, true, /*filter*/{}, queryParams);
     },
     loadReportFromParams(params) {

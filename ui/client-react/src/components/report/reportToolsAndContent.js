@@ -46,7 +46,9 @@ export const ReportToolsAndContent = React.createClass({
     mixins: [FluxMixin],
     //facetFields : {},
     debounceInputMillis: 700, // a key send delay
-    nameForRecords: "Records",  // get from table meta data
+    // TODO: the tablePropertiesEndpoint on EE has the noun for records
+    // get from table meta data
+    nameForRecords: "Records",
     propTypes: {
         appId: React.PropTypes.string,
         tblId: React.PropTypes.string,

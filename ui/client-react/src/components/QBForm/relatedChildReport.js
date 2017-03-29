@@ -1,5 +1,4 @@
 import React, {PropTypes} from 'react';
-import _ from 'lodash';
 
 import EmbeddedReportToolsAndContent from '../report/embedded/embeddedReportToolsAndContent';
 import EmbeddedReportLink from '../report/embedded/embeddedReportLink';

@@ -56,13 +56,13 @@ describe('EmbeddedReportToolsAndContent', () => {
     });
 
     it('calls loadDynamicReport with proper arguments', () => {
-        const spy = jasmine.createSpy('spy');
+        const loadDynamicReportSpy = jasmine.createSpy('loadDynamicReportSpy');
 
         component = mount(
-            <UnconnectedEmbeddedReportToolsAndContent loadDynamicReport={spy} {...props} />
+            <UnconnectedEmbeddedReportToolsAndContent loadDynamicReport={loadDynamicReportSpy} {...props} />
         );
-        expect(spy).toHaveBeenCalled();
-        expect(spy).toHaveBeenCalledWith(
+        expect(loadDynamicReportSpy).toHaveBeenCalled();
+        expect(loadDynamicReportSpy).toHaveBeenCalledWith(
             jasmine.any(String),
             appId,
             tblId,
@@ -78,17 +78,17 @@ describe('EmbeddedReportToolsAndContent', () => {
     });
 
     it('generates uniqueId context used to identify report in store', () => {
-        const spy = jasmine.createSpy('spy');
+        const loadDynamicReportSpy = jasmine.createSpy('loadDynamicReportSpy');
 
         const component1 = mount(
-            <UnconnectedEmbeddedReportToolsAndContent loadDynamicReport={spy} {...props} />
+            <UnconnectedEmbeddedReportToolsAndContent loadDynamicReport={loadDynamicReportSpy} {...props} />
         );
         const component2 = mount(
-            <UnconnectedEmbeddedReportToolsAndContent loadDynamicReport={spy} {...props} />
+            <UnconnectedEmbeddedReportToolsAndContent loadDynamicReport={loadDynamicReportSpy} {...props} />
         );
-        expect(spy).toHaveBeenCalled();
-        expect(spy.calls.count()).toEqual(2);
-        expect(spy.calls.argsFor(0)[0]).not.toEqual(spy.calls.argsFor(1)[0]);
+        expect(loadDynamicReportSpy).toHaveBeenCalled();
+        expect(loadDynamicReportSpy.calls.count()).toEqual(2);
+        expect(loadDynamicReportSpy.calls.argsFor(0)[0]).not.toEqual(loadDynamicReportSpy.calls.argsFor(1)[0]);
     });
 
     it('renders embedded report when a corresponding report exists in the store', () => {
@@ -113,11 +113,11 @@ describe('EmbeddedReportToolsAndContent', () => {
     });
 
     it('calls unloadEmbeddedReport with uniqueId when component unmounts', () => {
-        const spy = jasmine.createSpy('spy');
+        const loadDynamicReportSpy = jasmine.createSpy('loadDynamicReportSpy');
         component = shallow(
             <UnconnectedEmbeddedReportToolsAndContent
                 loadDynamicReport={() => null}
-                unloadEmbeddedReport={spy}
+                unloadEmbeddedReport={loadDynamicReportSpy}
                 {...props}
             />
         );
@@ -128,7 +128,7 @@ describe('EmbeddedReportToolsAndContent', () => {
 
         component.unmount();
 
-        expect(spy.calls.count()).toEqual(1);
-        expect(spy.calls.argsFor(0)[0]).toEqual(42);
+        expect(loadDynamicReportSpy.calls.count()).toEqual(1);
+        expect(loadDynamicReportSpy.calls.argsFor(0)[0]).toEqual(42);
     });
 });

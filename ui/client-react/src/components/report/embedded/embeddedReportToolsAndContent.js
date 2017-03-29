@@ -21,6 +21,7 @@ let logger = new Logger();
  */
 // Export the unconnected base component for testing, the default export is wrapped with `connect`
 export const EmbeddedReportToolsAndContent = React.createClass({
+    // TODO: the tablePropertiesEndpoint on EE has the noun for records
     nameForRecords: "Records",
 
     propTypes: {
@@ -63,8 +64,7 @@ export const EmbeddedReportToolsAndContent = React.createClass({
     },
 
     componentDidMount() {
-        this.uniqueId = CONTEXT.REPORT.EMBEDDED + Math.floor(Math.random() * Number.MAX_SAFE_INTEGER);
-        //this.setState({});
+        this.uniqueId = _.uniqueId(CONTEXT.REPORT.EMBEDDED);
         this.loadReportFromProps();
     },
 
