@@ -10,18 +10,6 @@
     var formsPO = requirePO('formsPage');
 
     var ReportContentPage = Object.create(e2ePageBase, {
-
-        tableBody: {get: function() {return browser.element('.qbTbody');}},
-        reportsToolBar : {get: function() {return browser.element('.reportToolbar');}},
-
-        reportFilterSearchBox : {get: function() {
-            return this.reportsToolBar.element('.searchInput');
-        }},
-        clickAndWaitForGrid: {value: function(button) {
-            button.click();
-            this.qbGridContainer.waitForVisible();
-        }},
-
         //Record add button on stage
         addRecordBtnOnStage : {get: function() {
             browser.element('.layout-stage .pageActions .iconUISturdy-add').waitForVisible();
@@ -110,16 +98,15 @@
             return colHeaders;
         }},
 
-        getAllRows: {get: function() {
-            this.qbGridBodyEl.element('.qbRow').waitForVisible();
-            return this.qbGridContainer.elements('.qbRow');
-        }},
-
         /**
          * Returns a recordRowElement from the table based on the supplied index
          * @param recordIndex
          * @returns Resolved record row element at specified index
          */
+        getAllRows: {get: function() {
+            this.qbGridBodyEl.element('.qbRow').waitForVisible();
+            return this.qbGridContainer.elements('.qbRow');
+        }},
         getRecordRowElement: {value: function(recordIndex) {
             return this.getAllRows.value[recordIndex];
         }},
