@@ -73,7 +73,9 @@ KeyboardShortcuts.propTypes = {
         content: PropTypes.any,
     })),
     /**
-     * An array of keyboard bindings that will be active while this component is mounted. It should be immutable. */
+     *  IMPORTANT: Only use the below prop if absolutely necessary
+     *  This array allows the keyboard bindings to override default keyboard behavior
+     *  An example is allowing keyboard bindings to work even when the focus is on an input field, select field, textarea and etc... */
     shortcutBindingsPreventDefault: PropTypes.arrayOf(PropTypes.shape({
         /**
          * The keyboard shortcut you want to activate the callback
