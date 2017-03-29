@@ -2,6 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {Route, Router, createMemoryHistory} from 'react-router';
 import TestUtils, {Simulate} from 'react-addons-test-utils';
+import {shallow, mount} from 'enzyme';
+import jasmineEnzyme from 'jasmine-enzyme';
 
 import RelatedChildReport, {__RewireAPI__ as RelatedChildReportRewireAPI} from '../../src/components/QBForm/relatedChildReport';
 
@@ -17,68 +19,99 @@ const childReportId = 3;
 const childTableName = 'child table';
 const detailKeyFid = 4;
 const detailKeyValue = 5;
+const type = 'EMBEDREPORT';
 const relatedChildReportUrl = `/qbase/app/${appId}/table/${childTableId}/report/${childReportId}?detailKeyFid=${detailKeyFid}&detailKeyValue=${detailKeyValue}`;
 
-const MockChildReport = (props) => () => {
+const MockChildReport = (props) => {
     props = Object.assign({
         appId,
         childTableId,
         childReportId,
         childTableName,
         detailKeyFid,
-        detailKeyValue
+        detailKeyValue,
+        type
     }, props);
     return <RelatedChildReport {...props} />;
 };
 
-// This is needed for testing the Link component rendered in RelatedChildReport
-const MockRouter = (props = {}) => (
-    <Router history={createMemoryHistory("/")}>
-        <Route path="/" component={MockChildReport(props)} />
-    </Router>
-);
+const EmbeddedReportToolsAndContentMock = (props) => <div className="embeddedReportContainer"></div>;
+const EmbeddedReportLinkMock = (props) => <div className="embeddedReportLink"></div>;
 
 describe('RelatedChildReport', () => {
+    beforeAll(() => {
+        jasmineEnzyme();
+        RelatedChildReportRewireAPI.__Rewire__('EmbeddedReportToolsAndContent', EmbeddedReportToolsAndContentMock);
+        RelatedChildReportRewireAPI.__Rewire__('EmbeddedReportLink', EmbeddedReportLinkMock);
+    });
+
+    afterAll(() => {
+        RelatedChildReportRewireAPI.__ResetDependency__('EmbeddedReportToolsAndContent');
+        RelatedChildReportRewireAPI.__Rewire__('EmbeddedReportLink');
+    });
+
     let component, domComponent;
 
+    it(`renders the component`, () => {
+        component = shallow(MockChildReport());
+        expect(component).toBePresent();
+    });
+
+    [
+        "appId",
+        "childTableId",
+        "childReportId",
+        "detailKeyFid",
+        "detailKeyValue"
+    ].forEach(prop => {
+        it(`does not render if ${prop} is not defined`, () => {
+            const props = {};
+            props[prop] = undefined;
+            component = shallow(MockChildReport(props));
+            //expect(component).not.toBePresent();
+        });
+    });
+
+    describe('in Large/Medium breakpoint', () => {
+        it('renders EmbeddedReportToolsAndContent', () => {
+            component = shallow(MockChildReport());
+            const embeddedReportContainer = component.find(EmbeddedReportToolsAndContentMock);
+            expect(embeddedReportContainer.length).toEqual(1);
+        });
+
+        it('passes the needed props to EmbeddedReportToolsAndContent', () => {
+            component = shallow(MockChildReport());
+            const embeddedReportContainer = component.find(EmbeddedReportToolsAndContentMock);
+
+            const passedProps = embeddedReportContainer.props();
+            const expectedProps = {
+                appId: appId,
+                tblId: childTableId,
+                rptId: childReportId,
+                detailKeyFid: detailKeyFid,
+                detailKeyValue: detailKeyValue
+            };
+
+            expect(passedProps.appId).toEqual(expectedProps.appId);
+            expect(passedProps.tblId).toEqual(expectedProps.tblId);
+            expect(passedProps.rptId).toEqual(expectedProps.rptId);
+            expect(passedProps.detailKeyFid).toEqual(expectedProps.detailKeyFid);
+            expect(passedProps.detailKeyValue).toEqual(expectedProps.detailKeyValue);
+        });
+    });
+
     describe('in Small Breakpoint', () => {
-        it('displays a clickable link in small breakpoint', () => {
+        beforeAll(() => {
             RelatedChildReportRewireAPI.__Rewire__('Breakpoints', BreakpointsAlwaysSmallMock);
-
-            component = TestUtils.renderIntoDocument(MockChildReport()());
-            domComponent = TestUtils.findRenderedDOMComponentWithTag(component, 'a');
-
-            expect(domComponent).toBeTruthy();
-
+        });
+        afterAll(() => {
             RelatedChildReportRewireAPI.__ResetDependency__('Breakpoints');
         });
 
-        it('displays a clickable link to a child table in small breakpoint', () => {
-            RelatedChildReportRewireAPI.__Rewire__('Breakpoints', BreakpointsAlwaysSmallMock);
-
-            component = TestUtils.renderIntoDocument(MockRouter());
-            domComponent = TestUtils.findRenderedDOMComponentWithTag(component, 'a');
-
-            expect(domComponent.getAttribute('href')).toEqual(relatedChildReportUrl);
-
-            RelatedChildReportRewireAPI.__ResetDependency__('Breakpoints');
-        });
-
-        [
-            "appId",
-            "childTableId",
-            "childReportId",
-            "detailKeyFid",
-            "detailKeyValue"
-        ].forEach(prop => {
-            it(`does not render a link if ${prop} is not defined`, () => {
-                const props = {};
-                props[prop] = undefined;
-                component = TestUtils.renderIntoDocument(MockChildReport(props)());
-                domComponent = TestUtils.scryRenderedDOMComponentsWithTag(component, 'a');
-
-                expect(domComponent.length).toEqual(0);
-            });
+        it('renders EmbeddedReportLink', () => {
+            component = shallow(MockChildReport());
+            const embeddedReportLink = component.find(EmbeddedReportLinkMock);
+            expect(embeddedReportLink.length).toEqual(1);
         });
     });
 });

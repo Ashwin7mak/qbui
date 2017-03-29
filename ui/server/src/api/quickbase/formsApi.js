@@ -152,7 +152,7 @@
                 if (lodash.get(req, 'query.relationshipPrototype')) {
                     // Eventually FormMetaData returned from the experience engine should include ReferenceElements.
                     // For now we are manually adding to the form when the 'relationshipPrototype' query parameter is true.
-                    return this.createReferenceElments(req, opts);
+                    return this.createReferenceElements(req, opts);
                 } else {
                     return requestHelper.executeRequest(req, opts)
                         .then(response => JSON.parse(response.body));
@@ -167,17 +167,18 @@
              * @param opts
              * @returns {Promise}
              */
-            createReferenceElments: (req, opts) => {
-                const promises = [requestHelper.executeRequest(req, opts), appsApi.getRelationshipsForApp(req)];
+            createReferenceElements: (req, opts) => {
+                const promises = [requestHelper.executeRequest(req, opts), appsApi.getRelationshipsForApp(req), appsApi.getHydratedApp(req, req.params.appId)];
                 /* istanbul ignore next  */
                 return Promise.all(promises).then(response => {
                     const formMeta = JSON.parse(response[0].body);
                     const relationships = response[1] || [];
+                    const app = response[2];
                     if (relationships.length) {
                         formMeta.relationships = relationships;
                         let referenceElements = [];
                         // creates the mock referenceElement
-                        const referenceElement = (orderIndex, relationshipId) => {
+                        const mockReferenceElement = (relationshipId) => {
                             return {
                                 ReferenceElement: {
                                     displayOptions: [
@@ -186,29 +187,33 @@
                                         "EDIT"
                                     ],
                                     type: "EMBEDREPORT",
-                                    orderIndex: orderIndex,
+                                    orderIndex: 0,
                                     positionSameRow: false,
                                     relationshipId: relationshipId
                                 }
                             };
                         };
+
                         relationships.forEach((relation, relationshipIdx) => {
                             // if a relationship in which this form is a parent is defined, mock ReferenceElement
                             if (relation.masterTableId === formMeta.tableId) {
-                                referenceElements.push(referenceElement(referenceElements.length, relationshipIdx));
+                                referenceElements.push(mockReferenceElement(relationshipIdx));
                             }
                         });
                         // if we created referenceElements, inject relationship elements in its own section
-                        if (referenceElements.length) {
-                            const length = Object.keys(formMeta.tabs[0].sections).length;
-                            let sections = formMeta.tabs[0].sections;
+                        referenceElements.forEach(referenceElement => {
+                            const sections = formMeta.tabs[0].sections;
+                            const length = Object.keys(sections).length;
                             sections[length] = Object.assign(lodash.cloneDeep(sections[0]), {
-                                elements: lodash.keyBy(referenceElements, 'ReferenceElement.orderIndex'),
+                                elements: {0: referenceElement},
                                 fields: [],
                                 orderIndex: length
                             });
-                            sections[length].headerElement.FormHeaderElement.displayText = 'Child Reports';
-                        }
+
+                            const childTableId = relationships[referenceElement.ReferenceElement.relationshipId].detailTableId;
+                            const childTableName = lodash.find(app.tables, {id:childTableId}).name;
+                            sections[length].headerElement.FormHeaderElement.displayText = childTableName;
+                        });
                     }
                     return formMeta;
                 });

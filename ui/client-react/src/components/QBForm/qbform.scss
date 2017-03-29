@@ -38,6 +38,7 @@ $edit-field-padding: 5px;
         .formTable {
             margin-left: 10px;
             display: flex;
+            margin-bottom: 20px;
 
             /* Fields in cardview span the width of the small device */
 
@@ -260,7 +261,7 @@ $edit-field-padding: 5px;
             }
 
             .fieldRow {
-                td {
+                .formElementWrapper {
                     padding-bottom: 20px;
                 }
 

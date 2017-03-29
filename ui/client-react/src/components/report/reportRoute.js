@@ -47,6 +47,14 @@ const ReportRoute = React.createClass({
         //  load the report
         this.props.dispatch(loadReport(CONTEXT.REPORT.NAV, appId, tblId, rptId, true, offset, numRows));
     },
+
+    /**
+     * Load a report with query parameters.
+     */
+    loadDynamicReport(appId, tblId, rptId, format, filter, queryParams) {
+        this.props.dispatch(loadDynamicReport(CONTEXT.REPORT.NAV, appId, tblId, rptId, format, filter, queryParams));
+    },
+
     /**
      * Load a report with query parameters.
      */
@@ -62,7 +70,7 @@ const ReportRoute = React.createClass({
 
         // TODO: instead of using 0 for the rptID, the node layer should send data when apps have
         // TODO: tables with relationships
-        this.props.dispatch(loadDynamicReport(CONTEXT.REPORT.NAV, appId, tblId, rptId, true, /*filter*/{}, queryParams));
+        this.loadDynamicReport(appId, tblId, rptId, true, /*filter*/{}, queryParams);
     },
     loadReportFromParams(params) {
         let {appId, tblId} = params;
@@ -178,7 +186,9 @@ const ReportRoute = React.createClass({
                     pageActions={this.getPageActions(0)}
                     nameForRecords={this.nameForRecords}
                     selectedRows={this.props.reportData.selectedRows}
-                    scrollingReport={this.props.scrollingReport} />
+                    scrollingReport={this.props.scrollingReport}
+                    loadDynamicReport={this.loadDynamicReport}
+                />
             </div>);
         }
     }

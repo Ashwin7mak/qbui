@@ -40,7 +40,10 @@ const ReportToolbar = React.createClass({
         pageStart: React.PropTypes.number,
         pageEnd: React.PropTypes.number,
         recordsCount: React.PropTypes.number,
-        width: React.PropTypes.number
+        width: React.PropTypes.number,
+
+        // used for relationships phase-1
+        phase1: React.PropTypes.bool
     },
 
     getDefaultProps() {
@@ -182,7 +185,9 @@ const ReportToolbar = React.createClass({
             }
         }
         // Conditional marking display of filter box. Show when records have been loaded. This box does not depend on the record counting call
-        let showFilterSearchBox = !isLoading && isPageLoaded && !isError;
+        const showFilterSearchBox = !isLoading && !isError && !this.props.phase1 && isPageLoaded;
+        const showSortAndGroup    = !isLoading && !isError && !this.props.phase1;
+        const showFacetsMenu      = !isLoading && !isError && !this.props.phase1 && hasFacets;
         let reportToolbar = (
             <div className={"reportToolbar " + (hasFacets ? "" : "noFacets")}>
                 <div className="leftReportToolbar">
@@ -197,7 +202,7 @@ const ReportToolbar = React.createClass({
                                          {...this.props} /> :
                         null
                     }
-                    {!isLoading && !isError ?
+                    {showSortAndGroup ?
                         <SortAndGroup  {...this.props}
                                        filter={{selections: this.props.selections,
                                            facet: this.props.reportData.facetExpression,
@@ -206,7 +211,7 @@ const ReportToolbar = React.createClass({
                     }
                     {/* check if facets is enabled for this report,
                      also hide Facets Menu Button if facets disabled  */}
-                    {!isLoading && hasFacets && !isError ?
+                    {showFacetsMenu ?
                         (<FacetsMenu className="facetMenu"
                                      {...this.props}
                                      isLoading={isLoading}

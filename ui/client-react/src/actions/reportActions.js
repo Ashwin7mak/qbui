@@ -8,6 +8,7 @@ import Logger from '../utils/logger';
 import LogLevel from '../utils/logLevels';
 
 import * as types from '../actions/types';
+import {CONTEXT} from '../actions/context';
 import * as query from '../constants/query';
 
 let logger = new Logger();
@@ -76,14 +77,10 @@ export const loadReports = (context, appId, tblId) => {
                         let model = ReportsModel.set(appId, tblId, response.data);
                         dispatch(event(context, types.LOAD_REPORTS_SUCCESS, model));
                         resolve();
-                    },
-                    (error) => {
-                        logger.parseAndLogError(LogLevel.ERROR, error.response, 'reportService.getReports:');
-                        dispatch(event(context, types.LOAD_REPORTS_FAILED, error));
-                        reject();
                     }
-                ).catch((ex) => {
-                    logger.logException(ex);
+                ).catch((error) => {
+                    logger.parseAndLogError(LogLevel.ERROR, error.response, 'reportService.getReports:');
+                    dispatch(event(context, types.LOAD_REPORTS_FAILED, error));
                     reject();
                 });
             } else {
@@ -134,13 +131,12 @@ export const loadReport = (context, appId, tblId, rptId, format, offset, rows) =
                         let model = new ReportModel(appId, metaData, reportResponse.data, params);
                         dispatch(event(context, types.LOAD_REPORT_SUCCESS, model.get()));
                         resolve();
-                    },
-                    (reportResponseError) => {
-                        logger.parseAndLogError(LogLevel.ERROR, reportResponseError.response, 'reportService.getReport:');
-                        dispatch(event(context, types.LOAD_REPORT_FAILED, reportResponseError));
-                        reject();
                     }
-                );
+                ).catch((reportResponseError) => {
+                    logger.parseAndLogError(LogLevel.ERROR, reportResponseError.response, 'reportService.getReport:');
+                    dispatch(event(context, types.LOAD_REPORT_FAILED, reportResponseError));
+                    reject();
+                });
             } else {
                 logger.error(`ReportAction.loadReport: Missing one or more required input parameters.  Context:${context}, AppId:${appId}, tableId:${tblId}, rptId:${rptId}`);
                 dispatch(event(context, types.LOAD_REPORT_FAILED, 500));
@@ -149,6 +145,98 @@ export const loadReport = (context, appId, tblId, rptId, format, offset, rows) =
         });
     };
 };
+
+/**
+ * Construct a query parameters for the dynamic report using supplied facet expression, filter, and
+ * existing queryParams.
+ */
+const constructQueryParams = (facetResponse = {}, filter = {}, queryParams) => {
+    const filterQueries = [];
+
+    //  add the facet expression
+    if (facetResponse.data) {
+        filterQueries.push(facetResponse.data);
+    }
+    //  any search filters
+    if (filter && filter.search) {
+        filterQueries.push(QueryUtils.parseStringIntoAllFieldsContainsExpression(filter.search));
+    }
+    //  override the report query expressions
+    if (filterQueries.length > 0) {
+        queryParams = queryParams || {};
+        queryParams[query.QUERY_PARAM] = QueryUtils.concatQueries(filterQueries);
+    }
+
+    logger.debug('Dynamic report query params: offset:' +
+        queryParams[query.OFFSET_PARAM] + ', numRows:' +
+        queryParams[query.NUMROWS_PARAM] + ', sortList:' +
+        queryParams[query.SORT_LIST_PARAM] + ', query:' +
+        queryParams[query.QUERY_PARAM]);
+
+    return queryParams;
+};
+
+/**
+ *  Fetch a report with custom attributes.  The response will include:
+ *    - report data/grouping data
+ *    - report meta data (includes the override settings..if any)
+ *    - report fields
+ *    - report count
+ *
+ *  NOTE:
+ *    - the sorting, grouping and clist requirements(if any) are expected to be included in queryParams
+ *    - no faceting data is returned..
+ *
+ * @param {String} context context of the redux action
+ * @param {Object} <Object> containing parameters needed by reportService.getDynamicReportResults
+ * @param {filter} filter Optional, filter being applied to the report
+ */
+const getDynamicReportResults = (context, {appId, tblId, rptId, queryParams, format}, filter) => {
+    const reportService = new ReportService();
+    return reportService.getDynamicReportResults(appId, tblId, rptId, queryParams, format).then(
+        (reportResponse) => {
+            const metaData = reportResponse.data ? reportResponse.data.metaData : null;
+
+            //  ensure the model includes the input run-time parameters
+            const params = {
+                [query.OFFSET_PARAM] : queryParams[query.OFFSET_PARAM],
+                [query.NUMROWS_PARAM] : queryParams[query.NUMROWS_PARAM],
+                filter
+            };
+
+            const model = new ReportModel(appId, metaData, reportResponse.data, params);
+            return model.get();
+        }
+    );
+};
+
+/**
+ * Utility function for handling rejected promises.
+ * This is a curried function which returns a function expecting 2 parameters, which returns another
+ * function that expects an error object.
+ *
+ * Ex.
+ *     const parseAndLogHandler = parseAndLogError(context, dispatch);
+ *     const errorHandler = parseAndLogHandler(action, 'something failed!');
+ *     errorHandler(new Error('oh no'));
+ *
+ * @param {String} context string representing the context to dispatch the failure event
+ * @param {Function} dispatch dispatch funtion to call
+ * @returns {Function}
+ */
+const parseAndLogError = (context, dispatch) =>
+    /* @param {String} action action type for the dispatch event
+     * @param {String} errorString message to log with the Logger
+     * @returns {Function} */
+    (action, errorString) =>
+        /* @param {Error} */
+        (error) => {
+            error = error.response || error;
+            logger.parseAndLogError(LogLevel.ERROR, error, errorString);
+            dispatch(event(context, action, error));
+            // reject the promise to prevent bluebird from swallowing the error
+            return Promise.reject();
+        };
 
 /* Run a customized report that optionally allows for dynamically overriding report meta data defaults for
  * sort/grouping, query and column list settings.
@@ -161,6 +249,7 @@ export const loadReport = (context, appId, tblId, rptId, format, offset, rows) =
  * data defaults will be used.  NOTE: an empty parameter value is considered valid (clear the default value) and will
  * be passed to the node layer.
  *
+ * @param context
  * @param appId
  * @param tblId
  * @param rptId
@@ -172,95 +261,82 @@ export const loadDynamicReport = (context, appId, tblId, rptId, format, filter, 
     // we're returning a promise to the caller (not a Redux action) since this is an async action
     // (this is permitted when we're using redux-thunk middleware which invokes the store dispatch)
     return (dispatch) => {
-        return new Promise((resolve, reject) => {
-            if (appId && tblId && rptId) {
-                logger.debug(`Loading dynamic report for appId: ${appId}, tblId:${tblId}, rptId:${rptId}`);
+        // set the actions to embedded or not embedded using the passed in context
+        const embedded = _.includes(context, CONTEXT.REPORT.EMBEDDED);
+        const actions = {
+            LOAD_REPORT: embedded ? types.LOAD_EMBEDDED_REPORT : types.LOAD_REPORT,
+            LOAD_REPORT_SUCCESS: embedded ? types.LOAD_EMBEDDED_REPORT_SUCCESS : types.LOAD_REPORT_SUCCESS,
+            LOAD_REPORT_FAILED: embedded ? types.LOAD_EMBEDDED_REPORT_FAILED : types.LOAD_REPORT_FAILED
+        };
+        if (appId && tblId && rptId) {
+            logger.debug(`Loading dynamic report for appId: ${appId}, tblId:${tblId}, rptId:${rptId}`);
 
-                dispatch(event(context, types.LOAD_REPORT, {appId, tblId, rptId}));
-                let reportService = new ReportService();
+            dispatch(event(context, actions.LOAD_REPORT, {appId, tblId, rptId}));
+            const reportService = new ReportService();
 
-                //  call node to parse the supplied facet expression into a query expression that
-                //  can be included on the request.
-                reportService.parseFacetExpression(filter ? filter.facet : '').then(
-                    (facetResponse) => {
-                        let filterQueries = [];
-                        if (!queryParams) {
-                            queryParams = {};
-                        }
+            // error handler for when a promise is rejected
+            const parseAndLogHandler = parseAndLogError(context, dispatch);
 
-                        //  add the facet expression..if any
-                        if (facetResponse.data) {
-                            filterQueries.push(facetResponse.data);
-                        }
-
-                        //  any search filters
-                        if (filter && filter.search) {
-                            filterQueries.push(QueryUtils.parseStringIntoAllFieldsContainsExpression(filter.search));
-                        }
-
-                        //  override the report query expressions
-                        if (filterQueries.length > 0) {
-                            queryParams[query.QUERY_PARAM] = QueryUtils.concatQueries(filterQueries);
-                        }
-
-                        logger.debug('Dynamic report query params: offset:' +
-                            queryParams[query.OFFSET_PARAM] + ', numRows:' +
-                            queryParams[query.NUMROWS_PARAM] + ', sortList:' +
-                            queryParams[query.SORT_LIST_PARAM] + ', query:' +
-                            queryParams[query.QUERY_PARAM]);
-
-                        //  Fetch a report with custom attributes.  The response will include:
-                        //    - report data/grouping data
-                        //    - report meta data (includes the override settings..if any)
-                        //    - report fields
-                        //    - report count
-                        //
-                        //  NOTE:
-                        //    - the sorting, grouping and clist requirements(if any) are expected to be included in queryParams
-                        //    - no faceting data is returned..
-                        //
-                        reportService.getDynamicReportResults(appId, tblId, rptId, queryParams, format).then(
-                            (reportResponse) => {
-                                let metaData = reportResponse.data ? reportResponse.data.metaData : null;
-
-                                //  ensure the model includes the input run-time parameters
-                                let params = {};
-                                params[query.OFFSET_PARAM] = queryParams[query.OFFSET_PARAM];
-                                params[query.NUMROWS_PARAM] = queryParams[query.NUMROWS_PARAM];
-                                params.filter = filter;
-
-                                let model = new ReportModel(appId, metaData, reportResponse.data, params);
-
-                                dispatch(event(context, types.LOAD_REPORT_SUCCESS, model.get()));
-                                resolve();
-                            },
-                            (reportResultsError) => {
-                                logger.parseAndLogError(LogLevel.ERROR, reportResultsError.response, 'reportActions.loadDynamicReport');
-                                dispatch(event(context, types.LOAD_REPORT_FAILED, reportResultsError));
-                                reject();
-                            }
-                        ).catch((ex) => {
-                            logger.logException(ex);
-                            reject();
-                        });
-                    },
-                    (error) => {
-                        //  axios upgraded to an error.response object in 0.13.x
-                        logger.parseAndLogError(LogLevel.ERROR, error.response, 'reportActions.parseFacetExpression');
-                        dispatch(event(context, types.LOAD_REPORT_FAILED, error));
-                        reject();
-                    }
-                ).catch((ex) => {
-                    logger.logException(ex);
-                    reject();
-                });
-            } else {
-                logger.error('reportActions.loadDynamicReport: Missing one or more required input parameters.  AppId:' + appId + '; TblId:' + tblId + '; RptId:' + rptId);
-                dispatch(event(context, types.LOAD_REPORT_FAILED, 500));
-                reject();
-            }
-        });
+            //  parse the supplied facet expression into a query expression that
+            //  can be included on the request.
+            return reportService.parseFacetExpression(filter ? filter.facet : '').then(
+                (facetResponse) => constructQueryParams(facetResponse, filter, queryParams)
+            ).then((newQueryParams) => {
+                return getDynamicReportResults(context, {appId, tblId, rptId, queryParams: newQueryParams, format}, filter).then((report) => {
+                    dispatch(event(context, actions.LOAD_REPORT_SUCCESS, report));
+                    return; //resolve promise with undefined
+                }).catch(
+                    parseAndLogHandler(actions.LOAD_REPORT_FAILED, `reportActions.getDynamicReportResults, context: ${context}`)
+                );
+            }).catch(
+                parseAndLogHandler(actions.LOAD_REPORT_FAILED, `reportActions.parseFacetExpression, context: ${context}`)
+            );
+        } else {
+            logger.error(`reportActions.loadDynamicReport: Missing one or more required input parameters.  AppId:${appId}; TblId:${tblId}; RptId:${rptId}`);
+            dispatch(event(context, actions.LOAD_REPORT_FAILED, 500));
+            return new Promise.reject();
+        }
     };
 };
 
+/**
+ * Called when an embedded report is being unmounted. We want to clear its report entry from the
+ * embeddedReports store.
+ * @param  context unique context for the embeddedReport instance
+ * @return {{id: *, type}}
+ */
+export const unloadEmbeddedReport = (context) =>
+    event(context, types.UNLOAD_EMBEDDED_REPORT);
 
+/* Find the records count for a report. Allows customized report that optionally allows for query
+ * parameters. The overrides are expected to be defined in the queryParams parameter.
+ *
+ * When the results are returned from the node layer a LOAD_REPORT_SUCCESS event is fired and the
+ * result will be passed to the report store.
+ * @param context
+ * @param appId
+ * @param tblId
+ * @param rptId
+ * @param queryParams: {offset, numrows, cList, sList, query}
+ */
+export const loadReportRecordsCount = (context, appId, tblId, rptId, queryParams) => {
+    // we're returning a promise to the caller (not a Redux action) since this is an async action
+    // (this is permitted when we're using redux-thunk middleware which invokes the store dispatch)
+    return (dispatch) => {
+        if (appId && tblId && rptId) {
+            logger.debug(`Loading records count for appId: ${appId}, tblId:${tblId}, rptId:${rptId}, queryParams:${JSON.stringify(queryParams)}`);
+
+            const reportService = new ReportService();
+            return reportService.getReportRecordsCount(appId, tblId, rptId, queryParams).then((response) => {
+                dispatch(event(context, types.LOAD_REPORT_RECORDS_COUNT_SUCCESS, Number(response.data.body)));
+                return; //resolve promise with undefined
+            }).catch(
+                parseAndLogError(context, dispatch)(types.LOAD_REPORT_RECORDS_COUNT_FAILED, `reportActions.loadReportRecordsCount, context: ${context}`)
+            );
+        } else {
+            logger.error(`reportActions.loadReportRecordsCount: Missing one or more required input parameters.  AppId:${appId}; TblId:${tblId}; RptId:${rptId}`);
+            dispatch(event(context, types.LOAD_REPORT_RECORDS_COUNT_FAILED, 500));
+            return new Promise.reject();
+        }
+    };
+};
