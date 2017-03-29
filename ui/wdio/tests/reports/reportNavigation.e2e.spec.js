@@ -63,7 +63,7 @@
 
             // Verify nav details on NEXT page
 
-            reportContentPO.clickAndWait(reportNavPO.nextPageButton);
+            reportContentPO.clickAndWaitForGrid(reportNavPO.nextPageButton);
             rows = reportContentPO.getAllRows.value;
             // verify expected # of records is displayed
             expect(rows.length).toBe(recOffset);
