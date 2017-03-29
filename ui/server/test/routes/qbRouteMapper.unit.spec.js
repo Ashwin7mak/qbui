@@ -122,7 +122,8 @@ describe('Qb Route Mapper Unit Test', function() {
 
     function eePathModificationProvider() {
         return [
-            {message: 'GET request to the swagger experience engine api endpoint', request: '/ee/v1/someEndpoint', expectedPath: '/ee/v1/someEndpoint', route: routeConsts.SWAGGER_API_EE, method: routeMapper.fetchGetFunctionForRoute(routeConsts.SWAGGER_API_EE), expectedDefined: true, httpVerb: 'GET'}
+            {message: 'GET request to EE health via Experience Engine all', request: '/ee/v1/health', expectedPath: '/ee/v1/health', route: routeConsts.EXPERIENCE_ENGINE_ALL, method: routeMapper.fetchAllFunctionForRoute(routeConsts.EXPERIENCE_ENGINE_ALL), expectedDefined: true, httpVerb: 'GET'},
+            {message: 'GET request to the swagger experience engine api endpoint', request: '/ee', expectedPath: '/ee', route: routeConsts.SWAGGER_API_EE, method: routeMapper.fetchGetFunctionForRoute(routeConsts.SWAGGER_API_EE), expectedDefined: true, httpVerb: 'GET'}
         ];
     }
 
