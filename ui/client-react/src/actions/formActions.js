@@ -14,6 +14,17 @@ import {convertFormToArrayForClient, convertFormToObjectForServer} from './actio
 
 let logger = new Logger();
 
+/*
+ Redux event for saving a form
+ */
+function event(id, type, content) {
+    return {
+        id: id,
+        type: type,
+        content: content || null
+    };
+}
+
 /**
  * form load in progress
  * @param container type of form (edit or view)
@@ -68,79 +79,24 @@ export const syncForm = (id) => {
 };
 
 /**
- * save form in progress
+ * open the 'modal working' spinner/window when saving a form or form record.
+ *
  * @param container
  * @returns {{type, container: *}}
  */
-//TODO: MOVE TO RECORDS ACTION..THIS IS FIRED WHEN SAVING A RECORD
-export const savingForm = (id) => {
+export const saveForm = (id) => {
     return {
         id,
         type: types.SAVE_FORM
     };
 };
-
-/**
- * save form failed
- * @param container
- * @param error error message from server
- * @returns {{type, container: *, error: *}}
+/*
+ * hide the 'modal working' spinner/window when completing a form save request.
  */
-//TODO: MOVE TO RECORDS ACTION..THIS IS FIRED WHEN SAVING A RECORD
-export const saveFormError = (id, error) => {
+export const saveFormComplete = (id) => {
     return {
         id,
-        type: types.SAVE_FORM_FAILED,
-        error
-    };
-};
-
-/**
- * save form succeeded
- * @param container
- * @returns {{type, container: *}}
- */
-//TODO: MOVE TO RECORDS ACTION..THIS IS FIRED WHEN SAVING A RECORD
-export const saveFormSuccess = (id) => {
-    return {
-        id,
-        type: types.SAVE_FORM_SUCCESS
-    };
-};
-
-
-/**
- * open an existing record for editing
- * @param recId
- * @returns {{type, recId: *}}
- */
-export const openRecordForEdit = (recId) => {
-    // add editRec query param and let the router take action
-    WindowLocationUtils.pushWithQuery(UrlConsts.EDIT_RECORD_KEY, recId);
-
-
-    // let store know we're editing a record so we can navigate back and forth
-
-    return {
-        type: types.EDIT_REPORT_RECORD,
-        recId: recId,
-    };
-};
-
-/**
- * open a new record for editing
- * @param navigateAfterSave go to the new record after saving
- * @returns {{type, recId, navigateAfterSave: boolean}}
- */
-export const editNewRecord = (navigateAfterSave = false) => {
-
-    // add editRec=new query param and let the router take action
-    WindowLocationUtils.pushWithQuery(UrlConsts.EDIT_RECORD_KEY, UrlConsts.NEW_RECORD_VALUE);
-
-    return {
-        type: types.EDIT_REPORT_RECORD,
-        recId: UrlConsts.NEW_RECORD_VALUE,
-        navigateAfterSave
+        type: types.SAVE_FORM_COMPLETE
     };
 };
 
@@ -314,7 +270,7 @@ export const toggleFormBuilderChildrenTabIndex = (formId, currentTabIndex) => {
  * @param form
  */
 export const createForm = (appId, tblId, formType, form) => {
-    return saveForm(appId, tblId, formType, form, true);
+    return saveTheForm(appId, tblId, formType, form, true);
 };
 
 /**
@@ -326,12 +282,12 @@ export const createForm = (appId, tblId, formType, form) => {
  * @param form
  */
 export const updateForm = (appId, tblId, formType, form) => {
-    return saveForm(appId, tblId, formType, form, false);
+    return saveTheForm(appId, tblId, formType, form, false);
 };
 
 // we're returning a promise to the caller (not a Redux action) since this is an async action
 // (this is permitted when we're using redux-thunk middleware which invokes the store dispatch)
-function saveForm(appId, tblId, formType, formMeta, isNew) {
+function saveTheForm(appId, tblId, formType, formMeta, isNew) {
 
     return (dispatch) => {
         return new Promise((resolve, reject) => {
@@ -348,7 +304,7 @@ function saveForm(appId, tblId, formType, formMeta, isNew) {
                 let formPromise = isNew ? formService.createForm(appId, tblId, form) : formService.updateForm(appId, tblId, form);
                 formPromise.then(
                     (response) => {
-                        logger.debug('FormService saveForm success');
+                        logger.debug('FormService saveTheForm success');
                         //  for now return the original form..
                         dispatch(event(formType, types.SAVING_FORM_SUCCESS, convertFormToArrayForClient({formMeta: response.data}).formMeta));
 
@@ -370,22 +326,10 @@ function saveForm(appId, tblId, formType, formMeta, isNew) {
                     reject(ex);
                 });
             } else {
-                logger.error(`formActions.saveForm: Missing required input parameters.  appId: ${appId}, tableId: ${tblId}`);
+                logger.error(`formActions.saveTheForm: Missing required input parameters.  appId: ${appId}, tableId: ${tblId}`);
                 dispatch(event(form.id, types.SAVING_FORM_ERROR, '500'));
                 reject();
             }
         });
-    };
-}
-
-/*
- Redux event for saving a form
- TODO: refactor once record events moved
- */
-function event(id, type, content) {
-    return {
-        id: id,
-        type: type,
-        content: content || null
     };
 }

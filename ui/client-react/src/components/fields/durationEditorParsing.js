@@ -317,8 +317,10 @@
                 if (Number(display) === 0) {
                     display = display + ' ' + this.getPlaceholder(DURATION_CONSTS.SCALES.DAYS, 0);
                 } else {
-                    var scale = display.replace(/-?[0-9.:]+/g, '').trim();
-                    var num = display.match(/-?[0-9.:]+/g);
+                    // make sure display is a string
+                    var displayStr = display + '';
+                    var scale = displayStr.replace(/-?[0-9.:]+/g, '').trim();
+                    var num = displayStr.match(/-?[0-9.:]+/g);
                     display = num;
                     if (scale) {
                         scale = scale[0].toUpperCase() + scale.slice(1);

@@ -1,15 +1,16 @@
 import React from 'react';
 import _ from 'lodash';
-import ReactDOM from 'react-dom';
-import SortAndGroup, {__RewireAPI__ as SortAndGroupRewireAPI}  from '../../src/components/sortGroup/sortAndGroup';
+import  {
+      SortAndGroup as UnConnectedSortAndGroup,
+    __RewireAPI__ as SortAndGroupRewireAPI}  from '../../src/components/sortGroup/sortAndGroup';
 import WindowLocationUtils from '../../src/utils/windowLocationUtils';
 import MockData from '../../src/mocks/sortGroup';
 import constants from '../../../common/src/constants';
 import {GROUP_TYPE} from '../../../common/src/groupTypes';
+import {shallow} from 'enzyme';
+import jasmineEnzyme from 'jasmine-enzyme';
 
-import TestUtils from 'react-addons-test-utils';
-
-let SortAndGroupDialogMock = React.createClass({
+const SortAndGroupDialogMock = React.createClass({
     render: function() {
         return (
             <div>SortAndGroupDialogMock</div>
@@ -20,20 +21,92 @@ let SortAndGroupDialogMock = React.createClass({
 describe('SortAndGroup functions', () => {
     'use strict';
 
-    var component;
-    let flux = {
-        actions: {
-            loadDynamicReport() {
-                return;
-            },
-            loadReport() {
-                return;
-            }
+    let component;
+    let instance;
+
+
+    const fields = {
+        fields: {
+            data: [
+                {
+                    appId: '1',
+                    appearsByDefault: false,
+                    builtIn: true,
+                    dataIsCopyable: true,
+                    datatypeAttributes: {
+                        clientSideAttributes: {},
+                    },
+                    defaultValue: {},
+                    id: 3,
+                    includeInQuickSearch: true,
+                    multiChoiceSourceAllowed: false,
+                    name: "Example",
+                    required: true,
+                    tblId: "0",
+                    type: "SCALAR",
+                    userEditableValue: false
+                },
+                {
+                    appId: '1',
+                    appearsByDefault: false,
+                    builtIn: true,
+                    dataIsCopyable: true,
+                    datatypeAttributes: {
+                        clientSideAttributes: {},
+                    },
+                    defaultValue: {},
+                    id: 4,
+                    includeInQuickSearch: true,
+                    multiChoiceSourceAllowed: false,
+                    name: "Text",
+                    required: true,
+                    tblId: "1",
+                    type: "SCALAR",
+                    userEditableValue: false
+                },
+                {
+                    appId: '1',
+                    appearsByDefault: false,
+                    builtIn: true,
+                    dataIsCopyable: true,
+                    datatypeAttributes: {
+                        clientSideAttributes: {},
+                    },
+                    defaultValue: {},
+                    id: 5,
+                    includeInQuickSearch: true,
+                    multiChoiceSourceAllowed: false,
+                    name: "Task",
+                    required: true,
+                    tblId: "2",
+                    type: "SCALAR",
+                    userEditableValue: false
+                },
+                {
+                    appId: '1',
+                    appearsByDefault: false,
+                    builtIn: true,
+                    dataIsCopyable: true,
+                    datatypeAttributes: {
+                        clientSideAttributes: {},
+                    },
+                    defaultValue: {},
+                    id: 12,
+                    includeInQuickSearch: true,
+                    multiChoiceSourceAllowed: false,
+                    name: "project",
+                    required: true,
+                    tblId: "3",
+                    type: "SCALAR",
+                    userEditableValue: false
+                }
+
+            ]
         }
     };
-
-    let fieldsArray = [
+    const fieldsArray = [
         {
+            appId: '1',
             appearsByDefault: false,
             builtIn: true,
             dataIsCopyable: true,
@@ -46,11 +119,13 @@ describe('SortAndGroup functions', () => {
             multiChoiceSourceAllowed: false,
             name: "Example",
             required: true,
-            tableId: "0mrfhdaaaaad",
+            tblId: "0",
             type: "SCALAR",
-            userEditableValue: false
+            userEditableValue: false,
+            fields : fields
         },
         {
+            appId: '1',
             appearsByDefault: false,
             builtIn: true,
             dataIsCopyable: true,
@@ -63,11 +138,13 @@ describe('SortAndGroup functions', () => {
             multiChoiceSourceAllowed: false,
             name: "Text",
             required: true,
-            tableId: "0mrfhdaaaaad",
+            tblId: "1",
             type: "SCALAR",
-            userEditableValue: false
+            userEditableValue: false,
+            fields : fields
         },
         {
+            appId: '1',
             appearsByDefault: false,
             builtIn: true,
             dataIsCopyable: true,
@@ -80,11 +157,13 @@ describe('SortAndGroup functions', () => {
             multiChoiceSourceAllowed: false,
             name: "Task",
             required: true,
-            tableId: "0mrfhdaaaaad",
+            tblId: "2",
             type: "SCALAR",
-            userEditableValue: false
+            userEditableValue: false,
+            fields : fields
         },
         {
+            appId: '1',
             appearsByDefault: false,
             builtIn: true,
             dataIsCopyable: true,
@@ -97,24 +176,25 @@ describe('SortAndGroup functions', () => {
             multiChoiceSourceAllowed: false,
             name: "project",
             required: true,
-            tableId: "0mrfhdaaaaad",
+            tblId: "3",
             type: "SCALAR",
-            userEditableValue: false
+            userEditableValue: false,
+            fields : fields
         }
     ];
 
-    let fieldsData = {
+    const fieldsData = {
         fields: {
             data: fieldsArray
         }
     };
 
-    let aField = {
+    const aField = {
         name: 'project',
         id: 12
     };
 
-    let reportData = {
+    const reportData = {
         data: {
             originalMetaData: {
                 sortList: [{fieldId: 5, sortOrder: constants.SORT_ORDER.ASC, groupType: null},
@@ -126,7 +206,7 @@ describe('SortAndGroup functions', () => {
         }
     };
 
-    let reportDataWithEdits = {
+    const reportDataWithEdits = {
         data: {
             originalMetaData: {
                 sortList: [{fieldId: 5, sortOrder: constants.SORT_ORDER.ASC, groupType: null},
@@ -140,7 +220,7 @@ describe('SortAndGroup functions', () => {
 
 
 
-    let reportDataEmpty = {
+    const reportDataEmpty = {
         data: {
             originalMetaData: {
                 sortList: []
@@ -148,7 +228,19 @@ describe('SortAndGroup functions', () => {
         }
     };
 
+    const props = {
+        appId: '1',
+        tblId: '2',
+        rptId: '3',
+        reportData: reportData,
+        filter: {},
+        fields: fieldsArray,
+        onMenuEnter: () => {},
+        onMenuExit: () => {}
+    };
+
     beforeEach(() => {
+        jasmineEnzyme();
         SortAndGroupRewireAPI.__Rewire__('SortAndGroupDialog', SortAndGroupDialogMock);
     });
 
@@ -157,33 +249,53 @@ describe('SortAndGroup functions', () => {
     });
 
     it('test render of not visible SortAndGroup', () => {
-        component = TestUtils.renderIntoDocument(<SortAndGroup flux={flux} show={false}/>);
-        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+        component = shallow(
+                <UnConnectedSortAndGroup {...props} show={false}/>
+        );
+        expect(component).toBePresent();
     });
 
     it('test render of visible SortAndGroup', () => {
-        component = TestUtils.renderIntoDocument(<SortAndGroup flux={flux}/>);
-        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
-        component.setState({show: true});
-        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+        component = shallow(
+            <UnConnectedSortAndGroup {...props}/>
+        );
+        expect(component).toBePresent();
 
+        component.setState({show: true});
+        expect(component).toBePresent();
+    });
+
+    it('test get initial state', () => {
+        component = shallow(
+            <UnConnectedSortAndGroup {...props} />
+        );
+        instance = component.instance();
+        const initialState = instance.getInitialState();
+        expect(initialState.show).toBeFalsy();
     });
 
     it('test click sortButtonSpan button', () => {
-        component = TestUtils.renderIntoDocument(<SortAndGroup flux={flux}/>);
-        let sortButtonSpan = TestUtils.scryRenderedDOMComponentsWithClass(component, "sortButtonSpan");
-        expect(sortButtonSpan.length).toEqual(1);
-        TestUtils.Simulate.click(sortButtonSpan[0]);
-        expect(component.state.show).toBeTruthy();
-        TestUtils.Simulate.click(sortButtonSpan[0]);
-        expect(component.state.show).toBeFalsy();
+        component = shallow(
+            <UnConnectedSortAndGroup {...props} />
+        );
+        instance = component.instance();
+        const sortButtonSpan = component.find(".sortButtonSpan");
+        expect(sortButtonSpan).toBePresent();
+        const sortAndGroupAction = component.find(".sortButtonSpan");
+        sortAndGroupAction.simulate('click');
+        expect(instance.state.show).toBeTruthy();
+        sortAndGroupAction.simulate('click');
+        expect(instance.state.show).toBeFalsy();
     });
 
     describe('test state change methods', () => {
 
         it('test initialState ', () => {
-            component = TestUtils.renderIntoDocument(<SortAndGroup flux={flux}/>);
-            let initState = component.initialState();
+            component = shallow(
+                    <UnConnectedSortAndGroup {...props} />
+            );
+
+            const initState = component.instance().initialState();
             expect(initState.dirty).toBeFalsy();
             expect(initState.show).toBeFalsy();
             expect(initState.showFields).toBeFalsy();
@@ -193,127 +305,154 @@ describe('SortAndGroup functions', () => {
         });
 
         it('test showMoreFields ', () => {
-            component = TestUtils.renderIntoDocument(<SortAndGroup flux={flux}/>);
-            component.showMoreFields();
-            expect(component.state.showNotVisible).toBeTruthy();
+            component = shallow(
+                <UnConnectedSortAndGroup  {...props}/>
+            );
+            instance = component.instance();
+            instance.showMoreFields();
+            expect(instance.state.showNotVisible).toBeTruthy();
         });
 
         it('test hideMoreFields ', () => {
-            component = TestUtils.renderIntoDocument(<SortAndGroup flux={flux}/>);
-            component.hideMoreFields();
-            expect(component.state.showNotVisible).toBeFalsy();
+            component = shallow(
+                <UnConnectedSortAndGroup  {...props}/>
+            );
+            instance = component.instance();
+            instance.hideMoreFields();
+            expect(instance.state.showNotVisible).toBeFalsy();
         });
 
         it('test toggleShow ', () => {
-            component = TestUtils.renderIntoDocument(<SortAndGroup flux={flux}/>);
-            component.toggleShow();
-            expect(component.state.show).toBeTruthy();
-            component.toggleShow();
-            expect(component.state.show).toBeFalsy();
+            component = shallow(
+                <UnConnectedSortAndGroup  {...props}/>
+            );
+            instance = component.instance();
+            instance.toggleShow();
+            expect(instance.state.show).toBeTruthy();
+            instance.toggleShow();
+            expect(instance.state.show).toBeFalsy();
         });
 
         it('test toggleShowFields ', () => {
-            component = TestUtils.renderIntoDocument(<SortAndGroup flux={flux}/>);
-            component.toggleShowFields();
-            expect(component.state.showFields).toBeTruthy();
-            component.toggleShowFields();
-            expect(component.state.showFields).toBeFalsy();
+            component = shallow(
+                <UnConnectedSortAndGroup  {...props}/>
+            );
+            instance = component.instance();
+            instance.toggleShowFields();
+            expect(instance.state.showFields).toBeTruthy();
+            instance.toggleShowFields();
+            expect(instance.state.showFields).toBeFalsy();
         });
     });
 
     describe('test apply and reset methods', () => {
-
+        let obj = {};
+        beforeEach(() => {
+            obj = {
+                loadDynamicReport: null
+            };
+        });
         it('test applyAndHide not dirty ', () => {
-            spyOn(flux.actions, 'loadDynamicReport');
-            component = TestUtils.renderIntoDocument(<SortAndGroup flux={flux}/>);
-            component.show();
-            expect(component.state.dirty).toBeFalsy();
-            component.applyAndHide();
-            expect(flux.actions.loadDynamicReport).not.toHaveBeenCalled();
-            flux.actions.loadDynamicReport.calls.reset();
-            expect(component.state.show).toBeFalsy();
+            spyOn(obj, 'loadDynamicReport');
+            component = shallow(<UnConnectedSortAndGroup {...props}/>);
+            instance = component.instance();
+            component.setProps({loadDynamicReport: obj.loadDynamicReport});
+            instance.show();
+            expect(instance.state.dirty).toBeFalsy();
+            instance.applyAndHide();
+            expect(obj.loadDynamicReport).not.toHaveBeenCalled();
+            obj.loadDynamicReport.calls.reset();
+            expect(instance.state.show).toBeFalsy();
         });
 
         it('test applyAndHide dirty with order', () => {
-            spyOn(flux.actions, 'loadDynamicReport');
-            component = TestUtils.renderIntoDocument(<SortAndGroup flux={flux} fields={fieldsData}/>);
-            component.show();
-            expect(component.state.dirty).toBeFalsy();
-            component.handleSetOrder('sort', 1, true, aField);
-            expect(component.state.dirty).toBeTruthy();
-            component.applyAndHide();
-            expect(flux.actions.loadDynamicReport).toHaveBeenCalled();
-            flux.actions.loadDynamicReport.calls.reset();
-            expect(component.state.show).toBeFalsy();
+            spyOn(obj, 'loadDynamicReport');
+            component = shallow(<UnConnectedSortAndGroup {...props} fields={fieldsArray} />);
+            instance = component.instance();
+            component.setProps({loadDynamicReport: obj.loadDynamicReport});
+            instance.show();
+            expect(instance.state.dirty).toBeFalsy();
+            instance.handleSetOrder('sort', 1, true, aField);
+            expect(instance.state.dirty).toBeTruthy();
+            instance.applyAndHide();
+            expect(obj.loadDynamicReport).toHaveBeenCalled();
+            obj.loadDynamicReport.calls.reset();
+            expect(instance.state.show).toBeFalsy();
         });
 
 
         it('test applyAndHide dirty with adds', () => {
-            spyOn(flux.actions, 'loadDynamicReport');
-            component = TestUtils.renderIntoDocument(<SortAndGroup flux={flux} fields={fieldsData}
-                                                                   reportData={reportData}/>);
-            component.show();
-            expect(component.state.dirty).toBeFalsy();
-            component.handleAddField('sort', aField);
-            expect(component.state.dirty).toBeTruthy();
+            spyOn(obj, 'loadDynamicReport');
+            component = shallow(<UnConnectedSortAndGroup {...props} reportData={reportData} />);
+            instance = component.instance();
+            component.setProps({loadDynamicReport: obj.loadDynamicReport});
+            instance.show();
+            expect(instance.state.dirty).toBeFalsy();
+            instance.handleAddField('sort', aField);
+            expect(instance.state.dirty).toBeTruthy();
             let otherField = _.cloneDeep(aField);
             otherField.id = 15;
-            component.handleAddField('group', otherField);
-            expect(component.state.dirty).toBeTruthy();
-            component.applyAndHide();
-            expect(flux.actions.loadDynamicReport).toHaveBeenCalled();
-            flux.actions.loadDynamicReport.calls.reset();
-            expect(component.state.show).toBeFalsy();
+            instance.handleAddField('group', otherField);
+            expect(instance.state.dirty).toBeTruthy();
+            instance.applyAndHide();
+            expect(obj.loadDynamicReport).toHaveBeenCalled();
+            obj.loadDynamicReport.calls.reset();
+            expect(instance.state.show).toBeFalsy();
         });
 
 
         it('test applyAndHide dirty with removes', () => {
-            spyOn(flux.actions, 'loadDynamicReport');
-            component = TestUtils.renderIntoDocument(<SortAndGroup flux={flux} fields={fieldsData}
-                                                                   reportData={_.cloneDeep(reportData)}/>);
-            component.show();
-            expect(component.state.dirty).toBeFalsy();
-            component.handleRemoveField('sort', 1);
-            expect(component.state.dirty).toBeTruthy();
-            component.handleRemoveField('group', 1);
-            expect(component.state.dirty).toBeTruthy();
-            component.applyAndHide();
-            expect(flux.actions.loadDynamicReport).toHaveBeenCalled();
-            flux.actions.loadDynamicReport.calls.reset();
-            expect(component.state.show).toBeFalsy();
+            spyOn(obj, 'loadDynamicReport');
+            component = shallow(<UnConnectedSortAndGroup {...props} reportData={_.cloneDeep(reportData)} />);
+            instance = component.instance();
+            component.setProps({loadDynamicReport: obj.loadDynamicReport});
+            instance.show();
+            expect(instance.state.dirty).toBeFalsy();
+            instance.handleRemoveField('sort', 1);
+            expect(instance.state.dirty).toBeTruthy();
+            instance.handleRemoveField('group', 1);
+            expect(instance.state.dirty).toBeTruthy();
+            instance.applyAndHide();
+            expect(obj.loadDynamicReport).toHaveBeenCalled();
+            obj.loadDynamicReport.calls.reset();
+            expect(instance.state.show).toBeFalsy();
         });
 
         it('test resetAndHide no original', () => {
-            spyOn(flux.actions, 'loadDynamicReport');
-            component = TestUtils.renderIntoDocument(<SortAndGroup flux={flux} fields={fieldsData}/>);
-            component.show();
-            component.resetAndHide();
-            expect(flux.actions.loadDynamicReport).not.toHaveBeenCalled();
-            flux.actions.loadDynamicReport.calls.reset();
-            expect(component.state.show).toBeFalsy();
+            spyOn(obj, 'loadDynamicReport');
+            component = shallow(<UnConnectedSortAndGroup fields={fieldsArray}/>);
+            instance = component.instance();
+            component.setProps({loadDynamicReport: obj.loadDynamicReport});
+            instance.show();
+            instance.resetAndHide();
+            expect(obj.loadDynamicReport).not.toHaveBeenCalled();
+            obj.loadDynamicReport.calls.reset();
+            expect(instance.state.show).toBeFalsy();
         });
 
         it('test resetAndHide has original', () => {
-            spyOn(flux.actions, 'loadDynamicReport');
-            component = TestUtils.renderIntoDocument(<SortAndGroup flux={flux}
-                                                                   fields={fieldsData}
-                                                                   reportData={reportData}/>);
-            component.show();
-            component.resetAndHide();
-            expect(flux.actions.loadDynamicReport).toHaveBeenCalled();
-            flux.actions.loadDynamicReport.calls.reset();
-            expect(component.state.show).toBeFalsy();
+            spyOn(obj, 'loadDynamicReport');
+            component = shallow(<UnConnectedSortAndGroup {...props} reportData={reportData} />);
+            instance = component.instance();
+            component.setProps({loadDynamicReport: obj.loadDynamicReport});
+            instance.show();
+            instance.resetAndHide();
+            expect(obj.loadDynamicReport).toHaveBeenCalled();
+            obj.loadDynamicReport.calls.reset();
+            expect(instance.state.show).toBeFalsy();
         });
     });
 
     describe('test modify sort group methods on original report settings', () => {
 
         it('test getSortState clean original', () => {
-            component = TestUtils.renderIntoDocument(<SortAndGroup flux={flux}
-                                                                   fields={fieldsData}
-                                                                   reportData={reportData}/>);
-            component.show();
-            let sortState = component.getSortState();
+            component = shallow(
+                <UnConnectedSortAndGroup {...props}/>
+            );
+
+            instance = component.instance();
+            instance.show();
+            const sortState = instance.getSortState();
 
             expect(sortState).toBeTruthy();
             expect(sortState.length).toBe(2);
@@ -322,72 +461,83 @@ describe('SortAndGroup functions', () => {
         });
 
         it('test getSortState add a sort', () => {
-            component = TestUtils.renderIntoDocument(<SortAndGroup flux={flux}
-                                                                   fields={fieldsData}
-                                                                   reportData={reportDataEmpty}/>);
+            component = shallow(
+                <UnConnectedSortAndGroup {...props}
+                                         reportData={reportDataEmpty}/>
+            );
 
-            component.show();
-            component.handleAddField('sort', aField);
-            let sortState = component.getSortState();
+            instance = component.instance();
+            instance.show();
+            instance.handleAddField('sort', aField);
+            const sortState = instance.getSortState();
             expect(sortState).toBeTruthy();
             expect(sortState.length).toBe(1);
             expect(sortState[0].id).toBe(aField.id);
-            expect(component.state.dirty).toBeTruthy();
+            expect(instance.state.dirty).toBeTruthy();
             expect(reportDataEmpty.data.originalMetaData.sortList.length).toBe(0);
-            let groupState = component.getGroupState();
+            const groupState = instance.getGroupState();
             expect(groupState.length).toBe(0);
 
         });
 
         it('test getGroupState add a groupBy', () => {
-            component = TestUtils.renderIntoDocument(<SortAndGroup flux={flux}
-                                                                   fields={fieldsData}
-                                                                   reportData={reportDataEmpty}/>);
+            component = shallow(
+                <UnConnectedSortAndGroup {...props}
+                                         reportData={reportDataEmpty}/>
+            );
 
-            component.show();
-            component.handleAddField('group', aField);
-            let groupState = component.getGroupState();
+            instance = component.instance();
+
+            instance.show();
+            instance.handleAddField('group', aField);
+            const groupState = instance.getGroupState();
             expect(groupState).toBeTruthy();
             expect(groupState.length).toBe(1);
             expect(groupState[0].id).toBe(aField.id);
             expect(groupState[0].howToGroup).toBe(GROUP_TYPE.COMMON.equals);
-            expect(component.state.dirty).toBeTruthy();
+            expect(instance.state.dirty).toBeTruthy();
             expect(reportDataEmpty.data.originalMetaData.sortList.length).toBe(0);
-            let sortState = component.getSortState();
+            const sortState = instance.getSortState();
             expect(sortState.length).toBe(0);
         });
 
         it('test getGroupState delete a sort', () => {
-            component = TestUtils.renderIntoDocument(<SortAndGroup flux={flux}
-                                                                   fields={fieldsData}
-                                                                   reportData={_.cloneDeep(reportData)}/>);
+            component = shallow(
+                <UnConnectedSortAndGroup {...props}
+                                         reportData={_.cloneDeep(reportData)}/>
+            );
 
-            component.show();
-            let startSortState = component.getSortState();
+            instance = component.instance();
+
+            instance.show();
+            const startSortState = instance.getSortState();
             expect(startSortState).toBeTruthy();
-            component.handleRemoveField('sort', 1);
-            let sortState = component.getSortState();
+            instance.handleRemoveField('sort', 1);
+            const sortState = instance.getSortState();
             expect(sortState).toBeTruthy();
             expect(sortState.length).toBe(1);
-            expect(component.state.dirty).toBeTruthy();
-            let groupState = component.getGroupState();
+            expect(instance.state.dirty).toBeTruthy();
+            const groupState = instance.getGroupState();
             expect(groupState.length).toBe(1);
         });
 
         it('test getGroupState delete a groupBy', () => {
-            component = TestUtils.renderIntoDocument(<SortAndGroup flux={flux}
-                                                                   fields={fieldsData}
-                                                                   reportData={_.cloneDeep(reportData)}/>);
+            component = shallow(
+                <UnConnectedSortAndGroup {...props}
+                                         reportData={_.cloneDeep(reportData)}/>
+            );
 
-            component.show();
-            let startGroupState = component.getGroupState();
+            instance = component.instance();
+
+            instance.show();
+            const startGroupState = instance.getGroupState();
             expect(startGroupState).toBeTruthy();
-            component.handleRemoveField('group', 1);
-            let groupState = component.getGroupState();
+            instance.handleRemoveField('group', 1);
+            const groupState = instance.getGroupState();
             expect(groupState).toBeTruthy();
             expect(groupState.length).toBe(1);
-            expect(component.state.dirty).toBeTruthy();
-            let sortState = component.getSortState();
+            expect(instance.state.dirty).toBeTruthy();
+            const sortState = instance.getSortState();
             expect(sortState.length).toBe(2);
         });
     });
@@ -395,11 +545,15 @@ describe('SortAndGroup functions', () => {
     describe('test modify sort group methods on different report settings', () => {
 
         it('test getSortState clean original', () => {
-            component = TestUtils.renderIntoDocument(<SortAndGroup flux={flux}
-                                                                   fields={fieldsData}
-                                                                   reportData={reportDataWithEdits}/>);
-            component.show();
-            let sortState = component.getSortState();
+
+            component = shallow(
+                <UnConnectedSortAndGroup {...props}
+                                         reportData={reportDataWithEdits}/>
+            );
+
+            instance = component.instance();
+            instance.show();
+            const sortState = instance.getSortState();
 
             expect(sortState).toBeTruthy();
             expect(sortState.length).toBe(2);
@@ -408,112 +562,113 @@ describe('SortAndGroup functions', () => {
         });
 
         it('test getSortState add a sort', () => {
-            component = TestUtils.renderIntoDocument(<SortAndGroup flux={flux}
-                                                                   fields={fieldsData}
-                                                                   reportData={reportDataWithEdits}/>);
+            component = shallow(
+                <UnConnectedSortAndGroup {...props}
+                                         reportData={reportDataWithEdits}/>
+            );
 
-            component.show();
-            component.handleAddField('sort', aField);
-            let sortState = component.getSortState();
+            instance = component.instance();
+            instance.show();
+            instance.handleAddField('sort', aField);
+            const sortState = instance.getSortState();
             expect(sortState).toBeTruthy();
             expect(sortState.length).toBe(3);
             expect(sortState[2].id).toBe(aField.id);
-            expect(component.state.dirty).toBeTruthy();
+            expect(instance.state.dirty).toBeTruthy();
             expect(reportDataEmpty.data.originalMetaData.sortList.length).toBe(0);
-            let groupState = component.getGroupState();
+            const groupState = instance.getGroupState();
             expect(groupState.length).toBe(1);
 
         });
 
         it('test getGroupState add a groupBy', () => {
-            component = TestUtils.renderIntoDocument(<SortAndGroup flux={flux}
-                                                                   fields={fieldsData}
-                                                                   reportData={reportDataWithEdits}/>);
+            component = shallow(
+                <UnConnectedSortAndGroup {...props}
+                                         reportData={reportDataWithEdits}/>
+            );
 
-            component.show();
-            component.handleAddField('group', aField);
-            let groupState = component.getGroupState();
+            instance = component.instance();
+            instance.show();
+            instance.handleAddField('group', aField);
+            const groupState = instance.getGroupState();
             expect(groupState).toBeTruthy();
             expect(groupState.length).toBe(2);
             expect(groupState[1].id).toBe(aField.id);
             expect(groupState[0].howToGroup).toBe(GROUP_TYPE.COMMON.equals);
-            expect(component.state.dirty).toBeTruthy();
+            expect(instance.state.dirty).toBeTruthy();
             expect(reportDataEmpty.data.originalMetaData.sortList.length).toBe(0);
-            let sortState = component.getSortState();
+            const sortState = instance.getSortState();
             expect(sortState.length).toBe(2);
         });
 
         it('test getGroupState delete a sort', () => {
-            component = TestUtils.renderIntoDocument(<SortAndGroup flux={flux}
-                                                                   fields={fieldsData}
-                                                                   reportData={_.cloneDeep(reportDataWithEdits)}/>);
-
-            component.show();
-            component.handleRemoveField('sort', 1);
-            let sortState = component.getSortState();
+            component = shallow(<UnConnectedSortAndGroup {...props}
+                                                         reportData={_.cloneDeep(reportDataWithEdits)}/>
+            );
+            instance = component.instance();
+            instance.show();
+            instance.handleRemoveField('sort', 1);
+            const sortState = instance.getSortState();
             expect(sortState).toBeTruthy();
             expect(sortState.length).toBe(1);
-            expect(component.state.dirty).toBeTruthy();
-            let groupState = component.getGroupState();
+            expect(instance.state.dirty).toBeTruthy();
+            const groupState = instance.getGroupState();
             expect(groupState.length).toBe(1);
         });
 
         it('test getGroupState delete a groupBy', () => {
-            component = TestUtils.renderIntoDocument(<SortAndGroup flux={flux}
-                                                                   fields={fieldsData}
-                                                                   reportData={_.cloneDeep(reportDataWithEdits)}/>);
-
-            component.show();
-            component.handleRemoveField('group', 1);
-            let groupState = component.getGroupState();
+            component = shallow(<UnConnectedSortAndGroup {...props}
+                                                         reportData={_.cloneDeep(reportDataWithEdits)}/>
+            );
+            instance = component.instance();
+            instance.show();
+            instance.handleRemoveField('group', 1);
+            const groupState = instance.getGroupState();
             expect(groupState).toBeTruthy();
             expect(groupState.length).toBe(1);
-            expect(component.state.dirty).toBeTruthy();
-            let sortState = component.getSortState();
+            expect(instance.state.dirty).toBeTruthy();
+            const sortState = instance.getSortState();
             expect(sortState.length).toBe(2);
         });
     });
 
     describe('test misc utils ', () => {
+        let obj = {};
+        beforeEach(() => {
+            obj = {
+                loadDynamicReport: null
+            };
+        });
         it('test handleClickOutside with edits', () => {
-            component = TestUtils.renderIntoDocument(<SortAndGroup flux={flux}
-                                                                   fields={fieldsData}
-                                                                   reportData={reportData}/>);
-
-            spyOn(flux.actions, 'loadDynamicReport');
-            component = TestUtils.renderIntoDocument(<SortAndGroup flux={flux} fields={fieldsData}/>);
-            component.show();
-            expect(component.state.dirty).toBeFalsy();
-            component.handleSetOrder('sort', 1, true, aField);
-            expect(component.state.dirty).toBeTruthy();
-            component.handleSetOrder('group', 0, false, aField);
-            component.handleClickOutside();
-            expect(flux.actions.loadDynamicReport).toHaveBeenCalled();
-            flux.actions.loadDynamicReport.calls.reset();
-            expect(component.state.show).toBeFalsy();
+            spyOn(obj, 'loadDynamicReport');
+            component = shallow(<UnConnectedSortAndGroup {...props}/>
+            );
+            component.setProps({loadDynamicReport: obj.loadDynamicReport});
+            instance = component.instance();
+            instance.show();
+            expect(instance.state.dirty).toBeFalsy();
+            instance.handleSetOrder('sort', 1, true, aField);
+            expect(instance.state.dirty).toBeTruthy();
+            instance.handleSetOrder('group', 0, false, aField);
+            instance.handleClickOutside();
+            expect(obj.loadDynamicReport).toHaveBeenCalled();
+            obj.loadDynamicReport.calls.reset();
+            expect(instance.state.show).toBeFalsy();
         });
 
         it('test handleClickOutside without edits', () => {
-            component = TestUtils.renderIntoDocument(<SortAndGroup flux={flux}
-                                                                   fields={fieldsData}
-                                                                   reportData={reportData}/>);
-
-            spyOn(flux.actions, 'loadDynamicReport');
-            component.show();
-            expect(component.state.dirty).toBeFalsy();
-            component.handleClickOutside();
-            expect(flux.actions.loadDynamicReport).not.toHaveBeenCalled();
-            flux.actions.loadDynamicReport.calls.reset();
-            expect(component.state.show).toBeFalsy();
-        });
-
-        it('test getStateFromFlux ', () => {
-            component = TestUtils.renderIntoDocument(<SortAndGroup flux={flux}
-                                                                   fields={fieldsData}
-                                                                   reportData={reportData}/>);
-
-            let state = component.getStateFromFlux();
-            expect(state.show).toBeFalsy();
+            spyOn(obj, 'loadDynamicReport');
+            component = shallow(<UnConnectedSortAndGroup {...props}
+                                                         reportData={reportData}/>
+            );
+            component.setProps({loadDynamicReport: obj.loadDynamicReport});
+            instance = component.instance();
+            instance.show();
+            expect(instance.state.dirty).toBeFalsy();
+            instance.handleClickOutside();
+            expect(obj.loadDynamicReport).not.toHaveBeenCalled();
+            obj.loadDynamicReport.calls.reset();
+            expect(instance.state.show).toBeFalsy();
         });
 
         describe('MockData via url ', () => {
@@ -526,13 +681,14 @@ describe('SortAndGroup functions', () => {
             it('test mockData ', () => {
                 SortAndGroupRewireAPI.__Rewire__('WindowLocationUtils', mockMethod);
 
-                component = TestUtils.renderIntoDocument(<SortAndGroup flux={flux}
-                                                                       fields={fieldsData}
-                                                                       reportData={reportData}/>);
-
-                let grp = component.getGroupFields(null);
+                component = shallow(
+                        <UnConnectedSortAndGroup {...props}
+                                      reportData={reportData}/>
+                );
+                instance = component.instance();
+                const grp = instance.getGroupFields(null);
                 expect(grp).toBe(MockData.GROUP);
-                let srt = component.getSortFields(null);
+                const srt = instance.getSortFields(null);
                 expect(srt).toBe(MockData.SORT);
                 SortAndGroupRewireAPI.__ResetDependency__('WindowLocationUtils');
 
