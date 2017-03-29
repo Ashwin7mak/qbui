@@ -150,12 +150,12 @@ export const loadReport = (context, appId, tblId, rptId, format, offset, rows) =
  * Construct a query parameters for the dynamic report using supplied facet expression, filter, and
  * existing queryParams.
  */
-const constructQueryParams = (facetResponse = {}, filter = {}, queryParams) => {
+const constructQueryParams = (facetExpression, filter = {}, queryParams) => {
     const filterQueries = [];
 
     //  add the facet expression
-    if (facetResponse.data) {
-        filterQueries.push(facetResponse.data);
+    if (facetExpression) {
+        filterQueries.push(facetExpression);
     }
     //  any search filters
     if (filter && filter.search) {
@@ -280,7 +280,10 @@ export const loadDynamicReport = (context, appId, tblId, rptId, format, filter, 
             //  parse the supplied facet expression into a query expression that
             //  can be included on the request.
             return reportService.parseFacetExpression(filter ? filter.facet : '').then(
-                (facetResponse) => constructQueryParams(facetResponse, filter, queryParams)
+                (facetResponse) => {
+                    const facetExpression = _.get(facetResponse, 'data');
+                    return constructQueryParams(facetExpression, filter, queryParams);
+                }
             ).then((newQueryParams) => {
                 return getDynamicReportResults(context, {appId, tblId, rptId, queryParams: newQueryParams, format}, filter).then((report) => {
                     dispatch(event(context, actions.LOAD_REPORT_SUCCESS, report));
