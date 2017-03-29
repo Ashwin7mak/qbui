@@ -1,20 +1,34 @@
-/* This file should contain ALL the colors used in QuickBase. This may be used to create themes in future. */
-/* per our discussion around color we will keep the 2 levels of indirection on color. So that if we change the value
- * of $color-x we are replacing every use of it with a new color(i.e colorblind can't see $color-x, or for theme usage).
- * If we want to modify a category of colors use we will change the semantic category
- * ie from $icon_background: $color-x to $icon_background: $color-y
- * and the scss for color will refer to the semantic category not the color number
-*/
-/* see http://quickbase.design/colors/ */
+/**
+ * QuickBase2 color palette
+ *
+ * This file should contain hex values for ALL colors needed by the product.
+ * These color variables are used in semantic name variables for UI elements.
+ *
+ * The format of this file is important because the comments are parsed with regular
+ * expressions for documentation purposes.
+ *
+ * C-style block comments (like this one) should not be used except in this comment at the top
+ * and to comment out blocks of variables.
+ *
+ * Section header comments begin with //== and denote blocks of related colors
+ * that are presented together in the documentation. Section headers are not
+ * currently displayed with the color swatches however, the comment (even of
+ * there is no text) is used to know which colors group together.
+ *
+ * Line comments begin with // and are extracted (when present) and displayed
+ * with the color swatch in the documentation.
+ *
+ * see http://quickbase.design/colors/
+ */
 
 
 //== Blacks and Greys - for General UI & Backgrounds
 $color-black-800: #000000; // Semi-transparent overlays behind modals
-   $color-black-700:#404040; // Text on light backgrounds
-      $color-black-600   :    #969696   ; // Small tertiary type
-$color-black-500: #b8b8b8; /* Placeholder / Ghost text in form fields */
-$color-black-400: #c7c7c7;//Gray icons (disabled), Blackout dates, modals...
-$color-black-300: #dcdcdc;/*Track of scrollbar, horizontal and vertical dividers*/
+$color-black-700: #404040; // Text on light backgrounds
+$color-black-600: #969696; // Small tertiary type
+$color-black-500: #b8b8b8; // Placeholder / Ghost text in form fields
+$color-black-400: #c7c7c7; // Gray icons (disabled), Blackout dates, modals...
+$color-black-300: #dcdcdc; // Track of scrollbar, horizontal and vertical dividers
 $color-black-250: #edf0f3; // Global header, left navigation, token background
 $color-black-200: #f5f5f5; // Shadows, backgrounds and environmental accents
 $color-black-100: #ffffff; // Form fields, backgrounds, stage background

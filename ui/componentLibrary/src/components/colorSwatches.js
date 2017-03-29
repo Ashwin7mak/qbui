@@ -15,7 +15,9 @@ const ColorSwatches = ({scssFileContents}) => {
     let colors = new Array(); // always a fresh one
 
     // iterate over lines and pull out the data
-    lines.forEach(function(line) {
+    // todo: consider changing this to parse globally instead of by line
+    // todo: and switch to use the reduce() pattern.
+    lines.forEach(line => {
 
         // see if we have a group comment
         // if we have a group comment and if we already have colors,
@@ -65,12 +67,10 @@ const ColorSwatches = ({scssFileContents}) => {
                 var c = color.varValue.substring(1);      // strip #
                 if (c.length === 3) {
                     // convert 3-digit hex codes to 6-digit
-                    c = c.substring(0,1) + c.substring(0,1) +
-                        c.substring(1,2) + c.substring(1,2) +
-                        c.substring(2,3) + c.substring(2,3);
+                    c = c[0] + c[0] + c[1] + c[1] + c[2] + c[2];
                 }
-                var rgb = parseInt(c, 16);   // convert rrggbb to decimal
-                var r = (rgb >> 16) & 0xff;  // extract red
+                var rgb = parseInt(c, 16);  // convert rrggbb to decimal
+                var r = (rgb >> 16) & 0xff; // extract red
                 var g = (rgb >> 8) & 0xff;  // extract green
                 var b = (rgb >> 0) & 0xff;  // extract blue
 
@@ -92,7 +92,7 @@ const ColorSwatches = ({scssFileContents}) => {
                 }
 
                 // if there is no description, provide default text
-                if (!color.description || color.description.replace(/[\s]*/g,"").length === 0) {
+                if (!color.description || color.description.trim().length === 0) {
                     color.description = "No information";
                 }
 
@@ -115,7 +115,7 @@ const ColorSwatches = ({scssFileContents}) => {
             <ul key={groupIndex} className="comp-library-color-group">
             {group.colors.map( (color, colorIndex) =>
                 <Tooltip key={colorIndex} plainMessage={color.description} location="right">
-                    <li key={colorIndex} className={"comp-library-color-swatch " + `${color.borderClass}`} style={{backgroundColor: color.varValue, color:color.textColor}}>
+                    <li key={colorIndex} className={`comp-library-color-swatch ${color.borderClass}`} style={{backgroundColor: color.varValue, color:color.textColor}}>
                         <span className="comp-library-color-swatch-name">{color.varName}</span><span className="comp-library-color-swatch-value">{color.varValue}</span>
                     </li>
                 </Tooltip>

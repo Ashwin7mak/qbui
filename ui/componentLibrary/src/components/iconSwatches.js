@@ -15,7 +15,9 @@ const IconSwatches = ({cssFileContents}) => {
     let icons = [];
 
     // iterate over lines and pull out the data
-    lines.forEach(function(line) {
+    // todo: consider changing this to parse globally instead of by line
+    // todo: and switch to use the reduce() pattern.
+    lines.forEach(line => {
 
         // extract the class name and character code
         // \1 = class name without a leading .
@@ -52,7 +54,7 @@ const IconSwatches = ({cssFileContents}) => {
             {icons.map( (icon, index) =>
                 <li key={index} className="comp-library-icon-swatch">
                     <Tooltip plainMessage={`${icon.iconName} [${icon.charCode}]`} location="bottom">
-                        <span className={"qbicon " + `${icon.className}`}>
+                        <span className={`qbicon ${icon.className}`}>
                             <input type="text" maxlength="1" readonly value={icon.character} className="comp-library-icon-input"/>
                         </span>
                     </Tooltip>

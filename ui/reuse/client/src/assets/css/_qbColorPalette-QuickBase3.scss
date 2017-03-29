@@ -1,17 +1,30 @@
-/* This file should contain ALL the colors used in QuickBase. This may be used to create themes in future. */
-/* per our discussion around color we will keep the 2 levels of indirection on color. So that if we change the value
- * of $color-x we are replacing every use of it with a new color(i.e colorblind can't see $color-x, or for theme usage).
- * If we want to modify a category of colors use we will change the semantic category
- * ie from $icon_background: $color-x to $icon_background: $color-y
- * and the scss for color will refer to the semantic category not the color number
-*/
-/* see http://quickbase.design/colors/ */
-
+/**
+ * QuickBase3 color palette
+ *
+ * This file should contain hex values for ALL colors needed by the product.
+ * These color variables are used in semantic name variables for UI elements.
+ *
+ * The format of this file is important because the comments are parsed with regular
+ * expressions for documentation purposes.
+ *
+ * C-style block comments (like this one) should not be used except in this comment at the top
+ * and to comment out blocks of variables.
+ *
+ * Section header comments begin with //== and denote blocks of related colors
+ * that are presented together in the documentation. Section headers are not
+ * currently displayed with the color swatches however, the comment (even of
+ * there is no text) is used to know which colors group together.
+ *
+ * Line comments begin with // and are extracted (when present) and displayed
+ * with the color swatch in the documentation.
+ *
+ * see http://quickbase.design/colors/
+ */
 
 //== Purple - for navigation selected states
 $color-purple-800: #4e2a6f; // Trowser header
-$color-purple-700: #5c3483; // 
-$color-purple-600: #74489d; // 
+$color-purple-700: #5c3483; //
+$color-purple-600: #74489d; //
 $color-purple-500: #9067b7; //
 $color-purple-400: #b192d0; //
 $color-purple-300: #d3bde9; //
@@ -20,13 +33,13 @@ $color-purple-100: #f8f5fb;
 
 
 //== Cyan - will be used for primary buttons
-$color-cyan-800: #005773; // 
-$color-cyan-700: #006e93; // 
+$color-cyan-800: #005773; //
+$color-cyan-700: #006e93; //
 $color-cyan-600: #0092c3; //
 $color-cyan-500: #00b1eb; //
-$color-cyan-400: #40caf8; // 
-$color-cyan-300: #7adeff; // 
-$color-cyan-200: #bceeff; // 
+$color-cyan-400: #40caf8; //
+$color-cyan-300: #7adeff; //
+$color-cyan-200: #bceeff; //
 $color-cyan-100: #e8faff; //
 
 
@@ -104,11 +117,12 @@ $color-black-200: #f5f5f5; // Shadows, backgrounds and environmental accents
 $color-black-100: #ffffff; // Form fields, stage background
 
 
+/*
+FOR VISUAL DESIGN QA/TESTING, TEMPORARILY MAKE THE FOLLOWING COLORS $color-red-500
+*/
 
-
-/*/ FOR VISUAL DESIGN QA/TESTING, TEMPORARILY MAKE THE FOLLOWING COLORS $color-red-500 */
-
-/*//== Teal - NO LONG VALID COLOR IN PALETTE
+/*
+//== Teal - NO LONG VALID COLOR IN PALETTE
 $color-teal-800: #007e89;
 $color-teal-700: #009aad;
 $color-teal-600: #00b0c2; // Date picker header & selected/todays date or time
@@ -116,10 +130,11 @@ $color-teal-500: #00c4d8;
 $color-teal-400: #13dbf1;
 $color-teal-300: #95edf6;
 $color-teal-200: #caf6fb;
-$color-teal-100: #effcfe;*/
+$color-teal-100: #effcfe;
+*/
 
-
-/*//== Blue - NO LONG VALID COLOR IN PALETTE
+/*
+//== Blue - NO LONG VALID COLOR IN PALETTE
 $color-blue-800: #4e2a6f; // Tooltip background
 $color-blue-700: #5c3483; // Trowser footer
 $color-blue-600: #74489d; // Numerical badges, Secondary buttons on Trowser Footer
@@ -127,11 +142,5 @@ $color-blue-500: #9067b7; // All icons on deep-sea or white
 $color-blue-400: #b192d0; // Dividers in table headers, Sort by column, date picker hover
 $color-blue-300: #d3bde9; // Table row inline edit selection state
 $color-blue-200: #eadff4; // Table row hover state, Bottom gradient color in stage background
-$color-blue-100: #f8f5fb; // page background*/
-
-
-
-
-
-
-
+$color-blue-100: #f8f5fb; // page background
+*/
