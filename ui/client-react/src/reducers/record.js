@@ -263,6 +263,15 @@ const record = (state = [], action) => {
         }
         return state;
     }
+    case types.REMOVE_BLANK_REPORT_RECORD: {
+        let recId = action.content.recId;
+        const currentRecd = getRecordFromState(recId);
+        if (_.has(currentRecd, 'pendEdits')) {
+            delete currentRecd.pendEdits;
+            return newState(currentRecd);
+        }
+        return state;
+    }
     default:
         // by default, return existing state
         return state;

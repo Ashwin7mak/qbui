@@ -183,46 +183,51 @@ class ReportModelHelper {
      * @param reportData
      * @param recId
      */
-    static deleteRecordFromReport(reportData, recId) {
-        var recordValueToMatch = {};
-        recordValueToMatch[FieldUtils.getPrimaryKeyFieldName(recordValueToMatch)] = {value: recId};
+    static deleteRecordFromReport(report, recId) {
+        //  table reports have a data model object
+        if (_.has(report, 'data')) {
+            let reportData = report.data;
 
-        const newFilteredRecords = reportData.filteredRecords ? reportData.filteredRecords.slice(0) : null;
-        const newRecords = reportData.records ? reportData.records.slice(0) : null;
-        let recordDeleted = false;
-        let filteredRecordDeleted = false;
+            let recordValueToMatch = {};
+            recordValueToMatch[FieldUtils.getPrimaryKeyFieldName(recordValueToMatch)] = {value: recId};
 
-        // ensure recId is numeric
-        if (recId) {
-            recId = +recId;
-        }
-        if (reportData.hasGrouping) {
-            filteredRecordDeleted = ReportUtils.removeGroupedRecordById(newFilteredRecords, recId, reportData.keyField.name);
-            recordDeleted = ReportUtils.removeGroupedRecordById(newRecords, recId, reportData.keyField.name);
-        } else {
-            //find record
-            let filteredRecordIndex = ReportUtils.findRecordIndex(newFilteredRecords, recId, reportData.keyField.name);
-            //remove it
-            if (filteredRecordIndex !== -1) {
-                filteredRecordDeleted = true;
-                newFilteredRecords.splice(filteredRecordIndex, 1);
+            const newFilteredRecords = reportData.filteredRecords ? reportData.filteredRecords.slice(0) : null;
+            const newRecords = reportData.records ? reportData.records.slice(0) : null;
+            let recordDeleted = false;
+            let filteredRecordDeleted = false;
+
+            // ensure recId is numeric
+            if (recId) {
+                recId = +recId;
             }
+            if (reportData.hasGrouping) {
+                filteredRecordDeleted = ReportUtils.removeGroupedRecordById(newFilteredRecords, recId, reportData.keyField.name);
+                recordDeleted = ReportUtils.removeGroupedRecordById(newRecords, recId, reportData.keyField.name);
+            } else {
+                //find record
+                let filteredRecordIndex = ReportUtils.findRecordIndex(newFilteredRecords, recId, reportData.keyField.name);
+                //remove it
+                if (filteredRecordIndex !== -1) {
+                    filteredRecordDeleted = true;
+                    newFilteredRecords.splice(filteredRecordIndex, 1);
+                }
 
-            //find record
-            let recordIndex = ReportUtils.findRecordIndex(newRecords, recId, reportData.keyField.name);
-            //remove it
-            if (recordIndex !== -1) {
-                recordDeleted = true;
-                newRecords.splice(recordIndex, 1);
+                //find record
+                let recordIndex = ReportUtils.findRecordIndex(newRecords, recId, reportData.keyField.name);
+                //remove it
+                if (recordIndex !== -1) {
+                    recordDeleted = true;
+                    newRecords.splice(recordIndex, 1);
+                }
             }
-        }
-        if (filteredRecordDeleted) {
-            reportData.filteredRecords = newFilteredRecords;
-            reportData.filteredRecordsCount--;
-        }
-        if (recordDeleted) {
-            reportData.records = newRecords;
-            reportData.recordsCount--; //pagination uses this one.
+            if (filteredRecordDeleted) {
+                reportData.filteredRecords = newFilteredRecords;
+                reportData.filteredRecordsCount--;
+            }
+            if (recordDeleted) {
+                reportData.records = newRecords;
+                reportData.recordsCount--; //pagination uses this one.
+            }
         }
     }
 }
@@ -336,22 +341,18 @@ function addRecordToReport(currentReport, content) {
         const newRecords = reportData.records.slice(0);
         let newRecordsIndex;
         if (afterRecIndex !== -1) {
-            //  set the editing index and id for new blank rows
-            if (newRecId === SchemaConstants.UNSAVED_RECORD_ID) {
-                currentReport.editingIndex = afterRecIndex;
-                currentReport.editingId = SchemaConstants.UNSAVED_RECORD_ID;
-            }
             newRecordsIndex = afterRecIndex + 1;
             newRecords.splice(newRecordsIndex, 0, newRecord);
         } else {
-            //  set the editing index for new blank rows
-            if (newRecId === SchemaConstants.UNSAVED_RECORD_ID) {
-                currentReport.editingIndex = newRecords.length;
-                currentReport.editingId = SchemaConstants.UNSAVED_RECORD_ID;
-            }
             // add to the top of the array
             newRecords.unshift(newRecord);
             newRecordsIndex = 0;
+        }
+
+        //  set the editing index for new blank rows
+        if (newRecId === SchemaConstants.UNSAVED_RECORD_ID) {
+            currentReport.editingIndex = newRecordsIndex;
+            currentReport.editingId = SchemaConstants.UNSAVED_RECORD_ID;
         }
 
         reportData.records = newRecords;
@@ -476,9 +477,9 @@ function addRecordToGroupedReport(currentReport, content) {
             afterRecIndex = ReportUtils.findRecordIndex(reportData.filteredRecords, afterRecordIdValue, reportData.keyField.name);
         }
 
-        //editing index for new blank rows
+        //  set the editing index for new blank rows
         if (content.newRecId === SchemaConstants.UNSAVED_RECORD_ID) {
-            currentReport.editingIndex = afterRecIndex;
+            currentReport.editingIndex = afterRecIndex + 1;
             currentReport.editingId = SchemaConstants.UNSAVED_RECORD_ID;
         }
     }

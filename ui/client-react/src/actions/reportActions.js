@@ -49,6 +49,10 @@ export const addBlankRecordToReport = (context, afterRecId) => {
     };
 };
 
+export const removeBlankRecordFromReport = (context, appId, tblId, recId) => {
+    return event(context, types.REMOVE_BLANK_REPORT_RECORD, {appId, tblId, recId});
+};
+
 /**
  * Retrieve a list of reports for the given app/table.  This function is called primarily when
  * populating the left hand navigation window with the list of reports and when displaying a

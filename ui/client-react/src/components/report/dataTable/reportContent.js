@@ -23,7 +23,7 @@ import * as CompConsts from '../../../constants/componentConstants';
 
 import {connect} from 'react-redux';
 import {createRecord, deleteRecord, editRecordStart, editRecordCancel, editRecordChange, editRecordValidateField, openRecord, updateRecord} from '../../../actions/recordActions';
-import {addBlankRecordToReport, selectReportRecords} from '../../../actions/reportActions';
+import {addBlankRecordToReport, removeBlankRecordFromReport, selectReportRecords} from '../../../actions/reportActions';
 import {APP_ROUTE, EDIT_RECORD_KEY} from '../../../constants/urlConstants';
 import * as SchemaConstants from '../../../constants/schema';
 import {CONTEXT} from '../../../actions/context';
@@ -265,12 +265,17 @@ export const ReportContent = React.createClass({
     },
 
     /**
-     * When an inline edit is canceled
-     * Initiate a recordPendingEditsCancel action the the app/table/recid
+     * When an inline edit is canceled, if the recId is defined, then that means we are editing
+     * and existing and should just cancel the edit operation.  If no recId, then we are editing a
+     * new blank row and should remove that row from the report.
      * @param recId
      */
     handleEditRecordCancel(recId) {
-        this.props.editRecordCancel(this.props.appId, this.props.tblId, recId);
+        if (recId) {
+            this.props.editRecordCancel(this.props.appId, this.props.tblId, recId);
+        } else {
+            this.props.removeBlankRecordFromReport(CONTEXT.REPORT.NAV, this.props.appId, this.props.tblId, recId);
+        }
     },
 
     /**
@@ -302,7 +307,6 @@ export const ReportContent = React.createClass({
             recordId = afterRecId.value;
         }
 
-        const flux = this.getFlux();
         let pendEdits = this.getPendEdits();
 
         // Don't allow a user to add multiple records in rapid succession (i.e., clicking "Save and add new" multiple times rapidly)
@@ -310,21 +314,12 @@ export const ReportContent = React.createClass({
             return;
         }
 
-        // if there are pending edits or this record is not saved
-        // try save instead of adding new one
+        // if there are pending edits or this record is not saved try save instead of adding new one
         if (pendEdits.isPendingEdit || recordId === SchemaConsts.UNSAVED_RECORD_ID) {
-            // TODO: add code in dispatcher to add blank record after successful record update
             let saveRecordPromise = this.handleRecordSaveClicked(recordId, true, true);
-
-            // After saving the record successfully, then add the new row
-            // Don't do anything if the record wasn't saved successfully or a promise was not returned
-            //if (saveRecordPromise) {
-            //    return saveRecordPromise.then(this.addNewRowAfterRecordSaveSuccess);
-            //}
         } else {
             this.props.addBlankRecordToReport(CONTEXT.REPORT.NAV, this.props.appId, this.props.tblId, recordId, false);
         }
-        //return Promise.resolve(null);
     },
 
     /**
@@ -337,8 +332,7 @@ export const ReportContent = React.createClass({
         if (_.isObject(id)) {
             recordId = id.value;
         }
-        //signal record save action, server will validate and if ok update an existing records with changed values
-        // or add a new record
+        // update an existing records with changed values or add a new record
         if (recordId === SchemaConsts.UNSAVED_RECORD_ID) {
             let recordChanges = {};
             let pendEdits = this.getPendEdits();
@@ -347,7 +341,7 @@ export const ReportContent = React.createClass({
             }
             return this.handleRecordAdd(recordChanges, showNotification, addNewRow);
         } else {
-            return this.handleRecordChange(recordId);
+            return this.handleRecordChange(recordId, addNewRow);
         }
     },
 
@@ -409,8 +403,6 @@ export const ReportContent = React.createClass({
      * @returns {Array} of field values for the new record
      */
     handleRecordAdd(recordChanges, showNotificationOnSuccess = false, addNewRow = false) {
-        const flux = this.getFlux();
-
         let fields = {};
         let colList = [];
         if (_.has(this.props, 'fields.fields.data') && Array.isArray(this.props.fields.fields.data)) {
@@ -435,7 +427,7 @@ export const ReportContent = React.createClass({
      * @param recId
      * @param addNewRecordAfterSave flag for indicating whether a new record will be added following a successful save.
      */
-    handleRecordChange(id) {
+    handleRecordChange(id, addNewRow = false) {
         let recordId = id;
         // To maintain compatibility with AgGrid
         if (_.isObject(id)) {
@@ -456,12 +448,7 @@ export const ReportContent = React.createClass({
                 colList: colList,
                 showNotificationOnSuccess: true
             };
-            this.props.updateRecord(this.props.appId, this.props.tblId, recordId, params);
-
-            //let promise = this.props.saveRecord(this.props.appId, this.props.tblId, recordId, pendEdits, this.props.fields.fields.data, colList, addNewRecordAfterSave);
-            //promise.then((obj) => {
-            //    this.props.updateReportRecord(obj, CONTEXT.REPORT.NAV);
-            //});
+            this.props.updateRecord(this.props.appId, this.props.tblId, recordId, params, addNewRow);
         }
     },
 
@@ -469,7 +456,7 @@ export const ReportContent = React.createClass({
         // check the value against the fieldDef
         if (fieldDef) {
 
-            let recId = null;
+            let recId = undefined;
             let pendEdits = this.getPendEdits();
 
             // Editing Id trumps editingRowId when editingIndex is set.
@@ -478,13 +465,14 @@ export const ReportContent = React.createClass({
             // store.  When saveAndAddANewRow is clicked, then the reportDataStore sets the editingIndex (index of
             // new row in array) and editingId (id of newly created row). The editingIndex could be any integer, but
             // if it is not null, we can assume a new row is added.
-            if (pendEdits.isInlineEditOpen && pendEdits.currentEditingRecordId) {
+            if (pendEdits.isInlineEditOpen) {
                 recId = pendEdits.currentEditingRecordId;
             }
-            if (Number.isInteger(this.props.editingIndex) && this.props.editingId !== recId) {
-                recId = this.props.editingId;
-            }
-            if (recId) {
+            //if (Number.isInteger(this.props.editingIndex)) {
+            //    recId = this.props.editingId;
+            //}
+
+            if (recId !== undefined) {
                 this.props.editRecordValidateField(recId, fieldDef, fieldName, value, checkRequired);
             } else {
                 let error = 'Record id not provided for field validation in reportContent';
@@ -1096,9 +1084,6 @@ const mapDispatchToProps = (dispatch) => {
         editRecordChange: (appId, tblId, recId, origRec, changes) => {
             dispatch(editRecordChange(appId, tblId, recId, origRec, changes));
         },
-        //editRecordCommit: (appId, tblId, recId) => {
-        //    dispatch(editRecordCommit(appId, tblId, recId));
-        //},
         editRecordValidateField: (fieldDef, fieldName, value, checkRequired) => {
             dispatch(editRecordValidateField(fieldDef, fieldName, value, checkRequired));
         },
@@ -1113,17 +1098,30 @@ const mapDispatchToProps = (dispatch) => {
                 }
             );
         },
+        removeBlankRecordFromReport: (context, appId, tblId, recId) => {
+            dispatch(removeBlankRecordFromReport(context, appId, tblId, recId));
+        },
         deleteRecord:  (appId, tblId, recId, nameForRecords) => {
             dispatch(deleteRecord(appId, tblId, recId, nameForRecords));
         },
-        updateRecord:(appId, tblId, recId, params) => {
-            dispatch(updateRecord(appId, tblId, recId, params));
-        },
-        createRecord: (appid, tblId, params, addNewRow) => {
-            dispatch(createRecord(appId, tblId, params)).then(
+        updateRecord:(appId, tblId, recId, params, addNewRow) => {
+            dispatch(updateRecord(appId, tblId, recId, params)).then(
                 () => {
+                    // NOTE: speed of rendering the blank row after the update is a
+                    // concern; consider adding the row in the update success reducer event
                     if (addNewRow) {
-                        dispatch(addBlankRecordToReport(CONTEXT.REPORT.NAV, appId, tblId, null, true));
+                        dispatch(addBlankRecordToReport(CONTEXT.REPORT.NAV, recId));
+                    }
+                }
+            );
+        },
+        createRecord: (appId, tblId, params, addNewRow) => {
+            dispatch(createRecord(appId, tblId, params)).then(
+                (obj) => {
+                    // NOTE: speed of rendering the blank row after the create is a
+                    // concern; consider adding the row in the create success reducer event
+                    if (addNewRow) {
+                        dispatch(addBlankRecordToReport(CONTEXT.REPORT.NAV, obj.recId));
                     }
                 }
             );

@@ -203,13 +203,13 @@ export const ReportGrid = React.createClass({
         //if (this.props.pendEdits && this.props.pendEdits.isInlineEditOpen && this.props.pendEdits.currentEditingRecordId) {
         //    editingRowId = this.props.pendEdits.currentEditingRecordId;
         //}
-        if (pendEdits && pendEdits.isInlineEditOpen && pendEdits.currentEditingRecordId) {
+        if (pendEdits && pendEdits.isInlineEditOpen) {
             editingRowId = pendEdits.currentEditingRecordId;
         }
 
-        if (Number.isInteger(this.props.editingIndex) && this.props.editingId !== editingRowId) {
-            editingRowId = this.props.editingId;
-        }
+        //if (Number.isInteger(this.props.editingIndex) && this.props.editingId !== editingRowId) {
+        //    editingRowId = this.props.editingId;
+        //}
 
         return editingRowId;
     },

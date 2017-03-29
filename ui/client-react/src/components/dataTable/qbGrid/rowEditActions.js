@@ -87,11 +87,12 @@ export const RowEditActions = React.createClass({
         // https://quickbase.atlassian.net/browse/MB-2115
         // remove the eslint override when this is addressed
         /* eslint no-constant-condition:0 */
-        if (true || !isValid || saving) {
+        //if (true || !isValid || saving) {
+        if (!isValid || saving) {
             addRecordClasses.push('disabled');
 
-            let tooltipMessage = 'pageActions.saveAndAddRecordDisabled'; // This can be removed once save and add is working again
-            //let tooltipMessage = 'pageActions.saveAndAddRecord'; // Currently disabled
+            //let tooltipMessage = 'pageActions.saveAndAddRecordDisabled'; // This can be removed once save and add is working again
+            let tooltipMessage = 'pageActions.saveAndAddRecord'; // Currently disabled
 
             return (
                 <QBToolTip tipId="addRecord" location="bottom" i18nMessageKey={tooltipMessage}>

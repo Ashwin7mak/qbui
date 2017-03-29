@@ -183,11 +183,11 @@ describe('Record Model', () => {
         expect(currentReport.data.records.length).toEqual(1);
 
         //  delete record id not in report
-        ReportModelHelper.deleteRecordFromReport(currentReport.data, 2);
+        ReportModelHelper.deleteRecordFromReport(currentReport, 2);
         expect(currentReport.data.records.length).toEqual(1);
 
         //  delete record in report
-        ReportModelHelper.deleteRecordFromReport(currentReport.data, 22);
+        ReportModelHelper.deleteRecordFromReport(currentReport, 22);
         expect(currentReport.data.records.length).toEqual(0);
     });
 
