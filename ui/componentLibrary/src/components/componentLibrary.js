@@ -8,11 +8,19 @@ var ComponentLibraryWrapper = React.createClass({
                 <div className="comp-library-nav">
                     <div className="header">
                         <h3 className="title">
-                            QuickBase<br />Component Library
+                            QuickBase<br />Engineering
                         </h3>
                     </div>
                     <nav>
-                        <h4 className="header">Fields</h4>
+                        <h4 className="header">Design System</h4>
+                        <ul>
+                            <li><Link to="/qbase/components/home" activeClassName="active">Home</Link></li>
+                            <li><Link to="/qbase/components/colors2" activeClassName="active">Colors 2</Link></li>
+                            <li><Link to="/qbase/components/colors3" activeClassName="active">Colors 3</Link></li>
+                            <li><Link to="/qbase/components/uiIconFont" activeClassName="active">UI Icon Font</Link></li>
+                            <li><Link to="/qbase/components/tableIconFont" activeClassName="active">Table Icon Font</Link></li>
+                        </ul>
+                        <h4 className="header">Field Components</h4>
                         <ul>
                             <li><Link to="/qbase/components/checkBoxFieldValueEditor" activeClassName="active">CheckBoxFieldValueEditor</Link></li>
                             <li><Link to="/qbase/components/checkBoxFieldValueRenderer" activeClassName="active">CheckBoxFieldValueRenderer</Link></li>
