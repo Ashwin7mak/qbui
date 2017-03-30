@@ -117,7 +117,7 @@
 
             // Need to use the right EE port based on where this is used (either locally or in CI)
             // Set eeHostPort in your IntelliJ config env vars to run locally
-            methodLess = methodLess.replace('9001', process.env.eeHostPort || '8081');
+            //methodLess = methodLess.replace('9001', process.env.eeHostPort || '8081');
 
 
             log.debug('baseUrl: ' + baseUrl + ' methodLess: ' + methodLess);
