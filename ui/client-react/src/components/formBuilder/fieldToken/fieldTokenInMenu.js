@@ -1,12 +1,17 @@
 import React, {PropTypes, Component} from 'react';
 import FieldToken from './fieldToken';
+import Tooltip from '../../../../../reuse/client/src/components/tooltip/tooltip';
 
 /**
  * A FieldToken that is extended to be displayed in a menu (i.e., Tool Palette) when building a form.
  * TODO: This will eventually be decorated with other methods like onClick for adding it to the form. */
 export class FieldTokenInMenu extends Component {
     render() {
-        return <FieldToken isDragging={false} {...this.props} />;
+        return (
+            <Tooltip location="right" plainMessage={this.props.tooltipText}>
+                <FieldToken isDragging={false} {...this.props} />
+            </Tooltip>
+        );
     }
 }
 

@@ -41,9 +41,10 @@ class ToolPalette extends Component {
             <ul className={`toolPaletteList toolPaletteNewFields ${this.props.isCollapsed ? 'toolPaletteCollapsed' : ''}`}>
                 {SUPPORTED_FIELD_TYPES.map((group, index) => (
                     <li key={index} className="toolPaletteItemGroup">
-                        <h6 className="toolPaletteItemHeader">{'Group Name'}</h6>
+                        <h6 className="toolPaletteItemHeader">{Locale.getMessage(group.titleI18nKey)}</h6>
 
                         <ul className="toolPaletteItemList">
+
                             {this.renderNewFieldTypes(group.fieldTypes)}
                         </ul>
                     </li>

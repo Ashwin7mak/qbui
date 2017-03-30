@@ -516,6 +516,12 @@ export default {
                 TEXT_FORMULA: "Textformel",
                 URL_FORMULA: "Url-Formel",
                 NUMERIC_FORMULA: "Numerische Formel"
+            },
+            fieldGroups: {
+                text: 'Text',
+                numeric: 'Nummer',
+                date: 'Datum',
+                other: 'Andere'
             }
         },
         featureSwitchAdmin: {

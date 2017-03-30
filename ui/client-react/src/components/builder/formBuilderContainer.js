@@ -35,7 +35,8 @@ const mapStateToProps = state => {
         tabIndex: (_.has(currentForm, 'formBuilderChildrenTabIndex') ? currentForm.formBuilderChildrenTabIndex[0] : undefined),
         formFocus: (_.has(currentForm, 'formFocus') ? currentForm.formFocus[0] : undefined),
         shouldNotifyTableCreated: state.tableCreation.notifyTableCreated,
-        builderNav: state.builderNav
+        isOpen: state.builderNav.isNavOpen,
+        isCollapsed: state.builderNav.isNavCollapsed
     };
 };
 
@@ -69,7 +70,15 @@ export const FormBuilderContainer = React.createClass({
         /**
          * the form type
          * */
-        formType: PropTypes.string
+        formType: PropTypes.string,
+
+        /**
+         * Controls the open state of the left tool panel */
+        isOpen: PropTypes.bool,
+
+        /**
+         * Controls the collapsed state of the left tool panel */
+        isCollapsed: PropTypes.bool
     },
 
     componentDidMount() {
@@ -191,7 +200,7 @@ export const FormBuilderContainer = React.createClass({
                 <PageTitle title={Locale.getMessage('pageTitles.editForm')}/>
 
                 <div className="toolsAndForm">
-                    <ToolPalette isCollapsed={this.props.builderNav.isNavCollapsed} isOpen={this.props.builderNav.isNavOpen}>
+                    <ToolPalette isCollapsed={this.props.isCollapsed} isOpen={this.props.isOpen}>
                             <FieldProperties>
                                 <AutoScroll
                                 pixelsFromBottomForLargeDevices={80}
