@@ -90,6 +90,7 @@
     "connect-livereload": "~0.4.0",
     "core-js": "^1.2.0",
     "css-loader": "^0.26.1",
+    "deep-diff": "^0.3.4",
     "enzyme": "^2.7.0",
     "es5-shim": "~4.1.16",
     "es6-shim": "^0.28.1",

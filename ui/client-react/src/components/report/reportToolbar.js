@@ -1,6 +1,4 @@
 import React from 'react';
-import Fluxxor from 'fluxxor';
-
 import './report.scss';
 
 import {I18nMessage} from '../../../src/utils/i18nMessage';
@@ -14,8 +12,6 @@ import mockFacets from '../../mocks/facets';
 import Breakpoints from "../../utils/breakpoints";
 import _ from 'lodash';
 
-let FluxMixin = Fluxxor.FluxMixin(React);
-
 
 /**
  * a ReportToolbar for table reports with search field and a filter icon
@@ -23,9 +19,6 @@ let FluxMixin = Fluxxor.FluxMixin(React);
  */
 
 const ReportToolbar = React.createClass({
-    //interaction options
-
-    mixins: [FluxMixin],
 
     propTypes: {
         /**
