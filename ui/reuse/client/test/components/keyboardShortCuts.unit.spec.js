@@ -29,6 +29,19 @@ describe('KeyboardShortCuts', () => {
         expect(instance.addAllKeyBindings).toHaveBeenCalledWith(keyBindings);
     });
 
+    it('calls addAllKeyBindingsPreventDefault when component mounts ', () => {
+        component = shallow(<KeyboardShortCuts
+            shortcutBindingsPreventDefault={keyBindings}
+            id={testId}
+        />);
+
+        let instance = component.instance();
+        spyOn(instance, 'addAllKeyBindingsPreventDefault');
+        instance.componentWillMount();
+
+        expect(instance.addAllKeyBindingsPreventDefault).toHaveBeenCalledWith(keyBindings);
+    });
+
     it('calls removeAllKeyBindings when component unmounts ', () => {
         component = shallow(<KeyboardShortCuts
             shortcutBindings={keyBindings}
