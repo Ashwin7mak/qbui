@@ -285,4 +285,4 @@ export const tableIconNames = [
 
 ];
 
-export const tableIconClasses = tableIconNames.map((iconName) => { iconName: 'iconTableSturdy-' + iconName})
+export const tableIconClasses = tableIconNames.map((name) => {return {iconName: 'iconTableSturdy-' + name};});

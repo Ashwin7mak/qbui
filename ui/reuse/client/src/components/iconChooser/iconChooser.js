@@ -11,7 +11,7 @@ import './iconChooser.scss';
 
 /**
  * # Icon Chooser
- * A pseudo menu containing a grid of selectable icons
+ * A pseudo-menu containing a grid of selectable icons
  * ## Usage
  * ```
  *   <IconChooser ...props/>
@@ -21,14 +21,20 @@ class IconChooser extends React.Component {
     constructor(props) {
         super(props);
 
+        this.state = {
+            filterText: ''
+        };
         this.toggleAllIcons = this.toggleAllIcons.bind(this);
+        this.filterChanged = this.filterChanged.bind(this);
     }
 
     toggleAllIcons() {
 
         if (this.props.isOpen) {
+
             this.props.onClose();
         } else {
+            this.setState({filterText: ''});
             this.props.onOpen();
         }
     }
@@ -36,10 +42,23 @@ class IconChooser extends React.Component {
     renderIconToggle() {
         return (
             <div className="showAllToggle" onClick={this.toggleAllIcons}>
-                <Icon iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY} icon={this.props.selected}/>
+                <Icon iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY} icon={this.props.selectedIcon}/>
                 <Icon icon="caret-filled-down" className="toggleIcon"/>
             </div>);
     }
+
+    filterChanged(e) {
+        this.setState({filterText: e.target.value.trim()});
+    }
+
+    getFilteredIcons() {
+        return this.props.icons.filter((icon) => icon.toLowerCase().indexOf(this.state.filterText.toLowerCase()) !== -1);
+    }
+
+    selectIcon(icon) {
+        this.props.onSelect(icon);
+    }
+
 
     render() {
         let classes = ['iconChooser', this.props.isOpen ? 'open' : 'closed'];
@@ -51,14 +70,23 @@ class IconChooser extends React.Component {
             <div className={classes.join(' ')}>
                 <div className="topRow">
                     {this.renderIconToggle()}
-                    <div className="iconSearch"><input type="text" cols="20"/></div>
+                    <div className="iconSearch"><input type="text" value={this.state.filterText} placeholder="Search table icons..." onChange={this.filterChanged} cols="20"/></div>
                 </div>
 
                 <div className="allIcons">
-                    {this.props.icons.map((icon, i) => <Icon key={i} iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY} icon={icon}/>)}
+                    {this.getFilteredIcons().map((icon, i) => <Icon key={i} onClick={() => this.selectIcon(icon)} iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY} icon={icon}/>)}
                 </div>
             </div>);
     }
 }
+
+
+IconChooser.propTypes = {
+    selectedIcon: PropTypes.string
+};
+
+IconChooser.defaultProps = {
+    selectedIcon: 'tasks'
+};
 
 export default IconChooser;

@@ -19,9 +19,16 @@
         display: flex;
         flex-shrink: 0;
         overflow: hidden;
+        .iconSearch {
+            margin: 2px;
+            input {
+                height: 30px;
+            }
+        }
         .showAllToggle {
             text-align: center;
             margin-right: 12px;
+            margin-top: 4px;
             flex-grow: 0;
             white-space: nowrap;
             .toggleIcon {
@@ -39,10 +46,13 @@
         overflow-y: auto;
 
         .qbIcon {
-            color: #666;
+            color: #333;
+            padding: 4px;
         }
         .qbIcon:hover {
-            color: #000;
+            background-color: #aaa;
+            color: #fff;
+            border-radius: 3px;
         }
     }
 

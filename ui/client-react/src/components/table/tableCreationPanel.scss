@@ -26,7 +26,7 @@
             }
             .iconChooser.closed {
                 transition: all 300ms ease-in;
-                height: 38px;
+                height: 42px;
                 width: 64px;
             }
             .iconChooser.open {
@@ -38,8 +38,9 @@
         }
 
         .suggestedIcons {
-            margin-left: 80px;
+            margin-left: 100px;
             .iconList {
+                margin-top: 12px;
                 height: 32px;
                 button {
                     width: 32px;
@@ -48,11 +49,13 @@
                     border: 0;
                     background-color: inherit;
                     font-size: 20px;
-                    transition: font-size 100ms ease-out;
+                    color: $color-black-700;
+
                 }
                 button:hover {
-                    font-size: 28px;
-                    transition: font-size 100ms ease-in;
+                    background-color: $color-black-500;
+                    color: $color-black-100;
+                    border-radius: 3px;
                 }
 
             }

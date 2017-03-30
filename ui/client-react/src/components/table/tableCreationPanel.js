@@ -60,10 +60,10 @@ class TableCreationPanel extends React.Component {
      * @returns {XML}
      */
     getSuggestedIcons() {
-        const iconNames = []; // get from tableicons
+        const iconNames = tableIconNames;
         return (
             <div className="iconList">
-                {iconNames.map((iconName, i) => (
+                {iconNames.slice(0, 6).map((iconName, i) => (
                     <button key={i} onClick={() => this.selectIcon(iconName)}>
                         {this.getTableIcon(iconName)}
                     </button>))}
@@ -118,7 +118,7 @@ class TableCreationPanel extends React.Component {
     renderIconSection() {
 
         return (<div className="tableField iconSelection">
-            <IconChooser selected={this.props.tableInfo.tableIcon.value}
+            <IconChooser selectedIcon={this.props.tableInfo.tableIcon.value}
                          isOpen={this.props.iconChooserOpen}
                          onOpen={this.props.openIconChooser}
                          onClose={this.props.closeIconChooser}
