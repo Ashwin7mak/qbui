@@ -246,10 +246,10 @@ export const RecordRoute = React.createClass({
      * @param data row record data
      */
     openRecordForEdit() {
-        const record = this.getRecordFromProps(this.props);
-        this.navigateToRecord(record.recId);
+        const recordId = this.props.params.recordId;
+        this.navigateToRecord(recordId);
 
-        WindowLocationUtils.pushWithQuery(EDIT_RECORD_KEY, record.recId);
+        WindowLocationUtils.pushWithQuery(EDIT_RECORD_KEY, recordId);
     },
 
     /**
