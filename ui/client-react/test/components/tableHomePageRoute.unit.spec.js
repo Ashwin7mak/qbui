@@ -5,29 +5,37 @@ import Fluxxor from 'fluxxor';
 import {TableHomePageRoute} from '../../src/components/table/tableHomePageRoute';
 import FacetSelections  from '../../src/components/facet/facetSelections';
 import Constants from '../../../common/src/constants';
+import {CONTEXT} from '../../src/actions/context';
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import {Provider} from "react-redux";
+import {shallow, mount} from 'enzyme';
+import _ from 'lodash';
 
-//const middlewares = [thunk];
-const mockStore = configureMockStore();
+const middlewares = [thunk];
+const mockStore = configureMockStore(middlewares);
 
 describe('TableHomePageRoute functions', () => {
     'use strict';
 
-    let component;
+    let props = {
+        clearSearchInput: () => {},
+        loadFields: (app, tbl) => {},
+        loadTableHomePage: () => {},
+        params: {
+            appId: 1,
+            tblId: 2,
+            offset:Constants.PAGE.DEFAULT_OFFSET,
+            numRows:Constants.PAGE.DEFAULT_NUM_ROWS
+        }
+    };
 
-    let reportDataSearchStore = Fluxxor.createStore({
+    let mockedStore = Fluxxor.createStore({
         getState() {
-            return {searchStringInput :''};
+            return {};
         }
     });
 
-    let stores = {
-        ReportDataSearchStore: new reportDataSearchStore()
-    };
-
-    let routeParams = {appId:1, tblId:2};
     let reportDataParams = {
         reportData: {
             pageOffset:Constants.PAGE.DEFAULT_OFFSET,
@@ -41,39 +49,35 @@ describe('TableHomePageRoute functions', () => {
         }
     };
 
+    let stores = {
+        MockStore: new mockedStore()
+    };
     let flux = new Fluxxor.Flux(stores);
-
     flux.actions = {
         selectTableId() {return;},
-        loadTableHomePage() {return;},
-        loadFields() {return;},
         hideTopNav() {return;}
     };
 
     beforeEach(() => {
-        spyOn(flux.actions, 'loadTableHomePage');
-        spyOn(flux.actions, 'loadFields');
+        spyOn(flux.actions, 'hideTopNav');
         spyOn(flux.actions, 'selectTableId');
+        spyOn(props, 'clearSearchInput');
+        spyOn(props, 'loadFields');
+        spyOn(props, 'loadTableHomePage');
     });
 
     afterEach(() => {
-        flux.actions.loadTableHomePage.calls.reset();
-        flux.actions.loadFields.calls.reset();
+        flux.actions.hideTopNav.calls.reset();
         flux.actions.selectTableId.calls.reset();
+        props.clearSearchInput.calls.reset();
+        props.loadFields.calls.reset();
+        props.loadTableHomePage.calls.reset();
     });
 
     const initialState = {};
     const store = mockStore(initialState);
 
     it('test render of component with url params', () => {
-
-        let params = {
-            appId:1,
-            tblId:2,
-            offset:Constants.PAGE.DEFAULT_OFFSET,
-            numRows:Constants.PAGE.DEFAULT_NUM_ROWS
-        };
-
         let oldProps = {
             reportData: {
                 appId: 0,
@@ -101,98 +105,22 @@ describe('TableHomePageRoute functions', () => {
                 }
             }
         };
-        component = TestUtils.renderIntoDocument(
-            <Provider store={store}>
-                <TableHomePageRoute params={params} {...oldProps} flux={flux}/>
-            </Provider>);
-        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+
+        let wrapper = shallow(<TableHomePageRoute {...props} {...oldProps} flux={flux}/>);
+        expect(wrapper).toBeDefined();
     });
 
-    it('test url changes ', () => {
-
-        var TestParent = React.createFactory(React.createClass({
-            getInitialState() {
-                let params = {
-                    appId:1,
-                    tblId:1,
-                    offset:Constants.PAGE.DEFAULT_OFFSET,
-                    numRows:Constants.PAGE.DEFAULT_NUM_ROWS
-                };
-                let reportData = {
-                    appId: 1,
-                    tblId: 1,
-                    data: {
-                        name: "test",
-                        filteredRecords: [{
-                            col_num: 1,
-                            col_text: "abc",
-                            col_date: "01-01-2015"
-                        }],
-                        columns: [{
-                            field: "col_num",
-                            headerName: "col_num"
-                        },
-                        {
-                            field: "col_text",
-                            headerName: "col_text"
-                        },
-                        {
-                            field: "col_date",
-                            headerName: "col_date"
-                        }]
-                    }
-                };
-                return {params, reportData};
-            },
-            render() {
-                return (
-                    <Provider store={store}>
-                        <TableHomePageRoute ref="thp" params={this.state.params} reportData={this.state.reportData} flux={flux} />
-                    </Provider>);
-            }
-        }));
-        var parent = TestUtils.renderIntoDocument(TestParent());
-        expect(TestUtils.isCompositeComponent(parent.refs.thp)).toBeTruthy();
-
-        // change params
-        parent.setState({params: {appId:2, tblId:2}});
-        expect(TestUtils.isCompositeComponent(parent.refs.thp)).toBeTruthy();
-
-        // change params to match current props
-        parent.setState({params: {appId:1, tblId:1}});
-        expect(TestUtils.isCompositeComponent(parent.refs.thp)).toBeTruthy();
-    });
-
-    it('test flux action loadTableHomePage is called with app data', () => {
-        component = TestUtils.renderIntoDocument(
-            <Provider store={store}>
-                <TableHomePageRoute params={routeParams} reportData={reportDataParams.reportData} flux={flux}></TableHomePageRoute>
-            </Provider>);
-        expect(flux.actions.loadTableHomePage).toHaveBeenCalledWith(routeParams.appId, routeParams.tblId, reportDataParams.reportData.pageOffset, reportDataParams.reportData.numRows);
-    });
-
-    it('test flux action loadTableHomePage is not called on 2nd called with same app data', () => {
-        var div = document.createElement('div');
-        ReactDOM.render(
-            <Provider store={store}>
-                <TableHomePageRoute params={routeParams} reportData={reportDataParams.reportData} flux={flux}></TableHomePageRoute>
-            </Provider>, div);
-        expect(flux.actions.loadTableHomePage).toHaveBeenCalled();
-        //  on subsequent call with same parameter data, the loadReport function is not called
-        ReactDOM.render(
-            <Provider store={store}>
-                <TableHomePageRoute params={routeParams} reportData={reportDataParams.reportData} flux={flux}></TableHomePageRoute>
-            </Provider>, div);
-        expect(flux.actions.loadTableHomePage).not.toHaveBeenCalledWith();
+    it('test action loadTableHomePage is called with app data', () => {
+        let wrapper = mount(<Provider store={store}><TableHomePageRoute {...props} reportData={reportDataParams.reportData} flux={flux}></TableHomePageRoute></Provider>);
+        expect(props.clearSearchInput).toHaveBeenCalled();
+        expect(props.loadFields).toHaveBeenCalledWith(props.params.appId, props.params.tblId);
+        expect(props.loadTableHomePage).toHaveBeenCalledWith(CONTEXT.REPORT.NAV, props.params.appId, props.params.tblId, reportDataParams.reportData.pageOffset, reportDataParams.reportData.numRows);
     });
 
     it('test flux action loadTableHomePage is not called with missing app data', () => {
-        routeParams.appId = null;
-        component = TestUtils.renderIntoDocument(
-            <Provider store={store}>
-                <TableHomePageRoute params={routeParams} reportData={reportDataParams.reportData} flux={flux}></TableHomePageRoute>
-            </Provider>);
-        expect(flux.actions.loadTableHomePage).not.toHaveBeenCalled();
+        let propsCopy = _.clone(props);
+        propsCopy.params.appId = null;
+        let wrapper = mount(<Provider store={store}><TableHomePageRoute {...propsCopy} reportData={reportDataParams.reportData} flux={flux}></TableHomePageRoute></Provider>);
+        expect(props.loadTableHomePage).not.toHaveBeenCalled();
     });
-
 });

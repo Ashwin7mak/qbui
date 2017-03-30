@@ -148,9 +148,10 @@
             });
         }
 
-        function assertUniqueValidationErrorsAreFormattedCorrectly(payload) {
-            assert.equal(payload.response.statusCode, 500);
-            var nodeLayerResponse = payload.response.body.response;
+        function assertUniqueValidationErrorsAreFormattedCorrectly(response) {
+            assert.equal(response.statusCode, 500);
+            var nodeLayerResponseBody = JSON.parse(response.body);
+            var nodeLayerResponse = nodeLayerResponseBody.response;
             assert.equal(nodeLayerResponse.status, httpStatusCodeConstants.UNPROCESSABLE_ENTITY, 'The wrong http status code was returned for an invalid record');
             assert.equal(nodeLayerResponse.errors.length, 1, 'An incorrect number of invalid fields was returned');
             assert.equal(nodeLayerResponse.errors[0].error.messageId, 'invalidMsg.api.notUniqueSingleField', 'The wrong internationalized error message was returned');

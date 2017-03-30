@@ -1,81 +1,45 @@
 import React from 'react';
-import TestUtils from 'react-addons-test-utils';
-import ReactDOM from 'react-dom';
-import Fluxxor from 'fluxxor';
-import TopNav, {__RewireAPI__ as TopNavRewireAPI} from '../../src/components/header/topNav';
-import GlobalActions from '../../src/components/actions/globalActions';
-import Locale from '../../src/locales/locales';
 
-/**
- * Tests for the client-react implementation of the TopNav including the actions that appear in the navbar
- */
+import TopNav from '../../src/components/header/topNav';
+import GlobalActions from '../../src/components/actions/globalActions';
+import {mount, shallow} from 'enzyme';
+
 describe('TopNav functions', () => {
     'use strict';
-    let component;
 
-    let navStore = Fluxxor.createStore({
-        getState: function() {
-            return {leftNavOpen: true};
-        }
-    });
-
-    let stores = {
-        NavStore: new navStore()
+    let props = {
+        showOnSmall: false,
+        title: 'mockTitle'
     };
-    let flux = new Fluxxor.Flux(stores);
-    flux.addActions({
-        searchFor: function(text) {
-            return;
-        },
-        changeLocale: function(locale) {
-            return;
-        },
+
+    it('test render of topNav', () => {
+        let wrapper = shallow(<TopNav {...props}/>);
+        let navGroup = wrapper.find('.topNav');
+        expect(navGroup.length).toBe(1);
     });
 
-    let globalActionsData = [
-        {msg: 'globalActions.user', link: '/user', icon: 'user'},
-        {msg: 'globalActions.help', link: '/help', icon: 'help'}
+    var testCasesSmall = [
+        {name:'test topNav with showOnSmall true', showOnSmall: true, expectation: 0},
+        {name:'test topNav with showOnSmall true', showOnSmall: false, expectation: 1}
     ];
-    let globalActions = (<GlobalActions flux={flux} actions={globalActionsData} startTabIndex={0}
-                                        position={"top"}/>);
-
-    beforeEach(() => {
-        component = TestUtils.renderIntoDocument(<TopNav globalActions={globalActions}/>);
-        spyOn(flux.actions, 'searchFor');
-        spyOn(flux.actions, 'changeLocale');
+    testCasesSmall.forEach(testCase => {
+        it(testCase.name, () => {
+            let wrapper = shallow(<TopNav {...props} showOnSmall={testCase.showOnSmall}/>);
+            let hideSmall = wrapper.find('.hideSmall');
+            expect(hideSmall.length).toBe(testCase.expectation);
+        });
     });
 
-    it('test render of component', () => {
-        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+    var testCasesTitle = [
+        {name:'test topNav with title', title: 'mockTitle', expectation: 1},
+        {name:'test topNav with no title', title: '', expectation: 0}
+    ];
+    testCasesTitle.forEach(testCase => {
+        it(testCase.name, () => {
+            let wrapper = shallow(<TopNav {...props} title={testCase.title}/>);
+            let title = wrapper.find('.topTitle');
+            expect(title.length).toBe(testCase.expectation);
+        });
     });
 
-    it('test renders all locale menu options', () => {
-        var menuItems = TestUtils.scryRenderedDOMComponentsWithClass(component, "localeLink");
-        var localeMenuItems = Locale.getSupportedLocales();
-        expect(menuItems.length).toBe(localeMenuItems.length);
-
-        //  test with zero supported locales
-        var LocaleMock = {
-            getSupportedLocales: () => {
-                return [];
-            },
-            getMessage: () => {
-                return "";
-            }
-        };
-        TopNavRewireAPI.__Rewire__('Locale', LocaleMock);
-        var noLocaleComponent = TestUtils.renderIntoDocument(<TopNav flux={flux}/>);
-        menuItems = TestUtils.scryRenderedDOMComponentsWithClass(noLocaleComponent, "localeLink");
-        expect(menuItems.length).toBe(0);
-        TopNavRewireAPI.__ResetDependency__('Locale');
-    });
-
-    it('test changes locale on selecting menu item', () => {
-        var localeMenuOptions = TestUtils.scryRenderedDOMComponentsWithClass(component, "localeLink");
-
-        let localeoption = ReactDOM.findDOMNode(localeMenuOptions[1]);
-        localeoption = localeoption.querySelector("a"); //get to the element that registers click event for change of locale.
-        TestUtils.Simulate.click(localeoption);
-        expect(flux.actions.changeLocale).toHaveBeenCalledWith(localeoption.title);
-    });
 });

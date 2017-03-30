@@ -206,7 +206,7 @@
                     results[0].element('.tableFieldInput input').setValue(fieldValue);
                     results[0].element('..').click();
                     //Enter value of 'a record in the table is called a ' field
-                } else if (tableField.includes('A record in the table is called a')) {
+                } else if (tableField.includes('A record in the table is called')) {
                     //verify title of the field
                     expect(results[0].element('.tableFieldTitle').getAttribute('textContent')).toBe(tableField);
                     results[0].element('.tableFieldInput input').setValue(fieldValue);
@@ -238,11 +238,9 @@
                 //Enter values for 'table name' field
                 if (tableField.includes('Table Name')) {
                     //Verify the placeholder inside input
-                    console.log("The placeHolder is: " + results[0].element('.tableFieldInput input').getAttribute('placeholder'));
-                    console.log("the param is: " + expectedPlaceHolder);
                     expect(results[0].element('.tableFieldInput input').getAttribute('placeholder')).toBe(expectedPlaceHolder);
                     //Enter value of 'a record in the table is called a ' field
-                } else if (tableField.includes('A record in the table is called a')) {
+                } else if (tableField.includes('A record in the table is called')) {
                     //Verify the placeholder inside input
                     expect(results[0].element('.tableFieldInput input').getAttribute('placeholder')).toBe(expectedPlaceHolder);
                     //Enter value for Description field
