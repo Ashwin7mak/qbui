@@ -67,9 +67,7 @@ export const ReportToolsAndContent = React.createClass({
         };
     },
     getInitialState: function() {
-        return {
-            reactabular: true
-        };
+        return {};
     },
     componentWillMount() {
         // Create a debounced function that delays invoking filterReport func
@@ -393,13 +391,7 @@ export const ReportToolsAndContent = React.createClass({
 
             return (
                 <div className={classes.join(' ')}>
-                    <label id="reactabularToggle" style={{display: "none"}}>&nbsp;
-                        <input type="checkbox"
-                               defaultChecked={this.state.reactabular}
-                               onClick={(e) => {this.setState({reactabular: e.target.checked});}}/>&nbsp;Use Reactabular Grid
-                    </label>
                     {this.getTableActions()}
-
                     <ReportContent appId={this.props.reportData.appId}
                                    tblId={this.props.reportData.tblId}
                                    rptId={typeof this.props.reportData.rptId !== "undefined" ? this.props.reportData.rptId : this.props.params.rptId}
@@ -410,7 +402,6 @@ export const ReportToolsAndContent = React.createClass({
                                    cardViewPagination={cardViewPagination }
                                    primaryKeyName={primaryKeyName}
                                    flux={this.getFlux()}
-                                   reactabular={this.state.reactabular}
                                    gridOptions={this.props.gridOptions}
                                    {...this.props}
                                    fields={fields}/>

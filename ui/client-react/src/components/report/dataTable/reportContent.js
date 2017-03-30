@@ -917,7 +917,6 @@ export const ReportContent = React.createClass({
 
         // Hide the footer if any rows are selected and for small breakpoint.
         let areRowsSelected = !!(selectedRows && selectedRows.length > 0);
-        let showFooter = !this.props.reactabular  && !areRowsSelected && !isSmall;
 
         let addPadding;
         const isRowPopUpMenuOpen = this.props.isRowPopUpMenuOpen;
@@ -938,7 +937,7 @@ export const ReportContent = React.createClass({
         } else {
             reportContent = (
                     <div className={addPadding}>
-                        {!isSmall && this.props.reactabular &&
+                        {!isSmall &&
                             <ReportGrid
                                 appId={this.props.reportData.appId}
                                 tblId={this.props.reportData.tblId}
