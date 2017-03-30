@@ -210,7 +210,6 @@ describe('ReportToolsAndContent functions', () => {
                 expect(obj.loadDynamicReport).not.toHaveBeenCalled();
             }).then(() => {
                 expect(obj.loadDynamicReport).toHaveBeenCalledWith(
-                    CONTEXT.REPORT.NAV,
                     reportParams.appId,
                     reportParams.tblId,
                     reportParams.rptId,
@@ -238,7 +237,6 @@ describe('ReportToolsAndContent functions', () => {
                 expect(obj.loadDynamicReport).toHaveBeenCalled();
             }).then(() => {
                 expect(obj.loadDynamicReport).toHaveBeenCalledWith(
-                    CONTEXT.REPORT.NAV,
                     reportParams.appId,
                     reportParams.tblId,
                     reportParams.rptId,

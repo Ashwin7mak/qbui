@@ -36,7 +36,7 @@ export const EmbeddedReportLink = React.createClass({
         // belong to a parent. A child has a parent if its detailKey field contains the
         // detailKeyValue that contains a parent record's masterKeyValue.
         const queryParams = {
-            query: QueryUtils.parseStringIntoExactMatchExpression(this.props.detailKeyFid, this.props.detailKeyValue)
+            query: QueryUtils.parseStringIntoExactMatchExpression(detailKeyFid, detailKeyValue)
         };
 
         this.props.loadReportRecordsCount(this.uniqueId, appId, childTableId, childReportId, queryParams);

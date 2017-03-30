@@ -68,7 +68,12 @@ describe('RelatedChildReport', () => {
             const props = {};
             props[prop] = undefined;
             component = shallow(MockChildReport(props));
-            //expect(component).not.toBePresent();
+            expect(component.find(RelatedChildReport)).not.toBePresent();
+            
+            const embeddedReportContainer = component.find(EmbeddedReportToolsAndContentMock);
+            const embeddedReportLink = component.find(EmbeddedReportLinkMock);
+            expect(embeddedReportContainer).not.toBePresent();
+            expect(embeddedReportLink).not.toBePresent();
         });
     });
 
@@ -76,7 +81,7 @@ describe('RelatedChildReport', () => {
         it('renders EmbeddedReportToolsAndContent', () => {
             component = shallow(MockChildReport());
             const embeddedReportContainer = component.find(EmbeddedReportToolsAndContentMock);
-            expect(embeddedReportContainer.length).toEqual(1);
+            expect(embeddedReportContainer).toBePresent();
         });
 
         it('passes the needed props to EmbeddedReportToolsAndContent', () => {
@@ -111,7 +116,7 @@ describe('RelatedChildReport', () => {
         it('renders EmbeddedReportLink', () => {
             component = shallow(MockChildReport());
             const embeddedReportLink = component.find(EmbeddedReportLinkMock);
-            expect(embeddedReportLink.length).toEqual(1);
+            expect(embeddedReportLink).toBePresent();
         });
     });
 });

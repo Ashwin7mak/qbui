@@ -200,7 +200,8 @@
                                 referenceElements.push(mockReferenceElement(relationshipIdx));
                             }
                         });
-                        // if we created referenceElements, inject relationship elements in its own section
+                        // place each referenceElement in its own section and append the new
+                        // sections to the tab
                         referenceElements.forEach(referenceElement => {
                             const sections = formMeta.tabs[0].sections;
                             const length = Object.keys(sections).length;
