@@ -20,7 +20,7 @@ exports.config = {
         // Uncomment this if you are running Sauce against your local dev
         //dns             : '127.0.0.1',
         //TODO: Figure out how to use custom Selenium port (see TODO below)
-        port            : 4400
+        port            : 3333
     },
     //
     //
@@ -32,7 +32,7 @@ exports.config = {
     //host: '127.0.0.1',
     //TODO: Figure out how to use custom Selenium port
     //Known issue here (wdio team currently fixing): https://github.com/webdriverio/webdriverio/issues/1683
-    port: 4400,
+    //port: 4400,
     //path: '/wd/hub',
     //
     // ============
@@ -154,7 +154,7 @@ exports.config = {
     sync: true,
     //
     // Level of logging verbosity: silent | verbose | command | data | result | error
-    logLevel: 'error',
+    logLevel: 'verbose',
     //
     // Enables colors for log output.
     coloredLogs: true,
