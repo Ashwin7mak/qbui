@@ -33,7 +33,7 @@
                 transition: all 300ms ease-in;
 
                 width: 766px;
-                height: 142px;
+                height: 182px;
             }
         }
 
@@ -42,14 +42,20 @@
             .iconList {
                 margin-top: 12px;
                 height: 32px;
+                display: flex;
+                flex-wrap: wrap;
+                align-items: center;
+                max-width: 240px;
                 button {
                     width: 32px;
                     height: 32px;
                     vertical-align: middle;
                     border: 0;
                     background-color: inherit;
-                    font-size: 20px;
+                    font-size: 24px;
                     color: $color-black-700;
+                    margin-right: 24px;
+                    margin-bottom: 12px;
 
                 }
                 button:hover {

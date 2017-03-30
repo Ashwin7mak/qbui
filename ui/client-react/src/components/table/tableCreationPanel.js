@@ -3,7 +3,7 @@ import {PropTypes} from 'react';
 import TableFieldInput from './tableFieldInput';
 import {I18nMessage} from "../../utils/i18nMessage";
 import Locale from '../../locales/locales';
-import {tableIconNames} from '../../../../reuse/client/src/components/icon/tableIcons';
+import {tableIconNames, tableIconsByTag, suggestedTableIcons} from '../../../../reuse/client/src/components/icon/tableIcons';
 import IconChooser from '../../../../reuse/client/src/components/iconChooser/iconChooser';
 import Icon, {AVAILABLE_ICON_FONTS} from '../../../../reuse/client/src/components/icon/icon';
 
@@ -15,7 +15,6 @@ class TableCreationPanel extends React.Component {
         super(props);
 
         // bind to fix context for event handlers
-        this.onToggleDropdown = this.onToggleDropdown.bind(this);
         this.selectIcon = this.selectIcon.bind(this);
         this.updateTableProperty = this.updateTableProperty.bind(this);
         this.onFocusInput = this.onFocusInput.bind(this);
@@ -30,19 +29,6 @@ class TableCreationPanel extends React.Component {
      */
     getTableIcon(name) {
         return <Icon iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY} icon={name}/>;
-    }
-
-    /**
-     * track open dialogs since parent might need the info to prevent clipping etc.
-     * @param isOpen
-     */
-    onToggleDropdown(isOpen) {
-
-        if (isOpen && this.props.tableMenuOpened) {
-            this.props.tableMenuOpened();
-        } else if (this.props.tableMenuOpened) {
-            this.props.tableMenuClosed();
-        }
     }
 
     /**
@@ -63,7 +49,7 @@ class TableCreationPanel extends React.Component {
         const iconNames = tableIconNames;
         return (
             <div className="iconList">
-                {iconNames.slice(0, 6).map((iconName, i) => (
+                {suggestedTableIcons.slice(0, 8).map((iconName, i) => (
                     <button key={i} onClick={() => this.selectIcon(iconName)}>
                         {this.getTableIcon(iconName)}
                     </button>))}
@@ -123,6 +109,7 @@ class TableCreationPanel extends React.Component {
                          onOpen={this.props.openIconChooser}
                          onClose={this.props.closeIconChooser}
                          icons={tableIconNames}
+                         iconsByTag={tableIconsByTag}
                          onSelect={this.selectIcon}
             />
             <div className="suggestedIcons">
@@ -204,7 +191,7 @@ class TableCreationPanel extends React.Component {
                                      value={this.props.tableInfo.description.value}
                                      onChange={this.updateTableProperty}
                                      component="textarea"
-                                     rows="6"/>
+                                     rows="8"/>
                 </div>
             </div>);
     }
