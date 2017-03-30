@@ -79,10 +79,7 @@
             tableToFieldToFieldTypeMap['table 1']['Finish Date'] = {fieldType: consts.SCALAR, dataType: consts.DATE};
             tableToFieldToFieldTypeMap['table 1']['Duration Taken'] = {fieldType: consts.SCALAR, dataType: consts.DURATION};
             tableToFieldToFieldTypeMap['table 1']['% Completed'] = {fieldType: consts.SCALAR, dataType: consts.PERCENT};
-
-            //Create a report with facets [text field and checkbox field]
-            //        //return e2eBase.reportService.createReportWithFidsAndFacetsAndSortLists(app.id, app.tables[e2eConsts.TABLE1].id, [6, 7, 8, 9, 10, 11, 12], [6, 7], ["9"]);
-
+            
             return e2eBase.createAppWithEmptyRecordsInTable(tableToFieldToFieldTypeMap).then(function(createdApp) {
                 // Set your global objects to use in the test functions
                 app = createdApp;
