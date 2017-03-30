@@ -2,7 +2,6 @@ import React from "react";
 import ReactIntl from "react-intl";
 import NotificationManager from '../../../../../reuse/client/src/scripts/notificationManager';
 import CardViewListHolder from "../../../components/dataTable/cardView/cardViewListHolder";
-//import AGGrid from "../../../components/dataTable/agGrid/agGrid";
 import ReportGrid from "../../../components/dataTable/reportGrid/reportGrid";
 import Logger from "../../../utils/logger";
 import Breakpoints from "../../../utils/breakpoints";
@@ -918,28 +917,31 @@ export const ReportContent = React.createClass({
 
         // Hide the footer if any rows are selected and for small breakpoint.
         let areRowsSelected = !!(selectedRows && selectedRows.length > 0);
-        let showFooter = !this.props.reactabular  && !areRowsSelected && !isSmall;
 
-        let addPadding;
+        let classNames = ['reportContent'];
         const isRowPopUpMenuOpen = this.props.isRowPopUpMenuOpen;
         const isInlineEditOpen = pendEdits.isInlineEditOpen;
         if (isInlineEditOpen) {
-            addPadding = "reportContent inlineEditing";
+            classNames.push('inlineEditing');
         } else if (isRowPopUpMenuOpen) {
-            addPadding =  "reportContent rowPopUpMenuOpen";
-        } else {
-            addPadding = "reportContent";
+            classNames.push('rowPopUpMenuOpen');
         }
 
+        classNames.push(this.props.reportData.loading ? 'loading' : '');
+
         const editErrors = pendEdits.editErrors || null;
+
+        // onCellClick handler: do nothing for embedded reports phase1.
+        let openRowToView = !this.props.phase1 && this.openRowToView;
+
         let reportContent;
 
         if (this.props.reportData.error) {
             reportContent = <ReportContentError errorDetails={this.props.reportData.errorDetails} />;
         } else {
             reportContent = (
-                    <div className={addPadding}>
-                        {!isSmall && this.props.reactabular &&
+                    <div className={classNames.join(' ')}>
+                        {!isSmall &&
                             <ReportGrid
                                 appId={this.props.reportData.appId}
                                 tblId={this.props.reportData.tblId}
@@ -952,15 +954,13 @@ export const ReportContent = React.createClass({
                                 appUsers={this.props.appUsers}
                                 onFieldChange={this.handleFieldChange}
                                 onEditRecordStart={this.handleEditRecordStart}
-                                onCellClick={this.openRowToView}
-                                //pendEdits={pendEdits}
+                                onCellClick={openRowToView}
                                 selectedRows={this.props.selectedRows}
                                 onRecordDelete={this.handleRecordDelete}
                                 onEditRecordCancel={this.handleEditRecordCancel}
                                 editErrors={editErrors}
                                 onRecordNewBlank={this.handleRecordNewBlank}
                                 onClickRecordSave={this.handleRecordSaveClicked}
-                                //isInlineEditOpen={isInlineEditOpen}
                                 editingIndex={this.props.reportData.editingIndex}
                                 editingId={this.props.reportData.editingId}
                                 selectRows={this.selectRows}
@@ -968,70 +968,11 @@ export const ReportContent = React.createClass({
                                 openRecordForEdit={this.openRecordForEditInTrowser}
                                 handleValidateFieldValue={this.handleValidateFieldValue}
                                 sortFids={this.props.reportData.data ? this.props.reportData.data.sortFids : []}
+
+                                // for relationships phase-1
+                                phase1={this.props.phase1}
                             />
                         }
-                        {/*TODO:: Remove once API for ReportGrid is closer to finalized. https://quickbase.atlassian.net/browse/MB-2023 */}
-                        {/*Keeping track of which props sent to AgGrid have not been used yet in QbGrid. Indicator of missing features; however, leaner implementation may mean fewer props passed as well*/}
-                        {/*onGridReady={this.props.onGridReady}*/}
-                        {/*onRecordChange={this.handleRecordChange}*/}
-                        {/*onRecordAdd={this.handleRecordAdd}*/}
-                        {/*validateRecord={this.validateRecord}*/}
-                        {/*validateFieldValue={this.handleValidateFieldValue}*/}
-                        {/*getOrigRec={this.getOrigRec}*/}
-                        {/*reportHeader={this.props.reportHeader}*/}
-                        {/*reportFooter={this.props.reportFooter}*/}
-                        {/*pageActions={this.props.pageActions}*/}
-                        {/*selectionActions={<ReportActions appId={this.props.reportData.appId} tblId={this.props.reportData.tblId} rptId={this.props.reportData.rptId} nameForRecords={this.props.nameForRecords} />}*/}
-                        {/*onScroll={this.onScrollRecords}*/}
-                        {/*showGrouping={this.props.reportData.data ? this.props.reportData.data.hasGrouping : false}*/}
-                        {/*recordsCount={recordsCount}*/}
-                        {/*groupLevel={this.props.reportData.data ? this.props.reportData.data.groupLevel : 0}*/}
-                        {/*groupEls={this.props.reportData.data ? this.props.reportData.data.groupEls : []}*/}
-                        {/*sortFids={this.props.reportData.data ? this.props.reportData.data.sortFids : []}*/}
-                        {/*filter={{selections: this.props.reportData.selections,*/}
-                        {/*facet: this.props.reportData.facetExpression,*/}
-                        {/*search: this.props.reportData.searchStringForFiltering}}*/}
-                        {/*!isSmall && !this.props.reactabular &&
-                        <AGGrid loading={this.props.reportData.loading}
-                                editingIndex={this.props.reportData.editingIndex}
-                                editingId={this.props.reportData.editingId}
-                                records={this.props.reportData.data ? _.cloneDeep(this.props.reportData.data.filteredRecords) : []}
-                                columns={this.props.reportData.data ? this.props.reportData.data.columns : []}
-                                primaryKeyName={this.props.primaryKeyName}
-                                appId={this.props.reportData.appId}
-                                appUsers={this.props.appUsers}
-                                isInlineEditOpen={isInlineEditOpen}
-                                pendEdits={pendEdits}
-                                editErrors={editErrors}
-                                onRecordDelete={this.handleRecordDelete}
-                                onEditRecordStart={this.handleEditRecordStart}
-                                onEditRecordCancel={this.handleEditRecordCancel}
-                                onFieldChange={this.handleFieldChange}
-                                onGridReady={this.props.onGridReady}
-                                onRecordChange={this.handleRecordChange}
-                                onRecordAdd={this.handleRecordAdd}
-                                onRecordNewBlank={this.handleRecordNewBlank}
-                                onRecordSaveClicked={this.handleRecordSaveClicked}
-                                validateRecord={this.validateRecord}
-                                validateFieldValue={this.handleValidateFieldValue}
-                                getOrigRec={this.getOrigRec}
-                                tblId={this.props.reportData.tblId}
-                                rptId={this.props.reportData.rptId}
-                                reportHeader={this.props.reportHeader}
-                                reportFooter={this.props.reportFooter}
-                                pageActions={this.props.pageActions}
-                                selectionActions={<ReportActions appId={this.props.reportData.appId} tblId={this.props.reportData.tblId} rptId={this.props.reportData.rptId} nameForRecords={this.props.nameForRecords} />}
-                                onScroll={this.onScrollRecords}
-                                onRowClick={this.openRowToView}
-                                showGrouping={this.props.reportData.data ? this.props.reportData.data.hasGrouping : false}
-                                recordsCount={recordsCount}
-                                groupLevel={this.props.reportData.data ? this.props.reportData.data.groupLevel : 0}
-                                groupEls={this.props.reportData.data ? this.props.reportData.data.groupEls : []}
-                                sortFids={this.props.reportData.data ? this.props.reportData.data.sortFids : []}
-                                filter={{selections: this.props.reportData.selections,
-                                    facet: this.props.reportData.facetExpression,
-                                    search: this.props.reportData.searchStringForFiltering}}/>
-                        */}
                         {isSmall &&
                         <CardViewListHolder reportData={this.props.reportData}
                                             appUsers={this.props.appUsers}
@@ -1065,9 +1006,7 @@ ReportContent.contextTypes = {
 };
 
 ReportContent.propTypes = {
-    //pendEdits: React.PropTypes.object.isRequired,
-    primaryKeyName: React.PropTypes.string.isRequired,
-    onGridReady: React.PropTypes.func
+    primaryKeyName: React.PropTypes.string.isRequired
 };
 
 const mapStateToProps = (state) => {

@@ -1,7 +1,7 @@
 import React, {PropTypes} from 'react';
 import ReactDom from 'react-dom';
 import FieldValueEditor from '../../fields/fieldValueEditor';
-import CellValueRenderer from '../agGrid/cellValueRenderer';
+import CellValueRenderer from '../qbGrid/cellValueRenderer';
 import FieldUtils from '../../../utils/fieldUtils';
 import FieldFormats from '../../../utils/fieldFormats';
 import QbIcon from '../../qbIcon/qbIcon';
@@ -10,10 +10,10 @@ import QbToolTip from '../../qbToolTip/qbToolTip';
 const ReportCell = React.createClass({
     propTypes: {
         appUsers: PropTypes.array,
-        onCellClick: PropTypes.func.isRequired,
-        onCellChange: PropTypes.func.isRequired,
-        onCellBlur: PropTypes.func.isRequired,
-        onCellClickEditIcon: PropTypes.func.isRequired,
+        onCellClick: PropTypes.func,
+        onCellChange: PropTypes.func,
+        onCellBlur: PropTypes.func,
+        onCellClickEditIcon: PropTypes.func,
         fieldDef: PropTypes.object,
         uniqueElementKey: PropTypes.string,
         recordId: PropTypes.number,
@@ -23,6 +23,9 @@ const ReportCell = React.createClass({
         invalidMessage: PropTypes.string,
         invalidResultData: PropTypes.object,
         validateFieldValue: PropTypes.func,
+
+        // relationship phase-1, will need remove when we allow editing
+        phase1: PropTypes.bool,
 
         /**
          * A property that tells this component to set focus on the first input in the FieldValue editor when it is in editing mode.
@@ -71,7 +74,8 @@ const ReportCell = React.createClass({
 
     shouldRenderEditIcon(isFieldEditable) {
         // We don't want to render an edit icon if another row is currently being edited. That is why we check for the editingRecordId to be null.
-        return (!this.props.isInlineEditOpen && isFieldEditable);
+        const currentlyEditable = !this.props.isInlineEditOpen && isFieldEditable;
+        return (!this.props.phase1 && currentlyEditable);
     },
 
     renderEditIcon(isFieldEditable) {
