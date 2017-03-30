@@ -48,14 +48,35 @@ class IconChooser extends React.Component {
     }
 
     filterChanged(e) {
-        this.setState({filterText: e.target.value.trim()});
+        this.setState({filterText: e.target.value});
+    }
+
+    filterMatches(text, icon) {
+
+        if (text === '') {
+            return true;
+        }
+        const iconName = icon.toLowerCase();
+
+        if (iconName.indexOf(text) !== -1) {
+            return true;
+        }
+
+        const matchedTags = this.props.iconsByTag.filter((tagToIcons) => tagToIcons.tag.toLowerCase().indexOf(text) !== -1);
+
+        if (!matchedTags) {
+            return false;
+        }
+
+        return matchedTags.find((taggedIcons) => taggedIcons.icons.find((taggedIcon) => taggedIcon.toLowerCase() === iconName));
     }
 
     getFilteredIcons() {
-        return this.props.icons.filter((icon) => icon.toLowerCase().indexOf(this.state.filterText.toLowerCase()) !== -1);
+        return this.props.icons.filter((icon) => this.filterMatches(this.state.filterText.toLowerCase().trim(), icon));
     }
 
     selectIcon(icon) {
+        this.toggleAllIcons();
         this.props.onSelect(icon);
     }
 
