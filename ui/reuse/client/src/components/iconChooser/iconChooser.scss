@@ -1,16 +1,68 @@
 @import '../../assets/css/qbVariables';
 
 .iconChooser {
+
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #c7c7c7;
+    background-color: #fff;
+    padding: 5px;
+    padding-right: 0;
+
+    .qbIcon {
+        font-size: 24px;
+        width: 32px;
+        height: 32px;
+    }
+
     .topRow {
         display: flex;
+        flex-shrink: 0;
+        overflow: hidden;
+        .showAllToggle {
+            text-align: center;
+            margin-right: 12px;
+            flex-grow: 0;
+            white-space: nowrap;
+            .toggleIcon {
+                margin: -5px;
+                width: 24px;
+                height: 24px;
+            }
+        }
     }
     .allIcons {
+        margin-top: 10px;
+        flex-grow: 1;
         display: flex;
+        flex-wrap: wrap;
+        overflow-y: auto;
+
+        .qbIcon {
+            color: #666;
+        }
+        .qbIcon:hover {
+            color: #000;
+        }
     }
 
     &.closed {
-        .allIcons {
+        .iconSearch {
             display: none;
+        }
+        .allIcons {
+            visibility: hidden;
+        }
+    }
+
+    .qbIcon.toggleIcon {
+        transition: transform 0.3s ease-in;
+        transform: rotate(0);
+    }
+
+    &.open {
+        .qbIcon.toggleIcon {
+            transform: rotate(-90deg);
         }
     }
 }

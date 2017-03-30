@@ -33,6 +33,14 @@ class IconChooser extends React.Component {
         }
     }
 
+    renderIconToggle() {
+        return (
+            <div className="showAllToggle" onClick={this.toggleAllIcons}>
+                <Icon iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY} icon={this.props.selected}/>
+                <Icon icon="caret-filled-down" className="toggleIcon"/>
+            </div>);
+    }
+
     render() {
         let classes = ['iconChooser', this.props.isOpen ? 'open' : 'closed'];
         if (this.props.classes) {
@@ -42,10 +50,12 @@ class IconChooser extends React.Component {
         return (
             <div className={classes.join(' ')}>
                 <div className="topRow">
-                    <div className="showAllToggle" onClick={this.toggleAllIcons}>click</div><div><input type="text" cols="20"/></div>
+                    {this.renderIconToggle()}
+                    <div className="iconSearch"><input type="text" cols="20"/></div>
                 </div>
+
                 <div className="allIcons">
-                    {this.props.icons.map((icon) => <Icon key={icon} iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY} icon={icon}/>)}
+                    {this.props.icons.map((icon, i) => <Icon key={i} iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY} icon={icon}/>)}
                 </div>
             </div>);
     }

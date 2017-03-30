@@ -60,7 +60,7 @@ class TableCreationPanel extends React.Component {
      * @returns {XML}
      */
     getSuggestedIcons() {
-        const iconNames = this.getIconNames();
+        const iconNames = []; // get from tableicons
         return (
             <div className="iconList">
                 {iconNames.map((iconName, i) => (
@@ -125,6 +125,10 @@ class TableCreationPanel extends React.Component {
                          icons={tableIconNames}
                          onSelect={this.selectIcon}
             />
+            <div className="suggestedIcons">
+                <div>Suggested Icons</div>
+                {this.getSuggestedIcons()}
+            </div>
         </div>);
     }
 

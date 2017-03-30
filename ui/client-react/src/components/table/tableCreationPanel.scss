@@ -19,25 +19,26 @@
         margin-left: 2px;
 
         .iconSelection {
-            display: flex;
-            justify-content: space-between;
-            flex-direction: row;
-        }
-        .iconChooser {
-            flex-grow: 0;
-            margin-right: 20px;
+            position: relative;
 
-            .dropdown-toggle {
-                border-radius: 0;
-                font-size: 20px;
+            .iconChooser {
+                position: absolute;
             }
-            .dropdown-menu {
-                min-width: inherit;
-                font-size: 20px;
+            .iconChooser.closed {
+                transition: all 300ms ease-in;
+                height: 38px;
+                width: 64px;
+            }
+            .iconChooser.open {
+                transition: all 300ms ease-in;
+
+                width: 766px;
+                height: 142px;
             }
         }
+
         .suggestedIcons {
-            flex-grow: 1;
+            margin-left: 80px;
             .iconList {
                 height: 32px;
                 button {
