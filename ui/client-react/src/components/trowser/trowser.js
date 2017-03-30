@@ -38,6 +38,18 @@ let Trowser = React.createClass({
         position: "top"
     },
 
+    keyboardOnSave() {
+        if (this.props.visible) {
+            this.props.onSave()
+        }
+    },
+
+    keyboardOnCancel() {
+        if (this.props.visible) {
+            this.props.onCancel()
+        }
+    },
+
     /**
      *
      * render trowser in front of a trowserBackground element (visible when browser is very wide)
@@ -56,8 +68,8 @@ let Trowser = React.createClass({
                 <div className={"trowserBackground"} onClick={this.props.onCancel}/>
                 <KeyboardShortcuts id="trowser"
                                    shortcutBindingsPreventDefault={[
-                                       {key: 'mod+s', callback: () => {this.props.onSave(); return false;}},
-                                       {key: 'esc', callback: () => {this.props.onCancel(); return false;}}
+                                       {key: 'mod+s', callback: () => {this.keyboardOnSave(); return false;}},
+                                       {key: 'esc', callback: () => {this.keyboardOnCancel(); return false;}}
                                    ]} />
                 <div className={"trowserContent"}>
                     <div className={"trowserHeader"}>
