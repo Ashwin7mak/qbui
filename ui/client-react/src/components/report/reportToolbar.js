@@ -1,6 +1,4 @@
 import React from 'react';
-import Fluxxor from 'fluxxor';
-
 import './report.scss';
 
 import {I18nMessage} from '../../../src/utils/i18nMessage';
@@ -14,8 +12,6 @@ import mockFacets from '../../mocks/facets';
 import Breakpoints from "../../utils/breakpoints";
 import _ from 'lodash';
 
-let FluxMixin = Fluxxor.FluxMixin(React);
-
 
 /**
  * a ReportToolbar for table reports with search field and a filter icon
@@ -23,9 +19,6 @@ let FluxMixin = Fluxxor.FluxMixin(React);
  */
 
 const ReportToolbar = React.createClass({
-    //interaction options
-
-    mixins: [FluxMixin],
 
     propTypes: {
         /**
@@ -47,7 +40,10 @@ const ReportToolbar = React.createClass({
         pageStart: React.PropTypes.number,
         pageEnd: React.PropTypes.number,
         recordsCount: React.PropTypes.number,
-        width: React.PropTypes.number
+        width: React.PropTypes.number,
+
+        // used for relationships phase-1
+        phase1: React.PropTypes.bool
     },
 
     getDefaultProps() {
@@ -189,7 +185,10 @@ const ReportToolbar = React.createClass({
             }
         }
         // Conditional marking display of filter box. Show when records have been loaded. This box does not depend on the record counting call
-        let showFilterSearchBox = !isLoading && isPageLoaded && !isError;
+        const isAvailable = !isLoading && !isError && !this.props.phase1;
+        const showFilterSearchBox = isAvailable && isPageLoaded;
+        const showSortAndGroup = isAvailable;
+        const showFacetsMenu = isAvailable && hasFacets;
         let reportToolbar = (
             <div className={"reportToolbar " + (hasFacets ? "" : "noFacets")}>
                 <div className="leftReportToolbar">
@@ -204,7 +203,7 @@ const ReportToolbar = React.createClass({
                                          {...this.props} /> :
                         null
                     }
-                    {!isLoading && !isError ?
+                    {showSortAndGroup ?
                         <SortAndGroup  {...this.props}
                                        filter={{selections: this.props.selections,
                                            facet: this.props.reportData.facetExpression,
@@ -213,7 +212,7 @@ const ReportToolbar = React.createClass({
                     }
                     {/* check if facets is enabled for this report,
                      also hide Facets Menu Button if facets disabled  */}
-                    {!isLoading && hasFacets && !isError ?
+                    {showFacetsMenu ?
                         (<FacetsMenu className="facetMenu"
                                      {...this.props}
                                      isLoading={isLoading}

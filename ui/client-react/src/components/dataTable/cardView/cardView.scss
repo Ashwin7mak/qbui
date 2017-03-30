@@ -12,14 +12,18 @@ $custom-row-card-padding-left: 10px;
 $custom-row-card-padding-right: 5px;
 $custom-row-card-horizontal-padding: $custom-row-card-padding-left + $custom-row-card-padding-right;
 
-.swipeable.actionsOpen .custom-row-card {
-    margin-left: -240px;
-    margin-right: 240px;
-}
+.swipeable {
+    width: 100%;
 
-.swipeable.recordActions {
-    position: absolute;
-    right: 0;
+    .actionsOpen .custom-row-card {
+        margin-left: -240px;
+        margin-right: 240px;
+    }
+
+    .recordActions {
+        position: absolute;
+        right: 0;
+    }
 }
 
 .custom-row-card {
@@ -177,7 +181,6 @@ $custom-row-card-horizontal-padding: $custom-row-card-padding-left + $custom-row
 .checkboxContainer {
     width: 40px;
     flex: 0 0 auto;
-    padding-left: 10px;
 
     input {
         height: 100%;

@@ -10,7 +10,10 @@ import CardViewNavigation from './cardViewNavigation';
 import * as SpinnerConfigurations from "../../../constants/spinnerConfigurations";
 import _ from 'lodash';
 import {connect} from 'react-redux';
-import {openRecordForEdit} from '../../../actions/formActions';
+import {openRecord} from '../../../actions/recordActions';
+import WindowLocationUtils from '../../../utils/windowLocationUtils';
+import {EDIT_RECORD_KEY} from '../../../constants/urlConstants';
+import {CONTEXT} from '../../../actions/context';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
 
@@ -259,7 +262,7 @@ export let CardViewListHolder = React.createClass({
         let showPreviousButton = !isLoading && !isCountingRecords && !isError && (this.props.pageStart !== 1);
 
         let cardViewListClasses = "cardViewList cardViewListHolder";
-        if (this.props.selectedRows.length) {
+        if (this.props.selectedRows && this.props.selectedRows.length) {
             cardViewListClasses += " selectedRows";
         }
         if (this.state.allowCardSelection) {
@@ -335,19 +338,62 @@ export let CardViewListHolder = React.createClass({
     },
 
     /**
-     * card edit action callbac, edit in trowser
+     * card edit action callback, edit in trowser
      * @param recordId
      */
-    openRecordForEdit(recordId) {
+    openRecordForEdit(recId) {
+        if (recId) {
+            const {data} = this.getReport();
+            if (data) {
+                const key = _.has(data, 'keyField.name') ? data.keyField.name : '';
+                if (key) {
+                    let recordsArray = this.getRecordsArray(data);
 
-        this.props.dispatch(openRecordForEdit(recordId));
+                    //  fetch the index of the row in the recordsArray that is being opened
+                    const index = _.findIndex(recordsArray, rec => rec[key] && rec[key].value === recId);
+                    let nextRecordId = (index < recordsArray.length - 1) ? recordsArray[index + 1][key].value : null;
+                    let previousRecordId = index > 0 ? recordsArray[index - 1][key].value : null;
 
-        // needed until report store is migrated to redux
-
-        const flux = this.getFlux();
-
-        flux.actions.editingReportRow(recordId);
+                    this.props.openRecord(recId, nextRecordId, previousRecordId);
+                    WindowLocationUtils.pushWithQuery(EDIT_RECORD_KEY, recId);
+                }
+            }
+        }
     },
+
+    addGroupedRecords(arr, groups) {
+        if (Array.isArray(groups)) {
+            groups.forEach(child => {
+                if (child.children) {
+                    this.addGroupedRecords(arr, child.children);
+                } else {
+                    arr.push(child);
+                }
+            });
+        }
+    },
+
+    getRecordsArray(data) {
+        //  TODO: get from store
+        const {filteredRecords, hasGrouping} = data;
+
+        let recordsArray = [];
+        if (hasGrouping) {
+            // flatten grouped records
+            this.addGroupedRecords(recordsArray, filteredRecords);
+        } else {
+            recordsArray = filteredRecords;
+        }
+        return recordsArray;
+    },
+
+    getReport() {
+        return this.props.reportData;
+        //return _.find(this.props.report, function(rpt) {
+        //    return rpt.id === CONTEXT.REPORT.NAV;
+        //});
+    },
+
     render() {
         let results = this.props.reportData && this.props.reportData.data ? this.props.reportData.data.filteredRecords : [];
 
@@ -370,4 +416,23 @@ export let CardViewListHolder = React.createClass({
     }
 });
 
-export default connect()(CardViewListHolder);
+const mapStateToProps = (state) => {
+    return {
+        report: state.report
+    };
+};
+
+// similarly, abstract out the Redux dispatcher from the presentational component
+// (another bit of boilerplate to keep the component free of Redux dependencies)
+const mapDispatchToProps = (dispatch) => {
+    return {
+        openRecord: (recId, nextId, prevId) => {
+            dispatch(openRecord(recId, nextId, prevId));
+        }
+    };
+};
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(CardViewListHolder);

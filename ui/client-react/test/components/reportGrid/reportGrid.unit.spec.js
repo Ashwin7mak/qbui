@@ -2,7 +2,10 @@ import React from 'react';
 import {shallow} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
 
-import ReportGrid, {__RewireAPI__ as ReportGridRewireAPI} from '../../../src/components/dataTable/reportGrid/reportGrid';
+import ReportGrid, {
+    ReportGrid as UnconnectedReportGrid,
+    __RewireAPI__ as ReportGridRewireAPI
+} from '../../../src/components/dataTable/reportGrid/reportGrid';
 import QbGrid from '../../../src/components/dataTable/qbGrid/qbGrid';
 import ReportCell from '../../../src/components/dataTable/reportGrid/reportCell';
 import ReportColumnHeaderMenu from '../../../src/components/dataTable/reportGrid/reportColumnHeaderMenu';
@@ -57,7 +60,7 @@ describe('ReportGrid', () => {
     describe('onCellChange', () => {
         it('transforms the field change into one accepted by the flux store', () => {
             spyOn(requiredProps, 'onFieldChange');
-            component = shallow(<ReportGrid {...requiredProps}/>);
+            component = shallow(<UnconnectedReportGrid {...requiredProps} />);
             instance = component.instance();
 
             // Cell change only receives the value
@@ -70,7 +73,7 @@ describe('ReportGrid', () => {
     describe('onCellBlur', () => {
         it('transforms the field change into one accepted by the flux store', () => {
             spyOn(requiredProps, 'onFieldChange');
-            component = shallow(<ReportGrid {...requiredProps}/>);
+            component = shallow(<UnconnectedReportGrid {...requiredProps}/>);
             instance = component.instance();
 
             // Cell blur receives a value object with both the value and display
@@ -83,7 +86,7 @@ describe('ReportGrid', () => {
     describe('selectAllRows', () => {
         it('selects all records currently passed into the grid', () => {
             spyOn(actions, 'selectRows');
-            component = shallow(<ReportGrid {...requiredProps} selectRows={actions.selectRows} records={testRecords}/>);
+            component = shallow(<UnconnectedReportGrid {...requiredProps} selectRows={actions.selectRows} records={testRecords}/>);
             instance = component.instance();
 
             instance.selectAllRows();
@@ -93,7 +96,7 @@ describe('ReportGrid', () => {
 
         it('ignores group headers when selecting rows', () => {
             spyOn(actions, 'selectRows');
-            component = shallow(<ReportGrid {...requiredProps} selectRows={actions.selectRows} records={testGroupedRecords}/>);
+            component = shallow(<UnconnectedReportGrid {...requiredProps} selectRows={actions.selectRows} records={testGroupedRecords}/>);
             instance = component.instance();
 
             instance.selectAllRows();
@@ -106,7 +109,7 @@ describe('ReportGrid', () => {
     describe('deselectAllRows', () => {
         it('calls selectRows prop with an empty array', () => {
             spyOn(actions, 'selectRows');
-            component = shallow(<ReportGrid {...requiredProps} selectRows={actions.selectRows} records={testRecords}/>);
+            component = shallow(<UnconnectedReportGrid {...requiredProps} selectRows={actions.selectRows} records={testRecords}/>);
             instance = component.instance();
 
             instance.deselectAllRows();
@@ -145,7 +148,7 @@ describe('ReportGrid', () => {
 
         testCases.forEach(testCase => {
             it(testCase.description, () => {
-                component = shallow(<ReportGrid
+                component = shallow(<UnconnectedReportGrid
                     {...requiredProps}
                     selectRows={actions.selectRows}
                     records={testCase.records}
@@ -172,7 +175,7 @@ describe('ReportGrid', () => {
     describe('startEditingRow', () => {
         it('passes the recordId to the onEditRecordStart prop', () => {
             spyOn(requiredProps, 'onEditRecordStart');
-            component = shallow(<ReportGrid {...requiredProps} onEditRecordStart={requiredProps.onEditRecordStart}/>);
+            component = shallow(<UnconnectedReportGrid {...requiredProps} onEditRecordStart={requiredProps.onEditRecordStart}/>);
             instance = component.instance();
 
             let mockField = {id: 1};
@@ -185,7 +188,7 @@ describe('ReportGrid', () => {
     describe('onClickDelete', () => {
         it('passes the recordId to the onRecordDelete prop', () => {
             spyOn(actions, 'onRecordDelete');
-            component = shallow(<ReportGrid {...requiredProps} onRecordDelete={actions.onRecordDelete}/>);
+            component = shallow(<UnconnectedReportGrid {...requiredProps} onRecordDelete={actions.onRecordDelete}/>);
             instance = component.instance();
 
             instance.onClickDelete(testRecordId);
@@ -235,9 +238,9 @@ describe('ReportGrid', () => {
 
         testCases.forEach(testCase => {
             it(testCase.description, () => {
-                component = shallow(<ReportGrid
+                component = shallow(<UnconnectedReportGrid
                     {...requiredProps}
-                    pendEdits={testCase.pendEdits}
+                    record={[{pendEdits: testCase.pendEdits}]}
                     editingIndex={testCase.editingIndex}
                     editingId={testCase.editingId}
                 />);
@@ -248,7 +251,7 @@ describe('ReportGrid', () => {
         });
     });
 
-    it('passes the correct props to QbGrid to render the grid correctly', () => {
+    describe('QbGrid props test', () => {
         const testColumns = [1, 2, 3];
         const isInlineEditOpen = true;
         const pendEdits = {isInlineEditOpen: isInlineEditOpen, currentEditingRecordId: testRecordId, errors: ['an error'], ok: false, saving: true};
@@ -259,68 +262,114 @@ describe('ReportGrid', () => {
         const sortFids = [5, 6];
         const testAppUsers = [7, 8];
 
-        ReportGridRewireAPI.__Rewire__('ReportRowTransformer', {transformRecordsForGrid() {return testRecords;}});
-        ReportGridRewireAPI.__Rewire__('ReportColumnTransformer', {transformColumnsForGrid() {return testColumns;}});
+        let phase1 = undefined;
 
-        component = shallow(<ReportGrid
-            {...requiredProps}
-            {...actions}
-            columns={testColumns}
-            records={testRecords}
-            isInlineEditOpen={isInlineEditOpen}
-            pendEdits={pendEdits}
-            loading={false}
-            selectedRows={selectedRows}
-            editErrors={pendEdits}
-            appId={appId}
-            tblId={tblId}
-            rptId={rptId}
-            sortFids={sortFids}
-            appUsers={testAppUsers}
-        />);
-        instance = component.instance();
-
-        let qbGrid = component.find(QbGrid);
-        expect(qbGrid).toHaveProp('numberOfColumns', testColumns.length);
-        expect(qbGrid).toHaveProp('columns', testColumns);
-        expect(qbGrid).toHaveProp('rows', testRecords);
-        expect(qbGrid).toHaveProp('loading', false);
-        expect(qbGrid).toHaveProp('onStartEditingRow', instance.startEditingRow);
-        expect(qbGrid).toHaveProp('editingRowId', testRecordId);
-        expect(qbGrid).toHaveProp('isInlineEditOpen', isInlineEditOpen);
-        expect(qbGrid).toHaveProp('appUsers', testAppUsers);
-        expect(qbGrid).toHaveProp('selectedRows', selectedRows);
-        expect(qbGrid).toHaveProp('areAllRowsSelected', true);
-        expect(qbGrid).toHaveProp('onClickToggleSelectedRow', actions.onClickToggle);
-        expect(qbGrid).toHaveProp('onClickEditIcon', actions.openRecordForEdit);
-        expect(qbGrid).toHaveProp('onClickDeleteIcon', instance.onClickDelete);
-        expect(qbGrid).toHaveProp('onClickToggleSelectAllRows', instance.toggleSelectAllRows);
-        expect(qbGrid).toHaveProp('onCancelEditingRow', actions.onEditRecordCancel);
-        expect(qbGrid).toHaveProp('editingRowErrors', pendEdits.errors);
-        expect(qbGrid).toHaveProp('isEditingRowValid', pendEdits.ok);
-        expect(qbGrid).toHaveProp('onClickAddNewRow', actions.onRecordNewBlank);
-        expect(qbGrid).toHaveProp('onClickSaveRow', actions.onClickRecordSave);
-        expect(qbGrid).toHaveProp('isEditingRowSaving', pendEdits.saving);
-        expect(qbGrid).toHaveProp('cellRenderer', ReportCell);
-        expect(qbGrid).toHaveProp('commonCellProps', {
-            appUsers: testAppUsers,
-            isInlineEditOpen: isInlineEditOpen,
-            onCellChange: instance.onCellChange,
-            onCellBlur: instance.onCellBlur,
-            onCellClick: actions.onCellClick,
-            onCellClickEditIcon: instance.startEditingRow,
-            validateFieldValue: actions.handleValidateFieldValue
-        });
-        expect(qbGrid).toHaveProp('compareCellChanges', FieldUtils.compareFieldValues);
-        expect(qbGrid).toHaveProp('menuComponent', ReportColumnHeaderMenu);
-        expect(qbGrid).toHaveProp('menuProps', {
-            appId: appId,
-            tblId: tblId,
-            rptId: rptId,
-            sortFids: sortFids
+        beforeAll(() => {
+            ReportGridRewireAPI.__Rewire__('ReportRowTransformer', {transformRecordsForGrid() {return testRecords;}});
+            ReportGridRewireAPI.__Rewire__('ReportColumnTransformer', {transformColumnsForGrid() {return testColumns;}});
         });
 
-        ReportGridRewireAPI.__ResetDependency__('ReportRowTransformer');
-        ReportGridRewireAPI.__ResetDependency__('ReportColumnTransformer');
+        afterAll(() => {
+            ReportGridRewireAPI.__ResetDependency__('ReportRowTransformer');
+            ReportGridRewireAPI.__ResetDependency__('ReportColumnTransformer');
+        });
+
+        it('passes the correct props to QbGrid to render the grid correctly', () => {
+            component = shallow(<UnconnectedReportGrid
+                {...requiredProps}
+                {...actions}
+                columns={testColumns}
+                records={testRecords}
+                isInlineEditOpen={isInlineEditOpen}
+                record={[{pendEdits}]}
+                loading={false}
+                selectedRows={selectedRows}
+                editErrors={pendEdits}
+                appId={appId}
+                tblId={tblId}
+                rptId={rptId}
+                sortFids={sortFids}
+                appUsers={testAppUsers}
+                phase1={phase1}
+            />);
+            instance = component.instance();
+
+            let qbGrid = component.find(QbGrid);
+            expect(qbGrid).toHaveProp('numberOfColumns', testColumns.length);
+            expect(qbGrid).toHaveProp('columns', testColumns);
+            expect(qbGrid).toHaveProp('rows', testRecords);
+            expect(qbGrid).toHaveProp('loading', false);
+            expect(qbGrid).toHaveProp('onStartEditingRow', instance.startEditingRow);
+            expect(qbGrid).toHaveProp('editingRowId', testRecordId);
+            expect(qbGrid).toHaveProp('isInlineEditOpen', isInlineEditOpen);
+            expect(qbGrid).toHaveProp('appUsers', testAppUsers);
+            expect(qbGrid).toHaveProp('selectedRows', selectedRows);
+            expect(qbGrid).toHaveProp('areAllRowsSelected', true);
+            expect(qbGrid).toHaveProp('onClickToggleSelectedRow', actions.onClickToggle);
+            expect(qbGrid).toHaveProp('onClickEditIcon', actions.openRecordForEdit);
+            expect(qbGrid).toHaveProp('onClickDeleteIcon', instance.onClickDelete);
+            expect(qbGrid).toHaveProp('onClickToggleSelectAllRows', instance.toggleSelectAllRows);
+            expect(qbGrid).toHaveProp('onCancelEditingRow', actions.onEditRecordCancel);
+            expect(qbGrid).toHaveProp('editingRowErrors', pendEdits.errors);
+            expect(qbGrid).toHaveProp('isEditingRowValid', pendEdits.ok);
+            expect(qbGrid).toHaveProp('onClickAddNewRow', actions.onRecordNewBlank);
+            expect(qbGrid).toHaveProp('onClickSaveRow', actions.onClickRecordSave);
+            expect(qbGrid).toHaveProp('isEditingRowSaving', pendEdits.saving);
+            expect(qbGrid).toHaveProp('cellRenderer', ReportCell);
+            expect(qbGrid).toHaveProp('commonCellProps', {
+                appUsers: testAppUsers,
+                isInlineEditOpen: isInlineEditOpen,
+                phase1,
+                onCellChange: instance.onCellChange,
+                onCellBlur: instance.onCellBlur,
+                onCellClick: actions.onCellClick,
+                onCellClickEditIcon: instance.startEditingRow,
+                validateFieldValue: actions.handleValidateFieldValue
+            });
+            expect(qbGrid).toHaveProp('compareCellChanges', FieldUtils.compareFieldValues);
+            expect(qbGrid).toHaveProp('menuComponent', ReportColumnHeaderMenu);
+            expect(qbGrid).toHaveProp('menuProps', {
+                appId: appId,
+                tblId: tblId,
+                rptId: rptId,
+                sortFids: sortFids
+            });
+        });
+
+        it('passes the correct props to QbGrid and commonCellProps for relationships phase1', () => {
+            phase1 = true;
+            component = shallow(<UnconnectedReportGrid
+                {...requiredProps}
+                {...actions}
+                columns={testColumns}
+                records={testRecords}
+                isInlineEditOpen={isInlineEditOpen}
+                record={[{pendEdits}]}
+                loading={false}
+                selectedRows={selectedRows}
+                editErrors={pendEdits}
+                appId={appId}
+                tblId={tblId}
+                rptId={rptId}
+                sortFids={sortFids}
+                appUsers={testAppUsers}
+                phase1={phase1}
+            />);
+            instance = component.instance();
+
+            let qbGrid = component.find(QbGrid);
+            expect(qbGrid).toHaveProp('phase1', phase1);
+            expect(qbGrid).toHaveProp('showRowActionsColumn', !phase1);
+            expect(qbGrid).toHaveProp('commonCellProps', {
+                appUsers: testAppUsers,
+                isInlineEditOpen: isInlineEditOpen,
+                phase1: phase1,
+                onCellChange: instance.onCellChange,
+                onCellBlur: instance.onCellBlur,
+                onCellClick: actions.onCellClick,
+                onCellClickEditIcon: instance.startEditingRow,
+                validateFieldValue: actions.handleValidateFieldValue
+            });
+        });
     });
 });

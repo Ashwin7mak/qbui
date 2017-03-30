@@ -16,10 +16,14 @@ import StringUtils from '../../utils/stringUtils';
 import * as query from '../../constants/query';
 import FieldUtils from '../../utils/fieldUtils';
 import ReportUtils from '../../utils/reportUtils';
+import WindowLocationUtils from '../../utils/windowLocationUtils';
 import * as Constants from "../../../../common/src/constants";
 import ReportContentError from './dataTable/reportContentError';
 import {connect} from 'react-redux';
 import {editNewRecord} from '../../actions/formActions';
+import {searchInput, clearSearchInput} from '../../actions/searchActions';
+import {EDIT_RECORD_KEY, NEW_RECORD_VALUE} from '../../constants/urlConstants';
+
 let logger = new Logger();
 
 let FluxMixin = Fluxxor.FluxMixin(React);
@@ -40,9 +44,11 @@ let AddRecordButton = React.createClass({
  */
 export const ReportToolsAndContent = React.createClass({
     mixins: [FluxMixin],
-    facetFields : {},
+    //facetFields : {},
     debounceInputMillis: 700, // a key send delay
-    nameForRecords: "Records",  // get from table meta data
+    // TODO: the tablePropertiesEndpoint on EE has the noun for records
+    // get from table meta data
+    nameForRecords: "Records",
     propTypes: {
         appId: React.PropTypes.string,
         tblId: React.PropTypes.string,
@@ -53,7 +59,11 @@ export const ReportToolsAndContent = React.createClass({
         callbacks :  React.PropTypes.object,
         selectedRows: React.PropTypes.array,
         pageStart: React.PropTypes.number,
-        pageEnd: React.PropTypes.number
+        pageEnd: React.PropTypes.number,
+        loadDynamicReport: React.PropTypes.func,
+
+        // used for relationships phase-1
+        phase1: React.PropTypes.bool
     },
     getDefaultProps() {
         return {
@@ -71,10 +81,10 @@ export const ReportToolsAndContent = React.createClass({
         // last time the debouncedFilterReport was invoked.
         this.debouncedFilterReport = _.debounce(this.filterReport, this.debounceInputMillis);
         // note the facets by id
-        this.mapFacetFields();
+        //this.mapFacetFields();
     },
     componentWillReceiveProps() {
-        this.mapFacetFields();
+        ///this.mapFacetFields();
     },
 
     //when report changed from not loading to loading start measure of components performance
@@ -116,14 +126,17 @@ export const ReportToolsAndContent = React.createClass({
     },
 
     mapFacetFields() {
-        this.facetFields = {};
+        //this.facetFields = {};
+        let facetFields = {};
         if (this.props.reportData && this.props.reportData.data &&
             this.props.reportData.data.facets) {
             this.props.reportData.data.facets.map((facet) => {
                 // a fields id ->facet lookup
-                this.facetFields[facet.id] = facet;
+                //this.facetFields[facet.id] = facet;
+                facetFields[facet.id] = facet;
             });
         }
+        return facetFields;
     },
 
     getPageActions(maxButtonsBeforeMenu) {
@@ -147,7 +160,8 @@ export const ReportToolsAndContent = React.createClass({
         if (trimmedSearch !== this.props.searchStringForFiltering || alwaysRunReport === true) {
             logger.debug('Sending filter action with:' + trimmedSearch);
 
-            const filter = FilterUtils.getFilter(StringUtils.trim(trimmedSearch), selections, this.facetFields);
+            let facetFields = this.mapFacetFields();
+            const filter = FilterUtils.getFilter(StringUtils.trim(trimmedSearch), selections, facetFields);
 
             let queryParams = {};
             queryParams[query.SORT_LIST_PARAM] = ReportUtils.getGListString(this.props.reportData.data.sortFids, this.props.reportData.data.groupEls);
@@ -156,7 +170,8 @@ export const ReportToolsAndContent = React.createClass({
             queryParams[query.OFFSET_PARAM] = Constants.PAGE.DEFAULT_OFFSET;
             queryParams[query.NUMROWS_PARAM] = Constants.PAGE.DEFAULT_NUM_ROWS;
 
-            this.getFlux().actions.loadDynamicReport(this.props.selectedAppId,
+            this.props.loadDynamicReport(
+                this.props.selectedAppId,
                 this.props.routeParams.tblId,
                 typeof this.props.rptId !== "undefined" ? this.props.rptId : this.props.routeParams.rptId,
                 true, filter, queryParams);
@@ -164,24 +179,26 @@ export const ReportToolsAndContent = React.createClass({
     },
 
     searchTheString(searchTxt) {
-        this.getFlux().actions.filterSearchPending(searchTxt);
+        this.props.searchInput(searchTxt);
         this.filterOnSearch(searchTxt);
     },
 
     filterOnSelections(newSelections) {
-        this.getFlux().actions.filterSelectionsPending(newSelections);
         this.debouncedFilterReport(this.props.searchStringForFiltering, newSelections, true);
     },
 
     clearSearchString() {
-        this.getFlux().actions.filterSearchPending('');
-        this.filterOnSearch('');
+        this.props.clearSearchInput();
+        // no debounce when clicking the clear button
+        this.filterReport('', this.props.reportData.selections);
     },
 
     clearAllFilters() {
+        // TODO clear out filter selection
         let noSelections = new FacetSelections();
-        this.getFlux().actions.filterSelectionsPending(noSelections);
-        this.getFlux().actions.filterSearchPending('');
+        // TODO: don't think this filterSelectionsPending is necessray
+
+        this.props.clearSearchInput();
         this.debouncedFilterReport('', noSelections, true);
     },
 
@@ -189,21 +206,22 @@ export const ReportToolsAndContent = React.createClass({
      * This function should be called only once when AGGrid is initialized. Find the full width of
      * the table so the ReportToolbar can adjust its width to match the table.
      */
-    onGridSizeSet() {
-        let agGridBody = document.getElementsByClassName('ag-body-container');
-        let leftColumn = document.getElementsByClassName('ag-pinned-left-cols-container');
-        if (_.get(agGridBody, '[0].clientWidth') && _.get(leftColumn, '[0].clientWidth')) {
-            this.setState({gridWidth: agGridBody[0].clientWidth + leftColumn[0].clientWidth});
-        }
-    },
+    /* to be reviewed when working on : https://quickbase.atlassian.net/browse/MC-1115
+     onGridSizeSet() {
+         let agGridBody = document.getElementsByClassName('ag-body-container');
+         let leftColumn = document.getElementsByClassName('ag-pinned-left-cols-container');
+         if (_.get(agGridBody, '[0].clientWidth') && _.get(leftColumn, '[0].clientWidth')) {
+             this.setState({gridWidth: agGridBody[0].clientWidth + leftColumn[0].clientWidth});
+         }
+     },*/
 
     getReportToolbar() {
         let {appId, tblId, rptId,
             reportData:{selections, ...otherReportData}} = this.props;
 
-        return <ReportToolbar appId={this.props.params.appId}
-                              tblId={this.props.params.tblId}
-                              rptId={typeof this.props.rptId !== "undefined" ? this.props.rptId : this.props.params.rptId}
+        return <ReportToolbar appId={this.props.reportData.appId}
+                              tblId={this.props.reportData.tblId}
+                              rptId={typeof this.props.reportData.rptId !== "undefined" ? this.props.reportData.rptId : this.props.params.rptId}
                               reportData={this.props.reportData}
                               selections={this.props.reportData.selections}
                               searchStringForFiltering={this.props.reportData.searchStringForFiltering}
@@ -220,6 +238,9 @@ export const ReportToolsAndContent = React.createClass({
                               pageEnd={this.pageEnd}
                               recordsCount={this.recordsCount}
                               width={this.state.gridWidth}
+
+                              // used for relationships phase-1
+                              phase1={this.props.phase1}
                />;
     },
     getSelectionActions() {
@@ -260,9 +281,9 @@ export const ReportToolsAndContent = React.createClass({
     },
 
     getPageUsingOffsetMultiplicant(multiplicant) {
-        let appId = this.props.params.appId;
-        let tblId = this.props.params.tblId;
-        let rptId = typeof this.props.rptId !== "undefined" ? this.props.rptId : this.props.params.rptId;
+        let appId = this.props.reportData.appId;
+        let tblId = this.props.reportData.tblId;
+        let rptId = typeof this.props.reportData.rptId !== "undefined" ? this.props.reportData.rptId : this.props.params.rptId;
         let filter = {};
         let queryParams = {};
         let sortList = "";
@@ -291,7 +312,7 @@ export const ReportToolsAndContent = React.createClass({
         queryParams[query.OFFSET_PARAM] = offset + (multiplicant * numRows);
         queryParams[query.NUMROWS_PARAM] = numRows;
 
-        this.getFlux().actions.loadDynamicReport(appId, tblId, rptId, true, filter, queryParams);
+        this.props.loadDynamicReport(appId, tblId, rptId, true, filter, queryParams);
     },
 
     /**
@@ -307,67 +328,54 @@ export const ReportToolsAndContent = React.createClass({
      */
     editNewRecord() {
         // need to dispatch to Fluxxor since report store handles this too...
-        const flux = this.getFlux();
-        flux.actions.editNewRecord();
+        //const flux = this.getFlux();
+        //flux.actions.editNewRecord();
 
-        this.props.dispatch(editNewRecord(false));
+        //this.props.dispatch(editNewRecord(false));
+        WindowLocationUtils.pushWithQuery(EDIT_RECORD_KEY, NEW_RECORD_VALUE);
     },
 
     render() {
-        let classes = ['reportToolsAndContentContainer'];
-        if (this.props.selectedRows) {
-            if (this.props.selectedRows.length > 0) {
-                classes.push('activeSelection');
-            }
-            if (this.props.selectedRows.length === 1) {
-                classes.push('singleSelection');
-            }
-        }
-
-        if (this.props.reportData && this.props.reportData.isRecordDeleted) {
-            this.getPageUsingOffsetMultiplicant(0);
-        }
-
-        let {appId, tblId, rptId, reportData:{selections, ...otherReportData}} = this.props;
-        let primaryKeyName = FieldUtils.getPrimaryKeyFieldName(this.props.fields);
-
-        // Define the page start. Page offset is zero indexed. For display purposes, add one.
-        this.pageStart = this.props.reportData.pageOffset + 1;
-        // Define page end. This is page offset added to page size or number of rows.
-        this.pageEnd = this.props.reportData.pageOffset + this.props.reportData.numRows;
-
-        this.recordsCount = this.getReportRecordsCount(this.props.reportData);
-        this.pageEnd = this.pageEnd > this.recordsCount ? this.recordsCount : this.pageEnd;
-
-
-        if (_.isUndefined(this.props.params) ||
-            _.isUndefined(this.props.params.appId) ||
-            _.isUndefined(this.props.params.tblId) ||
-            (_.isUndefined(this.props.params.rptId) && _.isUndefined(this.props.rptId))
+        if (_.isUndefined(this.props.reportData) ||
+            _.isUndefined(this.props.reportData.appId) ||
+            _.isUndefined(this.props.reportData.tblId) ||
+            (_.isUndefined(this.props.reportData.rptId))
         ) {
             logger.info("the necessary params were not specified to reportToolsAndContent render params=" + simpleStringify(this.props.params));
-            return <ReportContentError errorDetails={this.props.reportData.errorDetails} />;
+            return <ReportContentError errorDetails={this.props.reportData.errorDetails}/>;
         } else {
-            let toolbar = <ReportToolbar appId={this.props.params.appId}
-                                         tblId={this.props.params.tblId}
-                                         rptId={typeof this.props.rptId !== "undefined" ? this.props.rptId : this.props.params.rptId}
-                                         reportData={this.props.reportData}
-                                         selections={this.props.reportData.selections}
-                                         searchStringForFiltering={this.props.reportData.searchStringForFiltering}
-                                         pageActions={this.getPageActions(0)}
-                                         nameForRecords={this.nameForRecords}
-                                         fields={this.props.fields}
-                                         searchTheString={this.searchTheString}
-                                         filterOnSelections={this.filterOnSelections}
-                                         clearSearchString={this.clearSearchString}
-                                         clearAllFilters={this.clearAllFilters}
-                                         getNextReportPage={this.getNextReportPage}
-                                         getPreviousReportPage={this.getPreviousReportPage}
-                                         pageStart={this.pageStart}
-                                         pageEnd={this.pageEnd}
-                                         recordsCount={this.recordsCount}
-                                         width={this.state.gridWidth}
-                          />;
+            let classes = ['reportToolsAndContentContainer'];
+            // TODO get from reports store
+            if (this.props.selectedRows) {
+                if (this.props.selectedRows.length > 0) {
+                    classes.push('activeSelection');
+                }
+                if (this.props.selectedRows.length === 1) {
+                    classes.push('singleSelection');
+                }
+            }
+
+            if (this.props.reportData && this.props.reportData.isRecordDeleted) {
+                this.getPageUsingOffsetMultiplicant(0);
+            }
+
+            let {appId, tblId, rptId, reportData:{selections, ...otherReportData}} = this.props;
+
+            //  get the fields from redux store
+            let fieldsContainer = _.find(this.props.fields, field => field.appId === this.props.reportData.appId && field.tblId === this.props.reportData.tblId);
+            let fields = fieldsContainer ? fieldsContainer.fields : [];
+
+            let primaryKeyName = FieldUtils.getPrimaryKeyFieldName(fields);
+
+            // Define the page start. Page offset is zero indexed. For display purposes, add one.
+            this.pageStart = this.props.reportData.pageOffset + 1;
+            // Define page end. This is page offset added to page size or number of rows.
+            this.pageEnd = this.props.reportData.pageOffset + this.props.reportData.numRows;
+
+            this.recordsCount = this.getReportRecordsCount(this.props.reportData);
+            this.pageEnd = this.pageEnd > this.recordsCount ? this.recordsCount : this.pageEnd;
+
+            let toolbar = this.getReportToolbar();
 
             let reportFooter = <ReportFooter
                                 reportData={this.props.reportData}
@@ -394,9 +402,9 @@ export const ReportToolsAndContent = React.createClass({
                     </label>
                     {this.getTableActions()}
 
-                    <ReportContent appId={this.props.params.appId}
-                                   tblId={this.props.params.tblId}
-                                   rptId={typeof this.props.rptId !== "undefined" ? this.props.rptId : this.props.params.rptId}
+                    <ReportContent appId={this.props.reportData.appId}
+                                   tblId={this.props.reportData.tblId}
+                                   rptId={typeof this.props.reportData.rptId !== "undefined" ? this.props.reportData.rptId : this.props.params.rptId}
                                    reportData={this.props.reportData}
                                    appUsers={this.props.appUsers}
                                    reportHeader={toolbar}
@@ -406,9 +414,10 @@ export const ReportToolsAndContent = React.createClass({
                                    flux={this.getFlux()}
                                    reactabular={this.state.reactabular}
                                    gridOptions={this.props.gridOptions}
-
-                                   onGridReady={this.onGridSizeSet}
-                                   {...this.props} />
+                        //to be reviewed when working on : https://quickbase.atlassian.net/browse/MC-1115
+                                  /*{onGridReady={this.onGridSizeSet}*/
+                                   {...this.props}
+                                   fields={fields}/>
 
                     {!this.props.scrollingReport && <AddRecordButton onClick={this.editNewRecord}/>}
                 </div>
@@ -417,4 +426,26 @@ export const ReportToolsAndContent = React.createClass({
     }
 });
 
-export default connect()(ReportToolsAndContent);
+const mapStateToProps = (state) => {
+    return {
+        report: state.report,
+        search: state.search,
+        fields: state.fields
+    };
+};
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        searchInput: (input) => {
+            dispatch(searchInput(input));
+        },
+        clearSearchInput: () => {
+            dispatch(clearSearchInput());
+        }
+    };
+};
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(ReportToolsAndContent);
