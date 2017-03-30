@@ -359,6 +359,17 @@ describe('Form Actions', () => {
         });
     });
 
+    describe('deselectField', () => {
+        it('creates an action that deselects a form element', () => {
+            expect(formActions.deselectField('view', 1)).toEqual({
+                id: 'view',
+                type: types.DESELECT_FIELD,
+                content: {
+                    location: 1
+                }});
+        });
+    });
+
     describe('removeFieldFromForm', () => {
         it('creates an action that will remove a field', () => {
             expect(formActions.removeFieldFromForm('view', 1)).toEqual({
@@ -366,6 +377,39 @@ describe('Form Actions', () => {
                 type: types.REMOVE_FIELD,
                 content: {
                     location: 1
+                }});
+        });
+    });
+
+    describe('keyBoardMoveFieldUp', () => {
+        it('creates an action that will move a field up', () => {
+            expect(formActions.keyboardMoveFieldUp('view', 1)).toEqual({
+                id: 'view',
+                type: types.KEYBOARD_MOVE_FIELD_UP,
+                content: {
+                    location: 1
+                }});
+        });
+    });
+
+    describe('keyboardMoveFieldDown', () => {
+        it('creates an action that will move a field Down', () => {
+            expect(formActions.keyboardMoveFieldDown('view', 1)).toEqual({
+                id: 'view',
+                type: types.KEYBOARD_MOVE_FIELD_DOWN,
+                content: {
+                    location: 1
+                }});
+        });
+    });
+
+    describe('toggleFormBuilderChildrenTabIndex', () => {
+        it('creates an action that update formBuilder children tabindex', () => {
+            expect(formActions.toggleFormBuilderChildrenTabIndex('view', 1)).toEqual({
+                id: 'view',
+                type: types.TOGGLE_FORM_BUILDER_CHILDREN_TABINDEX,
+                content: {
+                    currentTabIndex: 1
                 }});
         });
     });

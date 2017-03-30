@@ -23,6 +23,15 @@
         }
     }
 
+    .droppableField {
+        @include small-breakpoint {
+            //This is set for mobile, this way the select box and bottom border
+            //will stretch across the whole screen
+            margin-right: -15px;
+            margin-left: -25px;
+        }
+    }
+
     .draggableField {
         opacity: 1;
         z-index: 1;
@@ -31,6 +40,77 @@
         /* When in builder mode we need to push out the
         left padding to make room for the editing tools */
         margin-left: $spacing-tiny;
+
+        .draggableFieldWrapper {
+            width: 310px;
+            height: 100%;
+
+            @include small-breakpoint {
+                width: 100%;
+            }
+
+            &:hover {
+                transition: background-color 0.5s ease;
+                background-color: $color-black-250;
+
+                .fieldEditingTools {
+                    opacity: 1;
+                    .dragHandle {
+                        opacity: 1;
+                    }
+                    .qbIcon {
+                        opacity: 1;
+                    }
+                }
+
+                @include small-breakpoint {
+                    background: none;
+                }
+            }
+
+            &:active {
+                @include dragpreview-active-gradient;
+                .fieldEditingTools {
+                    opacity: 0;
+                }
+            }
+
+            .formElement .fieldLabel {
+                padding-top: 12px;
+                padding-left: 15px;
+            }
+
+            .cellWrapper {
+                padding-left: 15px;
+            }
+
+            &.selectedFormElement {
+                transition: background-color 0.5s ease;
+                &:hover {
+                    background: $color-cyan-300;
+                }
+                background-color: $color-cyan-300;
+                z-index: -1 !important;
+
+                .dragHandle {
+                    opacity: 1;
+                }
+
+                .deleteFieldIcon {
+                    .qbIcon {
+                        opacity: 1;
+                        color: $color-red-700;
+                    }
+                }
+
+                .fieldPreferencesIcon {
+                    .qbIcon {
+                        opacity: 1;
+                        color: $color-cyan-700;
+                    }
+                }
+            }
+        }
     }
 
     .draggableField, .droppableField {
@@ -48,25 +128,5 @@
      */
     .elementCache {
         display: none;
-    }
-
-    .selectedFormElement {
-        opacity: 1;
-        outline: none;
-        border: $stroke-width-thin solid $border-focused-color;
-
-        .deleteFieldIcon {
-            .qbIcon {
-                opacity: 1;
-                color: $color-red-700;
-            }
-        }
-
-        .fieldPreferencesIcon {
-            .qbIcon {
-                opacity: 1;
-                color: $color-cyan-700;
-            }
-        }
     }
 }

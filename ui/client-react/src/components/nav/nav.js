@@ -387,7 +387,7 @@ export const Nav = React.createClass({
                         centerGlobalActions={this.getCenterGlobalActions()}
                         globalActions={this.getTopGlobalActions()}
                         onNavClick={this.toggleNav}
-                        showOnSmall = {this.state.nav.showTopNav}
+                        showOnSmall={this.state.nav.showTopNav}
                 />
                 {this.props.children &&
                     <div className="mainContent" >

@@ -117,7 +117,7 @@ class TableCreationPanel extends React.Component {
      */
     tableNameExists(name) {
 
-        return this.props.appTables.indexOf(name) !== -1;
+        return this.props.appTables.some((tableName) => tableName.toLowerCase().trim() === name.toLowerCase().trim());
     }
 
     /**

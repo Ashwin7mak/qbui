@@ -561,16 +561,17 @@ export default {
 
             addFieldsTitle: "Machen Sie sich bereit, Felder zu Ihrem Tisch hinzuzufügen",
             tableNameHeading: "Tabellenname",
-            recordNameHeading: "Ein Rekord in der Tabelle heißt a",
+            recordNameHeading: "Ein Rekord in der Tabelle heißt",
             descriptionHeading: "Beschreibung",
             iconHeading: "Symbol",
             suggestedIconsHeading: "Vorgeschlagene Ikonen",
 
             tableNamePlaceholder: "Zum Beispiel, Kunden",
             recordNamePlaceholder: "Zum Beispiel, Kunde",
-            descriptionPlaceholder: "Text, der angezeigt wird, wenn er über den Tabellennamen in der linken Spalte schwebt",
+            descriptionPlaceholder: "Text, der angezeigt wird, wenn er über den Tabellennamen in der linke navigation",
 
-            tableCreated: "Tabelle erstellt",
+            finishedButtonLabel: "Tabelle",
+            tableCreated: "Tabelle erstellen",
             tableCreationFailed: "Unable to create table",
             validateTableNameEmpty: "Kann keine Tabelle erstellen",
             validateTableNameExists: "Der Tabellenname muss für diese App eindeutig sein",
