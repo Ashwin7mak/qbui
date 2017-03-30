@@ -8,7 +8,6 @@ import TestUtils from 'react-addons-test-utils';
 
 const mockParentProps = {
     onCancel() {},
-    onSave() {}
 };
 
 describe('Trowser functions', () => {
@@ -16,7 +15,6 @@ describe('Trowser functions', () => {
     beforeEach(() => {
         jasmineEnzyme();
         spyOn(mockParentProps, 'onCancel');
-        spyOn(mockParentProps, 'onSave');
     });
 
     var component;
@@ -46,26 +44,6 @@ describe('Trowser functions', () => {
         }));
         var parent = TestUtils.renderIntoDocument(TestParent());
         expect(TestUtils.isCompositeComponent(parent.refs.trowser)).toBeTruthy();
-
-    });
-
-    it('keyboardOnSave will save if the trowser is visible', () => {
-        component = shallow(<Trowser ref="trowser" content={<div/>} visible={true} onSave={mockParentProps.onSave}/>);
-
-        let instance = component.instance();
-        instance.keyboardOnSave();
-
-        expect(mockParentProps.onSave).toHaveBeenCalled();
-
-    });
-
-    it('keyboardOnSave will not save if the trowser is not visible', () => {
-        component = shallow(<Trowser ref="trowser" content={<div/>} visible={false} onSave={mockParentProps.onSave}/>);
-
-        let instance = component.instance();
-        instance.keyboardOnSave();
-
-        expect(mockParentProps.onSave).not.toHaveBeenCalled();
 
     });
 

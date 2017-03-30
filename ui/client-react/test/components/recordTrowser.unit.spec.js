@@ -5,6 +5,8 @@ import {__RewireAPI__ as RecordTrowserRewireAPI} from '../../src/components/reco
 import {RecordTrowser} from '../../src/components/record/recordTrowser';
 import RecordTrowserStore from '../../src/components/record/recordTrowser';
 import {UNSAVED_RECORD_ID} from '../../src/constants/schema';
+import {shallow} from 'enzyme';
+import jasmineEnzyme from 'jasmine-enzyme';
 
 import Promise from 'bluebird';
 import {Provider} from "react-redux";
@@ -23,6 +25,7 @@ const nextId = '20';
 
 const mockStore = configureMockStore();
 let store = {};
+let component;
 
 describe('RecordTrowser functions', () => {
 
@@ -93,6 +96,7 @@ describe('RecordTrowser functions', () => {
     };
     beforeEach(() => {
         //  initialize the store to empty
+        jasmineEnzyme();
         store = mockStore({});
         spyOn(mockWindowUtils, 'pushWithQuery').and.callThrough();
         spyOn(mockWindowUtils, 'pushWithoutQuery').and.callThrough();
@@ -219,6 +223,28 @@ describe('RecordTrowser functions', () => {
         //  open nextRecId (20) ... so next will be undefined and previous will be recId(4)
         expect(props.openRecord).toHaveBeenCalledWith(nextId, null, recId);
         expect(mockWindowUtils.pushWithQuery).toHaveBeenCalled();
+    });
+
+    it('keyboardOnSave will save if the record trowser is visible', () => {
+        component = shallow(<RecordTrowser {...props} record={storeContent.record}/>);
+
+        let instance = component.instance();
+        spyOn(instance, 'saveClicked');
+        instance.keyboardOnSave();
+
+        expect(instance.saveClicked).toHaveBeenCalled();
+    });
+
+    it('keyboardOnSave will not save if the record trowser is not visible', () => {
+        props.visible = false;
+
+        component = shallow(<RecordTrowser {...props} record={storeContent.record}/>);
+
+        let instance = component.instance();
+        spyOn(instance, 'saveClicked');
+        instance.keyboardOnSave();
+
+        expect(instance.saveClicked).not.toHaveBeenCalled();
     });
 
 
