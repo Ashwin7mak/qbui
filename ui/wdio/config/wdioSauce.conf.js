@@ -29,11 +29,11 @@ exports.config = {
     // =============================
     // Define all options that are relevant for connecting WebdriverIO to a Sauce Labs Selenium Server here
     //
-    host: '127.0.0.1',
+    //host: '127.0.0.1',
     //TODO: Figure out how to use custom Selenium port
     //Known issue here (wdio team currently fixing): https://github.com/webdriverio/webdriverio/issues/1683
     port: 4400,
-    path: '/wd/hub',
+    //path: '/wd/hub',
     //
     // ============
     // Debug config
