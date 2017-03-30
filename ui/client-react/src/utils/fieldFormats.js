@@ -99,4 +99,8 @@ FieldFormats.TEXT_FORMULA_FORMAT = 16;
 FieldFormats.URL_FORMULA_FORMAT = 17;
 FieldFormats.NUMERIC_FORMULA_FORMAT = 18;
 
+// USed in builder to identify mutlip/radio
+FieldFormats.MULTI_CHOICE_TEXT = 19;
+FieldFormats.MULTI_CHOICE_RADIO_TEXT = 20;
+
 export default FieldFormats;

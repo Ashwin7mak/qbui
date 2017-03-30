@@ -1,24 +1,44 @@
-@import '../../../../src/assets/css/qbVariables';
+@import "../../../../src/assets/css/qbVariables";
 
 .toolPaletteContainer {
-    border: $stroke-width-thin solid  $formBuilder-border-color;
-    border-top: none;
-    width: 220px;
     background-color: $color-black-250;
+    width: 100%;
+    height: 100%;
 
-    @include small-breakpoint {
-        display: none;
+    .toolPaletteList, .toolPaletteItemList {
+        list-style-type: none;
+        padding: $spacing-xxx-small;
+
+        transition: padding 0.3s;
+
+        &.toolPaletteCollapsed {
+            padding: 3px;
+
+            transition: padding 0.3s;
+        }
     }
 
-    @include medium-breakpoint {
-        width: $leftNav-width-medium-breakpoint;
+    .toolPaletteItemList {
+        padding-left: 0;
+        padding-top: 0;
     }
 
-    @include large-breakpoint {
-        width: $leftNav-width-large-breakpoint;
+    .toolPaletteItemHeader {
+        color: $default-text-onlight-color;
+        font-size: $font-size-h6;
+        font-weight: 100;
+        margin-top: $spacing-tiny;
+        margin-bottom: $spacing-tiny;
+
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
-    @include xlarge-breakpoint {
-        width: $leftNav-width-xLarge-breakpoint;
+    .toolPaletteItem {
+        padding-bottom: $spacing-tiny;
+
+        .fieldToken:not(.fieldTokenCollapsed) {
+            width: 100%;
+        }
     }
 }

@@ -1,4 +1,5 @@
 import React, {PropTypes, Component} from 'react';
+import Locale from '../../../../../reuse/client/src/locales/locale';
 
 import FieldTokenInMenu from '../../formBuilder/fieldToken/fieldTokenInMenu';
 import {SUPPORTED_FIELD_TYPES, createFieldTypeProps} from '../../formBuilder/newFieldTypes';
@@ -14,24 +15,47 @@ class ToolPalette extends Component {
     constructor(props) {
         super(props);
 
+        this.renderNewFieldTypes = this.renderNewFieldTypes.bind(this);
+        this.renderNewFieldGroups = this.renderNewFieldGroups.bind(this);
+        this.renderToolPalette = this.renderToolPalette.bind(this);
     }
 
-    renderNewFields = () => {
+    /**
+     * Displays the fields within a group in SUPPORTED_FIELD_TYPES
+     * @param fieldTypes
+     */
+    renderNewFieldTypes(fieldTypes) {
+        return fieldTypes.map((fieldType, index) => (
+            <li key={index} className="toolPaletteItem">
+                <FieldTokenInMenu {...createFieldTypeProps(fieldType)} isCollapsed={this.props.isCollapsed} />
+            </li>
+        ));
+    }
+
+    /**
+     * Takes the SUPPORTED_FIELD_TYPES constant and maps them to a displayed list of grouped field types
+     * @returns {XML}
+     */
+    renderNewFieldGroups() {
         return (
-            <ul className="toolPaletteList toolPaletteNewFields">
-                {SUPPORTED_FIELD_TYPES.map((fieldType, index) => (
-                    <li className="toolPaletteItem" key={fieldType.key || index}>
-                        <FieldTokenInMenu {...createFieldTypeProps(fieldType)} isCollapsed={this.props.isCollapsed} />
+            <ul className={`toolPaletteList toolPaletteNewFields ${this.props.isCollapsed ? 'toolPaletteCollapsed' : ''}`}>
+                {SUPPORTED_FIELD_TYPES.map((group, index) => (
+                    <li key={index} className="toolPaletteItemGroup">
+                        <h6 className="toolPaletteItemHeader">{'Group Name'}</h6>
+
+                        <ul className="toolPaletteItemList">
+                            {this.renderNewFieldTypes(group.fieldTypes)}
+                        </ul>
                     </li>
                 ))}
             </ul>
         );
     };
 
-    renderToolPalette = () => {
+    renderToolPalette() {
         return (
             <div className="toolPaletteContainer">
-                {this.renderNewFields()}
+                {this.renderNewFieldGroups()}
             </div>
         );
     };

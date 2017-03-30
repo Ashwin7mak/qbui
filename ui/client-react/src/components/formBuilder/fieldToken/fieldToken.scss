@@ -1,6 +1,7 @@
 @import "../../../assets/css/_qbVariables";
 
 $fieldtoken-width: 250px;
+$fieldtoken-icon-width: 35px;
 
 .fieldToken {
     border-radius: $radius-base;
@@ -27,13 +28,17 @@ $fieldtoken-width: 250px;
         transition: opacity 0.3s, max-width 0.3s;
     }
 
-    &.fieldTokenCollapsed .fieldTokenTitle {
-        opacity: 0;
-        max-width: 0;
+    &.fieldTokenCollapsed {
+        max-width: $fieldtoken-icon-width;
+
+        .fieldTokenTitle {
+            opacity: 0;
+            max-width: 0;
+        }
     }
 
     .fieldTokenIconContainer {
-        width: 35px;
+        width: $fieldtoken-icon-width;
         height: 29px;
         border-radius: 2px;
         color: $fieldtoken-icon-color;

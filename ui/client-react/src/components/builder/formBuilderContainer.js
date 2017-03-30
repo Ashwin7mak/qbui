@@ -34,7 +34,8 @@ const mapStateToProps = state => {
         selectedField: (_.has(currentForm, 'selectedFields') ? currentForm.selectedFields[0] : []),
         tabIndex: (_.has(currentForm, 'formBuilderChildrenTabIndex') ? currentForm.formBuilderChildrenTabIndex[0] : undefined),
         formFocus: (_.has(currentForm, 'formFocus') ? currentForm.formFocus[0] : undefined),
-        shouldNotifyTableCreated: state.tableCreation.notifyTableCreated
+        shouldNotifyTableCreated: state.tableCreation.notifyTableCreated,
+        builderNav: state.builderNav
     };
 };
 
@@ -190,7 +191,7 @@ export const FormBuilderContainer = React.createClass({
                 <PageTitle title={Locale.getMessage('pageTitles.editForm')}/>
 
                 <div className="toolsAndForm">
-                    <ToolPalette>
+                    <ToolPalette isCollapsed={this.props.builderNav.isNavCollapsed} isOpen={this.props.builderNav.isNavOpen}>
                         <AutoScroll
                             pixelsFromBottomForLargeDevices={80}
                             pixelsFromBottomForMobile={50}>
@@ -209,11 +210,11 @@ export const FormBuilderContainer = React.createClass({
                             </div>
                         </AutoScroll>
 
+                        {this.getSaveOrCancelFooter()}
+
                         <FieldProperties />
                     </ToolPalette>
                 </div>
-
-                {this.getSaveOrCancelFooter()}
             </div>
         );
     }
