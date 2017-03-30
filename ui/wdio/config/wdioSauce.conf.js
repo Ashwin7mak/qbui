@@ -20,7 +20,7 @@ exports.config = {
         // Uncomment this if you are running Sauce against your local dev
         //dns             : '127.0.0.1',
         //TODO: Figure out how to use custom Selenium port (see TODO below)
-        port            : 3333
+        port            : 4400 + Number(process.env.EXECUTOR_NUMBER)
     },
     //
     //
@@ -154,7 +154,7 @@ exports.config = {
     sync: true,
     //
     // Level of logging verbosity: silent | verbose | command | data | result | error
-    logLevel: 'verbose',
+    logLevel: 'result',
     //
     // Enables colors for log output.
     coloredLogs: true,
