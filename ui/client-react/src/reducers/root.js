@@ -10,6 +10,7 @@ import featureSwitches from './featureSwitches';
 import tableCreation from './tableCreation';
 import animation from './animation';
 import embeddedReports from './embeddedReports';
+import commonNavReducer from '../../../reuse/client/src/components/sideNavs/commonNavReducer';
 
 // combine individual reducers into a single root reducer (qbui)
 export default combineReducers({
@@ -22,5 +23,6 @@ export default combineReducers({
     search,
     shell,
     tableCreation,
-    embeddedReports
+    embeddedReports,
+    builderNav: commonNavReducer('builder')
 });
