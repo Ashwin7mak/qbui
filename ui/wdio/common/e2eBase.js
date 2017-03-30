@@ -161,6 +161,34 @@
                     return promise.reject(error);
                 });
             },
+
+            /*
+             * Setup method that generates an application, and a table
+             * Creates an App, i tables with passed Field Types, empty Records
+             */
+            createAppWithEmptyRecordsInTable: function(tableToFieldToFieldTypeMap) {
+                var createdApp;
+
+                // Use map of tables passed in or create default
+                if (!tableToFieldToFieldTypeMap) {
+                    tableToFieldToFieldTypeMap = e2eConsts.createDefaultTableMap();
+                }
+
+                // Generate the app JSON object
+                var generatedApp = e2eBase.appService.generateAppFromMap(tableToFieldToFieldTypeMap);
+                // Create the app via the API
+                return e2eBase.appService.createApp(generatedApp).then(function(appResponse) {
+                    // Set the global app object for use below
+                    createdApp = appResponse;
+                }).then(function() {
+                    // Return the createdApp object
+                    return createdApp;
+                }).catch(function(e) {
+                    // Catch any errors and reject the promise with it
+                    return Promise.reject(new Error('Error during defaultAppSetup: ' + e.message));
+                });
+            },
+
             /**
              * Setup function that will create you all currently supported report types. Calls the basicAppSetup function as well.
              * @param numRecords - How many records will be generated per table

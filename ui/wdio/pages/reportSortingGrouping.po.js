@@ -7,8 +7,16 @@
     var _ = require('lodash');
     var recordsFromAllListReport;
 
-
     var ReportSortingGroupingPage = Object.create(e2ePageBase, {
+
+        /**
+         * Returns all group headers
+         * @returns Array of group headers
+         */
+        getAllGroupHeadersList: {get: function() {
+            return browser.elements('.groupHeader');
+        }},
+
         /*
          * Function to sort Records using loDash _.orderBy
          */
@@ -64,6 +72,49 @@
                 });
             });
             return sortedExpectedRecords;
+        }},
+
+        /**
+         * Function that will group and sort the records using lodash in asked order
+         *@parms Fids, sortFids and sortOrder
+         */
+        SortAndGroupFidsUsingLoDash: {value: function(records, sortFids, sortOrder, groupFids) {
+            var sortedAPIRecords;
+            var sortedObjects = [];
+            var groupedAPIRecords;
+            var self = this;
+
+            var groupedExpectedRecords = [];
+
+            //sort the records first
+            sortedAPIRecords = self.sortRecordsUsingLoDash(records, sortFids, sortOrder);
+
+            // Reduce the records to single object for grouping
+            sortedAPIRecords.forEach(function(sortedRecord) {
+                var obj = _.reduce(sortedRecord, function(t, i) {
+                    return t[i.id] = i.value, t;
+                }, {});
+                sortedObjects.push(obj);
+            });
+
+            //Group by groupFid
+            groupedAPIRecords = _.groupBy(sortedObjects, groupFids);
+
+            //Seperate out Keys(which are headers in UI) from an object
+            var headers = Object.keys(groupedAPIRecords);
+
+            //Seperate out Values(which are records in UI) from an object
+            var vals = _.values(groupedAPIRecords);
+
+            //For each of record Value object return just values (this is to match with UI)
+            vals.forEach(function(recordValue) {
+                recordValue.forEach(function(record) {
+                    //remove the grouped FID from the records object since UI removes the grouped FID
+                    record = _.omit(record, groupFids);
+                    groupedExpectedRecords.push(_.values(record));
+                });
+            });
+            return [headers, groupedExpectedRecords];
         }},
 
         /**
