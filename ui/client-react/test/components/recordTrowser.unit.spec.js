@@ -25,7 +25,6 @@ const nextId = '20';
 
 const mockStore = configureMockStore();
 let store = {};
-let component;
 
 describe('RecordTrowser functions', () => {
 
@@ -226,7 +225,7 @@ describe('RecordTrowser functions', () => {
     });
 
     it('keyboardOnSave will save if the record trowser is visible', () => {
-        component = shallow(<RecordTrowser {...props} record={storeContent.record}/>);
+        let component = shallow(<RecordTrowser {...props} record={storeContent.record}/>);
 
         let instance = component.instance();
         spyOn(instance, 'saveClicked');
@@ -237,8 +236,7 @@ describe('RecordTrowser functions', () => {
 
     it('keyboardOnSave will not save if the record trowser is not visible', () => {
         props.visible = false;
-
-        component = shallow(<RecordTrowser {...props} record={storeContent.record}/>);
+        let component = shallow(<RecordTrowser {...props} record={storeContent.record}/>);
 
         let instance = component.instance();
         spyOn(instance, 'saveClicked');
@@ -246,6 +244,4 @@ describe('RecordTrowser functions', () => {
 
         expect(instance.saveClicked).not.toHaveBeenCalled();
     });
-
-
 });
