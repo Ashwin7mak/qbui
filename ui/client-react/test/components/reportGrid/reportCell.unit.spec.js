@@ -4,7 +4,7 @@ import {shallow} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
 
 import ReportCell from '../../../src/components/dataTable/reportGrid/reportCell';
-import CellValueRenderer from '../../../src/components/dataTable/agGrid/cellValueRenderer';
+import CellValueRenderer from '../../../src/components/dataTable/qbGrid/cellValueRenderer';
 import FieldValueEditor from '../../../src/components/fields/fieldValueEditor';
 import {TEXT} from '../../../src/constants/schema';
 import FieldFormats from '../../../src/utils/fieldFormats';
@@ -78,7 +78,7 @@ describe('ReportCell', () => {
         expect(component.find('.cellEditIcon')).toBeEmpty();
     });
 
-    it('navigates to form view when a cell is clicked', () => {
+    it('calls onCellClick click handler with a recordId when a cell is clicked', () => {
         spyOn(actions, 'onCellClick');
         component = shallow(<ReportCell {...actions} isEditing={false} fieldDef={fieldDef} recordId={testRecordId}/>);
 
@@ -86,6 +86,14 @@ describe('ReportCell', () => {
         cellClickableArea.simulate('click');
 
         expect(actions.onCellClick).toHaveBeenCalledWith(testRecordId);
+    });
+
+    it('does not call onCellClick click handler if no handler is defined', () => {
+        component = shallow(<ReportCell isEditing={false} fieldDef={fieldDef} recordId={testRecordId}/>);
+
+        let cellClickableArea = component.find('.cellClickableArea');
+        cellClickableArea.simulate('click');
+        // no assertions, we just want to make sure no error is thrown
     });
 
     it('renders an editor when the cell is in editing mode', () => {

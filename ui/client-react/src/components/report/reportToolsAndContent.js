@@ -21,9 +21,7 @@ import * as Constants from "../../../../common/src/constants";
 import ReportContentError from './dataTable/reportContentError';
 import {connect} from 'react-redux';
 import {editNewRecord} from '../../actions/formActions';
-import {loadDynamicReport} from '../../actions/reportActions';
 import {searchInput, clearSearchInput} from '../../actions/searchActions';
-import {CONTEXT} from '../../actions/context';
 import {EDIT_RECORD_KEY, NEW_RECORD_VALUE} from '../../constants/urlConstants';
 
 let logger = new Logger();
@@ -48,7 +46,9 @@ export const ReportToolsAndContent = React.createClass({
     mixins: [FluxMixin],
     //facetFields : {},
     debounceInputMillis: 700, // a key send delay
-    nameForRecords: "Records",  // get from table meta data
+    // TODO: the tablePropertiesEndpoint on EE has the noun for records
+    // get from table meta data
+    nameForRecords: "Records",
     propTypes: {
         appId: React.PropTypes.string,
         tblId: React.PropTypes.string,
@@ -59,7 +59,11 @@ export const ReportToolsAndContent = React.createClass({
         callbacks :  React.PropTypes.object,
         selectedRows: React.PropTypes.array,
         pageStart: React.PropTypes.number,
-        pageEnd: React.PropTypes.number
+        pageEnd: React.PropTypes.number,
+        loadDynamicReport: React.PropTypes.func,
+
+        // used for relationships phase-1
+        phase1: React.PropTypes.bool
     },
     getDefaultProps() {
         return {
@@ -67,9 +71,7 @@ export const ReportToolsAndContent = React.createClass({
         };
     },
     getInitialState: function() {
-        return {
-            reactabular: true
-        };
+        return {};
     },
     componentWillMount() {
         // Create a debounced function that delays invoking filterReport func
@@ -166,7 +168,8 @@ export const ReportToolsAndContent = React.createClass({
             queryParams[query.OFFSET_PARAM] = Constants.PAGE.DEFAULT_OFFSET;
             queryParams[query.NUMROWS_PARAM] = Constants.PAGE.DEFAULT_NUM_ROWS;
 
-            this.props.loadDynamicReport(CONTEXT.REPORT.NAV, this.props.selectedAppId,
+            this.props.loadDynamicReport(
+                this.props.selectedAppId,
                 this.props.routeParams.tblId,
                 typeof this.props.rptId !== "undefined" ? this.props.rptId : this.props.routeParams.rptId,
                 true, filter, queryParams);
@@ -197,26 +200,13 @@ export const ReportToolsAndContent = React.createClass({
         this.debouncedFilterReport('', noSelections, true);
     },
 
-    /**
-     * This function should be called only once when AGGrid is initialized. Find the full width of
-     * the table so the ReportToolbar can adjust its width to match the table.
-     */
-    /* to be reviewed when working on : https://quickbase.atlassian.net/browse/MC-1115
-     onGridSizeSet() {
-         let agGridBody = document.getElementsByClassName('ag-body-container');
-         let leftColumn = document.getElementsByClassName('ag-pinned-left-cols-container');
-         if (_.get(agGridBody, '[0].clientWidth') && _.get(leftColumn, '[0].clientWidth')) {
-             this.setState({gridWidth: agGridBody[0].clientWidth + leftColumn[0].clientWidth});
-         }
-     },*/
-
     getReportToolbar() {
         let {appId, tblId, rptId,
             reportData:{selections, ...otherReportData}} = this.props;
 
-        return <ReportToolbar appId={this.props.params.appId}
-                              tblId={this.props.params.tblId}
-                              rptId={typeof this.props.rptId !== "undefined" ? this.props.rptId : this.props.params.rptId}
+        return <ReportToolbar appId={this.props.reportData.appId}
+                              tblId={this.props.reportData.tblId}
+                              rptId={typeof this.props.reportData.rptId !== "undefined" ? this.props.reportData.rptId : this.props.params.rptId}
                               reportData={this.props.reportData}
                               selections={this.props.reportData.selections}
                               searchStringForFiltering={this.props.reportData.searchStringForFiltering}
@@ -233,6 +223,9 @@ export const ReportToolsAndContent = React.createClass({
                               pageEnd={this.pageEnd}
                               recordsCount={this.recordsCount}
                               width={this.state.gridWidth}
+
+                              // used for relationships phase-1
+                              phase1={this.props.phase1}
                />;
     },
     getSelectionActions() {
@@ -304,7 +297,7 @@ export const ReportToolsAndContent = React.createClass({
         queryParams[query.OFFSET_PARAM] = offset + (multiplicant * numRows);
         queryParams[query.NUMROWS_PARAM] = numRows;
 
-        this.props.loadDynamicReport(CONTEXT.REPORT.NAV, appId, tblId, rptId, true, filter, queryParams);
+        this.props.loadDynamicReport(appId, tblId, rptId, true, filter, queryParams);
     },
 
     /**
@@ -367,26 +360,7 @@ export const ReportToolsAndContent = React.createClass({
             this.recordsCount = this.getReportRecordsCount(this.props.reportData);
             this.pageEnd = this.pageEnd > this.recordsCount ? this.recordsCount : this.pageEnd;
 
-            let toolbar = <ReportToolbar appId={this.props.reportData.appId}
-                                         tblId={this.props.reportData.tblId}
-                                         rptId={typeof this.props.reportData.rptId !== "undefined" ? this.props.reportData.rptId : this.props.params.rptId}
-                                         reportData={this.props.reportData}
-                                         selections={this.props.reportData.selections}
-                                         searchStringForFiltering={this.props.reportData.searchStringForFiltering}
-                                         pageActions={this.getPageActions(0)}
-                                         nameForRecords={this.nameForRecords}
-                                         fields={fields}
-                                         searchTheString={this.searchTheString}
-                                         filterOnSelections={this.filterOnSelections}
-                                         clearSearchString={this.clearSearchString}
-                                         clearAllFilters={this.clearAllFilters}
-                                         getNextReportPage={this.getNextReportPage}
-                                         getPreviousReportPage={this.getPreviousReportPage}
-                                         pageStart={this.pageStart}
-                                         pageEnd={this.pageEnd}
-                                         recordsCount={this.recordsCount}
-                                         width={this.state.gridWidth}
-                          />;
+            let toolbar = this.getReportToolbar();
 
             let reportFooter = <ReportFooter
                                 reportData={this.props.reportData}
@@ -406,13 +380,7 @@ export const ReportToolsAndContent = React.createClass({
 
             return (
                 <div className={classes.join(' ')}>
-                    <label id="reactabularToggle" style={{display: "none"}}>&nbsp;
-                        <input type="checkbox"
-                               defaultChecked={this.state.reactabular}
-                               onClick={(e) => {this.setState({reactabular: e.target.checked});}}/>&nbsp;Use Reactabular Grid
-                    </label>
                     {this.getTableActions()}
-
                     <ReportContent appId={this.props.reportData.appId}
                                    tblId={this.props.reportData.tblId}
                                    rptId={typeof this.props.reportData.rptId !== "undefined" ? this.props.reportData.rptId : this.props.params.rptId}
@@ -423,10 +391,7 @@ export const ReportToolsAndContent = React.createClass({
                                    cardViewPagination={cardViewPagination }
                                    primaryKeyName={primaryKeyName}
                                    flux={this.getFlux()}
-                                   reactabular={this.state.reactabular}
                                    gridOptions={this.props.gridOptions}
-                        //to be reviewed when working on : https://quickbase.atlassian.net/browse/MC-1115
-                                  /*{onGridReady={this.onGridSizeSet}*/
                                    {...this.props}
                                    fields={fields}/>
 
@@ -452,9 +417,6 @@ const mapDispatchToProps = (dispatch) => {
         },
         clearSearchInput: () => {
             dispatch(clearSearchInput());
-        },
-        loadDynamicReport: (context, appId, tblId, rptId, format, filter, queryParams) => {
-            dispatch(loadDynamicReport(context, appId, tblId, rptId, format, filter, queryParams));
         }
     };
 };

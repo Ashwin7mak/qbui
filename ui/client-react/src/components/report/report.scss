@@ -245,6 +245,10 @@
     .loadedContent {
         padding: 0 10px;
     }
+    &.loading {
+        min-height: 70px; // allow space for the loader spinner
+        overflow: hidden;
+    }
 }
 
 .reportToolbarContainer {
@@ -353,6 +357,10 @@
 $add-record-fg: $color-black-100;
 $add-record-bg: $badcolor19;
 $add-record-radius: 20px;
+
+.embeddedReportContainer {
+    margin-bottom: 35px;
+}
 
 @include small-breakpoint {
     .reportContainer .reportToolsAndContentContainer .reportToolbar {
