@@ -3,17 +3,15 @@ import Logger from '../../utils/logger';
 import {I18nMessage} from '../../utils/i18nMessage';
 import Button from 'react-bootstrap/lib/Button';
 import QBicon from '../qbIcon/qbIcon';
-import Fluxxor from 'fluxxor';
-let FluxMixin = Fluxxor.FluxMixin(React);
 
 import './qbErrorMessage.scss';
+
+let logger = new Logger();
 
 /**
  * QBErrorMessage displays a list of passed-in errors
  */
 let QBErrorMessage = React.createClass({
-    mixins: [FluxMixin],
-
     propTypes: {
         // Required, control this property to show or hidden error message popup.
         hidden: React.PropTypes.bool.isRequired,
@@ -31,12 +29,12 @@ let QBErrorMessage = React.createClass({
     renderErrorMessages() {
         return this.props.message.map(msg => {
             let fieldLabel;
-
             if (msg.def) {
                 // Prefer the fieldLabel if it is available
                 fieldLabel = (msg.def.fieldLabel || msg.def.fieldName);
             } else {
-                Logger().warn('Field definition for validation message on QbErrorMessage was not defined');
+                fieldLabel = 'Field Label';
+                logger.warn('Field definition for validation message on QbErrorMessage was not defined');
             }
 
             return <span className="qbErrorMessageItem" key={msg.id}>{fieldLabel}</span>;

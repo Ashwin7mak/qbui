@@ -1,5 +1,4 @@
 import React from 'react';
-import AppHistory from '../../globals/appHistory';
 import Stage from '../stage/stage';
 import QBicon from '../qbIcon/qbIcon';
 import Button from 'react-bootstrap/lib/Button';
@@ -18,11 +17,16 @@ import Locale from '../../locales/locales';
 import Loader from 'react-loader';
 import RecordHeader from './recordHeader';
 import Breakpoints from '../../utils/breakpoints';
+import WindowLocationUtils from '../../utils/windowLocationUtils';
 import * as SpinnerConfigurations from '../../constants/spinnerConfigurations';
+import * as UrlConsts from "../../constants/urlConstants";
 import _ from 'lodash';
 import {connect} from 'react-redux';
-import {loadForm, editNewRecord, openRecordForEdit} from '../../actions/formActions';
-import {APP_ROUTE, BUILDER_ROUTE} from '../../constants/urlConstants';
+import {loadForm, editNewRecord} from '../../actions/formActions';
+import {openRecord} from '../../actions/recordActions';
+import {clearSearchInput} from '../../actions/searchActions';
+import {APP_ROUTE, BUILDER_ROUTE, EDIT_RECORD_KEY} from '../../constants/urlConstants';
+
 
 import './record.scss';
 
@@ -41,6 +45,9 @@ export const RecordRoute = React.createClass({
         const flux = this.getFlux();
 
         flux.actions.selectTableId(tblId);
+
+        // ensure the search input is empty
+        this.props.clearSearchInput();
 
         this.props.loadForm(appId, tblId, rptId, formType, recordId);
     },
@@ -76,8 +83,10 @@ export const RecordRoute = React.createClass({
     },
 
     getSecondaryBar() {
-        const showBack = !!(this.props.reportData && this.props.reportData.previousRecordId !== null);
-        const showNext = !!(this.props.reportData && this.props.reportData.nextRecordId !== null);
+        const record = this.getRecordFromProps(this.props);
+        const showBack = !!(record && record.previousRecordId !== null);
+        const showNext = !!(record && record.nextRecordId !== null);
+
         const rptId = this.props.params ? this.props.params.rptId : null;
 
         const actions = [];
@@ -98,48 +107,84 @@ export const RecordRoute = React.createClass({
      * return to the report we navigated from
      */
     returnToReport() {
-
         // use the route parameters to build the URI
-
         const {appId, tblId, rptId} = this.props.params;
-
         const link = `${APP_ROUTE}/${appId}/table/${tblId}/report/${rptId}`;
         this.props.router.push(link);
     },
 
     /**
-     * navigate back/forth to a new record
-     * @param recId
+     * do a depth first search of the grouped records array, adding records
+     * to arr so we can determine next/prev records
+     * TODO: this is duplicated in reportContent..should be refactored out
+     * TODY: into shared function
+     * @param arr
+     * @param groups
      */
-    navigateToRecord(appId, tblId, rptId, recId) {
-        const link = `${APP_ROUTE}/${appId}/table/${tblId}/report/${rptId}/record/${recId}`;
-        this.props.router.push(link);
+    addGroupedRecords(arr, groups) {
+        if (Array.isArray(groups)) {
+            groups.forEach(child => {
+                if (child.children) {
+                    this.addGroupedRecords(arr, child.children);
+                } else {
+                    arr.push(child);
+                }
+            });
+        }
+    },
+
+    getRecordsArray() {
+        const {filteredRecords, hasGrouping} = this.props.reportData.data;
+
+        let recordsArray = [];
+        if (hasGrouping) {
+            // flatten grouped records
+            this.addGroupedRecords(recordsArray, filteredRecords);
+        } else {
+            recordsArray = filteredRecords;
+        }
+        return recordsArray;
+    },
+
+    navigateToRecord(recId) {
+        if (recId) {
+            const {data} = this.props.reportData;
+            const key = _.has(data, 'keyField.name') ? data.keyField.name : '';
+            if (key) {
+                let recordsArray = this.getRecordsArray() || [];
+
+                //  fetch the index of the row in the recordsArray that is being opened
+                const index = _.findIndex(recordsArray, rec => rec[key] && rec[key].value === recId);
+                let nextRecordId = (index < recordsArray.length - 1) ? recordsArray[index + 1][key].value : null;
+                let previousRecordId = index > 0 ? recordsArray[index - 1][key].value : null;
+
+                this.props.openRecord(recId, nextRecordId, previousRecordId);
+            }
+        }
     },
 
     /**
      * go back to the previous report record
      */
     previousRecord() {
-        const {appId, tblId, rptId, previousRecordId} = this.props.reportData;
+        const record = this.getRecordFromProps(this.props);
+        this.navigateToRecord(record.previousRecordId);
 
-        // let flux now we're tranversing records so it can pass down updated previous/next record IDs
-        let flux = this.getFlux();
-        flux.actions.showPreviousRecord(previousRecordId);
-
-        this.navigateToRecord(appId, tblId, rptId, previousRecordId);
+        const {appId, tblId, rptId} = this.props.reportData;
+        const link = `${APP_ROUTE}/${appId}/table/${tblId}/report/${rptId}/record/${record.previousRecordId}`;
+        this.props.router.push(link);
     },
 
     /**
      * go forward to the next report record
      */
     nextRecord() {
-        const {appId, tblId, rptId, nextRecordId} = this.props.reportData;
+        const record = this.getRecordFromProps(this.props);
+        this.navigateToRecord(record.nextRecordId);
 
-        // let flux now we're tranversing records so it can pass down updated previous/next record IDs
-        let flux = this.getFlux();
-        flux.actions.showNextRecord(nextRecordId);
-
-        this.navigateToRecord(appId, tblId, rptId, nextRecordId);
+        const {appId, tblId, rptId} = this.props.reportData;
+        const link = `${APP_ROUTE}/${appId}/table/${tblId}/report/${rptId}/record/${record.nextRecordId}`;
+        this.props.router.push(link);
     },
 
     getTitle() {
@@ -154,12 +199,14 @@ export const RecordRoute = React.createClass({
     getStageHeadline() {
         if (this.props.params) {
             const {appId, tblId, rptId} = this.props.params;
+            const record = this.getRecordFromProps(this.props);
 
             const tableLink = `${APP_ROUTE}/${appId}/table/${tblId}`;
 
-            const reportName = this.props.reportData && this.props.reportData.data.name ? this.props.reportData.data.name : Locale.getMessage('nav.backToReport');
-            const showBack = !!(this.props.reportData && this.props.reportData.previousRecordId !== null);
-            const showNext = !!(this.props.reportData && this.props.reportData.nextRecordId !== null);
+            //  ensure the property exists and it has some content
+            const reportName = _.has(this.props.reportData, 'data.name') && this.props.reportData.data.name ? this.props.reportData.data.name : Locale.getMessage('nav.backToReport');
+            const showBack = !!(this.props.reportData && record.previousRecordId !== null);
+            const showNext = !!(this.props.reportData && record.nextRecordId !== null);
 
             return (<div className="recordStageHeadline">
 
@@ -199,7 +246,10 @@ export const RecordRoute = React.createClass({
      * @param data row record data
      */
     openRecordForEdit() {
-        this.props.openRecordForEdit(parseInt(this.props.params.recordId));
+        const recordId = this.props.params.recordId;
+        this.navigateToRecord(recordId);
+
+        WindowLocationUtils.pushWithQuery(EDIT_RECORD_KEY, recordId);
     },
 
     /**
@@ -207,16 +257,10 @@ export const RecordRoute = React.createClass({
      * @param data row record data
      */
     editNewRecord() {
-
-        // need to dispatch to Fluxxor since report store handles this too...
-        const flux = this.getFlux();
-        flux.actions.editNewRecord();
-
-        this.props.editNewRecord();
+        WindowLocationUtils.pushWithQuery(EDIT_RECORD_KEY, UrlConsts.NEW_RECORD_VALUE);
     },
 
     getPageActions() {
-
         const actions = [
             {msg: 'pageActions.addRecord', icon:'add', className:'addRecord', onClick: this.editNewRecord},
             {msg: 'pageActions.edit', icon:'edit', onClick: this.openRecordForEdit},
@@ -236,10 +280,14 @@ export const RecordRoute = React.createClass({
     getViewFormFromProps(props = this.props) {
         return props.forms && _.find(props.forms, form => form.id === "view");
     },
+
+    getRecordFromProps(props = this.props) {
+        return _.nth(props.record, 0) || {};
+    },
+
     /**
      * only re-render when our form data has changed */
     shouldComponentUpdate(nextProps) {
-
 
         const viewData = this.getViewFormFromProps();
         const nextData = this.getViewFormFromProps(nextProps);
@@ -316,7 +364,9 @@ export const RecordRoute = React.createClass({
 // from the Redux state (the presentational component has no code dependency on Redux!)
 const mapStateToProps = (state) => {
     return {
-        forms: state.forms
+        forms: state.forms,
+        record: state.record
+        //Todo: get reports from state and remove as a passed prop
     };
 };
 
@@ -324,14 +374,17 @@ const mapStateToProps = (state) => {
 // (another bit of boilerplate to keep the component free of Redux dependencies)
 const mapDispatchToProps = (dispatch) => {
     return {
-        openRecordForEdit: (recId) => {
-            dispatch(openRecordForEdit(recId));
-        },
         editNewRecord: () => {
             dispatch(editNewRecord());
         },
         loadForm: (appId, tblId, rptId, formType, recordId) => {
             dispatch(loadForm(appId, tblId, rptId, formType, recordId));
+        },
+        openRecord: (recId, nextId, prevId) => {
+            dispatch(openRecord(recId, nextId, prevId));
+        },
+        clearSearchInput: () => {
+            dispatch(clearSearchInput());
         }
     };
 };

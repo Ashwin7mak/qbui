@@ -1,4 +1,5 @@
 import reducer from '../../src/reducers/shell';
+import Locale from '../../src/locales/locales';
 import * as types from '../../src/actions/types';
 
 let initialState = {};
@@ -12,7 +13,9 @@ function initializeState() {
         leftNavVisible: false,
         trowserOpen: false,
         trowserContent: null,
-        openCount: 0
+        openCount: 0,
+        locale: Locale.getLocale(),
+        i18n: Locale.getI18nBundle()
     };
 }
 
@@ -124,5 +127,26 @@ describe('Nav reducer functions for show/hide error dialog', () => {
     it('hide error dialog', () => {
         const state = reducer(openState, {type: types.HIDE_ERROR_MSG_DIALOG});
         expect(state.errorPopupHidden).toEqual(true);
+    });
+});
+
+describe('Nav reducer functions for changing locale', () => {
+    var testCases = [
+        {name:'toggle locale to fr-fr', locale:'fr-fr', isValid:true},
+        {name:'toggle locale is en-us', locale:'en-us', isValid:true},
+        {name:'toggle locale is invalid', locale:'12-34', isValid:false}
+    ];
+    testCases.forEach(function(test) {
+        it(test.name, (done) => {
+            initializeState();
+            const origState = reducer(initialState, {type: null});
+            const changeState = reducer(initialState, {type: types.CHANGE_LOCALE, locale:test.locale});
+            if (test.isValid) {
+                expect(changeState.locale).toEqual(test.locale);
+            } else {
+                expect(changeState.locale).toEqual(origState.locale);
+            }
+            done();
+        });
     });
 });

@@ -123,6 +123,7 @@ export class TableCreationDialog extends React.Component {
                                  onPrevious={this.onPrevious}
                                  onNext={this.onNext}
                                  onFinished={this.onFinished}
+                                 finishedButtonLabel={Locale.getMessage("tableCreation.finishedButtonLabel")}
                                  canProceed={this.isValid()}
                                  titles={[Locale.getMessage("tableCreation.newTablePageTitle"), Locale.getMessage("tableCreation.addFieldsTitle")]}>
                 <div className="tableCreationPanel">

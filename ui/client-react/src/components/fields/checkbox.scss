@@ -288,8 +288,3 @@ $checkbox-font-size-mobile: 16px;
         display: none;
     }
 }
-
-// Prevent validation error form left aligning checkbox on the grid
-.agGrid .gridCell .fieldValueEditor.checkboxField .tipChildWrapper {
-    width: auto;
-}

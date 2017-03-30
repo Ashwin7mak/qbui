@@ -1,9 +1,16 @@
 import React from 'react';
-import TestUtils from 'react-addons-test-utils';
-import {ReportToolsAndContent, __RewireAPI__ as ReportToolsAndContentRewireAPI}  from '../../src/components/report/reportToolsAndContent';
+import {ReportToolsAndContent,
+        __RewireAPI__ as ReportToolsAndContentRewireAPI}  from '../../src/components/report/reportToolsAndContent';
 import FacetSelections  from '../../src/components/facet/facetSelections';
 import constants from '../../../common/src/constants';
+import {shallow, mount} from 'enzyme';
+import jasmineEnzyme from 'jasmine-enzyme';
+import {CONTEXT} from '../../src/actions/context';
+import Promise from 'bluebird';
 
+class WindowLocationUtilsMock {
+    static pushWithQuery(key, recId) { }
+}
 describe('ReportToolsAndContent functions', () => {
     'use strict';
 
@@ -27,28 +34,33 @@ describe('ReportToolsAndContent functions', () => {
 
     const rptId = '3';
     let reportParams = {appId: 1, tblId: 2, rptId: rptId, format:true, offset: constants.PAGE.DEFAULT_OFFSET, numRows: constants.PAGE.DEFAULT_NUM_ROWS};
-    let reportDataParams = {reportData: {loading: true, selections: new FacetSelections(), data: {columns: [{field: "col_num", headerName: "col_num"}]}}};
+    let reportDataParams = {reportData: {appId: 1, tblId: 2, rptId: rptId, loading: true, pageOffset: 20, selections: new FacetSelections(), data: {recordsCount: 5, sortList: "1", columns: [{field: "col_num", headerName: "col_num"}], facets: [{
+        id: 1, name: 'test', type: "TEXT", values: [{value: "a"}, {value: "b"}, {value: "c"}]}]}}, selectedRows: ["rowSelected"]};
 
     const primaryKeyName = 'Employee Number';
-    const reportFields = {
+    const reportFields = [{
+        appId: 1,
+        tblId: 2,
         fields: {
-            data: [
-                {
-                    id: 3,
-                    keyField: true,
-                    name: primaryKeyName,
-                },
-                {
-                    id: 1,
-                    name: 'First Name'
-                },
-                {
-                    id: 2,
-                    name: 'Last Name'
-                }
-            ]
+            fields: {
+                data: [
+                    {
+                        id: 3,
+                        keyField: true,
+                        name: primaryKeyName,
+                    },
+                    {
+                        id: 1,
+                        name: 'First Name'
+                    },
+                    {
+                        id: 2,
+                        name: 'Last Name'
+                    }
+                ]
+            }
         }
-    };
+    }];
 
     const ReportContentMock = React.createClass({
         render() {
@@ -57,7 +69,10 @@ describe('ReportToolsAndContent functions', () => {
     });
 
     beforeEach(() => {
+        jasmineEnzyme();
         ReportToolsAndContentRewireAPI.__Rewire__('ReportContent', ReportContentMock);
+        ReportToolsAndContentRewireAPI.__Rewire__('WindowLocationUtils', WindowLocationUtilsMock);
+        spyOn(WindowLocationUtilsMock, 'pushWithQuery').and.callThrough();
         spyOn(flux.actions, 'selectTableId');
         spyOn(flux.actions, 'loadReport');
         spyOn(flux.actions, 'loadFields');
@@ -71,6 +86,7 @@ describe('ReportToolsAndContent functions', () => {
 
     afterEach(() => {
         ReportToolsAndContentRewireAPI.__ResetDependency__('ReportContent');
+        WindowLocationUtilsMock.pushWithQuery.calls.reset();
         flux.actions.selectTableId.calls.reset();
         flux.actions.loadReport.calls.reset();
         flux.actions.loadFields.calls.reset();
@@ -83,97 +99,217 @@ describe('ReportToolsAndContent functions', () => {
     });
 
     it('test render of report widget', () => {
-        var div = document.createElement('div');
-        component = TestUtils.renderIntoDocument(<ReportToolsAndContent flux={flux} params={reportParams} {...reportDataParams} />, div);
+        const div = document.createElement('div');
+        component = shallow(<ReportToolsAndContent flux={flux} params={reportParams} {...reportDataParams} />, div);
 
         //  test that the reportContentMock is rendered
-        expect(TestUtils.scryRenderedComponentsWithType(component, ReportContentMock).length).toEqual(1);
+        expect(component.find(ReportContentMock).length).toBe(1);
     });
 
     it('test report is not rendered with missing app data', () => {
-        var div = document.createElement('div');
-        let reportParamsWithUndefinedAppId = Object.assign({}, reportParams, {appId: undefined});
-        component = TestUtils.renderIntoDocument(<ReportToolsAndContent flux={flux} params={reportParamsWithUndefinedAppId} {...reportDataParams} />, div);
+        const div = document.createElement('div');
+        const reportParamsWithUndefinedAppId = Object.assign({}, reportParams, {appId: undefined});
+        component = shallow(<ReportToolsAndContent flux={flux} params={reportParamsWithUndefinedAppId} {...reportDataParams} />, div);
 
         //  test that the reportContentMock is rendered
-        expect(TestUtils.scryRenderedComponentsWithType(component, ReportContentMock).length).toEqual(0);
+        expect(component.find(ReportContentMock).length).toBe(1);
     });
 
     it('passes the primaryKeyName to child components', () => {
-        let renderer = TestUtils.createRenderer();
-        renderer.render(<ReportToolsAndContent rptId={rptId} fields={reportFields} flux={flux} params={reportParams} {...reportDataParams} />);
+        const result = shallow(
+                <ReportToolsAndContent rptId={rptId} fields={reportFields} flux={flux} params={reportParams} {...reportDataParams}/>
+            );
 
-        let result = renderer.getRenderOutput();
+        const reportContent = result.find(ReportContentMock);
 
-        let reportContent = result.props.children.find(individualComponent => {
-            return typeof individualComponent.type === 'function';
-        });
-
-        expect(reportContent).not.toBeNull();
-        expect(reportContent).not.toBeUndefined();
-        expect(reportContent.props.primaryKeyName).toEqual(primaryKeyName);
+        expect(reportContent).toBePresent();
+        expect(reportContent).toHaveProp('primaryKeyName', primaryKeyName);
     });
 
-    it('test to check if page fetches records on successful delete', () => {
-        let filter = {
-            selections: reportDataParams.reportData.selections,
-            search:undefined,
-            facet:undefined
-        };
-        let queryParams = {
-            sortList: '',
-            offset: reportParams.offset,
-            numRows: reportParams.numRows
-        };
-        let MockParent = React.createClass({
-            getInitialState() {
-                return {
-                    isRecordDeleted: false
-                };
-            },
-            isRecordDeleted() {
-                this.setState({isRecordDeleted: true});
-            },
-            render() {
-                const modifiedReport = Object.assign({}, reportDataParams);
-                modifiedReport.reportData.isRecordDeleted = this.state.isRecordDeleted;
-                return <ReportToolsAndContent ref="reportTools" flux={flux} params={reportParams} {...modifiedReport} />;
-            }
-        });
-
-        component = TestUtils.renderIntoDocument(<MockParent />);
-        spyOn(component.refs.reportTools, 'getFlux').and.returnValue(flux);
-        spyOn(flux.actions, 'loadDynamicReport');
-        component.isRecordDeleted();
-        expect(flux.actions.loadDynamicReport).toHaveBeenCalledWith(reportParams.appId,
-                                                                    reportParams.tblId,
-                                                                    reportParams.rptId,
-                                                                    reportParams.format,
-                                                                    filter,
-                                                                    queryParams);
+    it('invoke editNewRecord and verify pushWithQuery method gets called', () => {
+        component = shallow(
+            <ReportToolsAndContent
+                flux={flux}
+                params={reportParams}
+                {...reportDataParams}
+            />);
+        component.instance().editNewRecord();
+        expect(WindowLocationUtilsMock.pushWithQuery).toHaveBeenCalled();
     });
 
-    it('test to check if page does not fetch records on failed delete', () => {
-        let MockParent = React.createClass({
-            getInitialState() {
-                return {
-                    isRecordDeleted: true
-                };
-            },
-            isRecordDeleted() {
-                this.setState({isRecordDeleted: false});
-            },
-            render() {
-                const modifiedReport = Object.assign({}, reportDataParams);
-                modifiedReport.reportData.isRecordDeleted = this.state.isRecordDeleted;
-                return <ReportToolsAndContent ref="reportTools" flux={flux} params={reportParams} {...modifiedReport} />;
-            }
+    describe('load dynamic report Action tests', () => {
+        let loadDynamicReportSpy = null;
+        beforeEach(() =>{
+            loadDynamicReportSpy = jasmine.createSpy('loadDynamicReport');
         });
 
-        component = TestUtils.renderIntoDocument(<MockParent />);
-        spyOn(component.refs.reportTools, 'getFlux').and.returnValue(flux);
-        spyOn(flux.actions, 'loadDynamicReport');
-        component.isRecordDeleted();
-        expect(flux.actions.loadDynamicReport).not.toHaveBeenCalled();
+        it('invoke loadDynamicReport if a record is deleted', () => {
+
+            const modifiedReport = Object.assign({}, reportDataParams);
+            modifiedReport.reportData.isRecordDeleted = true;
+            component = shallow(<ReportToolsAndContent loadDynamicReport={loadDynamicReportSpy} flux={flux}
+                                                       params={reportParams} {...reportDataParams} {...modifiedReport} />);
+
+            expect(loadDynamicReportSpy).toHaveBeenCalledWith(
+                reportParams.appId,
+                reportParams.tblId,
+                reportParams.rptId,
+                reportParams.format,
+                jasmine.any(Object),
+                jasmine.any(Object)
+            );
+
+        });
+
+        it('does not invoke loadDynamicReport if a record is not deleted', () => {
+
+            const modifiedReport = Object.assign({}, reportDataParams);
+            modifiedReport.reportData.isRecordDeleted = false;
+            component = shallow(<ReportToolsAndContent loadDynamicReport={loadDynamicReportSpy} flux={flux} params={reportParams} {...reportDataParams} {...modifiedReport} />);
+
+            expect(loadDynamicReportSpy).not.toHaveBeenCalled();
+        });
+    });
+
+
+    describe('Test Search Input', () => {
+
+        let searchInput = null;
+        let clearSearchInput = null;
+        let obj = {};
+        const selectedAppId = 1;
+        beforeEach(() => {
+
+            searchInput = jasmine.createSpy('searchInput');
+            clearSearchInput = jasmine.createSpy('clearSearchInput');
+            obj = {
+                loadDynamicReport: null
+            };
+            component = shallow(
+                <ReportToolsAndContent
+                    searchInput={searchInput}
+                    clearSearchInput={clearSearchInput} flux={flux}
+                    params={reportParams}
+                    selectedAppId={selectedAppId}
+                    routeParams={{appId:1, tblId:2,  rptId:'3'}}
+                    {...reportDataParams}
+                />);
+
+        });
+
+        it('loads a new report with a debounce when user runs a text search', (done) => {
+            new Promise(resolve => {
+                // loadDynamicReport is called with a debounce, resolve when it's called
+                spyOn(obj, 'loadDynamicReport').and.callFake(() => {
+                    resolve();
+                });
+                // pass in the spy loadDynamicReport as a prop
+                component.setProps({loadDynamicReport: obj.loadDynamicReport});
+                component.instance().searchTheString('Search Text!');
+                expect(searchInput).toHaveBeenCalledWith('Search Text!');
+                expect(obj.loadDynamicReport).not.toHaveBeenCalled();
+            }).then(() => {
+                expect(obj.loadDynamicReport).toHaveBeenCalledWith(
+                    reportParams.appId,
+                    reportParams.tblId,
+                    reportParams.rptId,
+                    reportParams.format,
+                    jasmine.any(Object),
+                    jasmine.any(Object)
+                );
+                done();
+            });
+        });
+
+
+
+        it('loads a new report with an empty search string when user clears search input', (done) => {
+            new Promise(resolve => {
+                // loadDynamicReport is called with a debounce, resolve when it's called
+                spyOn(obj, 'loadDynamicReport').and.callFake(() => {
+                    resolve();
+                });
+                // pass in the spy loadDynamicReport as a prop
+                component.setProps({loadDynamicReport: obj.loadDynamicReport});
+                component.instance().clearSearchString();
+                component.instance().clearAllFilters();
+                expect(clearSearchInput).toHaveBeenCalled();
+                expect(obj.loadDynamicReport).toHaveBeenCalled();
+            }).then(() => {
+                expect(obj.loadDynamicReport).toHaveBeenCalledWith(
+                    reportParams.appId,
+                    reportParams.tblId,
+                    reportParams.rptId,
+                    reportParams.format,
+                    jasmine.any(Object),
+                    jasmine.any(Object)
+                );
+                done();
+            });
+        });
+    });
+
+    describe('Test get report next page', () => {
+        let obj = {};
+        reportDataParams.reportData.pageOffset = constants.PAGE.DEFAULT_OFFSET;
+        reportDataParams.reportData.numRows = constants.PAGE.DEFAULT_NUM_ROWS;
+        beforeEach(() => {
+            obj = {
+                loadDynamicReport: null
+            };
+            component = shallow(
+                <ReportToolsAndContent
+                    flux={flux}
+                    params={reportParams}
+                    {...reportDataParams}
+                />);
+
+        });
+
+        it('records count less than sum of offset and number of rows, method returns false', () => {
+            const result =  component.instance().getNextReportPage();
+            expect(result).toBeFalsy();
+        });
+
+        it('records count more than sum of offset and number of rows, invokes loadDynamicReport', () => {
+            spyOn(obj, 'loadDynamicReport');
+            component.setProps({loadDynamicReport: obj.loadDynamicReport});
+            reportDataParams.reportData.data.recordsCount =  reportDataParams.reportData.data.recordsCount + constants.PAGE.DEFAULT_NUM_ROWS;
+            component.instance().getNextReportPage();
+            expect(obj.loadDynamicReport).toHaveBeenCalled();
+        });
+    });
+
+    describe('Test get report previous page', () => {
+        let obj = {};
+
+        beforeEach(() => {
+            obj = {
+                loadDynamicReport: null
+            };
+
+            component = shallow(
+                <ReportToolsAndContent
+                    flux={flux}
+                    params={reportParams}
+                    {...reportDataParams}
+                />);
+
+        });
+
+        it('if page offset is zero, method returns false', () => {
+            reportDataParams.reportData.pageOffset = constants.PAGE.DEFAULT_OFFSET;
+            const result =  component.instance().getPreviousReportPage();
+            expect(result).toBeFalsy();
+        });
+
+
+        it('if page offset is not zero, invokes loadDynamicReport', () => {
+            reportDataParams.reportData.pageOffset = constants.PAGE.DEFAULT_NUM_ROWS;
+            spyOn(obj, 'loadDynamicReport');
+            component.setProps({loadDynamicReport: obj.loadDynamicReport});
+            component.instance().getPreviousReportPage();
+            expect(obj.loadDynamicReport).toHaveBeenCalled();
+        });
     });
 });
