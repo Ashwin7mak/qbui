@@ -190,27 +190,27 @@ export const FormBuilderContainer = React.createClass({
                 <PageTitle title={Locale.getMessage('pageTitles.editForm')}/>
 
                 <div className="toolsAndForm">
-                    <ToolPalette />
+                    <ToolPalette>
+                        <AutoScroll
+                            pixelsFromBottomForLargeDevices={80}
+                            pixelsFromBottomForMobile={50}>
+                            <div className="formBuilderContent">
+                                <Loader loaded={loaded} options={LARGE_BREAKPOINT}>
+                                    <FormBuilder
+                                        formFocus={this.props.formFocus}
+                                        selectedField={this.props.selectedField}
+                                        formBuilderUpdateChildrenTabIndex={this.updateChildrenTabIndex}
+                                        formId={formId}
+                                        formData={formData}
+                                        moveFieldOnForm={this.props.moveFieldOnForm}
+                                        updateAnimationState={this.props.updateFormAnimationState}
+                                    />
+                                </Loader>
+                            </div>
+                        </AutoScroll>
 
-                    <AutoScroll
-                        pixelsFromBottomForLargeDevices={80}
-                        pixelsFromBottomForMobile={50}>
-                        <div className="formBuilderContent">
-                            <Loader loaded={loaded} options={LARGE_BREAKPOINT}>
-                                <FormBuilder
-                                    formFocus={this.props.formFocus}
-                                    selectedField={this.props.selectedField}
-                                    formBuilderUpdateChildrenTabIndex={this.updateChildrenTabIndex}
-                                    formId={formId}
-                                    formData={formData}
-                                    moveFieldOnForm={this.props.moveFieldOnForm}
-                                    updateAnimationState={this.props.updateFormAnimationState}
-                                />
-                            </Loader>
-                        </div>
-                    </AutoScroll>
-
-                    <FieldProperties />
+                        <FieldProperties />
+                    </ToolPalette>
                 </div>
 
                 {this.getSaveOrCancelFooter()}

@@ -3,6 +3,13 @@ import FieldUtils from '../../../utils/fieldUtils';
 
 import './fieldToken.scss';
 
+/**
+ * This token represents fields while they are in a dragging state.
+ * If you need to display a field token in a menu, use `FieldTokenInMenu` instead.
+ * @param props
+ * @returns {XML}
+ * @constructor
+ */
 const FieldToken = (props) => {
     let classes = ['fieldToken'];
 
@@ -14,8 +21,12 @@ const FieldToken = (props) => {
         classes.push('fieldTokenDragging');
     }
 
+    if (props.isCollapsed) {
+        classes.push('fieldTokenCollapsed');
+    }
+
     return (
-        <div className={classes.join(' ')}>
+        <div className={classes.join(' ')} onClick={props.onClick}>
             <div className="fieldTokenIconContainer">
                 <div className="fieldTokenIcon">
                     {FieldUtils.getFieldSpecificIcon(props.type)}
@@ -36,6 +47,14 @@ FieldToken.propTypes = {
     /**
      * Whether the field token should display with its dragging styles applied */
     isDragging: PropTypes.bool,
+
+    /**
+     * Displays the token in a collapsed state (icon only) */
+    isCollapsed: PropTypes.bool,
+
+    /**
+     * Action when the field token is clicked. */
+    onClick: PropTypes.func
 };
 
 FieldToken.defaultProps = {

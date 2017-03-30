@@ -1,10 +1,11 @@
 @import "../../../assets/css/_qbVariables";
 
+$fieldtoken-width: 250px;
 
 .fieldToken {
     border-radius: $radius-base;
     height: 30px;
-    width: 250px;
+    width: $fieldtoken-width;
 
     display: flex;
     align-items: center;
@@ -17,6 +18,18 @@
 
     &:hover, &.fieldTokenDragging {
         box-shadow: 0 2.5px 4px 0 $dragtoken-shadow-color;
+    }
+
+    .fieldTokenTitle {
+        max-width: $fieldtoken-width;
+        opacity: 1;
+
+        transition: opacity 0.3s, max-width 0.3s;
+    }
+
+    &.fieldTokenCollapsed .fieldTokenTitle {
+        opacity: 0;
+        max-width: 0;
     }
 
     .fieldTokenIconContainer {

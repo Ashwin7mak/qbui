@@ -56,5 +56,13 @@ describe('FieldToken', () => {
         component = shallow(<FieldToken isDragging={false} />);
 
         expect(component.find('.fieldTokenDragging')).not.toBePresent();
+        expect(component.find('.fieldTokenCollapsed')).not.toBePresent();
+    });
+
+    it('displays the field token in a collapsed state', () => {
+        component = shallow(<FieldToken isCollapsed={true} />);
+
+        expect(component.find('.fieldTokenCollapsed')).toBePresent();
+        expect(component.find('.fieldTokenDragging')).not.toBePresent();
     });
 });
