@@ -43,7 +43,7 @@
 
         overflow: auto;
         background-color: $leftnav-background-color;
-        z-index: 100;
+        z-index: $zindex-trowser;
         height: 100vh; // Ensures that long content can be scrolled on all browsers
 
         @include baseMenuWidths;
