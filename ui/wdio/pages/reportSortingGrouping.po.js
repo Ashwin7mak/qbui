@@ -92,7 +92,8 @@
             // Reduce the records to single object for grouping
             sortedAPIRecords.forEach(function(sortedRecord) {
                 var obj = _.reduce(sortedRecord, function(t, i) {
-                    return t[i.id] = i.value, t;
+                    t[i.id] = i.value;
+                    return t;
                 }, {});
                 sortedObjects.push(obj);
             });
