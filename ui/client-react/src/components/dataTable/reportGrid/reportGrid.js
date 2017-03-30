@@ -49,7 +49,7 @@ export const ReportGrid = React.createClass({
 
         /**
          * Action that starts inline editing */
-        onEditRecordStart: PropTypes.func.isRequired,
+        onEditRecordStart: PropTypes.func,
 
         /**
          * Action to save a record that is currently being edited */
@@ -65,11 +65,11 @@ export const ReportGrid = React.createClass({
 
         /**
          * Action that will occur when a cell is click (does not include area covered by edit icon) */
-        onCellClick: PropTypes.func.isRequired,
+        onCellClick: PropTypes.func,
 
         /**
          * Action for when a field value is changed (e.g., user types in an input box when inline editing) */
-        onFieldChange: PropTypes.func.isRequired,
+        onFieldChange: PropTypes.func,
 
         /**
          * An action that is called when a field should be validated */
@@ -112,7 +112,10 @@ export const ReportGrid = React.createClass({
 
         /**
          * A list of ids by which the report has been sorted (used for displaying the report header menu) */
-        sortFids: PropTypes.array
+        sortFids: PropTypes.array,
+
+        // relationship phase-1, will need remove when we allow editing
+        phase1: PropTypes.bool
     },
 
     getDefaultProps() {
@@ -154,11 +157,15 @@ export const ReportGrid = React.createClass({
             display: value
         };
 
-        this.props.onFieldChange(formatChange(updatedFieldValue, colDef));
+        if (this.props.onFieldChange) {
+            this.props.onFieldChange(formatChange(updatedFieldValue, colDef));
+        }
     },
 
     onCellBlur(updatedFieldValue, colDef) {
-        this.props.onFieldChange(formatChange(updatedFieldValue, colDef));
+        if (this.props.onFieldChange) {
+            this.props.onFieldChange(formatChange(updatedFieldValue, colDef));
+        }
     },
 
     /**
@@ -242,6 +249,10 @@ export const ReportGrid = React.createClass({
             columns={this.transformColumns()}
             rows={transformedRecords}
             loading={this.props.loading}
+            appUsers={this.props.appUsers}
+            phase1={this.props.phase1}
+            showRowActionsColumn={!this.props.phase1}
+
             onStartEditingRow={this.startEditingRow}
             editingRowId={editingRecordId}
             // TODO:: Refactor out need for this prop once AgGrid is removed. https://quickbase.atlassian.net/browse/MB-1920
@@ -249,7 +260,6 @@ export const ReportGrid = React.createClass({
             // in editing mode with only that property. Future implementation might set a new record's id to 0 or 'new'
             //isInlineEditOpen={this.props.isInlineEditOpen}
             isInlineEditOpen={isInLineEditOpen}
-            appUsers={this.props.appUsers}
             selectedRows={this.props.selectedRows}
             areAllRowsSelected={ReportUtils.areAllRowsSelected(transformedRecords, this.props.selectedRows)}
             onClickToggleSelectedRow={this.props.toggleSelectedRow}
@@ -272,7 +282,8 @@ export const ReportGrid = React.createClass({
                 onCellClickEditIcon: this.startEditingRow,
                 validateFieldValue: this.props.handleValidateFieldValue,
                 //isInlineEditOpen: this.props.isInlineEditOpen
-                isInlineEditOpen: isInLineEditOpen
+                isInlineEditOpen: isInLineEditOpen,
+                phase1: this.props.phase1
             }}
             compareCellChanges={FieldUtils.compareFieldValues}
             menuComponent={ReportColumnHeaderMenu}
