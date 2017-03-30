@@ -106,11 +106,13 @@ export class FormBuilder extends Component {
                 </label>
                 {this.props.showCustomDragLayer && <FormBuilderCustomDragLayer />}
                 <QbForm
+                    formFocus={this.props.formFocus}
+                    selectedField={this.props.selectedField}
+                    formBuilderUpdateChildrenTabIndex={this.props.formBuilderUpdateChildrenTabIndex}
                     edit={true}
                     editingForm={true}
                     formData={this.props.formData}
                     handleFormReorder={this.handleFormReorder}
-                    removeField={this.removeField}
                     cacheDragElement={this.cacheDragElement}
                     clearDragElementCache={this.clearDragElementCache}
                     cancelFormReorder={this.cancelFormReorder}

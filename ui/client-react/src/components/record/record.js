@@ -20,7 +20,9 @@ export const Record = React.createClass({
     },
 
     componentDidMount() {
-        if (_.has(this.props, 'pendEdits.recordEditOpen') && _.isEmpty(this.props.pendEdits.recordChanges) && this.props.pendEdits.recordEditOpen !== false) {
+        //new record or existing records with pending changes on open
+        if ((this.props.recId === UNSAVED_RECORD_ID && _.isEmpty(this.props.pendEdits.recordChanges)) ||
+            (_.has(this.props, 'pendEdits.recordEditOpen') && _.isEmpty(this.props.pendEdits.recordChanges) && this.props.pendEdits.recordEditOpen !== false)) {
             this.handleEditRecordStart(this.props.recId);
         }
     },

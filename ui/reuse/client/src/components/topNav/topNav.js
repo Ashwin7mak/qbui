@@ -5,7 +5,7 @@ import Icon from '../icon/icon';
 
 import './topNav.scss';
 
-class ReTopNav extends Component {
+class TopNav extends Component {
     constructor(props) {
         super(props);
 
@@ -57,7 +57,9 @@ class ReTopNav extends Component {
     }
 }
 
-ReTopNav.propTypes = {
+TopNav.propTypes = {
+    /**
+     * Occasionally, the XD spec requires that the topNav is hidden on small breakpoint. Set this to false to hide the TopNav at that breakpoint. */
     showOnSmall: PropTypes.bool,
 
     /**
@@ -74,11 +76,11 @@ ReTopNav.propTypes = {
 
     /**
      * Actions that appear on the right side of the nav bar */
-    globalActions: PropTypes.element
+    globalActions: PropTypes.element,
 };
 
-ReTopNav.defaultProps = {
-    showOnSmall: false,
+TopNav.defaultProps = {
+    showOnSmall: true,
 };
 
-export default ReTopNav;
+export default TopNav;

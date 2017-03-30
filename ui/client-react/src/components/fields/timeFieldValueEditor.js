@@ -362,6 +362,7 @@ const TimeFieldValueEditor = React.createClass({
                         onChange={this.onInputChange}
                         onBlur={this.onBlur}
                         value={this.getMilitaryTime() || ''}
+                        tabIndex={this.props.tabIndex}
                     />
                 </div> :
                 <div className={classes.join(' ')}>
@@ -376,6 +377,7 @@ const TimeFieldValueEditor = React.createClass({
                         placeholder={placeholder}
                         clearable={false}
                         arrowRenderer={this.renderClockIcon}
+                        tabIndex={this.props.tabIndex}
                     />
                 </div>
         );
