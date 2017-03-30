@@ -9,6 +9,7 @@ import shell from './shell';
 import featureSwitches from './featureSwitches';
 import tableCreation from './tableCreation';
 import animation from './animation';
+import embeddedReports from './embeddedReports';
 
 // combine individual reducers into a single root reducer (qbui)
 export default combineReducers({
@@ -20,6 +21,6 @@ export default combineReducers({
     report,
     search,
     shell,
-    tableCreation
+    tableCreation,
+    embeddedReports
 });
-

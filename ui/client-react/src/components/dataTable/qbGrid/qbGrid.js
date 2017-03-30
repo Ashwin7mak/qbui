@@ -122,7 +122,10 @@ const QbGrid = React.createClass({
 
         /**
          * Flag to include the first column that includes row specific actions. Currently requires fluxxor/FluxMixin to be available. */
-        showRowActionsColumn: PropTypes.bool
+        showRowActionsColumn: PropTypes.bool,
+
+        // relationship phase-1, will need remove when we allow editing
+        phase1: PropTypes.bool
     },
 
     getDefaultProps() {
@@ -207,7 +210,11 @@ const QbGrid = React.createClass({
     getColumns() {
         return this.props.columns.map(column => {
             try {
-                return column.addFormatter(this.renderCell).addHeaderMenu(this.props.menuComponent, this.props.menuProps).getGridHeader();
+                column.addFormatter(this.renderCell);
+                if (!this.props.phase1) {
+                    column.addHeaderMenu(this.props.menuComponent, this.props.menuProps);
+                }
+                return column.getGridHeader();
             } catch (err) {
                 // If the column is not a type of ColumnTransformer with the appropriate methods, still pass through the column as the dev may have wanted to use a plain object (i.e., in the component library)
                 // but provide a warning in case using the ColumnTransformer class was forgotten.
