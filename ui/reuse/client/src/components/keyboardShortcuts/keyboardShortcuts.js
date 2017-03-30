@@ -35,9 +35,14 @@ class KeyboardShortcuts extends Component {
     }
 
     removeAllKeyBindings() {
-        let keyBindings = this.props.shortcutBindingsPreventDefault || this.props.shortcutBindings || [];
+        let shortcutBindingsPreventDefault = this.props.shortcutBindingsPreventDefault || [];
+        let shortcutBindings = this.props.shortcutBindings || [];
 
-        keyBindings.forEach(binding => {
+        shortcutBindingsPreventDefault.forEach(binding => {
+            MouseTrap.unbind(binding.key);
+        });
+
+        shortcutBindings.forEach(binding => {
             MouseTrap.unbind(binding.key);
         });
     }

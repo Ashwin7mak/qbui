@@ -73,6 +73,7 @@ describe('KeyboardShortCuts', () => {
     it('calls removeAllKeyBindings when component unmounts ', () => {
         component = shallow(<KeyboardShortCuts
             shortcutBindings={keyBindings}
+            shortcutBindingsPreventDefault={keyBindings}
             id={testId}
         />);
 
