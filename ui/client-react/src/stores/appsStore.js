@@ -35,7 +35,7 @@ let AppsStore = Fluxxor.createStore({
 
             actions.LOAD_APP_OWNER, this.onLoadAppOwner,
             actions.LOAD_APP_OWNER_FAILED, this.onLoadAppOwnerFailed,
-            actions.LOAD_APP_OWNER_SUCCESS, this.onLoadAppOwnerSuccess,
+            actions.LOAD_APP_OWNER_SUCCESS, this.onLoadAppOwnerSuccess
         );
 
         this.logger = new Logger();

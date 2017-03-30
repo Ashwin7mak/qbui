@@ -17,7 +17,6 @@ describe('Nav Actions functions', () => {
             return locale;
         }
     };
-
     beforeEach(() => {
         spyOn(flux.dispatchBinder, 'dispatch');
     });
@@ -43,6 +42,4 @@ describe('Nav Actions functions', () => {
 
         navActionsRewireAPI.__ResetDependency__('AppsBundleLoader');
     });
-
-
 });

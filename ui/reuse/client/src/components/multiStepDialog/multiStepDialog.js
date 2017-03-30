@@ -8,6 +8,7 @@ import Loader from 'react-loader';
 
 // IMPORTS FROM CLIENT REACT
 import {I18nMessage} from '../../../../../client-react/src/utils/i18nMessage';
+import Locale from '../../../../../client-react/src/locales/locales';
 // IMPORTS FROM CLIENT REACT
 
 import './multiStepDialog.scss';
@@ -87,7 +88,7 @@ class MultiStepDialog extends React.Component {
                     {showNext &&
                         <Button className="nextButton" bsStyle="primary" disabled={!this.props.canProceed} onClick={this.nextClicked}><I18nMessage message="nav.next"/></Button>}
                     {showFinished &&
-                        <Button className="finishedButton" bsStyle="primary" disabled={!this.props.canProceed} onClick={this.finishClicked}><I18nMessage message="nav.finished"/></Button>}
+                        <Button className="finishedButton" bsStyle="primary" disabled={!this.props.canProceed} onClick={this.finishClicked}>{this.props.finishedButtonLabel}</Button>}
                 </div>
             </Modal.Footer>
         );
@@ -183,12 +184,17 @@ MultiStepDialog.propTypes = {
     /**
      * additional classes
      */
-    classes: PropTypes.string
+    classes: PropTypes.string,
+    /**
+     *
+     */
+    finishedButtonLabel: PropTypes.string
 };
 
 MultiStepDialog.defaultProps = {
     canProceed: true,
-    isLoading: false
+    isLoading: false,
+    finishedButtonLabel: Locale.getMessage("nav.finished")
 };
 
 export default MultiStepDialog;

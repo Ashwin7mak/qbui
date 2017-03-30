@@ -1,59 +1,110 @@
-import Fluxxor from 'fluxxor';
-import fieldsActions, {__RewireAPI__ as fieldsActionsRewireAPI} from '../../src/actions/fieldsActions';
-import * as actions from '../../src/constants/actions';
+import {__RewireAPI__ as FieldsActionsRewireAPI} from '../../src/actions/fieldsActions';
+import * as fieldActions from '../../src/actions/fieldsActions';
+import * as types from '../../src/actions/types';
 import Promise from 'bluebird';
 
-describe('Fields Actions functions', () => {
-    'use strict';
+import mockStore from 'redux-mock-store';
+import thunk from 'redux-thunk';
+const middlewares = [thunk];
+const mockReportsStore = mockStore(middlewares);
 
-    let appId = 'appId';
-    let tblId = 'tblId';
-    let responseData = [{data: [1, 2, 3]}];
+function event(appId, tblId, type, content) {
+    return {
+        appId,
+        tblId,
+        type: type,
+        content: content || null
+    };
+}
 
-    class mockFieldsService {
-        constructor() { }
+describe('Test FieldsActions function success workflow', () => {
+
+    const appId = '1';
+    const tblId = '2';
+    let mockResponse = {
+        data: [{id: 1}]
+    };
+
+    class mockFieldService {
         getFields() {
-            return Promise.resolve({data: responseData});
-        }
-        getField(id) {
-            return Promise.resolve({data: {id:id}});
+            return Promise.resolve(mockResponse);
         }
     }
 
-    let stores = {};
-    let flux = new Fluxxor.Flux(stores);
-    flux.addActions(fieldsActions);
-
     beforeEach(() => {
-        spyOn(flux.dispatchBinder, 'dispatch');
-        spyOn(mockFieldsService.prototype, 'getFields').and.callThrough();
-        spyOn(mockFieldsService.prototype, 'getField').and.callThrough();
-        fieldsActionsRewireAPI.__Rewire__('FieldsService', mockFieldsService);
+        spyOn(mockFieldService.prototype, 'getFields').and.callThrough();
+        FieldsActionsRewireAPI.__Rewire__('FieldsService', mockFieldService);
     });
 
     afterEach(() => {
-        fieldsActionsRewireAPI.__ResetDependency__('FieldsService');
+        FieldsActionsRewireAPI.__ResetDependency__('FieldsService');
     });
 
-    var fieldsActionTests = [
-        {name:'test load fields action', appId: appId, tblId: tblId},
+    it('verify loadFields action', (done) => {
+        const expectedActions = [
+            event(appId, tblId, types.LOAD_FIELDS),
+            event(appId, tblId, types.LOAD_FIELDS_SUCCESS, {fields:mockResponse.data})
+        ];
+        const store = mockReportsStore({});
+        return store.dispatch(fieldActions.loadFields(appId, tblId)).then(
+            () => {
+                expect(store.getActions()).toEqual(expectedActions);
+                done();
+            },
+            () => {
+                expect(false).toBe(true);
+                done();
+            });
+    });
+});
+
+describe('Test FieldsActions function failure workflow', () => {
+
+    let errorResponse = {
+        response: {
+            error: {status:500}
+        }
+    };
+    class mockFieldService {
+        getFields() {
+            return Promise.reject(errorResponse);
+        }
+    }
+
+    beforeEach(() => {
+        spyOn(mockFieldService.prototype, 'getFields').and.callThrough();
+        FieldsActionsRewireAPI.__Rewire__('FieldsService', mockFieldService);
+    });
+    afterEach(() => {
+        FieldsActionsRewireAPI.__ResetDependency__('FieldsService');
+    });
+
+    let testCases = [
+        {name:'verify missing appId parameter', tblId:'2'},
+        {name:'verify missing tblId parameter', appId:'1'},
+        {name:'verify missing parameters'},
+        {name:'verify getFields reject response', appId:'1', tblId: '2', rejectTest:true}
     ];
 
-    fieldsActionTests.forEach(function(test) {
-        it(test.name, function(done) {
-            flux.actions.loadFields(test.appId, test.tblId).then(
-                () => {
-                    expect(mockFieldsService.prototype.getFields).toHaveBeenCalled();
-                    expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(2);
-                    expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_FIELDS]);
-                    expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.LOAD_FIELDS_SUCCESS, {appId, tblId, data:responseData}]);
-                    done();
-                },
+    testCases.forEach(testCase => {
+        it(testCase.name, (done) => {
+            let expectedActions = [];
+            if (testCase.rejectTest === true) {
+                expectedActions.push(event(testCase.appId, testCase.tblId, types.LOAD_FIELDS));
+            }
+            expectedActions.push(event(testCase.appId, testCase.tblId, types.LOAD_FIELDS_ERROR, {error:jasmine.any(Object)}));
+
+            const store = mockReportsStore({});
+            return store.dispatch(fieldActions.loadFields(testCase.appId, testCase.tblId)).then(
                 () => {
                     expect(false).toBe(true);
                     done();
-                }
-            );
+                },
+                () => {
+                    expect(store.getActions()).toEqual(expectedActions);
+                    done();
+                });
         });
     });
 });
+

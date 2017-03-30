@@ -55,44 +55,6 @@ const forms = (
         return newState;
     }
 
-    //TODO: MOVE/RENAME TO RECORDS STORE..THIS IS FIRED WHEN SAVING A RECORD
-    case types.SAVE_FORM: {
-
-        newState.push({
-            ...currentForm,
-            id,
-            saving: true,
-            errorStatus: null
-        });
-
-        return newState;
-    }
-
-    //TODO: MOVE/RENAME TO RECORDS STORE..THIS IS FIRED WHEN SAVING A RECORD
-    case types.SAVE_FORM_SUCCESS: {
-
-        newState.push({
-            ...currentForm,
-            id,
-            saving: false,
-            errorStatus: null
-        });
-
-        return newState;
-    }
-
-    //TODO: MOVE/RENAME TO RECORDS STORE..THIS IS FIRED WHEN SAVING A RECORD
-    case types.SAVE_FORM_FAILED: {
-
-        newState.push({
-            ...currentForm,
-            id,
-            saving: false,
-            errorStatus: action.error
-        });
-        return newState;
-    }
-
     case types.SYNC_FORM: {
         newState.push({
             ...currentForm,
@@ -101,11 +63,8 @@ const forms = (
         return newState;
     }
 
-    case types.SAVING_FORM: {
-        //  TODO:
-        //  because the state object holds both form and record data, make sure the
-        //  currentForm object is passed along for the ride.  This will get cleaned
-        //  up once form and record data is separated.
+    case types.SAVE_FORM: {
+        //  hide/show modal window and spinner over a form
         newState.push({
             ...currentForm,
             id,
@@ -115,29 +74,20 @@ const forms = (
         return newState;
     }
 
-    case types.SAVING_FORM_ERROR: {
-        //  TODO:
-        //  because the state object holds both form and record data, make sure the
-        //  currentForm object is passed along for the ride.  This will get cleaned
-        //  up once form and record data is separated.
+    case types.SAVE_FORM_COMPLETE: {
+        //  hide/show modal window and spinner over a form
         newState.push({
             ...currentForm,
             id,
             saving: false,
-            errorStatus: action.content
+            errorStatus: null
         });
         return newState;
     }
 
     case types.SAVING_FORM_SUCCESS: {
-        //  TODO:
-        //  because the state object holds both form and record data, make sure the
-        //  currentForm object is passed along for the ride.  This will get cleaned
-        //  up once form and record data is separated.
-        //
         //no changes to state..
         updatedForm = _.cloneDeep(currentForm);
-        //  ..for now until the store is refactored..
         if (!updatedForm.formData) {
             updatedForm.formData = {};
         }
