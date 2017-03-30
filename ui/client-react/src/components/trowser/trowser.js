@@ -40,13 +40,13 @@ let Trowser = React.createClass({
 
     keyboardOnSave() {
         if (this.props.visible) {
-            this.props.onSave()
+            this.props.onSave();
         }
     },
 
     keyboardOnCancel() {
         if (this.props.visible) {
-            this.props.onCancel()
+            this.props.onCancel();
         }
     },
 
