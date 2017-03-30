@@ -2,15 +2,15 @@ import React, {PropTypes} from 'react';
 import {Link} from 'react-router';
 import Icon from '../icon/icon';
 
-// IMPORTED FROM CLIENT REACT
+// IMPORTS FROM CLIENT REACT
 import {I18nMessage} from '../../../../../client-react/src/utils/i18nMessage';
-// IMPORTED FROM CLIENT REACT
+// IMPORTS FROM CLIENT REACT
 
 /**
  * A global action (ex. 'Help' with an icon and an associated link) */
-const ReGlobalAction = props => (
+const GlobalAction = props => (
     <li className="link globalAction">
-        <Link className="globalActionLink" tabIndex={props.tabIndex} to={props.action.link}>
+        <Link className="globalActionLink" tabIndex={props.tabIndex || 0} to={props.action.link}>
             <Icon icon={props.action.icon}/>
             <span className="navLabel"><I18nMessage message={props.action.msg}/></span>
         </Link>
@@ -23,12 +23,12 @@ const actionPropType = PropTypes.shape({
     link: PropTypes.string
 });
 
-ReGlobalAction.propTypes = {
+GlobalAction.propTypes = {
     /**
      * An object that describes the action ({icon, msg, link}) */
     action: actionPropType.isRequired,
 
-    tabIndex: PropTypes.number.isRequired
+    tabIndex: PropTypes.number
 };
 
-export default ReGlobalAction;
+export default GlobalAction;

@@ -14,8 +14,8 @@ let tableInfo = {
 };
 
 let appTables = [
-    {name: 'table1'},
-    {name: 'table2'}
+    'table1',
+    'table2'
 ];
 
 const mockParentFunctions = {

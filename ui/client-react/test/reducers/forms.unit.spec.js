@@ -232,7 +232,128 @@ describe('Forms reducer functions', () => {
             expect(reducer(stateWithViewForm, actionPayload)).toEqual([{
                 ...stateWithViewForm[0],
                 formData: {formMeta: testFormMeta},
-                selectedFields: [1]
+                selectedFields: [1],
+                previouslySelectedField: undefined
+            }]);
+        });
+
+        it('returns existing state if there is no current form', () => {
+            expect(reducer(stateWithEditForm, actionPayload)).toEqual(stateWithEditForm);
+        });
+
+    });
+
+    describe('(keyboard) move a field up', () => {
+        const updatedFormMeta = 'updated form meta';
+        const mockMoveFieldHelper = {
+            keyBoardMoveFieldUp(_formMeta, _location) {return updatedFormMeta;},
+            updateSelectedFieldLocation(_location, _Updatedlocation) {return updatedFormMeta;}
+        };
+
+        const actionPayload = {
+            id: VIEW,
+            type: types.KEYBOARD_MOVE_FIELD_UP,
+            content: {
+                location: 1
+            }
+        };
+
+        beforeEach(() => {
+            spyOn(mockMoveFieldHelper, 'keyBoardMoveFieldUp').and.callThrough();
+            spyOn(mockMoveFieldHelper, 'updateSelectedFieldLocation').and.callThrough();
+            ReducerRewireAPI.__Rewire__('MoveFieldHelper', mockMoveFieldHelper);
+        });
+
+        afterEach(() => {
+            ReducerRewireAPI.__ResetDependency__('MoveFieldHelper');
+        });
+
+        it('returns a new state with the field in the new position', () => {
+            expect(reducer(stateWithViewForm, actionPayload)).toEqual([{
+                ...stateWithViewForm[0],
+                formData: {formMeta: updatedFormMeta},
+                selectedFields: [updatedFormMeta]
+            }]);
+            expect(mockMoveFieldHelper.keyBoardMoveFieldUp).toHaveBeenCalledWith(
+                stateWithViewForm[0].formData.formMeta, 1
+            );
+            expect(mockMoveFieldHelper.updateSelectedFieldLocation).toHaveBeenCalledWith(
+                1, -1
+            );
+        });
+
+        it('returns existing state if there is no current form', () => {
+            expect(reducer(stateWithEditForm, actionPayload)).toEqual(stateWithEditForm);
+
+            expect(mockMoveFieldHelper.keyBoardMoveFieldUp).not.toHaveBeenCalled();
+            expect(mockMoveFieldHelper.updateSelectedFieldLocation).not.toHaveBeenCalled();
+        });
+    });
+
+    describe('(keyboard) move a field down', () => {
+        const updatedFormMeta = 'updated form meta';
+        const mockMoveFieldHelper = {
+            keyBoardMoveFieldDown(_formMeta, _location) {return updatedFormMeta;},
+            updateSelectedFieldLocation(_location, _updatedLocation) {return updatedFormMeta;}
+        };
+
+        const actionPayload = {
+            id: VIEW,
+            type: types.KEYBOARD_MOVE_FIELD_DOWN,
+            content: {
+                location: 1
+            }
+        };
+
+        beforeEach(() => {
+            spyOn(mockMoveFieldHelper, 'keyBoardMoveFieldDown').and.callThrough();
+            spyOn(mockMoveFieldHelper, 'updateSelectedFieldLocation').and.callThrough();
+            ReducerRewireAPI.__Rewire__('MoveFieldHelper', mockMoveFieldHelper);
+        });
+
+        afterEach(() => {
+            ReducerRewireAPI.__ResetDependency__('MoveFieldHelper');
+        });
+
+        it('returns a new state with the field in the new position', () => {
+            expect(reducer(stateWithViewForm, actionPayload)).toEqual([{
+                ...stateWithViewForm[0],
+                formData: {formMeta: updatedFormMeta},
+                selectedFields: [updatedFormMeta]
+            }]);
+            expect(mockMoveFieldHelper.keyBoardMoveFieldDown).toHaveBeenCalledWith(
+                stateWithViewForm[0].formData.formMeta, 1
+            );
+            expect(mockMoveFieldHelper.updateSelectedFieldLocation).toHaveBeenCalledWith(
+                1, 1
+            );
+        });
+
+        it('returns existing state if there is no current form', () => {
+            expect(reducer(stateWithEditForm, actionPayload)).toEqual(stateWithEditForm);
+
+            expect(mockMoveFieldHelper.keyBoardMoveFieldDown).not.toHaveBeenCalled();
+            expect(mockMoveFieldHelper.updateSelectedFieldLocation).not.toHaveBeenCalled();
+        });
+    });
+
+    describe('toggle tab index', () => {
+        const testFormMeta = 'some meta data';
+
+        const actionPayload = {
+            id: VIEW,
+            type: types.TOGGLE_FORM_BUILDER_CHILDREN_TABINDEX,
+            content: {
+                currentTabIndex: '-1',
+            }
+        };
+
+        it('returns a new state with a tabindex toggled', () => {
+            expect(reducer(stateWithViewForm, actionPayload)).toEqual([{
+                ...stateWithViewForm[0],
+                formData: {formMeta: testFormMeta},
+                formBuilderChildrenTabIndex: ['0'],
+                formFocus: [false]
             }]);
         });
 

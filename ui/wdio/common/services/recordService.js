@@ -4,11 +4,15 @@
  */
 (function() {
     'use strict';
-    //Bluebird Promise library
+    // Bluebird Promise library
     var promise = require('bluebird');
-    //Node.js assert library
+    // Node.js assert library
     var assert = require('assert');
-    var recordGenerator = require('../../../test_generators/record.generator.js');
+    // Logging library
+    var log = require('../../../server/src/logger').getLogger();
+    // Record Generator library
+    var recordGenerator = require('../../../test_generators/record.generator');
+
     module.exports = function(recordBase) {
         var recordService = {
             /**
@@ -21,9 +25,10 @@
              * @returns Promise result from the add records API call
              */
             addRecordsToTable: function(createdApp, tableIndex, numRecords, addDupeRecord, addEmptyRecord) {
+                var MIN_RECORDSCOUNT = 5;
+
                 // Variable to determine whether or not we use regular or bulk add record APIs below
-                var MIN_RECORDSCOUNT = 11;
-                var totalNumRecords;
+                var totalNumRecords = numRecords;
 
                 // Include a duplicate or blank record if specified in the method call
                 if (addDupeRecord) {
@@ -36,12 +41,13 @@
                 // Get the appropriate fields out of the Create App response (specifically the created field Ids)
                 var tableNonBuiltInFields = e2eBase.tableService.getNonBuiltInFields(createdApp.tables[tableIndex]);
                 // Generate the record JSON objects with data
-                var generatedRecords = e2eBase.recordService.generateRecords(tableNonBuiltInFields, totalNumRecords);
+                var generatedRecords = this.generateRecords(tableNonBuiltInFields, totalNumRecords);
 
                 // Add 1 duplicate record
                 if (addDupeRecord) {
                     var clonedArray = JSON.parse(JSON.stringify(generatedRecords));
                     var dupRecord = clonedArray[0];
+                    //TODO: This structure is hardcoded so need to read in the record and duplicate dynamically
                     // Edit the numeric field so we can check the second level sort (ex: 6.7)
                     dupRecord.forEach(function(field) {
                         if (field.id === 7) {
@@ -57,16 +63,17 @@
 
                 // Add 1 empty record
                 if (addEmptyRecord) {
-                    var generatedEmptyRecords = e2eBase.recordService.generateEmptyRecords(tableNonBuiltInFields, 1);
+                    var generatedEmptyRecords = this.generateEmptyRecords(tableNonBuiltInFields, 1);
                     generatedRecords.push(generatedEmptyRecords[0]);
                 }
 
-                if (numRecords < MIN_RECORDSCOUNT) {
+                // Based on how many records we are adding either do a couple addRecord calls or one bulk add call
+                if (numRecords <= MIN_RECORDSCOUNT) {
                     // Via the API create the records, a new report, then run the report.
-                    return e2eBase.recordService.addRecords(createdApp, createdApp.tables[tableIndex], generatedRecords);
+                    return this.addRecords(createdApp, createdApp.tables[tableIndex], generatedRecords);
                 } else {
-                    // Via the API create the bulk records
-                    return e2eBase.recordService.addBulkRecords(createdApp, createdApp.tables[tableIndex], generatedRecords);
+                    // Via the API create the records via bulk add
+                    return this.addBulkRecords(createdApp, createdApp.tables[tableIndex], generatedRecords);
                 }
             },
             /**
@@ -75,24 +82,26 @@
              * Returns a promise.
              */
             addRecords: function(app, table, genRecords) {
-                //TODO: Remove deferred pattern
-                var deferred = promise.pending();
                 //Resolve the proper record endpoint specific to the generated app and table
                 var recordsEndpoint = recordBase.apiBase.resolveRecordsEndpoint(app.id, table.id);
                 var fetchRecordPromises = [];
-                //TODO: This function does not add records in order of the genRecords due to looping over promises
-                //TODO: Investigate fix or just use bulk for add any more than 1 record
+
+                // If using JS for loops with promise functions make sure to use Bluebird's Promise.each function
+                // otherwise errors can be swallowed!
                 genRecords.forEach(function(currentRecord) {
-                    fetchRecordPromises.push(recordBase.createAndFetchRecord(recordsEndpoint, currentRecord, null));
-                });
-                promise.all(fetchRecordPromises)
-                    .then(function(results) {
-                        deferred.resolve(results);
-                    }).catch(function(error) {
-                        console.log(JSON.stringify(error));
-                        deferred.reject(error);
+                    fetchRecordPromises.push(function() {
+                        return recordBase.createRecord(recordsEndpoint, currentRecord, null);
                     });
-                return deferred.promise;
+                });
+
+                // Bluebird's promise.each function (executes each promise synchronously)
+                return promise.each(fetchRecordPromises, function(queueItem) {
+                    // This is an iterator that executes each Promise function in the array here
+                    return queueItem();
+                }).catch(function(error) {
+                    log.error('Error adding records (possible random dataGen issue)');
+                    return promise.reject(error);
+                });
             },
             /**
              * Given an already created app and table, create a list of generated record JSON objects via the API.
@@ -101,7 +110,10 @@
             addBulkRecords: function(app, table, genRecords) {
                 //Resolve the proper record endpoint specific to the generated app and table
                 var recordsEndpoint = recordBase.apiBase.resolveRecordsEndpoint(app.id, table.id);
-                return recordBase.createBulkRecords(recordsEndpoint, genRecords, null);
+                return recordBase.createBulkRecords(recordsEndpoint, genRecords).catch(function(error) {
+                    log.error('Error adding bulk records (possible random dataGen issue)');
+                    return promise.reject(error);
+                });
             },
 
             /**
@@ -220,65 +232,56 @@
              *   - records for each table
              *   - a form and
              *   - report for each table
-             * @param app - the created app
+             * @param createdApp - the created app JSON object from createApp API call
              * @param recordsConfig - optional
              *  { numRecordsToCreate : number  //defaults to Consts.DEFAULT_NUM_RECORDS_TO_CREATE,
-              *  tableConfig: hash by tablename of configs for table (numRecordsToCreate)}
+             *  tableConfig: hashmap by tablename of configs for table (numRecordsToCreate)}
              * @returns {*|promise}
              */
-            createRecords : function(app, recordsConfig, services) {
-                //TODO: Remove deferred pattern
-                var deferred = promise.pending();
-                var results = {allPromises:[], tablePromises:[]};
-                if (app) {
-                    try {
-                        var createdApp = app;
-                        var numberOfRecords = e2eConsts.DEFAULT_NUM_RECORDS_TO_CREATE;
-                        // get the number of records to create if specified
-                        if (recordsConfig && recordsConfig.numRecordsToCreate) {
-                            numberOfRecords = recordsConfig.numRecordsToCreate;
-                        }
-                        //create records for each table in the app
-                        createdApp.tables.forEach(function(table, index) {
-                            // get the number of records to create if specified for this table
-                            if (recordsConfig && recordsConfig.tablesConfig && recordsConfig.tablesConfig[table.name] &&
-                                recordsConfig.tablesConfig[table.name].numRecordsToCreate &&
-                                typeof recordsConfig.tablesConfig[table.name].numRecordsToCreate === 'number') {
-                                numberOfRecords = recordsConfig.tablesConfig[table.name].numRecordsToCreate;
-                            }
-                            // Get the created non builtin field Ids
-                            var nonBuiltInFields = services.tableService.getNonBuiltInFields(table);
-                            // Generate the record JSON input objects
-                            var generatedRecords = services.recordService.generateRecords(nonBuiltInFields, numberOfRecords);
+            createRecords : function(createdApp, recordsConfig) {
+                var numberOfRecords;
 
-                            // Via the serices API create the records, a new report and form
-                            var reportPromise = services.reportService.createReport(createdApp.id, table.id);
-                            var recordsPromise = services.recordService.addBulkRecords(createdApp, table, generatedRecords);
-                            reportPromise.then(function() {
-                                // Set default table homepage for Table
-                                return services.tableService.setDefaultTableHomePage(createdApp.id, table.id, 1);
-                            });
-
-                            results.allPromises.push(reportPromise);
-                            results.allPromises.push(recordsPromise);
-
-                            results.tablePromises[index] = {
-                                reportPromise: reportPromise,
-                                recordsPromise: recordsPromise,
-                                nonBuiltInFields: nonBuiltInFields
-                            };
-                        });
-                        deferred.resolve(results);
-                    } catch (error) {
-                        console.error(JSON.stringify(error));
-                        deferred.reject(error);
-                    }
-                } else {
-                    var error = new Error("No app to generate records for");
-                    console.error(JSON.stringify(error));
-                    deferred.reject(error);
+                // Get the global number of records to create in each table if specified
+                if (recordsConfig && recordsConfig.numRecordsToCreate) {
+                    numberOfRecords = recordsConfig.numRecordsToCreate;
                 }
-                return deferred.promise;
+
+                var recordCreatePromise = [];
+
+                createdApp.tables.forEach(function(table, index) {
+                    var tableNumOfRecords = null;
+
+                    // Get the number of records to create if specified for each table
+                    if (recordsConfig && recordsConfig.tablesConfig && recordsConfig.tablesConfig[table.name] &&
+                        recordsConfig.tablesConfig[table.name].numRecordsToCreate &&
+                        typeof recordsConfig.tablesConfig[table.name].numRecordsToCreate === 'number') {
+
+                        tableNumOfRecords = recordsConfig.tablesConfig[table.name].numRecordsToCreate;
+                    }
+                    if (tableNumOfRecords) {
+                        // Generate and add records to each table
+                        recordCreatePromise.push(function() {
+                            return e2eBase.recordService.addRecordsToTable(createdApp, index, tableNumOfRecords, false, false);
+                        });
+                    } else {
+                        // Generate and add records to each table
+                        recordCreatePromise.push(function() {
+                            return e2eBase.recordService.addRecordsToTable(createdApp, index, numberOfRecords, false, false);
+                        });
+                    }
+                });
+
+                // Bluebird's promise.each function (executes each promise sequentially)
+                return promise.each(recordCreatePromise, function(queueItem) {
+                    // This is an iterator that executes each Promise function in the array here
+                    // Note that this is how you can catch errors from each promise function if you need to
+                    return queueItem().catch(function(err) {
+                        //TODO: Adding records is flaky due to random dataGen
+                        //TODO: Need to swallow the error so the rest complete in the array and we don't stop execution
+                        //TODO: Fix the dataGen or Implement retry function
+                        log.error('Error creating records (possible random dataGen issue): ' + JSON.stringify(err));
+                    });
+                });
             }
         };
         return recordService;

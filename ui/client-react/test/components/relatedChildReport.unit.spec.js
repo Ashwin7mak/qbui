@@ -69,7 +69,7 @@ describe('RelatedChildReport', () => {
             props[prop] = undefined;
             component = shallow(MockChildReport(props));
             expect(component.find(RelatedChildReport)).not.toBePresent();
-            
+
             const embeddedReportContainer = component.find(EmbeddedReportToolsAndContentMock);
             const embeddedReportLink = component.find(EmbeddedReportLinkMock);
             expect(embeddedReportContainer).not.toBePresent();
