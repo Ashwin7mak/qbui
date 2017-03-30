@@ -1,7 +1,7 @@
 import React, {PropTypes} from 'react';
 import ReactDom from 'react-dom';
 import FieldValueEditor from '../../fields/fieldValueEditor';
-import CellValueRenderer from '../agGrid/cellValueRenderer';
+import CellValueRenderer from '../qbGrid/cellValueRenderer';
 import FieldUtils from '../../../utils/fieldUtils';
 import FieldFormats from '../../../utils/fieldFormats';
 import QbIcon from '../../qbIcon/qbIcon';

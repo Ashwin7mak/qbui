@@ -71,9 +71,7 @@ export const ReportToolsAndContent = React.createClass({
         };
     },
     getInitialState: function() {
-        return {
-            reactabular: true
-        };
+        return {};
     },
     componentWillMount() {
         // Create a debounced function that delays invoking filterReport func
@@ -201,19 +199,6 @@ export const ReportToolsAndContent = React.createClass({
         this.props.clearSearchInput();
         this.debouncedFilterReport('', noSelections, true);
     },
-
-    /**
-     * This function should be called only once when AGGrid is initialized. Find the full width of
-     * the table so the ReportToolbar can adjust its width to match the table.
-     */
-    /* to be reviewed when working on : https://quickbase.atlassian.net/browse/MC-1115
-     onGridSizeSet() {
-         let agGridBody = document.getElementsByClassName('ag-body-container');
-         let leftColumn = document.getElementsByClassName('ag-pinned-left-cols-container');
-         if (_.get(agGridBody, '[0].clientWidth') && _.get(leftColumn, '[0].clientWidth')) {
-             this.setState({gridWidth: agGridBody[0].clientWidth + leftColumn[0].clientWidth});
-         }
-     },*/
 
     getReportToolbar() {
         let {appId, tblId, rptId,
@@ -395,13 +380,7 @@ export const ReportToolsAndContent = React.createClass({
 
             return (
                 <div className={classes.join(' ')}>
-                    <label id="reactabularToggle" style={{display: "none"}}>&nbsp;
-                        <input type="checkbox"
-                               defaultChecked={this.state.reactabular}
-                               onClick={(e) => {this.setState({reactabular: e.target.checked});}}/>&nbsp;Use Reactabular Grid
-                    </label>
                     {this.getTableActions()}
-
                     <ReportContent appId={this.props.reportData.appId}
                                    tblId={this.props.reportData.tblId}
                                    rptId={typeof this.props.reportData.rptId !== "undefined" ? this.props.reportData.rptId : this.props.params.rptId}
@@ -412,10 +391,7 @@ export const ReportToolsAndContent = React.createClass({
                                    cardViewPagination={cardViewPagination }
                                    primaryKeyName={primaryKeyName}
                                    flux={this.getFlux()}
-                                   reactabular={this.state.reactabular}
                                    gridOptions={this.props.gridOptions}
-                        //to be reviewed when working on : https://quickbase.atlassian.net/browse/MC-1115
-                                  /*{onGridReady={this.onGridSizeSet}*/
                                    {...this.props}
                                    fields={fields}/>
 

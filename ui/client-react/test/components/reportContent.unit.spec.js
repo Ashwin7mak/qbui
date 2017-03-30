@@ -394,7 +394,6 @@ const flux = {
 const props = {
     appId: '1',
     tblId: '2',
-    reactabular: true,
     flux: flux,
     record: [
         {pendEdits: {}}
