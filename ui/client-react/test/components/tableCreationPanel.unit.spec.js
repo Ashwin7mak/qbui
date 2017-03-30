@@ -19,8 +19,8 @@ let appTables = [
 ];
 
 const mockParentFunctions = {
-    tableMenuOpened() {},
-    tableMenuClosed() {},
+    openIconChooser() {},
+    closeIconChooser() {},
     setTableProperty() {},
     setEditingProperty() {},
 };
@@ -32,23 +32,23 @@ describe('TableCreationPanel', () => {
 
     it('renders a TableCreationPanel', () => {
         component = mount(<TableCreationPanel tableInfo={tableInfo}
-                            tableMenuOpened={mockParentFunctions.tableMenuOpened}
-                            tableMenuClosed={mockParentFunctions.tableMenuClosed}
-                            setTableProperty={mockParentFunctions.setTableProperty}
-                            setEditingProperty={mockParentFunctions.setEditingProperty}
-                            focusOn="name"
-                            validate={true}
-                            appTables={appTables} />);
+                                              openIconChooser={mockParentFunctions.openIconChooser}
+                                              closeIconChooser={mockParentFunctions.closeIconChooser}
+                                              setTableProperty={mockParentFunctions.setTableProperty}
+                                              setEditingProperty={mockParentFunctions.setEditingProperty}
+                                              focusOn="name"
+                                              validate={true}
+                                              appTables={appTables} />);
 
         expect(component.find('.tableInfo')).toBePresent();
     });
 
-    it('calls tableMenu callbacks when necessary', () => {
-        spyOn(mockParentFunctions, 'tableMenuOpened');
-        spyOn(mockParentFunctions, 'tableMenuClosed');
+    it('calls icon chooser callbacks when necessary', () => {
+        spyOn(mockParentFunctions, 'openIconChooser');
+        spyOn(mockParentFunctions, 'closeIconChooser');
         component = mount(<TableCreationPanel tableInfo={tableInfo}
-                                              tableMenuOpened={mockParentFunctions.tableMenuOpened}
-                                              tableMenuClosed={mockParentFunctions.tableMenuClosed}
+                                              openIconChooser={mockParentFunctions.openIconChooser}
+                                              closeIconChooser={mockParentFunctions.closeIconChooser}
                                               setTableProperty={mockParentFunctions.setTableProperty}
                                               setEditingProperty={mockParentFunctions.setEditingProperty}
                                               focusOn="name"
@@ -57,22 +57,21 @@ describe('TableCreationPanel', () => {
 
         expect(component.find('.tableInfo')).toBePresent();
 
-        let iconMenu = component.find("#createTableIconDropdown");
-        expect(iconMenu).toBePresent();
+        let iconChooser = component.find(".iconChooser .showAllToggle");
+        expect(iconChooser).toBePresent();
 
-        Simulate.click(iconMenu.get(0));
-        expect(mockParentFunctions.tableMenuOpened).toHaveBeenCalled();
+        Simulate.click(iconChooser.get(0));
+        expect(mockParentFunctions.openIconChooser).toHaveBeenCalled();
 
-        Simulate.click(iconMenu.get(0));
-        expect(mockParentFunctions.tableMenuClosed).toHaveBeenCalled();
     });
 
     it('calls editing callbacks', () => {
         spyOn(mockParentFunctions, 'setTableProperty');
         spyOn(mockParentFunctions, 'setEditingProperty');
+
         component = mount(<TableCreationPanel tableInfo={tableInfo}
-                                              tableMenuOpened={mockParentFunctions.tableMenuOpened}
-                                              tableMenuClosed={mockParentFunctions.tableMenuClosed}
+                                              openIconChooser={mockParentFunctions.openIconChooser}
+                                              closeIconChooser={mockParentFunctions.closeIconChooser}
                                               setTableProperty={mockParentFunctions.setTableProperty}
                                               setEditingProperty={mockParentFunctions.setEditingProperty}
                                               focusOn="name"

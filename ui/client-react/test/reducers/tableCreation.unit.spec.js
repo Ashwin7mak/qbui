@@ -12,7 +12,7 @@ function initializeState() {
             value: "",
         },
         tableIcon: {
-            value: "projects",
+            value: "tasks",
         },
         tableNoun: {
             value: "",
@@ -23,7 +23,7 @@ function initializeState() {
         //  default states
         dialogOpen: false,
         pageIndex: 0,
-        menuOpen: false,
+        iconChooserOpen: false,
         savingTable: false,
         tableInfo: defaultTableInfo,
         edited: false,
@@ -76,17 +76,17 @@ describe('Test table creation reducers', () => {
             expect(state.pageIndex).toBe(0);
         });
 
-        it('return updated page state table menu open', () => {
+        it('return updated page state icon chooser open', () => {
 
-            const state = reducer(initialState, {type: types.TABLE_CREATION_MENU_OPEN});
-            expect(state.menuOpen).toBe(true);
+            const state = reducer(initialState, {type: types.TABLE_ICON_CHOOSER_OPEN, isOpen: true});
+            expect(state.iconChooserOpen).toBe(true);
         });
 
         it('return updated page state table menu open', () => {
 
-            let state = reducer(initialState, {type: types.TABLE_CREATION_MENU_OPEN});
-            state = reducer(state, {type: types.TABLE_CREATION_MENU_CLOSED});
-            expect(state.menuOpen).toBe(false);
+            let state = reducer(initialState, {type: types.TABLE_ICON_CHOOSER_OPEN, isOpen: true});
+            state = reducer(state, {type: types.TABLE_ICON_CHOOSER_OPEN, isOpen: false});
+            expect(state.iconChooserOpen).toBe(false);
         });
 
         it('return updated page state after programatic edit', () => {

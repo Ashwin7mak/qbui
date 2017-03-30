@@ -55,12 +55,12 @@ describe('Table Creation actions', () => {
         expect(actions.previousTableCreationPage()).toEqual({type: types.PREVIOUS_TABLE_CREATION_PAGE});
     });
 
-    it('should create an action for opened table menu', () => {
-        expect(actions.tableMenuOpened()).toEqual({type: types.TABLE_CREATION_MENU_OPEN});
+    it('should create an action for opened icon chooser', () => {
+        expect(actions.openIconChooser()).toEqual({type: types.TABLE_ICON_CHOOSER_OPEN, isOpen: true});
     });
 
-    it('should create an action for closed table menu', () => {
-        expect(actions.tableMenuClosed()).toEqual({type: types.TABLE_CREATION_MENU_CLOSED});
+    it('should create an action for closed icon chooser', () => {
+        expect(actions.closeIconChooser()).toEqual({type: types.TABLE_ICON_CHOOSER_OPEN, isOpen: false});
     });
 
     it('should create an action for setting the editing property', () => {
