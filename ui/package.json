@@ -83,6 +83,7 @@
     "babel-loader": "~6.2.10",
     "babel-plugin-rewire": "^1.0.0",
     "babel-plugin-rewire-ignore-coverage": "^2.0.2",
+    "babel-plugin-transform-class-properties": "^6.23.0",
     "babel-preset-stage-3": "^6.17.0",
     "bootstrap-sass": "^3.3.5",
     "bootstrap-sass-loader": "^1.0.9",
