@@ -1,5 +1,4 @@
 import React from 'react';
-import Fluxxor from 'fluxxor';
 import Trowser from "../trowser/trowser";
 import Record from "./record";
 import {I18nMessage} from '../../utils/i18nMessage';
@@ -17,14 +16,15 @@ import AppHistory from '../../globals/appHistory';
 import * as SpinnerConfigurations from "../../constants/spinnerConfigurations";
 import {HideAppModal} from '../qbModal/appQbModalFunctions';
 import {connect} from 'react-redux';
-import {savingForm, saveFormSuccess, editNewRecord, saveFormError, syncForm, openRecordForEdit} from '../../actions/formActions';
+import {saveForm, saveFormComplete, syncForm} from '../../actions/formActions';
 import {showErrorMsgDialog, hideErrorMsgDialog} from '../../actions/shellActions';
-import {APP_ROUTE} from '../../constants/urlConstants';
+import {editRecordCancel, openRecord, createRecord, updateRecord} from '../../actions/recordActions';
+import {APP_ROUTE, EDIT_RECORD_KEY} from '../../constants/urlConstants';
+import {CONTEXT} from '../../actions/context';
 import SaveOrCancelFooter from '../saveOrCancelFooter/saveOrCancelFooter';
 
 import './recordTrowser.scss';
 
-let FluxMixin = Fluxxor.FluxMixin(React);
 
 /**
  * trowser containing a record component
@@ -32,7 +32,6 @@ let FluxMixin = Fluxxor.FluxMixin(React);
  * Note: this component has been partially migrated to Redux
  */
 export const RecordTrowser = React.createClass({
-    mixins: [FluxMixin],
 
     propTypes: {
         appId: React.PropTypes.string,
@@ -41,18 +40,19 @@ export const RecordTrowser = React.createClass({
         viewingRecordId: React.PropTypes.string,
         visible: React.PropTypes.bool,
         editForm: React.PropTypes.object,
-        pendEdits: React.PropTypes.object,
         reportData: React.PropTypes.object,
         errorPopupHidden: React.PropTypes.bool,
         onHideTrowser: React.PropTypes.func.isRequired
     },
 
     _hasErrorsAndAttemptedSave() {
-        return (_.has(this.props, 'pendEdits.editErrors.errors') && this.props.pendEdits.editErrors.errors.length > 0 && this.props.pendEdits.hasAttemptedSave);
+        const pendEdits = this.getPendEdits();
+        return (_.has(pendEdits, 'editErrors.errors') && pendEdits.editErrors.errors.length > 0 && pendEdits.hasAttemptedSave);
     },
 
     _doesNotHaveErrors() {
-        return (!_.has(this.props, 'pendEdits.editErrors.errors') || this.props.pendEdits.editErrors.errors.length === 0 || !this.props.pendEdits.hasAttemptedSave);
+        const pendEdits = this.getPendEdits();
+        return (!_.has(pendEdits, 'editErrors.errors') || pendEdits.editErrors.errors.length === 0 || !pendEdits.hasAttemptedSave);
     },
 
     /**
@@ -61,9 +61,10 @@ export const RecordTrowser = React.createClass({
     getTrowserContent() {
         let hideErrorMessage = this.props.shell ? this.props.shell.errorPopupHidden : true;
         let errorMessage = [];
-        if (_.has(this.props, 'pendEdits.editErrors.errors')) {
+        const pendEdits = this.getPendEdits();
+        if (_.has(pendEdits, 'editErrors.errors')) {
             hideErrorMessage = hideErrorMessage || this._doesNotHaveErrors();
-            errorMessage = this.props.pendEdits.editErrors.errors;
+            errorMessage = pendEdits.editErrors.errors;
         }
 
         return (this.props.visible &&
@@ -76,7 +77,7 @@ export const RecordTrowser = React.createClass({
                     recId={this.props.recId}
                     appUsers={this.props.appUsers}
                     errorStatus={this.editForm ? this.props.editForm.errorStatus : null}
-                    pendEdits={this.props.pendEdits ? this.props.pendEdits : null}
+                    pendEdits={pendEdits}
                     formData={this.props.editForm ? this.props.editForm.formData : null}
                     edit={true} />
                 <QBErrorMessage message={errorMessage} hidden={hideErrorMessage} onCancel={this.dismissErrorDialog}/>
@@ -95,7 +96,8 @@ export const RecordTrowser = React.createClass({
      */
     navigateToNewRecord(recId) {
 
-        if (this.props.reportData && this.props.reportData.navigateAfterSave) {
+        const record = this.getRecordFromProps(this.props);
+        if (record.navigateAfterSave === true) {
             let {appId, tblId} = this.props;
             this.props.router.push(`${APP_ROUTE}/${appId}/table/${tblId}/record/${recId}`);
         }
@@ -105,10 +107,10 @@ export const RecordTrowser = React.createClass({
      * User wants to save changes to a record. First we do client side validation
      * and if validation is successful we initiate the save action for the new or existing record
      * if validation if not ok we stay in edit mode and show the errors (TBD)
-     * @param saveAnother if true, keep trowser open after save with a new blank record
+     * @param openNewRecord if true, keep trowser open after save with a new blank record
      * @returns {boolean}
      */
-    saveClicked(saveAnother = false) {
+    saveClicked(openNewRecord = false) {
         //validate changed values -- this is skipped for now
         //get pending changes
         let validationResult = {
@@ -119,34 +121,43 @@ export const RecordTrowser = React.createClass({
         if (validationResult.ok) {
             //signal record save action, will update an existing records with changed values
             // or add a new record
-            let promise;
-
+            //let promise;
+            //let updateRecord = false;
             const formType = "edit";
 
-            this.props.savingForm(formType);
+            //  open the 'modal working' spinner/window for the record's form
+            this.props.saveForm(formType);
+
             if (this.props.recId === SchemaConsts.UNSAVED_RECORD_ID) {
-                promise = this.handleRecordAdd(this.props.pendEdits.recordChanges);
+                const pendEdits = this.getPendEdits();
+                this.handleRecordAdd(pendEdits.recordChanges, formType, false, openNewRecord);
             } else {
-                promise = this.handleRecordChange(this.props.recId);
+                //updateRecord = true;
+                this.handleRecordChange(formType, false, openNewRecord);
             }
-            promise.then((recId) => {
-                this.props.saveFormSuccess(formType);
-
-                if (this.props.viewingRecordId === recId) {
-                    this.props.syncForm("view");
-                }
-
-                if (saveAnother) {
-                    this.props.editNewRecord(false);
-                } else {
-                    this.hideTrowser();
-                    this.navigateToNewRecord(recId);
-                }
-
-            }, (errorStatus) => {
-                this.props.saveFormError(formType, errorStatus);
-                this.showErrorDialog();
-            });
+            //promise.then((obj) => {
+            //    //  update the grid with the change..this is expected to get refactored once the record store is moved to redux..
+            //    //if (updateRecord === true) {
+            //    //    this.props.updateReportRecord(obj, CONTEXT.REPORT.NAV);
+            //    //}
+            //
+            //    this.props.saveFormSuccess(formType);
+            //
+            //    if (this.props.viewingRecordId === obj.recId) {
+            //        this.props.syncForm("view");
+            //    }
+            //
+            //    if (openNewRecord) {
+            //        this.props.editNewRecord(false);
+            //    } else {
+            //        this.hideTrowser();
+            //        this.navigateToNewRecord(obj.recId);
+            //    }
+            //
+            //}, (errorStatus) => {
+            //    this.props.saveFormError(formType, errorStatus);
+            //    this.showErrorDialog();
+            //});
         }
         return validationResult;
     },
@@ -169,26 +180,38 @@ export const RecordTrowser = React.createClass({
         if (validationResult.ok) {
             //signal record save action, will update an existing records with changed values
             // or add a new record
-            let promise;
+            //let promise;
+
+
+            //let updateRecord = false;
             const formType = "edit";
 
-            this.props.savingForm(formType);
-            if (this.props.recId === SchemaConsts.UNSAVED_RECORD_ID) {
-                promise = this.handleRecordAdd(this.props.pendEdits.recordChanges);
-            } else {
-                promise = this.handleRecordChange(this.props.recId);
-            }
-            promise.then(() => {
-                this.props.saveFormSuccess(formType);
-                if (this.props.viewingRecordId === this.props.recId) {
-                    this.props.syncForm("view");
-                }
+            // open the 'modal working' spinner/window for the record's form
+            this.props.saveForm(formType);
 
-                this.nextRecord();
-            }, (errorStatus) => {
-                this.props.saveFormError(formType, errorStatus);
-                this.showErrorDialog();
-            });
+            if (this.props.recId === SchemaConsts.UNSAVED_RECORD_ID) {
+                const pendEdits = this.getPendEdits();
+                this.handleRecordAdd(pendEdits.recordChanges, formType, true);
+            } else {
+                //updateRecord = true;
+                this.handleRecordChange(formType, true);
+            }
+            //promise.then((obj) => {
+            //    //  update the grid with the change..this is expected to get refactored once the record store is moved to redux..
+            //    //if (updateRecord === true) {
+            //    //    this.props.updateReportRecord(obj, CONTEXT.REPORT.NAV);
+            //    //}
+            //
+            //    this.props.saveFormSuccess(formType);
+            //    if (this.props.viewingRecordId === this.props.recId) {
+            //        this.props.syncForm("view");
+            //    }
+            //
+            //    this.nextRecord();
+            //}, (errorStatus) => {
+            //    this.props.saveFormError(formType, errorStatus);
+            //    this.showErrorDialog();
+            //});
         }
         return validationResult;
     },
@@ -197,18 +220,53 @@ export const RecordTrowser = React.createClass({
      * @param recId
      * @returns {Array}
      */
-    handleRecordChange() {
-        const flux = this.getFlux();
-        flux.actions.recordPendingEditsCommit(this.props.appId, this.props.tblId, this.props.recId);
+    handleRecordChange(formType, next = false, openNewRecord = false) {
+
         let colList = [];
         // we need to pass in cumulative fields' fid list from report - because after form save report needs to be updated and we need to get the record
         // with the right column list from the server
-        if (_.has(this.props, 'reportData.data.fields') && Array.isArray(this.props.reportData.data.fields)) {
+        if (_.has(this.props.reportData, 'data.fields') && Array.isArray(this.props.reportData.data.fields)) {
             this.props.reportData.data.fields.forEach((field) => {
                 colList.push(field.id);
             });
         }
-        return flux.actions.saveRecord(this.props.appId, this.props.tblId, this.props.recId, this.props.pendEdits, this.props.editForm.formData.fields, colList);
+        const pendEdits = this.getPendEdits();
+
+        let params = {
+            context: CONTEXT.REPORT.NAV,
+            pendEdits: pendEdits,
+            fields: _.has(this.props.editForm, 'formData.fields') ? this.props.editForm.formData.fields : {},
+            colList: colList,
+            showNotificationOnSuccess: true
+        };
+        this.props.dispatch(updateRecord(this.props.appId, this.props.tblId, this.props.recId, params)).then(
+            (obj) => {
+                //  need to call as the form.saving attribute is used to determine when to
+                //  open/close the 'modal working' spinner/window..
+                this.props.saveFormComplete(formType);
+                if (this.props.viewingRecordId === obj.recId) {
+                    this.props.syncForm("view");
+                }
+
+                if (next) {
+                    this.nextRecord();
+                } else {
+                    /*eslint no-lonely-if:0*/
+                    if (!openNewRecord) {
+                    //    this.props.editNewRecord(false);
+                    //} else {
+                        this.hideTrowser();
+                        this.navigateToNewRecord(obj.recId);
+                    }
+                }
+            },
+            () => {
+                //  need to call as the form.saving attribute as it is used to determine when to
+                //  open/close the 'modal working' spinner/window..
+                this.props.saveFormComplete(formType);
+                this.showErrorDialog();
+            }
+        );
     },
 
     /**
@@ -216,52 +274,126 @@ export const RecordTrowser = React.createClass({
      * @param recordChanges
      * @returns {Array} of field values for the new record
      */
-    handleRecordAdd(recordChanges) {
-        const flux = this.getFlux();
+    handleRecordAdd(recordChanges, formType, next = false, openNewRecord = false) {
         let colList = [];
         // we need to pass in cumulative fields' fid list from report - because after form save report needs to be updated and we need to get the record
         // with the right column list from the server
-        if (_.has(this.props, 'reportData.data.fields') && Array.isArray(this.props.reportData.data.fields)) {
+        if (_.has(this.props.reportData, 'data.fields') && Array.isArray(this.props.reportData.data.fields)) {
             this.props.reportData.data.fields.forEach((field) => {
                 colList.push(field.id);
             });
         }
-        return flux.actions.saveNewRecord(this.props.appId, this.props.tblId, recordChanges, this.props.editForm.formData.fields, colList);
+        let params = {
+            context: CONTEXT.REPORT.NAV,
+            recordChanges: recordChanges,
+            fields: _.has(this.props.editForm, 'formData.fields') ? this.props.editForm.formData.fields : {},
+            colList: colList,
+            showNotificationOnSuccess: true
+        };
+        this.props.dispatch(createRecord(this.props.appId, this.props.tblId, params)).then(
+            (obj) => {
+                this.props.saveFormComplete(formType);
+                if (this.props.viewingRecordId === obj.recId) {
+                    this.props.syncForm("view");
+                }
+
+                if (next) {
+                    this.nextRecord();
+                } else {
+                    /*eslint no-lonely-if:0*/
+                    if (!openNewRecord) {
+                    //    this.props.editNewRecord(false);
+                    //} else {
+                        this.hideTrowser();
+                        this.navigateToNewRecord(obj.recId);
+                    }
+                }
+            },
+            () => {
+                //  need to call as the form.saving attribute is used to determine when to
+                //  open/close the 'modal working' spinner/window..
+                this.props.saveFormComplete(formType);
+                this.showErrorDialog();
+            }
+        );
     },
 
     /**
      * go back to the previous report record
      */
     previousRecord() {
-        const {appId, tblId, rptId, previousEditRecordId} = this.props.reportData;
-
-        // let flux know we're traversing records so it can pass down updated previous/next record IDs
-        let flux = this.getFlux();
-        flux.actions.editPreviousRecord(previousEditRecordId);
-
-        this.props.openRecordForEdit(previousEditRecordId);
+        const record = this.getRecordFromProps(this.props);
+        this.navigateToRecord(record.previousRecordId);
     },
 
     /**
      * go forward to the next report record
      */
     nextRecord() {
-        const {appId, tblId, rptId, nextEditRecordId} = this.props.reportData;
-
-        // let flux know we're traversing records so it can pass down updated previous/next record IDs
-        let flux = this.getFlux();
-        flux.actions.editNextRecord(nextEditRecordId);
-
-        this.props.openRecordForEdit(nextEditRecordId);
+        const record = this.getRecordFromProps(this.props);
+        this.navigateToRecord(record.nextRecordId);
     },
+
+    navigateToRecord(recId) {
+        if (recId) {
+            //TODO - retrieve from store
+            const {appId, tblId, rptId, data} = this.props.reportData;
+            const key = _.has(data, 'keyField.name') ? data.keyField.name : '';
+            if (key) {
+                let recordsArray = this.getRecordsArray();
+
+                //  fetch the index of the row in the recordsArray that is being opened
+                const index = _.findIndex(recordsArray, rec => rec[key] && rec[key].value === recId);
+                let nextRecordId = (index < recordsArray.length - 1) ? recordsArray[index + 1][key].value : null;
+                let previousRecordId = index > 0 ? recordsArray[index - 1][key].value : null;
+
+                this.props.openRecord(recId, nextRecordId, previousRecordId);
+                WindowLocationUtils.pushWithQuery(EDIT_RECORD_KEY, recId);
+            }
+        }
+    },
+
+    getRecordsArray() {
+        //TODO - retrieve from store
+        const {filteredRecords, hasGrouping} = this.props.reportData.data;
+
+        let recordsArray = [];
+        if (hasGrouping) {
+            // flatten grouped records
+            this.addGroupedRecords(recordsArray, filteredRecords);
+        } else {
+            recordsArray = filteredRecords;
+        }
+        return recordsArray;
+    },
+
+    addGroupedRecords(arr, groups) {
+        if (Array.isArray(groups)) {
+            groups.forEach(child => {
+                if (child.children) {
+                    this.addGroupedRecords(arr, child.children);
+                } else {
+                    arr.push(child);
+                }
+            });
+        }
+    },
+
+    getRecordFromProps(props = this.props) {
+        return _.nth(props.record, 0) || {};
+    },
+
     /**
      *  get breadcrumb element for top of trowser
      */
     getTrowserBreadcrumbs() {
         const table = this.props.selectedTable;
 
-        const showBack = !!(this.props.reportData && this.props.reportData.previousEditRecordId !== null);
-        const showNext = !!(this.props.reportData && this.props.reportData.nextEditRecordId !== null);
+        let record = this.getRecordFromProps(this.props);
+
+        const showBack = !!(record.previousRecordId !== null);
+        const showNext = !!(record.nextRecordId !== null);
+
         const recordName = this.props.selectedTable && this.props.selectedTable.name;
 
         let title = this.props.recId === SchemaConsts.UNSAVED_RECORD_ID ? <span><I18nMessage message="nav.new"/><span>&nbsp;{table ? table.name : ""}</span></span> :
@@ -286,7 +418,8 @@ export const RecordTrowser = React.createClass({
     getTrowserRightIcons() {
         const errorFlg = this._hasErrorsAndAttemptedSave();
 
-        const showNext = !!(this.props.reportData && this.props.reportData.nextEditRecordId !== null);
+        const record = this.getRecordFromProps(this.props);
+        const showNext = !!(record.nextRecordId !== null) && this.props.recId !== null;
 
         const errorPopupHidden = this.props.shell ? this.props.shell.errorPopupHidden : true;
         return (
@@ -318,16 +451,15 @@ export const RecordTrowser = React.createClass({
     },
 
     clearEditsAndClose() {
-        const flux = this.getFlux();
-
         HideAppModal();
-        flux.actions.recordPendingEditsCancel(this.props.appId, this.props.tblId, this.props.recId);
+        this.props.editRecordCancel(this.props.appId, this.props.tblId, this.props.recId);
         WindowLocationUtils.pushWithoutQuery();
         this.props.onHideTrowser();
     },
 
     cancelEditing() {
-        if (this.props.pendEdits && this.props.pendEdits.isPendingEdit) {
+        const pendEdits = this.getPendEdits();
+        if (pendEdits && pendEdits.isPendingEdit) {
             AppHistory.showPendingEditsConfirmationModal(this.saveAndClose, this.clearEditsAndClose, function() {HideAppModal();});
         } else {
             // Clean up before exiting the trowser
@@ -348,11 +480,27 @@ export const RecordTrowser = React.createClass({
     dismissErrorDialog() {
         this.props.hideErrorMsgDialog();
     },
+
+    getPendEdits() {
+        return this.getRecord().pendEdits || {};
+    },
+
+    getRecord() {
+        let record = {};
+        if (Array.isArray(this.props.record) && this.props.record.length > 0) {
+            if (_.isEmpty(this.props.record[0]) === false) {
+                record = this.props.record[0];
+            }
+        }
+        return record;
+    },
+
     /**
      * trowser to wrap report manager
      */
     render() {
-        const errorFlg = this.props.pendEdits && this.props.pendEdits.editErrors && this.props.pendEdits.editErrors.errors.length > 0;
+        const pendEdits = this.getPendEdits();
+        const errorFlg = pendEdits && pendEdits.editErrors && pendEdits.editErrors.errors.length > 0;
         return (
             <Trowser className={"recordTrowser " + (errorFlg ? "recordTrowserErrorPopRes" : "")}
                      visible={this.props.visible}
@@ -372,28 +520,28 @@ export const RecordTrowser = React.createClass({
 
 const mapStateToProps = (state) => {
     return {
-        forms: state.forms,
-        shell : state.shell
+        shell: state.shell,
+        record: state.record
     };
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        openRecordForEdit: (recId) => {
-            dispatch(openRecordForEdit(recId));
+        saveForm: (formType) => {
+            dispatch(saveForm(formType));
         },
-        savingForm: (formType) => {
-            dispatch(savingForm(formType));
+        saveFormComplete: (formType) => {
+            dispatch(saveFormComplete(formType));
         },
-        saveFormSuccess: (formType)=>{
-            dispatch(saveFormSuccess(formType));
-        },
-        editNewRecord: (navigateAfterSave) => {
-            dispatch(editNewRecord(navigateAfterSave));
-        },
-        saveFormError: (formType, errorStatus) => {
-            dispatch(saveFormError(formType, errorStatus));
-        },
+        //saveFormSuccess: (formType)=>{
+        //    dispatch(saveFormSuccess(formType));
+        //},
+        //editNewRecord: (navigateAfterSave) => {
+        //    dispatch(editNewRecord(navigateAfterSave));
+        //},
+        //saveFormError: (formType, errorStatus) => {
+        //    dispatch(saveFormError(formType, errorStatus));
+        //},
         syncForm: (formType) => {
             dispatch(syncForm(formType));
         },
@@ -402,7 +550,29 @@ const mapDispatchToProps = (dispatch) => {
         },
         showErrorMsgDialog: () => {
             dispatch(showErrorMsgDialog());
-        }
+        },
+        openRecord:(recId, nextRecordId, prevRecordId) => {
+            dispatch(openRecord(recId, nextRecordId, prevRecordId));
+        },
+        editRecordCancel: (appId, tblId, recId) => {
+            dispatch(editRecordCancel(appId, tblId, recId));
+        },
+        //editRecordCommit: (appId, tblId, recId) => {
+        //    dispatch(editRecordCommit(appId, tblId, recId));
+        //},
+        //updateReportRecord: (obj, context) => {
+        //    dispatch(updateReportRecord(obj, context));
+        //},
+        dispatch: dispatch
+        //updateRecord:(appId, tblId, recId, params) => {
+        //    dispatch(updateRecord(appId, tblId, recId, params)).then(
+        //        (obj) => {
+        //            //dispatch(updateReportRecord(obj, CONTEXT.REPORT.NAV));
+        //            dispatch(saveFormSuccess('edit'));
+        //            dispatch(syncForm("view"));
+        //        }
+        //    );
+        //}
     };
 };
 
@@ -411,4 +581,3 @@ export default connect(
     mapStateToProps,
     mapDispatchToProps
 )(RecordTrowser);
-

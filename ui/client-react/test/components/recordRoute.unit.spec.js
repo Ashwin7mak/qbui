@@ -3,44 +3,54 @@ import TestUtils from 'react-addons-test-utils';
 import QBForm from  '../../src/components/QBForm/qbform';
 import {ConnectedRecordRoute, RecordRoute} from '../../src/components/record/recordRoute';
 
-
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import {Provider} from "react-redux";
-import {loadingForm} from '../../src/actions/formActions';
 import {APP_ROUTE} from '../../src/constants/urlConstants';
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
+
+import {mount} from 'enzyme';
 
 describe('RecordRoute', () => {
     'use strict';
 
     let component;
 
+    //TODO: once all the flux actions are converted to redux, this file should get refactored
+    //TODO: to use enzyme
     let flux = {};
-
     flux.actions = {
         hideTopNav() {return;},
         setTopTitle() {return;},
-        selectTableId() {return;},
-        openingReportRow() {return;},
-        showPreviousRecord() {return;},
-        showNextRecord() {return;},
+        selectTableId() {return;}
+    };
+
+    let reduxProps = {
+        editNewRecord: () => {},
+        loadForm: () => {},
+        openRecord: () => {},
+        clearSearchInput: () => {},
+        record: [
+            {id: 2, recId: 2, nextRecordId: 3, previousRecordId: 1}
+        ]
     };
 
     beforeEach(() => {
         spyOn(flux.actions, 'selectTableId');
-        spyOn(flux.actions, 'openingReportRow');
-        spyOn(flux.actions, 'showPreviousRecord');
-        spyOn(flux.actions, 'showNextRecord');
+        spyOn(reduxProps, 'editNewRecord').and.callThrough();
+        spyOn(reduxProps, 'loadForm').and.callThrough();
+        spyOn(reduxProps, 'openRecord').and.callThrough();
+        spyOn(reduxProps, 'clearSearchInput').and.callThrough();
     });
 
     afterEach(() => {
         flux.actions.selectTableId.calls.reset();
-        flux.actions.openingReportRow.calls.reset();
-        flux.actions.showPreviousRecord.calls.reset();
-        flux.actions.showNextRecord.calls.reset();
+        reduxProps.editNewRecord.calls.reset();
+        reduxProps.loadForm.calls.reset();
+        reduxProps.openRecord.calls.reset();
+        reduxProps.clearSearchInput.calls.reset();
     });
 
     describe('Previous/Next/Return functions', () => {
@@ -52,7 +62,6 @@ describe('RecordRoute', () => {
 
             let qbForm = TestUtils.scryRenderedComponentsWithType(component, QBForm);
             expect(qbForm.length).toBe(0);
-
         });
 
         it('test render of component without report param', () => {
@@ -70,9 +79,6 @@ describe('RecordRoute', () => {
             expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 
             expect(flux.actions.selectTableId).toHaveBeenCalledWith(routeParams.tblId);
-
-        // test Redux actions
-            expect(store.getActions()[0]).toEqual(loadingForm("view"));
 
             let qbForm = TestUtils.scryRenderedComponentsWithType(component, QBForm);
             expect(qbForm.length).toBe(1);
@@ -128,7 +134,10 @@ describe('RecordRoute', () => {
                 nextRecordId: 3,
 
                 data: {
-                    records: [
+                    keyField: {
+                        name: 'Record ID#'
+                    },
+                    filteredRecords: [
                         {"Record ID#": {id: 1, value: 1, display: "1"}},
                         {"Record ID#": {id: 2, value: 2, display: "2"}},
                         {"Record ID#": {id: 3, value: 3, display: "3"}}
@@ -149,9 +158,8 @@ describe('RecordRoute', () => {
 
             component = TestUtils.renderIntoDocument(
                 <Provider store={store}>
-                    <ConnectedRecordRoute params={routeParams} reportData={reportData} flux={flux} router={router}/>
+                    <RecordRoute params={routeParams} reportData={reportData} flux={flux} router={router} {...reduxProps}/>
                 </Provider>);
-
             expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 
             let prevRecord = TestUtils.scryRenderedDOMComponentsWithClass(component, "prevRecord");
@@ -165,12 +173,12 @@ describe('RecordRoute', () => {
 
             // previous record
             TestUtils.Simulate.click(prevRecord[0]);
-            expect(flux.actions.showPreviousRecord).toHaveBeenCalled();
+            expect(reduxProps.openRecord).toHaveBeenCalled();
             expectedRouter.push(`${APP_ROUTE}/1/table/2/report/3/record/1`);
 
             // next record
             TestUtils.Simulate.click(nextRecord[0]);
-            expect(flux.actions.showNextRecord).toHaveBeenCalled();
+            expect(reduxProps.openRecord).toHaveBeenCalled();
             expectedRouter.push(`${APP_ROUTE}/1/table/2/report/3/record/3`);
 
             // return to report
