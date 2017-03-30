@@ -1,0 +1,26 @@
+@import '../../../assets/css/qbVariables';
+
+.childReportLinkContainer {
+    display: flex;
+    flex-direction: column;
+
+    .reportDetail {
+        font-size: 14px;
+        color: $field-label-normal-color;
+        padding-bottom: 10px;
+    }
+
+    .childReportLink.btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        font-size: 16px;
+        color: $color-indigo-700;
+        background-color: $color-black-200;
+
+        .qbIcon {
+            padding-right: 5px;
+        }
+    }
+}

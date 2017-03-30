@@ -918,25 +918,29 @@ export const ReportContent = React.createClass({
         // Hide the footer if any rows are selected and for small breakpoint.
         let areRowsSelected = !!(selectedRows && selectedRows.length > 0);
 
-        let addPadding;
+        let classNames = ['reportContent'];
         const isRowPopUpMenuOpen = this.props.isRowPopUpMenuOpen;
         const isInlineEditOpen = pendEdits.isInlineEditOpen;
         if (isInlineEditOpen) {
-            addPadding = "reportContent inlineEditing";
+            classNames.push('inlineEditing');
         } else if (isRowPopUpMenuOpen) {
-            addPadding =  "reportContent rowPopUpMenuOpen";
-        } else {
-            addPadding = "reportContent";
+            classNames.push('rowPopUpMenuOpen');
         }
 
+        classNames.push(this.props.reportData.loading ? 'loading' : '');
+
         const editErrors = pendEdits.editErrors || null;
+
+        // onCellClick handler: do nothing for embedded reports phase1.
+        let openRowToView = !this.props.phase1 && this.openRowToView;
+
         let reportContent;
 
         if (this.props.reportData.error) {
             reportContent = <ReportContentError errorDetails={this.props.reportData.errorDetails} />;
         } else {
             reportContent = (
-                    <div className={addPadding}>
+                    <div className={classNames.join(' ')}>
                         {!isSmall &&
                             <ReportGrid
                                 appId={this.props.reportData.appId}
@@ -950,7 +954,7 @@ export const ReportContent = React.createClass({
                                 appUsers={this.props.appUsers}
                                 onFieldChange={this.handleFieldChange}
                                 onEditRecordStart={this.handleEditRecordStart}
-                                onCellClick={this.openRowToView}
+                                onCellClick={openRowToView}
                                 selectedRows={this.props.selectedRows}
                                 onRecordDelete={this.handleRecordDelete}
                                 onEditRecordCancel={this.handleEditRecordCancel}
@@ -964,6 +968,9 @@ export const ReportContent = React.createClass({
                                 openRecordForEdit={this.openRecordForEditInTrowser}
                                 handleValidateFieldValue={this.handleValidateFieldValue}
                                 sortFids={this.props.reportData.data ? this.props.reportData.data.sortFids : []}
+
+                                // for relationships phase-1
+                                phase1={this.props.phase1}
                             />
                         }
                         {isSmall &&
