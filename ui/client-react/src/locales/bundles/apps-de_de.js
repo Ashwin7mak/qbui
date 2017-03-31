@@ -485,7 +485,7 @@ export default {
         quickBaseClassic: "QuickBase Klassik",
         quickBaseMercury: "QuickBase Mercury",
         missingWalkMe: "Tutorial ist nicht verfügbar",
-        fields: {
+        fieldsDefaultLabels: {
             [FieldFormats.TEXT_FORMAT]: "Text",
             [FieldFormats.MULTI_LINE_TEXT_FORMAT]: "Langtext",
             [FieldFormats.TEXT_FORMAT_MULTICHOICE]: "Auswahlliste",
