@@ -24,6 +24,7 @@ class Pagination extends Component{
         getNextReportPage: PropTypes.func,
         getPreviousReportPage: PropTypes.func,
         recordsCount: PropTypes.number,
+        loadDynamicReport: React.PropTypes.func,
     },
 
     /**
