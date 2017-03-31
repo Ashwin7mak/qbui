@@ -2,19 +2,8 @@ import React from 'react';
 import {shallow} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
 
-import {FieldEditingTools, __RewireAPI__ as FieldEditingToolsRewireAPI} from '../../../src/components/formBuilder/fieldEditingTools/fieldEditingTools';
+import {FieldEditingTools} from '../../../src/components/formBuilder/fieldEditingTools/fieldEditingTools';
 import DragHandle from '../../../src/components/formBuilder/dragHandle/dragHandle';
-
-const mockReactDom = {
-    findDOMNode(_element) {
-        return {nextElementSibling: {
-            offsetTop: 5,
-            offsetLeft: 5,
-            offsetHeight: 50,
-            offsetWidth: 100
-        }};
-    }
-};
 
 const mockParentProps = {
     removeFieldFromForm(_location) {},
@@ -31,12 +20,6 @@ let component;
 describe('FieldEditingTools', () => {
     beforeEach(() => {
         jasmineEnzyme();
-
-        FieldEditingToolsRewireAPI.__Rewire__('ReactDom', mockReactDom);
-    });
-
-    afterEach(() => {
-        FieldEditingToolsRewireAPI.__ResetDependency__('ReactDom');
     });
 
     it('has a drag handle', () => {

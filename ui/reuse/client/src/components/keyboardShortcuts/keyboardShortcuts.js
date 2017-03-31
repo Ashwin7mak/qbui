@@ -6,11 +6,16 @@ class KeyboardShortcuts extends Component {
         super(props);
 
         this.addAllKeyBindings = this.addAllKeyBindings.bind(this);
+        this.addAllKeyBindingsPreventDefault = this.addAllKeyBindingsPreventDefault.bind(this);
         this.removeAllKeyBindings = this.removeAllKeyBindings.bind(this);
     }
 
     componentWillMount() {
-        this.addAllKeyBindings(this.props.shortcutBindings);
+        if (this.props.shortcutBindingsPreventDefault) {
+            this.addAllKeyBindingsPreventDefault(this.props.shortcutBindingsPreventDefault);
+        } else {
+            this.addAllKeyBindings(this.props.shortcutBindings);
+        }
     }
 
     componentWillUnmount() {
@@ -23,8 +28,21 @@ class KeyboardShortcuts extends Component {
         });
     }
 
+    addAllKeyBindingsPreventDefault(bindings = []) {
+        bindings.forEach(binding => {
+            MouseTrap(document.body).bind(binding.key, () => binding.callback(binding.content));
+        });
+    }
+
     removeAllKeyBindings() {
-        this.props.shortcutBindings.forEach(binding => {
+        let shortcutBindingsPreventDefault = this.props.shortcutBindingsPreventDefault || [];
+        let shortcutBindings = this.props.shortcutBindings || [];
+
+        shortcutBindingsPreventDefault.forEach(binding => {
+            MouseTrap.unbind(binding.key);
+        });
+
+        shortcutBindings.forEach(binding => {
             MouseTrap.unbind(binding.key);
         });
     }
@@ -53,7 +71,23 @@ KeyboardShortcuts.propTypes = {
         callback: PropTypes.func.isRequired,
 
         /** Content will be passed as the first argument to the callback. It is optional. */
-        content: PropTypes.any
+        content: PropTypes.any,
+    })),
+    /**
+     *  IMPORTANT: Only use the below prop if absolutely necessary
+     *  This array allows the keyboard bindings to override default keyboard behavior
+     *  An example is allowing keyboard bindings to work even when the focus is on an input field, select field, textarea and etc... */
+    shortcutBindingsPreventDefault: PropTypes.arrayOf(PropTypes.shape({
+        /**
+         * The keyboard shortcut you want to activate the callback
+         * See available options at https://craig.is/killing/mice#api.bind */
+        key: PropTypes.string.isRequired,
+
+        /** The callback that will be activated when the key is pressed */
+        callback: PropTypes.func.isRequired,
+
+        /** Content will be passed as the first argument to the callback. It is optional. */
+        content: PropTypes.any,
     }))
 };
 
