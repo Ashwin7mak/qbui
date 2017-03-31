@@ -83,6 +83,7 @@
             browser.moveToObject(source);
             browser.buttonDown();
             formBuilderPO.moveCursorTo(target, label);
+            expect(formBuilderPO.fieldTokenTitle.getText()).toEqual(origFields[0].replace('* ', ''));
             formBuilderPO.moveCursorTo(source, label);
             browser.buttonUp();
             browser.pause(5000);
