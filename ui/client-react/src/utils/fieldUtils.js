@@ -1,6 +1,7 @@
 import * as SchemaConsts from '../constants/schema';
 import consts from '../../../common/src/constants';
 import FieldFormats from '../utils/fieldFormats';
+import Locale from '../locales/locales';
 import * as durationFormatter from "../../../common/src/formatter/durationFormatter";
 import _ from 'lodash';
 
@@ -89,10 +90,11 @@ class FieldUtils {
      *     }
      */
     static getFieldLabel(element, relatedField) {
+        let fieldType = FieldFormats.getFormatType(relatedField);
         if (element && element.useAlternateLabel) {
             return element.displayText || '';
         } else if (relatedField) {
-            return relatedField.name || '';
+            return Locale.getMessage(`builder.fields.${fieldType}`) || relatedField.name || '';
         } else {
             return '';
         }

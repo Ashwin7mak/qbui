@@ -37,7 +37,7 @@ const FieldLabelElement = React.createClass({
             classes.push('errorText');
         }
 
-        const type = FieldFormats.getFormatType(_.get(this.props, 'relatedField.datatypeAttributes'));
+        const type = FieldFormats.getFormatType(_.get(this.props, 'relatedField'));
         if (type === FieldFormats.CHECKBOX_FORMAT) {
             classes.push('checkbox-field-label');
             return <div className={classes.join(' ')}> </div>;
