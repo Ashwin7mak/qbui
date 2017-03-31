@@ -9,6 +9,7 @@ import Promise from 'bluebird';
 import Locale from '../locales/locales';
 import _ from 'lodash';
 import {NotificationManager} from 'react-notifications';
+import {NOTIFICATION_MESSAGE_DISMISS_TIME} from '../../../reuse/client/src/scripts/notificationManager';
 import * as CompConsts from '../constants/componentConstants';
 import * as query from '../constants/query';
 import * as UrlConsts from "../constants/urlConstants";
@@ -168,7 +169,7 @@ export const deleteRecords = (appId, tblId, recIds, nameForRecords) => {
 
                         //  send out notification message on the client
                         let message = `${recIds.length} ${nameForRecords} ${Locale.getMessage('recordNotifications.deleted')}`;
-                        NotificationManager.success(message, Locale.getMessage('success'), CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);
+                        NotificationManager.success(message, Locale.getMessage('success'), NOTIFICATION_MESSAGE_DISMISS_TIME);
 
                         // the delay allows for saving modal to trap inputs otherwise clicks get invoked after delete
                         Promise.delay(PRE_REQ_DELAY_MS).then(() => {
@@ -187,7 +188,7 @@ export const deleteRecords = (appId, tblId, recIds, nameForRecords) => {
 
                         //  send out notification message
                         let message = `${recIds.length} ${nameForRecords} ${Locale.getMessage('recordNotifications.notDeleted')}`;
-                        NotificationManager.error(message, Locale.getMessage('failed'), CompConsts.NOTIFICATION_MESSAGE_FAIL_DISMISS_TIME);
+                        NotificationManager.error(message, Locale.getMessage('failed'), NOTIFICATION_MESSAGE_FAIL_DISMISS_TIME);
 
                         // the delay allows for saving modal to trap inputs otherwise clicks get invoked after delete
                         Promise.delay(PRE_REQ_DELAY_MS).then(() => {
@@ -199,7 +200,7 @@ export const deleteRecords = (appId, tblId, recIds, nameForRecords) => {
             } else {
                 logger.error(`Missing one or more required input parameters to recordActions.deleteRecords. AppId:${appId}; TblId:${tblId}; RecId${recIds}`);
                 let message = `0 ${nameForRecords} ${Locale.getMessage('recordNotifications.notDeleted')}`;
-                NotificationManager.error(message, Locale.getMessage('failed'), CompConsts.NOTIFICATION_MESSAGE_FAIL_DISMISS_TIME);
+                NotificationManager.error(message, Locale.getMessage('failed'), NOTIFICATION_MESSAGE_FAIL_DISMISS_TIME);
                 reject();
             }
         });
@@ -295,7 +296,7 @@ export const createRecord = (appId, tblId, params = {}) => {
 
                                 if (params.showNotificationOnSuccess) {
                                     NotificationManager.success(Locale.getMessage('recordNotifications.recordAdded'), Locale.getMessage('success'),
-                                        CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);
+                                        NOTIFICATION_MESSAGE_DISMISS_TIME);
                                 }
 
                                 // this tiny delay allows for saving modal to trap inputs otherwise
@@ -320,7 +321,7 @@ export const createRecord = (appId, tblId, params = {}) => {
                                 dispatch(event(recId, types.SAVE_RECORD_ERROR, {appId, tblId, recId, errors}));
 
                                 NotificationManager.error(Locale.getMessage('recordNotifications.recordNotSaved'), Locale.getMessage('failed'),
-                                    CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);
+                                    NOTIFICATION_MESSAGE_DISMISS_TIME);
 
                                 // this tiny delay allows for saving modal to trap inputs otherwise
                                 // clicks get queued till after creating
@@ -496,7 +497,7 @@ export const updateRecord = (appId, tblId, recId, params = {}) => {
                                 dispatch(event(recId, types.SAVE_RECORD_SUCCESS, {appId, tblId, recId, report, addNewRow}));
                                 if (params.showNotificationOnSuccess) {
                                     NotificationManager.success(Locale.getMessage('recordNotifications.recordSaved'), Locale.getMessage('success'),
-                                        CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);
+                                        NOTIFICATION_MESSAGE_DISMISS_TIME);
                                 }
 
                                 // delay the response object so that the state gets updated with success settings
@@ -519,7 +520,7 @@ export const updateRecord = (appId, tblId, recId, params = {}) => {
                                 dispatch(event(recId, types.SAVE_RECORD_ERROR, {appId, tblId, recId, errors: errors}));
 
                                 NotificationManager.error(Locale.getMessage('recordNotifications.recordNotSaved'), Locale.getMessage('failed'),
-                                    CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);
+                                    NOTIFICATION_MESSAGE_DISMISS_TIME);
 
                                 // this delay allows for saving modal to trap inputs otherwise clicks get invoked and error message
                                 // icon in action column does not render.

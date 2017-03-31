@@ -1,6 +1,6 @@
 import React from "react";
 import ReactIntl from "react-intl";
-import NotificationManager from '../../../../../reuse/client/src/scripts/notificationManager';
+import {NOTIFICATION_MESSAGE_DISMISS_TIME} from '../../../../../reuse/client/src/scripts/notificationManager';
 import CardViewListHolder from "../../../components/dataTable/cardView/cardViewListHolder";
 import ReportGrid from "../../../components/dataTable/reportGrid/reportGrid";
 import Logger from "../../../utils/logger";
@@ -18,7 +18,6 @@ import {withRouter} from 'react-router';
 import ReportContentError from './reportContentError';
 import UrlUtils from '../../../utils/urlUtils';
 import QBModal from '../../qbModal/qbModal';
-import * as CompConsts from '../../../constants/componentConstants';
 
 import {connect} from 'react-redux';
 import {createRecord, deleteRecord, editRecordStart, editRecordCancel, editRecordChange, editRecordValidateField, openRecord, updateRecord} from '../../../actions/recordActions';
@@ -227,36 +226,7 @@ export const ReportContent = React.createClass({
                 origRec = this.props.reportData.data.hasGrouping ? this.getOrigGroupedRec(recId) : this.getOrigRec(recId);
                 //// this.props.report[0].data
             } else {
-                //add each non null value as to the new record as a change
-                let newRec = null;
-                if (this.props.reportData.data.hasGrouping) {
-                    newRec = ReportUtils.findGroupedRecord(this.props.reportData.data.filteredRecords, recId, this.props.primaryKeyName);
-                    // this.props.report[0].data
-                } else {
-                    // this.props.report[0].data
-                    newRec = _.find(this.props.reportData.data.filteredRecords, (rec) => {
-                        return rec[this.props.primaryKeyName].value === recId;
-                    });
-                }
-                if (newRec) {
-                    changes = {};
-                    // loop thru the values in the new rec add any non nulls to change set
-                    // so it will be treated as dirty/not saved
-                    Object.keys(newRec).forEach((key) => {
-                        let field = newRec[key];
-                        let fieldDef = _.has(this.props, 'reportData.data.fieldsMap') ? this.props.reportData.data.fieldsMap.get(+field.id) : null;
-                        if (fieldDef && !fieldDef.builtIn) {
-                            let change = {
-                                //the + before field.id is needed turn the field id from string into a number
-                                oldVal: {value: undefined, id: +field.id},
-                                newVal: {value: field.value},
-                                fieldName: key,
-                                fieldDef: fieldDef
-                            };
-                            changes[field.id] = change;
-                        }
-                    });
-                }
+                changes = this.setNewRowFieldChanges(recId);
             }
 
             this.props.editRecordStart(this.props.appId, this.props.tblId, recId, origRec, changes, true, fieldToStartEditing);
@@ -419,7 +389,14 @@ export const ReportContent = React.createClass({
             showNotificationOnSuccess: showNotificationOnSuccess,
             addNewRow: addNewRow
         };
-        this.props.createRecord(this.props.appId, this.props.tblId, params);
+        this.props.createRecord(this.props.appId, this.props.tblId, params).then(
+            (obj) => {
+                //  successful if a recId is returned
+                if (_.has(obj, 'recId') && addNewRow) {
+                    let changes = this.setNewRowFieldChanges(SchemaConsts.UNSAVED_RECORD_ID);
+                }
+            }
+        );
     },
 
     /**
@@ -449,8 +426,48 @@ export const ReportContent = React.createClass({
                 showNotificationOnSuccess: true,
                 addNewRow: addNewRow
             };
-            this.props.updateRecord(this.props.appId, this.props.tblId, recordId, params);
+            this.props.updateRecord(this.props.appId, this.props.tblId, recordId, params).then(
+                (obj) => {
+                    //  successful if a recId is returned
+                    if (_.has(obj, 'recId') && addNewRow) {
+                        let changes = this.setNewRowFieldChanges(SchemaConsts.UNSAVED_RECORD_ID);
+                    }
+                }
+            );
         }
+    },
+
+    setNewRowFieldChanges(recId) {
+        //add each non null value as to the new record as a change
+        let newRec = null;
+        if (this.props.reportData.data.hasGrouping) {
+            newRec = ReportUtils.findGroupedRecord(this.props.reportData.data.filteredRecords, recId, this.props.primaryKeyName);
+            // this.props.report[0].data
+        } else {
+            // this.props.report[0].data
+            newRec = _.find(this.props.reportData.data.filteredRecords, (rec) => {
+                return rec[this.props.primaryKeyName].value === recId;
+            });
+        }
+
+        let changes = {};
+        // loop thru the values in the new rec add any non nulls to change set
+        // so it will be treated as dirty/not saved
+        Object.keys(newRec).forEach((key) => {
+            let field = newRec[key];
+            let fieldDef = _.has(this.props, 'reportData.data.fieldsMap') ? this.props.reportData.data.fieldsMap.get(+field.id) : null;
+            if (fieldDef && !fieldDef.builtIn) {
+                let change = {
+                    //the + before field.id is needed turn the field id from string into a number
+                    oldVal: {value: undefined, id: +field.id},
+                    newVal: {value: field.value},
+                    fieldName: key,
+                    fieldDef: fieldDef
+                };
+                changes[field.id] = change;
+            }
+        });
+        return changes;
     },
 
     handleValidateFieldValue(fieldDef, fieldName, value, checkRequired) {
@@ -1034,7 +1051,7 @@ const mapDispatchToProps = (dispatch) => {
                     dispatch(editRecordStart(appId, tblId, SchemaConstants.UNSAVED_RECORD_ID, null, null, true, null));
                     if (showNotification) {
                         NotificationManager.success(Locales.getMessage('recordNotifications.recordAdded'), Locales.getMessage('success'),
-                            CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);
+                            NOTIFICATION_MESSAGE_DISMISS_TIME);
                     }
                 }
             );
@@ -1046,7 +1063,7 @@ const mapDispatchToProps = (dispatch) => {
             dispatch(deleteRecord(appId, tblId, recId, nameForRecords));
         },
         updateRecord:(appId, tblId, recId, params) => {
-            dispatch(updateRecord(appId, tblId, recId, params));
+            return dispatch(updateRecord(appId, tblId, recId, params));
             //dispatch(updateRecord(appId, tblId, recId, params)).then(
             //    () => {
             //        // NOTE: speed of rendering the blank row after the update is a
@@ -1058,7 +1075,7 @@ const mapDispatchToProps = (dispatch) => {
             //);
         },
         createRecord: (appId, tblId, params) => {
-            dispatch(createRecord(appId, tblId, params));
+            return dispatch(createRecord(appId, tblId, params));
             //dispatch(createRecord(appId, tblId, params)).then(
             //    (obj) => {
             //        // NOTE: speed of rendering the blank row after the create is a
