@@ -67,13 +67,13 @@
     }
 
     .qbIcon.toggleIcon {
-        transition: transform 0.3s ease-in;
+        transition: transform 300ms ease-in;
         transform: rotate(0);
     }
 
     &.open {
         .qbIcon.toggleIcon {
-            transform: rotate(-90deg);
+            transform: rotate(-180deg);
         }
     }
 }
