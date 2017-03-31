@@ -1,9 +1,11 @@
 import React, {PropTypes, Component} from 'react';
+import FlipMove from 'react-flip-move';
 import Locale from '../../../../../reuse/client/src/locales/locale';
 
 import FieldTokenInMenu from '../../formBuilder/fieldToken/fieldTokenInMenu';
 import {SUPPORTED_FIELD_TYPES, createFieldTypeProps} from '../../formBuilder/newFieldTypes';
 import SideTrowser from '../../../../../reuse/client/src/components/sideTrowserBase/sideTrowserBase';
+import SearchBoxInMenu from '../../../../../reuse/client/src/components/searchBoxInMenu/searchBoxInMenu';
 
 import './toolPalette.scss';
 
@@ -15,9 +17,25 @@ class ToolPalette extends Component {
     constructor(props) {
         super(props);
 
+        this.state = {fieldFilter: ''};
+
+        this.onChangeFieldFilter = this.onChangeFieldFilter.bind(this);
+        this.renderFilteredFieldsList = this.renderFilteredFieldsList.bind(this);
         this.renderNewFieldTypes = this.renderNewFieldTypes.bind(this);
         this.renderNewFieldGroups = this.renderNewFieldGroups.bind(this);
         this.renderToolPalette = this.renderToolPalette.bind(this);
+    }
+
+    onChangeFieldFilter(evt) {
+        this.setState({fieldFilter: evt.target.value});
+    }
+
+    renderFilteredFieldsList() {
+        let fieldTypes = SUPPORTED_FIELD_TYPES.reduce((allFieldTypes, fieldGroup) => [...allFieldTypes, ...fieldGroup.fieldTypes], []).filter(fieldType => {
+            return fieldType.toString() === this.state.fieldFilter;
+        });
+
+        return this.renderNewFieldTypes(fieldTypes);
     }
 
     /**
@@ -37,26 +55,25 @@ class ToolPalette extends Component {
      * @returns {XML}
      */
     renderNewFieldGroups() {
-        return (
-            <ul className={`toolPaletteList toolPaletteNewFields ${this.props.isCollapsed ? 'toolPaletteCollapsed' : ''}`}>
-                {SUPPORTED_FIELD_TYPES.map((group, index) => (
-                    <li key={index} className="toolPaletteItemGroup">
-                        <h6 className="toolPaletteItemHeader">{Locale.getMessage(group.titleI18nKey)}</h6>
+        return SUPPORTED_FIELD_TYPES.map((group, index) => (
+            <li key={index} className="toolPaletteItemGroup">
+                <h6 className="toolPaletteItemHeader">{Locale.getMessage(group.titleI18nKey)}</h6>
 
-                        <ul className="toolPaletteItemList">
-
-                            {this.renderNewFieldTypes(group.fieldTypes)}
-                        </ul>
-                    </li>
-                ))}
-            </ul>
-        );
-    };
+                <FlipMove typeName="ul" className="toolPaletteItemList">
+                    {this.renderNewFieldTypes(group.fieldTypes)}
+                </FlipMove>
+            </li>
+        ));
+    }
 
     renderToolPalette() {
         return (
             <div className="toolPaletteContainer">
-                {this.renderNewFieldGroups()}
+                <SearchBoxInMenu searchText={this.state.fieldFilter} onChange={this.onChangeFieldFilter} />
+                <FlipMove typeName="ul" className={`toolPaletteList toolPaletteNewFields ${this.props.isCollapsed ? 'toolPaletteCollapsed' : ''}`}>
+                    {this.state.fieldFilter.length > 0 && this.renderFilteredFieldsList()}
+                    {this.state.fieldFilter.length === 0 && this.renderNewFieldGroups()}
+                </FlipMove>
             </div>
         );
     };

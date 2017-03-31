@@ -38,6 +38,11 @@ export const SUPPORTED_FIELD_TYPES = [
     }
 ];
 
+/**
+ * Builds an object with the appropriate props for the field type. Includes localized field type names.
+ * @param fieldType
+ * @returns {{type: *, title: *, tooltipText: string, isNewField: boolean}}
+ */
 export function createFieldTypeProps(fieldType) {
     return {
         type: fieldType,

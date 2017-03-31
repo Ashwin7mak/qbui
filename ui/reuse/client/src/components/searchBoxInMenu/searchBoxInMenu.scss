@@ -1,0 +1,17 @@
+@import "../../assets/css/qbVariables";
+
+.searchBoxInMenu {
+
+    margin: $spacing-tiny;
+
+    .form-control {
+        border-color: $color-black-300;
+    }
+
+    .form-control-feedback {
+        display: flex;
+        align-items: center;
+        width: 22px;
+        color: $color-black-300;
+    }
+}
