@@ -69,8 +69,9 @@ export const FieldElement = React.createClass({
     },
 
     render() {
-        let relatedField = this.props.relatedField && this.props.relatedField.datatypeAttributes ?
-            this.props.relatedField : {};
+        let fieldDatatypeAttributes = this.props.relatedField && this.props.relatedField.datatypeAttributes ?
+            this.props.relatedField.datatypeAttributes : {};
+        let relatedField = this.props.relatedField;
         let fieldType = FieldFormats.getFormatType(relatedField);
 
         //catch the non-implemented pieces.
@@ -80,7 +81,6 @@ export const FieldElement = React.createClass({
         let indicateRequiredOnField = !this.props.indicateRequiredOnLabel;
 
         // If the form element has showAsRadio prop - pass it down as a part of fieldDef
-        let relatedField = this.props.relatedField;
         if (this.props.element && this.props.element.showAsRadio) {
             relatedField.showAsRadio = true;
         }
@@ -99,7 +99,7 @@ export const FieldElement = React.createClass({
             fieldElement = <FieldValueEditor type={fieldType}
                                              value={fieldRawValue}
                                              display={fieldDisplayValue}
-                                             attributes={relatedField}
+                                             attributes={fieldDatatypeAttributes}
                                              fieldDef = {relatedField}
                                              indicateRequired={indicateRequiredOnField}
                                              onChange={this.onChange}
@@ -123,7 +123,7 @@ export const FieldElement = React.createClass({
                                                idKey={'fvr-' + this.props.idKey}
                                                value={fieldRawValue}
                                                display={fieldDisplayValue}
-                                               attributes={relatedField}
+                                               attributes={fieldDatatypeAttributes}
                                                includeUnits={true}
                                                fieldDef={this.props.relatedField}
                                                label={FieldUtils.getFieldLabel(this.props.element, this.props.relatedField)}
@@ -133,13 +133,13 @@ export const FieldElement = React.createClass({
         return (
             <div className="formElement field">
                 {this.props.includeLabel &&
-                    <FieldLabelElement
-                        element={this.props.element}
-                        relatedField={this.props.relatedField}
-                        indicateRequiredOnLabel={this.props.indicateRequiredOnLabel}
-                        isInvalid={this.props.isInvalid}
-                        label={FieldUtils.getFieldLabel(this.props.element, this.props.relatedField)}
-                    /> }
+                <FieldLabelElement
+                    element={this.props.element}
+                    relatedField={this.props.relatedField}
+                    indicateRequiredOnLabel={this.props.indicateRequiredOnLabel}
+                    isInvalid={this.props.isInvalid}
+                    label={FieldUtils.getFieldLabel(this.props.element, this.props.relatedField)}
+                /> }
 
                 <span className="cellWrapper">
                     { fieldElement }
