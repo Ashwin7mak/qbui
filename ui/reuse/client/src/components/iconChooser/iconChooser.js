@@ -1,7 +1,6 @@
 import React from 'react';
 import {PropTypes} from 'react';
-
-import Icon, {AVAILABLE_ICON_FONTS} from '../icon/icon';
+import Icon from '../icon/icon';
 
 // IMPORTS FROM CLIENT REACT
 import {I18nMessage} from '../../../../../client-react/src/utils/i18nMessage';
@@ -11,7 +10,7 @@ import './iconChooser.scss';
 
 /**
  * # Icon Chooser
- * A pseudo-menu containing a grid of selectable icons
+ * A component that can expand to display a searchable grid of icons
  * ## Usage
  * ```
  *   <IconChooser ...props/>
@@ -22,65 +21,99 @@ class IconChooser extends React.Component {
         super(props);
 
         this.state = {
-            filterText: ''
+            filterText: '' // search text
         };
+
+        // bind event handlers to fix context
         this.toggleAllIcons = this.toggleAllIcons.bind(this);
         this.filterChanged = this.filterChanged.bind(this);
     }
 
+    /**
+     * expand/collapse icon grid
+     */
     toggleAllIcons() {
 
         if (this.props.isOpen) {
-
             this.props.onClose();
         } else {
+            // reset search text when icon chooser is expanded
             this.setState({filterText: ''});
             this.props.onOpen();
         }
     }
 
+    /**
+     * render the expand/collapse toggle
+     * @returns {XML}
+     */
     renderIconToggle() {
         return (
             <div className="showAllToggle" onClick={this.toggleAllIcons}>
-                <Icon iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY} icon={this.props.selectedIcon}/>
+                <Icon iconFont={this.props.font} icon={this.props.selectedIcon}/>
                 <Icon icon="caret-filled-down" className="toggleIcon"/>
             </div>);
     }
 
+    /**
+     * search input changed
+     * @param e
+     */
     filterChanged(e) {
         this.setState({filterText: e.target.value});
     }
 
+    /**
+     * does filter text match icon?
+     * @param text lowercase filter text
+     * @param icon icon name
+     * @returns {boolean}
+     */
     filterMatches(text, icon) {
 
         if (text === '') {
+            // no filter, display all icons
             return true;
         }
         const iconName = icon.toLowerCase();
 
+        // match agains icon name
         if (iconName.indexOf(text) !== -1) {
             return true;
         }
 
+        // find all tags (sets of icons by name) containing the search text
         const matchedTags = this.props.iconsByTag.filter((tagToIcons) => tagToIcons.tag.toLowerCase().indexOf(text) !== -1);
 
         if (!matchedTags) {
             return false;
         }
 
-        return matchedTags.find((taggedIcons) => taggedIcons.icons.find((taggedIcon) => taggedIcon.toLowerCase() === iconName));
+        // filter matches if any tag matching the filter text contains the current icon
+        return matchedTags.find((taggedIcons) => taggedIcons.icons.find((taggedIcon) => taggedIcon === icon));
     }
 
+    /**
+     * get icons matching the current filter text
+     */
     getFilteredIcons() {
         return this.props.icons.filter((icon) => this.filterMatches(this.state.filterText.toLowerCase().trim(), icon));
     }
 
+    /**
+     * icon selected callback
+     * @param icon
+     */
     selectIcon(icon) {
-        this.toggleAllIcons();
+        this.toggleAllIcons(); // collapse the icon chooser
+
         this.props.onSelect(icon);
     }
 
-
+    /**
+     * render icon chooser
+     * @returns {XML}
+     */
     render() {
         let classes = ['iconChooser', this.props.isOpen ? 'open' : 'closed'];
         if (this.props.classes) {
@@ -95,19 +128,48 @@ class IconChooser extends React.Component {
                 </div>
 
                 <div className="allIcons">
-                    {this.getFilteredIcons().map((icon, i) => <Icon key={i} onClick={() => this.selectIcon(icon)} iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY} icon={icon}/>)}
+                    {this.getFilteredIcons().map((icon, i) => <Icon key={i} onClick={() => this.selectIcon(icon)} iconFont={this.props.font} icon={icon}/>)}
                 </div>
             </div>);
     }
 }
 
-
 IconChooser.propTypes = {
-    selectedIcon: PropTypes.string
-};
-
-IconChooser.defaultProps = {
-    selectedIcon: 'tasks'
+    /**
+     * current icon name
+     */
+    selectedIcon: PropTypes.string.isRequired,
+    /**
+     * should the chooser be expanded to include icon grid and search box
+     */
+    isOpen: PropTypes.bool.isRequired,
+    /**
+     * expand chooser callback
+     */
+    onOpen: PropTypes.func.isRequired,
+    /**
+     * close chooser callback
+     */
+    onClose: PropTypes.func.isRequired,
+    /**
+     * icon font to use
+     */
+    font: PropTypes.string.isRequired,
+    /**
+     * icon names to include
+     */
+    icons: PropTypes.arrayOf(PropTypes.string).isRequired,
+    /**
+     * icon selected callback
+     */
+    onSelect: PropTypes.func.isRequired,
+    /**
+     * icon categorization metadata (if tag includes search text, show icons from icons array)
+     */
+    iconsByTag: PropTypes.arrayOf(PropTypes.shape({
+        tag: React.PropTypes.string,
+        icons: PropTypes.arrayOf(PropTypes.string)
+    }))
 };
 
 export default IconChooser;

@@ -108,10 +108,11 @@ class TableCreationPanel extends React.Component {
                          isOpen={this.props.iconChooserOpen}
                          onOpen={this.props.openIconChooser}
                          onClose={this.props.closeIconChooser}
+                         font={AVAILABLE_ICON_FONTS.TABLE_STURDY}
                          icons={tableIconNames}
                          iconsByTag={tableIconsByTag}
-                         onSelect={this.selectIcon}
-            />
+                         onSelect={this.selectIcon} />
+
             <div className="suggestedIcons">
                 <div>Suggested Icons</div>
                 {this.getSuggestedIcons()}

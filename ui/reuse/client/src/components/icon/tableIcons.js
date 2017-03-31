@@ -294,11 +294,6 @@ export const suggestedTableIcons = [
     "tasks", "Clock", "customers", "invoices", "projects", "team", "mailbox", "paperclip"
 ];
 
-// map icon names to icon font class names (for now, just add a prefix)
-export const tableIconClasses = tableIconNames.map((name) => {
-    return {iconName: name, iconClassName: "iconTableSturdy-" + name};
-});
-
 // map multiple icons to a tag name for searching (will need to be localized)
 export const tableIconsByTag = [
     {

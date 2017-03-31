@@ -22,12 +22,17 @@ export const previousTableCreationPage = () => ({
     type: types.PREVIOUS_TABLE_CREATION_PAGE
 });
 
-
+/**
+ * expand the icon chooser from a button to a searchable grid
+ */
 export const openIconChooser = () => ({
     type: types.TABLE_ICON_CHOOSER_OPEN,
     isOpen: true
 });
 
+/**
+ * collapse the icon chooser
+ */
 export const closeIconChooser = () => ({
     type: types.TABLE_ICON_CHOOSER_OPEN,
     isOpen: false
