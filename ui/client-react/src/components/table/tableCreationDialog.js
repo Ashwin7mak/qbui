@@ -108,12 +108,6 @@ export class TableCreationDialog extends React.Component {
 
         const classes = ['tableCreationDialog'];
 
-        // if a dropdown is open, add a class so we can temporarily display overflows
-        // (normally we want to hide overflows since the page transitions required overflow hidden)
-        if (this.props.tableCreation.menuOpen) {
-            classes.push('tableMenuOpen');
-        }
-
         return (<MultiStepDialog show={this.props.tableCreation.dialogOpen}
                                  isLoading={this.props.tableCreation.savingTable}
                                  classes={classes.join(' ')}
