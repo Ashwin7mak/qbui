@@ -505,7 +505,7 @@ export default {
                 [FieldFormats.NUMERIC_FORMULA_FORMAT]: "Formule numérique",
                 [FieldFormats.DATE_FORMAT]: "Rendez-vous amoureux",
                 [FieldFormats.DATETIME_FORMAT]: "Horodatage",
-                [FieldFormats.TIME_FORMAT ]: "Moment de la journée",
+                [FieldFormats.TIME_FORMAT]: "Moment de la journée",
                 [FieldFormats.DURATION_FORMAT]: "Durée",
                 [FieldFormats.USER_FORMAT]: "Utilisateur",
                 [FieldFormats.CHECKBOX_FORMAT]: "Case à cocher",

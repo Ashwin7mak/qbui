@@ -506,7 +506,7 @@ export default {
                 [FieldFormats.NUMERIC_FORMULA_FORMAT]: "Numerische Formel",
                 [FieldFormats.DATE_FORMAT]: "Datum",
                 [FieldFormats.DATETIME_FORMAT]: "Time stamp",
-                [FieldFormats.TIME_FORMAT ]: "Zeitstempel",
+                [FieldFormats.TIME_FORMAT]: "Zeitstempel",
                 [FieldFormats.DURATION_FORMAT]: "Dauer",
                 [FieldFormats.USER_FORMAT]: "Benutzer",
                 [FieldFormats.CHECKBOX_FORMAT]: "Checkbox",

@@ -512,7 +512,7 @@ export default {
                 [FieldFormats.NUMERIC_FORMULA_FORMAT]: "Numeric formula",
                 [FieldFormats.DATE_FORMAT]: "Date",
                 [FieldFormats.DATETIME_FORMAT]: "Time stamp",
-                [FieldFormats.TIME_FORMAT ]: "Time of day",
+                [FieldFormats.TIME_FORMAT]: "Time of day",
                 [FieldFormats.DURATION_FORMAT]: "Duration",
                 [FieldFormats.USER_FORMAT]: "User",
                 [FieldFormats.CHECKBOX_FORMAT]: "Checkbox",
