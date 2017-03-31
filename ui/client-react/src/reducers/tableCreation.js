@@ -8,7 +8,7 @@ const defaultTableInfo = {
         value: "",
     },
     tableIcon: {
-        value: "tasks",
+        value: "",
     },
     tableNoun: {
         value: "",

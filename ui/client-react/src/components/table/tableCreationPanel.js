@@ -46,7 +46,7 @@ class TableCreationPanel extends React.Component {
      * @returns {XML}
      */
     getSuggestedIcons() {
-        const iconNames = tableIconNames;
+
         return (
             <div className="iconList">
                 {suggestedTableIcons.slice(0, 8).map((iconName, i) => (
@@ -94,6 +94,7 @@ class TableCreationPanel extends React.Component {
             break;
         }
         }
+
         this.props.setTableProperty(property, value, validationError, isUserEdit);
     }
 
@@ -130,6 +131,11 @@ class TableCreationPanel extends React.Component {
             // update prop to set the validation state, but don't mark fields as being edited
             this.updateTableProperty(key, val.value, false);
         });
+
+        // choose a default icon
+        if (!this.props.tableInfo.tableIcon.value) {
+            this.updateTableProperty('tableIcon', suggestedTableIcons[0], false);
+        }
     }
 
     /**
@@ -152,6 +158,7 @@ class TableCreationPanel extends React.Component {
      * @returns {XML}
      */
     render() {
+
         return (
             <div className="tableInfo">
 

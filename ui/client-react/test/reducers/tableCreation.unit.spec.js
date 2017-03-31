@@ -12,7 +12,7 @@ function initializeState() {
             value: "",
         },
         tableIcon: {
-            value: "tasks",
+            value: "",
         },
         tableNoun: {
             value: "",
