@@ -6,8 +6,9 @@
     flex: 0 0 auto;
     display: flex;
     flex-direction: row;
-    background-color: $trowser-footer-background-color;
-    padding: 3px 0;
+    padding: 0;
+    border-top: 1px solid $trowser-footer-border-color;
+    margin: 0 10px;
 
     .leftActions {
         flex: 0 0 auto;
@@ -45,7 +46,7 @@
         align-self: center;
 
         button {
-            margin: 4px 10px 4px 4px;
+            margin: 10px 0 10px 10px;
         }
         display: flex;
     }

@@ -8,7 +8,7 @@
     &::after {
         content: '';
         position: absolute;
-        border-left: 1px solid $leftnav-brandarea-stroke-color;
+        border-left: 1px solid $leftnav-background-stroke-color;
         left: 0;
         height: 24px;
         top: 9px;
@@ -306,7 +306,7 @@ div.leftNavTooltip {
 
     .branding {
         background-color: $leftnav-brandarea-background-color;
-        border-top: 1px solid $leftnav-brandarea-stroke-color;
+        border-top: 1px solid $leftnav-background-stroke-color;
         padding: 10px;
         text-align: center;
     }
@@ -518,7 +518,7 @@ div.leftNavTooltip {
     border-bottom: 1px solid $leftnav-background-stroke-color;
 
     &:hover {
-        border-top-color: $color-cyan-300;
+        border-top-color: $color-purple-500;
     }
 }
 

@@ -8,6 +8,8 @@
     order: 1;
     flex-direction: column;
     background-color: $topnav-header-background-color;
+    border-bottom: 1px solid $color-black-300;
+    box-sizing: content-box;
 
     .top {
         display: flex;
