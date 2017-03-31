@@ -502,7 +502,6 @@ export default {
                 [FieldFormats.TEXT_FORMAT_MULTICHOICE]: "Choice list",
                 [FieldFormats.TEXT_FORMAT_RADIO_BUTTONS]: "Radio buttons",
                 [FieldFormats.TEXT_FORMULA_FORMAT]: "Text formula",
-
                 [FieldFormats.NUMBER_FORMAT]: "Number",
                 [FieldFormats.CURRENCY_FORMAT]: "Currency",
                 [FieldFormats.CURRENCY_FORMAT_MULTICHOICE]: "Currency",
@@ -511,13 +510,10 @@ export default {
                 [FieldFormats.NUMBER_FORMAT_MULTICHOICE]: "Numeric choice list",
                 [FieldFormats.NUMBER_FORMAT_RADIO_BUTTONS]: "Numeric radio buttons",
                 [FieldFormats.NUMERIC_FORMULA_FORMAT]: "Numeric formula",
-
-
                 [FieldFormats.DATE_FORMAT]: "Date",
                 [FieldFormats.DATETIME_FORMAT]: "Time stamp",
                 [FieldFormats.TIME_FORMAT ]: "Time of day",
                 [FieldFormats.DURATION_FORMAT]: "Duration",
-
                 [FieldFormats.USER_FORMAT]: "User",
                 [FieldFormats.CHECKBOX_FORMAT]: "Checkbox",
                 [FieldFormats.URL]: "Url",
@@ -526,13 +522,12 @@ export default {
                 [FieldFormats.RATING_FORMAT]: "Rating",
                 [FieldFormats.RATING_FORMAT_MULTICHOICE]: "Rating",
                 [FieldFormats.URL_FORMULA_FORMAT]: "Formula",
-
                 SCALAR: "Scalar",
                 CONCRETE: "Concrete",
                 REPORT_LINK: "Report link",
                 SUMMARY: "Summary",
                 LOOKUP: "Lookup",
-                FILE_ATTACHMENT: "File",
+                FILE_ATTACHMENT: "File"
             }
         },
         featureSwitchAdmin: {

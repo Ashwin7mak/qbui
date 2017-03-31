@@ -496,7 +496,6 @@ export default {
                 [FieldFormats.TEXT_FORMAT_MULTICHOICE]: "Auswahlliste",
                 [FieldFormats.TEXT_FORMAT_RADIO_BUTTONS]: "Radio Knöpfe",
                 [FieldFormats.TEXT_FORMULA_FORMAT]: "Textformel",
-
                 [FieldFormats.NUMBER_FORMAT]: "Nummer",
                 [FieldFormats.CURRENCY_FORMAT]: "Währung",
                 [FieldFormats.CURRENCY_FORMAT_MULTICHOICE]: "Währung",
@@ -505,13 +504,10 @@ export default {
                 [FieldFormats.NUMBER_FORMAT_MULTICHOICE]: "Numerische Auswahlliste",
                 [FieldFormats.NUMBER_FORMAT_RADIO_BUTTONS]: "Numeric radio buttons",
                 [FieldFormats.NUMERIC_FORMULA_FORMAT]: "Numerische Formel",
-
-
                 [FieldFormats.DATE_FORMAT]: "Datum",
                 [FieldFormats.DATETIME_FORMAT]: "Time stamp",
                 [FieldFormats.TIME_FORMAT ]: "Zeitstempel",
                 [FieldFormats.DURATION_FORMAT]: "Dauer",
-
                 [FieldFormats.USER_FORMAT]: "Benutzer",
                 [FieldFormats.CHECKBOX_FORMAT]: "Checkbox",
                 [FieldFormats.URL]: "Url",
@@ -520,13 +516,12 @@ export default {
                 [FieldFormats.RATING_FORMAT]: "Bewertung",
                 [FieldFormats.RATING_FORMAT_MULTICHOICE]: "Bewertung",
                 [FieldFormats.URL_FORMULA_FORMAT]: "Formel",
-
-                SCALAR: "Scalar",
-                CONCRETE: "Concrete",
-                REPORT_LINK: "Report link",
-                SUMMARY: "Summary",
-                LOOKUP: "Lookup",
-                FILE_ATTACHMENT: "File",
+                SCALAR: "Skalar",
+                CONCRETE: "Beton",
+                REPORT_LINK: "Bericht Link",
+                SUMMARY: "Zusammenfassung",
+                LOOKUP: "Sieh nach oben",
+                FILE_ATTACHMENT: "Datei"
             }
         },
         featureSwitchAdmin: {

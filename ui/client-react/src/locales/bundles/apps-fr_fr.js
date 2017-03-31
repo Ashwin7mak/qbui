@@ -495,7 +495,6 @@ export default {
                 [FieldFormats.TEXT_FORMAT_MULTICHOICE]: "Liste de choix",
                 [FieldFormats.TEXT_FORMAT_RADIO_BUTTONS]: "Boutons radio",
                 [FieldFormats.TEXT_FORMULA_FORMAT]: "Formule de texte",
-
                 [FieldFormats.NUMBER_FORMAT]: "Nombre",
                 [FieldFormats.CURRENCY_FORMAT]: "Devise",
                 [FieldFormats.CURRENCY_FORMAT_MULTICHOICE]: "Devise",
@@ -504,13 +503,10 @@ export default {
                 [FieldFormats.NUMBER_FORMAT_MULTICHOICE]: "NListe de choix uneric",
                 [FieldFormats.NUMBER_FORMAT_RADIO_BUTTONS]: "Boutons radio numériques",
                 [FieldFormats.NUMERIC_FORMULA_FORMAT]: "Formule numérique",
-
-
                 [FieldFormats.DATE_FORMAT]: "Rendez-vous amoureux",
                 [FieldFormats.DATETIME_FORMAT]: "Horodatage",
                 [FieldFormats.TIME_FORMAT ]: "Moment de la journée",
                 [FieldFormats.DURATION_FORMAT]: "Durée",
-
                 [FieldFormats.USER_FORMAT]: "Utilisateur",
                 [FieldFormats.CHECKBOX_FORMAT]: "Case à cocher",
                 [FieldFormats.URL]: "Url",
@@ -519,7 +515,6 @@ export default {
                 [FieldFormats.RATING_FORMAT]: "Évaluation",
                 [FieldFormats.RATING_FORMAT_MULTICHOICE]: "Évaluation",
                 [FieldFormats.URL_FORMULA_FORMAT]: "Formule",
-
                 SCALAR: "Scalaire",
                 CONCRETE: "Béton",
                 REPORT_LINK: "Lien du rapport",
