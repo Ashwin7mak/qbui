@@ -576,6 +576,9 @@ export default {
             validateTableNameEmpty: "Kann keine Tabelle erstellen",
             validateTableNameExists: "Der Tabellenname muss für diese App eindeutig sein",
             validateRecordNameEmpty: "Tabellenname darf nicht leer sein",
+        },
+        iconChooser: {
+            searchPlaceholder: "Tabellensymbole suchen ......"
         }
     }
 };
