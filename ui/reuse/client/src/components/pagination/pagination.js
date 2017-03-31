@@ -6,6 +6,7 @@ import {I18nMessage} from '../../../../../client-react/src/src/utils/i18nMessage
 import Breakpoints from '../../../../../client-react/src/utils/breakpoints';
 import StringUtils from "../../../../../client-react/src/utils/stringUtils";
 import NumberUtils from "../../../../../client-react/src/utils/numberUtils";
+import constants from '../../../../../common/src/constants';
 
 class Pagination extends Component{
     Pagination.propTypes = {
@@ -52,6 +53,59 @@ class Pagination extends Component{
         // - When page is not filtered, the condition mentioned above
         // - When page is filtered, number of items is less than page size
         let showComponent = !isSmall && !isLoading && !isCountingRecords && !isError && showNavigation;
+
+        getNextReportPage() {
+            if (this.props.reportData) {
+                if (this.props.reportData.pageOffset + this.props.reportData.numRows >= this.props.reportData.data.recordsCount) {
+                    return false;
+                }
+                this.getPageUsingOffsetMultiplicant(1);
+            }
+        },
+
+        getPreviousReportPage() {
+            if (this.props.reportData) {
+                if (this.props.reportData.pageOffset === 0) {
+                    return false;
+                }
+                this.getPageUsingOffsetMultiplicant(-1);
+            }
+        },
+
+        getPageUsingOffsetMultiplicant(multiplicant) {
+            let appId = this.props.reportData.appId;
+            let tblId = this.props.reportData.tblId;
+            let rptId = typeof this.props.reportData.rptId !== "undefined" ? this.props.reportData.rptId : this.props.params.rptId;
+            let filter = {};
+            let queryParams = {};
+            let sortList = "";
+            let numRows = Constants.PAGE.DEFAULT_NUM_ROWS;
+            let offset =  Constants.PAGE.DEFAULT_OFFSET;
+
+            if (this.props.reportData) {
+                let reportData = this.props.reportData;
+                if (reportData.numRows) {
+                    numRows = reportData.numRows;
+                }
+                if (reportData.pageOffset) {
+                    offset = reportData.pageOffset;
+                }
+
+                filter.selections = reportData.selections;
+                filter.search = reportData.searchStringForFiltering;
+                filter.facet = reportData.facetExpression;
+
+                if (reportData.data && reportData.data.sortList) {
+                    sortList = reportData.data.sortList;
+                }
+            }
+
+            queryParams[query.SORT_LIST_PARAM] = sortList;
+            queryParams[query.OFFSET_PARAM] = offset + (multiplicant * numRows);
+            queryParams[query.NUMROWS_PARAM] = numRows;
+
+            this.props.loadDynamicReport(appId, tblId, rptId, true, filter, queryParams);
+        },
 
         let navBar = "report.reportNavigationBar";
         if (showComponent) {
