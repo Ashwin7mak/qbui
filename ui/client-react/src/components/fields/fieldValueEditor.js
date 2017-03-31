@@ -222,21 +222,25 @@ const FieldValueEditor = React.createClass({
         case FieldFormats.RATING_FORMAT:
         case FieldFormats.CURRENCY_FORMAT:
         case FieldFormats.PERCENT_FORMAT: {
-            if (_.has(this.props, 'fieldDef.multipleChoice.choices')) {
-                return (
-                    <MultiChoiceFieldValueEditor choices={this.props.fieldDef.multipleChoice.choices}
-                        {...commonProps} showAsRadio={this.props.fieldDef.showAsRadio}/>
-                );
-            } else {
-                if (commonProps.value !== null && commonProps.value !== undefined) {
-                    commonProps.value = commonProps.value + '';
-                }
-                return <NumericFieldValueEditor {...commonProps}
-                    key={'nfve-' + this.props.idKey}
-                    onChange={this.props.onChange ? this.props.onChange : ()=>{}}
-                    classes="cellEdit"
-                />;
+            if (commonProps.value !== null && commonProps.value !== undefined) {
+                commonProps.value = commonProps.value + '';
             }
+            return <NumericFieldValueEditor {...commonProps}
+                key={'nfve-' + this.props.idKey}
+                onChange={this.props.onChange ? this.props.onChange : ()=>{}}
+                classes="cellEdit"
+            />;
+        }
+
+        case FieldFormats.TEXT_FORMAT_MULTICHOICE:
+        case FieldFormats.NUMBER_FORMAT_MULTICHOICE:
+        case FieldFormats.RATING_FORMAT_MULTICHOICE:
+        case FieldFormats.CURRENCY_FORMAT_MULTICHOICE:
+        case FieldFormats.PERCENT_FORMAT_MULTICHOICE: {
+            return (
+                <MultiChoiceFieldValueEditor choices={this.props.fieldDef.multipleChoice.choices}
+                                             {...commonProps} showAsRadio={this.props.fieldDef.showAsRadio}/>
+            );
         }
 
         case FieldFormats.USER_FORMAT: {
@@ -264,24 +268,17 @@ const FieldValueEditor = React.createClass({
                 commonProps.value = '';
             }
 
-            if (_.has(this.props, 'fieldDef.multipleChoice.choices')) {
-                return (
-                        <MultiChoiceFieldValueEditor choices={this.props.fieldDef.multipleChoice.choices}
-                                             {...commonProps} showAsRadio={this.props.fieldDef.showAsRadio}/>
-                );
-            } else {
-                return <TextFieldValueEditor {...commonProps}
-                                            onChange={this.props.onChange ? this.props.onChange : ()=>{}}
-                                            key={'tfve-' + this.props.idKey}
-                                            classes="cellEdit"
-                                            showClearButton={true}
-                    />;
-                    //Drew's change per Andrew if users want text box that
-                    // grows in height use a multiline not single line text
-                    //  return <MultiLineTextFieldValueEditor value={this.props.value}
-                    //       placeholder={this.props.fieldDef.placeholder}
-                    //       onChange={this.props.onChange} />;
-            }
+            return <TextFieldValueEditor {...commonProps}
+                                        onChange={this.props.onChange ? this.props.onChange : ()=>{}}
+                                        key={'tfve-' + this.props.idKey}
+                                        classes="cellEdit"
+                                        showClearButton={true}
+                />;
+                //Drew's change per Andrew if users want text box that
+                // grows in height use a multiline not single line text
+                //  return <MultiLineTextFieldValueEditor value={this.props.value}
+                //       placeholder={this.props.fieldDef.placeholder}
+                //       onChange={this.props.onChange} />;
         }
         }
     },

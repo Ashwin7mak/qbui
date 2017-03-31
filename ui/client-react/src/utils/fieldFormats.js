@@ -7,13 +7,19 @@ class FieldFormats {
     /**
      * get the formatter type given a field type
      * if the field type is not found it defaults to format.TEXT_FORMAT
-     * @param datatypeAttributes
+     * @param fieldDef
      * @return formatType from formats
      */
-    static getFormatType(datatypeAttributes) {
-        if (datatypeAttributes) {
-            switch (datatypeAttributes.type) {
+    static getFormatType(fieldDef) {
+        if (fieldDef.type === serverTypeConsts.NUMERIC) {
+            console.log('FIELDDEF: ', fieldDef);
+        }
+        if (fieldDef.type) {
+            switch (fieldDef.type) {
             case serverTypeConsts.NUMERIC:
+                if (_.has(fieldDef, 'multipleChoice.choices')) {
+                    return FieldFormats.NUMBER_FORMAT_MULTICHOICE;
+                }
                 return FieldFormats.NUMBER_FORMAT;
 
             case serverTypeConsts.DATE :
@@ -35,12 +41,21 @@ class FieldFormats {
                 return FieldFormats.USER_FORMAT;
 
             case serverTypeConsts.CURRENCY :
+                if (_.has(fieldDef, 'multipleChoice.choices')) {
+                    return FieldFormats.CURRENCY_FORMAT_MULTICHOICE;
+                }
                 return FieldFormats.CURRENCY_FORMAT;
 
             case serverTypeConsts.RATING :
+                if (_.has(fieldDef, 'multipleChoice.choices')) {
+                    return FieldFormats.RATING_FORMAT_MULTICHOICE;
+                }
                 return FieldFormats.RATING_FORMAT;
 
             case serverTypeConsts.PERCENT :
+                if (_.has(fieldDef, 'multipleChoice.choices')) {
+                    return FieldFormats.PERCENT_FORMAT_MULTICHOICE;
+                }
                 return FieldFormats.PERCENT_FORMAT;
 
             case serverTypeConsts.URL :
@@ -54,8 +69,11 @@ class FieldFormats {
 
             case serverTypeConsts.TEXT :
                 let numLines = 1;
-                if (_.has(datatypeAttributes, 'clientSideAttributes.num_lines')) {
-                    numLines = datatypeAttributes.clientSideAttributes.num_lines;
+                if (_.has(fieldDef, 'multipleChoice.choices')) {
+                    return FieldFormats.TEXT_FORMAT_MULTICHOICE;
+                }
+                if (_.has(fieldDef, 'clientSideAttributes.num_lines')) {
+                    numLines = fieldDef.clientSideAttributes.num_lines;
                 }
                 if (numLines > 1) {
                     return FieldFormats.MULTI_LINE_TEXT_FORMAT;
@@ -98,5 +116,11 @@ FieldFormats.EMAIL_ADDRESS = 15;
 FieldFormats.TEXT_FORMULA_FORMAT = 16;
 FieldFormats.URL_FORMULA_FORMAT = 17;
 FieldFormats.NUMERIC_FORMULA_FORMAT = 18;
+
+FieldFormats.TEXT_FORMAT_MULTICHOICE = 19;
+FieldFormats.RATING_FORMAT_MULTICHOICE = 20;
+FieldFormats.CURRENCY_FORMAT_MULTICHOICE = 21;
+FieldFormats.PERCENT_FORMAT_MULTICHOICE = 22;
+FieldFormats.NUMBER_FORMAT_MULTICHOICE = 23;
 
 export default FieldFormats;
