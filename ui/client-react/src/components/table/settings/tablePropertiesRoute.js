@@ -1,11 +1,15 @@
 import React from 'react';
 import {Button} from 'react-bootstrap';
 import {connect} from 'react-redux';
+import {NotificationManager} from 'react-notifications';
+import Locale from '../../../locales/locales';
 import Stage from '../../stage/stage';
 import IconActions from '../../actions/iconActions';
 import {I18nMessage} from '../../../utils/i18nMessage';
 import TableCreationPanel from '../tableCreationPanel';
 import * as TablePropertiesActions from '../../../actions/tablePropertiesActions';
+
+import './tableProperties.scss';
 
 
 const TablePropertiesRoute = React.createClass({
@@ -18,24 +22,46 @@ const TablePropertiesRoute = React.createClass({
     },
     getPageActions(maxButtonsBeforeMenu) {
         const actions = [
-            {i18nMessageKey: 'pageActions.deleteTable', icon:'delete', className:'delete', onClick: this.deleteTable}
+            //{i18nMessageKey: 'pageActions.deleteTable', icon:'delete', className:'delete', onClick: this.deleteTable}
+            {msg: 'pageActions.deleteTable', icon:'delete'}
         ];
         return (<IconActions className="pageActions" actions={actions} maxButtonsBeforeMenu={maxButtonsBeforeMenu}/>);
     },
     getStageHeadline() {
         return <I18nMessage message={"pageActions.tableSettings"}/>;
     },
+    componentDidMount() {
+        if (this.props.app && this.props.table) {
+            this.props.getTableProperties(this.props.table);
+        }
+    },
     componentWillReceiveProps(nextProps) {
         if ((nextProps.table && this.props.table && this.props.table.id !== nextProps.table.id) || (!this.props.table && nextProps.table)) {
-            nextProps.getTableProperties(nextProps.app.id, nextProps.table.id);
+            nextProps.getTableProperties(nextProps.table);
         }
+    },
+    updateTableProperties() {
+        this.props.updateTable(this.props.app.id, this.props.table.id, this.props.tableProperties.tableInfo).then(
+            (response) => {
+                NotificationManager.success(Locale.getMessage('tableCreation.tableCreated'), Locale.getMessage('success'));
+                let updatedTableInfo = this.props.tableProperties.tableInfo;
+                let tableInfoObj = {};
+                Object.keys(updatedTableInfo).forEach(function(key, index) {
+                    tableInfoObj[key] = updatedTableInfo[key].value;
+                });
+
+                this.props.flux.actions.updateTableProps(this.props.table.id, tableInfoObj);
+            },
+            (error) => {
+                NotificationManager.error(Locale.getMessage('tableCreation.tableCreationFailed'), Locale.getMessage('failed'));
+            });
     },
 
     render() {
         return (<div>
             <Stage stageHeadline={this.getStageHeadline()} pageActions={this.getPageActions(5)}></Stage>
 
-            <div className="TableInfoPanel">
+            <div className="tableInfoPanel">
                 <TableCreationPanel tableInfo={this.props.tableProperties.tableInfo}
                                     tableMenuOpened={this.props.tableMenuOpened}
                                     tableMenuClosed={this.props.tableMenuClosed}
@@ -45,9 +71,9 @@ const TablePropertiesRoute = React.createClass({
                                     validate={this.props.tableProperties.edited}
                                     appTables={this.getExistingTableNames()}
                                      />
-                <div className="TableInfoButtons">
+                <div className="tableInfoButtons">
                     <Button className="secondaryButton"><I18nMessage message={"nav.cancel"}/></Button>
-                    <Button className="primaryButton"><I18nMessage message={"nav.apply"}/></Button>
+                    <Button className="primaryButton" bsStyle="primary" onClick={this.updateTableProperties}><I18nMessage message={"nav.apply"}/></Button>
                 </div>
             </div>
         </div>);

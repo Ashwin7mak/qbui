@@ -1,6 +1,7 @@
 import React, {PropTypes, Component} from 'react';
 import Fluxxor from "fluxxor";
 import {connect} from 'react-redux';
+import * as UrlConsts from "../../constants/urlConstants";
 import AppShell from '../../../../reuse/client/src/components/appShell/appShell';
 import DefaultTopNavGlobalActions from '../../../../reuse/client/src/components/topNav/defaultTopNavGlobalActions';
 import TopNav from '../../../../reuse/client/src/components/topNav/topNav';
@@ -73,6 +74,10 @@ const SettingsWrapper = React.createClass({
             this.props.flux.actions.selectTableId(null);
         }
     },
+    getBackToAppLink() {
+        let link = `${UrlConsts.APP_ROUTE}/${this.state.apps.selectedAppId}`;
+        return link;
+    },
 
     render() {
         let selectedTable = this.getSelectedTable();
@@ -86,7 +91,7 @@ const SettingsWrapper = React.createClass({
                 contextHeaderIconTypeIsTable={true}
                 contextHeaderTitle={selectedTable ? selectedTable.name : ""}
                 navItems={[
-                {title: <I18nMessage message={"nav.backToApp"}/>, isPrimaryAction: true, secondaryIcon: 'caret-left', link: '/qbase/apps'},
+                {title: <I18nMessage message={"nav.backToApp"}/>, isPrimaryAction: true, secondaryIcon: 'caret-left', link: this.getBackToAppLink()},
                 ]}
             >
                 <TopNav onNavClick={this.props.toggleNav}/>

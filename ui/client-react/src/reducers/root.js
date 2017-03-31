@@ -24,5 +24,5 @@ export default combineReducers({
     shell,
     tableCreation,
     embeddedReports,
-tableProperties
+    tableProperties
 });

@@ -12,11 +12,11 @@ const logger = new Logger();
  * until it closes
  */
 export const tableMenuOpened = () => ({
-    type: types.TABLE_CREATION_MENU_OPEN
+    type: types.TABLE_PROPS_MENU_OPEN
 });
 
 export const tableMenuClosed = () => ({
-    type: types.TABLE_CREATION_MENU_CLOSED
+    type: types.TABLE_PROPS_MENU_CLOSED
 });
 
 /**
@@ -24,7 +24,7 @@ export const tableMenuClosed = () => ({
  * @param editing ('name', 'description' etc.)
  */
 export const setEditingProperty = (editing) => ({
-    type: types.SET_EDITING_PROPERTY,
+    type: types.SET_PROPS_EDITING_PROPERTY,
     editing
 });
 
@@ -36,7 +36,7 @@ export const setEditingProperty = (editing) => ({
  * @param isUserEdit is a user edit (edit was initiated by the user)
  */
 export const setTableProperty = (property, value, validationError, isUserEdit) => ({
-    type: types.SET_TABLE_PROPERTY,
+    type: types.SET_TABLE_PROPS,
     property,
     value,
     validationError,
@@ -46,15 +46,15 @@ export const setTableProperty = (property, value, validationError, isUserEdit) =
 /**
  * save in progress
  */
-export const savingTable = () => ({
-    type: types.SAVING_TABLE
+export const updatingTable = () => ({
+    type: types.UPDATING_TABLE
 });
 
 /**
  * save failed
  */
-export const savingTableFailed = () => ({
-    type: types.SAVING_TABLE_FAILED
+export const updatingTableFailed = () => ({
+    type: types.UPDATING_TABLE_FAILED
 });
 
 /**
@@ -62,6 +62,11 @@ export const savingTableFailed = () => ({
  */
 export const updatedTable = () => ({
     type: types.UPDATED_TABLE
+});
+
+export const loadedTable = (tableInfo) => ({
+    type: types.LOADED_TABLE_PROPS,
+    tableInfo
 });
 
 /**
@@ -76,17 +81,22 @@ export const updateTable = (appId, tableId, tableInfo) => {
 
         return new Promise((resolve, reject) => {
 
-            dispatch(savingTable());
+            dispatch(updatingTable());
 
             const tableService = new TableService();
+            //convert the tableInfo object that looks like {name: {value: <tableName>, editing: false}, description: {value: <>, editing: true} ...} into {name: <>, description: <>, ...}
+            let newTableInfo = {};
+            Object.keys(tableInfo).forEach(function(key, index) {
+                newTableInfo[key] = tableInfo[key].value;
+            });
 
-            const promise = tableService.updateTable(appId, tableId, tableInfo);
+            const promise = tableService.updateTable(appId, tableId, newTableInfo);
 
             promise.then(response => {
                 dispatch(updatedTable());
                 resolve(response);
             }).catch(error => {
-                dispatch(savingTableFailed());
+                dispatch(updatingTableFailed());
                 if (error.response) {
                     if (error.response.status === constants.HttpStatusCode.FORBIDDEN) {
                         logger.parseAndLogError(LogLevel.WARN, error.response, 'tableService.updateTable:');
@@ -100,38 +110,10 @@ export const updateTable = (appId, tableId, tableInfo) => {
     };
 };
 
-export const getTableProperties = (appId, tableId) => {
-
+export const getTableProperties = (tableInfo) => {
     return (dispatch) => {
-
-        return new Promise((resolve, reject) => {
-            const tableService = new TableService();
-            resolve({name: "name", description: "desc", tableIcon: "icon", tableNoun: "noun"});
-            //const promise = tableService.updateTable(appId, tableInfo);
-            //
-            //promise.then(response => {
-            //    dispatch(updatedTable());
-            //    resolve(response);
-            //}).catch(error => {
-            //    dispatch(savingTableFailed());
-            //    if (error.response) {
-            //        if (error.response.status === constants.HttpStatusCode.FORBIDDEN) {
-            //            logger.parseAndLogError(LogLevel.WARN, error.response, 'tableService.updateTable:');
-            //        } else {
-            //            logger.parseAndLogError(LogLevel.ERROR, error.response, 'tableService.updateTable:');
-            //        }
-            //    }
-            //    reject(error);
-            //});
-        });
+        tableInfo.tableNoun = "noun";
+        tableInfo.description = "";
+        dispatch(loadedTable(tableInfo));
     };
 };
-
-/**
- * someone (the form builder currently) needs to pop up a notification
- * @param notify true if notification is needed, false if the notification has been performed
- */
-export const notifyTableUpdated = (notify) => ({
-    type: types.NOTIFY_TABLE_UPDATED,
-    notifyTableUpdated: notify
-});

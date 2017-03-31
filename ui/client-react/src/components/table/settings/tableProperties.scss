@@ -1,0 +1,11 @@
+.tableInfoPanel {
+    margin: 15px;
+    max-width: 900px;
+    .tableInfoButtons {
+        float: right;
+        margin-right: 15px;
+        .primaryButton {
+            margin-left: 5px;
+        }
+    }
+}

@@ -30,21 +30,21 @@ const tableProperties = (
     action) => {
 
     switch (action.type) {
-    case types.TABLE_CREATION_MENU_OPEN: {
+    case types.TABLE_PROPS_MENU_OPEN: {
         return {
             ...state,
             menuOpen: true
         };
     }
 
-    case types.TABLE_CREATION_MENU_CLOSED: {
+    case types.TABLE_PROPS_MENU_CLOSED: {
         return {
             ...state,
             menuOpen: false
         };
     }
 
-    case types.SET_TABLE_PROPERTY: {
+    case types.SET_TABLE_PROPS: {
 
         const tableInfo = {...state.tableInfo};
 
@@ -63,19 +63,37 @@ const tableProperties = (
         };
     }
 
-    case types.SET_EDITING_PROPERTY: {
+    case types.LOADED_TABLE_PROPS: {
+
+        const tableInfo = action.tableInfo;
+
+        let newTableInfo = {};
+        Object.keys(tableInfo).forEach(function(key, index) {
+            newTableInfo[key] = {value: tableInfo[key],
+                validationError: action.validationError,
+                edited: action.isUserEdit
+            };
+        });
+
+        return {
+            ...state,
+            tableInfo: newTableInfo
+        };
+    }
+
+    case types.SET_PROPS_EDITING_PROPERTY: {
         return {
             ...state,
             editing: action.editing
         };
     }
-    case types.SAVING_TABLE: {
+    case types.UPDATING_TABLE: {
         return {
             ...state,
             savingTable: true
         };
     }
-    case types.SAVING_TABLE_FAILED: {
+    case types.UPDATING_TABLE_FAILED: {
         return {
             ...state,
             savingTable: false
@@ -85,13 +103,6 @@ const tableProperties = (
         return {
             ...state,
             savingTable: false
-        };
-    }
-
-    case types.NOTIFY_TABLE_UPDATED: {
-        return {
-            ...state,
-            notifyTableUpdated: action.notifyTableUpdated
         };
     }
     default:

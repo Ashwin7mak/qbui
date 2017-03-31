@@ -84,8 +84,6 @@ class StandardLeftNav extends Component {
             classes.push('contextHeaderSmall');
         }
 
-        let icon = null;
-
         return (
             <div className={classes.join(' ')}>
                 <Button
@@ -195,7 +193,7 @@ StandardLeftNav.propTypes = {
 
     /**
      * The title text for the context header. */
-    contextHeaderTitle: PropTypes.element,
+    contextHeaderTitle: PropTypes.string,
 
     /**
      * Whether to display that toggle button on the context header */
@@ -231,7 +229,10 @@ StandardLeftNav.propTypes = {
         isSelected: PropTypes.bool,
         icon: PropTypes.string,
         iconFont: PropTypes.string,
-        title: PropTypes.string,
+        title: React.PropTypes.oneOfType([
+            PropTypes.string,
+            PropTypes.element
+        ]),
         onClick: PropTypes.string,
         href: PropTypes.string,
         link: PropTypes.string,

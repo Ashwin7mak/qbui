@@ -51,16 +51,18 @@ class TableService extends BaseService {
      */
     createTableComponents(appId, tableInfo) {
         let url = super.constructUrl(this.API.CREATE_TABLE_COMPONENTS, [appId]);
-
         return super.post(url, tableInfo);
     }
 
     updateTable(appId, tableId, table) {
         let url = super.constructUrl(this.API.UPDATE_TABLE, [appId, tableId]);
-        //mock data
-        table = {name: "name", description: "desc", tableIcon: "icon", tableNoun: "noun"};
         return super.patch(url, table);
     }
+
+    //getTableProperties(appId, tableId) {
+    //    let url = super.constructUrl(this.API.GET_TABLE_PROPS, [appId, tableId]);
+    //    return super.get(url);
+    //}
 }
 
 export default TableService;
