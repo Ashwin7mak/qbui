@@ -15,10 +15,10 @@ class FieldFormats {
             switch (fieldDef.datatypeAttributes.type) {
             case serverTypeConsts.NUMERIC:
                 if (_.has(fieldDef, 'multipleChoice.choices')) {
-                    return FieldFormats.NUMBER_FORMAT_MULTICHOICE;
                     if (_.has(fieldDef, 'showAsRadio')) {
                         return FieldFormats.NUMBER_FORMAT_RADIO_BUTTONS;
                     }
+                    return FieldFormats.NUMBER_FORMAT_MULTICHOICE;
                 }
                 return FieldFormats.NUMBER_FORMAT;
 
@@ -71,7 +71,7 @@ class FieldFormats {
                 let numLines = 1;
                 if (_.has(fieldDef, 'multipleChoice.choices')) {
                     if (_.has(fieldDef, 'showAsRadio')) {
-                        return FieldFormats.TEXT_FORMAT_RADIO_BUTTONS
+                        return FieldFormats.TEXT_FORMAT_RADIO_BUTTONS;
                     }
                     return FieldFormats.TEXT_FORMAT_MULTICHOICE;
                 }
