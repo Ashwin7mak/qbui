@@ -78,6 +78,9 @@ consts = require('../../common/src/constants.js');
         var table9Name = 'Child Table 1';
         var table10Name = 'Parent Table 2';
         var table11Name = 'Child Table 2';
+        var table12Name = 'Country';
+        var table13Name = 'State';
+        var table14Name = 'City';
 
         // Convenience reusable settings
         var baseNumClientRequiredProps = {
@@ -423,7 +426,17 @@ consts = require('../../common/src/constants.js');
         addColumn(tableToFieldToFieldTypeMap[table11Name], e2eConsts.dataType.TEXT, 'Text Field', {unique: true});
         addColumn(tableToFieldToFieldTypeMap[table11Name], e2eConsts.dataType.NUMERIC, 'Numeric Parent1 ID', {unique: false});
         addColumn(tableToFieldToFieldTypeMap[table11Name], e2eConsts.dataType.NUMERIC, 'Numeric Parent2 ID', {unique: false});
-
+        //Country table is parent to State table
+        tableToFieldToFieldTypeMap[table12Name] = {};
+        addColumn(tableToFieldToFieldTypeMap[table12Name], e2eConsts.dataType.TEXT, 'Country', {unique: true});
+        // State Table Table
+        tableToFieldToFieldTypeMap[table13Name] = {};
+        addColumn(tableToFieldToFieldTypeMap[table13Name], e2eConsts.dataType.TEXT, 'State', {unique: true});
+        addColumn(tableToFieldToFieldTypeMap[table13Name], e2eConsts.dataType.NUMERIC, 'Country', {unique: false});
+        // City Table
+        tableToFieldToFieldTypeMap[table14Name] = {};
+        addColumn(tableToFieldToFieldTypeMap[table14Name], e2eConsts.dataType.TEXT, 'City', {unique: true});
+        addColumn(tableToFieldToFieldTypeMap[table14Name], e2eConsts.dataType.NUMERIC, 'State', {unique: false});
         return tableToFieldToFieldTypeMap;
     }
 
@@ -432,6 +445,10 @@ consts = require('../../common/src/constants.js');
      * @param _createdRecs - Print function to call when dataGen is finished
      */
     function generateNewData(_createdRecs) {
+
+        const countries = ["USA", "AUSTRALIA", "INDIA", "CHINA", "CANADA"];
+        const states = ["MASSACHUSETTS", "QUEENSLAND", "MAHARASHTRA", "BEIJING", "TORONTO"];
+        const cities = ["BOSTON", "BRISBANE", "MUMBAI", "ZIGONG", "MONTREAL"];
         // App setup //
         e2eBase.appService.createAppSchema(makeAppMap()).then(function(appResponse) {
             createdApp = appResponse;
@@ -477,7 +494,16 @@ consts = require('../../common/src/constants.js');
             recordsConfig.tablesConfig[createdApp.tables[e2eConsts.TABLE7].name].numRecordsToCreate = 5;
             recordsConfig.tablesConfig[createdApp.tables[e2eConsts.TABLE8].name] = {};
             recordsConfig.tablesConfig[createdApp.tables[e2eConsts.TABLE8].name].numRecordsToCreate = 6;
-
+            recordsConfig.tablesConfig[createdApp.tables[e2eConsts.TABLE9].name] = {};
+            recordsConfig.tablesConfig[createdApp.tables[e2eConsts.TABLE9].name].numRecordsToCreate = 6;
+            recordsConfig.tablesConfig[createdApp.tables[e2eConsts.TABLE10].name] = {};
+            recordsConfig.tablesConfig[createdApp.tables[e2eConsts.TABLE10].name].numRecordsToCreate = 6;
+            recordsConfig.tablesConfig[createdApp.tables[e2eConsts.TABLE11].name] = {};
+            recordsConfig.tablesConfig[createdApp.tables[e2eConsts.TABLE11].name].numRecordsToCreate = 6;//TODO :number of records is 5 and not 6 ?
+            recordsConfig.tablesConfig[createdApp.tables[e2eConsts.TABLE12].name] = {};
+            recordsConfig.tablesConfig[createdApp.tables[e2eConsts.TABLE12].name].numRecordsToCreate = 6;
+            recordsConfig.tablesConfig[createdApp.tables[e2eConsts.TABLE13].name] = {};
+            recordsConfig.tablesConfig[createdApp.tables[e2eConsts.TABLE13].name].numRecordsToCreate = 6;
             return e2eBase.recordService.createRecords(createdApp, recordsConfig);
         }).then(function() {
             // Report Creation //
@@ -508,6 +534,30 @@ consts = require('../../common/src/constants.js');
                 // Reset default report for Table 8
                 return e2eBase.tableService.setDefaultTableHomePage(createdApp.id, createdApp.tables[e2eConsts.TABLE8].id, 2);
             });
+            reportSetupPromises.push(function() {
+                // Create a report with ID field in Table 11
+                return e2eBase.reportService.createReportWithFids(createdApp.id, createdApp.tables[e2eConsts.TABLE11].id, [3, 6], null, 'Report with ID field');
+            });
+            reportSetupPromises.push(function() {
+                // Reset default report for Table 11
+                return e2eBase.tableService.setDefaultTableHomePage(createdApp.id, createdApp.tables[e2eConsts.TABLE11].id, 2);
+            });
+            reportSetupPromises.push(function() {
+                // Create a report with ID field in Table 12
+                return e2eBase.reportService.createReportWithFids(createdApp.id, createdApp.tables[e2eConsts.TABLE12].id, [3, 6, 7], null, 'Report with ID field');
+            });
+            reportSetupPromises.push(function() {
+                // Reset default report for Table 12
+                return e2eBase.tableService.setDefaultTableHomePage(createdApp.id, createdApp.tables[e2eConsts.TABLE12].id, 2);
+            });
+            reportSetupPromises.push(function() {
+                // Create a report with ID field in Table 13
+                return e2eBase.reportService.createReportWithFids(createdApp.id, createdApp.tables[e2eConsts.TABLE13].id, [3, 6, 7], null, 'Report with ID field');
+            });
+            reportSetupPromises.push(function() {
+                // Reset default report for Table 13
+                return e2eBase.tableService.setDefaultTableHomePage(createdApp.id, createdApp.tables[e2eConsts.TABLE13].id, 2);
+            });
 
             // Bluebird's promise.each function (executes each promise sequentially)
             return promise.each(reportSetupPromises, function(queueItem) {
@@ -534,26 +584,76 @@ consts = require('../../common/src/constants.js');
             // We also want these to be consistent, as opposed to randomly generated numbers, for
             // testing purposes.
             let fieldToEdit = createdApp.tables[e2eConsts.TABLE8].fields[6];
-            let editRecords = e2eBase.recordService.generateRecordsFromValues(fieldToEdit, [1, 1, 2, 2, 2, 3]);
+            let editRecords = e2eBase.recordService.generateRecordsFromValues(fieldToEdit, [1, 1, 2, 2, 2]);
             editRecordPromises.push(e2eBase.recordService.editRecords(createdApp.id, createdApp.tables[e2eConsts.TABLE8].id, editRecords));
 
             // Table 10 has 2 parents, set first numeric field
             fieldToEdit = createdApp.tables[e2eConsts.TABLE10].fields[6];
-            editRecords = e2eBase.recordService.generateRecordsFromValues(fieldToEdit, [1, 1, 2, 2, 2, 3]);
+            editRecords = e2eBase.recordService.generateRecordsFromValues(fieldToEdit, [1, 1, 2, 2, 2]);
             editRecordPromises.push(e2eBase.recordService.editRecords(createdApp.id, createdApp.tables[e2eConsts.TABLE10].id, editRecords));
 
             // Table 10 has 2 parents, set second numeric field
             fieldToEdit = createdApp.tables[e2eConsts.TABLE10].fields[7];
-            editRecords = e2eBase.recordService.generateRecordsFromValues(fieldToEdit, [1, 1, 2, 2, 2, 3]);
+            editRecords = e2eBase.recordService.generateRecordsFromValues(fieldToEdit, [1, 1, 2, 2, 2]);
             editRecordPromises.push(e2eBase.recordService.editRecords(createdApp.id, createdApp.tables[e2eConsts.TABLE10].id, editRecords));
 
+            // Table 11
+            fieldToEdit = createdApp.tables[e2eConsts.TABLE11].fields[5];
+            editRecords = e2eBase.recordService.generateRecordsFromValues(fieldToEdit, countries);
+            editRecordPromises.push(e2eBase.recordService.editRecords(createdApp.id, createdApp.tables[e2eConsts.TABLE11].id, editRecords));
+
+            // Table 12 has 1 parent, set first Text field displaying the states
+            fieldToEdit = createdApp.tables[e2eConsts.TABLE12].fields[5];
+            editRecords = e2eBase.recordService.generateRecordsFromValues(fieldToEdit, states);
+            editRecordPromises.push(e2eBase.recordService.editRecords(createdApp.id, createdApp.tables[e2eConsts.TABLE12].id, editRecords));
+
+
+            // Table 12 , set second Text field showing relationship with parent
+            fieldToEdit = createdApp.tables[e2eConsts.TABLE12].fields[6];
+            editRecords = e2eBase.recordService.generateRecordsFromValues(fieldToEdit, [1, 2, 3, 4, 5]);
+            editRecordPromises.push(e2eBase.recordService.editRecords(createdApp.id, createdApp.tables[e2eConsts.TABLE12].id, editRecords));
+
+            // Table 13 has 1 parent, set first Text field displaying the city
+            fieldToEdit = createdApp.tables[e2eConsts.TABLE13].fields[5];
+            editRecords = e2eBase.recordService.generateRecordsFromValues(fieldToEdit, cities);
+            editRecordPromises.push(e2eBase.recordService.editRecords(createdApp.id, createdApp.tables[e2eConsts.TABLE13].id, editRecords));
+
+
+            // Table 13, set second Text field showing relationship with parent
+            fieldToEdit = createdApp.tables[e2eConsts.TABLE13].fields[6];
+            editRecords = e2eBase.recordService.generateRecordsFromValues(fieldToEdit, [1, 2, 3, 4, 5]);
+            editRecordPromises.push(e2eBase.recordService.editRecords(createdApp.id, createdApp.tables[e2eConsts.TABLE13].id, editRecords));
+
+            // Bluebird's promise.each function (executes each promise sequentially)
+            return Promise.all(editRecordPromises);
+        }).then(function() {
+            const addRelationshipPromises = [];
+
             // Create table relationship, Table 8 is a child of Table 7
-            editRecordPromises.push(e2eBase.relationshipService.createOneToOneRelationship(createdApp, createdApp.tables[e2eConsts.TABLE7], createdApp.tables[e2eConsts.TABLE8], 7));
+            addRelationshipPromises.push(function() {
+                e2eBase.relationshipService.createOneToOneRelationship(createdApp, createdApp.tables[e2eConsts.TABLE7], createdApp.tables[e2eConsts.TABLE8], 7);
+            });
 
             // Table 10 is a child of both Table 7 and Table 9
-            editRecordPromises.push(e2eBase.relationshipService.createOneToOneRelationship(createdApp, createdApp.tables[e2eConsts.TABLE7], createdApp.tables[e2eConsts.TABLE10], 7));
-            editRecordPromises.push(e2eBase.relationshipService.createOneToOneRelationship(createdApp, createdApp.tables[e2eConsts.TABLE9], createdApp.tables[e2eConsts.TABLE10], 8));
-            return Promise.all(editRecordPromises);
+            addRelationshipPromises.push(function() {
+                e2eBase.relationshipService.createOneToOneRelationship(createdApp, createdApp.tables[e2eConsts.TABLE7], createdApp.tables[e2eConsts.TABLE10], 7);
+            });
+            addRelationshipPromises.push(function() {e2eBase.relationshipService.createOneToOneRelationship(createdApp, createdApp.tables[e2eConsts.TABLE9], createdApp.tables[e2eConsts.TABLE10], 8);
+            });
+            // Create table relationship, Table 13(City) is a child of Table 12(State)
+            addRelationshipPromises.push(function() {
+                e2eBase.relationshipService.createOneToOneRelationship(createdApp, createdApp.tables[e2eConsts.TABLE12], createdApp.tables[e2eConsts.TABLE13], 7);
+            });
+
+            // Create table relationship, Table 12(State) is a child of Table 11(Country)
+            addRelationshipPromises.push(function() {
+                e2eBase.relationshipService.createOneToOneRelationship(createdApp, createdApp.tables[e2eConsts.TABLE11], createdApp.tables[e2eConsts.TABLE12], 7);
+            });
+            // Bluebird's promise.each function (executes each promise sequentially)
+            return promise.each(addRelationshipPromises, function(queueItem) {
+                // This is an iterator that executes each Promise function in the array here
+                return queueItem();
+            });
         }).then(function() {
             // Print the generated test data and endpoints
             _createdRecs();
