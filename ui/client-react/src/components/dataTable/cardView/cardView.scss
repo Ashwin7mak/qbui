@@ -128,12 +128,12 @@ $custom-row-card-horizontal-padding: $custom-row-card-padding-left + $custom-row
 
         .rotateDown {
             transition: all 0.25s linear;
-            transform: rotate(90deg);
+            transform: rotate(0deg);
         }
 
         .rotateUp {
             transition: all 0.25s linear;
-            transform: rotate(0deg);
+            transform: rotate(-180deg);
         }
         //margin-top: $margin-spacer;
         .chevron_opened {

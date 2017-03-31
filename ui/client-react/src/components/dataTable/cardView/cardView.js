@@ -94,7 +94,7 @@ let CardView = React.createClass({
         let cardExpander = null;
         if (Object.keys(this.props.data).length >= CardView.MIN_EXPANDABLE_FIELDS) {
             cardExpander = (<div className="card-expander" onClick={this.handleMoreCard}>
-                                <QBicon icon="caret-right" className={"qbPanelHeaderIcon " + (this.state.showMoreCards ? "rotateDown" : "rotateUp")}/>
+                                <QBicon icon="caret-up" className={"qbPanelHeaderIcon " + (this.state.showMoreCards ? "rotateDown" : "rotateUp")}/>
                             </div>);
         }
         return (
