@@ -1,58 +1,9 @@
-import React, {PropTypes} from 'react';
-
-import Locale from '../../locales/locales';
-import HtmlUtils from '../../utils/htmlUtils';
-import {DEFAULT_PAGE_TITLE} from '../../constants/urlConstants';
-import WindowLocationUtils from '../../utils/windowLocationUtils';
-import CommonUrlUtils from '../../../../common/src/commonUrlUtils';
-
 /**
- * # Page Title
- *
- * A component that can alter the page/document title (i.e., the title in the tab at the top of the browser)
- *
- */
-const PageTitle = React.createClass({
-    propTypes: {
-        /**
-         * The new title of the page. If not provided, only the realm and default title will be displayed.
-         * The default title is always appended at the end.
-         */
-        title: PropTypes.string
-    },
+ * The original file in this location has moved to the reuse library.
+ * What remains here is a stub so existing code does not have to change yet.
+ **/
 
-    /**
-     * If there is no context or page title provided, use the realm in the title of the page
-     */
-    addRealm() {
-        let hostname = WindowLocationUtils.getHostname();
-        this.pageTitles.unshift(CommonUrlUtils.getSubdomain(hostname));
-    },
-
-    /**
-     * Updates the page title
-     * @returns {null}
-     */
-    updatePageTitle() {
-        let titleString = this.pageTitles.join(Locale.getMessage('pageTitles.pageTitleSeparator'));
-        HtmlUtils.updatePageTitle(titleString);
-        // This component does not render anything to the page. React requires null is returned.
-        return null;
-    },
-
-    render() {
-        // QuickBase is the default page title
-        this.pageTitles = [DEFAULT_PAGE_TITLE];
-
-        // Add the realm if no title is provided
-        if (!this.props.title || this.props.title === '') {
-            this.addRealm();
-        } else {
-            this.pageTitles.unshift(this.props.title);
-        }
-
-        return this.updatePageTitle();
-    }
-});
+// import the default renaming it to what we want to export
+import PageTitle from '../../../../reuse/client/src/components/pageTitle/pageTitle';
 
 export default PageTitle;

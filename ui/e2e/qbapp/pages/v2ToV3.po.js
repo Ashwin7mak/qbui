@@ -19,7 +19,7 @@
         this.popUpFooter = element(by.id('content')).element(by.className('popupFooter'));
         this.popUpTitle = this.popUpFooter.element(by.className('popupFooterTitle'));
         this.popUpTitleLabel = this.popUpTitle.element(by.className('popupFooterTitleLabel'));
-        this.manageUserAccessToMercuryToggle = this.popUpTitle.element(by.className('iconTableUISturdy-caret-down'));
+        this.manageUserAccessToMercuryToggle = this.popUpTitle.element(by.className('iconUISturdy-caret-down'));
 
         //elements inside popup
         this.popUpPanelTitle = this.popUpFooter.element(by.className('popupFooterMain')).element(by.className('v2v3radioTitle'));

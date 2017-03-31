@@ -22,5 +22,6 @@
         top: calc(50% - #{$font-size-base/2});
         font-size: $font-size-base !important;
         width: 14px !important;
+        cursor: pointer;
     }
 }

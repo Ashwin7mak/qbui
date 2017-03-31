@@ -1,0 +1,12 @@
+// -- Icon Font Constants
+// These should not be used. Instead, the actual classes defined in
+// uiIcons.css should be used directly in the DOM.
+// However, using these is better than sprinkling them throughout the CSS.
+// By storing them here, they are more likely to be updated as the icon font is updated.
+$icon-font-ui-family: 'QuickBaseIconUISturdy';
+$icon-font-ui-class-prefix: 'iconUISturdy-';
+
+// codepoints
+$codepoint-iconUISturdy-check: '\e916';
+$codepoint-iconUISturdy-caret-filled-left: '\e90e';
+

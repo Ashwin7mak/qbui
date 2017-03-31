@@ -2,6 +2,7 @@
  * Created by rbeyer on 3/6/17.
  */
 import React, {PropTypes} from 'react';
+import Locale from '../../../../../reuse/client/src/locales/locale';
 import './appSettingsStage.scss';
 
 class AppSettingsStage extends React.Component {
@@ -9,6 +10,8 @@ class AppSettingsStage extends React.Component {
     constructor(...args) {
         super(...args);
         this.getRoleTotals = this.getRoleTotals.bind(this);
+        this.getAppOwnerSection = this.getAppOwnerSection.bind(this);
+        this.getAppOwnerName = this.getAppOwnerName.bind(this);
     }
 
     getRoleTotals() {
@@ -31,12 +34,38 @@ class AppSettingsStage extends React.Component {
         return usersRoleCount;
     }
 
+    getAppOwnerName() {
+        let appOwner = `${this.props.appOwner.firstName} ${this.props.appOwner.lastName}`;
+        if (this.props.appOwner.email) {
+            let mailTo = `mailto:${this.props.appOwner.email}`;
+            return (<a href={mailTo}>{appOwner}</a>);
+        } else {
+            return (appOwner);
+        }
+    }
+
+    getAppOwnerSection() {
+        let appOwnerTitle = `, ${Locale.getMessage('app.users.manager')}`;
+        let appUsersManagementContent = Locale.getMessage('app.users.content');
+        return (
+            <div className="appOwnerContainer">
+                <div className="appOwnerName">
+                    <div>{this.getAppOwnerName()}{appOwnerTitle}</div>
+                </div>
+                <div className="appUsersManagementContent">
+                    {appUsersManagementContent}
+                </div>
+            </div>
+        );
+    }
+
     render() {
         return (
             <div className="report-content">
                 <div className="left">
                     <div className="content">
                         <div className="stage-showHide-content">
+                            {this.getAppOwnerSection()}
                             <div className="appRolesContent">
                                 {this.getRoleTotals()}
                             </div>
@@ -50,7 +79,8 @@ class AppSettingsStage extends React.Component {
 }
 AppSettingsStage.propTypes = {
     appUsers: PropTypes.object.isRequired,
-    appRoles: PropTypes.array.isRequired
+    appRoles: PropTypes.array.isRequired,
+    appOwner: PropTypes.object.isRequired
 };
 
 export default AppSettingsStage;

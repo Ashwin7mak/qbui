@@ -90,8 +90,8 @@
             }
 
             .glyphicon-chevron-left:before {
-                font-family: "QuickBaseIconUISturdy";
-                content: "\E90B";
+                font-family: $icon-font-ui-family;
+                content: $codepoint-iconUISturdy-caret-filled-left;
             }
 
             /* need to flip the right chevron as we're using the left */
@@ -100,8 +100,8 @@
             }
             /* replace their prev/next bootstrap icons with ours */
             .glyphicon-chevron-right:before {
-                font-family: "QuickBaseIconUISturdy";
-                content: "\E90B";
+                font-family: $icon-font-ui-family;
+                content: $codepoint-iconUISturdy-caret-filled-left; // this seems wrong... but it's right... you'll notice this DOM node is rotated 180 degrees.
             }
 
             tr {
@@ -137,8 +137,8 @@
 
         /* insert our icons */
         th.next:after, th.prev:after {
-            font-family: "QuickBaseIconUISturdy";
-            content: "\E90B";
+            font-family: $icon-font-ui-family;
+            content: $codepoint-iconUISturdy-caret-filled-left;
             font-size: 22px;
             color: $color-black-100;
         }

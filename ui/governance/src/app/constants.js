@@ -10,4 +10,5 @@ export default {
     BASE_GOVERNANCE_URL: `/api/governance/v1`,
 
     USERS               : 'users',
+    CONTEXT              : 'context',
 };

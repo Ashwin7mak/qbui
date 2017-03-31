@@ -1,5 +1,5 @@
 import * as formActions from '../../src/actions/formActions';
-import {editNewRecord, openRecordForEdit, loadForm, createForm, updateForm, __RewireAPI__ as FormActionsRewireAPI} from '../../src/actions/formActions';
+import {loadForm, createForm, updateForm, __RewireAPI__ as FormActionsRewireAPI} from '../../src/actions/formActions';
 import * as UrlConsts from "../../src/constants/urlConstants";
 import * as types from '../../src/actions/types';
 import WindowLocationUtils from '../../src/utils/windowLocationUtils';
@@ -53,66 +53,19 @@ describe('Form Actions', () => {
 
         it('creates an action to indicate form loaded', () => {
 
-            expect(formActions.loadFormSuccess("view", "someData")).toEqual({
+            expect(formActions.loadFormSuccess("view", "someData", 'appId', 'tblId')).toEqual({
                 type: types.LOAD_FORM_SUCCESS,
                 id: "view",
-                formData: "someData"
+                formData: "someData",
+                appId: 'appId',
+                tblId: 'tblId'
             });
         });
     });
 
     describe('saving actions', () => {
-
         it('creates an action to indicate saving a form', () => {
-
-            expect(formActions.savingForm("edit")).toEqual({type: types.SAVE_FORM, id: "edit"});
-        });
-
-        it('creates an action to indicate save form error', () => {
-
-            expect(formActions.saveFormError("edit", "oops")).toEqual({
-                type: types.SAVE_FORM_FAILED,
-                id: "edit",
-                error: "oops"
-            });
-        });
-
-        it('creates an action to indicate form saved', () => {
-
-            expect(formActions.saveFormSuccess("edit", "someData")).toEqual({
-                type: types.SAVE_FORM_SUCCESS,
-                id: "edit"
-            });
-        });
-    });
-
-
-    describe('edit record actions', () => {
-
-        it('creates an action to open record for edit', () => {
-
-            expect(openRecordForEdit(123)).toEqual({
-                type: types.EDIT_REPORT_RECORD,
-                recId: 123,
-            });
-        });
-
-        it('creates an action to edit new record, no nav after save', () => {
-
-            expect(editNewRecord(false)).toEqual({
-                type: types.EDIT_REPORT_RECORD,
-                recId: UrlConsts.NEW_RECORD_VALUE,
-                navigateAfterSave: false
-            });
-        });
-
-        it('creates an action to edit new record, nav after save', () => {
-
-            expect(editNewRecord(true)).toEqual({
-                type: types.EDIT_REPORT_RECORD,
-                recId: UrlConsts.NEW_RECORD_VALUE,
-                navigateAfterSave: true
-            });
+            expect(formActions.saveForm("edit")).toEqual({type: types.SAVE_FORM, id: "edit"});
         });
     });
 
@@ -174,7 +127,9 @@ describe('Form Actions', () => {
                         tableId: formAndRecordResponseData.tableId,
                         appId: formAndRecordResponseData.appId,
                         recordId: '123'
-                    }
+                    },
+                    appId: 'appId',
+                    tblId: 'tblId'
                 }
             ];
             const store = mockStore({});
@@ -202,7 +157,9 @@ describe('Form Actions', () => {
                         appId: formResponseData.appId,
                         recordId: formResponseData.recordId,
                         record: null
-                    }
+                    },
+                    appId: 'appId',
+                    tblId: 'tblId'
                 }
             ];
             const store = mockStore({});
@@ -402,6 +359,17 @@ describe('Form Actions', () => {
         });
     });
 
+    describe('deselectField', () => {
+        it('creates an action that deselects a form element', () => {
+            expect(formActions.deselectField('view', 1)).toEqual({
+                id: 'view',
+                type: types.DESELECT_FIELD,
+                content: {
+                    location: 1
+                }});
+        });
+    });
+
     describe('removeFieldFromForm', () => {
         it('creates an action that will remove a field', () => {
             expect(formActions.removeFieldFromForm('view', 1)).toEqual({
@@ -409,6 +377,39 @@ describe('Form Actions', () => {
                 type: types.REMOVE_FIELD,
                 content: {
                     location: 1
+                }});
+        });
+    });
+
+    describe('keyBoardMoveFieldUp', () => {
+        it('creates an action that will move a field up', () => {
+            expect(formActions.keyboardMoveFieldUp('view', 1)).toEqual({
+                id: 'view',
+                type: types.KEYBOARD_MOVE_FIELD_UP,
+                content: {
+                    location: 1
+                }});
+        });
+    });
+
+    describe('keyboardMoveFieldDown', () => {
+        it('creates an action that will move a field Down', () => {
+            expect(formActions.keyboardMoveFieldDown('view', 1)).toEqual({
+                id: 'view',
+                type: types.KEYBOARD_MOVE_FIELD_DOWN,
+                content: {
+                    location: 1
+                }});
+        });
+    });
+
+    describe('toggleFormBuilderChildrenTabIndex', () => {
+        it('creates an action that update formBuilder children tabindex', () => {
+            expect(formActions.toggleFormBuilderChildrenTabIndex('view', 1)).toEqual({
+                id: 'view',
+                type: types.TOGGLE_FORM_BUILDER_CHILDREN_TABINDEX,
+                content: {
+                    currentTabIndex: 1
                 }});
         });
     });

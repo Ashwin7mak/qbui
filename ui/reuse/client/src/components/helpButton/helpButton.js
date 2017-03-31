@@ -31,7 +31,7 @@ function getHelpWalkme() {
 const ReHelpButton = () => (
     <a className="dropdownToggle globalActionLink" onClick={getHelpWalkme}>
         <Icon icon="help" />
-        <span className={"navLabel"}><I18nMessage message={'globalActions.help'}/></span>
+        <span className="navLabel"><I18nMessage message="globalActions.help" /></span>
     </a>
 );
 

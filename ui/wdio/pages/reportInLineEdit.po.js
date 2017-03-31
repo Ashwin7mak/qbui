@@ -477,7 +477,7 @@
         ////This gives you all the record checkboxes of the report page
         //this.recordCheckBoxes = element.all(by.className('ag-selection-checkbox'));
         //
-        //this.deleteIcon = element(by.className('iconLink icon-delete')).element(by.className('qbIcon iconTableUISturdy-delete'));
+        //this.deleteIcon = element(by.className('iconLink icon-delete')).element(by.className('qbIcon iconUISturdy-delete'));
         //this.successWindow = element(by.className('notification notification-success')).element(by.className('notification-message')).element(by.className('message'));
         //
         //

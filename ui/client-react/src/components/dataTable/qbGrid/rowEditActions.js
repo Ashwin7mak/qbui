@@ -91,7 +91,7 @@ export const RowEditActions = React.createClass({
             addRecordClasses.push('disabled');
 
             let tooltipMessage = 'pageActions.saveAndAddRecordDisabled'; // This can be removed once save and add is working again
-            // let tooltipMessage = 'pageActions.saveAndAddRecord'; // Currently disabled
+            //let tooltipMessage = 'pageActions.saveAndAddRecord'; // Currently disabled
 
             return (
                 <QBToolTip tipId="addRecord" location="bottom" i18nMessageKey={tooltipMessage}>

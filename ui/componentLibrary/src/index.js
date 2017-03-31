@@ -5,6 +5,8 @@ import en from 'intl/locale-data/jsonp/en.js';
 import React from 'react';
 import {render} from 'react-dom';
 import {Router, Route, IndexRoute, IndexRedirect, browserHistory} from 'react-router';
+import AppsBundleLoader from '../../client-react/src/locales/appsBundleLoader';
+import config from '../../client-react/src/config/app.config';
 
 import Nav from '../../client-react/src/components/nav/nav';
 
@@ -18,6 +20,12 @@ import TableHomePageRoute from '../../client-react/src/components/table/tableHom
 
 import ComponentLibraryWrapper from './components/componentLibrary';
 import './assets/componentLibrary.scss';
+
+import HomePage from './pages/home';
+import Colors2Page from './pages/colors2';
+import Colors3Page from './pages/colors3';
+import UiIconFontPage from './pages/uiIconFont';
+import TableIconFontPage from './pages/tableIconFont';
 
 import CheckBoxFieldValueEditorDoc from './docs/checkBoxFieldValueEditor';
 import CheckBoxFieldValueRendererDoc from './docs/checkBoxFieldValueRenderer';
@@ -58,10 +66,19 @@ import SideTrowserBaseDoc from './docs/sideTrowserBase.js';
 // END OF IMPORT STATEMENTS
 // Above comment used for Grunt task. Please do not delete.
 
+// init the localization services
+AppsBundleLoader.changeLocale(config.locale.default);
+
 render((
     <Router history={browserHistory}>
         <Route path="qbase/components" component={ComponentLibraryWrapper}>
-            <IndexRedirect to="qbpanel" />
+            <IndexRedirect to="home" />
+            <Route path="home" component={HomePage} />
+            <Route path="colors2" component={Colors2Page} />
+            <Route path="colors3" component={Colors3Page} />
+            <Route path="uiIconFont" component={UiIconFontPage} />
+            <Route path="tableIconFont" component={TableIconFontPage} />
+
             <Route path="checkBoxFieldValueEditor" component={CheckBoxFieldValueEditorDoc} />
             <Route path="checkBoxFieldValueRenderer" component={CheckBoxFieldValueRendererDoc} />
             <Route path="dateFieldValueEditor" component={DateFieldValueEditorDoc} />

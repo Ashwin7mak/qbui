@@ -10,14 +10,23 @@
     var formsPO = requirePO('formsPage');
 
     var ReportContentPage = Object.create(e2ePageBase, {
+        tableBody: {get: function() {return browser.element('.qbTbody');}},
+        reportsToolBar : {get: function() {return browser.element('.reportToolbar');}},
+        reportFilterSearchBox : {get: function() {
+            return this.reportsToolBar.element('.searchInput');
+        }},
+        clickAndWaitForGrid: {value: function(button) {
+            button.click();
+            this.qbGridContainer.waitForVisible();
+        }},
         //Record add button on stage
         addRecordBtnOnStage : {get: function() {
-            browser.element('.layout-stage .pageActions .iconTableUISturdy-add').waitForVisible();
-            return browser.element('.layout-stage .pageActions .iconTableUISturdy-add');
+            browser.element('.layout-stage .pageActions .iconUISturdy-add').waitForVisible();
+            return browser.element('.layout-stage .pageActions .iconUISturdy-add');
         }},
 
         //edit pencil in report actions tool bar
-        editPencilBtnOnReportActions : {get: function() {return browser.element('.reportActions .actionIcons .iconTableUISturdy-edit');}},
+        editPencilBtnOnReportActions : {get: function() {return browser.element('.reportActions .actionIcons .iconUISturdy-edit');}},
 
         //edit pencil in record actions
         editPencilBtnInRecordActions : {get: function() {return browser.elements('.recordActions .iconActionButton.edit');}},
@@ -56,7 +65,7 @@
         qbGridHeaderContainerEl: {get: function() {return this.qbGridHeaderEl.element('.qbHeader');}},
 
         // List of all field column headers from qbGrid
-        qbGridColHeaderElList: {get: function() {return this.qbGridHeaderContainerEl.elements('.qbHeaderCell.gridHeaderCell');}},
+        qbGridColHeaderElList: {get: function() {return browser.elements('.qbHeaderCell');}},
 
         // qbGrid is divided up into two columns: one is the actions column (pinned on the left) and the second is the record data
         qbGridBodyEl: {get: function() {

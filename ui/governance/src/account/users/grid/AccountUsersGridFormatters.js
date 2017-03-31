@@ -1,4 +1,6 @@
 import moment from 'moment';
+import React from 'react';
+import Icon from '../../../../../reuse/client/src/components/icon/icon';
 
 // Realm/User/Account Flag constants
 const DeactivatedFlag = 0x00000040;
@@ -32,6 +34,20 @@ export const FormatUserStatusText = (hasAppAccess, cellInfo) => {
         return "Paid Seat";
     } else {
         return "No App Access";
+    }
+};
+
+export const FormatUserStatusHTML = (hasAppAccess, cellInfo) => {
+    if (IsDeactivated(cellInfo.rowData)) {
+        return (<span className="accessStatusLabel deactivated"><Icon icon="errorincircle-outline"/> Deactivated</span>);
+    } else if (IsDenied(cellInfo.rowData)) {
+        return (<span className="accessStatusLabel denied"><Icon icon="deactivate"/> Denied</span>);
+    } else if (HasAnySystemPermissions(cellInfo.rowData)) {
+        return (<span className="accessStatusLabel staff"><Icon icon="user"/> QuickBase Staff</span>);
+    } else if (hasAppAccess) {
+        return (<span className="accessStatusLabel paid"><Icon icon="currency-dollar"/> Paid Seat</span>);
+    } else {
+        return (<span className="accessStatusLabel none"><Icon icon="lock"/> No App Access</span>);
     }
 };
 

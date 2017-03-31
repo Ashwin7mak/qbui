@@ -611,7 +611,7 @@
                                 if (responseBodyParsed) {
                                     //  fetch the specified report home page report id..we don't necessarily
                                     //  know if the id value is valid, so fetch it and find out..
-                                    homepageReportId = responseBodyParsed;
+                                    homepageReportId = responseBodyParsed.id;
                                 }
                             }
 

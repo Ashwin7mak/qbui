@@ -4,13 +4,15 @@
     padding-left: 22px;
     padding-top: 30px;
 
-    th {
+    .qbHeaderCell {
         &:first-of-type {
             border-left: 1px solid $grid-column-header-border-color;
         }
     }
 
-    td {
+    .qbCell {
+        padding-top: 6px;
+        padding-bottom: 6px;
         background-color: $color-black-100;
     }
 }

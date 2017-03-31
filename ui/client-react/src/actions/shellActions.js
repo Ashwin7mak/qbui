@@ -85,3 +85,16 @@ export const hideErrorMsgDialog = () => {
         type: types.HIDE_ERROR_MSG_DIALOG
     };
 };
+
+/**
+ * Change the locale
+ *
+ * @param locale
+ * @returns {{type, locale: *}}
+ */
+export const changeLocale = (locale) => {
+    return {
+        type: types.CHANGE_LOCALE,
+        locale
+    };
+};

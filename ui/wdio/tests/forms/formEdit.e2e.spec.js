@@ -12,7 +12,7 @@
     var testApp;
     var recordList;
 
-    describe('Edit a record Via Form Tests :', function() {
+    xdescribe('Edit a record Via Form Tests :', function() {
         /**
          * Setup method. Creates test app then authenticates into the new stack
          */
@@ -31,7 +31,8 @@
             }).catch(function(error) {
                 // Global catch that will grab any errors from chain above
                 // Will appropriately fail the beforeAll method so other tests won't run
-                throw new Error('Error during test setup beforeAll: ' + error.message);
+                browser.logger.error('Error in beforeAll function:' + JSON.stringify(error));
+                return Promise.reject('Error in beforeAll function:' + JSON.stringify(error));
             });
         });
 
@@ -39,7 +40,7 @@
          * Test to Edit a particular record from the GRID edit pencil via form.
          * Fields Tested : text, url, phone, email, numeric, currency, duration, rating, date, dateTime, checkbox and userField.
          */
-        it('Edit a record via record actions edit pencil In a Grid', function() {
+        xit('Edit a record via record actions edit pencil In a Grid', function() {
             //TODO: Intermittent bug with Firefox where scrolling in the form trowser gets stuck
             if (browserName !== 'firefox') {
                 var origRecordCount;
@@ -80,7 +81,7 @@
          * Test to Edit a particular record from the TABLE edit pencil via form.
          * Fields Tested : text, url, phone, email, numeric, currency, duration, rating, date, dateTime, checkbox and userField.
          */
-        it('Edit a record via table actions edit pencil above the table grid', function() {
+        xit('Edit a record via table actions edit pencil above the table grid', function() {
             var origRecordCount;
             var fieldTypes = ['allTextFields', 'allPhoneFields', 'allEmailFields', 'allUrlFields', 'allDurationFields', 'allNumericFields', 'allDateFields', 'allTimeFields', 'allCheckboxFields', 'allUserField'];
 
@@ -118,7 +119,7 @@
          * Test to Edit a particular record from the View Form edit pencil.
          * Fields Tested : text, url, phone, email, numeric, currency, duration, rating, date, dateTime, checkbox and userField.
          */
-        it('Edit a record via View Form edit pencil', function() {
+        xit('Edit a record via View Form edit pencil', function() {
             var actualNumbersArray = ['33.33', '$33.33', '33.33'];
             var expectedNumbersArray;
             var fieldTypes = ['allTextFields', 'allPhoneFields', 'allEmailFields', 'allUrlFields', 'allDurationFields', 'allNumericFields', 'allDateFields', 'allTimeFields', 'allCheckboxFields', 'allUserField'];

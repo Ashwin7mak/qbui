@@ -1,0 +1,170 @@
+@import "../../assets/css/qbVariables";
+
+$navitem-height: 40px;
+$navitem-icon-width: 28px;
+$navitem-secondary-icon-width: 40px;
+$navitem-primary-hover-border: $color-cyan-300;
+
+.simpleNavItem {
+    @mixin showSecondaryNavItemIcon {
+        max-width: $navitem-secondary-icon-width;
+        opacity: 1;
+    }
+
+    width: 100%;
+    display: flex;
+    line-height: $spacing-medium2;
+    padding-left: $spacing-xxx-small;
+    color: $leftnav-items-color;
+    cursor: pointer;
+    position: relative;
+
+    .tipChildWrapper {
+        cursor: pointer;
+        height: $navitem-height;
+    }
+
+    &.navItemPrimaryAction {
+        padding-left: 0;
+        line-height: 20px;
+        border-right: 1px solid $leftnav-brandarea-stroke-color; // This right border is cleared for the last item in standardLeftNav.scss
+        border-top: 1px solid $leftnav-background-color;
+        border-bottom: 1px solid $leftnav-brandarea-stroke-color;
+
+        &:hover {
+            border-top: 1px solid $navitem-primary-hover-border;
+        }
+
+        .navBody.navBodyCollapsed {
+            padding-left: $spacing-xxx-small;
+        }
+    }
+
+    .navBody {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        width: 100%;
+
+        &:not(.primaryNavItem) {
+            height: $navitem-height;
+        }
+
+        &.primaryNavItem {
+            flex-direction: row;
+            flex: 1 auto;
+            justify-content: center;
+            margin-top: $spacing-xxx-small;
+            margin-bottom: $spacing-xxx-small;
+
+            .navBodyContent {
+                flex: 0 auto;
+            }
+        }
+
+        .navBodyContent {
+            flex: 1 auto;
+            display: flex;
+            align-items: center;
+            flex-direction: row;
+            overflow: hidden;
+        }
+    }
+
+    .navItemContent {
+        flex: 1 auto;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+    }
+
+    .navItemIcon, .navItemSecondaryIcon {
+        flex: 0 0 auto; // Don't allow this to shrink so that long navItem titles don't squish the icon
+        font-size: $font-size-large;
+        width: $navitem-icon-width;
+    }
+
+    .navItemSecondaryIcon {
+        position: relative;
+        background-color: transparent;
+        border: 0;
+        width: $navitem-secondary-icon-width;
+
+        &:after {
+            content: "";
+            position: absolute;
+            border-left: 1px solid $leftnav-brandarea-stroke-color;
+            left: 0;
+            height: 24px;
+            top: 9px;
+        }
+    }
+
+    .navItemSecondaryIcon:not(.navItemSecondaryIconTouch) {
+        opacity: 0;
+        max-width: 0;
+        transition: max-width 0.2s, opacity 0.3s;
+    }
+
+    // For a primary action, the secondary action appears to the left and is always visible
+    &.navItemPrimaryAction .navItemSecondaryIcon {
+        opacity: 1;
+        max-width: $navitem-secondary-icon-width;
+
+        // Using position absolute instead of flexbox order: -1, because the actual content needs to be centered
+        // in the full width of the nav item and not pushed to the right because of the icon.
+        // |.<..*.Text....| (with absolute position)
+        // |.<...*.Text...| (with flexbox order -1, notice the text is off-center)
+        position: absolute;
+        left: 0;
+
+        &:after {
+            content: none;
+        }
+    }
+
+    &.navItemSelected {
+        color: $leftnav-item-selected-color;
+
+        &:not(.navItemPrimaryAction):before {
+            content: "";
+            position: absolute;
+            width: 4px;
+            height: 30px;
+            left: 0;
+            top: 6px;
+            border-left: 4px solid $leftnav-item-selected-color;
+        }
+
+        &.navItemPrimaryAction:before {
+            content: "";
+            position: absolute;
+            top: auto;
+            left: auto;
+            bottom: 0;
+            width: 100%;
+            height: 3px;
+            border-bottom: 3px solid $leftnav-table-selected-color;
+        }
+
+        .navItemSecondaryIcon {
+            @include showSecondaryNavItemIcon;
+        }
+    }
+
+    &.navItemDisabled {
+        color: $leftnav-item-disabled-color;
+        pointer-events: none;
+    }
+
+    &:hover {
+        background-color: $leftnav-item-selected-color;
+        color: $left-nav-link-hover-color;
+
+        transition: color 0.3s, opacity 0.3s;
+
+        .navItemSecondaryIcon {
+            @include showSecondaryNavItemIcon;
+        }
+    }
+}

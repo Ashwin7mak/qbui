@@ -130,9 +130,19 @@ const FieldValueRenderer = React.createClass({
                                             />
             );
         case FieldFormats.CHECKBOX_FORMAT:
+            if (typeof this.props.value === 'string') {
+                if (this.props.value.toLowerCase() === 'true') {
+                    this.props.value = true;
+                } else {
+                    /*eslint no-lonely-if:0*/
+                    if (this.props.value.toLowerCase() === 'false') {
+                        this.props.value = false;
+                    }
+                }
+            }
             return (
                     <CheckBoxFieldValueRenderer {...commonProperties}
-                                                value={this.props.value}
+                                                value={_.isBoolean(this.props.value) ? this.props.value : false}
                                                 key={'cbfvr-' + this.props.idKey}
                                                 hideUncheckedCheckbox={this.props.hideUncheckedCheckbox}
                                                 label={this.props.label}
@@ -189,7 +199,7 @@ const FieldValueRenderer = React.createClass({
             return (
                 <DurationFieldValueRenderer {...commonProperties}
                                             value={this.props.value}
-                                            display={this.props.display}
+                                            display={this.props.display + ''}
                                             attributes={this.props.attributes}
                                             includeUnits={this.props.includeUnits}
                                             key={'drfvr-' + this.props.idKey}

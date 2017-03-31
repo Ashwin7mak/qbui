@@ -117,12 +117,12 @@ class ReportService extends BaseService {
      * @param appId
      * @param tableId
      * @param reportId
-     * @param filter
+     * @param params
      * @returns count of all records in the report
      */
-    getReportRecordsCount(appId, tableId, reportId) {
+    getReportRecordsCount(appId, tableId, reportId, params = {}) {
         let url = super.constructUrl(this.API.GET_REPORT_RECORDS_COUNT, [appId, tableId, reportId]);
-        return super.get(url);
+        return super.get(url, {params});
     }
 
     /**
