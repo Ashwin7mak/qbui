@@ -3,7 +3,7 @@ import {PropTypes} from 'react';
 import Icon from '../icon/icon';
 
 // IMPORTS FROM CLIENT REACT
-import {I18nMessage} from '../../../../../client-react/src/utils/i18nMessage';
+import Locale from '../../../../../client-react/src/locales/locales';
 // IMPORTS FROM CLIENT REACT
 
 import './iconChooser.scss';
@@ -120,7 +120,7 @@ class IconChooser extends React.Component {
             <div className={classes.join(' ')}>
                 <div className="topRow">
                     {this.renderIconToggle()}
-                    <div className="iconSearch"><input type="text" value={this.state.filterText} placeholder="Search table icons..." onChange={this.filterChanged} cols="20"/></div>
+                    <div className="iconSearch"><input type="text" value={this.state.filterText} placeholder={Locale.getMessage("iconChooser.searchPlaceholder")} onChange={this.filterChanged} cols="20"/></div>
                 </div>
 
                 <div className="allIcons">

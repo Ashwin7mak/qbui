@@ -115,7 +115,7 @@ class TableCreationPanel extends React.Component {
                          onSelect={this.selectIcon} />
 
             <div className="suggestedIcons">
-                <div>Suggested Icons</div>
+                <div><I18nMessage message="tableCreation.suggestedIconsHeading"/></div>
                 {this.getSuggestedIcons()}
             </div>
         </div>);
