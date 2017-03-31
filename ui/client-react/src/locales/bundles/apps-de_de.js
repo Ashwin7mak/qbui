@@ -1,3 +1,4 @@
+import FieldFormats from '../../utils/fieldFormats';
 /**
  * This bundle contains all the strings needed by the "Apps" functional area.
  * This functional area is for the main app served in client-react at the /qbase/apps route.
@@ -490,32 +491,42 @@ export default {
                 removeField: "Feld aus Form entfernen"
             },
             fields: {
-                // Keys are equal to server constants for field types to make it easier to get these keys
-                FORMULA: "Formel",
+                [FieldFormats.TEXT_FORMAT]: "Text",
+                [FieldFormats.MULTI_LINE_TEXT_FORMAT]: "Langtext",
+                [FieldFormats.TEXT_FORMAT_MULTICHOICE]: "Auswahlliste",
+                [FieldFormats.TEXT_FORMAT_RADIO_BUTTONS]: "Radio Knöpfe",
+                [FieldFormats.TEXT_FORMULA_FORMAT]: "Textformel",
+
+                [FieldFormats.NUMBER_FORMAT]: "Nummer",
+                [FieldFormats.CURRENCY_FORMAT]: "Währung",
+                [FieldFormats.CURRENCY_FORMAT_MULTICHOICE]: "Währung",
+                [FieldFormats.PERCENT_FORMAT]: "Prozentsatz",
+                [FieldFormats.PERCENT_FORMAT_MULTICHOICE]: "Prozentsatz",
+                [FieldFormats.NUMBER_FORMAT_MULTICHOICE]: "Numerische Auswahlliste",
+                [FieldFormats.NUMBER_FORMAT_RADIO_BUTTONS]: "Numeric radio buttons",
+                [FieldFormats.NUMERIC_FORMULA_FORMAT]: "Numerische Formel",
+
+
+                [FieldFormats.DATE_FORMAT]: "Datum",
+                [FieldFormats.DATETIME_FORMAT]: "Time stamp",
+                [FieldFormats.TIME_FORMAT ]: "Zeitstempel",
+                [FieldFormats.DURATION_FORMAT]: "Dauer",
+
+                [FieldFormats.USER_FORMAT]: "Benutzer",
+                [FieldFormats.CHECKBOX_FORMAT]: "Checkbox",
+                [FieldFormats.URL]: "Url",
+                [FieldFormats.EMAIL_ADDRESS]: "Email",
+                [FieldFormats.PHONE_FORMAT]: "Telefon",
+                [FieldFormats.RATING_FORMAT]: "Bewertung",
+                [FieldFormats.RATING_FORMAT_MULTICHOICE]: "Bewertung",
+                [FieldFormats.URL_FORMULA_FORMAT]: "Formel",
+
                 SCALAR: "Scalar",
-                CONCRETE: "Beton",
-                REPORT_LINK: "Berichtslink",
-                SUMMARY: "Zusammenfassung",
-                LOOKUP: "Nachschlagen",
-                //Data types
-                CHECKBOX: "Kontrollkästchen",
-                TEXT: "Text",
-                PHONE_NUMBER: "Telefonnummer",
-                DATE_TIME: "Datum & Uhrzeit",
-                DATE: "Datum",
-                DURATION: "Dauer",
-                TIME_OF_DAY: "Uhrzeit",
-                NUMERIC: "Numerisch",
-                CURRENCY: "Währung",
-                RATING: "Rating",
-                PERCENT: "Prozent",
-                URL: "Url",
-                EMAIL_ADDRESS: "Email",
-                USER: "Benutzer",
-                FILE_ATTACHMENT: "Datei",
-                TEXT_FORMULA: "Textformel",
-                URL_FORMULA: "Url-Formel",
-                NUMERIC_FORMULA: "Numerische Formel"
+                CONCRETE: "Concrete",
+                REPORT_LINK: "Report link",
+                SUMMARY: "Summary",
+                LOOKUP: "Lookup",
+                FILE_ATTACHMENT: "File",
             }
         },
         featureSwitchAdmin: {
