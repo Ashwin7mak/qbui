@@ -4,8 +4,8 @@
 
     display: flex;
     flex-direction: column;
-    border: 1px solid #c7c7c7;
-    background-color: #fff;
+    border: 1px solid $color-black-400;
+    background-color: $color-black-100;
     padding: 5px;
     padding-right: 0;
 
@@ -26,6 +26,7 @@
             }
         }
         .showAllToggle {
+            color: $color-black-700;
             text-align: center;
             margin-right: 12px;
             margin-top: 4px;
@@ -46,13 +47,13 @@
         overflow-y: auto;
 
         .qbIcon {
-            color: #333;
+            color: $color-black-700;
             padding: 4px;
         }
         .qbIcon:hover {
-            background-color: #aaa;
-            color: #fff;
-            border-radius: 3px;
+            background-color: $color-cyan-600;
+            color: $color-black-100;
+            border-radius: $radius-base;
         }
     }
 
