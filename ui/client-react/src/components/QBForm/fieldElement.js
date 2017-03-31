@@ -69,9 +69,9 @@ export const FieldElement = React.createClass({
     },
 
     render() {
-        let fieldDatatypeAttributes = this.props.relatedField && this.props.relatedField.datatypeAttributes ?
+        let relatedField = this.props.relatedField && this.props.relatedField.datatypeAttributes ?
             this.props.relatedField : {};
-        let fieldType = FieldFormats.getFormatType(fieldDatatypeAttributes);
+        let fieldType = FieldFormats.getFormatType(relatedField);
 
         //catch the non-implemented pieces.
         let fieldDisplayValue = this.props.fieldRecord ? this.props.fieldRecord.display : "";
@@ -99,7 +99,7 @@ export const FieldElement = React.createClass({
             fieldElement = <FieldValueEditor type={fieldType}
                                              value={fieldRawValue}
                                              display={fieldDisplayValue}
-                                             attributes={fieldDatatypeAttributes}
+                                             attributes={relatedField}
                                              fieldDef = {relatedField}
                                              indicateRequired={indicateRequiredOnField}
                                              onChange={this.onChange}
@@ -123,7 +123,7 @@ export const FieldElement = React.createClass({
                                                idKey={'fvr-' + this.props.idKey}
                                                value={fieldRawValue}
                                                display={fieldDisplayValue}
-                                               attributes={fieldDatatypeAttributes}
+                                               attributes={relatedField}
                                                includeUnits={true}
                                                fieldDef={this.props.relatedField}
                                                label={FieldUtils.getFieldLabel(this.props.element, this.props.relatedField)}
