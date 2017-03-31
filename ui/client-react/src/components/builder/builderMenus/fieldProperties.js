@@ -2,6 +2,7 @@ import React, {PropTypes} from 'react';
 import {connect} from 'react-redux';
 import TextFieldValueEditor from '../../fields/textFieldValueEditor';
 import CheckBoxFieldValueEditor from '../../fields/checkBoxFieldValueEditor';
+import {updateField} from '../../../actions/fieldsActions';
 import './fieldProperties.scss';
 
 const mapStateToProps = (state, ownProps) => {
@@ -10,18 +11,15 @@ const mapStateToProps = (state, ownProps) => {
     let selectedField = (_.has(currentForm, 'selectedFields') ? currentForm.selectedFields : []);
     return {
         selectedField: (selectedField.length === 1 ? selectedField[0] : null),
-        form: state.forms[0]
+        form: state.forms[0],
+        fields: state.fields
     };
 };
 
 const mapDispatchToProps = dispatch => {
     return {
-        loadForm(appId, tableId, reportId, formType, recordId) {
-            return dispatch(loadForm(appId, tableId, reportId, formType, recordId));
-        },
-
-        updateFieldProps(newValue) {
-            return false;
+        updateField: (field) => {
+            dispatch(updateField(field));
         }
     };
 };
@@ -37,53 +35,57 @@ let FieldProperties = React.createClass({
         );
     },
 
-    createTextPropertyContainer(fieldId, propertyTitle, propertyValue) {
+    createTextPropertyContainer(propertyTitle, propertyValue) {
         return (
             <div className="fieldPropertyContainer">
                 <div className="textPropertyTitle">{propertyTitle}</div>
                 <TextFieldValueEditor value={propertyValue}
                                       classes="textPropertyValue"
                                       inputType="text"
+                                      onChange={(newValue) => this.updateFieldProps(newValue, 'name')}
                 />
             </div>
         );
     },
 
-    createCheckBoxPropertyContainer(fieldId, propertyTitle, propertyValue) {
+    createCheckBoxPropertyContainer(propertyTitle, propertyValue) {
         return (
             <div className="checkboxPropertyContainer">
                 <CheckBoxFieldValueEditor value={propertyValue}
                                           label={propertyTitle}
-                                          onChange={this.props.updateFieldProps}
+                                          onChange={(newValue) => this.updateFieldProps(newValue, 'required')}
                 />
             </div>
         );
     },
 
-    createNameProperty(field) {
-        return (this.createTextPropertyContainer(field.id, "Name", field.name));
+    createNameProperty(name) {
+        return (this.createTextPropertyContainer("Name", name));
     },
 
-    createRequiredProperty(field) {
-        return (this.createCheckBoxPropertyContainer(field.id, "Must be filled in", field.required));
+    createRequiredProperty(required) {
+        return (this.createCheckBoxPropertyContainer("Must be filled in", required));
+    },
+
+    updateFieldProps(newValue, propertyName) {
+        let field = this.getField();
+        field[propertyName] = newValue;
+        this.props.updateField(field);
     },
 
     getField() {
-        if (this.props.selectedField) {
-            let duder = this.props.selectedField.elementIndex;
-            return this.props.form.formData.fields[duder + 5];
-        } else {
-            return null;
-        }
+        /*return (this.props.fields.length !== 0 && this.props.selectedField) ?
+            this.props.fields[0].fields.fields.data[this.props.selectedField.elementIndex + 5] : null;*/
+        return this.props.selectedField ? this.props.form.formData.fields[this.props.selectedField.elementIndex + 5] : null;
     },
 
     render() {
         let field = this.getField();
-        return ( field ?
+        return (field ?
             <div className="fieldPropertiesContainer">
                 {this.createPropertiesTitle(field.name)}
-                {this.createNameProperty(field)}
-                {this.createRequiredProperty(field)}
+                {this.createNameProperty(field.name)}
+                {this.createRequiredProperty(field.required)}
             </div> : <div className="fieldPropertiesContainer"></div>
         );
     }

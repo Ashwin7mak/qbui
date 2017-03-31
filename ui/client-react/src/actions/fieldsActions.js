@@ -26,6 +26,13 @@ function event(app, tbl, type, content) {
     };
 }
 
+export const updateField = (field) => {
+    return {
+        field,
+        type: types.UPDATE_FIELD
+    };
+};
+
 export const loadFields = (appId, tblId) => {
     // we're returning a promise to the caller (not a Redux action) since this is an async action
     // (this is permitted when we're using redux-thunk middleware which invokes the store dispatch)

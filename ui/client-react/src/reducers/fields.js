@@ -1,6 +1,5 @@
 import * as types from '../actions/types';
 import _ from 'lodash';
-import constants from '../../../common/src/constants';
 
 const fields = (state = [], action) => {
 
@@ -62,10 +61,19 @@ const fields = (state = [], action) => {
         });
         return newState;
     }
+    case types.UPDATE_FIELD : {
+        return {
+            ...state,
+            [action.field.id]: {...action.field, isPendingEdits: true}
+        };
+    }
+
     default:
         return state;
     }
 
 };
+
+export const getField = (state, id) => state.fields[id];
 
 export default fields;

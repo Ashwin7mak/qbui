@@ -40,6 +40,7 @@ export const CHANGE_LOCALE = 'CHANGE_LOCALE';
 export const LOAD_FIELDS = 'LOAD_FIELDS';
 export const LOAD_FIELDS_SUCCESS = 'LOAD_FIELDS_SUCCESS';
 export const LOAD_FIELDS_ERROR = 'LOAD_FIELDS_ERROR';
+export const UPDATE_FIELD = 'UPDATE_FIELD';
 
 //  ******** Record actions ********
 export const OPEN_RECORD = 'OPEN_RECORD';
