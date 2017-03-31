@@ -6,9 +6,9 @@ var config = {
             browserName     : 'chrome',
             version: '55.0',
             tunnelIdentifier: process.env.ENV_TUNNEL_NAME,
-            name            : process.env.SAUCE_JOB_NAME + '_OSX_Chrome',
-            build           : 'Jenkins Build #: ' + process.env.BUILD_NUMBER,
-            tags            : [process.env.SAUCE_JOB_NAME + '_OSX_Chrome'],
+            //name            : process.env.SAUCE_JOB_NAME + '_OSX_Chrome',
+            build           : 'WebdriverIO Jenkins Try Build #: ' + process.env.BUILD_NUMBER,
+            tags            : [process.env.SAUCE_JOB_NAME + '_OSX_Chrome', 'tryBuild'],
             screenResolution : '2048x1536',
             //Timeout in seconds for Sauce Labs to wait for another command (bumped this for sleeps in tests)
             idleTimeout: '180',

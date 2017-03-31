@@ -19,8 +19,8 @@ exports.config = {
         logger          : console.log,
         // Uncomment this if you are running Sauce against your local dev
         //dns             : '127.0.0.1',
-        // Read in the env var set the by the Jenkins job to make the port unique
-        port            : 4400 + Number(process.env.EXECUTOR_NUMBER)
+        // Use a random int to make the port unique between Jenkins jobs
+        port            : 4400 + (Math.random() * (100 - 1) + 1)
     },
     //
     //
