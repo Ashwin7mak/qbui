@@ -85,10 +85,6 @@ class IconChooser extends React.Component {
         // find all tags (sets of icons by name) containing the search text
         const matchedTags = this.props.iconsByTag.filter((tagToIcons) => tagToIcons.tag.toLowerCase().indexOf(text) !== -1);
 
-        if (!matchedTags) {
-            return false;
-        }
-
         // filter matches if any tag matching the filter text contains the current icon
         return matchedTags.find((taggedIcons) => taggedIcons.icons.find((taggedIcon) => taggedIcon === icon));
     }
@@ -136,6 +132,10 @@ class IconChooser extends React.Component {
 
 IconChooser.propTypes = {
     /**
+     * additional classes
+     */
+    classes: PropTypes.string,
+    /**
      * current icon name
      */
     selectedIcon: PropTypes.string.isRequired,
@@ -170,6 +170,10 @@ IconChooser.propTypes = {
         tag: React.PropTypes.string,
         icons: PropTypes.arrayOf(PropTypes.string)
     }))
+};
+
+IconChooser.defaultProps = {
+    iconsByTag: []
 };
 
 export default IconChooser;
