@@ -1,262 +1,225 @@
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
 import ReactDOM from 'react-dom';
-import ConnectedRecordTrowser, {__RewireAPI__ as RecordTrowserRewireAPI} from '../../src/components/record/recordTrowser';
+import {__RewireAPI__ as RecordTrowserRewireAPI} from '../../src/components/record/recordTrowser';
 import {RecordTrowser} from '../../src/components/record/recordTrowser';
+import RecordTrowserStore from '../../src/components/record/recordTrowser';
+import {UNSAVED_RECORD_ID} from '../../src/constants/schema';
 
 import Promise from 'bluebird';
 import {Provider} from "react-redux";
 import configureMockStore from 'redux-mock-store';
 import {hideErrorMsgDialog} from '../../src/actions/shellActions';
+import {createRecord} from '../../src/actions/recordActions';
 
-const RecordMock = React.createClass({
-    render: function() {
-        return (
-            <div className="record">test</div>
-        );
-    }
-});
+import {mount} from 'enzyme';
 
+const appId = '1';
+const tblId = '2';
+const rptId = '3';
+const recId = '4';
+const prevId = '1';
+const nextId = '20';
 
 const mockStore = configureMockStore();
-let initialState = {};
 let store = {};
 
 describe('RecordTrowser functions', () => {
-    'use strict';
 
-    let flux = {
-        actions: {
-            recordPendingEditsCommit() {},
-            recordPendingEditsCancel() {},
-            saveRecord() {return Promise.resolve({});},
-            saveNewRecord() {return Promise.resolve({});},
-            editNextRecord() {},
-            editPreviousRecord() {},
-            openRecordForEdit() {}
+
+    let obj = {
+        recId: recId
+    };
+    let props = {
+        appId: appId,
+        tblId: tblId,
+        rptId: rptId,
+        recId: recId,
+        viewingRecordId: null,
+        visible: true,
+        editForm: {},
+        errorPopupHidden: true,
+        onHideTrowser: () => {},
+        saveForm: (formType) => {},
+        saveFormComplete: (formType) => {},
+        syncForm: (formType) => {},
+        hideErrorMsgDialog: () => {},
+        showErrorMsgDialog: () => {},
+        openRecord: (rec, next, prev) => {},
+        editRecordCancel: (app, tbl, rec) => {},
+        dispatch: (ev) => Promise.resolve(obj),
+        reportData: {
+            appId: appId,
+            tblId: tblId,
+            rptId: rptId,
+            data: {
+                keyField: {
+                    name: 'recordId'
+                },
+                filteredRecords: [
+                    {recordId: {value: prevId}},
+                    {recordId: {value: recId}},
+                    {recordId: {value: nextId}}
+                ]
+            }
         }
     };
+    var mockWindowUtils = {
+        pushWithQuery: function() {},
+        pushWithoutQuery: function() {}
+    };
 
+    var MockRecordComponent = React.createClass({
+        render: function() {
+            return <div>MockRecordComponent</div>;
+        }
+    });
 
-    let component;
-
+    const storeContent = {
+        record: [{
+            pendEdits: {
+                hasAttemptedSave: true,
+                isPendingEdit: true,
+                recordChanges: {},
+                editErrors: {
+                    errors: [{id: 9, invalidMessage: "error message #1", def: {fieldName: "test field"}}]
+                }
+            },
+            id: recId, recId: recId, nextRecordId: nextId, previousRecordId: prevId
+        }],
+        shell: {
+            errorPopupHidden: false
+        }
+    };
     beforeEach(() => {
-        store = mockStore(initialState);
-        RecordTrowserRewireAPI.__Rewire__('Record', RecordMock);
+        //  initialize the store to empty
+        store = mockStore({});
+        spyOn(mockWindowUtils, 'pushWithQuery').and.callThrough();
+        spyOn(mockWindowUtils, 'pushWithoutQuery').and.callThrough();
+        RecordTrowserRewireAPI.__Rewire__('WindowLocationUtils', mockWindowUtils);
+        // have to mock Record component as it requires redux store to be injected and don't want to have to
+        // always inject a provider when testing certain recordTrowser component functionality
+        RecordTrowserRewireAPI.__Rewire__('Record', MockRecordComponent);
 
-        spyOn(flux.actions, 'recordPendingEditsCommit');
-        spyOn(flux.actions, 'recordPendingEditsCancel');
-        spyOn(flux.actions, 'saveRecord').and.callThrough();
-        spyOn(flux.actions, 'saveNewRecord').and.callThrough();
-        spyOn(flux.actions, 'editNextRecord');
-        spyOn(flux.actions, 'editPreviousRecord');
-        spyOn(flux.actions, 'openRecordForEdit');
+        spyOn(props, 'dispatch').and.callThrough();
+        spyOn(props, 'onHideTrowser').and.callThrough();
+        spyOn(props, 'saveForm').and.callThrough();
+        spyOn(props, 'saveFormComplete').and.callThrough();
+        spyOn(props, 'syncForm').and.callThrough();
+        spyOn(props, 'hideErrorMsgDialog').and.callThrough();
+        spyOn(props, 'showErrorMsgDialog').and.callThrough();
+        spyOn(props, 'openRecord').and.callThrough();
+        spyOn(props, 'editRecordCancel').and.callThrough();
     });
 
     afterEach(() => {
+        RecordTrowserRewireAPI.__ResetDependency__('WindowLocationUtils');
         RecordTrowserRewireAPI.__ResetDependency__('Record');
-
-        flux.actions.recordPendingEditsCommit.calls.reset();
-        flux.actions.recordPendingEditsCancel.calls.reset();
-        flux.actions.saveRecord.calls.reset();
-        flux.actions.saveNewRecord.calls.reset();
-        flux.actions.editNextRecord.calls.reset();
-        flux.actions.editPreviousRecord.calls.reset();
-        flux.actions.openRecordForEdit.calls.reset();
+        mockWindowUtils.pushWithQuery.calls.reset();
+        mockWindowUtils.pushWithoutQuery.calls.reset();
+        props.dispatch.calls.reset();
+        props.onHideTrowser.calls.reset();
+        props.saveForm.calls.reset();
+        props.saveFormComplete.calls.reset();
+        props.syncForm.calls.reset();
+        props.hideErrorMsgDialog.calls.reset();
+        props.showErrorMsgDialog.calls.reset();
+        props.openRecord.calls.reset();
+        props.editRecordCancel.calls.reset();
     });
 
     it('test render of loading component', () => {
-
-        component = TestUtils.renderIntoDocument(<Provider store={store}><ConnectedRecordTrowser flux={flux} visible={true}/></Provider>);
-
+        let component = TestUtils.renderIntoDocument(<RecordTrowser {...props}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
-
     });
 
-    it('test cancelling the record trowser', () => {
-
-        component = TestUtils.renderIntoDocument(
-            <Provider store={store}>
-            <ConnectedRecordTrowser
-                pendEdits={{recordChanges: {}}}
-                flux={flux}
-                recId={"1"}
-                visible={true}
-                errorPopupHidden={true}
-                onHideTrowser={()=>{}}
-            />
-            </Provider>
-        );
+    it('test render of loading component via connect', () => {
+        let component = TestUtils.renderIntoDocument(<Provider store={store}><RecordTrowserStore {...props}/></Provider>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
-
-        const closeIcon = TestUtils.findRenderedDOMComponentWithClass(component, "iconUISturdy-close");
-        TestUtils.Simulate.click(closeIcon);
-
-        expect(flux.actions.recordPendingEditsCancel).toHaveBeenCalled();
     });
 
-    it('test saving new record in the trowser', () => {
-        component = TestUtils.renderIntoDocument(
-            <Provider store={store}>
-                <ConnectedRecordTrowser editForm={{formData: {}}} pendEdits={{isPendingEdit:true, recordChanges: {}}} flux={flux} recId={null} visible={true}/>
-            </Provider>);
+    it('test cancelling from the record trowser', () => {
+        let wrapper = mount(<RecordTrowser {...props}/>);
+        const closeIcon = wrapper.find('.iconUISturdy-close');
+        closeIcon.simulate('click');
 
-        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
-
-        let saveButton = ReactDOM.findDOMNode(component).querySelectorAll(".saveOrCancelFooter .rightIcons .btn");
-
-        expect(saveButton.length).toBe(2);
-        TestUtils.Simulate.click(saveButton[0]);
-
-        expect(flux.actions.saveNewRecord).toHaveBeenCalled();
+        expect(props.editRecordCancel).toHaveBeenCalled();
+        expect(mockWindowUtils.pushWithoutQuery).toHaveBeenCalled();
+        expect(props.onHideTrowser).toHaveBeenCalled();
     });
 
-    it('test saving existing record in the trowser', () => {
-        component = TestUtils.renderIntoDocument(
-            <Provider store={store}>
-                <ConnectedRecordTrowser editForm={{formData: {}}} pendEdits={{isPendingEdit:true, recordChanges: {}}} flux={flux} recId={"1"} visible={true}/>
-            </Provider>);
+    let saveButtonTestCases = [
+        {name:'test click of save button for new record from trowser', recId:UNSAVED_RECORD_ID, clickSave:true, clickSaveAndNext: false},
+        {name:'test click of save and add button for new record from trowser', recId:UNSAVED_RECORD_ID, clickSave:false, clickSaveAndNext: true},
+        {name:'test click of save button for existing record from trowser', recId:recId, clickSave:true, clickSaveAndNext: false},
+        {name:'test click of save and next button for existing record from trowser', recId:recId, clickSave:false, clickSaveAndNext: true}
+    ];
+    saveButtonTestCases.forEach(testCase => {
+        it(testCase.name, () => {
+            let wrapper = mount(<RecordTrowser {...props} recId={testCase.recId}/>);
 
-        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+            //  should be 2 buttons
+            const buttons = wrapper.find('.saveOrCancelFooter .rightIcons .btn');
+            expect(buttons.length).toBe(2);
 
-        let saveButton = ReactDOM.findDOMNode(component).querySelectorAll(".saveOrCancelFooter .rightIcons .btn");
-        expect(saveButton.length).toBe(1);
+            // get button based on test requirement
+            const button = testCase.clickSaveAndNext ? buttons.first() : buttons.last();
 
-        TestUtils.Simulate.click(saveButton[0]);
-
-        expect(flux.actions.saveRecord).toHaveBeenCalled();
+            //  click the button
+            button.simulate('click');
+            expect(props.saveForm).toHaveBeenCalled();
+            expect(props.dispatch).toHaveBeenCalledWith(jasmine.any(Function));
+        });
     });
 
-    it('test saving new record which has server side error in the trowser', () => {
+    let errorValidationTestCases = [
+        {name:'test saving new record that throws a validation error', recId:UNSAVED_RECORD_ID},
+        {name:'test updating a record that throws a validation error', recId:recId}
+    ];
+    errorValidationTestCases.forEach(testCase => {
+        it(testCase, () => {
+            let reject = function(ev) {
+                return Promise.reject();
+            };
 
-        component = TestUtils.renderIntoDocument(<Provider store={store}><ConnectedRecordTrowser editForm={{formData: {}}} pendEdits={{isPendingEdit:true, recordChanges: {}, editErrors: {errors: [{id: 9, invalidMessage: "error message #1", def: {fieldName: "test field"}}]}}} flux={flux} recId={null} visible={true}/></Provider>);
+            //  override the props.recId and props.dispatch
+            let wrapper = mount(<RecordTrowser {...props} recId={testCase.recId} dispatch={reject} shell={storeContent.shell} record={storeContent.record}/>);
+            const button = wrapper.find('.saveOrCancelFooter .rightIcons .btn').last();
+            button.simulate('click');
 
-        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+            let errorMessageDialog = wrapper.find(".qbErrorMessage");
+            expect(errorMessageDialog.length).toBe(1);
 
-        let errorMessageDialog = ReactDOM.findDOMNode(component).querySelectorAll(".qbErrorMessage");
-        expect(errorMessageDialog.length).toBe(1);
+            // alert button to display
+            let errorMessageAlertIcon = wrapper.find(".saveOrCancelFooter .rightIcons .saveAlertButton");
+            expect(errorMessageAlertIcon.length).toBe(1);
+
+            //  the popup error message window should be displayed...click close button
+            let errorMessageCloseButton = wrapper.find(".qbErrorMessageHeader .rightIcons .btn").first();
+            errorMessageCloseButton.simulate('click');
+            expect(props.hideErrorMsgDialog).toHaveBeenCalled();
+        });
     });
 
-    it('test saving existing record which has server side error in the trowser', () => {
+    it('test navigate to previous record', () => {
+        let wrapper = mount(<RecordTrowser {...props} record={storeContent.record}/>);
+        const closeIcon = wrapper.find('.iconActionButton .prevRecord');
+        closeIcon.simulate('click');
 
-        component = TestUtils.renderIntoDocument(<Provider store={store}><ConnectedRecordTrowser editForm={{formData: {}}} pendEdits={{isPendingEdit:true, recordChanges: {}, editErrors: {errors: [{id: 9, invalidMessage: "error message #1", def: {fieldName: "test field"}}]}}} flux={flux} recId={"1"} visible={true}/></Provider>);
-
-        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
-
-        let errorMessageDialog = ReactDOM.findDOMNode(component).querySelectorAll(".qbErrorMessage");
-        expect(errorMessageDialog.length).toBe(1);
+        //  open previousRecId (1) ... so next will be recId(4) and previous will be undefined
+        expect(props.openRecord).toHaveBeenCalledWith(prevId, recId, null);
+        expect(mockWindowUtils.pushWithQuery).toHaveBeenCalled();
     });
 
-    it('test saving record which has server side errors, and error state icon displayed in footer section', () => {
-        component = TestUtils.renderIntoDocument(<Provider store={store}><ConnectedRecordTrowser editForm={{formData: {}}} pendEdits={{isPendingEdit:true, hasAttemptedSave: true, recordChanges: {}, editErrors: {errors: [{id: 9, invalidMessage: "error message #1", def: {fieldName: "test field"}}]}}} flux={flux} recId={"1"} visible={true}/></Provider>);
+    it('test navigate to next record', () => {
+        let wrapper = mount(<RecordTrowser {...props} record={storeContent.record}/>);
+        const closeIcon = wrapper.find('.iconActionButton .nextRecord');
+        closeIcon.simulate('click');
 
-        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
-
-        let errorMessageAlertIcon = ReactDOM.findDOMNode(component).querySelectorAll(".saveOrCancelFooter .rightIcons .saveAlertButton");
-        expect(errorMessageAlertIcon.length).toBe(1);
+        //  open nextRecId (20) ... so next will be undefined and previous will be recId(4)
+        expect(props.openRecord).toHaveBeenCalledWith(nextId, null, recId);
+        expect(mockWindowUtils.pushWithQuery).toHaveBeenCalled();
     });
 
-    it('does not display the error icon if there is a client-side validation error, but the user has not attempted to save the record', () => {
-        component = TestUtils.renderIntoDocument(<Provider store={store}><ConnectedRecordTrowser editForm={{formData: {}}} pendEdits={{isPendingEdit:true, hasAttemptedSave: false, recordChanges: {}, editErrors: {errors: [{id: 9, invalidMessage: "error message #1", def: {fieldName: "test field"}}]}}} flux={flux} recId={"1"} visible={true}/></Provider>);
-
-        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
-
-        let errorMessageAlertIcon = ReactDOM.findDOMNode(component).querySelectorAll(".saveOrCancelFooter .rightIcons .saveAlertButton");
-        expect(errorMessageAlertIcon.length).toBe(0);
-    });
-
-    it('test dismiss error message popup in trowser', () => {
-
-        const form = {editFormData: {}};
-
-        component = TestUtils.renderIntoDocument(
-            <Provider store={store}>
-                <ConnectedRecordTrowser form={form} pendEdits={{isPendingEdit:true, recordChanges: {}, editErrors: {errors: [{id: 9, invalidMessage: "error message #1", def: {fieldName: "test field"}}]}}} flux={flux} recId={null} visible={true}/>
-            </Provider>);
-        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
-
-        let errorMessageDialog = ReactDOM.findDOMNode(component).querySelectorAll(".qbErrorMessage");
-        expect(errorMessageDialog.length).toBe(1);
-
-        let errorMessageCloseButton = ReactDOM.findDOMNode(component).querySelectorAll(".qbErrorMessageHeader .rightIcons .btn");
-        expect(errorMessageCloseButton.length).toBe(1);
-
-        TestUtils.Simulate.click(errorMessageCloseButton[0]);
-        expect(store.getActions()[0]).toEqual(hideErrorMsgDialog());
-    });
-
-    it('test navigateToNewRecord in the trowser', () => {
-
-        const form = {editFormData: {}};
-
-        let reportData = {
-            navigateAfterSave: true,
-            appId:1,
-            tblId:2,
-            rptId:3
-        };
-        let routerList = [];
-        let newRecId  = "abracadabra";
-        component = TestUtils.renderIntoDocument(<RecordTrowser
-            flux={flux}
-            router={routerList} recId={"1"} reportData={reportData} visible={true}/>);
-
-        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
-
-        component.navigateToNewRecord(newRecId);
-
-        expect(routerList.length).toEqual(1);
-        expect(routerList[0].indexOf(newRecId)).not.toEqual(-1);
-    });
-
-    it('test nextRecord in the trowser', () => {
-
-        const form = {editFormData: {}};
-
-        let reportData = {
-            appId:1,
-            tblId:2,
-            rptId:3,
-            nextEditRecordId : 4
-        };
-        let routerList = [];
-        let newRecId  = "abracadabra";
-        component = TestUtils.renderIntoDocument(<RecordTrowser
-            flux={flux}
-            openRecordForEdit={flux.actions.openRecordForEdit}
-            router={routerList} recId={"1"} reportData={reportData} visible={true}/>);
-
-        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
-
-        component.nextRecord();
-
-        expect(flux.actions.editNextRecord).toHaveBeenCalled();
-        expect(flux.actions.openRecordForEdit).toHaveBeenCalled();
-    });
-
-    it('test previousRecord in the trowser', () => {
-
-        const form = {editFormData: {}};
-
-        let reportData = {
-            appId:1,
-            tblId:2,
-            rptId:3,
-            nextEditRecordId : 4
-        };
-        let routerList = [];
-        let newRecId  = "abracadabra";
-        component = TestUtils.renderIntoDocument(<RecordTrowser
-            flux={flux}
-            openRecordForEdit={flux.actions.openRecordForEdit}
-            router={routerList} recId={"1"} reportData={reportData} visible={true}/>);
-
-        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
-
-        component.previousRecord();
-
-        expect(flux.actions.editPreviousRecord).toHaveBeenCalled();
-        expect(flux.actions.openRecordForEdit).toHaveBeenCalled();
-    });
 
 });

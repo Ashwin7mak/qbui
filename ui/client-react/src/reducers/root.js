@@ -1,20 +1,26 @@
 import {combineReducers} from 'redux';
-import shell from './shell';
+
+import fields from './fields';
 import forms from './forms';
-import reports from './reports';
+import record from './record';
+import report from './report';
+import search from './search';
+import shell from './shell';
 import featureSwitches from './featureSwitches';
 import tableCreation from './tableCreation';
 import animation from './animation';
+import embeddedReports from './embeddedReports';
 
 // combine individual reducers into a single root reducer (qbui)
-
-// maps state keys to reducers
 export default combineReducers({
     animation,
     featureSwitches,
-    shell,
+    fields,
     forms,
-    reports,
-    tableCreation
+    record,
+    report,
+    search,
+    shell,
+    tableCreation,
+    embeddedReports
 });
-

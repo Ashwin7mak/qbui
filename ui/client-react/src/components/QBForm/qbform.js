@@ -301,6 +301,7 @@ let QBForm = React.createClass({
 
         let relatedField = this.getRelatedField(FormFieldElement.fieldId);
         let fieldRecord = this.getFieldRecord(relatedField);
+        let recId = _.has(this.props.formData, 'recordId') ? this.props.formData.recordId : null;
 
         //if the form prop calls for element to be required update fieldDef accordingly
         if (relatedField) {
@@ -335,6 +336,7 @@ let QBForm = React.createClass({
                   isInvalid={validationStatus.isInvalid}
                   invalidMessage={validationStatus.invalidMessage}
                   appUsers={this.props.appUsers}
+                  recId={recId}
               />
             </div>
         );
@@ -384,6 +386,8 @@ let QBForm = React.createClass({
                     childTableName={childTableName}
                     detailKeyFid={_.get(relationship, "detailFieldId")}
                     detailKeyValue={detailKeyValue}
+                    type={ReferenceElement.type}
+                    appUsers={this.props.appUsers}
                 />
             </div>
         );

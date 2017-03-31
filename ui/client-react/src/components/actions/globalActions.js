@@ -1,24 +1,21 @@
 import React from 'react';
-import Fluxxor from "fluxxor";
 import DefaultTopNavGlobalActions from '../../../../reuse/client/src/components/topNav/defaultTopNavGlobalActions';
-
-let FluxMixin = Fluxxor.FluxMixin(React);
+import {changeLocale} from '../../actions/shellActions';
+import {connect} from 'react-redux';
 
 const GlobalActions = React.createClass({
-    mixins: [FluxMixin],
 
     changeLocale: function(locale) {
-        let flux = this.getFlux();
-        flux.actions.changeLocale(locale);
+        this.props.dispatch(changeLocale(locale));
     },
 
     render() {
         return <DefaultTopNavGlobalActions
+            {...this.props}
             changeLocale={this.changeLocale}
             shouldOpenMenusUp={this.props.position === 'left'}
-            {...this.props}
         />;
     }
 });
 
-export default GlobalActions;
+export default connect()(GlobalActions);

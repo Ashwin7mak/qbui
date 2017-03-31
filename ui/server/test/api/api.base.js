@@ -115,11 +115,6 @@
                 methodLess = baseUrl.replace(HTTP, '');
             }
 
-            // Need to use the right EE port based on where this is used (either locally or in CI)
-            // Set eeHostPort in your IntelliJ config env vars to run locally
-            methodLess = methodLess.replace('9001', process.env.eeHostPort || '8081');
-
-
             log.debug('baseUrl: ' + baseUrl + ' methodLess: ' + methodLess);
             //If there is no subdomain, hit the javaHost directly and don't proxy through the node server
             //This is required for actions like ticket creation and realm creation
@@ -377,11 +372,11 @@
                             } else {
                                 // We need to handle if we get an error back from the network call (for example a 'ECONNREFUSED 127.0.0.1:8081' error)
                                 // Or if we get an API response back but with a non 200 status code
-                                var errorMsg = error ? error : '';
+                                var errorMsg = error ? JSON.stringify(error) : '';
                                 var responseMsg = response ? 'Response statusCode: ' + response.statusCode + ', body: ' + response.body : '';
 
                                 // Nice logging for Node output
-                                log.error('Network request failed, no retries left or an unsupported error for retry found');
+                                log.error('Network request failed, no retries left or an unsupported error for retry found ' + JSON.stringify(opts));
                                 log.error(`Unknown failure mode. ${errorMsg} ${responseMsg}`);
 
                                 // Return whatever kind of object we get back for the test frameworks to do validation with

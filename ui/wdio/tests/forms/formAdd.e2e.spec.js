@@ -9,7 +9,7 @@
     var ReportInLineEditPO = requirePO('reportInLineEdit');
 
 
-    describe('Add a record Via Form Tests : ', function() {
+    xdescribe('Add a record Via Form Tests : ', function() {
         var realmName;
         var realmId;
         var testApp;
@@ -50,7 +50,7 @@
          * Test to add a record via form.
          * Fields Tested : text, url, phone, email, numeric, currency, duration, rating, date, dateTime, checkbox and userField.
          */
-        it('Add a record via form', function() {
+        xit('Add a record via form', function() {
             var origRecordCount;
             var fieldTypes = ['allTextFields', 'allPhoneFields', 'allEmailFields', 'allUrlFields', 'allDurationFields', 'allNumericFields', 'allDateFields', 'allTimeFields', 'allCheckboxFields', 'allUserField'];
 

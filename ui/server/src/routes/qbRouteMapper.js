@@ -794,7 +794,7 @@
         perfLog.init('Fetch Report records count', {req:filterNodeReq(req)});
 
         processRequest(req, res, function(req, res) {
-            reportsApi.fetchReportRecordsCount(req).then(
+            reportsApi.fetchReportCount(req).then(
                 function(response) {
                     res.send(response);
                     logApiSuccess(req, response, perfLog, 'Fetch Report records count');
@@ -849,7 +849,7 @@
      * @returns {*}
      */
     function fetchReportInvokeResults(req, res) {
-        fetchReport(req, res, false, false);
+        fetchReport(req, res, true, false);
     }
 
     /**

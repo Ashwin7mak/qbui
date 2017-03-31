@@ -5,6 +5,7 @@
 $grid-font-size: $font-size-p;
 $grid-default-group-padding: 20px;
 $grid-default-cell-padding: 6px;
+$grid-default-cell-height: 30px;
 $grid-header-cell-padding: 6px;
 $grid-group-expand-icon-size: 20px;
 $edit-icon-font-size: 18px;
@@ -207,6 +208,7 @@ $edit-icon-font-size: 18px;
         border-right: 1px solid $grid-line-color;
         border-top: 1px solid $grid-line-color;
         transition: border 100ms ease-out;
+        height: $grid-default-cell-height;
 
         &:hover .cellEditIcon {
             display: inline;
@@ -219,7 +221,7 @@ $edit-icon-font-size: 18px;
 
     // cells get the pointer cursor when not in edit mode
     // tooltips get the pointer cursor too
-    .qbRow:not(.editing) .qbCell,
+    .qbRow:not(.editing) .qbCell:not(.phase1),
     .qbCell .tipChildWrapper {
         cursor: pointer;
     }
@@ -380,7 +382,7 @@ $edit-icon-font-size: 18px;
         .iconActionButton {
             color: $grid-lefticon-normal-color;
             transition: color 200ms ease-in-out;
-            height: 30px;
+            height: $grid-default-cell-height;
             width: auto;
             margin-right: 4px;
             background: inherit;
