@@ -19,6 +19,7 @@ import {connect} from 'react-redux';
 import {saveForm, saveFormComplete, syncForm} from '../../actions/formActions';
 import {showErrorMsgDialog, hideErrorMsgDialog} from '../../actions/shellActions';
 import {editRecordCancel, openRecord, createRecord, updateRecord} from '../../actions/recordActions';
+import KeyboardShortcuts from '../../../../reuse/client/src/components/keyboardShortcuts/keyboardShortcuts';
 import {APP_ROUTE, EDIT_RECORD_KEY} from '../../constants/urlConstants';
 import {CONTEXT} from '../../actions/context';
 import SaveOrCancelFooter from '../saveOrCancelFooter/saveOrCancelFooter';
@@ -495,6 +496,12 @@ export const RecordTrowser = React.createClass({
         return record;
     },
 
+    keyboardOnSave() {
+        if (this.props.visible) {
+            this.saveClicked();
+        }
+    },
+
     /**
      * trowser to wrap report manager
      */
@@ -507,6 +514,10 @@ export const RecordTrowser = React.createClass({
                      breadcrumbs={this.getTrowserBreadcrumbs()}
                      onCancel={this.cancelEditing}
                      content={this.getTrowserContent()} >
+                <KeyboardShortcuts id="trowser"
+                                   shortcutBindingsPreventDefault={[
+                                       {key: 'mod+s', callback: () => {this.keyboardOnSave(); return false;}},
+                                   ]} />
                 <SaveOrCancelFooter
                     rightAlignedButtons={this.getTrowserRightIcons()}
                     centerAlignedButtons={this.getTrowserActions()}
