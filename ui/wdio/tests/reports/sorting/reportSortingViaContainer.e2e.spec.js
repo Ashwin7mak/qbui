@@ -258,8 +258,7 @@
             var allFieldFromFieldsPanel = reportSortingPO.getAllFieldsFromFieldPanelValues();
 
             //Step 6 - Verify allFieldFromFieldsPanel also contain expectedMoreFields variable values
-            console.log("The all fields : "+JSON.stringify(allFieldFromFieldsPanel));
-            expect (_.every(expectedMoreFields, function(val) { return allFieldFromFieldsPanel.indexOf(val) >= 0; })).toBeTruthy();
+            expect(_.every(expectedMoreFields, function(val) {return allFieldFromFieldsPanel.indexOf(val) >= 0;})).toBeTruthy();
 
             //Step 7 - Click cancel button
             reportSortingPO.fieldsPanelCancel.click();

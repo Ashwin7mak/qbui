@@ -263,6 +263,24 @@
             return this.fieldsPanelCancel.click();
         }},
 
+        /**
+         * Method to get all headers and grouped records from the report table
+         */
+        getGroupedTableRows : {value: function() {
+            var groupHeaders = [];
+            var recordRows;
+
+            //get all group headers
+            this.getAllGroupHeadersList.value.filter(function(header) {
+                return groupHeaders.push(header.getAttribute('textContent'));
+            });
+
+            //get all rows in the table
+            recordRows = reportContentPO.getAllRecordsFromTable();
+
+            return [groupHeaders, recordRows];
+        }},
+
         /*
          * The below are for Group Sort Via Column Header
          */

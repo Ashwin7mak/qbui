@@ -164,22 +164,6 @@
             });
         });
 
-
-        var getGroupedTableRows = (function() {
-            var groupHeaders = [];
-            var recordRows;
-
-            //get all group headers
-            reportSortingPO.getAllGroupHeadersList.value.filter(function(header) {
-                return groupHeaders.push(header.getAttribute('textContent'));
-            });
-
-            //get all rows in the table
-            recordRows = reportContentPO.getAllRecordsFromTable();
-
-            return [groupHeaders, recordRows];
-        });
-
         /**
          * Data Provider for reports grouping testCases.
          * ['User Name Field', 'Text Field', 'Date Field', 'Duration Field'],
@@ -263,7 +247,7 @@
                 e2ePageBase.loadReportByIdInBrowser(realmName, app.id, app.tables[e2eConsts.TABLE1].id, reportId);
 
                     //Step 3 - get all table results which are expected to be sorted/grouped already via API
-                var groupedUITableResults = getGroupedTableRows();
+                var groupedUITableResults = reportSortingPO.getGroupedTableRows();
 
                     //Step 4 - Sort and Group the testCreated Formatted records using loDash
                 groupedViaLODASHResults = reportSortingPO.SortAndGroupFidsUsingLoDash(testCreatedFormattedRecords, testCase.sortFids, testCase.sortOrder, testCase.groupFids);
@@ -295,7 +279,7 @@
             reportSortingPO.expandColumnHeaderMenuAndSelectItem("User Name", "Group Z to A");
 
                 //Step 4 - get all table results which are expected to be sorted/grouped already via API
-            var groupedUITableResults = getGroupedTableRows();
+            var groupedUITableResults = reportSortingPO.getGroupedTableRows();
 
                 //Step 5 - Sort and Group the testCreated Formatted records using loDash
             groupedViaLODASHResults = reportSortingPO.SortAndGroupFidsUsingLoDash(testCreatedFormattedRecords, sortFids, sortOrder, groupFids);
@@ -332,7 +316,7 @@
             reportSortingPO.expandColumnHeaderMenuAndSelectItem("User Name", "Group Z to A");
 
             //Step 4 - get all table results which are expected to be sorted/grouped already via API
-            var groupedUITableResults = getGroupedTableRows();
+            var groupedUITableResults = reportSortingPO.getGroupedTableRows();
 
             //Step 5 - Sort and Group the testCreated Formatted records using loDash
             groupedViaLODASHResults = reportSortingPO.SortAndGroupFidsUsingLoDash(testCreatedFormattedRecords, sortFids, sortOrder, groupFids);
