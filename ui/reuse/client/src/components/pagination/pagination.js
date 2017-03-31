@@ -1,29 +1,28 @@
-import React from 'react';
+import React, {PropTypes, Component} from 'react';
+import Icon from '../icon/icon';
+import Tooltip from '../tooltip/tooltip';
+import './pagination.scss';
+import {I18nMessage} from '../../../../../client-react/src/src/utils/i18nMessage';
+import Breakpoints from '../../../../../client-react/src/utils/breakpoints';
+import StringUtils from "../../../../../client-react/src/utils/stringUtils";
+import NumberUtils from "../../../../../client-react/src/utils/numberUtils";
 
-import QBicon from '../qbIcon/qbIcon';
-import QBToolTip from '../qbToolTip/qbToolTip';
-import './report.scss';
-import {I18nMessage} from '../../../src/utils/i18nMessage';
-import Breakpoints from "../../utils/breakpoints";
-import StringUtils from "../../utils/stringUtils";
-import NumberUtils from "../../utils/numberUtils";
-
-var ReportNavigation = React.createClass({
-    propTypes: {
+class Pagination extends Component{
+    Pagination.propTypes = {
         /**
          *  Takes in for properties the reportData which includes the list of facets
          *  and a function to call when a facet value is selected.
          **/
-        reportData: React.PropTypes.shape({
-            data: React.PropTypes.shape({
-                facets:  React.PropTypes.array
+        reportData: PropTypes.shape({
+            data: PropTypes.shape({
+                facets:  PropTypes.array
             })
         }),
-        pageStart: React.PropTypes.number,
-        pageEnd: React.PropTypes.number,
-        getNextReportPage: React.PropTypes.func,
-        getPreviousReportPage: React.PropTypes.func,
-        recordsCount: React.PropTypes.number,
+        pageStart: PropTypes.number,
+        pageEnd: PropTypes.number,
+        getNextReportPage: PropTypes.func,
+        getPreviousReportPage: PropTypes.func,
+        recordsCount: PropTypes.number,
     },
 
     /**
@@ -56,7 +55,8 @@ var ReportNavigation = React.createClass({
 
         let navBar = "report.reportNavigationBar";
         if (showComponent) {
-            return (<div className="reportNavigation">
+            return (
+              <div className="pagination">
 
                         <PreviousLink pageStart={this.props.pageStart}
                                       getPreviousReportPage={this.props.getPreviousReportPage}
@@ -71,52 +71,53 @@ var ReportNavigation = React.createClass({
                                   pageEnd={this.props.pageEnd}
                                   getNextReportPage={this.props.getNextReportPage}
                         />
-                    </div>);
+                    </div>
+                  );
         }
         return (<div className="spacer"></div>);
     }
-});
+};
 
-var PreviousLink = React.createClass({
-    propTypes: {
-        pageStart : React.PropTypes.number,
-        getPreviousReportPage : React.PropTypes.func,
+class PreviousLink extends Component {
+    PreviousLink.propTypes =  {
+        pageStart : PropTypes.number,
+        getPreviousReportPage : PropTypes.func
     },
 
-    render: function() {
+    render() {
         const previousButtonClassName = "previousButton " + (this.props.pageStart !== 1 ? "" : "disabled");
         return (
-            <QBToolTip tipId="fieldName" i18nMessageKey="report.previousToolTip">
+            <Tooltip tipId="fieldName" i18nMessageKey="report.previousToolTip">
                 {/* For embedded reports, this button element is rendered inside a <form> element.
                     We need to specify type="button" to prevent form submission when clicked. */}
                 <button tabIndex="0" className="navigationButton" onClick={this.props.getPreviousReportPage} type="button">
-                    <QBicon className={previousButtonClassName} icon="caret-filled-left" />
+                    <Icon className={previousButtonClassName} icon="caret-filled-left" />
                 </button>
-            </QBToolTip>
+            </Tooltip>
         );
     }
-});
+};
 
-var NextLink = React.createClass({
-    propTypes: {
-        recordsCount : React.PropTypes.number,
-        pageEnd : React.PropTypes.number,
-        getNextReportPage : React.PropTypes.func,
+class NextLink extends Component {
+    NextLink.propTypes = {
+        recordsCount : PropTypes.number,
+        pageEnd : PropTypes.number,
+        getNextReportPage : PropTypes.func
     },
 
-    render: function() {
+    render() {
         const nextButtonClassName = "nextButton " + (this.props.recordsCount !== this.props.pageEnd ? "" : "disabled");
 
         return (
-            <QBToolTip tipId="fieldName" i18nMessageKey="report.nextToolTip">
+            <Tooltip tipId="fieldName" i18nMessageKey="report.nextToolTip">
                 {/* For embedded reports, this button element is rendered inside a <form> element.
                     We need to specify type="button" to prevent form submission when clicked. */}
                 <button tabIndex="0" className="navigationButton" onClick={this.props.getNextReportPage} type="button">
-                    <QBicon className={nextButtonClassName} icon="caret-filled-right" />
+                    <Icon className={nextButtonClassName} icon="caret-filled-right" />
                 </button>
-            </QBToolTip>
+            </Tooltip>
         );
     }
-});
+};
 
-export default ReportNavigation;
+export default Pagination;
