@@ -1,15 +1,11 @@
 @import '../../assets/css/_qbVariables';
 
-.tableCreationDialog.tableMenuOpen .modal-body > *:first-child {
-    overflow: visible;
-}
-
 @include not-small-breakpoint {
 
     .multiStepModal.tableCreationDialog .modal-dialog {
 
         .modal-body > *:first-child {
-            height: 315px;
+            height: 355px;
         }
         width: 840px;
     }
