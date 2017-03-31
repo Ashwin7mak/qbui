@@ -134,6 +134,7 @@ const ReportCell = React.createClass({
     },
 
     render() {
+        console.log('this.props: ', this.props);
         let fieldDef = this.props.fieldDef;
 
         // The field types are different on the server and the UI. Need to make sure we translate them before passing to certain functions.

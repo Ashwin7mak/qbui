@@ -1,62 +1,36 @@
-/**
- * Created by bstookey on 3/31/17.
- */
+const serverTypeConsts = require('../../../common/src/constants');
 
 (function() {
     'use strict';
     module.exports = Object.freeze({
-        DEFAULT_FIELD: {
+        DEFAULT_TEXT_FIELD: {
             "type": "SCALAR",
             "datatypeAttributes": {
-                "type": "TEXT",
-                "htmlAllowed": false
+                "type": serverTypeConsts.CHECKBOX
             },
-            "name": "Text",
-            "builtIn": false,
-            "dataIsCopyable": true,
-            "includeInQuickSearch": true,
-            "userEditableValue": true,
-            "required": false,
-            "unique": false,
-            "indexed": false,
-            "multiChoiceSourceAllowed": false
+            "name": "undefined"
         },
-        DEFAULT_TEXT_FIELD: {
-                   "type": "SCALAR",
-                    "datatypeAttributes": {
-                        "type": "TEXT",
-                        "htmlAllowed": false
-                    },
-                    "name": "Text",
-                    "builtIn": false,
-                    "dataIsCopyable": true,
-                    "includeInQuickSearch": true,
-                    "userEditableValue": true,
-                    "required": false,
-                    "unique": false,
-                    "indexed": false,
-                    "multiChoiceSourceAllowed": false
-        },
+
         DEFAULT_NUMERIC_FIELD: {
             "type": "SCALAR",
             "datatypeAttributes": {
-                "type": "TEXT",
-                "htmlAllowed": false
+                "type": serverTypeConsts.NUMERIC
             },
-            "name": "Text",
-            "builtIn": false,
-            "dataIsCopyable": true,
-            "includeInQuickSearch": true,
-            "userEditableValue": true,
-            "required": false,
-            "unique": false,
-            "indexed": false,
-            "multiChoiceSourceAllowed": false
+            "name": "undefined"
         },
+
         DEFAULT_CHECKBOX_FIELD: {
             "type": "SCALAR",
             "datatypeAttributes": {
-                "type": "TEXT",
+                "type": serverTypeConsts.CHECKBOX
+            },
+            "name": "undefined"
+        },
+
+        DEFAULT_FIELD: {
+            "type": "SCALAR",
+            "datatypeAttributes": {
+                "type": serverTypeConsts.TEXT,
                 "htmlAllowed": false
             },
             "name": "Text",
