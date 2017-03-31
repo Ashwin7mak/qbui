@@ -79,7 +79,7 @@
             tableToFieldToFieldTypeMap['table 1']['Finish Date'] = {fieldType: consts.SCALAR, dataType: consts.DATE};
             tableToFieldToFieldTypeMap['table 1']['Duration Taken'] = {fieldType: consts.SCALAR, dataType: consts.DURATION};
             tableToFieldToFieldTypeMap['table 1']['% Completed'] = {fieldType: consts.SCALAR, dataType: consts.PERCENT};
-            
+
             return e2eBase.createAppWithEmptyRecordsInTable(tableToFieldToFieldTypeMap).then(function(createdApp) {
                 // Set your global objects to use in the test functions
                 app = createdApp;

@@ -8,6 +8,264 @@
     var recordsFromAllListReport;
 
     var ReportSortingGroupingPage = Object.create(e2ePageBase, {
+        //report sort Grp button on reports page
+        reportSortGrpBtnOnReportsPage : {get: function() {return browser.element('.sortButton');}},
+        //sort group container
+        sortGroupDlg : {get: function() {return browser.element('.settingsDialog');}},
+        //sort group button in the dialogue
+        sortGroupDlgBtn : {get: function() {return this.sortGroupDlg.element('.sortButtonSpan');}},
+        //sort Grp dialogue close button
+        sortGroupDlgCloseBtn : {get: function() {return this.sortGroupDlg.element('.overlayRight .iconUISturdy-close');}},
+        //sort grp dialogue apply button
+        sortGroupDlgApplyBtn : {get: function() {return this.sortGroupDlg.element('.dialogBottom .apply');}},
+        //sort grp dialogue apply button
+        sortGroupDlgResetBtn : {get: function() {return this.sortGroupDlg.element('.dialogBottom .reset');}},
+
+        //GroupBy container
+        groupBySettings : {get: function() {return browser.element('.groupBySettings .fieldSelectorContainer');}},
+
+        //sort by container
+        sortBySettings : {get: function() {return browser.element('.sortBySettings .fieldSelectorContainer');}},
+
+        //fields Panel
+        fieldsPanel : {get: function() {return browser.element('.fieldsPanel');}},
+        //field panel title
+        fieldsPanelTitle : {get: function() {return this.fieldsPanel.element('.fieldPanelHeader span span');}},
+        //panel cancel
+        fieldsPanelCancel: {get: function() {return this.fieldsPanel.element('.cancel');}},
+
+        /**
+         * Method to click sort/Grp button in reports page.
+         */
+        clickSortGroupIconOnReportsPage : {value: function() {
+            //wait until you see sort/grp button
+            this.reportSortGrpBtnOnReportsPage.waitForVisible();
+            //click on srtGrp button on reports page
+            this.reportSortGrpBtnOnReportsPage.click();
+            //wait until you see sort/grp container
+            this.sortBySettings.waitForVisible();
+            //TODO Need this sometimes getting stale element
+            return browser.pause(e2eConsts.shortWaitTimeMs);
+        }},
+
+        /**
+         * Method to click Apply button on the Srt/Grp Container.
+         */
+        clickApplyBtn : {value: function() {
+            //wait until you see apply btn
+            this.sortGroupDlgApplyBtn.waitForVisible();
+            //click on apply btn
+            return this.sortGroupDlgApplyBtn.click();
+        }},
+
+        /**
+         * Method to click Reset button on the Srt/Grp Container.
+         */
+        clickResetBtn : {value: function() {
+            //wait until you see apply btn
+            this.sortGroupDlgResetBtn.waitForVisible();
+            //click on apply btn
+            return this.sortGroupDlgResetBtn.click();
+        }},
+
+        /**
+         * Method to click Close button on the Srt/Grp Container.
+         */
+        clickCloseBtn : {value: function() {
+            //wait until you see apply btn
+            this.sortGroupDlgCloseBtn.waitForVisible();
+            //click on apply btn
+            return this.sortGroupDlgCloseBtn.click();
+        }},
+
+        /**
+         * Method to click in empty field of the specified container.
+         */
+        clickInEmptyFieldInSortGrpDlg : {value: function(containerName, containerPanelTitle) {
+            containerName.waitForVisible();
+            containerName.element('.empty').waitForVisible();
+            containerName.element('.empty').click();
+            //Verify fields panel dialogue
+            return this.verifyFieldPanelDlg(containerPanelTitle);
+        }},
+
+        /*
+         * Function to select sort/Grp By Items
+         */
+        selectFieldsInSrtGrpDlg : {value: function(containerName, fieldPanelTitle, fieldNameToSelect) {
+            containerName.waitForVisible();
+            //Click on empty field
+            this.clickInEmptyFieldInSortGrpDlg(containerName, fieldPanelTitle);
+            //select the field Items
+            return this.selectFieldsFromFieldsPanel(fieldNameToSelect);
+        }},
+
+        /**
+         * Method to get all nonEmpty fields of the specified container.
+         */
+        getAllNonEmptyFieldValues : {value: function(containerName) {
+            var results = [];
+            containerName.waitForVisible();
+            containerName.elements('.notEmpty .fieldName').value.map(function(field) {
+                results.push(field.getAttribute('textContent'));
+            });
+            return results;
+        }},
+
+        /*
+         * Method to verify nonEmpty fields and their actions in specified container
+         */
+        verifyNonEmptyFieldsInSortGrpDlg : {value: function(containerName, fieldsToVerify) {
+            var results = [];
+            containerName.waitForVisible();
+            //Filter all nonEmpty fields in specified container
+            containerName.elements('.notEmpty').value.map(function(fields) {
+                results.push(fields);
+            });
+
+            if (results !== []) {
+                //for each nonEmpty field
+                results.forEach(function(result) {
+                    //verify the delete button visible beside the field
+                    result.element('.fieldDeleteIcon').waitForVisible();
+
+                    //verify the sort order button visible beside the field
+                    //TODO disable the below as it is bug. Right now sort Order is not displayed in the UI
+                    //result.element('.sortOrderIcon').waitForVisible();
+
+                    //Verify the prefix is 'By' for first field and 'then by' for remaining fields
+                    if (result.index === 0) {
+                        expect(result.element('.prefix').getAttribute('textContent')).toBe('by');
+                    } else {
+                        expect(result.element('.prefix').getAttribute('textContent')).toBe('then by');
+                    }
+                });
+
+                var nonEmptyFields = this.getAllNonEmptyFieldValues(containerName);
+                //Verify the field Names
+                expect(nonEmptyFields).toEqual(fieldsToVerify);
+
+            } else {
+                throw new Error('Cannot verify actions for fields ' + fieldsToVerify);
+            }
+        }},
+
+        /*
+         * Method to delete fields in specified container
+         */
+        deleteAllFieldsFromSrtGrpDlg : {value: function(containerName) {
+            var results = [];
+            containerName.waitForVisible();
+            //Filter nonEmpty fields to match with fieldToDelete
+            containerName.elements('.notEmpty').value.map(function(field) {
+                results.push(field);
+            });
+
+            //if filtered elements not empty
+            if (results !== []) {
+                results.forEach(function(result) {
+                    //wait for delete button to be visible
+                    result.element('.fieldDeleteIcon').waitForVisible();
+                    //click on delete button
+                    return result.element('.fieldDeleteIcon').click();
+                });
+            } else {
+                throw new Error('There are no fields in sort/grp container to delete');
+            }
+        }},
+
+        /*
+         * Method to delete fields in specified container
+         */
+        deleteFieldsFromSrtGrpDlg : {value: function(containerName, fieldToDelete) {
+            containerName.waitForVisible();
+            //Filter nonEmpty fields to match with fieldToDelete
+            var results = containerName.elements('.notEmpty').value.filter(function(field) {
+                return field.element('.fieldName').getAttribute('textContent') === fieldToDelete;
+            });
+
+            //if filtered elements not empty
+            if (results !== []) {
+                //wait for delete button to be visible
+                results[0].element('.fieldDeleteIcon').waitForVisible();
+                //click on delete button
+                return results[0].element('.fieldDeleteIcon').click();
+            } else {
+                throw new Error('Cannot delete value for field ' + fieldToDelete);
+            }
+        }},
+
+        /*
+         * Method to verify field Panel
+         */
+        verifyFieldPanelDlg : {value: function(title) {
+            //wait until you see field panel
+            this.fieldsPanel.waitForVisible();
+            //Verify cancel button is enabled
+            return expect(browser.isEnabled('.fieldsPanel .cancel')).toBeTruthy();
+            //TODO Element fieldsPanelTitle not getting identified
+            //Verify the title of the field panel
+            //expect(this.fieldsPanelTitle.getAttribute('textContent')).toBe(title);
+        }},
+
+        /*
+         * Method to click on more Fields link in the fields panel
+         */
+        ClickMoreFieldsLinkInFieldsPanel : {value: function() {
+            this.fieldsPanel.waitForVisible();
+            //scroll to more fields
+            this.fieldsPanel.element('.list-group .moreFields').scroll();
+            //click on more fields
+            this.fieldsPanel.element('.list-group .moreFields').click();
+            //Need this to wait for more fields to load
+            return browser.pause(e2eConsts.shortWaitTimeMs);
+        }},
+
+        /*
+         * Method to click on specified fields in the fields panel
+         */
+        selectFieldsFromFieldsPanel : {value: function(fieldItemToSelect) {
+            //wait until you see field panel
+            this.fieldsPanel.waitForVisible();
+            //filter field Items from fields Panel
+            var results = browser.elements('.list-group .fieldName').value.filter(function(field) {
+                return field.getAttribute('textContent') === fieldItemToSelect;
+            });
+
+            if (results !== []) {
+                //Click on filtered field name
+                results[0].click();
+                this.groupBySettings.waitForVisible();
+                //Need this to wait for container to slide away
+                return browser.pause(e2eConsts.shortWaitTimeMs);
+            }
+        }},
+
+        /*
+         * Method to get all fields in fields panel
+         */
+        getAllFieldsFromFieldPanelValues : {value: function() {
+            var results = [];
+            //get all fieldNames from the panel
+            this.fieldsPanel.elements('.list-group .fieldName').value.map(function(field) {
+                results.push(field.getAttribute('textContent'));
+            });
+            return results;
+        }},
+
+        /**
+         * Method to click Panel Cancel button on the fields panel.
+         */
+        clickPanelCancelBtn : {value: function() {
+            //wait until you see apply btn
+            this.fieldsPanelCancel.waitForVisible();
+            //click on apply btn
+            return this.fieldsPanelCancel.click();
+        }},
+
+        /*
+         * The below are for Group Sort Via Column Header
+         */
 
         /**
          * Returns all group headers
