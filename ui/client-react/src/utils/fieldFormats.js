@@ -16,6 +16,9 @@ class FieldFormats {
             case serverTypeConsts.NUMERIC:
                 if (_.has(fieldDef, 'multipleChoice.choices')) {
                     return FieldFormats.NUMBER_FORMAT_MULTICHOICE;
+                    if (_.has(fieldDef, 'showAsRadio')) {
+                        return FieldFormats.NUMBER_FORMAT_RADIO_BUTTONS;
+                    }
                 }
                 return FieldFormats.NUMBER_FORMAT;
 
@@ -67,6 +70,9 @@ class FieldFormats {
             case serverTypeConsts.TEXT :
                 let numLines = 1;
                 if (_.has(fieldDef, 'multipleChoice.choices')) {
+                    if (_.has(fieldDef, 'showAsRadio')) {
+                        return FieldFormats.TEXT_FORMAT_RADIO_BUTTONS
+                    }
                     return FieldFormats.TEXT_FORMAT_MULTICHOICE;
                 }
                 if (_.has(fieldDef, 'clientSideAttributes.num_lines')) {
@@ -118,5 +124,7 @@ FieldFormats.RATING_FORMAT_MULTICHOICE = 20;
 FieldFormats.CURRENCY_FORMAT_MULTICHOICE = 21;
 FieldFormats.PERCENT_FORMAT_MULTICHOICE = 22;
 FieldFormats.NUMBER_FORMAT_MULTICHOICE = 23;
+FieldFormats.NUMBER_FORMAT_RADIO_BUTTONS = 24;
+FieldFormats.TEXT_FORMAT_RADIO_BUTTONS = 25;
 
 export default FieldFormats;

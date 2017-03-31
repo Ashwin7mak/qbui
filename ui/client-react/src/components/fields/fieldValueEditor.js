@@ -233,7 +233,9 @@ const FieldValueEditor = React.createClass({
         }
 
         case FieldFormats.TEXT_FORMAT_MULTICHOICE:
+        case FieldFormats.TEXT_FORMAT_RADIO_BUTTONS:
         case FieldFormats.NUMBER_FORMAT_MULTICHOICE:
+        case FieldFormats.NUMBER_FORMAT_RADIO_BUTTONS:
         case FieldFormats.RATING_FORMAT_MULTICHOICE:
         case FieldFormats.CURRENCY_FORMAT_MULTICHOICE:
         case FieldFormats.PERCENT_FORMAT_MULTICHOICE: {

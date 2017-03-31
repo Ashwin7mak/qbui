@@ -497,23 +497,21 @@ export default {
                 removeField: "Remove field from form"
             },
             fields: {
-                // Keys are equal to server constants for field types to make it easier to get these keys
-
                 [FieldFormats.TEXT_FORMAT]: "Text",
-                [FieldFormats.TEXT_FORMAT_MULTICHOICE]: "Choice list",
                 [FieldFormats.MULTI_LINE_TEXT_FORMAT]: "Long text",
+                [FieldFormats.TEXT_FORMAT_MULTICHOICE]: "Choice list",
+                [FieldFormats.TEXT_FORMAT_RADIO_BUTTONS]: "Radio buttons",
                 [FieldFormats.TEXT_FORMULA_FORMAT]: "Text formula",
 
                 [FieldFormats.NUMBER_FORMAT]: "Number",
-                [FieldFormats.NUMBER_FORMAT_MULTICHOICE]: "Numeric choice list",
-
                 [FieldFormats.CURRENCY_FORMAT]: "Currency",
                 [FieldFormats.CURRENCY_FORMAT_MULTICHOICE]: "Currency",
-
                 [FieldFormats.PERCENT_FORMAT]: "Percentage",
                 [FieldFormats.PERCENT_FORMAT_MULTICHOICE]: "Percentage",
-
+                [FieldFormats.NUMBER_FORMAT_MULTICHOICE]: "Numeric choice list",
+                [FieldFormats.NUMBER_FORMAT_RADIO_BUTTONS]: "Numeric radio buttons",
                 [FieldFormats.NUMERIC_FORMULA_FORMAT]: "Numeric formula",
+
 
                 [FieldFormats.DATE_FORMAT]: "Date",
                 [FieldFormats.DATETIME_FORMAT]: "Time stamp",
@@ -525,7 +523,6 @@ export default {
                 [FieldFormats.URL]: "Url",
                 [FieldFormats.EMAIL_ADDRESS]: "Email",
                 [FieldFormats.PHONE_FORMAT]: "Phone",
-
                 [FieldFormats.RATING_FORMAT]: "Rating",
                 [FieldFormats.RATING_FORMAT_MULTICHOICE]: "Rating",
                 [FieldFormats.URL_FORMULA_FORMAT]: "Formula",
@@ -535,7 +532,6 @@ export default {
                 REPORT_LINK: "Report link",
                 SUMMARY: "Summary",
                 LOOKUP: "Lookup",
-                //Data types
                 FILE_ATTACHMENT: "File",
             }
         },
