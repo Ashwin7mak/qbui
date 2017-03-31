@@ -15,9 +15,11 @@
      * Use this method instead of toMatch() as that will return true for partial matches.
      */
     PageBase.prototype.hasClass = function(element, cls) {
-        return element.getAttribute('class').then(function(classes) {
-            return classes.split(' ').indexOf(cls) !== -1;
-        });
+        return element.getAttribute('class').split(' ').indexOf(cls) !== -1;
+    };
+
+    PageBase.prototype.isDisabled = function(element) {
+        return this.hasClass(element, 'disabled');
     };
 
     /**
