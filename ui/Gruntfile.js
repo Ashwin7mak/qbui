@@ -573,10 +573,9 @@ module.exports = function(grunt) {
             test: {
                 configFile: './wdio/config/' + wdioSauceConfig,
                 // Make sure no space between suites here
-                suite: 'reports,forms,tables'
+                suite: 'reports,forms'
             }
         },
-
 
         env: {
             test : {
