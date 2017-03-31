@@ -70,7 +70,7 @@ export const FieldElement = React.createClass({
 
     render() {
         let fieldDatatypeAttributes = this.props.relatedField && this.props.relatedField.datatypeAttributes ?
-            this.props.relatedField.datatypeAttributes : {};
+            this.props.relatedField : {};
         let fieldType = FieldFormats.getFormatType(fieldDatatypeAttributes);
 
         //catch the non-implemented pieces.

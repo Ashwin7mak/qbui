@@ -11,11 +11,8 @@ class FieldFormats {
      * @return formatType from formats
      */
     static getFormatType(fieldDef) {
-        if (fieldDef.type === serverTypeConsts.NUMERIC) {
-            console.log('FIELDDEF: ', fieldDef);
-        }
-        if (fieldDef.type) {
-            switch (fieldDef.type) {
+        if (fieldDef.datatypeAttributes) {
+            switch (fieldDef.datatypeAttributes.type) {
             case serverTypeConsts.NUMERIC:
                 if (_.has(fieldDef, 'multipleChoice.choices')) {
                     return FieldFormats.NUMBER_FORMAT_MULTICHOICE;
@@ -116,7 +113,6 @@ FieldFormats.EMAIL_ADDRESS = 15;
 FieldFormats.TEXT_FORMULA_FORMAT = 16;
 FieldFormats.URL_FORMULA_FORMAT = 17;
 FieldFormats.NUMERIC_FORMULA_FORMAT = 18;
-
 FieldFormats.TEXT_FORMAT_MULTICHOICE = 19;
 FieldFormats.RATING_FORMAT_MULTICHOICE = 20;
 FieldFormats.CURRENCY_FORMAT_MULTICHOICE = 21;
