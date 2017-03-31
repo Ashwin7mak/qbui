@@ -94,7 +94,7 @@ class FieldUtils {
         if (element && element.useAlternateLabel) {
             return element.displayText || '';
         } else if (relatedField) {
-            return Locale.getMessage(`builder.fields.${fieldType}`) || relatedField.name || '';
+            return relatedField.name || Locale.getMessage(`builder.fields.${fieldType}`) || '';
         } else {
             return '';
         }

@@ -11,7 +11,7 @@ class FieldFormats {
      * @return formatType from formats
      */
     static getFormatType(fieldDef) {
-        if (fieldDef.datatypeAttributes) {
+        if (fieldDef && fieldDef.datatypeAttributes) {
             switch (fieldDef.datatypeAttributes.type) {
             case serverTypeConsts.NUMERIC:
                 if (_.has(fieldDef, 'multipleChoice.choices')) {
