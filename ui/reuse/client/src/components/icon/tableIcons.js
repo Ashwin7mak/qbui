@@ -278,7 +278,15 @@ export const tableIconNames = [
     "Purchase",
     "Quality",
     "Refresh",
-
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "7",
+    "8",
+    "9"
 ];
 
 // popular icon names to suggest to the user initially
