@@ -139,11 +139,12 @@ const ReportCell = React.createClass({
         // The field types are different on the server and the UI. Need to make sure we translate them before passing to certain functions.
         // Both versions (server and UI constants) for field types are currently required throughout the chain of creating/validating a field
         // with the FieldValueRenderer
-        let uiFieldType = FieldFormats.getFormatType(fieldDef);
+        let uiFieldType;
 
         // If the column doesn't have a field definition, a field value cell cannot be created. Return a blank cell
         // that can be altered by column specific formatters/transformers.
         if (!fieldDef) {
+            uiFieldType = FieldFormats.getFormatType(fieldDef);
             return <td {...this.props} />;
         }
 
