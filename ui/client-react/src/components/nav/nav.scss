@@ -48,7 +48,6 @@
 
 body:not(.touch) .navShell .main .topNav .iconLink:hover {
     color: $topnav-hover-color;
-    //background: $topnav-hover-background-color;
 }
 
 @include small-breakpoint {
