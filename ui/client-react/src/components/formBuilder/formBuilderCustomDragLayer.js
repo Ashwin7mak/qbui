@@ -58,10 +58,8 @@ function getItemStyles(props) {
 
 export class FormBuilderCustomDragLayer extends Component {
     renderItem(type, item) {
-        let fieldType = (_.has(item, 'relatedField.datatypeAttributes') ? FieldFormats.getFormatType(item.relatedField.datatypeAttributes) : consts.TEXT);
-        // let label = (_.has(item, 'relatedField.name') ? item.relatedField.name : Locale.getMessage(`builder.fields.${fieldType}`));
-        let label =  Locale.getMessage(`builder.fields.${fieldType}`);
-
+        let fieldType = (_.has(item, 'relatedField.datatypeAttributes') ? FieldFormats.getFormatType(item.relatedField) : consts.TEXT);
+        let label = (_.has(item, 'relatedField.name') ? item.relatedField.name : Locale.getMessage(`builder.fields.${fieldType}`));
         switch (type) {
         case draggableItemTypes.FIELD :
             return (<FieldToken title={label} type={fieldType} />);
