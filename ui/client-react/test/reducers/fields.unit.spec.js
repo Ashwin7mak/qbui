@@ -1,7 +1,6 @@
 import reducer from '../../src/reducers/fields';
 import * as types from '../../src/actions/types';
 
-let initialState = [];
 const appId = '1';
 const tblId = '2';
 
@@ -49,6 +48,21 @@ describe('Test fields reducer', () => {
         expect(currentField.keyField).toEqual(undefined);
         expect(currentField.fieldsLoading).toEqual(false);
         expect(currentField.error).toEqual(true);
+    });
+
+    it('test update field success', () => {
+        //load some fields so we can update them!
+        const fields = [{builtIn:true, id:3}, {builtIn:false, id:8}, {builtIn:false, keyField:true, id:10}];
+        const state = reducer([], event(appId, tblId, types.LOAD_FIELDS_SUCCESS, {fields:fields}));
+        const currentField = _.find(state, field => field.appId === appId && field.tblId === tblId);
+        expect(currentField.fields).toEqual({fields:{data:fields}});
+        //okay lets update now
+        const field = {builtIn:true, keyField:false, id:10};
+        const state = reducer([], event(field, types.UPDATE_FIELD));
+        const updatedField = _.find(state, field => field.appId === appId && field.tblId === tblId);
+
+
+        expect(updatedField.fields[10]).toEqual(field);
     });
 });
 
