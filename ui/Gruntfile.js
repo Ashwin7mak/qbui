@@ -522,30 +522,58 @@ module.exports = function(grunt) {
         //TODO: Figure out how to define multiple webdriver tasks
         webdriver: {
             options: {
-                specs: [
-                    //reportAddRecord is currently broken on Reactabular, the save and add a new row button for inline editing has been disabled
-                    //this bug is logged in reactabular backlog under https://quickbase.atlassian.net/browse/MB-2115
-                    //because the save and add button is disabled we turned off the reportAddRecord test
-                    //we will turn it back on once this button has been enabled again
-                    // './wdio/tests/reports/reportAddRecord.e2e.spec.js',
-                    './wdio/tests/reports/reportEditRecord.e2e.spec.js',
-                    './wdio/tests/reports/reportInlineReloadPageWithoutSaving.e2e.spec.js',
-                    './wdio/tests/reports/reportNavigation.e2e.spec.js',
-                    './wdio/tests/reports/sorting/*.e2e.spec.js',
-                    './wdio/tests/reports/reportTable.e2e.spec.js',
-
-                    './wdio/tests/forms/formAdd*.e2e.spec.js',
-                    './wdio/tests/forms/formEdit*.e2e.spec.js',
-                    './wdio/tests/forms/formPermissionsParticipantRole.e2e.spec.js',
-                    './wdio/tests/forms/formDragDrop.e2e.spec.js',
-                    './wdio/tests/tables/tableCreate.e2e.spec.js'
-                    // disabling formPermissionsViewerRole test as we are moving to ExperienceEngine,
-                    // permission for viewer are not working correctly
-                    //'./wdio/tests/forms/formPermissionsViewerRole.e2e.spec.js'
-                ]
+                //specs: [
+                //    //reportAddRecord is currently broken on Reactabular, the save and add a new row button for inline editing has been disabled
+                //    //this bug is logged in reactabular backlog under https://quickbase.atlassian.net/browse/MB-2115
+                //    //because the save and add button is disabled we turned off the reportAddRecord test
+                //    //we will turn it back on once this button has been enabled again
+                //    // './wdio/tests/reports/reportAddRecord.e2e.spec.js',
+                //    './wdio/tests/reports/reportEditRecord.e2e.spec.js',
+                //    './wdio/tests/reports/reportInlineReloadPageWithoutSaving.e2e.spec.js',
+                //    './wdio/tests/reports/reportNavigation.e2e.spec.js',
+                //    './wdio/tests/reports/sorting/*.e2e.spec.js',
+                //    './wdio/tests/reports/reportTable.e2e.spec.js',
+                //
+                //    './wdio/tests/forms/formAdd*.e2e.spec.js',
+                //    './wdio/tests/forms/formEdit*.e2e.spec.js',
+                //    './wdio/tests/forms/formPermissionsParticipantRole.e2e.spec.js',
+                //    './wdio/tests/forms/formDragDrop.e2e.spec.js',
+                //    './wdio/tests/tables/tableCreate.e2e.spec.js'
+                //    // disabling formPermissionsViewerRole test as we are moving to ExperienceEngine,
+                //    // permission for viewer are not working correctly
+                //    //'./wdio/tests/forms/formPermissionsViewerRole.e2e.spec.js'
+                //],
+                suites: {
+                    reports: [
+                        //reportAddRecord is currently broken on Reactabular, the save and add a new row button for inline editing has been disabled
+                        //this bug is logged in reactabular backlog under https://quickbase.atlassian.net/browse/MB-2115
+                        //because the save and add button is disabled we turned off the reportAddRecord test
+                        //we will turn it back on once this button has been enabled again
+                        // './wdio/tests/reports/reportAddRecord.e2e.spec.js',
+                        './wdio/tests/reports/reportEditRecord.e2e.spec.js',
+                        './wdio/tests/reports/reportInlineReloadPageWithoutSaving.e2e.spec.js',
+                        './wdio/tests/reports/reportNavigation.e2e.spec.js',
+                        './wdio/tests/reports/reportTable.e2e.spec.js',
+                        './wdio/tests/reports/sorting/*.e2e.spec.js'
+                    ],
+                    forms: [
+                        './wdio/tests/forms/formAdd*.e2e.spec.js',
+                        './wdio/tests/forms/formEdit*.e2e.spec.js',
+                        './wdio/tests/forms/formDragDrop.e2e.spec.js',
+                        './wdio/tests/forms/formPermissionsParticipantRole.e2e.spec.js'
+                        //disabling formPermissionsViewerRole test as after moving to ExperienceEngine,
+                        //permissions for viewer are not working correctly
+                        //'./wdio/tests/forms/formPermissionsViewerRole.e2e.spec.js'
+                    ],
+                    tables: [
+                        './wdio/tests/tables/tableCreate.e2e.spec.js'
+                    ]
+                }
             },
             test: {
-                configFile: './wdio/config/' + wdioSauceConfig
+                configFile: './wdio/config/' + wdioSauceConfig,
+                // Make sure no space between suites here
+                suite: 'reports,forms,tables'
             }
         },
 
