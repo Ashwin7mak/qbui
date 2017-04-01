@@ -86,6 +86,7 @@ let NavItem = React.createClass({
                     onClick={this.onHeadingClick} onKeyDown={this.onHeadingClick}
                     className={ this.props.secondaryIcon ? "heading withSecondary" : "heading"}>
                     <I18nMessage message={item.msg}/>
+                    <QBicon icon="search" className="nav-search"/>
                     {this.props.secondaryIcon && <QBicon icon={this.props.secondaryIcon} />}
                 </li>);
         } else {
