@@ -50,19 +50,17 @@ describe('Test fields reducer', () => {
         expect(currentField.error).toEqual(true);
     });
 
-    it('test update field success', () => {
+    it('test update field', () => {
         //load some fields so we can update them!
         const fields = [{builtIn:true, id:3}, {builtIn:false, id:8}, {builtIn:false, keyField:true, id:10}];
         const state = reducer([], event(appId, tblId, types.LOAD_FIELDS_SUCCESS, {fields:fields}));
         const currentField = _.find(state, field => field.appId === appId && field.tblId === tblId);
         expect(currentField.fields).toEqual({fields:{data:fields}});
         //okay lets update now
-        const field = {builtIn:true, keyField:false, id:10};
-        const state = reducer([], event(field, types.UPDATE_FIELD));
-        const updatedField = _.find(state, field => field.appId === appId && field.tblId === tblId);
-
-
-        expect(updatedField.fields[10]).toEqual(field);
+        const field = {builtIn:true, keyField:false, id:10, isPendingEdits: true};
+        const upState = reducer(state, {type: types.UPDATE_FIELD, field: field});
+        const updatedField = _.find(upState, field => field.id === 10);
+        expect(updatedField).toEqual(field);
     });
 });
 
