@@ -575,6 +575,10 @@ export default {
             validateTableNameEmpty: "Le nom de la table ne doit pas être vide",
             validateTableNameExists: "Le nom de la table doit être unique pour cette application",
             validateRecordNameEmpty: "Le nom de l'enregistrement ne doit pas être vide",
+        },
+        iconChooser: {
+            searchPlaceholder: "Rechercher des icônes..."
         }
+
     }
 };
