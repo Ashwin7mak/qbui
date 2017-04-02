@@ -121,16 +121,10 @@ class AppHistory {
         let fields = [];
         if (self.store) {
             const state = self.store.getState();
-            if (Array.isArray(state.forms) && state.forms.length > 0) {
-                //  fetch the 1st form in the store
-                //  TODO: revisit to ensure appropriate support for store with multiple forms
-                if (_.isEmpty(state.forms[0]) === false) {
-                    const formsStore = state.forms[0];
-                    if (_.has(formsStore, 'formData.fields')) {
-                        fields = formsStore.formData.fields;
-                    }
-                }
-            }
+            //  fetch the 1st form in the store
+            //  TODO: revisit to ensure appropriate support for store with multiple forms
+            const viewConst = 'view'; //TODO: use const
+            return _.get(state, `forms[${viewConst}].formData.fields`, []);
         }
         return fields;
     }

@@ -278,7 +278,8 @@ export const RecordRoute = React.createClass({
      * @returns {boolean|*|HTMLCollection}
      */
     getViewFormFromProps(props = this.props) {
-        return props.forms && _.find(props.forms, form => form.id === "view");
+        const viewConst = "view"; //TODO: declare const somewhere
+        return props.forms && props.forms[viewConst];
     },
 
     getRecordFromProps(props = this.props) {
@@ -318,9 +319,9 @@ export const RecordRoute = React.createClass({
         } else {
             const viewData = this.getViewFormFromProps();
 
-            const formLoadingeErrorStatus = viewData && viewData.errorStatus;
-            const formInternalError = !formLoadingeErrorStatus ? false : (formLoadingeErrorStatus === 500);
-            const formAccessRightError = !formLoadingeErrorStatus ? false : (formLoadingeErrorStatus === 403);
+            const formLoadingErrorStatus = viewData && viewData.errorStatus;
+            const formInternalError = !formLoadingErrorStatus ? false : (formLoadingErrorStatus === 500);
+            const formAccessRightError = !formLoadingErrorStatus ? false : (formLoadingErrorStatus === 403);
 
             let key = _.has(viewData, "formData.recordId") ? viewData.formData.recordId : null;
             return (
@@ -339,7 +340,7 @@ export const RecordRoute = React.createClass({
                     </div>
 
 
-                    {!formLoadingeErrorStatus ?
+                    {!formLoadingErrorStatus ?
                         <Loader key={key}
                                 loaded={(!this.props.forms || !viewData || !viewData.loading)}
                                 options={SpinnerConfigurations.TROWSER_CONTENT}>
@@ -348,7 +349,7 @@ export const RecordRoute = React.createClass({
                                 appId={this.props.params.appId}
                                 tblId={this.props.params.tblId}
                                 recId={this.props.params.recordId}
-                                errorStatus={formLoadingeErrorStatus ? viewData.errorStatus : null}
+                                errorStatus={formLoadingErrorStatus ? viewData.errorStatus : null}
                                 formData={this.props.forms && viewData ? viewData.formData : null}
                                 appUsers={this.props.appUsers} />
                         </Loader> : null }

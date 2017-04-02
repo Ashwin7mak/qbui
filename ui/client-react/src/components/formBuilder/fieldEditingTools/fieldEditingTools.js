@@ -195,8 +195,8 @@ FieldEditingTools.defaultProps = {
 
 const mapStateToProps = (state, ownProps) => {
     let formId = (ownProps.formId || "view");
-    let currentForm = state.forms.find(form => form.id === formId);
-    let tabIndex = (_.has(currentForm, "formBuilderChildrenTabIndex") ? currentForm.formBuilderChildrenTabIndex[0] : '-1');
+    let currentForm = _.get(state, `forms[${formId}]`, {});
+    let tabIndex = _.get(currentForm, 'formBuilderChildrenTabIndex[0]', '-1');
     let selectedFields = (_.has(currentForm, "selectedFields") ? currentForm.selectedFields : []);
     let previouslySelectedField = (_.has(currentForm, "previouslySelectedField") ? currentForm.previouslySelectedField : []);
 

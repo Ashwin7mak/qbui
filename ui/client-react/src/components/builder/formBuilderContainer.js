@@ -27,7 +27,7 @@ import './formBuilderContainer.scss';
 let logger = new Logger();
 
 const mapStateToProps = state => {
-    let currentForm = state.forms ? state.forms[0] : undefined;
+    let currentForm = _.get(state, 'forms.view');
 
     return {
         currentForm,

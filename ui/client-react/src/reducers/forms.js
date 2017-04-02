@@ -4,12 +4,11 @@ import MoveFieldHelper from '../components/formBuilder/moveFieldHelper';
 
 const forms = (
 
-    state = [], action) => {
+    state = {}, action) => {
 
     const id = action.id;
-
-    const newState = _.reject(state, form => form.id === id);
-    const currentForm = _.find(state, form => form.id === id);
+    // retrieve currentForm and assign the rest of the form to newState
+    const {[id]: currentForm, ...newState} = state;
     let updatedForm;
 
     // reducer - no mutations!
@@ -17,7 +16,7 @@ const forms = (
 
     case types.LOADING_FORM: {
 
-        newState.push({
+        newState[id] = ({
             id,
             loading: true,
             errorStatus: null,
@@ -35,7 +34,7 @@ const forms = (
         action.formData.formMeta.appId = action.formData.formMeta.appId || action.appId;
         action.formData.formMeta.tableId = action.formData.formMeta.tableId || action.tblId;
 
-        newState.push({
+        newState[id] = ({
             id,
             formData: action.formData,
             loading: false,
@@ -47,7 +46,7 @@ const forms = (
 
     case types.LOAD_FORM_ERROR: {
 
-        newState.push({
+        newState[id] = ({
             id,
             loading: false,
             errorStatus: action.error
@@ -56,7 +55,7 @@ const forms = (
     }
 
     case types.SYNC_FORM: {
-        newState.push({
+        newState[id] = ({
             ...currentForm,
             syncLoadedForm: true
         });
@@ -65,7 +64,7 @@ const forms = (
 
     case types.SAVE_FORM: {
         //  hide/show modal window and spinner over a form
-        newState.push({
+        newState[id] = ({
             ...currentForm,
             id,
             saving: true,
@@ -76,7 +75,7 @@ const forms = (
 
     case types.SAVE_FORM_COMPLETE: {
         //  hide/show modal window and spinner over a form
-        newState.push({
+        newState[id] = ({
             ...currentForm,
             id,
             saving: false,
@@ -92,7 +91,7 @@ const forms = (
             updatedForm.formData = {};
         }
         updatedForm.formData.formMeta = action.content;
-        newState.push({
+        newState[id] = ({
             ...updatedForm,
             id,
             saving: false
@@ -114,10 +113,10 @@ const forms = (
             draggedItemProps
         );
 
-        return [
+        return {
             ...newState,
             updatedForm
-        ];
+        };
     }
 
     case types.REMOVE_FIELD : {
@@ -133,10 +132,10 @@ const forms = (
             location
         );
 
-        return [
+        return {
             ...newState,
             updatedForm
-        ];
+        };
     }
 
     case types.SELECT_FIELD : {
@@ -155,10 +154,10 @@ const forms = (
         updatedForm.selectedFields[0] = action.content.location;
         updatedForm.previouslySelectedField = undefined;
 
-        return [
+        return {
             ...newState,
             updatedForm
-        ];
+        };
     }
 
     case types.DESELECT_FIELD : {
@@ -177,10 +176,10 @@ const forms = (
         updatedForm.previouslySelectedField[0] = action.content.location;
         updatedForm.selectedFields[0] = undefined;
 
-        return [
+        return {
             ...newState,
             updatedForm
-        ];
+        };
     }
 
     case types.KEYBOARD_MOVE_FIELD_UP : {
@@ -205,10 +204,10 @@ const forms = (
             -1
         );
 
-        return [
+        return {
             ...newState,
             updatedForm
-        ];
+        };
     }
 
     case types.KEYBOARD_MOVE_FIELD_DOWN : {
@@ -233,10 +232,10 @@ const forms = (
             1
         );
 
-        return [
+        return {
             ...newState,
             updatedForm
-        ];
+        };
     }
 
     case types.TOGGLE_FORM_BUILDER_CHILDREN_TABINDEX : {
@@ -262,10 +261,10 @@ const forms = (
         updatedForm.formBuilderChildrenTabIndex[0] = tabIndex;
         updatedForm.formFocus[0] = formFocus;
 
-        return [
+        return {
             ...newState,
             updatedForm
-        ];
+        };
     }
 
     default:
