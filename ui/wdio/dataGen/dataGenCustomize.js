@@ -639,7 +639,8 @@ consts = require('../../common/src/constants.js');
             addRelationshipPromises.push(function() {
                 e2eBase.relationshipService.createOneToOneRelationship(createdApp, createdApp.tables[e2eConsts.TABLE7], createdApp.tables[e2eConsts.TABLE10], 7);
             });
-            addRelationshipPromises.push(function() {e2eBase.relationshipService.createOneToOneRelationship(createdApp, createdApp.tables[e2eConsts.TABLE9], createdApp.tables[e2eConsts.TABLE10], 8);
+            addRelationshipPromises.push(function() {
+                e2eBase.relationshipService.createOneToOneRelationship(createdApp, createdApp.tables[e2eConsts.TABLE9], createdApp.tables[e2eConsts.TABLE10], 8);
             });
             // Create table relationship, Table 13(City) is a child of Table 12(State)
             addRelationshipPromises.push(function() {
