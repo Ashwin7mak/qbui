@@ -3,7 +3,7 @@ import {shallow, mount} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
 import _ from 'lodash';
 
-import QBForm, {__RewireAPI__ as QbFormRewireAPI} from '../../src/components/QBForm/qbform';
+import {QBForm, __RewireAPI__ as QbFormRewireAPI} from '../../src/components/QBForm/qbform';
 import QBPanel from '../../src/components/QBPanel/qbpanel.js';
 import {TabPane} from 'rc-tabs';
 import RelatedChildReport from '../../src/components/QBForm/relatedChildReport';
@@ -53,10 +53,31 @@ const emptyQBFormData = {
     fields: [{id: 2, name: "field name", datatypeAttributes: {type: "TEXT"}}, {"builtIn": true, "datatypeAttributes": {"type": "DATE_TIME"}, "id": 1, "required": false, "type": "SCALAR", "name": "built in field name"}]
 };
 
-var FieldElementMock = React.createClass({
+const storeFields = [{
+    appId: 3,
+    tblId: 2,
+    fieldsLoading: false,
+    fields: {
+        fields: {
+            data: [
+                {id: 6, name: "field 6", datatypeAttributes: {type: "TEXT"}},
+                {id: 7, name: "field 7", datatypeAttributes: {type: "TEXT"}}
+            ]
+        }
+    }
+}];
+
+const FieldElementMock = React.createClass({
     render: function() {
         return (
             <div className="formElement field">{this.props.display}</div>
+        );
+    }
+});
+const DragAndDropMock = React.createClass({
+    render: function() {
+        return (
+            <div>mock dragAndDrop</div>
         );
     }
 });
@@ -66,10 +87,12 @@ let component;
 describe('QBForm', () => {
     beforeEach(() => {
         jasmineEnzyme();
+        QbFormRewireAPI.__Rewire__('DragAndDropField', DragAndDropMock);
         QbFormRewireAPI.__Rewire__('FieldElement', FieldElementMock);
     });
 
     afterEach(() => {
+        QbFormRewireAPI.__ResetDependency__('DragAndDropField');
         QbFormRewireAPI.__ResetDependency__('FieldElement');
     });
 
@@ -196,7 +219,8 @@ describe('QBForm', () => {
             }
         };
 
-        component = mount(<QBForm activeTab="0" formData={fakeQbFormData} pendEdits={edits} />);
+        //  fields is now coming from redux, so pass in as a prop
+        component = mount(<QBForm activeTab="0" formData={fakeQbFormData} pendEdits={edits} fields={storeFields} />);
         const fieldElements = component.find('.formTable').first().find(FieldElementMock);
         expect(fieldElements.length).toEqual(4);
 
@@ -224,7 +248,7 @@ describe('QBForm', () => {
             }
         };
 
-        component = mount(<QBForm activeTab={"0"} formData={fakeQbFormData} pendEdits={edits} />);
+        component = mount(<QBForm activeTab={"0"} formData={fakeQbFormData} pendEdits={edits} fields={storeFields}/>);
         const fieldElements = component.find('.formTable').first().find(FieldElementMock);
         expect(fieldElements.length).toEqual(4);
 
