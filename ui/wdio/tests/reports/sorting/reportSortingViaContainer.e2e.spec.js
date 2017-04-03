@@ -124,7 +124,7 @@
 
             //Step 9 - Verify records are sorted in ascending order
             sortedTableRecords = reportContentPO.getAllRecordsFromTable();
-            expect (_.flatten(sortedTableRecords)).toEqual(_.flatten(originalRecords).sort())
+            expect(_.flatten(sortedTableRecords)).toEqual(_.flatten(originalRecords).sort());
 
             //Step 10 - Click on sort/Grp Icon
             reportSortingPO.clickSortGroupIconOnReportsPage();
@@ -139,7 +139,7 @@
             actualTableRecords = reportContentPO.getAllRecordsFromTable();
 
             //Step 13 - Verify the records are not sorted now after reset
-            expect (_.flatten(actualTableRecords)).toEqual(_.flatten(originalRecords))
+            expect(_.flatten(actualTableRecords)).toEqual(_.flatten(originalRecords));
 
             //Step 14 - Verify reset also clears the fields in the container
             reportSortingPO.clickSortGroupIconOnReportsPage();
