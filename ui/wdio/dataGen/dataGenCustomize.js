@@ -499,7 +499,8 @@ consts = require('../../common/src/constants.js');
             recordsConfig.tablesConfig[createdApp.tables[e2eConsts.TABLE10].name] = {};
             recordsConfig.tablesConfig[createdApp.tables[e2eConsts.TABLE10].name].numRecordsToCreate = 6;
             recordsConfig.tablesConfig[createdApp.tables[e2eConsts.TABLE11].name] = {};
-            recordsConfig.tablesConfig[createdApp.tables[e2eConsts.TABLE11].name].numRecordsToCreate = 6;//TODO :number of records is 5 and not 6 ?
+            //TODO :number of records is 5 and not 6 , this needs to be fixed
+            recordsConfig.tablesConfig[createdApp.tables[e2eConsts.TABLE11].name].numRecordsToCreate = 6;
             recordsConfig.tablesConfig[createdApp.tables[e2eConsts.TABLE12].name] = {};
             recordsConfig.tablesConfig[createdApp.tables[e2eConsts.TABLE12].name].numRecordsToCreate = 6;
             recordsConfig.tablesConfig[createdApp.tables[e2eConsts.TABLE13].name] = {};
