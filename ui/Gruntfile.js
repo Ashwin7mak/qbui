@@ -102,6 +102,7 @@ module.exports = function(grunt) {
         bldinfo : {
             JOB_NAME : (process.env.JOB_NAME ? (process.env.JOB_NAME) : ''),
             GIT_BRANCH : (process.env.GIT_BRANCH ? (process.env.GIT_BRANCH) : ''),
+            GIT_UIBRANCH : (process.env.GIT_UIBRANCH ? (process.env.GIT_UIBRANCH) : ''),
             BUILD_NUMBER : (process.env.BUILD_NUMBER ? (process.env.BUILD_NUMBER) : ''),
         },
         vendorDir : 'vendor',
