@@ -1,3 +1,5 @@
+import Locale from '../locales/locales';
+import FieldFormats from'./fieldFormats';
 const serverTypeConsts = require('../../../common/src/constants');
 
 let arrayOfTypes = [
@@ -15,31 +17,29 @@ let arrayOfTypes = [
     serverTypeConsts.EMAIL_ADDRESS,
     serverTypeConsts.PHONE_NUMBER,
     serverTypeConsts.TEXT
-    // serverTypeConsts.TEXT_FORMULA,
-    // serverTypeConsts.URL_FORMULA,
-    // serverTypeConsts.NUMERIC_FORMULA
 ];
 
-let newFields = {};
+class DefaultFieldsProperties {
 
-let createDefaultFields = (typeArray) => {
-    return typeArray.forEach((type) => {
-        newFields[type] = {
+    static createScalarDefaultFieldsProperties() {
+        let defaultFieldProperties = {};
+
+        arrayOfTypes.forEach((type) => {
+            let fieldDef = {datatypeAttributes: {type: type}};
+            let fieldType = FieldFormats.getFormatType(fieldDef);
+
+            defaultFieldProperties[type] = {
                 "type": "SCALAR",
                 "datatypeAttributes": {
                     "type": type
                 },
-                "name": type
+                "name": Locale.getMessage(`fieldsDefaultLabels.${fieldType}`)
             }
+        });
 
-    });
+        return defaultFieldProperties;
+    };
 };
 
-createDefaultFields(arrayOfTypes);
+export default DefaultFieldsProperties;
 
-(function() {
-    'use strict';
-    module.exports = Object.freeze({
-        ...newFields
-    })
-}());
