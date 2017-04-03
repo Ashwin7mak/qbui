@@ -10,6 +10,9 @@ import _ from 'lodash';
 
 import ReportCell from './reportCell';
 
+
+
+
 const ReportGrid = React.createClass({
     propTypes: {
         appId: PropTypes.string,
@@ -220,6 +223,7 @@ const ReportGrid = React.createClass({
             numberOfColumns={_.isArray(this.props.columns) ? this.props.columns.length : 0}
             columns={this.transformColumns()}
             rows={transformedRecords}
+
             loading={this.props.loading}
             onStartEditingRow={this.startEditingRow}
             editingRowId={editingRecordId}
@@ -277,3 +281,12 @@ function formatChange(updatedValues, colDef) {
 }
 
 export default ReportGrid;
+
+
+
+
+
+
+
+
+

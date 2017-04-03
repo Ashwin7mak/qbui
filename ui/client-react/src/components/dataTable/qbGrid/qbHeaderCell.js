@@ -21,7 +21,7 @@ const QbHeaderCell = React.createClass({
             classes.push(['stickyCell']);
         }
 
-        return <th className={classes.join(' ')} {...this.props} />;
+        return <th className={classes.join(' ')} draggable="true" {...this.props} />;
     }
 });
 

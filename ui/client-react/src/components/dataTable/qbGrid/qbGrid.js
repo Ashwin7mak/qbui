@@ -15,6 +15,11 @@ const logger = new Logger();
 
 import './qbGrid.scss';
 
+import Header from './header';
+import {
+    moveChildrenLabels, moveLabels, move
+} from './move';
+
 const ICON_ACTIONS_COLUMN_ID = 'ICON_ACTIONS';
 
 const QbGrid = React.createClass({
@@ -124,6 +129,7 @@ const QbGrid = React.createClass({
          * Flag to include the first column that includes row specific actions. Currently requires fluxxor/FluxMixin to be available. */
         showRowActionsColumn: PropTypes.bool
     },
+
 
     getDefaultProps() {
         return {
@@ -341,7 +347,12 @@ const QbGrid = React.createClass({
         }
     },
 
+
+
+
     render() {
+
+        // this.state.columns= { onMove:o => this.onMoveColumn(o)}
         let columns;
         if (this.props.showRowActionsColumn) {
             columns = [
@@ -378,6 +389,7 @@ const QbGrid = React.createClass({
                     components={{
                         header: {
                             cell: QbHeaderCell
+                           // onMove:this.onMoveColumn(o)
                         },
                         body: {
                             row: QbRow,
