@@ -63,48 +63,52 @@ export const QBForm = React.createClass({
     },
 
     shouldComponentUpdate: function(nextProps, nextState) {
-        //  check to see if the fields store for this app/tbl is getting initialized with data
-        if (Array.isArray(nextProps.fields)) {
-            const formMeta = nextProps.formData ? nextProps.formData.formMeta : {};
-            if (_.has(formMeta, 'appId') && _.has(formMeta, 'tableId')) {
-                const tableFields = _.find(nextProps.fields, fields => {
-                    return ((fields.appId === formMeta.appId) && (fields.tblId === formMeta.tableId));
-                });
-
-                // don't render if the fields store is in the process of being initialized with data.
-                if (tableFields && tableFields.fieldsLoading === true) {
-                    return false;
-                }
-            }
+        // don't render if the fields store for this table is in the process of being initialized with data.
+        const tableFields = this.getTableFieldsFromStore(nextProps);
+        if (tableFields && tableFields.fieldsLoading === true) {
+            return false;
         }
+
         return true;
     },
 
     /**
-     * get the form data field from the fields redux store
+     * Retrieve the fields on the table from the fields redux store
      *
-     * @param fieldId
-     * @returns the field from formdata fields with the field ID
+     * @param props
+     * @returns {*}
      */
-    getRelatedField(fieldId) {
-        //  search the fields property from the redux store for the correct appId/tblId list
-        if (Array.isArray(this.props.fields)) {
-            const formMeta = this.props.formData ? this.props.formData.formMeta : {};
+    getTableFieldsFromStore: function(props) {
+        let fields = null;
+        if (props && Array.isArray(props.fields)) {
+            //  find the fields for the form's appId/tblId combination
+            const formMeta = _.has(props, 'formData.formMeta') ? props.formData.formMeta : {};
             if (_.has(formMeta, 'appId') && _.has(formMeta, 'tableId')) {
-                const tableFields = _.find(this.props.fields, fields => {
-                    return ((fields.appId === formMeta.appId) && (fields.tblId === formMeta.tableId));
+                fields = _.find(props.fields, flds => {
+                    return ((flds.appId === formMeta.appId) && (flds.tblId === formMeta.tableId));
                 });
-                if (_.has(tableFields, 'fields.fields.data')) {
-                    // crazy object structure..should be refactored!
-                    const fields = tableFields.fields.fields.data;
-                    return _.find(fields, field => {
-                        return field.id === fieldId;
-                    });
-                }
             }
         }
+        return fields;
+    },
 
-        return null;
+    /**
+     * Retrieve the field object from the fields redux store for this appId/tblId
+     *
+     * @param fieldId
+     * @returns field object or null if not found
+     */
+    getRelatedField(fieldId) {
+        let field;
+        const tableFields = this.getTableFieldsFromStore(this.props);
+        if (_.has(tableFields, 'fields.fields.data')) {
+            // crazy object structure..should be refactored!
+            const fields = tableFields.fields.fields.data;
+            field = _.find(fields, fld => {
+                return fld.id === fieldId;
+            });
+        }
+        return field || null;
     },
 
     /**
@@ -605,13 +609,6 @@ const mapStateToProps = (state) => {
         fields: state.fields
     };
 };
-//const mapDispatchToProps = (dispatch) => {
-//    return {
-//        loadFields: (appId, tblId) => {
-//            dispatch(loadFields(appId, tblId));
-//        }
-//    };
-//};
 
 export default connect(
     mapStateToProps,

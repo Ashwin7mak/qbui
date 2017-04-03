@@ -13,7 +13,7 @@ const fields = (state = [], action) => {
     function getKeyField(content) {
         let keyField;
         if (_.has(content, 'fields')) {
-            keyField = _.find(content.fields, field => field.id === BUILTIN_FIELD_ID);
+            keyField = _.find(content.fields, field => field.id === BUILTIN_FIELD_ID.RECORD_ID);
         }
         return keyField;
     }
