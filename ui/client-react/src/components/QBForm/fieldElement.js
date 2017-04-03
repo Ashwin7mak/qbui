@@ -71,7 +71,8 @@ export const FieldElement = React.createClass({
     render() {
         let fieldDatatypeAttributes = this.props.relatedField && this.props.relatedField.datatypeAttributes ?
             this.props.relatedField.datatypeAttributes : {};
-        let fieldType = FieldFormats.getFormatType(fieldDatatypeAttributes);
+        let relatedField = this.props.relatedField;
+        let fieldType = FieldFormats.getFormatType(relatedField);
 
         //catch the non-implemented pieces.
         let fieldDisplayValue = this.props.fieldRecord ? this.props.fieldRecord.display : "";
@@ -80,7 +81,6 @@ export const FieldElement = React.createClass({
         let indicateRequiredOnField = !this.props.indicateRequiredOnLabel;
 
         // If the form element has showAsRadio prop - pass it down as a part of fieldDef
-        let relatedField = this.props.relatedField;
         if (this.props.element && this.props.element.showAsRadio) {
             relatedField.showAsRadio = true;
         }
@@ -133,13 +133,13 @@ export const FieldElement = React.createClass({
         return (
             <div className="formElement field">
                 {this.props.includeLabel &&
-                    <FieldLabelElement
-                        element={this.props.element}
-                        relatedField={this.props.relatedField}
-                        indicateRequiredOnLabel={this.props.indicateRequiredOnLabel}
-                        isInvalid={this.props.isInvalid}
-                        label={FieldUtils.getFieldLabel(this.props.element, this.props.relatedField)}
-                    /> }
+                <FieldLabelElement
+                    element={this.props.element}
+                    relatedField={this.props.relatedField}
+                    indicateRequiredOnLabel={this.props.indicateRequiredOnLabel}
+                    isInvalid={this.props.isInvalid}
+                    label={FieldUtils.getFieldLabel(this.props.element, this.props.relatedField)}
+                /> }
 
                 <span className="cellWrapper">
                     { fieldElement }
