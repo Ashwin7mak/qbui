@@ -74,7 +74,6 @@ export const FormBuilderContainer = React.createClass({
     componentDidMount() {
         // We use the NEW_FORM_RECORD_ID so that the form does not load any record data
         this.props.loadForm(this.props.appId, this.props.tblId, null, (this.props.formType || 'view'), NEW_FORM_RECORD_ID);
-
         // if we've been sent here from the table creation flow, show a notification
         if (this.props.shouldNotifyTableCreated) {
             this.props.notifyTableCreated(false);
