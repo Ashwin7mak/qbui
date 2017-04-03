@@ -84,7 +84,8 @@
 
         });
 
-        it("Verify Reset btn functionality inside the sort/Grp dialogue", function() {
+        //TODO the below test Disabled due to MC-1518
+        xit("Verify Reset btn functionality inside the sort/Grp dialogue", function() {
             var expectedFieldsInContainer = ['Text Field'];
             var sortedTableRecords;
 
@@ -105,30 +106,25 @@
             //Step 4 - Delete if any fields present
             reportSortingPO.deleteAllFieldsFromSrtGrpDlg(reportSortingPO.sortBySettings);
 
-            //Step 5 - Add Text Field to sortBy
+            //step 5 - Get original records from the report table
+            var originalRecords = reportContentPO.getAllRecordsFromTable();
+
+            //Step 6 - Add Text Field to sortBy
             expectedFieldsInContainer.forEach(function(field) {
                 reportSortingPO.selectFieldsInSrtGrpDlg(reportSortingPO.sortBySettings, 'Choose a field to sort by', field);
             });
 
-            //Step 6 - Click on Apply
+            //Step 7 - Click on Apply
             reportSortingPO.clickContainerApplyBtn();
             //wait until report rows in table are loaded
             reportContentPO.waitForReportContent();
 
-            //Step 7 - Verify there is check mark present in column header
+            //Step 8 - Verify there is check mark present in column header
             reportSortingPO.expandColumnHeaderMenuAndVerifySelectedItem("Text Field", "Sort A to Z");
 
-            //Step 8 - Get all table results after sorting via sortBy
-            sortedTableRecords = reportContentPO.getAllRecordsFromTable();
-
             //Step 9 - Verify records are sorted in ascending order
-            //Verify they are in ascending order
-            expect(_.every(sortedTableRecords, function(value, index, array) {
-                // either it is the first element, or otherwise this element should
-                // not be smaller than the previous element.
-                // spec requires string conversion
-                return index === 0 || String(array[index - 1]) <= String(value);
-            })).toBeTruthy();
+            sortedTableRecords = reportContentPO.getAllRecordsFromTable();
+            expect (_.flatten(sortedTableRecords)).toEqual(_.flatten(originalRecords).sort())
 
             //Step 10 - Click on sort/Grp Icon
             reportSortingPO.clickSortGroupIconOnReportsPage();
@@ -143,13 +139,7 @@
             actualTableRecords = reportContentPO.getAllRecordsFromTable();
 
             //Step 13 - Verify the records are not sorted now after reset
-            expect(_.every(actualTableRecords, function(value, index, array) {
-                // either it is the first element, or otherwise this element should
-                // not be smaller than the previous element.
-                // spec requires string conversion
-                return index === 0 || String(array[index - 1]) <= String(value);
-            })).toBeFalsy();
-
+            expect (_.flatten(actualTableRecords)).toEqual(_.flatten(originalRecords))
 
             //Step 14 - Verify reset also clears the fields in the container
             reportSortingPO.clickSortGroupIconOnReportsPage();
