@@ -14,25 +14,6 @@
 // be created without XD creating them.
 @import '_qbColorPalette-QuickBase3.scss';
 
-/*
-FOR VISUAL DESIGN QA/TESTING, TEMPORARILY MAKE THE FOLLOWING COLORS $color-red-500
-*/
-
-//== Teal - NO LONG VALID COLOR IN PALETTE
-$color-teal-600: $color-red-500; //#00b0c2; // Date picker header & selected/todays date or time
-$color-teal-400: $color-red-500; //#13dbf1;
-$color-teal-100: $color-red-500; //#effcfe;
-
-//== Blue - NO LONG VALID COLOR IN PALETTE
-$color-blue-800: $color-red-500; //#4e2a6f; // Tooltip background
-$color-blue-700: $color-red-500; //#5c3483; // Trowser footer
-$color-blue-600: $color-red-500; //#74489d; // Numerical badges, Secondary buttons on Trowser Footer
-$color-blue-500: $color-red-500; //#9067b7; // All icons on deep-sea or white
-//$color-blue-400: $color-red-500; //#b192d0; // Dividers in table headers, Sort by column, date picker hover
-$color-blue-300: $color-red-500; //#d3bde9; // Table row inline edit selection state
-$color-blue-200: $color-red-500; //#eadff4; // Table row hover state, Bottom gradient color in stage background
-$color-blue-100: $color-red-500; //#f8f5fb; // page background
-
 //-------------------------------------------------------------------
 // BEGIN COLOR VARIABLES TO BE ELIMINATED
 // These variables are deprecated. Do not use them anymore.
@@ -45,7 +26,7 @@ $color-blue-100: $color-red-500; //#f8f5fb; // page background
 // outside the palette in one place.
 // Do not change the values of these variables. Change the code
 // using them and then delete the variable.
-$badcolor1-color6:          #d2dce7;
+//$badcolor1-color6:          #d2dce7;
 $badcolor2-color13:         #f6f8fb;
 $badcolor3-color14:         #f9fafb;
 //$badcolor4-color15:         #f0f3f9;
@@ -58,15 +39,15 @@ $badcolor10-nav-hover-bg:                   #0097cd;
 //$badcolor11-icon-badge-color:               #2d6c92;
 //$badcolor12-icon-mail-color:                #f7a21a;
 //$badcolor13-icon-duplicate-color:           #c75ac2;
-$badcolor14-top-nav-title-icon-color:       #009aae;
+//$badcolor14-top-nav-title-icon-color:       #009aae;
 //$badcolor15-secondary-bar-page-actions-bg:  #476b90;
 //$badcolor16:                #dddddd;
 //$badcolor17:                #333333;
 $badcolor18:                #f3f3f3;
-$badcolor19:                #a52363;
-$badcolor20:                #5f8ba7;
+//$badcolor19:                #a52363;
+//$badcolor20:                #5f8ba7;
 $badcolor21:                #6e8ba8;
-$badcolor22:                #f2f9fe;
+//$badcolor22:                #f2f9fe;
 $badcolor23:                #464242;
 
 //-------------------------------------------------------------------
@@ -124,7 +105,8 @@ $iconfont-on-light-alternate-color:     $color-black-700;
 $iconfont-on-light-disabled-color:      $color-black-400;   // not in XD spreadsheet
 
 // this old color needs to be merged with one of the iconfont colors above???
-$icon-color-hover:                      $color-black-500;    // not in XD spreadsheet
+$icon-color-hover:                      $color-black-700;    // not in XD spreadsheet
+$icon-light-color-hover:                $color-black-500;    // not in XD spreadsheet
 
 $report-columnheaderarrow-normal-color: $color-cyan-800;
 $mail-icon-normal-color:                $color-orange-600;
@@ -172,7 +154,7 @@ $datepicker-today-background-color:         $color-yellow-500;  // not in XD spr
 $today-link-background-color:               $color-black-250;
 
 // used by multi-choice field editor... not sure why it's here... or why it's got such a generic name for that component.
-$hover-color:                           $color-black-200;    // new spec has this set to $color-blue-300; (to be updated later)   // comment in spreadsheet that this needs to be replaced by $dropdown-hover-color
+$hover-color:                           $color-black-200;
 
 // elements
 $microtext-link-color:                  $color-indigo-700;
@@ -180,8 +162,8 @@ $microtext-normal-color:                $color-black-600;
 
 // top navigation
 $topnav-title-icon-color:               $color-purple-600;
-$topnav-icon-color:                     $iconfont-on-light-normal-color;        // not in XD spreadsheet
-$topnav-hover-color:                    $color-black-100;                       // not in XD spreadsheet
+$topnav-icon-color:                     $color-black-800;                       // not in XD spreadsheet
+$topnav-hover-color:                    $color-black-500;                       // not in XD spreadsheet
 $topnav-hover-background-color:         $badcolor10-nav-hover-bg;               // not in XD spreadsheet
 $topnav-header-background-color:        $color-black-200;                       // not in XD spreadsheet
 
@@ -202,16 +184,8 @@ $leftnav-items-color:                   $color-black-700;
 
 // current left navigation variables to be merged with the new ones above
 $left-nav-color: $color-black-100;                              // not in XD spreadsheet
-//$left-nav-link-color: $color-blue-500;                          // not in XD spreadsheet
 $left-nav-link-hover-color: $color-black-100;                   // not in XD spreadsheet
-$left-nav-hover-background-color: $color-cyan-800;              // not in XD spreadsheet
-$left-nav-selected-background-color: $color-teal-600;           // not in XD spreadsheet
 $left-nav-heading-color: $badcolor9-color29;                    // not in XD spreadsheet
-$left-nav-background-color: $color-blue-700;                    // not in XD spreadsheet
-$left-nav-selected-table-color: $color-black-100;               // not in XD spreadsheet
-$left-nav-right-icon-separator-color: $color-blue-600;          // not in XD spreadsheet
-$left-nav-right-icon-separator-hover-color: $color-teal-400;    // not in XD spreadsheet
-$left-nav-horizontal-icon-border-color: $color-blue-800;        // not in XD spreadsheet
 
 // Stage - This is the area below the top nav and above the page contents that the user cares about.
 $stage-background-color:                $color-black-100;       // not in XD spreadsheet
@@ -231,7 +205,7 @@ $secondary-bar-page-actions-background-color:   $color-purple-700;              
 
 // Card view
 $card-view-table-actions-container-background-color:    $color-black-100;               // not in XD spreadsheet
-$card-view-shadow-color:                                rgba($color-blue-600, 0.2);     // not in XD spreadsheet
+$card-view-shadow-color:                                rgba($color-black-600, 0.2);     // not in XD spreadsheet
 
 //== COMPONENTS
 
@@ -347,7 +321,8 @@ $pagination-mobile-topbar-text-color:       $color-black-100;
 $pagination-iconfont-normal-color:          $color-cyan-700;    // not in XD spreadsheet
 $pagination-iconfont-disabled-color:        $color-black-400;   // not in XD spreadsheet
 $pagination-iconfont-hover-color:           $color-cyan-300;    // not in XD spreadsheet
-
+$pagination-iconfont-darkblack-color:       $color-black-700;   // not in XD spreadsheet
+$pagination-arrow-hover-color:              $color-black-300;   // not in XD spreadsheet
 // Report grouped headers
 $grid-group-row-header-background-color:    $color-black-200;    // not in XD spreadsheet
 
@@ -395,16 +370,15 @@ $popover-shadow-color:                      rgba($badcolor23, 0.15);    // not i
 $error-message-border-color:                $color-black-400;   // not in XD spreadsheet
 $error-message-header-background-color:     $error-color;       // not in XD spreadsheet
 $error-message-content-background-color:    $color-black-100;   // not in XD spreadsheet
-$error-message-content-text-color:          $color-blue-600;    // not in XD spreadsheet
+$error-message-content-text-color:          $color-black-300;    // not in XD spreadsheet
 $error-message-header-text-color:           $color-black-100;   // not in XD spreadsheet
 
 // trowsers
 $trowser-color: $color-black-800;                                   // not in XD spreadsheet
 $trowser-icons-color: $color-black-100;                             // not in XD spreadsheet
 $trowser-header-background-color: $color-purple-600;                  // not in XD spreadsheet
-$trowser-footer-background-color: $color-blue-700;                  // not in XD spreadsheet
 $trowser-footer-border-color: $color-black-300;
-$trowser-action-separator-color: $color-blue-600;                   // not in XD spreadsheet
+$trowser-action-separator-color: $color-black-300;                   // not in XD spreadsheet
 $trowser-header-nav-icon-hover-background-color: $color-cyan-800;   // not in XD spreadsheet
 
 // QBPanel - an expandable/collapsable panel
@@ -435,7 +409,7 @@ $app-role-divider: $color-yellow-500;
 
 
 //-------------------------------------------------------------------
-// BEGIN SEMAreportNTIC NAMES TO CLEANUP
+// BEGIN SEMANTIC NAMES TO CLEANUP
 // Below are semantic names that are inconsistently used or have
 // not been reviewed for what to do with them.
 //-------------------------------------------------------------------

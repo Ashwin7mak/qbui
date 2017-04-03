@@ -34,7 +34,7 @@ const SearchBox = React.createClass({
                     <span className="clearSearch" onClick={this.props.onClearSearch}>
                         <QBicon icon="clear-mini" className="searchIcon"/>
                     </span> :
-                    null
+                    <QBicon icon="search" className="searchIcon"/>
                 }
             </div>
         );

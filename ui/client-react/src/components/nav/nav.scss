@@ -48,7 +48,6 @@
 
 body:not(.touch) .navShell .main .topNav .iconLink:hover {
     color: $topnav-hover-color;
-    background: $topnav-hover-background-color;
 }
 
 @include small-breakpoint {
@@ -63,4 +62,11 @@ body:not(.touch) .navShell .main .topNav .iconLink:hover {
     left: 0;
 }
 
+.nav-search {
+    float: right;
+    margin: 10px;
+}
 
+.fieldDeleteIcon {
+    font-size: 20px;
+}

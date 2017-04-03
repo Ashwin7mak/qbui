@@ -61,7 +61,7 @@
         flex-direction: row;
         flex: 1 0 auto;
         align-items: flex-start;
-        color: $iconfont-on-light-normal-color;
+        color: $search-input-color;
 
         &.noFacets {
             justify-content: flex-start;
@@ -83,7 +83,7 @@
             display: flex;
             flex-direction: row;
             justify-content: flex-end;
-            color: $pagination-iconfont-normal-color;
+            color: $pagination-iconfont-darkblack-color;
 
             .recordsCountLoaderContainer {
                 flex-grow: 1;
@@ -265,14 +265,14 @@
 .sortButtonSpan {
     display: inline-block;
     cursor: pointer;
-    color: $iconfont-on-light-normal-color;
+    color: $icon-color-hover;
 
     @include small-breakpoint {
         color: $secondary-bar-color;
     }
 
     .sortButton {
-        font-size: 20px;
+        font-size: 18px;
 
         &.qbIcon {
             display: inline;
@@ -282,7 +282,7 @@
 
 .reportNavigation {
     float: left;
-    color: $pagination-iconfont-normal-color;
+    color: $pagination-iconfont-darkblack-color;
     font-family: "Lato", sans-serif;
     font-size: 14px;
     display: flex;
@@ -305,7 +305,7 @@
         &.qbIcon {
             display: inline;
             font-size: 24px;
-            color: $pagination-iconfont-normal-color;
+            color: $pagination-iconfont-darkblack-color;
 
             &.disabled {
                 color: $pagination-iconfont-disabled-color;
@@ -313,7 +313,7 @@
         }
 
         &:hover {
-            color: $pagination-iconfont-hover-color;
+            color: $pagination-arrow-hover-color;
         }
     }
 
@@ -328,7 +328,7 @@
         &.qbIcon {
             display: inline;
             font-size: 24px;
-            color: $pagination-iconfont-normal-color;
+            color: $pagination-iconfont-darkblack-color;
 
             &.disabled {
                 color: $pagination-iconfont-disabled-color;
@@ -336,7 +336,7 @@
         }
 
         &:hover {
-            color: $pagination-iconfont-hover-color;
+            color: $pagination-arrow-hover-color;
         }
     }
 }

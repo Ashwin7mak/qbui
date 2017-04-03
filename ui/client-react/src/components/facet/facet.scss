@@ -36,7 +36,7 @@
     }
 
     .facetButtons {
-        color: $iconfont-on-light-normal-color;
+        color: $icon-color-hover;
 
         @include small-breakpoint {
             color: $secondary-bar-color;
@@ -52,10 +52,14 @@
     }
 
     .filterButton {
-        font-size: 20px;
+        font-size: 18px;
 
         &.qbIcon {
             display: inline;
+        }
+
+        &:hover {
+            color: $icon-light-color-hover;
         }
     }
 

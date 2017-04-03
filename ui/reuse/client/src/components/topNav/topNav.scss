@@ -79,7 +79,6 @@
     }
 
     .navGroup .btn-group .btn:not(.disabled):hover {
-        background: $topnav-hover-background-color;
 
         span {
             color: $topnav-hover-color;
@@ -95,7 +94,7 @@
     }
 
     .qbIcon {
-        font-size: 22px;
+        font-size: 20px;
     }
 
 
@@ -172,7 +171,7 @@
             }
         }
         .globalAction:hover {
-            background: $topnav-hover-background-color;
+            //background: $topnav-hover-background-color;
 
             > a, .dropdownToggle {
                 color: $topnav-hover-color;
