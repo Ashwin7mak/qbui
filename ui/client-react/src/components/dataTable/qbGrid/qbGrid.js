@@ -230,18 +230,6 @@ const QbGrid = React.createClass({
     },
 
     /**
-     * Add a column to the grid.
-     * @param index the index position this column should appear in the grid
-     * @param id
-     */
-    addColumn(index, id) {
-        console.log("adding column");
-        if (this.props.onColumnAdd) {
-            this.props.onColumnAdd(index, id);
-        }
-    },
-
-    /**
      * Adds properties to the row so that the row component can access information set on the QbGrid component.
      * @param row
      * @returns {*}
