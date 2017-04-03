@@ -48,15 +48,15 @@ let BuilderDropDownAction = React.createClass({
                     {isTableView ?
                     <div className="configSet withIcon">
                         <li className="menuHeader"><I18nMessage message={"settings.header"}/></li>
-                        <li><a className="heading">{this.props.selectedTable.icon && <Icon isTableIcon={true} icon={this.props.selectedTable.icon}/> }
+                        <li><a className="heading">{this.props.selectedTable.icon && <Icon className="headingIcon" isTableIcon={true} icon={this.props.selectedTable.icon}/> }
                             <span><I18nMessage message={"settings.tablesHeader"}/></span></a></li>
-                        <li><a id="modifyTableSettings" onClick={this.getTableSettingsLink}><I18nMessage message={"pageActions.tableSettings"}/></a></li>
+                        <li><a id="modifyTableSettings" onClick={this.getTableSettingsLink}><I18nMessage message={"settings.tableSettings"}/></a></li>
                     </div> : null}
                     {isFormView ?
                     <div className="configSet currentContext">
                         <li><a className="heading"><span><I18nMessage message={"settings.formsHeader"}/></span></a></li>
                         <li><a id="modifyForm" onClick={this.props.navigateToBuilder}><I18nMessage
-                            message={"pageActions.configureFormBuilder"}/></a></li>
+                            message={"settings.configureFormBuilder"}/></a></li>
                     </div> : null}
                 </div>
             </Dropdown.Menu>

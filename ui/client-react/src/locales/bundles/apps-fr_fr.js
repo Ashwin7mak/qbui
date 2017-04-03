@@ -104,8 +104,10 @@ export default {
             next: "Prochain",
             previous: "Orécédent",
             finished: "Fini",
+            apply: "Appliquer",
             new: "Nouveau",
-            backToApp: "Retour à l'application"
+            backToApp: "Retour à l'application",
+            reset: "Réinitialiser"
         },
         field: {
             search: "Chercher",
@@ -122,9 +124,6 @@ export default {
         },
         pageActions: {
             addRecord: "Ajouter un enregistrement",
-            tableSettingsHeader: 'Table Settings',
-            tableSettings: 'Table Properties & Settings',
-            configureFormBuilder: 'Modifier ce formulaire',
             saveRecord: "Sauvegarder les modifications",
             saveAndAddRecord: "Enregistrer et ajouter une nouvelle ligne",
             saveAndAddRecordDisabled: "Ajout de plusieurs enregistrements ne fonctionnant pas en ce moment",
@@ -589,7 +588,18 @@ export default {
         },
         iconChooser: {
             searchPlaceholder: "Rechercher des icônes..."
+        },
+        settings: {
+            header: "Paramètres",
+            tablesHeader: "Table",
+            appsHeader: "App",
+            formsHeader: "Forme",
+            tableSettings: "Propriétés et paramètres de la table",
+            configureFormBuilder: 'Modifier ce formulaire',
+        },
+        tableEdit: {
+            tableUpdateFailed: "Impossible de mettre à jour le tableau",
+            tableUpdated: "Tableau mis à jour"
         }
-
     }
 };

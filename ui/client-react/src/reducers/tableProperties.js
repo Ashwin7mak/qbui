@@ -21,7 +21,7 @@ const tableProperties = (
         iconChooserOpen: false,
         savingTable: false,
         tableInfo: defaultTableInfo,
-        edited: false,
+        isDirty: false,
         editing: null
     },
     action) => {
@@ -33,7 +33,6 @@ const tableProperties = (
             iconChooserOpen: action.isOpen
         };
     }
-
     case types.SET_TABLE_PROPS: {
 
         const tableInfo = {...state.tableInfo};
@@ -41,6 +40,7 @@ const tableProperties = (
         const fieldInfo = tableInfo[action.property];
 
         tableInfo[action.property] = {
+            origValue: tableInfo[action.property].origValue,
             value: action.value,
             validationError: action.validationError,
             edited: fieldInfo.edited || action.isUserEdit
@@ -48,7 +48,7 @@ const tableProperties = (
 
         return {
             ...state,
-            edited: state.edited || action.isUserEdit,
+            isDirty: state.edited || action.isUserEdit,
             tableInfo: tableInfo
         };
     }
@@ -59,7 +59,9 @@ const tableProperties = (
 
         let newTableInfo = {};
         Object.keys(tableInfo).forEach(function(key, index) {
-            newTableInfo[key] = {value: tableInfo[key],
+            newTableInfo[key] = {
+                origValue: tableInfo[key],
+                value: tableInfo[key],
                 validationError: action.validationError,
                 edited: action.isUserEdit
             };
@@ -93,6 +95,24 @@ const tableProperties = (
         return {
             ...state,
             savingTable: false
+        };
+    }
+    case types.RESET_TABLE_PROPS: {
+        let tableInfo = state.tableInfo;
+        let newTableInfo = {};
+        Object.keys(tableInfo).forEach(function(key, index) {
+            newTableInfo[key] = {
+                origValue: tableInfo[key].origValue,
+                value: tableInfo[key].origValue,
+                validationError: null,
+                edited: null
+            };
+        });
+
+        return {
+            ...state,
+            isDirty: false,
+            tableInfo: newTableInfo
         };
     }
     default:

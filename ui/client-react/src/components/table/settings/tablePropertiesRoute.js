@@ -24,12 +24,11 @@ const TablePropertiesRoute = React.createClass({
     getPageActions(maxButtonsBeforeMenu) {
         const actions = [
             {i18nMessageKey: 'pageActions.deleteTable', icon:'delete', className:'deleteTable'}
-            //{msg: 'pageActions.deleteTable', icon:'delete', className:'deleteTable'}
         ];
         return (<IconActions className="pageActions" actions={actions} maxButtonsBeforeMenu={maxButtonsBeforeMenu}/>);
     },
     getStageHeadline() {
-        return <div className="tableSettingsStage">{this.props.table ? <Icon isTableIcon={true} icon={this.props.table.icon} /> : null}<I18nMessage message={"pageActions.tableSettings"}/></div>;
+        return <div className="tableSettingsStage">{this.props.table ? <Icon isTableIcon={true} icon={this.props.table.icon} /> : null}<I18nMessage message={"settings.tableSettings"}/></div>;
     },
     componentDidMount() {
         if (this.props.app && this.props.table) {
@@ -44,7 +43,7 @@ const TablePropertiesRoute = React.createClass({
     updateTableProperties() {
         this.props.updateTable(this.props.app.id, this.props.table.id, this.props.tableProperties.tableInfo).then(
             (response) => {
-                NotificationManager.success(Locale.getMessage('tableCreation.tableCreated'), Locale.getMessage('success'));
+                NotificationManager.success(Locale.getMessage('tableEdit.tableUpdated'), Locale.getMessage('success'));
                 let updatedTableInfo = this.props.tableProperties.tableInfo;
                 let tableInfoObj = {};
                 Object.keys(updatedTableInfo).forEach(function(key, index) {
@@ -54,12 +53,17 @@ const TablePropertiesRoute = React.createClass({
                 this.props.flux.actions.updateTableProps(this.props.table.id, tableInfoObj);
             },
             (error) => {
-                NotificationManager.error(Locale.getMessage('tableCreation.tableCreationFailed'), Locale.getMessage('failed'));
+                NotificationManager.error(Locale.getMessage('tableEdit.tableUpdateFailed'), Locale.getMessage('failed'));
             });
     },
 
+    resetTableProperties() {
+        this.props.resetEditedTableProperties();
+    },
+
     render() {
-        let showButtons = this.props.tableProperties.editing ? true : false;
+        let showButtons = this.props.tableProperties.isDirty ? true : false;
+        let buttonsClasses =  "tableInfoButtons " + (showButtons ? "open" : "closed");
         return (<div>
             <Stage stageHeadline={this.getStageHeadline()} pageActions={this.getPageActions(5)}></Stage>
 
@@ -67,15 +71,15 @@ const TablePropertiesRoute = React.createClass({
                 <TableCreationPanel tableInfo={this.props.tableProperties.tableInfo}
                                     iconChooserOpen={this.props.tableProperties.iconChooserOpen}
                                     openIconChooser={this.props.openIconChooser}
-                                    closeIconChooser={this.props.closeIconChooser}
                                     setTableProperty={this.props.setTableProperty}
+                                    closeIconChooser={this.props.closeIconChooser}
                                     setEditingProperty={this.props.setEditingProperty}
                                     focusOn={this.props.tableProperties.editing}
                                     validate={this.props.tableProperties.edited}
                                     appTables={this.getExistingTableNames()}
                                      />
-                <div className="tableInfoButtons">
-                    <Button className="secondaryButton"><I18nMessage message={"nav.cancel"}/></Button>
+                <div className={buttonsClasses}>
+                    <a className="secondaryButton" onClick={this.resetTableProperties}><I18nMessage message={"nav.reset"}/></a>
                     <Button className="primaryButton" bsStyle="primary" onClick={this.updateTableProperties}><I18nMessage message={"nav.apply"}/></Button>
                 </div>
             </div>

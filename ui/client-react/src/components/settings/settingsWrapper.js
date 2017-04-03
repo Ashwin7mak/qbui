@@ -15,7 +15,7 @@ let FluxMixin = Fluxxor.FluxMixin(React);
 let StoreWatchMixin = Fluxxor.StoreWatchMixin;
 
 const SettingsWrapper = React.createClass({
-    mixins: [FluxMixin, StoreWatchMixin('NavStore', 'AppsStore')],
+    mixins: [FluxMixin, StoreWatchMixin('AppsStore')],
 
     getStateFromFlux() {
         let flux = this.getFlux();

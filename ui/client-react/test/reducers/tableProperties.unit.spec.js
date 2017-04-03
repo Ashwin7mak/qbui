@@ -24,7 +24,7 @@ function initializeState() {
         iconChooserOpen: false,
         savingTable: false,
         tableInfo: defaultTableInfo,
-        edited: false,
+        isDirty: false,
         editing: null
     };
 }
@@ -56,7 +56,7 @@ describe('Test table properties reducers', () => {
             expect(state.tableInfo.name.validationError).toBe('valueIsEmpty');
             expect(state.tableInfo.name.edited).toBeFalsy();
 
-            expect(state.edited).toBeFalsy();
+            expect(state.isDirty).toBeFalsy();
         });
 
         it('return updated page state after user edits', () => {
@@ -73,19 +73,19 @@ describe('Test table properties reducers', () => {
             expect(state.tableInfo.name.validationError).toBe(null);
             expect(state.tableInfo.name.edited).toBeTruthy();
 
-            expect(state.edited).toBeTruthy();
+            expect(state.isDirty).toBeTruthy();
         });
 
         it('return updated page state icon chooser open', () => {
 
-            const state = reducer(initialState, {type: types.TABLE_ICON_CHOOSER_OPEN, isOpen: true});
+            const state = reducer(initialState, {type: types.TABLE_PROPS_ICON_CHOOSER_OPEN, isOpen: true});
             expect(state.iconChooserOpen).toBe(true);
         });
 
         it('return updated page state table menu open', () => {
 
-            let state = reducer(initialState, {type: types.TABLE_ICON_CHOOSER_OPEN, isOpen: true});
-            state = reducer(state, {type: types.TABLE_ICON_CHOOSER_OPEN, isOpen: false});
+            let state = reducer(initialState, {type: types.TABLE_PROPS_ICON_CHOOSER_OPEN, isOpen: true});
+            state = reducer(state, {type: types.TABLE_PROPS_ICON_CHOOSER_OPEN, isOpen: false});
             expect(state.iconChooserOpen).toBe(false);
         });
 
@@ -116,7 +116,7 @@ describe('Test table properties reducers', () => {
 
         it('return loaded table props', () => {
             let state = reducer(initialState, {type: types.LOADED_TABLE_PROPS, tableInfo: {description: 'description'}});
-            expect(state.tableInfo.description).toEqual({value: 'description', validationError: undefined, edited: undefined});
+            expect(state.tableInfo.description).toEqual({origValue: 'description', value: 'description', validationError: undefined, edited: undefined});
         });
 
     });

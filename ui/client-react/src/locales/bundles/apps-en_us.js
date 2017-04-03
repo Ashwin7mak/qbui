@@ -109,7 +109,8 @@ export default {
             finished: "Finished",
             new: "New",
             apply: "Apply",
-            backToApp: "Back to app"
+            backToApp: "Back to app",
+            reset: "Reset"
         },
         field: {
             search: "Search",
@@ -126,9 +127,6 @@ export default {
         },
         pageActions: {
             addRecord: "Add a record",
-            tableSettingsHeader: 'Table Settings',
-            tableSettings: 'Table Properties & Settings',
-            configureFormBuilder: 'Modify this form',
             saveRecord: "Save changes",
             saveAndAddRecord: "Save and add a new row",
             saveAndAddRecordDisabled: "Adding records in the grid is not working right now",
@@ -602,7 +600,13 @@ export default {
             header: "Settings",
             tablesHeader: "Table",
             appsHeader: "Table",
-            formsHeader: "Form"
+            formsHeader: "Form",
+            tableSettings: 'Table properties & settings',
+            configureFormBuilder: 'Modify this form',
+        },
+        tableEdit: {
+            tableUpdateFailed: "Failed to update table",
+            tableUpdated: "Table updated"
         }
     }
 };

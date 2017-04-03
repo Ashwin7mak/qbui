@@ -18,9 +18,24 @@
     .tableInfoPanel {
         margin: 15px;
         max-width: 900px;
+
         .tableInfoButtons {
             float: right;
             margin-right: 15px;
+
+            &.open {
+                opacity: 1;
+                transition: all 300ms ease-in;
+            }
+            &.closed {
+                opacity: 0;
+                transition: all 300ms ease-in;
+            }
+
+            & > * {
+                vertical-align: middle;
+            }
+
             .primaryButton {
                 margin-left: 5px;
             }

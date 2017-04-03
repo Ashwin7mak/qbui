@@ -1,7 +1,8 @@
 @import '../../../../reuse/client/src/assets/css/qbVariables';
 
 $settings-menu-header-height: 40px;
-$settings-menu-padding-top: 15px;
+$settings-menu-padding-top: 10px;
+$settings-menu-padding-left: 15px;
 
 .topNav {
     .globalActions {
@@ -35,20 +36,23 @@ $settings-menu-padding-top: 15px;
                     }
                     &.heading {
                         font-weight: bold;
+                        .headingIcon {
+                            font-size: $size-iconfont-medium;
+                        }
                     }
                     > * {
                         vertical-align: middle;
                     }
                 }
                 .configSet {
-                    padding: $settings-menu-padding-top;
+                    padding: $settings-menu-padding-top $settings-menu-padding-left;
                     &.withIcon {
                         a:not(.heading) {
                             margin-left: 26px;
                         }
                     }
                     &:not(:first-of-type) {
-                        padding: $settings-menu-header-height + $settings-menu-padding-top $settings-menu-padding-top $settings-menu-padding-top * 2 $settings-menu-padding-top;
+                        padding: $settings-menu-header-height + $settings-menu-padding-top $settings-menu-padding-left $settings-menu-padding-top * 2 $settings-menu-padding-left;
                     }
                     &.currentContext {
                         background-color: $color-black-200;
