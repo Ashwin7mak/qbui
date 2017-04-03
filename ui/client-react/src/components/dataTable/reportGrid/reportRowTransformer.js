@@ -122,7 +122,7 @@ function addCurrentValues(id = null, record = {}, pendEdits = {}) {
 
         Object.keys(pendEdits.recordChanges).forEach(key => {
             let pendingEdit = pendEdits.recordChanges[key];
-            if (pendingEdit.newVal) {
+            if (recordCopy.hasOwnProperty(key) && pendingEdit.newVal) {
                 recordCopy[key].display = pendingEdit.newVal.display;
                 recordCopy[key].value = pendingEdit.newVal.value;
             }

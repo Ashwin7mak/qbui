@@ -1,8 +1,6 @@
 import UserService from '../../src/services/userService';
 import BaseService from '../../src/services/baseService';
-import constants from '../../src/services/constants';
 import StringUtils from '../../src/utils/stringUtils';
-import * as query from '../../src/constants/query';
 
 describe('UserService functions', () => {
     'use strict';
@@ -21,6 +19,14 @@ describe('UserService functions', () => {
         let url = StringUtils.format(userService.API.GET_REQ_USER);
 
         userService.getRequestUser();
+        expect(BaseService.prototype.get).toHaveBeenCalledWith(url);
+    });
+
+    it('test getUser function', () => {
+        let userId = '123';
+        let url = StringUtils.format(userService.API.GET_USER, [userId]);
+
+        userService.getUser(userId);
         expect(BaseService.prototype.get).toHaveBeenCalledWith(url);
     });
 });

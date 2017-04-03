@@ -1,0 +1,24 @@
+@import '../../assets/css/_qbVariables';
+
+@include not-small-breakpoint {
+
+    .multiStepModal.tableCreationDialog .modal-dialog {
+
+        .modal-body > *:first-child {
+            height: 355px;
+        }
+        width: 840px;
+    }
+}
+
+/* some initial small styles in case we support small */
+@include small-breakpoint {
+
+    .multiStepModal.tableCreationDialog .modal-dialog {
+
+        .modal-body > *:first-child {
+            height: 550px;
+        }
+        width: 420px;
+    }
+}

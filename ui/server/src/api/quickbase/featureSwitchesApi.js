@@ -335,7 +335,7 @@
                     }
                     if (useMockStore) {
                         resolve(mockApi.getFeatureSwitchStates(req, realmId, appId));
-                    } else {
+                    } else if (requestHelper.getRequestAWSHost()) {
                         let opts = this.getFeatureSwitchStatesRequestOpts(req, realmId, appId);
 
                         //  make the api request to get the app rights
@@ -352,6 +352,8 @@
                             requestHelper.logUnexpectedError('getFeatureSwitches.getFeatureSwitchStates(): unexpected error retrieving feature switches.', ex, true);
                             reject(ex);
                         });
+                    } else {
+                        resolve([]);
                     }
                 });
             }

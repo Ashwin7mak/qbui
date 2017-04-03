@@ -4,49 +4,41 @@
  */
 (function() {
     'use strict';
-    //Bluebird Promise library
+    // Bluebird Promise library
     var promise = require('bluebird');
-    //Node.js assert library
+    // Node.js assert library
     var assert = require('assert');
-    //App generator module
+    // App generator module
     var appGenerator = require('../../../test_generators/app.generator.js');
     module.exports = function(recordBase) {
         var appService = {
             /**
              * Takes a generated JSON object and creates it via the REST API. Returns the create app JSON response body.
-             * Returns a promise.
+             * Returns a promise resolving to the created app response
              */
             createApp: function(generatedApp) {
-                //TODO: Remove deferred pattern
-                var deferred = promise.pending();
-                recordBase.createApp(generatedApp).then(function(appResponse) {
-                    var createdApp = JSON.parse(appResponse.body);
-                    assert(createdApp, 'failed to create app via the API');
-                    //console.log('Create App Response: ' + app);
-                    deferred.resolve(createdApp);
-                }).catch(function(error) {
-                    console.log(JSON.stringify(error));
-                    deferred.reject(error);
+                // Call createApp function in recordBase
+                return recordBase.createApp(generatedApp).then(function(appResponse) {
+                    return JSON.parse(appResponse.body);
                 });
-                return deferred.promise;
             },
             /**
-             * creates an application, table, and fields from map
-             * @returns a promise the created app
+             * Wrapper function that calls the generator function in the test_generators folder
+             */
+            generateAppFromMap: function(tableToFieldToFieldTypeMap) {
+                // Generate the app JSON object using the test generators
+                var generatedApp = appGenerator.generateAppWithTablesFromMap(tableToFieldToFieldTypeMap);
+                return generatedApp;
+            },
+            /**
+             * Creates an application, table, and fields from map
+             * @returns a promise resolving to the created app response
              */
             createAppSchema: function(tableToFieldToFieldTypeMap) {
                 // Generate the app JSON object
                 var generatedApp = this.generateAppFromMap(tableToFieldToFieldTypeMap);
                 // Create the app via the API
                 return this.createApp(generatedApp);
-            },
-            /**
-             * Wrapper function that calls the generator function in the test_generators folder
-             */
-            generateAppFromMap: function(tableToFieldToFieldTypeMap) {
-                //Generate the app JSON object
-                var generatedApp = appGenerator.generateAppWithTablesFromMap(tableToFieldToFieldTypeMap);
-                return generatedApp;
             }
         };
         return appService;

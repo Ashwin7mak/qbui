@@ -1,0 +1,41 @@
+@import '../../../../../reuse/client/src/assets/css/qbVariables';
+
+
+.accountUsersContainer {
+  .qbCell {
+    vertical-align: middle;
+    padding: {
+      top: 6px;
+      bottom: 6px;
+    }
+  }
+  .BoolColumn {
+    max-width: 80px;
+    min-width: 40px;
+  }
+  .qbGrid {
+    display: table;
+    table-layout: auto;
+  }
+  .accessStatusLabel {
+    .qbIcon {
+      font-size: $size-iconfont-medium;
+      vertical-align: bottom;
+    }
+    &.paid {
+      color: $color-green-600;
+    }
+    &.denied {
+      color: $color-red-700;
+    }
+    &.deactivated {
+      color: $color-black-600;
+    }
+    &.staff {
+      color: $color-black-600;
+    }
+    &.none {
+      color: $color-black-600
+    }
+  }
+}

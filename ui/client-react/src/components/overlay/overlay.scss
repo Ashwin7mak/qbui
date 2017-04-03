@@ -11,7 +11,7 @@
         cursor: pointer;
 
         &:hover {
-            color: $icon-color-hover;
+            color: $iconfont-on-light-normal-color;
         }
     }
 
@@ -30,7 +30,7 @@
     .btn.btn-default {
         border: none;
         padding: 0;
-        color: $iconfont-on-light-normal-color;
+        color: $icon-color-hover;
     }
 
     .btn.btn-default:hover {

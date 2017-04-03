@@ -2,17 +2,21 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import TestUtils from 'react-addons-test-utils';
 import Fluxxor from 'fluxxor';
-import * as actions from '../../src/constants/actions';
 import IconActions from '../../src/components/actions/iconActions';
 import ReportToolbar  from '../../src/components/report/reportToolbar';
+import {__RewireAPI__ as ReportToolbarRewireAPI} from '../../src/components/report/reportToolbar';
 import FacetSelections  from '../../src/components/facet/facetSelections';
 import facetMenuActions from '../../src/actions/facetMenuActions';
-import SearchBox from '../../src/components/search/searchBox';
+
+import configureMockStore from 'redux-mock-store';
+import thunk from 'redux-thunk';
+import {Provider} from "react-redux";
+
+const middlewares = [thunk];
+const mockStore = configureMockStore(middlewares);
 
 describe('ReportToolbar functions', () => {
     'use strict';
-
-    let component;
 
     let navStore = Fluxxor.createStore({
         getState() {
@@ -20,56 +24,17 @@ describe('ReportToolbar functions', () => {
         }
     });
 
-    let appStore = Fluxxor.createStore({
-        getState() {
-            return [];
-        }
-    });
-    let reportDataStore = Fluxxor.createStore({
-        getState() {
-            return [];
-        }
-    });
-
-    let facetMenuStore = Fluxxor.createStore({
-        initMenu() {
-
-        },
-        getState() {
-            return {};
-        }
-    });
-    let reportDataSearchStore = Fluxxor.createStore({
-        getState() {
-            return {searchStringInput :'abc'};
-        }
-    });
-
     let stores = {
-        NavStore: new navStore(),
-        AppsStore: new appStore(),
-        ReportDataStore: new reportDataStore(),
-        FacetMenuStore:  new facetMenuStore(),
-        ReportDataSearchStore: new reportDataSearchStore()
+        NavStore: new navStore()
     };
 
     let flux = new Fluxxor.Flux(stores);
-
     flux.actions = {
-        selectTableId() {
+        onToggleRowPopUpMenu() {
             return;
-        },
-        searchFor(text) {
-            return;
-        },
-        filterReport() {
-            return;
-        },
-        getState() {
-            return;
-        },
+        }
     };
-
+    const pageActions = <IconActions flux={flux} actions={[]}/>;
 
     let fakefacets = [
         {
@@ -92,33 +57,81 @@ describe('ReportToolbar functions', () => {
         {
             id: 4, name: "Flag", type: "CHECKBOX", blanks: false,
             values: [{value: true}, {value: false}]
-        },
-        //{id : 4, name : "Dates", type: "date",  blanks: false,
-        //    range : {start: 1, end: 2}},
+        }
     ];
 
-    let callBacks = {};
+    //  mock SortAndGroup component as it requires redux store references.
+    //  NOTE: could instead rewrite the tests to use enzyme.shallow
+    let mockSortAndGroup = React.createClass({
+        render: function() {
+            return <div class="sortAndGroup">Mock SortAndGroup</div>;
+        }
+    });
+    let mockSearchBox = React.createClass({
+        render: function() {
+            return <div className="filterSearchBox">Mock Filter searchBox</div>;
+        }
+    });
+    let mockFacetsMenu = React.createClass({
+        render: function() {
+            return <div className="facetsMenu">Mock facets</div>;
+        }
+    });
+    let mockRecordsCount = React.createClass({
+        render: function() {
+            return <div className="recordsCount">Mock record count</div>;
+        }
+    });
+    let mockReportNavigation = React.createClass({
+        render: function() {
+            return <div className="reportNavigation">Mock report navigation</div>;
+        }
+    });
 
+    let props = {};
+    let callBacks = {};
+    let store = {};
     beforeEach(() => {
-        flux.store('FacetMenuStore').initMenu();
+        store = mockStore({});
+        // init props
+        props = {
+            reportData: {},
+            pageStart: 1,
+            pageEnd: 0,
+            recordsCount: 0,
+            search: {
+                searchInput: ''
+            }
+        };
         callBacks = {
             filterOnSelections: function() {
             },
             searchTheString: function() {
-            },
+            }
         };
         spyOn(callBacks, 'searchTheString');
         spyOn(callBacks, 'filterOnSelections');
+        ReportToolbarRewireAPI.__Rewire__('FacetsMenu', mockFacetsMenu);
+        ReportToolbarRewireAPI.__Rewire__('FilterSearchBox', mockSearchBox);
+        ReportToolbarRewireAPI.__Rewire__('RecordsCount', mockRecordsCount);
+        ReportToolbarRewireAPI.__Rewire__('ReportNavigation', mockReportNavigation);
+        ReportToolbarRewireAPI.__Rewire__('SortAndGroup', mockSortAndGroup);
     });
 
     afterEach(() => {
         callBacks.searchTheString.calls.reset();
         callBacks.filterOnSelections.calls.reset();
+        ReportToolbarRewireAPI.__ResetDependency__('FacetsMenu');
+        ReportToolbarRewireAPI.__ResetDependency__('FilterSearchBox');
+        ReportToolbarRewireAPI.__ResetDependency__('RecordsCount');
+        ReportToolbarRewireAPI.__ResetDependency__('ReportNavigation');
+        ReportToolbarRewireAPI.__ResetDependency__('SortAndGroup');
     });
 
     const fakeReportData_no_records = {
         loading: false,
         countingTotalRecords: false,
+        error: null,
         data: {
             recordsCount: 0,
             pageEnd:0,
@@ -171,59 +184,10 @@ describe('ReportToolbar functions', () => {
         }
     };
 
-    const pageActions = <IconActions actions={[]}/>;
-
-    it('test render reportToolbar no records', () => {
-        component = TestUtils.renderIntoDocument(<ReportToolbar flux={flux}
-                                                                reportData={fakeReportData_no_records}
-                                                                pageActions={pageActions}
-                                                                pageStart={1}
-                                                                pageEnd={0}
-                                                                recordsCount={0}
-        />);
-        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
-        let filterSearchBox = TestUtils.scryRenderedDOMComponentsWithClass(component, "filterSearchBox");
-        expect(filterSearchBox.length).toEqual(0);
-        let facetsMenuContainer = TestUtils.scryRenderedDOMComponentsWithClass(component, "facetsMenuContainer");
-        expect(facetsMenuContainer.length).toEqual(0);
-        let facetsMenuButton = TestUtils.scryRenderedDOMComponentsWithClass(component, "facetsMenuButton");
-        expect(facetsMenuButton.length).toEqual(0);
-        let facetButtons = TestUtils.scryRenderedDOMComponentsWithClass(component, "facetButtons");
-        expect(facetButtons.length).toEqual(0);
-        let recordsCount = TestUtils.scryRenderedDOMComponentsWithClass(component, "recordsCount");
-        expect(recordsCount.length).toEqual(1);
-        let reportNavigation = TestUtils.scryRenderedDOMComponentsWithClass(component, "reportNavigation");
-        expect(reportNavigation.length).toEqual(0);
-    });
-
-
-    it('test render reportToolbar with records', () => {
-        component = TestUtils.renderIntoDocument(<ReportToolbar flux={flux}
-                                                                reportData={fakeReportData_simple}
-                                                                pageActions={pageActions}
-                                                                pageStart={1}
-                                                                pageEnd={3}
-                                                                recordsCount={3}
-        />);
-        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
-        let filterSearchBox = TestUtils.scryRenderedDOMComponentsWithClass(component, "filterSearchBox");
-        expect(filterSearchBox.length).toEqual(1);
-        let facetsMenuContainer = TestUtils.scryRenderedDOMComponentsWithClass(component, "facetsMenuContainer");
-        expect(facetsMenuContainer.length).toEqual(1);
-        let facetsMenuButton = TestUtils.scryRenderedDOMComponentsWithClass(component, "facetsMenuButton");
-        expect(facetsMenuButton.length).toEqual(1);
-        let facetButtons = TestUtils.scryRenderedDOMComponentsWithClass(component, "facetButtons");
-        expect(facetButtons.length).toEqual(1);
-        let recordsCount = TestUtils.scryRenderedDOMComponentsWithClass(component, "recordsCount");
-        expect(recordsCount.length).toEqual(1);
-        let reportNavigation = TestUtils.scryRenderedDOMComponentsWithClass(component, "reportNavigation");
-        expect(reportNavigation.length).toEqual(0);
-    });
-
     it('test render reportToolbar with no facets', () => {
         let fakeReportWithNoFacets = _.cloneDeep(fakeReportData_simple);
         fakeReportWithNoFacets.data.facets = null;
-        component = TestUtils.renderIntoDocument(<ReportToolbar flux={flux}
+        let component = TestUtils.renderIntoDocument(<ReportToolbar {...props}
                                                                 reportData={fakeReportWithNoFacets}
                                                                 selections={null}
                                                                 pageActions={pageActions}
@@ -235,39 +199,6 @@ describe('ReportToolbar functions', () => {
 
     });
 
-    it('test render reportToolbar with no selected facet values', () => {
-        let selected = new FacetSelections();
-        let fakeReportWithFacets = _.cloneDeep(fakeReportData_simple);
-        component = TestUtils.renderIntoDocument(<ReportToolbar flux={flux}
-                                                                reportData={fakeReportWithFacets}
-                                                                selections={selected}
-                                                                pageActions={pageActions}
-        />);
-        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
-        // empty filter icon is shown
-        let filterIcon = TestUtils.scryRenderedDOMComponentsWithClass(component, "iconUISturdy-filter-tool");
-        expect(filterIcon.length).toEqual(1);
-
-    });
-
-    it('test render reportToolbar with selected facet values', () => {
-        let selected = new FacetSelections();
-        selected.addSelection(1, 'Development');
-        selected.addSelection(4, 'Yes');
-        let fakeReportWithFacets = _.cloneDeep(fakeReportData_simple);
-        component = TestUtils.renderIntoDocument(<ReportToolbar flux={flux} selections={selected}
-                                                                reportData={fakeReportWithFacets} pageActions={pageActions} />);
-        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
-
-
-        // count has 2 numbers X of X when there is a selection
-        let recordsCount = TestUtils.scryRenderedDOMComponentsWithClass(component, "recordsCount");
-        expect(recordsCount.length).toEqual(1);
-        let span = recordsCount[0];
-        expect(span).not.toBeNull();
-        expect(span.innerText.match(/\d+ .*\d+/)).toBeTruthy();
-    });
-
     it('test render reportToolbar with selected facet values and add Boolean filter', () => {
 
         let selected = new FacetSelections();
@@ -276,7 +207,8 @@ describe('ReportToolbar functions', () => {
         let initialSelected = selected.copy();
         let fakeReportWithFacets = _.cloneDeep(fakeReportData_simple);
 
-        component = TestUtils.renderIntoDocument(<ReportToolbar flux={flux} selections={initialSelected}
+        let component = TestUtils.renderIntoDocument(<ReportToolbar {...props}
+                                                                selections={initialSelected}
                                                                 reportData={fakeReportWithFacets}
                                                                 filterOnSelections={callBacks.filterOnSelections}
                                                                 searchTheString={callBacks.searchTheString}
@@ -291,54 +223,10 @@ describe('ReportToolbar functions', () => {
         expect(callBacks.filterOnSelections).toHaveBeenCalledWith(selected);
     });
 
-    it('test render reportToolbar searches text', () => {
-        component = TestUtils.renderIntoDocument(<ReportToolbar flux={flux}
-                                                                pageActions={pageActions}
-                                                                filterOnSelections={callBacks.filterOnSelections}
-                                                                searchTheString={callBacks.searchTheString}
-                                                                reportData={fakeReportData_simple}/>);
-
-        // check for the search box shows up
-        let filterSearchBox = TestUtils.scryRenderedComponentsWithType(component, SearchBox);
-
-        let searchInputBox = TestUtils.scryRenderedDOMComponentsWithClass(filterSearchBox[0], "searchInput");
-        expect(searchInputBox.length).toEqual(1);
-
-        // check that search input is debounced
-        var searchInput = searchInputBox[0];
-        var testValue = 'xxx';
-
-        //simulate search string was input
-        TestUtils.Simulate.change(searchInput, {target: {value: testValue}});
-        expect(callBacks.searchTheString).toHaveBeenCalled();
-    });
-
-    it('test render reportToolbar with search text', (done) => {
-        component = TestUtils.renderIntoDocument(<ReportToolbar flux={flux}
-                                                                searchStringForFiltering={"abc"}
-                                                                reportData={fakeReportData_simple}
-                                                                pageActions={pageActions} />);
-
-        // check for the search box shows up
-        let filterSearchBox = TestUtils.scryRenderedComponentsWithType(component, SearchBox);
-
-        let searchInputBox = TestUtils.scryRenderedDOMComponentsWithClass(filterSearchBox[0], "searchInput");
-        expect(searchInputBox.length).toEqual(1);
-
-        // check that search input is debounced
-        var searchInput = searchInputBox[0];
-        expect(searchInput.value).toEqual("abc");
-
-        // check that report is considered filter
-        expect(component.isFiltered()).toBeTruthy();
-        done();
-
-    });
-
     it('test render reportToolbar with selected values then clear a field selection', () => {
 
         let fakeReportWithFacets = _.cloneDeep(fakeReportData_simple);
-        component = TestUtils.renderIntoDocument(<ReportToolbar flux={flux}
+        let component = TestUtils.renderIntoDocument(<ReportToolbar {...props}
                                                                 reportData={fakeReportWithFacets}
                                                                 filterOnSelections={callBacks.filterOnSelections}
                                                                 searchTheString={callBacks.searchTheString}
@@ -362,7 +250,7 @@ describe('ReportToolbar functions', () => {
         let fakeReportWithFacets = _.cloneDeep(fakeReportData_simple);
         let startingSelections = new FacetSelections();
         startingSelections.addSelection(1, "Development");
-        component = TestUtils.renderIntoDocument(<ReportToolbar flux={flux}
+        let component = TestUtils.renderIntoDocument(<ReportToolbar {...props}
                                                                 selections={startingSelections}
                                                                 reportData={fakeReportWithFacets}
                                                                 filterOnSelections={callBacks.filterOnSelections}
@@ -379,7 +267,7 @@ describe('ReportToolbar functions', () => {
 
     it('test render reportToolbar with selected values then clear all selection', () => {
         let fakeReportWithFacets = _.cloneDeep(fakeReportData_simple);
-        component = TestUtils.renderIntoDocument(<ReportToolbar flux={flux}
+        let component = TestUtils.renderIntoDocument(<ReportToolbar {...props}
                                                                 reportData={fakeReportWithFacets}
                                                                 filterOnSelections={callBacks.filterOnSelections}
                                                                 searchTheString={callBacks.searchTheString}
