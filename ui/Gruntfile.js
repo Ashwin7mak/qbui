@@ -539,7 +539,8 @@ module.exports = function(grunt) {
                 suites: {
                     reports: [
                         './wdio/tests/reports/*.e2e.spec.js',
-                        './wdio/tests/reports/sorting/*.e2e.spec.js'
+                        './wdio/tests/reports/sorting/*.e2e.spec.js',
+                        './wdio/tests/reports/grouping/*.e2e.spec.js'
                     ],
                     forms: [
                         './wdio/tests/forms/*.e2e.spec.js'

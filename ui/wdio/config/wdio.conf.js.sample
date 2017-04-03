@@ -40,7 +40,8 @@ exports.config = {
     suites: {
         reports: [
             './ui/wdio/tests/reports/*.e2e.spec.js',
-            './ui/wdio/tests/reports/sorting/*.e2e.spec.js'
+            './ui/wdio/tests/reports/sorting/*.e2e.spec.js',
+            './ui/wdio/tests/reports/grouping/*.e2e.spec.js'
         ],
         forms: [
             './ui/wdio/tests/forms/*.e2e.spec.js'
