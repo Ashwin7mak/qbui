@@ -4,27 +4,26 @@ import {DefaultFieldProperties} from '../constants/defaultFieldPropertiesConstan
 const serverTypeConsts = require('../../../common/src/constants');
 import _ from 'lodash';
 
-let createDefaultFieldsProperties = (type, defaultTypeAttributes, userDefaultAttributes) => {
+let createDefaultFieldsProperties = (type, defaultTypeProperties, userDefaultProperties) => {
         let fieldDef = {datatypeAttributes: {type: type}};
         let fieldType = FieldFormats.getFormatType(fieldDef);
-        let attributes = defaultTypeAttributes || userDefaultAttributes;
-        let defaultFieldsProperties ={
+        let defaultProperties = userDefaultProperties || defaultTypeProperties;
+
+        let defaultScalarFieldsProperties ={
                 "type": "SCALAR",
                 "datatypeAttributes": {
                     "type": type
                 },
                 "name": Locale.getMessage(`fieldsDefaultLabels.${fieldType}`),
                 "required": false
-            };
-
-            return _.merge(defaultFieldsProperties, attributes);
+        };
+            return _.merge(defaultScalarFieldsProperties, defaultProperties);
 };
 
-
-export const createScalarDefaultFieldsProperties = () =>{
+export const createScalarDefaultFieldsProperties = (userDefaultProperties) =>{
     return {
         [serverTypeConsts.NUMERIC]: {
-            ...createDefaultFieldsProperties(serverTypeConsts.NUMERIC, DefaultFieldProperties.defaultNumericProperties)
+            ...createDefaultFieldsProperties(serverTypeConsts.NUMERIC, DefaultFieldProperties.defaultNumericProperties, userDefaultProperties)
         },
         [serverTypeConsts.DATE]: {
             ...createDefaultFieldsProperties(serverTypeConsts.DATE)
