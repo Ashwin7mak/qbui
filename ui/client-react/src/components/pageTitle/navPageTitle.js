@@ -1,8 +1,9 @@
 import React, {PropTypes} from 'react';
 
-import Locale from '../../locales/locales';
+import PageTitle from '../../../../reuse/client/src/components/pageTitle/pageTitle';
+import Locale from '../../../../reuse/client/src/locales/locale';
 import {NEW_RECORD_VALUE} from '../../constants/urlConstants';
-import PageTitle from './pageTitle';
+
 
 /**
  * # Nav Page Title

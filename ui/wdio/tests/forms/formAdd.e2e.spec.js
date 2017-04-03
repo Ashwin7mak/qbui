@@ -9,7 +9,7 @@
     var ReportInLineEditPO = requirePO('reportInLineEdit');
 
 
-    describe('Add a record Via Form Tests : ', function() {
+    xdescribe('Add a record Via Form Tests : ', function() {
         var realmName;
         var realmId;
         var testApp;
@@ -33,7 +33,8 @@
             }).catch(function(error) {
                 // Global catch that will grab any errors from chain above
                 // Will appropriately fail the beforeAll method so other tests won't run
-                throw new Error('Error during test setup beforeAll: ' + error.message);
+                browser.logger.error('Error in beforeAll function:' + JSON.stringify(error));
+                return Promise.reject('Error in beforeAll function:' + JSON.stringify(error));
             });
         });
 
@@ -49,7 +50,7 @@
          * Test to add a record via form.
          * Fields Tested : text, url, phone, email, numeric, currency, duration, rating, date, dateTime, checkbox and userField.
          */
-        it('Add a record via form', function() {
+        xit('Add a record via form', function() {
             var origRecordCount;
             var fieldTypes = ['allTextFields', 'allPhoneFields', 'allEmailFields', 'allUrlFields', 'allDurationFields', 'allNumericFields', 'allDateFields', 'allTimeFields', 'allCheckboxFields', 'allUserField'];
 

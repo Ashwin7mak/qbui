@@ -57,7 +57,7 @@ describe('ReportService functions', () => {
         var url = reportService.constructUrl(reportService.API.GET_REPORT_RECORDS_COUNT, [appId, tblId, rptId]);
 
         reportService.getReportRecordsCount(appId, tblId, rptId);
-        expect(BaseService.prototype.get).toHaveBeenCalledWith(url);
+        expect(BaseService.prototype.get).toHaveBeenCalledWith(url, {params: {}});
     });
 
     it('test getReports function', () => {

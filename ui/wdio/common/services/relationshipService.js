@@ -4,18 +4,24 @@
  */
 (function() {
     'use strict';
-    //Bluebird Promise library
+    // Bluebird Promise library
     var promise = require('bluebird');
-    //Node.js assert library
+    // Node.js assert library
     var assert = require('assert');
-    var recordGenerator = require('../../../test_generators/record.generator.js');
+    // Logging library
+    var log = require('../../../server/src/logger').getLogger();
+
     module.exports = function(recordBase) {
         var relationshipService = {
             /**
              * Creates one to one relationship between Master and Child tables
-             *
+             * @param app - Created app JSON object returned from the API
+             * @param parentTable - Parent table JSON object
+             * @param childTable - Child table JSON object
+             * @param detailFieldId - FieldId to relate master and child table by
+             * @returns Promise function that resolves to the returned JSON obj of the create relationship API call
              */
-            createOneToOneRelationship: function(createApp, parentTable, childTable, detailFieldId) {
+            createOneToOneRelationship: function(app, parentTable, childTable, detailFieldId) {
                 const FK_FIELD_NAME = 'Record ID#';
                 let RECORD_ID_NAME = 'Record ID#';
                 let masterTableId = parentTable.id;
@@ -36,11 +42,11 @@
                 });
 
                 const relationshipToCreate = {
-                    appId        : createApp.id,
-                    masterAppId  : createApp.id,
+                    appId        : app.id,
+                    masterAppId  : app.id,
                     masterTableId: masterTableId,
                     masterFieldId: masterTablePkFieldId,
-                    detailAppId  : createApp.id,
+                    detailAppId  : app.id,
                     detailTableId: detailTableId,
                     detailFieldId: detailTableFkFieldId,
                     referentialIntegrity: false,
@@ -49,8 +55,10 @@
                 };
 
                 recordBase.createRelationship(relationshipToCreate).then(function(relResponse) {
-                    var relationship = JSON.parse(relResponse.body);
-                    console.log('Relationship Created with ID: ' + relationship.id);
+                    return JSON.parse(relResponse.body);
+                }).catch(function(error) {
+                    log.error('Error creating relationship');
+                    return promise.reject(error);
                 });
             }
         };

@@ -112,6 +112,9 @@ describe('Qb Route Mapper Unit Test', function() {
             {message: 'DELETE request to apps endpoint', request: '/api/v1/apps/fakeApp', expectedPath: '/api/api/v1/apps/fakeApp', route: routeConsts.TOMCAT_ALL, method: routeMapper.fetchAllFunctionForRoute(routeConsts.TOMCAT_ALL), expectedDefined: false, httpVerb: 'DELETE'},
             {message: 'DELETE request to app users endpoint', request: '/api/v1/apps/fakeApp/users', expectedPath: '/api/api/v1/apps/fakeApp/users', route: routeConsts.APP_USERS, method: routeMapper.fetchDeleteFunctionForRoute(routeConsts.APP_USERS), expectedDefined: false, httpVerb: 'DELETE'},
 
+            {message: 'POST request to table components endpoint', request: '/api/v1/apps/1/tables/tableComponents', expectedPath: '/api/api/v1/apps/1/tables/tableComponents', route: routeConsts.TABLE_COMPONENTS, method: routeMapper.fetchPostFunctionForRoute(routeConsts.TABLE_COMPONENTS), expectedDefined: true, httpVerb: 'POST'},
+            {message: 'PATCH request to tables endpoint', request: '/api/v1/apps/1/tables/2', expectedPath: '/api/api/v1/apps/1/tables/2', route: routeConsts.TABLE, method: routeMapper.fetchPatchFunctionForRoute(routeConsts.TABLE), expectedDefined: true, httpVerb: 'PATCH'},
+
             {message: 'GET request to the health check endpoint', request: '/api/v1/health', expectedPath: '/api/api/v1/health', route: routeConsts.HEALTH_CHECK, method: routeMapper.fetchGetFunctionForRoute(routeConsts.HEALTH_CHECK), expectedDefined: true, httpVerb: 'GET'},
             {message: 'GET request to the swagger api endpoint', request: '/api/v1/someEndpoint', expectedPath: '/api/v1/someEndpoint', route: routeConsts.SWAGGER_API, method: routeMapper.fetchGetFunctionForRoute(routeConsts.SWAGGER_API), expectedDefined: true, httpVerb: 'GET'}
         ];
@@ -119,7 +122,12 @@ describe('Qb Route Mapper Unit Test', function() {
 
     function eePathModificationProvider() {
         return [
-            {message: 'GET request to the swagger experience engine api endpoint', request: '/ee/v1/someEndpoint', expectedPath: '/ee/v1/someEndpoint', route: routeConsts.SWAGGER_API_EE, method: routeMapper.fetchGetFunctionForRoute(routeConsts.SWAGGER_API_EE), expectedDefined: true, httpVerb: 'GET'}
+            {message: 'GET request to EE health via Experience Engine all', request: '/ee/v1/health', expectedPath: '/ee/v1/health', route: routeConsts.EXPERIENCE_ENGINE_ALL, method: routeMapper.fetchAllFunctionForRoute(routeConsts.EXPERIENCE_ENGINE_ALL), expectedDefined: true, httpVerb: 'GET'},
+            {message: 'POST request to EE api via Experience Engine all', request: '/ee/v1/someUrl', expectedPath: '/ee/v1/someUrl', route: routeConsts.EXPERIENCE_ENGINE_ALL, method: routeMapper.fetchAllFunctionForRoute(routeConsts.EXPERIENCE_ENGINE_ALL), expectedDefined: true, httpVerb: 'POST'},
+            {message: 'PATCH request to EE api via Experience Engine all', request: '/ee/v1/someUrl', expectedPath: '/ee/v1/someUrl', route: routeConsts.EXPERIENCE_ENGINE_ALL, method: routeMapper.fetchAllFunctionForRoute(routeConsts.EXPERIENCE_ENGINE_ALL), expectedDefined: true, httpVerb: 'PATCH'},
+            {message: 'PUT request to EE api via Experience Engine all', request: '/ee/v1/someUrl', expectedPath: '/ee/v1/someUrl', route: routeConsts.EXPERIENCE_ENGINE_ALL, method: routeMapper.fetchAllFunctionForRoute(routeConsts.EXPERIENCE_ENGINE_ALL), expectedDefined: true, httpVerb: 'PUT'},
+            {message: 'DELETE request to EE api via Experience Engine all', request: '/ee/v1/someUrl', expectedPath: '/ee/v1/someUrl', route: routeConsts.EXPERIENCE_ENGINE_ALL, method: routeMapper.fetchAllFunctionForRoute(routeConsts.EXPERIENCE_ENGINE_ALL), expectedDefined: true, httpVerb: 'DELETE'},
+            {message: 'GET request to the swagger experience engine api endpoint', request: '/ee', expectedPath: '/ee', route: routeConsts.SWAGGER_API_EE, method: routeMapper.fetchGetFunctionForRoute(routeConsts.SWAGGER_API_EE), expectedDefined: true, httpVerb: 'GET'}
         ];
     }
 
@@ -138,6 +146,14 @@ describe('Qb Route Mapper Unit Test', function() {
 
         ];
     }
+
+    function governanceModificationProvider() {
+        return [
+            {message: 'GET request to governance users endpoint', request: '/api/governance/v1/12345/users', expectedPath: '/api/governance/v1/12345/users', route: routeConsts.GOVERNANCE_ACCOUNT_USERS, method: routeMapper.fetchGetFunctionForRoute(routeConsts.GOVERNANCE_ACCOUNT_USERS), expectedDefined: true, httpVerb: 'GET'},
+            {message: 'GET request to governance context endpoint', request: '/api/governance/v1/context', expectedPath: '/api/governance/v1/context', route: routeConsts.GOVERNANCE_CONTEXT, method: routeMapper.fetchGetFunctionForRoute(routeConsts.GOVERNANCE_CONTEXT), expectedDefined: true, httpVerb: 'GET'},
+        ];
+    }
+
     /**
      * Unit test that validates generating an app with a specified number of tables
      */
@@ -149,6 +165,9 @@ describe('Qb Route Mapper Unit Test', function() {
             runTestCase(entry);
         });
         featureSwitchesPathModificationProvider().forEach(function(entry) {
+            runTestCase(entry);
+        });
+        governanceModificationProvider().forEach(function(entry) {
             runTestCase(entry);
         });
     });

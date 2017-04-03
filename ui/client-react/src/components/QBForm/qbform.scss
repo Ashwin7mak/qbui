@@ -38,6 +38,7 @@ $edit-field-padding: 5px;
         .formTable {
             margin-left: 10px;
             display: flex;
+            margin-bottom: 20px;
 
             /* Fields in cardview span the width of the small device */
 
@@ -80,7 +81,7 @@ $edit-field-padding: 5px;
 
             .formElementContainer {
                 flex: 1 1 auto;
-                padding-top: 5px;
+                //padding-top: 5px;
             }
 
             @include small-breakpoint {
@@ -90,7 +91,7 @@ $edit-field-padding: 5px;
                     flex: 1 100%;
                     margin-right: 15px;
                     padding-bottom: 0;
-                    padding-top: 10px;
+                    //padding-top: 10px;
                 }
 
                 .phoneWrapper {
@@ -260,7 +261,7 @@ $edit-field-padding: 5px;
             }
 
             .fieldRow {
-                td {
+                .formElementWrapper {
                     padding-bottom: 20px;
                 }
 

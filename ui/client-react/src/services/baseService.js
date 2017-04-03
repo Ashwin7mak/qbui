@@ -93,11 +93,6 @@ class BaseService {
         return axios.delete(url, config);
     }
 
-    deleteBulk(url, conf) {
-        let config = conf || {};
-        return axios.delete(url, config);
-    }
-
     /**
      * Axiom interceptor for all http requests -- add a session tracking id and session ticket
      */

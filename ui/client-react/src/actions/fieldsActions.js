@@ -2,44 +2,61 @@
 import * as actions from '../constants/actions';
 import FieldsService from '../services/fieldsService';
 import Promise from 'bluebird';
-
+import * as types from '../actions/types';
 import Logger from '../utils/logger';
 import LogLevel from '../utils/logLevels';
 
-let fieldsActions = {
+let logger = new Logger();
 
-    loadFields: function(appId, tblId) {
-        let logger = new Logger();
+/**
+ * Construct fields store payload
+ *
+ * @param appId - appId for fields
+ * @param tblId - tblId for fields
+ * @param type - event type
+ * @param content - optional content related to event type
+ * @returns {{id: *, type: *, content: *}}
+ */
+function event(app, tbl, type, content) {
+    return {
+        appId:app,
+        tblId:tbl,
+        type: type,
+        content: content || null
+    };
+}
 
-        //  promise is returned in support of unit testing only
+export const loadFields = (appId, tblId) => {
+    // we're returning a promise to the caller (not a Redux action) since this is an async action
+    // (this is permitted when we're using redux-thunk middleware which invokes the store dispatch)
+    return (dispatch) => {
         return new Promise((resolve, reject) => {
             if (appId && tblId) {
-                this.dispatch(actions.LOAD_FIELDS);
+                dispatch(event(appId, tblId, types.LOAD_FIELDS));
                 let fieldsService = new FieldsService();
 
                 fieldsService.getFields(appId, tblId).then(
                     (response) => {
-                        this.dispatch(actions.LOAD_FIELDS_SUCCESS, {appId, tblId, data: response.data});
+                        dispatch(event(appId, tblId, types.LOAD_FIELDS_SUCCESS, {fields:response.data}));
                         resolve();
                     },
-                    (error) => {
+                    (errorResponse) => {
                         //  axios upgraded to an error.response object in 0.13.x
-                        logger.parseAndLogError(LogLevel.ERROR, error.response, 'fieldsService.getFields:');
-                        this.dispatch(actions.LOAD_FIELDS_FAILED, error.response.status);
+                        let error = errorResponse.response;
+                        logger.parseAndLogError(LogLevel.ERROR, error, 'fieldsService.getFields:');
+                        dispatch(event(appId, tblId, types.LOAD_FIELDS_ERROR, {error:error}));
                         reject();
                     }
-                ).catch((ex) => {
-                    // TODO - remove catch block and update onPossiblyUnhandledRejection bluebird handler
-                    logger.logException(ex);
-                    reject();
-                });
+                );
             } else {
                 logger.error('fieldsService.getFields: Missing required input parameters.');
-                this.dispatch(actions.LOAD_FIELDS_FAILED, 500);
+                let error = {
+                    statusText:'Missing required input parameters to load fields',
+                    status:500
+                };
+                dispatch(event(appId, tblId, types.LOAD_FIELDS_ERROR, {error:error}));
                 reject();
             }
         });
-    }
+    };
 };
-
-export default fieldsActions;

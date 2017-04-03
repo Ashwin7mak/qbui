@@ -1,0 +1,18 @@
+@import '../../assets/css/_qbVariables';
+
+.tableCreationSummary {
+
+    .title {
+        color: $color-black-700;
+        font-size: $font-size-large;
+        padding-top: 25px;
+        padding-bottom: $spacing-x-small;
+    }
+    .description {
+        color: $color-black-500;
+        font-size: 16px;
+    }
+    .formBuilderPreview {
+        text-align: center;
+    }
+}

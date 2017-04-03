@@ -1,5 +1,4 @@
 import constants from './constants';
-import commonConstants from '../../../common/src/constants';
 import SaveRecordFormatter from '../../../common/src/formatter/saveRecordFormatter';
 import BaseService from './baseService';
 import NumberUtils from '../utils/numberUtils';
@@ -134,16 +133,16 @@ class RecordService extends BaseService {
     }
 
     /**
-     * Delete records in bulk
+     * Delete a list of records
      *
      * @param appId
      * @param tableId
      * @param recordIds
-     * @returns promise
+     * @returns {*}
      */
-    deleteRecordBulk(appId, tableId, recordIds) {
+    deleteRecords(appId, tableId, recordIds) {
         let url = super.constructUrl(this.API.DELETE_RECORD_BULK, [appId, tableId]);
-        return super.deleteBulk(url, {data: recordIds});
+        return super.delete(url, {data: recordIds});
     }
 
 }

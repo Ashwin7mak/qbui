@@ -20,6 +20,7 @@ const TextInput = React.createClass({
         if (this.props.value || this.props.value === 0) {
             value = this.props.value;
         }
+
         return (<input
                        className={this.props.classes}
                        value={value}
@@ -29,6 +30,7 @@ const TextInput = React.createClass({
                        placeholder={this.props.placeholder}
                        onChange={this.props.onChange}
                        onBlur={this.props.onBlur}
+                       tabIndex={this.props.tabIndex}
                  />);
     }
 });
@@ -132,12 +134,14 @@ const TextFieldValueEditor = React.createClass({
         classNames.push(this.props.classes || '');
 
         let Input = this.props.showClearButton ? ClearableTextInput : TextInput;
+
         // use the raw value as the input value, not the formatted display value that may include escaped content
         return (<Input
                     {...this.props}
                     classes={classNames.join(' ')}
                     onChange={this.onChange}
                     onBlur={this.onBlur}
+                    tabIndex={this.props.tabIndex}
                 />);
     }
 });

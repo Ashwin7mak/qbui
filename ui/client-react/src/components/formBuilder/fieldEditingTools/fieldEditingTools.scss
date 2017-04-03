@@ -3,6 +3,16 @@
 .fieldEditingTools {
     transition: opacity 0.4s;
     border-radius: $radius-base;
+    position: absolute;
+    height: 100%;
+    width: 310px;
+
+    &:focus {
+        //For keyboard nav
+        opacity: 1;
+        outline: none;
+        border: $stroke-width-thin solid $border-focused-color;
+    }
 
     &.selectedFormElement {
         &:active {
@@ -27,13 +37,17 @@
         }
     }
 
+    .actionIcons {
+        float: right;
+    }
     .deleteFieldIcon {
         font-size: $size-iconfont-small;
         position: absolute;
-        top: 5px;
-        right: 35px;
+        top: 10px;
+        right: 50px;
 
         .qbIcon {
+            color: $color-black-600;
             opacity: 0;
             transition: color 0.4s;
         }
@@ -42,10 +56,11 @@
     .fieldPreferencesIcon {
         font-size: $size-iconfont-small;
         position: absolute;
-        top: 5px;
-        right: 18px;
+        top: 10px;
+        right: 16px;
 
         .qbIcon {
+            color: $color-black-600;
             opacity: 0;
             transition: color 0.4s;
         }
@@ -54,11 +69,11 @@
     &.notTouchDevice {
         //No borders, icon, or drag handles are displayed when it is not a touch device
         //Everything shows up on hover
-        border: $stroke-width-thin solid $color-black-400;
-        opacity: 0;
+        .dragHandle {
+            opacity: 0;
+        }
 
         .deleteFieldIcon .qbIcon {
-            padding-right: $spacing-xxx-small;
             &:hover {
                 opacity: 1;
                 color: $color-red-700;
@@ -72,28 +87,11 @@
         }
     }
 
-    &:hover {
-        opacity: 1;
-
-        .deleteFieldIcon {
-            .qbIcon {
-                opacity: 1;
-                color: $color-black-600;
-            }
-        }
-
-        .fieldPreferencesIcon {
-            .qbIcon {
-                opacity: 1;
-                color: $color-black-600;
-            }
-        }
-    }
-
     &.isTablet {
         //Icons and borders only display during focus
         //Drag handle always show
         border: none;
+
         .deleteFieldIcon .qbIcon {
             padding-right: $spacing-medium1;
         }
@@ -102,33 +100,23 @@
     @include small-breakpoint {
         //Drag handles and borders always display during small breakpoints
         //Icons only show up when it is focused
+        width: 100%;
         border-bottom: $stroke-width-thin solid $color-black-400;
 
         .deleteFieldIcon .qbIcon {
             margin-right: $spacing-medium1;
         }
-        .fieldPreferencesIcon .qbIcon {
-            margin-right: 10px;
-        }
-        //Scrolling activates the hover state and shows the icons
-        //I am having the icons opacity set to 0 so it does not show while scrolling
-        &:hover {
-            .deleteFieldIcon {
-                .qbIcon {
-                    opacity: 0;
-                }
-            }
 
-            .fieldPreferencesIcon {
-                .qbIcon {
-                    opacity: 0;
-                }
+        //Scrolling triggers hover on touch, this hides the icon during scroll
+        &:hover {
+            .qbIcon {
+                opacity: 0;
             }
         }
     }
 
-    &:focus {
-        outline: none;
+    .tipChildWrapper {
+        cursor: pointer;
     }
 
     &.active {
@@ -136,29 +124,14 @@
         @include dragpreview-active-gradient;
     }
 
-    &:active {
-        @include dragpreview-active-gradient;
-        //Need to remove the z index temporarily to only show the field and the field label for active
-        z-index: 0 !important;
-
-        .deleteFieldIcon {
-            .qbIcon {
-                opacity: 0;
-            }
+    button {
+        background: transparent;
+        outline: none;
+        border: none;
+        &:focus {
+            opacity: 1;
+            outline: none;
+            border: $stroke-width-thin solid $border-focused-color;
         }
-
-        .fieldPreferencesIcon {
-            .qbIcon {
-                opacity: 0;
-            }
-        }
-
-        .dragHandle {
-            opacity: 0;
-        }
-    }
-
-    .tipChildWrapper {
-        cursor: pointer;
     }
 }

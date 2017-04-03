@@ -3,6 +3,8 @@
 @import 'customVariables';
 @import 'qbColorVariables';
 @import 'qbMixins';
+@import '../../components/icon/uiIconsVariables';
+
 $font-family: Lato, 'Open Sans', Helvetica, Arial, sans-serif;  /* default font face stack */
 $font-size: $font-size-base;          /* base/default body font size */
 $font-color: $color-black-700;                 /* default font color */
@@ -118,6 +120,9 @@ $stroke-width-thin: 1px;
 
 // Semantic names for icon fonts
 $size-iconfont-small: 16px;
+$size-iconfont-medium: 18px;
+$size-iconfont-large: 24px;
+$size-iconfont-xlarge: 40px;
 
 // Semantic names for padding/margins
 $spacing-none: 0;

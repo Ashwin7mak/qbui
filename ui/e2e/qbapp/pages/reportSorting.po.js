@@ -199,7 +199,7 @@
                     return text === itemToVerify;
                 });
             }).then(function(filteredElement) {
-                expect(filteredElement[0].element(by.className('iconTableUISturdy-check')).isDisplayed()).toBeTruthy();
+                expect(filteredElement[0].element(by.className('iconUISturdy-check')).isDisplayed()).toBeTruthy();
             });
         };
 

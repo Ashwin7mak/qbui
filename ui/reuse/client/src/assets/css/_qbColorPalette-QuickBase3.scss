@@ -1,0 +1,146 @@
+/**
+ * QuickBase3 color palette
+ *
+ * This file should contain hex values for ALL colors needed by the product.
+ * These color variables are used in semantic name variables for UI elements.
+ *
+ * The format of this file is important because the comments are parsed with regular
+ * expressions for documentation purposes.
+ *
+ * C-style block comments (like this one) should not be used except in this comment at the top
+ * and to comment out blocks of variables.
+ *
+ * Section header comments begin with //== and denote blocks of related colors
+ * that are presented together in the documentation. Section headers are not
+ * currently displayed with the color swatches however, the comment (even if
+ * there is no text) is used to know which colors group together.
+ *
+ * Line comments begin with // and are extracted (when present) and displayed
+ * with the color swatch in the documentation.
+ *
+ * see http://quickbase.design/colors/
+ */
+
+//== Purple - for navigation selected states
+$color-purple-800: #4e2a6f; // Trowser header
+$color-purple-700: #5c3483; //
+$color-purple-600: #74489d; //
+$color-purple-500: #9067b7; //
+$color-purple-400: #b192d0; //
+$color-purple-300: #d3bde9; //
+$color-purple-200: #eadff4; //
+$color-purple-100: #f8f5fb;
+
+
+//== Cyan - will be used for primary buttons
+$color-cyan-800: #005773; //
+$color-cyan-700: #006e93; //
+$color-cyan-600: #0092c3; //
+$color-cyan-500: #00b1eb; //
+$color-cyan-400: #40caf8; //
+$color-cyan-300: #7adeff; //
+$color-cyan-200: #bceeff; //
+$color-cyan-100: #e8faff; //
+
+
+//== Green — for confirmation, success, insights
+$color-green-800: #3e7a00;
+$color-green-700: #488b00; // Confirmation text, field validation success stroke
+$color-green-600: #61a517; // Confirmation icon
+$color-green-500: #7cbe35; // Confirmation notification stroke
+$color-green-400: #a3d36f; // Confirmation notification background, field validation success glow
+$color-green-300: #c2e69d; //
+$color-green-200: #dcf2c2; //
+$color-green-100: #effbe4; //
+
+
+//== Orange — for warnings, alerts, insights. Also used for drag and drop tokens.
+$color-orange-800: #984c00; //
+$color-orange-700: #bb5d00; //
+$color-orange-600: #dd6e00; //
+$color-orange-500: #f68903; //
+$color-orange-400: #fcab5a; //
+$color-orange-300: #ffca96; //
+$color-orange-200: #fee3c9; //
+$color-orange-100: #fff5eb; //
+
+
+//== Red - for errors, overdue, insights
+$color-red-800: #8b1100;
+$color-red-700: #b01a05; // Error icon, field label if in error, validation error
+$color-red-600: #cf2912; //
+$color-red-500: #ee3a21; //
+$color-red-400: #ff6e5a; // 
+$color-red-300: #ff9c8f; //
+$color-red-200: #ffcbc3; // Glow of field level error validation (50%)
+$color-red-100: #feeae7; //
+
+
+//== Pink - for guidance, insights
+$color-pink-800: #82004b; //
+$color-pink-700: #9c0c5f; // 
+$color-pink-600: #b80d6f; // WalkMe (guidance bar background, launcher)
+$color-pink-500: #d7278c; //
+$color-pink-400: #f178bd; //
+$color-pink-300: #ffb7e1; //
+$color-pink-200: #ffdbf0; //
+$color-pink-100: #fef3f9; //
+
+
+//== Yellow - Insights and use on modal dialogs
+$color-yellow-800: #987300; //
+$color-yellow-700: #b08a00; //
+$color-yellow-600: #d7aa00; //
+$color-yellow-500: #f4c100; //
+$color-yellow-400: #ffd94d; //
+$color-yellow-300: #ffe582; //
+$color-yellow-200: #ffeeb2; //
+$color-yellow-100: #fef8e2; //
+
+
+//== Indigo - for the various link states
+$color-indigo-800: #009deb; // Link
+$color-indigo-700: #009deb; // Visted 
+$color-indigo-600: #03aff2; // Hover
+$color-indigo-500: #009deb; // Active
+
+
+//== Blacks - Defaul text color, borders, page backgrounds, default icon color
+$color-black-800: #000000; // Semi-transparent overlays behind modals
+$color-black-700: #3e4245; // Text on light backgrounds
+$color-black-600: #676c6e; // Small tertiary type
+$color-black-500: #8f9395; // Placeholder / Ghost text in form fields
+$color-black-400: #b5b7b9; // Gray icons (disabled), Blackout dates, modals...
+$color-black-300: #ced0d0; // Track of scrollbar, horizontal and vertical dividers
+$color-black-250: #e5e5e5; // Global header, left navigation, token background
+$color-black-200: #f5f5f5; // Shadows, backgrounds and environmental accents
+$color-black-100: #ffffff; // Form fields, stage background
+
+
+/*
+FOR VISUAL DESIGN QA/TESTING, TEMPORARILY MAKE THE FOLLOWING COLORS $color-red-500
+*/
+
+/*
+//== Teal - NO LONG VALID COLOR IN PALETTE
+$color-teal-800: #007e89;
+$color-teal-700: #009aad;
+$color-teal-600: #00b0c2; // Date picker header & selected/todays date or time
+$color-teal-500: #00c4d8;
+$color-teal-400: #13dbf1;
+$color-teal-300: #95edf6;
+$color-teal-200: #caf6fb;
+$color-teal-100: #effcfe;
+*/
+
+/*
+//== Blue - NO LONG VALID COLOR IN PALETTE
+$color-blue-800: #4e2a6f; // Tooltip background
+$color-blue-700: #5c3483; // Trowser footer
+$color-blue-600: #74489d; // Numerical badges, Secondary buttons on Trowser Footer
+$color-blue-500: #9067b7; // All icons on deep-sea or white
+$color-blue-400: #b192d0; // Dividers in table headers, Sort by column, date picker hover
+$color-blue-300: #d3bde9; // Table row inline edit selection state
+$color-blue-200: #eadff4; // Table row hover state, Bottom gradient color in stage background
+$color-blue-100: #f8f5fb; // page background
+*/

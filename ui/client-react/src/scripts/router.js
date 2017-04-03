@@ -18,9 +18,13 @@ import * as FeatureSwitchActions from '../actions/featureSwitchActions';
 import AppSettingsRoute from "../components/app/settings/appSettingsRoute";
 import AppUsersRoute from "../components/app/settings/categories/appUsersRoute";
 import AppPropertiesRoute from "../components/app/settings/categories/appPropertiesRoute";
+import AppsBundleLoader from '../locales/appsBundleLoader';
+import config from '../config/app.config';
 
 import Logger from "../utils/logger";
 import {APPS_ROUTE, APP_ROUTE, BUILDER_ROUTE, ADMIN_ROUTE} from '../constants/urlConstants';
+
+import {editRecordCancel, createRecord, updateRecord} from '../actions/recordActions';
 
 import "react-fastclick";
 
@@ -34,7 +38,14 @@ let fluxxor = getFlux();
 let logger = new Logger();
 PerfLogUtils.setLogger(logger);
 
-let history = AppHistory.setup(fluxxor).history;
+const store = createAppStore();
+let storeFunc = {
+    editRecordCancel: editRecordCancel,
+    createRecord: createRecord,
+    updateRecord: updateRecord
+};
+//  pass references to redux store and methods called within the appHistory component
+let history = AppHistory.setup(store, storeFunc).history;
 
 const mapStateToProps = (state) => {
     return {
@@ -43,10 +54,11 @@ const mapStateToProps = (state) => {
 };
 const ConnectedNav = connect(mapStateToProps)(NavWrapper); // pass Redux state as qbui prop
 const ConnectedBuilderNav = connect(mapStateToProps)(BuilderWrapper); // pass Redux state as qbui prop
-const store = createAppStore();
+
+// init the localization services
+AppsBundleLoader.changeLocale(config.locale.default);
 
 // init the feature switches
-
 store.dispatch(FeatureSwitchActions.getStates());
 
 const createElementWithFlux = (Component, props) => <Component {...props} flux={fluxxor} />;
