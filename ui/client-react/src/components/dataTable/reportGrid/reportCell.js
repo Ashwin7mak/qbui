@@ -1,7 +1,7 @@
 import React, {PropTypes} from 'react';
 import ReactDom from 'react-dom';
 import FieldValueEditor from '../../fields/fieldValueEditor';
-import CellValueRenderer from '../agGrid/cellValueRenderer';
+import CellValueRenderer from '../qbGrid/cellValueRenderer';
 import FieldUtils from '../../../utils/fieldUtils';
 import FieldFormats from '../../../utils/fieldFormats';
 import QbIcon from '../../qbIcon/qbIcon';
@@ -136,16 +136,17 @@ const ReportCell = React.createClass({
     render() {
         let fieldDef = this.props.fieldDef;
 
-        // The field types are different on the server and the UI. Need to make sure we translate them before passing to certain functions.
-        // Both versions (server and UI constants) for field types are currently required throughout the chain of creating/validating a field
-        // with the FieldValueRenderer
-        let uiFieldType = FieldFormats.getFormatType(fieldDef.datatypeAttributes);
-
         // If the column doesn't have a field definition, a field value cell cannot be created. Return a blank cell
         // that can be altered by column specific formatters/transformers.
         if (!fieldDef) {
             return <td {...this.props} />;
         }
+
+        // The field types are different on the server and the UI. Need to make sure we translate them before passing to certain functions.
+        // Both versions (server and UI constants) for field types are currently required throughout the chain of creating/validating a field
+        // with the FieldValueRenderer
+        let uiFieldType = FieldFormats.getFormatType(fieldDef);
+
 
         let classes = ['cellWrapper', FieldUtils.getFieldSpecificCellClass(uiFieldType, fieldDef), ...FieldUtils.getCellAlignmentClassesForFieldType(fieldDef)];
 

@@ -14,10 +14,8 @@
 
     // we need to determine dynamically what port was opened with route53 shell script in core during jenkins build
     // so we add 8080 + executor number (which is what the shell script does to ensure uniqueness)
-    var javaHostPort = 8080 + Number(process.env.EXECUTOR_NUMBER);
-    var eeHostPort = 8081 + Number(process.env.EXECUTOR_NUMBER);
-    var javaHost = 'http://quickbase-dev.com:' + javaHostPort;
-    var eeHost = 'http://quickbase-dev.com:' + eeHostPort;
+    var javaHost = 'http://quickbase-dev.com';
+    var eeHost = 'http://quickbase-dev.com';
     // same thing with node so we don't have colliding ports
     var nodeHostPort = 9000 + Number(process.env.EXECUTOR_NUMBER);
     var nodeHost = 'http://quickbase-dev.com:' + nodeHostPort;
@@ -69,7 +67,6 @@
         javaHost: javaHost,
 
         eeHost: eeHost,
-        eeHostPort: eeHostPort,
         eeHostEnable: true,
 
         //Express Server

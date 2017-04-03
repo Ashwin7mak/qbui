@@ -4,7 +4,7 @@ import {shallow} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
 
 import ReportCell from '../../../src/components/dataTable/reportGrid/reportCell';
-import CellValueRenderer from '../../../src/components/dataTable/agGrid/cellValueRenderer';
+import CellValueRenderer from '../../../src/components/dataTable/qbGrid/cellValueRenderer';
 import FieldValueEditor from '../../../src/components/fields/fieldValueEditor';
 import {TEXT} from '../../../src/constants/schema';
 import FieldFormats from '../../../src/utils/fieldFormats';
