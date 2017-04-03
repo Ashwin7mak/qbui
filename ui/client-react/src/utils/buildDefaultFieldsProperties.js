@@ -1,5 +1,5 @@
 import Locale from '../locales/locales';
-import FieldFormats from'./fieldFormats';
+import FieldFormats from './fieldFormats';
 const serverTypeConsts = require('../../../common/src/constants');
 
 let arrayOfTypes = [
@@ -34,11 +34,11 @@ class DefaultFieldsProperties {
                     "type": type
                 },
                 "name": Locale.getMessage(`fieldsDefaultLabels.${fieldType}`)
-            }
+            };
         });
         return defaultFieldProperties;
-    };
-};
+    }
+}
 
 export default DefaultFieldsProperties;
 

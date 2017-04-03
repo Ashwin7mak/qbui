@@ -134,7 +134,6 @@ const ReportCell = React.createClass({
     },
 
     render() {
-        console.log('this.props: ', this.props);
         let fieldDef = this.props.fieldDef;
 
         // If the column doesn't have a field definition, a field value cell cannot be created. Return a blank cell
