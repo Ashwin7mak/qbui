@@ -178,7 +178,7 @@
             //Verify table title
             expect(this.tableTitle.getAttribute('textContent')).toBe('Name your table');
             //Verify Icon choose is enabled
-            expect(browser.isEnabled('.iconChooser .dropdown')).toBeTruthy();
+            //expect(browser.isEnabled('.iconChooser .dropdown')).toBeTruthy();
             //Verify cancel button is enabled
             expect(browser.isEnabled('.modal-footer .cancelButton')).toBeTruthy();
             //Verify next button is disabled
