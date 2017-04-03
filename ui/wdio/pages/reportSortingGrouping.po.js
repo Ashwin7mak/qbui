@@ -51,7 +51,7 @@
         /**
          * Method to click Apply button on the Srt/Grp Container.
          */
-        clickApplyBtn : {value: function() {
+        clickContainerApplyBtn : {value: function() {
             //wait until you see apply btn
             this.sortGroupDlgApplyBtn.waitForVisible();
             //click on apply btn
@@ -61,7 +61,7 @@
         /**
          * Method to click Reset button on the Srt/Grp Container.
          */
-        clickResetBtn : {value: function() {
+        clickContainerResetBtn : {value: function() {
             //wait until you see apply btn
             this.sortGroupDlgResetBtn.waitForVisible();
             //click on apply btn
@@ -71,7 +71,7 @@
         /**
          * Method to click Close button on the Srt/Grp Container.
          */
-        clickCloseBtn : {value: function() {
+        clickContainerCloseBtn : {value: function() {
             //wait until you see apply btn
             this.sortGroupDlgCloseBtn.waitForVisible();
             //click on apply btn
@@ -80,6 +80,8 @@
 
         /**
          * Method to click in empty field of the specified container.
+         * @param containerName (ie group or sort setting)
+         * @param containerPanelTitle (ie group or sort fields panel title)
          */
         clickInEmptyFieldInSortGrpDlg : {value: function(containerName, containerPanelTitle) {
             containerName.waitForVisible();
@@ -91,6 +93,9 @@
 
         /*
          * Function to select sort/Grp By Items
+         * @param containerName (ie group or sort setting)
+         * @param containerPanelTitle (ie group or sort fields panel title)
+         * @param fieldNameToSelect
          */
         selectFieldsInSrtGrpDlg : {value: function(containerName, fieldPanelTitle, fieldNameToSelect) {
             containerName.waitForVisible();
@@ -102,6 +107,7 @@
 
         /**
          * Method to get all nonEmpty fields of the specified container.
+         * @param containerName (ie group or sort setting)
          */
         getAllNonEmptyFieldValues : {value: function(containerName) {
             var results = [];
@@ -114,6 +120,8 @@
 
         /*
          * Method to verify nonEmpty fields and their actions in specified container
+         * @param containerName (ie group or sort setting)
+         * @param fieldsToVerify (Array of fields to verify)
          */
         verifyNonEmptyFieldsInSortGrpDlg : {value: function(containerName, fieldsToVerify) {
             var results = [];
@@ -130,7 +138,7 @@
                     result.element('.fieldDeleteIcon').waitForVisible();
 
                     //verify the sort order button visible beside the field
-                    //TODO disable the below as it is bug. Right now sort Order is not displayed in the UI
+                    //TODO disable the below as it is bug MC-1515. Right now sort Order is not displayed in the UI.
                     //result.element('.sortOrderIcon').waitForVisible();
 
                     //Verify the prefix is 'By' for first field and 'then by' for remaining fields
@@ -146,12 +154,14 @@
                 expect(nonEmptyFields).toEqual(fieldsToVerify);
 
             } else {
+                browser.logger.error('There are no nonEmpty fields filtered for container ' + containerName);
                 throw new Error('Cannot verify actions for fields ' + fieldsToVerify);
             }
         }},
 
         /*
          * Method to delete fields in specified container
+         * @param containerName (ie group or sort setting)
          */
         deleteAllFieldsFromSrtGrpDlg : {value: function(containerName) {
             var results = [];
@@ -170,12 +180,15 @@
                     return result.element('.fieldDeleteIcon').click();
                 });
             } else {
+                browser.logger.error('There are no nonEmpty fields for container ' + containerName);
                 throw new Error('There are no fields in sort/grp container to delete');
             }
         }},
 
         /*
          * Method to delete fields in specified container
+         * @param containerName (ie group or sort setting)
+         * @param fieldToDelete
          */
         deleteFieldsFromSrtGrpDlg : {value: function(containerName, fieldToDelete) {
             containerName.waitForVisible();
@@ -191,12 +204,14 @@
                 //click on delete button
                 return results[0].element('.fieldDeleteIcon').click();
             } else {
+                browser.logger.error('The field with name ' + fieldToDelete + ' is not found for container ' + containerName);
                 throw new Error('Cannot delete value for field ' + fieldToDelete);
             }
         }},
 
         /*
          * Method to verify field Panel
+         * @title
          */
         verifyFieldPanelDlg : {value: function(title) {
             //wait until you see field panel
@@ -223,6 +238,7 @@
 
         /*
          * Method to click on specified fields in the fields panel
+         * @param fieldItemToSelect
          */
         selectFieldsFromFieldsPanel : {value: function(fieldItemToSelect) {
             //wait until you see field panel
@@ -295,6 +311,9 @@
 
         /*
          * Function to sort Records using loDash _.orderBy
+         * @param recordsToSort
+         * @param columnListToSort
+         * @param sortOrder
          */
         sortRecordsUsingLoDash: {value: function(recordsToSort, columnListToSort, sortOrder) {
             // sorts the list of records passed in specified sort order for a given fid.
@@ -304,6 +323,8 @@
         /*
          * This function gets the value in the record parameter (array of field value pairs), where id matches the fid specified in the parameter
          * Function is a custom sort function used by lodash from within the sortRecords function
+         * @param record
+         * @param fid
          * @Returns The value that lodash should sort on
          */
         getSortValue: {value: function(record, fid) {
@@ -415,11 +436,13 @@
                 //wait until report rows in table are loaded
                 return reportContentPO.waitForReportContent();
             } else {
+                browser.logger.error('Item with name ' + itemToSelect + ' not found under column header menu');
                 throw new Error('Item with name ' + itemToSelect + ' not found under column header menu');
             }
         }},
         /*
          * Function will open the column headers popUp menu
+         * @param columnName
          */
         openColumnHeaderMenu: {value: function(columnName) {
             //get all column headers names and filter the one we want
@@ -434,12 +457,14 @@
                 //wait until you see drop down menu
                 return columns[0].element('.dropdown-menu').waitForVisible();
             } else {
+                browser.logger.error('Column Header with name ' + columnName + ' not found');
                 throw new Error('Column Header with name ' + columnName + ' not found');
             }
         }},
 
         /*
          * Function will Expand the Column header Menu and select the Item passed in parameter
+         * @params columnName, itemToSelect
          */
         expandColumnHeaderMenuAndSelectItem: {value: function(columnName, itemToSelect) {
             //open the Column Header PopUp Menu
@@ -451,6 +476,7 @@
 
         /*
          * Function will Expand the Column header Menu and select the Item passed in parameter
+         * @params columnName, itemToVerifySelected
          */
         expandColumnHeaderMenuAndVerifySelectedItem: {value: function(columnName, itemToVerifySelected) {
             //open the Column Header PopUp Menu
@@ -462,6 +488,7 @@
 
         /*
          * Function will select the Item passed in parameter from the column header popup menu
+         * @param itemToVerify
          */
         verifyColumnHeaderMenuItemSelected: {value: function(itemToVerify) {
             var items = reportContentPO.qbGridContainer.elements('.dropdown-menu').elements('li').value.filter(function(elm) {
@@ -472,6 +499,7 @@
                 //verify the check mark beside the item selected
                 expect(items[0].element('.iconUISturdy-check').isVisible()).toBeTruthy();
             } else {
+                browser.logger.error('Item with name ' + itemToVerify + ' not found under column header menu');
                 throw new Error('Item with name ' + itemToVerify + ' not found under column header menu');
             }
         }},

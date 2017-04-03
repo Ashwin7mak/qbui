@@ -183,9 +183,10 @@
                 }).then(function() {
                     // Return the createdApp object
                     return createdApp;
-                }).catch(function(e) {
+                }).catch(function(error) {
                     // Catch any errors and reject the promise with it
-                    return Promise.reject(new Error('Error during defaultAppSetup: ' + e.message));
+                    log.error('Error during basicAppSetup');
+                    return promise.reject(error);
                 });
             },
 

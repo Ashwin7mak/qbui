@@ -113,7 +113,8 @@
             }).catch(function(error) {
                 // Global catch that will grab any errors from chain above
                 // Will appropriately fail the beforeAll method so other tests won't run
-                Promise.reject(new Error('Error during test setup beforeAll: ' + error.message));
+                browser.logger.error('Error in beforeAll function:' + JSON.stringify(error));
+                return Promise.reject('Error in beforeAll function:' + JSON.stringify(error));
             });
         });
 
@@ -164,8 +165,6 @@
         });
 
         it("Verify Reset btn functionality inside the sort/Grp dialogue", function() {
-            //TODO question to Don can't we have sort and also group on same field ? UI when I picked user field as sortBy. Then that item is not showing up in groupBy list.
-            // TODO So changing my test to sortBy User Field and groupBy project Phase
             var sortList = [
                 {
                     "fieldId": 6,
@@ -197,7 +196,7 @@
             });
 
             //Step 7 - Click on Apply
-            reportSortingPO.clickApplyBtn();
+            reportSortingPO.clickContainerApplyBtn();
             //wait until report rows in table are loaded
             reportContentPO.waitForReportContent();
 
@@ -219,7 +218,7 @@
             reportSortingPO.groupBySettings.waitForVisible();
 
             //Step 12 - Click on Reset Btn
-            reportSortingPO.clickResetBtn();
+            reportSortingPO.clickContainerResetBtn();
             //wait until report rows in table are loaded
             reportContentPO.waitForReportContent();
 
@@ -358,7 +357,7 @@
             });
 
             //Step 4 - Click on Apply
-            reportSortingPO.clickApplyBtn();
+            reportSortingPO.clickContainerApplyBtn();
             //wait until report rows in table are loaded
             reportContentPO.waitForReportContent();
 
@@ -412,7 +411,7 @@
             reportSortingPO.deleteFieldsFromSrtGrpDlg(reportSortingPO.groupBySettings, fieldToDelete);
 
             //Step 5 - Click on Apply button
-            reportSortingPO.clickApplyBtn();
+            reportSortingPO.clickContainerApplyBtn();
             //wait until report rows in table are loaded
             reportContentPO.waitForReportContent();
 

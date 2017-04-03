@@ -63,7 +63,7 @@
             //Step 9 - Verify title of SortBy Container
             expect(browser.element('.sortBySettings .title').getAttribute('textContent')).toEqual('Sort');
             //Step 10 - Click on close button of the sort/Grp dialogue
-            reportSortingPO.clickCloseBtn();
+            reportSortingPO.clickContainerCloseBtn();
             //Step 11 - Verify sort/grp dialogue dissapered
             expect(browser.isVisible('.settingsDialog')).toBeFalsy();
         });
@@ -111,7 +111,7 @@
             });
 
             //Step 6 - Click on Apply
-            reportSortingPO.clickApplyBtn();
+            reportSortingPO.clickContainerApplyBtn();
             //wait until report rows in table are loaded
             reportContentPO.waitForReportContent();
 
@@ -135,7 +135,7 @@
             reportSortingPO.sortBySettings.waitForVisible();
 
             //Step 11 - Click on Reset Btn
-            reportSortingPO.clickResetBtn();
+            reportSortingPO.clickContainerResetBtn();
             //wait until report rows in table are loaded
             reportContentPO.waitForReportContent();
 
@@ -301,7 +301,7 @@
             reportSortingPO.deleteFieldsFromSrtGrpDlg(reportSortingPO.sortBySettings, fieldToDelete);
 
             //Step 5 - Click on Apply button
-            reportSortingPO.clickApplyBtn();
+            reportSortingPO.clickContainerApplyBtn();
             //wait until report rows in table are loaded
             reportContentPO.waitForReportContent();
 
