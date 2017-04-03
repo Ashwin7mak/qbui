@@ -31,7 +31,7 @@ describe('FormBuilder (drag/drop container)', () => {
     });
 
     afterEach(() => {
-        FormBuilderRewireAPI.__ResetDependency__('QbFormMock');
+        FormBuilderRewireAPI.__ResetDependency__('QbForm');
     });
 
     it('wraps QbForm in a drag drop container', () => {
