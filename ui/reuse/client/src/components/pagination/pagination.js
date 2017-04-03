@@ -27,10 +27,10 @@ class Pagination extends Component{
         pageEnd: PropTypes.number,
         /**
          * Gets the next page in the particular paginized record */
-        getNextReportPage: PropTypes.func,
+        getNextPage: PropTypes.func,
         /**
          * Goes to the previous page in the particular paginized record */
-        getPreviousReportPage: PropTypes.func,
+        getPreviousPage: PropTypes.func,
         /**
          * Shows the total number of fields available in the particular paginized record*/
         recordsCount: PropTypes.number,
@@ -65,7 +65,7 @@ class Pagination extends Component{
         // - When page is filtered, number of items is less than page size
         let showComponent = !isSmall && !isLoading && !isCountingRecords && !isError && showNavigation;
 
-        getNextReportPage() {
+        getNextPage() {
             if (this.props.reportData) {
                 if (this.props.reportData.pageOffset + this.props.reportData.numRows >= this.props.reportData.data.recordsCount) {
                     return false;
@@ -74,7 +74,7 @@ class Pagination extends Component{
             }
         },
 
-        getPreviousReportPage() {
+        getPreviousPage() {
             if (this.props.reportData) {
                 if (this.props.reportData.pageOffset === 0) {
                     return false;
@@ -121,10 +121,10 @@ class Pagination extends Component{
         let navBar = "report.reportNavigationBar";
         if (showComponent) {
             return (
-              <div className="pagination">
+              <div className="reportNavigation">
 
                         <PreviousLink pageStart={this.props.pageStart}
-                                      getPreviousReportPage={this.props.getPreviousReportPage}
+                                      getPreviousPage={this.props.getPreviousPage}
                         />
                         <div className="pageNumbers">
                             <I18nMessage message={navBar}
@@ -134,7 +134,7 @@ class Pagination extends Component{
                         </div>
                         <NextLink recordsCount={this.props.recordsCount}
                                   pageEnd={this.props.pageEnd}
-                                  getNextReportPage={this.props.getNextReportPage}
+                                  getNextPage={this.props.getNextPage}
                         />
                     </div>
                   );
@@ -150,7 +150,7 @@ class PreviousLink extends Component {
         pageStart : PropTypes.number,
         /**
          * Gets the previous page available in the particular paginized record*/
-        getPreviousReportPage : PropTypes.func
+        getPreviousPage : PropTypes.func
     },
 
     render() {
@@ -159,7 +159,7 @@ class PreviousLink extends Component {
             <Tooltip tipId="fieldName" i18nMessageKey="report.previousToolTip">
                 {/* For embedded reports, this button element is rendered inside a <form> element.
                     We need to specify type="button" to prevent form submission when clicked. */}
-                <button tabIndex="0" className="navigationButton" onClick={this.props.getPreviousReportPage} type="button">
+                <button tabIndex="0" className="navigationButton" onClick={this.props.getPreviousPage} type="button">
                     <Icon className={previousButtonClassName} icon="caret-filled-left" />
                 </button>
             </Tooltip>
@@ -177,7 +177,7 @@ class NextLink extends Component {
         pageEnd : PropTypes.number,
         /**
          * Gets the next page available in the particular paginized record*/
-        getNextReportPage : PropTypes.func
+        getNextPage : PropTypes.func
     },
 
     render() {
@@ -187,7 +187,7 @@ class NextLink extends Component {
             <Tooltip tipId="fieldName" i18nMessageKey="report.nextToolTip">
                 {/* For embedded reports, this button element is rendered inside a <form> element.
                     We need to specify type="button" to prevent form submission when clicked. */}
-                <button tabIndex="0" className="navigationButton" onClick={this.props.getNextReportPage} type="button">
+                <button tabIndex="0" className="navigationButton" onClick={this.props.getNextPage} type="button">
                     <Icon className={nextButtonClassName} icon="caret-filled-right" />
                 </button>
             </Tooltip>
