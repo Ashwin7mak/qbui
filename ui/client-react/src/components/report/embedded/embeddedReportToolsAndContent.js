@@ -3,6 +3,8 @@ import {connect} from 'react-redux';
 import _ from 'lodash';
 
 import ReportToolsAndContent from '../reportToolsAndContent';
+import unloadable from '../../hoc/unloadable';
+import withUniqueId from '../../hoc/withUniqueId';
 import {loadDynamicReport, unloadEmbeddedReport} from '../../../actions/reportActions';
 import {CONTEXT} from '../../../actions/context';
 
@@ -15,6 +17,12 @@ import constants from '../../../../../common/src/constants';
 import '../report.scss';
 
 let logger = new Logger();
+
+// Wrap ReportToolsAndContent with unloadable HOC. The HOC will call loadDynamicReport to add data
+// to the redux store which handles loading/unloading data from the
+// redux store.
+const ReportToolsAndContentWrapper = (props) => <ReportToolsAndContent {...props} />;
+const TrackableReportToolsAndContent = unloadable(ReportToolsAndContentWrapper);
 
 /**
  * A wrapper for ReportToolsAndContent to be rendered as an embedded report in a form.
@@ -43,7 +51,7 @@ export const EmbeddedReportToolsAndContent = React.createClass({
         // detailKeyValue that contains a parent record's masterKeyValue.
         queryParams.query = QueryUtils.parseStringIntoExactMatchExpression(this.props.detailKeyFid, this.props.detailKeyValue);
 
-        this.props.loadDynamicReport(this.uniqueId, appId, tblId, rptId, format, filter, queryParams);
+        this.props.loadDynamicReport(this.props.uniqueId, appId, tblId, rptId, format, filter, queryParams);
     },
 
     /**
@@ -63,50 +71,44 @@ export const EmbeddedReportToolsAndContent = React.createClass({
         }
     },
 
-    componentDidMount() {
-        this.uniqueId = _.uniqueId(CONTEXT.REPORT.EMBEDDED);
-        this.loadReportFromProps();
-    },
-
-    componentWillUnmount() {
-        this.props.unloadEmbeddedReport(this.uniqueId);
-    },
-
     render() {
-        const report = _.get(this, `props.reports[${this.uniqueId}]`);
-        if (!report) {
-            logger.info('no report exists in store for embeddedReportToolsAndContent with uniqueId: ' + this.uniqueId);
-            return null;
-        } else {
-            const params = {
-                appId: report.appId,
-                tblId: report.tblId,
-                rptId: report.rptId
-            };
-            return (
-                <div className="embeddedReportContainer reportContainer">
-                    <ReportToolsAndContent
-                        params={params}
-                        reportData={report}
-                        appUsers={this.props.appUsers}
-                        routeParams={this.props.routeParams}
-                        selectedAppId={report.appId}
-                        fields={this.props.fields || !("not used in phase1")}
-                        nameForRecords={this.nameForRecords}
-                        phase1={true}
-                        loadDynamicReport={this.loadDynamicReport}
-                    />
-                </div>);
-        }
+        const report = this.props.report;
+        const params = {
+            appId: _.get(report, 'appId'),
+            tblId: _.get(report, 'tblId'),
+            rptId: _.get(report, 'rptId')
+        };
+        return (
+            <div className="embeddedReportContainer reportContainer">
+                <TrackableReportToolsAndContent
+                    uniqueId={this.props.uniqueId}
+                    loadEntry={this.loadReportFromProps}
+                    unloadEntry={this.unloadEmbeddedReport}
+                    hasEntry={!!report}
+
+                    params={params}
+                    reportData={report}
+                    appUsers={this.props.appUsers}
+                    routeParams={this.props.routeParams}
+                    selectedAppId={_.get(report, 'appId')}
+                    fields={this.props.fields || !("not used in phase1")}
+                    nameForRecords={this.nameForRecords}
+                    phase1={true}
+                    loadDynamicReport={this.loadDynamicReport}
+                />
+            </div>);
     }
 });
 
 // instead of relying on our parent route component to pass our props down,
 // the react-redux container will generate the required props for this route
 // from the Redux state (the presentational component has no code dependency on Redux!)
-const mapStateToProps = (state) => {
+const mapStateToProps = (state, ownProps) => {
     return {
-        reports: state.embeddedReports
+        reports: state.embeddedReports,
+        // find the report which applies to this specific instance
+        // ownProps.uniqueId is the uniqueId prop passed in by the withUniqueId HOC
+        report: _.get(state, `embeddedReports[${ownProps.uniqueId}]`)
     };
 };
 
@@ -114,15 +116,16 @@ const mapStateToProps = (state) => {
 // (another bit of boilerplate to keep the component free of Redux dependencies)
 const mapDispatchToProps = (dispatch) => {
     return {
-        loadDynamicReport: (context, appId, tblId, rptId, format, filter, queryParams) => {
-            dispatch(loadDynamicReport(context, appId, tblId, rptId, format, filter, queryParams));
-        },
+        loadDynamicReport: (context, appId, tblId, rptId, format, filter, queryParams) =>
+            dispatch(loadDynamicReport(context, appId, tblId, rptId, format, filter, queryParams)),
         unloadEmbeddedReport: (context) =>
             dispatch(unloadEmbeddedReport(context))
     };
 };
 
-export default connect(
+const ConnectedEmbeddedReportToolsAndContent = connect(
     mapStateToProps,
     mapDispatchToProps
 )(EmbeddedReportToolsAndContent);
+
+export default withUniqueId(ConnectedEmbeddedReportToolsAndContent, CONTEXT.REPORT.EMBEDDED);
