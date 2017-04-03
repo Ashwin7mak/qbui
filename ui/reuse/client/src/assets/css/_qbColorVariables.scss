@@ -177,7 +177,8 @@ $iconfont-on-light-alternate-color:     $color-black-700;
 $iconfont-on-light-disabled-color:      $color-black-400;   // not in XD spreadsheet
 
 // this old color needs to be merged with one of the iconfont colors above???
-$icon-color-hover:                      $color-cyan-600;    // not in XD spreadsheet
+$icon-color-hover:                      $color-black-700;    // not in XD spreadsheet
+$icon-light-color-hover:                $color-black-500;    // not in XD spreadsheet
 
 $report-columnheaderarrow-normal-color: $color-cyan-800;
 $mail-icon-normal-color:                $color-orange-600;
@@ -235,8 +236,8 @@ $microtext-normal-color:                $color-black-600;
 
 // top navigation
 $topnav-title-icon-color:               $badcolor14-top-nav-title-icon-color;   // not in XD spreadsheet
-$topnav-icon-color:                     $iconfont-on-light-normal-color;        // not in XD spreadsheet
-$topnav-hover-color:                    $color-black-100;                       // not in XD spreadsheet
+$topnav-icon-color:                     $color-black-800;        // not in XD spreadsheet
+$topnav-hover-color:                    $color-black-500;                       // not in XD spreadsheet
 $topnav-hover-background-color:         $badcolor10-nav-hover-bg;               // not in XD spreadsheet
 $topnav-header-background-color:        $color-black-250;                        // not in XD spreadsheet
 
@@ -403,7 +404,8 @@ $report-background-color:                   $badcolor2-color13; // not in XD spr
 $pagination-iconfont-normal-color:          $color-cyan-700;    // not in XD spreadsheet
 $pagination-iconfont-disabled-color:        $color-black-400;   // not in XD spreadsheet
 $pagination-iconfont-hover-color:           $color-cyan-300;    // not in XD spreadsheet
-
+$pagination-iconfont-darkblack-color:       $color-black-700;   // not in XD spreadsheet
+$pagination-arrow-hover-color:              $color-black-300;   // not in XD spreadsheet
 // Report grouped headers
 $grid-group-row-header-background-color:    $color-blue-200;    // not in XD spreadsheet
 

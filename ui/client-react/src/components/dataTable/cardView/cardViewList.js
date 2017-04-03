@@ -66,7 +66,7 @@ let CardViewList = React.createClass({
         }
 
         let className = "cardViewList group-level-" + this.props.groupLevel;
-        let groupIcon = this.state.open ? "caret-filled-down" : "caret-filled-right";
+        let groupIcon = this.state.open ? "caret-filled-up" : "caret-filled-down";
 
         let rowId = this.props.node[this.props.primaryKeyName] ? this.props.node[this.props.primaryKeyName].value : null;
 
