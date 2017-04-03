@@ -36,7 +36,6 @@ class DefaultFieldsProperties {
                 "name": Locale.getMessage(`fieldsDefaultLabels.${fieldType}`)
             }
         });
-
         return defaultFieldProperties;
     };
 };
