@@ -12,6 +12,8 @@ import DragAndDropField from '../formBuilder/dragAndDropField';
 import RelatedChildReport from './relatedChildReport';
 import FlipMove from 'react-flip-move';
 
+import {connect} from 'react-redux';
+
 import './qbform.scss';
 import './tabs.scss';
 
@@ -20,7 +22,7 @@ let formBuilderEditForm = null;
  Custom QuickBase Form component that has 1 property.
  activeTab: the tab we want to display first when viewing the form, defaults to the first tab
  */
-let QBForm = React.createClass({
+export const QBForm = React.createClass({
     displayName: 'QBForm',
 
     propTypes: {
@@ -50,25 +52,59 @@ let QBForm = React.createClass({
 
         /**
          * Whether to display animation when reordering elements on a field in builder mode */
-        hasAnimation: PropTypes.bool,
+        hasAnimation: PropTypes.bool
     },
 
     getDefaultProps() {
         return {
             activeTab: '0',
-            hasAnimation: false,
+            hasAnimation: false
         };
     },
 
+    shouldComponentUpdate: function(nextProps, nextState) {
+        //  check to see if the fields store for this app/tbl is getting initialized with data
+        if (Array.isArray(nextProps.fields)) {
+            const formMeta = nextProps.formData ? nextProps.formData.formMeta : {};
+            if (_.has(formMeta, 'appId') && _.has(formMeta, 'tableId')) {
+                const tableFields = _.find(nextProps.fields, fields => {
+                    return ((fields.appId === formMeta.appId) && (fields.tblId === formMeta.tableId));
+                });
+
+                // don't render if the fields store is in the process of being initialized with data.
+                if (tableFields && tableFields.fieldsLoading === true) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    },
+
     /**
-     * get the form data field
+     * get the form data field from the fields redux store
+     *
      * @param fieldId
      * @returns the field from formdata fields with the field ID
      */
     getRelatedField(fieldId) {
-        let fields = this.props.formData.fields || [];
+        //  search the fields property from the redux store for the correct appId/tblId list
+        if (Array.isArray(this.props.fields)) {
+            const formMeta = this.props.formData ? this.props.formData.formMeta : {};
+            if (_.has(formMeta, 'appId') && _.has(formMeta, 'tableId')) {
+                const tableFields = _.find(this.props.fields, fields => {
+                    return ((fields.appId === formMeta.appId) && (fields.tblId === formMeta.tableId));
+                });
+                if (_.has(tableFields, 'fields.fields.data')) {
+                    // crazy object structure..should be refactored!
+                    const fields = tableFields.fields.fields.data;
+                    return _.find(fields, field => {
+                        return field.id === fieldId;
+                    });
+                }
+            }
+        }
 
-        return _.find(fields, field => field.id === fieldId);
+        return null;
     },
 
     /**
@@ -432,7 +468,8 @@ let QBForm = React.createClass({
      */
     getBuiltInFieldsForFooter() {
 
-        let fields = this.props.formData.fields;
+        //let fields = this.props.formData.fields;
+        let fields = this.props.fields;
         let values = this.props.formData.record;
 
         if (!fields || !values) {
@@ -563,4 +600,20 @@ function buildUserField(id, fieldValue, name) {
     };
 }
 
-export default QBForm;
+const mapStateToProps = (state) => {
+    return {
+        fields: state.fields
+    };
+};
+//const mapDispatchToProps = (dispatch) => {
+//    return {
+//        loadFields: (appId, tblId) => {
+//            dispatch(loadFields(appId, tblId));
+//        }
+//    };
+//};
+
+export default connect(
+    mapStateToProps,
+    null
+)(QBForm);
