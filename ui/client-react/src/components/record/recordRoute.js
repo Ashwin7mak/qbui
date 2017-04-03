@@ -18,6 +18,7 @@ import Loader from 'react-loader';
 import RecordHeader from './recordHeader';
 import Breakpoints from '../../utils/breakpoints';
 import WindowLocationUtils from '../../utils/windowLocationUtils';
+import AutomationUtils from '../../utils/automationUtils';
 import * as SpinnerConfigurations from '../../constants/spinnerConfigurations';
 import * as UrlConsts from "../../constants/urlConstants";
 import _ from 'lodash';
@@ -26,7 +27,6 @@ import {loadForm, editNewRecord} from '../../actions/formActions';
 import {openRecord} from '../../actions/recordActions';
 import {clearSearchInput} from '../../actions/searchActions';
 import {APP_ROUTE, BUILDER_ROUTE, EDIT_RECORD_KEY} from '../../constants/urlConstants';
-
 
 import './record.scss';
 
@@ -253,6 +253,14 @@ export const RecordRoute = React.createClass({
     },
 
     /**
+     * Invoke automation to approve
+     *
+     */
+    approveRecord()  {
+        AutomationUtils.approveRecord("appId", "wfId");
+    },
+
+    /**
      * edit the selected record in the trowser
      * @param data row record data
      */
@@ -264,6 +272,7 @@ export const RecordRoute = React.createClass({
         const actions = [
             {msg: 'pageActions.addRecord', icon:'add', className:'addRecord', onClick: this.editNewRecord},
             {msg: 'pageActions.edit', icon:'edit', onClick: this.openRecordForEdit},
+            {msg: 'pageActions.approve', icon: 'thumbs-up', onClick: this.approveRecord},
             {msg: 'unimplemented.email', icon:'mail', disabled:true},
             {msg: 'unimplemented.print', icon:'print', disabled:true},
             {msg: 'unimplemented.delete', icon:'delete', disabled:true}];
@@ -386,6 +395,9 @@ const mapDispatchToProps = (dispatch) => {
         clearSearchInput: () => {
             dispatch(clearSearchInput());
         }
+        // approveRecord: (appId, wfId) => {
+        //     dispatch(approveRecord(appId, wfId));
+        // }
     };
 };
 

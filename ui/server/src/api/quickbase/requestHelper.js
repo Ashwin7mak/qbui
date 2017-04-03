@@ -50,8 +50,14 @@
             getRequestUrl  : function(req) {
                 return config ? config.javaHost + req.url : '';
             },
+            getAutomationUrl  : function(req) {
+                return config ? config.automationHost + req.url : '';
+            },
             getRequestEEUrl  : function(req) {
                 return config ? config.eeHost + req.url : '';
+            },
+            getRequestAutomationUrl  : function(req) {
+                return config ? config.automationHost + req.originalUrl : '';   //Using Original url here because automation does not use 'api/api' format
             },
             getLegacyHost : function() {
                 return config ? config.legacyBase : '';
@@ -145,6 +151,57 @@
                 opts.url = this.getRequestEEUrl(req);
                 return opts;
             },
+
+            /**
+             * Set the request attributes for an automation server request
+             *
+             * @param req
+             * @returns request object used when submitting a server request
+             */
+            setAutomationEngineOptions: function(req) {
+                //  set the default request options
+                let opts = this.setAutomationOptions(req);
+
+                //  override the url to use automation server
+                opts.url = this.getRequestAutomationUrl(req);
+                return opts;
+            },
+
+            /**
+             * Set the request attributes for a automation server request
+             *
+             * @param req
+             * @returns request object used when submitting a server request
+             */
+            setAutomationOptions: function(req) {
+
+                this.setTidHeader(req);
+
+                let opts = {
+                    url         : this.getAutomationUrl(req),
+                    method      : (req.method),
+                    agentOptions: this.getAgentOptions(req),
+                    headers     : req.headers
+                };
+
+                if (config) {
+                    if (config.isMockServer) {
+                        opts.gzip = false;
+                        opts.headers["accept-encoding"] = "";
+                    }
+                    if (config.proxyHost) {
+                        opts.host = config.proxyHost;
+                        if (config.proxyPort) {
+                            opts.port = config.proxyPort;
+                        }
+                    }
+                }
+
+                this.setBodyOption(req, opts);
+
+                return opts;
+            },
+
 
             /**
              * Set the request attributes for a core server request

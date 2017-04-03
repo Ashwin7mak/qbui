@@ -123,6 +123,7 @@ export default {
         },
         pageActions: {
             addRecord: "Add a record",
+            approve: "Approve this record",
             configureFormBuilder: 'Modify this form',
             saveRecord: "Save changes",
             saveAndAddRecord: "Save and add a new row",

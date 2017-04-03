@@ -25,6 +25,7 @@ let defaultConfig = {
     api: {
         qbVersion: 'v1',
         eeVersion: 'v1',
+        automationVersion: 'v1',
         nodeVersion: 'v1',
         legacyVersion: 'v1'
     },
