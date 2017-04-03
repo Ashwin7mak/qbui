@@ -1,9 +1,14 @@
 import React, {Component, PropTypes} from 'react';
+import Loader  from 'react-loader';
+import {connect} from 'react-redux';
+
+import StandardGrid from '../../common/grid/standardGrid';
 import AccountUsersGrid from './grid/AccountUsersGrid';
 import AccountUsersStage from './AccountUsersStage';
-import {connect} from 'react-redux';
+
 import * as AccountUsersActions from './AccountUsersActions';
 import * as RequestContextActions from '../../common/requestContext/RequestContextActions';
+import * as SpinnerConfigurations from "../../../../client-react/src/constants/spinnerConfigurations";
 
 /**
  * Represents the top level page that contains the grid for account users
@@ -13,39 +18,69 @@ class AccountUsers extends Component {
         super(props);
     }
 
-    /**
-     * get users whenever the component mounts
-     */
     componentDidMount() {
-        this.props.fetchRequestContextIfNeeded(this.props.params.accountId);
-        this.props.fetchAccountUsers(this.props.params.accountId);
+        this.props.fetchData(this.props.params.accountId);
     }
 
     render() {
-        return (
-            <div className="accountUsersContainer">
-                <AccountUsersStage isHidden={false} />
-                <AccountUsersGrid accountId={this.props.params.accountId} />
-            </div>
-        );
+        var canSeeAccountColumns = false;
+        var canSeeRealmColumns = false;
+
+        if (this.props.requestUser && this.props.requestRealm) {
+            canSeeAccountColumns = this.props.requestUser.isAccountAdmin || this.props.requestUser.isCSR;
+            canSeeRealmColumns = !this.props.requestRealm.isAccountURL && (this.props.requestUser.isRealmAdmin || this.props.requestUser.isCSR);
+        }
+        if (this.props.dataFetchingError) {
+            return (
+                <h1>Error</h1>
+            );
+        } else {
+            return (
+                <Loader loaded={!this.props.loading} options={SpinnerConfigurations.LARGE_BREAKPOINT}>
+                    <div className="accountUsersContainer">
+                        <AccountUsersStage isHidden={false} />
+                        <StandardGrid>
+                            <AccountUsersGrid
+                                users={this.props.users}
+                                showAccountColumns={canSeeAccountColumns}
+                                showRealmColumns={canSeeRealmColumns}
+                                />
+                        </StandardGrid>
+                    </div>
+                </Loader>
+            );
+        }
     }
 }
 
 AccountUsers.propTypes = {
-    fetchAccountUsers: PropTypes.func.isRequired,
-    fetchRequestContextIfNeeded: PropTypes.func.isRequired
+    fetchData: PropTypes.func.isRequired,
+    dataFetchingError: PropTypes.any,
+    requestUser: PropTypes.object,
+    requestRealm: PropTypes.object,
+    users: PropTypes.array,
+    loading: PropTypes.bool
 };
 
 export {AccountUsers};
 
 const mapDispatchToProps = (dispatch) => ({
-    fetchAccountUsers(id) {
-        dispatch(AccountUsersActions.fetchAccountUsers(id));
-    },
-    fetchRequestContextIfNeeded(id) {
+    fetchData(id) {
         dispatch(RequestContextActions.fetchRequestContextIfNeeded(id));
+        dispatch(AccountUsersActions.fetchAccountUsers(id));
     }
 });
 
-export default connect(null, mapDispatchToProps)(AccountUsers);
+const mapStateToProps = (state) => {
+    return {
+        requestUser: state.RequestContext.currentUser,
+        requestRealm: state.RequestContext.realm,
+        users: state.AccountUsers.users,
+        loading: state.RequestContext.status.isFetching || !state.RequestContext.currentUser.id,
+        dataFetchingError: state.RequestContext.status.error,
+    };
+};
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(AccountUsers);
 
