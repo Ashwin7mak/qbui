@@ -2,7 +2,7 @@ import React, {PropTypes, Component} from 'react';
 import Icon from '../icon/icon';
 import Tooltip from '../tooltip/tooltip';
 import './pagination.scss';
-import {I18nMessage} from '../../../../../client-react/src/src/utils/i18nMessage';
+import {I18nMessage} from '../../utils/i18nMessage';
 import Breakpoints from '../../../../../client-react/src/utils/breakpoints';
 import StringUtils from "../../../../../client-react/src/utils/stringUtils";
 import NumberUtils from "../../../../../client-react/src/utils/numberUtils";
