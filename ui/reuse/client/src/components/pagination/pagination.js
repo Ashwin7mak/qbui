@@ -19,16 +19,26 @@ class Pagination extends Component{
                 facets:  PropTypes.array
             })
         }),
+        /**
+         * Shows the current page for the particular paginized record */
         pageStart: PropTypes.number,
+        /**
+         * Shows the total page count for the particular paginized record */
         pageEnd: PropTypes.number,
+        /**
+         * Gets the next page in the particular paginized record */
         getNextReportPage: PropTypes.func,
+        /**
+         * Goes to the previous page in the particular paginized record */
         getPreviousReportPage: PropTypes.func,
+        /**
+         * Shows the total number of fields available in the particular paginized record*/
         recordsCount: PropTypes.number,
         loadDynamicReport: React.PropTypes.func,
     },
 
     /**
-     * renders the report navigation toolbar
+     * renders the pagination bar
      */
     render() {
         // Conditional indicating display of record navigation arrows. Show when
@@ -135,7 +145,11 @@ class Pagination extends Component{
 
 class PreviousLink extends Component {
     PreviousLink.propTypes =  {
+      /**
+       * Shows the current page number in the particular paginized record*/
         pageStart : PropTypes.number,
+        /**
+         * Gets the previous page available in the particular paginized record*/
         getPreviousReportPage : PropTypes.func
     },
 
@@ -155,8 +169,14 @@ class PreviousLink extends Component {
 
 class NextLink extends Component {
     NextLink.propTypes = {
+      /**
+       * Shows the total number of fields available in the particular paginized record*/
         recordsCount : PropTypes.number,
+        /**
+         * Shows the last page number in the particular paginized record*/
         pageEnd : PropTypes.number,
+        /**
+         * Gets the next page available in the particular paginized record*/
         getNextReportPage : PropTypes.func
     },
 
