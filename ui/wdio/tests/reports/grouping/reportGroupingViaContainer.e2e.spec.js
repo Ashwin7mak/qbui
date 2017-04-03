@@ -164,7 +164,8 @@
             });
         });
 
-        it("Verify Reset btn functionality inside the sort/Grp dialogue", function() {
+        //TODO the below test Disabled due to MC-1518
+        xit("Verify Reset btn functionality inside the sort/Grp dialogue", function() {
             var sortList = [
                 {
                     "fieldId": 6,
