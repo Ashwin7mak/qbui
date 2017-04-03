@@ -8,8 +8,13 @@ const forms = (
 
     const id = action.id;
     // retrieve currentForm and assign the rest of the form to newState
-    const {[id]: currentForm, ...newState} = state;
-    let updatedForm;
+    let {[id]: currentForm, ...newState} = _.cloneDeep(state);
+    let updatedForm = currentForm;
+
+    // TODO: do this smarter, change to markCopiesAsDirty
+    function removeCopies(_id) {
+        return _.filter(newState, ['formData.recordId', _id]);
+    }
 
     // reducer - no mutations!
     switch (action.type) {
@@ -74,6 +79,8 @@ const forms = (
     }
 
     case types.SAVE_FORM_COMPLETE: {
+        // a form has been updated, remove entries if there are multiple entries for the same record
+        newState = removeCopies(currentForm.formData.recordId);
         //  hide/show modal window and spinner over a form
         newState[id] = ({
             ...currentForm,
@@ -85,8 +92,8 @@ const forms = (
     }
 
     case types.SAVING_FORM_SUCCESS: {
-        //no changes to state..
-        updatedForm = _.cloneDeep(currentForm);
+        // a form has been updated, remove entries if there are multiple entries for the same record
+        newState = removeCopies(currentForm.formData.recordId);
         if (!updatedForm.formData) {
             updatedForm.formData = {};
         }
@@ -105,7 +112,6 @@ const forms = (
         }
 
         let {newLocation, draggedItemProps} = action.content;
-        updatedForm = _.cloneDeep(currentForm);
 
         updatedForm.formData.formMeta = MoveFieldHelper.moveField(
             updatedForm.formData.formMeta,
@@ -125,7 +131,6 @@ const forms = (
         }
 
         let {location} = action.content;
-        updatedForm = _.cloneDeep(currentForm);
 
         updatedForm.formData.formMeta = MoveFieldHelper.removeField(
             updatedForm.formData.formMeta,
@@ -143,8 +148,6 @@ const forms = (
         if (!currentForm || !_.has(action, 'content.location')) {
             return state;
         }
-
-        updatedForm = _.cloneDeep(currentForm);
 
         if (!updatedForm.selectedFields) {
             updatedForm.selectedFields = [];
@@ -166,8 +169,6 @@ const forms = (
             return state;
         }
 
-        updatedForm = _.cloneDeep(currentForm);
-
         if (!updatedForm.selectedFields || !updatedForm.previouslySelectedField) {
             updatedForm.selectedFields = [];
             updatedForm.previouslySelectedField = [];
@@ -188,7 +189,6 @@ const forms = (
         }
 
         let {location} = action.content;
-        updatedForm = _.cloneDeep(currentForm);
 
         updatedForm.formData.formMeta = MoveFieldHelper.keyBoardMoveFieldUp(
             updatedForm.formData.formMeta,
@@ -216,7 +216,6 @@ const forms = (
         }
 
         let {location} = action.content;
-        updatedForm = _.cloneDeep(currentForm);
 
         updatedForm.formData.formMeta = MoveFieldHelper.keyBoardMoveFieldDown(
             updatedForm.formData.formMeta,
@@ -251,7 +250,6 @@ const forms = (
         } else if (tabIndex === "-1") {
             formFocus = true;
         }
-        updatedForm = _.cloneDeep(currentForm);
 
         if (!updatedForm.formBuilderChildrenTabIndex && !updatedForm.formFocus) {
             updatedForm.formBuilderChildrenTabIndex = [];
@@ -265,6 +263,10 @@ const forms = (
             ...newState,
             updatedForm
         };
+    }
+
+    case types.UNLOAD_FORM : {
+        return removeCopies(currentForm.formData.recordId);
     }
 
     default:

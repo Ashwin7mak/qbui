@@ -342,7 +342,7 @@ export const RecordRoute = React.createClass({
 
                     {!formLoadingErrorStatus ?
                         <Loader key={key}
-                                loaded={(!this.props.forms || !viewData || !viewData.loading)}
+                                loaded={(!viewData || !viewData.loading)}
                                 options={SpinnerConfigurations.TROWSER_CONTENT}>
                         <Record key={key}
                                 selectedApp={this.props.selectedApp}
@@ -350,7 +350,7 @@ export const RecordRoute = React.createClass({
                                 tblId={this.props.params.tblId}
                                 recId={this.props.params.recordId}
                                 errorStatus={formLoadingErrorStatus ? viewData.errorStatus : null}
-                                formData={this.props.forms && viewData ? viewData.formData : null}
+                                formData={viewData ? viewData.formData : null}
                                 appUsers={this.props.appUsers} />
                         </Loader> : null }
                     {formInternalError && <pre><I18nMessage message="form.error.500"/></pre>}
