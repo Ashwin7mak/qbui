@@ -7,8 +7,7 @@ export const testCases = [
             type: "SCALAR",
             datatypeAttributes: {
                 type: "NUMERIC",
-                treatNullAsZero: true,
-                decimalPlaces: 0
+                treatNullAsZero: true
             },
             name: "Number",
             required: false
