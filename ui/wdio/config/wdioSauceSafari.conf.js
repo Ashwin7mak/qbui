@@ -6,7 +6,7 @@ var config = {
             browserName: 'safari',
             version: '10.0',
             tunnelIdentifier: process.env.ENV_TUNNEL_NAME,
-            build           : 'WebdriverIO Jenkins Try Build #' + process.env.BUILD_NUMBER + ' - OSX Safari Browser - Git branch: ' + process.env.GIT_UIBRANCH,
+            build           : 'WebdriverIO Jenkins Try Build #' + process.env.BUILD_NUMBER + ' - Git branch: ' + process.env.GIT_UIBRANCH + ' - OSX Safari Browser',
             tags            : [process.env.SAUCE_JOB_NAME + '_OSX_Safari', 'try', 'OSX', 'Safari', process.env.BUILD_NUMBER, process.env.GIT_UIBRANCH],
             screenResolution: '1600x1200',
             //Timeout in seconds for Sauce Labs to wait for another command (bumped this for sleeps in tests)

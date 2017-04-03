@@ -6,7 +6,7 @@ var config = {
             browserName: 'MicrosoftEdge',
             version: '14.14393',
             tunnelIdentifier: process.env.ENV_TUNNEL_NAME,
-            build           : 'WebdriverIO Jenkins Try Build #' + process.env.BUILD_NUMBER + ' - Windows 10 Edge Browser - Git branch: ' + process.env.GIT_UIBRANCH,
+            build           : 'WebdriverIO Jenkins Try Build #' + process.env.BUILD_NUMBER + ' - Git branch: ' + process.env.GIT_UIBRANCH + ' - Windows 10 Edge Browser',
             tags            : [process.env.SAUCE_JOB_NAME + '_Win10_Edge', 'try', 'Win10', 'Edge', process.env.BUILD_NUMBER, process.env.GIT_UIBRANCH],
             screenResolution: '2560x1600',
             // Timeout in seconds for Sauce Labs to wait for another command (bumped this for sleeps in tests)

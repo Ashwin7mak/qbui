@@ -6,7 +6,7 @@ var config = {
             browserName: 'firefox',
             version: '46.0',
             tunnelIdentifier: process.env.ENV_TUNNEL_NAME,
-            build           : 'WebdriverIO Jenkins Try Build #' + process.env.BUILD_NUMBER + ' - OSX Firefox Browser - Git branch: ' + process.env.GIT_UIBRANCH,
+            build           : 'WebdriverIO Jenkins Try Build #' + process.env.BUILD_NUMBER + ' - Git branch: ' + process.env.GIT_UIBRANCH + ' - OSX Firefox Browser',
             tags            : [process.env.SAUCE_JOB_NAME + '_OSX_Firefox', 'try', 'OSX', 'Firefox', process.env.BUILD_NUMBER, process.env.GIT_UIBRANCH],
             screenResolution: '2048x1536',
             // Timeout in seconds for Sauce Labs to wait for another command (bumped this for sleeps in tests)
