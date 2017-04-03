@@ -33,10 +33,12 @@
         fieldsPanelTitle : {get: function() {return this.fieldsPanel.element('.fieldPanelHeader span span');}},
         //panel cancel
         fieldsPanelCancel: {get: function() {return this.fieldsPanel.element('.cancel');}},
-
-
+        //record Id in field panels
         recordID: {get: function() {return browser.element('//span[@class="fieldName" and text()="Record ID#"]');}},
 
+        /**
+         * Method to Select record ID# from field panels
+         */
         sortByRecordID: {value: function() {
             this.reportSortGrpBtnOnReportsPage.click();
             this.sortBySettings.waitForVisible();
