@@ -1,4 +1,4 @@
-import DefaultFieldProperties from '../../src/utils/defaultFieldsProperties';
+import {createScalarDefaultFieldsProperties} from '../../src/utils/defaultFieldsProperties';
 import jasmineEnzyme from 'jasmine-enzyme';
 const serverTypeConsts = require('../../../common/src/constants');
 
@@ -6,11 +6,14 @@ let testCases = [
     {
         type: serverTypeConsts.NUMERIC,
         expectedResult: {
-            "type": "SCALAR",
-            "datatypeAttributes": {
-                "type": "NUMERIC"
+            type: "SCALAR",
+            datatypeAttributes: {
+                type: "NUMERIC",
+                treatNullAsZero: true,
+                decimalPlaces: 0
             },
-            "name": "Number"
+            name: "Number",
+            required: false
         }
     },
     {
@@ -20,7 +23,8 @@ let testCases = [
             "datatypeAttributes": {
                 "type": "DATE"
             },
-            "name": "Date"
+            "name": "Date",
+            "required": false
         }
     },
     {
@@ -30,7 +34,8 @@ let testCases = [
             "datatypeAttributes": {
                 "type": "DURATION"
             },
-            "name": "Duration"
+            "name": "Duration",
+            "required": false
         }
     },
     {
@@ -40,7 +45,8 @@ let testCases = [
             "datatypeAttributes": {
                 "type": "DATE_TIME"
             },
-            "name": "Time stamp"
+            "name": "Time stamp",
+            "required": false
         }
     },
     {
@@ -50,7 +56,8 @@ let testCases = [
             "datatypeAttributes": {
                 "type": "TIME_OF_DAY"
             },
-            "name": "Time of day"
+            "name": "Time of day",
+            "required": false
         }
     },
     {
@@ -60,7 +67,8 @@ let testCases = [
             "datatypeAttributes": {
                 "type": "CHECKBOX"
             },
-            "name": "Checkbox"
+            "name": "Checkbox",
+            "required": false
         }
     },
     {
@@ -70,7 +78,8 @@ let testCases = [
             "datatypeAttributes": {
                 "type": "USER"
             },
-            "name": "User"
+            "name": "User",
+            "required": false
         }
     },
     {
@@ -80,7 +89,8 @@ let testCases = [
             "datatypeAttributes": {
                 "type": "CURRENCY"
             },
-            "name": "Currency"
+            "name": "Currency",
+            "required": false
         }
     },
     {
@@ -90,7 +100,8 @@ let testCases = [
             "datatypeAttributes": {
                 "type": "RATING"
             },
-            "name": "Rating"
+            "name": "Rating",
+            "required": false
         }
     },
     {
@@ -100,7 +111,8 @@ let testCases = [
             "datatypeAttributes": {
                 "type": "PERCENT"
             },
-            "name": "Percentage"
+            "name": "Percentage",
+            "required": false
         }
     },
     {
@@ -110,7 +122,8 @@ let testCases = [
             "datatypeAttributes": {
                 "type": "URL"
             },
-            "name": "Url"
+            "name": "Url",
+            "required": false
         }
     },
     {
@@ -120,7 +133,8 @@ let testCases = [
             "datatypeAttributes": {
                 "type": "EMAIL_ADDRESS"
             },
-            "name": "Email"
+            "name": "Email",
+            "required": false
         }
     },
     {
@@ -130,7 +144,8 @@ let testCases = [
             "datatypeAttributes": {
                 "type": "PHONE_NUMBER"
             },
-            "name": "Phone"
+            "name": "Phone",
+            "required": false
         }
     },
     {
@@ -140,19 +155,20 @@ let testCases = [
             "datatypeAttributes": {
                 "type": "TEXT"
             },
-            "name": "Text"
+            "name": "Text",
+            "required": false
         }
-    },
+    }
 ];
 
-describe('DefaultFieldsProperties', () => {
+fdescribe('DefaultFieldsProperties', () => {
     beforeEach(() => {
         jasmineEnzyme();
     });
 
     testCases.forEach(function(test) {
-        it('should do something', () => {
-           let result = DefaultFieldProperties.createScalarDefaultFieldsProperties()[test.type];
+        fit('should do something', () => {
+           let result = createScalarDefaultFieldsProperties()[test.type];
             expect(result).toEqual(test.expectedResult);
         });
     });
