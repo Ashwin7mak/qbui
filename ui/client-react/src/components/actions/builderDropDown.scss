@@ -10,18 +10,18 @@
                     clear: both;
                     font-weight: normal;
                     line-height: 1.42857;
-                    color: #333333;
+                    //color: #333333;
                     white-space: nowrap;
                     &:not(.heading):hover {
                         text-decoration: none;
-                        color: #262626;
-                        background-color: #f5f5f5;
+                        //color: #262626;
+                        //background-color: $settings-menu-heading;
                     }
                     > * {
                         vertical-align: middle;
                     }
                 }
-                .tableConfig li:not(.heading){
+                .tableConfig li:not(.heading) {
                     margin-left: 30px;
                 }
             }

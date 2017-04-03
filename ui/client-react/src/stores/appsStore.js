@@ -123,7 +123,9 @@ let AppsStore = Fluxxor.createStore({
      * @param tblId
      * @param tableInfo
      */
-    onUpdateTableProps(tblId, tableInfo) {
+    onUpdateTableProps(payload) {
+        let tblId = payload.tableId;
+        let tableInfo = payload.tableInfo;
         let newAppsList = this.apps.map((app) => {
             if (app.id === this.selectedAppId) {
                 let newAppInfo = app.tables.map((table) => {

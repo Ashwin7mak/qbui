@@ -18,14 +18,11 @@ const defaultTableInfo = {
 const tableProperties = (
     state = {
         //  default states
-        dialogOpen: false,
-        pageIndex: 0,
         menuOpen: false,
         savingTable: false,
         tableInfo: defaultTableInfo,
         edited: false,
-        editing: null,
-        notifyTableCreated: false
+        editing: null
     },
     action) => {
 

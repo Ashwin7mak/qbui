@@ -58,11 +58,6 @@ class TableService extends BaseService {
         let url = super.constructUrl(this.API.UPDATE_TABLE, [appId, tableId]);
         return super.patch(url, table);
     }
-
-    //getTableProperties(appId, tableId) {
-    //    let url = super.constructUrl(this.API.GET_TABLE_PROPS, [appId, tableId]);
-    //    return super.get(url);
-    //}
 }
 
 export default TableService;

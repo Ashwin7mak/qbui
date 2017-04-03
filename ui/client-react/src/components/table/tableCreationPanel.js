@@ -78,7 +78,7 @@ class TableCreationPanel extends React.Component {
     getIconDropdown() {
 
         // set title to currently selected icon
-        const dropdownTitle = this.props.tableInfo && this.props.tableInfo.tableIcon ? this.getTableIcon(this.props.tableInfo.tableIcon.value): null;
+        const dropdownTitle = this.props.tableInfo && this.props.tableInfo.tableIcon ? this.getTableIcon(this.props.tableInfo.tableIcon.value) : null;
 
         const iconNames = this.getIconNames();
 

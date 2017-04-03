@@ -110,10 +110,11 @@ export const updateTable = (appId, tableId, tableInfo) => {
     };
 };
 
-export const getTableProperties = (tableInfo) => {
+export const loadTableProperties = (tableInfo) => {
     return (dispatch) => {
         tableInfo.tableNoun = "noun";
         tableInfo.description = "";
+        tableInfo.icon = "report-table";
         dispatch(loadedTable(tableInfo));
     };
 };

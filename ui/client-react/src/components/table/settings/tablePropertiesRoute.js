@@ -32,12 +32,12 @@ const TablePropertiesRoute = React.createClass({
     },
     componentDidMount() {
         if (this.props.app && this.props.table) {
-            this.props.getTableProperties(this.props.table);
+            this.props.loadTableProperties(this.props.table);
         }
     },
     componentWillReceiveProps(nextProps) {
         if ((nextProps.table && this.props.table && this.props.table.id !== nextProps.table.id) || (!this.props.table && nextProps.table)) {
-            nextProps.getTableProperties(nextProps.table);
+            nextProps.loadTableProperties(nextProps.table);
         }
     },
     updateTableProperties() {
