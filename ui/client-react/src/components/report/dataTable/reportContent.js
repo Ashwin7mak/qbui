@@ -405,8 +405,7 @@ export const ReportContent = React.createClass({
      * Adds a new column.
      */
     handleColumnAdd() {
-        const flux = this.getFlux();
-        this.props.reportData.data.columns.push();
+        console.log("at handleColumnAdd");
     },
 
     /**
