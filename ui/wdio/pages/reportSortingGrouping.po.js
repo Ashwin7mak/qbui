@@ -9,6 +9,22 @@
 
 
     var ReportSortingGroupingPage = Object.create(e2ePageBase, {
+
+        sortButton: {get: function() {return browser.element('.sortButton');}},
+        fieldChoice: {get: function() {return browser.element('.fieldChoice.empty');}},
+        moreFields: {get: function() {return browser.element('.moreFields');}},
+        recordID: {get: function() {return browser.element('//span[@class="fieldName" and text()="Record ID#"]');}},
+        applyButton: {get: function() {return browser.element('.apply');}},
+
+        sortByRecordID: {value: function() {
+            this.sortButton.click();
+            this.fieldChoice.click();
+            this.moreFields.click();
+            this.recordID.waitForExist();
+            this.recordID.click();
+            reportContentPO.clickAndWaitForGrid(this.applyButton);
+        }},
+
         /*
          * Function to sort Records using loDash _.orderBy
          */

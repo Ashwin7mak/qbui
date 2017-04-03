@@ -57,6 +57,7 @@ const reactSelectWrapper = React.createClass({
                 onOpen={this.onOpen}
                 onClose={this.onClose}
                 {...this.props}
+                tabIndex={this.props.tabIndex}
             >
                 {this.props.children}
             </Select>

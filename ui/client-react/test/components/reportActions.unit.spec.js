@@ -3,6 +3,7 @@ import TestUtils from 'react-addons-test-utils';
 import ReactDOM from 'react-dom';
 import {ReportActions}  from '../../src/components/actions/reportActions';
 import ActionIcon from '../../src/components/actions/actionIcon';
+import {mount} from 'enzyme';
 
 describe('ReportActions functions', () => {
     'use strict';
@@ -11,27 +12,29 @@ describe('ReportActions functions', () => {
     let rptId = 1;
     let appId = 1;
     let tblId = 1;
-    let flux = {
-        actions:{
-            deleteRecordBulk: function() {return;}
-        }
+    let props = {
+        appId: appId,
+        tblId: tblId,
+        rptId: rptId,
+        deleteRecords: () => {}
     };
+
     beforeEach(() => {
-        spyOn(flux.actions, 'deleteRecordBulk');
+        spyOn(props, 'deleteRecords').and.callThrough();
     });
 
     afterEach(() => {
-        flux.actions.deleteRecordBulk.calls.reset();
+        props.deleteRecords.calls.reset();
     });
 
     it('test render of component', () => {
         let selection = [];
-        component = TestUtils.renderIntoDocument(<ReportActions selection={selection} rptId={rptId} appId={appId} tblId={tblId} flux={flux}/>);
+        component = TestUtils.renderIntoDocument(<ReportActions selection={selection} {...props}/>);
     });
 
     it('test render with 1 selected row', () => {
         let selection = [1];
-        component = TestUtils.renderIntoDocument(<ReportActions selection={selection} rptId={rptId} appId={appId} tblId={tblId} flux={flux}/>);
+        component = TestUtils.renderIntoDocument(<ReportActions selection={selection} {...props}/>);
 
         let actionIcons = TestUtils.scryRenderedComponentsWithType(component, ActionIcon);
         expect(actionIcons[0].props.icon).toEqual("edit");
@@ -39,7 +42,7 @@ describe('ReportActions functions', () => {
 
     it('test render of >1 selected row', () => {
         let selection = [1, 2, 3];
-        component = TestUtils.renderIntoDocument(<ReportActions selection={selection} rptId={rptId} appId={appId} tblId={tblId} flux={flux}/>);
+        component = TestUtils.renderIntoDocument(<ReportActions selection={selection} {...props}/>);
         let actionIcons = TestUtils.scryRenderedComponentsWithType(component, ActionIcon);
 
         // only allow edit of single selection
@@ -48,19 +51,16 @@ describe('ReportActions functions', () => {
 
     it('test onClick event for delete', () => {
         let selection = [1, 2, 3];
-        component = TestUtils.renderIntoDocument(<ReportActions selection={selection} rptId={rptId} appId={appId} tblId={tblId} flux={flux}/>);
+        component = TestUtils.renderIntoDocument(<ReportActions selection={selection} {...props}/>);
         let actionIcons = TestUtils.scryRenderedComponentsWithType(component, ActionIcon);
         let node = ReactDOM.findDOMNode(actionIcons[3]);
         TestUtils.Simulate.click(node);
-
-        // no longer delete before confirmation
-        expect(flux.actions.deleteRecordBulk).not.toHaveBeenCalled();
 
         // confirm via the modal dialog
         const confirmButton = document.querySelector(".qbModal .primaryButton");
         expect(confirmButton).not.toBe(null);
         TestUtils.Simulate.click(confirmButton);
-        expect(flux.actions.deleteRecordBulk).toHaveBeenCalled();
+        expect(props.deleteRecords).toHaveBeenCalled();
     });
 
 });

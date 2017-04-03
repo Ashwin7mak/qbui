@@ -55,44 +55,6 @@ const forms = (
         return newState;
     }
 
-    //TODO: MOVE/RENAME TO RECORDS STORE..THIS IS FIRED WHEN SAVING A RECORD
-    case types.SAVE_FORM: {
-
-        newState.push({
-            ...currentForm,
-            id,
-            saving: true,
-            errorStatus: null
-        });
-
-        return newState;
-    }
-
-    //TODO: MOVE/RENAME TO RECORDS STORE..THIS IS FIRED WHEN SAVING A RECORD
-    case types.SAVE_FORM_SUCCESS: {
-
-        newState.push({
-            ...currentForm,
-            id,
-            saving: false,
-            errorStatus: null
-        });
-
-        return newState;
-    }
-
-    //TODO: MOVE/RENAME TO RECORDS STORE..THIS IS FIRED WHEN SAVING A RECORD
-    case types.SAVE_FORM_FAILED: {
-
-        newState.push({
-            ...currentForm,
-            id,
-            saving: false,
-            errorStatus: action.error
-        });
-        return newState;
-    }
-
     case types.SYNC_FORM: {
         newState.push({
             ...currentForm,
@@ -101,11 +63,8 @@ const forms = (
         return newState;
     }
 
-    case types.SAVING_FORM: {
-        //  TODO:
-        //  because the state object holds both form and record data, make sure the
-        //  currentForm object is passed along for the ride.  This will get cleaned
-        //  up once form and record data is separated.
+    case types.SAVE_FORM: {
+        //  hide/show modal window and spinner over a form
         newState.push({
             ...currentForm,
             id,
@@ -115,29 +74,20 @@ const forms = (
         return newState;
     }
 
-    case types.SAVING_FORM_ERROR: {
-        //  TODO:
-        //  because the state object holds both form and record data, make sure the
-        //  currentForm object is passed along for the ride.  This will get cleaned
-        //  up once form and record data is separated.
+    case types.SAVE_FORM_COMPLETE: {
+        //  hide/show modal window and spinner over a form
         newState.push({
             ...currentForm,
             id,
             saving: false,
-            errorStatus: action.content
+            errorStatus: null
         });
         return newState;
     }
 
     case types.SAVING_FORM_SUCCESS: {
-        //  TODO:
-        //  because the state object holds both form and record data, make sure the
-        //  currentForm object is passed along for the ride.  This will get cleaned
-        //  up once form and record data is separated.
-        //
         //no changes to state..
         updatedForm = _.cloneDeep(currentForm);
-        //  ..for now until the store is refactored..
         if (!updatedForm.formData) {
             updatedForm.formData = {};
         }
@@ -189,7 +139,7 @@ const forms = (
         ];
     }
 
-    case types.SELECT_FIELD :
+    case types.SELECT_FIELD : {
 
         if (!currentForm || !_.has(action, 'content.location')) {
             return state;
@@ -199,14 +149,124 @@ const forms = (
 
         if (!updatedForm.selectedFields) {
             updatedForm.selectedFields = [];
+            updatedForm.previouslySelectedField = [];
         }
 
         updatedForm.selectedFields[0] = action.content.location;
+        updatedForm.previouslySelectedField = undefined;
 
         return [
             ...newState,
             updatedForm
         ];
+    }
+
+    case types.DESELECT_FIELD : {
+
+        if (!currentForm || !_.has(action, 'content.location')) {
+            return state;
+        }
+
+        updatedForm = _.cloneDeep(currentForm);
+
+        if (!updatedForm.selectedFields || !updatedForm.previouslySelectedField) {
+            updatedForm.selectedFields = [];
+            updatedForm.previouslySelectedField = [];
+        }
+
+        updatedForm.previouslySelectedField[0] = action.content.location;
+        updatedForm.selectedFields[0] = undefined;
+
+        return [
+            ...newState,
+            updatedForm
+        ];
+    }
+
+    case types.KEYBOARD_MOVE_FIELD_UP : {
+        if (!currentForm) {
+            return state;
+        }
+
+        let {location} = action.content;
+        updatedForm = _.cloneDeep(currentForm);
+
+        updatedForm.formData.formMeta = MoveFieldHelper.keyBoardMoveFieldUp(
+            updatedForm.formData.formMeta,
+            location
+        );
+
+        if (!updatedForm.selectedFields) {
+            updatedForm.selectedFields = [];
+        }
+
+        updatedForm.selectedFields[0] = MoveFieldHelper.updateSelectedFieldLocation(
+            location,
+            -1
+        );
+
+        return [
+            ...newState,
+            updatedForm
+        ];
+    }
+
+    case types.KEYBOARD_MOVE_FIELD_DOWN : {
+        if (!currentForm) {
+            return state;
+        }
+
+        let {location} = action.content;
+        updatedForm = _.cloneDeep(currentForm);
+
+        updatedForm.formData.formMeta = MoveFieldHelper.keyBoardMoveFieldDown(
+            updatedForm.formData.formMeta,
+            location
+        );
+
+        if (!updatedForm.selectedFields) {
+            updatedForm.selectedFields = [];
+        }
+
+        updatedForm.selectedFields[0] = MoveFieldHelper.updateSelectedFieldLocation(
+            location,
+            1
+        );
+
+        return [
+            ...newState,
+            updatedForm
+        ];
+    }
+
+    case types.TOGGLE_FORM_BUILDER_CHILDREN_TABINDEX : {
+        if (!currentForm) {
+            return state;
+        }
+
+        let tabIndex = action.content.currentTabIndex === undefined || action.content.currentTabIndex === "-1" ? "0" : "-1";
+        let formFocus = false;
+
+        if (action.content.currentTabIndex === undefined) {
+            formFocus = false;
+        } else if (tabIndex === "-1") {
+            formFocus = true;
+        }
+        updatedForm = _.cloneDeep(currentForm);
+
+        if (!updatedForm.formBuilderChildrenTabIndex && !updatedForm.formFocus) {
+            updatedForm.formBuilderChildrenTabIndex = [];
+            updatedForm.formFocus = [];
+        }
+
+        updatedForm.formBuilderChildrenTabIndex[0] = tabIndex;
+        updatedForm.formFocus[0] = formFocus;
+
+        return [
+            ...newState,
+            updatedForm
+        ];
+    }
 
     default:
         // return existing state by default in redux

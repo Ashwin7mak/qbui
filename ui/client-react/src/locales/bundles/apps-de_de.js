@@ -1,3 +1,4 @@
+import FieldFormats from '../../utils/fieldFormats';
 /**
  * This bundle contains all the strings needed by the "Apps" functional area.
  * This functional area is for the main app served in client-react at the /qbase/apps route.
@@ -34,7 +35,9 @@ export default {
             settings: "Einstellungen",
             users: {
                 addUser: "Das Hinzufügen eines neuen Benutzers ist noch nicht verfügbar",
-                users: "Benutzer"
+                users: "Benutzer",
+                content: "Dies ist die Liste aller Personen, die zu Ihrer Bewerbung hinzugefügt wurden. Sie können einige kurze Einblicke darüber, wie viele Menschen sind in jeder Rolle in Ihrer Anwendung sowie finden Sie eine bestimmte Person in der Liste und E-Mail sie.",
+                manager: "Anwendungsmanager"
             }
         },
         appMenu: {
@@ -98,6 +101,9 @@ export default {
             saveAndNext: "Speichern und Nächster",
             saveAndAddAnother: "Speichern und fügen Sie ein anderes",
             cancel: "Stornieren",
+            next: "Nächster",
+            previous: "Bisherige",
+            finished: "Fertig",
             new: "Neu"
         },
         field: {
@@ -479,39 +485,45 @@ export default {
         quickBaseClassic: "QuickBase Klassik",
         quickBaseMercury: "QuickBase Mercury",
         missingWalkMe: "Tutorial ist nicht verfügbar",
+        fieldsDefaultLabels: {
+            [FieldFormats.TEXT_FORMAT]: "Text",
+            [FieldFormats.MULTI_LINE_TEXT_FORMAT]: "Langtext",
+            [FieldFormats.TEXT_FORMAT_MULTICHOICE]: "Auswahlliste",
+            [FieldFormats.TEXT_FORMAT_RADIO_BUTTONS]: "Radio Knöpfe",
+            [FieldFormats.TEXT_FORMULA_FORMAT]: "Textformel",
+            [FieldFormats.NUMBER_FORMAT]: "Nummer",
+            [FieldFormats.CURRENCY_FORMAT]: "Währung",
+            [FieldFormats.CURRENCY_FORMAT_MULTICHOICE]: "Währung",
+            [FieldFormats.PERCENT_FORMAT]: "Prozentsatz",
+            [FieldFormats.PERCENT_FORMAT_MULTICHOICE]: "Prozentsatz",
+            [FieldFormats.NUMBER_FORMAT_MULTICHOICE]: "Numerische Auswahlliste",
+            [FieldFormats.NUMBER_FORMAT_RADIO_BUTTONS]: "Numeric radio buttons",
+            [FieldFormats.NUMERIC_FORMULA_FORMAT]: "Numerische Formel",
+            [FieldFormats.DATE_FORMAT]: "Datum",
+            [FieldFormats.DATETIME_FORMAT]: "Time stamp",
+            [FieldFormats.TIME_FORMAT]: "Zeitstempel",
+            [FieldFormats.DURATION_FORMAT]: "Dauer",
+            [FieldFormats.USER_FORMAT]: "Benutzer",
+            [FieldFormats.CHECKBOX_FORMAT]: "Checkbox",
+            [FieldFormats.URL]: "Url",
+            [FieldFormats.EMAIL_ADDRESS]: "Email",
+            [FieldFormats.PHONE_FORMAT]: "Telefon",
+            [FieldFormats.RATING_FORMAT]: "Bewertung",
+            [FieldFormats.RATING_FORMAT_MULTICHOICE]: "Bewertung",
+            [FieldFormats.URL_FORMULA_FORMAT]: "Url Formel",
+            FORMULA: "Formel",
+            SCALAR: "Skalar",
+            CONCRETE: "Beton",
+            REPORT_LINK: "Bericht Link",
+            SUMMARY: "Zusammenfassung",
+            LOOKUP: "Sieh nach oben",
+            FILE_ATTACHMENT: "Datei"
+        },
         builder: {
             formBuilder: {
                 unimplemented: "Feature ist momentan nicht verfügbar",
                 removeField: "Feld aus Form entfernen"
             },
-            fields: {
-                // Keys are equal to server constants for field types to make it easier to get these keys
-                FORMULA: "Formel",
-                SCALAR: "Scalar",
-                CONCRETE: "Beton",
-                REPORT_LINK: "Berichtslink",
-                SUMMARY: "Zusammenfassung",
-                LOOKUP: "Nachschlagen",
-                //Data types
-                CHECKBOX: "Kontrollkästchen",
-                TEXT: "Text",
-                PHONE_NUMBER: "Telefonnummer",
-                DATE_TIME: "Datum & Uhrzeit",
-                DATE: "Datum",
-                DURATION: "Dauer",
-                TIME_OF_DAY: "Uhrzeit",
-                NUMERIC: "Numerisch",
-                CURRENCY: "Währung",
-                RATING: "Rating",
-                PERCENT: "Prozent",
-                URL: "Url",
-                EMAIL_ADDRESS: "Email",
-                USER: "Benutzer",
-                FILE_ATTACHMENT: "Datei",
-                TEXT_FORMULA: "Textformel",
-                URL_FORMULA: "Url-Formel",
-                NUMERIC_FORMULA: "Numerische Formel"
-            }
         },
         featureSwitchAdmin: {
             defaultFeatureName: "Feature",
@@ -545,6 +557,35 @@ export default {
             noOverrides: "Es wurden keine Overrides gesetzt",
             featureNameExists: "Feature-Namen müssen eindeutig sein",
             featureNameEmpty: "Feature-Namen dürfen nicht leer sein"
+        },
+        tableCreation: {
+            newTablePageTitle: "Neue Tabelle",
+            newTableDescription: "Erstellen Sie eine neue Tabelle, wenn Sie eine neue Art von Informationen sammeln möchten.",
+            newTableTitle: "Nennen Sie Ihren Tisch",
+
+            summaryDescription: "Jedes Bit von Informationen, die Sie sammeln möchten, ist ein Feld.",
+            summaryTitle: "Drag & Drop Felder, die Sie hinzufügen möchten, um Ihre Tabelle auf das Formular. Sie können die Felder in der Reihenfolge anordnen, in der die Leute sie benutzen möchten.",
+
+            addFieldsTitle: "Machen Sie sich bereit, Felder zu Ihrem Tisch hinzuzufügen",
+            tableNameHeading: "Tabellenname",
+            recordNameHeading: "Ein Rekord in der Tabelle heißt",
+            descriptionHeading: "Beschreibung",
+            iconHeading: "Symbol",
+            suggestedIconsHeading: "Vorgeschlagene Ikonen",
+
+            tableNamePlaceholder: "Zum Beispiel, Kunden",
+            recordNamePlaceholder: "Zum Beispiel, Kunde",
+            descriptionPlaceholder: "Text, der angezeigt wird, wenn er über den Tabellennamen in der linke navigation",
+
+            finishedButtonLabel: "Tabelle",
+            tableCreated: "Tabelle erstellen",
+            tableCreationFailed: "Unable to create table",
+            validateTableNameEmpty: "Kann keine Tabelle erstellen",
+            validateTableNameExists: "Der Tabellenname muss für diese App eindeutig sein",
+            validateRecordNameEmpty: "Tabellenname darf nicht leer sein",
+        },
+        iconChooser: {
+            searchPlaceholder: "Tabellensymbole suchen ......"
         }
     }
 };

@@ -1,3 +1,4 @@
+import FieldFormats from '../../utils/fieldFormats';
 /**
  * This bundle contains all the strings needed by the "Apps" functional area.
  * This functional area is for the main app served in client-react at the /qbase/apps route.
@@ -37,7 +38,9 @@ export default {
             settings: "Settings",
             users: {
                 addUser: "Adding a new user is not available yet",
-                users: "Users"
+                users: "Users",
+                content: "This is the list of all the people who have been added to your application. You can get some quick insights about how many people are in each role in your application as well as find a specific person in the list and email them.",
+                manager: "Application Manager"
             }
         },
         appMenu: {
@@ -100,7 +103,10 @@ export default {
             save: "Save",
             saveAndNext: "Save & Next",
             saveAndAddAnother: "Save & Add Another",
-            cancel: 'Cancel',
+            cancel: "Cancel",
+            next: "Next",
+            previous: "Previous",
+            finished: "Finished",
             new: "New"
         },
         field: {
@@ -485,39 +491,45 @@ export default {
         quickBaseClassic: "QuickBase Classic",
         quickBaseMercury: "QuickBase Mercury",
         missingWalkMe: "Tutorial is not available",
+        fieldsDefaultLabels: {
+            [FieldFormats.TEXT_FORMAT]: "Text",
+            [FieldFormats.MULTI_LINE_TEXT_FORMAT]: "Long text",
+            [FieldFormats.TEXT_FORMAT_MULTICHOICE]: "Choice list",
+            [FieldFormats.TEXT_FORMAT_RADIO_BUTTONS]: "Radio buttons",
+            [FieldFormats.TEXT_FORMULA_FORMAT]: "Text formula",
+            [FieldFormats.NUMBER_FORMAT]: "Number",
+            [FieldFormats.CURRENCY_FORMAT]: "Currency",
+            [FieldFormats.CURRENCY_FORMAT_MULTICHOICE]: "Currency",
+            [FieldFormats.PERCENT_FORMAT]: "Percentage",
+            [FieldFormats.PERCENT_FORMAT_MULTICHOICE]: "Percentage",
+            [FieldFormats.NUMBER_FORMAT_MULTICHOICE]: "Numeric choice list",
+            [FieldFormats.NUMBER_FORMAT_RADIO_BUTTONS]: "Numeric radio buttons",
+            [FieldFormats.NUMERIC_FORMULA_FORMAT]: "Numeric formula",
+            [FieldFormats.DATE_FORMAT]: "Date",
+            [FieldFormats.DATETIME_FORMAT]: "Time stamp",
+            [FieldFormats.TIME_FORMAT]: "Time of day",
+            [FieldFormats.DURATION_FORMAT]: "Duration",
+            [FieldFormats.USER_FORMAT]: "User",
+            [FieldFormats.CHECKBOX_FORMAT]: "Checkbox",
+            [FieldFormats.URL]: "Url",
+            [FieldFormats.EMAIL_ADDRESS]: "Email",
+            [FieldFormats.PHONE_FORMAT]: "Phone",
+            [FieldFormats.RATING_FORMAT]: "Rating",
+            [FieldFormats.RATING_FORMAT_MULTICHOICE]: "Rating",
+            [FieldFormats.URL_FORMULA_FORMAT]: "Url Formula",
+            FORMULA: "Formula",
+            SCALAR: "Scalar",
+            CONCRETE: "Concrete",
+            REPORT_LINK: "Report link",
+            SUMMARY: "Summary",
+            LOOKUP: "Lookup",
+            FILE_ATTACHMENT: "File"
+        },
         builder: {
             formBuilder: {
                 unimplemented: "Feature is not available right now",
                 removeField: "Remove field from form"
             },
-            fields: {
-                // Keys are equal to server constants for field types to make it easier to get these keys
-                FORMULA: "Formula",
-                SCALAR: "Scalar",
-                CONCRETE: "Concrete",
-                REPORT_LINK: "Report link",
-                SUMMARY: "Summary",
-                LOOKUP: "Lookup",
-                //Data types
-                CHECKBOX: "Checkbox",
-                TEXT: "Text",
-                PHONE_NUMBER: "Phone number",
-                DATE_TIME: "Date & time",
-                DATE: "Date",
-                DURATION: "Duration",
-                TIME_OF_DAY: "Time of day",
-                NUMERIC: "Numeric",
-                CURRENCY: "Currency",
-                RATING: "Rating",
-                PERCENT: "Percent",
-                URL: "Url",
-                EMAIL_ADDRESS: "Email",
-                USER: "User",
-                FILE_ATTACHMENT: "File",
-                TEXT_FORMULA: "Text formula",
-                URL_FORMULA: "Url formula",
-                NUMERIC_FORMULA: "Numeric formula"
-            }
         },
         featureSwitchAdmin: {
             defaultFeatureName: "Feature",
@@ -551,6 +563,35 @@ export default {
             noOverrides: "No overrides have been set, click 'Add New' to add one.",
             featureNameExists: "Feature names must be unique",
             featureNameEmpty: "Feature names must not be blank"
+        },
+        tableCreation: {
+            newTablePageTitle: "New Table",
+            newTableDescription: "Create a new table when you want to collect a new type of information.",
+            newTableTitle: "Name your table",
+
+            summaryDescription: "Each bit of information you want to collect is a field, like Customer Name.",
+            summaryTitle: "Drag and drop fields you want to add to your table onto the form.  You can arrange the fields in the order you want people to use them.",
+
+            addFieldsTitle: "Get ready to add fields to your table",
+            tableNameHeading: "Table Name",
+            recordNameHeading: "A record in the table is called",
+            descriptionHeading: "Description",
+            iconHeading: "Icon",
+            suggestedIconsHeading: "Suggested Icons",
+
+            tableNamePlaceholder: "For example, Customers",
+            recordNamePlaceholder: "For example, customer",
+            descriptionPlaceholder: "Text to show when hovering over the table name in the left navigation",
+
+            finishedButtonLabel: "Create table",
+            tableCreated: "Table created",
+            tableCreationFailed: "Unable to create table",
+            validateTableNameEmpty: "Fill in the table name",
+            validateTableNameExists: "Fill in a different value. Another table is already using this name",
+            validateRecordNameEmpty: "Fill in the record name",
+        },
+        iconChooser: {
+            searchPlaceholder: "Search table icons..."
         }
     }
 };

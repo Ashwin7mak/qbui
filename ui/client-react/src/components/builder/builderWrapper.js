@@ -10,11 +10,11 @@ let StoreWatchMixin = Fluxxor.StoreWatchMixin;
 
 
 /**
- * The NavStore and the AppsStore are both needed for globalActions (The User and Help Button Located at the top of the screen)
- * The NavStore updates the locale and the AppsStore selects the appId.
+ * The AppsStore is needed for globalActions (The User and Help Button Located at the top of the screen)
+ * The AppsStore selects the appId.
  * */
 const BuilderWrapper = React.createClass({
-    mixins: [FluxMixin, StoreWatchMixin('NavStore', 'AppsStore')],
+    mixins: [FluxMixin, StoreWatchMixin('AppsStore')],
 
     getStateFromFlux() {
         let flux = this.getFlux();
@@ -33,7 +33,6 @@ const BuilderWrapper = React.createClass({
     getTopGlobalActions() {
         const actions = [];
         return (<GlobalActions actions={actions}
-                               flux={this.props.flux}
                                position={"top"}
                                dropdownIcon="user"
                                dropdownMsg="globalActions.user"

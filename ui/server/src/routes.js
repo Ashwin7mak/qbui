@@ -6,7 +6,6 @@
     'use strict';
 
     var errors = require('./components/errors');
-    var authentication = require('./components/authentication');
     var log = require('./logger').getLogger();
     var _ = require('lodash');
     var httpStatusCodes = require('./constants/httpStatusCodes');
@@ -15,7 +14,7 @@
     require('./logger').getLogger();
 
     module.exports = function(app, config) {
-
+        var authentication = require('./components/authentication')(config);
         var requestHelper = require('./api/quickbase/requestHelper')();
         var routeConstants = require('./routes/routeConstants');
         var routeMapper = require('./routes/qbRouteMapper')(config);
@@ -134,6 +133,10 @@
 
         app.route('/qbase/internalServerError*')
                 .get(errors[httpStatusCodes.INTERNAL_SERVER_ERROR]);
+
+        // Ticket Federation
+        app.route('/qbase/federation/shake')
+            .get(authentication.federation);
 
         // All undefined asset or api routes should return a 404
         app.route('/:url(api|auth|components|app|bower_components|assets)/*')

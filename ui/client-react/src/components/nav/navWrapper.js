@@ -2,6 +2,7 @@ import React from 'react';
 import Nav from './nav';
 import * as ReportActions from '../../actions/reportActions';
 import * as FeatureSwitchActions from '../../actions/featureSwitchActions';
+import * as SearchActions from '../../actions/searchActions';
 import {CONTEXT} from '../../actions/context';
 import Configuration from '../../config/app.config';
 
@@ -26,7 +27,7 @@ let NavWrapper = React.createClass({
     getChildContext() {
         return {
             touch: this.state.touch,
-            locales: this.state.locales
+            locales: this.props.qbui.shell.locales
         };
     },
     render() {
@@ -53,14 +54,17 @@ let NavWrapper = React.createClass({
 
             if (this.props.params.tblId) {
                 this.props.flux.actions.selectTableId(this.props.params.tblId);
-                this.props.dispatch(ReportActions.loadReports(CONTEXT.REPORTS_LIST.NAV, this.props.params.appId, this.props.params.tblId));
+                this.props.dispatch(ReportActions.loadReports(CONTEXT.REPORT.NAV_LIST, this.props.params.appId, this.props.params.tblId));
             } else {
                 this.props.flux.actions.selectTableId(null);
             }
+            // TODO: once the above SELECT_TABLE action is migrated to redux, the search store should
+            // TODO: listen for the new event to clear out any input.
+            //this.props.dispatch(SearchActions.clearSearchInput());
         }
     },
     /**
-     * force rerender since breakpoint may have changed
+     * force re-render since breakpoint may have changed
      */
     handleResize() {
         this.setState(this.state);
@@ -76,11 +80,16 @@ let NavWrapper = React.createClass({
         if (props.params.appId) {
             if (this.props.params.appId !== props.params.appId) {
                 this.props.flux.actions.selectAppId(props.params.appId);
-
+                // TODO: once the above SELECT_TABLE action is migrated to redux, the search store should
+                // TODO: listen for the new event to clear out any input.
+                //this.props.dispatch(SearchActions.clearSearchInput());
                 this.props.dispatch(FeatureSwitchActions.getStates(props.params.appId));
             }
         } else {
             this.props.flux.actions.selectAppId(null);
+            // TODO: once the above SELECT_TABLE action is migrated to redux, the search store should
+            // TODO: listen for the new event to clear out any input.
+            //this.props.dispatch(SearchActions.clearSearchInput());
         }
 
         if (this.props.params.appId !== props.params.appId) {
@@ -90,7 +99,7 @@ let NavWrapper = React.createClass({
         if (props.params.tblId) {
             if (this.props.params.tblId !== props.params.tblId) {
                 this.props.flux.actions.selectTableId(props.params.tblId);
-                this.props.dispatch(ReportActions.loadReports(CONTEXT.REPORTS_LIST.NAV, props.params.appId, props.params.tblId));
+                this.props.dispatch(ReportActions.loadReports(CONTEXT.REPORT.NAV_LIST, props.params.appId, props.params.tblId));
             }
         } else {
             this.props.flux.actions.selectTableId(null);

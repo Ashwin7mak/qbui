@@ -1,24 +1,21 @@
 import React from 'react';
 
-import Fluxxor from 'fluxxor';
 import FieldLabelElement from './fieldLabelElement';
 import FieldValueRenderer from '../fields/fieldValueRenderer';
 import FieldValueEditor from '../fields/fieldValueEditor';
 import FieldFormats from '../../utils/fieldFormats';
 import FieldUtils from '../../utils/fieldUtils';
 import './qbform.scss';
+import _ from 'lodash';
+import {editRecordValidateField} from '../../actions/recordActions';
+import {connect} from 'react-redux';
 
-import getFlux from '../../scripts/fluxxor';
-let fluxxor = getFlux();
-
-let FluxMixin = Fluxxor.FluxMixin(React);
 //TODO currently all fields have a default width of 50 defined by core. This needs to be fixed -- specific field types should have specific defaults
 const DEFAULT_FIELD_WIDTH = 50;
 /**s
  * render a form field value, optionally with its label
  */
 export const FieldElement = React.createClass({
-    mixins: [FluxMixin],
     displayName: 'FieldElement',
     propTypes: {
         element: React.PropTypes.object, // FormFieldElement from form API
@@ -57,14 +54,14 @@ export const FieldElement = React.createClass({
     },
 
     onBlur(theVals) {
-        const flux = this.getFlux();
         let fieldLabel = '';
         if (this.props.element.useAlternateLabel) {
             fieldLabel = this.props.element.displayText;
         } else {
             fieldLabel = this.props.relatedField ? this.props.relatedField.name : "";
         }
-        flux.actions.recordPendingValidateField(this.props.relatedField, fieldLabel, theVals.value);
+
+        this.props.editRecordValidateField(this.props.recId, this.props.relatedField, fieldLabel, theVals.value);
         let change = this.getChanges(theVals);
         if (this.props.onBlur) {
             this.props.onBlur(change);
@@ -74,7 +71,8 @@ export const FieldElement = React.createClass({
     render() {
         let fieldDatatypeAttributes = this.props.relatedField && this.props.relatedField.datatypeAttributes ?
             this.props.relatedField.datatypeAttributes : {};
-        let fieldType = FieldFormats.getFormatType(fieldDatatypeAttributes);
+        let relatedField = this.props.relatedField;
+        let fieldType = FieldFormats.getFormatType(relatedField);
 
         //catch the non-implemented pieces.
         let fieldDisplayValue = this.props.fieldRecord ? this.props.fieldRecord.display : "";
@@ -83,7 +81,6 @@ export const FieldElement = React.createClass({
         let indicateRequiredOnField = !this.props.indicateRequiredOnLabel;
 
         // If the form element has showAsRadio prop - pass it down as a part of fieldDef
-        let relatedField = this.props.relatedField;
         if (this.props.element && this.props.element.showAsRadio) {
             relatedField.showAsRadio = true;
         }
@@ -118,6 +115,7 @@ export const FieldElement = React.createClass({
                                              classes={classes}
                                              appUsers={this.props.appUsers}
                                              label={FieldUtils.getFieldLabel(this.props.element, this.props.relatedField)}
+                                             tabIndex={this.props.tabIndex}
             />;
         } else if (fieldDisplayValue !== null || fieldRawValue !== null) { //if there is no value do not render the field
             fieldElement = <FieldValueRenderer type={fieldType}
@@ -135,13 +133,13 @@ export const FieldElement = React.createClass({
         return (
             <div className="formElement field">
                 {this.props.includeLabel &&
-                    <FieldLabelElement
-                        element={this.props.element}
-                        relatedField={this.props.relatedField}
-                        indicateRequiredOnLabel={this.props.indicateRequiredOnLabel}
-                        isInvalid={this.props.isInvalid}
-                        label={FieldUtils.getFieldLabel(this.props.element, this.props.relatedField)}
-                    /> }
+                <FieldLabelElement
+                    element={this.props.element}
+                    relatedField={this.props.relatedField}
+                    indicateRequiredOnLabel={this.props.indicateRequiredOnLabel}
+                    isInvalid={this.props.isInvalid}
+                    label={FieldUtils.getFieldLabel(this.props.element, this.props.relatedField)}
+                /> }
 
                 <span className="cellWrapper">
                     { fieldElement }
@@ -150,16 +148,23 @@ export const FieldElement = React.createClass({
     }
 });
 
-/**
- * We need to create an HOC with flux, because upper level components are now connected to redux
- * and no longer pass down flux. Can be removed once pending edits store is in Redux
- * https://quickbase.atlassian.net/browse/MB-2183
- * @param FieldElementComponent
- * @returns {function(*): XML}
- * @constructor
- */
-const FieldElementWithFlux = FieldElementComponent => {
-    return (props) => <FieldElementComponent flux={fluxxor} {...props}/>;
+const mapStateToProps = (state) => {
+    return {
+        record: state.record
+    };
 };
 
-export default FieldElementWithFlux(FieldElement);
+// similarly, abstract out the Redux dispatcher from the presentational component
+// (another bit of boilerplate to keep the component free of Redux dependencies)
+const mapDispatchToProps = (dispatch) => {
+    return {
+        editRecordValidateField: (fieldDef, fieldName, value, checkRequired) => {
+            dispatch(editRecordValidateField(fieldDef, fieldName, value, checkRequired));
+        }
+    };
+};
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(FieldElement);

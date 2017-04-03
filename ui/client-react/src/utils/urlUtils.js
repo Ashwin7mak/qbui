@@ -5,7 +5,7 @@ import WindowLocationUtils from '../utils/windowLocationUtils';
 import CommonUrlUtils from '../../../common/src/commonUrlUtils';
 import StringUtils from '../utils/stringUtils';
 
-import {SUPPORT_LINK_PATH, REPORT_LINK, CHILD_REPORT_LINK, USERS_ROUTE} from '../constants/urlConstants';
+import {SUPPORT_LINK_PATH, REPORT_LINK, CHILD_REPORT_LINK, USERS_ROUTE, BUILDER_ROUTE} from '../constants/urlConstants';
 
 const UrlUtils = {
     getIconForProtocol(protocol) {
@@ -83,6 +83,15 @@ const UrlUtils = {
      */
     getAppUsersLink(appId) {
         return StringUtils.format(USERS_ROUTE, [appId]);
+    },
+
+    /**
+     * get link to navigate to after a new table has been created
+     * @param appId
+     * @param tblId
+     */
+    getAfterTableCreatedLink(appId, tblId) {
+        return `${BUILDER_ROUTE}/app/${appId}/table/${tblId}/form/1`;
     }
 };
 
