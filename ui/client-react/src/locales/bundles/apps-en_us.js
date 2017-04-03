@@ -582,6 +582,9 @@ export default {
             validateTableNameEmpty: "Fill in the table name",
             validateTableNameExists: "Fill in a different value. Another table is already using this name",
             validateRecordNameEmpty: "Fill in the record name",
+        },
+        iconChooser: {
+            searchPlaceholder: "Search table icons..."
         }
     }
 };
