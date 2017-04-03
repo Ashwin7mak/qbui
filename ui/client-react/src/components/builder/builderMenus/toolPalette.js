@@ -74,9 +74,10 @@ class ToolPalette extends Component {
 
     renderToolPalette() {
         return (
-            <div className="toolPaletteContainer">
+            <div className={`toolPaletteContainer ${this.props.isCollapsed ? 'toolPaletteCollapsed' : ''}`}>
                 <SearchBoxInMenu searchText={this.state.fieldFilter} onChange={this.onChangeFieldFilter} />
-                <FlipMove typeName="ul" className={`toolPaletteList toolPaletteNewFields ${this.props.isCollapsed ? 'toolPaletteCollapsed' : ''}`}>
+
+                <FlipMove typeName="ul" className="toolPaletteList toolPaletteNewFields">
                     {this.state.fieldFilter.length > 0 && this.renderFilteredFieldsList()}
                     {this.state.fieldFilter.length === 0 && this.renderNewFieldGroups()}
                 </FlipMove>

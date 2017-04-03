@@ -19,12 +19,6 @@
         padding: $spacing-xxx-small;
 
         transition: padding 0.3s;
-
-        &.toolPaletteCollapsed {
-            padding: 3px;
-
-            transition: padding 0.3s;
-        }
     }
 
     .toolPaletteItemList {
@@ -48,6 +42,30 @@
 
         .fieldToken:not(.fieldTokenCollapsed) {
             width: 100%;
+        }
+    }
+
+    .searchBoxInMenu {
+        opacity: 1;
+        max-width: $leftnav-width-standard;
+        max-height: 45px;
+
+        transition: opacity 0.3s, max-width 0.3s, max-height 0.3s;
+    }
+
+    &.toolPaletteCollapsed {
+        .searchBoxInMenu {
+            opacity: 0;
+            max-width: 0;
+            max-height: 0;
+
+            transition: opacity 0.3s, max-width 0.3s, max-height 0.3s;
+        }
+
+        .toolPaletteList, .toolPaletteItemList {
+            padding: 2px;
+
+            transition: padding 0.3s;
         }
     }
 }

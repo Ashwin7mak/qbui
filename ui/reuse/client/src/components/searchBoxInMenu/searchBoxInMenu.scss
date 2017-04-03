@@ -6,6 +6,11 @@
 
     .form-control {
         border-color: $color-black-300;
+
+        &:focus {
+            border: 1px solid $input-text-focus-border-color;
+            @include focus-shadow();
+        }
     }
 
     .form-control-feedback {
