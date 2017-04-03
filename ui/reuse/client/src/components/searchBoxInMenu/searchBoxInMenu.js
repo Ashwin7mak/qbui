@@ -1,17 +1,18 @@
 import React, {PropTypes, Component} from 'react';
-import FormControl from 'react-bootstrap/lib/FormControl';
-import FormGroup from 'react-bootstrap/lib/FormGroup';
 import Icon from '../icon/icon';
+
+// This element is not imported, but classes from bootstrap are using for styling a custom input.
+// If these imports are no longer valid, new styles should also be used for this element.
+// I'm leaving the import here, but commented out so it will be picked up by a global search if react-bootstrap is removed.
+// import FormControl from 'react-bootstrap/lib/FormControl';
 
 import './searchBoxInMenu.scss';
 
 const SearchBoxInMenu = ({searchText, onChange}) => (
-    <FormGroup controlId="formValidationSuccess3" validationState="success" bsClass="form-group searchBoxInMenu">
-        <FormControl type="text" value={searchText} onChange={onChange} />
-        <FormControl.Feedback>
-            <Icon icon="search" />
-        </FormControl.Feedback>
-    </FormGroup>
+    <div className="searchBoxInMenu form-group has-feedback">
+        <input className="form-control" type="text" value={searchText} onChange={onChange} />
+        <Icon className="form-control-feedback" icon="search" />
+    </div>
 );
 
 SearchBoxInMenu.propTypes = {

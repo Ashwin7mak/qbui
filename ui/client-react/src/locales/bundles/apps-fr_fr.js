@@ -518,17 +518,21 @@ export default {
             LOOKUP: "Chercher",
             FILE_ATTACHMENT: "Fichier"
         },
-        fieldGroups: {
-            text: 'Texte',
-            numeric: 'Nombre',
-            date: 'Date',
-            other: 'Autre'
-        },
         builder: {
             formBuilder: {
                 unimplemented: "La fonctionnalité n'est pas disponible en ce moment",
                 removeField: "Supprimer le champ du formulaire"
             },
+            fieldGroups: {
+                text: 'Texte',
+                numeric: 'Nombre',
+                date: 'Date',
+                other: 'Autre'
+            },
+            addNewFieldTooltip: "Créez un champ {fieldName} et ajoutez-le au formulaire",
+            addNewChoiceListTooltip: "Crée une liste de choix et ajoutez-la au formulaire",
+            addNewRadioGroupTooltip: "Créez des boutons radio et ajoutez-les au formulaire",
+            addNewCheckboxTooltip: "Créez une case à cocher et ajoutez-la au formulaire"
         },
         featureSwitchAdmin: {
             defaultFeatureName: "Fonctionnalité",

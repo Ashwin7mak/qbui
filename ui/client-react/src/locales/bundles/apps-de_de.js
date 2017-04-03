@@ -519,17 +519,21 @@ export default {
             LOOKUP: "Sieh nach oben",
             FILE_ATTACHMENT: "Datei"
         },
-        fieldGroups: {
-            text: 'Text',
-            numeric: 'Nummer',
-            date: 'Datum',
-            other: 'Andere'
-        },
         builder: {
             formBuilder: {
                 unimplemented: "Feature ist momentan nicht verfügbar",
                 removeField: "Feld aus Form entfernen"
-            }
+            },
+            fieldGroups: {
+                text: "Text",
+                numeric: "Nummer",
+                date: "Datum",
+                other: "Andere"
+            },
+            addNewFieldTooltip: "Erstellen Sie ein Feld {fieldName} und fügen Sie es dem Formular hinzu",
+            addNewChoiceListTooltip: "Erstellen Sie eine Auswahlliste und fügen Sie sie dem Formular hinzu",
+            addNewRadioGroupTooltip: "Erstellen Sie Optionsfelder und fügen Sie sie dem Formular hinzu",
+            addNewCheckboxTooltip: "Erstellen Sie ein Kontrollkästchen und fügen Sie es dem Formular hinzu"
         },
         featureSwitchAdmin: {
             defaultFeatureName: "Feature",

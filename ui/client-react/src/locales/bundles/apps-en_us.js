@@ -525,16 +525,22 @@ export default {
             LOOKUP: "Lookup",
             FILE_ATTACHMENT: "File"
         },
-        fieldGroups: {
-            text: 'Text',
-            numeric: 'Number',
-            date: 'Date',
-            other: 'Other'
-        },
         builder: {
             formBuilder: {
                 unimplemented: "Feature is not available right now",
                 removeField: "Remove field from form"
+            },
+            fieldGroups: {
+                text: 'Text',
+                numeric: 'Number',
+                date: 'Date',
+                other: 'Other'
+            },
+            tooltips: {
+                addNewFieldTooltip: "Create a {fieldName} field and add it to the form",
+                addNewChoiceListTooltip: "Create a choice list and add it to the form",
+                addNewRadioListTooltip: "Create radio buttons and add them to the form",
+                addNewCheckboxTooltip: "Create a checkbox and add it to the form",
             }
         },
         featureSwitchAdmin: {
