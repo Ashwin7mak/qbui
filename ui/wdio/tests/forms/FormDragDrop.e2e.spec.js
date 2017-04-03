@@ -32,6 +32,7 @@
                 throw new Error('Error during test setup beforeAll: ' + error.message);
             });
         });
+
         beforeEach(function() {
             // open first table
             e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
@@ -40,13 +41,14 @@
             // invoke form builder
             return formBuilderPO.open();
         });
+
         it('move a field via drag/drop, save & verify persistence', function() {
             // store the list of fields before moving
             let origFields = formBuilderPO.getFieldLabels();
             // drag the 1st field below the 2nd one
             let source = formBuilderPO.findFieldByIndex(1);
             let target = formBuilderPO.findFieldByIndex(2);
-            formBuilderPO.dragonDrop(source, target);
+            formBuilderPO.dragJiggleAndDrop(source, target);
             // verify that the first 2 items have changed position
             let movedFields = formBuilderPO.getFieldLabels();
             expect(movedFields[0]).toBe(origFields[1]);
@@ -57,13 +59,14 @@
             formBuilderPO.open();
             expect(formBuilderPO.getFieldLabels()).toEqual(movedFields);
         });
+
         it('move a field via drag/drop, cancel & verify lack of persistence', function() {
             // store the list of fields before moving
             let origFields = formBuilderPO.getFieldLabels();
             // drag the 1st field below the 2nd one
             let source = formBuilderPO.findFieldByIndex(1);
             let target = formBuilderPO.findFieldByIndex(2);
-            formBuilderPO.dragonDrop(source, target);
+            formBuilderPO.dragJiggleAndDrop(source, target);
             // verify that the first 2 items have changed position
             let movedFields = formBuilderPO.getFieldLabels();
             expect(movedFields[0]).toBe(origFields[1]);
@@ -73,22 +76,27 @@
             formBuilderPO.open();
             expect(formBuilderPO.getFieldLabels()).toEqual(origFields);
         });
-        it('drag a field onto another, then return & verify no change', function() {
+
+        it('drag a field onto another without dropping, then drag back to original field, release & verify no change', function() {
             // store the list of fields before moving
             let origFields = formBuilderPO.getFieldLabels();
             // drag 1st field onto 2nd
             let source = formBuilderPO.findFieldByIndex(1);
             let target = formBuilderPO.findFieldByIndex(2);
             let label = browser.element(source).getText();
+            // drag source to target without dropping
             browser.moveToObject(source);
             browser.buttonDown();
-            formBuilderPO.moveCursorTo(target, label);
+            formBuilderPO.jiggleCursor(target, label);
+            // verify drag token label
             expect(formBuilderPO.fieldTokenTitle.getText()).toEqual(origFields[0].replace('* ', ''));
-            formBuilderPO.moveCursorTo(source, label);
+            // drag back to source & drop
+            formBuilderPO.jiggleCursor(source, label);
             browser.buttonUp();
             browser.pause(5000);
             expect(formBuilderPO.getFieldLabels()).toEqual(origFields);
         });
+
         it('drag/drop a field to another by name & verify move', function() {
             // this isn't a real test, but the technique will come in handy later
             // when we start creating fields on the fly, renaming fields, etc.
@@ -102,6 +110,7 @@
             expect(movedFields[0]).toBe(origFields[1]);
             expect(movedFields[1]).toBe(origFields[0]);
         });
+
         it('removes a field, then saves and verifies absence', function() {
             // store the list of fields before deletion
             let firstField = formBuilderPO.getFieldLabels()[0];
@@ -116,6 +125,7 @@
             // verify that the first item is still gone
             expect(formBuilderPO.getFieldLabels().indexOf(firstField)).toEqual(-1);
         });
+
         it('removes a field, then cancels and verifies presence', function() {
             // store the list of fields before deletion
             let firstField = formBuilderPO.getFieldLabels()[0];

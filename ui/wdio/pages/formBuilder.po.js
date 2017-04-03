@@ -9,9 +9,9 @@
                 return browser.element('.cancelFormButton');
             }
         },
-        centerActions: {
+        centerActionsOnFooter: {
             get: function() {
-                return browser.element('.centerActions');
+                return browser.element('.saveOrCancelFooter .centerActions');
             }
         },
         deleteFieldIcon: {
@@ -59,6 +59,7 @@
                 return browser.element('.notification-success');
             }
         },
+
         // methods
         delete: {
             value: function(index) {
@@ -67,47 +68,48 @@
                 browser.pause(5000);
             }
         },
-        dragonDrop: {
+        dragJiggleAndDrop: {
             // drags vert then jiggles horz to induce the preview
             // because dragAndDrop doesn't do the trick
             value: function(source, target) {
                 let label = browser.element(source).getText();
                 browser.moveToObject(source);
                 browser.buttonDown();
-                this.moveCursorTo(target, label);
+                // jiggle on target until preview appears
+                this.jiggleCursor(target, label);
                 browser.buttonUp();
                 browser.pause(5000);
             }
         },
         getFieldLabels: {
             value: function() {
-                let label = "";
-                let labels = [];
                 let labelEls = browser.elements('.fieldLabel');
-                labelEls.value.filter(function(labelEl) {
-                    label = labelEl.getText();
-                    if (label === "") { // checkbox label is deeper in DOM
+
+                return labelEls.value.map(function(labelEl) {
+                    let label = labelEl.getText();
+                    if (label === '') { // checkbox label is deeper in DOM
                         label = labelEl.element('.label').getText();
                     }
-                    return labels.push(label);
+                    return label;
                 });
-                return labels;
             }
         },
         moveByName: {
             value: function(source, target) {
                 let labels = this.getFieldLabels();
+                // add 1 to index because indexOf is zero-based
+                // whereas findFieldByIndex is one-based
                 source = this.findFieldByIndex(labels.indexOf(source) + 1);
                 target = this.findFieldByIndex(labels.indexOf(target) + 1);
-                this.dragonDrop(source, target);
+                this.dragJiggleAndDrop(source, target);
             }
         },
-        moveCursorTo: {
+        jiggleCursor: {
             value: function(target, label) {
                 browser.waitUntil(function() {
                     // jiggle cursor on target until it updates with expected label
-                    browser.c(target);
-                    browser.moveToObject(target, 0, 0); // this updates the preview
+                    browser.moveToObject(target);
+                    browser.moveToObject(target, 0, 0);
                     return label === browser.element(target).getText();
                 }, 5000, 'expected target preview to display source label after dragging');
 
@@ -117,7 +119,7 @@
             value: function() {
                 // wait to prevent 'element not clickable'
                 topNavPO.formBuilderBtn.waitForVisible();
-                // Failed: unknown error: Element <div class="dropdownToggle globalActionLink formBuilder dropdown btn-group">...</div> is not clickable at point (850, 21). Other element would receive the click: <span>...</span>
+                // wait a bit longer to avoid 'Element not clickable' error
                 browser.pause(5000);
                 topNavPO.formBuilderBtn.click();
                 topNavPO.modifyThisForm.click();
