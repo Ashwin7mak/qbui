@@ -1,10 +1,10 @@
 import React from 'react';
 import {PropTypes} from 'react';
-import DropdownButton from 'react-bootstrap/lib/DropdownButton';
-import MenuItem from 'react-bootstrap/lib/MenuItem';
 import TableFieldInput from './tableFieldInput';
 import {I18nMessage} from "../../utils/i18nMessage";
 import Locale from '../../locales/locales';
+import {tableIconNames, tableIconsByTag, suggestedTableIcons} from '../../../../reuse/client/src/components/icon/tableIcons';
+import IconChooser from '../../../../reuse/client/src/components/iconChooser/iconChooser';
 import Icon, {AVAILABLE_ICON_FONTS} from '../../../../reuse/client/src/components/icon/icon';
 
 import './tableCreationPanel.scss';
@@ -15,30 +15,12 @@ class TableCreationPanel extends React.Component {
         super(props);
 
         // bind to fix context for event handlers
-        this.onToggleDropdown = this.onToggleDropdown.bind(this);
         this.selectIcon = this.selectIcon.bind(this);
         this.updateTableProperty = this.updateTableProperty.bind(this);
         this.onFocusInput = this.onFocusInput.bind(this);
         this.onBlurInput = this.onBlurInput.bind(this);
     }
 
-    /**
-     * get a set of table icon names (this is temporary until the icon chooser is built)
-     * @returns
-     */
-    getIconNames()  {
-        return [
-            "estimates",
-            "projects",
-            "customers",
-            "invoices",
-            "person",
-            "mailbox",
-            "projects",
-            "reports",
-            "schedule"
-        ];
-    }
 
     /**
      * get a table icon with a given name
@@ -50,19 +32,6 @@ class TableCreationPanel extends React.Component {
     }
 
     /**
-     * track open dialogs since parent might need the info to prevent clipping etc.
-     * @param isOpen
-     */
-    onToggleDropdown(isOpen) {
-
-        if (isOpen && this.props.tableMenuOpened) {
-            this.props.tableMenuOpened();
-        } else if (this.props.tableMenuOpened) {
-            this.props.tableMenuClosed();
-        }
-    }
-
-    /**
      * icon selected
      * @param icon
      */
@@ -71,38 +40,16 @@ class TableCreationPanel extends React.Component {
         this.updateTableProperty('tableIcon', icon);
     }
 
-    /**
-     * get a dropdown containing a set of sample icons (temporary until icon chooser is built)
-     * @returns {XML}
-     */
-    getIconDropdown() {
-
-        // set title to currently selected icon
-        const dropdownTitle = this.props.tableInfo && this.props.tableInfo.tableIcon ? this.getTableIcon(this.props.tableInfo.tableIcon.value) : null;
-
-        const iconNames = this.getIconNames();
-
-        return (
-            <DropdownButton title={dropdownTitle}
-                            id="createTableIconDropdown"
-                            onToggle={this.onToggleDropdown}>
-                {iconNames.map((iconName, i) => (
-                    <MenuItem key={i}
-                              onSelect={() => this.selectIcon(iconName)}>
-                                    {this.getTableIcon(iconName)}
-                    </MenuItem>))}
-            </DropdownButton>);
-    }
 
     /**
      * display suggested icons in a list (temporary until icon chooser is built)
      * @returns {XML}
      */
     getSuggestedIcons() {
-        const iconNames = this.getIconNames();
+
         return (
             <div className="iconList">
-                {iconNames.map((iconName, i) => (
+                {suggestedTableIcons.slice(0, 8).map((iconName, i) => (
                     <button key={i} onClick={() => this.selectIcon(iconName)}>
                         {this.getTableIcon(iconName)}
                     </button>))}
@@ -147,6 +94,7 @@ class TableCreationPanel extends React.Component {
             break;
         }
         }
+
         this.props.setTableProperty(property, value, validationError, isUserEdit);
     }
 
@@ -157,12 +105,17 @@ class TableCreationPanel extends React.Component {
     renderIconSection() {
 
         return (<div className="tableField iconSelection">
-            <div className="iconChooser">
-                <div className="tableFieldTitle"><I18nMessage message="tableCreation.iconHeading"/></div>
-                {this.getIconDropdown()}
-            </div>
+            <IconChooser selectedIcon={this.props.tableInfo.tableIcon.value}
+                         isOpen={this.props.iconChooserOpen}
+                         onOpen={this.props.openIconChooser}
+                         onClose={this.props.closeIconChooser}
+                         font={AVAILABLE_ICON_FONTS.TABLE_STURDY}
+                         icons={tableIconNames}
+                         iconsByTag={tableIconsByTag}
+                         onSelect={this.selectIcon} />
+
             <div className="suggestedIcons">
-                <div className="tableFieldTitle"><I18nMessage message="tableCreation.suggestedIconsHeading"/></div>
+                <div><I18nMessage message="tableCreation.suggestedIconsHeading"/></div>
                 {this.getSuggestedIcons()}
             </div>
         </div>);
@@ -178,6 +131,11 @@ class TableCreationPanel extends React.Component {
             // update prop to set the validation state, but don't mark fields as being edited
             this.updateTableProperty(key, val.value, false);
         });
+
+        // choose a default icon
+        if (!this.props.tableInfo.tableIcon.value) {
+            this.updateTableProperty('tableIcon', suggestedTableIcons[0], false);
+        }
     }
 
     /**
@@ -200,6 +158,7 @@ class TableCreationPanel extends React.Component {
      * @returns {XML}
      */
     render() {
+
         return (
             <div className="tableInfo">
                 <div className="sections">
@@ -236,7 +195,7 @@ class TableCreationPanel extends React.Component {
                                      value={this.props.tableInfo && this.props.tableInfo.description ? this.props.tableInfo.description.value : ""}
                                      onChange={this.updateTableProperty}
                                      component="textarea"
-                                     rows="6"/>
+                                     rows="8"/>
                 </div>
             </div>);
     }
@@ -245,8 +204,8 @@ class TableCreationPanel extends React.Component {
 TableCreationPanel.propTypes = {
     appTables: PropTypes.array.isRequired,
     tableInfo: PropTypes.object.isRequired,
-    tableMenuOpened: PropTypes.func,
-    tableMenuClosed: PropTypes.func,
+    openIconChooser: PropTypes.func,
+    closeIconChooser: PropTypes.func,
     setEditingProperty: PropTypes.func.isRequired
 
 };

@@ -97,5 +97,10 @@
                 return browser.element('.saveFormButton');
             }
         },
+        success: {
+            get: function() {
+                return browser.element('.notification-success');
+            }
+        },
     });
 }());
