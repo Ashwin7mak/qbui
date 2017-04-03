@@ -45,7 +45,6 @@ class ColumnTransformer {
      * @param props
      */
     addHeaderMenu(component, props = {}) {
-        console.log(props);
         this.headerMenuComponent = component;
         this.headerMenuProps = props;
         return this;
