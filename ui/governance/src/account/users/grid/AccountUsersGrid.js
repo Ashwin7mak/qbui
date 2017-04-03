@@ -9,9 +9,6 @@ import QbCell from '../../../../../client-react/src/components/dataTable/qbGrid/
 import '../../../../../client-react/src/components/dataTable/qbGrid/qbGrid.scss';
 import * as SpinnerConfigurations from "../../../../../client-react/src/constants/spinnerConfigurations";
 
-import * as AccountUsersActions from '../AccountUsersActions';
-import * as RequestContextActions from '../../../common/requestContext/RequestContextActions';
-
 import {GetAccountUsersGridColumns} from './AccountUsersGridColumns';
 
 import "./AccountUsersGrid.scss";
@@ -38,19 +35,6 @@ const onRowFn = (row) => {
  * Renders the grid portion of the AccountUsers view
  */
 class AccountUsersGrid extends Component {
-
-    constructor(props) {
-        super(props);
-    }
-
-    /**
-     * get users whenever the component mounts
-     */
-    componentDidMount() {
-        this.props.fetchRequestContextIfNeeded(this.props.accountId);
-        this.props.fetchAccountUsers(this.props.accountId);
-    }
-
     render() {
         if (this.props.dataFetchingError) {
             return (
@@ -86,9 +70,7 @@ AccountUsersGrid.propTypes = {
     users: PropTypes.array,
     showAccountColumns: PropTypes.bool,
     showRealmColumns: PropTypes.bool,
-    dataFetchingError: PropTypes.any,
-    fetchAccountUsers: PropTypes.func.isRequired,
-    fetchRequestContextIfNeeded: PropTypes.func.isRequired
+    dataFetchingError: PropTypes.any
 };
 
 // Provide default val
@@ -111,17 +93,5 @@ const mapStateToProps = (state) => {
     };
 };
 
-const mapDispatchToProps = (dispatch) => ({
-    fetchAccountUsers(id) {
-        dispatch(AccountUsersActions.fetchAccountUsers(id));
-    },
-    fetchRequestContextIfNeeded(id) {
-        dispatch(RequestContextActions.fetchRequestContextIfNeeded(id));
-    }
-});
-
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(AccountUsersGrid);
+export default connect(mapStateToProps)(AccountUsersGrid);
 
