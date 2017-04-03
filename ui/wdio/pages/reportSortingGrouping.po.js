@@ -34,6 +34,19 @@
         //panel cancel
         fieldsPanelCancel: {get: function() {return this.fieldsPanel.element('.cancel');}},
 
+
+        recordID: {get: function() {return browser.element('//span[@class="fieldName" and text()="Record ID#"]');}},
+
+        sortByRecordID: {value: function() {
+            this.reportSortGrpBtnOnReportsPage.click();
+            this.sortBySettings.waitForVisible();
+            this.clickInEmptyFieldInSortGrpDlg(this.sortBySettings, 'Choose a field to sort by');
+            this.ClickMoreFieldsLinkInFieldsPanel();
+            this.recordID.waitForExist();
+            this.recordID.click();
+            reportContentPO.clickAndWaitForGrid(this.sortGroupDlgApplyBtn);
+        }},
+
         /**
          * Method to click sort/Grp button in reports page.
          */
@@ -307,22 +320,6 @@
          */
         getAllGroupHeadersList: {get: function() {
             return browser.elements('.groupHeader');
-        }},
-
-
-        sortButton: {get: function() {return browser.element('.sortButton');}},
-        fieldChoice: {get: function() {return browser.element('.fieldChoice.empty');}},
-        moreFields: {get: function() {return browser.element('.moreFields');}},
-        recordID: {get: function() {return browser.element('//span[@class="fieldName" and text()="Record ID#"]');}},
-        applyButton: {get: function() {return browser.element('.apply');}},
-
-        sortByRecordID: {value: function() {
-            this.sortButton.click();
-            this.fieldChoice.click();
-            this.moreFields.click();
-            this.recordID.waitForExist();
-            this.recordID.click();
-            reportContentPO.clickAndWaitForGrid(this.applyButton);
         }},
 
         /*

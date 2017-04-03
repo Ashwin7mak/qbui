@@ -185,7 +185,7 @@
                     return createdApp;
                 }).catch(function(error) {
                     // Catch any errors and reject the promise with it
-                    log.error('Error during basicAppSetup');
+                    log.error('Error during createAppWithEmptyRecordsInTable');
                     return promise.reject(error);
                 });
             },
