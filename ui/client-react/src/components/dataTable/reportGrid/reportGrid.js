@@ -14,7 +14,6 @@ import ReportCell from './reportCell';
 
 
 export const ReportGrid = React.createClass({
-
     propTypes: {
         appId: PropTypes.string,
         tblId: PropTypes.string,
@@ -314,7 +313,6 @@ function formatChange(updatedValues, colDef) {
         fieldDef: colDef.fieldDef
     };
 }
-
 
 const mapStateToProps = (state) => {
     return {

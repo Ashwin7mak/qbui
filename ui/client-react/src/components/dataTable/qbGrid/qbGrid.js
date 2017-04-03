@@ -358,6 +358,7 @@ const QbGrid = React.createClass({
 
 
 
+
     render() {
 
         // this.state.columns= { onMove:o => this.onMoveColumn(o)}
