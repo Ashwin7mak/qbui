@@ -1,9 +1,16 @@
 @import "../../../../src/assets/css/qbVariables";
 
+$toolpalette-header-weight: 400;
+$toolpalette-header-color: $color-black-500;
+
 .toolPaletteContainer {
     background-color: $color-black-250;
     width: 100%;
     height: 100%;
+
+    padding: $spacing-xxx-small;
+
+    transition: padding 0.3s;
 
     .tooltip {
         z-index: 100;
@@ -16,29 +23,30 @@
 
     .toolPaletteList, .toolPaletteItemList {
         list-style-type: none;
-        padding: $spacing-xxx-small;
-
-        transition: padding 0.3s;
+        padding: 0 0 $spacing-xxx-small 0;
     }
 
     .toolPaletteItemList {
         padding-left: 0;
+        padding-right: 0;
         padding-top: 0;
     }
 
     .toolPaletteItemHeader {
-        color: $default-text-onlight-color;
+        color: $toolpalette-header-color;
         font-size: $font-size-h6;
-        font-weight: 100;
+        font-weight: $toolpalette-header-weight;
+        letter-spacing: 0.7px;
         margin-top: $spacing-tiny;
         margin-bottom: $spacing-tiny;
+        text-transform: uppercase;
 
         overflow: hidden;
         text-overflow: ellipsis;
     }
 
     .toolPaletteItem {
-        padding-bottom: $spacing-tiny;
+        padding-bottom: $spacing-x-tiny;
 
         .fieldToken:not(.fieldTokenCollapsed) {
             width: 100%;
@@ -54,18 +62,14 @@
     }
 
     &.toolPaletteCollapsed {
+        padding-left: 2px;
+
         .searchBoxInMenu {
             opacity: 0;
             max-width: 0;
             max-height: 0;
 
             transition: opacity 0.3s, max-width 0.3s, max-height 0.3s;
-        }
-
-        .toolPaletteList, .toolPaletteItemList {
-            padding: 2px;
-
-            transition: padding 0.3s;
         }
     }
 }

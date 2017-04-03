@@ -505,12 +505,12 @@ export default {
             [FieldFormats.DURATION_FORMAT]: "Dauer",
             [FieldFormats.USER_FORMAT]: "Benutzer",
             [FieldFormats.CHECKBOX_FORMAT]: "Checkbox",
-            [FieldFormats.URL]: "Url",
+            [FieldFormats.URL]: "URL",
             [FieldFormats.EMAIL_ADDRESS]: "Email",
             [FieldFormats.PHONE_FORMAT]: "Telefon",
             [FieldFormats.RATING_FORMAT]: "Bewertung",
             [FieldFormats.RATING_FORMAT_MULTICHOICE]: "Bewertung",
-            [FieldFormats.URL_FORMULA_FORMAT]: "Url Formel",
+            [FieldFormats.URL_FORMULA_FORMAT]: "URL Formel",
             FORMULA: "Formel",
             SCALAR: "Skalar",
             CONCRETE: "Beton",
@@ -530,10 +530,14 @@ export default {
                 date: "Datum",
                 other: "Andere"
             },
-            addNewFieldTooltip: "Erstellen Sie ein Feld {fieldName} und fügen Sie es dem Formular hinzu",
-            addNewChoiceListTooltip: "Erstellen Sie eine Auswahlliste und fügen Sie sie dem Formular hinzu",
-            addNewRadioGroupTooltip: "Erstellen Sie Optionsfelder und fügen Sie sie dem Formular hinzu",
-            addNewCheckboxTooltip: "Erstellen Sie ein Kontrollkästchen und fügen Sie es dem Formular hinzu"
+            searchToolPalette: "Suche nach neuen Elementen",
+            noSearchResultsInToolPalette: 'Keine Felder passen "{searchText}"',
+            tooltips: {
+                addNewFieldTooltip: "Erstellen Sie ein Feld {fieldName} und fügen Sie es dem Formular hinzu",
+                addNewChoiceListTooltip: "Erstellen Sie eine Auswahlliste und fügen Sie sie dem Formular hinzu",
+                addNewRadioGroupTooltip: "Erstellen Sie Optionsfelder und fügen Sie sie dem Formular hinzu",
+                addNewCheckboxTooltip: "Erstellen Sie ein Kontrollkästchen und fügen Sie es dem Formular hinzu"
+            }
         },
         featureSwitchAdmin: {
             defaultFeatureName: "Feature",

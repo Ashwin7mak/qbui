@@ -504,12 +504,12 @@ export default {
             [FieldFormats.DURATION_FORMAT]: "Durée",
             [FieldFormats.USER_FORMAT]: "Utilisateur",
             [FieldFormats.CHECKBOX_FORMAT]: "Case à cocher",
-            [FieldFormats.URL]: "Url",
+            [FieldFormats.URL]: "URL",
             [FieldFormats.EMAIL_ADDRESS]: "Email",
             [FieldFormats.PHONE_FORMAT]: "Téléphone",
             [FieldFormats.RATING_FORMAT]: "Évaluation",
             [FieldFormats.RATING_FORMAT_MULTICHOICE]: "Évaluation",
-            [FieldFormats.URL_FORMULA_FORMAT]: "Url Formule",
+            [FieldFormats.URL_FORMULA_FORMAT]: "URL Formule",
             FORMULA: "Formule",
             SCALAR: "Scalaire",
             CONCRETE: "Béton",
@@ -529,10 +529,14 @@ export default {
                 date: 'Date',
                 other: 'Autre'
             },
-            addNewFieldTooltip: "Créez un champ {fieldName} et ajoutez-le au formulaire",
-            addNewChoiceListTooltip: "Crée une liste de choix et ajoutez-la au formulaire",
-            addNewRadioGroupTooltip: "Créez des boutons radio et ajoutez-les au formulaire",
-            addNewCheckboxTooltip: "Créez une case à cocher et ajoutez-la au formulaire"
+            searchToolPalette: "Rechercher de nouveaux éléments",
+            noSearchResultsInToolPalette: 'Aucun champ ne correspond "{searchText}"',
+            tooltips: {
+                addNewFieldTooltip: "Créez un champ {fieldName} et ajoutez-le au formulaire",
+                addNewChoiceListTooltip: "Crée une liste de choix et ajoutez-la au formulaire",
+                addNewRadioGroupTooltip: "Créez des boutons radio et ajoutez-les au formulaire",
+                addNewCheckboxTooltip: "Créez une case à cocher et ajoutez-la au formulaire"
+            }
         },
         featureSwitchAdmin: {
             defaultFeatureName: "Fonctionnalité",

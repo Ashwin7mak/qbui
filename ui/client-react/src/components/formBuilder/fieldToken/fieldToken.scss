@@ -1,11 +1,16 @@
 @import "../../../assets/css/_qbVariables";
 
 $fieldtoken-width: 250px;
-$fieldtoken-icon-width: 35px;
+$fieldtoken-icon-width: 34px;
+$fieldtoken-height: 34px;
+$fieldtoken-border-radius: 4px;
 
 .fieldToken {
-    border-radius: $radius-base;
-    height: 30px;
+    // Overflow: hidden is used here to create the effect that the icon is rounded on the left, but flat on the right.
+    overflow: hidden;
+
+    border-radius: $fieldtoken-border-radius;
+    height: $fieldtoken-height;
     width: $fieldtoken-width;
 
     display: flex;
@@ -15,10 +20,11 @@ $fieldtoken-icon-width: 35px;
 
     border: $stroke-width-thin solid $fieldtoken-border-color;
 
-    transition: box-shadow 0.3s;
+    transition: border-color 0.3s;
 
     &:hover, &.fieldTokenDragging {
-        box-shadow: 0 2.5px 4px 0 $dragtoken-shadow-color;
+        border: 1px solid $color-orange-500;
+        box-shadow: 0 0 8px 0 rgba($color-black-100, 0.3);
     }
 
     .fieldTokenTitle {
@@ -39,8 +45,7 @@ $fieldtoken-icon-width: 35px;
 
     .fieldTokenIconContainer {
         width: $fieldtoken-icon-width;
-        height: 29px;
-        border-radius: 2px;
+        height: $fieldtoken-height;
         color: $fieldtoken-icon-color;
         background-color: $fieldtoken-background-color1;
 
@@ -65,7 +70,7 @@ $fieldtoken-icon-width: 35px;
     }
 
     .fieldTokenTitle {
-        margin-left: $spacing-xx-small;
+        margin-left: 12px;
         text-overflow: ellipsis;
         white-space: nowrap;
         overflow: hidden;

@@ -41,6 +41,10 @@ class ToolPalette extends Component {
             return fieldType.title.toLowerCase().indexOf(this.state.fieldFilter.toLowerCase()) >= 0;
         });
 
+        if (fieldTypes.length === 0) {
+            return <p className="emptySearchResult">{Locale.getMessage('builder.noSearchResultsInToolPalette', {searchText: this.state.fieldFilter})}</p>;
+        }
+
         return this.renderNewFieldTypes(fieldTypes);
     }
 
@@ -75,7 +79,11 @@ class ToolPalette extends Component {
     renderToolPalette() {
         return (
             <div className={`toolPaletteContainer ${this.props.isCollapsed ? 'toolPaletteCollapsed' : ''}`}>
-                <SearchBoxInMenu searchText={this.state.fieldFilter} onChange={this.onChangeFieldFilter} />
+                <SearchBoxInMenu
+                    searchText={this.state.fieldFilter}
+                    onChange={this.onChangeFieldFilter}
+                    placeholder={Locale.getMessage('builder.searchToolPalette')}
+                />
 
                 <FlipMove typeName="ul" className="toolPaletteList toolPaletteNewFields">
                     {this.state.fieldFilter.length > 0 && this.renderFilteredFieldsList()}
