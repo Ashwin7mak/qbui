@@ -1,47 +1,45 @@
 const serverTypeConsts = require('../../../common/src/constants');
 
+let arrayOfTypes = [
+    serverTypeConsts.NUMERIC,
+    serverTypeConsts.DATE,
+    serverTypeConsts.DURATION,
+    serverTypeConsts.DATE_TIME,
+    serverTypeConsts.TIME_OF_DAY,
+    serverTypeConsts.CHECKBOX,
+    serverTypeConsts.USER,
+    serverTypeConsts.CURRENCY,
+    serverTypeConsts.RATING,
+    serverTypeConsts.PERCENT,
+    serverTypeConsts.URL,
+    serverTypeConsts.EMAIL_ADDRESS,
+    serverTypeConsts.PHONE_NUMBER,
+    serverTypeConsts.TEXT
+    // serverTypeConsts.TEXT_FORMULA,
+    // serverTypeConsts.URL_FORMULA,
+    // serverTypeConsts.NUMERIC_FORMULA
+];
+
+let newFields = {};
+
+let createDefaultFields = (typeArray) => {
+    return typeArray.forEach((type) => {
+        newFields[type] = {
+                "type": "SCALAR",
+                "datatypeAttributes": {
+                    "type": type
+                },
+                "name": type
+            }
+
+    });
+};
+
+createDefaultFields(arrayOfTypes);
+
 (function() {
     'use strict';
     module.exports = Object.freeze({
-        DEFAULT_TEXT_FIELD: {
-            "type": "SCALAR",
-            "datatypeAttributes": {
-                "type": serverTypeConsts.CHECKBOX
-            },
-            "name": "undefined"
-        },
-
-        DEFAULT_NUMERIC_FIELD: {
-            "type": "SCALAR",
-            "datatypeAttributes": {
-                "type": serverTypeConsts.NUMERIC
-            },
-            "name": "undefined"
-        },
-
-        DEFAULT_CHECKBOX_FIELD: {
-            "type": "SCALAR",
-            "datatypeAttributes": {
-                "type": serverTypeConsts.CHECKBOX
-            },
-            "name": "undefined"
-        },
-
-        DEFAULT_FIELD: {
-            "type": "SCALAR",
-            "datatypeAttributes": {
-                "type": serverTypeConsts.TEXT,
-                "htmlAllowed": false
-            },
-            "name": "Text",
-            "builtIn": false,
-            "dataIsCopyable": true,
-            "includeInQuickSearch": true,
-            "userEditableValue": true,
-            "required": false,
-            "unique": false,
-            "indexed": false,
-            "multiChoiceSourceAllowed": false
-        }
+        ...newFields
     })
 }());
