@@ -21,7 +21,7 @@ function initializeState() {
 
     initialState = {
         //  default states
-        menuOpen: false,
+        iconChooserOpen: false,
         savingTable: false,
         tableInfo: defaultTableInfo,
         edited: false,
@@ -76,7 +76,20 @@ describe('Test table properties reducers', () => {
             expect(state.edited).toBeTruthy();
         });
 
+        it('return updated page state icon chooser open', () => {
+
+            const state = reducer(initialState, {type: types.TABLE_ICON_CHOOSER_OPEN, isOpen: true});
+            expect(state.iconChooserOpen).toBe(true);
+        });
+
         it('return updated page state table menu open', () => {
+
+            let state = reducer(initialState, {type: types.TABLE_ICON_CHOOSER_OPEN, isOpen: true});
+            state = reducer(state, {type: types.TABLE_ICON_CHOOSER_OPEN, isOpen: false});
+            expect(state.iconChooserOpen).toBe(false);
+        });
+
+        it('return updated page state on updating a property', () => {
 
             let state = reducer(initialState, {type: types.SET_PROPS_EDITING_PROPERTY, editing: 'description'});
 

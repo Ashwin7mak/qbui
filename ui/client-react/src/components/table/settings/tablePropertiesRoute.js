@@ -4,8 +4,9 @@ import {connect} from 'react-redux';
 import {NotificationManager} from 'react-notifications';
 import Locale from '../../../locales/locales';
 import Stage from '../../stage/stage';
-import IconActions from '../../actions/iconActions';
+import IconActions from '../../../../../reuse/client/src/components/iconActions/iconActions';
 import {I18nMessage} from '../../../utils/i18nMessage';
+import Icon from '../../../../../reuse/client/src/components/icon/icon.js';
 import TableCreationPanel from '../tableCreationPanel';
 import * as TablePropertiesActions from '../../../actions/tablePropertiesActions';
 
@@ -22,13 +23,13 @@ const TablePropertiesRoute = React.createClass({
     },
     getPageActions(maxButtonsBeforeMenu) {
         const actions = [
-            //{i18nMessageKey: 'pageActions.deleteTable', icon:'delete', className:'delete', onClick: this.deleteTable}
-            {msg: 'pageActions.deleteTable', icon:'delete'}
+            {i18nMessageKey: 'pageActions.deleteTable', icon:'delete', className:'deleteTable'}
+            //{msg: 'pageActions.deleteTable', icon:'delete', className:'deleteTable'}
         ];
         return (<IconActions className="pageActions" actions={actions} maxButtonsBeforeMenu={maxButtonsBeforeMenu}/>);
     },
     getStageHeadline() {
-        return <I18nMessage message={"pageActions.tableSettings"}/>;
+        return <div className="tableSettingsStage">{this.props.table ? <Icon isTableIcon={true} icon={this.props.table.icon} /> : null}<I18nMessage message={"pageActions.tableSettings"}/></div>;
     },
     componentDidMount() {
         if (this.props.app && this.props.table) {
@@ -58,13 +59,15 @@ const TablePropertiesRoute = React.createClass({
     },
 
     render() {
+        let showButtons = this.props.tableProperties.editing ? true : false;
         return (<div>
             <Stage stageHeadline={this.getStageHeadline()} pageActions={this.getPageActions(5)}></Stage>
 
             <div className="tableInfoPanel">
                 <TableCreationPanel tableInfo={this.props.tableProperties.tableInfo}
-                                    tableMenuOpened={this.props.tableMenuOpened}
-                                    tableMenuClosed={this.props.tableMenuClosed}
+                                    iconChooserOpen={this.props.tableProperties.iconChooserOpen}
+                                    openIconChooser={this.props.openIconChooser}
+                                    closeIconChooser={this.props.closeIconChooser}
                                     setTableProperty={this.props.setTableProperty}
                                     setEditingProperty={this.props.setEditingProperty}
                                     focusOn={this.props.tableProperties.editing}

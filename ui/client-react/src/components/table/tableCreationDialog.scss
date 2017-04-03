@@ -14,10 +14,6 @@
     }
 }
 
-.tableCreationDialog.tableMenuOpen .modal-body > *:first-child {
-    overflow: visible;
-}
-
 @include not-small-breakpoint {
 
     .multiStepModal.tableCreationDialog .modal-dialog {

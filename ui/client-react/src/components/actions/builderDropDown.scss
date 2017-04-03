@@ -1,28 +1,58 @@
+@import '../../../../reuse/client/src/assets/css/qbVariables';
+
+$settings-menu-header-height: 40px;
+$settings-menu-padding-top: 15px;
+
 .topNav {
     .globalActions {
         .globalAction.builder {
+            .dropdown-menu {
+                margin: 0;
+                padding: 0;
+                cursor: default;
+            }
             padding-right: 10px;
             .configurationMenu {
                 display: flex;
+                .menuHeader {
+                    font-size: $font-size-h3;
+                    color: $color-black-700;
+                    height: $settings-menu-header-height;
+                }
                 a {
                     display: block;
-                    padding: 3px 20px;
                     clear: both;
                     font-weight: normal;
-                    line-height: 1.42857;
-                    //color: #333333;
+                    line-height: 25px;
+                    color: $default-text-onlight-color;
                     white-space: nowrap;
-                    &:not(.heading):hover {
-                        text-decoration: none;
-                        //color: #262626;
-                        //background-color: $settings-menu-heading;
+                    &:not(.heading) {
+                        cursor: pointer;
+                        &:hover {
+                            text-decoration: none;
+                            color: $color-black-200;
+                        }
+                    }
+                    &.heading {
+                        font-weight: bold;
                     }
                     > * {
                         vertical-align: middle;
                     }
                 }
-                .tableConfig li:not(.heading) {
-                    margin-left: 30px;
+                .configSet {
+                    padding: $settings-menu-padding-top;
+                    &.withIcon {
+                        a:not(.heading) {
+                            margin-left: 26px;
+                        }
+                    }
+                    &:not(:first-of-type) {
+                        padding: $settings-menu-header-height + $settings-menu-padding-top $settings-menu-padding-top $settings-menu-padding-top * 2 $settings-menu-padding-top;
+                    }
+                    &.currentContext {
+                        background-color: $color-black-200;
+                    }
                 }
             }
         }

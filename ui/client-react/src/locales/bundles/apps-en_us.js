@@ -597,6 +597,12 @@ export default {
         },
         iconChooser: {
             searchPlaceholder: "Search table icons..."
+        },
+        settings: {
+            header: "Settings",
+            tablesHeader: "Table",
+            appsHeader: "Table",
+            formsHeader: "Form"
         }
     }
 };

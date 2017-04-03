@@ -8,15 +8,19 @@ const logger = new Logger();
 
 
 /**
- * a dropdown menu was opened, UI may need to enable CSS overflow
- * until it closes
+ * expand the icon chooser from a button to a searchable grid
  */
-export const tableMenuOpened = () => ({
-    type: types.TABLE_PROPS_MENU_OPEN
+export const openIconChooser = () => ({
+    type: types.TABLE_PROPS_ICON_CHOOSER_OPEN,
+    isOpen: true
 });
 
-export const tableMenuClosed = () => ({
-    type: types.TABLE_PROPS_MENU_CLOSED
+/**
+ * collapse the icon chooser
+ */
+export const closeIconChooser = () => ({
+    type: types.TABLE_PROPS_ICON_CHOOSER_OPEN,
+    isOpen: false
 });
 
 /**
@@ -114,7 +118,7 @@ export const loadTableProperties = (tableInfo) => {
     return (dispatch) => {
         tableInfo.tableNoun = "noun";
         tableInfo.description = "";
-        tableInfo.icon = "report-table";
+        tableInfo.tableIcon = "report-table";
         dispatch(loadedTable(tableInfo));
     };
 };

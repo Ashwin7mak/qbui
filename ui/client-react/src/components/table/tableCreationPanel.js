@@ -6,6 +6,7 @@ import Locale from '../../locales/locales';
 import {tableIconNames, tableIconsByTag, suggestedTableIcons} from '../../../../reuse/client/src/components/icon/tableIcons';
 import IconChooser from '../../../../reuse/client/src/components/iconChooser/iconChooser';
 import Icon, {AVAILABLE_ICON_FONTS} from '../../../../reuse/client/src/components/icon/icon';
+import _ from 'lodash';
 
 import './tableCreationPanel.scss';
 
@@ -105,7 +106,7 @@ class TableCreationPanel extends React.Component {
     renderIconSection() {
 
         return (<div className="tableField iconSelection">
-            <IconChooser selectedIcon={this.props.tableInfo.tableIcon.value}
+            <IconChooser selectedIcon={this.props.tableInfo && this.props.tableInfo.tableIcon ? this.props.tableInfo.tableIcon.value : null}
                          isOpen={this.props.iconChooserOpen}
                          onOpen={this.props.openIconChooser}
                          onClose={this.props.closeIconChooser}
@@ -114,7 +115,7 @@ class TableCreationPanel extends React.Component {
                          iconsByTag={tableIconsByTag}
                          onSelect={this.selectIcon} />
 
-            <div className="suggestedIcons">
+            <div className="tableFieldTitle suggestedIcons">
                 <div><I18nMessage message="tableCreation.suggestedIconsHeading"/></div>
                 {this.getSuggestedIcons()}
             </div>
@@ -133,7 +134,7 @@ class TableCreationPanel extends React.Component {
         });
 
         // choose a default icon
-        if (!this.props.tableInfo.tableIcon.value) {
+        if (!_.has(this.props, 'tableInfo.tableIcon.value') && this.props.tableInfo.tableIcon.value) {
             this.updateTableProperty('tableIcon', suggestedTableIcons[0], false);
         }
     }

@@ -249,7 +249,7 @@ describe('Test Apps Store', () => {
     it('test updated table props', () => {
         let loadAppsAction = {
             type: actions.LOAD_APPS_SUCCESS,
-            payload: [{appId: 'app1', tables: [{id:'table1', name: 'name'}]}]
+            payload: [{id: 'app1', tables: [{id:'table1', name: 'name'}]}]
         };
 
         flux.dispatcher.dispatch(loadAppsAction);
@@ -268,9 +268,9 @@ describe('Test Apps Store', () => {
 
         flux.dispatcher.dispatch(updatedTablePropsAction);
 
-        expect(flux.store(STORE_NAME).apps).toEqual([{appId: 'app1', tables: [{id:'table1', name: 'new name'}]}]);
+        expect(flux.store(STORE_NAME).apps).toEqual([{id: 'app1', tables: [{name: 'new name'}]}]);
 
         expect(flux.store(STORE_NAME).emit).toHaveBeenCalledWith('change');
-        expect(flux.store(STORE_NAME).emit.calls.count()).toBe(1);
+        expect(flux.store(STORE_NAME).emit.calls.count()).toBe(3);
     });
 });

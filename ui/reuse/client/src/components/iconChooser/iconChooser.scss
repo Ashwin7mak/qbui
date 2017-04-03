@@ -23,6 +23,7 @@
             margin: 2px;
             input {
                 height: 30px;
+                width: 210px;
             }
         }
         .showAllToggle {
@@ -44,10 +45,12 @@
         display: flex;
         flex-wrap: wrap;
         overflow-y: auto;
+        margin-left: -12px;
 
         .qbIcon {
             color: $color-black-700;
             padding: 4px;
+            margin: 12px;
         }
         .qbIcon:hover {
             background-color: $color-cyan-600;

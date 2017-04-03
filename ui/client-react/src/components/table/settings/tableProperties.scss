@@ -1,11 +1,29 @@
-.tableInfoPanel {
-    margin: 15px;
-    max-width: 900px;
-    .tableInfoButtons {
-        float: right;
-        margin-right: 15px;
-        .primaryButton {
-            margin-left: 5px;
+@import '../../../../../reuse/client/src/assets/css/qbVariables';
+
+.settingsAppShell {
+    .pageActions {
+        .deleteTable {
+            color: $color-red-700;
+        }
+    }
+    .tableSettingsStage {
+        .qbIcon {
+            font-size: 28px;
+            margin-right: 10px;
+        }
+        & > * {
+            vertical-align: middle;
+        }
+    }
+    .tableInfoPanel {
+        margin: 15px;
+        max-width: 900px;
+        .tableInfoButtons {
+            float: right;
+            margin-right: 15px;
+            .primaryButton {
+                margin-left: 5px;
+            }
         }
     }
 }

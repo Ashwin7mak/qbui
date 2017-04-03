@@ -128,14 +128,14 @@ let AppsStore = Fluxxor.createStore({
         let tableInfo = payload.tableInfo;
         let newAppsList = this.apps.map((app) => {
             if (app.id === this.selectedAppId) {
-                let newAppInfo = app.tables.map((table) => {
+                let newAppTables = app.tables.map((table) => {
                     if (table.id === tblId) {
                         return tableInfo;
                     } else {
                         return table;
                     }
                 });
-                return newAppInfo;
+                app.tables = newAppTables;
             }
             return app;
         });

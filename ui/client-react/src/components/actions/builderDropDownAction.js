@@ -1,9 +1,8 @@
 import React from 'react';
 import {MenuItem, Dropdown} from 'react-bootstrap';
-import QBicon from '../qbIcon/qbIcon';
+import Icon from '../../../../reuse/client/src/components/icon/icon.js';
 import {I18nMessage} from '../../utils/i18nMessage';
 import * as UrlConsts from "../../constants/urlConstants";
-import TableIcon from '../qbTableIcon/qbTableIcon';
 import './builderDropDown.scss';
 
 const actionPropType = React.PropTypes.shape({
@@ -41,19 +40,21 @@ let BuilderDropDownAction = React.createClass({
             <a bsRole="toggle"
                className={classes}
                tabIndex={this.props.startTabIndex + this.props.actions.length}>
-                <QBicon icon={this.props.icon}/>
+                <Icon icon={this.props.icon}/>
             </a>
 
             <Dropdown.Menu>
                 <div className="configurationMenu">
                     {isTableView ?
-                    <div className="tableConfig">
-                        <li><a className="heading">{this.props.selectedTable.icon && <TableIcon icon={this.props.selectedTable.icon}/> }
-                            <span>{this.props.selectedTable.name}&nbsp;<I18nMessage message={"pageActions.tableSettingsHeader"}/></span></a></li>
+                    <div className="configSet withIcon">
+                        <li className="menuHeader"><I18nMessage message={"settings.header"}/></li>
+                        <li><a className="heading">{this.props.selectedTable.icon && <Icon isTableIcon={true} icon={this.props.selectedTable.icon}/> }
+                            <span><I18nMessage message={"settings.tablesHeader"}/></span></a></li>
                         <li><a id="modifyTableSettings" onClick={this.getTableSettingsLink}><I18nMessage message={"pageActions.tableSettings"}/></a></li>
                     </div> : null}
                     {isFormView ?
-                    <div>
+                    <div className="configSet currentContext">
+                        <li><a className="heading"><span><I18nMessage message={"settings.formsHeader"}/></span></a></li>
                         <li><a id="modifyForm" onClick={this.props.navigateToBuilder}><I18nMessage
                             message={"pageActions.configureFormBuilder"}/></a></li>
                     </div> : null}

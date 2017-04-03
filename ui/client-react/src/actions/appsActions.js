@@ -123,7 +123,7 @@ let appsActions = {
     },
 
     updateTableProps(tableId, tableInfo) {
-        this.dispatch(actions.UPDATED_TABLE_PROPS, tableId, tableInfo);
+        this.dispatch(actions.UPDATED_TABLE_PROPS, {tableId: tableId, tableInfo: tableInfo});
     }
 };
 

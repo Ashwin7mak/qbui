@@ -18,7 +18,7 @@ const defaultTableInfo = {
 const tableProperties = (
     state = {
         //  default states
-        menuOpen: false,
+        iconChooserOpen: false,
         savingTable: false,
         tableInfo: defaultTableInfo,
         edited: false,
@@ -27,17 +27,10 @@ const tableProperties = (
     action) => {
 
     switch (action.type) {
-    case types.TABLE_PROPS_MENU_OPEN: {
+    case types.TABLE_PROPS_ICON_CHOOSER_OPEN: {
         return {
             ...state,
-            menuOpen: true
-        };
-    }
-
-    case types.TABLE_PROPS_MENU_CLOSED: {
-        return {
-            ...state,
-            menuOpen: false
+            iconChooserOpen: action.isOpen
         };
     }
 

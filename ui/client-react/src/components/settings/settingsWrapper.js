@@ -85,7 +85,6 @@ const SettingsWrapper = React.createClass({
             <LeftNav
                 isCollapsed={this.props.isNavCollapsed}
                 isOpen={true}
-                isContextHeaderSmall={true}
                 showContextHeader={true}
                 contextHeaderIcon={selectedTable ? selectedTable.icon : null}
                 contextHeaderIconTypeIsTable={true}

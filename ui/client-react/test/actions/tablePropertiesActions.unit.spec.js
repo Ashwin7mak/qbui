@@ -104,21 +104,12 @@ describe('Table properties actions', () => {
         // so we don't need to spy on the dispatcher etc.
 
         const expectedActions = [
-            {type: types.LOADED_TABLE_PROPS, tableInfo: {description: 'description'}}
+            {type: types.LOADED_TABLE_PROPS, tableInfo: {name: 'name', tableNoun: 'noun', description: '', tableIcon: 'report-table'}}
         ];
         const store = mockStore({});
 
-        store.dispatch(actions.loadTableProperties({description: 'description'}));
+        store.dispatch(actions.loadTableProperties({name: 'name'}));
         expect(store.getActions()).toEqual(expectedActions);
         done();
-        //return store.dispatch(actions.loadTableProperties({description: 'description'})).then(
-        //    () => {
-        //        expect(store.getActions()).toEqual(expectedActions);
-        //        done();
-        //    },
-        //    () => {
-        //        expect(false).toBe(true);
-        //        done();
-        //    });
     });
 });
