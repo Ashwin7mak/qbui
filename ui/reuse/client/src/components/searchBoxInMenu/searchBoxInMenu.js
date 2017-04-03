@@ -8,9 +8,9 @@ import Icon from '../icon/icon';
 
 import './searchBoxInMenu.scss';
 
-const SearchBoxInMenu = ({searchText, onChange}) => (
+const SearchBoxInMenu = ({searchText, placeholder, onChange}) => (
     <div className="searchBoxInMenu form-group has-feedback">
-        <input className="form-control" type="text" value={searchText} onChange={onChange} />
+        <input className="form-control" type="text" value={searchText} onChange={onChange} placeholder={placeholder} />
         <Icon className="form-control-feedback" icon="search" />
     </div>
 );
@@ -19,6 +19,10 @@ SearchBoxInMenu.propTypes = {
     /**
      * The current text in the search box */
     searchText: PropTypes.string,
+
+    /**
+     * The text that appears as placeholder in the input box. It should be localized before passing to this component. */
+    placeholder: PropTypes.string,
 
     /**
      * A callback that will be fired when the text is changed. It will receive one argument the onChange event. */
