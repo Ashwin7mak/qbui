@@ -58,7 +58,7 @@ export const SUPPORTED_NEW_FIELDS_WITH_PROPERTIES = SUPPORTED_NEW_FIELD_TYPES.ma
     return {
         ...fieldGroup,
         fieldTypes: fieldGroup.fieldTypes.map(fieldType => createFieldTypeProps(fieldType))
-    }
+    };
 });
 
 /**
@@ -79,23 +79,23 @@ export function createFieldTypeProps(fieldType) {
     };
 }
 
-export function getTooltipForNewField(fieldType, fieldName) {
-    switch(fieldType) {
-        case fieldFormats.CHECKBOX_FORMAT :
-            return Locale.getMessage('builder.tooltips.addNewCheckboxTooltip');
+export function getTooltipForNewField(fieldType, fieldName = '') {
+    switch (fieldType) {
+    case fieldFormats.CHECKBOX_FORMAT :
+        return Locale.getMessage('builder.tooltips.addNewCheckboxTooltip');
 
-        case fieldFormats.TEXT_FORMAT_MULTICHOICE :
-        case fieldFormats.CURRENCY_FORMAT_MULTICHOICE :
-        case fieldFormats.PERCENT_FORMAT_MULTICHOICE :
-        case fieldFormats.NUMBER_FORMAT_MULTICHOICE :
-        case fieldFormats.RATING_FORMAT_MULTICHOICE :
-            return Locale.getMessage('builder.tooltips.addNewChoiceListTooltip');
+    case fieldFormats.TEXT_FORMAT_MULTICHOICE :
+    case fieldFormats.CURRENCY_FORMAT_MULTICHOICE :
+    case fieldFormats.PERCENT_FORMAT_MULTICHOICE :
+    case fieldFormats.NUMBER_FORMAT_MULTICHOICE :
+    case fieldFormats.RATING_FORMAT_MULTICHOICE :
+        return Locale.getMessage('builder.tooltips.addNewChoiceListTooltip');
 
-        case fieldFormats.TEXT_FORMAT_RADIO_BUTTONS :
-        case fieldFormats.NUMBER_FORMAT_RADIO_BUTTONS :
-            return Locale.getMessage('builder.tooltips.addNewRadioListTooltip');
+    case fieldFormats.TEXT_FORMAT_RADIO_BUTTONS :
+    case fieldFormats.NUMBER_FORMAT_RADIO_BUTTONS :
+        return Locale.getMessage('builder.tooltips.addNewRadioListTooltip');
 
-        default :
-            return Locale.getMessage(`builder.tooltips.addNewFieldTooltip`, {fieldName});
+    default :
+        return Locale.getMessage(`builder.tooltips.addNewFieldTooltip`, {fieldName});
     }
 }

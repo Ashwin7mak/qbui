@@ -1,5 +1,6 @@
 import React, {PropTypes} from 'react';
 import FieldUtils from '../../../utils/fieldUtils';
+import Icon from '../../../../../reuse/client/src/components/icon/icon';
 
 import './fieldToken.scss';
 
@@ -29,7 +30,7 @@ const FieldToken = (props) => {
         <div className={classes.join(' ')} onClick={props.onClick}>
             <div className="fieldTokenIconContainer">
                 <div className="fieldTokenIcon">
-                    {FieldUtils.getFieldSpecificIcon(props.type)}
+                    <Icon icon={FieldUtils.getFieldSpecificIcon(props.type)} />
                 </div>
             </div>
             <div className="fieldTokenTitle">

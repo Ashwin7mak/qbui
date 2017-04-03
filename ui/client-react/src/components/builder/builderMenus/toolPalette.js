@@ -91,7 +91,7 @@ class ToolPalette extends Component {
                 </FlipMove>
             </div>
         );
-    };
+    }
 
     render() {
         return (
