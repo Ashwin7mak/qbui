@@ -2,7 +2,7 @@ import Locale from '../locales/locales';
 import FieldFormats from './fieldFormats';
 const serverTypeConsts = require('../../../common/src/constants');
 
-let arrayOfTypes = [
+let arrayOfScalarTypes = [
     serverTypeConsts.NUMERIC,
     serverTypeConsts.DATE,
     serverTypeConsts.DURATION,
@@ -24,7 +24,7 @@ class DefaultFieldsProperties {
     static createScalarDefaultFieldsProperties() {
         let defaultFieldProperties = {};
 
-        arrayOfTypes.forEach((type) => {
+        arrayOfScalarTypes.forEach((type) => {
             let fieldDef = {datatypeAttributes: {type: type}};
             let fieldType = FieldFormats.getFormatType(fieldDef);
 
