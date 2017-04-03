@@ -1,24 +1,24 @@
 import Locale from '../locales/locales';
 import FieldFormats from './fieldFormats';
-import {DefaultFieldProperties} from '../constants/defaultFieldPropertiesConstants'
+import {DefaultFieldProperties} from '../constants/defaultFieldPropertiesConstants';
 const serverTypeConsts = require('../../../common/src/constants');
 import _ from 'lodash';
 
 let createDefaultFieldsProperties = (type, defaultTypeProperties, userDefaultProperties) => {
-        let fieldDef = {datatypeAttributes: {type: type}};
-        let fieldType = FieldFormats.getFormatType(fieldDef);
-        userDefaultProperties = userDefaultProperties || {};
-        defaultTypeProperties = defaultTypeProperties || {};
+    let fieldDef = {datatypeAttributes: {type: type}};
+    let fieldType = FieldFormats.getFormatType(fieldDef);
+    userDefaultProperties = userDefaultProperties || {};
+    defaultTypeProperties = defaultTypeProperties || {};
 
-        let defaultScalarFieldsProperties ={
-                "type": "SCALAR",
-                "datatypeAttributes": {
-                    "type": type
-                },
-                "name": Locale.getMessage(`fieldsDefaultLabels.${fieldType}`),
-                "required": false
-        };
-            return _.merge(defaultScalarFieldsProperties, defaultTypeProperties, userDefaultProperties);
+    let defaultScalarFieldsProperties = {
+        "type": "SCALAR",
+        "datatypeAttributes": {
+            "type": type
+        },
+        "name": Locale.getMessage(`fieldsDefaultLabels.${fieldType}`),
+        "required": false
+    };
+    return _.merge(defaultScalarFieldsProperties, defaultTypeProperties, userDefaultProperties);
 };
 
 export const createScalarDefaultFieldsProperties = (userDefaultProperties) =>{
@@ -65,5 +65,5 @@ export const createScalarDefaultFieldsProperties = (userDefaultProperties) =>{
         [serverTypeConsts.TEXT]: {
             ...createDefaultFieldsProperties(serverTypeConsts.TEXT, DefaultFieldProperties[serverTypeConsts.TEXT], userDefaultProperties)
         }
-    }
+    };
 };

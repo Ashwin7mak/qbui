@@ -9,7 +9,7 @@ describe('DefaultFieldsProperties', () => {
 
     testCases.forEach(function(test) {
         it(`will return the ${test.userDefault ? 'user\'s' : ''} default properties for ${test.type}`, () => {
-           let result = createScalarDefaultFieldsProperties(test.userDefault)[test.type];
+            let result = createScalarDefaultFieldsProperties(test.userDefault)[test.type];
             expect(result).toEqual(test.expectedResult);
         });
     });
