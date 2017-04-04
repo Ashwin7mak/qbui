@@ -34,8 +34,28 @@ describe('ReportToolsAndContent functions', () => {
 
     const rptId = '3';
     let reportParams = {appId: 1, tblId: 2, rptId: rptId, format:true, offset: constants.PAGE.DEFAULT_OFFSET, numRows: constants.PAGE.DEFAULT_NUM_ROWS};
-    let reportDataParams = {reportData: {appId: 1, tblId: 2, rptId: rptId, loading: true, pageOffset: 20, selections: new FacetSelections(), data: {recordsCount: 5, sortList: "1", columns: [{field: "col_num", headerName: "col_num"}], facets: [{
-        id: 1, name: 'test', type: "TEXT", values: [{value: "a"}, {value: "b"}, {value: "c"}]}]}}, selectedRows: ["rowSelected"]};
+    let reportDataParams = {
+        reportData: {
+            appId: 1,
+            tblId: 2,
+            rptId: rptId,
+            loading: true,
+            pageOffset: 20,
+            selections: new FacetSelections(),
+            data: {
+                recordsCount: 5,
+                sortList: "1",
+                columns: [{field: "col_num", headerName: "col_num"}],
+                facets: [{
+                    id: 1,
+                    name: 'test',
+                    type: "TEXT",
+                    values: [{value: "a"}, {value: "b"}, {value: "c"}]
+                }]
+            }
+        },
+        selectedRows: ["rowSelected"]
+    };
 
     const primaryKeyName = 'Employee Number';
     const reportFields = [{

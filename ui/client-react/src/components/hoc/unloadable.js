@@ -41,10 +41,10 @@ const unloadableWrapper = (Component) => {
         }
 
         render() {
-            if (!this.props.hasEntry) {
-                return null;
-            } else {
+            if (this.props.hasEntry) {
                 return <Component {...this.props} />;
+            } else {
+                return null;
             }
         }
     }

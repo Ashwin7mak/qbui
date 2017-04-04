@@ -103,9 +103,9 @@ export const EmbeddedReportToolsAndContent = React.createClass({
 // instead of relying on our parent route component to pass our props down,
 // the react-redux container will generate the required props for this route
 // from the Redux state (the presentational component has no code dependency on Redux!)
-const mapStateToProps = (state, ownProps) => {
+// Exported for unit testing purposes only.
+export const mapStateToProps = (state, ownProps) => {
     return {
-        reports: state.embeddedReports,
         // find the report which applies to this specific instance
         // ownProps.uniqueId is the uniqueId prop passed in by the withUniqueId HOC
         report: _.get(state, `embeddedReports[${ownProps.uniqueId}]`)

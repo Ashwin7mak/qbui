@@ -13,7 +13,8 @@ const forms = (
 
     // TODO: do this smarter, change to markCopiesAsDirty
     function removeCopies(_id) {
-        return _.filter(newState, ['formData.recordId', _id]);
+        // remove any entries where the entry's formData.recordId matches the passed in id
+        return _.omit(newState, ['formData.recordId', _id]);
     }
 
     // reducer - no mutations!
@@ -80,7 +81,7 @@ const forms = (
 
     case types.SAVE_FORM_COMPLETE: {
         // a form has been updated, remove entries if there are multiple entries for the same record
-        newState = removeCopies(currentForm.formData.recordId);
+        newState = removeCopies(_.get(currentForm, 'formData.recordId'));
         //  hide/show modal window and spinner over a form
         newState[id] = ({
             ...currentForm,
@@ -88,12 +89,13 @@ const forms = (
             saving: false,
             errorStatus: null
         });
+        console.log(JSON.stringify(newState));
         return newState;
     }
 
     case types.SAVING_FORM_SUCCESS: {
         // a form has been updated, remove entries if there are multiple entries for the same record
-        newState = removeCopies(currentForm.formData.recordId);
+        newState = removeCopies(_.get(currentForm, 'formData.recordId'));
         if (!updatedForm.formData) {
             updatedForm.formData = {};
         }
@@ -119,10 +121,8 @@ const forms = (
             draggedItemProps
         );
 
-        return {
-            ...newState,
-            updatedForm
-        };
+        newState[action.id] = updatedForm;
+        return newState;
     }
 
     case types.REMOVE_FIELD : {
@@ -137,10 +137,8 @@ const forms = (
             location
         );
 
-        return {
-            ...newState,
-            updatedForm
-        };
+        newState[id] = updatedForm;
+        return newState;
     }
 
     case types.SELECT_FIELD : {
@@ -157,10 +155,8 @@ const forms = (
         updatedForm.selectedFields[0] = action.content.location;
         updatedForm.previouslySelectedField = undefined;
 
-        return {
-            ...newState,
-            updatedForm
-        };
+        newState[id] = updatedForm;
+        return newState;
     }
 
     case types.DESELECT_FIELD : {
@@ -177,10 +173,8 @@ const forms = (
         updatedForm.previouslySelectedField[0] = action.content.location;
         updatedForm.selectedFields[0] = undefined;
 
-        return {
-            ...newState,
-            updatedForm
-        };
+        newState[id] = updatedForm;
+        return newState;
     }
 
     case types.KEYBOARD_MOVE_FIELD_UP : {
@@ -204,10 +198,8 @@ const forms = (
             -1
         );
 
-        return {
-            ...newState,
-            updatedForm
-        };
+        newState[id] = updatedForm;
+        return newState;
     }
 
     case types.KEYBOARD_MOVE_FIELD_DOWN : {
@@ -231,10 +223,8 @@ const forms = (
             1
         );
 
-        return {
-            ...newState,
-            updatedForm
-        };
+        newState[id] = updatedForm;
+        return newState;
     }
 
     case types.TOGGLE_FORM_BUILDER_CHILDREN_TABINDEX : {
@@ -259,10 +249,8 @@ const forms = (
         updatedForm.formBuilderChildrenTabIndex[0] = tabIndex;
         updatedForm.formFocus[0] = formFocus;
 
-        return {
-            ...newState,
-            updatedForm
-        };
+        newState[id] = updatedForm;
+        return newState;
     }
 
     case types.UNLOAD_FORM : {

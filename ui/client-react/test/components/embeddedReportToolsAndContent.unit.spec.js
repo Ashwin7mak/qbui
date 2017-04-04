@@ -8,7 +8,8 @@ import jasmineEnzyme from 'jasmine-enzyme';
 
 import EmbeddedReportToolsAndContent, {
     EmbeddedReportToolsAndContent as UnconnectedEmbeddedReportToolsAndContent,
-    __RewireAPI__ as EmbeddedReportToolsAndContentRewireAPI
+    __RewireAPI__ as EmbeddedReportToolsAndContentRewireAPI,
+    mapStateToProps
 }  from '../../src/components/report/embedded/embeddedReportToolsAndContent';
 const mockStore = configureMockStore();
 
@@ -22,12 +23,22 @@ describe('EmbeddedReportToolsAndContent', () => {
     const rptId = 3;
     const detailKeyFid = 4;
     const detailKeyValue = 5;
+    const uniqueId = 'CONTEXT6';
     const props = {
         appId,
         tblId,
         rptId,
         detailKeyFid,
-        detailKeyValue
+        detailKeyValue,
+        uniqueId
+    };
+
+    const report = {
+        reportData: {
+            appId,
+            tblId,
+            rptId
+        }
     };
 
     const ReportToolsAndContentMock = React.createClass({
@@ -77,30 +88,13 @@ describe('EmbeddedReportToolsAndContent', () => {
         );
     });
 
-    it('generates uniqueId context used to identify report in store', () => {
-        const loadDynamicReportSpy = jasmine.createSpy('loadDynamicReportSpy');
-
-        const component1 = mount(
-            <UnconnectedEmbeddedReportToolsAndContent loadDynamicReport={loadDynamicReportSpy} {...props} />
-        );
-        const component2 = mount(
-            <UnconnectedEmbeddedReportToolsAndContent loadDynamicReport={loadDynamicReportSpy} {...props} />
-        );
-        expect(loadDynamicReportSpy).toHaveBeenCalled();
-        expect(loadDynamicReportSpy.calls.count()).toEqual(2);
-        expect(loadDynamicReportSpy.calls.argsFor(0)[0]).not.toEqual(loadDynamicReportSpy.calls.argsFor(1)[0]);
-    });
-
     it('renders embedded report when a corresponding report exists in the store', () => {
         component = mount(
-            <UnconnectedEmbeddedReportToolsAndContent loadDynamicReport={() => null} {...props} />
+            <UnconnectedEmbeddedReportToolsAndContent
+                loadDynamicReport={() => null}
+                report={report}
+                {...props} />
         );
-
-        // manually set the instance's uniqueId to 42
-        const instance = component.instance();
-        instance.uniqueId = 42;
-        // populate mock store with a single report corresponding to the component's instance
-        component.setProps({reports: {42: {}}});
 
         expect(component.find(ReportToolsAndContentMock).length).toEqual(1);
     });
@@ -112,23 +106,11 @@ describe('EmbeddedReportToolsAndContent', () => {
         expect(component.find(ReportToolsAndContentMock).length).toEqual(0);
     });
 
-    it('calls unloadEmbeddedReport with uniqueId when component unmounts', () => {
-        const loadDynamicReportSpy = jasmine.createSpy('loadDynamicReportSpy');
-        component = shallow(
-            <UnconnectedEmbeddedReportToolsAndContent
-                loadDynamicReport={() => null}
-                unloadEmbeddedReport={loadDynamicReportSpy}
-                {...props}
-            />
-        );
+    it('receives the report data as a prop via mapStateToProps', () => {
+        const data = 'data';
+        const state = {embeddedReports: {[uniqueId]: data}};
 
-        // manually set the instance's uniqueId to 42
-        const instance = component.instance();
-        instance.uniqueId = 42;
-
-        component.unmount();
-
-        expect(loadDynamicReportSpy.calls.count()).toEqual(1);
-        expect(loadDynamicReportSpy.calls.argsFor(0)[0]).toEqual(42);
+        const propsFromState = mapStateToProps(state, {uniqueId: uniqueId});
+        expect(propsFromState.report).toEqual(data);
     });
 });

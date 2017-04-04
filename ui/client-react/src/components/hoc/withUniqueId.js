@@ -5,11 +5,11 @@ import _ from 'lodash';
  * A higher-order component which wraps a component, generates a uniqueId and passes to the wrapped
  * component.
  */
-const withUniqueIdWrapper = (Component, context) => {
+const withUniqueIdWrapper = (Component, context, uniqueId) => {
     class WithUniqueId extends React.Component {
         constructor(...args) {
             super(...args);
-            this.uniqueId = _.uniqueId(context);
+            this.uniqueId = uniqueId || _.uniqueId(context);
         }
 
         render() {
@@ -19,7 +19,9 @@ const withUniqueIdWrapper = (Component, context) => {
 
     WithUniqueId.propTypes = {
         /* the component's context, used as part of the key value for the redux store entry */
-        context: PropTypes.string
+        context: PropTypes.string,
+        /* Optional: the component will use the passed in uniqueId if available (mostly for testing) */
+        uniqueId: PropTypes.string
     };
 
     return WithUniqueId;
