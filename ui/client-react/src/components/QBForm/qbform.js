@@ -63,7 +63,9 @@ export const QBForm = React.createClass({
     },
 
     shouldComponentUpdate: function(nextProps, nextState) {
-        // don't render if the fields store for this table is in the process of being initialized with data.
+        // if the fields store is being initialized, stop the component from re-rendering with any updates.  A
+        // subsequent state change(success or failure) when the action that fetch's the fields data is complete
+        // will be triggered and the component will re-render at that time.
         const tableFields = this.getTableFieldsFromStore(nextProps);
         if (tableFields && tableFields.fieldsLoading === true) {
             return false;
@@ -111,7 +113,7 @@ export const QBForm = React.createClass({
      */
     getRelatedField(fieldId) {
         const fields = this.getFieldsFromStore(this.props);
-        const field = _.find(fields, fld => {return fld.id === fieldId;});
+        const field = _.find(fields, fld => fld.id === fieldId);
         return field || null;
     },
 
@@ -453,8 +455,8 @@ export const QBForm = React.createClass({
 
                 return (
                     <span className="userInFooter" key={index}>
-                            <span key={index} className="fieldNormalText">{field.name}</span>
-                            <span key={`${index}-link`} className="fieldLinkText"><UserFieldValueRenderer value={user} display={display}/></span>
+                        <span key={index} className="fieldNormalText">{field.name}</span>
+                        <span key={`${index}-link`} className="fieldLinkText"><UserFieldValueRenderer value={user} display={display}/></span>
                     </span>
                 );
             } else {
@@ -492,9 +494,11 @@ export const QBForm = React.createClass({
         const footerBuiltIns = [DATE_CREATED, DATE_MODIFIED, RECORD_OWNER, LAST_MODIFIED_BY];
 
         //  return a list of the built in fields included on this form
-        let builtInFooterFields = _.filter(fields, function(field) {
-            return _.includes(footerBuiltIns, field.id);
-        });
+        let builtInFooterFields = _.filter(fields, (field) => _.includes(footerBuiltIns, field.id));
+
+        //let builtInFooterFields = _.filter(fields, function(field) {
+        //    return _.includes(footerBuiltIns, field.id);
+        //});
 
         return builtInFooterFields.map(builtInField => {
             let fieldValue = values.find(currentFieldValue => currentFieldValue.id === builtInField.id);
@@ -622,6 +626,5 @@ const mapStateToProps = (state) => {
 };
 
 export default connect(
-    mapStateToProps,
-    null
+    mapStateToProps
 )(QBForm);
