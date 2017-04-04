@@ -4,7 +4,7 @@
 import * as Constants from '../constants/query';
 import StringUtils from './stringUtils';
 
-/*eslint-disable no-invalid-this */
+/*eslint-disable "babel/no-invalid-this" */
 class QueryUtils {
 
     /**
