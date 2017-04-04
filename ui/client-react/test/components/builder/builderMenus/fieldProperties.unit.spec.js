@@ -53,20 +53,37 @@ describe('FieldProperties', () => {
     });
 
     it('test createNameProperty', () => {
-        component = shallow(<FieldProperties formId="view" form={currentForm} selectedField={selectedField} />);
+        component = shallow(<FieldProperties />);
 
-        expect(component).toBePresent();
+        let name = "Name";
+        let value = "slick rick";
+
+        instance = component.instance();
+        let nameProperty = mount(instance.createNameProperty(value));
+        expect(nameProperty.find('.textPropertyTitle')).toHaveText(name);
+        expect(nameProperty.find('.textPropertyValue')).toHaveValue(value);
     });
 
     it('test createRequiredProperty', () => {
-        component = shallow(<FieldProperties formId="view" form={currentForm} selectedField={selectedField} />);
+        component = shallow(<FieldProperties />);
 
-        expect(component).toBePresent();
+        let name = "Must be filled in";
+        let value = true;
+
+        instance = component.instance();
+        let requiredProperty = mount(instance.createRequiredProperty(value));
+        expect(requiredProperty.find('CheckBoxFieldValueEditor')).toHaveValue(value);
+        expect(requiredProperty.find('CheckBoxFieldValueEditor')).toHaveText(name);
     });
 
     it('test createPropertiesTitle', () => {
-        component = shallow(<FieldProperties formId="view" form={currentForm} selectedField={selectedField} />);
+        component = shallow(<FieldProperties />);
 
-        expect(component).toBePresent();
+        let name = "Meow";
+        let value = `${name} properties`;
+
+        instance = component.instance();
+        let nameProperty = mount(instance.createPropertiesTitle(name));
+        expect(nameProperty.find('.fieldPropertiesTitle')).toHaveText(value);
     });
 });
