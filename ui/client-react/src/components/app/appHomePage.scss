@@ -29,11 +29,11 @@
  * the homepage will revert to the normal color.
 */
 .appHomePageContainer {
-    background-color: $color-blue-200;
+    background-color: $color-black-200;
 }
 
 .appHomePage {
-    background-color: $color-blue-200;
+    background-color: $color-black-200;
     flex-direction: column;
     flex: 1;
     overflow: auto;
@@ -67,7 +67,7 @@
 
     .homePanel {
         background-color: $color-black-100;
-        border: 1px solid $color-blue-300;
+        border: 1px solid $color-black-250;
         padding: 10px 30px;
         margin-bottom: 20px;
 

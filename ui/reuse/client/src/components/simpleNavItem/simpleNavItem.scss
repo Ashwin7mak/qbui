@@ -27,9 +27,9 @@ $navitem-primary-hover-border: $color-cyan-300;
     &.navItemPrimaryAction {
         padding-left: 0;
         line-height: 20px;
-        border-right: 1px solid $leftnav-brandarea-stroke-color; // This right border is cleared for the last item in standardLeftNav.scss
+        border-right: 1px solid $leftnav-background-stroke-color; // This right border is cleared for the last item in standardLeftNav.scss
         border-top: 1px solid $leftnav-background-color;
-        border-bottom: 1px solid $leftnav-brandarea-stroke-color;
+        border-bottom: 1px solid $leftnav-background-stroke-color;
 
         &:hover {
             border-top: 1px solid $navitem-primary-hover-border;
@@ -93,7 +93,7 @@ $navitem-primary-hover-border: $color-cyan-300;
         &:after {
             content: "";
             position: absolute;
-            border-left: 1px solid $leftnav-brandarea-stroke-color;
+            border-left: 1px solid $leftnav-background-stroke-color;
             left: 0;
             height: 24px;
             top: 9px;
