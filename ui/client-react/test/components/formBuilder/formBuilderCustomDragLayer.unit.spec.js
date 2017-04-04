@@ -62,9 +62,9 @@ describe('FormBuilderCustomDragLayer', () => {
             },
             {
                 description: 'uses the field type if present',
-                item: {relatedField: {datatypeAttributes: {type: 'custom type'}}},
+                item: {relatedField: {datatypeAttributes: {type: consts.NUMERIC}}},
                 expectedTitle: testFieldName,
-                expectedType: 'custom type'
+                expectedType: 2
             }
         ];
 

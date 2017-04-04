@@ -1,10 +1,11 @@
+/* eslint-disable babel/no-invalid-this */
+
 /**
  * Static class for Query Utility functions
  */
 import * as Constants from '../constants/query';
 import StringUtils from './stringUtils';
 
-/*eslint-disable no-invalid-this */
 class QueryUtils {
 
     /**
