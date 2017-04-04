@@ -4,7 +4,7 @@ import FlipMove from 'react-flip-move';
 import Locale from '../../../../../reuse/client/src/locales/locale';
 
 import FieldTokenInMenu from '../../formBuilder/fieldToken/fieldTokenInMenu';
-import {SUPPORTED_NEW_FIELDS_WITH_PROPERTIES as SUPPORTED_NEW_FIELD_TYPES} from '../../formBuilder/newFieldTypes';
+import {supportedNewFieldTypesWithProperties} from '../../formBuilder/newFieldTypes';
 import SideTrowser from '../../../../../reuse/client/src/components/sideTrowserBase/sideTrowserBase';
 import SearchBox from '../../search/searchBox';
 
@@ -39,7 +39,7 @@ class ToolPalette extends Component {
     updateFieldFilter = _.debounce(() => this.setState({activeFieldFilter: this.state.fieldFilter}), FILTER_DEBOUNCE_TIMEOUT);
 
     renderFilteredFieldsList = () => {
-        let fieldTypes = SUPPORTED_NEW_FIELD_TYPES.reduce((allFieldTypes, fieldGroup) => [...allFieldTypes, ...fieldGroup.fieldTypes], []).filter(fieldType => {
+        let fieldTypes = supportedNewFieldTypesWithProperties().reduce((allFieldTypes, fieldGroup) => [...allFieldTypes, ...fieldGroup.fieldTypes], []).filter(fieldType => {
             // Filter out anything that isn't a string
             if (!_.isString(fieldType.title)) {
                 return false;
@@ -77,7 +77,7 @@ class ToolPalette extends Component {
             return this.renderFilteredFieldsList();
         }
 
-        return SUPPORTED_NEW_FIELD_TYPES.map((group, index) => (
+        return supportedNewFieldTypesWithProperties().map((group, index) => (
             <li key={index} className="toolPaletteItemGroup">
                 <h6 className="toolPaletteItemHeader">{Locale.getMessage(group.titleI18nKey)}</h6>
 

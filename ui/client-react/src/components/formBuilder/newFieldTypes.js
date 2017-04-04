@@ -51,15 +51,16 @@ export const SUPPORTED_NEW_FIELD_TYPES = [
 ];
 
 /**
- * A helper constant that has the supported fields along with the default props for each field type for display in form builder
- * @type {Array}
+ * A helper function that has the supported fields along with the default props for each field type for display in form builder
  */
-export const SUPPORTED_NEW_FIELDS_WITH_PROPERTIES = SUPPORTED_NEW_FIELD_TYPES.map(fieldGroup => {
-    return {
-        ...fieldGroup,
-        fieldTypes: fieldGroup.fieldTypes.map(fieldType => createFieldTypeProps(fieldType))
-    };
-});
+export const supportedNewFieldTypesWithProperties = () => {
+    return SUPPORTED_NEW_FIELD_TYPES.map(fieldGroup => {
+        return {
+            ...fieldGroup,
+            fieldTypes: fieldGroup.fieldTypes.map(fieldType => createFieldTypeProps(fieldType))
+        };
+    });
+};
 
 /**
  * Builds an object with the appropriate props for the field type. Includes localized field type names.
@@ -68,34 +69,12 @@ export const SUPPORTED_NEW_FIELDS_WITH_PROPERTIES = SUPPORTED_NEW_FIELD_TYPES.ma
  */
 export function createFieldTypeProps(fieldType) {
     let title = Locale.getMessage(`fieldsDefaultLabels.${fieldType}`);
-    let tooltipText = getTooltipForNewField(fieldType, title);
 
     return {
         key: `fieldType_${fieldType}`,
         type: fieldType,
         isNewField: true,
         title,
-        tooltipText
+        tooltipText: Locale.getMessage(`builder.formBuilder.tooltips.addNew${fieldType}`)
     };
-}
-
-export function getTooltipForNewField(fieldType, fieldName = '') {
-    switch (fieldType) {
-    case fieldFormats.CHECKBOX_FORMAT :
-        return Locale.getMessage('builder.tooltips.addNewCheckboxTooltip');
-
-    case fieldFormats.TEXT_FORMAT_MULTICHOICE :
-    case fieldFormats.CURRENCY_FORMAT_MULTICHOICE :
-    case fieldFormats.PERCENT_FORMAT_MULTICHOICE :
-    case fieldFormats.NUMBER_FORMAT_MULTICHOICE :
-    case fieldFormats.RATING_FORMAT_MULTICHOICE :
-        return Locale.getMessage('builder.tooltips.addNewChoiceListTooltip');
-
-    case fieldFormats.TEXT_FORMAT_RADIO_BUTTONS :
-    case fieldFormats.NUMBER_FORMAT_RADIO_BUTTONS :
-        return Locale.getMessage('builder.tooltips.addNewRadioListTooltip');
-
-    default :
-        return Locale.getMessage(`builder.tooltips.addNewFieldTooltip`, {fieldName});
-    }
 }
