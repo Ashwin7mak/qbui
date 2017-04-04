@@ -1,6 +1,1 @@
-import { paginationActionTypes } from './commonPaginationActions';
-
-export type State = {
-  pageNumber: number;
-  totalPages: number;
-};
+export const CHANGE_PAGE_NUMBER = 'CHANGE_PAGE_NUMBER';

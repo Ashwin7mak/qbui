@@ -1,43 +1,26 @@
-import {ActionTypes} from './commonPaginationActions';
+import { handleActions } from 'redux-actions';
 
-import type {State} from './commonPaginationTypes';
+import {
+  CHANGE_PAGE_NUMBER
+} from './commonPaginationTypes';
 
-const initialState: State = {
-  data: [],
-  page: [],
-  pageNumber: 0,
+const defaultState = (configs = {}) => ({
+  page: 0,
   pageSize: 20,
-  totalPages: 0,
+});
+
+const behaviours = {
+  [CHANGE_PAGE_NUMBER]: (state, { payload }) => ({
+    const nextState = {
+      ...defaultState(payload.configs),
+      ...state,
+      ...payload,
+    };
+    return {
+    ...nextState,
+    page: payload.page,
+  }
+  }),
 };
 
-const calculatePage(data, pageSize, pageNumber) {
-  if (pageSize === 0) {
-    return { page: data, totalPages: 0 };
-  }
-
-  const pagination = pageSize * pageNumber;
-
-  return {
-    page: data.slice(pagination, pagination + pageSize),
-    totalPages: Math.ceil(data.length / pageSize),
-  };
-}
-
-const pageNumberChange(state, {value: pageNumber}) {
-  return {
-    ...state,
-    ...calculatePage(state.data, pageNumber),
-    pageNumber,
-  };
-}
-
-export default const commonPaginationReducer(
-  state: State = initialState,
-  action: Action
-): State {
-  switch (action.type) {
-    case ActionTypes.PAGE_NUMBER_CHANGE:
-      return pageNumberChange(state, action);
-  }
-  return state;
-}
+export const commonPaginationReducer = handleActions(behaviours);

@@ -1,5 +1,10 @@
-export const ActionTypes = {
-  PAGE_NUMBER_CHANGE: 'PAGE_NUMBER_CHANGE',
-};
+import {
+  CHANGE_PAGE_NUMBER
+} from './commonPaginationTypes';
 
-export const pageNumberChange = (value) => ({value, type: ActionTypes.PAGE_NUMBER_CHANGE });
+export const pageChanged = (page) => ({
+  type: CHANGE_PAGE_NUMBER,
+  payload: {
+    page,
+  },
+});
