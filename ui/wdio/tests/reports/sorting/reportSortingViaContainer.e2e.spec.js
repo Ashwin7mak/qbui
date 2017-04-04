@@ -271,7 +271,6 @@
                     "groupType": null
                 }
             ];
-            var sortFids = [function(row) {return reportSortingPO.getSortValue(row, 6);}];
             var columnListToDisplayInReport = [6, 7];
 
             //Step 1 - Creating a report with FIDS and sortFIDS as in sortList
@@ -284,22 +283,22 @@
             //Step 2 - load the above created report in UI.
             e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, reportId);
 
-            //Step 3 - Click on sort/Grp Icon
+            //Step 3 - Get the original records before deleting
+            actualTableRecords = reportContentPO.getAllRecordsFromTable();
+
+            //Step 4 - Click on sort/Grp Icon
             reportSortingPO.clickSortGroupIconOnReportsPage();
 
-            //Step 4 - Delete a field from sort settings dialogue and also verify field got deleted
+            //Step 5 - Delete a field from sort settings dialogue and also verify field got deleted
             reportSortingPO.deleteFieldsFromSrtGrpDlg(reportSortingPO.sortBySettings, fieldToDelete);
 
-            //Step 5 - Click on Apply button
+            //Step 6 - Click on Apply button
             reportSortingPO.clickContainerApplyBtn();
             //wait until report rows in table are loaded
             reportContentPO.waitForReportContent();
 
-            //Step 6 - get all table results after deleting a field
-            actualTableRecords = reportContentPO.getAllRecordsFromTable();
-
-            //Step 7 - Using API get report records(results) from report 1 (List All report) then get FIDS(specific column) records specified and sort them using LoDash
-            expectedRecords = reportSortingPO.getReportResultsAndSortFidsUsingLoDashAndVerify(testApp.id, testApp.tables[e2eConsts.TABLE1].id, DEFAULT_REPORT_ID, columnListToDisplayInReport, sortFids, ['desc']);
+            //Step 6 - get all table results after deleting a Numeric field
+            expectedRecords = reportContentPO.getAllRecordsFromTable();
 
             //Step 8 - Verify the actual versus expected sorted records
             reportSortingPO.verifySortedResults(actualTableRecords, expectedRecords);
