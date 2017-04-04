@@ -2,6 +2,7 @@ import React, {PropTypes} from 'react';
 import {connect} from 'react-redux';
 import TextFieldValueEditor from '../../fields/textFieldValueEditor';
 import CheckBoxFieldValueEditor from '../../fields/checkBoxFieldValueEditor';
+import Locale from '../../../../../reuse/client/src/locales/locale';
 import {updateField} from '../../../actions/fieldsActions';
 import './fieldProperties.scss';
 
@@ -60,11 +61,11 @@ export const FieldProperties = React.createClass({
     },
 
     createNameProperty(name) {
-        return (this.createTextPropertyContainer("Name", name));
+        return (this.createTextPropertyContainer(Locale.getMessage('fieldPropertyLabels.name'), name));
     },
 
     createRequiredProperty(required) {
-        return (this.createCheckBoxPropertyContainer("Must be filled in", required));
+        return (this.createCheckBoxPropertyContainer(Locale.getMessage('fieldPropertyLabels.required'), required));
     },
 
     updateFieldProps(newValue, propertyName) {

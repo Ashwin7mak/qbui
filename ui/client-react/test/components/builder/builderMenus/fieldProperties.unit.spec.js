@@ -4,6 +4,7 @@
 import React from 'react';
 import {shallow, mount} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
+import Locale from '../../../../../reuse/client/src/locales/locale';
 import {FieldProperties, __RewireAPI__ as FieldPropertiesRewireAPI} from '../../../../src/components/builder/builderMenus/fieldProperties';
 
 const fields = [{},{},{},{},{},{id: 1, required: true, name: "Duder"}];
@@ -55,7 +56,7 @@ describe('FieldProperties', () => {
     it('test createNameProperty', () => {
         component = shallow(<FieldProperties />);
 
-        let name = "Name";
+        let name = Locale.getMessage('fieldPropertyLabels.name');
         let value = "slick rick";
 
         instance = component.instance();
@@ -67,7 +68,7 @@ describe('FieldProperties', () => {
     it('test createRequiredProperty', () => {
         component = shallow(<FieldProperties />);
 
-        let name = "Must be filled in";
+        let name = Locale.getMessage('fieldPropertyLabels.required');
         let value = true;
 
         instance = component.instance();
