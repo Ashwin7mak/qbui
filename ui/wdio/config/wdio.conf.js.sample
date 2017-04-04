@@ -36,6 +36,7 @@ exports.config = {
         // currently broken need to fix in another PR (test was never running in CI due to non camel case name)
         './ui/wdio/tests/forms/FormDragDrop.e2e.spec.js'
         // failing intermittently in CI
+        './ui/wdio/tests/reports/grouping/reportGroupingViaColumnHeader.e2e.spec.js',
         './ui/wdio/tests/reports/grouping/reportGroupingViaContainer.e2e.spec.js',
         './ui/wdio/tests/reports/sorting/reportSortingViaContainer.e2e.spec.js'
     ],
