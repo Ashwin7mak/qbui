@@ -1,5 +1,3 @@
-/* eslint-disable babel/no-invalid-this */
-
 import * as recordActions from '../../src/actions/recordActions';
 import {__RewireAPI__ as RecordActionsRewireAPI} from '../../src/actions/recordActions';
 import * as types from '../../src/actions/types';
@@ -58,6 +56,7 @@ describe('Open/edit Record actions', () => {
 
     testCases.forEach((testCase) => {
         it(testCase.name, () => {
+            /*eslint-disable no-invalid-this */
             expect(testCase.func.apply(this, [testCase.obj.appId, testCase.obj.tblId, testCase.obj.recId, testCase.obj.origRec,
                 testCase.obj.changes, testCase.obj.isInlineEdit, testCase.obj.fieldToStartEditing])).toEqual(testCase.expectation);
         });
@@ -112,6 +111,7 @@ describe('Delete Record Actions -- success workflow', () => {
             ];
 
             const store = mockStore({});
+            /*eslint-disable no-invalid-this */
             return store.dispatch(testCase.func.apply(this, [appId, tblId, testCase.recIds, 'name'])).then(
                 () => {
                     expect(store.getActions()).toEqual(expectedActions);

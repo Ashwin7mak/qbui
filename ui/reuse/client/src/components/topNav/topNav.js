@@ -8,9 +8,11 @@ import './topNav.scss';
 class TopNav extends Component {
     constructor(props) {
         super(props);
+
+        this.getTopTitle = this.getTopTitle.bind(this);
     }
 
-    getTopTitle = () => {
+    getTopTitle() {
         let {title} = this.props;
 
         if (title) {
@@ -22,7 +24,7 @@ class TopNav extends Component {
         }
 
         return null;
-    };
+    }
 
     render() {
         let {showOnSmall, onNavClick, globalActions} = this.props;

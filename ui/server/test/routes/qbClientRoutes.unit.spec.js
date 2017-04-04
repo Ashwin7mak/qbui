@@ -1,3 +1,4 @@
+
 var sinon = require('sinon');
 var request = require('supertest');
 var should = require('should');
@@ -16,6 +17,8 @@ var assert = require('assert');
 var envConsts = require('../../src/config/environment/environmentConstants');
 require('../../src/routes')(app, mockConfig);
 
+/*eslint-disable no-invalid-this */
+
 /**
  * Unit tests for app generator
  */
@@ -25,7 +28,7 @@ describe('Express Client Routes', function() {
 
     beforeEach(function() {
         stubLog = sinon.stub(log, 'info').returns(true);
-        this.timeout(5000); // eslint-disable-line no-invalid-this
+        this.timeout(5000);
     });
     afterEach(function() {
         stubLog.restore();

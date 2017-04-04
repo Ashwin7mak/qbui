@@ -8,7 +8,7 @@
     &::after {
         content: '';
         position: absolute;
-        border-left: 1px solid $leftnav-background-stroke-color;
+        border-left: 1px solid $leftnav-brandarea-stroke-color;
         left: 0;
         height: 24px;
         top: 9px;
@@ -306,7 +306,7 @@ div.leftNavTooltip {
 
     .branding {
         background-color: $leftnav-brandarea-background-color;
-        border-top: 1px solid $leftnav-background-stroke-color;
+        border-top: 1px solid $leftnav-brandarea-stroke-color;
         padding: 10px;
         text-align: center;
     }
@@ -452,6 +452,7 @@ div.leftNavTooltip {
                 -webkit-transition: opacity 0.2s ease-in-out;
                 -moz-transition: opacity 0.2s ease-in-out;
                 border-bottom: 0;
+                // border-left: 1px solid $left-nav-right-icon-separator-color;
 
                 @include leftNavReportIconSeparator();
 
@@ -517,7 +518,7 @@ div.leftNavTooltip {
     border-bottom: 1px solid $leftnav-background-stroke-color;
 
     &:hover {
-        border-top-color: $color-purple-500;
+        border-top-color: $color-cyan-300;
     }
 }
 

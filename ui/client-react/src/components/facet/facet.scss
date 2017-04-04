@@ -57,9 +57,8 @@
         &.qbIcon {
             display: inline;
         }
-
         &:hover {
-            color: $icon-light-color-hover;
+            color:$icon-light-color-hover;
         }
     }
 
@@ -251,7 +250,6 @@
         color: $facetmenu-facet-token-color;
         display: flex;
         flex-direction: column;
-        border: 1px solid $facetmenu-facet-token-border-color;
 
         .selectedTokenName {
             white-space: normal;

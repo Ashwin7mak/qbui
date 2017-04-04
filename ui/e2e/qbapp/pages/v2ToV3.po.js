@@ -1,5 +1,3 @@
-/* eslint-disable babel/no-invalid-this */
-
 /**
  * Created by skamineni on 12/5/16.
  */

@@ -1,9 +1,8 @@
-/* eslint-disable babel/no-invalid-this */
-
 //
 //
 var path = require('path');
 
+/*eslint-disable no-invalid-this */
 
 module.exports = function(grunt) {
     'use strict';
@@ -103,7 +102,6 @@ module.exports = function(grunt) {
         bldinfo : {
             JOB_NAME : (process.env.JOB_NAME ? (process.env.JOB_NAME) : ''),
             GIT_BRANCH : (process.env.GIT_BRANCH ? (process.env.GIT_BRANCH) : ''),
-            GIT_UIBRANCH : (process.env.GIT_UIBRANCH ? (process.env.GIT_UIBRANCH) : ''),
             BUILD_NUMBER : (process.env.BUILD_NUMBER ? (process.env.BUILD_NUMBER) : ''),
         },
         vendorDir : 'vendor',
@@ -521,47 +519,36 @@ module.exports = function(grunt) {
             }
         },
 
-        // Uses the grunt-webdriver node module to execute WebdriverIO E2E tests
-        //TODO: Figure out how to define multiple 'webdriver' tasks
+        //TODO: Figure out how to define multiple webdriver tasks
         webdriver: {
             options: {
-                exclude: [
-                    // reportAddRecord is currently broken on Reactabular, the save and add a new row button for inline editing has been disabled
-                    // this bug is logged in reactabular backlog under https://quickbase.atlassian.net/browse/MB-2115
-                    // because the save and add button is disabled we turned off the reportAddRecord test
-                    // we will turn it back on once this button has been enabled again
-                    './wdio/tests/reports/reportAddRecord.e2e.spec.js',
-                    // disabling formPermissionsViewerRole test as after moving to ExperienceEngine,
-                    // permissions for viewer are not working correctly
-                    './wdio/tests/forms/formPermissionsViewerRole.e2e.spec.js',
-                    // currently broken need to fix in another PR (test was never running in CI due to non camel case name)
-                    './wdio/tests/forms/FormDragDrop.e2e.spec.js',
-                    // failing intermittently in CI
-                    './wdio/tests/reports/grouping/reportGroupingViaColumnHeader.e2e.spec.js',
-                    './wdio/tests/reports/grouping/reportGroupingViaContainer.e2e.spec.js',
-                    './wdio/tests/reports/sorting/reportSortingViaContainer.e2e.spec.js'
-                ],
-                suites: {
-                    reports: [
-                        './wdio/tests/reports/*.e2e.spec.js',
-                        './wdio/tests/reports/grouping/*.e2e.spec.js',
-                        './wdio/tests/reports/sorting/*.e2e.spec.js'
-                    ],
-                    forms: [
-                        './wdio/tests/forms/*.e2e.spec.js'
-                    ],
-                    tables: [
-                        './wdio/tests/tables/*.e2e.spec.js'
-                    ]
-                }
+                specs: [
+                    //reportAddRecord is currently broken on Reactabular, the save and add a new row button for inline editing has been disabled
+                    //this bug is logged in reactabular backlog under https://quickbase.atlassian.net/browse/MB-2115
+                    //because the save and add button is disabled we turned off the reportAddRecord test
+                    //we will turn it back on once this button has been enabled again
+                    // './wdio/tests/reports/reportAddRecord.e2e.spec.js',
+                    './wdio/tests/reports/reportEditRecord.e2e.spec.js',
+                    './wdio/tests/reports/reportInlineReloadPageWithoutSaving.e2e.spec.js',
+                    './wdio/tests/reports/reportNavigation.e2e.spec.js',
+                    './wdio/tests/reports/sorting/*.e2e.spec.js',
+                    './wdio/tests/reports/reportTable.e2e.spec.js',
+
+                    './wdio/tests/forms/formAdd*.e2e.spec.js',
+                    './wdio/tests/forms/formEdit*.e2e.spec.js',
+                    './wdio/tests/forms/formPermissionsParticipantRole.e2e.spec.js',
+                    './wdio/tests/forms/formDragDrop.e2e.spec.js',
+                    './wdio/tests/tables/tableCreate.e2e.spec.js'
+                    // disabling formPermissionsViewerRole test as we are moving to ExperienceEngine,
+                    // permission for viewer are not working correctly
+                    //'./wdio/tests/forms/formPermissionsViewerRole.e2e.spec.js'
+                ]
             },
             test: {
-                // Use the wdioSauce.conf.js file setting the options above
-                configFile: './wdio/config/' + wdioSauceConfig,
-                // Make sure there are no spaces between test suites here
-                suite: 'reports,forms,tables'
+                configFile: './wdio/config/' + wdioSauceConfig
             }
         },
+
 
         env: {
             test : {

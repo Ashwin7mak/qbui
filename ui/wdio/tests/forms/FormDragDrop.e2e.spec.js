@@ -49,7 +49,7 @@
             // drag the 1st field below the 2nd one
             let source = formBuilderPO.findFieldByIndex(1);
             let target = formBuilderPO.findFieldByIndex(2);
-            formBuilderPO.dragJiggleAndDrop(source, target);
+            formBuilderPO.dragonDrop(source, target);
             // verify that the first 2 items have changed position
             let movedFields = formBuilderPO.getFieldLabels();
             expect(movedFields[0]).toBe(origFields[1]);
@@ -67,7 +67,7 @@
             // drag the 1st field below the 2nd one
             let source = formBuilderPO.findFieldByIndex(1);
             let target = formBuilderPO.findFieldByIndex(2);
-            formBuilderPO.dragJiggleAndDrop(source, target);
+            formBuilderPO.dragonDrop(source, target);
             // verify that the first 2 items have changed position
             let movedFields = formBuilderPO.getFieldLabels();
             expect(movedFields[0]).toBe(origFields[1]);
@@ -78,23 +78,24 @@
             expect(formBuilderPO.getFieldLabels()).toEqual(origFields);
         });
 
-        it('drag a field onto another without dropping, then drag back to original field, release & verify no change', function() {
+        it('drag a field to another & verify preview token, then drag off & verify no change', function() {
             // store the list of fields before moving
             let origFields = formBuilderPO.getFieldLabels();
             // drag 1st field onto 2nd
             let source = formBuilderPO.findFieldByIndex(1);
             let target = formBuilderPO.findFieldByIndex(2);
-            let label = browser.element(source).getText();
-            // drag source to target without dropping
             browser.moveToObject(source);
             browser.buttonDown();
-            formBuilderPO.jiggleCursor(target, label);
-            // verify drag token label
+            // TODO: verify click effects, e.g. field selected & buttons enabled? DOM doesn't change...
+            browser.moveToObject(target);
+            // verify preview token attributes, e.g. title (which won't contain a 'required' asterisk)
             expect(formBuilderPO.fieldTokenTitle.getText()).toEqual(origFields[0].replace('* ', ''));
-            // drag back to source & drop
-            formBuilderPO.jiggleCursor(source, label);
+            // TODO: verify preview token icon?  Need a const hashmap?
+            // TODO: verify target is highlighted? DOM doesn't change...
+            // drag preview back to original position & drop
+            browser.moveToObject(source);
             browser.buttonUp();
-            browser.pause(5000);
+            // verify field order has not changed
             expect(formBuilderPO.getFieldLabels()).toEqual(origFields);
         });
 
@@ -105,40 +106,12 @@
             // store the list of fields before moving
             let origFields = formBuilderPO.getFieldLabels();
             // drag the 1st field below the 2nd one
-            formBuilderPO.moveByName(origFields[0], origFields[1]);
+            formBuilderPO.moveByName(origFields[1], origFields[2]);
             // verify that the first 2 items have changed position
             let movedFields = formBuilderPO.getFieldLabels();
             expect(movedFields[0]).toBe(origFields[1]);
             expect(movedFields[1]).toBe(origFields[0]);
         });
 
-        it('removes a field, then saves and verifies absence', function() {
-            // store the list of fields before deletion
-            let firstField = formBuilderPO.getFieldLabels()[0];
-            // delete the first field
-            formBuilderPO.delete(1);
-            // verify that the first item is removed
-            expect(formBuilderPO.getFieldLabels().indexOf(firstField)).toEqual(-1);
-            // save, cancel, reopen
-            formBuilderPO.saveBtn.click();
-            formBuilderPO.cancelBtn.click();
-            formBuilderPO.open();
-            // verify that the first item is still gone
-            expect(formBuilderPO.getFieldLabels().indexOf(firstField)).toEqual(-1);
-        });
-
-        it('removes a field, then cancels and verifies presence', function() {
-            // store the list of fields before deletion
-            let firstField = formBuilderPO.getFieldLabels()[0];
-            // delete the first field
-            formBuilderPO.delete(1);
-            // verify that the first item is removed
-            expect(formBuilderPO.getFieldLabels().indexOf(firstField)).toEqual(-1);
-            // save, cancel, reopen
-            formBuilderPO.cancelBtn.click();
-            formBuilderPO.open();
-            // verify that the first item has been restored
-            expect(formBuilderPO.getFieldLabels().indexOf(firstField)).toEqual(0);
-        });
     });
 }());

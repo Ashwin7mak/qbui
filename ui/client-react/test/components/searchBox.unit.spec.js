@@ -29,7 +29,7 @@ describe('SearchBox functions', () => {
         component = TestUtils.renderIntoDocument(<SearchBox placeholder="test"/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
         let clearIcon = TestUtils.scryRenderedComponentsWithType(component, QBIcon);
-        expect(clearIcon.length).toEqual(1);
+        expect(clearIcon.length).toEqual(0);
         let searchInput = TestUtils.scryRenderedDOMComponentsWithClass(component, "searchInput");
         expect(searchInput.length).toEqual(1);
         expect(searchInput[0].placeholder).toEqual("test");
@@ -52,7 +52,7 @@ describe('SearchBox functions', () => {
         expect(searchInput.length).toEqual(1);
         expect(searchInput[0].value).toEqual("test");
         let clearIcon = TestUtils.scryRenderedComponentsWithType(component, QBIcon);
-        expect(clearIcon.length).toEqual(1);
+        expect(clearIcon.length).toEqual(0);
     });
 
     it('test render of component with change event', () => {

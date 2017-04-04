@@ -4,7 +4,7 @@ import Tooltip from '../../../reuse/client/src/components/tooltip/tooltip';
 /**
  * component to render icon examples from a CSS file that defines an icon font
  *
- * @param cssFileContents contents of a CSS file to process
+ * @param cssFileContents contents of an SCSS file to process
  */
 const IconSwatches = ({cssFileContents}) => {
 

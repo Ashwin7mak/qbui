@@ -19,8 +19,8 @@ exports.config = {
         logger          : console.log,
         // Uncomment this if you are running Sauce against your local dev
         //dns             : '127.0.0.1',
-        // Use a random int to make the port unique between Jenkins jobs
-        port            : 4400 + (Math.floor((Math.random() * (100 - 1) + 1)))
+        // Read in the env var set the by the Jenkins job to make the port unique
+        port            : 4400 + Number(process.env.EXECUTOR_NUMBER)
     },
     //
     //
@@ -85,10 +85,9 @@ exports.config = {
             browserName     : 'chrome',
             version: '55.0',
             tunnelIdentifier: process.env.ENV_TUNNEL_NAME,
-            build           : 'WebdriverIO Jenkins Master Build #' + process.env.BUILD_NUMBER + ' - OSX Chrome Browser',
-            tags            : [process.env.SAUCE_JOB_NAME + '_OSX_Chrome', 'master', 'OSX', 'Chrome', process.env.BUILD_NUMBER],
+            name            : process.env.SAUCE_JOB_NAME + '_OSX_Chrome',
             screenResolution : '2048x1536',
-            // Timeout in seconds for Sauce Labs to wait for another command (bumped this for sleeps in tests)
+            //Timeout in seconds for Sauce Labs to wait for another command (bumped this for sleeps in tests)
             idleTimeout: '180',
             maxDuration: 10800,
             breakpointSize: 'xlarge',
@@ -101,25 +100,23 @@ exports.config = {
         //     browserName: 'safari',
         //     version: '10.0',
         //     tunnelIdentifier: process.env.ENV_TUNNEL_NAME,
-        //     build           : 'WebdriverIO Jenkins Master Build #' + process.env.BUILD_NUMBER + ' - OSX Safari Browser',
-        //     tags            : [process.env.SAUCE_JOB_NAME + '_OSX_Safari', 'master', 'OSX', 'Safari', process.env.BUILD_NUMBER],
-        //     screenResolution : '2048x1536',
-        //     // Timeout in seconds for Sauce Labs to wait for another command (bumped this for sleeps in tests)
+        //     name: process.env.SAUCE_JOB_NAME + '_OSX_Safari',
+        //     screenResolution : '1600x1200',
+        //     //Timeout in seconds for Sauce Labs to wait for another command (bumped this for sleeps in tests)
         //     idleTimeout: '180',
         //     maxDuration: 10800,
-        //     breakpointSize: 'xlarge',
+        //     breakpointSize: 'large',
         //     shardTestFiles: true,
-        //     maxInstances: 4
+        //     maxInstances: 2
         // },
         {
             platform: 'OS X 10.11',
             browserName: 'firefox',
             version: '46.0',
             tunnelIdentifier: process.env.ENV_TUNNEL_NAME,
-            build           : 'WebdriverIO Jenkins Master Build #' + process.env.BUILD_NUMBER + ' - OSX Firefox Browser',
-            tags            : [process.env.SAUCE_JOB_NAME + '_OSX_Firefox', 'master', 'OSX', 'Firefox', process.env.BUILD_NUMBER],
+            name: process.env.SAUCE_JOB_NAME + '_OSX_Firefox',
             screenResolution: '2048x1536',
-            // Timeout in seconds for Sauce Labs to wait for another command (bumped this for sleeps in tests)
+            //Timeout in seconds for Sauce Labs to wait for another command (bumped this for sleeps in tests)
             idleTimeout: '180',
             maxDuration: 10800,
             breakpointSize: 'xlarge',
@@ -132,10 +129,9 @@ exports.config = {
             browserName: 'MicrosoftEdge',
             version: '14.14393',
             tunnelIdentifier: process.env.ENV_TUNNEL_NAME,
-            build           : 'WebdriverIO Jenkins Master Build #' + process.env.BUILD_NUMBER + ' - Windows 10 Edge Browser',
-            tags            : [process.env.SAUCE_JOB_NAME + '_Win10_Edge', 'master', 'Win10', 'Edge', process.env.BUILD_NUMBER],
+            name: process.env.SAUCE_JOB_NAME + '_Win10_MicrosoftEdge',
             screenResolution: '2560x1600',
-            // Timeout in seconds for Sauce Labs to wait for another command (bumped this for sleeps in tests)
+            //Timeout in seconds for Sauce Labs to wait for another command (bumped this for sleeps in tests)
             idleTimeout: '180',
             maxDuration: 10800,
             breakpointSize: 'xlarge',

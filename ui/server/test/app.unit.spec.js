@@ -10,7 +10,7 @@
 //var sinon = require('sinon');
 //var rewire = require('rewire');
 //
-///* eslint-disable babel/no-invalid-this */
+///*eslint-disable no-invalid-this */
 //
 //describe('Test node app main entry file', function() {
 //

@@ -27,10 +27,6 @@ $edit-icon-font-size: 18px;
     table-layout: fixed;
 
 
-    .qbTbody {
-        background-color: $color-black-100;
-    }
-
     //== generic/default styles for some grid elements
     .qbIcon {
         font-size: $grid-group-expand-icon-size;
@@ -291,7 +287,7 @@ $edit-icon-font-size: 18px;
         top: -47px;
         left: -79px;
         padding: 0 24px;
-        border: 1px solid $color-purple-400;
+        border: 1px solid $grid-line-color;
 
         .loadedContent {
             padding: 0;
@@ -535,10 +531,10 @@ $edit-icon-font-size: 18px;
 
         // standard cell
         .qbCell {
-            border-top: 1px solid $color-purple-400;
+            border-top: 2px solid $cell-edit-background-edit;
             overflow: visible;
             margin: 0;
-            border-right: 1px solid $color-black-300;
+            border-right: 1px solid $grid-line-color;
 
             .cellWrapper {
                 display: flex;

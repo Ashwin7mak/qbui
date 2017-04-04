@@ -15,7 +15,8 @@ var ComponentLibraryWrapper = React.createClass({
                         <h4 className="header">Design System</h4>
                         <ul>
                             <li><Link to="/qbase/components/home" activeClassName="active">Home</Link></li>
-                            <li><Link to="/qbase/components/colors" activeClassName="active">Colors</Link></li>
+                            <li><Link to="/qbase/components/colors2" activeClassName="active">Colors 2</Link></li>
+                            <li><Link to="/qbase/components/colors3" activeClassName="active">Colors 3</Link></li>
                             <li><Link to="/qbase/components/uiIconFont" activeClassName="active">UI Icon Font</Link></li>
                             <li><Link to="/qbase/components/tableIconFont" activeClassName="active">Table Icon Font</Link></li>
                         </ul>
