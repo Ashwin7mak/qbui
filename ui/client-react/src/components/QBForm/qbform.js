@@ -607,9 +607,9 @@ export const QBForm = React.createClass({
 function buildUserField(id, fieldValue, name) {
     return {
         name: Locale.getMessage(name),
-        value: fieldValue ? fieldValue.display : '',
-        email: fieldValue && fieldValue.value ? fieldValue.value.email : '',
-        screenName: fieldValue && fieldValue.value ? fieldValue.value.screenName : '',
+        value: _.has(fieldValue, 'display') ? fieldValue.display : '',
+        email: _.has(fieldValue, 'value.email') ? fieldValue.value.email : '',
+        screenName: _.has(fieldValue, 'value.screenName') ? fieldValue.value.screenName : '',
         id: id,
         type: Constants.USER
     };
