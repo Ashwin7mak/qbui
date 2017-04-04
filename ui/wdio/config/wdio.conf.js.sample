@@ -29,7 +29,7 @@ exports.config = {
         './ui/wdio/tests/reports/reportEditRecord.e2e.spec.js',
         './ui/wdio/tests/reports/reportInlineReloadPageWithoutSaving.e2e.spec.js',
         './ui/wdio/tests/reports/sorting/*.e2e.spec.js',
-
+        './ui/wdio/tests/reports/grouping/*.e2e.spec.js',
         './ui/wdio/tests/forms/formAdd*.e2e.spec.js',
         './ui/wdio/tests/forms/formEdit*.e2e.spec.js',
         './ui/wdio/tests/forms/formPermissionsParticipantRole.e2e.spec.js'
