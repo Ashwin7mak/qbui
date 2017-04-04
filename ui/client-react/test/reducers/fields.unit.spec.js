@@ -1,4 +1,5 @@
 import reducer from '../../src/reducers/fields';
+import {BUILTIN_FIELD_ID} from '../../../common/src/constants';
 import * as types from '../../src/actions/types';
 
 let initialState = [];
@@ -27,7 +28,7 @@ describe('Test fields reducer', () => {
         expect(currentField.error).toEqual(false);
     });
     it('test load fields success', () => {
-        const keyField = {builtIn:false, keyField:true, id:10};
+        const keyField = {builtIn:true, id:BUILTIN_FIELD_ID.RECORD_ID};
         const fields = [{builtIn:true, id:3}, {builtIn:false, id:8}, {builtIn:false, keyField:true, id:10}];
         const state = reducer([], event(appId, tblId, types.LOAD_FIELDS_SUCCESS, {fields:fields}));
         const currentField = _.find(state, field => field.appId === appId && field.tblId === tblId);
@@ -49,6 +50,19 @@ describe('Test fields reducer', () => {
         expect(currentField.keyField).toEqual(undefined);
         expect(currentField.fieldsLoading).toEqual(false);
         expect(currentField.error).toEqual(true);
+    });
+    it('test load form success', () => {
+        const keyField = {builtIn:true, id:BUILTIN_FIELD_ID.RECORD_ID};
+        const fields = [{builtIn:true, id:3}, {builtIn:false, id:8}, {builtIn:false, keyField:true, id:10}];
+        const state = reducer([], {appId:appId, tblId:tblId, type:types.LOAD_FORM_SUCCESS, formData:{fields:fields}});
+        const currentField = _.find(state, field => field.appId === appId && field.tblId === tblId);
+
+        expect(currentField.appId).toEqual(appId);
+        expect(currentField.tblId).toEqual(tblId);
+        expect(currentField.fields).toEqual({fields:{data:fields}});
+        expect(currentField.keyField).toEqual(keyField);
+        expect(currentField.fieldsLoading).toEqual(false);
+        expect(currentField.error).toEqual(false);
     });
 });
 
