@@ -35,7 +35,10 @@ class ToolPalette extends Component {
         this.updateFieldFilter();
     };
 
-
+    clearFilter = () => {
+        this.setState({fieldFilter: '', activeFieldFilter: ''});
+    };
+    
     updateFieldFilter = _.debounce(() => this.setState({activeFieldFilter: this.state.fieldFilter}), FILTER_DEBOUNCE_TIMEOUT);
 
     renderFilteredFieldsList = () => {
@@ -95,6 +98,7 @@ class ToolPalette extends Component {
                     value={this.state.fieldFilter}
                     onChange={this.onChangeFieldFilter}
                     placeholder={Locale.getMessage('builder.searchToolPalette')}
+                    onClearSearch={this.clearFilter}
                 />
 
                 <FlipMove typeName="ul" className="toolPaletteList toolPaletteNewFields">

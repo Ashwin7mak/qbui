@@ -498,7 +498,7 @@ export default {
             [FieldFormats.NUMBER_FORMAT_MULTICHOICE]: "NListe de choix uneric",
             [FieldFormats.NUMBER_FORMAT_RADIO_BUTTONS]: "Boutons radio numériques",
             [FieldFormats.NUMERIC_FORMULA_FORMAT]: "Formule numérique",
-            [FieldFormats.DATE_FORMAT]: "Rendez-vous amoureux",
+            [FieldFormats.DATE_FORMAT]: "Date",
             [FieldFormats.DATETIME_FORMAT]: "Horodatage",
             [FieldFormats.TIME_FORMAT]: "Moment de la journée",
             [FieldFormats.DURATION_FORMAT]: "Durée",
@@ -556,7 +556,7 @@ export default {
                 date: 'Date',
                 other: 'Autre'
             },
-            searchToolPalette: "Rechercher de nouveaux éléments",
+            searchToolPalette: "Filtre",
             noSearchResultsInToolPalette: 'Aucun champ ne correspond "{searchText}"'
         },
         featureSwitchAdmin: {

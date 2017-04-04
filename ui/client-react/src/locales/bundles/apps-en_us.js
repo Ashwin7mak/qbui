@@ -564,7 +564,7 @@ export default {
                 date: 'Date',
                 other: 'Other'
             },
-            searchToolPalette: "Search for new fields",
+            searchToolPalette: "Filter",
             noSearchResultsInToolPalette: 'No fields match "{searchText}"'
         },
         featureSwitchAdmin: {

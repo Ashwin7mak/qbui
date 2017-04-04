@@ -557,7 +557,7 @@ export default {
                 date: "Datum",
                 other: "Andere"
             },
-            searchToolPalette: "Suche nach neuen Elementen",
+            searchToolPalette: "Filter",
             noSearchResultsInToolPalette: 'Keine Felder passen "{searchText}"'
         },
         featureSwitchAdmin: {
