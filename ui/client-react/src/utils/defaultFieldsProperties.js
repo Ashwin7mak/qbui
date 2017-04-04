@@ -3,7 +3,7 @@ import {DefaultFieldProperties} from '../constants/defaultFieldPropertiesConstan
 const serverTypeConsts = require('../../../common/src/constants');
 import _ from 'lodash';
 
-let createDefaultFieldsProperties = (type, defaultTypeProperties, userDefaultProperties) => {
+let createDefaultFieldsProperties = (type, defaultTypeProperties, userDefaultProperties) =>{
     let fieldDef = {datatypeAttributes: {type}};
     let fieldType = FieldFormats.getFormatType(fieldDef);
     userDefaultProperties = userDefaultProperties || {};
