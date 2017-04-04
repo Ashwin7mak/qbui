@@ -64,7 +64,8 @@
 
   "plugins": [
     // e.g. "react" (must run `npm install eslint-plugin-react` first)
-    "react"
+    "react",
+    "babel"
   ],
 
   "rules": {
@@ -129,7 +130,8 @@
     "no-floating-decimal": 0,      // disallow the use of leading or trailing decimal points in numeric literals (off by default)
     "no-implicit-coercion": 0,     // disallow the type conversions with shorter notations
     "no-implied-eval": 2,          // disallow use of eval()-like methods
-    "no-invalid-this": 2,          // disallow this keywords outside of classes or class-like objects
+    "babel/no-invalid-this": 2,    // disallow this keywords outside of classes or class-like objects
+    "no-invalid-this": 0,          // turn off this rule when using babel/no-invalid-this
     "no-iterator": 2,              // disallow usage of __iterator__ property
     "no-labels": 2,                // disallow use of labeled statements
     "no-lone-blocks": 0,           // disallow unnecessary nested blocks
