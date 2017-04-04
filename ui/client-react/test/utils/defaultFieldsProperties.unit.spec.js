@@ -1,5 +1,5 @@
 import {createScalarDefaultFieldsProperties} from '../../src/utils/defaultFieldsProperties';
-import testCases from './defaultFieldsPropertiesTestCases';
+import {testCases} from './defaultFieldsPropertiesTestCases';
 import jasmineEnzyme from 'jasmine-enzyme';
 
 describe('DefaultFieldsProperties', () => {
