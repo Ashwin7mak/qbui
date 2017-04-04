@@ -2,7 +2,7 @@ import FieldFormats from '../../src/utils/fieldFormats';
 const serverTypeConsts = require('../../../common/src/constants');
 
 
-export const testCases = [
+export default testCases = [
     {
         type: FieldFormats.NUMBER_FORMAT,
         serverType: serverTypeConsts.NUMERIC,
