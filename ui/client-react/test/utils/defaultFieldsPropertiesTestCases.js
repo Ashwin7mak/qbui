@@ -1,8 +1,11 @@
+import FieldFormats from '../../src/utils/fieldFormats';
 const serverTypeConsts = require('../../../common/src/constants');
+
 
 export const testCases = [
     {
-        type: serverTypeConsts.NUMERIC,
+        type: FieldFormats.NUMBER_FORMAT,
+        serverType: serverTypeConsts.NUMERIC,
         expectedResult: {
             type: "SCALAR",
             datatypeAttributes: {
@@ -14,7 +17,8 @@ export const testCases = [
         }
     },
     {
-        type: serverTypeConsts.NUMERIC,
+        type: FieldFormats.NUMBER_FORMAT,
+        serverType: serverTypeConsts.NUMERIC,
         userDefault: {datatypeAttributes: {treatNullAsZero: false, decimalPlaces: 2}, pizza: 'yummy'},
         expectedResult: {
             type: "SCALAR",
@@ -29,7 +33,8 @@ export const testCases = [
         }
     },
     {
-        type: serverTypeConsts.DATE,
+        type: FieldFormats.DATE_FORMAT,
+        serverType: serverTypeConsts.DATE_FORMAT,
         expectedResult: {
             "type": "SCALAR",
             "datatypeAttributes": {
@@ -40,7 +45,8 @@ export const testCases = [
         }
     },
     {
-        type: serverTypeConsts.DURATION,
+        type: FieldFormats.DURATION_FORMAT,
+        serverType: serverTypeConsts.DURATION,
         expectedResult: {
             "type": "SCALAR",
             "datatypeAttributes": {
@@ -51,7 +57,8 @@ export const testCases = [
         }
     },
     {
-        type: serverTypeConsts.DATE_TIME,
+        type: FieldFormats.DATETIME_FORMAT,
+        serverType: serverTypeConsts.DATE_TIME,
         expectedResult: {
             "type": "SCALAR",
             "datatypeAttributes": {
@@ -62,7 +69,8 @@ export const testCases = [
         }
     },
     {
-        type: serverTypeConsts.TIME_OF_DAY,
+        type: FieldFormats.TIME_OF_DAY,
+        serverType: serverTypeConsts.TIME_OF_DAY,
         expectedResult: {
             "type": "SCALAR",
             "datatypeAttributes": {
@@ -73,7 +81,8 @@ export const testCases = [
         }
     },
     {
-        type: serverTypeConsts.CHECKBOX,
+        type: FieldFormats.CHECKBOX_FORMAT,
+        serverType: serverTypeConsts.CHECKBOX,
         expectedResult: {
             "type": "SCALAR",
             "datatypeAttributes": {
@@ -84,7 +93,8 @@ export const testCases = [
         }
     },
     {
-        type: serverTypeConsts.USER,
+        type: FieldFormats.USER_FORMAT,
+        serverType: serverTypeConsts.USER,
         expectedResult: {
             "type": "SCALAR",
             "datatypeAttributes": {
@@ -95,7 +105,8 @@ export const testCases = [
         }
     },
     {
-        type: serverTypeConsts.CURRENCY,
+        type: FieldFormats.CURRENCY_FORMAT,
+        serverType: serverTypeConsts.CURRENCY,
         expectedResult: {
             "type": "SCALAR",
             "datatypeAttributes": {
@@ -106,7 +117,8 @@ export const testCases = [
         }
     },
     {
-        type: serverTypeConsts.RATING,
+        type: FieldFormats.RATING_FORMAT,
+        serverType: serverTypeConsts.RATING,
         expectedResult: {
             "type": "SCALAR",
             "datatypeAttributes": {
@@ -117,7 +129,8 @@ export const testCases = [
         }
     },
     {
-        type: serverTypeConsts.PERCENT,
+        type: FieldFormats.PERCENT_FORMAT,
+        serverType: serverTypeConsts.PERCENT,
         expectedResult: {
             "type": "SCALAR",
             "datatypeAttributes": {
@@ -128,7 +141,8 @@ export const testCases = [
         }
     },
     {
-        type: serverTypeConsts.URL,
+        type: FieldFormats.URL,
+        serverType: serverTypeConsts.URL,
         expectedResult: {
             "type": "SCALAR",
             "datatypeAttributes": {
@@ -139,7 +153,8 @@ export const testCases = [
         }
     },
     {
-        type: serverTypeConsts.EMAIL_ADDRESS,
+        type: FieldFormats.EMAIL_ADDRESS,
+        serverType: serverTypeConsts.EMAIL_ADDRESS,
         expectedResult: {
             "type": "SCALAR",
             "datatypeAttributes": {
@@ -150,7 +165,8 @@ export const testCases = [
         }
     },
     {
-        type: serverTypeConsts.PHONE_NUMBER,
+        type: FieldFormats.PHONE_FORMAT,
+        serverType: serverTypeConsts.PHONE_NUMBER,
         expectedResult: {
             "type": "SCALAR",
             "datatypeAttributes": {
@@ -161,7 +177,8 @@ export const testCases = [
         }
     },
     {
-        type: serverTypeConsts.TEXT,
+        type: FieldFormats.TEXT_FORMAT,
+        serverType: serverTypeConsts.TEXT,
         expectedResult: {
             "type": "SCALAR",
             "datatypeAttributes": {

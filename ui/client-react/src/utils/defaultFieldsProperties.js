@@ -23,47 +23,47 @@ let createDefaultFieldsProperties = (type, defaultTypeProperties, userDefaultPro
 
 export const createScalarDefaultFieldsProperties = (userDefaultProperties) =>{
     return {
-        [serverTypeConsts.NUMERIC]: {
-            ...createDefaultFieldsProperties(serverTypeConsts.NUMERIC, DefaultFieldProperties[serverTypeConsts.NUMERIC], userDefaultProperties)
+        [FieldFormats.NUMBER_FORMAT]: {
+            ...createDefaultFieldsProperties(serverTypeConsts.NUMERIC, DefaultFieldProperties[FieldFormats.NUMBER_FORMAT], userDefaultProperties)
         },
-        [serverTypeConsts.DATE]: {
-            ...createDefaultFieldsProperties(serverTypeConsts.DATE, DefaultFieldProperties[serverTypeConsts.DATE], userDefaultProperties)
+        [FieldFormats.DATE_FORMAT]: {
+            ...createDefaultFieldsProperties(serverTypeConsts.DATE, DefaultFieldProperties[FieldFormats.DATE_FORMAT], userDefaultProperties)
         },
-        [serverTypeConsts.DURATION]: {
-            ...createDefaultFieldsProperties(serverTypeConsts.DURATION, DefaultFieldProperties[serverTypeConsts.DURATION], userDefaultProperties)
+        [FieldFormats.DURATION_FORMAT]: {
+            ...createDefaultFieldsProperties(serverTypeConsts.DURATION, DefaultFieldProperties[FieldFormats.DURATION_FORMAT], userDefaultProperties)
         },
-        [serverTypeConsts.DATE_TIME]: {
-            ...createDefaultFieldsProperties(serverTypeConsts.DATE_TIME, DefaultFieldProperties[serverTypeConsts.DATE_TIME], userDefaultProperties)
+        [FieldFormats.DATETIME_FORMAT]: {
+            ...createDefaultFieldsProperties(serverTypeConsts.DATE_TIME, DefaultFieldProperties[FieldFormats.DATETIME_FORMAT], userDefaultProperties)
         },
-        [serverTypeConsts.TIME_OF_DAY]: {
-            ...createDefaultFieldsProperties(serverTypeConsts.TIME_OF_DAY, DefaultFieldProperties[serverTypeConsts.TIME_OF_DAY], userDefaultProperties)
+        [FieldFormats.TIME_OF_DAY]: {
+            ...createDefaultFieldsProperties(serverTypeConsts.TIME_OF_DAY, DefaultFieldProperties[FieldFormats.TIME_OF_DAY], userDefaultProperties)
         },
-        [serverTypeConsts.CHECKBOX]: {
-            ...createDefaultFieldsProperties(serverTypeConsts.CHECKBOX, DefaultFieldProperties[serverTypeConsts.CHECKBOX], userDefaultProperties)
+        [FieldFormats.CHECKBOX_FORMAT]: {
+            ...createDefaultFieldsProperties(serverTypeConsts.CHECKBOX, DefaultFieldProperties[FieldFormats.CHECKBOX_FORMAT], userDefaultProperties)
         },
-        [serverTypeConsts.USER]: {
-            ...createDefaultFieldsProperties(serverTypeConsts.USER, DefaultFieldProperties[serverTypeConsts.USER], userDefaultProperties)
+        [FieldFormats.USER_FORMAT]: {
+            ...createDefaultFieldsProperties(serverTypeConsts.USER, DefaultFieldProperties[FieldFormats.USER_FORMAT], userDefaultProperties)
         },
-        [serverTypeConsts.CURRENCY]: {
-            ...createDefaultFieldsProperties(serverTypeConsts.CURRENCY, DefaultFieldProperties[serverTypeConsts.CURRENCY], userDefaultProperties)
+        [FieldFormats.CURRENCY_FORMAT]: {
+            ...createDefaultFieldsProperties(serverTypeConsts.CURRENCY, DefaultFieldProperties[FieldFormats.CURRENCY_FORMAT], userDefaultProperties)
         },
-        [serverTypeConsts.RATING]: {
-            ...createDefaultFieldsProperties(serverTypeConsts.RATING, DefaultFieldProperties[serverTypeConsts.RATING], userDefaultProperties)
+        [FieldFormats.RATING_FORMAT]: {
+            ...createDefaultFieldsProperties(serverTypeConsts.RATING, DefaultFieldProperties[FieldFormats.RATING_FORMAT], userDefaultProperties)
         },
-        [serverTypeConsts.PERCENT]: {
-            ...createDefaultFieldsProperties(serverTypeConsts.PERCENT, DefaultFieldProperties[serverTypeConsts.PERCENT], userDefaultProperties)
+        [FieldFormats.PERCENT_FORMAT]: {
+            ...createDefaultFieldsProperties(serverTypeConsts.PERCENT, DefaultFieldProperties[FieldFormats.PERCENT_FORMAT], userDefaultProperties)
         },
-        [serverTypeConsts.URL]: {
-            ...createDefaultFieldsProperties(serverTypeConsts.URL, DefaultFieldProperties[serverTypeConsts.URL], userDefaultProperties)
+        [FieldFormats.URL]: {
+            ...createDefaultFieldsProperties(serverTypeConsts.URL, DefaultFieldProperties[FieldFormats.URL], userDefaultProperties)
         },
-        [serverTypeConsts.EMAIL_ADDRESS]: {
-            ...createDefaultFieldsProperties(serverTypeConsts.EMAIL_ADDRESS, DefaultFieldProperties[serverTypeConsts.EMAIL_ADDRESS], userDefaultProperties)
+        [FieldFormats.EMAIL_ADDRESS]: {
+            ...createDefaultFieldsProperties(serverTypeConsts.EMAIL_ADDRESS, DefaultFieldProperties[FieldFormats.EMAIL_ADDRESS], userDefaultProperties)
         },
-        [serverTypeConsts.PHONE_NUMBER]: {
-            ...createDefaultFieldsProperties(serverTypeConsts.PHONE_NUMBER, DefaultFieldProperties[serverTypeConsts.PHONE_NUMBER], userDefaultProperties)
+        [FieldFormats.PHONE_FORMAT]: {
+            ...createDefaultFieldsProperties(serverTypeConsts.PHONE_NUMBER, DefaultFieldProperties[FieldFormats.PHONE_FORMAT], userDefaultProperties)
         },
-        [serverTypeConsts.TEXT]: {
-            ...createDefaultFieldsProperties(serverTypeConsts.TEXT, DefaultFieldProperties[serverTypeConsts.TEXT], userDefaultProperties)
+        [FieldFormats.TEXT_FORMAT]: {
+            ...createDefaultFieldsProperties(serverTypeConsts.TEXT, DefaultFieldProperties[FieldFormats.TEXT_FORMAT], userDefaultProperties)
         }
     };
 };
