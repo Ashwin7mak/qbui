@@ -13,10 +13,11 @@
         .qbIcon {
             font-size: 28px;
             margin-right: $spacing-xxx-small;
+            color: $stage-headline-icon-color;
         }
 
-        * {
-            color: $stage-headline-icon-color;
+        *:not(a) {
+            color: $stage-headline-color;
         }
     }
 
@@ -89,7 +90,7 @@
 }
 
 .layout-stage {
-    border-bottom: 1px solid $topnav-header-background-color;
+    border-bottom: 1px solid $stage-border-color;
     position: relative;
     margin-bottom: $spacing-medium1;
     background-color: $color-black-100;
@@ -100,7 +101,7 @@
         bottom: -24px;
         right: 4px;
         height: 24px;
-        border: 1px solid $topnav-header-background-color;
+        border: 1px solid $stage-border-color;
         border-top: 0;
         border-radius: 0 0 $spacing-x-tiny $spacing-x-tiny;
         background-color: $color-black-100;

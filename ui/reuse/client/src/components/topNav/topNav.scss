@@ -8,6 +8,8 @@
     order: 1;
     flex-direction: column;
     background-color: $topnav-header-background-color;
+    border-bottom: 1px solid $color-black-300;
+    box-sizing: content-box;
 
     .top {
         display: flex;
@@ -158,8 +160,9 @@
         .globalAction.disabled {
             vertical-align: middle;
             margin-right: -12px;
-            padding-top: 3px;
-            height: 40px;
+            padding-top: 2px;
+            height: 38px; // todo: have to shrink this so it doesn't cover up the line under the top nav
+            overflow: hidden; // todo: temporary fix until the entire component is re-written with flexbox
         }
         .globalAction.disabled:hover {
             background: $topnav-header-background-color;
