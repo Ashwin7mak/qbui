@@ -8,7 +8,7 @@ let createDefaultFieldsProperties = (type, defaultTypeProperties, userDefaultPro
     let fieldType = FieldFormats.getFormatType(fieldDef);
     userDefaultProperties = userDefaultProperties || {};
     defaultTypeProperties = defaultTypeProperties || {};
-    let defaultScalarFieldsProperties= DefaultFieldProperties.defaultScalarFieldsProperties(type, fieldType);
+    let defaultScalarFieldsProperties = DefaultFieldProperties.defaultScalarFieldsProperties(type, fieldType);
 
     return _.merge(defaultScalarFieldsProperties, defaultTypeProperties, userDefaultProperties);
 };
