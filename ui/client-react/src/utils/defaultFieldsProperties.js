@@ -1,4 +1,3 @@
-import Locale from '../locales/locales';
 import FieldFormats from './fieldFormats';
 import {DefaultFieldProperties} from '../constants/defaultFieldPropertiesConstants';
 const serverTypeConsts = require('../../../common/src/constants');
@@ -9,15 +8,8 @@ let createDefaultFieldsProperties = (type, defaultTypeProperties, userDefaultPro
     let fieldType = FieldFormats.getFormatType(fieldDef);
     userDefaultProperties = userDefaultProperties || {};
     defaultTypeProperties = defaultTypeProperties || {};
+    let defaultScalarFieldsProperties= DefaultFieldProperties.defaultScalarFieldsProperties(type, fieldType);
 
-    let defaultScalarFieldsProperties = {
-        "type": "SCALAR",
-        "datatypeAttributes": {
-            "type": type
-        },
-        "name": Locale.getMessage(`fieldsDefaultLabels.${fieldType}`),
-        "required": false
-    };
     return _.merge(defaultScalarFieldsProperties, defaultTypeProperties, userDefaultProperties);
 };
 
