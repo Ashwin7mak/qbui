@@ -281,6 +281,8 @@
          */
         getAllFieldsFromFieldPanelValues : {value: function() {
             var results = [];
+            //wait until you see field panel
+            this.fieldsPanel.element('.list-group .fieldName').waitForVisible();
             //get all fieldNames from the panel
             this.fieldsPanel.elements('.list-group .fieldName').value.map(function(field) {
                 results.push(field.getAttribute('textContent'));
@@ -304,7 +306,7 @@
         getGroupedTableRows : {value: function() {
             var groupHeaders = [];
             var recordRows;
-
+            browser.element('.groupHeader').waitForVisible();
             //get all group headers
             this.getAllGroupHeadersList.value.filter(function(header) {
                 return groupHeaders.push(header.getAttribute('textContent'));
