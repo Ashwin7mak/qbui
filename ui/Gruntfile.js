@@ -1,8 +1,9 @@
+/* eslint-disable babel/no-invalid-this */
+
 //
 //
 var path = require('path');
 
-/*eslint-disable no-invalid-this */
 
 module.exports = function(grunt) {
     'use strict';
