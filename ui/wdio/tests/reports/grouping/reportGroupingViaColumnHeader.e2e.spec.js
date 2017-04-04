@@ -293,18 +293,19 @@
          * Grouping Via UI column header
          */
         it('Verify Sorting Project Phase(textField desc) then GroupBy User Field Via UI column Header', function() {
-            var sortFids = [function(row) {return reportSortingPO.getSortValue(row, 6);}];
+            var sortFids = [function(row) {return reportSortingPO.getSortValue(row, 7);}];
             var sortOrder = ['desc'];
-            var groupFids = 7;
+            var groupFids = 6;
 
             //Step 1 - Go to report 1 which dosent have any grouping
             e2ePageBase.loadReportByIdInBrowser(realmName, app.id, app.tables[e2eConsts.TABLE1].id, DEFAULT_REPORT_ID);
 
-            //Step 2 - Expand 'User Name' column header and select 'Sort Z to A'
-            reportSortingPO.expandColumnHeaderMenuAndSelectItem("User Name", "Sort Z to A");
+            //Step 2 - Expand 'Project Phase' column header and select 'Sort Z to A'
+            reportSortingPO.expandColumnHeaderMenuAndSelectItem('Project Phase', 'Sort Z to A');
+            browser.element('.recordsCount').waitForVisible();
 
-            //Step 2 - Expand 'Project Phase' column header and select 'Group A to Z'
-            reportSortingPO.expandColumnHeaderMenuAndSelectItem("Project Phase", "Group A to Z");
+            //Step 3 - Expand 'User Name' column header and select 'Group A to Z'
+            reportSortingPO.expandColumnHeaderMenuAndSelectItem('User Name', 'Group A to Z');
 
             //Step 4 - get all table results which are expected to be sorted/grouped already via API
             var groupedUITableResults = reportSortingPO.getGroupedTableRows();
@@ -323,9 +324,9 @@
          * Grouping Via UI column header on report with Facets
          */
         it('Verify GroupBy User Field  Via UI column Header on report with facets', function() {
-            var sortFids = [function(row) {return reportSortingPO.getSortValue(row, 6);}];
+            var sortFids = [function(row) {return reportSortingPO.getSortValue(row, 7);}];
             var sortOrder = ['desc'];
-            var groupFids = 7;
+            var groupFids = 6;
 
             //Create a report with facets [text field and checkbox field]
             browser.call(function() {
@@ -337,11 +338,12 @@
             //Step 1 - Go to report 1 which dosent have any grouping
             e2ePageBase.loadReportByIdInBrowser(realmName, app.id, app.tables[e2eConsts.TABLE1].id, reportId);
 
-            //Step 2 - Expand 'User Name' column header and select 'Sort Z to A'
-            reportSortingPO.expandColumnHeaderMenuAndSelectItem("User Name", "Sort Z to A");
+            //Step 2 - Expand 'Project Phase' column header and select 'Sort Z to A'
+            reportSortingPO.expandColumnHeaderMenuAndSelectItem('Project Phase', 'Sort Z to A');
+            browser.element('.recordsCount').waitForVisible();
 
-            //Step 2 - Expand 'Project Phase' column header and select 'Group A to Z'
-            reportSortingPO.expandColumnHeaderMenuAndSelectItem("Project Phase", "Group A to Z");
+            //Step 3 - Expand 'User Name' column header and select 'Group A to Z'
+            reportSortingPO.expandColumnHeaderMenuAndSelectItem('User Name', 'Group A to Z');
 
             //Step 4 - get all table results which are expected to be sorted/grouped already via API
             var groupedUITableResults = reportSortingPO.getGroupedTableRows();
