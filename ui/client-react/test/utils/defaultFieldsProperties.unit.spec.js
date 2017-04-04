@@ -8,7 +8,7 @@ describe('DefaultFieldsProperties', () => {
     });
 
     testCases.forEach(function(test) {
-        fit(`will return the ${test.userDefault ? 'user\'s' : ''} default properties for ${test.serverType}`, () => {
+        it(`will return the ${test.userDefault ? 'user\'s' : ''} default properties for ${test.serverType}`, () => {
             let result = createScalarDefaultFieldsProperties(test.userDefault)[test.type];
             expect(result).toEqual(test.expectedResult);
         });

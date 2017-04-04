@@ -1,7 +1,7 @@
-const serverTypeConsts = require('../../../common/src/constants');
+import FieldFormats from '../../src/utils/fieldFormats';
 
 export const DefaultFieldProperties = {
-    [serverTypeConsts.NUMERIC]: {
+    [FieldFormats.NUMBER_FORMAT]: {
         "datatypeAttributes": {
             "treatNullAsZero": true
         }
