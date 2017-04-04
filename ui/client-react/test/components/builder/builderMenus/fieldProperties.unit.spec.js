@@ -6,8 +6,9 @@ import {shallow, mount} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
 import {FieldProperties, __RewireAPI__ as FieldPropertiesRewireAPI} from '../../../../src/components/builder/builderMenus/fieldProperties';
 
-const currentForm = {formData:{loading: false, formType: {}, formMeta: {}}, formBuilderChildrenTabIndex: ["0"], id: 'view'};
-const selectedField = {tabIndex: 0, sectionIndex: 1, columnIndex: 2, rowIndex: 3, elementIndex: 3};
+const fields = [{},{},{},{},{},{id: 1, required: true, name: "Duder"}];
+const currentForm = {formData:{loading: false, formType: {}, fields: fields}, formBuilderChildrenTabIndex: ["0"], id: 'view'};
+const selectedField = {elementIndex: 1};
 
 let component;
 let instance;
@@ -23,10 +24,49 @@ describe('FieldProperties', () => {
         spyOn(mockActions, 'updateField');
     });
 
-    it('test render of component', () => {
-        component = shallow(<FieldProperties formId="view" currentForm={currentForm} selectedField={selectedField} fields={null}/>);
-        instance = component.instance();
+    it('test render of component with no props', () => {
+        component = shallow(<FieldProperties />);
 
-        instance.componentDidMount();
+        expect(component).toBePresent();
+    });
+
+    it('test createTextPropertyContainer', () => {
+        component = shallow(<FieldProperties />);
+        let name = "awesome";
+        let value = "possum";
+
+        instance = component.instance();
+        let textPropertyContainer = mount(instance.createTextPropertyContainer(name, value));
+        expect(textPropertyContainer.find('.textPropertyTitle')).toHaveText(name);
+        expect(textPropertyContainer.find('.textPropertyValue')).toHaveValue(value);
+    });
+
+    it('test createBooleanPropertyContainer', () => {
+        component = shallow(<FieldProperties />);
+        let name = "super";
+        let value = true;
+
+        instance = component.instance();
+        let checkboxPropertyContainer = mount(instance.createCheckBoxPropertyContainer(name, value));
+        expect(checkboxPropertyContainer.find('CheckBoxFieldValueEditor')).toHaveValue(value);
+        expect(checkboxPropertyContainer.find('CheckBoxFieldValueEditor')).toHaveText(name);
+    });
+
+    it('test createNameProperty', () => {
+        component = shallow(<FieldProperties formId="view" form={currentForm} selectedField={selectedField} />);
+
+        expect(component).toBePresent();
+    });
+
+    it('test createRequiredProperty', () => {
+        component = shallow(<FieldProperties formId="view" form={currentForm} selectedField={selectedField} />);
+
+        expect(component).toBePresent();
+    });
+
+    it('test createPropertiesTitle', () => {
+        component = shallow(<FieldProperties formId="view" form={currentForm} selectedField={selectedField} />);
+
+        expect(component).toBePresent();
     });
 });

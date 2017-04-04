@@ -24,7 +24,7 @@ const mapDispatchToProps = dispatch => {
     };
 };
 
-let FieldProperties = React.createClass({
+export const FieldProperties = React.createClass({
     propTypes: {
         selectedField: PropTypes.object
     },
