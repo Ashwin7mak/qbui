@@ -22,8 +22,7 @@ import ComponentLibraryWrapper from './components/componentLibrary';
 import './assets/componentLibrary.scss';
 
 import HomePage from './pages/home';
-import Colors2Page from './pages/colors2';
-import Colors3Page from './pages/colors3';
+import ColorsPage from './pages/colors';
 import UiIconFontPage from './pages/uiIconFont';
 import TableIconFontPage from './pages/tableIconFont';
 
@@ -74,8 +73,7 @@ render((
         <Route path="qbase/components" component={ComponentLibraryWrapper}>
             <IndexRedirect to="home" />
             <Route path="home" component={HomePage} />
-            <Route path="colors2" component={Colors2Page} />
-            <Route path="colors3" component={Colors3Page} />
+            <Route path="colors" component={ColorsPage} />
             <Route path="uiIconFont" component={UiIconFontPage} />
             <Route path="tableIconFont" component={TableIconFontPage} />
 
