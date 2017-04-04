@@ -44,17 +44,17 @@
         }
 
         .iconActionButton[disabled] {
-            color: $iconfont-on-light-disabled-color;
+            color: $pagination-iconfont-disabled-color;
         }
 
         .iconActionButton {
-            color: $pagination-iconfont-normal-color;
+            color: $pagination-iconfont-darkblack-color;
             font-size: 24px;
         }
 
         .iconActionButton:not([disabled]):hover {
             background-color: inherit;
-            color: $pagination-iconfont-hover-color;
+            color: $pagination-arrow-hover-color;
         }
     }
 

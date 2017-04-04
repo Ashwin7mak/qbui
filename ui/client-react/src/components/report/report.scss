@@ -7,17 +7,12 @@
     min-width: 0;
     overflow-y: auto;
 
-    @include not-small-breakpoint {
-        background: $report-container-bg;
-    }
-
     .layout-stage {
         flex: 0 0 auto;
     }
     margin-top: 0;
     margin-left: 0;
     margin-right: 0;
-    background-color: $report-background-color;
 
     .reportLinks {
         margin: 0 10px;
@@ -66,7 +61,7 @@
         flex-direction: row;
         flex: 1 0 auto;
         align-items: flex-start;
-        color: $iconfont-on-light-normal-color;
+        color: $search-input-color;
 
         &.noFacets {
             justify-content: flex-start;
@@ -355,7 +350,7 @@
     outline: none;
 }
 $add-record-fg: $color-black-100;
-$add-record-bg: $badcolor19;
+$add-record-bg: $color-cyan-500;
 $add-record-radius: 20px;
 
 .embeddedReportContainer {
