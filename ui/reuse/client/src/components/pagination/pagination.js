@@ -11,10 +11,10 @@ import constants from '../../../../../common/src/constants';
 class Pagination extends Component{
     Pagination.propTypes = {
         /**
-         *  Takes in for properties the reportData which includes the list of facets
+         *  Takes in for properties the pagingData which includes the list of facets
          *  and a function to call when a facet value is selected.
          **/
-        reportData: PropTypes.shape({
+        pagingData: PropTypes.shape({
             data: PropTypes.shape({
                 facets:  PropTypes.array
             })
@@ -33,8 +33,7 @@ class Pagination extends Component{
         getPreviousPage: PropTypes.func,
         /**
          * Shows the total number of fields available in the particular paginized record*/
-        recordsCount: PropTypes.number,
-        loadDynamicReport: React.PropTypes.func,
+        pageCount: PropTypes.number,
     },
 
     /**
@@ -47,15 +46,15 @@ class Pagination extends Component{
         //   component container, to display the correct page end, we set the page end to the total records count if records count
         //   is less than page size for the last page. Hence, the conditions to check for here, are that we are on the first page
         //   (page start is 1) and the number of records is equal to page end
-        if (!this.props.reportData) {
+        if (!this.props.pagingData) {
             return (<div className="spacer"></div>);
         }
         let isSmall = Breakpoints.isSmallBreakpoint();
-        let isError = this.props.reportData.error ? true : false;
-        let isLoading = this.props.reportData.loading ? true : false;
-        let isCountingRecords = this.props.reportData.countingTotalRecords ? true : false;
+        let isError = this.props.pagingData.error ? true : false;
+        let isLoading = this.props.pagingData.loading ? true : false;
+        let isCountingRecords = this.props.pagingData.countingTotalRecords ? true : false;
 
-        let showNavigation = !(this.props.recordsCount === this.props.pageEnd && this.props.pageStart === 1) && this.props.recordsCount !== 0;
+        let showNavigation = !(this.props.pageCount === this.props.pageEnd && this.props.pageStart === 1) && this.props.pageCount !== 0;
         // Do not show navigation if:
         // - We're in the small breakpoint
         // - Page records have not been fetched
@@ -66,8 +65,8 @@ class Pagination extends Component{
         let showComponent = !isSmall && !isLoading && !isCountingRecords && !isError && showNavigation;
 
         getNextPage() {
-            if (this.props.reportData) {
-                if (this.props.reportData.pageOffset + this.props.reportData.numRows >= this.props.reportData.data.recordsCount) {
+            if (this.props.pagingData) {
+                if (this.props.pagingData.pageOffset + this.props.pagingData.numRows >= this.props.pagingData.data.pageCount) {
                     return false;
                 }
                 this.getPageUsingOffsetMultiplicant(1);
@@ -75,47 +74,12 @@ class Pagination extends Component{
         },
 
         getPreviousPage() {
-            if (this.props.reportData) {
-                if (this.props.reportData.pageOffset === 0) {
+            if (this.props.pagingData) {
+                if (this.props.pagingData.pageOffset === 0) {
                     return false;
                 }
                 this.getPageUsingOffsetMultiplicant(-1);
             }
-        },
-
-        getPageUsingOffsetMultiplicant(multiplicant) {
-            let appId = this.props.reportData.appId;
-            let tblId = this.props.reportData.tblId;
-            let rptId = typeof this.props.reportData.rptId !== "undefined" ? this.props.reportData.rptId : this.props.params.rptId;
-            let filter = {};
-            let queryParams = {};
-            let sortList = "";
-            let numRows = Constants.PAGE.DEFAULT_NUM_ROWS;
-            let offset =  Constants.PAGE.DEFAULT_OFFSET;
-
-            if (this.props.reportData) {
-                let reportData = this.props.reportData;
-                if (reportData.numRows) {
-                    numRows = reportData.numRows;
-                }
-                if (reportData.pageOffset) {
-                    offset = reportData.pageOffset;
-                }
-
-                filter.selections = reportData.selections;
-                filter.search = reportData.searchStringForFiltering;
-                filter.facet = reportData.facetExpression;
-
-                if (reportData.data && reportData.data.sortList) {
-                    sortList = reportData.data.sortList;
-                }
-            }
-
-            queryParams[query.SORT_LIST_PARAM] = sortList;
-            queryParams[query.OFFSET_PARAM] = offset + (multiplicant * numRows);
-            queryParams[query.NUMROWS_PARAM] = numRows;
-
-            this.props.loadDynamicReport(appId, tblId, rptId, true, filter, queryParams);
         },
 
         let navBar = "report.reportNavigationBar";
@@ -132,7 +96,7 @@ class Pagination extends Component{
                                          pageEnd={this.props.pageEnd}
                             />
                         </div>
-                        <NextLink recordsCount={this.props.recordsCount}
+                        <NextLink pageCount={this.props.pageCount}
                                   pageEnd={this.props.pageEnd}
                                   getNextPage={this.props.getNextPage}
                         />
@@ -171,7 +135,7 @@ class NextLink extends Component {
     NextLink.propTypes = {
       /**
        * Shows the total number of fields available in the particular paginized record*/
-        recordsCount : PropTypes.number,
+        pageCount : PropTypes.number,
         /**
          * Shows the last page number in the particular paginized record*/
         pageEnd : PropTypes.number,
@@ -181,7 +145,7 @@ class NextLink extends Component {
     },
 
     render() {
-        const nextButtonClassName = "nextButton " + (this.props.recordsCount !== this.props.pageEnd ? "" : "disabled");
+        const nextButtonClassName = "nextButton " + (this.props.pageCount !== this.props.pageEnd ? "" : "disabled");
 
         return (
             <Tooltip tipId="fieldName" i18nMessageKey="report.nextToolTip">
