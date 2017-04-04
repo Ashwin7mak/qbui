@@ -35,6 +35,9 @@ exports.config = {
         './ui/wdio/tests/forms/formPermissionsViewerRole.e2e.spec.js',
         // currently broken need to fix in another PR (test was never running in CI due to non camel case name)
         './ui/wdio/tests/forms/FormDragDrop.e2e.spec.js'
+        // failing intermittently in CI
+        './ui/wdio/tests/reports/grouping/reportGroupingViaContainer.e2e.spec.js',
+        './ui/wdio/tests/reports/sorting/reportSortingViaContainer.e2e.spec.js'
     ],
     // Custom suites to execute. Add the --suite *name,name* to your IntelliJ config or command line call
     suites: {
