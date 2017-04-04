@@ -3,6 +3,7 @@ import Locale from '../../../../reuse/client/src/locales/locale';
 
 /**
  * A master list of supported that affect which field types are displayed in the new field menu in form builder.
+ * NOTE: Currently unsupported fields are commented out to be added in a future PR.
  * @type {[*]}
  */
 export const SUPPORTED_NEW_FIELD_TYPES = [
@@ -10,42 +11,42 @@ export const SUPPORTED_NEW_FIELD_TYPES = [
         titleI18nKey: 'builder.fieldGroups.text',
         fieldTypes: [
             fieldFormats.TEXT_FORMAT,
-            fieldFormats.MULTI_LINE_TEXT_FORMAT,
-            fieldFormats.TEXT_FORMAT_MULTICHOICE,
-            fieldFormats.TEXT_FORMAT_RADIO_BUTTONS
+            // fieldFormats.MULTI_LINE_TEXT_FORMAT,
+            // fieldFormats.TEXT_FORMAT_MULTICHOICE,
+            // fieldFormats.TEXT_FORMAT_RADIO_BUTTONS
         ]
     },
     {
         titleI18nKey: 'builder.fieldGroups.numeric',
         fieldTypes: [
             fieldFormats.NUMBER_FORMAT,
-            fieldFormats.CURRENCY_FORMAT,
-            fieldFormats.PERCENT_FORMAT,
-            fieldFormats.NUMBER_FORMAT_MULTICHOICE,
-            fieldFormats.NUMBER_FORMAT_RADIO_BUTTONS
+            // fieldFormats.CURRENCY_FORMAT,
+            // fieldFormats.PERCENT_FORMAT,
+            // fieldFormats.NUMBER_FORMAT_MULTICHOICE,
+            // fieldFormats.NUMBER_FORMAT_RADIO_BUTTONS
         ]
     },
-    {
-        titleI18nKey: 'builder.fieldGroups.date',
-        fieldTypes: [
-            fieldFormats.DATE_FORMAT,
-            fieldFormats.DATETIME_FORMAT,
-            fieldFormats.TIME_FORMAT,
-            fieldFormats.DURATION_FORMAT
-        ]
-    },
+    // {
+    //     titleI18nKey: 'builder.fieldGroups.date',
+    //     fieldTypes: [
+    //         fieldFormats.DATE_FORMAT,
+    //         fieldFormats.DATETIME_FORMAT,
+    //         fieldFormats.TIME_FORMAT,
+    //         fieldFormats.DURATION_FORMAT
+    //     ]
+    // },
     {
         titleI18nKey: 'builder.fieldGroups.other',
         fieldTypes: [
             fieldFormats.CHECKBOX_FORMAT,
-            fieldFormats.USER_FORMAT,
-            fieldFormats.URL,
-            fieldFormats.EMAIL_ADDRESS,
-            fieldFormats.PHONE_FORMAT,
-            fieldFormats.RATING_FORMAT,
-            fieldFormats.TEXT_FORMULA_FORMAT,
-            fieldFormats.NUMERIC_FORMULA_FORMAT,
-            fieldFormats.URL_FORMULA_FORMAT
+            // fieldFormats.USER_FORMAT,
+            // fieldFormats.URL,
+            // fieldFormats.EMAIL_ADDRESS,
+            // fieldFormats.PHONE_FORMAT,
+            // fieldFormats.RATING_FORMAT,
+            // fieldFormats.TEXT_FORMULA_FORMAT,
+            // fieldFormats.NUMERIC_FORMULA_FORMAT,
+            // fieldFormats.URL_FORMULA_FORMAT
         ]
     }
 ];

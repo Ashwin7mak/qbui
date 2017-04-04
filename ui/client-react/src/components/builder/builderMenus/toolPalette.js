@@ -38,7 +38,7 @@ class ToolPalette extends Component {
     clearFilter = () => {
         this.setState({fieldFilter: '', activeFieldFilter: ''});
     };
-    
+
     updateFieldFilter = _.debounce(() => this.setState({activeFieldFilter: this.state.fieldFilter}), FILTER_DEBOUNCE_TIMEOUT);
 
     renderFilteredFieldsList = () => {
