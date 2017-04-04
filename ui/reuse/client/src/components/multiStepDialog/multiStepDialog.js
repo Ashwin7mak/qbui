@@ -6,10 +6,7 @@ import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import Icon from '../icon/icon';
 import Loader from 'react-loader';
 import {I18nMessage} from '../../utils/i18nMessage';
-
-// IMPORTS FROM CLIENT REACT
-import Locale from '../../../../../client-react/src/locales/locales';
-// IMPORTS FROM CLIENT REACT
+import Locale from '../../locales/locales';
 
 import './multiStepDialog.scss';
 
