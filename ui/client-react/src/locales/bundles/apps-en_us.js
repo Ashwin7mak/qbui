@@ -511,12 +511,12 @@ export default {
             [FieldFormats.DURATION_FORMAT]: "Duration",
             [FieldFormats.USER_FORMAT]: "User",
             [FieldFormats.CHECKBOX_FORMAT]: "Checkbox",
-            [FieldFormats.URL]: "Url",
+            [FieldFormats.URL]: "URL",
             [FieldFormats.EMAIL_ADDRESS]: "Email",
             [FieldFormats.PHONE_FORMAT]: "Phone",
             [FieldFormats.RATING_FORMAT]: "Rating",
             [FieldFormats.RATING_FORMAT_MULTICHOICE]: "Rating",
-            [FieldFormats.URL_FORMULA_FORMAT]: "Url Formula",
+            [FieldFormats.URL_FORMULA_FORMAT]: "URL Formula",
             FORMULA: "Formula",
             SCALAR: "Scalar",
             CONCRETE: "Concrete",
@@ -530,6 +530,20 @@ export default {
                 unimplemented: "Feature is not available right now",
                 removeField: "Remove field from form"
             },
+            fieldGroups: {
+                text: 'Text',
+                numeric: 'Number',
+                date: 'Date',
+                other: 'Other'
+            },
+            searchToolPalette: "Search for new fields",
+            noSearchResultsInToolPalette: 'No fields match "{searchText}"',
+            tooltips: {
+                addNewFieldTooltip: "Create a {fieldName} field and add it to the form",
+                addNewChoiceListTooltip: "Create a choice list and add it to the form",
+                addNewRadioListTooltip: "Create radio buttons and add them to the form",
+                addNewCheckboxTooltip: "Create a checkbox and add it to the form",
+            }
         },
         featureSwitchAdmin: {
             defaultFeatureName: "Feature",

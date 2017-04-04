@@ -45,4 +45,24 @@ describe('FieldToken', () => {
         expect(mockFieldUtils.getFieldSpecificIcon).toHaveBeenCalledWith(testFieldType);
         expect(component.find('.fieldTokenIcon')).toHaveText(mockFieldIcon);
     });
+
+    it('displays the icon in a dragging state', () => {
+        component = shallow(<FieldToken isDragging={true} />);
+
+        expect(component.find('.fieldTokenDragging')).toBePresent();
+    });
+
+    it('displays the token in a non-dragging state for use in menus (default)', () => {
+        component = shallow(<FieldToken isDragging={false} />);
+
+        expect(component.find('.fieldTokenDragging')).not.toBePresent();
+        expect(component.find('.fieldTokenCollapsed')).not.toBePresent();
+    });
+
+    it('displays the field token in a collapsed state', () => {
+        component = shallow(<FieldToken isCollapsed={true} />);
+
+        expect(component.find('.fieldTokenCollapsed')).toBePresent();
+        expect(component.find('.fieldTokenDragging')).not.toBePresent();
+    });
 });

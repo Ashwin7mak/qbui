@@ -1,3 +1,5 @@
+@import "../../assets/css/qbVariables";
+
 .tipChildWrapper {
     cursor: not-allowed;
     display: flex;
@@ -5,4 +7,8 @@
     justify-content: flex-start;
     align-items: center;
     align-content: center;
+}
+
+.tooltip {
+    z-index: $zindex-tooltip;
 }

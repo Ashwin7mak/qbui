@@ -1,17 +1,119 @@
-import React, {PropTypes} from 'react';
+import React, {PropTypes, Component} from 'react';
+import _ from 'lodash';
+import FlipMove from 'react-flip-move';
+import Locale from '../../../../../reuse/client/src/locales/locale';
+
+import FieldTokenInMenu from '../../formBuilder/fieldToken/fieldTokenInMenu';
+import {SUPPORTED_NEW_FIELDS_WITH_PROPERTIES as SUPPORTED_NEW_FIELD_TYPES} from '../../formBuilder/newFieldTypes';
+import SideTrowser from '../../../../../reuse/client/src/components/sideTrowserBase/sideTrowserBase';
+import SearchBoxInMenu from '../../../../../reuse/client/src/components/searchBoxInMenu/searchBoxInMenu';
+
 import './toolPalette.scss';
 
-let ToolPalette = React.createClass({
-    propTypes: {
-    },
+/**
+ * Displays a list of new field types that can be added to the form.
+ * TODO: Extend to allow existing fields to be shown as well.
+ */
+class ToolPalette extends Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {fieldFilter: ''};
+
+        this.onChangeFieldFilter = this.onChangeFieldFilter.bind(this);
+        this.renderFilteredFieldsList = this.renderFilteredFieldsList.bind(this);
+        this.renderNewFieldTypes = this.renderNewFieldTypes.bind(this);
+        this.renderNewFieldGroups = this.renderNewFieldGroups.bind(this);
+        this.renderToolPalette = this.renderToolPalette.bind(this);
+    }
+
+    onChangeFieldFilter(evt) {
+        this.setState({fieldFilter: evt.target.value});
+    }
+
+    renderFilteredFieldsList() {
+        let fieldTypes = SUPPORTED_NEW_FIELD_TYPES.reduce((allFieldTypes, fieldGroup) => [...allFieldTypes, ...fieldGroup.fieldTypes], []).filter(fieldType => {
+            // Filter out anything that isn't a string
+            if (!_.isString(fieldType.title)) {
+                return false;
+            }
+
+            return fieldType.title.toLowerCase().indexOf(this.state.fieldFilter.toLowerCase()) >= 0;
+        });
+
+        if (fieldTypes.length === 0) {
+            return <p className="emptySearchResult">{Locale.getMessage('builder.noSearchResultsInToolPalette', {searchText: this.state.fieldFilter})}</p>;
+        }
+
+        return this.renderNewFieldTypes(fieldTypes);
+    }
+
+    /**
+     * Displays the fields within a group in SUPPORTED_NEW_FIELD_TYPES
+     * @param fieldTypes
+     */
+    renderNewFieldTypes(fieldTypes) {
+        return fieldTypes.map((fieldType, index) => (
+            <li key={fieldType.key || index} className="toolPaletteItem">
+                <FieldTokenInMenu {...fieldType} isCollapsed={this.props.isCollapsed} />
+            </li>
+        ));
+    }
+
+    /**
+     * Takes the SUPPORTED_NEW_FIELD_TYPES constant and maps them to a displayed list of grouped field types
+     * @returns {XML}
+     */
+    renderNewFieldGroups() {
+        return SUPPORTED_NEW_FIELD_TYPES.map((group, index) => (
+            <li key={index} className="toolPaletteItemGroup">
+                <h6 className="toolPaletteItemHeader">{Locale.getMessage(group.titleI18nKey)}</h6>
+
+                <FlipMove typeName="ul" className="toolPaletteItemList">
+                    {this.renderNewFieldTypes(group.fieldTypes)}
+                </FlipMove>
+            </li>
+        ));
+    }
+
+    renderToolPalette() {
+        return (
+            <div className={`toolPaletteContainer ${this.props.isCollapsed ? 'toolPaletteCollapsed' : ''}`}>
+                <SearchBoxInMenu
+                    searchText={this.state.fieldFilter}
+                    onChange={this.onChangeFieldFilter}
+                    placeholder={Locale.getMessage('builder.searchToolPalette')}
+                />
+
+                <FlipMove typeName="ul" className="toolPaletteList toolPaletteNewFields">
+                    {this.state.fieldFilter.length > 0 && this.renderFilteredFieldsList()}
+                    {this.state.fieldFilter.length === 0 && this.renderNewFieldGroups()}
+                </FlipMove>
+            </div>
+        );
+    };
 
     render() {
         return (
-            <div className="toolPaletteContainer">
-
-            </div>
+            <SideTrowser
+                sideMenuContent={this.renderToolPalette()}
+                isCollapsed={this.props.isCollapsed}
+                isOpen={this.props.isOpen}
+            >
+                {this.props.children}
+            </SideTrowser>
         );
     }
-});
+}
+
+ToolPalette.propTypes = {
+    /**
+     * Show the tool palette in a collapsed state */
+    isCollapsed: PropTypes.bool,
+
+    /**
+     * Show the tool palette in an open state */
+    isOpen: PropTypes.bool,
+};
 
 export default ToolPalette;
