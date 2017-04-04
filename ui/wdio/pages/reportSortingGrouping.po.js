@@ -192,7 +192,9 @@
                     //wait for delete button to be visible
                     result.element('.fieldDeleteIcon').waitForVisible();
                     //click on delete button
-                    return result.element('.fieldDeleteIcon').click();
+                    result.element('.fieldDeleteIcon').click();
+                    //Need this to wait for rendering
+                    return browser.pause(e2eConsts.shortWaitTimeMs);
                 });
             } else {
                 browser.logger.error('There are no nonEmpty fields for container ' + containerName);
@@ -217,7 +219,9 @@
                 //wait for delete button to be visible
                 results[0].element('.fieldDeleteIcon').waitForVisible();
                 //click on delete button
-                return results[0].element('.fieldDeleteIcon').click();
+                results[0].element('.fieldDeleteIcon').click();
+                //Need this to wait for rendering
+                return browser.pause(e2eConsts.shortWaitTimeMs);
             } else {
                 browser.logger.error('The field with name ' + fieldToDelete + ' is not found for container ' + containerName);
                 throw new Error('Cannot delete value for field ' + fieldToDelete);
