@@ -71,7 +71,7 @@ export function createFieldTypeProps(fieldType) {
     let tooltipText = getTooltipForNewField(fieldType, title);
 
     return {
-        key: fieldType,
+        key: `fieldType_${fieldType}`,
         type: fieldType,
         isNewField: true,
         title,

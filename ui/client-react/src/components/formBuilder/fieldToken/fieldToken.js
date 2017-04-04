@@ -42,7 +42,7 @@ const FieldToken = (props) => {
 
 FieldToken.propTypes = {
     classes: PropTypes.array,
-    type: PropTypes.string,
+    type: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     title: PropTypes.string,
 
     /**

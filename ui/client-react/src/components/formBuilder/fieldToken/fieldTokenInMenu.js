@@ -18,7 +18,7 @@ export class FieldTokenInMenu extends Component {
 FieldTokenInMenu.propTypes = {
     /**
      * What field type does this token represent? */
-    type: PropTypes.string.isRequired,
+    type: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
 
     /**
      * What title should be used on the field token? */
