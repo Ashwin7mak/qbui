@@ -8,9 +8,8 @@
     font-family: $font-family;
     color: $font-color;
     font-size: $font-size;
-    -webkit-box-shadow: 0 0px 2px 2px $panel-shadow-color;
-    -moz-box-shadow: 0 0px 2px 2px $panel-shadow-color;
-    box-shadow: 0 0px 2px 2px $panel-shadow-color;
+    border: 1px solid $panel-border-color;
+    background-color: $panel-background-color;
 
     &.closed {
         overflow: hidden;
@@ -39,7 +38,6 @@
     .qbPanelHeader {
         padding: 20px 0 30px 20px;
         min-width: 30%;
-        background-color: $panel-background-color;
 
         .qbPanelHeaderTitle {
             position: relative;
