@@ -43,6 +43,7 @@
     position: relative;
     //min-height is required in order for the scrollbar to work in firefox
     min-height: 0;
+    width: 635px;
 
     .tableActionsContainer {
         position: relative;
@@ -313,7 +314,7 @@
         }
 
         &:hover {
-            color: $pagination-arrow-hover-color;
+            color: $pagination-arrow-dark-hover-color;
         }
     }
 
@@ -336,7 +337,7 @@
         }
 
         &:hover {
-            color: $pagination-arrow-hover-color;
+            color: $pagination-arrow-dark-hover-color;
         }
     }
 }
