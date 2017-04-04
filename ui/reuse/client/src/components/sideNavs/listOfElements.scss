@@ -1,0 +1,80 @@
+@import "../../assets/css/qbVariables";
+
+$toolpalette-header-weight: 400;
+$toolpalette-header-color: $color-black-500;
+
+.listOfElementsContainer {
+    background-color: $leftnav-background-color;
+    width: 100%;
+    height: 100%;
+
+    padding: $spacing-xxx-small;
+
+    transition: padding 0.3s;
+
+    .tooltip {
+        z-index: 100;
+        opacity: 1;
+    }
+
+    .tipChildWrapper {
+        cursor: pointer;
+    }
+
+    .listOfElementsMainList, .listOfElementsItemList {
+        list-style-type: none;
+        padding: 0 0 $spacing-xxx-small 0;
+    }
+
+    .listOfElementsMainList {
+        margin-bottom: $spacing-medium3; // Add margin to the bottom so the last element can be seen when scrolled to the bottom
+    }
+
+    .listOfElementsItemList {
+        padding-left: 0;
+        padding-right: 0;
+        padding-top: 0;
+    }
+
+    .listOfElementsItemHeader {
+        color: $toolpalette-header-color;
+        font-size: $font-size-h6;
+        font-weight: $toolpalette-header-weight;
+        letter-spacing: 0.7px;
+        margin-top: $spacing-tiny;
+        margin-bottom: $spacing-tiny;
+        text-transform: uppercase;
+
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .listOfElementsItem {
+        padding-bottom: $spacing-x-tiny;
+
+        .fieldToken:not(.fieldTokenCollapsed) {
+            width: 100%;
+        }
+    }
+
+    .searchInputBox {
+        opacity: 1;
+        max-width: $leftnav-width-standard;
+        max-height: 45px;
+        margin-bottom: $spacing-xxx-small;
+
+        transition: opacity 0.3s, max-width 0.3s, max-height 0.3s;
+    }
+
+    &.listOfElementsCollapsed {
+        padding-left: 2px;
+
+        .searchInputBox {
+            opacity: 0;
+            max-width: 0;
+            max-height: 0;
+
+            transition: opacity 0.3s, max-width 0.3s, max-height 0.3s;
+        }
+    }
+}

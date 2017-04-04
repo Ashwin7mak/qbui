@@ -555,9 +555,7 @@ export default {
                 numeric: 'Nombre',
                 date: 'Date',
                 other: 'Autre'
-            },
-            searchToolPalette: "Filtre",
-            noSearchResultsInToolPalette: 'Aucun champ ne correspond "{searchText}"'
+            }
         },
         featureSwitchAdmin: {
             defaultFeatureName: "Fonctionnalité",

@@ -401,10 +401,12 @@ $fieldtoken-background-color2: $color-black-100;
 $fieldtoken-text-color: $iconfont-on-light-alternate-color;
 $fieldtoken-icon-color: $color-black-100;
 $fieldtoken-border-color: $color-black-300;
+$fieldtoken-hover-border-color: $color-orange-500;
 
 $dragtoken-background-color1: $color-orange-500;
 $dragtoken-background-color2: $color-black-100;
 $dragtoken-text-color: $iconfont-on-light-alternate-color;
+$dragtoken-border-color: $color-orange-500;
 
 $dragtoken-shadow-color: rgba($color-black-800, 0.5);
 // dragtoken-active-gradient is defined in qbVariables because of a circular dependency on stroke-width

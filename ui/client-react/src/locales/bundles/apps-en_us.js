@@ -563,9 +563,7 @@ export default {
                 numeric: 'Number',
                 date: 'Date',
                 other: 'Other'
-            },
-            searchToolPalette: "Filter",
-            noSearchResultsInToolPalette: 'No fields match "{searchText}"'
+            }
         },
         featureSwitchAdmin: {
             defaultFeatureName: "Feature",

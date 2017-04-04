@@ -55,10 +55,12 @@ export const SUPPORTED_NEW_FIELD_TYPES = [
  * A helper function that has the supported fields along with the default props for each field type for display in form builder
  */
 export const supportedNewFieldTypesWithProperties = () => {
-    return SUPPORTED_NEW_FIELD_TYPES.map(fieldGroup => {
+    return SUPPORTED_NEW_FIELD_TYPES.map((fieldGroup, index) => {
         return {
             ...fieldGroup,
-            fieldTypes: fieldGroup.fieldTypes.map(fieldType => createFieldTypeProps(fieldType))
+            key: `group_${index}`,
+            title: Locale.getMessage(fieldGroup.titleI18nKey),
+            children: fieldGroup.fieldTypes.map(fieldType => createFieldTypeProps(fieldType))
         };
     });
 };

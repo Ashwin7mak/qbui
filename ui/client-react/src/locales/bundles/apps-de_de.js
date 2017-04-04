@@ -556,9 +556,7 @@ export default {
                 numeric: "Nummer",
                 date: "Datum",
                 other: "Andere"
-            },
-            searchToolPalette: "Filter",
-            noSearchResultsInToolPalette: 'Keine Felder passen "{searchText}"'
+            }
         },
         featureSwitchAdmin: {
             defaultFeatureName: "Feature",

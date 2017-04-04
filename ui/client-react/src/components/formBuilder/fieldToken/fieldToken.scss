@@ -23,7 +23,7 @@ $fieldtoken-border-radius: 4px;
     transition: border-color 0.3s;
 
     &:hover, &.fieldTokenDragging {
-        border: 1px solid $color-orange-500;
+        border: $stroke-width-thin solid $fieldtoken-hover-border-color;
         box-shadow: 0 0 8px 0 rgba($color-black-100, 0.3);
     }
 
@@ -58,7 +58,7 @@ $fieldtoken-border-radius: 4px;
     &.fieldTokenDragging {
         color: $dragtoken-text-color;
         background-color: $dragtoken-background-color2;
-        border: $stroke-width-thin solid $dragtoken-background-color2;
+        border: $stroke-width-thin solid $dragtoken-border-color;
 
         .fieldTokenIconContainer {
             background-color: $dragtoken-background-color1;
