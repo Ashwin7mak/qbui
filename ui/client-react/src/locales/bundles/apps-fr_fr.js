@@ -1,3 +1,4 @@
+import FieldFormats from '../../utils/fieldFormats';
 /**
  * This bundle contains all the strings needed by the "Apps" functional area.
  * This functional area is for the main app served in client-react at the /qbase/apps route.
@@ -483,39 +484,45 @@ export default {
         quickBaseClassic: "QuickBase Classique",
         quickBaseMercury: "QuickBase Mercury",
         missingWalkMe: "Le didacticiel n'est pas disponible",
+        fieldsDefaultLabels: {
+            [FieldFormats.TEXT_FORMAT]: "Texte",
+            [FieldFormats.MULTI_LINE_TEXT_FORMAT]: "Texte long",
+            [FieldFormats.TEXT_FORMAT_MULTICHOICE]: "Liste de choix",
+            [FieldFormats.TEXT_FORMAT_RADIO_BUTTONS]: "Boutons radio",
+            [FieldFormats.TEXT_FORMULA_FORMAT]: "Formule de texte",
+            [FieldFormats.NUMBER_FORMAT]: "Nombre",
+            [FieldFormats.CURRENCY_FORMAT]: "Devise",
+            [FieldFormats.CURRENCY_FORMAT_MULTICHOICE]: "Devise",
+            [FieldFormats.PERCENT_FORMAT]: "Pourcentage",
+            [FieldFormats.PERCENT_FORMAT_MULTICHOICE]: "Pourcentage",
+            [FieldFormats.NUMBER_FORMAT_MULTICHOICE]: "NListe de choix uneric",
+            [FieldFormats.NUMBER_FORMAT_RADIO_BUTTONS]: "Boutons radio numériques",
+            [FieldFormats.NUMERIC_FORMULA_FORMAT]: "Formule numérique",
+            [FieldFormats.DATE_FORMAT]: "Rendez-vous amoureux",
+            [FieldFormats.DATETIME_FORMAT]: "Horodatage",
+            [FieldFormats.TIME_FORMAT]: "Moment de la journée",
+            [FieldFormats.DURATION_FORMAT]: "Durée",
+            [FieldFormats.USER_FORMAT]: "Utilisateur",
+            [FieldFormats.CHECKBOX_FORMAT]: "Case à cocher",
+            [FieldFormats.URL]: "Url",
+            [FieldFormats.EMAIL_ADDRESS]: "Email",
+            [FieldFormats.PHONE_FORMAT]: "Téléphone",
+            [FieldFormats.RATING_FORMAT]: "Évaluation",
+            [FieldFormats.RATING_FORMAT_MULTICHOICE]: "Évaluation",
+            [FieldFormats.URL_FORMULA_FORMAT]: "Url Formule",
+            FORMULA: "Formule",
+            SCALAR: "Scalaire",
+            CONCRETE: "Béton",
+            REPORT_LINK: "Lien du rapport",
+            SUMMARY: "Résumé",
+            LOOKUP: "Chercher",
+            FILE_ATTACHMENT: "Fichier"
+        },
         builder: {
             formBuilder: {
                 unimplemented: "La fonctionnalité n'est pas disponible en ce moment",
                 removeField: "Supprimer le champ du formulaire"
             },
-            fields: {
-                // Keys are equal to server constants for field types to make it easier to get these keys
-                FORMULA: "Formule",
-                SCALAR: "Scalaire",
-                CONCRETE: "Béton",
-                REPORT_LINK: "Lien de rapport",
-                SUMMARY: "Résumé",
-                LOOKUP: "Recherche",
-                //Data types
-                CHECKBOX: "Case à cocher",
-                TEXT: "Texte",
-                PHONE_NUMBER: "Numéro de téléphone",
-                DATE_TIME: "Date et heure",
-                DATE: "Date",
-                DURATION: "Durée",
-                TIME_OF_DAY: "Heure du jour",
-                NUMERIC: "Numérique",
-                CURRENCY: "Devise",
-                RATING: "Cote",
-                PERCENT: "Pourcentage",
-                URL: "Url",
-                EMAIL_ADDRESS: "Email",
-                USER: "Utilisateur",
-                FILE_ATTACHMENT: "Fichier",
-                TEXT_FORMULA: "Formule de texte",
-                URL_FORMULA: "Formule Url",
-                NUMERIC_FORMULA: "Formule numérique"
-            }
         },
         featureSwitchAdmin: {
             defaultFeatureName: "Fonctionnalité",
