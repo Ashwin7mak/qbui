@@ -324,7 +324,7 @@ $edit-icon-font-size: 18px;
                 // colorize and tweak icon buttons
                 &.saveRecord {
                     color: $color-green-700;
-                    font-size: 18px;
+                    font-size: 16px;
                 }
 
                 &.invalidRecord {
@@ -334,6 +334,10 @@ $edit-icon-font-size: 18px;
                 }
 
                 &.cancelSelection {
+                    color: $iconfont-on-light-alternate-color;
+                }
+
+                &:hover {
                     color: $iconfont-on-light-normal-color;
                 }
 
