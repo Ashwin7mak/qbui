@@ -1,6 +1,7 @@
 import React from 'react';
 import {PropTypes} from 'react';
 import Icon from '../icon/icon';
+import QBicon from '../icon/icon.js';
 
 // IMPORTS FROM CLIENT REACT
 import Locale from '../../../../../client-react/src/locales/locales';
@@ -120,7 +121,7 @@ class IconChooser extends React.Component {
             <div className={classes.join(' ')}>
                 <div className="topRow">
                     {this.renderIconToggle()}
-                    <div className="iconSearch"><input type="text" value={this.state.filterText} placeholder={Locale.getMessage("iconChooser.searchPlaceholder")} onChange={this.filterChanged} cols="20"/></div>
+                    <div className="iconSearch searchInputBox"><input type="text" value={this.state.filterText} placeholder={Locale.getMessage("iconChooser.searchPlaceholder")} onChange={this.filterChanged} cols="20"/><QBicon icon="search" className="searchIcon"/></div>
                 </div>
 
                 <div className="allIcons">
