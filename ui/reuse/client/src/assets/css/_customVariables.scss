@@ -256,6 +256,7 @@ $dropdown-caret-color: #000 !default;
 //
 // Note: These variables are not generated into the Customizer.
 $zindex-navbar: 1000 !default;
+$zindex-navbar-menu: 1010 !default;
 $zindex-dropdown: 1000 !default;
 $zindex-trowser: 1000 !default;
 $zindex-trowserFooter: 1000 !default;
@@ -264,6 +265,7 @@ $zindex-tooltip: 1070 !default;
 $zindex-navbar-fixed: 1030 !default;
 $zindex-modal-background: 1040 !default;
 $zindex-modal: 1050 !default;
+
 //Z-index for qbGrid.scss
 //The below zindex are used to keep row action menus from clipping during inline edit
 //to keep sticky header and sticky columns positioned above the table during scrolling and etc..

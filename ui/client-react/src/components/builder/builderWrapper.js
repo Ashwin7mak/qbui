@@ -1,9 +1,12 @@
 import React, {PropTypes} from 'react';
 import FormBuilderContainer from './formBuilderContainer';
 import Fluxxor from "fluxxor";
+import {connect} from 'react-redux';
+import commonNavActions from '../../../../reuse/client/src/components/sideNavs/commonNavActions';
 import './builderWrapper.scss';
 import GlobalActions from '../actions/globalActions';
 import {NotificationContainer} from "react-notifications";
+import TopNav from '../../../../reuse/client/src/components/topNav/topNav';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
 let StoreWatchMixin = Fluxxor.StoreWatchMixin;
@@ -13,7 +16,7 @@ let StoreWatchMixin = Fluxxor.StoreWatchMixin;
  * The AppsStore is needed for globalActions (The User and Help Button Located at the top of the screen)
  * The AppsStore selects the appId.
  * */
-const BuilderWrapper = React.createClass({
+export const BuilderWrapper = React.createClass({
     mixins: [FluxMixin, StoreWatchMixin('AppsStore')],
 
     getStateFromFlux() {
@@ -50,10 +53,11 @@ const BuilderWrapper = React.createClass({
 
         return (
             <div className="builderWrapperContent">
-                <div className="topNav">
-                    {this.getTopGlobalActions()}
-                     <NotificationContainer/>
-                </div>
+                <NotificationContainer/>
+                <TopNav
+                    onNavClick={this.props.toggleNav}
+                    globalActions={this.getTopGlobalActions()}
+                />
 
                 <div className="builderWrapperBody">
                     <FormBuilderContainer
@@ -68,4 +72,4 @@ const BuilderWrapper = React.createClass({
     }
 });
 
-export default BuilderWrapper;
+export default connect(null, commonNavActions('builder'))(BuilderWrapper);

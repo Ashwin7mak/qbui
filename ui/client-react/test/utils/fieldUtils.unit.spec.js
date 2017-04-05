@@ -483,97 +483,97 @@ describe('FieldUtils', () => {
             {
                 description: 'returns default icon',
                 type: null,
-                expectedType: 'T'
+                expectedType: 'text'
             },
             {
                 description: 'returns Date field icon',
                 type: FieldFormats.DATE_FORMAT,
-                expectedType: 'D'
+                expectedType: 'date'
             },
             {
                 description: 'returns DateTime field icon',
                 type: FieldFormats.DATETIME_FORMAT,
-                expectedType: 'Dt'
+                expectedType: 'date-time'
             },
             {
                 description: 'returns Time of day field icon',
                 type: FieldFormats.TIME_FORMAT,
-                expectedType: 'Tm'
+                expectedType: 'time-of-day'
             },
             {
                 description: 'returns Numeric field icon',
                 type: FieldFormats.NUMBER_FORMAT,
-                expectedType: 'N'
+                expectedType: 'number'
             },
             {
                 description: 'returns Rating field icon',
                 type: FieldFormats.RATING_FORMAT,
-                expectedType: 'R'
+                expectedType: 'rating'
             },
             {
                 description: 'returns Currency field icon',
                 type: FieldFormats.CURRENCY_FORMAT,
-                expectedType: 'C'
+                expectedType: 'currency'
             },
             {
                 description: 'returns Percent field icon',
                 type: FieldFormats.PERCENT_FORMAT,
-                expectedType: 'P'
+                expectedType: 'percentage'
             },
             {
                 description: 'returns Duration field icon',
                 type: FieldFormats.DURATION_FORMAT,
-                expectedType: 'Du'
+                expectedType: 'duration'
             },
             {
                 description: 'returns Phone field icon',
                 type: FieldFormats.PHONE_FORMAT,
-                expectedType: 'Ph'
+                expectedType: 'phone-number'
             },
             {
                 description: 'returns Text field icon',
                 type: FieldFormats.TEXT_FORMAT,
-                expectedType: 'T'
+                expectedType: 'text'
             },
             {
                 description: 'returns User field icon',
                 type: FieldFormats.USER_FORMAT,
-                expectedType: 'U'
+                expectedType: 'user'
             },
             {
                 description: 'returns URL field icon',
                 type: FieldFormats.URL,
-                expectedType: 'Ur'
+                expectedType: 'url'
             },
             {
                 description: 'returns Email field icon',
                 type: FieldFormats.EMAIL_ADDRESS,
-                expectedType: 'E'
+                expectedType: 'email-address'
             },
             {
                 description: 'returns Text Formula field icon',
                 type: FieldFormats.TEXT_FORMULA_FORMAT,
-                expectedType: 'F'
+                expectedType: 'formula'
             },
             {
                 description: 'returns Numeric Formula field icon',
                 type: FieldFormats.NUMERIC_FORMULA_FORMAT,
-                expectedType: 'F'
+                expectedType: 'formula'
             },
             {
                 description: 'returns Url Formula field icon',
                 type: FieldFormats.URL_FORMULA_FORMAT,
-                expectedType: 'F'
+                expectedType: 'formula'
             },
             {
                 description: 'returns Checkbox Formula field icon',
                 type: FieldFormats.CHECKBOX_FORMAT,
-                expectedType: 'C'
+                expectedType: 'selected'
             },
             {
                 description: 'returns Text if type is not found',
                 type: 'invalid type',
-                expectedType: 'T'
+                expectedType: 'text'
             }
         ];
 
