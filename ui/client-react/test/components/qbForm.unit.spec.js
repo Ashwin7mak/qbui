@@ -57,32 +57,24 @@ const storeFields = [{
     appId: 3,
     tblId: 2,
     fieldsLoading: false,
-    fields: {
-        fields: {
-            data: [
-                {id: 6, name: "field 6", datatypeAttributes: {type: "TEXT"}},
-                {id: 7, name: "field 7", datatypeAttributes: {type: "TEXT"}}
-            ]
-        }
-    }
+    fields: [
+        {id: 6, name: "field 6", datatypeAttributes: {type: "TEXT"}},
+        {id: 7, name: "field 7", datatypeAttributes: {type: "TEXT"}}
+    ]
 }];
 const storeFieldsWithBuiltIns = [{
     appId: 3,
     tblId: 2,
     fieldsLoading: false,
-    fields: {
-        fields: {
-            data: [
-                {id: 1, name: "field 1", builtIn: true},
-                {id: 2, name: "field 2", builtIn: true},
-                {id: 3, name: "field 3", builtIn: true},
-                {id: 4, name: "field 4", builtIn: true},
-                {id: 5, name: "field 5", builtIn: true},
-                {id: 6, name: "field 6", datatypeAttributes: {type: "TEXT"}},
-                {id: 7, name: "field 7", datatypeAttributes: {type: "TEXT"}}
-            ]
-        }
-    }
+    fields: [
+        {id: 1, name: "field 1", builtIn: true},
+        {id: 2, name: "field 2", builtIn: true},
+        {id: 3, name: "field 3", builtIn: true},
+        {id: 4, name: "field 4", builtIn: true},
+        {id: 5, name: "field 5", builtIn: true},
+        {id: 6, name: "field 6", datatypeAttributes: {type: "TEXT"}},
+        {id: 7, name: "field 7", datatypeAttributes: {type: "TEXT"}}
+    ]
 }];
 
 const FieldElementMock = React.createClass({
