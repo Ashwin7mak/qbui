@@ -110,11 +110,8 @@ export const QBForm = React.createClass({
      * @returns field object or null if not found
      */
     getRelatedField(fieldId) {
-        console.log('getRelatedField: ',fieldId);
         const fields = this.getFieldsFromStore(this.props);
-        console.log('FIELDS: ', fields);
         const field = _.find(fields, fld => fld.id === fieldId);
-        console.log('getRelatedField: ',field);
         return field || null;
     },
 
@@ -345,7 +342,6 @@ export const QBForm = React.createClass({
      * @returns {XML}
      */
     createFieldElement(FormFieldElement, validationStatus, containingElement, location) {
-        console.log('FormFieldElement: ', FormFieldElement);
         let relatedField = this.getRelatedField(FormFieldElement.fieldId);
         let fieldRecord = this.getFieldRecord(relatedField);
         let recId = _.has(this.props.formData, 'recordId') ? this.props.formData.recordId : null;
