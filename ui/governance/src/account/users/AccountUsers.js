@@ -71,13 +71,23 @@ const mapDispatchToProps = (dispatch) => ({
     }
 });
 
+function checkDataFetchingError(error)
+{
+    //if it's a redirect error, do not display the 'error' text and show spinner
+    if(error && error.data && error.data.statusCode === 401)
+    {
+        return null;
+    }
+    return error;
+};
+
 const mapStateToProps = (state) => {
     return {
         requestUser: state.RequestContext.currentUser,
         requestRealm: state.RequestContext.realm,
         users: state.AccountUsers.users,
         loading: state.RequestContext.status.isFetching || !state.RequestContext.currentUser.id,
-        dataFetchingError: state.RequestContext.status.error,
+        dataFetchingError: checkDataFetchingError(state.RequestContext.status.error),
     };
 };
 
