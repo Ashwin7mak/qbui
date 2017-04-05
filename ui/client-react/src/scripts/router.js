@@ -82,9 +82,7 @@ render((
 
             <Route path={`${APP_ROUTE}/:appId`} component={ConnectedNav} >
                 <IndexRoute component={AppHomePageRoute} />
-                <Route path="settings" component={AppSettingsRoute} />
                 <Route path="users" component={AppUsersRoute} />
-                <Route path="properties" component={AppPropertiesRoute} />
                 <Route path="table/:tblId" component={TableHomePageRoute} />
                 <Route path="table/:tblId/report/:rptId" component={ReportRoute} />
                 <Route path="table/:tblId/report/:rptId/record/:recordId" component={RecordRoute} />
@@ -96,6 +94,8 @@ render((
             </Route>
 
             <Route path={`${SETTINGS_ROUTE}`} component={ConnectedSettingsNav}>
+                <Route path="app/:appId" component={AppSettingsRoute} />
+                <Route path="app/:appId/properties" component={AppPropertiesRoute} />
                 <Route path="app/:appId/table/:tblId/properties" component={TablePropertiesRoute} />
             </Route>
 
