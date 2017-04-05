@@ -14,21 +14,6 @@ import consts from '../../../common/src/constants';
 import _ from 'lodash';
 import {convertFormToArrayForClient, convertFormToObjectForServer} from './actionHelpers/transformFormData';
 
-let testIt = {
-    "FormFieldElement": {
-        "displayText": "Ob",
-        "displayOptions": ["VIEW", "ADD", "EDIT"],
-        "labelPosition": "LEFT",
-        "type": "FIELD",
-        "positionSameRow": false,
-        "useAlternateLabel": false,
-        "readOnly": false,
-        "required": false,
-        "fieldId": 11,
-        "showAsRadio": false
-    },
-}
-
 let logger = new Logger();
 
 /*
@@ -209,10 +194,10 @@ const buildNewFieldElement = (displayText = 'New Text Field') => {
     });
 };
 
-export const addNewFieldToForm = (formId, newField) => {
+export const addNewFieldToForm = (formId, newLocation, newField) => {
     let newId = _.uniqueId('newField_');
     let displayText = 'New Text Field';
-    newField = _.merge({}, testIt, newField, {
+    newField = _.merge({}, newField, {
         id: newId,
         edit: true,
         FormFieldElement: {
@@ -222,9 +207,11 @@ export const addNewFieldToForm = (formId, newField) => {
         }
     });
     return event(formId, types.ADD_FIELD, {
+        newLocation,
         newField
     });
 };
+
 
 /**
  * Move a field from one position on a form to a different position

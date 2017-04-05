@@ -9,8 +9,14 @@ import {addNewFieldToForm} from "../../../actions/formActions";
  * A FieldToken that is extended to be displayed in a menu (i.e., Tool Palette) when building a form.
  * TODO: This will eventually be decorated with other methods like onClick for adding it to the form. */
 export class FieldTokenInMenu extends Component {
+
     clickToAddToForm = () => {
-        this.props.addNewFieldToForm('view', this.props);
+        let {selectedField, formId} = this.props;
+        let location = null;
+        if (this.props.selectedField) {
+            location = selectedField;
+        }
+        this.props.addNewFieldToForm(formId, location, this.props);
     };
 
     render() {
@@ -47,7 +53,10 @@ FieldTokenInMenu.propTypes = {
 };
 
 const mapStateToProps = state => {
+    let currentForm = state.forms ? state.forms[0] : undefined;
     return {
+        formId: (_.has(currentForm, 'id') ? currentForm.id : null),
+        selectedField: (_.has(currentForm, 'selectedFields') ? currentForm.selectedFields[0] : []),
         state: state.forms
     };
 };

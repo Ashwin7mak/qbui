@@ -120,6 +120,25 @@ const forms = (
             ];
         }
 
+        case types.ADD_FIELD : {
+            if (!currentForm) {
+                return state;
+            }
+
+            let {newField, newLocation} = action.content;
+            updatedForm = _.cloneDeep(currentForm);
+
+            updatedForm.formData.formMeta = MoveFieldHelper.addNewFieldToForm(
+                updatedForm.formData.formMeta,
+                newLocation,
+                newField);
+
+            return [
+                ...newState,
+                updatedForm
+            ];
+        }
+
         case types.REMOVE_FIELD : {
             if (!currentForm) {
                 return state;
@@ -176,24 +195,6 @@ const forms = (
 
             updatedForm.previouslySelectedField[0] = action.content.location;
             updatedForm.selectedFields[0] = undefined;
-
-            return [
-                ...newState,
-                updatedForm
-            ];
-        }
-
-        case types.ADD_FIELD : {
-            if (!currentForm) {
-                return state;
-            }
-
-            let {newField} = action.content;
-            updatedForm = _.cloneDeep(currentForm);
-
-            updatedForm.formData.formMeta = MoveFieldHelper.addNewFieldToForm(
-                updatedForm.formData.formMeta,
-                newField);
 
             return [
                 ...newState,

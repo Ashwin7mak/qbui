@@ -45,11 +45,10 @@ const MoveFieldHelper = {
         return formMetaCopy;
     },
 
-    addNewFieldToForm(formMeta, newField) {
+    addNewFieldToForm(formMeta, newLocation, newField) {
         let formMetaCopy = _.cloneDeep(formMeta);
 
-        addNewFieldToBottomOfForm(formMetaCopy, newField);
-
+        addElementToNewLocation(formMetaCopy, newLocation, newField);
         return formMetaCopy;
     },
 
@@ -179,7 +178,7 @@ function addElementToNewLocation(formMetaData, newLocation, draggedItemProps) {
         columns.push(column);
     }
 
-    column.elements.splice(elementIndex, 0, draggedItemProps.containingElement);
+    column.elements.splice(elementIndex, 0, draggedItemProps);
     updateOrderIndices(column, 'elements');
 
     return formMetaData;
