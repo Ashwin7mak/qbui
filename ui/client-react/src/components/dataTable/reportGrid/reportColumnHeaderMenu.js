@@ -163,7 +163,6 @@ export const ReportColumnHeaderMenu = React.createClass({
 
     addColumnBefore() {
         let requestedColumn = this.props.fieldDef.id;
-        console.log(this.props);
         this.props.onColumnAdd(this.props.fieldDef.id, requestedColumn, true);
     },
 
