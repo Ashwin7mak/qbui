@@ -453,6 +453,7 @@
             });
 
             if (items !== []) {
+                items[0].element('a').waitForVisible();
                 items[0].element('a').click();
                 //wait until report rows in table are loaded
                 return reportContentPO.waitForReportContent();
