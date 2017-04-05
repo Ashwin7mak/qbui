@@ -402,7 +402,9 @@ export const ReportContent = React.createClass({
     },
 
     /**
-     * Adds a new column.
+     * Adds a new column to the table before or after the clicked on column.
+     * @param clickedColumn the column of the table which the menu dropdown was selected from
+     * @param addBefore should the requested column go before or after the clicked column
      */
     handleColumnAdd(clickedColumn, addBefore) {
         let params = {
