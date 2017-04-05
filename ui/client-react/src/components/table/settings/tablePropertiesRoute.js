@@ -6,7 +6,7 @@ import Locale from '../../../locales/locales';
 import Stage from '../../stage/stage';
 import IconActions from '../../../../../reuse/client/src/components/iconActions/iconActions';
 import {I18nMessage} from '../../../utils/i18nMessage';
-import Icon from '../../../../../reuse/client/src/components/icon/icon.js';
+import Icon, {AVAILABLE_ICON_FONTS} from '../../../../../reuse/client/src/components/icon/icon.js';
 import TableCreationPanel from '../tableCreationPanel';
 import {updateTable, loadTableProperties, setTableProperty, openIconChooser, closeIconChooser, setEditingProperty, resetEditedTableProperties} from '../../../actions/tablePropertiesActions';
 
@@ -28,7 +28,7 @@ export const TablePropertiesRoute = React.createClass({
         return (<IconActions className="pageActions" actions={actions} maxButtonsBeforeMenu={maxButtonsBeforeMenu}/>);
     },
     getStageHeadline() {
-        return <div className="tableSettingsStage stageHeadLine">{this.props.table ? <Icon isTableIcon={true} icon={this.props.table.icon} /> : null}<I18nMessage message={"settings.tableSettings"}/></div>;
+        return <div className="tableSettingsStage stageHeadLine">{this.props.table ? <Icon iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY} icon={this.props.table.icon} /> : null}<I18nMessage message={"settings.tableSettings"}/></div>;
     },
     componentDidMount() {
         if (this.props.app && this.props.table) {

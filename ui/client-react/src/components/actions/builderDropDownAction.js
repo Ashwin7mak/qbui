@@ -1,6 +1,6 @@
 import React from 'react';
 import {MenuItem, Dropdown} from 'react-bootstrap';
-import Icon from '../../../../reuse/client/src/components/icon/icon.js';
+import Icon, {AVAILABLE_ICON_FONTS} from '../../../../reuse/client/src/components/icon/icon.js';
 import {I18nMessage} from '../../utils/i18nMessage';
 import * as UrlConsts from "../../constants/urlConstants";
 import './builderDropDown.scss';
@@ -31,15 +31,14 @@ let BuilderDropDownAction = React.createClass({
 
     getConfigOptions() {
         let isAppView = this.props.selectedApp ? true : false;
-        let isTableView = this.props.selectedTable ? true : false;
-        let isFormView = this.props.recId ? true : false;
-        let classes = "dropdownToggle globalActionLink formBuilder";
-
+        let isTableView = isAppView && this.props.selectedTable ? true : false;
+        let isFormView = isTableView && this.props.recId ? true : false;
+        let classes = "dropdownToggle globalActionLink";
 
         let dropDown = <Dropdown className={classes} id="nav-right-dropdown" dropup={this.props.position === "left"} >
             <a bsRole="toggle"
                className={classes}
-               tabIndex={this.props.startTabIndex + this.props.actions.length}>
+               tabIndex={this.props.startTabIndex + this.props.actions ? this.props.actions.length : 0}>
                 <Icon icon={this.props.icon}/>
             </a>
 
@@ -48,14 +47,14 @@ let BuilderDropDownAction = React.createClass({
                     {isTableView ?
                     <div className="configSet withIcon">
                         <li className="menuHeader heading"><I18nMessage message={"settings.header"}/></li>
-                        <li className="heading"><a>{this.props.selectedTable.icon && <Icon className="headingIcon" isTableIcon={true} icon={this.props.selectedTable.icon}/> }
+                        <li className="heading"><a>{this.props.selectedTable.icon && <Icon className="headingIcon" iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY} icon={this.props.selectedTable.icon}/> }
                             <span><I18nMessage message={"settings.tablesHeader"}/></span></a></li>
-                        <li><a id="modifyTableSettings" onClick={this.getTableSettingsLink}><I18nMessage message={"settings.tableSettings"}/></a></li>
+                        <li><a className="modifyTableSettings" onClick={this.getTableSettingsLink}><I18nMessage message={"settings.tableSettings"}/></a></li>
                     </div> : null}
                     {isFormView ?
                     <div className="configSet currentContext">
                         <li className="heading"><a><span><I18nMessage message={"settings.formsHeader"}/></span></a></li>
-                        <li><a id="modifyForm" onClick={this.props.navigateToBuilder}><I18nMessage
+                        <li><a className="modifyForm" onClick={this.props.navigateToBuilder}><I18nMessage
                             message={"settings.configureFormBuilder"}/></a></li>
                     </div> : null}
                 </div>
@@ -67,7 +66,7 @@ let BuilderDropDownAction = React.createClass({
     },
 
     render() {
-        let isTableView = this.props.selectedTable ? true : false;
+        let isTableView = this.props.selectedApp && this.props.selectedTable ? true : false;
         //For now this menu only shows for table/form view. Eventually this should show for all views with content dependent on the route.
         return (isTableView ? <li className="link globalAction withDropdown builder">{this.getConfigOptions()}</li> : null);
     }

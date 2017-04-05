@@ -75,7 +75,7 @@ export const SettingsWrapper = React.createClass({
         }
     },
     getBackToAppLink() {
-        let link = `${UrlConsts.APP_ROUTE}/${this.state.apps.selectedAppId}`;
+        let link = `${UrlConsts.APP_ROUTE}/${this.state.apps.selectedAppId}/table/${this.state.apps.selectedTableId}`;
         return link;
     },
 
@@ -87,7 +87,7 @@ export const SettingsWrapper = React.createClass({
                 isOpen={true}
                 showContextHeader={true}
                 contextHeaderIcon={selectedTable ? selectedTable.icon : null}
-                contextHeaderIconTypeIsTable={true}
+                contextHeaderIconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY}
                 contextHeaderTitle={selectedTable ? selectedTable.name : ""}
                 navItems={[
                 {title: <I18nMessage message={"nav.backToApp"}/>, isPrimaryAction: true, secondaryIcon: 'caret-left', link: this.getBackToAppLink()},

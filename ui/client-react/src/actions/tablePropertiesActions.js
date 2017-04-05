@@ -4,8 +4,12 @@ import TableService from '../services/tableService';
 import Logger from '../utils/logger';
 import LogLevel from '../utils/logLevels';
 
-const logger = new Logger();
+/**
+ * Actions related to table properties and settings page
+ * @type {Logger}
+ */
 
+const logger = new Logger();
 
 /**
  * expand the icon chooser from a button to a searchable grid

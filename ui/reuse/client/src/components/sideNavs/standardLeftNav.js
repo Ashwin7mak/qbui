@@ -68,7 +68,7 @@ class StandardLeftNav extends Component {
     }
 
     renderContextHeader() {
-        const {showContextHeader, isContextHeaderSmall, contextHeaderIcon, showContextHeaderToggle, isContextToggleDown, isCollapsed} = this.props;
+        const {showContextHeader, isContextHeaderSmall, contextHeaderIcon, contextHeaderIconFont, showContextHeaderToggle, isContextToggleDown, isCollapsed} = this.props;
 
         let classes = ['contextHeader'];
 
@@ -90,7 +90,7 @@ class StandardLeftNav extends Component {
                     className="contextHeaderButton"
                     onClick={this.props.onClickContextHeader}
                 >
-                    {contextHeaderIcon && <Icon icon={contextHeaderIcon} className="contextHeaderIcon"/>}
+                    {contextHeaderIcon && <Icon icon={contextHeaderIcon} iconFont={contextHeaderIconFont} className="contextHeaderIcon" />}
 
                     {this.renderContextHeaderTitle()}
 
@@ -188,6 +188,11 @@ StandardLeftNav.propTypes = {
     contextHeaderIcon: PropTypes.string,
 
     /**
+     * The font set to use for the contextHeaderIcon
+     */
+    contextHeaderIconFont: PropTypes.string,
+
+    /**
      * The title text for the context header. */
     contextHeaderTitle: PropTypes.string,
 
@@ -252,6 +257,7 @@ StandardLeftNav.defaultProps = {
     showLoadingIndicator: false,
     showContextHeader: false,
     contextHeaderIcon: null,
+    contextHeaderIconFont: null,
     contextHeaderTitle: null,
     showContextHeaderToggle: false,
     isContextToggleDown: true,
