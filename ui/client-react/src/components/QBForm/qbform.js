@@ -63,7 +63,9 @@ export const QBForm = React.createClass({
     },
 
     shouldComponentUpdate: function(nextProps, nextState) {
-        // don't render if the fields store for this table is in the process of being initialized with data.
+        // if the fields store is being initialized, stop the component from re-rendering with any updates.  A
+        // subsequent state change(success or failure) when the action that fetch's the fields data is complete
+        // will be triggered and the component will re-render at that time.
         const tableFields = this.getTableFieldsFromStore(nextProps);
         if (tableFields && tableFields.fieldsLoading === true) {
             return false;
@@ -84,12 +86,21 @@ export const QBForm = React.createClass({
             //  find the fields for the form's appId/tblId combination
             const formMeta = _.has(props, 'formData.formMeta') ? props.formData.formMeta : {};
             if (_.has(formMeta, 'appId') && _.has(formMeta, 'tableId')) {
-                fields = _.find(props.fields, flds => {
-                    return ((flds.appId === formMeta.appId) && (flds.tblId === formMeta.tableId));
-                });
+                fields = _.find(props.fields, flds => flds.appId === formMeta.appId && flds.tblId === formMeta.tableId);
             }
         }
         return fields;
+    },
+
+    getFieldsFromStore: function(props) {
+        const tableFields = this.getTableFieldsFromStore(props);
+        // crazy object structure..should be refactored!
+        if (_.has(tableFields, 'fields.fields.data')) {
+            if (Array.isArray(tableFields.fields.fields.data)) {
+                return tableFields.fields.fields.data;
+            }
+        }
+        return [];
     },
 
     /**
@@ -99,15 +110,8 @@ export const QBForm = React.createClass({
      * @returns field object or null if not found
      */
     getRelatedField(fieldId) {
-        let field;
-        const tableFields = this.getTableFieldsFromStore(this.props);
-        if (_.has(tableFields, 'fields.fields.data')) {
-            // crazy object structure..should be refactored!
-            const fields = tableFields.fields.fields.data;
-            field = _.find(fields, fld => {
-                return fld.id === fieldId;
-            });
-        }
+        const fields = this.getFieldsFromStore(this.props);
+        const field = _.find(fields, fld => fld.id === fieldId);
         return field || null;
     },
 
@@ -448,14 +452,14 @@ export const QBForm = React.createClass({
                 let display = field.screenName + ". ";
 
                 return (
-                    <div className="userInFooter" key={index}>
+                    <span className="userInFooter" key={index}>
                         <span key={index} className="fieldNormalText">{field.name}</span>
-                        <span key={`${index}-link`} className="fieldLinkText"><UserFieldValueRenderer value={user} display={display} /></span>
-                    </div>
+                        <span key={`${index}-link`} className="fieldLinkText"><UserFieldValueRenderer value={user} display={display}/></span>
+                    </span>
                 );
             } else {
                 return (
-                    <div key={index} className="fieldNormalText">{`${field.name} ${field.value}. `}</div>
+                    <span key={index} className="fieldNormalText">{`${field.name} ${field.value}.`}</span>
                 );
             }
         });
@@ -472,18 +476,23 @@ export const QBForm = React.createClass({
      */
     getBuiltInFieldsForFooter() {
 
-        //let fields = this.props.formData.fields;
-        let fields = this.props.fields;
-        let values = this.props.formData.record;
+        let fields = this.getFieldsFromStore(this.props);
+        if (fields.length === 0) {
+            return [];
+        }
 
-        if (!fields || !values) {
+        let values = this.props.formData.record;
+        if (!values) {
             return [];
         }
 
         const {DATE_CREATED, DATE_MODIFIED, RECORD_OWNER, LAST_MODIFIED_BY} = Constants.BUILTIN_FIELD_ID;
-        const footerFields = [DATE_CREATED, DATE_MODIFIED, RECORD_OWNER, LAST_MODIFIED_BY];
 
-        let builtInFooterFields = fields.filter(field => footerFields.includes(field.id));
+        //  these are the list of built in fields to include on the footer
+        const footerBuiltIns = [DATE_CREATED, DATE_MODIFIED, RECORD_OWNER, LAST_MODIFIED_BY];
+
+        //  return a list of the built in fields included on this form
+        let builtInFooterFields = _.filter(fields, (field) => _.includes(footerBuiltIns, field.id));
 
         return builtInFooterFields.map(builtInField => {
             let fieldValue = values.find(currentFieldValue => currentFieldValue.id === builtInField.id);
@@ -495,7 +504,7 @@ export const QBForm = React.createClass({
             case DATE_CREATED :
                 return {
                     name: Locale.getMessage('form.footer.createdOn'),
-                    value: fieldValue.display,
+                    value: fieldValue ? fieldValue.display : '',
                     id: DATE_CREATED,
                     type: Constants.DATE
                 };
@@ -503,7 +512,7 @@ export const QBForm = React.createClass({
             case DATE_MODIFIED :
                 return {
                     name: Locale.getMessage('form.footer.lastUpdatedOn'),
-                    value: fieldValue.display,
+                    value: fieldValue ? fieldValue.display : '',
                     id: DATE_MODIFIED,
                     type: Constants.DATE
                 };
@@ -596,9 +605,9 @@ export const QBForm = React.createClass({
 function buildUserField(id, fieldValue, name) {
     return {
         name: Locale.getMessage(name),
-        value: fieldValue.display,
-        email: fieldValue.value.email,
-        screenName: fieldValue.value.screenName,
+        value: _.has(fieldValue, 'display') ? fieldValue.display : '',
+        email: _.has(fieldValue, 'value.email') ? fieldValue.value.email : '',
+        screenName: _.has(fieldValue, 'value.screenName') ? fieldValue.value.screenName : '',
         id: id,
         type: Constants.USER
     };
@@ -611,6 +620,5 @@ const mapStateToProps = (state) => {
 };
 
 export default connect(
-    mapStateToProps,
-    null
+    mapStateToProps
 )(QBForm);

@@ -1,18 +1,11 @@
 import * as Formatters from './AccountUsersGridFormatters';
 import _ from 'lodash';
 
-// Column Definitions
-const breakWordColumnProps = {
-    style: {
-        maxWidth: 275,
-        wordWrap: 'break-word'
-    }
-};
-
 const boolColumnProps = {
-    classes: ['AlignCenter BoolColumn'],
+    classes: ['BoolColumn'],
 };
 
+// Column Definitions
 const columns = [
     {
         property: 'firstName',
@@ -31,14 +24,18 @@ const columns = [
         header: {
             label: 'Email'
         },
-        props: breakWordColumnProps
+        props: {
+            classes: ['EmailColumn']
+        }
     },
     {
         property: 'userName',
         header: {
             label: 'User Name'
         },
-        props: breakWordColumnProps
+        props: {
+            classes: ['ScreennameColumn']
+        }
     },
     {
         property: 'lastAccess',
@@ -55,8 +52,7 @@ const columns = [
     {
         property: 'hasAppAccess',
         header: {
-            label: 'QuickBase Access Status',
-            props: boolColumnProps
+            label: 'QuickBase Access Status'
         },
         cell: {
             formatters: [Formatters.FormatUserStatusHTML]

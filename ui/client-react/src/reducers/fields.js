@@ -7,9 +7,6 @@ const fields = (state = [], action) => {
     //  new state list without the appId/tblId entry
     const newState = _.reject(state, field => field.appId === action.appId && field.tblId === action.tblId);
 
-    //  return the current state entry for the appId/tblId from the state list
-    const currentField = _.find(state, field => field.appId === action.appId && field.tblId === action.tblId);
-
     function getKeyField(content) {
         let keyField;
         if (_.has(content, 'fields')) {
@@ -77,7 +74,6 @@ const fields = (state = [], action) => {
     default:
         return state;
     }
-
 };
 
 export default fields;

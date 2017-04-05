@@ -1,3 +1,5 @@
+/* eslint-disable babel/no-invalid-this */
+
 // Protractor configuration
 // Use when running E2E tests on your local dev environment
 // https://github.com/angular/protractor/blob/master/docs/referenceConf.js
