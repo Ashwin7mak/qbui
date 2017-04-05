@@ -95,12 +95,11 @@ const ReportColumnHeaderMenuContainer = (ReportColumnHeaderMenu) => {
          */
         addColumnToTable(clickedColumnId, requestedColumnId, addBefore) {
             let params = {
-                context: CONTEXT.REPORT.NAV,
                 clickedId: clickedColumnId,
-                addBefore: addBefore,
-                requestedId: requestedColumnId
+                requestedId: requestedColumnId,
+                addBefore: addBefore
             };
-            this.props.dispatch(addColumnToTable(this.props.appId, this.props.tblId, this.props.rptId, params));
+            this.props.dispatch(addColumnToTable(CONTEXT.REPORT.NAV, this.props.appId, this.props.tblId, this.props.rptId, params));
         },
 
         render() {

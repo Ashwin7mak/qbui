@@ -343,11 +343,11 @@ export const loadReportRecordsCount = (context, appId, tblId, rptId, queryParams
     };
 };
 
-export const addColumnToTable = (appId, tblId, rptId, params) => {
+export const addColumnToTable = (context, appId, tblId, rptId, params) => {
     return (dispatch) => {
         if (appId && tblId && rptId) {
             logger.debug(`Adding requested column for appId: ${appId}, tblId: ${tblId}, rptId: ${rptId}`);
-            dispatch(event(params.context, types.ADD_COLUMN_SUCCESS, params));
+            dispatch(event(context, types.ADD_COLUMN_SUCCESS, params));
         }
     }
 };
