@@ -39,17 +39,17 @@ const fields = (state = [], action) => {
     }
 
         case types.ADD_FIELD: {
-            let newStateWithNewField = _.cloneDeep(newState);
-            let {newField} = action.content;
-            // let newId = newField.id;
-            // let newField = {newId: newField};
-            console.log(newStateWithNewField);
-            let lastIndex = newStateWithNewField[0].fields.fields.data.length;
-            newStateWithNewField[0].fields.fields.data[lastIndex] = newField;
+            // let newStateWithNewField = _.cloneDeep(newState);
 
-            return {
-                newStateWithNewField
-            }
+            let {newField} = action.content;
+            // let lastIndex = newStateWithNewField[0].fields.fields.data.length;
+            let lastIndex = newState[0].fields.fields.data.length;
+
+            newState[0].fields.fields.data[lastIndex] = newField;
+
+            return newState;
+            // return newStateWithNewField
+
         }
 
     case types.LOAD_FIELDS_SUCCESS: {
