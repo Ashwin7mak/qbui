@@ -8,12 +8,12 @@ import IconActions from '../../../../../reuse/client/src/components/iconActions/
 import {I18nMessage} from '../../../utils/i18nMessage';
 import Icon from '../../../../../reuse/client/src/components/icon/icon.js';
 import TableCreationPanel from '../tableCreationPanel';
-import * as TablePropertiesActions from '../../../actions/tablePropertiesActions';
+import {updateTable, loadTableProperties, setTableProperty, openIconChooser, closeIconChooser, setEditingProperty, resetEditedTableProperties} from '../../../actions/tablePropertiesActions';
 
 import './tableProperties.scss';
 
 
-const TablePropertiesRoute = React.createClass({
+export const TablePropertiesRoute = React.createClass({
 
     getExistingTableNames() {
         if (this.props.app && this.props.app.tables) {
@@ -28,7 +28,7 @@ const TablePropertiesRoute = React.createClass({
         return (<IconActions className="pageActions" actions={actions} maxButtonsBeforeMenu={maxButtonsBeforeMenu}/>);
     },
     getStageHeadline() {
-        return <div className="tableSettingsStage">{this.props.table ? <Icon isTableIcon={true} icon={this.props.table.icon} /> : null}<I18nMessage message={"settings.tableSettings"}/></div>;
+        return <div className="tableSettingsStage stageHeadLine">{this.props.table ? <Icon isTableIcon={true} icon={this.props.table.icon} /> : null}<I18nMessage message={"settings.tableSettings"}/></div>;
     },
     componentDidMount() {
         if (this.props.app && this.props.table) {
@@ -94,7 +94,33 @@ const mapStateToProps = (state) => {
     };
 };
 
+const mapDispatchToProps = (dispatch) => {
+    return {
+        updateTable: (appId, tableId, tableInfo) => {
+            return dispatch(updateTable(appId, tableId, tableInfo));
+        },
+        loadTableProperties: (tableInfo) => {
+            dispatch(loadTableProperties(tableInfo));
+        },
+        setTableProperty: (property, value, validationError, isUserEdit) => {
+            dispatch(setTableProperty(property, value, validationError, isUserEdit));
+        },
+        openIconChooser: () => {
+            dispatch(openIconChooser());
+        },
+        closeIconChooser: () => {
+            dispatch(closeIconChooser());
+        },
+        setEditingProperty: (editing) => {
+            dispatch(setEditingProperty(editing));
+        },
+        resetEditedTableProperties: () => {
+            dispatch(resetEditedTableProperties());
+        }
+    };
+};
+
 export default connect(
     mapStateToProps,
-    TablePropertiesActions
+    mapDispatchToProps
 )(TablePropertiesRoute);

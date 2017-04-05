@@ -14,7 +14,7 @@ import {I18nMessage} from '../../utils/i18nMessage';
 let FluxMixin = Fluxxor.FluxMixin(React);
 let StoreWatchMixin = Fluxxor.StoreWatchMixin;
 
-const SettingsWrapper = React.createClass({
+export const SettingsWrapper = React.createClass({
     mixins: [FluxMixin, StoreWatchMixin('AppsStore')],
 
     getStateFromFlux() {
@@ -94,10 +94,10 @@ const SettingsWrapper = React.createClass({
                 ]}
             >
                 <TopNav onNavClick={this.props.toggleNav}/>
-                {React.cloneElement(this.props.children, {
+                {this.props.children ? React.cloneElement(this.props.children, {
                     app: this.getSelectedApp(),
                     table: this.getSelectedTable()
-                })
+                }) : null}
                 }
             </LeftNav>
         </AppShell>;

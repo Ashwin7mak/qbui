@@ -73,6 +73,9 @@ export const loadedTable = (tableInfo) => ({
     tableInfo
 });
 
+export const resetEditedTableProperties = () => ({
+    type: types.RESET_TABLE_PROPS
+});
 /**
  * create the table on the server
  * @param appId
