@@ -2,7 +2,7 @@ import FieldFormats from '../../src/utils/fieldFormats';
 const serverTypeConsts = require('../../../common/src/constants');
 
 
-export const testCases = [
+const testCases = [
     {
         type: FieldFormats.NUMBER_FORMAT,
         serverType: serverTypeConsts.NUMERIC,
@@ -148,7 +148,7 @@ export const testCases = [
             "datatypeAttributes": {
                 "type": "URL"
             },
-            "name": "Url",
+            "name": "URL",
             "required": false
         }
     },
@@ -189,3 +189,5 @@ export const testCases = [
         }
     }
 ];
+
+export default testCases;
