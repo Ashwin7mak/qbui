@@ -214,7 +214,6 @@ export const ReportToolsAndContent = React.createClass({
                               searchStringForFiltering={this.props.reportData.searchStringForFiltering}
                               pageActions={this.getPageActions(0)}
                               nameForRecords={this.nameForRecords}
-                              //fields={this.props.fields}
                               searchTheString={this.searchTheString}
                               filterOnSelections={this.filterOnSelections}
                               clearSearchString={this.clearSearchString}
@@ -350,7 +349,7 @@ export const ReportToolsAndContent = React.createClass({
 
             //  use helper method to retrieve the fields for this table and return the field in the object structure used by the reports components
             let tableFieldsObj = FieldsReducer.tableFieldsObj(this.props.fields, this.props.reportData.appId, this.props.reportData.tblId);
-            let fields = _.has(tableFieldsObj, 'getTableReportField') ? tableFieldsObj.getTableReportFields() : [];
+            let fields = _.has(tableFieldsObj, 'getTableReportFields') ? tableFieldsObj.getTableReportFields() : [];
 
             let primaryKeyName = FieldUtils.getPrimaryKeyFieldName(fields);
 
