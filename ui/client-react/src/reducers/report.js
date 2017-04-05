@@ -250,7 +250,7 @@ const report = (state = [], action) => {
             let columns = currentReport.data.columns;
             let fids = currentReport.data.fids;
             let params = action.content;
-
+            // searches through the current columns to find the one that was selected
             let currentColumn = columns.filter((column) => {
                 if (column.id == params.clickedId) {
                     return column;
@@ -266,6 +266,7 @@ const report = (state = [], action) => {
             newColumn.id = newId;
 
             let indexedOrder = currentColumn.order - 1;
+            // correctly position the new column in the table
             if (params.addBefore) {
                 columns.splice(indexedOrder, 0, newColumn);
                 currentColumn.order += 1
