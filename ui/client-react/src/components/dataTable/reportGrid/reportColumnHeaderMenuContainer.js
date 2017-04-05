@@ -106,7 +106,7 @@ const ReportColumnHeaderMenuContainer = (ReportColumnHeaderMenu) => {
             return (<ReportColumnHeaderMenu
                 sortReport={this.sortReport}
                 groupReport={this.groupReport}
-                onColumnAdd={this.addColumnToTable}
+                addColumn={this.addColumnToTable}
                 {...this.props}
             />);
         }
