@@ -1,16 +1,15 @@
 import React from 'react';
-import TestUtils from 'react-addons-test-utils';
 import {shallow, mount} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
 
 import Pagination, {__RewireAPI__ as PaginationRewireAPI} from '../../src/components/pagination/pagination';
 
-describe('Pagination', () => {
+describe('Pagination component', () => {
   beforeEach(() => {
       jasmineEnzyme();
   });
 
-  it('test next page button', () => {
+  it('has a next page button', () => {
     const mockNextPageButton = {nextPageButton() {}};
     spyOn(mockNextPageButton, 'nextPageButton');
 
@@ -19,7 +18,7 @@ describe('Pagination', () => {
     expect(component.find('.nextPageButton')).toBePresent();
   })
 
-  it('test previous page button', () => {
+  it('has a previous page button', () => {
     const mockPreviousPageButton = {previousPageButton() {}};
     spyOn(mockPreviousPageButton, 'previousPageButton');
 
@@ -28,8 +27,23 @@ describe('Pagination', () => {
     expect(component.find('.prevPageButton')).toBePresent();
   })
 
-  it('test render of component with plain string', () => {
-      let component = TestUtils.renderIntoDocument(<I18nMessage message="1"></I18nMessage>);
-      expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+  it('that fetches a previous page when previousPageButton is clicked', () => {
+      const testParent = {testOnClick() {}};
+      spyOn(testParent, 'testOnClick');
+      component = shallow(<Pagination onPageChange={testParent.testOnClick}/>);
+
+      component.find('.navigationButtonPrevious').simulate('click');
+
+      expect(testParent.testOnClick).toHaveBeenCalledWith(page-1);
+  });
+
+  it('that fetches a next page when nextPageButton is clicked', () => {
+      const testParent = {testOnClick() {}};
+      spyOn(testParent, 'testOnClick');
+      component = shallow(<Pagination onPageChange={testParent.testOnClick}/>);
+
+      component.find('.navigationButtonNext').simulate('click');
+
+      expect(testParent.testOnClick).toHaveBeenCalledWith(page+1);
   });
 })

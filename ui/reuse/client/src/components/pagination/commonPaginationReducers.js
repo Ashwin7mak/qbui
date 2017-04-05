@@ -10,7 +10,7 @@ const defaultState = (configs = {}) => ({
 });
 
 const behaviours = {
-  [CHANGE_PAGE_NUMBER]: (state, { payload }) => ({
+  [CHANGE_PAGE_NUMBER]: (state, { payload }) => {
     const nextState = {
       ...defaultState(payload.configs),
       ...state,
