@@ -51,17 +51,12 @@ const fieldsStore = (state = [], action) => {
     }
 
         case types.ADD_FIELD: {
-            // let newStateWithNewField = _.cloneDeep(newState);
-
             let {newField} = action.content;
-            // let lastIndex = newStateWithNewField[0].fields.fields.data.length;
-            let lastIndex = newState[0].fields.fields.data.length;
+            let lastIndex = newState[0].fields.length;
 
-            newState[0].fields.fields.data[lastIndex] = newField;
+            newState[0].fields[lastIndex] = newField;
 
             return newState;
-            // return newStateWithNewField
-
         }
 
     case types.LOAD_FIELDS_SUCCESS: {
