@@ -59,9 +59,6 @@ export const SortAndGroup = React.createClass({
         // the adhoc filter information selected facets and search
         filter: React.PropTypes.object,
 
-        // the fields in the table
-        //fields:  React.PropTypes.array.isRequired,
-
         // the callback to call when the sort group dialog in shown
         onMenuEnter : React.PropTypes.func,
 
@@ -469,7 +466,7 @@ export const SortAndGroup = React.createClass({
     },
 
     getFieldsFromProps() {
-        let fieldsContainer = FieldsReducer.tableFieldsObj(this.props.fields, this.props.reportData.appId, this.props.reportData.tblId);
+        let fieldsContainer = FieldsReducer.tableFieldsObj(this.props.fields, this.props.appId, this.props.tblId);
         return fieldsContainer ? fieldsContainer.fields : [];
     },
 
