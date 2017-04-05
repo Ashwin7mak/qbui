@@ -121,7 +121,7 @@
     "paramSslCertificateID": {
       "Description": "ARN of the SSL cert for the ELB",
       "Type": "String",
-      "Default": "arn:aws:acm:us-west-2:723670383381:certificate/a5e4a6b9-8a5a-4c87-a602-de2848410b27"
+      "Default": "arn:aws:acm:us-west-2:723670383381:certificate/9f6356af-20cb-479e-b321-6a60eab593bb"
     }
   },
   "Resources": {

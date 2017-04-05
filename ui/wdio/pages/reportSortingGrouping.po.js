@@ -192,7 +192,9 @@
                     //wait for delete button to be visible
                     result.element('.fieldDeleteIcon').waitForVisible();
                     //click on delete button
-                    return result.element('.fieldDeleteIcon').click();
+                    result.element('.fieldDeleteIcon').click();
+                    //Need this to wait for rendering
+                    return browser.pause(e2eConsts.shortWaitTimeMs);
                 });
             } else {
                 browser.logger.error('There are no nonEmpty fields for container ' + containerName);
@@ -217,7 +219,9 @@
                 //wait for delete button to be visible
                 results[0].element('.fieldDeleteIcon').waitForVisible();
                 //click on delete button
-                return results[0].element('.fieldDeleteIcon').click();
+                results[0].element('.fieldDeleteIcon').click();
+                //Need this to wait for rendering
+                return browser.pause(e2eConsts.shortWaitTimeMs);
             } else {
                 browser.logger.error('The field with name ' + fieldToDelete + ' is not found for container ' + containerName);
                 throw new Error('Cannot delete value for field ' + fieldToDelete);
@@ -277,6 +281,8 @@
          */
         getAllFieldsFromFieldPanelValues : {value: function() {
             var results = [];
+            //wait until you see field panel
+            this.fieldsPanel.element('.list-group .fieldName').waitForVisible();
             //get all fieldNames from the panel
             this.fieldsPanel.elements('.list-group .fieldName').value.map(function(field) {
                 results.push(field.getAttribute('textContent'));
@@ -300,7 +306,7 @@
         getGroupedTableRows : {value: function() {
             var groupHeaders = [];
             var recordRows;
-
+            browser.element('.groupHeader').waitForVisible();
             //get all group headers
             this.getAllGroupHeadersList.value.filter(function(header) {
                 return groupHeaders.push(header.getAttribute('textContent'));
@@ -442,11 +448,12 @@
          * Function will select the Item passed in parameter from the column header popup menu
          */
         selectColumnHeaderMenuItem: {value: function(itemToSelect) {
-            var items = reportContentPO.qbGridContainer.elements('.dropdown-menu').elements('li').value.filter(function(elm) {
-                return elm.getText() === itemToSelect;
+            var items = reportContentPO.qbGridContainer.element('.dropdown.open .dropdown-menu').elements('li').value.filter(function(elm) {
+                return elm.getAttribute('textContent') === itemToSelect;
             });
 
             if (items !== []) {
+                items[0].element('a').waitForVisible();
                 items[0].element('a').click();
                 //wait until report rows in table are loaded
                 return reportContentPO.waitForReportContent();

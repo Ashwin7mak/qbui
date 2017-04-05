@@ -505,12 +505,12 @@ export default {
             [FieldFormats.DURATION_FORMAT]: "Dauer",
             [FieldFormats.USER_FORMAT]: "Benutzer",
             [FieldFormats.CHECKBOX_FORMAT]: "Checkbox",
-            [FieldFormats.URL]: "Url",
+            [FieldFormats.URL]: "URL",
             [FieldFormats.EMAIL_ADDRESS]: "Email",
             [FieldFormats.PHONE_FORMAT]: "Telefon",
             [FieldFormats.RATING_FORMAT]: "Bewertung",
             [FieldFormats.RATING_FORMAT_MULTICHOICE]: "Bewertung",
-            [FieldFormats.URL_FORMULA_FORMAT]: "Url Formel",
+            [FieldFormats.URL_FORMULA_FORMAT]: "URL Formel",
             FORMULA: "Formel",
             SCALAR: "Skalar",
             CONCRETE: "Beton",
@@ -522,8 +522,41 @@ export default {
         builder: {
             formBuilder: {
                 unimplemented: "Feature ist momentan nicht verfügbar",
-                removeField: "Feld aus Form entfernen"
+                removeField: "Feld aus Form entfernen",
+                tooltips: {
+                    [`addNew${FieldFormats.TEXT_FORMAT}`]: "Erstellen Sie ein Textfeld und fügen Sie es dem Formular hinzu",
+                    [`addNew${FieldFormats.NUMBER_FORMAT}`]: "Erstellen Sie ein Zahlenfeld und fügen Sie es dem Formular hinzu",
+                    [`addNew${FieldFormats.DATE_FORMAT}`]: "Erstellen Sie ein Datumsfeld und fügen Sie es dem Formular hinzu",
+                    [`addNew${FieldFormats.DATETIME_FORMAT}`]: "Erstellen Sie einen Zeitstempel und fügen Sie ihn dem Formular hinzu",
+                    [`addNew${FieldFormats.TIME_FORMAT}`]: "Erstellen Sie ein Time-of-Day-Feld und fügen Sie es dem Formular hinzu",
+                    [`addNew${FieldFormats.CHECKBOX_FORMAT}`]: "Erstellen Sie ein Kontrollkästchen und fügen Sie es dem Formular hinzu",
+                    [`addNew${FieldFormats.USER_FORMAT}`]: "Erstellen Sie ein Benutzerfeld und fügen Sie es dem Formular hinzu",
+                    [`addNew${FieldFormats.CURRENCY_FORMAT}`]: "Erstellen Sie ein Währungsfeld und fügen Sie es dem Formular hinzu",
+                    [`addNew${FieldFormats.PERCENT_FORMAT}`]: "Erstellen Sie ein Prozentfeld und fügen Sie es dem Formular hinzu",
+                    [`addNew${FieldFormats.RATING_FORMAT}`]: "Erstellen Sie ein Rating-Feld und fügen Sie es dem Formular hinzu",
+                    [`addNew${FieldFormats.DURATION_FORMAT}`]: "Erstellen Sie ein Dauerfeld und fügen Sie es dem Formular hinzu",
+                    [`addNew${FieldFormats.PHONE_FORMAT}`]: "Erstellen Sie ein Telefonfeld und fügen Sie es dem Formular hinzu",
+                    [`addNew${FieldFormats.MULTI_LINE_TEXT_FORMAT}`]: "Erstellen Sie ein langes Textfeld und fügen Sie es dem Formular hinzu",
+                    [`addNew${FieldFormats.URL}`]: "Erstellen Sie ein URL-Feld und fügen Sie es dem Formular hinzu",
+                    [`addNew${FieldFormats.EMAIL_ADDRESS}`]: "Erstellen Sie ein E-Mail-Feld und fügen Sie es dem Formular hinzu",
+                    [`addNew${FieldFormats.TEXT_FORMULA_FORMAT}`]: "Erstellen Sie ein Textformelfeld und fügen Sie es dem Formular hinzu",
+                    [`addNew${FieldFormats.URL_FORMULA_FORMAT}`]: "Erstellen Sie ein URL-Formelfeld und fügen Sie es dem Formular hinzu",
+                    [`addNew${FieldFormats.NUMERIC_FORMULA_FORMAT}`]: "Erstellen Sie ein numerisches Formelfeld und fügen Sie es dem Formular hinzu",
+                    [`addNew${FieldFormats.TEXT_FORMAT_MULTICHOICE}`]: "Erstellen Sie eine Auswahlliste und fügen Sie sie dem Formular hinzu",
+                    [`addNew${FieldFormats.RATING_FORMAT_MULTICHOICE}`]: "Erstellen Sie ein Rating-Feld und fügen Sie es dem Formular hinzu",
+                    [`addNew${FieldFormats.CURRENCY_FORMAT_MULTICHOICE}`]: "Erstellen Sie ein Währungsfeld und fügen Sie es dem Formular hinzu",
+                    [`addNew${FieldFormats.PERCENT_FORMAT_MULTICHOICE}`]: "Erstellen Sie ein Prozentfeld und fügen Sie es dem Formular hinzu",
+                    [`addNew${FieldFormats.NUMBER_FORMAT_MULTICHOICE}`]: "Erstellen Sie eine numerische Auswahlliste und fügen Sie sie dem Formular hinzu",
+                    [`addNew${FieldFormats.NUMBER_FORMAT_RADIO_BUTTONS}`]: "Erstellen Sie numerische Optionsfelder und fügen Sie sie dem Formular hinzu",
+                    [`addNew${FieldFormats.TEXT_FORMAT_RADIO_BUTTONS}`]: "Radio-Optionsfeld erstellen und sie dem Formular hinzufügen",
+                }
             },
+            fieldGroups: {
+                text: "Text",
+                numeric: "Nummer",
+                date: "Datum",
+                other: "Andere"
+            }
         },
         featureSwitchAdmin: {
             defaultFeatureName: "Feature",
