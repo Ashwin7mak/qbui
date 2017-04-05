@@ -94,6 +94,8 @@ export const FieldElement = React.createClass({
         }
         let isEditable = this.props.edit && FieldUtils.isFieldEditable(this.props.relatedField);
 
+        console.log('relatedField: ', this.props);
+
         let fieldElement = null;
         if (isEditable) {
             fieldElement = <FieldValueEditor type={fieldType}

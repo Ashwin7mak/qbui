@@ -1,5 +1,6 @@
 import fieldFormats from '../../utils/fieldFormats';
 import Locale from '../../../../reuse/client/src/locales/locale';
+import {createScalarDefaultFieldsProperties} from '../../utils/defaultFieldsProperties';
 
 /**
  * A master list of supported that affect which field types are displayed in the new field menu in form builder.
@@ -76,6 +77,7 @@ export function createFieldTypeProps(fieldType) {
     return {
         key: `fieldType_${fieldType}`,
         type: fieldType,
+        relatedField: {...createScalarDefaultFieldsProperties()[fieldType]},
         isNewField: true,
         title,
         tooltipText: Locale.getMessage(`builder.formBuilder.tooltips.addNew${fieldType}`)

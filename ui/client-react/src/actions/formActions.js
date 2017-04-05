@@ -10,7 +10,24 @@ import NotificationManager from '../../../reuse/client/src/scripts/notificationM
 import * as types from '../actions/types';
 import * as UrlConsts from "../constants/urlConstants";
 import {NEW_FORM_RECORD_ID} from '../constants/schema';
+import consts from '../../../common/src/constants';
+import _ from 'lodash';
 import {convertFormToArrayForClient, convertFormToObjectForServer} from './actionHelpers/transformFormData';
+
+let testIt = {
+    "FormFieldElement": {
+        "displayText": "Ob",
+        "displayOptions": ["VIEW", "ADD", "EDIT"],
+        "labelPosition": "LEFT",
+        "type": "FIELD",
+        "positionSameRow": false,
+        "useAlternateLabel": false,
+        "readOnly": false,
+        "required": false,
+        "fieldId": 11,
+        "showAsRadio": false
+    },
+}
 
 let logger = new Logger();
 
@@ -179,6 +196,36 @@ export const loadForm = (appId, tblId, rptId, formType, recordId) => {
     };
 };
 
+// Not exported, private function
+const buildNewFieldElement = (displayText = 'New Text Field') => {
+    let newId = _.uniqueId('newField_');
+    return _.merge({}, {
+        id: newId,
+        FormFieldElement: {
+            fieldId: newId,
+            displayText,
+            isNewField: true,
+        }
+    });
+};
+
+export const addNewFieldToForm = (formId, newField) => {
+    let newId = _.uniqueId('newField_');
+    let displayText = 'New Text Field';
+    newField = _.merge({}, testIt, newField, {
+        id: newId,
+        edit: true,
+        FormFieldElement: {
+            fieldId: newId,
+            displayText,
+            isNewField: true,
+        }
+    });
+    return event(formId, types.ADD_FIELD, {
+        newField
+    });
+};
+
 /**
  * Move a field from one position on a form to a different position
  * @param formId
@@ -218,7 +265,6 @@ export const deselectField = (formId, location) => {
  * @param formId
  * @param location
  * @returns {{id, type, content}|*}
-
  */
 export const removeFieldFromForm = (formId, location) => {
     return event(formId, types.REMOVE_FIELD, {

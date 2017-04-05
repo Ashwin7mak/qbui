@@ -45,11 +45,19 @@ const MoveFieldHelper = {
         return formMetaCopy;
     },
 
+    addNewFieldToForm(formMeta, newField) {
+        let formMetaCopy = _.cloneDeep(formMeta);
+
+        addNewFieldToBottomOfForm(formMetaCopy, newField);
+
+        return formMetaCopy;
+    },
+
     updateSelectedFieldLocation(location, updatedLocation) {
         let locationCopy = Object.assign({}, location);
         locationCopy.elementIndex = locationCopy.elementIndex + updatedLocation;
         return locationCopy;
-    }
+    },
 };
 
 // -- PRIVATE METHODS
@@ -122,6 +130,17 @@ function removeElementFromCurrentLocation(formMetaData, location) {
 
     updateOrderIndices(column, 'elements');
     clearEmptyElementsFromSection(formMetaData, tabIndex, sectionIndex, columnIndex);
+
+    return formMetaData;
+}
+
+function addNewFieldToBottomOfForm(formMetaData, newField) {
+    let column = formMetaData.tabs[0].sections[0].columns[0];
+    let lastIndex = column.elements.length;
+
+    column.elements[lastIndex] = newField;
+    column.elements[lastIndex].orderIndex = lastIndex;
+    column.elements[lastIndex].FormFieldElement.orderIndex = lastIndex;
 
     return formMetaData;
 }
