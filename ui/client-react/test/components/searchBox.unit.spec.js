@@ -19,8 +19,7 @@ describe('SearchBox', () => {
     });
 
     it('renders the component', () => {
-        let placeholderText = "test";
-        component = shallow(<SearchBox placeholder={placeholderText}/>);
+        component = shallow(<SearchBox placeholder="test"/>);
 
         expect(component.find('input')).toBePresent();
     });

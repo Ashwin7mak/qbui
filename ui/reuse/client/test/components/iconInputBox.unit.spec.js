@@ -13,17 +13,17 @@ describe('IconInputBox functions', () => {
         mockCallbacks = {
             onChangeEv : function(value) {
             },
-            onClearSearchEv : function(value) {
+            onClearEv : function(value) {
             }
         };
         spyOn(mockCallbacks, 'onChangeEv');
-        spyOn(mockCallbacks, 'onClearSearchEv');
+        spyOn(mockCallbacks, 'onClearEv');
 
     });
 
     afterEach(() => {
         mockCallbacks.onChangeEv.calls.reset();
-        mockCallbacks.onClearSearchEv.calls.reset();
+        mockCallbacks.onClearEv.calls.reset();
     });
     it('test render of component', () => {
         component = TestUtils.renderIntoDocument(<IconInputBox placeholder="test"/>);
@@ -66,12 +66,12 @@ describe('IconInputBox functions', () => {
     });
 
     it('test render of component with clear event', () => {
-        component = TestUtils.renderIntoDocument(<IconInputBox value="test" onClearSearch={mockCallbacks.onClearSearchEv}/>);
+        component = TestUtils.renderIntoDocument(<IconInputBox value="test" onClear={mockCallbacks.onClearEv}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
         let clearIcon = TestUtils.scryRenderedDOMComponentsWithClass(component, "clearSearch");
         expect(clearIcon.length).toEqual(1);
         TestUtils.Simulate.click(clearIcon[0]);
-        expect(mockCallbacks.onClearSearchEv).toHaveBeenCalled();
+        expect(mockCallbacks.onClearEv).toHaveBeenCalled();
     });
 });
 

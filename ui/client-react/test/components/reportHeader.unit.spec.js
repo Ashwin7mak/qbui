@@ -21,7 +21,7 @@ const mockStore = configureMockStore(middlewares);
 
 import * as types from '../../src/actions/types';
 
-describe('ReportHeader', () => {
+fdescribe('ReportHeader', () => {
     'use strict';
 
     let component;
