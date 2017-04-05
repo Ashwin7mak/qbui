@@ -347,9 +347,8 @@ export const ReportToolsAndContent = React.createClass({
             let {appId, tblId, rptId, reportData:{selections, ...otherReportData}} = this.props;
 
             //  get the fields from redux store
-            let fieldsContainer = _.find(this.props.fields, field => field.appId === this.props.reportData.appId && field.tblId === this.props.reportData.tblId);
-            let fields = fieldsContainer ? fieldsContainer.fields : [];
-
+            let fieldsContainer = _.find(this.props.fields, flds => flds.appId ===  this.props.reportData.appId && flds.tblId === this.props.reportData.tblId);
+            let fields = fieldsContainer.fields ? fieldsContainer.fields : [];
             let primaryKeyName = FieldUtils.getPrimaryKeyFieldName(fields);
 
             // Define the page start. Page offset is zero indexed. For display purposes, add one.

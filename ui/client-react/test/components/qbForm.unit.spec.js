@@ -3,7 +3,7 @@ import {shallow, mount} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
 import _ from 'lodash';
 
-import QBForm, {__RewireAPI__ as QbFormRewireAPI} from '../../src/components/QBForm/qbform';
+import {QBForm, __RewireAPI__ as QbFormRewireAPI} from '../../src/components/QBForm/qbform';
 import QBPanel from '../../src/components/QBPanel/qbpanel.js';
 import {TabPane} from 'rc-tabs';
 import RelatedChildReport from '../../src/components/QBForm/relatedChildReport';
@@ -53,36 +53,106 @@ const emptyQBFormData = {
     fields: [{id: 2, name: "field name", datatypeAttributes: {type: "TEXT"}}, {"builtIn": true, "datatypeAttributes": {"type": "DATE_TIME"}, "id": 1, "required": false, "type": "SCALAR", "name": "built in field name"}]
 };
 
-var FieldElementMock = React.createClass({
+const storeFields = [{
+    appId: 3,
+    tblId: 2,
+    fieldsLoading: false,
+    fields: {
+        fields: {
+            data: [
+                {id: 6, name: "field 6", datatypeAttributes: {type: "TEXT"}},
+                {id: 7, name: "field 7", datatypeAttributes: {type: "TEXT"}}
+            ]
+        }
+    }
+}];
+const storeFieldsWithBuiltIns = [{
+    appId: 3,
+    tblId: 2,
+    fieldsLoading: false,
+    fields: {
+        fields: {
+            data: [
+                {id: 1, name: "field 1", builtIn: true},
+                {id: 2, name: "field 2", builtIn: true},
+                {id: 3, name: "field 3", builtIn: true},
+                {id: 4, name: "field 4", builtIn: true},
+                {id: 5, name: "field 5", builtIn: true},
+                {id: 6, name: "field 6", datatypeAttributes: {type: "TEXT"}},
+                {id: 7, name: "field 7", datatypeAttributes: {type: "TEXT"}}
+            ]
+        }
+    }
+}];
+
+const FieldElementMock = React.createClass({
     render: function() {
         return (
             <div className="formElement field">{this.props.display}</div>
         );
     }
 });
+const DragAndDropMock = React.createClass({
+    render: function() {
+        return (
+            <div>mock dragAndDrop</div>
+        );
+    }
+});
 
-let component;
+const UserFieldValueRendererMock = React.createClass({
+    render: function() {
+        return (
+            <div>mock UserFieldValueRenderer</div>
+        );
+    }
+});
 
 describe('QBForm', () => {
     beforeEach(() => {
         jasmineEnzyme();
+        QbFormRewireAPI.__Rewire__('DragAndDropField', DragAndDropMock);
         QbFormRewireAPI.__Rewire__('FieldElement', FieldElementMock);
+        QbFormRewireAPI.__Rewire__('UserFieldValueRenderer', UserFieldValueRendererMock);
     });
 
     afterEach(() => {
+        QbFormRewireAPI.__ResetDependency__('DragAndDropField');
         QbFormRewireAPI.__ResetDependency__('FieldElement');
+        QbFormRewireAPI.__ResetDependency__('UserFieldValueRenderer');
     });
 
     it('renders the component', () => {
-        component = shallow(<QBForm activeTab="0" formData={fakeQbFormData}/>);
+        const component = shallow(<QBForm activeTab="0" formData={fakeQbFormData}/>);
         expect(component).toBePresent();
     });
 
-    it('renders tabs', () => {
-        component = mount(<QBForm activeTab="0" formData={fakeQbFormData} />);
-        let tabs = component.find('.rc-tabs-tab');
+    it('renders footer', () => {
+        let qbFormData = _.cloneDeep(fakeQbFormData);
+        qbFormData.formMeta.includeBuiltIns = true;
+        qbFormData.record = [
+            {id: 1, display:'display value 1', value: "2017-03-31T18:06:30.367Z[UTC]"},
+            {id: 2, display:'display value 2', value: "2017-03-31T18:06:30.367Z[UTC]"},
+            {id: 3, display:'display value 3', value: "field value 3"},
+            {id: 4, display:'display value 4', value: {
+                email: 'email',
+                screenName: 'screenName'
+            }},
+            {id: 5, display:'display value 5', value: {
+                email: 'email',
+                screenName: 'screenName'
+            }}
+        ];
+        const component = mount(<QBForm activeTab="0" formData={qbFormData} fields={storeFieldsWithBuiltIns}/>);
+        const footer = component.find('.formFooter');
+        expect(footer.length).toEqual(1);
+    });
 
-        let expectedTabs = fakeQbFormData.formMeta.tabs.map(tab => tab.title);
+    it('renders tabs', () => {
+        const component = mount(<QBForm activeTab="0" formData={fakeQbFormData} />);
+        const tabs = component.find('.rc-tabs-tab');
+
+        const expectedTabs = fakeQbFormData.formMeta.tabs.map(tab => tab.title);
 
         expect(tabs.length).toEqual(2);
         expectedTabs.forEach((tab, index) => {
@@ -96,15 +166,15 @@ describe('QBForm', () => {
         let formDataWithSingleTab = _.cloneDeep(fakeQbFormData);
         formDataWithSingleTab.formMeta.tabs = formDataWithSingleTab.formMeta.tabs.filter(tab => tab.orderIndex === 0);
 
-        component = mount(<QBForm activeTab="0" formData={formDataWithSingleTab} />);
+        const component = mount(<QBForm activeTab="0" formData={formDataWithSingleTab} />);
 
         expect(component.find('.rc-tabs-tab')).not.toBePresent();
         expect(component.find('.noTabForm')).toBePresent();
     });
 
     it('renders sections', () => {
-        component = shallow(<QBForm activeTab="0" formData={fakeQbFormData} />);
-        let sections = component.find('.formSection');
+        const component = shallow(<QBForm activeTab="0" formData={fakeQbFormData} />);
+        const sections = component.find('.formSection');
 
         let expectedSectionTitles = [];
         fakeQbFormData.formMeta.tabs.forEach(tab => {
@@ -118,8 +188,8 @@ describe('QBForm', () => {
     });
 
     it('renders a single column', () => {
-        component = mount(<QBForm activeTab="1" formData={fakeQbFormData} />);
-        let columns = component.find('.sectionColumn');
+        const component = mount(<QBForm activeTab="1" formData={fakeQbFormData} />);
+        const columns = component.find('.sectionColumn');
 
         expect(columns.length).toEqual(4);
         columns.forEach(column => {
@@ -128,8 +198,8 @@ describe('QBForm', () => {
     });
 
     it('renders multiple columns', () => {
-        component = mount(<QBForm activeTab="1" formData={testFormDataArrayWithTwoColumns} />);
-        let columns = component.find('.sectionColumn');
+        const component = mount(<QBForm activeTab="1" formData={testFormDataArrayWithTwoColumns} />);
+        const columns = component.find('.sectionColumn');
 
         expect(columns.length).toEqual(2);
         columns.forEach(column => {
@@ -138,8 +208,8 @@ describe('QBForm', () => {
     });
 
     it('does not render relationship element if no relationships exist', () => {
-        component = mount(<QBForm activeTab="0" formData={fakeQbFormData} />);
-        let childReport = component.find('.referenceElement');
+        const component = mount(<QBForm activeTab="0" formData={fakeQbFormData} />);
+        const childReport = component.find('.referenceElement');
 
         expect(childReport).not.toBePresent();
     });
@@ -147,9 +217,9 @@ describe('QBForm', () => {
     it('renders relationship elements if relationships exist', () => {
         const actualRelationship = testFormDataWithRelationship.formMeta.relationships[0];
 
-        component = mount(<QBForm activeTab="0" formData={testFormDataWithRelationship}/>);
-        let childReport = component.find('.referenceElement');
-        let childReportComponent = component.find(RelatedChildReport);
+        const component = mount(<QBForm activeTab="0" formData={testFormDataWithRelationship}/>);
+        const childReport = component.find('.referenceElement');
+        const childReportComponent = component.find(RelatedChildReport);
 
         expect(childReport).toBePresent();
         expect(childReportComponent).toHaveProp('appId', actualRelationship.appId);
@@ -158,8 +228,8 @@ describe('QBForm', () => {
     });
 
     it('renders text form elements', () => {
-        component = mount(<QBForm activeTab="1" formData={fakeQbFormData} />);
-        let textElement = component.find('.formElement.text');
+        const component = mount(<QBForm activeTab="1" formData={fakeQbFormData} />);
+        const textElement = component.find('.formElement.text');
 
         expect(textElement.length).toEqual(1);
         expect(textElement.text()).toEqual(textElementText);
@@ -167,13 +237,13 @@ describe('QBForm', () => {
 
 
     it('renders an empty section', () => {
-        component = mount(<QBForm activeTab="0" formData={emptyQBFormData} />);
-        let fieldElements = component.find('.formElement');
+        const component = mount(<QBForm activeTab="0" formData={emptyQBFormData} />);
+        const fieldElements = component.find('.formElement');
         expect(fieldElements.length).toEqual(0);
     });
 
     it('renders for field elements with a location for use in dragging and dropping', () => {
-        component = mount(<QBForm activeTab="0" formData={fakeQbFormData} />);
+        const component = mount(<QBForm activeTab="0" formData={fakeQbFormData} />);
         const fieldElement = component.find(FieldElementMock).first();
 
         expect(fieldElement).toHaveProp('location', {
@@ -196,7 +266,8 @@ describe('QBForm', () => {
             }
         };
 
-        component = mount(<QBForm activeTab="0" formData={fakeQbFormData} pendEdits={edits} />);
+        //  fields is now coming from redux, so pass in as a prop
+        const component = mount(<QBForm activeTab="0" formData={fakeQbFormData} pendEdits={edits} fields={storeFields} />);
         const fieldElements = component.find('.formTable').first().find(FieldElementMock);
         expect(fieldElements.length).toEqual(4);
 
@@ -224,7 +295,7 @@ describe('QBForm', () => {
             }
         };
 
-        component = mount(<QBForm activeTab={"0"} formData={fakeQbFormData} pendEdits={edits} />);
+        const component = mount(<QBForm activeTab={"0"} formData={fakeQbFormData} pendEdits={edits} fields={storeFields}/>);
         const fieldElements = component.find('.formTable').first().find(FieldElementMock);
         expect(fieldElements.length).toEqual(4);
 

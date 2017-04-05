@@ -9,7 +9,6 @@ import Fluxxor from 'fluxxor';
 import {I18nMessage} from "../../utils/i18nMessage";
 import Constants from '../../../../common/src/constants';
 import {connect} from 'react-redux';
-import {editNewRecord} from '../../actions/formActions';
 import * as SearchActions from '../../actions/searchActions';
 import * as TableActions from '../../actions/tableActions';
 import * as FieldsActions from '../../actions/fieldsActions';
@@ -110,13 +109,6 @@ export const TableHomePageRoute = React.createClass({
         //  ensure there is a rptId property otherwise the report not found page is rendered in ReportToolsAndContent
         let homePageParams = _.assign(this.props.params, {rptId: null});
 
-        //  get fields from redux store
-        let fields = [];
-        if (_.has(this.props, 'params')) {
-            let fieldsContainer = _.find(this.props.fields, field => field.appId === this.props.params.appId && field.tblId === this.props.params.tblId);
-            fields = fieldsContainer ? fieldsContainer.fields : [];
-        }
-
         return (<div className="reportContainer">
             <Stage stageHeadline={this.getStageHeadline()} pageActions={this.getPageActions(5)}>
                 <ReportStage reportData={this.props.reportData} />
@@ -130,7 +122,6 @@ export const TableHomePageRoute = React.createClass({
                 appUsers={this.props.appUsers}
                 routeParams={this.props.routeParams}
                 selectedAppId={this.props.selectedAppId}
-                fields={fields}
                 searchStringForFiltering={this.props.reportData.searchStringForFiltering}
                 selectedRows={this.props.reportData.selectedRows}
                 scrollingReport={this.props.scrollingReport}
@@ -146,7 +137,6 @@ export const TableHomePageRoute = React.createClass({
 // (another bit of boilerplate to keep the component free of Redux dependencies)
 const mapStateToProps = (state) => {
     return {
-        fields: state.fields,
         report: state.report
     };
 };
