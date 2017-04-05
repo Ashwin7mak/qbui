@@ -40,8 +40,11 @@ export const TablePropertiesRoute = React.createClass({
             nextProps.loadTableProperties(nextProps.table);
         }
     },
-    updateTableProperties() {
-        this.props.updateTable(this.props.app.id, this.props.table.id, this.props.tableProperties.tableInfo).then(
+    updateTable() {
+        this.updateTableProperties(this.props.app.id, this.props.table.id, this.props.tableProperties.tableInfo);
+    },
+    updateTableProperties(appId, tableId, tableIno) {
+        this.props.updateTable(appId, tableId, tableIno).then(
             (response) => {
                 NotificationManager.success(Locale.getMessage('tableEdit.tableUpdated'), Locale.getMessage('success'));
                 let updatedTableInfo = this.props.tableProperties.tableInfo;
@@ -58,7 +61,17 @@ export const TablePropertiesRoute = React.createClass({
     },
 
     resetTableProperties() {
-        this.props.resetEditedTableProperties();
+        let tableInfo = this.props.tableProperties.tableInfo;
+        let newTableInfo = {};
+        Object.keys(tableInfo).forEach(function(key, index) {
+            newTableInfo[key] = {
+                origValue: tableInfo[key].origValue,
+                value: tableInfo[key].origValue,
+                validationError: null,
+                edited: null
+            };
+        });
+        this.updateTableProperties(this.props.app.id, this.props.table.id, newTableInfo);
     },
 
     render() {
@@ -75,12 +88,12 @@ export const TablePropertiesRoute = React.createClass({
                                     closeIconChooser={this.props.closeIconChooser}
                                     setEditingProperty={this.props.setEditingProperty}
                                     focusOn={this.props.tableProperties.editing}
-                                    validate={this.props.tableProperties.edited}
+                                    validate={this.props.tableProperties.isDirty}
                                     appTables={this.getExistingTableNames()}
                                      />
                 <div className={buttonsClasses}>
                     <a className="secondaryButton" onClick={this.resetTableProperties}><I18nMessage message={"nav.reset"}/></a>
-                    <Button className="primaryButton" bsStyle="primary" onClick={this.updateTableProperties}><I18nMessage message={"nav.apply"}/></Button>
+                    <Button className="primaryButton" bsStyle="primary" onClick={this.updateTable}><I18nMessage message={"nav.apply"}/></Button>
                 </div>
             </div>
         </div>);

@@ -15,44 +15,49 @@ $settings-menu-padding-left: 15px;
             padding-right: 10px;
             .configurationMenu {
                 display: flex;
-                .menuHeader {
-                    font-size: $font-size-h3;
-                    color: $color-black-700;
-                    height: $settings-menu-header-height;
-                }
-                a {
-                    display: block;
-                    clear: both;
-                    font-weight: normal;
-                    line-height: 25px;
-                    color: $default-text-onlight-color;
-                    white-space: nowrap;
-                    &:not(.heading) {
-                        cursor: pointer;
-                        &:hover {
-                            text-decoration: none;
+                .configSet {
+                    padding: $settings-menu-padding-top * 2 0 $settings-menu-padding-top * 2 0;
+                    .menuHeader {
+                        font-size: $font-size-h3;
+                        color: $color-black-700;
+                        height: $settings-menu-header-height;
+                    }
+                    li {
+                        padding: 0 $settings-menu-padding-left;
+                        &:not(.heading):hover {
                             background-color: $color-black-200;
                         }
-                    }
-                    &.heading {
-                        font-weight: bold;
-                        .headingIcon {
-                            font-size: $size-iconfont-medium;
+                        a {
+                            display: block;
+                            clear: both;
+                            font-weight: normal;
+                            line-height: 25px;
+                            color: $default-text-onlight-color;
+                            white-space: nowrap;
+                            &:not(.heading) {
+                                cursor: pointer;
+                                &:hover {
+                                    text-decoration: none;
+                                }
+                            }
+                            &.heading {
+                                font-weight: bold;
+                                .headingIcon {
+                                    font-size: $size-iconfont-medium;
+                                }
+                            }
+                            > * {
+                                vertical-align: middle;
+                            }
                         }
                     }
-                    > * {
-                        vertical-align: middle;
-                    }
-                }
-                .configSet {
-                    padding: $settings-menu-padding-top $settings-menu-padding-left;
                     &.withIcon {
-                        a:not(.heading) {
-                            margin-left: 26px;
+                        li:not(.heading) {
+                            padding-left: 41px;
                         }
                     }
                     &:not(:first-of-type) {
-                        padding: $settings-menu-header-height + $settings-menu-padding-top $settings-menu-padding-left $settings-menu-padding-top * 2 $settings-menu-padding-left;
+                        padding: $settings-menu-header-height + $settings-menu-padding-top * 2 $settings-menu-padding-left $settings-menu-padding-top * 2 $settings-menu-padding-left;
                     }
                     &.currentContext {
                         background-color: $color-black-200;

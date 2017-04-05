@@ -92,27 +92,21 @@ const tableProperties = (
         };
     }
     case types.UPDATED_TABLE: {
-        return {
-            ...state,
-            savingTable: false
-        };
-    }
-    case types.RESET_TABLE_PROPS: {
-        let tableInfo = state.tableInfo;
+        let tableInfo = action.tableInfo;
         let newTableInfo = {};
         Object.keys(tableInfo).forEach(function(key, index) {
             newTableInfo[key] = {
-                origValue: tableInfo[key].origValue,
-                value: tableInfo[key].origValue,
+                origValue: tableInfo[key].value,
+                value: tableInfo[key].value,
                 validationError: null,
                 edited: null
             };
         });
-
         return {
             ...state,
+            tableInfo: newTableInfo,
             isDirty: false,
-            tableInfo: newTableInfo
+            savingTable: false
         };
     }
     default:

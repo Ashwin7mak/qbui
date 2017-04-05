@@ -42,7 +42,8 @@ describe('Table properties actions', () => {
     });
 
     it('should create an action for updated table', () => {
-        expect(actions.updatedTable()).toEqual({type: types.UPDATED_TABLE});
+        let tableInfo = {};
+        expect(actions.updatedTable(tableInfo)).toEqual({type: types.UPDATED_TABLE, tableInfo});
     });
 
     it('should create an action for loaded table props', () => {
@@ -65,13 +66,14 @@ describe('Table properties actions', () => {
         // the mock store makes the actions dispatched available via getActions()
         // so we don't need to spy on the dispatcher etc.
 
+        const tableInfo = {name: 'Record', tableNoun: 'record', description: 'description'};
         const expectedActions = [
             {type: types.UPDATING_TABLE},
-            {type: types.UPDATED_TABLE}
+            {type: types.UPDATED_TABLE, tableInfo}
         ];
         const store = mockStore({});
 
-        return store.dispatch(actions.updateTable('appId', 'tableId', {name: 'Record', tableNoun: 'record', description: 'description'})).then(
+        return store.dispatch(actions.updateTable('appId', 'tableId', tableInfo)).then(
             () => {
                 expect(store.getActions()).toEqual(expectedActions);
                 done();

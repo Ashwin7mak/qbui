@@ -97,7 +97,7 @@ export const SettingsWrapper = React.createClass({
                 {this.props.children ? React.cloneElement(this.props.children, {
                     app: this.getSelectedApp(),
                     table: this.getSelectedTable()
-                }) : null}
+                }) : null
                 }
             </LeftNav>
         </AppShell>;

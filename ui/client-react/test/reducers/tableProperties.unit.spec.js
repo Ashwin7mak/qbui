@@ -103,8 +103,9 @@ describe('Test table properties reducers', () => {
         });
 
         it('return updated table', () => {
+            let tableInfo = {};
             let state = reducer(initialState, {type: types.UPDATING_TABLE});
-            state = reducer(state, {type: types.UPDATED_TABLE});
+            state = reducer(state, {type: types.UPDATED_TABLE, tableInfo});
             expect(state.savingTable).toBe(false);
         });
 

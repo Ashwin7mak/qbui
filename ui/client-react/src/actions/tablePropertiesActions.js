@@ -62,10 +62,11 @@ export const updatingTableFailed = () => ({
 });
 
 /**
- * table was succesfully created
+ * table was succesfully updated
  */
-export const updatedTable = () => ({
-    type: types.UPDATED_TABLE
+export const updatedTable = (tableInfo) => ({
+    type: types.UPDATED_TABLE,
+    tableInfo
 });
 
 export const loadedTable = (tableInfo) => ({
@@ -73,11 +74,8 @@ export const loadedTable = (tableInfo) => ({
     tableInfo
 });
 
-export const resetEditedTableProperties = () => ({
-    type: types.RESET_TABLE_PROPS
-});
 /**
- * create the table on the server
+ * update the table on the server
  * @param appId
  * @param tableInfo
  * @returns {function(*=)}
@@ -100,7 +98,7 @@ export const updateTable = (appId, tableId, tableInfo) => {
             const promise = tableService.updateTable(appId, tableId, newTableInfo);
 
             promise.then(response => {
-                dispatch(updatedTable());
+                dispatch(updatedTable(tableInfo));
                 resolve(response);
             }).catch(error => {
                 dispatch(updatingTableFailed());
@@ -119,6 +117,7 @@ export const updateTable = (appId, tableId, tableInfo) => {
 
 export const loadTableProperties = (tableInfo) => {
     return (dispatch) => {
+        /* TODO Currently we dont pull props from EE so initialize these to something. To be fixed by MC-1541 */
         tableInfo.tableNoun = "noun";
         tableInfo.description = "";
         tableInfo.tableIcon = "report-table";

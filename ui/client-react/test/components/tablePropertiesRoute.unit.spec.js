@@ -126,7 +126,7 @@ describe('TablePropertiesRoute functions', () => {
             let buttonsPanel = TestUtils.scryRenderedDOMComponentsWithClass(component, "tableInfoButtons");
             let resetButton = buttonsPanel[0].querySelectorAll('.secondaryButton');
             Simulate.click(resetButton[0]);
-            expect(props.resetEditedTableProperties).toHaveBeenCalled();
+            expect(props.updateTable).toHaveBeenCalled();
         });
     });
 });
