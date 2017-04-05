@@ -34,15 +34,6 @@ const fieldsStore = (state = [], action) => {
         return content ? content.fields : [];
     }
 
-    // Return fields in an object structure used by the reporting components
-    function getReportObj(tableFields) {
-        return {
-            fields: {
-                data: tableFields || []
-            }
-        };
-    }
-
     switch (action.type) {
     case types.LOAD_FIELDS: {
 
