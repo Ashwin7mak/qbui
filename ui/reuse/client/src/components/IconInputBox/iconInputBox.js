@@ -1,10 +1,10 @@
 import React from 'react';
-import './searchBox.scss';
-import QBicon from '../qbIcon/qbIcon';
+import './iconInputBox.scss';
+import Icon from '../icon/icon';
 /**
  * Generic component that renders a search box
  */
-const SearchBox = React.createClass({
+const IconInputBox = React.createClass({
     propTypes: {
         className: React.PropTypes.string,
         searchBoxKey: React.PropTypes.string,
@@ -32,13 +32,13 @@ const SearchBox = React.createClass({
                 </input>
                 {this.props.value && this.props.value.length && !this.props.hideClearIcon ?
                     <span className="clearSearch" onClick={this.props.onClearSearch}>
-                        <QBicon icon="clear-mini" className="searchIcon"/>
+                        <Icon icon="clear-mini" className="searchIcon"/>
                     </span> :
-                    <QBicon icon="search" className="searchIcon"/>
+                    <Icon icon="search" className="searchIcon"/>
                 }
             </div>
         );
     }
 });
 
-export default SearchBox;
+export default IconInputBox;
