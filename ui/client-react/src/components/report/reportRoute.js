@@ -22,6 +22,8 @@ import {loadFields} from '../../actions/fieldsActions';
 import {CONTEXT} from '../../actions/context';
 import {APP_ROUTE, EDIT_RECORD_KEY, NEW_RECORD_VALUE} from '../../constants/urlConstants';
 
+import * as FieldsReducer from '../../reducers/fields';
+
 let logger = new Logger();
 let FluxMixin = Fluxxor.FluxMixin(React);
 
@@ -156,8 +158,8 @@ const ReportRoute = React.createClass({
         } else {
             let fields = [];
             if (_.has(this.props, 'qbui.fields')) {
-                let fieldsContainer = this.props.qbui.fields.getTableFieldsObj(this.props.params.appId, this.props.params.tblId);
-                fields = fieldsContainer ? fieldsContainer.getTableReportFields() : [];
+                let tableFieldsObj = FieldsReducer.tableFieldsObj(this.props.qbui.fields, this.props.params.appId, this.props.params.tblId);
+                fields = _.has(tableFieldsObj, 'getTableReportFields') ? tableFieldsObj.getTableReportFields() : [];
             }
 
             return (<div className="reportContainer">

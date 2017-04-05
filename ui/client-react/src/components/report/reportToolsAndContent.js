@@ -348,8 +348,11 @@ export const ReportToolsAndContent = React.createClass({
             let {appId, tblId, rptId, reportData:{selections, ...otherReportData}} = this.props;
 
             //  use helper method to retrieve the fields for this table and return the field in the object structure used by the reports components
-            let tableFieldsObj = FieldsReducer.tableFieldsObj(this.props.fields, this.props.reportData.appId, this.props.reportData.tblId);
-            let fields = _.has(tableFieldsObj, 'getTableReportFields') ? tableFieldsObj.getTableReportFields() : [];
+            let fields = [];
+            if (_.has(this.props, 'fields')) {
+                let tableFieldsObj = FieldsReducer.tableFieldsObj(this.props.fields, this.props.reportData.appId, this.props.reportData.tblId);
+                fields = _.has(tableFieldsObj, 'getTableReportFields') ? tableFieldsObj.getTableReportFields() : [];
+            }
 
             let primaryKeyName = FieldUtils.getPrimaryKeyFieldName(fields);
 
