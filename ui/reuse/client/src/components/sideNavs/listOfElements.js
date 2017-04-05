@@ -40,6 +40,11 @@ class ListOfElements extends Component {
         this.setState({fieldFilter: '', activeFieldFilter: ''});
     };
 
+    /**
+     * Updating the filtered list of elements in debounced so that if someone types really quicklys,
+     * the animations that occur during filter won't flash. Also, improves performance of filter.
+     * @type {*}
+     */
     updateFieldFilter = _.debounce(() => this.setState({activeFieldFilter: this.state.fieldFilter}), FILTER_DEBOUNCE_TIMEOUT);
 
     /**
