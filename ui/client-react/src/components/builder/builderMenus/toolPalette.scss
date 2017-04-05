@@ -1,10 +1,9 @@
 @import "../../../../src/assets/css/qbVariables";
 
-$toolpalette-header-weight: 400;
-$toolpalette-header-color: $color-black-500;
+$toolpalette-background-color: $color-black-250;
 
 .toolPaletteContainer {
-    background-color: $color-black-250;
+    background-color: $toolpalette-background-color;
     width: 100%;
     height: 100%;
 }

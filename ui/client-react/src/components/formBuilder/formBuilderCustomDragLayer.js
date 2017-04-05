@@ -62,6 +62,7 @@ export class FormBuilderCustomDragLayer extends Component {
         let label = (_.has(item, 'relatedField.name') ? item.relatedField.name : Locale.getMessage(`fieldsDefaultLabels.${fieldType}`));
         switch (type) {
         case draggableItemTypes.FIELD :
+            // Show the FieldToken in its dragging state. Always dragging as part of customDragLayer so hardcoded to true.
             return (<FieldToken title={label} type={fieldType} isDragging={true} />);
         default :
             return null;

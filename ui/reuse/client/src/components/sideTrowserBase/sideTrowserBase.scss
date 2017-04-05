@@ -29,6 +29,7 @@
             position: relative;
             flex: 1 auto;
             overflow: auto;
+            height: 100%;
         }
 
         > .sideTrowserContent {
@@ -44,7 +45,7 @@
         overflow: auto;
         background-color: $leftnav-background-color;
         z-index: $zindex-trowser;
-        height: 100vh; // Ensures that long content can be scrolled on all browsers
+        height: 100%;
 
         @include baseMenuWidths;
 
