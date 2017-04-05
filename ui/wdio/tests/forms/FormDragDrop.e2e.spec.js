@@ -140,5 +140,29 @@
             // verify that the first item has been restored
             expect(formBuilderPO.getFieldLabels().indexOf(firstField)).toEqual(0);
         });
+
+        it('drags a field outside of viewport & verifies autoscroll', function() {
+            let firstField = formBuilderPO.findFieldByIndex(1);
+            let secondField = formBuilderPO.findFieldByIndex(2);
+            let firstFieldSize = browser.element(firstField).getElementSize();
+            let containerSize = formBuilderPO.formBuilderContainer.getElementSize();
+            // temporarily shrink the window to cause 2nd element to not be visible
+            browser.setViewportSize({width: containerSize.width, height: firstFieldSize.height});
+            // verify second field is not visible
+            expect(browser.isVisibleWithinViewport(secondField)).toBe(false);
+            // start dragging
+            browser.moveToObject(firstField);
+            browser.buttonDown();
+            // drag off the scrollable area & wait for second field to become visible (or timeout)
+            formBuilderPO.centerActionsOnFooter.moveToObject(); // blue footer bar
+            let i = 0;
+            while ((browser.isVisibleWithinViewport(secondField) !== true) && i++ < 100) {
+                browser.pause(100);
+            }
+            // stop dragging & verify that the second field is now visible
+            browser.buttonUp();
+            expect(browser.isVisibleWithinViewport(secondField)).toBe(true);
+            browser.setViewportSize(containerSize);
+        });
     });
 }());
