@@ -68,7 +68,7 @@ class StandardLeftNav extends Component {
     }
 
     renderContextHeader() {
-        const {showContextHeader, isContextHeaderSmall, contextHeaderIcon, contextHeaderIconTypeIsTable, showContextHeaderToggle, isContextToggleDown, isCollapsed} = this.props;
+        const {showContextHeader, isContextHeaderSmall, contextHeaderIcon, showContextHeaderToggle, isContextToggleDown, isCollapsed} = this.props;
 
         let classes = ['contextHeader'];
 
@@ -90,7 +90,7 @@ class StandardLeftNav extends Component {
                     className="contextHeaderButton"
                     onClick={this.props.onClickContextHeader}
                 >
-                    {contextHeaderIcon && <Icon icon={contextHeaderIcon} className="contextHeaderIcon" isTableIcon={contextHeaderIconTypeIsTable}/>}
+                    {contextHeaderIcon && <Icon icon={contextHeaderIcon} className="contextHeaderIcon"/>}
 
                     {this.renderContextHeaderTitle()}
 
@@ -186,10 +186,6 @@ StandardLeftNav.propTypes = {
     /**
      * The icon for the context header. */
     contextHeaderIcon: PropTypes.string,
-
-    /**
-     * The icon for the context header is a table icon (false means its a normal QBIcon). Table Icons have a slightly different format */
-    contextHeaderIconTypeIsTable: PropTypes.bool,
 
     /**
      * The title text for the context header. */
