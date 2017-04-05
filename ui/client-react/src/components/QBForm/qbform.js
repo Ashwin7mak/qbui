@@ -12,6 +12,8 @@ import DragAndDropField from '../formBuilder/dragAndDropField';
 import RelatedChildReport from './relatedChildReport';
 import FlipMove from 'react-flip-move';
 
+import * as FieldsReducer from '../../reducers/fields';
+
 import {connect} from 'react-redux';
 
 import './qbform.scss';
@@ -62,11 +64,13 @@ export const QBForm = React.createClass({
         };
     },
 
-    shouldComponentUpdate: function(nextProps, nextState) {
+    shouldComponentUpdate: function(nextProps) {
+        //  TODO: look at implementing a loading spinner code when rendering and remove this.
+        //
         // if the fields store is being initialized, stop the component from re-rendering with any updates.  A
         // subsequent state change(success or failure) when the action that fetch's the fields data is complete
         // will be triggered and the component will re-render at that time.
-        const tableFields = this.getTableFieldsFromStore(nextProps);
+        const tableFields = this.getTableFieldsObj(nextProps);
         if (tableFields && tableFields.fieldsLoading === true) {
             return false;
         }
@@ -80,27 +84,14 @@ export const QBForm = React.createClass({
      * @param props
      * @returns {*}
      */
-    getTableFieldsFromStore: function(props) {
-        let fields = null;
-        if (props && Array.isArray(props.fields)) {
-            //  find the fields for the form's appId/tblId combination
-            const formMeta = _.has(props, 'formData.formMeta') ? props.formData.formMeta : {};
-            if (_.has(formMeta, 'appId') && _.has(formMeta, 'tableId')) {
-                fields = _.find(props.fields, flds => flds.appId === formMeta.appId && flds.tblId === formMeta.tableId);
-            }
-        }
-        return fields;
+    getTableFieldsObj: function(props) {
+        const formMeta = _.has(props, 'formData.formMeta') ? props.formData.formMeta : {};
+        return FieldsReducer.tableFieldsObj(props.fields, formMeta.appId, formMeta.tableId);
     },
 
-    getFieldsFromStore: function(props) {
-        const tableFields = this.getTableFieldsFromStore(props);
-        // crazy object structure..should be refactored!
-        if (_.has(tableFields, 'fields.fields.data')) {
-            if (Array.isArray(tableFields.fields.fields.data)) {
-                return tableFields.fields.fields.data;
-            }
-        }
-        return [];
+    getTableFields: function(props) {
+        const tableFields = this.getTableFieldsObj(props);
+        return tableFields ? tableFields.fields : [];
     },
 
     /**
@@ -110,7 +101,7 @@ export const QBForm = React.createClass({
      * @returns field object or null if not found
      */
     getRelatedField(fieldId) {
-        const fields = this.getFieldsFromStore(this.props);
+        const fields = this.getTableFields(this.props);
         const field = _.find(fields, fld => fld.id === fieldId);
         return field || null;
     },
@@ -475,7 +466,7 @@ export const QBForm = React.createClass({
      */
     getBuiltInFieldsForFooter() {
 
-        let fields = this.getFieldsFromStore(this.props);
+        let fields = this.getTableFields(this.props);
         if (fields.length === 0) {
             return [];
         }

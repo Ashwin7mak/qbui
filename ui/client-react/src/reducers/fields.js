@@ -2,7 +2,12 @@ import * as types from '../actions/types';
 import _ from 'lodash';
 import {BUILTIN_FIELD_ID} from '../../../common/src/constants';
 
-const fields = (state = [], action) => {
+//  Return the table fields object for the given appId and tableId
+export const tableFieldsObj = (fieldsStore, appId, tblId) => {
+    return _.find(fieldsStore, flds => flds.appId === appId && flds.tblId === tblId);
+};
+
+const fieldsStore = (state = [], action) => {
 
     //  new state list without the appId/tblId entry
     const newState = _.reject(state, field => field.appId === action.appId && field.tblId === action.tblId);
@@ -15,25 +20,32 @@ const fields = (state = [], action) => {
         return keyField;
     }
 
-    //  Return fields in an object structure that matches the
-    //  fields object that is returned within a report object.
     function getFields(content) {
+        return content ? content.fields : [];
+    }
+
+    // Return fields in an object structure used by the reporting components
+    function getReportObj(tableFields) {
         return {
             fields: {
-                data: content ? content.fields : []
+                data: tableFields || []
             }
         };
     }
 
     switch (action.type) {
     case types.LOAD_FIELDS: {
+
         newState.push({
             appId: action.appId,
             tblId: action.tblId,
             keyField: getKeyField(),
             fields: [],
             fieldsLoading: true,
-            error: false
+            error: false,
+            getTableReportFields: function() {
+                return getReportObj(this.fields);
+            }
         });
         return newState;
     }
@@ -59,7 +71,10 @@ const fields = (state = [], action) => {
             keyField: getKeyField(action.content),
             fields: getFields(action.content),
             fieldsLoading: false,
-            error: false
+            error: false,
+            getTableReportFields: function() {
+                return getReportObj(this.fields);
+            }
         });
         return newState;
     }
@@ -70,7 +85,10 @@ const fields = (state = [], action) => {
             keyField: getKeyField(),
             fields: [],
             fieldsLoading: false,
-            error: true
+            error: true,
+            getTableReportFields: function() {
+                return getReportObj(this.fields);
+            }
         });
         return newState;
     }
@@ -82,13 +100,17 @@ const fields = (state = [], action) => {
             keyField: getKeyField(action.formData),
             fields: getFields(action.formData),
             fieldsLoading: false,
-            error: false
+            error: false,
+            getTableReportFields: function() {
+                return getReportObj(this.fields);
+            }
         });
         return newState;
     }
     default:
         return state;
     }
+
 };
 
-export default fields;
+export default fieldsStore;
