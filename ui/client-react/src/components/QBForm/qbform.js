@@ -86,7 +86,7 @@ export const QBForm = React.createClass({
             //  find the fields for the form's appId/tblId combination
             const formMeta = _.has(props, 'formData.formMeta') ? props.formData.formMeta : {};
             if (_.has(formMeta, 'appId') && _.has(formMeta, 'tableId')) {
-                fields = _.find(props.fields, flds => flds.appId === formMeta.appId && flds.tblId === formMeta.tblId);
+                fields = _.find(props.fields, flds => flds.appId === formMeta.appId && flds.tblId === formMeta.tableId);
             }
         }
         return fields;
