@@ -3,6 +3,7 @@ import {shallow, mount} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
 import {NEW_FORM_RECORD_ID} from '../../../src/constants/schema';
 import {FormBuilderContainer, __RewireAPI__ as FormBuilderRewireAPI} from '../../../src/components/builder/formBuilderContainer';
+import NavigationUtils from '../../../src/utils/navigationUtils';
 import Loader from 'react-loader';
 
 const appId = 1;
@@ -61,6 +62,18 @@ describe('FormBuilderContainer', () => {
             });
         });
 
+    });
+
+    describe('onCancel', () => {
+        it('exits form builder', () => {
+            spyOn(NavigationUtils, 'goBackFromFormBuilder');
+
+            component = shallow(<FormBuilderContainer appId={appId} tblId={tblId} />);
+
+            component.instance().onCancel();
+
+            expect(NavigationUtils.goBackFromFormBuilder).toHaveBeenCalledWith(appId, tblId);
+        });
     });
 
 

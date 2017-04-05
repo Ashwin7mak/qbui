@@ -13,7 +13,7 @@ import ToolPalette from './builderMenus/toolPalette';
 import FieldProperties from './builderMenus/fieldProperties';
 import FormBuilder from '../formBuilder/formBuilder';
 import SaveOrCancelFooter from '../saveOrCancelFooter/saveOrCancelFooter';
-import AppHistory from '../../globals/appHistory';
+import NavigationUtils from '../../utils/navigationUtils';
 import Logger from '../../utils/logger';
 import AutoScroll from '../autoScroll/autoScroll';
 import PageTitle from '../pageTitle/pageTitle';
@@ -96,7 +96,7 @@ export const FormBuilderContainer = React.createClass({
     },
 
     onCancel() {
-        AppHistory.history.goBack();
+        NavigationUtils.goBackFromFormBuilder(this.props.appId, this.props.tblId);
     },
 
     removeField() {

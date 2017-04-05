@@ -8,7 +8,7 @@ import WindowLocationUtils from '../utils/windowLocationUtils';
 import Locale from '../locales/locales';
 import NotificationManager from '../../../reuse/client/src/scripts/notificationManager';
 import * as types from '../actions/types';
-import * as UrlConsts from "../constants/urlConstants";
+import NavigationUtils from '../utils/navigationUtils';
 import {NEW_FORM_RECORD_ID} from '../constants/schema';
 import {convertFormToArrayForClient, convertFormToObjectForServer} from './actionHelpers/transformFormData';
 
@@ -309,6 +309,9 @@ function saveTheForm(appId, tblId, formType, formMeta, isNew) {
                         dispatch(event(formType, types.SAVING_FORM_SUCCESS, convertFormToArrayForClient({formMeta: response.data}).formMeta));
 
                         NotificationManager.success(Locale.getMessage('form.notification.save.success'), Locale.getMessage('success'));
+
+                        // Leave form Builder
+                        NavigationUtils.goBackFromFormBuilder(appId, tblId);
 
                         resolve();
                     },
