@@ -277,32 +277,37 @@ class FieldUtils {
 
     /**
     * Returns the icon for a field type (used in Builder)
-    * TODO:: Replace with icon names once icons have been created. Currently using letters to represent fields.
+    * See spec for specific icons at https://quickbase.atlassian.net/wiki/display/qbasepd/Fields+List#FieldsList-VISUALDESIGN
     */
     static getFieldSpecificIcon(fieldType) {
         if (!fieldType) {
-            return 'T';
+            return 'text';
         }
 
         switch (fieldType) {
-        case FieldFormats.DATE_FORMAT:              return "D";
-        case FieldFormats.DATETIME_FORMAT:          return "Dt";
-        case FieldFormats.TIME_FORMAT:              return "Tm";
-        case FieldFormats.NUMBER_FORMAT:            return "N";
-        case FieldFormats.RATING_FORMAT:            return "R";
-        case FieldFormats.CURRENCY_FORMAT:          return "C";
-        case FieldFormats.PERCENT_FORMAT:           return "P";
-        case FieldFormats.DURATION_FORMAT:          return 'Du';
-        case FieldFormats.PHONE_FORMAT:             return "Ph";
-        case FieldFormats.TEXT_FORMAT:              return "T";
-        case FieldFormats.USER_FORMAT:              return "U";
-        case FieldFormats.URL:                      return "Ur";
-        case FieldFormats.EMAIL_ADDRESS:            return "E";
-        case FieldFormats.TEXT_FORMULA_FORMAT:      return "F";
-        case FieldFormats.NUMERIC_FORMULA_FORMAT:   return "F";
-        case FieldFormats.URL_FORMULA_FORMAT:       return "F";
-        case FieldFormats.CHECKBOX_FORMAT:          return 'C';
-        default:                                    return "T";
+        case FieldFormats.TEXT_FORMAT:                 return 'text';
+        case FieldFormats.MULTI_LINE_TEXT_FORMAT:      return 'text-long';
+        case FieldFormats.TEXT_FORMAT_MULTICHOICE:     return 'multiple-choice';
+        case FieldFormats.TEXT_FORMAT_RADIO_BUTTONS:   return 'radio-buttons';
+        case FieldFormats.CHECKBOX_FORMAT:             return 'selected';
+        case FieldFormats.NUMBER_FORMAT:               return 'number';
+        case FieldFormats.NUMBER_FORMAT_MULTICHOICE:   return 'multiple-choice';
+        case FieldFormats.NUMBER_FORMAT_RADIO_BUTTONS: return 'radio-buttons';
+        case FieldFormats.CURRENCY_FORMAT:             return 'currency';
+        case FieldFormats.PERCENT_FORMAT:              return 'percentage';
+        case FieldFormats.RATING_FORMAT:               return 'rating';
+        case FieldFormats.DATE_FORMAT:                 return 'date';
+        case FieldFormats.DATETIME_FORMAT:             return 'date-time';
+        case FieldFormats.TIME_FORMAT:                 return 'time-of-day';
+        case FieldFormats.DURATION_FORMAT:             return 'duration';
+        case FieldFormats.EMAIL_ADDRESS:               return 'email-address';
+        case FieldFormats.URL:                         return 'url';
+        case FieldFormats.PHONE_FORMAT:                return 'phone-number';
+        case FieldFormats.USER_FORMAT:                 return 'user';
+        case FieldFormats.TEXT_FORMULA_FORMAT:         return 'formula';
+        case FieldFormats.NUMERIC_FORMULA_FORMAT:      return 'formula';
+        case FieldFormats.URL_FORMULA_FORMAT:          return 'formula';
+        default:                                       return 'text';
         }
     }
 }

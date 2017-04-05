@@ -536,10 +536,6 @@ module.exports = function(grunt) {
                     './wdio/tests/forms/formPermissionsViewerRole.e2e.spec.js',
                     // currently broken need to fix in another PR (test was never running in CI due to non camel case name)
                     './wdio/tests/forms/FormDragDrop.e2e.spec.js',
-                    // failing intermittently in CI
-                    //'./wdio/tests/reports/grouping/reportGroupingViaColumnHeader.e2e.spec.js',
-                    //'./wdio/tests/reports/grouping/reportGroupingViaContainer.e2e.spec.js',
-                    //'./wdio/tests/reports/sorting/reportSortingViaContainer.e2e.spec.js'
                 ],
                 suites: {
                     reports: [
