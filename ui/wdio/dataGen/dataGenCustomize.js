@@ -687,12 +687,12 @@ consts = require('../../common/src/constants.js');
             });
             // Create table relationship, Table 13(City) is a child of Table 12(State)
             addRelationshipPromises.push(function() {
-                return e2eBase.relationshipService.createOneToOneRelationship(createdApp, createdApp.tables[e2eConsts.TABLE12], createdApp.tables[e2eConsts.TABLE13], 7, 'State');
+                return e2eBase.relationshipService.createOneToOneRelationship(createdApp, createdApp.tables[e2eConsts.TABLE12], createdApp.tables[e2eConsts.TABLE13], 7, 6);
             });
 
             // Create table relationship, Table 12(State) is a child of Table 11(Country)
             addRelationshipPromises.push(function() {
-                return e2eBase.relationshipService.createOneToOneRelationship(createdApp, createdApp.tables[e2eConsts.TABLE11], createdApp.tables[e2eConsts.TABLE12], 7, 'Country');
+                return e2eBase.relationshipService.createOneToOneRelationship(createdApp, createdApp.tables[e2eConsts.TABLE11], createdApp.tables[e2eConsts.TABLE12], 7, 6);
             });
 
             // Bluebird's promise.each function (executes each promise sequentially)

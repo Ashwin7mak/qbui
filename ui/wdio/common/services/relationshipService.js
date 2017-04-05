@@ -18,30 +18,25 @@
              * @param app - Created app JSON object returned from the API
              * @param parentTable - Parent table JSON object
              * @param childTable - Child table JSON object
-             * @param detailFieldId - FieldId to relate master and child table by
-             * @param lookUpFieldName - FieldName relating master and child table
+             * @param detailFieldId - FieldId in child table to relate master and child table by
+             * @param lookUpFieldId - FieldId in master table used to relate master and child table
              * @returns Promise function that resolves to the returned JSON obj of the create relationship API call
              */
-            createOneToOneRelationship: function(app, parentTable, childTable, detailFieldId, lookUpFieldName) {
-                let FK_FIELD_NAME, RECORD_ID_NAME;
-                if (lookUpFieldName !== undefined) {
-                    FK_FIELD_NAME =  RECORD_ID_NAME = lookUpFieldName ;
-                } else {
-                    FK_FIELD_NAME = RECORD_ID_NAME = 'Record ID#';
-                }
+            createOneToOneRelationship: function(app, parentTable, childTable, detailFieldId, lookUpFieldId) {
+                const RECORD_ID_NAME = 'Record ID#';
                 let masterTableId = parentTable.id;
                 let detailTableId = childTable.id;
-                let masterTablePkFieldId;
+                let masterTablePkFieldId = lookUpFieldId;
                 let detailTableFkFieldId = detailFieldId;
 
                 parentTable.fields.forEach(field => {
-                    if (field.name === RECORD_ID_NAME) {
+                    if (masterTablePkFieldId === undefined && field.name === RECORD_ID_NAME) {
                         masterTablePkFieldId = field.id;
                     }
                 });
 
                 childTable.fields.forEach(field => {
-                    if (detailTableFkFieldId === undefined && field.name === FK_FIELD_NAME) {
+                    if (detailTableFkFieldId === undefined && field.name === RECORD_ID_NAME) {
                         detailTableFkFieldId = field.id;
                     }
                 });
