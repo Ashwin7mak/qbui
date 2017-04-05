@@ -19,7 +19,7 @@ import {connect} from 'react-redux';
 import {loadDynamicReport} from '../../actions/reportActions';
 import {CONTEXT} from '../../actions/context';
 
-import * as FieldsReducer from '../../reducers/fields';
+import {tableFieldsObj} from '../../reducers/fields';
 
 /**
  *  SortAndGroup container component manages the state and presents the components that are :
@@ -466,9 +466,7 @@ export const SortAndGroup = React.createClass({
     },
 
     getFieldsFromProps() {
-        //  use helper method to retrieve the fields for this table
-        let tableFieldsObj = FieldsReducer.tableFieldsObj(this.props.fields, this.props.appId, this.props.tblId);
-        return tableFieldsObj ? tableFieldsObj.fields : [];
+        return this.props.fields || [];
     },
 
     /**
@@ -529,9 +527,10 @@ export const SortAndGroup = React.createClass({
     }
 });
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state, props) => {
+    const fieldObj = tableFieldsObj(state.fields, props.appId, props.tblId);
     return {
-        fields: state.fields
+        fields: fieldObj ? fieldObj.fields : []
     };
 };
 const mapDispatchToProps = (dispatch) => {

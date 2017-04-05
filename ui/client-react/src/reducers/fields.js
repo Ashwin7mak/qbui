@@ -3,8 +3,18 @@ import _ from 'lodash';
 import {BUILTIN_FIELD_ID} from '../../../common/src/constants';
 
 //  Return the table fields object for the given appId and tableId
-export const tableFieldsObj = (fieldsStore, appId, tblId) => {
-    return _.find(fieldsStore, flds => flds.appId === appId && flds.tblId === tblId);
+export const tableFieldsObj = (state, appId, tblId) => {
+    return _.find(state, flds => flds.appId === appId && flds.tblId === tblId);
+};
+
+//  Return fields for the given appId/tableId in format expected by the reports components
+export const tableFieldsReportDataObj = (state, appId, tblId) => {
+    const tableFields = _.find(state, flds => flds.appId === appId && flds.tblId === tblId);
+    return {
+        fields: {
+            data: tableFields ? tableFields.fields : []
+        }
+    };
 };
 
 const fieldsStore = (state = [], action) => {
@@ -42,10 +52,7 @@ const fieldsStore = (state = [], action) => {
             keyField: getKeyField(),
             fields: [],
             fieldsLoading: true,
-            error: false,
-            getTableReportFields: function() {
-                return getReportObj(this.fields);
-            }
+            error: false
         });
         return newState;
     }
@@ -56,10 +63,7 @@ const fieldsStore = (state = [], action) => {
             keyField: getKeyField(action.content),
             fields: getFields(action.content),
             fieldsLoading: false,
-            error: false,
-            getTableReportFields: function() {
-                return getReportObj(this.fields);
-            }
+            error: false
         });
         return newState;
     }
@@ -70,10 +74,7 @@ const fieldsStore = (state = [], action) => {
             keyField: getKeyField(),
             fields: [],
             fieldsLoading: false,
-            error: true,
-            getTableReportFields: function() {
-                return getReportObj(this.fields);
-            }
+            error: true
         });
         return newState;
     }
@@ -85,10 +86,7 @@ const fieldsStore = (state = [], action) => {
             keyField: getKeyField(action.formData),
             fields: getFields(action.formData),
             fieldsLoading: false,
-            error: false,
-            getTableReportFields: function() {
-                return getReportObj(this.fields);
-            }
+            error: false
         });
         return newState;
     }

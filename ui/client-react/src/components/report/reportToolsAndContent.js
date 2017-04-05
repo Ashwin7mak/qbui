@@ -20,11 +20,9 @@ import WindowLocationUtils from '../../utils/windowLocationUtils';
 import * as Constants from "../../../../common/src/constants";
 import ReportContentError from './dataTable/reportContentError';
 import {connect} from 'react-redux';
-import {editNewRecord} from '../../actions/formActions';
 import {searchInput, clearSearchInput} from '../../actions/searchActions';
+import {tableFieldsReportDataObj} from '../../reducers/fields';
 import {EDIT_RECORD_KEY, NEW_RECORD_VALUE} from '../../constants/urlConstants';
-
-import * as FieldsReducer from '../../reducers/fields';
 
 let logger = new Logger();
 
@@ -347,13 +345,7 @@ export const ReportToolsAndContent = React.createClass({
 
             let {appId, tblId, rptId, reportData:{selections, ...otherReportData}} = this.props;
 
-            //  use helper method to retrieve the fields for this table and return the field in the object structure used by the reports components
-            let fields = [];
-            if (_.has(this.props, 'fields')) {
-                let tableFieldsObj = FieldsReducer.tableFieldsObj(this.props.fields, this.props.reportData.appId, this.props.reportData.tblId);
-                fields = _.has(tableFieldsObj, 'getTableReportFields') ? tableFieldsObj.getTableReportFields() : [];
-            }
-
+            let fields = this.props.fields;
             let primaryKeyName = FieldUtils.getPrimaryKeyFieldName(fields);
 
             // Define the page start. Page offset is zero indexed. For display purposes, add one.
@@ -397,7 +389,7 @@ export const ReportToolsAndContent = React.createClass({
                                    flux={this.getFlux()}
                                    gridOptions={this.props.gridOptions}
                                    {...this.props}
-                                   // until sub-components reference store directly, need to explicitly override this.props.fields
+                                   // until all sub-components reference store directly, need to explicitly override this.props.fields
                                    fields={fields}/>
 
                     {!this.props.scrollingReport && <AddRecordButton onClick={this.editNewRecord}/>}
@@ -407,11 +399,12 @@ export const ReportToolsAndContent = React.createClass({
     }
 });
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state, props) => {
+    const reportData = _.has(props, 'reportData') ? props.reportData : {};
     return {
         report: state.report,
         search: state.search,
-        fields: state.fields
+        fields: tableFieldsReportDataObj(state.fields, reportData.appId, reportData.tblId)
     };
 };
 
