@@ -86,9 +86,7 @@ export const QBForm = React.createClass({
             //  find the fields for the form's appId/tblId combination
             const formMeta = _.has(props, 'formData.formMeta') ? props.formData.formMeta : {};
             if (_.has(formMeta, 'appId') && _.has(formMeta, 'tableId')) {
-                fields = _.find(props.fields, flds => {
-                    return ((flds.appId === formMeta.appId) && (flds.tblId === formMeta.tableId));
-                });
+                fields = _.find(props.fields, flds => flds.appId === formMeta.appId && flds.tblId === formMeta.tblId);
             }
         }
         return fields;
@@ -495,10 +493,6 @@ export const QBForm = React.createClass({
 
         //  return a list of the built in fields included on this form
         let builtInFooterFields = _.filter(fields, (field) => _.includes(footerBuiltIns, field.id));
-
-        //let builtInFooterFields = _.filter(fields, function(field) {
-        //    return _.includes(footerBuiltIns, field.id);
-        //});
 
         return builtInFooterFields.map(builtInField => {
             let fieldValue = values.find(currentFieldValue => currentFieldValue.id === builtInField.id);
