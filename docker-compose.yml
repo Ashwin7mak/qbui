@@ -1,0 +1,19 @@
+version: '3'
+
+# To run this stack and build (or rebuild) the service image, use the command 'docker-compose up -d --build'
+services:
+  service:
+  # CoreUI Container
+    build:
+      # Build image from the parent project directory
+      context: ./
+      dockerfile: Dockerfile
+    environment:
+      - NODE_ENV=local
+    image: quickbase/ui
+    ports:
+      # Unique post assignment from host:container
+      - "9447:9443"
+    volumes:
+      # Using /tmp for temporary logs as it's a default volume mount point for the Docker for Mac installation
+      - /tmp/log/docker/ui/service:/var/log/qbase
