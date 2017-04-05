@@ -73,10 +73,6 @@ export const ReportGrid = React.createClass({
         onFieldChange: PropTypes.func,
 
         /**
-         * The action that will add a column */
-        onColumnAdd: PropTypes.func,
-
-        /**
          * An action that is called when a field should be validated */
         handleValidateFieldValue: PropTypes.func,
 
@@ -296,7 +292,6 @@ export const ReportGrid = React.createClass({
                 appId: this.props.appId,
                 tblId: this.props.tblId,
                 rptId: this.props.rptId,
-                onColumnAdd: this.props.onColumnAdd,
                 sortFids: this.props.sortFids
             }}
         />;

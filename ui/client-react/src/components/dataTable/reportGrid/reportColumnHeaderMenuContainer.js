@@ -6,7 +6,7 @@ import serverTypeConsts from '../../../../../common/src/constants';
 import * as query from '../../../constants/query';
 import {GROUP_TYPE} from '../../../../../common/src/groupTypes';
 
-import {loadDynamicReport} from '../../../actions/reportActions';
+import {loadDynamicReport, addColumnToTable} from '../../../actions/reportActions';
 import {CONTEXT} from '../../../actions/context';
 
 /**
@@ -25,7 +25,6 @@ const ReportColumnHeaderMenuContainer = (ReportColumnHeaderMenu) => {
             rptId: PropTypes.string,
             fieldDef: PropTypes.object,
             sortFids: PropTypes.array,
-            onColumnAdd: PropTypes.func
         },
 
         /**
@@ -88,11 +87,27 @@ const ReportColumnHeaderMenuContainer = (ReportColumnHeaderMenu) => {
             this.props.dispatch(loadDynamicReport(CONTEXT.REPORT.NAV, this.props.appId, this.props.tblId, this.props.rptId, true, this.props.filter, queryParams));
         },
 
+        /**
+         * Adds a new column to the table before or after the clicked on column.
+         * @param clickedColumnId the id of the column of the table which the menu dropdown was selected from
+         * @param requestedColumnId the id of the column to show in the table
+         * @param addBefore should the requested column go before or after the clicked column
+         */
+        addColumnToTable(clickedColumnId, requestedColumnId, addBefore) {
+            let params = {
+                context: CONTEXT.REPORT.NAV,
+                clickedId: clickedColumnId,
+                addBefore: addBefore,
+                requestedId: requestedColumnId
+            };
+            this.props.dispatch(addColumnToTable(this.props.appId, this.props.tblId, this.props.rptId, params));
+        },
+
         render() {
             return (<ReportColumnHeaderMenu
                 sortReport={this.sortReport}
                 groupReport={this.groupReport}
-                onColumnAdd={this.props.onColumnAdd}
+                onColumnAdd={this.addColumnToTable}
                 {...this.props}
             />);
         }

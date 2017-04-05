@@ -402,20 +402,6 @@ export const ReportContent = React.createClass({
     },
 
     /**
-     * Adds a new column to the table before or after the clicked on column.
-     * @param clickedColumn the column of the table which the menu dropdown was selected from
-     * @param addBefore should the requested column go before or after the clicked column
-     */
-    handleColumnAdd(clickedColumn, addBefore) {
-        let params = {
-            context: CONTEXT.REPORT.NAV,
-            clickedId: clickedColumn.id,
-            addBefore: addBefore
-        };
-        this.props.addColumnToTable(this.props.appId, this.props.tblId, this.props.reportData.rptId, params);
-    },
-
-    /**
      * Save a new record
      * @param recordChanges
      * @param addNewRecordAfterSave flag for indicating whether a new record will be added following a successful save.
@@ -967,7 +953,6 @@ export const ReportContent = React.createClass({
                                 loading={this.props.reportData.loading}
                                 appUsers={this.props.appUsers}
                                 onFieldChange={this.handleFieldChange}
-                                onColumnAdd={this.handleColumnAdd}
                                 onEditRecordStart={this.handleEditRecordStart}
                                 onCellClick={openRowToView}
                                 selectedRows={this.props.selectedRows}
@@ -1081,9 +1066,6 @@ const mapDispatchToProps = (dispatch) => {
                     }
                 }
             );
-        },
-        addColumnToTable: (appId, tblId, rptId, params) => {
-            dispatch(addColumnToTable(appId, tblId, rptId, params));
         }
     };
 };

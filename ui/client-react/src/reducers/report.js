@@ -248,31 +248,43 @@ const report = (state = [], action) => {
         let currentReport = getReportFromState(action.id);
         if (currentReport) {
             let columns = currentReport.data.columns;
-            let fids = currentReport.data.fids;
             let params = action.content;
+
             // searches through the current columns to find the one that was selected
-            let currentColumn = columns.filter((column) => {
+            let clickedColumn;
+            let columnToAdd;
+            for (let currentColumnIndex = 0; currentColumnIndex < columns.length; currentColumnIndex++) {
+                let column = columns[currentColumnIndex];
+                if (column.id === params.clickedId) {
+                    clickedColumn = columns[currentColumnIndex];
+                }
+                if (column.id === params.requestedId) {
+                    columnToAdd = columns[currentColumnIndex];
+                }
+            }
+
+            /*let currentColumn = columns.filter((column) => {
                 if (column.id == params.clickedId) {
                     return column;
                 }
-            })[0];
+            })[0];*/
 
-            let newColumn = _.cloneDeep(currentColumn);
+            /*let newColumn = _.cloneDeep(currentColumn);
             newColumn.headerName = "New column";
             newColumn.field = "New column";
             let newId = fids[fids.length - 1] + 1;
             fids.push(newId);
 
-            newColumn.id = newId;
+            newColumn.id = newId;*/
 
-            let indexedOrder = currentColumn.order - 1;
+            let indexedOrder = clickedColumn.order - 1;
             // correctly position the new column in the table
             if (params.addBefore) {
-                columns.splice(indexedOrder, 0, newColumn);
-                currentColumn.order += 1
+                columns.splice(indexedOrder, 0, columnToAdd);
+                clickedColumn.order += 1
             } else {
-                newColumn.order += 1;
-                columns.splice(indexedOrder + 1, 0, newColumn);
+                //newColumn.order += 1;
+                columns.splice(indexedOrder + 1, 0, columnToAdd);
             }
 
             return newState(currentReport);
