@@ -1,7 +1,8 @@
 @import "../../assets/css/qbVariables";
 
 $toolpalette-header-weight: 400;
-$toolpalette-header-color: $color-black-500;
+$toolpalette-header-color: $color-black-400;
+$toolpalette-header-font-size: 10px;
 
 .listOfElementsContainer {
     background-color: $leftnav-background-color;
@@ -38,7 +39,7 @@ $toolpalette-header-color: $color-black-500;
 
     .listOfElementsItemHeader {
         color: $toolpalette-header-color;
-        font-size: $font-size-h6;
+        font-size: $toolpalette-header-font-size;
         font-weight: $toolpalette-header-weight;
         letter-spacing: 0.7px;
         margin-top: $spacing-tiny;
@@ -50,7 +51,7 @@ $toolpalette-header-color: $color-black-500;
     }
 
     .listOfElementsItem {
-        padding-bottom: $spacing-x-tiny;
+        padding-bottom: 3px; // No semantic spacing for 3px, but requested by design
 
         .fieldToken:not(.fieldTokenCollapsed) {
             width: 100%;
@@ -62,6 +63,12 @@ $toolpalette-header-color: $color-black-500;
         max-width: $leftnav-width-standard;
         max-height: 45px;
         margin-bottom: $spacing-xxx-small;
+
+        @include small-breakpoint {
+            // On small breakpoint,
+            // the left nav width is based on the device width so set to 100% on mobile.
+            max-width: 100%;
+        }
 
         transition: opacity 0.3s, max-width 0.3s, max-height 0.3s;
     }

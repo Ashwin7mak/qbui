@@ -24,7 +24,7 @@ $fieldtoken-border-radius: 4px;
 
     &:hover, &.fieldTokenDragging {
         border: $stroke-width-thin solid $fieldtoken-hover-border-color;
-        box-shadow: 0 0 8px 0 rgba($color-black-100, 0.3);
+        box-shadow: 0 0 8px 0 rgba($color-black-800, 0.3);
     }
 
     .fieldTokenTitle {
