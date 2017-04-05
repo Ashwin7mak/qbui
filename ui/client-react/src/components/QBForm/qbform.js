@@ -615,7 +615,7 @@ function buildUserField(id, fieldValue, name) {
 const mapStateToProps = (state) => {
 
     return {
-        fields: state.fields.newStateWithNewField || state.fields
+        fields: state.fields
     };
 };
 
