@@ -4,6 +4,7 @@ $fieldtoken-width: 250px;
 $fieldtoken-icon-width: 34px;
 $fieldtoken-height: 34px;
 $fieldtoken-border-radius: 4px;
+$fieldtoken-title-margin-left: 12px;
 
 .fieldToken {
     // Overflow: hidden is used here to create the effect that the icon is rounded on the left, but flat on the right.
@@ -70,7 +71,7 @@ $fieldtoken-border-radius: 4px;
     }
 
     .fieldTokenTitle {
-        margin-left: 12px;
+        margin-left: $fieldtoken-title-margin-left;
         text-overflow: ellipsis;
         white-space: nowrap;
         overflow: hidden;

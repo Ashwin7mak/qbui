@@ -317,7 +317,9 @@
 
             if (results !== []) {
                 //Hover over to an element and verify the field error
-                expect(results[0].moveToObject('.tableFieldInput').element('.invalidInput').getAttribute('textContent')).toBe(errorMsg);
+                results[0].moveToObject('.tableFieldInput');
+                browser.waitForExist('.invalidInput'); // Account for short timeout in showing tooltip
+                expect(results[0].element('.invalidInput').getAttribute('textContent')).toBe(errorMsg);
                 return results[0].click();
             }
         }},

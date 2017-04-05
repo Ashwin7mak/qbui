@@ -3,7 +3,7 @@ import Locale from '../../../../reuse/client/src/locales/locale';
 import {createScalarDefaultFieldsProperties} from '../../utils/defaultFieldsProperties';
 
 /**
- * A master list of supported that affect which field types are displayed in the new field menu in form builder.
+ * A master list of supported field types that affect which field types are displayed in the new field menu in form builder.
  * NOTE: Currently unsupported fields are commented out to be added in a future PR.
  * @type {[*]}
  */
