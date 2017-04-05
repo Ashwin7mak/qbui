@@ -12,7 +12,7 @@ describe('withUniqueId HOC', () => {
         }
     }
 
-    it('generates uniqueId context used to identify report in store', () => {
+    it('generates uniqueId', () => {
         // wrap the mock class with HOC
         const MockClassWithId = withUniqueId(mockComponentClass);
 

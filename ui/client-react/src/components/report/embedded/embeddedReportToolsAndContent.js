@@ -19,8 +19,8 @@ import '../report.scss';
 let logger = new Logger();
 
 // Wrap ReportToolsAndContent with unloadable HOC. The HOC will call loadDynamicReport to add data
-// to the redux store which handles loading/unloading data from the
-// redux store.
+// to the redux store. The HOC also handles unloading data from the redux store when the component
+// unmounts.
 const ReportToolsAndContentWrapper = (props) => <ReportToolsAndContent {...props} />;
 const TrackableReportToolsAndContent = unloadable(ReportToolsAndContentWrapper);
 
