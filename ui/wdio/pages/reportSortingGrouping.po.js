@@ -448,8 +448,8 @@
          * Function will select the Item passed in parameter from the column header popup menu
          */
         selectColumnHeaderMenuItem: {value: function(itemToSelect) {
-            var items = reportContentPO.qbGridContainer.elements('.dropdown-menu').elements('li').value.filter(function(elm) {
-                return elm.getText() === itemToSelect;
+            var items = reportContentPO.qbGridContainer.element('.dropdown.open .dropdown-menu').elements('li').value.filter(function(elm) {
+                return elm.getAttribute('textContent') === itemToSelect;
             });
 
             if (items !== []) {
