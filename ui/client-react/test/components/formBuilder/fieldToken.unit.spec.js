@@ -7,7 +7,10 @@ import FieldToken, {__RewireAPI__ as FieldTokenRewireAPI} from '../../../src/com
 const mockFieldUtils = {
     getFieldSpecificIcon(_type) {}
 };
-let mockFieldIcon = 'omelette';
+
+const mockFieldIcon = 'omelette';
+const MockIcon = ({icon}) => <span>{mockFieldIcon}</span>;
+
 
 let component;
 
@@ -16,10 +19,12 @@ describe('FieldToken', () => {
         jasmineEnzyme();
         spyOn(mockFieldUtils, 'getFieldSpecificIcon').and.returnValue(mockFieldIcon);
         FieldTokenRewireAPI.__Rewire__('FieldUtils', mockFieldUtils);
+        FieldTokenRewireAPI.__Rewire__('Icon', MockIcon);
     });
 
     afterEach(() => {
         FieldTokenRewireAPI.__ResetDependency__('FieldUtils');
+        FieldTokenRewireAPI.__ResetDependency__('Icon');
     });
 
     it('renders the title of the field', () => {
@@ -43,7 +48,8 @@ describe('FieldToken', () => {
         component = shallow(<FieldToken type={testFieldType} />);
 
         expect(mockFieldUtils.getFieldSpecificIcon).toHaveBeenCalledWith(testFieldType);
-        expect(component.find('.fieldTokenIcon')).toHaveText(mockFieldIcon);
+
+        expect(component.find(MockIcon)).toHaveProp('icon', mockFieldIcon);
     });
 
     it('displays the icon in a dragging state', () => {

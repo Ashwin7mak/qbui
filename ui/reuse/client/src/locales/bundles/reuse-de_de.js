@@ -9,6 +9,10 @@ export default {
     messages: {
         test: {
             testMsg2: "Test message for reuse library - de-de"
+        },
+        listOfElements: {
+            noSearchResults: 'Keine Felder passen "{searchText}"',
+            searchPlaceholder: "Filter"
         }
     }
 };

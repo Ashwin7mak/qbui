@@ -1,9 +1,9 @@
-@import '../../../src/assets/css/qbVariables';
+@import "../../../../reuse/client/src/assets/css/qbVariables";
 
 .formBuilderContainer {
     height: 100%;
 
-    .toolsAndForm {
+    .formBuilderContainerContent {
         display: flex;
         flex-direction: row;
         height: 100%;

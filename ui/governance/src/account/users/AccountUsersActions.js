@@ -26,20 +26,8 @@ export const fetchAccountUsers = (accountId) => {
         const promise = accountUsersService.getAccountUsers(accountId);
 
         promise.then(response => {
-
             // we have the users, update the redux store
             dispatch(receiveAccountUsers(response.data));
-
-            // otherwise we have an error
-        }).catch(error => {
-
-            if (error.response) {
-                if (error.response.status === 403) {
-                    logger.parseAndLogError(LogLevel.WARN, error.response, 'accountUsersService.getAccountUsers:');
-                } else {
-                    logger.parseAndLogError(LogLevel.ERROR, error.response, 'accountUsersService.getAccountUsers:');
-                }
-            }
         });
         return promise;
     };

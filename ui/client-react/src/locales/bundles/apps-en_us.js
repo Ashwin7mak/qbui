@@ -127,7 +127,7 @@ export default {
             configureFormBuilder: 'Modify this form',
             saveRecord: "Save changes",
             saveAndAddRecord: "Save and add a new row",
-            saveAndAddRecordDisabled: "Adding records in the grid is not working right now",
+            saveAndAddRecordDisabled: "Adding records in the grid is not available yet",
             cancelSelection: "Cancel changes",
             favorite: "Favorite",
             gridEdit: "Grid Edit",
@@ -528,21 +528,41 @@ export default {
         builder: {
             formBuilder: {
                 unimplemented: "Feature is not available right now",
-                removeField: "Remove field from form"
+                removeField: "Remove field from form",
+                tooltips: {
+                    // Tooltip for every single field type because of requirements for a/an and pronouns different for each language
+                    [`addNew${FieldFormats.TEXT_FORMAT}`]: "Create a text field and add it to the form",
+                    [`addNew${FieldFormats.NUMBER_FORMAT}`]: "Create a number field and add it to the form",
+                    [`addNew${FieldFormats.DATE_FORMAT}`]: "Create a date field and add it to the form",
+                    [`addNew${FieldFormats.DATETIME_FORMAT}`]: "Create a time stamp and add it to the form",
+                    [`addNew${FieldFormats.TIME_FORMAT}`]: "Create a time-of-day field and add it to the form",
+                    [`addNew${FieldFormats.CHECKBOX_FORMAT}`]: "Create a checkbox and add it to the form",
+                    [`addNew${FieldFormats.USER_FORMAT}`]: "Create a user field and add it to the form",
+                    [`addNew${FieldFormats.CURRENCY_FORMAT}`]: "Create a currency field and add it to the form",
+                    [`addNew${FieldFormats.PERCENT_FORMAT}`]: "Create a percentage field and add it to the form",
+                    [`addNew${FieldFormats.RATING_FORMAT}`]: "Create a rating field and add it to the form",
+                    [`addNew${FieldFormats.DURATION_FORMAT}`]: "Create a duration field and add it to the form",
+                    [`addNew${FieldFormats.PHONE_FORMAT}`]: "Create a phone field and add it to the form",
+                    [`addNew${FieldFormats.MULTI_LINE_TEXT_FORMAT}`]: "Create a long text field and add it to the form",
+                    [`addNew${FieldFormats.URL}`]: "Create a URL field and add it to the form",
+                    [`addNew${FieldFormats.EMAIL_ADDRESS}`]: "Create an email field and add it to the form",
+                    [`addNew${FieldFormats.TEXT_FORMULA_FORMAT}`]: "Create a text formula field and add it to the form",
+                    [`addNew${FieldFormats.URL_FORMULA_FORMAT}`]: "Create a URL formula field and add it to the form",
+                    [`addNew${FieldFormats.NUMERIC_FORMULA_FORMAT}`]: "Create a numeric formula field and add it to the form",
+                    [`addNew${FieldFormats.TEXT_FORMAT_MULTICHOICE}`]: "Create a choice list and add it to the form",
+                    [`addNew${FieldFormats.RATING_FORMAT_MULTICHOICE}`]: "Create a rating field and add it to the form",
+                    [`addNew${FieldFormats.CURRENCY_FORMAT_MULTICHOICE}`]: "Create a currency field and add it to the form",
+                    [`addNew${FieldFormats.PERCENT_FORMAT_MULTICHOICE}`]: "Create a percentage field and add it to the form",
+                    [`addNew${FieldFormats.NUMBER_FORMAT_MULTICHOICE}`]: "Create a numeric choice list and add it to the form",
+                    [`addNew${FieldFormats.NUMBER_FORMAT_RADIO_BUTTONS}`]: "Create numeric radio buttons and add them to the form",
+                    [`addNew${FieldFormats.TEXT_FORMAT_RADIO_BUTTONS}`]: "Create radio buttons field and add them to the form",
+                }
             },
             fieldGroups: {
                 text: 'Text',
                 numeric: 'Number',
                 date: 'Date',
                 other: 'Other'
-            },
-            searchToolPalette: "Search for new fields",
-            noSearchResultsInToolPalette: 'No fields match "{searchText}"',
-            tooltips: {
-                addNewFieldTooltip: "Create a {fieldName} field and add it to the form",
-                addNewChoiceListTooltip: "Create a choice list and add it to the form",
-                addNewRadioListTooltip: "Create radio buttons and add them to the form",
-                addNewCheckboxTooltip: "Create a checkbox and add it to the form",
             }
         },
         featureSwitchAdmin: {
