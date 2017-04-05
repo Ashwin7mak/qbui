@@ -404,8 +404,34 @@ export const ReportContent = React.createClass({
     /**
      * Adds a new column.
      */
-    handleColumnAdd() {
-        console.log("at handleColumnAdd");
+    handleColumnAdd(clickedColumn, addBefore) {
+        let currentColumns = this.props.reportData.data.columns;
+        let currentColumn = currentColumns.filter((column) => {
+            if (column.id == clickedColumn.id) {
+                return column;
+            }
+        })[0];
+
+        let newColumn = _.cloneDeep(currentColumn);
+        newColumn.headerName = "New column";
+        newColumn.field = "New column";
+        let fids = this.props.reportData.data.fids;
+        let newId = fids[fids.length - 1] + 1;
+        fids.push(newId);
+
+        newColumn.id = newId;
+        newColumn.fieldDef.id = newId;
+
+        let indexedOrder = currentColumn.order - 1;
+        if (addBefore) {
+            this.props.reportData.data.columns.splice(indexedOrder, 0, newColumn);
+            currentColumn.order += 1
+        } else {
+            newColumn.order += 1;
+            this.props.reportData.data.columns.splice(indexedOrder + 1, 0, newColumn);
+        }
+        this.forceUpdate();
+        console.log(this.props.reportData.data);
     },
 
     /**

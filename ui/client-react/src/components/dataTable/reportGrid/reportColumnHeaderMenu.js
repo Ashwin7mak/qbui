@@ -162,11 +162,11 @@ export const ReportColumnHeaderMenu = React.createClass({
     },
 
     addColumnBefore() {
-        this.props.onColumnAdd(this.props.fieldDef.id - 1, this.props.sortFids.length);
+        this.props.onColumnAdd(this.props.fieldDef, true);
     },
 
     addColumnAfter() {
-        this.props.onColumnAdd(this.props.fieldDef.id + 1, this.props.sortFids.length);
+        this.props.onColumnAdd(this.props.fieldDef, false);
     },
 
     render() {
@@ -192,6 +192,7 @@ export const ReportColumnHeaderMenu = React.createClass({
                     <MenuItem onSelect={this.groupReportAscending}>
                         <span className="groupAscendMenuText">{this.getSortAscText(GROUPING_MESSAGE)}</span>
                     </MenuItem>
+
                     <MenuItem onSelect={this.groupReportDescending}>
                         <span className="groupDescendMenuText">{this.getSortDescText(GROUPING_MESSAGE)}</span>
                     </MenuItem>
@@ -202,9 +203,13 @@ export const ReportColumnHeaderMenu = React.createClass({
                         <I18nMessage message="report.menu.addColumnBefore"/>
                     </MenuItem>
 
-                    <MenuItem disabled><I18nMessage message="report.menu.addColumnAfter"/></MenuItem>
+                    <MenuItem onSelect={this.addColumnAfter}>
+                        <I18nMessage message="report.menu.addColumnAfter"/>
+                    </MenuItem>
+
                     <MenuItem disabled><I18nMessage message="report.menu.hideColumn"/></MenuItem>
                 </Dropdown.Menu>
+
             </Dropdown>
         );
     }
