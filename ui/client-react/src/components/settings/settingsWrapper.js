@@ -75,7 +75,10 @@ export const SettingsWrapper = React.createClass({
         }
     },
     getBackToAppLink() {
-        let link = `${UrlConsts.APP_ROUTE}/${this.state.apps.selectedAppId}/table/${this.state.apps.selectedTableId}`;
+        let link = `${UrlConsts.APP_ROUTE}/${this.state.apps.selectedAppId}`;
+        if (this.state.apps.selectedTableId) {
+            link += `/table/${this.state.apps.selectedTableId}`;
+        }
         return link;
     },
 
