@@ -14,7 +14,8 @@ export class FieldTokenInMenu extends Component {
         let {selectedField, formId} = this.props;
         let location = null;
         if (this.props.selectedField) {
-            location = selectedField;
+            location = Object.assign({}, selectedField);
+            location.elementIndex = location.elementIndex + 1;
         }
         this.props.addNewFieldToForm(formId, location, this.props);
     };
@@ -54,6 +55,7 @@ FieldTokenInMenu.propTypes = {
 
 const mapStateToProps = state => {
     let currentForm = state.forms ? state.forms[0] : undefined;
+    console.log('currentForm: ', currentForm);
     return {
         formId: (_.has(currentForm, 'id') ? currentForm.id : null),
         selectedField: (_.has(currentForm, 'selectedFields') ? currentForm.selectedFields[0] : []),
