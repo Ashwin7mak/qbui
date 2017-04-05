@@ -1,7 +1,7 @@
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
 import IconInputBox  from '../../src/components/iconInputBox/iconInputBox';
-import Icon  from '../../src/components/icon/icon';
+import Icon, {AVAILABLE_ICON_FONTS}  from '../../src/components/icon/icon';
 
 describe('IconInputBox functions', () => {
     'use strict';
@@ -25,7 +25,7 @@ describe('IconInputBox functions', () => {
         mockCallbacks.onChangeEv.calls.reset();
         mockCallbacks.onClearEv.calls.reset();
     });
-    it('test render of component', () => {
+    it('test render of component with default icon', () => {
         component = TestUtils.renderIntoDocument(<IconInputBox placeholder="test"/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
         let clearIcon = TestUtils.scryRenderedComponentsWithType(component, Icon);
@@ -33,6 +33,13 @@ describe('IconInputBox functions', () => {
         let searchInput = TestUtils.scryRenderedDOMComponentsWithClass(component, "searchInput");
         expect(searchInput.length).toEqual(1);
         expect(searchInput[0].placeholder).toEqual("test");
+    });
+
+    it('test render of component with specified icon', () => {
+        component = TestUtils.renderIntoDocument(<IconInputBox icon="heart"/>);
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+        let icon = TestUtils.scryRenderedDOMComponentsWithClass(component, `${AVAILABLE_ICON_FONTS.DEFAULT}-heart`);
+        expect(icon.length).toEqual(1);
     });
 
     it('test render of component with value', () => {
