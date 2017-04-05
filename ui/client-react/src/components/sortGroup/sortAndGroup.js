@@ -466,8 +466,9 @@ export const SortAndGroup = React.createClass({
     },
 
     getFieldsFromProps() {
-        let fieldsContainer = FieldsReducer.tableFieldsObj(this.props.fields, this.props.appId, this.props.tblId);
-        return fieldsContainer ? fieldsContainer.fields : [];
+        //  use helper method to retrieve the fields for this table
+        let tableFieldsObj = FieldsReducer.tableFieldsObj(this.props.fields, this.props.appId, this.props.tblId);
+        return tableFieldsObj ? tableFieldsObj.fields : [];
     },
 
     /**
