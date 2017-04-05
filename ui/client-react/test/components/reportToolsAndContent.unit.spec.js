@@ -203,7 +203,7 @@ describe('ReportToolsAndContent functions', () => {
             searchInput = jasmine.createSpy('searchInput');
             clearSearchInput = jasmine.createSpy('clearSearchInput');
             obj = {
-                loadDynamicReport: null
+                loadDynamicReport() {}
             };
             component = shallow(
                 <ReportToolsAndContent
@@ -214,7 +214,6 @@ describe('ReportToolsAndContent functions', () => {
                     routeParams={{appId:1, tblId:2,  rptId:'3'}}
                     {...reportDataParams}
                 />);
-
         });
 
         it('loads a new report with a debounce when user runs a text search', (done) => {
@@ -243,29 +242,22 @@ describe('ReportToolsAndContent functions', () => {
 
 
 
-        it('loads a new report with an empty search string when user clears search input', (done) => {
-            new Promise(resolve => {
-                // loadDynamicReport is called with a debounce, resolve when it's called
-                spyOn(obj, 'loadDynamicReport').and.callFake(() => {
-                    resolve();
-                });
-                // pass in the spy loadDynamicReport as a prop
-                component.setProps({loadDynamicReport: obj.loadDynamicReport});
-                component.instance().clearSearchString();
-                component.instance().clearAllFilters();
-                expect(clearSearchInput).toHaveBeenCalled();
-                expect(obj.loadDynamicReport).toHaveBeenCalled();
-            }).then(() => {
-                expect(obj.loadDynamicReport).toHaveBeenCalledWith(
-                    reportParams.appId,
-                    reportParams.tblId,
-                    reportParams.rptId,
-                    reportParams.format,
-                    jasmine.any(Object),
-                    jasmine.any(Object)
-                );
-                done();
-            });
+        it('loads a new report with an empty search string when user clears search input', () => {
+            // loadDynamicReport is called with a debounce, resolve when it's called
+            spyOn(obj, 'loadDynamicReport');
+            // pass in the spy loadDynamicReport as a prop
+            component.setProps({loadDynamicReport: obj.loadDynamicReport});
+            component.instance().clearSearchString();
+            expect(clearSearchInput).toHaveBeenCalled();
+            expect(obj.loadDynamicReport).toHaveBeenCalled();
+            expect(obj.loadDynamicReport).toHaveBeenCalledWith(
+                reportParams.appId,
+                reportParams.tblId,
+                reportParams.rptId,
+                reportParams.format,
+                jasmine.any(Object),
+                jasmine.any(Object)
+            );
         });
     });
 
