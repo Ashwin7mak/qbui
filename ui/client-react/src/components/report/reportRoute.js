@@ -156,10 +156,8 @@ const ReportRoute = React.createClass({
         } else {
             let fields = [];
             if (_.has(this.props, 'qbui.fields')) {
-                let fieldsContainer = _.find(this.props.qbui.fields, field => field.appId === this.props.params.appId && field.tblId === this.props.params.tblId);
-                if (fieldsContainer) {
-                    fields = fieldsContainer.fields;
-                }
+                let fieldsContainer = this.props.qbui.fields.getTableFieldsObj(this.props.params.appId, this.props.params.tblId);
+                fields = fieldsContainer ? fieldsContainer.getTableReportFields() : [];
             }
 
             return (<div className="reportContainer">
