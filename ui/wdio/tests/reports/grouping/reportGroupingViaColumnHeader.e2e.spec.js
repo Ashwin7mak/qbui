@@ -108,13 +108,18 @@
             }).then(function() {
                 let sortList = [
                     {
-                        "fieldId": 3,
+                        "fieldId": 6,
+                        "sortOrder": "asc",
+                        "groupType": null
+                    },
+                    {
+                        "fieldId": 12,
                         "sortOrder": "desc",
                         "groupType": null
                     },
                 ];
-                //Create a report
-                return e2eBase.reportService.createReportWithFidsAndSortList(app.id, app.tables[e2eConsts.TABLE1].id, [6, 7, 8, 9, 10, 11, 12], sortList, null, 'Test Grouping');
+                //Create a report with userField sorted in ascending then by %Complete(numeric field) by descending
+                return e2eBase.reportService.createReportWithFidsAndSortList(app.id, app.tables[e2eConsts.TABLE1].id, [6, 7, 8, 9, 10, 11, 12], sortList, null, 'Test Grouping via columnHeader');
             }).then(function() {
                 // Auth into the new stack
                 return newStackAuthPO.realmLogin(realmName, realmId);
@@ -127,134 +132,60 @@
         });
 
         /**
-         * Setup method. Get the report records via PAI and then formatt them as you see in UI to verify against UI
-         */
-        beforeAll(function() {
-            var reportRecordsViaAPI;
-            //report Endpoint
-            var reportEndpoint = e2eBase.recordBase.apiBase.resolveReportsEndpoint(app.id, app.tables[e2eConsts.TABLE1].id, DEFAULT_REPORT_ID);
-            //GET report results
-            browser.call(function() {
-                return e2eBase.recordBase.apiBase.executeRequest(reportEndpoint, consts.GET).then(function(reportResult) {
-                    var results = JSON.parse(reportResult.body);
-                    reportRecordsViaAPI = results.records;
-
-                    //Format the key value 6 which is userName to be be just firstName lastName
-                    reportRecordsViaAPI.forEach(function(record) {
-                        //Extract the value of key 6
-                        var userName = _.find(record, {id: 6});
-                        //replace value with just firstName lastName . The actual object value is in format ({"userId":"RBDXQ3V_UD","firstName":"Angela","lastName":"Leon","screenName":"Angela_Leon@example.com","email":"Angela_Leon@example.com"})
-                        userName.value = userName.value.firstName + " " + userName.value.lastName;
-
-                        //extract key 11
-                        var durationTaken = _.find(record, {id: 11});
-                        durationTaken.value = '-15250284452.47152052910053 weeks';
-
-                        //extract key 12
-                        var percentage = _.find(record, {id: 12});
-                        percentage.value = percentage.value + '00%';
-
-                        //extract start date(format as in UI ie mm-dd-yyy)
-                        var startDate = _.find(record, {id: 9});
-                        var sDate = startDate.value.split('-');
-                        startDate.value = sDate[1] + "-" + sDate[2] + "-" + sDate[0];
-
-                        //extract end date(format as in UI ie mm-dd-yyy)
-                        var endDate = _.find(record, {id: 10});
-                        var eDate = endDate.value.split('-');
-                        endDate.value = eDate[1] + "-" + eDate[2] + "-" + eDate[0];
-
-                        //remove key 3 (which is record ID). UI dose not show this
-                        record = record.slice(1);
-                        testCreatedFormattedRecords.push(record);
-                    });
-                });
-            });
-        });
-
-        /**
          * Data Provider for reports grouping testCases.
          * ['User Name Field', 'Text Field', 'Date Field', 'Duration Field'],
          */
         function groupingTestCases() {
             return [
                 {
-                    message: 'USER FIELD: User Field(asc)',
-                    //the below are for backend calls
-                    sortFids: [function(row) {return reportSortingPO.getSortValue(row, 6);}, function(row) {return reportSortingPO.getSortValue(row, 3);}],
-                    sortOrder: ['asc', 'desc'],
-                    groupFids: 6,
-                    sortList: [
-                        {
-                            "fieldId": 6,
-                            "sortOrder": "asc",
-                            "groupType": "EQUALS"
-                        },
-                        {
-                            "fieldId": 3,
-                            "sortOrder": "desc",
-                            "groupType": null
-                        }
-                    ],
+                    message: 'USER FIELD: A to Z',
+                    fieldName: 'User Name',
+                    groupDirection: 'Group A to Z',
+                    expectedGroups: ['Angela Leon', 'Chris Baker', 'Jon Neil'],
+                    expectedRecords: [
+                        ['Planning', 'Workstation purchase', '03-21-2009', '04-10-2009', '-15250284452.47152052910053 weeks', '9900%'],
+                        ['Planning', 'Server purchase', '03-16-2009', '04-10-2009', '-15250284452.47152052910053 weeks', '10000%'],
+                        ['Development', 'Upgrade DBMS', '03-19-2009', '04-28-2009', '-15250284452.47152052910053 weeks', '9900%'],
+                        ['Development', 'Install latest software', '03-31-2009', '04-28-2009', '-15250284452.47152052910053 weeks', '10000%']
+                    ]
                 },
                 {
-                    message: 'TEXT FIELD: Project Phase(desc)',
-                    //the below are for backend calls
-                    sortFids: [function(row) {return reportSortingPO.getSortValue(row, 7);}, function(row) {return reportSortingPO.getSortValue(row, 3);}],
-                    sortOrder: ['desc', 'desc'],
-                    groupFids: 7,
-                    sortList: [
-                        {
-                            "fieldId": 7,
-                            "sortOrder": "desc",
-                            "groupType": "EQUALS"
-                        },
-                        {
-                            "fieldId": 3,
-                            "sortOrder": "desc",
-                            "groupType": null
-                        }
-                    ],
+                    message: 'TEXT FIELD: Z to A',
+                    fieldName: 'Project Phase',
+                    groupDirection: 'Group Z to A',
+                    expectedGroups: ['Planning', 'Development'],
+                    expectedRecords: [
+                        ['Angela Leon', 'Workstation purchase', '03-21-2009', '04-10-2009', '-15250284452.47152052910053 weeks', '9900%'],
+                        ['Chris Baker', 'Server purchase', '03-16-2009', '04-10-2009', '-15250284452.47152052910053 weeks', '10000%'],
+                        ['Chris Baker', 'Upgrade DBMS', '03-19-2009', '04-28-2009', '-15250284452.47152052910053 weeks', '9900%'],
+                        ['Jon Neil', 'Install latest software', '03-31-2009', '04-28-2009', '-15250284452.47152052910053 weeks', '10000%']
+                    ]
                 },
                 {
-                    message: 'DATE FIELD: Start Date(desc)',
-                    //the below are for backend calls
-                    sortFids: [function(row) {return reportSortingPO.getSortValue(row, 9);}, function(row) {return reportSortingPO.getSortValue(row, 3);}],
-                    sortOrder: ['desc', 'desc'],
-                    groupFids: 9,
-                    sortList: [
-                        {
-                            "fieldId": 9,
-                            "sortOrder": "desc",
-                            "groupType": "EQUALS"
-                        },
-                        {
-                            "fieldId": 3,
-                            "sortOrder": "desc",
-                            "groupType": null
-                        }
-                    ],
+                    message: 'DATE FIELD: oldest to newest',
+                    fieldName: 'Finish Date',
+                    groupDirection: 'Group oldest to newest',
+                    expectedGroups: ['04-10-2009', '04-28-2009'],
+                    expectedRecords: [
+                        ['Angela Leon', 'Planning', 'Workstation purchase', '03-21-2009', '-15250284452.47152052910053 weeks', '9900%'],
+                        ['Chris Baker', 'Planning', 'Server purchase', '03-16-2009', '-15250284452.47152052910053 weeks', '10000%'],
+                        ['Chris Baker', 'Development', 'Upgrade DBMS', '03-19-2009', '-15250284452.47152052910053 weeks', '9900%'],
+                        ['Jon Neil', 'Development', 'Install latest software', '03-31-2009', '-15250284452.47152052910053 weeks', '10000%'],
+
+                    ]
                 },
-                //TODO report a bug on below. The header says empty after grouping
-                //{
-                //    message: 'NUMERIC FIELD: Duration field(desc)',
-                //    //the below are for backend calls
-                //    sortFids: [function(row) {return reportSortingPO.getSortValue(row, 11);}, function(row) {return reportSortingPO.getSortValue(row, 3);}],
-                //    sortOrder: ['desc', 'desc'],
-                //    groupFids: 11,
-                //    sortList: [
-                //        {
-                //            "fieldId": 11,
-                //            "sortOrder": "desc",
-                //            "groupType": "EQUALS"
-                //        },
-                //{
-                //    "fieldId": 3,
-                //    "sortOrder": "desc",
-                //    "groupType": null
-                //}
-                //    ],
-                //},
+                {
+                    message: 'NUMERIC FIELD: Duration field lowest to highest',
+                    fieldName: 'Duration Taken',
+                    groupDirection: 'Group lowest to highest',
+                    expectedGroups: ['(Empty)'], //TODO report a bug on below. The header says empty after grouping
+                    expectedRecords: [
+                        ['Angela Leon', 'Planning', 'Workstation purchase', '03-21-2009', '04-10-2009', '9900%'],
+                        ['Chris Baker', 'Planning', 'Server purchase', '03-16-2009', '04-10-2009', '10000%'],
+                        ['Chris Baker', 'Development', 'Upgrade DBMS', '03-19-2009', '04-28-2009', '9900%'],
+                        ['Jon Neil', 'Development', 'Install latest software', '03-31-2009', '04-28-2009', '10000%']
+                    ]
+                },
             ];
         }
 
@@ -262,100 +193,63 @@
          * Grouping Testcases
          */
         groupingTestCases().forEach(function(testCase) {
-            it('Group By ' + testCase.message, function() {
-
-                //Step 1 - Creating a report with FIDS and sortFIDS as described in dataProvider
-                browser.call(function() {
-                    return e2eBase.reportService.createReportWithFidsAndSortList(app.id, app.tables[e2eConsts.TABLE1].id, [6, 7, 8, 9, 10, 11, 12], testCase.sortList, '', 'Group By ' + testCase.message).then(function(id) {
-                        reportId = id;
-                    });
-                });
+            it('Report without Facets: Sort By User Field asc and Group By ' + testCase.message, function() {
 
                 //Step 2 - load the above created report in UI.
-                e2ePageBase.loadReportByIdInBrowser(realmName, app.id, app.tables[e2eConsts.TABLE1].id, reportId);
+                e2ePageBase.loadReportByIdInBrowser(realmName, app.id, app.tables[e2eConsts.TABLE1].id, DEFAULT_REPORT_ID);
+
+                reportSortingPO.expandColumnHeaderMenuAndSelectItem(testCase.fieldName, testCase.groupDirection);
 
                 //Step 3 - get all table results which are expected to be sorted/grouped already via API
                 var groupedUITableResults = reportSortingPO.getGroupedTableRows();
 
-                //Step 4 - Sort and Group the testCreated Formatted records using loDash
-                groupedViaLODASHResults = reportSortingPO.SortAndGroupFidsUsingLoDash(testCreatedFormattedRecords, testCase.sortFids, testCase.sortOrder, testCase.groupFids);
-
                 //Step 5 - Verify grouped headers
-                reportSortingPO.verifySortedResults(groupedUITableResults[0], groupedViaLODASHResults[0]);
+                reportSortingPO.verifySortedResults(groupedUITableResults[0], testCase.expectedGroups);
 
                 //Step 6 - Verify sorted and grouped records
-                reportSortingPO.verifySortedResults(groupedUITableResults[1], groupedViaLODASHResults[1]);
-
+                reportSortingPO.verifySortedResults(groupedUITableResults[1], testCase.expectedRecords);
             });
-        });
-
-        /*
-         * Grouping Via UI column header
-         */
-        it('Verify Sorting Project Phase(textField desc) then GroupBy User Field Via UI column Header', function() {
-            var sortFids = [function(row) {return reportSortingPO.getSortValue(row, 7);}];
-            var sortOrder = ['desc'];
-            var groupFids = 6;
-
-            //Step 1 - Go to report 1 which dosent have any grouping
-            e2ePageBase.loadReportByIdInBrowser(realmName, app.id, app.tables[e2eConsts.TABLE1].id, DEFAULT_REPORT_ID);
-
-            //Step 2 - Expand 'Project Phase' column header and select 'Sort Z to A'
-            reportSortingPO.expandColumnHeaderMenuAndSelectItem('Project Phase', 'Sort Z to A');
-            browser.element('.recordsCount').waitForVisible();
-
-            //Step 3 - Expand 'User Name' column header and select 'Group A to Z'
-            reportSortingPO.expandColumnHeaderMenuAndSelectItem('User Name', 'Group A to Z');
-
-            //Step 4 - get all table results which are expected to be sorted/grouped already via API
-            var groupedUITableResults = reportSortingPO.getGroupedTableRows();
-
-            //Step 5 - Sort and Group the testCreated Formatted records using loDash
-            groupedViaLODASHResults = reportSortingPO.SortAndGroupFidsUsingLoDash(testCreatedFormattedRecords, sortFids, sortOrder, groupFids);
-
-            //Step 6 - Verify grouped headers
-            reportSortingPO.verifySortedResults(groupedUITableResults[0], groupedViaLODASHResults[0]);
-
-            //Step 7 - Verify sorted and grouped records
-            reportSortingPO.verifySortedResults(groupedUITableResults[1], groupedViaLODASHResults[1]);
         });
 
         /*
          * Grouping Via UI column header on report with Facets
          */
-        it('Verify GroupBy User Field  Via UI column Header on report with facets', function() {
-            var sortFids = [function(row) {return reportSortingPO.getSortValue(row, 7);}];
-            var sortOrder = ['desc'];
-            var groupFids = 6;
+        // Grab a random test case from the data provider
+        var testCase = groupingTestCases()[Math.floor(Math.random() * groupingTestCases().length)];
+        it('Report with Facets: Group By : ' + testCase.message, function() {
+            let sortList = [
+                {
+                    "fieldId": 6,
+                    "sortOrder": "asc",
+                    "groupType": null
+                },
+                {
+                    "fieldId": 12,
+                    "sortOrder": "desc",
+                    "groupType": null
+                },
+            ];
 
             //Create a report with facets [text field and checkbox field]
             browser.call(function() {
-                return e2eBase.reportService.createReportWithFidsAndFacetsAndSortLists(app.id, app.tables[e2eConsts.TABLE1].id, [6, 7, 8, 9, 10, 11, 12], [6, 7], null).then(function(id) {
+                return e2eBase.reportService.createReportWithFidsAndFacetsAndSortLists(app.id, app.tables[e2eConsts.TABLE1].id, [6, 7, 8, 9, 10, 11, 12], [6, 7], sortList, null).then(function(id) {
                     reportId = id;
                 });
             });
 
-            //Step 1 - Go to report 1 which dosent have any grouping
+            //Step 2 - load the above created report in UI.
             e2ePageBase.loadReportByIdInBrowser(realmName, app.id, app.tables[e2eConsts.TABLE1].id, reportId);
 
-            //Step 2 - Expand 'Project Phase' column header and select 'Sort Z to A'
-            reportSortingPO.expandColumnHeaderMenuAndSelectItem('Project Phase', 'Sort Z to A');
-            browser.element('.recordsCount').waitForVisible();
+            reportSortingPO.expandColumnHeaderMenuAndSelectItem(testCase.fieldName, testCase.groupDirection);
 
-            //Step 3 - Expand 'User Name' column header and select 'Group A to Z'
-            reportSortingPO.expandColumnHeaderMenuAndSelectItem('User Name', 'Group A to Z');
-
-            //Step 4 - get all table results which are expected to be sorted/grouped already via API
+            //Step 3 - get all table results which are expected to be sorted/grouped already via API
             var groupedUITableResults = reportSortingPO.getGroupedTableRows();
 
-            //Step 5 - Sort and Group the testCreated Formatted records using loDash
-            groupedViaLODASHResults = reportSortingPO.SortAndGroupFidsUsingLoDash(testCreatedFormattedRecords, sortFids, sortOrder, groupFids);
+            //Step 5 - Verify grouped headers
+            reportSortingPO.verifySortedResults(groupedUITableResults[0], testCase.expectedGroups);
 
-            //Step 6 - Verify grouped headers
-            reportSortingPO.verifySortedResults(groupedUITableResults[0], groupedViaLODASHResults[0]);
-
-            //Step 7 - Verify sorted and grouped records
-            reportSortingPO.verifySortedResults(groupedUITableResults[1], groupedViaLODASHResults[1]);
+            //Step 6 - Verify sorted and grouped records
+            reportSortingPO.verifySortedResults(groupedUITableResults[1], testCase.expectedRecords);
 
         });
 
