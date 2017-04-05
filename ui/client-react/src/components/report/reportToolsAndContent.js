@@ -24,6 +24,8 @@ import {editNewRecord} from '../../actions/formActions';
 import {searchInput, clearSearchInput} from '../../actions/searchActions';
 import {EDIT_RECORD_KEY, NEW_RECORD_VALUE} from '../../constants/urlConstants';
 
+import * as FieldsReducer from '../../reducers/fields';
+
 let logger = new Logger();
 
 let FluxMixin = Fluxxor.FluxMixin(React);
@@ -212,7 +214,6 @@ export const ReportToolsAndContent = React.createClass({
                               searchStringForFiltering={this.props.reportData.searchStringForFiltering}
                               pageActions={this.getPageActions(0)}
                               nameForRecords={this.nameForRecords}
-                              fields={this.props.fields}
                               searchTheString={this.searchTheString}
                               filterOnSelections={this.filterOnSelections}
                               clearSearchString={this.clearSearchString}
@@ -346,9 +347,13 @@ export const ReportToolsAndContent = React.createClass({
 
             let {appId, tblId, rptId, reportData:{selections, ...otherReportData}} = this.props;
 
-            //  get the fields from redux store
-            let fieldsContainer = _.find(this.props.fields, flds => flds.appId ===  this.props.reportData.appId && flds.tblId === this.props.reportData.tblId);
-            let fields = fieldsContainer.fields ? fieldsContainer.fields : [];
+            //  use helper method to retrieve the fields for this table and return the field in the object structure used by the reports components
+            let fields = [];
+            if (_.has(this.props, 'fields')) {
+                let tableFieldsObj = FieldsReducer.tableFieldsObj(this.props.fields, this.props.reportData.appId, this.props.reportData.tblId);
+                fields = _.has(tableFieldsObj, 'getTableReportFields') ? tableFieldsObj.getTableReportFields() : [];
+            }
+
             let primaryKeyName = FieldUtils.getPrimaryKeyFieldName(fields);
 
             // Define the page start. Page offset is zero indexed. For display purposes, add one.
@@ -392,6 +397,7 @@ export const ReportToolsAndContent = React.createClass({
                                    flux={this.getFlux()}
                                    gridOptions={this.props.gridOptions}
                                    {...this.props}
+                                   // until sub-components reference store directly, need to explicitly override this.props.fields
                                    fields={fields}/>
 
                     {!this.props.scrollingReport && <AddRecordButton onClick={this.editNewRecord}/>}
