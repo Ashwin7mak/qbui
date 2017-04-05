@@ -1,9 +1,9 @@
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
-import SearchBox  from '../../src/components/search/searchBox';
-import QBIcon  from '../../src/components/qbIcon/qbIcon';
+import IconInputBox  from '../../src/components/iconInputBox/iconInputBox';
+import Icon  from '../../src/components/icon/icon';
 
-describe('SearchBox functions', () => {
+describe('IconInputBox functions', () => {
     'use strict';
 
     let component;
@@ -26,9 +26,9 @@ describe('SearchBox functions', () => {
         mockCallbacks.onClearSearchEv.calls.reset();
     });
     it('test render of component', () => {
-        component = TestUtils.renderIntoDocument(<SearchBox placeholder="test"/>);
+        component = TestUtils.renderIntoDocument(<IconInputBox placeholder="test"/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
-        let clearIcon = TestUtils.scryRenderedComponentsWithType(component, QBIcon);
+        let clearIcon = TestUtils.scryRenderedComponentsWithType(component, Icon);
         expect(clearIcon.length).toEqual(1);
         let searchInput = TestUtils.scryRenderedDOMComponentsWithClass(component, "searchInput");
         expect(searchInput.length).toEqual(1);
@@ -36,27 +36,27 @@ describe('SearchBox functions', () => {
     });
 
     it('test render of component with value', () => {
-        component = TestUtils.renderIntoDocument(<SearchBox value="test" />);
+        component = TestUtils.renderIntoDocument(<IconInputBox value="test" />);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
         let searchInput = TestUtils.scryRenderedDOMComponentsWithClass(component, "searchInput");
         expect(searchInput.length).toEqual(1);
         expect(searchInput[0].value).toEqual("test");
-        let clearIcon = TestUtils.scryRenderedComponentsWithType(component, QBIcon);
+        let clearIcon = TestUtils.scryRenderedComponentsWithType(component, Icon);
         expect(clearIcon.length).toEqual(1);
     });
 
     it('test render of component with no clear icon', () => {
-        component = TestUtils.renderIntoDocument(<SearchBox value="test" hideClearIcon={true}/>);
+        component = TestUtils.renderIntoDocument(<IconInputBox value="test" hideClearIcon={true}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
         let searchInput = TestUtils.scryRenderedDOMComponentsWithClass(component, "searchInput");
         expect(searchInput.length).toEqual(1);
         expect(searchInput[0].value).toEqual("test");
-        let clearIcon = TestUtils.scryRenderedComponentsWithType(component, QBIcon);
+        let clearIcon = TestUtils.scryRenderedComponentsWithType(component, Icon);
         expect(clearIcon.length).toEqual(1);
     });
 
     it('test render of component with change event', () => {
-        component = TestUtils.renderIntoDocument(<SearchBox value="test" onChange={mockCallbacks.onChangeEv}/>);
+        component = TestUtils.renderIntoDocument(<IconInputBox value="test" onChange={mockCallbacks.onChangeEv}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
         let searchInput = TestUtils.scryRenderedDOMComponentsWithClass(component, "searchInput");
         expect(searchInput.length).toEqual(1);
@@ -66,7 +66,7 @@ describe('SearchBox functions', () => {
     });
 
     it('test render of component with clear event', () => {
-        component = TestUtils.renderIntoDocument(<SearchBox value="test" onClearSearch={mockCallbacks.onClearSearchEv}/>);
+        component = TestUtils.renderIntoDocument(<IconInputBox value="test" onClearSearch={mockCallbacks.onClearSearchEv}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
         let clearIcon = TestUtils.scryRenderedDOMComponentsWithClass(component, "clearSearch");
         expect(clearIcon.length).toEqual(1);
