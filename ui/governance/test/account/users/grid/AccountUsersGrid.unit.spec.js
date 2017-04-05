@@ -1,7 +1,7 @@
 import React from 'react';
 import {mount} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
-import {AccountUsersGrid} from '../../../../src/account/users/grid/AccountUsersGrid';
+import AccountUsersGrid from '../../../../src/account/users/grid/AccountUsersGrid';
 import QbCell from '../../../../../client-react/src/components/dataTable/qbGrid/qbCell';
 import QbHeaderCell from '../../../../../client-react/src/components/dataTable/qbGrid/qbHeaderCell';
 import moment from 'moment';
@@ -14,10 +14,6 @@ describe('AccountUsersGrid', () => {
     describe("Component", () => {
 
         const baseProps = {
-            fetchAccountUsers: () => false,
-            fetchRequestContextIfNeeded: () => false,
-            accountId: "0",
-            loading: false,
             showAccountColumns: true,
             showRealmColumns: true
         };
@@ -50,32 +46,11 @@ describe('AccountUsersGrid', () => {
             expect(headers).toEqual(["First Name", "Last Name", "Email", "User Name", "Last Access", "QuickBase Access Status", "Inactive?", "In Any Group?", "Group Manager?", "Can create apps?", "App Manager?"]);
         });
 
-        it("should should call fetch on mount", ()=> {
-            let props = {
-                ...baseProps
-            };
-
-            spyOn(props, 'fetchAccountUsers');
-            mount(<AccountUsersGrid {...props} />);
-            expect(props.fetchAccountUsers.calls.any()).toEqual(true);
-        });
-
-        it("should should render an error state", ()=> {
-            let props = {
-                ...baseProps,
-                dataFetchingError: "Error"
-            };
-
-            let component = mount(<AccountUsersGrid {...props} />);
-            let errorSection = component.find("h1");
-            expect(errorSection.length).toEqual(1);
-        });
-
         describe("firstName", () => {
             it("should render properly", () => {
                 let props = {
+                    ...baseProps,
                     users: [{firstName: "Test", uid:0}],
-                    ...baseProps
                 };
 
                 let component = mount(<AccountUsersGrid {...props} />);
@@ -87,8 +62,8 @@ describe('AccountUsersGrid', () => {
         describe("lastName", () => {
             it("should render properly", () => {
                 let props = {
+                    ...baseProps,
                     users: [{lastName: "Test", uid:0}],
-                    ...baseProps
                 };
 
                 let component = mount(<AccountUsersGrid {...props} />);
@@ -100,8 +75,8 @@ describe('AccountUsersGrid', () => {
         describe("email", () => {
             it("should render properly", () => {
                 let props = {
+                    ...baseProps,
                     users: [{email: "Test", uid:0}],
-                    ...baseProps
                 };
 
                 let component = mount(<AccountUsersGrid {...props} />);
@@ -113,8 +88,8 @@ describe('AccountUsersGrid', () => {
         describe("userName", () => {
             it("should render properly", () => {
                 let props = {
+                    ...baseProps,
                     users: [{userName: "Test", uid:0}],
-                    ...baseProps
                 };
 
                 let component = mount(<AccountUsersGrid {...props} />);
@@ -126,8 +101,8 @@ describe('AccountUsersGrid', () => {
         describe("lastAccess", () => {
             it("should render null properly", () => {
                 let props = {
+                    ...baseProps,
                     users: [{lastAccess: "1900-01-01T00:00:00Z", uid:0}],
-                    ...baseProps
                 };
 
                 let component = mount(<AccountUsersGrid {...props} />);
@@ -137,8 +112,8 @@ describe('AccountUsersGrid', () => {
 
             it("should render properly", () => {
                 let props = {
+                    ...baseProps,
                     users: [{lastAccess: "2017-03-01T16:00:00Z", uid:0}],
-                    ...baseProps
                 };
 
                 let component = mount(<AccountUsersGrid {...props} />);
@@ -150,6 +125,7 @@ describe('AccountUsersGrid', () => {
         describe("quickbase access status", () => {
             it("should render no app access correctly", () => {
                 let props = {
+                    ...baseProps,
                     users: [{
                         hasAppAccess: false,
                         userBasicFlags: 4,
@@ -157,7 +133,6 @@ describe('AccountUsersGrid', () => {
                         systemRights: 0,
                         uid:0
                     }],
-                    ...baseProps
                 };
 
                 let component = mount(<AccountUsersGrid {...props} />);
@@ -167,6 +142,7 @@ describe('AccountUsersGrid', () => {
 
             it("should show deactivated above all else", () => {
                 let props = {
+                    ...baseProps,
                     users: [{
                         hasAppAccess: true,
                         userBasicFlags: 64,
@@ -174,7 +150,6 @@ describe('AccountUsersGrid', () => {
                         systemRights: 2,
                         uid:0
                     }],
-                    ...baseProps
                 };
 
                 let component = mount(<AccountUsersGrid {...props} />);
@@ -184,6 +159,7 @@ describe('AccountUsersGrid', () => {
 
             it("should show denied above everything other than deactivated", () => {
                 let props = {
+                    ...baseProps,
                     users: [{
                         hasAppAccess: true,
                         userBasicFlags: 0,
@@ -191,7 +167,6 @@ describe('AccountUsersGrid', () => {
                         systemRights: 2,
                         uid:0
                     }],
-                    ...baseProps
                 };
 
                 let component = mount(<AccountUsersGrid {...props} />);
@@ -201,6 +176,7 @@ describe('AccountUsersGrid', () => {
 
             it("should quickbase staff above everything but denied and deactivated", () => {
                 let props = {
+                    ...baseProps,
                     users: [{
                         hasAppAccess: true,
                         userBasicFlags: 4,
@@ -208,7 +184,6 @@ describe('AccountUsersGrid', () => {
                         systemRights: 6,
                         uid:0
                     }],
-                    ...baseProps
                 };
 
                 let component = mount(<AccountUsersGrid {...props} />);
@@ -218,6 +193,7 @@ describe('AccountUsersGrid', () => {
 
             it("should show paid seat if has access", () => {
                 let props = {
+                    ...baseProps,
                     users: [{
                         hasAppAccess: true,
                         userBasicFlags: 4,
@@ -225,7 +201,6 @@ describe('AccountUsersGrid', () => {
                         systemRights: 0,
                         uid:0
                     }],
-                    ...baseProps
                 };
 
                 let component = mount(<AccountUsersGrid {...props} />);
@@ -237,8 +212,8 @@ describe('AccountUsersGrid', () => {
         describe("Inactive?", () => {
             it("should render null properly", () => {
                 let props = {
+                    ...baseProps,
                     users: [{lastAccess: "1900-01-01T00:00:00Z", uid:0}],
-                    ...baseProps
                 };
 
                 let component = mount(<AccountUsersGrid {...props} />);
@@ -248,8 +223,8 @@ describe('AccountUsersGrid', () => {
 
             it("should render inactive properly", () => {
                 let props = {
+                    ...baseProps,
                     users: [{lastAccess: moment().subtract(181, 'days').toISOString(), uid:0}],
-                    ...baseProps
                 };
 
                 let component = mount(<AccountUsersGrid {...props} />);
@@ -259,8 +234,8 @@ describe('AccountUsersGrid', () => {
 
             it("should render NOT inactive properly", () => {
                 let props = {
+                    ...baseProps,
                     users: [{lastAccess: moment().subtract(179, 'days').toISOString(), uid:0}],
-                    ...baseProps
                 };
 
                 let component = mount(<AccountUsersGrid {...props} />);
@@ -273,8 +248,8 @@ describe('AccountUsersGrid', () => {
 
             it("should render numGroupsMember correctly when a number", () => {
                 let props = {
+                    ...baseProps,
                     users: [{numGroupsMember: 1, uid:0}],
-                    ...baseProps
                 };
 
                 let component = mount(<AccountUsersGrid {...props} />);
@@ -284,8 +259,8 @@ describe('AccountUsersGrid', () => {
 
             it("should render numGroupsMember correctly when 0", () => {
                 let props = {
+                    ...baseProps,
                     users: [{numGroupsMember: 0, uid:0}],
-                    ...baseProps
                 };
 
                 let component = mount(<AccountUsersGrid {...props} />);
@@ -298,8 +273,8 @@ describe('AccountUsersGrid', () => {
 
             it("should render numGroupsManaged correctly when a number", () => {
                 let props = {
+                    ...baseProps,
                     users: [{numGroupsManaged: 1, uid:0}],
-                    ...baseProps
                 };
 
                 let component = mount(<AccountUsersGrid {...props} />);
@@ -309,8 +284,8 @@ describe('AccountUsersGrid', () => {
 
             it("should render numGroupsManaged correctly when 0", () => {
                 let props = {
+                    ...baseProps,
                     users: [{numGroupsManaged: 0, uid:0}],
-                    ...baseProps
                 };
 
                 let component = mount(<AccountUsersGrid {...props} />);
@@ -323,8 +298,8 @@ describe('AccountUsersGrid', () => {
 
             it("should render can create apps correctly when user has flag", () => {
                 let props = {
+                    ...baseProps,
                     users: [{accountTrusteeFlags: 5, uid:0}],
-                    ...baseProps
                 };
 
                 let component = mount(<AccountUsersGrid {...props} />);
@@ -334,8 +309,8 @@ describe('AccountUsersGrid', () => {
 
             it("should render can create apps correctly when user does NOT have flag", () => {
                 let props = {
+                    ...baseProps,
                     users: [{accountTrusteeFlags: 1, uid:0}],
-                    ...baseProps
                 };
 
                 let component = mount(<AccountUsersGrid {...props} />);
@@ -348,8 +323,8 @@ describe('AccountUsersGrid', () => {
 
             it("should render no apps correctly", () => {
                 let props = {
+                    ...baseProps,
                     users: [{numAppsManaged: 0, uid:0}],
-                    ...baseProps
                 };
 
                 let component = mount(<AccountUsersGrid {...props} />);
@@ -359,8 +334,8 @@ describe('AccountUsersGrid', () => {
 
             it("should render some apps correctly", () => {
                 let props = {
+                    ...baseProps,
                     users: [{numAppsManaged: 1, uid:0}],
-                    ...baseProps
                 };
 
                 let component = mount(<AccountUsersGrid {...props} />);
@@ -373,8 +348,8 @@ describe('AccountUsersGrid', () => {
 
             it("should render in realm directory correctly when 0", () => {
                 let props = {
+                    ...baseProps,
                     users: [{realmDirectoryFlags: 0, uid:0}],
-                    ...baseProps
                 };
 
                 let component = mount(<AccountUsersGrid {...props} />);
@@ -384,8 +359,8 @@ describe('AccountUsersGrid', () => {
 
             it("should render in realm directory correctly when has some flags", () => {
                 let props = {
+                    ...baseProps,
                     users: [{realmDirectoryFlags: 1, uid:0}],
-                    ...baseProps
                 };
 
                 let component = mount(<AccountUsersGrid {...props} />);
@@ -398,8 +373,8 @@ describe('AccountUsersGrid', () => {
 
             it("should render realm approved correctly when flag is set", () => {
                 let props = {
+                    ...baseProps,
                     users: [{realmDirectoryFlags: 5, uid:0}],
-                    ...baseProps
                 };
 
                 let component = mount(<AccountUsersGrid {...props} />);
@@ -409,8 +384,8 @@ describe('AccountUsersGrid', () => {
 
             it("should render realm approved correctly when flag is not set", () => {
                 let props = {
+                    ...baseProps,
                     users: [{realmDirectoryFlags: 1, uid:0}],
-                    ...baseProps
                 };
 
                 let component = mount(<AccountUsersGrid {...props} />);
