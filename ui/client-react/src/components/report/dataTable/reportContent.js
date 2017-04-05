@@ -22,7 +22,7 @@ import * as CompConsts from '../../../constants/componentConstants';
 
 import {connect} from 'react-redux';
 import {createRecord, deleteRecord, editRecordStart, editRecordCancel, editRecordChange, editRecordValidateField, openRecord, updateRecord} from '../../../actions/recordActions';
-import {addBlankRecordToReport, selectReportRecords} from '../../../actions/reportActions';
+import {addBlankRecordToReport, selectReportRecords, addColumnToTable} from '../../../actions/reportActions';
 import {APP_ROUTE, EDIT_RECORD_KEY} from '../../../constants/urlConstants';
 import * as SchemaConstants from '../../../constants/schema';
 import {CONTEXT} from '../../../actions/context';
@@ -405,33 +405,12 @@ export const ReportContent = React.createClass({
      * Adds a new column.
      */
     handleColumnAdd(clickedColumn, addBefore) {
-        let currentColumns = this.props.reportData.data.columns;
-        let currentColumn = currentColumns.filter((column) => {
-            if (column.id == clickedColumn.id) {
-                return column;
-            }
-        })[0];
-
-        let newColumn = _.cloneDeep(currentColumn);
-        newColumn.headerName = "New column";
-        newColumn.field = "New column";
-        let fids = this.props.reportData.data.fids;
-        let newId = fids[fids.length - 1] + 1;
-        fids.push(newId);
-
-        newColumn.id = newId;
-        newColumn.fieldDef.id = newId;
-
-        let indexedOrder = currentColumn.order - 1;
-        if (addBefore) {
-            this.props.reportData.data.columns.splice(indexedOrder, 0, newColumn);
-            currentColumn.order += 1
-        } else {
-            newColumn.order += 1;
-            this.props.reportData.data.columns.splice(indexedOrder + 1, 0, newColumn);
-        }
-        this.forceUpdate();
-        console.log(this.props.reportData.data);
+        let params = {
+            context: CONTEXT.REPORT.NAV,
+            clickedId: clickedColumn.id,
+            addBefore: addBefore
+        };
+        this.props.addColumnToTable(this.props.appId, this.props.tblId, this.props.reportData.rptId, params);
     },
 
     /**
@@ -1100,6 +1079,9 @@ const mapDispatchToProps = (dispatch) => {
                     }
                 }
             );
+        },
+        addColumnToTable: (appId, tblId, rptId, params) => {
+            dispatch(addColumnToTable(appId, tblId, rptId, params));
         }
     };
 };

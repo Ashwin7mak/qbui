@@ -3,6 +3,7 @@ import ReportModel from '../models/reportModel';
 import ReportsModel from '../models/reportsModel';
 import Promise from 'bluebird';
 import QueryUtils from '../utils/queryUtils';
+import _ from 'lodash';
 
 import Logger from '../utils/logger';
 import LogLevel from '../utils/logLevels';
@@ -340,4 +341,13 @@ export const loadReportRecordsCount = (context, appId, tblId, rptId, queryParams
             return new Promise.reject();
         }
     };
+};
+
+export const addColumnToTable = (appId, tblId, rptId, params) => {
+    return (dispatch) => {
+        if (appId && tblId && rptId) {
+            logger.debug(`Adding requested column for appId: ${appId}, tblId: ${tblId}, rptId: ${rptId}`);
+            dispatch(event(params.context, types.ADD_COLUMN_SUCCESS, params));
+        }
+    }
 };

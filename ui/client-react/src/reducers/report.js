@@ -244,6 +244,40 @@ const report = (state = [], action) => {
         });
         return reports;
     }
+    case types.ADD_COLUMN_SUCCESS: {
+        let currentReport = getReportFromState(action.id);
+        if (currentReport) {
+            let columns = currentReport.data.columns;
+            let fids = currentReport.data.fids;
+            let params = action.content;
+
+            let currentColumn = columns.filter((column) => {
+                if (column.id == params.clickedId) {
+                    return column;
+                }
+            })[0];
+
+            let newColumn = _.cloneDeep(currentColumn);
+            newColumn.headerName = "New column";
+            newColumn.field = "New column";
+            let newId = fids[fids.length - 1] + 1;
+            fids.push(newId);
+
+            newColumn.id = newId;
+
+            let indexedOrder = currentColumn.order - 1;
+            if (params.addBefore) {
+                columns.splice(indexedOrder, 0, newColumn);
+                currentColumn.order += 1
+            } else {
+                newColumn.order += 1;
+                columns.splice(indexedOrder + 1, 0, newColumn);
+            }
+
+            return newState(currentReport);
+        }
+        return state;
+    }
     default:
         // by default, return existing state
         return state;
