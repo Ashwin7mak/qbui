@@ -318,14 +318,6 @@ export const Nav = React.createClass({
         }
 
         let viewingRecordId = null;
-        let fields = [];
-        if (this.props.params) {
-            viewingRecordId = this.props.params.recordId;
-            //   get the fields from the redux store
-            let fieldsContainer = _.find(this.props.fields, field => field.appId === this.props.params.appId && field.tblId === this.props.params.tblId);
-            fields = fieldsContainer ? fieldsContainer.fields : [];
-        }
-
         let reportsData = this.getReportsData();
         let reportsList = this.getReportsList();
         let pendEdits = this.getPendEdits();
@@ -405,7 +397,6 @@ export const Nav = React.createClass({
                             appOwner: this.state.apps.appOwner,
                             locale: this.state.nav.locale,
                             isRowPopUpMenuOpen: this.props.shell.isRowPopUpMenuOpen,
-                            fields: fields,
                             selectedApp: this.getSelectedApp(),
                             selectedTable: this.getSelectedTable(reportsData.tblId),
                             scrollingReport: this.state.nav.scrollingReport,
@@ -465,7 +456,6 @@ export const Nav = React.createClass({
 
 const mapStateToProps = (state) => {
     return {
-        fields: state.fields,
         forms: state.forms,
         shell: state.shell,
         record: state.record,
