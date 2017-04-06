@@ -1,6 +1,6 @@
 var sinon = require('sinon');
-
-var error = require('../../../src/components/errors/index');
+var config = require('../../../src/config/environment');
+var error = require('../../../src/components/errors/index')(config);
 var consts = require('../../../../common/src/constants');
 var assert = require('assert');
 var log = require('../../../src/logger').getLogger();
