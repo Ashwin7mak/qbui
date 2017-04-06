@@ -1,6 +1,7 @@
 /**
  * E2E DataGen Setup. Make sure to comment out 'after' hook in wdio.conf.js to prevent cleanup!
  * Use this script as a smoke test to ensure that wdio is setup properly
+ * This script can ONLY be run via WebdriverIO and is dependent on that framework for proper execution.
  */
 (function() {
     'use strict';
