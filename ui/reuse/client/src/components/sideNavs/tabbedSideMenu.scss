@@ -1,5 +1,15 @@
+// TabbedSideNav uses a 3rd party component called rc-tabs. The rc-tab classes below are rendered by that third party component.
+
 .tabbedSideNav {
+    &, .rc-tabs, .rc-tabs-content, .rc-tabs-tabpane {
+        height: 100%;
+    }
+
     .rc-tabs-top .rc-tabs-tab {
         margin-right: 0;
+    }
+
+    .rc-tabs-content {
+        overflow: visible; // Second tab would be invisible when this was set to hidden. Fixed with visible.
     }
 }

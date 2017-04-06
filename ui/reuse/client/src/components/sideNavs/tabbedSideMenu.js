@@ -38,9 +38,11 @@ class TabbedSideNav extends Component {
             return this.props.defaultTab;
         }
 
-        if (this.tabs && this.tabs.length > 0) {
-            return this.tabs[0].key;
+        if (this.props.tabs && this.props.tabs.length > 0) {
+            return this.props.tabs[0].key;
         }
+
+        return null;
     }
 
     render() {
