@@ -113,7 +113,7 @@ const forms = (
                 newLocation,
                 draggedItemProps
             );
-            
+
             return [
                 ...newState,
                 updatedForm
