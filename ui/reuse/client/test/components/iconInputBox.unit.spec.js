@@ -36,9 +36,10 @@ describe('IconInputBox functions', () => {
     });
 
     it('test render of component with specified icon', () => {
-        component = TestUtils.renderIntoDocument(<IconInputBox icon="heart"/>);
+        component = TestUtils.renderIntoDocument(<IconInputBox icon="hamburger"/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
-        let icon = TestUtils.scryRenderedDOMComponentsWithClass(component, `${AVAILABLE_ICON_FONTS.DEFAULT}-heart`);
+        let iconClass = AVAILABLE_ICON_FONTS.UI_STURDY + "-hamburger";
+        let icon = TestUtils.scryRenderedDOMComponentsWithClass(component, iconClass);
         expect(icon.length).toEqual(1);
     });
 

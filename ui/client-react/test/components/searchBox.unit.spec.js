@@ -1,9 +1,8 @@
 import React from 'react';
-import {shallow} from 'enzyme';
+import {mount} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
 
 import SearchBox from '../../src/components/search/searchBox';
-import Icon from '../../../reuse/client/src/components/icon/icon';
 
 /**
  * This component is relocated to the reuse library and renamed "IconInputBox".
@@ -19,7 +18,7 @@ describe('SearchBox', () => {
     });
 
     it('renders the component', () => {
-        component = shallow(<SearchBox placeholder="test"/>);
+        component = mount(<SearchBox placeholder="test"/>);
 
         expect(component.find('input')).toBePresent();
     });

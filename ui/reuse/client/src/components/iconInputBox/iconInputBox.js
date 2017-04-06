@@ -7,7 +7,7 @@ import Icon from '../icon/icon';
 const IconInputBox = React.createClass({
     propTypes: {
         className: PropTypes.string,
-        iconName: PropTypes.string,
+        icon: PropTypes.string,
         iconInputBoxKey: PropTypes.string,
         placeholder: PropTypes.string,
         hideClearIcon: PropTypes.bool, //if the box chooses to not render clear icon
@@ -17,7 +17,7 @@ const IconInputBox = React.createClass({
     },
     getDefaultProps() {
         return {
-            iconName: "search",
+            icon: "search",
             hideClearIcon: false
         };
     },
@@ -36,7 +36,7 @@ const IconInputBox = React.createClass({
                     <span className="clearSearch" onClick={this.props.onClear}>
                         <Icon icon="clear-mini" className="searchIcon"/>
                     </span> :
-                    <Icon icon={this.props.iconName} className="searchIcon"/>
+                    <Icon icon={this.props.icon} className="searchIcon"/>
                 }
             </div>
         );
