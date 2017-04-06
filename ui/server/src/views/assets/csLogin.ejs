@@ -3,8 +3,14 @@
 
 <script type="text/javascript">
 var hostnameSplit = window.location.hostname.split(".");
-var hostname = "." + hostnameSplit.pop();
-var currentStackDomain = hostnameSplit.shift() + "." + hostnameSplit.pop() + hostname;
+var currentStackDomain = '<%= legacyBase %>';
+if (currentStackDomain === null || currentStackDomain === undefined || currentStackDomain.length === 0 )
+{
+    var hostname = "." + hostnameSplit.pop();
+    currentStackDomain = hostnameSplit.shift() + "." + hostnameSplit.pop() + hostname;
+} else {
+    currentStackDomain = hostnameSplit.shift() + currentStackDomain;
+}
 var currentStackSignIn=  "https://" + currentStackDomain + "/db/main?a=SignIn";
 document.getElementById("signin").href = currentStackSignIn;
 </script>
