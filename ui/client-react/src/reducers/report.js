@@ -246,36 +246,20 @@ const report = (state = [], action) => {
     }
     case types.ADD_COLUMN_SUCCESS: {
         let currentReport = getReportFromState(action.id);
+        console.log("adding column..");
         if (currentReport) {
             let columns = currentReport.data.columns;
             let params = action.content;
 
             // searches through the current columns to find the one that was selected
-            let clickedColumn;
+            let clickedColumn = params.clicked;
             let columnToAdd;
             for (let currentColumnIndex = 0; currentColumnIndex < columns.length; currentColumnIndex++) {
                 let column = columns[currentColumnIndex];
-                if (column.id === params.clickedId) {
-                    clickedColumn = columns[currentColumnIndex];
-                }
                 if (column.id === params.requestedId) {
                     columnToAdd = columns[currentColumnIndex];
                 }
             }
-
-            /*let currentColumn = columns.filter((column) => {
-                if (column.id == params.clickedId) {
-                    return column;
-                }
-            })[0];*/
-
-            /*let newColumn = _.cloneDeep(currentColumn);
-            newColumn.headerName = "New column";
-            newColumn.field = "New column";
-            let newId = fids[fids.length - 1] + 1;
-            fids.push(newId);
-
-            newColumn.id = newId;*/
 
             let indexedOrder = clickedColumn.order - 1;
             // correctly position the new column in the table
@@ -283,10 +267,41 @@ const report = (state = [], action) => {
                 columns.splice(indexedOrder, 0, columnToAdd);
                 clickedColumn.order += 1
             } else {
-                //newColumn.order += 1;
                 columns.splice(indexedOrder + 1, 0, columnToAdd);
             }
 
+            return newState(currentReport);
+        }
+        return state;
+    }
+    case types.OPEN_FIELD_SELECTOR: {
+        let currentReport = getReportFromState(action.id);
+        if (currentReport) {
+            console.log(currentReport);
+            let columns = currentReport.data.columns;
+            let params = action.content;
+
+            // searches through the current columns to find the one that was selected
+            let clickedColumn;
+            for (let currentColumnIndex = 0; currentColumnIndex < columns.length; currentColumnIndex++) {
+                let column = columns[currentColumnIndex];
+                if (column.id === params.clickedId) {
+                    clickedColumn = columns[currentColumnIndex];
+                }
+            }
+            currentReport.fieldSelectMenu.clickedColumn = clickedColumn;
+            currentReport.fieldSelectMenu.addBefore = params.addBefore;
+            currentReport.fieldSelectMenu.availableFieldsMenuCollapsed = false;
+            return newState(currentReport);
+        }
+        return state;
+    }
+    case types.CLOSE_FIELD_SELECTOR: {
+        let currentReport = getReportFromState(action.id);
+        if (currentReport) {
+            currentReport.fieldSelectMenu.clickedColumn = null;
+            currentReport.fieldSelectMenu.addBefore = null;
+            currentReport.fieldSelectMenu.availableFieldsMenuCollapsed = true;
             return newState(currentReport);
         }
         return state;

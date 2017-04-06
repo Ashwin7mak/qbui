@@ -171,8 +171,12 @@ export const ReportColumnHeaderMenu = React.createClass({
         this.props.addColumn(this.props.fieldDef.id, requestedColumn, false);
     },
 
-    openFieldSelector() {
+    openFieldSelectorAddBefore() {
+        this.props.openFieldSelector(this.props.fieldDef.id, true);
+    },
 
+    openFieldSelectorAddAfter() {
+        this.props.openFieldSelector(this.props.fieldDef.id, false);
     },
 
     render() {
@@ -205,7 +209,7 @@ export const ReportColumnHeaderMenu = React.createClass({
 
                     <MenuItem divider/>
 
-                    <MenuItem onSelect={this.addColumnBefore}>
+                    <MenuItem onSelect={this.openFieldSelectorAddBefore}>
                         <I18nMessage message="report.menu.addColumnBefore"/>
                     </MenuItem>
 

@@ -6,7 +6,7 @@ import serverTypeConsts from '../../../../../common/src/constants';
 import * as query from '../../../constants/query';
 import {GROUP_TYPE} from '../../../../../common/src/groupTypes';
 
-import {loadDynamicReport, addColumnToTable} from '../../../actions/reportActions';
+import {loadDynamicReport, addColumnToTable, toggleFieldSelectorMenu} from '../../../actions/reportActions';
 import {CONTEXT} from '../../../actions/context';
 
 /**
@@ -102,11 +102,21 @@ const ReportColumnHeaderMenuContainer = (ReportColumnHeaderMenu) => {
             this.props.dispatch(addColumnToTable(CONTEXT.REPORT.NAV, this.props.appId, this.props.tblId, this.props.rptId, params));
         },
 
+        openFieldSelector(clickedColumnId, addBefore) {
+            let params = {
+                clickedId: clickedColumnId,
+                addBefore: addBefore,
+                open: true
+            };
+            this.props.dispatch(toggleFieldSelectorMenu(CONTEXT.REPORT.NAV, this.props.appId, this.props.tblId, this.props.rptId, params));
+        },
+
         render() {
             return (<ReportColumnHeaderMenu
                 sortReport={this.sortReport}
                 groupReport={this.groupReport}
                 addColumn={this.addColumnToTable}
+                openFieldSelector={this.openFieldSelector}
                 {...this.props}
             />);
         }
