@@ -38,7 +38,6 @@ import AppUtils from '../../utils/appUtils';
 
 import {updateFormRedirectRoute} from '../../actions/formActions';
 
-
 // This shared view with the server layer must be loaded as raw HTML because
 // the current backend setup cannot handle a react component in a common directory. It is loaded
 // as a raw string and we tell react to interpret it as HTML. See more in common/src/views/Readme.md

@@ -26,7 +26,7 @@ class NavigationUtils {
     }
 
     /**
-     * A helper function that will redirect a user back to a previousLocation. If there is no preivous location,
+     * A helper function that will redirect a user back to a previousLocation. If there is no previous location,
      * the user is redirected back to the table default report page.
      * @param appId
      * @param tableId

@@ -247,7 +247,6 @@ describe('Nav Unit tests', () => {
 
     it('renders form builder and sets the redirect route', () => {
         spyOn(mockFormStore, 'updateFormRedirectRoute');
-        NavRewireAPI.__Rewire__('updateFormRedirectRoute', mockFormStore.updateFormRedirectRoute);
 
         const testLocation = {pathname: '/previousLocation'};
         props.forms = [];
