@@ -359,7 +359,8 @@ export const toggleFieldSelectorMenu = (context, appId, tblId, rptId, params) =>
     return (dispatch) => {
         if (appId && tblId && rptId) {
             let openOrClose = params.open ? types.OPEN_FIELD_SELECTOR : types.CLOSE_FIELD_SELECTOR;
-            logger.debug(`Opening field select menu: ${appId}, tblId: ${tblId}, rptId: ${rptId}`);
+            let debugAction = params.open ? "Opening" : "Closing";
+            logger.debug(`${debugAction} field select menu: ${appId}, tblId: ${tblId}, rptId: ${rptId}`);
             dispatch(event(context, openOrClose, params));
         }
     }
