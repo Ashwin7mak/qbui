@@ -133,17 +133,6 @@ function removeElementFromCurrentLocation(formMetaData, location) {
     return formMetaData;
 }
 
-function addNewFieldToBottomOfForm(formMetaData, newField) {
-    let column = formMetaData.tabs[0].sections[0].columns[0];
-    let lastIndex = column.elements.length;
-
-    column.elements[lastIndex] = newField;
-    column.elements[lastIndex].orderIndex = lastIndex;
-    column.elements[lastIndex].FormFieldElement.orderIndex = lastIndex;
-
-    return formMetaData;
-}
-
 function swapFieldLocation(formMetaData, currentLocation, newLocation) {
     let {tabIndex, sectionIndex, columnIndex, elementIndex} = currentLocation;
 
@@ -178,7 +167,8 @@ function addElementToNewLocation(formMetaData, newLocation, draggedItemProps) {
         columns.push(column);
     }
 
-    column.elements.splice(elementIndex, 0, draggedItemProps);
+    // column.elements.splice(elementIndex, 0, draggedItemProps);
+    column.elements.splice(elementIndex, 0, draggedItemProps.containingElement);
     updateOrderIndices(column, 'elements');
 
     return formMetaData;
