@@ -1,34 +1,42 @@
 import * as types from '../actions/types';
 import _ from 'lodash';
+import {BUILTIN_FIELD_ID} from '../../../common/src/constants';
 
-const fields = (state = [], action) => {
+//  Return the table fields object for the given appId and tableId
+export const tableFieldsObj = (state, appId, tblId) => {
+    return _.find(state, flds => flds.appId === appId && flds.tblId === tblId);
+};
+
+//  Return fields for the given appId/tableId in format expected by the reports components
+export const tableFieldsReportDataObj = (state, appId, tblId) => {
+    const tableFields = _.find(state, flds => flds.appId === appId && flds.tblId === tblId);
+    return {
+        fields: {
+            data: tableFields ? tableFields.fields : []
+        }
+    };
+};
+
+const fieldsStore = (state = [], action) => {
 
     //  new state list without the appId/tblId entry
     const newState = _.reject(state, field => field.appId === action.appId && field.tblId === action.tblId);
 
-    //  return the current state entry for the appId/tblId from the state list
-    const currentField = _.find(state, field => field.appId === action.appId && field.tblId === action.tblId);
-
-    function getKeyField() {
+    function getKeyField(content) {
         let keyField;
-        if (_.has(action.content, 'fields')) {
-            keyField = _.find(action.content.fields, field => field.keyField === true);
+        if (_.has(content, 'fields')) {
+            keyField = _.find(content.fields, field => field.id === BUILTIN_FIELD_ID.RECORD_ID);
         }
         return keyField;
     }
 
-    //  Return fields in an object structure that matches the
-    //  fields object that is returned within a report object.
-    function getFields() {
-        return {
-            fields: {
-                data: action.content.fields
-            }
-        };
+    function getFields(content) {
+        return content ? content.fields : [];
     }
 
     switch (action.type) {
     case types.LOAD_FIELDS: {
+
         newState.push({
             appId: action.appId,
             tblId: action.tblId,
@@ -43,8 +51,8 @@ const fields = (state = [], action) => {
         newState.push({
             appId: action.appId,
             tblId: action.tblId,
-            keyField: getKeyField(),
-            fields: getFields(),
+            keyField: getKeyField(action.content),
+            fields: getFields(action.content),
             fieldsLoading: false,
             error: false
         });
@@ -61,13 +69,24 @@ const fields = (state = [], action) => {
         });
         return newState;
     }
+    case types.LOAD_FORM_SUCCESS: {
+        // update fields store when loading a form
+        newState.push({
+            appId: action.appId,
+            tblId: action.tblId,
+            keyField: getKeyField(action.formData),
+            fields: getFields(action.formData),
+            fieldsLoading: false,
+            error: false
+        });
+        return newState;
+    }
     case types.UPDATE_FIELD : {
         return {
             ...state,
             [action.field.id]: {...action.field, isPendingEdits: true}
         };
     }
-
     default:
         return state;
     }
@@ -76,4 +95,4 @@ const fields = (state = [], action) => {
 
 export const getField = (state, id) => state.fields[id];
 
-export default fields;
+export default fieldsStore;

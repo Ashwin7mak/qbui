@@ -4,6 +4,8 @@ import TextFieldValueEditor from '../../fields/textFieldValueEditor';
 import CheckBoxFieldValueEditor from '../../fields/checkBoxFieldValueEditor';
 import Locale from '../../../../../reuse/client/src/locales/locale';
 import {updateField} from '../../../actions/fieldsActions';
+import SideTrowser from '../../../../../reuse/client/src/components/sideTrowserBase/sideTrowserBase';
+
 import './fieldProperties.scss';
 
 const mapStateToProps = (state, ownProps) => {
@@ -76,19 +78,31 @@ export const FieldProperties = React.createClass({
 
     getField() {
         /*return (this.props.fields.length !== 0 && this.props.selectedField) ?
-            this.props.fields[0].fields.fields.data[this.props.selectedField.elementIndex + 5] : null;*/
+         this.props.fields[0].fields.fields.data[this.props.selectedField.elementIndex + 5] : null;*/
         return this.props.selectedField ? this.props.form.formData.fields[this.props.selectedField.elementIndex + 5] : null;
     },
 
     render() {
         let field = this.getField();
-        return (field ?
-            <div className="fieldPropertiesContainer">
-                {this.createPropertiesTitle(field.name)}
-                {this.createNameProperty(field.name)}
-                {this.createRequiredProperty(field.required)}
-            </div> : <div className="fieldPropertiesContainer"></div>
-        );
+        if (field) {
+            return (
+                <SideTrowser pullRight={true} sideMenuContent={
+                    <div className="fieldPropertiesContainer">
+                        {this.createPropertiesTitle(field.name)}
+                        {this.createNameProperty(field.name)}
+                        {this.createRequiredProperty(field.required)}
+                    </div>
+                }>
+                    {this.props.children}
+                </SideTrowser>
+            );
+        } else {
+            return(
+                <SideTrowser pullRight={true} sideMenuContent={<div className="fieldPropertiesContainer"></div>}>
+                    {this.props.children}
+                </SideTrowser>
+            );
+        }
     }
 });
 

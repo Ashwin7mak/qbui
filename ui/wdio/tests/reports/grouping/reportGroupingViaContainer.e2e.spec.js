@@ -105,8 +105,15 @@
                     return e2eBase.recordService.addRecords(app, app.tables[e2eConsts.TABLE1], testRecord4);
                 });
             }).then(function() {
+                let sortList = [
+                    {
+                        "fieldId": 3,
+                        "sortOrder": "desc",
+                        "groupType": null
+                    },
+                ];
                 //Create a report
-                return e2eBase.reportService.createReportWithFids(app.id, app.tables[e2eConsts.TABLE1].id, [6, 7, 8, 9, 10, 11, 12], null, 'Test Grouping');
+                return e2eBase.reportService.createReportWithFidsAndSortList(app.id, app.tables[e2eConsts.TABLE1].id, [6, 7, 8, 9, 10, 11, 12], sortList, null, 'Test Grouping Via Container');
             }).then(function() {
                 // Auth into the new stack
                 return newStackAuthPO.realmLogin(realmName, realmId);
@@ -326,7 +333,7 @@
             var allFieldFromFieldsPanel = reportSortingPO.getAllFieldsFromFieldPanelValues();
 
             //Step 6 - Verify allFieldFromFieldsPanel also contain expectedMoreFields variable values
-            expect(_.every(expectedMoreFields, function(val) {return allFieldFromFieldsPanel.indexOf(val) >= 0;})).toBeTruthy();
+            expect(_.intersection(allFieldFromFieldsPanel, expectedMoreFields).length > 0).toBeTruthy();
 
             //Step 7 - Click cancel button
             reportSortingPO.fieldsPanelCancel.click();
@@ -365,11 +372,10 @@
             //Step 5 - Get all table results after grouping via groupBy
             groupedTableRecords = reportSortingPO.getGroupedTableRows();
 
-            console.log("the 3 grouped results are: " + JSON.stringify(groupedTableRecords));
-            //Step 5 - Verify grouped headers
+            //Step 6 - Verify grouped headers
             reportSortingPO.verifySortedResults(groupedTableRecords[0], expectedHeaders);
 
-            //Step 6 - Verify sorted and grouped records
+            //Step 7 - Verify sorted and grouped records
             reportSortingPO.verifySortedResults(groupedTableRecords[1], expectedRecords);
 
 
@@ -386,13 +392,18 @@
                     "groupType": "EQUALS"
                 },
                 {
+                    "fieldId": 3,
+                    "sortOrder": "desc",
+                    "groupType": null
+                },
+                {
                     "fieldId": 7,
                     "sortOrder": "asc",
                     "groupType": "EQUALS"
                 }
             ];
-            var sortFids = [function(row) {return reportSortingPO.getSortValue(row, 6);}];
-            var sortOrder = ['desc'];
+            var sortFids = [function(row) {return reportSortingPO.getSortValue(row, 6);}, function(row) {return reportSortingPO.getSortValue(row, 3);}];
+            var sortOrder = ['desc', 'desc'];
             var groupFids = 6;
 
             //Step 1 - Creating a report with FIDS and sortFIDS as in sortList
