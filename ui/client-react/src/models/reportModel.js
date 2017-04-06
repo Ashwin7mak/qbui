@@ -144,7 +144,7 @@ class ReportModel {
                 data.columns = ReportModelHelper.getReportColumns(reportData.fields, this.model.data.fids, this.model.data.groupEls);
                 data.records = ReportModelHelper.getReportData(reportData.fields, reportData.records);
                 data.filteredRecords = data.records;
-                data.filteredRecordsCount = reportData.records ? reportData.records.length : null;
+                data.filteredRecordsCount = reportData.records ? reportData.records.length : 0;
                 data.gridColumns = null;
                 data.groupFields = null;
             }
@@ -161,6 +161,7 @@ class ReportModel {
             data.fieldsMap = map;
             data.keyField = _.find(data.fields, field => field.id === DEFAULT_RECORD_KEY_ID);
 
+            //  TODO: clean this up...don't think filteredCount is ever set
             if (reportData.filteredCount && !isNaN(reportData.filteredCount)) {
                 data.recordsCount = parseInt(reportData.filteredCount);
             }

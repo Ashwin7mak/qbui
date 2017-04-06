@@ -222,7 +222,7 @@ describe('Nav Unit tests', () => {
 
     it('renders form builder component without form type or form id', () => {
         let expectedRouter = ['/qbase/builder/app/1/table/2/form'];
-        props.forms = [];
+        props.forms = {};
         props.router = [];
 
         let component = TestUtils.renderIntoDocument(<Nav {...props} flux={flux} />);
@@ -233,7 +233,7 @@ describe('Nav Unit tests', () => {
 
     it('renders form builder component with a form type', () => {
         let expectedRouter = ['/qbase/builder/app/1/table/2/form?formType=view'];
-        props.forms = [{id: 'view'}];
+        props.forms = {'view': {}};
         props.router = [];
 
         let component = TestUtils.renderIntoDocument(<Nav {...props} flux={flux} />);

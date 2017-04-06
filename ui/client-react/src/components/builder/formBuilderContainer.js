@@ -17,6 +17,8 @@ import NavigationUtils from '../../utils/navigationUtils';
 import Logger from '../../utils/logger';
 import AutoScroll from '../autoScroll/autoScroll';
 import PageTitle from '../pageTitle/pageTitle';
+import {getFormByContext} from '../../reducers/forms';
+import {CONTEXT} from '../../actions/context';
 import {ENTER_KEY, SPACE_KEY} from '../../../../reuse/client/src/components/keyboardShortcuts/keyCodeConstants';
 import KeyboardShortcuts from '../../../../reuse/client/src/components/keyboardShortcuts/keyboardShortcuts';
 import _ from 'lodash';
@@ -27,7 +29,7 @@ import './formBuilderContainer.scss';
 let logger = new Logger();
 
 const mapStateToProps = state => {
-    let currentForm = state.forms ? state.forms[0] : undefined;
+    let currentForm = getFormByContext(state, CONTEXT.FORM.VIEW);
 
     return {
         currentForm,
@@ -111,7 +113,6 @@ export const FormBuilderContainer = React.createClass({
         this.props.loadForm(appId, tblId, null, (formType || 'view'), NEW_FORM_RECORD_ID);
 
         // if we've been sent here from the table creation flow, show a notification
-
         if (this.props.shouldNotifyTableCreated) {
             this.props.notifyTableCreated(false);
             setTimeout(() => {
