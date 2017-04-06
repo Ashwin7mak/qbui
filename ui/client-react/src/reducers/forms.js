@@ -113,7 +113,7 @@ const forms = (
                 newLocation,
                 draggedItemProps
             );
-
+            
             return [
                 ...newState,
                 updatedForm
@@ -128,10 +128,28 @@ const forms = (
             let {newField, newLocation} = action.content;
             updatedForm = _.cloneDeep(currentForm);
 
+            if (!newLocation) {
+                newLocation = {
+                    tabIndex: 0,
+                    sectionIndex: 0,
+                    columnIndex: 0,
+                    elementIndex: updatedForm.formData.formMeta.tabs[0].sections[0].columns[0].elements.length
+                }
+            } else if (newLocation) {
+                newLocation.elementIndex = newLocation.elementIndex + 1;
+            }
+
             updatedForm.formData.formMeta = MoveFieldHelper.addNewFieldToForm(
                 updatedForm.formData.formMeta,
                 newLocation,
                 newField);
+
+            if (!updatedForm.selectedFields) {
+                updatedForm.selectedFields = [];
+                updatedForm.previouslySelectedField = [];
+            }
+
+            updatedForm.selectedFields[0] = newLocation;
 
             return [
                 ...newState,
