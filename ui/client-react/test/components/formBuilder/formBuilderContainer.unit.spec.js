@@ -92,13 +92,13 @@ describe('FormBuilderContainer', () => {
 
     describe('onCancel', () => {
         it('exits form builder', () => {
-            spyOn(NavigationUtils, 'goBackFromFormBuilder');
+            spyOn(NavigationUtils, 'goBackToLocationOrTable');
 
-            component = shallow(<FormBuilderContainer params={testParamsProp} location={testLocationProp} />);
+            component = shallow(<FormBuilderContainer params={testParamsProp} location={testLocationProp} redirectRoute={previousLocation} />);
 
             component.instance().onCancel();
 
-            expect(NavigationUtils.goBackFromFormBuilder).toHaveBeenCalledWith(appId, tblId, previousLocation);
+            expect(NavigationUtils.goBackToLocationOrTable).toHaveBeenCalledWith(appId, tblId, previousLocation);
         });
     });
 

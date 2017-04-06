@@ -38,13 +38,13 @@ describe('NavigationUtils', () => {
         });
     });
 
-    describe('goBackFromFormBuilder', () => {
+    describe('goBackToLocationOrTable', () => {
         const testAppId = '5Teenagers';
         const testTableId = 'WithAttitude';
 
         it('goes back to the previous route if provided', () => {
             const testPreviousRoute = '/highSchools/AngelGrove';
-            NavigationUtils.goBackFromFormBuilder(testAppId, testTableId, testPreviousRoute);
+            NavigationUtils.goBackToLocationOrTable(testAppId, testTableId, testPreviousRoute);
 
             expect(AppHistoryMock.history.push).toHaveBeenCalledWith(testPreviousRoute);
             expect(AppHistoryMock.history.goBack).not.toHaveBeenCalled();
@@ -53,7 +53,7 @@ describe('NavigationUtils', () => {
         it('goes back to the previous page if within the current domain', () => {
             spyOn(NavigationUtils, 'referrer').and.returnValue('localhost');
 
-            NavigationUtils.goBackFromFormBuilder(testAppId, testTableId);
+            NavigationUtils.goBackToLocationOrTable(testAppId, testTableId);
 
             expect(AppHistoryMock.history.goBack).toHaveBeenCalled();
             expect(AppHistoryMock.history.push).not.toHaveBeenCalled();
@@ -62,7 +62,7 @@ describe('NavigationUtils', () => {
         it('goes to the default table report if going back would cause the user to leave quickbase', () => {
             spyOn(NavigationUtils, 'referrer').and.returnValue('');
 
-            NavigationUtils.goBackFromFormBuilder(testAppId, testTableId);
+            NavigationUtils.goBackToLocationOrTable(testAppId, testTableId);
 
             expect(AppHistoryMock.history.push).toHaveBeenCalledWith(StringUtils.format(TABLE_LINK, [testAppId, testTableId]));
             expect(AppHistoryMock.history.goBack).not.toHaveBeenCalled();

@@ -17,7 +17,7 @@ import NavigationUtils from '../../utils/navigationUtils';
 import Logger from '../../utils/logger';
 import AutoScroll from '../autoScroll/autoScroll';
 import PageTitle from '../pageTitle/pageTitle';
-import {getFormByContext} from '../../reducers/forms';
+import {getFormByContext, getFormRedirectRoute} from '../../reducers/forms';
 import {CONTEXT} from '../../actions/context';
 import {ENTER_KEY, SPACE_KEY} from '../../../../reuse/client/src/components/keyboardShortcuts/keyCodeConstants';
 import KeyboardShortcuts from '../../../../reuse/client/src/components/keyboardShortcuts/keyboardShortcuts';
@@ -33,6 +33,7 @@ const mapStateToProps = state => {
 
     return {
         currentForm,
+        redirectRoute: getFormRedirectRoute(state),
         selectedField: (_.has(currentForm, 'selectedFields') ? currentForm.selectedFields[0] : []),
         tabIndex: (_.has(currentForm, 'formBuilderChildrenTabIndex') ? currentForm.formBuilderChildrenTabIndex[0] : undefined),
         formFocus: (_.has(currentForm, 'formFocus') ? currentForm.formFocus[0] : undefined),
@@ -81,12 +82,12 @@ export const FormBuilderContainer = React.createClass({
                 /**
                  * the form type */
                 formType: PropTypes.string,
-
-                /**
-                 * The previous route that can be returned to when leaving builder */
-                previous: PropTypes.string
             })
         }),
+
+        /**
+         * A route that will be redirected to after a save/cancel action. Currently passed through mapState. */
+        redirectRoute: PropTypes.string,
 
         /**
          * Controls the open state of the left tool panel */
@@ -123,9 +124,8 @@ export const FormBuilderContainer = React.createClass({
 
     onCancel() {
         const {appId, tblId} = this.props.params;
-        const previousLocation = _.has(this.props, 'location.query.previous') ? this.props.location.query.previous : null;
 
-        NavigationUtils.goBackFromFormBuilder(appId, tblId, previousLocation);
+        NavigationUtils.goBackToLocationOrTable(appId, tblId, this.props.redirectRoute);
     },
 
     removeField() {
@@ -135,13 +135,11 @@ export const FormBuilderContainer = React.createClass({
     },
 
     saveClicked() {
-        const previousLocation = _.has(this.props, 'location.query.previous') ? this.props.location.query.previous : null;
-
         // get the form meta data from the store..hard code offset for now...this is going to change..
         if (this.props.currentForm && this.props.currentForm.formData) {
             let formMeta = this.props.currentForm.formData.formMeta;
             let formType = this.props.currentForm.formData.formType;
-            this.props.updateForm(formMeta.appId, formMeta.tableId, formType, formMeta, previousLocation);
+            this.props.updateForm(formMeta.appId, formMeta.tableId, formType, formMeta, this.props.redirectRoute);
         }
     },
 

@@ -25,6 +25,13 @@ function event(id, type, content) {
     };
 }
 
+export const updateFormRedirectRoute = route => {
+    return {
+        type: types.UPDATE_FORM_REDIRECT_ROUTE,
+        redirectRoute: route
+    }
+};
+
 /**
  * form load in progress
  * @param container type of form (edit or view)
@@ -280,15 +287,16 @@ export const createForm = (appId, tblId, formType, form) => {
  * @param tblId
  * @param formType
  * @param form
- * @param previousLocation
+ * @param redirectRoute
+ * @param shouldRedirectOnSave
  */
-export const updateForm = (appId, tblId, formType, form, previousLocation = null) => {
-    return saveTheForm(appId, tblId, formType, form, false, previousLocation);
+export const updateForm = (appId, tblId, formType, form, redirectRoute, shouldRedirectOnSave = true) => {
+    return saveTheForm(appId, tblId, formType, form, false, redirectRoute, shouldRedirectOnSave);
 };
 
 // we're returning a promise to the caller (not a Redux action) since this is an async action
 // (this is permitted when we're using redux-thunk middleware which invokes the store dispatch)
-function saveTheForm(appId, tblId, formType, formMeta, isNew, previousLocation = null) {
+function saveTheForm(appId, tblId, formType, formMeta, isNew, redirectRoute, shouldRedirectOnSave) {
 
     return (dispatch) => {
         return new Promise((resolve, reject) => {
@@ -312,7 +320,9 @@ function saveTheForm(appId, tblId, formType, formMeta, isNew, previousLocation =
                         NotificationManager.success(Locale.getMessage('form.notification.save.success'), Locale.getMessage('success'));
 
                         // Leave form Builder
-                        NavigationUtils.goBackFromFormBuilder(appId, tblId, previousLocation);
+                        if (shouldRedirectOnSave) {
+                            NavigationUtils.goBackToLocationOrTable(appId, tblId, redirectRoute);
+                        }
 
                         resolve();
                     },

@@ -26,12 +26,13 @@ class NavigationUtils {
     }
 
     /**
-     * A helper function to redirect back when the user is leaving the Form Builder pages
+     * A helper function that will redirect a user back to a previousLocation. If there is no preivous location,
+     * the user is redirected back to the table default report page.
      * @param appId
      * @param tableId
      * @param previousLocation
      */
-    static goBackFromFormBuilder(appId, tableId, previousLocation = null) {
+    static goBackToLocationOrTable(appId, tableId, previousLocation = null) {
         if (previousLocation) {
             return AppHistory.history.push(previousLocation);
         }

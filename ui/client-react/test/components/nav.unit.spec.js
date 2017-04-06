@@ -13,29 +13,32 @@ class BreakpointsMock {
     }
 }
 
-var LeftNavMock = React.createClass({
+const LeftNavMock = React.createClass({
     render() {
         return <div className="leftMenu"><a className="leftNavLink" onClick={() => this.props.onSelect()}>mock left
             nav</a></div>;
     }
 });
 
-var TrowserMock = React.createClass({
+const TrowserMock = React.createClass({
     render() {
         return <div>mock trowser</div>;
     }
 });
-var TopNavMock = React.createClass({
+
+const TopNavMock = React.createClass({
     render() {
         return <div className="topNav">mock top nav</div>;
     }
 });
 
-var TableCreationDialogMock = React.createClass({
+const TableCreationDialogMock = React.createClass({
     render() {
         return <div>mock table creation dialog</div>;
     }
 });
+
+const mockFormStore = {updateFormRedirectRoute(_route) {}};
 
 class WindowLocationUtilsMock {
     static update(url) { }
@@ -225,7 +228,7 @@ describe('Nav Unit tests', () => {
         props.forms = {};
         props.router = [];
 
-        let component = TestUtils.renderIntoDocument(<Nav {...props} flux={flux} />);
+        let component = TestUtils.renderIntoDocument(<Nav {...props} flux={flux} updateFormRedirectRoute={mockFormStore.updateFormRedirectRoute} />);
         component.navigateToBuilder();
 
         expect(props.router).toEqual(expectedRouter);
@@ -236,33 +239,23 @@ describe('Nav Unit tests', () => {
         props.forms = {'view': {}};
         props.router = [];
 
-        let component = TestUtils.renderIntoDocument(<Nav {...props} flux={flux} />);
+        let component = TestUtils.renderIntoDocument(<Nav {...props} flux={flux} updateFormRedirectRoute={mockFormStore.updateFormRedirectRoute} />);
         component.navigateToBuilder();
 
         expect(props.router).toEqual(expectedRouter);
     });
 
-    it('renders form builder with the previous location as a query parameter', () => {
+    it('renders form builder and sets the redirect route', () => {
+        spyOn(mockFormStore, 'updateFormRedirectRoute');
+        NavRewireAPI.__Rewire__('updateFormRedirectRoute', mockFormStore.updateFormRedirectRoute);
+
         const testLocation = {pathname: '/previousLocation'};
-        let expectedRouter = [`/qbase/builder/app/1/table/2/form?previous=${testLocation.pathname}`];
         props.forms = [];
         props.router = [];
 
-        let component = TestUtils.renderIntoDocument(<Nav {...props} flux={flux} location={testLocation} />);
+        let component = TestUtils.renderIntoDocument(<Nav {...props} flux={flux} location={testLocation} updateFormRedirectRoute={mockFormStore.updateFormRedirectRoute} />);
         component.navigateToBuilder();
 
-        expect(props.router).toEqual(expectedRouter);
-    });
-
-    it('renders form builder with the previous location and form type as a query parameters', () => {
-        const testLocation = {pathname: '/previousLocation'};
-        let expectedRouter = [`/qbase/builder/app/1/table/2/form?formType=view&previous=${testLocation.pathname}`];
-        props.forms = [{id: 'view'}];
-        props.router = [];
-
-        let component = TestUtils.renderIntoDocument(<Nav {...props} flux={flux} location={testLocation} />);
-        component.navigateToBuilder();
-
-        expect(props.router).toEqual(expectedRouter);
+        expect(mockFormStore.updateFormRedirectRoute).toHaveBeenCalledWith(testLocation.pathname);
     });
 });
