@@ -169,7 +169,6 @@ function swapFieldLocation(formMetaData, currentLocation, newLocation) {
  * @param sameRow
  */
 function addElementToNewLocation(formMetaData, newLocation, draggedItemProps) {
-    console.log('newLocaiton: ', newLocation);
     let {tabIndex, sectionIndex, columnIndex, elementIndex} = newLocation;
     let columns = formMetaData.tabs[tabIndex].sections[sectionIndex].columns;
     let column = columns[columnIndex];
