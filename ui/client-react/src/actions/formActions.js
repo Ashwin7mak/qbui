@@ -290,21 +290,18 @@ export const updateForm = (appId, tblId, formType, form) => {
 // (this is permitted when we're using redux-thunk middleware which invokes the store dispatch)
 function saveTheForm(appId, tblId, formType, formMeta, isNew) {
 
-    return (dispatch, getState) => {
-        dispatch(saveAllNewFields(appId, tblId, formType))
+    return (dispatch) => {
+        return dispatch(saveAllNewFields(appId, tblId, formType))
             .then(() => dispatch(updateAllFieldsWithEdits(appId, tblId)))
             .then(() => {
                 return new Promise((resolve, reject) => {
                     if (appId && tblId) {
-                        // We need to get the most recent form from the state because the previous action has updated
-                        // the ids of the new fields. The one passed in to this function is now out of date.
-                        let mostRecentFormFromState = getState().forms.find(form => form.id === formType);
-                        let form = convertFormToObjectForServer(mostRecentFormFromState.formData.formMeta);
+                        let form = convertFormToObjectForServer(formMeta);
 
                         logger.debug(`Saving form -- appId:${appId}, tableId:${tblId}, isNew:${isNew}`);
 
                         //  TODO: refactor once record events are moved out..
-                        // dispatch(event(formType, types.SAVING_FORM));
+                        dispatch(event(formType, types.SAVING_FORM));
 
                         let formService = new FormService();
 

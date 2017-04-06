@@ -16,6 +16,19 @@ const mockTransformHelper = {
     convertFormToObjectForServer(data) {return data;}
 };
 
+const mockFieldsActions = {
+    saveAllNewFields(_appId, _tableId, formType) {
+        return (dispatch) => {
+            return Promise.resolve().then(() => (dispatch({type: 'AllFieldsSaved'})));
+        }
+    },
+    updateAllFieldsWithEdits(_appId, _tableId) {
+        return (dispatch) => {
+            return Promise.resolve().then(() => (dispatch({type: 'AllFieldsSaved'})));
+        }
+    }
+};
+
 describe('Form Actions', () => {
 
     beforeEach(() => {
@@ -202,10 +215,14 @@ describe('Form Actions', () => {
         const mockStore = configureMockStore(middlewares);
 
         const expectedSaveActions = [
+            {type: 'AllFieldsSaved'},
+            {type: 'AllFieldsSaved'},
             {id:'view', type:types.SAVING_FORM, content: null},
             {id: 'view', type: types.SAVING_FORM_SUCCESS, content: formData.formMeta}
         ];
         const expectedActions = [
+            {type: 'AllFieldsSaved'},
+            {type: 'AllFieldsSaved'},
             {id:'view', type:types.SAVING_FORM, content: null},
             {id: 'view', type: types.SAVING_FORM_SUCCESS, content: formData}
         ];
@@ -226,11 +243,17 @@ describe('Form Actions', () => {
 
             spyOn(mockTransformHelper, 'convertFormToArrayForClient').and.returnValue(formData);
             FormActionsRewireAPI.__Rewire__('convertFormToArrayForClient', mockTransformHelper.convertFormToArrayForClient);
+
+            spyOn(mockFieldsActions, 'saveAllNewFields').and.callThrough();
+            spyOn(mockFieldsActions, 'updateAllFieldsWithEdits').and.callThrough();
+            FormActionsRewireAPI.__Rewire__('saveAllNewFields', mockFieldsActions.saveAllNewFields);
+            FormActionsRewireAPI.__Rewire__('updateAllFieldsWithEdits', mockFieldsActions.updateAllFieldsWithEdits);
         });
 
         afterEach(() => {
             FormActionsRewireAPI.__ResetDependency__('FormService');
             FormActionsRewireAPI.__ResetDependency__('convertFormToArrayForClient');
+            FormActionsRewireAPI.__ResetDependency__('saveAllNewFields');
         });
 
         it('saves a form update', (done) => {
@@ -269,6 +292,44 @@ describe('Form Actions', () => {
                     expect(false).toBe(true);
                     done();
                 });
+        });
+
+        it('saves new fields added to the form', (done) => {
+            const appId = 'appId';
+            const tableId = 'tableId';
+            const formType = 'view';
+
+            const store = mockStore({});
+
+            return store.dispatch(updateForm(appId, tableId, formType, formData)).then(
+                () => {
+                    expect(mockFieldsActions.saveAllNewFields).toHaveBeenCalledWith(appId, tableId, formType);
+                    done();
+                },
+                () => {
+                    expect(false).toBe(true);
+                    done();
+                }
+            )
+        });
+
+        it('saves existing fields that were edited on the form', (done) => {
+            const appId = 'appId';
+            const tableId = 'tableId';
+            const formType = 'view';
+
+            const store = mockStore({});
+
+            return store.dispatch(updateForm(appId, tableId, formType, formData)).then(
+                () => {
+                    expect(mockFieldsActions.updateAllFieldsWithEdits).toHaveBeenCalledWith(appId, tableId);
+                    done();
+                },
+                () => {
+                    expect(false).toBe(true);
+                    done();
+                }
+            )
         });
     });
 
@@ -322,7 +383,7 @@ describe('Form Actions', () => {
         it('transforms the returned response data after the save', (done) => {
             const store = mockStore({});
 
-            return store.dispatch(createForm("appId", "tblId", "view", formData)).then(
+            store.dispatch(createForm("appId", "tblId", "view", formData)).then(
                 () => {
                     expect(mockTransformHelper.convertFormToArrayForClient).toHaveBeenCalled();
                     done();

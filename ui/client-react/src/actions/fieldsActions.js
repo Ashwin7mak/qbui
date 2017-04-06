@@ -5,8 +5,6 @@ import Promise from 'bluebird';
 import * as types from '../actions/types';
 import Logger from '../utils/logger';
 import LogLevel from '../utils/logLevels';
-import {normalize} from 'normalizr';
-import {arrayOfFields} from '../apiSchema/field';
 import {getFields} from '../reducers/fields';
 
 let logger = new Logger();
@@ -20,11 +18,11 @@ let logger = new Logger();
  * @param content - optional content related to event type
  * @returns {{id: *, type: *, content: *}}
  */
-function event(app, tbl, type, content) {
+function event(appId, tblId, type, content) {
     return {
-        appId:app,
-        tblId:tbl,
-        type: type,
+        appId,
+        tblId,
+        type,
         content: content || null
     };
 }

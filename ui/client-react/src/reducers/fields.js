@@ -17,6 +17,11 @@ export const tableFieldsReportDataObj = (state, appId, tblId) => {
     };
 };
 
+// TODO:: Replace mocked function with actual function to get fields
+// TEMPORARY MOCK
+export const getFields = () => [];
+// TEMPORARY MOCK
+
 const fieldsStore = (state = [], action) => {
 
     //  new state list without the appId/tblId entry
