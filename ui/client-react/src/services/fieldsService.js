@@ -43,6 +43,25 @@ class FieldsService extends BaseService {
         return super.get(url);
     }
 
+    /**
+     * Create a field
+     *
+     * @param appId
+     * @param tableId
+     * @param field
+     * @returns {*}
+     */
+    createField(appId, tableId, field) {
+        let url = super.constructUrl(this.API.GET_FIELDS, [appId, tableId]);
+        return super.post(url, field);
+    }
+
+    updateField(appId, tableId, field) {
+        // TODO: npe if field is undefined
+        let url = super.constructUrl(this.API.GET_FIELD, [appId, tableId, field.id]);
+        return super.patch(url, field);
+    }
+
 }
 
 export default FieldsService;
