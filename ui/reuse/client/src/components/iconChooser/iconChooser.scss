@@ -23,6 +23,7 @@
             margin: 2px;
             input {
                 height: 30px;
+                width: 210px;
             }
         }
         .showAllToggle {
@@ -36,6 +37,7 @@
                 margin: -5px;
                 width: 24px;
                 height: 24px;
+                font-size: 18px;
             }
         }
     }
@@ -44,15 +46,17 @@
         display: flex;
         flex-wrap: wrap;
         overflow-y: auto;
+        margin-left: -6px;
 
         .qbIcon {
             color: $color-black-700;
             padding: 4px;
+            margin: 6px;
         }
         .qbIcon:hover {
             background-color: $color-cyan-600;
             color: $color-black-100;
-            border-radius: $radius-base;
+            border-radius: $radius-base * 2;
         }
     }
 
