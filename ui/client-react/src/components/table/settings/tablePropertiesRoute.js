@@ -61,17 +61,8 @@ export const TablePropertiesRoute = React.createClass({
     },
 
     resetTableProperties() {
-        let tableInfo = this.props.tableProperties.tableInfo;
-        let newTableInfo = {};
-        Object.keys(tableInfo).forEach(function(key, index) {
-            newTableInfo[key] = {
-                origValue: tableInfo[key].origValue,
-                value: tableInfo[key].origValue,
-                validationError: null,
-                edited: null
-            };
-        });
-        this.updateTableProperties(this.props.app.id, this.props.table.id, newTableInfo);
+        this.props.resetEditedTableProperties();
+        NotificationManager.success(Locale.getMessage('tableEdit.tableReset'), Locale.getMessage('success'));
     },
 
     render() {

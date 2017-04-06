@@ -632,7 +632,8 @@ export default {
         },
         tableEdit: {
             tableUpdateFailed: "Impossible de mettre à jour le tableau",
-            tableUpdated: "Tableau mis à jour"
+            tableUpdated: "Informations sur la table enregistrées",
+            tableReset: "Informations sur la table non enregistrées"
         }
     }
 };

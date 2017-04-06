@@ -640,7 +640,8 @@ export default {
         },
         tableEdit: {
             tableUpdateFailed: "Failed to update table",
-            tableUpdated: "Table updated"
+            tableUpdated: "Table information saved",
+            tableReset: "Table information not saved"
         }
     }
 };

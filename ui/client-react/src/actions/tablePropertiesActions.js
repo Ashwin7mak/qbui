@@ -78,6 +78,10 @@ export const loadedTable = (tableInfo) => ({
     tableInfo
 });
 
+export const resetEditedTableProperties = () => ({
+    type: types.RESET_TABLE_PROPS
+});
+
 /**
  * update the table on the server
  * @param appId
@@ -124,7 +128,7 @@ export const loadTableProperties = (tableInfo) => {
         /* TODO Currently we dont pull props from EE so initialize these to something. To be fixed by MC-1541 */
         tableInfo.tableNoun = "noun";
         tableInfo.description = "";
-        tableInfo.tableIcon = "report-table";
+        tableInfo.tableIcon = "Spreadsheet";
         dispatch(loadedTable(tableInfo));
     };
 };

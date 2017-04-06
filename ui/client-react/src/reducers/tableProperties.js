@@ -8,7 +8,7 @@ const defaultTableInfo = {
         value: "",
     },
     tableIcon: {
-        value: "projects",
+        value: "Spreadsheet",
     },
     tableNoun: {
         value: "",
@@ -98,6 +98,24 @@ const tableProperties = (
             newTableInfo[key] = {
                 origValue: tableInfo[key].value,
                 value: tableInfo[key].value,
+                validationError: null,
+                edited: null
+            };
+        });
+        return {
+            ...state,
+            tableInfo: newTableInfo,
+            isDirty: false,
+            savingTable: false
+        };
+    }
+    case types.RESET_TABLE_PROPS: {
+        let tableInfo = state.tableInfo;
+        let newTableInfo = {};
+        Object.keys(tableInfo).forEach(function(key, index) {
+            newTableInfo[key] = {
+                origValue: tableInfo[key].origValue,
+                value: tableInfo[key].origValue,
                 validationError: null,
                 edited: null
             };

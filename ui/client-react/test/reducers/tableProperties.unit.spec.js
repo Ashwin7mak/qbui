@@ -12,7 +12,7 @@ function initializeState() {
             value: "",
         },
         tableIcon: {
-            value: "projects",
+            value: "Spreadsheet",
         },
         tableNoun: {
             value: "",

@@ -633,7 +633,8 @@ export default {
         },
         tableEdit: {
             tableUpdateFailed: "Fehler beim Aktualisieren der Tabelle",
-            tableUpdated: "Tabelle aktualisiert"
+            tableUpdated: "Tabelleninformationen gespeichert",
+            tableReset: "Tabelleninformationen werden nicht gespeichert"
         }
     }
 };
