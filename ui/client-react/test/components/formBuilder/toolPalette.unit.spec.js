@@ -7,7 +7,7 @@ import NewFieldsMenu, {__RewireAPI__ as NewFieldsMenuRewireAPI} from '../../../s
 
 let component;
 
-fdescribe('ToolPalette', () => {
+describe('ToolPalette', () => {
     beforeEach(() => {
         jasmineEnzyme();
         NewFieldsMenuRewireAPI.__Rewire__('FieldTokenInMenu', FieldTokenInMenu);
