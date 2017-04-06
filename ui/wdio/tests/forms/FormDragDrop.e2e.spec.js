@@ -10,7 +10,7 @@
     let realmId;
     let testApp;
 
-    describe('Form Builder Tests:', function() {
+    describe('Forms - Form Builder Tests (Drag and Drop): ', function() {
         beforeAll(function() {
             /**
              * Setup method. Creates test app then authenticates into the new stack

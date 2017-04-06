@@ -535,13 +535,13 @@ module.exports = function(grunt) {
                     // permissions for viewer are not working correctly
                     './wdio/tests/forms/formPermissionsViewerRole.e2e.spec.js',
                     // currently broken need to fix in another PR (test was never running in CI due to non camel case name)
-                    './wdio/tests/forms/FormDragDrop.e2e.spec.js',
+                    './wdio/tests/forms/FormDragDrop.e2e.spec.js'
                 ],
                 suites: {
                     reports: [
-                        './wdio/tests/reports/grouping/*.e2e.spec.js',
-                        './wdio/tests/reports/sorting/*.e2e.spec.js',
                         './wdio/tests/reports/*.e2e.spec.js',
+                        './wdio/tests/reports/grouping/*.e2e.spec.js',
+                        './wdio/tests/reports/sorting/*.e2e.spec.js'
                     ],
                     forms: [
                         './wdio/tests/forms/*.e2e.spec.js'
