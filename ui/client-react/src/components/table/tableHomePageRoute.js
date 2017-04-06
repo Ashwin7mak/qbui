@@ -121,6 +121,7 @@ export const TableHomePageRoute = React.createClass({
 
     getMenuContent() {
         let availableFields = this.props.reportData.data ? this.props.reportData.data.columns : [];
+        //TODO: display only hidden fields -- talk with Christine about how she'll denote a hidden column
         let display = availableFields.map((column) => {
             return <li key={column.fieldDef.id} onClick={() => this.addColumnToTable(column.fieldDef.id)}>{column.fieldDef.name}</li>;
         });
