@@ -65,7 +65,12 @@
             //Step 3 - Verify table elements
             tableCreatePO.verifyTable();
 
-            //Step 4 - Enter table field values
+            //Step 4 - Choose an Icon from Icon picker
+            var iconChoosedClassName = tableCreatePO.selectRandomIconFromIconChooser();
+            //Verify the choosed icon in closed combo
+            tableCreatePO.verifyIconInIconChooserCombo(iconChoosedClassName);
+
+            //Step 5 - Enter table field values
             tableFields.forEach(function(tableField) {
                 //verify place holders for each table field
                 tableCreatePO.verifyTableFieldPlaceHolders(tableField.fieldTitle, tableField.placeHolder);
@@ -73,12 +78,7 @@
                 tableCreatePO.enterTableFieldValue(tableField.fieldTitle, tableField.fieldValue);
             });
 
-            //Step 6 - Choose an Icon from Icon picker
-            var iconChoosedClassName = tableCreatePO.selectRandomIconFromIconChooser();
-            //Verify the choosed icon in closed combo
-            tableCreatePO.verifyIconInIconChooserCombo(iconChoosedClassName);
-
-            //Step 5 - Verify iconChooser search functionality
+            //Step 6 - Verify iconChooser search functionality
             tableCreatePO.searchIconFromChooser('bicycle');
             var searchReturnedIcons = tableCreatePO.getAllIconsFromIconChooser;
             //Verify it returns just one
@@ -114,34 +114,24 @@
                 {
                     message: 'with empty table name',
                     tableFields: [
-                        {fieldTitle: '* Table Name', fieldValue: ' '},
+                        {fieldTitle: '* Table Name', fieldValue: '\uE00D  ', fieldError: 'Fill in the table name'},
                         {fieldTitle: 'Description', fieldValue: 'test Description'}
-                    ],
-                    tableFieldError: [
-                        {fieldTitle: '* Table Name', fieldError: 'Fill in the table name'},
                     ]
                 },
                 {
                     message: 'with empty required fields',
                     tableFields: [
-                        {fieldTitle: '* Table Name', fieldValue: ' '},
-                        {fieldTitle: '* A record in the table is called', fieldValue: ' '},
+                        {fieldTitle: '* Table Name', fieldValue: '\uE00D  ', fieldError: 'Fill in the table name'},
+                        {fieldTitle: '* A record in the table is called', fieldValue: '\uE00D  ', fieldError: 'Fill in the record name'},
                         {fieldTitle: 'Description', fieldValue: 'test Description'}
-                    ],
-                    tableFieldError: [
-                        {fieldTitle: '* Table Name', fieldError: 'Fill in the table name'},
-                        {fieldTitle: '* A record in the table is called', fieldError: 'Fill in the record name'}
                     ]
                 },
                 {
                     message: 'with duplicate table name',
                     tableFields: [
-                        {fieldTitle: '* Table Name', fieldValue: 'Table 1'},
+                        {fieldTitle: '* Table Name', fieldValue: 'Table 1', fieldError: 'Fill in a different value. Another table is already using this name'},
                         {fieldTitle: '* A record in the table is called', fieldValue: 'Table 1'},
                         {fieldTitle: 'Description', fieldValue: 'test Description'}
-                    ],
-                    tableFieldError: [
-                        {fieldTitle: '* Table Name', fieldError: 'Fill in a different value. Another table is already using this name'},
                     ]
                 },
             ];
@@ -157,25 +147,18 @@
                 //Step 2 - Click on new table button
                 tableCreatePO.clickCreateNewTable();
 
-                //Step 3 - Enter table field values
+                //Step 3 - Enter table field values and verify validation
                 testCase.tableFields.forEach(function(tableField) {
-                    tableCreatePO.enterTableFieldValue(tableField.fieldTitle, tableField.fieldValue);
+                    tableCreatePO.enterInvalidInputAndVerifyTableFieldValidation(tableField.fieldTitle, tableField.fieldValue, tableField.fieldError);
                 });
 
-                //Step 4 - Verify validation
-                testCase.tableFieldError.forEach(function(tableField) {
-                    tableCreatePO.verifyTableFieldValidation(tableField.fieldTitle, tableField.fieldError);
-                    //Verify next button is not enabled since there is error in field values
-                    expect(browser.isEnabled('.modal-footer .nextButton')).toBeFalsy();
-                });
-
-                //Step 5 - Cancel table dialogue
+                //Step 4 - Cancel table dialogue
                 tableCreatePO.clickCancelBtn();
 
-                //Step 6 - Get the new count of table links in the left nav
+                //Step 5 - Get the new count of table links in the left nav
                 var newTableLinksCount = tableCreatePO.getAllTableLeftNavLinksList.value.length;
 
-                //Step 7 - Verify the table links NOT increased(ie table not saved)
+                //Step 6 - Verify the table links NOT increased(ie table not saved)
                 expect(newTableLinksCount).toBe(originalTableLinksCount);
 
             });

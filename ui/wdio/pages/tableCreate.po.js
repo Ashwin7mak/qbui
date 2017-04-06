@@ -61,6 +61,8 @@
          * @returns Array of Icons
          */
         getAllIconsFromIconChooser: {get: function() {
+            browser.element('.allIcons').waitForVisible();
+            browser.element('.allIcons .qbIcon').waitForVisible();
             return browser.elements('.allIcons .qbIcon');
         }},
 
@@ -69,14 +71,8 @@
          *@returns IconChoosed className
          */
         selectRandomIconFromIconChooser: {value: function() {
-            //Wait untill you see closed Icon chooser
-            this.tableFieldIconChooser.waitForVisible();
-            //Click on Icon chooser select dropdown to open
-            this.iconChooserSelect.click();
-            //Wait until you see open icon chooser
-            this.iconChooserSearch.waitForVisible();
-            //Wait for container to expand
-            browser.pause(100);
+            //search for tasks
+            this.searchIconFromChooser('tasks');
             //get all icons to a list
             var icons = this.getAllIconsFromIconChooser;
             //Get random Icon from the list of Icons
@@ -86,8 +82,8 @@
             //Select the Icon
             randomIcon.waitForVisible();
             randomIcon.click();
-            //Wait for container to collapse after selecting an Icon
-            browser.pause(100);
+            //Wait until the iconChooser is closed
+            this.tableFieldIconChooser.waitForVisible();
             return randomIconClassName;
         }},
 
@@ -123,6 +119,7 @@
          * @returns Array of table links
          */
         getAllTableLeftNavLinksList: {get: function() {
+            browser.element('.leftNavLabel').waitForVisible();
             return browser.elements('.leftNavLabel');
         }},
 
@@ -132,6 +129,7 @@
          * @returns Array of fields
          */
         getAllTableFieldsList: {get: function() {
+            browser.element('.tableField').waitForVisible();
             return browser.elements('.tableField');
         }},
 
@@ -282,23 +280,21 @@
                 if (tableField.includes('Table Name')) {
                     //verify title of the field
                     expect(results[0].element('.tableFieldTitle').getAttribute('textContent')).toBe(tableField);
-                    results[0].element('.tableFieldInput input').clearElement();
-                    results[0].element('.tableFieldInput input').keys(fieldValue);
-                    results[0].element('..').click();
+                    //Need this as we need to write something and remove it for testing negativity ie empty field for it to trigger the invalidInput
+                    results[0].element('.tableFieldInput input').click();
+                    results[0].setValue('.tableFieldInput input', [fieldValue, '\uE004']);
                     //Enter value of 'a record in the table is called a ' field
                 } else if (tableField.includes('A record in the table is called')) {
                     //verify title of the field
                     expect(results[0].element('.tableFieldTitle').getAttribute('textContent')).toBe(tableField);
-                    results[0].element('.tableFieldInput input').clearElement();
-                    results[0].element('.tableFieldInput input').keys(fieldValue);
-                    results[0].element('..').click();
+                    results[0].element('.tableFieldInput input').click();
+                    results[0].setValue('.tableFieldInput input', [fieldValue, '\uE004']);
                     //Enter value for Description field
                 } else if (tableField.includes('Description')) {
                     //verify title of the field
                     expect(results[0].element('.tableFieldTitle').getAttribute('textContent')).toBe(tableField);
-                    results[0].element('.tableFieldInput textarea').clearElement();
-                    results[0].element('.tableFieldInput textarea').keys(fieldValue);
-                    results[0].element('..').click();
+                    results[0].element('.tableFieldInput textarea').click();
+                    results[0].setValue('.tableFieldInput textarea', [fieldValue, '\uE004']);
                 }
             } else {
                 throw new Error('Cannot set value for input of field type ' + JSON.stringify(results[0]));
@@ -380,22 +376,49 @@
         }},
 
         /**
-         * Method to verify table field validation
+         * Method to enter the invalid field values and verify table field validation
          * @fieldName
+         * @fieldValue
          * @fieldErrorMsg
          */
-        verifyTableFieldValidation : {value: function(tableField, errorMsg) {
+        enterInvalidInputAndVerifyTableFieldValidation : {value: function(tableField, fieldValue, errorMsg) {
             //filter all fields in create new table dialogue
             var results = this.getAllTableFieldsList.value.filter(function(field) {
                 return field.getAttribute('textContent') === tableField;
             });
 
             if (results !== []) {
-                //Hover over to an element and verify the field error
-                results[0].moveToObject('.tableFieldInput');
-                browser.waitForExist('.invalidInput'); // Account for short timeout in showing tooltip
-                expect(results[0].element('.invalidInput').getAttribute('textContent')).toBe(errorMsg);
-                return results[0].click();
+                //Enter values for 'table name' field
+                if (tableField.includes('Table Name')) {
+                    results[0].element('.tableFieldInput input').click();
+                    results[0].setValue('.tableFieldInput input', [fieldValue, '\uE004']);
+                    // Account for short timeout in showing tooltip
+                    browser.waitForExist('.invalidInput');
+                    expect(results[0].element('.invalidInput').getAttribute('textContent')).toBe(errorMsg);
+                    //Enter value of 'a record in the table is called a ' field
+                } else if (tableField.includes('A record in the table is called')) {
+                    results[0].element('.tableFieldInput input').click();
+                    //Enter invalid value and hit Tab
+                    results[0].setValue('.tableFieldInput input', [fieldValue, '\uE004']);
+                    // Account for short timeout in showing tooltip
+                    browser.waitForExist('.invalidInput');
+                    expect(results[0].element('.invalidInput').getAttribute('textContent')).toBe(errorMsg);
+                }
+
+                //browser.execute(function() {
+                //    var event = new MouseEvent('mouseover', {
+                //        'view': window,
+                //        'bubbles': true,
+                //        'cancelable': true,
+                //    });
+                //    document.getElementsByClassName(results[0].element('.tableFieldInput')).querySelector('input').dispatchEvent(event);
+                //});
+                //
+                //    browser.waitForExist('.invalidInput'); // Account for short timeout in showing tooltip
+                //    expect(results[0].element('.invalidInput').getAttribute('textContent')).toBe(errorMsg);
+                //}
+                //Verify next button is not enabled since there is error in field values
+                expect(browser.isEnabled('.modal-footer .nextButton')).toBeFalsy();
             }
         }},
 

@@ -71,16 +71,16 @@
             //Step 1 - Click on new table button
             tableCreatePO.clickCreateNewTable();
 
-            //Step 2 - Enter table field values
+            //Step 2 - Choose an Icon from Icon picker
+            var iconChoosedClassName = tableCreatePO.selectRandomIconFromIconChooser();
+            //Verify the choosed icon in closed combo
+            tableCreatePO.verifyIconInIconChooserCombo(iconChoosedClassName);
+
+            //Step 3 - Enter table field values
             tableFields.forEach(function(tableField) {
                 //Enter field values
                 tableCreatePO.enterTableFieldValue(tableField.fieldTitle, tableField.fieldValue);
             });
-
-            //Step 3 - Choose an Icon from Icon picker
-            var iconChoosedClassName = tableCreatePO.selectRandomIconFromIconChooser();
-            //Verify the choosed icon in closed combo
-            tableCreatePO.verifyIconInIconChooserCombo(iconChoosedClassName);
 
             //Step 4 - Click next field and verify it landed in drag fields page
             tableCreatePO.clickNextBtn();
@@ -114,16 +114,15 @@
             //****************
             //*Edit the newely added table with new values
             //***************
-
-            //Step 10 - Enter table invalid field values
-            newTableFields.forEach(function(tableField) {
-                tableCreatePO.enterTableFieldValue(tableField.fieldTitle, tableField.fieldValue);
-            });
-
-            //Step 11 - Select the new icon from icon chooser
+            //Step 10 - Select the new icon from icon chooser
             var newIconChoosedClassName = tableCreatePO.selectRandomIconFromIconChooser();
             //Verify the choosed icon in closed combo
             tableCreatePO.verifyIconInIconChooserCombo(newIconChoosedClassName);
+
+            //Step 11 - Enter table invalid field values
+            newTableFields.forEach(function(tableField) {
+                tableCreatePO.enterTableFieldValue(tableField.fieldTitle, tableField.fieldValue);
+            });
 
             //Step 12 - Click on apply button in edit table mode
             tableCreatePO.clickOnEditTableApplyBtn();
@@ -161,13 +160,13 @@
             //Step 2 - Click on edit table settings and properties link of an existing table 'Table 2' under global actions gear
             tableCreatePO.clickOnModifyTableSettingsLink();
 
-            //Step 3 - Enter new table field avlues
+            //Step 3 - Select the new icon from icon chooser
+            var newIconChoosedClassName = tableCreatePO.selectRandomIconFromIconChooser();
+
+            //Step 4 - Enter new table field avlues
             tableFields.forEach(function(tableField) {
                 tableCreatePO.enterTableFieldValue(tableField.fieldTitle, tableField.fieldValue);
             });
-
-            //Step 4 - Select the new icon from icon chooser
-            var newIconChoosedClassName = tableCreatePO.selectRandomIconFromIconChooser();
 
             //Step 5 - Click on apply button in edit table mode
             tableCreatePO.clickOnEditTableApplyBtn();
@@ -216,13 +215,13 @@
             //Step 3 - Get all original field values from table builder
             originalFieldValues = tableCreatePO.getAllTableFieldValues();
 
-            //Step 4 - Enter new table field values
+            //Step 4 - Select the new icon from icon chooser
+            tableCreatePO.selectRandomIconFromIconChooser();
+
+            //Step 5 - Enter new table field values
             tableFields.forEach(function(tableField) {
                 tableCreatePO.enterTableFieldValue(tableField.fieldTitle, tableField.fieldValue);
             });
-
-            //Step 5 - Select the new icon from icon chooser
-            tableCreatePO.selectRandomIconFromIconChooser();
 
             //Step 6 - Click on apply button in edit table mode
             tableCreatePO.clickOnEditTableResetBtn();
@@ -253,34 +252,24 @@
                 {
                     message: 'with empty table name',
                     tableFields: [
-                        {fieldTitle: '* Table Name', fieldValue: ' '},
+                        {fieldTitle: '* Table Name', fieldValue: '\uE00D  ', fieldError: 'Fill in the table name'},
                         {fieldTitle: 'Description', fieldValue: 'test Description'}
-                    ],
-                    tableFieldError: [
-                        {fieldTitle: '* Table Name', fieldError: 'Fill in the table name'},
                     ]
                 },
                 {
                     message: 'with empty required fields',
                     tableFields: [
-                        {fieldTitle: '* Table Name', fieldValue: ' '},
-                        {fieldTitle: '* A record in the table is called', fieldValue: ' '},
+                        {fieldTitle: '* Table Name', fieldValue: '\uE00D  ', fieldError: 'Fill in the table name'},
+                        {fieldTitle: '* A record in the table is called', fieldValue: '\uE00D  ', fieldError: 'Fill in the record name'},
                         {fieldTitle: 'Description', fieldValue: 'test Description'}
-                    ],
-                    tableFieldError: [
-                        {fieldTitle: '* Table Name', fieldError: 'Fill in the table name'},
-                        {fieldTitle: '* A record in the table is called', fieldError: 'Fill in the record name'}
                     ]
                 },
                 {
                     message: 'with duplicate table name',
                     tableFields: [
-                        {fieldTitle: '* Table Name', fieldValue: 'Table 1'},
+                        {fieldTitle: '* Table Name', fieldValue: 'Table 1', fieldError: 'Fill in a different value. Another table is already using this name'},
                         {fieldTitle: '* A record in the table is called', fieldValue: 'Table 1'},
                         {fieldTitle: 'Description', fieldValue: 'test Description'}
-                    ],
-                    tableFieldError: [
-                        {fieldTitle: '* Table Name', fieldError: 'Fill in a different value. Another table is already using this name'},
                     ]
                 },
             ];
@@ -299,27 +288,22 @@
                 tableCreatePO.editTableHeading.waitForVisible();
                 expect(tableCreatePO.editTableHeading.getAttribute('textContent')).toBe('Table properties & settings');
 
-                //Step 4 - Enter table invalid field values
+                //Step 4 - Verify validation
                 testCase.tableFields.forEach(function(tableField) {
-                    tableCreatePO.enterTableFieldValue(tableField.fieldTitle, tableField.fieldValue);
-                });
-
-                //Step 5 - Verify validation
-                testCase.tableFieldError.forEach(function(tableField) {
-                    tableCreatePO.verifyTableFieldValidation(tableField.fieldTitle, tableField.fieldError);
+                    tableCreatePO.enterInvalidInputAndVerifyTableFieldValidation(tableField.fieldTitle, tableField.fieldValue, tableField.fieldError);
                     //Verify Apply button is enabled
                     expect(browser.isEnabled('.tableInfoButtons.open .primaryButton')).toBeTruthy();
                     //Verify reset button is enabled
                     expect(browser.isEnabled('.tableInfoButtons.open .secondaryButton')).toBeTruthy();
                 });
 
-                //Step 6 - Verify table link with table name shows on left Nav . Make sure the table name is not updated, it is still 'Table 2'
+                //Step 5 - Verify table link with table name shows on left Nav . Make sure the table name is not updated, it is still 'Table 2'
                 expect(browser.element('.standardLeftNav .contextHeaderTitle').getAttribute('textContent')).toBe('Table 1');
 
-                //Step 7 - Verify 'Back to app' link shows up in the left Nav
+                //Step 6 - Verify 'Back to app' link shows up in the left Nav
                 expect(browser.element('.standardLeftNav .navItemContent').getAttribute('textContent')).toBe('Back to app');
 
-                //Step 8 - Verify bck to app link is enabled
+                //Step 7 - Verify bck to app link is enabled
                 expect(browser.isEnabled('.standardLeftNav .navItemContent')).toBeTruthy();
             });
         });
