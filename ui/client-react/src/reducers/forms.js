@@ -274,4 +274,14 @@ const forms = (
     }
 };
 
+export const getSelectedFormElement = (state, id) => {
+    const currentForm = _.find(state.forms, form => form.id === id);
+    if(!currentForm || !currentForm.selectedFields) {
+        return null;
+    }
+
+    const {tabIndex, sectionIndex, columnIndex, elementIndex} = currentForm.selectedFields[0];
+    return currentForm.formData.formMeta.tabs[tabIndex].sections[sectionIndex].columns[columnIndex].elements[elementIndex];
+};
+
 export default forms;

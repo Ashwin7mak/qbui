@@ -4,32 +4,35 @@ import TextFieldValueEditor from '../../fields/textFieldValueEditor';
 import CheckBoxFieldValueEditor from '../../fields/checkBoxFieldValueEditor';
 import Locale from '../../../../../reuse/client/src/locales/locale';
 import {updateField} from '../../../actions/fieldsActions';
+import {getSelectedFormElement} from '../../../reducers/forms';
+import {getField} from '../../../reducers/fields';
 import SideTrowser from '../../../../../reuse/client/src/components/sideTrowserBase/sideTrowserBase';
 
 import './fieldProperties.scss';
 
 const mapStateToProps = (state, ownProps) => {
     let formId = (ownProps.formId || 'view');
-    let currentForm = state.forms.find(form => form.id === formId);
-    let selectedField = (_.has(currentForm, 'selectedFields') ? currentForm.selectedFields : []);
+    let formElement = getSelectedFormElement(state, formId);
     return {
-        selectedField: (selectedField.length === 1 ? selectedField[0] : null),
-        form: state.forms[0],
+        selectedField: (_.has(formElement, 'FormFieldElement') ? getField(state, formElement.FormFieldElement.fieldId, ownProps.appId, ownProps.tableId) : undefined),
         fields: state.fields
     };
 };
 
 const mapDispatchToProps = dispatch => {
     return {
-        updateField: (field) => {
-            dispatch(updateField(field));
+        updateField: (field, appId, tableId) => {
+            dispatch(updateField(field, appId, tableId));
         }
     };
 };
 
 export const FieldProperties = React.createClass({
     propTypes: {
-        selectedField: PropTypes.object
+        selectedField: PropTypes.object,
+        appId: PropTypes.string,
+        tableId: PropTypes.string,
+        formId: PropTypes.string
     },
 
     createPropertiesTitle(fieldName) {
@@ -73,13 +76,12 @@ export const FieldProperties = React.createClass({
     updateFieldProps(newValue, propertyName) {
         let field = this.getField();
         field[propertyName] = newValue;
-        this.props.updateField(field);
+        this.props.updateField(field, this.props.appId, this.props.tableId);
     },
 
     getField() {
-        /*return (this.props.fields.length !== 0 && this.props.selectedField) ?
-         this.props.fields[0].fields.fields.data[this.props.selectedField.elementIndex + 5] : null;*/
-        return this.props.selectedField ? this.props.form.formData.fields[this.props.selectedField.elementIndex + 5] : null;
+        //return this.props.selectedField ? this.props.fields[0].fields[this.props.selectedField.elementIndex + 5] : null;
+        return this.props.selectedField;
     },
 
     render() {

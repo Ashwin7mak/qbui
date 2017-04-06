@@ -17,6 +17,17 @@ export const tableFieldsReportDataObj = (state, appId, tblId) => {
     };
 };
 
+// Return a specific field from table fields object for a given appId and tableId
+export const getField = (state, id, appId, tblId) => {
+    const fieldsList = _.find(state.fields, fieldList => fieldList.appId === appId && fieldList.tblId === tblId);
+    const currentField = _.find(fieldsList.fields, field => field.id === id);
+    if(!currentField) {
+        return null;
+    } else {
+        return currentField;
+    }
+};
+
 const fieldsStore = (state = [], action) => {
 
     //  new state list without the appId/tblId entry
@@ -92,7 +103,5 @@ const fieldsStore = (state = [], action) => {
     }
 
 };
-
-export const getField = (state, id) => state.fields[id];
 
 export default fieldsStore;
