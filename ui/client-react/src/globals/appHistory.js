@@ -124,7 +124,9 @@ class AppHistory {
             const state = self.store.getState();
             //  fetch the 1st form in the store
             //  TODO: revisit to ensure appropriate support for store with multiple forms
-            return _.get(state, `forms[${CONTEXT.FORM.VIEW}].formData.fields`, []);
+            const viewFields = _.get(state, `forms[${CONTEXT.FORM.VIEW}].formData.fields`);
+            const editFields = _.get(state, `forms[${CONTEXT.FORM.EDIT}].formData.fields`);
+            return viewFields || editFields || fields;
         }
         return fields;
     }

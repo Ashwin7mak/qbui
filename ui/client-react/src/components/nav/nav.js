@@ -77,6 +77,8 @@ export const Nav = React.createClass({
         const {appId, tblId} = this.props.params;
         let formType;
 
+        // currently users can navigate to builder only from "view" context, will need to update
+        // when we allow navigating to builder from "edit" context
         if (_.has(this.props, 'forms.view')) {
             formType = 'view';
         }
