@@ -84,6 +84,7 @@
             //Get the className of Icon
             var randomIconClassName = randomIcon.getAttribute('className');
             //Select the Icon
+            randomIcon.waitForVisible();
             randomIcon.click();
             //Wait for container to collapse after selecting an Icon
             browser.pause(100);
@@ -281,19 +282,22 @@
                 if (tableField.includes('Table Name')) {
                     //verify title of the field
                     expect(results[0].element('.tableFieldTitle').getAttribute('textContent')).toBe(tableField);
-                    results[0].element('.tableFieldInput input').setValue(fieldValue);
+                    results[0].element('.tableFieldInput input').clearElement();
+                    results[0].element('.tableFieldInput input').keys(fieldValue);
                     results[0].element('..').click();
                     //Enter value of 'a record in the table is called a ' field
                 } else if (tableField.includes('A record in the table is called')) {
                     //verify title of the field
                     expect(results[0].element('.tableFieldTitle').getAttribute('textContent')).toBe(tableField);
-                    results[0].element('.tableFieldInput input').setValue(fieldValue);
+                    results[0].element('.tableFieldInput input').clearElement();
+                    results[0].element('.tableFieldInput input').keys(fieldValue);
                     results[0].element('..').click();
                     //Enter value for Description field
                 } else if (tableField.includes('Description')) {
                     //verify title of the field
                     expect(results[0].element('.tableFieldTitle').getAttribute('textContent')).toBe(tableField);
-                    results[0].element('.tableFieldInput textarea').setValue(fieldValue);
+                    results[0].element('.tableFieldInput textarea').clearElement();
+                    results[0].element('.tableFieldInput textarea').keys(fieldValue);
                     results[0].element('..').click();
                 }
             } else {
