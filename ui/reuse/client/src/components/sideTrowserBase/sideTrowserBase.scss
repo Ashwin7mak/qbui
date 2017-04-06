@@ -12,6 +12,7 @@
 .sideTrowserBase {
     height: 100%;
     width: 100%;
+    position: relative;
 
     &:not(.sideTrowserDocked) > .sideTrowserContent.sideTrowserOpen {
         @include menuShadow;
@@ -28,6 +29,7 @@
             position: relative;
             flex: 1 auto;
             overflow: auto;
+            height: 100%;
         }
 
         > .sideTrowserContent {
@@ -40,11 +42,10 @@
         position: absolute;
         top: 0;
 
-        padding: $spacing-small;
         overflow: auto;
-        background-color: $color-black-300;
-        z-index: 100;
-        height: 100vh; // Ensures that long content can be scrolled on all browsers
+        background-color: $leftnav-background-color;
+        z-index: $zindex-trowser;
+        height: 100%;
 
         @include baseMenuWidths;
 
@@ -60,6 +61,10 @@
 
             // Hide menu by default
             @include moveMenuToRight;
+            // On small breakpoint the menu should be all the way off the screen, but the width is dependent on the specific device size
+            @include small-breakpoint {
+                transform: translateX(-100%);
+            }
 
             &.sideTrowserOpen {
                 transform: translateX(0);
@@ -73,6 +78,10 @@
 
             // Hide menu by default
             @include moveMenuToLeft;
+            // On small breakpoint the menu should be all the way off the screen, but the width is dependent on the specific device size
+            @include small-breakpoint {
+                transform: translateX(100%);
+            }
 
             &.sideTrowserOpen {
                 transform: translateX(0);

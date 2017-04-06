@@ -39,6 +39,11 @@
                 return '.formElementContainer:nth-child(' + index + ')';
             }
         },
+        formBuilderContainer: {
+            get: function() {
+                return browser.element('.formBuilderContainer');
+            }
+        },
         formContainer: {
             get: function() {
                 return browser.element('.formContainer');

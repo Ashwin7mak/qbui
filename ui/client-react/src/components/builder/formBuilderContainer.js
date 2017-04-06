@@ -34,7 +34,9 @@ const mapStateToProps = state => {
         selectedField: (_.has(currentForm, 'selectedFields') ? currentForm.selectedFields[0] : []),
         tabIndex: (_.has(currentForm, 'formBuilderChildrenTabIndex') ? currentForm.formBuilderChildrenTabIndex[0] : undefined),
         formFocus: (_.has(currentForm, 'formFocus') ? currentForm.formFocus[0] : undefined),
-        shouldNotifyTableCreated: state.tableCreation.notifyTableCreated
+        shouldNotifyTableCreated: state.tableCreation.notifyTableCreated,
+        isOpen: state.builderNav.isNavOpen,
+        isCollapsed: state.builderNav.isNavCollapsed
     };
 };
 
@@ -68,7 +70,15 @@ export const FormBuilderContainer = React.createClass({
         /**
          * the form type
          * */
-        formType: PropTypes.string
+        formType: PropTypes.string,
+
+        /**
+         * Controls the open state of the left tool panel */
+        isOpen: PropTypes.bool,
+
+        /**
+         * Controls the collapsed state of the left tool panel */
+        isCollapsed: PropTypes.bool
     },
 
     componentDidMount() {
@@ -76,7 +86,6 @@ export const FormBuilderContainer = React.createClass({
         this.props.loadForm(this.props.appId, this.props.tblId, null, (this.props.formType || 'view'), NEW_FORM_RECORD_ID);
 
         // if we've been sent here from the table creation flow, show a notification
-
         if (this.props.shouldNotifyTableCreated) {
             this.props.notifyTableCreated(false);
             setTimeout(() => {
@@ -189,31 +198,31 @@ export const FormBuilderContainer = React.createClass({
 
                 <PageTitle title={Locale.getMessage('pageTitles.editForm')}/>
 
-                <div className="toolsAndForm">
-                    <ToolPalette />
+                <ToolPalette isCollapsed={this.props.isCollapsed} isOpen={this.props.isOpen}>
+                    <FieldProperties>
+                        <div className="formBuilderContainerContent">
+                            <AutoScroll
+                                pixelsFromBottomForLargeDevices={80}
+                                pixelsFromBottomForMobile={50}>
+                                <div className="formBuilderContent">
+                                    <Loader loaded={loaded} options={LARGE_BREAKPOINT}>
+                                        <FormBuilder
+                                            formFocus={this.props.formFocus}
+                                            selectedField={this.props.selectedField}
+                                            formBuilderUpdateChildrenTabIndex={this.updateChildrenTabIndex}
+                                            formId={formId}
+                                            formData={formData}
+                                            moveFieldOnForm={this.props.moveFieldOnForm}
+                                            updateAnimationState={this.props.updateFormAnimationState}
+                                        />
+                                    </Loader>
+                                </div>
+                            </AutoScroll>
 
-                    <AutoScroll
-                        pixelsFromBottomForLargeDevices={80}
-                        pixelsFromBottomForMobile={50}>
-                        <div className="formBuilderContent">
-                            <Loader loaded={loaded} options={LARGE_BREAKPOINT}>
-                                <FormBuilder
-                                    formFocus={this.props.formFocus}
-                                    selectedField={this.props.selectedField}
-                                    formBuilderUpdateChildrenTabIndex={this.updateChildrenTabIndex}
-                                    formId={formId}
-                                    formData={formData}
-                                    moveFieldOnForm={this.props.moveFieldOnForm}
-                                    updateAnimationState={this.props.updateFormAnimationState}
-                                />
-                            </Loader>
+                            {this.getSaveOrCancelFooter()}
                         </div>
-                    </AutoScroll>
-
-                    <FieldProperties />
-                </div>
-
-                {this.getSaveOrCancelFooter()}
+                    </FieldProperties>
+                </ToolPalette>
             </div>
         );
     }

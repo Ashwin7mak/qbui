@@ -2,20 +2,20 @@
     'use strict';
 
     //Load the page Objects
-    var newStackAuthPO = requirePO('newStackAuth');
-    var e2ePageBase = requirePO('e2ePageBase');
-    var reportSortingPO = requirePO('reportSortingGrouping');
-    var reportContentPO = requirePO('reportContent');
-    var _ = require('lodash');
+    let newStackAuthPO = requirePO('newStackAuth');
+    let e2ePageBase = requirePO('e2ePageBase');
+    let reportSortingPO = requirePO('reportSortingGrouping');
+    let reportContentPO = requirePO('reportContent');
+    let _ = require('lodash');
 
     describe('Report Sorting Via Container Tests  -\n', function() {
-        var realmName;
-        var realmId;
-        var testApp;
-        var reportId;
-        var DEFAULT_REPORT_ID = 1;
-        var actualTableRecords;
-        var expectedRecords;
+        let realmName;
+        let realmId;
+        let testApp;
+        let reportId;
+        let DEFAULT_REPORT_ID = 1;
+        let actualTableRecords;
+        let expectedRecords;
 
         /**
          * Setup method. Creates test app then authenticates into the new stack
@@ -86,8 +86,8 @@
 
         //TODO the below test Disabled due to MC-1518
         xit("Verify Reset btn functionality inside the sort/Grp dialogue", function() {
-            var expectedFieldsInContainer = ['Text Field'];
-            var sortedTableRecords;
+            let expectedFieldsInContainer = ['Text Field'];
+            let sortedTableRecords;
 
             //Step 1 - Create report via API with just Text Field FID
             browser.call(function() {
@@ -107,7 +107,7 @@
             reportSortingPO.deleteAllFieldsFromSrtGrpDlg(reportSortingPO.sortBySettings);
 
             //step 5 - Get original records from the report table
-            var originalRecords = reportContentPO.getAllRecordsFromTable();
+            let originalRecords = reportContentPO.getAllRecordsFromTable();
 
             //Step 6 - Add Text Field to sortBy
             expectedFieldsInContainer.forEach(function(field) {
@@ -144,15 +144,15 @@
             //Step 14 - Verify reset also clears the fields in the container
             reportSortingPO.clickSortGroupIconOnReportsPage();
             reportSortingPO.sortBySettings.waitForVisible();
-            var allNonEmptyFields = reportSortingPO.getAllNonEmptyFieldValues(reportSortingPO.sortBySettings);
+            let allNonEmptyFields = reportSortingPO.getAllNonEmptyFieldValues(reportSortingPO.sortBySettings);
             //Verify 'Text Field' is no longer there in the sortBy container after reset
             expect(allNonEmptyFields.indexOf('Text Field')).toBe(-1);
         });
 
         it("Verify sort/grp dialogue is pre filled with sortItems for report with sortFids already set.", function() {
-            var expectedFieldsInContainer = ['Text Field', 'Numeric Field'];
+            let expectedFieldsInContainer = ['Text Field', 'Numeric Field'];
             //Sort by Text field in asc order then by Numeric in desc
-            var sortList = [
+            let sortList = [
                 {
                     "fieldId": 6,
                     "sortOrder": "asc",
@@ -184,7 +184,7 @@
         });
 
         it("Verify you cannot select more than 5 items in sort setting dialogue", function() {
-            var sortList = [
+            let sortList = [
                 {
                     "fieldId": 6,
                     "sortOrder": "asc",
@@ -230,7 +230,7 @@
         });
 
         it("Verify more fields and Cancel functionality in field panel of sortSettings", function() {
-            var expectedMoreFields = ['Date Created', 'Record ID#', 'Record Owner', 'Last Modified By'];
+            let expectedMoreFields = ['Date Created', 'Record ID#', 'Record Owner', 'Last Modified By'];
 
             //Step 1 - load the above created report in UI.
             e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, DEFAULT_REPORT_ID);
@@ -245,9 +245,9 @@
             reportSortingPO.ClickMoreFieldsLinkInFieldsPanel();
 
             //Step 5 - Get all field List items from panel
-            var allFieldFromFieldsPanel = reportSortingPO.getAllFieldsFromFieldPanelValues();
+            let allFieldFromFieldsPanel = reportSortingPO.getAllFieldsFromFieldPanelValues();
 
-            //Step 6 - Verify allFieldFromFieldsPanel also contain expectedMoreFields variable values
+            //Step 6 - Verify allFieldFromFieldsPanel also contain expectedMoreFields letiable values
             expect(_.every(expectedMoreFields, function(val) {return allFieldFromFieldsPanel.indexOf(val) >= 0;})).toBeTruthy();
 
             //Step 7 - Click cancel button
@@ -258,10 +258,16 @@
         });
 
         it("Verify Delete sort fields functionality", function() {
-            var fieldToDelete = 'Numeric Field';
-            var sortList = [
+            let fieldToDelete = 'Numeric Field';
+            let lodashResults;
+            let sortList = [
                 {
                     "fieldId": 6,
+                    "sortOrder": "desc",
+                    "groupType": null
+                },
+                {
+                    "fieldId": 3,
                     "sortOrder": "desc",
                     "groupType": null
                 },
@@ -269,10 +275,9 @@
                     "fieldId": 7,
                     "sortOrder": "asc",
                     "groupType": null
-                }
+                },
             ];
-            var sortFids = [function(row) {return reportSortingPO.getSortValue(row, 6);}];
-            var columnListToDisplayInReport = [6, 7];
+            let columnListToDisplayInReport = [6, 7];
 
             //Step 1 - Creating a report with FIDS and sortFIDS as in sortList
             browser.call(function() {
@@ -287,7 +292,7 @@
             //Step 3 - Click on sort/Grp Icon
             reportSortingPO.clickSortGroupIconOnReportsPage();
 
-            //Step 4 - Delete a field from sort settings dialogue and also verify field got deleted
+            //Step 4 - Delete a field(numeric field) from sort settings dialogue
             reportSortingPO.deleteFieldsFromSrtGrpDlg(reportSortingPO.sortBySettings, fieldToDelete);
 
             //Step 5 - Click on Apply button
@@ -295,18 +300,19 @@
             //wait until report rows in table are loaded
             reportContentPO.waitForReportContent();
 
-            //Step 6 - get all table results after deleting a field
+            //Step 6 - Get all records from the report table after deleting numeric field from sort container
             actualTableRecords = reportContentPO.getAllRecordsFromTable();
 
+
             //Step 7 - Using API get report records(results) from report 1 (List All report) then get FIDS(specific column) records specified and sort them using LoDash
-            expectedRecords = reportSortingPO.getReportResultsAndSortFidsUsingLoDashAndVerify(testApp.id, testApp.tables[e2eConsts.TABLE1].id, DEFAULT_REPORT_ID, columnListToDisplayInReport, sortFids, ['desc']);
+            lodashResults = reportSortingPO.getReportResultsAndSortFidsUsingLoDashAndVerify(testApp.id, testApp.tables[e2eConsts.TABLE1].id, DEFAULT_REPORT_ID, [6, 7], [function(row) {return reportSortingPO.getSortValue(row, 6);}, function(row) {return reportSortingPO.getSortValue(row, 3);}], ['desc', 'desc']);
 
-            //Step 8 - Verify the actual versus expected sorted records
-            reportSortingPO.verifySortedResults(actualTableRecords, expectedRecords);
+            //Step 8 - Verify text field is sorted ascending. No sort on numeric since we deleted that field
+            reportSortingPO.verifySortedResults(actualTableRecords, lodashResults);
 
-            //Step 9 - Finally verify if field item got deleted
+            //Step 10 - Finally verify if field item got deleted
             reportSortingPO.clickSortGroupIconOnReportsPage();
-            var allNonEmptyFields = reportSortingPO.getAllNonEmptyFieldValues(reportSortingPO.sortBySettings);
+            let allNonEmptyFields = reportSortingPO.getAllNonEmptyFieldValues(reportSortingPO.sortBySettings);
             expect(allNonEmptyFields.indexOf(fieldToDelete)).toBe(-1);
         });
 

@@ -21,12 +21,19 @@ const mockActions = {
     deselectField(_formId, _location) {}
 };
 
+const FormBuilderMock = React.createClass({
+    render: function() {
+        return <div>FormBuilder mock</div>;
+    }
+});
+
 let component;
 let instance;
 
 describe('FormBuilderContainer', () => {
     beforeEach(() => {
         jasmineEnzyme();
+        FormBuilderRewireAPI.__Rewire__('FormBuilder', FormBuilderMock);
         spyOn(mockActions, 'loadForm');
         spyOn(mockActions, 'updateForm');
         spyOn(mockActions, 'toggleFormBuilderChildrenTabIndex');
@@ -34,6 +41,17 @@ describe('FormBuilderContainer', () => {
         spyOn(mockActions, 'keyboardMoveFieldDown');
         spyOn(mockActions, 'removeFieldFromForm');
         spyOn(mockActions, 'deselectField');
+    });
+
+    afterEach(() => {
+        FormBuilderRewireAPI.__ResetDependency__('FormBuilder');
+        mockActions.loadForm.calls.reset();
+        mockActions.updateForm.calls.reset();
+        mockActions.toggleFormBuilderChildrenTabIndex.calls.reset();
+        mockActions.keyboardMoveFieldUp.calls.reset();
+        mockActions.keyboardMoveFieldDown.calls.reset();
+        mockActions.removeFieldFromForm.calls.reset();
+        mockActions.deselectField.calls.reset();
     });
 
     describe('load form data', () => {
