@@ -32,7 +32,7 @@ const Tooltip = React.createClass({
 
     getDefaultProps() {
         return {
-            defaultDelayShow: 300,
+            delayShow: 300,
             location: 'top'
         };
     },

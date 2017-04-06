@@ -37,7 +37,58 @@
         tablePreviousBtn: {get: function() {return browser.element('.modal-footer .previousButton');}},
 
         //Icon chooser
-        tableFieldIconDropDown: {get: function() {return browser.element('.iconChooser .createTableIconDropdown');}},
+        tableFieldIconChooser: {get: function() {return browser.element('.iconChooser.closed');}},
+        //Icon chooser down arrow
+        iconChooserSelect: {get: function() {return this.tableFieldIconChooser.element('.iconUISturdy-caret-filled-down');}},
+        //Icon chooser search
+        iconChooserSearch: {get: function() {return browser.element('.iconChooser.open .iconSearch input');}},
+
+
+        /**
+         * Returns all Icon List from the Icon Chooser
+         * @returns Array of Icons
+         */
+        getAllIconsFromIconChooser: {get: function() {
+            return browser.elements('.allIcons .qbIcon');
+        }},
+
+        /**
+         * Method to select random Icon from the Icon Chooser
+         *
+         */
+        selectRandomIconFromIconChooser: {value: function() {
+            //Wait untill you see closed Icon chooser
+            this.tableFieldIconChooser.waitForVisible();
+            //Click on Icon chooser select dropdown to open
+            this.iconChooserSelect.click();
+            //Wait until you see open icon chooser
+            this.iconChooserSearch.waitForVisible();
+            //get all icons to a list
+            var icons = this.getAllIconsFromIconChooser;
+            //Get random Icon from the list of Icons
+            var randomIcon = _.sample(icons.value);
+            //Select the Icon
+            randomIcon.click();
+            //Verify that the item got selected.
+            return expect(randomIcon.getAttribute('className')).toBe(browser.element('.showAllToggle .qbIcon').getAttribute('className'));
+        }},
+
+        /**
+         * Method to search for an Icon from the Icon Chooser
+         *@param searchIcon item name
+         */
+        searchIconFromChooser: {value: function(searchIconName) {
+            //Wait untill you see closed Icon chooser
+            this.tableFieldIconChooser.waitForVisible();
+            //Click on Icon chooser select dropdown to open
+            this.iconChooserSelect.click();
+            //Wait until you see open icon chooser
+            this.iconChooserSearch.waitForVisible();
+            //Click in search
+            this.iconChooserSearch.click();
+            //Enter search value
+            return this.iconChooserSearch.setValue(searchIconName);
+        }},
 
         /**
          * Returns all table links from left Nav apps page
@@ -178,7 +229,7 @@
             //Verify table title
             expect(this.tableTitle.getAttribute('textContent')).toBe('Name your table');
             //Verify Icon choose is enabled
-            //expect(browser.isEnabled('.iconChooser .dropdown')).toBeTruthy();
+            expect(browser.isEnabled('.iconChooser.closed')).toBeTruthy();
             //Verify cancel button is enabled
             expect(browser.isEnabled('.modal-footer .cancelButton')).toBeTruthy();
             //Verify next button is disabled
@@ -266,7 +317,9 @@
 
             if (results !== []) {
                 //Hover over to an element and verify the field error
-                expect(results[0].moveToObject('.tableFieldInput').element('.invalidInput').getAttribute('textContent')).toBe(errorMsg);
+                results[0].moveToObject('.tableFieldInput');
+                browser.waitForExist('.invalidInput'); // Account for short timeout in showing tooltip
+                expect(results[0].element('.invalidInput').getAttribute('textContent')).toBe(errorMsg);
                 return results[0].click();
             }
         }},
