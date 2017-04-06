@@ -2,7 +2,7 @@ import React from 'react';
 import {shallow} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
 
-import FieldTokenInMenu from '../../../src/components/formBuilder/fieldToken/fieldTokenInMenu';
+import {FieldTokenInMenu} from '../../../src/components/formBuilder/fieldToken/fieldTokenInMenu';
 import FieldToken from '../../../src/components/formBuilder/fieldToken/fieldToken';
 
 let component;
