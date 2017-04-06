@@ -19,6 +19,13 @@ var ComponentLibraryWrapper = React.createClass({
                             <li><Link to="/qbase/components/uiIconFont" activeClassName="active">UI Icon Font</Link></li>
                             <li><Link to="/qbase/components/tableIconFont" activeClassName="active">Table Icon Font</Link></li>
                         </ul>
+                        <h4 className="header">Reuse Library</h4>
+                        <ul>
+                            <li><Link to="/qbase/components/icon" activeClassName="active">Icon</Link></li>
+                            <li><Link to="/qbase/components/pageTitle" activeClassName="active">PageTitle</Link></li>
+                            <li><Link to="/qbase/components/sideMenuBase" activeClassName="active">SideMenuBase</Link></li>
+                            <li><Link to="/qbase/components/sideTrowserBase" activeClassName="active">SideTrowserBase</Link></li>
+                        </ul>
                         <h4 className="header">Field Components</h4>
                         <ul>
                             <li><Link to="/qbase/components/checkBoxFieldValueEditor" activeClassName="active">CheckBoxFieldValueEditor</Link></li>
@@ -50,15 +57,11 @@ var ComponentLibraryWrapper = React.createClass({
                         <h4 className="header">Generic Components</h4>
                         <ul>
                             <li><Link to="/qbase/components/alertBanner" activeClassName="active">AlertBanner</Link></li>
-                            <li><Link to="/qbase/components/pageTitle" activeClassName="active">PageTitle</Link></li>
                             <li><Link to="/qbase/components/qbpanel" activeClassName="active">QBPanel</Link></li>
-                            <li><Link to="/qbase/components/icon" activeClassName="active">Icon</Link></li>
                             <li><Link to="/qbase/components/trowser" activeClassName="active">Trowser</Link></li>
                             <li><Link to="/qbase/components/qBModal" activeClassName="active">QBModal</Link></li>
                             <li><Link to="/qbase/components/invisibleBackdrop" activeClassName="active">InvisibleBackdrop</Link></li>
                             <li><Link to="/qbase/components/qbGrid" activeClassName="active">QbGrid</Link></li>
-                            <li><Link to="/qbase/components/sideMenuBase" activeClassName="active">SideMenuBase</Link></li>
-                            <li><Link to="/qbase/components/sideTrowserBase" activeClassName="active">SideTrowserBase</Link></li>
                         </ul>
                     </nav>
                 </div>
