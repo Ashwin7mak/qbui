@@ -151,7 +151,7 @@
             // verify second field is not visible
             expect(browser.isVisibleWithinViewport(secondField)).toBe(false);
             // start dragging
-            browser.moveToObject(firstField);
+            browser.moveToObject(firstField, 0, 0);
             browser.buttonDown();
             // drag off the scrollable area & wait for second field to become visible (or timeout)
             formBuilderPO.centerActionsOnFooter.moveToObject(); // blue footer bar
