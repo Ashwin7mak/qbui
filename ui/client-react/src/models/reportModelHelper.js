@@ -355,7 +355,7 @@ function addRecordToReport(currentReport, content) {
         }
 
         reportData.records = newRecords;
-        currentReport.recordsCount++;
+        reportData.recordsCount++;
 
         record = newRecords[newRecordsIndex];
         filtRecord = newFilteredRecords[filteredIndex];

@@ -34,15 +34,11 @@ describe('ReportHeader', () => {
                 id: 1, name: 'test', type: "TEXT",
                 values: [{value: "a"}, {value: "b"}, {value: "c"}]
             }],
-            selections: selections
+            selections: selections,
+            appId: '1',
+            tblId: '2',
+            rptId: '3'
         }
-    };
-
-    const props = {
-        appId: '1',
-        tblId: '2',
-        rptId: '3',
-        nameForRecords: "Records",
     };
 
     const HeaderMock = React.createClass({
@@ -65,7 +61,7 @@ describe('ReportHeader', () => {
 
         component = mount(
             <Provider store={store}>
-                <ReportHeader report={[reportData]} {...props} />
+                <ReportHeader report={[reportData]}/>
             </Provider>);
         expect(component).toBePresent();
     });
@@ -86,8 +82,7 @@ describe('ReportHeader', () => {
                     className="report-header"
                     searchInput={searchInput}
                     clearSearchInput={clearSearchInput}
-                    report={[reportData]}
-                    {...props} />
+                    report={[reportData]}/>
             );
         });
 

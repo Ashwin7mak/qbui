@@ -534,6 +534,7 @@ module.exports = function(grunt) {
                     // disabling formPermissionsViewerRole test as after moving to ExperienceEngine,
                     // permissions for viewer are not working correctly
                     './wdio/tests/forms/formPermissionsViewerRole.e2e.spec.js',
+
                     // failing intermittently in CI
                     //'./wdio/tests/reports/grouping/reportGroupingViaColumnHeader.e2e.spec.js',
                     //'./wdio/tests/reports/grouping/reportGroupingViaContainer.e2e.spec.js',

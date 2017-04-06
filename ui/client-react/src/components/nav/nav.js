@@ -77,8 +77,10 @@ export const Nav = React.createClass({
         const {appId, tblId} = this.props.params;
         let formType;
 
-        if (_.has(this.props, 'forms') && this.props.forms.length > 0) {
-            formType = this.props.forms[0].id;
+        // currently users can navigate to builder only from "view" context, will need to update
+        // when we allow navigating to builder from "edit" context
+        if (_.has(this.props, 'forms.view')) {
+            formType = 'view';
         }
 
         let link = `${UrlConsts.BUILDER_ROUTE}/app/${appId}/table/${tblId}/form`;
@@ -318,14 +320,6 @@ export const Nav = React.createClass({
         }
 
         let viewingRecordId = null;
-        let fields = [];
-        if (this.props.params) {
-            viewingRecordId = this.props.params.recordId;
-            //   get the fields from the redux store
-            let fieldsContainer = _.find(this.props.fields, field => field.appId === this.props.params.appId && field.tblId === this.props.params.tblId);
-            fields = fieldsContainer ? fieldsContainer.fields : [];
-        }
-
         let reportsData = this.getReportsData();
         let reportsList = this.getReportsList();
         let pendEdits = this.getPendEdits();
@@ -405,7 +399,6 @@ export const Nav = React.createClass({
                             appOwner: this.state.apps.appOwner,
                             locale: this.state.nav.locale,
                             isRowPopUpMenuOpen: this.props.shell.isRowPopUpMenuOpen,
-                            fields: fields,
                             selectedApp: this.getSelectedApp(),
                             selectedTable: this.getSelectedTable(reportsData.tblId),
                             scrollingReport: this.state.nav.scrollingReport,
@@ -465,7 +458,6 @@ export const Nav = React.createClass({
 
 const mapStateToProps = (state) => {
     return {
-        fields: state.fields,
         forms: state.forms,
         shell: state.shell,
         record: state.record,
