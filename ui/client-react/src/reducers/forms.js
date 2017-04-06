@@ -24,7 +24,7 @@ const forms = (
         return {
             ...state,
             redirectRoute: action.redirectRoute
-        }
+        };
     }
 
     case types.LOADING_FORM: {
@@ -96,7 +96,7 @@ const forms = (
             saving: false,
             errorStatus: null
         });
-        console.log(JSON.stringify(newState));
+
         return newState;
     }
 

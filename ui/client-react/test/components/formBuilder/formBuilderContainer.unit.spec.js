@@ -102,7 +102,6 @@ describe('FormBuilderContainer', () => {
         });
     });
 
-
     describe('showing FormBuilder', () => {
         const testFormData = {fields: [], formMeta: {name: 'some form', includeBuiltIns: false}};
         let testCases = [
