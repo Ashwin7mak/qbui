@@ -4,7 +4,11 @@
  * expects java server, experience engine and node server running
  * expects NODE_ENV to be defined e.g. NODE_ENV=local
  *
- * run from qbui directory with `node ui/wdio/dataGen/dataGenCustomize.js`
+ * run from the qbui directory with `node ui/wdio/dataGen/dataGenCustomize.js`
+ * or you can create a NEW IntelliJ Node configuration and point it at this script
+ *
+ * Do NOT run this script via WebdriverIO. It is framework agnostic. It only makes use of the service modules found
+ * in qbui/ui/wdio/common to avoid code duplication.
  */
 
 // jshint sub: true
