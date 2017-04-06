@@ -756,7 +756,7 @@ describe('ReportContent grouping functions exception handling', () => {
 
     afterEach(() => {
         ReportContentRewireAPI.__ResetDependency__('Locales');
-        ReportContentRewireAPI.__ResetDependency__('ReportGridMock');
+        ReportContentRewireAPI.__ResetDependency__('ReportGrid');
         localizeNumberSpy.calls.reset();
         localizeDateSpy.calls.reset();
         localeGetMessageSpy.calls.reset();

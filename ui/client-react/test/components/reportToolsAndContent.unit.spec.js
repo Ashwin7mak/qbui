@@ -6,6 +6,7 @@ import constants from '../../../common/src/constants';
 import {shallow, mount} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
 import {CONTEXT} from '../../src/actions/context';
+import {DEFAULT_RECORD_KEY} from '../../src/constants/schema';
 import Promise from 'bluebird';
 
 class WindowLocationUtilsMock {
@@ -37,29 +38,25 @@ describe('ReportToolsAndContent functions', () => {
     let reportDataParams = {reportData: {appId: 1, tblId: 2, rptId: rptId, loading: true, pageOffset: 20, selections: new FacetSelections(), data: {recordsCount: 5, sortList: "1", columns: [{field: "col_num", headerName: "col_num"}], facets: [{
         id: 1, name: 'test', type: "TEXT", values: [{value: "a"}, {value: "b"}, {value: "c"}]}]}}, selectedRows: ["rowSelected"]};
 
-    const primaryKeyName = 'Employee Number';
-    const reportFields = [{
+    const primaryKeyName = DEFAULT_RECORD_KEY;
+    const fields = [{
         appId: 1,
         tblId: 2,
-        fields: {
-            fields: {
-                data: [
-                    {
-                        id: 3,
-                        keyField: true,
-                        name: primaryKeyName,
-                    },
-                    {
-                        id: 1,
-                        name: 'First Name'
-                    },
-                    {
-                        id: 2,
-                        name: 'Last Name'
-                    }
-                ]
+        keyField: {id:3, keyField:true},
+        fields: [
+            {
+                id: 3,
+                name: primaryKeyName
+            },
+            {
+                id: 1,
+                name: 'First Name'
+            },
+            {
+                id: 2,
+                name: 'Last Name'
             }
-        }
+        ]
     }];
 
     const ReportContentMock = React.createClass({
@@ -117,7 +114,7 @@ describe('ReportToolsAndContent functions', () => {
 
     it('passes the primaryKeyName to child components', () => {
         const result = shallow(
-                <ReportToolsAndContent rptId={rptId} fields={reportFields} flux={flux} params={reportParams} {...reportDataParams}/>
+                <ReportToolsAndContent rptId={rptId} fields={fields} flux={flux} params={reportParams} {...reportDataParams}/>
             );
 
         const reportContent = result.find(ReportContentMock);

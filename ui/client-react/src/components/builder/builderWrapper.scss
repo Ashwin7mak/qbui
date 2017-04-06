@@ -1,5 +1,7 @@
 @import '../../../src/assets/css/qbVariables';
 
+$builder-wrapper-border-color: $color-black-300;
+
 .builderWrapperContent {
     height: 100%;
     width: 100%;
@@ -7,15 +9,8 @@
     .builderWrapperBody {
         height: calc(100% - #{$top-nav-height} - 1px);
         width: 100%;
-    }
 
-    .topNav {
-        border: $stroke-width-thin solid  $formBuilder-border-color;
-        flex-direction: column;
-        min-width: 200px;
-        background-color: $topnav-header-background-color;
-        text-align: right;
-        height: $top-nav-height;
+        border-top: 1px solid $builder-wrapper-border-color;
     }
 
     .saveOrCancelFooter {
