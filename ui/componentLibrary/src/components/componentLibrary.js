@@ -23,6 +23,7 @@ var ComponentLibraryWrapper = React.createClass({
                         <ul>
                             <li><Link to="/qbase/components/icon" activeClassName="active">Icon</Link></li>
                             <li><Link to="/qbase/components/iconChooser" activeClassName="active">IconChooser</Link></li>
+                            <li><Link to="/qbase/components/iconInputBox" activeClassName="active">IconInputBox</Link></li>
                             <li><Link to="/qbase/components/pageTitle" activeClassName="active">PageTitle</Link></li>
                             <li><Link to="/qbase/components/sideMenuBase" activeClassName="active">SideMenuBase</Link></li>
                             <li><Link to="/qbase/components/sideTrowserBase" activeClassName="active">SideTrowserBase</Link></li>

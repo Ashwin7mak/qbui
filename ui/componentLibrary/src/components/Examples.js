@@ -36,6 +36,7 @@ import QbGridExample from 'raw!../examples/QbGridExample.js';
 import SideMenuBaseExample from 'raw!../examples/SideMenuBaseExample.js';
 import SideTrowserBaseExample from 'raw!../examples/SideTrowserBaseExample.js';
 import IconChooserExample from 'raw!../examples/IconChooserExample.js';
+import IconInputBoxExample from 'raw!../examples/IconInputBoxExample.js';
 // END OF IMPORT STATEMENTS
 // The comment above is used for a grunt task. Please do not delete.
 
@@ -76,6 +77,7 @@ export default {
     SideMenuBase: SideMenuBaseExample,
     SideTrowserBase: SideTrowserBaseExample,
     IconChooser: IconChooserExample,
+    IconInputBox: IconInputBoxExample,
     // END OF EXPORT
     // The comment above is used for a grunt task. Please do not delete.
 };
