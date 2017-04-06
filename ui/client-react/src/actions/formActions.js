@@ -181,7 +181,7 @@ export const loadForm = (appId, tblId, rptId, formType, recordId) => {
     };
 };
 
-export const addNewFieldToForm = (formId, newLocation, newField) => {``
+export const addNewFieldToForm = (formId, newLocation, newField) => {
     let newId = _.uniqueId('newField_');
     let displayText = 'New Text Field';
     newField = _.merge({}, newField, {

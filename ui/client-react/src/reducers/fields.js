@@ -48,14 +48,14 @@ const fieldsStore = (state = [], action) => {
         return newState;
     }
 
-        case types.ADD_FIELD: {
-            let {newField} = action.content;
-            let lastIndex = newState[0].fields.length;
+    case types.ADD_FIELD: {
+        let {newField} = action.content;
+        let lastIndex = newState[0].fields.length;
 
-            newState[0].fields[lastIndex] = newField;
+        newState[0].fields[lastIndex] = newField;
 
-            return newState;
-        }
+        return newState;
+    }
 
     case types.LOAD_FIELDS_SUCCESS: {
         newState.push({
