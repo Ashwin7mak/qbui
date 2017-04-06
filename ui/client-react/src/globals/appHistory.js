@@ -3,6 +3,7 @@ import createHistory from 'history/lib/createBrowserHistory';
 import {useBeforeUnload} from 'history';
 import {UNSAVED_RECORD_ID} from '../constants/schema';
 import {ShowAppModal, HideAppModal} from '../components/qbModal/appQbModalFunctions';
+import {CONTEXT} from '../actions/context';
 import _ from 'lodash';
 
 // Uses singleton pattern
@@ -123,8 +124,7 @@ class AppHistory {
             const state = self.store.getState();
             //  fetch the 1st form in the store
             //  TODO: revisit to ensure appropriate support for store with multiple forms
-            const viewConst = 'view'; //TODO: use const
-            return _.get(state, `forms[${viewConst}].formData.fields`, []);
+            return _.get(state, `forms[${CONTEXT.FORM.VIEW}].formData.fields`, []);
         }
         return fields;
     }

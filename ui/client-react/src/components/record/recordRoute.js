@@ -26,6 +26,7 @@ import {loadForm, editNewRecord} from '../../actions/formActions';
 import {openRecord} from '../../actions/recordActions';
 import {clearSearchInput} from '../../actions/searchActions';
 import {APP_ROUTE, BUILDER_ROUTE, EDIT_RECORD_KEY} from '../../constants/urlConstants';
+import {CONTEXT} from '../../actions/context';
 
 
 import './record.scss';
@@ -278,8 +279,7 @@ export const RecordRoute = React.createClass({
      * @returns {boolean|*|HTMLCollection}
      */
     getViewFormFromProps(props = this.props) {
-        const viewConst = "view"; //TODO: declare const somewhere
-        return props.forms && props.forms[viewConst];
+        return _.get(props, `forms[${CONTEXT.FORM.VIEW}]`);
     },
 
     getRecordFromProps(props = this.props) {
