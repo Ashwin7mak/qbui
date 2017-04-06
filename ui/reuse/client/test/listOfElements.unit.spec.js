@@ -1,7 +1,7 @@
 import React from 'react';
 import {mount} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
-
+import {FieldTokenInMenu} from '../../../client-react/src/components/formBuilder/fieldToken/fieldTokenInMenu';
 import ListOfElements, {__RewireAPI__ as ListOfElementsRewireAPI} from '../src/components/sideNavs/listOfElements';
 
 const testElements = [
@@ -38,11 +38,13 @@ describe('ListOfElements', () => {
 
         ListOfElementsRewireAPI.__Rewire__('Locale', mockLocale);
         ListOfElementsRewireAPI.__Rewire__('FlipMove', mockFlipMove);
+        ListOfElementsRewireAPI.__Rewire__('FieldTokenInMenu', FieldTokenInMenu);
     });
 
     afterEach(() => {
         ListOfElementsRewireAPI.__ResetDependency__('Locale');
         ListOfElementsRewireAPI.__ResetDependency__('FlipMove');
+        ListOfElementsRewireAPI.__ResetDependency__('FieldTokenInMenu');
     });
 
     it('displays groups of fields', () => {
