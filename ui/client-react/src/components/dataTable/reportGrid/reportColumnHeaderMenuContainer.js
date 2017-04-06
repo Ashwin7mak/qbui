@@ -6,7 +6,7 @@ import serverTypeConsts from '../../../../../common/src/constants';
 import * as query from '../../../constants/query';
 import {GROUP_TYPE} from '../../../../../common/src/groupTypes';
 
-import {loadDynamicReport, addColumnToTable, toggleFieldSelectorMenu} from '../../../actions/reportActions';
+import {loadDynamicReport, toggleFieldSelectorMenu} from '../../../actions/reportActions';
 import {CONTEXT} from '../../../actions/context';
 
 /**
@@ -88,20 +88,10 @@ const ReportColumnHeaderMenuContainer = (ReportColumnHeaderMenu) => {
         },
 
         /**
-         * Adds a new column to the table before or after the clicked on column.
+         * Opens the field select menu for this report.
          * @param clickedColumnId the id of the column of the table which the menu dropdown was selected from
-         * @param requestedColumnId the id of the column to show in the table
          * @param addBefore should the requested column go before or after the clicked column
          */
-        addColumnToTable(clickedColumnId, requestedColumnId, addBefore) {
-            let params = {
-                clickedId: clickedColumnId,
-                requestedId: requestedColumnId,
-                addBefore: addBefore
-            };
-            this.props.dispatch(addColumnToTable(CONTEXT.REPORT.NAV, this.props.appId, this.props.tblId, this.props.rptId, params));
-        },
-
         openFieldSelector(clickedColumnId, addBefore) {
             let params = {
                 clickedId: clickedColumnId,
@@ -115,7 +105,6 @@ const ReportColumnHeaderMenuContainer = (ReportColumnHeaderMenu) => {
             return (<ReportColumnHeaderMenu
                 sortReport={this.sortReport}
                 groupReport={this.groupReport}
-                addColumn={this.addColumnToTable}
                 openFieldSelector={this.openFieldSelector}
                 {...this.props}
             />);

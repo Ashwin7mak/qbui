@@ -22,7 +22,6 @@ export const ReportColumnHeaderMenu = React.createClass({
         sortFids: PropTypes.array,
         sortReport: PropTypes.func,
         groupReport: PropTypes.func,
-        addColumn : PropTypes.func,
     },
 
     /**
@@ -161,16 +160,6 @@ export const ReportColumnHeaderMenu = React.createClass({
         this.groupReport(false);
     },
 
-    addColumnBefore() {
-        let requestedColumn = this.props.fieldDef.id;
-        this.props.addColumn(this.props.fieldDef.id, requestedColumn, true);
-    },
-
-    addColumnAfter() {
-        let requestedColumn = this.props.fieldDef.id;
-        this.props.addColumn(this.props.fieldDef.id, requestedColumn, false);
-    },
-
     openFieldSelectorAddBefore() {
         this.props.openFieldSelector(this.props.fieldDef.id, true);
     },
@@ -213,7 +202,7 @@ export const ReportColumnHeaderMenu = React.createClass({
                         <I18nMessage message="report.menu.addColumnBefore"/>
                     </MenuItem>
 
-                    <MenuItem onSelect={this.addColumnAfter}>
+                    <MenuItem onSelect={this.openFieldSelectorAddBefore}>
                         <I18nMessage message="report.menu.addColumnAfter"/>
                     </MenuItem>
 
