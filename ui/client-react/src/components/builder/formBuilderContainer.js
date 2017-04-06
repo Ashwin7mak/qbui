@@ -17,6 +17,8 @@ import AppHistory from '../../globals/appHistory';
 import Logger from '../../utils/logger';
 import AutoScroll from '../autoScroll/autoScroll';
 import PageTitle from '../pageTitle/pageTitle';
+import {getFormByContext} from '../../reducers/forms';
+import {CONTEXT} from '../../actions/context';
 import {ENTER_KEY, SPACE_KEY} from '../../../../reuse/client/src/components/keyboardShortcuts/keyCodeConstants';
 import KeyboardShortcuts from '../../../../reuse/client/src/components/keyboardShortcuts/keyboardShortcuts';
 import _ from 'lodash';
@@ -27,7 +29,7 @@ import './formBuilderContainer.scss';
 let logger = new Logger();
 
 const mapStateToProps = state => {
-    let currentForm = _.get(state, 'forms.view');
+    let currentForm = getFormByContext(state, CONTEXT.FORM.VIEW);
 
     return {
         currentForm,

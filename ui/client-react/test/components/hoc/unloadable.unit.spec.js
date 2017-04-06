@@ -1,7 +1,6 @@
 import React from 'react';
 import {mount, shallow} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
-import promise from 'bluebird';
 
 import unloadable from '../../../src/components/hoc/unloadable';
 

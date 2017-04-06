@@ -264,3 +264,6 @@ const forms = (
 };
 
 export default forms;
+
+// Utility function which returns a component's state given it's context. The context is the 'key' in the state map.
+export const getFormByContext = (state, context) => _.get(state, `forms.${context}`);
