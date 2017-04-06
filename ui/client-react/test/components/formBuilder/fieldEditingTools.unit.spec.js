@@ -8,7 +8,8 @@ import DragHandle from '../../../src/components/formBuilder/dragHandle/dragHandl
 const mockParentProps = {
     removeFieldFromForm(_location) {},
     openFieldPreferences(_location) {},
-    selectFieldOnForm(_formId, _location) {}
+    selectFieldOnForm(_formId, _location) {},
+    deselectField(_formId, _location) {}
 };
 
 const formBuilderChildrenTabIndex = ["0"];
@@ -72,8 +73,9 @@ describe('FieldEditingTools', () => {
         component = shallow(<FieldEditingTools
             formBuilderChildrenTabIndex={formBuilderChildrenTabIndex}
             location={location}
-            selectedFields={[location]}
+            selectedFields={[]}
             selectFieldOnForm={mockParentProps.selectFieldOnForm}
+            deselectField={mockParentProps.deselectField}
         />);
 
         let onClickField = component.find('.fieldEditingTools');
