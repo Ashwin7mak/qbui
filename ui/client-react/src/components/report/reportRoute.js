@@ -156,12 +156,6 @@ const ReportRoute = React.createClass({
             logger.info("the necessary params were not specified to reportRoute render params=" + simpleStringify(this.props.params));
             return null;
         } else {
-            let fields = [];
-            if (_.has(this.props, 'qbui.fields')) {
-                let tableFieldsObj = FieldsReducer.tableFieldsObj(this.props.qbui.fields, this.props.params.appId, this.props.params.tblId);
-                fields = _.has(tableFieldsObj, 'getTableReportFields') ? tableFieldsObj.getTableReportFields() : [];
-            }
-
             return (<div className="reportContainer">
                 <Stage stageHeadline={this.getStageHeadline()}
                        pageActions={this.getPageActions(5)}>
@@ -179,7 +173,6 @@ const ReportRoute = React.createClass({
                     isRowPopUpMenuOpen={this.props.isRowPopUpMenuOpen}
                     routeParams={this.props.routeParams}
                     selectedAppId={this.props.selectedAppId}
-                    fields={this.props.fields}
                     searchStringForFiltering={this.props.reportData.searchStringForFiltering}
                     pageActions={this.getPageActions(0)}
                     nameForRecords={this.nameForRecords}

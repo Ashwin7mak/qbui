@@ -56,8 +56,7 @@ describe('ReportToolsAndContent functions', () => {
                 id: 2,
                 name: 'Last Name'
             }
-        ],
-        getTableReportFields() {return [];}
+        ]
     }];
 
     const ReportContentMock = React.createClass({
