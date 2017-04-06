@@ -24,11 +24,11 @@
             if (req.headers.accept === consts.APPLICATION_JSON) {
                 res.json(result, result.status);
             } else {
-                res.render(viewFilePath, {favicons: favicons}, function(err) {
+                res.render(viewFilePath, {favicons: favicons, legacyBase: requestHelper.getLegacyHost()}, function(err) {
                     if (err) {
                         return res.json(result, result.status);
                     }
-                    res.render(viewFilePath, {favicons: favicons});
+                    res.render(viewFilePath, {favicons: favicons, legacyBase: requestHelper.getLegacyHost()});
                 });
             }
             log.info({req: req, res: res}, message);
