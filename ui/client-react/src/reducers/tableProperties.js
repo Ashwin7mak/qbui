@@ -2,16 +2,16 @@ import * as types from '../actions/types';
 
 const defaultTableInfo = {
     name: {
-        value: "",
+        value: ""
     },
     description: {
-        value: "",
+        value: ""
     },
     tableIcon: {
-        value: "Spreadsheet",
+        value: "Spreadsheet"
     },
     tableNoun: {
-        value: "",
+        value: ""
     }
 };
 
@@ -39,13 +39,14 @@ const tableProperties = (
 
         const fieldInfo = tableInfo[action.property];
 
-        tableInfo[action.property] = {
-            origValue: tableInfo[action.property].origValue,
-            value: action.value,
-            validationError: action.validationError,
-            edited: fieldInfo.edited || action.isUserEdit
-        };
-
+        if (fieldInfo) {
+            tableInfo[action.property] = {
+                origValue: tableInfo[action.property].origValue,
+                value: action.value,
+                validationError: action.validationError,
+                edited: fieldInfo.edited || action.isUserEdit
+            };
+        }
         return {
             ...state,
             isDirty: state.edited || action.isUserEdit,
@@ -79,19 +80,19 @@ const tableProperties = (
             editing: action.editing
         };
     }
-    case types.UPDATING_TABLE: {
+    case types.SAVING_TABLE: {
         return {
             ...state,
             savingTable: true
         };
     }
-    case types.UPDATING_TABLE_FAILED: {
+    case types.SAVING_TABLE_FAILED: {
         return {
             ...state,
             savingTable: false
         };
     }
-    case types.UPDATED_TABLE: {
+    case types.TABLE_SAVED: {
         let tableInfo = action.tableInfo;
         let newTableInfo = {};
         Object.keys(tableInfo).forEach(function(key, index) {

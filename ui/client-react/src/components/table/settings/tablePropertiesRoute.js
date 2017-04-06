@@ -43,11 +43,11 @@ export const TablePropertiesRoute = React.createClass({
     updateTable() {
         this.updateTableProperties(this.props.app.id, this.props.table.id, this.props.tableProperties.tableInfo);
     },
-    updateTableProperties(appId, tableId, tableIno) {
-        this.props.updateTable(appId, tableId, tableIno).then(
+    updateTableProperties(appId, tableId, tableInfo) {
+        this.props.updateTable(appId, tableId, tableInfo).then(
             (response) => {
                 NotificationManager.success(Locale.getMessage('tableEdit.tableUpdated'), Locale.getMessage('success'));
-                let updatedTableInfo = this.props.tableProperties.tableInfo;
+                let updatedTableInfo = tableInfo;
                 let tableInfoObj = {};
                 Object.keys(updatedTableInfo).forEach(function(key, index) {
                     tableInfoObj[key] = updatedTableInfo[key].value;

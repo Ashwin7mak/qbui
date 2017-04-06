@@ -98,20 +98,20 @@ describe('Test table properties reducers', () => {
 
 
         it('return updating saving', () => {
-            const state = reducer(initialState, {type: types.UPDATING_TABLE});
+            const state = reducer(initialState, {type: types.SAVING_TABLE});
             expect(state.savingTable).toBe(true);
         });
 
         it('return updated table', () => {
             let tableInfo = {};
-            let state = reducer(initialState, {type: types.UPDATING_TABLE});
-            state = reducer(state, {type: types.UPDATED_TABLE, tableInfo});
+            let state = reducer(initialState, {type: types.SAVING_TABLE});
+            state = reducer(state, {type: types.TABLE_SAVED, tableInfo});
             expect(state.savingTable).toBe(false);
         });
 
         it('return updating table failed', () => {
-            let state = reducer(initialState, {type: types.UPDATING_TABLE});
-            state = reducer(state, {type: types.UPDATING_TABLE_FAILED});
+            let state = reducer(initialState, {type: types.SAVING_TABLE});
+            state = reducer(state, {type: types.SAVING_TABLE_FAILED});
             expect(state.savingTable).toBe(false);
         });
 

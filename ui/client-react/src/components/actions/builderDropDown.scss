@@ -1,8 +1,8 @@
 @import '../../../../reuse/client/src/assets/css/qbVariables';
 
-$settings-menu-header-height: 40px;
-$settings-menu-padding-top: 10px;
-$settings-menu-padding-left: 15px;
+$settings-menu-header-height: $spacing-medium2;
+$settings-menu-padding-top: $spacing-xxx-small;
+$settings-menu-padding-left: $spacing-xx-small;
 
 .topNav {
     .globalActions {

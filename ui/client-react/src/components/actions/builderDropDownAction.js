@@ -1,8 +1,9 @@
 import React from 'react';
 import {MenuItem, Dropdown} from 'react-bootstrap';
 import Icon, {AVAILABLE_ICON_FONTS} from '../../../../reuse/client/src/components/icon/icon.js';
-import {I18nMessage} from '../../utils/i18nMessage';
+import {I18nMessage} from '../../../../reuse/client/src/utils/i18nMessage';
 import * as UrlConsts from "../../constants/urlConstants";
+import URLUtils from '../../utils/urlUtils';
 import './builderDropDown.scss';
 
 const actionPropType = React.PropTypes.shape({
@@ -25,7 +26,7 @@ let BuilderDropDownAction = React.createClass({
     },
 
     getTableSettingsLink() {
-        let link = `${UrlConsts.SETTINGS_ROUTE}/app/${this.props.selectedApp.id}/table/${this.props.selectedTable.id}/properties`;
+        let link = URLUtils.getTableSettingsLink(this.props.selectedApp.id, this.props.selectedTable.id);
         this.props.router.push(link);
     },
 

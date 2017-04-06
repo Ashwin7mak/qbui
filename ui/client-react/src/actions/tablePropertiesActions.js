@@ -54,22 +54,22 @@ export const setTableProperty = (property, value, validationError, isUserEdit) =
 /**
  * save in progress
  */
-export const updatingTable = () => ({
-    type: types.UPDATING_TABLE
+export const savingTable = () => ({
+    type: types.SAVING_TABLE
 });
 
 /**
  * save failed
  */
-export const updatingTableFailed = () => ({
-    type: types.UPDATING_TABLE_FAILED
+export const savingTableFailed = () => ({
+    type: types.SAVING_TABLE_FAILED
 });
 
 /**
- * table was succesfully updated
+ * table was succesfully saved
  */
-export const updatedTable = (tableInfo) => ({
-    type: types.UPDATED_TABLE,
+export const tableSaved = (tableInfo) => ({
+    type: types.TABLE_SAVED,
     tableInfo
 });
 
@@ -94,7 +94,7 @@ export const updateTable = (appId, tableId, tableInfo) => {
 
         return new Promise((resolve, reject) => {
 
-            dispatch(updatingTable());
+            dispatch(savingTable());
 
             const tableService = new TableService();
             //convert the tableInfo object that looks like {name: {value: <tableName>, editing: false}, description: {value: <>, editing: true} ...} into {name: <>, description: <>, ...}
@@ -106,10 +106,10 @@ export const updateTable = (appId, tableId, tableInfo) => {
             const promise = tableService.updateTable(appId, tableId, newTableInfo);
 
             promise.then(response => {
-                dispatch(updatedTable(tableInfo));
+                dispatch(tableSaved(tableInfo));
                 resolve(response);
             }).catch(error => {
-                dispatch(updatingTableFailed());
+                dispatch(savingTableFailed(error));
                 if (error.response) {
                     if (error.response.status === constants.HttpStatusCode.FORBIDDEN) {
                         logger.parseAndLogError(LogLevel.WARN, error.response, 'tableService.updateTable:');

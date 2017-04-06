@@ -34,16 +34,16 @@ describe('Table properties actions', () => {
 
 
     it('should create an action for updating the table', () => {
-        expect(actions.updatingTable()).toEqual({type: types.UPDATING_TABLE});
+        expect(actions.savingTable()).toEqual({type: types.SAVING_TABLE});
     });
 
     it('should create an action for failed update on a table', () => {
-        expect(actions.updatingTableFailed()).toEqual({type: types.UPDATING_TABLE_FAILED});
+        expect(actions.savingTableFailed()).toEqual({type: types.SAVING_TABLE_FAILED});
     });
 
-    it('should create an action for updated table', () => {
+    it('should create an action for saved table', () => {
         let tableInfo = {};
-        expect(actions.updatedTable(tableInfo)).toEqual({type: types.UPDATED_TABLE, tableInfo});
+        expect(actions.tableSaved(tableInfo)).toEqual({type: types.TABLE_SAVED, tableInfo});
     });
 
     it('should create an action for loaded table props', () => {
@@ -68,8 +68,8 @@ describe('Table properties actions', () => {
 
         const tableInfo = {name: 'Record', tableNoun: 'record', description: 'description'};
         const expectedActions = [
-            {type: types.UPDATING_TABLE},
-            {type: types.UPDATED_TABLE, tableInfo}
+            {type: types.SAVING_TABLE},
+            {type: types.TABLE_SAVED, tableInfo}
         ];
         const store = mockStore({});
 
