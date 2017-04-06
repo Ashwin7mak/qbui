@@ -1,5 +1,7 @@
 import {createFieldTypeProps, getTooltipForNewField, __RewireAPI__ as NewFieldTypesRewireAPI} from '../../../src/components/formBuilder/newFieldTypes';
 import fieldFormats from '../../../src/utils/fieldFormats';
+import {createScalarDefaultFieldsProperties} from '../../../src/utils/defaultFieldsProperties';
+
 
 const mockLocale = {
     getMessage(key) {return key;}
@@ -20,9 +22,10 @@ describe('NewFieldTypes', () => {
             expect(createFieldTypeProps(fieldFormats.TEXT_FORMAT)).toEqual({
                 key: `fieldType_${fieldFormats.TEXT_FORMAT}`,
                 type: fieldFormats.TEXT_FORMAT,
+                ...createScalarDefaultFieldsProperties()[fieldFormats.TEXT_FORMAT],
+                isNewField: true,
                 title: `fieldsDefaultLabels.${fieldFormats.TEXT_FORMAT}`,
-                tooltipText: `builder.formBuilder.tooltips.addNew${fieldFormats.TEXT_FORMAT}`,
-                isNewField: true
+                tooltipText: `builder.formBuilder.tooltips.addNew${fieldFormats.TEXT_FORMAT}`
             });
         });
     });
