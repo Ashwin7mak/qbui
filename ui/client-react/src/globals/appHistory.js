@@ -3,6 +3,7 @@ import createHistory from 'history/lib/createBrowserHistory';
 import {useBeforeUnload} from 'history';
 import {UNSAVED_RECORD_ID} from '../constants/schema';
 import {ShowAppModal, HideAppModal} from '../components/qbModal/appQbModalFunctions';
+import {CONTEXT} from '../actions/context';
 import _ from 'lodash';
 
 // Uses singleton pattern
@@ -121,16 +122,11 @@ class AppHistory {
         let fields = [];
         if (self.store) {
             const state = self.store.getState();
-            if (Array.isArray(state.forms) && state.forms.length > 0) {
-                //  fetch the 1st form in the store
-                //  TODO: revisit to ensure appropriate support for store with multiple forms
-                if (_.isEmpty(state.forms[0]) === false) {
-                    const formsStore = state.forms[0];
-                    if (_.has(formsStore, 'formData.fields')) {
-                        fields = formsStore.formData.fields;
-                    }
-                }
-            }
+            //  fetch the 1st form in the store
+            //  TODO: revisit to ensure appropriate support for store with multiple forms
+            const viewFields = _.get(state, `forms[${CONTEXT.FORM.VIEW}].formData.fields`);
+            const editFields = _.get(state, `forms[${CONTEXT.FORM.EDIT}].formData.fields`);
+            return viewFields || editFields || fields;
         }
         return fields;
     }

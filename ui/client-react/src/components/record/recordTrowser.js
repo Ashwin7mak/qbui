@@ -124,7 +124,7 @@ export const RecordTrowser = React.createClass({
             // or add a new record
             //let promise;
             //let updateRecord = false;
-            const formType = "edit";
+            const formType = CONTEXT.FORM.EDIT;
 
             //  open the 'modal working' spinner/window for the record's form
             this.props.saveForm(formType);
@@ -185,7 +185,7 @@ export const RecordTrowser = React.createClass({
 
 
             //let updateRecord = false;
-            const formType = "edit";
+            const formType = CONTEXT.FORM.EDIT;
 
             // open the 'modal working' spinner/window for the record's form
             this.props.saveForm(formType);
@@ -246,7 +246,7 @@ export const RecordTrowser = React.createClass({
                 //  open/close the 'modal working' spinner/window..
                 this.props.saveFormComplete(formType);
                 if (this.props.viewingRecordId === obj.recId) {
-                    this.props.syncForm("view");
+                    this.props.syncForm(CONTEXT.FORM.VIEW);
                 }
 
                 if (next) {
@@ -295,7 +295,7 @@ export const RecordTrowser = React.createClass({
             (obj) => {
                 this.props.saveFormComplete(formType);
                 if (this.props.viewingRecordId === obj.recId) {
-                    this.props.syncForm("view");
+                    this.props.syncForm(CONTEXT.FORM.VIEW);
                 }
 
                 if (next) {
