@@ -42,6 +42,7 @@ const DurationFieldValueEditor = require('../../../client-react/src/components/f
 const QbGrid = require('../../../client-react/src/components/dataTable/qbGrid/qbGrid.js').default;
 const SideMenuBase = require('../../../reuse/client/src/components/sideMenuBase/sideMenuBase.js').default;
 const SideTrowserBase = require('../../../reuse/client/src/components/sideTrowserBase/sideTrowserBase.js').default;
+const IconChooser = require('../../../reuse/client/src/components/iconChooser/iconChooser.js').default;
 // END OF IMPORT STATEMENTS
 // The comment above is used for a grunt task. Please do not delete.
 

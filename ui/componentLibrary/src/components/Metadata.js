@@ -37,6 +37,7 @@ import DurationFieldValueEditorMetadata from 'component-metadata!../../../client
 import QbGridMetadata from 'component-metadata!../../../client-react/src/components/dataTable/qbGrid/qbGrid.js';
 import SideMenuBaseMetadata from 'component-metadata!../../../reuse/client/src/components/sideMenuBase/sideMenuBase.js';
 import SideTrowserBaseMetadata from 'component-metadata!../../../reuse/client/src/components/sideTrowserBase/sideTrowserBase.js';
+import IconChooserMetadata from 'component-metadata!../../../reuse/client/src/components/iconChooser/iconChooser.js';
 // END OF IMPORT STATEMENTS
 // above comment used for grunt task, please do not delete
 
@@ -76,7 +77,8 @@ var Metadata = () => {
         DurationFieldValueEditorMetadata,
         QbGridMetadata,
         SideMenuBaseMetadata,
-        SideTrowserBaseMetadata
+        SideTrowserBaseMetadata,
+        IconChooserMetadata
         // END OF METADATA MERGE
         // above comment used for grunt task, please do not delete
     };
