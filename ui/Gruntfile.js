@@ -534,8 +534,6 @@ module.exports = function(grunt) {
                     // disabling formPermissionsViewerRole test as after moving to ExperienceEngine,
                     // permissions for viewer are not working correctly
                     './wdio/tests/forms/formPermissionsViewerRole.e2e.spec.js',
-                    // currently broken need to fix in another PR (test was never running in CI due to non camel case name)
-                    './wdio/tests/forms/FormDragDrop.e2e.spec.js',
                 ],
                 suites: {
                     reports: [
