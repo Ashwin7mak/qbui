@@ -25,85 +25,81 @@ describe('SortAndGroup functions', () => {
     let instance;
 
 
-    const fields = {
-        fields: {
-            data: [
-                {
-                    appId: '1',
-                    appearsByDefault: false,
-                    builtIn: true,
-                    dataIsCopyable: true,
-                    datatypeAttributes: {
-                        clientSideAttributes: {},
-                    },
-                    defaultValue: {},
-                    id: 3,
-                    includeInQuickSearch: true,
-                    multiChoiceSourceAllowed: false,
-                    name: "Example",
-                    required: true,
-                    tblId: "0",
-                    type: "SCALAR",
-                    userEditableValue: false
-                },
-                {
-                    appId: '1',
-                    appearsByDefault: false,
-                    builtIn: true,
-                    dataIsCopyable: true,
-                    datatypeAttributes: {
-                        clientSideAttributes: {},
-                    },
-                    defaultValue: {},
-                    id: 4,
-                    includeInQuickSearch: true,
-                    multiChoiceSourceAllowed: false,
-                    name: "Text",
-                    required: true,
-                    tblId: "1",
-                    type: "SCALAR",
-                    userEditableValue: false
-                },
-                {
-                    appId: '1',
-                    appearsByDefault: false,
-                    builtIn: true,
-                    dataIsCopyable: true,
-                    datatypeAttributes: {
-                        clientSideAttributes: {},
-                    },
-                    defaultValue: {},
-                    id: 5,
-                    includeInQuickSearch: true,
-                    multiChoiceSourceAllowed: false,
-                    name: "Task",
-                    required: true,
-                    tblId: "2",
-                    type: "SCALAR",
-                    userEditableValue: false
-                },
-                {
-                    appId: '1',
-                    appearsByDefault: false,
-                    builtIn: true,
-                    dataIsCopyable: true,
-                    datatypeAttributes: {
-                        clientSideAttributes: {},
-                    },
-                    defaultValue: {},
-                    id: 12,
-                    includeInQuickSearch: true,
-                    multiChoiceSourceAllowed: false,
-                    name: "project",
-                    required: true,
-                    tblId: "3",
-                    type: "SCALAR",
-                    userEditableValue: false
-                }
-
-            ]
+    const fields = [
+        {
+            appId: '1',
+            appearsByDefault: false,
+            builtIn: true,
+            dataIsCopyable: true,
+            datatypeAttributes: {
+                clientSideAttributes: {},
+            },
+            defaultValue: {},
+            id: 3,
+            includeInQuickSearch: true,
+            multiChoiceSourceAllowed: false,
+            name: "Example",
+            required: true,
+            tblId: "0",
+            type: "SCALAR",
+            userEditableValue: false
+        },
+        {
+            appId: '1',
+            appearsByDefault: false,
+            builtIn: true,
+            dataIsCopyable: true,
+            datatypeAttributes: {
+                clientSideAttributes: {},
+            },
+            defaultValue: {},
+            id: 4,
+            includeInQuickSearch: true,
+            multiChoiceSourceAllowed: false,
+            name: "Text",
+            required: true,
+            tblId: "1",
+            type: "SCALAR",
+            userEditableValue: false
+        },
+        {
+            appId: '1',
+            appearsByDefault: false,
+            builtIn: true,
+            dataIsCopyable: true,
+            datatypeAttributes: {
+                clientSideAttributes: {},
+            },
+            defaultValue: {},
+            id: 5,
+            includeInQuickSearch: true,
+            multiChoiceSourceAllowed: false,
+            name: "Task",
+            required: true,
+            tblId: "2",
+            type: "SCALAR",
+            userEditableValue: false
+        },
+        {
+            appId: '1',
+            appearsByDefault: false,
+            builtIn: true,
+            dataIsCopyable: true,
+            datatypeAttributes: {
+                clientSideAttributes: {},
+            },
+            defaultValue: {},
+            id: 12,
+            includeInQuickSearch: true,
+            multiChoiceSourceAllowed: false,
+            name: "project",
+            required: true,
+            tblId: "3",
+            type: "SCALAR",
+            userEditableValue: false
         }
-    };
+    ];
+
     const fieldsArray = [
         {
             appId: '1',
@@ -182,12 +178,6 @@ describe('SortAndGroup functions', () => {
             fields : fields
         }
     ];
-
-    const fieldsData = {
-        fields: {
-            data: fieldsArray
-        }
-    };
 
     const aField = {
         name: 'project',
@@ -367,7 +357,7 @@ describe('SortAndGroup functions', () => {
 
         it('test applyAndHide dirty with order', () => {
             spyOn(obj, 'loadDynamicReport');
-            component = shallow(<UnConnectedSortAndGroup {...props} fields={fieldsArray} />);
+            component = shallow(<UnConnectedSortAndGroup {...props} />);
             instance = component.instance();
             component.setProps({loadDynamicReport: obj.loadDynamicReport});
             instance.show();
