@@ -74,7 +74,9 @@
             });
 
             //Step 6 - Choose an Icon from Icon picker
-            tableCreatePO.selectRandomIconFromIconChooser();
+            var iconChoosedClassName = tableCreatePO.selectRandomIconFromIconChooser();
+            //Verify the choosed icon in closed combo
+            tableCreatePO.verifyIconInIconChooserCombo(iconChoosedClassName);
 
             //Step 5 - Verify iconChooser search functionality
             tableCreatePO.searchIconFromChooser('bicycle');
