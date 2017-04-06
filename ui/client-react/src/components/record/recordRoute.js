@@ -26,6 +26,7 @@ import {loadForm, editNewRecord} from '../../actions/formActions';
 import {openRecord} from '../../actions/recordActions';
 import {clearSearchInput} from '../../actions/searchActions';
 import {APP_ROUTE, BUILDER_ROUTE, EDIT_RECORD_KEY} from '../../constants/urlConstants';
+import {CONTEXT} from '../../actions/context';
 
 
 import './record.scss';
@@ -278,7 +279,7 @@ export const RecordRoute = React.createClass({
      * @returns {boolean|*|HTMLCollection}
      */
     getViewFormFromProps(props = this.props) {
-        return props.forms && _.find(props.forms, form => form.id === "view");
+        return _.get(props, `forms[${CONTEXT.FORM.VIEW}]`);
     },
 
     getRecordFromProps(props = this.props) {
@@ -318,9 +319,9 @@ export const RecordRoute = React.createClass({
         } else {
             const viewData = this.getViewFormFromProps();
 
-            const formLoadingeErrorStatus = viewData && viewData.errorStatus;
-            const formInternalError = !formLoadingeErrorStatus ? false : (formLoadingeErrorStatus === 500);
-            const formAccessRightError = !formLoadingeErrorStatus ? false : (formLoadingeErrorStatus === 403);
+            const formLoadingErrorStatus = viewData && viewData.errorStatus;
+            const formInternalError = !formLoadingErrorStatus ? false : (formLoadingErrorStatus === 500);
+            const formAccessRightError = !formLoadingErrorStatus ? false : (formLoadingErrorStatus === 403);
 
             let key = _.has(viewData, "formData.recordId") ? viewData.formData.recordId : null;
             return (
@@ -339,17 +340,17 @@ export const RecordRoute = React.createClass({
                     </div>
 
 
-                    {!formLoadingeErrorStatus ?
+                    {!formLoadingErrorStatus ?
                         <Loader key={key}
-                                loaded={(!this.props.forms || !viewData || !viewData.loading)}
+                                loaded={(!viewData || !viewData.loading)}
                                 options={SpinnerConfigurations.TROWSER_CONTENT}>
                         <Record key={key}
                                 selectedApp={this.props.selectedApp}
                                 appId={this.props.params.appId}
                                 tblId={this.props.params.tblId}
                                 recId={this.props.params.recordId}
-                                errorStatus={formLoadingeErrorStatus ? viewData.errorStatus : null}
-                                formData={this.props.forms && viewData ? viewData.formData : null}
+                                errorStatus={formLoadingErrorStatus ? viewData.errorStatus : null}
+                                formData={viewData ? viewData.formData : null}
                                 appUsers={this.props.appUsers} />
                         </Loader> : null }
                     {formInternalError && <pre><I18nMessage message="form.error.500"/></pre>}
