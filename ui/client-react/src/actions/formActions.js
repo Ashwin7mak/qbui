@@ -280,14 +280,15 @@ export const createForm = (appId, tblId, formType, form) => {
  * @param tblId
  * @param formType
  * @param form
+ * @param previousLocation
  */
-export const updateForm = (appId, tblId, formType, form) => {
-    return saveTheForm(appId, tblId, formType, form, false);
+export const updateForm = (appId, tblId, formType, form, previousLocation = null) => {
+    return saveTheForm(appId, tblId, formType, form, false, previousLocation);
 };
 
 // we're returning a promise to the caller (not a Redux action) since this is an async action
 // (this is permitted when we're using redux-thunk middleware which invokes the store dispatch)
-function saveTheForm(appId, tblId, formType, formMeta, isNew) {
+function saveTheForm(appId, tblId, formType, formMeta, isNew, previousLocation = null) {
 
     return (dispatch) => {
         return new Promise((resolve, reject) => {
@@ -311,7 +312,7 @@ function saveTheForm(appId, tblId, formType, formMeta, isNew) {
                         NotificationManager.success(Locale.getMessage('form.notification.save.success'), Locale.getMessage('success'));
 
                         // Leave form Builder
-                        NavigationUtils.goBackFromFormBuilder(appId, tblId);
+                        NavigationUtils.goBackFromFormBuilder(appId, tblId, previousLocation);
 
                         resolve();
                     },

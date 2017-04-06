@@ -126,12 +126,12 @@ describe('Nav Unit tests', () => {
     });
 
     it('test render of component', () => {
-        let component = shallow(<Nav {...props} flux={flux}></Nav>);
+        let component = shallow(<Nav {...props} flux={flux} />);
         expect(component).toBeDefined();
     });
 
     it('test renders large by default', () => {
-        let component = mount(<Nav {...props} flux={flux}></Nav>);
+        let component = mount(<Nav {...props} flux={flux} />);
         let leftNav = component.find('.leftMenu');
         expect(leftNav.length).toBe(1);
         let topNav = component.find('.topNav');
@@ -176,7 +176,7 @@ describe('Nav Unit tests', () => {
         NavRewireAPI.__Rewire__('Breakpoints', BreakpointsMock);
         smallBreakpoint = true;
 
-        let component = TestUtils.renderIntoDocument(<Nav {...props} flux={flux}></Nav>);
+        let component = TestUtils.renderIntoDocument(<Nav {...props} flux={flux} />);
         component.onSelectItem();
         expect(props.toggleLeftNav).toHaveBeenCalled();
 
@@ -184,20 +184,20 @@ describe('Nav Unit tests', () => {
     });
 
     it('test toggleNav method', () => {
-        let component = TestUtils.renderIntoDocument(<Nav {...props} flux={flux}></Nav>);
+        let component = TestUtils.renderIntoDocument(<Nav {...props} flux={flux} />);
         component.toggleNav();
         expect(props.toggleLeftNav).toHaveBeenCalled();
     });
 
     it('test onSelectTableReports method', () => {
-        let component = TestUtils.renderIntoDocument(<Nav {...props} flux={flux}></Nav>);
+        let component = TestUtils.renderIntoDocument(<Nav {...props} flux={flux} />);
         component.onSelectTableReports();
         expect(props.showTrowser).toHaveBeenCalled();
         expect(props.loadReports).toHaveBeenCalled();
     });
 
     it('test hideTrowser method', () => {
-        let component = TestUtils.renderIntoDocument(<Nav {...props} flux={flux}></Nav>);
+        let component = TestUtils.renderIntoDocument(<Nav {...props} flux={flux} />);
         component.hideTrowser();
         expect(props.hideTrowser).toHaveBeenCalled();
     });
@@ -209,7 +209,7 @@ describe('Nav Unit tests', () => {
         ];
         testCases.forEach(testCase => {
             props.shell.leftNavExpanded = testCase.expanded;
-            let component = TestUtils.renderIntoDocument(<Nav {...props} flux={flux}></Nav>);
+            let component = TestUtils.renderIntoDocument(<Nav {...props} flux={flux} />);
             component.toggleAppsList(testCase.expanded);
             if (testCase.expanded) {
                 expect(props.toggleAppsList(testCase.expanded));
@@ -225,7 +225,7 @@ describe('Nav Unit tests', () => {
         props.forms = [];
         props.router = [];
 
-        let component = TestUtils.renderIntoDocument(<Nav {...props} flux={flux}></Nav>);
+        let component = TestUtils.renderIntoDocument(<Nav {...props} flux={flux} />);
         component.navigateToBuilder();
 
         expect(props.router).toEqual(expectedRouter);
@@ -236,10 +236,33 @@ describe('Nav Unit tests', () => {
         props.forms = [{id: 'view'}];
         props.router = [];
 
-        let component = TestUtils.renderIntoDocument(<Nav {...props} flux={flux}></Nav>);
+        let component = TestUtils.renderIntoDocument(<Nav {...props} flux={flux} />);
         component.navigateToBuilder();
 
         expect(props.router).toEqual(expectedRouter);
     });
 
+    it('renders form builder with the previous location as a query parameter', () => {
+        const testLocation = {pathname: '/previousLocation'};
+        let expectedRouter = [`/qbase/builder/app/1/table/2/form?previous=${testLocation.pathname}`];
+        props.forms = [];
+        props.router = [];
+
+        let component = TestUtils.renderIntoDocument(<Nav {...props} flux={flux} location={testLocation} />);
+        component.navigateToBuilder();
+
+        expect(props.router).toEqual(expectedRouter);
+    });
+
+    it('renders form builder with the previous location and form type as a query parameters', () => {
+        const testLocation = {pathname: '/previousLocation'};
+        let expectedRouter = [`/qbase/builder/app/1/table/2/form?formType=view&previous=${testLocation.pathname}`];
+        props.forms = [{id: 'view'}];
+        props.router = [];
+
+        let component = TestUtils.renderIntoDocument(<Nav {...props} flux={flux} location={testLocation} />);
+        component.navigateToBuilder();
+
+        expect(props.router).toEqual(expectedRouter);
+    });
 });

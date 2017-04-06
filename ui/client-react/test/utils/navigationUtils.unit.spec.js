@@ -42,6 +42,14 @@ describe('NavigationUtils', () => {
         const testAppId = '5Teenagers';
         const testTableId = 'WithAttitude';
 
+        it('goes back to the previous route if provided', () => {
+            const testPreviousRoute = '/highSchools/AngelGrove';
+            NavigationUtils.goBackFromFormBuilder(testAppId, testTableId, testPreviousRoute);
+
+            expect(AppHistoryMock.history.push).toHaveBeenCalledWith(testPreviousRoute);
+            expect(AppHistoryMock.history.goBack).not.toHaveBeenCalled();
+        });
+
         it('goes back to the previous page if within the current domain', () => {
             spyOn(NavigationUtils, 'referrer').and.returnValue('localhost');
 

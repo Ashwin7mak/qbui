@@ -53,24 +53,38 @@ const mapDispatchToProps = {
     notifyTableCreated
 };
 
+/**
+ * A container component that holds the FormBuilder.
+ * FormBuilderContainer is rendered by ReactRouter and has access to location and params
+ * @type {*}
+ */
 export const FormBuilderContainer = React.createClass({
     propTypes: {
-        /**
-         * the app id
-         * */
-        appId: PropTypes.string,
-        /**
-         * the table id
-         * */
-        tblId: PropTypes.string,
-        /**
-         * the form id
-         * */
-        formId: PropTypes.string,
-        /**
-         * the form type
-         * */
-        formType: PropTypes.string,
+        params: PropTypes.shape({
+            /**
+             * the app id */
+            appId: PropTypes.string,
+
+            /**
+             * the table id */
+            tblId: PropTypes.string,
+
+            /**
+             * the form id */
+            formId: PropTypes.string,
+        }),
+
+        location: PropTypes.shape({
+            query: PropTypes.shape({
+                /**
+                 * the form type */
+                formType: PropTypes.string,
+
+                /**
+                 * The previous route that can be returned to when leaving builder */
+                previous: PropTypes.string
+            })
+        }),
 
         /**
          * Controls the open state of the left tool panel */
@@ -81,9 +95,20 @@ export const FormBuilderContainer = React.createClass({
         isCollapsed: PropTypes.bool
     },
 
+    getDefaultProps() {
+        // For easier unit tests without the Router, we can pass in default empty values
+        return {
+            location: {query: {}},
+            params: {}
+        };
+    },
+
     componentDidMount() {
+        const {appId, tblId} = this.props.params;
+        const formType = this.props.location.query.formType;
+
         // We use the NEW_FORM_RECORD_ID so that the form does not load any record data
-        this.props.loadForm(this.props.appId, this.props.tblId, null, (this.props.formType || 'view'), NEW_FORM_RECORD_ID);
+        this.props.loadForm(appId, tblId, null, (formType || 'view'), NEW_FORM_RECORD_ID);
 
         // if we've been sent here from the table creation flow, show a notification
 
@@ -96,7 +121,10 @@ export const FormBuilderContainer = React.createClass({
     },
 
     onCancel() {
-        NavigationUtils.goBackFromFormBuilder(this.props.appId, this.props.tblId);
+        const {appId, tblId} = this.props.params;
+        const previousLocation = _.has(this.props, 'location.query.previous') ? this.props.location.query.previous : null;
+
+        NavigationUtils.goBackFromFormBuilder(appId, tblId, previousLocation);
     },
 
     removeField() {
@@ -106,11 +134,13 @@ export const FormBuilderContainer = React.createClass({
     },
 
     saveClicked() {
+        const previousLocation = _.has(this.props, 'location.query.previous') ? this.props.location.query.previous : null;
+
         // get the form meta data from the store..hard code offset for now...this is going to change..
         if (this.props.currentForm && this.props.currentForm.formData) {
             let formMeta = this.props.currentForm.formData.formMeta;
             let formType = this.props.currentForm.formData.formType;
-            this.props.updateForm(formMeta.appId, formMeta.tableId, formType, formMeta);
+            this.props.updateForm(formMeta.appId, formMeta.tableId, formType, formMeta, previousLocation);
         }
     },
 
@@ -186,6 +216,7 @@ export const FormBuilderContainer = React.createClass({
             formId = this.props.currentForm.id;
             formData = this.props.currentForm.formData;
         }
+
         return (
             <div className="formBuilderContainer">
 

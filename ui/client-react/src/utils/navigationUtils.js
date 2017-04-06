@@ -17,6 +17,7 @@ class NavigationUtils {
         // referrer will be an empty string. In that case, because we don't know where the user
         // came from, we will send them back to a default location. Otherwise, we can send the user back
         // to the previous page they were on.
+        // WARNING: This is not perfect. If only navigating within the SPA, then referrer may also be a blank string.
         if (this.referrer() === '') {
             return AppHistory.history.push(defaultLocation);
         }
@@ -28,8 +29,13 @@ class NavigationUtils {
      * A helper function to redirect back when the user is leaving the Form Builder pages
      * @param appId
      * @param tableId
+     * @param previousLocation
      */
-    static goBackFromFormBuilder(appId, tableId) {
+    static goBackFromFormBuilder(appId, tableId, previousLocation = null) {
+        if (previousLocation) {
+            return AppHistory.history.push(previousLocation);
+        }
+
         this.goBackToPreviousLocation(StringUtils.format(TABLE_LINK, [appId, tableId]));
     }
 }

@@ -91,6 +91,11 @@ export const Nav = React.createClass({
             link = `${link}/${formId}`;
         }
 
+        // Add reference to current location for redirecting back when leaving builder
+        if (_.has(this.props, 'location.pathname')) {
+            link += (link.includes('?') ? `&previous=${this.props.location.pathname}` : `?previous=${this.props.location.pathname}`);
+        }
+
         this.props.router.push(link);
     },
 
