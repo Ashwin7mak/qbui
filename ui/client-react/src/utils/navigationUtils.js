@@ -36,6 +36,8 @@ class NavigationUtils {
             return AppHistory.history.push(previousLocation);
         }
 
+        // If not previous history, we go back to the default table report.
+        // We can't go back to a record in form view because we don't have a record ID consistently.
         this.goBackToPreviousLocation(StringUtils.format(TABLE_LINK, [appId, tableId]));
     }
 }
