@@ -108,7 +108,7 @@ export const FormBuilderContainer = React.createClass({
 
     componentDidMount() {
         const {appId, tblId} = this.props.params;
-        const formType = this.props.location.query.formType;
+        const formType = _.get(this.props, 'location.query.formType');
 
         // We use the NEW_FORM_RECORD_ID so that the form does not load any record data
         this.props.loadForm(appId, tblId, null, (formType || 'view'), NEW_FORM_RECORD_ID);
