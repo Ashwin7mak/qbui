@@ -47,7 +47,16 @@ const MoveFieldHelper = {
 
     addNewFieldToForm(formMeta, newLocation, newField) {
         let formMetaCopy = _.cloneDeep(formMeta);
-
+        if (!newLocation) {
+            newLocation = {
+                tabIndex: 0,
+                sectionIndex: 0,
+                columnIndex: 0,
+                elementIndex: formMetaCopy.tabs[0].sections[0].columns[0].elements.length
+            }
+        } else if (newLocation) {
+            newLocation.elementIndex = newLocation.elementIndex + 1;
+        }
         addElementToNewLocation(formMetaCopy, newLocation, newField);
         return formMetaCopy;
     },
@@ -169,6 +178,7 @@ function swapFieldLocation(formMetaData, currentLocation, newLocation) {
  * @param sameRow
  */
 function addElementToNewLocation(formMetaData, newLocation, draggedItemProps) {
+    console.log('newLocaiton: ', newLocation);
     let {tabIndex, sectionIndex, columnIndex, elementIndex} = newLocation;
     let columns = formMetaData.tabs[tabIndex].sections[sectionIndex].columns;
     let column = columns[columnIndex];

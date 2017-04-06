@@ -195,6 +195,7 @@ const buildNewFieldElement = (displayText = 'New Text Field') => {
 };
 
 export const addNewFieldToForm = (formId, newLocation, newField) => {
+    console.log('newField: ', newField);
     let newId = _.uniqueId('newField_');
     let displayText = 'New Text Field';
     newField = _.merge({}, newField, {
