@@ -8,10 +8,6 @@ import React, {PropTypes} from 'react';
  */
 const unloadableWrapper = (Component) => {
     class Unloadable extends React.Component {
-        constructor(...args) {
-            super(...args);
-        }
-
         componentDidMount() {
             if (!this.props.hasEntry) {
                 this.loadEntry();

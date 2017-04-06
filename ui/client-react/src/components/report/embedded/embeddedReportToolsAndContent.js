@@ -2,8 +2,7 @@ import React, {PropTypes} from 'react';
 import {connect} from 'react-redux';
 import _ from 'lodash';
 
-import ReportToolsAndContent from '../reportToolsAndContent';
-import unloadable from '../../hoc/unloadable';
+import {TrackableReportToolsAndContent} from '../reportToolsAndContent';
 import withUniqueId from '../../hoc/withUniqueId';
 import {loadDynamicReport, unloadEmbeddedReport} from '../../../actions/reportActions';
 import {CONTEXT} from '../../../actions/context';
@@ -17,12 +16,6 @@ import constants from '../../../../../common/src/constants';
 import '../report.scss';
 
 let logger = new Logger();
-
-// Wrap ReportToolsAndContent with unloadable HOC. The HOC will call loadDynamicReport to add data
-// to the redux store. The HOC also handles unloading data from the redux store when the component
-// unmounts.
-const ReportToolsAndContentWrapper = (props) => <ReportToolsAndContent {...props} />;
-const TrackableReportToolsAndContent = unloadable(ReportToolsAndContentWrapper);
 
 /**
  * A wrapper for ReportToolsAndContent to be rendered as an embedded report in a form.

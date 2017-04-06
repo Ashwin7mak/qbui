@@ -10,6 +10,7 @@ import Fluxxor from 'fluxxor';
 import simpleStringify from '../../../../common/src/simpleStringify';
 import _ from 'lodash';
 import FacetSelections from '../facet/facetSelections';
+import unloadable from '../hoc/unloadable';
 import './report.scss';
 import FilterUtils from '../../utils/filterUtils';
 import StringUtils from '../../utils/stringUtils';
@@ -42,7 +43,7 @@ let AddRecordButton = React.createClass({
  *
  * Note: this component has been partially migrated to Redux
  */
-export const ReportToolsAndContent = React.createClass({
+export const UnconnectedReportToolsAndContent = React.createClass({
     mixins: [FluxMixin],
     //facetFields : {},
     debounceInputMillis: 700, // a key send delay
@@ -421,7 +422,13 @@ const mapDispatchToProps = (dispatch) => {
     };
 };
 
-export default connect(
+const ReportToolsAndContent = connect(
     mapStateToProps,
     mapDispatchToProps
-)(ReportToolsAndContent);
+)(UnconnectedReportToolsAndContent);
+export default ReportToolsAndContent;
+
+// Wrap ReportToolsAndContent with unloadable HOC for use in embedded reports. The HOC will call
+// loadDynamicReport to add data to the redux store. The HOC also handles unloading data from the
+// redux store when the component unmounts.
+export const TrackableReportToolsAndContent = unloadable(ReportToolsAndContent);

@@ -49,11 +49,11 @@ describe('EmbeddedReportToolsAndContent', () => {
 
     beforeAll(() => {
         jasmineEnzyme();
-        EmbeddedReportToolsAndContentRewireAPI.__Rewire__('ReportToolsAndContent', ReportToolsAndContentMock);
+        EmbeddedReportToolsAndContentRewireAPI.__Rewire__('TrackableReportToolsAndContent', ReportToolsAndContentMock);
     });
 
     afterAll(() => {
-        EmbeddedReportToolsAndContentRewireAPI.__ResetDependency__('ReportToolsAndContent');
+        EmbeddedReportToolsAndContentRewireAPI.__ResetDependency__('TrackableReportToolsAndContent');
     });
 
     it('test render of component', () => {
@@ -72,9 +72,11 @@ describe('EmbeddedReportToolsAndContent', () => {
         component = mount(
             <UnconnectedEmbeddedReportToolsAndContent loadDynamicReport={loadDynamicReportSpy} {...props} />
         );
-        expect(loadDynamicReportSpy).toHaveBeenCalled();
+        // manually call loadReportFromProps, normally this would be invoked by the `unloadable` HOC
+        // which wraps ReportToolsAndContent
+        component.instance().loadReportFromProps();
         expect(loadDynamicReportSpy).toHaveBeenCalledWith(
-            jasmine.any(String),
+            uniqueId,
             appId,
             tblId,
             rptId,
@@ -97,13 +99,6 @@ describe('EmbeddedReportToolsAndContent', () => {
         );
 
         expect(component.find(ReportToolsAndContentMock).length).toEqual(1);
-    });
-
-    it('does not render embedded report when a record is not available', () => {
-        component = mount(
-            <UnconnectedEmbeddedReportToolsAndContent loadDynamicReport={() => null} {...props} />
-        );
-        expect(component.find(ReportToolsAndContentMock).length).toEqual(0);
     });
 
     it('receives the report data as a prop via mapStateToProps', () => {

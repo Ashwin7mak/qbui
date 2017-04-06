@@ -4,11 +4,17 @@ import _ from 'lodash';
 /**
  * A higher-order component which wraps a component, generates a uniqueId and passes to the wrapped
  * component.
+ *
+ * @param {Component}
+ * @param {String} context  the component's context, used as part of the key value for the redux
+ *                          store entry
+ * @param {String} uniqueId the component will use the passed in uniqueId if available (used
+ *                          mostly for testing)
  */
 const withUniqueIdWrapper = (Component, context, uniqueId) => {
     class WithUniqueId extends React.Component {
-        constructor(...args) {
-            super(...args);
+        constructor(props) {
+            super(props);
             this.uniqueId = uniqueId || _.uniqueId(context);
         }
 
@@ -16,13 +22,6 @@ const withUniqueIdWrapper = (Component, context, uniqueId) => {
             return <Component uniqueId={this.uniqueId} {...this.props} />;
         }
     }
-
-    WithUniqueId.propTypes = {
-        /* the component's context, used as part of the key value for the redux store entry */
-        context: PropTypes.string,
-        /* Optional: the component will use the passed in uniqueId if available (mostly for testing) */
-        uniqueId: PropTypes.string
-    };
 
     return WithUniqueId;
 };

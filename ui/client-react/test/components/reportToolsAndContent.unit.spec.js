@@ -1,5 +1,5 @@
 import React from 'react';
-import {ReportToolsAndContent,
+import {UnconnectedReportToolsAndContent as ReportToolsAndContent,
         __RewireAPI__ as ReportToolsAndContentRewireAPI}  from '../../src/components/report/reportToolsAndContent';
 import FacetSelections  from '../../src/components/facet/facetSelections';
 import constants from '../../../common/src/constants';
