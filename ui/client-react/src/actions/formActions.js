@@ -181,20 +181,7 @@ export const loadForm = (appId, tblId, rptId, formType, recordId) => {
     };
 };
 
-// Not exported, private function
-const buildNewFieldElement = (displayText = 'New Text Field') => {
-    let newId = _.uniqueId('newField_');
-    return _.merge({}, {
-        id: newId,
-        FormFieldElement: {
-            fieldId: newId,
-            displayText,
-            isNewField: true,
-        }
-    });
-};
-
-export const addNewFieldToForm = (formId, newLocation, newField) => {
+export const addNewFieldToForm = (formId, newLocation, newField) => {``
     let newId = _.uniqueId('newField_');
     let displayText = 'New Text Field';
     newField = _.merge({}, newField, {
