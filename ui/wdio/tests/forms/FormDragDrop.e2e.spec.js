@@ -42,7 +42,7 @@
             // invoke form builder
             return formBuilderPO.open();
         });
-
+/*
         it('move a field via drag/drop, save & verify persistence', function() {
             // store the list of fields before moving
             let origFields = formBuilderPO.getFieldLabels();
@@ -140,7 +140,7 @@
             // verify that the first item has been restored
             expect(formBuilderPO.getFieldLabels().indexOf(firstField)).toEqual(0);
         });
-
+*/
         it('drags a field outside of viewport & verifies autoscroll', function() {
             let firstField = formBuilderPO.findFieldByIndex(1);
             let secondField = formBuilderPO.findFieldByIndex(2);
@@ -151,7 +151,7 @@
             // verify second field is not visible
             expect(browser.isVisibleWithinViewport(secondField)).toBe(false);
             // start dragging
-            browser.moveToObject(firstField);
+            browser.moveToObject(firstField,0,0);
             browser.buttonDown();
             // drag off the scrollable area & wait for second field to become visible (or timeout)
             formBuilderPO.centerActionsOnFooter.moveToObject(); // blue footer bar
