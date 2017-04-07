@@ -16,8 +16,6 @@ import {loadDynamicReport, addColumnToTable, toggleFieldSelectorMenu} from '../.
 import {CONTEXT} from '../../actions/context';
 import WindowLocationUtils from '../../utils/windowLocationUtils';
 import {EDIT_RECORD_KEY, NEW_RECORD_VALUE} from '../../constants/urlConstants';
-import ReportFieldSelectTrowser from '../../components/report/reportFieldSelectTrowser';
-import SideMenuBase from '../../../../reuse/client/src/components/sideMenuBase/sideMenuBase';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
 import './tableHomePage.scss';
@@ -107,49 +105,6 @@ export const TableHomePageRoute = React.createClass({
             </div>);
     },
 
-    addColumnToTable(id) {
-        let params = {
-            clicked: this.props.reportData.fieldSelectMenu.clickedColumn,
-            requestedId: id,
-            addBefore: this.props.reportData.fieldSelectMenu.addBefore
-        };
-
-        let availableFields = this.props.reportData.data ? this.props.reportData.data.columns : [];
-        for (let c = 0; c < availableFields.length; c++) {
-            if (availableFields[c].id === id) {
-                availableFields[c].isHidden = false;
-            }
-        }
-
-        this.props.addColumnToTable(CONTEXT.REPORT.NAV, this.props.reportData.appId,
-            this.props.reportData.tblId, this.props.reportData.rptId, params);
-
-
-        /*this.props.toggleFieldSelectorMenu(CONTEXT.REPORT.NAV, this.props.reportData.appId,
-            this.props.reportData.tblId, this.props.reportData.rptId, {open: false});*/
-    },
-
-    getMenuContent() {
-        let availableFields = this.props.reportData.data ? this.props.reportData.data.columns : [];
-        let display = availableFields.map((column) => {
-            if (column.isHidden === true) {
-                return <li key={column.fieldDef.id} onClick={() => this.addColumnToTable(column.fieldDef.id)}>{column.fieldDef.name}</li>;
-            }
-        });
-        return (
-            <div className="sideMenuFieldContent">
-                <div className="header">
-                    <h1>Fields</h1>
-                </div>
-                <div className="fields">
-                    <ul>
-                        {display}
-                    </ul>
-                </div>
-            </div>
-        );
-    },
-
     render() {
         //  ensure there is a rptId property otherwise the report not found page is rendered in ReportToolsAndContent
         let homePageParams = _.assign(this.props.params, {rptId: null});
@@ -158,8 +113,6 @@ export const TableHomePageRoute = React.createClass({
             this.props.reportData.fieldSelectMenu = this.props.fieldSelectMenu;
         }
 
-        let menuContent = this.getMenuContent();
-
         return (<div className="reportContainer">
             <Stage stageHeadline={this.getStageHeadline()} pageActions={this.getPageActions(5)}>
                 <ReportStage reportData={this.props.reportData} />
@@ -167,24 +120,19 @@ export const TableHomePageRoute = React.createClass({
 
             {this.getHeader()}
 
-            <ReportFieldSelectTrowser
-                sideMenuContent={menuContent}
-                isCollapsed={this.props.reportData.fieldSelectMenu.availableFieldsMenuCollapsed}
-                pullRight>
-                <ReportToolsAndContent
-                    params={homePageParams}
-                    reportData={this.props.reportData}
-                    appUsers={this.props.appUsers}
-                    routeParams={this.props.routeParams}
-                    selectedAppId={this.props.selectedAppId}
-                    searchStringForFiltering={this.props.reportData.searchStringForFiltering}
-                    selectedRows={this.props.reportData.selectedRows}
-                    scrollingReport={this.props.scrollingReport}
-                    rptId={this.props.reportData ? this.props.reportData.rptId : null}
-                    nameForRecords={this.nameForRecords}
-                    pendEdits={this.props.pendEdits}
-                    loadDynamicReport={this.loadDynamicReport}/>
-            </ReportFieldSelectTrowser>
+            <ReportToolsAndContent
+                params={homePageParams}
+                reportData={this.props.reportData}
+                appUsers={this.props.appUsers}
+                routeParams={this.props.routeParams}
+                selectedAppId={this.props.selectedAppId}
+                searchStringForFiltering={this.props.reportData.searchStringForFiltering}
+                selectedRows={this.props.reportData.selectedRows}
+                scrollingReport={this.props.scrollingReport}
+                rptId={this.props.reportData ? this.props.reportData.rptId : null}
+                nameForRecords={this.nameForRecords}
+                pendEdits={this.props.pendEdits}
+                loadDynamicReport={this.loadDynamicReport}/>
         </div>);
     }
 });
@@ -215,12 +163,6 @@ const mapDispatchToProps = (dispatch) => {
         },
         loadDynamicReport: (appId, tblId, rptId, format, filter, queryParams) => {
             dispatch(loadDynamicReport(CONTEXT.REPORT.NAV, appId, tblId, rptId, format, filter, queryParams));
-        },
-        addColumnToTable: (context, appId, tblId, rptId, params) => {
-            dispatch(addColumnToTable(context, appId, tblId, rptId, params));
-        },
-        toggleFieldSelectorMenu: (context, appId, tblId, rptId, params) => {
-            dispatch(toggleFieldSelectorMenu(context, appId, tblId, rptId, params));
         }
     };
 };

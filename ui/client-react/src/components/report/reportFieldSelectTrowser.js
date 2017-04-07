@@ -6,7 +6,7 @@ import './reportFieldSelectTrowser.scss';
 class ReportFieldSelectTrowser extends Component {
     render() {
         return (
-            <SideMenuBase {...this.props} baseClass="reportFieldSelectTrowser" />
+            <SideMenuBase {...this.props} baseClass="reportFieldSelectTrowser"/>
         );
     }
 }

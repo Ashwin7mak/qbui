@@ -14,7 +14,8 @@ const shell = (
         trowserContent: null,
         openCount: 0,
         locale: Locale.getLocale(),
-        i18n: Locale.getI18nBundle()
+        i18n: Locale.getI18nBundle(),
+        fieldsListCollapsed: true
     },
     action) => {
 
@@ -77,6 +78,11 @@ const shell = (
             ...state,
             locale: Locale.getLocale(),
             i18n: Locale.getI18nBundle()
+        };
+        case types.OPEN_FIELD_SELECTOR:
+        return {
+            ...state,
+            fieldsListCollapsed: false
         };
     default:
         // return existing state by default in redux

@@ -41,19 +41,17 @@
   > .reportFieldSelectTrowserContent {
     position: absolute;
     top: 0;
+    bottom: 0;
 
     overflow: auto;
     background-color: $leftnav-background-color;
-    border-left: 1px solid $leftnav-background-stroke-color;
-    box-shadow: -3px 0 2px grey;
     z-index: $zindex-trowser;
-    height: 100%;
     padding-left: 5px;
 
     @include baseMenuWidths;
 
     &.reportFieldSelectTrowserCollapsed {
-      min-width: $leftNav-width-collapsed;
+      min-width: 0;
       // Min width alone doesn't work when translating over the top of the main content. Need max-width too.
       max-width: $leftNav-width-collapsed;
     }

@@ -344,7 +344,6 @@ export const loadReportRecordsCount = (context, appId, tblId, rptId, queryParams
 };
 
 export const addColumnToTable = (context, appId, tblId, rptId, params) => {
-    console.log("at column add");
     return (dispatch) => {
         if (appId && tblId && rptId) {
             logger.debug(`Adding requested column for appId: ${appId}, tblId: ${tblId}, rptId: ${rptId}`);

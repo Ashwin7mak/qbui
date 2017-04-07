@@ -5,6 +5,8 @@ import TopNav from "../header/topNav";
 import TempMainErrorMessages from './tempMainErrorMessages';
 import ReportManagerTrowser from "../report/reportManagerTrowser";
 import RecordTrowser from "../record/recordTrowser";
+import ReportFieldSelectTrowser from '../report/reportFieldSelectTrowser';
+import ListOfElements from '../../../../reuse/client/src/components/sideNavs/listOfElements';
 
 import GlobalActions from "../actions/globalActions";
 import BuilderDropDownAction from '../actions/builderDropDownAction';
@@ -27,6 +29,7 @@ import * as ShellActions from '../../actions/shellActions';
 import * as FormActions from '../../actions/formActions';
 import * as ReportActions from '../../actions/reportActions';
 import * as TableCreationActions from '../../actions/tableCreationActions';
+import {addColumnToTable, toggleFieldSelectorMenu} from '../../actions/reportActions';
 
 import {CONTEXT} from '../../actions/context';
 import ButtonGroup from 'react-bootstrap/lib/ButtonGroup';
@@ -297,6 +300,49 @@ export const Nav = React.createClass({
         );
     },
 
+    addColumnToTable(id) {
+        /*let params = {
+            clicked: this.props.reportData.fieldSelectMenu.clickedColumn,
+            requestedId: id,
+            addBefore: this.props.reportData.fieldSelectMenu.addBefore
+        };
+
+        let availableFields = this.props.reportData.data ? this.props.reportData.data.columns : [];
+        for (let c = 0; c < availableFields.length; c++) {
+            if (availableFields[c].id === id) {
+                availableFields[c].isHidden = false;
+            }
+        }
+
+        this.props.addColumnToTable(CONTEXT.REPORT.NAV, this.props.reportData.appId,
+            this.props.reportData.tblId, this.props.reportData.rptId, params);*/
+    },
+
+    getMenuContent(reportData) {
+        return (
+            <ListOfElements
+                elements={[
+                    {key: "1", title: "Test"},
+                    {key: "2", title: "Another test"}
+                ]}
+            />
+        );
+        /*let availableFields = this.props.reportData.data ? this.props.reportData.data.columns : [];
+        let display = availableFields.map((column) => {
+            if (column.isHidden === true) {
+                return {
+                    key: "" + column.fieldDef.id,
+                    title: column.fieldDef.name
+                };
+            }
+        });
+        return (
+            <ListOfElements
+                elements={display}
+            />
+        );*/
+    },
+
     render() {
         if (!this.state.apps || this.state.apps.apps === null) {
             // don't render anything until we've made this first api call without being redirected to V2
@@ -323,6 +369,7 @@ export const Nav = React.createClass({
         let reportsData = this.getReportsData();
         let reportsList = this.getReportsList();
         let pendEdits = this.getPendEdits();
+        let menuContent = this.getMenuContent(reportsData);
 
         return (<div className={classes}>
             <NavPageTitle
@@ -385,6 +432,11 @@ export const Nav = React.createClass({
                 />
                 {this.props.children &&
                     <div className="mainContent" >
+                        <ReportFieldSelectTrowser
+                            sideMenuContent={menuContent}
+                            isCollapsed={this.props.shell.fieldsListCollapsed}
+                            isDocked={false}
+                            pullRight>
                         <TempMainErrorMessages apps={this.state.apps.apps} appsLoading={this.state.apps.loading} selectedAppId={this.state.apps.selectedAppId} />
                         {/* insert the component passed in by the router */}
                         {React.cloneElement(this.props.children, {
@@ -403,8 +455,9 @@ export const Nav = React.createClass({
                             selectedTable: this.getSelectedTable(reportsData.tblId),
                             scrollingReport: this.state.nav.scrollingReport,
                             flux: flux}
-                        )}
+                        )}</ReportFieldSelectTrowser>
                     </div>}
+
             </div>
 
             {pendEdits &&
@@ -459,7 +512,10 @@ export const Nav = React.createClass({
 const mapStateToProps = (state) => {
     return {
         forms: state.forms,
-        shell: state.shell,
+        shell: {
+            fieldsListCollapsed: (state.shell.fieldsListCollapsed === undefined ? true : state.shell.fieldsListCollapsed),
+            ...state.shell
+        },
         record: state.record,
         report: state.report
     };
@@ -488,6 +544,12 @@ const mapDispatchToProps = (dispatch) => {
         },
         loadReports: (context, appId, tblId) => {
             dispatch(ReportActions.loadReports(context, appId, tblId));
+        },
+        addColumnToTable: (context, appId, tblId, rptId, params) => {
+            dispatch(addColumnToTable(context, appId, tblId, rptId, params));
+        },
+        toggleFieldSelectorMenu: (context, appId, tblId, rptId, params) => {
+            dispatch(toggleFieldSelectorMenu(context, appId, tblId, rptId, params));
         }
     };
 };
