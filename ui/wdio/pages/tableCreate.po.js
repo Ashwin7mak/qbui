@@ -28,13 +28,13 @@
         tableHelpBtn : {get: function() {return browser.element('.iconUISturdy-help');}},
 
         //table Next button
-        tableNextBtn: {get: function() {return browser.element('.buttons .nextButton');}},
+        tableNextBtn: {get: function() {return browser.element('button.nextButton');}},
         //table Cancel button
-        tableCancelBtn: {get: function() {return browser.element('.buttons .cancelButton');}},
+        tableCancelBtn: {get: function() {return browser.element('button.cancelButton');}},
         //table finished button
-        tableFinishedBtn: {get: function() {return browser.element('.buttons .finishedButton');}},
+        tableFinishedBtn: {get: function() {return browser.element('button.finishedButton');}},
         //table previous button
-        tablePreviousBtn: {get: function() {return browser.element('.buttons .previousButton');}},
+        tablePreviousBtn: {get: function() {return browser.element('button.previousButton');}},
 
         //Icon chooser
         tableFieldIconChooser: {get: function() {return browser.element('.iconChooser.closed');}},
@@ -44,9 +44,9 @@
         iconChooserSearch: {get: function() {return browser.element('.iconChooser.open .iconSearch input');}},
 
         //edit table apply btn
-        editTableApplyBtn : {get: function() {return browser.element('.tableInfoButtons.open .primaryButton');}},
+        editTableApplyBtn : {get: function() {return browser.element('button.primaryButton');}},
         //edit table resest btn
-        editTableResetBtn : {get: function() {return browser.element('.tableInfoButtons.open .secondaryButton');}},
+        editTableResetBtn : {get: function() {return browser.element('a.secondaryButton');}},
 
         // settings Icon under globalActions
         settingsBtn : {get: function() {return browser.element('.iconUISturdy-settings');}},
