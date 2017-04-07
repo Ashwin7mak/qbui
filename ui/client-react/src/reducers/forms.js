@@ -6,9 +6,9 @@ const forms = (
 
     state = {}, action) => {
 
-    const id = action.id;
+    const {id, formId} = action;
     // retrieve currentForm and assign the rest of the form to newState
-    let {[id]: currentForm, ...newState} = _.cloneDeep(state);
+    let {[id || formId]: currentForm, ...newState} = _.cloneDeep(state);
     let updatedForm = currentForm;
 
     // TODO: do this smarter, change to markCopiesAsDirty
@@ -142,6 +142,13 @@ const forms = (
 
         let {newField, newLocation} = action.content;
         updatedForm = _.cloneDeep(currentForm);
+        let newFieldCopy = _.cloneDeep(newField);
+        // Remove all keys that are not necessary for forms
+        Object.keys(newFieldCopy).forEach(key => {
+            if (key !== 'FormFieldElement') {
+                delete newFieldCopy[key];
+            }
+        });
 
         if (!newLocation) {
             newLocation = {
@@ -158,7 +165,8 @@ const forms = (
         updatedForm.formData.formMeta = MoveFieldHelper.addNewFieldToForm(
             updatedForm.formData.formMeta,
             newLocation,
-            newField);
+            newFieldCopy
+        );
 
         if (!updatedForm.selectedFields) {
             updatedForm.selectedFields = [];
@@ -185,6 +193,39 @@ const forms = (
 
         newState[id] = updatedForm;
         return newState;
+    }
+
+    case types.UPDATE_FIELD_ID : {
+        if (!currentForm) {
+            return state;
+        }
+
+        updatedForm = _.cloneDeep(currentForm);
+
+        let foundFieldElement;
+        updatedForm.formData.formMeta.tabs.some(tab => {
+            return tab.sections.some(section => {
+                return section.columns.some(column => {
+                    return column.elements.some(currentElement => {
+                        if (currentElement.FormFieldElement) {
+                            foundFieldElement = currentElement.FormFieldElement;
+                            return currentElement.FormFieldElement.fieldId === action.oldFieldId;
+                        }
+
+                        return false;
+                    });
+                });
+            });
+        });
+
+        if (foundFieldElement) {
+            foundFieldElement.fieldId = action.newFieldId;
+        }
+
+        return {
+            ...newState,
+            [id || formId]: updatedForm
+        };
     }
 
     case types.SELECT_FIELD : {

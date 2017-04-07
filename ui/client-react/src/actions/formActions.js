@@ -188,11 +188,12 @@ export const loadForm = (appId, tblId, rptId, formType, recordId) => {
 const buildNewField = (newField) => {
     let newId = _.uniqueId('newField_');
     let displayText = 'New Text Field';
+
     return _.merge({}, newField, {
         id: newId,
         edit: true,
         FormFieldElement: {
-            positionSameRow: true,
+            positionSameRow: false,
             fieldId: newId,
             displayText
         }
@@ -206,13 +207,19 @@ const buildNewField = (newField) => {
  * @param newField
  * @returns {{id, type, content}|*}
  */
-export const addNewFieldToForm = (formId, newLocation, newField) => {
+export const addNewFieldToForm = (formId, appId, tblId, newLocation, newField) => {
     newField = buildNewField(newField);
 
-    return event(formId, types.ADD_FIELD, {
-        newLocation,
-        newField
-    });
+    return {
+        type: types.ADD_FIELD,
+        id: formId,
+        appId,
+        tblId,
+        content: {
+            newLocation,
+            newField,
+        }
+    };
 };
 
 /**
@@ -324,13 +331,15 @@ export const updateForm = (appId, tblId, formType, form) => {
 // (this is permitted when we're using redux-thunk middleware which invokes the store dispatch)
 function saveTheForm(appId, tblId, formType, formMeta, isNew) {
 
-    return (dispatch) => {
+    return (dispatch, getState) => {
         return dispatch(saveAllNewFields(appId, tblId, formType))
             .then(() => dispatch(updateAllFieldsWithEdits(appId, tblId)))
             .then(() => {
                 return new Promise((resolve, reject) => {
                     if (appId && tblId) {
-                        let form = convertFormToObjectForServer(formMeta);
+                        // Get the newest version of the form from state
+                        let form = getState().forms[formType].formData.formMeta;
+                        form = convertFormToObjectForServer(form);
 
                         logger.debug(`Saving form -- appId:${appId}, tableId:${tblId}, isNew:${isNew}`);
 

@@ -5,6 +5,7 @@ import Tooltip from '../../../../../reuse/client/src/components/tooltip/tooltip'
 import {addNewFieldToForm} from "../../../actions/formActions";
 import {getFormByContext} from '../../../reducers/forms';
 import {CONTEXT} from '../../../actions/context';
+import _ from 'lodash';
 
 /**
  * A FieldToken that is extended to be displayed in a menu (i.e., Tool Palette) when building a form.
@@ -12,9 +13,8 @@ import {CONTEXT} from '../../../actions/context';
 export class FieldTokenInMenu extends Component {
 
     clickToAddToForm = () => {
-        let {selectedField, formId, relatedField} = this.props;
-
-        this.props.addNewFieldToForm(formId, selectedField, relatedField);
+        let {selectedField, formId, appId, tblId, relatedField} = this.props;
+        this.props.addNewFieldToForm(formId, appId, tblId, selectedField, relatedField);
     };
 
     render() {
@@ -52,8 +52,11 @@ FieldTokenInMenu.propTypes = {
 
 const mapStateToProps = state => {
     let currentForm = getFormByContext(state, CONTEXT.FORM.VIEW);
+
     return {
-        formId: (_.has(currentForm, 'id') ? currentForm.id : null),
+        formId: _.get(currentForm, 'id'),
+        appId: _.get(currentForm, 'formData.formMeta.appId'),
+        tblId: _.get(currentForm, 'formData.formMeta.tableId'),
         selectedField: (_.has(currentForm, 'selectedFields') ? currentForm.selectedFields[0] : null),
         state: state.forms
     };

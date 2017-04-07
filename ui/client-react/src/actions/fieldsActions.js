@@ -27,12 +27,14 @@ function event(appId, tblId, type, content) {
     };
 }
 
-export const updateFieldId = (oldFieldId, newFieldId, formId = null) => {
+export const updateFieldId = (oldFieldId, newFieldId, formId = null, appId, tblId) => {
     return {
         type: types.UPDATE_FIELD_ID,
         oldFieldId,
         newFieldId,
-        formId
+        formId,
+        appId,
+        tblId
     };
 };
 
@@ -52,13 +54,14 @@ export const saveNewField = (appId, tblId, field, formId = null) => {
                 let fieldsService = new FieldsService();
 
                 const oldFieldId = field.id;
-                delete field.id;
-                delete field.isPendingEdits;
+                const fieldCopy = _.cloneDeep(field);
+                delete fieldCopy.id;
+                delete fieldCopy.isPendingEdits;
 
-                fieldsService.createField(appId, tblId, field).then(
+                fieldsService.createField(appId, tblId, fieldCopy).then(
                     (response) => {
-                        dispatch(updateFieldId(oldFieldId, response.data.id, formId));
-                        resolve();
+                            dispatch(updateFieldId(oldFieldId, response.data.id, formId, appId, tblId));
+                            resolve();
                     },
                     (errorResponse) => {
                         //  axios upgraded to an error.response object in 0.13.x
@@ -67,7 +70,10 @@ export const saveNewField = (appId, tblId, field, formId = null) => {
                         dispatch(event(appId, tblId, types.LOAD_FIELDS_ERROR, {error:error}));
                         reject();
                     }
-                );
+                ).catch(error => {
+                    logger.error(error);
+                    return Promise.reject(error);
+                });
             } else {
                 logger.error('fieldsService.getFields: Missing required input parameters.');
                 let error = {
@@ -77,10 +83,6 @@ export const saveNewField = (appId, tblId, field, formId = null) => {
                 dispatch(event(appId, tblId, types.LOAD_FIELDS_ERROR, {error:error}));
                 reject();
             }
-        }).
-        catch(e => {
-            logger.error(e);
-            Promise.reject(e);
         });
     };
 };
@@ -120,9 +122,9 @@ export const updateFieldProperties = (appId, tblId, field) => {
 
 export const updateAllFieldsWithEdits = (appId, tableId) => {
     return (dispatch, getState) => {
-        let fields = getFields(getState().fields);
-        const fieldPromises = fields.filter(field => field.isPendingEdits).map(field => dispatch(updateFieldProperties(appId, tableId, field)));
+        let fields = getFields(getState(), appId, tableId);
 
+        const fieldPromises = fields.filter(field => field.isPendingEdits).map(field => dispatch(updateFieldProperties(appId, tableId, field)));
         if (fieldPromises.length === 0) {
             logger.info('No new fields to add when calling updateAllFieldsWithEdit against app: `{appId}`, tbl: `{tableId}`');
             return Promise.resolve();
@@ -138,7 +140,7 @@ export const updateAllFieldsWithEdits = (appId, tableId) => {
 
 export const saveAllNewFields = (appId, tableId, formId = null) => {
     return (dispatch, getState) => {
-        let fields = getFields(getState().fields);
+        let fields = getFields(getState(), appId, tableId);
         const fieldPromises = fields.filter(field => _.isString(field.id) && field.id.includes('newField')).map(field => dispatch(saveNewField(appId, tableId, field, formId)));
 
         if (fieldPromises.length === 0) {

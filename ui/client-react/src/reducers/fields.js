@@ -28,6 +28,11 @@ export const getField = (state, id, appId, tblId) => {
     }
 };
 
+export const getFields = (state, appId, tblId) => {
+    const fieldsList = _.find(state.fields, fieldList => fieldList.appId === appId && fieldList.tblId === tblId);
+    return fieldsList ? fieldsList.fields : [];
+};
+
 const fieldsStore = (state = [], action) => {
 
     //  new state list without the appId/tblId entry
@@ -60,12 +65,15 @@ const fieldsStore = (state = [], action) => {
     }
 
     case types.ADD_FIELD: {
-        let {newField} = action.content;
-        let lastIndex = newState[0].fields.length;
+        let {newField} = _.cloneDeep(action.content);
+        delete newField.FormFieldElement;
 
-        newState[0].fields[lastIndex] = newField;
+        let fieldList = _.find(state, fieldlist => fieldlist.appId === action.appId && fieldlist.tblId === action.tblId);
+        fieldList = _.cloneDeep(fieldList);
 
-        return newState;
+        fieldList.fields.push(newField);
+
+        return [...newState, fieldList];
     }
 
     case types.LOAD_FIELDS_SUCCESS: {
@@ -105,11 +113,24 @@ const fieldsStore = (state = [], action) => {
     case types.UPDATE_FIELD : {
         //newState above already pulled out the fieldList we want removed, so we just need to find our fieldList and update it!
         let fieldList = _.find(state, fieldlist => fieldlist.appId === action.appId && fieldlist.tblId === action.tblId);
+        fieldList = _.cloneDeep(fieldList);
+
         let fieldIndex = _.findIndex(fieldList.fields, field => field.id === action.field.id);
-        fieldList.fields[fieldIndex] = action.field;
+        fieldList.fields[fieldIndex] = {...action.field, isPendingEdits: true};
         newState.push(fieldList);
         return newState;
     }
+
+    case types.UPDATE_FIELD_ID : {
+        let fieldList = _.find(state, fieldlist => fieldlist.appId === action.appId && fieldlist.tblId === action.tblId);
+        fieldList = _.cloneDeep(fieldList);
+
+        let fieldIndex = _.findIndex(fieldList.fields, field => field.id === action.oldFieldId);
+        fieldList.fields[fieldIndex] = {...fieldList.fields[fieldIndex], id: action.newFieldId};
+        newState.push(fieldList);
+        return newState;
+    }
+
     default:
         return state;
     }
