@@ -15,7 +15,6 @@ import FieldUtils from '../utils/fieldUtils';
 import ReportUtils from '../utils/reportUtils';
 import Locale from '../locales/locales';
 import * as SchemaConstants from '../constants/schema';
-import {NEW_RECORD_VALUE} from '../constants/urlConstants';
 import _ from 'lodash';
 
 class ReportModelHelper {

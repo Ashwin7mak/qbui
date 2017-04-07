@@ -203,10 +203,7 @@ const report = (state = [], action) => {
                         newRecId: UNSAVED_RECORD_ID,
                         afterRecId: content.newRecId || content.recId
                     };
-                    //  gotta have an id to know where to insert the new record
-                    if (newRowContent.afterRecId !== undefined) {
-                        ReportModelHelper.addReportRecord(currentReport, newRowContent);
-                    }
+                    ReportModelHelper.addReportRecord(currentReport, newRowContent);
                 }
 
                 currentReport.loading = false;

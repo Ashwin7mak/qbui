@@ -174,6 +174,18 @@ const record = (state = [], action) => {
             model.set(currentRecd.pendEdits);
             model.setRecordSaveSuccess(action.content.appId, action.content.tblId, action.content.recId);
             model.setSaving(false);
+
+            // if we adding a new row via inline edit after saving a record, need to start edit record
+            if (action.content.addNewRow === true) {
+                currentRecd.pendEdits.recordEditOpen = true;
+                currentRecd.pendEdits.isInlineEditOpen = true;
+                currentRecd.pendEdits.recId = UNSAVED_RECORD_ID;
+                currentRecd.pendEdits.currentEditingRecordId = UNSAVED_RECORD_ID;
+                currentRecd.pendEdits.originalRecord = null;
+                currentRecd.pendEdits.recordChanges = {};
+                currentRecd.pendEdits.fieldToStartEditing = null;
+            }
+
             return newState(currentRecd);
         }
         return state;

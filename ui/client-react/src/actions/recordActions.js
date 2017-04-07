@@ -261,7 +261,7 @@ export const createRecord = (appId, tblId, params = {}) => {
 
             let changes = params.recordChanges;
             let record = formatRecordChanges(changes);
-            let recId = UrlConsts.NEW_RECORD_VALUE;
+            let recId = SchemaConstants.UNSAVED_RECORD_ID;
 
             if (appId && tblId && params.fields) {
                 dispatch(event(recId, types.SAVE_RECORD, {appId, tblId, recId, changes}));
@@ -291,6 +291,8 @@ export const createRecord = (appId, tblId, params = {}) => {
                                     newRecId: resJson.id,
                                     record:getResponse.data
                                 };
+
+                                //  to add a new row in the grid, the passed parameter must be true AND an afterRecId must be defined
                                 const addNewRow = params.addNewRow || false;
                                 dispatch(event(recId, types.SAVE_RECORD_SUCCESS, {appId, tblId, recId, report, addNewRow}));
 
