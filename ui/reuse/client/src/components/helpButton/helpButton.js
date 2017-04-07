@@ -5,7 +5,7 @@ import {I18nMessage} from '../../utils/i18nMessage';
 
 // IMPORTS FROM CLIENT REACT
 import Device from '../../../../../client-react/src/utils/device';
-import Locale from '../../locales/locales';
+import Locale from '../../locales/locale';
 // IMPORTS FROM CLIENT REACT
 
 /**

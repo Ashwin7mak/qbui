@@ -9,18 +9,18 @@ const defaultState = (configs = {}) => ({
   pageSize: 20,
 });
 
-const behaviours = {
+const paginationBehaviours = {
   [CHANGE_PAGE_NUMBER]: (state, { payload }) => {
-    const nextState = {
+    const nextOrPreviousState = {
       ...defaultState(payload.configs),
       ...state,
       ...payload,
     };
     return {
-    ...nextState,
+    ...nextOrPreviousState,
     page: payload.page,
   }
-  }),
+},
 };
 
-export const commonPaginationReducer = handleActions(behaviours);
+export const commonPaginationReducer = handleActions(paginationBehaviours);

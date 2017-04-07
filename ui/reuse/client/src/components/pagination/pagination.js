@@ -30,12 +30,46 @@ const propTypes = {
 };
 
 class Pagination extends Component {
+  constructor(props) {
+      super(props);
+
+      this.previousPageButton = this.previousPageButton.bind(this);
+      this.nextPageButton = this.nextPageButton.bind(this);
+  }
+
+  previousPageButton() {
+    const previousButtonClassName = "previousButton " + (hasPrevious ? "" : "disabled");
+    return (
+          <div className="prevPageButton">
+            <Tooltip tipId="fieldName" i18nMessageKey="report.previousToolTip" >
+              <button tabIndex="0" className="navigationButton navigationButtonPrevious" onClick={(e) => {e.preventDefault(); if (hasPrevious) { onPageChange(page - 1); } }} type="button" >
+                <Icon className={previousButtonClassName} icon="caret-filled-left" />
+              </button>
+            </Tooltip>
+          </div>
+           )
+  };
+
+   nextPageButton() {
+    const nextButtonClassName = "nextButton " + (hasNext ? "" : "disabled");
+    return(
+      <div className="nextPageButton">
+       <Tooltip tipId="fieldName" i18nMessageKey="report.nextToolTip">
+         <button tabIndex="0" className="navigationButton navigationButtonNext" onClick={(e)=> { e.preventDefault(); if (hasNext) { onPageChange(page + 1); } }} type="button" >
+            <Icon className={nextButtonClassName} icon="caret-filled-right" />
+         </button>
+      </Tooltip>
+     </div>
+  )
+};
+
+
+  //move previous and next page funciton here
   render() {
-    const {
+    let {
       page,
       pageSize,
       onPageChange,
-      autoHidePagination,
       pageCount,
     } = this.props;
     let hasPrevious = page > 0;
@@ -46,45 +80,22 @@ class Pagination extends Component {
       hasPrevious = false;
       hasNext = false;
     }
-
-    const previousPageButton = () => {
-      const previousButtonClassName = "previousButton " + (this.props.pageStart !== 1 ? "" : "disabled");
-      return (
-        <div className="prevPageButton">
-          <Tooltip tipId="fieldName" i18nMessageKey="report.previousToolTip" >
-            <button tabIndex="0" className="navigationButton navigationButtonPrevious" onClick={(e) => {e.preventDefault(); if (hasPrevious) { onPageChange(page - 1); } }} type="button" >
-         <Icon className={previousButtonClassName} icon="caret-filled-left" />
-            </button>
-          </Tooltip>
-        </div>
-        )
-    }
-
-    const nextPageButton = () => {
-      const nextButtonClassName = "nextButton " + (this.props.pageCount !== this.props.pageEnd ? "" : "disabled");
-      return(
-        <div className="nextPageButton">
-         <Tooltip tipId="fieldName" i18nMessageKey="report.nextToolTip">
-           <button tabIndex="0" className="navigationButton navigationButtonNext" onClick={(e)=> { e.preventDefault(); if (hasNext) { onPageChange(page + 1); } }} type="button" >
-              <Icon className={nextButtonClassName} icon="caret-filled-right" />
-           </button>
-        </Tooltip>
-       </div>
-    )
-  }
+    console.log('page: ', page);
+    console.log('pageCount: ', pageCount);
+    console.log('hasNext: ', hasNext);
 
     let navBar = "report.reportNavigationBar";
     if (pageCount > 1 || !autoHidePagination) {
       return (
           <div className="reportNavigation">
-            {prevPageButton()}
+            {this.prevPageButton(/*page*/)}
               <div className="pageNumbers">
                 <I18nMessage message={navBar}
                              pageStart={this.props.pageStart}
                              pageEnd={this.props.pageEnd}
                 />
               </div>
-              {nextPageButton()}
+              {this.nextPageButton()}
             </div>
             );
     }
