@@ -226,7 +226,7 @@
                 });
                 document.querySelector('button.finishedButton').dispatchEvent(event);
             });
-            browser.waitForVisible('form.editForm', e2eConsts.mediumWaitTimeMs, true);
+            browser.waitForVisible('form.editForm', e2eConsts.extraLongWaitTimeMs, true);
         }},
 
         /**
