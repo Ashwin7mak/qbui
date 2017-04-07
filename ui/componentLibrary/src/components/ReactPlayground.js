@@ -28,6 +28,8 @@ const UserFieldValueEditor = require('../../../client-react/src/components/field
 const UserFieldValueRenderer = require('../../../client-react/src/components/fields/userFieldValueRenderer').default;
 
 const Icon = require('../../../reuse/client/src/components/icon/icon').default;
+const AVAILABLE_ICON_FONTS = require('../../../reuse/client/src/components/icon/icon').AVAILABLE_ICON_FONTS;
+
 const QBPanel = require('../../../client-react/src/components/QBPanel/qbpanel').default;
 
 const Trowser = require('../../../client-react/src/components/trowser/trowser.js').default;
@@ -50,6 +52,7 @@ const Stage = require('../../../reuse/client/src/components/stage/stage.js').def
 const StageHeader = require('../../../reuse/client/src/components/stage/stageHeader').default;
 const StageHeaderCount = require('../../../reuse/client/src/components/stage/stageHeaderCounts').default;
 const Tooltip = require('../../../reuse/client/src/components/tooltip/tooltip.js').default;
+const StandardLeftNav = require('../../../reuse/client/src/components/sideNavs/standardLeftNav.js').default;
 // END OF IMPORT STATEMENTS
 // The comment above is used for a grunt task. Please do not delete.
 

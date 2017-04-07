@@ -42,6 +42,7 @@ import IconInputBoxMetadata from 'component-metadata!../../../reuse/client/src/c
 import TopNavMetadata from 'component-metadata!../../../reuse/client/src/components/topNav/topNav.js';
 import StageMetadata from 'component-metadata!../../../reuse/client/src/components/stage/stage.js';
 import TooltipMetadata from 'component-metadata!../../../reuse/client/src/components/tooltip/tooltip.js';
+import StandardLeftNavMetadata from 'component-metadata!../../../reuse/client/src/components/sideNavs/standardLeftNav.js';
 // END OF IMPORT STATEMENTS
 // above comment used for grunt task, please do not delete
 
@@ -86,7 +87,8 @@ var Metadata = () => {
         IconInputBoxMetadata,
         TopNavMetadata,
         StageMetadata,
-        TooltipMetadata
+        TooltipMetadata,
+        StandardLeftNavMetadata
         // END OF METADATA MERGE
         // above comment used for grunt task, please do not delete
     };
