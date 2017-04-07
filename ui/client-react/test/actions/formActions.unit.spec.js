@@ -354,9 +354,10 @@ describe('Form Actions', () => {
                 id: 'view',
                 type: types.ADD_FIELD,
                 content: {
-                    location: 1,
-                    newField: { id: 'newField_1', edit: true, FormFieldElement: { positionSameRow: true, fieldId: 'newField_1', displayText: 'New Text Field' }
-                }});
+                    newLocation: 1,
+                    newField: {id: 'newField_1', edit: true, FormFieldElement: {positionSameRow: true, fieldId: 'newField_1', displayText: 'New Text Field'}}
+                }
+            });
         });
     });
 
