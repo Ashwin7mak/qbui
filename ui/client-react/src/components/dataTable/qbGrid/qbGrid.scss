@@ -53,10 +53,10 @@ $edit-icon-font-size: 18px;
 
         position: relative;
         border-top: 1px solid $grid-column-header-border-color;
-        border-right: 1px solid $grid-line-color;
+        border-right: 1px solid $grid-column-header-grid-line-color;
         border-bottom: 1px solid $grid-column-header-border-color;
         padding: $grid-header-cell-padding;
-        color: $color-black-700;
+        color: $grid-column-header-text-color;
         -webkit-font-smoothing: antialiased;
         background-color: $grid-column-header-background-color;
         cursor: default;
