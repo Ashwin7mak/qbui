@@ -125,10 +125,6 @@ export const updateTable = (appId, tableId, tableInfo) => {
 
 export const loadTableProperties = (tableInfo) => {
     return (dispatch) => {
-        /* TODO Currently we dont pull props from EE so initialize these to something. To be fixed by MC-1541 */
-        tableInfo.tableNoun = "noun";
-        tableInfo.description = "";
-        tableInfo.tableIcon = "Spreadsheet";
         dispatch(loadedTable(tableInfo));
     };
 };

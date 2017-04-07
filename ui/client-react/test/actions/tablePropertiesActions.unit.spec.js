@@ -106,7 +106,7 @@ describe('Table properties actions', () => {
         // so we don't need to spy on the dispatcher etc.
 
         const expectedActions = [
-            {type: types.LOADED_TABLE_PROPS, tableInfo: {name: 'name', tableNoun: 'noun', description: '', tableIcon: 'Spreadsheet'}}
+            {type: types.LOADED_TABLE_PROPS, tableInfo: {name: 'name'}}
         ];
         const store = mockStore({});
 

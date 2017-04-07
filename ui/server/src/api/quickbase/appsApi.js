@@ -57,6 +57,44 @@
                 });
             },
 
+            getTableProperties: function(req, tableId) {
+                return new Promise((resolve, reject) =>{
+                    let opts = requestHelper.setOptions(req);
+                    opts.url = requestHelper.getRequestEeHost() + routeHelper.getTablePropertiesRoute(req.url, tableId);
+
+                    requestHelper.executeRequest(req, opts).then(
+                        (eeResponse) =>{
+                            resolve(JSON.parse(eeResponse.body));
+                        },
+                        (error) =>{
+                            log.error({req: req}, "appsApi.getTableProperties(): Error getting table properties");
+                            //always resolve - we do not want to block the get Apps call on this failure
+                            resolve();
+                        }).catch((ex) =>{
+                            requestHelper.logUnexpectedError('appsApi.getTableProperties(): unexpected error getting table properties', ex, true);
+                            reject(ex);
+                        });
+                });
+            },
+
+            /**
+             * Helper method to update the app's tables after table properties have been retrieved
+             * @param app
+             * @param tables
+             * @private
+             */
+            _mergeTableProps(app, tablePropsArray) {
+                //ideally there should be same number of responses as tables but just to be sure look up which response corresponds to which table
+                app.tables.map((table) => {
+                    let idx = _.findIndex(tablePropsArray, function(props) {return props.tableId === table.id;});
+                    if (idx !== -1) {
+                        Object.keys(tablePropsArray[idx]).forEach(function(key, index){
+                            table[key] = tablePropsArray[idx][key];
+                        });
+                    }
+                });
+            },
+
             getApp: function(req, appId) {
                 return new Promise((resolve, reject) => {
                     let opts = requestHelper.setOptions(req);
@@ -67,7 +105,25 @@
                     requestHelper.executeRequest(req, opts).then(
                         (response) => {
                             let app = JSON.parse(response.body);
-                            resolve(app);
+                            let tablePromises = [];
+                            if (Array.isArray(app.tables)) {
+                                app.tables.map((table) => {
+                                    let tablesRootUrl = routeHelper.getTablesRoute(routeHelper.getAppsRoute(req.url, appId), table.id);
+                                    let tableReq = _.clone(req);
+                                    tableReq.url = tablesRootUrl;
+                                    tablePromises.push(this.getTableProperties(tableReq, table.id));
+                                });
+                                Promise.all(tablePromises).then(
+                                    (responses) => {
+                                        this._mergeTableProps(app, responses);
+                                        resolve(app);
+                                    },
+                                    (error) => {
+                                        log.error({req: req}, "appsApi.getTableProperties(): Error retrieving table properties.");
+                                        resolve(app);
+                                    }
+                                );
+                            }
                         },
                         (error) => {
                             log.error({req: req}, "appsApi.getApp(): Error retrieving app.");
