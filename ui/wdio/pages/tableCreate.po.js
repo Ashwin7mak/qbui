@@ -28,13 +28,13 @@
         tableHelpBtn : {get: function() {return browser.element('.iconUISturdy-help');}},
 
         //table Next button
-        tableNextBtn: {get: function() {return browser.element('.modal-footer .nextButton');}},
+        tableNextBtn: {get: function() {return browser.element('.buttons .nextButton');}},
         //table Cancel button
-        tableCancelBtn: {get: function() {return browser.element('.modal-footer .cancelButton');}},
+        tableCancelBtn: {get: function() {return browser.element('.buttons .cancelButton');}},
         //table finished button
-        tableFinishedBtn: {get: function() {return browser.element('.modal-footer .finishedButton');}},
+        tableFinishedBtn: {get: function() {return browser.element('.buttons .finishedButton');}},
         //table previous button
-        tablePreviousBtn: {get: function() {return browser.element('.modal-footer .previousButton');}},
+        tablePreviousBtn: {get: function() {return browser.element('.buttons .previousButton');}},
 
         //Icon chooser
         tableFieldIconChooser: {get: function() {return browser.element('.iconChooser.closed');}},
@@ -265,6 +265,21 @@
         }},
 
         /**
+         * Method to enter table field input values
+         * @filteredElement
+         * @filteredElementInputClassName
+         * @fieldValue
+         */
+        setInputValue : {value: function(filteredElement, filteredElementInputClassName, fieldValue) {
+            filteredElement.element(filteredElementInputClassName).clearElement();
+            if (browserName === 'firefox') {
+                return filteredElement.setValue(filteredElementInputClassName, [fieldValue, '\uE004']);
+            } else {
+                return browser.keys([fieldValue, '\uE004']);
+            }
+        }},
+
+        /**
          * Method to enter table field values
          * @tableField
          * @fieldValue
@@ -280,33 +295,17 @@
                 if (tableField.includes('Table Name')) {
                     //verify title of the field
                     expect(results[0].element('.tableFieldTitle').getAttribute('textContent')).toBe(tableField);
-                    //Need this as we need to write something and remove it for testing negativity ie empty field for it to trigger the invalidInput
-                    results[0].element('.tableFieldInput input').clearElement();
-                    if (browserName === 'firefox') {
-                        results[0].setValue('.tableFieldInput input', [fieldValue, '\uE004']);
-                    } else {
-                        browser.keys([fieldValue, '\uE004']);
-                    }
+                    this.setInputValue(results[0], '.tableFieldInput input', fieldValue);
                     //Enter value of 'a record in the table is called a ' field
                 } else if (tableField.includes('A record in the table is called')) {
                     //verify title of the field
                     expect(results[0].element('.tableFieldTitle').getAttribute('textContent')).toBe(tableField);
-                    results[0].element('.tableFieldInput input').clearElement();
-                    if (browserName === 'firefox') {
-                        results[0].setValue('.tableFieldInput input', [fieldValue, '\uE004']);
-                    } else {
-                        browser.keys([fieldValue, '\uE004']);
-                    }
+                    this.setInputValue(results[0], '.tableFieldInput input', fieldValue);
                     //Enter value for Description field
                 } else if (tableField.includes('Description')) {
                     //verify title of the field
                     expect(results[0].element('.tableFieldTitle').getAttribute('textContent')).toBe(tableField);
-                    results[0].element('.tableFieldInput textarea').clearElement();
-                    if (browserName === 'firefox') {
-                        results[0].setValue('.tableFieldInput textarea', [fieldValue, '\uE004']);
-                    } else {
-                        browser.keys([fieldValue, '\uE004']);
-                    }
+                    this.setInputValue(results[0], '.tableFieldInput textarea', fieldValue);
                 }
             } else {
                 throw new Error('Cannot set value for input of field type ' + JSON.stringify(results[0]));
