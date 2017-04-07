@@ -78,7 +78,6 @@ export function createFieldTypeProps(fieldType) {
         key: `fieldType_${fieldType}`,
         type: fieldType,
         ...createScalarDefaultFieldsProperties()[fieldType],
-        isNewField: true,
         title,
         tooltipText: Locale.getMessage(`builder.formBuilder.tooltips.addNew${fieldType}`),
         isNewField: true

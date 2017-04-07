@@ -120,7 +120,7 @@ export class FieldEditingTools extends Component {
          * */
         let selectedFormElement = document.querySelector(".selectedFormElement");
         if (selectedFormElement) {
-            // document.querySelector(".selectedFormElement").scrollIntoView(false);
+            document.querySelector(".selectedFormElement").scrollIntoView(false);
         }
     }
 
