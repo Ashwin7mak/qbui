@@ -8,7 +8,7 @@
     var formsPO = requirePO('formsPage');
     var reportContentPO = requirePO('reportContent');
 
-    describe('Form Viewer Permission Tests: ', function() {
+    describe('Forms - Viewer User Permission Tests: ', function() {
 
         var realmName;
         var realmId;

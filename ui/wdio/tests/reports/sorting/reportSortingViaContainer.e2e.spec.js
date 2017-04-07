@@ -8,7 +8,7 @@
     let reportContentPO = requirePO('reportContent');
     let _ = require('lodash');
 
-    describe('Report Sorting Via Container Tests  -\n', function() {
+    describe('Reports - Sorting Via Container Tests: ', function() {
         let realmName;
         let realmId;
         let testApp;
