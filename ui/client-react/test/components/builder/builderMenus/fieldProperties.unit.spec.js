@@ -7,7 +7,7 @@ import jasmineEnzyme from 'jasmine-enzyme';
 import Locale from '../../../../../reuse/client/src/locales/locale';
 import {FieldProperties, __RewireAPI__ as FieldPropertiesRewireAPI} from '../../../../src/components/builder/builderMenus/fieldProperties';
 
-const fields = [{},{},{},{},{},{id: 1, required: true, name: "Duder"}];
+const fields = [{}, {}, {}, {}, {}, {id: 1, required: true, name: "Duder"}];
 const currentForm = {formData:{loading: false, formType: {}, fields: fields}, formBuilderChildrenTabIndex: ["0"], id: 'view'};
 const selectedField = {elementIndex: 1};
 

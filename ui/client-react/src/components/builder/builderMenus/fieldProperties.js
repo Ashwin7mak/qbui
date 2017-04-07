@@ -99,7 +99,7 @@ export const FieldProperties = React.createClass({
                 </SideTrowser>
             );
         } else {
-            return(
+            return (
                 <SideTrowser pullRight={true} sideMenuContent={<div className="fieldPropertiesContainer"></div>}>
                     {this.props.children}
                 </SideTrowser>

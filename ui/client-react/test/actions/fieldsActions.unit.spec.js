@@ -109,13 +109,14 @@ describe('Test FieldsActions function failure workflow', () => {
 });
 
 describe('Test FieldsActions function updateField', () => {
-
+    const appId = '1';
+    const tblId = '2';
     const field = {id: '1', required: false, name: "field of dreams"};
 
     it('verify updateField action', (done) => {
-        const expectedResponse = {field: field, type: types.UPDATE_FIELD};
+        const expectedResponse = {appId: appId, tblId: tblId, field: field, type: types.UPDATE_FIELD};
         const store = mockReportsStore({});
-        const response = store.dispatch(fieldActions.updateField(field));
+        const response = store.dispatch(fieldActions.updateField(field, appId, tblId));
         expect(response).toEqual(expectedResponse);
         done();
     });

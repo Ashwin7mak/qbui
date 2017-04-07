@@ -264,7 +264,7 @@ const forms = (
 
 export const getSelectedFormElement = (state, id) => {
     const currentForm = _.find(state.forms, form => form.id === id);
-    if(!currentForm || !currentForm.selectedFields) {
+    if (!currentForm || !currentForm.selectedFields) {
         return null;
     }
 
