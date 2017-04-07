@@ -6,7 +6,7 @@ let mock = {
     onClose: () => {},
     onSelect: () => {},
     icons: ["Apple", "carfront", "cat", "Chicken", "heart", "ruler", "bell", "duck"]
-}
+};
 
 const basicIconChooserExample = (
     <div>
