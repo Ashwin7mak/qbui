@@ -181,10 +181,13 @@ export const loadForm = (appId, tblId, rptId, formType, recordId) => {
     };
 };
 
-export const addNewFieldToForm = (formId, newLocation, newField) => {
+/**
+ * Private function for addNewFieldToForm, not exported
+ * */
+const buildNewField = (newField) => {
     let newId = _.uniqueId('newField_');
     let displayText = 'New Text Field';
-    newField = _.merge({}, newField, {
+    return _.merge({}, newField, {
         id: newId,
         edit: true,
         FormFieldElement: {
@@ -193,12 +196,23 @@ export const addNewFieldToForm = (formId, newLocation, newField) => {
             displayText
         }
     });
+};
+
+/**
+ * Move a field from one position on a form to a different position
+ * @param formId
+ * @param newLocation
+ * @param newField
+ * @returns {{id, type, content}|*}
+ */
+export const addNewFieldToForm = (formId, newLocation, newField) => {
+    newField = buildNewField(newField);
+
     return event(formId, types.ADD_FIELD, {
         newLocation,
         newField
     });
 };
-
 
 /**
  * Move a field from one position on a form to a different position

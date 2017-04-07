@@ -20,11 +20,14 @@ describe('Form Actions', () => {
 
     beforeEach(() => {
         FormActionsRewireAPI.__Rewire__('WindowLocationUtils', WindowLocationUtilsMock);
+        // Mock out Lodash's uniqueId function so it produces a predictable output for tests. Other functions remain the same.
+        FormActionsRewireAPI.__Rewire__('_',  Object.assign({}, _, {uniqueId() {return 'newField_1';}}));
 
     });
 
     afterEach(() => {
         FormActionsRewireAPI.__ResetDependency__('WindowLocationUtils');
+        FormActionsRewireAPI.__ResetDependency__('_');
     });
 
     describe('syncing actions', () => {
@@ -349,7 +352,7 @@ describe('Form Actions', () => {
     });
 
     describe('addNewFieldToForm', () => {
-        fit('creates an action that will add a field', () => {
+        it('creates an action that will add a field', () => {
             expect(formActions.addNewFieldToForm('view', 1, {})).toEqual({
                 id: 'view',
                 type: types.ADD_FIELD,
