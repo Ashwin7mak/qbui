@@ -188,6 +188,8 @@
             this.tableNextBtn.click();
             //Need this to wait for container to slide to next screen
             browser.pause(e2eConsts.shortWaitTimeMs);
+            //Wait until Finished button visible
+            this.tableFinishedBtn.waitForVisible();
             //Verify the title and description in table summary in the dialogue
             expect(this.tableHeader.getAttribute('textContent')).toBe('Get ready to add fields to your table');
             return expect(this.tableDescription.getAttribute('textContent')).toBe('Each bit of information you want to collect is a field, like Customer Name.');

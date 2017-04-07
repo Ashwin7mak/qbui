@@ -171,21 +171,27 @@
             //Step 5 - Click on apply button in edit table mode
             tableCreatePO.clickOnEditTableApplyBtn();
 
-            //Step 6 - Verify table link with new edited table name shows on left Nav . Make sure the table name is updated to new name
+            //Step 6 - Verify new table field values
+            tableFields.forEach(function(tableField) {
+                //Enter field values
+                tableCreatePO.verifyTableFieldValues(tableField.fieldTitle, tableField.fieldValue);
+            });
+
+            //Step 7 - Verify table link with new edited table name shows on left Nav . Make sure the table name is updated to new name
             expect(browser.element('.standardLeftNav .contextHeaderTitle').getAttribute('textContent')).toBe(tableName);
 
-            //Step 7 - Click on back to apps page link
+            //Step 8 - Click on back to apps page link
             browser.element('.standardLeftNav .navItemContent').click();
             //Verify it landed in apps page with tables list
             tableCreatePO.newTableBtn.waitForVisible();
 
-            //Step 8 - Select Table and make sure it lands in reports page
+            //Step 9 - Select Table and make sure it lands in reports page
             tableCreatePO.selectTable(tableName);
 
-            //Step 9 - Click on edit table settings and properties link under global actions gear
+            //Step 10 - Click on edit table settings and properties link under global actions gear
             tableCreatePO.clickOnModifyTableSettingsLink();
 
-            //Step 10 - Verify new edited values
+            //Step 11 - Verify new edited values
             //TODO I dont see the values added while creating in edit mode for record, description etc. Spoke to aditi this is different story of GET
             //tableFields.forEach(function(tableField) {
             //    //Enter field values
