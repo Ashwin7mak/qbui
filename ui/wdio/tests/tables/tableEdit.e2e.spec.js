@@ -71,16 +71,16 @@
             //Step 1 - Click on new table button
             tableCreatePO.clickCreateNewTable();
 
-            //Step 2 - Enter table field values
+            //Step 2 - Choose an Icon from Icon picker
+            var iconChoosedClassName = tableCreatePO.selectRandomIconFromIconChooser();
+            //Verify the choosed icon in closed combo
+            tableCreatePO.verifyIconInIconChooserCombo(iconChoosedClassName);
+
+            //Step 3 - Enter table field values
             tableFields.forEach(function(tableField) {
                 //Enter field values
                 tableCreatePO.enterTableFieldValue(tableField.fieldTitle, tableField.fieldValue);
             });
-
-            //Step 3 - Choose an Icon from Icon picker
-            var iconChoosedClassName = tableCreatePO.selectRandomIconFromIconChooser();
-            //Verify the choosed icon in closed combo
-            tableCreatePO.verifyIconInIconChooserCombo(iconChoosedClassName);
 
             //Step 4 - Click next field and verify it landed in drag fields page
             tableCreatePO.clickNextBtn();
@@ -114,16 +114,15 @@
             //****************
             //*Edit the newely added table with new values
             //***************
-
-            //Step 10 - Enter table invalid field values
-            newTableFields.forEach(function(tableField) {
-                tableCreatePO.enterTableFieldValue(tableField.fieldTitle, tableField.fieldValue);
-            });
-
-            //Step 11 - Select the new icon from icon chooser
+            //Step 10 - Select the new icon from icon chooser
             var newIconChoosedClassName = tableCreatePO.selectRandomIconFromIconChooser();
             //Verify the choosed icon in closed combo
             tableCreatePO.verifyIconInIconChooserCombo(newIconChoosedClassName);
+
+            //Step 11 - Enter table invalid field values
+            newTableFields.forEach(function(tableField) {
+                tableCreatePO.enterTableFieldValue(tableField.fieldTitle, tableField.fieldValue);
+            });
 
             //Step 12 - Click on apply button in edit table mode
             tableCreatePO.clickOnEditTableApplyBtn();
@@ -161,32 +160,38 @@
             //Step 2 - Click on edit table settings and properties link of an existing table 'Table 2' under global actions gear
             tableCreatePO.clickOnModifyTableSettingsLink();
 
-            //Step 3 - Enter new table field avlues
+            //Step 3 - Select the new icon from icon chooser
+            var newIconChoosedClassName = tableCreatePO.selectRandomIconFromIconChooser();
+
+            //Step 4 - Enter new table field avlues
             tableFields.forEach(function(tableField) {
                 tableCreatePO.enterTableFieldValue(tableField.fieldTitle, tableField.fieldValue);
             });
 
-            //Step 4 - Select the new icon from icon chooser
-            var newIconChoosedClassName = tableCreatePO.selectRandomIconFromIconChooser();
-
             //Step 5 - Click on apply button in edit table mode
             tableCreatePO.clickOnEditTableApplyBtn();
 
-            //Step 6 - Verify table link with new edited table name shows on left Nav . Make sure the table name is updated to new name
+            //Step 6 - Verify new table field values
+            tableFields.forEach(function(tableField) {
+                //Enter field values
+                tableCreatePO.verifyTableFieldValues(tableField.fieldTitle, tableField.fieldValue);
+            });
+
+            //Step 7 - Verify table link with new edited table name shows on left Nav . Make sure the table name is updated to new name
             expect(browser.element('.standardLeftNav .contextHeaderTitle').getAttribute('textContent')).toBe(tableName);
 
-            //Step 7 - Click on back to apps page link
+            //Step 8 - Click on back to apps page link
             browser.element('.standardLeftNav .navItemContent').click();
             //Verify it landed in apps page with tables list
             tableCreatePO.newTableBtn.waitForVisible();
 
-            //Step 8 - Select Table and make sure it lands in reports page
+            //Step 9 - Select Table and make sure it lands in reports page
             tableCreatePO.selectTable(tableName);
 
-            //Step 9 - Click on edit table settings and properties link under global actions gear
+            //Step 10 - Click on edit table settings and properties link under global actions gear
             tableCreatePO.clickOnModifyTableSettingsLink();
 
-            //Step 10 - Verify new edited values
+            //Step 11 - Verify new edited values
             //TODO I dont see the values added while creating in edit mode for record, description etc. Spoke to aditi this is different story of GET
             //tableFields.forEach(function(tableField) {
             //    //Enter field values
@@ -216,13 +221,13 @@
             //Step 3 - Get all original field values from table builder
             originalFieldValues = tableCreatePO.getAllTableFieldValues();
 
-            //Step 4 - Enter new table field values
+            //Step 4 - Select the new icon from icon chooser
+            tableCreatePO.selectRandomIconFromIconChooser();
+
+            //Step 5 - Enter new table field values
             tableFields.forEach(function(tableField) {
                 tableCreatePO.enterTableFieldValue(tableField.fieldTitle, tableField.fieldValue);
             });
-
-            //Step 5 - Select the new icon from icon chooser
-            tableCreatePO.selectRandomIconFromIconChooser();
 
             //Step 6 - Click on apply button in edit table mode
             tableCreatePO.clickOnEditTableResetBtn();
@@ -295,31 +300,27 @@
                 //Step 2 - Select the table properties of settings of table 1 from global actions gear
                 tableCreatePO.clickOnModifyTableSettingsLink();
 
-                //Step 3 - Verify the table settings heading
-                tableCreatePO.editTableHeading.waitForVisible();
-                expect(tableCreatePO.editTableHeading.getAttribute('textContent')).toBe('Table properties & settings');
-
-                //Step 4 - Enter table invalid field values
+                //Step 3 - Enter table field values
                 testCase.tableFields.forEach(function(tableField) {
                     tableCreatePO.enterTableFieldValue(tableField.fieldTitle, tableField.fieldValue);
                 });
 
-                //Step 5 - Verify validation
+                //Step 4 - Verify validation
                 testCase.tableFieldError.forEach(function(tableField) {
                     tableCreatePO.verifyTableFieldValidation(tableField.fieldTitle, tableField.fieldError);
                     //Verify Apply button is enabled
                     expect(browser.isEnabled('.tableInfoButtons.open .primaryButton')).toBeTruthy();
-                    //Verify reset button is enabled
+                    //Verify Reset button is enabled
                     expect(browser.isEnabled('.tableInfoButtons.open .secondaryButton')).toBeTruthy();
                 });
 
-                //Step 6 - Verify table link with table name shows on left Nav . Make sure the table name is not updated, it is still 'Table 2'
+                //Step 5 - Verify table link with table name shows on left Nav . Make sure the table name is not updated, it is still 'Table 2'
                 expect(browser.element('.standardLeftNav .contextHeaderTitle').getAttribute('textContent')).toBe('Table 1');
 
-                //Step 7 - Verify 'Back to app' link shows up in the left Nav
+                //Step 6 - Verify 'Back to app' link shows up in the left Nav
                 expect(browser.element('.standardLeftNav .navItemContent').getAttribute('textContent')).toBe('Back to app');
 
-                //Step 8 - Verify bck to app link is enabled
+                //Step 7 - Verify bck to app link is enabled
                 expect(browser.isEnabled('.standardLeftNav .navItemContent')).toBeTruthy();
             });
         });

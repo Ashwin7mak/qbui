@@ -64,7 +64,12 @@
             //Step 3 - Verify table elements
             tableCreatePO.verifyTable();
 
-            //Step 4 - Enter table field values
+            //Step 4 - Choose an Icon from Icon picker
+            var iconChoosedClassName = tableCreatePO.selectRandomIconFromIconChooser();
+            //Verify the choosed icon in closed combo
+            tableCreatePO.verifyIconInIconChooserCombo(iconChoosedClassName);
+
+            //Step 5 - Enter table field values
             tableFields.forEach(function(tableField) {
                 //verify place holders for each table field
                 tableCreatePO.verifyTableFieldPlaceHolders(tableField.fieldTitle, tableField.placeHolder);
@@ -72,12 +77,7 @@
                 tableCreatePO.enterTableFieldValue(tableField.fieldTitle, tableField.fieldValue);
             });
 
-            //Step 6 - Choose an Icon from Icon picker
-            var iconChoosedClassName = tableCreatePO.selectRandomIconFromIconChooser();
-            //Verify the choosed icon in closed combo
-            tableCreatePO.verifyIconInIconChooserCombo(iconChoosedClassName);
-
-            //Step 5 - Verify iconChooser search functionality
+            //Step 6 - Verify iconChooser search functionality
             tableCreatePO.searchIconFromChooser('bicycle');
             var searchReturnedIcons = tableCreatePO.getAllIconsFromIconChooser;
             //Verify it returns just one
