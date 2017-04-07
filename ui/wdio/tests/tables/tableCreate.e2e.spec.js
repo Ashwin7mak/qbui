@@ -150,6 +150,9 @@
                 //Step 3 - Enter table field values and verify validation
                 testCase.tableFields.forEach(function(tableField) {
                     tableCreatePO.enterInvalidInputAndVerifyTableFieldValidation(tableField.fieldTitle, tableField.fieldValue, tableField.fieldError);
+
+                    //Verify next button is not enabled since there is error in field values
+                    expect(browser.isEnabled('.modal-footer .nextButton')).toBeFalsy();
                 });
 
                 //Step 4 - Cancel table dialogue
