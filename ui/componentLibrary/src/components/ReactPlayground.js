@@ -49,6 +49,7 @@ const DefaultTopNavGlobalActions = require('../../../reuse/client/src/components
 const Stage = require('../../../reuse/client/src/components/stage/stage.js').default;
 const StageHeader = require('../../../reuse/client/src/components/stage/stageHeader').default;
 const StageHeaderCount = require('../../../reuse/client/src/components/stage/stageHeaderCounts').default;
+const Tooltip = require('../../../reuse/client/src/components/tooltip/tooltip.js').default;
 // END OF IMPORT STATEMENTS
 // The comment above is used for a grunt task. Please do not delete.
 

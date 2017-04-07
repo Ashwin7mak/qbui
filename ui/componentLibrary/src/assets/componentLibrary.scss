@@ -452,3 +452,8 @@ $bs-table-border-color:                #dddddd;
 
 
 }
+
+// need to change the cursor on the tooltips
+.tipChildWrapper {
+    cursor: default;
+}

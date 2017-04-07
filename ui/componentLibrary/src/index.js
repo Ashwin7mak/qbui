@@ -66,6 +66,7 @@ import IconChooserDoc from './docs/iconChooser.js';
 import IconInputBoxDoc from './docs/iconInputBox.js';
 import TopNavDoc from './docs/topNav.js';
 import StageDoc from './docs/stage.js';
+import TooltipDoc from './docs/tooltip.js';
 // END OF IMPORT STATEMENTS
 // Above comment used for Grunt task. Please do not delete.
 
@@ -120,6 +121,7 @@ render((
             <Route path="iconInputBox" component={IconInputBoxDoc} />
             <Route path="topNav" component={TopNavDoc} />
             <Route path="stage" component={StageDoc} />
+            <Route path="tooltip" component={TooltipDoc} />
         </Route>
     </Router>
 ), document.getElementById('content'));
