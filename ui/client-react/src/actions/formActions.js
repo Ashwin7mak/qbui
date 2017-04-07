@@ -190,8 +190,7 @@ export const addNewFieldToForm = (formId, newLocation, newField) => {
         FormFieldElement: {
             positionSameRow: true,
             fieldId: newId,
-            displayText,
-            isNewField: true,
+            displayText
         }
     });
     return event(formId, types.ADD_FIELD, {
