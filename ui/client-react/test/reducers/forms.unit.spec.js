@@ -171,7 +171,7 @@ describe('Forms reducer functions', () => {
             type: types.MOVE_FIELD,
             content: {
                 newLocation: 1,
-                draggedItemProps: 2
+                draggedItemProps: 2,
             }
         };
 
@@ -183,12 +183,15 @@ describe('Forms reducer functions', () => {
         afterEach(() => {
             ReducerRewireAPI.__ResetDependency__('MoveFieldHelper');
         });
-
+        // Object({ view: Object({ id: 'view', formData: Object({ formMeta: 'updated form meta' }), selectedFields: [ 1 ], previouslySelectedField: [  ] }) })
+        // Object({ view: Object({ id: 'view', formData: Object({ formMeta: 'updated form meta' }) }) })
         it('returns a new state with the field in the new position', () => {
             expect(reducer(stateWithViewForm, actionPayload)).toEqual({
                 [VIEW]: {
                     ...stateWithViewForm[VIEW],
-                    formData: {formMeta: updatedFormMeta}
+                    formData: {formMeta: updatedFormMeta},
+                    selectedFields: [1],
+                    previouslySelectedField: []
                 }
             });
 
@@ -313,8 +316,6 @@ describe('Forms reducer functions', () => {
                 [VIEW]: {
                     ...stateWithViewForm[VIEW],
                     formData: {formMeta: testFormMeta},
-                    selectedFields: [1],
-                    previouslySelectedField: undefined
                 }
             });
         });
