@@ -88,7 +88,7 @@
                 app.tables.map((table) => {
                     let idx = _.findIndex(tablePropsArray, function(props) {return props.tableId === table.id;});
                     if (idx !== -1) {
-                        Object.keys(tablePropsArray[idx]).forEach(function(key, index){
+                        Object.keys(tablePropsArray[idx]).forEach(function(key, index) {
                             table[key] = tablePropsArray[idx][key];
                         });
                     }
