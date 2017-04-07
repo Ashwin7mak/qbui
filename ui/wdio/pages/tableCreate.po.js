@@ -282,19 +282,31 @@
                     expect(results[0].element('.tableFieldTitle').getAttribute('textContent')).toBe(tableField);
                     //Need this as we need to write something and remove it for testing negativity ie empty field for it to trigger the invalidInput
                     results[0].element('.tableFieldInput input').clearElement();
-                    results[0].setValue('.tableFieldInput input', [fieldValue, '\uE004']);
+                    if (browserName === 'firefox') {
+                        results[0].setValue('.tableFieldInput input', [fieldValue, '\uE004']);
+                    } else {
+                        browser.keys([fieldValue, '\uE004']);
+                    }
                     //Enter value of 'a record in the table is called a ' field
                 } else if (tableField.includes('A record in the table is called')) {
                     //verify title of the field
                     expect(results[0].element('.tableFieldTitle').getAttribute('textContent')).toBe(tableField);
                     results[0].element('.tableFieldInput input').clearElement();
-                    results[0].setValue('.tableFieldInput input', [fieldValue, '\uE004']);
+                    if (browserName === 'firefox') {
+                        results[0].setValue('.tableFieldInput input', [fieldValue, '\uE004']);
+                    } else {
+                        browser.keys([fieldValue, '\uE004']);
+                    }
                     //Enter value for Description field
                 } else if (tableField.includes('Description')) {
                     //verify title of the field
                     expect(results[0].element('.tableFieldTitle').getAttribute('textContent')).toBe(tableField);
                     results[0].element('.tableFieldInput textarea').clearElement();
-                    results[0].setValue('.tableFieldInput textarea', [fieldValue, '\uE004']);
+                    if (browserName === 'firefox') {
+                        results[0].setValue('.tableFieldInput textarea', [fieldValue, '\uE004']);
+                    } else {
+                        browser.keys([fieldValue, '\uE004']);
+                    }
                 }
             } else {
                 throw new Error('Cannot set value for input of field type ' + JSON.stringify(results[0]));
