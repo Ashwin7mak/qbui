@@ -336,10 +336,14 @@ export const Nav = React.createClass({
             open: false
         };
         return (
-            <div>
+            <div className="fieldSelect">
                 <QBicon
                     icon="close"
-                    onClick={() => this.toggleFieldSelectorMenu(CONTEXT.REPORT.NAV, reportData.appId, reportData.tblId, reportData.rptId, params)}/>
+                    onClick={() => this.toggleFieldSelectorMenu(CONTEXT.REPORT.NAV, reportData.appId, reportData.tblId, reportData.rptId, params)}
+                    className="fieldSelectCloseIcon"
+                />
+                <div className="header">Fields</div>
+                <div className="info">Add a field to this report</div>
                 <ListOfElements
                     elements={elements}
                 />
@@ -530,10 +534,7 @@ export const Nav = React.createClass({
 const mapStateToProps = (state) => {
     return {
         forms: state.forms,
-        shell: {
-            fieldsListCollapsed: (state.shell.fieldsListCollapsed === undefined ? true : state.shell.fieldsListCollapsed),
-            ...state.shell
-        },
+        shell: state.shell,
         record: state.record,
         report: state.report
     };
