@@ -8,7 +8,7 @@ import FieldToken from '../../../src/components/formBuilder/fieldToken/fieldToke
 let component;
 let formId = 1;
 let selectedField = 1;
-let datatypeAttributes = {};
+let relatedField = {};
 let mockActions = {
     addNewFieldToForm(_formId, _location, _field) {}
 };
@@ -31,12 +31,12 @@ describe('FieldTokenInMenu', () => {
         expect(fieldToken).toHaveProp('title', title);
     });
 
-    it('renders a field token for display in a menu', () => {
+    it('will invoke addNewFieldToForm when FieldToken node is clicked', () => {
         const type = 'textbox';
         const title = 'New Textbox';
-        component = shallow(<FieldTokenInMenu addNewFieldToForm={mockActions.addNewFieldToForm} datatypeAttributes={datatypeAttributes} type={type} title={title} formId={formId} selectedField={selectedField}/>);
+        component = shallow(<FieldTokenInMenu addNewFieldToForm={mockActions.addNewFieldToForm} relatedField={relatedField} type={type} title={title} formId={formId} selectedField={selectedField}/>);
         component.find(FieldToken).simulate('click');
 
-        expect(mockActions.addNewFieldToForm).toHaveBeenCalledWith(formId, selectedField, datatypeAttributes);
+        expect(mockActions.addNewFieldToForm).toHaveBeenCalledWith(formId, selectedField, relatedField);
     });
 });
