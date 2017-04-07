@@ -11,7 +11,7 @@ const appId = 1;
 const tblId = 2;
 const formType = 'edit';
 const currentForm = {formData:{loading: false, formType: {}, formMeta: {}}, formBuilderChildrenTabIndex: ["0"], id: 'view'};
-const selectedField = {tabIndex: 0, sectionIndex: 1, columnIndex: 2, rowIndex: 3, elementIndex: 3};
+const selectedField = {tabIndex: 0, sectionIndex: 0, columnIndex: 0, rowIndex: 0, elementIndex: 3};
 
 const mockActions = {
     loadForm() {},
@@ -281,7 +281,7 @@ describe('FormBuilderContainer', () => {
         });
 
         it('will move a field down if the selected form element is not located at the last index', () => {
-            let currentFormData = {formData: {formMeta: {fields:[1, 2, 3, 4, 5, 6]}}, id: 'view'};
+            let currentFormData = {formData: {formMeta: {tabs:[{sections: [{columns: [{elements: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]}]}]}]}}, id: 'view'};
 
             component = shallow(<FormBuilderContainer
                 selectedField={selectedField}
@@ -298,7 +298,7 @@ describe('FormBuilderContainer', () => {
         });
 
         it('will not move a field down if the selected form element is greater than the last index', () => {
-            let currentFormData = {formData: {formMeta: {fields: [1, 2, 3, 4]}}, id: 'view'};
+            let currentFormData = {formData: {formMeta: {tabs:[{sections: [{columns: [{elements: []}]}]}]}}, id: 'view'};
 
             component = shallow(<FormBuilderContainer
                 selectedField={selectedField}
