@@ -89,7 +89,7 @@ const forms = (
             saving: false,
             errorStatus: null
         });
-        console.log(JSON.stringify(newState));
+
         return newState;
     }
 

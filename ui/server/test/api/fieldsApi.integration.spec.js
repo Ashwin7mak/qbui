@@ -126,7 +126,7 @@ function createField(payload, hasEmptyFieldName = false) {
         }, errorResponse => {
             // Pass through the error and expect the assertions to handle it correctly
             return errorResponse;
-        })
+        });
 }
 
 function createFieldWithBlankName(payload) {
@@ -141,11 +141,11 @@ function updateField(payload) {
                 table: payload.table,
                 responseBody: updatedFieldResponse.body,
                 statusCode: updatedFieldResponse.statusCode
-            }
+            };
         }, errorResponse => {
             // Pass through the error and expect the assertions to handle it correctly
             return errorResponse;
-        })
+        });
 }
 
 function buildField(name, type, required = false) {
