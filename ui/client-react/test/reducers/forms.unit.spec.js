@@ -183,7 +183,7 @@ describe('Forms reducer functions', () => {
         afterEach(() => {
             ReducerRewireAPI.__ResetDependency__('MoveFieldHelper');
         });
-        
+
         it('returns a new state with the field in the new position', () => {
             expect(reducer(stateWithViewForm, actionPayload)).toEqual({
                 [VIEW]: {
@@ -279,14 +279,14 @@ describe('Forms reducer functions', () => {
         });
 
         it('returns a new state with a single field added', () => {
-            expect(reducer(stateForAddingField, actionPayload)).toEqual([
-                {
+            expect(reducer(stateForAddingField, actionPayload)).toEqual({
+                [VIEW]: {
                     ...stateForAddingField[VIEW],
                     selectedFields: [1],
                     previouslySelectedField: [],
                     formData: {formMeta: updatedFormMeta}
                 }
-            ]);
+            });
             expect(mockMoveFieldHelper.addNewFieldToForm).toHaveBeenCalledWith(
                 stateForAddingField[VIEW].formData.formMeta, 1, {}
             );
@@ -298,7 +298,7 @@ describe('Forms reducer functions', () => {
             expect(mockMoveFieldHelper.addNewFieldToForm).not.toHaveBeenCalled();
         });
     });
-
+    
     describe('select a field', () => {
         const testFormMeta = 'some meta data';
 
@@ -315,6 +315,8 @@ describe('Forms reducer functions', () => {
                 [VIEW]: {
                     ...stateWithViewForm[VIEW],
                     formData: {formMeta: testFormMeta},
+                    selectedFields: [1],
+                    previouslySelectedField: undefined
                 }
             });
         });
