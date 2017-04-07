@@ -11,6 +11,7 @@ import * as types from '../actions/types';
 import * as UrlConsts from "../constants/urlConstants";
 import {NEW_FORM_RECORD_ID} from '../constants/schema';
 import {convertFormToArrayForClient, convertFormToObjectForServer} from './actionHelpers/transformFormData';
+import {saveAllNewFields, updateAllFieldsWithEdits} from './fieldsActions';
 
 let logger = new Logger();
 
@@ -290,47 +291,50 @@ export const updateForm = (appId, tblId, formType, form) => {
 function saveTheForm(appId, tblId, formType, formMeta, isNew) {
 
     return (dispatch) => {
-        return new Promise((resolve, reject) => {
-            if (appId && tblId) {
-                let form = convertFormToObjectForServer(formMeta);
+        return dispatch(saveAllNewFields(appId, tblId, formType))
+            .then(() => dispatch(updateAllFieldsWithEdits(appId, tblId)))
+            .then(() => {
+                return new Promise((resolve, reject) => {
+                    if (appId && tblId) {
+                        let form = convertFormToObjectForServer(formMeta);
 
-                logger.debug(`Saving form -- appId:${appId}, tableId:${tblId}, isNew:${isNew}`);
+                        logger.debug(`Saving form -- appId:${appId}, tableId:${tblId}, isNew:${isNew}`);
 
-                //  TODO: refactor once record events are moved out..
-                dispatch(event(formType, types.SAVING_FORM));
+                        //  TODO: refactor once record events are moved out..
+                        dispatch(event(formType, types.SAVING_FORM));
 
-                let formService = new FormService();
+                        let formService = new FormService();
 
-                let formPromise = isNew ? formService.createForm(appId, tblId, form) : formService.updateForm(appId, tblId, form);
-                formPromise.then(
-                    (response) => {
-                        logger.debug('FormService saveTheForm success');
-                        //  for now return the original form..
-                        dispatch(event(formType, types.SAVING_FORM_SUCCESS, convertFormToArrayForClient({formMeta: response.data}).formMeta));
-
-                        NotificationManager.success(Locale.getMessage('form.notification.save.success'), Locale.getMessage('success'));
-
-                        resolve();
-                    },
-                    (error) => {
-                        logger.parseAndLogError(LogLevel.ERROR, error.response, 'formService.getReports:');
-                        dispatch(event(formType, types.SAVING_FORM_ERROR, error.response ? error.response.status : error.response));
-
-                        NotificationManager.error(Locale.getMessage('form.notification.save.error'), Locale.getMessage('failed'));
-
-                        reject(error);
+                        let formPromise = isNew ? formService.createForm(appId, tblId, form) : formService.updateForm(appId, tblId, form);
+                        formPromise.then(
+                            (response) => {
+                                logger.debug('FormService saveTheForm success');
+                                //  for now return the original form..
+                                dispatch(event(formType, types.SAVING_FORM_SUCCESS, convertFormToArrayForClient({formMeta: response.data}).formMeta));
+                                NotificationManager.success(Locale.getMessage('form.notification.save.success'), Locale.getMessage('success'));
+                                resolve();
+                            },
+                            (error) => {
+                                logger.parseAndLogError(LogLevel.ERROR, error.response, 'formService.getReports:');
+                                dispatch(event(formType, types.SAVING_FORM_ERROR, error.response ? error.response.status : error.response));
+                                NotificationManager.error(Locale.getMessage('form.notification.save.error'), Locale.getMessage('failed'));
+                                reject(error);
+                            }
+                        ).catch((ex) => {
+                            logger.logException(ex);
+                            NotificationManager.error(Locale.getMessage('form.notification.save.error'), Locale.getMessage('failed'));
+                            reject(ex);
+                        });
+                    } else {
+                        logger.error(`formActions.saveTheForm: Missing required input parameters.  appId: ${appId}, tableId: ${tblId}`);
+                        dispatch(event(form.id, types.SAVING_FORM_ERROR, '500'));
+                        reject();
                     }
-                ).catch((ex) => {
-                    logger.logException(ex);
-                    NotificationManager.error(Locale.getMessage('form.notification.save.error'), Locale.getMessage('failed'));
-                    reject(ex);
+                }).catch(e => {
+                    console.log(e);
+                    Promise.reject(e);
                 });
-            } else {
-                logger.error(`formActions.saveTheForm: Missing required input parameters.  appId: ${appId}, tableId: ${tblId}`);
-                dispatch(event(form.id, types.SAVING_FORM_ERROR, '500'));
-                reject();
-            }
-        });
+            });
     };
 }
 
