@@ -24,7 +24,6 @@ export const TOGGLE_FORM_BUILDER_CHILDREN_TABINDEX = 'TOGGLE_FORM_BUILDER_CHILDR
 export const SYNC_FORM = 'SYNC_FORM';
 export const SELECT_FIELD = 'SELECT_FIELD';
 export const DESELECT_FIELD = 'DESELECT_FIELD';
-export const ADD_FIELD = 'ADD_FIELD';
 export const UNLOAD_FORM = 'UNLOAD_FORM';
 
 //  ********  Nav shell actions ********
