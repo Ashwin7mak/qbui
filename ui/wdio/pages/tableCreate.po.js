@@ -277,6 +277,7 @@
             if (browserName === 'firefox') {
                 return filteredElement.setValue(filteredElementInputClassName, [fieldValue, '\uE004']);
             } else {
+                filteredElement.element(filteredElementInputClassName).click();
                 return browser.keys([fieldValue, '\uE004']);
             }
         }},
