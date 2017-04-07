@@ -3,7 +3,8 @@ import {connect} from "react-redux";
 import FieldToken from './fieldToken';
 import Tooltip from '../../../../../reuse/client/src/components/tooltip/tooltip';
 import {addNewFieldToForm} from "../../../actions/formActions";
-
+import {getFormByContext} from '../../../reducers/forms';
+import {CONTEXT} from '../../../actions/context';
 
 /**
  * A FieldToken that is extended to be displayed in a menu (i.e., Tool Palette) when building a form.
@@ -49,7 +50,7 @@ FieldTokenInMenu.propTypes = {
 };
 
 const mapStateToProps = state => {
-    let currentForm = state.forms ? state.forms[0] : undefined;
+    let currentForm = getFormByContext(state, CONTEXT.FORM.VIEW);
     return {
         formId: (_.has(currentForm, 'id') ? currentForm.id : null),
         selectedField: (_.has(currentForm, 'selectedFields') ? currentForm.selectedFields[0] : null),

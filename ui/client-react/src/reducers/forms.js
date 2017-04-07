@@ -155,10 +155,8 @@ const forms = (
 
         updatedForm.selectedFields[0] = newLocation;
 
-        return [
-            ...newState,
-            updatedForm
-        ];
+        newState[action.id] = updatedForm;
+        return newState;
     }
 
     case types.REMOVE_FIELD : {
