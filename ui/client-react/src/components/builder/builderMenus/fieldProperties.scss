@@ -1,7 +1,7 @@
 @import '../../../../../reuse/client/src/assets/css/qbVariables';
 
 .fieldPropertiesContainer {
-    width: 260px;
+    width: 225px;
     padding-top: 23px;
     padding-left: $spacing-xx-small;
     padding-right: $spacing-xx-small;
@@ -10,7 +10,7 @@
     flex-wrap: wrap;
 
     .fieldPropertiesTitle {
-        width: 241px;
+        width: 206px;
         height: 24px;
         font-size: 20px;
         color: $default-text-onlight-color;
@@ -28,7 +28,7 @@
         }
 
         .textPropertyValue {
-            width: 230px;
+            width: 195px;
             height: 34px;
             border-radius: 2px;
             background-color: $color-black-100;

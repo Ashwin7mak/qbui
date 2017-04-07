@@ -35,7 +35,7 @@ let instance;
 var FieldPropertiesMock = React.createClass({
     render: function() {
         return (
-            <div>this component has its own unit tests</div>
+            <div>{this.props.children}</div>
         );
     }
 });
