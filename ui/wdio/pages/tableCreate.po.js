@@ -208,16 +208,34 @@
         }},
 
         /**
-         * Method to click on Finished button in create table dialogue
+         * Method to click on Create Table button in create table dialogue
          */
-        clickFinishedBtn : {value: function() {
-            //Wait until Finished button visible
-            this.tableFinishedBtn.waitForVisible();
-            //Click on finished button
-            this.tableFinishedBtn.click();
-            //make sure it lands in forms edit container
-            return formsPO.editFormContainerEl.waitForVisible();
+        clickFinishedBtn: {value: function() {
+            var createTableButtonEl = this.tableFinishedBtn;
 
+            //step 1-  Wait for the button to be visible
+            createTableButtonEl.waitForVisible();
+            try {
+                //step 2 - Click on create Table button
+                createTableButtonEl.click();
+
+                //step 3 - make sure it lands in forms edit container
+                browser.waitForVisible('form.editForm', e2eConsts.extraLongWaitTimeMs, true);
+            } catch (err) {
+                console.log("Checking to see if WebdriverIO command throws an error - Trying again with JS. \n Error = " + err.toString());
+                // Catch an error from above and then retry
+                // Single click via raw javascript
+                browser.execute(function() {
+                    var event = new MouseEvent('click', {
+                        'view': window,
+                        'bubbles': true,
+                        'cancelable': true,
+                        'detail': 1
+                    });
+                    document.querySelector('button.finishedButton').dispatchEvent(event);
+                });
+                browser.waitForVisible('form.editForm', e2eConsts.mediumWaitTimeMs, true);
+            }
         }},
 
         /**
