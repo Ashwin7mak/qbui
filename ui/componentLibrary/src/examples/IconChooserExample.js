@@ -16,7 +16,7 @@ const basicIconChooserExample = (
                          isOpen={true}
                          onOpen={mock.onOpen}
                          onClose={mock.onClose}
-                         font="iconTableSturdy"
+                         font={AVAILABLE_ICON_FONTS.TABLE_STURDY}
                          icons={mock.icons}
                          onSelect={mock.onSelect} />
         </dd>
