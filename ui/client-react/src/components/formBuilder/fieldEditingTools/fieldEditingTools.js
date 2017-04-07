@@ -93,6 +93,10 @@ export class FieldEditingTools extends Component {
     }
 
     componentDidMount() {
+        /**
+          * For keyboard, we need to reset the focus, to maintain proper tabbing order
+          * and we need to keep the current form element in view, by scrolling it into view
+          * */
         if (this.props.previouslySelectedField && this.props.previouslySelectedField[0] && this.props.tabIndex !== "-1") {
             let previouslySelectedField = document.querySelectorAll(".fieldEditingTools");
             previouslySelectedField[this.props.previouslySelectedField[0].elementIndex].focus();
@@ -111,9 +115,6 @@ export class FieldEditingTools extends Component {
     }
 
     scrollElementIntoView() {
-        /**
-         * This is currently broken and will be fixed in an immediate follow up story
-         * */
         let selectedFormElement = document.querySelector(".selectedFormElement");
         if (selectedFormElement) {
             document.querySelector(".selectedFormElement").scrollIntoView(false);
