@@ -108,6 +108,7 @@ class ListOfElements extends Component {
         }
         return this.props.elements.map((element, index) => {
             if (element.children) {
+
                 return (
                     <li key={element.key || `group_${index}`} className="listOfElementsItemGroup">
                         <h6 className="listOfElementsItemHeader">{element.title}</h6>
