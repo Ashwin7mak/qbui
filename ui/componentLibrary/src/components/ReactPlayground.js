@@ -46,6 +46,9 @@ const IconChooser = require('../../../reuse/client/src/components/iconChooser/ic
 const IconInputBox = require('../../../reuse/client/src/components/iconInputBox/iconInputBox.js').default;
 const TopNav = require('../../../reuse/client/src/components/topNav/topNav.js').default;
 const DefaultTopNavGlobalActions = require('../../../reuse/client/src/components/topNav/defaultTopNavGlobalActions.js').default;
+const Stage = require('../../../reuse/client/src/components/stage/stage.js').default;
+const StageHeader = require('../../../reuse/client/src/components/stage/stageHeader').default;
+const StageHeaderCount = require('../../../reuse/client/src/components/stage/stageHeaderCounts').default;
 // END OF IMPORT STATEMENTS
 // The comment above is used for a grunt task. Please do not delete.
 
