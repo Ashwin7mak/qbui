@@ -14,7 +14,6 @@ export class FieldTokenInMenu extends Component {
     clickToAddToForm = () => {
         let {selectedField, formId, datatypeAttributes} = this.props;
 
-        console.log({...this.props});
         this.props.addNewFieldToForm(formId, selectedField, datatypeAttributes);
     };
 
