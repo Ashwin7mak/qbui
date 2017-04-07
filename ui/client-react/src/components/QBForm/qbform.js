@@ -333,6 +333,7 @@ export const QBForm = React.createClass({
      * @returns {XML}
      */
     createFieldElement(FormFieldElement, validationStatus, containingElement, location) {
+
         let relatedField = this.getRelatedField(FormFieldElement.fieldId);
         let fieldRecord = this.getFieldRecord(relatedField);
         let recId = _.has(this.props.formData, 'recordId') ? this.props.formData.recordId : null;
@@ -604,7 +605,6 @@ function buildUserField(id, fieldValue, name) {
 }
 
 const mapStateToProps = (state) => {
-
     return {
         fields: state.fields
     };
