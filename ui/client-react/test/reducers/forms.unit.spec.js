@@ -171,7 +171,7 @@ describe('Forms reducer functions', () => {
             type: types.MOVE_FIELD,
             content: {
                 newLocation: 1,
-                draggedItemProps: 2,
+                draggedItemProps: 2
             }
         };
 
@@ -298,7 +298,7 @@ describe('Forms reducer functions', () => {
             expect(mockMoveFieldHelper.addNewFieldToForm).not.toHaveBeenCalled();
         });
     });
-    
+
     describe('select a field', () => {
         const testFormMeta = 'some meta data';
 
