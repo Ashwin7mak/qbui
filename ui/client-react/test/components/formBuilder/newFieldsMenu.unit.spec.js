@@ -16,7 +16,7 @@ describe('NewFieldsMenu', () => {
     });
 
     afterEach(() => {
-        // NewsFieldsMenuRewireApi.__ResetDependency__('FieldTokenInMenu');
+        NewsFieldsMenuRewireApi.__ResetDependency__('FieldTokenInMenu');
     });
 
     it('displays a list of new field elements', () => {
