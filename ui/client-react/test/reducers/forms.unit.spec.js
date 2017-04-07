@@ -246,6 +246,57 @@ describe('Forms reducer functions', () => {
         });
     });
 
+    describe('adding a field', () => {
+        const updatedFormMeta = 'updated form meta';
+        const stateForAddingField = {
+            'view': {
+                id: 'view',
+                formData: {formMeta: {tabs: [{sections: [{columns: [{elements: []}]}]}]}}
+            }
+        };
+        const mockMoveFieldHelper = {
+            addNewFieldToForm(_formMeta, _location, _field) {return updatedFormMeta;}
+        };
+
+        const actionPayload = {
+            id: VIEW,
+            type: types.ADD_FIELD,
+            content: {
+                newLocation: 1,
+                newField: {}
+            }
+        };
+
+        beforeEach(() => {
+            spyOn(mockMoveFieldHelper, 'addNewFieldToForm').and.callThrough();
+            ReducerRewireAPI.__Rewire__('MoveFieldHelper', mockMoveFieldHelper);
+        });
+
+        afterEach(() => {
+            ReducerRewireAPI.__ResetDependency__('MoveFieldHelper');
+        });
+
+        it('returns a new state with a single field added', () => {
+            expect(reducer(stateForAddingField, actionPayload)).toEqual([
+                {
+                    ...stateForAddingField[VIEW],
+                    selectedFields: [1],
+                    previouslySelectedField: [],
+                    formData: {formMeta: updatedFormMeta}
+                }
+            ]);
+            expect(mockMoveFieldHelper.addNewFieldToForm).toHaveBeenCalledWith(
+                stateForAddingField[VIEW].formData.formMeta, 1, {}
+            );
+        });
+
+        it('returns existing state if there is no current form', () => {
+            expect(reducer(stateWithEditForm, actionPayload)).toEqual(stateWithEditForm);
+
+            expect(mockMoveFieldHelper.addNewFieldToForm).not.toHaveBeenCalled();
+        });
+    });
+
     describe('select a field', () => {
         const testFormMeta = 'some meta data';
 
