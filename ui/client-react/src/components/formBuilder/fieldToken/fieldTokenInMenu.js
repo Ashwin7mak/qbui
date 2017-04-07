@@ -12,8 +12,10 @@ import {CONTEXT} from '../../../actions/context';
 export class FieldTokenInMenu extends Component {
 
     clickToAddToForm = () => {
-        let {selectedField, formId} = this.props;
-        this.props.addNewFieldToForm(formId, selectedField, this.props);
+        let {selectedField, formId, datatypeAttributes} = this.props;
+
+        console.log({...this.props});
+        this.props.addNewFieldToForm(formId, selectedField, datatypeAttributes);
     };
 
     render() {
