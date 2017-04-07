@@ -2,8 +2,6 @@
  * E2E tests for the components on the Table Reports page
  *
  */
-
-
 (function() {
     'use strict';
 
@@ -14,8 +12,7 @@
     var FormsPO = require('../../pages/formsPage.po');
     var ReportTableActionsPO = require('../../pages/reportTableActions.po');
 
-
-    describe('Report Page Table Tests', function() {
+    describe('Reports - Table Tests: ', function() {
         var realmName;
         var realmId;
         var testApp;

@@ -9,7 +9,7 @@
     //include underScore js
     var _ = require('underscore');
 
-    describe('Report Grouping Via Column Header Tests  - ', function() {
+    describe('Reports - Grouping Via Column Header Tests: ', function() {
         var realmName;
         var realmId;
         var app;
