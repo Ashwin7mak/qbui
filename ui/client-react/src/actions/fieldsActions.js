@@ -26,6 +26,13 @@ function event(app, tbl, type, content) {
     };
 }
 
+/**
+ * Construct fields store update payload
+ * @param field
+ * @param appId
+ * @param tableId
+ * @returns {{appId: *, tblId: *, field: *, type}}
+ */
 export const updateField = (field, appId, tableId) => {
     return {
         appId: appId,

@@ -526,6 +526,7 @@ export default {
             FILE_ATTACHMENT: "File"
         },
         fieldPropertyLabels: {
+            title: 'properties',
             name: 'Name',
             required: 'Must be filled in'
         },

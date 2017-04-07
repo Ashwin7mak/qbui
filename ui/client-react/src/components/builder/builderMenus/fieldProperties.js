@@ -35,12 +35,24 @@ export const FieldProperties = React.createClass({
         formId: PropTypes.string
     },
 
+    /**
+     * Creates the headline at the top of the right panel saying the field name and the text properties after it
+     * @param fieldName
+     * @returns {node}
+     */
     createPropertiesTitle(fieldName) {
         return (
-            <div className="fieldPropertiesTitle">{fieldName} properties</div>
+            <div className="fieldPropertiesTitle">{fieldName} {Locale.getMessage('fieldPropertyLabels.title')}</div>
         );
     },
 
+    /**
+     * Generic method for any text field property that needs to be rendered
+     * Using a textfieldvalueeditor to keep it green and it has handy props
+     * @param propertyTitle
+     * @param propertyValue
+     * @returns {node}
+     */
     createTextPropertyContainer(propertyTitle, propertyValue) {
         return (
             <div className="fieldPropertyContainer">
@@ -54,6 +66,13 @@ export const FieldProperties = React.createClass({
         );
     },
 
+    /**
+     * Generic method for any boolean field property that needs to be rendered
+     * Using a checkboxfieldvalueeditor to keep it green and the awesome label/onChange built in support
+     * @param propertyTitle
+     * @param propertyValue
+     * @returns {node}
+     */
     createCheckBoxPropertyContainer(propertyTitle, propertyValue) {
         return (
             <div className="checkboxPropertyContainer">
@@ -65,34 +84,47 @@ export const FieldProperties = React.createClass({
         );
     },
 
+    /**
+     * hard coded name property creation since we know EVERY field type has a name
+     * this could be refactored out if the next iteration wants to go super generic
+     * @param name
+     * @returns {node}
+     */
     createNameProperty(name) {
         return (this.createTextPropertyContainer(Locale.getMessage('fieldPropertyLabels.name'), name));
     },
 
+    /**
+     * hard coded required property creation since we know EVERY field type has a required property
+     * this could be refactored out if the next iteration wants to go super generic
+     * @param required
+     * @returns {node}
+     */
     createRequiredProperty(required) {
         return (this.createCheckBoxPropertyContainer(Locale.getMessage('fieldPropertyLabels.required'), required));
     },
 
+    /**
+     * takes the new property value and the name of the property we need to set
+     * updates that value in the field object and then calls fieldAction to dispatch to reducer store
+     * @param newValue
+     * @param propertyName
+     */
     updateFieldProps(newValue, propertyName) {
-        let field = this.getField();
+        let field = this.props.selectedField;
         field[propertyName] = newValue;
         this.props.updateField(field, this.props.appId, this.props.tableId);
     },
 
-    getField() {
-        //return this.props.selectedField ? this.props.fields[0].fields[this.props.selectedField.elementIndex + 5] : null;
-        return this.props.selectedField;
-    },
-
     render() {
-        let field = this.getField();
-        if (field) {
+        //only show something if we have selected a field
+        if (this.props.selectedField) {
             return (
                 <SideTrowser pullRight={true} sideMenuContent={
                     <div className="fieldPropertiesContainer">
-                        {this.createPropertiesTitle(field.name)}
-                        {this.createNameProperty(field.name)}
-                        {this.createRequiredProperty(field.required)}
+                        {this.createPropertiesTitle(this.props.selectedField.name)}
+                        {this.createNameProperty(this.props.selectedField.name)}
+                        {this.createRequiredProperty(this.props.selectedField.required)}
                     </div>
                 }>
                     {this.props.children}
