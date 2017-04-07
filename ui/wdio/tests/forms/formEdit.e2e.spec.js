@@ -12,7 +12,7 @@
     var testApp;
     var recordList;
 
-    xdescribe('Edit a record Via Form Tests :', function() {
+    xdescribe('Forms - Edit a Record Via Form Tests: ', function() {
         /**
          * Setup method. Creates test app then authenticates into the new stack
          */
