@@ -111,6 +111,121 @@ describe('Field Actions success workflow', () => {
             });
     });
 
+    describe('updateAllFieldsWIthEdits with no fields', () => {
+        let fields = [];
+        let mockGetFields = () => {
+            return fields;
+        };
+
+        beforeEach(() => {
+            FieldsActionsRewireAPI.__Rewire__('getFields', mockGetFields);
+        });
+        afterEach(() => {
+            FieldsActionsRewireAPI.__ResetDependency__('getFields');
+        });
+
+        it('verify no fields to update', (done) => {
+            fields = [];
+            const store = mockReportsStore({});
+            return store.dispatch(fieldActions.updateAllFieldsWithEdits(appId, tblId)).then(
+                () => {
+                    expect(mockFieldService.prototype.updateField).not.toHaveBeenCalled();
+                    expect(true).toBe(true);
+                    done();
+                },
+                () => {
+                    expect(false).toBe(true);
+                    done();
+                });
+        });
+    });
+
+    describe('updateAllFieldsWIthEdits with multiple fields', () => {
+        let fields = [{id: 1}, {id: 2}, {id: 3}];
+        let mockGetFields = () => {
+            return fields;
+        };
+
+        beforeEach(() => {
+            FieldsActionsRewireAPI.__Rewire__('getFields', mockGetFields);
+        });
+        afterEach(() => {
+            FieldsActionsRewireAPI.__ResetDependency__('getFields');
+        });
+
+        it('verify multiple fields to update', (done) => {
+            fields = [];
+            const store = mockReportsStore({});
+            return store.dispatch(fieldActions.updateAllFieldsWithEdits(appId, tblId)).then(
+                () => {
+                    expect(mockFieldService.prototype.updateField.calls.count()).toEqual(fields.length);
+                    expect(true).toBe(true);
+                    done();
+                },
+                () => {
+                    expect(false).toBe(true);
+                    done();
+                });
+        });
+    });
+
+    describe('saveAllFieldsWIthEdits with no fields', () => {
+        let fields = [];
+        let mockGetFields = () => {
+            return fields;
+        };
+
+        beforeEach(() => {
+            FieldsActionsRewireAPI.__Rewire__('getFields', mockGetFields);
+        });
+        afterEach(() => {
+            FieldsActionsRewireAPI.__ResetDependency__('getFields');
+        });
+
+        it('verify no fields to update', (done) => {
+            fields = [];
+            const store = mockReportsStore({});
+            return store.dispatch(fieldActions.saveAllNewFields(appId, tblId)).then(
+                () => {
+                    expect(mockFieldService.prototype.createField).not.toHaveBeenCalled();
+                    expect(true).toBe(true);
+                    done();
+                },
+                () => {
+                    expect(false).toBe(true);
+                    done();
+                });
+        });
+    });
+
+    describe('saveAllFieldsWIthEdits with multiple fields', () => {
+        let fields = [{id: 1}, {id: 2}, {id: 3}];
+        let mockGetFields = () => {
+            return fields;
+        };
+
+        beforeEach(() => {
+            FieldsActionsRewireAPI.__Rewire__('getFields', mockGetFields);
+        });
+        afterEach(() => {
+            FieldsActionsRewireAPI.__ResetDependency__('getFields');
+        });
+
+        it('verify multiple fields to update', (done) => {
+            fields = [];
+            const store = mockReportsStore({});
+            return store.dispatch(fieldActions.saveAllNewFields(appId, tblId)).then(
+                () => {
+                    expect(mockFieldService.prototype.createField.calls.count()).toEqual(fields.length);
+                    expect(true).toBe(true);
+                    done();
+                },
+                () => {
+                    expect(false).toBe(true);
+                    done();
+                });
+        });
+    });
 });
 
 describe('Field Actions failure workflow', () => {
