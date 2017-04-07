@@ -541,14 +541,14 @@ module.exports = function(grunt) {
                     //'./wdio/tests/reports/sorting/reportSortingViaContainer.e2e.spec.js'
                 ],
                 suites: {
-                    //reports: [
-                    //    './wdio/tests/reports/grouping/*.e2e.spec.js',
-                    //    './wdio/tests/reports/sorting/*.e2e.spec.js',
-                    //    './wdio/tests/reports/*.e2e.spec.js',
-                    //],
-                    //forms: [
-                    //    './wdio/tests/forms/*.e2e.spec.js'
-                    //],
+                    reports: [
+                        './wdio/tests/reports/grouping/*.e2e.spec.js',
+                        './wdio/tests/reports/sorting/*.e2e.spec.js',
+                        './wdio/tests/reports/*.e2e.spec.js',
+                    ],
+                    forms: [
+                        './wdio/tests/forms/*.e2e.spec.js'
+                    ],
                     tables: [
                         './wdio/tests/tables/*.e2e.spec.js'
                     ]
