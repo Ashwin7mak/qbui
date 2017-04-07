@@ -28,13 +28,13 @@
         tableHelpBtn : {get: function() {return browser.element('.iconUISturdy-help');}},
 
         //table Next button
-        tableNextBtn: {get: function() {return browser.element('.buttons .nextButton');}},
+        tableNextBtn: {get: function() {return browser.element('button.nextButton');}},
         //table Cancel button
-        tableCancelBtn: {get: function() {return browser.element('.buttons .cancelButton');}},
+        tableCancelBtn: {get: function() {return browser.element('button.cancelButton');}},
         //table finished button
-        tableFinishedBtn: {get: function() {return browser.element('.buttons .finishedButton');}},
+        tableFinishedBtn: {get: function() {return browser.element('button.finishedButton');}},
         //table previous button
-        tablePreviousBtn: {get: function() {return browser.element('.buttons .previousButton');}},
+        tablePreviousBtn: {get: function() {return browser.element('button.previousButton');}},
 
         //Icon chooser
         tableFieldIconChooser: {get: function() {return browser.element('.iconChooser.closed');}},
@@ -44,9 +44,9 @@
         iconChooserSearch: {get: function() {return browser.element('.iconChooser.open .iconSearch input');}},
 
         //edit table apply btn
-        editTableApplyBtn : {get: function() {return browser.element('.tableInfoButtons.open .primaryButton');}},
+        editTableApplyBtn : {get: function() {return browser.element('button.primaryButton');}},
         //edit table resest btn
-        editTableResetBtn : {get: function() {return browser.element('.tableInfoButtons.open .secondaryButton');}},
+        editTableResetBtn : {get: function() {return browser.element('a.secondaryButton');}},
 
         // settings Icon under globalActions
         settingsBtn : {get: function() {return browser.element('.iconUISturdy-settings');}},
@@ -277,6 +277,7 @@
             if (browserName === 'firefox') {
                 return filteredElement.setValue(filteredElementInputClassName, [fieldValue, '\uE004']);
             } else {
+                filteredElement.element(filteredElementInputClassName).click();
                 return browser.keys([fieldValue, '\uE004']);
             }
         }},
@@ -403,8 +404,8 @@
             if (results !== []) {
                 //Verify tipChildWrapper is visible
                 results[0].element('.tipChildWrapper').waitForVisible();
-                //moveToObject not working in firefox but we do check that tipChildWrapper is present for all invalid fieldInputs which should be good.
-                if (browserName !== 'firefox') {
+                //moveToObject not working in firefox and edge but we do check that tipChildWrapper is present for all invalid fieldInputs which should be good.
+                if (browserName === 'chrome') {
                     //Hover over to an element and verify the field error
                     results[0].moveToObject('.tableFieldInput');
                     browser.waitForExist('.invalidInput'); // Account for short timeout in showing tooltip

@@ -325,5 +325,33 @@
             });
         });
 
+        it('Verify that only ADMIN can edit a new table', function() {
+            var userId;
+
+            //Create a user
+            browser.call(function() {
+                return e2eBase.recordBase.apiBase.createUser().then(function(userResponse) {
+                    userId = JSON.parse(userResponse.body).id;
+                });
+            });
+
+            //Add user to participant appRole
+            browser.call(function() {
+                return e2eBase.recordBase.apiBase.assignUsersToAppRole(testApp.id, "11", [userId]);
+            });
+
+            //get the user authentication
+            browser.call(function() {
+                return RequestSessionTicketPage.get(e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.recordBase.apiBase.resolveUserTicketEndpoint() + '?uid=' + userId + '&realmId='));
+            });
+
+            //Go to Tables Page
+            RequestAppsPage.get(e2eBase.getRequestTableEndpoint(realmName, testApp.id, testApp.tables[0].id));
+
+            //Verify edit settings button not available for user other than ADMIN
+            expect(browser.isVisible('.iconUISturdy-settings')).toBeFalsy();
+
+        });
+
     });
 }());
