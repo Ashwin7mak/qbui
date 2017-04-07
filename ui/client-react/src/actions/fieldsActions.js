@@ -75,10 +75,6 @@ export const saveNewField = (appId, tblId, field, formId = null) => {
                 dispatch(event(appId, tblId, types.LOAD_FIELDS_ERROR, {error:error}));
                 reject();
             }
-        }).
-        catch(e => {
-            logger.error(e);
-            Promise.reject(e);
         });
     };
 };
@@ -93,6 +89,7 @@ export const updateFieldProperties = (appId, tblId, field) => {
 
                 fieldsService.updateField(appId, tblId, field).then(
                     (response) => {
+                        //TODO: some action needs to get emitted
                         resolve();
                     },
                     (errorResponse) => {
