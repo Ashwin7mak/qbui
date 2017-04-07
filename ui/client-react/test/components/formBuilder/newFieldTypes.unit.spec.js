@@ -2,7 +2,6 @@ import {createFieldTypeProps, getTooltipForNewField, __RewireAPI__ as NewFieldTy
 import fieldFormats from '../../../src/utils/fieldFormats';
 import {createScalarDefaultFieldsProperties} from '../../../src/utils/defaultFieldsProperties';
 
-
 const mockLocale = {
     getMessage(key) {return key;}
 };
