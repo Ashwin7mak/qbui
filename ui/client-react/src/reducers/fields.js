@@ -93,10 +93,12 @@ const fieldsStore = (state = [], action) => {
         return newState;
     }
     case types.UPDATE_FIELD : {
-        return {
-            ...state,
-            [action.field.id]: {...action.field, isPendingEdits: true}
-        };
+        //newState above already pulled out the fieldList we want removed, so we just need to find our fieldList and update it!
+        let fieldList = _.find(state, fieldlist => fieldlist.appId === action.appId && fieldlist.tblId === action.tblId);
+        let fieldIndex = _.findIndex(fieldList.fields, field => field.id === action.field.id);
+        fieldList.fields[fieldIndex] = action.field;
+        newState.push(fieldList);
+        return newState;
     }
     default:
         return state;

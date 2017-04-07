@@ -26,9 +26,11 @@ function event(app, tbl, type, content) {
     };
 }
 
-export const updateField = (field) => {
+export const updateField = (field, appId, tableId) => {
     return {
-        field,
+        appId: appId,
+        tblId: tableId,
+        field: field,
         type: types.UPDATE_FIELD
     };
 };
