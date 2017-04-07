@@ -30,7 +30,7 @@ let logger = new Logger();
 
 const mapStateToProps = state => {
     let currentForm = getFormByContext(state, CONTEXT.FORM.VIEW);
-    
+
     return {
         currentForm,
         selectedField: (_.has(currentForm, 'selectedFields') ? currentForm.selectedFields[0] : []),
@@ -156,6 +156,7 @@ export const FormBuilderContainer = React.createClass({
     },
 
     keyboardMoveFieldDown() {
+        console.log('this.props.currentForm: ', this.props.currentForm);
         let {tabIndex, sectionIndex, columnIndex} = this.props.selectedField;
         let formDataLength = this.props.currentForm.formData.formMeta.tabs[tabIndex].sections[sectionIndex].columns[columnIndex].elements.length - 1;
 
