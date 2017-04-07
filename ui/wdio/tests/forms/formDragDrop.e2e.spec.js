@@ -10,7 +10,7 @@
     let realmId;
     let testApp;
 
-    describe('Form Builder Tests:', function() {
+    describe('Forms - Form Builder Tests (Drag and Drop): ', function() {
         beforeAll(function() {
             /**
              * Setup method. Creates test app then authenticates into the new stack
@@ -151,7 +151,7 @@
             // verify second field is not visible
             expect(browser.isVisibleWithinViewport(secondField)).toBe(false);
             // start dragging
-            browser.moveToObject(firstField);
+            browser.moveToObject(firstField, 0, 0);
             browser.buttonDown();
             // drag off the scrollable area & wait for second field to become visible (or timeout)
             formBuilderPO.centerActionsOnFooter.moveToObject(); // blue footer bar
