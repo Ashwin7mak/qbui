@@ -79,10 +79,15 @@ const shell = (
             locale: Locale.getLocale(),
             i18n: Locale.getI18nBundle()
         };
-        case types.OPEN_FIELD_SELECTOR:
+    case types.OPEN_FIELD_SELECTOR:
         return {
             ...state,
             fieldsListCollapsed: false
+        };
+    case types.CLOSE_FIELD_SELECTOR:
+        return {
+            ...state,
+            fieldsListCollapsed: true
         };
     default:
         // return existing state by default in redux

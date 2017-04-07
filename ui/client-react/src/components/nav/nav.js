@@ -38,6 +38,7 @@ import Tooltip from '../../../../reuse/client/src/components/tooltip/tooltip';
 import Icon from '../../../../reuse/client/src/components/icon/icon';
 import TableCreationDialog from '../table/tableCreationDialog';
 import AppUtils from '../../utils/appUtils';
+import QBicon from '../qbIcon/qbIcon';
 
 
 // This shared view with the server layer must be loaded as raw HTML because
@@ -300,6 +301,10 @@ export const Nav = React.createClass({
         );
     },
 
+    toggleFieldSelectorMenu(context, appId, tblId, rptId, params) {
+        this.props.toggleFieldSelectorMenu(context, appId, tblId, rptId, params);
+    },
+
     addColumnToTable(id) {
         /*let params = {
             clicked: this.props.reportData.fieldSelectMenu.clickedColumn,
@@ -319,13 +324,26 @@ export const Nav = React.createClass({
     },
 
     getMenuContent(reportData) {
+        let titles = ["Title", "Another Title", "Apples", "Fruit", "School", "Toast", "Cereal", "Sauce", "Sandwich", "Overflow", "Dance", "Movies"];
+        let elements = [];
+        for (let i = 0; i < titles.length; i++) {
+            elements.push({
+                key: i + "",
+                title: titles[i]
+            });
+        }
+        let params = {
+            open: false
+        };
         return (
-            <ListOfElements
-                elements={[
-                    {key: "1", title: "Test"},
-                    {key: "2", title: "Another test"}
-                ]}
-            />
+            <div>
+                <QBicon
+                    icon="close"
+                    onClick={() => this.toggleFieldSelectorMenu(CONTEXT.REPORT.NAV, reportData.appId, reportData.tblId, reportData.rptId, params)}/>
+                <ListOfElements
+                    elements={elements}
+                />
+            </div>
         );
         /*let availableFields = this.props.reportData.data ? this.props.reportData.data.columns : [];
         let display = availableFields.map((column) => {
