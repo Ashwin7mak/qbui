@@ -27,6 +27,7 @@ var ComponentLibraryWrapper = React.createClass({
                             <li><Link to="/qbase/components/pageTitle" activeClassName="active">PageTitle</Link></li>
                             <li><Link to="/qbase/components/sideMenuBase" activeClassName="active">SideMenuBase</Link></li>
                             <li><Link to="/qbase/components/sideTrowserBase" activeClassName="active">SideTrowserBase</Link></li>
+                            <li><Link to="/qbase/components/topNav" activeClassName="active">TopNav</Link></li>
                         </ul>
                         <h4 className="header">Field Components</h4>
                         <ul>

@@ -39,6 +39,7 @@ import SideMenuBaseMetadata from 'component-metadata!../../../reuse/client/src/c
 import SideTrowserBaseMetadata from 'component-metadata!../../../reuse/client/src/components/sideTrowserBase/sideTrowserBase.js';
 import IconChooserMetadata from 'component-metadata!../../../reuse/client/src/components/iconChooser/iconChooser.js';
 import IconInputBoxMetadata from 'component-metadata!../../../reuse/client/src/components/iconInputBox/iconInputBox.js';
+import TopNavMetadata from 'component-metadata!../../../reuse/client/src/components/topNav/topNav.js';
 // END OF IMPORT STATEMENTS
 // above comment used for grunt task, please do not delete
 
@@ -80,7 +81,8 @@ var Metadata = () => {
         SideMenuBaseMetadata,
         SideTrowserBaseMetadata,
         IconChooserMetadata,
-        IconInputBoxMetadata
+        IconInputBoxMetadata,
+        TopNavMetadata
         // END OF METADATA MERGE
         // above comment used for grunt task, please do not delete
     };

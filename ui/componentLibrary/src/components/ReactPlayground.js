@@ -44,6 +44,8 @@ const SideMenuBase = require('../../../reuse/client/src/components/sideMenuBase/
 const SideTrowserBase = require('../../../reuse/client/src/components/sideTrowserBase/sideTrowserBase.js').default;
 const IconChooser = require('../../../reuse/client/src/components/iconChooser/iconChooser.js').default;
 const IconInputBox = require('../../../reuse/client/src/components/iconInputBox/iconInputBox.js').default;
+const TopNav = require('../../../reuse/client/src/components/topNav/topNav.js').default;
+const DefaultTopNavGlobalActions = require('../../../reuse/client/src/components/topNav/defaultTopNavGlobalActions.js').default;
 // END OF IMPORT STATEMENTS
 // The comment above is used for a grunt task. Please do not delete.
 

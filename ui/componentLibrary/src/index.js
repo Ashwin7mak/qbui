@@ -64,6 +64,7 @@ import SideMenuBaseDoc from './docs/sideMenuBase.js';
 import SideTrowserBaseDoc from './docs/sideTrowserBase.js';
 import IconChooserDoc from './docs/iconChooser.js';
 import IconInputBoxDoc from './docs/iconInputBox.js';
+import TopNavDoc from './docs/topNav.js';
 // END OF IMPORT STATEMENTS
 // Above comment used for Grunt task. Please do not delete.
 
@@ -116,6 +117,7 @@ render((
             <Route path="sideTrowserBase" component={SideTrowserBaseDoc} />
             <Route path="iconChooser" component={IconChooserDoc} />
             <Route path="iconInputBox" component={IconInputBoxDoc} />
+            <Route path="topNav" component={TopNavDoc} />
         </Route>
     </Router>
 ), document.getElementById('content'));
