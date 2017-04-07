@@ -17,10 +17,16 @@ export const tableFieldsReportDataObj = (state, appId, tblId) => {
     };
 };
 
-// TODO:: Replace mocked function with actual function to get fields
-// TEMPORARY MOCK
-export const getFields = () => [];
-// TEMPORARY MOCK
+// Return a specific field from table fields object for a given appId and tableId
+export const getField = (state, id, appId, tblId) => {
+    const fieldsList = _.find(state, fieldList => fieldList.appId === appId && fieldList.tblId === tblId);
+    const currentField = _.find(fieldsList.fields, field => field.id === id);
+    if (!currentField) {
+        return null;
+    } else {
+        return currentField;
+    }
+};
 
 const fieldsStore = (state = [], action) => {
 
@@ -94,6 +100,14 @@ const fieldsStore = (state = [], action) => {
             fieldsLoading: false,
             error: false
         });
+        return newState;
+    }
+    case types.UPDATE_FIELD : {
+        //newState above already pulled out the fieldList we want removed, so we just need to find our fieldList and update it!
+        let fieldList = _.find(state, fieldlist => fieldlist.appId === action.appId && fieldlist.tblId === action.tblId);
+        let fieldIndex = _.findIndex(fieldList.fields, field => field.id === action.field.id);
+        fieldList.fields[fieldIndex] = action.field;
+        newState.push(fieldList);
         return newState;
     }
     default:

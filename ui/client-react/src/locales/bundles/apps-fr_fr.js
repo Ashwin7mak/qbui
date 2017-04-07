@@ -518,6 +518,10 @@ export default {
             LOOKUP: "Chercher",
             FILE_ATTACHMENT: "Fichier"
         },
+        fieldPropertyLabels: {
+            name: 'prénom',
+            required: 'Doit être rempli'
+        },
         builder: {
             formBuilder: {
                 unimplemented: "La fonctionnalité n'est pas disponible en ce moment",

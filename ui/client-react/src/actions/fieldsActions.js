@@ -36,10 +36,12 @@ export const updateFieldId = (oldFieldId, newFieldId, formId = null) => {
     };
 };
 
-export const updateField = field => {
+export const updateField = (field, appId, tableId) => {
     return {
-        type: types.UPDATE_FIELD,
-        field
+        appId: appId,
+        tblId: tableId,
+        field: field,
+        type: types.UPDATE_FIELD
     };
 };
 
