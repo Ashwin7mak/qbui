@@ -138,7 +138,8 @@ const forms = (
 
         let {newField, newLocation} = action.content;
         updatedForm = _.cloneDeep(currentForm);
-
+        //If no location is passed in, a location will currently be hardcoded, since there is no current implementation
+        //to know what the current tabIndex, sectionIndex, and columnIndex might be.
         if (!newLocation) {
             newLocation = {
                 tabIndex: 0,
