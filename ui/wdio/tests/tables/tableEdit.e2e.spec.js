@@ -51,159 +51,155 @@
         });
 
         it('Add a new table and then edit that table', function() {
-            //TODO disabling on edge due to MC-1604
-            if (browserName !== 'MicrosoftEdge') {
-                //****************
-                //*Add a table
-                //***************
-                var tableName = rawValueGenerator.generateStringWithFixLength(5);
-                var tableRecord = rawValueGenerator.generateStringWithFixLength(10);
-                var tableDescription = rawValueGenerator.generateStringWithFixLength(10);
-                var tableFields = [
-                    {fieldTitle: '* Table Name', fieldValue: tableName},
-                    {fieldTitle: '* A record in the table is called', fieldValue: tableRecord},
-                    {fieldTitle: 'Description', fieldValue: tableDescription}
-                ];
-                var newTableFields = [
-                    {fieldTitle: '* Table Name', fieldValue: 'New ' + tableName},
-                    {fieldTitle: '* A record in the table is called', fieldValue: 'New ' + tableRecord},
-                    {fieldTitle: 'Description', fieldValue: 'New ' + tableDescription}
-                ];
 
-                //Step 1 - Click on new table button
-                tableCreatePO.clickCreateNewTable();
+            //****************
+            //*Add a table
+            //***************
+            var tableName = rawValueGenerator.generateStringWithFixLength(5);
+            var tableRecord = rawValueGenerator.generateStringWithFixLength(10);
+            var tableDescription = rawValueGenerator.generateStringWithFixLength(10);
+            var tableFields = [
+                {fieldTitle: '* Table Name', fieldValue: tableName},
+                {fieldTitle: '* A record in the table is called', fieldValue: tableRecord},
+                {fieldTitle: 'Description', fieldValue: tableDescription}
+            ];
+            var newTableFields = [
+                {fieldTitle: '* Table Name', fieldValue: 'New ' + tableName},
+                {fieldTitle: '* A record in the table is called', fieldValue: 'New ' + tableRecord},
+                {fieldTitle: 'Description', fieldValue: 'New ' + tableDescription}
+            ];
 
-                //Step 2 - Choose an Icon from Icon picker
-                var iconChoosedClassName = tableCreatePO.selectRandomIconFromIconChooser();
-                //Verify the choosed icon in closed combo
-                tableCreatePO.verifyIconInIconChooserCombo(iconChoosedClassName);
+            //Step 1 - Click on new table button
+            tableCreatePO.clickCreateNewTable();
 
-                //Step 3 - Enter table field values
-                tableFields.forEach(function(tableField) {
-                    //Enter field values
-                    tableCreatePO.enterTableFieldValue(tableField.fieldTitle, tableField.fieldValue);
-                });
+            //Step 2 - Choose an Icon from Icon picker
+            var iconChoosedClassName = tableCreatePO.selectRandomIconFromIconChooser();
+            //Verify the choosed icon in closed combo
+            tableCreatePO.verifyIconInIconChooserCombo(iconChoosedClassName);
 
-                //Step 4 - Click next field and verify it landed in drag fields page
-                tableCreatePO.clickNextBtn();
+            //Step 3 - Enter table field values
+            tableFields.forEach(function(tableField) {
+                //Enter field values
+                tableCreatePO.enterTableFieldValue(tableField.fieldTitle, tableField.fieldValue);
+            });
 
-                //Step 5 - Click on finished button and make sure it landed in edit Form container page
-                tableCreatePO.clickFinishedBtn();
+            //Step 4 - Click next field and verify it landed in drag fields page
+            tableCreatePO.clickNextBtn();
 
-                //Step 6- Click on forms Cancel button
-                formsPO.clickFormCancelBtn();
-                tableCreatePO.newTableBtn.waitForVisible();
+            //Step 5 - Click on finished button and make sure it landed in edit Form container page
+            tableCreatePO.clickFinishedBtn();
 
-                //****************
-                //*Verify the table field values created above in Edit mode
-                //***************
-                //Step 7 - Select Table and make sure it lands in reports page
-                tableCreatePO.selectTable(tableName);
+            //Step 6- Click on forms Cancel button
+            formsPO.clickFormCancelBtn();
+            tableCreatePO.newTableBtn.waitForVisible();
 
-                //Step 8 - Click on edit table settings and properties link under global actions gear
-                tableCreatePO.clickOnModifyTableSettingsLink();
+            //****************
+            //*Verify the table field values created above in Edit mode
+            //***************
+            //Step 7 - Select Table and make sure it lands in reports page
+            tableCreatePO.selectTable(tableName);
 
-                //Step 9 - Verify the created table field values in Edit mode.
-                //TODO I dont see the values added while creating in edit mode for record, description etc. Spoke to aditi this is different story of GET
-                //Verify field values that were added while create
-                //tableFields.forEach(function(tableField) {
-                //    //Enter field values
-                //    tableCreatePO.verifyTableFieldValues(tableField.fieldTitle, tableField.fieldValue);
-                //});
-                //verify icon chooser shows up the value selected
-                //expect(browser.element('.showAllToggle .qbIcon').getAttribute('className')).toBe(iconChoosedClassName);
+            //Step 8 - Click on edit table settings and properties link under global actions gear
+            tableCreatePO.clickOnModifyTableSettingsLink();
 
-                //****************
-                //*Edit the newely added table with new values
-                //***************
-                //Step 10 - Select the new icon from icon chooser
-                var newIconChoosedClassName = tableCreatePO.selectRandomIconFromIconChooser();
-                //Verify the choosed icon in closed combo
-                tableCreatePO.verifyIconInIconChooserCombo(newIconChoosedClassName);
+            //Step 9 - Verify the created table field values in Edit mode.
+            //TODO I dont see the values added while creating in edit mode for record, description etc. Spoke to aditi this is different story of GET
+            //Verify field values that were added while create
+            //tableFields.forEach(function(tableField) {
+            //    //Enter field values
+            //    tableCreatePO.verifyTableFieldValues(tableField.fieldTitle, tableField.fieldValue);
+            //});
+            //verify icon chooser shows up the value selected
+            //expect(browser.element('.showAllToggle .qbIcon').getAttribute('className')).toBe(iconChoosedClassName);
 
-                //Step 11 - Enter table invalid field values
-                newTableFields.forEach(function(tableField) {
-                    tableCreatePO.enterTableFieldValue(tableField.fieldTitle, tableField.fieldValue);
-                });
+            //****************
+            //*Edit the newely added table with new values
+            //***************
+            //Step 10 - Select the new icon from icon chooser
+            var newIconChoosedClassName = tableCreatePO.selectRandomIconFromIconChooser();
+            //Verify the choosed icon in closed combo
+            tableCreatePO.verifyIconInIconChooserCombo(newIconChoosedClassName);
 
-                //Step 12 - Click on apply button in edit table mode
-                tableCreatePO.clickOnEditTableApplyBtn();
+            //Step 11 - Enter table invalid field values
+            newTableFields.forEach(function(tableField) {
+                tableCreatePO.enterTableFieldValue(tableField.fieldTitle, tableField.fieldValue);
+            });
 
-                //Step 13 - Verify new table field values
-                newTableFields.forEach(function(tableField) {
-                    //Enter field values
-                    tableCreatePO.verifyTableFieldValues(tableField.fieldTitle, tableField.fieldValue);
-                });
-                expect(browser.element('.showAllToggle .qbIcon').getAttribute('className')).toBe(newIconChoosedClassName);
+            //Step 12 - Click on apply button in edit table mode
+            tableCreatePO.clickOnEditTableApplyBtn();
 
-                //Step 14 - Verify table link with new edited table name shows on left Nav . Make sure the table name is updated to new name
-                expect(browser.element('.standardLeftNav .contextHeaderTitle').getAttribute('textContent')).toBe('New ' + tableName);
+            //Step 13 - Verify new table field values
+            newTableFields.forEach(function(tableField) {
+                //Enter field values
+                tableCreatePO.verifyTableFieldValues(tableField.fieldTitle, tableField.fieldValue);
+            });
+            expect(browser.element('.showAllToggle .qbIcon').getAttribute('className')).toBe(newIconChoosedClassName);
 
-                //Step 15 - Click on back to apps page link
-                browser.element('.standardLeftNav .navItemContent').click();
+            //Step 14 - Verify table link with new edited table name shows on left Nav . Make sure the table name is updated to new name
+            expect(browser.element('.standardLeftNav .contextHeaderTitle').getAttribute('textContent')).toBe('New ' + tableName);
 
-                //Step 16 - Verify it landed in apps page with tables list
-                tableCreatePO.newTableBtn.waitForVisible();
-            }
+            //Step 15 - Click on back to apps page link
+            browser.element('.standardLeftNav .navItemContent').click();
+
+            //Step 16 - Verify it landed in apps page with tables list
+            tableCreatePO.newTableBtn.waitForVisible();
         });
 
         it('Edit existing table', function() {
-            //TODO disabling on edge due to MC-1604
-            if (browserName !== 'MicrosoftEdge') {
-                var tableName = rawValueGenerator.generateStringWithFixLength(5);
-                var tableRecord = rawValueGenerator.generateStringWithFixLength(10);
-                var tableDescription = rawValueGenerator.generateStringWithFixLength(10);
-                var tableFields = [
-                    {fieldTitle: '* Table Name', fieldValue: tableName},
-                    {fieldTitle: '* A record in the table is called', fieldValue: tableRecord},
-                    {fieldTitle: 'Description', fieldValue: tableDescription}
-                ];
 
-                //Step 1 - Click on existing table 'Table 2'
-                tableCreatePO.selectTable(existingTableName);
+            var tableName = rawValueGenerator.generateStringWithFixLength(5);
+            var tableRecord = rawValueGenerator.generateStringWithFixLength(10);
+            var tableDescription = rawValueGenerator.generateStringWithFixLength(10);
+            var tableFields = [
+                {fieldTitle: '* Table Name', fieldValue: tableName},
+                {fieldTitle: '* A record in the table is called', fieldValue: tableRecord},
+                {fieldTitle: 'Description', fieldValue: tableDescription}
+            ];
 
-                //Step 2 - Click on edit table settings and properties link of an existing table 'Table 2' under global actions gear
-                tableCreatePO.clickOnModifyTableSettingsLink();
+            //Step 1 - Click on existing table 'Table 2'
+            tableCreatePO.selectTable(existingTableName);
 
-                //Step 3 - Select the new icon from icon chooser
-                var newIconChoosedClassName = tableCreatePO.selectRandomIconFromIconChooser();
+            //Step 2 - Click on edit table settings and properties link of an existing table 'Table 2' under global actions gear
+            tableCreatePO.clickOnModifyTableSettingsLink();
 
-                //Step 4 - Enter new table field avlues
-                tableFields.forEach(function(tableField) {
-                    tableCreatePO.enterTableFieldValue(tableField.fieldTitle, tableField.fieldValue);
-                });
+            //Step 3 - Select the new icon from icon chooser
+            var newIconChoosedClassName = tableCreatePO.selectRandomIconFromIconChooser();
 
-                //Step 5 - Click on apply button in edit table mode
-                tableCreatePO.clickOnEditTableApplyBtn();
+            //Step 4 - Enter new table field avlues
+            tableFields.forEach(function(tableField) {
+                tableCreatePO.enterTableFieldValue(tableField.fieldTitle, tableField.fieldValue);
+            });
 
-                //Step 6 - Verify new table field values
-                tableFields.forEach(function(tableField) {
-                    //Enter field values
-                    tableCreatePO.verifyTableFieldValues(tableField.fieldTitle, tableField.fieldValue);
-                });
+            //Step 5 - Click on apply button in edit table mode
+            tableCreatePO.clickOnEditTableApplyBtn();
 
-                //Step 7 - Verify table link with new edited table name shows on left Nav . Make sure the table name is updated to new name
-                expect(browser.element('.standardLeftNav .contextHeaderTitle').getAttribute('textContent')).toBe(tableName);
+            //Step 6 - Verify new table field values
+            tableFields.forEach(function(tableField) {
+                //Enter field values
+                tableCreatePO.verifyTableFieldValues(tableField.fieldTitle, tableField.fieldValue);
+            });
 
-                //Step 8 - Click on back to apps page link
-                browser.element('.standardLeftNav .navItemContent').click();
-                //Verify it landed in apps page with tables list
-                tableCreatePO.newTableBtn.waitForVisible();
+            //Step 7 - Verify table link with new edited table name shows on left Nav . Make sure the table name is updated to new name
+            expect(browser.element('.standardLeftNav .contextHeaderTitle').getAttribute('textContent')).toBe(tableName);
 
-                //Step 9 - Select Table and make sure it lands in reports page
-                tableCreatePO.selectTable(tableName);
+            //Step 8 - Click on back to apps page link
+            browser.element('.standardLeftNav .navItemContent').click();
+            //Verify it landed in apps page with tables list
+            tableCreatePO.newTableBtn.waitForVisible();
 
-                //Step 10 - Click on edit table settings and properties link under global actions gear
-                tableCreatePO.clickOnModifyTableSettingsLink();
+            //Step 9 - Select Table and make sure it lands in reports page
+            tableCreatePO.selectTable(tableName);
 
-                //Step 11 - Verify new edited values
-                //TODO I dont see the values added while creating in edit mode for record, description etc. Spoke to aditi this is different story of GET
-                //tableFields.forEach(function(tableField) {
-                //    //Enter field values
-                //    tableCreatePO.verifyTableFieldValues(tableField.fieldTitle, tableField.fieldValue);
-                //});
-                //tableCreatePO.verifyIconInIconChooserCombo(newIconChoosedClassName);
-            }
+            //Step 10 - Click on edit table settings and properties link under global actions gear
+            tableCreatePO.clickOnModifyTableSettingsLink();
+
+            //Step 11 - Verify new edited values
+            //TODO I dont see the values added while creating in edit mode for record, description etc. Spoke to aditi this is different story of GET
+            //tableFields.forEach(function(tableField) {
+            //    //Enter field values
+            //    tableCreatePO.verifyTableFieldValues(tableField.fieldTitle, tableField.fieldValue);
+            //});
+            //tableCreatePO.verifyIconInIconChooserCombo(newIconChoosedClassName);
         });
 
         it('Verify Reset functionality in edit table mode', function() {
