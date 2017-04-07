@@ -27,14 +27,11 @@ const FieldToken = (props) => {
         classes.push('fieldTokenCollapsed');
     }
 
-    let {datatypeAttributes} = props;
-    let fieldDef = {datatypeAttributes};
-    let type = FieldFormats.getFormatType(fieldDef);
     return (
         <div className={classes.join(' ')} onClick={props.onClick}>
             <div className="fieldTokenIconContainer">
                 <div className="fieldTokenIcon">
-                    <Icon icon={FieldUtils.getFieldSpecificIcon(type)} />
+                    <Icon icon={FieldUtils.getFieldSpecificIcon(props.type)} />
                 </div>
             </div>
             <div className="fieldTokenTitle">
