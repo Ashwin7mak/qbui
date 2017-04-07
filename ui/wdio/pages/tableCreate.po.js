@@ -28,13 +28,13 @@
         tableHelpBtn : {get: function() {return browser.element('.iconUISturdy-help');}},
 
         //table Next button
-        tableNextBtn: {get: function() {return browser.element('button.nextButton');}},
+        tableNextBtn: {get: function() {return browser.element('.modal-footer button.nextButton');}},
         //table Cancel button
-        tableCancelBtn: {get: function() {return browser.element('button.cancelButton');}},
+        tableCancelBtn: {get: function() {return browser.element('.modal-footer button.cancelButton');}},
         //table finished button
-        tableFinishedBtn: {get: function() {return browser.element('button.finishedButton');}},
+        tableFinishedBtn: {get: function() {return browser.element('.modal-footer button.finishedButton');}},
         //table previous button
-        tablePreviousBtn: {get: function() {return browser.element('button.previousButton');}},
+        tablePreviousBtn: {get: function() {return browser.element('.modal-footer button.previousButton');}},
 
         //Icon chooser
         tableFieldIconChooser: {get: function() {return browser.element('.iconChooser.closed');}},
@@ -215,27 +215,18 @@
 
             //step 1-  Wait for the button to be visible
             createTableButtonEl.waitForVisible();
-            try {
-                //step 2 - Click on create Table button
-                createTableButtonEl.click();
-
-                //step 3 - make sure it lands in forms edit container
-                browser.waitForVisible('form.editForm', e2eConsts.extraLongWaitTimeMs, true);
-            } catch (err) {
-                console.log("Checking to see if WebdriverIO command throws an error - Trying again with JS. \n Error = " + err.toString());
-                // Catch an error from above and then retry
-                // Single click via raw javascript
-                browser.execute(function() {
-                    var event = new MouseEvent('click', {
-                        'view': window,
-                        'bubbles': true,
-                        'cancelable': true,
-                        'detail': 1
-                    });
-                    document.querySelector('button.finishedButton').dispatchEvent(event);
+            // Catch an error from above and then retry
+            // Single click via raw javascript
+            browser.execute(function() {
+                var event = new MouseEvent('click', {
+                    'view': window,
+                    'bubbles': true,
+                    'cancelable': true,
+                    'detail': 1
                 });
-                browser.waitForVisible('form.editForm', e2eConsts.mediumWaitTimeMs, true);
-            }
+                document.querySelector('button.finishedButton').dispatchEvent(event);
+            });
+            browser.waitForVisible('form.editForm', e2eConsts.mediumWaitTimeMs, true);
         }},
 
         /**
