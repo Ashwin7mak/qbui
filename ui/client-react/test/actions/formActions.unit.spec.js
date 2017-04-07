@@ -348,6 +348,18 @@ describe('Form Actions', () => {
         });
     });
 
+    describe('addNewFieldToForm', () => {
+        it('creates an action that will select a field', () => {
+            expect(formActions.addNewFieldToForm('view', 1, {})).toEqual({
+                id: 'view',
+                type: types.ADD_FIELD,
+                content: {
+                    location: 1,
+                    newField: { id: 'newField_1', edit: true, FormFieldElement: { positionSameRow: true, fieldId: 'newField_1', displayText: 'New Text Field' }
+                }});
+        });
+    });
+
     describe('selectFieldOnForm', () => {
         it('creates an action that will select a field', () => {
             expect(formActions.selectFieldOnForm('view', 1)).toEqual({
