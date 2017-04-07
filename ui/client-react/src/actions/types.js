@@ -24,6 +24,7 @@ export const SYNC_FORM = 'SYNC_FORM';
 export const SELECT_FIELD = 'SELECT_FIELD';
 export const DESELECT_FIELD = 'DESELECT_FIELD';
 export const ADD_FIELD = 'ADD_FIELD';
+export const UNLOAD_FORM = 'UNLOAD_FORM';
 
 //  ********  Nav shell actions ********
 export const UPDATE_FORM_ANIMATION_STATE = 'UPDATE_FORM_ANIMATION_STATE';

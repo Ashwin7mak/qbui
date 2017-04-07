@@ -353,3 +353,10 @@ function saveTheForm(appId, tblId, formType, formMeta, isNew) {
         });
     };
 }
+
+export const unloadForm = (id) => {
+    return {
+        id,
+        type: types.UNLOAD_FORM
+    };
+};
