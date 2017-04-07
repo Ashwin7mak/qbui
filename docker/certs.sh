@@ -1,9 +1,7 @@
 #!/bin/sh
 set -e
-set -o pipefail
 
 mkdir -p /dev/shm/secrets
-chmod 750 /dev/shm/secrets
 openssl req -batch -nodes -new -x509 \
 -keyout /dev/shm/secrets/nodejs.key \
 -out /dev/shm/secrets/nodejs.crt \

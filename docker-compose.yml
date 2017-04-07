@@ -9,7 +9,7 @@ services:
       context: ./
       dockerfile: Dockerfile
     environment:
-      - NODE_ENV=local
+      - NODE_ENV=container
     image: quickbase/ui
     ports:
       # Unique post assignment from host:container
