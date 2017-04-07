@@ -120,6 +120,13 @@ const forms = (
             draggedItemProps
         );
 
+        if (!updatedForm.selectedFields) {
+            updatedForm.selectedFields = [];
+            updatedForm.previouslySelectedField = [];
+        }
+
+        updatedForm.selectedFields[0] = newLocation;
+
         newState[action.id] = updatedForm;
         return newState;
     }
