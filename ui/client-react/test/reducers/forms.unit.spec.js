@@ -183,8 +183,7 @@ describe('Forms reducer functions', () => {
         afterEach(() => {
             ReducerRewireAPI.__ResetDependency__('MoveFieldHelper');
         });
-        // Object({ view: Object({ id: 'view', formData: Object({ formMeta: 'updated form meta' }), selectedFields: [ 1 ], previouslySelectedField: [  ] }) })
-        // Object({ view: Object({ id: 'view', formData: Object({ formMeta: 'updated form meta' }) }) })
+        
         it('returns a new state with the field in the new position', () => {
             expect(reducer(stateWithViewForm, actionPayload)).toEqual({
                 [VIEW]: {
