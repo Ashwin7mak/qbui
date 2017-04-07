@@ -402,10 +402,11 @@
                 results[0].element('.tipChildWrapper').waitForVisible();
                 //moveToObject() not working for firefox. Here the above line still checking for tipChildWrapper. We are good on firefox too.
                 if (browserName !== 'firefox') {
-                    results[0].element('.tableFieldInput input').moveToObject();
-                    browser.element('.invalidInput').waitForVisible();
+                    results[0].moveToObject('.tableFieldInput');
+                    browser.waitForExist('.invalidInput'); // Account for short timeout in showing tooltip
                     expect(results[0].element('.invalidInput').getAttribute('textContent')).toBe(errorMsg);
                 }
+                return results[0].click();
             }
         }},
 
