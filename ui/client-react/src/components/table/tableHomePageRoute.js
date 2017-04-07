@@ -16,6 +16,7 @@ import {loadDynamicReport, addColumnToTable, toggleFieldSelectorMenu} from '../.
 import {CONTEXT} from '../../actions/context';
 import WindowLocationUtils from '../../utils/windowLocationUtils';
 import {EDIT_RECORD_KEY, NEW_RECORD_VALUE} from '../../constants/urlConstants';
+import ReportFieldSelectTrowser from '../../components/report/reportFieldSelectTrowser';
 import SideMenuBase from '../../../../reuse/client/src/components/sideMenuBase/sideMenuBase';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
@@ -113,17 +114,27 @@ export const TableHomePageRoute = React.createClass({
             addBefore: this.props.reportData.fieldSelectMenu.addBefore
         };
 
+        let availableFields = this.props.reportData.data ? this.props.reportData.data.columns : [];
+        for (let c = 0; c < availableFields.length; c++) {
+            if (availableFields[c].id === id) {
+                availableFields[c].isHidden = false;
+            }
+        }
+
         this.props.addColumnToTable(CONTEXT.REPORT.NAV, this.props.reportData.appId,
             this.props.reportData.tblId, this.props.reportData.rptId, params);
-        this.props.toggleFieldSelectorMenu(CONTEXT.REPORT.NAV, this.props.reportData.appId,
-            this.props.reportData.tblId, this.props.reportData.rptId, {open: false});
+
+
+        /*this.props.toggleFieldSelectorMenu(CONTEXT.REPORT.NAV, this.props.reportData.appId,
+            this.props.reportData.tblId, this.props.reportData.rptId, {open: false});*/
     },
 
     getMenuContent() {
         let availableFields = this.props.reportData.data ? this.props.reportData.data.columns : [];
-        //TODO: display only hidden fields -- talk with Christine about how she'll denote a hidden column
         let display = availableFields.map((column) => {
-            return <li key={column.fieldDef.id} onClick={() => this.addColumnToTable(column.fieldDef.id)}>{column.fieldDef.name}</li>;
+            if (column.isHidden === true) {
+                return <li key={column.fieldDef.id} onClick={() => this.addColumnToTable(column.fieldDef.id)}>{column.fieldDef.name}</li>;
+            }
         });
         return (
             <div className="sideMenuFieldContent">
@@ -156,7 +167,7 @@ export const TableHomePageRoute = React.createClass({
 
             {this.getHeader()}
 
-            <SideMenuBase
+            <ReportFieldSelectTrowser
                 sideMenuContent={menuContent}
                 isCollapsed={this.props.reportData.fieldSelectMenu.availableFieldsMenuCollapsed}
                 pullRight>
@@ -173,7 +184,7 @@ export const TableHomePageRoute = React.createClass({
                     nameForRecords={this.nameForRecords}
                     pendEdits={this.props.pendEdits}
                     loadDynamicReport={this.loadDynamicReport}/>
-            </SideMenuBase>
+            </ReportFieldSelectTrowser>
         </div>);
     }
 });

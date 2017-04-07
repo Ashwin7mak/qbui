@@ -246,7 +246,6 @@ const report = (state = [], action) => {
     }
     case types.ADD_COLUMN_SUCCESS: {
         let currentReport = getReportFromState(action.id);
-        console.log("adding column..");
         if (currentReport) {
             let columns = currentReport.data.columns;
             let params = action.content;
@@ -277,7 +276,6 @@ const report = (state = [], action) => {
     case types.OPEN_FIELD_SELECTOR: {
         let currentReport = getReportFromState(action.id);
         if (currentReport) {
-            console.log(currentReport);
             let columns = currentReport.data.columns;
             let params = action.content;
 

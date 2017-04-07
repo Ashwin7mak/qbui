@@ -900,6 +900,19 @@ export const ReportContent = React.createClass({
     componentDidUpdate(prevProps) {
         this.capturePerfTiming(prevProps);
     },
+
+    getColumns() {
+        let columns = this.props.reportData.data ? this.props.reportData.data.columns : [];
+
+        columns.map((column) => {
+            if (column.isHidden === undefined) {
+                column.isHidden = true;
+            }
+        });
+
+        return columns;
+    },
+
     render() {
         //  Get the pending props from the redux store..
         let pendEdits = this.getPendEdits();
@@ -934,6 +947,8 @@ export const ReportContent = React.createClass({
         // onCellClick handler: do nothing for embedded reports phase1.
         let openRowToView = !this.props.phase1 && this.openRowToView;
 
+        let columns = this.getColumns();
+
         let reportContent;
 
         if (this.props.reportData.error) {
@@ -948,7 +963,7 @@ export const ReportContent = React.createClass({
                                 rptId={this.props.reportData.rptId}
 
                                 records={this.props.reportData.data ? _.cloneDeep(this.props.reportData.data.filteredRecords) : []}
-                                columns={this.props.reportData.data ? this.props.reportData.data.columns : []}
+                                columns={columns}
                                 primaryKeyName={this.props.primaryKeyName}
                                 loading={this.props.reportData.loading}
                                 appUsers={this.props.appUsers}
