@@ -7,7 +7,6 @@
     var favicons = require('../../constants/favicons');
     var CommonUrlUtils = require('../../../../common/src/commonUrlUtils');
     var log = require('../../logger').getLogger();
-    var cookieUtils = require('../../utility/cookieUtils');
     let routeHelper = require('../../routes/routeHelper');
     let ob32Utils = require('../../utility/ob32Utils');
 
@@ -99,13 +98,11 @@
                         secure: true
                     });
 
-                // Copy and set the new stack cookie with the same expiration as the original
-                // ticket cookie
-                let ticketExpiration = ob32Utils.decoder(cookieUtils.breakTicketDown(ticket, 1));
+                // Copy and set the new stack TICKET cookie as a session cookie
                 res.cookie(consts.COOKIES.TICKET, ticket,
                     {
                         domain: hostname,
-                        expires: new Date(ticketExpiration),
+                        expires: 0,
                         httpOnly: true,
                         secure: true
                     });
