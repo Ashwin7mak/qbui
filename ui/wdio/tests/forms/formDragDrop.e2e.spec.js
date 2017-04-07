@@ -10,7 +10,7 @@
     let realmId;
     let testApp;
 
-    describe('Form Builder Tests:', function() {
+    describe('Forms - Form Builder Tests (Drag and Drop): ', function() {
         beforeAll(function() {
             /**
              * Setup method. Creates test app then authenticates into the new stack
@@ -42,7 +42,7 @@
             // invoke form builder
             return formBuilderPO.open();
         });
-/*
+
         it('move a field via drag/drop, save & verify persistence', function() {
             // store the list of fields before moving
             let origFields = formBuilderPO.getFieldLabels();
@@ -140,7 +140,7 @@
             // verify that the first item has been restored
             expect(formBuilderPO.getFieldLabels().indexOf(firstField)).toEqual(0);
         });
-*/
+
         it('drags a field outside of viewport & verifies autoscroll', function() {
             let firstField = formBuilderPO.findFieldByIndex(1);
             let secondField = formBuilderPO.findFieldByIndex(2);
