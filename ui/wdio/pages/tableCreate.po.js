@@ -403,8 +403,8 @@
             if (results !== []) {
                 //Verify tipChildWrapper is visible
                 results[0].element('.tipChildWrapper').waitForVisible();
-                //moveToObject not working in firefox but we do check that tipChildWrapper is present for all invalid fieldInputs which should be good.
-                if (browserName !== 'firefox') {
+                //moveToObject not working in firefox and edge but we do check that tipChildWrapper is present for all invalid fieldInputs which should be good.
+                if (browserName === 'chrome') {
                     //Hover over to an element and verify the field error
                     results[0].moveToObject('.tableFieldInput');
                     browser.waitForExist('.invalidInput'); // Account for short timeout in showing tooltip
