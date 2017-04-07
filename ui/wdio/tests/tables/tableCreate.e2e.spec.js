@@ -114,24 +114,34 @@
                 {
                     message: 'with empty table name',
                     tableFields: [
-                        {fieldTitle: '* Table Name', fieldValue: '\uE00D  ', fieldError: 'Fill in the table name'},
+                        {fieldTitle: '* Table Name', fieldValue: ' '},
                         {fieldTitle: 'Description', fieldValue: 'test Description'}
+                    ],
+                    tableFieldError: [
+                        {fieldTitle: '* Table Name', fieldError: 'Fill in the table name'},
                     ]
                 },
                 {
                     message: 'with empty required fields',
                     tableFields: [
-                        {fieldTitle: '* Table Name', fieldValue: '\uE00D  ', fieldError: 'Fill in the table name'},
-                        {fieldTitle: '* A record in the table is called', fieldValue: '\uE00D  ', fieldError: 'Fill in the record name'},
+                        {fieldTitle: '* Table Name', fieldValue: ' '},
+                        {fieldTitle: '* A record in the table is called', fieldValue: ' '},
                         {fieldTitle: 'Description', fieldValue: 'test Description'}
+                    ],
+                    tableFieldError: [
+                        {fieldTitle: '* Table Name', fieldError: 'Fill in the table name'},
+                        {fieldTitle: '* A record in the table is called', fieldError: 'Fill in the record name'}
                     ]
                 },
                 {
                     message: 'with duplicate table name',
                     tableFields: [
-                        {fieldTitle: '* Table Name', fieldValue: 'Table 1', fieldError: 'Fill in a different value. Another table is already using this name'},
+                        {fieldTitle: '* Table Name', fieldValue: 'Table 1'},
                         {fieldTitle: '* A record in the table is called', fieldValue: 'Table 1'},
                         {fieldTitle: 'Description', fieldValue: 'test Description'}
+                    ],
+                    tableFieldError: [
+                        {fieldTitle: '* Table Name', fieldError: 'Fill in a different value. Another table is already using this name'},
                     ]
                 },
             ];
@@ -147,21 +157,25 @@
                 //Step 2 - Click on new table button
                 tableCreatePO.clickCreateNewTable();
 
-                //Step 3 - Enter table field values and verify validation
+                //Step 3 - Enter table field values
                 testCase.tableFields.forEach(function(tableField) {
-                    tableCreatePO.enterInvalidInputAndVerifyTableFieldValidation(tableField.fieldTitle, tableField.fieldValue, tableField.fieldError);
+                    tableCreatePO.enterTableFieldValue(tableField.fieldTitle, tableField.fieldValue);
+                });
 
+                //Step 4 - Verify validation
+                testCase.tableFieldError.forEach(function(tableField) {
+                    tableCreatePO.verifyTableFieldValidation(tableField.fieldTitle, tableField.fieldError);
                     //Verify next button is not enabled since there is error in field values
                     expect(browser.isEnabled('.modal-footer .nextButton')).toBeFalsy();
                 });
 
-                //Step 4 - Cancel table dialogue
+                //Step 5 - Cancel table dialogue
                 tableCreatePO.clickCancelBtn();
 
-                //Step 5 - Get the new count of table links in the left nav
+                //Step 6 - Get the new count of table links in the left nav
                 var newTableLinksCount = tableCreatePO.getAllTableLeftNavLinksList.value.length;
 
-                //Step 6 - Verify the table links NOT increased(ie table not saved)
+                //Step 7 - Verify the table links NOT increased(ie table not saved)
                 expect(newTableLinksCount).toBe(originalTableLinksCount);
 
             });

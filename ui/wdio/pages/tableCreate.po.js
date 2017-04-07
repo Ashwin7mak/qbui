@@ -281,19 +281,19 @@
                     //verify title of the field
                     expect(results[0].element('.tableFieldTitle').getAttribute('textContent')).toBe(tableField);
                     //Need this as we need to write something and remove it for testing negativity ie empty field for it to trigger the invalidInput
-                    results[0].element('.tableFieldInput input').click();
+                    results[0].element('.tableFieldInput input').clearElement();
                     results[0].setValue('.tableFieldInput input', [fieldValue, '\uE004']);
                     //Enter value of 'a record in the table is called a ' field
                 } else if (tableField.includes('A record in the table is called')) {
                     //verify title of the field
                     expect(results[0].element('.tableFieldTitle').getAttribute('textContent')).toBe(tableField);
-                    results[0].element('.tableFieldInput input').click();
+                    results[0].element('.tableFieldInput input').clearElement();
                     results[0].setValue('.tableFieldInput input', [fieldValue, '\uE004']);
                     //Enter value for Description field
                 } else if (tableField.includes('Description')) {
                     //verify title of the field
                     expect(results[0].element('.tableFieldTitle').getAttribute('textContent')).toBe(tableField);
-                    results[0].element('.tableFieldInput textarea').click();
+                    results[0].element('.tableFieldInput textarea').clearElement();
                     results[0].setValue('.tableFieldInput textarea', [fieldValue, '\uE004']);
                 }
             } else {
@@ -381,32 +381,23 @@
          * @fieldValue
          * @fieldErrorMsg
          */
-        enterInvalidInputAndVerifyTableFieldValidation : {value: function(tableField, fieldValue, errorMsg) {
+        verifyTableFieldValidation : {value: function(tableField, errorMsg) {
             //filter all fields in create new table dialogue
             var results = this.getAllTableFieldsList.value.filter(function(field) {
                 return field.getAttribute('textContent') === tableField;
             });
 
             if (results !== []) {
-                //Enter values for 'table name' field
-                if (tableField.includes('Table Name')) {
-                    results[0].element('.tableFieldInput input').click();
-                    results[0].setValue('.tableFieldInput input', [fieldValue, '\uE004']);
-                    //Enter value of 'a record in the table is called a ' field
-                } else if (tableField.includes('A record in the table is called')) {
-                    results[0].element('.tableFieldInput input').click();
-                    //Enter invalid value and hit Tab
-                    results[0].setValue('.tableFieldInput input', [fieldValue, '\uE004']);
-                }
-                //tip child wrapper displays only if there is an error.
+                //Verify tipChildWrapper is visible
                 results[0].element('.tipChildWrapper').waitForVisible();
-                //moveToObject() not working for firefox. Here the above line still checking for tipChildWrapper. We are good on firefox too.
+                //moveToObject not working in firefox but we do check that tipChildWrapper is present for all invalid fieldInputs which should be good.
                 if (browserName !== 'firefox') {
+                    //Hover over to an element and verify the field error
                     results[0].moveToObject('.tableFieldInput');
                     browser.waitForExist('.invalidInput'); // Account for short timeout in showing tooltip
                     expect(results[0].element('.invalidInput').getAttribute('textContent')).toBe(errorMsg);
+                    return results[0].click();
                 }
-                return results[0].click();
             }
         }},
 
