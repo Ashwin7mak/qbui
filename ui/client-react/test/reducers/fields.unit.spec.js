@@ -72,5 +72,25 @@ describe('Test fields reducer', () => {
         expect(reportObjNotFound.fields.data.length).toEqual(0);
     });
 
+    it('adding a field', () => {
+        const newState = [{
+            appId: appId,
+            tblId: tblId,
+            fields: [{builtIn:true, id:3}, {builtIn:false, id:8}, {builtIn:false, keyField:true, id:10}]
+        }];
+        const actionPayload = {
+            type: types.ADD_FIELD,
+            content: {
+                newField: {}
+            }
+        };
+        const fieldsWithNewFieldAddedOn = [{builtIn:true, id:3}, {builtIn:false, id:8}, {builtIn:false, keyField:true, id:10}, {}];
+        const state = reducer(newState, actionPayload, {appId:appId, tblId:tblId, type:types.ADD_FIELD});
+        const currentField = tableFieldsObj(state, appId, tblId);
+
+        expect(currentField.appId).toEqual(appId);
+        expect(currentField.tblId).toEqual(tblId);
+        expect(currentField.fields).toEqual(fieldsWithNewFieldAddedOn);
+    });
 });
 

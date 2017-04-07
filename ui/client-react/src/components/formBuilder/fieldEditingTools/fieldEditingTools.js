@@ -8,7 +8,7 @@ import Breakpoints from "../../../utils/breakpoints";
 import {connect} from "react-redux";
 import {ENTER_KEY, SPACE_KEY} from "../../../../../reuse/client/src/components/keyboardShortcuts/keyCodeConstants";
 import _ from "lodash";
-import {selectFieldOnForm, removeFieldFromForm} from "../../../actions/formActions";
+import {selectFieldOnForm, removeFieldFromForm, deselectField} from "../../../actions/formActions";
 import {CONTEXT} from "../../../actions/context";
 
 import "./fieldEditingTools.scss";
@@ -46,11 +46,13 @@ export class FieldEditingTools extends Component {
     }
 
     onClickField(e) {
-        if (this.props.selectFieldOnForm) {
+        if (this.props.selectFieldOnForm && !this.props.selectedFields[0]) {
             this.props.selectFieldOnForm(this.props.formId, this.props.location);
             if (e) {
                 e.preventDefault();
             }
+        } else if (this.props.selectFieldOnForm) {
+            this.props.deselectField(this.props.formId, this.props.location);
         }
     }
 
@@ -92,9 +94,9 @@ export class FieldEditingTools extends Component {
 
     componentDidMount() {
         /**
-         * For keyboard, we need to reset the focus, to maintain proper tabbing order
-         * and we need to keep the current form element in view, by scrolling it into view
-         * */
+          * For keyboard, we need to reset the focus, to maintain proper tabbing order
+          * and we need to keep the current form element in view, by scrolling it into view
+          * */
         if (this.props.previouslySelectedField && this.props.previouslySelectedField[0] && this.props.tabIndex !== "-1") {
             let previouslySelectedField = document.querySelectorAll(".fieldEditingTools");
             previouslySelectedField[this.props.previouslySelectedField[0].elementIndex].focus();
@@ -210,7 +212,8 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = {
     selectFieldOnForm,
-    removeFieldFromForm
+    removeFieldFromForm,
+    deselectField
 };
 
 export default connect(

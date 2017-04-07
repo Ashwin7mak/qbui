@@ -89,7 +89,6 @@ const forms = (
             saving: false,
             errorStatus: null
         });
-        console.log(JSON.stringify(newState));
         return newState;
     }
 
@@ -120,6 +119,49 @@ const forms = (
             newLocation,
             draggedItemProps
         );
+
+        if (!updatedForm.selectedFields) {
+            updatedForm.selectedFields = [];
+            updatedForm.previouslySelectedField = [];
+        }
+
+        updatedForm.selectedFields[0] = newLocation;
+
+        newState[action.id] = updatedForm;
+        return newState;
+    }
+
+    case types.ADD_FIELD : {
+        if (!currentForm) {
+            return state;
+        }
+
+        let {newField, newLocation} = action.content;
+        updatedForm = _.cloneDeep(currentForm);
+        //If no location is passed in, a location will currently be hardcoded, since there is no current implementation
+        //to know what the current tabIndex, sectionIndex, and columnIndex might be.
+        if (!newLocation) {
+            newLocation = {
+                tabIndex: 0,
+                sectionIndex: 0,
+                columnIndex: 0,
+                elementIndex: updatedForm.formData.formMeta.tabs[0].sections[0].columns[0].elements.length
+            };
+        } else if (newLocation) {
+            newLocation.elementIndex = newLocation.elementIndex + 1;
+        }
+
+        updatedForm.formData.formMeta = MoveFieldHelper.addNewFieldToForm(
+            updatedForm.formData.formMeta,
+            newLocation,
+            newField);
+
+        if (!updatedForm.selectedFields) {
+            updatedForm.selectedFields = [];
+            updatedForm.previouslySelectedField = [];
+        }
+
+        updatedForm.selectedFields[0] = newLocation;
 
         newState[action.id] = updatedForm;
         return newState;

@@ -45,6 +45,13 @@ const MoveFieldHelper = {
         return formMetaCopy;
     },
 
+    addNewFieldToForm(formMeta, newLocation, newField) {
+        let formMetaCopy = _.cloneDeep(formMeta);
+        newField = {containingElement: newField};
+        addElementToNewLocation(formMetaCopy, newLocation, newField);
+        return formMetaCopy;
+    },
+
     updateSelectedFieldLocation(location, updatedLocation) {
         let locationCopy = Object.assign({}, location);
         locationCopy.elementIndex = locationCopy.elementIndex + updatedLocation;
@@ -160,6 +167,7 @@ function addElementToNewLocation(formMetaData, newLocation, draggedItemProps) {
         columns.push(column);
     }
 
+    // column.elements.splice(elementIndex, 0, draggedItemProps);
     column.elements.splice(elementIndex, 0, draggedItemProps.containingElement);
     updateOrderIndices(column, 'elements');
 

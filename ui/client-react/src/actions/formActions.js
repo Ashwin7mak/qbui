@@ -10,6 +10,8 @@ import NotificationManager from '../../../reuse/client/src/scripts/notificationM
 import * as types from '../actions/types';
 import * as UrlConsts from "../constants/urlConstants";
 import {NEW_FORM_RECORD_ID} from '../constants/schema';
+import consts from '../../../common/src/constants';
+import _ from 'lodash';
 import {convertFormToArrayForClient, convertFormToObjectForServer} from './actionHelpers/transformFormData';
 import {saveAllNewFields, updateAllFieldsWithEdits} from './fieldsActions';
 
@@ -180,6 +182,25 @@ export const loadForm = (appId, tblId, rptId, formType, recordId) => {
     };
 };
 
+export const addNewFieldToForm = (formId, newLocation, newField) => {
+    let newId = _.uniqueId('newField_');
+    let displayText = 'New Text Field';
+    newField = _.merge({}, newField, {
+        id: newId,
+        edit: true,
+        FormFieldElement: {
+            positionSameRow: true,
+            fieldId: newId,
+            displayText
+        }
+    });
+    return event(formId, types.ADD_FIELD, {
+        newLocation,
+        newField
+    });
+};
+
+
 /**
  * Move a field from one position on a form to a different position
  * @param formId
@@ -219,7 +240,6 @@ export const deselectField = (formId, location) => {
  * @param formId
  * @param location
  * @returns {{id, type, content}|*}
-
  */
 export const removeFieldFromForm = (formId, location) => {
     return event(formId, types.REMOVE_FIELD, {
