@@ -56,7 +56,7 @@ const MoveFieldHelper = {
         let locationCopy = Object.assign({}, location);
         locationCopy.elementIndex = locationCopy.elementIndex + updatedLocation;
         return locationCopy;
-    },
+    }
 };
 
 // -- PRIVATE METHODS
