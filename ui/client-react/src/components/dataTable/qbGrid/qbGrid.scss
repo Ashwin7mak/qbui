@@ -27,6 +27,10 @@ $edit-icon-font-size: 18px;
     table-layout: fixed;
 
 
+    .qbTbody {
+        background-color: $color-black-100;
+    }
+
     //== generic/default styles for some grid elements
     .qbIcon {
         font-size: $grid-group-expand-icon-size;
@@ -52,7 +56,7 @@ $edit-icon-font-size: 18px;
         border-right: 1px solid $grid-line-color;
         border-bottom: 1px solid $grid-column-header-border-color;
         padding: $grid-header-cell-padding;
-        color: $color-blue-600;
+        color: $color-black-700;
         -webkit-font-smoothing: antialiased;
         background-color: $grid-column-header-background-color;
         cursor: default;
@@ -287,7 +291,7 @@ $edit-icon-font-size: 18px;
         top: -47px;
         left: -79px;
         padding: 0 24px;
-        border: 1px solid $grid-line-color;
+        border: 1px solid $color-purple-400;
 
         .loadedContent {
             padding: 0;
@@ -324,7 +328,7 @@ $edit-icon-font-size: 18px;
                 // colorize and tweak icon buttons
                 &.saveRecord {
                     color: $color-green-700;
-                    font-size: 18px;
+                    font-size: 16px;
                 }
 
                 &.invalidRecord {
@@ -334,7 +338,11 @@ $edit-icon-font-size: 18px;
                 }
 
                 &.cancelSelection {
-                    color: $iconfont-on-light-normal-color;
+                    color: $iconfont-on-light-alternate-color;
+                }
+
+                &:hover {
+                    color: $iconfont-on-hover-color;
                 }
 
                 &.deleteRecord {
@@ -531,10 +539,10 @@ $edit-icon-font-size: 18px;
 
         // standard cell
         .qbCell {
-            border-top: 2px solid $cell-edit-background-edit;
+            border-top: 1px solid $color-purple-400;
             overflow: visible;
             margin: 0;
-            border-right: 1px solid $grid-line-color;
+            border-right: 1px solid $color-black-300;
 
             .cellWrapper {
                 display: flex;

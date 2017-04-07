@@ -1,3 +1,4 @@
+import FieldFormats from '../../utils/fieldFormats';
 /**
  * This bundle contains all the strings needed by the "Apps" functional area.
  * This functional area is for the main app served in client-react at the /qbase/apps route.
@@ -483,38 +484,77 @@ export default {
         quickBaseClassic: "QuickBase Classique",
         quickBaseMercury: "QuickBase Mercury",
         missingWalkMe: "Le didacticiel n'est pas disponible",
+        fieldsDefaultLabels: {
+            [FieldFormats.TEXT_FORMAT]: "Texte",
+            [FieldFormats.MULTI_LINE_TEXT_FORMAT]: "Texte long",
+            [FieldFormats.TEXT_FORMAT_MULTICHOICE]: "Liste de choix",
+            [FieldFormats.TEXT_FORMAT_RADIO_BUTTONS]: "Boutons radio",
+            [FieldFormats.TEXT_FORMULA_FORMAT]: "Formule de texte",
+            [FieldFormats.NUMBER_FORMAT]: "Nombre",
+            [FieldFormats.CURRENCY_FORMAT]: "Devise",
+            [FieldFormats.CURRENCY_FORMAT_MULTICHOICE]: "Devise",
+            [FieldFormats.PERCENT_FORMAT]: "Pourcentage",
+            [FieldFormats.PERCENT_FORMAT_MULTICHOICE]: "Pourcentage",
+            [FieldFormats.NUMBER_FORMAT_MULTICHOICE]: "NListe de choix uneric",
+            [FieldFormats.NUMBER_FORMAT_RADIO_BUTTONS]: "Boutons radio numériques",
+            [FieldFormats.NUMERIC_FORMULA_FORMAT]: "Formule numérique",
+            [FieldFormats.DATE_FORMAT]: "Date",
+            [FieldFormats.DATETIME_FORMAT]: "Horodatage",
+            [FieldFormats.TIME_FORMAT]: "Moment de la journée",
+            [FieldFormats.DURATION_FORMAT]: "Durée",
+            [FieldFormats.USER_FORMAT]: "Utilisateur",
+            [FieldFormats.CHECKBOX_FORMAT]: "Case à cocher",
+            [FieldFormats.URL]: "URL",
+            [FieldFormats.EMAIL_ADDRESS]: "Email",
+            [FieldFormats.PHONE_FORMAT]: "Téléphone",
+            [FieldFormats.RATING_FORMAT]: "Évaluation",
+            [FieldFormats.RATING_FORMAT_MULTICHOICE]: "Évaluation",
+            [FieldFormats.URL_FORMULA_FORMAT]: "URL Formule",
+            FORMULA: "Formule",
+            SCALAR: "Scalaire",
+            CONCRETE: "Béton",
+            REPORT_LINK: "Lien du rapport",
+            SUMMARY: "Résumé",
+            LOOKUP: "Chercher",
+            FILE_ATTACHMENT: "Fichier"
+        },
         builder: {
             formBuilder: {
                 unimplemented: "La fonctionnalité n'est pas disponible en ce moment",
-                removeField: "Supprimer le champ du formulaire"
+                removeField: "Supprimer le champ du formulaire",
+                tooltips: {
+                    [`addNew${FieldFormats.TEXT_FORMAT}`]: "Créer un champ de texte et l'ajouter au formulaire",
+                    [`addNew${FieldFormats.NUMBER_FORMAT}`]: "Créer un champ de numéro et l'ajouter au formulaire",
+                    [`addNew${FieldFormats.DATE_FORMAT}`]: "Créer un champ de date et l'ajouter au formulaire",
+                    [`addNew${FieldFormats.DATETIME_FORMAT}`]: "Créez un horodatage et ajoutez-le au formulaire",
+                    [`addNew${FieldFormats.TIME_FORMAT}`]: "Créer un champ de l'heure du jour et l'ajouter au formulaire",
+                    [`addNew${FieldFormats.CHECKBOX_FORMAT}`]: "Crée une case à cocher et ajoutez-la au formulaire",
+                    [`addNew${FieldFormats.USER_FORMAT}`]: "Créer un champ utilisateur et l'ajouter au formulaire",
+                    [`addNew${FieldFormats.CURRENCY_FORMAT}`]: "Créez un champ de devise et ajoutez-le au formulaire",
+                    [`addNew${FieldFormats.PERCENT_FORMAT}`]: "Créer un champ de pourcentage et l'ajouter au formulaire",
+                    [`addNew${FieldFormats.RATING_FORMAT}`]: "Créer un champ de notation et l'ajouter au formulaire",
+                    [`addNew${FieldFormats.DURATION_FORMAT}`]: "Créer un champ de durée et l'ajouter au formulaire",
+                    [`addNew${FieldFormats.PHONE_FORMAT}`]: "Créer un champ de téléphone et l'ajouter au formulaire",
+                    [`addNew${FieldFormats.MULTI_LINE_TEXT_FORMAT}`]: "Créez un champ de texte long et ajoutez-le au formulaire",
+                    [`addNew${FieldFormats.URL}`]: "Créer un champ URL et l'ajouter au formulaire",
+                    [`addNew${FieldFormats.EMAIL_ADDRESS}`]: "Créer un champ de messagerie et l'ajouter au formulaire",
+                    [`addNew${FieldFormats.TEXT_FORMULA_FORMAT}`]: "Créez un champ de formule de texte et ajoutez-le au formulaire",
+                    [`addNew${FieldFormats.URL_FORMULA_FORMAT}`]: "Créer un champ de formule d'URL et l'ajouter au formulaire",
+                    [`addNew${FieldFormats.NUMERIC_FORMULA_FORMAT}`]: "Créez un champ de formule numérique et ajoutez-le au formulaire",
+                    [`addNew${FieldFormats.TEXT_FORMAT_MULTICHOICE}`]: "Créer une liste de choix et l'ajouter au formulaire",
+                    [`addNew${FieldFormats.RATING_FORMAT_MULTICHOICE}`]: "Créer un champ de notation et l'ajouter au formulaire",
+                    [`addNew${FieldFormats.CURRENCY_FORMAT_MULTICHOICE}`]: "Créez un champ de devise et ajoutez-le au formulaire",
+                    [`addNew${FieldFormats.PERCENT_FORMAT_MULTICHOICE}`]: "Créez un champ de pourcentage et ajoutez-le au formulaire",
+                    [`addNew${FieldFormats.NUMBER_FORMAT_MULTICHOICE}`]: "Créer une liste de choix numérique et l'ajouter au formulaire",
+                    [`addNew${FieldFormats.NUMBER_FORMAT_RADIO_BUTTONS}`]: "Créez des boutons radio numériques et ajoutez-les au formulaire",
+                    [`addNew${FieldFormats.TEXT_FORMAT_RADIO_BUTTONS}`]: "Créer les boutons radio des champs et les ajouter au formulaire",
+                }
             },
-            fields: {
-                // Keys are equal to server constants for field types to make it easier to get these keys
-                FORMULA: "Formule",
-                SCALAR: "Scalaire",
-                CONCRETE: "Béton",
-                REPORT_LINK: "Lien de rapport",
-                SUMMARY: "Résumé",
-                LOOKUP: "Recherche",
-                //Data types
-                CHECKBOX: "Case à cocher",
-                TEXT: "Texte",
-                PHONE_NUMBER: "Numéro de téléphone",
-                DATE_TIME: "Date et heure",
-                DATE: "Date",
-                DURATION: "Durée",
-                TIME_OF_DAY: "Heure du jour",
-                NUMERIC: "Numérique",
-                CURRENCY: "Devise",
-                RATING: "Cote",
-                PERCENT: "Pourcentage",
-                URL: "Url",
-                EMAIL_ADDRESS: "Email",
-                USER: "Utilisateur",
-                FILE_ATTACHMENT: "Fichier",
-                TEXT_FORMULA: "Formule de texte",
-                URL_FORMULA: "Formule Url",
-                NUMERIC_FORMULA: "Formule numérique"
+            fieldGroups: {
+                text: 'Texte',
+                numeric: 'Nombre',
+                date: 'Date',
+                other: 'Autre'
             }
         },
         featureSwitchAdmin: {
@@ -575,6 +615,10 @@ export default {
             validateTableNameEmpty: "Le nom de la table ne doit pas être vide",
             validateTableNameExists: "Le nom de la table doit être unique pour cette application",
             validateRecordNameEmpty: "Le nom de l'enregistrement ne doit pas être vide",
+        },
+        iconChooser: {
+            searchPlaceholder: "Rechercher des icônes..."
         }
+
     }
 };

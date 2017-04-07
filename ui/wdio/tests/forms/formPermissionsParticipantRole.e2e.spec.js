@@ -9,7 +9,7 @@
     var reportContentPO = requirePO('reportContent');
     var formsPO = requirePO('formsPage');
 
-    describe('Forms Participant User Permission Tests: ', function() {
+    describe('Forms - Participant User Permission Tests: ', function() {
 
         var realmName;
         var realmId;
@@ -19,7 +19,6 @@
         var roleId = 11;
         var appId;
         var tableId;
-
 
         beforeAll(function() {
             //App basic setUp

@@ -1,3 +1,4 @@
+import FieldFormats from '../../utils/fieldFormats';
 /**
  * This bundle contains all the strings needed by the "Apps" functional area.
  * This functional area is for the main app served in client-react at the /qbase/apps route.
@@ -484,38 +485,77 @@ export default {
         quickBaseClassic: "QuickBase Klassik",
         quickBaseMercury: "QuickBase Mercury",
         missingWalkMe: "Tutorial ist nicht verfügbar",
+        fieldsDefaultLabels: {
+            [FieldFormats.TEXT_FORMAT]: "Text",
+            [FieldFormats.MULTI_LINE_TEXT_FORMAT]: "Langtext",
+            [FieldFormats.TEXT_FORMAT_MULTICHOICE]: "Auswahlliste",
+            [FieldFormats.TEXT_FORMAT_RADIO_BUTTONS]: "Radio Knöpfe",
+            [FieldFormats.TEXT_FORMULA_FORMAT]: "Textformel",
+            [FieldFormats.NUMBER_FORMAT]: "Nummer",
+            [FieldFormats.CURRENCY_FORMAT]: "Währung",
+            [FieldFormats.CURRENCY_FORMAT_MULTICHOICE]: "Währung",
+            [FieldFormats.PERCENT_FORMAT]: "Prozentsatz",
+            [FieldFormats.PERCENT_FORMAT_MULTICHOICE]: "Prozentsatz",
+            [FieldFormats.NUMBER_FORMAT_MULTICHOICE]: "Numerische Auswahlliste",
+            [FieldFormats.NUMBER_FORMAT_RADIO_BUTTONS]: "Numeric radio buttons",
+            [FieldFormats.NUMERIC_FORMULA_FORMAT]: "Numerische Formel",
+            [FieldFormats.DATE_FORMAT]: "Datum",
+            [FieldFormats.DATETIME_FORMAT]: "Time stamp",
+            [FieldFormats.TIME_FORMAT]: "Zeitstempel",
+            [FieldFormats.DURATION_FORMAT]: "Dauer",
+            [FieldFormats.USER_FORMAT]: "Benutzer",
+            [FieldFormats.CHECKBOX_FORMAT]: "Checkbox",
+            [FieldFormats.URL]: "URL",
+            [FieldFormats.EMAIL_ADDRESS]: "Email",
+            [FieldFormats.PHONE_FORMAT]: "Telefon",
+            [FieldFormats.RATING_FORMAT]: "Bewertung",
+            [FieldFormats.RATING_FORMAT_MULTICHOICE]: "Bewertung",
+            [FieldFormats.URL_FORMULA_FORMAT]: "URL Formel",
+            FORMULA: "Formel",
+            SCALAR: "Skalar",
+            CONCRETE: "Beton",
+            REPORT_LINK: "Bericht Link",
+            SUMMARY: "Zusammenfassung",
+            LOOKUP: "Sieh nach oben",
+            FILE_ATTACHMENT: "Datei"
+        },
         builder: {
             formBuilder: {
                 unimplemented: "Feature ist momentan nicht verfügbar",
-                removeField: "Feld aus Form entfernen"
+                removeField: "Feld aus Form entfernen",
+                tooltips: {
+                    [`addNew${FieldFormats.TEXT_FORMAT}`]: "Erstellen Sie ein Textfeld und fügen Sie es dem Formular hinzu",
+                    [`addNew${FieldFormats.NUMBER_FORMAT}`]: "Erstellen Sie ein Zahlenfeld und fügen Sie es dem Formular hinzu",
+                    [`addNew${FieldFormats.DATE_FORMAT}`]: "Erstellen Sie ein Datumsfeld und fügen Sie es dem Formular hinzu",
+                    [`addNew${FieldFormats.DATETIME_FORMAT}`]: "Erstellen Sie einen Zeitstempel und fügen Sie ihn dem Formular hinzu",
+                    [`addNew${FieldFormats.TIME_FORMAT}`]: "Erstellen Sie ein Time-of-Day-Feld und fügen Sie es dem Formular hinzu",
+                    [`addNew${FieldFormats.CHECKBOX_FORMAT}`]: "Erstellen Sie ein Kontrollkästchen und fügen Sie es dem Formular hinzu",
+                    [`addNew${FieldFormats.USER_FORMAT}`]: "Erstellen Sie ein Benutzerfeld und fügen Sie es dem Formular hinzu",
+                    [`addNew${FieldFormats.CURRENCY_FORMAT}`]: "Erstellen Sie ein Währungsfeld und fügen Sie es dem Formular hinzu",
+                    [`addNew${FieldFormats.PERCENT_FORMAT}`]: "Erstellen Sie ein Prozentfeld und fügen Sie es dem Formular hinzu",
+                    [`addNew${FieldFormats.RATING_FORMAT}`]: "Erstellen Sie ein Rating-Feld und fügen Sie es dem Formular hinzu",
+                    [`addNew${FieldFormats.DURATION_FORMAT}`]: "Erstellen Sie ein Dauerfeld und fügen Sie es dem Formular hinzu",
+                    [`addNew${FieldFormats.PHONE_FORMAT}`]: "Erstellen Sie ein Telefonfeld und fügen Sie es dem Formular hinzu",
+                    [`addNew${FieldFormats.MULTI_LINE_TEXT_FORMAT}`]: "Erstellen Sie ein langes Textfeld und fügen Sie es dem Formular hinzu",
+                    [`addNew${FieldFormats.URL}`]: "Erstellen Sie ein URL-Feld und fügen Sie es dem Formular hinzu",
+                    [`addNew${FieldFormats.EMAIL_ADDRESS}`]: "Erstellen Sie ein E-Mail-Feld und fügen Sie es dem Formular hinzu",
+                    [`addNew${FieldFormats.TEXT_FORMULA_FORMAT}`]: "Erstellen Sie ein Textformelfeld und fügen Sie es dem Formular hinzu",
+                    [`addNew${FieldFormats.URL_FORMULA_FORMAT}`]: "Erstellen Sie ein URL-Formelfeld und fügen Sie es dem Formular hinzu",
+                    [`addNew${FieldFormats.NUMERIC_FORMULA_FORMAT}`]: "Erstellen Sie ein numerisches Formelfeld und fügen Sie es dem Formular hinzu",
+                    [`addNew${FieldFormats.TEXT_FORMAT_MULTICHOICE}`]: "Erstellen Sie eine Auswahlliste und fügen Sie sie dem Formular hinzu",
+                    [`addNew${FieldFormats.RATING_FORMAT_MULTICHOICE}`]: "Erstellen Sie ein Rating-Feld und fügen Sie es dem Formular hinzu",
+                    [`addNew${FieldFormats.CURRENCY_FORMAT_MULTICHOICE}`]: "Erstellen Sie ein Währungsfeld und fügen Sie es dem Formular hinzu",
+                    [`addNew${FieldFormats.PERCENT_FORMAT_MULTICHOICE}`]: "Erstellen Sie ein Prozentfeld und fügen Sie es dem Formular hinzu",
+                    [`addNew${FieldFormats.NUMBER_FORMAT_MULTICHOICE}`]: "Erstellen Sie eine numerische Auswahlliste und fügen Sie sie dem Formular hinzu",
+                    [`addNew${FieldFormats.NUMBER_FORMAT_RADIO_BUTTONS}`]: "Erstellen Sie numerische Optionsfelder und fügen Sie sie dem Formular hinzu",
+                    [`addNew${FieldFormats.TEXT_FORMAT_RADIO_BUTTONS}`]: "Radio-Optionsfeld erstellen und sie dem Formular hinzufügen",
+                }
             },
-            fields: {
-                // Keys are equal to server constants for field types to make it easier to get these keys
-                FORMULA: "Formel",
-                SCALAR: "Scalar",
-                CONCRETE: "Beton",
-                REPORT_LINK: "Berichtslink",
-                SUMMARY: "Zusammenfassung",
-                LOOKUP: "Nachschlagen",
-                //Data types
-                CHECKBOX: "Kontrollkästchen",
-                TEXT: "Text",
-                PHONE_NUMBER: "Telefonnummer",
-                DATE_TIME: "Datum & Uhrzeit",
-                DATE: "Datum",
-                DURATION: "Dauer",
-                TIME_OF_DAY: "Uhrzeit",
-                NUMERIC: "Numerisch",
-                CURRENCY: "Währung",
-                RATING: "Rating",
-                PERCENT: "Prozent",
-                URL: "Url",
-                EMAIL_ADDRESS: "Email",
-                USER: "Benutzer",
-                FILE_ATTACHMENT: "Datei",
-                TEXT_FORMULA: "Textformel",
-                URL_FORMULA: "Url-Formel",
-                NUMERIC_FORMULA: "Numerische Formel"
+            fieldGroups: {
+                text: "Text",
+                numeric: "Nummer",
+                date: "Datum",
+                other: "Andere"
             }
         },
         featureSwitchAdmin: {
@@ -576,6 +616,9 @@ export default {
             validateTableNameEmpty: "Kann keine Tabelle erstellen",
             validateTableNameExists: "Der Tabellenname muss für diese App eindeutig sein",
             validateRecordNameEmpty: "Tabellenname darf nicht leer sein",
+        },
+        iconChooser: {
+            searchPlaceholder: "Tabellensymbole suchen ......"
         }
     }
 };

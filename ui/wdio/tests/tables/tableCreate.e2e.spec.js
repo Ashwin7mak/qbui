@@ -10,8 +10,7 @@
     var RequestSessionTicketPage = requirePO('requestSessionTicket');
     var rawValueGenerator = require('../../../test_generators/rawValue.generator');
 
-
-    describe('Create table tests : ', function() {
+    describe('Tables - Create a table via builder tests: ', function() {
         var realmName;
         var realmId;
         var testApp;
@@ -73,27 +72,35 @@
                 tableCreatePO.enterTableFieldValue(tableField.fieldTitle, tableField.fieldValue);
             });
 
-            //Step 5 - Click next field and verify it landed in drag fields page
+            //Step 6 - Choose an Icon from Icon picker
+            tableCreatePO.selectRandomIconFromIconChooser();
+
+            //Step 5 - Verify iconChooser search functionality
+            tableCreatePO.searchIconFromChooser('bicycle');
+            var searchReturnedIcons = tableCreatePO.getAllIconsFromIconChooser;
+            //Verify it returns just one
+            expect(searchReturnedIcons.value.length).toBe(1);
+            expect(searchReturnedIcons.getAttribute('className')).toBe('qbIcon iconTableSturdy-bicycle');
+
+            //Step 7 - Click next field and verify it landed in drag fields page
             tableCreatePO.clickNextBtn();
 
-            //Step 6 - Click on finished button and make sure it landed in edit Form container page
+            //Step 8 - Click on finished button and make sure it landed in edit Form container page
             tableCreatePO.clickFinishedBtn();
 
-            //Step 7 - Click on forms Cancel button
+            //Step 9 - Click on forms Cancel button
             formsPO.clickFormCancelBtn();
             tableCreatePO.newTableBtn.waitForVisible();
 
 
-            //Step 8 - Get the new count of table links in the left nav
+            //Step 10 - Get the new count of table links in the left nav
             var newTableLinksCount = tableCreatePO.getAllTableLeftNavLinksList.value.length;
 
-            //Step 9 - Verify the table links count got increased by 1
+            //Step 11 - Verify the table links count got increased by 1
             expect(newTableLinksCount).toBe(originalTableLinksCount + 1);
 
-            //Step 10 - Select Table and make sure it lands in reports page
+            //Step 12 - Select Table and make sure it lands in reports page
             tableCreatePO.selectTable(tableName);
-
-
         });
 
         /**

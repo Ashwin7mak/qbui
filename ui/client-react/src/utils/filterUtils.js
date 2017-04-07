@@ -2,10 +2,11 @@
  * Static class of Filter Utility functions
  */
 import * as schemaConsts from '../constants/schema.js';
+import FacetSelections from '../components/facet/facetSelections';
 
 class FilterUtils {
 
-    static getFilter(searchFor, selected, facetFields) {
+    static getFilter(searchFor, selected = new FacetSelections(), facetFields) {
         //var facetExpression = [{fid:'3', values:['10', '11']}, {fid:'4', values:['abc']}];
         let facetExpression = [];
         let fields = selected.whichHasAnySelections();
