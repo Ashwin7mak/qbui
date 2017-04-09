@@ -39,6 +39,19 @@
                 var generatedApp = this.generateAppFromMap(tableToFieldToFieldTypeMap);
                 // Create the app via the API
                 return this.createApp(generatedApp);
+            },
+
+            /**
+             * Creates a named application, table and fields from map
+             */
+            createNamedAppSchema: function (tableToFieldToFieldTypeMap, appName) {
+                var generatedApp = this.generateNamedAppFromMap(tableToFieldToFieldTypeMap, appName);
+                return this.createApp(generatedApp);
+
+            },
+            generateNamedAppFromMap: function(tableToFieldToFieldTypeMap, appName) {
+                var generatedApp = appGenerator.generateNamedAppWithTablesFromMap(tableToFieldToFieldTypeMap, appName);
+                return generatedApp;
             }
         };
         return appService;

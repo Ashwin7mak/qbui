@@ -14,15 +14,26 @@ class AutomationUtils  {
     static approveRecord(appId, wfId){
         var logger = new Logger();
         let automationService = new AutomationService();
+        // let payload = {
+        //     "parameters": { "number": "6"}
+        // };
         let payload = {
-            "parameters": { "number": "6"}
-        };
-        automationService.invokeAutomation("http://localhost:8089", "0duiiaaaaab", "7fb492ae-3b5e-4c93-92b0-727aa2da6481", payload).then(
+            "parameters": {
+                "appId" : "0duiiaaaaab",
+                "tableId": "0duiiaaaaae",
+                "recordId": "1",
+                "record": [{"id":9, "value":true}]
+            }
+        }
+
+        // automationService.invokeAutomation("http://localhost:8089", "0duiiaaaaab", "Factorial", payload).then(
+        automationService.invokeAutomation("http://localhost:8089", "0duiiaaaaab", "ApproveProjectRecord", payload).then(
             response => {
                 logger.debug('Automation success');
-                NotificationManager.info(response.data.message);
+                NotificationManager.info("Record Approved.");
             },
             error => {
+                NotificationManager.error("An Error occured when invoking automation");
                 let errors = [];
 
                 //  if a validation error, print each one individually..
@@ -31,7 +42,6 @@ class AutomationUtils  {
                 } else {
                     logger.parseAndLogError(LogLevel.ERROR, error.response, 'Automation');
                 }
-                NotificationManager.error("An Error occured when invoking automation");
             })
         };
 }

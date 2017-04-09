@@ -18,7 +18,7 @@
         NODE                : '/api/n/:version',
         QUICKBASE_LEGACY    : '/api/l/:version',
         GOVERNANCE          : '/api/governance/:version',
-        AUTOMATION          : '/we/api/:version'
+        AUTOMATION          : '/we/workflow/:version'
     };
 
     /*

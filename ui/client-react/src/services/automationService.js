@@ -14,7 +14,7 @@ class AutomationService extends BaseService {
 
         //  Record service API endpoints
         this.API = {
-            AUTOMATION_INVOKE  : `${constants.BASE_URL.AUTOMATION}/${constants.APPS}/{0}/automation/invoke/{1}`
+            AUTOMATION_INVOKE  : `${constants.BASE_URL.AUTOMATION}/${constants.APPS}/{0}/api/{1}`
         };
     }
 
@@ -22,6 +22,7 @@ class AutomationService extends BaseService {
         let url = super.constructUrl(this.API.AUTOMATION_INVOKE, [appId, wfId]);
         console.log("Automation Service: url constructed: " + url);
         return super.post(url, payload, {});
+
     }
 }
 export default AutomationService;
