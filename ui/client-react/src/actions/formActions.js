@@ -206,11 +206,9 @@ const buildNewField = (newField) => {
  * @returns {{id, type, content}|*}
  */
 export const addNewFieldToForm = (formId, newLocation, newField) => {
-    newField = buildNewField(newField);
-
     return event(formId, types.ADD_FIELD, {
         newLocation,
-        newField
+        newField: buildNewField(newField)
     });
 };
 
