@@ -191,7 +191,7 @@ const buildNewField = (newField) => {
         id: newId,
         edit: true,
         FormFieldElement: {
-            positionSameRow: true,
+            positionSameRow: false,
             fieldId: newId,
             displayText
         }
