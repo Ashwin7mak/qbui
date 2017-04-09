@@ -187,7 +187,7 @@ export const loadForm = (appId, tblId, rptId, formType, recordId) => {
 const buildNewField = (newField) => {
     let newId = _.uniqueId('newField_');
     let displayText = 'New Text Field';
-    return _.merge({}, newField, {
+    return _.merge({}, {
         id: newId,
         edit: true,
         FormFieldElement: {
@@ -195,7 +195,7 @@ const buildNewField = (newField) => {
             fieldId: newId,
             displayText
         }
-    });
+    }, newField);
 };
 
 /**
