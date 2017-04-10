@@ -89,13 +89,9 @@ const ReportColumnHeaderMenuContainer = (ReportColumnHeaderMenu) => {
 
         /**
          * Opens the field select menu for this report.
-         * @param clickedColumnId the id of the column of the table which the menu dropdown was selected from
-         * @param addBefore should the requested column go before or after the clicked column
          */
-        openFieldSelector(clickedColumnId, addBefore) {
+        openFieldSelector() {
             let params = {
-                clickedId: clickedColumnId,
-                addBefore: addBefore,
                 open: true
             };
             this.props.dispatch(toggleFieldSelectorMenu(CONTEXT.REPORT.NAV, this.props.appId, this.props.tblId, this.props.rptId, params));
