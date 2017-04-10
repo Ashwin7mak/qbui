@@ -11,29 +11,17 @@ import constants from '../../../../../common/src/constants';
 import './pagination.scss';
 
 
-Pagination.propTypes = {
-  current: React.PropTypes.number,
-  defaultCurrent: React.PropTypes.number,
-  total: React.PropTypes.number,
-  pageSize: React.PropTypes.number,
-  defaultPageSize: React.PropTypes.number,
-  onChange: React.PropTypes.func,
-  showTotal: React.PropTypes.func,
-};
-
-Pagination.defaultProps = {
-  defaultCurrent: 1,
-  total: 0,
-  defaultPageSize: 20,
-  onChange: noop,
-  className: '',
-};
+function paginate() {
+}
 
 class Pagination extends Component {
   constructor(props) {
       super(props);
 
-    const hasOnChange = props.onChange;
+    this.previousPageButton = this.previousPageButton.bind(this);
+    this.nextPageButton = this.nextPageButton.bind(this);
+
+    const hasOnChange = props.onChange !== paginate;
     const hasCurrent = ('current' in props);
 
     let current = props.defaultCurrent;
@@ -53,7 +41,6 @@ class Pagination extends Component {
     };
 
     [
-      'render',
       '_isValid',
       '_prev',
       '_next',
@@ -71,6 +58,7 @@ class Pagination extends Component {
     }
   }
 
+ //Calculates the total number of pages available
   _calcPage(p) {
     let pageSize = p;
     if (typeof pageSize === 'undefined') {
@@ -83,6 +71,7 @@ class Pagination extends Component {
     return typeof page === 'number' && page >= 1 && page !== this.state.current;
   }
 
+  //Function that handles the change of pages
   _handleChange(p) {
     let page = p;
     if (this._isValid(page)) {
@@ -106,79 +95,119 @@ class Pagination extends Component {
     return this.state.current;
   }
 
+  //Fetches the previous page
   _prev() {
     if (this._hasPrev()) {
       this._handleChange(this.state.current - 1);
     }
   }
 
+  //Fetches the next page
   _next() {
     if (this._hasNext()) {
       this._handleChange(this.state.current + 1);
     }
   }
 
+ //Checks whether a previous page is present
   _hasPrev() {
     return this.state.current > 1;
   }
 
+  //Checks whether a next page is present
   _hasNext() {
     return this.state.current < this._calcPage();
   }
 
+ //Renders the logic for previous page button
+  previousPageButton() {
+    const previousButtonClassName = "previousButton " + (this._hasPrev() ? "" : "disabled");
+    return (
+          <div className="prevPageButton">
+            <Tooltip tipId="fieldName" i18nMessageKey="report.previousToolTip" >
+              <button tabIndex="0" className="navigationButton navigationButtonPrevious" onClick={this._prev} type="button" >
+                <Icon className={previousButtonClassName} icon="caret-filled-left" />
+              </button>
+            </Tooltip>
+          </div>
+           )
+  };
 
+  //Renders the logic for next page button
+  nextPageButton(){
+   const nextButtonClassName = "nextButton " + (this._hasNext() ? "" : "disabled");
+   return(
+     <div className="nextPageButton">
+      <Tooltip tipId="fieldName" i18nMessageKey="report.nextToolTip">
+        <button tabIndex="0" className="navigationButton navigationButtonNext" onClick={this._next} type="button" >
+           <Icon className={nextButtonClassName} icon="caret-filled-right" />
+        </button>
+     </Tooltip>
+    </div>
+ )
+};
 
-  //move previous and next page funciton here
   render() {
     const props = this.props;
     const allPages = this._calcPage();
     const { current, pageSize } = this.state;
 
-    const previousPageButton = () => {
-      const previousButtonClassName = "previousButton " + (this._hasPrev() ? "" : "disabled");
-      return (
-            <div className="prevPageButton">
-              <Tooltip tipId="fieldName" i18nMessageKey="report.previousToolTip" >
-                <button tabIndex="0" className="navigationButton navigationButtonPrevious" onClick={this._prev} type="button" >
-                  <Icon className={previousButtonClassName} icon="caret-filled-left" />
-                </button>
-              </Tooltip>
-            </div>
-             )
-    };
-
-    const nextPageButton = () =>  {
-     const nextButtonClassName = "nextButton " + (this._hasNext() ? "" : "disabled");
-     return(
-       <div className="nextPageButton">
-        <Tooltip tipId="fieldName" i18nMessageKey="report.nextToolTip">
-          <button tabIndex="0" className="navigationButton navigationButtonNext" onClick={this._next} type="button" >
-             <Icon className={nextButtonClassName} icon="caret-filled-right" />
-          </button>
-       </Tooltip>
-      </div>
-   )
-  };
-
-
     let navBar = "report.reportNavigationBar";
-    if (props.simple) {
+    if (props.pagingData) {
       return (
           <div className="reportNavigation">
-            {previousPageButton()}
+            {this.previousPageButton()}
               <div className="pageNumbers">
                 <I18nMessage message={navBar}
                              pageStart={this.state._current}
                              pageEnd={allPages}
                 />
               </div>
-              {nextPageButton()}
+              {this.nextPageButton()}
             </div>
             );
     }
     return null;
   }
 }
+
+Pagination.propTypes = {
+  /*
+  // The data to be passed in for the paginated component to work */
+  pagingData: React.PropTypes.bool,
+  /*
+  // Current refers to the current page which is actually in view */
+  current: React.PropTypes.number,
+  /*
+  //Default current is the current page to be loaded when the component loads up - Default set to 1st page */
+  defaultCurrent: React.PropTypes.number,
+  /*
+  // Total number of records available */
+  total: React.PropTypes.number,
+  /*
+  pageSize is the total number of rows per page */
+  pageSize: React.PropTypes.number,
+  /*
+  defaultPageSize is the total number of rows per page - default to 20 */
+  defaultPageSize: React.PropTypes.number,
+  /*
+  Function that renders the change */
+  onChange: React.PropTypes.func,
+  };
+
+Pagination.defaultProps = {
+  /*
+  Default current page is 1 */
+  defaultCurrent: 1,
+  /*
+  Default number of records to be paginated is 0 */
+  total: 0,
+  /*
+  Default page size is 20 i.e., 20 records per page */
+  defaultPageSize: 20,
+  onChange: paginate,
+  className: '',
+};
 
 //Have created an action and a reducer which works well with this component. Feel free to use it.
 export default Pagination;
