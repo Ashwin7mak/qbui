@@ -292,7 +292,7 @@ export const createRecord = (appId, tblId, params = {}) => {
                                     record:getResponse.data
                                 };
 
-                                //  to add a new row in the grid, the passed parameter must be true AND an afterRecId must be defined
+                                // is this an inline edit save and we want to add a new row in the grid
                                 const addNewRow = params.addNewRow || false;
                                 dispatch(event(recId, types.SAVE_RECORD_SUCCESS, {appId, tblId, recId, report, addNewRow}));
 
@@ -495,6 +495,8 @@ export const updateRecord = (appId, tblId, recId, params = {}) => {
                                     recId:recId,
                                     record:getResponse.data
                                 };
+
+                                // is this an inline edit save and we want to add a new row in the grid
                                 const addNewRow = params.addNewRow || false;
                                 dispatch(event(recId, types.SAVE_RECORD_SUCCESS, {appId, tblId, recId, report, addNewRow}));
                                 if (params.showNotificationOnSuccess) {

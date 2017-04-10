@@ -3,7 +3,6 @@ import {UNSAVED_RECORD_ID} from '../constants/schema';
 import {NEW_RECORD_VALUE} from '../constants/urlConstants';
 import _ from 'lodash';
 import FacetSelections from '../components/facet/facetSelections';
-import ReportUtils from '../utils/reportUtils';
 import ReportModelHelper from '../models/reportModelHelper';
 
 /**
@@ -166,21 +165,9 @@ const report = (state = [], action) => {
                 };
 
                 if (content.newRecId) {
-                    const keyName = _.has(currentReport, 'data.keyField') ? currentReport.data.keyField.name : '';
-                    let records = _.has(currentReport, 'data.records') ? currentReport.data.records : [];
-
-                    //  check to see if the new record is getting added from an inline editing blank row
-                    let hasBlankRec = false;
-                    if (currentReport.data.hasGrouping) {
-                        const blankRec = ReportUtils.findGroupedRecord(records, UNSAVED_RECORD_ID, keyName);
-                        hasBlankRec = (blankRec !== null);
-                    } else {
-                        const blankRecIdx = ReportUtils.findRecordIndex(records, UNSAVED_RECORD_ID, keyName);
-                        hasBlankRec = (blankRecIdx !== -1);
-                    }
-
                     //  if there is a blank record created from inline editing, we'll delete the blank record
                     //  from the report and then add the new row based on recId supplied when creating the blank row
+                    const hasBlankRec = ReportModelHelper.isBlankRecInReport(currentReport);
                     if (hasBlankRec) {
                         //  delete the blank row from the report
                         ReportModelHelper.deleteRecordFromReport(currentReport, UNSAVED_RECORD_ID);
@@ -193,11 +180,11 @@ const report = (state = [], action) => {
                         ReportModelHelper.addReportRecord(currentReport, content);
                     }
                 } else {
-                    // update the report row
+                    // update the existing report row
                     ReportModelHelper.updateReportRecord(currentReport, content);
                 }
 
-                //  has the user elected to add a new row via inline edit after update/save
+                //  has the user elected to add a new row to the grid via inline edit after update/save
                 if (action.content.addNewRow === true) {
                     let newRowContent = {
                         newRecId: UNSAVED_RECORD_ID,

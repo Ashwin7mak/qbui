@@ -18,6 +18,7 @@ import {withRouter} from 'react-router';
 import ReportContentError from './reportContentError';
 import UrlUtils from '../../../utils/urlUtils';
 import QBModal from '../../qbModal/qbModal';
+import Promise from 'bluebird';
 
 import {connect} from 'react-redux';
 import {createRecord, deleteRecord, editRecordStart, editRecordCancel, editRecordChange, editRecordValidateField, openRecord, updateRecord} from '../../../actions/recordActions';
@@ -1064,27 +1065,43 @@ const mapDispatchToProps = (dispatch) => {
         },
         updateRecord:(appId, tblId, recId, params) => {
             return dispatch(updateRecord(appId, tblId, recId, params));
-            //dispatch(updateRecord(appId, tblId, recId, params)).then(
-            //    () => {
-            //        // NOTE: speed of rendering the blank row after the update is a
-            //        // concern; consider adding the row in the update success reducer event
-            //        if (addNewRow) {
-            //            dispatch(addBlankRecordToReport(CONTEXT.REPORT.NAV, recId));
+            //return new Promise((resolve, reject) => {
+            //    dispatch(updateRecord(appId, tblId, recId, params)).then(
+            //        (obj) => {
+            //            // NOTE: speed of rendering the blank row after the update is a
+            //            // concern as their is a pause between when the inline edit row is
+            //            // updated and the new row is added. So, the intent to add a new row
+            //            // is getting processed in the record save reducer event.
+            //            if (params.addNewRow) {
+            //                dispatch(addBlankRecordToReport(CONTEXT.REPORT.NAV, recId));
+            //            }
+            //            resolve(obj);
+            //        },
+            //        () => {
+            //            reject();
             //        }
-            //    }
-            //);
+            //    );
+            //});
         },
         createRecord: (appId, tblId, params) => {
             return dispatch(createRecord(appId, tblId, params));
-            //dispatch(createRecord(appId, tblId, params)).then(
-            //    (obj) => {
-            //        // NOTE: speed of rendering the blank row after the create is a
-            //        // concern; consider adding the row in the create success reducer event
-            //        if (addNewRow) {
-            //            dispatch(addBlankRecordToReport(CONTEXT.REPORT.NAV, obj.recId));
+            //return new Promise((resolve, reject) => {
+            //    dispatch(createRecord(appId, tblId, params)).then(
+            //        (obj) => {
+            //            // NOTE: speed of rendering the blank row after the update is a
+            //            // concern as their is a pause between when the inline edit row is
+            //            // updated and the new row is added. So, the intent to add a new row
+            //            // is getting processed in the record save reducer event.
+            //            if (params.addNewRow) {
+            //                dispatch(addBlankRecordToReport(CONTEXT.REPORT.NAV, obj.recId));
+            //            }
+            //            resolve(obj);
+            //        },
+            //        () => {
+            //            reject();
             //        }
-            //    }
-            //);
+            //    );
+            //});
         }
     };
 };

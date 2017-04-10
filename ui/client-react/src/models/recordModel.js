@@ -56,7 +56,8 @@ class RecordModel {
             this.model.appId = obj.appId || null;
             this.model.tblId = obj.tblId || null;
             this.model.recId = obj.recId || null;
-            if (obj.recId) {
+            if (obj.recId !== undefined) {
+                // null is valid as it identifies a new row added inline
                 this.model.currentEditingAppId = obj.appId;
                 this.model.currentEditingTableId = obj.tblId;
                 this.model.currentEditingRecordId = obj.recId;
