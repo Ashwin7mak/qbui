@@ -75,11 +75,11 @@ describe('Table Creation actions', () => {
     });
 
     it('should create an action for saving table', () => {
-        expect(actions.savingTable('description')).toEqual({type: types.SAVING_TABLE});
+        expect(actions.creatingTable('description')).toEqual({type: types.CREATING_TABLE});
     });
 
     it('should create an action for saving table failed', () => {
-        expect(actions.savingTableFailed('description')).toEqual({type: types.SAVING_TABLE_FAILED});
+        expect(actions.creatingTableFailed('description')).toEqual({type: types.CREATING_TABLE_FAILED});
     });
     it('should create an action for created table', () => {
         expect(actions.createdTable('description')).toEqual({type: types.CREATED_TABLE});
@@ -95,7 +95,7 @@ describe('Table Creation actions', () => {
         // so we don't need to spy on the dispatcher etc.
 
         const expectedActions = [
-            {type: types.SAVING_TABLE},
+            {type: types.CREATING_TABLE},
             {type: types.CREATED_TABLE}
         ];
         const store = mockStore({});
@@ -116,7 +116,7 @@ describe('Table Creation actions', () => {
         TableCreationsActionsRewireAPI.__Rewire__('TableService', mockTableFailureService);
 
         const expectedActions = [
-            {type: types.SAVING_TABLE},
+            {type: types.CREATING_TABLE},
             {type: types.CREATED_TABLE}
         ];
         const store = mockStore({});

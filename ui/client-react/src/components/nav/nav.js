@@ -106,18 +106,28 @@ export const Nav = React.createClass({
         if (this.props.params) {
             recordId = this.props.params.recordId;
         }
+        let selectedApp = this.getSelectedApp();
+        let isAdmin = false;
+        if (selectedApp) {
+            isAdmin = AppUtils.hasAdminAccess(selectedApp.accessRights);
+        }
         return (<GlobalActions actions={actions}
                                position={"top"}
                                dropdownIcon="user"
                                dropdownMsg="globalActions.user"
                                startTabIndex={4}
-                               app={this.getSelectedApp()}>
-                    <BuilderDropDownAction recId={recordId}
-                                           actions={actions}
-                                           position={"top"}
-                                           formBuilderIcon="settings"
-                                           navigateToBuilder={this.navigateToBuilder}
-                                           startTabIndex={4}/>
+                               app={selectedApp}>
+            {isAdmin ?
+                    <BuilderDropDownAction
+                                router={this.props.router}
+                                selectedApp={selectedApp}
+                                selectedTable={this.getSelectedTable(this.state.apps.selectedTableId)}
+                                recId={recordId}
+                                actions={actions}
+                                position={"top"}
+                                icon="settings"
+                                navigateToBuilder={this.navigateToBuilder}
+                                startTabIndex={4}/> : null}
                 </GlobalActions>);
     },
 
@@ -133,12 +143,6 @@ export const Nav = React.createClass({
                                dropdownMsg="globalActions.user"
                                startTabIndex={100}
                                position="left">
-                    <BuilderDropDownAction recId={recordId}
-                                           actions={actions}
-                                           position="left"
-                                           formBuilderIcon="settings"
-                                           navigateToBuilder={this.navigateToBuilder}
-                                           startTabIndex={4}/>
                 </GlobalActions>);
     },
 
