@@ -17,6 +17,11 @@
   .fieldSelectCloseIcon {
     margin-left: 90%;
     margin-top: 10px;
+    cursor: pointer;
+  }
+
+  .fieldSelectCloseIcon:hover {
+    color: $topnav-hover-color;
   }
 
   .header {
