@@ -9,7 +9,7 @@ const AppPropertiesRoute = React.createClass({
     render() {
         return (
             <AppProperties appId={this.props.params.appId}
-                           selectedApp={this.props.selectedApp}
+                           selectedApp={this.props.app}
             />
         );
     }
