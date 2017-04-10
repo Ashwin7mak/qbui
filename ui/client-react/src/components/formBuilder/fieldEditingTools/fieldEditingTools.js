@@ -97,6 +97,7 @@ export class FieldEditingTools extends Component {
 
     componentDidMount() {
         /**
+         * COMMENTED OUT: Will be fixed.
          * For keyboard, we need to reset the focus, to maintain proper tabbing order
          * and we need to keep the current form element in view, by scrolling it into view
          * */
@@ -107,10 +108,6 @@ export class FieldEditingTools extends Component {
         //     let setFocusOnSelectedField = document.querySelectorAll(".fieldEditingTools");
         //     setFocusOnSelectedField[this.props.selectedFields[0].elementIndex].focus();
         // }
-        if (this.props.selectedFields && this.props.selectedFields[0]) {
-            let setFocusOnSelectedField = document.querySelectorAll(".fieldEditingTools");
-            setFocusOnSelectedField[this.props.selectedFields[0].elementIndex].focus();
-        }
         this.updateScrollLocation();
     }
 
