@@ -10,6 +10,10 @@
     var formsPO = requirePO('formsPage');
 
     var ReportContentPage = Object.create(e2ePageBase, {
+        // This gives you all the record checkboxes of the report page
+        recordCheckBoxes: {get: function() {return browser.elements('.selectRowCheckbox');}},
+        deleteIcon: {get: function() {return browser.element('.icon-delete span');}},
+
         tableBody: {get: function() {return browser.element('.qbTbody');}},
         reportsToolBar : {get: function() {return browser.element('.reportToolbar');}},
         reportFilterSearchBox : {get: function() {
@@ -37,6 +41,13 @@
             browser.element('.reportContainer').waitForVisible();
             return browser.element('.reportContainer');
         }},
+        // Delete and Don't Delete button on modal dialog box
+        deleteButton : {get: function() {return browser.element('.modal-dialog .primaryButton');}},
+        dontDeleteButton : {get: function() {return browser.element('.modal-dialog .secondaryButton');}},
+
+        //Drop down menu actions icon
+        dropDownIcon : {get: function() {return browser.element('.actionsCol .iconActionsDropDownMenu');}},
+        dropDownDeleteIcon: {get: function() {return browser.element('.dropdown-menu .delete');}},
 
         reportToolsAndContentEl: {get: function() {return this.reportContainerEl.element('.reportToolsAndContentContainer');}},
 
@@ -83,8 +94,7 @@
 
 
         // this will get you every record element on the grid
-        // qbGridRecordElList: {get: function() {return this.qbGridBodyContainer.elements('.qbRow);}},
-        qbGridRecordElList: {get: function() {return this.qbGridBodyEl.elements('.qbTbody');}},
+         qbGridRecordElList: {value: function() {return this.qbGridBodyEl.elements('.qbRow');}},
 
         /**
          * Helper method to ensure the report has been properly loaded with records. Will throw an error if no records are in the report.
@@ -117,7 +127,7 @@
             return this.qbGridContainer.elements('.qbRow');
         }},
         getRecordRowElement: {value: function(recordIndex) {
-            return this.getAllRows.value[recordIndex];
+            return this.getAllRows.value[recordIndex - 1];
         }},
 
         /**
@@ -158,7 +168,8 @@
             // Return all record values if no cell number supplied
             if (typeof recordCellIndex === 'undefined') {
                 var cellValues = [];
-                for (var i = 0; i < recordRowCells.value.length; i++) {
+                //start at column 1 as column 0 is not an actual data column
+                for (var i = 1; i < recordRowCells.value.length; i++) {
                     var cellValue = this.getRecordCellValue(recordRowCells.value[i]);
                     cellValues.push(cellValue);
                 }
@@ -310,25 +321,67 @@
             }
         }},
 
-        //TODO: Refactor these once we port over the delete record tests
-        /// Checking for the deleted record on the first page
-        //this.checkForTheDeletedRecordOnTheCurrentPage = function(deletedRecord) {
-        //    var self = this;
-        //    self.qbGridRecordElList.then(function(recordsNo) {
-        //
-        //        for (var i = 0; i < recordsNo.length; i++) {
-        //            self.getRecordValues(i).then(function(fieldValues) {
-        //                expect(deletedRecord).not.toEqual(fieldValues);
-        //            });
-        //        }
-        //    });
-        //
-        //};
-        //
-        ////Record Row to be selected:
-        //reportRowSelected: { value: function(recordRow) {
-        //    this.recordCheckBoxes.get(recordRow).click();
-        //} },
+        // TODO: Refactor these once we port over the delete record tests
+        // Checking for the deleted record on the first page
+
+        checkForTheAbsenceDeletedRecordOnTheCurrentPage:
+            {
+                value: function(deletedRecord)
+            {
+
+           //this.qbGridRecordElList.then(function(recordsNo) {
+                console.log('Deleted record: ' + deletedRecord);
+
+               // for (var i = 0; i < this.qbGridRecordElList.value.length; i++) {
+                for (var i = 1; i < browser.elements('.qbRow').value.length; i++) {
+
+                   console.log('Row' + i + ': ' + this.getRecordValues(i));
+                   expect(deletedRecord).not.toEqual(this.getRecordValues(i));
+               }
+           //});
+
+        }},
+
+        checkForThePresenceDeletedRecordOnTheCurrentPage:
+            {
+                value: function(deletedRecord)
+                {
+                    //this will check each row
+                    for (var i = 1; i < browser.elements('.qbRow').value.length; i++) {
+
+                        if(this.compareTwoRows(deletedRecord, this.getRecordValues(i) )){
+                            return true;
+                        }
+                    }
+
+                    return false;
+
+                }},
+
+        compareTwoRows:
+            {
+                value: function(rowA, rowB)
+                {
+
+                    expect(rowA.length).toBe(rowB.length);
+                    for(var i=1; i< rowA.length; i++)
+                    {
+                        //comparing two cells from two rows
+                        if(rowA[i]!=rowB[i])
+                        {
+                            return false;
+                        }
+                    }
+                return true;
+
+                }
+            },
+
+        // Record Row to be selected:
+        selectRow: { value: function(recordRow) {
+           this.recordCheckBoxes.value[recordRow].click();
+           this.deleteIcon.waitForExist();
+        } },
     });
 
     module.exports = ReportContentPage;
