@@ -273,4 +273,33 @@ describe('Record Model', () => {
         expect(currentReport.data.filteredRecords.length).toEqual(2);
     });
 
+    it('verify isBlankRecInReport method', () => {
+        let currentReport = _.cloneDeep(testReport);
+        let blankRowReport = _.cloneDeep(testReport);
+        blankRowReport.data.records.push(
+            {
+                'Record ID#': {
+                    id:SchemaConstants.UNSAVED_RECORD_ID, display: '22', value: 22
+                },
+                'Numeric': {
+                    id:3, display: '3.0', value: 3
+                },
+                'Text': {
+                    id:6, display: 'TestString', value: 'testString'
+                }
+            }
+        );
+        const blankRecTests = [
+            {name:'blank rec in report', report: blankRowReport, expectation: true},
+            {name:'blank rec not in report', report: currentReport, expectation: false}
+        ];
+        blankRecTests.forEach(blankRecTest => {
+            it(blankRecTest.name, () => {
+                let blankRec = ReportModelHelper.isBlankRecInReport(blankRecTest.report);
+                expect(blankRecTest.expectation).toEqual(blankRec);
+            });
+        });
+
+    });
+
 });
