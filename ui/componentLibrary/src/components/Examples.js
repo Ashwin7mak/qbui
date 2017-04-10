@@ -35,6 +35,12 @@ import DurationFieldValueEditorExample from 'raw!../examples/DurationFieldValueE
 import QbGridExample from 'raw!../examples/QbGridExample.js';
 import SideMenuBaseExample from 'raw!../examples/SideMenuBaseExample.js';
 import SideTrowserBaseExample from 'raw!../examples/SideTrowserBaseExample.js';
+import IconChooserExample from 'raw!../examples/IconChooserExample.js';
+import IconInputBoxExample from 'raw!../examples/IconInputBoxExample.js';
+import TopNavExample from 'raw!../examples/TopNavExample.js';
+import StageExample from 'raw!../examples/StageExample.js';
+import TooltipExample from 'raw!../examples/TooltipExample.js';
+import StandardLeftNavExample from 'raw!../examples/StandardLeftNavExample.js';
 // END OF IMPORT STATEMENTS
 // The comment above is used for a grunt task. Please do not delete.
 
@@ -74,6 +80,12 @@ export default {
     QbGrid: QbGridExample,
     SideMenuBase: SideMenuBaseExample,
     SideTrowserBase: SideTrowserBaseExample,
+    IconChooser: IconChooserExample,
+    IconInputBox: IconInputBoxExample,
+    TopNav: TopNavExample,
+    Stage: StageExample,
+    Tooltip: TooltipExample,
+    StandardLeftNav: StandardLeftNavExample,
     // END OF EXPORT
     // The comment above is used for a grunt task. Please do not delete.
 };
