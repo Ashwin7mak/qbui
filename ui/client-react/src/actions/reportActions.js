@@ -349,7 +349,7 @@ export const addColumnToTable = (context, appId, tblId, rptId, params) => {
             logger.debug(`Adding requested column for appId: ${appId}, tblId: ${tblId}, rptId: ${rptId}`);
             dispatch(event(context, types.ADD_COLUMN_SUCCESS, params));
         } else {
-            logger.error(`reportActions.loadReportRecordsCount: Missing one or more required input parameters.  AppId:${appId}; TblId:${tblId}; RptId:${rptId}`);
+            logger.error(`reportActions.addColumnToTable: Missing one or more required input parameters.  AppId:${appId}; TblId:${tblId}; RptId:${rptId}`);
         }
     }
 };
@@ -361,6 +361,8 @@ export const toggleFieldSelectorMenu = (context, appId, tblId, rptId, params) =>
             let debugAction = params.open ? "Opening" : "Closing";
             logger.debug(`${debugAction} field select menu: ${appId}, tblId: ${tblId}, rptId: ${rptId}`);
             dispatch(event(context, openOrClose, params));
+        } else {
+            logger.error(`reportActions.toggleFieldSelectorMenu: Missing one or more required input parameters. AppId:${appId}; TblId:${tblId}; RptId:${rptId}`);
         }
     }
 };
