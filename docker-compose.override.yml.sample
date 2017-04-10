@@ -1,0 +1,10 @@
+version: '3'
+
+# These overrides can be copied to docker-compose.override.yml to tweak the base Compose environment for your local
+# development needs. There is more information available about overrides at this link:
+# https://docs.docker.com/compose/extends/#multiple-compose-files. Do not add your copy of this sample into Git or other VCS.
+services:
+  service:
+    # Sample config to override an envvar (any property of the original YAML such as ports, etc can be overridden too)
+    environment:
+      - NODE_ENV=overrides
