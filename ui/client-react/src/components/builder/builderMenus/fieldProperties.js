@@ -122,25 +122,17 @@ export class FieldProperties extends Component {
 
     render() {
         //only show something if we have selected a field
-        if (this.props.selectedField) {
-            return (
-                <SideTrowser pullRight={true} sideMenuContent={
-                    <div className="fieldPropertiesContainer">
-                        {this.createPropertiesTitle(this.props.selectedField.name)}
-                        {this.createNameProperty(this.props.selectedField.name)}
-                        {this.createRequiredProperty(this.props.selectedField.required)}
-                    </div>
-                }>
-                    {this.props.children}
-                </SideTrowser>
-            );
-        } else {
-            return (
-                <SideTrowser pullRight={true} sideMenuContent={<div className="fieldPropertiesContainer"></div>}>
-                    {this.props.children}
-                </SideTrowser>
-            );
-        }
+        return (
+            <SideTrowser pullRight={true} sideMenuContent={
+                <div className="fieldPropertiesContainer">
+                    {this.props.selectedField && this.createPropertiesTitle(this.props.selectedField.name)}
+                    {this.props.selectedField &&this.createNameProperty(this.props.selectedField.name)}
+                    {this.props.selectedField &&this.createRequiredProperty(this.props.selectedField.required)}
+                </div>
+            }>
+                {this.props.children}
+            </SideTrowser>
+        );
     }
 }
 
