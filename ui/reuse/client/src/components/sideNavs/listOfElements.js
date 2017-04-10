@@ -156,6 +156,11 @@ ListOfElements.propTypes = {
     isFilterable: PropTypes.bool,
 
     /**
+     * Tokens are being passed in as a renderer to allow this component to be reusable
+     * */
+    renderer: PropTypes.func,
+
+    /**
      * A list of grouped elements to be displayed in the menu. */
     elements: PropTypes.arrayOf(PropTypes.shape({
         /**
