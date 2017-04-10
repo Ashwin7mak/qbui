@@ -12,7 +12,7 @@
 
     var tablesPage = Object.create(e2ePageBase, {
         //new table button
-        newTableBtn : {get: function() {return browser.element('.newTable');}},
+        newTableBtn : {get: function() {return browser.element('.tablesFooter .newTable');}},
         //new table container
         tableContainer : {get: function() {return browser.element('.modal-dialog .bodyContainer');}},
         //new table header
@@ -27,14 +27,8 @@
         //table help
         tableHelpBtn : {get: function() {return browser.element('.iconUISturdy-help');}},
 
-        //table Next button
-        tableNextBtn: {get: function() {return browser.element('.modal-footer button.nextButton');}},
-        //table Cancel button
-        tableCancelBtn: {get: function() {return browser.element('.modal-footer button.cancelButton');}},
-        //table finished button
-        tableFinishedBtn: {get: function() {return browser.element('.modal-footer button.finishedButton');}},
-        //table previous button
-        tablePreviousBtn: {get: function() {return browser.element('.modal-footer button.previousButton');}},
+        //table footer buttons
+        tableFooterButtons: {get: function() {return browser.elements('.modal-footer .buttons button');}},
 
         //Icon chooser
         tableFieldIconChooser: {get: function() {return browser.element('.iconChooser.closed');}},
@@ -147,7 +141,7 @@
                 //Click on filtered table name
                 results[0].click();
                 //Wat until reports page is visible
-                return reportContentPO.reportContainerEl.waitForVisible();
+                return reportContentPO.reportContainerEl;
             }
         }},
 
@@ -180,17 +174,37 @@
         }},
 
         /**
+         * Method for spinner to dissaper after hitting on any save buttons on edit forms
+         */
+        waitUntilNotificationContainerGoesAway : {value: function() {
+            //wait until notification container slides away
+            browser.waitForExist('.notification-container-empty', e2eConsts.shortWaitTimeMs);
+            //Need this to wait for container to slide away
+            return browser.pause(e2eConsts.shortWaitTimeMs);
+        }},
+
+        /**
+         * Method to click button with name on the table footer.
+         */
+        clickBtnOnTableDlgFooter : {value: function(btnName) {
+            //get all save buttons on the form
+            var buttonToClick = this.tableFooterButtons.value.filter(function(button) {
+                return button.getAttribute('textContent') === btnName;
+            });
+
+            if (buttonToClick !== []) {
+                //Click on filtered save button
+                return buttonToClick[0].click();
+            } else {
+                throw new Error('button with name ' + btnName + " not found on the table");
+            }
+        }},
+
+        /**
          * Method to click on Next button in create Table dialogue
          */
         clickNextBtn : {value: function() {
-            //Wait until next button visible
-            this.tableNextBtn.waitForVisible();
-            //click on next button
-            this.tableNextBtn.click();
-            //Need this to wait for container to slide to next screen
-            browser.pause(e2eConsts.shortWaitTimeMs);
-            //Wait until Finished button visible
-            this.tableFinishedBtn.waitForVisible();
+            this.clickBtnOnTableDlgFooter('Next');
             //Verify the title and description in table summary in the dialogue
             expect(this.tableHeader.getAttribute('textContent')).toBe('Get ready to add fields to your table');
             return expect(this.tableDescription.getAttribute('textContent')).toBe('Each bit of information you want to collect is a field, like Customer Name.');
@@ -200,20 +214,15 @@
          * Method to click on cancel button in create table dialogue
          */
         clickCancelBtn : {value: function() {
-            //Wait until cancel button visible
-            this.tableCancelBtn.waitForVisible();
-            //click on cancel button
-            this.tableCancelBtn.click();
-            //Need this to wait for dialogue to dissapear
-            return browser.pause(e2eConsts.shortWaitTimeMs);
+            return this.clickBtnOnTableDlgFooter('Cancel');
         }},
 
         /**
          * Method to click on Create Table button in create table dialogue
          */
         clickFinishedBtn: {value: function() {
-            this.tableFinishedBtn.waitForVisible();
-            this.tableFinishedBtn.click();
+            this.clickBtnOnTableDlgFooter('Create table');
+            this.waitUntilNotificationContainerGoesAway();
             return formsPO.editFormContainerEl.waitForVisible();
         }},
 
@@ -221,12 +230,7 @@
          * Method to click on Previous button in create table dialogue
          */
         clickPreviousBtn : {value: function() {
-            //Wait until Finished button visible
-            this.tablePreviousBtn.waitForVisible();
-            //Click on finished button
-            this.tablePreviousBtn.click();
-            //Need this to wait for container to slide to next screen
-            return browser.pause(e2eConsts.shortWaitTimeMs);
+            return this.clickBtnOnTableDlgFooter('Previous');
         }},
 
         /**
