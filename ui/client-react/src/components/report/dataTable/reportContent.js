@@ -68,11 +68,17 @@ export const ReportContent = React.createClass({
             recId = row[this.props.primaryKeyName].value;
         }
 
-        this.openRow(recId);
-        //create the link we want to send the user to and then send them on their way
-        const link = `${APP_ROUTE}/${appId}/table/${tblId}/report/${rptId}/record/${recId}`;
-        if (this.props.router) {
-            this.props.router.push(link);
+
+        if (this.props.openDrawer) {
+            console.log("openDrawer");
+            this.props.renderDrawerContainer(tblId, recId);
+        } else {
+            this.openRow(recId);
+            //create the link we want to send the user to and then send them on their way
+            const link = `${APP_ROUTE}/${appId}/table/${tblId}/report/${rptId}/record/${recId}`;
+            if (this.props.router) {
+                this.props.router.push(link);
+            }
         }
     },
 
@@ -932,7 +938,7 @@ export const ReportContent = React.createClass({
         const editErrors = pendEdits.editErrors || null;
 
         // onCellClick handler: do nothing for embedded reports phase1.
-        let openRowToView = !this.props.phase1 && this.openRowToView;
+        let openRowToView = this.openRowToView;
 
         let reportContent;
 

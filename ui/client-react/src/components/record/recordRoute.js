@@ -31,6 +31,7 @@ import {CONTEXT} from '../../actions/context';
 
 import '../drawer/drawer.scss';
 import '../drawer/drawerContainer.scss';
+import RecordDrawerContainer from '../QBForm/recordDrawer';
 import './record.scss';
 
 let logger = new Logger();
@@ -51,8 +52,14 @@ export const RecordRoute = React.createClass({
 
         // ensure the search input is empty
         this.props.clearSearchInput();
-
-        this.props.loadForm(appId, tblId, rptId, formType, recordId);
+        if (this.props.loadContainer && this.props.location.search.includes('Drawer')) {
+            let arr = this.props.location.search.split('&');
+            const drawerRecId = arr[1].split('=')[1];
+            const drawerTableId = arr[2].split('=')[1];
+            this.props.loadForm(appId, drawerTableId, rptId, formType, drawerRecId, this.props.uniqueId);
+        } else {
+            this.props.loadForm(appId, tblId, rptId, formType, recordId, 'view');
+        }
     },
     loadRecordFromParams(params) {
         const {appId, tblId, recordId, rptId} = params;
@@ -316,6 +323,9 @@ export const RecordRoute = React.createClass({
      * @returns {boolean|*|HTMLCollection}
      */
     getViewFormFromProps(props = this.props) {
+        if (props.uniqueId) {
+            return _.get(props, `forms[${props.uniqueId}]`);
+        }
         return _.get(props, `forms[${CONTEXT.FORM.VIEW}]`);
     },
 
@@ -327,6 +337,10 @@ export const RecordRoute = React.createClass({
      * only re-render when our form data has changed */
     shouldComponentUpdate(nextProps) {
 
+        if (this.props.location.search.includes('Drawer')) {
+            //TODO: add a check to see if drawer component data got updated
+            return true;
+        }
         const viewData = this.getViewFormFromProps();
         const nextData = this.getViewFormFromProps(nextProps);
 
@@ -337,6 +351,38 @@ export const RecordRoute = React.createClass({
             !_.isEqual(viewData.loading, nextData.loading) ||
             !_.isEqual(this.props.pendEdits, nextProps.pendEdits) ||
             !_.isEqual(this.props.selectedTable, nextProps.selectedTable);
+    },
+
+    /***
+     * method rendering the drawer conatiner
+     * @param tblId
+     * @param recId
+     */
+    renderDrawerContainer(tblId, recId) {
+        //TODO : call windowutils pushWithQuery(key, value) ?
+        // const embeddedReport = _.find(this.props.embeddedReports, function(o) {
+        //     return o.tblId === tblId ;
+        // });
+        // this.props.loadContainer = true;
+        // const {data} = embeddedReport;
+        // const key = _.has(data, 'keyField.name') ? data.keyField.name : '';
+        // if (key) {
+        //     let recordsArray = embeddedReport !== undefined ? embeddedReport.data.records : [];
+        //
+        //     //  fetch the index of the row in the recordsArray that is being opened
+        //     const index = _.findIndex(recordsArray, rec => rec[key] && rec[key].value === recId);
+        //     let nextRecordId = (index < recordsArray.length - 1) ? recordsArray[index + 1][key].value : null;
+        //     let previousRecordId = index > 0 ? recordsArray[index - 1][key].value : null;
+        //
+        //     this.props.openRecord(recId, nextRecordId, previousRecordId, tblId);
+        WindowLocationUtils.pushWithQuery('DrawerRecId', recId);
+        WindowLocationUtils.pushWithQuery('DrawerTableId', tblId);
+        console.log(this.props.location);
+        // }
+    },
+
+    getDrawer() {
+     //TODO : Drawer Component
     },
 
     /**
@@ -388,10 +434,12 @@ export const RecordRoute = React.createClass({
                                     recId={this.props.params.recordId}
                                     errorStatus={formLoadingErrorStatus ? viewData.errorStatus : null}
                                     formData={viewData ? viewData.formData : null}
-                                    appUsers={this.props.appUsers} />
+                                    appUsers={this.props.appUsers}
+                                    renderDrawerContainer={this.renderDrawerContainer}/>
                         </Loader> : null }
                     {formInternalError && <pre><I18nMessage message="form.error.500"/></pre>}
                     {formAccessRightError && <pre><I18nMessage message="form.error.403"/></pre>}
+                    {!this.props.loadContainer && this.props.location.search.includes('Drawer') ? <RecordDrawerContainer {...this.props}/> : ''}
 
                     {!formLoadingErrorStatus &&
                         this.getDrawerContainer()
@@ -405,10 +453,11 @@ export const RecordRoute = React.createClass({
 // instead of relying on our parent route component to pass our props down,
 // the react-redux container will generate the required props for this route
 // from the Redux state (the presentational component has no code dependency on Redux!)
-const mapStateToProps = (state) => {
+const mapStateToProps = (state, ownProps) => {
     return {
         forms: state.forms,
         record: state.record
+        // embeddedReports: state.embeddedReports
         //Todo: get reports from state and remove as a passed prop
     };
 };
@@ -420,11 +469,11 @@ const mapDispatchToProps = (dispatch) => {
         editNewRecord: () => {
             dispatch(editNewRecord());
         },
-        loadForm: (appId, tblId, rptId, formType, recordId) => {
-            dispatch(loadForm(appId, tblId, rptId, formType, recordId));
+        loadForm: (appId, tblId, rptId, formType, recordId, context) => {
+            dispatch(loadForm(appId, tblId, rptId, formType, recordId, context));
         },
-        openRecord: (recId, nextId, prevId) => {
-            dispatch(openRecord(recId, nextId, prevId));
+        openRecord: (recId, nextId, prevId, tblId) => {
+            dispatch(openRecord(recId, nextId, prevId, tblId));
         },
         clearSearchInput: () => {
             dispatch(clearSearchInput());
@@ -444,3 +493,6 @@ export default connect(
     mapStateToProps,
     mapDispatchToProps
 )(RecordRouteWithRouter);
+RecordRoute.defaultProps  = {
+    loadContainer : false
+};

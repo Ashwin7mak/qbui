@@ -87,7 +87,9 @@ export const EmbeddedReportToolsAndContent = React.createClass({
                     fields={this.props.fields || !("not used in phase1")}
                     nameForRecords={this.nameForRecords}
                     phase1={true}
+                    openDrawer={true}
                     loadDynamicReport={this.loadDynamicReport}
+                    renderDrawerContainer={this.props.renderDrawerContainer}
                 />
             </div>);
     }

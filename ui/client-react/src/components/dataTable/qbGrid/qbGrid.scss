@@ -225,7 +225,7 @@ $edit-icon-font-size: 18px;
 
     // cells get the pointer cursor when not in edit mode
     // tooltips get the pointer cursor too
-    .qbRow:not(.editing) .qbCell:not(.phase1),
+    .qbRow:not(.editing) .qbCell,
     .qbCell .tipChildWrapper {
         cursor: pointer;
     }

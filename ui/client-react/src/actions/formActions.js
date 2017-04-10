@@ -109,10 +109,12 @@ export const saveFormComplete = (id) => {
  * @param recordId record ID or "new"
  * @returns {function(*=)}
  */
-export const loadForm = (appId, tblId, rptId, formType, recordId) => {
+export const loadForm = (appId, tblId, rptId, formType, recordId, context) => {
 
     // we're returning a promise to the caller (not a Redux action) since this is an async action
     // (this is permitted when we're using redux-thunk middleware which invokes the store dispatch)
+
+    context = context || formType;
 
     return (dispatch) => {
 
@@ -121,7 +123,7 @@ export const loadForm = (appId, tblId, rptId, formType, recordId) => {
                 reject();
             }
 
-            dispatch(loadingForm(formType));
+            dispatch(loadingForm(context));
 
             let formService = new FormService();
 
@@ -144,7 +146,7 @@ export const loadForm = (appId, tblId, rptId, formType, recordId) => {
                         response.data.recordId = recordId;
                     }
 
-                    dispatch(loadFormSuccess(formType, response.data, appId, tblId));
+                    dispatch(loadFormSuccess(context, response.data, appId, tblId));
                     resolve(response.data);
                 },
                 (error) => {
