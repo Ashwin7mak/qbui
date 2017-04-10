@@ -12,7 +12,7 @@
     var ReportInLineEditPO = require('../../pages/reportInLineEdit.po');
     var ReportPagingPO = require('../../pages/reportPaging.po');
 
-    describe('Reports Page - Add Record Tests', function() {
+    describe('Reports - Add Record Tests: ', function() {
         var realmName;
         var realmId;
         var testApp;
