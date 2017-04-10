@@ -73,11 +73,6 @@ export const tableSaved = (tableInfo) => ({
     tableInfo
 });
 
-export const loadedTable = (tableInfo) => ({
-    type: types.LOADED_TABLE_PROPS,
-    tableInfo
-});
-
 export const resetEditedTableProperties = () => ({
     type: types.RESET_TABLE_PROPS
 });
@@ -123,8 +118,7 @@ export const updateTable = (appId, tableId, tableInfo) => {
     };
 };
 
-export const loadTableProperties = (tableInfo) => {
-    return (dispatch) => {
-        dispatch(loadedTable(tableInfo));
-    };
-};
+export const loadTableProperties = (tableInfo) => ({
+    type: types.LOADED_TABLE_PROPS,
+    tableInfo
+});

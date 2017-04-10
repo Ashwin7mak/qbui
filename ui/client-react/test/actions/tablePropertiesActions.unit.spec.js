@@ -47,7 +47,7 @@ describe('Table properties actions', () => {
     });
 
     it('should create an action for loaded table props', () => {
-        expect(actions.loadedTable({})).toEqual({type: types.LOADED_TABLE_PROPS, tableInfo: {}});
+        expect(actions.loadTableProperties({})).toEqual({type: types.LOADED_TABLE_PROPS, tableInfo: {}});
     });
 
     it('should create an action for setting the editing property', () => {
