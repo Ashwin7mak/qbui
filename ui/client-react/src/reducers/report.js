@@ -251,14 +251,17 @@ const report = (state = [], action) => {
             let params = action.content;
 
             // searches through the current columns to find the one that was selected
-            let clickedColumn = params.clicked;
-            let columnToAdd;
+            let clickedColumn;
+            let columnToAdd = params.requested;
             for (let currentColumnIndex = 0; currentColumnIndex < columns.length; currentColumnIndex++) {
                 let column = columns[currentColumnIndex];
-                if (column.id === params.requestedId) {
-                    columnToAdd = columns[currentColumnIndex];
+                if (column.id === params.clickedId) {
+                    clickedColumn = columns[currentColumnIndex];
                 }
             }
+
+            console.log(clickedColumn);
+            console.log(columnToAdd);
 
             let indexedOrder = clickedColumn.order - 1;
             // correctly position the new column in the table

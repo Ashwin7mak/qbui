@@ -161,7 +161,7 @@ export const ReportColumnHeaderMenu = React.createClass({
     },
 
     openFieldSelector() {
-        this.props.openFieldSelector();
+        this.props.openFieldSelector(this.props.fieldDef.id);
     },
 
     render() {

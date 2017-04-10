@@ -15,7 +15,11 @@ const shell = (
         openCount: 0,
         locale: Locale.getLocale(),
         i18n: Locale.getI18nBundle(),
-        fieldsListCollapsed: true
+        fieldsSelectMenu: {
+            clickedId: null,
+            fieldsListCollapsed: true
+        }
+
     },
     action) => {
 
@@ -82,12 +86,18 @@ const shell = (
     case types.OPEN_FIELD_SELECTOR:
         return {
             ...state,
-            fieldsListCollapsed: false
+            fieldsSelectMenu: {
+                clickedId: action.content.clickedId,
+                fieldsListCollapsed: false
+            }
         };
-    case types.CLOSE_FIELD_SELECTOR:
+        case types.CLOSE_FIELD_SELECTOR:
         return {
             ...state,
-            fieldsListCollapsed: true
+            fieldsSelectMenu: {
+                clickedId: action.content.clickedId,
+                fieldsListCollapsed: true
+            }
         };
     default:
         // return existing state by default in redux

@@ -305,37 +305,48 @@ export const Nav = React.createClass({
         this.props.toggleFieldSelectorMenu(context, appId, tblId, rptId, params);
     },
 
-    addColumnToTable(id) {
-        /*let params = {
-            clicked: this.props.reportData.fieldSelectMenu.clickedColumn,
-            requestedId: id,
-            addBefore: this.props.reportData.fieldSelectMenu.addBefore
+    addColumnToTable(columnData, reportData) {
+        let params = {
+            clickedId: this.props.shell.fieldsSelectMenu.clickedId,
+            requested: columnData
         };
 
-        let availableFields = this.props.reportData.data ? this.props.reportData.data.columns : [];
+        /*let availableFields = this.props.reportData.data ? this.props.reportData.data.columns : [];
         for (let c = 0; c < availableFields.length; c++) {
             if (availableFields[c].id === id) {
                 availableFields[c].isHidden = false;
             }
-        }
+        }*/
 
-        this.props.addColumnToTable(CONTEXT.REPORT.NAV, this.props.reportData.appId,
-            this.props.reportData.tblId, this.props.reportData.rptId, params);*/
+        this.props.addColumnToTable(CONTEXT.REPORT.NAV, reportData.appId, reportData.tblId, reportData.rptId, params);
     },
 
     getMenuContent(reportData) {
         let elements = [];
-        let columns = reportData.data ? reportData.data.fields : [];
-        console.log(columns);
+        let columns = reportData.data ? reportData.data.columns : [];
         for (let i = 0; i < columns.length; i++) {
-            elements.push({
-                key: columns[i].id + "",
-                title: columns[i].name
-            });
+            if (columns[i].isHidden) {
+                elements.push({
+                    key: columns[i].id + "",
+                    title: columns[i].headerName,
+                    onClick: (() => {
+                        this.addColumnToTable(columns[i], reportData)
+                    })
+                });
+            }
         }
+
         let params = {
             open: false
         };
+
+        let content;
+        if (elements.length === 0) {
+            content = <div className="no-elements">All fields are shown in the table.</div>
+        } else {
+            content = <ListOfElements elements={elements}/>
+        };
+
         return (
             <div className="fieldSelect">
                 <QBicon
@@ -345,9 +356,7 @@ export const Nav = React.createClass({
                 />
                 <div className="header">Fields</div>
                 <div className="info">Add a field to this report</div>
-                <ListOfElements
-                    elements={elements}
-                />
+                {content}
             </div>
         );
         /*let availableFields = this.props.reportData.data ? this.props.reportData.data.columns : [];
@@ -457,7 +466,7 @@ export const Nav = React.createClass({
                     <div className="mainContent" >
                         <ReportFieldSelectTrowser
                             sideMenuContent={menuContent}
-                            isCollapsed={this.props.shell.fieldsListCollapsed}
+                            isCollapsed={this.props.shell.fieldsSelectMenu.fieldsListCollapsed}
                             isDocked={false}
                             pullRight>
                         <TempMainErrorMessages apps={this.state.apps.apps} appsLoading={this.state.apps.loading} selectedAppId={this.state.apps.selectedAppId} />

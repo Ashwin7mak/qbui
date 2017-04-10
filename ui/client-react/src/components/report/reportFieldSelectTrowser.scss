@@ -29,6 +29,11 @@
     margin-left: 10px;
   }
 
+  .no-elements {
+    margin-top: 10px;
+    margin-left: 10px;
+  }
+
   &:not(.reportFieldSelectTrowserDocked) > .reportFieldSelectTrowserContent.reportFieldSelectTrowserOpen {
     @include menuShadow;
   }

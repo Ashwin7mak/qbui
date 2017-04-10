@@ -90,8 +90,9 @@ const ReportColumnHeaderMenuContainer = (ReportColumnHeaderMenu) => {
         /**
          * Opens the field select menu for this report.
          */
-        openFieldSelector() {
+        openFieldSelector(clickedId) {
             let params = {
+                clickedId: clickedId,
                 open: true
             };
             this.props.dispatch(toggleFieldSelectorMenu(CONTEXT.REPORT.NAV, this.props.appId, this.props.tblId, this.props.rptId, params));
