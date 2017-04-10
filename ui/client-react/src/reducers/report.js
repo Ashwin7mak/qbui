@@ -273,37 +273,6 @@ const report = (state = [], action) => {
         }
         return state;
     }
-    case types.OPEN_FIELD_SELECTOR: {
-        let currentReport = getReportFromState(action.id);
-        if (currentReport) {
-            let columns = currentReport.data.columns;
-            let params = action.content;
-
-            // searches through the current columns to find the one that was selected
-            let clickedColumn;
-            for (let currentColumnIndex = 0; currentColumnIndex < columns.length; currentColumnIndex++) {
-                let column = columns[currentColumnIndex];
-                if (column.id === params.clickedId) {
-                    clickedColumn = columns[currentColumnIndex];
-                }
-            }
-            currentReport.fieldSelectMenu.clickedColumn = clickedColumn;
-            currentReport.fieldSelectMenu.addBefore = params.addBefore;
-            currentReport.fieldSelectMenu.availableFieldsMenuCollapsed = false;
-            return newState(currentReport);
-        }
-        return state;
-    }
-    case types.CLOSE_FIELD_SELECTOR: {
-        let currentReport = getReportFromState(action.id);
-        if (currentReport) {
-            currentReport.fieldSelectMenu.clickedColumn = null;
-            currentReport.fieldSelectMenu.addBefore = null;
-            currentReport.fieldSelectMenu.availableFieldsMenuCollapsed = true;
-            return newState(currentReport);
-        }
-        return state;
-    }
     default:
         // by default, return existing state
         return state;
