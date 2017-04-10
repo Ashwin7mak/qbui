@@ -289,6 +289,7 @@ $bs-table-border-color:                #dddddd;
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            position: relative;
 
             .qbicon {
                 width: $icon-size;
@@ -353,12 +354,20 @@ $bs-table-border-color:                #dddddd;
                 white-space: nowrap;
                 padding: 10px 15px;
                 width: 300px;
+                display: flex;
+                flex-direction: row;
+                align-items: center;
 
                 .comp-library-color-swatch-name {
                 }
 
                 .comp-library-color-swatch-value {
-                    float:right;
+                    margin-left: auto;
+                }
+
+                .comp-library-color-swatch-sample,
+                .comp-library-color-swatch-description {
+                    display: none; // displayed only when printed
                 }
             }
 
@@ -374,4 +383,77 @@ $bs-table-border-color:                #dddddd;
 
         }
     }
+}
+
+@media print {
+    // enable content to flow to multiple pages
+    html, body {
+        height: initial;
+    }
+
+    // Hide the left navigation when printing
+    .comp-library-nav {
+        display: none;
+    }
+
+    .comp-library-content {
+        width: 100%;
+
+        // allow page to stretch to paper width
+        > div {
+            max-width: initial;
+        }
+
+        // print styling for the icon font pages
+        .comp-library-icon-grid {
+            .comp-library-icon-swatch {
+                page-break-inside: avoid;
+                width: 120px;
+
+                .comp-library-icon-input {
+                    display: none;
+                }
+
+                .comp-library-icon-label {
+                    overflow: visible;
+                    width: initial;
+                }
+            }
+        }
+
+        // print styling for the color swatch pages
+        .comp-library-color-grid {
+            flex-direction: column;
+
+            .comp-library-color-group {
+                .comp-library-color-swatch {
+                    position: relative;
+                    page-break-inside: avoid;
+                    border: none; // override borders on swatches if the color is too light (since SVG will be used instead)
+
+                    .comp-library-color-swatch-description {
+                        display:inline-block;
+                        position: absolute;
+                        left: 110%;
+                        color: #000;
+                        width: initial;
+                    }
+
+                    .comp-library-color-swatch-sample {
+                        display: inline-block;
+                        width: 1em;
+                        height: 1em;
+                        margin-right: 10px;
+                    }
+                }
+            }
+        }
+    }
+
+
+}
+
+// need to change the cursor on the tooltips
+.tipChildWrapper {
+    cursor: default;
 }
