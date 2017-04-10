@@ -8,7 +8,8 @@ RUN apk add --no-cache openssl
 COPY docker/certs.sh /usr/local/bin/certs.sh
 RUN chmod +x /usr/local/bin/certs.sh
 
-# Copy dist code into image
+# Expects that the code has already been built at 'dist'
+# Copy dist code only into image
 RUN mkdir -p /usr/src/app
 COPY ui/dist/ /usr/src/app
 WORKDIR /usr/src/app
