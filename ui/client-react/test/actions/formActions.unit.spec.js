@@ -21,7 +21,7 @@ describe('Form Actions', () => {
     beforeEach(() => {
         FormActionsRewireAPI.__Rewire__('WindowLocationUtils', WindowLocationUtilsMock);
         // Mock out Lodash's uniqueId function so it produces a predictable output for tests. Other functions remain the same.
-        FormActionsRewireAPI.__Rewire__('_',  Object.assign({}, _, {uniqueId() {return 'newField_1';}}));
+        FormActionsRewireAPI.__Rewire__('_',  Object.assign({}, _, {uniqueId:() => 'newField_1'}));
 
     });
 
