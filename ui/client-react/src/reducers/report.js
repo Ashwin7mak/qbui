@@ -260,14 +260,16 @@ const report = (state = [], action) => {
                 }
             }
 
-            let indexedOrder = clickedColumn.order - 1;
+            columnToAdd.fieldDef.isHidden = false;
+
+            /*let indexedOrder = clickedColumn.order - 1;
             // correctly position the new column in the table
             if (params.addBefore) {
                 columns.splice(indexedOrder, 0, columnToAdd);
                 clickedColumn.order += 1
             } else {
                 columns.splice(indexedOrder + 1, 0, columnToAdd);
-            }
+            }*/
 
             return newState(currentReport);
         }

@@ -315,13 +315,6 @@ export const Nav = React.createClass({
             requested: columnData
         };
 
-        let availableFields = reportData.data.columns;
-        for (let c = 0; c < availableFields.length; c++) {
-            if (availableFields[c].id === columnData.id) {
-                availableFields[c].isHidden = false;
-            }
-        }
-
         this.props.addColumnToTable(CONTEXT.REPORT.NAV, reportData.appId, reportData.tblId, reportData.rptId, params);
     },
 
@@ -329,7 +322,7 @@ export const Nav = React.createClass({
         let elements = [];
         let columns = reportData.data ? reportData.data.columns : [];
         for (let i = 0; i < columns.length; i++) {
-            if (columns[i].isHidden) {
+            if (columns[i].fieldDef.isHidden) {
                 elements.push({
                     key: columns[i].id + "",
                     title: columns[i].headerName,
