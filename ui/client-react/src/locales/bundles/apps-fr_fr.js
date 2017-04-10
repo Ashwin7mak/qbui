@@ -104,7 +104,10 @@ export default {
             next: "Prochain",
             previous: "Orécédent",
             finished: "Fini",
-            new: "Nouveau"
+            apply: "Appliquer",
+            new: "Nouveau",
+            backToApp: "Retour à l'application",
+            reset: "Réinitialiser"
         },
         field: {
             search: "Chercher",
@@ -121,7 +124,6 @@ export default {
         },
         pageActions: {
             addRecord: "Ajouter un enregistrement",
-            configureFormBuilder: 'Modifier ce formulaire',
             saveRecord: "Sauvegarder les modifications",
             saveAndAddRecord: "Enregistrer et ajouter une nouvelle ligne",
             saveAndAddRecordDisabled: "Ajout de plusieurs enregistrements ne fonctionnant pas en ce moment",
@@ -134,7 +136,8 @@ export default {
             print: "Imprimer",
             customizeReport: "Personnaliser ce Rapport",
             customizeForm: "Personnaliser ce formulaire",
-            customizePage: "Personnaliser cette page"
+            customizePage: "Personnaliser cette page",
+            deleteTable: "Supprimer la table"
         },
         recordActions: {
             previous: "Précédent",
@@ -618,7 +621,19 @@ export default {
         },
         iconChooser: {
             searchPlaceholder: "Rechercher des icônes..."
+        },
+        settings: {
+            header: "Paramètres",
+            tablesHeader: "Table",
+            appsHeader: "App",
+            formsHeader: "Forme",
+            tableSettings: "Propriétés et paramètres de la table",
+            configureFormBuilder: 'Modifier ce formulaire',
+        },
+        tableEdit: {
+            tableUpdateFailed: "Impossible de mettre à jour le tableau",
+            tableUpdated: "Informations sur la table enregistrées",
+            tableReset: "Informations sur la table non enregistrées"
         }
-
     }
 };
