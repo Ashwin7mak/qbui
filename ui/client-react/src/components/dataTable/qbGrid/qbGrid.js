@@ -360,7 +360,7 @@ const QbGrid = React.createClass({
 
 
     componentWillReceiveProps(nextProps){
-        if(this.state.colmns && this.state.columns.length>1){
+        if(this.state.columns && this.state.columns.length>1){
             return;
         }
         this.setState({columns: nextProps.columns});
@@ -375,21 +375,6 @@ const QbGrid = React.createClass({
       console.log("moved", labels);
         const movedColumns = this.moveLabels(this.state.columns, labels);
         if (movedColumns) {
-            // Retain widths to avoid flashing while drag and dropping.
-            // const source = movedColumns.source;
-            // const target = movedColumns.target;
-            // const sourceWidth = source.props.style && source.props.style.width;
-            // const targetWidth = target.props.style && target.props.style.width;
-            //
-            // source.props.style = {
-            //     ...source.props.style,
-            //     width: targetWidth
-            // };
-            // target.props.style = {
-            //     ...target.props.style,
-            //     width: sourceWidth
-            // };
-
             this.setState({
                 columns: movedColumns.columns
             });
@@ -403,18 +388,6 @@ const QbGrid = React.createClass({
         if (!columns) {
             throw new Error('dnd.moveLabels - Missing columns!');
         }
-
-        // var sourceIndex = (0, _findIndex5.default)(columns, { header: { headerlabel: sourceLabel } });
-        //
-        // if (sourceIndex < 0) {
-        //   return null;
-        // }
-        //
-        // var targetIndex = (0, _findIndex5.default)(columns, { header: { headerlabel: targetLabel } });
-        //
-        // if (targetIndex < 0) {
-        //   return null;
-        // }
         for(var i=0;i<columns.length;i++){
             console.log("Column is", columns[i].headerLabel)
             if(columns[i].headerLabel==sourceLabel)
