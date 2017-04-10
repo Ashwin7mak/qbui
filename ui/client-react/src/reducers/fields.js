@@ -50,10 +50,8 @@ const fieldsStore = (state = [], action) => {
 
     case types.ADD_FIELD: {
         let {newField} = action.content;
-        let lastIndex = newState[0].fields.length;
 
-        newState[0].fields[lastIndex] = newField;
-
+        newState[0].fields.push(newField);
         return newState;
     }
 
