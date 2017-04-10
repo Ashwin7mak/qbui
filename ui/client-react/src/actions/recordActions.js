@@ -9,7 +9,7 @@ import Promise from 'bluebird';
 import Locale from '../locales/locales';
 import _ from 'lodash';
 import {NotificationManager} from 'react-notifications';
-import {NOTIFICATION_MESSAGE_DISMISS_TIME} from '../../../reuse/client/src/scripts/notificationManager';
+import {NOTIFICATION_MESSAGE_DISMISS_TIME, NOTIFICATION_MESSAGE_FAIL_DISMISS_TIME} from '../../../reuse/client/src/scripts/notificationManager';
 import * as CompConsts from '../constants/componentConstants';
 import * as query from '../constants/query';
 import * as UrlConsts from "../constants/urlConstants";
@@ -352,7 +352,7 @@ export const createRecord = (appId, tblId, params = {}) => {
                         let errStatus = error.response ? error.response.status : null;
                         if (errStatus === 403) {
                             NotificationManager.error(Locale.getMessage('recordNotifications.error.403'), Locale.getMessage('failed'),
-                                CompConsts.NOTIFICATION_MESSAGE_FAIL_DISMISS_TIME);
+                                NOTIFICATION_MESSAGE_FAIL_DISMISS_TIME);
                         } else {
                             /*eslint no-lonely-if:0 */
                             if (errStatus === 500 && _.has(error.response, 'data.response.status')) {
@@ -360,12 +360,12 @@ export const createRecord = (appId, tblId, params = {}) => {
                                 if (status !== 422) {
                                     // HTTP data response status 422 means server "validation error" under the general HTTP 500 error
                                     NotificationManager.error(Locale.getMessage('recordNotifications.error.500'), Locale.getMessage('failed'),
-                                        CompConsts.NOTIFICATION_MESSAGE_FAIL_DISMISS_TIME);
+                                        NOTIFICATION_MESSAGE_FAIL_DISMISS_TIME);
                                 }
                             } else {
                                 //  need to render some message to the user
                                 NotificationManager.error(Locale.getMessage('recordNotifications.error.500'), Locale.getMessage('failed'),
-                                    CompConsts.NOTIFICATION_MESSAGE_FAIL_DISMISS_TIME);
+                                    NOTIFICATION_MESSAGE_FAIL_DISMISS_TIME);
                             }
                         }
                         // this delay allows for saving modal to trap inputs otherwise
@@ -381,7 +381,7 @@ export const createRecord = (appId, tblId, params = {}) => {
                     appId + '; TblId:' + tblId + '; fields:' + JSON.stringify(params.fields);
                 logger.error(errors);
                 NotificationManager.error(Locale.getMessage('recordNotifications.recordNotSaved'), Locale.getMessage('failed'),
-                    CompConsts.NOTIFICATION_MESSAGE_FAIL_DISMISS_TIME);
+                    NOTIFICATION_MESSAGE_FAIL_DISMISS_TIME);
                 reject();
             }
         });
@@ -549,7 +549,7 @@ export const updateRecord = (appId, tblId, recId, params = {}) => {
 
                         dispatch(event(recId, types.SAVE_RECORD_ERROR, {appId, tblId, recId, errors: errors}));
                         NotificationManager.error(Locale.getMessage('recordNotifications.recordNotSaved'), Locale.getMessage('failed'),
-                            CompConsts.NOTIFICATION_MESSAGE_FAIL_DISMISS_TIME);
+                            NOTIFICATION_MESSAGE_FAIL_DISMISS_TIME);
 
                         // this delay allows for saving modal to trap inputs otherwise clicks get invoked and error message
                         // icon in action column does not render.
@@ -564,7 +564,7 @@ export const updateRecord = (appId, tblId, recId, params = {}) => {
                 logger.error(errMessage);
 
                 NotificationManager.error(Locale.getMessage('recordNotifications.recordNotSaved'), Locale.getMessage('failed'),
-                    CompConsts.NOTIFICATION_MESSAGE_FAIL_DISMISS_TIME);
+                    NOTIFICATION_MESSAGE_FAIL_DISMISS_TIME);
 
                 reject();
             }
