@@ -94,7 +94,7 @@
 
 
         // this will get you every record element on the grid
-         qbGridRecordElList: {value: function() {return this.qbGridBodyEl.elements('.qbRow');}},
+        qbGridRecordElList: {value: function() {return this.qbGridBodyEl.elements('.qbRow');}},
 
         /**
          * Helper method to ensure the report has been properly loaded with records. Will throw an error if no records are in the report.
@@ -325,9 +325,8 @@
         // Checking for the deleted record on the first page
 
         checkForTheAbsenceDeletedRecordOnTheCurrentPage:
-            {
-                value: function(deletedRecord)
-            {
+        {
+            value: function(deletedRecord)            {
 
            //this.qbGridRecordElList.then(function(recordsNo) {
                 console.log('Deleted record: ' + deletedRecord);
@@ -335,53 +334,49 @@
                // for (var i = 0; i < this.qbGridRecordElList.value.length; i++) {
                 for (var i = 1; i < browser.elements('.qbRow').value.length; i++) {
 
-                   console.log('Row' + i + ': ' + this.getRecordValues(i));
-                   expect(deletedRecord).not.toEqual(this.getRecordValues(i));
-               }
+                    console.log('Row' + i + ': ' + this.getRecordValues(i));
+                    expect(deletedRecord).not.toEqual(this.getRecordValues(i));
+                }
            //});
 
-        }},
+            }},
 
         checkForThePresenceDeletedRecordOnTheCurrentPage:
-            {
-                value: function(deletedRecord)
-                {
+        {
+            value: function(deletedRecord)                {
                     //this will check each row
-                    for (var i = 1; i < browser.elements('.qbRow').value.length; i++) {
+                for (var i = 1; i < browser.elements('.qbRow').value.length; i++) {
 
-                        if(this.compareTwoRows(deletedRecord, this.getRecordValues(i) )){
-                            return true;
-                        }
+                    if (this.compareTwoRows(deletedRecord, this.getRecordValues(i))) {
+                        return true;
                     }
+                }
 
-                    return false;
+                return false;
 
-                }},
+            }},
 
         compareTwoRows:
-            {
-                value: function(rowA, rowB)
-                {
+        {
+            value: function(rowA, rowB)                {
 
-                    expect(rowA.length).toBe(rowB.length);
-                    for(var i=1; i< rowA.length; i++)
-                    {
+                expect(rowA.length).toBe(rowB.length);
+                for (var i = 1; i < rowA.length; i++)                    {
                         //comparing two cells from two rows
-                        if(rowA[i]!=rowB[i])
-                        {
-                            return false;
-                        }
+                    if (rowA[i] !== rowB[i])                        {
+                        return false;
                     }
+                }
                 return true;
 
-                }
-            },
+            }
+        },
 
         // Record Row to be selected:
-        selectRow: { value: function(recordRow) {
-           this.recordCheckBoxes.value[recordRow].click();
-           this.deleteIcon.waitForExist();
-        } },
+        selectRow: {value: function(recordRow) {
+            this.recordCheckBoxes.value[recordRow].click();
+            this.deleteIcon.waitForExist();
+        }},
     });
 
     module.exports = ReportContentPage;

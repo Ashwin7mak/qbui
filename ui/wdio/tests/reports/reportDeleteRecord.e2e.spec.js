@@ -5,10 +5,10 @@
     let e2ePageBase = requirePO('e2ePageBase');
     let newStackAuthPO = requirePO('newStackAuth');
     let reportContentPO = requirePO('reportContent');
-    let reportInLineEditPO = requirePO('reportInLineEdit')
+    let reportInLineEditPO = requirePO('reportInLineEdit');
     let reportNavPO = requirePO('reportNavigation');
 
-    describe('Reports Page - Add Record Tests', function () {
+    describe('Reports Page - Add Record Tests', function() {
         var realmName;
         var realmId;
         var testApp;
@@ -16,7 +16,7 @@
         /**
          * Setup method. Creates test app then authenticates into the new stack
          */
-        beforeAll(function () {
+        beforeAll(function() {
             browser.logger.info('beforeAll spec function - Generating test data and logging in');
             // Need to return here. beforeAll is completely async, need to return the Promise chain in any before or after functions!
             // No need to call done() anymore
@@ -24,10 +24,10 @@
                 testApp = createdApp;
                 realmName = e2eBase.recordBase.apiBase.realm.subdomain;
                 realmId = e2eBase.recordBase.apiBase.realm.id;
-            }).then(function () {
+            }).then(function() {
                 // Auth into the new stack
                 return newStackAuthPO.realmLogin(realmName, realmId);
-            }).catch(function (error) {
+            }).catch(function(error) {
                 // Global catch that will grab any errors from chain above
                 // Will appropriately fail the beforeAll method so other tests won't run
                 browser.logger.error('Error in beforeAll function:' + JSON.stringify(error));
@@ -35,7 +35,7 @@
             });
         });
 
-        describe('Single Record Delete Tests', function () {
+        describe('Single Record Delete Tests', function() {
 
             var deletedRecord;
             var rowToBeDeleted = 2;
@@ -45,7 +45,7 @@
             /**
              * Before each it block reload the list all report (can be used as a way to reset state between tests)
              */
-            beforeEach(function () {
+            beforeEach(function() {
                 // Load the List All report on Table 1
                 return e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
 
@@ -56,10 +56,10 @@
             /**
              * Test Method- By clicking on the checkbox
              */
-            it('Delete a Record and check for the success message', function () {
+            it('Delete a Record and check for the success message', function() {
 
                 //Step 0: Get the row data for the delete verification
-                deletedRecord= reportContentPO.getRecordValues(rowToBeDeleted);
+                deletedRecord = reportContentPO.getRecordValues(rowToBeDeleted);
                 expect(reportNavPO.recordsCount.getText()).toEqual(reportCount + " records");
 
                 // Step 1: Select the checkbox and click on delete icon
@@ -87,7 +87,7 @@
             it('Not to delete a Record and check for the record ', function() {
 
                 //Step 0: Get the row data for the delete verification
-                deletedRecord= reportContentPO.getRecordValues(rowToBeDeleted);
+                deletedRecord = reportContentPO.getRecordValues(rowToBeDeleted);
                 expect(reportNavPO.recordsCount.getText()).toEqual(reportCount - 1 + " records");
 
                 // Step 1: Select the DropDown menu and clicking on delete icon
