@@ -1,5 +1,6 @@
 import React, {PropTypes, Component} from 'react';
 import {DragLayer} from 'react-dnd';
+import FieldFormats from '../../utils/fieldFormats';
 import draggableItemTypes from './draggableItemTypes';
 import FieldToken from './fieldToken/fieldToken';
 import Locale from '../../locales/locales';
@@ -57,12 +58,12 @@ function getItemStyles(props) {
 
 export class FormBuilderCustomDragLayer extends Component {
     renderItem(type, item) {
-        let fieldType = (_.has(item, 'relatedField.datatypeAttributes.type') ? item.relatedField.datatypeAttributes.type : consts.TEXT);
-        let label = (_.has(item, 'relatedField.name') ? item.relatedField.name : Locale.getMessage(`builder.fields.${fieldType}`));
-
+        let fieldType = (_.has(item, 'relatedField.datatypeAttributes') ? FieldFormats.getFormatType(item.relatedField) : consts.TEXT);
+        let label = (_.has(item, 'relatedField.name') ? item.relatedField.name : Locale.getMessage(`fieldsDefaultLabels.${fieldType}`));
         switch (type) {
         case draggableItemTypes.FIELD :
-            return (<FieldToken title={label} type={fieldType} />);
+            // Show the FieldToken in its dragging state. Always dragging as part of customDragLayer so hardcoded to true.
+            return (<FieldToken title={label} type={fieldType} isDragging={true} />);
         default :
             return null;
         }

@@ -9,5 +9,10 @@ export const CONTEXT = {
         NAV_LIST: 'LIST',
         GRID: 'GRID',
         EMBEDDED: 'EMBEDDED'
+    },
+
+    FORM: {
+        VIEW: 'view',
+        EDIT: 'edit'
     }
 };

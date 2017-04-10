@@ -7,7 +7,6 @@
     var favicons = require('../../constants/favicons');
     var CommonUrlUtils = require('../../../../common/src/commonUrlUtils');
     var log = require('../../logger').getLogger();
-    var cookieUtils = require('../../utility/cookieUtils');
     let routeHelper = require('../../routes/routeHelper');
     let ob32Utils = require('../../utility/ob32Utils');
 
@@ -24,11 +23,11 @@
             if (req.headers.accept === consts.APPLICATION_JSON) {
                 res.json(result, result.status);
             } else {
-                res.render(viewFilePath, {favicons: favicons}, function(err) {
+                res.render(viewFilePath, {favicons: favicons, legacyBase: requestHelper.getLegacyHost()}, function(err) {
                     if (err) {
                         return res.json(result, result.status);
                     }
-                    res.render(viewFilePath, {favicons: favicons});
+                    res.render(viewFilePath, {favicons: favicons, legacyBase: requestHelper.getLegacyHost()});
                 });
             }
             log.info({req: req, res: res}, message);
@@ -99,13 +98,11 @@
                         secure: true
                     });
 
-                // Copy and set the new stack cookie with the same expiration as the original
-                // ticket cookie
-                let ticketExpiration = ob32Utils.decoder(cookieUtils.breakTicketDown(ticket, 1));
+                // Copy and set the new stack TICKET cookie as a session cookie
                 res.cookie(consts.COOKIES.TICKET, ticket,
                     {
                         domain: hostname,
-                        expires: new Date(ticketExpiration),
+                        expires: 0,
                         httpOnly: true,
                         secure: true
                     });

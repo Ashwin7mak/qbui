@@ -2,37 +2,21 @@
     'use strict';
 
     let topNavPO = requirePO('topNav');
-
     module.exports = Object.create(e2ePageBase, {
-        // should everything here be sorted alphabetically, or logically instead?
+        // elements
         cancelBtn: {
             get: function() {
                 return browser.element('.cancelFormButton');
             }
         },
+        centerActionsOnFooter: {
+            get: function() {
+                return browser.element('.saveOrCancelFooter .centerActions');
+            }
+        },
         deleteFieldIcon: {
             get: function() {
                 return browser.element('.deleteFieldIcon');
-            }
-        },
-        dragonDrop: {
-            // drags vert then horz to induce the preview
-            // because dragAndDrop doesn't do the trick
-            value: function(source, target) {
-                let sourceText = browser.element(source).getText();
-                browser.moveToObject(source);
-                browser.buttonDown();
-                browser.moveToObject(target);
-                browser.moveToObject(target, 0, 0); // this updates the preview
-                browser.buttonUp();
-                browser.waitUntil(function() {
-                    return sourceText === browser.element(target).getText();
-                }, 5000, 'expected text to be different after 5s');
-            }
-        },
-        fieldLabels: {
-            get: function() {
-                return browser.elements('.fieldLabel');
             }
         },
         fieldPreferencesIcon: {
@@ -55,36 +39,14 @@
                 return '.formElementContainer:nth-child(' + index + ')';
             }
         },
+        formBuilderContainer: {
+            get: function() {
+                return browser.element('.formBuilderContainer');
+            }
+        },
         formContainer: {
             get: function() {
                 return browser.element('.formContainer');
-            }
-        },
-        getFieldLabels: {
-            value: function() {
-                let labels = [];
-                let fieldLabels = this.fieldLabels;
-                for (let i = 0; i < fieldLabels.value.length; i++) {
-                    labels.push(fieldLabels.value[i].getText());
-                }
-                return labels;
-            }
-        },
-        moveByName: {
-            value: function(source, target) {
-                let labels = this.getFieldLabels();
-                source = this.findFieldByIndex(labels.indexOf(source));
-                target = this.findFieldByIndex(labels.indexOf(target));
-                this.dragonDrop(source, target);
-            }
-        },
-        open: {
-            value: function() {
-                // wait to prevent 'element not clickable'
-                topNavPO.formBuilderBtn.waitForVisible();
-                topNavPO.formBuilderBtn.click();
-                topNavPO.modifyThisForm.click();
-                return this.formContainer.waitForVisible();
             }
         },
         previewContainer: {
@@ -100,6 +62,74 @@
         success: {
             get: function() {
                 return browser.element('.notification-success');
+            }
+        },
+
+        // methods
+        delete: {
+            value: function(index) {
+                let field = this.findFieldByIndex(index);
+                browser.element(field).element('.deleteFieldIcon').click();
+                browser.pause(5000);
+            }
+        },
+        dragJiggleAndDrop: {
+            // drags vert then jiggles horz to induce the preview
+            // because dragAndDrop doesn't do the trick
+            value: function(source, target) {
+                let label = browser.element(source).getText();
+                browser.moveToObject(source);
+                browser.buttonDown();
+                // jiggle on target until preview appears
+                this.jiggleCursor(target, label);
+                browser.buttonUp();
+                browser.pause(5000);
+            }
+        },
+        getFieldLabels: {
+            value: function() {
+                let labelEls = browser.elements('.fieldLabel');
+
+                return labelEls.value.map(function(labelEl) {
+                    let label = labelEl.getText();
+                    if (label === '') { // checkbox label is deeper in DOM
+                        label = labelEl.element('.label').getText();
+                    }
+                    return label;
+                });
+            }
+        },
+        moveByName: {
+            value: function(source, target) {
+                let labels = this.getFieldLabels();
+                // add 1 to index because indexOf is zero-based
+                // whereas findFieldByIndex is one-based
+                source = this.findFieldByIndex(labels.indexOf(source) + 1);
+                target = this.findFieldByIndex(labels.indexOf(target) + 1);
+                this.dragJiggleAndDrop(source, target);
+            }
+        },
+        jiggleCursor: {
+            value: function(target, label) {
+                browser.waitUntil(function() {
+                    // jiggle cursor on target until it updates with expected label
+                    browser.moveToObject(target);
+                    browser.moveToObject(target, 0, 0);
+                    return label === browser.element(target).getText();
+                }, 5000, 'expected target preview to display source label after dragging');
+
+            }
+        },
+        open: {
+            value: function() {
+                // wait to prevent 'element not clickable'
+                topNavPO.formBuilderBtn.waitForVisible();
+                // wait a bit longer to avoid 'Element not clickable' error
+                browser.pause(5000);
+                topNavPO.formBuilderBtn.click();
+                topNavPO.modifyThisForm.click();
+                browser.pause(5000);
+                return this.formContainer.waitForVisible();
             }
         },
     });

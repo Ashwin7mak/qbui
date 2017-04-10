@@ -46,12 +46,12 @@ export const ReportHeader = React.createClass({
 
     searchTheString(searchTxt) {
         this.props.searchInput(searchTxt);
-        this.debouncedFilterReport(searchTxt, this.getReportData().selections);
+        this.debouncedFilterReport(searchTxt, this.getReport().selections);
     },
 
     clearSearchString() {
         this.props.clearSearchInput();
-        this.debouncedFilterReport('', this.getReportData().selections);
+        this.debouncedFilterReport('', this.getReport().selections);
     },
 
     mapFacetFields() {
@@ -77,9 +77,9 @@ export const ReportHeader = React.createClass({
         queryParams[query.NUMROWS_PARAM] = PAGE.DEFAULT_NUM_ROWS;
 
         this.props.loadDynamicReport(CONTEXT.REPORT.NAV,
-            this.props.appId,
-            this.props.tblId,
-            this.props.rptId,
+            reportData.appId,
+            reportData.tblId,
+            reportData.rptId,
             true,
             filter,
             queryParams
@@ -93,10 +93,14 @@ export const ReportHeader = React.createClass({
     },
 
     getReportData() {
+        let report = this.getReport();
+        return _.has(report, 'data') ? report.data : {};
+    },
+    getReport() {
         let report = _.find(this.props.report, function(rpt) {
             return rpt.id === CONTEXT.REPORT.NAV;
         });
-        return _.has(report, 'data') ? report.data : {};
+        return report ? report : {};
     },
 
     render: function() {

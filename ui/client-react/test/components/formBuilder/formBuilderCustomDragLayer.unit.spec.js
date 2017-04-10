@@ -47,6 +47,13 @@ describe('FormBuilderCustomDragLayer', () => {
             expect(component.find(FieldToken)).not.toBePresent();
         });
 
+        it('calls getMessage when a valid field type is passed through and name is not available', () => {
+            let item = {relatedField: {datatypeAttributes: {type: consts.NUMERIC}}};
+            component = shallow(<FormBuilderCustomDragLayer item={item} isDragging={true} itemType={draggableTypes.FIELD}/>);
+
+            expect(mockLocale.getMessage).toHaveBeenCalled();
+        });
+
         let testCases = [
             {
                 description: 'renders a default FieldToken',
@@ -62,9 +69,9 @@ describe('FormBuilderCustomDragLayer', () => {
             },
             {
                 description: 'uses the field type if present',
-                item: {relatedField: {datatypeAttributes: {type: 'custom type'}}},
+                item: {relatedField: {datatypeAttributes: {type: consts.NUMERIC}}},
                 expectedTitle: testFieldName,
-                expectedType: 'custom type'
+                expectedType: 2
             }
         ];
 

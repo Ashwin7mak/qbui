@@ -579,7 +579,7 @@ export function buildTestFormDataArrayWithTwoColumns() {
                 },
             ]
         },
-        record:[{id: 2, value: "field value"}],
+        record:[{id: 2, display:'display value', value: "field value"}],
         fields: [{id: 6, name: "field 6", datatypeAttributes: {type: "TEXT"}}, {id: 7, name: "field 7", datatypeAttributes: {type: "TEXT"}}]
     };
 }

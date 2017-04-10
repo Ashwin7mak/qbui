@@ -8,8 +8,7 @@
     var formsPO = requirePO('formsPage');
     var ReportInLineEditPO = requirePO('reportInLineEdit');
 
-
-    xdescribe('Add a record Via Form Tests : ', function() {
+    xdescribe('Forms - Add a Record Via Form Tests: ', function() {
         var realmName;
         var realmId;
         var testApp;

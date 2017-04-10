@@ -10,7 +10,7 @@
     let realmId;
     let testApp;
 
-    describe('Form Builder Tests:', function() {
+    describe('Forms - Form Builder Tests (Drag and Drop): ', function() {
         beforeAll(function() {
             /**
              * Setup method. Creates test app then authenticates into the new stack
@@ -49,7 +49,7 @@
             // drag the 1st field below the 2nd one
             let source = formBuilderPO.findFieldByIndex(1);
             let target = formBuilderPO.findFieldByIndex(2);
-            formBuilderPO.dragonDrop(source, target);
+            formBuilderPO.dragJiggleAndDrop(source, target);
             // verify that the first 2 items have changed position
             let movedFields = formBuilderPO.getFieldLabels();
             expect(movedFields[0]).toBe(origFields[1]);
@@ -67,7 +67,7 @@
             // drag the 1st field below the 2nd one
             let source = formBuilderPO.findFieldByIndex(1);
             let target = formBuilderPO.findFieldByIndex(2);
-            formBuilderPO.dragonDrop(source, target);
+            formBuilderPO.dragJiggleAndDrop(source, target);
             // verify that the first 2 items have changed position
             let movedFields = formBuilderPO.getFieldLabels();
             expect(movedFields[0]).toBe(origFields[1]);
@@ -78,24 +78,23 @@
             expect(formBuilderPO.getFieldLabels()).toEqual(origFields);
         });
 
-        it('drag a field to another & verify preview token, then drag off & verify no change', function() {
+        it('drag a field onto another without dropping, then drag back to original field, release & verify no change', function() {
             // store the list of fields before moving
             let origFields = formBuilderPO.getFieldLabels();
             // drag 1st field onto 2nd
             let source = formBuilderPO.findFieldByIndex(1);
             let target = formBuilderPO.findFieldByIndex(2);
+            let label = browser.element(source).getText();
+            // drag source to target without dropping
             browser.moveToObject(source);
             browser.buttonDown();
-            // TODO: verify click effects, e.g. field selected & buttons enabled? DOM doesn't change...
-            browser.moveToObject(target);
-            // verify preview token attributes, e.g. title (which won't contain a 'required' asterisk)
+            formBuilderPO.jiggleCursor(target, label);
+            // verify drag token label
             expect(formBuilderPO.fieldTokenTitle.getText()).toEqual(origFields[0].replace('* ', ''));
-            // TODO: verify preview token icon?  Need a const hashmap?
-            // TODO: verify target is highlighted? DOM doesn't change...
-            // drag preview back to original position & drop
-            browser.moveToObject(source);
+            // drag back to source & drop
+            formBuilderPO.jiggleCursor(source, label);
             browser.buttonUp();
-            // verify field order has not changed
+            browser.pause(5000);
             expect(formBuilderPO.getFieldLabels()).toEqual(origFields);
         });
 
@@ -106,12 +105,64 @@
             // store the list of fields before moving
             let origFields = formBuilderPO.getFieldLabels();
             // drag the 1st field below the 2nd one
-            formBuilderPO.moveByName(origFields[1], origFields[2]);
+            formBuilderPO.moveByName(origFields[0], origFields[1]);
             // verify that the first 2 items have changed position
             let movedFields = formBuilderPO.getFieldLabels();
             expect(movedFields[0]).toBe(origFields[1]);
             expect(movedFields[1]).toBe(origFields[0]);
         });
 
+        it('removes a field, then saves and verifies absence', function() {
+            // store the list of fields before deletion
+            let firstField = formBuilderPO.getFieldLabels()[0];
+            // delete the first field
+            formBuilderPO.delete(1);
+            // verify that the first item is removed
+            expect(formBuilderPO.getFieldLabels().indexOf(firstField)).toEqual(-1);
+            // save, cancel, reopen
+            formBuilderPO.saveBtn.click();
+            formBuilderPO.cancelBtn.click();
+            formBuilderPO.open();
+            // verify that the first item is still gone
+            expect(formBuilderPO.getFieldLabels().indexOf(firstField)).toEqual(-1);
+        });
+
+        it('removes a field, then cancels and verifies presence', function() {
+            // store the list of fields before deletion
+            let firstField = formBuilderPO.getFieldLabels()[0];
+            // delete the first field
+            formBuilderPO.delete(1);
+            // verify that the first item is removed
+            expect(formBuilderPO.getFieldLabels().indexOf(firstField)).toEqual(-1);
+            // save, cancel, reopen
+            formBuilderPO.cancelBtn.click();
+            formBuilderPO.open();
+            // verify that the first item has been restored
+            expect(formBuilderPO.getFieldLabels().indexOf(firstField)).toEqual(0);
+        });
+
+        it('drags a field outside of viewport & verifies autoscroll', function() {
+            let firstField = formBuilderPO.findFieldByIndex(1);
+            let secondField = formBuilderPO.findFieldByIndex(2);
+            let firstFieldSize = browser.element(firstField).getElementSize();
+            let containerSize = formBuilderPO.formBuilderContainer.getElementSize();
+            // temporarily shrink the window to cause 2nd element to not be visible
+            browser.setViewportSize({width: containerSize.width, height: firstFieldSize.height});
+            // verify second field is not visible
+            expect(browser.isVisibleWithinViewport(secondField)).toBe(false);
+            // start dragging
+            browser.moveToObject(firstField, 0, 0);
+            browser.buttonDown();
+            // drag off the scrollable area & wait for second field to become visible (or timeout)
+            formBuilderPO.centerActionsOnFooter.moveToObject(); // blue footer bar
+            let i = 0;
+            while ((browser.isVisibleWithinViewport(secondField) !== true) && i++ < 100) {
+                browser.pause(100);
+            }
+            // stop dragging & verify that the second field is now visible
+            browser.buttonUp();
+            expect(browser.isVisibleWithinViewport(secondField)).toBe(true);
+            browser.setViewportSize(containerSize);
+        });
     });
 }());

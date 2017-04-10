@@ -7,7 +7,7 @@
     let reportNavPO = requirePO('reportNavigation');
     let reportSortPO = requirePO('reportSortingGrouping');
 
-    describe('Report Navigation Tests: ', function() {
+    describe('Reports - Navigation Tests: ', function() {
         let testApp;
         let realmName;
         let realmId;

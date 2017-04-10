@@ -483,97 +483,97 @@ describe('FieldUtils', () => {
             {
                 description: 'returns default icon',
                 type: null,
-                expectedType: 'T'
+                expectedType: 'text'
             },
             {
                 description: 'returns Date field icon',
-                type: consts.DATE,
-                expectedType: 'D'
+                type: FieldFormats.DATE_FORMAT,
+                expectedType: 'date'
             },
             {
                 description: 'returns DateTime field icon',
-                type: consts.DATE_TIME,
-                expectedType: 'Dt'
+                type: FieldFormats.DATETIME_FORMAT,
+                expectedType: 'date-time'
             },
             {
                 description: 'returns Time of day field icon',
-                type: consts.TIME_OF_DAY,
-                expectedType: 'Tm'
+                type: FieldFormats.TIME_FORMAT,
+                expectedType: 'time-of-day'
             },
             {
                 description: 'returns Numeric field icon',
-                type: consts.NUMERIC,
-                expectedType: 'N'
+                type: FieldFormats.NUMBER_FORMAT,
+                expectedType: 'number'
             },
             {
                 description: 'returns Rating field icon',
-                type: consts.RATING,
-                expectedType: 'R'
+                type: FieldFormats.RATING_FORMAT,
+                expectedType: 'rating'
             },
             {
                 description: 'returns Currency field icon',
-                type: consts.CURRENCY,
-                expectedType: 'C'
+                type: FieldFormats.CURRENCY_FORMAT,
+                expectedType: 'currency'
             },
             {
                 description: 'returns Percent field icon',
-                type: consts.PERCENT,
-                expectedType: 'P'
+                type: FieldFormats.PERCENT_FORMAT,
+                expectedType: 'percentage'
             },
             {
                 description: 'returns Duration field icon',
-                type: consts.DURATION,
-                expectedType: 'Du'
+                type: FieldFormats.DURATION_FORMAT,
+                expectedType: 'duration'
             },
             {
                 description: 'returns Phone field icon',
-                type: consts.PHONE_NUMBER,
-                expectedType: 'Ph'
+                type: FieldFormats.PHONE_FORMAT,
+                expectedType: 'phone-number'
             },
             {
                 description: 'returns Text field icon',
-                type: consts.TEXT,
-                expectedType: 'T'
+                type: FieldFormats.TEXT_FORMAT,
+                expectedType: 'text'
             },
             {
                 description: 'returns User field icon',
-                type: consts.USER,
-                expectedType: 'U'
+                type: FieldFormats.USER_FORMAT,
+                expectedType: 'user'
             },
             {
                 description: 'returns URL field icon',
-                type: consts.URL,
-                expectedType: 'Ur'
+                type: FieldFormats.URL,
+                expectedType: 'url'
             },
             {
                 description: 'returns Email field icon',
-                type: consts.EMAIL_ADDRESS,
-                expectedType: 'E'
+                type: FieldFormats.EMAIL_ADDRESS,
+                expectedType: 'email-address'
             },
             {
                 description: 'returns Text Formula field icon',
-                type: consts.TEXT_FORMULA,
-                expectedType: 'F'
+                type: FieldFormats.TEXT_FORMULA_FORMAT,
+                expectedType: 'formula'
             },
             {
                 description: 'returns Numeric Formula field icon',
-                type: consts.NUMERIC_FORMULA,
-                expectedType: 'F'
+                type: FieldFormats.NUMERIC_FORMULA_FORMAT,
+                expectedType: 'formula'
             },
             {
                 description: 'returns Url Formula field icon',
-                type: consts.URL_FORMULA,
-                expectedType: 'F'
+                type: FieldFormats.URL_FORMULA_FORMAT,
+                expectedType: 'formula'
             },
             {
                 description: 'returns Checkbox Formula field icon',
-                type: consts.CHECKBOX,
-                expectedType: 'C'
+                type: FieldFormats.CHECKBOX_FORMAT,
+                expectedType: 'selected'
             },
             {
                 description: 'returns Text if type is not found',
                 type: 'invalid type',
-                expectedType: 'T'
+                expectedType: 'text'
             }
         ];
 

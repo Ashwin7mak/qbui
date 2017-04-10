@@ -22,6 +22,8 @@ import {loadFields} from '../../actions/fieldsActions';
 import {CONTEXT} from '../../actions/context';
 import {APP_ROUTE, EDIT_RECORD_KEY, NEW_RECORD_VALUE} from '../../constants/urlConstants';
 
+import * as FieldsReducer from '../../reducers/fields';
+
 let logger = new Logger();
 let FluxMixin = Fluxxor.FluxMixin(React);
 
@@ -154,14 +156,6 @@ const ReportRoute = React.createClass({
             logger.info("the necessary params were not specified to reportRoute render params=" + simpleStringify(this.props.params));
             return null;
         } else {
-            let fields = [];
-            if (_.has(this.props, 'qbui.fields')) {
-                let fieldsContainer = _.find(this.props.qbui.fields, field => field.appId === this.props.params.appId && field.tblId === this.props.params.tblId);
-                if (fieldsContainer) {
-                    fields = fieldsContainer.fields;
-                }
-            }
-
             return (<div className="reportContainer">
                 <Stage stageHeadline={this.getStageHeadline()}
                        pageActions={this.getPageActions(5)}>
@@ -179,7 +173,6 @@ const ReportRoute = React.createClass({
                     isRowPopUpMenuOpen={this.props.isRowPopUpMenuOpen}
                     routeParams={this.props.routeParams}
                     selectedAppId={this.props.selectedAppId}
-                    fields={this.props.fields}
                     searchStringForFiltering={this.props.reportData.searchStringForFiltering}
                     pageActions={this.getPageActions(0)}
                     nameForRecords={this.nameForRecords}
