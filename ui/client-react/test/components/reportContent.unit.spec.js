@@ -407,8 +407,8 @@ const props = {
     editRecordValidateField: () => {},
     addBlankRecordToReport: () => {},
     deleteRecord: () => {},
-    updateRecord: () => {},
-    createRecord: () => {}
+    updateRecord: () => {return Promise.resolve()},
+    createRecord: () => {return Promise.resolve()}
 };
 
 const fakeReportGroupDataTemplate = {
