@@ -42,6 +42,7 @@ describe('FormBuilderContainer', () => {
     beforeEach(() => {
         jasmineEnzyme();
         FormBuilderRewireAPI.__Rewire__('FormBuilder', FormBuilderMock);
+        FormBuilderRewireAPI.__Rewire__('FieldProperties', FieldPropertiesMock);
         spyOn(mockActions, 'loadForm');
         spyOn(mockActions, 'updateForm');
         spyOn(mockActions, 'toggleFormBuilderChildrenTabIndex');
@@ -53,6 +54,7 @@ describe('FormBuilderContainer', () => {
 
     afterEach(() => {
         FormBuilderRewireAPI.__ResetDependency__('FormBuilder');
+        FormBuilderRewireAPI.__ResetDependency__('FieldProperties');
         mockActions.loadForm.calls.reset();
         mockActions.updateForm.calls.reset();
         mockActions.toggleFormBuilderChildrenTabIndex.calls.reset();
@@ -129,7 +131,6 @@ describe('FormBuilderContainer', () => {
 
     describe('saving on FormBuilder', () => {
         it('test saveButton on the formBuilder footer', () => {
-            FormBuilderRewireAPI.__Rewire__('FieldProperties', FieldPropertiesMock);
             component = mount(<FormBuilderContainer appId={appId}
                                                     currentForm={currentForm}
                                                     tblId={tblId}
@@ -141,13 +142,11 @@ describe('FormBuilderContainer', () => {
             saveButton.simulate('click');
 
             expect(mockActions.updateForm).toHaveBeenCalled();
-            FormBuilderRewireAPI.__ResetDependency__('FieldProperties');
         });
     });
 
     describe('keyboard navigation for formBuilder', () => {
         it('will toggle the children tab indices if space is pressed and the tab indices are not already 0', () => {
-            FormBuilderRewireAPI.__Rewire__('FieldProperties', FieldPropertiesMock);
             let e = {
                 which: 32,
                 preventDefault() {return;}
@@ -166,11 +165,9 @@ describe('FormBuilderContainer', () => {
             instance.updateChildrenTabIndex(e);
 
             expect(mockActions.toggleFormBuilderChildrenTabIndex).toHaveBeenCalled();
-            FormBuilderRewireAPI.__ResetDependency__('FieldProperties');
         });
 
         it('will not toggle the children tab indices if space or enter are not pressed', () => {
-            FormBuilderRewireAPI.__Rewire__('FieldProperties', FieldPropertiesMock);
             let e = {
                 which: 19,
                 preventDefault() {return;}
@@ -188,11 +185,9 @@ describe('FormBuilderContainer', () => {
             instance.updateChildrenTabIndex(e);
 
             expect(mockActions.toggleFormBuilderChildrenTabIndex).not.toHaveBeenCalled();
-            FormBuilderRewireAPI.__ResetDependency__('FieldProperties');
         });
 
         it('enter and space will not toggle the children tab indices if the tabIndex is currently 0', () => {
-            FormBuilderRewireAPI.__Rewire__('FieldProperties', FieldPropertiesMock);
             let e = {
                 which: 32,
                 preventDefault() {return;}
@@ -211,7 +206,6 @@ describe('FormBuilderContainer', () => {
             instance.updateChildrenTabIndex(e);
 
             expect(mockActions.toggleFormBuilderChildrenTabIndex).not.toHaveBeenCalled();
-            FormBuilderRewireAPI.__ResetDependency__('FieldProperties');
         });
 
         it('will remove a field', () => {

@@ -1,5 +1,6 @@
 import * as types from '../actions/types';
 import _ from 'lodash';
+import Logger from '../utils/logger';
 import {BUILTIN_FIELD_ID} from '../../../common/src/constants';
 
 //  Return the table fields object for the given appId and tableId
@@ -27,6 +28,7 @@ const fieldsStore = (state = [], action) => {
 
     //  new state list without the appId/tblId entry
     const newState = _.reject(state, field => field.appId === action.appId && field.tblId === action.tblId);
+    let logger = new Logger();
 
     function getKeyField(content) {
         let keyField;
@@ -90,9 +92,13 @@ const fieldsStore = (state = [], action) => {
     case types.UPDATE_FIELD : {
         //newState above already pulled out the fieldList we want removed, so we just need to find our fieldList and update it!
         let fieldList = _.find(state, fieldlist => fieldlist.appId === action.appId && fieldlist.tblId === action.tblId);
-        let fieldIndex = _.findIndex(fieldList.fields, field => field.id === action.field.id);
-        fieldList.fields[fieldIndex] = action.field;
-        newState.push(fieldList);
+        if (fieldList) {
+            let fieldIndex = _.findIndex(fieldList.fields, field => field.id === action.field.id);
+            fieldList.fields[fieldIndex] = action.field;
+            newState.push(fieldList);
+        } else {
+            logger.warn(`the list of fields for the appId: ${action.appId}  and tblId: ${action.tblId} do not exist!`);
+        }
         return newState;
     }
     default:
