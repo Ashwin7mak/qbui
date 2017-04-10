@@ -127,7 +127,16 @@ class ListOfElements extends Component {
         });
     };
 
+    getMessage() {
+        if (this.props.elements.length === 0 && this.props.emptyListMessage) {
+            return <div>{this.props.emptyListMessage}</div>;
+        }
+    };
+
     render() {
+
+        let message = this.getMessage();
+
         return (
             <div className={`listOfElementsContainer ${this.props.isCollapsed ? 'listOfElementsCollapsed' : ''}`}>
                 <SearchBox
@@ -136,6 +145,8 @@ class ListOfElements extends Component {
                     placeholder={Locale.getMessage('listOfElements.searchPlaceholder')}
                     onClearSearch={this.clearFilter}
                 />
+
+                {message}
 
                 <FlipMove typeName="ul" className="listOfElementsMainList">
                     {this.renderElementGroups()}
@@ -157,6 +168,10 @@ ListOfElements.propTypes = {
     /**
      * Displays the filter box at the top of the menu */
     isFilterable: PropTypes.bool,
+
+    /**
+     * A message to be displayed when the list is empty */
+    emptyListMessage: PropTypes.string,
 
     /**
      * A list of grouped elements to be displayed in the menu. */

@@ -344,13 +344,6 @@ export const Nav = React.createClass({
             open: false
         };
 
-        let content;
-        if (elements.length === 0) {
-            content = <div className="no-elements">All fields are shown in the table.</div>
-        } else {
-            content = <ListOfElements elements={elements}/>
-        };
-
         return (
             <div className="fieldSelect">
                 <QBicon
@@ -360,7 +353,10 @@ export const Nav = React.createClass({
                 />
                 <div className="header">Fields</div>
                 <div className="info">Add a field to this report</div>
-                {content}
+                <ListOfElements
+                    elements={elements}
+                    emptyListMessage={"All fields are shown in the table."}
+                />
             </div>
         );
         /*let availableFields = this.props.reportData.data ? this.props.reportData.data.columns : [];
