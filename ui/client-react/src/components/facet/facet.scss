@@ -74,6 +74,7 @@
     width: 300px;
     position: absolute;
     margin-left: -29px;
+    padding: 0;
 
     > .arrow {
         left: 13% !important;
@@ -84,6 +85,7 @@
         margin: 0;
         max-height: 280px;
         overflow-y: auto;
+        font-family: Lato, "Open Sans", Arial, Sans-Serif;
 
         @include height-medium-breakpoint {
             max-height: 420px;
@@ -162,7 +164,7 @@
         font-size: 14px;
         font-weight: normal;
         margin: 0;
-        padding: 10px 15px;
+        padding: 8px 15px;
     }
 
     .selectionInfo.small {

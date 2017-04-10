@@ -97,15 +97,11 @@
         font-size: 20px;
     }
 
-
     .dropdown-menu {
         right: 0;
         left: auto;
         z-index: $zindex-navbar-menu;
-
-
-
-
+        top: 37px;
     }
 
     .topNav .dropdown {
@@ -132,7 +128,6 @@
         .builder {
             padding-right: 10px;
         }
-
 
         .link {
             cursor: pointer;

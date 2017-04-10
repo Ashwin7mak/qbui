@@ -136,6 +136,19 @@ $edit-icon-font-size: 18px;
             .dropdown-menu {
                 top: calc(100% - 1px);
                 left: calc(100% - #{$grid-group-expand-icon-size} - #{$grid-header-cell-padding});
+                li {
+                    position:relative;
+
+                    a {
+                        padding:3px 20px 3px 30px;
+
+                        .qbIcon{
+                            position:absolute;
+                            left:5px;
+                            color: $color-green-400;
+                        }
+                    }
+                }
             }
         }
 
@@ -404,7 +417,7 @@ $edit-icon-font-size: 18px;
         .dropdown-menu {
 
             // position menu to the right of the sticky cells
-            top: 30px;
+            top: 28px;
             left: -5px;
 
             &:before {
