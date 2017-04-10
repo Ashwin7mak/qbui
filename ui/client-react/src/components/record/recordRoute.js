@@ -16,6 +16,7 @@ import {withRouter} from 'react-router';
 import Locale from '../../locales/locales';
 import Loader from 'react-loader';
 import RecordHeader from './recordHeader';
+import DrawerContainer from '../drawer/drawerContainer';
 import Breakpoints from '../../utils/breakpoints';
 import WindowLocationUtils from '../../utils/windowLocationUtils';
 import * as SpinnerConfigurations from '../../constants/spinnerConfigurations';
@@ -28,7 +29,8 @@ import {clearSearchInput} from '../../actions/searchActions';
 import {APP_ROUTE, BUILDER_ROUTE, EDIT_RECORD_KEY} from '../../constants/urlConstants';
 import {CONTEXT} from '../../actions/context';
 
-
+import '../drawer/drawer.scss';
+import '../drawer/drawerContainer.scss';
 import './record.scss';
 
 let logger = new Logger();
@@ -269,7 +271,42 @@ export const RecordRoute = React.createClass({
             {msg: 'unimplemented.print', icon:'print', disabled:true},
             {msg: 'unimplemented.delete', icon:'delete', disabled:true}];
 
+        // TODO: onCloseHandler, add to Proptypes, icon, i18nMessage for other languages
+        if (true || this.props.closeRecord) {
+            actions.push({msg: 'pageActions.close', icon:'close', onClick: () => {console.log('pass in this.props.onCloseHandler');}});
+        }
+
         return (<IconActions className="pageActions" actions={actions} {...this.props}/>);
+    },
+
+    /**
+     * Render drawer container (if url instructs us to render drawers).
+     */
+    getDrawerContainer() {
+        // TODO: update this when upgrading to React Router 4 work is done.
+        const hasDrawers = this.props.location.pathname.indexOf('drawers') > -1;
+        const drawerTableIds = ['0duiiaaaaa2'];
+        const drawerRecordIds = ['2'];
+
+        if (hasDrawers) {
+            const appId = _.get(this, 'props.params.appId');
+            return (
+                <DrawerContainer
+                    appId={appId}
+                    visible={true}
+                    drawerTableIds={drawerTableIds}
+                    drawerRecordIds={drawerRecordIds}
+                />);
+        } else {
+            return null;
+        }
+    },
+
+    fakeOpenDrawerLink() {
+        const link = this.props.location.pathname + '/drawers';
+        //console.log(link);
+
+        return <Link to={link} >Load Them Drawers, YO!</Link>;
     },
 
     /**
@@ -320,8 +357,8 @@ export const RecordRoute = React.createClass({
             const viewData = this.getViewFormFromProps();
 
             const formLoadingErrorStatus = viewData && viewData.errorStatus;
-            const formInternalError = !formLoadingErrorStatus ? false : (formLoadingErrorStatus === 500);
-            const formAccessRightError = !formLoadingErrorStatus ? false : (formLoadingErrorStatus === 403);
+            const formInternalError = (formLoadingErrorStatus === 500);
+            const formAccessRightError = (formLoadingErrorStatus === 403);
 
             let key = _.has(viewData, "formData.recordId") ? viewData.formData.recordId : null;
             return (
@@ -344,17 +381,22 @@ export const RecordRoute = React.createClass({
                         <Loader key={key}
                                 loaded={(!viewData || !viewData.loading)}
                                 options={SpinnerConfigurations.TROWSER_CONTENT}>
-                        <Record key={key}
-                                selectedApp={this.props.selectedApp}
-                                appId={this.props.params.appId}
-                                tblId={this.props.params.tblId}
-                                recId={this.props.params.recordId}
-                                errorStatus={formLoadingErrorStatus ? viewData.errorStatus : null}
-                                formData={viewData ? viewData.formData : null}
-                                appUsers={this.props.appUsers} />
+                            <Record key={key}
+                                    selectedApp={this.props.selectedApp}
+                                    appId={this.props.params.appId}
+                                    tblId={this.props.params.tblId}
+                                    recId={this.props.params.recordId}
+                                    errorStatus={formLoadingErrorStatus ? viewData.errorStatus : null}
+                                    formData={viewData ? viewData.formData : null}
+                                    appUsers={this.props.appUsers} />
                         </Loader> : null }
                     {formInternalError && <pre><I18nMessage message="form.error.500"/></pre>}
                     {formAccessRightError && <pre><I18nMessage message="form.error.403"/></pre>}
+
+                    {!formLoadingErrorStatus &&
+                        this.getDrawerContainer()
+                    }
+                    {this.fakeOpenDrawerLink()}
                 </div>);
         }
     }

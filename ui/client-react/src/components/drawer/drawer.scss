@@ -1,0 +1,31 @@
+@import '../../assets/css/qbVariables';
+
+.drawer {
+    position: absolute;
+    z-index: 10; // TODO: what to do? use qbVariable?
+    height: 100%;
+    width: calc(100% - 20px);
+    overflow: hidden;
+    transition: 0.5s;
+    transition-timing-function: ease-in-out;
+
+    // TODO: remove these, these are temporary
+    background: bisque;
+    left: 100%;
+    border: 1px solid;
+
+    &.visible {
+        transform: translateX(-100%);
+    }
+}
+
+//TODO: remove as well, use inline css
+@include small-breakpoint {
+    .drawer {
+        transition-timing-function: ease-in-out;
+
+        &.visible {
+            transform: translateY(-100%);
+        }
+    }
+}
