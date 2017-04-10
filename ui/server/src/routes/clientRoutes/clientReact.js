@@ -7,6 +7,8 @@ const routes = [
     '/app/:appId/table/:tblId/reports',
     '/app/:appId/table/:tblId',
     '/app/:appId/table/:tblId/report/:rptId/fieldWithParentId/:fieldWithParentId/masterRecordId/:masterRecordId',
+    // TODO: remove!
+    '/app/:appId/table/:tblId/report/:rptId/record/:recordId/:drawers',
     '/app/:appId/settings',
     '/app/:appId/users',
     '/app/:appId/properties',

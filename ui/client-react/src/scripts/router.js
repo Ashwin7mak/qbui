@@ -85,6 +85,8 @@ render((
                 <Route path="table/:tblId" component={TableHomePageRoute} />
                 <Route path="table/:tblId/report/:rptId" component={ReportRoute} />
                 <Route path="table/:tblId/report/:rptId/record/:recordId" component={RecordRoute} />
+                {/* TODO: remove!*/}
+                <Route path="table/:tblId/report/:rptId/record/:recordId/:drawers" component={RecordRoute} />
                 <Route path="table/:tblId/record/:recordId" component={RecordRoute} />
             </Route>
 
