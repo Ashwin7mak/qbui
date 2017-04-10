@@ -175,7 +175,8 @@
             //Verify there is also + Icon associated with it
             this.newTableBtn.element('.iconUISturdy-add-mini').waitForVisible();
             //Click on the new Table Btn
-            return this.newTableBtn.click();
+            this.newTableBtn.click();
+            return browser.element('.tableFieldInput').waitForVisible();
         }},
 
         /**
@@ -211,22 +212,9 @@
          * Method to click on Create Table button in create table dialogue
          */
         clickFinishedBtn: {value: function() {
-            var createTableButtonEl = this.tableFinishedBtn;
-
-            //step 1-  Wait for the button to be visible
-            createTableButtonEl.waitForVisible();
-            // Catch an error from above and then retry
-            // Single click via raw javascript
-            browser.execute(function() {
-                var event = new MouseEvent('click', {
-                    'view': window,
-                    'bubbles': true,
-                    'cancelable': true,
-                    'detail': 1
-                });
-                document.querySelector('button.finishedButton').dispatchEvent(event);
-            });
-            browser.waitForVisible('form.editForm', e2eConsts.extraLongWaitTimeMs, true);
+            this.tableFinishedBtn.waitForVisible();
+            this.tableFinishedBtn.click();
+            return formsPO.editFormContainerEl.waitForVisible();
         }},
 
         /**
@@ -282,12 +270,11 @@
          * @fieldValue
          */
         setInputValue : {value: function(filteredElement, filteredElementInputClassName, fieldValue) {
+            filteredElement.element(filteredElementInputClassName).click();
             filteredElement.element(filteredElementInputClassName).clearElement();
             if (browserName === 'firefox') {
                 return filteredElement.setValue(filteredElementInputClassName, [fieldValue, '\uE004']);
             } else {
-                filteredElement.element(filteredElementInputClassName).click();
-                filteredElement.element(filteredElementInputClassName).clearElement();
                 return browser.keys([fieldValue, '\uE004']);
             }
         }},
@@ -308,17 +295,17 @@
                 if (tableField.includes('Table Name')) {
                     //verify title of the field
                     expect(results[0].element('.tableFieldTitle').getAttribute('textContent')).toBe(tableField);
-                    return this.setInputValue(results[0], '.tableFieldInput input', fieldValue);
+                    this.setInputValue(results[0], '.tableFieldInput INPUT', fieldValue);
                     //Enter value of 'a record in the table is called a ' field
                 } else if (tableField.includes('A record in the table is called')) {
                     //verify title of the field
                     expect(results[0].element('.tableFieldTitle').getAttribute('textContent')).toBe(tableField);
-                    return this.setInputValue(results[0], '.tableFieldInput input', fieldValue);
+                    this.setInputValue(results[0], '.tableFieldInput INPUT', fieldValue);
                     //Enter value for Description field
                 } else if (tableField.includes('Description')) {
                     //verify title of the field
                     expect(results[0].element('.tableFieldTitle').getAttribute('textContent')).toBe(tableField);
-                    return this.setInputValue(results[0], '.tableFieldInput textarea', fieldValue);
+                    this.setInputValue(results[0], '.tableFieldInput TEXTAREA', fieldValue);
                 }
             } else {
                 throw new Error('Cannot set value for input of field type ' + JSON.stringify(results[0]));
@@ -340,13 +327,13 @@
                 //Enter values for 'table name' field
                 if (tableField.includes('Table Name')) {
                     //Verify the table name field value
-                    expect(results[0].element('.tableFieldInput input').getAttribute('value')).toBe(expectedFieldValue);
+                    expect(results[0].element('.tableFieldInput INPUT').getAttribute('value')).toBe(expectedFieldValue);
                 } else if (tableField.includes('A record in the table is called')) {
                     //Verify the record field value
-                    expect(results[0].element('.tableFieldInput input').getAttribute('value')).toBe(expectedFieldValue);
+                    expect(results[0].element('.tableFieldInput INPUT').getAttribute('value')).toBe(expectedFieldValue);
                 } else if (tableField.includes('Description')) {
                     //Verify the description field value
-                    expect(results[0].element('.tableFieldInput textarea').getAttribute('value')).toBe(expectedFieldValue);
+                    expect(results[0].element('.tableFieldInput TEXTAREA').getAttribute('value')).toBe(expectedFieldValue);
                 }
             } else {
                 throw new Error('Unexpected table field filtered element' + JSON.stringify(results[0]));
@@ -448,7 +435,18 @@
             this.verifyTableSettingsDropDown();
             //Click on table properties and settings link
             this.modifyTableSettingsLink.waitForVisible();
-            return this.modifyTableSettingsLink.click();
+            this.modifyTableSettingsLink.click();
+            return browser.element('.tableFieldInput').waitForVisible();
+        }},
+
+        /**
+         * Method to click on 'back to apps ' link
+         */
+        clickBackToAppsLink : {value: function() {
+            browser.element('.standardLeftNav .navItemContent').waitForVisible();
+            browser.element('.standardLeftNav .navItemContent').click();
+            reportContentPO.waitForReportContent();
+            return this.newTableBtn.waitForVisible();
         }},
 
         /**
@@ -459,7 +457,7 @@
             this.editTableApplyBtn.waitForVisible();
             this.editTableApplyBtn.click();
             //Need this for notification container to slide away
-            return browser.pause(e2eConsts.shortWaitTimeMs);
+            return browser.pause(e2eConsts.mediumWaitTimeMs);
         }},
 
         /**
