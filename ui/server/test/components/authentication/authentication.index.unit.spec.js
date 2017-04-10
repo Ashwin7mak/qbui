@@ -130,8 +130,8 @@ describe('Validate https response authentication functions', function() {
             'redirect should be set based on url specified in query parameters of the request');
         assert.equal(mockRes.cookies.TICKET.value, mockFederationReq.cookies.team_TICKET,
             'the team_TICKET cookie value should be set as the TICKET cookie in the response');
-        assert.equal(mockRes.cookies.TICKET.options.expires.getTime(), time,
-            'the expiration from the original cookie should be used on the new stack cookie');
+        assert.equal(mockRes.cookies.TICKET.options.expires, 0,
+            'the expiration on the new stack cookie should be zero (session cookie)');
         assert.equal(mockRes.cookies.TICKET.options.domain, mockFederationReq.headers.host,
             'the domain of the new stack cookie should use the hostname defined in the request');
         assert.equal(mockRes.cookies.team_TICKET.value, "",
@@ -164,8 +164,8 @@ describe('Validate https response authentication functions', function() {
             'redirect should be set based on url specified in query parameters of the request');
         assert.equal(mockRes.cookies.TICKET.value, mockFederationReq.cookies.team_TICKET,
             'the team_TICKET cookie value should be set as the TICKET cookie in the response');
-        assert.equal(mockRes.cookies.TICKET.options.expires.getTime(), time,
-            'the expiration from the original cookie should be used on the new stack cookie');
+        assert.equal(mockRes.cookies.TICKET.options.expires, 0,
+            'the expiration on the new stack cookie should be zero (session cookie)');
         assert.equal(mockRes.cookies.TICKET.options.domain, mockFederationReq.headers.host,
             'the domain of the new stack cookie should use the hostname defined in the request');
         assert.equal(mockRes.cookies.team_TICKET.value, "",
