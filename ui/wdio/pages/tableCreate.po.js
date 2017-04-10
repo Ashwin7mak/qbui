@@ -28,13 +28,13 @@
         tableHelpBtn : {get: function() {return browser.element('.iconUISturdy-help');}},
 
         //table Next button
-        tableNextBtn: {get: function() {return browser.element('button.nextButton');}},
+        tableNextBtn: {get: function() {return browser.element('.modal-footer button.nextButton');}},
         //table Cancel button
-        tableCancelBtn: {get: function() {return browser.element('button.cancelButton');}},
+        tableCancelBtn: {get: function() {return browser.element('.modal-footer button.cancelButton');}},
         //table finished button
-        tableFinishedBtn: {get: function() {return browser.element('button.finishedButton');}},
+        tableFinishedBtn: {get: function() {return browser.element('.modal-footer button.finishedButton');}},
         //table previous button
-        tablePreviousBtn: {get: function() {return browser.element('button.previousButton');}},
+        tablePreviousBtn: {get: function() {return browser.element('.modal-footer button.previousButton');}},
 
         //Icon chooser
         tableFieldIconChooser: {get: function() {return browser.element('.iconChooser.closed');}},
@@ -208,16 +208,25 @@
         }},
 
         /**
-         * Method to click on Finished button in create table dialogue
+         * Method to click on Create Table button in create table dialogue
          */
-        clickFinishedBtn : {value: function() {
-            //Wait until Finished button visible
-            this.tableFinishedBtn.waitForVisible();
-            //Click on finished button
-            this.tableFinishedBtn.click();
-            //make sure it lands in forms edit container
-            return formsPO.editFormContainerEl.waitForVisible();
+        clickFinishedBtn: {value: function() {
+            var createTableButtonEl = this.tableFinishedBtn;
 
+            //step 1-  Wait for the button to be visible
+            createTableButtonEl.waitForVisible();
+            // Catch an error from above and then retry
+            // Single click via raw javascript
+            browser.execute(function() {
+                var event = new MouseEvent('click', {
+                    'view': window,
+                    'bubbles': true,
+                    'cancelable': true,
+                    'detail': 1
+                });
+                document.querySelector('button.finishedButton').dispatchEvent(event);
+            });
+            browser.waitForVisible('form.editForm', e2eConsts.extraLongWaitTimeMs, true);
         }},
 
         /**
@@ -278,6 +287,7 @@
                 return filteredElement.setValue(filteredElementInputClassName, [fieldValue, '\uE004']);
             } else {
                 filteredElement.element(filteredElementInputClassName).click();
+                filteredElement.element(filteredElementInputClassName).clearElement();
                 return browser.keys([fieldValue, '\uE004']);
             }
         }},
@@ -298,17 +308,17 @@
                 if (tableField.includes('Table Name')) {
                     //verify title of the field
                     expect(results[0].element('.tableFieldTitle').getAttribute('textContent')).toBe(tableField);
-                    this.setInputValue(results[0], '.tableFieldInput input', fieldValue);
+                    return this.setInputValue(results[0], '.tableFieldInput input', fieldValue);
                     //Enter value of 'a record in the table is called a ' field
                 } else if (tableField.includes('A record in the table is called')) {
                     //verify title of the field
                     expect(results[0].element('.tableFieldTitle').getAttribute('textContent')).toBe(tableField);
-                    this.setInputValue(results[0], '.tableFieldInput input', fieldValue);
+                    return this.setInputValue(results[0], '.tableFieldInput input', fieldValue);
                     //Enter value for Description field
                 } else if (tableField.includes('Description')) {
                     //verify title of the field
                     expect(results[0].element('.tableFieldTitle').getAttribute('textContent')).toBe(tableField);
-                    this.setInputValue(results[0], '.tableFieldInput textarea', fieldValue);
+                    return this.setInputValue(results[0], '.tableFieldInput textarea', fieldValue);
                 }
             } else {
                 throw new Error('Cannot set value for input of field type ' + JSON.stringify(results[0]));
