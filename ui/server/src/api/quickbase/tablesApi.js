@@ -64,31 +64,6 @@
             },
 
             /**
-             * Get call on the table properties end point
-             * @param req
-             * @param tableId
-             * @returns {Promise}
-             */
-            getTableProperties: function(req, tableId) {
-                return new Promise((resolve, reject) =>{
-                    let opts = requestHelper.setOptions(req);
-                    opts.url = requestHelper.getRequestEeHost() + routeHelper.getTablePropertiesRoute(req.url, tableId);
-
-                    requestHelper.executeRequest(req, opts).then(
-                        (eeResponse) =>{
-                            resolve(JSON.parse(eeResponse.body));
-                        },
-                        (error) =>{
-                            log.error({req: req}, "tablesApi.getTableProperties(): Error getting table properties");
-                            reject(error);
-                        }).catch((ex) =>{
-                            requestHelper.logUnexpectedError('tablesApi.getTableProperties(): unexpected error getting table properties', ex, true);
-                            reject(ex);
-                        });
-                });
-            },
-
-            /**
              * Create endpoint on the tableProperties object.
              * @param req
              * @param tableId
