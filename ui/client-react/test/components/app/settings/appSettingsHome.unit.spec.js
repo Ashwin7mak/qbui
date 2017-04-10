@@ -15,8 +15,8 @@ describe('AppSettingsHome functions', () => {
         {userId: 3, firstName: 'Steve', lastName: 'Rogers'}
     ];
     const setting = "users";
-    const settingsLinkWithParameter = `${UrlConstants.APP_ROUTE}/${appId}/${setting}`;
-    const settingsLinkWithoutParameter = `${UrlConstants.APP_ROUTE}/${appId}/`;
+    const settingsLinkWithParameter = `${UrlConstants.SETTINGS_ROUTE}/app/${appId}/${setting}`;
+    const settingsLinkWithoutParameter = `${UrlConstants.SETTINGS_ROUTE}/app/${appId}/`;
 
     it('test render of component', () => {
         let component = TestUtils.renderIntoDocument(<AppSettingsHome selectedApp={selectedApp}

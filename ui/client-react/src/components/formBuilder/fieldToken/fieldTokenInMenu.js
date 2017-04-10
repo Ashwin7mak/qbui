@@ -57,8 +57,7 @@ const mapStateToProps = state => {
         formId: _.get(currentForm, 'id'),
         appId: _.get(currentForm, 'formData.formMeta.appId'),
         tblId: _.get(currentForm, 'formData.formMeta.tableId'),
-        selectedField: (_.has(currentForm, 'selectedFields') ? currentForm.selectedFields[0] : null),
-        state: state.forms
+        selectedField: (_.has(currentForm, 'selectedFields') ? currentForm.selectedFields[0] : null)
     };
 };
 

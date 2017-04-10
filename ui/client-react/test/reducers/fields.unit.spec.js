@@ -81,11 +81,13 @@ describe('Test fields reducer', () => {
         const actionPayload = {
             type: types.ADD_FIELD,
             content: {
-                newField: {}
+                newField: {},
+                appId:appId,
+                tblId:tblId
             }
         };
         const fieldsWithNewFieldAddedOn = [{builtIn:true, id:3}, {builtIn:false, id:8}, {builtIn:false, keyField:true, id:10}, {}];
-        const state = reducer(newState, actionPayload, {appId:appId, tblId:tblId, type:types.ADD_FIELD});
+        const state = reducer(newState, actionPayload, {type:types.ADD_FIELD});
         const currentField = tableFieldsObj(state, appId, tblId);
 
         expect(currentField.appId).toEqual(appId);

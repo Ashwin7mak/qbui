@@ -8,6 +8,8 @@ import FieldToken from '../../../src/components/formBuilder/fieldToken/fieldToke
 let component;
 let formId = 1;
 let selectedField = 1;
+let appId = 1;
+let tblId = 1;
 let relatedField = {};
 let mockActions = {
     addNewFieldToForm(_formId, _location, _field) {}
@@ -34,9 +36,9 @@ describe('FieldTokenInMenu', () => {
     it('will invoke addNewFieldToForm when FieldToken node is clicked', () => {
         const type = 'textbox';
         const title = 'New Textbox';
-        component = shallow(<FieldTokenInMenu addNewFieldToForm={mockActions.addNewFieldToForm} relatedField={relatedField} type={type} title={title} formId={formId} selectedField={selectedField}/>);
+        component = shallow(<FieldTokenInMenu addNewFieldToForm={mockActions.addNewFieldToForm} relatedField={relatedField} type={type} title={title} formId={formId} selectedField={selectedField} appId={appId} tableId={tblId}/>);
         component.find(FieldToken).simulate('click');
 
-        expect(mockActions.addNewFieldToForm).toHaveBeenCalledWith(formId, selectedField, relatedField);
+        expect(mockActions.addNewFieldToForm).toHaveBeenCalledWith(formId, selectedField, relatedField, appId, tblId);
     });
 });

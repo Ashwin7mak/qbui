@@ -189,7 +189,8 @@ const buildNewField = (newField) => {
     let newId = _.uniqueId('newField_');
     let displayText = 'New Text Field';
 
-    return _.merge({}, newField, {
+    return _.merge({}, {
+
         id: newId,
         edit: true,
         FormFieldElement: {
@@ -197,12 +198,14 @@ const buildNewField = (newField) => {
             fieldId: newId,
             displayText
         }
-    });
+    }, newField);
 };
 
 /**
  * Move a field from one position on a form to a different position
  * @param formId
+ * @param appId
+ * @param tblId
  * @param newLocation
  * @param newField
  * @returns {{id, type, content}|*}

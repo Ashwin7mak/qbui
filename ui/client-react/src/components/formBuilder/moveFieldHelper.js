@@ -167,7 +167,6 @@ function addElementToNewLocation(formMetaData, newLocation, draggedItemProps) {
         columns.push(column);
     }
 
-    // column.elements.splice(elementIndex, 0, draggedItemProps);
     column.elements.splice(elementIndex, 0, draggedItemProps.containingElement);
     updateOrderIndices(column, 'elements');
 

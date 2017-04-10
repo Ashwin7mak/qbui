@@ -104,7 +104,10 @@ export default {
             next: "Nächster",
             previous: "Bisherige",
             finished: "Fertig",
-            new: "Neu"
+            apply: "Sich bewerben",
+            new: "Neu",
+            backToApp: "Zurück zur App",
+            reset: "Zurücksetzen"
         },
         field: {
             search: "Suche",
@@ -121,7 +124,6 @@ export default {
         },
         pageActions: {
             addRecord: "Datensatz hinzufügen",
-            configureFormBuilder: "Ändern Sie dieses Formular",
             saveRecord: "Änderungen speichern",
             saveAndAddRecord: "Speichern und fügen Sie eine neue Zeile",
             saveAndAddRecordDisabled: "Hinzufügen von mehreren Datensätzen funktioniert nicht sofort",
@@ -134,7 +136,8 @@ export default {
             print: "Drucken",
             customizeReport: "Fertigen Sie diesen Bericht",
             customizeForm: "Fertigen Sie dieses Formular",
-            customizePage: "Fertigen Sie diese Seite"
+            customizePage: "Fertigen Sie diese Seite",
+            deleteTable: "Tabelle löschen"
         },
         recordActions: {
             previous: "Früher",
@@ -624,6 +627,19 @@ export default {
         },
         iconChooser: {
             searchPlaceholder: "Tabellensymbole suchen ......"
+        },
+        settings: {
+            header: "Einstellungen",
+            tablesHeader: "Tabelle",
+            appsHeader: "Table",
+            formsHeader: "Bilden",
+            tableSettings: "Tabelleneigenschaften & Einstellungen",
+            configureFormBuilder: "Ändern Sie dieses Formular",
+        },
+        tableEdit: {
+            tableUpdateFailed: "Fehler beim Aktualisieren der Tabelle",
+            tableUpdated: "Tabelleninformationen gespeichert",
+            tableReset: "Tabelleninformationen werden nicht gespeichert"
         }
     }
 };

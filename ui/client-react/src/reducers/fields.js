@@ -38,6 +38,7 @@ const fieldsStore = (state = [], action) => {
 
     //  new state list without the appId/tblId entry
     const newState = _.reject(state, field => field.appId === action.appId && field.tblId === action.tblId);
+    let getCurrentState = (appId, tblId) =>  _.find(state, field => field.appId === appId && field.tblId === tblId);
 
     function getKeyField(content) {
         let keyField;
@@ -67,14 +68,25 @@ const fieldsStore = (state = [], action) => {
 
     case types.ADD_FIELD: {
         let {newField} = _.cloneDeep(action.content);
+        // Removes the FormFieldElement key which is not applicable to fields store, only matters on forms.
         delete newField.FormFieldElement;
 
-        let fieldList = _.find(state, fieldlist => fieldlist.appId === action.appId && fieldlist.tblId === action.tblId);
-        fieldList = _.cloneDeep(fieldList);
+        let {appId, tblId} = action.content;
 
-        fieldList.fields.push(newField);
+        let currentState = getCurrentState(appId, tblId);
 
-        return [...newState, fieldList];
+        if (!currentState) {
+            currentState = {
+                appId: appId,
+                tblId: tblId,
+                fields: [newField]
+            };
+        } else {
+            currentState.fields.push(newField);
+        }
+
+        newState.push(currentState);
+        return newState;
     }
 
     case types.LOAD_FIELDS_SUCCESS: {
