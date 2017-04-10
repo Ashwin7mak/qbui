@@ -520,9 +520,9 @@ export default {
             FILE_ATTACHMENT: "Datei"
         },
         fieldPropertyLabels: {
-            title: 'eigenschaften',
-            name: 'Name',
-            required: 'Muss ausgefüllt werden'
+            title: "eigenschaften",
+            name: "Name",
+            required: "Muss ausgefüllt werden"
         },
         builder: {
             formBuilder: {
