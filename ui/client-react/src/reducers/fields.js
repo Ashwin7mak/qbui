@@ -17,15 +17,10 @@ export const tableFieldsReportDataObj = (state, appId, tblId) => {
     };
 };
 
-// Return a specific field from table fields object for a given appId and tableId
+// Return a specific field from table fields object for a given appId and tableId, else returns null
 export const getField = (state, id, appId, tblId) => {
     const fieldsList = _.find(state, fieldList => fieldList.appId === appId && fieldList.tblId === tblId);
-    const currentField = _.find(fieldsList.fields, field => field.id === id);
-    if (!currentField) {
-        return null;
-    } else {
-        return currentField;
-    }
+    return fieldsList ? _.find(fieldsList.fields, field => field.id === id) : null;
 };
 
 const fieldsStore = (state = [], action) => {

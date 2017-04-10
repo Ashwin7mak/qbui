@@ -84,5 +84,13 @@ describe('Test fields reducer', () => {
         const updatedField = getField(upState, field.id, appId, tblId);
         expect(updatedField).toEqual(field);
     });
+
+    it('test get field', () => {
+        //load a field so we can get it!
+        const field = {builtIn:true, keyField:true, id:10, required: false, name: "fielderino"};
+        const fields = [field];
+        const state = reducer([], event(appId, tblId, types.LOAD_FIELDS_SUCCESS, {fields:fields}));
+        expect(getField(state, field.id, appId, tblId)).toEqual(field);
+    });
 });
 
