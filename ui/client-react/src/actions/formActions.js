@@ -205,10 +205,12 @@ const buildNewField = (newField) => {
  * @param newField
  * @returns {{id, type, content}|*}
  */
-export const addNewFieldToForm = (formId, newLocation, newField) => {
+export const addNewFieldToForm = (formId, newLocation, newField, appId, tblId) => {
     return event(formId, types.ADD_FIELD, {
         newLocation,
-        newField: buildNewField(newField)
+        newField: buildNewField(newField),
+        appId,
+        tblId
     });
 };
 

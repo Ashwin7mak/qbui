@@ -12,9 +12,8 @@ import {CONTEXT} from '../../../actions/context';
 export class FieldTokenInMenu extends Component {
 
     clickToAddToForm = () => {
-        let {selectedField, formId, relatedField} = this.props;
-
-        this.props.addNewFieldToForm(formId, selectedField, relatedField);
+        let {selectedField, formId, relatedField, appId, tableId} = this.props;
+        this.props.addNewFieldToForm(formId, selectedField, relatedField, appId, tableId);
     };
 
     render() {
@@ -52,9 +51,15 @@ FieldTokenInMenu.propTypes = {
 
 const mapStateToProps = state => {
     let currentForm = getFormByContext(state, CONTEXT.FORM.VIEW);
+    let formMeta;
+    if (currentForm && currentForm.formData) {
+        formMeta = currentForm.formData.formMeta;
+    }
     return {
         formId: (_.has(currentForm, 'id') ? currentForm.id : null),
         selectedField: (_.has(currentForm, 'selectedFields') ? currentForm.selectedFields[0] : null),
+        appId: (_.has(formMeta, 'appId') ? formMeta.appId : null),
+        tableId: (_.has(formMeta, 'tableId') ? formMeta.tableId : null),
         state: state.forms
     };
 };

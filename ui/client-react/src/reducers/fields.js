@@ -21,6 +21,7 @@ const fieldsStore = (state = [], action) => {
 
     //  new state list without the appId/tblId entry
     const newState = _.reject(state, field => field.appId === action.appId && field.tblId === action.tblId);
+    let getCurrentState = (appId, tblId) =>  _.find(state, field => field.appId === appId && field.tblId === tblId);
 
     function getKeyField(content) {
         let keyField;
@@ -49,9 +50,21 @@ const fieldsStore = (state = [], action) => {
     }
 
     case types.ADD_FIELD: {
-        let {newField} = action.content;
+        let {newField, appId, tblId} = action.content;
+        let currentState = getCurrentState(appId, tblId);
 
-        newState[0].fields.push(newField);
+
+        if (!currentState) {
+            currentState = {
+                appId: appId,
+                tblId: tblId,
+                fields: [newField]
+            };
+        } else {
+            currentState.fields.push(newField);
+        }
+
+        newState.push(currentState);
         return newState;
     }
 
