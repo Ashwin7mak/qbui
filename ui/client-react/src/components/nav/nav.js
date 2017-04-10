@@ -315,12 +315,12 @@ export const Nav = React.createClass({
             requested: columnData
         };
 
-        /*let availableFields = this.props.reportData.data ? this.props.reportData.data.columns : [];
+        let availableFields = reportData.data.columns;
         for (let c = 0; c < availableFields.length; c++) {
-            if (availableFields[c].id === id) {
+            if (availableFields[c].id === columnData.id) {
                 availableFields[c].isHidden = false;
             }
-        }*/
+        }
 
         this.props.addColumnToTable(CONTEXT.REPORT.NAV, reportData.appId, reportData.tblId, reportData.rptId, params);
     },
@@ -352,27 +352,13 @@ export const Nav = React.createClass({
                     className="fieldSelectCloseIcon"
                 />
                 <div className="header">Fields</div>
-                <div className="info">Add a field to this report</div>
+                <div className="info">Add a field to the report</div>
                 <ListOfElements
                     elements={elements}
                     emptyListMessage={"All fields are shown in the table."}
                 />
             </div>
         );
-        /*let availableFields = this.props.reportData.data ? this.props.reportData.data.columns : [];
-        let display = availableFields.map((column) => {
-            if (column.isHidden === true) {
-                return {
-                    key: "" + column.fieldDef.id,
-                    title: column.fieldDef.name
-                };
-            }
-        });
-        return (
-            <ListOfElements
-                elements={display}
-            />
-        );*/
     },
 
     render() {

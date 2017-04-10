@@ -260,9 +260,6 @@ const report = (state = [], action) => {
                 }
             }
 
-            console.log(clickedColumn);
-            console.log(columnToAdd);
-
             let indexedOrder = clickedColumn.order - 1;
             // correctly position the new column in the table
             if (params.addBefore) {
