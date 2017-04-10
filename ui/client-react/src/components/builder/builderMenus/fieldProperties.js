@@ -1,4 +1,4 @@
-import React, {PropTypes} from 'react';
+import React, {PropTypes, Component} from "react";
 import {connect} from 'react-redux';
 import TextFieldValueEditor from '../../fields/textFieldValueEditor';
 import CheckBoxFieldValueEditor from '../../fields/checkBoxFieldValueEditor';
@@ -27,13 +27,17 @@ const mapDispatchToProps = dispatch => {
     };
 };
 
-export const FieldProperties = React.createClass({
-    propTypes: {
-        selectedField: PropTypes.object,
-        appId: PropTypes.string,
-        tableId: PropTypes.string,
-        formId: PropTypes.string
-    },
+export class FieldProperties extends Component {
+    constructor(props) {
+        super(props);
+
+        this.createPropertiesTitle = this.createPropertiesTitle.bind(this);
+        this.createTextPropertyContainer = this.createTextPropertyContainer.bind(this);
+        this.createCheckBoxPropertyContainer = this.createCheckBoxPropertyContainer.bind(this);
+        this.createNameProperty = this.createNameProperty.bind(this);
+        this.createRequiredProperty = this.createRequiredProperty.bind(this);
+        this.updateFieldProps = this.updateFieldProps.bind(this);
+    }
 
     /**
      * Creates the headline at the top of the right panel saying the field name and the text properties after it
@@ -44,7 +48,7 @@ export const FieldProperties = React.createClass({
         return (
             <div className="fieldPropertiesTitle">{fieldName} {Locale.getMessage('fieldPropertyLabels.title')}</div>
         );
-    },
+    }
 
     /**
      * Generic method for any text field property that needs to be rendered
@@ -64,7 +68,7 @@ export const FieldProperties = React.createClass({
                 />
             </div>
         );
-    },
+    }
 
     /**
      * Generic method for any boolean field property that needs to be rendered
@@ -82,7 +86,7 @@ export const FieldProperties = React.createClass({
                 />
             </div>
         );
-    },
+    }
 
     /**
      * hard coded name property creation since we know EVERY field type has a name
@@ -92,7 +96,7 @@ export const FieldProperties = React.createClass({
      */
     createNameProperty(name) {
         return (this.createTextPropertyContainer(Locale.getMessage('fieldPropertyLabels.name'), name));
-    },
+    }
 
     /**
      * hard coded required property creation since we know EVERY field type has a required property
@@ -102,7 +106,7 @@ export const FieldProperties = React.createClass({
      */
     createRequiredProperty(required) {
         return (this.createCheckBoxPropertyContainer(Locale.getMessage('fieldPropertyLabels.required'), required));
-    },
+    }
 
     /**
      * takes the new property value and the name of the property we need to set
@@ -114,31 +118,30 @@ export const FieldProperties = React.createClass({
         let field = this.props.selectedField;
         field[propertyName] = newValue;
         this.props.updateField(field, this.props.appId, this.props.tableId);
-    },
+    }
 
     render() {
         //only show something if we have selected a field
-        if (this.props.selectedField) {
-            return (
-                <SideTrowser pullRight={true} sideMenuContent={
-                    <div className="fieldPropertiesContainer">
-                        {this.createPropertiesTitle(this.props.selectedField.name)}
-                        {this.createNameProperty(this.props.selectedField.name)}
-                        {this.createRequiredProperty(this.props.selectedField.required)}
-                    </div>
-                }>
-                    {this.props.children}
-                </SideTrowser>
-            );
-        } else {
-            return (
-                <SideTrowser pullRight={true} sideMenuContent={<div className="fieldPropertiesContainer"></div>}>
-                    {this.props.children}
-                </SideTrowser>
-            );
-        }
+        return (
+            <SideTrowser pullRight={true} sideMenuContent={
+                <div className="fieldPropertiesContainer">
+                    {this.props.selectedField && this.createPropertiesTitle(this.props.selectedField.name)}
+                    {this.props.selectedField &&this.createNameProperty(this.props.selectedField.name)}
+                    {this.props.selectedField &&this.createRequiredProperty(this.props.selectedField.required)}
+                </div>
+            }>
+                {this.props.children}
+            </SideTrowser>
+        );
     }
-});
+}
+
+FieldProperties.propTypes = {
+    selectedField: PropTypes.object,
+    appId: PropTypes.string,
+    tableId: PropTypes.string,
+    formId: PropTypes.string
+};
 
 export default connect(
     mapStateToProps,

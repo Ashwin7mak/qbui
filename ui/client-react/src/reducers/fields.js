@@ -1,5 +1,6 @@
 import * as types from '../actions/types';
 import _ from 'lodash';
+import Logger from '../utils/logger';
 import {BUILTIN_FIELD_ID} from '../../../common/src/constants';
 
 //  Return the table fields object for the given appId and tableId
@@ -17,16 +18,11 @@ export const tableFieldsReportDataObj = (state, appId, tblId) => {
     };
 };
 
-// Return a specific field from table fields object for a given appId and tableId
+// Return a specific field from table fields object for a given appId and tableId, else returns null
 export const getField = (state, id, appId, tblId) => {
-    const fieldsList = _.find(state.fields, fieldList => fieldList.appId === appId && fieldList.tblId === tblId);
+    const fieldsList = _.find(state, fieldList => fieldList.appId === appId && fieldList.tblId === tblId);
+    return fieldsList ? _.find(fieldsList.fields, field => field.id === id) : null;
 
-    const currentField = _.find(fieldsList.fields, field => field.id === id);
-    if (!currentField) {
-        return null;
-    } else {
-        return currentField;
-    }
 };
 
 export const getFields = (state, appId, tblId) => {
@@ -38,7 +34,10 @@ const fieldsStore = (state = [], action) => {
 
     //  new state list without the appId/tblId entry
     const newState = _.reject(state, field => field.appId === action.appId && field.tblId === action.tblId);
+
     let getCurrentState = (appId, tblId) =>  _.find(state, field => field.appId === appId && field.tblId === tblId);
+
+    let logger = new Logger();
 
     function getKeyField(content) {
         let keyField;
@@ -126,12 +125,21 @@ const fieldsStore = (state = [], action) => {
     case types.UPDATE_FIELD : {
         //newState above already pulled out the fieldList we want removed, so we just need to find our fieldList and update it!
         let fieldList = _.find(state, fieldlist => fieldlist.appId === action.appId && fieldlist.tblId === action.tblId);
-        fieldList = _.cloneDeep(fieldList);
 
-        let fieldIndex = _.findIndex(fieldList.fields, field => field.id === action.field.id);
-        fieldList.fields[fieldIndex] = {...action.field, isPendingEdits: true};
-        newState.push(fieldList);
-        return newState;
+        if (fieldList) {
+            fieldList = _.cloneDeep(fieldList);
+
+            let fieldIndex = _.findIndex(fieldList.fields, field => field.id === action.field.id);
+
+            fieldList.fields[fieldIndex] = {...action.field, isPendingEdits: true};
+
+            newState.push(fieldList);
+            return newState;
+
+        } else {
+            logger.warn(`the list of fields for the appId: ${action.appId}  and tblId: ${action.tblId} do not exist!`);
+            return state;
+        }
     }
 
     case types.UPDATE_FIELD_ID : {
@@ -141,6 +149,7 @@ const fieldsStore = (state = [], action) => {
         let fieldIndex = _.findIndex(fieldList.fields, field => field.id === action.oldFieldId);
         fieldList.fields[fieldIndex] = {...fieldList.fields[fieldIndex], id: action.newFieldId};
         newState.push(fieldList);
+
         return newState;
     }
 

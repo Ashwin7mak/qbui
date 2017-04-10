@@ -522,9 +522,9 @@ export default {
             FILE_ATTACHMENT: "Fichier"
         },
         fieldPropertyLabels: {
-            title: 'propriétés',
-            name: 'prénom',
-            required: 'Doit être rempli'
+            title: "propriétés",
+            name: "prénom",
+            required: "Doit être rempli"
         },
         builder: {
             formBuilder: {
