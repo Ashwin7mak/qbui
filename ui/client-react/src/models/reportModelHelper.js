@@ -44,8 +44,9 @@ class ReportModelHelper {
     static getReportColumns(fields, fids  = [], groupEls = []) {
         let columns = [];
         let groupDelimiter = REQUEST_PARAMETER.GROUP_DELIMITER;
-        if (fields) {
-            fields.forEach((fieldDef, index) => {
+        if (fids) {
+            fids.forEach((fid, index) => {
+                const fieldDef = fields.find(currentField => currentField.id === fid);
                 let groupedField = _.find(groupEls, el => el.split(groupDelimiter)[0] === fieldDef.id);
                 if (!groupedField && fids.length && (fids.indexOf(fieldDef.id) === -1)) {
                     //skip this fieldDef since its not on report's column list or on group list

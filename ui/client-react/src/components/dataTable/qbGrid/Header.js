@@ -7,7 +7,7 @@ import React from 'react';
 import { DragSource, DropTarget } from 'react-dnd';
 
 const DragTypes = {
-    HEADER: 'header'
+    HEADER: 'QbHeaderCell'
 };
 const headerSource = {
     beginDrag({ label }) {

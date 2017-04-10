@@ -1,5 +1,11 @@
 import React, {PropTypes} from 'react';
 import * as Table from 'reactabular-table';
+import * as dnd from 'reactabular-dnd';
+import * as resolve from 'table-resolver';
+import { DragDropContext } from 'react-dnd';
+import HTML5Backend from 'react-dnd-html5-backend';
+import cloneDeep from 'lodash/cloneDeep';
+import _ from 'lodash';
 import Loader  from 'react-loader';
 import * as SpinnerConfigurations from "../../../constants/spinnerConfigurations";
 import QbHeaderCell from './qbHeaderCell';
@@ -14,11 +20,7 @@ import Logger from '../../../utils/logger';
 const logger = new Logger();
 
 import './qbGrid.scss';
-
-import Header from './header';
-import {
-    moveChildrenLabels, moveLabels, move
-} from './move';
+import {connect} from 'react-redux';
 
 const ICON_ACTIONS_COLUMN_ID = 'ICON_ACTIONS';
 
@@ -214,13 +216,14 @@ const QbGrid = React.createClass({
      * Render a single column
      */
     getColumns() {
-        return this.props.columns.map(column => {
+        if(!_.isArray(this.state.columns)) { return [];}
+        return this.state.columns.map(column => {
             try {
                 column.addFormatter(this.renderCell);
                 if (!this.props.phase1) {
                     column.addHeaderMenu(this.props.menuComponent, this.props.menuProps);
                 }
-                return column.getGridHeader();
+                return column.getGridHeader(this.onMoveColumn);
             } catch (err) {
                 // If the column is not a type of ColumnTransformer with the appropriate methods, still pass through the column as the dev may have wanted to use a plain object (i.e., in the component library)
                 // but provide a warning in case using the ColumnTransformer class was forgotten.
@@ -356,13 +359,50 @@ const QbGrid = React.createClass({
     },
 
 
+    componentWillReceiveProps(nextProps){
+        if(this.state.colmns && this.state.columns.length>1){
+            return;
+        }
+        this.setState({columns: nextProps.columns});
+    },
+    getDefaultState(){
+        return{
+            columns:[]
+        }
+    },
 
+    onMoveColumn(labels){
+      console.log("moved", labels);
+        const movedColumns = dnd.moveLabels(this.state.columns, labels);
+
+
+        if (movedColumns) {
+            // Retain widths to avoid flashing while drag and dropping.
+            // const source = movedColumns.source;
+            // const target = movedColumns.target;
+            // const sourceWidth = source.props.style && source.props.style.width;
+            // const targetWidth = target.props.style && target.props.style.width;
+            //
+            // source.props.style = {
+            //     ...source.props.style,
+            //     width: targetWidth
+            // };
+            // target.props.style = {
+            //     ...target.props.style,
+            //     width: sourceWidth
+            // };
+
+            this.setState({
+                columns: movedColumns.columns
+            });
+        }
+    },
 
 
     render() {
 
-        // this.state.columns= { onMove:o => this.onMoveColumn(o)}
         let columns;
+
         if (this.props.showRowActionsColumn) {
             columns = [
                 ...[{
@@ -370,7 +410,9 @@ const QbGrid = React.createClass({
                     headerClass: "gridHeaderCell",
                     header: {
                         props: {
-                            scope: 'col'
+                            scope: 'col',
+                            label: "abc",
+                            onMove: o => this.onMoveColumn(o)
                         },
                         label: this.getCheckboxHeader(),
                         transforms: [this.getActionCellProps],
@@ -383,8 +425,12 @@ const QbGrid = React.createClass({
                 ...this.getColumns()
             ];
         } else {
-            columns = this.getColumns();
+            columns = this.getColumns()
+
         }
+
+        const resolvedColumns = resolve.columnChildren({ columns });
+
 
         return (
 
@@ -395,10 +441,10 @@ const QbGrid = React.createClass({
                     className={`qbGrid${this.props.isInlineEditOpen ? ' inlineEditing' : ''}`}
                     columns={columns}
                     onScroll={this.handleScroll}
+
                     components={{
                         header: {
-                            cell: QbHeaderCell
-                           // onMove:this.onMoveColumn(o)
+                            cell: dnd.Header
                         },
                         body: {
                             row: QbRow,
@@ -406,8 +452,9 @@ const QbGrid = React.createClass({
                         }
                     }}
                 >
-                    <Table.Header className="qbHeader"/>
 
+
+        <Table.Header className="qbHeader" />
                     <Table.Body className="qbTbody"
                         onRow={this.addRowProps}
                         rows={this.collapsedGroupHelper.filterRows(this.props.rows)}
@@ -422,4 +469,19 @@ const QbGrid = React.createClass({
     }
 });
 
-export default QbGrid;
+const mapStateToProps = (state) => {
+    return {
+        report: state.report,
+        record: state.record
+    };
+};
+
+connect(
+    mapStateToProps
+)(QbGrid);
+
+
+// Set up drag and drop context
+//const DragAndDrop = DragDropContext(HTML5Backend)(QbGrid);
+
+export default DragDropContext(HTML5Backend)(QbGrid);
