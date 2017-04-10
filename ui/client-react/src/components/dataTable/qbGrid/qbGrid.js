@@ -373,9 +373,7 @@ const QbGrid = React.createClass({
 
     onMoveColumn(labels){
       console.log("moved", labels);
-        const movedColumns = dnd.moveLabels(this.state.columns, labels);
-
-
+        const movedColumns = this.moveLabels(this.state.columns, labels);
         if (movedColumns) {
             // Retain widths to avoid flashing while drag and dropping.
             // const source = movedColumns.source;
@@ -396,6 +394,56 @@ const QbGrid = React.createClass({
                 columns: movedColumns.columns
             });
         }
+    },
+
+    moveLabels(columns, _ref2) {
+        var sourceLabel = _ref2.sourceLabel,
+            targetLabel = _ref2.targetLabel;
+
+        if (!columns) {
+            throw new Error('dnd.moveLabels - Missing columns!');
+        }
+
+        // var sourceIndex = (0, _findIndex5.default)(columns, { header: { headerlabel: sourceLabel } });
+        //
+        // if (sourceIndex < 0) {
+        //   return null;
+        // }
+        //
+        // var targetIndex = (0, _findIndex5.default)(columns, { header: { headerlabel: targetLabel } });
+        //
+        // if (targetIndex < 0) {
+        //   return null;
+        // }
+        for(var i=0;i<columns.length;i++){
+            console.log("Column is", columns[i].headerLabel)
+            if(columns[i].headerLabel==sourceLabel)
+                var sourceIndex=i;
+            if(columns[i].headerLabel==targetLabel)
+                var targetIndex=i;
+        }
+
+        var movedColumns = this.move(columns, sourceIndex, targetIndex);
+
+        return {
+            source: movedColumns[sourceIndex],
+            target: movedColumns[targetIndex],
+            columns: movedColumns
+        };
+    },
+
+    move(data, sourceIndex, targetIndex) {
+        // Idea
+        // a, b, c, d, e -> move(b, d) -> a, c, d, b, e
+        // a, b, c, d, e -> move(d, a) -> d, a, b, c, e
+        // a, b, c, d, e -> move(a, d) -> b, c, d, a, e
+        var sourceItem = data[sourceIndex];
+
+        // 1. detach - a, c, d, e - a, b, c, e, - b, c, d, e
+        var ret = data.slice(0, sourceIndex).concat(data.slice(sourceIndex + 1));
+
+        // 2. attach - a, c, d, b, e - d, a, b, c, e - b, c, d, a, e
+        return ret.slice(0, targetIndex).concat([sourceItem]).concat(ret.slice(targetIndex));
     },
 
 
