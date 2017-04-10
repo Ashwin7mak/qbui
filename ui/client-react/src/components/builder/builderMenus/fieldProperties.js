@@ -13,6 +13,7 @@ import './fieldProperties.scss';
 const mapStateToProps = (state, ownProps) => {
     let formId = (ownProps.formId || 'view');
     let formElement = getSelectedFormElement(state, formId);
+
     return {
         selectedField: (_.has(formElement, 'FormFieldElement') ? getField(state, formElement.FormFieldElement.fieldId, ownProps.appId, ownProps.tableId) : undefined),
         fields: state.fields

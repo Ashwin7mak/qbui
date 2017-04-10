@@ -143,9 +143,10 @@ const forms = (
         let {newField, newLocation} = action.content;
         updatedForm = _.cloneDeep(currentForm);
         let newFieldCopy = _.cloneDeep(newField);
+
         // Remove all keys that are not necessary for forms
         Object.keys(newFieldCopy).forEach(key => {
-            if (key !== 'FormFieldElement') {
+            if (key !== 'FormFieldElement' && key != 'id') {
                 delete newFieldCopy[key];
             }
         });
@@ -165,7 +166,7 @@ const forms = (
         updatedForm.formData.formMeta = MoveFieldHelper.addNewFieldToForm(
             updatedForm.formData.formMeta,
             newLocation,
-            newFieldCopy
+            {...newFieldCopy}
         );
 
         if (!updatedForm.selectedFields) {
@@ -351,7 +352,8 @@ const forms = (
 };
 
 export const getSelectedFormElement = (state, id) => {
-    const currentForm = _.find(state.forms, form => form.id === id);
+    const currentForm = state.forms[id];
+
     if (!currentForm || !currentForm.selectedFields || !currentForm.selectedFields[0]) {
         return null;
     }

@@ -105,8 +105,10 @@ export class FieldEditingTools extends Component {
             let previouslySelectedField = document.querySelectorAll(".fieldEditingTools");
             previouslySelectedField[this.props.previouslySelectedField[0].elementIndex].focus();
         } else if (this.props.selectedFields && this.props.selectedFields[0] && document.activeElement.tagName !== "INPUT") {
-            let setFocusOnSelectedField = document.querySelectorAll(".fieldEditingTools");
-            setFocusOnSelectedField[this.props.selectedFields[0].elementIndex].focus();
+            let setFocusOnSelectedField = document.querySelectorAll(".fieldEditingTools")[this.props.selectedFields[0].elementIndex];
+            if (setFocusOnSelectedField) {
+                setFocusOnSelectedField.focus()
+            }
         }
         this.updateScrollLocation();
     }

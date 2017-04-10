@@ -20,9 +20,8 @@ export const tableFieldsReportDataObj = (state, appId, tblId) => {
 
 // Return a specific field from table fields object for a given appId and tableId, else returns null
 export const getField = (state, id, appId, tblId) => {
-    const fieldsList = _.find(state, fieldList => fieldList.appId === appId && fieldList.tblId === tblId);
+    const fieldsList = _.find(state.fields, fieldList => fieldList.appId === appId && fieldList.tblId === tblId);
     return fieldsList ? _.find(fieldsList.fields, field => field.id === id) : null;
-
 };
 
 export const getFields = (state, appId, tblId) => {
@@ -66,11 +65,11 @@ const fieldsStore = (state = [], action) => {
     }
 
     case types.ADD_FIELD: {
-        let {newField} = _.cloneDeep(action.content);
+        let newField = _.cloneDeep(action.content.newField);
         // Removes the FormFieldElement key which is not applicable to fields store, only matters on forms.
         delete newField.FormFieldElement;
 
-        let {appId, tblId} = action.content;
+        let {appId, tblId} = action;
 
         let currentState = getCurrentState(appId, tblId);
 
