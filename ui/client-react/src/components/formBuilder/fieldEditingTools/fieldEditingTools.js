@@ -9,6 +9,7 @@ import {connect} from "react-redux";
 import {ENTER_KEY, SPACE_KEY} from "../../../../../reuse/client/src/components/keyboardShortcuts/keyCodeConstants";
 import _ from "lodash";
 import {selectFieldOnForm, removeFieldFromForm} from "../../../actions/formActions";
+import {CONTEXT} from "../../../actions/context";
 
 import "./fieldEditingTools.scss";
 
@@ -189,14 +190,14 @@ FieldEditingTools.propTypes = {
 };
 
 FieldEditingTools.defaultProps = {
-    formId: "view",
+    formId: CONTEXT.FORM.VIEW,
 };
 
 
 const mapStateToProps = (state, ownProps) => {
-    let formId = (ownProps.formId || "view");
-    let currentForm = state.forms.find(form => form.id === formId);
-    let tabIndex = (_.has(currentForm, "formBuilderChildrenTabIndex") ? currentForm.formBuilderChildrenTabIndex[0] : '-1');
+    let formId = (ownProps.formId || CONTEXT.FORM.VIEW);
+    let currentForm = _.get(state, `forms[${formId}]`, {});
+    let tabIndex = _.get(currentForm, 'formBuilderChildrenTabIndex[0]', '-1');
     let selectedFields = (_.has(currentForm, "selectedFields") ? currentForm.selectedFields : []);
     let previouslySelectedField = (_.has(currentForm, "previouslySelectedField") ? currentForm.previouslySelectedField : []);
 

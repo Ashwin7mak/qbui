@@ -1,13 +1,22 @@
 @import '../../../../../reuse/client/src/assets/css/qbVariables';
 
-
 .accountUsersContainer {
   .qbCell {
     vertical-align: middle;
+    word-wrap: break-word;
     padding: {
       top: 6px;
       bottom: 6px;
     }
+  }
+  .qbHeaderCell {
+    word-wrap: break-word;
+  }
+  .ScreennameColumn {
+    max-width: 200px;
+  }
+  .EmailColumn {
+    max-width: 180px;
   }
   .BoolColumn {
     max-width: 80px;

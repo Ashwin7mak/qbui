@@ -10,6 +10,7 @@ import Fluxxor from 'fluxxor';
 import simpleStringify from '../../../../common/src/simpleStringify';
 import _ from 'lodash';
 import FacetSelections from '../facet/facetSelections';
+import unloadable from '../hoc/unloadable';
 import './report.scss';
 import FilterUtils from '../../utils/filterUtils';
 import StringUtils from '../../utils/stringUtils';
@@ -20,8 +21,8 @@ import WindowLocationUtils from '../../utils/windowLocationUtils';
 import * as Constants from "../../../../common/src/constants";
 import ReportContentError from './dataTable/reportContentError';
 import {connect} from 'react-redux';
-import {editNewRecord} from '../../actions/formActions';
 import {searchInput, clearSearchInput} from '../../actions/searchActions';
+import {tableFieldsReportDataObj} from '../../reducers/fields';
 import {EDIT_RECORD_KEY, NEW_RECORD_VALUE} from '../../constants/urlConstants';
 
 let logger = new Logger();
@@ -42,7 +43,7 @@ let AddRecordButton = React.createClass({
  *
  * Note: this component has been partially migrated to Redux
  */
-export const ReportToolsAndContent = React.createClass({
+export const UnconnectedReportToolsAndContent = React.createClass({
     mixins: [FluxMixin],
     //facetFields : {},
     debounceInputMillis: 700, // a key send delay
@@ -212,7 +213,6 @@ export const ReportToolsAndContent = React.createClass({
                               searchStringForFiltering={this.props.reportData.searchStringForFiltering}
                               pageActions={this.getPageActions(0)}
                               nameForRecords={this.nameForRecords}
-                              fields={this.props.fields}
                               searchTheString={this.searchTheString}
                               filterOnSelections={this.filterOnSelections}
                               clearSearchString={this.clearSearchString}
@@ -324,7 +324,7 @@ export const ReportToolsAndContent = React.createClass({
         if (_.isUndefined(this.props.reportData) ||
             _.isUndefined(this.props.reportData.appId) ||
             _.isUndefined(this.props.reportData.tblId) ||
-            (_.isUndefined(this.props.reportData.rptId))
+            _.isUndefined(this.props.reportData.rptId)
         ) {
             logger.info("the necessary params were not specified to reportToolsAndContent render params=" + simpleStringify(this.props.params));
             return <ReportContentError errorDetails={this.props.reportData.errorDetails}/>;
@@ -346,10 +346,7 @@ export const ReportToolsAndContent = React.createClass({
 
             let {appId, tblId, rptId, reportData:{selections, ...otherReportData}} = this.props;
 
-            //  get the fields from redux store
-            let fieldsContainer = _.find(this.props.fields, field => field.appId === this.props.reportData.appId && field.tblId === this.props.reportData.tblId);
-            let fields = fieldsContainer ? fieldsContainer.fields : [];
-
+            let fields = this.props.fields;
             let primaryKeyName = FieldUtils.getPrimaryKeyFieldName(fields);
 
             // Define the page start. Page offset is zero indexed. For display purposes, add one.
@@ -393,6 +390,7 @@ export const ReportToolsAndContent = React.createClass({
                                    flux={this.getFlux()}
                                    gridOptions={this.props.gridOptions}
                                    {...this.props}
+                                   // until all sub-components reference store directly, need to explicitly override this.props.fields
                                    fields={fields}/>
 
                     {!this.props.scrollingReport && <AddRecordButton onClick={this.editNewRecord}/>}
@@ -402,11 +400,12 @@ export const ReportToolsAndContent = React.createClass({
     }
 });
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state, props) => {
+    const reportData = _.has(props, 'reportData') ? props.reportData : {};
     return {
         report: state.report,
         search: state.search,
-        fields: state.fields
+        fields: tableFieldsReportDataObj(state.fields, reportData.appId, reportData.tblId)
     };
 };
 
@@ -421,7 +420,13 @@ const mapDispatchToProps = (dispatch) => {
     };
 };
 
-export default connect(
+const ReportToolsAndContent = connect(
     mapStateToProps,
     mapDispatchToProps
-)(ReportToolsAndContent);
+)(UnconnectedReportToolsAndContent);
+export default ReportToolsAndContent;
+
+// Wrap ReportToolsAndContent with unloadable HOC for use in embedded reports. The HOC will call
+// loadDynamicReport to add data to the redux store. The HOC also handles unloading data from the
+// redux store when the component unmounts.
+export const TrackableReportToolsAndContent = unloadable(ReportToolsAndContent);

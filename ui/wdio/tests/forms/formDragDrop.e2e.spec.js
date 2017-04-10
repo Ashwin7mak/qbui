@@ -10,7 +10,7 @@
     let realmId;
     let testApp;
 
-    describe('Form Builder Tests:', function() {
+    describe('Forms - Form Builder Tests (Drag and Drop): ', function() {
         beforeAll(function() {
             /**
              * Setup method. Creates test app then authenticates into the new stack
@@ -139,6 +139,30 @@
             formBuilderPO.open();
             // verify that the first item has been restored
             expect(formBuilderPO.getFieldLabels().indexOf(firstField)).toEqual(0);
+        });
+
+        it('drags a field outside of viewport & verifies autoscroll', function() {
+            let firstField = formBuilderPO.findFieldByIndex(1);
+            let secondField = formBuilderPO.findFieldByIndex(2);
+            let firstFieldSize = browser.element(firstField).getElementSize();
+            let containerSize = formBuilderPO.formBuilderContainer.getElementSize();
+            // temporarily shrink the window to cause 2nd element to not be visible
+            browser.setViewportSize({width: containerSize.width, height: firstFieldSize.height});
+            // verify second field is not visible
+            expect(browser.isVisibleWithinViewport(secondField)).toBe(false);
+            // start dragging
+            browser.moveToObject(firstField, 0, 0);
+            browser.buttonDown();
+            // drag off the scrollable area & wait for second field to become visible (or timeout)
+            formBuilderPO.centerActionsOnFooter.moveToObject(); // blue footer bar
+            let i = 0;
+            while ((browser.isVisibleWithinViewport(secondField) !== true) && i++ < 100) {
+                browser.pause(100);
+            }
+            // stop dragging & verify that the second field is now visible
+            browser.buttonUp();
+            expect(browser.isVisibleWithinViewport(secondField)).toBe(true);
+            browser.setViewportSize(containerSize);
         });
     });
 }());

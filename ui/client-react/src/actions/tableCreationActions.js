@@ -65,15 +65,15 @@ export const setTableProperty = (property, value, validationError, isUserEdit) =
 /**
  * save in progress
  */
-export const savingTable = () => ({
-    type: types.SAVING_TABLE
+export const creatingTable = () => ({
+    type: types.CREATING_TABLE
 });
 
 /**
  * save failed
  */
-export const savingTableFailed = () => ({
-    type: types.SAVING_TABLE_FAILED
+export const creatingTableFailed = () => ({
+    type: types.CREATING_TABLE_FAILED
 });
 
 /**
@@ -95,7 +95,7 @@ export const createTable = (appId, tableInfo) => {
 
         return new Promise((resolve, reject) => {
 
-            dispatch(savingTable());
+            dispatch(creatingTable());
 
             const tableService = new TableService();
 
@@ -105,7 +105,7 @@ export const createTable = (appId, tableInfo) => {
                 dispatch(createdTable());
                 resolve(response);
             }).catch(error => {
-                dispatch(savingTableFailed());
+                dispatch(creatingTableFailed());
                 if (error.response) {
                     if (error.response.status === constants.HttpStatusCode.FORBIDDEN) {
                         logger.parseAndLogError(LogLevel.WARN, error.response, 'tableService.createTable:');

@@ -104,7 +104,10 @@ export default {
             next: "Prochain",
             previous: "Orécédent",
             finished: "Fini",
-            new: "Nouveau"
+            apply: "Appliquer",
+            new: "Nouveau",
+            backToApp: "Retour à l'application",
+            reset: "Réinitialiser"
         },
         field: {
             search: "Chercher",
@@ -121,7 +124,6 @@ export default {
         },
         pageActions: {
             addRecord: "Ajouter un enregistrement",
-            configureFormBuilder: 'Modifier ce formulaire',
             saveRecord: "Sauvegarder les modifications",
             saveAndAddRecord: "Enregistrer et ajouter une nouvelle ligne",
             saveAndAddRecordDisabled: "Ajout de plusieurs enregistrements ne fonctionnant pas en ce moment",
@@ -134,7 +136,8 @@ export default {
             print: "Imprimer",
             customizeReport: "Personnaliser ce Rapport",
             customizeForm: "Personnaliser ce formulaire",
-            customizePage: "Personnaliser cette page"
+            customizePage: "Personnaliser cette page",
+            deleteTable: "Supprimer la table"
         },
         recordActions: {
             previous: "Précédent",
@@ -498,18 +501,18 @@ export default {
             [FieldFormats.NUMBER_FORMAT_MULTICHOICE]: "NListe de choix uneric",
             [FieldFormats.NUMBER_FORMAT_RADIO_BUTTONS]: "Boutons radio numériques",
             [FieldFormats.NUMERIC_FORMULA_FORMAT]: "Formule numérique",
-            [FieldFormats.DATE_FORMAT]: "Rendez-vous amoureux",
+            [FieldFormats.DATE_FORMAT]: "Date",
             [FieldFormats.DATETIME_FORMAT]: "Horodatage",
             [FieldFormats.TIME_FORMAT]: "Moment de la journée",
             [FieldFormats.DURATION_FORMAT]: "Durée",
             [FieldFormats.USER_FORMAT]: "Utilisateur",
             [FieldFormats.CHECKBOX_FORMAT]: "Case à cocher",
-            [FieldFormats.URL]: "Url",
+            [FieldFormats.URL]: "URL",
             [FieldFormats.EMAIL_ADDRESS]: "Email",
             [FieldFormats.PHONE_FORMAT]: "Téléphone",
             [FieldFormats.RATING_FORMAT]: "Évaluation",
             [FieldFormats.RATING_FORMAT_MULTICHOICE]: "Évaluation",
-            [FieldFormats.URL_FORMULA_FORMAT]: "Url Formule",
+            [FieldFormats.URL_FORMULA_FORMAT]: "URL Formule",
             FORMULA: "Formule",
             SCALAR: "Scalaire",
             CONCRETE: "Béton",
@@ -521,8 +524,41 @@ export default {
         builder: {
             formBuilder: {
                 unimplemented: "La fonctionnalité n'est pas disponible en ce moment",
-                removeField: "Supprimer le champ du formulaire"
+                removeField: "Supprimer le champ du formulaire",
+                tooltips: {
+                    [`addNew${FieldFormats.TEXT_FORMAT}`]: "Créer un champ de texte et l'ajouter au formulaire",
+                    [`addNew${FieldFormats.NUMBER_FORMAT}`]: "Créer un champ de numéro et l'ajouter au formulaire",
+                    [`addNew${FieldFormats.DATE_FORMAT}`]: "Créer un champ de date et l'ajouter au formulaire",
+                    [`addNew${FieldFormats.DATETIME_FORMAT}`]: "Créez un horodatage et ajoutez-le au formulaire",
+                    [`addNew${FieldFormats.TIME_FORMAT}`]: "Créer un champ de l'heure du jour et l'ajouter au formulaire",
+                    [`addNew${FieldFormats.CHECKBOX_FORMAT}`]: "Crée une case à cocher et ajoutez-la au formulaire",
+                    [`addNew${FieldFormats.USER_FORMAT}`]: "Créer un champ utilisateur et l'ajouter au formulaire",
+                    [`addNew${FieldFormats.CURRENCY_FORMAT}`]: "Créez un champ de devise et ajoutez-le au formulaire",
+                    [`addNew${FieldFormats.PERCENT_FORMAT}`]: "Créer un champ de pourcentage et l'ajouter au formulaire",
+                    [`addNew${FieldFormats.RATING_FORMAT}`]: "Créer un champ de notation et l'ajouter au formulaire",
+                    [`addNew${FieldFormats.DURATION_FORMAT}`]: "Créer un champ de durée et l'ajouter au formulaire",
+                    [`addNew${FieldFormats.PHONE_FORMAT}`]: "Créer un champ de téléphone et l'ajouter au formulaire",
+                    [`addNew${FieldFormats.MULTI_LINE_TEXT_FORMAT}`]: "Créez un champ de texte long et ajoutez-le au formulaire",
+                    [`addNew${FieldFormats.URL}`]: "Créer un champ URL et l'ajouter au formulaire",
+                    [`addNew${FieldFormats.EMAIL_ADDRESS}`]: "Créer un champ de messagerie et l'ajouter au formulaire",
+                    [`addNew${FieldFormats.TEXT_FORMULA_FORMAT}`]: "Créez un champ de formule de texte et ajoutez-le au formulaire",
+                    [`addNew${FieldFormats.URL_FORMULA_FORMAT}`]: "Créer un champ de formule d'URL et l'ajouter au formulaire",
+                    [`addNew${FieldFormats.NUMERIC_FORMULA_FORMAT}`]: "Créez un champ de formule numérique et ajoutez-le au formulaire",
+                    [`addNew${FieldFormats.TEXT_FORMAT_MULTICHOICE}`]: "Créer une liste de choix et l'ajouter au formulaire",
+                    [`addNew${FieldFormats.RATING_FORMAT_MULTICHOICE}`]: "Créer un champ de notation et l'ajouter au formulaire",
+                    [`addNew${FieldFormats.CURRENCY_FORMAT_MULTICHOICE}`]: "Créez un champ de devise et ajoutez-le au formulaire",
+                    [`addNew${FieldFormats.PERCENT_FORMAT_MULTICHOICE}`]: "Créez un champ de pourcentage et ajoutez-le au formulaire",
+                    [`addNew${FieldFormats.NUMBER_FORMAT_MULTICHOICE}`]: "Créer une liste de choix numérique et l'ajouter au formulaire",
+                    [`addNew${FieldFormats.NUMBER_FORMAT_RADIO_BUTTONS}`]: "Créez des boutons radio numériques et ajoutez-les au formulaire",
+                    [`addNew${FieldFormats.TEXT_FORMAT_RADIO_BUTTONS}`]: "Créer les boutons radio des champs et les ajouter au formulaire",
+                }
             },
+            fieldGroups: {
+                text: 'Texte',
+                numeric: 'Nombre',
+                date: 'Date',
+                other: 'Autre'
+            }
         },
         featureSwitchAdmin: {
             defaultFeatureName: "Fonctionnalité",
@@ -585,7 +621,19 @@ export default {
         },
         iconChooser: {
             searchPlaceholder: "Rechercher des icônes..."
+        },
+        settings: {
+            header: "Paramètres",
+            tablesHeader: "Table",
+            appsHeader: "App",
+            formsHeader: "Forme",
+            tableSettings: "Propriétés et paramètres de la table",
+            configureFormBuilder: 'Modifier ce formulaire',
+        },
+        tableEdit: {
+            tableUpdateFailed: "Impossible de mettre à jour le tableau",
+            tableUpdated: "Informations sur la table enregistrées",
+            tableReset: "Informations sur la table non enregistrées"
         }
-
     }
 };

@@ -10,8 +10,7 @@
     var RequestSessionTicketPage = requirePO('requestSessionTicket');
     var rawValueGenerator = require('../../../test_generators/rawValue.generator');
 
-
-    describe('Create table tests : ', function() {
+    describe('Tables - Create a table via builder tests: ', function() {
         var realmName;
         var realmId;
         var testApp;
@@ -65,7 +64,12 @@
             //Step 3 - Verify table elements
             tableCreatePO.verifyTable();
 
-            //Step 4 - Enter table field values
+            //Step 4 - Choose an Icon from Icon picker
+            var iconChoosedClassName = tableCreatePO.selectRandomIconFromIconChooser();
+            //Verify the choosed icon in closed combo
+            tableCreatePO.verifyIconInIconChooserCombo(iconChoosedClassName);
+
+            //Step 5 - Enter table field values
             tableFields.forEach(function(tableField) {
                 //verify place holders for each table field
                 tableCreatePO.verifyTableFieldPlaceHolders(tableField.fieldTitle, tableField.placeHolder);
@@ -73,26 +77,37 @@
                 tableCreatePO.enterTableFieldValue(tableField.fieldTitle, tableField.fieldValue);
             });
 
-            //Step 5 - Click next field and verify it landed in drag fields page
+            //Step 6 - Click next field and verify it landed in drag fields page
             tableCreatePO.clickNextBtn();
 
-            //Step 6 - Click on finished button and make sure it landed in edit Form container page
+            //Step 7 - Click on finished button and make sure it landed in edit Form container page
             tableCreatePO.clickFinishedBtn();
 
-            //Step 7 - Click on forms Cancel button
+            //Step 8 - Click on forms Cancel button
             formsPO.clickFormCancelBtn();
             tableCreatePO.newTableBtn.waitForVisible();
 
-
-            //Step 8 - Get the new count of table links in the left nav
+            //Step 9 - Get the new count of table links in the left nav
             var newTableLinksCount = tableCreatePO.getAllTableLeftNavLinksList.value.length;
 
-            //Step 9 - Verify the table links count got increased by 1
+            //Step 10 - Verify the table links count got increased by 1
             expect(newTableLinksCount).toBe(originalTableLinksCount + 1);
 
-            //Step 10 - Select Table and make sure it lands in reports page
+            //Step 11 - Select Table and make sure it lands in reports page
             tableCreatePO.selectTable(tableName);
+        });
 
+        it('Verify ICON chooser search', function() {
+
+            //Step 1 - Click on new table button
+            tableCreatePO.clickCreateNewTable();
+
+            //Step 2 - Verify iconChooser search functionality
+            tableCreatePO.searchIconFromChooser('bicycle');
+            var searchReturnedIcons = tableCreatePO.getAllIconsFromIconChooser;
+            //Verify it returns just one
+            expect(searchReturnedIcons.value.length).toBe(1);
+            expect(searchReturnedIcons.getAttribute('className')).toBe('qbIcon iconTableSturdy-bicycle');
 
         });
 

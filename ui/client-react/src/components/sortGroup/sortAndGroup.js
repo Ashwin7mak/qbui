@@ -19,6 +19,8 @@ import {connect} from 'react-redux';
 import {loadDynamicReport} from '../../actions/reportActions';
 import {CONTEXT} from '../../actions/context';
 
+import {tableFieldsObj} from '../../reducers/fields';
+
 /**
  *  SortAndGroup container component manages the state and presents the components that are :
  *  a trigger button that when clicked shows the panel of options for sorting and grouping
@@ -56,9 +58,6 @@ export const SortAndGroup = React.createClass({
 
         // the adhoc filter information selected facets and search
         filter: React.PropTypes.object,
-
-        // the fields in the table
-        fields:  React.PropTypes.array.isRequired,
 
         // the callback to call when the sort group dialog in shown
         onMenuEnter : React.PropTypes.func,
@@ -467,9 +466,7 @@ export const SortAndGroup = React.createClass({
     },
 
     getFieldsFromProps() {
-        let fieldsContainer = _.find(this.props.fields, field => field.appId === this.props.appId && field.tblId === this.props.tblId);
-        let fields = _.has(fieldsContainer, 'fields.fields.data') ? fieldsContainer.fields.fields.data : [];
-        return fields;
+        return this.props.fields || [];
     },
 
     /**
@@ -529,6 +526,13 @@ export const SortAndGroup = React.createClass({
         );
     }
 });
+
+const mapStateToProps = (state, props) => {
+    const fieldObj = tableFieldsObj(state.fields, props.appId, props.tblId);
+    return {
+        fields: fieldObj ? fieldObj.fields : []
+    };
+};
 const mapDispatchToProps = (dispatch) => {
     return {
         loadDynamicReport:  (context, appId, tblId, rptId, format, filter, queryParams) => {
@@ -539,6 +543,6 @@ const mapDispatchToProps = (dispatch) => {
 
 
 export default connect(
-    null,
+    mapStateToProps,
     mapDispatchToProps
 )(SortAndGroup);

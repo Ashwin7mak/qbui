@@ -49,6 +49,7 @@ describe('Test Apps Store', () => {
         expect(flux.store(STORE_NAME).__actions__.LOAD_APP_OWNER).toBeDefined();
         expect(flux.store(STORE_NAME).__actions__.LOAD_APP_OWNER_SUCCESS).toBeDefined();
         expect(flux.store(STORE_NAME).__actions__.LOAD_APP_OWNER_FAILED).toBeDefined();
+        expect(flux.store(STORE_NAME).__actions__.UPDATED_TABLE_PROPS).toBeDefined();
     });
 
     it('test load apps action', () => {
@@ -245,4 +246,31 @@ describe('Test Apps Store', () => {
         expect(flux.store(STORE_NAME).emit.calls.count()).toBe(1);
     });
 
+    it('test updated table props', () => {
+        let loadAppsAction = {
+            type: actions.LOAD_APPS_SUCCESS,
+            payload: [{id: 'app1', tables: [{id:'table1', name: 'name'}]}]
+        };
+
+        flux.dispatcher.dispatch(loadAppsAction);
+
+        let selectAppAction = {
+            type: actions.SELECT_APP,
+            payload: 'app1'
+        };
+        flux.dispatcher.dispatch(selectAppAction);
+
+        let tableInfo = {name: 'new name'};
+        let updatedTablePropsAction = {
+            type: actions.UPDATED_TABLE_PROPS,
+            payload: {tableId: 'table1', tableInfo: tableInfo}
+        };
+
+        flux.dispatcher.dispatch(updatedTablePropsAction);
+
+        expect(flux.store(STORE_NAME).apps).toEqual([{id: 'app1', tables: [{name: 'new name'}]}]);
+
+        expect(flux.store(STORE_NAME).emit).toHaveBeenCalledWith('change');
+        expect(flux.store(STORE_NAME).emit.calls.count()).toBe(3);
+    });
 });
