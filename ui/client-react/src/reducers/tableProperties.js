@@ -39,14 +39,13 @@ const tableProperties = (
 
         const fieldInfo = tableInfo[action.property];
 
-        if (fieldInfo) {
-            tableInfo[action.property] = {
-                origValue: tableInfo[action.property].origValue,
-                value: action.value,
-                validationError: action.validationError,
-                edited: fieldInfo.edited || action.isUserEdit
-            };
-        }
+        tableInfo[action.property] = {
+            origValue: fieldInfo ? fieldInfo.origValue : "",
+            value: action.value,
+            validationError: action.validationError,
+            edited: fieldInfo ? fieldInfo.edited || action.isUserEdit : action.isUserEdit
+        };
+
         return {
             ...state,
             isDirty: state.edited || action.isUserEdit,
