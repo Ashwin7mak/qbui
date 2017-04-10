@@ -12,7 +12,7 @@ module.exports = (app, appConfig, baseProps) => {
     return {
         addRoutes() {
             const compBundleFileName = baseClientRoute.generateBundleFilePath('componentLibrary');
-            const options = {title: 'QuickBase Component Library', bundleFileName: compBundleFileName};
+            const options = {title: 'QuickBase Engineering', bundleFileName: compBundleFileName};
 
             baseClientRoute.addRoutesFromArrayOfPaths(routes, options);
         }
