@@ -37,7 +37,7 @@
         });
 
         /**
-         * Navigate to a record (view form) and assert that the form section containing a child table / w records is displayed
+         * Navigate to a record (view form) and assert that the section containing an empty child table is displayed
          */
         it('View Child Table when viewing a Record', function() {
             // Navigate to Table 3, Report 1, Record 1, Relationship Id 1
