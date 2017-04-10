@@ -11,23 +11,18 @@ class AutomationUtils  {
     /**
      * Invoke 'approve' automation
      */
-    static approveRecord(appId, wfId){
+     static approveRecord(appId, tblId, recId){
         var logger = new Logger();
         let automationService = new AutomationService();
-        // let payload = {
-        //     "parameters": { "number": "6"}
-        // };
         let payload = {
             "parameters": {
-                "appId" : "0duiiaaaaab",
-                "tableId": "0duiiaaaaae",
-                "recordId": "1",
-                "record": [{"id":9, "value":true}]
+                "appId" : appId,
+                "tableId": tblId,
+                "recordId": recId,
+                "record": [{"id":8, "value":true}]
             }
         }
-
-        // automationService.invokeAutomation("http://localhost:8089", "0duiiaaaaab", "Factorial", payload).then(
-        automationService.invokeAutomation("http://localhost:8089", "0duiiaaaaab", "ApproveProjectRecord", payload).then(
+        return automationService.invokeAutomation("http://localhost:8089", "0duiiaaaaab", "ApproveProjectRecord", payload).then(
             response => {
                 logger.debug('Automation success');
                 NotificationManager.info("Record Approved.");
@@ -43,6 +38,6 @@ class AutomationUtils  {
                     logger.parseAndLogError(LogLevel.ERROR, error.response, 'Automation');
                 }
             })
-        };
+    };
 }
 export default AutomationUtils;

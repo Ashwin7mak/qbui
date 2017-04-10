@@ -180,10 +180,10 @@ consts = require('../../common/src/constants.js');
             // If using JS for loops with promise functions make sure to use Bluebird's Promise.each function
             // otherwise errors can be swallowed!
             createdApp.tables.forEach(function(table, index) {
-                tableSetupPromises.push(function() {
-                    // Create a List all report for each table
-                    return e2eBase.reportService.createCustomReport(createdApp.id, table.id, 'List All Report', null, null, null, null);
-                });
+                // tableSetupPromises.push(function() {
+                //     // Create a List all report for each table
+                //     return e2eBase.reportService.createCustomReport(createdApp.id, table.id, 'List All Report', null, null, null, null);
+                // });
                 tableSetupPromises.push(function() {
                     // Set the default table homepage for each
                     return e2eBase.tableService.setDefaultTableHomePage(createdApp.id, table.id, 1);

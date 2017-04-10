@@ -252,12 +252,25 @@ export const RecordRoute = React.createClass({
         WindowLocationUtils.pushWithQuery(EDIT_RECORD_KEY, recordId);
     },
 
+    isAutomationEnabled()  {
+        const automationAppName = "Automation Demo";
+        if(this.props.selectedApp.name != automationAppName)  {
+            return true;
+        }
+        return false;
+    },
+
     /**
      * Invoke automation to approve
      *
      */
     approveRecord()  {
-        AutomationUtils.approveRecord("appId", "wfId");
+        let appId = this.props.params.appId;
+        let tblId = this.props.params.tblId;
+        let recId = this.props.params.recordId;
+        AutomationUtils.approveRecord(appId, tblId, recId).then(() => {
+            this.loadRecordFromParams(this.props.params);
+        });
     },
 
     /**
@@ -272,7 +285,7 @@ export const RecordRoute = React.createClass({
         const actions = [
             {msg: 'pageActions.addRecord', icon:'add', className:'addRecord', onClick: this.editNewRecord},
             {msg: 'pageActions.edit', icon:'edit', onClick: this.openRecordForEdit},
-            {msg: 'pageActions.approve', icon: 'thumbs-up', onClick: this.approveRecord},
+            {msg: 'pageActions.approve', icon: 'thumbs-up', onClick: this.approveRecord, disabled:this.isAutomationEnabled()},
             {msg: 'unimplemented.email', icon:'mail', disabled:true},
             {msg: 'unimplemented.print', icon:'print', disabled:true},
             {msg: 'unimplemented.delete', icon:'delete', disabled:true}];
@@ -395,9 +408,6 @@ const mapDispatchToProps = (dispatch) => {
         clearSearchInput: () => {
             dispatch(clearSearchInput());
         }
-        // approveRecord: (appId, wfId) => {
-        //     dispatch(approveRecord(appId, wfId));
-        // }
     };
 };
 
