@@ -7,7 +7,7 @@
     var clientConsts = require('./clientConsts');
     var client = clientConsts.REACT;
 
-    module.exports = {
+    var baseVars = {
         LOG: {
             name: 'UI',
             level: 'info',
@@ -39,4 +39,6 @@
         wistiaScriptPart1: 'https://fast.wistia.com/embed/medias/zl4za7cf5e.jsonp',
         wistiaScriptPart2: 'https://fast.wistia.com/assets/external/E-v1.js',
     };
+
+    module.exports = Object.assign({}, baseVars, process.env);
 }());
