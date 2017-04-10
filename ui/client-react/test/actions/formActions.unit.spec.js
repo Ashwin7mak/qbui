@@ -350,7 +350,6 @@ describe('Form Actions', () => {
             });
         });
     });
-    
     describe('addNewFieldToForm', () => {
         it('creates an action that will add a field', () => {
             expect(formActions.addNewFieldToForm('view', 1, {}, 1, 1)).toEqual({
