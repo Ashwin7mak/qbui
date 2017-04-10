@@ -110,7 +110,7 @@ export const FormBuilderContainer = React.createClass({
         // get the form meta data from the store..hard code offset for now...this is going to change..
         if (this.props.currentForm && this.props.currentForm.formData) {
             let formMeta = this.props.currentForm.formData.formMeta;
-            let formType = this.props.currentForm.formData.formType;
+            let formType = this.props.currentForm.id;
             this.props.updateForm(formMeta.appId, formMeta.tableId, formType, formMeta);
         }
     },
@@ -183,7 +183,7 @@ export const FormBuilderContainer = React.createClass({
     },
 
     render() {
-        let loaded = (_.has(this.props, 'currentForm') && this.props.currentForm !== undefined && !this.props.currentForm.loading);
+        let loaded = (_.has(this.props, 'currentForm') && this.props.currentForm !== undefined && !this.props.currentForm.loading && !this.props.currentForm.saving);
         let formData = null;
         let formId = null;
         if (loaded) {

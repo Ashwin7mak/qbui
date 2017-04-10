@@ -92,6 +92,16 @@ const forms = (
         return newState;
     }
 
+    case types.SAVING_FORM: {
+        currentForm = {
+            ...currentForm,
+            saving: true,
+            selectedFields: []
+        };
+
+        return {...newState, [id || formId]: currentForm};
+    }
+
     case types.SAVING_FORM_SUCCESS: {
         // a form has been updated, remove entries if there are multiple entries for the same record
         newState = removeCopies(_.get(currentForm, 'formData.recordId'));

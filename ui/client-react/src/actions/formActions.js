@@ -335,6 +335,8 @@ export const updateForm = (appId, tblId, formType, form) => {
 function saveTheForm(appId, tblId, formType, formMeta, isNew) {
 
     return (dispatch, getState) => {
+        dispatch(event(formType, types.SAVING_FORM));
+
         return dispatch(saveAllNewFields(appId, tblId, formType))
             .then(() => dispatch(updateAllFieldsWithEdits(appId, tblId)))
             .then(() => {
@@ -345,9 +347,6 @@ function saveTheForm(appId, tblId, formType, formMeta, isNew) {
                         form = convertFormToObjectForServer(form);
 
                         logger.debug(`Saving form -- appId:${appId}, tableId:${tblId}, isNew:${isNew}`);
-
-                        //  TODO: refactor once record events are moved out..
-                        dispatch(event(formType, types.SAVING_FORM));
 
                         let formService = new FormService();
 
