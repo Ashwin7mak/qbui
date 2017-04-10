@@ -356,7 +356,6 @@ const QbGrid = React.createClass({
     },
 
     render() {
-        console.log("rendering");
         let columns;
         if (this.props.showRowActionsColumn) {
             columns = [
