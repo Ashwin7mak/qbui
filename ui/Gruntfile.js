@@ -548,6 +548,9 @@ module.exports = function(grunt) {
                     ],
                     tables: [
                         './wdio/tests/tables/*.e2e.spec.js'
+                    ],
+                    relationships: [
+                        './wdio/tests/relationships/*.e2e.spec.js'
                     ]
                 }
             },

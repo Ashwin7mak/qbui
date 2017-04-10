@@ -6,6 +6,7 @@
     var e2ePageBase = requirePO('e2ePageBase');
     var reportContentPO = requirePO('reportContent');
     var relationshipsPO = requirePO('relationshipsPage');
+    var reportInLineEditPO = requirePO('reportInLineEdit');
 
     var realmName;
     var realmId;
@@ -49,11 +50,53 @@
             expect(sectionText).toEqual('Child Table A');
 
             let recordCount = relationshipsPO.recordsCountEl(childTableFormSection).getText();
-            expect(recordCount).toEqual('1 record');
+            expect(recordCount).toEqual('0 records');
+
+            // Check there are no records in the child table by default
+            browser.waitForExist('.qbTbody', true);
+        });
+
+        /**
+         *  Create related child records and view them in the child table from the master record
+         */
+        it('Create related child records and view them in the child table', function() {
+            //Step 1 - Go to report without any settings (LIST all report)
+            e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE4].id, 1);
+
+            reportInLineEditPO.openRecordEditMenu(0);
+
+            // Step 2 - Edit the Numeric Field of the first record
+            reportInLineEditPO.editNumericField(0, 1);
+            reportInLineEditPO.clickSaveChangesButton();
+
+            reportInLineEditPO.openRecordEditMenu(1);
+
+            // Step 2 - Edit the Numeric Field of the second record
+            reportInLineEditPO.editNumericField(0, 1);
+            reportInLineEditPO.clickSaveChangesButton();
+
+            // Get values for text field
+            var record1Text = reportContentPO.getRecordValues(0, 0);
+            var record2Text = reportContentPO.getRecordValues(1, 0);
+
+            // Navigate to Table 3, Report 1, Record 1, Relationship Id 1
+            relationshipsPO.viewRecordWithChildTable(realmName, testApp.id, testApp.tables[e2eConsts.TABLE3].id, 1, 1, 1);
+
+            // Do assertions on the child table form section
+            let childTableFormSection = relationshipsPO.qbPanelFormSectionEl(1);
+
+            let recordCount = relationshipsPO.recordsCountEl(childTableFormSection).getText();
+            expect(recordCount).toEqual('2 records');
 
             // Check the number of related records (should be 1 by default in basicAppSetup)
             let rowCount = reportContentPO.getAllRows.value.length;
-            expect(rowCount).toEqual(1);
+            expect(rowCount).toEqual(2);
+
+            var childRecord1Text = reportContentPO.getRecordValues(0, 0);
+            var childRecord2Text = reportContentPO.getRecordValues(1, 0);
+
+            expect(record1Text).toEqual(childRecord1Text);
+            expect(record2Text).toEqual(childRecord2Text);
         });
     });
 }());
