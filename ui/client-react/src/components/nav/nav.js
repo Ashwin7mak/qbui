@@ -324,12 +324,13 @@ export const Nav = React.createClass({
     },
 
     getMenuContent(reportData) {
-        let titles = ["Title", "Another Title", "Apples", "Fruit", "School", "Toast", "Cereal", "Sauce", "Sandwich", "Overflow", "Dance", "Movies"];
         let elements = [];
-        for (let i = 0; i < titles.length; i++) {
+        let columns = reportData.data ? reportData.data.fields : [];
+        console.log(columns);
+        for (let i = 0; i < columns.length; i++) {
             elements.push({
-                key: i + "",
-                title: titles[i]
+                key: columns[i].id + "",
+                title: columns[i].name
             });
         }
         let params = {
