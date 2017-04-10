@@ -6,6 +6,7 @@ import StandardGrid from '../../common/grid/standardGrid';
 import AccountUsersGrid from './grid/AccountUsersGrid';
 import AccountUsersStage from './AccountUsersStage';
 
+
 import * as AccountUsersActions from './AccountUsersActions';
 import * as RequestContextActions from '../../common/requestContext/RequestContextActions';
 import * as SpinnerConfigurations from "../../../../client-react/src/constants/spinnerConfigurations";
@@ -38,7 +39,7 @@ class AccountUsers extends Component {
             return (
                 <Loader loaded={!this.props.loading} options={SpinnerConfigurations.LARGE_BREAKPOINT}>
                     <div className="accountUsersContainer">
-                        <AccountUsersStage isHidden={false} />
+                        <AccountUsersStage users={this.props.users}/>
                         <StandardGrid>
                             <AccountUsersGrid
                                 users={this.props.users}
