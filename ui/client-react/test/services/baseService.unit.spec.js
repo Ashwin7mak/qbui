@@ -25,12 +25,20 @@ describe('BaseService rewire tests', () => {
         }
     };
 
+    var mockSimpleDomainConfiguration = {
+        legacyBase: '.quickbase.com'
+    };
+
+    var mockComplexSubdomainConfiguration = {
+        legacyBase: '.currentstack-int.quickbaserocks.com'
+    };
+
     var simpleSubdomain = {href: "https://team.quickbase.com", hostname: "team.quickbase.com",
         subdomain: "team", domain: "quickbase.com",
         expectedUrl: 'https://team.quickbase.com/db/main?a=nsredirect&nsurl='};
-    var complexSubdomain = {href: "https://team.demo.quickbaserocks.com", hostname: "team.demo.quickbaserocks.com",
-        subdomain: "team", domain: "quickbaserocks.com",
-        expectedUrl: 'https://team.quickbaserocks.com/db/main?a=nsredirect&nsurl='};
+    var complexSubdomain = {href: "https://team.qb3.quickbaserocks.com", hostname: "team.qb3.quickbaserocks.com",
+        subdomain: "team", domain: "currentstack-int.quickbaserocks.com",
+        expectedUrl: 'https://team.currentstack-int.quickbaserocks.com/db/main?a=nsredirect&nsurl='};
 
     var mockWindowUtils = {
         update: function(url) {
@@ -131,9 +139,11 @@ describe('BaseService rewire tests', () => {
     });
 
     it('test constructRedirectUrl method with simple subdomain', () => {
+        BaseServiceRewireAPI.__Rewire__('Configuration', mockSimpleDomainConfiguration);
         baseService = new BaseService();
         var expectedUrl = simpleSubdomain.expectedUrl + mockWindowUtils.getHref();
         var url = baseService.constructRedirectUrl();
+        BaseServiceRewireAPI.__ResetDependency__('Configuration');
         expect(expectedUrl).toEqual(url);
     });
 
@@ -141,9 +151,11 @@ describe('BaseService rewire tests', () => {
         mockWindowUtils.getHref = function() {return complexSubdomain.href;};
         mockWindowUtils.getHostname = function() {return complexSubdomain.hostname;};
         BaseServiceRewireAPI.__Rewire__('WindowLocationUtils', mockWindowUtils);
+        BaseServiceRewireAPI.__Rewire__('Configuration', mockComplexSubdomainConfiguration);
         baseService = new BaseService();
         var expectedUrl = complexSubdomain.expectedUrl + mockWindowUtils.getHref();
         var url = baseService.constructRedirectUrl();
+        BaseServiceRewireAPI.__ResetDependency__('Configuration');
         expect(expectedUrl).toEqual(url);
     });
 

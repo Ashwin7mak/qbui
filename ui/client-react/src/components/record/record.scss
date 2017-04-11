@@ -6,7 +6,6 @@
 
 .recordContainer {
     width: 100%;
-    background-image: linear-gradient(to top, $badcolor2-color13 0%, $badcolor3-color14 100%);
     background-color: $color-black-200;
     display: flex;
     flex-direction: column;
@@ -44,17 +43,17 @@
         }
 
         .iconActionButton[disabled] {
-            color: $iconfont-on-light-disabled-color;
+            color: $pagination-iconfont-disabled-color;
         }
 
         .iconActionButton {
-            color: $pagination-iconfont-normal-color;
+            color: $pagination-iconfont-darkblack-color;
             font-size: 24px;
         }
 
         .iconActionButton:not([disabled]):hover {
             background-color: inherit;
-            color: $pagination-iconfont-hover-color;
+            color: $pagination-arrow-hover-color;
         }
     }
 

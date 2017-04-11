@@ -1,11 +1,12 @@
 import React from 'react';
-import {ReportToolsAndContent,
+import {UnconnectedReportToolsAndContent as ReportToolsAndContent,
         __RewireAPI__ as ReportToolsAndContentRewireAPI}  from '../../src/components/report/reportToolsAndContent';
 import FacetSelections  from '../../src/components/facet/facetSelections';
 import constants from '../../../common/src/constants';
 import {shallow, mount} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
 import {CONTEXT} from '../../src/actions/context';
+import {DEFAULT_RECORD_KEY} from '../../src/constants/schema';
 import Promise from 'bluebird';
 
 class WindowLocationUtilsMock {
@@ -34,32 +35,48 @@ describe('ReportToolsAndContent functions', () => {
 
     const rptId = '3';
     let reportParams = {appId: 1, tblId: 2, rptId: rptId, format:true, offset: constants.PAGE.DEFAULT_OFFSET, numRows: constants.PAGE.DEFAULT_NUM_ROWS};
-    let reportDataParams = {reportData: {appId: 1, tblId: 2, rptId: rptId, loading: true, pageOffset: 20, selections: new FacetSelections(), data: {recordsCount: 5, sortList: "1", columns: [{field: "col_num", headerName: "col_num"}], facets: [{
-        id: 1, name: 'test', type: "TEXT", values: [{value: "a"}, {value: "b"}, {value: "c"}]}]}}, selectedRows: ["rowSelected"]};
+    let reportDataParams = {
+        reportData: {
+            appId: 1,
+            tblId: 2,
+            rptId: rptId,
+            loading: true,
+            pageOffset: 20,
+            selections: new FacetSelections(),
+            data: {
+                recordsCount: 5,
+                sortList: "1",
+                columns: [{field: "col_num", headerName: "col_num"}],
+                facets: [{
+                    id: 1,
+                    name: 'test',
+                    type: "TEXT",
+                    values: [{value: "a"}, {value: "b"}, {value: "c"}]
+                }]
+            }
+        },
+        selectedRows: ["rowSelected"]
+    };
 
-    const primaryKeyName = 'Employee Number';
-    const reportFields = [{
+    const primaryKeyName = DEFAULT_RECORD_KEY;
+    const fields = [{
         appId: 1,
         tblId: 2,
-        fields: {
-            fields: {
-                data: [
-                    {
-                        id: 3,
-                        keyField: true,
-                        name: primaryKeyName,
-                    },
-                    {
-                        id: 1,
-                        name: 'First Name'
-                    },
-                    {
-                        id: 2,
-                        name: 'Last Name'
-                    }
-                ]
+        keyField: {id:3, keyField:true},
+        fields: [
+            {
+                id: 3,
+                name: primaryKeyName
+            },
+            {
+                id: 1,
+                name: 'First Name'
+            },
+            {
+                id: 2,
+                name: 'Last Name'
             }
-        }
+        ]
     }];
 
     const ReportContentMock = React.createClass({
@@ -117,7 +134,7 @@ describe('ReportToolsAndContent functions', () => {
 
     it('passes the primaryKeyName to child components', () => {
         const result = shallow(
-                <ReportToolsAndContent rptId={rptId} fields={reportFields} flux={flux} params={reportParams} {...reportDataParams}/>
+                <ReportToolsAndContent rptId={rptId} fields={fields} flux={flux} params={reportParams} {...reportDataParams}/>
             );
 
         const reportContent = result.find(ReportContentMock);
@@ -183,7 +200,7 @@ describe('ReportToolsAndContent functions', () => {
             searchInput = jasmine.createSpy('searchInput');
             clearSearchInput = jasmine.createSpy('clearSearchInput');
             obj = {
-                loadDynamicReport: null
+                loadDynamicReport() {}
             };
             component = shallow(
                 <ReportToolsAndContent
@@ -194,7 +211,6 @@ describe('ReportToolsAndContent functions', () => {
                     routeParams={{appId:1, tblId:2,  rptId:'3'}}
                     {...reportDataParams}
                 />);
-
         });
 
         it('loads a new report with a debounce when user runs a text search', (done) => {
@@ -223,29 +239,22 @@ describe('ReportToolsAndContent functions', () => {
 
 
 
-        it('loads a new report with an empty search string when user clears search input', (done) => {
-            new Promise(resolve => {
-                // loadDynamicReport is called with a debounce, resolve when it's called
-                spyOn(obj, 'loadDynamicReport').and.callFake(() => {
-                    resolve();
-                });
-                // pass in the spy loadDynamicReport as a prop
-                component.setProps({loadDynamicReport: obj.loadDynamicReport});
-                component.instance().clearSearchString();
-                component.instance().clearAllFilters();
-                expect(clearSearchInput).toHaveBeenCalled();
-                expect(obj.loadDynamicReport).toHaveBeenCalled();
-            }).then(() => {
-                expect(obj.loadDynamicReport).toHaveBeenCalledWith(
-                    reportParams.appId,
-                    reportParams.tblId,
-                    reportParams.rptId,
-                    reportParams.format,
-                    jasmine.any(Object),
-                    jasmine.any(Object)
-                );
-                done();
-            });
+        it('loads a new report with an empty search string when user clears search input', () => {
+            // loadDynamicReport is called with a debounce, resolve when it's called
+            spyOn(obj, 'loadDynamicReport');
+            // pass in the spy loadDynamicReport as a prop
+            component.setProps({loadDynamicReport: obj.loadDynamicReport});
+            component.instance().clearSearchString();
+            expect(clearSearchInput).toHaveBeenCalled();
+            expect(obj.loadDynamicReport).toHaveBeenCalled();
+            expect(obj.loadDynamicReport).toHaveBeenCalledWith(
+                reportParams.appId,
+                reportParams.tblId,
+                reportParams.rptId,
+                reportParams.format,
+                jasmine.any(Object),
+                jasmine.any(Object)
+            );
         });
     });
 

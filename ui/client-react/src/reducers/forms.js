@@ -4,20 +4,25 @@ import MoveFieldHelper from '../components/formBuilder/moveFieldHelper';
 
 const forms = (
 
-    state = [], action) => {
+    state = {}, action) => {
 
     const id = action.id;
+    // retrieve currentForm and assign the rest of the form to newState
+    let {[id]: currentForm, ...newState} = _.cloneDeep(state);
+    let updatedForm = currentForm;
 
-    const newState = _.reject(state, form => form.id === id);
-    const currentForm = _.find(state, form => form.id === id);
-    let updatedForm;
+    // TODO: do this smarter, change to markCopiesAsDirty
+    function removeCopies(_id) {
+        // remove any entries where the entry's formData.recordId matches the passed in id
+        return _.omit(newState, ['formData.recordId', _id]);
+    }
 
     // reducer - no mutations!
     switch (action.type) {
 
     case types.LOADING_FORM: {
 
-        newState.push({
+        newState[id] = ({
             id,
             loading: true,
             errorStatus: null,
@@ -35,7 +40,7 @@ const forms = (
         action.formData.formMeta.appId = action.formData.formMeta.appId || action.appId;
         action.formData.formMeta.tableId = action.formData.formMeta.tableId || action.tblId;
 
-        newState.push({
+        newState[id] = ({
             id,
             formData: action.formData,
             loading: false,
@@ -47,7 +52,7 @@ const forms = (
 
     case types.LOAD_FORM_ERROR: {
 
-        newState.push({
+        newState[id] = ({
             id,
             loading: false,
             errorStatus: action.error
@@ -56,7 +61,7 @@ const forms = (
     }
 
     case types.SYNC_FORM: {
-        newState.push({
+        newState[id] = ({
             ...currentForm,
             syncLoadedForm: true
         });
@@ -65,7 +70,7 @@ const forms = (
 
     case types.SAVE_FORM: {
         //  hide/show modal window and spinner over a form
-        newState.push({
+        newState[id] = ({
             ...currentForm,
             id,
             saving: true,
@@ -75,8 +80,10 @@ const forms = (
     }
 
     case types.SAVE_FORM_COMPLETE: {
+        // a form has been updated, remove entries if there are multiple entries for the same record
+        newState = removeCopies(_.get(currentForm, 'formData.recordId'));
         //  hide/show modal window and spinner over a form
-        newState.push({
+        newState[id] = ({
             ...currentForm,
             id,
             saving: false,
@@ -86,13 +93,13 @@ const forms = (
     }
 
     case types.SAVING_FORM_SUCCESS: {
-        //no changes to state..
-        updatedForm = _.cloneDeep(currentForm);
+        // a form has been updated, remove entries if there are multiple entries for the same record
+        newState = removeCopies(_.get(currentForm, 'formData.recordId'));
         if (!updatedForm.formData) {
             updatedForm.formData = {};
         }
         updatedForm.formData.formMeta = action.content;
-        newState.push({
+        newState[id] = ({
             ...updatedForm,
             id,
             saving: false
@@ -106,7 +113,6 @@ const forms = (
         }
 
         let {newLocation, draggedItemProps} = action.content;
-        updatedForm = _.cloneDeep(currentForm);
 
         updatedForm.formData.formMeta = MoveFieldHelper.moveField(
             updatedForm.formData.formMeta,
@@ -114,10 +120,8 @@ const forms = (
             draggedItemProps
         );
 
-        return [
-            ...newState,
-            updatedForm
-        ];
+        newState[action.id] = updatedForm;
+        return newState;
     }
 
     case types.REMOVE_FIELD : {
@@ -126,17 +130,14 @@ const forms = (
         }
 
         let {location} = action.content;
-        updatedForm = _.cloneDeep(currentForm);
 
         updatedForm.formData.formMeta = MoveFieldHelper.removeField(
             updatedForm.formData.formMeta,
             location
         );
 
-        return [
-            ...newState,
-            updatedForm
-        ];
+        newState[id] = updatedForm;
+        return newState;
     }
 
     case types.SELECT_FIELD : {
@@ -144,8 +145,6 @@ const forms = (
         if (!currentForm || !_.has(action, 'content.location')) {
             return state;
         }
-
-        updatedForm = _.cloneDeep(currentForm);
 
         if (!updatedForm.selectedFields) {
             updatedForm.selectedFields = [];
@@ -155,10 +154,8 @@ const forms = (
         updatedForm.selectedFields[0] = action.content.location;
         updatedForm.previouslySelectedField = undefined;
 
-        return [
-            ...newState,
-            updatedForm
-        ];
+        newState[id] = updatedForm;
+        return newState;
     }
 
     case types.DESELECT_FIELD : {
@@ -166,8 +163,6 @@ const forms = (
         if (!currentForm || !_.has(action, 'content.location')) {
             return state;
         }
-
-        updatedForm = _.cloneDeep(currentForm);
 
         if (!updatedForm.selectedFields || !updatedForm.previouslySelectedField) {
             updatedForm.selectedFields = [];
@@ -177,10 +172,8 @@ const forms = (
         updatedForm.previouslySelectedField[0] = action.content.location;
         updatedForm.selectedFields[0] = undefined;
 
-        return [
-            ...newState,
-            updatedForm
-        ];
+        newState[id] = updatedForm;
+        return newState;
     }
 
     case types.KEYBOARD_MOVE_FIELD_UP : {
@@ -189,7 +182,6 @@ const forms = (
         }
 
         let {location} = action.content;
-        updatedForm = _.cloneDeep(currentForm);
 
         updatedForm.formData.formMeta = MoveFieldHelper.keyBoardMoveFieldUp(
             updatedForm.formData.formMeta,
@@ -205,10 +197,8 @@ const forms = (
             -1
         );
 
-        return [
-            ...newState,
-            updatedForm
-        ];
+        newState[id] = updatedForm;
+        return newState;
     }
 
     case types.KEYBOARD_MOVE_FIELD_DOWN : {
@@ -217,7 +207,6 @@ const forms = (
         }
 
         let {location} = action.content;
-        updatedForm = _.cloneDeep(currentForm);
 
         updatedForm.formData.formMeta = MoveFieldHelper.keyBoardMoveFieldDown(
             updatedForm.formData.formMeta,
@@ -233,10 +222,8 @@ const forms = (
             1
         );
 
-        return [
-            ...newState,
-            updatedForm
-        ];
+        newState[id] = updatedForm;
+        return newState;
     }
 
     case types.TOGGLE_FORM_BUILDER_CHILDREN_TABINDEX : {
@@ -252,7 +239,6 @@ const forms = (
         } else if (tabIndex === "-1") {
             formFocus = true;
         }
-        updatedForm = _.cloneDeep(currentForm);
 
         if (!updatedForm.formBuilderChildrenTabIndex && !updatedForm.formFocus) {
             updatedForm.formBuilderChildrenTabIndex = [];
@@ -262,10 +248,12 @@ const forms = (
         updatedForm.formBuilderChildrenTabIndex[0] = tabIndex;
         updatedForm.formFocus[0] = formFocus;
 
-        return [
-            ...newState,
-            updatedForm
-        ];
+        newState[id] = updatedForm;
+        return newState;
+    }
+
+    case types.UNLOAD_FORM : {
+        return removeCopies(currentForm.formData.recordId);
     }
 
     default:
@@ -275,3 +263,6 @@ const forms = (
 };
 
 export default forms;
+
+// Utility function which returns a component's state given it's context. The context is the 'key' in the state map.
+export const getFormByContext = (state, context) => _.get(state, `forms.${context}`);

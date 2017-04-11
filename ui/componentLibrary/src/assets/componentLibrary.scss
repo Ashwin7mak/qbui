@@ -39,16 +39,24 @@ $bs-table-border-color:                #dddddd;
 .comp-library-nav {
     flex: 0 1 auto;
     width: 100%;
-    background: $color-blue-700;
+    background: $color-black-200;
+    color: $color-black-700;
+    border-right: 1px solid $color-black-300;
+
+    .title {
+        background-color: $color-purple-600;
+        color: $color-black-100;
+        margin: 0;
+        padding: 20px 0;
+    }
+
     h3 {
-        color: $color-blue-300;
         font-size: 20px;
         font-weight: normal;
         text-align: center;
         margin-bottom: 20px !important;
     }
     h4 {
-        color: $color-blue-300;
         font-weight: normal;
         margin-left: 10px;
         margin-top: 20px;
@@ -57,31 +65,40 @@ $bs-table-border-color:                #dddddd;
     ul {
         margin: 0;
         padding: 0;
+        margin-bottom: 20px;
     }
     li {
         list-style: none;
-        border-bottom: 1px solid $color-blue-800;
-    }
-    li:first-child {
-        border-top: 1px solid $color-blue-800;
     }
     li a {
         display: block;
         line-height: 1.8;
-        color: $color-black-100;
+        color: $color-black-700;
         width: 100%;
         font-size: 14px;
         text-decoration: none;
         padding: 20px;
         // margin-bottom: 3px;
-        &:hover {
-            background: $color-cyan-800;
-        }
         &.active {
-            background: $color-teal-600;
+            color: $color-purple-600;
+            position: relative;
+
+            &::after {
+                content: "";
+                position: absolute;
+                width: 5px;
+                height: 100%;
+                background-color: $color-purple-600;
+                top: 0;
+                left: 0;
+            }
+        }
+        &:hover {
+            background: $color-purple-600;
+            color: $color-black-100;
         }
         @media (min-width: 768px) {
-            padding: 10px 10%;
+            padding: 5px 10%;
         }
     }
 
@@ -93,7 +110,6 @@ $bs-table-border-color:                #dddddd;
         flex: 0 1 245px;
         width: 245px;
         height: 100%;
-        padding-top: 10px;
         overflow: scroll;
         overflow-x: hidden;
     }
@@ -273,6 +289,7 @@ $bs-table-border-color:                #dddddd;
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            position: relative;
 
             .qbicon {
                 width: $icon-size;
@@ -337,12 +354,20 @@ $bs-table-border-color:                #dddddd;
                 white-space: nowrap;
                 padding: 10px 15px;
                 width: 300px;
+                display: flex;
+                flex-direction: row;
+                align-items: center;
 
                 .comp-library-color-swatch-name {
                 }
 
                 .comp-library-color-swatch-value {
-                    float:right;
+                    margin-left: auto;
+                }
+
+                .comp-library-color-swatch-sample,
+                .comp-library-color-swatch-description {
+                    display: none; // displayed only when printed
                 }
             }
 
@@ -358,4 +383,77 @@ $bs-table-border-color:                #dddddd;
 
         }
     }
+}
+
+@media print {
+    // enable content to flow to multiple pages
+    html, body {
+        height: initial;
+    }
+
+    // Hide the left navigation when printing
+    .comp-library-nav {
+        display: none;
+    }
+
+    .comp-library-content {
+        width: 100%;
+
+        // allow page to stretch to paper width
+        > div {
+            max-width: initial;
+        }
+
+        // print styling for the icon font pages
+        .comp-library-icon-grid {
+            .comp-library-icon-swatch {
+                page-break-inside: avoid;
+                width: 120px;
+
+                .comp-library-icon-input {
+                    display: none;
+                }
+
+                .comp-library-icon-label {
+                    overflow: visible;
+                    width: initial;
+                }
+            }
+        }
+
+        // print styling for the color swatch pages
+        .comp-library-color-grid {
+            flex-direction: column;
+
+            .comp-library-color-group {
+                .comp-library-color-swatch {
+                    position: relative;
+                    page-break-inside: avoid;
+                    border: none; // override borders on swatches if the color is too light (since SVG will be used instead)
+
+                    .comp-library-color-swatch-description {
+                        display:inline-block;
+                        position: absolute;
+                        left: 110%;
+                        color: #000;
+                        width: initial;
+                    }
+
+                    .comp-library-color-swatch-sample {
+                        display: inline-block;
+                        width: 1em;
+                        height: 1em;
+                        margin-right: 10px;
+                    }
+                }
+            }
+        }
+    }
+
+
+}
+
+// need to change the cursor on the tooltips
+.tipChildWrapper {
+    cursor: default;
 }

@@ -43,6 +43,8 @@ For more on the wdio config file and all the different options see the page here
 
 Edit the **specs** parameter of **wdio.conf.js** (the path is dependent on where u run the wdio.conf.js from - see above)
 
+To run a specific test suite add the `--suite` cli argument to the end of the **Application Parameters** section of your IntelliJ config. If specifying multiple suites separate values with commas and no spaces (example: `--suite reports,tables`).
+
 ###Configure your browser and breakpoint size
 
 Edit the **capabilities** object of **wdio.conf.js**. Valid browserNames are **chrome**, **firefox**, **safari** and valid breakpointSizes are **small**, **medium**, **large**, **xlarge**.
@@ -57,7 +59,6 @@ You can run the E2E tests either by creating an IntelliJ Node configuration or v
 * Configure it as follows (you will need to edit the paths to where your qbui repo is located)
 
 ![wdioIntellijConfig.png](wdioIntellijConfig.png)
-
 
 * Save and close this window when you are finished. You can then click the green **Play** button at the top to run (or debug) your config.
 

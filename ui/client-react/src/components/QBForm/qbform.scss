@@ -7,16 +7,20 @@ $edit-field-padding: 5px;
     padding: 10px;
 
     .formFooter {
-        display: inline;
-        margin: 15px 0 15px 1px;
+        display: flex;
+        flex-wrap: wrap;
+        margin: 5px 0 15px 1px;
         font-size: $font-size-small;
 
         .fieldNormalText {
             color: $color-black-600;
+            display: inline;
+            white-space: nowrap;
+            margin-right: 10px;
         }
 
         .fieldLinkText {
-            color: $color-indigo-700;
+            font-weight: bold;
         }
 
         .div {
@@ -25,6 +29,10 @@ $edit-field-padding: 5px;
 
         .userInFooter .userDisplayValue {
             display: inline;
+            margin-right: 10px;
+        }
+        .userInFooter .fieldNormalText {
+            margin-right: 0px;
         }
     }
 
