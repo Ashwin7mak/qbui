@@ -15,6 +15,7 @@ let assert = require('assert');
 let requestHelper = require('./../../../src/api/quickbase/requestHelper')(config);
 let formsApi = require('../../../src/api/quickbase/formsApi')(config);
 let recordsApi = require('../../../src/api/quickbase/recordsApi')(config);
+let appsApi = require('../../../src/api/quickbase/appsApi')(config);
 let errorCodes = require('../../../src/api/errorCodes');
 let errorStatus = 403;
 
@@ -44,13 +45,20 @@ describe('Validate FormsApi unit tests', function() {
     describe('validate fetchFormMetaData api', function() {
 
         let executeReqStub;
+        let getHydratedAppStub;
+        let getRelationshipForAppStub;
         beforeEach(function() {
             executeReqStub = sinon.stub(requestHelper, "executeRequest");
             formsApi.setRequestHelperObject(requestHelper);
+            getHydratedAppStub = sinon.stub(appsApi, "getHydratedApp");
+            getRelationshipForAppStub = sinon.stub(appsApi, "getRelationshipsForApp");
+            formsApi.setAppsApiObject(appsApi);
         });
 
         afterEach(function() {
             executeReqStub.restore();
+            getHydratedAppStub.restore();
+            getRelationshipForAppStub.restore();
         });
 
         it('success return results ', function(done) {
@@ -58,6 +66,8 @@ describe('Validate FormsApi unit tests', function() {
 
             let targetObject = {formMeta:{id:1}};
             executeReqStub.returns(Promise.resolve({body: JSON.stringify(targetObject)}));
+            getHydratedAppStub.returns(Promise.resolve({body: '[{"appId":1}]'}));
+
             let promise = formsApi.fetchFormMetaData(req);
 
             promise.then(
@@ -84,8 +94,10 @@ describe('Validate FormsApi unit tests', function() {
             let getRequestJavaHostSpy = sinon.spy(requestHelper, "getRequestJavaHost");
             formsApi.setRequestHelperObject(requestHelper);
 
-            let targetObject = "[{formMeta: [id:1]}]";
-            executeReqStub.returns(Promise.resolve(targetObject));
+            let targetObject = '"[formMeta: {id:1}]"';
+            executeReqStub.returns(Promise.resolve({body: targetObject}));
+            getHydratedAppStub.returns(Promise.resolve({body: '[{"appId":1}]'}));
+
 
             [true, false].forEach(eeEnableFlag => {
                 getRequestEeHostEnableStub.returns(eeEnableFlag);
@@ -94,7 +106,7 @@ describe('Validate FormsApi unit tests', function() {
 
                 promise.then(
                     function(response) {
-                        assert.deepEqual(response, targetObject);
+                        assert.deepEqual(response, "[formMeta: {id:1}]");
                         if (eeEnableFlag) {
                             assert(getRequestEeHostSpy.called);
                         } else {

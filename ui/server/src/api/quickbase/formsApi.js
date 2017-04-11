@@ -127,6 +127,14 @@
             },
 
             /**
+             * Allows you to override the appsApi object for unit tests.
+             * @param requestRequestOverride
+             */
+            setAppsApiObject: function(obj) {
+                appsApi = obj;
+            },
+
+            /**
              * Return form meta data for a given record
              *
              * @param req
