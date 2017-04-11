@@ -78,9 +78,6 @@ export const ReportContent = React.createClass({
 
     // row was clicked in the report; navigate to record
     openRow(recId) {
-        //  data is the row object...get the record id
-        //let recId = data[key].value;
-
         //  TODO: improve the retrieve of a report from redux store
         const {filteredRecords, hasGrouping} = this.props.reportData.data;
         //const {filteredRecords, hasGrouping} = this.props.report[0].data;
@@ -443,9 +440,7 @@ export const ReportContent = React.createClass({
         let newRec = null;
         if (this.props.reportData.data.hasGrouping) {
             newRec = ReportUtils.findGroupedRecord(this.props.reportData.data.filteredRecords, recId, this.props.primaryKeyName);
-            // this.props.report[0].data
         } else {
-            // this.props.report[0].data
             newRec = _.find(this.props.reportData.data.filteredRecords, (rec) => {
                 return rec[this.props.primaryKeyName].value === recId;
             });
@@ -478,18 +473,10 @@ export const ReportContent = React.createClass({
             let recId = undefined;
             let pendEdits = this.getPendEdits();
 
-            // Editing Id trumps editingRowId when editingIndex is set.
-            //
-            // The Editing index comes from the reportDataStore whereas editingRecord comes from the pending edits.
-            // store.  When saveAndAddANewRow is clicked, then the reportDataStore sets the editingIndex (index of
-            // new row in array) and editingId (id of newly created row). The editingIndex could be any integer, but
-            // if it is not null, we can assume a new row is added.
+            // if inline edit is open, what is the current editing record id
             if (pendEdits.isInlineEditOpen) {
                 recId = pendEdits.currentEditingRecordId;
             }
-            //if (Number.isInteger(this.props.editingIndex)) {
-            //    recId = this.props.editingId;
-            //}
 
             if (recId !== undefined) {
                 this.props.editRecordValidateField(recId, fieldDef, fieldName, value, checkRequired);
@@ -1065,43 +1052,19 @@ const mapDispatchToProps = (dispatch) => {
         },
         updateRecord:(appId, tblId, recId, params) => {
             return dispatch(updateRecord(appId, tblId, recId, params));
-            //return new Promise((resolve, reject) => {
-            //    dispatch(updateRecord(appId, tblId, recId, params)).then(
-            //        (obj) => {
-            //            // NOTE: speed of rendering the blank row after the update is a
-            //            // concern as their is a pause between when the inline edit row is
-            //            // updated and the new row is added. So, the intent to add a new row
-            //            // is getting processed in the record save reducer event.
-            //            if (params.addNewRow) {
-            //                dispatch(addBlankRecordToReport(CONTEXT.REPORT.NAV, recId));
-            //            }
-            //            resolve(obj);
-            //        },
-            //        () => {
-            //            reject();
-            //        }
-            //    );
-            //});
+            //  NOTE: speed of calling the 'add blank row' action after the update in this
+            //  component is a concern as there is a noticeable pause between when the
+            //  inline edit row is updated and the new row is added to the grid. So, the
+            //  new row is added after the record save reducer event is executed but before
+            //  the grid is refreshed.  See record save reducer for more info..
         },
         createRecord: (appId, tblId, params) => {
             return dispatch(createRecord(appId, tblId, params));
-            //return new Promise((resolve, reject) => {
-            //    dispatch(createRecord(appId, tblId, params)).then(
-            //        (obj) => {
-            //            // NOTE: speed of rendering the blank row after the update is a
-            //            // concern as their is a pause between when the inline edit row is
-            //            // updated and the new row is added. So, the intent to add a new row
-            //            // is getting processed in the record save reducer event.
-            //            if (params.addNewRow) {
-            //                dispatch(addBlankRecordToReport(CONTEXT.REPORT.NAV, obj.recId));
-            //            }
-            //            resolve(obj);
-            //        },
-            //        () => {
-            //            reject();
-            //        }
-            //    );
-            //});
+            //  NOTE: speed of calling the 'add blank row' action after the update in this
+            //  component is a concern as there is a noticeable pause between when the
+            //  inline edit row is updated and the new row is added to the grid. So, the
+            //  new row is added after the record save reducer event is executed but before
+            //  the grid is refreshed.  See record save reducer for more info..
         }
     };
 };

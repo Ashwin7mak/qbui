@@ -199,24 +199,13 @@ export const ReportGrid = React.createClass({
     },
 
     getCurrentlyEditingRecordId() {
-        // Editing Id trumps editingRowId when editingIndex is set
-        // Editing index comes from the reportDataStore whereas editingRecord comes from the pending edits store
-        // When saveAndAddANewRow is clicked, then the reportDataStore sets the editingIndex (index of new row in array)
-        // and editingId (id of newly created row). The editingIndex could be any integer, but if it is not null, we can assume a new row is added.
-        // TODO:: This process can be refactored once AgGrid is removed. https://quickbase.atlassian.net/browse/MB-1920
         let editingRowId = null;
 
+        //  if inline edit is open, get the current editing record id
         let pendEdits = this.getPendEdits();
-        //if (this.props.pendEdits && this.props.pendEdits.isInlineEditOpen && this.props.pendEdits.currentEditingRecordId) {
-        //    editingRowId = this.props.pendEdits.currentEditingRecordId;
-        //}
         if (pendEdits && pendEdits.isInlineEditOpen) {
             editingRowId = pendEdits.currentEditingRecordId;
         }
-
-        //if (Number.isInteger(this.props.editingIndex) && this.props.editingId !== editingRowId) {
-        //    editingRowId = this.props.editingId;
-        //}
 
         return editingRowId;
     },
@@ -255,10 +244,6 @@ export const ReportGrid = React.createClass({
 
             onStartEditingRow={this.startEditingRow}
             editingRowId={editingRecordId}
-            // TODO:: Refactor out need for this prop once AgGrid is removed. https://quickbase.atlassian.net/browse/MB-1920
-            // Currently required because editingRowId could be null for a new record so it is difficult to check if
-            // in editing mode with only that property. Future implementation might set a new record's id to 0 or 'new'
-            //isInlineEditOpen={this.props.isInlineEditOpen}
             isInlineEditOpen={isInLineEditOpen}
             selectedRows={this.props.selectedRows}
             areAllRowsSelected={ReportUtils.areAllRowsSelected(transformedRecords, this.props.selectedRows)}
@@ -271,7 +256,6 @@ export const ReportGrid = React.createClass({
             isEditingRowValid={isRecordValid}
             onClickAddNewRow={this.props.onRecordNewBlank}
             onClickSaveRow={this.props.onClickRecordSave}
-            //isEditingRowSaving={_.has(this.props, 'pendEdits.saving') ? this.props.pendEdits.saving : false}
             isEditingRowSaving={_.has(pendEdits, 'saving') ? pendEdits.saving : false}
             cellRenderer={ReportCell}
             commonCellProps={{
@@ -281,7 +265,6 @@ export const ReportGrid = React.createClass({
                 onCellClick: this.props.onCellClick,
                 onCellClickEditIcon: this.startEditingRow,
                 validateFieldValue: this.props.handleValidateFieldValue,
-                //isInlineEditOpen: this.props.isInlineEditOpen
                 isInlineEditOpen: isInLineEditOpen,
                 phase1: this.props.phase1
             }}
