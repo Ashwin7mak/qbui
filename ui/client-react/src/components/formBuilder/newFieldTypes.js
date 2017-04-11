@@ -31,8 +31,8 @@ export const SUPPORTED_NEW_FIELD_TYPES = [
         titleI18nKey: 'builder.fieldGroups.date',
         fieldTypes: [
             fieldFormats.DATE_FORMAT,
-            // fieldFormats.DATETIME_FORMAT,
-            // fieldFormats.TIME_FORMAT,
+            fieldFormats.DATETIME_FORMAT,
+            fieldFormats.TIME_FORMAT,
             fieldFormats.DURATION_FORMAT
         ]
     },
