@@ -168,35 +168,39 @@ const record = (state = [], action) => {
         return newState(currentRecd);
     }
     case types.SAVE_RECORD_SUCCESS: {
+        let savedState = state;
         let currentRecd = getRecordFromState(action.id);
         if (currentRecd) {
             let model = new RecordModel();
             model.set(currentRecd.pendEdits);
             model.setRecordSaveSuccess(action.content.appId, action.content.tblId, action.content.recId);
             model.setSaving(false);
+            savedState = newState(currentRecd);
+        }
 
-            // if adding a new row via inline edit after saving a record, call start edit record
-            if (action.content.addNewRow === true) {
-                let obj = {
-                    appId: action.content.appId,
-                    tblId: action.content.tblId,
-                    recId: UNSAVED_RECORD_ID,
-                    isInlineEdit: true
+        // if adding a new row via inline edit after saving a record, need to add that row
+        if (action.content.addNewRow === true) {
+            // the new row shouldn't be there, but we'll check anyways
+            let newRecd = getRecordFromState(UNSAVED_RECORD_ID);
+            if (!newRecd) {
+                newRecd = {
+                    id: UNSAVED_RECORD_ID
                 };
-                model.setEditRecordStart(obj);
-
-                //currentRecd.pendEdits.recordEditOpen = true;
-                //currentRecd.pendEdits.isInlineEditOpen = true;
-                //currentRecd.pendEdits.recId = UNSAVED_RECORD_ID;
-                //currentRecd.pendEdits.currentEditingRecordId = UNSAVED_RECORD_ID;
-                //currentRecd.pendEdits.originalRecord = null;
-                //currentRecd.pendEdits.recordChanges = {};
-                //currentRecd.pendEdits.fieldToStartEditing = null;
             }
 
-            return newState(currentRecd);
+            //  initialize a new record model object
+            let model = new RecordModel();
+            let obj = {
+                appId: action.content.appId,
+                tblId: action.content.tblId,
+                recId: UNSAVED_RECORD_ID,
+                isInlineEdit: true
+            };
+            model.setEditRecordStart(obj);
+            newRecd.pendEdits = model.get();
+            savedState = newState(newRecd);
         }
-        return state;
+        return savedState;
     }
     case types.SAVE_RECORD_ERROR: {
         let currentRecd = getRecordFromState(action.id);
@@ -290,7 +294,8 @@ const record = (state = [], action) => {
             delete currentRecd.pendEdits;
             return newState(currentRecd);
         }
-        return state;
+
+        return state.length === 1 ? newState(state[0]) : state;
     }
     default:
         // by default, return existing state
