@@ -21,66 +21,82 @@ describe('FieldProperties', () => {
         spyOn(mockActions, 'updateField');
     });
 
-    it('test render of component with no props', () => {
-        component = shallow(<FieldProperties />);
-
-        expect(component).toBePresent();
+    afterEach(() => {
+        mockActions.updateField.calls.reset();
     });
 
-    it('test createTextPropertyContainer', () => {
-        component = shallow(<FieldProperties />);
-        let name = "awesome";
-        let value = "possum";
+    describe('component rendering', () => {
+        it('with no props', () => {
+            component = shallow(<FieldProperties />);
 
-        instance = component.instance();
-        let textPropertyContainer = mount(instance.createTextPropertyContainer(name, value));
-        expect(textPropertyContainer.find('.textPropertyTitle')).toHaveText(name);
-        expect(textPropertyContainer.find('.textPropertyValue')).toHaveValue(value);
+            expect(component).toBePresent();
+        });
     });
 
-    it('test createBooleanPropertyContainer', () => {
-        component = shallow(<FieldProperties />);
-        let name = "super";
-        let value = true;
+    describe('createTextPropertyContainer', () => {
+        it('renders with proper title and value', () => {
+            component = shallow(<FieldProperties />);
+            let name = "awesome";
+            let value = "possum";
 
-        instance = component.instance();
-        let checkboxPropertyContainer = mount(instance.createCheckBoxPropertyContainer(name, value));
-        expect(checkboxPropertyContainer.find('CheckBoxFieldValueEditor')).toHaveValue(value);
-        expect(checkboxPropertyContainer.find('CheckBoxFieldValueEditor')).toHaveText(name);
+            instance = component.instance();
+            let textPropertyContainer = mount(instance.createTextPropertyContainer(name, value));
+            expect(textPropertyContainer.find('.textPropertyTitle')).toHaveText(name);
+            expect(textPropertyContainer.find('.textPropertyValue')).toHaveValue(value);
+        });
     });
 
-    it('test createNameProperty', () => {
-        component = shallow(<FieldProperties />);
+    describe('createBooleanPropertyContainer', () => {
+        it('renders with proper title and value', () => {
+            component = shallow(<FieldProperties />);
+            let name = "super";
+            let value = true;
 
-        let name = Locale.getMessage('fieldPropertyLabels.name');
-        let value = "slick rick";
-
-        instance = component.instance();
-        let nameProperty = mount(instance.createNameProperty(value));
-        expect(nameProperty.find('.textPropertyTitle')).toHaveText(name);
-        expect(nameProperty.find('.textPropertyValue')).toHaveValue(value);
+            instance = component.instance();
+            let checkboxPropertyContainer = mount(instance.createCheckBoxPropertyContainer(name, value));
+            expect(checkboxPropertyContainer.find('CheckBoxFieldValueEditor')).toHaveValue(value);
+            expect(checkboxPropertyContainer.find('CheckBoxFieldValueEditor')).toHaveText(name);
+        });
     });
 
-    it('test createRequiredProperty', () => {
-        component = shallow(<FieldProperties />);
+    describe('createNameProperty', () => {
+        it('renders with proper property name, title, and value', () => {
+            component = shallow(<FieldProperties />);
 
-        let name = Locale.getMessage('fieldPropertyLabels.required');
-        let value = true;
+            let name = Locale.getMessage('fieldPropertyLabels.name');
+            let value = "slick rick";
 
-        instance = component.instance();
-        let requiredProperty = mount(instance.createRequiredProperty(value));
-        expect(requiredProperty.find('CheckBoxFieldValueEditor')).toHaveValue(value);
-        expect(requiredProperty.find('CheckBoxFieldValueEditor')).toHaveText(name);
+            instance = component.instance();
+            let nameProperty = mount(instance.createNameProperty(value));
+            expect(nameProperty.find('.textPropertyTitle')).toHaveText(name);
+            expect(nameProperty.find('.textPropertyValue')).toHaveValue(value);
+        });
     });
 
-    it('test createPropertiesTitle', () => {
-        component = shallow(<FieldProperties />);
+    describe('createRequiredProperty', () => {
+        it('renders with proper property name, title, and value', () => {
+            component = shallow(<FieldProperties />);
 
-        let name = "Meow";
-        let value = `${name} properties`;
+            let name = Locale.getMessage('fieldPropertyLabels.required');
+            let value = true;
 
-        instance = component.instance();
-        let nameProperty = mount(instance.createPropertiesTitle(name));
-        expect(nameProperty.find('.fieldPropertiesTitle')).toHaveText(value);
+            instance = component.instance();
+            let requiredProperty = mount(instance.createRequiredProperty(value));
+            expect(requiredProperty.find('CheckBoxFieldValueEditor')).toHaveValue(value);
+            expect(requiredProperty.find('CheckBoxFieldValueEditor')).toHaveText(name);
+        });
+    });
+
+    describe('createPropertiesTitle', () => {
+        it('renders with title container with proper name', () => {
+            component = shallow(<FieldProperties />);
+
+            let name = "Meow";
+            let value = `${name} properties`;
+
+            instance = component.instance();
+            let nameProperty = mount(instance.createPropertiesTitle(name));
+            expect(nameProperty.find('.fieldPropertiesTitle')).toHaveText(value);
+        });
     });
 });
