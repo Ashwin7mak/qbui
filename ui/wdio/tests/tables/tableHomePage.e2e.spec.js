@@ -4,7 +4,7 @@
  */
 
 
-(function() {
+(function () {
     'use strict';
 
     //Load the page Objects
@@ -17,7 +17,7 @@
     var rawValueGenerator = require('../../../test_generators/rawValue.generator');
     var ReportContentPO = require('../../pages/reportContent.po')
 
-    describe('Report Table Home Page Tests', function() {
+    describe('Report Table Home Page Tests', function () {
         var realmName;
         var realmId;
         var app;
@@ -28,12 +28,12 @@
          * Then creates them via the REST API.
          * Have to specify the done() callback at the end of the promise chain to let Jasmine know we are done with async calls
          */
-        beforeAll(function() {
+        beforeAll(function () {
             //Create a app, table and report
-            return e2eBase.basicAppSetup(null, 5).then(function(appAndRecords) {
+            return e2eBase.basicAppSetup(null, 5).then(function (appAndRecords) {
                 // Set your global objects to use in the test functions
                 app = appAndRecords;
-            }).then(function() {
+            }).then(function () {
                 var report1 = {
                     name: 'Viewer Report',
                     type: 'TABLE',
@@ -44,7 +44,7 @@
                 var reportEndpoint = e2eBase.recordBase.apiBase.resolveReportsEndpoint(app.id, app.tables[0].id);
                 //Create a viewer report
                 return e2eBase.recordBase.apiBase.executeRequest(reportEndpoint, consts.POST, report1);
-            }).then(function() {
+            }).then(function () {
                 var report2 = {
                     name: 'Participant Report',
                     type: 'TABLE',
@@ -55,7 +55,7 @@
                 var reportEndpoint = e2eBase.recordBase.apiBase.resolveReportsEndpoint(app.id, app.tables[0].id);
                 //Create a participant report
                 return e2eBase.recordBase.apiBase.executeRequest(reportEndpoint, consts.POST, report2);
-            }).then(function() {
+            }).then(function () {
                 var report3 = {
                     name: 'Admin Report',
                     type: 'TABLE',
@@ -66,8 +66,8 @@
                 var reportEndpoint = e2eBase.recordBase.apiBase.resolveReportsEndpoint(app.id, app.tables[0].id);
                 //Create an Admin report
                 return e2eBase.recordBase.apiBase.executeRequest(reportEndpoint, consts.POST, report3);
-            }).then(function() {
-            }).catch(function(error) {
+            }).then(function () {
+            }).catch(function (error) {
                 // Global catch that will grab any errors from chain above
                 // Will appropriately fail the beforeAll method so other tests won't run
                 browser.logger.error('Error in beforeAll function:' + JSON.stringify(error));
@@ -75,7 +75,7 @@
             });
         });
 
-        beforeEach(function() {
+        beforeEach(function () {
             //Set the session back to ADMIN
             // Get a session ticket for that subdomain and realmId (stores it in the browser)
             realmName = e2eBase.recordBase.apiBase.realm.subdomain;
@@ -102,19 +102,19 @@
                     message: 'Viewer Role',
                     roleId: 10,
                     reportId: 2,
-                    reportTitle: 'Table 1 | Viewer Report'
+                    reportTitle: 'Viewer Report'
                 },
                 {
                     message: 'Participant Role',
                     roleId: 11,
                     reportId: 3,
-                    reportTitle: 'Table 1 | Participant Report'
+                    reportTitle: 'Participant Report'
                 },
                 {
                     message: 'Admin Role',
                     roleId: 12,
                     reportId: 4,
-                    reportTitle: 'Table 1 | Admin Report'
+                    reportTitle: 'Admin Report'
                 }
             ];
         }
@@ -123,10 +123,10 @@
          * Tests for default table home page UI.The test creates user and add user to app role and assign the report to appRole.
          * Authenticate the created User and verify the default table home page displays the report set or not.
          */
-        reportHomePageTestCases().forEach(function(testcase) {
-            it('Verify default table home page for ' + testcase.message, function() {
+        reportHomePageTestCases().forEach(function (testcase) {
+            xit('Verify default table home page for ' + testcase.message, function () {
                 //Create a user
-                browser.call(function() {
+                browser.call(function () {
                     return e2eBase.recordBase.apiBase.createUser().then(function (userResponse) {
 
                         userId = JSON.parse(userResponse.body).id;
@@ -137,24 +137,23 @@
                 });
 
                 //POST custdefaulthomepage for a table
-                browser.call(function() {
+                browser.call(function () {
                     return e2eBase.recordBase.apiBase.setCustDefaultTableHomePageForRole(app.id, app.tables[0].id, createRoleReportMapJSON(testcase.roleId, testcase.reportId))
                 });
 
                 //get the user authentication
-                browser.call(function() {
+                browser.call(function () {
                     return RequestSessionTicketPage.get(e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.recordBase.apiBase.resolveUserTicketEndpoint() + '?uid=' + userId + '&realmId='));
                 });
 
-                //Load the table for that user
-                RequestAppsPage.get(e2eBase.getRequestTableEndpoint(e2eBase.recordBase.apiBase.realm.subdomain, app.id, app.tables[0].id));
+                //Load the report for that user
+                RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[0].id, testcase.reportId));
 
                 // wait for the report content to be visible
                 ReportContentPO.waitForReportContent();
 
-                //Assert tableHomepageStageHeadline *make sure testing right thing here
-               // expect(browser.element('.tableHomepageStageHeadline').getAttribute('textContent')).toBe(testcase.reportTitle);
-                expect(browser.element('.tableHomepageStageHeadline').getAttribute('textContent')).toBe('Table 1 Home');
+                //Assert report title to be expected
+                expect(browser.element('.stageHeadline').getAttribute('textContent')).toBe(testcase.reportTitle);
 
                 //Assert number of records
                 expect(ReportContentPO.reportDisplayedRecordCount()).toBe(5);
@@ -167,24 +166,25 @@
         /**
          * Negative test to verify the personal reports for a user cannot be accessed by others.
          */
-        it('Negative test to verify personal reports not accessable by other users', function() {
+        it('Negative test to verify personal reports not accessible by other users', function () {
             //Create a user
-            browser.call(function() {
+            browser.call(function () {
                 return e2eBase.recordBase.apiBase.createUser().then(function (userResponse) {
                     userId = JSON.parse(userResponse.body).id;
 
                     //Add user to participant appRole
-                    e2eBase.recordBase.apiBase.assignUsersToAppRole(app.id, "11", [userId]);
+                    e2eBase.recordBase.apiBase.assignUsersToAppRole(app.id, "10", [userId]);
                 });
             });
 
             //get the user authentication
-            browser.call(function() {
+            browser.call(function () {
                 return RequestSessionTicketPage.get(e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.recordBase.apiBase.resolveUserTicketEndpoint() + '?uid=' + userId + '&realmId='));
             });
-            //go to report page directly to load personal report(report 1 which is Test Report).
-            browser.call(function() {
-                RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, "1"));
+            //go to report page directly to load personal report
+            browser.call(function () {
+                RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, "4"));
+
             });
 
             // Make sure the report not loaded and gives unAuthorized error
