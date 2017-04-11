@@ -4,36 +4,39 @@
  */
 
 
-(function () {
+(function() {
     'use strict';
 
     //Load the page Objects
-    var newStackAuthPO = requirePO('newStackAuth');
     var e2ePageBase = requirePO('e2ePageBase');
     var RequestAppsPage = requirePO('requestApps');
-    var tableCreatePO = requirePO('tableCreate');
-    var formsPO = requirePO('formsPage');
     var RequestSessionTicketPage = requirePO('requestSessionTicket');
-    var rawValueGenerator = require('../../../test_generators/rawValue.generator');
-    var ReportContentPO = require('../../pages/reportContent.po')
+    var ReportContentPO = require('../../pages/reportContent.po');
 
-    describe('Report Table Home Page Tests', function () {
+    describe('Report Table Home Page Tests', function() {
         var realmName;
         var realmId;
         var app;
         var userId;
+        var numOfRecords = 5;
+
+        var viewerRoleId = 10;
+        var viewerReportId = 2;
+        var participantRoleId = 11;
+        var participantReportId = 3;
+        var adminRoleId = 12;
+        var adminReportId = 4;
 
         /**
          * Setup method. Generates JSON for an app, a table, a set of records and multiple reports.
-         * Then creates them via the REST API.
-         * Have to specify the done() callback at the end of the promise chain to let Jasmine know we are done with async calls
+         * Then create them via the REST API.
          */
-        beforeAll(function () {
-            //Create a app, table and report
-            return e2eBase.basicAppSetup(null, 5).then(function (appAndRecords) {
+        beforeAll(function() {
+            //Create an app, table and reports
+            return e2eBase.basicAppSetup(null, numOfRecords).then(function(appAndRecords) {
                 // Set your global objects to use in the test functions
                 app = appAndRecords;
-            }).then(function () {
+            }).then(function() {
                 var report1 = {
                     name: 'Viewer Report',
                     type: 'TABLE',
@@ -44,7 +47,7 @@
                 var reportEndpoint = e2eBase.recordBase.apiBase.resolveReportsEndpoint(app.id, app.tables[0].id);
                 //Create a viewer report
                 return e2eBase.recordBase.apiBase.executeRequest(reportEndpoint, consts.POST, report1);
-            }).then(function () {
+            }).then(function() {
                 var report2 = {
                     name: 'Participant Report',
                     type: 'TABLE',
@@ -55,7 +58,7 @@
                 var reportEndpoint = e2eBase.recordBase.apiBase.resolveReportsEndpoint(app.id, app.tables[0].id);
                 //Create a participant report
                 return e2eBase.recordBase.apiBase.executeRequest(reportEndpoint, consts.POST, report2);
-            }).then(function () {
+            }).then(function() {
                 var report3 = {
                     name: 'Admin Report',
                     type: 'TABLE',
@@ -66,8 +69,8 @@
                 var reportEndpoint = e2eBase.recordBase.apiBase.resolveReportsEndpoint(app.id, app.tables[0].id);
                 //Create an Admin report
                 return e2eBase.recordBase.apiBase.executeRequest(reportEndpoint, consts.POST, report3);
-            }).then(function () {
-            }).catch(function (error) {
+            }).then(function() {
+            }).catch(function(error) {
                 // Global catch that will grab any errors from chain above
                 // Will appropriately fail the beforeAll method so other tests won't run
                 browser.logger.error('Error in beforeAll function:' + JSON.stringify(error));
@@ -75,7 +78,7 @@
             });
         });
 
-        beforeEach(function () {
+        beforeEach(function() {
             //Set the session back to ADMIN
             // Get a session ticket for that subdomain and realmId (stores it in the browser)
             realmName = e2eBase.recordBase.apiBase.realm.subdomain;
@@ -100,20 +103,20 @@
             return [
                 {
                     message: 'Viewer Role',
-                    roleId: 10,
-                    reportId: 2,
+                    roleId: viewerRoleId,
+                    reportId: viewerReportId,
                     reportTitle: 'Viewer Report'
                 },
                 {
                     message: 'Participant Role',
-                    roleId: 11,
-                    reportId: 3,
+                    roleId: participantRoleId,
+                    reportId: participantReportId,
                     reportTitle: 'Participant Report'
                 },
                 {
                     message: 'Admin Role',
-                    roleId: 12,
-                    reportId: 4,
+                    roleId: participantRoleId,
+                    reportId: participantReportId,
                     reportTitle: 'Admin Report'
                 }
             ];
@@ -121,75 +124,114 @@
 
         /**
          * Tests for default table home page UI.The test creates user and add user to app role and assign the report to appRole.
-         * Authenticate the created User and verify the default table home page displays the report set or not.
+         * Authenticate the created User and verify that the user is able access the assigned report
          */
-        reportHomePageTestCases().forEach(function (testcase) {
-            xit('Verify default table home page for ' + testcase.message, function () {
+        reportHomePageTestCases().forEach(function(testcase) {
+            it('Verify default table home page for ' + testcase.message, function() {
                 //Create a user
-                browser.call(function () {
-                    return e2eBase.recordBase.apiBase.createUser().then(function (userResponse) {
-
+                browser.call(function() {
+                    return e2eBase.recordBase.apiBase.createUser().then(function(userResponse) {
+                        //parse user ID
                         userId = JSON.parse(userResponse.body).id;
 
                         //Add user to an appRole
                         e2eBase.recordBase.apiBase.assignUsersToAppRole(app.id, testcase.roleId, [userId]);
+
+                        //POST custdefaulthomepage for a table
+                        e2eBase.recordBase.apiBase.setCustDefaultTableHomePageForRole(app.id, app.tables[0].id, createRoleReportMapJSON(testcase.roleId, testcase.reportId));
+
+                        //get the user authentication
+                        RequestSessionTicketPage.get(e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.recordBase.apiBase.resolveUserTicketEndpoint() + '?uid=' + userId + '&realmId='));
                     });
+
+                    //Load the report for given user
+                    RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[0].id, testcase.reportId));
+
+                    // wait for the report content to be visible
+                    ReportContentPO.waitForReportContent();
+
+                    //Assert report title to be expected
+                    expect(browser.element('.stageHeadline').getAttribute('textContent')).toBe(testcase.reportTitle);
+
+                    //Assert the number of records
+                    expect(ReportContentPO.reportDisplayedRecordCount()).toBe(numOfRecords);
+
+                    //Assert record count displayed is correct
+                    expect(browser.element('.recordsCount').getAttribute('textContent')).toBe(numOfRecords + ' records');
                 });
-
-                //POST custdefaulthomepage for a table
-                browser.call(function () {
-                    return e2eBase.recordBase.apiBase.setCustDefaultTableHomePageForRole(app.id, app.tables[0].id, createRoleReportMapJSON(testcase.roleId, testcase.reportId))
-                });
-
-                //get the user authentication
-                browser.call(function () {
-                    return RequestSessionTicketPage.get(e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.recordBase.apiBase.resolveUserTicketEndpoint() + '?uid=' + userId + '&realmId='));
-                });
-
-                //Load the report for that user
-                RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[0].id, testcase.reportId));
-
-                // wait for the report content to be visible
-                ReportContentPO.waitForReportContent();
-
-                //Assert report title to be expected
-                expect(browser.element('.stageHeadline').getAttribute('textContent')).toBe(testcase.reportTitle);
-
-                //Assert number of records
-                expect(ReportContentPO.reportDisplayedRecordCount()).toBe(5);
-                //Assert record count displayed is correct
-                expect(browser.element('.recordsCount').getAttribute('textContent')).toBe('5 records');
 
             });
         });
 
         /**
-         * Negative test to verify the personal reports for a user cannot be accessed by others.
+         * Negative test to verify that the personal reports for a user cannot be accessed by other users.
          */
-        it('Negative test to verify personal reports not accessible by other users', function () {
+        it('Negative test to verify personal reports not accessible by other users', function() {
+
             //Create a user
-            browser.call(function () {
-                return e2eBase.recordBase.apiBase.createUser().then(function (userResponse) {
+            browser.call(function() {
+                return e2eBase.recordBase.apiBase.createUser().then(function(userResponse) {
+                    //parse user ID
                     userId = JSON.parse(userResponse.body).id;
 
-                    //Add user to participant appRole
-                    e2eBase.recordBase.apiBase.assignUsersToAppRole(app.id, "10", [userId]);
+                    //Adding user to the participant appRole
+                    e2eBase.recordBase.apiBase.assignUsersToAppRole(app.id, participantRoleId, [userId]);
+
+                    //get the user authentication
+                    RequestSessionTicketPage.get(e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.recordBase.apiBase.resolveUserTicketEndpoint() + '?uid=' + userId + '&realmId='));
+
+                    //try to load the report of admin user
+                    RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, adminReportId));
                 });
+
+                // Make sure the report not loaded and gives unAuthorized error
+                expect(RequestSessionTicketPage.ticketResponseBodyEl.getText()).toEqual(e2eConsts.invalidCredentials);
             });
+        });
 
-            //get the user authentication
-            browser.call(function () {
-                return RequestSessionTicketPage.get(e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.recordBase.apiBase.resolveUserTicketEndpoint() + '?uid=' + userId + '&realmId='));
+        /**
+         * Positive test to verify that admin has access to all the reports
+         */
+        it('Positive test to verify that admin has access to all the reports', function() {
+
+            //Create a user
+            browser.call(function() {
+                return e2eBase.recordBase.apiBase.createUser().then(function(userResponse) {
+                    //parse user ID
+                    userId = JSON.parse(userResponse.body).id;
+
+                    //Add user to the admin appRole
+                    e2eBase.recordBase.apiBase.assignUsersToAppRole(app.id, adminRoleId, [userId]);
+
+                    //get the user authentication
+                    RequestSessionTicketPage.get(e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.recordBase.apiBase.resolveUserTicketEndpoint() + '?uid=' + userId + '&realmId='));
+                });
+                //next - make sure admin have access to all the reports
+
+                //test that admin have access to admin report
+                //Load the report for admin user
+                RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, adminReportId));
+                // wait for the report content to be visible
+                ReportContentPO.waitForReportContent();
+                //Assert report title to be expected
+                expect(browser.element('.stageHeadline').getAttribute('textContent')).toBe('Admin Report');
+
+                //test that admin have access to participant report
+                //Load the report for participant user
+                RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, participantReportId));
+                // wait for the report content to be visible
+                ReportContentPO.waitForReportContent();
+                //Assert report title to be expected
+                expect(browser.element('.stageHeadline').getAttribute('textContent')).toBe('Participant Report');
+
+                //test that admin have access to viewer report
+                //Load the report for viewer user
+                RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, viewerReportId));
+                // wait for the report content to be visible
+                ReportContentPO.waitForReportContent();
+                //Assert report title to be expected
+                expect(browser.element('.stageHeadline').getAttribute('textContent')).toBe('Viewer Report');
             });
-            //go to report page directly to load personal report
-            browser.call(function () {
-                RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, "4"));
-
-            });
-
-            // Make sure the report not loaded and gives unAuthorized error
-            expect(RequestSessionTicketPage.ticketResponseBodyEl.getText()).toEqual(e2eConsts.invalidCredentials);
-
         });
 
 
