@@ -104,12 +104,19 @@ $edit-icon-font-size: 18px;
         // text label for the header cell
         .gridHeaderLabel {
             // set max-height to 2 lines. An extra 2px is needed to prevent clipping
-            max-height: (($line-height-text-comfortable * 2) + 2);
+            max-height: (($line-height-text-multiline * 2) + 2);
             overflow: hidden;
             flex-grow: 1;
             padding-right: 4px;
             padding-top: 2px;
-            line-height: $line-height-text-comfortable;
+            line-height: $line-height-text-multiline;
+            font-size: $font-size-h6;
+            font-weight: 400;
+            letter-spacing: 0.5px;
+        }
+
+        .qbIcon {
+            font-size: $size-iconfont-medium;
         }
 
         // menu to access sorting options
