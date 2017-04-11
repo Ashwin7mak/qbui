@@ -8,24 +8,24 @@
     'use strict';
 
     //Load the page Objects
-    var e2ePageBase = requirePO('e2ePageBase');
-    var RequestAppsPage = requirePO('requestApps');
-    var RequestSessionTicketPage = requirePO('requestSessionTicket');
-    var ReportContentPO = require('../../pages/reportContent.po');
+    let e2ePageBase = requirePO('e2ePageBase');
+    let RequestAppsPage = requirePO('requestApps');
+    let RequestSessionTicketPage = requirePO('requestSessionTicket');
+    let ReportContentPO = require('../../pages/reportContent.po');
 
     describe('Report Table Home Page Tests', function() {
-        var realmName;
-        var realmId;
-        var app;
-        var userId;
-        var numOfRecords = 5;
+        let realmName;
+        let realmId;
+        let app;
+        let userId;
+        let numOfRecords = 5;
 
-        var viewerRoleId = 10;
-        var viewerReportId = 2;
-        var participantRoleId = 11;
-        var participantReportId = 3;
-        var adminRoleId = 12;
-        var adminReportId = 4;
+        let viewerRoleId = 10;
+        let viewerReportId = 2;
+        let participantRoleId = 11;
+        let participantReportId = 3;
+        let adminRoleId = 12;
+        let adminReportId = 4;
 
         /**
          * Setup method. Generates JSON for an app, a table, a set of records and multiple reports.
@@ -37,36 +37,36 @@
                 // Set your global objects to use in the test functions
                 app = appAndRecords;
             }).then(function() {
-                var report1 = {
+                let report1 = {
                     name: 'Viewer Report',
                     type: 'TABLE',
                     tableId: app.tables[0].id,
                     query: null
                 };
                 //report endpoint
-                var reportEndpoint = e2eBase.recordBase.apiBase.resolveReportsEndpoint(app.id, app.tables[0].id);
+                let reportEndpoint = e2eBase.recordBase.apiBase.resolveReportsEndpoint(app.id, app.tables[0].id);
                 //Create a viewer report
                 return e2eBase.recordBase.apiBase.executeRequest(reportEndpoint, consts.POST, report1);
             }).then(function() {
-                var report2 = {
+                let report2 = {
                     name: 'Participant Report',
                     type: 'TABLE',
                     tableId: app.tables[0].id,
                     query: null
                 };
                 //report endpoint
-                var reportEndpoint = e2eBase.recordBase.apiBase.resolveReportsEndpoint(app.id, app.tables[0].id);
+                let reportEndpoint = e2eBase.recordBase.apiBase.resolveReportsEndpoint(app.id, app.tables[0].id);
                 //Create a participant report
                 return e2eBase.recordBase.apiBase.executeRequest(reportEndpoint, consts.POST, report2);
             }).then(function() {
-                var report3 = {
+                let report3 = {
                     name: 'Admin Report',
                     type: 'TABLE',
                     tableId: app.tables[0].id,
                     query: null
                 };
                 //report endpoint
-                var reportEndpoint = e2eBase.recordBase.apiBase.resolveReportsEndpoint(app.id, app.tables[0].id);
+                let reportEndpoint = e2eBase.recordBase.apiBase.resolveReportsEndpoint(app.id, app.tables[0].id);
                 //Create an Admin report
                 return e2eBase.recordBase.apiBase.executeRequest(reportEndpoint, consts.POST, report3);
             }).then(function() {
@@ -92,12 +92,12 @@
          * Function that creates JSON for roleId reportId map for custdefaulthomepage POST
          */
         function createRoleReportMapJSON(roleId, report_Id) {
-            var jsonStr = '{"' + roleId + '":"' + report_Id + '"}';
+            let jsonStr = '{"' + roleId + '":"' + report_Id + '"}';
             return JSON.parse(jsonStr);
         }
 
         /**
-         * Data Provider for table homepage for various user roles
+         * Data Provider for table homepage for letious user roles
          */
         function reportHomePageTestCases() {
             return [
