@@ -1,0 +1,106 @@
+@import '../../../../src/assets/css/qbVariables';
+@import '../../../../src/assets/css/customVariables';
+
+// When a row is in inline edit mode, this class is used on an empty DOM
+// node in all sticky cells (row headers) that are not on the row being edited.
+// Used in place of actionsCol below
+.emptyRowActions {
+    min-height: $inline-edit-input-box-height;
+    width: 75px;
+}
+
+// contains all the row actions such as the checkbox to select the row, edit data, or access the dropdown menu
+.actionsCol {
+    white-space: nowrap;
+
+    > * {
+        display: inline-block;
+    }
+
+    // Select row checkbox
+    input[type=checkbox] {
+        margin-right: 12px;
+    }
+    .iconActions {
+        line-height: inherit;
+    }
+
+    .iconActionButton {
+        color: $grid-lefticon-normal-color;
+        transition: color 200ms ease-in-out;
+        height: $grid-default-cell-height;
+        width: auto;
+        margin-right: 4px;
+        background: inherit;
+
+        &:hover {
+            color: $topnav-icon-color;
+        }
+    }
+
+    // menu to access additional row actions such as print, email, copy, and delete
+    .dropdown-menu {
+
+        // position menu to the right of the sticky cells
+        top: 0;
+        left: 27px;
+
+        a {
+            padding-left: 4px;
+
+            // dropdown menu icon colors and default properties
+            .qbIcon {
+                margin-right: 6px;
+                vertical-align: middle;
+                width: 28px;
+                padding: 4px;
+
+                &.print {
+                    color: $print-icon-normal-color;
+                }
+
+                &.email {
+                    color: $mail-icon-normal-color;
+                }
+
+                &.duplicate {
+                    color: $copy-icon-normal-color;
+                }
+
+                &.delete {
+                    color: $delete-icon-normal-color;
+                }
+
+            }
+
+            // dropdown menu hover icon colors
+            &:hover {
+                .qbIcon {
+                    color: $color-black-100;
+
+                    &.print {
+                        background-color: $print-icon-normal-color;
+                    }
+
+                    &.email {
+                        background-color: $mail-icon-normal-color;
+                    }
+
+                    &.duplicate {
+                        background-color: $copy-icon-normal-color;
+                    }
+
+                    &.delete {
+                        background-color: $delete-icon-normal-color;
+                    }
+                }
+            }
+        }
+
+        // disabled icon colors
+        .disabled a .qbIcon {
+            color: $iconfont-on-light-disabled-color;
+            background-color: transparent;
+        }
+    }
+}
