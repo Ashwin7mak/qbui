@@ -108,6 +108,9 @@
                     apiBase.executeRequest(endpoint, consts.GET).
                             then(function(recResp) {
                                 deferred.resolve(recResp);
+                            },
+                            (error) => {
+                                deferred.resolve(error);
                             }).
                             catch(function(error) {
                                 deferred.reject(error);
@@ -307,19 +310,30 @@
              * @Returns A promise chain.
              */
             addRecords: function(createdApp, createdTable, genRecords) {
-                //Resolve the proper record endpoint specific to the generated app and table
-                var recordsEndpoint = recordBase.apiBase.resolveRecordsEndpoint(createdApp.id, createdTable.id);
-                var fetchRecordPromises = [];
-                genRecords.forEach(function(currentRecord) {
-                    fetchRecordPromises.push(recordBase.createAndFetchRecord(recordsEndpoint, currentRecord, null));
+                return new Promise((resolve, reject) => {
+                    var recordsEndpoint = recordBase.apiBase.resolveRecordsEndpoint(createdApp.id, createdTable.id);
+                    recordBase.createBulkRecords(recordsEndpoint, genRecords).then(
+                        (recordIdList) => {
+                            var fetchRecordPromises = [];
+                            recordIdList.forEach((recId) => {
+                                fetchRecordPromises.push(recordBase.fetchRecord(createdApp.id, createdTable.id, recId));
+                            });
+                            Promise.all(fetchRecordPromises).then(
+                                (responses) => {
+                                    let records = [];
+                                    responses.forEach((response) => {
+                                        records.push(JSON.parse(response.body));
+                                    });
+                                    resolve(records);
+                                },
+                                (error) => {
+                                    reject(error);
+                                }
+                            );
+                        }).catch((error) => {
+                            throw new Error(error);
+                        });
                 });
-                return Promise.all(fetchRecordPromises)
-                    .then(function(results) {
-                        return results;
-                    }).catch(function(error) {
-                        // Proper error handling, you need to rethrow not just return the error
-                        throw new Error(error);
-                    });
             }
         };
         return recordBase;
