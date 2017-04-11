@@ -98,6 +98,27 @@
                 });
                 return deferred.promise;
             },
+            fetchRecords: function(appId, tableId, params) {
+                var deferred = promise.pending();
+                var endpoint = apiBase.resolveRecordsEndpoint(appId, tableId);
+                if (params) {
+                    endpoint += "?" + params;
+                }
+                init.then(function() {
+                    apiBase.executeRequest(endpoint, consts.GET).
+                    then(function(recResp) {
+                        deferred.resolve(JSON.parse(recResp.body).records);
+                        },
+                        (error) => {
+                            deferred.resolve(error);
+                        }).
+                    catch(function(error) {
+                        deferred.reject(error);
+                        assert(false, 'failed to resolve record');
+                    });
+                });
+                return deferred.promise;
+            },
             fetchRecord: function(appId, tableId, recordId, params) {
                 var deferred = promise.pending();
                 var endpoint = apiBase.resolveRecordsEndpoint(appId, tableId, recordId);
@@ -315,20 +336,19 @@
                     recordBase.createBulkRecords(recordsEndpoint, genRecords).then(
                         (recordIdList) => {
                             var fetchRecordPromises = [];
+                            var query = "";
                             recordIdList.forEach((recId) => {
-                                fetchRecordPromises.push(recordBase.fetchRecord(createdApp.id, createdTable.id, recId));
+                                //{3.EX.'1'} OR {3.EX.'2'}
+                                query += query.length > 0 ? " OR " : "";
+                                query += "{3.EX.'" + recId + "'}";
                             });
-                            Promise.all(fetchRecordPromises).then(
-                                (responses) => {
-                                    let records = [];
-                                    responses.forEach((response) => {
-                                        records.push(JSON.parse(response.body));
-                                    });
-                                    resolve(records);
-                                },
-                                (error) => {
-                                    reject(error);
-                                }
+                            recordBase.fetchRecords(createdApp.id, createdTable.id, "query=" + query).then(
+                                    (responses) => {
+                                        resolve(responses);
+                                    },
+                                    (error) => {
+                                        reject(error);
+                                    }
                             );
                         }).catch((error) => {
                             throw new Error(error);
