@@ -162,11 +162,16 @@ const forms = (
         });
 
         if (!newLocation) {
+            let elementIndex = 0;
+            if (updatedForm.formData.formMeta.tabs[0].sections[0].columns[0]) {
+                elementIndex = updatedForm.formData.formMeta.tabs[0].sections[0].columns[0].elements.length;
+            }
+
             newLocation = {
                 tabIndex: 0,
                 sectionIndex: 0,
                 columnIndex: 0,
-                elementIndex: updatedForm.formData.formMeta.tabs[0].sections[0].columns[0].elements.length
+                elementIndex: 0
             };
         } else if (newLocation.elementIndex !== updatedForm.formData.formMeta.tabs[0].sections[0].columns[0].elements.length) {
             //If a field is selected on the form and the selectedField is not located at the end of the form, then the new field will be added below the selected field
