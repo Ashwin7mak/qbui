@@ -12,26 +12,9 @@ import Icon, {AVAILABLE_ICON_FONTS} from '../../../../reuse/client/src/component
  */
 const TableIcon = ({classes, icon}) => {
 
-    // Map the parameters to the format expected by the embedded component.
-    // The icon passed in is the full class name including font.
-    // So separate them into two parameters.
     let iconName = `${icon}`;
-    let iconFont = undefined;
-
-    // iterate through the available fonts to see which one is specified on this icon
-    Object.keys(AVAILABLE_ICON_FONTS).map(function(key) {
-        if (iconName.indexOf(AVAILABLE_ICON_FONTS[key]) === 0) {
-            iconFont = AVAILABLE_ICON_FONTS[key];
-        }
-    });
-
-    // strip the icon font off the front of the icon name because the Icon component expects them passed in separately
-    if (iconFont) {
-        iconName = iconName.replace(iconFont + '-', '');
-    }
-
     return (
-        <Icon className={`${classes}`} icon={iconName} iconFont={iconFont} />
+        <Icon className={`${classes}`} icon={iconName} iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY} />
     );
 };
 

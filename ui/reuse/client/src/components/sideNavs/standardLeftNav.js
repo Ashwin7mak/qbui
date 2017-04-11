@@ -3,6 +3,7 @@ import Button from 'react-bootstrap/lib/Button';
 import Loader from 'react-loader';
 import FlipMove from 'react-flip-move';
 import SideMenuBase from '../sideMenuBase/sideMenuBase';
+import TableIcon from '../icon/icon';
 import Icon from '../icon/icon';
 import Tooltip from '../tooltip/tooltip';
 import SimpleNavItem from '../simpleNavItem/simpleNavItem';
@@ -67,7 +68,7 @@ class StandardLeftNav extends Component {
     }
 
     renderContextHeader() {
-        const {showContextHeader, isContextHeaderSmall, contextHeaderIcon, showContextHeaderToggle, isContextToggleDown, isCollapsed} = this.props;
+        const {showContextHeader, isContextHeaderSmall, contextHeaderIcon, contextHeaderIconFont, showContextHeaderToggle, isContextToggleDown, isCollapsed} = this.props;
 
         let classes = ['contextHeader'];
 
@@ -89,7 +90,7 @@ class StandardLeftNav extends Component {
                     className="contextHeaderButton"
                     onClick={this.props.onClickContextHeader}
                 >
-                    {contextHeaderIcon && <Icon icon={contextHeaderIcon} className="contextHeaderIcon" />}
+                    {contextHeaderIcon && <Icon icon={contextHeaderIcon} iconFont={contextHeaderIconFont} className="contextHeaderIcon" />}
 
                     {this.renderContextHeaderTitle()}
 
@@ -187,6 +188,11 @@ StandardLeftNav.propTypes = {
     contextHeaderIcon: PropTypes.string,
 
     /**
+     * The font set to use for the contextHeaderIcon
+     */
+    contextHeaderIconFont: PropTypes.string,
+
+    /**
      * The title text for the context header. */
     contextHeaderTitle: PropTypes.string,
 
@@ -224,7 +230,10 @@ StandardLeftNav.propTypes = {
         isSelected: PropTypes.bool,
         icon: PropTypes.string,
         iconFont: PropTypes.string,
-        title: PropTypes.string,
+        title: React.PropTypes.oneOfType([
+            PropTypes.string,
+            PropTypes.element
+        ]),
         onClick: PropTypes.string,
         href: PropTypes.string,
         link: PropTypes.string,
@@ -248,6 +257,7 @@ StandardLeftNav.defaultProps = {
     showLoadingIndicator: false,
     showContextHeader: false,
     contextHeaderIcon: null,
+    contextHeaderIconFont: null,
     contextHeaderTitle: null,
     showContextHeaderToggle: false,
     isContextToggleDown: true,

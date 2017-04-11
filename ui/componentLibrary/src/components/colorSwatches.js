@@ -116,7 +116,16 @@ const ColorSwatches = ({scssFileContents}) => {
             {group.colors.map((color, colorIndex) =>
                 <Tooltip key={colorIndex} plainMessage={color.description} location="right">
                     <li key={colorIndex} className={`comp-library-color-swatch ${color.borderClass}`} style={{backgroundColor: color.varValue, color:color.textColor}}>
-                        <span className="comp-library-color-swatch-name">{color.varName}</span><span className="comp-library-color-swatch-value">{color.varValue}</span>
+                        {/*
+                         SVG is needed for print because bootstrap changes all text to black and all backgrounds to transparent
+                         and React doesn't support !important on an inline style. This SVG is hidden by default.
+                        */}
+                        <svg className={`comp-library-color-swatch-sample ${color.borderClass}`} viewBox="0 0 5 5">
+                            <rect width="5" height="5" fill={color.varValue}/>
+                        </svg>
+                        <span className="comp-library-color-swatch-name">{color.varName}</span>
+                        <span className="comp-library-color-swatch-value">{color.varValue}</span>
+                        <span className="comp-library-color-swatch-description">{color.description}</span>
                     </li>
                 </Tooltip>
             )}
