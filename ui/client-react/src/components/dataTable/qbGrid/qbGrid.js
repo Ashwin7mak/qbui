@@ -1,16 +1,14 @@
 import React, {PropTypes} from 'react';
 import * as Table from 'reactabular-table';
 import * as dnd from 'reactabular-dnd';
-import * as resolve from 'table-resolver';
 import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
-import cloneDeep from 'lodash/cloneDeep';
 import _ from 'lodash';
 import Loader  from 'react-loader';
 import * as SpinnerConfigurations from "../../../constants/spinnerConfigurations";
-import QbHeaderCell from './qbHeaderCell';
 import QbRow from './qbRow';
 import QbCell from './qbCell';
+import QbHeaderCell from './qbHeaderCell';
 import {UNSAVED_RECORD_ID} from '../../../constants/schema';
 import RowActions, {SELECT_ROW_CHECKBOX} from './rowActions';
 import QbIcon from '../../qbIcon/qbIcon';
@@ -389,7 +387,6 @@ const QbGrid = React.createClass({
             throw new Error('dnd.moveLabels - Missing columns!');
         }
         for(var i=0;i<columns.length;i++){
-            console.log("Column is", columns[i].headerLabel)
             if(columns[i].headerLabel==sourceLabel)
                 var sourceIndex=i;
             if(columns[i].headerLabel==targetLabel)
@@ -419,7 +416,6 @@ const QbGrid = React.createClass({
         return ret.slice(0, targetIndex).concat([sourceItem]).concat(ret.slice(targetIndex));
     },
 
-
     render() {
 
         let columns;
@@ -432,7 +428,6 @@ const QbGrid = React.createClass({
                     header: {
                         props: {
                             scope: 'col',
-                            label: "abc",
                             onMove: o => this.onMoveColumn(o)
                         },
                         label: this.getCheckboxHeader(),
@@ -450,9 +445,6 @@ const QbGrid = React.createClass({
 
         }
 
-        const resolvedColumns = resolve.columnChildren({ columns });
-
-
         return (
 
             <Loader loaded={!this.props.loading} options={SpinnerConfigurations.LARGE_BREAKPOINT}>
@@ -465,6 +457,7 @@ const QbGrid = React.createClass({
 
                     components={{
                         header: {
+                            //cell: QbHeaderCell
                             cell: dnd.Header
                         },
                         body: {

@@ -9,8 +9,6 @@ import QbIcon from '../../qbIcon/qbIcon';
 import {connect} from 'react-redux';
 import ReportColumnHeaderMenuContainer from './reportColumnHeaderMenuContainer';
 import FormBuilder from './../../formBuilder/formBuilder';
-import { Draggable, Droppable } from 'react-drag-and-drop';
-import DragAndDropTable from './reactabular';
 
 const SORTING_MESSAGE = 'sort';
 const GROUPING_MESSAGE = 'group';
@@ -191,25 +189,6 @@ export const ReportColumnHeaderMenu = React.createClass({
                     <MenuItem onSelect={this.groupReportDescending}>
                         <span className="groupDescendMenuText">{this.getSortDescText(GROUPING_MESSAGE)}</span>
                     </MenuItem>
-
-
-            <div>
-            <ul>
-            <Draggable type="fruit" data="banana"><li>Banana </li></Draggable>
-            <Draggable type="fruit" data="apple"><li>Apple</li></Draggable>
-            <Draggable type="metal" data="silver"><li>Silver</li></Draggable>
-            </ul>
-
-                <ul>
-                <Droppable types={['fruit']}> <ul className="hoo">Console.log(this.type)</ul></Droppable>
-                </ul>
-            </div>
-
-                <div>
-
-                </div>
-
-
 
                     <MenuItem divider/>
 
