@@ -59,12 +59,16 @@
                 return browser.element('.saveFormButton');
             }
         },
+        selectedField: {
+            get: function() {
+                return browser.element('.selectedFormElement');
+            }
+        },
         success: {
             get: function() {
                 return browser.element('.notification-success');
             }
         },
-
         // methods
         delete: {
             value: function(index) {
@@ -73,15 +77,14 @@
                 browser.pause(5000);
             }
         },
-        dragJiggleAndDrop: {
-            // drags vert then jiggles horz to induce the preview
-            // because dragAndDrop doesn't do the trick
+        slowDragAndDrop: {
+            // pauses after clicking on source because dragAndDrop fails
             value: function(source, target) {
                 let label = browser.element(source).getText();
                 browser.moveToObject(source);
                 browser.buttonDown();
                 // jiggle on target until preview appears
-                this.jiggleCursor(target, label);
+                this.slowDrag(target, label);
                 browser.buttonUp();
                 browser.pause(5000);
             }
@@ -106,18 +109,18 @@
                 // whereas findFieldByIndex is one-based
                 source = this.findFieldByIndex(labels.indexOf(source) + 1);
                 target = this.findFieldByIndex(labels.indexOf(target) + 1);
-                this.dragJiggleAndDrop(source, target);
+                this.slowDragAndDrop(source, target);
             }
         },
-        jiggleCursor: {
+        slowDrag: { // apologies to Scott Joplin
             value: function(target, label) {
                 browser.waitUntil(function() {
-                    // jiggle cursor on target until it updates with expected label
+                    // pause (after caller just pressed keyDown), then move
+                    // cursor to target and wait until it updates with expected label
+                    browser.pause(1000);
                     browser.moveToObject(target);
-                    browser.moveToObject(target, 0, 0);
                     return label === browser.element(target).getText();
                 }, 5000, 'expected target preview to display source label after dragging');
-
             }
         },
         open: {
@@ -130,6 +133,73 @@
                 topNavPO.modifyThisForm.click();
                 browser.pause(5000);
                 return this.formContainer.waitForVisible();
+            }
+        },
+        KB_focusField: {
+            value: function(index) {
+                this.KB_focusForm();
+                // focus field at specified index using tab key
+                for (let i = 0; i < index; i++) {
+                    browser.keys(['Tab']);
+                }
+            }
+        },
+        KB_focusForm: {
+            value: function() {
+                // assumes that the page has just been invoked & nothing has focus
+                return browser.keys([
+                    'Tab', // hamburger
+                    'Tab', // User
+                    'Tab', // Filter
+                    'Tab', // formSection
+                    'Enter']); // redirect input to form/fields
+            }
+        },
+        KB_moveField: {
+            value: function(source, target) {
+                let originalOrder = this.getFieldLabels();
+                this.KB_selectField(source);
+                let sourceField = this.selectedField.getText();
+                browser.keys(['Shift']);
+                let arrowKey = source < target ? 'ArrowDown' : 'ArrowUp';
+                let distance = Math.abs(source - target);
+                for (let i = 0; i < distance; i++) {
+                    browser.keys([arrowKey]); // up or down
+                }
+                browser.keys(['Shift']); // release modifier key
+                browser.pause(5000);
+                let revisedOrder = this.getFieldLabels();
+                expect(originalOrder).not.toEqual(revisedOrder);
+                expect(revisedOrder[target - 1]).toEqual(sourceField);
+                return revisedOrder;
+            }
+        },
+        KB_removeFieldViaIcon: {
+            value: function(index) {
+                this.KB_selectField(index);
+                let deletedField = this.selectedField.getText();
+                browser.keys(['Tab', 'Enter']); // select & press DELETE icon
+                browser.pause(5000);
+                expect(this.getFieldLabels()).not.toContain(deletedField);
+                return deletedField;
+            }
+        },
+        KB_removeFieldViaBackspaceKey: {
+            value: function(index) {
+                this.KB_selectField(index); // field doesn't need to be selected
+                let deletedField = this.selectedField.getText();
+                this.selectedField.keys(['Backspace']); // press DELETE key
+                browser.pause(5000);
+                expect(this.getFieldLabels()).not.toContain(deletedField);
+                return deletedField;
+            }
+        },
+        KB_selectField: {
+            value: function(index) {
+                this.KB_focusField(index);
+                browser.keys(['Enter']); // select field
+                browser.pause(5000);
+                return this.selectedField.getText();
             }
         },
     });

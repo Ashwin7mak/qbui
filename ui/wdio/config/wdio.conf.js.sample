@@ -33,8 +33,6 @@ exports.config = {
         // disabling formPermissionsViewerRole test as after moving to ExperienceEngine,
         // permissions for viewer are not working correctly
         './ui/wdio/tests/forms/formPermissionsViewerRole.e2e.spec.js',
-        // currently intermittently broken in CI need to fix in another PR
-        './ui/wdio/tests/forms/formDragDrop.e2e.spec.js'
     ],
     // Custom suites to execute. Add the --suite *name,name* to your IntelliJ config or command line call
     suites: {
