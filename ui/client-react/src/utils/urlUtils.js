@@ -5,7 +5,7 @@ import WindowLocationUtils from '../utils/windowLocationUtils';
 import CommonUrlUtils from '../../../common/src/commonUrlUtils';
 import StringUtils from '../utils/stringUtils';
 
-import {SUPPORT_LINK_PATH, REPORT_LINK, CHILD_REPORT_LINK, USERS_ROUTE, BUILDER_ROUTE} from '../constants/urlConstants';
+import {SUPPORT_LINK_PATH, REPORT_LINK, CHILD_REPORT_LINK, USERS_ROUTE, BUILDER_ROUTE, SETTINGS_ROUTE} from '../constants/urlConstants';
 
 const UrlUtils = {
     getIconForProtocol(protocol) {
@@ -92,6 +92,13 @@ const UrlUtils = {
      */
     getAfterTableCreatedLink(appId, tblId) {
         return `${BUILDER_ROUTE}/app/${appId}/table/${tblId}/form/1`;
+    },
+
+    /**
+     * Get the link for Table Properties & Settings page
+     */
+    getTableSettingsLink(appId, tableId) {
+        return `${SETTINGS_ROUTE}/app/${appId}/table/${tableId}/properties`;
     }
 };
 

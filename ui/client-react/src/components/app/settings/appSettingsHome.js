@@ -24,7 +24,7 @@ const AppSettingsHome = React.createClass({
     },
 
     constructSettingsLink(setting) {
-        return `${UrlConstants.APP_ROUTE}/${this.props.appId}/${setting}`;
+        return `${UrlConstants.SETTINGS_ROUTE}/app/${this.props.appId}/${setting}`;
     },
 
     render() {
