@@ -6,6 +6,7 @@ import AppHistory from '../globals/appHistory';
 import PerfLogUtils from "../utils/perf/perfLogUtils";
 import NavWrapper from "../components/nav/navWrapper";
 import BuilderWrapper from '../components/builder/builderWrapper';
+import SettingsWrapper from '../components/settings/settingsWrapper';
 import AppsRoute from "../components/apps/appsRoute";
 import AppHomePageRoute from "../components/app/appHomePageRoute";
 import ReportRoute from "../components/report/reportRoute";
@@ -18,11 +19,12 @@ import * as FeatureSwitchActions from '../actions/featureSwitchActions';
 import AppSettingsRoute from "../components/app/settings/appSettingsRoute";
 import AppUsersRoute from "../components/app/settings/categories/appUsersRoute";
 import AppPropertiesRoute from "../components/app/settings/categories/appPropertiesRoute";
+import TablePropertiesRoute from "../components/table/settings/tablePropertiesRoute";
 import AppsBundleLoader from '../locales/appsBundleLoader';
 import config from '../config/app.config';
 
 import Logger from "../utils/logger";
-import {APPS_ROUTE, APP_ROUTE, BUILDER_ROUTE, ADMIN_ROUTE} from '../constants/urlConstants';
+import {APPS_ROUTE, APP_ROUTE, BUILDER_ROUTE, ADMIN_ROUTE, SETTINGS_ROUTE} from '../constants/urlConstants';
 
 import {editRecordCancel, createRecord, updateRecord} from '../actions/recordActions';
 
@@ -54,6 +56,7 @@ const mapStateToProps = (state) => {
 };
 const ConnectedNav = connect(mapStateToProps)(NavWrapper); // pass Redux state as qbui prop
 const ConnectedBuilderNav = connect(mapStateToProps)(BuilderWrapper); // pass Redux state as qbui prop
+const ConnectedSettingsNav = connect(mapStateToProps)(SettingsWrapper); // pass Redux state as qbui prop
 
 // init the localization services
 AppsBundleLoader.changeLocale(config.locale.default);
@@ -79,9 +82,7 @@ render((
 
             <Route path={`${APP_ROUTE}/:appId`} component={ConnectedNav} >
                 <IndexRoute component={AppHomePageRoute} />
-                <Route path="settings" component={AppSettingsRoute} />
                 <Route path="users" component={AppUsersRoute} />
-                <Route path="properties" component={AppPropertiesRoute} />
                 <Route path="table/:tblId" component={TableHomePageRoute} />
                 <Route path="table/:tblId/report/:rptId" component={ReportRoute} />
                 <Route path="table/:tblId/report/:rptId/record/:recordId" component={RecordRoute} />
@@ -90,6 +91,12 @@ render((
 
             <Route path={`${BUILDER_ROUTE}/app/:appId`} component={ConnectedBuilderNav}>
                 <Route path="table/:tblId/form(/:formId)" component={FormBuilderContainer} />
+            </Route>
+
+            <Route path={`${SETTINGS_ROUTE}`} component={ConnectedSettingsNav}>
+                <Route path="app/:appId" component={AppSettingsRoute} />
+                <Route path="app/:appId/properties" component={AppPropertiesRoute} />
+                <Route path="app/:appId/table/:tblId/properties" component={TablePropertiesRoute} />
             </Route>
 
         </Router>
