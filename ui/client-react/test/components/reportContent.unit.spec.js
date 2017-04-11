@@ -407,8 +407,8 @@ const props = {
     editRecordValidateField: () => {},
     addBlankRecordToReport: () => {},
     deleteRecord: () => {},
-    updateRecord: () => {return Promise.resolve()},
-    createRecord: () => {return Promise.resolve()}
+    updateRecord: () => {return Promise.resolve();},
+    createRecord: () => {return Promise.resolve();}
 };
 
 const fakeReportGroupDataTemplate = {
@@ -1494,7 +1494,8 @@ describe('ReportContent functions', () => {
             pendEdits: edits,
             fields: fakeReportDataFieldsSimple.fields.data,
             colList: colList,
-            showNotificationOnSuccess: true
+            showNotificationOnSuccess: true,
+            addNewRow: false
         };
         expect(props.updateRecord).toHaveBeenCalledWith(props.appId, props.tblId, 100, params);
     });
