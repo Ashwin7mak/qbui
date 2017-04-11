@@ -907,6 +907,9 @@ export const ReportContent = React.createClass({
         columns.map((column) => {
             if (column.fieldDef.isHidden === undefined) {
                 column.fieldDef.isHidden = false;
+                if (column.fieldDef.id === 7) {
+                    column.fieldDef.isHidden = true;
+                }
             }
         });
 

@@ -245,32 +245,50 @@ const report = (state = [], action) => {
         return reports;
     }
     case types.ADD_COLUMN_SUCCESS: {
+        // function that sets all columns to the correct order property based on its location in the list
+        function reorder(columns) {
+            let newOrder = 1;
+            columns.map((column) => {
+                column.order = newOrder++;
+            });
+        }
+
         let currentReport = getReportFromState(action.id);
         if (currentReport) {
             let columns = currentReport.data.columns;
             let params = action.content;
+            let addBefore = params.addBefore;
+            let clickedId = params.clickedId;
+
+            let requestedColumn = params.requested;
+            let requestedColumnIndex = requestedColumn.order - 1;
+            // remove the column that is going to get shown
+            let columnMoving = columns.splice(requestedColumnIndex, 1)[0];
+            reorder(columns);
 
             // searches through the current columns to find the one that was selected
-            let clickedColumn;
-            let columnToAdd = params.requested;
-            for (let currentColumnIndex = 0; currentColumnIndex < columns.length; currentColumnIndex++) {
-                let column = columns[currentColumnIndex];
-                if (column.id === params.clickedId) {
-                    clickedColumn = columns[currentColumnIndex];
-                }
-            }
+            let clickedColumnIndex = columns.filter((column) => {
+                return column.fieldDef.id === clickedId;
+            })[0].order - 1;
 
-            columnToAdd.fieldDef.isHidden = false;
-
-            /*let indexedOrder = clickedColumn.order - 1;
-            // correctly position the new column in the table
-            if (params.addBefore) {
-                columns.splice(indexedOrder, 0, columnToAdd);
-                clickedColumn.order += 1
+            // add before or after the clicked column
+            let insertionIndex;
+            if (addBefore) {
+                insertionIndex = clickedColumnIndex;
             } else {
-                columns.splice(indexedOrder + 1, 0, columnToAdd);
-            }*/
+                insertionIndex = clickedColumnIndex + 1;
+            }
+            // insert the removed column in the correct place in the columns list
+            columns.splice(insertionIndex, 0, columnMoving);
+            reorder(columns);
 
+            // show the currently hidden column that was just added
+            columns.map(column => {
+                if (column.fieldDef.id === requestedColumn.fieldDef.id) {
+                    column.fieldDef.isHidden = false;
+                }
+                return column;
+            });
             return newState(currentReport);
         }
         return state;

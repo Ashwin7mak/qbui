@@ -309,7 +309,8 @@ export default {
                     uncheckedToChecked: "Group unchecked to checked",
                     checkedToUnchecked: "Group checked to unchecked"
                 },
-                addColumn: "Add a column",
+                addColumnBefore: "Add column before",
+                addColumnAfter: "Add column after",
                 hideColumn: "Hide this column",
                 newTable: "New table based on this column",
                 columnProps: "Column properties",

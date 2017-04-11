@@ -312,8 +312,11 @@ export const Nav = React.createClass({
     addColumnToTable(columnData, reportData) {
         let params = {
             clickedId: this.props.shell.fieldsSelectMenu.clickedId,
-            requested: columnData
+            requested: columnData,
+            addBefore: this.props.shell.fieldsSelectMenu.addBefore
         };
+
+        console.log(reportData);
 
         this.props.addColumnToTable(CONTEXT.REPORT.NAV, reportData.appId, reportData.tblId, reportData.rptId, params);
     },

@@ -17,7 +17,8 @@ const shell = (
         i18n: Locale.getI18nBundle(),
         fieldsSelectMenu: {
             clickedId: null,
-            fieldsListCollapsed: true
+            fieldsListCollapsed: true,
+            addBefore: null,
         }
 
     },
@@ -88,7 +89,8 @@ const shell = (
             ...state,
             fieldsSelectMenu: {
                 clickedId: action.content.clickedId,
-                fieldsListCollapsed: false
+                fieldsListCollapsed: false,
+                addBefore: action.content.addBefore
             }
         };
         case types.CLOSE_FIELD_SELECTOR:
@@ -96,7 +98,8 @@ const shell = (
             ...state,
             fieldsSelectMenu: {
                 clickedId: action.content.clickedId,
-                fieldsListCollapsed: true
+                fieldsListCollapsed: true,
+                addBefore: action.content.addBefore
             }
         };
     default:
