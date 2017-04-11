@@ -194,7 +194,8 @@ const record = (state = [], action) => {
                 appId: action.content.appId,
                 tblId: action.content.tblId,
                 recId: UNSAVED_RECORD_ID,
-                isInlineEdit: true
+                isInlineEdit: true,
+                fieldToStartEditing: _.has(currentRecd, 'pendEdits') ? currentRecd.pendEdits.fieldToStartEditing : null
             };
             model.setEditRecordStart(obj);
             newRecd.pendEdits = model.get();
@@ -294,8 +295,7 @@ const record = (state = [], action) => {
             delete currentRecd.pendEdits;
             return newState(currentRecd);
         }
-
-        return state.length === 1 ? newState(state[0]) : state;
+        return state;
     }
     default:
         // by default, return existing state

@@ -248,7 +248,6 @@ const report = (state = [], action) => {
         }
         return state;
     }
-    case types.EDIT_RECORD_CANCEL:
     case types.REMOVE_BLANK_REPORT_RECORD:
         let currentReport = getReportFromState(action.id);
         if (currentReport && action.content) {
