@@ -101,11 +101,10 @@
         right: 0;
         left: auto;
         z-index: $zindex-navbar-menu;
-        top: 37px;
+        top: 36px;
     }
 
     .topNav .dropdown {
-
         a.dropdownToggle {
             display: inline-block;
             cursor: pointer;
@@ -128,7 +127,6 @@
         .builder {
             padding-right: 10px;
         }
-
 
         .link {
             cursor: pointer;
