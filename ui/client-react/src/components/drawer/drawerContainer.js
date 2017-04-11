@@ -2,6 +2,7 @@ import React, {PropTypes} from 'react';
 import _ from 'lodash';
 
 import Drawer from './drawer';
+import {RecordRouteWithUniqueId} from '../../components/record/recordRoute';
 import './drawer.scss';
 
 /**
@@ -29,6 +30,7 @@ class DrawerContainer extends React.Component {
                     <Drawer visible={true} key={drawerRecordId} keyboardOnCancel={()=> {console.log('hey');}}>
                         <div>{appId + drawerRecordId}</div>
                         {/* TODO: render RecordWrapper*/}
+                        <RecordRouteWithUniqueId {...this.props} loadDrawerContainer={true}/>
                     </Drawer>);
             });
             return map;

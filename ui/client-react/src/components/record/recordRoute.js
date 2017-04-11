@@ -17,6 +17,7 @@ import Locale from '../../locales/locales';
 import Loader from 'react-loader';
 import RecordHeader from './recordHeader';
 import DrawerContainer from '../drawer/drawerContainer';
+import withUniqueId from '../../components/hoc/withUniqueId';
 import Breakpoints from '../../utils/breakpoints';
 import WindowLocationUtils from '../../utils/windowLocationUtils';
 import * as SpinnerConfigurations from '../../constants/spinnerConfigurations';
@@ -52,10 +53,12 @@ export const RecordRoute = React.createClass({
 
         // ensure the search input is empty
         this.props.clearSearchInput();
-        if (this.props.loadContainer && this.props.location.search.includes('Drawer')) {
+        if (this.props.loadDrawerContainer && this.props.location.pathname.includes('drawers')) {
             let arr = this.props.location.search.split('&');
-            const drawerRecId = arr[1].split('=')[1];
-            const drawerTableId = arr[2].split('=')[1];
+            //const drawerRecId = arr[1].split('=')[1];
+            //const drawerTableId = arr[2].split('=')[1];
+            const drawerTableId = '0duiiaaaaa2';
+            const drawerRecId = '2';
             this.props.loadForm(appId, drawerTableId, rptId, formType, drawerRecId, this.props.uniqueId);
         } else {
             this.props.loadForm(appId, tblId, rptId, formType, recordId, 'view');
@@ -279,39 +282,44 @@ export const RecordRoute = React.createClass({
             {msg: 'unimplemented.delete', icon:'delete', disabled:true}];
 
         // TODO: onCloseHandler, add to Proptypes, icon, i18nMessage for other languages
-        if (true || this.props.closeRecord) {
+        if (this.props.loadDrawerContainer) {
             actions.push({msg: 'pageActions.close', icon:'close', onClick: () => {console.log('pass in this.props.onCloseHandler');}});
         }
 
         return (<IconActions className="pageActions" actions={actions} {...this.props}/>);
     },
 
+    shouldRenderDrawers() {
+        // TODO: update this when upgrading to React Router 4 work is done.
+        const hasDrawers = _.get(this, 'props.location.pathname', '').indexOf('drawers') > -1;
+        return hasDrawers && !this.props.loadDrawerContainer;
+    },
+
     /**
      * Render drawer container (if url instructs us to render drawers).
      */
     getDrawerContainer() {
-        // TODO: update this when upgrading to React Router 4 work is done.
-        const hasDrawers = this.props.location.pathname.indexOf('drawers') > -1;
-        const drawerTableIds = ['0duiiaaaaa2'];
-        const drawerRecordIds = ['2'];
-
-        if (hasDrawers) {
+        if (this.shouldRenderDrawers()) {
+            // this is the root recordRoute instance, render Drawers if any
+            const drawerTableIds = ['0duiiaaaaa2'];
+            const drawerRecordIds = ['2'];
             const appId = _.get(this, 'props.params.appId');
             return (
                 <DrawerContainer
+                    {...this.props}
                     appId={appId}
                     visible={true}
                     drawerTableIds={drawerTableIds}
                     drawerRecordIds={drawerRecordIds}
                 />);
         } else {
+            // Drawers don't render nested drawers.
             return null;
         }
     },
 
     fakeOpenDrawerLink() {
         const link = this.props.location.pathname + '/drawers';
-        //console.log(link);
 
         return <Link to={link} >Load Them Drawers, YO!</Link>;
     },
@@ -336,8 +344,7 @@ export const RecordRoute = React.createClass({
     /**
      * only re-render when our form data has changed */
     shouldComponentUpdate(nextProps) {
-
-        if (this.props.location.search.includes('Drawer')) {
+        if (/*!this.props.location.pathname.includes('drawers') &&*/ nextProps.location.pathname.includes('drawers')) {
             //TODO: add a check to see if drawer component data got updated
             return true;
         }
@@ -426,7 +433,7 @@ export const RecordRoute = React.createClass({
                     {!formLoadingErrorStatus ?
                         <Loader key={key}
                                 loaded={(!viewData || !viewData.loading)}
-                                options={SpinnerConfigurations.TROWSER_CONTENT}>
+                                options={SpinnerConfigurations.DRAWER_CONTENT}>
                             <Record key={key}
                                     selectedApp={this.props.selectedApp}
                                     appId={this.props.params.appId}
@@ -439,7 +446,7 @@ export const RecordRoute = React.createClass({
                         </Loader> : null }
                     {formInternalError && <pre><I18nMessage message="form.error.500"/></pre>}
                     {formAccessRightError && <pre><I18nMessage message="form.error.403"/></pre>}
-                    {!this.props.loadContainer && this.props.location.search.includes('Drawer') ? <RecordDrawerContainer {...this.props}/> : ''}
+                    {false && !this.props.loadContainer && this.props.location.search.includes('Drawer') ? <RecordDrawerContainer {...this.props}/> : ''}
 
                     {!formLoadingErrorStatus &&
                         this.getDrawerContainer()
@@ -489,10 +496,11 @@ export const ConnectedRecordRoute = connect(
     mapDispatchToProps
 )(RecordRoute);
 
-export default connect(
+// why do we have 2 connected RecordRoutes exported?
+const ConnectedRecordRouteWithRouter = connect(
     mapStateToProps,
     mapDispatchToProps
 )(RecordRouteWithRouter);
-RecordRoute.defaultProps  = {
-    loadContainer : false
-};
+export default ConnectedRecordRouteWithRouter;
+
+export const RecordRouteWithUniqueId = withUniqueId(ConnectedRecordRouteWithRouter);
