@@ -240,8 +240,9 @@
 
     .loadedContent {
         padding: 0 10px;
-        min-height: 300px;
+        min-height: 285px; // allow space for cell header dropdown menu
     }
+
     &.loading {
         min-height: 70px; // allow space for the loader spinner
         overflow: hidden;
