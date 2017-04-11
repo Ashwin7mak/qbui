@@ -83,8 +83,9 @@ function createEditRecordEventObject(appId, tblId, recId, origRec, changes, isIn
  * @param previousRecordId
  * @returns {{id, type, content}|{id: *, type: *, content: *}}
  */
-export const openRecord = (recId, nextRecordId, previousRecordId) => {
-    return event(recId, types.OPEN_RECORD, {recId, nextRecordId, previousRecordId});
+export const openRecord = (recId, nextRecordId, previousRecordId, uniqueId) => {
+    uniqueId = uniqueId || recId;
+    return event(uniqueId, types.OPEN_RECORD, {recId, nextRecordId, previousRecordId});
 };
 
 /**

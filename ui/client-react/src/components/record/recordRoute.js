@@ -16,8 +16,6 @@ import {withRouter} from 'react-router';
 import Locale from '../../locales/locales';
 import Loader from 'react-loader';
 import RecordHeader from './recordHeader';
-import DrawerContainer from '../drawer/drawerContainer';
-import withUniqueId from '../../components/hoc/withUniqueId';
 import Breakpoints from '../../utils/breakpoints';
 import WindowLocationUtils from '../../utils/windowLocationUtils';
 import * as SpinnerConfigurations from '../../constants/spinnerConfigurations';
@@ -29,15 +27,17 @@ import {openRecord} from '../../actions/recordActions';
 import {clearSearchInput} from '../../actions/searchActions';
 import {APP_ROUTE, BUILDER_ROUTE, EDIT_RECORD_KEY} from '../../constants/urlConstants';
 import {CONTEXT} from '../../actions/context';
-
-import '../drawer/drawer.scss';
-import '../drawer/drawerContainer.scss';
 import RecordDrawerContainer from '../QBForm/recordDrawer';
 import './record.scss';
+import withUniqueId from '../hoc/withUniqueId';
+import DrawerContainer from '../drawer/drawerContainer';
+import '../drawer/drawer.scss';
+import '../drawer/drawerContainer.scss';
 
 let logger = new Logger();
 let FluxMixin = Fluxxor.FluxMixin(React);
-
+let drawerRecId;
+let drawerTableId;
 /**
  * record route component
  *
@@ -53,13 +53,14 @@ export const RecordRoute = React.createClass({
 
         // ensure the search input is empty
         this.props.clearSearchInput();
-        if (this.props.loadDrawerContainer && this.props.location.pathname.includes('drawers')) {
+        if (this.props.loadDrawerContainer && this.props.location.search.includes('drawer')) {
             let arr = this.props.location.search.split('&');
-            //const drawerRecId = arr[1].split('=')[1];
-            //const drawerTableId = arr[2].split('=')[1];
-            const drawerTableId = '0duiiaaaaa2';
-            const drawerRecId = '2';
             this.props.loadForm(appId, drawerTableId, rptId, formType, drawerRecId, this.props.uniqueId);
+            const embeddedReport = _.find(this.props.embeddedReports, function(o) {
+                return o.tblId === drawerTableId ;
+            });
+            const recordsArray = embeddedReport !== undefined ? embeddedReport.data.records : [];
+            this.navigateToRecord(drawerRecId, embeddedReport, recordsArray);
         } else {
             this.props.loadForm(appId, tblId, rptId, formType, recordId, 'view');
         }
@@ -84,7 +85,7 @@ export const RecordRoute = React.createClass({
 
     componentDidUpdate(prev) {
 
-        const viewData = this.getViewFormFromProps();
+        const viewData = this.getFormFromProps();
 
         if (this.props.params.appId !== prev.params.appId ||
             this.props.params.tblId !== prev.params.tblId ||
@@ -159,19 +160,19 @@ export const RecordRoute = React.createClass({
         return recordsArray;
     },
 
-    navigateToRecord(recId) {
+    navigateToRecord(recId, reportData, records) {
         if (recId) {
-            const {data} = this.props.reportData;
+            const {data} = reportData || this.props.reportData;
             const key = _.has(data, 'keyField.name') ? data.keyField.name : '';
             if (key) {
-                let recordsArray = this.getRecordsArray() || [];
+                let recordsArray = records || this.getRecordsArray() || [];
 
                 //  fetch the index of the row in the recordsArray that is being opened
                 const index = _.findIndex(recordsArray, rec => rec[key] && rec[key].value === recId);
                 let nextRecordId = (index < recordsArray.length - 1) ? recordsArray[index + 1][key].value : null;
                 let previousRecordId = index > 0 ? recordsArray[index - 1][key].value : null;
 
-                this.props.openRecord(recId, nextRecordId, previousRecordId);
+                this.props.openRecord(recId, nextRecordId, previousRecordId, this.props.uniqueId);
             }
         }
     },
@@ -200,8 +201,8 @@ export const RecordRoute = React.createClass({
         this.props.router.push(link);
     },
 
-    getTitle() {
-        const {recordId} = this.props.params;
+    getTitle(recIdTitle) {
+        const recordId = recIdTitle || this.props.params.recordId;
         const isSmall = Breakpoints.isSmallBreakpoint();
         const tableName = this.props.selectedTable ? this.props.selectedTable.name : '';
         return <div className="title">
@@ -213,14 +214,16 @@ export const RecordRoute = React.createClass({
         if (this.props.params) {
             const {appId, tblId, rptId} = this.props.params;
             const record = this.getRecordFromProps(this.props);
-
+            let recordIdTitle;
             const tableLink = `${APP_ROUTE}/${appId}/table/${tblId}`;
 
             //  ensure the property exists and it has some content
             const reportName = _.has(this.props.reportData, 'data.name') && this.props.reportData.data.name ? this.props.reportData.data.name : Locale.getMessage('nav.backToReport');
             const showBack = !!(this.props.reportData && record.previousRecordId !== null);
             const showNext = !!(this.props.reportData && record.nextRecordId !== null);
-
+            if (this.props.uniqueId) {
+                recordIdTitle = drawerRecId;
+            }
             return (<div className="recordStageHeadline">
 
                 <div className="navLinks">
@@ -244,7 +247,7 @@ export const RecordRoute = React.createClass({
                             <Button className="iconActionButton nextRecord" disabled={true} onClick={this.nextRecord}><QBicon icon="caret-filled-right"/></Button>}
                     </div> }
 
-                    {this.getTitle()}
+                    {this.getTitle(recordIdTitle)}
 
                 </div>
             </div>);
@@ -291,7 +294,7 @@ export const RecordRoute = React.createClass({
 
     shouldRenderDrawers() {
         // TODO: update this when upgrading to React Router 4 work is done.
-        const hasDrawers = _.get(this, 'props.location.pathname', '').indexOf('drawers') > -1;
+        const hasDrawers = _.get(this, 'props.location.search', '').indexOf('drawer') > -1;
         return hasDrawers && !this.props.loadDrawerContainer;
     },
 
@@ -330,7 +333,7 @@ export const RecordRoute = React.createClass({
      * @param formType
      * @returns {boolean|*|HTMLCollection}
      */
-    getViewFormFromProps(props = this.props) {
+    getFormFromProps(props = this.props) {
         if (props.uniqueId) {
             return _.get(props, `forms[${props.uniqueId}]`);
         }
@@ -338,18 +341,22 @@ export const RecordRoute = React.createClass({
     },
 
     getRecordFromProps(props = this.props) {
-        return _.nth(props.record, 0) || {};
+        if (this.props.uniqueId) {
+            return  _.find(props.record, rec => rec.id === props.uniqueId) || {};
+        } else {
+            return  _.find(props.record, rec => rec.id.toString() === props.params.recordId) || {};
+        }
     },
 
     /**
      * only re-render when our form data has changed */
     shouldComponentUpdate(nextProps) {
-        if (/*!this.props.location.pathname.includes('drawers') &&*/ nextProps.location.pathname.includes('drawers')) {
+        if (/*!this.props.location.pathname.includes('drawers') &&*/ nextProps.location.search.includes('drawer')) {
             //TODO: add a check to see if drawer component data got updated
             return true;
         }
-        const viewData = this.getViewFormFromProps();
-        const nextData = this.getViewFormFromProps(nextProps);
+        const viewData = this.getFormFromProps();
+        const nextData = this.getFormFromProps(nextProps);
 
         return !viewData ||
             !_.isEqual(viewData.formData, nextData.formData) ||
@@ -366,30 +373,10 @@ export const RecordRoute = React.createClass({
      * @param recId
      */
     renderDrawerContainer(tblId, recId) {
-        //TODO : call windowutils pushWithQuery(key, value) ?
-        // const embeddedReport = _.find(this.props.embeddedReports, function(o) {
-        //     return o.tblId === tblId ;
-        // });
-        // this.props.loadContainer = true;
-        // const {data} = embeddedReport;
-        // const key = _.has(data, 'keyField.name') ? data.keyField.name : '';
-        // if (key) {
-        //     let recordsArray = embeddedReport !== undefined ? embeddedReport.data.records : [];
-        //
-        //     //  fetch the index of the row in the recordsArray that is being opened
-        //     const index = _.findIndex(recordsArray, rec => rec[key] && rec[key].value === recId);
-        //     let nextRecordId = (index < recordsArray.length - 1) ? recordsArray[index + 1][key].value : null;
-        //     let previousRecordId = index > 0 ? recordsArray[index - 1][key].value : null;
-        //
-        //     this.props.openRecord(recId, nextRecordId, previousRecordId, tblId);
-        WindowLocationUtils.pushWithQuery('DrawerRecId', recId);
-        WindowLocationUtils.pushWithQuery('DrawerTableId', tblId);
-        console.log(this.props.location);
-        // }
-    },
-
-    getDrawer() {
-     //TODO : Drawer Component
+        drawerRecId = recId;
+        drawerTableId = tblId;
+        WindowLocationUtils.pushWithQuery('drawerRecId', recId);
+        WindowLocationUtils.pushWithQuery('drawerTableId', tblId);
     },
 
     /**
@@ -407,7 +394,7 @@ export const RecordRoute = React.createClass({
             logger.info("the necessary params were not specified to recordRoute render params=" + simpleStringify(this.props.params));
             return null;
         } else {
-            const viewData = this.getViewFormFromProps();
+            const viewData = this.getFormFromProps();
 
             const formLoadingErrorStatus = viewData && viewData.errorStatus;
             const formInternalError = (formLoadingErrorStatus === 500);
@@ -449,7 +436,7 @@ export const RecordRoute = React.createClass({
                     {false && !this.props.loadContainer && this.props.location.search.includes('Drawer') ? <RecordDrawerContainer {...this.props}/> : ''}
 
                     {!formLoadingErrorStatus &&
-                        this.getDrawerContainer()
+                    this.getDrawerContainer()
                     }
                     {this.fakeOpenDrawerLink()}
                 </div>);
@@ -463,8 +450,8 @@ export const RecordRoute = React.createClass({
 const mapStateToProps = (state, ownProps) => {
     return {
         forms: state.forms,
-        record: state.record
-        // embeddedReports: state.embeddedReports
+        record: state.record,
+        embeddedReports: state.embeddedReports
         //Todo: get reports from state and remove as a passed prop
     };
 };
@@ -479,8 +466,8 @@ const mapDispatchToProps = (dispatch) => {
         loadForm: (appId, tblId, rptId, formType, recordId, context) => {
             dispatch(loadForm(appId, tblId, rptId, formType, recordId, context));
         },
-        openRecord: (recId, nextId, prevId, tblId) => {
-            dispatch(openRecord(recId, nextId, prevId, tblId));
+        openRecord: (recId, nextId, prevId, tblId, uniqueId) => {
+            dispatch(openRecord(recId, nextId, prevId, tblId, uniqueId));
         },
         clearSearchInput: () => {
             dispatch(clearSearchInput());
