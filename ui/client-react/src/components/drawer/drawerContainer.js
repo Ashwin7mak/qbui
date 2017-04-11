@@ -28,7 +28,6 @@ class DrawerContainer extends React.Component {
             const map =  drawerRecordIds.map(drawerRecordId => {
                 return (
                     <Drawer visible={true} key={drawerRecordId} keyboardOnCancel={()=> {console.log('hey');}}>
-                        <div>{appId + drawerRecordId}</div>
                         {/* TODO: render RecordWrapper*/}
                         <RecordRouteWithUniqueId {...this.props} loadDrawerContainer={true}/>
                     </Drawer>);

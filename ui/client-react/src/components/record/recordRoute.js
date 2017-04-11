@@ -64,7 +64,7 @@ export const RecordRoute = React.createClass({
             this.props.loadForm(appId, tblId, rptId, formType, recordId, 'view');
         }
     },
-    loadRecordFromParams(params) {
+    loadRecordFromParams(params = this.props.params) {
         const {appId, tblId, recordId, rptId} = params;
 
         if (appId && tblId && recordId) {
@@ -79,7 +79,7 @@ export const RecordRoute = React.createClass({
         flux.actions.hideTopNav();
         flux.actions.setTopTitle();
 
-        this.loadRecordFromParams(this.props.params);
+        this.loadRecordFromParams();
     },
 
     componentDidUpdate(prev) {
@@ -91,7 +91,7 @@ export const RecordRoute = React.createClass({
             this.props.params.recordId !== prev.params.recordId ||
             (viewData && viewData.syncLoadedForm)) {
 
-            this.loadRecordFromParams(this.props.params);
+            this.loadRecordFromParams();
         }
     },
 
@@ -503,4 +503,4 @@ const ConnectedRecordRouteWithRouter = connect(
 )(RecordRouteWithRouter);
 export default ConnectedRecordRouteWithRouter;
 
-export const RecordRouteWithUniqueId = withUniqueId(ConnectedRecordRouteWithRouter);
+export const RecordRouteWithUniqueId = withUniqueId(ConnectedRecordRouteWithRouter, CONTEXT.FORM.DRAWER);
