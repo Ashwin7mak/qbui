@@ -142,7 +142,7 @@
     "jit-grunt": "^0.10.0",
     "jshint-practical": "^0.1.0",
     "jshint-stylish": "~2.2.1",
-    "karma": "^1.4.1",
+    "karma": "~1.4.1",
     "karma-chrome-launcher": "~0.1.12",
     "karma-coffee-preprocessor": "~0.2.1",
     "karma-coverage": "^0.5.5",

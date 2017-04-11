@@ -1,32 +1,27 @@
 import React from 'react';
 import {shallow, mount} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
-
-const I18nMessageMock = ({message}) => <span className="mockI18nMessage">{message}</span>;
-
-import Pagination, {__RewireAPI__ as PaginationRewireAPI} from '../../src/components/pagination/pagination';
+import {I18nMessage} from '../../src/utils/i18nMessage'
 
 const mockParentFunctions = {
-  onChange() {},
+  onClickPrevious() {},
+  onClickNext() {},
 };
+
+import Pagination, {__RewireAPI__ as PaginationRewireAPI} from '../../src/components/pagination/pagination';
 
 describe('Pagination component', () => {
   beforeEach(() => {
       jasmineEnzyme();
-      PaginationRewireAPI.__Rewire__('I18nMessage', ({message}) => <div className="mockMessage">{message}</div>);
-  });
-
-  afterEach(() => {
-    PaginationRewireAPI.__ResetDependency__('I18nMessage');
   });
 
   it('should render a `.reportNavigation` ', () => {
-    const wrapper = mount(<Pagination pagingData={true}/>);
+    const wrapper = mount(<Pagination isHidden={false} />);
     expect(wrapper.find(".reportNavigation")).toBePresent();
   });
 
   it('should render a `.pageNumbers` ', () => {
-    const wrapper = mount(<Pagination pagingData={true}/>);
+    const wrapper = mount(<Pagination isHidden={false} />);
     expect(wrapper.find(".pageNumbers")).toBePresent();
   });
 
@@ -34,36 +29,48 @@ describe('Pagination component', () => {
     const wrapper = shallow(<Pagination />);
     wrapper.instance().previousPageButton();
   });
-
+  //
   it('has a next page button', () => {
     const wrapper = shallow(<Pagination />);
     wrapper.instance().nextPageButton();
   });
 
   it('has a previous page button that can be clicked', () => {
-  spyOn(mockParentFunctions, 'onChange');
+  spyOn(mockParentFunctions, 'onClickPrevious');
 
-  const component = mount(<Pagination pagingData={true} current={3} total={1000} onChange={mockParentFunctions.onChange}/>);
-  let instance = component.instance();
-  spyOn(instance, '_prev');
+  const component = mount(<Pagination isHidden={false} onClickPrevious={mockParentFunctions.onClickPrevious} />);
 
   component.find('.navigationButtonPrevious').simulate('click');
-  expect(mockParentFunctions.onChange).toHaveBeenCalledWith(2,20);
+  expect(mockParentFunctions.onClickPrevious).toHaveBeenCalled();
   })
 
   it('has a next page button that can be clicked', () => {
-    spyOn(mockParentFunctions, 'onChange');
+  spyOn(mockParentFunctions, 'onClickNext');
 
-  const component = mount(<Pagination pagingData={true} total={1000} onChange={mockParentFunctions.onChange}/>);
-  let instance = component.instance();
-  spyOn(instance, '_next');
+  const component = mount(<Pagination isHidden={false} onClickNext={mockParentFunctions.onClickNext} />);
 
   component.find('.navigationButtonNext').simulate('click');
-  expect(mockParentFunctions.onChange).toHaveBeenCalledWith(2,20);
+  expect(mockParentFunctions.onClickNext).toHaveBeenCalled();
+  })
+
+  it('has a previous page button that is disabled', () => {
+
+  const wrapper = mount(<Pagination isHidden={false} isPreviousDisabled={true} />);
+
+  wrapper.instance().previousPageButton();
+  expect(wrapper.find('.previousButton .disabled')).toBePresent();
+  })
+
+  it('has a next page button that is disabled', () => {
+
+  const wrapper = mount(<Pagination isHidden={false} isNextDisabled={true} />);
+
+  wrapper.instance().nextPageButton();
+  expect(wrapper.find('.nextButton .disabled')).toBePresent();
   })
 
   it('displays a message with page number', () => {
-    const component = mount(<Pagination pagingData={true}/>);
-    expect(component.find('.mockMessage')).toHaveText("report.reportNavigationBar");
+    const wrapper = mount(<Pagination isHidden={false} />);
+    expect(wrapper.find(I18nMessage)).toHaveProp('message', 'report.reportNavigationBar');
   });
-})
+});
