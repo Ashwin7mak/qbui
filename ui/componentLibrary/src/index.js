@@ -62,6 +62,12 @@ import DurationFieldValueEditorDoc from './docs/durationFieldValueEditor.js';
 import QbGridDoc from './docs/qbGrid.js';
 import SideMenuBaseDoc from './docs/sideMenuBase.js';
 import SideTrowserBaseDoc from './docs/sideTrowserBase.js';
+import IconChooserDoc from './docs/iconChooser.js';
+import IconInputBoxDoc from './docs/iconInputBox.js';
+import TopNavDoc from './docs/topNav.js';
+import StageDoc from './docs/stage.js';
+import TooltipDoc from './docs/tooltip.js';
+import StandardLeftNavDoc from './docs/standardLeftNav.js';
 // END OF IMPORT STATEMENTS
 // Above comment used for Grunt task. Please do not delete.
 
@@ -112,6 +118,12 @@ render((
             <Route path="qbGrid" component={QbGridDoc} />
             <Route path="sideMenuBase" component={SideMenuBaseDoc} />
             <Route path="sideTrowserBase" component={SideTrowserBaseDoc} />
+            <Route path="iconChooser" component={IconChooserDoc} />
+            <Route path="iconInputBox" component={IconInputBoxDoc} />
+            <Route path="topNav" component={TopNavDoc} />
+            <Route path="stage" component={StageDoc} />
+            <Route path="tooltip" component={TooltipDoc} />
+            <Route path="standardLeftNav" component={StandardLeftNavDoc} />
         </Route>
     </Router>
 ), document.getElementById('content'));

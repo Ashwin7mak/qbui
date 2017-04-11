@@ -24,6 +24,7 @@ let AppsStore = Fluxxor.createStore({
             actions.LOAD_APPS_FAILED, this.onLoadAppsFailed,
             actions.SELECT_APP, this.onSelectApp,
             actions.SELECT_TABLE, this.onSelectTable,
+            actions.UPDATED_TABLE_PROPS, this.onUpdateTableProps,
 
             actions.LOAD_APP_USERS, this.onLoadAppUsers,
             actions.LOAD_APP_USERS_FAILED, this.onLoadAppUsersFailed,
@@ -114,6 +115,31 @@ let AppsStore = Fluxxor.createStore({
     onSelectTable(tblId) {
         this.selectedTableId = tblId;
 
+        this.emit('change');
+    },
+    /**
+     * A table's props were updated. Find the table in the selected app and replace its details with those passed in.
+     * An example of who updated the table might be user updated table name from settings pages.
+     * @param tblId
+     * @param tableInfo
+     */
+    onUpdateTableProps(payload) {
+        let tblId = payload.tableId;
+        let tableInfo = payload.tableInfo;
+        let newAppsList = this.apps.map((app) => {
+            if (app.id === this.selectedAppId) {
+                let newAppTables = app.tables.map((table) => {
+                    if (table.id === tblId) {
+                        return tableInfo;
+                    } else {
+                        return table;
+                    }
+                });
+                app.tables = newAppTables;
+            }
+            return app;
+        });
+        this.apps = newAppsList;
         this.emit('change');
     },
     getState() {
