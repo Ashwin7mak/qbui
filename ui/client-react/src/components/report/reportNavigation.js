@@ -8,7 +8,7 @@ import Breakpoints from "../../utils/breakpoints";
 import StringUtils from "../../utils/stringUtils";
 import NumberUtils from "../../utils/numberUtils";
 
-import Pagination from "../../../../reuse/client/src/components/pagination/pagination"
+import Pagination from "../../../../reuse/client/src/components/pagination/pagination";
 
 var ReportNavigation = React.createClass({
     propTypes: {
@@ -38,6 +38,9 @@ var ReportNavigation = React.createClass({
         //   component container, to display the correct page end, we set the page end to the total records count if records count
         //   is less than page size for the last page. Hence, the conditions to check for here, are that we are on the first page
         //   (page start is 1) and the number of records is equal to page end
+        if (!this.props.reportData) {
+            return (<div className="spacer"></div>);
+        }
         let isSmall = Breakpoints.isSmallBreakpoint();
         let isError = this.props.reportData.error ? true : false;
         let isLoading = this.props.reportData.loading ? true : false;
@@ -56,8 +59,8 @@ var ReportNavigation = React.createClass({
         let navBar = "report.reportNavigationBar";
         if (showComponent) {
             return (<div className="reportNavigation">
-                        <Pagination isPreviousDisabled={this.props.pageStart == 1}
-                                    isNextDisabled={this.props.recordsCount == this.props.pageEnd}
+                        <Pagination isPreviousDisabled={this.props.pageStart === 1}
+                                    isNextDisabled={this.props.recordsCount === this.props.pageEnd}
                                     onClickPrevious={this.props.getPreviousReportPage}
                                     onClickNext={this.props.getNextReportPage}
                                     startRecord={this.props.pageStart}
@@ -66,7 +69,7 @@ var ReportNavigation = React.createClass({
                         />
                     </div>);
         }
-        return null;
+        return (<div className="spacer"></div>);
     }
 });
 
