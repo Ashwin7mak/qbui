@@ -168,7 +168,7 @@ const record = (state = [], action) => {
         return newState(currentRecd);
     }
     case types.SAVE_RECORD_SUCCESS: {
-        let savedState = state;
+        let savedState = null;
         let currentRecd = getRecordFromState(action.id);
         if (currentRecd) {
             let model = new RecordModel();
@@ -200,7 +200,7 @@ const record = (state = [], action) => {
             newRecd.pendEdits = model.get();
             savedState = newState(newRecd);
         }
-        return savedState;
+        return Array.isArray(savedState) ? savedState : state;
     }
     case types.SAVE_RECORD_ERROR: {
         let currentRecd = getRecordFromState(action.id);
