@@ -241,6 +241,10 @@ div.leftNavTooltip {
         min-height: 40px;
         background-color: $leftnav-app-background-color;
 
+        .toggleAreaLogo {
+            width:80%;
+        }
+
         .toggleNavButton {
             display: none;
             position: absolute;
@@ -594,6 +598,9 @@ div.leftNavTooltip {
         z-index: 9999;
 
         .appsToggleArea {
+            .toggleAreaLogo {
+                width: 50%;
+            }
             .toggleNavButton {
                 display: block;
             }
