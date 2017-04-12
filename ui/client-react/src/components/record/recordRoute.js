@@ -52,8 +52,8 @@ export const RecordRoute = React.createClass({
 
         // ensure the search input is empty
         this.props.clearSearchInput();
-        if (this.props.isDrawerContext && this.props.location.search.includes('drawer')) {
-            let arr = this.props.location.search.split('&');
+        if (this.props.isDrawerContext && window.location.href.includes('drawer')) {
+            let arr = window.location.href.split('&');
             this.props.loadForm(appId, drawerTableId, rptId, formType, drawerRecId, this.props.uniqueId);
             const recordsArray = embeddedReport !== undefined ? embeddedReport.data.records : [];
             this.navigateToRecord(drawerRecId, embeddedReport, recordsArray);
@@ -349,10 +349,10 @@ export const RecordRoute = React.createClass({
     },
 
     fakeOpenDrawerLink() {
-        if (this.props.location.pathname.includes('drawers')) {
+        if (window.location.href.includes('drawers')) {
             return null;
         } else {
-            const link = this.props.location.pathname + '/drawers';
+            const link = window.location.href + '/drawers';
 
             return <Link to={link} >Load Them Drawers, YO!</Link>;
         }
@@ -382,7 +382,7 @@ export const RecordRoute = React.createClass({
     /**
      * only re-render when our form data has changed */
     shouldComponentUpdate(nextProps) {
-        if (/*!this.props.location.pathname.includes('drawers') &&*/ nextProps.location.search.includes('drawer')) {
+        if (/*!this.props.location.pathname.includes('drawers') &&*/ window.location.href.includes('drawer')) {
             //TODO: add a check to see if drawer component data got updated
             return true;
         }
@@ -473,7 +473,7 @@ export const RecordRoute = React.createClass({
                             uniqueId={this.props.uniqueId}
                             loadEntry={this.loadRecordFromParams}
                             unloadEntry={this.unloadRecordFromParams}
-                            hasEntry={!!this.getViewFormFromProps()}
+                            hasEntry={!!this.getFormFromProps()}
                             />}
 
                     {!formLoadingErrorStatus &&
