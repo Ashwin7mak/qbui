@@ -18,8 +18,7 @@ class AutomationUtils  {
             "parameters": {
                 "appId" : appId,
                 "tableId": tblId,
-                "recordId": recId,
-                "record": [{"id":8, "value":true}]
+                "recordId": recId
             }
         };
         return automationService.invokeAutomation("http://localhost:8089", "0duiiaaaaab", "ApproveProjectRecord", payload).then(
