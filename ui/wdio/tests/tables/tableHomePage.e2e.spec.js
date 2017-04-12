@@ -11,9 +11,9 @@
     let e2ePageBase = requirePO('e2ePageBase');
     let RequestAppsPage = requirePO('requestApps');
     let RequestSessionTicketPage = requirePO('requestSessionTicket');
-    let ReportContentPO = require('../../pages/reportContent.po');
+    let ReportContentPO = requirePO('reportContent');
 
-    describe('Report Table Home Page Tests', function() {
+    describe('Reports - Table Home Page Tests', function() {
         let realmName;
         let realmId;
         let app;
@@ -69,7 +69,6 @@
                 let reportEndpoint = e2eBase.recordBase.apiBase.resolveReportsEndpoint(app.id, app.tables[0].id);
                 //Create an Admin report
                 return e2eBase.recordBase.apiBase.executeRequest(reportEndpoint, consts.POST, report3);
-            }).then(function() {
             }).catch(function(error) {
                 // Global catch that will grab any errors from chain above
                 // Will appropriately fail the beforeAll method so other tests won't run
@@ -97,7 +96,7 @@
         }
 
         /**
-         * Data Provider for table homepage for letious user roles
+         * Data Provider for table homepage for various user roles
          */
         function reportHomePageTestCases() {
             return [
@@ -128,8 +127,8 @@
          */
         reportHomePageTestCases().forEach(function(testcase) {
             it('Verify default table home page for ' + testcase.message, function() {
-                //Create a user
                 browser.call(function() {
+                    //Create a user
                     return e2eBase.recordBase.apiBase.createUser().then(function(userResponse) {
                         //parse user ID
                         userId = JSON.parse(userResponse.body).id;
@@ -153,9 +152,6 @@
                     //Assert report title to be expected
                     expect(browser.element('.stageHeadline').getAttribute('textContent')).toBe(testcase.reportTitle);
 
-                    //Assert the number of records
-                    expect(ReportContentPO.reportDisplayedRecordCount()).toBe(numOfRecords);
-
                     //Assert record count displayed is correct
                     expect(browser.element('.recordsCount').getAttribute('textContent')).toBe(numOfRecords + ' records');
                 });
@@ -168,8 +164,8 @@
          */
         it('Negative test to verify personal reports not accessible by other users', function() {
 
-            //Create a user
             browser.call(function() {
+                //Create a user
                 return e2eBase.recordBase.apiBase.createUser().then(function(userResponse) {
                     //parse user ID
                     userId = JSON.parse(userResponse.body).id;
@@ -194,8 +190,8 @@
          */
         it('Positive test to verify that admin has access to all the reports', function() {
 
-            //Create a user
             browser.call(function() {
+                //Create a user
                 return e2eBase.recordBase.apiBase.createUser().then(function(userResponse) {
                     //parse user ID
                     userId = JSON.parse(userResponse.body).id;
@@ -206,7 +202,6 @@
                     //get the user authentication
                     RequestSessionTicketPage.get(e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.recordBase.apiBase.resolveUserTicketEndpoint() + '?uid=' + userId + '&realmId='));
                 });
-                //next - make sure admin have access to all the reports
 
                 //test that admin have access to admin report
                 //Load the report for admin user
