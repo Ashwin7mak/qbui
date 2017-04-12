@@ -208,7 +208,10 @@ const QbGrid = React.createClass({
      * Render a single column
      */
     getColumns() {
-        return this.props.columns.map(column => {
+        let visibleColumns = this.props.columns.filter(column => {
+            return !column.fieldDef.isHidden;
+        });
+        return visibleColumns.map(column => {
             try {
                 column.addFormatter(this.renderCell);
                 if (!this.props.phase1) {

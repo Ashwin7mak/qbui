@@ -6,7 +6,7 @@ import serverTypeConsts from '../../../../../common/src/constants';
 import * as query from '../../../constants/query';
 import {GROUP_TYPE} from '../../../../../common/src/groupTypes';
 
-import {loadDynamicReport} from '../../../actions/reportActions';
+import {loadDynamicReport, hideColumn} from '../../../actions/reportActions';
 import {CONTEXT} from '../../../actions/context';
 
 /**
@@ -87,10 +87,19 @@ const ReportColumnHeaderMenuContainer = (ReportColumnHeaderMenu) => {
             this.props.dispatch(loadDynamicReport(CONTEXT.REPORT.NAV, this.props.appId, this.props.tblId, this.props.rptId, true, this.props.filter, queryParams));
         },
 
+        hideColumn(columnId) {
+            let params = {
+                columnId: columnId
+            };
+
+            this.props.dispatch(hideColumn(CONTEXT.REPORT.NAV, this.props.appId, this.props.tblId, this.props.rptId, params));
+        },
+
         render() {
             return (<ReportColumnHeaderMenu
                 sortReport={this.sortReport}
                 groupReport={this.groupReport}
+                hideColumn={this.hideColumn}
                 {...this.props}
             />);
         }

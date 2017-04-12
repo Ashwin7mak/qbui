@@ -244,6 +244,18 @@ const report = (state = [], action) => {
         });
         return reports;
     }
+    case types.HIDE_COLUMN: {
+        let currentReport = getReportFromState(action.id);
+        if (currentReport) {
+            currentReport.data.columns.map(column => {
+                if (column.fieldDef.id === action.content.columnId) {
+                    column.fieldDef.isHidden = true;
+                }
+            });
+            return newState(currentReport);
+        }
+        return state;
+    }
     default:
         // by default, return existing state
         return state;

@@ -22,6 +22,7 @@ export const ReportColumnHeaderMenu = React.createClass({
         sortFids: PropTypes.array,
         sortReport: PropTypes.func,
         groupReport: PropTypes.func,
+        hideColumn: PropTypes.func,
     },
 
     /**
@@ -160,6 +161,10 @@ export const ReportColumnHeaderMenu = React.createClass({
         this.groupReport(false);
     },
 
+    hideColumn() {
+        this.props.hideColumn(this.props.fieldDef.id);
+    },
+
     render() {
         return (
             <Dropdown bsStyle="default" noCaret id="dropdown-no-caret">
@@ -191,7 +196,9 @@ export const ReportColumnHeaderMenu = React.createClass({
 
                     <MenuItem disabled><I18nMessage message="report.menu.addColumnBefore"/></MenuItem>
                     <MenuItem disabled><I18nMessage message="report.menu.addColumnAfter"/></MenuItem>
-                    <MenuItem disabled><I18nMessage message="report.menu.hideColumn"/></MenuItem>
+                    <MenuItem onSelect={this.hideColumn}>
+                        <I18nMessage message="report.menu.hideColumn"/>
+                    </MenuItem>
                 </Dropdown.Menu>
             </Dropdown>
         );
