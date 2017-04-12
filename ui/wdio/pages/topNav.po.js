@@ -4,12 +4,12 @@
     module.exports = Object.create(e2ePageBase, {
         formBuilderBtn: {
             get: function() {
-                return browser.element('.topNav .dropdown');//formBuilder');
+                return browser.element('.topNav .dropdown');
             }
         },
         modifyThisForm: {
             get: function() {
-                return browser.element('.topNav .modifyForm');//#modifyForm');
+                return browser.element('.topNav .modifyForm');
             }
         },
     });
