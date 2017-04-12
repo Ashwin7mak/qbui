@@ -22,6 +22,8 @@ module.exports = function(grunt) {
 
     var serverReportDir = buildDir + '/reports/server';
     var clientReportDir = buildDir + '/reports/client';
+    var reuseReportDir = buildDir + '/reports/reuse';
+    var governanceReportDir = buildDir + '/reports/governance';
 
     var mochaUnitTest = grunt.option('test') || '*.unit.spec.js';
     var mochaIntTest = grunt.option('test') || '*.integration.spec.js';
@@ -217,6 +219,24 @@ module.exports = function(grunt) {
                     src: [
                         clientReportDir + '/coverage/*',
                         clientReportDir + '/unit/*'
+                    ]
+                }]
+            },
+            reuse: {
+                files: [{
+                    dot: true,
+                    src: [
+                        reuseReportDir + '/coverage/*',
+                        reuseReportDir + '/unit/*'
+                    ]
+                }]
+            },
+            governance: {
+                files: [{
+                    dot: true,
+                    src: [
+                        governanceReportDir + '/coverage/*',
+                        governanceReportDir + '/unit/*'
                     ]
                 }]
             },
@@ -774,6 +794,14 @@ module.exports = function(grunt) {
             return grunt.task.run([
                 'clean:client']);
         }
+        if (target === 'reuse') {
+            return grunt.task.run([
+                'clean:reuse']);
+        }
+        if (target === 'governance') {
+            return grunt.task.run([
+                'clean:governance']);
+        }
         if (target === 'server') {
             return grunt.task.run([
                 'clean:server']);
@@ -841,12 +869,31 @@ module.exports = function(grunt) {
         // does not contain the absolute path and thus sonar cannot use the report file
         // for coverage, an issue is open on this https://github.com/karma-runner/karma/issues/528
         // meanwhile we can workaround it by fixing the paths in the client coverage file
+        var lcovString;
+        var newLcovString;
+
         var clientCoverageReport = clientReportDir + '/coverage/lcov.info';
         var absoluteFilePrefix =  path.join('SF:', __dirname, '/');
         if (grunt.file.exists(clientCoverageReport)) {
-            var lcovString = grunt.file.read(clientCoverageReport);
-            var newLcovString = lcovString.replace(/SF\:\.\//g, absoluteFilePrefix);
+            lcovString = grunt.file.read(clientCoverageReport);
+            newLcovString = lcovString.replace(/SF\:\.\//g, absoluteFilePrefix);
             grunt.file.write(clientCoverageReport, newLcovString);
+        }
+
+        var reuseCoverageReport = reuseReportDir + '/coverage/lcov.info';
+        var reuseAbsoluteFilePrefix =  path.join('SF:', __dirname, '/');
+        if (grunt.file.exists(reuseCoverageReport)) {
+            lcovString = grunt.file.read(reuseAbsoluteFilePrefix);
+            newLcovString = lcovString.replace(/SF\:\.\//g, reuseAbsoluteFilePrefix);
+            grunt.file.write(reuseCoverageReport, newLcovString);
+        }
+
+        var governanceCoverageReport = governanceReportDir + '/coverage/lcov.info';
+        var governanceAbsoluteFilePrefix =  path.join('SF:', __dirname, '/');
+        if (grunt.file.exists(governanceCoverageReport)) {
+            lcovString = grunt.file.read(governanceCoverageReport);
+            newLcovString = lcovString.replace(/SF\:\.\//g, governanceAbsoluteFilePrefix);
+            grunt.file.write(governanceCoverageReport, newLcovString);
         }
     });
 
@@ -1016,8 +1063,8 @@ module.exports = function(grunt) {
             'codeStandards',
             // run unit tests
             'test:client',
-            'test:reuse',
             'test:governance',
+            'test:reuse',
             //'test:server' // no coverage
             'test:coverage' // server with coverage
         ]);
