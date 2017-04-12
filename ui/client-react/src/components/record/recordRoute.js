@@ -264,7 +264,7 @@ export const RecordRoute = React.createClass({
 
                 <div className="navLinks">
                     {this.props.selectedTable && <Link className="tableHomepageIconLink" to={tableLink}><TableIcon icon={this.props.selectedTable.icon}/></Link>}
-                    {this.props.selectedTable && <Link className="tableHomepageLink" to={tableLink}>{this.props.selectedTable.name}</Link>}
+                    {this.props.selectedTable && <Link className="tableHomepageLink" to={tableLink}>{this.props.isDrawerContext ? this.getSelectedTable(drawerTableId).name : this.props.selectedTable.name}</Link>}
                     {this.props.selectedTable && rptId && <span className="divider color-black-700">&nbsp;&nbsp;:&nbsp;&nbsp;</span>}
                     {rptId && <a className="backToReport" href="#" onClick={this.returnToReport}>{reportName}</a>}
                 </div>
