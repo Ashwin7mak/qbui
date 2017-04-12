@@ -99,6 +99,7 @@ class AutoScroll extends Component {
     getContainerDimension() {
         let container = this.getContainer();
         let containerBottom = container.offsetHeight;
+        //Set the height to window.innerHeight if the container is taller than the window, this ensures autoscroll will continue to behave as expected
         if (window.innerHeight < containerBottom) {
             containerBottom = window.innerHeight;
         }
@@ -129,14 +130,9 @@ class AutoScroll extends Component {
 
     getContainer() {
         let container;
-
-        // if (this.props.children) {
-        //     container = document.querySelector(`.${this.props.children.props.className}`);
-        // }
         if (this.props.parentContainer) {
-            container = document.querySelector(`.${this.props.parentContainer}`);
+            container = this.props.parentContainer;
         }
-        console.log('className: ', this.props.parentContainer);
         return container;
     }
 
@@ -159,9 +155,6 @@ class AutoScroll extends Component {
         /**
          * Activate auto scroll only if it is in the designated scroll zone within the container
          * */
-        console.log('pointerY > containerBottom: ', pointerY > containerBottom);
-        console.log('pointerX < containerRightSide: ', pointerX < containerRightSide);
-        console.log('pointerX > containerOffsetLeft: ', pointerY > containerBottom);
         if (pointerY > containerBottom &&
             pointerX < containerRightSide &&
             pointerX > containerOffsetLeft) {
@@ -183,7 +176,6 @@ class AutoScroll extends Component {
 
         container.scrollTop = scrollTop + pixelsPerFrame;
         pixelsPerFrame = pixelsPerFrame + pixelsPerFrame;
-        console.log('pixelsPerFrame: ', pixelsPerFrame);
         this.scrollingAnimationId = window.requestAnimationFrame(this.scrollDown);
     }
 
@@ -228,6 +220,10 @@ class AutoScroll extends Component {
 }
 
 AutoScroll.propTypes = {
+    /**
+     * parentContainer is the container that has scroll set
+     * */
+    parentContainer: PropTypes.element.required,
     /**
      * pixelsPerFrame sets how fast the scroll bar should scroll
      * */
