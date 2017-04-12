@@ -30,28 +30,28 @@ class Pagination extends Component {
                           <Icon className={nextButtonClassName} icon="caret-filled-right" />
                       </button>
                   </Tooltip>
-            </div>
+              </div>
         );
     };
 
     render() {
-        let navBar = "report.reportNavigationBar";
-        if (!this.props.isHidden) {
+            let navBar = "report.reportNavigationBar";
+            if (!this.props.isHidden) {
             return (
-              <div className="reportNavigation">
-                  {this.previousPageButton()}
-                    <span className="pageNumbers">
-                      <I18nMessage  message={navBar}
-                                    pageStart={this.props.startRecord}
-                                    pageEnd={this.props.endRecord}
-                      />
-                    </span>
-                  {this.nextPageButton()}
-              </div>
-            );
+                    <div className="reportNavigation">
+                        {this.previousPageButton()}
+                            <span className="pageNumbers">
+                                <I18nMessage  message={navBar}
+                                              pageStart={this.props.startRecord}
+                                              pageEnd={this.props.endRecord}
+                                />
+                            </span>
+                        {this.nextPageButton()}
+                     </div>
+                );
+            }
+            return (<div className="spacer"></div>);
         }
-        return (<div className="spacer"></div>);
-    }
     }
 
 
@@ -97,5 +97,5 @@ Pagination.defaultProps = {
     * Shows the pagination component unless its true */
     isHidden: false,
 };
-//Have created an action and a reducer which works well with this component. Feel free to use it.
+
 export default Pagination;

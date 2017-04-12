@@ -2,10 +2,10 @@ import React from 'react';
 import NotificationManager from '../../scripts/notificationManager';
 import Icon from '../icon/icon';
 import {I18nMessage} from '../../utils/i18nMessage';
+import Locale from '../../locales/locale';
 
 // IMPORTS FROM CLIENT REACT
 import Device from '../../../../../client-react/src/utils/device';
-import Locale from '../../locales/locale';
 // IMPORTS FROM CLIENT REACT
 
 /**
