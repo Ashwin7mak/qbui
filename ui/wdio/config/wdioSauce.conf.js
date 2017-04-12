@@ -83,7 +83,7 @@ exports.config = {
         {
             platform : 'OS X 10.11',
             browserName     : 'chrome',
-            version: '57.0',
+            version: '55.0',
             tunnelIdentifier: process.env.ENV_TUNNEL_NAME,
             build           : 'WebdriverIO Jenkins Master Build #' + process.env.BUILD_NUMBER + ' - OSX Chrome Browser',
             tags            : [process.env.SAUCE_JOB_NAME + '_OSX_Chrome', 'master', 'OSX', 'Chrome', process.env.BUILD_NUMBER],

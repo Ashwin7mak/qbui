@@ -537,8 +537,8 @@ module.exports = function(grunt) {
                     // currently intermittently broken in CI need to fix in another PR
                     './wdio/tests/forms/formDragDrop.e2e.spec.js',
                     './wdio/tests/tables/tableCreate.e2e.spec.js',
-                    './wdio/tests/tables/tableEdit.e2e.spec.js'
-
+                    './wdio/tests/tables/tableEdit.e2e.spec.js',
+                    './wdio/tests/reports/reportNavigation.e2e.spec.js'
                 ],
                 suites: {
                     reports: [
