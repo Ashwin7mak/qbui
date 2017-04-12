@@ -8,10 +8,6 @@ import * as RequestContextCommon from '../requestContext/RequestContextCommon';
 import * as RequestContextActions from '../requestContext/RequestContextActions';
 
 class GovernanceLeftNav extends Component {
-    constructor(props) {
-        super(props);
-    }
-
     componentDidMount() {
         this.props.fetchData(this.props.accountId);
     }
@@ -32,16 +28,16 @@ class GovernanceLeftNav extends Component {
                     contextHeaderIcon="settings"
                     contextHeaderTitle="Manage QuickBase"
                     navItems={[
-                        {title: 'Back to My Apps', isPrimaryAction: true, secondaryIcon: 'caret-left', href: '/qbase/apps'},
-                        {icon: 'Report', iconFont: AVAILABLE_ICON_FONTS.TABLE_STURDY, title: 'Account summary', isDisabled: true},
-                        {icon: 'favicon', title: 'Manage apps', isDisabled: true},
-                        {icon: 'users', title: 'Manage users', isSelected: true},
-                        {icon: 'Group', iconFont: AVAILABLE_ICON_FONTS.TABLE_STURDY, title: 'Manage groups', isDisabled: true},
-                        {icon: 'configure', title: 'Set account properties', isDisabled: true},
-                        {icon: 'selected', title: 'Set realm policies', isDisabled: true},
-                        {icon: 'Fountain_Pen', iconFont: AVAILABLE_ICON_FONTS.TABLE_STURDY, title: 'Edit realm branding', isDisabled: true},
-                        {icon: 'currency', title: 'Manage billing', isDisabled: true},
-                        {icon: 'bell', iconFont: AVAILABLE_ICON_FONTS.TABLE_STURDY, title: 'Contact support'}
+                        {icon: 'home', title: 'MY APPS', isPrimaryAction: true, secondaryIcon: 'caret-left', href: '/qbase/apps'},
+                        {icon: 'Report', title: 'Account Summary', iconFont: AVAILABLE_ICON_FONTS.TABLE_STURDY,  isDisabled: true},
+                        {icon: 'favicon', title: 'Manage Apps', isDisabled: true},
+                        {icon: 'users', title: 'Manage Users', isSelected: true},
+                        {icon: 'Group', title: 'Manage Groups', iconFont: AVAILABLE_ICON_FONTS.TABLE_STURDY,  isDisabled: true},
+                        {icon: 'configure', title: 'Set Account Properties', isDisabled: true},
+                        {icon: 'selected', title: 'Set Realm Policies', isDisabled: true},
+                        {icon: 'Fountain_Pen', title: 'Edit Realm Branding', iconFont: AVAILABLE_ICON_FONTS.TABLE_STURDY, isDisabled: true},
+                        {icon: 'currency', title: 'Manage Billing', isDisabled: true},
+                        {icon: 'bell', title: 'Contact Support', iconFont: AVAILABLE_ICON_FONTS.TABLE_STURDY, isDisabled: true}
                     ]}
                     globalActions={<DefaultTopNavGlobalActions dropdownIcon="user" dropdownMsg="globalActions.user" shouldOpenMenusUp={true} />}
                 >
