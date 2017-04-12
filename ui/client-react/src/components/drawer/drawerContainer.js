@@ -3,6 +3,7 @@ import _ from 'lodash';
 
 import Drawer from './drawer';
 import {RecordRouteWithUniqueId} from '../../components/record/recordRoute';
+
 import './drawer.scss';
 
 /**
@@ -29,7 +30,7 @@ class DrawerContainer extends React.Component {
                 return (
                     <Drawer visible={true} key={drawerRecordId} keyboardOnCancel={()=> {console.log('hey');}}>
                         {/* TODO: render RecordWrapper*/}
-                        <RecordRouteWithUniqueId {...this.props} loadDrawerContainer={true}/>
+                        <RecordRouteWithUniqueId {...this.props} isDrawerContext={true}/>
                     </Drawer>);
             });
             return map;
@@ -45,6 +46,11 @@ class DrawerContainer extends React.Component {
         this.setState({addedDrawers: drawers});
     }
 
+    // TODO: remove this function, this is temporary
+    removeDrawers = () => {
+        this.setState({addedDrawers: []});
+    }
+
     // TODO: render a 'Close' button, probably a <Link> component and pass to child
     //       OR pass a closeDrawers function to drawers, drawers pass close button as a prop to
     //          RecordWrapper, RecordWrapper renders button. YES!
@@ -53,7 +59,8 @@ class DrawerContainer extends React.Component {
         classNames.push(this.props.visible ? 'visible' : '');
         return (
             <div className={classNames.join(' ')} onClick={this.closeDrawers}>
-                <button className="moreDrawers" onClick={this.addDrawers} />
+                <button className="moreDrawers" onClick={this.addDrawers} >add</button>
+                <button className="moreDrawers" onClick={this.removeDrawers} >remove</button>
                 {this.getDrawers()}
                 {this.props.content}
                 {this.props.children}

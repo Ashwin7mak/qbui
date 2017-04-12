@@ -16,6 +16,7 @@ import {withRouter} from 'react-router';
 import Locale from '../../locales/locales';
 import Loader from 'react-loader';
 import RecordHeader from './recordHeader';
+import {UnloadableNode} from '../../components/hoc/unloadable';
 import Breakpoints from '../../utils/breakpoints';
 import WindowLocationUtils from '../../utils/windowLocationUtils';
 import * as SpinnerConfigurations from '../../constants/spinnerConfigurations';
@@ -51,7 +52,7 @@ export const RecordRoute = React.createClass({
 
         // ensure the search input is empty
         this.props.clearSearchInput();
-        if (this.props.loadDrawerContainer && this.props.location.search.includes('drawer')) {
+        if (this.props.isDrawerContext && this.props.location.search.includes('drawer')) {
             let arr = this.props.location.search.split('&');
             this.props.loadForm(appId, drawerTableId, rptId, formType, drawerRecId, this.props.uniqueId);
             const recordsArray = embeddedReport !== undefined ? embeddedReport.data.records : [];
@@ -311,7 +312,7 @@ export const RecordRoute = React.createClass({
             {msg: 'unimplemented.delete', icon:'delete', disabled:true}];
 
         // TODO: onCloseHandler, add to Proptypes, icon, i18nMessage for other languages
-        if (this.props.loadDrawerContainer) {
+        if (this.props.isDrawerContext) {
             actions.push({msg: 'pageActions.close', icon:'close', onClick: () => {console.log('pass in this.props.onCloseHandler');}});
         }
 
@@ -321,7 +322,7 @@ export const RecordRoute = React.createClass({
     shouldRenderDrawers() {
         // TODO: update this when upgrading to React Router 4 work is done.
         const hasDrawers = _.get(this, 'props.location.search', '').indexOf('drawer') > -1;
-        return hasDrawers && !this.props.loadDrawerContainer;
+        return hasDrawers && !this.props.isDrawerContext;
     },
 
     /**
@@ -348,9 +349,13 @@ export const RecordRoute = React.createClass({
     },
 
     fakeOpenDrawerLink() {
-        const link = this.props.location.pathname + '/drawers';
+        if (this.props.location.pathname.includes('drawers')) {
+            return null;
+        } else {
+            const link = this.props.location.pathname + '/drawers';
 
-        return <Link to={link} >Load Them Drawers, YO!</Link>;
+            return <Link to={link} >Load Them Drawers, YO!</Link>;
+        }
     },
 
     /**
@@ -462,8 +467,17 @@ export const RecordRoute = React.createClass({
                         </Loader> : null }
                     {formInternalError && <pre><I18nMessage message="form.error.500"/></pre>}
                     {formAccessRightError && <pre><I18nMessage message="form.error.403"/></pre>}
+
+                    {this.props.isDrawerContext &&
+                        <UnloadableNode
+                            uniqueId={this.props.uniqueId}
+                            loadEntry={this.loadRecordFromParams}
+                            unloadEntry={this.unloadRecordFromParams}
+                            hasEntry={!!this.getViewFormFromProps()}
+                            />}
+
                     {!formLoadingErrorStatus &&
-                    this.getDrawerContainer()
+                        this.getDrawerContainer()
                     }
                     {this.fakeOpenDrawerLink()}
                 </div>);
@@ -511,10 +525,12 @@ export const ConnectedRecordRoute = connect(
 )(RecordRoute);
 
 // why do we have 2 connected RecordRoutes exported?
-const ConnectedRecordRouteWithRouter = connect(
+export const ConnectedRecordRouteWithRouter = connect(
     mapStateToProps,
     mapDispatchToProps
 )(RecordRouteWithRouter);
 export default ConnectedRecordRouteWithRouter;
 
+// Wrap RecordRoute with `withUniqueId` hoc so that it has a unique ID used to identify its own
+// instance's data in the record store and form store. Used by stacked forms.
 export const RecordRouteWithUniqueId = withUniqueId(ConnectedRecordRouteWithRouter, CONTEXT.FORM.DRAWER);
