@@ -109,6 +109,10 @@ export class TableCreationDialog extends React.Component {
 
         const classes = ['tableCreationDialog'];
 
+        if (this.props.tableCreation.iconChooserOpen) {
+            classes.push('allowOverflow');
+        }
+
         return (<MultiStepDialog show={this.props.tableCreation.dialogOpen}
                                  isLoading={this.props.tableCreation.savingTable}
                                  classes={classes.join(' ')}
