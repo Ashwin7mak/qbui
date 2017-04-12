@@ -928,7 +928,6 @@ module.exports = function(grunt) {
         }
 
         if (target === 'client') {
-            //client dummy placeholder
             return grunt.task.run([
                 'clean:client',
                 'autoprefixer',
