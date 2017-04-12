@@ -10,8 +10,17 @@ import {FieldProperties, __RewireAPI__ as FieldPropertiesRewireAPI} from '../../
 let component;
 let instance;
 
+let appId = 1;
+let tableId = 2;
+let formId = "view";
+let field = {id: 6, required: true, name: "Dat Field"};
+let formElement = {FormFieldElement: {fieldId: 6}};
+
+
 const mockActions = {
-    updateField() {}
+    updateField() {},
+    getField() {return field;},
+    getSelectedFormElement() {return formElement;}
 };
 
 describe('FieldProperties', () => {
@@ -19,10 +28,14 @@ describe('FieldProperties', () => {
     beforeEach(() => {
         jasmineEnzyme();
         spyOn(mockActions, 'updateField');
+        spyOn(mockActions, 'getField');
+        spyOn(mockActions, 'getSelectedFormElement');
     });
 
     afterEach(() => {
         mockActions.updateField.calls.reset();
+        mockActions.getField.calls.reset();
+        mockActions.getSelectedFormElement.calls.reset();
     });
 
     describe('component rendering', () => {
@@ -30,6 +43,39 @@ describe('FieldProperties', () => {
             component = shallow(<FieldProperties />);
 
             expect(component).toBePresent();
+        });
+
+        it('with no selectedField prop', () => {
+            component = shallow(<FieldProperties appId={appId} tableId={tableId} formId={formId}/>);
+
+            expect(component).toBePresent();
+            expect(component.find('.fieldPropertiesTitle')).not.toBePresent();
+            expect(component.find('CheckBoxFieldValueEditor')).not.toBePresent();
+            expect(component.find('.textPropertyTitle')).not.toBePresent();
+        });
+
+        it('with selectedField prop', () => {
+            component = mount(<FieldProperties appId={appId} tableId={tableId} formId={formId}
+                                                 selectedField={field} formElement={formElement}/>);
+
+            expect(component).toBePresent();
+            expect(component.find('.fieldPropertiesTitle')).toBePresent();
+            expect(component.find('.fieldPropertiesTitle')).toHaveText(`${field.name} properties`);
+            expect(component.find('CheckBoxFieldValueEditor')).toBePresent();
+            expect(component.find('CheckBoxFieldValueEditor')).toHaveValue(field.required);
+            expect(component.find('.textPropertyTitle')).toBePresent();
+            expect(component.find('.textPropertyValue')).toHaveValue(field.name);
+        });
+    });
+
+    describe('updating a property ', () => {
+        it('updateField is dispatched', () => {
+            component = mount(<FieldProperties appId={appId} tableId={tableId} formId={formId}
+                                               selectedField={field} formElement={formElement}
+                                               updateField={mockActions.updateField}/>);
+            let checkBox = component.find('CheckBoxFieldValueEditor');
+            checkBox.simulate('click');
+            expect(mockActions.updateField).toHaveBeenCalled();
         });
     });
 
