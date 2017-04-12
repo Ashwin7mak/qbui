@@ -46,7 +46,7 @@ module.exports = function(config) {
                             path.resolve(__dirname, "./src"),
                             path.resolve(__dirname, "./test")
                         ],
-                        exclude: [nodeModulesPath, nodeComponentsPath],
+                        exclude: [nodeModulesPath],
                         loader: "babel-loader",
                         query: {
                             plugins: ['babel-plugin-rewire', 'babel-plugin-rewire-ignore-coverage']
@@ -214,7 +214,7 @@ module.exports = function(config) {
             ],
             check : {
                 global: {
-                    statements: 89,
+                    statements: 90,
                     branches: 60,
                     functions: 90,
                     lines: 90
