@@ -126,6 +126,8 @@ consts = require('../../common/src/constants.js');
         addColumn(tableToFieldToFieldTypeMap[table1Name], e2eConsts.dataType.TEXT, "Request Name");
         addColumn(tableToFieldToFieldTypeMap[table1Name], e2eConsts.dataType.TEXT, "Company");
         addColumn(tableToFieldToFieldTypeMap[table1Name], e2eConsts.dataType.CHECKBOX, "Approved?");
+        addColumn(tableToFieldToFieldTypeMap[table1Name], e2eConsts.dataType.USER, "User Approved");
+        addColumn(tableToFieldToFieldTypeMap[table1Name], e2eConsts.dataType.DATE_TIME, "Approved On");
         addColumn(tableToFieldToFieldTypeMap[table1Name], e2eConsts.dataType.TEXT, "Project Type",
             {
                 dataAttr: {htmlAllowed: true, clientSideAttributes: Object.assign({}, baseTextClientRequiredProps)},
