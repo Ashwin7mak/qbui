@@ -1,6 +1,8 @@
-import React, {PropTypes} from 'react';
-import {PositionedRowEditActions} from './rowEditActions';
+import React, {PropTypes, Component} from 'react';
+import {PositionedRowEditActions} from '../../../../../client-react/src/components/dataTable/qbGrid/positionedRowEditActionsHoc';
 import IconActions from '../iconActions/iconActions';
+
+import './rowActions.scss';
 
 export const SELECT_ROW_CHECKBOX = 'selectRowCheckbox';
 
@@ -10,13 +12,13 @@ class RowActions extends Component {
         if (this.props.onClickEditRowIcon) {
             return this.props.onClickEditRowIcon(this.props.rowId);
         }
-    },
+    }
 
     onClickDeleteRowIcon = () => {
         if (this.props.onClickDeleteRowIcon) {
             this.props.onClickDeleteRowIcon(this.props.rowId);
         }
-    },
+    }
 
     render() {
         // Turn the row actions into edit actions when in inline edit mode
