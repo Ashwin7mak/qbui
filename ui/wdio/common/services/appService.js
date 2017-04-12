@@ -44,7 +44,7 @@
             /**
              * Creates a named application, table and fields from map
              */
-            createNamedAppSchema: function (tableToFieldToFieldTypeMap, appName) {
+            createNamedAppSchema: function(tableToFieldToFieldTypeMap, appName) {
                 var generatedApp = this.generateNamedAppFromMap(tableToFieldToFieldTypeMap, appName);
                 return this.createApp(generatedApp);
 

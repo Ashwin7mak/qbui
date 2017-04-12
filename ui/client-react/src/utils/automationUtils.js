@@ -11,7 +11,7 @@ class AutomationUtils  {
     /**
      * Invoke 'approve' automation
      */
-     static approveRecord(appId, tblId, recId){
+    static approveRecord(appId, tblId, recId) {
         var logger = new Logger();
         let automationService = new AutomationService();
         let payload = {
@@ -21,7 +21,7 @@ class AutomationUtils  {
                 "recordId": recId,
                 "record": [{"id":8, "value":true}]
             }
-        }
+        };
         return automationService.invokeAutomation("http://localhost:8089", "0duiiaaaaab", "ApproveProjectRecord", payload).then(
             response => {
                 logger.debug('Automation success');
@@ -37,7 +37,7 @@ class AutomationUtils  {
                 } else {
                     logger.parseAndLogError(LogLevel.ERROR, error.response, 'Automation');
                 }
-            })
-    };
+            });
+    }
 }
 export default AutomationUtils;

@@ -2,16 +2,15 @@
  * Created by msyed on 4/5/17.
  */
 /**
- * Standalone script for generating test data for the UI
+ * This is a custom script for generating a Demo app named 'Automation Demo'
+ * Unlike other 'dataGen' scripts, this generates a named app with a single named tabled (Project Request)
+ * Columns in this table are also named and have some of the columns have meaningful data, rather than random data.
  *
  * expects java server, experience engine and node server running
  * expects NODE_ENV to be defined e.g. NODE_ENV=local
  *
- * run from qbui directory with `node ui/wdio/dataGen/dataGenCustomize.js`
+ * run from qbui directory with `node ui/wdio/dataGen/dataGenForAutomation.js`
  */
-
-// jshint sub: true
-// jscs:disable requireDotNotation
 
 // if you set realmToUse null it will randomly generated a new realm name
 // change this to a string i.e. "myRealm" of an existing realm to use
@@ -180,10 +179,6 @@ consts = require('../../common/src/constants.js');
             // If using JS for loops with promise functions make sure to use Bluebird's Promise.each function
             // otherwise errors can be swallowed!
             createdApp.tables.forEach(function(table, index) {
-                // tableSetupPromises.push(function() {
-                //     // Create a List all report for each table
-                //     return e2eBase.reportService.createCustomReport(createdApp.id, table.id, 'List All Report', null, null, null, null);
-                // });
                 tableSetupPromises.push(function() {
                     // Set the default table homepage for each
                     return e2eBase.tableService.setDefaultTableHomePage(createdApp.id, table.id, 1);

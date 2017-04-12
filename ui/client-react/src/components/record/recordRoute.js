@@ -255,7 +255,7 @@ export const RecordRoute = React.createClass({
 
     isAutomationEnabled()  {
         const automationAppName = "Automation Demo";
-        if(this.props.selectedApp.name != automationAppName)  {
+        if (this.props.selectedApp.name !== automationAppName)  {
             return true;
         }
         return false;

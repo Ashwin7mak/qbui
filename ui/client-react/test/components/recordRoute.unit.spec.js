@@ -73,7 +73,7 @@ describe('RecordRoute', () => {
 
             component = TestUtils.renderIntoDocument(
                 <Provider store={store}>
-                    <ConnectedRecordRoute params={routeParams} flux={flux}/>
+                    <ConnectedRecordRoute params={routeParams} flux={flux} selectedApp={{"name": "TestApp"}}/>
                 </Provider>);
 
             expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
@@ -102,7 +102,7 @@ describe('RecordRoute', () => {
 
             component = TestUtils.renderIntoDocument(
                 <Provider store={store}>
-                    <ConnectedRecordRoute params={routeParams} flux={flux}/>
+                    <ConnectedRecordRoute params={routeParams} flux={flux} selectedApp={{"name": "TestApp"}}/>
                 </Provider>);
 
             expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
@@ -158,7 +158,7 @@ describe('RecordRoute', () => {
 
             component = TestUtils.renderIntoDocument(
                 <Provider store={store}>
-                    <RecordRoute params={routeParams} reportData={reportData} flux={flux} router={router} {...reduxProps}/>
+                    <RecordRoute params={routeParams} reportData={reportData} flux={flux} router={router} {...reduxProps} selectedApp={{"name": "TestApp"}}/>
                 </Provider>);
             expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 
