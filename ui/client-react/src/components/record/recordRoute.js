@@ -27,7 +27,6 @@ import {openRecord} from '../../actions/recordActions';
 import {clearSearchInput} from '../../actions/searchActions';
 import {APP_ROUTE, BUILDER_ROUTE, EDIT_RECORD_KEY} from '../../constants/urlConstants';
 import {CONTEXT} from '../../actions/context';
-import RecordDrawerContainer from '../QBForm/recordDrawer';
 import './record.scss';
 import withUniqueId from '../hoc/withUniqueId';
 import DrawerContainer from '../drawer/drawerContainer';
@@ -36,8 +35,7 @@ import '../drawer/drawerContainer.scss';
 
 let logger = new Logger();
 let FluxMixin = Fluxxor.FluxMixin(React);
-let drawerRecId;
-let drawerTableId;
+let drawerRecId, drawerTableId, embeddedReport;
 /**
  * record route component
  *
@@ -56,9 +54,6 @@ export const RecordRoute = React.createClass({
         if (this.props.loadDrawerContainer && this.props.location.search.includes('drawer')) {
             let arr = this.props.location.search.split('&');
             this.props.loadForm(appId, drawerTableId, rptId, formType, drawerRecId, this.props.uniqueId);
-            const embeddedReport = _.find(this.props.embeddedReports, function(o) {
-                return o.tblId === drawerTableId ;
-            });
             const recordsArray = embeddedReport !== undefined ? embeddedReport.data.records : [];
             this.navigateToRecord(drawerRecId, embeddedReport, recordsArray);
         } else {
@@ -182,9 +177,14 @@ export const RecordRoute = React.createClass({
      */
     previousRecord() {
         const record = this.getRecordFromProps(this.props);
-        this.navigateToRecord(record.previousRecordId);
+        let reportData;
+        if (this.props.uniqueId) {
+            reportData = embeddedReport;
+        }
+        reportData = reportData || this.props.reportData;
+        this.navigateToRecord(record.previousRecordId, reportData);
 
-        const {appId, tblId, rptId} = this.props.reportData;
+        const {appId, tblId, rptId} = reportData;
         const link = `${APP_ROUTE}/${appId}/table/${tblId}/report/${rptId}/record/${record.previousRecordId}`;
         this.props.router.push(link);
     },
@@ -194,9 +194,14 @@ export const RecordRoute = React.createClass({
      */
     nextRecord() {
         const record = this.getRecordFromProps(this.props);
-        this.navigateToRecord(record.nextRecordId);
-
-        const {appId, tblId, rptId} = this.props.reportData;
+        let reportData;
+        //when in a drawer, the report data can be different than the report data passed in props
+        if (this.props.uniqueId) {
+            reportData = embeddedReport;
+        }
+        reportData = reportData || this.props.reportData;
+        this.navigateToRecord(record.nextRecordId, reportData);
+        const {appId, tblId, rptId} = reportData;
         const link = `${APP_ROUTE}/${appId}/table/${tblId}/report/${rptId}/record/${record.nextRecordId}`;
         this.props.router.push(link);
     },
@@ -204,10 +209,31 @@ export const RecordRoute = React.createClass({
     getTitle(recIdTitle) {
         const recordId = recIdTitle || this.props.params.recordId;
         const isSmall = Breakpoints.isSmallBreakpoint();
-        const tableName = this.props.selectedTable ? this.props.selectedTable.name : '';
+        let tableName;
+        //when in a drawer, the table can be different than the selected Table passed in props
+        if (this.props.loadDrawerContainer) {
+            tableName = this.getSelectedTable(drawerTableId).name;
+        } else {
+            tableName = this.props.selectedTable ? this.props.selectedTable.name : '';
+        }
         return <div className="title">
             {isSmall ? <TableIcon classes="primaryIcon" icon={this.props.selectedTable ? this.props.selectedTable.icon : ""}/> : null}
             <span> {tableName} # {recordId}</span></div>;
+    },
+
+    /**
+     * finds and returns the table from the selected app using the table id
+     * @param tableId
+     * @returns table only in case, tableId is passed in
+     */
+    getSelectedTable(tableId) {
+        if (tableId) {
+            const app = this.props.selectedApp;
+            if (app) {
+                return _.find(app.tables, (t) => t.id === tableId);
+            }
+        }
+        return null;
     },
 
     getStageHeadline() {
@@ -344,7 +370,7 @@ export const RecordRoute = React.createClass({
         if (this.props.uniqueId) {
             return  _.find(props.record, rec => rec.id === props.uniqueId) || {};
         } else {
-            return  _.find(props.record, rec => rec.id.toString() === props.params.recordId) || {};
+            return  _.find(props.record, rec => rec.recId.toString() === props.params.recordId) || {};
         }
     },
 
@@ -375,6 +401,9 @@ export const RecordRoute = React.createClass({
     renderDrawerContainer(tblId, recId) {
         drawerRecId = recId;
         drawerTableId = tblId;
+        embeddedReport = _.find(this.props.embeddedReports, function(o) {
+            return o.tblId === drawerTableId ;
+        });
         WindowLocationUtils.pushWithQuery('drawerRecId', recId);
         WindowLocationUtils.pushWithQuery('drawerTableId', tblId);
     },
@@ -433,8 +462,6 @@ export const RecordRoute = React.createClass({
                         </Loader> : null }
                     {formInternalError && <pre><I18nMessage message="form.error.500"/></pre>}
                     {formAccessRightError && <pre><I18nMessage message="form.error.403"/></pre>}
-                    {false && !this.props.loadContainer && this.props.location.search.includes('Drawer') ? <RecordDrawerContainer {...this.props}/> : ''}
-
                     {!formLoadingErrorStatus &&
                     this.getDrawerContainer()
                     }
