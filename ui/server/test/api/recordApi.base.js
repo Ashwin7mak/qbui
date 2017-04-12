@@ -108,7 +108,7 @@
                     apiBase.executeRequest(endpoint, consts.GET).
                     then(function(recResp) {
                         deferred.resolve(JSON.parse(recResp.body).records);
-                        },
+                    },
                         (error) => {
                             deferred.resolve(error);
                         }).
