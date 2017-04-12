@@ -97,17 +97,19 @@ class AutoScroll extends Component {
     }
 
     getContainerDimension() {
-        let container = this.getContainer();
-        let containerBottom = container.offsetHeight;
+        let container = this.getContainer().getBoundingClientRect();
+        let containerBottom = container.bottom;
         //Set the height to window.innerHeight if the container is taller than the window, this ensures autoscroll will continue to behave as expected
         if (window.innerHeight < containerBottom) {
             containerBottom = window.innerHeight;
         }
+        console.log('CONTAINER.bottom: ', container.bottom);
+        console.log('window.innerHeight: ', window.innerHeight);
         return {
-            containerOffsetLeft: container.offsetLeft,
-            containerRightSide: container.offsetLeft + container.offsetWidth,
+            containerOffsetLeft: container.left,
+            containerRightSide: container.right,
             containerBottom: containerBottom,
-            containerTop: container.offsetTop
+            containerTop: container.top
         };
 
     }
@@ -155,6 +157,9 @@ class AutoScroll extends Component {
         /**
          * Activate auto scroll only if it is in the designated scroll zone within the container
          * */
+        console.log('pointerX: ', pointerX);
+        console.log('pointerY: ', pointerY);
+        console.log('containerTop: ', containerTop);
         if (pointerY > containerBottom &&
             pointerX < containerRightSide &&
             pointerX > containerOffsetLeft) {

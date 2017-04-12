@@ -120,7 +120,9 @@ export class FieldEditingTools extends Component {
 
     scrollElementIntoView() {
         let selectedFormElement = document.querySelector(".selectedFormElement");
-        if (selectedFormElement) {
+        let isDragging = document.querySelector(".dragging");
+        console.log('isDragging: ', !isDragging);
+        if (selectedFormElement && !isDragging) {
             document.querySelector(".selectedFormElement").scrollIntoView(false);
         }
     }

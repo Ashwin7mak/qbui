@@ -207,10 +207,7 @@ export const FormBuilderContainer = React.createClass({
                 <ToolPalette isCollapsed={this.props.isCollapsed} isOpen={this.props.isOpen}>
                     <FieldProperties>
                         <div className="formBuilderContainerContent" ref={element => formBuilderContainerContent = element}>
-                            <AutoScroll
-                                pixelsFromBottomForLargeDevices={80}
-                                pixelsFromBottomForMobile={50}
-                                parentContainer={formBuilderContainerContent}>
+                            <AutoScroll parentContainer={formBuilderContainerContent}>
                                 <div className="formBuilderContent">
                                     <Loader loaded={loaded} options={LARGE_BREAKPOINT}>
                                         <FormBuilder
