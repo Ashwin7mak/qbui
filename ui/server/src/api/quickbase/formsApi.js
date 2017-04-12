@@ -282,6 +282,7 @@
                             //  for record and fields; otherwise will return just the form meta data and empty
                             //  object for records and fields.
                             let fidList = extractFidsListFromForm(obj.formMeta, obj.tableFields);
+
                             if (obj.formMeta.includeBuiltIns) {
                                 let builtInFieldsFids = getBuiltInFieldsFids(obj.tableFields);
                                 fidList.push.apply(fidList, builtInFieldsFids);
@@ -305,7 +306,9 @@
                                         function(resp) {
                                             obj.record = resp.record;
                                             obj.fields = resp.fields;
-                                            obj.fields = mergeConstraintsFromFidlist(obj.fields, fidList);
+                                            //  don't override the field constraint required as with the form constraint setting as the form field required
+                                            //  attribute will be removed in jira MC-1687.  Once that work is complete, this code should be removed.
+                                            //obj.fields = mergeConstraintsFromFidlist(obj.fields, fidList);
                                             resolve(obj);
                                         },
                                         function(err) {
@@ -316,7 +319,9 @@
                                     recordsApi.fetchFields(req).then(
                                         function(resp) {
                                             obj.fields = JSON.parse(resp.body);
-                                            obj.fields = mergeConstraintsFromFidlist(obj.fields, fidList);
+                                            //  don't override the field constraint required as with the form constraint setting as the form field required
+                                            //  attribute will be removed in jira MC-1687.  Once that work is complete, this code should be removed.
+                                            //obj.fields = mergeConstraintsFromFidlist(obj.fields, fidList);
                                             resolve(obj);
                                         },
                                         function(err) {

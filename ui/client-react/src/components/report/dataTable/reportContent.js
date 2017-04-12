@@ -23,6 +23,7 @@ import Promise from 'bluebird';
 import {connect} from 'react-redux';
 import {createRecord, deleteRecord, editRecordStart, editRecordCancel, editRecordChange, editRecordValidateField, openRecord, updateRecord} from '../../../actions/recordActions';
 import {addBlankRecordToReport, removeBlankRecordFromReport, selectReportRecords} from '../../../actions/reportActions';
+import {tableFieldsReportDataObj} from '../../../reducers/fields';
 import {APP_ROUTE, EDIT_RECORD_KEY} from '../../../constants/urlConstants';
 import * as SchemaConstants from '../../../constants/schema';
 import {CONTEXT} from '../../../actions/context';
@@ -1004,10 +1005,11 @@ ReportContent.propTypes = {
     primaryKeyName: React.PropTypes.string.isRequired
 };
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state, props) => {
     return {
         report: state.report,
-        record: state.record
+        record: state.record,
+        fields: tableFieldsReportDataObj(state.fields, props.appId, props.tblId)
     };
 };
 

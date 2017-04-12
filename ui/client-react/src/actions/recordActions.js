@@ -225,7 +225,7 @@ export const deleteRecord = (appId, tblId, recId, nameForRecords) => {
  * @returns {Function}
  */
 export const createRecord = (appId, tblId, params = {}) => {
-    function formatRecordChanges(_recordChanges) {
+    function formatRecordChanges(_recordChanges, fields) {
         //save changes in record
         let payload = [];
         // columns id and new values array
@@ -251,6 +251,25 @@ export const createRecord = (appId, tblId, params = {}) => {
                     }
                 }
             });
+
+            //  add any fields not included in the recordChanges list to the payload that is sent
+            //  to the server.  This means we check all fields(minus built-ins) for validity
+            //  even if the user didn't explicitly enter a value.
+            if (fields) {
+                fields.forEach((field) => {
+                    if (_recordChanges[field.id] === undefined) {
+                        if (!field.builtIn) {
+                            let colChange = {};
+                            colChange.fieldName = field.name;
+                            colChange.id = +field.id;     //the + before field.id is needed to turn field id from string into a number
+                            colChange.value = '';
+                            colChange.display = '';
+                            colChange.fieldDef = field;
+                            payload.push(colChange);
+                        }
+                    }
+                });
+            }
         }
         return payload;
     }
@@ -260,10 +279,12 @@ export const createRecord = (appId, tblId, params = {}) => {
         return new Promise((resolve, reject) => {
 
             let changes = params.recordChanges;
-            let record = formatRecordChanges(changes);
-            let recId = SchemaConstants.UNSAVED_RECORD_ID;
+            let fields = params.fields;
 
-            if (appId && tblId && params.fields) {
+            if (appId && tblId && fields) {
+                let record = formatRecordChanges(changes, fields);
+                let recId = SchemaConstants.UNSAVED_RECORD_ID;
+
                 dispatch(event(recId, types.SAVE_RECORD, {appId, tblId, recId, changes}));
 
                 let recordService = new RecordService();
@@ -413,20 +434,24 @@ export const updateRecord = (appId, tblId, recId, params = {}) => {
         payload.push(colChange);
     }
 
-    function getConstrainedUnchangedValues(_pendEdits, _fields, changes, list) {
-        // add in any editable fields values that are required or unique so that server can validate them if they
-        // were created before the field's constraint was made. So modifying a record via patch will check those
-        // fields for validity even if the user didn't edit the value.
-        if (_fields) {
-            _fields.forEach((field) => {
+    function getConstrainedUnchangedValues(pendEdits, fields, changes, list) {
+        // add in any editable fields values so that the node server can validate any defined field constraint. This
+        // means modifying a record via patch will check those fields for validity even if the user didn't edit the value.
+        // We what is behavior as a field attribute could of changed (ie: make a field required that previously was not)
+        // and it now fails validation.
+        if (fields) {
+            fields.forEach((field) => {
                 if (changes[field.id] === undefined) {
-                    if (!field.builtIn && (field.required || field.unique)) {
-                        if (_pendEdits.originalRecord && _pendEdits.originalRecord.fids && _pendEdits.originalRecord.fids[field.id]) {
-                            let newValue = _pendEdits.originalRecord.fids[field.id].value;
-                            if (newValue === null) {
-                                newValue = "";
+                    if (!field.builtIn) { //} && (field.required || field.unique)) {
+                        if (pendEdits.originalRecord && pendEdits.originalRecord.fids && pendEdits.originalRecord.fids[field.id]) {
+                            let newValue = pendEdits.originalRecord.fids[field.id].value;
+                            if (_.isNil(newValue)) {
+                                newValue = '';
                             }
-                            let newDisplay = _pendEdits.originalRecord.fids[field.id].display;
+                            let newDisplay = pendEdits.originalRecord.fids[field.id].display;
+                            if (_.isNil(newDisplay)) {
+                                newDisplay = '';
+                            }
                             createColChange(newValue, newDisplay, field, list);
                         }
                     }
@@ -435,11 +460,11 @@ export const updateRecord = (appId, tblId, recId, params = {}) => {
         }
     }
 
-    function getChanges(_pendEdits, _fields) {
+    function getChanges(pendEdits, fields) {
         // get the current edited data
         let changes = {};
-        if (_pendEdits.recordChanges) {
-            changes = _.cloneDeep(_pendEdits.recordChanges);
+        if (pendEdits.recordChanges) {
+            changes = _.cloneDeep(pendEdits.recordChanges);
         }
 
         let payload = [];
@@ -447,11 +472,10 @@ export const updateRecord = (appId, tblId, recId, params = {}) => {
             if (changes[key].newVal) {
                 let newValue = changes[key].newVal.value;
                 let newDisplay = changes[key].newVal.display;
-                if (_.has(_pendEdits, 'originalRecord.fids')) {
-                    if (_pendEdits.originalRecord.fids.hasOwnProperty(key)) {
-                        if (newValue !== _pendEdits.originalRecord.fids[key].value) {
-                            //get each columns matching field description
-                            let matchingField = changes[key].fieldDef;
+                if (_.has(pendEdits, 'originalRecord.fids')) {
+                    if (pendEdits.originalRecord.fids.hasOwnProperty(key)) {
+                        if (newValue !== pendEdits.originalRecord.fids[key].value) {
+                            let matchingField = _.find(fields, field => field.id === pendEdits.originalRecord.fids[key].id);
                             createColChange(newValue, newDisplay, matchingField, payload);
                         }
                     }
@@ -459,7 +483,7 @@ export const updateRecord = (appId, tblId, recId, params = {}) => {
             }
         });
 
-        getConstrainedUnchangedValues(_pendEdits, _fields, changes, payload);
+        getConstrainedUnchangedValues(pendEdits, fields, changes, payload);
         return payload;
     }
 
