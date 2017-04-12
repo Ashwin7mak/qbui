@@ -391,6 +391,16 @@ module.exports = function(grunt) {
             devunit: {
                 browsers: ["Chrome"],
                 singleRun : false
+            },
+            governance: {
+                configFile: './governance/governance.karma.conf.js',
+                browsers: ["PhantomJS_Desktop"],
+                singleRun : true
+            },
+            reuse: {
+                configFile: './reuse/reuse.karma.conf.js',
+                browsers: ["PhantomJS_Desktop"],
+                singleRun : true
             }
         },
 
@@ -923,6 +933,24 @@ module.exports = function(grunt) {
             ]);
         }
 
+        if (target === 'reuse') {
+            return grunt.task.run([
+                'clean:client',
+                'autoprefixer',
+                'karma:reuse',
+                'fixCoveragePaths'
+            ]);
+        }
+
+        if (target === 'governance') {
+            return grunt.task.run([
+                'clean:client',
+                'autoprefixer',
+                'karma:governance',
+                'fixCoveragePaths'
+            ]);
+        }
+
         // Run your protractor tests locally against your dev env
         if (target === 'e2eLocal') {
             return grunt.task.run([
@@ -988,6 +1016,8 @@ module.exports = function(grunt) {
             'codeStandards',
             // run unit tests
             'test:client',
+            'test:reuse',
+            'test:governance',
             //'test:server' // no coverage
             'test:coverage' // server with coverage
         ]);
