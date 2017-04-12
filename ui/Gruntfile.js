@@ -982,7 +982,7 @@ module.exports = function(grunt) {
 
         if (target === 'reuse') {
             return grunt.task.run([
-                'clean:client',
+                'clean:reuse',
                 'autoprefixer',
                 'karma:reuse',
                 'fixCoveragePaths'
@@ -991,7 +991,7 @@ module.exports = function(grunt) {
 
         if (target === 'governance') {
             return grunt.task.run([
-                'clean:client',
+                'clean:governance',
                 'autoprefixer',
                 'karma:governance',
                 'fixCoveragePaths'
