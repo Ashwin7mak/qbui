@@ -8,8 +8,7 @@ import QBicon from '../qbIcon/qbIcon';
 import './leftNav.scss';
 import AppUtils from '../../utils/appUtils';
 import * as SpinnerConfigurations from "../../constants/spinnerConfigurations";
-import LogoImg from '../../../../reuse/client/src/assets/images/QB-logo.svg';
-import ToggleAreaLogo from '../../../../reuse/client/src/assets/images/QB3-logo.svg';
+import LogoImg from '../../../../reuse/client/src/assets/images/QB3-logo.svg';
 
 let LeftNav = React.createClass({
 
@@ -41,7 +40,7 @@ let LeftNav = React.createClass({
         return (<div className="appsToggleArea">
             {this.props.selectedAppId &&
             <Button className="appsToggle" onClick={this.props.onToggleAppsList}>
-                <img className={"toggleAreaLogo"} alt="QuickBase" src={ToggleAreaLogo} />
+                <QBicon icon={"favicon"}/>
                 <span className={"navLabel"}> {app ? app.name : ''}</span>
                 <QBicon className={"appsToggleIcon"} icon="caret-up"/>
             </Button>
