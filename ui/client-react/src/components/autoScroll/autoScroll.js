@@ -98,11 +98,14 @@ class AutoScroll extends Component {
 
     getContainerDimension() {
         let container = this.getContainer();
-
+        let containerBottom = container.offsetHeight;
+        if (window.innerHeight < containerBottom) {
+            containerBottom = window.innerHeight;
+        }
         return {
             containerOffsetLeft: container.offsetLeft,
             containerRightSide: container.offsetLeft + container.offsetWidth,
-            containerBottom: container.offsetHeight,
+            containerBottom: containerBottom,
             containerTop: container.offsetTop
         };
 
@@ -127,10 +130,13 @@ class AutoScroll extends Component {
     getContainer() {
         let container;
 
-        if (this.props.children) {
-            container = document.querySelector(`.${this.props.children.props.className}`);
+        // if (this.props.children) {
+        //     container = document.querySelector(`.${this.props.children.props.className}`);
+        // }
+        if (this.props.parentContainer) {
+            container = document.querySelector(`.${this.props.parentContainer}`);
         }
-
+        console.log('className: ', this.props.parentContainer);
         return container;
     }
 
@@ -153,6 +159,9 @@ class AutoScroll extends Component {
         /**
          * Activate auto scroll only if it is in the designated scroll zone within the container
          * */
+        console.log('pointerY > containerBottom: ', pointerY > containerBottom);
+        console.log('pointerX < containerRightSide: ', pointerX < containerRightSide);
+        console.log('pointerX > containerOffsetLeft: ', pointerY > containerBottom);
         if (pointerY > containerBottom &&
             pointerX < containerRightSide &&
             pointerX > containerOffsetLeft) {
@@ -174,7 +183,7 @@ class AutoScroll extends Component {
 
         container.scrollTop = scrollTop + pixelsPerFrame;
         pixelsPerFrame = pixelsPerFrame + pixelsPerFrame;
-
+        console.log('pixelsPerFrame: ', pixelsPerFrame);
         this.scrollingAnimationId = window.requestAnimationFrame(this.scrollDown);
     }
 

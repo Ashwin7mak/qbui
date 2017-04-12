@@ -208,7 +208,8 @@ export const FormBuilderContainer = React.createClass({
                         <div className="formBuilderContainerContent">
                             <AutoScroll
                                 pixelsFromBottomForLargeDevices={80}
-                                pixelsFromBottomForMobile={50}>
+                                pixelsFromBottomForMobile={50}
+                                parentContainer="formBuilderContainerContent">
                                 <div className="formBuilderContent">
                                     <Loader loaded={loaded} options={LARGE_BREAKPOINT}>
                                         <FormBuilder
@@ -222,8 +223,8 @@ export const FormBuilderContainer = React.createClass({
                                         />
                                     </Loader>
                                 </div>
-                            </AutoScroll>
 
+                            </AutoScroll>
                             {this.getSaveOrCancelFooter()}
                         </div>
                     </FieldProperties>
