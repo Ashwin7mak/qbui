@@ -3,7 +3,6 @@
 let path = require("path");
 let webpack = require('webpack');
 let nodeModulesPath = path.resolve(__dirname, "node_modules");
-let nodeComponentsPath = path.resolve(__dirname, "client-react/src/components/node");
 let testsFile = "tests.webpack.js";
 let testWithCoverage = true;
 let profilePath = path.resolve(__dirname, '../build/chromeDebugPath'); //use to keep debug settings between sessions applied in customLaunchers ChromeWithCustomConfig
@@ -186,21 +185,20 @@ module.exports = function(config) {
 
     if (testWithCoverage) {
         newConf.preprocessors = Object.assign({}, newConf.preprocessors, {
-            "../governance/src/**/*.js" : ["coverage"]
+            "./src/**/*.js" : ["coverage"],
+
+            // We exclude client-react and reuse from governance coverage. Files in those folders shouldn't count for or against coverage in governance.
+            "!../client-react/**/*.js" : ["coverage"],
+            "!../reuse/**/*.js" : ["coverage"]
         });
         newConf.webpack.module.postLoaders = [
             { //delays coverage til after tests are run, fixing transpiled source coverage error
                 test: /\.js$/,
                 include: [
-                    path.resolve(__dirname, "../client-react/src"),
-                    path.resolve(__dirname, "../reuse/client/src"),
                     path.resolve(__dirname, "./src")
                 ],
                 exclude: [
                     nodeModulesPath,
-                    nodeComponentsPath,
-                    path.resolve(__dirname, "../client-react/test"),
-                    path.resolve(__dirname, "../reuse/client/test"),
                     path.resolve(__dirname, "./test")
                 ],
                 loader: "istanbul-instrumenter"
