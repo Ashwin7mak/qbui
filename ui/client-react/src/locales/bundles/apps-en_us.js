@@ -107,7 +107,10 @@ export default {
             next: "Next",
             previous: "Previous",
             finished: "Finished",
-            new: "New"
+            new: "New",
+            apply: "Apply",
+            backToApp: "Back to app",
+            reset: "Reset"
         },
         field: {
             search: "Search",
@@ -124,7 +127,6 @@ export default {
         },
         pageActions: {
             addRecord: "Add a record",
-            configureFormBuilder: 'Modify this form',
             saveRecord: "Save changes",
             saveAndAddRecord: "Save and add a new row",
             saveAndAddRecordDisabled: "Adding records in the grid is not available yet",
@@ -137,7 +139,8 @@ export default {
             print: "Print",
             customizeReport: "Customize this Report",
             customizeForm: "Customize this Form",
-            customizePage: "Customize this Page"
+            customizePage: "Customize this Page",
+            deleteTable: "Delete Table"
         },
         recordActions: {
             previous: "Previous",
@@ -631,6 +634,19 @@ export default {
         },
         iconChooser: {
             searchPlaceholder: "Search table icons..."
+        },
+        settings: {
+            header: "Settings",
+            tablesHeader: "Table",
+            appsHeader: "Table",
+            formsHeader: "Form",
+            tableSettings: 'Table properties & settings',
+            configureFormBuilder: 'Modify this form',
+        },
+        tableEdit: {
+            tableUpdateFailed: "Failed to update table",
+            tableUpdated: "Table information saved",
+            tableReset: "Table information not saved"
         }
     }
 };
