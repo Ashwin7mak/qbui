@@ -232,6 +232,12 @@ export const ReportGrid = React.createClass({
         return pendEdits;
     },
 
+    isOnlyOneColumnVisible() {
+        return this.props.columns.filter(column => {
+            return !column.fieldDef.isHidden;
+        }).length === 1;
+    },
+
     render() {
         let isRecordValid = true;
         if (_.has(this.props, 'editErrors.ok')) {
@@ -243,6 +249,8 @@ export const ReportGrid = React.createClass({
 
         let pendEdits = this.getPendEdits();
         let isInLineEditOpen = (pendEdits.isInlineEditOpen === true);
+
+        let isOnlyOneColumnVisible = this.isOnlyOneColumnVisible();
 
         return <QbGrid
             numberOfColumns={_.isArray(this.props.columns) ? this.props.columns.length : 0}
@@ -291,7 +299,8 @@ export const ReportGrid = React.createClass({
                 appId: this.props.appId,
                 tblId: this.props.tblId,
                 rptId: this.props.rptId,
-                sortFids: this.props.sortFids
+                sortFids: this.props.sortFids,
+                isOnlyOneColumnVisible: isOnlyOneColumnVisible
             }}
         />;
     }

@@ -23,6 +23,7 @@ export const ReportColumnHeaderMenu = React.createClass({
         sortReport: PropTypes.func,
         groupReport: PropTypes.func,
         hideColumn: PropTypes.func,
+        isOnlyOneColumnVisible: PropTypes.bool,
     },
 
     /**
@@ -166,6 +167,7 @@ export const ReportColumnHeaderMenu = React.createClass({
     },
 
     render() {
+        let isDisabled = this.props.isOnlyOneColumnVisible;
         return (
             <Dropdown bsStyle="default" noCaret id="dropdown-no-caret">
                 <Button tabIndex="0" bsRole="toggle" className={"dropdownToggle iconActionButton"}>
@@ -196,7 +198,7 @@ export const ReportColumnHeaderMenu = React.createClass({
 
                     <MenuItem disabled><I18nMessage message="report.menu.addColumnBefore"/></MenuItem>
                     <MenuItem disabled><I18nMessage message="report.menu.addColumnAfter"/></MenuItem>
-                    <MenuItem onSelect={this.hideColumn}>
+                    <MenuItem disabled={isDisabled} onSelect={this.hideColumn}>
                         <I18nMessage message="report.menu.hideColumn"/>
                     </MenuItem>
                 </Dropdown.Menu>
