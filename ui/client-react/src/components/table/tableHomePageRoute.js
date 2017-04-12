@@ -2,6 +2,7 @@ import React from 'react';
 import Stage from '../stage/stage';
 import ReportStage from '../report/reportStage';
 import ReportHeader from '../report/reportHeader';
+import TableHomePageInitial from './tableHomePageInitial';
 import TableIcon from '../qbTableIcon/qbTableIcon';
 import IconActions from '../actions/iconActions';
 import ReportToolsAndContent from '../report/reportToolsAndContent';
@@ -12,10 +13,12 @@ import {connect} from 'react-redux';
 import * as SearchActions from '../../actions/searchActions';
 import * as TableActions from '../../actions/tableActions';
 import * as FieldsActions from '../../actions/fieldsActions';
+import {showTableCreationDialog} from '../../actions/tableCreationActions';
 import {loadDynamicReport} from '../../actions/reportActions';
 import {CONTEXT} from '../../actions/context';
 import WindowLocationUtils from '../../utils/windowLocationUtils';
 import {EDIT_RECORD_KEY, NEW_RECORD_VALUE} from '../../constants/urlConstants';
+import _ from 'lodash';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
 import './tableHomePage.scss';
@@ -109,14 +112,19 @@ export const TableHomePageRoute = React.createClass({
         //  ensure there is a rptId property otherwise the report not found page is rendered in ReportToolsAndContent
         let homePageParams = _.assign(this.props.params, {rptId: null});
 
-        return (<div className="reportContainer">
-            <Stage stageHeadline={this.getStageHeadline()} pageActions={this.getPageActions(5)}>
-                <ReportStage reportData={this.props.reportData} />
-            </Stage>
+        let mainContent;
 
-            {this.getHeader()}
+        if (_.has(this.props, "reportData.data.records") && this.props.reportData.data.records.length === 0) {
+            if (window.sessionStorage && window.sessionStorage.newTables) {
+                const newTableIds = window.sessionStorage.newTables.split(",");
 
-            <ReportToolsAndContent
+                if (newTableIds.indexOf(this.props.params.tblId) !== -1) {
+                    mainContent = <TableHomePageInitial onCreateTable={this.props.showTableCreationDialog}
+                                                        onAddRecord={this.editNewRecord} />;
+                }
+            }
+        } else {
+            mainContent = <ReportToolsAndContent
                 params={homePageParams}
                 reportData={this.props.reportData}
                 appUsers={this.props.appUsers}
@@ -128,7 +136,17 @@ export const TableHomePageRoute = React.createClass({
                 rptId={this.props.reportData ? this.props.reportData.rptId : null}
                 nameForRecords={this.nameForRecords}
                 pendEdits={this.props.pendEdits}
-                loadDynamicReport={this.loadDynamicReport}/>
+                loadDynamicReport={this.loadDynamicReport}/>;
+        }
+
+        return (<div className="reportContainer">
+            <Stage stageHeadline={this.getStageHeadline()} pageActions={this.getPageActions(5)}>
+                <ReportStage reportData={this.props.reportData} />
+            </Stage>
+
+            {this.getHeader()}
+            {mainContent}
+
         </div>);
     }
 });
@@ -153,6 +171,9 @@ const mapDispatchToProps = (dispatch) => {
         },
         loadDynamicReport: (appId, tblId, rptId, format, filter, queryParams) => {
             dispatch(loadDynamicReport(CONTEXT.REPORT.NAV, appId, tblId, rptId, format, filter, queryParams));
+        },
+        showTableCreationDialog: () => {
+            dispatch(showTableCreationDialog());
         }
     };
 };

@@ -618,6 +618,12 @@ export default {
             validateTableNameEmpty: "Le nom de la table ne doit pas être vide",
             validateTableNameExists: "Le nom de la table doit être unique pour cette application",
             validateRecordNameEmpty: "Le nom de l'enregistrement ne doit pas être vide",
+
+            homePageInitialTitle: "Commencez à utiliser votre table",
+            homePageInitialDescription: "Nous avons créé quelques rapports pour accompagner votre nouvelle table afin que vous puissiez commencer à ajouter des enregistrements",
+            homePageAddRecordButton: "Ajouter un enregistrement",
+            homePageStillBuilding: "Bâtiment fixe?  ",
+            homePageCreateAnother: "Créer un autre tableau"
         },
         iconChooser: {
             searchPlaceholder: "Rechercher des icônes..."

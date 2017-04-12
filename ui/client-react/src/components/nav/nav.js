@@ -422,10 +422,19 @@ export const Nav = React.createClass({
     /**
      * new table was created, ensure it is displayed available in the UI
      */
-    tableCreated() {
+    tableCreated(tblId) {
         const flux = this.getFlux();
 
         flux.actions.loadApps(true);
+
+        if (window.sessionStorage) {
+            let newTables = window.sessionStorage.newTables;
+
+            let tableIds = newTables ? newTables.split(",") : [];
+            tableIds.push(tblId);
+
+            window.sessionStorage.newTables = tableIds.join(",");
+        }
     },
 
     onSelectItem() {

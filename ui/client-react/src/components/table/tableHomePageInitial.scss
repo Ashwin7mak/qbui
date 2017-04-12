@@ -1,0 +1,72 @@
+
+@import '../../assets/css/_qbVariables';
+
+.tableHomePageInitial {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .iconWrapper {
+        margin-top: 40px;
+        margin-bottom: 40px;
+        width: 50px;
+        height: 50px;
+    }
+
+    .description {
+        max-width: 350px;
+        margin-bottom: 30px;
+    }
+
+    .addRecordButton {
+        .qbIcon {
+            font-size: 24px;
+            vertical-align: middle;
+        }
+        flex-shrink: 0;
+        margin-bottom: 40px;
+    }
+}
+
+
+.starShape {
+    background: $color-black-300;
+    width: 60px;
+    height: 60px;
+    position: relative;
+    text-align: center;
+
+    .starShapeContent {
+        position: absolute;
+        z-index: 1;
+
+        .qbIcon {
+            font-size: 40px;
+            margin: 10px;
+        }
+    }
+}
+
+.starShape:before, .starShape:after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 60px;
+    width: 60px;
+    background: $color-black-300;
+}
+
+.starShape:before {
+    -webkit-transform: rotate(30deg);
+    -moz-transform: rotate(30deg);
+    -ms-transform: rotate(30deg);
+    -o-transform: rotate(30deg);
+}
+
+.starShape:after {
+    -webkit-transform: rotate(60deg);
+    -moz-transform: rotate(60deg);
+    -ms-transform: rotate(60deg);
+    -o-transform: rotate(60deg);
+}

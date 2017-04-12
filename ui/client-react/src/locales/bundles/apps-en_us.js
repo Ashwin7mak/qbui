@@ -626,6 +626,12 @@ export default {
             validateTableNameEmpty: "Fill in the table name",
             validateTableNameExists: "Fill in a different value. Another table is already using this name",
             validateRecordNameEmpty: "Fill in the record name",
+
+            homePageInitialTitle: "Start using your table",
+            homePageInitialDescription: "We created a couple of reports to go along with your new table so you can get started adding records",
+            homePageAddRecordButton: "Add a record",
+            homePageStillBuilding: "Still building?  ",
+            homePageCreateAnother: "Create another table"
         },
         iconChooser: {
             searchPlaceholder: "Search table icons..."

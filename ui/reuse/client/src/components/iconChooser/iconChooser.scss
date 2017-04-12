@@ -52,11 +52,13 @@
             color: $color-black-700;
             padding: 4px;
             margin: 6px;
+            transition: all 100ms ease-in;
         }
         .qbIcon:hover {
             background-color: $color-cyan-600;
             color: $color-black-100;
             border-radius: $radius-base * 2;
+            transition: all 100ms ease-in;
         }
     }
 

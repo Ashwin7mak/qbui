@@ -619,6 +619,12 @@ export default {
             validateTableNameEmpty: "Kann keine Tabelle erstellen",
             validateTableNameExists: "Der Tabellenname muss für diese App eindeutig sein",
             validateRecordNameEmpty: "Tabellenname darf nicht leer sein",
+
+            homePageInitialTitle: "Beginnen Sie mit Ihrem Tisch",
+            homePageInitialDescription: "Wir haben ein paar Berichte erstellt, um mit deiner neuen Tabelle zu gehen, damit du mit dem Hinzufügen von Datensätzen beginnen kannst",
+            homePageAddRecordButton: "Fügen Sie einen Datensatz hinzu",
+            homePageStillBuilding: "Noch gebaut  ",
+            homePageCreateAnother: "Erstellen Sie eine andere Tabelle"
         },
         iconChooser: {
             searchPlaceholder: "Tabellensymbole suchen ......"
