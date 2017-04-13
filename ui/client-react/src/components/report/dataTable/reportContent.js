@@ -70,8 +70,7 @@ export const ReportContent = React.createClass({
 
 
         if (this.props.openDrawer) {
-            console.log("openDrawer");
-            this.props.renderDrawerContainer(tblId, recId);
+            this.props.renderDrawerContainer(tblId, recId, this.props.uniqueId);
         } else {
             this.openRow(recId);
             //create the link we want to send the user to and then send them on their way
