@@ -64,19 +64,16 @@ var config = {
         // urls() that aren't inlined must not be loaded into a blob:// URL by webpack.
         bundle: [
             'bootstrap-sass!./client-react/bootstrap-sass.config.js',
-            path.resolve(reuseLibraryPath, 'client/src/assets/fonts/lato-font.css'),
             path.resolve(reuseLibraryPath, 'client/src/assets/css/qbMain.scss'),
             path.resolve(clientPath, 'src/scripts/router.js')
         ],
         componentLibrary: [
             'bootstrap-sass!./client-react/bootstrap-sass.config.js',
-            path.resolve(reuseLibraryPath, 'client/src/assets/fonts/lato-font.css'),
             path.resolve(reuseLibraryPath, 'client/src/assets/css/qbMain.scss'),
             path.resolve(componentLibraryPath, 'index.js')
         ],
         governance: [
             'bootstrap-sass!./client-react/bootstrap-sass.config.js',
-            path.resolve(reuseLibraryPath, 'client/src/assets/fonts/lato-font.css'),
             path.resolve(reuseLibraryPath, 'client/src/assets/css/qbMain.scss'),
             path.resolve(governancePath, 'src/app/index.js')
         ]

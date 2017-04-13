@@ -25,6 +25,10 @@ describe('BaseService rewire tests', () => {
         }
     };
 
+    var mockUnauthorizedRedirectConfiguration = {
+        unauthorizedRedirect: '/qbase/unauthorized'
+    };
+
     var mockSimpleDomainConfiguration = {
         legacyBase: '.quickbase.com'
     };
@@ -64,12 +68,14 @@ describe('BaseService rewire tests', () => {
         BaseServiceRewireAPI.__Rewire__('cookie', mockCookie);
         BaseServiceRewireAPI.__Rewire__('axios', mockAxios);
         BaseServiceRewireAPI.__Rewire__('WindowLocationUtils', mockWindowUtils);
+        BaseServiceRewireAPI.__Rewire__('Configuration', mockUnauthorizedRedirectConfiguration);
     });
 
     afterEach(() => {
         BaseServiceRewireAPI.__ResetDependency__('cookie');
         BaseServiceRewireAPI.__ResetDependency__('axios');
         BaseServiceRewireAPI.__ResetDependency__('WindowLocationUtils', mockWindowUtils);
+        BaseServiceRewireAPI.__ResetDependency__('Configuration', mockUnauthorizedRedirectConfiguration);
     });
 
     it('test constructor', () => {
@@ -82,7 +88,6 @@ describe('BaseService rewire tests', () => {
     it('test checkResponseStatus with 401 status', () => {
         baseService = new BaseService();
         baseService.checkResponseStatus({response: {status: 401}});
-        expect(mockWindowUtils.update).toHaveBeenCalled();
         expect(mockWindowUtils.replace).not.toHaveBeenCalled();
     });
 
@@ -138,25 +143,46 @@ describe('BaseService rewire tests', () => {
         expect(output).toEqual(url);
     });
 
-    it('test constructRedirectUrl method with simple subdomain', () => {
+    it('test constructRedirectUrl method with Configuration specifying unauthorizedRedirect', (done) => {
+        baseService = new BaseService();
+        baseService.constructRedirectUrl().then(function(url) {
+            expect(mockUnauthorizedRedirectConfiguration.unauthorizedRedirect).toEqual(url);
+        }).then(done, done);
+    });
+
+    var mockGetSimpleSubdomainAxios = {
+        get: function() {
+            return Promise.resolve({legacyUrl: `https://${simpleSubdomain.subdomain}.${simpleSubdomain.domain}`});
+        },
+    };
+
+    var mockGetComplexSubdomainAxios = {
+        get: function() {
+            return Promise.resolve({legacyUrl: `https://${complexSubdomain.subdomain}.${complexSubdomain.domain}`});
+        },
+    };
+
+    it('test constructRedirectUrl method with simple subdomain', (done) => {
         BaseServiceRewireAPI.__Rewire__('Configuration', mockSimpleDomainConfiguration);
         baseService = new BaseService();
         var expectedUrl = simpleSubdomain.expectedUrl + mockWindowUtils.getHref();
-        var url = baseService.constructRedirectUrl();
-        BaseServiceRewireAPI.__ResetDependency__('Configuration');
-        expect(expectedUrl).toEqual(url);
+        BaseServiceRewireAPI.__Rewire__('axios', mockGetSimpleSubdomainAxios);
+        baseService.constructRedirectUrl().then(function(url) {
+            expect(expectedUrl).toEqual(url);
+        }).then(done, done);
     });
 
-    it('test constructRedirectUrl method with complex subdomain', () => {
+    it('test constructRedirectUrl method with complex subdomain', (done) => {
         mockWindowUtils.getHref = function() {return complexSubdomain.href;};
         mockWindowUtils.getHostname = function() {return complexSubdomain.hostname;};
         BaseServiceRewireAPI.__Rewire__('WindowLocationUtils', mockWindowUtils);
         BaseServiceRewireAPI.__Rewire__('Configuration', mockComplexSubdomainConfiguration);
+        BaseServiceRewireAPI.__Rewire__('axios', mockGetComplexSubdomainAxios);
         baseService = new BaseService();
         var expectedUrl = complexSubdomain.expectedUrl + mockWindowUtils.getHref();
-        var url = baseService.constructRedirectUrl();
-        BaseServiceRewireAPI.__ResetDependency__('Configuration');
-        expect(expectedUrl).toEqual(url);
+        baseService.constructRedirectUrl().then(function(url) {
+            expect(expectedUrl).toEqual(url);
+        }).then(done, done);
     });
 
 });

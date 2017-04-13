@@ -5,10 +5,6 @@ import Locale from '../../locales/locale';
 
 // IMPORT FROM CLIENT REACT
 import SearchBox from '../../../../../client-react/src/components/search/searchBox';
-// Eventually FieldTokenInMenu could be passed in as a renderer
-import FieldTokenInMenu from '../../../../../client-react/src/components/formBuilder/fieldToken/fieldTokenInMenu';
-// IMPORT FROM CLIENT REACT
-
 import './listOfElements.scss';
 
 const FILTER_DEBOUNCE_TIMEOUT = 100;
@@ -93,9 +89,11 @@ class ListOfElements extends Component {
      * @param fieldTypes
      */
     renderElements = (fieldTypes) => {
+        //Tokens are being passed in as a renderer to reduce dependency on client-react
+        let TokenInMenu = this.props.renderer;
         return fieldTypes.map((fieldType, index) => (
             <li key={fieldType.key || index} className="listOfElementsItem">
-                <FieldTokenInMenu {...fieldType} isCollapsed={this.props.isCollapsed} />
+                <TokenInMenu {...fieldType} isCollapsed={this.props.isCollapsed} />
             </li>
         ));
     };
@@ -109,7 +107,6 @@ class ListOfElements extends Component {
         if (this.state.activeFieldFilter) {
             return this.renderFilteredFieldsList();
         }
-
         return this.props.elements.map((element, index) => {
             if (element.children) {
                 return (
@@ -157,6 +154,11 @@ ListOfElements.propTypes = {
     /**
      * Displays the filter box at the top of the menu */
     isFilterable: PropTypes.bool,
+
+    /**
+     * Tokens are being passed in as a renderer to allow this component to be reusable
+     * */
+    renderer: PropTypes.func,
 
     /**
      * A list of grouped elements to be displayed in the menu. */
