@@ -135,6 +135,7 @@ class AutoScroll extends Component {
         if (this.props.parentContainer) {
             container = this.props.parentContainer;
         }
+
         return container;
     }
 
@@ -157,13 +158,6 @@ class AutoScroll extends Component {
         /**
          * Activate auto scroll only if it is in the designated scroll zone within the container
          * */
-        console.log('pointerX: ', pointerX);
-        console.log('pointerY: ', pointerX);
-        // console.log('containerOffsetLeft: ', pointerX > containerOffsetLeft);
-        // console.log('containerRightSide: ', pointerX < containerRightSide);
-        //
-        console.log('containerBottom: ', containerBottom);
-        console.log('containerTop: ', containerTop);
         if (pointerY > containerBottom) {
             this.scrollingAnimationId = window.requestAnimationFrame(this.scrollDown);
         } else if (pointerY < containerTop) {
