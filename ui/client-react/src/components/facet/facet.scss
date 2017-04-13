@@ -52,7 +52,11 @@
     }
 
     .filterButton {
-        font-size: 18px;
+        font-size: $size-iconfont-medium;
+
+        @include small-breakpoint {
+            font-size: $size-iconfont-large;
+        }
 
         &.qbIcon {
             display: inline;
@@ -305,7 +309,7 @@
         }
 
         .facetsMenuButton.withoutSelections {
-            margin: 0; // no search box to effect centered height in small
+            margin: 10px 0 0; // no search box to effect centered height in small
         }
 
         .popover.bottom > .arrow {

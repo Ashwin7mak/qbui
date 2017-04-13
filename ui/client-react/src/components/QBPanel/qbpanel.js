@@ -5,7 +5,6 @@ import Collapse from 'react-bootstrap/lib/Collapse';
 import OverlayTrigger from 'react-bootstrap/lib/OverlayTrigger';
 import Tooltip from 'react-bootstrap/lib/Tooltip';
 import {I18nMessage} from '../../utils/i18nMessage';
-//import Button from 'react-bootstrap/lib/Button';
 
 /**
  *  # QBPanel
@@ -43,8 +42,7 @@ class QBPanel extends React.Component {
                     <h3 className="qbPanelHeaderTitle">
                         <div className="qbPanelHeaderTitleText">{this.props.title}</div>
                         <OverlayTrigger placement="bottom" overlay={<Tooltip id="expandToolTip">{this.state.open ? <I18nMessage message="nav.collapseSection"/> : <I18nMessage message="nav.expandSection"/>}</Tooltip>}>
-                        {<QBicon icon="caret-right" className={iconClass}/>}
-                            {/*<Button onClick={this.props.onCancel}><QBicon icon={"close"}/></Button>*/}
+                        <QBicon icon="caret-right" className={iconClass}/>
                             </OverlayTrigger>
                     </h3>
                 </div>
