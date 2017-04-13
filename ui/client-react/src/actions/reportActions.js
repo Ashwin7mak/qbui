@@ -350,5 +350,6 @@ export const hideColumn = (context, appId, tblId, rptId, params) => {
         } else {
             logger.error(`reportActions.hideColumn: Missing one or more required input parameters.  AppId:${appId}; TblId:${tblId}; RptId:${rptId}`);
         }
-    }
+    };
 };
+

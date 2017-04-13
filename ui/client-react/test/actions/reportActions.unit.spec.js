@@ -370,4 +370,20 @@ describe('Test ReportsActions function failure workflow', () => {
                 done();
             });
     });
+
+    it('hideColumn action dispatches types.HIDE_COLUMN with parameters', (done) => {
+        const expectedActions = [
+            event(context, types.HIDE_COLUMN, {columnId: 6})
+        ];
+        const store = mockReportsStore({});
+
+        return store.dispatch(reportActions.hideColumn(context, appId, tblId, rptId, {columnId: 6})).then(
+            () => {
+                expect(false).toBe(true);
+                done();
+            },
+            () => {
+                expect(store.getActions()).toEqual(expectedActions);
+            });
+    });
 });
