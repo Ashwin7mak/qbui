@@ -2,7 +2,10 @@ import React, {PropTypes, Component} from 'react';
 import MenuItem from 'react-bootstrap/lib/MenuItem';
 import DropDown from 'react-bootstrap/lib/Dropdown';
 import Icon from '../../icon/icon';
-import {I18nMessage} from '../../../utils/i18nMessage';
+
+// IMPORTED FROM CLIENT REACT
+import {I18nMessage} from '../../../../../../client-react/src/utils/i18nMessage';
+// IMPORTED FROM CLIENT REACT
 
 import './userDropDown.scss';
 

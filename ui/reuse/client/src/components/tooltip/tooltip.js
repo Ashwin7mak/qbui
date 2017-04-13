@@ -3,7 +3,10 @@ import OverlayTrigger from 'react-bootstrap/lib/OverlayTrigger';
 import BsToolTip from 'react-bootstrap/lib/Tooltip';
 import _ from 'lodash';
 import './tooltip.scss';
-import {I18nMessage} from '../../utils/i18nMessage';
+
+// CLIENT REACT IMPORT
+import {I18nMessage} from '../../../../../client-react/src/utils/i18nMessage';
+// CLIENT REACT IMPORT
 
 const Tooltip = React.createClass({
     propTypes: {
