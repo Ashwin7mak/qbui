@@ -35,13 +35,8 @@ class Pagination extends Component {
     };
 
     render() {
-<<<<<<< HEAD
-            let navBar = "report.reportNavigationBar";
-            if (!this.props.isHidden) {
-=======
         let navBar = "report.reportNavigationBar";
         if (!this.props.isHidden) {
->>>>>>> MC1066_Extract_refactor_report_navigation
             return (
                     <div className="reportNavigation">
                         {this.previousPageButton()}
@@ -52,21 +47,12 @@ class Pagination extends Component {
                                 />
                             </span>
                         {this.nextPageButton()}
-<<<<<<< HEAD
-                     </div>
-                );
-            }
-            return (<div className="spacer"></div>);
-        }
-    }
-=======
                     </div>
             );
         }
         return (<div className="spacer"></div>);
     }
 }
->>>>>>> MC1066_Extract_refactor_report_navigation
 
 
 Pagination.propTypes = {
