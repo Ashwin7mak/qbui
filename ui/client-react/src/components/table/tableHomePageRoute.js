@@ -141,6 +141,7 @@ export const TableHomePageRoute = React.createClass({
                                                 onAddRecord={this.editNewRecord} />;
         } else {
             mainContent = <ReportToolsAndContent
+                noRowsUI={true}
                 params={homePageParams}
                 reportData={this.props.reportData}
                 appUsers={this.props.appUsers}

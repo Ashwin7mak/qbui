@@ -123,15 +123,17 @@ export const ReportGrid = React.createClass({
          */
         searchString: PropTypes.string,
         // relationship phase-1, will need remove when we allow editing
-        phase1: PropTypes.bool
+        phase1: PropTypes.bool,
 
+        noRowsUI: PropTypes.bool
 
     },
 
     getDefaultProps() {
         return {
             records: [],
-            columns: []
+            columns: [],
+            noRowsUI: false
         };
     },
 
@@ -275,7 +277,7 @@ export const ReportGrid = React.createClass({
         let pendEdits = this.getPendEdits();
         let isInLineEditOpen = (pendEdits.isInlineEditOpen === true);
 
-        if (this.props.loading || transformedRecords.length > 0) {
+        if (!this.props.noRowsUI || this.props.loading || transformedRecords.length > 0) {
 
             return (
                 <QbGrid
