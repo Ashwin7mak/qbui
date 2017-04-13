@@ -35,9 +35,9 @@ class Pagination extends Component {
     };
 
     render() {
-            let navBar = "report.reportNavigationBar";
-            if (!this.props.isHidden) {
-            return (
+        let navBar = "report.reportNavigationBar";
+        if (!this.props.isHidden) {
+                return (
                     <div className="reportNavigation">
                         {this.previousPageButton()}
                             <span className="pageNumbers">
@@ -48,11 +48,11 @@ class Pagination extends Component {
                             </span>
                         {this.nextPageButton()}
                      </div>
-                );
+            );
             }
-            return (<div className="spacer"></div>);
-        }
+        return (<div className="spacer"></div>);
     }
+}
 
 
 Pagination.propTypes = {
