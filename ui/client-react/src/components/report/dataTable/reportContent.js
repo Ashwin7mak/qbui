@@ -391,12 +391,12 @@ export const ReportContent = React.createClass({
         this.props.createRecord(this.props.appId, this.props.tblId, params).then(
             // if create is successful and adding a new blank row via inline edit, will
             // init the new row so that it be in the proper state.
-            // NOTE: no work necessary if the promise rejected.
             (obj) => {
                 if (_.has(obj, 'recId') && addNewRow) {
                     let changes = this.setNewRowFieldChanges(SchemaConsts.UNSAVED_RECORD_ID);
                 }
-            }
+            },
+            () => {}   // no work necessary if the promise rejects
         );
     },
 
@@ -430,12 +430,12 @@ export const ReportContent = React.createClass({
             this.props.updateRecord(this.props.appId, this.props.tblId, recordId, params).then(
                 // if the update is successful and adding a new blank row via inline edit, will
                 // init the new row so that it be in the proper state.
-                // NOTE: no work necessary if the promise rejected.
                 (obj) => {
                     if (_.has(obj, 'recId') && addNewRow) {
                         let changes = this.setNewRowFieldChanges(SchemaConsts.UNSAVED_RECORD_ID);
                     }
-                }
+                },
+                () => {}   // no work necessary if the promise rejects
             );
         }
     },
