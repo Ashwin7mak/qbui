@@ -1,0 +1,90 @@
+html,
+input {
+    font-family : "Lato", Helvetica, Arial, sans-serif;
+    background:#fff;
+}
+
+.error_container {
+    width:532px;
+    margin:0 auto;
+    color:#404040;
+    text-align:center;
+}
+
+.error_container h1 {
+    margin     : 150px 0 61px;
+    font-size  : 150px;
+    text-align : center;
+    position: relative;
+    padding:0 125px;
+    line-height: 230px;
+}
+
+.error_container h1:before{
+    width:124.7px;
+    height:228.4px;
+    content:'';
+    display: block;
+    position:absolute;
+    left:0;
+    top:0;
+    background:url(/qbase/images/bracketLeft.svg) no-repeat;
+
+}
+
+.error_container h1:after{
+    width:125px;
+    height:229px;
+    content:'';
+    display: block;
+    position:absolute;
+    right:0;
+    top:0;
+    background:url(/qbase/images/bracketRight.svg) no-repeat;
+}
+
+.error_container p {
+    margin :0 0 45px;
+    font-size:19px;
+}
+
+.error_container a {
+    cursor : pointer;
+    color  : #fff;
+    width: 146px;
+    height: 38px;
+    line-height: 38px;
+    border-radius: 4px;
+    background: #00b1eb;
+    display:block;
+    margin:0 auto;
+    text-decoration: none;
+}
+
+@media (max-width: 750px) {
+    .error_container{
+        width:318px;
+    }
+    .error_container p{
+        font-size: 16px;
+    }
+    .error_container h1{
+        padding:0 78px;
+        font-size:100px;
+        line-height:140px;
+    }
+    .error_container h1:before, .error_container h1:after{
+        width:80px;
+        height:150px;
+    }
+}
+
+@media (max-width: 750px) and (orientation: landscape) and (-webkit-min-device-pixel-ratio: 2)
+    {
+    .error_container h1{
+        margin:20px 0 45px;
+    }
+    .error_container p{
+        margin:0 0 30px;
+    }
+}

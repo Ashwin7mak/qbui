@@ -30,9 +30,10 @@
     }
 
     .modal-body {
-        padding: $spacing-x-small;
-        padding-top: 10px;
+        padding-bottom: $spacing-x-small;
+        padding-top: $spacing-xxx-small;
         padding-left: $spacing-medium1;
+        padding-right: $spacing-medium1;
     }
 
     .modal-body > *:first-child {
