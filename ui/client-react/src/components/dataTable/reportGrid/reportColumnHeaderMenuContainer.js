@@ -89,7 +89,7 @@ const ReportColumnHeaderMenuContainer = (ReportColumnHeaderMenu) => {
         },
 
         hideColumn(columnId) {
-            if (!this.hasRequiredIds()) { return; }
+            if (!this.hasRequiredIds()) {return;}
             let params = {
                 columnId: columnId
             };
