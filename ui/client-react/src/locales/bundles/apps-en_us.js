@@ -110,7 +110,11 @@ export default {
             new: "New",
             apply: "Apply",
             backToApp: "Back to app",
-            reset: "Reset"
+            reset: "Reset",
+            closeRecord: "Close record",
+            expandSection: "Expand section",
+            collapseSection: "Collapse section"
+
         },
         field: {
             search: "Search",

@@ -36,9 +36,9 @@
         padding: 0 10px 0 20px;
 
         .qbIcon {
-            font-size: 18px;
+            font-size: $size-iconfont-medium;
             vertical-align: middle;
-            margin-right: 6px;
+            margin-bottom: 5px;
         }
 
         .breadcrumbs {
@@ -49,10 +49,7 @@
             .breadcrumbsContent {
                 overflow: hidden;
                 text-overflow: ellipsis;
-
-                * {
-                    vertical-align: middle;
-                }
+                margin-top:3px;
 
                 .primaryIcon {
                     margin-right: 10px;
