@@ -108,21 +108,35 @@ export const TableHomePageRoute = React.createClass({
             </div>);
     },
 
+    /**
+     * show we render the initial homepage information instead of the grid?
+     * @returns {boolean}
+     */
+    showInitialTableHomePage() {
+
+        const haveRecords = _.has(this.props, "reportData.data.records") && this.props.reportData.data.records.length > 0;
+        const newTablesJSONArrray = window.sessionStorage && window.sessionStorage.newTables;
+
+        if (haveRecords || !newTablesJSONArrray) {
+            return false;
+        }
+
+        // show the initial homepage if we have the current table ID in session storage's newTables JSON array
+
+        const newTableIds = newTablesJSONArrray.split(",");
+
+        return newTableIds.indexOf(this.props.params.tblId) !== -1;
+    },
+
     render() {
         //  ensure there is a rptId property otherwise the report not found page is rendered in ReportToolsAndContent
         let homePageParams = _.assign(this.props.params, {rptId: null});
 
         let mainContent;
 
-        if (_.has(this.props, "reportData.data.records") && this.props.reportData.data.records.length === 0) {
-            if (window.sessionStorage && window.sessionStorage.newTables) {
-                const newTableIds = window.sessionStorage.newTables.split(",");
-
-                if (newTableIds.indexOf(this.props.params.tblId) !== -1) {
-                    mainContent = <TableHomePageInitial onCreateTable={this.props.showTableCreationDialog}
+        if (this.showInitialTableHomePage()) {
+            mainContent = <TableHomePageInitial onCreateTable={this.props.showTableCreationDialog}
                                                         onAddRecord={this.editNewRecord} />;
-                }
-            }
         } else {
             mainContent = <ReportToolsAndContent
                 params={homePageParams}
