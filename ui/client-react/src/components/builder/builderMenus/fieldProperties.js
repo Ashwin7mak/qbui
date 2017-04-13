@@ -127,8 +127,8 @@ export class FieldProperties extends Component {
             <SideTrowser pullRight={true} sideMenuContent={
                 <div className="fieldPropertiesContainer">
                     {this.props.selectedField && this.createPropertiesTitle(this.props.selectedField.name)}
-                    {this.props.selectedField &&this.createNameProperty(this.props.selectedField.name)}
-                    {this.props.selectedField &&this.createRequiredProperty(this.props.selectedField.required)}
+                    {this.props.selectedField && this.createNameProperty(this.props.selectedField.name)}
+                    {this.props.selectedField && this.createRequiredProperty(this.props.selectedField.required)}
                 </div>
             }>
                 {this.props.children}

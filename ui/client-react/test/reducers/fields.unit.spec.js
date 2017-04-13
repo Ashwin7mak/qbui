@@ -76,25 +76,29 @@ describe('Test fields reducer', () => {
         const newState = [{
             appId: appId,
             tblId: tblId,
-            fields: [{builtIn:true, id:3}, {builtIn:false, id:8}, {builtIn:false, keyField:true, id:10}]
+            fields: [{builtIn: true, id: 3}, {builtIn: false, id: 8}, {builtIn: false, keyField: true, id: 10}]
         }];
         const actionPayload = {
             type: types.ADD_FIELD,
             content: {
                 newField: {},
-                appId:appId,
-                tblId:tblId
+                appId: appId,
+                tblId: tblId
             }
         };
-        const fieldsWithNewFieldAddedOn = [{builtIn:true, id:3}, {builtIn:false, id:8}, {builtIn:false, keyField:true, id:10}, {}];
-        const state = reducer(newState, actionPayload, {type:types.ADD_FIELD});
+        const fieldsWithNewFieldAddedOn = [{builtIn: true, id: 3}, {builtIn: false, id: 8}, {
+            builtIn: false,
+            keyField: true,
+            id: 10
+        }, {}];
+        const state = reducer(newState, actionPayload, {type: types.ADD_FIELD});
         const currentField = tableFieldsObj(state, appId, tblId);
 
         expect(currentField.appId).toEqual(appId);
         expect(currentField.tblId).toEqual(tblId);
         expect(currentField.fields).toEqual(fieldsWithNewFieldAddedOn);
     });
-
+    
     it('updates a field', () => {
         //load some fields so we can update them!
         const fields = [{builtIn:true, id:3}, {builtIn:false, id:8}, {builtIn:false, keyField:true, id:10}];
@@ -116,4 +120,3 @@ describe('Test fields reducer', () => {
         expect(getField(state, field.id, appId, tblId)).toEqual(field);
     });
 });
-

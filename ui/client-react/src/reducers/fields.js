@@ -33,7 +33,6 @@ const fieldsStore = (state = [], action) => {
 
     //  new state list without the appId/tblId entry
     const newState = _.reject(state, field => field.appId === action.appId && field.tblId === action.tblId);
-
     let getCurrentState = (appId, tblId) =>  _.find(state, field => field.appId === appId && field.tblId === tblId);
 
     let logger = new Logger();

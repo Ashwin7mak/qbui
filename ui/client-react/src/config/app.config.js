@@ -43,7 +43,6 @@ if (__QB_PROD__) {
             logToConsole: false,
             logToServer: true
         },
-        legacyBase: '.quickbase.com',
         unauthorizedRedirect: null,
         // walkme java script
         walkmeJSSnippet : 'https://cdn.walkme.com/users/897ca46385a543cbbeaffbc655cdf312/walkme_897ca46385a543cbbeaffbc655cdf312_https.js'
@@ -59,7 +58,6 @@ if (__QB_TEST__) {
             logToConsole: false,
             logToServer: false
         },
-        legacyBase: '.currentstack-int.quickbaserocks.com',
         unauthorizedRedirect: null,
         // walkme java script
         walkmeJSSnippet : ''
@@ -75,7 +73,6 @@ if (__QB_LOCAL__) {
             logToConsole: true,
             logToServer: false
         },
-        legacyBase: '.quickbase-dev.com',
         detectInvalidMutations: false, /* use redux-immutable-state-invariant middleware? */
         unauthorizedRedirect: '/qbase/unauthorized',
         // walkme java script

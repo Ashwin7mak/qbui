@@ -9,10 +9,17 @@ export default {
 
     messages: {
         governance: {
-            home: {
-                welcome: "Welcome to Governance! - de-de"
+            account: {
+                users: {
+                    paidSeats: "Paid seats DE",
+                    deniedUsers: "Denied users DE",
+                    deactivatedUsers: "Deactivated users DE",
+                    realmDirectoryUsers: "In realm directory DE",
+                    stageTitle: "Manage all Users DE",
+                    stageDescription: "FR Use this page to manage QuickBase users at the account and realm levels. Take a look around and try out the functionality. If you have any feedback, we'd love to hear it:",
+                    feedbackLinkText: "https://some.quickbase.com/link/to/feedback"
+                }
             }
-            // put new governance strings here
         }
     }
 };
