@@ -148,11 +148,7 @@ const report = (state = [], action) => {
         return state;
     }
     case types.SAVE_RECORD_SUCCESS: {
-        //  listen to record save event.  If there is a report context
-        //  defined, then the report is updated with the new/updated record.
-        //
-        //  NOTE: this record event is listened to in the report reducer
-        //  to avoid multiple renders of the grid.
+        //  NOTE: this event is listened to in the record reducer to avoid multiple grid renders.
         let rpt = _.get(action, 'content.report');
         if (rpt && rpt.context) {
             let currentReport = getReportFromState(rpt.context);
@@ -165,20 +161,17 @@ const report = (state = [], action) => {
                 };
 
                 if (content.newRecId) {
-                    //  if there is a blank record created from inline editing, we'll delete the blank record
+                    //  if there is a blank record created from inline editing, we'll remove the blank record
                     //  from the report and then add the new row based on recId supplied when creating the blank row
                     const hasBlankRec = ReportModelHelper.isBlankRecInReport(currentReport);
                     if (hasBlankRec) {
                         //  delete the blank row from the report
                         ReportModelHelper.deleteRecordFromReport(currentReport, UNSAVED_RECORD_ID);
-
                         //  add the new row where the blank row was sitting...we know where that is because we
                         //  saved the rec id immediately prior to the blank row when it was added to the report.
                         content.afterRecId = currentReport.recIdBeforeBlankRow;
-                        ReportModelHelper.addReportRecord(currentReport, content);
-                    } else {
-                        ReportModelHelper.addReportRecord(currentReport, content);
                     }
+                    ReportModelHelper.addReportRecord(currentReport, content);
                 } else {
                     // update the existing report row
                     ReportModelHelper.updateReportRecord(currentReport, content);
@@ -249,6 +242,7 @@ const report = (state = [], action) => {
         return state;
     }
     case types.REMOVE_BLANK_REPORT_RECORD:
+        //  NOTE: this event is listened to in the record reducer to avoid multiple grid renders.
         let currentReport = getReportFromState(action.id);
         if (currentReport && action.content) {
             const appId = action.content.appId;

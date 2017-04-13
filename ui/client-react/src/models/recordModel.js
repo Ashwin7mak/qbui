@@ -42,7 +42,7 @@ class RecordModel {
 
     getEntryKey() {
         if (this.model.currentEditingAppId && this.model.currentEditingTableId) {
-            return '' + this.model.currentEditingAppId + '/' + this.model.currentEditingTableId + '/' + this.model.currentEditingRecordId;
+            return '${this.model.currentEditingAppId}/${this.model.currentEditingTableId}/${this.model.currentEditingRecordId}';
         }
         return null;
     }

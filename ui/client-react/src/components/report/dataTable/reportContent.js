@@ -389,8 +389,10 @@ export const ReportContent = React.createClass({
             addNewRow: addNewRow
         };
         this.props.createRecord(this.props.appId, this.props.tblId, params).then(
+            // if create is successful and adding a new blank row via inline edit, will
+            // init the new row so that it be in the proper state.
+            // NOTE: no work necessary if the promise rejected.
             (obj) => {
-                //  successful if a recId is returned
                 if (_.has(obj, 'recId') && addNewRow) {
                     let changes = this.setNewRowFieldChanges(SchemaConsts.UNSAVED_RECORD_ID);
                 }
@@ -426,8 +428,10 @@ export const ReportContent = React.createClass({
                 addNewRow: addNewRow
             };
             this.props.updateRecord(this.props.appId, this.props.tblId, recordId, params).then(
+                // if the update is successful and adding a new blank row via inline edit, will
+                // init the new row so that it be in the proper state.
+                // NOTE: no work necessary if the promise rejected.
                 (obj) => {
-                    //  successful if a recId is returned
                     if (_.has(obj, 'recId') && addNewRow) {
                         let changes = this.setNewRowFieldChanges(SchemaConsts.UNSAVED_RECORD_ID);
                     }
@@ -448,8 +452,7 @@ export const ReportContent = React.createClass({
         }
 
         let changes = {};
-        // loop thru the values in the new rec add any non nulls to change set
-        // so it will be treated as dirty/not saved
+        // loop thru the values in the new rec and add any non nulls to the changeSet so it will be treated as dirty/not saved
         Object.keys(newRec).forEach((key) => {
             let field = newRec[key];
             let fieldDef = _.has(this.props, 'reportData.data.fieldsMap') ? this.props.reportData.data.fieldsMap.get(+field.id) : null;

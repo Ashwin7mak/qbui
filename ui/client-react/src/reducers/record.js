@@ -168,6 +168,7 @@ const record = (state = [], action) => {
         return newState(currentRecd);
     }
     case types.SAVE_RECORD_SUCCESS: {
+        //  NOTE: this event is listened to in the report reducer to avoid multiple grid renders.
         let savedState = null;
         let currentRecd = getRecordFromState(action.id);
         if (currentRecd) {
@@ -289,6 +290,7 @@ const record = (state = [], action) => {
         return state;
     }
     case types.REMOVE_BLANK_REPORT_RECORD: {
+        //  NOTE: this event is listened to in the report reducer to avoid multiple grid renders.
         let recId = action.content.recId;
         const currentRecd = getRecordFromState(recId);
         if (_.has(currentRecd, 'pendEdits')) {
