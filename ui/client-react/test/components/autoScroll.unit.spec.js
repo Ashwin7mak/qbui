@@ -160,7 +160,7 @@ describe('AutoScroll', () => {
             expect(instance.stopScrolling.calls.count()).toBe(1);
         });
 
-        fit('should add default props for adding extra pixels at the bottom and top for large and small break points', function() {
+        it('should add default props for adding extra pixels at the bottom and top for large and small break points', function() {
 
             let component = mount(<AutoScroll parentContainer={mockParentContainer} />);
             let instance = component.instance();
