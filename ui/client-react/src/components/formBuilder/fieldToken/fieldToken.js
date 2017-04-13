@@ -1,5 +1,6 @@
 import React, {PropTypes} from 'react';
 import FieldUtils from '../../../utils/fieldUtils';
+import FieldFormats from '../../../utils/fieldFormats';
 import Icon from '../../../../../reuse/client/src/components/icon/icon';
 
 import './fieldToken.scss';
