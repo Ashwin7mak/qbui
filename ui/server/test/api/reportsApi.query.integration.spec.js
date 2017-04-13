@@ -46,9 +46,14 @@
             recordBase.createApp(appWithNoFlags).then(function(appResponse) {
                 app = JSON.parse(appResponse.body);
                 var recordsEndpoint = recordBase.apiBase.resolveRecordsEndpoint(app.id, app.tables[0].id);
-                recordBase.createBulkRecords(recordsEndpoint, [JSON.parse(testRecord1), JSON.parse(testRecord2), JSON.parse(testRecord3)]).then(function() {
-                    done();
-                });
+                recordBase.createBulkRecords(recordsEndpoint, [JSON.parse(testRecord1), JSON.parse(testRecord2), JSON.parse(testRecord3)]).then(
+                    function() {
+                        done();
+                    },
+                    function(error) {
+                        throw new Error("Error in set up for ReportsApi" + JSON.stringify(error));
+                    }
+                );
             }).catch(function(error) {
                 log.error(JSON.stringify(error));
                 done();
