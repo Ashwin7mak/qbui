@@ -20,7 +20,6 @@ describe('AutoScroll', () => {
         it('should call scrollUp when the mouse is in the top scroll zone', function() {
 
             let e = {
-                clientX: 55,
                 clientY: 0
             };
 
@@ -40,7 +39,6 @@ describe('AutoScroll', () => {
         it('should call scrollDown when the mouse is in the bottom scroll zone', function() {
 
             let e = {
-                clientX: 55,
                 clientY: 100
             };
 
@@ -60,7 +58,6 @@ describe('AutoScroll', () => {
         it('should call stopScrolling when the mouse is not in a scroll zone', function() {
 
             let e = {
-                clientX: 45,
                 clientY: 50
             };
 

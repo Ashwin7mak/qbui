@@ -106,6 +106,7 @@ class AutoScroll extends Component {
     }
 
     getContainerDimension() {
+        //getBondingClientRect is used because it only gets the dimension of the container inside of the viewport
         let container = this.getContainer().getBoundingClientRect();
         return {
             containerBottom: container.bottom,
@@ -143,7 +144,6 @@ class AutoScroll extends Component {
         this.stopScrolling();
 
         let pointerY = this.pointerY;
-        let pointerX = this.pointerX;
 
         let {containerBottom, containerTop} = this.getContainerDimension();
 
