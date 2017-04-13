@@ -72,7 +72,8 @@
                             resolve();
                         }).catch((ex) =>{
                             requestHelper.logUnexpectedError('appsApi.getTableProperties(): unexpected error getting table properties', ex, true);
-                            reject(ex);
+                            //always resolve - we do not want to block the get Apps call on this failure
+                            resolve();
                         });
                 });
             },
