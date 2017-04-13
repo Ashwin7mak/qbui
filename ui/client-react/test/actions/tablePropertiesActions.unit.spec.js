@@ -47,7 +47,7 @@ describe('Table properties actions', () => {
     });
 
     it('should create an action for loaded table props', () => {
-        expect(actions.loadedTable({})).toEqual({type: types.LOADED_TABLE_PROPS, tableInfo: {}});
+        expect(actions.loadTableProperties({})).toEqual({type: types.LOADED_TABLE_PROPS, tableInfo: {}});
     });
 
     it('should create an action for setting the editing property', () => {
@@ -106,7 +106,7 @@ describe('Table properties actions', () => {
         // so we don't need to spy on the dispatcher etc.
 
         const expectedActions = [
-            {type: types.LOADED_TABLE_PROPS, tableInfo: {name: 'name', tableNoun: 'noun', description: '', tableIcon: 'Spreadsheet'}}
+            {type: types.LOADED_TABLE_PROPS, tableInfo: {name: 'name'}}
         ];
         const store = mockStore({});
 
