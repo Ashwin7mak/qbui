@@ -65,7 +65,6 @@ class AutoScroll extends Component {
         this.mouseDownSetIntervalId = undefined;
 
         this.pointerY = undefined;
-        this.pointerX = undefined;
 
         this.updateScrolling = this.updateScrolling.bind(this);
         this.stopScrolling = this.stopScrolling.bind(this);
@@ -152,7 +151,6 @@ class AutoScroll extends Component {
 
         if (e && e.type === 'touchmove') {
             pointerY = e.touches[0].clientY;
-            // pointerX = e.touches[0].clientX;
         }
 
         /**
@@ -200,7 +198,6 @@ class AutoScroll extends Component {
 
     updateMouseLocation(e) {
         this.pointerY = e.clientY;
-        this.pointerX = e.clientX;
     }
 
     mouseUpStopScrolling() {
