@@ -67,8 +67,8 @@ export const saveNewField = (appId, tblId, field, formId = null) => {
 
                 fieldsService.createField(appId, tblId, fieldCopy).then(
                     (response) => {
-                            dispatch(updateFieldId(oldFieldId, response.data.id, formId, appId, tblId));
-                            resolve();
+                        dispatch(updateFieldId(oldFieldId, response.data.id, formId, appId, tblId));
+                        resolve();
                     },
                     (errorResponse) => {
                         //  axios upgraded to an error.response object in 0.13.x

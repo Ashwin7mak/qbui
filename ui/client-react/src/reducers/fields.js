@@ -45,7 +45,7 @@ const fieldsStore = (state = [], action) => {
         return keyField;
     }
 
-    function getFields(content) {
+    function getFieldsFromContent(content) {
         return content ? content.fields : [];
     }
 
@@ -91,7 +91,7 @@ const fieldsStore = (state = [], action) => {
             appId: action.appId,
             tblId: action.tblId,
             keyField: getKeyField(action.content),
-            fields: getFields(action.content),
+            fields: getFieldsFromContent(action.content),
             fieldsLoading: false,
             error: false
         });
@@ -114,12 +114,13 @@ const fieldsStore = (state = [], action) => {
             appId: action.appId,
             tblId: action.tblId,
             keyField: getKeyField(action.formData),
-            fields: getFields(action.formData),
+            fields: getFieldsFromContent(action.formData),
             fieldsLoading: false,
             error: false
         });
         return newState;
     }
+
     case types.UPDATE_FIELD : {
         //newState above already pulled out the fieldList we want removed, so we just need to find our fieldList and update it!
         let fieldList = _.find(state, fieldlist => fieldlist.appId === action.appId && fieldlist.tblId === action.tblId);

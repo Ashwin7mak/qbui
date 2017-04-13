@@ -20,12 +20,12 @@ const mockFieldsActions = {
     saveAllNewFields(_appId, _tableId, formType) {
         return (dispatch) => {
             return Promise.resolve().then(() => (dispatch({type: 'AllFieldsSaved'})));
-        }
+        };
     },
     updateAllFieldsWithEdits(_appId, _tableId) {
         return (dispatch) => {
             return Promise.resolve().then(() => (dispatch({type: 'AllFieldsSaved'})));
-        }
+        };
     }
 };
 
@@ -218,9 +218,9 @@ describe('Form Actions', () => {
         const mockStore = configureMockStore(middlewares);
 
         const expectedSaveActions = [
-            {type: 'AllFieldsSaved'},
-            {type: 'AllFieldsSaved'},
             {id:'view', type:types.SAVING_FORM, content: null},
+            {type: 'AllFieldsSaved'},
+            {type: 'AllFieldsSaved'},
             {id: 'view', type: types.SAVING_FORM_SUCCESS, content: formData.formMeta}
         ];
         const expectedActions = [
@@ -313,7 +313,7 @@ describe('Form Actions', () => {
                     expect(false).toBe(true);
                     done();
                 }
-            )
+            );
         });
 
         it('saves existing fields that were edited on the form', (done) => {
@@ -332,7 +332,7 @@ describe('Form Actions', () => {
                     expect(false).toBe(true);
                     done();
                 }
-            )
+            );
         });
     });
 
@@ -413,14 +413,16 @@ describe('Form Actions', () => {
     });
     describe('addNewFieldToForm', () => {
         it('creates an action that will add a field', () => {
-            expect(formActions.addNewFieldToForm('view', 1, {}, 1, 1)).toEqual({
+            const testNewField = {id: 'newField_1', edit: true, FormFieldElement: {positionSameRow: false, fieldId: 'newField_1', displayText: 'New Text Field'}};
+            expect(formActions.addNewFieldToForm('view', 1, 2, 3, testNewField)).toEqual({
                 id: 'view',
                 type: types.ADD_FIELD,
+                appId: 1,
+                tblId: 2,
                 content: {
-                    newLocation: 1,
-                    newField: {id: 'newField_1', edit: true, FormFieldElement: {positionSameRow: false, fieldId: 'newField_1', displayText: 'New Text Field'}},
-                    appId: 1,
-                    tblId: 1
+                    newLocation: 3,
+                    newField: testNewField,
+
                 }
             });
         });

@@ -156,7 +156,7 @@ const forms = (
 
         // Remove all keys that are not necessary for forms
         Object.keys(newFieldCopy).forEach(key => {
-            if (key !== 'FormFieldElement' && key != 'id') {
+            if (key !== 'FormFieldElement' && key !== 'id') {
                 delete newFieldCopy[key];
             }
         });

@@ -342,8 +342,11 @@ function saveTheForm(appId, tblId, formType, formMeta, isNew) {
             .then(() => {
                 return new Promise((resolve, reject) => {
                     if (appId && tblId) {
-                        // Get the newest version of the form from state
-                        let form = getState().forms[formType].formData.formMeta;
+                        // Get the newest version of the form from state if it exists in state
+                        let form = formMeta;
+                        if (getState().forms && getState().forms[formType]) {
+                            form = getState().forms[formType].formData.formMeta;
+                        }
                         form = convertFormToObjectForServer(form);
 
                         logger.debug(`Saving form -- appId:${appId}, tableId:${tblId}, isNew:${isNew}`);
