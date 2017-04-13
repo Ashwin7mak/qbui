@@ -114,7 +114,9 @@ export default {
             searchNoMatch: "Keiner stimmt mit"
         },
         grid: {
-            no_data: "Es liegen keine Daten zum Anzeigen."
+            no_data: "Es liegen keine Daten zum Anzeigen.",
+            no_filter_matches: "Keine Datensätze übereinstimmen, was du suchst. Versuchen Sie, nach einer anderen Art von Rekord zu suchen.",
+            no_rows: "TheEs gibt keine Aufzeichnungen, um jetzt zu sehen."
         },
         globalActions: {
             user: "Benutzer",

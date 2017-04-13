@@ -14,11 +14,15 @@
     }
 
     .description {
+        color: $color-black-700;
         max-width: 350px;
         margin-bottom: 30px;
     }
 
     .addRecordButton {
+        font-size: $font-size-button;
+        color: $color-cyan-500;
+        border: 1px solid $color-cyan-500;
         .qbIcon {
             font-size: 24px;
             vertical-align: middle;
@@ -43,6 +47,7 @@
         .qbIcon {
             font-size: 40px;
             margin: 10px;
+            color: $color-purple-500;
         }
     }
 }

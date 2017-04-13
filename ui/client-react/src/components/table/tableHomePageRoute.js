@@ -136,8 +136,9 @@ export const TableHomePageRoute = React.createClass({
         let mainContent;
 
         if (this.showInitialTableHomePage()) {
-            mainContent = <TableHomePageInitial onCreateTable={this.props.showTableCreationDialog}
-                                                        onAddRecord={this.editNewRecord} />;
+            mainContent = <TableHomePageInitial selectedTable={this.props.selectedTable}
+                                                onCreateTable={this.props.showTableCreationDialog}
+                                                onAddRecord={this.editNewRecord} />;
         } else {
             mainContent = <ReportToolsAndContent
                 params={homePageParams}

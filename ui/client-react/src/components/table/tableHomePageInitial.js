@@ -1,5 +1,6 @@
 import React from 'react';
 import {PropTypes} from 'react';
+import Button from 'react-bootstrap/lib/Button';
 import Icon, {AVAILABLE_ICON_FONTS} from '../../../../reuse/client/src/components/icon/icon';
 import {I18nMessage} from "../../utils/i18nMessage";
 import './tableHomePageInitial.scss';
@@ -22,7 +23,7 @@ class TableHomePageInitial extends React.Component {
                 <div className="iconWrapper">
                     <div className="starShape">
                         <div className="starShapeContent">
-                           <Icon icon="projects" iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY}/>
+                           <Icon icon={_.has(this.props, "selectedTable.tableIcon") ? this.props.selectedTable.tableIcon : "projects"} iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY}/>
                         </div>
                     </div>
                 </div>
@@ -30,10 +31,10 @@ class TableHomePageInitial extends React.Component {
 
                 <div className="description"><I18nMessage message="tableCreation.homePageInitialDescription"/></div>
 
-                <button className="addRecordButton" onClick={this.props.onAddRecord}>
+                <Button className="addRecordButton" onClick={this.props.onAddRecord}>
                     <Icon icon="add-mini"/>
                     <I18nMessage message="tableCreation.homePageAddRecordButton"/>
-                </button>
+                </Button>
 
                 <div className="moreOptions">
                     <I18nMessage message="tableCreation.homePageStillBuilding"/>&nbsp;

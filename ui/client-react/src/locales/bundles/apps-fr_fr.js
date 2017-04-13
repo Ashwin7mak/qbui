@@ -114,7 +114,9 @@ export default {
             searchNoMatch: "Personne ne correspond à"
         },
         grid: {
-            no_data: "Il n'y a pas de données à afficher."
+            no_data: "Il n'y a pas de données à afficher.",
+            no_filter_matches: "Aucun enregistrement ne correspond à ce que vous recherchez. Essayez de rechercher un autre type d'enregistrement.",
+            no_rows: "Il n'y a aucun enregistrement à voir en ce moment."
         },
         globalActions: {
             user: "Utilisateur",
