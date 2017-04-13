@@ -3,18 +3,13 @@
 let path = require("path");
 let webpack = require('webpack');
 let nodeModulesPath = path.resolve(__dirname, "node_modules");
-let nodeComponentsPath = path.resolve(__dirname, "client-react/src/components/node");
 let testsFile = "tests.webpack.js";
 let testWithCoverage = true;
-let profilePath = path.resolve(__dirname, 'build/chromeDebugPath'); //use to keep debug settings between sessions applied in customLaunchers ChromeWithCustomConfig
+let profilePath = path.resolve(__dirname, '../build/chromeDebugPath'); //use to keep debug settings between sessions applied in customLaunchers ChromeWithCustomConfig
 
-if (process.env.KARMA_USE_CUSTOM) {
-    testsFile = "tests.custom.webpack.js";
-}
-if (process.env.KARMA_WITHOUT_COVERAGE) {
-    testWithCoverage = false;
-}
+// To run a custom set of tests, use `grunt test:client`
 
+// TODO:: Once governance folder is clean of dependencies on client-react, remove client-react auto-imports and transpilation throughout this file
 module.exports = function(config) {
     "use strict";
 
@@ -44,14 +39,14 @@ module.exports = function(config) {
                         // all js src and test files get treated by babel
                         test: /\.js?$/,
                         include: [
-                            path.resolve(__dirname, "client-react/src"),
-                            path.resolve(__dirname, "client-react/test"),
-                            path.resolve(__dirname, "reuse/client/src"),
-                            path.resolve(__dirname, "reuse/client/test"),
-                            path.resolve(__dirname, "componentLibrary/src"),
-                            path.resolve(__dirname, "componentLibrary/test"),
+                            path.resolve(__dirname, "../client-react/src"),
+                            path.resolve(__dirname, "../client-react/test"),
+                            path.resolve(__dirname, "../reuse/client/src"),
+                            path.resolve(__dirname, "../reuse/client/test"),
+                            path.resolve(__dirname, "./src"),
+                            path.resolve(__dirname, "./test")
                         ],
-                        exclude: [nodeModulesPath, nodeComponentsPath],
+                        exclude: [nodeModulesPath],
                         loader: "babel-loader",
                         query: {
                             plugins: ['babel-plugin-rewire', 'babel-plugin-rewire-ignore-coverage']
@@ -61,11 +56,10 @@ module.exports = function(config) {
                         // all css files can be required into js files with this
                         test: /\.css?$/,
                         include: [
-                            path.resolve(__dirname, "client-react/src"),
-                            path.resolve(__dirname, "reuse/client/src"),
-                            path.resolve(__dirname, "componentLibrary/src"),
-                            path.resolve(__dirname, "node_modules/react-notifications"),
-                            path.resolve(__dirname, 'node_modules/react-select')
+                            path.resolve(__dirname, "../client-react/src"),
+                            path.resolve(__dirname, "../reuse/client/src"),
+                            path.resolve(__dirname, "../node_modules/react-notifications"),
+                            path.resolve(__dirname, '../node_modules/react-select')
                         ],
                         loader: "style!css"
                     },
@@ -75,8 +69,9 @@ module.exports = function(config) {
                         // but can return a Data Url if the file is smaller than a limit.
                         test: /\.(png|gif)?$/,
                         include: [
-                            path.resolve(__dirname, "client-react/src"),
-                            path.resolve(__dirname, "reuse/client/src"),
+                            path.resolve(__dirname, "../client-react/src"),
+                            path.resolve(__dirname, "../reuse/client/src"),
+                            path.resolve(__dirname, "./src")
                         ],
                         loader: "url-loader"
                     },
@@ -85,9 +80,9 @@ module.exports = function(config) {
                         test: /\.scss$/,
                         loader: "style!css!sass",
                         include: [
-                            path.resolve(__dirname, "client-react/src"),
-                            path.resolve(__dirname, "reuse/client/src"),
-                            path.resolve(__dirname, "componentLibrary/src")
+                            path.resolve(__dirname, "../client-react/src"),
+                            path.resolve(__dirname, "../reuse/client/src"),
+                            path.resolve(__dirname, "./src"),
                         ]
                     },
                     {
@@ -155,7 +150,7 @@ module.exports = function(config) {
 
         // will be resolved to basePath (in the same way as files/exclude patterns)
         junitReporter : {
-            outputFile : "build/reports/client/unit/client_report.xml"
+            outputFile : "../build/reports/governance/unit/client_report.xml"
         },
 
         // web server port
@@ -190,23 +185,21 @@ module.exports = function(config) {
 
     if (testWithCoverage) {
         newConf.preprocessors = Object.assign({}, newConf.preprocessors, {
-            "client-react/src/!(components/node)/**/*.js" : ["coverage"],
+            "./src/**/*.js" : ["coverage"],
 
-            // Test coverage within reuse should not count for or against client-react
-            "!reuse/client/src/**/*.js" : ["coverage"],
+            // We exclude client-react and reuse from governance coverage. Files in those folders shouldn't count for or against coverage in governance.
+            "!../client-react/**/*.js" : ["coverage"],
+            "!../reuse/**/*.js" : ["coverage"]
         });
         newConf.webpack.module.postLoaders = [
             { //delays coverage til after tests are run, fixing transpiled source coverage error
                 test: /\.js$/,
                 include: [
-                    path.resolve(__dirname, "client-react/src"),
-                    path.resolve(__dirname, "componentLibrary/src"),
+                    path.resolve(__dirname, "./src")
                 ],
                 exclude: [
                     nodeModulesPath,
-                    nodeComponentsPath,
-                    path.resolve(__dirname, "client-react/test"),
-                    path.resolve(__dirname, "componentLibrary/test"),
+                    path.resolve(__dirname, "./test")
                 ],
                 loader: "istanbul-instrumenter"
             }
@@ -214,14 +207,14 @@ module.exports = function(config) {
         //  define where the coverage reports live for the client code
         newConf.coverageReporter = {
             // specify a common output directory
-            dir: "build/reports/client/",
+            dir: "../build/reports/governance/",
             reporters: [
                 {type: "lcov", subdir: "coverage"},
                 {type: "text-summary"}    // outputs to the console by default
             ],
             check : {
                 global: {
-                    statements: 90,
+                    statements: 89,
                     branches: 60,
                     functions: 90,
                     lines: 90
