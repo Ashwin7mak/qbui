@@ -156,7 +156,10 @@ export const FormBuilderContainer = React.createClass({
     },
 
     keyboardMoveFieldDown() {
-        if (this.props.selectedField && this.props.selectedField.elementIndex < this.props.currentForm.formData.formMeta.fields.length - 1) {
+        let {tabIndex, sectionIndex, columnIndex} = this.props.selectedField;
+        let formDataLength = this.props.currentForm.formData.formMeta.tabs[tabIndex].sections[sectionIndex].columns[columnIndex].elements.length - 1;
+
+        if (this.props.selectedField.elementIndex < formDataLength) {
             this.props.keyboardMoveFieldDown(this.props.currentForm.id, this.props.selectedField);
         }
     },
