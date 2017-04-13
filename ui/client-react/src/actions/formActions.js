@@ -190,7 +190,6 @@ const buildNewField = (newField) => {
     let displayText = 'New Text Field';
 
     return _.merge({}, {
-
         id: newId,
         edit: true,
         FormFieldElement: {
