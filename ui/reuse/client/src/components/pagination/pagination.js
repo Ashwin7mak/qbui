@@ -47,8 +47,8 @@ class Pagination extends Component {
                                 />
                             </span>
                         {this.nextPageButton()}
-                     </div>
-                );
+                    </div>
+            );
         }
         return (<div className="spacer"></div>);
     }
