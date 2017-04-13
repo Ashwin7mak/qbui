@@ -12,7 +12,7 @@ const MockLocale = {
 };
 const actions = {
     sortReport() {},
-    groupReport() {}
+    groupReport() {},
 };
 const testFieldDef = {
     id: 13,
@@ -421,6 +421,18 @@ describe('ReportColumnHeaderMenu', () => {
             instance.groupReportDescending();
 
             expect(actions.groupReport).toHaveBeenCalledWith(testFieldDef, false);
+        });
+    });
+
+    describe('Add and Hide', () => {
+        it('hide a field when that menu item is selected', () => {
+            component = shallow(<ReportColumnHeaderMenu {...actions} fieldDef={testFieldDef}/>);
+            instance = component.instance();
+
+            let hidingMenuItem = component.find(MenuItem).find({onSelect: instance.hideColumn});
+            expect(hidingMenuItem).toBePresent();
+
+            expect(hidingMenuItem.find('.hideColumnText')).toHaveText('report.menu.hideColumn');
         });
     });
 });

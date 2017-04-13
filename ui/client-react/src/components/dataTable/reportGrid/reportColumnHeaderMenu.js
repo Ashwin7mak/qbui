@@ -199,7 +199,7 @@ export const ReportColumnHeaderMenu = React.createClass({
                     <MenuItem disabled><I18nMessage message="report.menu.addColumnBefore"/></MenuItem>
                     <MenuItem disabled><I18nMessage message="report.menu.addColumnAfter"/></MenuItem>
                     <MenuItem disabled={isDisabled} onSelect={this.hideColumn}>
-                        <I18nMessage message="report.menu.hideColumn"/>
+                        <span className="hideColumnText">{Locale.getMessage('report.menu.hideColumn')}</span>
                     </MenuItem>
                 </Dropdown.Menu>
             </Dropdown>
