@@ -14,7 +14,7 @@
             .iconActions {
                 display: inline-block;
                 /* this is temporary fix because the icons have built in padding which is incorrect */
-                margin-right: 15px;
+                margin-right: $spacing-xxx-small;
 
                 .btn {
                     &:hover {
