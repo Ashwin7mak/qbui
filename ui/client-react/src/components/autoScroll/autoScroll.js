@@ -131,12 +131,9 @@ class AutoScroll extends Component {
     }
 
     getContainer() {
-        let container;
         if (this.props.parentContainer) {
-            container = this.props.parentContainer;
+            return this.props.parentContainer;
         }
-
-        return container;
     }
 
     updateScrolling(e) {
