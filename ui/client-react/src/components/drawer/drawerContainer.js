@@ -1,5 +1,6 @@
 import React, {PropTypes} from 'react';
 import _ from 'lodash';
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
 import Drawer from './drawer';
 import {RecordRouteWithUniqueId} from '../../components/record/recordRoute';
@@ -25,6 +26,7 @@ class DrawerContainer extends React.Component {
 
         if (drawerTableIds.length && drawerRecordIds.length) {
             return drawerRecordIds.map(drawerRecordId => {
+                // use embeddedreport's uniqueId + recordId for the key
                 return (
                     <Drawer visible={true} key={drawerRecordId} keyboardOnCancel={()=> {console.log('hey');}}>
                         <RecordRouteWithUniqueId {...this.props} isDrawerContext={true}/>
@@ -60,7 +62,17 @@ class DrawerContainer extends React.Component {
             <div className={classNames.join(' ')} onClick={this.closeDrawers}>
                 <button className="moreDrawers" onClick={this.addDrawers} >add</button>
                 <button className="moreDrawers" onClick={this.removeDrawers} >remove</button>
-                {this.getDrawers()}
+                <ReactCSSTransitionGroup
+                    className="slidey-righty"
+                    transitionName="slidey-righty"
+                    transitionAppear={true}
+                    transitionAppearTimeout={1000}
+                    transitionEnterTimeout={1000}
+                    transitionLeaveTimeout={1000}
+                    >
+                    {this.getDrawers()}
+                </ReactCSSTransitionGroup>
+
                 {this.props.content}
                 {this.props.children}
             </div>

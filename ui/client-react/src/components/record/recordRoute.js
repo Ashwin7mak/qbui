@@ -313,6 +313,8 @@ export const RecordRoute = React.createClass({
     },
 
     shouldRenderDrawers() {
+        // TODO: to allow css transition on initial load, we might need to always render Drawers for
+        //       root recordRouter instance
         // TODO: update this when upgrading to React Router 4 work is done.
         const hasDrawers = _.get(this, 'props.location.search', '').indexOf('drawer') > -1;
         return hasDrawers && !this.props.isDrawerContext;
