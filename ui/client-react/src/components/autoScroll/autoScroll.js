@@ -107,15 +107,8 @@ class AutoScroll extends Component {
 
     getContainerDimension() {
         let container = this.getContainer().getBoundingClientRect();
-        let containerBottom = container.bottom;
-        //Set the height to window.innerHeight if the container is taller than the window, this ensures autoscroll will continue to behave as expected
-        if (window.innerHeight < containerBottom) {
-            containerBottom = window.innerHeight;
-        }
         return {
-            containerOffsetLeft: container.left,
-            containerRightSide: container.right,
-            containerBottom: containerBottom,
+            containerBottom: container.bottom,
             containerTop: container.top
         };
 
@@ -151,26 +144,29 @@ class AutoScroll extends Component {
         let pointerY = this.pointerY;
         let pointerX = this.pointerX;
 
-        let {containerOffsetLeft, containerRightSide, containerBottom, containerTop} = this.getContainerDimension();
+        let {containerBottom, containerTop} = this.getContainerDimension();
 
         containerBottom = this.getContainerBottom(containerBottom);
         containerTop = this.getContainerTop(containerTop);
 
         if (e && e.type === 'touchmove') {
             pointerY = e.touches[0].clientY;
-            pointerX = e.touches[0].clientX;
+            // pointerX = e.touches[0].clientX;
         }
 
         /**
          * Activate auto scroll only if it is in the designated scroll zone within the container
          * */
-        if (pointerY > containerBottom &&
-            pointerX < containerRightSide &&
-            pointerX > containerOffsetLeft) {
+        console.log('pointerX: ', pointerX);
+        console.log('pointerY: ', pointerX);
+        // console.log('containerOffsetLeft: ', pointerX > containerOffsetLeft);
+        // console.log('containerRightSide: ', pointerX < containerRightSide);
+        //
+        console.log('containerBottom: ', containerBottom);
+        console.log('containerTop: ', containerTop);
+        if (pointerY > containerBottom) {
             this.scrollingAnimationId = window.requestAnimationFrame(this.scrollDown);
-        } else if (pointerY < containerTop &&
-                   pointerX < containerRightSide &&
-                   pointerX > containerOffsetLeft) {
+        } else if (pointerY < containerTop) {
             this.scrollingAnimationId = window.requestAnimationFrame(this.scrollUp);
 
         } else {
