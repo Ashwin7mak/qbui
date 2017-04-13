@@ -67,8 +67,18 @@
                                             return fieldId === field.id;
                                         });
 
+                                        // search the tableFields array for the field element by id
+                                        // set the formFieldElement to the table setting for required
+                                        // tableFields[].required
+
                                         //  add the field if defined on the table
                                         if (tableField) {
+                                            //  NOTE: jira MC-1687 is work to remove the 'required' constraint attribute from
+                                            //  the form.  For now, set the FormFieldElement.required to the field setting until
+                                            //  that work is complete so that the UI will continue to work today.  Part of that
+                                            //  jira should include reworking the UI to no longer reference this form attribute
+                                            //  but instead reference the fields object to determine whether input is required.
+                                            element.FormFieldElement.required = tableField.required;
                                             let required = element.FormFieldElement.required;
                                             fidList.push({id: fieldId, required: required});
                                         } else {
