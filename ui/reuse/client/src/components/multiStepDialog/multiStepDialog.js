@@ -5,8 +5,11 @@ import Button from 'react-bootstrap/lib/Button';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import Icon from '../icon/icon';
 import Loader from 'react-loader';
-import {I18nMessage} from '../../utils/i18nMessage';
-import Locale from '../../locales/locale';
+
+// IMPORTS FROM CLIENT REACT
+import {I18nMessage} from '../../../../../client-react/src/utils/i18nMessage';
+import Locale from '../../../../../client-react/src/locales/locales';
+// IMPORTS FROM CLIENT REACT
 
 import './multiStepDialog.scss';
 
