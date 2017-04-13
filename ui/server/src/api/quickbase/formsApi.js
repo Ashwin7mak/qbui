@@ -96,18 +96,6 @@
             return tableFieldsFidList;
         }
 
-        function mergeConstraintsFromFidlist(fields, constraintList) {
-            return fields.map((field) => {
-                let matchingField = lodash.find(constraintList, (constraintField) => {
-                    return field.id === constraintField.id;
-                });
-                if (matchingField) {
-                    field.required = field.required || matchingField.required;
-                }
-                return field;
-            });
-        }
-
         let formsApi = {
 
             /**
@@ -306,9 +294,8 @@
                                         function(resp) {
                                             obj.record = resp.record;
                                             obj.fields = resp.fields;
-                                            //  don't override the field constraint required as with the form constraint setting as the form field required
-                                            //  attribute will be removed in jira MC-1687.  Once that work is complete, this code should be removed.
-                                            //obj.fields = mergeConstraintsFromFidlist(obj.fields, fidList);
+                                            //  NOTE: do not override the 'required' field constraint with the setting defined on the
+                                            //  form.  jira MC-1687 is work to remove that attribute from the form.
                                             resolve(obj);
                                         },
                                         function(err) {
@@ -319,9 +306,8 @@
                                     recordsApi.fetchFields(req).then(
                                         function(resp) {
                                             obj.fields = JSON.parse(resp.body);
-                                            //  don't override the field constraint required as with the form constraint setting as the form field required
-                                            //  attribute will be removed in jira MC-1687.  Once that work is complete, this code should be removed.
-                                            //obj.fields = mergeConstraintsFromFidlist(obj.fields, fidList);
+                                            //  NOTE: do not override the 'required' field constraint with the setting defined on the
+                                            //  form.  jira MC-1687 is work to remove that attribute from the form.
                                             resolve(obj);
                                         },
                                         function(err) {
