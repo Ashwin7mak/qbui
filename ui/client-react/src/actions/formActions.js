@@ -375,9 +375,6 @@ function saveTheForm(appId, tblId, formType, formMeta, isNew) {
                         dispatch(event(form.id, types.SAVING_FORM_ERROR, '500'));
                         reject();
                     }
-                }).catch(e => {
-                    console.log(e);
-                    Promise.reject(e);
                 });
             });
     };

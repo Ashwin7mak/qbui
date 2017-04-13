@@ -104,6 +104,7 @@ export const updateFieldProperties = (appId, tblId, field) => {
 
                 fieldsService.updateField(appId, tblId, field).then(
                     (response) => {
+                        //TODO: some action needs to get emitted
                         resolve();
                     },
                     (errorResponse) => {
