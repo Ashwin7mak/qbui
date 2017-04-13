@@ -54,7 +54,9 @@ let AppsStore = Fluxxor.createStore({
         this.apps.forEach((app) => {
             if (app.tables) {
                 app.tables.forEach((table) => {
-                    table.icon = TableIconUtils.getTableIcon(table.name);
+                    if (!table.tableIcon) {
+                        table.tableIcon = TableIconUtils.getTableIcon(table.name);
+                    }
                 });
             }
         });

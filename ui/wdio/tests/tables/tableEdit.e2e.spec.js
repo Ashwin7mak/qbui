@@ -44,10 +44,8 @@
          * Before each it block reload the list all report (can be used as a way to reset state between tests)
          */
         beforeEach(function() {
-            //load the apps page
-            //load the tables page
-            RequestAppsPage.get(e2eBase.getRequestTableEndpoint(realmName, testApp.id, testApp.tables[0].id));
-            return tableCreatePO.newTableBtn.waitForVisible();
+            // Load the List All report on Table 1
+            return e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
         });
 
         it('Add a new table and then edit that table', function() {
@@ -103,14 +101,13 @@
                 tableCreatePO.clickOnModifyTableSettingsLink();
 
                 //Step 9 - Verify the created table field values in Edit mode.
-                //TODO I dont see the values added while creating in edit mode for record, description etc. Spoke to aditi this is different story of GET
                 //Verify field values that were added while create
-                //tableFields.forEach(function(tableField) {
-                //    //Enter field values
-                //    tableCreatePO.verifyTableFieldValues(tableField.fieldTitle, tableField.fieldValue);
-                //});
+                tableFields.forEach(function(tableField) {
+                    //Enter field values
+                    tableCreatePO.verifyTableFieldValues(tableField.fieldTitle, tableField.fieldValue);
+                });
                 //verify icon chooser shows up the value selected
-                //expect(browser.element('.showAllToggle .qbIcon').getAttribute('className')).toBe(iconChoosedClassName);
+                expect(browser.element('.showAllToggle .qbIcon').getAttribute('className')).toBe(iconChoosedClassName);
 
                 //****************
                 //*Edit the newely added table with new values
@@ -138,23 +135,17 @@
                 //Step 14 - Verify table link with new edited table name shows on left Nav . Make sure the table name is updated to new name
                 expect(browser.element('.standardLeftNav .contextHeaderTitle').getAttribute('textContent')).toBe('New ' + tableName);
 
-                //Step 15 - Click on back to apps page link
-                browser.element('.standardLeftNav .navItemContent').click();
-
-                //Step 16 - Verify it landed in apps page with tables list
-                tableCreatePO.newTableBtn.waitForVisible();
             }
         });
 
         it('Edit existing table', function() {
             if (browserName !== 'MicrosoftEdge') {
-                var tableName = rawValueGenerator.generateStringWithFixLength(5);
-                var tableRecord = rawValueGenerator.generateStringWithFixLength(10);
-                var tableDescription = rawValueGenerator.generateStringWithFixLength(10);
+                var tableName = rawValueGenerator.generateStringWithFixLength(5) + ' modified tableName';
+                var tableRecord = rawValueGenerator.generateStringWithFixLength(10) + ' updated record a';
+
                 var tableFields = [
                     {fieldTitle: '* Table Name', fieldValue: tableName},
-                    {fieldTitle: '* A record in the table is called', fieldValue: tableRecord},
-                    {fieldTitle: 'Description', fieldValue: tableDescription}
+                    {fieldTitle: '* A record in the table is called', fieldValue: tableRecord}
                 ];
 
                 //Step 1 - Click on existing table 'Table 2'
@@ -166,7 +157,7 @@
                 //Step 3 - Select the new icon from icon chooser
                 var newIconChoosedClassName = tableCreatePO.selectRandomIconFromIconChooser();
 
-                //Step 4 - Enter new table field avlues
+                //Step 4 - Enter new table field values
                 tableFields.forEach(function(tableField) {
                     tableCreatePO.enterTableFieldValue(tableField.fieldTitle, tableField.fieldValue);
                 });
@@ -174,33 +165,22 @@
                 //Step 5 - Click on apply button in edit table mode
                 tableCreatePO.clickOnEditTableApplyBtn();
 
-                //Step 6 - Verify new table field values
+                //Step 6 - Click on back to apps page link
+                tableCreatePO.clickBackToAppsLink();
+
+                //Step 7 - Select Table and make sure it lands in reports page
+                tableCreatePO.selectTable(tableName);
+
+                //Step 8 - Click on edit table settings and properties link under global actions gear
+                tableCreatePO.clickOnModifyTableSettingsLink();
+
+                //Step 9 - Verify new edited values
                 tableFields.forEach(function(tableField) {
                     //Enter field values
                     tableCreatePO.verifyTableFieldValues(tableField.fieldTitle, tableField.fieldValue);
                 });
 
-                //Step 7 - Verify table link with new edited table name shows on left Nav . Make sure the table name is updated to new name
-                expect(browser.element('.standardLeftNav .contextHeaderTitle').getAttribute('textContent')).toBe(tableName);
-
-                //Step 8 - Click on back to apps page link
-                browser.element('.standardLeftNav .navItemContent').click();
-                //Verify it landed in apps page with tables list
-                tableCreatePO.newTableBtn.waitForVisible();
-
-                //Step 9 - Select Table and make sure it lands in reports page
-                tableCreatePO.selectTable(tableName);
-
-                //Step 10 - Click on edit table settings and properties link under global actions gear
-                tableCreatePO.clickOnModifyTableSettingsLink();
-
-                //Step 11 - Verify new edited values
-                //TODO I dont see the values added while creating in edit mode for record, description etc. Spoke to aditi this is different story of GET
-                //tableFields.forEach(function(tableField) {
-                //    //Enter field values
-                //    tableCreatePO.verifyTableFieldValues(tableField.fieldTitle, tableField.fieldValue);
-                //});
-                //tableCreatePO.verifyIconInIconChooserCombo(newIconChoosedClassName);
+                tableCreatePO.verifyIconInIconChooserCombo(newIconChoosedClassName);
             }
         });
 
@@ -237,9 +217,7 @@
             tableCreatePO.clickOnEditTableResetBtn();
 
             //Step 7 - Click on back to apps page link
-            browser.element('.standardLeftNav .navItemContent').click();
-            //Verify it landed in apps page with tables list
-            tableCreatePO.newTableBtn.waitForVisible();
+            tableCreatePO.clickBackToAppsLink();
 
             //Step 8 - Select Table and make sure it lands in reports page
             tableCreatePO.selectTable('Table 1');
