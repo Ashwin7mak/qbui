@@ -78,7 +78,7 @@
                                             //  that work is complete so that the UI will continue to work today.  Part of that
                                             //  jira should include reworking the UI to no longer reference this form attribute
                                             //  but instead reference the fields object to determine whether input is required.
-                                            element.FormFieldElement.required = tableField.required;
+                                            element.FormFieldElement.required = tableField.required || false;
                                             let required = element.FormFieldElement.required;
                                             fidList.push({id: fieldId, required: required});
                                         } else {
