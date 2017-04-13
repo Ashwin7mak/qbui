@@ -16,7 +16,7 @@ const mockStore = configureMockStore();
 describe('EmbeddedReportToolsAndContent', () => {
     let component;
     let offset = 0;
-    let numRows = 20;
+    let numRows = 100;
 
     const appId = 1;
     const tblId = 2;
