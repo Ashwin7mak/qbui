@@ -275,7 +275,7 @@ export const ReportGrid = React.createClass({
         let pendEdits = this.getPendEdits();
         let isInLineEditOpen = (pendEdits.isInlineEditOpen === true);
 
-        if (this.props.loading || transformedRecords.length > 0 ) {
+        if (this.props.loading || transformedRecords.length > 0) {
 
             return (
                 <QbGrid
@@ -328,7 +328,7 @@ export const ReportGrid = React.createClass({
                     }}
             />);
         } else {
-            return this.renderNoRowsExist()
+            return this.renderNoRowsExist();
         }
     }
 });
