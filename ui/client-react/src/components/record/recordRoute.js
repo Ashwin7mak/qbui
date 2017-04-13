@@ -144,11 +144,8 @@ export const RecordRoute = React.createClass({
     },
 
     getRecordsArray() {
-        let data;
-        if (this.props.isDrawerContext) {
-            data = embeddedReport;
-        }
-        const {filteredRecords, hasGrouping} = data || this.props.reportData.data;
+        const reportData = this.getReportDataFromProps(this.props);
+        const {filteredRecords, hasGrouping} = reportData.data;
         let recordsArray = [];
         if (hasGrouping) {
             // flatten grouped records
@@ -181,11 +178,7 @@ export const RecordRoute = React.createClass({
      */
     previousRecord() {
         const record = this.getRecordFromProps(this.props);
-        let reportData;
-        if (this.props.isDrawerContext) {
-            reportData = embeddedReport;
-        }
-        reportData = reportData || this.props.reportData;
+        const reportData = this.getReportDataFromProps(this.props);
         this.navigateToRecord(record.previousRecordId, reportData);
 
         const {appId, tblId, rptId} = reportData;
@@ -201,12 +194,7 @@ export const RecordRoute = React.createClass({
      */
     nextRecord() {
         const record = this.getRecordFromProps(this.props);
-        let reportData;
-        //when in a drawer, the report data can be different than the report data passed in props
-        if (this.props.isDrawerContext) {
-            reportData = embeddedReport;
-        }
-        reportData = reportData || this.props.reportData;
+        const reportData = this.getReportDataFromProps(this.props);
         this.navigateToRecord(record.nextRecordId, reportData);
         const {appId, tblId, rptId} = reportData;
         const link = `${APP_ROUTE}/${appId}/table/${tblId}/report/${rptId}/record/${record.nextRecordId}`;
@@ -216,16 +204,9 @@ export const RecordRoute = React.createClass({
         }
     },
 
-    getTitle(recIdTitle) {
+    getTitle(recIdTitle, tableName) {
         const recordId = recIdTitle || this.props.params.recordId;
         const isSmall = Breakpoints.isSmallBreakpoint();
-        let tableName;
-        //when in a drawer, the table can be different than the selected Table passed in props
-        if (this.props.isDrawerContext) {
-            tableName = this.getSelectedTable(drawerTableId).name;
-        } else {
-            tableName = this.props.selectedTable ? this.props.selectedTable.name : '';
-        }
         return <div className="title">
             {isSmall ? <TableIcon classes="primaryIcon" icon={this.props.selectedTable ? this.props.selectedTable.icon : ""}/> : null}
             <span> {tableName} # {recordId}</span></div>;
@@ -237,13 +218,13 @@ export const RecordRoute = React.createClass({
      * @returns table only in case, tableId is passed in
      */
     getSelectedTable(tableId) {
-        if (tableId) {
+        if (tableId && this.props.isDrawerContext) {
             const app = this.props.selectedApp;
             if (app) {
                 return _.find(app.tables, (t) => t.id === tableId);
             }
         }
-        return null;
+        return this.props.selectedTable;
     },
 
     getStageHeadline() {
@@ -260,11 +241,13 @@ export const RecordRoute = React.createClass({
             if (this.props.isDrawerContext) {
                 recordIdTitle = drawerRecId;
             }
+            const tableSelected =  this.getSelectedTable(drawerTableId);
+            const tableName = tableSelected !== undefined ? tableSelected.name : '';
             return (<div className="recordStageHeadline">
 
                 <div className="navLinks">
                     {this.props.selectedTable && <Link className="tableHomepageIconLink" to={tableLink}><TableIcon icon={this.props.selectedTable.icon}/></Link>}
-                    {this.props.selectedTable && <Link className="tableHomepageLink" to={tableLink}>{this.props.isDrawerContext ? this.getSelectedTable(drawerTableId).name : this.props.selectedTable.name}</Link>}
+                    {this.props.selectedTable && <Link className="tableHomepageLink" to={tableLink}>{tableName}</Link>}
                     {this.props.selectedTable && rptId && <span className="divider color-black-700">&nbsp;&nbsp;:&nbsp;&nbsp;</span>}
                     {rptId && <a className="backToReport" href="#" onClick={this.returnToReport}>{reportName}</a>}
                 </div>
@@ -283,7 +266,7 @@ export const RecordRoute = React.createClass({
                             <Button className="iconActionButton nextRecord" disabled={true} onClick={this.nextRecord}><QBicon icon="caret-filled-right"/></Button>}
                     </div> }
 
-                    {this.getTitle(recordIdTitle)}
+                    {this.getTitle(recordIdTitle, tableName)}
 
                 </div>
             </div>);
@@ -387,6 +370,18 @@ export const RecordRoute = React.createClass({
             return  _.find(props.record, rec => rec.recId.toString() === props.params.recordId) || {};
         }
     },
+    /**
+     * returns report data from passed in props if not in a drawer else returns embedded Report
+     * @param props
+     * @returns {*}
+     */
+    getReportDataFromProps(props = this.props) {
+        if (props.isDrawerContext) {
+            return  embeddedReport;
+        } else {
+            return  props.reportData;
+        }
+    },
 
     /**
      * only re-render when our form data has changed */
@@ -418,7 +413,7 @@ export const RecordRoute = React.createClass({
         drawerRecId = recId;
         drawerTableId = tblId;
         if (embeddedReportsUniqueId !== undefined) {
-            embeddedReport = _.find(this.props.embeddedReports, function (o) {
+            embeddedReport = _.find(this.props.embeddedReports, function(o) {
                 return o.id === embeddedReportsUniqueId;
             });
         }
