@@ -3,7 +3,8 @@ import KeyboardShortcuts from '../../../../reuse/client/src/components/keyboardS
 import './drawer.scss';
 
 /**
- *
+ * A blank container meant to wrap some other component. This Drawer component will slide in from
+ * the direction set by props.position (defaults to the right side).
  */
 class Drawer extends React.Component {
     constructor(props) {
@@ -22,14 +23,14 @@ class Drawer extends React.Component {
         setTimeout(() => this.setState({mounted: true}), 10);
     }
 
-    // TODO: use inline css for setting the direction to slide the drawer
+    // TODO: use inline css for setting the direction to slide the drawer. covered in MC-734
     render() {
         const classNames = ['drawer', this.props.position, this.props.className];
         if (this.props.visible && this.state.mounted) {
             classNames.push('visible');
         }
-        //TODO: keyboard shortcut? ESC while focus is on component only to prevent butting heads
-        // with trowser
+        //TODO: keyboard shortcut? Do not use KeyboardShorcuts' shortcutBindingsPreventDefault,
+        //      since we want to avoid butting heads with the trowser's ESC handler
         return (
             <div className={classNames.join(' ')}>
                 {/* KeyboardShortcuts doesn't seem to be working */}
@@ -37,7 +38,6 @@ class Drawer extends React.Component {
                     shortcutBindings={[
                         {key: 'esc', callback: () => this.props.keyboardOnCancel()}
                     ]} />}
-                {this.props.content}
                 {this.props.children}
             </div>
         );
@@ -47,8 +47,6 @@ class Drawer extends React.Component {
 Drawer.propTypes = {
     /** wheather the drawer is be visible */
     visible: PropTypes.bool.isRequired,
-    /** main content of drawer */
-    content: PropTypes.node,
     /** position of the drawer, defaults to 'right' */
     position: PropTypes.oneOf(['left', 'right', 'top', 'bottom'])
 };
