@@ -522,6 +522,11 @@ export default {
             LOOKUP: "Sieh nach oben",
             FILE_ATTACHMENT: "Datei"
         },
+        fieldPropertyLabels: {
+            title: "eigenschaften",
+            name: "Name",
+            required: "Muss ausgefüllt werden"
+        },
         builder: {
             formBuilder: {
                 unimplemented: "Feature ist momentan nicht verfügbar",

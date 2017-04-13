@@ -5,16 +5,14 @@ import axios from 'axios';
 import Configuration from '../config/app.config';
 import StringUtils from '../utils/stringUtils';
 import WindowLocationUtils from '../utils/windowLocationUtils';
-import CommonUrlUtils from '../../../common/src/commonUrlUtils';
 import CookieConstants from '../../../common/src/constants';
 import uuid from 'uuid';
 import Promise from 'bluebird';
 import QbResponseError from './QbResponseError';
 
 window.Promise = Promise; // set global Promise to Bluebird promise (axios has dependency on Promises which are not in IE 11)
-
+let FEDERATION_LEGACY_URL = '/qbase/federation/legacyUrl';
 class BaseService {
-
     constructor() {
         this.setRequestInterceptor();
         this.setResponseInterceptor();
@@ -142,8 +140,9 @@ class BaseService {
             //  axios upgraded to an error.response object in 0.13.x
             switch (error.response.status) {
             case 401:   // invalid/no ticket
-                let currentStackSignInUrl = Configuration.unauthorizedRedirect || this.constructRedirectUrl();
-                WindowLocationUtils.update(currentStackSignInUrl);
+                this.constructRedirectUrl().then(function(currentStackSignInUrl) {
+                    WindowLocationUtils.update(currentStackSignInUrl);
+                });
                 break;
             }
         }
@@ -183,12 +182,18 @@ class BaseService {
      * example prod output: team.quickbase.com/db/main?a=nsredirect&nsurl=https://team.quickbase.com/qbase/apps
      */
     constructRedirectUrl() {
-        let hostname = WindowLocationUtils.getHostname();
-        let currentStackSignInUrl = "/db/main?a=nsredirect&nsurl=";
-        let newStackDestination = WindowLocationUtils.getHref();
-        let currentStackDomain = CommonUrlUtils.getSubdomain(hostname) + Configuration.legacyBase;
-        currentStackSignInUrl = "https://" + currentStackDomain + currentStackSignInUrl + newStackDestination;
-        return currentStackSignInUrl;
+        if (Configuration.unauthorizedRedirect) {
+            return Promise.resolve(Configuration.unauthorizedRedirect);
+        } else {
+            return this.get(FEDERATION_LEGACY_URL, {})
+                .then(function(json) {
+                    let currentStackSignInUrl = "/db/main?a=nsredirect&nsurl=";
+                    let newStackDestination = WindowLocationUtils.getHref();
+                    let currentStackDomain = json.data.legacyUrl;
+                    currentStackSignInUrl = currentStackDomain + currentStackSignInUrl + newStackDestination;
+                    return currentStackSignInUrl;
+                });
+        }
     }
 
 }
