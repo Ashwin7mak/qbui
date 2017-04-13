@@ -23,7 +23,7 @@ describe('AutomationService functions', () => {
         let wfId = "testAutmation";
         let url = StringUtils.format(automationService.API.AUTOMATION_INVOKE, [appId, wfId]);
         let host = "testHost";
-        automationService.invokeAutomation(host, appId, wfId, {});
+        automationService.invokeAutomation(appId, wfId, {});
         expect(BaseService.prototype.post).toHaveBeenCalledWith(url, {}, {});
     });
 });
