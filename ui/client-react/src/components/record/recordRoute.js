@@ -242,7 +242,7 @@ export const RecordRoute = React.createClass({
                 recordIdTitle = drawerRecId;
             }
             const tableSelected =  this.getSelectedTable(drawerTableId);
-            const tableName = tableSelected !== undefined ? tableSelected.name : '';
+            const tableName = tableSelected !== undefined && tableSelected !== null ? tableSelected.name : '';
             return (<div className="recordStageHeadline">
 
                 <div className="navLinks">
@@ -413,9 +413,7 @@ export const RecordRoute = React.createClass({
         drawerRecId = recId;
         drawerTableId = tblId;
         if (embeddedReportsUniqueId !== undefined) {
-            embeddedReport = _.find(this.props.embeddedReports, function(o) {
-                return o.id === embeddedReportsUniqueId;
-            });
+            embeddedReport = _.find(this.props.embeddedReports, {'id' : embeddedReportsUniqueId});
         }
         WindowLocationUtils.pushWithQuery('drawerRecId', recId);
         WindowLocationUtils.pushWithQuery('drawerTableId', tblId);
