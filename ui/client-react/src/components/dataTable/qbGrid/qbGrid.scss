@@ -137,14 +137,14 @@ $edit-icon-font-size: 18px;
                 top: calc(100% - 1px);
                 left: calc(100% - #{$grid-group-expand-icon-size} - #{$grid-header-cell-padding});
                 li {
-                    position:relative;
+                    position: relative;
 
                     a {
-                        padding:3px 20px 3px 30px;
+                        padding: 3px 20px 3px 30px;
 
-                        .qbIcon{
-                            position:absolute;
-                            left:5px;
+                        .qbIcon {
+                            position: absolute;
+                            left: 5px;
                             color: $color-green-400;
                         }
                     }
@@ -420,13 +420,13 @@ $edit-icon-font-size: 18px;
             left: -5px;
 
             &:before {
-                right:auto;
-                left:10px;
+                right: auto;
+                left: 10px;
             }
 
             &:after {
-                right:auto;
-                left:10px;
+                right: auto;
+                left: 10px;
             }
 
             a {
