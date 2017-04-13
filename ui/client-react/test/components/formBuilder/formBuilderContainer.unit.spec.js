@@ -30,10 +30,19 @@ const FormBuilderMock = React.createClass({
 let component;
 let instance;
 
+var FieldPropertiesMock = React.createClass({
+    render: function() {
+        return (
+            <div>{this.props.children}</div>
+        );
+    }
+});
+
 describe('FormBuilderContainer', () => {
     beforeEach(() => {
         jasmineEnzyme();
         FormBuilderRewireAPI.__Rewire__('FormBuilder', FormBuilderMock);
+        FormBuilderRewireAPI.__Rewire__('FieldProperties', FieldPropertiesMock);
         spyOn(mockActions, 'loadForm');
         spyOn(mockActions, 'updateForm');
         spyOn(mockActions, 'toggleFormBuilderChildrenTabIndex');
@@ -45,6 +54,7 @@ describe('FormBuilderContainer', () => {
 
     afterEach(() => {
         FormBuilderRewireAPI.__ResetDependency__('FormBuilder');
+        FormBuilderRewireAPI.__ResetDependency__('FieldProperties');
         mockActions.loadForm.calls.reset();
         mockActions.updateForm.calls.reset();
         mockActions.toggleFormBuilderChildrenTabIndex.calls.reset();

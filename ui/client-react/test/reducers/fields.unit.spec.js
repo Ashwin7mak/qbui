@@ -1,4 +1,4 @@
-import {tableFieldsObj, tableFieldsReportDataObj} from '../../src/reducers/fields';
+import {tableFieldsObj, tableFieldsReportDataObj, getField} from '../../src/reducers/fields';
 import reducer from '../../src/reducers/fields';
 import {BUILTIN_FIELD_ID} from '../../../common/src/constants';
 import * as types from '../../src/actions/types';
@@ -72,5 +72,25 @@ describe('Test fields reducer', () => {
         expect(reportObjNotFound.fields.data.length).toEqual(0);
     });
 
+    it('test update field', () => {
+        //load some fields so we can update them!
+        const fields = [{builtIn:true, id:3}, {builtIn:false, id:8}, {builtIn:false, keyField:true, id:10}];
+        const state = reducer([], event(appId, tblId, types.LOAD_FIELDS_SUCCESS, {fields:fields}));
+        const currentFieldList = tableFieldsObj(state, appId, tblId);
+        expect(currentFieldList.fields).toEqual(fields);
+        //okay lets update now
+        const field = {builtIn:true, keyField:false, id:10};
+        const upState = reducer(state, {type: types.UPDATE_FIELD, field: field, appId: appId, tblId: tblId});
+        const updatedField = getField(upState, field.id, appId, tblId);
+        expect(updatedField).toEqual(field);
+    });
+
+    it('test get field', () => {
+        //load a field so we can get it!
+        const field = {builtIn:true, keyField:true, id:10, required: false, name: "fielderino"};
+        const fields = [field];
+        const state = reducer([], event(appId, tblId, types.LOAD_FIELDS_SUCCESS, {fields:fields}));
+        expect(getField(state, field.id, appId, tblId)).toEqual(field);
+    });
 });
 
