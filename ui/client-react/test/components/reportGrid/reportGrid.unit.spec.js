@@ -7,6 +7,7 @@ import ReportGrid, {
     __RewireAPI__ as ReportGridRewireAPI
 } from '../../../src/components/dataTable/reportGrid/reportGrid';
 import QbGrid from '../../../src/components/dataTable/qbGrid/qbGrid';
+import ReportColumnTransformer from '../../../src/components/dataTable/reportGrid/reportColumnTransformer';
 import ReportCell from '../../../src/components/dataTable/reportGrid/reportCell';
 import ReportColumnHeaderMenu from '../../../src/components/dataTable/reportGrid/reportColumnHeaderMenu';
 import FieldUtils from '../../../src/utils/fieldUtils';
@@ -46,6 +47,59 @@ const testGroupedRecords = [
         group: 'test group',
         children: testRecords
     }
+];
+const testColumns = [
+    new ReportColumnTransformer(1,
+        {
+            builtIn: false,
+            dataIsCopyable: true,
+            id: 1,
+            includeInQuickSearch: true,
+            indexed: false,
+            isHidden: false,
+            mutliChoiceSourceAllowed: false,
+            name: 'Header 1',
+            required: true,
+            tableId: '1',
+            type: "SCALAR",
+            unique: false,
+            userEditableValue: true
+        },
+        'Header 1', 'header1class', ''),
+    new ReportColumnTransformer(2,
+        {
+            builtIn: false,
+            dataIsCopyable: true,
+            id: 2,
+            includeInQuickSearch: true,
+            indexed: false,
+            isHidden: false,
+            mutliChoiceSourceAllowed: false,
+            name: 'Header 2',
+            required: true,
+            tableId: '1',
+            type: "SCALAR",
+            unique: false,
+            userEditableValue: true
+        },
+        'Header 2', 'header2class', ''),
+    new ReportColumnTransformer(3,
+        {
+            builtIn: false,
+            dataIsCopyable: true,
+            id: 3,
+            includeInQuickSearch: true,
+            indexed: false,
+            isHidden: false,
+            mutliChoiceSourceAllowed: false,
+            name: 'Header 3',
+            required: true,
+            tableId: '3',
+            type: "SCALAR",
+            unique: false,
+            userEditableValue: true
+        },
+        'Header 3', 'header3class', ''),
 ];
 
 
@@ -252,7 +306,6 @@ describe('ReportGrid', () => {
     });
 
     describe('QbGrid props test', () => {
-        const testColumns = [1, 2, 3];
         const isInlineEditOpen = true;
         const pendEdits = {isInlineEditOpen: isInlineEditOpen, currentEditingRecordId: testRecordId, errors: ['an error'], ok: false, saving: true};
         const selectedRows = [4];
@@ -332,7 +385,8 @@ describe('ReportGrid', () => {
                 appId: appId,
                 tblId: tblId,
                 rptId: rptId,
-                sortFids: sortFids
+                sortFids: sortFids,
+                isOnlyOneColumnVisible: false
             });
         });
 

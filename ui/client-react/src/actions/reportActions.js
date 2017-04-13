@@ -346,9 +346,13 @@ export const hideColumn = (context, appId, tblId, rptId, params) => {
     return (dispatch) => {
         if (appId && tblId && rptId) {
             logger.debug(`Hiding column with id: ${params.id} for appId: ${appId}, tblId:${tblId}, rptId:${rptId}, params:${JSON.stringify(params)}`);
-            dispatch(event(context, types.HIDE_COLUMN, params));
+            return new Promise((resolve) => {
+                dispatch(event(context, types.HIDE_COLUMN, params));
+                resolve();
+            });
         } else {
             logger.error(`reportActions.hideColumn: Missing one or more required input parameters.  AppId:${appId}; TblId:${tblId}; RptId:${rptId}`);
+            return new Promise.reject();
         }
     };
 };

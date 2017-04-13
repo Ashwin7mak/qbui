@@ -49,6 +49,22 @@ describe('Report actions', () => {
                 done();
             });
     });
+
+    it('hideColumn action dispatches types.HIDE_COLUMN with parameters', (done) => {
+        const params = {
+            columnId: 6
+        };
+        const expectedActions = [
+            event(context, types.HIDE_COLUMN, params)
+        ];
+        const store = mockReportsStore({});
+
+        return store.dispatch(reportActions.hideColumn(context, appId, tblId, rptId, params)).then(
+            () => {
+                expect(store.getActions()).toEqual(expectedActions);
+                done();
+            });
+    });
 });
 
 describe('Test ReportsActions function success workflow', () => {
@@ -368,22 +384,6 @@ describe('Test ReportsActions function failure workflow', () => {
             () => {
                 expect(store.getActions()).toEqual(expectedActions);
                 done();
-            });
-    });
-
-    it('hideColumn action dispatches types.HIDE_COLUMN with parameters', (done) => {
-        const expectedActions = [
-            event(context, types.HIDE_COLUMN, {columnId: 6})
-        ];
-        const store = mockReportsStore({});
-
-        return store.dispatch(reportActions.hideColumn(context, appId, tblId, rptId, {columnId: 6})).then(
-            () => {
-                expect(false).toBe(true);
-                done();
-            },
-            () => {
-                expect(store.getActions()).toEqual(expectedActions);
             });
     });
 });
