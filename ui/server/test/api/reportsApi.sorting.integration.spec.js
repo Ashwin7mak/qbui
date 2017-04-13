@@ -127,7 +127,7 @@
                     // Push the created records into an array (the add record call also returns the fields used)
                     var recordData = [];
                     for (var j in returnedRecords) {
-                        recordData.push(returnedRecords[j].record);
+                        recordData.push(returnedRecords[j]);
                     }
                     records = recordData;
                     done();
