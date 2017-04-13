@@ -123,7 +123,10 @@
                                         log.error({req: req}, "appsApi.getTableProperties(): Error retrieving table properties.");
                                         resolve(app);
                                     }
-                                );
+                                ).catch((ex) => {
+                                    requestHelper.logUnexpectedError('appsApi.getTableProperties(): unexpected error retrieving table properties', ex, true);
+                                    resolve(app);
+                                });
                             }
                         },
                         (error) => {

@@ -289,6 +289,42 @@ describe("Validate appsApi", function() {
             });
         });
 
+        it('error on getTableProps returns success results 2', function(done) {
+            executeReqStub.returns(Promise.resolve({'body': '{"id":1, "tables": [{"id": 1, "name": "table1"}]}'}));
+            getTablePropertiesStub.returns();
+            let promise = appsApi.getApp(req, req.params.appId);
+
+            promise.then(
+                function(response) {
+                    assert.deepEqual(response, {id:1, tables: [{id: 1, name: "table1"}]});
+                    done();
+                },
+                function(error) {
+                    done(new Error("Unexpected failure promise return when testing getApp success"));
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('getApp: exception processing success test: ' + JSON.stringify(errorMsg)));
+            });
+        });
+
+        it('exception on getTableProps returns success results', function(done) {
+            executeReqStub.returns(Promise.resolve({'body': '{"id":1, "tables": [{"id": 1, "name": "table1"}]}'}));
+            getTablePropertiesStub.returns();
+            let promise = appsApi.getApp(req, req.params.appId);
+
+            promise.then(
+                function(response) {
+                    assert.deepEqual(response, {id:1, tables: [{id: 1, name: "table1"}]});
+                    done();
+                },
+                function(error) {
+                    done(new Error("Unexpected failure promise return when testing getApp success"));
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('getApp: exception processing success test: ' + JSON.stringify(errorMsg)));
+            });
+        });
+
         it('unexpected exception return results ', function(done) {
             let error_message = "unexpected exception unit test case execution";
 
@@ -593,5 +629,4 @@ describe("Validate appsApi", function() {
         });
 
     });
-
 });
