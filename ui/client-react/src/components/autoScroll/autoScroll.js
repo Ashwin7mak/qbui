@@ -11,7 +11,16 @@ import isSmall from '../../utils/breakpoints';
  * AutoScroll listens for mousedown, mousemove and mouseup for desktop.
  * AutoScroll listens for touchmove or touchend for touch devices.
  *
- * Note: Autoscroll will only work if the parent container has overflow set to auto
+ * Note: Autoscroll will only work if the parent container has overflow set to auto and
+ * pass in the parent's container element by using a ref
+ * For example:
+ * let parentContainerElement = null;
+ *
+ * <ParentContainer style={{overflow: 'auto'}} ref={element => parentContainerElement = element}>
+ *      <AutoScroll parentContainer={parentContainerElement}>
+ *          <ChildComponent />
+ *      </AutoScroll>
+ * <ParentContainer />
  * */
 
 
@@ -103,8 +112,6 @@ class AutoScroll extends Component {
         if (window.innerHeight < containerBottom) {
             containerBottom = window.innerHeight;
         }
-        console.log('CONTAINER.bottom: ', container.bottom);
-        console.log('window.innerHeight: ', window.innerHeight);
         return {
             containerOffsetLeft: container.left,
             containerRightSide: container.right,
@@ -157,9 +164,6 @@ class AutoScroll extends Component {
         /**
          * Activate auto scroll only if it is in the designated scroll zone within the container
          * */
-        console.log('pointerX: ', pointerX);
-        console.log('pointerY: ', pointerY);
-        console.log('containerTop: ', containerTop);
         if (pointerY > containerBottom &&
             pointerX < containerRightSide &&
             pointerX > containerOffsetLeft) {
