@@ -11,8 +11,8 @@ import isSmall from '../../utils/breakpoints';
  * AutoScroll listens for mousedown, mousemove and mouseup for desktop.
  * AutoScroll listens for touchmove or touchend for touch devices.
  *
- * Note: Autoscroll will only work if the parent container has overflow set to auto and
- * pass in the parent's container element by using a ref
+ * Note: Autoscroll will only work if the parent container has overflow set to auto, also
+ * this container element needs to be passed in using a ref
  * For example:
  * let parentContainerElement = null;
  *
