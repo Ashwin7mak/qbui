@@ -21,7 +21,7 @@ class AutomationUtils  {
                 "recordId": recId
             }
         };
-        return automationService.invokeAutomation("http://localhost:8089", "0duiiaaaaab", "ApproveProjectRecord", payload).then(
+        return automationService.invokeAutomation("0duiiaaaaab", "ApproveProjectRecord", payload).then(
             response => {
                 logger.debug('Automation success');
                 NotificationManager.info("Record Approved.");
