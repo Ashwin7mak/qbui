@@ -36,6 +36,7 @@ import '../drawer/drawerContainer.scss';
 
 let logger = new Logger();
 let FluxMixin = Fluxxor.FluxMixin(React);
+//todo :remove the following variables once we start using react router 4
 let drawerRecId, drawerTableId, embeddedReport;
 /**
  * record route component
