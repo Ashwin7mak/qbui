@@ -14,6 +14,7 @@ const mockProps = {
     tblId: 'tbl1',
     rptId: 'rpt1',
     filter: 'someFilter',
+    isOnlyOneColumnVisible: false,
     // Since ReportColumnHeaderMenuContainer itself is not connected to a redux store, pass in fake
     // dispatch function as a prop.
     dispatch() {}
@@ -30,16 +31,20 @@ const mockFieldDef = {
 let component;
 let instance;
 let loadDynamicReport;
+let hideColumn;
 
 describe('ReportColumnHeaderMenuContainer', () => {
     beforeEach(() => {
         jasmineEnzyme();
         loadDynamicReport = jasmine.createSpy('loadDynamicReport');
+        hideColumn = jasmine.createSpy('hideColumn');
         RewireAPI.__Rewire__('loadDynamicReport', loadDynamicReport);
+        RewireAPI.__Rewire__('hideColumn', hideColumn);
     });
 
     afterEach(() => {
         RewireAPI.__ResetDependency__('loadDynamicReport');
+        RewireAPI.__ResetDependency__('hideColumn');
     });
 
     it('passes the sortReport and groupReport functions to the ReportColumnHeaderMenu', () => {
@@ -124,6 +129,21 @@ describe('ReportColumnHeaderMenuContainer', () => {
             instance.sortReport(mockFieldDef, true, true);
 
             expect(loadDynamicReport).not.toHaveBeenCalled();
+        });
+    });
+
+    describe('hideColumn', () => {
+        it('calls hideColumn to hide a field', () => {
+            component = shallow(React.createElement(ReportColumnHeaderMenuContainer(MockMenu), {...mockProps}));
+            instance = component.instance();
+
+            instance.hideColumn(mockFieldDef.id);
+
+            let params = {
+                columnId: mockFieldDef.id
+            };
+
+            expect(hideColumn).toHaveBeenCalledWith(CONTEXT.REPORT.NAV, mockProps.appId, mockProps.tblId, mockProps.rptId, params);
         });
     });
 });
