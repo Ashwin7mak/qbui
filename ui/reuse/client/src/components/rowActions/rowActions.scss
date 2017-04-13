@@ -1,5 +1,8 @@
-@import '../../../../src/assets/css/qbVariables';
-@import '../../../../src/assets/css/customVariables';
+@import "../../assets/css/_qbVariables";
+@import "../../assets/css/_customVariables";
+
+// semantic names to go through and scrub
+$grid-default-cell-height: 30px;
 
 // When a row is in inline edit mode, this class is used on an empty DOM
 // node in all sticky cells (row headers) that are not on the row being edited.

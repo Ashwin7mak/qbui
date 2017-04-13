@@ -3,7 +3,7 @@ import {shallow} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
 
 import RowActions from '../../src/components/rowActions/rowActions';
-import {PositionedRowEditActions} from '../../../../client-react/src/components/dataTable/qbGrid/positionedRowEditActionsHoc';
+import {PositionedRowEditActions} from '../../../../client-react/src/components/dataTable/qbGrid/rowEditActions';
 import IconActions, {__RewireAPI__ as IconActionsRewireAPI} from '../../src/components/iconActions/iconActions';
 
 let component;
@@ -12,24 +12,22 @@ const checkboxSelector = 'input[type="checkbox"]';
 
 const rowId = 1;
 const props = {
-    rowId: rowId,
-    isEditing: false,
-    editingRowId: null,
-    isEditingRowValid: true,
-    isEditingRowSaving: true,
-    isInlineEditOpen: false,
-    editingRowErrors: [],
-    onCancelEditingRow () {},
-    onClickAddNewRow () {},
-    onClickToggleSelectedRow () {},
-    onClickSaveRow () {}
+  rowId: rowId,
+  isEditing: false,
+  editingRowId: null,
+  isEditingRowValid: true,
+  isEditingRowSaving: true,
+  isInlineEditOpen: false,
+  editingRowErrors: [],
+  onCancelEditingRow () {},
+  onClickAddNewRow () {},
+  onClickToggleSelectedRow () {},
+  onClickSaveRow () {}
 };
 
-describe('RowActions (QbGrid)', () => {
+fdescribe('RowActions (Grid)', () => {
     beforeEach(() => {
         jasmineEnzyme();
-        // IconActions currently relies on the flux store which is difficult to unit test because of the mixin
-        // TODO:: Refactor once redux stores are implemented. https://quickbase.atlassian.net/browse/MB-1920
         IconActionsRewireAPI.__Rewire__('IconActions', () => {return <div></div>;});
     });
 
@@ -37,7 +35,7 @@ describe('RowActions (QbGrid)', () => {
         IconActionsRewireAPI.__ResetDependency__('IconActions');
     });
 
-    it('Renders the row actions', () => {
+    fit('Renders the row actions', () => {
         component = shallow(<RowActions {...props} />);
 
         expect(component).toHaveClassName('actionsCol');
@@ -55,7 +53,7 @@ describe('RowActions (QbGrid)', () => {
         expect(checkbox).not.toBeChecked();
     });
 
-    it('Renders an empty div if inlineEditing is open', () => {
+    fit('Renders an empty div if inlineEditing is open', () => {
         component = shallow(<RowActions {...props} isInlineEditOpen={true} rowId={rowId} />);
 
         expect(component).toHaveClassName('emptyRowActions');
@@ -65,12 +63,8 @@ describe('RowActions (QbGrid)', () => {
         expect(component).not.toContainReact(<PositionedRowEditActions />);
     });
 
-    it('renders the row edit actions if the row being editing', () => {
-        component = shallow(<RowActions
-            {...props}
-            isEditing={true}
-            editingRowId={rowId}
-        />);
+    fit('renders the row edit actions if the row being editing', () => {
+        component = shallow(<RowActions {...props} isEditing={true} editingRowId={rowId} />);
 
         // Make sure the appropriate props are passed down to the RowEdit Actions
         let RowEditActions = component.find(PositionedRowEditActions);
