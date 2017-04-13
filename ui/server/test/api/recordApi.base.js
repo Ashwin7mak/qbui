@@ -98,6 +98,27 @@
                 });
                 return deferred.promise;
             },
+            fetchRecords: function(appId, tableId, params) {
+                var deferred = promise.pending();
+                var endpoint = apiBase.resolveRecordsEndpoint(appId, tableId);
+                if (params) {
+                    endpoint += "?" + params;
+                }
+                init.then(function() {
+                    apiBase.executeRequest(endpoint, consts.GET).
+                    then(function(recResp) {
+                        deferred.resolve(JSON.parse(recResp.body).records);
+                    },
+                        (error) => {
+                            deferred.resolve(error);
+                        }).
+                    catch(function(error) {
+                        deferred.reject(error);
+                        assert(false, 'failed to resolve record');
+                    });
+                });
+                return deferred.promise;
+            },
             fetchRecord: function(appId, tableId, recordId, params) {
                 var deferred = promise.pending();
                 var endpoint = apiBase.resolveRecordsEndpoint(appId, tableId, recordId);
@@ -108,6 +129,9 @@
                     apiBase.executeRequest(endpoint, consts.GET).
                             then(function(recResp) {
                                 deferred.resolve(recResp);
+                            },
+                            (error) => {
+                                deferred.resolve(error);
                             }).
                             catch(function(error) {
                                 deferred.reject(error);
@@ -307,19 +331,29 @@
              * @Returns A promise chain.
              */
             addRecords: function(createdApp, createdTable, genRecords) {
-                //Resolve the proper record endpoint specific to the generated app and table
-                var recordsEndpoint = recordBase.apiBase.resolveRecordsEndpoint(createdApp.id, createdTable.id);
-                var fetchRecordPromises = [];
-                genRecords.forEach(function(currentRecord) {
-                    fetchRecordPromises.push(recordBase.createAndFetchRecord(recordsEndpoint, currentRecord, null));
+                return new Promise((resolve, reject) => {
+                    var recordsEndpoint = recordBase.apiBase.resolveRecordsEndpoint(createdApp.id, createdTable.id);
+                    recordBase.createBulkRecords(recordsEndpoint, genRecords).then(
+                        (recordIdList) => {
+                            var fetchRecordPromises = [];
+                            var query = "";
+                            recordIdList.forEach((recId) => {
+                                //{3.EX.'1'} OR {3.EX.'2'}
+                                query += query.length > 0 ? " OR " : "";
+                                query += "{3.EX.'" + recId + "'}";
+                            });
+                            recordBase.fetchRecords(createdApp.id, createdTable.id, "query=" + query).then(
+                                    (responses) => {
+                                        resolve(responses);
+                                    },
+                                    (error) => {
+                                        reject(error);
+                                    }
+                            );
+                        }).catch((error) => {
+                            throw new Error(error);
+                        });
                 });
-                return Promise.all(fetchRecordPromises)
-                    .then(function(results) {
-                        return results;
-                    }).catch(function(error) {
-                        // Proper error handling, you need to rethrow not just return the error
-                        throw new Error(error);
-                    });
             }
         };
         return recordBase;
