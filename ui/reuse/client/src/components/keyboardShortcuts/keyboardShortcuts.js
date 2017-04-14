@@ -1,5 +1,49 @@
 import React, {PropTypes, Component} from 'react';
-import MouseTrap from 'mousetrap';
+import Mousetrap from 'mousetrap';
+
+/**
+ * adds a bindGlobal method to Mousetrap that allows you to
+ * bind specific keyboard shortcuts that will still work
+ * inside a text input field
+ *
+ * usage:
+ * Mousetrap.bindGlobal('ctrl+s', _saveChanges);
+ */
+/* global Mousetrap:true */
+(function(Mousetrap) {
+    var _globalCallbacks = {};
+    var _originalStopCallback = Mousetrap.prototype.stopCallback;
+
+    Mousetrap.prototype.stopCallback = function(e, element, combo, sequence) {
+        var self = this;
+
+        if (self.paused) {
+            return true;
+        }
+
+        if (_globalCallbacks[combo] || _globalCallbacks[sequence]) {
+            return false;
+        }
+
+        return _originalStopCallback.call(self, e, element, combo);
+    };
+
+    Mousetrap.prototype.bindGlobal = function(keys, callback, action) {
+        var self = this;
+        self.bind(keys, callback, action);
+
+        if (keys instanceof Array) {
+            for (var i = 0; i < keys.length; i++) {
+                _globalCallbacks[keys[i]] = true;
+            }
+            return;
+        }
+
+        _globalCallbacks[keys] = true;
+    };
+
+    Mousetrap.init();
+}) (Mousetrap);
 
 class KeyboardShortcuts extends Component {
     constructor(props) {
@@ -13,39 +57,46 @@ class KeyboardShortcuts extends Component {
     componentWillMount() {
         if (this.props.shortcutBindingsPreventDefault) {
             this.addAllKeyBindingsPreventDefault(this.props.shortcutBindingsPreventDefault);
-        } else {
+        }
+        if (this.props.shortcutBindings) {
             this.addAllKeyBindings(this.props.shortcutBindings);
         }
     }
 
     componentWillUnmount() {
+        console.log('UNMOUNTED');
+        Mousetrap.reset();
         this.removeAllKeyBindings();
     }
 
     addAllKeyBindings(bindings = []) {
-        console.log('bindings: ', bindings);
+        console.log('addAllKeyBindings: ', bindings);
         bindings.forEach(binding => {
             console.log('bindings: ', binding.callback);
-            MouseTrap.bind(binding.key, () => binding.callback(binding.content));
+            Mousetrap.bind(binding.key, () => binding.callback(binding.content));
         });
     }
 
     addAllKeyBindingsPreventDefault(bindings = []) {
+        console.log('PreventDefault: ', bindings);
         bindings.forEach(binding => {
-            MouseTrap(document.body).bind(binding.key, () => binding.callback(binding.content));
+            Mousetrap.bindGlobal(binding.key, () => binding.callback(binding.content));
         });
     }
 
     removeAllKeyBindings() {
+        // Order matters, keys must be unbinded in the order that they were passed in to be binded
         let shortcutBindingsPreventDefault = this.props.shortcutBindingsPreventDefault || [];
         let shortcutBindings = this.props.shortcutBindings || [];
 
         shortcutBindingsPreventDefault.forEach(binding => {
-            MouseTrap.unbind(binding.key);
+            console.log(binding.key);
+            Mousetrap(document.body).unbind(binding.key, binding.callback);
         });
 
         shortcutBindings.forEach(binding => {
-            MouseTrap.unbind(binding.key);
+            console.log(binding.key);
+            Mousetrap.unbind(binding.key, binding.callback);
         });
     }
 

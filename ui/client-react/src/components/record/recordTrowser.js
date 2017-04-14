@@ -500,6 +500,7 @@ export const RecordTrowser = React.createClass({
 
     keyboardOnSave() {
         if (this.props.visible) {
+            console.log('recordTrowser');
             this.saveClicked();
         }
     },
@@ -516,10 +517,10 @@ export const RecordTrowser = React.createClass({
                      breadcrumbs={this.getTrowserBreadcrumbs()}
                      onCancel={this.cancelEditing}
                      content={this.getTrowserContent()} >
-                <KeyboardShortcuts id="trowser"
+                {this.props.visible ? <KeyboardShortcuts id="trowser"
                                    shortcutBindingsPreventDefault={[
                                        {key: 'mod+s', callback: () => {this.keyboardOnSave(); return false;}},
-                                   ]} />
+                                   ]} /> : null}
                 <SaveOrCancelFooter
                     rightAlignedButtons={this.getTrowserRightIcons()}
                     centerAlignedButtons={this.getTrowserActions()}

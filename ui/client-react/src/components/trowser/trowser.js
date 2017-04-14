@@ -40,6 +40,7 @@ let Trowser = React.createClass({
 
     keyboardOnCancel() {
         if (this.props.visible) {
+            console.log('trowser');
             this.props.onCancel();
         }
     },
@@ -60,10 +61,10 @@ let Trowser = React.createClass({
         return (
             <div className={trowserClasses} >
                 <div className={"trowserBackground"} onClick={this.props.onCancel}/>
-                <KeyboardShortcuts id="trowser"
+                {this.props.visible ? <KeyboardShortcuts id="trowser"
                                    shortcutBindingsPreventDefault={[
                                        {key: 'esc', callback: () => {this.keyboardOnCancel(); return false;}}
-                                   ]} />
+                                   ]} /> : null}
                 <div className={"trowserContent"}>
                     <div className={"trowserHeader"}>
                         <div className={"breadcrumbs h4"}>

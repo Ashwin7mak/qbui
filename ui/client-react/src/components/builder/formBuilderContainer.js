@@ -102,6 +102,8 @@ export const FormBuilderContainer = React.createClass({
     },
 
     removeField() {
+        console.log('removeField');
+
         if (this.props.removeFieldFromForm) {
             return this.props.removeFieldFromForm(this.props.currentForm.id, this.props.selectedField);
         }
@@ -118,6 +120,7 @@ export const FormBuilderContainer = React.createClass({
 
     saveClickedKeyBoard() {
         // Invoke `save` when invoked by keyboard, debouncing subsequent calls.
+        console.log('damnit');
         let debouncedSave = _.debounce(this.saveClicked, debounceKeyboardSaveMillis, {
             'leading': true,
             'trailing': false
@@ -160,12 +163,14 @@ export const FormBuilderContainer = React.createClass({
     },
 
     keyboardMoveFieldUp() {
+        console.log('keyboardMoveFieldUp');
         if (this.props.selectedField.elementIndex !== 0) {
             this.props.keyboardMoveFieldUp(this.props.currentForm.id, this.props.selectedField);
         }
     },
 
     keyboardMoveFieldDown() {
+        console.log('keyboardMoveFieldDown');
         let {tabIndex, sectionIndex, columnIndex} = this.props.selectedField;
         let formDataLength = this.props.currentForm.formData.formMeta.tabs[tabIndex].sections[sectionIndex].columns[columnIndex].elements.length - 1;
 
