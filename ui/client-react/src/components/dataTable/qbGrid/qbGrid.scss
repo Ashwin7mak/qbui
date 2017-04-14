@@ -20,7 +20,7 @@ $edit-icon-font-size: 18px;
     flex: 1 1 auto;
     overflow: auto;
     display: block;
-    width: 100%;
+    width: auto;
     border-collapse: initial; // needed for sticky column
     color: $default-text-onlight-color;
     -webkit-font-smoothing: antialiased;
@@ -220,6 +220,7 @@ $edit-icon-font-size: 18px;
 
         &:last-of-type {
             border-right: 0;
+            width: 100%; // XD wants the last cell in the grid to fill any remaining space in the window
         }
     }
 
