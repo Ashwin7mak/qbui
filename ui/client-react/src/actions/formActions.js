@@ -351,7 +351,6 @@ function saveTheForm(appId, tblId, formType, formMeta, isNew, redirectRoute, sho
                         //  for now return the original form..
                         dispatch(event(formType, types.SAVING_FORM_SUCCESS, convertFormToArrayForClient({formMeta: response.data}).formMeta));
 
-                        // Leave form Builder
                         if (shouldRedirectOnSave) {
                             NavigationUtils.goBackToLocationOrTable(appId, tblId, redirectRoute);
                         }
