@@ -14,6 +14,7 @@ import {openRecord} from '../../../actions/recordActions';
 import WindowLocationUtils from '../../../utils/windowLocationUtils';
 import {EDIT_RECORD_KEY} from '../../../constants/urlConstants';
 import {CONTEXT} from '../../../actions/context';
+import EmptyImage from '../../../../../client-react/src/assets/images/empty box graphic.svg';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
 
@@ -394,31 +395,61 @@ export let CardViewListHolder = React.createClass({
         //});
     },
 
+    /**
+     * get text to display below grid if no rows are displayed
+     * @returns {*}
+     */
+    renderNoRowsExist() {
+
+        const hasSearch = this.props.searchString && this.props.searchString.trim().length > 0;
+
+        return (
+            <div className="noRowsExist">
+
+                <div className="noRowsIconLine">
+                    <img className={"noRowsIcon"} alt="No Rows" src={EmptyImage} />
+                </div>
+
+                <div className="noRowsText">
+                    {hasSearch ? <I18nMessage message="grid.no_filter_matches"/> :
+                        <div className="cardViewCreateOne">
+                            <I18nMessage message="grid.no_rows_but"/>
+                            <div><a href="#" onClick={this.props.onAddNewRecord}><I18nMessage message="grid.no_rows_create_link"/></a>...</div>
+                        </div>}
+                </div>
+            </div>);
+    },
+
     render() {
         let results = this.props.reportData && this.props.reportData.data ? this.props.reportData.data.filteredRecords : [];
 
+        if (!this.props.noRowsUI || this.props.reportData.loading || results && results.length > 0) {
+            return (
+                <div className="reportTable">
 
-        return (
-            <div className="reportTable">
-
-                <div className="tableLoaderContainer" ref="cardViewListWrapper">
-                    <Loader loaded={!this.props.reportData.loading} options={SpinnerConfigurations.CARD_VIEW_REPORT}>
-                        {results ?
-                            this.getRows(results) :
-                            <div className="noData"><I18nMessage message={'grid.no_data'}/></div>}
-                    </Loader>
-                    { //keep empty placeholder when loading to reduce reflow of space, scrollbar changes
-                        this.props.reportData.loading ? <div className="loadedContent"></div> : null
-                    }
+                    <div className="tableLoaderContainer" ref="cardViewListWrapper">
+                        <Loader loaded={!this.props.reportData.loading}
+                                options={SpinnerConfigurations.CARD_VIEW_REPORT}>
+                            {results ?
+                                this.getRows(results) :
+                                <div className="noData"><I18nMessage message={'grid.no_data'}/></div>}
+                        </Loader>
+                        { //keep empty placeholder when loading to reduce reflow of space, scrollbar changes
+                            this.props.reportData.loading ? <div className="loadedContent"></div> : null
+                        }
+                    </div>
                 </div>
-            </div>
-        );
+            );
+        } else {
+            return this.renderNoRowsExist();
+        }
     }
 });
 
 const mapStateToProps = (state) => {
     return {
-        report: state.report
+        report: state.report,
+        searchString: state.search && state.search.searchInput
     };
 };
 

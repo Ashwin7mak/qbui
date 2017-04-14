@@ -21,13 +21,13 @@ class TableHomePageInitial extends React.Component {
         return (
             <div className="tableHomePageInitial">
                 <div className="iconWrapper">
-                    <div className="starShape">
+                    <div className="starShape animated rubberBand">
                         <div className="starShapeContent">
                            <Icon icon={_.has(this.props, "selectedTable.tableIcon") ? this.props.selectedTable.tableIcon : "projects"} iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY}/>
                         </div>
                     </div>
                 </div>
-                <div className="h1"><I18nMessage message="tableCreation.homePageInitialTitle"/></div>
+                <div className="h1 animated fadeIn"><I18nMessage message="tableCreation.homePageInitialTitle"/></div>
 
                 <div className="description"><I18nMessage message="tableCreation.homePageInitialDescription"/></div>
 

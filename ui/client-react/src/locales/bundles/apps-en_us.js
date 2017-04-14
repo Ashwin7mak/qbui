@@ -119,7 +119,9 @@ export default {
         grid: {
             no_data: "There is no data to display.",
             no_filter_matches: "No records match what you're looking for.  Try looking for a different kind of record.",
-            no_rows: "There are no records to see right now."
+            no_rows: "There are no records to see right now.",
+            no_rows_but: "There are no records, but you can ",
+            no_rows_create_link:  "create one"
         },
         globalActions: {
             user: "User",

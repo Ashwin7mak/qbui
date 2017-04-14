@@ -116,7 +116,10 @@ export default {
         grid: {
             no_data: "Es liegen keine Daten zum Anzeigen.",
             no_filter_matches: "Keine Datensätze übereinstimmen, was du suchst. Versuchen Sie, nach einer anderen Art von Rekord zu suchen.",
-            no_rows: "TheEs gibt keine Aufzeichnungen, um jetzt zu sehen."
+            no_rows: "TheEs gibt keine Aufzeichnungen, um jetzt zu sehen.",
+            no_rows_but: "Es gibt keine Aufzeichnungen, aber du kannst ",
+            no_rows_create_link:  "erstelle einen"
+
         },
         globalActions: {
             user: "Benutzer",

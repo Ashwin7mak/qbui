@@ -116,7 +116,10 @@ export default {
         grid: {
             no_data: "Il n'y a pas de données à afficher.",
             no_filter_matches: "Aucun enregistrement ne correspond à ce que vous recherchez. Essayez de rechercher un autre type d'enregistrement.",
-            no_rows: "Il n'y a aucun enregistrement à voir en ce moment."
+            no_rows: "Il n'y a aucun enregistrement à voir en ce moment.",
+            no_rows_but: "Il n'y a pas d'enregistrements, mais vous pouvez ",
+            no_rows_create_link:  "créer une"
+
         },
         globalActions: {
             user: "Utilisateur",

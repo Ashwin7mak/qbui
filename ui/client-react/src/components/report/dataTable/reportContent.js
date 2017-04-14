@@ -975,6 +975,7 @@ export const ReportContent = React.createClass({
                         }
                         {isSmall &&
                         <CardViewListHolder reportData={this.props.reportData}
+                                            noRowsUI={this.props.noRowsUI}
                                             appUsers={this.props.appUsers}
                                             primaryKeyName={this.props.primaryKeyName}
                                             reportHeader={this.props.reportHeader}
@@ -985,7 +986,8 @@ export const ReportContent = React.createClass({
                                             pageStart={this.props.cardViewPagination.props.pageStart}
                                             pageEnd={this.props.cardViewPagination.props.pageEnd}
                                             getNextReportPage={this.props.cardViewPagination.props.getNextReportPage}
-                                            getPreviousReportPage={this.props.cardViewPagination.props.getPreviousReportPage}/>
+                                            getPreviousReportPage={this.props.cardViewPagination.props.getPreviousReportPage}
+                                            onAddNewRecord={this.props.onAddNewRecord}/>
                         }
                         {this.getConfirmationDialog()}
                     </div>
