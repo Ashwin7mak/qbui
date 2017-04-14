@@ -28,14 +28,8 @@ class AutomationUtils  {
             },
             error => {
                 NotificationManager.error("An Error occured when invoking automation");
-                let errors = [];
-
                 //  if a validation error, print each one individually..
-                if (errors.length > 0) {
-                    logger.debug('RecordService createRecord success');
-                } else {
-                    logger.parseAndLogError(LogLevel.ERROR, error.response, 'Automation');
-                }
+                logger.parseAndLogError(LogLevel.ERROR, error.response, 'Automation');
             });
     }
 }
