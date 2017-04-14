@@ -87,7 +87,7 @@ class AppHistory {
      * Add the global listeners to route changes
      * @private
      */
-    _setupHistoryListeners() {
+     _setupHistoryListeners() {
         // Setup listener for route changes within the app
         //self.cancelListenBefore = self.history.listenBefore((location, callback) => {
         self.cancelListenBefore = history.block((location, action) => {
