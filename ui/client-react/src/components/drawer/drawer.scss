@@ -4,14 +4,10 @@
     position: absolute;
     z-index: 10; // TODO: what to do? use qbVariable?
     height: 100%;
-    width: calc(100% - 20px);
+    width: 100%;
     overflow: hidden;
+    background-color: #f5f5f5;
 
-    // TODO: remove these, these are temporary
-    background: bisque;
-    //left: 100%;
     right: 0;
-    border: 1px solid;
-
 }
 

@@ -46,17 +46,23 @@ let drawerRecId, drawerTableId, embeddedReport;
 export const RecordRoute = React.createClass({
     mixins: [FluxMixin],
 
+    // TODO: remove
+    getInitialState() {
+        return {hasDrawer: false};
+    },
+
     loadRecord(appId, tblId, recordId, rptId, formType = "view") {
         const flux = this.getFlux();
 
         flux.actions.selectTableId(tblId);
+        window.recId = ((window.recId || 0) + 1) % 5 + 1;
 
         // ensure the search input is empty
         this.props.clearSearchInput();
-        if (this.props.isDrawerContext && window.location.href.includes('drawer')) {
-            this.props.loadForm(appId, drawerTableId, rptId, formType, drawerRecId, this.props.uniqueId);
+        if (this.props.hasDrawer || (this.props.isDrawerContext && window.location.href.includes('drawer'))) {
+            this.props.loadForm(appId, '0duiiaaaaa2', rptId, formType, window.recId, this.props.uniqueId);
             const recordsArray = embeddedReport !== undefined ? embeddedReport.data.records : [];
-            this.navigateToRecord(drawerRecId, embeddedReport, recordsArray);
+            this.navigateToRecord(window.recId, embeddedReport, recordsArray);
         } else {
             this.props.loadForm(appId, tblId, rptId, formType, recordId, 'view');
         }
@@ -317,40 +323,38 @@ export const RecordRoute = React.createClass({
         //       root recordRouter instance
         // TODO: update this when upgrading to React Router 4 work is done.
         const hasDrawers = _.get(this, 'props.location.search', '').indexOf('drawer') > -1;
-        return hasDrawers && !this.props.isDrawerContext;
+
+        let drawerCount = this.props.drawerCount;
+        if (typeof drawerCount !== 'number') {
+            drawerCount = 4;
+        }
+
+        return hasDrawers && --drawerCount;
+    },
+
+    getDrawerParams() {
+        // TODO: handle all the records in url since we'll support multiple drawers
+        //       the array or tables/records should not be passed in as props, we should retrieve
+        //       or generate the list of records from the router
+        return this.state.drawerParams;
     },
 
     /**
      * Render drawer container (if url instructs us to render drawers).
      */
     getDrawerContainer() {
-        if (this.shouldRenderDrawers()) {
-            // this is the root recordRoute instance, render Drawers if any
-            const drawerTableIds = ['0duiiaaaaa2'];
-            const drawerRecordIds = ['2'];
-            const appId = _.get(this, 'props.params.appId');
-            return (
-                <DrawerContainer
-                    {...this.props}
-                    appId={appId}
-                    visible={true}
-                    drawerTableIds={drawerTableIds}
-                    drawerRecordIds={drawerRecordIds}
-                />);
-        } else {
-            // Drawers don't render nested drawers.
-            return null;
-        }
-    },
+        const closeAll = this.props.closeAll || this.closeDrawer;
+        const className = this.props.isDrawerContext ? '' : 'rootDrawer';
+        return (
+            <DrawerContainer
+                {...this.props}
 
-    fakeOpenDrawerLink() {
-        if (window.location.href.includes('drawers')) {
-            return null;
-        } else {
-            const link = window.location.href + '/drawers';
-
-            return <Link to={link} >Load Them Drawers, YO!</Link>;
-        }
+                className={className}
+                hasDrawer={this.state.hasDrawer}
+                closeDrawer={this.closeDrawer}
+                closeAll={closeAll}
+                >
+            </DrawerContainer>);
     },
 
     /**
@@ -388,9 +392,12 @@ export const RecordRoute = React.createClass({
 
     /**
      * only re-render when our form data has changed */
-    shouldComponentUpdate(nextProps) {
-        if (/*!this.props.location.pathname.includes('drawers') &&*/ window.location.href.includes('drawer')) {
+    shouldComponentUpdate(nextProps, nextState) {
+        if (window.location.href.includes('drawer')) {
             //TODO: add a check to see if drawer component data got updated
+            return true;
+        }
+        if (nextState.hasDrawer || this.state.hasDrawer) {
             return true;
         }
         const viewData = this.getFormFromProps();
@@ -420,6 +427,16 @@ export const RecordRoute = React.createClass({
         }
         WindowLocationUtils.pushWithQuery('drawerRecId', recId);
         WindowLocationUtils.pushWithQuery('drawerTableId', tblId);
+    },
+
+    //TODO: remove
+    fakeRenderDrawer() {
+        this.setState({hasDrawer: true});
+    },
+
+    //TODO: remove
+    closeDrawer() {
+        this.setState({hasDrawer: false});
     },
 
     /**
@@ -488,7 +505,9 @@ export const RecordRoute = React.createClass({
                     {!formLoadingErrorStatus &&
                         this.getDrawerContainer()
                     }
-                    {this.fakeOpenDrawerLink()}
+                    <button onClick={this.fakeRenderDrawer}>render child drawer</button>
+                    {this.props.closeDrawer && <button onClick={this.props.closeDrawer}>close this drawer</button>}
+                    {this.props.closeAll && <button onClick={this.props.closeAll}>close all drawers</button>}
                 </div>);
         }
     }

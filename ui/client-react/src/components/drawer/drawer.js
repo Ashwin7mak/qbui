@@ -1,6 +1,7 @@
 import React, {PropTypes} from 'react';
 import _ from 'lodash';
 
+import RecordRouteWithUniqueId from '../record/recordRoute';
 import './drawer.scss';
 
 /**
@@ -8,9 +9,13 @@ import './drawer.scss';
  * the right.
  */
 class Drawer extends React.Component {
+    componentWillUnmount() {
+        if (this.props.unmount) {
+            this.props.unmount();
+        }
+    }
     render() {
-        const classNames = ['panel', this.props.className];
-        classNames.push(this.props.isDrawer ? 'drawer' : '');
+        const classNames = ['drawer', this.props.className];
         return (
             <div className={classNames.join(' ')}>
                 {this.props.children}
