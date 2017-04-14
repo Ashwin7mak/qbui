@@ -114,10 +114,10 @@
                 },
                 {
                     message: 'Admin Role',
-                    roleId: participantRoleId,
-                    reportId: participantReportId,
+                    roleId: adminRoleId,
+                    reportId: adminReportId,
                     reportTitle: 'Admin Report'
-                }
+                },
             ];
         }
 
@@ -142,27 +142,26 @@
                         //get the user authentication
                         RequestSessionTicketPage.get(e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.recordBase.apiBase.resolveUserTicketEndpoint() + '?uid=' + userId + '&realmId='));
                     });
-
-                    //Load the report for given user
-                    RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[0].id, testcase.reportId));
-
-                    // wait for the report content to be visible
-                    ReportContentPO.waitForReportContent();
-
-                    //Assert report title to be expected
-                    expect(browser.element('.stageHeadline').getAttribute('textContent')).toBe(testcase.reportTitle);
-
-                    //Assert record count displayed is correct
-                    expect(browser.element('.recordsCount').getAttribute('textContent')).toBe(numOfRecords + ' records');
                 });
 
+                //Load the report for given user
+                RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[0].id, testcase.reportId));
+
+                // wait for the report content to be visible
+                ReportContentPO.waitForReportContent();
+
+                //Assert report title to be expected
+                expect(browser.element('.stageHeadline').getAttribute('textContent')).toBe(testcase.reportTitle);
+
+                //Assert record count displayed is correct
+                expect(browser.element('.recordsCount').getAttribute('textContent')).toBe(numOfRecords + ' records');
             });
         });
 
         /**
          * Negative test to verify that the personal reports for a user cannot be accessed by other users.
          */
-        it('Negative test to verify personal reports not accessible by other users', function() {
+        xit('Negative test to verify personal reports not accessible by other users', function() {
 
             browser.call(function() {
                 //Create a user
@@ -175,14 +174,14 @@
 
                     //get the user authentication
                     RequestSessionTicketPage.get(e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.recordBase.apiBase.resolveUserTicketEndpoint() + '?uid=' + userId + '&realmId='));
-
-                    //try to load the report of admin user
-                    RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, adminReportId));
                 });
-
-                // Make sure the report not loaded and gives unAuthorized error
-                expect(RequestSessionTicketPage.ticketResponseBodyEl.getText()).toEqual(e2eConsts.invalidCredentials);
             });
+            //try to load the report of admin user
+            RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, adminReportId));
+
+            // Make sure the report not loaded and gives unAuthorized error
+            expect(RequestSessionTicketPage.ticketResponseBodyEl.getText()).toEqual(e2eConsts.invalidCredentials);
+
         });
 
         /**
@@ -202,31 +201,31 @@
                     //get the user authentication
                     RequestSessionTicketPage.get(e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.recordBase.apiBase.resolveUserTicketEndpoint() + '?uid=' + userId + '&realmId='));
                 });
-
-                //test that admin have access to admin report
-                //Load the report for admin user
-                RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, adminReportId));
-                // wait for the report content to be visible
-                ReportContentPO.waitForReportContent();
-                //Assert report title to be expected
-                expect(browser.element('.stageHeadline').getAttribute('textContent')).toBe('Admin Report');
-
-                //test that admin have access to participant report
-                //Load the report for participant user
-                RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, participantReportId));
-                // wait for the report content to be visible
-                ReportContentPO.waitForReportContent();
-                //Assert report title to be expected
-                expect(browser.element('.stageHeadline').getAttribute('textContent')).toBe('Participant Report');
-
-                //test that admin have access to viewer report
-                //Load the report for viewer user
-                RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, viewerReportId));
-                // wait for the report content to be visible
-                ReportContentPO.waitForReportContent();
-                //Assert report title to be expected
-                expect(browser.element('.stageHeadline').getAttribute('textContent')).toBe('Viewer Report');
             });
+
+            //test that admin have access to admin report
+            //Load the report for admin user
+            RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, adminReportId));
+            // wait for the report content to be visible
+            ReportContentPO.waitForReportContent();
+            //Assert report title to be expected
+            expect(browser.element('.stageHeadline').getAttribute('textContent')).toBe('Admin Report');
+
+            //test that admin have access to participant report
+            //Load the report for participant user
+            RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, participantReportId));
+            // wait for the report content to be visible
+            ReportContentPO.waitForReportContent();
+            //Assert report title to be expected
+            expect(browser.element('.stageHeadline').getAttribute('textContent')).toBe('Participant Report');
+
+            //test that admin have access to viewer report
+            //Load the report for viewer user
+            RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, viewerReportId));
+            // wait for the report content to be visible
+            ReportContentPO.waitForReportContent();
+            //Assert report title to be expected
+            expect(browser.element('.stageHeadline').getAttribute('textContent')).toBe('Viewer Report');
         });
 
 
