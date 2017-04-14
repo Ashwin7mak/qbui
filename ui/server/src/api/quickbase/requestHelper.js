@@ -50,9 +50,6 @@
             getRequestUrl  : function(req) {
                 return config ? config.javaHost + req.url : '';
             },
-            getAutomationUrl  : function(req) {
-                return config ? config.automationHost + req.url : '';
-            },
             getRequestEEUrl  : function(req) {
                 return config ? config.eeHost + req.url : '';
             },
@@ -178,7 +175,7 @@
                 this.setTidHeader(req);
 
                 let opts = {
-                    url         : this.getAutomationUrl(req),
+                    url         : this.getRequestAutomationUrl(req),
                     method      : (req.method),
                     agentOptions: this.getAgentOptions(req),
                     headers     : req.headers
