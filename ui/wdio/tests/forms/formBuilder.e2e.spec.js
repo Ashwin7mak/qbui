@@ -225,5 +225,27 @@
             expect(browser.isVisibleWithinViewport(secondField)).toBe(true, 'autoscroll failed');
             browser.setViewportSize(containerSize);
         });
+
+        it('search for fields in the new field picker', function() {
+            let newFields = formBuilderPO.getNewFieldLabels();
+            let label = formBuilderPO.fieldTokenTitle.getText();
+
+            // search for label of first new field token
+            formBuilderPO.searchInput.setValue(label);
+            // wait for groups to disappear
+            formBuilderPO.listOfElementsItemGroup.waitForExist(false);
+            browser.pause(1000);
+            // expect a single match in search results
+            expect (formBuilderPO.getNewFieldLabels().length).toBe(1);
+            // expect that label to match the search term
+            expect (formBuilderPO.fieldTokenTitle.getText()).toBe(label);
+            // remove the search term
+            formBuilderPO.clearSearch.click();
+            // wait for groups to reappear
+            formBuilderPO.listOfElementsItemGroup.waitForExist(true);
+            browser.pause(1000);
+            // expect original new field tokens to reappear
+            expect (formBuilderPO.getNewFieldLabels()).toEqual(newFields);
+        });
     });
 }());

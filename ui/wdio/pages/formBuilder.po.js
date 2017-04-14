@@ -14,6 +14,11 @@
                 return browser.element('.saveOrCancelFooter .centerActions');
             }
         },
+        clearSearch: {
+            get: function() {
+                return browser.element('.clearSearch .searchIcon');
+            }
+        },
         deleteFieldIcon: {
             get: function() {
                 return browser.element('.deleteFieldIcon');
@@ -34,6 +39,11 @@
                 return browser.element('.fieldTokenTitle');
             }
         },
+        fieldTokenTitles: {
+            value: function() {
+                return browser.elements('.fieldTokenTitle');
+            }
+        },
         findFieldByIndex: { // doesn't actually FIND anything...
             value: function(index) {
                 return '.formElementContainer:nth-child(' + index + ')';
@@ -49,6 +59,16 @@
                 return browser.element('.formContainer');
             }
         },
+        listOfElementsItemGroup: {
+            get: function() {
+                return browser.element('.listOfElementsItemGroup');
+            }
+        },
+        listOfElementsItem: {
+            get: function() {
+                return browser.element('.listOfElementsItem');
+            }
+        },
         previewContainer: {
             get: function() {
                 return browser.element('.previewContainer');
@@ -57,6 +77,11 @@
         saveBtn: {
             get: function() {
                 return browser.element('.saveFormButton');
+            }
+        },
+        searchInput: {
+            get: function() {
+                return browser.element('.searchInput');
             }
         },
         selectedField: {
@@ -99,6 +124,15 @@
                         label = labelEl.element('.label').getText();
                     }
                     return label;
+                });
+            }
+        },
+        getNewFieldLabels: {
+            value: function() {
+                let labelEls = browser.elements('.listOfElementsItem');
+
+                return labelEls.value.map(function(labelEl) {
+                    return labelEl.getText();
                 });
             }
         },
