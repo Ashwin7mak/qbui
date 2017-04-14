@@ -19,6 +19,7 @@ import {loadDynamicReport} from '../../actions/reportActions';
 import {CONTEXT} from '../../actions/context';
 import WindowLocationUtils from '../../utils/windowLocationUtils';
 import {EDIT_RECORD_KEY, NEW_RECORD_VALUE} from '../../constants/urlConstants';
+import {NEW_TABLE_IDS_KEY} from '../../constants/localStorage';
 import _ from 'lodash';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
@@ -116,7 +117,7 @@ export const TableHomePageRoute = React.createClass({
     showInitialTableHomePage() {
 
         const haveRecords = _.has(this.props, "reportData.data.records") && this.props.reportData.data.records.length > 0;
-        const newTablesJSONArrray = window.sessionStorage && window.sessionStorage.newTables;
+        const newTablesJSONArrray = window.sessionStorage && window.sessionStorage.getItem(NEW_TABLE_IDS_KEY);
 
         if (haveRecords || !newTablesJSONArrray) {
             return false;

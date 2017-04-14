@@ -35,7 +35,7 @@ import Tooltip from '../../../../reuse/client/src/components/tooltip/tooltip';
 import Icon from '../../../../reuse/client/src/components/icon/icon';
 import TableCreationDialog from '../table/tableCreationDialog';
 import AppUtils from '../../utils/appUtils';
-
+import {NEW_TABLE_IDS_KEY} from '../../constants/localStorage';
 
 // This shared view with the server layer must be loaded as raw HTML because
 // the current backend setup cannot handle a react component in a common directory. It is loaded
@@ -429,12 +429,12 @@ export const Nav = React.createClass({
 
         // store any new table IDs for duration of session for table homepage
         if (window.sessionStorage) {
-            let newTables = window.sessionStorage.newTables;
+            let newTables = window.sessionStorage.getItem(NEW_TABLE_IDS_KEY);
 
             let tableIds = newTables ? newTables.split(",") : [];
             tableIds.push(tblId);
 
-            window.sessionStorage.newTables = tableIds.join(",");
+            window.sessionStorage.setItem(NEW_TABLE_IDS_KEY, tableIds.join(","));
         }
     },
 
