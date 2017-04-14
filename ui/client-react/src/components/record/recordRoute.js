@@ -54,7 +54,6 @@ export const RecordRoute = React.createClass({
         // ensure the search input is empty
         this.props.clearSearchInput();
         if (this.props.isDrawerContext && window.location.href.includes('drawer')) {
-            let arr = window.location.href.split('&');
             this.props.loadForm(appId, drawerTableId, rptId, formType, drawerRecId, this.props.uniqueId);
             const recordsArray = embeddedReport !== undefined ? embeddedReport.data.records : [];
             this.navigateToRecord(drawerRecId, embeddedReport, recordsArray);
