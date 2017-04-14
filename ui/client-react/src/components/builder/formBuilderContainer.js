@@ -112,17 +112,13 @@ export const FormBuilderContainer = React.createClass({
         if (this.props.currentForm && this.props.currentForm.formData) {
             let formMeta = this.props.currentForm.formData.formMeta;
             let formType = this.props.currentForm.formData.formType;
-            this.props.updateForm(formMeta.appId, formMeta.tableId, formType, formMeta);
+            // Invoke `save` when invoked by keyboard, debouncing subsequent calls.
+            let debouncedSave = _.debounce(() => this.props.updateForm(formMeta.appId, formMeta.tableId, formType, formMeta), debounceKeyboardSaveMillis, {
+                'leading': true,
+                'trailing': false
+            });
+            debouncedSave();
         }
-    },
-
-    saveClickedKeyBoard() {
-        // Invoke `save` when invoked by keyboard, debouncing subsequent calls.
-        let debouncedSave = _.debounce(this.saveClicked, debounceKeyboardSaveMillis, {
-            'leading': true,
-            'trailing': false
-        });
-        debouncedSave();
     },
 
     getRightAlignedButtons() {
@@ -211,7 +207,7 @@ export const FormBuilderContainer = React.createClass({
                                    ]}
                                    shortcutBindingsPreventDefault={[
                                        {key: 'esc', callback: () => {this.escapeCurrentContext(); return false;}},
-                                       {key: 'mod+s', callback: () => {this.saveClickedKeyBoard(); return false;}},
+                                       {key: 'mod+s', callback: () => {this.saveClicked(); return false;}},
                                    ]}/>
 
                 <PageTitle title={Locale.getMessage('pageTitles.editForm')}/>
