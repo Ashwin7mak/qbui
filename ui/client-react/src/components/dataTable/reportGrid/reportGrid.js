@@ -256,7 +256,7 @@ export const ReportGrid = React.createClass({
             <div className="noRowsExist">
 
                 <div className="noRowsIconLine">
-                    <img className={"noRowsIcon"} alt="No Rows" src={EmptyImage} />
+                    <img className="noRowsIcon animated zoomInDown" alt="No Rows" src={EmptyImage} />
                 </div>
 
                 <div className="noRowsText">
