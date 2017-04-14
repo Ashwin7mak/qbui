@@ -500,7 +500,6 @@ export const RecordTrowser = React.createClass({
 
     keyboardOnSave() {
         if (this.props.visible) {
-            console.log('recordTrowser');
             this.saveClicked();
         }
     },

@@ -23,21 +23,17 @@ class KeyboardShortcuts extends Component {
     }
 
     componentWillUnmount() {
-        console.log('UNMOUNTED');
         Mousetrap.reset();
         this.removeAllKeyBindings();
     }
 
     addAllKeyBindings(bindings = []) {
-        console.log('addAllKeyBindings: ', bindings);
         bindings.forEach(binding => {
-            console.log('bindings: ', binding.callback);
             Mousetrap.bind(binding.key, () => binding.callback(binding.content));
         });
     }
 
     addAllKeyBindingsPreventDefault(bindings = []) {
-        console.log('PreventDefault: ', bindings);
         bindings.forEach(binding => {
             Mousetrap.bindGlobal(binding.key, () => binding.callback(binding.content));
         });
@@ -47,14 +43,9 @@ class KeyboardShortcuts extends Component {
         // Order matters, keys must be unbinded in the order that they were passed in to be binded
         let shortcutBindingsPreventDefault = this.props.shortcutBindingsPreventDefault || [];
         let shortcutBindings = this.props.shortcutBindings || [];
+        let keyBindings = shortcutBindingsPreventDefault.concat(shortcutBindings);
 
-        shortcutBindingsPreventDefault.forEach(binding => {
-            console.log(binding.key);
-            Mousetrap(document.body).unbind(binding.key, binding.callback);
-        });
-
-        shortcutBindings.forEach(binding => {
-            console.log(binding.key);
+        keyBindings.forEach(binding => {
             Mousetrap.unbind(binding.key, binding.callback);
         });
     }

@@ -5,6 +5,7 @@
  *
  * usage:
  * Mousetrap.bindGlobal('ctrl+s', _saveChanges);
+ * https://github.com/ccampbell/mousetrap/tree/master/plugins/global-bind
  */
 /* global Mousetrap:true */
 export const bindGlobal = (Mousetrap) => {

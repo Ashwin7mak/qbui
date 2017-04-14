@@ -40,7 +40,6 @@ let Trowser = React.createClass({
 
     keyboardOnCancel() {
         if (this.props.visible) {
-            console.log('trowser');
             this.props.onCancel();
         }
     },
