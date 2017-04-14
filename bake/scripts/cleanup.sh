@@ -35,8 +35,8 @@ rm -rf /var/log/anaconda
 # Clean up ssh host keys
 rm -rf /etc/ssh/ssh_host*_key*
 
-# Clear out machine ID
-rm -f /etc/machine-id
+# Clear out machine ID (an empty file - not a missing file - will cause the machine ID to be regenerated)
+install -b -m 444 /dev/null /etc/machine-id
 
 # Clear out hostname
 hostnamectl set-hostname ""
