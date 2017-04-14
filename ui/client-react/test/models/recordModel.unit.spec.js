@@ -252,7 +252,10 @@ describe('Record Model', () => {
         recordModel.setRecordChanges(appId, tblId, UNSAVED_RECORD_ID, changes);
         const model = recordModel.get();
 
-        expect(model.recordChanges).toEqual(changes);
+        expect(model.recordChanges[changes.fid].oldVal).toEqual(changes.values.oldVal);
+        expect(model.recordChanges[changes.fid].newVal).toEqual(changes.values.newVal);
+        expect(model.recordChanges[changes.fid].fieldName).toEqual(changes.fieldName);
+        expect(model.recordChanges[changes.fid].fieldDef).toEqual(changes.fieldDef);
         expect(model.saving).toBeTruthy();
     });
 

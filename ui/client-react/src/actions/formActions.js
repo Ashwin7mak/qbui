@@ -10,6 +10,8 @@ import NotificationManager from '../../../reuse/client/src/scripts/notificationM
 import * as types from '../actions/types';
 import * as UrlConsts from "../constants/urlConstants";
 import {NEW_FORM_RECORD_ID} from '../constants/schema';
+import consts from '../../../common/src/constants';
+import _ from 'lodash';
 import {convertFormToArrayForClient, convertFormToObjectForServer} from './actionHelpers/transformFormData';
 
 let logger = new Logger();
@@ -180,6 +182,39 @@ export const loadForm = (appId, tblId, rptId, formType, recordId) => {
 };
 
 /**
+ * Private function for addNewFieldToForm, not exported
+ * */
+const buildNewField = (newField) => {
+    let newId = _.uniqueId('newField_');
+    let displayText = 'New Text Field';
+    return _.merge({}, {
+        id: newId,
+        edit: true,
+        FormFieldElement: {
+            positionSameRow: false,
+            fieldId: newId,
+            displayText
+        }
+    }, newField);
+};
+
+/**
+ * Move a field from one position on a form to a different position
+ * @param formId
+ * @param newLocation
+ * @param newField
+ * @returns {{id, type, content}|*}
+ */
+export const addNewFieldToForm = (formId, newLocation, newField, appId, tblId) => {
+    return event(formId, types.ADD_FIELD, {
+        newLocation,
+        newField: buildNewField(newField),
+        appId,
+        tblId
+    });
+};
+
+/**
  * Move a field from one position on a form to a different position
  * @param formId
  * @param newLocation
@@ -218,7 +253,6 @@ export const deselectField = (formId, location) => {
  * @param formId
  * @param location
  * @returns {{id, type, content}|*}
-
  */
 export const removeFieldFromForm = (formId, location) => {
     return event(formId, types.REMOVE_FIELD, {

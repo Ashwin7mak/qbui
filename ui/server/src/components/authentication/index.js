@@ -115,6 +115,22 @@
                 }
                 res.redirect(redirectUrl);
                 log.info({req: req, res: res});
+            },
+
+            /**
+             * The client code will ask the server for the legacy stack URL in order to redirect to the sign in page.
+             * This is needed to support TICKET federation in various environments where the legacy stack URL is
+             * specifed in server configs.
+             *
+             * @param req
+             * @param res
+             */
+            legacyUrl: function legacyRedirectUrl(req, res) {
+                let result = {
+                    status: 200,
+                    legacyUrl: requestHelper.getLegacyRealmBase(req)
+                };
+                res.json(result, result.status);
             }
         };
     };
