@@ -48,7 +48,7 @@ let BuilderDropDownAction = React.createClass({
                     {isTableView ?
                     <div className="configSet withIcon">
                         <li className="menuHeader heading"><I18nMessage message={"settings.header"}/></li>
-                        <li className="heading"><a>{this.props.selectedTable.icon && <Icon className="headingIcon" iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY} icon={this.props.selectedTable.icon}/> }
+                        <li className="heading"><a>{this.props.selectedTable.tableIcon && <Icon className="headingIcon" iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY} icon={this.props.selectedTable.tableIcon}/> }
                             <span><I18nMessage message={"settings.tablesHeader"}/></span></a></li>
                         <li><a className="modifyTableSettings" onClick={this.getTableSettingsLink}><I18nMessage message={"settings.tableSettings"}/></a></li>
                     </div> : null}

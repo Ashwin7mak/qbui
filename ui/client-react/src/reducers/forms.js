@@ -89,6 +89,7 @@ const forms = (
             saving: false,
             errorStatus: null
         });
+
         return newState;
     }
 
