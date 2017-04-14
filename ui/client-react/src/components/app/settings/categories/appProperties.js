@@ -20,7 +20,7 @@ const AppProperties = React.createClass({
 
     createSpan(curProperty) {
         return (
-            <span className="fieldValue">{this.props.selectedApp[curProperty]}</span>
+            <span className="fieldValue">{this.props.selectedApp ? this.props.selectedApp[curProperty] : null}</span>
         );
     },
 
@@ -37,7 +37,7 @@ const AppProperties = React.createClass({
         let fields = [];
         let keys = Object.keys(displayProps);
         for (let c = 0; c < keys.length; c++) {
-            if (this.props.selectedApp.hasOwnProperty(keys[c])) {
+            if (this.props.selectedApp && this.props.selectedApp.hasOwnProperty(keys[c])) {
                 fields.push(this.createField(keys[c]));
             }
         }

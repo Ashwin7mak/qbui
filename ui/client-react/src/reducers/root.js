@@ -8,6 +8,7 @@ import search from './search';
 import shell from './shell';
 import featureSwitches from './featureSwitches';
 import tableCreation from './tableCreation';
+import tableProperties from './tableProperties';
 import animation from './animation';
 import embeddedReports from './embeddedReports';
 import commonNavReducer from '../../../reuse/client/src/components/sideNavs/commonNavReducer';
@@ -24,5 +25,6 @@ export default combineReducers({
     shell,
     tableCreation,
     embeddedReports,
+    tableProperties,
     builderNav: commonNavReducer('builder')
 });

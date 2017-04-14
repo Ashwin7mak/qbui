@@ -8,7 +8,7 @@ const defaultTableInfo = {
         value: "",
     },
     tableIcon: {
-        value: "",
+        value: "Spreadsheet",
     },
     tableNoun: {
         value: "",
