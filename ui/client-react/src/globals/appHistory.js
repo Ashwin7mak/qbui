@@ -90,7 +90,7 @@ class AppHistory {
     _setupHistoryListeners() {
         // Setup listener for route changes within the app
         //self.cancelListenBefore = self.history.listenBefore((location, callback) => {
-        self.cancelListenBefore = history.block((location, action) => {
+        self.cancelListenBefore = self.history.block((location, action) => {
             if (self) {
                 if (self.getIsPendingEdit()) {
                     //self.showPendingEditsConfirmationModal();

@@ -1,7 +1,7 @@
 //these two imports are needed for safari and iOS to work with internationalization
 import React from "react";
 import {render} from "react-dom";
-import {Router, Route, IndexRoute} from "react-router";
+import {Router as Router, Route, Switch} from "react-router-dom";
 import AppHistory from '../globals/appHistory';
 import PerfLogUtils from "../utils/perf/perfLogUtils";
 import NavWrapper from "../components/nav/navWrapper";
@@ -34,6 +34,7 @@ import {Provider, connect} from "react-redux";
 import createAppStore from './store';
 
 import getFlux from './fluxxor';
+import RouteWithSubRoutes from "./RouteWithSubRoutes";
 
 let fluxxor = getFlux();
 
@@ -54,9 +55,21 @@ const mapStateToProps = (state) => {
         qbui: state
     };
 };
-const ConnectedNav = connect(mapStateToProps)(NavWrapper); // pass Redux state as qbui prop
-const ConnectedBuilderNav = connect(mapStateToProps)(BuilderWrapper); // pass Redux state as qbui prop
-const ConnectedSettingsNav = connect(mapStateToProps)(SettingsWrapper); // pass Redux state as qbui prop
+
+
+const withFlux = (ComponentToWrap) => {
+    class WrappedComponent extends React.Component {
+        render() {
+            const { ...props} = this.props;
+            return <ComponentToWrap {...props} flux={fluxxor}/>
+        };
+    }
+    return WrappedComponent;
+};
+
+const ConnectedNav = connect(mapStateToProps)(withFlux(NavWrapper)); // pass Redux state as qbui prop
+const ConnectedBuilderNav = connect(mapStateToProps)(withFlux(BuilderWrapper)); // pass Redux state as qbui prop
+const ConnectedSettingsNav = connect(mapStateToProps)(withFlux(SettingsWrapper)); // pass Redux state as qbui prop
 
 // init the localization services
 AppsBundleLoader.changeLocale(config.locale.default);
@@ -66,7 +79,11 @@ store.dispatch(FeatureSwitchActions.getStates());
 
 const createElementWithFlux = (Component, props) => <Component {...props} flux={fluxxor} />;
 
+
+
+
 // render the UI, wrap the router in the react-redux Provider to make the Redux store available to connected components
+/*
 render((
     <Provider store={store}>
         <Router history={history} createElement={createElementWithFlux} >
@@ -99,6 +116,109 @@ render((
                 <Route path="app/:appId/table/:tblId/properties" component={TablePropertiesRoute} />
             </Route>
 
+        </Router>
+    </Provider>
+), document.getElementById('content'));
+*/
+
+
+//  our route config
+const routes = [
+    {
+        path: APPS_ROUTE,
+        component: ConnectedNav,
+        routes: [
+            {
+                path: '/?',
+                component: AppsRoute
+            }
+        ]
+    },
+    {
+        path: ADMIN_ROUTE,
+        component: ConnectedNav,
+        routes: [
+            {
+                path: `${ADMIN_ROUTE}/featureSwitches/:id`,
+                component: FeatureSwitchOverridesRoute
+            },
+            {
+                path: `${ADMIN_ROUTE}/featureSwitches`,
+                component: FeatureSwitchesRoute
+            }
+        ]
+    },
+    {
+        path: `${APP_ROUTE}/:appId`,
+        component: ConnectedNav,
+        routes: [
+            {
+                path: `${APP_ROUTE}/:appId/table/:tblId/report/:rptId/record/:recordId`,
+                component: RecordRoute
+            },
+            {
+                path: `${APP_ROUTE}/:appId/table/:tblId/report/:rptId/`,
+                component: ReportRoute
+            },
+            {
+                path: `${APP_ROUTE}/:appId/table/:tblId/record/:recordId`,
+                component: RecordRoute
+            },
+            {
+                path: `${APP_ROUTE}/:appId/table/:tblId`,
+                component: TableHomePageRoute
+            },
+            {
+                path: `${APP_ROUTE}/:appId/users`,
+                component: AppUsersRoute
+            },
+            {
+                path: `${APP_ROUTE}/:appId`,
+                component: AppHomePageRoute
+            }
+        ]
+    },
+    {
+        path: `${BUILDER_ROUTE}/app/:appId`,
+        component: ConnectedBuilderNav,
+        routes: [
+            {
+                path: `${BUILDER_ROUTE}/app/:appId/table/:tblId/form/:formId?`,
+                component: FormBuilderContainer
+            }
+        ]
+    },
+    {
+        path: `${SETTINGS_ROUTE}`,
+        component: ConnectedSettingsNav,
+        routes: [
+            {
+                path: `${SETTINGS_ROUTE}/app/:appId/properties`,
+                component: AppPropertiesRoute
+            },
+            {
+                path: `${SETTINGS_ROUTE}/app/:appId/table/:tblId/properties`,
+                component: TablePropertiesRoute
+            },
+            {
+                path: `${SETTINGS_ROUTE}/app/:appId`,
+                exact: true,
+                component: AppSettingsRoute
+            }
+        ]
+    },
+];
+
+render((
+    <Provider store={store}>
+        <Router history={history} createElement={createElementWithFlux} >
+            <Switch>
+                {/*  within Switch 1st match wins */}
+                {routes.map((route, i) => (
+                        <RouteWithSubRoutes key={i} {...route} />
+                    )
+                )}
+            </Switch>
         </Router>
     </Provider>
 ), document.getElementById('content'));

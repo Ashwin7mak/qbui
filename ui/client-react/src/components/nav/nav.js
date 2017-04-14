@@ -10,7 +10,7 @@ import GlobalActions from "../actions/globalActions";
 import BuilderDropDownAction from '../actions/builderDropDownAction';
 import Breakpoints from "../../utils/breakpoints";
 import {NotificationContainer} from "react-notifications";
-import {withRouter} from 'react-router';
+import {withRouter, Switch} from 'react-router';
 import _ from 'lodash';
 
 import * as TrowserConsts from "../../constants/trowserConstants";
@@ -386,27 +386,35 @@ export const Nav = React.createClass({
                         onNavClick={this.toggleNav}
                         showOnSmall={this.state.nav.showTopNav}
                 />
-                {this.props.children &&
+                {this.props.routes &&
                     <div className="mainContent" >
                         <TempMainErrorMessages apps={this.state.apps.apps} appsLoading={this.state.apps.loading} selectedAppId={this.state.apps.selectedAppId} />
-                        {/* insert the component passed in by the router */}
-                        {React.cloneElement(this.props.children, {
-                            key: this.props.location ? this.props.location.pathname : "",
-                            apps: this.state.apps.apps,
-                            selectedAppId: this.state.apps.selectedAppId,
-                            appsLoading: this.state.apps.loading,
-                            reportData: reportsData,
-                            appUsers: this.state.apps.appUsers,
-                            appUsersUnfiltered: this.state.apps.appUsersUnfiltered,
-                            appRoles: this.state.apps.appRoles,
-                            appOwner: this.state.apps.appOwner,
-                            locale: this.state.nav.locale,
-                            isRowPopUpMenuOpen: this.props.shell.isRowPopUpMenuOpen,
-                            selectedApp: this.getSelectedApp(),
-                            selectedTable: this.getSelectedTable(reportsData.tblId),
-                            scrollingReport: this.state.nav.scrollingReport,
-                            flux: flux}
+                        <Switch>
+                        { this.props.routes.map((route, i) => {
+                            //insert the child route passed in by the router
+                            let routeProps = Object.assign({}, {
+                                key: this.props.location ? this.props.location.pathname : "",
+                                apps: this.state.apps.apps,
+                                selectedAppId: this.state.apps.selectedAppId,
+                                appsLoading: this.state.apps.loading,
+                                reportData: reportsData,
+                                appUsers: this.state.apps.appUsers,
+                                appUsersUnfiltered: this.state.apps.appUsersUnfiltered,
+                                appRoles: this.state.apps.appRoles,
+                                appOwner: this.state.apps.appOwner,
+                                locale: this.state.nav.locale,
+                                isRowPopUpMenuOpen: this.props.shell.isRowPopUpMenuOpen,
+                                selectedApp: this.getSelectedApp(),
+                                selectedTable: this.getSelectedTable(reportsData.tblId),
+                                scrollingReport: this.state.nav.scrollingReport,
+                                flux: flux
+                            }, route.props);
+                            return (
+                                <RouteWithSubRoutes key={i} {...route} {...routeProps} />
+                            );
+                            }
                         )}
+                        </Switch>
                     </div>}
             </div>
 
