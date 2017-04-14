@@ -214,7 +214,7 @@ class AutoScroll extends Component {
 
 AutoScroll.propTypes = {
     /**
-     * parentContainer is the container that has scroll set
+     * the parent container passed in needs to have overflow set to auto
      * */
     parentContainer: PropTypes.element.required,
     /**
