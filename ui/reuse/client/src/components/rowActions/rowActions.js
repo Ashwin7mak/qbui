@@ -1,7 +1,7 @@
 import React, {PropTypes, Component} from 'react';
 import {PositionedRowEditActions} from '../../../../../client-react/src/components/dataTable/qbGrid/rowEditActions';
 import IconActions from '../iconActions/iconActions';
-import Locale from '../../locales/locale'
+import Locale from '../../locales/locale';
 
 import './rowActions.scss';
 
@@ -69,7 +69,7 @@ class RowActions extends Component {
             </div>
         );
     }
-};
+}
 
 RowActions.propTypes = {
     rowId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),

@@ -12,17 +12,17 @@ const checkboxSelector = 'input[type="checkbox"]';
 
 const rowId = 1;
 const props = {
-  rowId: rowId,
-  isEditing: false,
-  editingRowId: null,
-  isEditingRowValid: true,
-  isEditingRowSaving: true,
-  isInlineEditOpen: false,
-  editingRowErrors: [],
-  onCancelEditingRow () {},
-  onClickAddNewRow () {},
-  onClickToggleSelectedRow () {},
-  onClickSaveRow () {}
+    rowId: rowId,
+    isEditing: false,
+    editingRowId: null,
+    isEditingRowValid: true,
+    isEditingRowSaving: true,
+    isInlineEditOpen: false,
+    editingRowErrors: [],
+    onCancelEditingRow() {},
+    onClickAddNewRow() {},
+    onClickToggleSelectedRow() {},
+    onClickSaveRow() {}
 };
 
 fdescribe('RowActions (Grid)', () => {
