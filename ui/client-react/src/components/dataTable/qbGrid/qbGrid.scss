@@ -110,6 +110,7 @@ $edit-icon-font-size: 18px;
             padding-right: 4px;
             padding-top: 2px;
             line-height: $line-height-text-comfortable;
+            white-space: nowrap;
         }
 
         // menu to access sorting options
@@ -147,16 +148,18 @@ $edit-icon-font-size: 18px;
     }
 
     //== styling for the sticky column cells
-    .qbRow .stickyCell {
-        left: 0;
+    .stickyCell {
         width: 80px;
         max-width: 80px;
+    }
+
+    .qbRow .stickyCell {
+        left: 0;
         position: relative;
         vertical-align: top;
         z-index: $zindex-qbGrid-firstOfType-stickyColumn;
         background-color: $color-black-100;
     }
-
 
     //== header row above groups of rows
     .groupHeader .subHeaderCell {
@@ -164,6 +167,17 @@ $edit-icon-font-size: 18px;
         vertical-align: top;
         font-weight: bold;
         border-top: 1px solid $grid-line-color;
+        width: 100vw; // Group headers should always be the width of the page at minimum
+
+        .subHeaderContainer {
+            display: flex;
+            align-items: center;
+        }
+
+        .subHeaderLabel {
+            padding-top: $spacing-tiny;
+            padding-bottom: $spacing-tiny;
+        }
     }
 
     // indentations for nested group header rows - assuming that we can have up to 6 group levels
