@@ -74,7 +74,7 @@ $default-text-ondark-color:     $color-black-100;
 $default-text-onlight-color:    $color-black-700;
 $text-color: $default-text-onlight-color;   // This is overriding a bootstrap variable. We need to keep it until we go through bootstrap in another pass.
 
-$default-hover-color:           $color-cyan-600;
+$default-hover-color:           $color-cyan-400;
 $page-background-color:         $color-black-200;
 
 // general
@@ -411,12 +411,7 @@ $dragtoken-border-color: $color-orange-500;
 $dragtoken-shadow-color: rgba($color-black-800, 0.5);
 // dragtoken-active-gradient is defined in qbVariables because of a circular dependency on stroke-width
 
-// Field Properties
-$propertytitle-text-color: $color-black-700;
-$propertyvalue-background-color: $color-black-100;
-$propertyvalue-border-color: $color-black-400;
-
-// App Users Management
+// app users
 $add-user-button: $color-cyan-500;
 $app-role-divider: $color-yellow-500;
 

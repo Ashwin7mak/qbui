@@ -1,44 +1,10 @@
-@import '../../../../../reuse/client/src/assets/css/qbVariables';
+@import '../../../../src/assets/css/qbVariables';
 
 .fieldPropertiesContainer {
-    width: 100%;
-    padding-top: 23px;
-    padding-left: $spacing-xx-small;
-    padding-right: $spacing-xx-small;
-    display: flex;
-    flex-direction: column;
-    flex-wrap: wrap;
-
-    .fieldPropertiesTitle {
-        width: 100%;
-        height: 24px;
-        font-size: 20px;
-        color: $default-text-onlight-color;
-    }
-
-    .fieldPropertyContainer {
-        padding-top: 25px;
-
-        .textPropertyTitle {
-            margin-bottom: 7px;
-            width: 100%;
-            height: 17px;
-            font-size: 14px;
-            color: $propertytitle-text-color;
-        }
-
-        .textPropertyValue {
-            width: 100%;
-            height: 34px;
-            border-radius: 2px;
-            background-color: $propertyvalue-background-color;
-            border: solid 1px $propertyvalue-border-color;
-        }
-    }
-
-    .checkboxPropertyContainer {
-        padding-top: 20px;
-    }
+    border: $stroke-width-thin solid  $formBuilder-border-color;
+    border-top: none;
+    width: 220px;
+    background-color: $color-black-250;
 
     @include small-breakpoint {
         display: none;

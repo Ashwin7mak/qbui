@@ -377,9 +377,8 @@ $add-record-radius: 20px;
         position: fixed;
         right: 24px;
         bottom: 24px;
-        font-size: 24px;
-        color: $add-record-fg;
-        background-color: $add-record-bg;
+        font-size:$size-iconfont-xlarge;
+        color: $add-user-button;
         text-align: center;
         width: $add-record-radius * 2;
         height: $add-record-radius * 2;
@@ -388,15 +387,18 @@ $add-record-radius: 20px;
         border-radius: $add-record-radius;
 
         .qbIcon {
-            line-height: $add-record-radius * 2;
-        }
+          line-height: $add-record-radius * 2;
 
-        &:hover {
-            color: $add-record-fg;
+          &:hover {
+            color: $default-hover-color;
+          }
         }
+          &:hover {
+            color: $add-record-fg;
+          }
 
         &:focus {
             color: $add-record-fg;
-        }
+       }
     }
 }

@@ -16,8 +16,17 @@ $medium-breakpoint-width: 1024px;
 $large-breakpoint-width: 1440px;
 
 @mixin small-breakpoint {
+  .a {
+    color: $add-user-button;
+    font-size: $size-iconfont-large2;
+    border-radius:20px;
+  }
+  a:hover {
+       background-color: $default-hover-color;
 
-    @media (max-width: #{$small-breakpoint-width}) {
+}
+
+   @media (max-width: #{$small-breakpoint-width}) {
 
         @content;
     }
@@ -122,6 +131,7 @@ $stroke-width-thin: 1px;
 $size-iconfont-small: 16px;
 $size-iconfont-medium: 18px;
 $size-iconfont-large: 24px;
+$size-iconfont-large2: 30px;
 $size-iconfont-xlarge: 40px;
 
 // Semantic names for padding/margins

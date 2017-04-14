@@ -36,7 +36,7 @@ const AppUsersRoute = React.createClass({
 
     getPageActions() {
         const actions = [
-            {msg: 'app.users.addUser', icon:'add', className:'addRecord', disabled: true},
+            {msg: 'app.users.addUser', icon:'add-new-filled', className:'addRecord', disabled: true},
             {msg: 'unimplemented.makeFavorite', icon:'star', disabled: true},
             {msg: 'unimplemented.email', icon:'mail', disabled: true},
             {msg: 'unimplemented.print', icon:'print', disabled: true}
