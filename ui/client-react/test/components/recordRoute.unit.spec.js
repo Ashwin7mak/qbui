@@ -2,7 +2,7 @@ import React from 'react';
 import TestUtils from 'react-addons-test-utils';
 import QBForm from  '../../src/components/QBForm/qbform';
 import {ConnectedRecordRoute, RecordRoute,
-       __RewireAPI__ as embeddedReportRewire} from '../../src/components/record/recordRoute';
+       __RewireAPI__ as recordRouteRewire} from '../../src/components/record/recordRoute';
 
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
@@ -266,13 +266,13 @@ describe('RecordRoute', () => {
         let router = [];
         beforeAll(() => {
             jasmineEnzyme();
-            embeddedReportRewire.__Rewire__('embeddedReport', embeddedReport);
-            embeddedReportRewire.__Rewire__('drawerTableId', drawerTableId);
+            recordRouteRewire.__Rewire__('embeddedReport', embeddedReport);
+            recordRouteRewire.__Rewire__('drawerTableId', drawerTableId);
         });
 
         afterAll(() => {
-            embeddedReportRewire.__ResetDependency__('embeddedReport');
-            embeddedReportRewire.__ResetDependency__('drawerTableId');
+            recordRouteRewire.__ResetDependency__('embeddedReport');
+            recordRouteRewire.__ResetDependency__('drawerTableId');
         });
 
 
@@ -308,11 +308,6 @@ describe('RecordRoute', () => {
                                  uniqueId="DRAWER123"/>
                 </Provider>);
 
-            //drawer exists
-            let drawer = component.find('.drawer');
-
-            expect(drawer.length).toBe(1);
-
             component = mount(
                 <Provider store={store}>
                     <RecordRoute params={routeParams}
@@ -322,42 +317,14 @@ describe('RecordRoute', () => {
                                  isDrawerContext={true}/>
                 </Provider>);
 
-            drawer = component.find('.drawer');
+            let drawer = component.find('.drawer');
             //not re-rendering a drawer
             expect(drawer.length).toBe(0);
         });
 
         it('tests navigating records in drawer', () => {
 
-            const embeddedReports = [{
-                id: 'EMBEDDED123',
-                appId: 1,
-                tblId: 2,
-                rptId: 3,
-
-                previousRecordId: 3,
-                currentRecordId: 4,
-                nextRecordId: 5,
-
-                data: {
-                    keyField: {
-                        name: 'Record ID#'
-                    },
-                    filteredRecords: [
-                        {"Record ID#": {id: 3, value: 1, display: "3"}},
-                        {"Record ID#": {id: 4, value: 2, display: "4"}},
-                        {"Record ID#": {id: 5, value: 3, display: "5"}}
-                    ],
-                    columns: [
-                        {
-                            id: 1,
-                            field: "Record ID#",
-                            headerName: "Record ID#",
-                            fieldDef: {datatypeAttributes: {type: "NUMERIC"}}
-                        }
-                    ]
-                }
-            }];
+            const embeddedReports = [embeddedReport];
 
             const selectedApp = {
                 id: "1",
