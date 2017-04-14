@@ -46,7 +46,7 @@ class KeyboardShortcuts extends Component {
         let keyBindings = shortcutBindingsPreventDefault.concat(shortcutBindings);
 
         keyBindings.forEach(binding => {
-            Mousetrap.unbind(binding.key, binding.callback);
+            Mousetrap.unbind(binding.key);
         });
     }
 
