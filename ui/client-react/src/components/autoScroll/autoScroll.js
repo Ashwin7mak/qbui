@@ -106,7 +106,7 @@ class AutoScroll extends Component {
 
     getContainerDimension() {
         //getBondingClientRect is used because it only gets the dimension of the container inside of the viewport
-        let container = this.getContainer().getBoundingClientRect();
+        let container = this.getContainer(this.props.parentContainer).getBoundingClientRect();
         return {
             containerBottom: container.bottom,
             containerTop: container.top
@@ -130,9 +130,9 @@ class AutoScroll extends Component {
         }
     }
 
-    getContainer() {
-        if (this.props.parentContainer) {
-            return this.props.parentContainer;
+    getContainer(parentContainer) {
+        if (parentContainer) {
+            return parentContainer;
         }
     }
 
@@ -165,7 +165,7 @@ class AutoScroll extends Component {
 
     scrollDown() {
         let pixelsPerFrame = this.props.pixelsPerFrame ? this.props.pixelsPerFrame : 10;
-        let container = this.getContainer();
+        let container = this.getContainer(this.props.parentContainer);
         let scrollTop = container.scrollTop;
 
         container.scrollTop = scrollTop + pixelsPerFrame;
@@ -176,7 +176,7 @@ class AutoScroll extends Component {
     scrollUp() {
         let defaultPixelsPerFrame = isSmall.isSmallBreakpoint() ? 2 : 10;
         let pixelsPerFrame = this.props.pixelsPerFrame ? this.props.pixelsPerFrame : defaultPixelsPerFrame ;
-        let container = this.getContainer();
+        let container = this.getContainer(this.props.parentContainer);
         let scrollTop = container.scrollTop;
 
         container.scrollTop = scrollTop + -pixelsPerFrame;

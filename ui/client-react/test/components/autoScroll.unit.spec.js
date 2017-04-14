@@ -9,6 +9,9 @@ let container = {
 };
 
 let mockParentContainer = <div></div>;
+let mockGetBoundingClientRect = {
+    getBoundingClientRect() {return container;}
+}
 
 describe('AutoScroll', () => {
     beforeEach(() => {
@@ -160,21 +163,25 @@ describe('AutoScroll', () => {
             expect(instance.stopScrolling.calls.count()).toBe(1);
         });
 
-        it('should add default props for adding extra pixels at the bottom and top for large and small break points', function() {
+        it('should have default props', function() {
 
             let component = mount(<AutoScroll parentContainer={mockParentContainer} />);
-            let instance = component.instance();
-
-            spyOn(instance, 'getContainerDimension').and.returnValue(container);
-            spyOn(instance, 'getContainerBottom');
-
-            instance.updateScrolling();
 
             expect(component.props().pixelsPerFrame).toBe(10);
             expect(component.props().pixelsFromBottomForLargeDevices).toBe(30);
             expect(component.props().pixelsFromTopForLargeDevices).toBe(30);
             expect(component.props().pixelsFromTopForMobile).toBe(30);
             expect(component.props().pixelsFromBottomForMobile).toBe(30);
+        });
+
+        it('getContainer should be called with the prop parentContainer', function() {
+            let component = mount(<AutoScroll parentContainer={mockParentContainer} />);
+            let instance = component.instance();
+
+            spyOn(instance, 'getContainer').and.returnValue(mockGetBoundingClientRect);
+            instance.getContainerDimension();
+
+            expect(instance.getContainer).toHaveBeenCalledWith(mockParentContainer);
         });
     });
 });
