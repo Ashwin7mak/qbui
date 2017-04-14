@@ -21,11 +21,21 @@
         let numOfRecords = 5;
 
         let viewerRoleId = 10;
-        let viewerReportId = 2;
+        let viewerReportId = 1;
         let participantRoleId = 11;
-        let participantReportId = 3;
+        let participantReportId = 2;
         let adminRoleId = 12;
-        let adminReportId = 4;
+        let adminReportId = 3;
+
+        let tableToFieldToFieldTypeMap = {};
+        tableToFieldToFieldTypeMap['table 1'] = {};
+        tableToFieldToFieldTypeMap['table 1']['User Name'] = {fieldType: consts.SCALAR, dataType: consts.USER};
+        tableToFieldToFieldTypeMap['table 1']['Project Phase'] = {fieldType: consts.SCALAR, dataType: consts.TEXT};
+        tableToFieldToFieldTypeMap['table 1']['Task Name'] = {fieldType: consts.SCALAR, dataType: consts.TEXT};
+        tableToFieldToFieldTypeMap['table 1']['Start Date'] = {fieldType: consts.SCALAR, dataType: consts.DATE};
+        tableToFieldToFieldTypeMap['table 1']['Finish Date'] = {fieldType: consts.SCALAR, dataType: consts.DATE};
+        tableToFieldToFieldTypeMap['table 1']['Duration Taken'] = {fieldType: consts.SCALAR, dataType: consts.DURATION};
+        tableToFieldToFieldTypeMap['table 1']['% Completed'] = {fieldType: consts.SCALAR, dataType: consts.PERCENT};
 
         /**
          * Setup method. Generates JSON for an app, a table, a set of records and multiple reports.
@@ -33,12 +43,19 @@
          */
         beforeAll(function() {
             //Create an app, table and reports
-            return e2eBase.basicAppSetup(null, numOfRecords).then(function(appAndRecords) {
+            return e2eBase.createAppWithEmptyRecordsInTable(tableToFieldToFieldTypeMap).then(function(appAndRecords) {
                 // Set your global objects to use in the test functions
                 app = appAndRecords;
+                // Get the appropriate fields out of the Create App response (specifically the created field Ids)
+                var table1NonBuiltInFields = e2eBase.tableService.getNonBuiltInFields(app.tables[0]);
+                // Generate the record JSON objects
+                var table1GeneratedRecords = e2eBase.recordService.generateRecords(table1NonBuiltInFields, 6);
+                //add records to the table
+                e2eBase.recordService.addRecords(app, app.tables[0], table1GeneratedRecords);
             }).then(function() {
                 let report1 = {
                     name: 'Viewer Report',
+                    description: 'Viewer Report',
                     type: 'TABLE',
                     tableId: app.tables[0].id,
                     query: null
@@ -50,6 +67,7 @@
             }).then(function() {
                 let report2 = {
                     name: 'Participant Report',
+                    description: 'Participant Report',
                     type: 'TABLE',
                     tableId: app.tables[0].id,
                     query: null
@@ -61,6 +79,7 @@
             }).then(function() {
                 let report3 = {
                     name: 'Admin Report',
+                    description: 'Admin Report',
                     type: 'TABLE',
                     tableId: app.tables[0].id,
                     query: null
@@ -140,18 +159,24 @@
                         e2eBase.recordBase.apiBase.setCustDefaultTableHomePageForRole(app.id, app.tables[0].id, createRoleReportMapJSON(testcase.roleId, testcase.reportId));
 
                         //get the user authentication
-                        RequestSessionTicketPage.get(e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.recordBase.apiBase.resolveUserTicketEndpoint() + '?uid=' + userId + '&realmId='));
+                        return RequestSessionTicketPage.get(e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.recordBase.apiBase.resolveUserTicketEndpoint() + '?uid=' + userId + '&realmId='));
                     });
                 });
 
-                //Load the report for given user
-                RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[0].id, testcase.reportId));
-
+                //Load the table to verify THP
+                RequestAppsPage.get(e2eBase.getRequestTableEndpoint(realmName, app.id, app.tables[0].id));
                 // wait for the report content to be visible
                 ReportContentPO.waitForReportContent();
 
                 //Assert report title to be expected
-                expect(browser.element('.stageHeadline').getAttribute('textContent')).toBe(testcase.reportTitle);
+                expect(browser.element('.tableHomepageStageHeadline').getAttribute('textContent')).toBe('table 1 Home');
+
+                //Expand the stage
+                browser.element('.iconUISturdy-caret-down').click();
+                browser.element('.stage-showHide-content').waitForVisible();
+
+                //Assert description of the stage
+                expect(browser.element('.stage-showHide-content').getAttribute('textContent')).toBe(testcase.reportTitle);
 
                 //Assert record count displayed is correct
                 expect(browser.element('.recordsCount').getAttribute('textContent')).toBe(numOfRecords + ' records');
@@ -173,9 +198,16 @@
                     e2eBase.recordBase.apiBase.assignUsersToAppRole(app.id, participantRoleId, [userId]);
 
                     //get the user authentication
-                    RequestSessionTicketPage.get(e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.recordBase.apiBase.resolveUserTicketEndpoint() + '?uid=' + userId + '&realmId='));
+                    return RequestSessionTicketPage.get(e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.recordBase.apiBase.resolveUserTicketEndpoint() + '?uid=' + userId + '&realmId='));
                 });
             });
+
+            //try to load the report of viewer user
+            RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, viewerReportId));
+
+            // Make sure the report not loaded and gives unAuthorized error
+            expect(RequestSessionTicketPage.ticketResponseBodyEl.getText()).toEqual(e2eConsts.invalidCredentials);
+
             //try to load the report of admin user
             RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, adminReportId));
 
@@ -199,12 +231,12 @@
                     e2eBase.recordBase.apiBase.assignUsersToAppRole(app.id, adminRoleId, [userId]);
 
                     //get the user authentication
-                    RequestSessionTicketPage.get(e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.recordBase.apiBase.resolveUserTicketEndpoint() + '?uid=' + userId + '&realmId='));
+                    return RequestSessionTicketPage.get(e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.recordBase.apiBase.resolveUserTicketEndpoint() + '?uid=' + userId + '&realmId='));
                 });
             });
 
             //test that admin have access to admin report
-            //Load the report for admin user
+            //Load the admin report
             RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, adminReportId));
             // wait for the report content to be visible
             ReportContentPO.waitForReportContent();
@@ -212,7 +244,7 @@
             expect(browser.element('.stageHeadline').getAttribute('textContent')).toBe('Admin Report');
 
             //test that admin have access to participant report
-            //Load the report for participant user
+            //Load the participant report
             RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, participantReportId));
             // wait for the report content to be visible
             ReportContentPO.waitForReportContent();
@@ -220,7 +252,7 @@
             expect(browser.element('.stageHeadline').getAttribute('textContent')).toBe('Participant Report');
 
             //test that admin have access to viewer report
-            //Load the report for viewer user
+            //Load the viewer report
             RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, viewerReportId));
             // wait for the report content to be visible
             ReportContentPO.waitForReportContent();
