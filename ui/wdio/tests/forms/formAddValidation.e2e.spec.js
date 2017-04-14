@@ -14,7 +14,7 @@
         var realmName;
         var realmId;
         var testApp;
-        var expectedErrorMessages = ['Numeric Field', 'Numeric Percent Field', 'Duration Field', 'Phone Number Field', 'Email Address Field', 'URL Field'];
+        var expectedErrorMessages = ['Phone Number Field', 'Email Address Field'];
 
         /**
          * Setup method. Creates test app then authenticates into the new stack
@@ -47,15 +47,20 @@
             return e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
         });
 
-        it('Validate for all required fields and correct the errors and Save the record by clicking Save and add another Button', function() {
+        it('Validate correct the errors and Save the record by clicking Save and add another Button', function() {
             var origRecordCount;
-            var fieldTypes = ['allTextFields', 'allPhoneFields', 'allEmailFields', 'allUrlFields', 'allDurationFields', 'allNumericFields', 'allDateFields', 'allTimeFields', 'allCheckboxFields', 'allUserField'];
+            var fieldTypes = ['allPhoneFields', 'allEmailFields'];
 
             //Step 1 - Get the original records count in a report
             origRecordCount = formsPO.getRecordsCountInATable();
 
             //Step 2 - Click on Add Record Button on the report Stage
             reportContentPO.clickAddRecordBtnOnStage();
+
+            //Step 2 - Enter invalid values to get the form to error state
+            fieldTypes.forEach(function(fieldType) {
+                formsPO.enterInvalidFormValues(fieldType, '2345-7');
+            });
 
             //Step 4 - Click Save on the form
             formsPO.clickFormSaveBtn();
@@ -86,9 +91,15 @@
         });
 
         it('Verify error alert button functionality on form Footer', function() {
-
             //Step 1 - Click on Add Record Button on the report Stage
             reportContentPO.clickAddRecordBtnOnStage();
+
+            //Step 2 - Enter invalid values to get the form to error state
+            var fieldTypes = ['allPhoneFields', 'allEmailFields'];
+            fieldTypes.forEach(function(fieldType) {
+                //TODO change the empty string to special characters once MB-1970 is fixed.
+                formsPO.enterInvalidFormValues(fieldType, '2345-7');
+            });
 
             //Step 2 - Click on Save Button on the form without entering any values
             formsPO.clickFormSaveBtn();
