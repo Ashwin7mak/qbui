@@ -42,7 +42,7 @@ let AppHomePageRoute = React.createClass({
             }
 
             if (checkParams) {
-                if (this.props.match.params.appId === appId) {
+                if (_.get(this.props, 'match.params.appId') === appId) {
                     return;
                 }
             }
@@ -81,12 +81,12 @@ let AppHomePageRoute = React.createClass({
         let flux = this.getFlux();
         flux.actions.showTopNav();
         flux.actions.setTopTitle();
-        this.selectAppFromParams(this.props.match.params);
+        this.selectAppFromParams(_.get(this.props, 'match.params'));
         flux.actions.doneRoute();
     },
     // Triggered when properties change
     componentWillReceiveProps: function(props) {
-        this.selectAppFromParams(props.match.params, true);
+        this.selectAppFromParams(_.get(this.props, 'match.params'), true);
     },
 
     getPageActions(maxButtonsBeforeMenu = 0) {

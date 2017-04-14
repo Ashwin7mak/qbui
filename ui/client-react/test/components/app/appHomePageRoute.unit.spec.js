@@ -46,11 +46,11 @@ describe('AppHomePageRoute functions', () => {
     it('test render of component with url params', () => {
 
         let params = {
-            appId:1
+           appId:1
         };
 
 
-        component = TestUtils.renderIntoDocument(<AppHomePageRoute params={params} selectedAppId={1} flux={flux}/>);
+        component = TestUtils.renderIntoDocument(<AppHomePageRoute match={{params}} selectedAppId={1} flux={flux}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
     });
 
@@ -65,7 +65,7 @@ describe('AppHomePageRoute functions', () => {
                 return {params, selectedAppId: 1};
             },
             render() {
-                return <AppHomePageRoute ref="ahp" params={this.state.params} selectedAppId={this.state.selectedAppId} flux={flux} />;
+                return <AppHomePageRoute ref="ahp" match={{params:this.state.params}} selectedAppId={this.state.selectedAppId} flux={flux} />;
             }
         }));
         var parent = TestUtils.renderIntoDocument(TestParent());
