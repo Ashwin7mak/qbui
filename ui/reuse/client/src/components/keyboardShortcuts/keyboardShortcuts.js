@@ -23,7 +23,9 @@ class KeyboardShortcuts extends Component {
     }
 
     addAllKeyBindings(bindings = []) {
+        console.log('bindings: ', bindings);
         bindings.forEach(binding => {
+            console.log('bindings: ', binding.callback);
             MouseTrap.bind(binding.key, () => binding.callback(binding.content));
         });
     }

@@ -27,6 +27,7 @@ import NotificationManager from '../../../../reuse/client/src/scripts/notificati
 import './formBuilderContainer.scss';
 
 let logger = new Logger();
+let debounceKeyboardSaveMillis = 100;
 
 const mapStateToProps = state => {
     let currentForm = getFormByContext(state, CONTEXT.FORM.VIEW);
@@ -115,6 +116,15 @@ export const FormBuilderContainer = React.createClass({
         }
     },
 
+    saveClickedKeyBoard() {
+        // Invoke `save` when invoked by keyboard, debouncing subsequent calls.
+        let debouncedSave = _.debounce(this.saveClicked, debounceKeyboardSaveMillis, {
+            'leading': true,
+            'trailing': false
+        });
+        debouncedSave();
+    },
+
     getRightAlignedButtons() {
         return (
             <div>
@@ -193,13 +203,16 @@ export const FormBuilderContainer = React.createClass({
         return (
             <div className="formBuilderContainer">
 
-                <KeyboardShortcuts id="formBuilderContainer" shortcutBindings={[
-                    {key: 'esc', callback: () => {this.escapeCurrentContext(); return false;}},
-                    {key: 'mod+s', callback: () => {this.saveClicked(); return false;}},
-                    {key: 'shift+up', callback: () => {this.keyboardMoveFieldUp(); return false;}},
-                    {key: 'shift+down', callback: () => {this.keyboardMoveFieldDown(); return false;}},
-                    {key: 'backspace', callback: () => {this.removeField(); return false;}}
-                ]}/>
+                <KeyboardShortcuts id="formBuilderContainer"
+                                   shortcutBindings={[
+                                       {key: 'shift+up', callback: () => {this.keyboardMoveFieldUp(); return false;}},
+                                       {key: 'shift+down', callback: () => {this.keyboardMoveFieldDown(); return false;}},
+                                       {key: 'backspace', callback: () => {this.removeField(); return false;}}
+                                   ]}
+                                   shortcutBindingsPreventDefault={[
+                                       {key: 'esc', callback: () => {this.escapeCurrentContext(); return false;}},
+                                       {key: 'mod+s', callback: () => {this.saveClickedKeyBoard(); return false;}},
+                                   ]}/>
 
                 <PageTitle title={Locale.getMessage('pageTitles.editForm')}/>
 
