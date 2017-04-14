@@ -45,6 +45,7 @@ import LoadingScreen from 'raw!../../../../common/src/views/loadingScreen.html';
 import "./nav.scss";
 import "react-notifications/lib/notifications.css";
 import "../../assets/css/animate.min.css";
+import RouteWithSubRoutes from "../../scripts/RouteWithSubRoutes";
 
 const OPEN_NAV = true;
 const CLOSE_NAV = false;
