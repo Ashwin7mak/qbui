@@ -34,7 +34,7 @@ const mapStateToProps = state => {
 
     return {
         currentForm,
-        selectedField: (_.has(currentForm, 'selectedFields') ? currentForm.selectedFields[0] : []),
+        selectedField: (_.has(currentForm, 'selectedFields') ? currentForm.selectedFields[0] : undefined),
         tabIndex: (_.has(currentForm, 'formBuilderChildrenTabIndex') ? currentForm.formBuilderChildrenTabIndex[0] : undefined),
         formFocus: (_.has(currentForm, 'formFocus') ? currentForm.formFocus[0] : undefined),
         shouldNotifyTableCreated: state.tableCreation.notifyTableCreated,
