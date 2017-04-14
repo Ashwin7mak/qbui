@@ -236,16 +236,16 @@
             formBuilderPO.listOfElementsItemGroup.waitForExist(false);
             browser.pause(1000);
             // expect a single match in search results
-            expect (formBuilderPO.getNewFieldLabels().length).toBe(1);
+            expect(formBuilderPO.getNewFieldLabels().length).toBe(1);
             // expect that label to match the search term
-            expect (formBuilderPO.fieldTokenTitle.getText()).toBe(label);
+            expect(formBuilderPO.fieldTokenTitle.getText()).toBe(label);
             // remove the search term
             formBuilderPO.clearSearch.click();
             // wait for groups to reappear
             formBuilderPO.listOfElementsItemGroup.waitForExist(true);
             browser.pause(1000);
             // expect original new field tokens to reappear
-            expect (formBuilderPO.getNewFieldLabels()).toEqual(newFields);
+            expect(formBuilderPO.getNewFieldLabels()).toEqual(newFields);
         });
     });
 }());
