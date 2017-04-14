@@ -109,6 +109,7 @@ export class TableCreationDialog extends React.Component {
 
         const classes = ['tableCreationDialog'];
 
+        // if icon chooser is open, add class to allow it to overflow the bottom buttons (while open)
         if (this.props.tableCreation.iconChooserOpen) {
             classes.push('allowOverflow');
         }

@@ -427,6 +427,7 @@ export const Nav = React.createClass({
 
         flux.actions.loadApps(true);
 
+        // store any new table IDs for duration of session for table homepage
         if (window.sessionStorage) {
             let newTables = window.sessionStorage.newTables;
 

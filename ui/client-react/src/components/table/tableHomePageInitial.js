@@ -5,11 +5,13 @@ import Icon, {AVAILABLE_ICON_FONTS} from '../../../../reuse/client/src/component
 import {I18nMessage} from "../../utils/i18nMessage";
 import './tableHomePageInitial.scss';
 
+/**
+ * initial table homepage displayed when a new table is created (until session expires or rows are created)
+ */
 class TableHomePageInitial extends React.Component {
 
     constructor(props) {
         super(props);
-
     }
 
     /**
@@ -43,5 +45,22 @@ class TableHomePageInitial extends React.Component {
             </div>);
     }
 }
+
+TableHomePageInitial.PropTypes = {
+    /**
+     * selected table object containing tableIcon property
+     */
+    selectedTable: PropTypes.obj,
+
+    /**
+     * create another table callback
+     */
+    onCreateTable: PropTypes.func,
+
+    /**
+     * add new record callback
+     */
+    onAddRecord: PropTypes.func
+};
 
 export default TableHomePageInitial;

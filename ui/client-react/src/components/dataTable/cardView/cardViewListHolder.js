@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {PropTypes} from 'react';
 import {I18nMessage} from '../../../utils/i18nMessage';
 import Loader  from 'react-loader';
 import Swipeable from 'react-swipeable';
@@ -27,12 +27,14 @@ const MAX_SWIPE_DISTANCE = 150; // Drag distance when swiping up or down. Applie
 export let CardViewListHolder = React.createClass({
     mixins: [FluxMixin],
     propTypes: {
-        reportData: React.PropTypes.object.isRequired,
-        primaryKeyName: React.PropTypes.string,
-        reportHeader: React.PropTypes.element,
-        selectionActions: React.PropTypes.element,
-        onScroll: React.PropTypes.func,
-        onRowClicked: React.PropTypes.func
+        reportData: PropTypes.object.isRequired,
+        primaryKeyName: PropTypes.string,
+        reportHeader: PropTypes.element,
+        selectionActions: PropTypes.element,
+        onScroll: PropTypes.func,
+        onRowClicked: PropTypes.func,
+        searchString: PropTypes.string,
+        onAddNewRecord: PropTypes.func
     },
 
     getInitialState() {

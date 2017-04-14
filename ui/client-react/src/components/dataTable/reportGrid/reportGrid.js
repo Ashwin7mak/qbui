@@ -125,6 +125,9 @@ export const ReportGrid = React.createClass({
         // relationship phase-1, will need remove when we allow editing
         phase1: PropTypes.bool,
 
+        /**
+         * present an alternate UI instead of an empty grid if on rows are present?
+         */
         noRowsUI: PropTypes.bool
 
     },

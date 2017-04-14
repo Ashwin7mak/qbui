@@ -1,4 +1,4 @@
-import React from "react";
+import React, {PropTypes} from "react";
 import ReactIntl from "react-intl";
 import {NOTIFICATION_MESSAGE_DISMISS_TIME} from '../../../../../reuse/client/src/scripts/notificationManager';
 import CardViewListHolder from "../../../components/dataTable/cardView/cardViewListHolder";
@@ -1003,11 +1003,16 @@ export const ReportContent = React.createClass({
 });
 
 ReportContent.contextTypes = {
-    touch: React.PropTypes.bool
+    touch: PropTypes.bool
 };
 
 ReportContent.propTypes = {
-    primaryKeyName: React.PropTypes.string.isRequired
+    primaryKeyName: PropTypes.string.isRequired,
+
+    /**
+     * callback for creating a new record
+     */
+    onAddNewRecord: PropTypes.func
 };
 
 const mapStateToProps = (state, props) => {

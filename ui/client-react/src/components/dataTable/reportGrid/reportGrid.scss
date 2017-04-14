@@ -9,11 +9,11 @@
     text-align: center;
 
     font-size: $font-size-large;
-    margin: 10px;
+    margin: $spacing-xxx-small;
     border: 1px dashed $color-black-400;
-    padding: 30px;
+    padding: $spacing-medium1;
 
     .noRowsIconLine {
-        margin-bottom: 30px;
+        margin-bottom: $spacing-medium1;
     }
 }
