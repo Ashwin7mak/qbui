@@ -7,11 +7,10 @@ import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import {Provider} from "react-redux";
 import {APP_ROUTE} from '../../src/constants/urlConstants';
-
+import {mount} from 'enzyme';
+import jasmineEnzyme from 'jasmine-enzyme';
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
-
-import {mount} from 'enzyme';
 
 describe('RecordRoute', () => {
     'use strict';
@@ -38,6 +37,7 @@ describe('RecordRoute', () => {
     };
 
     beforeEach(() => {
+        jasmineEnzyme();
         spyOn(flux.actions, 'selectTableId');
         spyOn(reduxProps, 'editNewRecord').and.callThrough();
         spyOn(reduxProps, 'loadForm').and.callThrough();
@@ -123,7 +123,7 @@ describe('RecordRoute', () => {
             const initialState = {};
             const store = mockStore(initialState);
 
-            let routeParams = {appId: 1, tblId: 2, rptId: 3, recordId: 2};
+            let routeParams = {appId: '1', tblId: '2', rptId: '3', recordId: '2'};
             let reportData = {
                 appId: 1,
                 tblId: 2,
@@ -155,16 +155,15 @@ describe('RecordRoute', () => {
 
             let router = [];
             let expectedRouter = [];
-
-            component = TestUtils.renderIntoDocument(
+            component = mount(
                 <Provider store={store}>
                     <RecordRoute params={routeParams} reportData={reportData} flux={flux} router={router} {...reduxProps}/>
                 </Provider>);
             expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 
-            let prevRecord = TestUtils.scryRenderedDOMComponentsWithClass(component, "prevRecord");
-            let nextRecord = TestUtils.scryRenderedDOMComponentsWithClass(component, "nextRecord");
-            let returnToReport = TestUtils.scryRenderedDOMComponentsWithClass(component, "backToReport");
+            let prevRecord = component.find('.prevRecord');
+            let nextRecord = component.find('.nextRecord');
+            let returnToReport = component.find('.backToReport');
 
             // should have all 3 nav links
             expect(prevRecord.length).toBe(1);
@@ -172,17 +171,18 @@ describe('RecordRoute', () => {
             expect(returnToReport.length).toBe(1);
 
             // previous record
-            TestUtils.Simulate.click(prevRecord[0]);
+            // const prevRecord1 = prevRecord.nodes[0];
+            prevRecord.simulate('click');
             expect(reduxProps.openRecord).toHaveBeenCalled();
             expectedRouter.push(`${APP_ROUTE}/1/table/2/report/3/record/1`);
 
             // next record
-            TestUtils.Simulate.click(nextRecord[0]);
+            nextRecord.simulate('click');
             expect(reduxProps.openRecord).toHaveBeenCalled();
             expectedRouter.push(`${APP_ROUTE}/1/table/2/report/3/record/3`);
 
             // return to report
-            TestUtils.Simulate.click(returnToReport[0]);
+            returnToReport.simulate('click');
             expectedRouter.push(`${APP_ROUTE}/1/table/2/report/3`);
 
             expect(router).toEqual(expectedRouter);

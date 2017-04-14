@@ -181,8 +181,8 @@ export const RecordRoute = React.createClass({
         const record = this.getRecordFromProps(this.props);
         const reportData = this.getReportDataFromProps(this.props);
         this.navigateToRecord(record.previousRecordId, reportData);
-
-        const {appId, tblId, rptId} = reportData;
+        //the url shall always be using the app/table/rec id from reportsdata, and not from any embedded report
+        const {appId, tblId, rptId} = this.props.reportData;
         const link = `${APP_ROUTE}/${appId}/table/${tblId}/report/${rptId}/record/${record.previousRecordId}`;
         this.props.router.push(link);
         if (this.props.isDrawerContext) {
@@ -197,7 +197,8 @@ export const RecordRoute = React.createClass({
         const record = this.getRecordFromProps(this.props);
         const reportData = this.getReportDataFromProps(this.props);
         this.navigateToRecord(record.nextRecordId, reportData);
-        const {appId, tblId, rptId} = reportData;
+        //the url shall always be using the app/table/rec id from reportsdata, and not from any embedded report
+        const {appId, tblId, rptId} = this.props.reportData;
         const link = `${APP_ROUTE}/${appId}/table/${tblId}/report/${rptId}/record/${record.nextRecordId}`;
         this.props.router.push(link);
         if (this.props.isDrawerContext) {
@@ -237,8 +238,8 @@ export const RecordRoute = React.createClass({
 
             //  ensure the property exists and it has some content
             const reportName = _.has(this.props.reportData, 'data.name') && this.props.reportData.data.name ? this.props.reportData.data.name : Locale.getMessage('nav.backToReport');
-            const showBack = !!(this.props.reportData && record.previousRecordId !== null);
-            const showNext = !!(this.props.reportData && record.nextRecordId !== null);
+            const showBack = _.get(record, 'previousRecordId') && _.get(this.props, 'reportData.data.keyField.name');
+            const showNext = _.get(record, 'nextRecordId') && _.get(this.props, 'reportData.data.keyField.name');
             if (this.props.isDrawerContext) {
                 recordIdTitle = drawerRecId;
             }
@@ -248,7 +249,7 @@ export const RecordRoute = React.createClass({
 
                 <div className="navLinks">
                     {this.props.selectedTable && <Link className="tableHomepageIconLink" to={tableLink}><TableIcon icon={this.props.selectedTable.icon}/></Link>}
-                    {this.props.selectedTable && <Link className="tableHomepageLink" to={tableLink}>{tableName}</Link>}
+                    {this.props.selectedTable && <Link className="tableHomepageLink" to={tableLink}>{this.props.selectedTable.name}</Link>}
                     {this.props.selectedTable && rptId && <span className="divider color-black-700">&nbsp;&nbsp;:&nbsp;&nbsp;</span>}
                     {rptId && <a className="backToReport" href="#" onClick={this.returnToReport}>{reportName}</a>}
                 </div>
@@ -514,8 +515,8 @@ const mapDispatchToProps = (dispatch) => {
         loadForm: (appId, tblId, rptId, formType, recordId, context) => {
             dispatch(loadForm(appId, tblId, rptId, formType, recordId, context));
         },
-        openRecord: (recId, nextId, prevId, tblId, uniqueId) => {
-            dispatch(openRecord(recId, nextId, prevId, tblId, uniqueId));
+        openRecord: (recId, nextId, prevId, uniqueId) => {
+            dispatch(openRecord(recId, nextId, prevId, uniqueId));
         },
         clearSearchInput: () => {
             dispatch(clearSearchInput());
