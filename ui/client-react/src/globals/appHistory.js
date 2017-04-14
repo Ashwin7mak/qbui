@@ -1,6 +1,6 @@
 import createHistory from "history/createBrowserHistory";
 import qhistory from 'qhistory';
-import { stringify, parse } from 'query-string';
+import {stringify, parse} from 'query-string';
 import {UNSAVED_RECORD_ID} from '../constants/schema';
 import {ShowAppModal, HideAppModal} from '../components/qbModal/appQbModalFunctions';
 import {CONTEXT} from '../actions/context';
@@ -87,7 +87,7 @@ class AppHistory {
      * Add the global listeners to route changes
      * @private
      */
-     _setupHistoryListeners() {
+    _setupHistoryListeners() {
         // Setup listener for route changes within the app
         //self.cancelListenBefore = self.history.listenBefore((location, callback) => {
         self.cancelListenBefore = history.block((location, action) => {
