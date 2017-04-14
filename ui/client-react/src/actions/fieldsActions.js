@@ -111,7 +111,7 @@ export const updateFieldProperties = (appId, tblId, field) => {
                         //  axios upgraded to an error.response object in 0.13.x
                         let error = errorResponse.response;
                         logger.parseAndLogError(LogLevel.ERROR, error, 'fieldsService.createField:');
-                        dispatch(event(appId, tblId, types.LOAD_FIELDS_ERROR, {error:error}));
+                        dispatch(event(appId, tblId, types.LOAD_FIELDS_ERROR, {error}));
                         reject();
                     }
                 );
@@ -121,7 +121,7 @@ export const updateFieldProperties = (appId, tblId, field) => {
                     statusText:'Missing required input parameters to load fields',
                     status:500
                 };
-                dispatch(event(appId, tblId, types.LOAD_FIELDS_ERROR, {error:error}));
+                dispatch(event(appId, tblId, types.LOAD_FIELDS_ERROR, {error}));
                 reject();
             }
         });

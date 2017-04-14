@@ -21,10 +21,10 @@ function event(appId, tblId, type, content) {
     };
 }
 
-const appId = '1';
-const tblId = '2';
-
 describe('Field Actions success workflow', () => {
+
+    const appId = '1';
+    const tblId = '2';
     const field = {id: 10};
     const newFieldId = 20;
     let mockResponseGetFields = {
@@ -62,7 +62,7 @@ describe('Field Actions success workflow', () => {
     it('verify saveNewField action', (done) => {
         const formId = null;
         const expectedActions = [
-            {type:types.UPDATE_FIELD_ID, oldFieldId:field.id, newFieldId, formId, appId, tblId}
+            {type: types.UPDATE_FIELD_ID, oldFieldId: field.id, newFieldId, formId, appId, tblId}
         ];
         const store = mockReportsStore({});
         return store.dispatch(fieldActions.saveNewField(appId, tblId, field, formId)).then(
@@ -78,6 +78,7 @@ describe('Field Actions success workflow', () => {
     });
 
     it('verify updateFieldProperties action', (done) => {
+        const formId = null;
         const expectedActions = [];
         const store = mockReportsStore({});
         return store.dispatch(fieldActions.updateFieldProperties(appId, tblId, field)).then(
@@ -225,37 +226,25 @@ describe('Field Actions success workflow', () => {
                 });
         });
     });
-
-    describe('Test FieldsActions function updateField', () => {
-        const testField = {id: '1', required: false, name: "field of dreams"};
-
-        it('verify updateField action', (done) => {
-            const expectedResponse = {appId, tblId, field: testField, type: types.UPDATE_FIELD};
-            const store = mockReportsStore({});
-            const response = store.dispatch(fieldActions.updateField(testField, appId, tblId));
-            expect(response).toEqual(expectedResponse);
-            done();
-        });
-    });
 });
 
 describe('Field Actions failure workflow', () => {
+    const appId = '1';
+    const tblId = '2';
     const field = {id: 10};
 
     let errorResponse = {
         response: {
-            error: {status: 500}
+            error: {status:500}
         }
     };
     class mockFieldService {
         getFields() {
             return Promise.reject(errorResponse);
         }
-
         createField() {
             return Promise.reject(errorResponse);
         }
-
         updateField() {
             return Promise.reject(errorResponse);
         }
@@ -276,17 +265,17 @@ describe('Field Actions failure workflow', () => {
 
     describe('Test saveNewField function', () => {
         let testCases = [
-            {name: 'verify missing appId parameter', appId: null, tblId: tblId, field: field},
-            {name: 'verify missing tblId parameter', appId: appId, tblId: null, field: field},
-            {name: 'verify missing field parameter', appId: appId, tblId: tblId, field: null},
-            {name: 'verify missing parameters'},
-            {name: 'verify createField reject response', appId: appId, tblId: tblId, field: field, rejectTest: true}
+            {name:'verify missing appId parameter', appId:null, tblId:tblId, field:field},
+            {name:'verify missing tblId parameter', appId:appId, tblId:null, field:field},
+            {name:'verify missing field parameter', appId:appId, tblId:tblId, field:null},
+            {name:'verify missing parameters'},
+            {name:'verify createField reject response', appId:appId, tblId:tblId, field:field, rejectTest:true}
         ];
 
         testCases.forEach(testCase => {
             it(testCase.name, (done) => {
                 let expectedActions = [];
-                expectedActions.push(event(testCase.appId, testCase.tblId, types.LOAD_FIELDS_ERROR, {error: jasmine.any(Object)}));
+                expectedActions.push(event(testCase.appId, testCase.tblId, types.LOAD_FIELDS_ERROR, {error:jasmine.any(Object)}));
 
                 const store = mockReportsStore({});
                 return store.dispatch(fieldActions.saveNewField(testCase.appId, testCase.tblId, testCase.field)).then(
@@ -307,54 +296,19 @@ describe('Field Actions failure workflow', () => {
         });
     });
 
-    describe('Test loadFields function', () => {
-        let testCases = [
-            {name: 'verify missing appId parameter', tblId: tblId},
-            {name: 'verify missing tblId parameter', appId: appId},
-            {name: 'verify missing parameters'},
-            {name: 'verify getFields reject response', appId: appId, tblId: tblId, rejectTest: true}
-        ];
-
-        testCases.forEach(testCase => {
-            it(testCase.name, (done) => {
-                let expectedActions = [];
-                if (testCase.rejectTest === true) {
-                    expectedActions.push(event(testCase.appId, testCase.tblId, types.LOAD_FIELDS));
-                }
-                expectedActions.push(event(testCase.appId, testCase.tblId, types.LOAD_FIELDS_ERROR, {error: jasmine.any(Object)}));
-
-                const store = mockReportsStore({});
-                return store.dispatch(fieldActions.loadFields(testCase.appId, testCase.tblId)).then(
-                    () => {
-                        expect(false).toBe(true);
-                        done();
-                    },
-                    () => {
-                        expect(store.getActions()).toEqual(expectedActions);
-                        if (testCase.rejectTest === true) {
-                            expect(mockFieldService.prototype.getFields).toHaveBeenCalled();
-                        } else {
-                            expect(mockFieldService.prototype.getFields).not.toHaveBeenCalled();
-                        }
-                        done();
-                    });
-            });
-        });
-    });
-
     describe('Test updateFieldsProperties function', () => {
         let testCases = [
-            {name: 'verify missing appId parameter', appId: null, tblId: tblId, field: field},
-            {name: 'verify missing tblId parameter', appId: appId, tblId: null, field: field},
-            {name: 'verify missing field parameter', appId: appId, tblId: tblId, field: null},
-            {name: 'verify missing parameters'},
-            {name: 'verify createField reject response', appId: appId, tblId: tblId, field: field, rejectTest: true}
+            {name:'verify missing appId parameter', appId:null, tblId:tblId, field:field},
+            {name:'verify missing tblId parameter', appId:appId, tblId:null, field:field},
+            {name:'verify missing field parameter', appId:appId, tblId:tblId, field:null},
+            {name:'verify missing parameters'},
+            {name:'verify createField reject response', appId:appId, tblId:tblId, field:field, rejectTest:true}
         ];
 
         testCases.forEach(testCase => {
             it(testCase.name, (done) => {
                 let expectedActions = [];
-                expectedActions.push(event(testCase.appId, testCase.tblId, types.LOAD_FIELDS_ERROR, {error: jasmine.any(Object)}));
+                expectedActions.push(event(testCase.appId, testCase.tblId, types.LOAD_FIELDS_ERROR, {error:jasmine.any(Object)}));
 
                 const store = mockReportsStore({});
                 return store.dispatch(fieldActions.updateFieldProperties(testCase.appId, testCase.tblId, testCase.field)).then(
@@ -368,6 +322,41 @@ describe('Field Actions failure workflow', () => {
                             expect(mockFieldService.prototype.updateField).toHaveBeenCalled();
                         } else {
                             expect(mockFieldService.prototype.updateField).not.toHaveBeenCalled();
+                        }
+                        done();
+                    });
+            });
+        });
+    });
+
+    describe('Test loadFields function', () => {
+        let testCases = [
+            {name:'verify missing appId parameter', tblId:tblId},
+            {name:'verify missing tblId parameter', appId:appId},
+            {name:'verify missing parameters'},
+            {name:'verify getFields reject response', appId:appId, tblId:tblId, rejectTest:true}
+        ];
+
+        testCases.forEach(testCase => {
+            it(testCase.name, (done) => {
+                let expectedActions = [];
+                if (testCase.rejectTest === true) {
+                    expectedActions.push(event(testCase.appId, testCase.tblId, types.LOAD_FIELDS));
+                }
+                expectedActions.push(event(testCase.appId, testCase.tblId, types.LOAD_FIELDS_ERROR, {error:jasmine.any(Object)}));
+
+                const store = mockReportsStore({});
+                return store.dispatch(fieldActions.loadFields(testCase.appId, testCase.tblId)).then(
+                    () => {
+                        expect(false).toBe(true);
+                        done();
+                    },
+                    () => {
+                        expect(store.getActions()).toEqual(expectedActions);
+                        if (testCase.rejectTest === true) {
+                            expect(mockFieldService.prototype.getFields).toHaveBeenCalled();
+                        } else {
+                            expect(mockFieldService.prototype.getFields).not.toHaveBeenCalled();
                         }
                         done();
                     });
