@@ -4,6 +4,7 @@
     position: absolute;
     z-index: 10; // TODO: what to do? use qbVariable?
     height: 100%;
+    //    height: calc(100vh - 41px);
     width: 100%;
     overflow: hidden;
     background-color: #f5f5f5;
