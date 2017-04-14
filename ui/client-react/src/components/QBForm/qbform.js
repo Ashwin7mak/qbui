@@ -339,9 +339,10 @@ export const QBForm = React.createClass({
         let recId = _.has(this.props.formData, 'recordId') ? this.props.formData.recordId : null;
 
         //if the form prop calls for element to be required update fieldDef accordingly
+        /*
         if (relatedField) {
             relatedField.required = relatedField.required || FormFieldElement.required;
-        }
+        }*/
 
         let CurrentFieldElement = (this.props.editingForm ? DragAndDropField(FieldElement) : FieldElement);
 

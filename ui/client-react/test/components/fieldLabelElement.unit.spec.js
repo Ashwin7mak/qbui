@@ -10,9 +10,17 @@ const relatedField = {
     },
     required: false
 };
+const relatedFieldRequired = {
+    id: 6,
+    name: 'field',
+    datatypeAttributes: {
+        type: 'TEXT'
+    },
+    required: true
+};
 const element = {
     fieldId: 6,
-    type: 'FIELD',
+    type: 'FIELD'
 };
 const label = 'label text';
 
@@ -68,9 +76,11 @@ describe('FieldLabelElement', () => {
     });
 
     it(`indicates when the field is required`, () => {
-        const requiredElement = Object.assign({required: true}, element);
-        let component = TestUtils.renderIntoDocument(<FieldLabelElement element={requiredElement} relatedField={relatedField} indicateRequiredOnLabel={true} label={label}/>);
+        let component = TestUtils.renderIntoDocument(<FieldLabelElement element={element} relatedField={relatedField} indicateRequiredOnLabel={true} label={label}/>);
         let domnode = TestUtils.findRenderedDOMComponentWithTag(component, 'div');
+        expect(domnode.innerText).not.toContain('*');
+        component = TestUtils.renderIntoDocument(<FieldLabelElement element={element} relatedField={relatedFieldRequired} indicateRequiredOnLabel={true} label={label}/>);
+        domnode = TestUtils.findRenderedDOMComponentWithTag(component, 'div');
         expect(domnode.innerText).toContain('*');
     });
 });
