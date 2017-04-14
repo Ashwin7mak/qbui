@@ -20,6 +20,13 @@ const forms = (
     // reducer - no mutations!
     switch (action.type) {
 
+    case types.UPDATE_FORM_REDIRECT_ROUTE: {
+        return {
+            ...state,
+            redirectRoute: action.redirectRoute
+        };
+    }
+
     case types.LOADING_FORM: {
 
         newState[id] = ({
@@ -382,3 +389,5 @@ export default forms;
 
 // Utility function which returns a component's state given it's context. The context is the 'key' in the state map.
 export const getFormByContext = (state, context) => _.get(state, `forms.${context}`);
+
+export const getFormRedirectRoute = (state) => _.get(state, 'forms.redirectRoute');
