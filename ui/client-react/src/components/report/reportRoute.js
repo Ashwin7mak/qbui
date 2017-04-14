@@ -100,8 +100,8 @@ const ReportRoute = React.createClass({
         const flux = this.getFlux();
         flux.actions.hideTopNav();
 
-        if (this.props.params) {
-            this.loadReportFromParams(this.props.params);
+        if (this.props.match.params) {
+            this.loadReportFromParams(this.props.match.params);
         }
     },
     getHeader() {
@@ -131,7 +131,7 @@ const ReportRoute = React.createClass({
 
     getStageHeadline() {
         const reportName = this.props.reportData && this.props.reportData.data && this.props.reportData.data.name;
-        const {appId, tblId} = this.props.params;
+        const {appId, tblId} = this.props.match.params;
         const tableLink = `${APP_ROUTE}/${appId}/table/${tblId}`;
         return (
             <div className="reportStageHeadline">
@@ -148,12 +148,12 @@ const ReportRoute = React.createClass({
     },
 
     render() {
-        if (_.isUndefined(this.props.params) ||
-            _.isUndefined(this.props.params.appId) ||
-            _.isUndefined(this.props.params.tblId) ||
-            (_.isUndefined(this.props.params.rptId) && _.isUndefined(this.props.rptId))
+        if (_.isUndefined(this.props.match.params) ||
+            _.isUndefined(this.props.match.params.appId) ||
+            _.isUndefined(this.props.match.params.tblId) ||
+            (_.isUndefined(this.props.match.params.rptId) && _.isUndefined(this.props.rptId))
         ) {
-            logger.info("the necessary params were not specified to reportRoute render params=" + simpleStringify(this.props.params));
+            logger.info("the necessary params were not specified to reportRoute render params=" + simpleStringify(this.props.match.params));
             return null;
         } else {
             return (<div className="reportContainer">
@@ -166,7 +166,7 @@ const ReportRoute = React.createClass({
                 {this.getHeader()}
 
                 <ReportToolsAndContent
-                    params={this.props.params}
+                    params={this.props.match.params}
                     reportData={this.props.reportData}
                     appUsers={this.props.appUsers}
                     pendEdits={this.props.pendEdits}

@@ -20,7 +20,7 @@ class AccountUsers extends Component {
     }
 
     componentDidMount() {
-        this.props.fetchData(this.props.params.accountId);
+        this.props.fetchData(this.props.match.params.accountId);
     }
 
     render() {

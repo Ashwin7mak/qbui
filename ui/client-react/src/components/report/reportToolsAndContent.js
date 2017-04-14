@@ -207,7 +207,7 @@ export const UnconnectedReportToolsAndContent = React.createClass({
 
         return <ReportToolbar appId={this.props.reportData.appId}
                               tblId={this.props.reportData.tblId}
-                              rptId={typeof this.props.reportData.rptId !== "undefined" ? this.props.reportData.rptId : this.props.params.rptId}
+                              rptId={typeof this.props.reportData.rptId !== "undefined" ? this.props.reportData.rptId : this.props.match.params.rptId}
                               reportData={this.props.reportData}
                               selections={this.props.reportData.selections}
                               searchStringForFiltering={this.props.reportData.searchStringForFiltering}
@@ -229,7 +229,7 @@ export const UnconnectedReportToolsAndContent = React.createClass({
                />;
     },
     getSelectionActions() {
-        return (<ReportActions selection={this.props.selectedRows} appId={this.props.params.appId} tblId={this.props.params.tblId} rptId={this.props.params.rptId} nameForRecords={this.props.nameForRecords}/>);
+        return (<ReportActions selection={this.props.selectedRows} appId={this.props.match.params.appId} tblId={this.props.match.params.tblId} rptId={this.props.match.params.rptId} nameForRecords={this.props.nameForRecords}/>);
     },
 
     getTableActions() {
@@ -268,7 +268,7 @@ export const UnconnectedReportToolsAndContent = React.createClass({
     getPageUsingOffsetMultiplicant(multiplicant) {
         let appId = this.props.reportData.appId;
         let tblId = this.props.reportData.tblId;
-        let rptId = typeof this.props.reportData.rptId !== "undefined" ? this.props.reportData.rptId : this.props.params.rptId;
+        let rptId = typeof this.props.reportData.rptId !== "undefined" ? this.props.reportData.rptId : this.props.match.params.rptId;
         let filter = {};
         let queryParams = {};
         let sortList = "";
@@ -326,7 +326,7 @@ export const UnconnectedReportToolsAndContent = React.createClass({
             _.isUndefined(this.props.reportData.tblId) ||
             _.isUndefined(this.props.reportData.rptId)
         ) {
-            logger.info("the necessary params were not specified to reportToolsAndContent render params=" + simpleStringify(this.props.params));
+            logger.info("the necessary params were not specified to reportToolsAndContent render params=" + simpleStringify(this.props.match.params));
             return <ReportContentError errorDetails={this.props.reportData.errorDetails}/>;
         } else {
             let classes = ['reportToolsAndContentContainer'];
@@ -380,7 +380,7 @@ export const UnconnectedReportToolsAndContent = React.createClass({
                     {this.getTableActions()}
                     <ReportContent appId={this.props.reportData.appId}
                                    tblId={this.props.reportData.tblId}
-                                   rptId={typeof this.props.reportData.rptId !== "undefined" ? this.props.reportData.rptId : this.props.params.rptId}
+                                   rptId={typeof this.props.reportData.rptId !== "undefined" ? this.props.reportData.rptId : this.props.match.params.rptId}
                                    reportData={this.props.reportData}
                                    appUsers={this.props.appUsers}
                                    reportHeader={toolbar}
