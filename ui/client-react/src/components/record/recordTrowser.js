@@ -6,7 +6,7 @@ import Button from 'react-bootstrap/lib/Button';
 import OverlayTrigger from 'react-bootstrap/lib/OverlayTrigger';
 import Tooltip from 'react-bootstrap/lib/Tooltip';
 import QBicon from "../qbIcon/qbIcon";
-import TableIcon from "../qbTableIcon/qbTableIcon";
+import Icon, {AVAILABLE_ICON_FONTS} from '../../../../reuse/client/src/components/icon/icon.js';
 import Loader from 'react-loader';
 import QBErrorMessage from "../QBErrorMessage/qbErrorMessage";
 import WindowLocationUtils from '../../utils/windowLocationUtils';
@@ -238,7 +238,8 @@ export const RecordTrowser = React.createClass({
             pendEdits: pendEdits,
             fields: _.has(this.props.editForm, 'formData.fields') ? this.props.editForm.formData.fields : {},
             colList: colList,
-            showNotificationOnSuccess: true
+            showNotificationOnSuccess: true,
+            addNewRow: false
         };
         this.props.dispatch(updateRecord(this.props.appId, this.props.tblId, this.props.recId, params)).then(
             (obj) => {
@@ -289,7 +290,8 @@ export const RecordTrowser = React.createClass({
             recordChanges: recordChanges,
             fields: _.has(this.props.editForm, 'formData.fields') ? this.props.editForm.formData.fields : {},
             colList: colList,
-            showNotificationOnSuccess: true
+            showNotificationOnSuccess: true,
+            addNewRow: false
         };
         this.props.dispatch(createRecord(this.props.appId, this.props.tblId, params)).then(
             (obj) => {
@@ -412,7 +414,7 @@ export const RecordTrowser = React.createClass({
                         <Button className="iconActionButton nextRecord" disabled={!showNext} onClick={this.nextRecord}><QBicon icon="caret-filled-right"/></Button>
                     </OverlayTrigger>
                 </div> }
-                <TableIcon classes="primaryIcon" icon={table ? table.icon : ""}/>{title}
+                <Icon iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY} classes="primaryIcon" icon={table ? table.tableIcon : ""}/>{title}
             </div>);
 
     },
