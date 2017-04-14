@@ -15,9 +15,22 @@
         overflow: hidden;
     }
 
-    .qbPanelHeaderIcon {
+    .qbPanelHeaderButton {
         position: absolute;
-        top: 0;
+        top: 4px;
+        padding: 0;
+        line-height: 10px;
+        border: none;
+        background: transparent;
+        right: 20px;
+
+        &:focus {
+            outline: none;
+        }
+
+        @include small-breakpoint {
+            right: 10px;
+        }
     }
 
     .iconLeft {

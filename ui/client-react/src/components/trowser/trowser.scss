@@ -33,13 +33,13 @@
         background-color: $trowser-header-background-color;
         display: flex;
         align-items: center;
-        padding: 0 10px 0 20px;
+        padding: 0 10px;
 
         .qbIcon {
             font-size: $size-iconfont-medium;
             vertical-align: middle;
-            margin-bottom: 5px;
-            padding-right: 10px;
+            margin-bottom: $spacing-tiny;
+            padding-right: $spacing-xxx-small;
         }
 
         .breadcrumbs {
@@ -50,7 +50,7 @@
             .breadcrumbsContent {
                 overflow: hidden;
                 text-overflow: ellipsis;
-                margin-top:3px;
+                margin-top: 3px;
 
                 .primaryIcon {
                     margin-right: 10px;
@@ -59,7 +59,7 @@
         }
 
         button {
-            height: 40px;
+            height: 30px;
             font-size: 18px;
             color: $color-black-100;
             background-color: $trowser-header-background-color;
@@ -69,6 +69,14 @@
 
         .rightIcons {
             flex: 0 0 auto;
+            button {
+                height: 32px;
+                background: transparent;
+                padding: 0;
+            }
+            .qbIcon {
+                padding-right: 0;
+            }
         }
     }
 
