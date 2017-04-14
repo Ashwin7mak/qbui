@@ -1,6 +1,5 @@
-import {useRouterHistory} from "react-router";
-import createHistory from 'history/lib/createBrowserHistory';
-import {useBeforeUnload} from 'history';
+import createHistory from "history/createBrowserHistory";
+//import {useBeforeUnload} from 'history';
 import {UNSAVED_RECORD_ID} from '../constants/schema';
 import {ShowAppModal, HideAppModal} from '../components/qbModal/appQbModalFunctions';
 import {CONTEXT} from '../actions/context';
@@ -20,7 +19,25 @@ class AppHistory {
     constructor() {
         if (!self) {
             // A custom browser history object that can be used by React Router
-            this.history = useRouterHistory(useBeforeUnload(createHistory))();
+            this.history = createHistory({
+                //todo handle outside app location change
+                getUserConfirmation(message, callback) {
+                    // Show some custom dialog to the user and call
+                    // callback(true) to continue the transition, or
+                    // callback(false) to abort it.
+                    if (self) {
+                        self.callback = callback;
+                        if (self.getIsPendingEdit()) {
+                            self.showPendingEditsConfirmationModal();
+                        } else {
+                            // cancel any pending pending edits that don't require confirmation, i.e. started inline editing
+                            self._discardChanges(false);
+                        }
+                    } else {
+                        return callback(true);
+                    }
+                }
+            });
 
             // get redux stores and call actions
             this.store = null;
@@ -69,24 +86,23 @@ class AppHistory {
      * Add the global listeners to route changes
      * @private
      */
-    _setupHistoryListeners() {
+     _setupHistoryListeners() {
         // Setup listener for route changes within the app
-        self.cancelListenBefore = self.history.listenBefore((location, callback) => {
+        //self.cancelListenBefore = self.history.listenBefore((location, callback) => {
+        self.cancelListenBefore = history.block((location, action) => {
             if (self) {
-                self.callback = callback;
                 if (self.getIsPendingEdit()) {
-                    self.showPendingEditsConfirmationModal();
+                    //self.showPendingEditsConfirmationModal();
+                    return "Ask confirmation"; //this message return is not used just triggers the prompt
                 } else {
                     // cancel any pending pending edits that don't require confirmation, i.e. started inline editing
                     self._discardChanges(false);
                 }
-            } else {
-                return callback();
             }
         });
 
         // Setup listener for route changes outside of the app (e.g., pasting in a new url)
-        self.cancelListenBeforeUnload = self.history.listenBeforeUnload(event => {
+        window.addEventListener("beforeunload", event => {
             if (self && self.getIsPendingEdit()) {
                 // No need to internationalize as it will not appear in the modal on evergreen browsers.
                 if (event) {
@@ -95,6 +111,9 @@ class AppHistory {
                 return 'Save changes before leaving?';
             }
         });
+        self.cancelListenBeforeUnload = () => {
+            window.removeEventListener("beforeunload", ()=>{this.noop();});
+        }
     }
 
     getIsPendingEdit() {
@@ -256,7 +275,9 @@ class AppHistory {
     }
 
     _continueToDestination() {
-        self.callback();
+        if (self.callback) {
+            self.callback(true);
+        }
     }
 
     _haltRouteChange() {

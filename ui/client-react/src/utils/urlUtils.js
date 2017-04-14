@@ -4,6 +4,7 @@ import UrlFileAttachmentReportLinkFormatter from '../../../common/src/formatter/
 import WindowLocationUtils from '../utils/windowLocationUtils';
 import CommonUrlUtils from '../../../common/src/commonUrlUtils';
 import StringUtils from '../utils/stringUtils';
+const queryString = require('query-string');
 
 import {SUPPORT_LINK_PATH, REPORT_LINK, CHILD_REPORT_LINK, USERS_ROUTE, BUILDER_ROUTE, SETTINGS_ROUTE} from '../constants/urlConstants';
 

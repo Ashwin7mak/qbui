@@ -36,7 +36,6 @@ import Icon from '../../../../reuse/client/src/components/icon/icon';
 import TableCreationDialog from '../table/tableCreationDialog';
 import AppUtils from '../../utils/appUtils';
 
-
 // This shared view with the server layer must be loaded as raw HTML because
 // the current backend setup cannot handle a react component in a common directory. It is loaded
 // as a raw string and we tell react to interpret it as HTML. See more in common/src/views/Readme.md
@@ -74,7 +73,7 @@ export const Nav = React.createClass({
          * a new unit test will need to be added to recordRoute.unit.spec.js
          * */
         const formId = null;
-        const {appId, tblId} = this.props.params;
+        const {appId, tblId} = this.props.match.params;
         let formType;
 
         // currently users can navigate to builder only from "view" context, will need to update
@@ -99,8 +98,8 @@ export const Nav = React.createClass({
     getTopGlobalActions() {
         const actions = [];
         let recordId;
-        if (this.props.params) {
-            recordId = this.props.params.recordId;
+        if (this.props.match.params) {
+            recordId = this.props.match.params.recordId;
         }
         let selectedApp = this.getSelectedApp();
         let isAdmin = false;
@@ -130,8 +129,8 @@ export const Nav = React.createClass({
     getLeftGlobalActions() {
         const actions = [];
         let recordId;
-        if (this.props.params) {
-            recordId = this.props.params.recordId;
+        if (this.props.match.params) {
+            recordId = this.props.match.params.recordId;
         }
         return (<GlobalActions actions={actions}
                                onSelect={this.onSelectItem}
@@ -222,7 +221,7 @@ export const Nav = React.createClass({
      */
     updateRecordTrowser(oldRecId) {
 
-        const {appId, tblId, rptId} = this.props.params;
+        const {appId, tblId, rptId} = this.props.match.params;
 
         const editRec = this.props.location.query[UrlConsts.EDIT_RECORD_KEY];
 
@@ -340,12 +339,12 @@ export const Nav = React.createClass({
             {/* AppQbModal is an app-wide modal that can be called from non-react classes*/}
             <AppQbModal/>
 
-            {this.props.params && this.props.params.appId &&
+            {this.props.match.params && this.props.match.params.appId &&
                 <RecordTrowser visible={this.props.shell.trowserOpen && this.props.shell.trowserContent === TrowserConsts.TROWSER_EDIT_RECORD}
                                router={this.props.router}
                                editForm={this.getEditFormFromProps()}
-                               appId={this.props.params.appId}
-                               tblId={this.props.params.tblId}
+                               appId={this.props.match.params.appId}
+                               tblId={this.props.match.params.tblId}
                                recId={editRecordId}
                                viewingRecordId={viewingRecordId}
                                pendEdits={pendEdits}
@@ -356,7 +355,7 @@ export const Nav = React.createClass({
                                errorPopupHidden={this.props.shell.errorPopupHidden}
                                onHideTrowser={this.hideTrowser}/>
             }
-            {this.props.params && this.props.params.appId &&
+            {this.props.match.params && this.props.match.params.appId &&
                 <ReportManagerTrowser visible={this.props.shell.trowserOpen && this.props.shell.trowserContent === TrowserConsts.TROWSER_REPORTS}
                                       router={this.props.router}
                                       selectedTable={this.getSelectedTable(reportsList.tblId)}

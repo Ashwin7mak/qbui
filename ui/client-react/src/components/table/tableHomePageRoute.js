@@ -72,8 +72,8 @@ export const TableHomePageRoute = React.createClass({
         const flux = this.getFlux();
         flux.actions.hideTopNav();
 
-        if (this.props.params) {
-            this.loadHomePageForParams(this.props.params);
+        if (this.props.match.params) {
+            this.loadHomePageForParams(this.props.match.params);
         }
     },
 
@@ -107,7 +107,7 @@ export const TableHomePageRoute = React.createClass({
 
     render() {
         //  ensure there is a rptId property otherwise the report not found page is rendered in ReportToolsAndContent
-        let homePageParams = _.assign(this.props.params, {rptId: null});
+        let homePageParams = _.assign(this.props.match.params, {rptId: null});
 
         return (<div className="reportContainer">
             <Stage stageHeadline={this.getStageHeadline()} pageActions={this.getPageActions(5)}>

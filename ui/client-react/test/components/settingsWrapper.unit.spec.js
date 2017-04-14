@@ -65,8 +65,8 @@ describe('SettingsWrapper tests', () => {
 
     it('test default action on mount', () => {
         expect(flux.actions.loadApps).toHaveBeenCalled();
-        expect(flux.actions.selectAppId).toHaveBeenCalledWith(props.params.appId);
-        expect(flux.actions.selectTableId).toHaveBeenCalledWith(props.params.tblId);
+        expect(flux.actions.selectAppId).toHaveBeenCalledWith(props.match.params.appId);
+        expect(flux.actions.selectTableId).toHaveBeenCalledWith(props.match.params.tblId);
     });
 
     it('test render of nav components', () => {

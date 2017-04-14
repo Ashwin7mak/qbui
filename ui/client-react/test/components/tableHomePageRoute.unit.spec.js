@@ -113,8 +113,8 @@ describe('TableHomePageRoute functions', () => {
     it('test action loadTableHomePage is called with app data', () => {
         let wrapper = mount(<Provider store={store}><TableHomePageRoute {...props} reportData={reportDataParams.reportData} flux={flux}></TableHomePageRoute></Provider>);
         expect(props.clearSearchInput).toHaveBeenCalled();
-        expect(props.loadFields).toHaveBeenCalledWith(props.params.appId, props.params.tblId);
-        expect(props.loadTableHomePage).toHaveBeenCalledWith(CONTEXT.REPORT.NAV, props.params.appId, props.params.tblId, reportDataParams.reportData.pageOffset, reportDataParams.reportData.numRows);
+        expect(props.loadFields).toHaveBeenCalledWith(props.match.params.appId, props.match.params.tblId);
+        expect(props.loadTableHomePage).toHaveBeenCalledWith(CONTEXT.REPORT.NAV, props.match.params.appId, props.match.params.tblId, reportDataParams.reportData.pageOffset, reportDataParams.reportData.numRows);
     });
 
     it('test flux action loadTableHomePage is not called with missing app data', () => {
