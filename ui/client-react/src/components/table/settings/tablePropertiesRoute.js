@@ -28,7 +28,7 @@ export const TablePropertiesRoute = React.createClass({
         return (<IconActions className="pageActions" actions={actions} maxButtonsBeforeMenu={maxButtonsBeforeMenu}/>);
     },
     getStageHeadline() {
-        return <div className="tableSettingsStage stageHeadLine">{this.props.table ? <Icon iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY} icon={this.props.table.icon} /> : null}<I18nMessage message={"settings.tableSettings"}/></div>;
+        return <div className="tableSettingsStage stageHeadLine">{this.props.table ? <Icon iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY} icon={this.props.table.tableIcon} /> : null}<I18nMessage message={"settings.tableSettings"}/></div>;
     },
     componentDidMount() {
         if (this.props.app && this.props.table) {
