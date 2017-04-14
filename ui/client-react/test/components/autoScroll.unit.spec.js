@@ -11,7 +11,7 @@ let container = {
 let mockParentContainer = <div></div>;
 let mockGetBoundingClientRect = {
     getBoundingClientRect() {return container;}
-}
+};
 
 describe('AutoScroll', () => {
     beforeEach(() => {
