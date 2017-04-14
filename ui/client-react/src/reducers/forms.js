@@ -89,6 +89,7 @@ const forms = (
             saving: false,
             errorStatus: null
         });
+
         return newState;
     }
 
@@ -119,6 +120,53 @@ const forms = (
             newLocation,
             draggedItemProps
         );
+
+        if (!updatedForm.selectedFields) {
+            updatedForm.selectedFields = [];
+            updatedForm.previouslySelectedField = [];
+        }
+
+        updatedForm.selectedFields[0] = newLocation;
+
+        newState[action.id] = updatedForm;
+        return newState;
+    }
+
+    /**If a location is not passed in, a location will be hardcoded, since there is no current implementation
+     *that sets the current tabIndex, sectionIndex, and columnIndex for a new field.
+     *Default location for a newField is always set to the bottom of the form.
+     */
+    case types.ADD_FIELD : {
+        if (!currentForm) {
+            return state;
+        }
+
+        let {newField, newLocation} = action.content;
+        updatedForm = _.cloneDeep(currentForm);
+
+        if (!newLocation) {
+            newLocation = {
+                tabIndex: 0,
+                sectionIndex: 0,
+                columnIndex: 0,
+                elementIndex: updatedForm.formData.formMeta.tabs[0].sections[0].columns[0].elements.length
+            };
+        } else if (newLocation.elementIndex !== updatedForm.formData.formMeta.tabs[0].sections[0].columns[0].elements.length) {
+            //If a field is selected on the form and the selectedField is not located at the end of the form, then the new field will be added below the selected field
+            newLocation.elementIndex = newLocation.elementIndex + 1;
+        }
+
+        updatedForm.formData.formMeta = MoveFieldHelper.addNewFieldToForm(
+            updatedForm.formData.formMeta,
+            newLocation,
+            newField);
+
+        if (!updatedForm.selectedFields) {
+            updatedForm.selectedFields = [];
+            updatedForm.previouslySelectedField = [];
+        }
+
+        updatedForm.selectedFields[0] = newLocation;
 
         newState[action.id] = updatedForm;
         return newState;
@@ -260,6 +308,16 @@ const forms = (
         // return existing state by default in redux
         return state;
     }
+};
+
+export const getSelectedFormElement = (state, id) => {
+    const currentForm = _.find(state.forms, form => form.id === id);
+    if (!currentForm || !currentForm.selectedFields) {
+        return null;
+    }
+
+    const {tabIndex, sectionIndex, columnIndex, elementIndex} = currentForm.selectedFields[0];
+    return currentForm.formData.formMeta.tabs[tabIndex].sections[sectionIndex].columns[columnIndex].elements[elementIndex];
 };
 
 export default forms;

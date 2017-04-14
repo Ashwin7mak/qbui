@@ -3,13 +3,15 @@ import {shallow, mount} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
 import {NEW_FORM_RECORD_ID} from '../../../src/constants/schema';
 import {FormBuilderContainer, __RewireAPI__ as FormBuilderRewireAPI} from '../../../src/components/builder/formBuilderContainer';
+import NewfieldsMenu, {__RewireAPI__ as NewfieldsMenuRewireAPI} from '../../../src/components/formBuilder/menus/newFieldsMenu';
+import {FieldTokenInMenu} from '../../../src/components/formBuilder/fieldToken/fieldTokenInMenu';
 import Loader from 'react-loader';
 
 const appId = 1;
 const tblId = 2;
 const formType = 'edit';
 const currentForm = {formData:{loading: false, formType: {}, formMeta: {}}, formBuilderChildrenTabIndex: ["0"], id: 'view'};
-const selectedField = {tabIndex: 0, sectionIndex: 1, columnIndex: 2, rowIndex: 3, elementIndex: 3};
+const selectedField = {tabIndex: 0, sectionIndex: 0, columnIndex: 0, rowIndex: 0, elementIndex: 3};
 
 const mockActions = {
     loadForm() {},
@@ -30,10 +32,20 @@ const FormBuilderMock = React.createClass({
 let component;
 let instance;
 
+var FieldPropertiesMock = React.createClass({
+    render: function() {
+        return (
+            <div>{this.props.children}</div>
+        );
+    }
+});
+
 describe('FormBuilderContainer', () => {
     beforeEach(() => {
         jasmineEnzyme();
         FormBuilderRewireAPI.__Rewire__('FormBuilder', FormBuilderMock);
+        NewfieldsMenuRewireAPI.__Rewire__('FieldTokenInMenu', FieldTokenInMenu);
+        FormBuilderRewireAPI.__Rewire__('FieldProperties', FieldPropertiesMock);
         spyOn(mockActions, 'loadForm');
         spyOn(mockActions, 'updateForm');
         spyOn(mockActions, 'toggleFormBuilderChildrenTabIndex');
@@ -45,6 +57,8 @@ describe('FormBuilderContainer', () => {
 
     afterEach(() => {
         FormBuilderRewireAPI.__ResetDependency__('FormBuilder');
+        NewfieldsMenuRewireAPI.__ResetDependency__('FieldTokenInMenu');
+        FormBuilderRewireAPI.__ResetDependency__('FieldProperties');
         mockActions.loadForm.calls.reset();
         mockActions.updateForm.calls.reset();
         mockActions.toggleFormBuilderChildrenTabIndex.calls.reset();
@@ -261,7 +275,7 @@ describe('FormBuilderContainer', () => {
         });
 
         it('will move a field down if the selected form element is not located at the last index', () => {
-            let currentFormData = {formData: {formMeta: {fields:[1, 2, 3, 4, 5, 6]}}, id: 'view'};
+            let currentFormData = {formData: {formMeta: {tabs:[{sections: [{columns: [{elements: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]}]}]}]}}, id: 'view'};
 
             component = shallow(<FormBuilderContainer
                 selectedField={selectedField}
@@ -278,7 +292,7 @@ describe('FormBuilderContainer', () => {
         });
 
         it('will not move a field down if the selected form element is greater than the last index', () => {
-            let currentFormData = {formData: {formMeta: {fields: [1, 2, 3, 4]}}, id: 'view'};
+            let currentFormData = {formData: {formMeta: {tabs:[{sections: [{columns: [{elements: []}]}]}]}}, id: 'view'};
 
             component = shallow(<FormBuilderContainer
                 selectedField={selectedField}

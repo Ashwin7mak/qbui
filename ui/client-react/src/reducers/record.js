@@ -168,15 +168,41 @@ const record = (state = [], action) => {
         return newState(currentRecd);
     }
     case types.SAVE_RECORD_SUCCESS: {
+        //  NOTE: this event is listened to in the report reducer to avoid multiple grid renders.
+        let savedState = null;
         let currentRecd = getRecordFromState(action.id);
         if (currentRecd) {
             let model = new RecordModel();
             model.set(currentRecd.pendEdits);
             model.setRecordSaveSuccess(action.content.appId, action.content.tblId, action.content.recId);
             model.setSaving(false);
-            return newState(currentRecd);
+            savedState = newState(currentRecd);
         }
-        return state;
+
+        // if adding a new row via inline edit after saving a record, need to add that row
+        if (action.content.addNewRow === true) {
+            // the new row shouldn't be there, but we'll check anyways
+            let newRecd = getRecordFromState(UNSAVED_RECORD_ID);
+            if (!newRecd) {
+                newRecd = {
+                    id: UNSAVED_RECORD_ID
+                };
+            }
+
+            //  initialize a new record model object
+            let model = new RecordModel();
+            let obj = {
+                appId: action.content.appId,
+                tblId: action.content.tblId,
+                recId: UNSAVED_RECORD_ID,
+                isInlineEdit: true,
+                fieldToStartEditing: _.has(currentRecd, 'pendEdits') ? currentRecd.pendEdits.fieldToStartEditing : null
+            };
+            model.setEditRecordStart(obj);
+            newRecd.pendEdits = model.get();
+            savedState = newState(newRecd);
+        }
+        return Array.isArray(savedState) ? savedState : state;
     }
     case types.SAVE_RECORD_ERROR: {
         let currentRecd = getRecordFromState(action.id);
@@ -257,6 +283,16 @@ const record = (state = [], action) => {
     }
     case types.EDIT_RECORD_CANCEL: {
         const currentRecd = getRecordFromState(action.id);
+        if (_.has(currentRecd, 'pendEdits')) {
+            delete currentRecd.pendEdits;
+            return newState(currentRecd);
+        }
+        return state;
+    }
+    case types.REMOVE_BLANK_REPORT_RECORD: {
+        //  NOTE: this event is listened to in the report reducer to avoid multiple grid renders.
+        let recId = action.content.recId;
+        const currentRecd = getRecordFromState(recId);
         if (_.has(currentRecd, 'pendEdits')) {
             delete currentRecd.pendEdits;
             return newState(currentRecd);
