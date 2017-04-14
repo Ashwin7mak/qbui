@@ -33,6 +33,7 @@ export let CardViewListHolder = React.createClass({
         selectionActions: PropTypes.element,
         onScroll: PropTypes.func,
         onRowClicked: PropTypes.func,
+        noRowsUI: PropTypes.bool,
         searchString: PropTypes.string,
         onAddNewRecord: PropTypes.func
     },
@@ -61,7 +62,7 @@ export let CardViewListHolder = React.createClass({
         if (this.state.rowActionsRowId !== -1) {
             return;
         }
-        this.setState({allowCardSelection: allow, swiping:false});
+        this.setState({allowCardSelection: allow, swiping: false});
 
         const flux = this.getFlux();
         if (!allow) {
@@ -286,58 +287,66 @@ export let CardViewListHolder = React.createClass({
         }
 
         return (<Swipeable className="swipeable"
-                       onSwipingUp={(ev, delta) => {this.swiping(ev.target, delta, true);}}
-                       onSwipingDown={(ev, delta) => {this.swiping(ev.target, delta, false);}}
-                       onSwipedUp={this.swipedUp}
-                       onSwipedDown={this.swipedDown}
-                       preventDefaultTouchmoveEvent={false}>
+                           onSwipingUp={(ev, delta) => {
+                               this.swiping(ev.target, delta, true);
+                           }}
+                           onSwipingDown={(ev, delta) => {
+                               this.swiping(ev.target, delta, false);
+                           }}
+                           onSwipedUp={this.swipedUp}
+                           onSwipedDown={this.swipedDown}
+                           preventDefaultTouchmoveEvent={false}>
 
-                    <div className={cardViewListClasses} style={cardViewListStyle}>
-                        {showPreviousButton ?
-                            (<CardViewNavigation getPreviousReportPage={this.props.getPreviousReportPage}
-                            />) :
-                            <div className="spacer"></div>
-                        }
+            <div className={cardViewListClasses} style={cardViewListStyle}>
+                {showPreviousButton ?
+                    (<CardViewNavigation getPreviousReportPage={this.props.getPreviousReportPage}
+                    />) :
+                    <div className="spacer"></div>
+                }
 
-                        <CardViewList ref="cardViewList"
-                                      node={recordNodes}
-                                      columns={_.has(this.props, "reportData.data.columns") ? this.props.reportData.data.columns : []}
-                                      primaryKeyName={this.props.primaryKeyName}
-                                      groupId=""
-                                      groupLevel={-1}
-                                      appId={this.props.reportData.appId}
-                                      tblId={this.props.reportData.tblId}
-                                      allowCardSelection={this.allowCardSelection}
-                                      onToggleCardSelection={this.onToggleCardSelection}
-                                      onRowSelected={this.onCardRowSelected}
-                                      onRowClicked={this.props.onRowClicked}
-                                      isRowSelected={this.isRowSelected}
-                                      onEditRecord={this.openRecordForEdit}
-                                      onSwipe={this.onSwipe}
-                                      onActionsOpened={this.rowActionsOpened}
-                                      onActionsClosed={this.rowActionsClosed}
-                                      rowActionsRowId={this.state.rowActionsRowId}/>
+                <CardViewList ref="cardViewList"
+                              node={recordNodes}
+                              columns={_.has(this.props, "reportData.data.columns") ? this.props.reportData.data.columns : []}
+                              primaryKeyName={this.props.primaryKeyName}
+                              groupId=""
+                              groupLevel={-1}
+                              appId={this.props.reportData.appId}
+                              tblId={this.props.reportData.tblId}
+                              allowCardSelection={this.allowCardSelection}
+                              onToggleCardSelection={this.onToggleCardSelection}
+                              onRowSelected={this.onCardRowSelected}
+                              onRowClicked={this.props.onRowClicked}
+                              isRowSelected={this.isRowSelected}
+                              onEditRecord={this.openRecordForEdit}
+                              onSwipe={this.onSwipe}
+                              onActionsOpened={this.rowActionsOpened}
+                              onActionsClosed={this.rowActionsClosed}
+                              rowActionsRowId={this.state.rowActionsRowId}/>
 
-                        {showNextButton ?
-                            (<CardViewFooter getNextReportPage={this.props.getNextReportPage}/>) :
-                            <div className="spacer"></div>
-                        }
-                    </div>
-                </Swipeable>);
+                {showNextButton ?
+                    (<CardViewFooter getNextReportPage={this.props.getNextReportPage}/>) :
+                    <div className="spacer"></div>
+                }
+            </div>
+        </Swipeable>);
     },
 
     /**
      * tell parent we're scrolling so they can hide the add record icon
      */
     componentDidMount() {
-        this.refs.cardViewListWrapper.addEventListener("scroll", this.props.onScroll);
+        if (this.refs.cardViewListWrapper) {
+            this.refs.cardViewListWrapper.addEventListener("scroll", this.props.onScroll);
+        }
     },
 
     /**
      * tell parent we've stopped scrolling so they can re-display the add record icon
      */
     componentWillUnmount() {
-        this.refs.cardViewListWrapper.removeEventListener("scroll", this.props.onScroll);
+        if (this.refs.cardViewListWrapper) {
+            this.refs.cardViewListWrapper.removeEventListener("scroll", this.props.onScroll);
+        }
     },
 
     /**
@@ -413,10 +422,10 @@ export let CardViewListHolder = React.createClass({
                 </div>
 
                 <div className="noRowsText">
-                    {hasSearch ? <I18nMessage message="grid.no_filter_matches"/> :
+                    {hasSearch ? <div className="searchNoRows"><I18nMessage message="grid.no_filter_matches"/></div> :
                         <div className="cardViewCreateOne">
                             <I18nMessage message="grid.no_rows_but"/>
-                            <div><a href="#" onClick={this.props.onAddNewRecord}><I18nMessage message="grid.no_rows_create_link"/></a>...</div>
+                            <a href="#" onClick={this.props.onAddNewRecord}><I18nMessage message="grid.no_rows_create_link"/></a>...
                         </div>}
                 </div>
             </div>);

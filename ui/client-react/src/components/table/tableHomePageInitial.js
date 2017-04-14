@@ -40,7 +40,7 @@ class TableHomePageInitial extends React.Component {
 
                 <div className="moreOptions">
                     <I18nMessage message="tableCreation.homePageStillBuilding"/>&nbsp;
-                    <a href="#" onClick={this.props.onCreateTable}><I18nMessage message="tableCreation.homePageCreateAnother"/></a>
+                    <a href="#" className="createTableLink" onClick={this.props.onCreateTable}><I18nMessage message="tableCreation.homePageCreateAnother"/></a>
                 </div>
             </div>);
     }
