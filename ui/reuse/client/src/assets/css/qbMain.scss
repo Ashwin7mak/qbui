@@ -2,11 +2,6 @@
 //@import "node_modules/bootstrap-sass/assets/stylesheets/_bootstrap.scss";
 
 @import 'qbVariables';
-//@include font-face(Lato, "../fonts/Lato/Lato-Regular", null, normal, woff2 woff ttf);
-//@include font-face(Lato, "../fonts/Lato/Lato-Italic", null, italic, woff2 woff ttf);
-//@include font-face(Lato, "../fonts/Lato/Lato-Bold", bold, normal, woff2 woff ttf);
-//@include font-face(Lato, "../fonts/Lato/Lato-BoldItalic", bold, italic, woff2 woff ttf);
-//@import '../fonts/lato-font.css';
 
 h1, .h1 {
     font-size: $font-size-h1;

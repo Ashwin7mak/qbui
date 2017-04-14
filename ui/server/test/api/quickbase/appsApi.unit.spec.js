@@ -216,9 +216,12 @@ describe("Validate appsApi", function() {
 
     describe("validate getApp function", function() {
         let executeReqStub = null;
+        let getTablePropertiesStub = null;
+        let tablePropsSuccessResponse = {tableId: 1, icon: "test"};
 
         beforeEach(function() {
             executeReqStub = sinon.stub(requestHelper, "executeRequest");
+            getTablePropertiesStub = sinon.stub(appsApi, "getTableProperties");
             appsApi.setRequestHelperObject(requestHelper);
             req.url = '/app/123';
             req.method = 'get';
@@ -227,16 +230,18 @@ describe("Validate appsApi", function() {
         afterEach(function() {
             req.method = 'get';
             req.url = '';
+            getTablePropertiesStub.restore();
             executeReqStub.restore();
         });
 
         it('success return results ', function(done) {
-            executeReqStub.returns(Promise.resolve({'body': '[{"id":1}]'}));
+            executeReqStub.returns(Promise.resolve({'body': '{"id":1, "tables": [{"id": 1, "name": "table1"}]}'}));
+            getTablePropertiesStub.returns(Promise.resolve(tablePropsSuccessResponse));
             let promise = appsApi.getApp(req, req.params.appId);
 
             promise.then(
                 function(response) {
-                    assert.deepEqual(response, [{"id":1}]);
+                    assert.deepEqual(response, {id:1, tables: [{id: 1, tableId: 1, name: "table1", icon: "test"}]});
                     done();
                 },
                 function(error) {
@@ -263,6 +268,60 @@ describe("Validate appsApi", function() {
                 }
             ).catch(function(errorMsg) {
                 done(new Error('getApp: exception processing failure test: ' + JSON.stringify(errorMsg)));
+            });
+        });
+
+        it('error on getTableProps returns success results ', function(done) {
+            executeReqStub.returns(Promise.resolve({'body': '{"id":1, "tables": [{"id": 1, "name": "table1"}]}'}));
+            getTablePropertiesStub.returns(Promise.reject({error: "some error"}));
+            let promise = appsApi.getApp(req, req.params.appId);
+
+            promise.then(
+                function(response) {
+                    assert.deepEqual(response, {id:1, tables: [{id: 1, name: "table1"}]});
+                    done();
+                },
+                function(error) {
+                    done(new Error("Unexpected failure promise return when testing getApp success"));
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('getApp: exception processing success test: ' + JSON.stringify(errorMsg)));
+            });
+        });
+
+        it('error on getTableProps returns success results 2', function(done) {
+            executeReqStub.returns(Promise.resolve({'body': '{"id":1, "tables": [{"id": 1, "name": "table1"}]}'}));
+            getTablePropertiesStub.returns();
+            let promise = appsApi.getApp(req, req.params.appId);
+
+            promise.then(
+                function(response) {
+                    assert.deepEqual(response, {id:1, tables: [{id: 1, name: "table1"}]});
+                    done();
+                },
+                function(error) {
+                    done(new Error("Unexpected failure promise return when testing getApp success"));
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('getApp: exception processing success test: ' + JSON.stringify(errorMsg)));
+            });
+        });
+
+        it('exception on getTableProps returns success results', function(done) {
+            executeReqStub.returns(Promise.resolve({'body': '{"id":1, "tables": [{"id": 1, "name": "table1"}]}'}));
+            getTablePropertiesStub.returns();
+            let promise = appsApi.getApp(req, req.params.appId);
+
+            promise.then(
+                function(response) {
+                    assert.deepEqual(response, {id:1, tables: [{id: 1, name: "table1"}]});
+                    done();
+                },
+                function(error) {
+                    done(new Error("Unexpected failure promise return when testing getApp success"));
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('getApp: exception processing success test: ' + JSON.stringify(errorMsg)));
             });
         });
 
@@ -570,5 +629,4 @@ describe("Validate appsApi", function() {
         });
 
     });
-
 });

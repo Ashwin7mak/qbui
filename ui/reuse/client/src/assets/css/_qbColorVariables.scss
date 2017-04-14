@@ -413,7 +413,12 @@ $dragtoken-border-color: $color-orange-500;
 $dragtoken-shadow-color: rgba($color-black-800, 0.5);
 // dragtoken-active-gradient is defined in qbVariables because of a circular dependency on stroke-width
 
-// app users
+// Field Properties
+$propertytitle-text-color: $color-black-700;
+$propertyvalue-background-color: $color-black-100;
+$propertyvalue-border-color: $color-black-400;
+
+// App Users Management
 $add-user-button: $color-cyan-500;
 $app-role-divider: $color-yellow-500;
 
