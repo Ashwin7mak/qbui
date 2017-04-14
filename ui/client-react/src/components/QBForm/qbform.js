@@ -338,11 +338,13 @@ export const QBForm = React.createClass({
         let fieldRecord = this.getFieldRecord(relatedField);
         let recId = _.has(this.props.formData, 'recordId') ? this.props.formData.recordId : null;
 
-        //if the form prop calls for element to be required update fieldDef accordingly
-        /*
+        /* if the form prop calls for element to be required update fieldDef accordingly
+         * This isn't functionality that currently exists in newstack. Its causing issues with updating field properties
+         * in form builder. Once we had support for forms to have required fields,etc we will need to address this
         if (relatedField) {
             relatedField.required = relatedField.required || FormFieldElement.required;
-        }*/
+        }
+        */
 
         let CurrentFieldElement = (this.props.editingForm ? DragAndDropField(FieldElement) : FieldElement);
 
