@@ -253,9 +253,11 @@ export const RecordRoute = React.createClass({
         WindowLocationUtils.pushWithQuery(EDIT_RECORD_KEY, recordId);
     },
 
-    isAutomationEnabled()  {
+    isAutomationEnabled() {
+        //Using hard-coded app name here, to check if approve record button needs to be displayed.
+        //TODO: Remove after Empower
         const automationAppName = "Automation Demo";
-        if (this.props.selectedApp.name !== automationAppName)  {
+        if (this.props.selectedApp.name === automationAppName)  {
             return true;
         }
         return false;
@@ -286,11 +288,14 @@ export const RecordRoute = React.createClass({
         const actions = [
             {msg: 'pageActions.addRecord', icon:'add', className:'addRecord', onClick: this.editNewRecord},
             {msg: 'pageActions.edit', icon:'edit', onClick: this.openRecordForEdit},
-            {msg: 'pageActions.approve', icon: 'thumbs-up', onClick: this.approveRecord, disabled:this.isAutomationEnabled()},
             {msg: 'unimplemented.email', icon:'mail', disabled:true},
             {msg: 'unimplemented.print', icon:'print', disabled:true},
             {msg: 'unimplemented.delete', icon:'delete', disabled:true}];
-
+        // Add a button that 'approves' a record by invoking automation feature.
+        // TODO: Remove after Empower 2017 demo.
+        if(this.isAutomationEnabled()) {
+            actions.splice(2, 0, {msg: 'pageActions.approve', icon: 'thumbs-up', onClick: this.approveRecord});
+        }
         return (<IconActions className="pageActions" actions={actions} {...this.props}/>);
     },
 

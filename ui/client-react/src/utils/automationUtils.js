@@ -4,6 +4,7 @@
 import NotificationManager from '../../../reuse/client/src/scripts/notificationManager';
 import AutomationService from '../services/automationService';
 import Logger from '../utils/logger';
+import Locale from '../locales/locales';
 
 class AutomationUtils  {
 
@@ -24,10 +25,10 @@ class AutomationUtils  {
         return automationService.invokeAutomation("0duiiaaaaab", "ApproveProjectRecord", payload).then(
             response => {
                 logger.debug('Automation success');
-                NotificationManager.info("Record Approved.");
+                NotificationManager.info(Locale.getMessage('form.automation.approverecord.success'), Locale.getMessage('success'));
             },
             error => {
-                NotificationManager.error("An Error occured when invoking automation");
+                NotificationManager.error(Locale.getMessage('form.automation.approverecord.error'), Locale.getMessage('failed'));
                 //  if a validation error, print each one individually..
                 logger.parseAndLogError(LogLevel.ERROR, error.response, 'Automation');
             });

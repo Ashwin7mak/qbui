@@ -199,6 +199,12 @@ export default {
                     success: "Form saved",
                     error: "Error saving form"
                 }
+            },
+            automation: {
+                approverecord: {
+                    success: "Record Approved.",
+                    error: "An error occured when approving this record."
+                }
             }
         },
         relationship: {
