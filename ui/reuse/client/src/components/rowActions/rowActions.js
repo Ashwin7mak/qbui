@@ -59,13 +59,15 @@ class RowActions extends Component {
                     onChange={this.props.onClickToggleSelectedRow(this.props.rowId)}
                 />
                 <IconActions onClickEditRowIcon={this.onClickEditRowIcon}
-                             onClickDeleteRowIcon={this.onClickDeleteRowIcon}
-                             dropdownTooltip={true}
-                             className="recordActions"
-                             pullRight={false}
-                             menuIcons
-                             actions={actions}
-                             maxButtonsBeforeMenu={1}/>
+                                                            onClickDeleteRowIcon={this.onClickDeleteRowIcon}
+                                                            dropdownTooltip={true}
+                                                            className="recordActions"
+                                                            pullRight={false}
+                                                            menuIcons
+                                                            actions={actions}
+                                                            maxButtonsBeforeMenu={1}
+                />
+                
             </div>
         );
     }
@@ -85,7 +87,8 @@ RowActions.propTypes = {
     onClickToggleSelectedRow: PropTypes.func.isRequired,
     onClickEditRowIcon: PropTypes.func,
     onClickDeleteRowIcon: PropTypes.func,
-    onClickSaveRow: PropTypes.func.isRequired
+    onClickSaveRow: PropTypes.func.isRequired,
+    iconActionsNode: PropTypes.element
 };
 
 RowActions.defaultProps = {
@@ -96,6 +99,7 @@ RowActions.defaultProps = {
     isEditingRowSaving: true,
     isInlineEditOpen: false,
     editingRowErrors: [],
+    iconActionsNode: null
 };
 
 export default RowActions;
