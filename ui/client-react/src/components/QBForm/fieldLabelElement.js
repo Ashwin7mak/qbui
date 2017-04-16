@@ -11,7 +11,6 @@ import './qbform.scss';
 const FieldLabelElement = React.createClass({
     displayName: 'FieldLabelElement',
     propTypes: {
-        element: React.PropTypes.object, // FormFieldElement from form API
         relatedField: React.PropTypes.object, // field from Form data
         indicateRequiredOnLabel: React.PropTypes.bool,
         isInvalid: React.PropTypes.bool,
