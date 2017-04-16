@@ -455,17 +455,24 @@ consts = require('../../common/src/constants.js');
         const numOfStates = 30;
         const numOfCities = 30;
         //create unique set of countries/states/cities
-        const countries = chance.unique(chance.country, numOfCountries, {full : true});
-        const states = chance.unique(chance.state, numOfStates, {full : true});
-        const cities = chance.unique(chance.city, numOfCities, {full : true});
+        const countries = chance.unique(chance.country, numOfCountries, {full: true});
+        const states = chance.unique(chance.state, numOfStates, {full: true});
+        const cities = chance.unique(chance.city, numOfCities, {full: true});
 
         //used while adding the lookUp field record values
-        const numOfStatesPerCountry  = 3;
-        const numOfCitiesPerState  = 3;
+        const numOfStatesPerCountry = 3;
+        const numOfCitiesPerState = 3;
 
         // App setup //
-        e2eBase.appService.createAppSchema(makeAppMap()).then(function(appResponse) {
+        e2eBase.appService.createAppSchema(makeAppMap())
+        .then(function (appResponse) {
             createdApp = appResponse;
+
+            // Users Setup first//
+
+            // Generate and add the default set of Users to the app
+            return e2eBase.userService.addDefaultUserListToApp(createdApp.id);
+        }).then(function() {
 
             // Tables setup //
             let tableSetupPromises = [];
@@ -579,11 +586,6 @@ consts = require('../../common/src/constants.js');
                 // This is an iterator that executes each Promise function in the array here
                 return queueItem();
             });
-        }).then(function() {
-            // Users Setup //
-
-            // Generate and add the default set of Users to the app
-            return e2eBase.userService.addDefaultUserListToApp(createdApp.id);
         }).then(function() {
             // Forms Setup //
 
