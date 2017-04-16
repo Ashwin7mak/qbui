@@ -11,24 +11,23 @@ import './qbform.scss';
 const FieldLabelElement = React.createClass({
     displayName: 'FieldLabelElement',
     propTypes: {
-        element: React.PropTypes.object, // FormFieldElement from form API
         relatedField: React.PropTypes.object, // field from Form data
         indicateRequiredOnLabel: React.PropTypes.bool,
         isInvalid: React.PropTypes.bool,
-        label: React.PropTypes.string,
+        label: React.PropTypes.string
     },
 
     getDefaultProps() {
         return {
             indicateRequiredOnLabel: false,
-            label: '',
+            label: ''
         };
     },
 
     render() {
         // symbol that a value required
         let requiredIndication = '';
-        if (this.props.indicateRequiredOnLabel && ((this.props.element && this.props.element.required) || (this.props.relatedField && this.props.relatedField.required))) {
+        if (this.props.indicateRequiredOnLabel && (this.props.relatedField && this.props.relatedField.required)) {
             requiredIndication = '*';
         }
 
