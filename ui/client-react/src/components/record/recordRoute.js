@@ -293,7 +293,7 @@ export const RecordRoute = React.createClass({
             {msg: 'unimplemented.delete', icon:'delete', disabled:true}];
         // Add a button that 'approves' a record by invoking automation feature.
         // TODO: Remove after Empower 2017 demo.
-        if(this.isAutomationEnabled()) {
+        if (this.isAutomationEnabled()) {
             actions.splice(2, 0, {msg: 'pageActions.approve', icon: 'thumbs-up', onClick: this.approveRecord});
         }
         return (<IconActions className="pageActions" actions={actions} {...this.props}/>);
