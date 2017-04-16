@@ -69,10 +69,11 @@
                         (error) =>{
                             log.error({req: req}, "appsApi.getTableProperties(): Error getting table properties");
                             //always resolve - we do not want to block the get Apps call on this failure
-                            resolve();
+                            resolve({});
                         }).catch((ex) =>{
                             requestHelper.logUnexpectedError('appsApi.getTableProperties(): unexpected error getting table properties', ex, true);
-                            reject(ex);
+                            //always resolve - we do not want to block the get Apps call on this failure
+                            resolve({});
                         });
                 });
             },
@@ -122,7 +123,10 @@
                                         log.error({req: req}, "appsApi.getTableProperties(): Error retrieving table properties.");
                                         resolve(app);
                                     }
-                                );
+                                ).catch((ex) => {
+                                    requestHelper.logUnexpectedError('appsApi.getTableProperties(): unexpected error retrieving table properties', ex, true);
+                                    resolve(app);
+                                });
                             }
                         },
                         (error) => {

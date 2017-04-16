@@ -41,8 +41,8 @@ class RecordModel {
     }
 
     getEntryKey() {
-        if (this.model.currentEditingAppId && this.model.currentEditingTableId && this.model.currentEditingRecordId) {
-            return '' + this.model.currentEditingAppId + '/' + this.model.currentEditingTableId + '/' + this.model.currentEditingRecordId;
+        if (this.model.currentEditingAppId && this.model.currentEditingTableId) {
+            return '${this.model.currentEditingAppId}/${this.model.currentEditingTableId}/${this.model.currentEditingRecordId}';
         }
         return null;
     }
@@ -56,7 +56,8 @@ class RecordModel {
             this.model.appId = obj.appId || null;
             this.model.tblId = obj.tblId || null;
             this.model.recId = obj.recId || null;
-            if (obj.recId) {
+            if (obj.recId !== undefined) {
+                // null is valid as it identifies a new row added inline
                 this.model.currentEditingAppId = obj.appId;
                 this.model.currentEditingTableId = obj.tblId;
                 this.model.currentEditingRecordId = obj.recId;
@@ -152,13 +153,6 @@ class RecordModel {
                 this.model.commitChanges[entry].changes.push(this.model.recordChanges);
                 this.model.commitChanges[entry].status = '...'; //status is pending response from server
             }
-        }
-
-        // only set if a new record; updating when inline editing seems to trigger a hide of the
-        // the inline editing row , which displays the old record values for a short period of time.
-        //if (recId === UNSAVED_RECORD_ID || recId === NEW_RECORD_VALUE) {
-        if (recId === UNSAVED_RECORD_ID) {
-            this.model.recordChanges = changes;
         }
 
         this.setSaving(true);
