@@ -8,7 +8,7 @@ import WindowLocationUtils from '../utils/windowLocationUtils';
 import Locale from '../locales/locales';
 import NotificationManager from '../../../reuse/client/src/scripts/notificationManager';
 import * as types from '../actions/types';
-import * as UrlConsts from "../constants/urlConstants";
+import NavigationUtils from '../utils/navigationUtils';
 import {NEW_FORM_RECORD_ID} from '../constants/schema';
 import consts from '../../../common/src/constants';
 import _ from 'lodash';
@@ -26,6 +26,13 @@ function event(id, type, content) {
         content: content || null
     };
 }
+
+export const updateFormRedirectRoute = route => {
+    return {
+        type: types.UPDATE_FORM_REDIRECT_ROUTE,
+        redirectRoute: route
+    };
+};
 
 /**
  * form load in progress
@@ -314,14 +321,16 @@ export const createForm = (appId, tblId, formType, form) => {
  * @param tblId
  * @param formType
  * @param form
+ * @param redirectRoute
+ * @param shouldRedirectOnSave
  */
-export const updateForm = (appId, tblId, formType, form) => {
-    return saveTheForm(appId, tblId, formType, form, false);
+export const updateForm = (appId, tblId, formType, form, redirectRoute, shouldRedirectOnSave = true) => {
+    return saveTheForm(appId, tblId, formType, form, false, redirectRoute, shouldRedirectOnSave);
 };
 
 // we're returning a promise to the caller (not a Redux action) since this is an async action
 // (this is permitted when we're using redux-thunk middleware which invokes the store dispatch)
-function saveTheForm(appId, tblId, formType, formMeta, isNew) {
+function saveTheForm(appId, tblId, formType, formMeta, isNew, redirectRoute, shouldRedirectOnSave) {
 
     return (dispatch) => {
         return new Promise((resolve, reject) => {
@@ -341,6 +350,10 @@ function saveTheForm(appId, tblId, formType, formMeta, isNew) {
                         logger.debug('FormService saveTheForm success');
                         //  for now return the original form..
                         dispatch(event(formType, types.SAVING_FORM_SUCCESS, convertFormToArrayForClient({formMeta: response.data}).formMeta));
+
+                        if (shouldRedirectOnSave) {
+                            NavigationUtils.goBackToLocationOrTable(appId, tblId, redirectRoute);
+                        }
 
                         NotificationManager.success(Locale.getMessage('form.notification.save.success'), Locale.getMessage('success'));
 
