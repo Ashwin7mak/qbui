@@ -409,6 +409,19 @@
             return url;
         },
 
+        getEETablesRoute: function(url, tableId) {
+            let root = getUrlRoot(url, APPS);
+            if (root) {
+                let eeUrl = getEEReqURL(root);
+                if (eeUrl) {
+                    return eeUrl + '/' + TABLES + (tableId ? '/' + tableId : '');
+                }
+            }
+
+            //  no url root for APPS found; return original url unchanged
+            return url;
+        },
+
         /**
          * For the given req.url, extract the APPS and TABLES identifiers/ids and
          * append the DEFAULT HOMEPAGE identifier

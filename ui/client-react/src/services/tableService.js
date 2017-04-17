@@ -14,7 +14,8 @@ class TableService extends BaseService {
         this.API = {
             GET_HOMEPAGE            : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.HOMEPAGE}`,
             CREATE_TABLE_COMPONENTS : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/${constants.TABLECOMPONENTS}`,
-            UPDATE_TABLE            : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}`
+            UPDATE_TABLE            : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}`,
+            DELETE_TABLE            : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}`
         };
     }
 
@@ -50,13 +51,22 @@ class TableService extends BaseService {
      * @param table object of structure {name: "name", description: "desc", tableIcon: "icon", tableNoun: "noun"}
      */
     createTableComponents(appId, tableInfo) {
-        let url = super.constructUrl(this.API.CREATE_TABLE_COMPONENTS, [appId]);
-        return super.post(url, tableInfo);
+        //let url = super.constructUrl(this.API.CREATE_TABLE_COMPONENTS, [appId]);
+        //return super.post(url, tableInfo);
+        appId = '0c4aq6aaaaab';
+        let tableId = '0c4aq6aaaaav';
+        let url = super.constructUrl(this.API.DELETE_TABLE, [appId, tableId]);
+        return super.delete(url);
     }
 
     updateTable(appId, tableId, table) {
         let url = super.constructUrl(this.API.UPDATE_TABLE, [appId, tableId]);
         return super.patch(url, table);
+    }
+
+    deleteTable(appId, tableId) {
+        let url = super.constructUrl(this.API.DELETE_TABLE, [appId, tableId]);
+        return super.delete(url);
     }
 }
 

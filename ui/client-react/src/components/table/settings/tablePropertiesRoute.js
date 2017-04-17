@@ -8,7 +8,7 @@ import IconActions from '../../../../../reuse/client/src/components/iconActions/
 import {I18nMessage} from '../../../utils/i18nMessage';
 import Icon, {AVAILABLE_ICON_FONTS} from '../../../../../reuse/client/src/components/icon/icon.js';
 import TableCreationPanel from '../tableCreationPanel';
-import {updateTable, loadTableProperties, setTableProperty, openIconChooser, closeIconChooser, setEditingProperty, resetEditedTableProperties} from '../../../actions/tablePropertiesActions';
+import {updateTable, loadTableProperties, setTableProperty, openIconChooser, closeIconChooser, setEditingProperty, resetEditedTableProperties, deleteTable} from '../../../actions/tablePropertiesActions';
 
 import './tableProperties.scss';
 
@@ -23,7 +23,7 @@ export const TablePropertiesRoute = React.createClass({
     },
     getPageActions(maxButtonsBeforeMenu) {
         const actions = [
-            {i18nMessageKey: 'pageActions.deleteTable', icon:'delete', className:'deleteTable'}
+            {i18nMessageKey: 'pageActions.deleteTable', icon:'delete', className:'deleteTable', onClick:this.deleteTable}
         ];
         return (<IconActions className="pageActions" actions={actions} maxButtonsBeforeMenu={maxButtonsBeforeMenu}/>);
     },
@@ -42,6 +42,22 @@ export const TablePropertiesRoute = React.createClass({
     },
     updateTable() {
         this.updateTableProperties(this.props.app.id, this.props.table.id, this.props.tableProperties.tableInfo);
+    },
+    deleteTable() {
+        this.props.deleteTable(this.props.app.id, this.props.table.id).then(
+            (response) => {
+                NotificationManager.success(Locale.getMessage('tableEdit.tableUpdated'), Locale.getMessage('success'));
+                //let updatedTableInfo = tableInfo;
+                //let tableInfoObj = {};
+                //Object.keys(updatedTableInfo).forEach(function(key, index) {
+                //    tableInfoObj[key] = updatedTableInfo[key].value;
+                //});
+                //
+                //this.props.flux.actions.updateTableProps(this.props.table.id, tableInfoObj);
+            },
+            (error) => {
+                NotificationManager.error(Locale.getMessage('tableEdit.tableUpdateFailed'), Locale.getMessage('failed'));
+            });
     },
     updateTableProperties(appId, tableId, tableInfo) {
         this.props.updateTable(appId, tableId, tableInfo).then(
@@ -120,6 +136,9 @@ const mapDispatchToProps = (dispatch) => {
         },
         resetEditedTableProperties: () => {
             dispatch(resetEditedTableProperties());
+        },
+        deleteTable: (appId, tableId) => {
+            dispatch(deleteTable(appId, tableId));
         }
     };
 };

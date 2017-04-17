@@ -123,6 +123,31 @@ export const updateTable = (appId, tableId, tableInfo) => {
     };
 };
 
+export const deleteTable = (appId, tableId) => {
+    return (dispatch) => {
+
+        return new Promise((resolve, reject) => {
+            const tableService = new TableService();
+            const promise = tableService.deleteTable(appId, tableId);
+
+            promise.then(response => {
+                //dispatch(tableSaved(tableInfo));
+                resolve(response);
+            }).catch(error => {
+                dispatch(savingTableFailed(error));
+                if (error.response) {
+                    if (error.response.status === constants.HttpStatusCode.FORBIDDEN) {
+                        logger.parseAndLogError(LogLevel.WARN, error.response, 'tableService.updateTable:');
+                    } else {
+                        logger.parseAndLogError(LogLevel.ERROR, error.response, 'tableService.updateTable:');
+                    }
+                }
+                reject(error);
+            });
+        });
+    };
+};
+
 export const loadTableProperties = (tableInfo) => {
     return (dispatch) => {
         /* TODO Currently we dont pull props from EE so initialize these to something. To be fixed by MC-1541 */
