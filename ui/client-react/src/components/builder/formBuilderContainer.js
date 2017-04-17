@@ -139,7 +139,6 @@ export const FormBuilderContainer = React.createClass({
         if (this.props.currentForm && this.props.currentForm.formData) {
             let formMeta = this.props.currentForm.formData.formMeta;
             let formType = this.props.currentForm.id;
-
             this.props.updateForm(formMeta.appId, formMeta.tableId, formType, formMeta, this.props.redirectRoute)
         }
     },
