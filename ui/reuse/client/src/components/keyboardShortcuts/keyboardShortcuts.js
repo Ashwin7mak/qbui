@@ -23,7 +23,6 @@ class KeyboardShortcuts extends Component {
     }
 
     componentWillUnmount() {
-        Mousetrap.reset();
         this.removeAllKeyBindings();
     }
 

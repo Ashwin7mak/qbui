@@ -5,7 +5,8 @@ import KeyboardShortCuts, {__RewireAPI__ as KeyboardShortCutsRewireAPI} from '..
 
 let MockMouseTrap = {
     bind: (_keyBindings) => {},
-    bindGlobal: (_keyBindings) => {}
+    bindGlobal: (_keyBindings) => {},
+    unbind: () => {}
 };
 
 const keyBindings = [{key: 'esc', callback: () => {}}];
@@ -16,9 +17,10 @@ let component;
 describe('KeyboardShortCuts', () => {
     beforeEach(() => {
         jasmineEnzyme();
-        spyOn(MockMouseTrap, 'bindGlobal').and.callThrough();
-        spyOn(MockMouseTrap, 'bind');
         KeyboardShortCutsRewireAPI.__Rewire__('Mousetrap', MockMouseTrap);
+        spyOn(MockMouseTrap, 'bindGlobal');
+        spyOn(MockMouseTrap, 'bind');
+        spyOn(MockMouseTrap, 'unbind');
 
     });
 
@@ -33,14 +35,14 @@ describe('KeyboardShortCuts', () => {
         />);
 
         let instance = component.instance();
-
+        spyOn(instance, 'addAllKeyBindings');
         instance.componentWillMount();
 
         expect(instance.addAllKeyBindings).toHaveBeenCalledWith(keyBindings);
-        expect(MockMouseTrap.bind).toHaveBeenCalledWith([keyBindings[0].key, keyBindings[0].callback], [keyBindings[1].key, keyBindings[1].callback]);
+        expect(MockMouseTrap.bind).toHaveBeenCalled();
     });
 
-    fit('calls addAllKeyBindingsPreventDefault when component mounts ', () => {
+    it('calls addAllKeyBindingsPreventDefault when component mounts ', () => {
         component = shallow(<KeyboardShortCuts
             shortcutBindingsPreventDefault={keyBindings}
             id={testId}
@@ -62,9 +64,10 @@ describe('KeyboardShortCuts', () => {
         />);
 
         let instance = component.instance();
-        spyOn(instance, 'removeAllKeyBindings');
+        spyOn(instance, 'removeAllKeyBindings').and.callThrough();
         instance.componentWillUnmount();
 
-        expect(instance.removeAllKeyBindings.calls.count()).toBe(1);
+        expect(instance.removeAllKeyBindings).toHaveBeenCalled();
+        expect(MockMouseTrap.unbind).toHaveBeenCalled();
     });
 });
