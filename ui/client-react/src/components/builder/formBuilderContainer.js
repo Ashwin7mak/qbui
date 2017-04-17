@@ -138,7 +138,7 @@ export const FormBuilderContainer = React.createClass({
         // get the form meta data from the store..hard code offset for now...this is going to change..
         if (this.props.currentForm && this.props.currentForm.formData) {
             let formMeta = this.props.currentForm.formData.formMeta;
-            let formType = this.props.currentForm.formData.formType;
+            let formType = this.props.currentForm.id;
             this.props.updateForm(formMeta.appId, formMeta.tableId, formType, formMeta, this.props.redirectRoute);
         }
     },
@@ -211,7 +211,7 @@ export const FormBuilderContainer = React.createClass({
     },
 
     render() {
-        let loaded = (_.has(this.props, 'currentForm') && this.props.currentForm !== undefined && !this.props.currentForm.loading);
+        let loaded = (_.has(this.props, 'currentForm') && this.props.currentForm !== undefined && !this.props.currentForm.loading && !this.props.currentForm.saving);
         let formData = null;
         let formId = null;
         if (loaded) {
@@ -233,7 +233,7 @@ export const FormBuilderContainer = React.createClass({
                 <PageTitle title={Locale.getMessage('pageTitles.editForm')}/>
 
                 <ToolPalette isCollapsed={this.props.isCollapsed} isOpen={this.props.isOpen}>
-                    <FieldProperties appId={this.props.appId} tableId={this.props.tblId} formId={formId}>
+                    <FieldProperties appId={this.props.params.appId} tableId={this.props.params.tblId} formId={formId}>
                         <div className="formBuilderContainerContent">
                             <AutoScroll
                                 pixelsFromBottomForLargeDevices={80}

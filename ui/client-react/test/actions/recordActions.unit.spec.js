@@ -11,7 +11,7 @@ import thunk from 'redux-thunk';
 import Promise from 'bluebird';
 
 Promise.onPossiblyUnhandledRejection(function() {
-    // swallow the error..
+    // swallow the error..otherwise the log gets cluttered with the exception
 });
 
 // we mock the Redux store when testing async action creators
