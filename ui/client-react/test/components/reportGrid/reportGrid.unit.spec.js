@@ -280,14 +280,7 @@ describe('ReportGrid', () => {
                 editingIndex: null,
                 editingId: null,
                 expectedValue: testRecordId
-            },
-            {
-                description: 'returns the current record id if a record is being edited according to the reportDataStore (applies for new records, see comments in method on reportGrid)',
-                pendEdits: null,
-                editingIndex: testRecordId,
-                editingId: testRecordId,
-                expectedValue: testRecordId
-            },
+            }
         ];
 
         testCases.forEach(testCase => {
