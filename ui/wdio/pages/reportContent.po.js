@@ -93,7 +93,7 @@
         waitForReportContent: {value: function() {
             if (browserName === 'MicrosoftEdge') {
                 // wait until you see .qbTbody
-                browser.element('.qbTbody', 120000);
+                browser.element('.qbTbody', 90000);
                 return browser.element('.qbRow').waitForVisible();
             } else {
                 // wait until you see .qbTbody
@@ -232,7 +232,11 @@
             //Click on add record button
             this.addRecordBtnOnStage.click();
             //wait until you see edit container and save buttons in footer
-            formsPO.editFormContainerEl.waitForVisible();
+            if (browserName === 'MicrosoftEdge') {
+                formsPO.editFormContainerEl.waitForVisible(60000);
+            } else {
+                formsPO.editFormContainerEl.waitForVisible();
+            }
             return formsPO.editFormSaveBtns.waitForVisible();
         }},
 
