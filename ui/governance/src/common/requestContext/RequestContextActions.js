@@ -30,10 +30,10 @@ const fetchRequestContext = (desiredAccountId) => {
 };
 
 const shouldFetchRequestContext = (state, desiredAccountId) => {
-    if (!state.RequestContext.account.id) {
-        return true;
-    } else if (state.RequestContext.status.isFetching) {
+    if (state.RequestContext.status.isFetching) {
         return false;
+    } else if (!state.RequestContext.account.id) {
+        return true;
     } else {
         return state.RequestContext.account.id !== desiredAccountId;
     }
