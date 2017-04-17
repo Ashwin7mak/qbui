@@ -173,15 +173,5 @@ describe('AutoScroll', () => {
             expect(component.props().pixelsFromTopForMobile).toBe(30);
             expect(component.props().pixelsFromBottomForMobile).toBe(30);
         });
-
-        it('getContainer should be called with the prop parentContainer', function() {
-            let component = mount(<AutoScroll parentContainer={mockParentContainer} />);
-            let instance = component.instance();
-
-            spyOn(instance, 'getContainer').and.returnValue(mockGetBoundingClientRect);
-            instance.getContainerDimension();
-
-            expect(instance.getContainer).toHaveBeenCalledWith(mockParentContainer);
-        });
     });
 });
