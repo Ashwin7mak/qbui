@@ -130,7 +130,6 @@ class AutoScroll extends Component {
             return containerBottom - this.props.pixelsFromBottomForLargeDevices;
         }
     }
-    
     updateScrolling(e) {
         this.stopScrolling();
 
