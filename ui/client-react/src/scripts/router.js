@@ -60,9 +60,9 @@ const mapStateToProps = (state) => {
 const withFlux = (ComponentToWrap) => {
     class WrappedComponent extends React.Component {
         render() {
-            const { ...props} = this.props;
-            return <ComponentToWrap {...props} flux={fluxxor}/>
-        };
+            const {...props} = this.props;
+            return <ComponentToWrap {...props} flux={fluxxor}/>;
+        }
     }
     return WrappedComponent;
 };
@@ -78,9 +78,6 @@ AppsBundleLoader.changeLocale(config.locale.default);
 store.dispatch(FeatureSwitchActions.getStates());
 
 const createElementWithFlux = (Component, props) => <Component {...props} flux={fluxxor} />;
-
-
-
 
 // render the UI, wrap the router in the react-redux Provider to make the Redux store available to connected components
 /*
@@ -122,7 +119,16 @@ render((
 */
 
 
-//  our route config
+/**
+ * our route config
+ * each entry is a route config that contains:
+ *          path -  string the URL path pattern to match (see https://www.npmjs.com/package/path-to-regexp for the patterns supported )
+ *                  if path is not included or en all routes will match the item
+ *          component - the Component to render when the match occurs (required)
+ *          routes - an array child routes that occur under within the route (optional)
+ *          props - object with any properties to be included when rendering the component (optional)
+ **/
+
 const routes = [
     {
         path: APPS_ROUTE,
@@ -213,7 +219,11 @@ render((
     <Provider store={store}>
         <Router history={history} createElement={createElementWithFlux} >
             <Switch>
-                {/*  within Switch 1st match wins */}
+                {/*  within Switch 1st match wins
+                    includes all the above top level routes and passed on the child routes in the properties
+                    note if an entry it is without a path to match
+                     the route has to come after specific routes
+                 */}
                 {routes.map((route, i) => (
                         <RouteWithSubRoutes key={i} {...route} />
                     )

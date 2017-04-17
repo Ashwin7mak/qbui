@@ -46,7 +46,7 @@ describe('AppHomePageRoute functions', () => {
     it('test render of component with url params', () => {
 
         let params = {
-           appId:1
+            appId:1
         };
 
 

@@ -36,6 +36,7 @@ import Icon from '../../../../reuse/client/src/components/icon/icon';
 import TableCreationDialog from '../table/tableCreationDialog';
 import AppUtils from '../../utils/appUtils';
 
+import {updateFormRedirectRoute} from '../../actions/formActions';
 // This shared view with the server layer must be loaded as raw HTML because
 // the current backend setup cannot handle a react component in a common directory. It is loaded
 // as a raw string and we tell react to interpret it as HTML. See more in common/src/views/Readme.md
@@ -45,6 +46,7 @@ import LoadingScreen from 'raw!../../../../common/src/views/loadingScreen.html';
 import "./nav.scss";
 import "react-notifications/lib/notifications.css";
 import "../../assets/css/animate.min.css";
+import RouteWithSubRoutes from "../../scripts/RouteWithSubRoutes";
 
 const OPEN_NAV = true;
 const CLOSE_NAV = false;
@@ -91,6 +93,8 @@ export const Nav = React.createClass({
         } else if (formId) {
             link = `${link}/${formId}`;
         }
+
+        this.props.updateFormRedirectRoute(_.get(this.props, 'location.pathname'));
 
         this.props.router.push(link);
     },
@@ -412,7 +416,7 @@ export const Nav = React.createClass({
                             return (
                                 <RouteWithSubRoutes key={i} {...route} {...routeProps} />
                             );
-                            }
+                        }
                         )}
                         </Switch>
                     </div>}
@@ -478,18 +482,12 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        toggleAppsList: (toggleState) => {
-            dispatch(ShellActions.toggleAppsList(toggleState));
-        },
-        toggleLeftNav: (navState) => {
-            dispatch(ShellActions.toggleLeftNav(navState));
-        },
-        hideTrowser: () => {
-            dispatch(ShellActions.hideTrowser());
-        },
-        showTrowser: (content) => {
-            dispatch(ShellActions.showTrowser(content));
-        },
+        toggleAppsList: (toggleState) => dispatch(ShellActions.toggleAppsList(toggleState)),
+        toggleLeftNav: (navState) => dispatch(ShellActions.toggleLeftNav(navState)),
+
+        hideTrowser: () => dispatch(ShellActions.hideTrowser()),
+        showTrowser: (content) => dispatch(ShellActions.showTrowser(content)),
+
         loadForm: (appId, tblId, rptId, formType, editRec, showTrowser) => {
             dispatch(FormActions.loadForm(appId, tblId, rptId, formType, editRec)).then(() => {
                 if (showTrowser) {
@@ -497,9 +495,10 @@ const mapDispatchToProps = (dispatch) => {
                 }
             });
         },
-        loadReports: (context, appId, tblId) => {
-            dispatch(ReportActions.loadReports(context, appId, tblId));
-        }
+
+        loadReports: (context, appId, tblId) => dispatch(ReportActions.loadReports(context, appId, tblId)),
+
+        updateFormRedirectRoute: (route) => dispatch(updateFormRedirectRoute(route))
     };
 };
 

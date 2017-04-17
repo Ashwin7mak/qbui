@@ -9,6 +9,8 @@
 export const LOADING_FORM = 'LOADING_FORM';
 export const LOAD_FORM_ERROR = 'LOAD_FORM_ERROR';
 export const LOAD_FORM_SUCCESS = 'LOAD_FORM_SUCCESS';
+export const UPDATE_FORM_REDIRECT_ROUTE = 'UPDATE_FORM_REDIRECT_ROUTE';
+
 //  Used when saving a form or a record to show/hide the spinner
 export const SAVE_FORM = 'SAVE_FORM';
 export const SAVE_FORM_COMPLETE = 'SAVE_FORM_COMPLETE';
@@ -75,6 +77,7 @@ export const LOAD_REPORT_RECORDS_COUNT_FAILED = 'LOAD_REPORT_RECORDS_COUNT_FAILE
 export const SELECT_REPORT_RECORDS = 'SELECT_REPORT_RECORDS';
 export const REMOVE_REPORT_RECORDS = 'REMOVE_REPORT_RECORDS';
 export const ADD_BLANK_REPORT_RECORD = 'ADD_BLANK_REPORT_RECORD';
+export const REMOVE_BLANK_REPORT_RECORD = 'REMOVE_BLANK_REPORT_RECORD';
 
 //  ******** table report list actions ********
 export const LOAD_REPORTS = 'LOAD_REPORTS';
