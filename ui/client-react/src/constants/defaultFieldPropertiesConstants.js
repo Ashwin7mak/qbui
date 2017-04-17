@@ -9,7 +9,8 @@ export const DefaultFieldProperties = {
                 "type": type
             },
             "name": Locale.getMessage(`fieldsDefaultLabels.${fieldType}`),
-            "required": false
+            "required": false,
+            "userEditableValue": true
         };
     },
 
