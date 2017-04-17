@@ -71,7 +71,6 @@ class AutoScroll extends Component {
         this.scrollDown = this.scrollDown.bind(this);
         this.scrollUp = this.scrollUp.bind(this);
 
-        this.getContainer = this.getContainer.bind(this);
         this.getContainerDimension = this.getContainerDimension.bind(this);
         this.getContainerBottom = this.getContainerBottom.bind(this);
 
@@ -105,13 +104,15 @@ class AutoScroll extends Component {
     }
 
     getContainerDimension() {
-        //getBondingClientRect is used because it only gets the dimension of the container inside of the viewport
-        let container = this.getContainer(this.props.parentContainer).getBoundingClientRect();
-        return {
-            containerBottom: container.bottom,
-            containerTop: container.top
-        };
-
+        //getBoundingClientRect is used because it only gets the dimension of the container inside of the viewport
+        let container = this.props.parentContainer;
+        if (container) {
+            container = container.getBoundingClientRect();
+            return {
+                containerBottom: container.bottom,
+                containerTop: container.top
+            };
+        }
     }
 
     getContainerTop(containerTop) {
@@ -129,13 +130,7 @@ class AutoScroll extends Component {
             return containerBottom - this.props.pixelsFromBottomForLargeDevices;
         }
     }
-
-    getContainer(parentContainer) {
-        if (parentContainer) {
-            return parentContainer;
-        }
-    }
-
+    
     updateScrolling(e) {
         this.stopScrolling();
 
@@ -165,24 +160,27 @@ class AutoScroll extends Component {
 
     scrollDown() {
         let pixelsPerFrame = this.props.pixelsPerFrame ? this.props.pixelsPerFrame : 10;
-        let container = this.getContainer(this.props.parentContainer);
-        let scrollTop = container.scrollTop;
-
-        container.scrollTop = scrollTop + pixelsPerFrame;
-        pixelsPerFrame = pixelsPerFrame + pixelsPerFrame;
-        this.scrollingAnimationId = window.requestAnimationFrame(this.scrollDown);
+        let container = this.props.parentContainer;
+        let scrollTop;
+        if (container) {
+            scrollTop = container.scrollTop;
+            container.scrollTop = scrollTop + pixelsPerFrame;
+            pixelsPerFrame = pixelsPerFrame + pixelsPerFrame;
+            this.scrollingAnimationId = window.requestAnimationFrame(this.scrollDown);
+        }
     }
 
     scrollUp() {
         let defaultPixelsPerFrame = isSmall.isSmallBreakpoint() ? 2 : 10;
         let pixelsPerFrame = this.props.pixelsPerFrame ? this.props.pixelsPerFrame : defaultPixelsPerFrame ;
-        let container = this.getContainer(this.props.parentContainer);
-        let scrollTop = container.scrollTop;
-
-        container.scrollTop = scrollTop + -pixelsPerFrame;
-        pixelsPerFrame = pixelsPerFrame - pixelsPerFrame;
-
-        this.scrollingAnimationId = window.requestAnimationFrame(this.scrollUp);
+        let container = this.props.parentContainer;
+        let scrollTop;
+        if (container) {
+            scrollTop = container.scrollTop;
+            container.scrollTop = scrollTop + -pixelsPerFrame;
+            pixelsPerFrame = pixelsPerFrame - pixelsPerFrame;
+            this.scrollingAnimationId = window.requestAnimationFrame(this.scrollUp);
+        }
     }
 
     stopScrolling() {
