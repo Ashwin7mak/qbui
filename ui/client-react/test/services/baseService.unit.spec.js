@@ -89,10 +89,16 @@ describe('BaseService rewire tests', () => {
     });
 
 
-    it('test checkResponseStatus with 401 status', () => {
+    it('test checkResponseStatus with 401 status', (done) => {
         baseService = new BaseService();
-        baseService.checkResponseStatus({response: {status: 401}});
-        expect(mockWindowUtils.replace).not.toHaveBeenCalled();
+        baseService.checkResponseStatus({response: {status: 401}}).then(() => {
+            expect(mockWindowUtils.update).not.toHaveBeenCalledWith('');
+            expect(mockWindowUtils.replace).not.toHaveBeenCalled();
+            done();
+        }).catch(() => {
+            expect(false).toEqual(true);
+            done();
+        });
     });
 
     it('test checkResponseStatus with 200 status', () => {

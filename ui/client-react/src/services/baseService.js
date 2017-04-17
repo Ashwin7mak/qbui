@@ -141,10 +141,9 @@ class BaseService {
             //  axios upgraded to an error.response object in 0.13.x
             switch (error.response.status) {
             case 401:   // invalid/no ticket
-                this.constructRedirectUrl().then(function(currentStackSignInUrl) {
+                return this.constructRedirectUrl().then(function(currentStackSignInUrl) {
                     WindowLocationUtils.update(currentStackSignInUrl);
                 });
-                break;
             }
         }
     }
