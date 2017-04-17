@@ -14,7 +14,7 @@ describe('AppUsersRoute functions', () => {
     const selectedApp = {name: "Duder", ownerId: "CFalc"};
     const appOwner = {firstName: "Captain", lastName: "Falcon", email: "cfalc@fzero.com"};
     const appOwerNoEmail = {firstName: "Captain", lastName: "Falcon"};
-
+    const match = {params: {appId: appId}}
     const flux = {
         actions:{
             loadAppRoles: function() {return;},
@@ -42,12 +42,13 @@ describe('AppUsersRoute functions', () => {
 
     it('test render of component', () => {
         AppUsersRouteAPI.__Rewire__('IconActions', IconActionsMock);
+
         let component = TestUtils.renderIntoDocument(<AppUsersRoute appUsersUnfiltered={appUsersUnfiltered}
                                                                     appRoles={appRoles}
                                                                     appOwner={appOwner}
                                                                     flux={flux}
                                                                     selectedApp={selectedApp}
-                                                                    params={{appId: appId}}/>);
+                                                                    match={match}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
         AppUsersRouteAPI.__ResetDependency__('IconActions');
     });
