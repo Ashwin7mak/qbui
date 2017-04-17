@@ -1,10 +1,11 @@
 // action creators
-import * as actions from '../constants/actions';
+import _ from 'lodash';
 import FieldsService from '../services/fieldsService';
 import Promise from 'bluebird';
 import * as types from '../actions/types';
 import Logger from '../utils/logger';
 import LogLevel from '../utils/logLevels';
+import {getFields} from '../reducers/fields';
 
 let logger = new Logger();
 
@@ -17,14 +18,25 @@ let logger = new Logger();
  * @param content - optional content related to event type
  * @returns {{id: *, type: *, content: *}}
  */
-function event(app, tbl, type, content) {
+function event(appId, tblId, type, content) {
     return {
-        appId:app,
-        tblId:tbl,
-        type: type,
+        appId,
+        tblId,
+        type,
         content: content || null
     };
 }
+
+export const updateFieldId = (oldFieldId, newFieldId, formId = null, appId, tblId) => {
+    return {
+        type: types.UPDATE_FIELD_ID,
+        oldFieldId,
+        newFieldId,
+        formId,
+        appId,
+        tblId
+    };
+};
 
 /**
  * Construct fields store update payload
@@ -39,6 +51,116 @@ export const updateField = (field, appId, tableId) => {
         tblId: tableId,
         field: field,
         type: types.UPDATE_FIELD
+    };
+};
+
+export const saveNewField = (appId, tblId, field, formId = null) => {
+    return (dispatch) => {
+        return new Promise((resolve, reject) => {
+            if (appId && tblId && field) {
+                let fieldsService = new FieldsService();
+
+                const oldFieldId = field.id;
+                const fieldCopy = _.cloneDeep(field);
+                delete fieldCopy.id;
+                delete fieldCopy.isPendingEdits;
+
+                fieldsService.createField(appId, tblId, fieldCopy).then(
+                    (response) => {
+                        dispatch(updateFieldId(oldFieldId, response.data.id, formId, appId, tblId));
+                        resolve();
+                    },
+                    (errorResponse) => {
+                        //  axios upgraded to an error.response object in 0.13.x
+                        let error = errorResponse.response;
+                        logger.parseAndLogError(LogLevel.ERROR, error, 'fieldsService.createField:');
+                        dispatch(event(appId, tblId, types.LOAD_FIELDS_ERROR, {error:error}));
+                        reject();
+                    }
+                ).catch(error => {
+                    logger.error(error);
+                    return Promise.reject(error);
+                });
+            } else {
+                logger.error('fieldsService.getFields: Missing required input parameters.');
+                let error = {
+                    statusText:'Missing required input parameters to load fields',
+                    status:500
+                };
+                dispatch(event(appId, tblId, types.LOAD_FIELDS_ERROR, {error:error}));
+                reject();
+            }
+        });
+    };
+};
+
+export const updateFieldProperties = (appId, tblId, field) => {
+    return (dispatch) => {
+        return new Promise((resolve, reject) => {
+            if (appId && tblId && field) {
+                let fieldsService = new FieldsService();
+
+                delete field.isPendingEdits;
+
+                fieldsService.updateField(appId, tblId, field).then(
+                    (response) => {
+                        //TODO: some action needs to get emitted
+                        resolve();
+                    },
+                    (errorResponse) => {
+                        //  axios upgraded to an error.response object in 0.13.x
+                        let error = errorResponse.response;
+                        logger.parseAndLogError(LogLevel.ERROR, error, 'fieldsService.createField:');
+                        dispatch(event(appId, tblId, types.LOAD_FIELDS_ERROR, {error}));
+                        reject();
+                    }
+                );
+            } else {
+                logger.error('fieldsService.getFields: Missing required input parameters.');
+                let error = {
+                    statusText:'Missing required input parameters to load fields',
+                    status:500
+                };
+                dispatch(event(appId, tblId, types.LOAD_FIELDS_ERROR, {error}));
+                reject();
+            }
+        });
+    };
+};
+
+export const updateAllFieldsWithEdits = (appId, tableId) => {
+    return (dispatch, getState) => {
+        let fields = getFields(getState(), appId, tableId);
+
+        const fieldPromises = fields.filter(field => field.isPendingEdits).map(field => dispatch(updateFieldProperties(appId, tableId, field)));
+        if (fieldPromises.length === 0) {
+            logger.info('No new fields to add when calling updateAllFieldsWithEdit against app: `{appId}`, tbl: `{tableId}`');
+            return Promise.resolve();
+        }
+
+        return Promise.all(fieldPromises).then(() => {
+            logger.debug('All promises processed in updateAllFieldsWithEdit against app: `{appId}`, tbl: `{tableId}`');
+        }).catch(error => {
+            logger.error(error);
+        });
+    };
+};
+
+export const saveAllNewFields = (appId, tableId, formId = null) => {
+    return (dispatch, getState) => {
+        let fields = getFields(getState(), appId, tableId);
+        const fieldPromises = fields.filter(field => _.isString(field.id) && field.id.includes('newField')).map(field => dispatch(saveNewField(appId, tableId, field, formId)));
+
+        if (fieldPromises.length === 0) {
+            logger.info('No new fields to add when calling saveAllNewFields against app: `{appId}`, tbl: `{tableId}`');
+            return Promise.resolve();
+        }
+
+        return Promise.all(fieldPromises).then(() => {
+            logger.debug('All promises processed in saveAllNewFields against app: `{appId}`, tbl: `{tableId}`');
+        }).catch(error => {
+            logger.error(error);
+        });
     };
 };
 

@@ -87,8 +87,7 @@ const FieldValueRenderer = React.createClass({
         let fieldType = this.props.type;
 
         let attributes = null;
-        if (typeof this.props.fieldDef !== 'undefined' &&
-            typeof this.props.fieldDef.datatypeAttributes !== 'undefined') {
+        if (_.has(this.props, 'fieldDef.datatypeAttributes')) {
             attributes = this.props.fieldDef.datatypeAttributes;
             fieldType = FieldUtils.getFieldType(this.props.fieldDef, this.props.type, attributes);
         }

@@ -52,6 +52,7 @@ describe('Test fields reducer', () => {
         const reportObj = tableFieldsReportDataObj(state, appId, tblId);
         expect(reportObj.fields.data.length).toEqual(0);
     });
+
     it('test load form success', () => {
         const keyField = {builtIn:true, id:BUILTIN_FIELD_ID.RECORD_ID};
         const fields = [{builtIn:true, id:3}, {builtIn:false, id:8}, {builtIn:false, keyField:true, id:10}];
@@ -80,10 +81,10 @@ describe('Test fields reducer', () => {
         }];
         const actionPayload = {
             type: types.ADD_FIELD,
+            appId: appId,
+            tblId: tblId,
             content: {
-                newField: {},
-                appId: appId,
-                tblId: tblId
+                newField: {}
             }
         };
         const fieldsWithNewFieldAddedOn = [{builtIn: true, id: 3}, {builtIn: false, id: 8}, {
@@ -99,24 +100,25 @@ describe('Test fields reducer', () => {
         expect(currentField.fields).toEqual(fieldsWithNewFieldAddedOn);
     });
 
-    it('test update field', () => {
+    it('updates a field', () => {
         //load some fields so we can update them!
-        const fields = [{builtIn:true, id:3}, {builtIn:false, id:8}, {builtIn:false, keyField:true, id:10}];
-        const state = reducer([], event(appId, tblId, types.LOAD_FIELDS_SUCCESS, {fields:fields}));
+        const fields = [{builtIn: true, id: 3}, {builtIn: false, id: 8}, {builtIn: false, keyField: true, id: 10}];
+        const state = reducer([], event(appId, tblId, types.LOAD_FIELDS_SUCCESS, {fields}));
         const currentFieldList = tableFieldsObj(state, appId, tblId);
         expect(currentFieldList.fields).toEqual(fields);
+
         //okay lets update now
-        const field = {builtIn:true, keyField:false, id:10};
-        const upState = reducer(state, {type: types.UPDATE_FIELD, field: field, appId: appId, tblId: tblId});
-        const updatedField = getField(upState, field.id, appId, tblId);
-        expect(updatedField).toEqual(field);
+        const field = {builtIn: true, keyField: false, id: 10};
+        const updatedState = reducer(state, {type: types.UPDATE_FIELD, field, appId, tblId});
+        const updatedField = getField({fields: updatedState}, field.id, appId, tblId);
+        expect(updatedField).toEqual({...field, isPendingEdits: true});
     });
 
     it('test get field', () => {
         //load a field so we can get it!
         const field = {builtIn:true, keyField:true, id:10, required: false, name: "fielderino"};
         const fields = [field];
-        const state = reducer([], event(appId, tblId, types.LOAD_FIELDS_SUCCESS, {fields:fields}));
-        expect(getField(state, field.id, appId, tblId)).toEqual(field);
+        const state = reducer([], event(appId, tblId, types.LOAD_FIELDS_SUCCESS, {fields}));
+        expect(getField({fields: state}, field.id, appId, tblId)).toEqual(field);
     });
 });

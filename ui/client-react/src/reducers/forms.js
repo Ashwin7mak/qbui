@@ -6,9 +6,9 @@ const forms = (
 
     state = {}, action) => {
 
-    const id = action.id;
+    const {id, formId} = action;
     // retrieve currentForm and assign the rest of the form to newState
-    let {[id]: currentForm, ...newState} = _.cloneDeep(state);
+    let {[id || formId]: currentForm, ...newState} = _.cloneDeep(state);
     let updatedForm = currentForm;
 
     // TODO: do this smarter, change to markCopiesAsDirty
@@ -100,6 +100,16 @@ const forms = (
         return newState;
     }
 
+    case types.SAVING_FORM: {
+        currentForm = {
+            ...currentForm,
+            saving: true,
+            selectedFields: []
+        };
+
+        return {...newState, [id || formId]: currentForm};
+    }
+
     case types.SAVING_FORM_SUCCESS: {
         // a form has been updated, remove entries if there are multiple entries for the same record
         newState = removeCopies(_.get(currentForm, 'formData.recordId'));
@@ -150,13 +160,26 @@ const forms = (
 
         let {newField, newLocation} = action.content;
         updatedForm = _.cloneDeep(currentForm);
+        let newFieldCopy = _.cloneDeep(newField);
+
+        // Remove all keys that are not necessary for forms
+        Object.keys(newFieldCopy).forEach(key => {
+            if (key !== 'FormFieldElement' && key !== 'id') {
+                delete newFieldCopy[key];
+            }
+        });
 
         if (!newLocation) {
+            let elementIndex = 0;
+            if (updatedForm.formData.formMeta.tabs[0].sections[0].columns[0]) {
+                elementIndex = updatedForm.formData.formMeta.tabs[0].sections[0].columns[0].elements.length;
+            }
+
             newLocation = {
                 tabIndex: 0,
                 sectionIndex: 0,
                 columnIndex: 0,
-                elementIndex: updatedForm.formData.formMeta.tabs[0].sections[0].columns[0].elements.length
+                elementIndex: elementIndex
             };
         } else if (newLocation.elementIndex !== updatedForm.formData.formMeta.tabs[0].sections[0].columns[0].elements.length) {
             //If a field is selected on the form and the selectedField is not located at the end of the form, then the new field will be added below the selected field
@@ -166,7 +189,8 @@ const forms = (
         updatedForm.formData.formMeta = MoveFieldHelper.addNewFieldToForm(
             updatedForm.formData.formMeta,
             newLocation,
-            newField);
+            {...newFieldCopy}
+        );
 
         if (!updatedForm.selectedFields) {
             updatedForm.selectedFields = [];
@@ -193,6 +217,39 @@ const forms = (
 
         newState[id] = updatedForm;
         return newState;
+    }
+
+    case types.UPDATE_FIELD_ID : {
+        if (!currentForm) {
+            return state;
+        }
+
+        updatedForm = _.cloneDeep(currentForm);
+
+        let foundFieldElement;
+        updatedForm.formData.formMeta.tabs.some(tab => {
+            return tab.sections.some(section => {
+                return section.columns.some(column => {
+                    return column.elements.some(currentElement => {
+                        if (currentElement.FormFieldElement) {
+                            foundFieldElement = currentElement.FormFieldElement;
+                            return currentElement.FormFieldElement.fieldId === action.oldFieldId;
+                        }
+
+                        return false;
+                    });
+                });
+            });
+        });
+
+        if (foundFieldElement) {
+            foundFieldElement.fieldId = action.newFieldId;
+        }
+
+        return {
+            ...newState,
+            [id || formId]: updatedForm
+        };
     }
 
     case types.SELECT_FIELD : {
@@ -318,7 +375,8 @@ const forms = (
 };
 
 export const getSelectedFormElement = (state, id) => {
-    const currentForm = _.find(state.forms, form => form.id === id);
+    const currentForm = state.forms[id];
+
     if (!currentForm || !currentForm.selectedFields || !currentForm.selectedFields[0]) {
         return null;
     }
