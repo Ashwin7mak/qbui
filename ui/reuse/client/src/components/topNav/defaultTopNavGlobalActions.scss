@@ -1,0 +1,8 @@
+.globalActions { // This specificity is needed to override the disabled property
+    &.defaultTopNavGlobalActions .globalAction {
+        .preferencesButton.disabled {
+            padding-left: 0; // Remove the disabled padding that causes the menu to shift left when disabled
+        }
+    }
+}
+

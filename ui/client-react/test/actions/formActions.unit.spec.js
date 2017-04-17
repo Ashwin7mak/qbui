@@ -1,5 +1,5 @@
 import * as formActions from '../../src/actions/formActions';
-import {editNewRecord, openRecordForEdit, loadForm, createForm, updateForm, __RewireAPI__ as FormActionsRewireAPI} from '../../src/actions/formActions';
+import {loadForm, createForm, updateForm, __RewireAPI__ as FormActionsRewireAPI} from '../../src/actions/formActions';
 import * as UrlConsts from "../../src/constants/urlConstants";
 import * as types from '../../src/actions/types';
 import WindowLocationUtils from '../../src/utils/windowLocationUtils';
@@ -16,15 +16,31 @@ const mockTransformHelper = {
     convertFormToObjectForServer(data) {return data;}
 };
 
+const mockFieldsActions = {
+    saveAllNewFields(_appId, _tableId, formType) {
+        return (dispatch) => {
+            return Promise.resolve().then(() => (dispatch({type: 'AllFieldsSaved'})));
+        };
+    },
+    updateAllFieldsWithEdits(_appId, _tableId) {
+        return (dispatch) => {
+            return Promise.resolve().then(() => (dispatch({type: 'AllFieldsSaved'})));
+        };
+    }
+};
+
 describe('Form Actions', () => {
 
     beforeEach(() => {
         FormActionsRewireAPI.__Rewire__('WindowLocationUtils', WindowLocationUtilsMock);
+        // Mock out Lodash's uniqueId function so it produces a predictable output for tests. Other functions remain the same.
+        FormActionsRewireAPI.__Rewire__('_',  Object.assign({}, _, {uniqueId:() => 'newField_1'}));
 
     });
 
     afterEach(() => {
         FormActionsRewireAPI.__ResetDependency__('WindowLocationUtils');
+        FormActionsRewireAPI.__ResetDependency__('_');
     });
 
     describe('syncing actions', () => {
@@ -53,66 +69,19 @@ describe('Form Actions', () => {
 
         it('creates an action to indicate form loaded', () => {
 
-            expect(formActions.loadFormSuccess("view", "someData")).toEqual({
+            expect(formActions.loadFormSuccess("view", "someData", 'appId', 'tblId')).toEqual({
                 type: types.LOAD_FORM_SUCCESS,
                 id: "view",
-                formData: "someData"
+                formData: "someData",
+                appId: 'appId',
+                tblId: 'tblId'
             });
         });
     });
 
     describe('saving actions', () => {
-
         it('creates an action to indicate saving a form', () => {
-
-            expect(formActions.savingForm("edit")).toEqual({type: types.SAVE_FORM, id: "edit"});
-        });
-
-        it('creates an action to indicate save form error', () => {
-
-            expect(formActions.saveFormError("edit", "oops")).toEqual({
-                type: types.SAVE_FORM_FAILED,
-                id: "edit",
-                error: "oops"
-            });
-        });
-
-        it('creates an action to indicate form saved', () => {
-
-            expect(formActions.saveFormSuccess("edit", "someData")).toEqual({
-                type: types.SAVE_FORM_SUCCESS,
-                id: "edit"
-            });
-        });
-    });
-
-
-    describe('edit record actions', () => {
-
-        it('creates an action to open record for edit', () => {
-
-            expect(openRecordForEdit(123)).toEqual({
-                type: types.EDIT_REPORT_RECORD,
-                recId: 123,
-            });
-        });
-
-        it('creates an action to edit new record, no nav after save', () => {
-
-            expect(editNewRecord(false)).toEqual({
-                type: types.EDIT_REPORT_RECORD,
-                recId: UrlConsts.NEW_RECORD_VALUE,
-                navigateAfterSave: false
-            });
-        });
-
-        it('creates an action to edit new record, nav after save', () => {
-
-            expect(editNewRecord(true)).toEqual({
-                type: types.EDIT_REPORT_RECORD,
-                recId: UrlConsts.NEW_RECORD_VALUE,
-                navigateAfterSave: true
-            });
+            expect(formActions.saveForm("edit")).toEqual({type: types.SAVE_FORM, id: "edit"});
         });
     });
 
@@ -174,7 +143,9 @@ describe('Form Actions', () => {
                         tableId: formAndRecordResponseData.tableId,
                         appId: formAndRecordResponseData.appId,
                         recordId: '123'
-                    }
+                    },
+                    appId: 'appId',
+                    tblId: 'tblId'
                 }
             ];
             const store = mockStore({});
@@ -202,7 +173,9 @@ describe('Form Actions', () => {
                         appId: formResponseData.appId,
                         recordId: formResponseData.recordId,
                         record: null
-                    }
+                    },
+                    appId: 'appId',
+                    tblId: 'tblId'
                 }
             ];
             const store = mockStore({});
@@ -246,9 +219,13 @@ describe('Form Actions', () => {
 
         const expectedSaveActions = [
             {id:'view', type:types.SAVING_FORM, content: null},
+            {type: 'AllFieldsSaved'},
+            {type: 'AllFieldsSaved'},
             {id: 'view', type: types.SAVING_FORM_SUCCESS, content: formData.formMeta}
         ];
         const expectedActions = [
+            {type: 'AllFieldsSaved'},
+            {type: 'AllFieldsSaved'},
             {id:'view', type:types.SAVING_FORM, content: null},
             {id: 'view', type: types.SAVING_FORM_SUCCESS, content: formData}
         ];
@@ -269,11 +246,17 @@ describe('Form Actions', () => {
 
             spyOn(mockTransformHelper, 'convertFormToArrayForClient').and.returnValue(formData);
             FormActionsRewireAPI.__Rewire__('convertFormToArrayForClient', mockTransformHelper.convertFormToArrayForClient);
+
+            spyOn(mockFieldsActions, 'saveAllNewFields').and.callThrough();
+            spyOn(mockFieldsActions, 'updateAllFieldsWithEdits').and.callThrough();
+            FormActionsRewireAPI.__Rewire__('saveAllNewFields', mockFieldsActions.saveAllNewFields);
+            FormActionsRewireAPI.__Rewire__('updateAllFieldsWithEdits', mockFieldsActions.updateAllFieldsWithEdits);
         });
 
         afterEach(() => {
             FormActionsRewireAPI.__ResetDependency__('FormService');
             FormActionsRewireAPI.__ResetDependency__('convertFormToArrayForClient');
+            FormActionsRewireAPI.__ResetDependency__('saveAllNewFields');
         });
 
         it('saves a form update', (done) => {
@@ -312,6 +295,44 @@ describe('Form Actions', () => {
                     expect(false).toBe(true);
                     done();
                 });
+        });
+
+        it('saves new fields added to the form', (done) => {
+            const appId = 'appId';
+            const tableId = 'tableId';
+            const formType = 'view';
+
+            const store = mockStore({});
+
+            return store.dispatch(updateForm(appId, tableId, formType, formData)).then(
+                () => {
+                    expect(mockFieldsActions.saveAllNewFields).toHaveBeenCalledWith(appId, tableId, formType);
+                    done();
+                },
+                () => {
+                    expect(false).toBe(true);
+                    done();
+                }
+            );
+        });
+
+        it('saves existing fields that were edited on the form', (done) => {
+            const appId = 'appId';
+            const tableId = 'tableId';
+            const formType = 'view';
+
+            const store = mockStore({});
+
+            return store.dispatch(updateForm(appId, tableId, formType, formData)).then(
+                () => {
+                    expect(mockFieldsActions.updateAllFieldsWithEdits).toHaveBeenCalledWith(appId, tableId);
+                    done();
+                },
+                () => {
+                    expect(false).toBe(true);
+                    done();
+                }
+            );
         });
     });
 
@@ -365,7 +386,7 @@ describe('Form Actions', () => {
         it('transforms the returned response data after the save', (done) => {
             const store = mockStore({});
 
-            return store.dispatch(createForm("appId", "tblId", "view", formData)).then(
+            store.dispatch(createForm("appId", "tblId", "view", formData)).then(
                 () => {
                     expect(mockTransformHelper.convertFormToArrayForClient).toHaveBeenCalled();
                     done();
@@ -390,12 +411,39 @@ describe('Form Actions', () => {
             });
         });
     });
+    describe('addNewFieldToForm', () => {
+        it('creates an action that will add a field', () => {
+            const testNewField = {id: 'newField_1', edit: true, FormFieldElement: {positionSameRow: false, fieldId: 'newField_1', displayText: 'New Text Field'}};
+            expect(formActions.addNewFieldToForm('view', 1, 2, 3, testNewField)).toEqual({
+                id: 'view',
+                type: types.ADD_FIELD,
+                appId: 1,
+                tblId: 2,
+                content: {
+                    newLocation: 3,
+                    newField: testNewField,
+
+                }
+            });
+        });
+    });
 
     describe('selectFieldOnForm', () => {
         it('creates an action that will select a field', () => {
             expect(formActions.selectFieldOnForm('view', 1)).toEqual({
                 id: 'view',
                 type: types.SELECT_FIELD,
+                content: {
+                    location: 1
+                }});
+        });
+    });
+
+    describe('deselectField', () => {
+        it('creates an action that deselects a form element', () => {
+            expect(formActions.deselectField('view', 1)).toEqual({
+                id: 'view',
+                type: types.DESELECT_FIELD,
                 content: {
                     location: 1
                 }});
@@ -409,6 +457,39 @@ describe('Form Actions', () => {
                 type: types.REMOVE_FIELD,
                 content: {
                     location: 1
+                }});
+        });
+    });
+
+    describe('keyBoardMoveFieldUp', () => {
+        it('creates an action that will move a field up', () => {
+            expect(formActions.keyboardMoveFieldUp('view', 1)).toEqual({
+                id: 'view',
+                type: types.KEYBOARD_MOVE_FIELD_UP,
+                content: {
+                    location: 1
+                }});
+        });
+    });
+
+    describe('keyboardMoveFieldDown', () => {
+        it('creates an action that will move a field Down', () => {
+            expect(formActions.keyboardMoveFieldDown('view', 1)).toEqual({
+                id: 'view',
+                type: types.KEYBOARD_MOVE_FIELD_DOWN,
+                content: {
+                    location: 1
+                }});
+        });
+    });
+
+    describe('toggleFormBuilderChildrenTabIndex', () => {
+        it('creates an action that update formBuilder children tabindex', () => {
+            expect(formActions.toggleFormBuilderChildrenTabIndex('view', 1)).toEqual({
+                id: 'view',
+                type: types.TOGGLE_FORM_BUILDER_CHILDREN_TABINDEX,
+                content: {
+                    currentTabIndex: 1
                 }});
         });
     });

@@ -121,7 +121,12 @@
     "paramSslCertificateID": {
       "Description": "ARN of the SSL cert for the ELB",
       "Type": "String",
-      "Default": "arn:aws:acm:us-west-2:723670383381:certificate/a5e4a6b9-8a5a-4c87-a602-de2848410b27"
+      "Default": "arn:aws:acm:us-west-2:723670383381:certificate/9f6356af-20cb-479e-b321-6a60eab593bb"
+    },
+    "paramLegacyBase": {
+      "Description": "Base domain of legacy stack",
+      "Type": "String",
+      "Default": ".currentstack-int.quickbaserocks.com"
     }
   },
   "Resources": {
@@ -375,7 +380,7 @@
                       "rest_endpoint": {"Fn::Join": ["", ["https://t.tomcat.", {"Ref": "paramSwimlane"}, ".", {"Ref": "paramDomainName"}, ":8443"]]},
                       "ee_host": {"Fn::Join": ["", ["https://t.experienceengine.", {"Ref": "paramSwimlane"}, ".", {"Ref": "paramDomainName"}, ":443"]]},
                       "ee_host_enable": true,
-                      "legacy_endpoint": "https://internal.jenkinscs1.quickbaserocks.com",
+                      "legacy_base": {"Ref": "paramLegacyBase"},
                       "route_group": "LH_V1"
                     }
                   }
@@ -405,7 +410,7 @@
                       "rest_endpoint": {"Fn::Join": ["", ["https://t.tomcat.", {"Ref": "paramSwimlane"}, ".", {"Ref": "paramDomainName"}, ":8443"]]},
                       "ee_host": {"Fn::Join": ["", ["https://t.experienceengine.", {"Ref": "paramSwimlane"}, ".", {"Ref": "paramDomainName"}, ":443"]]},
                       "ee_host_enable": true,
-                      "legacy_endpoint": "https://internal.jenkinscs1.quickbaserocks.com",
+                      "legacy_base": {"Ref": "paramLegacyBase"},
                       "route_group": "LH_V1"
                     }
                   }
@@ -435,7 +440,7 @@
                       "rest_endpoint": {"Fn::Join": ["", ["https://t.tomcat.", {"Ref": "paramSwimlane"}, ".", {"Ref": "paramDomainName"}, ":8443"]]},
                       "ee_host": {"Fn::Join": ["", ["https://t.experienceengine.", {"Ref": "paramSwimlane"}, ".", {"Ref": "paramDomainName"}, ":443"]]},
                       "ee_host_enable": true,
-                      "legacy_endpoint": "",
+                      "legacy_base": {"Ref": "paramLegacyBase"},
                       "route_group": "LH_V1"
                     }
                   }
@@ -465,7 +470,7 @@
                       "rest_endpoint": {"Fn::Join": ["", ["https://t.tomcat.", {"Ref": "paramSwimlane"}, ".", {"Ref": "paramDomainName"}, ":8443"]]},
                       "ee_host": {"Fn::Join": ["", ["https://t.experienceengine.", {"Ref": "paramSwimlane"}, ".", {"Ref": "paramDomainName"}, ":443"]]},
                       "ee_host_enable": true,
-                      "legacy_endpoint": "https://internal.jenkinscs1.quickbaserocks.com",
+                      "legacy_base": {"Ref": "paramLegacyBase"},
                       "route_group": "LH_V1"
                     }
                   }
@@ -496,7 +501,7 @@
                       "rest_endpoint": {"Fn::Join": ["", ["https://t.tomcat.", {"Ref": "paramSwimlane"}, ".", {"Ref": "paramDomainName"}, ":8443"]]},
                       "ee_host": {"Fn::Join": ["", ["https://t.experienceengine.", {"Ref": "paramSwimlane"}, ".", {"Ref": "paramDomainName"}, ":443"]]},
                       "ee_host_enable": true,
-                      "legacy_endpoint": "https://login.quickbase.com",
+                      "legacy_base": {"Ref": "paramLegacyBase"},
                       "route_group": "LH_V1"
                     }
                   }

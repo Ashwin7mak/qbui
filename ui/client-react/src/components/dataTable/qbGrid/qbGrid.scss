@@ -5,7 +5,8 @@
 $grid-font-size: $font-size-p;
 $grid-default-group-padding: 20px;
 $grid-default-cell-padding: 6px;
-$grid-header-cell-padding: 4px;
+$grid-default-cell-height: 30px;
+$grid-header-cell-padding: 6px;
 $grid-group-expand-icon-size: 20px;
 $edit-icon-font-size: 18px;
 
@@ -25,6 +26,10 @@ $edit-icon-font-size: 18px;
     -webkit-font-smoothing: antialiased;
     table-layout: fixed;
 
+
+    .qbTbody {
+        background-color: $color-black-100;
+    }
 
     //== generic/default styles for some grid elements
     .qbIcon {
@@ -48,10 +53,10 @@ $edit-icon-font-size: 18px;
 
         position: relative;
         border-top: 1px solid $grid-column-header-border-color;
-        border-right: 1px solid $grid-line-color;
+        border-right: 1px solid $grid-column-header-grid-line-color;
         border-bottom: 1px solid $grid-column-header-border-color;
         padding: $grid-header-cell-padding;
-        color: $color-blue-600;
+        color: $grid-column-header-text-color;
         -webkit-font-smoothing: antialiased;
         background-color: $grid-column-header-background-color;
         cursor: default;
@@ -99,12 +104,19 @@ $edit-icon-font-size: 18px;
         // text label for the header cell
         .gridHeaderLabel {
             // set max-height to 2 lines. An extra 2px is needed to prevent clipping
-            max-height: (($line-height-text-comfortable * 2) + 2);
+            max-height: (($line-height-text-multiline * 2) + 2);
             overflow: hidden;
             flex-grow: 1;
             padding-right: 4px;
             padding-top: 2px;
-            line-height: $line-height-text-comfortable;
+            line-height: $line-height-text-multiline;
+            font-size: $font-size-h6;
+            font-weight: 400;
+            letter-spacing: 0.5px;
+        }
+
+        .qbIcon {
+            font-size: $size-iconfont-medium;
         }
 
         // menu to access sorting options
@@ -207,6 +219,7 @@ $edit-icon-font-size: 18px;
         border-right: 1px solid $grid-line-color;
         border-top: 1px solid $grid-line-color;
         transition: border 100ms ease-out;
+        height: $grid-default-cell-height;
 
         &:hover .cellEditIcon {
             display: inline;
@@ -219,7 +232,7 @@ $edit-icon-font-size: 18px;
 
     // cells get the pointer cursor when not in edit mode
     // tooltips get the pointer cursor too
-    .qbRow:not(.editing) .qbCell,
+    .qbRow:not(.editing) .qbCell:not(.phase1),
     .qbCell .tipChildWrapper {
         cursor: pointer;
     }
@@ -285,7 +298,7 @@ $edit-icon-font-size: 18px;
         top: -47px;
         left: -79px;
         padding: 0 24px;
-        border: 1px solid $grid-line-color;
+        border: 1px solid $color-purple-400;
 
         .loadedContent {
             padding: 0;
@@ -322,7 +335,7 @@ $edit-icon-font-size: 18px;
                 // colorize and tweak icon buttons
                 &.saveRecord {
                     color: $color-green-700;
-                    font-size: 18px;
+                    font-size: 16px;
                 }
 
                 &.invalidRecord {
@@ -332,7 +345,11 @@ $edit-icon-font-size: 18px;
                 }
 
                 &.cancelSelection {
-                    color: $iconfont-on-light-normal-color;
+                    color: $iconfont-on-light-alternate-color;
+                }
+
+                &:hover {
+                    color: $iconfont-on-hover-color;
                 }
 
                 &.deleteRecord {
@@ -380,7 +397,7 @@ $edit-icon-font-size: 18px;
         .iconActionButton {
             color: $grid-lefticon-normal-color;
             transition: color 200ms ease-in-out;
-            height: 30px;
+            height: $grid-default-cell-height;
             width: auto;
             margin-right: 4px;
             background: inherit;
@@ -529,10 +546,10 @@ $edit-icon-font-size: 18px;
 
         // standard cell
         .qbCell {
-            border-top: 2px solid $cell-edit-background-edit;
+            border-top: 1px solid $color-purple-400;
             overflow: visible;
             margin: 0;
-            border-right: 1px solid $grid-line-color;
+            border-right: 1px solid $color-black-300;
 
             .cellWrapper {
                 display: flex;

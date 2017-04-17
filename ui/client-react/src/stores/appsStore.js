@@ -12,6 +12,7 @@ let AppsStore = Fluxxor.createStore({
         this.appUsers = [];
         this.appUsersUnfiltered = {};
         this.appRoles = [];
+        this.appOwner = {};
         // Default is true because the apps must load before the website is usable
         this.loading = true;
         this.loadingAppUsers = false;
@@ -23,6 +24,7 @@ let AppsStore = Fluxxor.createStore({
             actions.LOAD_APPS_FAILED, this.onLoadAppsFailed,
             actions.SELECT_APP, this.onSelectApp,
             actions.SELECT_TABLE, this.onSelectTable,
+            actions.UPDATED_TABLE_PROPS, this.onUpdateTableProps,
 
             actions.LOAD_APP_USERS, this.onLoadAppUsers,
             actions.LOAD_APP_USERS_FAILED, this.onLoadAppUsersFailed,
@@ -31,6 +33,10 @@ let AppsStore = Fluxxor.createStore({
             actions.LOAD_APP_ROLES, this.onLoadAppRoles,
             actions.LOAD_APP_ROLES_FAILED, this.onLoadAppRolesFailed,
             actions.LOAD_APP_ROLES_SUCCESS, this.onLoadAppRolesSuccess,
+
+            actions.LOAD_APP_OWNER, this.onLoadAppOwner,
+            actions.LOAD_APP_OWNER_FAILED, this.onLoadAppOwnerFailed,
+            actions.LOAD_APP_OWNER_SUCCESS, this.onLoadAppOwnerSuccess
         );
 
         this.logger = new Logger();
@@ -48,7 +54,9 @@ let AppsStore = Fluxxor.createStore({
         this.apps.forEach((app) => {
             if (app.tables) {
                 app.tables.forEach((table) => {
-                    table.icon = TableIconUtils.getTableIcon(table.name);
+                    if (!table.tableIcon) {
+                        table.tableIcon = TableIconUtils.getTableIcon(table.name);
+                    }
                 });
             }
         });
@@ -82,13 +90,23 @@ let AppsStore = Fluxxor.createStore({
         this.emit('change');
     },
     onLoadAppRoles() {
-        this.emit('change');
+        //place holder incase we want to in the future (I know we are going to migrate to redux as well)
     },
     onLoadAppRolesFailed() {
-        this.emit('change');
+        //place holder incase we want to in the future (I know we are going to migrate to redux as well)
     },
     onLoadAppRolesSuccess(roles) {
         this.appRoles = roles;
+        this.emit('change');
+    },
+    onLoadAppOwner() {
+        //place holder incase we want to in the future (I know we are going to migrate to redux as well)
+    },
+    onLoadAppOwnerFailed() {
+        //place holder incase we want to in the future (I know we are going to migrate to redux as well)
+    },
+    onLoadAppOwnerSuccess(appOwner) {
+        this.appOwner = appOwner;
         this.emit('change');
     },
     onSelectApp(appId) {
@@ -101,6 +119,31 @@ let AppsStore = Fluxxor.createStore({
 
         this.emit('change');
     },
+    /**
+     * A table's props were updated. Find the table in the selected app and replace its details with those passed in.
+     * An example of who updated the table might be user updated table name from settings pages.
+     * @param tblId
+     * @param tableInfo
+     */
+    onUpdateTableProps(payload) {
+        let tblId = payload.tableId;
+        let tableInfo = payload.tableInfo;
+        let newAppsList = this.apps.map((app) => {
+            if (app.id === this.selectedAppId) {
+                let newAppTables = app.tables.map((table) => {
+                    if (table.id === tblId) {
+                        return tableInfo;
+                    } else {
+                        return table;
+                    }
+                });
+                app.tables = newAppTables;
+            }
+            return app;
+        });
+        this.apps = newAppsList;
+        this.emit('change');
+    },
     getState() {
         return {
             apps: this.apps,
@@ -108,6 +151,7 @@ let AppsStore = Fluxxor.createStore({
             appUsers: this.appUsers,
             appUsersUnfiltered: this.appUsersUnfiltered,
             appRoles: this.appRoles,
+            appOwner: this.appOwner,
             selectedTableId: this.selectedTableId,
             loading: this.loading,
             loadingAppUsers: this.loadingAppUsers,

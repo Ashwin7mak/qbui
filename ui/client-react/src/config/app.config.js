@@ -25,6 +25,7 @@ let defaultConfig = {
     api: {
         qbVersion: 'v1',
         eeVersion: 'v1',
+        automationVersion: 'v1',
         nodeVersion: 'v1',
         legacyVersion: 'v1'
     },
@@ -58,7 +59,7 @@ if (__QB_TEST__) {
             logToConsole: false,
             logToServer: false
         },
-        unauthorizedRedirect: '/qbase/unauthorized',
+        unauthorizedRedirect: null,
         // walkme java script
         walkmeJSSnippet : ''
     });

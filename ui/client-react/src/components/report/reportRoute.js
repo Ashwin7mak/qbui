@@ -1,6 +1,6 @@
 import React from 'react';
 import Stage from '../stage/stage';
-import TableIcon from '../qbTableIcon/qbTableIcon';
+import Icon, {AVAILABLE_ICON_FONTS} from '../../../../reuse/client/src/components/icon/icon.js';
 import ReportStage from './reportStage';
 import ReportHeader from './reportHeader';
 import IconActions from '../actions/iconActions';
@@ -8,6 +8,7 @@ import {Link} from 'react-router';
 import Logger from '../../utils/logger';
 import QueryUtils from '../../utils/queryUtils';
 import NumberUtils from '../../utils/numberUtils';
+import WindowLocationUtils from '../../utils/windowLocationUtils';
 import simpleStringify from '../../../../common/src/simpleStringify';
 import constants from '../../../../common/src/constants';
 import Fluxxor from 'fluxxor';
@@ -15,8 +16,13 @@ import _ from 'lodash';
 import './report.scss';
 import ReportToolsAndContent from '../report/reportToolsAndContent';
 import {connect} from 'react-redux';
-import {editNewRecord} from '../../actions/formActions';
-import {APP_ROUTE} from '../../constants/urlConstants';
+import {clearSearchInput} from '../../actions/searchActions';
+import {loadReport, loadDynamicReport} from '../../actions/reportActions';
+import {loadFields} from '../../actions/fieldsActions';
+import {CONTEXT} from '../../actions/context';
+import {APP_ROUTE, EDIT_RECORD_KEY, NEW_RECORD_VALUE} from '../../constants/urlConstants';
+
+import * as FieldsReducer from '../../reducers/fields';
 
 let logger = new Logger();
 let FluxMixin = Fluxxor.FluxMixin(React);
@@ -33,17 +39,38 @@ const ReportRoute = React.createClass({
     loadReport(appId, tblId, rptId, offset, numRows) {
         const flux = this.getFlux();
         flux.actions.selectTableId(tblId);
-        flux.actions.loadFields(appId, tblId);
-        flux.actions.loadReport(appId, tblId, rptId, true, offset, numRows);
+
+        // ensure the search box is cleared for the new report
+        this.props.dispatch(clearSearchInput());
+
+        //  get the fields for this app/tbl
+        this.props.dispatch(loadFields(appId, tblId));
+
+        //  load the report
+        this.props.dispatch(loadReport(CONTEXT.REPORT.NAV, appId, tblId, rptId, true, offset, numRows));
     },
+
+    /**
+     * Load a report with query parameters.
+     */
+    loadDynamicReport(appId, tblId, rptId, format, filter, queryParams) {
+        this.props.dispatch(loadDynamicReport(CONTEXT.REPORT.NAV, appId, tblId, rptId, format, filter, queryParams));
+    },
+
     /**
      * Load a report with query parameters.
      */
     loadDynamicReportFromParams(appId, tblId, rptId, queryParams) {
         const flux = this.getFlux();
         flux.actions.selectTableId(tblId);
-        flux.actions.loadFields(appId, tblId);
-        flux.actions.loadDynamicReport(appId, tblId, rptId, true, /*filter*/{}, queryParams);
+
+        // ensure the search box is cleared for the new report
+        this.props.dispatch(clearSearchInput());
+
+        //  get the fields for this app/tbl
+        this.props.dispatch(loadFields(appId, tblId));
+
+        this.loadDynamicReport(appId, tblId, rptId, true, /*filter*/{}, queryParams);
     },
     loadReportFromParams(params) {
         let {appId, tblId} = params;
@@ -72,16 +99,14 @@ const ReportRoute = React.createClass({
     componentDidMount() {
         const flux = this.getFlux();
         flux.actions.hideTopNav();
-        flux.actions.resetRowMenu();
+
         if (this.props.params) {
             this.loadReportFromParams(this.props.params);
         }
     },
     getHeader() {
         return (
-            <ReportHeader reportData={this.props.reportData}
-                          nameForRecords={this.nameForRecords}
-                          searchData={this.props.reportSearchData}
+            <ReportHeader nameForRecords={this.nameForRecords}
                 {...this.props}
             />);
     },
@@ -91,12 +116,7 @@ const ReportRoute = React.createClass({
      * @param data row record data
      */
     editNewRecord() {
-
-        // need to dispatch to Fluxxor since report store handles this too...
-        const flux = this.getFlux();
-        flux.actions.editNewRecord();
-
-        this.props.dispatch(editNewRecord());
+        WindowLocationUtils.pushWithQuery(EDIT_RECORD_KEY, NEW_RECORD_VALUE);
     },
 
     getPageActions(maxButtonsBeforeMenu) {
@@ -117,7 +137,7 @@ const ReportRoute = React.createClass({
             <div className="reportStageHeadline">
 
                 <div className="navLinks">
-                    {this.props.selectedTable && <Link className="tableHomepageIconLink" to={tableLink}><TableIcon icon={this.props.selectedTable.icon}/></Link>}
+                    {this.props.selectedTable && <Link className="tableHomepageIconLink" to={tableLink}><Icon iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY} icon={this.props.selectedTable.tableIcon}/></Link>}
                     {this.props.selectedTable && <Link className="tableHomepageLink" to={tableLink}>{this.props.selectedTable.name}</Link>}
                 </div>
 
@@ -153,12 +173,13 @@ const ReportRoute = React.createClass({
                     isRowPopUpMenuOpen={this.props.isRowPopUpMenuOpen}
                     routeParams={this.props.routeParams}
                     selectedAppId={this.props.selectedAppId}
-                    fields={this.props.fields}
                     searchStringForFiltering={this.props.reportData.searchStringForFiltering}
                     pageActions={this.getPageActions(0)}
                     nameForRecords={this.nameForRecords}
                     selectedRows={this.props.reportData.selectedRows}
-                    scrollingReport={this.props.scrollingReport} />
+                    scrollingReport={this.props.scrollingReport}
+                    loadDynamicReport={this.loadDynamicReport}
+                />
             </div>);
         }
     }

@@ -1,11 +1,11 @@
 import React from 'react';
 import NotificationManager from '../../scripts/notificationManager';
 import Icon from '../icon/icon';
+import {I18nMessage} from '../../utils/i18nMessage';
+import Locale from '../../locales/locale';
 
 // IMPORTS FROM CLIENT REACT
 import Device from '../../../../../client-react/src/utils/device';
-import Locale from '../../../../../client-react/src/locales/locales';
-import {I18nMessage} from '../../../../../client-react/src/utils/i18nMessage';
 // IMPORTS FROM CLIENT REACT
 
 /**
@@ -31,7 +31,7 @@ function getHelpWalkme() {
 const ReHelpButton = () => (
     <a className="dropdownToggle globalActionLink" onClick={getHelpWalkme}>
         <Icon icon="help" />
-        <span className={"navLabel"}><I18nMessage message={'globalActions.help'}/></span>
+        <span className="navLabel"><I18nMessage message="globalActions.help" /></span>
     </a>
 );
 

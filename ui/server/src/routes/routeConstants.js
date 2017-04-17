@@ -17,7 +17,8 @@
         QUICKBASE_HEALTH    : '/api/:version',
         NODE                : '/api/n/:version',
         QUICKBASE_LEGACY    : '/api/l/:version',
-        GOVERNANCE          : '/api/governance/:version'
+        GOVERNANCE          : '/api/governance/:version',
+        AUTOMATION          : '/we/workflow/:version'
     };
 
     /*
@@ -58,8 +59,9 @@
         REPORT_INVOKE_RESULTS       : baseUrl.QUICKBASE + '/apps/:appId/tables/:tableId/reports/:reportId/invoke',
         REPORT_RECORDS_COUNT        : baseUrl.QUICKBASE + '/apps/:appId/tables/:tableId/reports/:reportId/recordsCount',
         TABLE_HOMEPAGE_REPORT       : baseUrl.QUICKBASE + '/apps/:appId/tables/:tableId/homePage',
-        TABLES                      : baseUrl.QUICKBASE + '/apps/:appId/tables',
         TABLE_COMPONENTS            : baseUrl.QUICKBASE + '/apps/:appId/tables/tableComponents',
+        TABLE                       : baseUrl.QUICKBASE + '/apps/:appId/tables/:tableId',
+        TABLES                      : baseUrl.QUICKBASE + '/apps/:appId/tables',
 
         //  APP ENDPOINTS
         APPS                        : baseUrl.QUICKBASE + '/apps',
@@ -86,6 +88,9 @@
         ADMIN                       : baseUrl.QUICKBASE + '/admin',
 
         GOVERNANCE_ACCOUNT_USERS     : baseUrl.GOVERNANCE + '/:accountId/users',
+
+        // the account id is an optional parameter
+        GOVERNANCE_CONTEXT           : baseUrl.GOVERNANCE + '/context'
     };
 
     /*
@@ -97,7 +102,11 @@
         // Heads Up: Order matters. Define all specific routes BEFORE the generic EXPERIENCE_ENGINE_ALL route.
         // Second Heads up: You also need to define the routes in qbRouteMapper.
         EE_FORMS                    : baseUrl.EXPERIENCE_ENGINE + '/apps/:app/tables/:table/forms*',
-        EXPERIENCE_ENGINE_ALL       : baseUrl.EXPERIENCE_ENGINE + '/*',
+        EXPERIENCE_ENGINE_ALL       : baseUrl.EXPERIENCE_ENGINE + '/*'
+    };
+
+    var automationEngineApiEndpoints = {
+        AUTOMATION_ENGINE_ALL       : baseUrl.AUTOMATION + '/*',
     };
 
     /**
@@ -116,6 +125,6 @@
 
     //  Export the combined list of endpoints.
     module.exports = Object.freeze(_.assign({},
-        swaggerApiEndpoints, nodeApiEndpoints, legacyApiEndpoints, quickBaseApiEndpoints, experienceEngineApiEndpoints));
+        swaggerApiEndpoints, nodeApiEndpoints, legacyApiEndpoints, quickBaseApiEndpoints, experienceEngineApiEndpoints, automationEngineApiEndpoints));
 
 }());

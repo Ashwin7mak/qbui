@@ -11,8 +11,7 @@
     var ReportInLineEditPO = require('../../pages/reportInLineEdit.po');
     var ReportPagingPO = require('../../pages/reportPaging.po');
 
-
-    describe('Report Page Edit Record Tests', function() {
+    describe('Reports - In-line Edit Record Tests: ', function() {
         var realmName;
         var realmId;
         var testApp;
@@ -31,7 +30,8 @@
             }).catch(function(error) {
                 // Global catch that will grab any errors from chain above
                 // Will appropriately fail the beforeAll method so other tests won't run
-                Promise.reject(new Error('Error during test setup beforeAll: ' + error.message));
+                browser.logger.error('Error in beforeAll function:' + JSON.stringify(error));
+                return Promise.reject('Error in beforeAll function:' + JSON.stringify(error));
             });
         });
 
@@ -177,6 +177,42 @@
                 // Check that the edit was not persisted on report
                 var fieldValues2 = ReportContentPO.getRecordValues(1);
                 expect(fieldValues2[1]).toBe(originalText);
+            }
+        });
+
+        /**
+         * Negative Test. Reload page test for in-line editing.
+         */
+        it('Reloading the page while editing should not save updates to a record', function() {
+            if (browserName === 'chrome' || browserName === 'firefox') {
+                var textToEnter = 'My new text 3';
+
+                // Get the original value of the text field on the second record
+                var fieldValues = ReportContentPO.getRecordValues(2);
+                var originalText = fieldValues[0];
+
+                // Step 1 - Open the in-line edit menu for the third record on that page
+                ReportInLineEditPO.openRecordEditMenu(2);
+
+                // Step 2 - Edit the Text Field
+                ReportInLineEditPO.editTextField(0, textToEnter);
+
+                //Todo - For Safari alert tried these
+                //browser.execute("window.onbeforeunload = function(){ return null;}");
+                // browser.execute("window.onbeforeunload = function(e){};");
+
+                //Step 3 - Refresh the browser
+                browser.refresh();
+
+                //Step 4 - handle Alert chrome
+                if (browser.alertText()) {
+                    browser.alertAccept();
+
+                }
+
+                //Step 5 - Check that the edit was not persisted on report
+                var expectedValues = ReportContentPO.getRecordValues(2);
+                expect(expectedValues[0]).toBe(originalText);
             }
         });
 

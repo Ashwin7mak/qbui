@@ -117,11 +117,10 @@ class SideMenuBase extends Component {
     render() {
         return (
             <div className={this.getBaseClasses()}>
-                <div className={this.getSideMenuClasses()}>
-                    <Swipeable onswipedLeft={this.closeOnSwipeLeft}>
-                        {this.props.sideMenuContent}
-                    </Swipeable>
-                </div>
+                <Swipeable className={this.getSideMenuClasses()} onswipedLeft={this.closeOnSwipeLeft}>
+                    {this.props.sideMenuContent}
+                </Swipeable>
+
                 <div className={this.getMainBodyClasses()}>
                     {this.props.children}
                 </div>

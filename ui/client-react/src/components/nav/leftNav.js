@@ -8,7 +8,7 @@ import QBicon from '../qbIcon/qbIcon';
 import './leftNav.scss';
 import AppUtils from '../../utils/appUtils';
 import * as SpinnerConfigurations from "../../constants/spinnerConfigurations";
-import LogoImg from '../../../../reuse/client/src/assets/images/QB-logo.svg';
+import LogoImg from '../../../../reuse/client/src/assets/images/QB3-logo.svg';
 
 let LeftNav = React.createClass({
 
@@ -21,6 +21,7 @@ let LeftNav = React.createClass({
         onToggleAppsList:React.PropTypes.func,
         onSelect:React.PropTypes.func,
         onSelectReports:React.PropTypes.func,
+        onCreateNewTable:React.PropTypes.func,
         globalActions:React.PropTypes.element
     },
 
@@ -72,7 +73,12 @@ let LeftNav = React.createClass({
         if (this.props.appsListOpen || !AppUtils.appExists(this.props.selectedAppId, this.props.apps)) {
             return <AppsList key={"apps"} {...this.props} onSelectApp={this.onSelectApp}  />;
         } else {
-            return <TablesList key={"tables"} expanded={this.props.expanded} showReports={(id)=>{this.props.onSelectReports(id);} } getAppTables={AppUtils.getAppTables} {...this.props} />;
+            return <TablesList key={"tables"}
+                               expanded={this.props.expanded}
+                               showReports={(id)=>{this.props.onSelectReports(id);} }
+                               getAppTables={AppUtils.getAppTables}
+                               onCreateNewTable={this.props.onCreateNewTable}
+                               {...this.props} />;
         }
     },
 

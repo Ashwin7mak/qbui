@@ -8,11 +8,8 @@ describe('QBErrorMessage functions', () => {
 
     let component;
 
-    let flux = {
-    };
-
     it('test render of default QBErrorMessage component', () => {
-        component = TestUtils.renderIntoDocument(<QBErrorMessage flux={flux} message={[]} hidden={false}/>);
+        component = TestUtils.renderIntoDocument(<QBErrorMessage message={[]} hidden={false}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
     });
 
@@ -21,9 +18,9 @@ describe('QBErrorMessage functions', () => {
             {id: 1, invalidMessage: "error message #1", def: {fieldName: "test field 1"}},
             {id: 2, invalidMessage: "error message #2", def: {fieldName: "test field 2"}},
             {id: 3, invalidMessage: "error message #3", def: {fieldName: "test field 3"}},
-            {id: 4, invalidMessage: "error message #4", def: {fieldName: "test field 4"}},
+            {id: 4, invalidMessage: "error message #4", def: {fieldName: "test field 4"}}
         ];
-        component = TestUtils.renderIntoDocument(<QBErrorMessage flux={flux} message={errorMessage} hidden={false}/>);
+        component = TestUtils.renderIntoDocument(<QBErrorMessage message={errorMessage} hidden={false}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 
         const errorRenderResult = ReactDOM.findDOMNode(component).getElementsByClassName("qbErrorMessageItem");
@@ -33,9 +30,9 @@ describe('QBErrorMessage functions', () => {
     it('renders a list of client-side validation error messages', () => {
         let errorMessage = [
             {id: 1, invalidMessage: "error message #1", def: {fieldLabel: "test field 1"}},
-            {id: 2, invalidMessage: "error message #2", def: {fieldLabel: "test field 2"}},
+            {id: 2, invalidMessage: "error message #2", def: {fieldLabel: "test field 2"}}
         ];
-        component = TestUtils.renderIntoDocument(<QBErrorMessage flux={flux} message={errorMessage} hidden={false}/>);
+        component = TestUtils.renderIntoDocument(<QBErrorMessage  message={errorMessage} hidden={false}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 
         const errorRenderResult = ReactDOM.findDOMNode(component).getElementsByClassName("qbErrorMessageItem");

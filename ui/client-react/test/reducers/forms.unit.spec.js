@@ -18,17 +18,21 @@ describe('Forms reducer functions', () => {
         });
     });
 
-    let initialState = [];
+    let initialState = {};
 
-    let stateWithViewForm = [{
-        id: 'view',
-        formData: {formMeta: 'some meta data'}
-    }];
+    let stateWithViewForm = {
+        'view': {
+            id: 'view',
+            formData: {formMeta: 'some meta data'}
+        }
+    };
 
-    let stateWithEditForm = [{
-        id: 'edit',
-        formData: {formMeta: 'some meta data'}
-    }];
+    let stateWithEditForm = {
+        'edit': {
+            id: 'edit',
+            formData: {formMeta: 'some meta data'}
+        }
+    };
 
     it('returns correct initial state', () => {
         expect(reducer(undefined, {})).toEqual(initialState);
@@ -36,129 +40,123 @@ describe('Forms reducer functions', () => {
 
 
     describe('Sync form changes functions', () => {
-        let syncFormState = [{
-            id:'view',
-            syncLoadedForm: false,
-            formData: 'someData'
-        }];
+        let syncFormState = {
+            'view': {
+                id:'view',
+                syncLoadedForm: false,
+                formData: 'someData'
+            }
+        };
 
         it('returns correct syncLoadedForm state', () => {
-            expect(reducer(syncFormState, {id:'view', type: types.SYNC_FORM})).toEqual([{
-                id:'view',
-                syncLoadedForm: true,
-                formData:'someData'
-            }]);
+            expect(reducer(syncFormState, {id:'view', type: types.SYNC_FORM})).toEqual({
+                'view': {
+                    id:'view',
+                    syncLoadedForm: true,
+                    formData:'someData'
+                }
+            });
         });
     });
+
 
     describe('Loading form functions', () => {
         it('returns correct state when loading view form', () => {
-            expect(reducer(initialState, {type: types.LOADING_FORM, id: 'view'})).toDeepEqual([{
-                id: 'view',
-                syncLoadedForm: false,
-                loading: true,
-                errorStatus: null
-            }]);
+            expect(reducer(initialState, {type: types.LOADING_FORM, id: 'view'})).toDeepEqual({
+                'view': {
+                    id: 'view',
+                    syncLoadedForm: false,
+                    loading: true,
+                    errorStatus: null
+                }
+            });
         });
 
         it('returns correct state when load error occurs', () => {
-            let loadingFormState = [{
-                id: 'view',
-                loading: true,
-                errorStatus: null
-            }];
-
-            expect(reducer(loadingFormState, {type: types.LOAD_FORM_ERROR, id: "view", error: "oops"})).toDeepEqual([{
-                id: 'view',
-                loading: false,
-                errorStatus: "oops"
-            }]);
+            let loadingFormState = {
+                'view': {
+                    id: 'view',
+                    loading: true,
+                    errorStatus: null
+                }
+            };
+            expect(reducer(loadingFormState, {type: types.LOAD_FORM_ERROR, id: "view", error: "oops"})).toDeepEqual({
+                'view': {
+                    id: 'view',
+                    loading: false,
+                    errorStatus: "oops"
+                }
+            });
         });
-
         it('returns correct state when load succeeds', () => {
-            let loadingFormState = [{
-                id: 'view',
-                loading: true,
-                errorStatus: null
-            }];
-
-            expect(reducer(loadingFormState, {type: types.LOAD_FORM_SUCCESS, id: "view", formData: "someData"})).toDeepEqual([{
-                id: 'view',
-                loading: false,
-                formData: "someData",
-                errorStatus:null
-            }]);
+            let currentAppId = 'appId';
+            let currentblId = 'tblId';
+            let formData = {formMeta: {appId: currentAppId, tableId: currentblId}};
+            /**
+             * This test checks to be sure the actual appId and tblId from the response are
+             * the ones being used. So here I made the backup id's different for testing purposes.
+             * */
+            let backUpAppId = 'banana';
+            let backUpTblId = 'apple';
+            let loadingFormState = {
+                'view': {
+                    id: 'view',
+                    loading: true,
+                    errorStatus: null
+                }
+            };
+            expect(reducer(loadingFormState, {type: types.LOAD_FORM_SUCCESS, id: "view", formData: formData, appId: backUpAppId, tblId: backUpTblId})).toDeepEqual({
+                'view': {
+                    id: 'view',
+                    loading: false,
+                    formData: {formMeta: {appId: currentAppId, tableId: currentblId}},
+                    errorStatus: null
+                }
+            });
         });
 
-    });
+        it('returns correct appId and tableId if they are missing', () => {
+            let formData = {formMeta: {appId: null, tableId: null}};
+            let backUpAppId = 'banana';
+            let backUpTblId = 'apple';
+            let loadingFormState = {
+                'view': {
+                    id: 'view',
+                    loading: true,
+                    errorStatus: null
+                }
+            };
 
-    describe('Saving form functions', () => {
-        it('returns correct state when saving form', () => {
-            expect(reducer(initialState, {type: types.SAVE_FORM, id: 'edit'})).toDeepEqual([{
-                id: 'edit',
-                saving: true,
-                errorStatus: null
-            }]);
+            expect(reducer(loadingFormState, {type: types.LOAD_FORM_SUCCESS, id: "view", formData: formData, appId: backUpAppId, tblId: backUpTblId})).toDeepEqual({
+                'view': {
+                    id: 'view',
+                    loading: false,
+                    formData: {formMeta: {appId: backUpAppId, tableId: backUpTblId}},
+                    errorStatus: null
+                }
+            });
         });
 
-        it('returns correct state when save error occurs', () => {
-            let savingFormState = [{
-                id: 'edit',
-                saving: true,
-                errorStatus: null
-            }];
-
-            expect(reducer(savingFormState, {type: types.SAVE_FORM_FAILED, id: "edit", error: "oops"})).toDeepEqual([{
-                id: 'edit',
-                saving: false,
-                errorStatus: "oops"
-            }]);
-        });
-
-        it('returns correct state when save succeeds', () => {
-            let savingFormState = [{
-                id: 'edit',
-                saving: true,
-                errorStatus: null
-            }];
-
-            expect(reducer(savingFormState, {type: types.SAVE_FORM_SUCCESS, id: "edit"})).toDeepEqual([{
-                id: 'edit',
-                saving: false,
-                errorStatus:null
-            }]);
-        });
     });
 
     let VIEW = 'view';
-    describe('Update form functions', () => {
-        let savingFormState = [{
-            id: VIEW,
-            saving: true,
-            errorStatus: null
-        }];
+    describe('Save form functions', () => {
+        let savingFormState = {
+            [VIEW]: {
+                id: VIEW,
+                saving: true,
+                errorStatus: null
+            }
+        };
 
-        it('returns correct state when creating/updating a form', () => {
-            expect(reducer(initialState, {id: VIEW, type: types.SAVING_FORM})).toDeepEqual(savingFormState);
+        it('returns correct state when saving a form', () => {
+            savingFormState[VIEW].saving = true;
+            expect(reducer(initialState, {id: VIEW, type: types.SAVE_FORM})).toDeepEqual(savingFormState);
         });
 
-        it('returns correct state when creating/updating a form error occurs', () => {
-            expect(reducer(savingFormState, {id: VIEW, type: types.SAVING_FORM_ERROR, content: 'bah'})).toDeepEqual([{
-                id: VIEW,
-                saving: false,
-                errorStatus: 'bah'
-            }]);
-        });
-
-        it('returns correct state when creating/updating a form succeeds', () => {
-            expect(reducer(savingFormState, {id: VIEW, type: types.SAVING_FORM_SUCCESS, content:'data'})).toDeepEqual([{
-                id: VIEW,
-                saving: false,
-                errorStatus: null,
-                formData: {
-                    formMeta: 'data'
-                }
-            }]);
+        it('returns correct state when saving a form is complete', () => {
+            savingFormState[VIEW].saving = false;
+            expect(reducer(initialState, {id: VIEW, type: types.SAVE_FORM_COMPLETE})).toDeepEqual(savingFormState);
         });
     });
 
@@ -187,12 +185,17 @@ describe('Forms reducer functions', () => {
         });
 
         it('returns a new state with the field in the new position', () => {
-            expect(reducer(stateWithViewForm, actionPayload)).toEqual([{
-                ...stateWithViewForm[0],
-                formData: {formMeta: updatedFormMeta}
-            }]);
+            expect(reducer(stateWithViewForm, actionPayload)).toEqual({
+                [VIEW]: {
+                    ...stateWithViewForm[VIEW],
+                    formData: {formMeta: updatedFormMeta},
+                    selectedFields: [1],
+                    previouslySelectedField: []
+                }
+            });
+
             expect(mockMoveFieldHelper.moveField).toHaveBeenCalledWith(
-                stateWithViewForm[0].formData.formMeta, 1, 2
+                stateWithViewForm[VIEW].formData.formMeta, 1, 2
             );
         });
 
@@ -227,12 +230,14 @@ describe('Forms reducer functions', () => {
         });
 
         it('returns a new state with a single field removed', () => {
-            expect(reducer(stateWithViewForm, actionPayload)).toEqual([{
-                ...stateWithViewForm[0],
-                formData: {formMeta: updatedFormMeta}
-            }]);
+            expect(reducer(stateWithViewForm, actionPayload)).toEqual({
+                [VIEW]: {
+                    ...stateWithViewForm[VIEW],
+                    formData: {formMeta: updatedFormMeta}
+                }
+            });
             expect(mockMoveFieldHelper.removeField).toHaveBeenCalledWith(
-                stateWithViewForm[0].formData.formMeta, 1
+                stateWithViewForm[VIEW].formData.formMeta, 1
             );
         });
 
@@ -240,6 +245,57 @@ describe('Forms reducer functions', () => {
             expect(reducer(stateWithEditForm, actionPayload)).toEqual(stateWithEditForm);
 
             expect(mockMoveFieldHelper.removeField).not.toHaveBeenCalled();
+        });
+    });
+
+    describe('adding a field', () => {
+        const updatedFormMeta = 'updated form meta';
+        const stateForAddingField = {
+            'view': {
+                id: 'view',
+                formData: {formMeta: {tabs: [{sections: [{columns: [{elements: []}]}]}]}}
+            }
+        };
+        const mockMoveFieldHelper = {
+            addNewFieldToForm(_formMeta, _location, _field) {return updatedFormMeta;}
+        };
+
+        const actionPayload = {
+            id: VIEW,
+            type: types.ADD_FIELD,
+            content: {
+                newLocation: 1,
+                newField: {}
+            }
+        };
+
+        beforeEach(() => {
+            spyOn(mockMoveFieldHelper, 'addNewFieldToForm').and.callThrough();
+            ReducerRewireAPI.__Rewire__('MoveFieldHelper', mockMoveFieldHelper);
+        });
+
+        afterEach(() => {
+            ReducerRewireAPI.__ResetDependency__('MoveFieldHelper');
+        });
+
+        it('returns a new state with a single field added', () => {
+            expect(reducer(stateForAddingField, actionPayload)).toEqual({
+                [VIEW]: {
+                    ...stateForAddingField[VIEW],
+                    selectedFields: [1],
+                    previouslySelectedField: [],
+                    formData: {formMeta: updatedFormMeta}
+                }
+            });
+            expect(mockMoveFieldHelper.addNewFieldToForm).toHaveBeenCalledWith(
+                stateForAddingField[VIEW].formData.formMeta, 1, {}
+            );
+        });
+
+        it('returns existing state if there is no current form', () => {
+            expect(reducer(stateWithEditForm, actionPayload)).toEqual(stateWithEditForm);
+
+            expect(mockMoveFieldHelper.addNewFieldToForm).not.toHaveBeenCalled();
         });
     });
 
@@ -255,11 +311,140 @@ describe('Forms reducer functions', () => {
         };
 
         it('returns a new state with a field selected', () => {
-            expect(reducer(stateWithViewForm, actionPayload)).toEqual([{
-                ...stateWithViewForm[0],
-                formData: {formMeta: testFormMeta},
-                selectedFields: [1]
-            }]);
+            expect(reducer(stateWithViewForm, actionPayload)).toEqual({
+                [VIEW]: {
+                    ...stateWithViewForm[VIEW],
+                    formData: {formMeta: testFormMeta},
+                    selectedFields: [1],
+                    previouslySelectedField: undefined
+                }
+            });
+        });
+
+        it('returns existing state if there is no current form', () => {
+            expect(reducer(stateWithEditForm, actionPayload)).toEqual(stateWithEditForm);
+        });
+
+    });
+
+    describe('(keyboard) move a field up', () => {
+        const updatedFormMeta = 'updated form meta';
+        const mockMoveFieldHelper = {
+            keyBoardMoveFieldUp(_formMeta, _location) {return updatedFormMeta;},
+            updateSelectedFieldLocation(_location, _Updatedlocation) {return updatedFormMeta;}
+        };
+
+        const actionPayload = {
+            id: VIEW,
+            type: types.KEYBOARD_MOVE_FIELD_UP,
+            content: {
+                location: 1
+            }
+        };
+
+        beforeEach(() => {
+            spyOn(mockMoveFieldHelper, 'keyBoardMoveFieldUp').and.callThrough();
+            spyOn(mockMoveFieldHelper, 'updateSelectedFieldLocation').and.callThrough();
+            ReducerRewireAPI.__Rewire__('MoveFieldHelper', mockMoveFieldHelper);
+        });
+
+        afterEach(() => {
+            ReducerRewireAPI.__ResetDependency__('MoveFieldHelper');
+        });
+
+        it('returns a new state with the field in the new position', () => {
+            expect(reducer(stateWithViewForm, actionPayload)).toEqual({
+                [VIEW]: {
+                    ...stateWithViewForm[VIEW],
+                    formData: {formMeta: updatedFormMeta},
+                    selectedFields: [updatedFormMeta]
+                }
+            });
+            expect(mockMoveFieldHelper.keyBoardMoveFieldUp).toHaveBeenCalledWith(
+                stateWithViewForm[VIEW].formData.formMeta, 1
+            );
+            expect(mockMoveFieldHelper.updateSelectedFieldLocation).toHaveBeenCalledWith(
+                1, -1
+            );
+        });
+
+        it('returns existing state if there is no current form', () => {
+            expect(reducer(stateWithEditForm, actionPayload)).toEqual(stateWithEditForm);
+
+            expect(mockMoveFieldHelper.keyBoardMoveFieldUp).not.toHaveBeenCalled();
+            expect(mockMoveFieldHelper.updateSelectedFieldLocation).not.toHaveBeenCalled();
+        });
+    });
+
+    describe('(keyboard) move a field down', () => {
+        const updatedFormMeta = 'updated form meta';
+        const mockMoveFieldHelper = {
+            keyBoardMoveFieldDown(_formMeta, _location) {return updatedFormMeta;},
+            updateSelectedFieldLocation(_location, _updatedLocation) {return updatedFormMeta;}
+        };
+
+        const actionPayload = {
+            id: VIEW,
+            type: types.KEYBOARD_MOVE_FIELD_DOWN,
+            content: {
+                location: 1
+            }
+        };
+
+        beforeEach(() => {
+            spyOn(mockMoveFieldHelper, 'keyBoardMoveFieldDown').and.callThrough();
+            spyOn(mockMoveFieldHelper, 'updateSelectedFieldLocation').and.callThrough();
+            ReducerRewireAPI.__Rewire__('MoveFieldHelper', mockMoveFieldHelper);
+        });
+
+        afterEach(() => {
+            ReducerRewireAPI.__ResetDependency__('MoveFieldHelper');
+        });
+
+        it('returns a new state with the field in the new position', () => {
+            expect(reducer(stateWithViewForm, actionPayload)).toEqual({
+                [VIEW]: {
+                    ...stateWithViewForm[VIEW],
+                    formData: {formMeta: updatedFormMeta},
+                    selectedFields: [updatedFormMeta]
+                }
+            });
+            expect(mockMoveFieldHelper.keyBoardMoveFieldDown).toHaveBeenCalledWith(
+                stateWithViewForm[VIEW].formData.formMeta, 1
+            );
+            expect(mockMoveFieldHelper.updateSelectedFieldLocation).toHaveBeenCalledWith(
+                1, 1
+            );
+        });
+
+        it('returns existing state if there is no current form', () => {
+            expect(reducer(stateWithEditForm, actionPayload)).toEqual(stateWithEditForm);
+
+            expect(mockMoveFieldHelper.keyBoardMoveFieldDown).not.toHaveBeenCalled();
+            expect(mockMoveFieldHelper.updateSelectedFieldLocation).not.toHaveBeenCalled();
+        });
+    });
+
+    describe('toggle tab index', () => {
+        const testFormMeta = 'some meta data';
+
+        const actionPayload = {
+            id: VIEW,
+            type: types.TOGGLE_FORM_BUILDER_CHILDREN_TABINDEX,
+            content: {
+                currentTabIndex: '-1',
+            }
+        };
+
+        it('returns a new state with a tabindex toggled', () => {
+            expect(reducer(stateWithViewForm, actionPayload)).toEqual({
+                [VIEW]: {
+                    ...stateWithViewForm[VIEW],
+                    formData: {formMeta: testFormMeta},
+                    formBuilderChildrenTabIndex: ['0'],
+                    formFocus: [false]
+                }
+            });
         });
 
         it('returns existing state if there is no current form', () => {

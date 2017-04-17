@@ -4,7 +4,7 @@ import OverlayTrigger from 'react-bootstrap/lib/OverlayTrigger';
 import {Link} from 'react-router';
 import {I18nMessage} from '../../utils/i18nMessage';
 import QBicon from '../qbIcon/qbIcon';
-import TableIcon from '../qbTableIcon/qbTableIcon';
+import Icon, {AVAILABLE_ICON_FONTS} from '../../../../reuse/client/src/components/icon/icon.js';
 import A11Utils from '../../utils/a11yUtils';
 
 let NavItem = React.createClass({
@@ -62,7 +62,7 @@ let NavItem = React.createClass({
         return (<li className={classes}>
             <Link className="leftNavLink" to={item.link} onClick={this.onClick} onKeyDown={this.onClick}>
                 {this.props.tableIcon ?
-                    <TableIcon icon={item.icon}/> :
+                    <Icon iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY} icon={item.tableIcon}/> :
                     <QBicon icon={item.icon}/>
                     }
                 <span className={"leftNavLabel"}>{label}</span>
@@ -86,6 +86,7 @@ let NavItem = React.createClass({
                     onClick={this.onHeadingClick} onKeyDown={this.onHeadingClick}
                     className={ this.props.secondaryIcon ? "heading withSecondary" : "heading"}>
                     <I18nMessage message={item.msg}/>
+                    <QBicon icon="search" className="nav-search"/>
                     {this.props.secondaryIcon && <QBicon icon={this.props.secondaryIcon} />}
                 </li>);
         } else {

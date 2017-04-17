@@ -41,18 +41,35 @@
             },
             //Helper method to create an app, can be used by multiple test cases
             createApp         : function(appToCreate) {
-                var deferred = promise.pending();
-                init.then(function() {
-                    apiBase.executeRequest(apiBase.resolveAppsEndpoint(), consts.POST, appToCreate).then(function(appResponse) {
-                        log.debug('App create response: ' + appResponse);
-                        deferred.resolve(appResponse);
+                var self = this;
+                return init.then(function() {
+                    return apiBase.executeRequest(apiBase.resolveAppsEndpoint(), consts.POST, appToCreate).then(function(appResponse) {
+                        let createdApp = JSON.parse(appResponse.body);
+                        log.debug('App create response: ' + JSON.stringify(createdApp));
+                        var initTablePropsPromises = [];
+                        createdApp.tables.forEach(function(table, index) {
+                            initTablePropsPromises.push(self.initTableProperties(createdApp.id, table.id, table.name));
+                        });
+                        // Set the tableProperties for each table
+                        return promise.all(initTablePropsPromises).then(function(results) {
+                            // if all promises successful return the createApp response or code will error to catch block below
+                            return appResponse;
+                        });
                     }).catch(function(error) {
-                        deferred.reject(error);
-                        //TODO: figure out how we want to handle
-                        assert(false, 'failed to create app: ' + JSON.stringify(error) + ', appToCreate: ' + JSON.stringify(appToCreate));
+                        log.error('Error in createApp');
+                        return promise.reject(error);
                     });
                 });
-                return deferred.promise;
+            },
+            initTableProperties: function(appId, tableId, tableNoun) {
+                let propsJson = {tableNoun: tableNoun};
+                const tablePropertiesEndpoint = recordBase.apiBase.resolveTablePropertiesEndpoint(appId, tableId);
+                return recordBase.apiBase.executeRequest(tablePropertiesEndpoint, 'POST', propsJson, null, null, true).then(function(result) {
+                    return JSON.parse(result.body);
+                }).catch(function(error) {
+                    log.error("Error in initTableProperties");
+                    return promise.reject(error);
+                });
             },
             //Helper method to create a relationship between two tables in an app
             createRelationship: function(relationshipToCreate) {
@@ -81,6 +98,27 @@
                 });
                 return deferred.promise;
             },
+            fetchRecords: function(appId, tableId, params) {
+                var deferred = promise.pending();
+                var endpoint = apiBase.resolveRecordsEndpoint(appId, tableId);
+                if (params) {
+                    endpoint += "?" + params;
+                }
+                init.then(function() {
+                    apiBase.executeRequest(endpoint, consts.GET).
+                    then(function(recResp) {
+                        deferred.resolve(JSON.parse(recResp.body).records);
+                    },
+                        (error) => {
+                            deferred.resolve(error);
+                        }).
+                    catch(function(error) {
+                        deferred.reject(error);
+                        assert(false, 'failed to resolve record');
+                    });
+                });
+                return deferred.promise;
+            },
             fetchRecord: function(appId, tableId, recordId, params) {
                 var deferred = promise.pending();
                 var endpoint = apiBase.resolveRecordsEndpoint(appId, tableId, recordId);
@@ -91,6 +129,9 @@
                     apiBase.executeRequest(endpoint, consts.GET).
                             then(function(recResp) {
                                 deferred.resolve(recResp);
+                            },
+                            (error) => {
+                                deferred.resolve(error);
                             }).
                             catch(function(error) {
                                 deferred.reject(error);
@@ -290,19 +331,29 @@
              * @Returns A promise chain.
              */
             addRecords: function(createdApp, createdTable, genRecords) {
-                //Resolve the proper record endpoint specific to the generated app and table
-                var recordsEndpoint = recordBase.apiBase.resolveRecordsEndpoint(createdApp.id, createdTable.id);
-                var fetchRecordPromises = [];
-                genRecords.forEach(function(currentRecord) {
-                    fetchRecordPromises.push(recordBase.createAndFetchRecord(recordsEndpoint, currentRecord, null));
+                return new Promise((resolve, reject) => {
+                    var recordsEndpoint = recordBase.apiBase.resolveRecordsEndpoint(createdApp.id, createdTable.id);
+                    recordBase.createBulkRecords(recordsEndpoint, genRecords).then(
+                        (recordIdList) => {
+                            var fetchRecordPromises = [];
+                            var query = "";
+                            recordIdList.forEach((recId) => {
+                                //{3.EX.'1'} OR {3.EX.'2'}
+                                query += query.length > 0 ? " OR " : "";
+                                query += "{3.EX.'" + recId + "'}";
+                            });
+                            recordBase.fetchRecords(createdApp.id, createdTable.id, "query=" + query).then(
+                                    (responses) => {
+                                        resolve(responses);
+                                    },
+                                    (error) => {
+                                        reject(error);
+                                    }
+                            );
+                        }).catch((error) => {
+                            throw new Error(error);
+                        });
                 });
-                return Promise.all(fetchRecordPromises)
-                    .then(function(results) {
-                        return results;
-                    }).catch(function(error) {
-                        // Proper error handling, you need to rethrow not just return the error
-                        throw new Error(error);
-                    });
             }
         };
         return recordBase;

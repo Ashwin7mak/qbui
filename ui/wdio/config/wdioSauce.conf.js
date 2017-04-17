@@ -16,11 +16,11 @@ exports.config = {
     sauceConnectOpts: {
         tunnelIdentifier: process.env.ENV_TUNNEL_NAME,
         verbose         : true,
-        logger          : console.log
+        logger          : console.log,
         // Uncomment this if you are running Sauce against your local dev
         //dns             : '127.0.0.1',
-        //TODO: Figure out how to use custom Selenium port (see TODO below)
-        //port            : 4400
+        // Use a random int to make the port unique between Jenkins jobs
+        port            : 4400 + (Math.floor((Math.random() * (100 - 1) + 1)))
     },
     //
     //
@@ -30,8 +30,6 @@ exports.config = {
     // Define all options that are relevant for connecting WebdriverIO to a Sauce Labs Selenium Server here
     //
     //host: '127.0.0.1',
-    //TODO: Figure out how to use custom Selenium port
-    //Known issue here (wdio team currently fixing): https://github.com/webdriverio/webdriverio/issues/1683
     //port: 4400,
     //path: '/wd/hub',
     //
@@ -87,9 +85,10 @@ exports.config = {
             browserName     : 'chrome',
             version: '55.0',
             tunnelIdentifier: process.env.ENV_TUNNEL_NAME,
-            name            : process.env.SAUCE_JOB_NAME + '_OSX_Chrome',
+            build           : 'WebdriverIO Jenkins Master Build #' + process.env.BUILD_NUMBER + ' - OSX Chrome Browser',
+            tags            : [process.env.SAUCE_JOB_NAME + '_OSX_Chrome', 'master', 'OSX', 'Chrome', process.env.BUILD_NUMBER],
             screenResolution : '2048x1536',
-            //Timeout in seconds for Sauce Labs to wait for another command (bumped this for sleeps in tests)
+            // Timeout in seconds for Sauce Labs to wait for another command (bumped this for sleeps in tests)
             idleTimeout: '180',
             maxDuration: 10800,
             breakpointSize: 'xlarge',
@@ -102,23 +101,25 @@ exports.config = {
         //     browserName: 'safari',
         //     version: '10.0',
         //     tunnelIdentifier: process.env.ENV_TUNNEL_NAME,
-        //     name: process.env.SAUCE_JOB_NAME + '_OSX_Safari',
-        //     screenResolution : '1600x1200',
-        //     //Timeout in seconds for Sauce Labs to wait for another command (bumped this for sleeps in tests)
+        //     build           : 'WebdriverIO Jenkins Master Build #' + process.env.BUILD_NUMBER + ' - OSX Safari Browser',
+        //     tags            : [process.env.SAUCE_JOB_NAME + '_OSX_Safari', 'master', 'OSX', 'Safari', process.env.BUILD_NUMBER],
+        //     screenResolution : '2048x1536',
+        //     // Timeout in seconds for Sauce Labs to wait for another command (bumped this for sleeps in tests)
         //     idleTimeout: '180',
         //     maxDuration: 10800,
-        //     breakpointSize: 'large',
+        //     breakpointSize: 'xlarge',
         //     shardTestFiles: true,
-        //     maxInstances: 2
+        //     maxInstances: 4
         // },
         {
             platform: 'OS X 10.11',
             browserName: 'firefox',
             version: '46.0',
             tunnelIdentifier: process.env.ENV_TUNNEL_NAME,
-            name: process.env.SAUCE_JOB_NAME + '_OSX_Firefox',
+            build           : 'WebdriverIO Jenkins Master Build #' + process.env.BUILD_NUMBER + ' - OSX Firefox Browser',
+            tags            : [process.env.SAUCE_JOB_NAME + '_OSX_Firefox', 'master', 'OSX', 'Firefox', process.env.BUILD_NUMBER],
             screenResolution: '2048x1536',
-            //Timeout in seconds for Sauce Labs to wait for another command (bumped this for sleeps in tests)
+            // Timeout in seconds for Sauce Labs to wait for another command (bumped this for sleeps in tests)
             idleTimeout: '180',
             maxDuration: 10800,
             breakpointSize: 'xlarge',
@@ -131,9 +132,10 @@ exports.config = {
             browserName: 'MicrosoftEdge',
             version: '14.14393',
             tunnelIdentifier: process.env.ENV_TUNNEL_NAME,
-            name: process.env.SAUCE_JOB_NAME + '_Win10_MicrosoftEdge',
+            build           : 'WebdriverIO Jenkins Master Build #' + process.env.BUILD_NUMBER + ' - Windows 10 Edge Browser',
+            tags            : [process.env.SAUCE_JOB_NAME + '_Win10_Edge', 'master', 'Win10', 'Edge', process.env.BUILD_NUMBER],
             screenResolution: '2560x1600',
-            //Timeout in seconds for Sauce Labs to wait for another command (bumped this for sleeps in tests)
+            // Timeout in seconds for Sauce Labs to wait for another command (bumped this for sleeps in tests)
             idleTimeout: '180',
             maxDuration: 10800,
             breakpointSize: 'xlarge',
@@ -154,7 +156,7 @@ exports.config = {
     sync: true,
     //
     // Level of logging verbosity: silent | verbose | command | data | result | error
-    logLevel: 'verbose',
+    logLevel: 'error',
     //
     // Enables colors for log output.
     coloredLogs: true,

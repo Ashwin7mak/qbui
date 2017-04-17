@@ -14,10 +14,12 @@ import WindowLocationUtils from '../../utils/windowLocationUtils';
 import constants from '../../../../common/src/constants';
 import {GROUP_TYPE} from '../../../../common/src/groupTypes';
 import _ from 'lodash';
-import Fluxxor from 'fluxxor';
 
-let FluxMixin = Fluxxor.FluxMixin(React);
-let StoreWatchMixin = Fluxxor.StoreWatchMixin;
+import {connect} from 'react-redux';
+import {loadDynamicReport} from '../../actions/reportActions';
+import {CONTEXT} from '../../actions/context';
+
+import {tableFieldsObj} from '../../reducers/fields';
 
 /**
  *  SortAndGroup container component manages the state and presents the components that are :
@@ -31,10 +33,7 @@ let KIND = {
     SORT :'sort'
 };
 
-const SortAndGroup = React.createClass({
-    mixins: [FluxMixin],
-    //mixins: [FluxMixin, StoreWatchMixin('SortAndGroupStore')],
-
+export const SortAndGroup = React.createClass({
     displayName: 'SortAndGroup',
     contextTypes: {
         touch: React.PropTypes.bool
@@ -59,9 +58,6 @@ const SortAndGroup = React.createClass({
 
         // the adhoc filter information selected facets and search
         filter: React.PropTypes.object,
-
-        // the fields in the table
-        fields:  React.PropTypes.object.isRequired,
 
         // the callback to call when the sort group dialog in shown
         onMenuEnter : React.PropTypes.func,
@@ -106,9 +102,6 @@ const SortAndGroup = React.createClass({
     },
 
     toggleShow() {
-        //TODO:move state to flux action & store
-        //let flux = this.getFlux();
-        //flux.actions.showSortAndGroup({show:!this.state.show});
         return this.state.show ? this.hide() : this.show();
     },
 
@@ -140,14 +133,13 @@ const SortAndGroup = React.createClass({
     },
 
     updateRecords(sortGroupString) {
-        let flux = this.getFlux();
         let queryParams = {};
-
         queryParams[query.SORT_LIST_PARAM] = sortGroupString;
         queryParams[query.OFFSET_PARAM] = constants.PAGE.DEFAULT_OFFSET;
         queryParams[query.NUMROWS_PARAM] = constants.PAGE.DEFAULT_NUM_ROWS;
 
-        flux.actions.loadDynamicReport(this.props.appId, this.props.tblId, this.props.rptId, true, this.props.filter, queryParams);
+        //  right now, the component is used only within the context of a report served up by the nav window
+        this.props.loadDynamicReport(CONTEXT.REPORT.NAV, this.props.appId, this.props.tblId, this.props.rptId, true, this.props.filter, queryParams);
     },
 
     applyChanges() {
@@ -191,12 +183,14 @@ const SortAndGroup = React.createClass({
     },
 
     getSortState() {
-        let answer = this.state.dirty ? this.state.newSelectionsSort : this.getSortFields(this.props.fields.fields.data);
+        let fields = this.getFieldsFromProps();
+        let answer = this.state.dirty ? this.state.newSelectionsSort : this.getSortFields(fields);
         return answer;
     },
 
     getGroupState() {
-        let answer = this.state.dirty ? this.state.newSelectionsGroup : this.getGroupFields(this.props.fields.fields.data);
+        let fields = this.getFieldsFromProps();
+        let answer = this.state.dirty ? this.state.newSelectionsGroup : this.getGroupFields(fields);
         return answer;
     },
 
@@ -301,13 +295,6 @@ const SortAndGroup = React.createClass({
         }
         return answer;
     },
-
-    getStateFromFlux() {
-        //let flux = this.getFlux();
-        //return flux.store('SortAndGroupStore').getState();
-        return {show: false};
-    },
-
 
     getField(fid, fields) {
         return _.find(fields, field => (field.id === fid));
@@ -478,16 +465,20 @@ const SortAndGroup = React.createClass({
         return answer;
     },
 
+    getFieldsFromProps() {
+        return this.props.fields || [];
+    },
+
     /**
      * Prepares the menu button used to show/hide the dialog of sort and group options when clicked
      *
      **/
     render() {
 
-        let fields = this.state.show &&  _.has(this.props, 'fields.fields.data') ?
-                                this.props.fields.fields.data : [];
+        let fields = this.state.show ? this.getFieldsFromProps() : [];
         let sortByFields = this.state.show ? this.getSortFields(fields) : [];
         let groupByFields = this.state.show ? this.getGroupFields(fields) : [];
+
         let fieldChoiceList = this.getFieldsNotYetUsed(fields, groupByFields, sortByFields);
         let visGroupEls = _.has(this.props, 'reportData.data.groupEls') ?
                             this.getVisGroupEls(this.props.reportData.data.groupEls, fields) :  [];
@@ -536,4 +527,22 @@ const SortAndGroup = React.createClass({
     }
 });
 
-export default SortAndGroup;
+const mapStateToProps = (state, props) => {
+    const fieldObj = tableFieldsObj(state.fields, props.appId, props.tblId);
+    return {
+        fields: fieldObj ? fieldObj.fields : []
+    };
+};
+const mapDispatchToProps = (dispatch) => {
+    return {
+        loadDynamicReport:  (context, appId, tblId, rptId, format, filter, queryParams) => {
+            dispatch(loadDynamicReport(context, appId, tblId, rptId, format, filter, queryParams));
+        }
+    };
+};
+
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(SortAndGroup);

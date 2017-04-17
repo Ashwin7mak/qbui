@@ -583,7 +583,8 @@ var DateTimeField = (function (_Component) {
                 onChange: this.onChange,
                 onFocus: (function() {this.setState({isFocused: true})}).bind(this),
                 type: "text",
-                value: this.state.inputValue
+                value: this.state.inputValue,
+                tabIndex: this.props.tabIndex
             }, this.props.inputProps)),
           _react2["default"].createElement(
             "span",

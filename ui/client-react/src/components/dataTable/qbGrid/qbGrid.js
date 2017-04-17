@@ -122,7 +122,10 @@ const QbGrid = React.createClass({
 
         /**
          * Flag to include the first column that includes row specific actions. Currently requires fluxxor/FluxMixin to be available. */
-        showRowActionsColumn: PropTypes.bool
+        showRowActionsColumn: PropTypes.bool,
+
+        // relationship phase-1, will need remove when we allow editing
+        phase1: PropTypes.bool
     },
 
     getDefaultProps() {
@@ -207,7 +210,11 @@ const QbGrid = React.createClass({
     getColumns() {
         return this.props.columns.map(column => {
             try {
-                return column.addFormatter(this.renderCell).addHeaderMenu(this.props.menuComponent, this.props.menuProps).getGridHeader();
+                column.addFormatter(this.renderCell);
+                if (!this.props.phase1) {
+                    column.addHeaderMenu(this.props.menuComponent, this.props.menuProps);
+                }
+                return column.getGridHeader();
             } catch (err) {
                 // If the column is not a type of ColumnTransformer with the appropriate methods, still pass through the column as the dev may have wanted to use a plain object (i.e., in the component library)
                 // but provide a warning in case using the ColumnTransformer class was forgotten.
@@ -317,27 +324,28 @@ const QbGrid = React.createClass({
     handleScroll() {
 
         let scrolled = this.tableRef;
+        if (scrolled) {
+            let currentLeftScroll = scrolled.scrollLeft;
+            let currentTopScroll = scrolled.scrollTop;
 
-        let currentLeftScroll = scrolled.scrollLeft;
-        let currentTopScroll = scrolled.scrollTop;
+            // move the headers down to their original positions
+            let stickyHeaders = scrolled.getElementsByClassName('qbHeaderCell');
+            for (let i = 0; i < stickyHeaders.length; i++) {
+                let translate = "translate(0," + currentTopScroll + "px)";
+                stickyHeaders[i].style.transform = translate;
+            }
 
-        // move the headers down to their original positions
-        let stickyHeaders = scrolled.getElementsByClassName('qbHeaderCell');
-        for (let i = 0; i < stickyHeaders.length; i++) {
-            let translate = "translate(0," + currentTopScroll + "px)";
-            stickyHeaders[i].style.transform = translate;
-        }
+            // move the sticky cells (1st col) right to their original positions
+            let stickyCells = scrolled.getElementsByClassName('stickyCell');
 
-        // move the sticky cells (1st col) right to their original positions
-        let stickyCells = scrolled.getElementsByClassName('stickyCell');
+            stickyCells[0].style.left = currentLeftScroll + 'px';
+            stickyCells[0].style.right = 0;
+            stickyCells[0].style.bottom = 0;
 
-        stickyCells[0].style.left = currentLeftScroll + 'px';
-        stickyCells[0].style.right = 0;
-        stickyCells[0].style.bottom = 0;
-
-        for (let i = 1; i < stickyCells.length; i++) {
-            let translate = "translate(" + currentLeftScroll + "px,0)";
-            stickyCells[i].style.transform = translate;
+            for (let i = 1; i < stickyCells.length; i++) {
+                let translate = "translate(" + currentLeftScroll + "px,0)";
+                stickyCells[i].style.transform = translate;
+            }
         }
     },
 

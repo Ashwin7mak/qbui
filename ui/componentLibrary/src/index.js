@@ -5,6 +5,8 @@ import en from 'intl/locale-data/jsonp/en.js';
 import React from 'react';
 import {render} from 'react-dom';
 import {Router, Route, IndexRoute, IndexRedirect, browserHistory} from 'react-router';
+import AppsBundleLoader from '../../client-react/src/locales/appsBundleLoader';
+import config from '../../client-react/src/config/app.config';
 
 import Nav from '../../client-react/src/components/nav/nav';
 
@@ -18,6 +20,11 @@ import TableHomePageRoute from '../../client-react/src/components/table/tableHom
 
 import ComponentLibraryWrapper from './components/componentLibrary';
 import './assets/componentLibrary.scss';
+
+import HomePage from './pages/home';
+import ColorsPage from './pages/colors';
+import UiIconFontPage from './pages/uiIconFont';
+import TableIconFontPage from './pages/tableIconFont';
 
 import CheckBoxFieldValueEditorDoc from './docs/checkBoxFieldValueEditor';
 import CheckBoxFieldValueRendererDoc from './docs/checkBoxFieldValueRenderer';
@@ -55,13 +62,27 @@ import DurationFieldValueEditorDoc from './docs/durationFieldValueEditor.js';
 import QbGridDoc from './docs/qbGrid.js';
 import SideMenuBaseDoc from './docs/sideMenuBase.js';
 import SideTrowserBaseDoc from './docs/sideTrowserBase.js';
+import IconChooserDoc from './docs/iconChooser.js';
+import IconInputBoxDoc from './docs/iconInputBox.js';
+import TopNavDoc from './docs/topNav.js';
+import StageDoc from './docs/stage.js';
+import TooltipDoc from './docs/tooltip.js';
+import StandardLeftNavDoc from './docs/standardLeftNav.js';
 // END OF IMPORT STATEMENTS
 // Above comment used for Grunt task. Please do not delete.
+
+// init the localization services
+AppsBundleLoader.changeLocale(config.locale.default);
 
 render((
     <Router history={browserHistory}>
         <Route path="qbase/components" component={ComponentLibraryWrapper}>
-            <IndexRedirect to="qbpanel" />
+            <IndexRedirect to="home" />
+            <Route path="home" component={HomePage} />
+            <Route path="colors" component={ColorsPage} />
+            <Route path="uiIconFont" component={UiIconFontPage} />
+            <Route path="tableIconFont" component={TableIconFontPage} />
+
             <Route path="checkBoxFieldValueEditor" component={CheckBoxFieldValueEditorDoc} />
             <Route path="checkBoxFieldValueRenderer" component={CheckBoxFieldValueRendererDoc} />
             <Route path="dateFieldValueEditor" component={DateFieldValueEditorDoc} />
@@ -97,6 +118,12 @@ render((
             <Route path="qbGrid" component={QbGridDoc} />
             <Route path="sideMenuBase" component={SideMenuBaseDoc} />
             <Route path="sideTrowserBase" component={SideTrowserBaseDoc} />
+            <Route path="iconChooser" component={IconChooserDoc} />
+            <Route path="iconInputBox" component={IconInputBoxDoc} />
+            <Route path="topNav" component={TopNavDoc} />
+            <Route path="stage" component={StageDoc} />
+            <Route path="tooltip" component={TooltipDoc} />
+            <Route path="standardLeftNav" component={StandardLeftNavDoc} />
         </Route>
     </Router>
 ), document.getElementById('content'));

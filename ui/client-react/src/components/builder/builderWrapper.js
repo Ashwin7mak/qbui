@@ -1,20 +1,23 @@
 import React, {PropTypes} from 'react';
 import FormBuilderContainer from './formBuilderContainer';
 import Fluxxor from "fluxxor";
+import {connect} from 'react-redux';
+import commonNavActions from '../../../../reuse/client/src/components/sideNavs/commonNavActions';
 import './builderWrapper.scss';
 import GlobalActions from '../actions/globalActions';
 import {NotificationContainer} from "react-notifications";
+import TopNav from '../../../../reuse/client/src/components/topNav/topNav';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
 let StoreWatchMixin = Fluxxor.StoreWatchMixin;
 
 
 /**
- * The NavStore and the AppsStore are both needed for globalActions (The User and Help Button Located at the top of the screen)
- * The NavStore updates the locale and the AppsStore selects the appId.
+ * The AppsStore is needed for globalActions (The User and Help Button Located at the top of the screen)
+ * The AppsStore selects the appId.
  * */
-const BuilderWrapper = React.createClass({
-    mixins: [FluxMixin, StoreWatchMixin('NavStore', 'AppsStore')],
+export const BuilderWrapper = React.createClass({
+    mixins: [FluxMixin, StoreWatchMixin('AppsStore')],
 
     getStateFromFlux() {
         let flux = this.getFlux();
@@ -33,7 +36,6 @@ const BuilderWrapper = React.createClass({
     getTopGlobalActions() {
         const actions = [];
         return (<GlobalActions actions={actions}
-                               flux={this.props.flux}
                                position={"top"}
                                dropdownIcon="user"
                                dropdownMsg="globalActions.user"
@@ -42,26 +44,16 @@ const BuilderWrapper = React.createClass({
     },
 
     render() {
-        /**
-         *formId is set to null for now, it is left here, because formId will need to be passed down as a prop in a future story
-         * */
-        const formId = null;
-        const {appId, tblId} = this.props.params;
-        const formType = this.props.location.query.formType;
-
         return (
             <div className="builderWrapperContent">
-                <div className="topNav">
-                    {this.getTopGlobalActions()}
-                     <NotificationContainer/>
-                </div>
+                <NotificationContainer/>
+                <TopNav
+                    onNavClick={this.props.toggleNav}
+                    globalActions={this.getTopGlobalActions()}
+                />
 
                 <div className="builderWrapperBody">
-                    <FormBuilderContainer
-                    appId={appId}
-                    tblId={tblId}
-                    formType={formType}
-                    formId={formId} />
+                    {this.props.children}
                 </div>
 
             </div>
@@ -69,4 +61,4 @@ const BuilderWrapper = React.createClass({
     }
 });
 
-export default BuilderWrapper;
+export default connect(null, commonNavActions('builder'))(BuilderWrapper);

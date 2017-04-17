@@ -6,6 +6,7 @@ import {DURATION_CONSTS} from '../../../common/src/constants';
 import durationFormatter from '../../../common/src/formatter/durationFormatter';
 import bigDecimal from 'bigdecimal';
 import Locale from '../../src/locales/locales';
+import AppsBundleLoader from '../../src/locales/appsBundleLoader';
 
 // gen a repeatable seed for random values, so it can be reproduced
 var Chance = require('chance');
@@ -20,10 +21,10 @@ let languages = [
 
 describe('DurationFieldValueEditor seed:' + (seed), () => {
     beforeEach(function() {
-        Locale.changeLocale('en-us');
+        AppsBundleLoader.changeLocale('en-us');
     });
     afterEach(function() {
-        Locale.changeLocale('en-us');
+        AppsBundleLoader.changeLocale('en-us');
     });
     let component;
     let divideBigDecimal = function(numerator, millis) {
@@ -58,7 +59,7 @@ describe('DurationFieldValueEditor seed:' + (seed), () => {
         TestData.multiInputData.forEach(function(test) {
 
             it('(' + language + ') converts a multi input of ' + test.description + ' to  ' + test.scale, () => {
-                Locale.changeLocale(language);
+                AppsBundleLoader.changeLocale(language);
                 Locale.getI18nBundle();
                 component = TestUtils.renderIntoDocument(<MockParent attributes={{scale: test.scale}} />);
 
@@ -103,7 +104,7 @@ describe('DurationFieldValueEditor seed:' + (seed), () => {
         TestData.placeholderData.forEach(function(test) {
 
             it('(' + language + ') displays the correct placeholder for ' + test.scale + ' in French', () => {
-                Locale.changeLocale(language);
+                AppsBundleLoader.changeLocale(language);
                 Locale.getI18nBundle();
 
                 let localeType = Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + test.placeholder);
@@ -120,7 +121,7 @@ describe('DurationFieldValueEditor seed:' + (seed), () => {
         TestData.dataProvider.forEach(function(test) {
 
             it('(' + language + ') converts a user input of ' + -test.numValue + ' ' + test.type + ' to  ' + test.scale, () => {
-                Locale.changeLocale(language);
+                AppsBundleLoader.changeLocale(language);
                 Locale.getI18nBundle();
 
                 let localeType = Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + test.type);
@@ -146,7 +147,7 @@ describe('DurationFieldValueEditor seed:' + (seed), () => {
 
             it('(' + language + ') converts a user input of ' + test.numValue + ' ' + test.type + ' to  ' + test.scale, () => {
 
-                Locale.changeLocale(language);
+                AppsBundleLoader.changeLocale(language);
                 Locale.getI18nBundle();
 
                 let localeType = Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + test.type);
@@ -172,7 +173,7 @@ describe('DurationFieldValueEditor seed:' + (seed), () => {
 
             it('(' + language + ') displays value and scale on form edit', () => {
 
-                Locale.changeLocale(language);
+                AppsBundleLoader.changeLocale(language);
                 Locale.getI18nBundle();
                 let localeType = Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + test.type);
                 component = TestUtils.renderIntoDocument(<MockParent attributes={{scale: test.scale}} includeUnits={true}/>);
@@ -196,7 +197,7 @@ describe('DurationFieldValueEditor seed:' + (seed), () => {
         TestData.timeFormatDataProvider.forEach(function(test) {
 
             it('(' + language + ') converts a user input of ' + test.numValue + ' ' + test.type + ' to  ' + test.scale, () => {
-                Locale.changeLocale(language);
+                AppsBundleLoader.changeLocale(language);
                 Locale.getI18nBundle();
 
                 let localeType = Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + test.type);

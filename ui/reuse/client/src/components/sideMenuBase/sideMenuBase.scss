@@ -19,7 +19,7 @@
         height: 100vh; // Ensures that long content can be scrolled on all browsers
         z-index: 1;
 
-        background-color: $page-background-color;
+        background-color: $leftnav-background-color;
 
         transform: translateX(0);
 
@@ -52,7 +52,6 @@
             right: 0;
         }
 
-        padding: $spacing-small;
         overflow: auto;
         background-color: $color-black-300;
         z-index: 0;

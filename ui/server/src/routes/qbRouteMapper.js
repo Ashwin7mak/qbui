@@ -27,6 +27,7 @@
     let tablesApi;
     let featureSwitchesApi;
     let accountUsersApi;
+    let governanceApi;
 
     module.exports = function(config) {
         requestHelper = require('../api/quickbase/requestHelper')(config);
@@ -44,6 +45,7 @@
         usersApi = require('../api/quickbase/usersApi')(config);
         accountUsersApi = require('../governance/account/users/AccountUsersApi')(config);
         tablesApi = require('../api/quickbase/tablesApi')(config);
+        governanceApi = require('../governance/common/GovernanceCommonApi')(config);
 
         /* internal data */
         /*
@@ -56,6 +58,7 @@
 
         // governance endpoints
         routeToGetFunction[routeConsts.GOVERNANCE_ACCOUNT_USERS] = getAccountUsers;
+        routeToGetFunction[routeConsts.GOVERNANCE_CONTEXT] = getGovernanceContext;
 
         //  app endpoints
         routeToGetFunction[routeConsts.APPS] = getApps;
@@ -122,6 +125,7 @@
          */
         var routeToPatchFunction = {};
         routeToPatchFunction[routeConsts.RECORD] = saveSingleRecord;
+        routeToPatchFunction[routeConsts.TABLE] = updateTable;
 
         /*
          * routeToDeleteFunction maps each route to the proper function associated with that route for a DELETE request
@@ -138,6 +142,7 @@
         routeToAllFunction[routeConsts.TOMCAT_ALL] = forwardApiRequest;
         routeToAllFunction[routeConsts.EXPERIENCE_ENGINE_ALL] = forwardExperienceEngineApiRequest;
         routeToAllFunction[routeConsts.EE_FORMS] = forwardExperienceEngineApiRequest;
+        routeToAllFunction[routeConsts.AUTOMATION_ENGINE_ALL] = forwardAutomationEngineApiRequest;
 
         /*** public data ****/
         return {
@@ -336,6 +341,36 @@
         }
     }
 
+    /**
+     * Get context of the governance
+     * @param req
+     * @param res
+     */
+    function getGovernanceContext(req, res) {
+        let perfLog = perfLogger.getInstance();
+        perfLog.init('Get governance context', {req:filterNodeReq(req)});
+
+        if (!isRouteEnabled(req)) {
+            routeTo404(req, res);
+        } else {
+            governanceApi.getContext(req, req.query.accountId).then(
+                function(response) {
+                    res.send(response);
+                    logApiSuccess(req, response, perfLog, 'Get governance context');
+                },
+                function(response) {
+                    logApiFailure(req, response, perfLog, 'Get governance context');
+
+                    //  client is waiting for a response..make sure one is always returned
+                    if (response && response.statusCode) {
+                        res.status(response.statusCode).send(response);
+                    } else {
+                        res.status(500).send(response);
+                    }
+                }
+            );
+        }
+    }
 
     /**
      * create new feature switch
@@ -760,7 +795,7 @@
         perfLog.init('Fetch Report records count', {req:filterNodeReq(req)});
 
         processRequest(req, res, function(req, res) {
-            reportsApi.fetchReportRecordsCount(req).then(
+            reportsApi.fetchReportCount(req).then(
                 function(response) {
                     res.send(response);
                     logApiSuccess(req, response, perfLog, 'Fetch Report records count');
@@ -815,7 +850,7 @@
      * @returns {*}
      */
     function fetchReportInvokeResults(req, res) {
-        fetchReport(req, res, false, false);
+        fetchReport(req, res, true, false);
     }
 
     /**
@@ -1032,18 +1067,18 @@
         });
     }
 
-    function createTableComponents(req, res, payload) {
+    function createTableComponents(req, res) {
         let perfLog = perfLogger.getInstance();
-        perfLog.init('Get User by id', {req:filterNodeReq(req)});
+        perfLog.init('Create table components', {req:filterNodeReq(req)});
 
         processRequest(req, res, function(req, res) {
             tablesApi.createTableComponents(req).then(
                 function(response) {
                     res.send(response);
-                    logApiSuccess(req, response, perfLog, 'getReqUser');
+                    logApiSuccess(req, response, perfLog, 'createTableComponents');
                 },
                 function(response) {
-                    logApiFailure(req, response, perfLog, 'getReqUser');
+                    logApiFailure(req, response, perfLog, 'createTableComponents');
 
                     //  client is waiting for a response..make sure one is always returned
                     if (response && response.statusCode) {
@@ -1056,6 +1091,29 @@
         });
     }
 
+    function updateTable(req, res) {
+        let perfLog = perfLogger.getInstance();
+        perfLog.init('Update table', {req:filterNodeReq(req)});
+
+        processRequest(req, res, function(req, res) {
+            tablesApi.updateTable(req).then(
+                function(response) {
+                    res.send(response);
+                    logApiSuccess(req, response, perfLog, 'updateTable');
+                },
+                function(response) {
+                    logApiFailure(req, response, perfLog, 'updateTable');
+
+                    //  client is waiting for a response..make sure one is always returned
+                    if (response && response.statusCode) {
+                        res.status(response.statusCode).send(response);
+                    } else {
+                        res.status(500).send(response);
+                    }
+                }
+            );
+        });
+    }
 
     /**
      * This is the function for proxying to a swagger endpoint on
@@ -1122,6 +1180,31 @@
 
         processRequest(req, res, function(req, res) {
             var opts = requestHelper.setExperienceEngineOptions(req);
+            request(opts)
+                .on('response', function(response) {
+                    logApiSuccess(req, response, perfLog);
+                })
+                .on('error', function(error) {
+                    logApiFailure(req, error, perfLog);
+                })
+                .pipe(res);
+        });
+    }
+
+    /**
+     * This is the function for forwarding a request to the automation server.  Expectation
+     * is that the data in the body of the response is a json structure for all requests.
+     *
+     * @param req
+     * @param res
+     */
+    /*eslint no-shadow:0 */
+    function forwardAutomationEngineApiRequest(req, res) {
+        let perfLog = perfLogger.getInstance();
+        perfLog.init('Forward automation engine API Request', {req:filterNodeReq(req)});
+
+        processRequest(req, res, function(req, res) {
+            var opts = requestHelper.setAutomationEngineOptions(req);
             request(opts)
                 .on('response', function(response) {
                     logApiSuccess(req, response, perfLog);

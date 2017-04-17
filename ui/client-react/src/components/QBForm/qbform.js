@@ -12,14 +12,19 @@ import DragAndDropField from '../formBuilder/dragAndDropField';
 import RelatedChildReport from './relatedChildReport';
 import FlipMove from 'react-flip-move';
 
+import * as FieldsReducer from '../../reducers/fields';
+
+import {connect} from 'react-redux';
+
 import './qbform.scss';
 import './tabs.scss';
 
+let formBuilderEditForm = null;
 /*
  Custom QuickBase Form component that has 1 property.
  activeTab: the tab we want to display first when viewing the form, defaults to the first tab
  */
-let QBForm = React.createClass({
+export const QBForm = React.createClass({
     displayName: 'QBForm',
 
     propTypes: {
@@ -34,6 +39,10 @@ let QBForm = React.createClass({
         /**
          * The order index of the tab to display */
         activeTab: PropTypes.string,
+        /**
+         * formBuilderUpdateChildrenTabIndex is used for form builder. It is used to toggle the tab indices of form builder's children.
+         */
+        formBuilderUpdateChildrenTabIndex: PropTypes.func,
 
         /**
          * Data used to display the form. Expect formMeta to be in an array based structure. */
@@ -45,25 +54,56 @@ let QBForm = React.createClass({
 
         /**
          * Whether to display animation when reordering elements on a field in builder mode */
-        hasAnimation: PropTypes.bool,
+        hasAnimation: PropTypes.bool
     },
 
     getDefaultProps() {
         return {
             activeTab: '0',
-            hasAnimation: false,
+            hasAnimation: false
         };
     },
 
+    shouldComponentUpdate: function(nextProps) {
+        //  TODO: look at implementing a loading spinner code when rendering and remove this.
+        //
+        // if the fields store is being initialized, stop the component from re-rendering with any updates.  A
+        // subsequent state change(success or failure) when the action that fetch's the fields data is complete
+        // will be triggered and the component will re-render at that time.
+        const tableFields = this.getTableFieldsObj(nextProps);
+        if (tableFields && tableFields.fieldsLoading === true) {
+            return false;
+        }
+
+        return true;
+    },
+
     /**
-     * get the form data field
+     * Retrieve the fields on the table from the fields redux store
+     *
+     * @param props
+     * @returns {*}
+     */
+    getTableFieldsObj: function(props) {
+        const formMeta = _.has(props, 'formData.formMeta') ? props.formData.formMeta : {};
+        return FieldsReducer.tableFieldsObj(props.fields, formMeta.appId, formMeta.tableId);
+    },
+
+    getTableFields: function(props) {
+        const tableFields = this.getTableFieldsObj(props);
+        return tableFields ? tableFields.fields : [];
+    },
+
+    /**
+     * Retrieve the field object from the fields redux store for this appId/tblId
+     *
      * @param fieldId
-     * @returns the field from formdata fields with the field ID
+     * @returns field object or null if not found
      */
     getRelatedField(fieldId) {
-        let fields = this.props.formData.fields || [];
-
-        return _.find(fields, field => field.id === fieldId);
+        const fields = this.getTableFields(this.props);
+        const field = _.find(fields, fld => fld.id === fieldId);
+        return field || null;
     },
 
     /**
@@ -296,21 +336,28 @@ let QBForm = React.createClass({
 
         let relatedField = this.getRelatedField(FormFieldElement.fieldId);
         let fieldRecord = this.getFieldRecord(relatedField);
+        let recId = _.has(this.props.formData, 'recordId') ? this.props.formData.recordId : null;
 
-        //if the form prop calls for element to be required update fieldDef accordingly
+        /* if the form prop calls for element to be required update fieldDef accordingly
+         * This isn't functionality that currently exists in newstack. Its causing issues with updating field properties
+         * in form builder. Once we had support for forms to have required fields,etc we will need to address this
         if (relatedField) {
             relatedField.required = relatedField.required || FormFieldElement.required;
         }
+        */
 
         let CurrentFieldElement = (this.props.editingForm ? DragAndDropField(FieldElement) : FieldElement);
 
+        //This tabIndex is for form builder keyboard navigation. It is removing all field value editors from the tabbing flow
+        let tabIndex = (this.props.editingForm ? "-1" : 0);
         return (
             <div key={containingElement.id} className="formElementContainer">
               <CurrentFieldElement
+                  selectedField={this.props.selectedField}
+                  tabIndex={tabIndex}
                   location={location}
                   orderIndex={FormFieldElement.orderIndex}
                   handleFormReorder={this.props.handleFormReorder}
-                  removeField={this.props.removeField}
                   cacheDragElement={this.props.cacheDragElement}
                   clearDragElementCache={this.props.clearDragElementCache}
                   containingElement={containingElement}
@@ -327,6 +374,7 @@ let QBForm = React.createClass({
                   isInvalid={validationStatus.isInvalid}
                   invalidMessage={validationStatus.invalidMessage}
                   appUsers={this.props.appUsers}
+                  recId={recId}
               />
             </div>
         );
@@ -376,6 +424,8 @@ let QBForm = React.createClass({
                     childTableName={childTableName}
                     detailKeyFid={_.get(relationship, "detailFieldId")}
                     detailKeyValue={detailKeyValue}
+                    type={ReferenceElement.type}
+                    appUsers={this.props.appUsers}
                 />
             </div>
         );
@@ -396,14 +446,14 @@ let QBForm = React.createClass({
                 let display = field.screenName + ". ";
 
                 return (
-                    <div className="userInFooter" key={index}>
+                    <span className="userInFooter" key={index}>
                         <span key={index} className="fieldNormalText">{field.name}</span>
-                        <span key={`${index}-link`} className="fieldLinkText"><UserFieldValueRenderer value={user} display={display} /></span>
-                    </div>
+                        <span key={`${index}-link`} className="fieldLinkText"><UserFieldValueRenderer value={user} display={display}/></span>
+                    </span>
                 );
             } else {
                 return (
-                    <div key={index} className="fieldNormalText">{`${field.name} ${field.value}. `}</div>
+                    <span key={index} className="fieldNormalText">{`${field.name} ${field.value}.`}</span>
                 );
             }
         });
@@ -420,17 +470,23 @@ let QBForm = React.createClass({
      */
     getBuiltInFieldsForFooter() {
 
-        let fields = this.props.formData.fields;
-        let values = this.props.formData.record;
+        let fields = this.getTableFields(this.props);
+        if (fields.length === 0) {
+            return [];
+        }
 
-        if (!fields || !values) {
+        let values = this.props.formData.record;
+        if (!values) {
             return [];
         }
 
         const {DATE_CREATED, DATE_MODIFIED, RECORD_OWNER, LAST_MODIFIED_BY} = Constants.BUILTIN_FIELD_ID;
-        const footerFields = [DATE_CREATED, DATE_MODIFIED, RECORD_OWNER, LAST_MODIFIED_BY];
 
-        let builtInFooterFields = fields.filter(field => footerFields.includes(field.id));
+        //  these are the list of built in fields to include on the footer
+        const footerBuiltIns = [DATE_CREATED, DATE_MODIFIED, RECORD_OWNER, LAST_MODIFIED_BY];
+
+        //  return a list of the built in fields included on this form
+        let builtInFooterFields = _.filter(fields, (field) => _.includes(footerBuiltIns, field.id));
 
         return builtInFooterFields.map(builtInField => {
             let fieldValue = values.find(currentFieldValue => currentFieldValue.id === builtInField.id);
@@ -442,7 +498,7 @@ let QBForm = React.createClass({
             case DATE_CREATED :
                 return {
                     name: Locale.getMessage('form.footer.createdOn'),
-                    value: fieldValue.display,
+                    value: fieldValue ? fieldValue.display : '',
                     id: DATE_CREATED,
                     type: Constants.DATE
                 };
@@ -450,7 +506,7 @@ let QBForm = React.createClass({
             case DATE_MODIFIED :
                 return {
                     name: Locale.getMessage('form.footer.lastUpdatedOn'),
-                    value: fieldValue.display,
+                    value: fieldValue ? fieldValue.display : '',
                     id: DATE_MODIFIED,
                     type: Constants.DATE
                 };
@@ -459,6 +515,43 @@ let QBForm = React.createClass({
                 return buildUserField(RECORD_OWNER, fieldValue, 'form.footer.ownedBy');
             }
         });
+    },
+
+    /**
+     * This is for keyboard navigation, it will add focus to a form only if formFocus is true
+     * formFocus becomes true when a user is hitting escape to remove the children elements form the tabbing flow
+     * */
+    componentDidUpdate() {
+        if (this.props.formFocus) {
+            formBuilderEditForm.focus();
+            document.querySelector('.qbPanelHeaderTitleText').scrollIntoView(false);
+        }
+    },
+
+    /**
+     * We normally return a regular form based on whether or not it is in view or edit mode.
+     * However, for form builder we want the form to have a tabIndex.
+     * */
+    wrapFormContent(formContent) {
+        if (this.props.editingForm) {
+            return (
+                <form ref={(editForm) => {formBuilderEditForm = editForm;}} className="editForm" tabIndex="0" role="button" onKeyDown={this.props.formBuilderUpdateChildrenTabIndex}>
+                    {formContent}
+                </form>
+            );
+        } else if (this.props.edit) {
+            return (
+                <form className="editForm">
+                    {formContent}
+                </form>
+            );
+        } else {
+            return (
+                <form className="viewForm">
+                    {formContent}
+                </form>
+            );
+        }
     },
 
     /**
@@ -490,9 +583,7 @@ let QBForm = React.createClass({
 
         return (
             <div className="formContainer">
-                <form className={this.props.edit ? 'editForm' : 'viewForm'}>
-                    {formContent}
-                </form>
+                {this.wrapFormContent(formContent)}
                 <div>{formFooter}</div>
             </div>
         );
@@ -508,12 +599,20 @@ let QBForm = React.createClass({
 function buildUserField(id, fieldValue, name) {
     return {
         name: Locale.getMessage(name),
-        value: fieldValue.display,
-        email: fieldValue.value.email,
-        screenName: fieldValue.value.screenName,
+        value: _.has(fieldValue, 'display') ? fieldValue.display : '',
+        email: _.has(fieldValue, 'value.email') ? fieldValue.value.email : '',
+        screenName: _.has(fieldValue, 'value.screenName') ? fieldValue.value.screenName : '',
         id: id,
         type: Constants.USER
     };
 }
 
-export default QBForm;
+const mapStateToProps = (state) => {
+    return {
+        fields: state.fields
+    };
+};
+
+export default connect(
+    mapStateToProps
+)(QBForm);

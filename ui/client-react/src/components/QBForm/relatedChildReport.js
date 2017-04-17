@@ -1,56 +1,52 @@
-import React from 'react';
-import {Link} from 'react-router';
-import _ from 'lodash';
+import React, {PropTypes} from 'react';
 
-import UrlUtils from '../../utils/urlUtils';
+import EmbeddedReportToolsAndContent from '../report/embedded/embeddedReportToolsAndContent';
+import EmbeddedReportLink from '../report/embedded/embeddedReportLink';
+
 import Breakpoints from '../../utils/breakpoints';
-import {I18nMessage} from '../../utils/i18nMessage';
 
 /**
- * This component renders a link to a child report, which is the behavior in the small breakpoint.
- * In medium/large breakpoint, we will show an embedded report of the children(not implemented yet).
+ * This component renders child records as an embedded report. In small-breakpoint, we render a link
+ * to a child report.
  */
 class ChildReport extends React.Component {
     constructor(...args) {
         super(...args);
     }
-    // remove the eslint override when true case is removed
-    /* eslint no-constant-condition:0 */
+
     render() {
         const {appId, childTableId, childReportId, detailKeyFid, detailKeyValue} = this.props;
         const validProps = [appId, childTableId, childReportId, detailKeyFid, detailKeyValue].every(prop => prop || typeof prop === 'number');
         if (!validProps) {
             return null;
-        } else if (Breakpoints.isSmallBreakpoint() || true) {
-            const link = UrlUtils.getRelatedChildReportLink(appId, childTableId, childReportId, detailKeyFid, detailKeyValue);
-            let reportLink;
-            if (this.props.childTableName) {
-                reportLink = <span>{this.props.childTableName}</span>;
-            } else {
-                reportLink = <I18nMessage message="relationship.childTable" />;
-            }
+        } else if (Breakpoints.isSmallBreakpoint() || this.props.type === 'REPORTLINK') {
             return (
-                <Link to={link} className="relatedChildReport childReportLink">
-                    {reportLink}
-                </Link>
+                <EmbeddedReportLink {...this.props}/>
             );
+        } else if (this.props.type === 'EMBEDREPORT') {
+            return (
+                <EmbeddedReportToolsAndContent
+                    tblId={childTableId}
+                    rptId={childReportId}
+                    {...this.props}
+                />);
         } else {
-            // TODO: render embedded report for medium and large breakpoint
             return null;
         }
     }
 }
 
 ChildReport.propTypes = {
-    appId: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.number]),
-    childTableId: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.number]),
-    childReportId: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.number]),
+    appId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    childTableId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    childReportId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     /** The name of the child table. The same as what would be shown in the left nav for that table */
-    childTableName: React.PropTypes.string,
+    childTableName: PropTypes.string,
     /** The fid of the field containing the foreignkey. */
-    detailKeyFid: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.number]),
+    detailKeyFid: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     /** The value entered in the foreignkey field. */
-    detailKeyValue: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.number])
+    detailKeyValue: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    type: PropTypes.oneOf(['EMBEDREPORT', 'REPORTLINK'])
 };
 
 export default ChildReport;

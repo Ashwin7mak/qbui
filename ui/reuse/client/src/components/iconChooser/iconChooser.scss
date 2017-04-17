@@ -1,0 +1,83 @@
+@import '../../assets/css/qbVariables';
+
+.iconChooser {
+
+    display: flex;
+    flex-direction: column;
+    border: 1px solid $color-black-400;
+    background-color: $color-black-100;
+    padding: 5px;
+    padding-right: 0;
+
+    .qbIcon {
+        font-size: 24px;
+        width: 32px;
+        height: 32px;
+    }
+
+    .topRow {
+        display: flex;
+        flex-shrink: 0;
+        overflow: hidden;
+        .iconSearch {
+            margin: 2px;
+            input {
+                height: 30px;
+                width: 210px;
+            }
+        }
+        .showAllToggle {
+            color: $color-black-700;
+            text-align: center;
+            margin-right: 12px;
+            margin-top: 4px;
+            flex-grow: 0;
+            white-space: nowrap;
+            .toggleIcon {
+                margin: -5px;
+                width: 24px;
+                height: 24px;
+                font-size: 18px;
+            }
+        }
+    }
+    .allIcons {
+        margin-top: 10px;
+        display: flex;
+        flex-wrap: wrap;
+        overflow-y: auto;
+        margin-left: -6px;
+
+        .qbIcon {
+            color: $color-black-700;
+            padding: 4px;
+            margin: 6px;
+        }
+        .qbIcon:hover {
+            background-color: $color-cyan-600;
+            color: $color-black-100;
+            border-radius: $radius-base * 2;
+        }
+    }
+
+    &.closed {
+        .iconSearch {
+            display: none;
+        }
+        .allIcons {
+            visibility: hidden;
+        }
+    }
+
+    .qbIcon.toggleIcon {
+        transition: transform 300ms ease-in;
+        transform: rotate(0);
+    }
+
+    &.open {
+        .qbIcon.toggleIcon {
+            transform: rotate(-180deg);
+        }
+    }
+}
+

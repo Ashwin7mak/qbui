@@ -109,6 +109,13 @@ describe('QbGrid', () => {
         expect(TableProvider.props().columns.length).toEqual(testColumns.length + 1);
     });
 
+    it('does not add a first column for row actions when showRowActionsColumn prop is false', () => {
+        component = shallow(<QbGrid numberOfColumns={testColumns.length} columns={testColumns} rows={testRows} cellRenderer={testCellRenderer} showRowActionsColumn={false} />);
+
+        let TableProvider = component.find(Table.Provider);
+        expect(TableProvider.props().columns.length).toEqual(testColumns.length);
+    });
+
     describe('addRowProps', () => {
         it('adds props to each row so the row component can have access to relevant properties set on QbGrid', () => {
             component = shallow(<QbGrid

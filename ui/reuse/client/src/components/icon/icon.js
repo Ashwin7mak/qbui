@@ -1,14 +1,14 @@
 import React from 'react';
 import './icon.scss';
-import './style.css';
+import './uiIcons.css';
 import './tableIcons.css';
 
 /**
  * Constants for accessing different icon fonts
  */
 export const AVAILABLE_ICON_FONTS = {
-    DEFAULT: 'iconTableUISturdy',
-    UI_STURDY: 'iconTableUISturdy',
+    DEFAULT: 'iconUISturdy',
+    UI_STURDY: 'iconUISturdy',
     TABLE_STURDY: 'iconTableSturdy'
 };
 

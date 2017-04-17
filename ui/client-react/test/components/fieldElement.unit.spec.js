@@ -6,13 +6,6 @@ import FieldLabelElement from '../../src/components/QBForm/fieldLabelElement';
 import FieldValueRenderer from '../../src/components/fields/fieldValueRenderer';
 import FieldValueEditor from '../../src/components/fields/fieldValueEditor';
 
-let flux = {
-    actions: {
-        recordPendingValidateField: ()=> {
-        }
-    }
-};
-
 let relatedField = {
     id: 6,
     name: "field",
@@ -37,32 +30,32 @@ describe('FieldElement functions', () => {
     let component;
 
     it('test render of component', () => {
-        component = TestUtils.renderIntoDocument(<FieldElement flux={flux} />);
+        component = TestUtils.renderIntoDocument(<FieldElement />);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
         const field = ReactDOM.findDOMNode(component);
         expect(field).toBeDefined();
     });
 
     it('test render of editor components', () =>{
-        component = TestUtils.renderIntoDocument(<FieldElement flux={flux} element={element} relatedField={relatedField} fieldRecord={fieldRecord} edit={true}/>);
+        component = TestUtils.renderIntoDocument(<FieldElement element={element} relatedField={relatedField} fieldRecord={fieldRecord} edit={true}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
         expect(TestUtils.scryRenderedComponentsWithType(component, FieldValueEditor).length).toEqual(1);
     });
 
     it('test render of view components', () =>{
-        component = TestUtils.renderIntoDocument(<FieldElement flux={flux} element={element} fieldRecord={fieldRecord} edit={false}/>);
+        component = TestUtils.renderIntoDocument(<FieldElement element={element} fieldRecord={fieldRecord} edit={false}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
         expect(TestUtils.scryRenderedComponentsWithType(component, FieldValueRenderer).length).toEqual(1);
     });
 
     it('test render of labels', () =>{
-        component = TestUtils.renderIntoDocument(<FieldElement flux={flux} element={element} fieldRecord={fieldRecord} relatedField={relatedField} edit={false} includeLabel={true}/>);
+        component = TestUtils.renderIntoDocument(<FieldElement element={element} fieldRecord={fieldRecord} relatedField={relatedField} edit={false} includeLabel={true}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
         expect(TestUtils.scryRenderedComponentsWithType(component, FieldLabelElement).length).toEqual(1);
     });
 
     it('test render of required on labels', () =>{
-        component = TestUtils.renderIntoDocument(<FieldElement flux={flux} element={element} fieldRecord={fieldRecord} relatedField={relatedField} edit={false} includeLabel={true} indicateRequiredOnLabel={true}/>);
+        component = TestUtils.renderIntoDocument(<FieldElement element={element} fieldRecord={fieldRecord} relatedField={relatedField} edit={false} includeLabel={true} indicateRequiredOnLabel={true}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
         let fieldLabel = TestUtils.scryRenderedDOMComponentsWithClass(component, 'fieldLabel');
         expect(fieldLabel.length).toEqual(1);
@@ -70,7 +63,6 @@ describe('FieldElement functions', () => {
     });
 
     it('test onChange for edit component', () =>{
-        spyOn(flux.actions, 'recordPendingValidateField');
         var callbacks = {
             onChange : function onChange(val) {},
             onBlur : function onBlur(val) {}
@@ -88,7 +80,7 @@ describe('FieldElement functions', () => {
                 this.setState({value: val});
             },
             render() {
-                return <FieldElement ref="fieldElement" flux={flux} element={element} fieldRecord={{value: this.state.value, display: this.state.value}} relatedField={relatedField}
+                return <FieldElement ref="fieldElement" element={element} fieldRecord={{value: this.state.value, display: this.state.value}} relatedField={relatedField}
                                      edit={true} onChange={this.onChange} onBlur={this.onBlur} />;
             }
         }));
@@ -114,7 +106,16 @@ describe('FieldElement functions', () => {
     });
 
     it('test onBlur for edit component', () =>{
-        spyOn(flux.actions, 'recordPendingValidateField');
+        let recordId = 10;
+        let reduxProps = {
+            recId: recordId,
+            editRecordValidateField: () => {},
+            record: [
+                {id: recordId}
+            ]
+        };
+        spyOn(reduxProps, 'editRecordValidateField').and.callThrough();
+
         var callbacks = {
             onChange : function onChange(val) {},
             onBlur : function onBlur(val) {}
@@ -132,8 +133,8 @@ describe('FieldElement functions', () => {
                 this.setState({value: val});
             },
             render() {
-                return <FieldElement ref="fieldElement" flux={flux} element={element} fieldRecord={{value: this.state.value, display: this.state.value}} relatedField={relatedField}
-                                     edit={true} onChange={this.onChange} onBlur={this.onBlur} />;
+                return <FieldElement ref="fieldElement" element={element} fieldRecord={{value: this.state.value, display: this.state.value}} relatedField={relatedField}
+                                     edit={true} onChange={this.onChange} onBlur={this.onBlur} {...reduxProps}/>;
             }
         }));
         var parent = TestUtils.renderIntoDocument(TestParent());
@@ -154,6 +155,6 @@ describe('FieldElement functions', () => {
 
         TestUtils.Simulate.blur(input[0]);
         expect(parent.state.value).toEqual(expectedCallBackArgs);
-        expect(flux.actions.recordPendingValidateField).toHaveBeenCalledWith(relatedField, "field", "new");
+        expect(reduxProps.editRecordValidateField).toHaveBeenCalledWith(recordId, relatedField, "field", "new");
     });
 });

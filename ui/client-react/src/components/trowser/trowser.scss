@@ -28,7 +28,7 @@
 
     .trowserHeader {
         flex: 0 0 auto;
-        flex-basis: 40px;
+        flex-basis: 50px;
         color: $color-black-100;
         background-color: $trowser-header-background-color;
         display: flex;
@@ -36,8 +36,9 @@
         padding: 0 10px 0 20px;
 
         .qbIcon {
-            font-size: 22px;
+            font-size: 18px;
             vertical-align: middle;
+            margin-right: 6px;
         }
 
         .breadcrumbs {
@@ -93,7 +94,7 @@
         top: 0;
         bottom: 0;
         margin: auto;
-        background-color: $badcolor22;
+        background-color: $color-black-200;
         opacity: 1;
         max-width: 1440px;
     }

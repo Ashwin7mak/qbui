@@ -39,30 +39,6 @@ describe('Test Nav Store', () => {
         StoreRewireAPI.__ResetDependency__('Locale');
     });
 
-    it('test default nav store state', () => {
-        // verify default states
-        expect(flux.store(STORE_NAME).state.i18n).toBe(i18nBundle);
-
-        //  expect 3 bindActions
-        expect(flux.store(STORE_NAME).__actions__.CHANGE_LOCALE).toBeDefined();
-    });
-
-
-    it('test change locale action', () => {
-
-        let changeLocaleAction = {
-            type: actions.CHANGE_LOCALE
-        };
-        spyOn(mockLocale, 'getI18nBundle');
-        spyOn(flux.store(STORE_NAME), 'setLocaleBundle');
-
-        flux.dispatcher.dispatch(changeLocaleAction);
-        expect(flux.store(STORE_NAME).setLocaleBundle).toHaveBeenCalled();
-
-        expect(flux.store(STORE_NAME).emit).toHaveBeenCalledWith('change');
-        expect(flux.store(STORE_NAME).emit.calls.count()).toBe(1);
-    });
-
     it('test toggle mobile nav searchbar action', () => {
 
         let toggleSearchAction = {

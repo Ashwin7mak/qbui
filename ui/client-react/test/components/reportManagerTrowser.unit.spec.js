@@ -53,7 +53,7 @@ describe('ReportManagerTrowser functions', () => {
 
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 
-        const closeIcon = TestUtils.findRenderedDOMComponentWithClass(component, "iconTableUISturdy-close");
+        const closeIcon = TestUtils.findRenderedDOMComponentWithClass(component, "iconUISturdy-close");
         TestUtils.Simulate.click(closeIcon);
 
         expect(flux.actions.filterReportsByName).toHaveBeenCalledWith("");

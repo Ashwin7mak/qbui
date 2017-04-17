@@ -7,7 +7,7 @@
     var reportSortingPO = requirePO('reportSortingGrouping');
     var reportContentPO = requirePO('reportContent');
 
-    describe('Report Sorting Via Column Header Tests  - ', function() {
+    describe('Reports - Sorting Via Column Header Tests: ', function() {
         var realmName;
         var realmId;
         var testApp;
@@ -34,7 +34,8 @@
             }).catch(function(error) {
                 // Global catch that will grab any errors from chain above
                 // Will appropriately fail the beforeAll method so other tests won't run
-                throw new Error('Error during test setup beforeAll: ' + error.message);
+                browser.logger.error('Error in beforeAll function:' + JSON.stringify(error));
+                return Promise.reject('Error in beforeAll function:' + JSON.stringify(error));
             });
         });
 

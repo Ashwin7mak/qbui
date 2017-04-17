@@ -27,7 +27,7 @@ function it_is_unchecked() {
 }
 
 function it_is_checked() {
-    let checkedCheckbox = findElements('.iconTableUISturdy-check');
+    let checkedCheckbox = findElements('.iconUISturdy-check');
     expect(checkedCheckbox.length).toBe(1);
 }
 

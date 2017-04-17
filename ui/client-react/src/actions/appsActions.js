@@ -2,12 +2,10 @@
 import * as actions from '../constants/actions';
 import AppService from '../services/appService';
 import RoleService from '../services/roleService';
+import UserService from '../services/userService';
 import Promise from 'bluebird';
-import _ from 'lodash';
-
 import Logger from '../utils/logger';
 import LogLevel from '../utils/logLevels';
-import constants from '../../../common/src/constants';
 import appsModel from '../models/appsModel';
 
 //  Custom handling of 'possible unhandled rejection' error,  because we don't want
@@ -106,8 +104,26 @@ let appsActions = {
         });
     },
 
+    loadAppOwner(userId) {
+        //  promise is returned in support of unit testing only
+        return new Promise((resolve, reject) => {
+            let userService = new UserService();
+            userService.getUser(userId).then(response => {
+                this.dispatch(actions.LOAD_APP_OWNER_SUCCESS, response.data);
+                resolve();
+            }, () => {
+                this.dispatch(actions.LOAD_APP_OWNER_FAILED);
+                reject();
+            });
+        });
+    },
+
     selectTableId(tblId) {
         this.dispatch(actions.SELECT_TABLE, tblId);
+    },
+
+    updateTableProps(tableId, tableInfo) {
+        this.dispatch(actions.UPDATED_TABLE_PROPS, {tableId: tableId, tableInfo: tableInfo});
     }
 };
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import {I18nMessage} from '../../utils/i18nMessage';
 import QBicon from '../qbIcon/qbIcon';
-import TableIcon from '../qbTableIcon/qbTableIcon';
+import Icon, {AVAILABLE_ICON_FONTS} from '../../../../reuse/client/src/components/icon/icon.js';
 import QBToolTip from '../qbToolTip/qbToolTip';
 import Logger from '../../utils/logger';
 
@@ -80,7 +80,7 @@ const FieldChoice = React.createClass({
                             <span className={"action sortOrderIcon " + order} tabIndex="0"
                                   onClick={() => this.props.onSetOrder(this.props.type, this.props.index,
                                                             !this.props.field.descendOrder, this.props.field)} >
-                                  <TableIcon icon={"icon-TableIcons_sturdy_arrow" + order}/>
+                                  <Icon iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY} icon={"arrow" + order}/>
                             </span>
                         </QBToolTip>) :
                             null

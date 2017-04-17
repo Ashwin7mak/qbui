@@ -6,6 +6,7 @@ import * as FieldConsts from '../../../constants/schema';
 import Locale from '../../../locales/locales';
 import {I18nMessage} from '../../../utils/i18nMessage';
 import QbIcon from '../../qbIcon/qbIcon';
+import {connect} from 'react-redux';
 import ReportColumnHeaderMenuContainer from './reportColumnHeaderMenuContainer';
 
 const SORTING_MESSAGE = 'sort';
@@ -203,4 +204,4 @@ function convertSortingMessageToI18nMessage(prependText, message) {
     return Locale.getMessage(`report.menu.${prependText}.${message}`);
 }
 
-export default ReportColumnHeaderMenuContainer(ReportColumnHeaderMenu);
+export default connect()(ReportColumnHeaderMenuContainer(ReportColumnHeaderMenu));

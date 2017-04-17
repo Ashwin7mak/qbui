@@ -1,4 +1,5 @@
 import React from 'react';
+import _ from 'lodash';
 import shallowCompare from 'react-addons-shallow-compare';
 
 /**
@@ -18,7 +19,11 @@ const QbCell = React.createClass({
     render() {
         let classes = [...this.props.classes, 'qbCell'];
         if (this.props.isStickyCell) {
-            classes.push(['stickyCell']);
+            classes.push('stickyCell');
+        }
+        // this is a tad bit hacky, remove when EmbeddedReportToolsAndContent supports editing
+        if (_.get(this, 'props.children.props.phase1')) {
+            classes.push('phase1');
         }
 
         return <td className={classes.join(' ')} {...this.props} />;
