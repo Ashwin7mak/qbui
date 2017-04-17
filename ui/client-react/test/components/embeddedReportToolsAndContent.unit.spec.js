@@ -5,7 +5,7 @@ import configureMockStore from 'redux-mock-store';
 import {Provider} from "react-redux";
 import {mount, shallow} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
-import './../../../common/src/constants'
+import './../../../common/src/constants';
 
 import EmbeddedReportToolsAndContent, {
     EmbeddedReportToolsAndContent as UnconnectedEmbeddedReportToolsAndContent,
