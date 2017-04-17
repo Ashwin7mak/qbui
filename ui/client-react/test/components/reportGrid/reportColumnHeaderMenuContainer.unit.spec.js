@@ -145,5 +145,23 @@ describe('ReportColumnHeaderMenuContainer', () => {
 
             expect(hideColumn).toHaveBeenCalledWith(CONTEXT.REPORT.NAV, mockProps.appId, mockProps.tblId, mockProps.rptId, params);
         });
+
+        it('does not call the action to hide a column if the required props are not passed in', () => {
+            component = shallow(React.createElement(ReportColumnHeaderMenuContainer(MockMenu)));
+            instance = component.instance();
+
+            instance.hideColumn(mockFieldDef.id);
+
+            expect(hideColumn).not.toHaveBeenCalled();
+        });
+
+        it('does not call the action to hide a column if there is only one column currently visible', () => {
+            component = shallow(React.createElement(ReportColumnHeaderMenuContainer(MockMenu), {isOnlyOneColumnVisible: true}));
+            instance = component.instance();
+
+            instance.hideColumn(mockFieldDef.id);
+
+            expect(hideColumn).not.toHaveBeenCalled();
+        });
     });
 });
