@@ -233,7 +233,7 @@ export const FormBuilderContainer = React.createClass({
                 <PageTitle title={Locale.getMessage('pageTitles.editForm')}/>
 
                 <ToolPalette isCollapsed={this.props.isCollapsed} isOpen={this.props.isOpen}>
-                    <FieldProperties appId={this.props.appId} tableId={this.props.tblId} formId={formId}>
+                    <FieldProperties appId={this.props.params.appId} tableId={this.props.params.tblId} formId={formId}>
                         <div className="formBuilderContainerContent">
                             <AutoScroll
                                 pixelsFromBottomForLargeDevices={80}
