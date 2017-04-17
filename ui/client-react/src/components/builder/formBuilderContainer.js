@@ -27,7 +27,7 @@ import NotificationManager from '../../../../reuse/client/src/scripts/notificati
 import './formBuilderContainer.scss';
 
 let logger = new Logger();
-let debounceKeyboardSaveMillis = 100;
+let debounceKeyboardSaveMillis = 1000;
 
 const mapStateToProps = state => {
     let currentForm = getFormByContext(state, CONTEXT.FORM.VIEW);
@@ -140,12 +140,8 @@ export const FormBuilderContainer = React.createClass({
         if (this.props.currentForm && this.props.currentForm.formData) {
             let formMeta = this.props.currentForm.formData.formMeta;
             let formType = this.props.currentForm.id;
-            // Invoke `save` when invoked by keyboard, debouncing subsequent calls.
-            let debouncedSave = _.debounce(() => this.props.updateForm(formMeta.appId, formMeta.tableId, formType, formMeta, this.props.redirectRoute), debounceKeyboardSaveMillis, {
-                'leading': true,
-                'trailing': false
-            });
-            debouncedSave();
+
+            this.props.updateForm(formMeta.appId, formMeta.tableId, formType, formMeta, this.props.redirectRoute)
         }
     },
 
