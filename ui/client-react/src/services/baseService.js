@@ -9,6 +9,7 @@ import CookieConstants from '../../../common/src/constants';
 import uuid from 'uuid';
 import Promise from 'bluebird';
 import QbResponseError from './QbResponseError';
+import {UNAUTHORIZED} from '../constants/urlConstants';
 
 window.Promise = Promise; // set global Promise to Bluebird promise (axios has dependency on Promises which are not in IE 11)
 let FEDERATION_LEGACY_URL = '/qbase/federation/legacyUrl';
@@ -196,7 +197,7 @@ class BaseService {
                 .catch(error => {
                     // When the federation legacy URL request fails, return the default redirect
                     // We can't use the Logger here because it would cause a circular reference because Logger uses baseService
-                    return Promise.resolve('/qbase/unauthorized');
+                    return Promise.resolve(UNAUTHORIZED);
                 });
         }
     }
