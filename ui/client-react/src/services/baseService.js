@@ -14,6 +14,7 @@ window.Promise = Promise; // set global Promise to Bluebird promise (axios has d
 let FEDERATION_LEGACY_URL = '/qbase/federation/legacyUrl';
 class BaseService {
     constructor() {
+        this._axios = axios.create();
         this.setRequestInterceptor();
         this.setResponseInterceptor();
     }
@@ -37,7 +38,7 @@ class BaseService {
      */
     get(url, conf) {
         let config = conf || {};
-        return axios.get(url, config);
+        return this._axios.get(url, config);
     }
 
     /**
@@ -50,7 +51,7 @@ class BaseService {
      */
     post(url, data, conf) {
         let config = conf || {};
-        return axios.post(url, data, config);
+        return this._axios.post(url, data, config);
     }
 
     /**
@@ -63,7 +64,7 @@ class BaseService {
      */
     put(url, data, conf) {
         let config = conf || {};
-        return axios.put(url, data, config);
+        return this._axios.put(url, data, config);
     }
 
     /**
@@ -76,7 +77,7 @@ class BaseService {
      */
     patch(url, data, conf) {
         let config = conf || {};
-        return axios.patch(url, data, config);
+        return this._axios.patch(url, data, config);
     }
 
     /**
@@ -88,14 +89,14 @@ class BaseService {
      */
     delete(url, conf) {
         let config = conf || {};
-        return axios.delete(url, config);
+        return this._axios.delete(url, config);
     }
 
     /**
      * Axiom interceptor for all http requests -- add a session tracking id and session ticket
      */
     setRequestInterceptor() {
-        axios.interceptors.request.use(config => {
+        this._axios.interceptors.request.use(config => {
             //  a unique id per request
             config.headers[constants.HEADER.SESSION_ID] = uuid.v1();
             //  not including now, but this is where we would add another header
@@ -114,7 +115,7 @@ class BaseService {
      */
     setResponseInterceptor() {
         let self = this;
-        axios.interceptors.response.use(
+        this._axios.interceptors.response.use(
             response => {
                 return response;
             },
