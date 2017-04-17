@@ -318,38 +318,16 @@ export const RecordRoute = React.createClass({
         return (<IconActions className="pageActions" actions={actions} {...this.props}/>);
     },
 
-    shouldRenderDrawers() {
-        // TODO: to allow css transition on initial load, we might need to always render Drawers for
-        //       root recordRouter instance
-        // TODO: update this when upgrading to React Router 4 work is done.
-        const hasDrawers = _.get(this, 'props.location.search', '').indexOf('drawer') > -1;
-
-        let drawerCount = this.props.drawerCount;
-        if (typeof drawerCount !== 'number') {
-            drawerCount = 4;
-        }
-
-        return hasDrawers && --drawerCount;
-    },
-
-    getDrawerParams() {
-        // TODO: handle all the records in url since we'll support multiple drawers
-        //       the array or tables/records should not be passed in as props, we should retrieve
-        //       or generate the list of records from the router
-        return this.state.drawerParams;
-    },
-
     /**
-     * Render drawer container (if url instructs us to render drawers).
+     * Render drawer container
      */
     getDrawerContainer() {
         const closeAll = this.props.closeAll || this.closeDrawer;
-        const className = this.props.isDrawerContext ? '' : 'rootDrawer';
         return (
             <DrawerContainer
                 {...this.props}
 
-                className={className}
+                rootDrawer={!this.props.isDrawerContext}
                 hasDrawer={this.state.hasDrawer}
                 closeDrawer={this.closeDrawer}
                 closeAll={closeAll}
