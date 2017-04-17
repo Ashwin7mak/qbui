@@ -416,7 +416,7 @@ export const Nav = React.createClass({
                             return (
                                 <RouteWithSubRoutes key={i} {...route} {...routeProps} />
                             );
-                            }
+                        }
                         )}
                         </Switch>
                     </div>}

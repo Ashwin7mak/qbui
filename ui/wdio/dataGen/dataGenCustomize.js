@@ -465,7 +465,7 @@ consts = require('../../common/src/constants.js');
 
         // App setup //
         e2eBase.appService.createAppSchema(makeAppMap())
-        .then(function (appResponse) {
+        .then(function(appResponse) {
             createdApp = appResponse;
 
             // Users Setup first//

@@ -60,9 +60,9 @@ const mapStateToProps = (state) => {
 const withFlux = (ComponentToWrap) => {
     class WrappedComponent extends React.Component {
         render() {
-            const { ...props} = this.props;
-            return <ComponentToWrap {...props} flux={fluxxor}/>
-        };
+            const {...props} = this.props;
+            return <ComponentToWrap {...props} flux={fluxxor}/>;
+        }
     }
     return WrappedComponent;
 };
@@ -78,9 +78,6 @@ AppsBundleLoader.changeLocale(config.locale.default);
 store.dispatch(FeatureSwitchActions.getStates());
 
 const createElementWithFlux = (Component, props) => <Component {...props} flux={fluxxor} />;
-
-
-
 
 // render the UI, wrap the router in the react-redux Provider to make the Redux store available to connected components
 /*
