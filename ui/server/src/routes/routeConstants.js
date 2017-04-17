@@ -17,7 +17,8 @@
         QUICKBASE_HEALTH    : '/api/:version',
         NODE                : '/api/n/:version',
         QUICKBASE_LEGACY    : '/api/l/:version',
-        GOVERNANCE          : '/api/governance/:version'
+        GOVERNANCE          : '/api/governance/:version',
+        AUTOMATION          : '/we/workflow/:version'
     };
 
     /*
@@ -89,7 +90,7 @@
         GOVERNANCE_ACCOUNT_USERS     : baseUrl.GOVERNANCE + '/:accountId/users',
 
         // the account id is an optional parameter
-        GOVERNANCE_CONTEXT           : baseUrl.GOVERNANCE + '/context',
+        GOVERNANCE_CONTEXT           : baseUrl.GOVERNANCE + '/context'
     };
 
     /*
@@ -101,7 +102,11 @@
         // Heads Up: Order matters. Define all specific routes BEFORE the generic EXPERIENCE_ENGINE_ALL route.
         // Second Heads up: You also need to define the routes in qbRouteMapper.
         EE_FORMS                    : baseUrl.EXPERIENCE_ENGINE + '/apps/:app/tables/:table/forms*',
-        EXPERIENCE_ENGINE_ALL       : baseUrl.EXPERIENCE_ENGINE + '/*',
+        EXPERIENCE_ENGINE_ALL       : baseUrl.EXPERIENCE_ENGINE + '/*'
+    };
+
+    var automationEngineApiEndpoints = {
+        AUTOMATION_ENGINE_ALL       : baseUrl.AUTOMATION + '/*',
     };
 
     /**
@@ -120,6 +125,6 @@
 
     //  Export the combined list of endpoints.
     module.exports = Object.freeze(_.assign({},
-        swaggerApiEndpoints, nodeApiEndpoints, legacyApiEndpoints, quickBaseApiEndpoints, experienceEngineApiEndpoints));
+        swaggerApiEndpoints, nodeApiEndpoints, legacyApiEndpoints, quickBaseApiEndpoints, experienceEngineApiEndpoints, automationEngineApiEndpoints));
 
 }());
