@@ -47,9 +47,9 @@
                 // Set your global objects to use in the test functions
                 app = appAndRecords;
                 // Get the appropriate fields out of the Create App response (specifically the created field Ids)
-                var table1NonBuiltInFields = e2eBase.tableService.getNonBuiltInFields(app.tables[0]);
+                let table1NonBuiltInFields = e2eBase.tableService.getNonBuiltInFields(app.tables[0]);
                 // Generate the record JSON objects
-                var table1GeneratedRecords = e2eBase.recordService.generateRecords(table1NonBuiltInFields, 6);
+                let table1GeneratedRecords = e2eBase.recordService.generateRecords(table1NonBuiltInFields, 6);
                 //add records to the table
                 e2eBase.recordService.addRecords(app, app.tables[0], table1GeneratedRecords);
             }).then(function() {
@@ -181,39 +181,6 @@
                 //Assert record count displayed is correct
                 expect(browser.element('.recordsCount').getAttribute('textContent')).toBe(numOfRecords + ' records');
             });
-        });
-
-        /**
-         * Negative test to verify that the personal reports for a user cannot be accessed by other users.
-         */
-        xit('Negative test to verify personal reports not accessible by other users', function() {
-
-            browser.call(function() {
-                //Create a user
-                return e2eBase.recordBase.apiBase.createUser().then(function(userResponse) {
-                    //parse user ID
-                    userId = JSON.parse(userResponse.body).id;
-
-                    //Adding user to the participant appRole
-                    e2eBase.recordBase.apiBase.assignUsersToAppRole(app.id, participantRoleId, [userId]);
-
-                    //get the user authentication
-                    return RequestSessionTicketPage.get(e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.recordBase.apiBase.resolveUserTicketEndpoint() + '?uid=' + userId + '&realmId='));
-                });
-            });
-
-            //try to load the report of viewer user
-            RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, viewerReportId));
-
-            // Make sure the report not loaded and gives unAuthorized error
-            expect(RequestSessionTicketPage.ticketResponseBodyEl.getText()).toEqual(e2eConsts.invalidCredentials);
-
-            //try to load the report of admin user
-            RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, adminReportId));
-
-            // Make sure the report not loaded and gives unAuthorized error
-            expect(RequestSessionTicketPage.ticketResponseBodyEl.getText()).toEqual(e2eConsts.invalidCredentials);
-
         });
 
         /**
