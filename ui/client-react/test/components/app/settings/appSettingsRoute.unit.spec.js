@@ -12,10 +12,11 @@ describe('AppSettingsRoute functions', () => {
         {userId: 2, firstName: 'Tony', lastName: 'Stark'},
         {userId: 3, firstName: 'Steve', lastName: 'Rogers'}
     ];
+    const match = {params: {appId: appId}};
 
     it('test render of component', () => {
         let component = TestUtils.renderIntoDocument(<AppSettingsRoute selectedApp={selectedApp}
-                                                                        params={appId}
+                                                                        match={match}
                                                                         appUsers={appUsers}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
     });
