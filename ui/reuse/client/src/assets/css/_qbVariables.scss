@@ -16,14 +16,6 @@ $medium-breakpoint-width: 1024px;
 $large-breakpoint-width: 1440px;
 
 @mixin small-breakpoint {
-  .a {
-    color: $add-user-button;
-    font-size: $size-iconfont-large2;
-    border-radius:20px;
-  }
-  a:hover {
-       background-color: $default-hover-color;
-}
 
     @media (max-width: #{$small-breakpoint-width}) {
 

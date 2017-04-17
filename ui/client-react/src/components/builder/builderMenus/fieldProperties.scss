@@ -1,7 +1,7 @@
 @import '../../../../src/assets/css/qbVariables';
 
 .fieldPropertiesContainer {
-    border: $stroke-width-thin solid  $formBuilder-border-color;
+    border: $stroke-width-thin solid $formBuilder-border-color;
     border-top: none;
     width: 220px;
     background-color: $color-black-250;
@@ -10,3 +10,4 @@
         display: none;
     }
 }
+
