@@ -5,7 +5,7 @@ import configureMockStore from 'redux-mock-store';
 import {Provider} from "react-redux";
 import {mount, shallow} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
-import './../../../common/src/constants';
+import serverTypeConsts from '../../../common/src/constants';
 
 import EmbeddedReportToolsAndContent, {
     EmbeddedReportToolsAndContent as UnconnectedEmbeddedReportToolsAndContent,
@@ -17,7 +17,7 @@ const mockStore = configureMockStore();
 describe('EmbeddedReportToolsAndContent', () => {
     let component;
     let offset = 0;
-    let numRows = DEFAULT_NUM_ROWS;
+    let numRows = serverTypeConsts.PAGE.DEFAULT_NUM_ROWS;
 
     const appId = 1;
     const tblId = 2;
