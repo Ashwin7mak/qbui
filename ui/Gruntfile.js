@@ -568,11 +568,12 @@ module.exports = function(grunt) {
                     './wdio/tests/forms/formDragDrop.e2e.spec.js',
                     './wdio/tests/tables/tableCreate.e2e.spec.js',
                     './wdio/tests/tables/tableEdit.e2e.spec.js',
-                    './wdio/tests/reports/reportNavigation.e2e.spec.js',
                     './wdio/tests/reports/reportEditRecord.e2e.spec.js',
-                    './wdio/tests/forms/grouping/reportGroupingViaColumnHeader.e2e.spec.js',
-                    './wdio/tests/reports/sorting/reportSortingViaColumnHeader.e2e.spec.js',
-                    './wdio/tests/reports/reportTable.e2e.spec.js'
+                    './wdio/tests/reports/reportNavigation.e2e.spec.js',
+                    './wdio/tests/reports/reportTable.e2e.spec.js',
+                    './wdio/tests/reports/grouping/reportGroupingViaColumnHeader.e2e.spec.js',
+                    './wdio/tests/reports/sorting/reportSortingViaColumnHeader.e2e.spec.js'
+
                 ],
                 suites: {
                     reports: [
