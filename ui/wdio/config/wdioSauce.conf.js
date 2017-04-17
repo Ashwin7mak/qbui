@@ -205,7 +205,9 @@ exports.config = {
     // Firefox does not fire certain blur events when Firefox window does not have OS level focus. The following
     // setting enable blur events to fire during e2e tests even when the window does not have OS level focus.
     firefoxProfile: {
-        'focusmanager.testmode': true
+        'focusmanager.testmode': true,
+        'dom.max_chrome_script_run_time': 0,
+        'dom.max_script_run_time': 0
     },
     //
     // Framework you want to run your specs with.
