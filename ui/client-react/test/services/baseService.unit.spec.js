@@ -156,7 +156,7 @@ describe('BaseService rewire tests', () => {
     it('test constructRedirectUrl method with Configuration specifying unauthorizedRedirect', (done) => {
         baseService = new BaseService();
         baseService.constructRedirectUrl().then(function(url) {
-            expect(mockUnauthorizedRedirectConfiguration.unauthorizedRedirect).toEqual(url);
+            expect(url).toEqual(mockUnauthorizedRedirectConfiguration.unauthorizedRedirect);
         }).then(done, done);
     });
 
@@ -164,7 +164,7 @@ describe('BaseService rewire tests', () => {
         create: function() {
             return {
                 get: function() {
-                    return Promise.resolve({legacyUrl: `https://${simpleSubdomain.subdomain}.${simpleSubdomain.domain}`});
+                    return Promise.resolve({data: {legacyUrl: `https://${simpleSubdomain.subdomain}.${simpleSubdomain.domain}`}});
                 }
             };
         }
@@ -174,7 +174,7 @@ describe('BaseService rewire tests', () => {
         create: function() {
             return {
                 get: function() {
-                    return Promise.resolve({legacyUrl: `https://${complexSubdomain.subdomain}.${complexSubdomain.domain}`});
+                    return Promise.resolve({data: {legacyUrl: `https://${complexSubdomain.subdomain}.${complexSubdomain.domain}`}});
                 }
             };
         }
@@ -186,7 +186,7 @@ describe('BaseService rewire tests', () => {
         baseService = new BaseService();
         var expectedUrl = simpleSubdomain.expectedUrl + mockWindowUtils.getHref();
         baseService.constructRedirectUrl().then(function(url) {
-            expect(expectedUrl).toEqual(url);
+            expect(url).toEqual(expectedUrl);
         }).then(done, done);
     });
 
@@ -199,7 +199,7 @@ describe('BaseService rewire tests', () => {
         baseService = new BaseService();
         var expectedUrl = complexSubdomain.expectedUrl + mockWindowUtils.getHref();
         baseService.constructRedirectUrl().then(function(url) {
-            expect(expectedUrl).toEqual(url);
+            expect(url).toEqual(expectedUrl);
         }).then(done, done);
     });
 

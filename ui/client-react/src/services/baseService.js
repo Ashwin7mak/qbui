@@ -186,12 +186,17 @@ class BaseService {
             return Promise.resolve(Configuration.unauthorizedRedirect);
         } else {
             return this.get(FEDERATION_LEGACY_URL, {})
-                .then(function(json) {
+                .then(json => {
                     let currentStackSignInUrl = "/db/main?a=nsredirect&nsurl=";
                     let newStackDestination = WindowLocationUtils.getHref();
                     let currentStackDomain = json.data.legacyUrl;
                     currentStackSignInUrl = currentStackDomain + currentStackSignInUrl + newStackDestination;
                     return currentStackSignInUrl;
+                })
+                .catch(error => {
+                    // When the federation legacy URL request fails, return the default redirect
+                    // We can't use the Logger here because it would cause a circular reference because Logger uses baseService
+                    return Promise.resolve('/qbase/unauthorized');
                 });
         }
     }
