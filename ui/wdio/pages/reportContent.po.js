@@ -91,9 +91,15 @@
          * @returns A promise that will resolve after waiting for the report records to be displayed
          */
         waitForReportContent: {value: function() {
-            // wait until you see .qbTbody
-            browser.element('.qbTbody').waitForVisible();
-            return browser.element('.qbRow').waitForVisible();
+            if (browserName === 'MicrosoftEdge') {
+                // wait until you see .qbTbody
+                browser.element('.qbTbody', 120000);
+                return browser.element('.qbRow').waitForVisible();
+            } else {
+                // wait until you see .qbTbody
+                browser.element('.qbTbody').waitForVisible();
+                return browser.element('.qbRow').waitForVisible();
+            }
         }},
 
         /**
