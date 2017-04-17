@@ -91,15 +91,9 @@
          * @returns A promise that will resolve after waiting for the report records to be displayed
          */
         waitForReportContent: {value: function() {
-            if (browserName === 'MicrosoftEdge') {
-                // wait until you see .qbTbody
-                browser.element('.qbTbody', 90000);
-                return browser.element('.qbRow').waitForVisible();
-            } else {
-                // wait until you see .qbTbody
-                browser.element('.qbTbody').waitForVisible();
-                return browser.element('.qbRow').waitForVisible();
-            }
+            // wait until you see .qbTbody
+            browser.element('.qbTbody').waitForVisible();
+            return browser.element('.qbRow').waitForVisible();
         }},
 
         /**
@@ -232,11 +226,7 @@
             //Click on add record button
             this.addRecordBtnOnStage.click();
             //wait until you see edit container and save buttons in footer
-            if (browserName === 'MicrosoftEdge') {
-                formsPO.editFormContainerEl.waitForVisible(60000);
-            } else {
-                formsPO.editFormContainerEl.waitForVisible();
-            }
+            formsPO.editFormContainerEl.waitForVisible();
             return formsPO.editFormSaveBtns.waitForVisible();
         }},
 
