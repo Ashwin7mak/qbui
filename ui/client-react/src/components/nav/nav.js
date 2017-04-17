@@ -10,7 +10,7 @@ import GlobalActions from "../actions/globalActions";
 import BuilderDropDownAction from '../actions/builderDropDownAction';
 import Breakpoints from "../../utils/breakpoints";
 import {NotificationContainer} from "react-notifications";
-import {withRouter, Switch} from 'react-router';
+import {withRouter, Switch} from 'react-router-dom';
 import _ from 'lodash';
 
 import * as TrowserConsts from "../../constants/trowserConstants";

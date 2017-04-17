@@ -2,7 +2,7 @@
  * Created by rbeyer on 2/3/17.
  */
 import React, {PropTypes} from 'react';
-import {Link} from 'react-router';
+import {Link} from 'react-router-dom';
 import QBIcon from '../qbIcon/qbIcon';
 import './card.scss';
 

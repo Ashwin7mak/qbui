@@ -70,271 +70,62 @@ import TopNavDoc from './docs/topNav.js';
 import StageDoc from './docs/stage.js';
 import TooltipDoc from './docs/tooltip.js';
 import StandardLeftNavDoc from './docs/standardLeftNav.js';
-import createBrowserHistory from 'history/createBrowserHistory';
 // END OF IMPORT STATEMENTS
 // Above comment used for Grunt task. Please do not delete.
-const browserHistory  = createBrowserHistory();
+
 // init the localization services
 AppsBundleLoader.changeLocale(config.locale.default);
 
-// render((
-//     <Router history={browserHistory}>
-//         <Route path="qbase/components" component={ComponentLibraryWrapper}>
-//             <IndexRedirect to="home" />
-//             <Route path="home" component={HomePage} />
-//             <Route path="colors" component={ColorsPage} />
-//             <Route path="uiIconFont" component={UiIconFontPage} />
-//             <Route path="tableIconFont" component={TableIconFontPage} />
-//
-//             <Route path="checkBoxFieldValueEditor" component={CheckBoxFieldValueEditorDoc} />
-//             <Route path="checkBoxFieldValueRenderer" component={CheckBoxFieldValueRendererDoc} />
-//             <Route path="dateFieldValueEditor" component={DateFieldValueEditorDoc} />
-//             <Route path="dateTimeFieldValueEditor" component={DateTimeFieldValueEditorDoc} />
-//             <Route path="dateTimeFieldValueRenderer" component={DateTimeFieldValueRendererDoc} />
-//             <Route path="durationFieldValueRenderer" component={DurationFieldValueRendererDoc} />
-//             <Route path="emailFieldValueEditor" component={EmailFieldValueEditorDoc} />
-//             <Route path="emailFieldValueRenderer" component={EmailFieldValueRendererDoc} />
-//             <Route path="fieldValueEditor" component={FieldValueEditorDoc} />
-//             <Route path="fieldValueRenderer" component={FieldValueRendererDoc} />
-//             <Route path="multiChoiceFieldValueEditor" component={MultiChoiceFieldValueEditorDoc} />
-//             <Route path="multiLineTextFieldValueEditor" component={MultiLineTextFieldValueEditorDoc} />
-//             <Route path="numericfieldValueEditor" component={NumericFieldValueEditorDoc} />
-//             <Route path="numericFieldValueRenderer" component={NumericFieldValueRendererDoc} />
-//             <Route path="textfieldValueEditor" component={TextFieldValueEditorDoc} />
-//             <Route path="textFieldValueRenderer" component={TextFieldValueRendererDoc} />
-//             <Route path="timeFieldValueEditor" component={TimeFieldValueEditorDoc} />
-//             <Route path="timeFieldValueRenderer" component={TimeFieldValueRendererDoc} />
-//             <Route path="trowser" component={TrowserDoc} />
-//             <Route path="urlFieldValueEditor" component={UrlFieldValueEditorDoc} />
-//             <Route path="urlFieldValueRenderer" component={UrlFieldValueRendererDoc} />
-//             <Route path="userFieldRenderer" component={UserFieldRendererDoc} />
-//             <Route path="userFieldEditor" component={UserFieldEditorDoc} />
-//             <Route path="qbpanel" component={QBPanelDoc} />
-//             <Route path="icon" component={IconDoc} />
-//             <Route path="qBModal" component={QBModalDoc} />
-//             <Route path="alertBanner" component={AlertBannerDoc} />
-//             <Route path="pageTitle" component={PageTitleDoc} />
-//             <Route path="invisibleBackdrop" component={InvisibleBackdropDoc} />
-//             <Route path="phoneFieldValueEditor" component={PhoneFieldValueEditorDoc} />
-//             <Route path="phoneFieldValueRenderer" component={PhoneFieldValueRendererDoc} />
-//             <Route path="durationFieldValueEditor" component={DurationFieldValueEditorDoc} />
-//             <Route path="qbGrid" component={QbGridDoc} />
-//             <Route path="sideMenuBase" component={SideMenuBaseDoc} />
-//             <Route path="sideTrowserBase" component={SideTrowserBaseDoc} />
-//             <Route path="iconChooser" component={IconChooserDoc} />
-//             <Route path="iconInputBox" component={IconInputBoxDoc} />
-//             <Route path="topNav" component={TopNavDoc} />
-//             <Route path="stage" component={StageDoc} />
-//             <Route path="tooltip" component={TooltipDoc} />
-//             <Route path="standardLeftNav" component={StandardLeftNavDoc} />
-//         </Route>
-//     </Router>
-// ), document.getElementById('content'));
-
-
-const routes = [
-    {
-        path: 'qbase/components',
-        component: ComponentLibraryWrapper,
-        routes: [
-            {
-                path: 'home',
-                component: HomePage
-            },
-            {
-                path: 'colors',
-                component: ColorsPage
-            },
-            {
-                path: 'uiIconFont',
-                component: UiIconFontPage
-            },
-            {
-                path: 'tableIconFont',
-                component: TableIconFontPage
-            },
-            {
-                path: 'checkBoxFieldValueEditor',
-                component: CheckBoxFieldValueEditorDoc
-            },
-            {
-                path: 'checkBoxFieldValueRenderer',
-                component: CheckBoxFieldValueRendererDoc
-            },
-            {
-                path: 'dateFieldValueEditor',
-                component: DateFieldValueEditorDoc
-            },
-            {
-                path: 'dateTimeFieldValueEditor',
-                component: DateTimeFieldValueEditorDoc
-            },
-            {
-                path: 'dateTimeFieldValueRenderer',
-                component: DateTimeFieldValueRendererDoc
-            },
-            {
-                path: 'durationFieldValueRenderer',
-                component: DurationFieldValueRendererDoc
-            },
-            {
-                path: 'emailFieldValueEditor',
-                component: EmailFieldValueEditorDoc
-            },
-            {
-                path: 'emailFieldValueRenderer',
-                component: EmailFieldValueRendererDoc
-            },
-            {
-                path: 'fieldValueEditor',
-                component: FieldValueEditorDoc
-            },
-            {
-                path: 'fieldValueRenderer',
-                component: FieldValueRendererDoc
-            },
-            {
-                path: 'multiChoiceFieldValueEditor',
-                component: MultiChoiceFieldValueEditorDoc
-            },
-            {
-                path: 'multiLineTextFieldValueEditor',
-                component: MultiLineTextFieldValueEditorDoc
-            },
-            {
-                path: 'numericfieldValueEditor',
-                component: NumericFieldValueEditorDoc
-            },
-            {
-                path: 'numericFieldValueRenderer',
-                component: NumericFieldValueRendererDoc
-            },
-            {
-                path: 'textfieldValueEditor',
-                component: TextFieldValueEditorDoc
-            },
-            {
-                path: 'textFieldValueRenderer',
-                component: TextFieldValueRendererDoc
-            },
-            {
-                path: 'timeFieldValueEditor',
-                component: TimeFieldValueEditorDoc
-            },
-            {
-                path: 'timeFieldValueRenderer',
-                component: TimeFieldValueRendererDoc
-            },
-            {
-                path: 'trowser',
-                component: TrowserDoc
-            },
-            {
-                path: 'urlFieldValueEditor',
-                component: UrlFieldValueEditorDoc
-            },
-            {
-                path: 'urlFieldValueRenderer',
-                component: UrlFieldValueRendererDoc
-            },
-            {
-                path: 'userFieldRenderer',
-                component: UserFieldRendererDoc
-            },
-            {
-                path: 'userFieldEditor',
-                component: UserFieldEditorDoc
-            },
-            {
-                path: 'qbpanel',
-                component: QBPanelDoc
-            },
-            {
-                path: 'icon',
-                component: IconDoc
-            },
-            {
-                path: 'qBModal',
-                component: QBModalDoc
-            },
-            {
-                path: 'alertBanner',
-                component: AlertBannerDoc
-            },
-            {
-                path: 'pageTitle',
-                component: PageTitleDoc
-            },
-            {
-                path: 'invisibleBackdrop',
-                component: InvisibleBackdropDoc
-            },
-            {
-                path: 'phoneFieldValueEditor',
-                component: PhoneFieldValueEditorDoc
-            },
-            {
-                path: 'phoneFieldValueRenderer',
-                component: PhoneFieldValueRendererDoc
-            },
-            {
-                path: 'durationFieldValueEditor',
-                component: DurationFieldValueEditorDoc
-            },
-            {
-                path: 'qbGrid',
-                component: QbGridDoc
-            },
-            {
-                path: 'sideMenuBase',
-                component: SideMenuBaseDoc
-            },
-            {
-                path: 'sideTrowserBase',
-                component: SideTrowserBaseDoc
-            },
-            {
-                path: 'iconChooser',
-                component: IconChooserDoc
-            },
-            {
-                path: 'iconInputBox',
-                component: IconInputBoxDoc
-            },
-            {
-                path: 'topNav',
-                component: TopNavDoc
-            },
-            {
-                path: 'stage',
-                component: StageDoc
-            },
-            {
-                path: 'tooltip',
-                component: TooltipDoc
-            },
-            {
-                path: 'standardLeftNav',
-                component: StandardLeftNavDoc
-            }
-        ]
-    }
-];
-
-
 render((
     <Router history={browserHistory}>
-        <Switch>
-            <Redirect push from="/qbase/components" to="/qbase/components/home"/>
-            {/*  within Switch 1st match wins
-             includes all the above top level routes and passed on the child routes in the properties
-             note if an entry it is without a path to match
-             the route has to come after specific routes
-             */}
-            {routes.map((route, i) => (
-                    <RouteWithSubRoutes key={i} {...route} />
-                )
-            )}
-        </Switch>
+        <Route path="qbase/components" component={ComponentLibraryWrapper}>
+            <IndexRedirect to="home" />
+            <Route path="home" component={HomePage} />
+            <Route path="colors" component={ColorsPage} />
+            <Route path="uiIconFont" component={UiIconFontPage} />
+            <Route path="tableIconFont" component={TableIconFontPage} />
+
+            <Route path="checkBoxFieldValueEditor" component={CheckBoxFieldValueEditorDoc} />
+            <Route path="checkBoxFieldValueRenderer" component={CheckBoxFieldValueRendererDoc} />
+            <Route path="dateFieldValueEditor" component={DateFieldValueEditorDoc} />
+            <Route path="dateTimeFieldValueEditor" component={DateTimeFieldValueEditorDoc} />
+            <Route path="dateTimeFieldValueRenderer" component={DateTimeFieldValueRendererDoc} />
+            <Route path="durationFieldValueRenderer" component={DurationFieldValueRendererDoc} />
+            <Route path="emailFieldValueEditor" component={EmailFieldValueEditorDoc} />
+            <Route path="emailFieldValueRenderer" component={EmailFieldValueRendererDoc} />
+            <Route path="fieldValueEditor" component={FieldValueEditorDoc} />
+            <Route path="fieldValueRenderer" component={FieldValueRendererDoc} />
+            <Route path="multiChoiceFieldValueEditor" component={MultiChoiceFieldValueEditorDoc} />
+            <Route path="multiLineTextFieldValueEditor" component={MultiLineTextFieldValueEditorDoc} />
+            <Route path="numericfieldValueEditor" component={NumericFieldValueEditorDoc} />
+            <Route path="numericFieldValueRenderer" component={NumericFieldValueRendererDoc} />
+            <Route path="textfieldValueEditor" component={TextFieldValueEditorDoc} />
+            <Route path="textFieldValueRenderer" component={TextFieldValueRendererDoc} />
+            <Route path="timeFieldValueEditor" component={TimeFieldValueEditorDoc} />
+            <Route path="timeFieldValueRenderer" component={TimeFieldValueRendererDoc} />
+            <Route path="trowser" component={TrowserDoc} />
+            <Route path="urlFieldValueEditor" component={UrlFieldValueEditorDoc} />
+            <Route path="urlFieldValueRenderer" component={UrlFieldValueRendererDoc} />
+            <Route path="userFieldRenderer" component={UserFieldRendererDoc} />
+            <Route path="userFieldEditor" component={UserFieldEditorDoc} />
+            <Route path="qbpanel" component={QBPanelDoc} />
+            <Route path="icon" component={IconDoc} />
+            <Route path="qBModal" component={QBModalDoc} />
+            <Route path="alertBanner" component={AlertBannerDoc} />
+            <Route path="pageTitle" component={PageTitleDoc} />
+            <Route path="invisibleBackdrop" component={InvisibleBackdropDoc} />
+            <Route path="phoneFieldValueEditor" component={PhoneFieldValueEditorDoc} />
+            <Route path="phoneFieldValueRenderer" component={PhoneFieldValueRendererDoc} />
+            <Route path="durationFieldValueEditor" component={DurationFieldValueEditorDoc} />
+            <Route path="qbGrid" component={QbGridDoc} />
+            <Route path="sideMenuBase" component={SideMenuBaseDoc} />
+            <Route path="sideTrowserBase" component={SideTrowserBaseDoc} />
+            <Route path="iconChooser" component={IconChooserDoc} />
+            <Route path="iconInputBox" component={IconInputBoxDoc} />
+            <Route path="topNav" component={TopNavDoc} />
+            <Route path="stage" component={StageDoc} />
+            <Route path="tooltip" component={TooltipDoc} />
+            <Route path="standardLeftNav" component={StandardLeftNavDoc} />
+        </Route>
     </Router>
 ), document.getElementById('content'));
