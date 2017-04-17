@@ -4,7 +4,7 @@ import en from 'intl/locale-data/jsonp/en.js';
 
 import React from 'react';
 import {render} from 'react-dom';
-import {Router, Route, IndexRoute, IndexRedirect, browserHistory} from 'react-router';
+import {Router, Route, IndexRoute, IndexRedirect, browserHistory} from 'react-router-dom';
 import AppsBundleLoader from '../../client-react/src/locales/appsBundleLoader';
 import config from '../../client-react/src/config/app.config';
 

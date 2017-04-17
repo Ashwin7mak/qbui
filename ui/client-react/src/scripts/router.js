@@ -218,17 +218,19 @@ const routes = [
 render((
     <Provider store={store}>
         <Router history={history} createElement={createElementWithFlux} >
-            <Switch>
+            {/*<Switch>*/}
                 {/*  within Switch 1st match wins
                     includes all the above top level routes and passed on the child routes in the properties
                     note if an entry it is without a path to match
                      the route has to come after specific routes
                  */}
+            <div className="testapp">
                 {routes.map((route, i) => (
                         <RouteWithSubRoutes key={i} {...route} />
                     )
                 )}
-            </Switch>
+            </div>
+            {/*</Switch>*/}
         </Router>
     </Provider>
 ), document.getElementById('content'));
