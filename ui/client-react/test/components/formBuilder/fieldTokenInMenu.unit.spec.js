@@ -36,9 +36,9 @@ describe('FieldTokenInMenu', () => {
     it('will invoke addNewFieldToForm when FieldToken node is clicked', () => {
         const type = 'textbox';
         const title = 'New Textbox';
-        component = shallow(<FieldTokenInMenu addNewFieldToForm={mockActions.addNewFieldToForm} relatedField={relatedField} type={type} title={title} formId={formId} selectedField={selectedField} appId={appId} tableId={tblId}/>);
+        component = shallow(<FieldTokenInMenu addNewFieldToForm={mockActions.addNewFieldToForm} relatedField={relatedField} type={type} title={title} formId={formId} selectedField={selectedField} appId={appId} tblId={tblId}/>);
         component.find(FieldToken).simulate('click');
 
-        expect(mockActions.addNewFieldToForm).toHaveBeenCalledWith(formId, selectedField, relatedField, appId, tblId);
+        expect(mockActions.addNewFieldToForm).toHaveBeenCalledWith(formId, appId, tblId, selectedField, relatedField);
     });
 });

@@ -11,17 +11,21 @@ describe('BaseService rewire tests', () => {
         }
     };
     var mockAxios = {
-        delete: function() {
-            return {deleteMethodCalled:true};
-        },
-        get: function() {
-            return {getMethodCalled:true};
-        },
-        patch: function() {
-            return {patchMethodCalled:true};
-        },
-        put: function() {
-            return {putMethodCalled:true};
+        create: function() {
+            return {
+                delete: function() {
+                    return {deleteMethodCalled:true};
+                },
+                get: function() {
+                    return {getMethodCalled:true};
+                },
+                patch: function() {
+                    return {patchMethodCalled:true};
+                },
+                put: function() {
+                    return {putMethodCalled:true};
+                }
+            };
         }
     };
 
@@ -85,10 +89,16 @@ describe('BaseService rewire tests', () => {
     });
 
 
-    it('test checkResponseStatus with 401 status', () => {
+    it('test checkResponseStatus with 401 status', (done) => {
         baseService = new BaseService();
-        baseService.checkResponseStatus({response: {status: 401}});
-        expect(mockWindowUtils.replace).not.toHaveBeenCalled();
+        baseService.checkResponseStatus({response: {status: 401}}).then(() => {
+            expect(mockWindowUtils.update).not.toHaveBeenCalledWith('');
+            expect(mockWindowUtils.replace).not.toHaveBeenCalled();
+            done();
+        }).catch(() => {
+            expect(false).toEqual(true);
+            done();
+        });
     });
 
     it('test checkResponseStatus with 200 status', () => {
@@ -146,29 +156,37 @@ describe('BaseService rewire tests', () => {
     it('test constructRedirectUrl method with Configuration specifying unauthorizedRedirect', (done) => {
         baseService = new BaseService();
         baseService.constructRedirectUrl().then(function(url) {
-            expect(mockUnauthorizedRedirectConfiguration.unauthorizedRedirect).toEqual(url);
+            expect(url).toEqual(mockUnauthorizedRedirectConfiguration.unauthorizedRedirect);
         }).then(done, done);
     });
 
     var mockGetSimpleSubdomainAxios = {
-        get: function() {
-            return Promise.resolve({legacyUrl: `https://${simpleSubdomain.subdomain}.${simpleSubdomain.domain}`});
-        },
+        create: function() {
+            return {
+                get: function() {
+                    return Promise.resolve({data: {legacyUrl: `https://${simpleSubdomain.subdomain}.${simpleSubdomain.domain}`}});
+                }
+            };
+        }
     };
 
     var mockGetComplexSubdomainAxios = {
-        get: function() {
-            return Promise.resolve({legacyUrl: `https://${complexSubdomain.subdomain}.${complexSubdomain.domain}`});
-        },
+        create: function() {
+            return {
+                get: function() {
+                    return Promise.resolve({data: {legacyUrl: `https://${complexSubdomain.subdomain}.${complexSubdomain.domain}`}});
+                }
+            };
+        }
     };
 
     it('test constructRedirectUrl method with simple subdomain', (done) => {
         BaseServiceRewireAPI.__Rewire__('Configuration', mockSimpleDomainConfiguration);
+        BaseServiceRewireAPI.__Rewire__('axios', mockGetSimpleSubdomainAxios);
         baseService = new BaseService();
         var expectedUrl = simpleSubdomain.expectedUrl + mockWindowUtils.getHref();
-        BaseServiceRewireAPI.__Rewire__('axios', mockGetSimpleSubdomainAxios);
         baseService.constructRedirectUrl().then(function(url) {
-            expect(expectedUrl).toEqual(url);
+            expect(url).toEqual(expectedUrl);
         }).then(done, done);
     });
 
@@ -181,7 +199,7 @@ describe('BaseService rewire tests', () => {
         baseService = new BaseService();
         var expectedUrl = complexSubdomain.expectedUrl + mockWindowUtils.getHref();
         baseService.constructRedirectUrl().then(function(url) {
-            expect(expectedUrl).toEqual(url);
+            expect(url).toEqual(expectedUrl);
         }).then(done, done);
     });
 

@@ -131,6 +131,12 @@ describe('Qb Route Mapper Unit Test', function() {
         ];
     }
 
+    function automationModificationProvider()  {
+        return [
+            {message: 'GET request to automation engine health check', request: '/we/api/api/v1/health', expectedPath: '/we/api/api/v1/health', route: routeConsts.AUTOMATION_ENGINE_ALL, method: routeMapper.fetchAllFunctionForRoute(routeConsts.AUTOMATION_ENGINE_ALL), expectedDefined: true, httpVerb: 'GET'},
+        ];
+    }
+
     function featureSwitchesPathModificationProvider() {
         return [
             {message: 'GET request to the feature states endpoint', request: '/api/v1/featureStates', expectedPath: '/api/v1/featureStates', route: routeConsts.FEATURE_STATES, method: routeMapper.fetchGetFunctionForRoute(routeConsts.FEATURE_STATES), expectedDefined: true, httpVerb: 'GET'},
@@ -162,6 +168,9 @@ describe('Qb Route Mapper Unit Test', function() {
             runTestCase(entry);
         });
         eePathModificationProvider().forEach(function(entry) {
+            runTestCase(entry);
+        });
+        automationModificationProvider().forEach(function(entry) {
             runTestCase(entry);
         });
         featureSwitchesPathModificationProvider().forEach(function(entry) {
