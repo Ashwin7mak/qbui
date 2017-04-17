@@ -34,7 +34,9 @@ describe('ReportToolsAndContent functions', () => {
     };
 
     const rptId = '3';
-    let reportParams = {appId: 1, tblId: 2, rptId: rptId, format:true, offset: constants.PAGE.DEFAULT_OFFSET, numRows: constants.PAGE.DEFAULT_NUM_ROWS};
+    let reportParams = {
+        params: {appId: 1, tblId: 2, rptId: rptId, format:true, offset: constants.PAGE.DEFAULT_OFFSET, numRows: constants.PAGE.DEFAULT_NUM_ROWS}
+    };
     let reportDataParams = {
         reportData: {
             appId: 1,
@@ -117,7 +119,7 @@ describe('ReportToolsAndContent functions', () => {
 
     it('test render of report widget', () => {
         const div = document.createElement('div');
-        component = shallow(<ReportToolsAndContent flux={flux} params={reportParams} {...reportDataParams} />, div);
+        component = shallow(<ReportToolsAndContent flux={flux} match={reportParams} {...reportDataParams} />, div);
 
         //  test that the reportContentMock is rendered
         expect(component.find(ReportContentMock).length).toBe(1);
@@ -125,8 +127,8 @@ describe('ReportToolsAndContent functions', () => {
 
     it('test report is not rendered with missing app data', () => {
         const div = document.createElement('div');
-        const reportParamsWithUndefinedAppId = Object.assign({}, reportParams, {appId: undefined});
-        component = shallow(<ReportToolsAndContent flux={flux} params={reportParamsWithUndefinedAppId} {...reportDataParams} />, div);
+        const reportParamsWithUndefinedAppId = Object.assign({}, reportParams, {params: {appId: undefined}});
+        component = shallow(<ReportToolsAndContent flux={flux} match={reportParamsWithUndefinedAppId} {...reportDataParams} />, div);
 
         //  test that the reportContentMock is rendered
         expect(component.find(ReportContentMock).length).toBe(1);
@@ -134,7 +136,7 @@ describe('ReportToolsAndContent functions', () => {
 
     it('passes the primaryKeyName to child components', () => {
         const result = shallow(
-                <ReportToolsAndContent rptId={rptId} fields={fields} flux={flux} params={reportParams} {...reportDataParams}/>
+                <ReportToolsAndContent rptId={rptId} fields={fields} flux={flux} match={reportParams} {...reportDataParams}/>
             );
 
         const reportContent = result.find(ReportContentMock);
@@ -147,7 +149,7 @@ describe('ReportToolsAndContent functions', () => {
         component = shallow(
             <ReportToolsAndContent
                 flux={flux}
-                params={reportParams}
+                match={reportParams}
                 {...reportDataParams}
             />);
         component.instance().editNewRecord();
@@ -165,13 +167,13 @@ describe('ReportToolsAndContent functions', () => {
             const modifiedReport = Object.assign({}, reportDataParams);
             modifiedReport.reportData.isRecordDeleted = true;
             component = shallow(<ReportToolsAndContent loadDynamicReport={loadDynamicReportSpy} flux={flux}
-                                                       params={reportParams} {...reportDataParams} {...modifiedReport} />);
+                                                       match={reportParams} {...reportDataParams} {...modifiedReport} />);
 
             expect(loadDynamicReportSpy).toHaveBeenCalledWith(
-                reportParams.appId,
-                reportParams.tblId,
-                reportParams.rptId,
-                reportParams.format,
+                reportParams.params.appId,
+                reportParams.params.tblId,
+                reportParams.params.rptId,
+                reportParams.params.format,
                 jasmine.any(Object),
                 jasmine.any(Object)
             );
@@ -182,7 +184,7 @@ describe('ReportToolsAndContent functions', () => {
 
             const modifiedReport = Object.assign({}, reportDataParams);
             modifiedReport.reportData.isRecordDeleted = false;
-            component = shallow(<ReportToolsAndContent loadDynamicReport={loadDynamicReportSpy} flux={flux} params={reportParams} {...reportDataParams} {...modifiedReport} />);
+            component = shallow(<ReportToolsAndContent loadDynamicReport={loadDynamicReportSpy} flux={flux} match={reportParams} {...reportDataParams} {...modifiedReport} />);
 
             expect(loadDynamicReportSpy).not.toHaveBeenCalled();
         });
@@ -206,7 +208,7 @@ describe('ReportToolsAndContent functions', () => {
                 <ReportToolsAndContent
                     searchInput={searchInput}
                     clearSearchInput={clearSearchInput} flux={flux}
-                    params={reportParams}
+                    match={reportParams}
                     selectedAppId={selectedAppId}
                     routeParams={{appId:1, tblId:2,  rptId:'3'}}
                     {...reportDataParams}
@@ -226,10 +228,10 @@ describe('ReportToolsAndContent functions', () => {
                 expect(obj.loadDynamicReport).not.toHaveBeenCalled();
             }).then(() => {
                 expect(obj.loadDynamicReport).toHaveBeenCalledWith(
-                    reportParams.appId,
-                    reportParams.tblId,
-                    reportParams.rptId,
-                    reportParams.format,
+                    reportParams.params.appId,
+                    reportParams.params.tblId,
+                    reportParams.params.rptId,
+                    reportParams.params.format,
                     jasmine.any(Object),
                     jasmine.any(Object)
                 );
@@ -248,10 +250,10 @@ describe('ReportToolsAndContent functions', () => {
             expect(clearSearchInput).toHaveBeenCalled();
             expect(obj.loadDynamicReport).toHaveBeenCalled();
             expect(obj.loadDynamicReport).toHaveBeenCalledWith(
-                reportParams.appId,
-                reportParams.tblId,
-                reportParams.rptId,
-                reportParams.format,
+                reportParams.params.appId,
+                reportParams.params.tblId,
+                reportParams.params.rptId,
+                reportParams.params.format,
                 jasmine.any(Object),
                 jasmine.any(Object)
             );
@@ -269,7 +271,7 @@ describe('ReportToolsAndContent functions', () => {
             component = shallow(
                 <ReportToolsAndContent
                     flux={flux}
-                    params={reportParams}
+                    match={reportParams}
                     {...reportDataParams}
                 />);
 
@@ -300,7 +302,7 @@ describe('ReportToolsAndContent functions', () => {
             component = shallow(
                 <ReportToolsAndContent
                     flux={flux}
-                    params={reportParams}
+                    match={reportParams}
                     {...reportDataParams}
                 />);
 
