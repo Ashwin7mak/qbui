@@ -124,6 +124,7 @@ export default {
         },
         pageActions: {
             addRecord: "Datensatz hinzufügen",
+            approve: "Genehmigen Sie diese Aufzeichnung",
             saveRecord: "Änderungen speichern",
             saveAndAddRecord: "Speichern und fügen Sie eine neue Zeile",
             saveAndAddRecordDisabled: "Hinzufügen von mehreren Datensätzen funktioniert nicht sofort",
@@ -194,6 +195,12 @@ export default {
                 save: {
                     success: "Formular gespeichert",
                     error: "Fehler beim Speichern des Formulars"
+                }
+            },
+            automation: {
+                approverecord: {
+                    success: "Rekord genehmigt.",
+                    error: "Bei der Genehmigung dieses Datensatzes ist ein Fehler aufgetreten."
                 }
             }
         },
