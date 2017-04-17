@@ -84,10 +84,12 @@ describe('Nav Unit tests', () => {
         fields: [],
         record: [],
         report: [],
-        params: {
-            appId: '1',
-            tblId: '2',
-            recordId: '3'
+        match:{
+            params: {
+                appId: '1',
+                tblId: '2',
+                recordId: '3'
+            }
         },
         forms: [{id: 'view'}],
         shell: {
