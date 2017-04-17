@@ -213,7 +213,7 @@ AutoScroll.propTypes = {
     /**
      * the parent container passed in needs to have overflow set to auto
      * */
-    parentContainer: PropTypes.func.required,
+    parentContainer: PropTypes.object,
     /**
      * pixelsPerFrame sets how fast the scroll bar should scroll
      * */
