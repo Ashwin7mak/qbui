@@ -27,7 +27,6 @@ import NotificationManager from '../../../../reuse/client/src/scripts/notificati
 import './formBuilderContainer.scss';
 
 let logger = new Logger();
-let debounceKeyboardSaveMillis = 1000;
 
 const mapStateToProps = state => {
     let currentForm = getFormByContext(state, CONTEXT.FORM.VIEW);
