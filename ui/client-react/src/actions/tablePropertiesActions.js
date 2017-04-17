@@ -73,11 +73,6 @@ export const tableSaved = (tableInfo) => ({
     tableInfo
 });
 
-export const loadedTable = (tableInfo) => ({
-    type: types.LOADED_TABLE_PROPS,
-    tableInfo
-});
-
 export const resetEditedTableProperties = () => ({
     type: types.RESET_TABLE_PROPS
 });
@@ -148,12 +143,7 @@ export const deleteTable = (appId, tableId) => {
     };
 };
 
-export const loadTableProperties = (tableInfo) => {
-    return (dispatch) => {
-        /* TODO Currently we dont pull props from EE so initialize these to something. To be fixed by MC-1541 */
-        tableInfo.tableNoun = "noun";
-        tableInfo.description = "";
-        tableInfo.tableIcon = "Spreadsheet";
-        dispatch(loadedTable(tableInfo));
-    };
-};
+export const loadTableProperties = (tableInfo) => ({
+    type: types.LOADED_TABLE_PROPS,
+    tableInfo
+});

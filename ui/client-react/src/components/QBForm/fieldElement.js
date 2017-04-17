@@ -134,7 +134,6 @@ export const FieldElement = React.createClass({
             <div className="formElement field">
                 {this.props.includeLabel &&
                 <FieldLabelElement
-                    element={this.props.element}
                     relatedField={this.props.relatedField}
                     indicateRequiredOnLabel={this.props.indicateRequiredOnLabel}
                     isInvalid={this.props.isInvalid}
