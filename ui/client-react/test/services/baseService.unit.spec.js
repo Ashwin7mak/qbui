@@ -153,7 +153,7 @@ describe('BaseService rewire tests', () => {
         let url = baseService.constructUrl(mask, tokens);
         expect(output).toEqual(url);
     });
-    
+
     describe('constructRedirectUrl', () => {
         it('returns the pre-configured unauthorizedRedirect if it exists on Configuration', (done) => {
             baseService = new BaseService();
