@@ -23,10 +23,9 @@ $large-breakpoint-width: 1440px;
   }
   a:hover {
        background-color: $default-hover-color;
-
 }
 
-   @media (max-width: #{$small-breakpoint-width}) {
+    @media (max-width: #{$small-breakpoint-width}) {
 
         @content;
     }
