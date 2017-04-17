@@ -9,7 +9,7 @@ let MockMouseTrap = {
     unbind: () => {}
 };
 
-const keyBindings = [{key: 'esc', callback: () => {}}];
+const keyBindings = [{key: 'esc', callback: () => {}}, {key: 'mod+s', callback: () => {}}];
 const testId = "testId";
 
 let component;
