@@ -270,14 +270,14 @@ const report = (state = [], action) => {
         return reports;
     }
     case types.HIDE_COLUMN: {
-        let currentReport = getReportFromState(action.id);
-        if (currentReport) {
-            currentReport.data.columns.map(column => {
+        let currReport = getReportFromState(action.id);
+        if (currReport) {
+            currReport.data.columns.map(column => {
                 if (column.fieldDef.id === action.content.columnId) {
                     column.fieldDef.isHidden = true;
                 }
             });
-            return newState(currentReport);
+            return newState(currReport);
         }
         return state;
     }
