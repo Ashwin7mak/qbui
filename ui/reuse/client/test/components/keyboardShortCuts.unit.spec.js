@@ -3,28 +3,10 @@ import {shallow} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
 import KeyboardShortCuts, {__RewireAPI__ as KeyboardShortCutsRewireAPI} from '../../src/components/keyboardShortcuts/keyboardShortcuts';
 
-/**
- * This lets us mock out and test library classes
- * for more info see http://stackoverflow.com/questions/25688880/spy-on-a-constructor-using-jasmine
- * */
-// let mockClass = function(Subject) {
-//     var Surrogate = function() {
-//         Surrogate.prototype.constructor.apply(this, arguments);
-//         return Surrogate.prototype;
-//     };
-//     Surrogate.prototype = Object.create(Subject.prototype);
-//     Surrogate.prototype.constructor = Subject;
-//     return Surrogate;
-// };
-
-// let MouseTrap = (_selector) => {};
-
 let MockMouseTrap = {
     bind: (_keyBindings) => {},
     bindGlobal: (_keyBindings) => {}
 };
-
-// let MockMouseTrap = mockClass(MouseTrap);
 
 const keyBindings = [{key: 'esc', callback: () => {}}];
 const testId = "testId";
@@ -69,7 +51,7 @@ describe('KeyboardShortCuts', () => {
         instance.componentWillMount();
 
         expect(instance.addAllKeyBindingsPreventDefault).toHaveBeenCalledWith(keyBindings);
-        expect(MockMouseTrap.bindGlobal).toHaveBeenCalledWith(keyBindings[0].key, keyBindings[0].callback);
+        expect(MockMouseTrap.bindGlobal).toHaveBeenCalled();
     });
 
     it('calls removeAllKeyBindings when component unmounts', () => {
