@@ -254,10 +254,10 @@ export const RecordRoute = React.createClass({
     },
 
     isAutomationEnabled() {
-        //Using hard-coded app name here, to check if approve record button needs to be displayed.
+        //Using hard-coded table name here, to check if approve record button needs to be displayed.
         //TODO: Remove after Empower
-        const automationAppName = "Automation Demo";
-        if (this.props.selectedApp.name === automationAppName)  {
+        const automationTableName = "Project Request";
+        if (this.props.selectedTable.name === automationTableName)  {
             return true;
         }
         return false;
