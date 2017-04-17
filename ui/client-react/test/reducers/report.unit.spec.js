@@ -846,6 +846,89 @@ describe('Report reducer functions', () => {
 
     });
 
+    describe('Report reducer HIDE_COLUMN test correct state', () => {
+        let contextId = "HIDE_COLUMN";
+        let initialState = [
+            {
+                id: contextId,
+                data:
+                {
+                    columns: [
+                        {
+                            fieldDef: {
+                                id: 6,
+                                isHidden: false
+                            }
+                        },
+                        {
+                            fieldDef: {
+                                id: 7,
+                                isHidden: false
+                            }
+                        }
+                    ]
+                }
+            }
+        ];
+        let testCases = [
+            {
+                description: 'when fieldDef id of column equals column id of first',
+                initialState: initialState,
+                content : {columnId: 6},
+                expects : (testState) => {
+                    expect(Array.isArray(testState)).toEqual(true);
+                    expect(testState[0].data.columns[0].fieldDef.isHidden).toEqual(true);
+                    expect(testState[0].data.columns[1].fieldDef.isHidden).toEqual(false);
+                }
+            },
+            {
+                description: 'when fieldDef id of column equals column id of second',
+                initialState: initialState,
+                content : {columnId: 7},
+                expects : (testState) => {
+                    expect(Array.isArray(testState)).toEqual(true);
+                    expect(testState[0].data.columns[0].fieldDef.isHidden).toEqual(false);
+                    expect(testState[0].data.columns[1].fieldDef.isHidden).toEqual(true);
+                }
+            },
+            {
+                description: 'when fieldDef id of column does not equal any ids',
+                initialState: initialState,
+                content : {columnId: 8},
+                expects : (testState) => {
+                    expect(Array.isArray(testState)).toEqual(true);
+                    expect(testState[0].data.columns[0].fieldDef.isHidden).toEqual(false);
+                    expect(testState[0].data.columns[1].fieldDef.isHidden).toEqual(false);
+                }
+            },
+            {
+                description: 'when no columnId provided',
+                initialState: initialState,
+                content : {},
+                expects : (testState) => {
+                    expect(Array.isArray(testState)).toEqual(true);
+                    expect(testState[0].data.columns[0].fieldDef.isHidden).toEqual(false);
+                    expect(testState[0].data.columns[1].fieldDef.isHidden).toEqual(false);
+                }
+            }
+        ];
+
+        testCases.forEach(testCase => {
+            it(testCase.description, () => {
+                let testState = testCase.initialState;
+                actionObj.type = types.HIDE_COLUMN;
+                actionObj.id = contextId;
+                if (testCase.content) {
+                    actionObj.content = testCase.content;
+                }
+                testState = reducer(testState, actionObj);
+
+                testCase.expects(testState);
+            });
+        });
+
+    });
+
     describe('Report reducer INVALID_ACTION test correct state', () => {
         it('handled non matching action', () => {
             let testState = [123, 456, 789];
