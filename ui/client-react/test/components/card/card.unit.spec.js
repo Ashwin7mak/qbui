@@ -14,39 +14,36 @@ describe('Card functions', () => {
 
     it('test render of component', () => {
         let component = shallow(
-            <MemoryRouter>
-                <Card
-                    title={title}
-                    subtitle={subtitle}
-                    icon={icon}
-                    link={link}
-                />
-            </MemoryRouter>);
-        expect(component.find(Card).length).toEqual(1);
+            <Card
+                title={title}
+                subtitle={subtitle}
+                icon={icon}
+                link={link}
+            />);
+        expect(component.exists()).toBeTruthy();
     });
 
     it('test renderLink method with link', () => {
         const context = createRouterContext();
         let component = mount(
-                <Card
-                    title={title}
-                    subtitle={subtitle}
-                    icon={icon}
-                    link={link}
-                />, {context});
+            <Card
+                title={title}
+                subtitle={subtitle}
+                icon={icon}
+                link={link}
+            />,
+            {context});
         expect(component.find('.cardLink').length).toEqual(1);
     });
 
     it('test renderLink method without link', () => {
         let component = shallow(
-            <MemoryRouter>
-                <Card
-                    title={title}
-                    subtitle={subtitle}
-                    icon={icon}
-                />
-            </MemoryRouter>);
-        const instance = component.dive().dive().instance();
+            <Card
+                title={title}
+                subtitle={subtitle}
+                icon={icon}
+            />);
+        const instance = component.instance();
         let result = instance.renderLink();
         expect(result).toEqual(title);
     });
