@@ -9,6 +9,7 @@ import CookieConstants from '../../../common/src/constants';
 import uuid from 'uuid';
 import Promise from 'bluebird';
 import QbResponseError from './QbResponseError';
+import {UNAUTHORIZED} from '../constants/urlConstants';
 
 window.Promise = Promise; // set global Promise to Bluebird promise (axios has dependency on Promises which are not in IE 11)
 let FEDERATION_LEGACY_URL = '/qbase/federation/legacyUrl';
@@ -141,10 +142,9 @@ class BaseService {
             //  axios upgraded to an error.response object in 0.13.x
             switch (error.response.status) {
             case 401:   // invalid/no ticket
-                this.constructRedirectUrl().then(function(currentStackSignInUrl) {
+                return this.constructRedirectUrl().then(function(currentStackSignInUrl) {
                     WindowLocationUtils.update(currentStackSignInUrl);
                 });
-                break;
             }
         }
     }
@@ -187,12 +187,17 @@ class BaseService {
             return Promise.resolve(Configuration.unauthorizedRedirect);
         } else {
             return this.get(FEDERATION_LEGACY_URL, {})
-                .then(function(json) {
+                .then(json => {
                     let currentStackSignInUrl = "/db/main?a=nsredirect&nsurl=";
                     let newStackDestination = WindowLocationUtils.getHref();
                     let currentStackDomain = json.data.legacyUrl;
                     currentStackSignInUrl = currentStackDomain + currentStackSignInUrl + newStackDestination;
                     return currentStackSignInUrl;
+                })
+                .catch(error => {
+                    // When the federation legacy URL request fails, return the default redirect
+                    // We can't use the Logger here because it would cause a circular reference because Logger uses baseService
+                    return Promise.resolve(UNAUTHORIZED);
                 });
         }
     }

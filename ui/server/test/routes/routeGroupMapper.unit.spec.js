@@ -56,7 +56,7 @@ describe('Group Route Mapper Unit Test', function() {
             {message: 'LH_V1, ' + routeConsts.SWAGGER_RESOURCES + ' POST', routeGroup: routeGroups.LH_V1, route: routeConsts.SWAGGER_RESOURCES, method: 'post', expectedOutput: false},
             {message: 'LH_V1, ' + routeConsts.SWAGGER_IMAGES + ' POST', routeGroup: routeGroups.LH_V1, route: routeConsts.SWAGGER_IMAGES, method: 'post', expectedOutput: false},
             {message: 'LH_V1, ' + routeConsts.SWAGGER_DOCUMENTATION + ' POST', routeGroup: routeGroups.LH_V1, route: routeConsts.SWAGGER_DOCUMENTATION, method: 'post', expectedOutput: false},
-            {message: 'LH_V1, ' + routeConsts.TOMCAT_ALL + ' POST', routeGroup: routeGroups.LH_V1, route: routeConsts.TOMCAT_ALL, method: 'post', expectedOutput: false},
+            {message: 'LH_V1, ' + routeConsts.TOMCAT_ALL + ' POST', routeGroup: routeGroups.LH_V1, route: routeConsts.TOMCAT_ALL, method: 'post', expectedOutput: true},
             {message: 'LH_V1, ' + routeConsts.SWAGGER_API_EE + ' POST', routeGroup: routeGroups.LH_V1, route: routeConsts.SWAGGER_API_EE, method: 'post', expectedOutput: false},
             {message: 'LH_V1, ' + routeConsts.EXPERIENCE_ENGINE_ALL + ' POST', routeGroup: routeGroups.LH_V1, route: routeConsts.EXPERIENCE_ENGINE_ALL, method: 'post', expectedOutput: false},
 
@@ -76,7 +76,7 @@ describe('Group Route Mapper Unit Test', function() {
             {message: 'LH_V1, ' + routeConsts.SWAGGER_RESOURCES + ' DELETE', routeGroup: routeGroups.LH_V1, route: routeConsts.SWAGGER_RESOURCES, method: 'delete', expectedOutput: false},
             {message: 'LH_V1, ' + routeConsts.SWAGGER_IMAGES + ' DELETE', routeGroup: routeGroups.LH_V1, route: routeConsts.SWAGGER_IMAGES, method: 'delete', expectedOutput: false},
             {message: 'LH_V1, ' + routeConsts.SWAGGER_DOCUMENTATION + ' DELETE', routeGroup: routeGroups.LH_V1, route: routeConsts.SWAGGER_DOCUMENTATION, method: 'delete', expectedOutput: false},
-            {message: 'LH_V1, ' + routeConsts.TOMCAT_ALL + ' DELETE', routeGroup: routeGroups.LH_V1, route: routeConsts.TOMCAT_ALL, method: 'delete', expectedOutput: false},
+            {message: 'LH_V1, ' + routeConsts.TOMCAT_ALL + ' DELETE', routeGroup: routeGroups.LH_V1, route: routeConsts.TOMCAT_ALL, method: 'delete', expectedOutput: true},
             {message: 'LH_V1, ' + routeConsts.SWAGGER_API_EE + ' DELETE', routeGroup: routeGroups.LH_V1, route: routeConsts.SWAGGER_API_EE, method: 'delete', expectedOutput: false},
             {message: 'LH_V1, ' + routeConsts.EXPERIENCE_ENGINE_ALL + ' DELETE', routeGroup: routeGroups.LH_V1, route: routeConsts.EXPERIENCE_ENGINE_ALL, method: 'delete', expectedOutput: false},
 
