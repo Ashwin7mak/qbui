@@ -3,7 +3,7 @@ import {shallow, mount} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
 
 import RowActions from '../../../src/components/dataTable/qbGrid/rowActions';
-import RowActionsReuse from '../../../../reuse/client/src/components/rowActions/rowActions'
+import RowActionsReuse from '../../../../reuse/client/src/components/rowActions/rowActions';
 import {PositionedRowEditActions} from '../../../src/components/dataTable/qbGrid/rowEditActions';
 import QbIconActions, {__RewireAPI__ as QbIconActionsRewireAPI} from '../../../src/components/dataTable/qbGrid/qbIconActions';
 
@@ -45,13 +45,9 @@ fdescribe('RowActions (QbGrid)', () => {
     });
 
     fit('Checks the row actions component has props', () => {
-        component = shallow(<RowActions {...props}/>);
+        component = mount(<RowActions {...props}/>);
 
-        let RowActionsTest = component.find(RowActionsReuse);
-        expect(RowActionsTest).toBePresent();
-
-        expect(RowActionsTest).toHaveProp('iconActionsNode').
-        toHaveClassName('recordActions');
-        // expect(RowActions).toBePresent();
+        let RowActionsTest = component.find(QbIconActions);
+        expect(RowActionsTest).toHaveProp('pullRight', false);
     });
 });

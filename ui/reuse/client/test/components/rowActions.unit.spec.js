@@ -1,5 +1,5 @@
 import React from 'react';
-import {shallow} from 'enzyme';
+import {shallow, mount} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
 
 import RowActions from '../../src/components/rowActions/rowActions';
@@ -18,6 +18,7 @@ const props = {
     isEditingRowValid: true,
     isEditingRowSaving: true,
     isInlineEditOpen: false,
+    iconActionsNode: null,
     editingRowErrors: [],
     onCancelEditingRow() {},
     onClickAddNewRow() {},
@@ -25,7 +26,7 @@ const props = {
     onClickSaveRow() {}
 };
 
-fdescribe('RowActions (Grid)', () => {
+describe('RowActions (Grid)', () => {
     beforeEach(() => {
         jasmineEnzyme();
         IconActionsRewireAPI.__Rewire__('IconActions', () => {return <div></div>;});
@@ -35,7 +36,7 @@ fdescribe('RowActions (Grid)', () => {
         IconActionsRewireAPI.__ResetDependency__('IconActions');
     });
 
-    fit('Renders the row actions', () => {
+    it('Renders the row actions', () => {
         component = shallow(<RowActions {...props} />);
 
         expect(component).toHaveClassName('actionsCol');
@@ -53,7 +54,7 @@ fdescribe('RowActions (Grid)', () => {
         expect(checkbox).not.toBeChecked();
     });
 
-    fit('Renders an empty div if inlineEditing is open', () => {
+    it('Renders an empty div if inlineEditing is open', () => {
         component = shallow(<RowActions {...props} isInlineEditOpen={true} rowId={rowId} />);
 
         expect(component).toHaveClassName('emptyRowActions');
@@ -63,7 +64,7 @@ fdescribe('RowActions (Grid)', () => {
         expect(component).not.toContainReact(<PositionedRowEditActions />);
     });
 
-    fit('renders the row edit actions if the row being editing', () => {
+    it('renders the row edit actions if the row being editing', () => {
         component = shallow(<RowActions {...props} isEditing={true} editingRowId={rowId} />);
 
         // Make sure the appropriate props are passed down to the RowEdit Actions
@@ -84,5 +85,17 @@ fdescribe('RowActions (Grid)', () => {
         expect(component).not.toHaveClassName('actionsCol');
         expect(component.find(checkboxSelector)).toBeEmpty();
         expect(component.find(IconActions)).toBeEmpty();
+    });
+
+    it('renders IconActions if iconActionsNode has some value', () => {
+        component = shallow(<RowActions {...props} iconActionsNode={1} />);
+
+        expect(component.find(IconActions)).not.toBePresent();
+    });
+
+    it('not renders IconActions if iconActionsNode has some value', () => {
+        component = shallow(<RowActions {...props} />);
+
+        expect(component.find(IconActions)).toBePresent();
     });
 });
