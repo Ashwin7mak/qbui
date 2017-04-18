@@ -74,12 +74,11 @@ var ComponentLibraryWrapper = React.createClass({
                 </div>
                 <div className="comp-library-content">
                     <Switch>
-                        { this.props.routes.map((route, i) => {
+                        { this.props.routes !== undefined ? this.props.routes.map((route, i) => {
                             return (
                                 <RouteWithSubRoutes key={i} {...route} />
                             );
-                        }
-                        )}
+                        }) : ''}
                     </Switch>
                 </div>
             </div>
