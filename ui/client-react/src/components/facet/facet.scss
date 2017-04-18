@@ -54,6 +54,11 @@
     .filterButton {
         font-size: 18px;
 
+        @include small-breakpoint {
+          font-size:$size-iconfont-large2;
+          line-height: 1.7;
+        }
+
         &.qbIcon {
             display: inline;
         }
