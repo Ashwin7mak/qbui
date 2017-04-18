@@ -569,7 +569,7 @@ module.exports = function(grunt) {
                     './wdio/tests/forms/formEdit.e2e.spec.js',
                     './wdio/tests/forms/formDragDrop.e2e.spec.js',
                     './wdio/tests/forms/formPermissionsParticipantRole.e2e.spec.js',
-                    './wdio/tests/tables/tableCreate.e2e.spec.js',
+                    //'./wdio/tests/tables/tableCreate.e2e.spec.js',
                     './wdio/tests/tables/tableEdit.e2e.spec.js',
                     './wdio/tests/reports/reportEditRecord.e2e.spec.js',
                     './wdio/tests/reports/reportNavigation.e2e.spec.js',
