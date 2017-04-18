@@ -76,33 +76,36 @@ let navItemTestData =
         it('test render opened with app list', () => {
 
             component = mount(
-                <LeftNav open={true}
+                <MemoryRouter>
+                    <LeftNav open={true}
                          appsListOpen={true}
                          apps={appsTestData}
                          items={navItemsTestData}
-                         onToggleAppsList={() => {}} />,
-                {context});
+                             onToggleAppsList={() => {}} />
+                </MemoryRouter>);
         });
 
 
         it('test render opened with app,table,reports', () => {
             component = mount(
-                <LeftNav open={true}
+                <MemoryRouter>
+                    <LeftNav open={true}
                          appsListOpen={true}
                          apps={appsTestData}
                          selectedAppId={'app1'}
-                         items={navItemsTestData}/>,
-                {context});
+                         items={navItemsTestData}/>
+                </MemoryRouter>);
         });
 
         it('test render closed with app,table,reports', () => {
             component = mount(
-                <LeftNav open={false}
+                <MemoryRouter>
+                    <LeftNav open={false}
                          appsListOpen={true}
                          apps={appsTestData}
                          selectedAppId={'app1'}
-                         items={navItemsTestData}/>,
-                {context});
+                         items={navItemsTestData}/>
+                </MemoryRouter>);
 
         });
     });
