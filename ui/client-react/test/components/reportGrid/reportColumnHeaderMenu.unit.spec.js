@@ -12,7 +12,7 @@ const MockLocale = {
 };
 const actions = {
     sortReport() {},
-    groupReport() {},
+    groupReport() {}
 };
 const testFieldDef = {
     id: 13,
