@@ -12,7 +12,8 @@ const MockLocale = {
 };
 const actions = {
     sortReport() {},
-    groupReport() {}
+    groupReport() {},
+    hideColumn() {}
 };
 const testFieldDef = {
     id: 13,
@@ -425,6 +426,15 @@ describe('ReportColumnHeaderMenu', () => {
     });
 
     describe('Add and Hide', () => {
+        // For these tests we check to make sure the appropriate action has been set on a menu item
+        // and then make sure when that action is called, it calls the correct function passed in through props
+
+        beforeEach(() => {
+            Object.keys(actions).forEach(action => {
+                spyOn(actions, action);
+            });
+        });
+
         it('hide a field when that menu item is selected', () => {
             component = shallow(<ReportColumnHeaderMenu {...actions} fieldDef={testFieldDef}/>);
             instance = component.instance();
@@ -433,6 +443,10 @@ describe('ReportColumnHeaderMenu', () => {
             expect(hidingMenuItem).toBePresent();
 
             expect(hidingMenuItem.find('.hideColumnText')).toHaveText('report.menu.hideColumn');
+
+            instance.hideColumn();
+
+            expect(actions.hideColumn).toHaveBeenCalledWith(testFieldDef.id);
         });
     });
 });
