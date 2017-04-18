@@ -22,7 +22,7 @@
 
         beforeAll(function() {
             //App basic setUp
-            return e2eBase.basicAppSetup().then(function(createdApp) {
+            return e2eBase.basicAppSetup(null, 10).then(function(createdApp) {
                 // Set your global objects to use in the test functions
                 testApp = createdApp;
                 appId = testApp.id;
