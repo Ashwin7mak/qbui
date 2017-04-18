@@ -1,5 +1,8 @@
 import React, {PropTypes, Component} from 'react';
-import MouseTrap from 'mousetrap';
+import Mousetrap from 'mousetrap';
+import {bindGlobal} from './mouseTrapBindGlobal';
+
+bindGlobal(Mousetrap);
 
 class KeyboardShortcuts extends Component {
     constructor(props) {
@@ -13,7 +16,8 @@ class KeyboardShortcuts extends Component {
     componentWillMount() {
         if (this.props.shortcutBindingsPreventDefault) {
             this.addAllKeyBindingsPreventDefault(this.props.shortcutBindingsPreventDefault);
-        } else {
+        }
+        if (this.props.shortcutBindings) {
             this.addAllKeyBindings(this.props.shortcutBindings);
         }
     }
@@ -24,26 +28,24 @@ class KeyboardShortcuts extends Component {
 
     addAllKeyBindings(bindings = []) {
         bindings.forEach(binding => {
-            MouseTrap.bind(binding.key, () => binding.callback(binding.content));
+            Mousetrap.bind(binding.key, () => binding.callback(binding.content));
         });
     }
 
     addAllKeyBindingsPreventDefault(bindings = []) {
         bindings.forEach(binding => {
-            MouseTrap(document.body).bind(binding.key, () => binding.callback(binding.content));
+            Mousetrap.bindGlobal(binding.key, () => binding.callback(binding.content));
         });
     }
 
     removeAllKeyBindings() {
+        // Order matters, keys must be unbinded in the order that they were passed in to be binded
         let shortcutBindingsPreventDefault = this.props.shortcutBindingsPreventDefault || [];
         let shortcutBindings = this.props.shortcutBindings || [];
+        let keyBindings = shortcutBindingsPreventDefault.concat(shortcutBindings);
 
-        shortcutBindingsPreventDefault.forEach(binding => {
-            MouseTrap.unbind(binding.key);
-        });
-
-        shortcutBindings.forEach(binding => {
-            MouseTrap.unbind(binding.key);
+        keyBindings.forEach(binding => {
+            Mousetrap.unbind(binding.key);
         });
     }
 
