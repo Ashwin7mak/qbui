@@ -3,7 +3,7 @@ import {mount} from 'enzyme';
 import createRouterContext from 'react-router-test-context';
 import LeftNav from '../../src/components/nav/leftNav';
 import NavItem, {__RewireAPI__ as NavItemRewireAPI} from '../../src/components/nav/navItem';
-
+import {MemoryRouter} from 'react-router-dom';
 var I18nMessageMock = React.createClass({
     render: function() {
         return (
@@ -58,54 +58,54 @@ let navItemsTestData = [
 ];
 
 let navItemTestData =
-describe('Left Nav functions', () => {
-    'use strict';
+    describe('Left Nav functions', () => {
+        'use strict';
 
-    var component;
-    const context = createRouterContext();
+        var component;
+        const context = createRouterContext();
 
-    beforeEach(() => {
-        NavItemRewireAPI.__Rewire__('I18nMessage', I18nMessageMock);
+        beforeEach(() => {
+            NavItemRewireAPI.__Rewire__('I18nMessage', I18nMessageMock);
+        });
+
+        afterEach(() => {
+            NavItemRewireAPI.__ResetDependency__('I18nMessage');
+        });
+
+
+        it('test render opened with app list', () => {
+
+            component = mount(
+                <LeftNav open={true}
+                         appsListOpen={true}
+                         apps={appsTestData}
+                         items={navItemsTestData}
+                         onToggleAppsList={() => {}} />,
+                {context});
+        });
+
+
+        it('test render opened with app,table,reports', () => {
+            component = mount(
+                <LeftNav open={true}
+                         appsListOpen={true}
+                         apps={appsTestData}
+                         selectedAppId={'app1'}
+                         items={navItemsTestData}/>,
+                {context});
+        });
+
+        it('test render closed with app,table,reports', () => {
+            component = mount(
+                <LeftNav open={false}
+                         appsListOpen={true}
+                         apps={appsTestData}
+                         selectedAppId={'app1'}
+                         items={navItemsTestData}/>,
+                {context});
+
+        });
     });
-
-    afterEach(() => {
-        NavItemRewireAPI.__ResetDependency__('I18nMessage');
-    });
-
-
-    it('test render opened with app list', () => {
-
-        component = mount(
-            <LeftNav open={true}
-                appsListOpen={true}
-                apps={appsTestData}
-                items={navItemsTestData}
-                onToggleAppsList={() => {}} />,
-            {context});
-    });
-
-
-    it('test render opened with app,table,reports', () => {
-        component = mount(
-            <LeftNav open={true}
-                appsListOpen={true}
-                apps={appsTestData}
-                selectedAppId={'app1'}
-                items={navItemsTestData}/>,
-            {context});
-    });
-
-    it('test render closed with app,table,reports', () => {
-        component = mount(
-            <LeftNav open={false}
-                appsListOpen={true}
-                apps={appsTestData}
-                selectedAppId={'app1'}
-                items={navItemsTestData}/>,
-            {context});
-
-    });
-});
 
 describe('LeftNav', () => {
     let component;
@@ -115,12 +115,13 @@ describe('LeftNav', () => {
 
     it('renders the apps list if an app is not selected', () => {
         component = mount(
-            <LeftNav open={false}
-                appsListOpen={false}
-                apps={appsTestData}
-                selectedAppId={null}
-                items={navItemsTestData}/>,
-            {context});
+            <MemoryRouter>
+                <LeftNav open={false}
+                         appsListOpen={false}
+                         apps={appsTestData}
+                         selectedAppId={null}
+                         items={navItemsTestData}/>
+            </MemoryRouter>);
 
         expect(component.find('.appsList').length).toEqual(1);
         expect(component.find('.tablesList').length).toEqual(0);
@@ -128,12 +129,13 @@ describe('LeftNav', () => {
 
     it('renders the tables list if a valid app is currently selected', () => {
         component = mount(
-            <LeftNav open={false}
-                appsListOpen={false}
-                apps={appsTestData}
-                selectedAppId={validAppId}
-                items={navItemsTestData}/>,
-            {context});
+            <MemoryRouter>
+                <LeftNav open={false}
+                         appsListOpen={false}
+                         apps={appsTestData}
+                         selectedAppId={validAppId}
+                         items={navItemsTestData}/>
+            </MemoryRouter>);
 
         expect(component.find('.tablesList').length).toEqual(1);
         expect(component.find('.appsList').length).toEqual(0);
@@ -141,12 +143,13 @@ describe('LeftNav', () => {
 
     it('renders the apps list if an invalid/non-existing app is currently selected', () => {
         component = mount(
-            <LeftNav open={false}
-                appsListOpen={true}
-                apps={appsTestData}
-                selectedAppId={invalidAppId}
-                items={navItemsTestData}/>,
-            {context});
+            <MemoryRouter>
+                <LeftNav open={false}
+                         appsListOpen={true}
+                         apps={appsTestData}
+                         selectedAppId={invalidAppId}
+                         items={navItemsTestData}/>
+            </MemoryRouter>);
 
         expect(component.find('.appsList').length).toEqual(1);
         expect(component.find('.tablesList').length).toEqual(0);
