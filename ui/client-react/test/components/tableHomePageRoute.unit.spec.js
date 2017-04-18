@@ -64,7 +64,7 @@ describe('TableHomePageRoute functions', () => {
         hideTopNav() {return;}
     };
 
-    class mockReportToolsAndContent extends React.Component{
+    class mockReportToolsAndContent extends React.Component {
         render() {
             return <div></div>;
         }
