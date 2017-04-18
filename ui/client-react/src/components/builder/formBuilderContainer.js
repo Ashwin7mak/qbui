@@ -210,6 +210,58 @@ export const FormBuilderContainer = React.createClass({
         }
     },
 
+    upArrowKeysShouldTab() {
+        //should drill down tab is number 9
+        let all = document.getElementsByTagName("*");
+        let result;
+        let index;
+        if (all) {
+            result = _.filter(all, (domNode) => {
+                if (domNode.attributes.tabIndex) {
+                    return domNode.attributes.tabIndex !== "1";
+                }
+            });
+
+            result.forEach(function(domNode, i) {
+                if (domNode === document.activeElement) {
+                    index = i;
+                }
+            });
+
+            if (result[index]) {
+                result[index - 1].focus();
+            } else if (result[0]) {
+                result[0].focus();
+            }
+        }
+    },
+
+    downArrowKeysShouldTab() {
+        this.updateChildrenTabIndex("-1");
+        let all = document.getElementsByTagName("*");
+        let result;
+        let index;
+        if (all) {
+            result = _.filter(all, (domNode) => {
+                if (domNode.attributes.tabIndex) {
+                    return domNode.attributes.tabIndex !== "1";
+                }
+            });
+
+            result.forEach(function(domNode, i) {
+                if (domNode === document.activeElement) {
+                    index = i;
+                }
+            });
+
+            if (result[index]) {
+                result[index + 1].focus();
+            } else if (result[0]) {
+                result[0].focus();
+            }
+        }
+    },
+
     render() {
         let loaded = (_.has(this.props, 'currentForm') && this.props.currentForm !== undefined && !this.props.currentForm.loading && !this.props.currentForm.saving);
         let formData = null;
@@ -227,7 +279,9 @@ export const FormBuilderContainer = React.createClass({
                     {key: 'mod+s', callback: () => {this.saveClicked(); return false;}},
                     {key: 'shift+up', callback: () => {this.keyboardMoveFieldUp(); return false;}},
                     {key: 'shift+down', callback: () => {this.keyboardMoveFieldDown(); return false;}},
-                    {key: 'backspace', callback: () => {this.removeField(); return false;}}
+                    {key: 'backspace', callback: () => {this.removeField(); return false;}},
+                    {key: 'up', callback: () => {this.upArrowKeysShouldTab(); return false;}},
+                    {key: 'down', callback: () => {this.downArrowKeysShouldTab(); return false;}},
                 ]}/>
 
                 <PageTitle title={Locale.getMessage('pageTitles.editForm')}/>
