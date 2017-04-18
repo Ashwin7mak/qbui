@@ -319,9 +319,9 @@ export default {
                 fieldProps: "Propriétés de champ"
             },
             drawer: {
-                title: "Hidden fields",
-                info: "Add a field to the report",
-                empty: "All fields are shown in the report."
+                title: "Champs cachés",
+                info: "Ajoutez un champ au rapport",
+                empty: "Tous les champs sont montrés dans le rapport."
             }
         },
         errorMessagePopup: {
