@@ -4,7 +4,7 @@ import QBicon from '../qbIcon/qbIcon';
 import Button from 'react-bootstrap/lib/Button';
 import OverlayTrigger from 'react-bootstrap/lib/OverlayTrigger';
 import Tooltip from 'react-bootstrap/lib/Tooltip';
-import TableIcon from '../qbTableIcon/qbTableIcon';
+import Icon, {AVAILABLE_ICON_FONTS} from '../../../../reuse/client/src/components/icon/icon.js';
 import IconActions from '../actions/iconActions';
 import {I18nMessage} from '../../utils/i18nMessage';
 import Record from './../record/record';
@@ -18,6 +18,7 @@ import Loader from 'react-loader';
 import RecordHeader from './recordHeader';
 import Breakpoints from '../../utils/breakpoints';
 import WindowLocationUtils from '../../utils/windowLocationUtils';
+import AutomationUtils from '../../utils/automationUtils';
 import * as SpinnerConfigurations from '../../constants/spinnerConfigurations';
 import * as UrlConsts from "../../constants/urlConstants";
 import _ from 'lodash';
@@ -27,7 +28,6 @@ import {openRecord} from '../../actions/recordActions';
 import {clearSearchInput} from '../../actions/searchActions';
 import {APP_ROUTE, BUILDER_ROUTE, EDIT_RECORD_KEY} from '../../constants/urlConstants';
 import {CONTEXT} from '../../actions/context';
-
 
 import './record.scss';
 
@@ -193,7 +193,7 @@ export const RecordRoute = React.createClass({
         const isSmall = Breakpoints.isSmallBreakpoint();
         const tableName = this.props.selectedTable ? this.props.selectedTable.name : '';
         return <div className="title">
-            {isSmall ? <TableIcon classes="primaryIcon" icon={this.props.selectedTable ? this.props.selectedTable.icon : ""}/> : null}
+            {isSmall ? <Icon iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY} classes="primaryIcon" icon={this.props.selectedTable ? this.props.selectedTable.tableIcon : ""}/> : null}
             <span> {tableName} # {recordId}</span></div>;
     },
 
@@ -212,7 +212,7 @@ export const RecordRoute = React.createClass({
             return (<div className="recordStageHeadline">
 
                 <div className="navLinks">
-                    {this.props.selectedTable && <Link className="tableHomepageIconLink" to={tableLink}><TableIcon icon={this.props.selectedTable.icon}/></Link>}
+                    {this.props.selectedTable && <Link className="tableHomepageIconLink" to={tableLink}><Icon iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY} icon={this.props.selectedTable.tableIcon}/></Link>}
                     {this.props.selectedTable && <Link className="tableHomepageLink" to={tableLink}>{this.props.selectedTable.name}</Link>}
                     {this.props.selectedTable && rptId && <span className="divider color-black-700">&nbsp;&nbsp;:&nbsp;&nbsp;</span>}
                     {rptId && <a className="backToReport" href="#" onClick={this.returnToReport}>{reportName}</a>}
@@ -253,6 +253,29 @@ export const RecordRoute = React.createClass({
         WindowLocationUtils.pushWithQuery(EDIT_RECORD_KEY, recordId);
     },
 
+    isAutomationEnabled() {
+        //Using hard-coded table name here, to check if approve record button needs to be displayed.
+        //TODO: Remove after Empower
+        const automationTableName = "Project Request";
+        if (this.props.selectedTable.name === automationTableName)  {
+            return true;
+        }
+        return false;
+    },
+
+    /**
+     * Invoke automation to approve
+     *
+     */
+    approveRecord()  {
+        let appId = this.props.params.appId;
+        let tblId = this.props.params.tblId;
+        let recId = this.props.params.recordId;
+        AutomationUtils.approveRecord(appId, tblId, recId).then(() => {
+            this.loadRecordFromParams(this.props.params);
+        });
+    },
+
     /**
      * edit the selected record in the trowser
      * @param data row record data
@@ -268,7 +291,11 @@ export const RecordRoute = React.createClass({
             {msg: 'unimplemented.email', icon:'mail', disabled:true},
             {msg: 'unimplemented.print', icon:'print', disabled:true},
             {msg: 'unimplemented.delete', icon:'delete', disabled:true}];
-
+        // Add a button that 'approves' a record by invoking automation feature.
+        // TODO: Remove after Empower 2017 demo.
+        if (this.isAutomationEnabled()) {
+            actions.splice(2, 0, {msg: 'pageActions.approve', icon: 'thumbs-up', onClick: this.approveRecord});
+        }
         return (<IconActions className="pageActions" actions={actions} {...this.props}/>);
     },
 

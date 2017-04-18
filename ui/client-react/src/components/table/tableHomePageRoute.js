@@ -2,7 +2,7 @@ import React from 'react';
 import Stage from '../stage/stage';
 import ReportStage from '../report/reportStage';
 import ReportHeader from '../report/reportHeader';
-import TableIcon from '../qbTableIcon/qbTableIcon';
+import Icon, {AVAILABLE_ICON_FONTS} from '../../../../reuse/client/src/components/icon/icon.js';
 import IconActions from '../actions/iconActions';
 import ReportToolsAndContent from '../report/reportToolsAndContent';
 import Fluxxor from 'fluxxor';
@@ -99,7 +99,7 @@ export const TableHomePageRoute = React.createClass({
         return (
             <div className="tableHomepageStageHeadline">
                 <div className="navLinks">
-                    {this.props.selectedTable && this.props.selectedTable.icon && <TableIcon icon={this.props.selectedTable.icon}/> }
+                    {this.props.selectedTable && this.props.selectedTable.tableIcon && <Icon iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY} icon={this.props.selectedTable.tableIcon}/> }
                     <span>{this.props.selectedTable && this.props.selectedTable.name}&nbsp;<I18nMessage message={'nav.home'}/></span>
                 </div>
             </div>);

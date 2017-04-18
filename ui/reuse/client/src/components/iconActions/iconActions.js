@@ -5,12 +5,7 @@ import Button from 'react-bootstrap/lib/Button';
 import Dropdown from 'react-bootstrap/lib/Dropdown';
 import Icon from '../icon/icon';
 import Tooltip from '../tooltip/tooltip';
-
-// IMPORT FROM CLIENT REACT
-import {I18nMessage} from '../../../../../client-react/src/utils/i18nMessage';
-// IMPORT FROM CLIENT REACT
-
-
+import {I18nMessage} from '../../utils/i18nMessage';
 import './iconActions.scss';
 
 /**
