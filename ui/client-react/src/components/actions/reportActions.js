@@ -205,6 +205,7 @@ export const ReportActions = React.createClass({
                         {this.props.selection.length === 1 &&
                             <ActionIcon icon="edit" onClick={this.onEditClicked} tip={this.getSelectionTip("selection.edit")}/>
                         }
+                        <ActionIcon icon="thumbs-up" tip={"approve"} onClick={this.props.onEditAction}/>
                         <ActionIcon icon="print" tip={Locale.getMessage("unimplemented.print")} disabled={true}/>
                         {this.getEmailAction()}
                         <ActionIcon icon="duplicate" tip={Locale.getMessage("unimplemented.copy")} disabled={true}/>
