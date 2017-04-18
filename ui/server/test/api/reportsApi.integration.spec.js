@@ -112,7 +112,7 @@
          * Test to create a report with all fields and verify the results.
          */
         it('Should create a report, execute the report, and validate the resulting ' +
-            'record matches the created record in setup', function(done) {
+            'record matches the created record in setup', function() {
             this.timeout(testConsts.INTEGRATION_TIMEOUT * appWithNoFlags.length);
 
             var reportEndpoint = recordBase.apiBase.resolveReportsEndpoint(app.id, app.tables[0].id);
@@ -122,18 +122,19 @@
                 tableId: app.tables[0].id
             };
             //Create a report
-            recordBase.apiBase.executeRequest(reportEndpoint, consts.POST, reportToCreate).then(function(report) {
+            return recordBase.apiBase.executeRequest(reportEndpoint, consts.POST, reportToCreate).then(function(report) {
                 var r = JSON.parse(report.body);
                 //Execute a report
-                recordBase.apiBase.executeRequest(reportEndpoint + r.id + '/results?format=' + FORMAT, consts.GET).then(function(reportResults) {
-                    var results = JSON.parse(reportResults.body);
-                    //Verify records
-                    verifyRecords(results);
-                    done();
+                return recordBase.apiBase.executeRequest(reportEndpoint + r.id + '/results?format=' + FORMAT, consts.GET).then(function(reportResults) {
+                    return JSON.parse(reportResults.body);
+                }, error => {
+                    log.error(JSON.stringify(error));
                 });
-            }).catch(function(error) {
+            })
+            .then(verifyRecords)
+            .catch(function(error) {
                 log.error(JSON.stringify(error));
-                done();
+                return Promise.reject(error);
             });
         });
 
