@@ -115,9 +115,11 @@ describe('Component Library functions', () => {
     'use strict';
 
     it('test render component library wrapper', () => {
+
+        const routes = [];
         let component = TestUtils.renderIntoDocument(
             <MemoryRouter>
-                <ComponentLibraryWrapper />
+                <ComponentLibraryWrapper routes={routes}/>
             </MemoryRouter>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
     });
