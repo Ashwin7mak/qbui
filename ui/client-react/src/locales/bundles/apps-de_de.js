@@ -525,7 +525,8 @@ export default {
         fieldPropertyLabels: {
             title: "eigenschaften",
             name: "Name",
-            required: "Muss ausgefüllt werden"
+            required: "Muss ausgefüllt werden",
+            multiChoice: "Wahlen"
         },
         builder: {
             formBuilder: {
