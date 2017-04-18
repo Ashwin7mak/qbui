@@ -27,6 +27,7 @@ import NotificationManager from '../../../../reuse/client/src/scripts/notificati
 import './formBuilderContainer.scss';
 
 let logger = new Logger();
+let formBuilderContainerContent = null;
 
 const mapStateToProps = state => {
     let currentForm = getFormByContext(state, CONTEXT.FORM.VIEW);
@@ -288,10 +289,8 @@ export const FormBuilderContainer = React.createClass({
 
                 <ToolPalette isCollapsed={this.props.isCollapsed} isOpen={this.props.isOpen}>
                     <FieldProperties appId={this.props.params.appId} tableId={this.props.params.tblId} formId={formId}>
-                        <div className="formBuilderContainerContent">
-                            <AutoScroll
-                                pixelsFromBottomForLargeDevices={80}
-                                pixelsFromBottomForMobile={50}>
+                        <div className="formBuilderContainerContent" ref={element => formBuilderContainerContent = element}>
+                            <AutoScroll parentContainer={formBuilderContainerContent} pixelsFromBottomForLargeDevices={100}>
                                 <div className="formBuilderContent">
                                     <Loader loaded={loaded} options={LARGE_BREAKPOINT}>
                                         <FormBuilder
@@ -306,7 +305,6 @@ export const FormBuilderContainer = React.createClass({
                                     </Loader>
                                 </div>
                             </AutoScroll>
-
                             {this.getSaveOrCancelFooter()}
                         </div>
                     </FieldProperties>

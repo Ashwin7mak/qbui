@@ -97,7 +97,6 @@ export class FieldEditingTools extends Component {
 
     componentDidMount() {
         /**
-         * COMMENTED OUT: Will be fixed.
          * For keyboard, we need to reset the focus, to maintain proper tabbing order
          * and we need to keep the current form element in view, by scrolling it into view
          * */
@@ -121,8 +120,12 @@ export class FieldEditingTools extends Component {
     }
 
     scrollElementIntoView() {
+        /**
+         * We only need to scroll into view for keyboard navigating
+         * */
         let selectedFormElement = document.querySelector(".selectedFormElement");
-        if (selectedFormElement) {
+        let isDragging = document.querySelector(".dragging");
+        if (selectedFormElement && !isDragging) {
             document.querySelector(".selectedFormElement").scrollIntoView(false);
         }
     }
