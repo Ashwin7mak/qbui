@@ -25,24 +25,31 @@ describe('Card functions', () => {
 
     it('test renderLink method with link', () => {
         const context = createRouterContext();
-        let component = mount(
+        let cardWithContext = (
+            <MemoryRouter>
             <Card
                 title={title}
                 subtitle={subtitle}
                 icon={icon}
                 link={link}
-            />,
+            />
+            </MemoryRouter>
+        );
+        let component = mount(
+            cardWithContext,
             {context});
         expect(component.find('.cardLink').length).toEqual(1);
     });
 
     it('test renderLink method without link', () => {
-        let component = shallow(
+        let cardComponent = (
             <Card
                 title={title}
                 subtitle={subtitle}
                 icon={icon}
-            />);
+            />
+        );
+        let component = shallow(cardComponent);
         const instance = component.instance();
         let result = instance.renderLink();
         expect(result).toEqual(title);
