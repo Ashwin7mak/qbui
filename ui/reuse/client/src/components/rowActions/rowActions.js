@@ -58,7 +58,7 @@ class RowActions extends Component {
                     checked={this.props.isSelected}
                     onChange={this.props.onClickToggleSelectedRow(this.props.rowId)}
                 />
-                <IconActions onClickEditRowIcon={this.onClickEditRowIcon}
+                {this.props.iconActionsNode || <IconActions onClickEditRowIcon={this.onClickEditRowIcon}
                                                             onClickDeleteRowIcon={this.onClickDeleteRowIcon}
                                                             dropdownTooltip={true}
                                                             className="recordActions"
@@ -66,8 +66,8 @@ class RowActions extends Component {
                                                             menuIcons
                                                             actions={actions}
                                                             maxButtonsBeforeMenu={1}
-                />
-                
+                />}
+
             </div>
         );
     }
