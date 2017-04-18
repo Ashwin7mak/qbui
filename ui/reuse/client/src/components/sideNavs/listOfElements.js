@@ -126,7 +126,7 @@ class ListOfElements extends Component {
 
     render() {
         return (
-            <div className={`listOfElementsContainer ${this.props.isCollapsed ? 'listOfElementsCollapsed' : ''}`}>
+            <div className={`listOfElementsContainer ${this.props.isCollapsed ? 'listOfElementsCollapsed' : ''}`} tabIndex="0">
                 <SearchBox
                     value={this.state.fieldFilter}
                     onChange={this.onChangeFilter}

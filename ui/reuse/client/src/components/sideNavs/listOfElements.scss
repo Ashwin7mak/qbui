@@ -84,4 +84,8 @@ $toolpalette-header-font-size: 10px;
             transition: opacity 0.3s, max-width 0.3s, max-height 0.3s;
         }
     }
+    &:focus {
+        outline: none;
+        border: 20px solid $border-focused-color;
+    }
 }
