@@ -271,8 +271,9 @@ const report = (state = [], action) => {
         return reports;
     }
     case types.OPEN_FIELD_SELECTOR: {
+        // helpful function to make sure the order of the columns are correct
         function reorder(columns) {
-            let newOrder = 1;
+            let newOrder = 0;
             columns.map((column) => {
                 column.order = newOrder++;
             });
@@ -280,20 +281,24 @@ const report = (state = [], action) => {
 
         let currentReport = getReportFromState(action.id);
         if (currentReport) {
+            // loop through to check that if the columns are all visible
             let allVisible = currentReport.data.columns.every(column => {
-                return column.fieldDef.isHidden === false;
+                return column.fieldDef.isHidden !== true;
             });
             if (!allVisible) {
+                // loop through to check if the placeholder column is already visible
                 let placeHolderAlreadyExists = currentReport.data.columns.some(column => {
                     return column.fieldDef.isPlaceholder === true;
                 });
                 if (placeHolderAlreadyExists) {
+                    // remove the placeholder column if it exists
                     let actualColumns = currentReport.data.columns.filter(column => {
                         return column.fieldDef.isPlaceholder === undefined;
                     });
                     reorder(actualColumns);
                     currentReport.data.columns = actualColumns;
                 }
+                // since not all columns are visible, add the placeholder column to columns so it gets rendered on screen
                 let params = action.content;
                 let data = {
                     id: -1,
@@ -304,17 +309,16 @@ const report = (state = [], action) => {
                     }
                 };
                 let placeholder = ReportColumnTransformer.createFromApiColumn(data);
-
-                let clickedColumnIndex = currentReport.data.columns.filter((column) => {
+                // find the index of the column where 'add a column' was clicked
+                let clickedColumnOrder = currentReport.data.columns.filter(column => {
                         return column.fieldDef.id === params.clickedId;
-                    })[0].order - 1;
-
-                // add before or after the clicked column
+                    })[0].order;
+                // add before or after the clicked column depending on selection
                 let insertionIndex;
                 if (params.addBefore) {
-                    insertionIndex = clickedColumnIndex;
+                    insertionIndex = clickedColumnOrder;
                 } else {
-                    insertionIndex = clickedColumnIndex + 1;
+                    insertionIndex = clickedColumnOrder + 1;
                 }
 
                 currentReport.data.columns.splice(insertionIndex, 0, placeholder);
@@ -325,8 +329,9 @@ const report = (state = [], action) => {
         return state;
     }
     case types.CLOSE_FIELD_SELECTOR: {
+        // helpful function to make sure the order of the columns are correct
         function reorder(columns) {
-            let newOrder = 1;
+            let newOrder = 0;
             columns.map((column) => {
                 column.order = newOrder++;
             });
@@ -334,6 +339,7 @@ const report = (state = [], action) => {
 
         let currentReport = getReportFromState(action.id);
         if (currentReport) {
+            // remove the placeholder column (if it exists) when the drawer is closed
             let actualColumns = currentReport.data.columns.filter(column => {
                 return column.fieldDef.isPlaceholder === undefined;
             });
@@ -344,9 +350,9 @@ const report = (state = [], action) => {
         return state;
     }
     case types.ADD_COLUMN_SUCCESS: {
-        // function that sets all columns to the correct order property based on its location in the list
+        // helpful function to make sure the order of the columns are correct
         function reorder(columns) {
-            let newOrder = 1;
+            let newOrder = 0;
             columns.map((column) => {
                 column.order = newOrder++;
             });
