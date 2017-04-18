@@ -90,6 +90,8 @@ const ReportColumnHeaderMenuContainer = (ReportColumnHeaderMenu) => {
 
         hideColumn(columnId) {
             if (!this.hasRequiredIds()) {return;}
+            if (this.props.isOnlyOneColumnVisible) {return;}
+
             let params = {
                 columnId: columnId
             };

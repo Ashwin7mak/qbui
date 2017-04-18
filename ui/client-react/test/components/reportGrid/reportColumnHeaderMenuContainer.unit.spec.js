@@ -147,7 +147,7 @@ describe('ReportColumnHeaderMenuContainer', () => {
         });
 
         it('does not call the action to hide a column if the required props are not passed in', () => {
-            component = shallow(React.createElement(ReportColumnHeaderMenuContainer(MockMenu)));
+            component = shallow(React.createElement(ReportColumnHeaderMenuContainer(MockMenu), {isOnlyOneColumnVisible: false}));
             instance = component.instance();
 
             instance.hideColumn(mockFieldDef.id);
@@ -156,7 +156,7 @@ describe('ReportColumnHeaderMenuContainer', () => {
         });
 
         it('does not call the action to hide a column if there is only one column currently visible', () => {
-            component = shallow(React.createElement(ReportColumnHeaderMenuContainer(MockMenu), {isOnlyOneColumnVisible: true}));
+            component = shallow(React.createElement(ReportColumnHeaderMenuContainer(MockMenu), {...mockProps, isOnlyOneColumnVisible: true}));
             instance = component.instance();
 
             instance.hideColumn(mockFieldDef.id);

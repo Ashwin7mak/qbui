@@ -163,7 +163,9 @@ export const ReportColumnHeaderMenu = React.createClass({
     },
 
     hideColumn() {
-        this.props.hideColumn(this.props.fieldDef.id);
+        if (!this.props.isOnlyOneColumnVisible) {
+            this.props.hideColumn(this.props.fieldDef.id);
+        }
     },
 
     render() {
