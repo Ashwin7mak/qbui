@@ -4,8 +4,9 @@ import en from 'intl/locale-data/jsonp/en.js';
 
 import React from 'react';
 import {render} from 'react-dom';
-import {Router as Router, Route, Switch, Redirect} from 'react-router-dom';
+import {BrowserRouter, Route, Switch, Redirect} from 'react-router-dom';
 import RouteWithSubRoutes from "../../client-react/src/scripts/RouteWithSubRoutes";
+import {ROUTES} from '../../common/src/constants';
 
 import AppsBundleLoader from '../../client-react/src/locales/appsBundleLoader';
 import config from '../../client-react/src/config/app.config';
@@ -74,6 +75,12 @@ import createBrowserHistory from 'history/createBrowserHistory';
 // END OF IMPORT STATEMENTS
 // Above comment used for Grunt task. Please do not delete.
 const browserHistory  = createBrowserHistory();
+
+
+const {BASE_CLIENT_ROUTE} = ROUTES;
+const LIB_ROUTE = `${BASE_CLIENT_ROUTE}/components`;
+
+
 // init the localization services
 AppsBundleLoader.changeLocale(config.locale.default);
 
@@ -134,187 +141,187 @@ AppsBundleLoader.changeLocale(config.locale.default);
 
 const routes = [
     {
-        path: 'qbase/components',
+        path: `${LIB_ROUTE}/home`,
         component: ComponentLibraryWrapper,
         routes: [
             {
-                path: 'home',
+                path: `${LIB_ROUTE}/home`,
                 component: HomePage
             },
             {
-                path: 'colors',
+                path: `${LIB_ROUTE}/colors`,
                 component: ColorsPage
             },
             {
-                path: 'uiIconFont',
+                path: `${LIB_ROUTE}/uiIconFont`,
                 component: UiIconFontPage
             },
             {
-                path: 'tableIconFont',
+                path: `${LIB_ROUTE}/tableIconFont`,
                 component: TableIconFontPage
             },
             {
-                path: 'checkBoxFieldValueEditor',
+                path: `${LIB_ROUTE}/checkBoxFieldValueEditor`,
                 component: CheckBoxFieldValueEditorDoc
             },
             {
-                path: 'checkBoxFieldValueRenderer',
+                path: `${LIB_ROUTE}/checkBoxFieldValueRenderer`,
                 component: CheckBoxFieldValueRendererDoc
             },
             {
-                path: 'dateFieldValueEditor',
+                path: `${LIB_ROUTE}/dateFieldValueEditor`,
                 component: DateFieldValueEditorDoc
             },
             {
-                path: 'dateTimeFieldValueEditor',
+                path: `${LIB_ROUTE}/dateTimeFieldValueEditor`,
                 component: DateTimeFieldValueEditorDoc
             },
             {
-                path: 'dateTimeFieldValueRenderer',
+                path: `${LIB_ROUTE}/dateTimeFieldValueRenderer`,
                 component: DateTimeFieldValueRendererDoc
             },
             {
-                path: 'durationFieldValueRenderer',
+                path: `${LIB_ROUTE}/durationFieldValueRenderer`,
                 component: DurationFieldValueRendererDoc
             },
             {
-                path: 'emailFieldValueEditor',
+                path: `${LIB_ROUTE}/emailFieldValueEditor`,
                 component: EmailFieldValueEditorDoc
             },
             {
-                path: 'emailFieldValueRenderer',
+                path: `${LIB_ROUTE}/emailFieldValueRenderer`,
                 component: EmailFieldValueRendererDoc
             },
             {
-                path: 'fieldValueEditor',
+                path: `${LIB_ROUTE}/fieldValueEditor`,
                 component: FieldValueEditorDoc
             },
             {
-                path: 'fieldValueRenderer',
+                path: `${LIB_ROUTE}/fieldValueRenderer`,
                 component: FieldValueRendererDoc
             },
             {
-                path: 'multiChoiceFieldValueEditor',
+                path: `${LIB_ROUTE}/multiChoiceFieldValueEditor`,
                 component: MultiChoiceFieldValueEditorDoc
             },
             {
-                path: 'multiLineTextFieldValueEditor',
+                path: `${LIB_ROUTE}/multiLineTextFieldValueEditor`,
                 component: MultiLineTextFieldValueEditorDoc
             },
             {
-                path: 'numericfieldValueEditor',
+                path: `${LIB_ROUTE}/numericfieldValueEditor`,
                 component: NumericFieldValueEditorDoc
             },
             {
-                path: 'numericFieldValueRenderer',
+                path: `${LIB_ROUTE}/numericFieldValueRenderer`,
                 component: NumericFieldValueRendererDoc
             },
             {
-                path: 'textfieldValueEditor',
+                path: `${LIB_ROUTE}/textfieldValueEditor`,
                 component: TextFieldValueEditorDoc
             },
             {
-                path: 'textFieldValueRenderer',
+                path: `${LIB_ROUTE}/textFieldValueRenderer`,
                 component: TextFieldValueRendererDoc
             },
             {
-                path: 'timeFieldValueEditor',
+                path: `${LIB_ROUTE}/timeFieldValueEditor`,
                 component: TimeFieldValueEditorDoc
             },
             {
-                path: 'timeFieldValueRenderer',
+                path: `${LIB_ROUTE}/timeFieldValueRenderer`,
                 component: TimeFieldValueRendererDoc
             },
             {
-                path: 'trowser',
+                path: `${LIB_ROUTE}/trowser`,
                 component: TrowserDoc
             },
             {
-                path: 'urlFieldValueEditor',
+                path: `${LIB_ROUTE}/urlFieldValueEditor`,
                 component: UrlFieldValueEditorDoc
             },
             {
-                path: 'urlFieldValueRenderer',
+                path: `${LIB_ROUTE}/urlFieldValueRenderer`,
                 component: UrlFieldValueRendererDoc
             },
             {
-                path: 'userFieldRenderer',
+                path: `${LIB_ROUTE}/userFieldRenderer`,
                 component: UserFieldRendererDoc
             },
             {
-                path: 'userFieldEditor',
+                path: `${LIB_ROUTE}/userFieldEditor`,
                 component: UserFieldEditorDoc
             },
             {
-                path: 'qbpanel',
+                path: `${LIB_ROUTE}/qbpanel`,
                 component: QBPanelDoc
             },
             {
-                path: 'icon',
+                path: `${LIB_ROUTE}/icon`,
                 component: IconDoc
             },
             {
-                path: 'qBModal',
+                path: `${LIB_ROUTE}/qBModal`,
                 component: QBModalDoc
             },
             {
-                path: 'alertBanner',
+                path: `${LIB_ROUTE}/alertBanner`,
                 component: AlertBannerDoc
             },
             {
-                path: 'pageTitle',
+                path: `${LIB_ROUTE}/pageTitle`,
                 component: PageTitleDoc
             },
             {
-                path: 'invisibleBackdrop',
+                path: `${LIB_ROUTE}/invisibleBackdrop`,
                 component: InvisibleBackdropDoc
             },
             {
-                path: 'phoneFieldValueEditor',
+                path: `${LIB_ROUTE}/phoneFieldValueEditor`,
                 component: PhoneFieldValueEditorDoc
             },
             {
-                path: 'phoneFieldValueRenderer',
+                path: `${LIB_ROUTE}/phoneFieldValueRenderer`,
                 component: PhoneFieldValueRendererDoc
             },
             {
-                path: 'durationFieldValueEditor',
+                path: `${LIB_ROUTE}/durationFieldValueEditor`,
                 component: DurationFieldValueEditorDoc
             },
             {
-                path: 'qbGrid',
+                path: `${LIB_ROUTE}/qbGrid`,
                 component: QbGridDoc
             },
             {
-                path: 'sideMenuBase',
+                path: `${LIB_ROUTE}/sideMenuBase`,
                 component: SideMenuBaseDoc
             },
             {
-                path: 'sideTrowserBase',
+                path: `${LIB_ROUTE}/sideTrowserBase`,
                 component: SideTrowserBaseDoc
             },
             {
-                path: 'iconChooser',
+                path: `${LIB_ROUTE}/iconChooser`,
                 component: IconChooserDoc
             },
             {
-                path: 'iconInputBox',
+                path: `${LIB_ROUTE}/iconInputBox`,
                 component: IconInputBoxDoc
             },
             {
-                path: 'topNav',
+                path: `${LIB_ROUTE}/topNav`,
                 component: TopNavDoc
             },
             {
-                path: 'stage',
+                path: `${LIB_ROUTE}/stage`,
                 component: StageDoc
             },
             {
-                path: 'tooltip',
+                path: `${LIB_ROUTE}/tooltip`,
                 component: TooltipDoc
             },
             {
-                path: 'standardLeftNav',
+                path: `${LIB_ROUTE}/standardLeftNav`,
                 component: StandardLeftNavDoc
             }
         ]
@@ -323,18 +330,20 @@ const routes = [
 
 
 render((
-    <Router history={browserHistory}>
-        <Switch>
-            <Redirect push from="/qbase/components" to="/qbase/components/home"/>
-            {/*  within Switch 1st match wins
-             includes all the above top level routes and passed on the child routes in the properties
-             note if an entry it is without a path to match
-             the route has to come after specific routes
-             */}
-            {routes.map((route, i) => (
-                    <RouteWithSubRoutes key={i} {...route} />
-                )
-            )}
-        </Switch>
-    </Router>
+    <BrowserRouter>
+        <div>
+            <Redirect push from="{LIB_ROUTE}" to={`${LIB_ROUTE}/home`}/>
+            <Switch>
+                {/*  within Switch 1st match wins
+                 includes all the above top level routes and passed on the child routes in the properties
+                 note if an entry it is without a path to match
+                 the route has to come after specific routes
+                 */}
+                {routes.map((route, i) => (
+                        <RouteWithSubRoutes key={i} {...route} />
+                    )
+                )}
+            </Switch>
+        </div>
+    </BrowserRouter>
 ), document.getElementById('content'));
