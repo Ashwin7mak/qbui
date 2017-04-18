@@ -1,5 +1,6 @@
 import React from 'react';
-import {Link} from 'react-router-dom';
+import {Link, Switch} from 'react-router-dom';
+import RouteWithSubRoutes from "../../../client-react/src/scripts/RouteWithSubRoutes";
 
 var ComponentLibraryWrapper = React.createClass({
     render() {
@@ -72,7 +73,13 @@ var ComponentLibraryWrapper = React.createClass({
                     </nav>
                 </div>
                 <div className="comp-library-content">
-                    {this.props.children}
+                    <Switch>
+                        { this.props.routes !== undefined ? this.props.routes.map((route, i) => {
+                            return (
+                                <RouteWithSubRoutes key={i} {...route} />
+                            );
+                        }) : ''}
+                    </Switch>
                 </div>
             </div>
         );
