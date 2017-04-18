@@ -54,6 +54,18 @@ const report = (state = [], action) => {
         return null;
     }
 
+    /**
+     * Makes sure the order of the columns isn't out of sync with their actual position.
+     * Used in adding/hiding columns and when opening/closing field select menu.
+     * @param columns
+     */
+    function reorderColumns(columns) {
+        let newOrder = 0;
+        columns.map((column) => {
+            column.order = newOrder++;
+        });
+    }
+
     //  what report action is being requested
     switch (action.type) {
     case types.LOAD_REPORT:
@@ -271,14 +283,6 @@ const report = (state = [], action) => {
         return reports;
     }
     case types.OPEN_FIELD_SELECTOR: {
-        // helpful function to make sure the order of the columns are correct
-        function reorder(columns) {
-            let newOrder = 0;
-            columns.map((column) => {
-                column.order = newOrder++;
-            });
-        }
-
         let currentReport = getReportFromState(action.id);
         if (currentReport) {
             // loop through to check that if the columns are all visible
@@ -295,7 +299,7 @@ const report = (state = [], action) => {
                     let actualColumns = currentReport.data.columns.filter(column => {
                         return column.fieldDef.isPlaceholder === undefined;
                     });
-                    reorder(actualColumns);
+                    reorderColumns(actualColumns);
                     currentReport.data.columns = actualColumns;
                 }
                 // since not all columns are visible, add the placeholder column to columns so it gets rendered on screen
@@ -322,42 +326,26 @@ const report = (state = [], action) => {
                 }
 
                 currentReport.data.columns.splice(insertionIndex, 0, placeholder);
-                reorder(currentReport.data.columns);
+                reorderColumns(currentReport.data.columns);
                 return newState(currentReport);
             }
         }
         return state;
     }
     case types.CLOSE_FIELD_SELECTOR: {
-        // helpful function to make sure the order of the columns are correct
-        function reorder(columns) {
-            let newOrder = 0;
-            columns.map((column) => {
-                column.order = newOrder++;
-            });
-        }
-
         let currentReport = getReportFromState(action.id);
         if (currentReport) {
             // remove the placeholder column (if it exists) when the drawer is closed
             let actualColumns = currentReport.data.columns.filter(column => {
                 return column.fieldDef.isPlaceholder === undefined;
             });
-            reorder(actualColumns);
+            reorderColumns(actualColumns);
             currentReport.data.columns = actualColumns;
             return newState(currentReport);
         }
         return state;
     }
     case types.ADD_COLUMN_SUCCESS: {
-        // helpful function to make sure the order of the columns are correct
-        function reorder(columns) {
-            let newOrder = 0;
-            columns.map((column) => {
-                column.order = newOrder++;
-            });
-        }
-
         let currentReport = getReportFromState(action.id);
         if (currentReport) {
             let columns = currentReport.data.columns;
@@ -369,7 +357,7 @@ const report = (state = [], action) => {
             let requestedColumnIndex = requestedColumn.order - 1;
             // remove the column that is going to get shown
             let columnMoving = columns.splice(requestedColumnIndex, 1)[0];
-            reorder(columns);
+            reorderColumns(columns);
 
             // searches through the current columns to find the one that was selected
             let clickedColumnIndex = columns.filter((column) => {
@@ -385,7 +373,7 @@ const report = (state = [], action) => {
             }
             // insert the removed column in the correct place in the columns list
             columns.splice(insertionIndex, 0, columnMoving);
-            reorder(columns);
+            reorderColumns(columns);
 
             // show the currently hidden column that was just added
             columns.map(column => {
@@ -402,7 +390,7 @@ const report = (state = [], action) => {
                 let actualColumns = currentReport.data.columns.filter(column => {
                     return column.fieldDef.isPlaceholder === undefined;
                 });
-                reorder(actualColumns);
+                reorderColumns(actualColumns);
                 currentReport.data.columns = actualColumns;
             }
             return newState(currentReport);
