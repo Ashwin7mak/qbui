@@ -331,7 +331,7 @@ const routes = [
 
 render((
     <BrowserRouter>
-        <div>
+        <div className="router-wrapper">
             <Redirect push from="{LIB_ROUTE}" to={`${LIB_ROUTE}/home`}/>
             <Switch>
                 {/*  within Switch 1st match wins
