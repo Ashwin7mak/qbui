@@ -205,7 +205,7 @@ const QbGrid = React.createClass({
     },
 
     /**
-     * Render a single column
+     * Gets all non-hidden columns and add the correct properties to them.
      */
     getColumns() {
         let visibleColumns = this.props.columns.filter(column => {
