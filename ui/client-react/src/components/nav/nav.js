@@ -316,8 +316,6 @@ export const Nav = React.createClass({
             addBefore: this.props.shell.fieldsSelectMenu.addBefore
         };
 
-        console.log(reportData);
-
         this.props.addColumnToTable(CONTEXT.REPORT.NAV, reportData.appId, reportData.tblId, reportData.rptId, params);
     },
 
@@ -347,7 +345,7 @@ export const Nav = React.createClass({
                     onClick={() => this.toggleFieldSelectorMenu(CONTEXT.REPORT.NAV, reportData.appId, reportData.tblId, reportData.rptId, params)}
                     className="fieldSelectCloseIcon"
                 />
-                <div className="header">Fields</div>
+                <div className="header">Hidden fields</div>
                 <div className="info">Add a field to the report</div>
                 <ListOfElements
                     elements={elements}

@@ -5,6 +5,7 @@ import _ from 'lodash';
 import FacetSelections from '../components/facet/facetSelections';
 import ReportUtils from '../utils/reportUtils';
 import ReportModelHelper from '../models/reportModelHelper';
+import ReportColumnTransformer from '../../src/components/dataTable/reportGrid/reportColumnTransformer';
 
 /**
  * Manage array of report states
@@ -244,6 +245,79 @@ const report = (state = [], action) => {
         });
         return reports;
     }
+    case types.OPEN_FIELD_SELECTOR: {
+        function reorder(columns) {
+            let newOrder = 1;
+            columns.map((column) => {
+                column.order = newOrder++;
+            });
+        }
+
+        let currentReport = getReportFromState(action.id);
+        if (currentReport) {
+            let allVisible = currentReport.data.columns.every(column => {
+                return column.fieldDef.isHidden === false;
+            });
+            if (!allVisible) {
+                let placeHolderAlreadyExists = currentReport.data.columns.some(column => {
+                    return column.fieldDef.isPlaceholder === true;
+                });
+                if (placeHolderAlreadyExists) {
+                    let actualColumns = currentReport.data.columns.filter(column => {
+                        return column.fieldDef.isPlaceholder === undefined;
+                    });
+                    reorder(actualColumns);
+                    currentReport.data.columns = actualColumns;
+                }
+                let params = action.content;
+                let data = {
+                    id: -1,
+                    headerName: "placeholder",
+                    fieldDef: {
+                        isHidden: false,
+                        isPlaceholder: true
+                    }
+                };
+                let placeholder = ReportColumnTransformer.createFromApiColumn(data);
+
+                let clickedColumnIndex = currentReport.data.columns.filter((column) => {
+                        return column.fieldDef.id === params.clickedId;
+                    })[0].order - 1;
+
+                // add before or after the clicked column
+                let insertionIndex;
+                if (params.addBefore) {
+                    insertionIndex = clickedColumnIndex;
+                } else {
+                    insertionIndex = clickedColumnIndex + 1;
+                }
+
+                currentReport.data.columns.splice(insertionIndex, 0, placeholder);
+                reorder(currentReport.data.columns);
+                return newState(currentReport);
+            }
+        }
+        return state;
+    }
+    case types.CLOSE_FIELD_SELECTOR: {
+        function reorder(columns) {
+            let newOrder = 1;
+            columns.map((column) => {
+                column.order = newOrder++;
+            });
+        }
+
+        let currentReport = getReportFromState(action.id);
+        if (currentReport) {
+            let actualColumns = currentReport.data.columns.filter(column => {
+                return column.fieldDef.isPlaceholder === undefined;
+            });
+            reorder(actualColumns);
+            currentReport.data.columns = actualColumns;
+            return newState(currentReport);
+        }
+        return state;
+    }
     case types.ADD_COLUMN_SUCCESS: {
         // function that sets all columns to the correct order property based on its location in the list
         function reorder(columns) {
@@ -274,9 +348,9 @@ const report = (state = [], action) => {
             // add before or after the clicked column
             let insertionIndex;
             if (addBefore) {
-                insertionIndex = clickedColumnIndex;
+                insertionIndex = clickedColumnIndex - 1;
             } else {
-                insertionIndex = clickedColumnIndex + 1;
+                insertionIndex = clickedColumnIndex + 2;
             }
             // insert the removed column in the correct place in the columns list
             columns.splice(insertionIndex, 0, columnMoving);
@@ -289,6 +363,17 @@ const report = (state = [], action) => {
                 }
                 return column;
             });
+            let allVisible = currentReport.data.columns.every(column => {
+                return column.fieldDef.isHidden === false;
+            });
+
+            if (allVisible) {
+                let actualColumns = currentReport.data.columns.filter(column => {
+                    return column.fieldDef.isPlaceholder === undefined;
+                });
+                reorder(actualColumns);
+                currentReport.data.columns = actualColumns;
+            }
             return newState(currentReport);
         }
         return state;

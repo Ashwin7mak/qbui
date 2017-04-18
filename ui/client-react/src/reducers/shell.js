@@ -85,6 +85,7 @@ const shell = (
             i18n: Locale.getI18nBundle()
         };
     case types.OPEN_FIELD_SELECTOR:
+        console.log(action);
         return {
             ...state,
             fieldsSelectMenu: {

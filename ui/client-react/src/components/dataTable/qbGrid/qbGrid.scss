@@ -65,6 +65,18 @@ $edit-icon-font-size: 18px;
         // set the default z-index of header cells so the one displaying the popup menu can be made higher than these
         z-index: $zindex-qbGrid-th;
 
+        &.placeHolderCell {
+            background-color: $color-orange-100;
+            border-left: 1px dashed $color-black-600;
+            border-right: 1px dashed $color-black-600;
+            border-bottom: none;
+            border-top: 1px dashed $color-black-600;
+
+            &:last-of-type {
+                border-right: 1px dashed $color-black-600;
+            }
+        }
+
         // set the z-index of the header cell for the sticky column so the other column headers scroll underneath
         &.stickyCell {
             z-index: $zindex-qbGrid-header-stickyCell;
@@ -155,6 +167,24 @@ $edit-icon-font-size: 18px;
         vertical-align: top;
         z-index: $zindex-qbGrid-firstOfType-stickyColumn;
         background-color: $color-black-100;
+    }
+
+    //== styling for the placeholder column cells
+    .qbRow .placeHolderCell {
+        left: 0;
+        width: 80px;
+        max-width: 80px;
+        position: relative;
+        vertical-align: top;
+        background-color: $color-orange-100;
+        border-left: 1px dashed $color-black-600;
+        border-right: 1px dashed $color-black-600;
+        border-bottom: none;
+        border-top: none;
+
+        &:last-of-type {
+            border-right: 1px dashed $color-black-600;
+        }
     }
 
 
@@ -481,6 +511,9 @@ $edit-icon-font-size: 18px;
     .qbRow:last-of-type .qbCell {
         border-bottom: 1px solid $grid-line-color;
     }
+    .qbRow:last-of-type .placeHolderCell {
+        border-bottom: 1px dashed $color-black-600;
+    }
 
     // row hover highlighting - only done while not inline editing
     &:not(.inlineEditing) {
@@ -488,6 +521,10 @@ $edit-icon-font-size: 18px;
         // highlight the row when mouse is over the row
         .qbRow:hover .qbCell {
             background: $grid-row-hover-color;
+        }
+
+        .qbRow:hover .placeHolderCell {
+            background: $color-orange-100;
         }
 
         // Outline the data cells in the row when the use hovers over a pencil.

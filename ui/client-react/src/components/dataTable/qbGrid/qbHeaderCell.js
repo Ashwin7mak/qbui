@@ -20,6 +20,9 @@ const QbHeaderCell = React.createClass({
         if (this.props.isStickyCell) {
             classes.push(['stickyCell']);
         }
+        if (this.props.isPlaceholderCell) {
+            classes.push('placeHolderCell');
+        }
 
         return <th className={classes.join(' ')} {...this.props} />;
     }
@@ -27,7 +30,8 @@ const QbHeaderCell = React.createClass({
 
 QbHeaderCell.propTypes = {
     classes: React.PropTypes.array,
-    isStickyCell: React.PropTypes.bool
+    isStickyCell: React.PropTypes.bool,
+    isPlaceholderCell: React.PropTypes.bool
 };
 
 // Provide default val

@@ -21,6 +21,9 @@ const QbCell = React.createClass({
         if (this.props.isStickyCell) {
             classes.push('stickyCell');
         }
+        if (this.props.isPlaceholderCell) {
+            classes.push('placeHolderCell')
+        }
         // this is a tad bit hacky, remove when EmbeddedReportToolsAndContent supports editing
         if (_.get(this, 'props.children.props.phase1')) {
             classes.push('phase1');
@@ -32,7 +35,8 @@ const QbCell = React.createClass({
 
 QbCell.propTypes = {
     classes: React.PropTypes.array,
-    isStickyCell: React.PropTypes.bool
+    isStickyCell: React.PropTypes.bool,
+    isPlaceholderCell: React.PropTypes.bool
 };
 
 // Provide default val
