@@ -350,7 +350,6 @@ export const loadReportRecordsCount = (context, appId, tblId, rptId, queryParams
 export const addColumnToTable = (context, appId, tblId, rptId, params) => {
     return (dispatch) => {
         if (appId && tblId && rptId) {
-            logger.debug(`Adding requested column for appId: ${appId}, tblId: ${tblId}, rptId: ${rptId}`);
             dispatch(event(context, types.ADD_COLUMN_SUCCESS, params));
         } else {
             logger.error(`reportActions.addColumnToTable: Missing one or more required input parameters.  AppId:${appId}; TblId:${tblId}; RptId:${rptId}`);
@@ -362,8 +361,6 @@ export const toggleFieldSelectorMenu = (context, appId, tblId, rptId, params) =>
     return (dispatch) => {
         if (appId && tblId && rptId) {
             let openOrClose = params.open ? types.OPEN_FIELD_SELECTOR : types.CLOSE_FIELD_SELECTOR;
-            let debugAction = params.open ? "Opening" : "Closing";
-            logger.debug(`${debugAction} field select menu: ${appId}, tblId: ${tblId}, rptId: ${rptId}`);
             dispatch(event(context, openOrClose, params));
         } else {
             logger.error(`reportActions.toggleFieldSelectorMenu: Missing one or more required input parameters. AppId:${appId}; TblId:${tblId}; RptId:${rptId}`);
