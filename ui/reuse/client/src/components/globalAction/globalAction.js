@@ -1,10 +1,7 @@
 import React, {PropTypes} from 'react';
 import {Link} from 'react-router-dom';
 import Icon from '../icon/icon';
-
-// IMPORTS FROM CLIENT REACT
-import {I18nMessage} from '../../../../../client-react/src/utils/i18nMessage';
-// IMPORTS FROM CLIENT REACT
+import {I18nMessage} from '../../utils/i18nMessage';
 
 /**
  * A global action (ex. 'Help' with an icon and an associated link) */
