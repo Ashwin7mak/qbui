@@ -7,31 +7,19 @@ describe('BaseService rewire tests', () => {
 
     let baseService;
     const mockCookie = {
-        load: function() {
-            return {loadMethodCalled:true};
-        }
+        load: () => ({loadMethodCalled:true})
     };
     const mockAxios = {
-        create: function() {
-            return {
-                delete: function() {
-                    return {deleteMethodCalled:true};
-                },
-                get: function() {
-                    return {getMethodCalled:true};
-                },
-                patch: function() {
-                    return {patchMethodCalled:true};
-                },
-                put: function() {
-                    return {putMethodCalled:true};
-                }
-            };
-        }
+        create: () => ({
+            delete: () => ({deleteMethodCalled:true}),
+            get: ()  => ({getMethodCalled:true}),
+            patch: () => ({patchMethodCalled:true}),
+            put: () => ({putMethodCalled:true})
+        })
     };
 
     const mockUnauthorizedRedirectConfiguration = {
-        unauthorizedRedirect: '/qbase/custom-unathorized-route'
+        unauthorizedRedirect: '/qbase/custom-unauthorized-route'
     };
 
     const mockSimpleDomainConfiguration = {
@@ -50,18 +38,10 @@ describe('BaseService rewire tests', () => {
         expectedUrl: 'https://team.currentstack-int.quickbaserocks.com/db/main?a=nsredirect&nsurl='};
 
     const mockWindowUtils = {
-        update: function(url) {
-            return url;
-        },
-        replace: function(url) {
-            return url;
-        },
-        getHref: function() {
-            return simpleSubdomain.href;
-        },
-        getHostname: function() {
-            return simpleSubdomain.hostname;
-        }
+        update: url => url,
+        replace: url => url,
+        getHref: () => simpleSubdomain.href,
+        getHostname: () => simpleSubdomain.hostname
     };
 
     beforeEach(() => {
@@ -163,13 +143,9 @@ describe('BaseService rewire tests', () => {
         });
 
         const createMockAxiosForFederation = returnValue => ({
-            create: function() {
-                return {
-                    get: function() {
-                        return returnValue;
-                    }
-                };
-            }
+            create: () => ({
+                get: () => returnValue
+            })
         });
 
         const mockGetSimpleSubdomainAxios = createMockAxiosForFederation(Promise.resolve({data: {legacyUrl: `https://${simpleSubdomain.subdomain}.${simpleSubdomain.domain}`}}));
