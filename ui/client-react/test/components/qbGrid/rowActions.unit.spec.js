@@ -26,7 +26,7 @@ const props = {
     onClickSaveRow: function() {}
 };
 
-fdescribe('RowActions (QbGrid)', () => {
+describe('RowActions (QbGrid)', () => {
     beforeEach(() => {
         jasmineEnzyme();
         // IconActions currently relies on the flux store which is difficult to unit test because of the mixin
@@ -38,13 +38,13 @@ fdescribe('RowActions (QbGrid)', () => {
         QbIconActionsRewireAPI.__ResetDependency__('IconActions');
     });
 
-    fit('Renders the row actions component', () => {
+    it('Renders the row actions component', () => {
         component = shallow(<RowActions {...props}/>);
 
         expect(component.find(RowActionsReuse)).toBePresent();
     });
 
-    fit('Checks the row actions component has props', () => {
+    it('Checks the row actions component has props', () => {
         component = mount(<RowActions {...props}/>);
 
         let RowActionsTest = component.find(QbIconActions);
