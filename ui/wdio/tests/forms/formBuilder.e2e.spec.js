@@ -5,6 +5,7 @@
     let e2ePageBase = requirePO('e2ePageBase');
     let reportContentPO = requirePO('reportContent');
     let formBuilderPO = requirePO('formBuilder');
+    let topNavPO = requirePO('topNav');
 
     let realmName;
     let realmId;
@@ -157,8 +158,6 @@
             expect(formBuilderPO.getFieldLabels()).not.toContain(removedField);
         });
 
-        // it('verify field selection stickiness', function() {
-
         xit('verify field selection stickiness', function() {
         // pending fix for ESC key (MC-1609)
             let selectedField = formBuilderPO.KB_selectField(2);
@@ -202,28 +201,52 @@
             expect(formBuilderPO.getFieldLabels()).toEqual(origFields);
         });
 
-        xit('drags a field outside of viewport & verifies autoscroll', function() {
-            let firstField = formBuilderPO.findFieldByIndex(1);
-            let secondField = formBuilderPO.findFieldByIndex(2);
-            let firstFieldSize = browser.element(firstField).getElementSize();
-            let containerSize = formBuilderPO.formBuilderContainer.getElementSize();
-         // temporarily shrink the window to cause 2nd element to not be visible
-            browser.setViewportSize({width: containerSize.width, height: firstFieldSize.height});
-         // verify second field is not visible
-            expect(browser.isVisibleWithinViewport(secondField)).toBe(false);
-         // start dragging
-            browser.moveToObject(firstField, 0, 0);
+        it('drags a field outside of viewport & verifies autoscroll', function() {
+            let autoscrollTimeout = 10; // seconds
+            let firstField = browser.element(formBuilderPO.findFieldByIndex(1));
+            let lastField = browser.element(formBuilderPO.findFieldByIndex(formBuilderPO.getFieldLabels().length));
+            let firstFieldSize = firstField.getElementSize();
+            let viewportSize = browser.getViewportSize();
+            // temporarily shrink the window to (hopefully) cause last element to not be visible
+        //  make it height of first field + 'padding' below last field
+            browser.setViewportSize({width: viewportSize.width, height: firstFieldSize.height * 3});
+         // verify last field is not visible
+            expect(lastField.isVisibleWithinViewport()).toBe(false);
+         // click & hold on first field
+            firstField.element('.fieldLabel').moveToObject();
             browser.buttonDown();
-         // drag off the scrollable area & wait for second field to become visible (or timeout)
-            formBuilderPO.centerActionsOnFooter.moveToObject(); // blue footer bar
-            let i = 0;
-            while ((browser.isVisibleWithinViewport(secondField) !== true) && i++ < 100) {
-                browser.pause(100);
+         // drag DOWN until autoscroll begins
+            while (firstField.isVisibleWithinViewport()) {
+                browser.moveTo(null, 0, 1);
             }
-         // stop dragging & verify that the second field is now visible
+        // wait for autoscroll to reach the bottom (or timeout)
+            let seconds = 0;
+            while (!lastField.isVisibleWithinViewport() && seconds++ < autoscrollTimeout) {
+                browser.pause(1000);
+            }
+        // verify that the last field is visible
+            expect(lastField.isVisibleWithinViewport()).toBe(true, 'autoscroll DOWN failed');
+
+        // these ops are inexplicably required (s/b able to just move the mouse up?!)
             browser.buttonUp();
-            expect(browser.isVisibleWithinViewport(secondField)).toBe(true, 'autoscroll failed');
-            browser.setViewportSize(containerSize);
+            browser.pause(1000);
+            lastField.element('.fieldLabel').moveToObject();
+            browser.buttonDown();
+
+        // drag UP until autoscroll begins
+            while (lastField.isVisibleWithinViewport()) {
+                browser.moveTo(null, 0, -1);
+            }
+        // wait for autoscroll to reach the top
+            seconds = 0;
+            while (!firstField.isVisibleWithinViewport() && seconds++ < autoscrollTimeout) {
+                browser.pause(1000);
+            }
+        // verify that the first field is visible
+            expect(firstField.isVisibleWithinViewport()).toBe(true, 'autoscroll UP failed');
+        // release button & restore window
+            browser.buttonUp();
+            browser.setViewportSize(viewportSize);
         });
 
         it('search for fields in the new field picker', function() {
@@ -246,6 +269,76 @@
             browser.pause(1000);
             // expect original new field tokens to reappear
             expect(formBuilderPO.getNewFieldLabels()).toEqual(newFields);
+        });
+
+        xit('add a new field to bottom of form, save & verify presence', function() {
+            let existingFields = formBuilderPO.getFieldLabels();
+            let newField = formBuilderPO.listOfElementsItem;
+            // verify that (hopefully) the last existing field on the form
+            // doesn't have the same name as the first item in the NEW FIELDS list
+            expect(existingFields[existingFields.length - 1]).not.toBe(newField);
+            // add the first new field item to the form
+            newField.click();
+            browser.pause(5000);
+            // verify that the new field appears at the end of the revised fields list
+            existingFields.push(newField.getText());
+            expect(formBuilderPO.getFieldLabels()).toEqual(existingFields);
+            // todo: save, cancel, verify presence (once SAVE is working)
+        });
+
+        it('add a new field to bottom of form, cancel & verify absence', function() {
+            let existingFields = formBuilderPO.getFieldLabels();
+            let newField = formBuilderPO.listOfElementsItem;
+            // verify that the last existing field on the form
+            // doesn't have the same name as the first item in the NEW FIELDS list
+            expect(existingFields[existingFields.length - 1]).not.toBe(newField);
+            // add the first new field item to the form
+            newField.click();
+            browser.pause(5000);
+            // verify that the new field appears at the end of the revised fields list
+            let originalFields = existingFields.slice();
+            existingFields.push(newField.getText());
+            expect(formBuilderPO.getFieldLabels()).toEqual(existingFields);
+            // save, cancel, reopen
+            formBuilderPO.saveBtn.click();
+            formBuilderPO.cancelBtn.click();
+            formBuilderPO.open();
+            // verify new field is not present
+            expect(formBuilderPO.getFieldLabels()).toEqual(originalFields);
+        });
+
+        it('rename a field, save & verify revision', function() {
+            // let source = browser.element(formBuilderPO.findFieldByIndex(1));
+            // source.element('.dragHandle').click();
+
+            // at the moment, the only way to select a field for property editing
+            // is to add a new one (click to select field isn't working)
+            let source = formBuilderPO.listOfElementsItem;
+            source.click();
+            formBuilderPO.fieldProperty_Name.waitForExist()
+            let testString = 'testString';
+            formBuilderPO.fieldProperty_Name.setValue(testString);
+            // get the NAME component of the title by trimming " properties"
+            let propertyTitle = formBuilderPO.fieldPropertiesTitle.getText().split(' properties')[0];
+            expect (propertyTitle).toEqual(testString);
+            //  get field labels & verify that the last one has changed as expected
+            let existingFields = formBuilderPO.getFieldLabels();
+            expect (existingFields[existingFields.length - 1]).toEqual(testString);
+        });
+
+        xit('rename a field, cancel & verify no revision', function() {
+        });
+
+        xit('make a field required, save & verify revision', function() {
+            // then make it unrequired & do same checks
+            // && check that new record actually requires value
+        });
+
+        xit('make a field required, cancel & verify no revision', function() {
+        });
+
+        xit('make a field NOT required, save & verify no revision', function() {
+            // & check that new record actually does not require value
         });
     });
 }());

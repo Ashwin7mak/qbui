@@ -9,11 +9,6 @@
                 return browser.element('.cancelFormButton');
             }
         },
-        centerActionsOnFooter: {
-            get: function() {
-                return browser.element('.saveOrCancelFooter .centerActions');
-            }
-        },
         clearSearch: {
             get: function() {
                 return browser.element('.clearSearch .searchIcon');
@@ -24,9 +19,29 @@
                 return browser.element('.deleteFieldIcon');
             }
         },
+        editForm: {
+            get: function() {
+                return browser.element('.editForm');
+            }
+        },
         fieldPreferencesIcon: {
             get: function() {
                 return browser.element('.fieldPreferencesIcon');
+            }
+        },
+        fieldProperty_Name: {
+            get: function() {
+                return browser.element('.fieldPropertyContainer input[type="text"]');
+            }
+        },
+        fieldProperty_Required: {
+            get: function() {
+                return browser.element('.fieldPropertyContainer input[type="checkbox"]');
+            }
+        },
+        fieldPropertiesTitle: {
+            get: function() {
+                return browser.element('.fieldPropertiesTitle');
             }
         },
         fieldTokenIcon: {
@@ -89,6 +104,11 @@
                 return browser.element('.selectedFormElement');
             }
         },
+        saveOrCancelFooter: {
+            get: function() {
+                return browser.element('.saveOrCancelFooter');
+            }
+        },
         success: {
             get: function() {
                 return browser.element('.notification-success');
@@ -102,25 +122,12 @@
                 browser.pause(5000);
             }
         },
-        slowDragAndDrop: {
-            // pauses after clicking on source because dragAndDrop fails
-            value: function(source, target) {
-                let label = browser.element(source).getText();
-                browser.moveToObject(source);
-                browser.buttonDown();
-                // jiggle on target until preview appears
-                this.slowDrag(target, label);
-                browser.buttonUp();
-                browser.pause(5000);
-            }
-        },
         getFieldLabels: {
             value: function() {
-                let labelEls = browser.elements('.fieldLabel');
-
+                let labelEls = browser.elements('.field');
                 return labelEls.value.map(function(labelEl) {
-                    let label = labelEl.getText();
-                    if (label === '') { // checkbox label is deeper in DOM
+                    let label = labelEl.element('.fieldLabel').getText();
+                    if (label === '') { // checkbox labels are defined elsewhere
                         label = labelEl.element('.label').getText();
                     }
                     return label;
@@ -130,7 +137,6 @@
         getNewFieldLabels: {
             value: function() {
                 let labelEls = browser.elements('.listOfElementsItem');
-
                 return labelEls.value.map(function(labelEl) {
                     return labelEl.getText();
                 });
@@ -144,29 +150,6 @@
                 source = this.findFieldByIndex(labels.indexOf(source) + 1);
                 target = this.findFieldByIndex(labels.indexOf(target) + 1);
                 this.slowDragAndDrop(source, target);
-            }
-        },
-        slowDrag: { // apologies to Scott Joplin
-            value: function(target, label) {
-                browser.waitUntil(function() {
-                    // pause (after caller just pressed keyDown), then move
-                    // cursor to target and wait until it updates with expected label
-                    browser.pause(1000);
-                    browser.moveToObject(target);
-                    return label === browser.element(target).getText();
-                }, 5000, 'expected target preview to display source label after dragging');
-            }
-        },
-        open: {
-            value: function() {
-                // wait to prevent 'element not clickable'
-                topNavPO.formBuilderBtn.waitForVisible();
-                // wait a bit longer to avoid 'Element not clickable' error
-                browser.pause(5000);
-                topNavPO.formBuilderBtn.click();
-                topNavPO.modifyThisForm.click();
-                browser.pause(5000);
-                return this.formContainer.waitForVisible();
             }
         },
         KB_focusField: {
@@ -234,6 +217,42 @@
                 browser.keys(['Enter']); // select field
                 browser.pause(5000);
                 return this.selectedField.getText();
+            }
+        },
+        open: {
+            value: function() {
+                // wait to prevent 'element not clickable'
+                topNavPO.formBuilderBtn.waitForVisible();
+                // wait a bit longer to avoid 'Element not clickable' error
+                browser.pause(5000);
+                topNavPO.formBuilderBtn.click();
+                topNavPO.modifyThisForm.click();
+                browser.pause(5000);
+                return this.formContainer.waitForVisible();
+            }
+        },
+        slowDrag: { // apologies to Scott Joplin
+            value: function(target, label) {
+                browser.waitUntil(function() {
+                    // pause (after caller just pressed keyDown), then move
+                    // cursor to target and wait until it updates with expected label
+                    browser.pause(1000);
+                    browser.moveToObject(target);
+                    return label === browser.element(target).getText();
+                }, 5000, 'expected target preview to display source label after dragging');
+            }
+        },
+        slowDragAndDrop: {
+            // pauses after clicking on source because dragAndDrop fails
+            value: function(source, target) {
+                let label = browser.element(source).getText();
+                browser.moveToObject(source);
+                browser.buttonDown();
+                // move to target & wait until preview appears
+                this.slowDrag(target, label);
+                // release button
+                browser.buttonUp();
+                browser.pause(5000);
             }
         },
     });
