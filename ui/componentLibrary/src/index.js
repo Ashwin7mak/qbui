@@ -141,7 +141,7 @@ AppsBundleLoader.changeLocale(config.locale.default);
 
 const routes = [
     {
-        path: `${LIB_ROUTE}/home`,
+        path: `${LIB_ROUTE}`,
         component: ComponentLibraryWrapper,
         routes: [
             {
