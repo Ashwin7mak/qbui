@@ -1,3 +1,7 @@
+/**
+ * E2E tests for the topNav of the Reports page
+ * cperikal 4/18/2017
+ */
 (function() {
     'use strict';
 
