@@ -14,7 +14,7 @@ describe('AppUsersRoute functions', () => {
     const selectedApp = {name: "Duder", ownerId: "CFalc"};
     const appOwner = {firstName: "Captain", lastName: "Falcon", email: "cfalc@fzero.com"};
     const appOwerNoEmail = {firstName: "Captain", lastName: "Falcon"};
-    const match = {params: {appId: appId}}
+    const match = {params: {appId: appId}};
     const flux = {
         actions:{
             loadAppRoles: function() {return;},

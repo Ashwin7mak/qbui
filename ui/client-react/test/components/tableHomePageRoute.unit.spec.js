@@ -2,7 +2,10 @@ import React from 'react';
 import TestUtils from 'react-addons-test-utils';
 import ReactDOM from 'react-dom';
 import Fluxxor from 'fluxxor';
-import {TableHomePageRoute} from '../../src/components/table/tableHomePageRoute';
+import {
+    TableHomePageRoute,
+    __RewireAPI__ as TableHomePageRewireAPI
+} from '../../src/components/table/tableHomePageRoute';
 import FacetSelections  from '../../src/components/facet/facetSelections';
 import Constants from '../../../common/src/constants';
 import {CONTEXT} from '../../src/actions/context';
@@ -10,6 +13,7 @@ import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import {Provider} from "react-redux";
 import {shallow, mount} from 'enzyme';
+import {MemoryRouter} from 'react-router-dom';
 import _ from 'lodash';
 
 const middlewares = [thunk];
@@ -22,11 +26,13 @@ describe('TableHomePageRoute functions', () => {
         clearSearchInput: () => {},
         loadFields: (app, tbl) => {},
         loadTableHomePage: () => {},
-        params: {
-            appId: 1,
-            tblId: 2,
-            offset:Constants.PAGE.DEFAULT_OFFSET,
-            numRows:Constants.PAGE.DEFAULT_NUM_ROWS
+        match: {
+            params: {
+                appId: 1,
+                tblId: 2,
+                offset:Constants.PAGE.DEFAULT_OFFSET,
+                numRows:Constants.PAGE.DEFAULT_NUM_ROWS
+            }
         }
     };
 
@@ -58,12 +64,19 @@ describe('TableHomePageRoute functions', () => {
         hideTopNav() {return;}
     };
 
+    class mockReportToolsAndContent extends React.Component {
+        render() {
+            return <div></div>;
+        }
+    }
+
     beforeEach(() => {
         spyOn(flux.actions, 'hideTopNav');
         spyOn(flux.actions, 'selectTableId');
         spyOn(props, 'clearSearchInput');
         spyOn(props, 'loadFields');
         spyOn(props, 'loadTableHomePage');
+        TableHomePageRewireAPI.__Rewire__('ReportToolsAndContent', mockReportToolsAndContent);
     });
 
     afterEach(() => {
@@ -72,6 +85,7 @@ describe('TableHomePageRoute functions', () => {
         props.clearSearchInput.calls.reset();
         props.loadFields.calls.reset();
         props.loadTableHomePage.calls.reset();
+        TableHomePageRewireAPI.__ResetDependency__('ReportToolsAndContent');
     });
 
     const initialState = {};
@@ -111,7 +125,8 @@ describe('TableHomePageRoute functions', () => {
     });
 
     it('test action loadTableHomePage is called with app data', () => {
-        let wrapper = mount(<Provider store={store}><TableHomePageRoute {...props} reportData={reportDataParams.reportData} flux={flux}></TableHomePageRoute></Provider>);
+        // we need to `mount` so componentDidMount will fire
+        let wrapper = mount(<Provider store={store}><TableHomePageRoute {...props} reportData={reportDataParams.reportData} flux={flux} /></Provider>);
         expect(props.clearSearchInput).toHaveBeenCalled();
         expect(props.loadFields).toHaveBeenCalledWith(props.match.params.appId, props.match.params.tblId);
         expect(props.loadTableHomePage).toHaveBeenCalledWith(CONTEXT.REPORT.NAV, props.match.params.appId, props.match.params.tblId, reportDataParams.reportData.pageOffset, reportDataParams.reportData.numRows);
@@ -119,8 +134,8 @@ describe('TableHomePageRoute functions', () => {
 
     it('test flux action loadTableHomePage is not called with missing app data', () => {
         let propsCopy = _.clone(props);
-        propsCopy.params.appId = null;
-        let wrapper = mount(<Provider store={store}><TableHomePageRoute {...propsCopy} reportData={reportDataParams.reportData} flux={flux}></TableHomePageRoute></Provider>);
+        propsCopy.match.params.appId = null;
+        let wrapper = mount(<Provider store={store}><TableHomePageRoute {...propsCopy} reportData={reportDataParams.reportData} flux={flux} /></Provider>);
         expect(props.loadTableHomePage).not.toHaveBeenCalled();
     });
 });

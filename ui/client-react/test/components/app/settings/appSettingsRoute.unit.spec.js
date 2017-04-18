@@ -1,5 +1,6 @@
 import React from 'react';
-import TestUtils from 'react-addons-test-utils';
+import {shallow} from 'enzyme';
+import {MemoryRouter} from 'react-router-dom';
 import AppSettingsRoute  from '../../../../src/components/app/settings/appSettingsRoute';
 
 describe('AppSettingsRoute functions', () => {
@@ -15,9 +16,14 @@ describe('AppSettingsRoute functions', () => {
     const match = {params: {appId: appId}};
 
     it('test render of component', () => {
-        let component = TestUtils.renderIntoDocument(<AppSettingsRoute selectedApp={selectedApp}
-                                                                        match={match}
-                                                                        appUsers={appUsers}/>);
-        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+        let component = shallow(
+            <MemoryRouter>
+                <AppSettingsRoute
+                    selectedApp={selectedApp}
+                    match={match}
+                    appUsers={appUsers}
+                />
+            </MemoryRouter>);
+        expect(component.find(AppSettingsRoute).length).toEqual(1);
     });
 });

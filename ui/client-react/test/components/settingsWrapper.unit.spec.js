@@ -1,6 +1,7 @@
 import React from 'react';
 import TestUtils, {Simulate} from 'react-addons-test-utils';
 import ReactDOM from 'react-dom';
+import {MemoryRouter} from 'react-router-dom';
 import Fluxxor from 'fluxxor';
 import {SettingsWrapper, __RewireAPI__ as SettingsWrapperRewireAPI}  from '../../src/components/settings/settingsWrapper';
 import DefaultTopNavGlobalActions from '../../../reuse/client/src/components/topNav/defaultTopNavGlobalActions';
@@ -33,9 +34,11 @@ flux.actions = {
 };
 
 const props = {
-    params: {
-        appId: 'app1',
-        tblId: 'table1'
+    match: {
+        params: {
+            appId: 'app1',
+            tblId: 'table1'
+        }
     },
     toggleNav: () => {},
     dispatch: () => {},
@@ -50,7 +53,7 @@ describe('SettingsWrapper tests', () => {
         spyOn(flux.actions, 'loadApps').and.callThrough();
         spyOn(flux.actions, 'selectAppId').and.callThrough();
         spyOn(flux.actions, 'selectTableId').and.callThrough();
-        component = TestUtils.renderIntoDocument(<SettingsWrapper {...props}/>);
+        component = TestUtils.renderIntoDocument(<MemoryRouter><SettingsWrapper {...props}/></MemoryRouter>);
     });
 
     afterEach(() => {
@@ -81,7 +84,7 @@ describe('SettingsWrapper tests', () => {
             }
         });
         const childComponentEl = React.createFactory(childComponent);
-        component = TestUtils.renderIntoDocument(<SettingsWrapper {...props}>{childComponentEl}</SettingsWrapper>);
+        component = TestUtils.renderIntoDocument(<MemoryRouter><SettingsWrapper {...props}>{childComponentEl}</SettingsWrapper></MemoryRouter>);
         let child = TestUtils.scryRenderedComponentsWithType(component, childComponent);
         expect(child.length).toEqual(1);
         expect(child[0].props).toEqual({app: apps[0], table: apps[0].tables[1]});
