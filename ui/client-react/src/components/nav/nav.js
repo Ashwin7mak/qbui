@@ -7,6 +7,7 @@ import ReportManagerTrowser from "../report/reportManagerTrowser";
 import RecordTrowser from "../record/recordTrowser";
 import ReportFieldSelectTrowser from '../report/reportFieldSelectTrowser';
 import ListOfElements from '../../../../reuse/client/src/components/sideNavs/listOfElements';
+import Locale from '../../../../reuse/client/src/locales/locale';
 
 import GlobalActions from "../actions/globalActions";
 import BuilderDropDownAction from '../actions/builderDropDownAction';
@@ -348,11 +349,15 @@ export const Nav = React.createClass({
                     onClick={() => this.toggleFieldSelectorMenu(CONTEXT.REPORT.NAV, reportData.appId, reportData.tblId, reportData.rptId, params)}
                     className="fieldSelectCloseIcon"
                 />
-                <div className="header">Hidden fields</div>
-                <div className="info">Add a field to the report</div>
+                <div className="header">
+                    {Locale.getMessage('report.drawer.title')}
+                </div>
+                <div className="info">
+                    {Locale.getMessage('report.drawer.info')}
+                </div>
                 <ListOfElements
                     elements={elements}
-                    emptyListMessage={"All fields are shown in the table."}
+                    emptyListMessage={Locale.getMessage('report.drawer.empty')}
                 />
             </div>
         );

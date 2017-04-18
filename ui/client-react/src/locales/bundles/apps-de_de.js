@@ -318,6 +318,11 @@ export default {
                 newTable: "Neue Tabelle auf dieser Spalte über",
                 columnProps: "Spalteneigenschaften",
                 fieldProps: "Feldeigenschaften"
+            },
+            drawer: {
+                title: "Hidden fields",
+                info: "Add a field to the report",
+                empty: "All fields are shown in the report."
             }
         },
         errorMessagePopup: {

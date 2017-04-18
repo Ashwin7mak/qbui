@@ -317,6 +317,11 @@ export default {
                 newTable: "Nouvelle table basée sur cette colonne",
                 columnProps: "Propriétés de la colonne",
                 fieldProps: "Propriétés de champ"
+            },
+            drawer: {
+                title: "Hidden fields",
+                info: "Add a field to the report",
+                empty: "All fields are shown in the report."
             }
         },
         errorMessagePopup: {
