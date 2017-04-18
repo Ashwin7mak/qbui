@@ -5,6 +5,7 @@ import Tooltip from '../../../../../reuse/client/src/components/tooltip/tooltip'
 import {addNewFieldToForm} from "../../../actions/formActions";
 import {getFormByContext} from '../../../reducers/forms';
 import {CONTEXT} from '../../../actions/context';
+import {ENTER_KEY, SPACE_KEY} from '../../../../../reuse/client/src/components/keyboardShortcuts/keyCodeConstants';
 import _ from 'lodash';
 
 /**
@@ -17,14 +18,23 @@ export class FieldTokenInMenu extends Component {
         this.props.addNewFieldToForm(formId, appId, tblId, selectedField, relatedField);
     };
 
+    onEnterClickToAdd = (e) => {
+        if (e.which === ENTER_KEY || e.which === SPACE_KEY) {
+            this.clickToAddToForm();
+            e.preventDefault();
+        }
+    };
+
     render() {
         const fieldToken = <FieldToken onClick={this.clickToAddToForm} isDragging={false} {...this.props} />;
 
         if (this.props.tooltipText) {
             return (
-                <Tooltip location="right" plainMessage={this.props.tooltipText}>
-                    {fieldToken}
-                </Tooltip>
+                <div tabIndex="0" onKeyDown={this.onEnterClickToAdd}>
+                    <Tooltip location="right" plainMessage={this.props.tooltipText}>
+                        {fieldToken}
+                    </Tooltip>
+                </div>
             );
         }
 
