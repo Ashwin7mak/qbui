@@ -276,7 +276,7 @@
             if (getAllEdits !== []) {
                 //Click on filtered save button
                 getAllEdits[0].click();
-                formsPO.editFormContainerEl.waitForVisible();
+                formsPO.editFormContainerEl.waitForVisible(10000);
                 //need these for trowser to drop down
                 return browser.pause(e2eConsts.shortWaitTimeMs);
             } else {
