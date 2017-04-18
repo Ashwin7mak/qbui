@@ -1,7 +1,6 @@
 import React from 'react';
-import TestUtils from 'react-addons-test-utils';
-import {shallow} from 'enzyme';
-import {MemoryRouter} from 'react-router-dom';
+import {shallow, mount} from 'enzyme';
+import createRouterContext from 'react-router-test-context';
 import * as UrlConstants from '../../../../src/constants/urlConstants';
 import AppSettingsHome  from '../../../../src/components/app/settings/appSettingsHome';
 
@@ -21,27 +20,22 @@ describe('AppSettingsHome functions', () => {
     const settingsLinkWithoutParameter = `${UrlConstants.SETTINGS_ROUTE}/app/${appId}/`;
 
     it('test render of component', () => {
-        let component = TestUtils.renderIntoDocument(
-            <MemoryRouter>
-                <AppSettingsHome
-                    selectedApp={selectedApp}
-                    appId={appId}
-                    appUsers={appUsers}
-                />
-            </MemoryRouter>);
-        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+        const context = createRouterContext();
+        let component = mount(<AppSettingsHome selectedApp={selectedApp}
+                                               appId={appId}
+                                               appUsers={appUsers}
+                                               />, {context});
+        expect(component.find(AppSettingsHome).length).toEqual(1);
     });
 
     it('test constructSettingsLink method', () => {
         let component = shallow(
-            <MemoryRouter>
                 <AppSettingsHome
                     selectedApp={selectedApp}
                     appId={appId}
                     appUsers={appUsers}
-                />
-            </MemoryRouter>);
-        const instance = component.dive().dive().instance();
+                />);
+        const instance = component.instance();
         let result = instance.constructSettingsLink(setting);
         expect(result).toEqual(settingsLinkWithParameter);
 

@@ -1,7 +1,7 @@
 import React from 'react';
-import TestUtils from 'react-addons-test-utils';
-import {shallow} from 'enzyme';
+import {shallow, mount} from 'enzyme';
 import {MemoryRouter} from 'react-router-dom';
+import createRouterContext from 'react-router-test-context';
 import Card  from '../../../src/components/card/card';
 
 describe('Card functions', () => {
@@ -13,7 +13,7 @@ describe('Card functions', () => {
     const link = '/qbase/app/1/users';
 
     it('test render of component', () => {
-        let component = TestUtils.renderIntoDocument(
+        let component = shallow(
             <MemoryRouter>
                 <Card
                     title={title}
@@ -22,20 +22,19 @@ describe('Card functions', () => {
                     link={link}
                 />
             </MemoryRouter>);
-        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+        expect(component.find(Card).length).toEqual(1);
     });
 
     it('test renderLink method with link', () => {
-        let component = TestUtils.renderIntoDocument(
-            <MemoryRouter>
+        const context = createRouterContext();
+        let component = mount(
                 <Card
                     title={title}
                     subtitle={subtitle}
                     icon={icon}
                     link={link}
-                />
-            </MemoryRouter>);
-        expect(TestUtils.scryRenderedDOMComponentsWithClass(component, 'cardLink').length).toEqual(1);
+                />, {context});
+        expect(component.find('.cardLink').length).toEqual(1);
     });
 
     it('test renderLink method without link', () => {

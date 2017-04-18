@@ -1,6 +1,6 @@
 import React from 'react';
-import TestUtils from 'react-addons-test-utils';
-import {MemoryRouter} from 'react-router-dom';
+import {mount} from 'enzyme';
+import createRouterContext from 'react-router-test-context';
 import LeftNav from '../../src/components/nav/leftNav';
 import NavItem, {__RewireAPI__ as NavItemRewireAPI} from '../../src/components/nav/navItem';
 
@@ -62,6 +62,7 @@ describe('Left Nav functions', () => {
     'use strict';
 
     var component;
+    const context = createRouterContext();
 
     beforeEach(() => {
         NavItemRewireAPI.__Rewire__('I18nMessage', I18nMessageMock);
@@ -74,37 +75,34 @@ describe('Left Nav functions', () => {
 
     it('test render opened with app list', () => {
 
-        component = TestUtils.renderIntoDocument(
-            <MemoryRouter>
-                <LeftNav open={true}
-                    appsListOpen={true}
-                    apps={appsTestData}
-                    items={navItemsTestData}
-                    onToggleAppsList={() => {}} />
-            </MemoryRouter>);
+        component = mount(
+            <LeftNav open={true}
+                appsListOpen={true}
+                apps={appsTestData}
+                items={navItemsTestData}
+                onToggleAppsList={() => {}} />,
+            {context});
     });
 
 
     it('test render opened with app,table,reports', () => {
-        component = TestUtils.renderIntoDocument(
-            <MemoryRouter>
-                <LeftNav open={true}
-                    appsListOpen={true}
-                    apps={appsTestData}
-                    selectedAppId={'app1'}
-                    items={navItemsTestData}/>
-            </MemoryRouter>);
+        component = mount(
+            <LeftNav open={true}
+                appsListOpen={true}
+                apps={appsTestData}
+                selectedAppId={'app1'}
+                items={navItemsTestData}/>,
+            {context});
     });
 
     it('test render closed with app,table,reports', () => {
-        component = TestUtils.renderIntoDocument(
-            <MemoryRouter>
-                <LeftNav open={false}
-                    appsListOpen={true}
-                    apps={appsTestData}
-                    selectedAppId={'app1'}
-                    items={navItemsTestData}/>
-            </MemoryRouter>);
+        component = mount(
+            <LeftNav open={false}
+                appsListOpen={true}
+                apps={appsTestData}
+                selectedAppId={'app1'}
+                items={navItemsTestData}/>,
+            {context});
 
     });
 });
@@ -113,46 +111,44 @@ describe('LeftNav', () => {
     let component;
     let validAppId = 'app1';
     let invalidAppId = 'doesnotexist';
+    const context = createRouterContext();
 
     it('renders the apps list if an app is not selected', () => {
-        component = TestUtils.renderIntoDocument(
-            <MemoryRouter>
-                <LeftNav open={false}
-                    appsListOpen={false}
-                    apps={appsTestData}
-                    selectedAppId={null}
-                    items={navItemsTestData}/>
-            </MemoryRouter>);
+        component = mount(
+            <LeftNav open={false}
+                appsListOpen={false}
+                apps={appsTestData}
+                selectedAppId={null}
+                items={navItemsTestData}/>,
+            {context});
 
-        TestUtils.findRenderedDOMComponentWithClass(component, 'appsList');
-        expect(TestUtils.scryRenderedDOMComponentsWithClass(component, 'tablesList').length).toEqual(0);
+        expect(component.find('.appsList').length).toEqual(1);
+        expect(component.find('.tablesList').length).toEqual(0);
     });
 
     it('renders the tables list if a valid app is currently selected', () => {
-        component = TestUtils.renderIntoDocument(
-            <MemoryRouter>
-                <LeftNav open={false}
-                    appsListOpen={false}
-                    apps={appsTestData}
-                    selectedAppId={validAppId}
-                    items={navItemsTestData}/>
-            </MemoryRouter>);
+        component = mount(
+            <LeftNav open={false}
+                appsListOpen={false}
+                apps={appsTestData}
+                selectedAppId={validAppId}
+                items={navItemsTestData}/>,
+            {context});
 
-        TestUtils.findRenderedDOMComponentWithClass(component, 'tablesList');
-        expect(TestUtils.scryRenderedDOMComponentsWithClass(component, 'appsList').length).toEqual(0);
+        expect(component.find('.tablesList').length).toEqual(1);
+        expect(component.find('.appsList').length).toEqual(0);
     });
 
     it('renders the apps list if an invalid/non-existing app is currently selected', () => {
-        component = TestUtils.renderIntoDocument(
-            <MemoryRouter>
-                <LeftNav open={false}
-                    appsListOpen={true}
-                    apps={appsTestData}
-                    selectedAppId={invalidAppId}
-                    items={navItemsTestData}/>
-            </MemoryRouter>);
+        component = mount(
+            <LeftNav open={false}
+                appsListOpen={true}
+                apps={appsTestData}
+                selectedAppId={invalidAppId}
+                items={navItemsTestData}/>,
+            {context});
 
-        TestUtils.findRenderedDOMComponentWithClass(component, 'appsList');
-        expect(TestUtils.scryRenderedDOMComponentsWithClass(component, 'tablesList').length).toEqual(0);
+        expect(component.find('.appsList').length).toEqual(1);
+        expect(component.find('.tablesList').length).toEqual(0);
     });
 });
