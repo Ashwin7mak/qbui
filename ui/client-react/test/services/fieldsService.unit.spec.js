@@ -10,7 +10,8 @@ describe('FieldsService functions', () => {
         spyOn(BaseService.prototype, 'setRequestInterceptor');
         spyOn(BaseService.prototype, 'setResponseInterceptor');
         spyOn(BaseService.prototype, 'get');
-
+        spyOn(BaseService.prototype, 'patch');
+        spyOn(BaseService.prototype, 'post');
         fieldsService = new FieldsService();
     });
 
@@ -30,6 +31,24 @@ describe('FieldsService functions', () => {
         var url = fieldsService.constructUrl(fieldsService.API.GET_FIELDS, [appId, tableId]);
         fieldsService.getFields(appId, tableId);
         expect(BaseService.prototype.get).toHaveBeenCalledWith(url);
+    });
+
+    it('test createField function', () => {
+        var appId = '123';
+        var tableId = '456';
+        var field = {id: 1};
+        var url = fieldsService.constructUrl(fieldsService.API.GET_FIELDS, [appId, tableId]);
+        fieldsService.createField(appId, tableId, field);
+        expect(BaseService.prototype.post).toHaveBeenCalledWith(url, field);
+    });
+
+    it('test updateField function', () => {
+        var appId = '123';
+        var tableId = '456';
+        var field = {id: 1};
+        var url = fieldsService.constructUrl(fieldsService.API.GET_FIELD, [appId, tableId, field.id]);
+        fieldsService.updateField(appId, tableId, field);
+        expect(BaseService.prototype.patch).toHaveBeenCalledWith(url, field);
     });
 
 });
