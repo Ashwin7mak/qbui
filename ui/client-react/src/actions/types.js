@@ -9,6 +9,8 @@
 export const LOADING_FORM = 'LOADING_FORM';
 export const LOAD_FORM_ERROR = 'LOAD_FORM_ERROR';
 export const LOAD_FORM_SUCCESS = 'LOAD_FORM_SUCCESS';
+export const UPDATE_FORM_REDIRECT_ROUTE = 'UPDATE_FORM_REDIRECT_ROUTE';
+
 //  Used when saving a form or a record to show/hide the spinner
 export const SAVE_FORM = 'SAVE_FORM';
 export const SAVE_FORM_COMPLETE = 'SAVE_FORM_COMPLETE';
@@ -17,13 +19,13 @@ export const SAVING_FORM_SUCCESS = 'SAVING_FORM_SUCCESS';
 export const SAVING_FORM_ERROR = 'SAVING_FORM_ERROR';
 export const KEYBOARD_MOVE_FIELD_UP = 'KEYBOARD_MOVE_FIELD_UP';
 export const KEYBOARD_MOVE_FIELD_DOWN = 'KEYBOARD_MOVE_FIELD_DOWN';
+export const ADD_FIELD = 'ADD_FIELD';
 export const MOVE_FIELD = 'MOVE_FIELD';
 export const REMOVE_FIELD = 'REMOVE_FIELD';
 export const TOGGLE_FORM_BUILDER_CHILDREN_TABINDEX = 'TOGGLE_FORM_BUILDER_CHILDREN_TABINDEX';
 export const SYNC_FORM = 'SYNC_FORM';
 export const SELECT_FIELD = 'SELECT_FIELD';
 export const DESELECT_FIELD = 'DESELECT_FIELD';
-export const ADD_FIELD = 'ADD_FIELD';
 export const UNLOAD_FORM = 'UNLOAD_FORM';
 
 //  ********  Nav shell actions ********
@@ -42,6 +44,8 @@ export const CHANGE_LOCALE = 'CHANGE_LOCALE';
 export const LOAD_FIELDS = 'LOAD_FIELDS';
 export const LOAD_FIELDS_SUCCESS = 'LOAD_FIELDS_SUCCESS';
 export const LOAD_FIELDS_ERROR = 'LOAD_FIELDS_ERROR';
+export const SAVE_NEW_FIELD = 'SAVE_NEW_FIELD';
+export const UPDATE_FIELD_ID = 'UPDATE_FIELD_ID';
 export const UPDATE_FIELD = 'UPDATE_FIELD';
 
 //  ******** Record actions ********
