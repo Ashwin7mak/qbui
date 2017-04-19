@@ -405,11 +405,13 @@ module.exports = function(grunt) {
                 configFile: 'karma.conf.js'
             },
             unit: {
+                // browsers: ["ChromeCanaryHeadless"],
                 browsers: ["PhantomJS_Desktop"],
                 singleRun : true
             },
             devunit: {
-                browsers: ["Chrome"],
+                // browsers: ["ChromeCanaryHeadless"],
+                browsers: ["PhantomJS_Desktop"],
                 singleRun : false
             },
             governance: {

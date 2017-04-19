@@ -136,8 +136,8 @@ module.exports = function(config) {
             'ChromeCanaryHeadless': {
                 base: 'ChromeCanary',
                 flags: [
-                    '--no-sandbox',
                     // See https://chromium.googlesource.com/chromium/src/+/lkgr/headless/README.md
+                    '--no-sandbox',
                     '--headless',
                     '--disable-gpu',
                     // Without a remote debugging port, Google Chrome exits immediately.
