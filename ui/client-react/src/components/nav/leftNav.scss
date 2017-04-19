@@ -383,8 +383,8 @@ div.leftNavTooltip {
                 .newTableItem {
                     position: sticky;
                     bottom: 0;
-                    background-color: #f5f5f5;
-                    border-top: 1px solid #ced0d0;
+                    background-color: $leftnav-background-color;
+                    border-top: 1px solid $leftnav-background-stroke-color;
                 }
                 .newTable {
                     cursor: pointer;
