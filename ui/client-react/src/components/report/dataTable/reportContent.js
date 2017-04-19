@@ -931,7 +931,7 @@ export const ReportContent = React.createClass({
         const editErrors = pendEdits.editErrors || null;
 
         // onCellClick handler: do nothing for embedded reports phase1.
-        let openRowToView = !this.props.phase1 && this.openRowToView;
+        let openRowToView = this.props.phase1 ? undefined : this.openRowToView;
 
         let reportContent;
 
