@@ -1,28 +1,14 @@
 import * as types from '../actions/types';
 
-const defaultTableInfo = {
-    name: {
-        value: ""
-    },
-    description: {
-        value: ""
-    },
-    tableIcon: {
-        value: ""
-    },
-    tableNoun: {
-        value: ""
-    }
-};
-
 const tableProperties = (
     state = {
         //  default states
         iconChooserOpen: false,
         savingTable: false,
-        tableInfo: defaultTableInfo,
+        tableInfo: null,
         isDirty: false,
-        editing: null
+        editing: null,
+        notifyTableDeleted: false
     },
     action) => {
 
@@ -125,6 +111,24 @@ const tableProperties = (
             tableInfo: newTableInfo,
             isDirty: false,
             savingTable: false
+        };
+    }
+    case types.TABLE_DELETED: {
+        return {
+            ...state,
+            savingTable: false
+        };
+    }
+    case types.DELETING_TABLE_FAILED: {
+        return {
+            ...state,
+            savingTable: false
+        };
+    }
+    case types.NOTIFY_TABLE_DELETED: {
+        return {
+            ...state,
+            notifyTableDeleted: action.notifyTableDeleted
         };
     }
     default:

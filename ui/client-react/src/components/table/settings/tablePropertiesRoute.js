@@ -3,27 +3,36 @@ import {Button} from 'react-bootstrap';
 import {connect} from 'react-redux';
 import {NotificationManager} from 'react-notifications';
 import Locale from '../../../locales/locales';
-import Stage from '../../stage/stage';
+import Stage from '../../../../../reuse/client/src/components/stage/stage';
 import IconActions from '../../../../../reuse/client/src/components/iconActions/iconActions';
 import {I18nMessage} from '../../../utils/i18nMessage';
 import Icon, {AVAILABLE_ICON_FONTS} from '../../../../../reuse/client/src/components/icon/icon.js';
 import TableCreationPanel from '../tableCreationPanel';
-import {updateTable, loadTableProperties, setTableProperty, openIconChooser, closeIconChooser, setEditingProperty, resetEditedTableProperties, deleteTable} from '../../../actions/tablePropertiesActions';
-
+import QBModal from '../../qbModal/qbModal';
+import {updateTable, loadTableProperties, setTableProperty, openIconChooser, closeIconChooser, setEditingProperty, resetEditedTableProperties, deleteTable, notifyTableDeleted} from '../../../actions/tablePropertiesActions';
+import * as UrlConsts from '../../../constants/urlConstants';
 import './tableProperties.scss';
 
 
 export const TablePropertiesRoute = React.createClass({
 
+    getInitialState() {
+        return {
+            confirmDeletesDialogOpen: false
+        };
+    },
     getExistingTableNames() {
         if (this.props.app && this.props.app.tables) {
             return this.props.app.tables.map((table) => table.name);
         }
         return [];
     },
+    doSomething() {
+        console.log(1);
+    },
     getPageActions(maxButtonsBeforeMenu) {
         const actions = [
-            {i18nMessageKey: 'pageActions.deleteTable', icon:'delete', className:'deleteTable', onClick:this.deleteTable}
+            {i18nMessageKey: 'pageActions.deleteTable', icon:'delete', onClick:this.handleDelete}
         ];
         return (<IconActions className="pageActions" actions={actions} maxButtonsBeforeMenu={maxButtonsBeforeMenu}/>);
     },
@@ -43,20 +52,31 @@ export const TablePropertiesRoute = React.createClass({
     updateTable() {
         this.updateTableProperties(this.props.app.id, this.props.table.id, this.props.tableProperties.tableInfo);
     },
-    deleteTable() {
+    getConfirmDialog() {
+        let msg = Locale.getMessage('tableEdit.deleteThisTable', {tableName: this.props.table.name});
+        return (
+            <QBModal
+                show={this.state.confirmDeletesDialogOpen}
+                primaryButtonName={Locale.getMessage('tableEdit.deleteTable')}
+                primaryButtonOnClick={this.handleRecordDelete}
+                leftButtonName={Locale.getMessage('selection.dontDelete')}
+                leftButtonOnClick={this.cancelRecordDelete}
+                bodyMessage={msg}
+                type="alert"/>);
+    },
+    handleDelete() {
+        this.setState({confirmDeletesDialogOpen: true});
+    },
+    handleRecordDelete() {
         this.props.deleteTable(this.props.app.id, this.props.table.id).then(
             (response) => {
-                NotificationManager.success(Locale.getMessage('tableEdit.tableUpdated'), Locale.getMessage('success'));
-                //let updatedTableInfo = tableInfo;
-                //let tableInfoObj = {};
-                //Object.keys(updatedTableInfo).forEach(function(key, index) {
-                //    tableInfoObj[key] = updatedTableInfo[key].value;
-                //});
-                //
-                //this.props.flux.actions.updateTableProps(this.props.table.id, tableInfoObj);
+                this.props.notifyTableDeleted(true);
+                // navigate to app home page (no page reload)
+                let link = `${UrlConsts.APP_ROUTE}/${this.props.app.id}`;
+                AppHistory.history.push(link);
             },
             (error) => {
-                NotificationManager.error(Locale.getMessage('tableEdit.tableUpdateFailed'), Locale.getMessage('failed'));
+                NotificationManager.error(Locale.getMessage('tableEdit.tableDeleteFailed'), Locale.getMessage('failed'));
             });
     },
     updateTableProperties(appId, tableId, tableInfo) {
@@ -82,28 +102,41 @@ export const TablePropertiesRoute = React.createClass({
     },
 
     render() {
-        let showButtons = this.props.tableProperties.isDirty ? true : false;
-        let buttonsClasses =  "tableInfoButtons " + (showButtons ? "open" : "closed");
-        return (<div>
-            <Stage stageHeadline={this.getStageHeadline()} pageActions={this.getPageActions(5)}></Stage>
+        if (_.isUndefined(this.props.app) ||
+            _.isUndefined(this.props.table) ||
+            _.isUndefined(this.props.tableProperties) ||
+            _.isNull(this.props.tableProperties.tableInfo)
+        ) {
+            return null;
+        } else {
+            let showButtons = this.props.tableProperties.isDirty ? true : false;
+            let buttonsClasses = "tableInfoButtons " + (showButtons ? "open" : "closed");
+            return (<div>
+                <Stage stageHeadline={this.getStageHeadline()} pageActions={this.getPageActions(5)}>
+                    <div className="tableProperties-content"></div>
+                </Stage>
 
-            <div className="tableInfoPanel">
-                <TableCreationPanel tableInfo={this.props.tableProperties.tableInfo}
-                                    iconChooserOpen={this.props.tableProperties.iconChooserOpen}
-                                    openIconChooser={this.props.openIconChooser}
-                                    setTableProperty={this.props.setTableProperty}
-                                    closeIconChooser={this.props.closeIconChooser}
-                                    setEditingProperty={this.props.setEditingProperty}
-                                    focusOn={this.props.tableProperties.editing}
-                                    validate={this.props.tableProperties.isDirty}
-                                    appTables={this.getExistingTableNames()}
-                                     />
-                <div className={buttonsClasses}>
-                    <a className="secondaryButton" onClick={this.resetTableProperties}><I18nMessage message={"nav.reset"}/></a>
-                    <Button className="primaryButton" bsStyle="primary" onClick={this.updateTable}><I18nMessage message={"nav.apply"}/></Button>
+                <div className="tableInfoPanel">
+                    <TableCreationPanel tableInfo={this.props.tableProperties.tableInfo}
+                                        iconChooserOpen={this.props.tableProperties.iconChooserOpen}
+                                        openIconChooser={this.props.openIconChooser}
+                                        setTableProperty={this.props.setTableProperty}
+                                        closeIconChooser={this.props.closeIconChooser}
+                                        setEditingProperty={this.props.setEditingProperty}
+                                        focusOn={this.props.tableProperties.editing}
+                                        validate={this.props.tableProperties.isDirty}
+                                        appTables={this.getExistingTableNames()}
+                    />
+                    <div className={buttonsClasses}>
+                        <a className="secondaryButton" onClick={this.resetTableProperties}><I18nMessage
+                            message={"nav.reset"}/></a>
+                        <Button className="primaryButton" bsStyle="primary" onClick={this.updateTable}><I18nMessage
+                            message={"nav.apply"}/></Button>
+                    </div>
                 </div>
-            </div>
-        </div>);
+                {this.getConfirmDialog()}
+            </div>);
+        }
     }
 
 });
@@ -138,7 +171,10 @@ const mapDispatchToProps = (dispatch) => {
             dispatch(resetEditedTableProperties());
         },
         deleteTable: (appId, tableId) => {
-            dispatch(deleteTable(appId, tableId));
+            return dispatch(deleteTable(appId, tableId));
+        },
+        notifyTableDeleted: (notify) => {
+            dispatch(notifyTableDeleted(notify));
         }
     };
 };

@@ -671,4 +671,123 @@ describe("Validate tablesApi", function() {
             });
         });
     });
+    describe("validate deleteTableEntities function", function() {
+        let executeReqStub = null;
+
+        beforeEach(function() {
+            executeReqStub = sinon.stub(requestHelper, "executeRequest");
+            tablesApi.setRequestHelperObject(requestHelper);
+            req.url = 'apps/123/tables/456';
+            req.method = 'delete';
+        });
+
+        afterEach(function() {
+            req.url = '';
+            executeReqStub.restore();
+        });
+
+        it('success return results ', function(done) {
+            executeReqStub.returns(Promise.resolve({statusCode:"200"}));
+            let promise = tablesApi.deleteTableEntities(req, "456");
+
+            promise.then(
+                function(response) {
+                    assert.deepEqual(response, {statusCode: 200});
+                    done();
+                },
+                function(error) {
+                    done(new Error("Unexpected failure promise return when testing deleteTableEntities success"));
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('deleteTableEntities: exception processing success test: ' + JSON.stringify(errorMsg)));
+            });
+        });
+
+        it('fail return results ', function(done) {
+            let error_message = "fail unit test case execution";
+
+            executeReqStub.returns(Promise.reject(new Error(error_message)));
+            let promise = tablesApi.deleteTableEntities(req, "456");
+
+            promise.then(
+                function() {
+                    done(new Error("Unexpected success promise return when testing deleteTableEntities failure"));
+                },
+                function(error) {
+                    assert.equal(error, "Error: fail unit test case execution");
+                    done();
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('deleteTableEntities: exception processing failure test: ' + JSON.stringify(errorMsg)));
+            });
+        });
+    });
+    describe("validate deleteTableComponents function", function() {
+        let deleteTableStub = null;
+        let deleteTableEntitiesStub = null;
+        let deleteTableResp = {};
+        let deleteTableEntitiesResp = {};
+        let errorPromise = Promise.reject({error: "some error"});
+
+        beforeEach(function() {
+            deleteTableStub = sinon.stub(tablesApi, "deleteTable");
+            deleteTableEntitiesStub = sinon.stub(tablesApi, "deleteTableEntities");
+            req.url = 'apps/123/tables/456';
+            req.method = 'delete';
+            deleteTableStub.returns(Promise.resolve(deleteTableResp));
+            deleteTableEntitiesStub.returns(Promise.resolve(deleteTableEntitiesResp));
+        });
+
+        afterEach(function() {
+            req.url = '';
+            req.rawBody = {};
+            deleteTableStub.restore();
+            deleteTableEntitiesStub.restore();
+        });
+
+        it('success return results ', function(done) {
+            let promise = tablesApi.deleteTableComponents(req);
+
+            promise.then(
+                function(response) {
+                    done();
+                },
+                function(error) {
+                    done(new Error("Unexpected failure promise return when testing deleteTableComponents success"));
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('deleteTableComponents: exception processing success test: ' + JSON.stringify(errorMsg)));
+            });
+        });
+        it('fails if deleteTable fails', function(done) {
+            deleteTableStub.returns(errorPromise);
+            let promise = tablesApi.deleteTableComponents(req);
+
+            promise.then(
+                function(response) {
+                    done(new Error("Unexpected success promise return when deleteTable failed"));
+                },
+                function(error) {
+                    done();
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('deleteTableComponents: exception processing success test: ' + JSON.stringify(errorMsg)));
+            });
+        });
+        it('success if deleteTableEntities fails', function(done) {
+            deleteTableEntitiesStub.returns(errorPromise);
+            let promise = tablesApi.deleteTableComponents(req);
+
+            promise.then(
+                function(response) {
+                    done();
+                },
+                function(error) {
+                    done(new Error("Unexpected failure promise return when testing deleteTableComponents success"));
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('deleteTableComponents: exception processing success test: ' + JSON.stringify(errorMsg)));
+            });
+        });
+    });
 });

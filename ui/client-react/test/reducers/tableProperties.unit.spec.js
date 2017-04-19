@@ -25,7 +25,8 @@ function initializeState() {
         savingTable: false,
         tableInfo: defaultTableInfo,
         isDirty: false,
-        editing: null
+        editing: null,
+        notifyTableDeleted: false
     };
 }
 
@@ -120,6 +121,20 @@ describe('Test table properties reducers', () => {
             expect(state.tableInfo.description).toEqual({origValue: 'description', value: 'description', validationError: undefined, edited: undefined});
         });
 
+        it('return deleted table', () => {
+            const state = reducer(initialState, {type: types.TABLE_DELETED});
+            expect(state.savingTable).toBe(false);
+        });
+
+        it('return deleting table failed', () => {
+            const state = reducer(initialState, {type: types.DELETING_TABLE_FAILED});
+            expect(state.savingTable).toBe(false);
+        });
+
+        it('return notify table deleted', () => {
+            const state = reducer(initialState, {type: types.NOTIFY_TABLE_DELETED, notifyTableDeleted: true});
+            expect(state.notifyTableDeleted).toBe(true);
+        });
     });
 
 

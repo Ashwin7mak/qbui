@@ -132,9 +132,9 @@
                             log.error({req: req}, "tablesApi.deleteTableEntities(): Error deleting table entitied");
                             reject(error);
                         }).catch((ex) =>{
-                        requestHelper.logUnexpectedError('tablesApi.deleteTableEntities(): unexpected error deleting table entities', ex, true);
-                        reject(ex);
-                    });
+                            requestHelper.logUnexpectedError('tablesApi.deleteTableEntities(): unexpected error deleting table entities', ex, true);
+                            reject(ex);
+                        });
                 });
             },
             /**
@@ -369,18 +369,16 @@
             deleteTableComponents: function(req) {
                 let tableProperReq = _.clone(req);
                 let tableReq = _.clone(req);
-                //return new Promise((resolve, reject) => {
-                    return this.deleteTableProperties(tableProperReq, tableProperReq.params.tableId).then(
-                        (success) => {return this.deleteTable(tableReq, tableReq.params.tableId);},
-                        (error) => {
-                            log.error({req: tableReq}, "tablesApi.deleteTableComponents(): Error deleting table entities in EE");
-                            return this.deleteTable(tableReq, tableReq.params.tableId);
-                        }
-                    ).catch((ex) => {
-                        requestHelper.logUnexpectedError('tablesApi.deleteTableComponents(): unexpected error deleting table entities in EE', ex, true);
+                return this.deleteTableEntities(tableProperReq, tableProperReq.params.tableId).then(
+                    (success) => {return this.deleteTable(tableReq, tableReq.params.tableId);},
+                    (error) => {
+                        log.error({req: tableReq}, "tablesApi.deleteTableComponents(): Error deleting table entities in EE");
                         return this.deleteTable(tableReq, tableReq.params.tableId);
-                    });
-                //});
+                    }
+                ).catch((ex) => {
+                    requestHelper.logUnexpectedError('tablesApi.deleteTableComponents(): unexpected error deleting table entities in EE', ex, true);
+                    return this.deleteTable(tableReq, tableReq.params.tableId);
+                });
             }
         };
         return tablesApi;

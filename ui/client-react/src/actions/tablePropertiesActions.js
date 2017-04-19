@@ -73,6 +73,20 @@ export const tableSaved = (tableInfo) => ({
     tableInfo
 });
 
+/**
+ * delete failed
+ */
+export const deletingTableFailed = () => ({
+    type: types.DELETING_TABLE_FAILED
+});
+
+/**
+ * table was succesfully deleted
+ */
+export const tableDeleted = () => ({
+    type: types.TABLE_DELETED
+});
+
 export const resetEditedTableProperties = () => ({
     type: types.RESET_TABLE_PROPS
 });
@@ -122,19 +136,19 @@ export const deleteTable = (appId, tableId) => {
     return (dispatch) => {
 
         return new Promise((resolve, reject) => {
-            const tableService = new TableService();
-            const promise = tableService.deleteTable(appId, tableId);
 
-            promise.then(response => {
-                //dispatch(tableSaved(tableInfo));
+            dispatch(savingTable());
+            const tableService = new TableService();
+            tableService.deleteTable(appId, tableId).then((response) => {
+                dispatch(tableDeleted());
                 resolve(response);
             }).catch(error => {
-                dispatch(savingTableFailed(error));
+                dispatch(deletingTableFailed(error));
                 if (error.response) {
                     if (error.response.status === constants.HttpStatusCode.FORBIDDEN) {
-                        logger.parseAndLogError(LogLevel.WARN, error.response, 'tableService.updateTable:');
+                        logger.parseAndLogError(LogLevel.WARN, error.response, 'tableService.deleteTable:');
                     } else {
-                        logger.parseAndLogError(LogLevel.ERROR, error.response, 'tableService.updateTable:');
+                        logger.parseAndLogError(LogLevel.ERROR, error.response, 'tableService.deleteTable:');
                     }
                 }
                 reject(error);
@@ -146,4 +160,13 @@ export const deleteTable = (appId, tableId) => {
 export const loadTableProperties = (tableInfo) => ({
     type: types.LOADED_TABLE_PROPS,
     tableInfo
+});
+
+/**
+ * someone (the app homepage currently) needs to pop up a notification
+ * @param notify true if notification is needed, false if the notification has been performed
+ */
+export const notifyTableDeleted = (notify) => ({
+    type: types.NOTIFY_TABLE_DELETED,
+    notifyTableDeleted: notify
 });

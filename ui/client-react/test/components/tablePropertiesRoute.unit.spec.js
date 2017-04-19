@@ -38,6 +38,7 @@ const props = {
     closeIconChooser: () => {},
     setEditingProperty: () => {},
     resetEditedTableProperties: () => {},
+    deleteTable: () => {return Promise.resolve({});},
     flux: flux
 };
 
@@ -87,6 +88,10 @@ describe('TablePropertiesRoute functions', () => {
             expect(buttonsPanel.length).toEqual(1);
             expect(buttonsPanel[0].className.indexOf("open") !== -1).toBe(true);
         });
+
+        it('test render of delete icon on page bar', () => {
+            expect(TestUtils.scryRenderedDOMComponentsWithClass(component, "deleteTable").length).toEqual(1);
+        });
     });
 
     describe('TablePropertiesRoute actions', () =>{
@@ -127,6 +132,12 @@ describe('TablePropertiesRoute functions', () => {
             let resetButton = buttonsPanel[0].querySelectorAll('.secondaryButton');
             Simulate.click(resetButton[0]);
             expect(props.resetEditedTableProperties).toHaveBeenCalled();
+        });
+
+        it('test clicking on delete icon calls delete table', () => {
+            let deleteTableIcon = TestUtils.scryRenderedDOMComponentsWithClass(component, "deleteTable")[0];
+            Simulate.click(deleteTableIcon);
+            
         });
     });
 });

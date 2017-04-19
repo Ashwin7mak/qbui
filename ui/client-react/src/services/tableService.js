@@ -51,12 +51,8 @@ class TableService extends BaseService {
      * @param table object of structure {name: "name", description: "desc", tableIcon: "icon", tableNoun: "noun"}
      */
     createTableComponents(appId, tableInfo) {
-        //let url = super.constructUrl(this.API.CREATE_TABLE_COMPONENTS, [appId]);
-        //return super.post(url, tableInfo);
-        appId = '0c4aq6aaaaab';
-        let tableId = '0c4aq6aaaaav';
-        let url = super.constructUrl(this.API.DELETE_TABLE, [appId, tableId]);
-        return super.delete(url);
+        let url = super.constructUrl(this.API.CREATE_TABLE_COMPONENTS, [appId]);
+        return super.post(url, tableInfo);
     }
 
     updateTable(appId, tableId, table) {
