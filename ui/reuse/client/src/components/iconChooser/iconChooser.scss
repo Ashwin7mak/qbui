@@ -27,16 +27,17 @@
             }
         }
         .showAllToggle {
+            display: flex;
             color: $color-black-700;
             text-align: center;
             margin-right: 12px;
             margin-top: 4px;
-            flex-grow: 0;
-            white-space: nowrap;
+            align-items: center;
+
             .toggleIcon {
                 margin: -5px;
                 width: 24px;
-                height: 24px;
+                height: 32px;
                 font-size: 18px;
             }
         }
@@ -71,11 +72,13 @@
 
     .qbIcon.toggleIcon {
         transition: transform 300ms ease-in;
+        transform-origin: center 9px;
         transform: rotate(0);
     }
 
     &.open {
         .qbIcon.toggleIcon {
+            transform-origin: center 9px;
             transform: rotate(-180deg);
         }
     }

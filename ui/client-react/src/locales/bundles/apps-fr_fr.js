@@ -640,7 +640,9 @@ export default {
             homePageInitialDescription: "Nous avons créé quelques rapports pour accompagner votre nouvelle table afin que vous puissiez commencer à ajouter des enregistrements",
             homePageAddRecordButton: "Ajouter un enregistrement",
             homePageStillBuilding: "Bâtiment fixe?  ",
-            homePageCreateAnother: "Créer un autre tableau"
+            homePageCreateAnother: "Créer un autre tableau",
+
+            noSuggestedIcons: "Il n'y a pas d'icônes suggérées pour ce nom de table"
         },
         iconChooser: {
             searchPlaceholder: "Rechercher des icônes..."

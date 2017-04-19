@@ -1,6 +1,7 @@
 import React from 'react';
 import {PropTypes} from 'react';
 import Icon from '../icon/icon';
+import IconUtils from '../icon/iconUtils';
 
 // IMPORTS FROM CLIENT REACT
 import Locale from '../../../../../client-react/src/locales/locales';
@@ -64,36 +65,10 @@ class IconChooser extends React.Component {
     }
 
     /**
-     * does filter text match icon?
-     * @param text lowercase filter text
-     * @param icon icon name
-     * @returns {boolean}
-     */
-    filterMatches(text, icon) {
-
-        if (text === '') {
-            // no filter, display all icons
-            return true;
-        }
-        const iconName = icon.toLowerCase();
-
-        // match agains icon name
-        if (iconName.indexOf(text) !== -1) {
-            return true;
-        }
-
-        // find all tags (sets of icons by name) containing the search text
-        const matchedTags = this.props.iconsByTag.filter((tagToIcons) => tagToIcons.tag.toLowerCase().indexOf(text) !== -1);
-
-        // filter matches if any tag matching the filter text contains the current icon
-        return matchedTags.find((taggedIcons) => taggedIcons.icons.find((taggedIcon) => taggedIcon === icon));
-    }
-
-    /**
      * get icons matching the current filter text
      */
     getFilteredIcons() {
-        return this.props.icons.filter((icon) => this.filterMatches(this.state.filterText.toLowerCase().trim(), icon));
+        return this.props.icons.filter((icon) => IconUtils.filterMatches(this.props.iconsByTag, this.state.filterText.toLowerCase().trim(), icon));
     }
 
     /**
