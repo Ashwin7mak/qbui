@@ -650,7 +650,8 @@ export default {
             homePageStillBuilding: "Still building?  ",
             homePageCreateAnother: "Create another table",
 
-            noSuggestedIcons: "There are no suggested icons for this table name"
+            noSuggestedIcons: "There are no suggested icons for this table name",
+            typeForSuggestions: "Please type a table name to get suggestions"
         },
         iconChooser: {
             searchPlaceholder: "Search table icons..."
