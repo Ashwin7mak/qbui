@@ -87,7 +87,7 @@ RowActions.propTypes = {
     * Holds the corresponding rowId of the row that is currently being edited */
     editingRowId: PropTypes.number,
     /*
-    * Checks whether the editable row is valid or not */
+    * Shows or hides a loading spinner on the RowEditActions component*/
     isEditingRowValid: PropTypes.bool.isRequired,
     /*
     * Saves the values inside the current editing row */
@@ -117,7 +117,7 @@ RowActions.propTypes = {
     * Icon through which the row can be saved on click */
     onClickSaveRow: PropTypes.func.isRequired,
     /*
-    * a node which splits the logic between QbIconActions and IconActions - initially set to null */
+    * Uses an IconActions component to render the icon menu by default, but you can override the renderer by passing in your own React class (e.g., QbIconActions). */
     iconActionsNode: PropTypes.element
 };
 
