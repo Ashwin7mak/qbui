@@ -382,7 +382,7 @@ export const RecordRoute = React.createClass({
         if (this.props.isDrawerContext) {
             return  _.find(props.record, rec => rec.id === props.uniqueId) || {};
         } else {
-            return  _.find(props.record, rec => rec.recId.toString() === props.params.recordId) || {};
+            return  _.find(props.record, rec => rec.recId.toString() === props.match.params.recordId) || {};
         }
     },
     /**
