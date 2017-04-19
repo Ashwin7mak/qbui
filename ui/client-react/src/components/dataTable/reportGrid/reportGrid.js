@@ -275,8 +275,6 @@ export const ReportGrid = React.createClass({
         let pendEdits = this.getPendEdits();
         let isInLineEditOpen = (pendEdits.isInlineEditOpen === true);
 
-        let isOnlyOneColumnVisible = this.isOnlyOneColumnVisible();
-
         return <QbGrid
             numberOfColumns={_.isArray(this.props.columns) ? this.props.columns.length : 0}
             columns={this.transformColumns()}
@@ -319,7 +317,7 @@ export const ReportGrid = React.createClass({
                 tblId: this.props.tblId,
                 rptId: this.props.rptId,
                 sortFids: this.props.sortFids,
-                isOnlyOneColumnVisible: isOnlyOneColumnVisible
+                isOnlyOneColumnVisible: this.isOnlyOneColumnVisible()
             }}
         />;
         if (!this.props.noRowsUI || this.props.loading || transformedRecords.length > 0) {
