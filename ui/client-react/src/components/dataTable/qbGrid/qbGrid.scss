@@ -131,7 +131,8 @@ $edit-icon-font-size: 18px;
             // This temporary fix positions the menu below the entire header row so as not
             // to be clipped by adjacent cells.
             .dropdown {
-                position: initial; // we want to position the popup menu relative to the <th> for now.
+                //position: initial; // we want to position the popup menu relative to the <th> for now.
+                position: relative;
             }
             .dropdown-menu {
                 top: calc(100% - 1px);
