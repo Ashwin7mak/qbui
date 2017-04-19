@@ -386,6 +386,18 @@ $add-record-radius: 20px;
         -webkit-border-radius: $add-record-radius;
         border-radius: $add-record-radius;
 
+        // This is temporary until the icon is fixed with a non-transparent plus sign
+        &:before {
+            position: absolute;
+            content: "";
+            z-index: -1;
+            left: 10px;
+            top: 10px;
+            background-color: $color-black-100;
+            height: 20px;
+            width: 20px;
+        }
+
         .qbIcon {
             line-height: $add-record-radius * 2;
 
