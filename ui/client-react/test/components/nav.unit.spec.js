@@ -97,7 +97,7 @@ describe('Nav Unit tests', () => {
             leftNavExpanded: false
         },
         reports: [],
-        router: []
+        history: []
     };
 
     beforeEach(() => {

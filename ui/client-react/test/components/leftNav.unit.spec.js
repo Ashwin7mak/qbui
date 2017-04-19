@@ -1,8 +1,7 @@
 import React from 'react';
 import {mount} from 'enzyme';
-import createRouterContext from 'react-router-test-context';
 import LeftNav from '../../src/components/nav/leftNav';
-import NavItem, {__RewireAPI__ as NavItemRewireAPI} from '../../src/components/nav/navItem';
+import {__RewireAPI__ as NavItemRewireAPI} from '../../src/components/nav/navItem';
 import {MemoryRouter} from 'react-router-dom';
 var I18nMessageMock = React.createClass({
     render: function() {
@@ -62,7 +61,6 @@ let navItemTestData =
         'use strict';
 
         var component;
-        const context = createRouterContext();
 
         beforeEach(() => {
             NavItemRewireAPI.__Rewire__('I18nMessage', I18nMessageMock);
@@ -114,7 +112,6 @@ describe('LeftNav', () => {
     let component;
     let validAppId = 'app1';
     let invalidAppId = 'doesnotexist';
-    const context = createRouterContext();
 
     it('renders the apps list if an app is not selected', () => {
         component = mount(

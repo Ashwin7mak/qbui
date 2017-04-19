@@ -79,46 +79,6 @@ store.dispatch(FeatureSwitchActions.getStates());
 
 const createElementWithFlux = (Component, props) => <Component {...props} flux={fluxxor} />;
 
-// render the UI, wrap the router in the react-redux Provider to make the Redux store available to connected components
-/*
-render((
-    <Provider store={store}>
-        <Router history={history} createElement={createElementWithFlux} >
-
-            <Route path={APPS_ROUTE} component={ConnectedNav} >
-                <IndexRoute component={AppsRoute} />
-            </Route>
-
-            <Route path={ADMIN_ROUTE} component={ConnectedNav} >
-                <Route path="featureSwitches" component={FeatureSwitchesRoute} />
-                <Route path="featureSwitch/:id" component={FeatureSwitchOverridesRoute} />
-            </Route>
-
-            <Route path={`${APP_ROUTE}/:appId`} component={ConnectedNav} >
-                <IndexRoute component={AppHomePageRoute} />
-                <Route path="users" component={AppUsersRoute} />
-                <Route path="table/:tblId" component={TableHomePageRoute} />
-                <Route path="table/:tblId/report/:rptId" component={ReportRoute} />
-                <Route path="table/:tblId/report/:rptId/record/:recordId" component={RecordRoute} />
-                <Route path="table/:tblId/record/:recordId" component={RecordRoute} />
-            </Route>
-
-            <Route path={`${BUILDER_ROUTE}/app/:appId`} component={ConnectedBuilderNav}>
-                <Route path="table/:tblId/form(/:formId)" component={FormBuilderContainer} />
-            </Route>
-
-            <Route path={`${SETTINGS_ROUTE}`} component={ConnectedSettingsNav}>
-                <Route path="app/:appId" component={AppSettingsRoute} />
-                <Route path="app/:appId/properties" component={AppPropertiesRoute} />
-                <Route path="app/:appId/table/:tblId/properties" component={TablePropertiesRoute} />
-            </Route>
-
-        </Router>
-    </Provider>
-), document.getElementById('content'));
-*/
-
-
 /**
  * routes config
  * each entry is a route config that contains:
@@ -256,9 +216,9 @@ render((
     <Provider store={store}>
         <Router history={history} createElement={createElementWithFlux} >
                 {/*  within Switch 1st match wins
-                    includes all the above top level routes and passed on the child routes in the properties
-                    note if an entry it is without a path to match
-                     the route has to come after specific routes
+                    includes all the above top level routes and passes on the child routes in the properties
+                    note if an entry it is without a path to match it matches all
+                    the route has to come after specific routes to be matched within a switch
                  */}
                 <Switch>
                     {routes.map((route, i) =>

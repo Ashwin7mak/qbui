@@ -71,10 +71,8 @@ import TopNavDoc from './docs/topNav.js';
 import StageDoc from './docs/stage.js';
 import TooltipDoc from './docs/tooltip.js';
 import StandardLeftNavDoc from './docs/standardLeftNav.js';
-import createBrowserHistory from 'history/createBrowserHistory';
 // END OF IMPORT STATEMENTS
 // Above comment used for Grunt task. Please do not delete.
-const browserHistory  = createBrowserHistory();
 
 
 const {BASE_CLIENT_ROUTE} = ROUTES;
@@ -83,61 +81,6 @@ const LIB_ROUTE = `${BASE_CLIENT_ROUTE}/components`;
 
 // init the localization services
 AppsBundleLoader.changeLocale(config.locale.default);
-
-// render((
-//     <Router history={browserHistory}>
-//         <Route path="qbase/components" component={ComponentLibraryWrapper}>
-//             <IndexRedirect to="home" />
-//             <Route path="home" component={HomePage} />
-//             <Route path="colors" component={ColorsPage} />
-//             <Route path="uiIconFont" component={UiIconFontPage} />
-//             <Route path="tableIconFont" component={TableIconFontPage} />
-//
-//             <Route path="checkBoxFieldValueEditor" component={CheckBoxFieldValueEditorDoc} />
-//             <Route path="checkBoxFieldValueRenderer" component={CheckBoxFieldValueRendererDoc} />
-//             <Route path="dateFieldValueEditor" component={DateFieldValueEditorDoc} />
-//             <Route path="dateTimeFieldValueEditor" component={DateTimeFieldValueEditorDoc} />
-//             <Route path="dateTimeFieldValueRenderer" component={DateTimeFieldValueRendererDoc} />
-//             <Route path="durationFieldValueRenderer" component={DurationFieldValueRendererDoc} />
-//             <Route path="emailFieldValueEditor" component={EmailFieldValueEditorDoc} />
-//             <Route path="emailFieldValueRenderer" component={EmailFieldValueRendererDoc} />
-//             <Route path="fieldValueEditor" component={FieldValueEditorDoc} />
-//             <Route path="fieldValueRenderer" component={FieldValueRendererDoc} />
-//             <Route path="multiChoiceFieldValueEditor" component={MultiChoiceFieldValueEditorDoc} />
-//             <Route path="multiLineTextFieldValueEditor" component={MultiLineTextFieldValueEditorDoc} />
-//             <Route path="numericfieldValueEditor" component={NumericFieldValueEditorDoc} />
-//             <Route path="numericFieldValueRenderer" component={NumericFieldValueRendererDoc} />
-//             <Route path="textfieldValueEditor" component={TextFieldValueEditorDoc} />
-//             <Route path="textFieldValueRenderer" component={TextFieldValueRendererDoc} />
-//             <Route path="timeFieldValueEditor" component={TimeFieldValueEditorDoc} />
-//             <Route path="timeFieldValueRenderer" component={TimeFieldValueRendererDoc} />
-//             <Route path="trowser" component={TrowserDoc} />
-//             <Route path="urlFieldValueEditor" component={UrlFieldValueEditorDoc} />
-//             <Route path="urlFieldValueRenderer" component={UrlFieldValueRendererDoc} />
-//             <Route path="userFieldRenderer" component={UserFieldRendererDoc} />
-//             <Route path="userFieldEditor" component={UserFieldEditorDoc} />
-//             <Route path="qbpanel" component={QBPanelDoc} />
-//             <Route path="icon" component={IconDoc} />
-//             <Route path="qBModal" component={QBModalDoc} />
-//             <Route path="alertBanner" component={AlertBannerDoc} />
-//             <Route path="pageTitle" component={PageTitleDoc} />
-//             <Route path="invisibleBackdrop" component={InvisibleBackdropDoc} />
-//             <Route path="phoneFieldValueEditor" component={PhoneFieldValueEditorDoc} />
-//             <Route path="phoneFieldValueRenderer" component={PhoneFieldValueRendererDoc} />
-//             <Route path="durationFieldValueEditor" component={DurationFieldValueEditorDoc} />
-//             <Route path="qbGrid" component={QbGridDoc} />
-//             <Route path="sideMenuBase" component={SideMenuBaseDoc} />
-//             <Route path="sideTrowserBase" component={SideTrowserBaseDoc} />
-//             <Route path="iconChooser" component={IconChooserDoc} />
-//             <Route path="iconInputBox" component={IconInputBoxDoc} />
-//             <Route path="topNav" component={TopNavDoc} />
-//             <Route path="stage" component={StageDoc} />
-//             <Route path="tooltip" component={TooltipDoc} />
-//             <Route path="standardLeftNav" component={StandardLeftNavDoc} />
-//         </Route>
-//     </Router>
-// ), document.getElementById('content'));
-
 
 const routes = [
     {
