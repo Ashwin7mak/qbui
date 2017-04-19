@@ -55,7 +55,7 @@ class TableCreationPanel extends React.Component {
         if (name === '') {
             suggestedIcons = tableIconNames.slice(1, 9);
         } else {
-            suggestedIcons = tableIconNames.filter((icon) => IconUtils.filterMatches(tableIconsByTag, name, icon)).slice(0,8);
+            suggestedIcons = tableIconNames.filter((icon) => IconUtils.filterMatches(tableIconsByTag, name, icon)).slice(0, 8);
         }
 
         if (suggestedIcons.length === 0) {
