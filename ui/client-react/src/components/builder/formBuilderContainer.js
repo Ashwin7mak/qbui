@@ -39,6 +39,7 @@ const mapStateToProps = state => {
         tabIndex: (_.has(currentForm, 'formBuilderChildrenTabIndex') ? currentForm.formBuilderChildrenTabIndex[0] : undefined),
         toolPaletteChildrenTabIndex: (_.has(currentForm, 'toolPaletteChildrenTabIndex') ? currentForm.toolPaletteChildrenTabIndex[0] : undefined),
         formFocus: (_.has(currentForm, 'formFocus') ? currentForm.formFocus[0] : undefined),
+        toolPaletteFocus: (_.has(currentForm, 'toolPaletteFocus') ? currentForm.toolPaletteFocus[0] : undefined),
         shouldNotifyTableCreated: state.tableCreation.notifyTableCreated,
         isOpen: state.builderNav.isNavOpen,
         isCollapsed: state.builderNav.isNavCollapsed
@@ -204,10 +205,13 @@ export const FormBuilderContainer = React.createClass({
     escapeCurrentContext() {
         let childrenTabIndex = this.props.tabIndex;
         let selectedField = this.props.selectedField;
+        let formId = this.props.currentForm.id;
         if (selectedField) {
             this.deselectField();
         } else if (this.props.tabIndex === "0") {
-            this.props.toggleFormBuilderChildrenTabIndex(this.props.currentForm.id, childrenTabIndex);
+            this.props.toggleFormBuilderChildrenTabIndex(formId, childrenTabIndex);
+        } else if (this.props.toolPaletteChildrenTabIndex === "0") {
+            this.props.toggleToolPaletteChildrenTabIndex(formId, "0");
         } else {
             this.onCancel();
         }
@@ -303,7 +307,7 @@ export const FormBuilderContainer = React.createClass({
                              isOpen={this.props.isOpen}
                              toggleToolPaletteChildrenTabIndex={this.toggleToolPaletteChildrenTabIndex}
                              toolPaletteChildrenTabIndex={this.props.toolPaletteChildrenTabIndex}
-                                >
+                             toolPaletteFocus={this.props.toolPaletteFocus} >
                     <FieldProperties appId={this.props.params.appId} tableId={this.props.params.tblId} formId={formId}>
                         <div className="formBuilderContainerContent" ref={element => formBuilderContainerContent = element}>
                             <AutoScroll parentContainer={formBuilderContainerContent} pixelsFromBottomForLargeDevices={100}>

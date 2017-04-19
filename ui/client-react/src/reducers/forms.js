@@ -355,11 +355,13 @@ const forms = (
         if (!updatedForm.formBuilderChildrenTabIndex && !updatedForm.formFocus) {
             updatedForm.formBuilderChildrenTabIndex = [];
             updatedForm.formFocus = [];
+            updatedForm.toolPaletteFocus = [];
         }
 
         updatedForm.formBuilderChildrenTabIndex[0] = tabIndex;
         updatedForm.toolPaletteChildrenTabIndex[0] = "-1";
         updatedForm.formFocus[0] = formFocus;
+        updatedForm.toolPaletteFocus[0] = false;
 
         newState[id] = updatedForm;
         return newState;
@@ -370,17 +372,26 @@ const forms = (
             return state;
         }
 
+        let toolPaletteFocus = false;
         let tabIndex = action.content.currentTabIndex === undefined || action.content.currentTabIndex === "-1" ? "0" : "-1";
+
+        if (action.content.currentTabIndex === undefined) {
+            toolPaletteFocus = false;
+        } else if (tabIndex === "-1") {
+            toolPaletteFocus = true;
+        }
 
         if (!updatedForm.formBuilderChildrenTabIndex && !updatedForm.toolPaletteChildrenTabIndex && !updatedForm.formFocus) {
             updatedForm.formBuilderChildrenTabIndex = [];
             updatedForm.toolPaletteChildrenTabIndex = [];
             updatedForm.formFocus = [];
+            updatedForm.toolPaletteFocus = [];
         }
 
         updatedForm.formBuilderChildrenTabIndex[0] = "-1";
         updatedForm.toolPaletteChildrenTabIndex[0] = tabIndex;
         updatedForm.formFocus[0] = false;
+        updatedForm.toolPaletteFocus[0] = toolPaletteFocus;
 
         newState[id] = updatedForm;
         return newState;

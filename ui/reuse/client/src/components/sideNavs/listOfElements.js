@@ -16,7 +16,7 @@ const FILTER_DEBOUNCE_TIMEOUT = 100;
 class ListOfElements extends Component {
     constructor(props) {
         super(props);
-
+        this.listOfElementsContainer = null;
         this.state = {
             // Stores the current value of the filter input
             fieldFilter: '',
@@ -126,11 +126,18 @@ class ListOfElements extends Component {
         });
     };
 
+    componentDidUpdate = () => {
+        if (this.props.toolPaletteFocus) {
+            this.listOfElementsContainer.focus();
+        }
+    }
+
     render() {
         return (
             <div className={`listOfElementsContainer ${this.props.isCollapsed ? 'listOfElementsCollapsed' : ''}`}
                  tabIndex="0"
                  onKeyDown={this.props.toggleToolPaletteChildrenTabIndex}
+                 ref={(element) => {this.listOfElementsContainer = element;}}
                  role="button">
                 <SearchBox
                     value={this.state.fieldFilter}
