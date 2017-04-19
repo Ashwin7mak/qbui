@@ -106,9 +106,9 @@
                     tableToFieldToFieldTypeMap  = e2eConsts.createDefaultTableMap();
                 }
 
-                // Use num of records to generate or use 25 by default to enable paging
+                // Use num of records to generate or use the default
                 if (!numberOfRecords) {
-                    numberOfRecords  = e2eConsts.MAX_PAGING_SIZE + 5;
+                    numberOfRecords  = e2eConsts.DEFAULT_NUM_RECORDS_TO_CREATE;
                 }
 
                 // Generate the app JSON object
@@ -148,9 +148,9 @@
                     // Create forms for both tables
                     return e2eBase.formService.createDefaultForms(createdApp);
                 }).then(function() {
-                    // Create a relationship between the 3rd and 4th tables
+                    // Create a relationship between the 3rd and 4th tables (Child Table's Numeric Field relates to Parent Table's Record ID)
                     if (createdApp.tables[2] && createdApp.tables[3]) {
-                        return e2eBase.relationshipService.createOneToOneRelationship(createdApp, createdApp.tables[2], createdApp.tables[3]);
+                        return e2eBase.relationshipService.createOneToOneRelationship(createdApp, createdApp.tables[2], createdApp.tables[3], 7);
                     }
                 }).then(function() {
                     // Return the createdApp object

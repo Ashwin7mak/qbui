@@ -14,6 +14,7 @@ import Breakpoints from '../../../../../client-react/src/utils/breakpoints';
 // CLIENT REACT IMPORTS
 
 import QbLogoImage from '../../assets/images/QB-logo.svg';
+import LogoImg from '../../assets/images/QB3-logo.svg';
 import './standardLeftNav.scss';
 
 /**
@@ -131,7 +132,7 @@ class StandardLeftNav extends Component {
                 {Breakpoints.isSmallBreakpoint() && globalActions}
 
                 <div className="standardLeftNavBranding">
-                    <img className="leftNavLogo" alt={brandingImageAltText} src={brandingImage} />
+                    <img className="leftNavLogo" alt={brandingImageAltText} src={LogoImg} />
                 </div>
             </div>
         );

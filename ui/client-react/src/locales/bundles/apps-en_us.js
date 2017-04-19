@@ -117,7 +117,11 @@ export default {
             searchNoMatch: "Nobody matches"
         },
         grid: {
-            no_data: "There is no data to display."
+            no_data: "There is no data to display.",
+            no_filter_matches: "No records match what you're looking for.  Try looking for a different kind of record.",
+            no_rows: "There are no records to see right now.",
+            no_rows_but: "There are no records, but you can ",
+            no_rows_create_link:  "create one"
         },
         globalActions: {
             user: "User",
@@ -127,6 +131,8 @@ export default {
         },
         pageActions: {
             addRecord: "Add a record",
+            approve: "Approve this record",
+            configureFormBuilder: 'Modify this form',
             saveRecord: "Save changes",
             saveAndAddRecord: "Save and add a new row",
             saveAndAddRecordDisabled: "Adding records in the grid is not available yet",
@@ -196,6 +202,12 @@ export default {
                 save: {
                     success: "Form saved",
                     error: "Error saving form"
+                }
+            },
+            automation: {
+                approverecord: {
+                    success: "Record Approved.",
+                    error: "An error occured when approving this record."
                 }
             }
         },
@@ -528,6 +540,11 @@ export default {
             LOOKUP: "Lookup",
             FILE_ATTACHMENT: "File"
         },
+        fieldPropertyLabels: {
+            title: "properties",
+            name: "Name",
+            required: "Must be filled in"
+        },
         builder: {
             formBuilder: {
                 unimplemented: "Feature is not available right now",
@@ -626,6 +643,12 @@ export default {
             validateTableNameEmpty: "Fill in the table name",
             validateTableNameExists: "Fill in a different value. Another table is already using this name",
             validateRecordNameEmpty: "Fill in the record name",
+
+            homePageInitialTitle: "Start using your table",
+            homePageInitialDescription: "We created a couple of reports to go along with your new table so you can get started adding records",
+            homePageAddRecordButton: "Add a record",
+            homePageStillBuilding: "Still building?  ",
+            homePageCreateAnother: "Create another table"
         },
         iconChooser: {
             searchPlaceholder: "Search table icons..."

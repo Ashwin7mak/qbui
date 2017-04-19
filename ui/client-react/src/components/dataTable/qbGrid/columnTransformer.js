@@ -94,7 +94,7 @@ class ColumnTransformer {
             headerComponent = (
                 <span className={this.headerClasses}>
                     <span className={this.headerLabelClasses}>
-                        {this.headerLabel}
+                        {this.headerLabel.toUpperCase()}
                     </span>
                     <div className="headerMenu">
                         <MenuComponent {...this.headerMenuProps} />

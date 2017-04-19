@@ -15,6 +15,7 @@ let assert = require('assert');
 let requestHelper = require('./../../../src/api/quickbase/requestHelper')(config);
 let formsApi = require('../../../src/api/quickbase/formsApi')(config);
 let recordsApi = require('../../../src/api/quickbase/recordsApi')(config);
+let appsApi = require('../../../src/api/quickbase/appsApi')(config);
 let errorCodes = require('../../../src/api/errorCodes');
 let errorStatus = 403;
 
@@ -44,13 +45,20 @@ describe('Validate FormsApi unit tests', function() {
     describe('validate fetchFormMetaData api', function() {
 
         let executeReqStub;
+        let getHydratedAppStub;
+        let getRelationshipForAppStub;
         beforeEach(function() {
             executeReqStub = sinon.stub(requestHelper, "executeRequest");
             formsApi.setRequestHelperObject(requestHelper);
+            getHydratedAppStub = sinon.stub(appsApi, "getHydratedApp");
+            getRelationshipForAppStub = sinon.stub(appsApi, "getRelationshipsForApp");
+            formsApi.setAppsApiObject(appsApi);
         });
 
         afterEach(function() {
             executeReqStub.restore();
+            getHydratedAppStub.restore();
+            getRelationshipForAppStub.restore();
         });
 
         it('success return results ', function(done) {
@@ -58,6 +66,8 @@ describe('Validate FormsApi unit tests', function() {
 
             let targetObject = {formMeta:{id:1}};
             executeReqStub.returns(Promise.resolve({body: JSON.stringify(targetObject)}));
+            getHydratedAppStub.returns(Promise.resolve({body: '[{"appId":1}]'}));
+
             let promise = formsApi.fetchFormMetaData(req);
 
             promise.then(
@@ -84,8 +94,10 @@ describe('Validate FormsApi unit tests', function() {
             let getRequestJavaHostSpy = sinon.spy(requestHelper, "getRequestJavaHost");
             formsApi.setRequestHelperObject(requestHelper);
 
-            let targetObject = "[{formMeta: [id:1]}]";
-            executeReqStub.returns(Promise.resolve(targetObject));
+            let targetObject = '"[formMeta: {id:1}]"';
+            executeReqStub.returns(Promise.resolve({body: targetObject}));
+            getHydratedAppStub.returns(Promise.resolve({body: '[{"appId":1}]'}));
+
 
             [true, false].forEach(eeEnableFlag => {
                 getRequestEeHostEnableStub.returns(eeEnableFlag);
@@ -94,7 +106,7 @@ describe('Validate FormsApi unit tests', function() {
 
                 promise.then(
                     function(response) {
-                        assert.deepEqual(response, targetObject);
+                        assert.deepEqual(response, "[formMeta: {id:1}]");
                         if (eeEnableFlag) {
                             assert(getRequestEeHostSpy.called);
                         } else {
@@ -226,24 +238,28 @@ describe('Validate FormsApi unit tests', function() {
                                     "1": {
                                         "FormFieldElement": {
                                             "displayText": "g6e5k9ySac7EhVscoc5pHKhAJ1skg7F8zIZlHW8hFuZqq486fz",
-                                            "fieldId": 3
+                                            "fieldId": 3,
+                                            "required": false
                                         }
                                     },
                                     "2": {
                                         "FormFieldElement": {
                                             "displayText": "FFWJ4RpUxV5HioEb1G5pHKhAJ1skg7F8zIZlHW8hFuZqhVCqvE",
-                                            "fieldId": 2
+                                            "fieldId": 2,
+                                            "required": false
                                         }
                                     },
                                     "3": {
                                         "FormFieldElement": {
                                             "displayText": "FFWJ4RpUxV5HioEb1G5pHKhAJ1skg7F8zIZlHW8hFuZqhVCqvE",
-                                            "fieldId": ""
+                                            "fieldId": "",
+                                            "required": false
                                         }
                                     },
                                     "4": {
                                         "FormTextElement": {
-                                            "displayText": "FFWJ4RpUxV5HioEb1GeipR3EGbmGC6fycKb1kMHlJAvWhVCqvE"
+                                            "displayText": "FFWJ4RpUxV5HioEb1GeipR3EGbmGC6fycKb1kMHlJAvWhVCqvE",
+                                            "required": true
                                         }
                                     }
                                 }
@@ -309,7 +325,7 @@ describe('Validate FormsApi unit tests', function() {
         it('success return results with fids in table including built-ins', function(done) {
             req.url = '/apps/123/tables/456';
 
-            let bodyFields = '[{"id":3},{"id":2},{"id":1,"builtIn":true}]';
+            let bodyFields = '[{"id":3,"required":false},{"id":2,"required":false},{"id":1,"builtIn":true,"required":true}]';
             let expectedSuccessResponse = {
                 formMeta: formMeta(),
                 tableFields: JSON.parse(bodyFields),
