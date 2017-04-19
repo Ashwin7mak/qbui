@@ -36,6 +36,7 @@ import Icon from '../../../../reuse/client/src/components/icon/icon';
 import TableCreationDialog from '../table/tableCreationDialog';
 import AppUtils from '../../utils/appUtils';
 
+import {NEW_TABLE_IDS_KEY} from '../../constants/localStorage';
 import {updateFormRedirectRoute} from '../../actions/formActions';
 
 // This shared view with the server layer must be loaded as raw HTML because
@@ -425,10 +426,20 @@ export const Nav = React.createClass({
     /**
      * new table was created, ensure it is displayed available in the UI
      */
-    tableCreated() {
+    tableCreated(tblId) {
         const flux = this.getFlux();
 
         flux.actions.loadApps(true);
+
+        // store any new table IDs for duration of session for table homepage
+        if (window.sessionStorage) {
+            let newTables = window.sessionStorage.getItem(NEW_TABLE_IDS_KEY);
+
+            let tableIds = newTables ? newTables.split(",") : [];
+            tableIds.push(tblId);
+
+            window.sessionStorage.setItem(NEW_TABLE_IDS_KEY, tableIds.join(","));
+        }
     },
 
     onSelectItem() {

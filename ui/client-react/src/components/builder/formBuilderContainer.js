@@ -27,14 +27,15 @@ import NotificationManager from '../../../../reuse/client/src/scripts/notificati
 import './formBuilderContainer.scss';
 
 let logger = new Logger();
+let formBuilderContainerContent = null;
 
 const mapStateToProps = state => {
     let currentForm = getFormByContext(state, CONTEXT.FORM.VIEW);
 
     return {
         currentForm,
+        selectedField: (_.has(currentForm, 'selectedFields') ? currentForm.selectedFields[0] : undefined),
         redirectRoute: getFormRedirectRoute(state),
-        selectedField: (_.has(currentForm, 'selectedFields') ? currentForm.selectedFields[0] : []),
         tabIndex: (_.has(currentForm, 'formBuilderChildrenTabIndex') ? currentForm.formBuilderChildrenTabIndex[0] : undefined),
         formFocus: (_.has(currentForm, 'formFocus') ? currentForm.formFocus[0] : undefined),
         shouldNotifyTableCreated: state.tableCreation.notifyTableCreated,
@@ -222,22 +223,23 @@ export const FormBuilderContainer = React.createClass({
         return (
             <div className="formBuilderContainer">
 
-                <KeyboardShortcuts id="formBuilderContainer" shortcutBindings={[
-                    {key: 'esc', callback: () => {this.escapeCurrentContext(); return false;}},
-                    {key: 'mod+s', callback: () => {this.saveClicked(); return false;}},
-                    {key: 'shift+up', callback: () => {this.keyboardMoveFieldUp(); return false;}},
-                    {key: 'shift+down', callback: () => {this.keyboardMoveFieldDown(); return false;}},
-                    {key: 'backspace', callback: () => {this.removeField(); return false;}}
-                ]}/>
+                <KeyboardShortcuts id="formBuilderContainer"
+                                   shortcutBindings={[
+                                       {key: 'shift+up', callback: () => {this.keyboardMoveFieldUp(); return false;}},
+                                       {key: 'shift+down', callback: () => {this.keyboardMoveFieldDown(); return false;}},
+                                       {key: 'backspace', callback: () => {this.removeField(); return false;}}
+                                   ]}
+                                   shortcutBindingsPreventDefault={[
+                                       {key: 'esc', callback: () => {this.escapeCurrentContext(); return false;}},
+                                       {key: 'mod+s', callback: () => {this.saveClicked(); return false;}},
+                                   ]}/>
 
                 <PageTitle title={Locale.getMessage('pageTitles.editForm')}/>
 
                 <ToolPalette isCollapsed={this.props.isCollapsed} isOpen={this.props.isOpen}>
                     <FieldProperties appId={this.props.params.appId} tableId={this.props.params.tblId} formId={formId}>
-                        <div className="formBuilderContainerContent">
-                            <AutoScroll
-                                pixelsFromBottomForLargeDevices={80}
-                                pixelsFromBottomForMobile={50}>
+                        <div className="formBuilderContainerContent" ref={element => formBuilderContainerContent = element}>
+                            <AutoScroll parentContainer={formBuilderContainerContent} pixelsFromBottomForLargeDevices={100}>
                                 <div className="formBuilderContent">
                                     <Loader loaded={loaded} options={LARGE_BREAKPOINT}>
                                         <FormBuilder
@@ -252,7 +254,6 @@ export const FormBuilderContainer = React.createClass({
                                     </Loader>
                                 </div>
                             </AutoScroll>
-
                             {this.getSaveOrCancelFooter()}
                         </div>
                     </FieldProperties>

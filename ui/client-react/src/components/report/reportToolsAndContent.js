@@ -389,6 +389,7 @@ export const UnconnectedReportToolsAndContent = React.createClass({
                                    primaryKeyName={primaryKeyName}
                                    flux={this.getFlux()}
                                    gridOptions={this.props.gridOptions}
+                                   onAddNewRecord={this.editNewRecord}
                                    {...this.props}
                                    // until all sub-components reference store directly, need to explicitly override this.props.fields
                                    fields={fields}/>
