@@ -35,7 +35,9 @@ import Tooltip from '../../../../reuse/client/src/components/tooltip/tooltip';
 import Icon from '../../../../reuse/client/src/components/icon/icon';
 import TableCreationDialog from '../table/tableCreationDialog';
 import AppUtils from '../../utils/appUtils';
+
 import {NEW_TABLE_IDS_KEY} from '../../constants/localStorage';
+import {updateFormRedirectRoute} from '../../actions/formActions';
 
 // This shared view with the server layer must be loaded as raw HTML because
 // the current backend setup cannot handle a react component in a common directory. It is loaded
@@ -92,6 +94,8 @@ export const Nav = React.createClass({
         } else if (formId) {
             link = `${link}/${formId}`;
         }
+
+        this.props.updateFormRedirectRoute(_.get(this.props, 'location.pathname'));
 
         this.props.router.push(link);
     },
@@ -481,18 +485,12 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        toggleAppsList: (toggleState) => {
-            dispatch(ShellActions.toggleAppsList(toggleState));
-        },
-        toggleLeftNav: (navState) => {
-            dispatch(ShellActions.toggleLeftNav(navState));
-        },
-        hideTrowser: () => {
-            dispatch(ShellActions.hideTrowser());
-        },
-        showTrowser: (content) => {
-            dispatch(ShellActions.showTrowser(content));
-        },
+        toggleAppsList: (toggleState) => dispatch(ShellActions.toggleAppsList(toggleState)),
+        toggleLeftNav: (navState) => dispatch(ShellActions.toggleLeftNav(navState)),
+
+        hideTrowser: () => dispatch(ShellActions.hideTrowser()),
+        showTrowser: (content) => dispatch(ShellActions.showTrowser(content)),
+
         loadForm: (appId, tblId, rptId, formType, editRec, showTrowser) => {
             dispatch(FormActions.loadForm(appId, tblId, rptId, formType, editRec)).then(() => {
                 if (showTrowser) {
@@ -500,9 +498,10 @@ const mapDispatchToProps = (dispatch) => {
                 }
             });
         },
-        loadReports: (context, appId, tblId) => {
-            dispatch(ReportActions.loadReports(context, appId, tblId));
-        }
+
+        loadReports: (context, appId, tblId) => dispatch(ReportActions.loadReports(context, appId, tblId)),
+
+        updateFormRedirectRoute: (route) => dispatch(updateFormRedirectRoute(route))
     };
 };
 

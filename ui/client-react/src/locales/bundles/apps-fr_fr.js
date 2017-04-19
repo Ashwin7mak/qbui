@@ -129,6 +129,7 @@ export default {
         },
         pageActions: {
             addRecord: "Ajouter un enregistrement",
+            approve: "Approuve ce disque",
             saveRecord: "Sauvegarder les modifications",
             saveAndAddRecord: "Enregistrer et ajouter une nouvelle ligne",
             saveAndAddRecordDisabled: "Ajout de plusieurs enregistrements ne fonctionnant pas en ce moment",
@@ -198,6 +199,12 @@ export default {
                 save: {
                     success: "Formulaire enregistré",
                     error: "Erreur lors de l'enregistrement du formulaire"
+                }
+            },
+            automation: {
+                approverecord: {
+                    success: "Enregistrement approuvé.",
+                    error: "Une erreur s'est produite lors de l'approbation de ce document."
                 }
             }
         },
