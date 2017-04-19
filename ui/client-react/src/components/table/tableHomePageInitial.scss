@@ -35,8 +35,8 @@
 
 .starShape {
     background: $color-black-250;
-    width: 60px;
-    height: 60px;
+    width: 80px;
+    height: 80px;
     position: relative;
     text-align: center;
 
@@ -45,7 +45,7 @@
         z-index: 1;
 
         .qbIcon {
-            font-size: 40px;
+            font-size: 60px;
             margin: 10px;
             color: $color-purple-500;
         }
@@ -57,8 +57,8 @@
     position: absolute;
     top: 0;
     left: 0;
-    height: 60px;
-    width: 60px;
+    height: 80px;
+    width: 80px;
     background: $color-black-250;
 }
 

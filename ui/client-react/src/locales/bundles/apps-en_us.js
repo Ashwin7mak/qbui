@@ -648,7 +648,9 @@ export default {
             homePageInitialDescription: "We created a couple of reports to go along with your new table so you can get started adding records",
             homePageAddRecordButton: "Add a record",
             homePageStillBuilding: "Still building?  ",
-            homePageCreateAnother: "Create another table"
+            homePageCreateAnother: "Create another table",
+
+            noSuggestedIcons: "There are no suggested icons for this table name"
         },
         iconChooser: {
             searchPlaceholder: "Search table icons..."
