@@ -127,6 +127,8 @@ export default {
         },
         pageActions: {
             addRecord: "Add a record",
+            approve: "Approve this record",
+            configureFormBuilder: 'Modify this form',
             saveRecord: "Save changes",
             saveAndAddRecord: "Save and add a new row",
             saveAndAddRecordDisabled: "Adding records in the grid is not available yet",
@@ -196,6 +198,12 @@ export default {
                 save: {
                     success: "Form saved",
                     error: "Error saving form"
+                }
+            },
+            automation: {
+                approverecord: {
+                    success: "Record Approved.",
+                    error: "An error occured when approving this record."
                 }
             }
         },

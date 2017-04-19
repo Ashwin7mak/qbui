@@ -67,8 +67,18 @@
                                             return fieldId === field.id;
                                         });
 
+                                        // search the tableFields array for the field element by id
+                                        // set the formFieldElement to the table setting for required
+                                        // tableFields[].required
+
                                         //  add the field if defined on the table
                                         if (tableField) {
+                                            //  NOTE: jira MC-1687 is work to remove the 'required' constraint attribute from
+                                            //  the form.  For now, set the FormFieldElement.required to the field setting until
+                                            //  that work is complete so that the UI will continue to work today.  Part of that
+                                            //  jira should include reworking the UI to no longer reference this form attribute
+                                            //  but instead reference the fields object to determine whether input is required.
+                                            element.FormFieldElement.required = tableField.required || false;
                                             let required = element.FormFieldElement.required;
                                             fidList.push({id: fieldId, required: required});
                                         } else {
@@ -94,18 +104,6 @@
                 }
             }
             return tableFieldsFidList;
-        }
-
-        function mergeConstraintsFromFidlist(fields, constraintList) {
-            return fields.map((field) => {
-                let matchingField = lodash.find(constraintList, (constraintField) => {
-                    return field.id === constraintField.id;
-                });
-                if (matchingField) {
-                    field.required = field.required || matchingField.required;
-                }
-                return field;
-            });
         }
 
         let formsApi = {
@@ -285,6 +283,7 @@
                             //  for record and fields; otherwise will return just the form meta data and empty
                             //  object for records and fields.
                             let fidList = extractFidsListFromForm(obj.formMeta, obj.tableFields);
+
                             if (obj.formMeta.includeBuiltIns) {
                                 let builtInFieldsFids = getBuiltInFieldsFids(obj.tableFields);
                                 fidList.push.apply(fidList, builtInFieldsFids);
@@ -308,7 +307,8 @@
                                         function(resp) {
                                             obj.record = resp.record;
                                             obj.fields = resp.fields;
-                                            obj.fields = mergeConstraintsFromFidlist(obj.fields, fidList);
+                                            //  NOTE: do not override the 'required' field constraint with the setting defined on the
+                                            //  form.  jira MC-1687 is work to remove that attribute from the form.
                                             resolve(obj);
                                         },
                                         function(err) {
@@ -319,7 +319,8 @@
                                     recordsApi.fetchFields(req).then(
                                         function(resp) {
                                             obj.fields = JSON.parse(resp.body);
-                                            obj.fields = mergeConstraintsFromFidlist(obj.fields, fidList);
+                                            //  NOTE: do not override the 'required' field constraint with the setting defined on the
+                                            //  form.  jira MC-1687 is work to remove that attribute from the form.
                                             resolve(obj);
                                         },
                                         function(err) {

@@ -238,24 +238,28 @@ describe('Validate FormsApi unit tests', function() {
                                     "1": {
                                         "FormFieldElement": {
                                             "displayText": "g6e5k9ySac7EhVscoc5pHKhAJ1skg7F8zIZlHW8hFuZqq486fz",
-                                            "fieldId": 3
+                                            "fieldId": 3,
+                                            "required": false
                                         }
                                     },
                                     "2": {
                                         "FormFieldElement": {
                                             "displayText": "FFWJ4RpUxV5HioEb1G5pHKhAJ1skg7F8zIZlHW8hFuZqhVCqvE",
-                                            "fieldId": 2
+                                            "fieldId": 2,
+                                            "required": false
                                         }
                                     },
                                     "3": {
                                         "FormFieldElement": {
                                             "displayText": "FFWJ4RpUxV5HioEb1G5pHKhAJ1skg7F8zIZlHW8hFuZqhVCqvE",
-                                            "fieldId": ""
+                                            "fieldId": "",
+                                            "required": false
                                         }
                                     },
                                     "4": {
                                         "FormTextElement": {
-                                            "displayText": "FFWJ4RpUxV5HioEb1GeipR3EGbmGC6fycKb1kMHlJAvWhVCqvE"
+                                            "displayText": "FFWJ4RpUxV5HioEb1GeipR3EGbmGC6fycKb1kMHlJAvWhVCqvE",
+                                            "required": true
                                         }
                                     }
                                 }
@@ -321,7 +325,7 @@ describe('Validate FormsApi unit tests', function() {
         it('success return results with fids in table including built-ins', function(done) {
             req.url = '/apps/123/tables/456';
 
-            let bodyFields = '[{"id":3},{"id":2},{"id":1,"builtIn":true}]';
+            let bodyFields = '[{"id":3,"required":false},{"id":2,"required":false},{"id":1,"builtIn":true,"required":true}]';
             let expectedSuccessResponse = {
                 formMeta: formMeta(),
                 tableFields: JSON.parse(bodyFields),

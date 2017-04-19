@@ -4,7 +4,7 @@
 
 ## Install Prerequisites
 * __OPTIONAL__: [Install and configure the AWS CLI tools for your laptop](https://github.com/QuickBase/aws#getting-an-mfa-enabled-aws-account)
-* [Install the Docker for Mac stable channel release](https://../Documents/images.docker.com/docker-for-mac/install/)
+* [Install the Docker for Mac stable channel release](https://docs.docker.com/docker-for-mac/install/)
 * __OPTIONAL__: For GUI to view available images and running containers, [install Kitematic](https://kitematic.com/docs/) from the non-Docker Toolbox installer
 
 ## Local Stack Lifecycle

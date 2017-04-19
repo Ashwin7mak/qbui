@@ -9,11 +9,13 @@ import CookieConstants from '../../../common/src/constants';
 import uuid from 'uuid';
 import Promise from 'bluebird';
 import QbResponseError from './QbResponseError';
+import {UNAUTHORIZED} from '../constants/urlConstants';
 
 window.Promise = Promise; // set global Promise to Bluebird promise (axios has dependency on Promises which are not in IE 11)
 let FEDERATION_LEGACY_URL = '/qbase/federation/legacyUrl';
 class BaseService {
     constructor() {
+        this._axios = axios.create();
         this.setRequestInterceptor();
         this.setResponseInterceptor();
     }
@@ -37,7 +39,7 @@ class BaseService {
      */
     get(url, conf) {
         let config = conf || {};
-        return axios.get(url, config);
+        return this._axios.get(url, config);
     }
 
     /**
@@ -50,7 +52,7 @@ class BaseService {
      */
     post(url, data, conf) {
         let config = conf || {};
-        return axios.post(url, data, config);
+        return this._axios.post(url, data, config);
     }
 
     /**
@@ -63,7 +65,7 @@ class BaseService {
      */
     put(url, data, conf) {
         let config = conf || {};
-        return axios.put(url, data, config);
+        return this._axios.put(url, data, config);
     }
 
     /**
@@ -76,7 +78,7 @@ class BaseService {
      */
     patch(url, data, conf) {
         let config = conf || {};
-        return axios.patch(url, data, config);
+        return this._axios.patch(url, data, config);
     }
 
     /**
@@ -88,14 +90,14 @@ class BaseService {
      */
     delete(url, conf) {
         let config = conf || {};
-        return axios.delete(url, config);
+        return this._axios.delete(url, config);
     }
 
     /**
      * Axiom interceptor for all http requests -- add a session tracking id and session ticket
      */
     setRequestInterceptor() {
-        axios.interceptors.request.use(config => {
+        this._axios.interceptors.request.use(config => {
             //  a unique id per request
             config.headers[constants.HEADER.SESSION_ID] = uuid.v1();
             //  not including now, but this is where we would add another header
@@ -114,7 +116,7 @@ class BaseService {
      */
     setResponseInterceptor() {
         let self = this;
-        axios.interceptors.response.use(
+        this._axios.interceptors.response.use(
             response => {
                 return response;
             },
@@ -140,10 +142,9 @@ class BaseService {
             //  axios upgraded to an error.response object in 0.13.x
             switch (error.response.status) {
             case 401:   // invalid/no ticket
-                this.constructRedirectUrl().then(function(currentStackSignInUrl) {
+                return this.constructRedirectUrl().then(function(currentStackSignInUrl) {
                     WindowLocationUtils.update(currentStackSignInUrl);
                 });
-                break;
             }
         }
     }
@@ -186,12 +187,17 @@ class BaseService {
             return Promise.resolve(Configuration.unauthorizedRedirect);
         } else {
             return this.get(FEDERATION_LEGACY_URL, {})
-                .then(function(json) {
+                .then(json => {
                     let currentStackSignInUrl = "/db/main?a=nsredirect&nsurl=";
                     let newStackDestination = WindowLocationUtils.getHref();
                     let currentStackDomain = json.data.legacyUrl;
                     currentStackSignInUrl = currentStackDomain + currentStackSignInUrl + newStackDestination;
                     return currentStackSignInUrl;
+                })
+                .catch(error => {
+                    // When the federation legacy URL request fails, return the default redirect
+                    // We can't use the Logger here because it would cause a circular reference because Logger uses baseService
+                    return Promise.resolve(UNAUTHORIZED);
                 });
         }
     }
