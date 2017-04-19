@@ -346,10 +346,19 @@ export const loadReportRecordsCount = (context, appId, tblId, rptId, queryParams
     };
 };
 
+/**
+ * Hide a column based on the column id given.
+ * @param context
+ * @param appId
+ * @param tblId
+ * @param rptId
+ * @param params { columnId }
+ */
 export const hideColumn = (context, appId, tblId, rptId, params) => {
     return (dispatch) => {
         if (appId && tblId && rptId) {
             logger.debug(`Hiding column with id: ${params.id} for appId: ${appId}, tblId:${tblId}, rptId:${rptId}, params:${JSON.stringify(params)}`);
+            // Temporary until API to persist hidden columns.
             return new Promise((resolve) => {
                 dispatch(event(context, types.HIDE_COLUMN, params));
                 resolve();
