@@ -378,10 +378,10 @@ const QbGrid = React.createClass({
                         transforms: [this.getActionCellProps],
                     }
                 }],
-                ...this.getColumns()
+                ...this.getVisibleColumns()
             ];
         } else {
-            columns = this.getColumns();
+            columns = this.getVisibleColumns();
         }
 
         return (
