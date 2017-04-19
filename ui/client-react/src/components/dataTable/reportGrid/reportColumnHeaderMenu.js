@@ -156,7 +156,8 @@ export class ReportColumnHeaderMenu extends Component {
     sortReport(asc) {
         if (!this.hasRequiredIds()) {return;}
 
-        if (this.isFieldSortedAscending()) {return;}
+        if (asc && this.isFieldSortedAscending()) {return;}
+        if (!asc && this.isFieldSortedDescending()) {return;}
 
         let column = this.props.fieldDef;
         let queryParams = {};
