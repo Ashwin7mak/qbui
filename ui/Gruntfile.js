@@ -714,7 +714,7 @@ module.exports = function(grunt) {
             gitState : {
                 command: [
                     //print out  the time of this build, include eastern time for convenience
-                    /*' printf "<%= grunt.template.today("dddd, mmmm d yyyy, hh:MM:ss TT Z") %>\n"  > <%= quickbase.client.gen %>/buildBranchInfo.txt ',
+                    ' printf "<%= grunt.template.today("dddd, mmmm d yyyy, hh:MM:ss TT Z") %>\n"  > <%= quickbase.client.gen %>/buildBranchInfo.txt ',
                     ' [[ $(date +%Z) != E* ]] && TZ=":America/New_York" date "+%A, %B %d %Y, %I:%M:%S %p %Z" >> <%= quickbase.client.gen %>/buildBranchInfo.txt ||: ',
 
                     //print out the CI Job name and build number if available
@@ -731,7 +731,7 @@ module.exports = function(grunt) {
                     ' git rev-parse --verify HEAD --short >> <%= quickbase.client.gen %>/buildBranchInfo.txt ',
 
                     //console log whats went into the buildBranchInfo.txt file
-                    ' cat <%= quickbase.client.gen %>/buildBranchInfo.txt'*/
+                    ' cat <%= quickbase.client.gen %>/buildBranchInfo.txt'
                 ].join('&&')
             },
             options: {
@@ -1072,7 +1072,6 @@ module.exports = function(grunt) {
         'shell:nodeVer',
         'clean:dist',
         'webpackbuild',
-        'logGitState',
         'copy:reactDist'
     ]);
 
