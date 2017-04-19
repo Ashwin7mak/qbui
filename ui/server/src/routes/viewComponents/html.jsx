@@ -75,6 +75,7 @@ var Html = React.createClass({
                 <head>
                     <meta charSet="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
                     <link rel="stylesheet" href="/qbase/css/loadingScreen.css" />
+                    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Lato" />
                     {this.renderPerfList()}
 
                         <title>{this.props.title}</title>

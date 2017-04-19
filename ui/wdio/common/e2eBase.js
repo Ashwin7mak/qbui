@@ -106,9 +106,9 @@
                     tableToFieldToFieldTypeMap  = e2eConsts.createDefaultTableMap();
                 }
 
-                // Use num of records to generate or use 25 by default to enable paging
+                // Use num of records to generate or use the default
                 if (!numberOfRecords) {
-                    numberOfRecords  = e2eConsts.MAX_PAGING_SIZE + 5;
+                    numberOfRecords  = e2eConsts.DEFAULT_NUM_RECORDS_TO_CREATE;
                 }
 
                 // Generate the app JSON object

@@ -11,7 +11,16 @@ import isSmall from '../../utils/breakpoints';
  * AutoScroll listens for mousedown, mousemove and mouseup for desktop.
  * AutoScroll listens for touchmove or touchend for touch devices.
  *
- * Note: Autoscroll will only work if the parent container has overflow set to auto
+ * Note: Autoscroll will only work if the parent container has overflow set to auto, also
+ * this container element needs to be passed in using a ref
+ * For example:
+ * let parentContainerElement = null;
+ *
+ * <ParentContainer style={{overflow: 'auto'}} ref={element => parentContainerElement = element}>
+ *      <AutoScroll parentContainer={parentContainerElement}>
+ *          <ChildComponent />
+ *      </AutoScroll>
+ * <ParentContainer />
  * */
 
 
@@ -56,14 +65,12 @@ class AutoScroll extends Component {
         this.mouseDownSetIntervalId = undefined;
 
         this.pointerY = undefined;
-        this.pointerX = undefined;
 
         this.updateScrolling = this.updateScrolling.bind(this);
         this.stopScrolling = this.stopScrolling.bind(this);
         this.scrollDown = this.scrollDown.bind(this);
         this.scrollUp = this.scrollUp.bind(this);
 
-        this.getContainer = this.getContainer.bind(this);
         this.getContainerDimension = this.getContainerDimension.bind(this);
         this.getContainerBottom = this.getContainerBottom.bind(this);
 
@@ -97,15 +104,15 @@ class AutoScroll extends Component {
     }
 
     getContainerDimension() {
-        let container = this.getContainer();
-
-        return {
-            containerOffsetLeft: container.offsetLeft,
-            containerRightSide: container.offsetLeft + container.offsetWidth,
-            containerBottom: container.offsetHeight,
-            containerTop: container.offsetTop
-        };
-
+        //getBoundingClientRect is used because it only gets the dimension of the container inside of the viewport
+        let container = this.props.parentContainer;
+        if (container) {
+            container = container.getBoundingClientRect();
+            return {
+                containerBottom: container.bottom,
+                containerTop: container.top
+            };
+        }
     }
 
     getContainerTop(containerTop) {
@@ -123,43 +130,26 @@ class AutoScroll extends Component {
             return containerBottom - this.props.pixelsFromBottomForLargeDevices;
         }
     }
-
-    getContainer() {
-        let container;
-
-        if (this.props.children) {
-            container = document.querySelector(`.${this.props.children.props.className}`);
-        }
-
-        return container;
-    }
-
     updateScrolling(e) {
         this.stopScrolling();
 
         let pointerY = this.pointerY;
-        let pointerX = this.pointerX;
 
-        let {containerOffsetLeft, containerRightSide, containerBottom, containerTop} = this.getContainerDimension();
+        let {containerBottom, containerTop} = this.getContainerDimension();
 
         containerBottom = this.getContainerBottom(containerBottom);
         containerTop = this.getContainerTop(containerTop);
 
         if (e && e.type === 'touchmove') {
             pointerY = e.touches[0].clientY;
-            pointerX = e.touches[0].clientX;
         }
 
         /**
          * Activate auto scroll only if it is in the designated scroll zone within the container
          * */
-        if (pointerY > containerBottom &&
-            pointerX < containerRightSide &&
-            pointerX > containerOffsetLeft) {
+        if (pointerY > containerBottom) {
             this.scrollingAnimationId = window.requestAnimationFrame(this.scrollDown);
-        } else if (pointerY < containerTop &&
-                   pointerX < containerRightSide &&
-                   pointerX > containerOffsetLeft) {
+        } else if (pointerY < containerTop) {
             this.scrollingAnimationId = window.requestAnimationFrame(this.scrollUp);
 
         } else {
@@ -169,25 +159,27 @@ class AutoScroll extends Component {
 
     scrollDown() {
         let pixelsPerFrame = this.props.pixelsPerFrame ? this.props.pixelsPerFrame : 10;
-        let container = this.getContainer();
-        let scrollTop = container.scrollTop;
-
-        container.scrollTop = scrollTop + pixelsPerFrame;
-        pixelsPerFrame = pixelsPerFrame + pixelsPerFrame;
-
-        this.scrollingAnimationId = window.requestAnimationFrame(this.scrollDown);
+        let container = this.props.parentContainer;
+        let scrollTop;
+        if (container) {
+            scrollTop = container.scrollTop;
+            container.scrollTop = scrollTop + pixelsPerFrame;
+            pixelsPerFrame = pixelsPerFrame + pixelsPerFrame;
+            this.scrollingAnimationId = window.requestAnimationFrame(this.scrollDown);
+        }
     }
 
     scrollUp() {
         let defaultPixelsPerFrame = isSmall.isSmallBreakpoint() ? 2 : 10;
         let pixelsPerFrame = this.props.pixelsPerFrame ? this.props.pixelsPerFrame : defaultPixelsPerFrame ;
-        let container = this.getContainer();
-        let scrollTop = container.scrollTop;
-
-        container.scrollTop = scrollTop + -pixelsPerFrame;
-        pixelsPerFrame = pixelsPerFrame - pixelsPerFrame;
-
-        this.scrollingAnimationId = window.requestAnimationFrame(this.scrollUp);
+        let container = this.props.parentContainer;
+        let scrollTop;
+        if (container) {
+            scrollTop = container.scrollTop;
+            container.scrollTop = scrollTop + -pixelsPerFrame;
+            pixelsPerFrame = pixelsPerFrame - pixelsPerFrame;
+            this.scrollingAnimationId = window.requestAnimationFrame(this.scrollUp);
+        }
     }
 
     stopScrolling() {
@@ -200,7 +192,6 @@ class AutoScroll extends Component {
 
     updateMouseLocation(e) {
         this.pointerY = e.clientY;
-        this.pointerX = e.clientX;
     }
 
     mouseUpStopScrolling() {
@@ -219,6 +210,10 @@ class AutoScroll extends Component {
 }
 
 AutoScroll.propTypes = {
+    /**
+     * the parent container passed in needs to have overflow set to auto
+     * */
+    parentContainer: PropTypes.object,
     /**
      * pixelsPerFrame sets how fast the scroll bar should scroll
      * */

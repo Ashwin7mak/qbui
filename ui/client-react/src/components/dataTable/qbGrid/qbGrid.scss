@@ -53,10 +53,10 @@ $edit-icon-font-size: 18px;
 
         position: relative;
         border-top: 1px solid $grid-column-header-border-color;
-        border-right: 1px solid $grid-line-color;
+        border-right: 1px solid $grid-column-header-grid-line-color;
         border-bottom: 1px solid $grid-column-header-border-color;
         padding: $grid-header-cell-padding;
-        color: $color-black-700;
+        color: $grid-column-header-text-color;
         -webkit-font-smoothing: antialiased;
         background-color: $grid-column-header-background-color;
         cursor: default;
@@ -104,12 +104,19 @@ $edit-icon-font-size: 18px;
         // text label for the header cell
         .gridHeaderLabel {
             // set max-height to 2 lines. An extra 2px is needed to prevent clipping
-            max-height: (($line-height-text-comfortable * 2) + 2);
+            max-height: (($line-height-text-multiline * 2) + 2);
             overflow: hidden;
             flex-grow: 1;
             padding-right: 4px;
             padding-top: 2px;
-            line-height: $line-height-text-comfortable;
+            line-height: $line-height-text-multiline;
+            font-size: $font-size-h6;
+            font-weight: 400;
+            letter-spacing: 0.5px;
+        }
+
+        .qbIcon {
+            font-size: $size-iconfont-medium;
         }
 
         // menu to access sorting options
@@ -136,6 +143,19 @@ $edit-icon-font-size: 18px;
             .dropdown-menu {
                 top: calc(100% - 1px);
                 left: calc(100% - #{$grid-group-expand-icon-size} - #{$grid-header-cell-padding});
+                li {
+                    position: relative;
+
+                    a {
+                        padding: 3px 20px 3px 30px;
+
+                        .qbIcon {
+                            position: absolute;
+                            left: 5px;
+                            color: $color-green-400;
+                        }
+                    }
+                }
             }
         }
 
@@ -153,7 +173,6 @@ $edit-icon-font-size: 18px;
         max-width: 80px;
         position: relative;
         vertical-align: top;
-        z-index: $zindex-qbGrid-firstOfType-stickyColumn;
         background-color: $color-black-100;
     }
 
@@ -404,8 +423,18 @@ $edit-icon-font-size: 18px;
         .dropdown-menu {
 
             // position menu to the right of the sticky cells
-            top: 0;
-            left: 27px;
+            top: 28px;
+            left: -5px;
+
+            &:before {
+                right: auto;
+                left: 10px;
+            }
+
+            &:after {
+                right: auto;
+                left: 10px;
+            }
 
             a {
                 padding-left: 4px;
@@ -477,6 +506,7 @@ $edit-icon-font-size: 18px;
     // on the first row, and add a border on the last row.
     .qbRow:first-of-type .qbCell {
         border-top: none;
+        z-index: 9;
     }
     .qbRow:last-of-type .qbCell {
         border-bottom: 1px solid $grid-line-color;

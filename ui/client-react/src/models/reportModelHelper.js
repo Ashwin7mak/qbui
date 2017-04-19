@@ -14,8 +14,7 @@ import {REQUEST_PARAMETER, DURATION} from '../../../common/src/constants';
 import FieldUtils from '../utils/fieldUtils';
 import ReportUtils from '../utils/reportUtils';
 import Locale from '../locales/locales';
-import * as SchemaConstants from '../constants/schema';
-import {NEW_RECORD_VALUE} from '../constants/urlConstants';
+import {DEFAULT_RECORD_KEY_ID, UNSAVED_RECORD_ID} from '../constants/schema';
 import _ from 'lodash';
 
 class ReportModelHelper {
@@ -183,47 +182,74 @@ class ReportModelHelper {
      * @param reportData
      * @param recId
      */
-    static deleteRecordFromReport(reportData, recId) {
-        var recordValueToMatch = {};
-        recordValueToMatch[FieldUtils.getPrimaryKeyFieldName(recordValueToMatch)] = {value: recId};
+    static deleteRecordFromReport(report, recId) {
+        //  table reports have a data model object
+        if (_.has(report, 'data')) {
+            let reportData = report.data;
 
-        const newFilteredRecords = reportData.filteredRecords ? reportData.filteredRecords.slice(0) : null;
-        const newRecords = reportData.records ? reportData.records.slice(0) : null;
-        let recordDeleted = false;
-        let filteredRecordDeleted = false;
+            let recordValueToMatch = {};
+            recordValueToMatch[FieldUtils.getPrimaryKeyFieldName(recordValueToMatch)] = {value: recId};
 
-        // ensure recId is numeric
-        if (recId) {
-            recId = +recId;
+            const newFilteredRecords = reportData.filteredRecords ? reportData.filteredRecords.slice(0) : null;
+            const newRecords = reportData.records ? reportData.records.slice(0) : null;
+            let recordDeleted = false;
+            let filteredRecordDeleted = false;
+
+            // ensure recId is numeric
+            if (recId) {
+                recId = +recId;
+            }
+            if (reportData.hasGrouping) {
+                filteredRecordDeleted = ReportUtils.removeGroupedRecordById(newFilteredRecords, recId, reportData.keyField.name);
+                recordDeleted = ReportUtils.removeGroupedRecordById(newRecords, recId, reportData.keyField.name);
+            } else {
+                //find record
+                let filteredRecordIndex = ReportUtils.findRecordIndex(newFilteredRecords, recId, reportData.keyField.name);
+                //remove it
+                if (filteredRecordIndex !== -1) {
+                    filteredRecordDeleted = true;
+                    newFilteredRecords.splice(filteredRecordIndex, 1);
+                }
+
+                //find record
+                let recordIndex = ReportUtils.findRecordIndex(newRecords, recId, reportData.keyField.name);
+                //remove it
+                if (recordIndex !== -1) {
+                    recordDeleted = true;
+                    newRecords.splice(recordIndex, 1);
+                }
+            }
+            if (filteredRecordDeleted) {
+                reportData.filteredRecords = newFilteredRecords;
+                reportData.filteredRecordsCount--;
+            }
+            if (recordDeleted) {
+                reportData.records = newRecords;
+                reportData.recordsCount--; //pagination uses this one.
+            }
         }
-        if (reportData.hasGrouping) {
-            filteredRecordDeleted = ReportUtils.removeGroupedRecordById(newFilteredRecords, recId, reportData.keyField.name);
-            recordDeleted = ReportUtils.removeGroupedRecordById(newRecords, recId, reportData.keyField.name);
+    }
+
+    /**
+     * Helper method to check current report model for a blank record added from inline edit
+     *
+     * @param currentReport
+     * @returns {boolean}
+     */
+    static isBlankRecInReport(currentReport) {
+        const keyName = _.has(currentReport, 'data.keyField') ? currentReport.data.keyField.name : '';
+        let records = _.has(currentReport, 'data.records') ? currentReport.data.records : [];
+
+        //  check to see if the new record is getting added from an inline editing blank row
+        let hasBlankRec = false;
+        if (currentReport.data.hasGrouping) {
+            const blankRec = ReportUtils.findGroupedRecord(records, UNSAVED_RECORD_ID, keyName);
+            hasBlankRec = (blankRec !== null);
         } else {
-            //find record
-            let filteredRecordIndex = ReportUtils.findRecordIndex(newFilteredRecords, recId, reportData.keyField.name);
-            //remove it
-            if (filteredRecordIndex !== -1) {
-                filteredRecordDeleted = true;
-                newFilteredRecords.splice(filteredRecordIndex, 1);
-            }
-
-            //find record
-            let recordIndex = ReportUtils.findRecordIndex(newRecords, recId, reportData.keyField.name);
-            //remove it
-            if (recordIndex !== -1) {
-                recordDeleted = true;
-                newRecords.splice(recordIndex, 1);
-            }
+            const blankRecIdx = ReportUtils.findRecordIndex(records, UNSAVED_RECORD_ID, keyName);
+            hasBlankRec = (blankRecIdx !== -1);
         }
-        if (filteredRecordDeleted) {
-            reportData.filteredRecords = newFilteredRecords;
-            reportData.filteredRecordsCount--;
-        }
-        if (recordDeleted) {
-            reportData.records = newRecords;
-            reportData.recordsCount--; //pagination uses this one.
-        }
+        return hasBlankRec;
     }
 }
 
@@ -259,11 +285,20 @@ function findRecordById(records, recId, hasGrouping, keyField) {
 function addRecordToReport(currentReport, content) {
 
     let reportData = currentReport.data;
-    let record = findRecordById(reportData.records, SchemaConstants.UNSAVED_RECORD_ID, reportData.hasGrouping, reportData.keyField);
-    let filtRecord = findRecordById(reportData.filteredRecords, SchemaConstants.UNSAVED_RECORD_ID, reportData.hasGrouping, reportData.keyField);
+    let record = findRecordById(reportData.records, UNSAVED_RECORD_ID, reportData.hasGrouping, reportData.keyField);
+    let filtRecord = findRecordById(reportData.filteredRecords, UNSAVED_RECORD_ID, reportData.hasGrouping, reportData.keyField);
 
     if (record === undefined && filtRecord === undefined) {
         let afterRecId = content.afterRecId;
+        // The afterRecId is an object if coming from the grid
+        if (_.has(afterRecId, 'value')) {
+            afterRecId = afterRecId.value;
+        }
+        //  ensure afterRecId is numeric
+        if (afterRecId) {
+            afterRecId = +afterRecId;
+        }
+
         let newRecId = content.newRecId;
 
         let newRecord;
@@ -272,14 +307,6 @@ function addRecordToReport(currentReport, content) {
             //  Unless there is a specified afterRecId, will add the new record to the top of the list.  Currently, only
             //  adding a new record from the grid will include the afterRecId.
             if (afterRecId) {
-                // The afterRecId is an object if coming from the grid
-                if (_.has(afterRecId, 'value')) {
-                    afterRecId = afterRecId.value;
-                }
-                //  ensure afterRecId is numeric
-                if (afterRecId) {
-                    afterRecId = +afterRecId;
-                }
                 afterRecIndex = ReportUtils.findRecordIndex(reportData.records, afterRecId, reportData.keyField.name);
             }
 
@@ -292,7 +319,7 @@ function addRecordToReport(currentReport, content) {
                 if (theCorrespondingField && _.has(theCorrespondingField, 'defaultValue.coercedValue')) {
                     valueAnswer = {id: obj.id, value: theCorrespondingField.defaultValue.coercedValue.value};
                 } else {
-                    valueAnswer = (obj.id === SchemaConstants.DEFAULT_RECORD_KEY_ID ? {
+                    valueAnswer = (obj.id === DEFAULT_RECORD_KEY_ID ? {
                         id: obj.id,
                         value: null
                     } : getDefaultValue(obj.id, theCorrespondingField.datatypeAttributes.type));
@@ -304,8 +331,9 @@ function addRecordToReport(currentReport, content) {
             // format the values in the new record
             formatRecordValues(newRecord, reportData.fields);
             // set id to unsaved
-            newRecord[reportData.keyField.name].value = SchemaConstants.UNSAVED_RECORD_ID;
+            newRecord[reportData.keyField.name].value = UNSAVED_RECORD_ID;
         } else {
+            afterRecId = 0;
             //  there are no records in the grid to use as a template..so just convert the
             //  new record into the 'newRecord' format
             newRecord = formatRecord(content.record, reportData.fields);
@@ -336,22 +364,22 @@ function addRecordToReport(currentReport, content) {
         const newRecords = reportData.records.slice(0);
         let newRecordsIndex;
         if (afterRecIndex !== -1) {
-            //  set the editing index and id for new blank rows
-            if (newRecId === SchemaConstants.UNSAVED_RECORD_ID) {
-                currentReport.editingIndex = afterRecIndex;
-                currentReport.editingId = SchemaConstants.UNSAVED_RECORD_ID;
-            }
             newRecordsIndex = afterRecIndex + 1;
             newRecords.splice(newRecordsIndex, 0, newRecord);
         } else {
-            //  set the editing index for new blank rows
-            if (newRecId === SchemaConstants.UNSAVED_RECORD_ID) {
-                currentReport.editingIndex = newRecords.length;
-                currentReport.editingId = SchemaConstants.UNSAVED_RECORD_ID;
-            }
             // add to the top of the array
             newRecords.unshift(newRecord);
             newRecordsIndex = 0;
+        }
+
+        //  set the editing index for new blank rows
+        if (newRecId === UNSAVED_RECORD_ID) {
+            currentReport.editingIndex = newRecordsIndex;
+            currentReport.editingId = UNSAVED_RECORD_ID;
+            // keep track of the record id immediately before the blank row
+            currentReport.recIdBeforeBlankRow = afterRecId;
+        } else {
+            currentReport.recIdBeforeBlankRow = undefined;
         }
 
         reportData.records = newRecords;
@@ -387,7 +415,7 @@ function addRecordToReport(currentReport, content) {
  */
 function addRecordToGroupedReport(currentReport, content) {
     let reportData = currentReport.data;
-    let record = ReportUtils.findGroupedRecord(reportData.filteredRecords, SchemaConstants.UNSAVED_RECORD_ID, reportData.keyField.name);
+    let record = ReportUtils.findGroupedRecord(reportData.filteredRecords, UNSAVED_RECORD_ID, reportData.keyField.name);
     if (record === null && reportData.filteredRecords.length > 0) {
         // find record to add after
         let afterRecordIdValue = content.afterRecId || -1;
@@ -429,13 +457,16 @@ function addRecordToGroupedReport(currentReport, content) {
                 return item === theCorrespondingField.id;
             });
             if (isGroupedFid !== -1) {
-                let fieldValuesForRecord = _.find(record, (item) => item.id === theCorrespondingField.id);
+                let fieldValuesForRecord = _.find(templateRecord, (item) => item.id === theCorrespondingField.id);
                 valueAnswer = {id: obj.id, value: fieldValuesForRecord.value};
             } else if (theCorrespondingField && _.has(theCorrespondingField, 'defaultValue.coercedValue')) {
                 //set the default values in the answer for each field
                 valueAnswer = {id: obj.id, value: theCorrespondingField.defaultValue.coercedValue.value};
             } else {
-                valueAnswer = (obj.id === SchemaConstants.DEFAULT_RECORD_KEY_ID ? {id: obj.id, value: null} : getDefaultValue(obj.id, theCorrespondingField.datatypeAttributes.type));
+                valueAnswer = (obj.id === DEFAULT_RECORD_KEY_ID ? {
+                    id: obj.id,
+                    value: null
+                } : getDefaultValue(obj.id, theCorrespondingField.datatypeAttributes.type));
             }
             return valueAnswer;
         });
@@ -444,7 +475,7 @@ function addRecordToGroupedReport(currentReport, content) {
         formatRecordValues(record, reportData.fields);
 
         // set id to unsaved
-        record[reportData.keyField.name].value = SchemaConstants.UNSAVED_RECORD_ID;
+        record[reportData.keyField.name].value = UNSAVED_RECORD_ID;
 
         //make a copy
         const newFilteredRecords = reportData.filteredRecords.slice(0);
@@ -476,27 +507,29 @@ function addRecordToGroupedReport(currentReport, content) {
             afterRecIndex = ReportUtils.findRecordIndex(reportData.filteredRecords, afterRecordIdValue, reportData.keyField.name);
         }
 
-        //editing index for new blank rows
-        if (content.newRecId === SchemaConstants.UNSAVED_RECORD_ID) {
-            currentReport.editingIndex = afterRecIndex;
-            currentReport.editingId = SchemaConstants.UNSAVED_RECORD_ID;
+        //  set the editing index for new blank rows
+        if (content.newRecId === UNSAVED_RECORD_ID) {
+            currentReport.editingIndex = afterRecIndex + 1;
+            currentReport.editingId = UNSAVED_RECORD_ID;
+            // keep track of the record id immediately before the blank row
+            currentReport.recIdBeforeBlankRow = afterRecordIdValue;
+        } else {
+            currentReport.recIdBeforeBlankRow = undefined;
         }
-    }
 
-    // set the record id
-    if (content.newRecId) {
-        if (record) {
+        // set the record id
+        if (content.newRecId) {
             record[reportData.keyField.name].value = content.newRecId;
         }
-    }
 
-    // skip if adding a blank row to the report list as content.record will not exist
-    if (content.record) {
-        // transform record from format [{id, value}] to [fieldName: {id, value}]
-        let formattedRec = formatRecord(content.record, reportData.fields);
+        // skip if adding a blank row to the report list as content.record will not exist
+        if (content.record) {
+            // transform record from format [{id, value}] to [fieldName: {id, value}]
+            let formattedRec = formatRecord(content.record, reportData.fields);
 
-        //  update the report with the new record data
-        updateReportRecordData(null, record, formattedRec);
+            //  update the report with the new record data
+            updateReportRecordData(null, record, formattedRec);
+        }
     }
 }
 

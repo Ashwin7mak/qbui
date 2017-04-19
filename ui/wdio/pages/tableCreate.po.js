@@ -12,7 +12,7 @@
 
     var tablesPage = Object.create(e2ePageBase, {
         //new table button
-        newTableBtn : {get: function() {return browser.element('.newTable');}},
+        newTableBtn : {get: function() {return browser.element('.tablesFooter .newTable');}},
         //new table container
         tableContainer : {get: function() {return browser.element('.modal-dialog .bodyContainer');}},
         //new table header
@@ -27,14 +27,8 @@
         //table help
         tableHelpBtn : {get: function() {return browser.element('.iconUISturdy-help');}},
 
-        //table Next button
-        tableNextBtn: {get: function() {return browser.element('.modal-footer button.nextButton');}},
-        //table Cancel button
-        tableCancelBtn: {get: function() {return browser.element('.modal-footer button.cancelButton');}},
-        //table finished button
-        tableFinishedBtn: {get: function() {return browser.element('.modal-footer button.finishedButton');}},
-        //table previous button
-        tablePreviousBtn: {get: function() {return browser.element('.modal-footer button.previousButton');}},
+        //table footer buttons
+        tableFooterButtons: {get: function() {return browser.elements('.modal-footer .buttons button');}},
 
         //Icon chooser
         tableFieldIconChooser: {get: function() {return browser.element('.iconChooser.closed');}},
@@ -147,7 +141,7 @@
                 //Click on filtered table name
                 results[0].click();
                 //Wat until reports page is visible
-                return reportContentPO.reportContainerEl.waitForVisible();
+                return reportContentPO.reportContainerEl;
             }
         }},
 
@@ -175,21 +169,42 @@
             //Verify there is also + Icon associated with it
             this.newTableBtn.element('.iconUISturdy-add-mini').waitForVisible();
             //Click on the new Table Btn
-            return this.newTableBtn.click();
+            this.newTableBtn.click();
+            return browser.element('.tableFieldInput').waitForVisible();
+        }},
+
+        /**
+         * Method for spinner to dissaper after hitting on any save buttons on edit forms
+         */
+        waitUntilNotificationContainerGoesAway : {value: function() {
+            //wait until notification container slides away
+            browser.waitForExist('.notification-container-empty', e2eConsts.shortWaitTimeMs);
+            //Need this to wait for container to slide away
+            return browser.pause(e2eConsts.shortWaitTimeMs);
+        }},
+
+        /**
+         * Method to click button with name on the table footer.
+         */
+        clickBtnOnTableDlgFooter : {value: function(btnName) {
+            //get all save buttons on the form
+            var buttonToClick = this.tableFooterButtons.value.filter(function(button) {
+                return button.getAttribute('textContent') === btnName;
+            });
+
+            if (buttonToClick !== []) {
+                //Click on filtered save button
+                return buttonToClick[0].click();
+            } else {
+                throw new Error('button with name ' + btnName + " not found on the table");
+            }
         }},
 
         /**
          * Method to click on Next button in create Table dialogue
          */
         clickNextBtn : {value: function() {
-            //Wait until next button visible
-            this.tableNextBtn.waitForVisible();
-            //click on next button
-            this.tableNextBtn.click();
-            //Need this to wait for container to slide to next screen
-            browser.pause(e2eConsts.shortWaitTimeMs);
-            //Wait until Finished button visible
-            this.tableFinishedBtn.waitForVisible();
+            this.clickBtnOnTableDlgFooter('Next');
             //Verify the title and description in table summary in the dialogue
             expect(this.tableHeader.getAttribute('textContent')).toBe('Get ready to add fields to your table');
             return expect(this.tableDescription.getAttribute('textContent')).toBe('Each bit of information you want to collect is a field, like Customer Name.');
@@ -199,46 +214,23 @@
          * Method to click on cancel button in create table dialogue
          */
         clickCancelBtn : {value: function() {
-            //Wait until cancel button visible
-            this.tableCancelBtn.waitForVisible();
-            //click on cancel button
-            this.tableCancelBtn.click();
-            //Need this to wait for dialogue to dissapear
-            return browser.pause(e2eConsts.shortWaitTimeMs);
+            return this.clickBtnOnTableDlgFooter('Cancel');
         }},
 
         /**
          * Method to click on Create Table button in create table dialogue
          */
         clickFinishedBtn: {value: function() {
-            var createTableButtonEl = this.tableFinishedBtn;
-
-            //step 1-  Wait for the button to be visible
-            createTableButtonEl.waitForVisible();
-            // Catch an error from above and then retry
-            // Single click via raw javascript
-            browser.execute(function() {
-                var event = new MouseEvent('click', {
-                    'view': window,
-                    'bubbles': true,
-                    'cancelable': true,
-                    'detail': 1
-                });
-                document.querySelector('button.finishedButton').dispatchEvent(event);
-            });
-            browser.waitForVisible('form.editForm', e2eConsts.extraLongWaitTimeMs, true);
+            this.clickBtnOnTableDlgFooter('Create table');
+            this.waitUntilNotificationContainerGoesAway();
+            return formsPO.editFormContainerEl.waitForVisible();
         }},
 
         /**
          * Method to click on Previous button in create table dialogue
          */
         clickPreviousBtn : {value: function() {
-            //Wait until Finished button visible
-            this.tablePreviousBtn.waitForVisible();
-            //Click on finished button
-            this.tablePreviousBtn.click();
-            //Need this to wait for container to slide to next screen
-            return browser.pause(e2eConsts.shortWaitTimeMs);
+            return this.clickBtnOnTableDlgFooter('Previous');
         }},
 
         /**
@@ -282,12 +274,11 @@
          * @fieldValue
          */
         setInputValue : {value: function(filteredElement, filteredElementInputClassName, fieldValue) {
+            filteredElement.element(filteredElementInputClassName).click();
             filteredElement.element(filteredElementInputClassName).clearElement();
             if (browserName === 'firefox') {
                 return filteredElement.setValue(filteredElementInputClassName, [fieldValue, '\uE004']);
             } else {
-                filteredElement.element(filteredElementInputClassName).click();
-                filteredElement.element(filteredElementInputClassName).clearElement();
                 return browser.keys([fieldValue, '\uE004']);
             }
         }},
@@ -308,17 +299,17 @@
                 if (tableField.includes('Table Name')) {
                     //verify title of the field
                     expect(results[0].element('.tableFieldTitle').getAttribute('textContent')).toBe(tableField);
-                    return this.setInputValue(results[0], '.tableFieldInput input', fieldValue);
+                    this.setInputValue(results[0], '.tableFieldInput INPUT', fieldValue);
                     //Enter value of 'a record in the table is called a ' field
                 } else if (tableField.includes('A record in the table is called')) {
                     //verify title of the field
                     expect(results[0].element('.tableFieldTitle').getAttribute('textContent')).toBe(tableField);
-                    return this.setInputValue(results[0], '.tableFieldInput input', fieldValue);
+                    this.setInputValue(results[0], '.tableFieldInput INPUT', fieldValue);
                     //Enter value for Description field
                 } else if (tableField.includes('Description')) {
                     //verify title of the field
                     expect(results[0].element('.tableFieldTitle').getAttribute('textContent')).toBe(tableField);
-                    return this.setInputValue(results[0], '.tableFieldInput textarea', fieldValue);
+                    this.setInputValue(results[0], '.tableFieldInput TEXTAREA', fieldValue);
                 }
             } else {
                 throw new Error('Cannot set value for input of field type ' + JSON.stringify(results[0]));
@@ -340,13 +331,13 @@
                 //Enter values for 'table name' field
                 if (tableField.includes('Table Name')) {
                     //Verify the table name field value
-                    expect(results[0].element('.tableFieldInput input').getAttribute('value')).toBe(expectedFieldValue);
+                    expect(results[0].element('.tableFieldInput INPUT').getAttribute('value')).toBe(expectedFieldValue);
                 } else if (tableField.includes('A record in the table is called')) {
                     //Verify the record field value
-                    expect(results[0].element('.tableFieldInput input').getAttribute('value')).toBe(expectedFieldValue);
+                    expect(results[0].element('.tableFieldInput INPUT').getAttribute('value')).toBe(expectedFieldValue);
                 } else if (tableField.includes('Description')) {
                     //Verify the description field value
-                    expect(results[0].element('.tableFieldInput textarea').getAttribute('value')).toBe(expectedFieldValue);
+                    expect(results[0].element('.tableFieldInput TEXTAREA').getAttribute('value')).toBe(expectedFieldValue);
                 }
             } else {
                 throw new Error('Unexpected table field filtered element' + JSON.stringify(results[0]));
@@ -448,7 +439,18 @@
             this.verifyTableSettingsDropDown();
             //Click on table properties and settings link
             this.modifyTableSettingsLink.waitForVisible();
-            return this.modifyTableSettingsLink.click();
+            this.modifyTableSettingsLink.click();
+            return browser.element('.tableFieldInput').waitForVisible();
+        }},
+
+        /**
+         * Method to click on 'back to apps ' link
+         */
+        clickBackToAppsLink : {value: function() {
+            browser.element('.standardLeftNav .navItemContent').waitForVisible();
+            browser.element('.standardLeftNav .navItemContent').click();
+            reportContentPO.waitForReportContent();
+            return this.newTableBtn.waitForVisible();
         }},
 
         /**
@@ -459,7 +461,7 @@
             this.editTableApplyBtn.waitForVisible();
             this.editTableApplyBtn.click();
             //Need this for notification container to slide away
-            return browser.pause(e2eConsts.shortWaitTimeMs);
+            return browser.pause(e2eConsts.mediumWaitTimeMs);
         }},
 
         /**
