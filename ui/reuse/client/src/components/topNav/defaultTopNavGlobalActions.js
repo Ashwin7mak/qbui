@@ -51,6 +51,7 @@ class ReDefaultTopNavGlobalActions extends Component {
                             signOutUser={this.signOutUser}
                             app={this.props.app}
                             shouldOpenMenusUp={this.props.shouldOpenMenusUp}
+                            position = {"center"}
                         />
                     </li>
                     <li className="link globalAction"><HelpButton/></li>

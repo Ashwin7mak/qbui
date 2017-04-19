@@ -178,12 +178,12 @@ export const ReportColumnHeaderMenu = React.createClass({
 
                 <Dropdown.Menu>
                     <MenuItem onSelect={this.sortReportAscending}>
-                        {this.isFieldSortedAscending() && <QbIcon icon="check"/>}
+                        {this.isFieldSortedAscending() && <QbIcon icon="checkmarkincircle-outline"/>}
                         <span className="sortAscendMenuText">{this.getSortAscText(SORTING_MESSAGE)}</span>
                     </MenuItem>
 
                     <MenuItem onSelect={this.sortReportDescending}>
-                        {this.isFieldSortedDescending() && <QbIcon icon="check"/>}
+                        {this.isFieldSortedDescending() && <QbIcon icon="checkmarkincircle-outline"/>}
                         <span className="sortDescendMenuText">{this.getSortDescText(SORTING_MESSAGE)}</span>
                     </MenuItem>
 
