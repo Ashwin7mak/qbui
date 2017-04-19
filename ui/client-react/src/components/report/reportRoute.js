@@ -181,6 +181,7 @@ doSomething() {
                     selectedRows={this.props.reportData.selectedRows}
                     scrollingReport={this.props.scrollingReport}
                     loadDynamicReport={this.loadDynamicReport}
+                    noRowsUI={true}
                 />
             </div>);
         }

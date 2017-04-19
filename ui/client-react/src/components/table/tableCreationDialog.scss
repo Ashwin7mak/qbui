@@ -23,6 +23,10 @@
         }
         width: 840px;
     }
+
+    .multiStepModal.tableCreationDialog.allowOverflow .loadedContent {
+        overflow: visible;
+    }
 }
 
 /* some initial small styles in case we support small */

@@ -114,7 +114,12 @@ export default {
             searchNoMatch: "Personne ne correspond à"
         },
         grid: {
-            no_data: "Il n'y a pas de données à afficher."
+            no_data: "Il n'y a pas de données à afficher.",
+            no_filter_matches: "Aucun enregistrement ne correspond à ce que vous recherchez. Essayez de rechercher un autre type d'enregistrement.",
+            no_rows: "Il n'y a aucun enregistrement à voir en ce moment.",
+            no_rows_but: "Il n'y a pas d'enregistrements, mais vous pouvez ",
+            no_rows_create_link:  "créer une"
+
         },
         globalActions: {
             user: "Utilisateur",
@@ -124,6 +129,7 @@ export default {
         },
         pageActions: {
             addRecord: "Ajouter un enregistrement",
+            approve: "Approuve ce disque",
             saveRecord: "Sauvegarder les modifications",
             saveAndAddRecord: "Enregistrer et ajouter une nouvelle ligne",
             saveAndAddRecordDisabled: "Ajout de plusieurs enregistrements ne fonctionnant pas en ce moment",
@@ -193,6 +199,12 @@ export default {
                 save: {
                     success: "Formulaire enregistré",
                     error: "Erreur lors de l'enregistrement du formulaire"
+                }
+            },
+            automation: {
+                approverecord: {
+                    success: "Enregistrement approuvé.",
+                    error: "Une erreur s'est produite lors de l'approbation de ce document."
                 }
             }
         },
@@ -623,6 +635,12 @@ export default {
             validateTableNameEmpty: "Le nom de la table ne doit pas être vide",
             validateTableNameExists: "Le nom de la table doit être unique pour cette application",
             validateRecordNameEmpty: "Le nom de l'enregistrement ne doit pas être vide",
+
+            homePageInitialTitle: "Commencez à utiliser votre table",
+            homePageInitialDescription: "Nous avons créé quelques rapports pour accompagner votre nouvelle table afin que vous puissiez commencer à ajouter des enregistrements",
+            homePageAddRecordButton: "Ajouter un enregistrement",
+            homePageStillBuilding: "Bâtiment fixe?  ",
+            homePageCreateAnother: "Créer un autre tableau"
         },
         iconChooser: {
             searchPlaceholder: "Rechercher des icônes..."

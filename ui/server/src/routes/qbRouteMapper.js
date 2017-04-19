@@ -142,6 +142,7 @@
         routeToAllFunction[routeConsts.TOMCAT_ALL] = forwardApiRequest;
         routeToAllFunction[routeConsts.EXPERIENCE_ENGINE_ALL] = forwardExperienceEngineApiRequest;
         routeToAllFunction[routeConsts.EE_FORMS] = forwardExperienceEngineApiRequest;
+        routeToAllFunction[routeConsts.AUTOMATION_ENGINE_ALL] = forwardAutomationEngineApiRequest;
 
         /*** public data ****/
         return {
@@ -1203,6 +1204,31 @@
 
         processRequest(req, res, function(req, res) {
             var opts = requestHelper.setExperienceEngineOptions(req);
+            request(opts)
+                .on('response', function(response) {
+                    logApiSuccess(req, response, perfLog);
+                })
+                .on('error', function(error) {
+                    logApiFailure(req, error, perfLog);
+                })
+                .pipe(res);
+        });
+    }
+
+    /**
+     * This is the function for forwarding a request to the automation server.  Expectation
+     * is that the data in the body of the response is a json structure for all requests.
+     *
+     * @param req
+     * @param res
+     */
+    /*eslint no-shadow:0 */
+    function forwardAutomationEngineApiRequest(req, res) {
+        let perfLog = perfLogger.getInstance();
+        perfLog.init('Forward automation engine API Request', {req:filterNodeReq(req)});
+
+        processRequest(req, res, function(req, res) {
+            var opts = requestHelper.setAutomationEngineOptions(req);
             request(opts)
                 .on('response', function(response) {
                     logApiSuccess(req, response, perfLog);

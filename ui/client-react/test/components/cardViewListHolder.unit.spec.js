@@ -128,11 +128,31 @@ describe('CardViewListHolder functions', () => {
     });
 
     it('test render of empty component', () => {
-        component = TestUtils.renderIntoDocument(<CardViewListHolder flux={flux} selectedRows={[]} primaryKeyName="col_num" reportData={fakeReportData_empty}/>);
+        component = TestUtils.renderIntoDocument(<CardViewListHolder flux={flux} selectedRows={[]} primaryKeyName="col_num" reportData={fakeReportData_empty} noRowsUI={true}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 
         let cards = TestUtils.scryRenderedDOMComponentsWithClass(component, "cardViewList");
         expect(cards.length).toEqual(0);
+
+        let noRows = TestUtils.scryRenderedDOMComponentsWithClass(component, "noRowsExist");
+        expect(noRows.length).toEqual(1);
+
+        let noRowsText = TestUtils.scryRenderedDOMComponentsWithClass(component, "cardViewCreateOne");
+        expect(noRowsText.length).toEqual(1);
+    });
+
+    it('test render of empty component with search string', () => {
+        component = TestUtils.renderIntoDocument(<CardViewListHolder flux={flux} selectedRows={[]} primaryKeyName="col_num" reportData={fakeReportData_empty} searchString="xxx" noRowsUI={true}/>);
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+
+        let cards = TestUtils.scryRenderedDOMComponentsWithClass(component, "cardViewList");
+        expect(cards.length).toEqual(0);
+
+        let noRows = TestUtils.scryRenderedDOMComponentsWithClass(component, "noRowsExist");
+        expect(noRows.length).toEqual(1);
+
+        let searchNoRowsText = TestUtils.scryRenderedDOMComponentsWithClass(component, "searchNoRows");
+        expect(searchNoRowsText.length).toEqual(1);
     });
 
     it('test render of single cardview component', () => {
