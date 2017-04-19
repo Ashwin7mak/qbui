@@ -381,7 +381,7 @@
 
         });
 
-        it("Verify Delete group fields functionality", function() {
+        xit("Verify Delete group fields functionality", function() {
             var fieldToDelete = 'Project Phase';
             var actualGroupedTableRecords;
             var groupedViaLODASHResults;
