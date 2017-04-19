@@ -87,13 +87,13 @@ describe('RowActions (Grid)', () => {
         expect(component.find(IconActions)).toBeEmpty();
     });
 
-    it('renders IconActions if iconActionsNode has some value', () => {
+    it('does not render IconActions if iconActionsNode has some value', () => {
         component = shallow(<RowActions {...props} iconActionsNode={1} />);
 
         expect(component.find(IconActions)).not.toBePresent();
     });
 
-    it('not renders IconActions if iconActionsNode has some value', () => {
+    it('renders IconActions if iconActionsNode doesnt have any value', () => {
         component = shallow(<RowActions {...props} />);
 
         expect(component.find(IconActions)).toBePresent();

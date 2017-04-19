@@ -4,6 +4,7 @@ import jasmineEnzyme from 'jasmine-enzyme';
 
 import RowActions from '../../../src/components/dataTable/qbGrid/rowActions';
 import RowActionsReuse from '../../../../reuse/client/src/components/rowActions/rowActions';
+import IconActions from '../../../../reuse/client/src/components/iconActions/iconActions';
 import {PositionedRowEditActions} from '../../../src/components/dataTable/qbGrid/rowEditActions';
 import QbIconActions, {__RewireAPI__ as QbIconActionsRewireAPI} from '../../../src/components/dataTable/qbGrid/qbIconActions';
 
@@ -23,10 +24,10 @@ const props = {
     onCancelEditingRow: function() {},
     onClickAddNewRow: function() {},
     onClickToggleSelectedRow: function() {},
-    onClickSaveRow: function() {}
+    onClickSaveRow: function() {},
 };
 
-describe('RowActions (QbGrid)', () => {
+fdescribe('RowActions (QbGrid)', () => {
     beforeEach(() => {
         jasmineEnzyme();
         // IconActions currently relies on the flux store which is difficult to unit test because of the mixin
@@ -38,16 +39,19 @@ describe('RowActions (QbGrid)', () => {
         QbIconActionsRewireAPI.__ResetDependency__('IconActions');
     });
 
-    it('Renders the row actions component', () => {
+    fit('Renders the row actions component', () => {
         component = shallow(<RowActions {...props}/>);
 
         expect(component.find(RowActionsReuse)).toBePresent();
     });
 
-    it('Checks the row actions component has props', () => {
+    fit('Checks the row actions component has props', () => {
+
         component = mount(<RowActions {...props}/>);
 
-        let RowActionsTest = component.find(QbIconActions);
-        expect(RowActionsTest).toHaveProp('pullRight', false);
+        let QbIconActionsInstance = component.find(QbIconActions);
+
+        expect(QbIconActionsInstance).toHaveProp('onClickEditRowIcon', component.onClickEditRowIcon);
+        expect(QbIconActionsInstance).toHaveProp('onClickDeleteRowIcon', component.onClickDeleteRowIcon);
     });
 });
