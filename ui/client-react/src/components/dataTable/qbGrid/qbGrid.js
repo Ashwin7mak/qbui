@@ -205,28 +205,33 @@ const QbGrid = React.createClass({
     },
 
     /**
-     * Gets all non-hidden columns and add the correct properties to them.
+     * Gets all non-hidden columns.
      */
-    getColumns() {
-        let columns = [];
-        for (let c = 0; c < this.props.columns.length; c++) {
-            let column = this.props.columns[c];
-            if (!column.fieldDef.isHidden) {
-                try {
-                    column.addFormatter(this.renderCell);
-                    if (!this.props.phase1) {
-                        column.addHeaderMenu(this.props.menuComponent, this.props.menuProps);
-                    }
-                    columns.push(column.getGridHeader());
-                } catch (err) {
-                    // If the column is not a type of ColumnTransformer with the appropriate methods, still pass through the column as the dev may have wanted to use a plain object (i.e., in the component library)
-                    // but provide a warning in case using the ColumnTransformer class was forgotten.
-                    logger.warn('The columns passed to QbGrid are not instances of ColumnTransformer. Use the ColumnTransformer helper class in the QbGrid folder for better results in the grid.');
-                    columns.push(column);
-                }
+    getVisibleColumns() {
+        let visibleColumns = this.props.columns.filter(column => {
+            return !column.fieldDef.isHidden;
+        });
+        return visibleColumns.map(column => {
+            return this.getColumn(column);
+        });
+    },
+
+    /**
+     * Renders a single column.
+     */
+    getColumn(column) {
+        try {
+            column.addFormatter(this.renderCell);
+            if (!this.props.phase1) {
+                column.addHeaderMenu(this.props.menuComponent, this.props.menuProps);
             }
+            return column.getGridHeader();
+        } catch (err) {
+            // If the column is not a type of ColumnTransformer with the appropriate methods, still pass through the column as the dev may have wanted to use a plain object (i.e., in the component library)
+            // but provide a warning in case using the ColumnTransformer class was forgotten.
+            logger.warn('The columns passed to QbGrid are not instances of ColumnTransformer. Use the ColumnTransformer helper class in the QbGrid folder for better results in the grid.');
+            return column;
         }
-        return columns;
     },
 
     /**
