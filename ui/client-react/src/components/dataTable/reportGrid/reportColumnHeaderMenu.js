@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from 'react';
+import React, {Component, PropTypes} from 'react';
 import Button from 'react-bootstrap/lib/Button';
 import Dropdown from 'react-bootstrap/lib/Dropdown';
 import MenuItem from 'react-bootstrap/lib/MenuItem';
@@ -286,7 +286,7 @@ const mapDispatchToProps = (dispatch) => {
         hideColumn: (context, appId, tblId, rptId, params) => {
             dispatch(hideColumn(context, appId, tblId, rptId, params));
         }
-    }
+    };
 };
 
 // --- PRIVATE FUNCTIONS

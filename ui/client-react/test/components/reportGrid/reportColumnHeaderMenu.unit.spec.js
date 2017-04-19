@@ -512,16 +512,16 @@ describe('ReportColumnHeaderMenu', () => {
         });
 
         it('calls hideColumn to hide a field', () => {
-           component = shallow(<ReportColumnHeaderMenu {...testProps}/>);
-           instance = component.instance();
+            component = shallow(<ReportColumnHeaderMenu {...testProps}/>);
+            instance = component.instance();
 
-           instance.hideThisColumn(testProps.fieldDef.id);
+            instance.hideThisColumn(testProps.fieldDef.id);
 
-           let params = {
-               columnId: testProps.fieldDef.id
-           };
+            let params = {
+                columnId: testProps.fieldDef.id
+            };
 
-           expect(testProps.hideColumn).toHaveBeenCalledWith(CONTEXT.REPORT.NAV, testProps.appId, testProps.tblId, testProps.rptId, params);
+            expect(testProps.hideColumn).toHaveBeenCalledWith(CONTEXT.REPORT.NAV, testProps.appId, testProps.tblId, testProps.rptId, params);
         });
 
         it('does not call the action to hide a column if the required props are not passed in', () => {
