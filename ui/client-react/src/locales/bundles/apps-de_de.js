@@ -643,7 +643,8 @@ export default {
             homePageStillBuilding: "Noch gebaut  ",
             homePageCreateAnother: "Erstellen Sie eine andere Tabelle",
 
-            noSuggestedIcons: "Es gibt keine vorgeschlagenen Symbole für diesen Tabellennamen"
+            noSuggestedIcons: "Es gibt keine vorgeschlagenen Symbole für diesen Tabellennamen",
+            typeForSuggestions: "Bitte geben Sie einen Tabellennamen ein, um Vorschläge zu erhalten"
         },
         iconChooser: {
             searchPlaceholder: "Tabellensymbole suchen ......"

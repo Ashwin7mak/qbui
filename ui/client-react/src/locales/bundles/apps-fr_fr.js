@@ -642,7 +642,8 @@ export default {
             homePageStillBuilding: "Bâtiment fixe?  ",
             homePageCreateAnother: "Créer un autre tableau",
 
-            noSuggestedIcons: "Il n'y a pas d'icônes suggérées pour ce nom de table"
+            noSuggestedIcons: "Il n'y a pas d'icônes suggérées pour ce nom de table",
+            typeForSuggestions: "Tapez un nom de table pour obtenir des suggestions"
         },
         iconChooser: {
             searchPlaceholder: "Rechercher des icônes..."
