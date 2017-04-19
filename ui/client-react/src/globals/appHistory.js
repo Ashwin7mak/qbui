@@ -3,6 +3,7 @@ import qhistory from 'qhistory';
 import {stringify, parse} from 'query-string';
 import {UNSAVED_RECORD_ID} from '../constants/schema';
 import {ShowAppModal, HideAppModal} from '../components/qbModal/appQbModalFunctions';
+import WindowUtils from '../utils/windowLocationUtils';
 import {CONTEXT} from '../actions/context';
 import _ from 'lodash';
 
@@ -103,7 +104,7 @@ class AppHistory {
         });
 
         // Setup listener for route changes outside of the app (e.g., pasting in a new url)
-        window.addEventListener("beforeunload", event => {
+        WindowUtils.addEventListener("beforeunload", event => {
             if (self && self.getIsPendingEdit()) {
                 // No need to internationalize as it will not appear in the modal on evergreen browsers.
                 if (event) {
@@ -112,6 +113,7 @@ class AppHistory {
                 return 'Save changes before leaving?';
             }
         });
+
         self.cancelListenBeforeUnload = () => {
             window.removeEventListener("beforeunload", ()=>{this.noop();});
         };
