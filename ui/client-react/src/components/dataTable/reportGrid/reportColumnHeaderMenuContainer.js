@@ -103,7 +103,7 @@ const ReportColumnHeaderMenuContainer = (ReportColumnHeaderMenu) => {
             return (<ReportColumnHeaderMenu
                 sortReport={this.sortReport}
                 groupReport={this.groupReport}
-                hideColumn={this.hideColumn}
+                onHideColumn={this.hideColumn}
                 {...this.props}
             />);
         }
