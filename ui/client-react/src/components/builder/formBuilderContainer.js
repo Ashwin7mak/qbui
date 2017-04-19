@@ -34,8 +34,8 @@ const mapStateToProps = state => {
 
     return {
         currentForm,
+        selectedField: (_.has(currentForm, 'selectedFields') ? currentForm.selectedFields[0] : undefined),
         redirectRoute: getFormRedirectRoute(state),
-        selectedField: (_.has(currentForm, 'selectedFields') ? currentForm.selectedFields[0] : []),
         tabIndex: (_.has(currentForm, 'formBuilderChildrenTabIndex') ? currentForm.formBuilderChildrenTabIndex[0] : undefined),
         formFocus: (_.has(currentForm, 'formFocus') ? currentForm.formFocus[0] : undefined),
         shouldNotifyTableCreated: state.tableCreation.notifyTableCreated,
@@ -223,13 +223,16 @@ export const FormBuilderContainer = React.createClass({
         return (
             <div className="formBuilderContainer">
 
-                <KeyboardShortcuts id="formBuilderContainer" shortcutBindings={[
-                    {key: 'esc', callback: () => {this.escapeCurrentContext(); return false;}},
-                    {key: 'mod+s', callback: () => {this.saveClicked(); return false;}},
-                    {key: 'shift+up', callback: () => {this.keyboardMoveFieldUp(); return false;}},
-                    {key: 'shift+down', callback: () => {this.keyboardMoveFieldDown(); return false;}},
-                    {key: 'backspace', callback: () => {this.removeField(); return false;}}
-                ]}/>
+                <KeyboardShortcuts id="formBuilderContainer"
+                                   shortcutBindings={[
+                                       {key: 'shift+up', callback: () => {this.keyboardMoveFieldUp(); return false;}},
+                                       {key: 'shift+down', callback: () => {this.keyboardMoveFieldDown(); return false;}},
+                                       {key: 'backspace', callback: () => {this.removeField(); return false;}}
+                                   ]}
+                                   shortcutBindingsPreventDefault={[
+                                       {key: 'esc', callback: () => {this.escapeCurrentContext(); return false;}},
+                                       {key: 'mod+s', callback: () => {this.saveClicked(); return false;}},
+                                   ]}/>
 
                 <PageTitle title={Locale.getMessage('pageTitles.editForm')}/>
 
