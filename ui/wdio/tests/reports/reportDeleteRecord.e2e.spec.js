@@ -1,3 +1,7 @@
+/**
+ * E2E tests for Deleting a Record via Checkbox and Dropdown menu.
+ * Created by cperikal on 04/10/2017
+ */
 (function() {
     'use strict';
 
@@ -48,13 +52,9 @@
             beforeEach(function() {
                 // Load the List All report on Table 1
                 return e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
-
             });
-
-
-
             /**
-             * Test Method- By clicking on the checkbox
+             * Test Method- Delete record by clicking on the checkbox
              */
             it('Delete a Record and check for the success message', function() {
 
@@ -78,11 +78,10 @@
 
                 // Step 5: Check if the record count is reduced or not after the deletion
                 expect(reportNavPO.recordsCount.getText()).toEqual(reportCount - 1 + " records") ;
-
             });
 
             /**
-             * Test Method- By clicking on the DropDown Menu
+             * Test Method- Click on Don't Delete from the DropDown Menu
              */
             it('Not to delete a Record and check for the record ', function() {
 
@@ -99,9 +98,6 @@
 
                 // Step 3: Check for the deleted record on the first page
                 reportContentPO.checkForThePresenceDeletedRecordOnTheCurrentPage(deletedRecord);
-
-
-
             });
         });
     });
