@@ -14,7 +14,7 @@ import {GROUP_TYPE} from "../../../../../common/src/groupTypes";
 import Locales from "../../../locales/locales";
 import ReportFooter from '../reportFooter';
 import _ from 'lodash';
-import {withRouter} from 'react-router';
+import {withRouter} from 'react-router-dom';
 import ReportContentError from './reportContentError';
 import UrlUtils from '../../../utils/urlUtils';
 import QBModal from '../../qbModal/qbModal';

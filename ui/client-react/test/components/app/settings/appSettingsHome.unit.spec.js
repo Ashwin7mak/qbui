@@ -3,7 +3,7 @@ import {shallow, mount} from 'enzyme';
 import createRouterContext from 'react-router-test-context';
 import * as UrlConstants from '../../../../src/constants/urlConstants';
 import AppSettingsHome  from '../../../../src/components/app/settings/appSettingsHome';
-
+import {MemoryRouter} from 'react-router-dom';
 describe('AppSettingsHome functions', () => {
     'use strict';
 
@@ -20,11 +20,12 @@ describe('AppSettingsHome functions', () => {
     const settingsLinkWithoutParameter = `${UrlConstants.SETTINGS_ROUTE}/app/${appId}/`;
 
     it('test render of component', () => {
-        const context = createRouterContext();
-        let component = mount(<AppSettingsHome selectedApp={selectedApp}
+        let component = mount(<MemoryRouter>
+                                    <AppSettingsHome selectedApp={selectedApp}
                                                appId={appId}
                                                appUsers={appUsers}
-                                               />, {context});
+                                               />
+                                </MemoryRouter>);
         expect(component.find(AppSettingsHome).length).toEqual(1);
     });
 

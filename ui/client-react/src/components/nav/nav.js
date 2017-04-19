@@ -10,7 +10,7 @@ import GlobalActions from "../actions/globalActions";
 import BuilderDropDownAction from '../actions/builderDropDownAction';
 import Breakpoints from "../../utils/breakpoints";
 import {NotificationContainer} from "react-notifications";
-import {withRouter, Switch} from 'react-router';
+import {withRouter, Switch} from 'react-router-dom';
 import _ from 'lodash';
 
 import * as TrowserConsts from "../../constants/trowserConstants";
@@ -308,7 +308,7 @@ export const Nav = React.createClass({
         if (!this.state.apps || this.state.apps.apps === null) {
             // don't render anything until we've made this first api call without being redirected to V2
             // The common loading screen html is shared across server and client as an HTML file and
-            // therefore must be loaded using the dnagerouslySetInnerHTML attribute
+            // therefore must be loaded using the dangerouslySetInnerHTML attribute
             // see more information in common/src/views/Readme.md
             return <div dangerouslySetInnerHTML={{__html: LoadingScreen}} />;
         }
@@ -359,6 +359,7 @@ export const Nav = React.createClass({
                                errorPopupHidden={this.props.shell.errorPopupHidden}
                                onHideTrowser={this.hideTrowser}/>
             }
+
             {this.props.match.params && this.props.match.params.appId &&
                 <ReportManagerTrowser visible={this.props.shell.trowserOpen && this.props.shell.trowserContent === TrowserConsts.TROWSER_REPORTS}
                                       router={this.props.router}
@@ -393,10 +394,13 @@ export const Nav = React.createClass({
                 {this.props.routes &&
                     <div className="mainContent" >
                         <TempMainErrorMessages apps={this.state.apps.apps} appsLoading={this.state.apps.loading} selectedAppId={this.state.apps.selectedAppId} />
+
                         <Switch>
+
                         { this.props.routes.map((route, i) => {
                             //insert the child route passed in by the router
-                            let routeProps = Object.assign({}, {
+                            // with additional props
+                            let routeProps = {
                                 key: this.props.location ? this.props.location.pathname : "",
                                 apps: this.state.apps.apps,
                                 selectedAppId: this.state.apps.selectedAppId,
@@ -412,13 +416,13 @@ export const Nav = React.createClass({
                                 selectedTable: this.getSelectedTable(reportsData.tblId),
                                 scrollingReport: this.state.nav.scrollingReport,
                                 flux: flux
-                            }, route.props);
-                            return (
-                                <RouteWithSubRoutes key={i} {...route} {...routeProps} />
-                            );
+                            };
+                            return RouteWithSubRoutes(route, i, routeProps);
                         }
                         )}
+
                         </Switch>
+
                     </div>}
             </div>
 
@@ -503,12 +507,12 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 export const NavWithRouter = withRouter(Nav);
-export const ConnectedNavRoute = connect(
+export const ConnectedNavRoute = withRouter(connect(
     mapStateToProps,
     mapDispatchToProps
-)(Nav);
+)(Nav));
 
-export default connect(
+export default withRouter(connect(
     mapStateToProps,
     mapDispatchToProps
-)(NavWithRouter);
+)(NavWithRouter));

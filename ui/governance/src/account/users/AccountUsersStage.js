@@ -17,7 +17,8 @@ class AccountUsersStage extends React.Component {
     }
 
     getTotalPaidUsers() {
-        return lodash.sumBy(this.props.users, user =>  (user.hasAppAccess ? 1 : 0));
+        return lodash.sumBy(this.props.users, user =>  (
+            user.hasAppAccess && !RealmUserAccountFlagConstants.HasAnySystemPermissions(user) && !RealmUserAccountFlagConstants.IsDenied(user) && !RealmUserAccountFlagConstants.IsDeactivated(user) ? 1 : 0));
     }
 
     getTotalDeniedUsers() {

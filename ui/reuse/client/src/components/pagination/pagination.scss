@@ -1,0 +1,67 @@
+@import '../../assets/css/qbVariables';
+
+.reportNavigation {
+    float: left;
+    color: $pagination-iconfont-normal-color;
+    font-family: "Lato", sans-serif;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+
+    .tipChildWrapper {
+        width: auto;
+    }
+
+    .navigationButton {
+        text-decoration: none;
+        padding-top: 5px;
+
+        .disabled {
+            pointer-events: none;
+        }
+    }
+
+    .previousButton {
+        &.qbIcon {
+            display: inline;
+            font-size: 24px;
+            color: $pagination-iconfont-normal-color;
+
+            &.disabled {
+                color: $pagination-iconfont-disabled-color;
+            }
+        }
+
+        &:hover {
+            color: $pagination-iconfont-hover-color;
+        }
+    }
+
+    .pageNumbers {
+        display: inline;
+        padding-left: 3px;
+        padding-right: 3px;
+        white-space: nowrap;
+    }
+
+    .nextButton {
+        &.qbIcon {
+            display: inline;
+            font-size: 24px;
+            color: $pagination-iconfont-normal-color;
+
+            &.disabled {
+                color: $pagination-iconfont-disabled-color;
+            }
+        }
+
+        &:hover {
+            color: $pagination-iconfont-hover-color;
+        }
+    }
+    
+    &.spacer {
+        width: 15px;
+    }
+
+}
