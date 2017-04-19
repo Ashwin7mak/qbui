@@ -161,6 +161,7 @@ const forms = (
         let {newField, newLocation} = action.content;
         updatedForm = _.cloneDeep(currentForm);
         let newFieldCopy = _.cloneDeep(newField);
+        let newLocationCopy = _.cloneDeep(newLocation);
 
         // Remove all keys that are not necessary for forms
         Object.keys(newFieldCopy).forEach(key => {
@@ -175,7 +176,7 @@ const forms = (
                 elementIndex = updatedForm.formData.formMeta.tabs[0].sections[0].columns[0].elements.length;
             }
 
-            newLocation = {
+            newLocationCopy = {
                 tabIndex: 0,
                 sectionIndex: 0,
                 columnIndex: 0,
@@ -183,12 +184,14 @@ const forms = (
             };
         } else if (newLocation.elementIndex !== updatedForm.formData.formMeta.tabs[0].sections[0].columns[0].elements.length) {
             //If a field is selected on the form and the selectedField is not located at the end of the form, then the new field will be added below the selected field
-            newLocation.elementIndex = newLocation.elementIndex + 1;
+            if (newLocation && newLocation.elementIndex) {
+                newLocationCopy.elementIndex = newLocationCopy.elementIndex + 1;
+            }
         }
 
         updatedForm.formData.formMeta = MoveFieldHelper.addNewFieldToForm(
             updatedForm.formData.formMeta,
-            newLocation,
+            newLocationCopy,
             {...newFieldCopy}
         );
 
@@ -197,7 +200,7 @@ const forms = (
             updatedForm.previouslySelectedField = [];
         }
 
-        updatedForm.selectedFields[0] = newLocation;
+        updatedForm.selectedFields[0] = newLocationCopy;
 
         newState[action.id] = updatedForm;
         return newState;
