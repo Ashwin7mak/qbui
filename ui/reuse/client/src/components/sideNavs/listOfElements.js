@@ -140,6 +140,7 @@ class ListOfElements extends Component {
                  ref={(element) => {this.listOfElementsContainer = element;}}
                  role="button">
                 <SearchBox
+                    toolPaletteChildrenTabIndex={this.props.toolPaletteChildrenTabIndex}
                     value={this.state.fieldFilter}
                     onChange={this.onChangeFilter}
                     placeholder={Locale.getMessage('listOfElements.searchPlaceholder')}
