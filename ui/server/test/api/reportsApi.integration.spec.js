@@ -15,7 +15,6 @@
         //TODO Test Data should not hardcoded.
         var testRecord = '[{"id": 6 , "value": "abcdef"},{"id": 7 , "value": "2016-04-12"},{"id": 8,"value": "2016-04-12T05:51:19Z"},{"id": 9 , "value": "first_name_last_name@quickbase.com"},{"id": 10 , "value": true},{"id": 11 , "value": ""},{"id": 12 , "value": ""},{"id": 13 , "value": "2016-08-08"}]';
         var expectedRecords = [[
-            {"id":3, "value":1, "display":"1"},
             {"id":6, "value":"abcdef", "display":"abcdef"},
             {"id":7, "value":"2016-04-12", "display":"04-12-2016"},
             {"id":8, "value":"2016-04-12T05:51:19Z[UTC]", "display":"04-11-2016 10:51 pm"},
@@ -23,7 +22,8 @@
             {"id":10, "value":true, "display":true},
             {"id":11, "value":null, "display":""},
             {"id":12, "value":null, "display":""},
-            {"id":13, "value":"2016-08-08", "display":"08-08-2016"}
+            {"id":13, "value":"2016-08-08", "display":"08-08-2016"},
+            {"id":3, "value":1, "display":"1"}
         ]];
 
         var FORMAT = 'display';
@@ -112,7 +112,7 @@
          * Test to create a report with all fields and verify the results.
          */
         it('Should create a report, execute the report, and validate the resulting ' +
-            'record matches the created record in setup', function(done) {
+            'record matches the created record in setup', function() {
             this.timeout(testConsts.INTEGRATION_TIMEOUT * appWithNoFlags.length);
 
             var reportEndpoint = recordBase.apiBase.resolveReportsEndpoint(app.id, app.tables[0].id);
@@ -122,18 +122,19 @@
                 tableId: app.tables[0].id
             };
             //Create a report
-            recordBase.apiBase.executeRequest(reportEndpoint, consts.POST, reportToCreate).then(function(report) {
+            return recordBase.apiBase.executeRequest(reportEndpoint, consts.POST, reportToCreate).then(function(report) {
                 var r = JSON.parse(report.body);
                 //Execute a report
-                recordBase.apiBase.executeRequest(reportEndpoint + r.id + '/results?format=' + FORMAT, consts.GET).then(function(reportResults) {
-                    var results = JSON.parse(reportResults.body);
-                    //Verify records
-                    verifyRecords(results);
-                    done();
+                return recordBase.apiBase.executeRequest(reportEndpoint + r.id + '/results?format=' + FORMAT, consts.GET).then(function(reportResults) {
+                    return JSON.parse(reportResults.body);
+                }, error => {
+                    log.error(JSON.stringify(error));
                 });
-            }).catch(function(error) {
+            })
+            .then(verifyRecords)
+            .catch(function(error) {
                 log.error(JSON.stringify(error));
-                done();
+                return Promise.reject(error);
             });
         });
 
