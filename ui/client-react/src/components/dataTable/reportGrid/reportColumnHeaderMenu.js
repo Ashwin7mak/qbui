@@ -22,7 +22,7 @@ export const ReportColumnHeaderMenu = React.createClass({
         sortFids: PropTypes.array,
         sortReport: PropTypes.func,
         groupReport: PropTypes.func,
-        hideColumn: PropTypes.func,
+        onHideColumn: PropTypes.func,
         isOnlyOneColumnVisible: PropTypes.bool,
     },
 
@@ -164,7 +164,7 @@ export const ReportColumnHeaderMenu = React.createClass({
 
     hideColumn() {
         if (!this.props.isOnlyOneColumnVisible) {
-            this.props.hideColumn(this.props.fieldDef.id);
+            this.props.onHideColumn(this.props.fieldDef.id);
         }
     },
 
