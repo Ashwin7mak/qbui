@@ -125,15 +125,25 @@ describe('AppHistory', () => {
         });
 
         it('sets a listener for internal app route changes', () => {
-            spyOn(AppHistory.history, 'listenBefore');
+            spyOn(AppHistory.history, 'block');
             AppHistory.setup(mockStore, mockStoreFunc);
-            expect(AppHistory.history.listenBefore).toHaveBeenCalled();
+            expect(AppHistory.history.block).toHaveBeenCalled();
         });
 
         it('sets a listener for browser chrome route changes (e.g., pasting a link in the URL bar)', () => {
-            spyOn(AppHistory.history, 'listenBeforeUnload');
+            const windowUtilsSpy = {
+                addEventListener: {}
+            };
+            AppHistoryRewireAPI.__Rewire__('WindowUtils', windowUtilsSpy);
+
+            spyOn(windowUtilsSpy, 'addEventListener');
             AppHistory.setup(mockStore, mockStoreFunc);
-            expect(AppHistory.history.listenBeforeUnload).toHaveBeenCalled();
+            expect(windowUtilsSpy.addEventListener).toHaveBeenCalledWith(
+                "beforeunload",
+                jasmine.any(Function)
+            );
+
+            AppHistoryRewireAPI.__ResetDependency__('WindowUtils');
         });
     });
 

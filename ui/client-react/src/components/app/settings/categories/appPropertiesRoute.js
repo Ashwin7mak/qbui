@@ -8,8 +8,8 @@ const AppPropertiesRoute = React.createClass({
 
     render() {
         return (
-            <AppProperties appId={this.props.params.appId}
-                           selectedApp={this.props.selectedApp}
+            <AppProperties appId={this.props.match.params.appId}
+                           selectedApp={this.props.app}
             />
         );
     }

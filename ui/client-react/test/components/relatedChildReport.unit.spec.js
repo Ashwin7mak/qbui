@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {Route, Router, createMemoryHistory} from 'react-router';
+import {Route, Router, createMemoryHistory} from 'react-router-dom';
 import TestUtils, {Simulate} from 'react-addons-test-utils';
 import {shallow, mount} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';

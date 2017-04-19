@@ -8,6 +8,8 @@ import Breakpoints from "../../utils/breakpoints";
 import StringUtils from "../../utils/stringUtils";
 import NumberUtils from "../../utils/numberUtils";
 
+import Pagination from "../../../../reuse/client/src/components/pagination/pagination";
+
 var ReportNavigation = React.createClass({
     propTypes: {
         /**
@@ -57,65 +59,17 @@ var ReportNavigation = React.createClass({
         let navBar = "report.reportNavigationBar";
         if (showComponent) {
             return (<div className="reportNavigation">
-
-                        <PreviousLink pageStart={this.props.pageStart}
-                                      getPreviousReportPage={this.props.getPreviousReportPage}
-                        />
-                        <div className="pageNumbers">
-                            <I18nMessage message={navBar}
-                                         pageStart={this.props.pageStart}
-                                         pageEnd={this.props.pageEnd}
-                            />
-                        </div>
-                        <NextLink recordsCount={this.props.recordsCount}
-                                  pageEnd={this.props.pageEnd}
-                                  getNextReportPage={this.props.getNextReportPage}
+                        <Pagination isPreviousDisabled={this.props.pageStart === 1}
+                                    isNextDisabled={this.props.recordsCount === this.props.pageEnd}
+                                    onClickPrevious={this.props.getPreviousReportPage}
+                                    onClickNext={this.props.getNextReportPage}
+                                    startRecord={this.props.pageStart}
+                                    endRecord={this.props.pageEnd}
+                                    isHidden={!this.props.reportData}
                         />
                     </div>);
         }
         return (<div className="spacer"></div>);
-    }
-});
-
-var PreviousLink = React.createClass({
-    propTypes: {
-        pageStart : React.PropTypes.number,
-        getPreviousReportPage : React.PropTypes.func,
-    },
-
-    render: function() {
-        const previousButtonClassName = "previousButton " + (this.props.pageStart !== 1 ? "" : "disabled");
-        return (
-            <QBToolTip tipId="fieldName" i18nMessageKey="report.previousToolTip">
-                {/* For embedded reports, this button element is rendered inside a <form> element.
-                    We need to specify type="button" to prevent form submission when clicked. */}
-                <button tabIndex="0" className="navigationButton" onClick={this.props.getPreviousReportPage} type="button">
-                    <QBicon className={previousButtonClassName} icon="caret-filled-left" />
-                </button>
-            </QBToolTip>
-        );
-    }
-});
-
-var NextLink = React.createClass({
-    propTypes: {
-        recordsCount : React.PropTypes.number,
-        pageEnd : React.PropTypes.number,
-        getNextReportPage : React.PropTypes.func,
-    },
-
-    render: function() {
-        const nextButtonClassName = "nextButton " + (this.props.recordsCount !== this.props.pageEnd ? "" : "disabled");
-
-        return (
-            <QBToolTip tipId="fieldName" i18nMessageKey="report.nextToolTip">
-                {/* For embedded reports, this button element is rendered inside a <form> element.
-                    We need to specify type="button" to prevent form submission when clicked. */}
-                <button tabIndex="0" className="navigationButton" onClick={this.props.getNextReportPage} type="button">
-                    <QBicon className={nextButtonClassName} icon="caret-filled-right" />
-                </button>
-            </QBToolTip>
-        );
     }
 });
 

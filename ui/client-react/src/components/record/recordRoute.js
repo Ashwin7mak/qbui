@@ -4,21 +4,22 @@ import QBicon from '../qbIcon/qbIcon';
 import Button from 'react-bootstrap/lib/Button';
 import OverlayTrigger from 'react-bootstrap/lib/OverlayTrigger';
 import Tooltip from 'react-bootstrap/lib/Tooltip';
-import TableIcon from '../qbTableIcon/qbTableIcon';
+import Icon, {AVAILABLE_ICON_FONTS} from '../../../../reuse/client/src/components/icon/icon.js';
 import IconActions from '../actions/iconActions';
 import {I18nMessage} from '../../utils/i18nMessage';
 import Record from './../record/record';
-import {Link} from 'react-router';
+import {Link} from 'react-router-dom';
 import simpleStringify from '../../../../common/src/simpleStringify';
 import Fluxxor from 'fluxxor';
 import Logger from '../../utils/logger';
-import {withRouter} from 'react-router';
+import {withRouter} from 'react-router-dom';
 import Locale from '../../locales/locales';
 import Loader from 'react-loader';
 import RecordHeader from './recordHeader';
 import {UnloadableNode} from '../../components/hoc/unloadable';
 import Breakpoints from '../../utils/breakpoints';
 import WindowLocationUtils from '../../utils/windowLocationUtils';
+import AutomationUtils from '../../utils/automationUtils';
 import * as SpinnerConfigurations from '../../constants/spinnerConfigurations';
 import * as UrlConsts from "../../constants/urlConstants";
 import _ from 'lodash';
@@ -28,6 +29,7 @@ import {openRecord} from '../../actions/recordActions';
 import {clearSearchInput} from '../../actions/searchActions';
 import {APP_ROUTE, BUILDER_ROUTE, EDIT_RECORD_KEY} from '../../constants/urlConstants';
 import {CONTEXT} from '../../actions/context';
+
 import './record.scss';
 import withUniqueId from '../hoc/withUniqueId';
 import DrawerContainer from '../drawer/drawerContainer';
@@ -67,7 +69,7 @@ export const RecordRoute = React.createClass({
             this.props.loadForm(appId, tblId, rptId, formType, recordId, 'view');
         }
     },
-    loadRecordFromParams(params = this.props.params) {
+    loadRecordFromParams(params = this.props.match.params) {
         const {appId, tblId, recordId, rptId} = params;
 
         if (appId && tblId && recordId) {
@@ -89,9 +91,9 @@ export const RecordRoute = React.createClass({
 
         const viewData = this.getFormFromProps();
 
-        if (this.props.params.appId !== prev.params.appId ||
-            this.props.params.tblId !== prev.params.tblId ||
-            this.props.params.recordId !== prev.params.recordId ||
+        if (this.props.match.params.appId !== prev.match.params.appId ||
+            this.props.match.params.tblId !== prev.match.params.tblId ||
+            this.props.match.params.recordId !== prev.match.params.recordId ||
             (viewData && viewData.syncLoadedForm)) {
 
             this.loadRecordFromParams();
@@ -103,7 +105,7 @@ export const RecordRoute = React.createClass({
         const showBack = !!(record && record.previousRecordId !== null);
         const showNext = !!(record && record.nextRecordId !== null);
 
-        const rptId = this.props.params ? this.props.params.rptId : null;
+        const rptId = this.props.match.params ? this.props.match.params.rptId : null;
 
         const actions = [];
         if (showBack || showNext) {
@@ -124,9 +126,9 @@ export const RecordRoute = React.createClass({
      */
     returnToReport() {
         // use the route parameters to build the URI
-        const {appId, tblId, rptId} = this.props.params;
+        const {appId, tblId, rptId} = this.props.match.params;
         const link = `${APP_ROUTE}/${appId}/table/${tblId}/report/${rptId}`;
-        this.props.router.push(link);
+        this.props.history.push(link);
     },
 
     /**
@@ -189,7 +191,7 @@ export const RecordRoute = React.createClass({
         //the url shall always be using the app/table/rec id from reportsdata, and not from any embedded report
         const {appId, tblId, rptId} = this.props.reportData;
         const link = `${APP_ROUTE}/${appId}/table/${tblId}/report/${rptId}/record/${record.previousRecordId}`;
-        this.props.router.push(link);
+        this.props.history.push(link);
         if (this.props.isDrawerContext) {
             this.renderDrawerContainer(drawerTableId, record.previousRecordId);
         }
@@ -205,17 +207,17 @@ export const RecordRoute = React.createClass({
         //the url shall always be using the app/table/rec id from reportsdata, and not from any embedded report
         const {appId, tblId, rptId} = this.props.reportData;
         const link = `${APP_ROUTE}/${appId}/table/${tblId}/report/${rptId}/record/${record.nextRecordId}`;
-        this.props.router.push(link);
+        this.props.history.push(link);
         if (this.props.isDrawerContext) {
             this.renderDrawerContainer(drawerTableId, record.nextRecordId);
         }
     },
 
     getTitle(recIdTitle, tableName) {
-        const recordId = recIdTitle || this.props.params.recordId;
+        const recordId = recIdTitle || this.props.match.params.recordId;
         const isSmall = Breakpoints.isSmallBreakpoint();
         return <div className="title">
-            {isSmall ? <TableIcon classes="primaryIcon" icon={this.props.selectedTable ? this.props.selectedTable.icon : ""}/> : null}
+            {isSmall ? <Icon iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY} classes="primaryIcon" icon={this.props.selectedTable ? this.props.selectedTable.tableIcon : ""}/> : null}
             <span> {tableName} # {recordId}</span></div>;
     },
 
@@ -235,8 +237,8 @@ export const RecordRoute = React.createClass({
     },
 
     getStageHeadline() {
-        if (this.props.params) {
-            const {appId, tblId, rptId} = this.props.params;
+        if (this.props.match.params) {
+            const {appId, tblId, rptId} = this.props.match.params;
             const record = this.getRecordFromProps(this.props);
             let recordIdTitle;
             const tableLink = `${APP_ROUTE}/${appId}/table/${tblId}`;
@@ -253,7 +255,7 @@ export const RecordRoute = React.createClass({
             return (<div className="recordStageHeadline">
 
                 <div className="navLinks">
-                    {this.props.selectedTable && <Link className="tableHomepageIconLink" to={tableLink}><TableIcon icon={this.props.selectedTable.icon}/></Link>}
+                    {this.props.selectedTable && <Link className="tableHomepageIconLink" to={tableLink}><Icon iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY} icon={this.props.selectedTable.tableIcon}/></Link>}
                     {this.props.selectedTable && <Link className="tableHomepageLink" to={tableLink}>{this.props.selectedTable.name}</Link>}
                     {this.props.selectedTable && rptId && <span className="divider color-black-700">&nbsp;&nbsp;:&nbsp;&nbsp;</span>}
                     {rptId && <a className="backToReport" href="#" onClick={this.returnToReport}>{reportName}</a>}
@@ -288,10 +290,33 @@ export const RecordRoute = React.createClass({
      * @param data row record data
      */
     openRecordForEdit() {
-        const recordId = this.props.params.recordId;
+        const recordId = this.props.match.params.recordId;
         this.navigateToRecord(recordId);
 
         WindowLocationUtils.pushWithQuery(EDIT_RECORD_KEY, recordId);
+    },
+
+    isAutomationEnabled() {
+        //Using hard-coded table name here, to check if approve record button needs to be displayed.
+        //TODO: Remove after Empower
+        const automationTableName = "Project Request";
+        if (this.props.selectedTable.name === automationTableName)  {
+            return true;
+        }
+        return false;
+    },
+
+    /**
+     * Invoke automation to approve
+     *
+     */
+    approveRecord()  {
+        let appId = this.props.match.params.appId;
+        let tblId = this.props.match.params.tblId;
+        let recId = this.props.match.params.recordId;
+        AutomationUtils.approveRecord(appId, tblId, recId).then(() => {
+            this.loadRecordFromParams(this.props.match.params);
+        });
     },
 
     /**
@@ -309,6 +334,11 @@ export const RecordRoute = React.createClass({
             {msg: 'unimplemented.email', icon:'mail', disabled:true},
             {msg: 'unimplemented.print', icon:'print', disabled:true},
             {msg: 'unimplemented.delete', icon:'delete', disabled:true}];
+        // Add a button that 'approves' a record by invoking automation feature.
+        // TODO: Remove after Empower 2017 demo.
+        if (this.isAutomationEnabled()) {
+            actions.splice(2, 0, {msg: 'pageActions.approve', icon: 'thumbs-up', onClick: this.approveRecord});
+        }
 
         // TODO: onCloseHandler, add to Proptypes, icon, i18nMessage for other languages
         if (this.props.isDrawerContext) {
@@ -424,12 +454,12 @@ export const RecordRoute = React.createClass({
      * we implement shouldComponentUpdate() to prevent triggering animations unless the record has changed
      */
     render() {
-        if (_.isUndefined(this.props.params) ||
-            _.isUndefined(this.props.params.appId) ||
-            _.isUndefined(this.props.params.tblId) ||
-            (_.isUndefined(this.props.params.recordId))
+        if (_.isUndefined(this.props.match.params) ||
+            _.isUndefined(this.props.match.params.appId) ||
+            _.isUndefined(this.props.match.params.tblId) ||
+            (_.isUndefined(this.props.match.params.recordId))
         ) {
-            logger.info("the necessary params were not specified to recordRoute render params=" + simpleStringify(this.props.params));
+            logger.info("the necessary params were not specified to recordRoute render params=" + simpleStringify(this.props.match.params));
             return null;
         } else {
             const viewData = this.getFormFromProps();
@@ -461,9 +491,9 @@ export const RecordRoute = React.createClass({
                                 options={SpinnerConfigurations.DRAWER_CONTENT}>
                             <Record key={key}
                                     selectedApp={this.props.selectedApp}
-                                    appId={this.props.params.appId}
-                                    tblId={this.props.params.tblId}
-                                    recId={this.props.params.recordId}
+                                    appId={this.props.match.params.appId}
+                                    tblId={this.props.match.params.tblId}
+                                    recId={this.props.match.params.recordId}
                                     errorStatus={formLoadingErrorStatus ? viewData.errorStatus : null}
                                     formData={viewData ? viewData.formData : null}
                                     appUsers={this.props.appUsers}

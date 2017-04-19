@@ -1,10 +1,10 @@
 import React from 'react';
 import Stage from '../stage/stage';
-import TableIcon from '../qbTableIcon/qbTableIcon';
+import Icon, {AVAILABLE_ICON_FONTS} from '../../../../reuse/client/src/components/icon/icon.js';
 import ReportStage from './reportStage';
 import ReportHeader from './reportHeader';
 import IconActions from '../actions/iconActions';
-import {Link} from 'react-router';
+import {Link} from 'react-router-dom';
 import Logger from '../../utils/logger';
 import QueryUtils from '../../utils/queryUtils';
 import NumberUtils from '../../utils/numberUtils';
@@ -100,8 +100,8 @@ const ReportRoute = React.createClass({
         const flux = this.getFlux();
         flux.actions.hideTopNav();
 
-        if (this.props.params) {
-            this.loadReportFromParams(this.props.params);
+        if (this.props.match.params) {
+            this.loadReportFromParams(this.props.match.params);
         }
     },
     getHeader() {
@@ -131,13 +131,13 @@ const ReportRoute = React.createClass({
 
     getStageHeadline() {
         const reportName = this.props.reportData && this.props.reportData.data && this.props.reportData.data.name;
-        const {appId, tblId} = this.props.params;
+        const {appId, tblId} = this.props.match.params;
         const tableLink = `${APP_ROUTE}/${appId}/table/${tblId}`;
         return (
             <div className="reportStageHeadline">
 
                 <div className="navLinks">
-                    {this.props.selectedTable && <Link className="tableHomepageIconLink" to={tableLink}><TableIcon icon={this.props.selectedTable.icon}/></Link>}
+                    {this.props.selectedTable && <Link className="tableHomepageIconLink" to={tableLink}><Icon iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY} icon={this.props.selectedTable.tableIcon}/></Link>}
                     {this.props.selectedTable && <Link className="tableHomepageLink" to={tableLink}>{this.props.selectedTable.name}</Link>}
                 </div>
 
@@ -148,12 +148,12 @@ const ReportRoute = React.createClass({
     },
 
     render() {
-        if (_.isUndefined(this.props.params) ||
-            _.isUndefined(this.props.params.appId) ||
-            _.isUndefined(this.props.params.tblId) ||
-            (_.isUndefined(this.props.params.rptId) && _.isUndefined(this.props.rptId))
+        if (_.isUndefined(this.props.match.params) ||
+            _.isUndefined(this.props.match.params.appId) ||
+            _.isUndefined(this.props.match.params.tblId) ||
+            (_.isUndefined(this.props.match.params.rptId) && _.isUndefined(this.props.rptId))
         ) {
-            logger.info("the necessary params were not specified to reportRoute render params=" + simpleStringify(this.props.params));
+            logger.info("the necessary params were not specified to reportRoute render params=" + simpleStringify(this.props.match.params));
             return null;
         } else {
             return (<div className="reportContainer">
@@ -166,7 +166,7 @@ const ReportRoute = React.createClass({
                 {this.getHeader()}
 
                 <ReportToolsAndContent
-                    params={this.props.params}
+                    params={this.props.match.params}
                     reportData={this.props.reportData}
                     appUsers={this.props.appUsers}
                     pendEdits={this.props.pendEdits}
@@ -179,6 +179,7 @@ const ReportRoute = React.createClass({
                     selectedRows={this.props.reportData.selectedRows}
                     scrollingReport={this.props.scrollingReport}
                     loadDynamicReport={this.loadDynamicReport}
+                    noRowsUI={true}
                 />
             </div>);
         }

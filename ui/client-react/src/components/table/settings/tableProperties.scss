@@ -1,0 +1,45 @@
+@import '../../../../../reuse/client/src/assets/css/qbVariables';
+
+.settingsAppShell {
+    .pageActions {
+        .deleteTable {
+            color: $color-red-700;
+        }
+    }
+    .tableSettingsStage {
+        font-size: 24px;
+        color: $stage-headline-color;
+        .qbIcon {
+            font-size: 28px;
+            margin-right: 10px;
+        }
+        & > * {
+            vertical-align: middle;
+        }
+    }
+    .tableInfoPanel {
+        margin: 15px;
+        max-width: 776px;
+
+        .tableInfoButtons {
+            float: right;
+
+            &.open {
+                opacity: 1;
+                transition: all 300ms ease-in;
+            }
+            &.closed {
+                opacity: 0;
+                transition: all 300ms ease-in;
+            }
+
+            & > * {
+                vertical-align: middle;
+            }
+
+            .primaryButton {
+                margin-left: 5px;
+            }
+        }
+    }
+}

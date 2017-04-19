@@ -226,14 +226,7 @@ describe('ReportGrid', () => {
                 editingIndex: null,
                 editingId: null,
                 expectedValue: testRecordId
-            },
-            {
-                description: 'returns the current record id if a record is being edited according to the reportDataStore (applies for new records, see comments in method on reportGrid)',
-                pendEdits: null,
-                editingIndex: testRecordId,
-                editingId: testRecordId,
-                expectedValue: testRecordId
-            },
+            }
         ];
 
         testCases.forEach(testCase => {
@@ -254,7 +247,13 @@ describe('ReportGrid', () => {
     describe('QbGrid props test', () => {
         const testColumns = [1, 2, 3];
         const isInlineEditOpen = true;
-        const pendEdits = {isInlineEditOpen: isInlineEditOpen, currentEditingRecordId: testRecordId, errors: ['an error'], ok: false, saving: true};
+        const pendEdits = {
+            isInlineEditOpen: isInlineEditOpen,
+            currentEditingRecordId: testRecordId,
+            errors: ['an error'],
+            ok: false,
+            saving: true
+        };
         const selectedRows = [4];
         const appId = 'appId';
         const tblId = 'tblId';
@@ -265,8 +264,16 @@ describe('ReportGrid', () => {
         let phase1 = undefined;
 
         beforeAll(() => {
-            ReportGridRewireAPI.__Rewire__('ReportRowTransformer', {transformRecordsForGrid() {return testRecords;}});
-            ReportGridRewireAPI.__Rewire__('ReportColumnTransformer', {transformColumnsForGrid() {return testColumns;}});
+            ReportGridRewireAPI.__Rewire__('ReportRowTransformer', {
+                transformRecordsForGrid() {
+                    return testRecords;
+                }
+            });
+            ReportGridRewireAPI.__Rewire__('ReportColumnTransformer', {
+                transformColumnsForGrid() {
+                    return testColumns;
+                }
+            });
         });
 
         afterAll(() => {
@@ -370,6 +377,37 @@ describe('ReportGrid', () => {
                 onCellClickEditIcon: instance.startEditingRow,
                 validateFieldValue: actions.handleValidateFieldValue
             });
+        });
+
+        it('renders the no rows present UI', () => {
+            phase1 = true;
+            component = shallow(<UnconnectedReportGrid
+                {...requiredProps}
+                {...actions}
+                columns={testColumns}
+                records={[]}
+                isInlineEditOpen={isInlineEditOpen}
+                record={[{pendEdits}]}
+                loading={false}
+                selectedRows={selectedRows}
+                editErrors={pendEdits}
+                appId={appId}
+                tblId={tblId}
+                rptId={rptId}
+                sortFids={sortFids}
+                appUsers={testAppUsers}
+                phase1={phase1}
+                noRowsUI={true}
+            />);
+            instance = component.instance();
+
+            // grid should not be present
+            let qbGrid = component.find(QbGrid);
+            expect(qbGrid.length).toBe(0);
+
+            // check for 'no rows' element
+            let noRows = component.find(".noRowsExist");
+            expect(noRows.length).toBe(1);
         });
     });
 });

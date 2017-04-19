@@ -47,14 +47,14 @@ let NavWrapper = React.createClass({
 
         this.props.flux.actions.loadApps(true);
 
-        if (this.props.params.appId) {
-            this.props.flux.actions.selectAppId(this.props.params.appId);
+        if (this.props.match.params.appId) {
+            this.props.flux.actions.selectAppId(this.props.match.params.appId);
 
-            this.props.dispatch(FeatureSwitchActions.getStates(this.props.params.appId));
+            this.props.dispatch(FeatureSwitchActions.getStates(this.props.match.params.appId));
 
-            if (this.props.params.tblId) {
-                this.props.flux.actions.selectTableId(this.props.params.tblId);
-                this.props.dispatch(ReportActions.loadReports(CONTEXT.REPORT.NAV_LIST, this.props.params.appId, this.props.params.tblId));
+            if (this.props.match.params.tblId) {
+                this.props.flux.actions.selectTableId(this.props.match.params.tblId);
+                this.props.dispatch(ReportActions.loadReports(CONTEXT.REPORT.NAV_LIST, this.props.match.params.appId, this.props.match.params.tblId));
             } else {
                 this.props.flux.actions.selectTableId(null);
             }
@@ -77,13 +77,13 @@ let NavWrapper = React.createClass({
         window.removeEventListener('resize', this.handleResize);
     },
     componentWillReceiveProps(props) {
-        if (props.params.appId) {
-            if (this.props.params.appId !== props.params.appId) {
-                this.props.flux.actions.selectAppId(props.params.appId);
+        if (props.match.params.appId) {
+            if (this.props.match.params.appId !== props.match.params.appId) {
+                this.props.flux.actions.selectAppId(props.match.params.appId);
                 // TODO: once the above SELECT_TABLE action is migrated to redux, the search store should
                 // TODO: listen for the new event to clear out any input.
                 //this.props.dispatch(SearchActions.clearSearchInput());
-                this.props.dispatch(FeatureSwitchActions.getStates(props.params.appId));
+                this.props.dispatch(FeatureSwitchActions.getStates(props.match.params.appId));
             }
         } else {
             this.props.flux.actions.selectAppId(null);
@@ -92,14 +92,14 @@ let NavWrapper = React.createClass({
             //this.props.dispatch(SearchActions.clearSearchInput());
         }
 
-        if (this.props.params.appId !== props.params.appId) {
-            this.props.flux.actions.selectAppId(props.params.appId);
-            this.props.dispatch(FeatureSwitchActions.getStates(props.params.appId));
+        if (this.props.match.params.appId !== props.match.params.appId) {
+            this.props.flux.actions.selectAppId(props.match.params.appId);
+            this.props.dispatch(FeatureSwitchActions.getStates(props.match.params.appId));
         }
-        if (props.params.tblId) {
-            if (this.props.params.tblId !== props.params.tblId) {
-                this.props.flux.actions.selectTableId(props.params.tblId);
-                this.props.dispatch(ReportActions.loadReports(CONTEXT.REPORT.NAV_LIST, props.params.appId, props.params.tblId));
+        if (props.match.params.tblId) {
+            if (this.props.match.params.tblId !== props.match.params.tblId) {
+                this.props.flux.actions.selectTableId(props.match.params.tblId);
+                this.props.dispatch(ReportActions.loadReports(CONTEXT.REPORT.NAV_LIST, props.match.params.appId, props.match.params.tblId));
             }
         } else {
             this.props.flux.actions.selectTableId(null);

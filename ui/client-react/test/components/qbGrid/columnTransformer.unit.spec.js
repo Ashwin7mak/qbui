@@ -96,7 +96,7 @@ describe('ColumnTransformer', () => {
                     label: (
                         <span className="">
                             <span className="">
-                                {testHeaderLabel}
+                                {testHeaderLabel.toUpperCase()}
                             </span>
                             <div className="headerMenu">
                                 <TestHeaderComponent {...testHeaderProps} />

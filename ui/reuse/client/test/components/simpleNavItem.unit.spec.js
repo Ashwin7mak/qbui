@@ -3,7 +3,7 @@ import {shallow} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
 
 import SimpleNavItem from '../../src/components/simpleNavItem/simpleNavItem';
-import {Link} from 'react-router';
+import {Link} from 'react-router-dom';
 
 let component;
 

@@ -1,5 +1,5 @@
 import React, {PropTypes, Component} from 'react';
-import {Link} from 'react-router';
+import {Link} from 'react-router-dom';
 import Icon, {AVAILABLE_ICON_FONTS} from '../icon/icon';
 import Tooltip from '../tooltip/tooltip';
 
@@ -197,7 +197,10 @@ SimpleNavItem.propTypes = {
 
     /**
      * The text that displays on the nav item */
-    title: PropTypes.string,
+    title: React.PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.element
+    ]),
 
     /**
      * Optionally pass a callback that will be called when the nav item is clicked. It receives the click event as its only argument. */
