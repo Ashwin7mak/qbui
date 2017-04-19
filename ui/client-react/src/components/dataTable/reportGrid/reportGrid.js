@@ -15,7 +15,6 @@ import ReportCell from './reportCell';
 
 import './reportGrid.scss';
 
-
 export const ReportGrid = React.createClass({
     propTypes: {
         appId: PropTypes.string,
@@ -270,59 +269,6 @@ export const ReportGrid = React.createClass({
         let pendEdits = this.getPendEdits();
         let isInLineEditOpen = (pendEdits.isInlineEditOpen === true);
 
-
-        return <QbGrid
-            numberOfColumns={_.isArray(this.props.columns) ? this.props.columns.length : 0}
-            columns={this.transformColumns()}
-            rows={transformedRecords}
-
-            loading={this.props.loading}
-            appUsers={this.props.appUsers}
-            phase1={this.props.phase1}
-            showRowActionsColumn={!this.props.phase1}
-
-            onStartEditingRow={this.startEditingRow}
-            editingRowId={editingRecordId}
-            // TODO:: Refactor out need for this prop once AgGrid is removed. https://quickbase.atlassian.net/browse/MB-1920
-            // Currently required because editingRowId could be null for a new record so it is difficult to check if
-            // in editing mode with only that property. Future implementation might set a new record's id to 0 or 'new'
-            //isInlineEditOpen={this.props.isInlineEditOpen}
-            isInlineEditOpen={isInLineEditOpen}
-            selectedRows={this.props.selectedRows}
-            areAllRowsSelected={ReportUtils.areAllRowsSelected(transformedRecords, this.props.selectedRows)}
-            onClickToggleSelectedRow={this.props.toggleSelectedRow}
-            onClickEditIcon={this.props.openRecordForEdit}
-            onClickDeleteIcon={this.onClickDelete}
-            onClickToggleSelectAllRows={this.toggleSelectAllRows}
-            onCancelEditingRow={this.props.onEditRecordCancel}
-            editingRowErrors={this.props.editErrors ? this.props.editErrors.errors : []}
-            isEditingRowValid={isRecordValid}
-            onClickAddNewRow={this.props.onRecordNewBlank}
-            onClickSaveRow={this.props.onClickRecordSave}
-            //isEditingRowSaving={_.has(this.props, 'pendEdits.saving') ? this.props.pendEdits.saving : false}
-            isEditingRowSaving={_.has(pendEdits, 'saving') ? pendEdits.saving : false}
-            cellRenderer={ReportCell}
-            commonCellProps={{
-                appUsers: this.props.appUsers,
-                onCellChange: this.onCellChange,
-                onCellBlur: this.onCellBlur,
-                onCellClick: this.props.onCellClick,
-                onCellClickEditIcon: this.startEditingRow,
-                validateFieldValue: this.props.handleValidateFieldValue,
-                //isInlineEditOpen: this.props.isInlineEditOpen
-                isInlineEditOpen: isInLineEditOpen,
-                phase1: this.props.phase1
-            }}
-            compareCellChanges={FieldUtils.compareFieldValues}
-            menuComponent={ReportColumnHeaderMenu}
-            menuProps={{
-                appId: this.props.appId,
-                tblId: this.props.tblId,
-                rptId: this.props.rptId,
-                sortFids: this.props.sortFids
-            }}
-        />;
-
         if (!this.props.noRowsUI || this.props.loading || transformedRecords.length > 0) {
 
             return (
@@ -373,7 +319,6 @@ export const ReportGrid = React.createClass({
             // instead of grid, render a "no records" UI
             return this.renderNoRowsExist();
         }
-
     }
 });
 
