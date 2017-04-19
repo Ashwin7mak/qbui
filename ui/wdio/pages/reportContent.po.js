@@ -304,7 +304,6 @@
             var getAllCheckBoxs = browser.elements('input.selectRowCheckbox').value.filter(function(checkbox) {
                 return checkbox.index === recordRowIndex;
             });
-
             if (getAllCheckBoxs !== []) {
                 //Click on filtered save button
                 getAllCheckBoxs[0].click();
@@ -324,60 +323,43 @@
         // TODO: Refactor these once we port over the delete record tests
         // Checking for the deleted record on the first page
 
-        checkForTheAbsenceDeletedRecordOnTheCurrentPage:
-        {
-            value: function(deletedRecord)            {
-
-           //this.qbGridRecordElList.then(function(recordsNo) {
+        checkForTheAbsenceDeletedRecordOnTheCurrentPage: {
+            value: function(deletedRecord) {
                 console.log('Deleted record: ' + deletedRecord);
-
-               // for (var i = 0; i < this.qbGridRecordElList.value.length; i++) {
                 for (var i = 1; i < browser.elements('.qbRow').value.length; i++) {
-
                     console.log('Row' + i + ': ' + this.getRecordValues(i));
                     expect(deletedRecord).not.toEqual(this.getRecordValues(i));
                 }
-           //});
-
             }},
-
         checkForThePresenceDeletedRecordOnTheCurrentPage:
         {
-            value: function(deletedRecord)                {
-                    //this will check each row
+            value: function(deletedRecord) {
+                //this will check each row
                 for (var i = 1; i < browser.elements('.qbRow').value.length; i++) {
-
                     if (this.compareTwoRows(deletedRecord, this.getRecordValues(i))) {
                         return true;
                     }
                 }
-
                 return false;
-
             }},
-
         compareTwoRows:
         {
-            value: function(rowA, rowB)                {
-
+            value: function(rowA, rowB) {
                 expect(rowA.length).toBe(rowB.length);
-                for (var i = 1; i < rowA.length; i++)                    {
-                        //comparing two cells from two rows
-                    if (rowA[i] !== rowB[i])                        {
+                for (var i = 1; i < rowA.length; i++) {
+                    //comparing two cells from two rows
+                    if (rowA[i] !== rowB[i]) {
                         return false;
                     }
                 }
                 return true;
-
             }
         },
-
         // Record Row to be selected:
         selectRow: {value: function(recordRow) {
             this.recordCheckBoxes.value[recordRow].click();
             this.deleteIcon.waitForExist();
         }},
     });
-
     module.exports = ReportContentPage;
 }());
