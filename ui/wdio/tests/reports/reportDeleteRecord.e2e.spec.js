@@ -12,7 +12,7 @@
     let reportInLineEditPO = requirePO('reportInLineEdit');
     let reportNavPO = requirePO('reportNavigation');
 
-    describe('Reports Page - Add Record Tests', function() {
+    describe('Reports Page - Delete Record Tests', function() {
         var realmName;
         var realmId;
         var testApp;
@@ -43,7 +43,6 @@
 
             var deletedRecord;
             var rowToBeDeleted = 2;
-            var successMessage = "1 Records deleted";
             var reportCount = e2eConsts.MAX_PAGING_SIZE - recOffset;
 
             /**
@@ -61,22 +60,14 @@
                 //Step 0: Get the row data for the delete verification
                 deletedRecord = reportContentPO.getRecordValues(rowToBeDeleted);
                 expect(reportNavPO.recordsCount.getText()).toEqual(reportCount + " records");
-
                 // Step 1: Select the checkbox and click on delete icon
                 reportContentPO.selectRow(rowToBeDeleted);
                 reportContentPO.deleteIcon.click();
-
                 // Step 2: Click on delete button from the dialogue box
                 reportContentPO.deleteButton.click();
-
-                // Step 3: Check for the success message '1 Records Deleted'
-                reportInLineEditPO.assertSuccessMessage(successMessage);
-                reportContentPO.waitForReportContent();
-
-                // Step 4: Check for the deleted record on the first page
+                // Step 3: Check for the deleted record on the first page
                 reportContentPO.checkForTheAbsenceDeletedRecordOnTheCurrentPage(deletedRecord);
-
-                // Step 5: Check if the record count is reduced or not after the deletion
+                // Step 4: Check if the record count is reduced or not after the deletion
                 expect(reportNavPO.recordsCount.getText()).toEqual(reportCount - 1 + " records") ;
             });
 
@@ -88,14 +79,11 @@
                 //Step 0: Get the row data for the delete verification
                 deletedRecord = reportContentPO.getRecordValues(rowToBeDeleted);
                 expect(reportNavPO.recordsCount.getText()).toEqual(reportCount - 1 + " records");
-
                 // Step 1: Select the DropDown menu and clicking on delete icon
                 reportContentPO.dropDownIcon.click();
                 reportContentPO.dropDownDeleteIcon.click();
-
                 // Step 2: Click on delete button from the dialogue box
                 reportContentPO.dontDeleteButton.click();
-
                 // Step 3: Check for the deleted record on the first page
                 reportContentPO.checkForThePresenceDeletedRecordOnTheCurrentPage(deletedRecord);
             });

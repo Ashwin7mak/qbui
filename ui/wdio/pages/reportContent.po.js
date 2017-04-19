@@ -321,8 +321,10 @@
         }},
 
         // TODO: Refactor these once we port over the delete record tests
-        // Checking for the deleted record on the first page
-
+        /**
+         * Checking for the deleted record on the first page
+         * @param deletedRecord
+         */
         checkForTheAbsenceDeletedRecordOnTheCurrentPage: {
             value: function(deletedRecord) {
                 console.log('Deleted record: ' + deletedRecord);
@@ -331,6 +333,10 @@
                     expect(deletedRecord).not.toEqual(this.getRecordValues(i));
                 }
             }},
+        /**
+         * Checks for the presence of the deleted record on the current page
+         * @param deletedRecord
+         */
         checkForThePresenceDeletedRecordOnTheCurrentPage:
         {
             value: function(deletedRecord) {
@@ -342,6 +348,10 @@
                 }
                 return false;
             }},
+        /**
+         * Compares rows to check for the deleted record, test fails if the deleted record is present
+         * @param rowA, rowB
+         */
         compareTwoRows:
         {
             value: function(rowA, rowB) {
