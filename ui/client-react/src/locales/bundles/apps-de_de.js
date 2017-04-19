@@ -114,7 +114,12 @@ export default {
             searchNoMatch: "Keiner stimmt mit"
         },
         grid: {
-            no_data: "Es liegen keine Daten zum Anzeigen."
+            no_data: "Es liegen keine Daten zum Anzeigen.",
+            no_filter_matches: "Keine Datensätze übereinstimmen, was du suchst. Versuchen Sie, nach einer anderen Art von Rekord zu suchen.",
+            no_rows: "TheEs gibt keine Aufzeichnungen, um jetzt zu sehen.",
+            no_rows_but: "Es gibt keine Aufzeichnungen, aber du kannst ",
+            no_rows_create_link:  "erstelle einen"
+
         },
         globalActions: {
             user: "Benutzer",
@@ -631,6 +636,12 @@ export default {
             validateTableNameEmpty: "Kann keine Tabelle erstellen",
             validateTableNameExists: "Der Tabellenname muss für diese App eindeutig sein",
             validateRecordNameEmpty: "Tabellenname darf nicht leer sein",
+
+            homePageInitialTitle: "Beginnen Sie mit Ihrem Tisch",
+            homePageInitialDescription: "Wir haben ein paar Berichte erstellt, um mit deiner neuen Tabelle zu gehen, damit du mit dem Hinzufügen von Datensätzen beginnen kannst",
+            homePageAddRecordButton: "Fügen Sie einen Datensatz hinzu",
+            homePageStillBuilding: "Noch gebaut  ",
+            homePageCreateAnother: "Erstellen Sie eine andere Tabelle"
         },
         iconChooser: {
             searchPlaceholder: "Tabellensymbole suchen ......"
