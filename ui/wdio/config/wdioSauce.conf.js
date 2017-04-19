@@ -20,11 +20,7 @@ exports.config = {
         // Uncomment this if you are running Sauce against your local dev
         //dns             : '127.0.0.1',
         // Use a random int to make the port unique between Jenkins jobs
-        port            : 4400 + (Math.floor((Math.random() * (100 - 1) + 1))),
-        // retry to establish a tunnel multiple times. (optional)
-        connectRetries: 3,
-        // time to wait between connection retries in ms. (optional)
-        connectRetryTimeout: 5000
+        port            : 4400 + (Math.floor((Math.random() * (100 - 1) + 1)))
     },
     //
     //
@@ -98,7 +94,11 @@ exports.config = {
             breakpointSize: 'xlarge',
             // These two values enable parallel testing which will run a spec file per instance
             shardTestFiles: true,
-            maxInstances: 4
+            maxInstances: 4,
+            // retry to establish a tunnel multiple times. (optional)
+            connectRetries: 3,
+            // time to wait between connection retries in ms. (optional)
+            connectRetryTimeout: 5000
         },
         // {
         //     platform: 'OS X 10.11',
@@ -129,7 +129,11 @@ exports.config = {
             breakpointSize: 'xlarge',
             // These two values enable parallel testing which will run a spec file per instance
             shardTestFiles: true,
-            maxInstances: 4
+            maxInstances: 4,
+            // retry to establish a tunnel multiple times. (optional)
+            connectRetries: 3,
+            // time to wait between connection retries in ms. (optional)
+            connectRetryTimeout: 5000
         },
         {
             platform: 'Windows 10',
@@ -145,7 +149,11 @@ exports.config = {
             breakpointSize: 'xlarge',
             // These two values enable parallel testing which will run a spec file per instance
             shardTestFiles: true,
-            maxInstances: 4
+            maxInstances: 4,
+            // retry to establish a tunnel multiple times. (optional)
+            connectRetries: 3,
+            // time to wait between connection retries in ms. (optional)
+            connectRetryTimeout: 5000
         }
     ],
     //
