@@ -273,7 +273,7 @@ const report = (state = [], action) => {
     case types.HIDE_COLUMN: {
         let currentReport = getReportFromState(action.id);
         if (currentReport) {
-            currentReport.data.columns.map(column => {
+            currentReport.data.columns.forEach(column => {
                 if (column.fieldDef.id === action.content.columnId) {
                     column.fieldDef.isHidden = true;
                 }
