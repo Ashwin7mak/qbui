@@ -58,6 +58,9 @@ exports.config = {
         tables: [
             './ui/wdio/tests/tables/*.e2e.spec.js'
         ],
+        relationships: [
+            './ui/wdio/tests/relationships/*.e2e.spec.js'
+        ],
         dataGen: [
             // Make sure to uncomment the 'after' hook below if you want to save the test data!
             './ui/wdio/dataGen/wdioDataGen.e2e.spec.js'
