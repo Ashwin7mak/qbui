@@ -340,7 +340,7 @@ render((
                  the route has to come after specific routes
                  */}
                 {routes.map((route, i) => (
-                        <RouteWithSubRoutes key={i} {...route} />
+                    RouteWithSubRoutes(route, i)
                     )
                 )}
             </Switch>

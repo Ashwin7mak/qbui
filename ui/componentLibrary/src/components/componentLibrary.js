@@ -76,7 +76,7 @@ var ComponentLibraryWrapper = React.createClass({
                     <Switch>
                         { this.props.routes !== undefined ? this.props.routes.map((route, i) => {
                             return (
-                                <RouteWithSubRoutes key={i} {...route} />
+                                RouteWithSubRoutes(route, i)
                             );
                         }) : ''}
                     </Switch>
