@@ -9,7 +9,7 @@ describe('Build drop down action functions', () => {
     let component;
     const sampleTable = {id: '123', icon: 'icon', name: 'name'};
     const sampleApp = {id: 'xyz', tables: [sampleTable]};
-    const router = {
+    const history = {
         push: () =>{}
     };
     const callbacks = {
@@ -41,7 +41,7 @@ describe('Build drop down action functions', () => {
     });
 
     it('test table settings link', () => {
-        component = TestUtils.renderIntoDocument(<BuilderDropDownAction selectedApp={sampleApp} selectedTable={sampleTable} router={router}/>);
+        component = TestUtils.renderIntoDocument(<BuilderDropDownAction selectedApp={sampleApp} selectedTable={sampleTable} history={history}/>);
         let gearIcon = TestUtils.scryRenderedDOMComponentsWithClass(component, "globalActionLink");
         Simulate.click(gearIcon[0]);
         let tableSettingsLink = TestUtils.scryRenderedDOMComponentsWithClass(component, "modifyTableSettings");

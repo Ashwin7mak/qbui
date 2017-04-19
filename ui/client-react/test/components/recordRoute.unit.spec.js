@@ -157,13 +157,13 @@ describe('RecordRoute', () => {
                 }
             };
 
-            let router = [];
+            let history = [];
             let expectedRouter = [];
 
             component = TestUtils.renderIntoDocument(
                 <MemoryRouter>
                     <Provider store={store}>
-                        <RecordRoute match={{params}} reportData={reportData} flux={flux} router={router} {...reduxProps} selectedTable={{"name": "TestTable"}}/>
+                        <RecordRoute match={{params}} reportData={reportData} flux={flux} history={history} {...reduxProps} selectedTable={{"name": "TestTable"}}/>
                     </Provider>
                 </MemoryRouter>);
             expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
@@ -191,7 +191,7 @@ describe('RecordRoute', () => {
             TestUtils.Simulate.click(returnToReport[0]);
             expectedRouter.push(`${APP_ROUTE}/1/table/2/report/3`);
 
-            expect(router).toEqual(expectedRouter);
+            expect(history).toEqual(expectedRouter);
         });
     });
 });
