@@ -176,8 +176,10 @@
 
             //Step 7 - Verify record edited with expected values
             var recordValues = reportContentPO.getRecordValues(5);
-            expect(recordValues[2]).toBe('test@gmail.com');
-            expect(recordValues[3]).toBe('http://www.yahoo.com');
+            console.log("the edited recordValues are: "+recordValues);
+            expect(recordValues.indexOf("testTextValue") > -1).toBe(true);
+            expect(recordValues.indexOf("test@gmail.com") > -1).toBe(true);
+            expect(recordValues.indexOf("http://www.yahoo.com") > -1).toBe(true);
 
             // Step 8 - Reload the report after saving row as the row is added at the last page
             e2ePageBase.loadReportByIdInBrowser(realmName, appId, tableId, reportId);
