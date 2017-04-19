@@ -36,6 +36,7 @@ import Icon from '../../../../reuse/client/src/components/icon/icon';
 import TableCreationDialog from '../table/tableCreationDialog';
 import AppUtils from '../../utils/appUtils';
 
+import {NEW_TABLE_IDS_KEY} from '../../constants/localStorage';
 import {updateFormRedirectRoute} from '../../actions/formActions';
 // This shared view with the server layer must be loaded as raw HTML because
 // the current backend setup cannot handle a react component in a common directory. It is loaded
@@ -96,7 +97,7 @@ export const Nav = React.createClass({
 
         this.props.updateFormRedirectRoute(_.get(this.props, 'location.pathname'));
 
-        this.props.router.push(link);
+        this.props.history.push(link);
     },
 
     getTopGlobalActions() {
@@ -118,7 +119,7 @@ export const Nav = React.createClass({
                                app={selectedApp}>
             {isAdmin ?
                     <BuilderDropDownAction
-                                router={this.props.router}
+                                history={this.props.history}
                                 selectedApp={selectedApp}
                                 selectedTable={this.getSelectedTable(this.state.apps.selectedTableId)}
                                 recId={recordId}
@@ -345,7 +346,7 @@ export const Nav = React.createClass({
 
             {this.props.match.params && this.props.match.params.appId &&
                 <RecordTrowser visible={this.props.shell.trowserOpen && this.props.shell.trowserContent === TrowserConsts.TROWSER_EDIT_RECORD}
-                               router={this.props.router}
+                               history={this.props.history}
                                editForm={this.getEditFormFromProps()}
                                appId={this.props.match.params.appId}
                                tblId={this.props.match.params.tblId}
@@ -362,7 +363,7 @@ export const Nav = React.createClass({
 
             {this.props.match.params && this.props.match.params.appId &&
                 <ReportManagerTrowser visible={this.props.shell.trowserOpen && this.props.shell.trowserContent === TrowserConsts.TROWSER_REPORTS}
-                                      router={this.props.router}
+                                      router={this.props.history}
                                       selectedTable={this.getSelectedTable(reportsList.tblId)}
                                       filterReportsName={this.state.nav.filterReportsName}
                                       reportsData={reportsList}
@@ -437,10 +438,20 @@ export const Nav = React.createClass({
     /**
      * new table was created, ensure it is displayed available in the UI
      */
-    tableCreated() {
+    tableCreated(tblId) {
         const flux = this.getFlux();
 
         flux.actions.loadApps(true);
+
+        // store any new table IDs for duration of session for table homepage
+        if (window.sessionStorage) {
+            let newTables = window.sessionStorage.getItem(NEW_TABLE_IDS_KEY);
+
+            let tableIds = newTables ? newTables.split(",") : [];
+            tableIds.push(tblId);
+
+            window.sessionStorage.setItem(NEW_TABLE_IDS_KEY, tableIds.join(","));
+        }
     },
 
     onSelectItem() {

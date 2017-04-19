@@ -74,9 +74,9 @@ export const RecordRoute = React.createClass({
 
         const viewData = this.getViewFormFromProps();
 
-        if (this.props.match.params.appId !== prev.params.appId ||
-            this.props.match.params.tblId !== prev.params.tblId ||
-            this.props.match.params.recordId !== prev.params.recordId ||
+        if (this.props.match.params.appId !== prev.match.params.appId ||
+            this.props.match.params.tblId !== prev.match.params.tblId ||
+            this.props.match.params.recordId !== prev.match.params.recordId ||
             (viewData && viewData.syncLoadedForm)) {
 
             this.loadRecordFromParams(this.props.match.params);
@@ -111,7 +111,7 @@ export const RecordRoute = React.createClass({
         // use the route parameters to build the URI
         const {appId, tblId, rptId} = this.props.match.params;
         const link = `${APP_ROUTE}/${appId}/table/${tblId}/report/${rptId}`;
-        this.props.router.push(link);
+        this.props.history.push(link);
     },
 
     /**
@@ -173,7 +173,7 @@ export const RecordRoute = React.createClass({
 
         const {appId, tblId, rptId} = this.props.reportData;
         const link = `${APP_ROUTE}/${appId}/table/${tblId}/report/${rptId}/record/${record.previousRecordId}`;
-        this.props.router.push(link);
+        this.props.history.push(link);
     },
 
     /**
@@ -185,7 +185,7 @@ export const RecordRoute = React.createClass({
 
         const {appId, tblId, rptId} = this.props.reportData;
         const link = `${APP_ROUTE}/${appId}/table/${tblId}/report/${rptId}/record/${record.nextRecordId}`;
-        this.props.router.push(link);
+        this.props.history.push(link);
     },
 
     getTitle() {
@@ -268,11 +268,11 @@ export const RecordRoute = React.createClass({
      *
      */
     approveRecord()  {
-        let appId = this.props.params.appId;
-        let tblId = this.props.params.tblId;
-        let recId = this.props.params.recordId;
+        let appId = this.props.match.params.appId;
+        let tblId = this.props.match.params.tblId;
+        let recId = this.props.match.params.recordId;
         AutomationUtils.approveRecord(appId, tblId, recId).then(() => {
-            this.loadRecordFromParams(this.props.params);
+            this.loadRecordFromParams(this.props.match.params);
         });
     },
 
