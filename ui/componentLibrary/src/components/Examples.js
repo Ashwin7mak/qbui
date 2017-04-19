@@ -87,7 +87,7 @@ export default {
     Stage: StageExample,
     Tooltip: TooltipExample,
     StandardLeftNav: StandardLeftNavExample,
-    RowActions: RowActionsExample,
+    // RowActions: RowActionsExample,
     // END OF EXPORT
     // The comment above is used for a grunt task. Please do not delete.
 };
