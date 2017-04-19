@@ -344,7 +344,7 @@ export const UnconnectedReportToolsAndContent = React.createClass({
                 this.getPageUsingOffsetMultiplicant(0);
             }
 
-            let {appId, tblId, rptId, reportData:{selections, ...otherReportData}} = this.props;
+            let {appId, tblId, rptId, reportData: {selections, ...otherReportData}} = this.props;
 
             let fields = this.props.fields;
             let primaryKeyName = FieldUtils.getPrimaryKeyFieldName(fields);
@@ -390,8 +390,9 @@ export const UnconnectedReportToolsAndContent = React.createClass({
                                        primaryKeyName={primaryKeyName}
                                        flux={this.getFlux()}
                                        gridOptions={this.props.gridOptions}
+                                       onAddNewRecord={this.editNewRecord}
                                        {...this.props}
-                                       // until all sub-components reference store directly, need to explicitly override this.props.fields
+                            // until all sub-components reference store directly, need to explicitly override this.props.fields
                                        fields={fields}/>
 
                         {!this.props.scrollingReport && <AddRecordButton onClick={this.editNewRecord}/>}
