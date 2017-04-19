@@ -1,7 +1,7 @@
 //these two imports are needed for safari and iOS to work with internationalization
 import React from "react";
 import {render} from "react-dom";
-import {Router as Router, Route, Switch} from "react-router-dom";
+import {Router, Switch} from "react-router-dom";
 import AppHistory from '../globals/appHistory';
 import PerfLogUtils from "../utils/perf/perfLogUtils";
 import NavWrapper from "../components/nav/navWrapper";
@@ -120,7 +120,7 @@ render((
 
 
 /**
- * our route config
+ * routes config
  * each entry is a route config that contains:
  *          path -  string the URL path pattern to match (see https://www.npmjs.com/package/path-to-regexp for the patterns supported )
  *                  if path is not included or en all routes will match the item
@@ -129,17 +129,41 @@ render((
  *          props - object with any properties to be included when rendering the component (optional)
  **/
 
-const routes = [
+const navChildRoutes =  [
     {
-        path: APPS_ROUTE,
-        component: ConnectedNav,
-        routes: [
-            {
-                path: '/?',
-                component: AppsRoute
-            }
-        ]
+        path: `${APP_ROUTE}/:appId/table/:tblId/report/:rptId/record/:recordId`,
+        exact: true,
+        component: RecordRoute
     },
+    {
+        path: `${APP_ROUTE}/:appId/table/:tblId/report/:rptId/`,
+        exact: true,
+        component: ReportRoute
+    },
+    {
+        path: `${APP_ROUTE}/:appId/table/:tblId/record/:recordId`,
+        exact: true,
+        component: RecordRoute
+    },
+    {
+        path: `${APP_ROUTE}/:appId/table/:tblId`,
+        exact: true,
+        component: TableHomePageRoute
+    },
+    {
+        path: `${APP_ROUTE}/:appId/users`,
+        exact: true,
+        component: AppUsersRoute
+    },
+    {
+        path: `${APP_ROUTE}/:appId`,
+        exact: true,
+        component: AppHomePageRoute
+    }
+];
+
+const routes = [
+
     {
         path: ADMIN_ROUTE,
         component: ConnectedNav,
@@ -155,32 +179,45 @@ const routes = [
         ]
     },
     {
-        path: `${APP_ROUTE}/:appId`,
+        path: `${APP_ROUTE}/:appId/users`,
         component: ConnectedNav,
         routes: [
             {
-                path: `${APP_ROUTE}/:appId/table/:tblId/report/:rptId/record/:recordId`,
-                component: RecordRoute
-            },
-            {
-                path: `${APP_ROUTE}/:appId/table/:tblId/report/:rptId/`,
-                component: ReportRoute
-            },
-            {
-                path: `${APP_ROUTE}/:appId/table/:tblId/record/:recordId`,
-                component: RecordRoute
-            },
-            {
-                path: `${APP_ROUTE}/:appId/table/:tblId`,
-                component: TableHomePageRoute
-            },
-            {
                 path: `${APP_ROUTE}/:appId/users`,
                 component: AppUsersRoute
-            },
+            }
+        ]
+    },
+    {
+        path: `${APP_ROUTE}/:appId/(table)?/:tblId?/(report)?/:reportId?/(record)?/(:recordId)?`,
+        component: ConnectedNav,
+        routes: navChildRoutes
+    },
+    {
+        path: `${APP_ROUTE}/:appId/(table)?/:tblId?/(record)?/(:recordId)?`,
+        component: ConnectedNav,
+        routes: navChildRoutes
+    },
+    {
+        path: `${APP_ROUTE}/:appId`,
+        exact: true,
+        component: ConnectedNav,
+        routes: [
             {
                 path: `${APP_ROUTE}/:appId`,
+                exact: true,
                 component: AppHomePageRoute
+            }
+        ]
+    },
+    {
+        path: APPS_ROUTE,
+        exact: true,
+        component: ConnectedNav,
+        routes: [
+            {
+                path: APPS_ROUTE,
+                component: AppsRoute
             }
         ]
     },
@@ -218,19 +255,16 @@ const routes = [
 render((
     <Provider store={store}>
         <Router history={history} createElement={createElementWithFlux} >
-            {/*<Switch>*/}
                 {/*  within Switch 1st match wins
                     includes all the above top level routes and passed on the child routes in the properties
                     note if an entry it is without a path to match
                      the route has to come after specific routes
                  */}
-            <div className="testapp">
-                {routes.map((route, i) => (
-                        <RouteWithSubRoutes key={i} {...route} />
-                    )
-                )}
-            </div>
-            {/*</Switch>*/}
+                <Switch>
+                    {routes.map((route, i) =>
+                        (RouteWithSubRoutes(route, i))
+                    )}
+                </Switch>
         </Router>
     </Provider>
 ), document.getElementById('content'));
