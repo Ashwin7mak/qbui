@@ -63,6 +63,10 @@ describe('Report actions', () => {
             () => {
                 expect(store.getActions()).toEqual(expectedActions);
                 done();
+            },
+            () => {
+                expect(false).toBe(true);
+                done();
             });
     });
 });
