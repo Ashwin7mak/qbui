@@ -34,6 +34,11 @@
             background-color: $propertyvalue-background-color;
             border: solid 1px $propertyvalue-border-color;
         }
+
+        textarea {
+            overflow-x: scroll;
+            overflow-wrap: normal;
+        }
     }
 
     .checkboxPropertyContainer {

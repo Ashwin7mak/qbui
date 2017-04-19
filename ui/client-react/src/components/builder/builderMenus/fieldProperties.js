@@ -3,6 +3,7 @@ import {connect} from 'react-redux';
 import TextFieldValueEditor from '../../fields/textFieldValueEditor';
 import CheckBoxFieldValueEditor from '../../fields/checkBoxFieldValueEditor';
 import MultiLinTextFieldValueEditor from '../../fields/multiLineTextFieldValueEditor';
+import FieldFormats from '../../../utils/fieldFormats';
 import Locale from '../../../../../reuse/client/src/locales/locale';
 import {updateField} from '../../../actions/fieldsActions';
 import {getSelectedFormElement} from '../../../reducers/forms';
@@ -95,7 +96,11 @@ export class FieldProperties extends Component {
     }
 
     /**
-     * onChange={(newValue) => this.updateFieldProps(newValue, 'name')}
+     * Generic method for any multichoice field property that needs to be rendered
+     * Using a MultiLinTextFieldValueEditor to keep it green and textarea built in support
+     * @param propertyTitle
+     * @param propertyValue
+     * @returns {XML}
      */
     createMultiChoiceTextPropertyContainer(propertyTitle, propertyValue) {
         return (
@@ -109,7 +114,10 @@ export class FieldProperties extends Component {
     }
 
     /**
-     *
+     * takes the array of choices objects and creates a string separated by newline characters to display each
+     * option on a separate line in the textarea
+     * @param choices
+     * @returns empty string OR string with each choice newline separated
      */
     buildMultiChoiceDisplayList(choices) {
         let list = "";
@@ -144,7 +152,7 @@ export class FieldProperties extends Component {
      *
      */
     findFieldProperties() {
-        if (this.props.selectedField.datatypeAttributes.type === "TEXT" && this.props.selectedField.multipleChoice && this.props.selectedField.multipleChoice.choices) {
+        if (FieldFormats.getFormatType(this.props.selectedField === (FieldFormats.TEXT_FORMAT_MULTICHOICE || FieldFormats.NUMBER_FORMAT_MULTICHOICE))) {
             let choices = this.buildMultiChoiceDisplayList(this.props.selectedField.multipleChoice.choices);
             return (this.createMultiChoiceTextPropertyContainer(Locale.getMessage('fieldPropertyLabels.multiChoice'), choices));
         }
@@ -173,7 +181,8 @@ export class FieldProperties extends Component {
         let choices = newValues.split("\n");
         let newChoices = [];
         choices.forEach(function(curChoice) {
-            newChoices.push({coercedValue: {value: curChoice}, displayValue: curChoice});
+            let coerced = FieldFormats.getFormatType(field) === FieldFormats.TEXT_FORMAT_MULTICHOICE ? curChoice : Number(curChoice);
+            newChoices.push({coercedValue: {value: coerced}, displayValue: curChoice});
         });
         field.multipleChoice.choices = newChoices;
         this.props.updateField(field, this.props.appId, this.props.tableId);
