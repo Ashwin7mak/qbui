@@ -2,7 +2,7 @@ import React, {PropTypes, Component} from "react";
 import {connect} from 'react-redux';
 import TextFieldValueEditor from '../../fields/textFieldValueEditor';
 import CheckBoxFieldValueEditor from '../../fields/checkBoxFieldValueEditor';
-import MultiLinTextFieldValueEditor from '../../fields/multiLineTextFieldValueEditor';
+import MultiLineTextFieldValueEditor from '../../fields/multiLineTextFieldValueEditor';
 import FieldFormats from '../../../utils/fieldFormats';
 import Locale from '../../../../../reuse/client/src/locales/locale';
 import {updateField} from '../../../actions/fieldsActions';
@@ -106,7 +106,7 @@ export class FieldProperties extends Component {
         return (
             <div className="fieldPropertyContainer">
                 <div className="textPropertyTitle">{propertyTitle}</div>
-                <MultiLinTextFieldValueEditor value={propertyValue}
+                <MultiLineTextFieldValueEditor value={propertyValue}
                                               onChange={(newValue) => this.updateMultiChoiceFieldProps(newValue)}
                 />
             </div>
@@ -152,7 +152,7 @@ export class FieldProperties extends Component {
      *
      */
     findFieldProperties() {
-        if (FieldFormats.getFormatType(this.props.selectedField === (FieldFormats.TEXT_FORMAT_MULTICHOICE || FieldFormats.NUMBER_FORMAT_MULTICHOICE))) {
+        if (FieldFormats.getFormatType(this.props.selectedField) === (FieldFormats.TEXT_FORMAT_MULTICHOICE || FieldFormats.NUMBER_FORMAT_MULTICHOICE)) {
             let choices = this.buildMultiChoiceDisplayList(this.props.selectedField.multipleChoice.choices);
             return (this.createMultiChoiceTextPropertyContainer(Locale.getMessage('fieldPropertyLabels.multiChoice'), choices));
         }

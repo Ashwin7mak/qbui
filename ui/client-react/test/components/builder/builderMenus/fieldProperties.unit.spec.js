@@ -14,7 +14,11 @@ let appId = 1;
 let tableId = 2;
 let formId = "view";
 let field = {id: 6, required: true, name: "Dat Field", datatypeAttributes: {type: "TEXT"}};
+let multiChoicefield = {id: 7, required: false, name: "Leeloo Dallas MultiChoice", datatypeAttributes: {type: "TEXT"},
+    multipleChoice: {choices: [{coercedValue: {value: "Fifth Element"}, displayValue: "Fifth Element"},
+        {coercedValue: {value: "Ultimate Weapon"}, displayValue: "Ultimate Weapon"}]}};
 let formElement = {FormFieldElement: {fieldId: 6}};
+let formElementMultiChoice = {FormFieldElement: {fieldId: 7}};
 
 
 const mockActions = {
@@ -54,17 +58,20 @@ describe('FieldProperties', () => {
             expect(component.find('.textPropertyTitle')).not.toBePresent();
         });
 
-        it('with selectedField prop', () => {
+        it('with selectedField prop that is multiChoice', () => {
             component = mount(<FieldProperties appId={appId} tableId={tableId} formId={formId}
-                                                 selectedField={field} formElement={formElement}/>);
+                                               selectedField={multiChoicefield} formElement={formElementMultiChoice}/>);
 
             expect(component).toBePresent();
+            instance = component.instance();
             expect(component.find('.fieldPropertiesTitle')).toBePresent();
-            expect(component.find('.fieldPropertiesTitle')).toHaveText(`${field.name} properties`);
+            expect(component.find('.fieldPropertiesTitle')).toHaveText(`${multiChoicefield.name} properties`);
             expect(component.find('CheckBoxFieldValueEditor')).toBePresent();
-            expect(component.find('CheckBoxFieldValueEditor')).toHaveValue(field.required);
+            expect(component.find('CheckBoxFieldValueEditor')).toHaveValue(multiChoicefield.required);
             expect(component.find('.textPropertyTitle')).toBePresent();
-            expect(component.find('.textPropertyValue')).toHaveValue(field.name);
+            expect(component.find('.textPropertyValue')).toHaveValue(multiChoicefield.name);
+            expect(component.find('MultiLineTextFieldValueEditor')).toBePresent();
+            expect(component.find('MultiLineTextFieldValueEditor')).toHaveValue(instance.buildMultiChoiceDisplayList(multiChoicefield.multipleChoice.choices));
         });
     });
 
