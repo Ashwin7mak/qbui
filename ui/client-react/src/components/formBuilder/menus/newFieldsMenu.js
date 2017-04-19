@@ -3,8 +3,9 @@ import {supportedNewFieldTypesWithProperties} from '../newFieldTypes';
 import ListOfElements from '../../../../../reuse/client/src/components/sideNavs/listOfElements';
 import FieldTokenInMenu from '../fieldToken/fieldTokenInMenu';
 
-const NewFieldsMenu = ({isCollapsed, isOpen}) => (
+const NewFieldsMenu = ({isCollapsed, isOpen, toggleTooPaletteChildrenTabIndex}) => (
     <ListOfElements
+        toggleTooPaletteChildrenTabIndex={toggleTooPaletteChildrenTabIndex}
         renderer={FieldTokenInMenu}
         isCollapsed={isCollapsed}
         isOpen={isOpen}
@@ -20,7 +21,11 @@ NewFieldsMenu.propTypes = {
 
     /**
      * Displays the menu in an open state */
-    isOpen: PropTypes.bool
+    isOpen: PropTypes.bool,
+
+    /**
+     * Toggles tool Palette children*/
+    toggleTooPaletteChildrenTabIndex: PropTypes.func
 };
 
 export default NewFieldsMenu;

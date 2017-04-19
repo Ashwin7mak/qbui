@@ -213,54 +213,60 @@ export const FormBuilderContainer = React.createClass({
 
     upArrowKeysShouldTab() {
         //should drill down tab is number 9
-        let all = document.getElementsByTagName("*");
-        let result;
-        let index;
-        if (all) {
-            result = _.filter(all, (domNode) => {
-                if (domNode.attributes.tabIndex) {
-                    return domNode.attributes.tabIndex !== "1";
-                }
-            });
-
-            result.forEach(function(domNode, i) {
-                if (domNode === document.activeElement) {
-                    index = i;
-                }
-            });
-
-            if (result[index]) {
-                result[index - 1].focus();
-            } else if (result[0]) {
-                result[0].focus();
-            }
-        }
+        // let all = document.getElementsByTagName("*");
+        // let result;
+        // let index;
+        // if (all) {
+        //     result = _.filter(all, (domNode) => {
+        //         if (domNode.attributes.tabIndex) {
+        //             return domNode.attributes.tabIndex !== "1";
+        //         }
+        //     });
+        //
+        //     result.forEach(function(domNode, i) {
+        //         if (domNode === document.activeElement) {
+        //             index = i;
+        //         }
+        //     });
+        //
+        //     if (result[index]) {
+        //         result[index - 1].focus();
+        //     } else if (result[0]) {
+        //         result[0].focus();
+        //     }
+        // }
     },
 
     downArrowKeysShouldTab() {
-        this.updateChildrenTabIndex("-1");
-        let all = document.getElementsByTagName("*");
-        let result;
-        let index;
-        if (all) {
-            result = _.filter(all, (domNode) => {
-                if (domNode.attributes.tabIndex) {
-                    return domNode.attributes.tabIndex !== "1";
-                }
-            });
+        // this.updateChildrenTabIndex("-1");
+        // let all = document.getElementsByTagName("*");
+        // let result;
+        // let index;
+        // if (all) {
+        //     result = _.filter(all, (domNode) => {
+        //         if (domNode.attributes.tabIndex) {
+        //             return domNode.attributes.tabIndex !== "1";
+        //         }
+        //     });
+        //
+        //     result.forEach(function(domNode, i) {
+        //         if (domNode === document.activeElement) {
+        //             index = i;
+        //         }
+        //     });
+        //
+        //     if (result[index]) {
+        //         result[index + 1].focus();
+        //     } else if (result[0]) {
+        //         result[0].focus();
+        //     }
+        // }
+    },
 
-            result.forEach(function(domNode, i) {
-                if (domNode === document.activeElement) {
-                    index = i;
-                }
-            });
-
-            if (result[index]) {
-                result[index + 1].focus();
-            } else if (result[0]) {
-                result[0].focus();
-            }
-        }
+    toggleTooPaletteChildrenTabIndex() {
+        //Test, will need to update to actually changing only tool palette children
+        // this.updateChildrenTabIndex();
+        console.log('toggle has been called!');
     },
 
     render() {
@@ -289,7 +295,7 @@ export const FormBuilderContainer = React.createClass({
 
                 <PageTitle title={Locale.getMessage('pageTitles.editForm')}/>
 
-                <ToolPalette isCollapsed={this.props.isCollapsed} isOpen={this.props.isOpen}>
+                <ToolPalette isCollapsed={this.props.isCollapsed} isOpen={this.props.isOpen} toggleTooPaletteChildrenTabIndex={this.toggleTooPaletteChildrenTabIndex}>
                     <FieldProperties appId={this.props.params.appId} tableId={this.props.params.tblId} formId={formId}>
                         <div className="formBuilderContainerContent" ref={element => formBuilderContainerContent = element}>
                             <AutoScroll parentContainer={formBuilderContainerContent} pixelsFromBottomForLargeDevices={100}>
