@@ -93,6 +93,13 @@ class WindowLocationUtils {
 
         AppHistory.history.push(location.pathname);
     }
+
+    /**
+     * Calls window.addEventListener. This is mostly for ease of testing.
+     */
+    static addEventListener(...args) {
+        window.addEventListener(...args);
+    }
 }
 
 export default WindowLocationUtils;

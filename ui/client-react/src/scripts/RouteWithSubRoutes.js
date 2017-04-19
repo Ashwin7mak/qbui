@@ -1,18 +1,19 @@
 import React from 'react';
-import {Route} from 'react-router-dom';
+import {Route, withRouter} from 'react-router-dom';
 import _ from 'lodash';
 
-const RouteWithSubRoutes = (routeConfig) => {
-    let exact = _.get(routeConfig, 'exact', false) ? {exact:true} : {}; // include exact true if specified to be exact
+const RouteWithSubRoutes = (route, key, extraProps) => {
+    let exact = _.get(route, 'exact', false) ? {exact:true} : {}; // include exact true if specified to be exact
     return (
-        <Route path={routeConfig.path}
-               {...exact}
-               location={routeConfig.location}
-                render={props => {
-                    // pass the sub-routes down to keep nesting
-                    // props (history, location, match) are passed to all routes ,
-                    return <routeConfig.component {...props} {...routeConfig.props} routes={routeConfig.routes}/>;
-                }}
+        <Route key={key}  path={route.path}
+            {...exact}
+            location={route.location}
+            render={props => {
+                // pass the sub-routes down to keep nesting
+                // props (history, location, match) are passed to all routes ,
+                // and add any additional props in extraProps
+                return <route.component {...props} routes={route.routes} {...extraProps} />;
+            }}
         />);
 };
 

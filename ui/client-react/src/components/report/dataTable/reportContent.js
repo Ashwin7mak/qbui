@@ -72,8 +72,8 @@ export const ReportContent = React.createClass({
         this.openRow(recId);
         //create the link we want to send the user to and then send them on their way
         const link = `${APP_ROUTE}/${appId}/table/${tblId}/report/${rptId}/record/${recId}`;
-        if (this.props.router) {
-            this.props.router.push(link);
+        if (this.props.history) {
+            this.props.history.push(link);
         }
     },
 

@@ -111,7 +111,7 @@ export const RecordRoute = React.createClass({
         // use the route parameters to build the URI
         const {appId, tblId, rptId} = this.props.match.params;
         const link = `${APP_ROUTE}/${appId}/table/${tblId}/report/${rptId}`;
-        this.props.router.push(link);
+        this.props.history.push(link);
     },
 
     /**
@@ -173,7 +173,7 @@ export const RecordRoute = React.createClass({
 
         const {appId, tblId, rptId} = this.props.reportData;
         const link = `${APP_ROUTE}/${appId}/table/${tblId}/report/${rptId}/record/${record.previousRecordId}`;
-        this.props.router.push(link);
+        this.props.history.push(link);
     },
 
     /**
@@ -185,7 +185,7 @@ export const RecordRoute = React.createClass({
 
         const {appId, tblId, rptId} = this.props.reportData;
         const link = `${APP_ROUTE}/${appId}/table/${tblId}/report/${rptId}/record/${record.nextRecordId}`;
-        this.props.router.push(link);
+        this.props.history.push(link);
     },
 
     getTitle() {
