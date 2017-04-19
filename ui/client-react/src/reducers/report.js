@@ -275,7 +275,7 @@ const report = (state = [], action) => {
         if (currentReport) {
             currentReport.data.columns.forEach(column => {
                 if (column.fieldDef.id === action.content.columnId) {
-                    column.fieldDef.isHidden = true;
+                    column.isHidden = true;
                 }
             });
             return newState(currentReport);

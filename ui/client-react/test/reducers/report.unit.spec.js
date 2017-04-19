@@ -856,15 +856,15 @@ describe('Report reducer functions', () => {
                     columns: [
                         {
                             fieldDef: {
-                                id: 6,
-                                isHidden: false
-                            }
+                                id: 6
+                            },
+                            isHidden: false
                         },
                         {
                             fieldDef: {
-                                id: 7,
-                                isHidden: false
-                            }
+                                id: 7
+                            },
+                            isHidden: false
                         }
                     ]
                 }
@@ -877,8 +877,8 @@ describe('Report reducer functions', () => {
                 content : {columnId: 6},
                 expects : (testState) => {
                     expect(Array.isArray(testState)).toEqual(true);
-                    expect(testState[0].data.columns[0].fieldDef.isHidden).toEqual(true);
-                    expect(testState[0].data.columns[1].fieldDef.isHidden).toEqual(false);
+                    expect(testState[0].data.columns[0].isHidden).toEqual(true);
+                    expect(testState[0].data.columns[1].isHidden).toEqual(false);
                 }
             },
             {
@@ -887,8 +887,8 @@ describe('Report reducer functions', () => {
                 content : {columnId: 7},
                 expects : (testState) => {
                     expect(Array.isArray(testState)).toEqual(true);
-                    expect(testState[0].data.columns[0].fieldDef.isHidden).toEqual(false);
-                    expect(testState[0].data.columns[1].fieldDef.isHidden).toEqual(true);
+                    expect(testState[0].data.columns[0].isHidden).toEqual(false);
+                    expect(testState[0].data.columns[1].isHidden).toEqual(true);
                 }
             },
             {
@@ -897,8 +897,8 @@ describe('Report reducer functions', () => {
                 content : {columnId: 8},
                 expects : (testState) => {
                     expect(Array.isArray(testState)).toEqual(true);
-                    expect(testState[0].data.columns[0].fieldDef.isHidden).toEqual(false);
-                    expect(testState[0].data.columns[1].fieldDef.isHidden).toEqual(false);
+                    expect(testState[0].data.columns[0].isHidden).toEqual(false);
+                    expect(testState[0].data.columns[1].isHidden).toEqual(false);
                 }
             },
             {
@@ -907,8 +907,8 @@ describe('Report reducer functions', () => {
                 content : {},
                 expects : (testState) => {
                     expect(Array.isArray(testState)).toEqual(true);
-                    expect(testState[0].data.columns[0].fieldDef.isHidden).toEqual(false);
-                    expect(testState[0].data.columns[1].fieldDef.isHidden).toEqual(false);
+                    expect(testState[0].data.columns[0].isHidden).toEqual(false);
+                    expect(testState[0].data.columns[1].isHidden).toEqual(false);
                 }
             }
         ];

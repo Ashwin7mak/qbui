@@ -209,7 +209,7 @@ const QbGrid = React.createClass({
      */
     getVisibleColumns() {
         let visibleColumns = this.props.columns.filter(column => {
-            return !column.fieldDef.isHidden;
+            return !column.isHidden;
         });
         return visibleColumns.map(column => {
             return this.getColumn(column);
@@ -383,7 +383,6 @@ const QbGrid = React.createClass({
         } else {
             columns = this.getVisibleColumns();
         }
-
         return (
 
             <Loader loaded={!this.props.loading} options={SpinnerConfigurations.LARGE_BREAKPOINT}>

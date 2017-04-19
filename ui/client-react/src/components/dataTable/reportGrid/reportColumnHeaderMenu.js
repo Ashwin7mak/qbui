@@ -219,15 +219,14 @@ export class ReportColumnHeaderMenu extends Component {
      * On selection of hide option from menu fire off the action to hide the column
      */
     hideThisColumn() {
-        if (!this.props.isOnlyOneColumnVisible) {
-            if (!this.hasRequiredIds()) {return;}
-            if (this.props.isOnlyOneColumnVisible) {return;}
+        if (!this.hasRequiredIds()) {return;}
+        if (this.props.isOnlyOneColumnVisible) {return;}
 
-            let params = {
-                columnId: this.props.fieldDef.id
-            };
-            this.props.hideColumn(CONTEXT.REPORT.NAV, this.props.appId, this.props.tblId, this.props.rptId, params);
-        }
+        let params = {
+            columnId: this.props.fieldDef.id
+        };
+
+        this.props.hideColumn(CONTEXT.REPORT.NAV, this.props.appId, this.props.tblId, this.props.rptId, params);
     }
 
     render() {

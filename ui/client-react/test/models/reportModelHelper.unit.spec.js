@@ -155,7 +155,7 @@ describe('Record Model', () => {
                 expect(findIdx === -1).toBeTruthy();
             });
             columns.forEach(column => {
-                const isHidden = column.fieldDef.isHidden;
+                const isHidden = column.isHidden;
                 expect(isHidden).toEqual(false);
             });
         });

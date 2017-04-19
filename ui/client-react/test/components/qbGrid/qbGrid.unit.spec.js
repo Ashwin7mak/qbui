@@ -14,57 +14,9 @@ import * as Table from 'reactabular-table';
 import {UNSAVED_RECORD_ID} from '../../../src/constants/schema';
 
 const testColumns = [
-    new ReportColumnTransformer(1,
-        {
-            builtIn: false,
-            dataIsCopyable: true,
-            id: 1,
-            includeInQuickSearch: true,
-            indexed: false,
-            isHidden: false,
-            multiChoiceSourceAllowed: false,
-            name: 'Header 1',
-            required: true,
-            tableId: '1',
-            type: "SCALAR",
-            unique: false,
-            userEditableValue: true
-        },
-        'Header 1', 'header1class', ''),
-    new ReportColumnTransformer(2,
-        {
-            builtIn: false,
-            dataIsCopyable: true,
-            id: 2,
-            includeInQuickSearch: true,
-            indexed: false,
-            isHidden: false,
-            multiChoiceSourceAllowed: false,
-            name: 'Header 2',
-            required: true,
-            tableId: '1',
-            type: "SCALAR",
-            unique: false,
-            userEditableValue: true
-        },
-        'Header 2', 'header2class', ''),
-    new ReportColumnTransformer(3,
-        {
-            builtIn: false,
-            dataIsCopyable: true,
-            id: 3,
-            includeInQuickSearch: true,
-            indexed: false,
-            isHidden: false,
-            multiChoiceSourceAllowed: false,
-            name: 'Header 3',
-            required: true,
-            tableId: '3',
-            type: "SCALAR",
-            unique: false,
-            userEditableValue: true
-        },
-        'Header 3', 'header3class', ''),
+    new ColumnTransformer('Header 1', 1, 'header1class', false),
+    new ColumnTransformer('Header 2', 2, 'header2class', false),
+    new ColumnTransformer('Header 3', 3, 'header3class', false)
 ];
 const rowIds = [1, 2];
 const testRows = [
