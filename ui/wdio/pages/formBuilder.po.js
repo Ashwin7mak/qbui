@@ -115,10 +115,18 @@
             }
         },
         // methods
+        cancel: {
+            value: function() {
+                this.cancelBtn.click();
+                // wait for spinner?
+                browser.pause(5000);
+            }
+        },
         delete: {
             value: function(index) {
-                let field = this.findFieldByIndex(index);
-                browser.element(field).element('.deleteFieldIcon').click();
+                let field = browser.element(this.findFieldByIndex(index));
+                field.element('.deleteFieldIcon').click();
+                field.waitForExist(5000,false);
                 browser.pause(5000);
             }
         },
@@ -127,7 +135,7 @@
                 let labelEls = browser.elements('.field');
                 return labelEls.value.map(function(labelEl) {
                     let label = labelEl.element('.fieldLabel').getText();
-                    if (label === '') { // checkbox labels are defined elsewhere
+                    if (label === '') { // checkbox labels are in a child
                         label = labelEl.element('.label').getText();
                     }
                     return label;
@@ -196,8 +204,7 @@
                 this.KB_selectField(index);
                 let deletedField = this.selectedField.getText();
                 browser.keys(['Tab', 'Enter']); // select & press DELETE icon
-                browser.pause(5000);
-                expect(this.getFieldLabels()).not.toContain(deletedField);
+                this.selectedField.waitForExist(5000,false);
                 return deletedField;
             }
         },
@@ -205,9 +212,8 @@
             value: function(index) {
                 this.KB_selectField(index); // field doesn't need to be selected
                 let deletedField = this.selectedField.getText();
-                this.selectedField.keys(['Backspace']); // press DELETE key
-                browser.pause(5000);
-                expect(this.getFieldLabels()).not.toContain(deletedField);
+                this.selectedField.keys(['Backspace']);
+                this.selectedField.waitForExist(5000,false);
                 return deletedField;
             }
         },

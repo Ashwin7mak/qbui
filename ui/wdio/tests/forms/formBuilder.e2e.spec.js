@@ -201,54 +201,6 @@
             expect(formBuilderPO.getFieldLabels()).toEqual(origFields);
         });
 
-        it('drags a field outside of viewport & verifies autoscroll', function() {
-            let autoscrollTimeout = 10; // seconds
-            let firstField = browser.element(formBuilderPO.findFieldByIndex(1));
-            let lastField = browser.element(formBuilderPO.findFieldByIndex(formBuilderPO.getFieldLabels().length));
-            let firstFieldSize = firstField.getElementSize();
-            let viewportSize = browser.getViewportSize();
-            // temporarily shrink the window to (hopefully) cause last element to not be visible
-        //  make it height of first field + 'padding' below last field
-            browser.setViewportSize({width: viewportSize.width, height: firstFieldSize.height * 3});
-         // verify last field is not visible
-            expect(lastField.isVisibleWithinViewport()).toBe(false);
-         // click & hold on first field
-            firstField.element('.fieldLabel').moveToObject();
-            browser.buttonDown();
-         // drag DOWN until autoscroll begins
-            while (firstField.isVisibleWithinViewport()) {
-                browser.moveTo(null, 0, 1);
-            }
-        // wait for autoscroll to reach the bottom (or timeout)
-            let seconds = 0;
-            while (!lastField.isVisibleWithinViewport() && seconds++ < autoscrollTimeout) {
-                browser.pause(1000);
-            }
-        // verify that the last field is visible
-            expect(lastField.isVisibleWithinViewport()).toBe(true, 'autoscroll DOWN failed');
-
-        // these ops are inexplicably required (s/b able to just move the mouse up?!)
-            browser.buttonUp();
-            browser.pause(1000);
-            lastField.element('.fieldLabel').moveToObject();
-            browser.buttonDown();
-
-        // drag UP until autoscroll begins
-            while (lastField.isVisibleWithinViewport()) {
-                browser.moveTo(null, 0, -1);
-            }
-        // wait for autoscroll to reach the top
-            seconds = 0;
-            while (!firstField.isVisibleWithinViewport() && seconds++ < autoscrollTimeout) {
-                browser.pause(1000);
-            }
-        // verify that the first field is visible
-            expect(firstField.isVisibleWithinViewport()).toBe(true, 'autoscroll UP failed');
-        // release button & restore window
-            browser.buttonUp();
-            browser.setViewportSize(viewportSize);
-        });
-
         it('search for fields in the new field picker', function() {
             let newFields = formBuilderPO.getNewFieldLabels();
             let label = formBuilderPO.fieldTokenTitle.getText();
@@ -266,7 +218,7 @@
             formBuilderPO.clearSearch.click();
             // wait for groups to reappear
             formBuilderPO.listOfElementsItemGroup.waitForExist(true);
-            browser.pause(1000);
+            browser.pause(5000);
             // expect original new field tokens to reappear
             expect(formBuilderPO.getNewFieldLabels()).toEqual(newFields);
         });
@@ -339,6 +291,58 @@
 
         xit('make a field NOT required, save & verify no revision', function() {
             // & check that new record actually does not require value
+        });
+
+        it('drags a field outside of viewport & verifies autoscroll', function() {
+            let autoscrollTimeout = 10; // seconds
+            let firstField = browser.element(formBuilderPO.findFieldByIndex(1));
+            let lastField = browser.element(formBuilderPO.findFieldByIndex(formBuilderPO.getFieldLabels().length));
+            let firstFieldSize = firstField.getElementSize();
+//            let viewportSize = browser.getViewportSize();
+            let browserSize = browser.windowHandleSize();
+            // temporarily shrink the window to (hopefully) cause last element to not be visible
+            //  shrink to height of first field + title + ...
+//            browser.setViewportSize({width: viewportSize.width, height: (firstFieldSize.height * 3)});
+            browser.windowHandleSize({width: browserSize.width, height: (firstFieldSize.height * 3)});
+            // verify last field is not visible
+            expect(lastField.isVisibleWithinViewport()).toBe(false);
+            // click & hold on first field
+            let dragHandle = firstField.element('.fieldEditingTools');
+            dragHandle.buttonDown();
+            // drag DOWN until autoscroll begins
+            while (firstField.isVisibleWithinViewport()) {
+                dragHandle.moveTo(null, 0, 1);
+            }
+            // wait for autoscroll to reach the bottom (or timeout)
+            let seconds = 0;
+            while (!lastField.isVisibleWithinViewport() && seconds++ < autoscrollTimeout) {
+                browser.pause(1000);
+            }
+            // verify that the last field is visible
+            expect(lastField.isVisibleWithinViewport()).toBe(true, 'autoscroll DOWN failed; lastField not visible');
+            expect(firstField.isVisibleWithinViewport()).toBe(false, 'autoscroll DOWN failed; firstField visible');
+
+            // these ops are inexplicably required (s/b able to just move the mouse up?!)
+            browser.buttonUp();
+            browser.pause(5000);
+            dragHandle = lastField.element('.fieldEditingTools');
+            dragHandle.moveToObject();
+            browser.buttonDown();
+
+            // drag UP until autoscroll begins
+            while (lastField.isVisibleWithinViewport()) {
+                browser.moveTo(null, 0, -1);
+            }
+            // wait for autoscroll to reach the top
+            seconds = 0;
+            while (!firstField.isVisibleWithinViewport() && seconds++ < autoscrollTimeout) {
+                browser.pause(1000);
+            }
+            // verify that the first field is visible
+            expect(firstField.isVisibleWithinViewport()).toBe(true, 'autoscroll UP failed');
+            // release button & restore window
+            browser.buttonUp();
+            browser.windowHandleSize(browserSize);
         });
     });
 }());

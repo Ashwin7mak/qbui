@@ -18,6 +18,7 @@ import Loader from 'react-loader';
 import RecordHeader from './recordHeader';
 import Breakpoints from '../../utils/breakpoints';
 import WindowLocationUtils from '../../utils/windowLocationUtils';
+import AutomationUtils from '../../utils/automationUtils';
 import * as SpinnerConfigurations from '../../constants/spinnerConfigurations';
 import * as UrlConsts from "../../constants/urlConstants";
 import _ from 'lodash';
@@ -27,7 +28,6 @@ import {openRecord} from '../../actions/recordActions';
 import {clearSearchInput} from '../../actions/searchActions';
 import {APP_ROUTE, BUILDER_ROUTE, EDIT_RECORD_KEY} from '../../constants/urlConstants';
 import {CONTEXT} from '../../actions/context';
-
 
 import './record.scss';
 
@@ -253,6 +253,29 @@ export const RecordRoute = React.createClass({
         WindowLocationUtils.pushWithQuery(EDIT_RECORD_KEY, recordId);
     },
 
+    isAutomationEnabled() {
+        //Using hard-coded table name here, to check if approve record button needs to be displayed.
+        //TODO: Remove after Empower
+        const automationTableName = "Project Request";
+        if (this.props.selectedTable.name === automationTableName)  {
+            return true;
+        }
+        return false;
+    },
+
+    /**
+     * Invoke automation to approve
+     *
+     */
+    approveRecord()  {
+        let appId = this.props.params.appId;
+        let tblId = this.props.params.tblId;
+        let recId = this.props.params.recordId;
+        AutomationUtils.approveRecord(appId, tblId, recId).then(() => {
+            this.loadRecordFromParams(this.props.params);
+        });
+    },
+
     /**
      * edit the selected record in the trowser
      * @param data row record data
@@ -268,7 +291,11 @@ export const RecordRoute = React.createClass({
             {msg: 'unimplemented.email', icon:'mail', disabled:true},
             {msg: 'unimplemented.print', icon:'print', disabled:true},
             {msg: 'unimplemented.delete', icon:'delete', disabled:true}];
-
+        // Add a button that 'approves' a record by invoking automation feature.
+        // TODO: Remove after Empower 2017 demo.
+        if (this.isAutomationEnabled()) {
+            actions.splice(2, 0, {msg: 'pageActions.approve', icon: 'thumbs-up', onClick: this.approveRecord});
+        }
         return (<IconActions className="pageActions" actions={actions} {...this.props}/>);
     },
 
