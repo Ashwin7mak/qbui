@@ -96,7 +96,7 @@ export const Nav = React.createClass({
 
         this.props.updateFormRedirectRoute(_.get(this.props, 'location.pathname'));
 
-        this.props.router.push(link);
+        this.props.history.push(link);
     },
 
     getTopGlobalActions() {
@@ -118,7 +118,7 @@ export const Nav = React.createClass({
                                app={selectedApp}>
             {isAdmin ?
                     <BuilderDropDownAction
-                                router={this.props.router}
+                                history={this.props.history}
                                 selectedApp={selectedApp}
                                 selectedTable={this.getSelectedTable(this.state.apps.selectedTableId)}
                                 recId={recordId}
@@ -345,7 +345,7 @@ export const Nav = React.createClass({
 
             {this.props.match.params && this.props.match.params.appId &&
                 <RecordTrowser visible={this.props.shell.trowserOpen && this.props.shell.trowserContent === TrowserConsts.TROWSER_EDIT_RECORD}
-                               router={this.props.router}
+                               history={this.props.history}
                                editForm={this.getEditFormFromProps()}
                                appId={this.props.match.params.appId}
                                tblId={this.props.match.params.tblId}
@@ -362,7 +362,7 @@ export const Nav = React.createClass({
 
             {this.props.match.params && this.props.match.params.appId &&
                 <ReportManagerTrowser visible={this.props.shell.trowserOpen && this.props.shell.trowserContent === TrowserConsts.TROWSER_REPORTS}
-                                      router={this.props.router}
+                                      router={this.props.history}
                                       selectedTable={this.getSelectedTable(reportsList.tblId)}
                                       filterReportsName={this.state.nav.filterReportsName}
                                       reportsData={reportsList}
