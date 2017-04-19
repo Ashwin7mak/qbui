@@ -4,33 +4,30 @@
  */
 (function() {
     'use strict';
-    //var Page = require('./page')
-    //class topNav extends Page {
     module.exports = Object.create(e2ePageBase, {
         formBuilderBtn: {
             get: function() {
                 return browser.element('.topNav .formBuilder');
             }
         },
-
-        // get forBuilderBtn() { return browser.element('.topNav .formBuilder');}
-
         modifyThisForm: {
             get: function() {
                 return browser.element('.topNav #modifyForm');
             }
         },
-
+        // Left Nav menu elements
         navMenuEl: {
             get: function() {
                 return browser.elements('.leftNav');
             }
         },
+        // Top Nav elements
         topNavDivEl: {
             get: function() {
                 return browser.element('.topNav');
             }
         },
+        // Top Nav Hamburger element
         topNavToggleHamburgerEl: {
             get: function() {
                 return browser.element('.topNav .iconLink');
@@ -42,17 +39,19 @@
                 return this.topNavDivEl.element('.navGroup.center');
             }
         },
+        // Top Nav Harmony buttons
         topNavHarButtonsListEl: {
             get: function() {
                 return this.topNavCenterDivEl.elements('button');
             }
         },
-        // Global actions
+        // Top Nav Right elements
         topNavRightDivEl: {
             get: function() {
                 return this.topNavDivEl.element('.navGroup.right');
             }
         },
+        // Top Nav Global Actions
         topNavGlobalActDivEl: {
             get: function() {
                 return this.topNavRightDivEl.element('.globalActions');
@@ -68,17 +67,19 @@
                 return this.topNavGlobalActionsListUlEl.elements('.link');
             }
         },
+        // Top Nav User Global element
         topNavUserGlobActEl: {
             get: function() {
                 return this.topNavGlobalActionsListEl.get(0);
             }
         },
+        // Top Nav Help Global element
         topNavHelpGlobActEl: {
             get: function() {
                 return this.topNavGlobalActionsListEl.get(1);
             }
         },
-
+        // Left Nav Global Actions
         leftNavGlobActsDivEl: {
             get: function() {
                 this.navMenuEl.element('.globalActions');
@@ -89,6 +90,7 @@
                 return this.leftNavGlobActsDivEl.elements('.globalActionsList');
             }
         },
+        // Click on top nav Hamburger menu
         clickTopNavHamburger: {
             get: function() {
                 this.topNavDivEl.waitForVisible();
