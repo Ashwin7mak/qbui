@@ -43,7 +43,6 @@ export class ReportColumnHeaderMenu extends Component {
 
     /**
      * Build the menu items for sort/group (ascending)
-     * @param column
      * @param prependText
      * @returns {*}
      */
