@@ -575,7 +575,8 @@ module.exports = function(grunt) {
                     './wdio/tests/reports/reportNavigation.e2e.spec.js',
                     './wdio/tests/reports/reportTable.e2e.spec.js',
                     './wdio/tests/reports/grouping/reportGroupingViaColumnHeader.e2e.spec.js',
-                    './wdio/tests/reports/sorting/reportSortingViaColumnHeader.e2e.spec.js'
+                    './wdio/tests/reports/sorting/reportSortingViaColumnHeader.e2e.spec.js',
+                    './wdio/tests/relationships/relationshipViewChildTable.e2e.spec.js'
                 ],
                 suites: {
                     reports: [
@@ -588,6 +589,9 @@ module.exports = function(grunt) {
                     ],
                     tables: [
                         './wdio/tests/tables/*.e2e.spec.js'
+                    ],
+                    relationships: [
+                        './wdio/tests/relationships/*.e2e.spec.js'
                     ]
                 }
             },
