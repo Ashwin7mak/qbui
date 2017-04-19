@@ -301,12 +301,23 @@ export const keyboardMoveFieldDown = (formId, location) => {
 };
 
 /**
- * Toggles children tabIndex for formBuilder
+ * Toggles children tabIndex for formBuilder's form
  * @param formId
  * @returns {{id, type, content}|*}
  */
 export const toggleFormBuilderChildrenTabIndex = (formId, currentTabIndex) => {
     return event(formId, types.TOGGLE_FORM_BUILDER_CHILDREN_TABINDEX, {
+        currentTabIndex
+    });
+};
+
+/**
+ * Toggles children tabIndex for formBuilder's toolPalette
+ * @param formId
+ * @returns {{id, type, content}|*}
+ */
+export const toggleToolPaletteChildrenTabIndex = (formId, currentTabIndex) => {
+    return event(formId, types.TOGGLE_TOOL_PALETTE_BUILDER_CHILDREN_TABINDEX, {
         currentTabIndex
     });
 };

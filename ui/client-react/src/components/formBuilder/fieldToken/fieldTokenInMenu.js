@@ -30,7 +30,8 @@ export class FieldTokenInMenu extends Component {
 
         if (this.props.tooltipText) {
             return (
-                <div tabIndex="0" onKeyDown={this.onEnterClickToAdd}>
+                <div tabIndex={this.props.toolPaletteChildrenTabIndex}
+                     onKeyDown={this.onEnterClickToAdd}>
                     <Tooltip location="right" plainMessage={this.props.tooltipText}>
                         {fieldToken}
                     </Tooltip>
@@ -57,7 +58,11 @@ FieldTokenInMenu.propTypes = {
 
     /**
      * Can optionally show the token in a collapsed state (icon only) */
-    isCollapsed: PropTypes.bool
+    isCollapsed: PropTypes.bool,
+
+    /**
+     * Tabindex */
+    toolPaletteChildrenTabIndex: PropTypes.string
 };
 
 const mapStateToProps = state => {

@@ -3,7 +3,7 @@ import {Button} from 'react-bootstrap';
 import {I18nMessage} from '../../utils/i18nMessage';
 import Locale from '../../locales/locales';
 import {connect} from 'react-redux';
-import {loadForm, updateForm, moveFieldOnForm, toggleFormBuilderChildrenTabIndex, keyboardMoveFieldUp, keyboardMoveFieldDown, deselectField, removeFieldFromForm} from '../../actions/formActions';
+import {loadForm, updateForm, moveFieldOnForm, toggleFormBuilderChildrenTabIndex, toggleToolPaletteChildrenTabIndex, keyboardMoveFieldUp, keyboardMoveFieldDown, deselectField, removeFieldFromForm} from '../../actions/formActions';
 import {notifyTableCreated} from '../../actions/tableCreationActions';
 import {updateFormAnimationState} from '../../actions/animationActions';
 import Loader from 'react-loader';
@@ -37,6 +37,7 @@ const mapStateToProps = state => {
         selectedField: (_.has(currentForm, 'selectedFields') ? currentForm.selectedFields[0] : undefined),
         redirectRoute: getFormRedirectRoute(state),
         tabIndex: (_.has(currentForm, 'formBuilderChildrenTabIndex') ? currentForm.formBuilderChildrenTabIndex[0] : undefined),
+        toolPaletteChildrenTabIndex: (_.has(currentForm, 'toolPaletteChildrenTabIndex') ? currentForm.toolPaletteChildrenTabIndex[0] : undefined),
         formFocus: (_.has(currentForm, 'formFocus') ? currentForm.formFocus[0] : undefined),
         shouldNotifyTableCreated: state.tableCreation.notifyTableCreated,
         isOpen: state.builderNav.isNavOpen,
@@ -50,6 +51,7 @@ const mapDispatchToProps = {
     updateForm,
     updateFormAnimationState,
     toggleFormBuilderChildrenTabIndex,
+    toggleToolPaletteChildrenTabIndex,
     keyboardMoveFieldUp,
     keyboardMoveFieldDown,
     deselectField,
@@ -263,10 +265,12 @@ export const FormBuilderContainer = React.createClass({
         // }
     },
 
-    toggleTooPaletteChildrenTabIndex() {
+    toggleToolPaletteChildrenTabIndex(e) {
         //Test, will need to update to actually changing only tool palette children
-        // this.updateChildrenTabIndex();
-        console.log('toggle has been called!');
+        let formId = this.props.currentForm.id;
+        if (e.which === ENTER_KEY || e.which === SPACE_KEY) {
+            this.props.toggleToolPaletteChildrenTabIndex(formId, "-1");
+        }
     },
 
     render() {
@@ -295,7 +299,11 @@ export const FormBuilderContainer = React.createClass({
 
                 <PageTitle title={Locale.getMessage('pageTitles.editForm')}/>
 
-                <ToolPalette isCollapsed={this.props.isCollapsed} isOpen={this.props.isOpen} toggleTooPaletteChildrenTabIndex={this.toggleTooPaletteChildrenTabIndex}>
+                <ToolPalette isCollapsed={this.props.isCollapsed}
+                             isOpen={this.props.isOpen}
+                             toggleToolPaletteChildrenTabIndex={this.toggleToolPaletteChildrenTabIndex}
+                             toolPaletteChildrenTabIndex={this.props.toolPaletteChildrenTabIndex}
+                                >
                     <FieldProperties appId={this.props.params.appId} tableId={this.props.params.tblId} formId={formId}>
                         <div className="formBuilderContainerContent" ref={element => formBuilderContainerContent = element}>
                             <AutoScroll parentContainer={formBuilderContainerContent} pixelsFromBottomForLargeDevices={100}>

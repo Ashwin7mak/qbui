@@ -358,7 +358,29 @@ const forms = (
         }
 
         updatedForm.formBuilderChildrenTabIndex[0] = tabIndex;
+        updatedForm.toolPaletteChildrenTabIndex[0] = "-1";
         updatedForm.formFocus[0] = formFocus;
+
+        newState[id] = updatedForm;
+        return newState;
+    }
+
+    case types.TOGGLE_TOOL_PALETTE_BUILDER_CHILDREN_TABINDEX : {
+        if (!currentForm) {
+            return state;
+        }
+
+        let tabIndex = action.content.currentTabIndex === undefined || action.content.currentTabIndex === "-1" ? "0" : "-1";
+
+        if (!updatedForm.formBuilderChildrenTabIndex && !updatedForm.toolPaletteChildrenTabIndex && !updatedForm.formFocus) {
+            updatedForm.formBuilderChildrenTabIndex = [];
+            updatedForm.toolPaletteChildrenTabIndex = [];
+            updatedForm.formFocus = [];
+        }
+
+        updatedForm.formBuilderChildrenTabIndex[0] = "-1";
+        updatedForm.toolPaletteChildrenTabIndex[0] = tabIndex;
+        updatedForm.formFocus[0] = false;
 
         newState[id] = updatedForm;
         return newState;

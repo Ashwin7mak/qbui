@@ -93,7 +93,9 @@ class ListOfElements extends Component {
         let TokenInMenu = this.props.renderer;
         return fieldTypes.map((fieldType, index) => (
             <li key={fieldType.key || index} className="listOfElementsItem">
-                <TokenInMenu {...fieldType} isCollapsed={this.props.isCollapsed} />
+                <TokenInMenu {...fieldType}
+                             isCollapsed={this.props.isCollapsed}
+                             toolPaletteChildrenTabIndex={this.props.toolPaletteChildrenTabIndex} />
             </li>
         ));
     };
@@ -126,7 +128,10 @@ class ListOfElements extends Component {
 
     render() {
         return (
-            <div className={`listOfElementsContainer ${this.props.isCollapsed ? 'listOfElementsCollapsed' : ''}`} tabIndex="0" onKeyDown={this.props.toggleTooPaletteChildrenTabIndex} role="button">
+            <div className={`listOfElementsContainer ${this.props.isCollapsed ? 'listOfElementsCollapsed' : ''}`}
+                 tabIndex="0"
+                 onKeyDown={this.props.toggleToolPaletteChildrenTabIndex}
+                 role="button">
                 <SearchBox
                     value={this.state.fieldFilter}
                     onChange={this.onChangeFilter}
