@@ -20,7 +20,7 @@ const SORTING_MESSAGE = 'sort';
 const GROUPING_MESSAGE = 'group';
 
 /**
- * A component that displays the column header menu for grouping, sorting, and hiding on a report
+ * A component that displays the column header menu for grouping/sorting records and adding/hiding columns on a report
  */
 export class ReportColumnHeaderMenu extends Component {
     constructor(props) {
