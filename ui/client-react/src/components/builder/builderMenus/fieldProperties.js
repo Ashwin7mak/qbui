@@ -2,6 +2,7 @@ import React, {PropTypes, Component} from "react";
 import {connect} from 'react-redux';
 import TextFieldValueEditor from '../../fields/textFieldValueEditor';
 import CheckBoxFieldValueEditor from '../../fields/checkBoxFieldValueEditor';
+import MultiLinTextFieldValueEditor from '../../fields/multiLineTextFieldValueEditor';
 import Locale from '../../../../../reuse/client/src/locales/locale';
 import {updateField} from '../../../actions/fieldsActions';
 import {getSelectedFormElement} from '../../../reducers/forms';
@@ -35,15 +36,19 @@ export class FieldProperties extends Component {
         this.createPropertiesTitle = this.createPropertiesTitle.bind(this);
         this.createTextPropertyContainer = this.createTextPropertyContainer.bind(this);
         this.createCheckBoxPropertyContainer = this.createCheckBoxPropertyContainer.bind(this);
+        this.createMultiChoiceTextPropertyContainer = this.createMultiChoiceTextPropertyContainer.bind(this);
         this.createNameProperty = this.createNameProperty.bind(this);
         this.createRequiredProperty = this.createRequiredProperty.bind(this);
+        this.findFieldProperties = this.findFieldProperties.bind(this);
         this.updateFieldProps = this.updateFieldProps.bind(this);
+        this.updateMultiChoiceFieldProps = this.updateMultiChoiceFieldProps.bind(this);
+        this.buildMultiChoiceDisplayList = this.buildMultiChoiceDisplayList.bind(this);
     }
 
     /**
      * Creates the headline at the top of the right panel saying the field name and the text properties after it
      * @param fieldName
-     * @returns {node}
+     * @returns {XML}
      */
     createPropertiesTitle(fieldName) {
         return (
@@ -56,7 +61,7 @@ export class FieldProperties extends Component {
      * Using a textfieldvalueeditor to keep it green and it has handy props
      * @param propertyTitle
      * @param propertyValue
-     * @returns {node}
+     * @returns {XML}
      */
     createTextPropertyContainer(propertyTitle, propertyValue) {
         return (
@@ -76,7 +81,7 @@ export class FieldProperties extends Component {
      * Using a checkboxfieldvalueeditor to keep it green and the awesome label/onChange built in support
      * @param propertyTitle
      * @param propertyValue
-     * @returns {node}
+     * @returns {XML}
      */
     createCheckBoxPropertyContainer(propertyTitle, propertyValue) {
         return (
@@ -90,10 +95,36 @@ export class FieldProperties extends Component {
     }
 
     /**
+     * onChange={(newValue) => this.updateFieldProps(newValue, 'name')}
+     */
+    createMultiChoiceTextPropertyContainer(propertyTitle, propertyValue) {
+        return (
+            <div className="fieldPropertyContainer">
+                <div className="textPropertyTitle">{propertyTitle}</div>
+                <MultiLinTextFieldValueEditor value={propertyValue}
+                                              onChange={(newValue) => this.updateMultiChoiceFieldProps(newValue)}
+                />
+            </div>
+        );
+    }
+
+    /**
+     *
+     */
+    buildMultiChoiceDisplayList(choices) {
+        let list = "";
+        if (choices.length > 0) {
+            let choiceArr = choices.map(function(choice) {return choice.displayValue;});
+            list = choiceArr.join("\n");
+        }
+        return list;
+    }
+
+    /**
      * hard coded name property creation since we know EVERY field type has a name
      * this could be refactored out if the next iteration wants to go super generic
      * @param name
-     * @returns {node}
+     * @returns {XML}
      */
     createNameProperty(name) {
         return (this.createTextPropertyContainer(Locale.getMessage('fieldPropertyLabels.name'), name));
@@ -103,10 +134,21 @@ export class FieldProperties extends Component {
      * hard coded required property creation since we know EVERY field type has a required property
      * this could be refactored out if the next iteration wants to go super generic
      * @param required
-     * @returns {node}
+     * @returns {XML}
      */
     createRequiredProperty(required) {
         return (this.createCheckBoxPropertyContainer(Locale.getMessage('fieldPropertyLabels.required'), required));
+    }
+
+    /**
+     *
+     */
+    findFieldProperties() {
+        if (this.props.selectedField.datatypeAttributes.type === "TEXT" && this.props.selectedField.multipleChoice && this.props.selectedField.multipleChoice.choices) {
+            let choices = this.buildMultiChoiceDisplayList(this.props.selectedField.multipleChoice.choices);
+            return (this.createMultiChoiceTextPropertyContainer(Locale.getMessage('fieldPropertyLabels.multiChoice'), choices));
+        }
+        return null;
     }
 
     /**
@@ -121,6 +163,22 @@ export class FieldProperties extends Component {
         this.props.updateField(field, this.props.appId, this.props.tableId);
     }
 
+    /**
+     * takes the new multichoice list value and creates the choices array for the field object
+     * updates that value in the field object and then calls fieldAction to dispatch to reducer store
+     * @param newValues
+     */
+    updateMultiChoiceFieldProps(newValues) {
+        let field = this.props.selectedField;
+        let choices = newValues.split("\n");
+        let newChoices = [];
+        choices.forEach(function(curChoice) {
+            newChoices.push({coercedValue: {value: curChoice}, displayValue: curChoice});
+        });
+        field.multipleChoice.choices = newChoices;
+        this.props.updateField(field, this.props.appId, this.props.tableId);
+    }
+
     render() {
         //only show something if we have selected a field
         return (
@@ -129,6 +187,7 @@ export class FieldProperties extends Component {
                     {this.props.selectedField && this.createPropertiesTitle(this.props.selectedField.name)}
                     {this.props.selectedField && this.createNameProperty(this.props.selectedField.name)}
                     {this.props.selectedField && this.createRequiredProperty(this.props.selectedField.required)}
+                    {this.props.selectedField && this.findFieldProperties()}
                 </div>
             }>
                 {this.props.children}

@@ -13,7 +13,7 @@ let instance;
 let appId = 1;
 let tableId = 2;
 let formId = "view";
-let field = {id: 6, required: true, name: "Dat Field"};
+let field = {id: 6, required: true, name: "Dat Field", datatypeAttributes: {type: "TEXT"}};
 let formElement = {FormFieldElement: {fieldId: 6}};
 
 
