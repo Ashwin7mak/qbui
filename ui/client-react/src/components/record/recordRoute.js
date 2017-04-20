@@ -39,7 +39,7 @@ import '../drawer/drawerContainer.scss';
 let logger = new Logger();
 let FluxMixin = Fluxxor.FluxMixin(React);
 //todo :remove the following variables once we start using react router 4
-let drawerRecId, drawerTableId, embeddedReport;
+let embeddedReport;
 /**
  * record route component
  *
@@ -57,14 +57,13 @@ export const RecordRoute = React.createClass({
         const flux = this.getFlux();
 
         flux.actions.selectTableId(tblId);
-        window.recId = ((window.recId || 0) + 1) % 5 + 1;
 
         // ensure the search input is empty
         this.props.clearSearchInput();
-        if (this.props.hasDrawer || (this.props.isDrawerContext && window.location.href.includes('drawer'))) {
-            this.props.loadForm(appId, '0duiiaaaaa2', rptId, formType, window.recId, this.props.uniqueId);
+        if (this.props.hasDrawer || (this.props.isDrawerContext && this.props.history.location.pathname.includes('drawer'))) {
+            this.props.loadForm(appId, this.props.match.params.drawerTableId, rptId, formType, this.props.match.params.drawerRecId, this.props.uniqueId);
             const recordsArray = embeddedReport !== undefined ? embeddedReport.data.records : [];
-            this.navigateToRecord(window.recId, embeddedReport, recordsArray);
+            this.navigateToRecord(this.props.match.params.drawerRecId, embeddedReport, recordsArray);
         } else {
             this.props.loadForm(appId, tblId, rptId, formType, recordId, 'view');
         }
@@ -193,7 +192,7 @@ export const RecordRoute = React.createClass({
         const link = `${APP_ROUTE}/${appId}/table/${tblId}/report/${rptId}/record/${record.previousRecordId}`;
         this.props.history.push(link);
         if (this.props.isDrawerContext) {
-            this.renderDrawerContainer(drawerTableId, record.previousRecordId);
+            this.renderDrawerContainer(this.props.match.params.drawerTableId, record.previousRecordId);
         }
     },
 
@@ -209,7 +208,7 @@ export const RecordRoute = React.createClass({
         const link = `${APP_ROUTE}/${appId}/table/${tblId}/report/${rptId}/record/${record.nextRecordId}`;
         this.props.history.push(link);
         if (this.props.isDrawerContext) {
-            this.renderDrawerContainer(drawerTableId, record.nextRecordId);
+            this.renderDrawerContainer(this.props.match.params.drawerTableId, record.nextRecordId);
         }
     },
 
@@ -248,9 +247,9 @@ export const RecordRoute = React.createClass({
             const showBack = _.get(record, 'previousRecordId') && _.get(this.props, 'reportData.data.keyField.name');
             const showNext = _.get(record, 'nextRecordId') && _.get(this.props, 'reportData.data.keyField.name');
             if (this.props.isDrawerContext) {
-                recordIdTitle = drawerRecId;
+                recordIdTitle = this.props.match.params.drawerRecId;
             }
-            const tableSelected =  this.getSelectedTable(drawerTableId);
+            const tableSelected =  this.getSelectedTable(this.props.match.params.drawerTableId);
             const tableName = tableSelected !== undefined && tableSelected !== null ? tableSelected.name : '';
             return (<div className="recordStageHeadline">
 
@@ -356,7 +355,7 @@ export const RecordRoute = React.createClass({
         return (
             <DrawerContainer
                 {...this.props}
-
+                isDrawerContext={!this.props.isDrawerContext}
                 rootDrawer={!this.props.isDrawerContext}
                 hasDrawer={this.state.hasDrawer}
                 closeDrawer={this.closeDrawer}
@@ -401,7 +400,7 @@ export const RecordRoute = React.createClass({
     /**
      * only re-render when our form data has changed */
     shouldComponentUpdate(nextProps, nextState) {
-        if (window.location.href.includes('drawer')) {
+        if (this.props.history.location.pathname.includes('drawer')) {
             //TODO: add a check to see if drawer component data got updated
             return true;
         }
@@ -428,13 +427,15 @@ export const RecordRoute = React.createClass({
      */
     //shold be removed as a param and instead be stored in react router state
     renderDrawerContainer(tblId, recId, embeddedReportsUniqueId) {
-        drawerRecId = recId;
-        drawerTableId = tblId;
         if (embeddedReportsUniqueId !== undefined) {
             embeddedReport = _.find(this.props.embeddedReports, {'id' : embeddedReportsUniqueId});
         }
-        WindowLocationUtils.pushWithQuery('drawerRecId', recId);
-        WindowLocationUtils.pushWithQuery('drawerTableId', tblId);
+        //todo : handle query params in the url
+        const existingPath = this.props.history.location.pathname;
+        const link = `${existingPath}/drawerTableId/${tblId}/drawerRecId/${recId}/embeddedReportId/${embeddedReportsUniqueId}`;
+        if (this.props.history) {
+            this.props.history.push(link);
+        }
     },
 
     //TODO: remove
@@ -510,7 +511,7 @@ export const RecordRoute = React.createClass({
                             hasEntry={!!this.getFormFromProps()}
                             />}
 
-                    {!formLoadingErrorStatus &&
+                    {!formLoadingErrorStatus && this.props.history.location.pathname.includes('drawer') &&
                         this.getDrawerContainer()
                     }
                     <button onClick={this.fakeRenderDrawer}>render child drawer</button>

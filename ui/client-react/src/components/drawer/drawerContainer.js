@@ -15,23 +15,24 @@ import './drawer.scss';
  * I think Route's children prop might come in handy https://reacttraining.com/react-router/web/api/Route/children-func
  */
 class DrawerContainer extends React.Component {
+    shouldRender = () => {
+        return !!this.props.isDrawerContext;
+        // const {appId, tblId, recordId, drawerTableId, drawerRecId, embeddedRptId} = this.props.match.params;
+        // return [appId, tblId, recordId, drawerTableId, drawerRecId, embeddedRptId].every(id => id);
+    };
+
+
     getDrawer = () => {
         // TODO: Once we integrate with the router, `getDrawer` will return:
         //           <Route path={/*something*/} component={component}>
 
-        if (this.props.hasDrawer) {
-            const params = {
-                appId:'0duiiaaaaap',
-                tblId:'0duiiaaaaa2',
-                recordId:'3'
-            };
+        if (this.shouldRender()) {
             const component = (
                 <Drawer key={1} unmount={this.closeInvisiblePane}>
                     <RecordRouteWithUniqueId
                         {...this.props}
                         isDrawerContext={true}
                         hasDrawer={true}
-                        params={params}
                         />
                 </Drawer>);
             return component;
