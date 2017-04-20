@@ -28,6 +28,7 @@
         }
         .showAllToggle {
             display: flex;
+            flex-wrap: nowrap;
             color: $color-black-700;
             text-align: center;
 
