@@ -154,6 +154,10 @@ describe('Record Model', () => {
                 const findIdx = _.findIndex(columns, function(c) {return c.id === fid;});
                 expect(findIdx === -1).toBeTruthy();
             });
+            columns.forEach(column => {
+                const isHidden = column.isHidden;
+                expect(isHidden).toEqual(false);
+            });
         });
     });
 
