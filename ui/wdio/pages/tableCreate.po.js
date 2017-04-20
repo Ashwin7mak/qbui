@@ -33,7 +33,7 @@
         //Icon chooser
         tableFieldIconChooser: {get: function() {return browser.element('.iconChooser.closed');}},
         //Icon chooser down arrow
-        iconChooserSelect: {get: function() {return this.tableFieldIconChooser.element('.iconUISturdy-caret-filled-down');}},
+        iconChooserSelect: {get: function() {return this.tableFieldIconChooser.element('.showAllToggle');}},
         //Icon chooser search
         iconChooserSearch: {get: function() {return browser.element('.iconChooser.open .iconSearch input');}},
 
@@ -56,8 +56,8 @@
          */
         getAllIconsFromIconChooser: {get: function() {
             browser.element('.allIcons').waitForVisible();
-            browser.element('.allIcons .qbIcon').waitForVisible();
-            return browser.elements('.allIcons .qbIcon');
+            browser.element('.allIcons .iconButton').waitForVisible();
+            return browser.elements('.allIcons .iconButton');
         }},
 
         /**

@@ -48,7 +48,7 @@ class TableCreationPanel extends React.Component {
      * @returns {XML}
      */
     getSuggestedIcons() {
-        const name = this.props.tableInfo.name.value.toLowerCase().trim();
+        const name = _.has(this.props, "tableInfo.name.value") ? this.props.tableInfo.name.value.toLowerCase().trim() : '';
 
         if (name === '') {
             return <div className="noSuggestedIcons iconList"><I18nMessage message="tableCreation.typeForSuggestions"/></div>;

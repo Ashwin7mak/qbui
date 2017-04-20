@@ -99,7 +99,7 @@ class IconChooser extends React.Component {
                 </div>
 
                 <div className="allIcons">
-                    {this.getFilteredIcons().map((icon, i) => <button alt={icon} className="iconButton" tabIndex="0" key={i} onClick={() => this.selectIcon(icon)}><Icon iconFont={this.props.font} icon={icon}/></button>)}
+                    {this.getFilteredIcons().map((icon, i) => <button alt={icon} className={"iconButton " + icon} tabIndex="0" key={i} onClick={() => this.selectIcon(icon)}><Icon iconFont={this.props.font} icon={icon}/></button>)}
                 </div>
             </div>);
     }
