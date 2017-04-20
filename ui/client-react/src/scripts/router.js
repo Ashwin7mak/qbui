@@ -89,41 +89,8 @@ const createElementWithFlux = (Component, props) => <Component {...props} flux={
  *          props - object with any properties to be included when rendering the component (optional)
  **/
 
-const navChildRoutes =  [
-    {
-        path: `${APP_ROUTE}/:appId/table/:tblId/report/:rptId/record/:recordId`,
-        exact: true,
-        component: RecordRoute
-    },
-    {
-        path: `${APP_ROUTE}/:appId/table/:tblId/report/:rptId/`,
-        exact: true,
-        component: ReportRoute
-    },
-    {
-        path: `${APP_ROUTE}/:appId/table/:tblId/record/:recordId`,
-        exact: true,
-        component: RecordRoute
-    },
-    {
-        path: `${APP_ROUTE}/:appId/table/:tblId`,
-        exact: true,
-        component: TableHomePageRoute
-    },
-    {
-        path: `${APP_ROUTE}/:appId/users`,
-        exact: true,
-        component: AppUsersRoute
-    },
-    {
-        path: `${APP_ROUTE}/:appId`,
-        exact: true,
-        component: AppHomePageRoute
-    }
-];
 
 const routes = [
-
     {
         path: ADMIN_ROUTE,
         component: ConnectedNav,
@@ -149,20 +116,34 @@ const routes = [
         ]
     },
     {
-        path: `${APP_ROUTE}/:appId/(table)?/:tblId?/(report)?/:reportId?/(record)?/(:recordId)?`,
+        path: `${APP_ROUTE}/:appId/(table)?/:tblId?`,
         component: ConnectedNav,
-        routes: navChildRoutes
-    },
-    {
-        path: `${APP_ROUTE}/:appId/(table)?/:tblId?/(record)?/(:recordId)?`,
-        component: ConnectedNav,
-        routes: navChildRoutes
-    },
-    {
-        path: `${APP_ROUTE}/:appId`,
-        exact: true,
-        component: ConnectedNav,
-        routes: [
+        routes:  [
+            {
+                path: `${APP_ROUTE}/:appId/table/:tblId/(report)?/:rptId?/record/:recordId`,
+                exact: true,
+                component: RecordRoute
+            },
+            {
+                path: `${APP_ROUTE}/:appId/table/:tblId/report/:rptId/`,
+                exact: true,
+                component: ReportRoute
+            },
+            {
+                path: `${APP_ROUTE}/:appId/table/:tblId/record/:recordId`,
+                exact: true,
+                component: RecordRoute
+            },
+            {
+                path: `${APP_ROUTE}/:appId/table/:tblId`,
+                exact: true,
+                component: TableHomePageRoute
+            },
+            {
+                path: `${APP_ROUTE}/:appId/users`,
+                exact: true,
+                component: AppUsersRoute
+            },
             {
                 path: `${APP_ROUTE}/:appId`,
                 exact: true,
