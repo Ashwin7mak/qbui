@@ -17,10 +17,12 @@ export default {
     // A Node endpoint DOES NOT require the Quickbase API to fulfill
     // its request.  Work is done exclusively on the Node server.
     BASE_URL: {
-        QUICKBASE   : '/api/api/' + Configuration.api.qbVersion,
-        EXPERIENCE  : '/ee/' + Configuration.api.eeVersion,
+        CLIENT        : '/qb',
+        PROXY          : '',
+        //QUICKBASE   : '/api/api/' + Configuration.api.qbVersion,
+        //EXPERIENCE  : '/ee/' + Configuration.api.eeVersion,
         AUTOMATION  : '/we/workflow',          // + Configuration.api.automationVersion,
-        NODE        : '/api/n/' + Configuration.api.nodeVersion,
+        NODE        : '/n', // + Configuration.api.nodeVersion,
         LEGACY      : '/api/l/' + Configuration.api.legacyVersion
     },
 

@@ -10,9 +10,9 @@ class AppService extends BaseService {
 
         //  App Service API endpoints
         this.API = {
-            GET_APP           : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}`,
-            GET_APP_USERS     : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.USERS}`,
-            GET_APPS          : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}`
+            GET_APP           : `${constants.BASE_URL.CLIENT}/${constants.APPS}/{0}`,
+            GET_APP_USERS     : `${constants.BASE_URL.CLIENT}/${constants.APPS}/{0}/${constants.USERS}`,
+            GET_APPS          : `${constants.BASE_URL.CLIENT}/${constants.APPS}`
         };
     }
 

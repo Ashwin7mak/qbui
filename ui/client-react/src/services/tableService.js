@@ -12,9 +12,9 @@ class TableService extends BaseService {
 
         //  Record service API endpoints
         this.API = {
-            GET_HOMEPAGE            : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.HOMEPAGE}`,
-            CREATE_TABLE_COMPONENTS : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/${constants.TABLECOMPONENTS}`,
-            UPDATE_TABLE            : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}`
+            GET_HOMEPAGE            : `${constants.BASE_URL.CLIENT}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.HOMEPAGE}`,
+            CREATE_TABLE_COMPONENTS : `${constants.BASE_URL.CLIENT}/${constants.APPS}/{0}/${constants.TABLES}/${constants.TABLECOMPONENTS}`,
+            UPDATE_TABLE            : `${constants.BASE_URL.CLIENT}/${constants.APPS}/{0}/${constants.TABLES}/{1}`
         };
     }
 

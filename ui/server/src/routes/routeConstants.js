@@ -11,11 +11,11 @@
      *  Mercury Quickbase, Legacy Quickbase and Node server base url's
      */
     var baseUrl = {
-        // TODO: merge the 2 quickbase_api constants into 1...need to fix integration tests first..
-        QUICKBASE           : '/api/api/:version',
+        QUICKBASE           : '/qb',
+        CORE_ENGINE         : '/api/api/:version',
         EXPERIENCE_ENGINE   : '/ee/:version',
         QUICKBASE_HEALTH    : '/api/:version',
-        NODE                : '/api/n/:version',
+        NODE                : '/n',
         QUICKBASE_LEGACY    : '/api/l/:version',
         GOVERNANCE          : '/api/governance/:version',
         AUTOMATION          : '/we/workflow/:version'
@@ -43,13 +43,12 @@
      */
     var quickBaseApiEndpoints = {
         //  These routes are configured in qbRouteMapper to call node modules which perform
-        //  additional processing either pre/post the API call.
-        //
-        //  TABLE ENDPOINTS for FORM, RECORD and REPORT
-
+        //  custom processing either pre/post the API call.
         HEALTH_CHECK                : baseUrl.QUICKBASE_HEALTH + '/health',
+
         FORM_AND_RECORD_COMPONENTS  : baseUrl.QUICKBASE + '/apps/:appId/tables/:tableId/records/:recordId/formComponents',
         FORM_COMPONENTS             : baseUrl.QUICKBASE + '/apps/:appId/tables/:tableId/formComponents',
+
         RECORD                      : baseUrl.QUICKBASE + '/apps/:appId/tables/:tableId/records/:recordId',
         RECORDS                     : baseUrl.QUICKBASE + '/apps/:appId/tables/:tableId/records',
         RECORDS_BULK                : baseUrl.QUICKBASE + '/apps/:appId/tables/:tableId/records/bulk',
@@ -59,6 +58,7 @@
         REPORT_INVOKE_RESULTS       : baseUrl.QUICKBASE + '/apps/:appId/tables/:tableId/reports/:reportId/invoke',
         REPORT_RECORDS_COUNT        : baseUrl.QUICKBASE + '/apps/:appId/tables/:tableId/reports/:reportId/recordsCount',
         TABLE_HOMEPAGE_REPORT       : baseUrl.QUICKBASE + '/apps/:appId/tables/:tableId/homePage',
+
         TABLE_COMPONENTS            : baseUrl.QUICKBASE + '/apps/:appId/tables/tableComponents',
         TABLE                       : baseUrl.QUICKBASE + '/apps/:appId/tables/:tableId',
         TABLES                      : baseUrl.QUICKBASE + '/apps/:appId/tables',
@@ -84,13 +84,16 @@
         // No need to explicitly declare other endpoints as there is no special pre-processing required.  qbRouteMapper
         // is configured to act as proxy and pass the request directly to the server side resource.
         TOMCAT_ALL                  : baseUrl.QUICKBASE + '/*',
+        CORE_ALL                    : baseUrl.CORE_ENGINE + '/*',
 
         ADMIN                       : baseUrl.QUICKBASE + '/admin',
 
         GOVERNANCE_ACCOUNT_USERS     : baseUrl.GOVERNANCE + '/:accountId/users',
 
         // the account id is an optional parameter
-        GOVERNANCE_CONTEXT           : baseUrl.GOVERNANCE + '/context'
+        GOVERNANCE_CONTEXT           : baseUrl.GOVERNANCE + '/context',
+
+        ALL : '/*'
     };
 
     /*
@@ -114,10 +117,12 @@
      */
     var swaggerApiEndpoints = {
         SWAGGER_API              : '/api',
+        SWAGGER_CORE_V2          : '/api/*',
         SWAGGER_DOCUMENTATION    : '/api/documentation/*',
         SWAGGER_IMAGES           : '/api/images/*',
         SWAGGER_RESOURCES        : '/api/resources/*',
         SWAGGER_API_EE           : '/ee',
+        SWAGGER_EE_V2            : '/ee/*',
         SWAGGER_DOCUMENTATION_EE : '/ee/documentation/*',
         SWAGGER_IMAGES_EE        : '/ee/images/*',
         SWAGGER_RESOURCES_EE     : '/ee/resources/*'
