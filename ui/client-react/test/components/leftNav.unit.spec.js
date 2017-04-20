@@ -3,6 +3,7 @@ import {mount} from 'enzyme';
 import LeftNav from '../../src/components/nav/leftNav';
 import {__RewireAPI__ as NavItemRewireAPI} from '../../src/components/nav/navItem';
 import {MemoryRouter} from 'react-router-dom';
+
 var I18nMessageMock = React.createClass({
     render: function() {
         return (
@@ -29,18 +30,6 @@ let appsTestData = [
     }
 ];
 
-let reportsTestData = {
-    error: false,
-    loading: false,
-    list: [
-        {
-            id: 1,
-            name: 'List All',
-            link: '/app/app1/table/table1/report/1'
-        }
-    ]
-};
-
 let navItemsTestData = [
     {
         id:101,
@@ -56,8 +45,7 @@ let navItemsTestData = [
     }
 ];
 
-let navItemTestData =
-    describe('Left Nav functions', () => {
+describe('Left Nav functions', () => {
         'use strict';
 
         var component;
