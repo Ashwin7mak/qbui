@@ -6,7 +6,7 @@
     flex-direction: column;
     border: 1px solid $color-black-400;
     background-color: $color-black-100;
-    padding: 5px;
+    padding: 2px;
     padding-right: 0;
 
     .qbIcon {
@@ -30,14 +30,20 @@
             display: flex;
             color: $color-black-700;
             text-align: center;
-            margin-right: 12px;
-            margin-top: 4px;
-            align-items: center;
 
+            margin: 4px 12px 4px 4px;
+            align-items: center;
+            background-color: $iconchooserbutton-background-color;
+            border: 0;
+            padding: 0;
+
+            .showAllSelectedIcon {
+                margin-right: -5px;
+                height: 28px;
+            }
             .toggleIcon {
-                margin: -5px;
                 width: 24px;
-                height: 32px;
+                height: 22px;
                 font-size: 18px;
             }
         }
@@ -47,17 +53,24 @@
         display: flex;
         flex-wrap: wrap;
         overflow-y: auto;
-        margin-left: -6px;
+        margin-left: -2px;
 
-        .qbIcon {
-            color: $color-black-700;
-            padding: 4px;
+        .iconButton {
+            background-color: $iconchooserbutton-background-color;
+            border: 0;
+            padding: 0;
             margin: 6px;
-        }
-        .qbIcon:hover {
-            background-color: $color-cyan-600;
-            color: $color-black-100;
-            border-radius: $radius-base * 2;
+
+            .qbIcon {
+                color: $color-black-700;
+                padding: 4px;
+
+            }
+            .qbIcon:hover {
+                background-color: $color-cyan-600;
+                color: $color-black-100;
+                border-radius: $radius-base * 2;
+            }
         }
     }
 
