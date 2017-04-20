@@ -118,7 +118,7 @@
         PUBLIC_TABLES            : '/apps/:appId/tables*',
         PUBLIC_RELATIONSHIPS     : '/apps/:appId/relationships*',
         PUBLIC_ROLES             : '/apps/:appId/roles*',
-        PUBLIC_APP               : '/apps*',
+        PUBLIC_APPS              : '/apps*',
         PUBLIC_HEALTH            : '/health',
         PUBLIC_OPERATIONS        : '/operations*',
         PUBLIC_REALMS            : '/realms*',
