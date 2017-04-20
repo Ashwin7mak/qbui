@@ -365,7 +365,11 @@ export const RecordRoute = React.createClass({
 
         // TODO: onCloseHandler, add to Proptypes, icon, i18nMessage for other languages
         if (this.props.isDrawerContext) {
-            actions.push({msg: 'pageActions.close', icon:'close', onClick: () => {console.log('pass in this.props.onCloseHandler');}});
+            actions.push({msg: 'pageActions.close', icon:'close', onClick: () => {
+                const currentPath = this.props.history.location.pathname;
+                const newPath = currentPath.slice(0, currentPath.indexOf('drawer') - 1);
+                this.props.history.push(newPath);
+            }});
         }
 
         return (<IconActions className="pageActions" actions={actions} {...this.props}/>);
