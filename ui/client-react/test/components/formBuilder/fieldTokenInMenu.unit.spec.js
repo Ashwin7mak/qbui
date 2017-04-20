@@ -41,4 +41,49 @@ describe('FieldTokenInMenu', () => {
 
         expect(mockActions.addNewFieldToForm).toHaveBeenCalledWith(formId, appId, tblId, selectedField, relatedField);
     });
+
+    it('will invoke addNewFieldToForm when FieldToken enter is pressed', () => {
+        const type = 'textbox';
+        const title = 'New Textbox';
+        let e = {
+            which: 13,
+            preventDefault() {return;}
+        };
+
+        component = shallow(<FieldTokenInMenu addNewFieldToForm={mockActions.addNewFieldToForm} relatedField={relatedField} type={type} title={title} formId={formId} selectedField={selectedField} appId={appId} tblId={tblId}/>);
+        let instance = component.instance();
+        instance.onEnterClickToAdd(e);
+
+        expect(mockActions.addNewFieldToForm).toHaveBeenCalledWith(formId, appId, tblId, selectedField, relatedField);
+    });
+
+    it('will invoke addNewFieldToForm when space is pressed', () => {
+        const type = 'textbox';
+        const title = 'New Textbox';
+        let e = {
+            which: 32,
+            preventDefault() {return;}
+        };
+
+        component = shallow(<FieldTokenInMenu addNewFieldToForm={mockActions.addNewFieldToForm} relatedField={relatedField} type={type} title={title} formId={formId} selectedField={selectedField} appId={appId} tblId={tblId}/>);
+        let instance = component.instance();
+        instance.onEnterClickToAdd(e);
+
+        expect(mockActions.addNewFieldToForm).toHaveBeenCalledWith(formId, appId, tblId, selectedField, relatedField);
+    });
+
+    it('will not invoke addNewFieldToForm when keys space or enter are pressed', () => {
+        const type = 'textbox';
+        const title = 'New Textbox';
+        let e = {
+            which: 9,
+            preventDefault() {return;}
+        };
+
+        component = shallow(<FieldTokenInMenu addNewFieldToForm={mockActions.addNewFieldToForm} relatedField={relatedField} type={type} title={title} formId={formId} selectedField={selectedField} appId={appId} tblId={tblId}/>);
+        let instance = component.instance();
+        instance.onEnterClickToAdd(e);
+
+        expect(mockActions.addNewFieldToForm).not.toHaveBeenCalled();
+    });
 });
