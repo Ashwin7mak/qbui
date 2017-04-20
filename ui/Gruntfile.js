@@ -563,7 +563,9 @@ module.exports = function(grunt) {
                     './wdio/tests/reports/reportAddRecord.e2e.spec.js',
                     // disabling formPermissionsViewerRole test as after moving to ExperienceEngine,
                     // permissions for viewer are not working correctly
+                    //TODO MC-2105 should be fixed to enable permissions on forms
                     './wdio/tests/forms/formPermissionsViewerRole.e2e.spec.js',
+                    './wdio/tests/forms/formPermissionsParticipantRole.e2e.spec.js',
                     // currently intermittently broken in CI need to fix in another PR
                     './wdio/tests/forms/formDragDrop.e2e.spec.js',
                     './wdio/tests/reports/reportEditRecord.e2e.spec.js',
