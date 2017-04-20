@@ -1071,7 +1071,6 @@ module.exports = function(grunt) {
         'shell:nodeVer',
         'clean:dist',
         'webpackbuild',
-        'logGitState',
         'copy:reactDist'
     ]);
 
