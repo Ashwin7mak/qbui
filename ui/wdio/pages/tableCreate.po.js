@@ -165,7 +165,7 @@
             //Wait until new table button visible
             this.newTableBtn.waitForVisible();
             //Verify the name of the button
-            expect(this.newTableBtn.getAttribute('textContent')).toBe('New Table');
+            expect(this.newTableBtn.getAttribute('textContent')).toContain('New Table');
             //Verify there is also + Icon associated with it
             this.newTableBtn.element('.iconUISturdy-add-mini').waitForVisible();
             //Click on the new Table Btn
