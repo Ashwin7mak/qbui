@@ -8,6 +8,7 @@ import RecordTrowser from "../record/recordTrowser";
 import ReportFieldSelectTrowser from '../report/reportFieldSelectTrowser';
 import ListOfElements from '../../../../reuse/client/src/components/sideNavs/listOfElements';
 import FieldTokenInMenu from '../formBuilder/fieldToken/fieldTokenInMenu';
+import DraggableFieldTokenInMenu from '../formBuilder/fieldToken/draggableFieldTokenInMenu';
 import Locale from '../../../../reuse/client/src/locales/locale';
 
 import GlobalActions from "../actions/globalActions";
@@ -358,7 +359,7 @@ export const Nav = React.createClass({
                     {Locale.getMessage('report.drawer.info')}
                 </div>
                 <ListOfElements
-                    renderer={FieldTokenInMenu}
+                    renderer={DraggableFieldTokenInMenu}
                     elements={elements}
                     emptyListMessage={Locale.getMessage('report.drawer.empty')}
                 />

@@ -2,6 +2,8 @@ import React, {PropTypes, Component} from 'react';
 import _ from 'lodash';
 import FlipMove from 'react-flip-move';
 import Locale from '../../locales/locale';
+import { DragDropContext } from 'react-dnd';
+import HTML5Backend from 'react-dnd-html5-backend';
 
 // IMPORT FROM CLIENT REACT
 import SearchBox from '../../../../../client-react/src/components/search/searchBox';
@@ -197,4 +199,4 @@ ListOfElements.propTypes = {
     }))
 };
 
-export default ListOfElements;
+export default DragDropContext(HTML5Backend)(ListOfElements);
