@@ -65,24 +65,23 @@
          * @param recordRowIndex
          */
         openRecordEditMenu: {value: function(recordIndex) {
-            //This will return a qbRow from the specified recordIndex
+            // This will return a qbRow from the specified recordIndex
             var recordRowEl = reportContent.getRecordRowElement(recordIndex);
 
-            var recordCellEl = reportContent.getRecordRowCells(recordRowEl).value[0];
-            //This focuses on the cellData from qbCell at the specified recordIndex
-            var cellData = recordCellEl.elements('.cellData.NoWrap');
-            //Get the pencil from the qbCell
-            var cellEditIcon = recordCellEl.elements('.cellEditIcon');
+            // This focuses on the cellData from qbCell at the specified recordIndex
+            var cellData = recordRowEl.element('.cellData.NoWrap');
+            // Get the pencil from the qbCell
+            var cellEditIcon = recordRowEl.element('.cellEditIcon');
             //TODO: moveToObject does not work on safari, a javascript workaround needs to be implemented
             //TODO: moveToObject on Chrome and Firefox does not move to the exact qbCell that is returned from recordCellEl
             //TODO: the challenge is all cell's have the same className of qbCell, so the browser will move the mouse to the first
             //TODO: qbCell on the DOM. More research is required, in order to get moveToObject to move to the exact qbCell that is specified
             if (browserName !== 'safari') {
-                //Hover over the cell
-                browser.moveToObject(cellData.selector);
-                //Then once the pencil is visible hover over the pencil
-                browser.moveToObject(cellEditIcon.selector);
-                browser.element(cellEditIcon.selector).click();
+                // Hover over the cell
+                cellData.moveToObject();
+                // Then once the pencil is visible hover over the pencil and click
+                cellEditIcon.moveToObject();
+                cellEditIcon.click();
             }
 
             this.getInlineEditRecord().waitForVisible();

@@ -213,6 +213,15 @@
         text-align: center;
 
         transition: opacity 0.3s;
+
+        .leftNavLogo {
+            width: 45%;
+
+            @include small-breakpoint {
+                width: 28%;
+
+            }
+        }
     }
 
     &.isCollapsedStandardLeftNav {

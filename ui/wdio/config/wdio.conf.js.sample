@@ -34,9 +34,14 @@ exports.config = {
         // permissions for viewer are not working correctly
         './ui/wdio/tests/forms/formPermissionsViewerRole.e2e.spec.js',
         // currently intermittently broken in CI need to fix in another PR
+        './ui/wdio/tests/forms/formAdd.e2e.spec.js',
+        './ui/wdio/tests/forms/formEdit.e2e.spec.js',
         './ui/wdio/tests/forms/formDragDrop.e2e.spec.js',
-        './wdio/tests/tables/tableCreate.e2e.spec.js',
-        './wdio/tests/tables/tableEdit.e2e.spec.js'
+        './ui/wdio/tests/reports/reportEditRecord.e2e.spec.js',
+        './ui/wdio/tests/reports/reportNavigation.e2e.spec.js',
+        './ui/wdio/tests/reports/reportTable.e2e.spec.js',
+        './ui/wdio/tests/reports/grouping/reportGroupingViaColumnHeader.e2e.spec.js',
+        './ui/wdio/tests/reports/sorting/reportSortingViaColumnHeader.e2e.spec.js'
     ],
     // Custom suites to execute. Add the --suite *name,name* to your IntelliJ config or command line call
     suites: {
@@ -50,6 +55,9 @@ exports.config = {
         ],
         tables: [
             './ui/wdio/tests/tables/*.e2e.spec.js'
+        ],
+        relationships: [
+            './ui/wdio/tests/relationships/*.e2e.spec.js'
         ],
         dataGen: [
             // Make sure to uncomment the 'after' hook below if you want to save the test data!
@@ -149,7 +157,9 @@ exports.config = {
     // Firefox does not fire certain blur events when Firefox window does not have OS level focus. The following
     // setting enable blur events to fire during e2e tests even when the window does not have OS level focus.
     firefoxProfile: {
-        'focusmanager.testmode': true
+        'focusmanager.testmode': true,
+        'dom.max_chrome_script_run_time': 0,
+        'dom.max_script_run_time': 0
     },
     //
     // Framework you want to run your specs with.
