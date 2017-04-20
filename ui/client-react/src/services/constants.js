@@ -9,21 +9,21 @@ export default {
         TICKET          : 'ticket'
     },
 
-    // Define the base urls for QuickBase and Node API endpoints.
+    // Define the base context when calling node:
     //
-    // A Quickbase or Experience Engine endpoint that calls out to
-    // the public api, proxying through the node server.
-    //
-    // A Node endpoint DOES NOT require the Quickbase API to fulfill
-    // its request.  Work is done exclusively on the Node server.
+    //  CLIENT:  indicates the route performs custom function handling in node
+    //           before proxying to external server endpoint(s).
+    //  PROXY:   indicates the route will directly proxy through node to an
+    //           external server endpoint.  Note the content is blank..this is
+    //           intentional as this constant is to better self-document the
+    //           endpoint call within the service.
+    //  NODE:    indicates the route performs node only work and the request
+    //           should not proxy to an external server endpoint.
     BASE_URL: {
         CLIENT        : '/qb',
+        NODE        : '/n',
         PROXY          : '',
-        //QUICKBASE   : '/api/api/' + Configuration.api.qbVersion,
-        //EXPERIENCE  : '/ee/' + Configuration.api.eeVersion,
-        AUTOMATION  : '/we/workflow',          // + Configuration.api.automationVersion,
-        NODE        : '/n', // + Configuration.api.nodeVersion,
-        LEGACY      : '/api/l/' + Configuration.api.legacyVersion
+        AUTOMATION  : '/we/workflow'
     },
 
     // Entities

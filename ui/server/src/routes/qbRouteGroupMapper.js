@@ -8,7 +8,7 @@
     var routeGroups = require('./routeGroups'),
         _ = require('lodash'),
         constants = require('../../../common/src/constants'),
-        routeConsts = require('./routeConstants');
+        routes = require('./routeConstants').routes;
 
     /*
      * routeGroupDisabled maps each enumerated route group to the routes that are disabled for a route/method combination
@@ -16,9 +16,9 @@
     var routeGroupDisabled = {};
     //  debug
     routeGroupDisabled[routeGroups.DEBUG] = [
-        {route: routeConsts.APP_USERS, methods: [constants.POST, constants.DELETE, constants.PATCH, constants.PUT]},
-        {route: routeConsts.APPS, methods: [constants.POST, constants.DELETE, constants.PATCH, constants.PUT]},
-        {route: routeConsts.APP_ROLES, methods: [constants.POST, constants.DELETE, constants.PATCH, constants.PUT]}
+        {route: routes.APP_USERS, methods: [constants.POST, constants.DELETE, constants.PATCH, constants.PUT]},
+        {route: routes.APPS, methods: [constants.POST, constants.DELETE, constants.PATCH, constants.PUT]},
+        {route: routes.APP_ROLES, methods: [constants.POST, constants.DELETE, constants.PATCH, constants.PUT]}
     ];
 
     //  mercury v1
@@ -28,38 +28,34 @@
      * B) Enabled a specific subset of routes by defining the specific route in both routeConstants and qbRouteMapper.
      */
     routeGroupDisabled[routeGroups.LH_V1] = [
-        {route: routeConsts.FEATURE_STATES, methods: [constants.POST, constants.DELETE, constants.PATCH, constants.PUT]},
-        {route: routeConsts.FEATURE_SWITCHES, methods: [constants.POST, constants.DELETE, constants.PATCH, constants.PUT]},
-        {route: routeConsts.FEATURE_SWITCH, methods: [constants.PATCH]},
-        {route: routeConsts.FEATURE_OVERRIDE, methods: [constants.PATCH]},
+        {route: routes.FEATURE_STATES, methods: [constants.POST, constants.DELETE, constants.PATCH, constants.PUT]},
+        {route: routes.FEATURE_SWITCHES, methods: [constants.POST, constants.DELETE, constants.PATCH, constants.PUT]},
+        {route: routes.FEATURE_SWITCH, methods: [constants.PATCH]},
+        {route: routes.FEATURE_OVERRIDE, methods: [constants.PATCH]},
         //  app endpoints
-        {route: routeConsts.APPS, methods: [constants.POST, constants.DELETE, constants.PATCH, constants.PUT]},
-        {route: routeConsts.APP_USERS, methods: [constants.POST, constants.DELETE, constants.PATCH, constants.PUT]},
+        {route: routes.APPS, methods: [constants.POST, constants.DELETE, constants.PATCH, constants.PUT]},
+        {route: routes.APP_USERS, methods: [constants.POST, constants.DELETE, constants.PATCH, constants.PUT]},
         // form endpoints
-        {route: routeConsts.FORM_COMPONENTS, methods: [constants.POST, constants.DELETE, constants.PATCH, constants.PUT]},
-        {route: routeConsts.FORM_AND_RECORD_COMPONENTS, methods: [constants.POST, constants.DELETE, constants.PATCH, constants.PUT]},
+        {route: routes.FORM_COMPONENTS, methods: [constants.POST, constants.DELETE, constants.PATCH, constants.PUT]},
+        {route: routes.FORM_AND_RECORD_COMPONENTS, methods: [constants.POST, constants.DELETE, constants.PATCH, constants.PUT]},
         // report endpoints
-        {route: routeConsts.REPORT_RESULTS, methods: [constants.POST, constants.DELETE, constants.PATCH, constants.PUT]},
-        {route: routeConsts.REPORT_INVOKE_RESULTS, methods: [constants.POST, constants.DELETE, constants.PATCH, constants.PUT]},
-        {route: routeConsts.REPORT_META, methods: [constants.POST, constants.DELETE, constants.PATCH, constants.PUT]},
-        {route: routeConsts.REPORT_RECORDS_COUNT, methods: [constants.POST, constants.DELETE, constants.PATCH, constants.PUT]},
-        {route: routeConsts.TABLE_HOMEPAGE_REPORT, methods: [constants.POST, constants.DELETE, constants.PATCH, constants.PUT]},
+        {route: routes.REPORT_RESULTS, methods: [constants.POST, constants.DELETE, constants.PATCH, constants.PUT]},
+        {route: routes.REPORT_INVOKE_RESULTS, methods: [constants.POST, constants.DELETE, constants.PATCH, constants.PUT]},
+        {route: routes.REPORT_META, methods: [constants.POST, constants.DELETE, constants.PATCH, constants.PUT]},
+        {route: routes.REPORT_RECORDS_COUNT, methods: [constants.POST, constants.DELETE, constants.PATCH, constants.PUT]},
+        {route: routes.TABLE_HOMEPAGE_REPORT, methods: [constants.POST, constants.DELETE, constants.PATCH, constants.PUT]},
         // record endpoints
-        {route: routeConsts.RECORD, methods: [constants.POST, constants.PUT]}, //get, delete and patch allowed
-        {route: routeConsts.RECORDS, methods: [constants.DELETE, constants.PATCH, constants.PUT]}, //get and post allowed
-        {route: routeConsts.RECORDS_BULK, methods: [constants.POST, constants.GET, constants.PATCH, constants.PUT]}, //delete allowed
+        {route: routes.RECORD, methods: [constants.POST, constants.PUT]}, //get, delete and patch allowed
+        {route: routes.RECORDS, methods: [constants.DELETE, constants.PATCH, constants.PUT]}, //get and post allowed
+        {route: routes.RECORDS_BULK, methods: [constants.POST, constants.GET, constants.PATCH, constants.PUT]}, //delete allowed
         // role endpoints
-        {route: routeConsts.APP_ROLES, methods: [constants.POST, constants.DELETE, constants.PATCH, constants.PUT]},
-        // swagger endpoints
-        {route: routeConsts.SWAGGER_API, methods: [constants.GET, constants.POST, constants.DELETE, constants.PATCH, constants.PUT]},
-        {route: routeConsts.SWAGGER_API_EE, methods: [constants.GET, constants.POST, constants.DELETE, constants.PATCH, constants.PUT]},
-        {route: routeConsts.SWAGGER_RESOURCES, methods: [constants.GET, constants.POST, constants.DELETE, constants.PATCH, constants.PUT]},
-        {route: routeConsts.SWAGGER_IMAGES, methods: [constants.GET, constants.POST, constants.DELETE, constants.PATCH, constants.PUT]},
-        {route: routeConsts.SWAGGER_DOCUMENTATION, methods: [constants.GET, constants.POST, constants.DELETE, constants.PATCH, constants.PUT]},
+        {route: routes.APP_ROLES, methods: [constants.POST, constants.DELETE, constants.PATCH, constants.PUT]},
+
         // allow get, post, patch and delete on core
-        {route: routeConsts.TOMCAT_ALL, methods: [constants.PUT]},
+        {route: routes.CORE_ALL, methods: [constants.PUT]},
         // allow get on ee
-        {route: routeConsts.EXPERIENCE_ENGINE_ALL, methods: [constants.POST, constants.DELETE, constants.PATCH, constants.PUT]}];
+        {route: routes.EXPERIENCE_ENGINE_ALL, methods: [constants.POST, constants.DELETE, constants.PATCH, constants.PUT]}
+    ];
 
     module.exports = {
         /**

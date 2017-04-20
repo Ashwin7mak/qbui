@@ -6,9 +6,10 @@
 (function() {
     'use strict';
 
+    let _ = require('lodash');
     let log = require('../logger').getLogger();
     let perfLogger = require('../perfLogger');
-    let routeConsts = require('./routeConstants');
+    let routesConstants = require('./routeConstants');
     let request = require('request');
     let routeGroupMapper = require('./qbRouteGroupMapper');
     let simpleStringify = require('./../../../common/src/simpleStringify.js');
@@ -32,8 +33,7 @@
     let baseUrl = {
         CORE: '/api/api/v1',
         EE: '/ee/v1',
-        NODE: '/api/n',
-        AUTOMATION: '/we/workflow'
+        AUTOMATION: '/we/workflow/v1'
     };
 
     module.exports = function(config) {
@@ -62,8 +62,8 @@
          */
         function routeDeleteRequestsToFunction() {
             let requestFunctions = {};
-            requestFunctions[routeConsts.RECORD] = deleteSingleRecord;
-            requestFunctions[routeConsts.RECORDS_BULK] = deleteRecordsBulk;
+            requestFunctions[routes.RECORD] = deleteSingleRecord;
+            requestFunctions[routes.RECORDS_BULK] = deleteRecordsBulk;
 
             return requestFunctions;
         }
@@ -74,99 +74,93 @@
          *
          * @returns List of get routes
          */
-        function routeGetRequestsToFunction() {
+        function routeGetRequestsToFunction(routes) {
             let requestFunctions = {};
-            requestFunctions[routeConsts.APPS] = getApps;
-            requestFunctions[routeConsts.APP_USERS] = getAppUsers;
+            requestFunctions[routes.APPS] = getApps;
+            requestFunctions[routes.APP_USERS] = getAppUsers;
 
-            requestFunctions[routeConsts.APP_ROLES] = getAppRoles;
+            requestFunctions[routes.APP_ROLES] = getAppRoles;
 
-            requestFunctions[routeConsts.FEATURE_SWITCHES] = getFeatureSwitches;
-            requestFunctions[routeConsts.FEATURE_STATES] = getFeatureStates;
+            requestFunctions[routes.FEATURE_SWITCHES] = getFeatureSwitches;
+            requestFunctions[routes.FEATURE_STATES] = getFeatureStates;
 
-            requestFunctions[routeConsts.FORM_COMPONENTS] = fetchFormComponents;
-            requestFunctions[routeConsts.FORM_AND_RECORD_COMPONENTS] = fetchFormAndRecordComponents;
+            requestFunctions[routes.FORM_COMPONENTS] = fetchFormComponents;
+            requestFunctions[routes.FORM_AND_RECORD_COMPONENTS] = fetchFormAndRecordComponents;
 
-            requestFunctions[routeConsts.RECORD] = fetchSingleRecord;
-            requestFunctions[routeConsts.RECORDS] = fetchAllRecords;
+            requestFunctions[routes.RECORD] = fetchSingleRecord;
+            requestFunctions[routes.RECORDS] = fetchAllRecords;
 
-            requestFunctions[routeConsts.REPORT_META] = fetchReportMeta;
-            requestFunctions[routeConsts.REPORT_RESULTS] = fetchReportResults;
-            requestFunctions[routeConsts.REPORT_INVOKE_RESULTS] = fetchReportInvokeResults;
-            requestFunctions[routeConsts.REPORT_RECORDS_COUNT] = fetchReportRecordsCount;
-            requestFunctions[routeConsts.FACET_EXPRESSION_PARSE] = resolveReportFacets;
+            requestFunctions[routes.REPORT_META] = fetchReportMeta;
+            requestFunctions[routes.REPORT_RESULTS] = fetchReportResults;
+            requestFunctions[routes.REPORT_INVOKE_RESULTS] = fetchReportInvokeResults;
+            requestFunctions[routes.REPORT_RECORDS_COUNT] = fetchReportRecordsCount;
+            requestFunctions[routes.FACET_EXPRESSION_PARSE] = resolveReportFacets;
 
-            requestFunctions[routeConsts.TABLE_HOMEPAGE_REPORT] = fetchTableHomePageReport;
+            requestFunctions[routes.TABLE_HOMEPAGE_REPORT] = fetchTableHomePageReport;
 
-            requestFunctions[routeConsts.REQ_USER] = getReqUser;
+            requestFunctions[routes.REQ_USER] = getReqUser;
 
-            requestFunctions[routeConsts.HEALTH_CHECK] = forwardApiRequest;
+            requestFunctions[routes.HEALTH_CHECK] = forwardApiRequest;
 
-            requestFunctions[routeConsts.GOVERNANCE_ACCOUNT_USERS] = getAccountUsers;
-            requestFunctions[routeConsts.GOVERNANCE_CONTEXT] = getGovernanceContext;
+            requestFunctions[routes.GOVERNANCE_ACCOUNT_USERS] = getAccountUsers;
+            requestFunctions[routes.GOVERNANCE_CONTEXT] = getGovernanceContext;
 
             return requestFunctions;
         }
 
-        function routePatchRequestToFunction() {
+        function routePatchRequestToFunction(routes) {
             let requestFunctions = {};
-            requestFunctions[routeConsts.RECORD] = saveSingleRecord;
-            requestFunctions[routeConsts.TABLE] = updateTable;
+            requestFunctions[routes.RECORD] = saveSingleRecord;
+            requestFunctions[routes.TABLE] = updateTable;
 
             return requestFunctions;
         }
 
-        function routePostRequestsToFunction() {
+        function routePostRequestsToFunction(routes) {
             let requestFunctions = {};
-            requestFunctions[routeConsts.FEATURE_SWITCHES] = createFeatureSwitch;
-            requestFunctions[routeConsts.FEATURE_OVERRIDES] = createFeatureSwitchOverride;
-            requestFunctions[routeConsts.FEATURE_SWITCHES_BULK] = deleteFeatureSwitchesBulk;
-            requestFunctions[routeConsts.FEATURE_OVERRIDES_BULK] = deleteFeatureSwitchOverridesBulk;
+            requestFunctions[routes.FEATURE_SWITCHES] = createFeatureSwitch;
+            requestFunctions[routes.FEATURE_OVERRIDES] = createFeatureSwitchOverride;
+            requestFunctions[routes.FEATURE_SWITCHES_BULK] = deleteFeatureSwitchesBulk;
+            requestFunctions[routes.FEATURE_OVERRIDES_BULK] = deleteFeatureSwitchOverridesBulk;
 
-            requestFunctions[routeConsts.RECORDS] = createSingleRecord;
+            requestFunctions[routes.RECORDS] = createSingleRecord;
 
-            requestFunctions[routeConsts.TABLE_COMPONENTS] = createTableComponents;
+            requestFunctions[routes.TABLE_COMPONENTS] = createTableComponents;
 
             return requestFunctions;
         }
 
-        function routePutRequestsToFunction() {
+        function routePutRequestsToFunction(routes) {
             let requestFunctions = {};
-            requestFunctions[routeConsts.FEATURE_SWITCH] = updateFeatureSwitch;
-            requestFunctions[routeConsts.FEATURE_OVERRIDE] = updateFeatureSwitchOverride;
+            requestFunctions[routes.FEATURE_SWITCH] = updateFeatureSwitch;
+            requestFunctions[routes.FEATURE_OVERRIDE] = updateFeatureSwitchOverride;
+
+            return requestFunctions;
+        }
+
+        function routeAllRequestsToFunction(routes) {
+            var requestFunctions = {};
+            //
+            routesConstants.publicEndPoints.forEach(endPoint => {
+                requestFunctions[endPoint.route] = forwardApiRequest;
+            });
+            requestFunctions[routes.CORE_ALL] = forwardApiRequest;
+            requestFunctions[routes.EXPERIENCE_ENGINE_ALL] = forwardApiRequest;
+            requestFunctions[routes.SWAGGER_CORE_V2] = forwardApiRequest;
+            requestFunctions[routes.SWAGGER_EE_V2] = forwardApiRequest;
 
             return requestFunctions;
         }
 
         // Map all request that maps to a custom function
-        var routeToGetFunction = routeGetRequestsToFunction();
-        var routeToPostFunction = routePostRequestsToFunction();
-        var routeToPutFunction = routePutRequestsToFunction();
-        var routeToPatchFunction = routePatchRequestToFunction();
-        var routeToDeleteFunction = routeDeleteRequestsToFunction();
+        var routeToGetFunction = routeGetRequestsToFunction(routesConstants.routes);
+        var routeToPostFunction = routePostRequestsToFunction(routesConstants.routes);
+        var routeToPutFunction = routePutRequestsToFunction(routesConstants.routes);
+        var routeToPatchFunction = routePatchRequestToFunction(routesConstants.routes);
+        var routeToDeleteFunction = routeDeleteRequestsToFunction(routesConstants.routes);
+        var routeToAllFunction = routeAllRequestsToFunction(routesConstants.routes);
 
-        var routeToAllFunction = {};
-        //routeToAllFunction[routeConsts.CORE_ALL] = forwardApiRequest;
-        //routeToAllFunction[routeConsts.EXPERIENCE_ENGINE_ALL] = forwardApiRequest;
-        //routeToAllFunction[routeConsts.SWAGGER_CORE_V2] = forwardApiRequest;
-        //routeToAllFunction[routeConsts.SWAGGER_EE_V2] = forwardApiRequest;
-        routeToAllFunction[routeConsts.ALL] = forwardApiRequest;
-        //routeToAllFunction[routeConsts.EXPERIENCE_ENGINE_ALL] = forwardExperienceEngineApiRequest;
-        //routeToAllFunction[routeConsts.EE_FORMS] = forwardExperienceEngineApiRequest;
-        //routeToAllFunction[routeConsts.AUTOMATION_ENGINE_ALL] = forwardAutomationEngineApiRequest;
-
-
-        //routeToGetFunction[routeConsts.SWAGGER_API] = fetchSwagger;
-        //routeToGetFunction[routeConsts.SWAGGER_RESOURCES] = fetchSwagger;
-        //routeToGetFunction[routeConsts.SWAGGER_IMAGES] = fetchSwagger;
-        //routeToGetFunction[routeConsts.SWAGGER_DOCUMENTATION] = fetchSwagger;
-        //
-        //routeToGetFunction[routeConsts.SWAGGER_API_EE] = fetchSwagger;
-        //routeToGetFunction[routeConsts.SWAGGER_RESOURCES_EE] = fetchSwagger;
-        //routeToGetFunction[routeConsts.SWAGGER_IMAGES_EE] = fetchSwagger;
-        //routeToGetFunction[routeConsts.SWAGGER_DOCUMENTATION_EE] = fetchSwagger;
-
-        //  role endpoints
+         //  role endpoints
 
         /*
          * routeToAllFunction maps each route to the proper function associated with the route for all HTTP verb requests
@@ -181,7 +175,7 @@
              * @returns {*[]}
              */
             fetchAllRoutes: function() {
-                return routeConsts;
+                return routesConstants.routes;
             },
 
             /**
@@ -279,50 +273,27 @@
     }
 
     /**
-     * This helper method takes the request url produced and replaces the single /api with /api/api on the original
-     * request
+     * This helper method examines the req.url and updates based on whether
+     * it is a client customer endpoint or public short-hand notation endpoint.
      *
      * @param req
      */
     function modifyRequestPathForApi(req) {
-        //   if route starts with /qb/ context prefix, then it's a client custom function
-        //   route, so replace with the Core context prefix.
-        let clientContextRegEx = /^\/qb\/(.*)?$/i;
-        if (clientContextRegEx.test(req.url)) {
-            req.url = req.url.replace('/qb', baseUrl.CORE);
-        } else {
-            //  Regular expressions to identify supported short-hand notation routes. Matching route
-            //  requests with have the appropriate context prepended for the defined back-end server.
-            //
-            //  NOTE: ORDER OF ENTRY IN THE ROUTEMAP IS IMPORTANT.  Define specific routes FIRST, as routes
-            //  are tested in order of the array list and the first match found is always used.
-            //
-            //  The regular expression is interpreted as:
-            //      ^     - starts with
-            //      (.*)? - optionally match any character(s)
-            //      \/    - escaped forward slash
-            //      .*    - wildcard match any character(s)
-            //      /i    - case insensitive
-            let routeMap = [
-                {regEx: /^\/apps\/.*\/tables\/.*\/fields(.*)?$/i, context: baseUrl.CORE},
-                {regEx: /^\/apps\/.*\/tables\/.*\/forms(.*)?$/i, context: baseUrl.EE},
-                {regEx: /^\/apps\/.*\/tables\/.*\/records(.*)?$/i, context: baseUrl.CORE},
-                {regEx: /^\/apps\/.*\/tables\/.*\/reports(.*)?$/i, context: baseUrl.CORE},
-                {regEx: /^\/apps\/.*\/tables\/.*\/tableproperties(.*)?$/i, context: baseUrl.EE},
-                {regEx: /^\/apps\/.*\/relationships(.*)?$/i, context: baseUrl.CORE},
-                {regEx: /^\/apps\/.*\/roles(.*)?$/i, context: baseUrl.CORE},
-                {regEx: /^\/apps\/.*\/tables(.*)?$/i, context: baseUrl.CORE},
-                {regEx: /^\/apps(.*)?$/i, context: baseUrl.CORE},               // conflict with EE
-                {regEx: /^\/health(.*)?$/i, context: baseUrl.CORE},             // conflict with EE
-                {regEx: /^\/operations(.*)?$/i, context: baseUrl.CORE},         // conflict with EE
-                {regEx: /^\/realms(.*)?$/i, context: baseUrl.CORE},
-                {regEx: /^\/ticket(.*)?$/i, context: baseUrl.CORE},
-                {regEx: /^\/users(.*)?$/i, context: baseUrl.CORE}
-            ];
+        //   check if route is a client endpoint that performs custom function processing
+        let clientEndpoint = false;
+        routesConstants.clientEndPoints.some(endPoint => {
+            if (endPoint.regEx.test(req.url)) {
+                req.url = endPoint.context + req.url;
+                clientEndpoint = true;
+                return true;
+            }
+        });
 
-            routeMap.some(route => {
-                if (route.regEx.test(req.url)) {
-                    req.url = route.context + req.url;
+        // check if route is a public endpoint
+        if (!clientEndpoint) {
+            routesConstants.publicEndPoints.some(endPoint => {
+                if (endPoint.regEx.test(req.url)) {
+                    req.url = endPoint.context + req.url;
                     return true;
                 }
             });
