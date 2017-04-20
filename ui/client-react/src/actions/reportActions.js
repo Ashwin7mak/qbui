@@ -347,6 +347,17 @@ export const loadReportRecordsCount = (context, appId, tblId, rptId, queryParams
     };
 };
 
+export const toggleFieldSelectorMenu = (context, appId, tblId, rptId, params) => {
+    return (dispatch) => {
+        if (appId && tblId && rptId) {
+            let openOrClose = params.open ? types.OPEN_FIELD_SELECTOR : types.CLOSE_FIELD_SELECTOR;
+            dispatch(event(context, openOrClose, params));
+        } else {
+            logger.error(`reportActions.toggleFieldSelectorMenu: Missing one or more required input parameters. AppId:${appId}; TblId:${tblId}; RptId:${rptId}`);
+        }
+    }
+};
+
 export const addColumnToTable = (context, appId, tblId, rptId, params) => {
     return (dispatch) => {
         if (appId && tblId && rptId) {
@@ -357,13 +368,26 @@ export const addColumnToTable = (context, appId, tblId, rptId, params) => {
     }
 };
 
-export const toggleFieldSelectorMenu = (context, appId, tblId, rptId, params) => {
+/**
+ * Hide a column based on the column id given.
+ * @param context
+ * @param appId
+ * @param tblId
+ * @param rptId
+ * @param params { columnId }
+ */
+export const hideColumn = (context, appId, tblId, rptId, params) => {
     return (dispatch) => {
         if (appId && tblId && rptId) {
-            let openOrClose = params.open ? types.OPEN_FIELD_SELECTOR : types.CLOSE_FIELD_SELECTOR;
-            dispatch(event(context, openOrClose, params));
+            logger.debug(`Hiding column with id: ${params.columnId} for appId: ${appId}, tblId:${tblId}, rptId:${rptId}`);
+            // Temporary until API to persist hidden columns.
+            return new Promise((resolve) => {
+                dispatch(event(context, types.HIDE_COLUMN, params));
+                resolve();
+            });
         } else {
-            logger.error(`reportActions.toggleFieldSelectorMenu: Missing one or more required input parameters. AppId:${appId}; TblId:${tblId}; RptId:${rptId}`);
+            logger.error(`reportActions.hideColumn: Missing one or more required input parameters.  AppId:${appId}; TblId:${tblId}; RptId:${rptId}`);
+            return new Promise.reject();
         }
-    }
+    };
 };

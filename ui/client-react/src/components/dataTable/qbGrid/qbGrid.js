@@ -216,28 +216,33 @@ const QbGrid = React.createClass({
     },
 
     /**
-     * Render a single column
+     * Gets all non-hidden columns.
      */
-    getColumns() {
-        return this.props.columns.map(column => {
-            try {
-                column.addFormatter(this.renderCell);
-                if (!this.props.phase1 && !column.fieldDef.isPlaceholder) {
-                    column.addHeaderMenu(this.props.menuComponent, this.props.menuProps);
-                }
-                let c = column.getGridHeader();
-                if (c.property === undefined) {
-                    c.cell.transforms = [this.getPlaceholderCellProps];
-                    c.header.transforms = [this.getPlaceholderCellProps];
-                }
-                return c;
-            } catch (err) {
-                // If the column is not a type of ColumnTransformer with the appropriate methods, still pass through the column as the dev may have wanted to use a plain object (i.e., in the component library)
-                // but provide a warning in case using the ColumnTransformer class was forgotten.
-                logger.warn('The columns passed to QbGrid are not instances of ColumnTransformer. Use the ColumnTransformer helper class in the QbGrid folder for better results in the grid.');
-                return column;
-            }
+    getVisibleColumns() {
+        let visibleColumns = this.props.columns.filter(column => {
+            return !column.isHidden;
         });
+        return visibleColumns.map(column => {
+            return this.getColumn(column);
+        });
+    },
+
+    /**
+     * Renders a single column.
+     */
+    getColumn(column) {
+        try {
+            column.addFormatter(this.renderCell);
+            if (!this.props.phase1) {
+                column.addHeaderMenu(this.props.menuComponent, this.props.menuProps);
+            }
+            return column.getGridHeader();
+        } catch (err) {
+            // If the column is not a type of ColumnTransformer with the appropriate methods, still pass through the column as the dev may have wanted to use a plain object (i.e., in the component library)
+            // but provide a warning in case using the ColumnTransformer class was forgotten.
+            logger.warn('The columns passed to QbGrid are not instances of ColumnTransformer. Use the ColumnTransformer helper class in the QbGrid folder for better results in the grid.');
+            return column;
+        }
     },
 
     /**
@@ -384,12 +389,11 @@ const QbGrid = React.createClass({
                         transforms: [this.getActionCellProps],
                     }
                 }],
-                ...this.getColumns()
+                ...this.getVisibleColumns()
             ];
         } else {
-            columns = this.getColumns();
+            columns = this.getVisibleColumns();
         }
-
         return (
 
             <Loader loaded={!this.props.loading} options={SpinnerConfigurations.LARGE_BREAKPOINT}>

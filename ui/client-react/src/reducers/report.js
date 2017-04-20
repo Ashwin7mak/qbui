@@ -254,7 +254,7 @@ const report = (state = [], action) => {
         }
         return state;
     }
-    case types.REMOVE_BLANK_REPORT_RECORD:
+    case types.REMOVE_BLANK_REPORT_RECORD: {
         //  NOTE: this event is listened to in the record reducer to avoid multiple grid renders.
         let currentReport = getReportFromState(action.id);
         if (currentReport && action.content) {
@@ -266,6 +266,7 @@ const report = (state = [], action) => {
             }
         }
         return state;
+    }
     case types.CHANGE_LOCALE: {
         // listen for change locale event and update all reports to the new locale
         const reports = _.cloneDeep(state);
@@ -393,6 +394,18 @@ const report = (state = [], action) => {
                 reorderColumns(actualColumns);
                 currentReport.data.columns = actualColumns;
             }
+            return newState(currentReport);
+        }
+        return state;
+    }
+    case types.HIDE_COLUMN: {
+        let currentReport = getReportFromState(action.id);
+        if (currentReport) {
+            currentReport.data.columns.forEach(column => {
+                if (column.fieldDef.id === action.content.columnId) {
+                    column.isHidden = true;
+                }
+            });
             return newState(currentReport);
         }
         return state;

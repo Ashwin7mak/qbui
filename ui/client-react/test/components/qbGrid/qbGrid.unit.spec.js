@@ -13,9 +13,9 @@ import * as Table from 'reactabular-table';
 import {UNSAVED_RECORD_ID} from '../../../src/constants/schema';
 
 const testColumns = [
-    new ColumnTransformer('Header 1', 1, 'header1class'),
-    new ColumnTransformer('Header 2', 2, 'header2class'),
-    new ColumnTransformer('Header 3', 3, 'header3class')
+    new ColumnTransformer('Header 1', 1, 'header1class', false),
+    new ColumnTransformer('Header 2', 2, 'header2class', false),
+    new ColumnTransformer('Header 3', 3, 'header3class', false)
 ];
 const rowIds = [1, 2];
 const testRows = [
