@@ -1,0 +1,130 @@
+---
+AWSTemplateFormatVersion: '2010-09-09'
+Description: ExperienceEngine ECS Deployment
+Parameters:
+  VPCStackName:
+    Type: String
+    Default: general-vpc
+  Path:
+    Type: String
+    Default: "/qbase/*"
+  ECSClusterName:
+    Type: String
+  ServiceName:
+    Type: String
+    Default: coreui
+  DesiredCount:
+    Type: String
+    Default: 2
+  ContainerPort:
+    Type: String
+    Default: 9443
+  ContainerImage:
+    Type: String
+    Default: 723670383381.dkr.ecr.us-west-2.amazonaws.com/quickbase/qbui:latest
+  ContainerMemory:
+    Type: String
+    Default: 2048
+
+Mappings:
+  # 3381 = pre-prod
+  # 1063 = prod
+  AccountMap:
+    SplunkIndex:
+      "723670383381": "containers"
+      "729325871063": "containers"
+
+Resources:
+  Service: 
+    Type: AWS::ECS::Service
+    DependsOn: ListenerRule
+    Properties: 
+        Cluster: !Ref ECSClusterName
+        Role: !Ref ServiceRole
+        DesiredCount: !Ref DesiredCount
+        TaskDefinition: !Ref TaskDefinition
+        LoadBalancers:
+          - ContainerName: !Ref ServiceName
+            ContainerPort: !Ref ContainerPort
+            TargetGroupArn: !Ref TargetGroup
+  TaskDefinition:
+    Type: AWS::ECS::TaskDefinition
+    Properties:
+        ContainerDefinitions:
+          - Name: !Ref ServiceName
+            Essential: true
+            Image: !Ref ContainerImage
+            Memory: !Ref ContainerMemory
+            PortMappings:
+              - ContainerPort: !Ref ContainerPort
+            LogConfiguration:
+              LogDriver: splunk
+              Options:
+                splunk-url: https://http-inputs-quickbase.splunkcloud.com
+                splunk-sourcetype: !Ref ServiceName
+                splunk-token: F3CA376D-74A5-5684-B563-5542B2F2E0F2
+                splunk-index: !FindInMap [AccountMap, "SplunkIndex", !Ref "AWS::AccountId"]
+                splunk-source: !Ref ServiceName
+                tag: "{{.Name}}/{{.ID}}"
+            Environment:
+              - Name: NODE_ENV
+                Value: container
+  ListenerRule:
+    Type: AWS::ElasticLoadBalancingV2::ListenerRule
+    Properties:
+      ListenerArn:
+        "Fn::ImportValue": !Sub "${ECSClusterName}-ALBListenerARN"
+      Priority: 3
+      Conditions:
+        - Field: path-pattern
+          Values: 
+            - !Ref Path
+      Actions:
+        - TargetGroupArn: !Ref TargetGroup
+          Type: forward
+  TargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      VpcId:
+        "Fn::ImportValue": !Sub "${VPCStackName}-VPC"
+      Port: 443
+      Protocol: HTTPS
+      Matcher: 
+        HttpCode: 200-299
+      HealthCheckIntervalSeconds: 10
+      # FIXME (wrong path - should be /ee/v1/health)
+      HealthCheckPath: /qbase/
+      HealthCheckProtocol: HTTPS
+      HealthCheckTimeoutSeconds: 5
+      HealthyThresholdCount: 2
+  ServiceRole: 
+    Type: AWS::IAM::Role
+    Properties: 
+      Path: /
+      AssumeRolePolicyDocument:
+        Statement:
+          -
+            Effect: "Allow"
+            Principal:
+              Service:
+                - "ecs.amazonaws.com"
+            Action:
+              - "sts:AssumeRole"
+      Policies:
+      -
+        PolicyName: alb-registration-policy
+        PolicyDocument:
+          Statement:
+            - 
+              Effect: Allow
+              Action: 
+                - ec2:AuthorizeSecurityGroupIngress
+                - ec2:Describe*
+                - elasticloadbalancing:DeregisterInstancesFromLoadBalancer
+                - elasticloadbalancing:Describe*
+                - elasticloadbalancing:RegisterInstancesWithLoadBalancer
+                - elasticloadbalancing:DeregisterTargets
+                - elasticloadbalancing:DescribeTargetGroups
+                - elasticloadbalancing:DescribeTargetHealth
+                - elasticloadbalancing:RegisterTargets
+              Resource: "*"
