@@ -17,3 +17,4 @@
 7. grunt-protractor-runner
 8. react-redux Anything above 4.4.6 logs a ton of "Warnings: Failed Context Types: Calling PropTypes validators directly is not supported by the 'prop-types' packages" in the console.
 9. react-bootstrap Anything above 0.30.7 logs a ton of "Warnings: Failed Context Types: Calling PropTypes validators directly is not supported by the 'prop-types' packages" in the console.
+10. webdriverio - Version locked because of breaking change in minor update (trimming strings). Ken will investigate fixes and upgrades.
