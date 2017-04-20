@@ -15,4 +15,5 @@
 5. bootstrap-sass-loader no longer valid, bootstrap-loader is the new version
 6. bunyans
 7. grunt-protractor-runner
-8. ag-grid enterprise 4.1.x has breaking changes, we need to address these. all the ag-grid modules need to be at the same major update to move forwards (requirement at build time)
+8. react-redux Anything above 4.4.6 logs a ton of "Warnings: Failed Context Types: Calling PropTypes validators directly is not supported by the 'prop-types' packages" in the console.
+9. react-bootstrap Anything above 0.30.7 logs a ton of "Warnings: Failed Context Types: Calling PropTypes validators directly is not supported by the 'prop-types' packages" in the console.

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {PropTypes} from 'react';
 import {I18nMessage} from '../../../utils/i18nMessage';
 import Loader  from 'react-loader';
 import Swipeable from 'react-swipeable';
@@ -14,6 +14,7 @@ import {openRecord} from '../../../actions/recordActions';
 import WindowLocationUtils from '../../../utils/windowLocationUtils';
 import {EDIT_RECORD_KEY} from '../../../constants/urlConstants';
 import {CONTEXT} from '../../../actions/context';
+import EmptyImage from '../../../../../client-react/src/assets/images/empty box graphic.svg';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
 
@@ -26,12 +27,15 @@ const MAX_SWIPE_DISTANCE = 150; // Drag distance when swiping up or down. Applie
 export let CardViewListHolder = React.createClass({
     mixins: [FluxMixin],
     propTypes: {
-        reportData: React.PropTypes.object.isRequired,
-        primaryKeyName: React.PropTypes.string,
-        reportHeader: React.PropTypes.element,
-        selectionActions: React.PropTypes.element,
-        onScroll: React.PropTypes.func,
-        onRowClicked: React.PropTypes.func
+        reportData: PropTypes.object.isRequired,
+        primaryKeyName: PropTypes.string,
+        reportHeader: PropTypes.element,
+        selectionActions: PropTypes.element,
+        onScroll: PropTypes.func,
+        onRowClicked: PropTypes.func,
+        noRowsUI: PropTypes.bool,
+        searchString: PropTypes.string,
+        onAddNewRecord: PropTypes.func
     },
 
     getInitialState() {
@@ -58,7 +62,7 @@ export let CardViewListHolder = React.createClass({
         if (this.state.rowActionsRowId !== -1) {
             return;
         }
-        this.setState({allowCardSelection: allow, swiping:false});
+        this.setState({allowCardSelection: allow, swiping: false});
 
         const flux = this.getFlux();
         if (!allow) {
@@ -283,58 +287,66 @@ export let CardViewListHolder = React.createClass({
         }
 
         return (<Swipeable className="swipeable"
-                       onSwipingUp={(ev, delta) => {this.swiping(ev.target, delta, true);}}
-                       onSwipingDown={(ev, delta) => {this.swiping(ev.target, delta, false);}}
-                       onSwipedUp={this.swipedUp}
-                       onSwipedDown={this.swipedDown}
-                       preventDefaultTouchmoveEvent={false}>
+                           onSwipingUp={(ev, delta) => {
+                               this.swiping(ev.target, delta, true);
+                           }}
+                           onSwipingDown={(ev, delta) => {
+                               this.swiping(ev.target, delta, false);
+                           }}
+                           onSwipedUp={this.swipedUp}
+                           onSwipedDown={this.swipedDown}
+                           preventDefaultTouchmoveEvent={false}>
 
-                    <div className={cardViewListClasses} style={cardViewListStyle}>
-                        {showPreviousButton ?
-                            (<CardViewNavigation getPreviousReportPage={this.props.getPreviousReportPage}
-                            />) :
-                            <div className="spacer"></div>
-                        }
+            <div className={cardViewListClasses} style={cardViewListStyle}>
+                {showPreviousButton ?
+                    (<CardViewNavigation getPreviousReportPage={this.props.getPreviousReportPage}
+                    />) :
+                    <div className="spacer"></div>
+                }
 
-                        <CardViewList ref="cardViewList"
-                                      node={recordNodes}
-                                      columns={_.has(this.props, "reportData.data.columns") ? this.props.reportData.data.columns : []}
-                                      primaryKeyName={this.props.primaryKeyName}
-                                      groupId=""
-                                      groupLevel={-1}
-                                      appId={this.props.reportData.appId}
-                                      tblId={this.props.reportData.tblId}
-                                      allowCardSelection={this.allowCardSelection}
-                                      onToggleCardSelection={this.onToggleCardSelection}
-                                      onRowSelected={this.onCardRowSelected}
-                                      onRowClicked={this.props.onRowClicked}
-                                      isRowSelected={this.isRowSelected}
-                                      onEditRecord={this.openRecordForEdit}
-                                      onSwipe={this.onSwipe}
-                                      onActionsOpened={this.rowActionsOpened}
-                                      onActionsClosed={this.rowActionsClosed}
-                                      rowActionsRowId={this.state.rowActionsRowId}/>
+                <CardViewList ref="cardViewList"
+                              node={recordNodes}
+                              columns={_.has(this.props, "reportData.data.columns") ? this.props.reportData.data.columns : []}
+                              primaryKeyName={this.props.primaryKeyName}
+                              groupId=""
+                              groupLevel={-1}
+                              appId={this.props.reportData.appId}
+                              tblId={this.props.reportData.tblId}
+                              allowCardSelection={this.allowCardSelection}
+                              onToggleCardSelection={this.onToggleCardSelection}
+                              onRowSelected={this.onCardRowSelected}
+                              onRowClicked={this.props.onRowClicked}
+                              isRowSelected={this.isRowSelected}
+                              onEditRecord={this.openRecordForEdit}
+                              onSwipe={this.onSwipe}
+                              onActionsOpened={this.rowActionsOpened}
+                              onActionsClosed={this.rowActionsClosed}
+                              rowActionsRowId={this.state.rowActionsRowId}/>
 
-                        {showNextButton ?
-                            (<CardViewFooter getNextReportPage={this.props.getNextReportPage}/>) :
-                            <div className="spacer"></div>
-                        }
-                    </div>
-                </Swipeable>);
+                {showNextButton ?
+                    (<CardViewFooter getNextReportPage={this.props.getNextReportPage}/>) :
+                    <div className="spacer"></div>
+                }
+            </div>
+        </Swipeable>);
     },
 
     /**
      * tell parent we're scrolling so they can hide the add record icon
      */
     componentDidMount() {
-        this.refs.cardViewListWrapper.addEventListener("scroll", this.props.onScroll);
+        if (this.refs.cardViewListWrapper) {
+            this.refs.cardViewListWrapper.addEventListener("scroll", this.props.onScroll);
+        }
     },
 
     /**
      * tell parent we've stopped scrolling so they can re-display the add record icon
      */
     componentWillUnmount() {
-        this.refs.cardViewListWrapper.removeEventListener("scroll", this.props.onScroll);
+        if (this.refs.cardViewListWrapper) {
+            this.refs.cardViewListWrapper.removeEventListener("scroll", this.props.onScroll);
+        }
     },
 
     /**
@@ -394,31 +406,61 @@ export let CardViewListHolder = React.createClass({
         //});
     },
 
+    /**
+     * get text to display below grid if no rows are displayed
+     * @returns {*}
+     */
+    renderNoRowsExist() {
+
+        const hasSearch = this.props.searchString && this.props.searchString.trim().length > 0;
+
+        return (
+            <div className="noRowsExist">
+
+                <div className="noRowsIconLine">
+                    <img className="noRowsIcon animated zoomInDown" alt="No Rows" src={EmptyImage} />
+                </div>
+
+                <div className="noRowsText">
+                    {hasSearch ? <div className="searchNoRows"><I18nMessage message="grid.no_filter_matches"/></div> :
+                        <div className="cardViewCreateOne">
+                            <I18nMessage message="grid.no_rows_but"/>
+                            <a href="#" onClick={this.props.onAddNewRecord}><I18nMessage message="grid.no_rows_create_link"/></a>...
+                        </div>}
+                </div>
+            </div>);
+    },
+
     render() {
         let results = this.props.reportData && this.props.reportData.data ? this.props.reportData.data.filteredRecords : [];
 
+        if (!this.props.noRowsUI || this.props.reportData.loading || results && results.length > 0) {
+            return (
+                <div className="reportTable">
 
-        return (
-            <div className="reportTable">
-
-                <div className="tableLoaderContainer" ref="cardViewListWrapper">
-                    <Loader loaded={!this.props.reportData.loading} options={SpinnerConfigurations.CARD_VIEW_REPORT}>
-                        {results ?
-                            this.getRows(results) :
-                            <div className="noData"><I18nMessage message={'grid.no_data'}/></div>}
-                    </Loader>
-                    { //keep empty placeholder when loading to reduce reflow of space, scrollbar changes
-                        this.props.reportData.loading ? <div className="loadedContent"></div> : null
-                    }
+                    <div className="tableLoaderContainer" ref="cardViewListWrapper">
+                        <Loader loaded={!this.props.reportData.loading}
+                                options={SpinnerConfigurations.CARD_VIEW_REPORT}>
+                            {results ?
+                                this.getRows(results) :
+                                <div className="noData"><I18nMessage message={'grid.no_data'}/></div>}
+                        </Loader>
+                        { //keep empty placeholder when loading to reduce reflow of space, scrollbar changes
+                            this.props.reportData.loading ? <div className="loadedContent"></div> : null
+                        }
+                    </div>
                 </div>
-            </div>
-        );
+            );
+        } else {
+            return this.renderNoRowsExist();
+        }
     }
 });
 
 const mapStateToProps = (state) => {
     return {
-        report: state.report
+        report: state.report,
+        searchString: state.search && state.search.searchInput
     };
 };
 
