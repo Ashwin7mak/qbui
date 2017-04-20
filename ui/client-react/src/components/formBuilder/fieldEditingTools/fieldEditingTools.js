@@ -46,16 +46,16 @@ export class FieldEditingTools extends Component {
     }
 
     onClickField(e) {
-        if (this.props.selectFieldOnForm && !this.props.selectedFields[0]) {
+        let selectedField = this.props.selectedField ? this.props.selectedField[0] : undefined;
+
+        if (this.props.selectFieldOnForm &&
+            !(_.isEqual(this.props.location, selectedField))) {
             this.props.selectFieldOnForm(this.props.formId, this.props.location);
-            if (e) {
-                e.preventDefault();
-            }
-        } else if (this.props.selectFieldOnForm) {
+        } else if (this.props.deselectField) {
             this.props.deselectField(this.props.formId, this.props.location);
-            if (e) {
-                e.preventDefault();
-            }
+        }
+        if (e) {
+            e.preventDefault();
         }
     }
 
@@ -100,10 +100,15 @@ export class FieldEditingTools extends Component {
          * For keyboard, we need to reset the focus, to maintain proper tabbing order
          * and we need to keep the current form element in view, by scrolling it into view
          * */
-        if (this.props.previouslySelectedField && this.props.previouslySelectedField[0] && this.props.tabIndex !== "-1") {
+        if (this.props.previouslySelectedField &&
+            this.props.previouslySelectedField[0] &&
+            this.props.tabIndex !== "-1") {
             let previouslySelectedField = document.querySelectorAll(".fieldEditingTools");
             previouslySelectedField[this.props.previouslySelectedField[0].elementIndex].focus();
-        } else if (this.props.selectedFields && this.props.selectedFields[0] && document.activeElement.tagName !== "INPUT") {
+        } else if (this.props.selectedFields &&
+            this.props.selectedFields[0] &&
+            this.props.tabIndex !== "-1" &&
+            document.activeElement.tagName !== "INPUT") {
             let setFocusOnSelectedField = document.querySelectorAll(".fieldEditingTools")[this.props.selectedFields[0].elementIndex];
             if (setFocusOnSelectedField) {
                 setFocusOnSelectedField.focus();

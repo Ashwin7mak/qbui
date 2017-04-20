@@ -206,12 +206,12 @@ export const FormBuilderContainer = React.createClass({
         let childrenTabIndex = this.props.tabIndex;
         let selectedField = this.props.selectedField;
         let formId = this.props.currentForm.id;
-        if (selectedField) {
-            this.deselectField();
-        } else if (this.props.tabIndex === "0") {
+        if (this.props.tabIndex === "0") {
             this.props.toggleFormBuilderChildrenTabIndex(formId, childrenTabIndex);
         } else if (this.props.toolPaletteChildrenTabIndex === "0") {
             this.props.toggleToolPaletteChildrenTabIndex(formId, "0");
+        } else if (selectedField) {
+            this.deselectField();
         } else {
             this.onCancel();
         }

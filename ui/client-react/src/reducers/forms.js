@@ -388,8 +388,8 @@ const forms = (
             updatedForm.toolPaletteFocus = [];
         }
 
-        updatedForm.formBuilderChildrenTabIndex[0] = "-1";
         updatedForm.toolPaletteChildrenTabIndex[0] = tabIndex;
+        updatedForm.formBuilderChildrenTabIndex[0] = "-1";
         updatedForm.formFocus[0] = false;
         updatedForm.toolPaletteFocus[0] = toolPaletteFocus;
 
