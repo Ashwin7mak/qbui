@@ -522,7 +522,7 @@ export default {
             FILE_ATTACHMENT: "Fichier"
         },
         fieldPropertyLabels: {
-            title: "Propriétés",
+            title: "Propriétés du champ",
             name: "prénom",
             required: "Doit être rempli",
             multiChoice: "Les choix"
