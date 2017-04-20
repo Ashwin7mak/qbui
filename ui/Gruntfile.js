@@ -563,13 +563,17 @@ module.exports = function(grunt) {
                     './wdio/tests/reports/reportAddRecord.e2e.spec.js',
                     // disabling formPermissionsViewerRole test as after moving to ExperienceEngine,
                     // permissions for viewer are not working correctly
+                    //TODO MC-2105 should be fixed to enable permissions on forms
                     './wdio/tests/forms/formPermissionsViewerRole.e2e.spec.js',
+                    './wdio/tests/forms/formPermissionsParticipantRole.e2e.spec.js',
                     // currently intermittently broken in CI need to fix in another PR
                     './wdio/tests/forms/formDragDrop.e2e.spec.js',
-                    './wdio/tests/tables/tableCreate.e2e.spec.js',
-                    './wdio/tests/tables/tableEdit.e2e.spec.js',
+                    './wdio/tests/reports/reportEditRecord.e2e.spec.js',
                     './wdio/tests/reports/reportNavigation.e2e.spec.js',
-                    './wdio/tests/reports/reportEditRecord.e2e.spec.js'
+                    './wdio/tests/reports/reportTable.e2e.spec.js',
+                    './wdio/tests/reports/grouping/reportGroupingViaColumnHeader.e2e.spec.js',
+                    './wdio/tests/reports/sorting/reportSortingViaColumnHeader.e2e.spec.js',
+                    './wdio/tests/relationships/relationshipViewChildTable.e2e.spec.js'
                 ],
                 suites: {
                     reports: [
@@ -582,6 +586,9 @@ module.exports = function(grunt) {
                     ],
                     tables: [
                         './wdio/tests/tables/*.e2e.spec.js'
+                    ],
+                    relationships: [
+                        './wdio/tests/relationships/*.e2e.spec.js'
                     ]
                 }
             },
@@ -1064,7 +1071,6 @@ module.exports = function(grunt) {
         'shell:nodeVer',
         'clean:dist',
         'webpackbuild',
-        'logGitState',
         'copy:reactDist'
     ]);
 
