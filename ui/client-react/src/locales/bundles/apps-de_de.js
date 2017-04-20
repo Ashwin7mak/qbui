@@ -320,9 +320,9 @@ export default {
                 fieldProps: "Feldeigenschaften"
             },
             drawer: {
-                title: "Hidden fields",
-                info: "Add a field to the report",
-                empty: "All fields are shown in the report."
+                title: "Versteckte Felder",
+                info: "Fügen Sie ein Feld zum Bericht hinzu",
+                empty: "Alle Felder werden im Bericht gezeigt."
             }
         },
         errorMessagePopup: {
