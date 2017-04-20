@@ -7,15 +7,16 @@ import _ from 'lodash';
 
 import QbGrid from '../../../src/components/dataTable/qbGrid/qbGrid';
 import ColumnTransformer from '../../../src/components/dataTable/qbGrid/columnTransformer';
+import ReportColumnTransformer from '../../../src/components/dataTable/reportGrid/reportColumnTransformer';
 import RowTransformer from '../../../src/components/dataTable/qbGrid/rowTransformer';
 import QbIconActions, {__RewireAPI__ as QbIconActionsRewireAPI} from '../../../src/components/dataTable/qbGrid/qbIconActions';
 import * as Table from 'reactabular-table';
 import {UNSAVED_RECORD_ID} from '../../../src/constants/schema';
 
 const testColumns = [
-    new ColumnTransformer('Header 1', 1, 'header1class'),
-    new ColumnTransformer('Header 2', 2, 'header2class'),
-    new ColumnTransformer('Header 3', 3, 'header3class')
+    new ColumnTransformer('Header 1', 1, 'header1class', false),
+    new ColumnTransformer('Header 2', 2, 'header2class', false),
+    new ColumnTransformer('Header 3', 3, 'header3class', false)
 ];
 const rowIds = [1, 2];
 const testRows = [
