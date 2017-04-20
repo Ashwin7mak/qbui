@@ -124,8 +124,8 @@ export const TablePropertiesRoute = React.createClass({
         ) {
             return null;
         } else {
-            let showButtons = this.props.tableProperties.isDirty ? true : false;
-            let buttonsClasses = "tableInfoButtons " + (showButtons ? "open" : "closed");
+            let isDirty = this.props.isDirty ? true : false;
+            let buttonsClasses = "tableInfoButtons " + (isDirty ? "open" : "closed");
             return (<div>
                 <Stage stageHeadline={this.getStageHeadline()} pageActions={this.getPageActions(5)}>
                     <div className="tableProperties-content"></div>
@@ -144,9 +144,9 @@ export const TablePropertiesRoute = React.createClass({
                     />
                     <div className={buttonsClasses}>
                         <a className="secondaryButton" onClick={this.resetTableProperties}><I18nMessage
-                            message={"nav.reset"}/></a>
+                            message="nav.reset"/></a>
                         <Button className="primaryButton" bsStyle="primary" onClick={this.updateTable}><I18nMessage
-                            message={"nav.apply"}/></Button>
+                            message="nav.apply"/></Button>
                     </div>
                 </div>
                 {this.getConfirmDialog()}
@@ -158,7 +158,8 @@ export const TablePropertiesRoute = React.createClass({
 
 const mapStateToProps = (state) => {
     return {
-        tableProperties: state.tableProperties
+        tableProperties: state.tableProperties,
+        isDirty: state.tableProperties && state.tableProperties.isDirty ? true : false
     };
 };
 
