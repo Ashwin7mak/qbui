@@ -125,6 +125,14 @@
             },
 
             /**
+             * Allows you to override the appsApi object for unit tests.
+             * @param requestRequestOverride
+             */
+            setAppsApiObject: function(obj) {
+                appsApi = obj;
+            },
+
+            /**
              * Return form meta data for a given record
              *
              * @param req
@@ -147,14 +155,9 @@
                     opts.url += search;
                 }
 
-                if (lodash.get(req, 'query.relationshipPrototype')) {
-                    // Eventually FormMetaData returned from the experience engine should include ReferenceElements.
-                    // For now we are manually adding to the form when the 'relationshipPrototype' query parameter is true.
-                    return this.createReferenceElements(req, opts);
-                } else {
-                    return requestHelper.executeRequest(req, opts)
-                        .then(response => JSON.parse(response.body));
-                }
+                // Eventually FormMetaData returned from the experience engine should include ReferenceElements.
+                // For now we are manually adding to the form.
+                return this.createReferenceElements(req, opts);
             },
 
             /**

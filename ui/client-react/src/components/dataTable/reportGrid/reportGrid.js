@@ -5,11 +5,15 @@ import ReportRowTransformer from './reportRowTransformer';
 import FieldUtils from '../../../utils/fieldUtils';
 import ReportUtils from '../../../utils/reportUtils';
 import ReportColumnHeaderMenu from './reportColumnHeaderMenu';
+import EmptyImage from '../../../../../client-react/src/assets/images/empty box graphic.svg';
+import {I18nMessage} from "../../../utils/i18nMessage";
 import {connect} from 'react-redux';
 
 import _ from 'lodash';
 
 import ReportCell from './reportCell';
+
+import './reportGrid.scss';
 
 export const ReportGrid = React.createClass({
     propTypes: {
@@ -114,14 +118,25 @@ export const ReportGrid = React.createClass({
          * A list of ids by which the report has been sorted (used for displaying the report header menu) */
         sortFids: PropTypes.array,
 
+        /**
+         * search text
+         */
+        searchString: PropTypes.string,
         // relationship phase-1, will need remove when we allow editing
-        phase1: PropTypes.bool
+        phase1: PropTypes.bool,
+
+        /**
+         * present an alternate UI instead of an empty grid if on rows are present?
+         */
+        noRowsUI: PropTypes.bool
+
     },
 
     getDefaultProps() {
         return {
             records: [],
-            columns: []
+            columns: [],
+            noRowsUI: false
         };
     },
 
@@ -221,6 +236,27 @@ export const ReportGrid = React.createClass({
         return pendEdits;
     },
 
+    /**
+     * get text to display below grid if no rows are displayed
+     * @returns {*}
+     */
+    renderNoRowsExist() {
+
+        const hasSearch = this.props.searchString && this.props.searchString.trim().length > 0;
+
+        return (
+            <div className="noRowsExist">
+
+                <div className="noRowsIconLine">
+                    <img className="noRowsIcon animated zoomInDown" alt="No Rows" src={EmptyImage} />
+                </div>
+
+                <div className="noRowsText">
+                    {hasSearch ? <I18nMessage message="grid.no_filter_matches"/> : <I18nMessage message="grid.no_rows"/>}
+                </div>
+            </div>);
+    },
+
     render() {
         let isRecordValid = true;
         if (_.has(this.props, 'editErrors.ok')) {
@@ -233,50 +269,56 @@ export const ReportGrid = React.createClass({
         let pendEdits = this.getPendEdits();
         let isInLineEditOpen = (pendEdits.isInlineEditOpen === true);
 
-        return <QbGrid
-            numberOfColumns={_.isArray(this.props.columns) ? this.props.columns.length : 0}
-            columns={this.transformColumns()}
-            rows={transformedRecords}
-            loading={this.props.loading}
-            appUsers={this.props.appUsers}
-            phase1={this.props.phase1}
-            showRowActionsColumn={!this.props.phase1}
+        if (!this.props.noRowsUI || this.props.loading || transformedRecords.length > 0) {
 
-            onStartEditingRow={this.startEditingRow}
-            editingRowId={editingRecordId}
-            isInlineEditOpen={isInLineEditOpen}
-            selectedRows={this.props.selectedRows}
-            areAllRowsSelected={ReportUtils.areAllRowsSelected(transformedRecords, this.props.selectedRows)}
-            onClickToggleSelectedRow={this.props.toggleSelectedRow}
-            onClickEditIcon={this.props.openRecordForEdit}
-            onClickDeleteIcon={this.onClickDelete}
-            onClickToggleSelectAllRows={this.toggleSelectAllRows}
-            onCancelEditingRow={this.props.onEditRecordCancel}
-            editingRowErrors={this.props.editErrors ? this.props.editErrors.errors : []}
-            isEditingRowValid={isRecordValid}
-            onClickAddNewRow={this.props.onRecordNewBlank}
-            onClickSaveRow={this.props.onClickRecordSave}
-            isEditingRowSaving={_.has(pendEdits, 'saving') ? pendEdits.saving : false}
-            cellRenderer={ReportCell}
-            commonCellProps={{
-                appUsers: this.props.appUsers,
-                onCellChange: this.onCellChange,
-                onCellBlur: this.onCellBlur,
-                onCellClick: this.props.onCellClick,
-                onCellClickEditIcon: this.startEditingRow,
-                validateFieldValue: this.props.handleValidateFieldValue,
-                isInlineEditOpen: isInLineEditOpen,
-                phase1: this.props.phase1
-            }}
-            compareCellChanges={FieldUtils.compareFieldValues}
-            menuComponent={ReportColumnHeaderMenu}
-            menuProps={{
-                appId: this.props.appId,
-                tblId: this.props.tblId,
-                rptId: this.props.rptId,
-                sortFids: this.props.sortFids
-            }}
-        />;
+            return (
+                <QbGrid
+                numberOfColumns={_.isArray(this.props.columns) ? this.props.columns.length : 0}
+                columns={this.transformColumns()}
+                rows={transformedRecords}
+                loading={this.props.loading}
+                appUsers={this.props.appUsers}
+                phase1={this.props.phase1}
+                showRowActionsColumn={!this.props.phase1}
+
+                onStartEditingRow={this.startEditingRow}
+                editingRowId={editingRecordId}
+                isInlineEditOpen={isInLineEditOpen}
+                selectedRows={this.props.selectedRows}
+                areAllRowsSelected={ReportUtils.areAllRowsSelected(transformedRecords, this.props.selectedRows)}
+                onClickToggleSelectedRow={this.props.toggleSelectedRow}
+                onClickEditIcon={this.props.openRecordForEdit}
+                onClickDeleteIcon={this.onClickDelete}
+                onClickToggleSelectAllRows={this.toggleSelectAllRows}
+                onCancelEditingRow={this.props.onEditRecordCancel}
+                editingRowErrors={this.props.editErrors ? this.props.editErrors.errors : []}
+                isEditingRowValid={isRecordValid}
+                onClickAddNewRow={this.props.onRecordNewBlank}
+                onClickSaveRow={this.props.onClickRecordSave}
+                isEditingRowSaving={_.has(pendEdits, 'saving') ? pendEdits.saving : false}
+                cellRenderer={ReportCell}
+                commonCellProps={{
+                    appUsers: this.props.appUsers,
+                    onCellChange: this.onCellChange,
+                    onCellBlur: this.onCellBlur,
+                    onCellClick: this.props.onCellClick,
+                    onCellClickEditIcon: this.startEditingRow,
+                    validateFieldValue: this.props.handleValidateFieldValue,
+                    isInlineEditOpen: isInLineEditOpen,
+                    phase1: this.props.phase1
+                }}
+                compareCellChanges={FieldUtils.compareFieldValues}
+                menuComponent={ReportColumnHeaderMenu}
+                menuProps={{
+                    appId: this.props.appId,
+                    tblId: this.props.tblId,
+                    rptId: this.props.rptId,
+                    sortFids: this.props.sortFids
+                }}/>);
+        } else {
+            // instead of grid, render a "no records" UI
+            return this.renderNoRowsExist();
+        }
     }
 });
 
@@ -297,7 +339,8 @@ function formatChange(updatedValues, colDef) {
 const mapStateToProps = (state) => {
     return {
         report: state.report,
-        record: state.record
+        record: state.record,
+        searchString: state.search && state.search.searchInput
     };
 };
 
