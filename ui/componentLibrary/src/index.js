@@ -68,6 +68,7 @@ import TopNavDoc from './docs/topNav.js';
 import StageDoc from './docs/stage.js';
 import TooltipDoc from './docs/tooltip.js';
 import StandardLeftNavDoc from './docs/standardLeftNav.js';
+import RowActionsDoc from './docs/rowActions.js';
 // END OF IMPORT STATEMENTS
 // Above comment used for Grunt task. Please do not delete.
 
@@ -124,6 +125,7 @@ render((
             <Route path="stage" component={StageDoc} />
             <Route path="tooltip" component={TooltipDoc} />
             <Route path="standardLeftNav" component={StandardLeftNavDoc} />
+            <Route path="rowActions" component={RowActionsDoc} />
         </Route>
     </Router>
 ), document.getElementById('content'));

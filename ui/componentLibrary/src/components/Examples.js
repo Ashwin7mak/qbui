@@ -41,6 +41,7 @@ import TopNavExample from 'raw!../examples/TopNavExample.js';
 import StageExample from 'raw!../examples/StageExample.js';
 import TooltipExample from 'raw!../examples/TooltipExample.js';
 import StandardLeftNavExample from 'raw!../examples/StandardLeftNavExample.js';
+import RowActionsExample from 'raw!../examples/RowActionsExample.js';
 // END OF IMPORT STATEMENTS
 // The comment above is used for a grunt task. Please do not delete.
 
@@ -86,6 +87,7 @@ export default {
     Stage: StageExample,
     Tooltip: TooltipExample,
     StandardLeftNav: StandardLeftNavExample,
+    // RowActions: RowActionsExample,
     // END OF EXPORT
     // The comment above is used for a grunt task. Please do not delete.
 };
