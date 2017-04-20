@@ -1,9 +1,9 @@
 import React from 'react';
-import {shallow} from 'enzyme';
+import {shallow, mount} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
 
 import SimpleNavItem from '../../src/components/simpleNavItem/simpleNavItem';
-import {Link} from 'react-router-dom';
+import {MemoryRouter, Link} from 'react-router-dom';
 
 let component;
 
@@ -14,7 +14,7 @@ describe('SimpleNavItem', () => {
 
     it('renders the nav item as a react-router link if the link prop is passed in', () => {
         const testLink = '/qbase/apps';
-        component = shallow(<SimpleNavItem link={testLink} />);
+        component = mount(<MemoryRouter><SimpleNavItem link={testLink} /></MemoryRouter>);
 
         expect(component.find(Link)).toBePresent();
         expect(component.find(Link)).toHaveProp('to', testLink);
