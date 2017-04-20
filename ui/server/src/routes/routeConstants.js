@@ -106,8 +106,10 @@
     /**
      * Define public endpoints which map to support back-end server endpoint. These endpoints will route
      * the the appropriate back-end server base on the configuration file defined in qbRouteMapper.js
+     *
+     * Note these endpoints map roughly to the controllers defined on the respective back-end servers
      */
-    let publicShortHandEndpoints = {
+    let publicControllerEndpoints = {
         PUBLIC_FIELDS            : '/apps/:appId/tables/:tableId/fields*',
         PUBLIC_FORMS             : '/apps/:appId/tables/:tableId/forms*',
         PUBLIC_RECORDS           : '/apps/:appId/tables/:tableId/records*',
@@ -124,10 +126,13 @@
         PUBLIC_USERS             : '/users*'
     };
 
-    //  Regular expressions to identify supported short-hand notation routes. Matching route
-    //  requests with have the appropriate context prepended for the defined back-end server.
+    // Define list of public 'short-hand' routes and its back-end server api context.
     //
-    //  NOTE: ORDER OF ENTRY IN THE ROUTEMAP IS IMPORTANT.  Define granular routes FIRST..
+    // The regular expression is used to identify the short-hand notation routes when determine which
+    // back-end server to assign the route.  See qbRouteMapper.modifyRequestPathForApi() method for
+    // reference to this map and how it is used..
+    //
+    //  NOTE: ORDER OF ENTRY IN THE LIST IS IMPORTANT.  Define specific/granular routes FIRST..
     //
     //  The regular expression is interpreted as:
     //      ^     - starts with
@@ -137,20 +142,20 @@
     //      /i    - case insensitive
     //
     let publicEndPoints = [
-        {route: publicShortHandEndpoints.SHORT_FIELDS, regEx: /^\/apps\/.*\/tables\/.*\/fields(.*)?$/i, context: baseUrl.CORE},
-        {route: publicShortHandEndpoints.SHORT_FORMS, regEx: /^\/apps\/.*\/tables\/.*\/forms(.*)?$/i, context: baseUrl.EE},
-        {route: publicShortHandEndpoints.SHORT_RECORDS, regEx: /^\/apps\/.*\/tables\/.*\/records(.*)?$/i, context: baseUrl.CORE},
-        {route: publicShortHandEndpoints.SHORT_REPORTS, regEx: /^\/apps\/.*\/tables\/.*\/reports(.*)?$/i, context: baseUrl.CORE},
-        {route: publicShortHandEndpoints.SHORT_TABLE_PROPERTIES, regEx: /^\/apps\/.*\/tables\/.*\/tableproperties(.*)?$/i, context: baseUrl.EE},
-        {route: publicShortHandEndpoints.SHORT_TABLES, regEx: /^\/apps\/.*\/tables(.*)?$/i, context: baseUrl.CORE},
-        {route: publicShortHandEndpoints.SHORT_RELATIONSHIPS, regEx: /^\/apps\/.*\/relationships(.*)?$/i, context: baseUrl.CORE},
-        {route: publicShortHandEndpoints.SHORT_ROLES, regEx: /^\/apps\/.*\/roles(.*)?$/i, context: baseUrl.CORE},
-        {route: publicShortHandEndpoints.SHORT_APPS, regEx: /^\/apps\/(.*)?$/i, context: baseUrl.CORE},                  // conflict with EE
-        {route: publicShortHandEndpoints.SHORT_HEALTH, regEx: /^\/health(.*)?$/i, context: baseUrl.CORE},                // conflict with EE
-        {route: publicShortHandEndpoints.SHORT_OPERATIONS, regEx: /^\/operations(.*)?$/i, context: baseUrl.CORE},        // conflict with EE
-        {route: publicShortHandEndpoints.SHORT_REALMS, regEx: /^\/realms(.*)?$/i, context: baseUrl.CORE},
-        {route: publicShortHandEndpoints.SHORT_TICKET, regEx: /^\/ticket(.*)?$/i, context: baseUrl.CORE},
-        {route: publicShortHandEndpoints.SHORT_USERS, regEx: /^\/users(.*)?$/i, context: baseUrl.CORE}
+        {route: publicControllerEndpoints.PUBLIC_FIELDS, regEx: /^\/apps\/.*\/tables\/.*\/fields(.*)?$/i, context: baseUrl.CORE},
+        {route: publicControllerEndpoints.PUBLIC_FORMS, regEx: /^\/apps\/.*\/tables\/.*\/forms(.*)?$/i, context: baseUrl.EE},
+        {route: publicControllerEndpoints.PUBLIC_RECORDS, regEx: /^\/apps\/.*\/tables\/.*\/records(.*)?$/i, context: baseUrl.CORE},
+        {route: publicControllerEndpoints.PUBLIC_REPORTS, regEx: /^\/apps\/.*\/tables\/.*\/reports(.*)?$/i, context: baseUrl.CORE},
+        {route: publicControllerEndpoints.PUBLIC_TABLE_PROPERTIES, regEx: /^\/apps\/.*\/tables\/.*\/tableproperties(.*)?$/i, context: baseUrl.EE},
+        {route: publicControllerEndpoints.PUBLIC_TABLES, regEx: /^\/apps\/.*\/tables(.*)?$/i, context: baseUrl.CORE},
+        {route: publicControllerEndpoints.PUBLIC_RELATIONSHIPS, regEx: /^\/apps\/.*\/relationships(.*)?$/i, context: baseUrl.CORE},
+        {route: publicControllerEndpoints.PUBLIC_ROLES, regEx: /^\/apps\/.*\/roles(.*)?$/i, context: baseUrl.CORE},
+        {route: publicControllerEndpoints.PUBLIC_APPS, regEx: /^\/apps\/(.*)?$/i, context: baseUrl.CORE},                  // conflict with EE
+        {route: publicControllerEndpoints.PUBLIC_HEALTH, regEx: /^\/health(.*)?$/i, context: baseUrl.CORE},                // conflict with EE
+        {route: publicControllerEndpoints.PUBLIC_OPERATIONS, regEx: /^\/operations(.*)?$/i, context: baseUrl.CORE},        // conflict with EE
+        {route: publicControllerEndpoints.PUBLIC_REALMS, regEx: /^\/realms(.*)?$/i, context: baseUrl.CORE},
+        {route: publicControllerEndpoints.PUBLIC_TICKET, regEx: /^\/ticket(.*)?$/i, context: baseUrl.CORE},
+        {route: publicControllerEndpoints.PUBLIC_USERS, regEx: /^\/users(.*)?$/i, context: baseUrl.CORE}
     ];
 
     let clientEndPoints = [
@@ -159,7 +164,7 @@
 
     //  Export the combined list of routes.
     exports.routes = Object.freeze(_.assign({},
-        customFunctionApiEndpoints, nodeApiEndpoints, publicShortHandEndpoints, swaggerEndpoints, apiEndpoints));
+        customFunctionApiEndpoints, nodeApiEndpoints, publicControllerEndpoints, swaggerEndpoints, apiEndpoints));
 
     exports.publicEndPoints = publicEndPoints;
     exports.clientEndPoints = clientEndPoints;

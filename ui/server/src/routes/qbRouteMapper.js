@@ -30,12 +30,6 @@
     let accountUsersApi;
     let governanceApi;
 
-    let baseUrl = {
-        CORE: '/api/api/v1',
-        EE: '/ee/v1',
-        AUTOMATION: '/we/workflow/v1'
-    };
-
     module.exports = function(config) {
         requestHelper = require('../api/quickbase/requestHelper')(config);
         routeGroup = config.routeGroup;
@@ -60,7 +54,7 @@
          *
          * @returns List of get routes
          */
-        function routeDeleteRequestsToFunction() {
+        function bindDeleteRequestRouteToFunction(routes) {
             let requestFunctions = {};
             requestFunctions[routes.RECORD] = deleteSingleRecord;
             requestFunctions[routes.RECORDS_BULK] = deleteRecordsBulk;
@@ -69,12 +63,11 @@
         }
 
         /**
-         * Define all GET routes which map to a custom function. Another words these
-         * routes DO NOT just proxy through node to the backend server.
+         * Define all GET routes
          *
          * @returns List of get routes
          */
-        function routeGetRequestsToFunction(routes) {
+        function bindGetRequestRouteToFunction(routes) {
             let requestFunctions = {};
             requestFunctions[routes.APPS] = getApps;
             requestFunctions[routes.APP_USERS] = getAppUsers;
@@ -108,7 +101,12 @@
             return requestFunctions;
         }
 
-        function routePatchRequestToFunction(routes) {
+        /**
+         * Define all PATCH routes
+         *
+         * @returns List of get routes
+         */
+        function bindPatchRequestRouteToFunction(routes) {
             let requestFunctions = {};
             requestFunctions[routes.RECORD] = saveSingleRecord;
             requestFunctions[routes.TABLE] = updateTable;
@@ -116,7 +114,12 @@
             return requestFunctions;
         }
 
-        function routePostRequestsToFunction(routes) {
+        /**
+         * Define all POST routes
+         *
+         * @returns List of get routes
+         */
+        function bindPostRequestRouteToFunction(routes) {
             let requestFunctions = {};
             requestFunctions[routes.FEATURE_SWITCHES] = createFeatureSwitch;
             requestFunctions[routes.FEATURE_OVERRIDES] = createFeatureSwitchOverride;
@@ -130,7 +133,12 @@
             return requestFunctions;
         }
 
-        function routePutRequestsToFunction(routes) {
+        /**
+         * Define all PUT routes
+         *
+         * @returns List of get routes
+         */
+        function bindPutRequestRouteToFunction(routes) {
             let requestFunctions = {};
             requestFunctions[routes.FEATURE_SWITCH] = updateFeatureSwitch;
             requestFunctions[routes.FEATURE_OVERRIDE] = updateFeatureSwitchOverride;
@@ -138,7 +146,12 @@
             return requestFunctions;
         }
 
-        function routeAllRequestsToFunction(routes) {
+        /**
+         * Define routes which support all request methods
+         *
+         * @returns List of get routes
+         */
+        function bindAllRequestRouteToFunction(routes) {
             var requestFunctions = {};
             //
             routesConstants.publicEndPoints.forEach(endPoint => {
@@ -152,22 +165,14 @@
             return requestFunctions;
         }
 
-        // Map all request that maps to a custom function
-        var routeToGetFunction = routeGetRequestsToFunction(routesConstants.routes);
-        var routeToPostFunction = routePostRequestsToFunction(routesConstants.routes);
-        var routeToPutFunction = routePutRequestsToFunction(routesConstants.routes);
-        var routeToPatchFunction = routePatchRequestToFunction(routesConstants.routes);
-        var routeToDeleteFunction = routeDeleteRequestsToFunction(routesConstants.routes);
-        var routeToAllFunction = routeAllRequestsToFunction(routesConstants.routes);
+        // Map all requests
+        var routeToGetFunction = bindGetRequestRouteToFunction(routesConstants.routes);
+        var routeToPostFunction = bindPostRequestRouteToFunction(routesConstants.routes);
+        var routeToPutFunction = bindPutRequestRouteToFunction(routesConstants.routes);
+        var routeToPatchFunction = bindPatchRequestRouteToFunction(routesConstants.routes);
+        var routeToDeleteFunction = bindDeleteRequestRouteToFunction(routesConstants.routes);
+        var routeToAllFunction = bindAllRequestRouteToFunction(routesConstants.routes);
 
-         //  role endpoints
-
-        /*
-         * routeToAllFunction maps each route to the proper function associated with the route for all HTTP verb requests
-         */
-
-
-        /*** public data ****/
         return {
 
             /**
@@ -258,6 +263,16 @@
         return filtered;
     }
 
+    /**
+     * Common function to log a consistent api success message and output 
+     * optional performance information if a perfLog object is included on
+     * the request.
+     *
+     * @param req
+     * @param response
+     * @param perfLog
+     * @param apiName
+     */
     function logApiSuccess(req, response, perfLog, apiName) {
         log.debug({req: filterNodeReq(req), res:response}, apiName ? 'API SUCCESS:' + apiName : 'API SUCCESS');
         if (perfLog) {
@@ -265,6 +280,16 @@
         }
     }
 
+    /**
+     * Common function to log a consistent api failure message and output
+     * optional performance information if a perfLog object is included on
+     * the request.
+     *
+     * @param req
+     * @param response
+     * @param perfLog
+     * @param apiName
+     */
     function logApiFailure(req, response, perfLog, apiName) {
         log.error({req: req, res:response}, apiName ? 'API ERROR:' + apiName : 'API ERROR');
         if (perfLog) {
@@ -660,7 +685,6 @@
      * @param req
      * @param res
      */
-    /*eslint no-shadow:0 */
     function getAppUsers(req, res) {
         let perfLog = perfLogger.getInstance();
         perfLog.init('Get App Users', {req:filterNodeReq(req)});
@@ -690,7 +714,6 @@
      * @param req
      * @param res
      */
-    /*eslint no-shadow:0 */
     function fetchSingleRecord(req, res) {
         let perfLog = perfLogger.getInstance();
         perfLog.init('Fetch Single Record', {req:filterNodeReq(req)});
@@ -721,7 +744,6 @@
      * @param req
      * @param res
      */
-    /*eslint no-shadow:0 */
     function fetchAllRecords(req, res) {
         let perfLog = perfLogger.getInstance();
         perfLog.init('Fetch All Records', {req:filterNodeReq(req)});
@@ -753,7 +775,6 @@
      * @param req
      * @param res
      */
-    /*eslint no-shadow:0 */
     function fetchTableHomePageReport(req, res) {
         let perfLog = perfLogger.getInstance();
         perfLog.init('Fetch Table HomePage Report Components', {req:filterNodeReq(req)});
@@ -1077,7 +1098,6 @@
      * @param req
      * @param res
      */
-    /*eslint no-shadow:0 */
     function getAppRoles(req, res) {
         let perfLog = perfLogger.getInstance();
         perfLog.init('Get App Roles', {req:filterNodeReq(req)});
@@ -1207,7 +1227,6 @@
      * @param req
      * @param res
      */
-    /*eslint no-shadow:0 */
     function forwardApiRequest(req, res) {
         let perfLog = perfLogger.getInstance();
         perfLog.init('Forward API Request', {req:filterNodeReq(req)});
@@ -1249,7 +1268,6 @@
      * @param req
      * @param res
      */
-    /*eslint no-shadow:0 */
     function forwardExperienceEngineApiRequest(req, res) {
         let perfLog = perfLogger.getInstance();
         perfLog.init('Forward experience engine API Request', {req:filterNodeReq(req)});
@@ -1274,7 +1292,6 @@
      * @param req
      * @param res
      */
-    /*eslint no-shadow:0 */
     function forwardAutomationEngineApiRequest(req, res) {
         let perfLog = perfLogger.getInstance();
         perfLog.init('Forward automation engine API Request', {req:filterNodeReq(req)});
@@ -1303,19 +1320,16 @@
     }
 
     /**
-     * Check that the route has been enabled for this environment, if it has, then
+     * Check that the route has been enabled for this environment
      * @param req
      */
     function isRouteEnabled(req) {
-
-        var enabled = false;
         if (req !== undefined) {
             if (req.route !== undefined && req.method !== undefined) {
-                enabled = routeGroupMapper.routeIsEnabled(routeGroup, req.route.path, req.method);
+                return routeGroupMapper.routeIsEnabled(routeGroup, req.route.path, req.method);
             }
         }
-
-        return enabled;
+        return false;
     }
 
 }());
