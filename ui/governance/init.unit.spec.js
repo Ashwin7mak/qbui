@@ -10,6 +10,7 @@
  * Untils then, disable printing
  * see https://github.com/reactjs/prop-types/blob/master/README.md#what-happens-on-other-react-versions
  */
+/*eslint no-console:0 */
 console.log("All 'Failed Context Types' warning messages logged by the use of React Router 4 are" +
     " temporarily disabled from printing to the console until React is upgraded to v15.3.0" +
     " see http://fb.me/use-check-prop-types");

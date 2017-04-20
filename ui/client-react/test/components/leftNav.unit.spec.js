@@ -46,22 +46,22 @@ let navItemsTestData = [
 ];
 
 describe('Left Nav functions', () => {
-        'use strict';
+    'use strict';
 
-        var component;
+    var component;
 
-        beforeEach(() => {
-            NavItemRewireAPI.__Rewire__('I18nMessage', I18nMessageMock);
-        });
+    beforeEach(() => {
+        NavItemRewireAPI.__Rewire__('I18nMessage', I18nMessageMock);
+    });
 
-        afterEach(() => {
-            NavItemRewireAPI.__ResetDependency__('I18nMessage');
-        });
+    afterEach(() => {
+        NavItemRewireAPI.__ResetDependency__('I18nMessage');
+    });
 
 
-        it('test render opened with app list', () => {
+    it('test render opened with app list', () => {
 
-            component = mount(
+        component = mount(
                 <MemoryRouter>
                     <LeftNav open={true}
                          appsListOpen={true}
@@ -69,11 +69,11 @@ describe('Left Nav functions', () => {
                          items={navItemsTestData}
                              onToggleAppsList={() => {}} />
                 </MemoryRouter>);
-        });
+    });
 
 
-        it('test render opened with app,table,reports', () => {
-            component = mount(
+    it('test render opened with app,table,reports', () => {
+        component = mount(
                 <MemoryRouter>
                     <LeftNav open={true}
                          appsListOpen={true}
@@ -81,10 +81,10 @@ describe('Left Nav functions', () => {
                          selectedAppId={'app1'}
                          items={navItemsTestData}/>
                 </MemoryRouter>);
-        });
+    });
 
-        it('test render closed with app,table,reports', () => {
-            component = mount(
+    it('test render closed with app,table,reports', () => {
+        component = mount(
                 <MemoryRouter>
                     <LeftNav open={false}
                          appsListOpen={true}
@@ -93,8 +93,8 @@ describe('Left Nav functions', () => {
                          items={navItemsTestData}/>
                 </MemoryRouter>);
 
-        });
     });
+});
 
 describe('LeftNav', () => {
     let component;
