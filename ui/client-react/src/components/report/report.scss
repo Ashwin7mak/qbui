@@ -275,6 +275,15 @@
     .sortButton {
         font-size: 18px;
 
+        @include small-breakpoint {
+            font-size: $size-iconfont-large2;
+            line-height: 0.8;
+
+            &:hover {
+                color: $icon-light-color-hover;
+            }
+        }
+
         &.qbIcon {
             display: inline;
         }
