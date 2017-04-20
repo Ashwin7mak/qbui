@@ -80,6 +80,7 @@ export const SELECT_REPORT_RECORDS = 'SELECT_REPORT_RECORDS';
 export const REMOVE_REPORT_RECORDS = 'REMOVE_REPORT_RECORDS';
 export const ADD_BLANK_REPORT_RECORD = 'ADD_BLANK_REPORT_RECORD';
 export const REMOVE_BLANK_REPORT_RECORD = 'REMOVE_BLANK_REPORT_RECORD';
+export const HIDE_COLUMN = 'HIDE_COLUMN';
 
 //  ******** table report list actions ********
 export const LOAD_REPORTS = 'LOAD_REPORTS';
