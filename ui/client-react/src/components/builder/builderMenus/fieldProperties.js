@@ -51,9 +51,9 @@ export class FieldProperties extends Component {
      * @param fieldName
      * @returns {XML}
      */
-    createPropertiesTitle(fieldName) {
+    createPropertiesTitle() {
         return (
-            <div className="fieldPropertiesTitle">{fieldName} {Locale.getMessage('fieldPropertyLabels.title')}</div>
+            <div className="fieldPropertiesTitle">{Locale.getMessage('fieldPropertyLabels.title')}</div>
         );
     }
 
@@ -196,7 +196,7 @@ export class FieldProperties extends Component {
         return (
             <SideTrowser pullRight={true} sideMenuContent={
                 <div className="fieldPropertiesContainer">
-                    {this.props.selectedField && this.createPropertiesTitle(this.props.selectedField.name)}
+                    {this.props.selectedField && this.createPropertiesTitle()}
                     {this.props.selectedField && this.createNameProperty(this.props.selectedField.name)}
                     {this.props.selectedField && this.createRequiredProperty(this.props.selectedField.required)}
                     {this.props.selectedField && this.findFieldProperties()}

@@ -68,7 +68,7 @@ describe('FieldProperties', () => {
             expect(component).toBePresent();
             instance = component.instance();
             expect(component.find('.fieldPropertiesTitle')).toBePresent();
-            expect(component.find('.fieldPropertiesTitle')).toHaveText(`${multiChoiceField.name} properties`);
+            expect(component.find('.fieldPropertiesTitle')).toHaveText(Locale.getMessage('fieldPropertyLabels.title'));
             expect(component.find('CheckBoxFieldValueEditor')).toBePresent();
             expect(component.find('CheckBoxFieldValueEditor')).toHaveValue(multiChoiceField.required);
             expect(component.find('.textPropertyTitle')).toBePresent();
@@ -147,12 +147,11 @@ describe('FieldProperties', () => {
         it('renders with title container with proper name', () => {
             component = shallow(<FieldProperties />);
 
-            let name = "Meow";
-            let value = `${name} properties`;
+            let title = Locale.getMessage('fieldPropertyLabels.title');
 
             instance = component.instance();
-            let nameProperty = mount(instance.createPropertiesTitle(name));
-            expect(nameProperty.find('.fieldPropertiesTitle')).toHaveText(value);
+            let nameProperty = mount(instance.createPropertiesTitle());
+            expect(nameProperty.find('.fieldPropertiesTitle')).toHaveText(title);
         });
     });
 
