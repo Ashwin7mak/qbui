@@ -14,11 +14,14 @@ let appId = 1;
 let tableId = 2;
 let formId = "view";
 let field = {id: 6, required: true, name: "Dat Field", datatypeAttributes: {type: "TEXT"}};
-let multiChoicefield = {id: 7, required: false, name: "Leeloo Dallas MultiChoice", datatypeAttributes: {type: "TEXT"},
+let multiChoiceField = {id: 7, required: false, name: "Leeloo Dallas MultiChoice", datatypeAttributes: {type: "TEXT"},
     multipleChoice: {choices: [{coercedValue: {value: "Fifth Element"}, displayValue: "Fifth Element"},
         {coercedValue: {value: "Ultimate Weapon"}, displayValue: "Ultimate Weapon"}]}};
+let multiChoiceNumberField = {id: 8, required: false, name: "Leeloo Dallas MultiChoice", datatypeAttributes: {type: "NUMBER"},
+    multipleChoice: {choices: [{coercedValue: {value: 5}, displayValue: "5"}]}};
 let formElement = {FormFieldElement: {fieldId: 6}};
 let formElementMultiChoice = {FormFieldElement: {fieldId: 7}};
+let formElementMultiChoiceNumber = {FormFieldElement: {fieldId: 8}};
 
 
 const mockActions = {
@@ -60,18 +63,18 @@ describe('FieldProperties', () => {
 
         it('with selectedField prop that is multiChoice', () => {
             component = mount(<FieldProperties appId={appId} tableId={tableId} formId={formId}
-                                               selectedField={multiChoicefield} formElement={formElementMultiChoice}/>);
+                                               selectedField={multiChoiceField} formElement={formElementMultiChoice}/>);
 
             expect(component).toBePresent();
             instance = component.instance();
             expect(component.find('.fieldPropertiesTitle')).toBePresent();
-            expect(component.find('.fieldPropertiesTitle')).toHaveText(`${multiChoicefield.name} properties`);
+            expect(component.find('.fieldPropertiesTitle')).toHaveText(`${multiChoiceField.name} properties`);
             expect(component.find('CheckBoxFieldValueEditor')).toBePresent();
-            expect(component.find('CheckBoxFieldValueEditor')).toHaveValue(multiChoicefield.required);
+            expect(component.find('CheckBoxFieldValueEditor')).toHaveValue(multiChoiceField.required);
             expect(component.find('.textPropertyTitle')).toBePresent();
-            expect(component.find('.textPropertyValue')).toHaveValue(multiChoicefield.name);
+            expect(component.find('.textPropertyValue')).toHaveValue(multiChoiceField.name);
             expect(component.find('MultiLineTextFieldValueEditor')).toBePresent();
-            expect(component.find('MultiLineTextFieldValueEditor')).toHaveValue(instance.buildMultiChoiceDisplayList(multiChoicefield.multipleChoice.choices));
+            expect(component.find('MultiLineTextFieldValueEditor')).toHaveValue(instance.buildMultiChoiceDisplayList(multiChoiceField.multipleChoice.choices));
         });
     });
 
@@ -150,6 +153,22 @@ describe('FieldProperties', () => {
             instance = component.instance();
             let nameProperty = mount(instance.createPropertiesTitle(name));
             expect(nameProperty.find('.fieldPropertiesTitle')).toHaveText(value);
+        });
+    });
+
+    describe('updateMultiChoiceFieldProps', () => {
+        it('confirm that multiChoice Number fields do NOT save NaN values', () => {
+            let newValues = "5\nfifthElement\n1337";
+            let choices = [{coercedValue: {value: 5}, displayValue: "5"}, {coercedValue: {value: 1337}, displayValue: "1337"}];
+            let newField = multiChoiceNumberField;
+            newField.multipleChoice.choices = choices;
+            component = shallow(<FieldProperties appId={appId} tableId={tableId} formId={formId}
+                                                 selectedField={multiChoiceNumberField} formElement={formElementMultiChoiceNumber}
+                                                 updateField={mockActions.updateField}/>);
+
+            instance = component.instance();
+            instance.updateMultiChoiceFieldProps(newValues);
+            expect(mockActions.updateField).toHaveBeenCalledWith(newField, appId, tableId);
         });
     });
 });

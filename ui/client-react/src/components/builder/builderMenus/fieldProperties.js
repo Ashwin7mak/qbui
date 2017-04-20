@@ -181,8 +181,11 @@ export class FieldProperties extends Component {
         let choices = newValues.split("\n");
         let newChoices = [];
         choices.forEach(function(curChoice) {
-            let coerced = FieldFormats.getFormatType(field) === FieldFormats.TEXT_FORMAT_MULTICHOICE ? curChoice : Number(curChoice);
-            newChoices.push({coercedValue: {value: coerced}, displayValue: curChoice});
+            if (FieldFormats.getFormatType(field) === FieldFormats.NUMBER_FORMAT_MULTICHOICE && Number(curChoice)) {
+                newChoices.push({coercedValue: {value: Number(curChoice)}, displayValue: curChoice});
+            } else {
+                newChoices.push({coercedValue: {value: curChoice}, displayValue: curChoice});
+            }
         });
         field.multipleChoice.choices = newChoices;
         this.props.updateField(field, this.props.appId, this.props.tableId);
