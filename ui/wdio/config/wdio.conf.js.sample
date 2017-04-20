@@ -37,8 +37,6 @@ exports.config = {
         './ui/wdio/tests/forms/formAdd.e2e.spec.js',
         './ui/wdio/tests/forms/formEdit.e2e.spec.js',
         './ui/wdio/tests/forms/formDragDrop.e2e.spec.js',
-        './ui/wdio/tests/tables/tableCreate.e2e.spec.js',
-        './ui/wdio/tests/tables/tableEdit.e2e.spec.js',
         './ui/wdio/tests/reports/reportEditRecord.e2e.spec.js',
         './ui/wdio/tests/reports/reportNavigation.e2e.spec.js',
         './ui/wdio/tests/reports/reportTable.e2e.spec.js',
@@ -57,6 +55,9 @@ exports.config = {
         ],
         tables: [
             './ui/wdio/tests/tables/*.e2e.spec.js'
+        ],
+        relationships: [
+            './ui/wdio/tests/relationships/*.e2e.spec.js'
         ],
         dataGen: [
             // Make sure to uncomment the 'after' hook below if you want to save the test data!

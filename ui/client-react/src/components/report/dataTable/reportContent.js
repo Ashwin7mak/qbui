@@ -1,4 +1,4 @@
-import React from "react";
+import React, {PropTypes} from "react";
 import ReactIntl from "react-intl";
 import {NOTIFICATION_MESSAGE_DISMISS_TIME} from '../../../../../reuse/client/src/scripts/notificationManager';
 import CardViewListHolder from "../../../components/dataTable/cardView/cardViewListHolder";
@@ -932,7 +932,7 @@ export const ReportContent = React.createClass({
         const editErrors = pendEdits.editErrors || null;
 
         // onCellClick handler: do nothing for embedded reports phase1.
-        let openRowToView = !this.props.phase1 && this.openRowToView;
+        let openRowToView = this.props.phase1 ? undefined : this.openRowToView;
 
         let reportContent;
 
@@ -946,7 +946,7 @@ export const ReportContent = React.createClass({
                                 appId={this.props.reportData.appId}
                                 tblId={this.props.reportData.tblId}
                                 rptId={this.props.reportData.rptId}
-
+                                noRowsUI={this.props.noRowsUI}
                                 records={this.props.reportData.data ? _.cloneDeep(this.props.reportData.data.filteredRecords) : []}
                                 columns={this.props.reportData.data ? this.props.reportData.data.columns : []}
                                 primaryKeyName={this.props.primaryKeyName}
@@ -975,6 +975,7 @@ export const ReportContent = React.createClass({
                         }
                         {isSmall &&
                         <CardViewListHolder reportData={this.props.reportData}
+                                            noRowsUI={this.props.noRowsUI}
                                             appUsers={this.props.appUsers}
                                             primaryKeyName={this.props.primaryKeyName}
                                             reportHeader={this.props.reportHeader}
@@ -985,7 +986,8 @@ export const ReportContent = React.createClass({
                                             pageStart={this.props.cardViewPagination.props.pageStart}
                                             pageEnd={this.props.cardViewPagination.props.pageEnd}
                                             getNextReportPage={this.props.cardViewPagination.props.getNextReportPage}
-                                            getPreviousReportPage={this.props.cardViewPagination.props.getPreviousReportPage}/>
+                                            getPreviousReportPage={this.props.cardViewPagination.props.getPreviousReportPage}
+                                            onAddNewRecord={this.props.onAddNewRecord}/>
                         }
                         {this.getConfirmationDialog()}
                     </div>
@@ -1002,11 +1004,16 @@ export const ReportContent = React.createClass({
 });
 
 ReportContent.contextTypes = {
-    touch: React.PropTypes.bool
+    touch: PropTypes.bool
 };
 
 ReportContent.propTypes = {
-    primaryKeyName: React.PropTypes.string.isRequired
+    primaryKeyName: PropTypes.string.isRequired,
+
+    /**
+     * callback for creating a new record
+     */
+    onAddNewRecord: PropTypes.func
 };
 
 const mapStateToProps = (state, props) => {

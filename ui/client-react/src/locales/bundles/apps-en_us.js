@@ -117,7 +117,11 @@ export default {
             searchNoMatch: "Nobody matches"
         },
         grid: {
-            no_data: "There is no data to display."
+            no_data: "There is no data to display.",
+            no_filter_matches: "No records match what you're looking for.  Try looking for a different kind of record.",
+            no_rows: "There are no records to see right now.",
+            no_rows_but: "There are no records, but you can ",
+            no_rows_create_link:  "create one"
         },
         globalActions: {
             user: "User",
@@ -644,6 +648,12 @@ export default {
             validateTableNameEmpty: "Fill in the table name",
             validateTableNameExists: "Fill in a different value. Another table is already using this name",
             validateRecordNameEmpty: "Fill in the record name",
+
+            homePageInitialTitle: "Start using your table",
+            homePageInitialDescription: "We created a couple of reports to go along with your new table so you can get started adding records",
+            homePageAddRecordButton: "Add a record",
+            homePageStillBuilding: "Still building?  ",
+            homePageCreateAnother: "Create another table"
         },
         iconChooser: {
             searchPlaceholder: "Search table icons..."
