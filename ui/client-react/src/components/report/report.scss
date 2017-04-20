@@ -1,6 +1,8 @@
 @import '../../assets/css/qbVariables';
 
 .reportContainer {
+    display: flex;
+    flex-direction: column;
     flex: 1 1 auto;
     min-width: 0;
     overflow-y: auto;
@@ -34,24 +36,6 @@
     }
 }
 
-.reportToolsAndContentWrapper {
-    // On larger devices, only take up as much space as needed by the grid
-    // This keeps the pagination and record count in line with the right side of the grid
-    display: inline-block;
-    max-width: 100%;
-
-    // When the loading spinner is displayed, center the spinner
-    &.isLoading {
-        display: block;
-    }
-
-    // On small breakpoints, the card view should always take up 100% of the width
-    @include small-breakpoint {
-        display: block;
-        width: 100%;
-    }
-}
-
 .reportToolsAndContentContainer {
     display: flex;
     flex: 1 1 auto;
@@ -59,6 +43,7 @@
     position: relative;
     //min-height is required in order for the scrollbar to work in firefox
     min-height: 0;
+    width: 635px;
 
     .tableActionsContainer {
         position: relative;
@@ -201,7 +186,6 @@
 
     .loadedContent {
         display: flex;
-        flex-direction: column;
         flex: 1 1 auto;
         width: 100%;
         position: relative;
@@ -258,9 +242,7 @@
         padding: 0 10px;
     }
     &.loading {
-        // allow space for the loader spinner
-        min-width: 100%;
-        min-height: 70px;
+        min-height: 70px; // allow space for the loader spinner
         overflow: hidden;
     }
 }
