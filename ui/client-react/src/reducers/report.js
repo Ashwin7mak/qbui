@@ -355,7 +355,7 @@ const report = (state = [], action) => {
             let clickedId = params.clickedId;
 
             let requestedColumn = params.requested;
-            let requestedColumnIndex = requestedColumn.order - 1;
+            let requestedColumnIndex = requestedColumn.order;
             // remove the column that is going to get shown
             let columnMoving = columns.splice(requestedColumnIndex, 1)[0];
             reorderColumns(columns);
