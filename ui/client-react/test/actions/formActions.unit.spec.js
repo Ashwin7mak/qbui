@@ -484,7 +484,7 @@ describe('Form Actions', () => {
     });
 
     describe('toggleFormBuilderChildrenTabIndex', () => {
-        it('creates an action that update toolPalette children tabindex', () => {
+        it('creates an action that update formBuilder children tabindex', () => {
             expect(formActions.toggleFormBuilderChildrenTabIndex('view', 1)).toEqual({
                 id: 'view',
                 type: types.TOGGLE_FORM_BUILDER_CHILDREN_TABINDEX,
@@ -495,7 +495,7 @@ describe('Form Actions', () => {
     });
 
     describe('toggleToolPaletteChildrenTabIndex', () => {
-        it('creates an action that update formBuilder children tabindex', () => {
+        it('creates an action that update toolPalette children tabindex', () => {
             expect(formActions.toggleToolPaletteChildrenTabIndex('view', 1)).toEqual({
                 id: 'view',
                 type: types.TOGGLE_TOOL_PALETTE_BUILDER_CHILDREN_TABINDEX,
