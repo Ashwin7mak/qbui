@@ -126,11 +126,8 @@ render((
             <Route path="stage" component={StageDoc} />
             <Route path="tooltip" component={TooltipDoc} />
             <Route path="standardLeftNav" component={StandardLeftNavDoc} />
-<<<<<<< HEAD
             <Route path="pagination" component={PaginationDoc} />
-=======
-            <Route path="rowActions" component={RowActionsDoc} />
->>>>>>> master
+            {/* <Route path="rowActions" component={RowActionsDoc} /> */}
         </Route>
     </Router>
 ), document.getElementById('content'));
