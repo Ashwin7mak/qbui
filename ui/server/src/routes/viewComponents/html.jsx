@@ -55,6 +55,34 @@ var Html = React.createClass({
         return components;
     },
 
+    /**
+     * TODO: remove this function when React is upgraded to v15.3 or above.
+     *
+     * Using React Router 4 with older React versions throws LOTS of errors like the following:
+     *   ERROR: 'Warning: Failed Context Types: Calling PropTypes validators directly is not supported
+     *   by the `prop-types` package. Use `PropTypes.checkPropTypes()` to call them. Read more at
+     *   http://fb.me/use-check-prop-types Check the render method of `Constructor`.'
+     *
+     * these warnings will go away once we upgrade to react v15.3.
+     * Untils then, disable printing
+     * see https://github.com/reactjs/prop-types/blob/master/README.md#what-happens-on-other-react-versions
+     */
+    renderReactRouter4ErrorHandler() {
+        let initialUrl = _.has(this.props, 'req.url') ? this.props.req.url : 'undefined';
+        return (
+            <script dangerouslySetInnerHTML={{__html:`
+                console.error("All 'Failed Context Types' warning messages logged by the use of React Router 4 are"
+                + " temporarily disabled from printing to the console until React is upgraded to v15.3.0"
+                + " see http://fb.me/use-check-prop-types");
+                var error = console.error;
+                console.error = function() {
+                    if (arguments && arguments[0] && !arguments[0].includes("Warning: Failed Context Types: Calling PropTypes validators directly is not supported by the \`prop-types\` package.")) {
+                        error.apply(console, arguments);
+                    }
+                };
+            `}} ></script>);
+    },
+
     renderFavicons() {
         // This an array to get around JSX requirement that sibling elements must be wrapped in a parent component
         return [
@@ -76,6 +104,7 @@ var Html = React.createClass({
                     <meta charSet="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
                     <link rel="stylesheet" href="/qbase/css/loadingScreen.css" />
                     <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Lato" />
+                    {this.renderReactRouter4ErrorHandler()}
                     {this.renderPerfList()}
 
                         <title>{this.props.title}</title>
