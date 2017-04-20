@@ -340,7 +340,6 @@ export const Nav = React.createClass({
             }
         }
 
-        console.log(elements);
         let params = {
             open: false
         };

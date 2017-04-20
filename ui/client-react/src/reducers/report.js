@@ -286,8 +286,6 @@ const report = (state = [], action) => {
     case types.OPEN_FIELD_SELECTOR: {
         let currentReport = getReportFromState(action.id);
         if (currentReport) {
-            console.log(action.content);
-            console.log(currentReport);
             // loop through to check that if the columns are all visible
             let allVisible = currentReport.data.columns.every(column => {
                 return column.isHidden !== true;
@@ -302,9 +300,9 @@ const report = (state = [], action) => {
                     let actualColumns = currentReport.data.columns.filter(column => {
                         return column.fieldDef.isPlaceholder === undefined;
                     });
-                    reorderColumns(actualColumns);
                     currentReport.data.columns = actualColumns;
                 }
+                reorderColumns(currentReport.data.columns);
                 // since not all columns are visible, add the placeholder column to columns so it gets rendered on screen
                 let params = action.content;
                 let data = {
@@ -317,15 +315,15 @@ const report = (state = [], action) => {
                 };
                 let placeholder = ReportColumnTransformer.createFromApiColumn(data);
                 // find the index of the column where 'add a column' was clicked
-                let clickedColumnOrder = currentReport.data.columns.filter(column => {
-                        return column.fieldDef.id === params.clickedId;
-                    })[0].order;
+                let clickedColumnIndex = currentReport.data.columns.filter(column => {
+                    return column.id === params.clickedId;
+                })[0].order;
                 // add before or after the clicked column depending on selection
                 let insertionIndex;
                 if (params.addBefore) {
-                    insertionIndex = clickedColumnOrder;
+                    insertionIndex = clickedColumnIndex;
                 } else {
-                    insertionIndex = clickedColumnOrder + 1;
+                    insertionIndex = clickedColumnIndex + 1;
                 }
 
                 currentReport.data.columns.splice(insertionIndex, 0, placeholder);
@@ -361,11 +359,10 @@ const report = (state = [], action) => {
             // remove the column that is going to get shown
             let columnMoving = columns.splice(requestedColumnIndex, 1)[0];
             reorderColumns(columns);
-
             // searches through the current columns to find the one that was selected
             let clickedColumnIndex = columns.filter((column) => {
                 return column.fieldDef.id === clickedId;
-            })[0].order - 1;
+            })[0].order;
 
             // add before or after the clicked column
             let insertionIndex;
@@ -381,12 +378,12 @@ const report = (state = [], action) => {
             // show the currently hidden column that was just added
             columns.map(column => {
                 if (column.fieldDef.id === requestedColumn.fieldDef.id) {
-                    column.fieldDef.isHidden = false;
+                    column.isHidden = false;
                 }
                 return column;
             });
             let allVisible = currentReport.data.columns.every(column => {
-                return column.fieldDef.isHidden === false;
+                return column.isHidden === false;
             });
 
             if (allVisible) {
