@@ -59,23 +59,25 @@ const mapDispatchToProps = {
 
 /**
  * A container component that holds the FormBuilder.
- * FormBuilderContainer is rendered by ReactRouter and has access to location and params
+ * FormBuilderContainer is rendered by ReactRouter and has access to location and match.params
  * @type {*}
  */
 export const FormBuilderContainer = React.createClass({
     propTypes: {
-        params: PropTypes.shape({
-            /**
-             * the app id */
-            appId: PropTypes.string,
+        match: PropTypes.shape({
+            params: PropTypes.shape({
+                /**
+                 * the app id */
+                appId: PropTypes.string,
 
-            /**
-             * the table id */
-            tblId: PropTypes.string,
+                /**
+                 * the table id */
+                tblId: PropTypes.string,
 
-            /**
-             * the form id */
-            formId: PropTypes.string,
+                /**
+                 * the form id */
+                formId: PropTypes.string,
+            })
         }),
 
         location: PropTypes.shape({
@@ -103,7 +105,7 @@ export const FormBuilderContainer = React.createClass({
         // For easier unit tests without the Router, we can pass in default empty values
         return {
             location: {query: {}},
-            params: {}
+            match: {params: {}}
         };
     },
 

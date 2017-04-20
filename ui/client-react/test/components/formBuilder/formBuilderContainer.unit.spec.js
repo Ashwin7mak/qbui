@@ -9,8 +9,8 @@ import {__RewireAPI__ as NewfieldsMenuRewireAPI} from '../../../src/components/f
 import {FieldTokenInMenu} from '../../../src/components/formBuilder/fieldToken/fieldTokenInMenu';
 import Loader from 'react-loader';
 
-const appId = 1;
-const tblId = 2;
+const appId = "1";
+const tblId = "2";
 const formType = 'edit';
 const currentForm = {formData:{loading: false, formType: {}, formMeta: {}}, formBuilderChildrenTabIndex: ["0"], id: 'view'};
 const selectedField = {tabIndex: 0, sectionIndex: 0, columnIndex: 0, rowIndex: 0, elementIndex: 3};
