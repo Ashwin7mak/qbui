@@ -113,7 +113,7 @@
                 });
             },
             /**
-             * Delete endpoint on the tableProperties object
+             * Delete endpoint on EE to delete all the entities for a table. This includes tableProperties, forms for now.
              * @param req
              * @param tableId
              * @returns {Promise}
@@ -366,6 +366,13 @@
                 return Promise.all(promises);
             },
 
+            /**
+             * deleteTableComponents calls deleteTable on Core + deleteTableEntities on EE
+             * deleteTableEntities needs to be called first because if the table doesnt exist in core, EE validation fails
+             * This is a restriction for now until a synchronization service is set up between the two.
+             * @param req
+             * @returns {Promise.<T>|Promise<R>}
+             */
             deleteTableComponents: function(req) {
                 let tableProperReq = _.clone(req);
                 let tableReq = _.clone(req);

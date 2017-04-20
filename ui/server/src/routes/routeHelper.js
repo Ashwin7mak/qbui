@@ -409,17 +409,17 @@
             return url;
         },
 
+        /**
+         * For a given table url get the EE route
+         * For example url: api/api/apps/123/tables/456
+         *             returns: ee/apps/123/tables/456
+         * @param url
+         * @param tableId
+         * @returns {*}
+         */
         getEETablesRoute: function(url, tableId) {
-            let root = getUrlRoot(url, APPS);
-            if (root) {
-                let eeUrl = getEEReqURL(root);
-                if (eeUrl) {
-                    return eeUrl + '/' + TABLES + (tableId ? '/' + tableId : '');
-                }
-            }
-
-            //  no url root for APPS found; return original url unchanged
-            return url;
+            let root = this.getTablesRoute(url, tableId);
+            return getEEReqURL(root);
         },
 
         /**
