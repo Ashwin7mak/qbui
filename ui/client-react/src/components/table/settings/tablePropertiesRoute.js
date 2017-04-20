@@ -53,7 +53,7 @@ export const TablePropertiesRoute = React.createClass({
         this.updateTableProperties(this.props.app.id, this.props.table.id, this.props.tableProperties.tableInfo);
     },
     handleDeletePrompt(event) {
-        if (event.target.value === "YES") {
+        if (event.target.value === Locale.getMessage('tableEdit.YES')) {
             this.setState({confirmInputValue: event.target.value, allowDelete: true});
         } else {
             this.setState({confirmInputValue: event.target.value, allowDelete: false});

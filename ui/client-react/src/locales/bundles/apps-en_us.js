@@ -672,7 +672,8 @@ export default {
             tableDeleteDialog: {
                 text: "This can't be undone. You'll be deleting all the data in the table, and break relationships with other tables.",
                 prompt: "Type YES to confirm that you want to delete this table"
-            }
+            },
+            YES: "YES"
         }
     }
 };

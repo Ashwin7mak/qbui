@@ -663,8 +663,9 @@ export default {
             tableDeleteFailed: "Échec de la suppression du tableau",
             tableDeleteDialog: {
                 text: "Cela ne peut pas être annulé. Vous supprimez toutes les données dans le tableau et romperez les relations avec d'autres tables.",
-                prompt: "Tapez YES pour confirmer que vous souhaitez supprimer ce tableau."
-            }
+                prompt: "Tapez OUI pour confirmer que vous souhaitez supprimer ce tableau."
+            },
+            YES: "OUI"
         }
     }
 };

@@ -664,8 +664,9 @@ export default {
             tableDeleteFailed: "Tabelle konnte nicht gelöscht werden",
             tableDeleteDialog: {
                 text: "Das kann nicht rückgängig gemacht werden. Sie werden alle Daten in der Tabelle löschen und die Beziehungen zu anderen Tabellen brechen.",
-                prompt: "Geben Sie YES ein, um zu bestätigen, dass Sie diese Tabelle löschen möchten"
-            }
+                prompt: "Geben Sie JA ein, um zu bestätigen, dass Sie diese Tabelle löschen möchten"
+            },
+            YES: "JA"
         }
     }
 };
