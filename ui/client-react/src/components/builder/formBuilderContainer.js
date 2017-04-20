@@ -108,7 +108,7 @@ export const FormBuilderContainer = React.createClass({
     },
 
     componentDidMount() {
-        const {appId, tblId} = this.props.params;
+        const {appId, tblId} = this.props.match.params;
         const formType = _.get(this.props, 'location.query.formType');
 
         // We use the NEW_FORM_RECORD_ID so that the form does not load any record data
@@ -124,7 +124,7 @@ export const FormBuilderContainer = React.createClass({
     },
 
     onCancel() {
-        const {appId, tblId} = this.props.params;
+        const {appId, tblId} = this.props.match.params;
 
         NavigationUtils.goBackToLocationOrTable(appId, tblId, this.props.redirectRoute);
     },
@@ -237,7 +237,7 @@ export const FormBuilderContainer = React.createClass({
                 <PageTitle title={Locale.getMessage('pageTitles.editForm')}/>
 
                 <ToolPalette isCollapsed={this.props.isCollapsed} isOpen={this.props.isOpen}>
-                    <FieldProperties appId={this.props.params.appId} tableId={this.props.params.tblId} formId={formId}>
+                    <FieldProperties appId={this.props.match.params.appId} tableId={this.props.match.params.tblId} formId={formId}>
                         <div className="formBuilderContainerContent" ref={element => formBuilderContainerContent = element}>
                             <AutoScroll parentContainer={formBuilderContainerContent} pixelsFromBottomForLargeDevices={100}>
                                 <div className="formBuilderContent">

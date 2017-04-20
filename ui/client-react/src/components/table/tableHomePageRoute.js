@@ -127,7 +127,7 @@ export const TableHomePageRoute = React.createClass({
 
         const newTableIds = newTablesJSONArrray.split(",");
 
-        return newTableIds.indexOf(this.props.params.tblId) !== -1;
+        return newTableIds.indexOf(this.props.match.params.tblId) !== -1;
     },
 
     render() {
