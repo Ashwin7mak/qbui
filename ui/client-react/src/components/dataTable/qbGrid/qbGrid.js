@@ -457,7 +457,7 @@ const QbGrid = React.createClass({
 
                     components={{
                         header: {
-                            //cell: QbHeaderCell
+                          // cell: QbHeaderCell
                             cell: dnd.Header
                         },
                         body: {
