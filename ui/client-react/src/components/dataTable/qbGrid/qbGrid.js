@@ -6,7 +6,8 @@ import QbHeaderCell from './qbHeaderCell';
 import QbRow from './qbRow';
 import QbCell from './qbCell';
 import {UNSAVED_RECORD_ID} from '../../../constants/schema';
-import RowActions, {SELECT_ROW_CHECKBOX} from './rowActions';
+import RowActions from './rowActions';
+import {SELECT_ROW_CHECKBOX} from '../../../../../reuse/client/src/components/rowActions/rowActions';
 import QbIcon from '../../qbIcon/qbIcon';
 import CollapsedGroupsHelper from './collapsedGroupHelper';
 
