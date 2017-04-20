@@ -47,7 +47,7 @@
             getRequestEeHostEnable: function() {
                 return config ? config.eeHostEnable : '';
             },
-            getRequestUrl  : function(req) {
+            getRequestCoreUrl  : function(req) {
                 return config ? config.javaHost + req.url : '';
             },
             getRequestEEUrl  : function(req) {
@@ -146,6 +146,7 @@
 
                 //  override the url to use the experience engine
                 opts.url = this.getRequestEEUrl(req);
+
                 return opts;
             },
 
@@ -212,7 +213,7 @@
                 this.setTidHeader(req);
 
                 let opts = {
-                    url         : this.getRequestUrl(req),
+                    url         : this.getRequestCoreUrl(req),
                     method      : (forceGet === true ? 'GET' : req.method),
                     agentOptions: this.getAgentOptions(req),
                     headers     : req.headers

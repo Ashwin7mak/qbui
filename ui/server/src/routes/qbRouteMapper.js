@@ -146,10 +146,11 @@
         var routeToDeleteFunction = routeDeleteRequestsToFunction();
 
         var routeToAllFunction = {};
-        routeToAllFunction[routeConsts.CORE_ALL] = forwardApiRequest;
-        routeToAllFunction[routeConsts.EXPERIENCE_ENGINE_ALL] = forwardApiRequest;
-        routeToAllFunction[routeConsts.SWAGGER_CORE_V2] = forwardApiRequest;
-        routeToAllFunction[routeConsts.SWAGGER_EE_V2] = forwardApiRequest;
+        //routeToAllFunction[routeConsts.CORE_ALL] = forwardApiRequest;
+        //routeToAllFunction[routeConsts.EXPERIENCE_ENGINE_ALL] = forwardApiRequest;
+        //routeToAllFunction[routeConsts.SWAGGER_CORE_V2] = forwardApiRequest;
+        //routeToAllFunction[routeConsts.SWAGGER_EE_V2] = forwardApiRequest;
+        routeToAllFunction[routeConsts.ALL] = forwardApiRequest;
         //routeToAllFunction[routeConsts.EXPERIENCE_ENGINE_ALL] = forwardExperienceEngineApiRequest;
         //routeToAllFunction[routeConsts.EE_FORMS] = forwardExperienceEngineApiRequest;
         //routeToAllFunction[routeConsts.AUTOMATION_ENGINE_ALL] = forwardAutomationEngineApiRequest;
@@ -284,14 +285,17 @@
      * @param req
      */
     function modifyRequestPathForApi(req) {
-        //   custom functions called by the react client
-        if (req.url.startsWith('/qb')) {
-            req.url = req.url.replace('/qb', '/api/api/v1');
+        //   if route starts with /qb/ context prefix, then it's a client custom function
+        //   route, so replace with the Core context prefix.
+        let clientContextRegEx = /^\/qb\/(.*)?$/i;
+        if (clientContextRegEx.test(req.url)) {
+            req.url = req.url.replace('/qb', baseUrl.CORE);
         } else {
-            //  Regular expressions to identify a short-hand notation and prepend
-            //  a base url if a match is found.
+            //  Regular expressions to identify supported short-hand notation routes. Matching route
+            //  requests with have the appropriate context prepended for the defined back-end server.
             //
-            //  NOTE, ORDER OF ENTRY IN THE ROUTEMAP IS IMPORTANT.  Define the specific routes BEFORE the generic EXPERIENCE_ENGINE_ALL route.
+            //  NOTE: ORDER OF ENTRY IN THE ROUTEMAP IS IMPORTANT.  Define specific routes FIRST, as routes
+            //  are tested in order of the array list and the first match found is always used.
             //
             //  The regular expression is interpreted as:
             //      ^     - starts with
@@ -300,23 +304,25 @@
             //      .*    - wildcard match any character(s)
             //      /i    - case insensitive
             let routeMap = [
-                {regEx: /^apps\/.*\/tables\/.*\/fields(.*)?$/i, baseUrl: baseUrl.CORE},
-                {regEx: /^apps\/.*\/tables\/.*\/forms(.*)?$/i, baseUrl: baseUrl.EE},
-                {regEx: /^apps\/.*\/tables\/.*\/records(.*)?$/i, baseUrl: baseUrl.CORE},
-                {regEx: /^apps\/.*\/tables\/.*\/reports(.*)?$/i, baseUrl: baseUrl.CORE},
-                {regEx: /^apps\/.*\/tables\/.*\/tableproperties(.*)?$/i, baseUrl: baseUrl.EE},
-                {regEx: /^apps\/.*\/relationships(.*)?$/i, baseUrl: baseUrl.CORE},
-                {regEx: /^apps\/.*\/roles(.*)?$/i, baseUrl: baseUrl.CORE},
-                {regEx: /^apps\/.*\/tables(.*)?$/i, baseUrl: baseUrl.CORE},
-                {regEx: /^apps(.*)?$/i, baseUrl: baseUrl.CORE},
-                {regEx: /^realms(.*)?$/i, baseUrl: baseUrl.CORE},
-                {regEx: /^ticket(.*)?$/i, baseUrl: baseUrl.CORE},
-                {regEx: /^users(.*)?$/i, baseUrl: baseUrl.CORE}
+                {regEx: /^\/apps\/.*\/tables\/.*\/fields(.*)?$/i, context: baseUrl.CORE},
+                {regEx: /^\/apps\/.*\/tables\/.*\/forms(.*)?$/i, context: baseUrl.EE},
+                {regEx: /^\/apps\/.*\/tables\/.*\/records(.*)?$/i, context: baseUrl.CORE},
+                {regEx: /^\/apps\/.*\/tables\/.*\/reports(.*)?$/i, context: baseUrl.CORE},
+                {regEx: /^\/apps\/.*\/tables\/.*\/tableproperties(.*)?$/i, context: baseUrl.EE},
+                {regEx: /^\/apps\/.*\/relationships(.*)?$/i, context: baseUrl.CORE},
+                {regEx: /^\/apps\/.*\/roles(.*)?$/i, context: baseUrl.CORE},
+                {regEx: /^\/apps\/.*\/tables(.*)?$/i, context: baseUrl.CORE},
+                {regEx: /^\/apps(.*)?$/i, context: baseUrl.CORE},               // conflict with EE
+                {regEx: /^\/health(.*)?$/i, context: baseUrl.CORE},             // conflict with EE
+                {regEx: /^\/operations(.*)?$/i, context: baseUrl.CORE},         // conflict with EE
+                {regEx: /^\/realms(.*)?$/i, context: baseUrl.CORE},
+                {regEx: /^\/ticket(.*)?$/i, context: baseUrl.CORE},
+                {regEx: /^\/users(.*)?$/i, context: baseUrl.CORE}
             ];
 
             routeMap.some(route => {
                 if (route.regEx.test(req.url)) {
-                    req.url = route.baseUrl + req.url;
+                    req.url = route.context + req.url;
                     return true;
                 }
             });
@@ -340,35 +346,6 @@
             modifyRequestPathForApi(req);
             returnFunction(req, res);
         }
-    }
-
-    /**
-     * get feature switches with overrides
-     * @param req
-     * @param res
-     */
-    function getFeatureSwitches(req, res) {
-        let perfLog = perfLogger.getInstance();
-        perfLog.init('Get feature switches', {req:filterNodeReq(req)});
-
-        processRequest(req, res, function(req, res) {
-            featureSwitchesApi.getFeatureSwitches(req).then(
-                function(response) {
-                    res.send(response);
-                    logApiSuccess(req, response, perfLog, 'Get feature switches');
-                },
-                function(response) {
-                    logApiFailure(req, response, perfLog, 'Get feature switches');
-
-                    //  client is waiting for a response..make sure one is always returned
-                    if (response && response.statusCode) {
-                        res.status(response.statusCode).send(response);
-                    } else {
-                        res.status(500).send(response);
-                    }
-                }
-            );
-        });
     }
 
     /**
@@ -431,6 +408,35 @@
                 }
             );
         }
+    }
+
+    /**
+     * get feature switches with overrides
+     * @param req
+     * @param res
+     */
+    function getFeatureSwitches(req, res) {
+        let perfLog = perfLogger.getInstance();
+        perfLog.init('Get feature switches', {req:filterNodeReq(req)});
+
+        processRequest(req, res, function(req, res) {
+            featureSwitchesApi.getFeatureSwitches(req).then(
+                function(response) {
+                    res.send(response);
+                    logApiSuccess(req, response, perfLog, 'Get feature switches');
+                },
+                function(response) {
+                    logApiFailure(req, response, perfLog, 'Get feature switches');
+
+                    //  client is waiting for a response..make sure one is always returned
+                    if (response && response.statusCode) {
+                        res.status(response.statusCode).send(response);
+                    } else {
+                        res.status(500).send(response);
+                    }
+                }
+            );
+        });
     }
 
     /**
