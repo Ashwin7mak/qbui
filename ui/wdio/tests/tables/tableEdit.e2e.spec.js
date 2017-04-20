@@ -107,7 +107,7 @@
                     tableCreatePO.verifyTableFieldValues(tableField.fieldTitle, tableField.fieldValue);
                 });
                 //verify icon chooser shows up the value selected
-                expect(browser.element('.showAllToggle .qbIcon').getAttribute('className')).toBe(iconChoosedClassName);
+                expect(browser.element('.showAllToggle .qbIcon').getAttribute('className')).toContain(iconChoosedClassName);
 
                 //****************
                 //*Edit the newely added table with new values
@@ -130,10 +130,10 @@
                     //Enter field values
                     tableCreatePO.verifyTableFieldValues(tableField.fieldTitle, tableField.fieldValue);
                 });
-                expect(browser.element('.showAllToggle .qbIcon').getAttribute('className')).toBe(newIconChoosedClassName);
+                expect(browser.element('.showAllToggle .qbIcon').getAttribute('className')).toContain(newIconChoosedClassName);
 
                 //Step 14 - Verify table link with new edited table name shows on left Nav . Make sure the table name is updated to new name
-                expect(browser.element('.standardLeftNav .contextHeaderTitle').getAttribute('textContent')).toBe('New ' + tableName);
+                expect(browser.element('.standardLeftNav .contextHeaderTitle').getAttribute('textContent')).toContain('New ' + tableName);
 
             }
         });
@@ -297,10 +297,10 @@
                 });
 
                 //Step 5 - Verify table link with table name shows on left Nav . Make sure the table name is not updated, it is still 'Table 2'
-                expect(browser.element('.standardLeftNav .contextHeaderTitle').getAttribute('textContent')).toBe('Table 1');
+                expect(browser.element('.standardLeftNav .contextHeaderTitle').getAttribute('textContent')).toContain('Table 1');
 
                 //Step 6 - Verify 'Back to app' link shows up in the left Nav
-                expect(browser.element('.standardLeftNav .navItemContent').getAttribute('textContent')).toBe('Back to app');
+                expect(browser.element('.standardLeftNav .navItemContent').getAttribute('textContent')).toContain('Back to app');
 
                 //Step 7 - Verify bck to app link is enabled
                 expect(browser.isEnabled('.standardLeftNav .navItemContent')).toBeTruthy();
