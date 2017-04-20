@@ -657,7 +657,15 @@ export default {
         tableEdit: {
             tableUpdateFailed: "Fehler beim Aktualisieren der Tabelle",
             tableUpdated: "Tabelleninformationen gespeichert",
-            tableReset: "Tabelleninformationen werden nicht gespeichert"
+            tableReset: "Tabelleninformationen werden nicht gespeichert",
+            deleteThisTable: "Löschen {tableName} Tabelle?",
+            deleteTable: "Tabelle löschen",
+            tableDeleted: "{tableName} Tabelle gelöscht",
+            tableDeleteFailed: "Tabelle konnte nicht gelöscht werden",
+            tableDeleteDialog: {
+                text: "Das kann nicht rückgängig gemacht werden. Sie werden alle Daten in der Tabelle löschen und die Beziehungen zu anderen Tabellen brechen.",
+                prompt: "Geben Sie YES ein, um zu bestätigen, dass Sie diese Tabelle löschen möchten"
+            }
         }
     }
 };
