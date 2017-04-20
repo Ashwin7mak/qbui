@@ -236,6 +236,12 @@ export const ReportGrid = React.createClass({
         return pendEdits;
     },
 
+    isOnlyOneColumnVisible() {
+        return this.props.columns.filter(column => {
+            return !column.isHidden;
+        }).length === 1;
+    },
+
     /**
      * get text to display below grid if no rows are displayed
      * @returns {*}
@@ -313,7 +319,8 @@ export const ReportGrid = React.createClass({
                     appId: this.props.appId,
                     tblId: this.props.tblId,
                     rptId: this.props.rptId,
-                    sortFids: this.props.sortFids
+                    sortFids: this.props.sortFids,
+                    isOnlyOneColumnVisible: this.isOnlyOneColumnVisible()
                 }}/>);
         } else {
             // instead of grid, render a "no records" UI
