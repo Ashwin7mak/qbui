@@ -320,7 +320,7 @@
          * Select List option from the List combo
          *
          */
-        selectFromList : {value: function(fieldElement, listOption) {
+        selectFromList : {value: function(listOption) {
             browser.element('.Select-menu-outer').waitForVisible();
             //get all options from the list
             var option = browser.elements('.Select-option').value.filter(function(optionText) {
@@ -346,7 +346,7 @@
                 browser.execute("return arguments[0].scrollIntoView();", fieldTypes.value[i]);
                 fieldTypes.value[i].waitForVisible();
                 fieldTypes.value[i].click();
-                this.selectFromList(fieldTypes.value[i], fieldValue);
+                this.selectFromList(fieldValue);
             }
         }},
 
