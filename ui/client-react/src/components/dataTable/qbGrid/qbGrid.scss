@@ -26,6 +26,9 @@ $edit-icon-font-size: 18px;
     -webkit-font-smoothing: antialiased;
     table-layout: fixed;
 
+    // The min height allows the menus that can be opened from the header (sort on column) to be seen
+    // when there are only 1 or two rows. We may need to re-visit this if we start adding content below the grid.
+    min-height: 275px;
 
     .qbTbody {
         background-color: $color-black-100;
