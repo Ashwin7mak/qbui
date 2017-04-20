@@ -1,6 +1,6 @@
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
-import AppHomePageRoute  from '../../../src/components/app/appHomePageRoute';
+import {AppHomePageRoute}  from '../../../src/components/app/appHomePageRoute';
 import HtmlUtils from '../../../src/utils/htmlUtils';
 import {DEFAULT_PAGE_TITLE} from '../../../src/constants/urlConstants';
 

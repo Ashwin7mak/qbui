@@ -35,7 +35,7 @@ const QBModal = React.createClass({
         /**
          *This is the message for the modal body
          */
-        bodyMessage: React.PropTypes.oneOf([React.PropTypes.string, React.PropTypes.element]),
+        bodyMessage: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.element]),
         /**
          * This is the title for the modal title
          */

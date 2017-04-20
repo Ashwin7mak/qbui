@@ -10,7 +10,7 @@ import Icon, {AVAILABLE_ICON_FONTS} from '../../../../../reuse/client/src/compon
 import TableCreationPanel from '../tableCreationPanel';
 import QBModal from '../../qbModal/qbModal';
 import {updateTable, loadTableProperties, setTableProperty, openIconChooser, closeIconChooser, setEditingProperty, resetEditedTableProperties, deleteTable, notifyTableDeleted} from '../../../actions/tablePropertiesActions';
-import * as UrlConsts from '../../../constants/urlConstants';
+import UrlUtils from '../../../utils/urlUtils';
 import './tableProperties.scss';
 import AppHistory from '../../../globals/appHistory';
 
@@ -32,7 +32,7 @@ export const TablePropertiesRoute = React.createClass({
     },
     getPageActions(maxButtonsBeforeMenu) {
         const actions = [
-            {i18nMessageKey: 'pageActions.deleteTable', icon:'delete', onClick:this.handleDelete}
+            {i18nMessageKey: 'pageActions.deleteTable', icon:'delete', className:'deleteTable', onClick:this.handleDelete}
         ];
         return (<IconActions className="pageActions" actions={actions} maxButtonsBeforeMenu={maxButtonsBeforeMenu}/>);
     },
@@ -86,8 +86,8 @@ export const TablePropertiesRoute = React.createClass({
         this.props.deleteTable(this.props.app.id, this.props.table.id).then(
             (response) => {
                 this.props.notifyTableDeleted(true);
-                // navigate to app home page (no page reload)
-                let link = `${UrlConsts.APP_ROUTE}/${this.props.app.id}`;
+                // navigate to app home page
+                let link = UrlUtils.getAppHomePageLink(this.props.app.id);
                 AppHistory.history.push(link);
             },
             (error) => {

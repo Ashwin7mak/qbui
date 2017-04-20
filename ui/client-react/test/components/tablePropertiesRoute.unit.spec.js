@@ -7,6 +7,7 @@ import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import {Provider} from "react-redux";
 import Promise from 'bluebird';
+import QBModal from '../../src/components/qbModal/qbModal';
 import _ from 'lodash';
 
 const sampleTable = {id: 'table1', name: 'table1 name'};
@@ -89,8 +90,29 @@ describe('TablePropertiesRoute functions', () => {
             expect(buttonsPanel[0].className.indexOf("open") !== -1).toBe(true);
         });
 
-        xit('test render of delete icon on page bar', () => {
+        it('test render of delete icon on page bar', () => {
             expect(TestUtils.scryRenderedDOMComponentsWithClass(component, "deleteTable").length).toEqual(1);
+        });
+
+        it('test clicking on delete icon sets the state to open the modal', () => {
+            let deleteTableIcon = TestUtils.scryRenderedDOMComponentsWithClass(component, "deleteTable")[0];
+            Simulate.click(deleteTableIcon);
+            //confirm that the state was updated that is supposed to throw up the Modal
+            expect(component.state.confirmDeletesDialogOpen).toBe(true);
+        });
+
+        it('test clicking on cancel button of modal resets the state', () => {
+            let deleteTableIcon = TestUtils.scryRenderedDOMComponentsWithClass(component, "deleteTable")[0];
+            Simulate.click(deleteTableIcon);
+            Simulate.click(deleteTableIcon);
+            //confirm that the state was updated that is supposed to throw up the Modal
+            expect(component.state.confirmDeletesDialogOpen).toBe(true);
+            let deleteDialog = TestUtils.scryRenderedComponentsWithType(component, QBModal);
+            expect(deleteDialog.length).toBe(1);
+            let cancelButton = TestUtils.scryRenderedDOMComponentsWithClass(deleteDialog[0], "secondaryButton");
+            expect(cancelButton.length).toBe(1);
+            Simulate.click(cancelButton[0]);
+            expect(component.state.confirmDeletesDialogOpen).toBe(false);
         });
     });
 
@@ -134,9 +156,6 @@ describe('TablePropertiesRoute functions', () => {
             expect(props.resetEditedTableProperties).toHaveBeenCalled();
         });
 
-        xit('test clicking on delete icon calls delete table', () => {
-            let deleteTableIcon = TestUtils.scryRenderedDOMComponentsWithClass(component, "deleteTable")[0];
-            Simulate.click(deleteTableIcon);
-        });
+
     });
 });
