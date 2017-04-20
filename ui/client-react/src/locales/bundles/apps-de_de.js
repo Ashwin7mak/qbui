@@ -523,7 +523,7 @@ export default {
             FILE_ATTACHMENT: "Datei"
         },
         fieldPropertyLabels: {
-            title: "eigenschaften",
+            title: "Eigenschaften",
             name: "Name",
             required: "Muss ausgefüllt werden",
             multiChoice: "Wahlen"
