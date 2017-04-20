@@ -72,7 +72,7 @@ export class FieldEditingTools extends Component {
             return null;
         }
 
-        if (this.isFieldSelected()) {
+        if (this.isFieldSelected() && this.props.tabIndex === "0") {
             tabIndex = '0';
         } else {
             tabIndex = '-1';
@@ -160,7 +160,7 @@ export class FieldEditingTools extends Component {
     }
 
     render() {
-        let tabIndex = this.props.selectedFields && this.props.selectedFields[0] ? "0" : this.props.tabIndex;
+        let tabIndex = this.props.tabIndex ? this.props.tabIndex : "-1";
 
         let isSmall = Breakpoints.isSmallBreakpoint();
         let classNames = ["fieldEditingTools"];
