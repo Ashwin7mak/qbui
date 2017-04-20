@@ -43,3 +43,18 @@
         }
     }
 }
+
+.deleteTableDialogContent {
+    > * {
+        margin-bottom: $modal-vertical-spacer;
+    }
+    .note {
+        color: $alert-color;
+    }
+    .prompt {
+        .deletePrompt {
+            margin-left: 5px;
+            text-align: center;
+        }
+    }
+}

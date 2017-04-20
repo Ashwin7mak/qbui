@@ -123,14 +123,11 @@ const ReportRoute = React.createClass({
         const actions = [
             {msg: 'pageActions.addRecord', icon:'add', className:'addRecord', onClick: this.editNewRecord},
             {msg: 'unimplemented.makeFavorite', icon:'star', disabled: true},
-            {msg: 'unimplemented.print', icon:'print', onClick: this.doSomething},
+            {msg: 'unimplemented.print', icon:'print', disabled: true},
         ];
         return (<IconActions className="pageActions" actions={actions}/>);
     },
 
-doSomething() {
-  console.log(2);
-},
     getStageHeadline() {
         const reportName = this.props.reportData && this.props.reportData.data && this.props.reportData.data.name;
         const {appId, tblId} = this.props.params;

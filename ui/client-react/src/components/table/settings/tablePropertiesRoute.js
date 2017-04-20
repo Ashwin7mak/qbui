@@ -12,13 +12,16 @@ import QBModal from '../../qbModal/qbModal';
 import {updateTable, loadTableProperties, setTableProperty, openIconChooser, closeIconChooser, setEditingProperty, resetEditedTableProperties, deleteTable, notifyTableDeleted} from '../../../actions/tablePropertiesActions';
 import * as UrlConsts from '../../../constants/urlConstants';
 import './tableProperties.scss';
+import AppHistory from '../../../globals/appHistory';
 
 
 export const TablePropertiesRoute = React.createClass({
 
     getInitialState() {
         return {
-            confirmDeletesDialogOpen: false
+            confirmDeletesDialogOpen: false,
+            allowDelete: false,
+            confirmInputValue: ""
         };
     },
     getExistingTableNames() {
@@ -26,9 +29,6 @@ export const TablePropertiesRoute = React.createClass({
             return this.props.app.tables.map((table) => table.name);
         }
         return [];
-    },
-    doSomething() {
-        console.log(1);
     },
     getPageActions(maxButtonsBeforeMenu) {
         const actions = [
@@ -52,22 +52,37 @@ export const TablePropertiesRoute = React.createClass({
     updateTable() {
         this.updateTableProperties(this.props.app.id, this.props.table.id, this.props.tableProperties.tableInfo);
     },
+    handleDeletePrompt(event) {
+        if (event.target.value === "YES") {
+            this.setState({confirmInputValue: event.target.value, allowDelete: true});
+        } else {
+            this.setState({confirmInputValue: event.target.value, allowDelete: false});
+        }
+    },
     getConfirmDialog() {
-        let msg = Locale.getMessage('tableEdit.deleteThisTable', {tableName: this.props.table.name});
+        let msg = <div className="deleteTableDialogContent">
+            <div className="note"><I18nMessage message="tableEdit.tableDeleteDialog.text"/></div>
+            <div className="prompt"><I18nMessage message="tableEdit.tableDeleteDialog.prompt"/><input className="deletePrompt" type="text" maxLength="3" size="5" value={this.state.confirmInputValue} onChange={this.handleDeletePrompt}/></div>
+        </div>;
         return (
             <QBModal
                 show={this.state.confirmDeletesDialogOpen}
                 primaryButtonName={Locale.getMessage('tableEdit.deleteTable')}
-                primaryButtonOnClick={this.handleRecordDelete}
+                primaryButtonOnClick={this.handleTableDelete}
+                primaryButtonDisabled={!this.state.allowDelete}
                 leftButtonName={Locale.getMessage('selection.dontDelete')}
-                leftButtonOnClick={this.cancelRecordDelete}
+                leftButtonOnClick={this.cancelTableDelete}
+                title={Locale.getMessage('tableEdit.deleteThisTable', {tableName: this.props.table.name})}
                 bodyMessage={msg}
                 type="alert"/>);
     },
     handleDelete() {
         this.setState({confirmDeletesDialogOpen: true});
     },
-    handleRecordDelete() {
+    cancelTableDelete() {
+        this.setState({confirmDeletesDialogOpen: false});
+    },
+    handleTableDelete() {
         this.props.deleteTable(this.props.app.id, this.props.table.id).then(
             (response) => {
                 this.props.notifyTableDeleted(true);

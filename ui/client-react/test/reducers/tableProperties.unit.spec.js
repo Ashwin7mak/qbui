@@ -4,26 +4,11 @@ import * as types from '../../src/actions/types';
 let initialState = {};
 
 function initializeState() {
-    const defaultTableInfo = {
-        name: {
-            value: "",
-        },
-        description: {
-            value: "",
-        },
-        tableIcon: {
-            value: "",
-        },
-        tableNoun: {
-            value: "",
-        }
-    };
-
     initialState = {
         //  default states
         iconChooserOpen: false,
         savingTable: false,
-        tableInfo: defaultTableInfo,
+        tableInfo: null,
         isDirty: false,
         editing: null,
         notifyTableDeleted: false

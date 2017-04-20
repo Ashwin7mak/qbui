@@ -89,7 +89,7 @@ describe('TablePropertiesRoute functions', () => {
             expect(buttonsPanel[0].className.indexOf("open") !== -1).toBe(true);
         });
 
-        it('test render of delete icon on page bar', () => {
+        xit('test render of delete icon on page bar', () => {
             expect(TestUtils.scryRenderedDOMComponentsWithClass(component, "deleteTable").length).toEqual(1);
         });
     });
@@ -134,10 +134,9 @@ describe('TablePropertiesRoute functions', () => {
             expect(props.resetEditedTableProperties).toHaveBeenCalled();
         });
 
-        it('test clicking on delete icon calls delete table', () => {
+        xit('test clicking on delete icon calls delete table', () => {
             let deleteTableIcon = TestUtils.scryRenderedDOMComponentsWithClass(component, "deleteTable")[0];
             Simulate.click(deleteTableIcon);
-            
         });
     });
 });

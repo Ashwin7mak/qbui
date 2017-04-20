@@ -16,7 +16,7 @@ let testMiddleText = 'Middle Button';
 let testLeftText = 'Left Button';
 
 let alertType = 'alert';
-let alertIconClass = `iconUISturdy-alert`;
+let alertIconClass = `iconUISturdy-alert-fill`;
 let successType = 'success';
 let successIconClass = `iconUISturdy-check-reversed`;
 let standardType = 'standard';
