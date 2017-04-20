@@ -286,9 +286,11 @@ const report = (state = [], action) => {
     case types.OPEN_FIELD_SELECTOR: {
         let currentReport = getReportFromState(action.id);
         if (currentReport) {
+            console.log(action.content);
+            console.log(currentReport);
             // loop through to check that if the columns are all visible
             let allVisible = currentReport.data.columns.every(column => {
-                return column.fieldDef.isHidden !== true;
+                return column.isHidden !== true;
             });
             if (!allVisible) {
                 // loop through to check if the placeholder column is already visible
@@ -309,9 +311,9 @@ const report = (state = [], action) => {
                     id: -1,
                     headerName: "placeholder",
                     fieldDef: {
-                        isHidden: false,
                         isPlaceholder: true
-                    }
+                    },
+                    isHidden: false
                 };
                 let placeholder = ReportColumnTransformer.createFromApiColumn(data);
                 // find the index of the column where 'add a column' was clicked

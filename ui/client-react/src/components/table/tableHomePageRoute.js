@@ -15,7 +15,7 @@ import * as SearchActions from '../../actions/searchActions';
 import * as TableActions from '../../actions/tableActions';
 import * as FieldsActions from '../../actions/fieldsActions';
 import {showTableCreationDialog} from '../../actions/tableCreationActions';
-import {loadDynamicReport, addColumnToTable, toggleFieldSelectorMenu} from '../../actions/reportActions';
+import {loadDynamicReport, addColumnFromExistingField, toggleFieldSelectorMenu} from '../../actions/reportActions';
 import {CONTEXT} from '../../actions/context';
 import WindowLocationUtils from '../../utils/windowLocationUtils';
 import {EDIT_RECORD_KEY, NEW_RECORD_VALUE} from '../../constants/urlConstants';

@@ -229,18 +229,19 @@ export class ReportColumnHeaderMenu extends Component {
         if (!this.hasRequiredIds()) {return;}
 
         let params = {
-            columnId: this.props.fieldDef.id,
+            open: true,
+            clickedId: this.props.fieldDef.id,
             addBefore: before
         };
         this.props.toggleFieldSelectorMenu(CONTEXT.REPORT.NAV, this.props.appId, this.props.tblId, this.props.rptId, params);
     }
 
     openFieldSelectorBefore = () => {
-        this.props.openFieldSelector(true);
+        this.openFieldSelector(true);
     };
 
     openFieldSelectorAfter = () => {
-        this.props.openFieldSelector(false);
+        this.openFieldSelector(false);
     };
 
     render() {

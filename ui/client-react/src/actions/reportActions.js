@@ -313,7 +313,7 @@ export const loadDynamicReport = (context, appId, tblId, rptId, format, filter, 
 export const unloadEmbeddedReport = (context) =>
     event(context, types.UNLOAD_EMBEDDED_REPORT);
 
-/* Find the records count for a report. Allows customized report that optionally allows for query
+/** Find the records count for a report. Allows customized report that optionally allows for query
  * parameters. The overrides are expected to be defined in the queryParams parameter.
  *
  * When the results are returned from the node layer a LOAD_REPORT_SUCCESS event is fired and the
@@ -347,20 +347,41 @@ export const loadReportRecordsCount = (context, appId, tblId, rptId, queryParams
     };
 };
 
+/**
+ * Toggle the field select menu which displays hidden fields.
+ * @param context
+ * @param appId
+ * @param tblId
+ * @param rptId
+ * @param params { }
+ */
 export const toggleFieldSelectorMenu = (context, appId, tblId, rptId, params) => {
     return (dispatch) => {
         if (appId && tblId && rptId) {
             let openOrClose = params.open ? types.OPEN_FIELD_SELECTOR : types.CLOSE_FIELD_SELECTOR;
-            dispatch(event(context, openOrClose, params));
+            return new Promise((resolve) => {
+                dispatch(event(context, openOrClose, params));
+                resolve();
+            });
         } else {
             logger.error(`reportActions.toggleFieldSelectorMenu: Missing one or more required input parameters. AppId:${appId}; TblId:${tblId}; RptId:${rptId}`);
+            return new Promise.reject();
         }
     }
 };
 
-export const addColumnToTable = (context, appId, tblId, rptId, params) => {
+/**
+ * Add the selected field to the report table.
+ * @param context
+ * @param appId
+ * @param tblId
+ * @param rptId
+ * @param params { }
+ */
+export const addColumnFromExistingField = (context, appId, tblId, rptId, params) => {
     return (dispatch) => {
         if (appId && tblId && rptId) {
+            console.log(params);
             dispatch(event(context, types.ADD_COLUMN_SUCCESS, params));
         } else {
             logger.error(`reportActions.addColumnToTable: Missing one or more required input parameters.  AppId:${appId}; TblId:${tblId}; RptId:${rptId}`);

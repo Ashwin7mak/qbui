@@ -7,6 +7,7 @@ import ReportManagerTrowser from "../report/reportManagerTrowser";
 import RecordTrowser from "../record/recordTrowser";
 import ReportFieldSelectTrowser from '../report/reportFieldSelectTrowser';
 import ListOfElements from '../../../../reuse/client/src/components/sideNavs/listOfElements';
+import FieldTokenInMenu from '../formBuilder/fieldToken/fieldTokenInMenu';
 import Locale from '../../../../reuse/client/src/locales/locale';
 
 import GlobalActions from "../actions/globalActions";
@@ -30,7 +31,7 @@ import * as ShellActions from '../../actions/shellActions';
 import * as FormActions from '../../actions/formActions';
 import * as ReportActions from '../../actions/reportActions';
 import * as TableCreationActions from '../../actions/tableCreationActions';
-import {addColumnToTable, toggleFieldSelectorMenu} from '../../actions/reportActions';
+import {addColumnFromExistingField, toggleFieldSelectorMenu} from '../../actions/reportActions';
 
 import {CONTEXT} from '../../actions/context';
 import ButtonGroup from 'react-bootstrap/lib/ButtonGroup';
@@ -328,7 +329,7 @@ export const Nav = React.createClass({
         let elements = [];
         let columns = reportData.data ? reportData.data.columns : [];
         for (let i = 0; i < columns.length; i++) {
-            if (columns[i].fieldDef.isHidden) {
+            if (columns[i].isHidden) {
                 elements.push({
                     key: columns[i].id + "",
                     title: columns[i].headerName,
@@ -339,6 +340,7 @@ export const Nav = React.createClass({
             }
         }
 
+        console.log(elements);
         let params = {
             open: false
         };
@@ -357,6 +359,7 @@ export const Nav = React.createClass({
                     {Locale.getMessage('report.drawer.info')}
                 </div>
                 <ListOfElements
+                    renderer={FieldTokenInMenu}
                     elements={elements}
                     emptyListMessage={Locale.getMessage('report.drawer.empty')}
                 />
@@ -565,7 +568,7 @@ const mapDispatchToProps = (dispatch) => {
             });
         },
         addColumnToTable: (context, appId, tblId, rptId, params) => {
-            dispatch(addColumnToTable(context, appId, tblId, rptId, params));
+            dispatch(addColumnFromExistingField(context, appId, tblId, rptId, params));
         },
         toggleFieldSelectorMenu: (context, appId, tblId, rptId, params) => {
             dispatch(toggleFieldSelectorMenu(context, appId, tblId, rptId, params));
