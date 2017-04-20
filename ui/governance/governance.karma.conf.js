@@ -129,7 +129,7 @@ module.exports = function(config) {
         browsers: ["ChromeCanaryHeadless"],
         customLaunchers: {
             'ChromeCanaryHeadless': {
-                base: 'Chrome',
+                base: 'ChromeCanary',
                 flags: [
                     // See https://chromium.googlesource.com/chromium/src/+/lkgr/headless/README.md
                     '--no-sandbox',
