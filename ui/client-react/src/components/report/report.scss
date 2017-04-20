@@ -275,129 +275,137 @@
     .sortButton {
         font-size: 18px;
 
-        &.qbIcon {
-            display: inline;
+        @include small-breakpoint {
+            font-size: $size-iconfont-large2;
+            line-height: 0.8;
+
+            &.qbIcon {
+                display: inline;
+            }
+            &:hover {
+                color: $icon-light-color-hover;
+            }
         }
     }
-}
 
-.reportNavigation {
-    float: left;
-    color: $pagination-iconfont-darkblack-color;
-    font-family: "Lato", sans-serif;
-    font-size: 14px;
-    display: flex;
-    align-items: center;
+    .reportNavigation {
+        float: left;
+        color: $pagination-iconfont-darkblack-color;
+        font-family: "Lato", sans-serif;
+        font-size: 14px;
+        display: flex;
+        align-items: center;
 
-    .tipChildWrapper {
-        width: auto;
+        .tipChildWrapper {
+            width: auto;
+        }
+
+        .navigationButton {
+            text-decoration: none;
+            padding-top: 5px;
+
+            .disabled {
+                pointer-events: none;
+            }
+        }
+
+        .previousButton {
+            &.qbIcon {
+                display: inline;
+                font-size: 24px;
+                color: $pagination-iconfont-darkblack-color;
+
+                &.disabled {
+                    color: $pagination-iconfont-disabled-color;
+                }
+            }
+
+            &:hover {
+                color: $pagination-arrow-dark-hover-color;
+            }
+        }
+
+        .pageNumbers {
+            display: inline;
+            padding-left: 3px;
+            padding-right: 3px;
+            white-space: nowrap;
+        }
+
+        .nextButton {
+            &.qbIcon {
+                display: inline;
+                font-size: 24px;
+                color: $pagination-iconfont-darkblack-color;
+
+                &.disabled {
+                    color: $pagination-iconfont-disabled-color;
+                }
+            }
+
+            &:hover {
+                color: $pagination-arrow-dark-hover-color;
+            }
+        }
     }
 
     .navigationButton {
-        text-decoration: none;
-        padding-top: 5px;
+        background-color: transparent;
+        background-repeat: no-repeat;
+        border: none;
+        cursor: pointer;
+        overflow: hidden;
+        outline: none;
+    }
+    $add-record-fg: $color-black-100;
+    $add-record-bg: $color-cyan-500;
+    $add-record-radius: 20px;
 
-        .disabled {
-            pointer-events: none;
-        }
+    .embeddedReportContainer {
+        margin-bottom: 35px;
     }
 
-    .previousButton {
-        &.qbIcon {
-            display: inline;
-            font-size: 24px;
-            color: $pagination-iconfont-darkblack-color;
+    @include small-breakpoint {
+        .reportContainer .reportToolsAndContentContainer .reportToolbar {
+            color: $secondary-bar-color;
+            justify-content: space-between;
 
-            &.disabled {
-                color: $pagination-iconfont-disabled-color;
+            .popover-content {
+                color: $iconfont-on-light-normal-color;
             }
         }
 
-        &:hover {
-            color: $pagination-arrow-dark-hover-color;
+        .reportContainer .reportToolsAndContentContainer .loadedContent {
+            margin: 0;
+            width: 100%;
         }
-    }
 
-    .pageNumbers {
-        display: inline;
-        padding-left: 3px;
-        padding-right: 3px;
-        white-space: nowrap;
-    }
-
-    .nextButton {
-        &.qbIcon {
-            display: inline;
+        .addNewRecord {
+            display: inline-block;
+            position: fixed;
+            right: 24px;
+            bottom: 24px;
             font-size: 24px;
-            color: $pagination-iconfont-darkblack-color;
+            color: $add-record-fg;
+            background-color: $add-record-bg;
+            text-align: center;
+            width: $add-record-radius * 2;
+            height: $add-record-radius * 2;
+            -moz-border-radius: $add-record-radius;
+            -webkit-border-radius: $add-record-radius;
+            border-radius: $add-record-radius;
 
-            &.disabled {
-                color: $pagination-iconfont-disabled-color;
+            .qbIcon {
+                line-height: $add-record-radius * 2;
             }
-        }
 
-        &:hover {
-            color: $pagination-arrow-dark-hover-color;
-        }
-    }
-}
+            &:hover {
+                color: $add-record-fg;
+            }
 
-.navigationButton {
-    background-color: transparent;
-    background-repeat: no-repeat;
-    border: none;
-    cursor: pointer;
-    overflow: hidden;
-    outline: none;
-}
-$add-record-fg: $color-black-100;
-$add-record-bg: $color-cyan-500;
-$add-record-radius: 20px;
-
-.embeddedReportContainer {
-    margin-bottom: 35px;
-}
-
-@include small-breakpoint {
-    .reportContainer .reportToolsAndContentContainer .reportToolbar {
-        color: $secondary-bar-color;
-        justify-content: space-between;
-
-        .popover-content {
-            color: $iconfont-on-light-normal-color;
-        }
-    }
-
-    .reportContainer .reportToolsAndContentContainer .loadedContent {
-        margin: 0;
-        width: 100%;
-    }
-
-    .addNewRecord {
-        display: inline-block;
-        position: fixed;
-        right: 24px;
-        bottom: 24px;
-        font-size: 24px;
-        color: $add-record-fg;
-        background-color: $add-record-bg;
-        text-align: center;
-        width: $add-record-radius * 2;
-        height: $add-record-radius * 2;
-        -moz-border-radius: $add-record-radius;
-        -webkit-border-radius: $add-record-radius;
-        border-radius: $add-record-radius;
-
-        .qbIcon {
-            line-height: $add-record-radius * 2;
-        }
-
-        &:hover {
-            color: $add-record-fg;
-        }
-
-        &:focus {
-            color: $add-record-fg;
+            &:focus {
+                color: $add-record-fg;
+            }
         }
     }
 }
