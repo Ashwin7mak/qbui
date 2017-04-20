@@ -191,10 +191,10 @@ export const RecordRoute = React.createClass({
         const {appId, tblId, rptId} = this.props.reportData;
         if (this.props.isDrawerContext) {
             const existingPath = this.props.history.location.pathname;
-            const paths = existingPath.split('/');
-            const lastBlockIndex = paths.length - 1;
+            const urlSegments = existingPath.split('/');
+            const lastBlockIndex = urlSegments.length - 1;
             //replace the last drawerRecId(lastBlockIndex - 2) with the previous record Id
-            const newLink = this.getUpdatedUrl(paths, lastBlockIndex - 2, record.previousRecordId);
+            const newLink = this.getUpdatedUrl(urlSegments, lastBlockIndex - 2, record.previousRecordId);
             this.props.history.push(newLink);
         } else {
             const link = `${APP_ROUTE}/${appId}/table/${tblId}/report/${rptId}/record/${record.previousRecordId}`;
@@ -204,14 +204,14 @@ export const RecordRoute = React.createClass({
 
     /***
      * return updated url
-     * @param pathBlocks current url split at '/'
+     * @param urlSegments current url split at '/'
      * @param index path block to be replaced
-     * @param newEntity the new value to be placed in the url at the given index
+     * @param newUrlSegment the new value to be placed in the url at the given index
      */
-    getUpdatedUrl(pathBlocks, index, newEntity) {
-        pathBlocks[index] = newEntity;
-        const newPath = pathBlocks.join('/');
-        return newPath;
+    getUpdatedUrl(urlSegments, index, newUrlSegment) {
+        urlSegments[index] = newUrlSegment;
+        const newUrl = urlSegments.join('/');
+        return newUrl;
     },
 
     /**
@@ -225,10 +225,10 @@ export const RecordRoute = React.createClass({
         const {appId, tblId, rptId} = this.props.reportData;
         if (this.props.isDrawerContext) {
             const existingPath = this.props.history.location.pathname;
-            const paths = existingPath.split('/');
-            const lastBlockIndex = paths.length - 1;
+            const urlSegments = existingPath.split('/');
+            const lastBlockIndex = urlSegments.length - 1;
             //replace the last drawerRecId(lastBlockIndex - 2) with the next record Id
-            const newLink = this.getUpdatedUrl(paths, lastBlockIndex - 2, record.nextRecordId);
+            const newLink = this.getUpdatedUrl(urlSegments, lastBlockIndex - 2, record.nextRecordId);
             this.props.history.push(newLink);
         } else {
             const link = `${APP_ROUTE}/${appId}/table/${tblId}/report/${rptId}/record/${record.nextRecordId}`;
