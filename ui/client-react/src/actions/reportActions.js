@@ -50,6 +50,10 @@ export const addBlankRecordToReport = (context, afterRecId) => {
     };
 };
 
+export const removeBlankRecordFromReport = (context, appId, tblId, recId) => {
+    return event(context, types.REMOVE_BLANK_REPORT_RECORD, {appId, tblId, recId});
+};
+
 /**
  * Retrieve a list of reports for the given app/table.  This function is called primarily when
  * populating the left hand navigation window with the list of reports and when displaying a
@@ -341,3 +345,28 @@ export const loadReportRecordsCount = (context, appId, tblId, rptId, queryParams
         }
     };
 };
+
+/**
+ * Hide a column based on the column id given.
+ * @param context
+ * @param appId
+ * @param tblId
+ * @param rptId
+ * @param params { columnId }
+ */
+export const hideColumn = (context, appId, tblId, rptId, params) => {
+    return (dispatch) => {
+        if (appId && tblId && rptId) {
+            logger.debug(`Hiding column with id: ${params.columnId} for appId: ${appId}, tblId:${tblId}, rptId:${rptId}`);
+            // Temporary until API to persist hidden columns.
+            return new Promise((resolve) => {
+                dispatch(event(context, types.HIDE_COLUMN, params));
+                resolve();
+            });
+        } else {
+            logger.error(`reportActions.hideColumn: Missing one or more required input parameters.  AppId:${appId}; TblId:${tblId}; RptId:${rptId}`);
+            return new Promise.reject();
+        }
+    };
+};
+

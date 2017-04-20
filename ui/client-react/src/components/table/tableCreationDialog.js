@@ -5,6 +5,7 @@ import TableCreationSummaryPanel from './tableCreationSummaryPanel';
 import MultiStepDialog from '../../../../reuse/client/src/components/multiStepDialog/multiStepDialog';
 import {connect} from 'react-redux';
 import {NotificationManager} from 'react-notifications';
+import {I18nMessage} from "../../utils/i18nMessage";
 import * as TableCreationActions from '../../actions/tableCreationActions';
 import Locale from '../../locales/locales';
 import UrlUtils from '../../utils/urlUtils';
@@ -108,6 +109,11 @@ export class TableCreationDialog extends React.Component {
 
         const classes = ['tableCreationDialog'];
 
+        // if icon chooser is open, add class to allow it to overflow the bottom buttons (while open)
+        if (this.props.tableCreation.iconChooserOpen) {
+            classes.push('allowOverflow');
+        }
+
         return (<MultiStepDialog show={this.props.tableCreation.dialogOpen}
                                  isLoading={this.props.tableCreation.savingTable}
                                  classes={classes.join(' ')}
@@ -119,8 +125,10 @@ export class TableCreationDialog extends React.Component {
                                  finishedButtonLabel={Locale.getMessage("tableCreation.finishedButtonLabel")}
                                  canProceed={this.isValid()}
                                  titles={[Locale.getMessage("tableCreation.newTablePageTitle"), Locale.getMessage("tableCreation.addFieldsTitle")]}>
-
-                <TableCreationPanel tableInfo={this.props.tableInfo}
+                <div className="tableCreationPanel">
+                    <div className="description"><I18nMessage message="tableCreation.newTableDescription"/></div>
+                    <div className="title"><I18nMessage message="tableCreation.newTableTitle"/></div>
+                    <TableCreationPanel tableInfo={this.props.tableInfo}
                                     iconChooserOpen={this.props.tableCreation.iconChooserOpen}
                                     openIconChooser={this.props.openIconChooser}
                                     closeIconChooser={this.props.closeIconChooser}
@@ -129,7 +137,7 @@ export class TableCreationDialog extends React.Component {
                                     focusOn={this.props.tableCreation.editing}
                                     validate={this.props.tableCreation.edited}
                                     appTables={this.getExistingTableNames()} />
-
+                </div>
                 <TableCreationSummaryPanel />
 
             </MultiStepDialog>);

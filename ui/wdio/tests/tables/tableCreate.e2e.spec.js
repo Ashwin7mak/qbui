@@ -42,9 +42,7 @@
          * Before each it block reload the list all report (can be used as a way to reset state between tests)
          */
         beforeEach(function() {
-            //load the tables page
-            RequestAppsPage.get(e2eBase.getRequestTableEndpoint(realmName, testApp.id, testApp.tables[0].id));
-            return tableCreatePO.newTableBtn.waitForVisible();
+            return e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
         });
 
         it('Create new table', function() {
@@ -64,7 +62,12 @@
             //Step 3 - Verify table elements
             tableCreatePO.verifyTable();
 
-            //Step 4 - Enter table field values
+            //Step 4 - Choose an Icon from Icon picker
+            var iconChoosedClassName = tableCreatePO.selectRandomIconFromIconChooser();
+            //Verify the choosed icon in closed combo
+            tableCreatePO.verifyIconInIconChooserCombo(iconChoosedClassName);
+
+            //Step 5 - Enter table field values
             tableFields.forEach(function(tableField) {
                 //verify place holders for each table field
                 tableCreatePO.verifyTableFieldPlaceHolders(tableField.fieldTitle, tableField.placeHolder);
@@ -72,35 +75,38 @@
                 tableCreatePO.enterTableFieldValue(tableField.fieldTitle, tableField.fieldValue);
             });
 
-            //Step 6 - Choose an Icon from Icon picker
-            tableCreatePO.selectRandomIconFromIconChooser();
+            //Step 6 - Click next field and verify it landed in drag fields page
+            tableCreatePO.clickNextBtn();
 
-            //Step 5 - Verify iconChooser search functionality
+            //Step 7 - Click on finished button and make sure it landed in edit Form container page
+            tableCreatePO.clickFinishedBtn();
+
+            //Step 8 - Click on forms Cancel button
+            formsPO.clickFormCancelBtn();
+            tableCreatePO.newTableBtn.waitForVisible();
+
+            //Step 9 - Get the new count of table links in the left nav
+            var newTableLinksCount = tableCreatePO.getAllTableLeftNavLinksList.value.length;
+
+            //Step 10 - Verify the table links count got increased by 1
+            expect(newTableLinksCount).toBe(originalTableLinksCount + 1);
+
+            //Step 11 - Select Table and make sure it lands in reports page
+            tableCreatePO.selectTable(tableName);
+        });
+
+        it('Verify ICON chooser search', function() {
+
+            //Step 1 - Click on new table button
+            tableCreatePO.clickCreateNewTable();
+
+            //Step 2 - Verify iconChooser search functionality
             tableCreatePO.searchIconFromChooser('bicycle');
             var searchReturnedIcons = tableCreatePO.getAllIconsFromIconChooser;
             //Verify it returns just one
             expect(searchReturnedIcons.value.length).toBe(1);
             expect(searchReturnedIcons.getAttribute('className')).toBe('qbIcon iconTableSturdy-bicycle');
 
-            //Step 7 - Click next field and verify it landed in drag fields page
-            tableCreatePO.clickNextBtn();
-
-            //Step 8 - Click on finished button and make sure it landed in edit Form container page
-            tableCreatePO.clickFinishedBtn();
-
-            //Step 9 - Click on forms Cancel button
-            formsPO.clickFormCancelBtn();
-            tableCreatePO.newTableBtn.waitForVisible();
-
-
-            //Step 10 - Get the new count of table links in the left nav
-            var newTableLinksCount = tableCreatePO.getAllTableLeftNavLinksList.value.length;
-
-            //Step 11 - Verify the table links count got increased by 1
-            expect(newTableLinksCount).toBe(originalTableLinksCount + 1);
-
-            //Step 12 - Select Table and make sure it lands in reports page
-            tableCreatePO.selectTable(tableName);
         });
 
         /**

@@ -6,8 +6,10 @@ import StandardGrid from '../../common/grid/standardGrid';
 import AccountUsersGrid from './grid/AccountUsersGrid';
 import AccountUsersStage from './AccountUsersStage';
 
+
 import * as AccountUsersActions from './AccountUsersActions';
 import * as RequestContextActions from '../../common/requestContext/RequestContextActions';
+import * as RequestContextCommon from '../../common/requestContext/RequestContextCommon';
 import * as SpinnerConfigurations from "../../../../client-react/src/constants/spinnerConfigurations";
 
 /**
@@ -38,7 +40,7 @@ class AccountUsers extends Component {
             return (
                 <Loader loaded={!this.props.loading} options={SpinnerConfigurations.LARGE_BREAKPOINT}>
                     <div className="accountUsersContainer">
-                        <AccountUsersStage isHidden={false} />
+                        <AccountUsersStage users={this.props.users}/>
                         <StandardGrid>
                             <AccountUsersGrid
                                 users={this.props.users}
@@ -71,21 +73,13 @@ const mapDispatchToProps = (dispatch) => ({
     }
 });
 
-function checkDataFetchingError(error) {
-    //if it's a redirect error, do not display the 'error' text and show spinner
-    if (error && error.data && error.data.statusCode === 401) {
-        return null;
-    }
-    return error;
-}
-
 const mapStateToProps = (state) => {
     return {
         requestUser: state.RequestContext.currentUser,
         requestRealm: state.RequestContext.realm,
         users: state.AccountUsers.users,
         loading: state.RequestContext.status.isFetching || !state.RequestContext.currentUser.id,
-        dataFetchingError: checkDataFetchingError(state.RequestContext.status.error),
+        dataFetchingError: RequestContextCommon.checkDataFetchingError(state.RequestContext.status.error),
     };
 };
 

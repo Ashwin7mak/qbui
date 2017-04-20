@@ -27,8 +27,8 @@ export const createScalarDefaultFieldsProperties = (userDefaultProperties = null
         [FieldFormats.DATETIME_FORMAT]: {
             ...createDefaultFieldsProperties(serverTypeConsts.DATE_TIME, DefaultFieldProperties[FieldFormats.DATETIME_FORMAT], userDefaultProperties)
         },
-        [FieldFormats.TIME_OF_DAY]: {
-            ...createDefaultFieldsProperties(serverTypeConsts.TIME_OF_DAY, DefaultFieldProperties[FieldFormats.TIME_OF_DAY], userDefaultProperties)
+        [FieldFormats.TIME_FORMAT]: {
+            ...createDefaultFieldsProperties(serverTypeConsts.TIME_OF_DAY, DefaultFieldProperties[FieldFormats.TIME_FORMAT], userDefaultProperties)
         },
         [FieldFormats.CHECKBOX_FORMAT]: {
             ...createDefaultFieldsProperties(serverTypeConsts.CHECKBOX, DefaultFieldProperties[FieldFormats.CHECKBOX_FORMAT], userDefaultProperties)

@@ -23,6 +23,8 @@
 
             .iconChooser {
                 position: absolute;
+                background-color: $color-black-100;
+                z-index: 1;
             }
             .iconChooser.closed {
                 transition: all 300ms ease-in;
@@ -32,8 +34,8 @@
             .iconChooser.open {
                 transition: all 300ms ease-in;
 
-                width: 766px;
-                height: 182px;
+                width: 776px;
+                height: 256px;
             }
         }
 

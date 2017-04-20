@@ -1,6 +1,6 @@
 import React from 'react';
 import Stage from '../stage/stage';
-import TableIcon from '../qbTableIcon/qbTableIcon';
+import Icon, {AVAILABLE_ICON_FONTS} from '../../../../reuse/client/src/components/icon/icon.js';
 import ReportStage from './reportStage';
 import ReportHeader from './reportHeader';
 import IconActions from '../actions/iconActions';
@@ -137,7 +137,7 @@ const ReportRoute = React.createClass({
             <div className="reportStageHeadline">
 
                 <div className="navLinks">
-                    {this.props.selectedTable && <Link className="tableHomepageIconLink" to={tableLink}><TableIcon icon={this.props.selectedTable.icon}/></Link>}
+                    {this.props.selectedTable && <Link className="tableHomepageIconLink" to={tableLink}><Icon iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY} icon={this.props.selectedTable.tableIcon}/></Link>}
                     {this.props.selectedTable && <Link className="tableHomepageLink" to={tableLink}>{this.props.selectedTable.name}</Link>}
                 </div>
 
@@ -179,6 +179,7 @@ const ReportRoute = React.createClass({
                     selectedRows={this.props.reportData.selectedRows}
                     scrollingReport={this.props.scrollingReport}
                     loadDynamicReport={this.loadDynamicReport}
+                    noRowsUI={true}
                 />
             </div>);
         }

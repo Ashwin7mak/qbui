@@ -36,6 +36,8 @@ import Icon from '../../../../reuse/client/src/components/icon/icon';
 import TableCreationDialog from '../table/tableCreationDialog';
 import AppUtils from '../../utils/appUtils';
 
+import {NEW_TABLE_IDS_KEY} from '../../constants/localStorage';
+import {updateFormRedirectRoute} from '../../actions/formActions';
 
 // This shared view with the server layer must be loaded as raw HTML because
 // the current backend setup cannot handle a react component in a common directory. It is loaded
@@ -93,6 +95,8 @@ export const Nav = React.createClass({
             link = `${link}/${formId}`;
         }
 
+        this.props.updateFormRedirectRoute(_.get(this.props, 'location.pathname'));
+
         this.props.router.push(link);
     },
 
@@ -102,18 +106,28 @@ export const Nav = React.createClass({
         if (this.props.params) {
             recordId = this.props.params.recordId;
         }
+        let selectedApp = this.getSelectedApp();
+        let isAdmin = false;
+        if (selectedApp) {
+            isAdmin = AppUtils.hasAdminAccess(selectedApp.accessRights);
+        }
         return (<GlobalActions actions={actions}
                                position={"top"}
                                dropdownIcon="user"
                                dropdownMsg="globalActions.user"
                                startTabIndex={4}
-                               app={this.getSelectedApp()}>
-                    <BuilderDropDownAction recId={recordId}
-                                           actions={actions}
-                                           position={"top"}
-                                           formBuilderIcon="settings"
-                                           navigateToBuilder={this.navigateToBuilder}
-                                           startTabIndex={4}/>
+                               app={selectedApp}>
+            {isAdmin ?
+                    <BuilderDropDownAction
+                                router={this.props.router}
+                                selectedApp={selectedApp}
+                                selectedTable={this.getSelectedTable(this.state.apps.selectedTableId)}
+                                recId={recordId}
+                                actions={actions}
+                                position={"top"}
+                                icon="settings"
+                                navigateToBuilder={this.navigateToBuilder}
+                                startTabIndex={4}/> : null}
                 </GlobalActions>);
     },
 
@@ -129,12 +143,6 @@ export const Nav = React.createClass({
                                dropdownMsg="globalActions.user"
                                startTabIndex={100}
                                position="left">
-                    <BuilderDropDownAction recId={recordId}
-                                           actions={actions}
-                                           position="left"
-                                           formBuilderIcon="settings"
-                                           navigateToBuilder={this.navigateToBuilder}
-                                           startTabIndex={4}/>
                 </GlobalActions>);
     },
 
@@ -418,10 +426,20 @@ export const Nav = React.createClass({
     /**
      * new table was created, ensure it is displayed available in the UI
      */
-    tableCreated() {
+    tableCreated(tblId) {
         const flux = this.getFlux();
 
         flux.actions.loadApps(true);
+
+        // store any new table IDs for duration of session for table homepage
+        if (window.sessionStorage) {
+            let newTables = window.sessionStorage.getItem(NEW_TABLE_IDS_KEY);
+
+            let tableIds = newTables ? newTables.split(",") : [];
+            tableIds.push(tblId);
+
+            window.sessionStorage.setItem(NEW_TABLE_IDS_KEY, tableIds.join(","));
+        }
     },
 
     onSelectItem() {
@@ -467,18 +485,12 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        toggleAppsList: (toggleState) => {
-            dispatch(ShellActions.toggleAppsList(toggleState));
-        },
-        toggleLeftNav: (navState) => {
-            dispatch(ShellActions.toggleLeftNav(navState));
-        },
-        hideTrowser: () => {
-            dispatch(ShellActions.hideTrowser());
-        },
-        showTrowser: (content) => {
-            dispatch(ShellActions.showTrowser(content));
-        },
+        toggleAppsList: (toggleState) => dispatch(ShellActions.toggleAppsList(toggleState)),
+        toggleLeftNav: (navState) => dispatch(ShellActions.toggleLeftNav(navState)),
+
+        hideTrowser: () => dispatch(ShellActions.hideTrowser()),
+        showTrowser: (content) => dispatch(ShellActions.showTrowser(content)),
+
         loadForm: (appId, tblId, rptId, formType, editRec, showTrowser) => {
             dispatch(FormActions.loadForm(appId, tblId, rptId, formType, editRec)).then(() => {
                 if (showTrowser) {
@@ -486,9 +498,10 @@ const mapDispatchToProps = (dispatch) => {
                 }
             });
         },
-        loadReports: (context, appId, tblId) => {
-            dispatch(ReportActions.loadReports(context, appId, tblId));
-        }
+
+        loadReports: (context, appId, tblId) => dispatch(ReportActions.loadReports(context, appId, tblId)),
+
+        updateFormRedirectRoute: (route) => dispatch(updateFormRedirectRoute(route))
     };
 };
 

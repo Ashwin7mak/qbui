@@ -104,14 +104,22 @@ export default {
             next: "Prochain",
             previous: "Orécédent",
             finished: "Fini",
-            new: "Nouveau"
+            apply: "Appliquer",
+            new: "Nouveau",
+            backToApp: "Retour à l'application",
+            reset: "Réinitialiser"
         },
         field: {
             search: "Chercher",
             searchNoMatch: "Personne ne correspond à"
         },
         grid: {
-            no_data: "Il n'y a pas de données à afficher."
+            no_data: "Il n'y a pas de données à afficher.",
+            no_filter_matches: "Aucun enregistrement ne correspond à ce que vous recherchez. Essayez de rechercher un autre type d'enregistrement.",
+            no_rows: "Il n'y a aucun enregistrement à voir en ce moment.",
+            no_rows_but: "Il n'y a pas d'enregistrements, mais vous pouvez ",
+            no_rows_create_link:  "créer une"
+
         },
         globalActions: {
             user: "Utilisateur",
@@ -121,7 +129,7 @@ export default {
         },
         pageActions: {
             addRecord: "Ajouter un enregistrement",
-            configureFormBuilder: 'Modifier ce formulaire',
+            approve: "Approuve ce disque",
             saveRecord: "Sauvegarder les modifications",
             saveAndAddRecord: "Enregistrer et ajouter une nouvelle ligne",
             saveAndAddRecordDisabled: "Ajout de plusieurs enregistrements ne fonctionnant pas en ce moment",
@@ -134,7 +142,8 @@ export default {
             print: "Imprimer",
             customizeReport: "Personnaliser ce Rapport",
             customizeForm: "Personnaliser ce formulaire",
-            customizePage: "Personnaliser cette page"
+            customizePage: "Personnaliser cette page",
+            deleteTable: "Supprimer la table"
         },
         recordActions: {
             previous: "Précédent",
@@ -190,6 +199,12 @@ export default {
                 save: {
                     success: "Formulaire enregistré",
                     error: "Erreur lors de l'enregistrement du formulaire"
+                }
+            },
+            automation: {
+                approverecord: {
+                    success: "Enregistrement approuvé.",
+                    error: "Une erreur s'est produite lors de l'approbation de ce document."
                 }
             }
         },
@@ -518,6 +533,11 @@ export default {
             LOOKUP: "Chercher",
             FILE_ATTACHMENT: "Fichier"
         },
+        fieldPropertyLabels: {
+            title: "propriétés",
+            name: "prénom",
+            required: "Doit être rempli"
+        },
         builder: {
             formBuilder: {
                 unimplemented: "La fonctionnalité n'est pas disponible en ce moment",
@@ -615,10 +635,28 @@ export default {
             validateTableNameEmpty: "Le nom de la table ne doit pas être vide",
             validateTableNameExists: "Le nom de la table doit être unique pour cette application",
             validateRecordNameEmpty: "Le nom de l'enregistrement ne doit pas être vide",
+
+            homePageInitialTitle: "Commencez à utiliser votre table",
+            homePageInitialDescription: "Nous avons créé quelques rapports pour accompagner votre nouvelle table afin que vous puissiez commencer à ajouter des enregistrements",
+            homePageAddRecordButton: "Ajouter un enregistrement",
+            homePageStillBuilding: "Bâtiment fixe?  ",
+            homePageCreateAnother: "Créer un autre tableau"
         },
         iconChooser: {
             searchPlaceholder: "Rechercher des icônes..."
+        },
+        settings: {
+            header: "Paramètres",
+            tablesHeader: "Table",
+            appsHeader: "App",
+            formsHeader: "Forme",
+            tableSettings: "Propriétés et paramètres de la table",
+            configureFormBuilder: 'Modifier ce formulaire',
+        },
+        tableEdit: {
+            tableUpdateFailed: "Impossible de mettre à jour le tableau",
+            tableUpdated: "Informations sur la table enregistrées",
+            tableReset: "Informations sur la table non enregistrées"
         }
-
     }
 };

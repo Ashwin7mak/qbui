@@ -94,7 +94,7 @@ exports.config = {
             breakpointSize: 'xlarge',
             // These two values enable parallel testing which will run a spec file per instance
             shardTestFiles: true,
-            maxInstances: 4
+            maxInstances: 4,
         },
         // {
         //     platform: 'OS X 10.11',
@@ -125,7 +125,7 @@ exports.config = {
             breakpointSize: 'xlarge',
             // These two values enable parallel testing which will run a spec file per instance
             shardTestFiles: true,
-            maxInstances: 4
+            maxInstances: 4,
         },
         {
             platform: 'Windows 10',
@@ -141,7 +141,7 @@ exports.config = {
             breakpointSize: 'xlarge',
             // These two values enable parallel testing which will run a spec file per instance
             shardTestFiles: true,
-            maxInstances: 4
+            maxInstances: 4,
         }
     ],
     //
@@ -162,7 +162,7 @@ exports.config = {
     coloredLogs: true,
     //
     // Saves a screenshot to a given path if a command fails.
-    screenshotPath: './wdio/screenshots/',
+    screenshotPath: null,
     //
     // Set a base URL in order to shorten url command calls. If your url parameter starts
     // with "/", then the base url gets prepended.
@@ -205,7 +205,9 @@ exports.config = {
     // Firefox does not fire certain blur events when Firefox window does not have OS level focus. The following
     // setting enable blur events to fire during e2e tests even when the window does not have OS level focus.
     firefoxProfile: {
-        'focusmanager.testmode': true
+        'focusmanager.testmode': true,
+        'dom.max_chrome_script_run_time': 0,
+        'dom.max_script_run_time': 0
     },
     //
     // Framework you want to run your specs with.
