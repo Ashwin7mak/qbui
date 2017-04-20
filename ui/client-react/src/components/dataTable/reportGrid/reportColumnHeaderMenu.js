@@ -26,12 +26,8 @@ export class ReportColumnHeaderMenu extends Component {
     constructor(props) {
         super(props);
 
-        this.sortReportAscending = this.sortReportAscending.bind(this);
-        this.sortReportDescending = this.sortReportDescending.bind(this);
-        this.groupReportAscending = this.groupReportAscending.bind(this);
-        this.groupReportDescending = this.groupReportDescending.bind(this);
-        this.hideThisColumn = this.hideThisColumn.bind(this);
     }
+
     /**
      * Checks to make sure appId, tblId, and reportId have been passed in and are not null.
      * We can't use required here, because the component may load before the ids are available and passed down.
@@ -172,13 +168,13 @@ export class ReportColumnHeaderMenu extends Component {
         this.props.loadDynamicReport(CONTEXT.REPORT.NAV, this.props.appId, this.props.tblId, this.props.rptId, true, this.props.filter, queryParams);
     }
 
-    sortReportAscending() {
+    sortReportAscending = () => {
         this.sortReport(true);
-    }
+    };
 
-    sortReportDescending() {
+    sortReportDescending = () => {
         this.sortReport(false);
-    }
+    };
 
     /**
      * On selection of group option from menu fire off the action to sort the data
@@ -207,18 +203,18 @@ export class ReportColumnHeaderMenu extends Component {
         this.props.loadDynamicReport(CONTEXT.REPORT.NAV, this.props.appId, this.props.tblId, this.props.rptId, true, this.props.filter, queryParams);
     }
 
-    groupReportAscending() {
+    groupReportAscending = () => {
         this.groupReport(true);
-    }
+    };
 
-    groupReportDescending() {
+    groupReportDescending = () => {
         this.groupReport(false);
-    }
+    };
 
     /**
      * On selection of hide option from menu fire off the action to hide the column
      */
-    hideThisColumn() {
+    hideThisColumn = () => {
         if (!this.hasRequiredIds()) {return;}
         if (this.props.isOnlyOneColumnVisible) {return;}
 
@@ -227,7 +223,7 @@ export class ReportColumnHeaderMenu extends Component {
         };
 
         this.props.hideColumn(CONTEXT.REPORT.NAV, this.props.appId, this.props.tblId, this.props.rptId, params);
-    }
+    };
 
     render() {
         let isDisabled = this.props.isOnlyOneColumnVisible;
