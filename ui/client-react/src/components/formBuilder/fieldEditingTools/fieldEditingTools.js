@@ -28,7 +28,6 @@ export class FieldEditingTools extends Component {
 
         this.selectedCurrentField = this.selectedCurrentField.bind(this);
         this.getSelectedFormElementContainer = this.getSelectedFormElementContainer.bind(this);
-        this.scrollElementIntoView = this.scrollElementIntoView.bind(this);
         this.updateScrollLocation = this.updateScrollLocation.bind(this);
     }
 
@@ -124,25 +123,44 @@ export class FieldEditingTools extends Component {
         }
     }
 
-    scrollElementIntoView() {
+    scrollElementUpIntoView = () => {
         /**
          * We only need to scroll into view for keyboard navigating
          * */
         let selectedFormElement = document.querySelector(".selectedFormElement");
         let isDragging = document.querySelector(".dragging");
         if (selectedFormElement && !isDragging) {
-            document.querySelector(".selectedFormElement").scrollIntoView(false);
+            this.props.formBuilderContainerContentElement.scrollTop = this.props.formBuilderContainerContentElement.scrollTop - 400;
+            console.log(this.props.formBuilderContainerContentElement.scrollTop);
+        }
+    }
+
+    scrollElementDownIntoView = () => {
+        /**
+         * We only need to scroll into view for keyboard navigating
+         * */
+        let selectedFormElement = document.querySelector(".selectedFormElement");
+        let isDragging = document.querySelector(".dragging");
+        if (selectedFormElement && !isDragging) {
+            this.props.formBuilderContainerContentElement.scrollTop = this.props.formBuilderContainerContentElement.scrollTop + 400;
         }
     }
 
     updateScrollLocation() {
         if (this.props.selectedFields && this.props.selectedFields[0]) {
             let selectedFormElement = this.getSelectedFormElementContainer();
-            let absoluteElementTop = selectedFormElement.top + window.pageYOffset;
-            let bottom = absoluteElementTop + selectedFormElement.height;
+            let selectedElementTop = selectedFormElement.top;
+            let selectedElementBottom = selectedFormElement.bottom;
 
-            if (bottom > window.innerHeight - 40 || absoluteElementTop < 50) {
-                this.scrollElementIntoView();
+            console.log('selectedElementTop: ', selectedElementTop);
+            console.log('selectedElementBottom: ', selectedElementBottom);
+            console.log('this.props.formBuilderContainerContentElement.scrollTop : ', this.props.formBuilderContainerContentElement.scrollTop);
+            console.log('window.innerHeight : ', window.innerHeight);
+
+            if (selectedElementBottom > window.innerHeight - 40) {
+                this.scrollElementDownIntoView();
+            } else if (selectedElementTop < 70) {
+                this.scrollElementUpIntoView();
             }
         }
     }

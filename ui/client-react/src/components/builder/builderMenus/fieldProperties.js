@@ -63,6 +63,7 @@ export class FieldProperties extends Component {
             <div className="fieldPropertyContainer">
                 <div className="textPropertyTitle">{propertyTitle}</div>
                 <TextFieldValueEditor value={propertyValue}
+                                      tabIndex="0"
                                       classes="textPropertyValue"
                                       inputType="text"
                                       onChange={(newValue) => this.updateFieldProps(newValue, 'name')}
