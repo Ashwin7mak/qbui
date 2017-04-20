@@ -53,7 +53,7 @@ describe('ReportActions functions', () => {
         let selection = [1, 2, 3];
         component = TestUtils.renderIntoDocument(<ReportActions selection={selection} {...props}/>);
         let actionIcons = TestUtils.scryRenderedComponentsWithType(component, ActionIcon);
-        let node = ReactDOM.findDOMNode(actionIcons[3]);
+        let node = ReactDOM.findDOMNode(actionIcons[4]);
         TestUtils.Simulate.click(node);
 
         // confirm via the modal dialog

@@ -4,7 +4,7 @@ import Trowser from "../trowser/trowser";
 import ReportManager from "./reportManager";
 import {I18nMessage} from "../../utils/i18nMessage";
 import Button from 'react-bootstrap/lib/Button';
-import TableIcon from "../qbTableIcon/qbTableIcon";
+import Icon, {AVAILABLE_ICON_FONTS} from '../../../../reuse/client/src/components/icon/icon.js';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
 
@@ -44,7 +44,7 @@ let ReportManagerTrowser = React.createClass({
 
         return (
             <div className="breadcrumbsContent">
-                <TableIcon classes={"primaryIcon"} icon={table ? table.icon : ""}/>
+                <Icon iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY} classes={"primaryIcon"} icon={table ? table.tableIcon : ""}/>
                 <span>{table ? table.name : ""}</span>
                 <span> : </span>
                 <I18nMessage message={'nav.reportsHeading'}/>

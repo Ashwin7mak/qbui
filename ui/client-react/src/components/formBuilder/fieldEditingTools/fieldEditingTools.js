@@ -8,7 +8,7 @@ import Breakpoints from "../../../utils/breakpoints";
 import {connect} from "react-redux";
 import {ENTER_KEY, SPACE_KEY} from "../../../../../reuse/client/src/components/keyboardShortcuts/keyCodeConstants";
 import _ from "lodash";
-import {selectFieldOnForm, removeFieldFromForm} from "../../../actions/formActions";
+import {selectFieldOnForm, removeFieldFromForm, deselectField} from "../../../actions/formActions";
 import {CONTEXT} from "../../../actions/context";
 
 import "./fieldEditingTools.scss";
@@ -46,8 +46,13 @@ export class FieldEditingTools extends Component {
     }
 
     onClickField(e) {
-        if (this.props.selectFieldOnForm) {
+        if (this.props.selectFieldOnForm && !this.props.selectedFields[0]) {
             this.props.selectFieldOnForm(this.props.formId, this.props.location);
+            if (e) {
+                e.preventDefault();
+            }
+        } else if (this.props.selectFieldOnForm) {
+            this.props.deselectField(this.props.formId, this.props.location);
             if (e) {
                 e.preventDefault();
             }
@@ -98,9 +103,11 @@ export class FieldEditingTools extends Component {
         if (this.props.previouslySelectedField && this.props.previouslySelectedField[0] && this.props.tabIndex !== "-1") {
             let previouslySelectedField = document.querySelectorAll(".fieldEditingTools");
             previouslySelectedField[this.props.previouslySelectedField[0].elementIndex].focus();
-        } else if (this.props.selectedFields && this.props.selectedFields[0]) {
-            let setFocusOnSelectedField = document.querySelectorAll(".fieldEditingTools");
-            setFocusOnSelectedField[this.props.selectedFields[0].elementIndex].focus();
+        } else if (this.props.selectedFields && this.props.selectedFields[0] && document.activeElement.tagName !== "INPUT") {
+            let setFocusOnSelectedField = document.querySelectorAll(".fieldEditingTools")[this.props.selectedFields[0].elementIndex];
+            if (setFocusOnSelectedField) {
+                setFocusOnSelectedField.focus();
+            }
         }
         this.updateScrollLocation();
     }
@@ -113,8 +120,12 @@ export class FieldEditingTools extends Component {
     }
 
     scrollElementIntoView() {
+        /**
+         * We only need to scroll into view for keyboard navigating
+         * */
         let selectedFormElement = document.querySelector(".selectedFormElement");
-        if (selectedFormElement) {
+        let isDragging = document.querySelector(".dragging");
+        if (selectedFormElement && !isDragging) {
             document.querySelector(".selectedFormElement").scrollIntoView(false);
         }
     }
@@ -210,7 +221,8 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = {
     selectFieldOnForm,
-    removeFieldFromForm
+    removeFieldFromForm,
+    deselectField
 };
 
 export default connect(

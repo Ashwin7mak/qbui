@@ -20,12 +20,15 @@ $edit-icon-font-size: 18px;
     flex: 1 1 auto;
     overflow: auto;
     display: block;
-    width: 100%;
+    width: auto;
     border-collapse: initial; // needed for sticky column
     color: $default-text-onlight-color;
     -webkit-font-smoothing: antialiased;
     table-layout: fixed;
 
+    // The min height allows the menus that can be opened from the header (sort on column) to be seen
+    // when there are only 1 or two rows. We may need to re-visit this if we start adding content below the grid.
+    min-height: 275px;
 
     .qbTbody {
         background-color: $color-black-100;
@@ -53,10 +56,10 @@ $edit-icon-font-size: 18px;
 
         position: relative;
         border-top: 1px solid $grid-column-header-border-color;
-        border-right: 1px solid $grid-line-color;
+        border-right: 1px solid $grid-column-header-grid-line-color;
         border-bottom: 1px solid $grid-column-header-border-color;
         padding: $grid-header-cell-padding;
-        color: $color-black-700;
+        color: $grid-column-header-text-color;
         -webkit-font-smoothing: antialiased;
         background-color: $grid-column-header-background-color;
         cursor: default;
@@ -104,12 +107,21 @@ $edit-icon-font-size: 18px;
         // text label for the header cell
         .gridHeaderLabel {
             // set max-height to 2 lines. An extra 2px is needed to prevent clipping
-            max-height: (($line-height-text-comfortable * 2) + 2);
+            max-height: (($line-height-text-multiline * 2) + 2);
             overflow: hidden;
             flex-grow: 1;
             padding-right: 4px;
             padding-top: 2px;
-            line-height: $line-height-text-comfortable;
+
+            white-space: nowrap;
+            line-height: $line-height-text-multiline;
+            font-size: $font-size-h6;
+            font-weight: 400;
+            letter-spacing: 0.5px;
+        }
+
+        .qbIcon {
+            font-size: $size-iconfont-medium;
         }
 
         // menu to access sorting options
@@ -136,6 +148,19 @@ $edit-icon-font-size: 18px;
             .dropdown-menu {
                 top: calc(100% - 1px);
                 left: calc(100% - #{$grid-group-expand-icon-size} - #{$grid-header-cell-padding});
+                li {
+                    position: relative;
+
+                    a {
+                        padding: 3px 20px 3px 30px;
+
+                        .qbIcon {
+                            position: absolute;
+                            left: 5px;
+                            color: $color-green-400;
+                        }
+                    }
+                }
             }
         }
 
@@ -147,16 +172,17 @@ $edit-icon-font-size: 18px;
     }
 
     //== styling for the sticky column cells
-    .qbRow .stickyCell {
-        left: 0;
+    .stickyCell {
         width: 80px;
         max-width: 80px;
-        position: relative;
-        vertical-align: top;
-        z-index: $zindex-qbGrid-firstOfType-stickyColumn;
-        background-color: $color-black-100;
     }
 
+    .qbRow .stickyCell {
+        left: 0;
+        position: relative;
+        vertical-align: top;
+        background-color: $color-black-100;
+    }
 
     //== header row above groups of rows
     .groupHeader .subHeaderCell {
@@ -164,6 +190,17 @@ $edit-icon-font-size: 18px;
         vertical-align: top;
         font-weight: bold;
         border-top: 1px solid $grid-line-color;
+        width: 100vw; // Group headers should always be the width of the page at minimum
+
+        .subHeaderContainer {
+            display: flex;
+            align-items: center;
+        }
+
+        .subHeaderLabel {
+            padding-top: $spacing-tiny;
+            padding-bottom: $spacing-tiny;
+        }
     }
 
     // indentations for nested group header rows - assuming that we can have up to 6 group levels
@@ -220,6 +257,7 @@ $edit-icon-font-size: 18px;
 
         &:last-of-type {
             border-right: 0;
+            width: 100%; // XD wants the last cell in the grid to fill any remaining space in the window
         }
     }
 
@@ -404,8 +442,18 @@ $edit-icon-font-size: 18px;
         .dropdown-menu {
 
             // position menu to the right of the sticky cells
-            top: 0;
-            left: 27px;
+            top: 28px;
+            left: -5px;
+
+            &:before {
+                right: auto;
+                left: 10px;
+            }
+
+            &:after {
+                right: auto;
+                left: 10px;
+            }
 
             a {
                 padding-left: 4px;
@@ -477,6 +525,7 @@ $edit-icon-font-size: 18px;
     // on the first row, and add a border on the last row.
     .qbRow:first-of-type .qbCell {
         border-top: none;
+        z-index: 9;
     }
     .qbRow:last-of-type .qbCell {
         border-bottom: 1px solid $grid-line-color;

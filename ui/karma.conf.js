@@ -50,8 +50,6 @@ module.exports = function(config) {
                             path.resolve(__dirname, "reuse/client/test"),
                             path.resolve(__dirname, "componentLibrary/src"),
                             path.resolve(__dirname, "componentLibrary/test"),
-                            path.resolve(__dirname, "governance/src"),
-                            path.resolve(__dirname, "governance/test")
                         ],
                         exclude: [nodeModulesPath, nodeComponentsPath],
                         loader: "babel-loader",
@@ -79,7 +77,6 @@ module.exports = function(config) {
                         include: [
                             path.resolve(__dirname, "client-react/src"),
                             path.resolve(__dirname, "reuse/client/src"),
-                            path.resolve(__dirname, "governance/src")
                         ],
                         loader: "url-loader"
                     },
@@ -90,7 +87,6 @@ module.exports = function(config) {
                         include: [
                             path.resolve(__dirname, "client-react/src"),
                             path.resolve(__dirname, "reuse/client/src"),
-                            path.resolve(__dirname, "governance/src"),
                             path.resolve(__dirname, "componentLibrary/src")
                         ]
                     },
@@ -195,25 +191,22 @@ module.exports = function(config) {
     if (testWithCoverage) {
         newConf.preprocessors = Object.assign({}, newConf.preprocessors, {
             "client-react/src/!(components/node)/**/*.js" : ["coverage"],
-            "reuse/client/src/**/*.js" : ["coverage"],
-            "governance/src/**/*.js" : ["coverage"]
+
+            // Test coverage within reuse should not count for or against client-react
+            "!reuse/client/src/**/*.js" : ["coverage"],
         });
         newConf.webpack.module.postLoaders = [
             { //delays coverage til after tests are run, fixing transpiled source coverage error
                 test: /\.js$/,
                 include: [
                     path.resolve(__dirname, "client-react/src"),
-                    path.resolve(__dirname, "reuse/client/src"),
                     path.resolve(__dirname, "componentLibrary/src"),
-                    path.resolve(__dirname, "governance/src")
                 ],
                 exclude: [
                     nodeModulesPath,
                     nodeComponentsPath,
                     path.resolve(__dirname, "client-react/test"),
-                    path.resolve(__dirname, "reuse/client/test"),
                     path.resolve(__dirname, "componentLibrary/test"),
-                    path.resolve(__dirname, "governance/test")
                 ],
                 loader: "istanbul-instrumenter"
             }
