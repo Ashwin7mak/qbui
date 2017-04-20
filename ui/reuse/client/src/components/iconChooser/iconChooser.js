@@ -50,10 +50,10 @@ class IconChooser extends React.Component {
      */
     renderIconToggle() {
         return (
-            <div className="showAllToggle" onClick={this.toggleAllIcons}>
-                <Icon iconFont={this.props.font} icon={this.props.selectedIcon}/>
+            <button tabIndex="0" className="showAllToggle" onClick={this.toggleAllIcons}>
+                <Icon className="showAllSelectedIcon" iconFont={this.props.font} icon={this.props.selectedIcon}/>
                 <Icon icon="caret-filled-down" className="toggleIcon"/>
-            </div>);
+            </button>);
     }
 
     /**
@@ -99,7 +99,7 @@ class IconChooser extends React.Component {
                 </div>
 
                 <div className="allIcons">
-                    {this.getFilteredIcons().map((icon, i) => <Icon key={i} onClick={() => this.selectIcon(icon)} iconFont={this.props.font} icon={icon}/>)}
+                    {this.getFilteredIcons().map((icon, i) => <button alt={icon} className="iconButton" tabIndex="0" key={i} onClick={() => this.selectIcon(icon)}><Icon iconFont={this.props.font} icon={icon}/></button>)}
                 </div>
             </div>);
     }
