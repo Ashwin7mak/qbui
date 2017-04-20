@@ -167,13 +167,13 @@ const routes = [
         component: ConnectedBuilderNav,
         routes: [
             {
-                path: `${BUILDER_ROUTE}/app/:appId/table/:tblId/form/:formId?`,
+                path: `${BUILDER_ROUTE}/app/:appId/table/:tblId/form/:formId`,
                 component: FormBuilderContainer
             }
         ]
     },
     {
-        path: `${SETTINGS_ROUTE}`,
+        path: `${SETTINGS_ROUTE}/app/:appId`,
         component: ConnectedSettingsNav,
         routes: [
             {
@@ -182,6 +182,7 @@ const routes = [
             },
             {
                 path: `${SETTINGS_ROUTE}/app/:appId/table/:tblId/properties`,
+                exact: true,
                 component: TablePropertiesRoute
             },
             {
