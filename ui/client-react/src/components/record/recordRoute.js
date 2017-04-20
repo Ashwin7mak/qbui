@@ -171,7 +171,7 @@ export const RecordRoute = React.createClass({
                 let recordsArray = records || this.getRecordsArray() || [];
 
                 //  fetch the index of the row in the recordsArray that is being opened
-                const index = _.findIndex(recordsArray, rec => rec[key] && rec[key].value === recId);
+                const index = _.findIndex(recordsArray, rec => rec[key] && rec[key].value === Number.parseInt(recId));
                 let nextRecordId = (index < recordsArray.length - 1) ? recordsArray[index + 1][key].value : null;
                 let previousRecordId = index > 0 ? recordsArray[index - 1][key].value : null;
 
@@ -189,11 +189,29 @@ export const RecordRoute = React.createClass({
         this.navigateToRecord(record.previousRecordId, reportData);
         //the url shall always be using the app/table/rec id from reportsdata, and not from any embedded report
         const {appId, tblId, rptId} = this.props.reportData;
-        const link = `${APP_ROUTE}/${appId}/table/${tblId}/report/${rptId}/record/${record.previousRecordId}`;
-        this.props.history.push(link);
         if (this.props.isDrawerContext) {
-            this.renderDrawerContainer(this.props.match.params.drawerTableId, record.previousRecordId);
+            const existingPath = this.props.history.location.pathname;
+            const paths = existingPath.split('/');
+            const lastBlockIndex = paths.length - 1;
+            //replace the last drawerRecId(lastBlockIndex - 2) with the previous record Id
+            const newLink = this.getUpdatedUrl(paths, lastBlockIndex - 2, record.previousRecordId);
+            this.props.history.push(newLink);
+        } else {
+            const link = `${APP_ROUTE}/${appId}/table/${tblId}/report/${rptId}/record/${record.previousRecordId}`;
+            this.props.history.push(link);
         }
+    },
+
+    /***
+     * return updated url
+     * @param pathBlocks current url split at '/'
+     * @param index path block to be replaced
+     * @param newEntity the new value to be placed in the url at the given index
+     */
+    getUpdatedUrl(pathBlocks, index, newEntity) {
+        pathBlocks[index] = newEntity;
+        const newPath = pathBlocks.join('/');
+        return newPath;
     },
 
     /**
@@ -205,10 +223,16 @@ export const RecordRoute = React.createClass({
         this.navigateToRecord(record.nextRecordId, reportData);
         //the url shall always be using the app/table/rec id from reportsdata, and not from any embedded report
         const {appId, tblId, rptId} = this.props.reportData;
-        const link = `${APP_ROUTE}/${appId}/table/${tblId}/report/${rptId}/record/${record.nextRecordId}`;
-        this.props.history.push(link);
         if (this.props.isDrawerContext) {
-            this.renderDrawerContainer(this.props.match.params.drawerTableId, record.nextRecordId);
+            const existingPath = this.props.history.location.pathname;
+            const paths = existingPath.split('/');
+            const lastBlockIndex = paths.length - 1;
+            //replace the last drawerRecId(lastBlockIndex - 2) with the next record Id
+            const newLink = this.getUpdatedUrl(paths, lastBlockIndex - 2, record.nextRecordId);
+            this.props.history.push(newLink);
+        } else {
+            const link = `${APP_ROUTE}/${appId}/table/${tblId}/report/${rptId}/record/${record.nextRecordId}`;
+            this.props.history.push(link);
         }
     },
 
@@ -432,7 +456,7 @@ export const RecordRoute = React.createClass({
         }
         //todo : handle query params in the url
         const existingPath = this.props.history.location.pathname;
-        const link = `${existingPath}/drawerTableId/${tblId}/drawerRecId/${recId}/embeddedReportId/${embeddedReportsUniqueId}`;
+        const link = `${existingPath}/drawerTableId/${tblId}/drawerRecId/${recId}/embeddedReportId/${embeddedReport.id}`;
         if (this.props.history) {
             this.props.history.push(link);
         }
