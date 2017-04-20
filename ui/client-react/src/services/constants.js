@@ -19,6 +19,7 @@ export default {
     BASE_URL: {
         QUICKBASE   : '/api/api/' + Configuration.api.qbVersion,
         EXPERIENCE  : '/ee/' + Configuration.api.eeVersion,
+        AUTOMATION  : '/we/workflow',          // + Configuration.api.automationVersion,
         NODE        : '/api/n/' + Configuration.api.nodeVersion,
         LEGACY      : '/api/l/' + Configuration.api.legacyVersion
     },

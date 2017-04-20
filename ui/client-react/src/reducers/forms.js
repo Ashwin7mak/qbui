@@ -6,9 +6,9 @@ const forms = (
 
     state = {}, action) => {
 
-    const id = action.id;
+    const {id, formId} = action;
     // retrieve currentForm and assign the rest of the form to newState
-    let {[id]: currentForm, ...newState} = _.cloneDeep(state);
+    let {[id || formId]: currentForm, ...newState} = _.cloneDeep(state);
     let updatedForm = currentForm;
 
     // TODO: do this smarter, change to markCopiesAsDirty
@@ -19,6 +19,13 @@ const forms = (
 
     // reducer - no mutations!
     switch (action.type) {
+
+    case types.UPDATE_FORM_REDIRECT_ROUTE: {
+        return {
+            ...state,
+            redirectRoute: action.redirectRoute
+        };
+    }
 
     case types.LOADING_FORM: {
 
@@ -89,7 +96,18 @@ const forms = (
             saving: false,
             errorStatus: null
         });
+
         return newState;
+    }
+
+    case types.SAVING_FORM: {
+        currentForm = {
+            ...currentForm,
+            saving: true,
+            selectedFields: []
+        };
+
+        return {...newState, [id || formId]: currentForm};
     }
 
     case types.SAVING_FORM_SUCCESS: {
@@ -120,6 +138,67 @@ const forms = (
             draggedItemProps
         );
 
+        if (!updatedForm.selectedFields) {
+            updatedForm.selectedFields = [];
+            updatedForm.previouslySelectedField = [];
+        }
+
+        updatedForm.selectedFields[0] = newLocation;
+
+        newState[action.id] = updatedForm;
+        return newState;
+    }
+
+    /**If a location is not passed in, a location will be hardcoded, since there is no current implementation
+     *that sets the current tabIndex, sectionIndex, and columnIndex for a new field.
+     *Default location for a newField is always set to the bottom of the form.
+     */
+    case types.ADD_FIELD : {
+        if (!currentForm) {
+            return state;
+        }
+
+        let {newField, newLocation} = action.content;
+        updatedForm = _.cloneDeep(currentForm);
+        let newFieldCopy = _.cloneDeep(newField);
+
+        // Remove all keys that are not necessary for forms
+        Object.keys(newFieldCopy).forEach(key => {
+            if (key !== 'FormFieldElement' && key !== 'id') {
+                delete newFieldCopy[key];
+            }
+        });
+
+        if (!newLocation) {
+            let elementIndex = 0;
+            if (updatedForm.formData.formMeta.tabs[0].sections[0].columns[0]) {
+                elementIndex = updatedForm.formData.formMeta.tabs[0].sections[0].columns[0].elements.length;
+            }
+
+            newLocation = {
+                tabIndex: 0,
+                sectionIndex: 0,
+                columnIndex: 0,
+                elementIndex: elementIndex
+            };
+        } else if (newLocation.elementIndex !== updatedForm.formData.formMeta.tabs[0].sections[0].columns[0].elements.length) {
+            //If a field is selected on the form and the selectedField is not located at the end of the form, then the new field will be added below the selected field
+            newLocation.elementIndex = newLocation.elementIndex + 1;
+        }
+
+        updatedForm.formData.formMeta = MoveFieldHelper.addNewFieldToForm(
+            updatedForm.formData.formMeta,
+            newLocation,
+            {...newFieldCopy}
+        );
+
+        if (!updatedForm.selectedFields) {
+            updatedForm.selectedFields = [];
+            updatedForm.previouslySelectedField = [];
+        }
+
+        updatedForm.selectedFields[0] = newLocation;
+
         newState[action.id] = updatedForm;
         return newState;
     }
@@ -138,6 +217,39 @@ const forms = (
 
         newState[id] = updatedForm;
         return newState;
+    }
+
+    case types.UPDATE_FIELD_ID : {
+        if (!currentForm) {
+            return state;
+        }
+
+        updatedForm = _.cloneDeep(currentForm);
+
+        let foundFieldElement;
+        updatedForm.formData.formMeta.tabs.some(tab => {
+            return tab.sections.some(section => {
+                return section.columns.some(column => {
+                    return column.elements.some(currentElement => {
+                        if (currentElement.FormFieldElement) {
+                            foundFieldElement = currentElement.FormFieldElement;
+                            return currentElement.FormFieldElement.fieldId === action.oldFieldId;
+                        }
+
+                        return false;
+                    });
+                });
+            });
+        });
+
+        if (foundFieldElement) {
+            foundFieldElement.fieldId = action.newFieldId;
+        }
+
+        return {
+            ...newState,
+            [id || formId]: updatedForm
+        };
     }
 
     case types.SELECT_FIELD : {
@@ -262,7 +374,20 @@ const forms = (
     }
 };
 
+export const getSelectedFormElement = (state, id) => {
+    const currentForm = state.forms[id];
+
+    if (!currentForm || !currentForm.selectedFields || !currentForm.selectedFields[0]) {
+        return null;
+    }
+
+    const {tabIndex, sectionIndex, columnIndex, elementIndex} = currentForm.selectedFields[0];
+    return currentForm.formData.formMeta.tabs[tabIndex].sections[sectionIndex].columns[columnIndex].elements[elementIndex];
+};
+
 export default forms;
 
 // Utility function which returns a component's state given it's context. The context is the 'key' in the state map.
 export const getFormByContext = (state, context) => _.get(state, `forms.${context}`);
+
+export const getFormRedirectRoute = (state) => _.get(state, 'forms.redirectRoute');

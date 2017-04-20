@@ -296,10 +296,12 @@ $grid-row-hover-color:                          $color-purple-200;
 $grid-initiate-inline-edit-pencil-base-color:   rgba($color-black-700, 0.2);
 $grid-icon-hover-color:                         $color-cyan-600;
 $grid-onpencil-row-border-color:                $color-purple-400;
-$grid-column-header-background-color:           $color-cyan-100;
-$grid-column-header-border-color:               $color-cyan-300;
-$grid-column-icon-normal-color:                 $color-black-700;
-$grid-column-icon-hover-color:                  $color-cyan-600;
+$grid-column-header-background-color:           $color-black-600;
+$grid-column-header-border-color:               $color-black-600;
+$grid-column-header-grid-line-color:            $color-black-500;
+$grid-column-header-text-color:                 $color-black-100;
+$grid-column-icon-normal-color:                 $color-black-300;
+$grid-column-icon-hover-color:                  $color-cyan-300;
 $grid-lefticon-normal-color:                    $color-black-300;
 $grid-lefticon-hover-color:                     $color-cyan-600;
 $grid-line-color:                               $color-black-250;
@@ -319,9 +321,9 @@ $pagination-mobile-topbar-text-color:       $color-black-100;
 
 // report
 // We need to resolve the pagination color conflicts with the colors in the prior section
-$pagination-iconfont-normal-color:          $color-cyan-700;    // not in XD spreadsheet
+$pagination-iconfont-normal-color:          $color-black-700;    // not in XD spreadsheet
 $pagination-iconfont-disabled-color:        $color-black-400;   // not in XD spreadsheet
-$pagination-iconfont-hover-color:           $color-cyan-300;    // not in XD spreadsheet
+$pagination-iconfont-hover-color:           $color-cyan-400;    // not in XD spreadsheet
 $pagination-iconfont-darkblack-color:       $color-black-700;   // not in XD spreadsheet
 $pagination-arrow-hover-color:              $color-black-300;   // not in XD spreadsheet
 $pagination-arrow-dark-hover-color:         $color-black-500;   // not in XD spreadsheet
@@ -411,7 +413,12 @@ $dragtoken-border-color: $color-orange-500;
 $dragtoken-shadow-color: rgba($color-black-800, 0.5);
 // dragtoken-active-gradient is defined in qbVariables because of a circular dependency on stroke-width
 
-// app users
+// Field Properties
+$propertytitle-text-color: $color-black-700;
+$propertyvalue-background-color: $color-black-100;
+$propertyvalue-border-color: $color-black-400;
+
+// App Users Management
 $add-user-button: $color-cyan-500;
 $app-role-divider: $color-yellow-500;
 

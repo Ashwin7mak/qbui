@@ -9,6 +9,7 @@ import Promise from 'bluebird';
 import Locale from '../locales/locales';
 import _ from 'lodash';
 import {NotificationManager} from 'react-notifications';
+import {NOTIFICATION_MESSAGE_DISMISS_TIME, NOTIFICATION_MESSAGE_FAIL_DISMISS_TIME} from '../../../reuse/client/src/scripts/notificationManager';
 import * as CompConsts from '../constants/componentConstants';
 import * as query from '../constants/query';
 import * as UrlConsts from "../constants/urlConstants";
@@ -168,7 +169,7 @@ export const deleteRecords = (appId, tblId, recIds, nameForRecords) => {
 
                         //  send out notification message on the client
                         let message = `${recIds.length} ${nameForRecords} ${Locale.getMessage('recordNotifications.deleted')}`;
-                        NotificationManager.success(message, Locale.getMessage('success'), CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);
+                        NotificationManager.success(message, Locale.getMessage('success'), NOTIFICATION_MESSAGE_DISMISS_TIME);
 
                         // the delay allows for saving modal to trap inputs otherwise clicks get invoked after delete
                         Promise.delay(PRE_REQ_DELAY_MS).then(() => {
@@ -187,7 +188,7 @@ export const deleteRecords = (appId, tblId, recIds, nameForRecords) => {
 
                         //  send out notification message
                         let message = `${recIds.length} ${nameForRecords} ${Locale.getMessage('recordNotifications.notDeleted')}`;
-                        NotificationManager.error(message, Locale.getMessage('failed'), CompConsts.NOTIFICATION_MESSAGE_FAIL_DISMISS_TIME);
+                        NotificationManager.error(message, Locale.getMessage('failed'), NOTIFICATION_MESSAGE_FAIL_DISMISS_TIME);
 
                         // the delay allows for saving modal to trap inputs otherwise clicks get invoked after delete
                         Promise.delay(PRE_REQ_DELAY_MS).then(() => {
@@ -199,7 +200,7 @@ export const deleteRecords = (appId, tblId, recIds, nameForRecords) => {
             } else {
                 logger.error(`Missing one or more required input parameters to recordActions.deleteRecords. AppId:${appId}; TblId:${tblId}; RecId${recIds}`);
                 let message = `0 ${nameForRecords} ${Locale.getMessage('recordNotifications.notDeleted')}`;
-                NotificationManager.error(message, Locale.getMessage('failed'), CompConsts.NOTIFICATION_MESSAGE_FAIL_DISMISS_TIME);
+                NotificationManager.error(message, Locale.getMessage('failed'), NOTIFICATION_MESSAGE_FAIL_DISMISS_TIME);
                 reject();
             }
         });
@@ -224,7 +225,7 @@ export const deleteRecord = (appId, tblId, recId, nameForRecords) => {
  * @returns {Function}
  */
 export const createRecord = (appId, tblId, params = {}) => {
-    function formatRecordChanges(_recordChanges) {
+    function formatRecordChanges(_recordChanges, fields) {
         //save changes in record
         let payload = [];
         // columns id and new values array
@@ -250,6 +251,25 @@ export const createRecord = (appId, tblId, params = {}) => {
                     }
                 }
             });
+
+            //  add any fields not included in the recordChanges list to the payload that is sent
+            //  to the server.  This means we check all fields(minus built-ins) for validity
+            //  even if the user didn't explicitly enter a value.
+            if (fields) {
+                fields.forEach((field) => {
+                    if (_recordChanges[field.id] === undefined) {
+                        if (!field.builtIn) {
+                            let colChange = {};
+                            colChange.fieldName = field.name;
+                            colChange.id = +field.id;     //the + before field.id is needed to turn field id from string into a number
+                            colChange.value = '';
+                            colChange.display = '';
+                            colChange.fieldDef = field;
+                            payload.push(colChange);
+                        }
+                    }
+                });
+            }
         }
         return payload;
     }
@@ -259,10 +279,12 @@ export const createRecord = (appId, tblId, params = {}) => {
         return new Promise((resolve, reject) => {
 
             let changes = params.recordChanges;
-            let record = formatRecordChanges(changes);
-            let recId = UrlConsts.NEW_RECORD_VALUE;
+            let fields = params.fields;
 
-            if (appId && tblId && params.fields) {
+            if (appId && tblId && fields) {
+                let record = formatRecordChanges(changes, fields);
+                let recId = SchemaConstants.UNSAVED_RECORD_ID;
+
                 dispatch(event(recId, types.SAVE_RECORD, {appId, tblId, recId, changes}));
 
                 let recordService = new RecordService();
@@ -290,11 +312,14 @@ export const createRecord = (appId, tblId, params = {}) => {
                                     newRecId: resJson.id,
                                     record:getResponse.data
                                 };
-                                dispatch(event(recId, types.SAVE_RECORD_SUCCESS, {appId, tblId, recId, report}));
+
+                                // is this an inline edit save and we want to add a new row in the grid
+                                const addNewRow = params.addNewRow || false;
+                                dispatch(event(recId, types.SAVE_RECORD_SUCCESS, {appId, tblId, recId, report, addNewRow}));
 
                                 if (params.showNotificationOnSuccess) {
                                     NotificationManager.success(Locale.getMessage('recordNotifications.recordAdded'), Locale.getMessage('success'),
-                                        CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);
+                                        NOTIFICATION_MESSAGE_DISMISS_TIME);
                                 }
 
                                 // this tiny delay allows for saving modal to trap inputs otherwise
@@ -319,7 +344,7 @@ export const createRecord = (appId, tblId, params = {}) => {
                                 dispatch(event(recId, types.SAVE_RECORD_ERROR, {appId, tblId, recId, errors}));
 
                                 NotificationManager.error(Locale.getMessage('recordNotifications.recordNotSaved'), Locale.getMessage('failed'),
-                                    CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);
+                                    NOTIFICATION_MESSAGE_DISMISS_TIME);
 
                                 // this tiny delay allows for saving modal to trap inputs otherwise
                                 // clicks get queued till after creating
@@ -348,7 +373,7 @@ export const createRecord = (appId, tblId, params = {}) => {
                         let errStatus = error.response ? error.response.status : null;
                         if (errStatus === 403) {
                             NotificationManager.error(Locale.getMessage('recordNotifications.error.403'), Locale.getMessage('failed'),
-                                CompConsts.NOTIFICATION_MESSAGE_FAIL_DISMISS_TIME);
+                                NOTIFICATION_MESSAGE_FAIL_DISMISS_TIME);
                         } else {
                             /*eslint no-lonely-if:0 */
                             if (errStatus === 500 && _.has(error.response, 'data.response.status')) {
@@ -356,12 +381,12 @@ export const createRecord = (appId, tblId, params = {}) => {
                                 if (status !== 422) {
                                     // HTTP data response status 422 means server "validation error" under the general HTTP 500 error
                                     NotificationManager.error(Locale.getMessage('recordNotifications.error.500'), Locale.getMessage('failed'),
-                                        CompConsts.NOTIFICATION_MESSAGE_FAIL_DISMISS_TIME);
+                                        NOTIFICATION_MESSAGE_FAIL_DISMISS_TIME);
                                 }
                             } else {
                                 //  need to render some message to the user
                                 NotificationManager.error(Locale.getMessage('recordNotifications.error.500'), Locale.getMessage('failed'),
-                                    CompConsts.NOTIFICATION_MESSAGE_FAIL_DISMISS_TIME);
+                                    NOTIFICATION_MESSAGE_FAIL_DISMISS_TIME);
                             }
                         }
                         // this delay allows for saving modal to trap inputs otherwise
@@ -377,7 +402,7 @@ export const createRecord = (appId, tblId, params = {}) => {
                     appId + '; TblId:' + tblId + '; fields:' + JSON.stringify(params.fields);
                 logger.error(errors);
                 NotificationManager.error(Locale.getMessage('recordNotifications.recordNotSaved'), Locale.getMessage('failed'),
-                    CompConsts.NOTIFICATION_MESSAGE_FAIL_DISMISS_TIME);
+                    NOTIFICATION_MESSAGE_FAIL_DISMISS_TIME);
                 reject();
             }
         });
@@ -409,20 +434,24 @@ export const updateRecord = (appId, tblId, recId, params = {}) => {
         payload.push(colChange);
     }
 
-    function getConstrainedUnchangedValues(_pendEdits, _fields, changes, list) {
-        // add in any editable fields values that are required or unique so that server can validate them if they
-        // were created before the field's constraint was made. So modifying a record via patch will check those
-        // fields for validity even if the user didn't edit the value.
-        if (_fields) {
-            _fields.forEach((field) => {
+    function getConstrainedUnchangedValues(pendEdits, fields, changes, list) {
+        // add in any editable fields values so that the node server can validate any defined field constraint. This
+        // means modifying a record via patch will check those fields for validity even if the user didn't edit the value.
+        // We what is behavior as a field attribute could of changed (ie: make a field required that previously was not)
+        // and it now fails validation.
+        if (fields) {
+            fields.forEach((field) => {
                 if (changes[field.id] === undefined) {
-                    if (!field.builtIn && (field.required || field.unique)) {
-                        if (_pendEdits.originalRecord && _pendEdits.originalRecord.fids && _pendEdits.originalRecord.fids[field.id]) {
-                            let newValue = _pendEdits.originalRecord.fids[field.id].value;
-                            if (newValue === null) {
-                                newValue = "";
+                    if (!field.builtIn) { //} && (field.required || field.unique)) {
+                        if (pendEdits.originalRecord && pendEdits.originalRecord.fids && pendEdits.originalRecord.fids[field.id]) {
+                            let newValue = pendEdits.originalRecord.fids[field.id].value;
+                            if (_.isNil(newValue)) {
+                                newValue = '';
                             }
-                            let newDisplay = _pendEdits.originalRecord.fids[field.id].display;
+                            let newDisplay = pendEdits.originalRecord.fids[field.id].display;
+                            if (_.isNil(newDisplay)) {
+                                newDisplay = '';
+                            }
                             createColChange(newValue, newDisplay, field, list);
                         }
                     }
@@ -431,11 +460,11 @@ export const updateRecord = (appId, tblId, recId, params = {}) => {
         }
     }
 
-    function getChanges(_pendEdits, _fields) {
+    function getChanges(pendEdits, fields) {
         // get the current edited data
         let changes = {};
-        if (_pendEdits.recordChanges) {
-            changes = _.cloneDeep(_pendEdits.recordChanges);
+        if (pendEdits.recordChanges) {
+            changes = _.cloneDeep(pendEdits.recordChanges);
         }
 
         let payload = [];
@@ -443,11 +472,10 @@ export const updateRecord = (appId, tblId, recId, params = {}) => {
             if (changes[key].newVal) {
                 let newValue = changes[key].newVal.value;
                 let newDisplay = changes[key].newVal.display;
-                if (_.has(_pendEdits, 'originalRecord.fids')) {
-                    if (_pendEdits.originalRecord.fids.hasOwnProperty(key)) {
-                        if (newValue !== _pendEdits.originalRecord.fids[key].value) {
-                            //get each columns matching field description
-                            let matchingField = changes[key].fieldDef;
+                if (_.has(pendEdits, 'originalRecord.fids')) {
+                    if (pendEdits.originalRecord.fids.hasOwnProperty(key)) {
+                        if (newValue !== pendEdits.originalRecord.fids[key].value) {
+                            let matchingField = _.find(fields, field => field.id === pendEdits.originalRecord.fids[key].id);
                             createColChange(newValue, newDisplay, matchingField, payload);
                         }
                     }
@@ -455,7 +483,7 @@ export const updateRecord = (appId, tblId, recId, params = {}) => {
             }
         });
 
-        getConstrainedUnchangedValues(_pendEdits, _fields, changes, payload);
+        getConstrainedUnchangedValues(pendEdits, fields, changes, payload);
         return payload;
     }
 
@@ -491,10 +519,13 @@ export const updateRecord = (appId, tblId, recId, params = {}) => {
                                     recId:recId,
                                     record:getResponse.data
                                 };
-                                dispatch(event(recId, types.SAVE_RECORD_SUCCESS, {appId, tblId, recId, report}));
+
+                                // is this an inline edit save and we want to add a new row in the grid
+                                const addNewRow = params.addNewRow || false;
+                                dispatch(event(recId, types.SAVE_RECORD_SUCCESS, {appId, tblId, recId, report, addNewRow}));
                                 if (params.showNotificationOnSuccess) {
                                     NotificationManager.success(Locale.getMessage('recordNotifications.recordSaved'), Locale.getMessage('success'),
-                                        CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);
+                                        NOTIFICATION_MESSAGE_DISMISS_TIME);
                                 }
 
                                 // delay the response object so that the state gets updated with success settings
@@ -517,7 +548,7 @@ export const updateRecord = (appId, tblId, recId, params = {}) => {
                                 dispatch(event(recId, types.SAVE_RECORD_ERROR, {appId, tblId, recId, errors: errors}));
 
                                 NotificationManager.error(Locale.getMessage('recordNotifications.recordNotSaved'), Locale.getMessage('failed'),
-                                    CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);
+                                    NOTIFICATION_MESSAGE_DISMISS_TIME);
 
                                 // this delay allows for saving modal to trap inputs otherwise clicks get invoked and error message
                                 // icon in action column does not render.
@@ -542,7 +573,7 @@ export const updateRecord = (appId, tblId, recId, params = {}) => {
 
                         dispatch(event(recId, types.SAVE_RECORD_ERROR, {appId, tblId, recId, errors: errors}));
                         NotificationManager.error(Locale.getMessage('recordNotifications.recordNotSaved'), Locale.getMessage('failed'),
-                            CompConsts.NOTIFICATION_MESSAGE_FAIL_DISMISS_TIME);
+                            NOTIFICATION_MESSAGE_FAIL_DISMISS_TIME);
 
                         // this delay allows for saving modal to trap inputs otherwise clicks get invoked and error message
                         // icon in action column does not render.
@@ -557,7 +588,7 @@ export const updateRecord = (appId, tblId, recId, params = {}) => {
                 logger.error(errMessage);
 
                 NotificationManager.error(Locale.getMessage('recordNotifications.recordNotSaved'), Locale.getMessage('failed'),
-                    CompConsts.NOTIFICATION_MESSAGE_FAIL_DISMISS_TIME);
+                    NOTIFICATION_MESSAGE_FAIL_DISMISS_TIME);
 
                 reject();
             }

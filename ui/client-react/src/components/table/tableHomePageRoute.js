@@ -2,7 +2,9 @@ import React from 'react';
 import Stage from '../stage/stage';
 import ReportStage from '../report/reportStage';
 import ReportHeader from '../report/reportHeader';
-import TableIcon from '../qbTableIcon/qbTableIcon';
+
+import TableHomePageInitial from './tableHomePageInitial';
+import Icon, {AVAILABLE_ICON_FONTS} from '../../../../reuse/client/src/components/icon/icon.js';
 import IconActions from '../actions/iconActions';
 import ReportToolsAndContent from '../report/reportToolsAndContent';
 import Fluxxor from 'fluxxor';
@@ -12,10 +14,13 @@ import {connect} from 'react-redux';
 import * as SearchActions from '../../actions/searchActions';
 import * as TableActions from '../../actions/tableActions';
 import * as FieldsActions from '../../actions/fieldsActions';
+import {showTableCreationDialog} from '../../actions/tableCreationActions';
 import {loadDynamicReport} from '../../actions/reportActions';
 import {CONTEXT} from '../../actions/context';
 import WindowLocationUtils from '../../utils/windowLocationUtils';
 import {EDIT_RECORD_KEY, NEW_RECORD_VALUE} from '../../constants/urlConstants';
+import {NEW_TABLE_IDS_KEY} from '../../constants/localStorage';
+import _ from 'lodash';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
 import './tableHomePage.scss';
@@ -99,24 +104,45 @@ export const TableHomePageRoute = React.createClass({
         return (
             <div className="tableHomepageStageHeadline">
                 <div className="navLinks">
-                    {this.props.selectedTable && this.props.selectedTable.icon && <TableIcon icon={this.props.selectedTable.icon}/> }
+                    {this.props.selectedTable && this.props.selectedTable.tableIcon && <Icon iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY} icon={this.props.selectedTable.tableIcon}/> }
                     <span>{this.props.selectedTable && this.props.selectedTable.name}&nbsp;<I18nMessage message={'nav.home'}/></span>
                 </div>
             </div>);
+    },
+
+    /**
+     * show we render the initial homepage information instead of the grid?
+     * @returns {boolean}
+     */
+    showInitialTableHomePage() {
+
+        const haveRecords = _.has(this.props, "reportData.data.records") && this.props.reportData.data.records.length > 0;
+        const newTablesJSONArrray = window.sessionStorage && window.sessionStorage.getItem(NEW_TABLE_IDS_KEY);
+
+        if (haveRecords || !newTablesJSONArrray) {
+            return false;
+        }
+
+        // show the initial homepage if we have the current table ID in session storage's newTables JSON array
+
+        const newTableIds = newTablesJSONArrray.split(",");
+
+        return newTableIds.indexOf(this.props.params.tblId) !== -1;
     },
 
     render() {
         //  ensure there is a rptId property otherwise the report not found page is rendered in ReportToolsAndContent
         let homePageParams = _.assign(this.props.params, {rptId: null});
 
-        return (<div className="reportContainer">
-            <Stage stageHeadline={this.getStageHeadline()} pageActions={this.getPageActions(5)}>
-                <ReportStage reportData={this.props.reportData} />
-            </Stage>
+        let mainContent;
 
-            {this.getHeader()}
-
-            <ReportToolsAndContent
+        if (this.showInitialTableHomePage()) {
+            mainContent = <TableHomePageInitial selectedTable={this.props.selectedTable}
+                                                onCreateTable={this.props.showTableCreationDialog}
+                                                onAddRecord={this.editNewRecord} />;
+        } else {
+            mainContent = <ReportToolsAndContent
+                noRowsUI={true}
                 params={homePageParams}
                 reportData={this.props.reportData}
                 appUsers={this.props.appUsers}
@@ -128,7 +154,17 @@ export const TableHomePageRoute = React.createClass({
                 rptId={this.props.reportData ? this.props.reportData.rptId : null}
                 nameForRecords={this.nameForRecords}
                 pendEdits={this.props.pendEdits}
-                loadDynamicReport={this.loadDynamicReport}/>
+                loadDynamicReport={this.loadDynamicReport}/>;
+        }
+
+        return (<div className="reportContainer">
+            <Stage stageHeadline={this.getStageHeadline()} pageActions={this.getPageActions(5)}>
+                <ReportStage reportData={this.props.reportData} />
+            </Stage>
+
+            {this.getHeader()}
+            {mainContent}
+
         </div>);
     }
 });
@@ -153,6 +189,9 @@ const mapDispatchToProps = (dispatch) => {
         },
         loadDynamicReport: (appId, tblId, rptId, format, filter, queryParams) => {
             dispatch(loadDynamicReport(CONTEXT.REPORT.NAV, appId, tblId, rptId, format, filter, queryParams));
+        },
+        showTableCreationDialog: () => {
+            dispatch(showTableCreationDialog());
         }
     };
 };

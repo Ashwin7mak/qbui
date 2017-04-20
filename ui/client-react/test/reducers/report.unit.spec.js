@@ -39,8 +39,8 @@ describe('Report reducer functions', () => {
         updateReportRecord: () => {},
         deleteRecordFromReport: () => {},
         getReportColumns: () => {},
+        isBlankRecInReport: () => {}
     };
-
 
     beforeEach(() => {
         state = undefined;
@@ -406,7 +406,7 @@ describe('Report reducer functions', () => {
 
     });
 
-    describe('Report reducer SAVE_RECORD_SUCCESS test correct state', () => {
+    describe('Report reducer SAVE_RECORD_SUCCESS test correct state for update', () => {
         let contextId = "SAVE_RECORD_SUCCESS";
         let reportContentAdd = {report : {
             context: contextId,
@@ -423,19 +423,18 @@ describe('Report reducer functions', () => {
             afterRecId: 6,
             info: 'report stuff'
         }};
+
+        beforeEach(() => {
+            spyOn(mockReportModelHelper, 'isBlankRecInReport');
+        });
+
+        afterEach(() => {
+            mockReportModelHelper.isBlankRecInReport.calls.reset();
+            mockReportModelHelper.updateReportRecord.calls.reset();
+            mockReportModelHelper.addReportRecord.calls.reset();
+        });
+
         let testCases = [
-            {
-                initialState:  [{id:contextId}],
-                description: 'when report matches add record',
-                content : reportContentAdd,
-                expects : (testState) => {
-                    expect(Array.isArray(testState)).toEqual(true);
-                    expect(testState.length).toEqual(1);
-                    expect(testState[0].loading).toEqual(false);
-                    expect(testState[0].error).toEqual(false);
-                    expect(mockReportModelHelper.addReportRecord).toHaveBeenCalled();
-                }
-            },
             {
                 description: 'when report matches update record',
                 initialState: [{id:contextId}],
@@ -445,6 +444,8 @@ describe('Report reducer functions', () => {
                     expect(testState.length).toEqual(1);
                     expect(testState[0].loading).toEqual(false);
                     expect(testState[0].error).toEqual(false);
+                    expect(mockReportModelHelper.isBlankRecInReport).not.toHaveBeenCalled();
+                    expect(mockReportModelHelper.addReportRecord).not.toHaveBeenCalled();
                     expect(mockReportModelHelper.updateReportRecord).toHaveBeenCalled();
                 }
             },
@@ -462,6 +463,8 @@ describe('Report reducer functions', () => {
                     expect(testCase.length).toEqual(1);
                     expect(testCase[0].loading).toEqual(false);
                     expect(testCase[0].error).toEqual(false);
+                    expect(mockReportModelHelper.isBlankRecInReport).not.toHaveBeenCalled();
+                    expect(mockReportModelHelper.addReportRecord).not.toHaveBeenCalled();
                     expect(mockReportModelHelper.updateReportRecord).toHaveBeenCalled();
                 }
             },
@@ -472,6 +475,8 @@ describe('Report reducer functions', () => {
                 expects: (testCase) => {
                     expect(Array.isArray(testCase)).toEqual(true);
                     expect(testCase.length).toEqual(0);
+                    expect(mockReportModelHelper.addReportRecord).not.toHaveBeenCalled();
+                    expect(mockReportModelHelper.updateReportRecord).not.toHaveBeenCalled();
                 }
             },
             {
@@ -480,6 +485,8 @@ describe('Report reducer functions', () => {
                 expects: (testCase) => {
                     expect(Array.isArray(testCase)).toEqual(true);
                     expect(testCase.length).toEqual(0);
+                    expect(mockReportModelHelper.addReportRecord).not.toHaveBeenCalled();
+                    expect(mockReportModelHelper.updateReportRecord).not.toHaveBeenCalled();
                 }
             }
         ];
@@ -493,6 +500,81 @@ describe('Report reducer functions', () => {
                 }
                 testState = reducer(testState, actionObj);
 
+                testCase.expects(testState);
+            });
+        });
+
+    });
+
+    describe('Report reducer SAVE_RECORD_SUCCESS test correct state for add', () => {
+        let contextId = "SAVE_RECORD_SUCCESS";
+        let reportContentAdd = {report : {
+            context: contextId,
+            recId: 2,
+            record: [4, 5, 6],
+            newRecId :55,
+            afterRecId: 6,
+            info: 'report stuff'
+        }};
+        let reportContent = {report : {
+            context: contextId,
+            recId: 2,
+            record: [4, 5, 6],
+            afterRecId: 6,
+            info: 'report stuff'
+        }};
+
+        afterEach(() => {
+            mockReportModelHelper.isBlankRecInReport.calls.reset();
+            mockReportModelHelper.deleteRecordFromReport.calls.reset();
+            mockReportModelHelper.updateReportRecord.calls.reset();
+            mockReportModelHelper.addReportRecord.calls.reset();
+        });
+
+        let testCases = [
+            {
+                initialState:  [{id:contextId}],
+                description: 'when report matches add record',
+                content : reportContentAdd,
+                expects : (testState) => {
+                    expect(Array.isArray(testState)).toEqual(true);
+                    expect(testState.length).toEqual(1);
+                    expect(testState[0].loading).toEqual(false);
+                    expect(testState[0].error).toEqual(false);
+                    expect(mockReportModelHelper.isBlankRecInReport).toHaveBeenCalled();
+                    expect(mockReportModelHelper.addReportRecord).toHaveBeenCalled();
+                    expect(mockReportModelHelper.updateReportRecord).not.toHaveBeenCalled();
+                    expect(mockReportModelHelper.deleteRecordFromReport).not.toHaveBeenCalled();
+                },
+                blankRec: false
+            },
+            {
+                initialState:  [{id:contextId}],
+                description: 'when report matches add record',
+                content : reportContentAdd,
+                expects : (testState) => {
+                    expect(Array.isArray(testState)).toEqual(true);
+                    expect(testState.length).toEqual(1);
+                    expect(testState[0].loading).toEqual(false);
+                    expect(testState[0].error).toEqual(false);
+                    expect(mockReportModelHelper.isBlankRecInReport).toHaveBeenCalled();
+                    expect(mockReportModelHelper.addReportRecord).toHaveBeenCalled();
+                    expect(mockReportModelHelper.updateReportRecord).not.toHaveBeenCalled();
+                    expect(mockReportModelHelper.deleteRecordFromReport).toHaveBeenCalled();
+                },
+                blankRec: true
+            }
+        ];
+        testCases.forEach(testCase => {
+            it(testCase.description, () => {
+                let testState = testCase.initialState;
+                actionObj.type = types.SAVE_RECORD_SUCCESS;
+                actionObj.id = contextId;
+                if (testCase.content) {
+                    actionObj.content = testCase.content;
+                }
+                spyOn(mockReportModelHelper, 'isBlankRecInReport').and.returnValue(testCase.blankRec);
+                testState = reducer(testState, actionObj);
                 testCase.expects(testState);
             });
         });
@@ -752,6 +834,89 @@ describe('Report reducer functions', () => {
             it(testCase.description, () => {
                 let testState = testCase.initialState;
                 actionObj.type = types.CHANGE_LOCALE;
+                actionObj.id = contextId;
+                if (testCase.content) {
+                    actionObj.content = testCase.content;
+                }
+                testState = reducer(testState, actionObj);
+
+                testCase.expects(testState);
+            });
+        });
+
+    });
+
+    describe('Report reducer HIDE_COLUMN test correct state', () => {
+        let contextId = "HIDE_COLUMN";
+        let initialState = [
+            {
+                id: contextId,
+                data:
+                {
+                    columns: [
+                        {
+                            fieldDef: {
+                                id: 6
+                            },
+                            isHidden: false
+                        },
+                        {
+                            fieldDef: {
+                                id: 7
+                            },
+                            isHidden: false
+                        }
+                    ]
+                }
+            }
+        ];
+        let testCases = [
+            {
+                description: 'when fieldDef id of column equals column id of first',
+                initialState: initialState,
+                content : {columnId: 6},
+                expects : (testState) => {
+                    expect(Array.isArray(testState)).toEqual(true);
+                    expect(testState[0].data.columns[0].isHidden).toEqual(true);
+                    expect(testState[0].data.columns[1].isHidden).toEqual(false);
+                }
+            },
+            {
+                description: 'when fieldDef id of column equals column id of second',
+                initialState: initialState,
+                content : {columnId: 7},
+                expects : (testState) => {
+                    expect(Array.isArray(testState)).toEqual(true);
+                    expect(testState[0].data.columns[0].isHidden).toEqual(false);
+                    expect(testState[0].data.columns[1].isHidden).toEqual(true);
+                }
+            },
+            {
+                description: 'when fieldDef id of column does not equal any ids',
+                initialState: initialState,
+                content : {columnId: 8},
+                expects : (testState) => {
+                    expect(Array.isArray(testState)).toEqual(true);
+                    expect(testState[0].data.columns[0].isHidden).toEqual(false);
+                    expect(testState[0].data.columns[1].isHidden).toEqual(false);
+                }
+            },
+            {
+                description: 'when no columnId provided',
+                initialState: initialState,
+                content : {},
+                expects : (testState) => {
+                    expect(Array.isArray(testState)).toEqual(true);
+                    expect(testState[0].data.columns[0].isHidden).toEqual(false);
+                    expect(testState[0].data.columns[1].isHidden).toEqual(false);
+                }
+            }
+        ];
+
+        testCases.forEach(testCase => {
+            it(testCase.description, () => {
+                let testState = testCase.initialState;
+                actionObj.type = types.HIDE_COLUMN;
                 actionObj.id = contextId;
                 if (testCase.content) {
                     actionObj.content = testCase.content;

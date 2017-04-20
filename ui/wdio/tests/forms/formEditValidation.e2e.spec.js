@@ -20,7 +20,7 @@
             browser.logger.info('beforeAll spec function - Generating test data and logging in');
             // Need to return here. beforeAll is completely async, need to return the Promise chain in any before or after functions!
             // No need to call done() anymore
-            return e2eBase.basicAppSetup().then(function(createdApp) {
+            return e2eBase.basicAppSetup(null, 10).then(function(createdApp) {
                 // Set your global objects to use in the test functions
                 testApp = createdApp;
                 realmName = e2eBase.recordBase.apiBase.realm.subdomain;
@@ -45,8 +45,8 @@
         });
 
         it('Get into Error Form State, Validate Errors, Correct the errors and Verify Saving the record successfully', function() {
-            var fieldTypes = ['allPhoneFields', 'allEmailFields', 'allNumericFields', 'allDurationFields'];
-            var expectedErrorMessages = ['Numeric Field', 'Numeric Percent Field', 'Duration Field', 'Phone Number Field', 'Email Address Field'];
+            var fieldTypes = ['allPhoneFields', 'allEmailFields'];
+            var expectedErrorMessages = ['Phone Number Field', 'Email Address Field'];
 
             //Step 1 - Get the 6th record textField
             var recordValues = reportContentPO.getRecordValues(5);
@@ -57,8 +57,7 @@
 
             //Step 2 - Enter invalid values to get the form to error state
             fieldTypes.forEach(function(fieldType) {
-                //TODO change the empty string to special characters once MB-1970 is fixed.
-                formsPO.enterInvalidFormValues(fieldType, ' ');
+                formsPO.enterInvalidFormValues(fieldType, '2345-7');
             });
 
             //Step 3 - Click Save on the form

@@ -3,13 +3,17 @@ import {shallow, mount} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
 import {NEW_FORM_RECORD_ID} from '../../../src/constants/schema';
 import {FormBuilderContainer, __RewireAPI__ as FormBuilderRewireAPI} from '../../../src/components/builder/formBuilderContainer';
+import NavigationUtils from '../../../src/utils/navigationUtils';
+import {__RewireAPI__ as NewfieldsMenuRewireAPI} from '../../../src/components/formBuilder/menus/newFieldsMenu';
+
+import {FieldTokenInMenu} from '../../../src/components/formBuilder/fieldToken/fieldTokenInMenu';
 import Loader from 'react-loader';
 
 const appId = 1;
 const tblId = 2;
 const formType = 'edit';
 const currentForm = {formData:{loading: false, formType: {}, formMeta: {}}, formBuilderChildrenTabIndex: ["0"], id: 'view'};
-const selectedField = {tabIndex: 0, sectionIndex: 1, columnIndex: 2, rowIndex: 3, elementIndex: 3};
+const selectedField = {tabIndex: 0, sectionIndex: 0, columnIndex: 0, rowIndex: 0, elementIndex: 3};
 
 const mockActions = {
     loadForm() {},
@@ -21,6 +25,10 @@ const mockActions = {
     deselectField(_formId, _location) {}
 };
 
+const previousLocation = '/somewhere/over/the/rainbow';
+const testParamsProp = {appId, tblId};
+const testLocationProp = {query: {formType, previous: previousLocation}};
+
 const FormBuilderMock = React.createClass({
     render: function() {
         return <div>FormBuilder mock</div>;
@@ -30,10 +38,21 @@ const FormBuilderMock = React.createClass({
 let component;
 let instance;
 
+var FieldPropertiesMock = React.createClass({
+    render: function() {
+        return (
+            <div>{this.props.children}</div>
+        );
+    }
+});
+
 describe('FormBuilderContainer', () => {
     beforeEach(() => {
         jasmineEnzyme();
         FormBuilderRewireAPI.__Rewire__('FormBuilder', FormBuilderMock);
+        NewfieldsMenuRewireAPI.__Rewire__('FieldTokenInMenu', FieldTokenInMenu);
+        FormBuilderRewireAPI.__Rewire__('FieldProperties', FieldPropertiesMock);
+
         spyOn(mockActions, 'loadForm');
         spyOn(mockActions, 'updateForm');
         spyOn(mockActions, 'toggleFormBuilderChildrenTabIndex');
@@ -45,6 +64,9 @@ describe('FormBuilderContainer', () => {
 
     afterEach(() => {
         FormBuilderRewireAPI.__ResetDependency__('FormBuilder');
+        NewfieldsMenuRewireAPI.__ResetDependency__('FieldTokenInMenu');
+        FormBuilderRewireAPI.__ResetDependency__('FieldProperties');
+
         mockActions.loadForm.calls.reset();
         mockActions.updateForm.calls.reset();
         mockActions.toggleFormBuilderChildrenTabIndex.calls.reset();
@@ -70,7 +92,11 @@ describe('FormBuilderContainer', () => {
 
         testCases.forEach(testCase => {
             it(testCase.description, () => {
-                component = shallow(<FormBuilderContainer appId={appId} tblId={tblId} formType={testCase.formType} loadForm={mockActions.loadForm} />);
+                component = shallow(<FormBuilderContainer
+                    params={testParamsProp}
+                    location={{query: {formType: testCase.formType}}}
+                    loadForm={mockActions.loadForm}
+                />);
                 instance = component.instance();
 
                 instance.componentDidMount();
@@ -81,6 +107,17 @@ describe('FormBuilderContainer', () => {
 
     });
 
+    describe('onCancel', () => {
+        it('exits form builder', () => {
+            spyOn(NavigationUtils, 'goBackToLocationOrTable');
+
+            component = shallow(<FormBuilderContainer params={testParamsProp} location={testLocationProp} redirectRoute={previousLocation} />);
+
+            component.instance().onCancel();
+
+            expect(NavigationUtils.goBackToLocationOrTable).toHaveBeenCalledWith(appId, tblId, previousLocation);
+        });
+    });
 
     describe('showing FormBuilder', () => {
         const testFormData = {fields: [], formMeta: {name: 'some form', includeBuiltIns: false}};
@@ -121,9 +158,8 @@ describe('FormBuilderContainer', () => {
 
     describe('saving on FormBuilder', () => {
         it('test saveButton on the formBuilder footer', () => {
-            component = mount(<FormBuilderContainer appId={appId}
+            component = mount(<FormBuilderContainer params={testParamsProp}
                                                     currentForm={currentForm}
-                                                    tblId={tblId}
                                                     loadForm={mockActions.loadForm}
                                                     updateForm={mockActions.updateForm} />);
 
@@ -142,9 +178,8 @@ describe('FormBuilderContainer', () => {
                 preventDefault() {return;}
             };
 
-            component = mount(<FormBuilderContainer appId={appId}
+            component = mount(<FormBuilderContainer params={testParamsProp}
                                                     currentForm={currentForm}
-                                                    tblId={tblId}
                                                     selectedField={selectedField}
                                                     loadForm={mockActions.loadForm}
                                                     toggleFormBuilderChildrenTabIndex={mockActions.toggleFormBuilderChildrenTabIndex}
@@ -163,9 +198,8 @@ describe('FormBuilderContainer', () => {
                 preventDefault() {return;}
             };
 
-            component = mount(<FormBuilderContainer appId={appId}
+            component = mount(<FormBuilderContainer params={testParamsProp}
                                                     currentForm={currentForm}
-                                                    tblId={tblId}
                                                     loadForm={mockActions.loadForm}
                                                     toggleFormBuilderChildrenTabIndex={mockActions.toggleFormBuilderChildrenTabIndex}
                                                     updateForm={mockActions.updateForm} />);
@@ -183,9 +217,8 @@ describe('FormBuilderContainer', () => {
                 preventDefault() {return;}
             };
 
-            component = mount(<FormBuilderContainer appId={appId}
+            component = mount(<FormBuilderContainer params={testParamsProp}
                                                     currentForm={currentForm}
-                                                    tblId={tblId}
                                                     tabIndex="0"
                                                     loadForm={mockActions.loadForm}
                                                     toggleFormBuilderChildrenTabIndex={mockActions.toggleFormBuilderChildrenTabIndex}
@@ -261,7 +294,7 @@ describe('FormBuilderContainer', () => {
         });
 
         it('will move a field down if the selected form element is not located at the last index', () => {
-            let currentFormData = {formData: {formMeta: {fields:[1, 2, 3, 4, 5, 6]}}, id: 'view'};
+            let currentFormData = {formData: {formMeta: {tabs:[{sections: [{columns: [{elements: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]}]}]}]}}, id: 'view'};
 
             component = shallow(<FormBuilderContainer
                 selectedField={selectedField}
@@ -278,7 +311,7 @@ describe('FormBuilderContainer', () => {
         });
 
         it('will not move a field down if the selected form element is greater than the last index', () => {
-            let currentFormData = {formData: {formMeta: {fields: [1, 2, 3, 4]}}, id: 'view'};
+            let currentFormData = {formData: {formMeta: {tabs:[{sections: [{columns: [{elements: []}]}]}]}}, id: 'view'};
 
             component = shallow(<FormBuilderContainer
                 selectedField={selectedField}
