@@ -354,6 +354,7 @@ const forms = (
 
         if (!updatedForm.formBuilderChildrenTabIndex && !updatedForm.formFocus) {
             updatedForm.formBuilderChildrenTabIndex = [];
+            updatedForm.toolPaletteChildrenTabIndex = [];
             updatedForm.formFocus = [];
             updatedForm.toolPaletteFocus = [];
         }
@@ -382,8 +383,8 @@ const forms = (
         }
 
         if (!updatedForm.formBuilderChildrenTabIndex && !updatedForm.toolPaletteChildrenTabIndex && !updatedForm.formFocus) {
-            updatedForm.formBuilderChildrenTabIndex = [];
             updatedForm.toolPaletteChildrenTabIndex = [];
+            updatedForm.formBuilderChildrenTabIndex = [];
             updatedForm.formFocus = [];
             updatedForm.toolPaletteFocus = [];
         }
