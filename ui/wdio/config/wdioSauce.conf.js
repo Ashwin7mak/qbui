@@ -95,10 +95,6 @@ exports.config = {
             // These two values enable parallel testing which will run a spec file per instance
             shardTestFiles: true,
             maxInstances: 4,
-            // retry to establish a tunnel multiple times. (optional)
-            connectRetries: 3,
-            // time to wait between connection retries in ms. (optional)
-            connectRetryTimeout: 5000
         },
         // {
         //     platform: 'OS X 10.11',
@@ -130,10 +126,6 @@ exports.config = {
             // These two values enable parallel testing which will run a spec file per instance
             shardTestFiles: true,
             maxInstances: 4,
-            // retry to establish a tunnel multiple times. (optional)
-            connectRetries: 3,
-            // time to wait between connection retries in ms. (optional)
-            connectRetryTimeout: 5000
         },
         {
             platform: 'Windows 10',
@@ -150,10 +142,6 @@ exports.config = {
             // These two values enable parallel testing which will run a spec file per instance
             shardTestFiles: true,
             maxInstances: 4,
-            // retry to establish a tunnel multiple times. (optional)
-            connectRetries: 3,
-            // time to wait between connection retries in ms. (optional)
-            connectRetryTimeout: 5000
         }
     ],
     //
