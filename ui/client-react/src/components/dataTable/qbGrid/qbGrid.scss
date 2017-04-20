@@ -181,6 +181,7 @@ $edit-icon-font-size: 18px;
         left: 0;
         position: relative;
         vertical-align: top;
+        z-index: $zindex-qbGrid-firstOfType-stickyColumn;
         background-color: $color-black-100;
     }
 
