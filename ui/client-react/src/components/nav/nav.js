@@ -7,7 +7,6 @@ import ReportManagerTrowser from "../report/reportManagerTrowser";
 import RecordTrowser from "../record/recordTrowser";
 import ReportFieldSelectTrowser from '../report/reportFieldSelectTrowser';
 import ListOfElements from '../../../../reuse/client/src/components/sideNavs/listOfElements';
-import FieldTokenInMenu from '../formBuilder/fieldToken/fieldTokenInMenu';
 import DraggableFieldTokenInMenu from '../formBuilder/fieldToken/draggableFieldTokenInMenu';
 import Locale from '../../../../reuse/client/src/locales/locale';
 
