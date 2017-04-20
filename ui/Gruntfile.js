@@ -405,21 +405,25 @@ module.exports = function(grunt) {
                 configFile: 'karma.conf.js'
             },
             unit: {
-                browsers: ["PhantomJS_Desktop"],
+                browsers: ["ChromeCanaryHeadless"],
+                // browsers: ["PhantomJS_Desktop"],
                 singleRun : true
             },
             devunit: {
-                browsers: ["Chrome"],
+                browsers: ["ChromeCanaryHeadless"],
+                // browsers: ["PhantomJS_Desktop"],
                 singleRun : false
             },
             governance: {
                 configFile: './governance/governance.karma.conf.js',
-                browsers: ["PhantomJS_Desktop"],
+                browsers: ["ChromeCanaryHeadless"],
+                // browsers: ["PhantomJS_Desktop"],
                 singleRun : true
             },
             reuse: {
                 configFile: './reuse/reuse.karma.conf.js',
-                browsers: ["PhantomJS_Desktop"],
+                browsers: ["ChromeCanaryHeadless"],
+                // browsers: ["PhantomJS_Desktop"],
                 singleRun : true
             }
         },
@@ -569,8 +573,6 @@ module.exports = function(grunt) {
                     './wdio/tests/forms/formEdit.e2e.spec.js',
                     './wdio/tests/forms/formDragDrop.e2e.spec.js',
                     './wdio/tests/forms/formPermissionsParticipantRole.e2e.spec.js',
-                    './wdio/tests/tables/tableCreate.e2e.spec.js',
-                    './wdio/tests/tables/tableEdit.e2e.spec.js',
                     './wdio/tests/reports/reportEditRecord.e2e.spec.js',
                     './wdio/tests/reports/reportNavigation.e2e.spec.js',
                     './wdio/tests/reports/reportTable.e2e.spec.js',

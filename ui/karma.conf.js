@@ -131,8 +131,19 @@ module.exports = function(config) {
         // - Safari (only Mac)
         // - PhantomJS
         // - IE (only Windows)
-        browsers: ["PhantomJS_Desktop"],
+        browsers: ["ChromeCanaryHeadless"],
         customLaunchers: {
+            'ChromeCanaryHeadless': {
+                base: 'ChromeCanary',
+                flags: [
+                    // See https://chromium.googlesource.com/chromium/src/+/lkgr/headless/README.md
+                    '--no-sandbox',
+                    '--headless',
+                    '--disable-gpu',
+                    // Without a remote debugging port, Google Chrome exits immediately.
+                    ' --remote-debugging-port=9222',
+                ]
+            },
             'PhantomJS_Desktop': {
                 base: 'PhantomJS',
                 options: {
