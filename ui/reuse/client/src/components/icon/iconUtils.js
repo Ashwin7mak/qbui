@@ -15,7 +15,7 @@ const IconUtils = {
         }
         const iconName = icon.toLowerCase();
 
-        // match agains icon name
+        // match against icon name
         if (iconName.indexOf(text) !== -1) {
             return true;
         }
@@ -24,7 +24,7 @@ const IconUtils = {
         const matchedTags = iconsByTag.filter((tagToIcons) => tagToIcons.tag.toLowerCase().indexOf(text) !== -1);
 
         // filter matches if any tag matching the filter text contains the current icon
-        return matchedTags.find((taggedIcons) => taggedIcons.icons.find((taggedIcon) => taggedIcon === icon));
+        return matchedTags.find((taggedIcons) => taggedIcons.icons.find((taggedIcon) => taggedIcon === icon)) !== undefined;
     }
 };
 
