@@ -225,21 +225,23 @@ export class ReportColumnHeaderMenu extends Component {
         this.props.hideColumn(CONTEXT.REPORT.NAV, this.props.appId, this.props.tblId, this.props.rptId, params);
     };
 
-    openFieldSelector(columnId, before) {
+    openFieldSelector(before) {
+        if (!this.hasRequiredIds()) {return;}
+
         let params = {
-            columnId: columnId,
+            columnId: this.props.fieldDef.id,
             addBefore: before
         };
         this.props.toggleFieldSelectorMenu(CONTEXT.REPORT.NAV, this.props.appId, this.props.tblId, this.props.rptId, params);
     }
 
-    openFieldSelectorBefore() {
-        this.props.openFieldSelector(this.props.fieldDef.id, true);
-    }
+    openFieldSelectorBefore = () => {
+        this.props.openFieldSelector(true);
+    };
 
-    openFieldSelectorAfter() {
-        this.props.openFieldSelector(this.props.fieldDef.id, false);
-    }
+    openFieldSelectorAfter = () => {
+        this.props.openFieldSelector(false);
+    };
 
     render() {
         let isDisabled = this.props.isOnlyOneColumnVisible;
