@@ -1,4 +1,4 @@
-version: '3'
+version: '2.0'
 
 # To run this stack and build (or rebuild) the service image, use the command 'docker-compose up -d --build'
 services:
