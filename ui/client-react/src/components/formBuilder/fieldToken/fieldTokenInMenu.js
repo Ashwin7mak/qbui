@@ -27,7 +27,6 @@ export class FieldTokenInMenu extends Component {
 
     render() {
         const fieldToken = <FieldToken onClick={this.clickToAddToForm} isDragging={false} {...this.props} />;
-        console.log('this.props.toolPaletteChildrenTabIndex: ', this.props.toolPaletteChildrenTabIndex);
         if (this.props.tooltipText) {
             return (
                 <div tabIndex={this.props.toolPaletteChildrenTabIndex}
