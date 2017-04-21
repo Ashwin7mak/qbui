@@ -13,14 +13,14 @@ import './appUsersRoute.scss';
 const AppUsersRoute = React.createClass({
 
     componentDidMount() {
-        this.props.flux.actions.loadAppRoles(this.props.params.appId);
+        this.props.flux.actions.loadAppRoles(this.props.match.params.appId);
         this.props.flux.actions.loadAppOwner(this.props.selectedApp.ownerId);
     },
 
     componentWillReceiveProps(props) {
-        if (props.params.appId && props.selectedApp.ownerId) {
-            if (this.props.params.appId !== props.params.appId) {
-                this.props.flux.actions.loadAppRoles(this.props.params.appId);
+        if (props.match.params.appId && props.selectedApp.ownerId) {
+            if (this.props.match.params.appId !== props.match.params.appId) {
+                this.props.flux.actions.loadAppRoles(this.props.match.params.appId);
                 this.props.flux.actions.loadAppOwner(this.props.selectedApp.ownerId);
             }
         } else {
@@ -28,8 +28,8 @@ const AppUsersRoute = React.createClass({
             this.props.flux.actions.loadAppOwner(null);
         }
 
-        if (this.props.params.appId !== props.params.appId && this.props.selectedApp.ownerId !== props.selectedApp.ownerId) {
-            this.props.flux.actions.loadAppRoles(this.props.params.appId);
+        if (this.props.match.params.appId !== props.match.params.appId && this.props.selectedApp.ownerId !== props.selectedApp.ownerId) {
+            this.props.flux.actions.loadAppRoles(this.props.match.params.appId);
             this.props.flux.actions.loadAppOwner(this.props.selectedApp.ownerId);
         }
     },
@@ -69,7 +69,7 @@ const AppUsersRoute = React.createClass({
                                       appOwner={this.props.appOwner}/>
                 </Stage>
                 <div className="userManagementContainer">
-                    <UserManagement appId={this.props.params.appId}
+                    <UserManagement appId={this.props.match.params.appId}
                                     appUsers={this.props.appUsersUnfiltered}
                                     appRoles={this.props.appRoles}
                     />

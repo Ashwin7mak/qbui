@@ -2,7 +2,7 @@ import React from 'react';
 import Locale from '../../locales/locales';
 import QBicon from '../qbIcon/qbIcon';
 import QBPanel from '../QBPanel/qbpanel';
-import {Link} from 'react-router';
+import {Link} from 'react-router-dom';
 import A11Utils from '../../utils/a11yUtils';
 /**
  * a single report item

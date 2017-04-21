@@ -17,8 +17,10 @@ describe('AccountUsers', () => {
 
     const baseProps = {
         fetchData: () => false,
-        params: {
-            accountId: "0"
+        match: {
+            params: {
+                accountId: "0"
+            }
         },
         loading: false
     };

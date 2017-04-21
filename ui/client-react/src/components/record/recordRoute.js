@@ -8,11 +8,10 @@ import Icon, {AVAILABLE_ICON_FONTS} from '../../../../reuse/client/src/component
 import IconActions from '../actions/iconActions';
 import {I18nMessage} from '../../utils/i18nMessage';
 import Record from './../record/record';
-import {Link} from 'react-router';
+import {Link, withRouter} from 'react-router-dom';
 import simpleStringify from '../../../../common/src/simpleStringify';
 import Fluxxor from 'fluxxor';
 import Logger from '../../utils/logger';
-import {withRouter} from 'react-router';
 import Locale from '../../locales/locales';
 import Loader from 'react-loader';
 import RecordHeader from './recordHeader';
@@ -67,19 +66,19 @@ export const RecordRoute = React.createClass({
         flux.actions.hideTopNav();
         flux.actions.setTopTitle();
 
-        this.loadRecordFromParams(this.props.params);
+        this.loadRecordFromParams(this.props.match.params);
     },
 
     componentDidUpdate(prev) {
 
         const viewData = this.getViewFormFromProps();
 
-        if (this.props.params.appId !== prev.params.appId ||
-            this.props.params.tblId !== prev.params.tblId ||
-            this.props.params.recordId !== prev.params.recordId ||
+        if (this.props.match.params.appId !== prev.match.params.appId ||
+            this.props.match.params.tblId !== prev.match.params.tblId ||
+            this.props.match.params.recordId !== prev.match.params.recordId ||
             (viewData && viewData.syncLoadedForm)) {
 
-            this.loadRecordFromParams(this.props.params);
+            this.loadRecordFromParams(this.props.match.params);
         }
     },
 
@@ -88,7 +87,7 @@ export const RecordRoute = React.createClass({
         const showBack = !!(record && record.previousRecordId !== null);
         const showNext = !!(record && record.nextRecordId !== null);
 
-        const rptId = this.props.params ? this.props.params.rptId : null;
+        const rptId = this.props.match.params ? this.props.match.params.rptId : null;
 
         const actions = [];
         if (showBack || showNext) {
@@ -109,9 +108,9 @@ export const RecordRoute = React.createClass({
      */
     returnToReport() {
         // use the route parameters to build the URI
-        const {appId, tblId, rptId} = this.props.params;
+        const {appId, tblId, rptId} = this.props.match.params;
         const link = `${APP_ROUTE}/${appId}/table/${tblId}/report/${rptId}`;
-        this.props.router.push(link);
+        this.props.history.push(link);
     },
 
     /**
@@ -173,7 +172,7 @@ export const RecordRoute = React.createClass({
 
         const {appId, tblId, rptId} = this.props.reportData;
         const link = `${APP_ROUTE}/${appId}/table/${tblId}/report/${rptId}/record/${record.previousRecordId}`;
-        this.props.router.push(link);
+        this.props.history.push(link);
     },
 
     /**
@@ -185,11 +184,11 @@ export const RecordRoute = React.createClass({
 
         const {appId, tblId, rptId} = this.props.reportData;
         const link = `${APP_ROUTE}/${appId}/table/${tblId}/report/${rptId}/record/${record.nextRecordId}`;
-        this.props.router.push(link);
+        this.props.history.push(link);
     },
 
     getTitle() {
-        const {recordId} = this.props.params;
+        const {recordId} = this.props.match.params;
         const isSmall = Breakpoints.isSmallBreakpoint();
         const tableName = this.props.selectedTable ? this.props.selectedTable.name : '';
         return <div className="title">
@@ -198,8 +197,8 @@ export const RecordRoute = React.createClass({
     },
 
     getStageHeadline() {
-        if (this.props.params) {
-            const {appId, tblId, rptId} = this.props.params;
+        if (this.props.match.params) {
+            const {appId, tblId, rptId} = this.props.match.params;
             const record = this.getRecordFromProps(this.props);
 
             const tableLink = `${APP_ROUTE}/${appId}/table/${tblId}`;
@@ -247,7 +246,7 @@ export const RecordRoute = React.createClass({
      * @param data row record data
      */
     openRecordForEdit() {
-        const recordId = this.props.params.recordId;
+        const recordId = this.props.match.params.recordId;
         this.navigateToRecord(recordId);
 
         WindowLocationUtils.pushWithQuery(EDIT_RECORD_KEY, recordId);
@@ -268,11 +267,11 @@ export const RecordRoute = React.createClass({
      *
      */
     approveRecord()  {
-        let appId = this.props.params.appId;
-        let tblId = this.props.params.tblId;
-        let recId = this.props.params.recordId;
+        let appId = this.props.match.params.appId;
+        let tblId = this.props.match.params.tblId;
+        let recId = this.props.match.params.recordId;
         AutomationUtils.approveRecord(appId, tblId, recId).then(() => {
-            this.loadRecordFromParams(this.props.params);
+            this.loadRecordFromParams(this.props.match.params);
         });
     },
 
@@ -336,12 +335,12 @@ export const RecordRoute = React.createClass({
      * we implement shouldComponentUpdate() to prevent triggering animations unless the record has changed
      */
     render() {
-        if (_.isUndefined(this.props.params) ||
-            _.isUndefined(this.props.params.appId) ||
-            _.isUndefined(this.props.params.tblId) ||
-            (_.isUndefined(this.props.params.recordId))
+        if (_.isUndefined(this.props.match.params) ||
+            _.isUndefined(this.props.match.params.appId) ||
+            _.isUndefined(this.props.match.params.tblId) ||
+            (_.isUndefined(this.props.match.params.recordId))
         ) {
-            logger.info("the necessary params were not specified to recordRoute render params=" + simpleStringify(this.props.params));
+            logger.info("the necessary params were not specified to recordRoute render params=" + simpleStringify(this.props.match.params));
             return null;
         } else {
             const viewData = this.getViewFormFromProps();
@@ -373,9 +372,9 @@ export const RecordRoute = React.createClass({
                                 options={SpinnerConfigurations.TROWSER_CONTENT}>
                         <Record key={key}
                                 selectedApp={this.props.selectedApp}
-                                appId={this.props.params.appId}
-                                tblId={this.props.params.tblId}
-                                recId={this.props.params.recordId}
+                                appId={this.props.match.params.appId}
+                                tblId={this.props.match.params.tblId}
+                                recId={this.props.match.params.recordId}
                                 errorStatus={formLoadingErrorStatus ? viewData.errorStatus : null}
                                 formData={viewData ? viewData.formData : null}
                                 appUsers={this.props.appUsers} />

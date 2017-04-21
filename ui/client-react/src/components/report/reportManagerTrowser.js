@@ -25,8 +25,8 @@ let ReportManagerTrowser = React.createClass({
             this.hideTrowser();
             setTimeout(() => {
                 // give UI transition a moment to execute
-                if (this.props.router) {
-                    this.props.router.push(report.link);
+                if (this.props.history) {
+                    this.props.history.push(report.link);
                 }
             }, 500);
         };
