@@ -651,7 +651,11 @@ export default {
             homePageCreateAnother: "Create another table",
 
             noSuggestedIcons: "There are no suggested icons for this table name",
-            typeForSuggestions: "Please type a table name to get suggestions"
+            typeForSuggestions: "Please type a table name to get suggestions",
+
+            tableReadyTitle: "Your table's ready!",
+            tableReadyText1: "Each bit of information you want to collect is a field.  We've started you off with a couple.",
+            tableReadyText2: "Design this form to collect info.  Drag and drop to add fields."
         },
         iconChooser: {
             searchPlaceholder: "Search table icons..."

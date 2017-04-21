@@ -19,6 +19,7 @@ const tableCreation = (
     state = {
         //  default states
         dialogOpen: false,
+        showTableReadyDialog: false,
         pageIndex: 0,
         iconChooserOpen: false,
         savingTable: false,
@@ -47,6 +48,20 @@ const tableCreation = (
             ...state,
             dialogOpen: false,
             pageIndex: 0
+        };
+    }
+
+    case types.SHOW_TABLE_READY_DIALOG: {
+        return {
+            ...state,
+            showTableReadyDialog: true
+        };
+    }
+
+    case types.HIDE_TABLE_READY_DIALOG: {
+        return {
+            ...state,
+            showTableReadyDialog: false
         };
     }
 

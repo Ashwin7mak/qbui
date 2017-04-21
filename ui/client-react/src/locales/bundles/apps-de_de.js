@@ -643,7 +643,11 @@ export default {
             homePageCreateAnother: "Erstellen Sie eine andere Tabelle",
 
             noSuggestedIcons: "Es gibt keine vorgeschlagenen Symbole für diesen Tabellennamen",
-            typeForSuggestions: "Bitte geben Sie einen Tabellennamen ein, um Vorschläge zu erhalten"
+            typeForSuggestions: "Bitte geben Sie einen Tabellennamen ein, um Vorschläge zu erhalten",
+
+            tableReadyTitle: "Dein Tisch ist fertig!",
+            tableReadyText1: "Jedes Bit von Informationen, die Sie sammeln möchten, ist ein Feld. Wir haben dich mit einem Paar angefangen.",
+            tableReadyText2: "Gestalte dieses Formular, um Infos zu sammeln. Ziehen und ziehen, um Felder hinzuzufügen."
         },
         iconChooser: {
             searchPlaceholder: "Tabellensymbole suchen ......"

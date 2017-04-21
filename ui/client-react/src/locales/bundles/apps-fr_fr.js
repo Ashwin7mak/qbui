@@ -642,7 +642,11 @@ export default {
             homePageCreateAnother: "Créer un autre tableau",
 
             noSuggestedIcons: "Il n'y a pas d'icônes suggérées pour ce nom de table",
-            typeForSuggestions: "Tapez un nom de table pour obtenir des suggestions"
+            typeForSuggestions: "Tapez un nom de table pour obtenir des suggestions",
+
+            tableReadyTitle: "Votre table est prête!",
+            tableReadyText1: "Chaque élément d'information que vous souhaitez collecter est un champ. Nous vous avons commencé avec un couple.",
+            tableReadyText2: "Concevez ce formulaire pour collecter des informations. Faites glisser et déposez pour ajouter des champs."
         },
         iconChooser: {
             searchPlaceholder: "Rechercher des icônes..."
