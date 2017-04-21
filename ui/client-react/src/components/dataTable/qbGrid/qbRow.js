@@ -45,8 +45,10 @@ const QbRow = React.createClass({
         return (
             <tr key={`qbRowHeader-${this.props.subHeaderId}`} {...this.props} className={`groupHeader subHeaderLevel-${this.props.subHeaderLevel}`}>
                 <td id={this.props.subHeaderId} className="subHeaderCell" colSpan={this.props.numberOfColumns} onClick={this.toggleCollapseGroup}>
-                    <QbIcon icon={subHeaderIcon}/>
-                    <span className="subHeaderLabel">{this.props.subHeaderLabel}</span>
+                    <div className="subHeaderContainer">
+                        <QbIcon icon={subHeaderIcon}/>
+                        <span className="subHeaderLabel">{this.props.subHeaderLabel}</span>
+                    </div>
                 </td>
             </tr>
         );

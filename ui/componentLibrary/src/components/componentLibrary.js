@@ -1,5 +1,6 @@
 import React from 'react';
-import {Link} from 'react-router';
+import {Link, Switch} from 'react-router-dom';
+import RouteWithSubRoutes from "../../../client-react/src/scripts/RouteWithSubRoutes";
 
 var ComponentLibraryWrapper = React.createClass({
     render() {
@@ -25,6 +26,8 @@ var ComponentLibraryWrapper = React.createClass({
                             <li><Link to="/qbase/components/iconChooser" activeClassName="active">IconChooser</Link></li>
                             <li><Link to="/qbase/components/iconInputBox" activeClassName="active">IconInputBox</Link></li>
                             <li><Link to="/qbase/components/pageTitle" activeClassName="active">PageTitle</Link></li>
+                            <li><Link to="/qbase/components/pagination" activeClassName="active">Pagination</Link></li>
+                            {/* <li><Link to="/qbase/components/rowActions" activeClassName="active">RowActions</Link></li> */}
                             <li><Link to="/qbase/components/sideMenuBase" activeClassName="active">SideMenuBase</Link></li>
                             <li><Link to="/qbase/components/sideTrowserBase" activeClassName="active">SideTrowserBase</Link></li>
                             <li><Link to="/qbase/components/stage" activeClassName="active">Stage</Link></li>
@@ -72,7 +75,13 @@ var ComponentLibraryWrapper = React.createClass({
                     </nav>
                 </div>
                 <div className="comp-library-content">
-                    {this.props.children}
+                    <Switch>
+                        { this.props.routes !== undefined ? this.props.routes.map((route, i) => {
+                            return (
+                                RouteWithSubRoutes(route, i)
+                            );
+                        }) : ''}
+                    </Switch>
                 </div>
             </div>
         );

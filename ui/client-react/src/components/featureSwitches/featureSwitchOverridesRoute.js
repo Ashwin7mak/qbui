@@ -86,7 +86,7 @@ export class FeatureSwitchOverridesRoute extends React.Component {
 
             // only update override who's state needs change
             if (overrideToUpdate[FeatureSwitchConsts.OVERRIDE_ON_KEY] !== isOn) {
-                updatePromises.push(this.props.updateOverride(this.props.params.id, id, overrideToUpdate, FeatureSwitchConsts.OVERRIDE_ON_KEY, isOn));
+                updatePromises.push(this.props.updateOverride(this.props.match.params.id, id, overrideToUpdate, FeatureSwitchConsts.OVERRIDE_ON_KEY, isOn));
             }
         });
 
@@ -104,7 +104,7 @@ export class FeatureSwitchOverridesRoute extends React.Component {
     deleteSelectedOverrides() {
         this.setState({confirmDeletesDialogOpen: false});
 
-        this.props.deleteOverrides(this.props.params.id, this.state.selectedIDs).then(() => {
+        this.props.deleteOverrides(this.props.match.params.id, this.state.selectedIDs).then(() => {
 
             NotificationManager.success(Locale.getMessage("featureSwitchAdmin.overridesDeleted"), Locale.getMessage('success'));
 
@@ -151,14 +151,14 @@ export class FeatureSwitchOverridesRoute extends React.Component {
      */
     getFeatureSwitch() {
 
-        return this.props.switches.find(item => item.id === this.props.params.id);
+        return this.props.switches.find(item => item.id === this.props.match.params.id);
     }
 
     /**
      * create new override
      */
     createOverride() {
-        this.props.createOverride(this.props.params.id).then((override) => {
+        this.props.createOverride(this.props.match.params.id).then((override) => {
             NotificationManager.success(Locale.getMessage("featureSwitchAdmin.overrideCreated"), Locale.getMessage('success'));
 
             const columnToEdit = _.findIndex(this.state.columns, ['property', FeatureSwitchConsts.OVERRIDE_VALUE_KEY]);
@@ -177,7 +177,7 @@ export class FeatureSwitchOverridesRoute extends React.Component {
         const overrideToUpdate = this.props.overrides.find(override => override.id === id);
 
         if (overrideToUpdate[property] !== value) {
-            this.props.updateOverride(this.props.params.id, id, overrideToUpdate, property, value).then(() => {
+            this.props.updateOverride(this.props.match.params.id, id, overrideToUpdate, property, value).then(() => {
                 NotificationManager.success(Locale.getMessage("featureSwitchAdmin.overrideUpdated"), Locale.getMessage('success'));
             });
         } else {
@@ -281,10 +281,10 @@ export class FeatureSwitchOverridesRoute extends React.Component {
 
         if (this.props.switches.length === 0) {
             this.props.getSwitches().then(() => {
-                this.props.setFeatureSwitchOverrides(this.props.params.id);
+                this.props.setFeatureSwitchOverrides(this.props.match.params.id);
             });
         } else {
-            this.props.setFeatureSwitchOverrides(this.props.params.id);
+            this.props.setFeatureSwitchOverrides(this.props.match.params.id);
         }
     }
     checkAccess(props) {
@@ -305,7 +305,7 @@ export class FeatureSwitchOverridesRoute extends React.Component {
 
     render() {
 
-        let featureSwitch = this.props.switches.find((item) => item.id === this.props.params.id);
+        let featureSwitch = this.props.switches.find((item) => item.id === this.props.match.params.id);
 
         if (featureSwitch) {
 
