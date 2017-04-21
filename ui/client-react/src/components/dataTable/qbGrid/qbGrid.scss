@@ -198,8 +198,10 @@ $edit-icon-font-size: 18px;
         // hover effect on dropdown icon
         &:hover {
             opacity: 100;
-            color: #999299;
+            color: orange;
             cursor: move;
+            border: double;
+            border-color: orange;
         }
 
     }
