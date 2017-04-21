@@ -41,6 +41,7 @@
      */
     let customFunctionApiEndpoints = {
         HEALTH_CHECK                : baseContext.CORE_HEALTH + '/health',
+        QBUI_HEALTH_CHECK           : baseUrl.QUICKBASE_HEALTH + '/qbuiHealth',
 
         FORM_AND_RECORD_COMPONENTS  : baseContext.QUICKBASE_CLIENT + '/apps/:appId/tables/:tableId/records/:recordId/formComponents',
         FORM_COMPONENTS             : baseContext.QUICKBASE_CLIENT + '/apps/:appId/tables/:tableId/formComponents',
@@ -83,10 +84,11 @@
      *  List of node server endpoints used by the Quickbase client.  These endpoints are
      *  intended for requests where processing is performed strictly on the node server.
      */
+
     let nodeApiEndpoints = {
-        FACET_EXPRESSION_PARSE  : baseContext.QUICKBASE_NODE + '/facets/parse',
-        LOG_CLIENT_MSG          : baseContext.QUICKBASE_NODE + '/log',
-        LOG_CLIENT_PERF_MSG     : baseContext.QUICKBASE_NODE + '/clientPerf'
+        FACET_EXPRESSION_PARSE: baseContext.QUICKBASE_NODE + '/facets/parse',
+        LOG_CLIENT_MSG: baseContext.QUICKBASE_NODE + '/log',
+        LOG_CLIENT_PERF_MSG: baseContext.QUICKBASE_NODE + '/clientPerf'
     };
 
     /**

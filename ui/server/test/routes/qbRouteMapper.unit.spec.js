@@ -108,24 +108,28 @@ describe('Qb Route Mapper Unit Test', function() {
 
             {message: 'POST request to table components endpoint', request: '/api/v1/apps/1/tables/tableComponents', expectedPath: '/api/api/v1/apps/1/tables/tableComponents', route: routes.TABLE_COMPONENTS, method: routeMapper.fetchPostFunctionForRoute(routes.TABLE_COMPONENTS), expectedDefined: true, httpVerb: 'POST'},
             {message: 'PATCH request to tables endpoint', request: '/api/v1/apps/1/tables/2', expectedPath: '/api/api/v1/apps/1/tables/2', route: routes.TABLE, method: routeMapper.fetchPatchFunctionForRoute(routes.TABLE), expectedDefined: true, httpVerb: 'PATCH'},
+            {message: 'GET request to Node/Express health check endpoint', request: '/api/v1/qbuiHealth', expectedPath: '/api/v1/qbuiHealth', route: routeConsts.QBUI_HEALTH_CHECK, method: routeMapper.fetchGetFunctionForRoute(routeConsts.QBUI_HEALTH_CHECK), expectedDefined: true, httpVerb: 'GET'},
+            {message: 'GET request to the health check endpoint', request: '/api/v1/health', expectedPath: '/api/api/v1/health', route: routes.HEALTH_CHECK, method: routeMapper.fetchGetFunctionForRoute(routes.HEALTH_CHECK), expectedDefined: true, httpVerb: 'GET'},
 
-            {message: 'GET request to the health check endpoint', request: '/api/v1/health', expectedPath: '/api/api/v1/health', route: routes.HEALTH_CHECK, method: routeMapper.fetchGetFunctionForRoute(routes.HEALTH_CHECK), expectedDefined: true, httpVerb: 'GET'}
+            {message: 'GET request to the swagger core endpoint', request: '/api/someEndpoint', expectedPath: '/api/someEndpoint', route: routeConsts.SWAGGER_CORE, method: routeMapper.fetchGetFunctionForRoute(routeConsts.SWAGGER_CORE), expectedDefined: true, httpVerb: 'GET'}
         ];
     }
 
     function eePathModificationProvider() {
         return [
-            {message: 'GET request to EE health via Experience Engine all', request: '/ee/v1/health', expectedPath: '/ee/v1/health', route: routes.EXPERIENCE_ENGINE_ALL, method: routeMapper.fetchAllFunctionForRoute(routes.EXPERIENCE_ENGINE_ALL), expectedDefined: true, httpVerb: 'GET'},
-            {message: 'POST request to EE api via Experience Engine all', request: '/ee/v1/someUrl', expectedPath: '/ee/v1/someUrl', route: routes.EXPERIENCE_ENGINE_ALL, method: routeMapper.fetchAllFunctionForRoute(routes.EXPERIENCE_ENGINE_ALL), expectedDefined: true, httpVerb: 'POST'},
-            {message: 'PATCH request to EE api via Experience Engine all', request: '/ee/v1/someUrl', expectedPath: '/ee/v1/someUrl', route: routes.EXPERIENCE_ENGINE_ALL, method: routeMapper.fetchAllFunctionForRoute(routes.EXPERIENCE_ENGINE_ALL), expectedDefined: true, httpVerb: 'PATCH'},
-            {message: 'PUT request to EE api via Experience Engine all', request: '/ee/v1/someUrl', expectedPath: '/ee/v1/someUrl', route: routes.EXPERIENCE_ENGINE_ALL, method: routeMapper.fetchAllFunctionForRoute(routes.EXPERIENCE_ENGINE_ALL), expectedDefined: true, httpVerb: 'PUT'},
-            {message: 'DELETE request to EE api via Experience Engine all', request: '/ee/v1/someUrl', expectedPath: '/ee/v1/someUrl', route: routes.EXPERIENCE_ENGINE_ALL, method: routeMapper.fetchAllFunctionForRoute(routes.EXPERIENCE_ENGINE_ALL), expectedDefined: true, httpVerb: 'DELETE'}
+            {message: 'GET request to EE health via Experience Engine all', request: '/ee/v1/health', expectedPath: '/ee/v1/health', route: routes.EXPERIENCE_ENGINE, method: routeMapper.fetchAllFunctionForRoute(routes.EXPERIENCE_ENGINE), expectedDefined: true, httpVerb: 'GET'},
+            {message: 'POST request to EE api via Experience Engine all', request: '/ee/v1/someUrl', expectedPath: '/ee/v1/someUrl', route: routes.EXPERIENCE_ENGINE, method: routeMapper.fetchAllFunctionForRoute(routes.EXPERIENCE_ENGINE), expectedDefined: true, httpVerb: 'POST'},
+            {message: 'PATCH request to EE api via Experience Engine all', request: '/ee/v1/someUrl', expectedPath: '/ee/v1/someUrl', route: routes.EXPERIENCE_ENGINE, method: routeMapper.fetchAllFunctionForRoute(routes.EXPERIENCE_ENGINE), expectedDefined: true, httpVerb: 'PATCH'},
+            {message: 'PUT request to EE api via Experience Engine all', request: '/ee/v1/someUrl', expectedPath: '/ee/v1/someUrl', route: routes.EXPERIENCE_ENGINE, method: routeMapper.fetchAllFunctionForRoute(routes.EXPERIENCE_ENGINE), expectedDefined: true, httpVerb: 'PUT'},
+            {message: 'DELETE request to EE api via Experience Engine all', request: '/ee/v1/someUrl', expectedPath: '/ee/v1/someUrl', route: routes.EXPERIENCE_ENGINE, method: routeMapper.fetchAllFunctionForRoute(routes.EXPERIENCE_ENGINE), expectedDefined: true, httpVerb: 'DELETE'},
+            {message: 'GET request to the swagger ee endpoint', request: '/ee/someEndpoint', expectedPath: '/ee/someEndpoint', route: routeConsts.SWAGGER_EE, method: routeMapper.fetchGetFunctionForRoute(routeConsts.SWAGGER_EE), expectedDefined: true, httpVerb: 'GET'}
         ];
     }
 
     function automationModificationProvider()  {
         return [
-            {message: 'GET request to automation engine health check', request: '/we/api/api/v1/health', expectedPath: '/we/api/api/v1/health', route: routes.AUTOMATION_ENGINE_ALL, method: routeMapper.fetchAllFunctionForRoute(routes.AUTOMATION_ENGINE_ALL), expectedDefined: true, httpVerb: 'GET'}
+            {message: 'GET request to automation engine health check', request: '/we/api/api/v1/health', expectedPath: '/we/api/api/v1/health', route: routes.AUTOMATION_ENGINE, method: routeMapper.fetchAllFunctionForRoute(routes.AUTOMATION_ENGINE), expectedDefined: true, httpVerb: 'GET'},
+            {message: 'GET request to the swagger we endpoint', request: '/we/someEndpoint', expectedPath: '/we/someEndpoint', route: routeConsts.SWAGGER_WE, method: routeMapper.fetchGetFunctionForRoute(routeConsts.SWAGGER_WE), expectedDefined: true, httpVerb: 'GET'}
         ];
     }
 
