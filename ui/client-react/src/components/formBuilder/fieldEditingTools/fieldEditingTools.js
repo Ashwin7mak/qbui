@@ -210,6 +210,7 @@ export class FieldEditingTools extends Component {
 }
 
 FieldEditingTools.propTypes = {
+    formBuilderContainerContentElement: PropTypes.func,
     location: PropTypes.object,
     onClickDelete: PropTypes.func,
     onClickFieldPreferences: PropTypes.func,
