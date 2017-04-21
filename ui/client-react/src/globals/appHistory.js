@@ -90,11 +90,9 @@ class AppHistory {
      */
     _setupHistoryListeners() {
         // Setup listener for route changes within the app
-        //self.cancelListenBefore = self.history.listenBefore((location, callback) => {
         self.cancelListenBefore = self.history.block((location, action) => {
             if (self) {
                 if (self.getIsPendingEdit()) {
-                    //self.showPendingEditsConfirmationModal();
                     return "Ask confirmation"; //this message return is not used just triggers the prompt
                 } else {
                     // cancel any pending pending edits that don't require confirmation, i.e. started inline editing

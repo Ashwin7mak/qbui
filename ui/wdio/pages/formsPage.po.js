@@ -15,7 +15,7 @@
     var sUrl = 'http://www.yahoo.com';
     var sEmail = 'test@gmail.com';
     var sPhone = '508-481-1015';
-    var sNumeric = 33.33;
+    var sNumeric = '33.33';
     var sTime = '12:30 am';
     var date = new Date();
     var sDate = ('0' + (date.getMonth() + 1)).slice(-2) + '-' + ('0' + date.getDate()).slice(-2) + '-' + date.getFullYear();
@@ -153,7 +153,7 @@
          * @returns Array of email input fields
          */
         getAllEmailInputFields: {value: function() {
-            return this.editFormContainerEl.elements('input.emailField');
+            return this.editFormContainerEl.elements('input[type="email"].textField');
         }},
 
         /**
@@ -161,7 +161,7 @@
          * @returns Array of phone input fields
          */
         getAllPhoneInputFields: {value: function() {
-            return this.editFormContainerEl.elements('input.phoneNumber');
+            return this.editFormContainerEl.elements('input[type="tel"].textField.phoneNumber');
         }},
 
         /**
@@ -177,7 +177,7 @@
          * @returns Array of duration input fields
          */
         getAllDurationInputFields: {value: function() {
-            return this.editFormContainerEl.elements('input.durationField');
+            return this.editFormContainerEl.elements('input[type="text"].durationField');
         }},
 
         /**
@@ -185,7 +185,7 @@
          * @returns Array of numeric input fields
          */
         getAllNumericInputFields: {value: function() {
-            return this.editFormContainerEl.elements('input.numericField');
+            return this.editFormContainerEl.elements('input[type="text"].numericField');
         }},
 
         /**
@@ -201,7 +201,7 @@
          * @returns Array of time input fields
          */
         getAllTimeInputFields: {value: function() {
-            return this.editFormContainerEl.elements('.cellEdit.timeCell');
+            return this.editFormContainerEl.elements('.cellEdit.timeCell .glyphicon-time');
         }},
 
         /**
@@ -209,7 +209,7 @@
          * @returns Array of checkbox fields
          */
         getAllCheckboxFields: {value: function() {
-            return this.editFormContainerEl.elements('.checkbox');
+            return this.editFormContainerEl.elements('.checkbox.hasLabel');
         }},
 
         /**
@@ -217,7 +217,7 @@
          * @returns Array of user fields
          */
         getAllUserFields: {value: function() {
-            return this.editFormContainerEl.elements('.cellEdit.userFormat');
+            return this.editFormContainerEl.elements('.cellEdit.userFormat .Select-arrow');
         }},
 
         /**
@@ -300,11 +300,28 @@
         }},
 
         /**
+         * Method to set input value for a field on the form.
+         */
+        setFormInputValue: {value: function(getAllUniqueFieldTypes, fieldValue) {
+            var fieldTypes = getAllUniqueFieldTypes;
+            for (var i = 0; i < fieldTypes.value.length; i++) {
+                //scroll to an element.
+                browser.execute("return arguments[0].scrollIntoView();", fieldTypes.value[i]);
+                //Need this if loop because I just want to enter this textValue into textField only. Some fields className also just says textField.(eg duration)
+                if (fieldValue === 'testTextValue') {
+                    return fieldTypes.value[i].setValue([fieldValue]);
+                } else {
+                    fieldTypes.value[i].setValue([fieldValue]);
+                }
+            }
+        }},
+
+        /**
          * Select List option from the List combo
          *
          */
-        selectFromList : {value: function(fieldElement, listOption) {
-            fieldElement.element('.Select-menu-outer').waitForVisible();
+        selectFromList : {value: function(listOption) {
+            browser.element('.Select-menu-outer').waitForVisible();
             //get all options from the list
             var option = browser.elements('.Select-option').value.filter(function(optionText) {
                 return optionText.element('div div').getText() === listOption;
@@ -312,32 +329,11 @@
 
             if (option !== []) {
                 //Click on filtered option
-                return option[0].element('div div').click();
+                option[0].element('div div').click();
+                //wait until loading screen disappear
+                return browser.waitForVisible('.Select-menu-outer', e2eConsts.shortWaitTimeMs, true);
             } else {
                 throw new Error('Option with name ' + listOption + " not found in the list");
-            }
-        }},
-
-        /**
-         * Method to set input value for a field on the form.
-         */
-        setFormInputValue: {value: function(getAllUniqueFieldTypes, fieldValue) {
-            var fieldTypes = getAllUniqueFieldTypes;
-            for (var i = 0; i < fieldTypes.value.length; i++) {
-                if (browserName === 'firefox') {
-                    fieldTypes.value[i].scroll();
-                    fieldTypes.value[i].waitForVisible();
-                    fieldTypes.value[i].click();
-                    browser.pause(100);
-                    fieldTypes.value[i].setValue(fieldValue);
-                    browser.pause(100);
-                    fieldTypes.value[i].element('..').click();
-                    browser.pause(100);
-                } else {
-                    fieldTypes.value[i].scroll();
-                    fieldTypes.value[i].waitForVisible();
-                    fieldTypes.value[i].setValue(fieldValue);
-                }
             }
         }},
 
@@ -347,9 +343,19 @@
         setDropDownValue: {value: function(getAllUniqueFieldTypes, fieldValue) {
             var fieldTypes = getAllUniqueFieldTypes;
             for (var i = 0; i < fieldTypes.value.length; i++) {
-                fieldTypes.value[i].element('.Select-multi-value-wrapper').click();
-                this.selectFromList(fieldTypes.value[i], fieldValue);
+                browser.execute("return arguments[0].scrollIntoView();", fieldTypes.value[i]);
+                fieldTypes.value[i].waitForVisible();
+                fieldTypes.value[i].click();
+                this.selectFromList(fieldValue);
             }
+        }},
+
+        /**
+         * Method to search for record.
+         */
+        searchForRecord: {value: function(searchValue) {
+            browser.element('.reportToolbar  .searchInput').waitForVisible();
+            return browser.element('.reportToolbar  .searchInput').setValue(searchValue);
         }},
 
         /**
@@ -371,6 +377,8 @@
                 this.setFormInputValue(this.getAllDurationInputFields(), sNumeric);
             } else if (fieldType === 'allNumericFields') {
                 this.setFormInputValue(this.getAllNumericInputFields(), sNumeric);
+            } else if (fieldType === 'allTimeFields') {
+                this.setDropDownValue(this.getAllTimeInputFields(), sTime);
             } else if (fieldType === 'allDateFields') {
                 //get all date field input validators
                 var dateFields = this.getAllDateInputFields();
@@ -381,14 +389,12 @@
                         dateFields.value[i].element('input').setValue(sDate);
                     }
                 }
-            } else if (fieldType === 'allTimeFields') {
-                this.setDropDownValue(this.getAllTimeInputFields(), sTime);
             } else if (fieldType === 'allCheckboxFields') {
                 //get all checkbox fields on form
                 var checkboxFields = this.getAllCheckboxFields();
                 for (i = 0; i < checkboxFields.value.length; i++) {
                     //if checkbox not selected then check it.
-                    if (!checkboxFields.value[i].element('input').isSelected()) {
+                    if (checkboxFields.value[i].element('input').isSelected() === false) {
                         checkboxFields.value[i].element('label').click();
                     }
                 }

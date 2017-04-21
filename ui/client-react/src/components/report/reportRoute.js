@@ -121,7 +121,7 @@ const ReportRoute = React.createClass({
 
     getPageActions(maxButtonsBeforeMenu) {
         const actions = [
-            {msg: 'pageActions.addRecord', icon:'add', className:'addRecord', onClick: this.editNewRecord},
+            {msg: 'pageActions.addRecord', icon:'add-new-filled', className:'addRecord', onClick: this.editNewRecord},
             {msg: 'unimplemented.makeFavorite', icon:'star', disabled: true},
             {msg: 'unimplemented.print', icon:'print', disabled: true},
         ];
@@ -171,7 +171,7 @@ const ReportRoute = React.createClass({
                     appUsers={this.props.appUsers}
                     pendEdits={this.props.pendEdits}
                     isRowPopUpMenuOpen={this.props.isRowPopUpMenuOpen}
-                    routeParams={this.props.routeParams}
+                    routeParams={this.props.match.params}
                     selectedAppId={this.props.selectedAppId}
                     searchStringForFiltering={this.props.reportData.searchStringForFiltering}
                     pageActions={this.getPageActions(0)}

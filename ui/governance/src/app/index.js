@@ -47,13 +47,3 @@ render((
         </BrowserRouter>
     </Provider>
 ), document.getElementById('content'));
-
-// render((
-//     <Provider store={store}>
-//         <Router>
-//             <Route path={GOVERNANCE_ACCOUNT_ROUTE} component={AppShell}>
-//                <Route path={GOVERNANCE_ACCOUNT_USERS_ROUTE} component={AccountUsers} />
-//             </Route>
-//         </Router>
-//     </Provider>
-// ), document.getElementById('content'));

@@ -21,8 +21,8 @@
         }},
         //Record add button on stage
         addRecordBtnOnStage : {get: function() {
-            browser.element('.layout-stage .pageActions .iconUISturdy-add').waitForVisible();
-            return browser.element('.layout-stage .pageActions .iconUISturdy-add');
+            browser.element('.layout-stage .pageActions .addRecord').waitForVisible();
+            return browser.element('.layout-stage .pageActions .addRecord');
         }},
 
         //edit pencil in report actions tool bar

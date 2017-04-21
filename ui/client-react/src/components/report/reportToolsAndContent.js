@@ -33,7 +33,7 @@ let AddRecordButton = React.createClass({
 
     render() {
         return (
-            <a href="#" className="addNewRecord" onClick={this.props.onClick}><QBicon icon="add" /></a>
+            <a href="#" className="addNewRecord" onClick={this.props.onClick}><QBicon icon="add-new-filled" /></a>
         );
     }
 });
@@ -140,7 +140,7 @@ export const UnconnectedReportToolsAndContent = React.createClass({
 
     getPageActions(maxButtonsBeforeMenu) {
         const actions = [
-            {msg: 'pageActions.addRecord', icon:'add', onClick: this.editNewRecord},
+            {msg: 'pageActions.addRecord', icon:'add-new-filled', onClick: this.editNewRecord},
             {msg: 'pageActions.favorite', icon:'star', disabled: true},
             {msg: 'pageActions.print', icon:'print', disabled: true},
         ];
@@ -344,7 +344,7 @@ export const UnconnectedReportToolsAndContent = React.createClass({
                 this.getPageUsingOffsetMultiplicant(0);
             }
 
-            let {appId, tblId, rptId, reportData:{selections, ...otherReportData}} = this.props;
+            let {appId, tblId, rptId, reportData: {selections, ...otherReportData}} = this.props;
 
             let fields = this.props.fields;
             let primaryKeyName = FieldUtils.getPrimaryKeyFieldName(fields);
@@ -376,25 +376,27 @@ export const UnconnectedReportToolsAndContent = React.createClass({
                                 recordsCount={this.recordsCount}/>;
 
             return (
-                <div className={classes.join(' ')}>
-                    {this.getTableActions()}
-                    <ReportContent appId={this.props.reportData.appId}
-                                   tblId={this.props.reportData.tblId}
-                                   rptId={typeof this.props.reportData.rptId !== "undefined" ? this.props.reportData.rptId : this.props.params.rptId}
-                                   reportData={this.props.reportData}
-                                   appUsers={this.props.appUsers}
-                                   reportHeader={toolbar}
-                                   reportFooter={reportFooter}
-                                   cardViewPagination={cardViewPagination }
-                                   primaryKeyName={primaryKeyName}
-                                   flux={this.getFlux()}
-                                   gridOptions={this.props.gridOptions}
-                                   onAddNewRecord={this.editNewRecord}
-                                   {...this.props}
-                                   // until all sub-components reference store directly, need to explicitly override this.props.fields
-                                   fields={fields}/>
+                <div className={`reportToolsAndContentWrapper${this.props.reportData.loading ? ' isLoading' : ''}`}> {/* This wrapper allows pagination to be aligned with the right of the grid */}
+                    <div className={classes.join(' ')}>
+                        {this.getTableActions()}
+                        <ReportContent appId={this.props.reportData.appId}
+                                       tblId={this.props.reportData.tblId}
+                                       rptId={typeof this.props.reportData.rptId !== "undefined" ? this.props.reportData.rptId : this.props.params.rptId}
+                                       reportData={this.props.reportData}
+                                       appUsers={this.props.appUsers}
+                                       reportHeader={toolbar}
+                                       reportFooter={reportFooter}
+                                       cardViewPagination={cardViewPagination }
+                                       primaryKeyName={primaryKeyName}
+                                       flux={this.getFlux()}
+                                       gridOptions={this.props.gridOptions}
+                                       onAddNewRecord={this.editNewRecord}
+                                       {...this.props}
+                            // until all sub-components reference store directly, need to explicitly override this.props.fields
+                                       fields={fields}/>
 
-                    {!this.props.scrollingReport && <AddRecordButton onClick={this.editNewRecord}/>}
+                        {!this.props.scrollingReport && <AddRecordButton onClick={this.editNewRecord}/>}
+                    </div>
                 </div>
             );
         }

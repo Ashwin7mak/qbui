@@ -20,12 +20,15 @@ $edit-icon-font-size: 18px;
     flex: 1 1 auto;
     overflow: auto;
     display: block;
-    width: 100%;
+    width: auto;
     border-collapse: initial; // needed for sticky column
     color: $default-text-onlight-color;
     -webkit-font-smoothing: antialiased;
     table-layout: fixed;
 
+    // The min height allows the menus that can be opened from the header (sort on column) to be seen
+    // when there are only 1 or two rows. We may need to re-visit this if we start adding content below the grid.
+    min-height: 275px;
 
     .qbTbody {
         background-color: $color-black-100;
@@ -109,6 +112,8 @@ $edit-icon-font-size: 18px;
             flex-grow: 1;
             padding-right: 4px;
             padding-top: 2px;
+
+            white-space: nowrap;
             line-height: $line-height-text-multiline;
             font-size: $font-size-h6;
             font-weight: 400;
@@ -167,15 +172,18 @@ $edit-icon-font-size: 18px;
     }
 
     //== styling for the sticky column cells
-    .qbRow .stickyCell {
-        left: 0;
+    .stickyCell {
         width: 80px;
         max-width: 80px;
-        position: relative;
-        vertical-align: top;
-        background-color: $color-black-100;
     }
 
+    .qbRow .stickyCell {
+        left: 0;
+        position: relative;
+        vertical-align: top;
+        z-index: $zindex-qbGrid-firstOfType-stickyColumn;
+        background-color: $color-black-100;
+    }
 
     //== header row above groups of rows
     .groupHeader .subHeaderCell {
@@ -183,6 +191,17 @@ $edit-icon-font-size: 18px;
         vertical-align: top;
         font-weight: bold;
         border-top: 1px solid $grid-line-color;
+        width: 100vw; // Group headers should always be the width of the page at minimum
+
+        .subHeaderContainer {
+            display: flex;
+            align-items: center;
+        }
+
+        .subHeaderLabel {
+            padding-top: $spacing-tiny;
+            padding-bottom: $spacing-tiny;
+        }
     }
 
     // indentations for nested group header rows - assuming that we can have up to 6 group levels
@@ -239,6 +258,7 @@ $edit-icon-font-size: 18px;
 
         &:last-of-type {
             border-right: 0;
+            width: 100%; // XD wants the last cell in the grid to fill any remaining space in the window
         }
     }
 

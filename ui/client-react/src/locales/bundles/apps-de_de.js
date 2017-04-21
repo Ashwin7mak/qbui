@@ -642,7 +642,10 @@ export default {
             homePageInitialDescription: "Wir haben ein paar Berichte erstellt, um mit deiner neuen Tabelle zu gehen, damit du mit dem Hinzufügen von Datensätzen beginnen kannst",
             homePageAddRecordButton: "Fügen Sie einen Datensatz hinzu",
             homePageStillBuilding: "Noch gebaut  ",
-            homePageCreateAnother: "Erstellen Sie eine andere Tabelle"
+            homePageCreateAnother: "Erstellen Sie eine andere Tabelle",
+
+            noSuggestedIcons: "Es gibt keine vorgeschlagenen Symbole für diesen Tabellennamen",
+            typeForSuggestions: "Bitte geben Sie einen Tabellennamen ein, um Vorschläge zu erhalten"
         },
         iconChooser: {
             searchPlaceholder: "Tabellensymbole suchen ......"
