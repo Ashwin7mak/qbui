@@ -23,6 +23,9 @@ $settings-menu-padding-left: $spacing-xx-small;
                         color: $color-black-700;
                         height: $settings-menu-header-height;
                     }
+                    .heading > a {
+                        cursor: default !important;
+                    }
                     li {
                         padding: 0 $settings-menu-padding-left;
                         &:not(.heading):hover {
