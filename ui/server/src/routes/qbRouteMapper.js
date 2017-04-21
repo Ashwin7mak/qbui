@@ -137,7 +137,7 @@
         var routeToDeleteFunction = {};
         routeToDeleteFunction[routeConsts.RECORD] = deleteSingleRecord;
         routeToDeleteFunction[routeConsts.RECORDS_BULK] = deleteRecordsBulk;
-
+        routeToDeleteFunction[routeConsts.TABLE] = deleteTableComponents;
 
         /*
          * routeToAllFunction maps each route to the proper function associated with the route for all HTTP verb requests
@@ -1133,6 +1133,30 @@
                         res.status(response.statusCode).send(response);
                     } else {
                         res.status(httpConstants.INTERNAL_SERVER_ERROR).send(response);
+                    }
+                }
+            );
+        });
+    }
+
+    function deleteTableComponents(req, res) {
+        let perfLog = perfLogger.getInstance();
+        perfLog.init('Delete table', {req:filterNodeReq(req)});
+
+        processRequest(req, res, function(req, res) {
+            tablesApi.deleteTableComponents(req).then(
+                function(response) {
+                    res.send(response);
+                    logApiSuccess(req, response, perfLog, 'deleteTableComponents');
+                },
+                function(response) {
+                    logApiFailure(req, response, perfLog, 'deleteTableComponents');
+
+                    //  client is waiting for a response..make sure one is always returned
+                    if (response && response.statusCode) {
+                        res.status(response.statusCode).send(response);
+                    } else {
+                        res.status(500).send(response);
                     }
                 }
             );
