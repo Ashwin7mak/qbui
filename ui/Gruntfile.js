@@ -405,25 +405,25 @@ module.exports = function(grunt) {
                 configFile: 'karma.conf.js'
             },
             unit: {
-                // browsers: ["PhantomJS_Desktop"],
-                browsers: ["HeadlessChrome"],
+                browsers: ["PhantomJS_Desktop"],
+                // browsers: ["HeadlessChrome"],
                 singleRun : true
             },
             devunit: {
-                // browsers: ["PhantomJS_Desktop"],
-                browsers: ["HeadlessChrome"],
+                browsers: ["Chrome"],
+                // browsers: ["HeadlessChrome"],
                 singleRun : false
             },
             governance: {
                 configFile: './governance/governance.karma.conf.js',
-                // browsers: ["PhantomJS_Desktop"],
-                browsers: ["HeadlessChrome"],
+                browsers: ["PhantomJS_Desktop"],
+                // browsers: ["HeadlessChrome"],
                 singleRun : true
             },
             reuse: {
                 configFile: './reuse/reuse.karma.conf.js',
-                // browsers: ["PhantomJS_Desktop"],
-                browsers: ["HeadlessChrome"],
+                browsers: ["PhantomJS_Desktop"],
+                // browsers: ["HeadlessChrome"],
                 singleRun : true
             }
         },
