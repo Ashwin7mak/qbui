@@ -12,6 +12,7 @@
     var ReportContentPage = Object.create(e2ePageBase, {
         tableBody: {get: function() {return browser.element('.qbTbody');}},
         reportsToolBar : {get: function() {return browser.element('.reportToolbar');}},
+        addRecordButton : {get: function() {return browser.element('.addRecordButton');}},
         reportFilterSearchBox : {get: function() {
             return this.reportsToolBar.element('.searchInput');
         }},
