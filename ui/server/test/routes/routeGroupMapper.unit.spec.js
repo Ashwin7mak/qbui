@@ -32,7 +32,8 @@ describe('Group Route Mapper Unit Test', function() {
             {message: 'LH_V1, ' + routes.REPORT_META + ' GET', routeGroup: routeGroups.LH_V1, route: routes.REPORT_META, method: 'get', expectedOutput: true},
             {message: 'LH_V1, ' + routes.REPORT_RECORDS_COUNT + ' GET', routeGroup: routeGroups.LH_V1, route: routes.REPORT_RECORDS_COUNT, method: 'get', expectedOutput: true},
             {message: 'LH_V1, ' + routes.TABLE_HOMEPAGE_REPORT + ' GET', routeGroup: routeGroups.LH_V1, route: routes.TABLE_HOMEPAGE_REPORT, method: 'get', expectedOutput: true},
-            {message: 'LH_V1, ' + routes.EXPERIENCE_ENGINE_ALL + ' GET', routeGroup: routeGroups.LH_V1, route: routes.EXPERIENCE_ENGINE_ALL, method: 'get', expectedOutput: true},
+            {message: 'LH_V1, ' + routes.CORE_ENGINE + ' GET', routeGroup: routeGroups.LH_V1, route: routes.CORE_ENGINE, method: 'get', expectedOutput: true},
+            {message: 'LH_V1, ' + routes.EXPERIENCE_ENGINE + ' GET', routeGroup: routeGroups.LH_V1, route: routes.EXPERIENCE_ENGINE, method: 'get', expectedOutput: true},
 
             {message: 'LH_V1, ' + routes.APPS + ' POST', routeGroup: routeGroups.LH_V1, route: routes.APPS, method: 'post', expectedOutput: false},
             {message: 'LH_V1, ' + routes.APP_USERS + ' POST', routeGroup: routeGroups.LH_V1, route: routes.APP_USERS, method: 'post', expectedOutput: false},
@@ -46,7 +47,8 @@ describe('Group Route Mapper Unit Test', function() {
             {message: 'LH_V1, ' + routes.REPORT_META + ' POST', routeGroup: routeGroups.LH_V1, route: routes.REPORT_META, method: 'post', expectedOutput: false},
             {message: 'LH_V1, ' + routes.REPORT_RECORDS_COUNT + ' POST', routeGroup: routeGroups.LH_V1, route: routes.REPORT_RECORDS_COUNT, method: 'post', expectedOutput: false},
             {message: 'LH_V1, ' + routes.TABLE_HOMEPAGE_REPORT + ' POST', routeGroup: routeGroups.LH_V1, route: routes.TABLE_HOMEPAGE_REPORT, method: 'post', expectedOutput: false},
-            {message: 'LH_V1, ' + routes.EXPERIENCE_ENGINE_ALL + ' POST', routeGroup: routeGroups.LH_V1, route: routes.EXPERIENCE_ENGINE_ALL, method: 'post', expectedOutput: false},
+            {message: 'LH_V1, ' + routes.CORE_ENGINE + ' POST', routeGroup: routeGroups.LH_V1, route: routes.CORE_ENGINE, method: 'post', expectedOutput: true},
+            {message: 'LH_V1, ' + routes.EXPERIENCE_ENGINE + ' POST', routeGroup: routeGroups.LH_V1, route: routes.EXPERIENCE_ENGINE, method: 'post', expectedOutput: true},
 
             {message: 'LH_V1, ' + routes.APPS + ' DELETE', routeGroup: routeGroups.LH_V1, route: routes.APPS, method: 'delete', expectedOutput: false},
             {message: 'LH_V1, ' + routes.APP_USERS + ' DELETE', routeGroup: routeGroups.LH_V1, route: routes.APP_USERS, method: 'delete', expectedOutput: false},
@@ -60,7 +62,8 @@ describe('Group Route Mapper Unit Test', function() {
             {message: 'LH_V1, ' + routes.REPORT_META + ' DELETE', routeGroup: routeGroups.LH_V1, route: routes.REPORT_META, method: 'delete', expectedOutput: false},
             {message: 'LH_V1, ' + routes.REPORT_RECORDS_COUNT + ' DELETE', routeGroup: routeGroups.LH_V1, route: routes.REPORT_RECORDS_COUNT, method: 'delete', expectedOutput: false},
             {message: 'LH_V1, ' + routes.TABLE_HOMEPAGE_REPORT + ' DELETE', routeGroup: routeGroups.LH_V1, route: routes.TABLE_HOMEPAGE_REPORT, method: 'delete', expectedOutput: false},
-            {message: 'LH_V1, ' + routes.EXPERIENCE_ENGINE_ALL + ' DELETE', routeGroup: routeGroups.LH_V1, route: routes.EXPERIENCE_ENGINE_ALL, method: 'delete', expectedOutput: false},
+            {message: 'LH_V1, ' + routes.CORE_ENGINE + ' DELETE', routeGroup: routeGroups.LH_V1, route: routes.CORE_ENGINE, method: 'delete', expectedOutput: true},
+            {message: 'LH_V1, ' + routes.EXPERIENCE_ENGINE + ' DELETE', routeGroup: routeGroups.LH_V1, route: routes.EXPERIENCE_ENGINE, method: 'delete', expectedOutput: true},
 
             {message: 'LH_V1, ' + routes.APPS + ' PATCH', routeGroup: routeGroups.LH_V1, route: routes.APPS, method: 'patch', expectedOutput: false},
             {message: 'LH_V1, ' + routes.APP_USERS + ' PATCH', routeGroup: routeGroups.LH_V1, route: routes.APP_USERS, method: 'patch', expectedOutput: false},
@@ -74,7 +77,8 @@ describe('Group Route Mapper Unit Test', function() {
             {message: 'LH_V1, ' + routes.REPORT_META + ' PATCH', routeGroup: routeGroups.LH_V1, route: routes.REPORT_META, method: 'patch', expectedOutput: false},
             {message: 'LH_V1, ' + routes.REPORT_RECORDS_COUNT + ' PATCH', routeGroup: routeGroups.LH_V1, route: routes.REPORT_RECORDS_COUNT, method: 'patch', expectedOutput: false},
             {message: 'LH_V1, ' + routes.TABLE_HOMEPAGE_REPORT + ' PATCH', routeGroup: routeGroups.LH_V1, route: routes.TABLE_HOMEPAGE_REPORT, method: 'patch', expectedOutput: false},
-            {message: 'LH_V1, ' + routes.EXPERIENCE_ENGINE_ALL + ' PATCH', routeGroup: routeGroups.LH_V1, route: routes.EXPERIENCE_ENGINE_ALL, method: 'patch', expectedOutput: false},
+            {message: 'LH_V1, ' + routes.CORE_ENGINE + ' PATCH', routeGroup: routeGroups.LH_V1, route: routes.CORE_ENGINE, method: 'patch', expectedOutput: true},
+            {message: 'LH_V1, ' + routes.EXPERIENCE_ENGINE + ' PATCH', routeGroup: routeGroups.LH_V1, route: routes.EXPERIENCE_ENGINE, method: 'patch', expectedOutput: true},
 
             {message: 'LH_V1, ' + routes.APPS + ' PUT', routeGroup: routeGroups.LH_V1, route: routes.APPS, method: 'put', expectedOutput: false},
             {message: 'LH_V1, ' + routes.APP_USERS + ' PUT', routeGroup: routeGroups.LH_V1, route: routes.APP_USERS, method: 'put', expectedOutput: false},
@@ -88,7 +92,8 @@ describe('Group Route Mapper Unit Test', function() {
             {message: 'LH_V1, ' + routes.REPORT_META + ' PUT', routeGroup: routeGroups.LH_V1, route: routes.REPORT_META, method: 'put', expectedOutput: false},
             {message: 'LH_V1, ' + routes.REPORT_RECORDS_COUNT + ' PUT', routeGroup: routeGroups.LH_V1, route: routes.REPORT_RECORDS_COUNT, method: 'put', expectedOutput: false},
             {message: 'LH_V1, ' + routes.TABLE_HOMEPAGE_REPORT + ' PUT', routeGroup: routeGroups.LH_V1, route: routes.TABLE_HOMEPAGE_REPORT, method: 'put', expectedOutput: false},
-            {message: 'LH_V1, ' + routes.EXPERIENCE_ENGINE_ALL + ' PUT', routeGroup: routeGroups.LH_V1, route: routes.EXPERIENCE_ENGINE_ALL, method: 'put', expectedOutput: false},
+            {message: 'LH_V1, ' + routes.CORE_ENGINE + ' PUT', routeGroup: routeGroups.LH_V1, route: routes.CORE_ENGINE, method: 'put', expectedOutput: false},
+            {message: 'LH_V1, ' + routes.EXPERIENCE_ENGINE + ' PUT', routeGroup: routeGroups.LH_V1, route: routes.EXPERIENCE_ENGINE, method: 'put', expectedOutput: true},
             //DEBUG
             {message: 'DEBUG, ' + routes.APPS + ' GET', routeGroup: routeGroups.DEBUG, route: routes.APPS, method: 'get', expectedOutput: true},
             {message: 'DEBUG, ' + routes.APP_USERS + ' GET', routeGroup: routeGroups.DEBUG, route: routes.APP_USERS, method: 'get', expectedOutput: true},
