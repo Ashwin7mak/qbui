@@ -93,8 +93,9 @@ $edit-icon-font-size: 18px;
         -webkit-font-smoothing: antialiased;
         background-color: $grid-column-header-background-color;
         cursor: default;
+        z-index: $zindex-qbGrid-header-stickyCell;
         vertical-align: top;
-        height: 50px;
+        height: 40px;
 
         .selectRowCheckbox {
             margin-top: 0;
@@ -112,7 +113,7 @@ $edit-icon-font-size: 18px;
     .gridHeaderCell {
         display: flex;
         //min-width: 80px;
-        height: 50px;
+        height: 40px;
 
         position: static;
         border-top: 1px solid $grid-column-header-border-color;
@@ -120,7 +121,7 @@ $edit-icon-font-size: 18px;
         border-bottom: 1px solid $grid-column-header-border-color;
         padding: $grid-header-cell-padding;
         color: $grid-column-header-text-color;
-      //  -webkit-font-smoothing: antialiased;
+        -webkit-font-smoothing: antialiased;
         background-color: $grid-column-header-background-color;
         cursor: default;
         vertical-align: top;
