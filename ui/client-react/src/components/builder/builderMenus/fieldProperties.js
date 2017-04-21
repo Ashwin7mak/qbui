@@ -149,14 +149,20 @@ export class FieldProperties extends Component {
     }
 
     /**
-     *
+     * Find all field properties for a given field type
+     * We know EVERY field type currently has a Name and Required property so generate those no matter what
+     * We also know that we need to display the Title header for field properties so do that too.
+     * @returns {Array}
      */
     findFieldProperties() {
+        let fieldPropContainers = [this.createPropertiesTitle(),
+            this.createNameProperty(this.props.selectedField.name),
+            this.createRequiredProperty(this.props.selectedField.required)];
         if (FieldFormats.getFormatType(this.props.selectedField) === (FieldFormats.TEXT_FORMAT_MULTICHOICE || FieldFormats.NUMBER_FORMAT_MULTICHOICE)) {
             let choices = this.buildMultiChoiceDisplayList(this.props.selectedField.multipleChoice.choices);
-            return (this.createMultiChoiceTextPropertyContainer(Locale.getMessage('fieldPropertyLabels.multiChoice'), choices));
+            fieldPropContainers.push(this.createMultiChoiceTextPropertyContainer(Locale.getMessage('fieldPropertyLabels.multiChoice'), choices));
         }
-        return null;
+        return fieldPropContainers;
     }
 
     /**
@@ -196,9 +202,6 @@ export class FieldProperties extends Component {
         return (
             <SideTrowser pullRight={true} sideMenuContent={
                 <div className="fieldPropertiesContainer">
-                    {this.props.selectedField && this.createPropertiesTitle()}
-                    {this.props.selectedField && this.createNameProperty(this.props.selectedField.name)}
-                    {this.props.selectedField && this.createRequiredProperty(this.props.selectedField.required)}
                     {this.props.selectedField && this.findFieldProperties()}
                 </div>
             }>
