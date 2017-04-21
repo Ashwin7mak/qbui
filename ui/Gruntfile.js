@@ -581,12 +581,12 @@ module.exports = function(grunt) {
                     //    './wdio/tests/reports/sorting/*.e2e.spec.js',
                     //    './wdio/tests/reports/grouping/*.e2e.spec.js'
                     //],
-                    //forms: [
-                    //    './wdio/tests/forms/*.e2e.spec.js'
-                    //],
-                    tables: [
-                        './wdio/tests/tables/*.e2e.spec.js'
+                    forms: [
+                        './wdio/tests/forms/cardViewTests/test.e2e.spec.js'
                     ],
+                    //tables: [
+                    //    './wdio/tests/tables/*.e2e.spec.js'
+                    //],
                     //relationships: [
                     //    './wdio/tests/relationships/*.e2e.spec.js'
                     //]
