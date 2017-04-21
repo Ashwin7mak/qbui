@@ -103,7 +103,7 @@
             var colHeaders = [];
             for (var i = 0; i < this.qbGridColHeaderElList.value.length; i++) {
                 colHeaders.push(this.qbGridColHeaderElList.value[i].getAttribute('innerText').replace(/\w\S*/g,
-                    function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();}));
+                    function(txt) {return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();}));
             }
             return colHeaders;
         }},
