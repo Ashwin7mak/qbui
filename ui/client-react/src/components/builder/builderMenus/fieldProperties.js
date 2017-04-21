@@ -85,6 +85,7 @@ export class FieldProperties extends Component {
             <div className="checkboxPropertyContainer">
                 <CheckBoxFieldValueEditor value={propertyValue}
                                           label={propertyTitle}
+                                          tabIndex={tabIndexConstants.fieldPropsTabIndex}
                                           onChange={(newValue) => this.updateFieldProps(newValue, 'required')}
                 />
             </div>

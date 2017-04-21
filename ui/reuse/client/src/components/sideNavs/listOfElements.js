@@ -126,7 +126,9 @@ class ListOfElements extends Component {
     };
 
     componentDidUpdate = () => {
-        if (this.props.toolPaletteFocus && document.activeElement.tagName !== "INPUT") {
+        if (this.props.toolPaletteFocus &&
+            document.activeElement.classList[0] !== "checkbox" &&
+            document.activeElement.tagName !== "INPUT") {
             this.listOfElementsContainer.focus();
         }
     }
