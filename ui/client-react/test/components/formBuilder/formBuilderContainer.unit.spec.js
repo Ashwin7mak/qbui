@@ -172,7 +172,7 @@ describe('FormBuilderContainer', () => {
     });
 
     describe('keyboard navigation for formBuilder', () => {
-        it('will toggle the children tab indices if space is pressed and the tab indices are not already 0', () => {
+        it('will toggle the children tab indices if space is pressed and the tab indices are not already 4', () => {
             let e = {
                 which: 32,
                 preventDefault() {return;}
@@ -211,7 +211,7 @@ describe('FormBuilderContainer', () => {
             expect(mockActions.toggleFormBuilderChildrenTabIndex).not.toHaveBeenCalled();
         });
 
-        it('enter and space will not toggle the children tab indices if the tabIndex is currently 0', () => {
+        it('enter and space will not toggle the children tab indices if the tabIndex is currently 4', () => {
             let e = {
                 which: 32,
                 preventDefault() {return;}
@@ -219,7 +219,7 @@ describe('FormBuilderContainer', () => {
 
             component = mount(<FormBuilderContainer match={testParamsProp}
                                                     currentForm={currentForm}
-                                                    tabIndex="0"
+                                                    formBuilderChildrenTabIndex="4"
                                                     loadForm={mockActions.loadForm}
                                                     toggleFormBuilderChildrenTabIndex={mockActions.toggleFormBuilderChildrenTabIndex}
                                                     updateForm={mockActions.updateForm} />);
