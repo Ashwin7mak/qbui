@@ -121,7 +121,7 @@ const ReportRoute = React.createClass({
 
     getPageActions(maxButtonsBeforeMenu) {
         const actions = [
-            {msg: 'pageActions.addRecord', icon:'add', className:'addRecord', onClick: this.editNewRecord},
+            {msg: 'pageActions.addRecord', icon:'add-new-filled', className:'addRecord', onClick: this.editNewRecord},
             {msg: 'unimplemented.makeFavorite', icon:'star', disabled: true},
             {msg: 'unimplemented.print', icon:'print', disabled: true},
         ];

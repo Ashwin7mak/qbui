@@ -285,7 +285,7 @@ export const RecordRoute = React.createClass({
 
     getPageActions() {
         const actions = [
-            {msg: 'pageActions.addRecord', icon:'add', className:'addRecord', onClick: this.editNewRecord},
+            {msg: 'pageActions.addRecord', icon:'add-new-filled', className:'addRecord', onClick: this.editNewRecord},
             {msg: 'pageActions.edit', icon:'edit', onClick: this.openRecordForEdit},
             {msg: 'unimplemented.email', icon:'mail', disabled:true},
             {msg: 'unimplemented.print', icon:'print', disabled:true},
