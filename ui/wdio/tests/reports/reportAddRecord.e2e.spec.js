@@ -1,5 +1,5 @@
 /**
- * E2E tests for Adding a Record via Inline 'Save and Add New Row' Button on Reports page.
+ * E2E tests for Adding a Record on Reports page.
  * Created by aagrawal on 10/29/2016
  */
 (function() {
