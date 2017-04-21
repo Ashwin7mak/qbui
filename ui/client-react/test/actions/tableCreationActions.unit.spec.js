@@ -47,14 +47,6 @@ describe('Table Creation actions', () => {
         expect(actions.hideTableCreationDialog()).toEqual({type: types.HIDE_TABLE_CREATION_DIALOG});
     });
 
-    it('should create an action for navigating next', () => {
-        expect(actions.nextTableCreationPage()).toEqual({type: types.NEXT_TABLE_CREATION_PAGE});
-    });
-
-    it('should create an action for navigating previous', () => {
-        expect(actions.previousTableCreationPage()).toEqual({type: types.PREVIOUS_TABLE_CREATION_PAGE});
-    });
-
     it('should create an action for opened icon chooser', () => {
         expect(actions.openIconChooser()).toEqual({type: types.TABLE_ICON_CHOOSER_OPEN, isOpen: true});
     });

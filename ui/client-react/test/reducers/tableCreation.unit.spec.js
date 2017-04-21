@@ -58,24 +58,6 @@ describe('Test table creation reducers', () => {
             expect(state.dialogOpen).toBe(false);
         });
 
-
-        it('return updated page state after next', () => {
-
-            const state = reducer(initialState, {type: types.NEXT_TABLE_CREATION_PAGE});
-            expect(state.pageIndex).toBe(1);
-        });
-
-
-        it('return updated page state after previous', () => {
-            let state = reducer(initialState, {type: types.NEXT_TABLE_CREATION_PAGE});
-            state = reducer(state, {type: types.PREVIOUS_TABLE_CREATION_PAGE});
-            expect(state.pageIndex).toBe(0);
-
-            // doesn't go negative
-            state = reducer(state, {type: types.PREVIOUS_TABLE_CREATION_PAGE});
-            expect(state.pageIndex).toBe(0);
-        });
-
         it('return updated page state icon chooser open', () => {
 
             const state = reducer(initialState, {type: types.TABLE_ICON_CHOOSER_OPEN, isOpen: true});

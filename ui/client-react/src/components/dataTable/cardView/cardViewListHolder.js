@@ -1,5 +1,6 @@
 import React, {PropTypes} from 'react';
 import {I18nMessage} from '../../../utils/i18nMessage';
+import Locale from '../../../locales/locales';
 import Loader  from 'react-loader';
 import Swipeable from 'react-swipeable';
 import Fluxxor from 'fluxxor';
