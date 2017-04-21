@@ -15,11 +15,17 @@ describe('Table properties actions', () => {
         updateTable(appId, tableId, tableInfo) {
             return Promise.resolve({data: 'newTableId'});
         }
+        deleteTable(appId, tableId) {
+            return Promise.resolve({});
+        }
     }
 
     class mockTableFailureService {
         constructor() { }
         updateTable(appId, tableId, tableInfo) {
+            return Promise.reject({response: {status: 500}});
+        }
+        deleteTable(appId, tableId) {
             return Promise.reject({response: {status: 500}});
         }
     }
@@ -30,6 +36,7 @@ describe('Table properties actions', () => {
 
     afterEach(() => {
         TablePropertiesActionsRewireAPI.__ResetDependency__('mockTableService');
+        TablePropertiesActionsRewireAPI.__ResetDependency__('mockTableFailureService');
     });
 
 
@@ -59,6 +66,14 @@ describe('Table properties actions', () => {
             type: types.SET_TABLE_PROPS, property: 'name', value:'newName', validationError: 'badInput', isUserEdit: false
         };
         expect(actions.setTableProperty('name', 'newName', 'badInput', false)).toEqual(expected);
+    });
+
+    it('should create an action for deleted table', () => {
+        expect(actions.tableDeleted()).toEqual({type: types.TABLE_DELETED});
+    });
+
+    it('should create an action for deleting table failed', () => {
+        expect(actions.deletingTableFailed()).toEqual({type: types.DELETING_TABLE_FAILED});
     });
 
     it('updated table', (done) => {
@@ -113,5 +128,40 @@ describe('Table properties actions', () => {
         store.dispatch(actions.loadTableProperties({name: 'name'}));
         expect(store.getActions()).toEqual(expectedActions);
         done();
+    });
+
+    it('deleted table', (done) => {
+
+        const expectedActions = [
+            {type: types.SAVING_TABLE},
+            {type: types.TABLE_DELETED}
+        ];
+        const store = mockStore({});
+
+        return store.dispatch(actions.deleteTable('appId', 'tableId')).then(
+            () => {
+                expect(store.getActions()).toEqual(expectedActions);
+                done();
+            },
+            () => {
+                expect(false).toBe(true);
+                done();
+            });
+    });
+
+    it('fails to delete table', (done) => {
+
+        TablePropertiesActionsRewireAPI.__Rewire__('TableService', mockTableFailureService);
+
+        const store = mockStore({});
+
+        return store.dispatch(actions.deleteTable('appId', 'tableId')).then(
+            () => {
+                expect(false).toBe(true);
+                done();
+            },
+            () => {
+                done();
+            });
     });
 });
