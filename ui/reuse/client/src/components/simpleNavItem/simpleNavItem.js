@@ -1,5 +1,5 @@
 import React, {PropTypes, Component} from 'react';
-import {Link} from 'react-router';
+import {Link} from 'react-router-dom';
 import Icon, {AVAILABLE_ICON_FONTS} from '../icon/icon';
 import Tooltip from '../tooltip/tooltip';
 

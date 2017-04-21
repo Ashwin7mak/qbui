@@ -4,7 +4,7 @@ import Icon, {AVAILABLE_ICON_FONTS} from '../../../../reuse/client/src/component
 import ReportStage from './reportStage';
 import ReportHeader from './reportHeader';
 import IconActions from '../actions/iconActions';
-import {Link} from 'react-router';
+import {Link} from 'react-router-dom';
 import Logger from '../../utils/logger';
 import QueryUtils from '../../utils/queryUtils';
 import NumberUtils from '../../utils/numberUtils';
@@ -100,8 +100,8 @@ const ReportRoute = React.createClass({
         const flux = this.getFlux();
         flux.actions.hideTopNav();
 
-        if (this.props.params) {
-            this.loadReportFromParams(this.props.params);
+        if (this.props.match.params) {
+            this.loadReportFromParams(this.props.match.params);
         }
     },
     getHeader() {
@@ -121,7 +121,7 @@ const ReportRoute = React.createClass({
 
     getPageActions(maxButtonsBeforeMenu) {
         const actions = [
-            {msg: 'pageActions.addRecord', icon:'add', className:'addRecord', onClick: this.editNewRecord},
+            {msg: 'pageActions.addRecord', icon:'add-new-filled', className:'addRecord', onClick: this.editNewRecord},
             {msg: 'unimplemented.makeFavorite', icon:'star', disabled: true},
             {msg: 'unimplemented.print', icon:'print', disabled: true},
         ];
@@ -131,7 +131,7 @@ const ReportRoute = React.createClass({
 
     getStageHeadline() {
         const reportName = this.props.reportData && this.props.reportData.data && this.props.reportData.data.name;
-        const {appId, tblId} = this.props.params;
+        const {appId, tblId} = this.props.match.params;
         const tableLink = `${APP_ROUTE}/${appId}/table/${tblId}`;
         return (
             <div className="reportStageHeadline">
@@ -148,12 +148,12 @@ const ReportRoute = React.createClass({
     },
 
     render() {
-        if (_.isUndefined(this.props.params) ||
-            _.isUndefined(this.props.params.appId) ||
-            _.isUndefined(this.props.params.tblId) ||
-            (_.isUndefined(this.props.params.rptId) && _.isUndefined(this.props.rptId))
+        if (_.isUndefined(this.props.match.params) ||
+            _.isUndefined(this.props.match.params.appId) ||
+            _.isUndefined(this.props.match.params.tblId) ||
+            (_.isUndefined(this.props.match.params.rptId) && _.isUndefined(this.props.rptId))
         ) {
-            logger.info("the necessary params were not specified to reportRoute render params=" + simpleStringify(this.props.params));
+            logger.info("the necessary params were not specified to reportRoute render params=" + simpleStringify(this.props.match.params));
             return null;
         } else {
             return (<div className="reportContainer">
@@ -166,12 +166,12 @@ const ReportRoute = React.createClass({
                 {this.getHeader()}
 
                 <ReportToolsAndContent
-                    params={this.props.params}
+                    params={this.props.match.params}
                     reportData={this.props.reportData}
                     appUsers={this.props.appUsers}
                     pendEdits={this.props.pendEdits}
                     isRowPopUpMenuOpen={this.props.isRowPopUpMenuOpen}
-                    routeParams={this.props.routeParams}
+                    routeParams={this.props.match.params}
                     selectedAppId={this.props.selectedAppId}
                     searchStringForFiltering={this.props.reportData.searchStringForFiltering}
                     pageActions={this.getPageActions(0)}

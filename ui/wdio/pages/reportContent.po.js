@@ -21,8 +21,8 @@
         }},
         //Record add button on stage
         addRecordBtnOnStage : {get: function() {
-            browser.element('.layout-stage .pageActions .iconUISturdy-add').waitForVisible();
-            return browser.element('.layout-stage .pageActions .iconUISturdy-add');
+            browser.element('.layout-stage .pageActions .addRecord').waitForVisible();
+            return browser.element('.layout-stage .pageActions .addRecord');
         }},
 
         //edit pencil in report actions tool bar
@@ -102,7 +102,8 @@
         getReportColumnHeaders: {value: function() {
             var colHeaders = [];
             for (var i = 0; i < this.qbGridColHeaderElList.value.length; i++) {
-                colHeaders.push(this.qbGridColHeaderElList.value[i].getAttribute('innerText'));
+                colHeaders.push(this.qbGridColHeaderElList.value[i].getAttribute('innerText').replace(/\w\S*/g,
+                    function(txt) {return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();}));
             }
             return colHeaders;
         }},
