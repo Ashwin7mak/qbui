@@ -159,7 +159,8 @@ export class FieldProperties extends Component {
         let fieldPropContainers = [this.createPropertiesTitle(),
             this.createNameProperty(this.props.selectedField.name),
             this.createRequiredProperty(this.props.selectedField.required)];
-        if (FieldFormats.getFormatType(this.props.selectedField) === (FieldFormats.TEXT_FORMAT_MULTICHOICE || FieldFormats.NUMBER_FORMAT_MULTICHOICE)) {
+        let formatType = FieldFormats.getFormatType(this.props.selectedField);
+        if (formatType === FieldFormats.TEXT_FORMAT_MULTICHOICE || formatType === FieldFormats.NUMBER_FORMAT_MULTICHOICE) {
             let choices = this.buildMultiChoiceDisplayList(this.props.selectedField.multipleChoice.choices);
             fieldPropContainers.push(this.createMultiChoiceTextPropertyContainer(Locale.getMessage('fieldPropertyLabels.multiChoice'), choices));
         }
@@ -188,8 +189,8 @@ export class FieldProperties extends Component {
         let choices = newValues.split("\n");
         let newChoices = [];
         choices.forEach(function(curChoice) {
-            if (FieldFormats.getFormatType(field) === FieldFormats.NUMBER_FORMAT_MULTICHOICE && Number(curChoice)) {
-                newChoices.push({coercedValue: {value: Number(curChoice)}, displayValue: curChoice});
+            if ((FieldFormats.getFormatType(field) === FieldFormats.NUMBER_FORMAT_MULTICHOICE) && Number(curChoice.replace(/,/g, ""))) {
+                newChoices.push({coercedValue: {value: Number(curChoice.replace(/,/g, ""))}, displayValue: curChoice});
             } else {
                 newChoices.push({coercedValue: {value: curChoice}, displayValue: curChoice});
             }
