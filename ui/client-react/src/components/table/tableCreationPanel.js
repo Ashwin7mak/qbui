@@ -146,7 +146,7 @@ class TableCreationPanel extends React.Component {
         });
 
         // choose a default icon
-        if (_.has(this.props, 'tableInfo.tableIcon.value') && this.props.tableInfo.tableIcon.value) {
+        if (!_.has(this.props, 'tableInfo.tableIcon.value') && this.props.tableInfo.tableIcon.value) {
             this.updateTableProperty('tableIcon', tableIconNames[0], false);
         }
     }
