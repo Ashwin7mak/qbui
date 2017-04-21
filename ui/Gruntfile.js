@@ -44,7 +44,7 @@ module.exports = function(grunt) {
     grunt.log.writeln('NODE_ENV: ' + process.env.NODE_ENV);
 
     // Used as an option for e2e try builds to pass in a custom browser config file
-    var wdioSauceConfig = grunt.option('wdioSauceConfig') || 'wdioSauce.conf.js';
+    var wdioSauceConfig = grunt.option('wdioSauceConfig') || 'wdioAppiumSauce.conf.js';
 
     var sauceDns = grunt.option('sauceDns') || '127.0.0.1';
     var sauceJobName = grunt.option('sauceJobName') || 'e2e_' + currentDateTime;
@@ -576,20 +576,20 @@ module.exports = function(grunt) {
                     './wdio/tests/relationships/relationshipViewChildTable.e2e.spec.js'
                 ],
                 suites: {
-                    reports: [
-                        './wdio/tests/reports/*.e2e.spec.js',
-                        './wdio/tests/reports/sorting/*.e2e.spec.js',
-                        './wdio/tests/reports/grouping/*.e2e.spec.js'
-                    ],
-                    forms: [
-                        './wdio/tests/forms/*.e2e.spec.js'
-                    ],
+                    //reports: [
+                    //    './wdio/tests/reports/*.e2e.spec.js',
+                    //    './wdio/tests/reports/sorting/*.e2e.spec.js',
+                    //    './wdio/tests/reports/grouping/*.e2e.spec.js'
+                    //],
+                    //forms: [
+                    //    './wdio/tests/forms/*.e2e.spec.js'
+                    //],
                     tables: [
                         './wdio/tests/tables/*.e2e.spec.js'
                     ],
-                    relationships: [
-                        './wdio/tests/relationships/*.e2e.spec.js'
-                    ]
+                    //relationships: [
+                    //    './wdio/tests/relationships/*.e2e.spec.js'
+                    //]
                 }
             },
             test: {
