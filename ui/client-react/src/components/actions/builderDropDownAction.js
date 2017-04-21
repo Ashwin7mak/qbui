@@ -34,6 +34,8 @@ let BuilderDropDownAction = React.createClass({
         let isAppView = this.props.selectedApp ? true : false;
         let isTableView = isAppView && this.props.selectedTable ? true : false;
         let isFormView = isTableView && this.props.recId ? true : false;
+        // builder view is equivalent to table
+        let isBuilderView = isAppView && this.props.selectedTable ? true : false;
         let classes = "dropdownToggle globalActionLink";
 
         let dropDown = <Dropdown className={classes} id="nav-right-dropdown" dropup={this.props.position === "left"} >
@@ -52,6 +54,15 @@ let BuilderDropDownAction = React.createClass({
                             <span><I18nMessage message={"settings.tablesHeader"}/></span></a></li>
                         <li><a className="modifyTableSettings" onClick={this.getTableSettingsLink}><I18nMessage message={"settings.tableSettings"}/></a></li>
                     </div> : null}
+
+                    {isBuilderView ?
+                        <div className="configSet currentContext">
+                            <li className="heading"><a><span><I18nMessage message={"settings.reportsHeader"}/></span></a></li>
+                            <li><a className="modifyForm" onClick={this.props.navigateToBuilder}>
+                                <I18nMessage message={"settings.configureReportBuilder"}/></a></li>
+                        </div> : null
+                    }
+
                     {isFormView ?
                     <div className="configSet currentContext">
                         <li className="heading"><a><span><I18nMessage message={"settings.formsHeader"}/></span></a></li>

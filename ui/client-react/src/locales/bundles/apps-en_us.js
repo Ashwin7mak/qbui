@@ -660,6 +660,9 @@ export default {
             formsHeader: "Form",
             tableSettings: 'Table properties & settings',
             configureFormBuilder: 'Modify this form',
+            reportsHeader: 'Report',
+            configureReportBuilder: 'Modify this report'
+
         },
         tableEdit: {
             tableUpdateFailed: "Failed to update table",

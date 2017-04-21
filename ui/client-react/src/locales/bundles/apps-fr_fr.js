@@ -652,6 +652,8 @@ export default {
             formsHeader: "Forme",
             tableSettings: "Propriétés et paramètres de la table",
             configureFormBuilder: 'Modifier ce formulaire',
+            reportsHeader: 'Rapport',
+            configureReportBuilder: 'Modifier ce rapport'
         },
         tableEdit: {
             tableUpdateFailed: "Impossible de mettre à jour le tableau",
