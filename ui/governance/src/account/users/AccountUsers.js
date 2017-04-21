@@ -2,10 +2,8 @@ import React, {Component, PropTypes} from 'react';
 import Loader  from 'react-loader';
 import {connect} from 'react-redux';
 
-import StandardGrid from '../../common/grid/standardGrid';
 import AccountUsersGrid from './grid/AccountUsersGrid';
 import AccountUsersStage from './AccountUsersStage';
-
 
 import * as AccountUsersActions from './AccountUsersActions';
 import * as RequestContextActions from '../../common/requestContext/RequestContextActions';
@@ -21,7 +19,7 @@ class AccountUsers extends Component {
     }
 
     componentDidMount() {
-        this.props.fetchData(this.props.params.accountId);
+        this.props.fetchData(this.props.match.params.accountId);
     }
 
     render() {
@@ -41,13 +39,11 @@ class AccountUsers extends Component {
                 <Loader loaded={!this.props.loading} options={SpinnerConfigurations.LARGE_BREAKPOINT}>
                     <div className="accountUsersContainer">
                         <AccountUsersStage users={this.props.users}/>
-                        <StandardGrid>
-                            <AccountUsersGrid
-                                users={this.props.users}
-                                showAccountColumns={canSeeAccountColumns}
-                                showRealmColumns={canSeeRealmColumns}
-                                />
-                        </StandardGrid>
+                        <AccountUsersGrid
+                            users={this.props.users}
+                            showAccountColumns={canSeeAccountColumns}
+                            showRealmColumns={canSeeRealmColumns}
+                        />
                     </div>
                 </Loader>
             );

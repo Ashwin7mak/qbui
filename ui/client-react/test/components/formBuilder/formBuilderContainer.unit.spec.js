@@ -9,8 +9,8 @@ import {__RewireAPI__ as NewfieldsMenuRewireAPI} from '../../../src/components/f
 import {FieldTokenInMenu} from '../../../src/components/formBuilder/fieldToken/fieldTokenInMenu';
 import Loader from 'react-loader';
 
-const appId = 1;
-const tblId = 2;
+const appId = "1";
+const tblId = "2";
 const formType = 'edit';
 const currentForm = {formData:{loading: false, formType: {}, formMeta: {}}, formBuilderChildrenTabIndex: ["0"], id: 'view'};
 const selectedField = {tabIndex: 0, sectionIndex: 0, columnIndex: 0, rowIndex: 0, elementIndex: 3};
@@ -26,7 +26,7 @@ const mockActions = {
 };
 
 const previousLocation = '/somewhere/over/the/rainbow';
-const testParamsProp = {appId, tblId};
+const testParamsProp = {params: {appId, tblId}};
 const testLocationProp = {query: {formType, previous: previousLocation}};
 
 const FormBuilderMock = React.createClass({
@@ -93,7 +93,7 @@ describe('FormBuilderContainer', () => {
         testCases.forEach(testCase => {
             it(testCase.description, () => {
                 component = shallow(<FormBuilderContainer
-                    params={testParamsProp}
+                    match={testParamsProp}
                     location={{query: {formType: testCase.formType}}}
                     loadForm={mockActions.loadForm}
                 />);
@@ -111,7 +111,7 @@ describe('FormBuilderContainer', () => {
         it('exits form builder', () => {
             spyOn(NavigationUtils, 'goBackToLocationOrTable');
 
-            component = shallow(<FormBuilderContainer params={testParamsProp} location={testLocationProp} redirectRoute={previousLocation} />);
+            component = shallow(<FormBuilderContainer match={testParamsProp} location={testLocationProp} redirectRoute={previousLocation} />);
 
             component.instance().onCancel();
 
@@ -158,7 +158,7 @@ describe('FormBuilderContainer', () => {
 
     describe('saving on FormBuilder', () => {
         it('test saveButton on the formBuilder footer', () => {
-            component = mount(<FormBuilderContainer params={testParamsProp}
+            component = mount(<FormBuilderContainer match={testParamsProp}
                                                     currentForm={currentForm}
                                                     loadForm={mockActions.loadForm}
                                                     updateForm={mockActions.updateForm} />);
@@ -178,7 +178,7 @@ describe('FormBuilderContainer', () => {
                 preventDefault() {return;}
             };
 
-            component = mount(<FormBuilderContainer params={testParamsProp}
+            component = mount(<FormBuilderContainer match={testParamsProp}
                                                     currentForm={currentForm}
                                                     selectedField={selectedField}
                                                     loadForm={mockActions.loadForm}
@@ -198,7 +198,7 @@ describe('FormBuilderContainer', () => {
                 preventDefault() {return;}
             };
 
-            component = mount(<FormBuilderContainer params={testParamsProp}
+            component = mount(<FormBuilderContainer match={testParamsProp}
                                                     currentForm={currentForm}
                                                     loadForm={mockActions.loadForm}
                                                     toggleFormBuilderChildrenTabIndex={mockActions.toggleFormBuilderChildrenTabIndex}
@@ -217,7 +217,7 @@ describe('FormBuilderContainer', () => {
                 preventDefault() {return;}
             };
 
-            component = mount(<FormBuilderContainer params={testParamsProp}
+            component = mount(<FormBuilderContainer match={testParamsProp}
                                                     currentForm={currentForm}
                                                     tabIndex="0"
                                                     loadForm={mockActions.loadForm}
