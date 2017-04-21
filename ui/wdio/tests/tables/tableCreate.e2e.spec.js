@@ -100,13 +100,18 @@
 
             //Step 12 - make sure tableHomePage is visible
             ReportContentPO.addRecordButton.waitForVisible();
-            expect(ReportContentPO.addRecordButton.getAttribute('textContent')).toBe('Add a record');
             //Verify 'Add a Record' button is enabled
             expect(browser.isEnabled('.addRecordButton')).toBeTruthy();
+            //Verify text on the addRecord button
+            expect(ReportContentPO.addRecordButton.getAttribute('textContent')).toBe('Add a record');
+            //Verify a few other elements on tableHomePage
+            expect(browser.element('.h1').getAttribute('textContent')).toBe('Start using your table');
+            expect(browser.element('.createTableLink').getAttribute('textContent')).toBe('Create another table');
+            expect(browser.isEnabled('.createTableLink')).toBeTruthy();
 
             //Step 13 - Load a report for the table and verify report elements
             RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, testApp.id, tableId, 1));
-            browser.element('.noRowsIconLine').waitForVisible();
+            browser.element('.noRowsIcon').waitForVisible();
             expect(browser.element('.recordsCount').getAttribute('textContent')).toBe('0 records');
             expect(browser.element('.noRowsText').getAttribute('textContent')).toBe('There are no records to see right now.');
         });
