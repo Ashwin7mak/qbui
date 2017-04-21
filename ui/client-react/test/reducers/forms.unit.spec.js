@@ -425,7 +425,7 @@ describe('Forms reducer functions', () => {
         });
     });
 
-    describe('toggle tab index', () => {
+    describe('toggle formBuilder children tab index', () => {
         const testFormMeta = 'some meta data';
 
         const actionPayload = {
@@ -442,7 +442,39 @@ describe('Forms reducer functions', () => {
                     ...stateWithViewForm[VIEW],
                     formData: {formMeta: testFormMeta},
                     formBuilderChildrenTabIndex: ['0'],
-                    formFocus: [false]
+                    toolPaletteChildrenTabIndex: ['-1'],
+                    formFocus: [false],
+                    toolPaletteFocus: [false]
+                }
+            });
+        });
+
+        it('returns existing state if there is no current form', () => {
+            expect(reducer(stateWithEditForm, actionPayload)).toEqual(stateWithEditForm);
+        });
+
+    });
+
+    describe('toggle toolPalette children tab index', () => {
+        const testFormMeta = 'some meta data';
+
+        const actionPayload = {
+            id: VIEW,
+            type: types.TOGGLE_TOOL_PALETTE_BUILDER_CHILDREN_TABINDEX,
+            content: {
+                currentTabIndex: '-1',
+            }
+        };
+
+        it('returns a new state with a tabindex toggled', () => {
+            expect(reducer(stateWithViewForm, actionPayload)).toEqual({
+                [VIEW]: {
+                    ...stateWithViewForm[VIEW],
+                    formData: {formMeta: testFormMeta},
+                    formBuilderChildrenTabIndex: ['-1'],
+                    toolPaletteChildrenTabIndex: ['0'],
+                    formFocus: [false],
+                    toolPaletteFocus: [false]
                 }
             });
         });
