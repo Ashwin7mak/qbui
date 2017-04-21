@@ -142,7 +142,7 @@ const routes = [
             {
                 path: `${APP_ROUTE}/:appId/users`,
                 exact: true,
-                component: AppUsersRoute
+                component: withFlux(AppUsersRoute)
             },
             {
                 path: `${APP_ROUTE}/:appId`,
@@ -173,17 +173,17 @@ const routes = [
         ]
     },
     {
-        path: `${SETTINGS_ROUTE}/app/:appId`,
+        path: `${SETTINGS_ROUTE}/app/:appId/(table)?/:tblId?`,
         component: ConnectedSettingsNav,
         routes: [
             {
-                path: `${SETTINGS_ROUTE}/app/:appId/properties`,
-                component: AppPropertiesRoute
-            },
-            {
                 path: `${SETTINGS_ROUTE}/app/:appId/table/:tblId/properties`,
                 exact: true,
-                component: TablePropertiesRoute
+                component: withFlux(TablePropertiesRoute)
+            },
+            {
+                path: `${SETTINGS_ROUTE}/app/:appId/properties`,
+                component: AppPropertiesRoute
             },
             {
                 path: `${SETTINGS_ROUTE}/app/:appId`,
