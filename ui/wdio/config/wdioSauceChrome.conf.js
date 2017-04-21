@@ -18,19 +18,16 @@ var config = {
         //    maxInstances: 4
         //}
         {
-            platform : 'OS X 10.11',
-            browserName     : 'iphone',
-            version: '4.3',
+            browserName: '',
+            appiumVersion: '1.4.16',
+            deviceName: 'iPhone 6',
+            platformVersion: '8.4',
+            platformName: 'iOS',
+            name: 'Sample Test',
+            app: 'https://s3.amazonaws.com/appium/TestApp8.4.app.zip',
             tunnelIdentifier: process.env.ENV_TUNNEL_NAME,
             build           : 'WebdriverIO Jenkins Try Build #' + process.env.BUILD_NUMBER + ' - Git branch: ' + process.env.GIT_UIBRANCH + ' - OSX iPhone Browser',
             tags            : [process.env.SAUCE_JOB_NAME + '_OSX_Chrome', 'try', 'OSX', 'iPhone', process.env.BUILD_NUMBER, process.env.GIT_UIBRANCH],
-            deviceOrientation : 'portrait',
-            // Timeout in seconds for Sauce Labs to wait for another command (bumped this for sleeps in tests)
-            idleTimeout: '180',
-            maxDuration: 10800,
-            // These two values enable parallel testing which will run a spec file per instance
-            shardTestFiles: true,
-            maxInstances: 1
         }
     ]
 };
