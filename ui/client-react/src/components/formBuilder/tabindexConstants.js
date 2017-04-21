@@ -7,7 +7,9 @@
  * In the instance of form builder, the left and right nav are the parent containers for the center form element. If all tabIndices are set to "0" then the left nav
  * gets tabbed first, then the right nav will get tabbed second, because both are the parent container, then the center form will get tabbed.
  *
- * XD Requested that the tab flow goes from left nav, to center form, to right nav. In order to accomplish this, tab order had to be numerically set.
+ * XD Requested that the tab flow goes from left nav, to center form, to right nav. In order to accomplish this, tab order had to be numerically set. If multiple elements
+ * on a page have the same tabIndex numeric value, then they will be tabbed through based on how they are laid out on the page. This is taken advantage of by switching children elements
+ * from "-1" to the same tabIndex numeric value as its parent, allowing the children to then be tabbed.
  *
  * NOTE: It is best to reorder the dom elements on the page, in order to get the desired tabbing flow order by using "0". However, in the case of formBuilder, the left and right nav
  * are dependent on the form being the child element, which knocks it out of the desired flow order.
