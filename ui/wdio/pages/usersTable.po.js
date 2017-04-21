@@ -2,7 +2,7 @@
  * This file uses the Page Object pattern to define the User Management page object for tests
  *
  */
-(function () {
+(function() {
     'use strict';
     // Import the base page object
     var e2ePageBase = requirePO('./e2ePageBase');
@@ -35,11 +35,9 @@
          * Helper function that will get all of the field column headers from the user management report. Returns an array of strings.
          */
         getUserColumnHeaders: {value: function() {
-                var colHeaders = [];
-                for (var i = 0; i < this.userHeaderElList.value.length; i++) {
-                    colHeaders.push(this.userHeaderElList.value[i].getAttribute('innerText'));
-                }
-                return colHeaders;
+            var colHeaders = [];
+            for (var i = 0; i < this.userHeaderElList.value.length; i++) {colHeaders.push(this.userHeaderElList.value[i].getAttribute('innerText'));}
+            return colHeaders;
         }},
     });
 
