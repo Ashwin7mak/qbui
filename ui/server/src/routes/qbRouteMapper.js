@@ -30,6 +30,7 @@
     let accountUsersApi;
     let governanceApi;
 
+    /*eslint no-shadow:0 */
     module.exports = function(config) {
         requestHelper = require('../api/quickbase/requestHelper')(config);
         routeGroup = config.routeGroup;
@@ -157,10 +158,15 @@
             routesConstants.publicEndPoints.forEach(endPoint => {
                 requestFunctions[endPoint.route] = forwardApiRequest;
             });
-            requestFunctions[routes.CORE_ALL] = forwardApiRequest;
-            requestFunctions[routes.EXPERIENCE_ENGINE_ALL] = forwardApiRequest;
-            requestFunctions[routes.SWAGGER_CORE_V2] = forwardApiRequest;
-            requestFunctions[routes.SWAGGER_EE_V2] = forwardApiRequest;
+            //
+            requestFunctions[routes.CORE_ENGINE] = forwardApiRequest;
+            requestFunctions[routes.EXPERIENCE_ENGINE] = forwardApiRequest;
+            requestFunctions[routes.WORKFLOW_ENGINE] = forwardApiRequest;
+            requestFunctions[routes.AUTOMATION_ENGINE] = forwardApiRequest;
+            //
+            requestFunctions[routes.SWAGGER_CORE] = forwardApiRequest;
+            requestFunctions[routes.SWAGGER_EE] = forwardApiRequest;
+            requestFunctions[routes.SWAGGER_WE] = forwardApiRequest;
 
             return requestFunctions;
         }
@@ -264,7 +270,7 @@
     }
 
     /**
-     * Common function to log a consistent api success message and output 
+     * Common function to log a consistent api success message and output
      * optional performance information if a perfLog object is included on
      * the request.
      *
@@ -308,13 +314,13 @@
         let clientEndpoint = false;
         routesConstants.clientEndPoints.some(endPoint => {
             if (endPoint.regEx.test(req.url)) {
-                req.url = endPoint.context + req.url;
+                req.url = req.url.replace(endPoint.route, endPoint.context);
                 clientEndpoint = true;
                 return true;
             }
         });
 
-        // check if route is a public endpoint
+        // check if route is a public endpoint.  prepend the configured context if found
         if (!clientEndpoint) {
             routesConstants.publicEndPoints.some(endPoint => {
                 if (endPoint.regEx.test(req.url)) {
@@ -1195,32 +1201,6 @@
     }
 
     /**
-     * This is the function for proxying to a swagger endpoint on
-     * either core or experience engine.
-     *
-     * @param req
-     * @param res
-     */
-    function fetchSwagger(req, res) {
-        //  ensure the route is enabled
-        if (!isRouteEnabled(req)) {
-            routeTo404(req, res);
-            return;
-        }
-
-        //  log some route info and set the request options
-        log.debug({req: req}, 'Fetch swagger');
-
-        //  experience engine or core
-        let opts = req.url.startsWith(routeConsts.SWAGGER_API_EE) ? requestHelper.setExperienceEngineOptions(req) : requestHelper.setOptions(req);
-        request(opts)
-            .on('error', function(error) {
-                log.error({req:req}, 'API SWAGGER ERROR: ' + JSON.stringify(error));
-            })
-            .pipe(res);
-    }
-
-    /**
      * This is the function for forwarding a request to the core server.  Expectation
      * is that the data in the body of the response is a json structure for all requests.
      *
@@ -1258,54 +1238,6 @@
                 log.error({req:req}, 'API Forward Request error.  Unable to determine route request.');
                 perfLog.log();
             }
-        });
-    }
-
-    /**
-     * This is the function for forwarding a request to the experience engine server.  Expectation
-     * is that the data in the body of the response is a json structure for all requests.
-     *
-     * @param req
-     * @param res
-     */
-    function forwardExperienceEngineApiRequest(req, res) {
-        let perfLog = perfLogger.getInstance();
-        perfLog.init('Forward experience engine API Request', {req:filterNodeReq(req)});
-
-        processRequest(req, res, function(req, res) {
-            var opts = requestHelper.setExperienceEngineOptions(req);
-            request(opts)
-                .on('response', function(response) {
-                    logApiSuccess(req, response, perfLog);
-                })
-                .on('error', function(error) {
-                    logApiFailure(req, error, perfLog);
-                })
-                .pipe(res);
-        });
-    }
-
-    /**
-     * This is the function for forwarding a request to the automation server.  Expectation
-     * is that the data in the body of the response is a json structure for all requests.
-     *
-     * @param req
-     * @param res
-     */
-    function forwardAutomationEngineApiRequest(req, res) {
-        let perfLog = perfLogger.getInstance();
-        perfLog.init('Forward automation engine API Request', {req:filterNodeReq(req)});
-
-        processRequest(req, res, function(req, res) {
-            var opts = requestHelper.setAutomationEngineOptions(req);
-            request(opts)
-                .on('response', function(response) {
-                    logApiSuccess(req, response, perfLog);
-                })
-                .on('error', function(error) {
-                    logApiFailure(req, error, perfLog);
-                })
-                .pipe(res);
         });
     }
 

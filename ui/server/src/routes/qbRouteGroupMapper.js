@@ -5,74 +5,128 @@
  */
 (function() {
     'use strict';
-    var routeGroups = require('./routeGroups'),
-        _ = require('lodash'),
-        constants = require('../../../common/src/constants'),
-        routes = require('./routeConstants').routes;
+
+    let routeGroups = require('./routeGroups');
+    let _ = require('lodash');
+    let constants = require('../../../common/src/constants');
+    let routeConstants = require('./routeConstants');
+
+    let routes = routeConstants.routes;
+    let publicRoutes = routeConstants.publicEndPoints;
 
     /*
-     * routeGroupDisabled maps each enumerated route group to the routes that are disabled for a route/method combination
+     * routeList defines the routes that are enabled for a route/method combination
      */
-    var routeGroupDisabled = {};
+    var routeList = {};
     //  debug
-    routeGroupDisabled[routeGroups.DEBUG] = [
-        {route: routes.APP_USERS, methods: [constants.POST, constants.DELETE, constants.PATCH, constants.PUT]},
-        {route: routes.APPS, methods: [constants.POST, constants.DELETE, constants.PATCH, constants.PUT]},
-        {route: routes.APP_ROLES, methods: [constants.POST, constants.DELETE, constants.PATCH, constants.PUT]}
+    routeList[routeGroups.DEBUG] = [
+        {route: routes.APP_USERS, methods: [constants.GET]},
+        {route: routes.APPS, methods: [constants.GET]},
+        {route: routes.APP_ROLES, methods: [constants.GET]}
     ];
 
-    //  mercury v1
     /**
-     * These routes are disabled in the prod environment. If you are getting an unexpected 404 error in prod you can:
-     * A) Enable that HTTP verb for all routes to that endpoint by modifying the wildcard routes (e.g., TOMCAT_ALL, EXPERIENCE_ENGINE_ALL)
-     * B) Enabled a specific subset of routes by defining the specific route in both routeConstants and qbRouteMapper.
+     * These routes are enabled in the prod environment. If you are getting an unexpected 404 error, you should look
+     * add an entry in this list for the specific route and also add the definition to routeConstants and qbRouteMapper.
      */
-    routeGroupDisabled[routeGroups.LH_V1] = [
-        {route: routes.FEATURE_STATES, methods: [constants.POST, constants.DELETE, constants.PATCH, constants.PUT]},
-        {route: routes.FEATURE_SWITCHES, methods: [constants.POST, constants.DELETE, constants.PATCH, constants.PUT]},
-        {route: routes.FEATURE_SWITCH, methods: [constants.PATCH]},
-        {route: routes.FEATURE_OVERRIDE, methods: [constants.PATCH]},
-        //  app endpoints
-        {route: routes.APPS, methods: [constants.POST, constants.DELETE, constants.PATCH, constants.PUT]},
-        {route: routes.APP_USERS, methods: [constants.POST, constants.DELETE, constants.PATCH, constants.PUT]},
-        // form endpoints
-        {route: routes.FORM_COMPONENTS, methods: [constants.POST, constants.DELETE, constants.PATCH, constants.PUT]},
-        {route: routes.FORM_AND_RECORD_COMPONENTS, methods: [constants.POST, constants.DELETE, constants.PATCH, constants.PUT]},
-        // report endpoints
-        {route: routes.REPORT_RESULTS, methods: [constants.POST, constants.DELETE, constants.PATCH, constants.PUT]},
-        {route: routes.REPORT_INVOKE_RESULTS, methods: [constants.POST, constants.DELETE, constants.PATCH, constants.PUT]},
-        {route: routes.REPORT_META, methods: [constants.POST, constants.DELETE, constants.PATCH, constants.PUT]},
-        {route: routes.REPORT_RECORDS_COUNT, methods: [constants.POST, constants.DELETE, constants.PATCH, constants.PUT]},
-        {route: routes.TABLE_HOMEPAGE_REPORT, methods: [constants.POST, constants.DELETE, constants.PATCH, constants.PUT]},
-        // record endpoints
-        {route: routes.RECORD, methods: [constants.POST, constants.PUT]}, //get, delete and patch allowed
-        {route: routes.RECORDS, methods: [constants.DELETE, constants.PATCH, constants.PUT]}, //get and post allowed
-        {route: routes.RECORDS_BULK, methods: [constants.POST, constants.GET, constants.PATCH, constants.PUT]}, //delete allowed
-        // role endpoints
-        {route: routes.APP_ROLES, methods: [constants.POST, constants.DELETE, constants.PATCH, constants.PUT]},
+    routeList[routeGroups.LH_V1] = [
+        //  For specific custom function routes, provide list of support http verb methods
+        {route: routes.APPS, methods: [constants.GET]},
+        {route: routes.APP_USERS, methods: [constants.GET]},
+        {route: routes.APP_ROLES, methods: [constants.GET]},
 
-        // allow get, post, patch and delete on core
-        {route: routes.CORE_ALL, methods: [constants.PUT]},
-        // allow get on ee
-        {route: routes.EXPERIENCE_ENGINE_ALL, methods: [constants.POST, constants.DELETE, constants.PATCH, constants.PUT]}
+        {route: routes.FEATURE_STATES, methods: [constants.GET]},
+        {route: routes.FEATURE_SWITCH, methods: [constants.PUT]},
+        {route: routes.FEATURE_SWITCHES, methods: [constants.GET, constants.POST]},
+        {route: routes.FEATURE_OVERRIDE, methods: [constants.PUT]},
+        {route: routes.FEATURE_OVERRIDES, methods: [constants.POST]},
+        {route: routes.FEATURE_SWITCHES_BULK, methods: [constants.POST]},
+        {route: routes.FEATURE_OVERRIDES_BULK, methods: [constants.POST]},
+
+        {route: routes.FORM_AND_RECORD_COMPONENTS, methods: [constants.GET]},
+        {route: routes.FORM_COMPONENTS, methods: [constants.GET]},
+
+        {route: routes.RECORD, methods: [constants.DELETE, constants.GET, constants.PATCH]},
+        {route: routes.RECORDS, methods: [constants.GET, constants.POST]},
+        {route: routes.RECORDS_BULK, methods: [constants.DELETE]},
+
+        {route: routes.REPORT_META, methods: [constants.GET]},
+        {route: routes.REPORT_RESULTS, methods: [constants.GET]},
+        {route: routes.REPORT_INVOKE_RESULTS, methods: [constants.GET]},
+        {route: routes.REPORT_RECORDS_COUNT, methods: [constants.GET]},
+
+        {route: routes.FACET_EXPRESSION_PARSE, methods: [constants.GET]},
+        //  don't need to define the log routes as they are explicitly checked in routes.js
+
+        {route: routes.TABLE, methods: [constants.PATCH]},
+        {route: routes.TABLE_COMPONENTS, methods: [constants.POST]},
+        {route: routes.TABLE_HOMEPAGE_REPORT, methods: [constants.GET]},
+
+        {route: routes.REQ_USER, methods: [constants.GET]},
+
+        {route: routes.HEALTH_CHECK, methods: [constants.GET]},
+
+        {route: routes.HEALTH_CHECK, methods: [constants.GET]},
+
+        {route: routes.GOVERNANCE_ACCOUNT_USERS, methods: [constants.GET]},
+        {route: routes.GOVERNANCE_CONTEXT, methods: [constants.GET]},
+
+        {route: routes.SWAGGER_CORE, methods: [constants.GET]},
+        {route: routes.SWAGGER_EE, methods: [constants.GET]},
+        {route: routes.SWAGGER_WE, methods: [constants.GET]},
+
+        // PUT requests are not supported on core
+        {route: routes.CORE_ENGINE, methods: [constants.DELETE, constants.GET, constants.PATCH, constants.POST]},
+
+        //  all http verbs are supported on EE and WE
+        {route: routes.EXPERIENCE_ENGINE, methods: [constants.DELETE, constants.GET, constants.PATCH, constants.POST, constants.PUT]},
+        {route: routes.WORKFLOW_ENGINE, methods: [constants.DELETE, constants.GET, constants.PATCH, constants.POST, constants.PUT]},
+        {route: routes.AUTOMATION_ENGINE, methods: [constants.DELETE, constants.GET, constants.PATCH, constants.POST, constants.PUT]}
     ];
+
+    //  enable the public short-hand endpoints
+    publicRoutes.forEach(publicRoute => {
+        routeList[routeGroups.LH_V1].push({route: publicRoute.route, methods: [constants.DELETE, constants.GET, constants.PATCH, constants.POST, constants.PUT]});
+    });
+
+    /**
+     * Start with a list of disabled http verbs, remove the supported methods and
+     * return a list of methods that are not allowed.
+     *
+     * @param supportedMethods
+     */
+    function getDisabledMethodList(supportedMethods) {
+        let disabledList = [constants.DELETE, constants.GET, constants.PATCH, constants.POST, constants.PUT];
+        supportedMethods.forEach(method => {
+            _.pull(disabledList, method);
+        });
+        return disabledList;
+    }
 
     module.exports = {
         /**
          * For the app environment return all valid routes for this env
+         *
          * @param routeGroup
          * @param route
          * @param method
          * @returns {*}
          */
         routeIsEnabled: function(routeGroup, route, method) {
-            var disabledRoutes = routeGroupDisabled[routeGroup];
 
+            var routeGroupList = routeList[routeGroup];
+
+            //  unless the route is explicitly configured, the route is by default enabled.
             var routeEnabled = true;
 
-            _.forEach(disabledRoutes, function(disabledRoute) {
-                if (route === disabledRoute.route && _.includes(disabledRoute.methods, method.toUpperCase(), 0)) {
-                    routeEnabled = false;
+            // search for the route in the list...will exit the loop once we have a match
+            routeGroupList.some(configuredRoute => {
+                if (configuredRoute.route === route) {
+                    //  is the route enabled for this method request
+                    if (_.includes(getDisabledMethodList(configuredRoute.methods), method.toUpperCase(), 0)) {
+                        routeEnabled = false;
+                    }
+                    return true;
                 }
             });
 

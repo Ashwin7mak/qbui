@@ -109,7 +109,7 @@ describe('Qb Route Mapper Unit Test', function() {
             {message: 'POST request to table components endpoint', request: '/api/v1/apps/1/tables/tableComponents', expectedPath: '/api/api/v1/apps/1/tables/tableComponents', route: routes.TABLE_COMPONENTS, method: routeMapper.fetchPostFunctionForRoute(routes.TABLE_COMPONENTS), expectedDefined: true, httpVerb: 'POST'},
             {message: 'PATCH request to tables endpoint', request: '/api/v1/apps/1/tables/2', expectedPath: '/api/api/v1/apps/1/tables/2', route: routes.TABLE, method: routeMapper.fetchPatchFunctionForRoute(routes.TABLE), expectedDefined: true, httpVerb: 'PATCH'},
 
-            {message: 'GET request to the health check endpoint', request: '/api/v1/health', expectedPath: '/api/api/v1/health', route: routes.HEALTH_CHECK, method: routeMapper.fetchGetFunctionForRoute(routes.HEALTH_CHECK), expectedDefined: true, httpVerb: 'GET'},
+            {message: 'GET request to the health check endpoint', request: '/api/v1/health', expectedPath: '/api/api/v1/health', route: routes.HEALTH_CHECK, method: routeMapper.fetchGetFunctionForRoute(routes.HEALTH_CHECK), expectedDefined: true, httpVerb: 'GET'}
         ];
     }
 
@@ -119,13 +119,13 @@ describe('Qb Route Mapper Unit Test', function() {
             {message: 'POST request to EE api via Experience Engine all', request: '/ee/v1/someUrl', expectedPath: '/ee/v1/someUrl', route: routes.EXPERIENCE_ENGINE_ALL, method: routeMapper.fetchAllFunctionForRoute(routes.EXPERIENCE_ENGINE_ALL), expectedDefined: true, httpVerb: 'POST'},
             {message: 'PATCH request to EE api via Experience Engine all', request: '/ee/v1/someUrl', expectedPath: '/ee/v1/someUrl', route: routes.EXPERIENCE_ENGINE_ALL, method: routeMapper.fetchAllFunctionForRoute(routes.EXPERIENCE_ENGINE_ALL), expectedDefined: true, httpVerb: 'PATCH'},
             {message: 'PUT request to EE api via Experience Engine all', request: '/ee/v1/someUrl', expectedPath: '/ee/v1/someUrl', route: routes.EXPERIENCE_ENGINE_ALL, method: routeMapper.fetchAllFunctionForRoute(routes.EXPERIENCE_ENGINE_ALL), expectedDefined: true, httpVerb: 'PUT'},
-            {message: 'DELETE request to EE api via Experience Engine all', request: '/ee/v1/someUrl', expectedPath: '/ee/v1/someUrl', route: routes.EXPERIENCE_ENGINE_ALL, method: routeMapper.fetchAllFunctionForRoute(routes.EXPERIENCE_ENGINE_ALL), expectedDefined: true, httpVerb: 'DELETE'},
+            {message: 'DELETE request to EE api via Experience Engine all', request: '/ee/v1/someUrl', expectedPath: '/ee/v1/someUrl', route: routes.EXPERIENCE_ENGINE_ALL, method: routeMapper.fetchAllFunctionForRoute(routes.EXPERIENCE_ENGINE_ALL), expectedDefined: true, httpVerb: 'DELETE'}
         ];
     }
 
     function automationModificationProvider()  {
         return [
-            {message: 'GET request to automation engine health check', request: '/we/api/api/v1/health', expectedPath: '/we/api/api/v1/health', route: routes.AUTOMATION_ENGINE_ALL, method: routeMapper.fetchAllFunctionForRoute(routes.AUTOMATION_ENGINE_ALL), expectedDefined: true, httpVerb: 'GET'},
+            {message: 'GET request to automation engine health check', request: '/we/api/api/v1/health', expectedPath: '/we/api/api/v1/health', route: routes.AUTOMATION_ENGINE_ALL, method: routeMapper.fetchAllFunctionForRoute(routes.AUTOMATION_ENGINE_ALL), expectedDefined: true, httpVerb: 'GET'}
         ];
     }
 
@@ -140,7 +140,7 @@ describe('Qb Route Mapper Unit Test', function() {
 
             {message: 'POST request to feature overrides endpoint', request: '/api/v1/admin/featureSwitches/1/overrides', expectedPath: '/api/v1/admin/featureSwitches/1/overrides', route: routes.FEATURE_OVERRIDES, method: routeMapper.fetchPostFunctionForRoute(routes.FEATURE_OVERRIDES), expectedDefined: true, httpVerb: 'POST'},
             {message: 'PUT request to feature overrides endpoint', request: '/api/v1/admin/featureSwitches/1/overrides/1', expectedPath: '/api/v1/admin/featureSwitches/1/overrides/1', route: routes.FEATURE_OVERRIDE, method: routeMapper.fetchPutFunctionForRoute(routes.FEATURE_OVERRIDE), expectedDefined: true, httpVerb: 'PUT'},
-            {message: 'POST request to feature overrides bulk endpoint', request: '/api/v1/admin/featureSwitches/1/overrides/bulk', expectedPath: '/api/v1/admin/featureSwitches/1/overrides/bulk', route: routes.FEATURE_OVERRIDES_BULK, method: routeMapper.fetchPostFunctionForRoute(routes.FEATURE_OVERRIDES_BULK), expectedDefined: true, httpVerb: 'POST'},
+            {message: 'POST request to feature overrides bulk endpoint', request: '/api/v1/admin/featureSwitches/1/overrides/bulk', expectedPath: '/api/v1/admin/featureSwitches/1/overrides/bulk', route: routes.FEATURE_OVERRIDES_BULK, method: routeMapper.fetchPostFunctionForRoute(routes.FEATURE_OVERRIDES_BULK), expectedDefined: true, httpVerb: 'POST'}
 
         ];
     }
@@ -148,7 +148,7 @@ describe('Qb Route Mapper Unit Test', function() {
     function governanceModificationProvider() {
         return [
             {message: 'GET request to governance users endpoint', request: '/api/governance/v1/12345/users', expectedPath: '/api/governance/v1/12345/users', route: routes.GOVERNANCE_ACCOUNT_USERS, method: routeMapper.fetchGetFunctionForRoute(routes.GOVERNANCE_ACCOUNT_USERS), expectedDefined: true, httpVerb: 'GET'},
-            {message: 'GET request to governance context endpoint', request: '/api/governance/v1/context', expectedPath: '/api/governance/v1/context', route: routes.GOVERNANCE_CONTEXT, method: routeMapper.fetchGetFunctionForRoute(routes.GOVERNANCE_CONTEXT), expectedDefined: true, httpVerb: 'GET'},
+            {message: 'GET request to governance context endpoint', request: '/api/governance/v1/context', expectedPath: '/api/governance/v1/context', route: routes.GOVERNANCE_CONTEXT, method: routeMapper.fetchGetFunctionForRoute(routes.GOVERNANCE_CONTEXT), expectedDefined: true, httpVerb: 'GET'}
         ];
     }
 
