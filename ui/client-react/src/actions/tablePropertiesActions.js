@@ -3,6 +3,9 @@ import constants from '../../../common/src/constants';
 import TableService from '../services/tableService';
 import Logger from '../utils/logger';
 import LogLevel from '../utils/logLevels';
+import AppHistory from '../globals/appHistory';
+import UrlUtils from '../utils/urlUtils';
+import {NotificationManager} from 'react-notifications';
 
 /**
  * Actions related to table properties and settings page
@@ -141,9 +144,13 @@ export const deleteTable = (appId, tableId) => {
             const tableService = new TableService();
             tableService.deleteTable(appId, tableId).then((response) => {
                 dispatch(tableDeleted());
+                // navigate to app home page
+                let link = UrlUtils.getAppHomePageLink(appId);
+                AppHistory.history.push(link);
                 resolve(response);
             }).catch(error => {
                 dispatch(deletingTableFailed(error));
+                NotificationManager.error(Locale.getMessage('tableEdit.tableDeleteFailed'), Locale.getMessage('failed'));
                 if (error.response) {
                     if (error.response.status === constants.HttpStatusCode.FORBIDDEN) {
                         logger.parseAndLogError(LogLevel.WARN, error.response, 'tableService.deleteTable:');

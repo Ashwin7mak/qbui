@@ -88,7 +88,7 @@ export const AppHomePageRoute = React.createClass({
         flux.actions.doneRoute();
         if (this.props.notifyTableDeleted) {
             NotificationManager.success(Locale.getMessage('tableEdit.tableDeleted', {tableName: this.props.tableJustDeleted}), Locale.getMessage('success'));
-            this.props.resetTableDeleteNotification(false);
+            this.props.resetTableDeleteNotification();
         }
     },
     // Triggered when properties change
@@ -140,12 +140,8 @@ const mapStateToProps = (state) => {
     };
 };
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        resetTableDeleteNotification: (notify) => {
-            dispatch(notifyTableDeleted(notify));
-        }
-    };
+const mapDispatchToProps = {
+    resetTableDeleteNotification: notifyTableDeleted(false)
 };
 
 export default connect(

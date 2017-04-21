@@ -116,7 +116,8 @@ const tableProperties = (
     case types.TABLE_DELETED: {
         return {
             ...state,
-            savingTable: false
+            savingTable: false,
+            notifyTableDeleted: true
         };
     }
     case types.DELETING_TABLE_FAILED: {

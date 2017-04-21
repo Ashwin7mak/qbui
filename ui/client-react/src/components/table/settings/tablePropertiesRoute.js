@@ -1,6 +1,7 @@
 import React from 'react';
 import {Button} from 'react-bootstrap';
 import {connect} from 'react-redux';
+import Loader from 'react-loader';
 import {NotificationManager} from 'react-notifications';
 import Locale from '../../../locales/locales';
 import Stage from '../../../../../reuse/client/src/components/stage/stage';
@@ -9,10 +10,9 @@ import {I18nMessage} from '../../../utils/i18nMessage';
 import Icon, {AVAILABLE_ICON_FONTS} from '../../../../../reuse/client/src/components/icon/icon.js';
 import TableCreationPanel from '../tableCreationPanel';
 import QBModal from '../../qbModal/qbModal';
-import {updateTable, loadTableProperties, setTableProperty, openIconChooser, closeIconChooser, setEditingProperty, resetEditedTableProperties, deleteTable, notifyTableDeleted} from '../../../actions/tablePropertiesActions';
-import UrlUtils from '../../../utils/urlUtils';
+import {updateTable, loadTableProperties, setTableProperty, openIconChooser, closeIconChooser, setEditingProperty, resetEditedTableProperties, deleteTable} from '../../../actions/tablePropertiesActions';
 import './tableProperties.scss';
-import AppHistory from '../../../globals/appHistory';
+
 
 
 export const TablePropertiesRoute = React.createClass({
@@ -72,7 +72,7 @@ export const TablePropertiesRoute = React.createClass({
                 primaryButtonDisabled={!this.state.allowDelete}
                 leftButtonName={Locale.getMessage('selection.dontDelete')}
                 leftButtonOnClick={this.cancelTableDelete}
-                title={Locale.getMessage('tableEdit.deleteThisTable', {tableName: this.props.table.name})}
+                title={Locale.getMessage('tableEdit.deleteThisTable', {tableName: this.props.table ? this.props.table.name : ""})}
                 bodyMessage={msg}
                 type="alert"/>);
     },
@@ -83,16 +83,7 @@ export const TablePropertiesRoute = React.createClass({
         this.setState({confirmDeletesDialogOpen: false});
     },
     handleTableDelete() {
-        this.props.deleteTable(this.props.app.id, this.props.table.id).then(
-            (response) => {
-                this.props.notifyTableDeleted(true);
-                // navigate to app home page
-                let link = UrlUtils.getAppHomePageLink(this.props.app.id);
-                AppHistory.history.push(link);
-            },
-            (error) => {
-                NotificationManager.error(Locale.getMessage('tableEdit.tableDeleteFailed'), Locale.getMessage('failed'));
-            });
+        this.props.deleteTable(this.props.app.id, this.props.table.id);
     },
     updateTableProperties(appId, tableId, tableInfo) {
         this.props.updateTable(appId, tableId, tableInfo).then(
@@ -117,20 +108,12 @@ export const TablePropertiesRoute = React.createClass({
     },
 
     render() {
-        if (_.isUndefined(this.props.app) ||
-            _.isUndefined(this.props.table) ||
-            _.isUndefined(this.props.tableProperties) ||
-            _.isNull(this.props.tableProperties.tableInfo)
-        ) {
-            return null;
-        } else {
-            let isDirty = this.props.isDirty ? true : false;
-            let buttonsClasses = "tableInfoButtons " + (isDirty ? "open" : "closed");
-            return (<div>
-                <Stage stageHeadline={this.getStageHeadline()} pageActions={this.getPageActions(5)}>
-                    <div className="tableProperties-content"></div>
-                </Stage>
-
+        let loaded = !(_.isUndefined(this.props.app) || _.isUndefined(this.props.table) || _.isUndefined(this.props.tableProperties) || _.isNull(this.props.tableProperties.tableInfo));
+        let isDirty = this.props.isDirty ? true : false;
+        let buttonsClasses = "tableInfoButtons " + (isDirty ? "open" : "closed");
+        return <Loader loaded={loaded}>
+            <div>
+                <Stage stageHeadline={this.getStageHeadline()} pageActions={this.getPageActions(5)}></Stage>
                 <div className="tableInfoPanel">
                     <TableCreationPanel tableInfo={this.props.tableProperties.tableInfo}
                                         iconChooserOpen={this.props.tableProperties.iconChooserOpen}
@@ -150,10 +133,9 @@ export const TablePropertiesRoute = React.createClass({
                     </div>
                 </div>
                 {this.getConfirmDialog()}
-            </div>);
-        }
+            </div>
+        </Loader>;
     }
-
 });
 
 const mapStateToProps = (state) => {
@@ -163,36 +145,8 @@ const mapStateToProps = (state) => {
     };
 };
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        updateTable: (appId, tableId, tableInfo) => {
-            return dispatch(updateTable(appId, tableId, tableInfo));
-        },
-        loadTableProperties: (tableInfo) => {
-            dispatch(loadTableProperties(tableInfo));
-        },
-        setTableProperty: (property, value, validationError, isUserEdit) => {
-            dispatch(setTableProperty(property, value, validationError, isUserEdit));
-        },
-        openIconChooser: () => {
-            dispatch(openIconChooser());
-        },
-        closeIconChooser: () => {
-            dispatch(closeIconChooser());
-        },
-        setEditingProperty: (editing) => {
-            dispatch(setEditingProperty(editing));
-        },
-        resetEditedTableProperties: () => {
-            dispatch(resetEditedTableProperties());
-        },
-        deleteTable: (appId, tableId) => {
-            return dispatch(deleteTable(appId, tableId));
-        },
-        notifyTableDeleted: (notify) => {
-            dispatch(notifyTableDeleted(notify));
-        }
-    };
+const mapDispatchToProps = {
+    updateTable, loadTableProperties, setTableProperty, openIconChooser, closeIconChooser, setEditingProperty, resetEditedTableProperties, deleteTable
 };
 
 export default connect(

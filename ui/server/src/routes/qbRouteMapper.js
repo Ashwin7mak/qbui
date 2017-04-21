@@ -1117,7 +1117,7 @@
 
     function deleteTableComponents(req, res) {
         let perfLog = perfLogger.getInstance();
-        perfLog.init('Update table', {req:filterNodeReq(req)});
+        perfLog.init('Delete table', {req:filterNodeReq(req)});
 
         processRequest(req, res, function(req, res) {
             tablesApi.deleteTableComponents(req).then(
