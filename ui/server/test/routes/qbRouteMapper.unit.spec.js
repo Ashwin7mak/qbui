@@ -116,6 +116,7 @@ describe('Qb Route Mapper Unit Test', function() {
             {message: 'POST request to table components endpoint', request: '/api/v1/apps/1/tables/tableComponents', expectedPath: '/api/api/v1/apps/1/tables/tableComponents', route: routeConsts.TABLE_COMPONENTS, method: routeMapper.fetchPostFunctionForRoute(routeConsts.TABLE_COMPONENTS), expectedDefined: true, httpVerb: 'POST'},
             {message: 'PATCH request to tables endpoint', request: '/api/v1/apps/1/tables/2', expectedPath: '/api/api/v1/apps/1/tables/2', route: routeConsts.TABLE, method: routeMapper.fetchPatchFunctionForRoute(routeConsts.TABLE), expectedDefined: true, httpVerb: 'PATCH'},
 
+            {message: 'GET request to Node/Express health check endpoint', request: '/api/v1/qbuiHealth', expectedPath: '/api/v1/qbuiHealth', route: routeConsts.QBUI_HEALTH_CHECK, method: routeMapper.fetchGetFunctionForRoute(routeConsts.QBUI_HEALTH_CHECK), expectedDefined: true, httpVerb: 'GET'},
             {message: 'GET request to the health check endpoint', request: '/api/v1/health', expectedPath: '/api/api/v1/health', route: routeConsts.HEALTH_CHECK, method: routeMapper.fetchGetFunctionForRoute(routeConsts.HEALTH_CHECK), expectedDefined: true, httpVerb: 'GET'},
             {message: 'GET request to the swagger api endpoint', request: '/api/v1/someEndpoint', expectedPath: '/api/v1/someEndpoint', route: routeConsts.SWAGGER_API, method: routeMapper.fetchGetFunctionForRoute(routeConsts.SWAGGER_API), expectedDefined: true, httpVerb: 'GET'}
         ];
