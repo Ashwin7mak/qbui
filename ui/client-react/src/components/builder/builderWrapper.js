@@ -53,7 +53,7 @@ export const BuilderWrapper = React.createClass({
                 <TopNav
                     onNavClick={this.props.toggleNav}
                     globalActions={this.getTopGlobalActions()}
-                    tabIndex={tabIndexConstants.formBuilderToggleNavButton}
+                    tabIndex={tabIndexConstants.formBuilderToggleNavButtonTabIndex}
                 />
 
                 <div className="builderWrapperBody">
