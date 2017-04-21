@@ -7,8 +7,11 @@
  */
 module.exports = config => {
     return {
-        getShallowHealthCheck(_request = null) {
-            return Promise.resolve({message: 'Shallow health check succeeded. QBUI is accepting requests.'});
+        getShallowHealthCheck() {
+            return Promise.resolve({
+                systemDate: new Date(),
+                message: 'Shallow health check succeeded. QBUI is accepting requests.'
+            });
         }
     };
 };

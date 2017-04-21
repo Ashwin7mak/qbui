@@ -56,7 +56,8 @@
          */
         var routeToGetFunction = {};
 
-        routeToGetFunction[routeConsts.HEALTH_CHECK] = getHealthCheck;
+        routeToGetFunction[routeConsts.QBUI_HEALTH_CHECK] = getHealthCheck;
+        routeToGetFunction[routeConsts.HEALTH_CHECK] = forwardApiRequest;
 
         routeToGetFunction[routeConsts.FEATURE_SWITCHES] = getFeatureSwitches;
         routeToGetFunction[routeConsts.FEATURE_STATES] = getFeatureStates;
@@ -292,7 +293,7 @@
      * @param res
      */
     function getHealthCheck(req, res) {
-        healthApi.getShallowHealthCheck(req).then(
+        healthApi.getShallowHealthCheck().then(
             success => res.send(success),
             error => {
                 if (error && error.statusCode) {

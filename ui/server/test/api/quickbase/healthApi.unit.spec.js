@@ -18,7 +18,7 @@ describe('HealthApi', () => {
             return healthApi.getShallowHealthCheck().then(
                 response => {
                     // Only checking that it has a message. It doesn't matter what that message is for this particular api.
-                    assert.deepEqual(Object.keys(response), ['message']);
+                    assert.deepEqual(Object.keys(response), ['systemDate', 'message']);
                     return response;
                 },
                 error => {
