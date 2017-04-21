@@ -178,7 +178,7 @@ export const FormBuilderContainer = React.createClass({
     updateChildrenTabIndex(e) {
         let childrenTabIndex = this.props.tabIndex;
 
-        if ((e.which === ENTER_KEY || e.which === SPACE_KEY) && childrenTabIndex !== "0") {
+        if ((e.which === ENTER_KEY || e.which === SPACE_KEY) && childrenTabIndex !== tabIndexConstants.formTabIndex) {
             this.props.toggleFormBuilderChildrenTabIndex(this.props.currentForm.id, childrenTabIndex);
             e.preventDefault();
         }
