@@ -218,7 +218,7 @@ export const FormBuilderContainer = React.createClass({
             this.onCancel();
         }
     },
-    
+
     toggleToolPaletteChildrenTabIndex(e) {
         //Test, will need to update to actually changing only tool palette children
         let formId = this.props.currentForm.id;
@@ -243,8 +243,6 @@ export const FormBuilderContainer = React.createClass({
                                        {key: 'shift+up', callback: () => {this.keyboardMoveFieldUp(); return false;}},
                                        {key: 'shift+down', callback: () => {this.keyboardMoveFieldDown(); return false;}},
                                        {key: 'backspace', callback: () => {this.removeField(); return false;}},
-                                       {key: 'up', callback: () => {this.upArrowKeysShouldTab(); return false;}},
-                                       {key: 'down', callback: () => {this.downArrowKeysShouldTab(); return false;}}
                                    ]}
                                    shortcutBindingsPreventDefault={[
                                        {key: 'esc', callback: () => {this.escapeCurrentContext(); return false;}},
