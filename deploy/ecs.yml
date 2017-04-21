@@ -5,10 +5,7 @@ Parameters:
   VPCStackName:
     Type: String
     Default: general-vpc
-  SpecificPath:
-    Type: String
-    Default: "/qbase/*"
-  DefaultPath:
+  Path:
     Type: String
     Default: "/*"
   SwimlaneID:
@@ -81,24 +78,11 @@ Resources:
     Properties:
       ListenerArn:
         "Fn::ImportValue": !Sub "${SwimlaneID}-ecs-ALBListenerARN"
-      Priority: 3
-      Conditions:
-        - Field: path-pattern
-          Values:
-            - !Ref SpecificPath
-      Actions:
-        - TargetGroupArn: !Ref TargetGroup
-          Type: forward
-  ListenerRule:
-    Type: AWS::ElasticLoadBalancingV2::ListenerRule
-    Properties:
-      ListenerArn:
-        "Fn::ImportValue": !Sub "${SwimlaneID}-ecs-ALBListenerARN"
       Priority: 200
       Conditions:
         - Field: path-pattern
           Values:
-            - !Ref DefaultPath
+            - !Ref Path
       Actions:
         - TargetGroupArn: !Ref TargetGroup
           Type: forward
