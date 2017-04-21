@@ -1,4 +1,5 @@
 import * as types from '../actions/types';
+import * as tabIndexConstants from '../../../client-react/src/components/formBuilder/tabindexConstants';
 import _ from 'lodash';
 import MoveFieldHelper from '../components/formBuilder/moveFieldHelper';
 
@@ -343,12 +344,12 @@ const forms = (
             return state;
         }
 
-        let tabIndex = action.content.currentTabIndex === undefined || action.content.currentTabIndex === "-1" ? "0" : "-1";
+        let formTabIndex = action.content.currentTabIndex === undefined || action.content.currentTabIndex === "-1" ? tabIndexConstants.formTabIndex : "-1";
         let formFocus = false;
 
         if (action.content.currentTabIndex === undefined) {
             formFocus = false;
-        } else if (tabIndex === "-1") {
+        } else if (formTabIndex === "-1") {
             formFocus = true;
         }
 
@@ -359,7 +360,7 @@ const forms = (
             updatedForm.toolPaletteFocus = [];
         }
 
-        updatedForm.formBuilderChildrenTabIndex[0] = tabIndex;
+        updatedForm.formBuilderChildrenTabIndex[0] = formTabIndex;
         updatedForm.toolPaletteChildrenTabIndex[0] = "-1";
         updatedForm.formFocus[0] = formFocus;
         updatedForm.toolPaletteFocus[0] = false;
@@ -374,11 +375,11 @@ const forms = (
         }
 
         let toolPaletteFocus = false;
-        let tabIndex = action.content.currentTabIndex === undefined || action.content.currentTabIndex === "-1" ? "0" : "-1";
+        let toolPaletteTabIndex = action.content.currentTabIndex === undefined || action.content.currentTabIndex === "-1" ? tabIndexConstants.toolPaletteTabIndex : "-1";
 
         if (action.content.currentTabIndex === undefined) {
             toolPaletteFocus = false;
-        } else if (tabIndex === "-1") {
+        } else if (toolPaletteTabIndex === "-1") {
             toolPaletteFocus = true;
         }
 
@@ -389,7 +390,7 @@ const forms = (
             updatedForm.toolPaletteFocus = [];
         }
 
-        updatedForm.toolPaletteChildrenTabIndex[0] = tabIndex;
+        updatedForm.toolPaletteChildrenTabIndex[0] = toolPaletteTabIndex;
         updatedForm.formBuilderChildrenTabIndex[0] = "-1";
         updatedForm.formFocus[0] = false;
         updatedForm.toolPaletteFocus[0] = toolPaletteFocus;

@@ -2,7 +2,6 @@ import React, {PropTypes, Component} from 'react';
 import _ from 'lodash';
 import FlipMove from 'react-flip-move';
 import Locale from '../../locales/locale';
-
 // IMPORT FROM CLIENT REACT
 import SearchBox from '../../../../../client-react/src/components/search/searchBox';
 import './listOfElements.scss';
@@ -135,7 +134,7 @@ class ListOfElements extends Component {
     render() {
         return (
             <div className={`listOfElementsContainer ${this.props.isCollapsed ? 'listOfElementsCollapsed' : ''}`}
-                 tabIndex="0"
+                 tabIndex={this.props.toolPaletteTabIndex}
                  onKeyDown={this.props.toggleToolPaletteChildrenTabIndex}
                  ref={(element) => {this.listOfElementsContainer = element;}}
                  role="button">
@@ -172,6 +171,11 @@ ListOfElements.propTypes = {
      * Tokens are being passed in as a renderer to allow this component to be reusable
      * */
     renderer: PropTypes.func,
+
+    /**
+     * tabIndex for listOfElements
+     * */
+    toolPaletteTabIndex: PropTypes.string,
 
     /**
      * A list of grouped elements to be displayed in the menu. */

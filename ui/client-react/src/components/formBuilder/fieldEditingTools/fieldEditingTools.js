@@ -10,7 +10,7 @@ import {ENTER_KEY, SPACE_KEY} from "../../../../../reuse/client/src/components/k
 import _ from "lodash";
 import {selectFieldOnForm, removeFieldFromForm, deselectField} from "../../../actions/formActions";
 import {CONTEXT} from "../../../actions/context";
-
+import * as tabIndexConstants from '../tabindexConstants';
 import "./fieldEditingTools.scss";
 
 /**
@@ -71,8 +71,8 @@ export class FieldEditingTools extends Component {
             return null;
         }
 
-        if (this.isFieldSelected() && this.props.tabIndex === "0") {
-            tabIndex = '0';
+        if (this.isFieldSelected() && this.props.tabIndex === tabIndexConstants.formTabIndex) {
+            tabIndex = tabIndexConstants.formTabIndex;
         } else {
             tabIndex = '-1';
         }

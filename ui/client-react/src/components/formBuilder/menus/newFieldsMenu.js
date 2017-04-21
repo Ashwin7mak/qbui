@@ -3,8 +3,9 @@ import {supportedNewFieldTypesWithProperties} from '../newFieldTypes';
 import ListOfElements from '../../../../../reuse/client/src/components/sideNavs/listOfElements';
 import FieldTokenInMenu from '../fieldToken/fieldTokenInMenu';
 
-const NewFieldsMenu = ({isCollapsed, isOpen, toggleToolPaletteChildrenTabIndex, toolPaletteChildrenTabIndex, toolPaletteFocus}) => (
+const NewFieldsMenu = ({isCollapsed, isOpen, toggleToolPaletteChildrenTabIndex, toolPaletteChildrenTabIndex, toolPaletteFocus, toolPaletteTabIndex}) => (
     <ListOfElements
+        toolPaletteTabIndex={toolPaletteTabIndex}
         toolPaletteChildrenTabIndex={toolPaletteChildrenTabIndex}
         toggleToolPaletteChildrenTabIndex={toggleToolPaletteChildrenTabIndex}
         toolPaletteFocus={toolPaletteFocus}
@@ -26,12 +27,16 @@ NewFieldsMenu.propTypes = {
     isOpen: PropTypes.bool,
 
     /**
-     * Toggles tool Palette children*/
-    toggleTooPaletteChildrenTabIndex: PropTypes.func,
+     * Sets the tabIndex for the listOfElement tab*/
+    toolPaletteTabIndex: PropTypes.string,
+
+    /**
+     * Sets the tabIndex for the listOfElement tab*/
+    toolPaletteChildrenTabIndex: PropTypes.string,
 
     /**
      * Toggles tool Palette children*/
-    toolPaletteChildrenTabIndex: PropTypes.string,
+    toggleToolPaletteChildrenTabIndex: PropTypes.func,
 
     /**
      * Focus for palette for keybaord nav*/

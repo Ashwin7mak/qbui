@@ -20,6 +20,7 @@ import PageTitle from '../pageTitle/pageTitle';
 import {getFormByContext, getFormRedirectRoute} from '../../reducers/forms';
 import {CONTEXT} from '../../actions/context';
 import {ENTER_KEY, SPACE_KEY} from '../../../../reuse/client/src/components/keyboardShortcuts/keyCodeConstants';
+import * as tabIndexConstants from '../formBuilder/tabindexConstants';
 import KeyboardShortcuts from '../../../../reuse/client/src/components/keyboardShortcuts/keyboardShortcuts';
 import _ from 'lodash';
 import NotificationManager from '../../../../reuse/client/src/scripts/notificationManager';
@@ -152,8 +153,8 @@ export const FormBuilderContainer = React.createClass({
     getRightAlignedButtons() {
         return (
             <div>
-                <Button bsStyle="primary" onClick={this.onCancel} className="cancelFormButton"><I18nMessage message="nav.cancel"/></Button>
-                <Button bsStyle="primary" onClick={this.saveClicked} className="saveFormButton"><I18nMessage message="nav.save"/></Button>
+                <Button tabIndex={tabIndexConstants.cancelButtonTabIndex} bsStyle="primary" onClick={this.onCancel} className="cancelFormButton"><I18nMessage message="nav.cancel"/></Button>
+                <Button tabIndex={tabIndexConstants.saveButtonTabIndex} bsStyle="primary" onClick={this.saveClicked} className="saveFormButton"><I18nMessage message="nav.save"/></Button>
             </div>
         );
     },
@@ -208,10 +209,10 @@ export const FormBuilderContainer = React.createClass({
         let childrenTabIndex = this.props.tabIndex;
         let selectedField = this.props.selectedField;
         let formId = this.props.currentForm.id;
-        if (this.props.tabIndex === "0") {
+        if (this.props.tabIndex === tabIndexConstants.formTabIndex) {
             this.props.toggleFormBuilderChildrenTabIndex(formId, childrenTabIndex);
-        } else if (this.props.toolPaletteChildrenTabIndex === "0") {
-            this.props.toggleToolPaletteChildrenTabIndex(formId, "0");
+        } else if (this.props.toolPaletteChildrenTabIndex === tabIndexConstants.toolPaletteTabIndex) {
+            this.props.toggleToolPaletteChildrenTabIndex(formId, tabIndexConstants.toolPaletteTabIndex);
         } else if (selectedField) {
             this.deselectField();
         } else {

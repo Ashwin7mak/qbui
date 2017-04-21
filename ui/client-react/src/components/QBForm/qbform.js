@@ -11,6 +11,7 @@ import UserFieldValueRenderer from '../fields/userFieldValueRenderer.js';
 import DragAndDropField from '../formBuilder/dragAndDropField';
 import RelatedChildReport from './relatedChildReport';
 import FlipMove from 'react-flip-move';
+import * as tabIndexConstants from '../formBuilder/tabindexConstants';
 
 import * as FieldsReducer from '../../reducers/fields';
 
@@ -536,7 +537,7 @@ export const QBForm = React.createClass({
     wrapFormContent(formContent) {
         if (this.props.editingForm) {
             return (
-                <form ref={(editForm) => {formBuilderEditForm = editForm;}} className="editForm" tabIndex="0" role="button" onKeyDown={this.props.formBuilderUpdateChildrenTabIndex}>
+                <form ref={(editForm) => {formBuilderEditForm = editForm;}} className="editForm" tabIndex={tabIndexConstants.formTabIndex} role="button" onKeyDown={this.props.formBuilderUpdateChildrenTabIndex}>
                     {formContent}
                 </form>
             );

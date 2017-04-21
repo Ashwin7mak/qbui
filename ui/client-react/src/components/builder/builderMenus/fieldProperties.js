@@ -7,6 +7,7 @@ import {updateField} from '../../../actions/fieldsActions';
 import {getSelectedFormElement} from '../../../reducers/forms';
 import {getField} from '../../../reducers/fields';
 import SideTrowser from '../../../../../reuse/client/src/components/sideTrowserBase/sideTrowserBase';
+import * as tabIndexConstants from '../../formBuilder/tabindexConstants';
 
 import './fieldProperties.scss';
 
@@ -63,7 +64,7 @@ export class FieldProperties extends Component {
             <div className="fieldPropertyContainer">
                 <div className="textPropertyTitle">{propertyTitle}</div>
                 <TextFieldValueEditor value={propertyValue}
-                                      tabIndex="0"
+                                      tabIndex={tabIndexConstants.fieldPropsTabIndex}
                                       classes="textPropertyValue"
                                       inputType="text"
                                       onChange={(newValue) => this.updateFieldProps(newValue, 'name')}
