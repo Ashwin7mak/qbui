@@ -50,19 +50,6 @@ const tableCreation = (
         };
     }
 
-    case types.NEXT_TABLE_CREATION_PAGE: {
-        return {
-            ...state,
-            pageIndex: state.pageIndex + 1
-        };
-    }
-
-    case types.PREVIOUS_TABLE_CREATION_PAGE: {
-        return {
-            ...state,
-            pageIndex: state.pageIndex > 0 ? state.pageIndex - 1 : 0
-        };
-    }
     case types.TABLE_ICON_CHOOSER_OPEN: {
         return {
             ...state,

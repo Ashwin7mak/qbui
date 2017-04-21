@@ -382,6 +382,7 @@ export const UnconnectedReportToolsAndContent = React.createClass({
                         <ReportContent appId={this.props.reportData.appId}
                                        tblId={this.props.reportData.tblId}
                                        rptId={typeof this.props.reportData.rptId !== "undefined" ? this.props.reportData.rptId : this.props.params.rptId}
+                                       selectedTable={this.props.selectedTable}
                                        reportData={this.props.reportData}
                                        appUsers={this.props.appUsers}
                                        reportHeader={toolbar}

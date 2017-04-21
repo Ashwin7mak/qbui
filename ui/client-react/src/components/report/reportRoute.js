@@ -173,6 +173,7 @@ const ReportRoute = React.createClass({
                     isRowPopUpMenuOpen={this.props.isRowPopUpMenuOpen}
                     routeParams={this.props.match.params}
                     selectedAppId={this.props.selectedAppId}
+                    selectedTable={this.props.selectedTable}
                     searchStringForFiltering={this.props.reportData.searchStringForFiltering}
                     pageActions={this.getPageActions(0)}
                     nameForRecords={this.nameForRecords}

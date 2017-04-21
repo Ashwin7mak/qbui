@@ -14,14 +14,6 @@ export const hideTableCreationDialog = () => ({
     type: types.HIDE_TABLE_CREATION_DIALOG
 });
 
-export const nextTableCreationPage = () => ({
-    type: types.NEXT_TABLE_CREATION_PAGE
-});
-
-export const previousTableCreationPage = () => ({
-    type: types.PREVIOUS_TABLE_CREATION_PAGE
-});
-
 /**
  * expand the icon chooser from a button to a searchable grid
  */

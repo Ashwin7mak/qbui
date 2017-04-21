@@ -161,11 +161,11 @@ MultiStepDialog.propTypes = {
     /**
      * next page (client should increment pageIndex)
      */
-    onNext: PropTypes.func.isRequired,
+    onNext: PropTypes.func,
     /**
      * previous page (client should decrement pageIndex)
      */
-    onPrevious: PropTypes.func.isRequired,
+    onPrevious: PropTypes.func,
     /**
      * finished callback (client should hide dialog and process it)
      */
