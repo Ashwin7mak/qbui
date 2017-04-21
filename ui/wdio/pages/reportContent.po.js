@@ -12,7 +12,7 @@
     var ReportContentPage = Object.create(e2ePageBase, {
         tableBody: {get: function() {return browser.element('.qbTbody');}},
         reportsToolBar : {get: function() {return browser.element('.reportToolbar');}},
-        addRecordButton : {get: function() {return browser.element('.addRecordButton');}},
+        addRecordButton : {get: function() {return browser.element('.tableHomePageInitial .addRecordButton');}},
         reportFilterSearchBox : {get: function() {
             return this.reportsToolBar.element('.searchInput');
         }},
@@ -104,7 +104,7 @@
             var colHeaders = [];
             for (var i = 0; i < this.qbGridColHeaderElList.value.length; i++) {
                 colHeaders.push(this.qbGridColHeaderElList.value[i].getAttribute('innerText').replace(/\w\S*/g,
-                    function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();}));
+                    function(txt) {return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();}));
             }
             return colHeaders;
         }},
