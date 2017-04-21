@@ -117,6 +117,34 @@ describe('Qb Route Mapper Unit Test', function() {
         ];
     }
 
+    function publicEndpointsProvider()  {
+        return [
+            {message: 'GET request to public fields', request: '/apps/fakeApp/tables/fakeTable/fields', expectedPath: '/api/api/v1/apps/fakeApp/tables/fakeTable/fields', route: routes.PUBLIC_FIELDS, method: routeMapper.fetchAllFunctionForRoute(routes.PUBLIC_FIELDS), expectedDefined: true, httpVerb: 'GET'},
+            {message: 'GET request to public fields with id', request: '/apps/fakeApp/tables/fakeTable/fields/1', expectedPath: '/api/api/v1/apps/fakeApp/tables/fakeTable/fields/1', route: routes.PUBLIC_FIELDS, method: routeMapper.fetchAllFunctionForRoute(routes.PUBLIC_FIELDS), expectedDefined: true, httpVerb: 'GET'},
+            {message: 'GET request to public forms', request: '/apps/fakeApp/tables/fakeTable/forms', expectedPath: '/ee/v1/apps/fakeApp/tables/fakeTable/forms', route: routes.PUBLIC_FORMS, method: routeMapper.fetchAllFunctionForRoute(routes.PUBLIC_FORMS), expectedDefined: true, httpVerb: 'GET'},
+            {message: 'GET request to public forms with id', request: '/apps/fakeApp/tables/fakeTable/forms/1', expectedPath: '/ee/v1/apps/fakeApp/tables/fakeTable/forms/1', route: routes.PUBLIC_FORMS, method: routeMapper.fetchAllFunctionForRoute(routes.PUBLIC_FORMS), expectedDefined: true, httpVerb: 'GET'},
+            {message: 'GET request to public records', request: '/apps/fakeApp/tables/fakeTable/records', expectedPath: '/api/api/v1/apps/fakeApp/tables/fakeTable/records', route: routes.PUBLIC_RECORDS, method: routeMapper.fetchAllFunctionForRoute(routes.PUBLIC_RECORDS), expectedDefined: true, httpVerb: 'GET'},
+            {message: 'GET request to public records with id', request: '/apps/fakeApp/tables/fakeTable/records/1', expectedPath: '/api/api/v1/apps/fakeApp/tables/fakeTable/records/1', route: routes.PUBLIC_RECORDS, method: routeMapper.fetchAllFunctionForRoute(routes.PUBLIC_RECORDS), expectedDefined: true, httpVerb: 'GET'},
+            {message: 'GET request to public reports', request: '/apps/fakeApp/tables/fakeTable/reports', expectedPath: '/api/api/v1/apps/fakeApp/tables/fakeTable/reports', route: routes.PUBLIC_REPORTS, method: routeMapper.fetchAllFunctionForRoute(routes.PUBLIC_REPORTS), expectedDefined: true, httpVerb: 'GET'},
+            {message: 'GET request to public table properties', request: '/apps/fakeApp/tables/fakeTable/tableproperties', expectedPath: '/ee/v1/apps/fakeApp/tables/fakeTable/tableproperties', route: routes.PUBLIC_TABLE_PROPERTIES, method: routeMapper.fetchAllFunctionForRoute(routes.PUBLIC_TABLE_PROPERTIES), expectedDefined: true, httpVerb: 'GET'},
+            {message: 'GET request to public tables', request: '/apps/fakeApp/tables', expectedPath: '/api/api/v1/apps/fakeApp/tables', route: routes.PUBLIC_TABLES, method: routeMapper.fetchAllFunctionForRoute(routes.PUBLIC_TABLES), expectedDefined: true, httpVerb: 'GET'},
+            {message: 'GET request to public tables with id', request: '/apps/fakeApp/tables/1', expectedPath: '/api/api/v1/apps/fakeApp/tables/1', route: routes.PUBLIC_TABLES, method: routeMapper.fetchAllFunctionForRoute(routes.PUBLIC_TABLES), expectedDefined: true, httpVerb: 'GET'},
+            {message: 'GET request to public relationships', request: '/apps/fakeApp/relationships', expectedPath: '/api/api/v1/apps/fakeApp/relationships', route: routes.PUBLIC_RELATIONSHIPS, method: routeMapper.fetchAllFunctionForRoute(routes.PUBLIC_RELATIONSHIPS), expectedDefined: true, httpVerb: 'GET'},
+            {message: 'GET request to public roles', request: '/apps/fakeApp/roles', expectedPath: '/api/api/v1/apps/fakeApp/roles', route: routes.PUBLIC_ROLES, method: routeMapper.fetchAllFunctionForRoute(routes.PUBLIC_ROLES), expectedDefined: true, httpVerb: 'GET'},
+            {message: 'GET request to public apps', request: '/apps', expectedPath: '/api/api/v1/apps', route: routes.PUBLIC_APPS, method: routeMapper.fetchAllFunctionForRoute(routes.PUBLIC_APPS), expectedDefined: true, httpVerb: 'GET'},
+            {message: 'GET request to public apps with id', request: '/apps/1', expectedPath: '/api/api/v1/apps/1', route: routes.PUBLIC_APPS, method: routeMapper.fetchAllFunctionForRoute(routes.PUBLIC_APPS), expectedDefined: true, httpVerb: 'GET'},
+            {message: 'GET request to public health', request: '/health', expectedPath: '/api/api/v1/health', route: routes.PUBLIC_HEALTH, method: routeMapper.fetchAllFunctionForRoute(routes.PUBLIC_HEALTH), expectedDefined: true, httpVerb: 'GET'},
+            {message: 'GET request to public operations', request: '/operations', expectedPath: '/api/api/v1/operations', route: routes.PUBLIC_OPERATIONS, method: routeMapper.fetchAllFunctionForRoute(routes.PUBLIC_OPERATIONS), expectedDefined: true, httpVerb: 'GET'},
+            {message: 'GET request to public realms', request: '/realms', expectedPath: '/api/api/v1/realms', route: routes.PUBLIC_REALMS, method: routeMapper.fetchAllFunctionForRoute(routes.PUBLIC_REALMS), expectedDefined: true, httpVerb: 'GET'},
+            {message: 'GET request to public ticket', request: '/ticket', expectedPath: '/api/api/v1/ticket', route: routes.PUBLIC_TICKET, method: routeMapper.fetchAllFunctionForRoute(routes.PUBLIC_TICKET), expectedDefined: true, httpVerb: 'GET'},
+            {message: 'GET request to public users', request: '/users', expectedPath: '/api/api/v1/users', route: routes.PUBLIC_USERS, method: routeMapper.fetchAllFunctionForRoute(routes.PUBLIC_USERS), expectedDefined: true, httpVerb: 'GET'},
+            {message: 'GET request to public users with id', request: '/users/1', expectedPath: '/api/api/v1/users/1', route: routes.PUBLIC_USERS, method: routeMapper.fetchAllFunctionForRoute(routes.PUBLIC_USERS), expectedDefined: true, httpVerb: 'GET'},
+
+            {message: 'GET request to public workflow manager', request: '/apps/fakeApp/workflow/flows', expectedPath: '/we/api/v1/apps/fakeApp/workflow/flows', route: routes.PUBLIC_WORKFLOW_FLOW_MGR, method: routeMapper.fetchAllFunctionForRoute(routes.PUBLIC_WORKFLOW_FLOW_MGR), expectedDefined: true, httpVerb: 'GET'},
+            {message: 'GET request to public workflow automation', request: '/workflow/apps/fakeApp', expectedPath: '/workflow/apps/fakeApp', route: routes.PUBLIC_WORKFLOW_AUTOMATION, method: routeMapper.fetchAllFunctionForRoute(routes.PUBLIC_WORKFLOW_AUTOMATION), expectedDefined: true, httpVerb: 'GET'}
+        ];
+    }
+
     function featureSwitchesPathModificationProvider() {
         return [
             {message: 'GET request to the feature states endpoint', request: '/qb/featureStates', expectedPath: '/api/api/v1/featureStates', route: routes.FEATURE_STATES, method: routeMapper.fetchGetFunctionForRoute(routes.FEATURE_STATES), expectedDefined: true, httpVerb: 'GET'},
@@ -158,6 +186,9 @@ describe('Qb Route Mapper Unit Test', function() {
         governanceModificationProvider().forEach(function(entry) {
             runTestCase(entry);
         });
+        publicEndpointsProvider().forEach(function(entry) {
+            runTestCase(entry);
+        })
     });
 
     function runTestCase(entry) {
