@@ -100,7 +100,7 @@ export const RecordTrowser = React.createClass({
         const record = this.getRecordFromProps(this.props);
         if (record.navigateAfterSave === true) {
             let {appId, tblId} = this.props;
-            this.props.router.push(`${APP_ROUTE}/${appId}/table/${tblId}/record/${recId}`);
+            this.props.history.push(`${APP_ROUTE}/${appId}/table/${tblId}/record/${recId}`);
         }
     },
 
