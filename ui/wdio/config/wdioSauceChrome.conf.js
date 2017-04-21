@@ -18,7 +18,7 @@ var config = {
         //    maxInstances: 4
         //}
         {
-            browserName: 'chrome',
+            browserName: 'safari',
             appiumVersion: '1.5.3',
             deviceName: 'iPhone 6 Device',
             deviceOrientation: 'portrait',
@@ -27,7 +27,7 @@ var config = {
             breakpointSize: 'large',
             tunnelIdentifier: process.env.ENV_TUNNEL_NAME,
             build           : 'WebdriverIO Jenkins Try Build #' + process.env.BUILD_NUMBER + ' - Git branch: ' + process.env.GIT_UIBRANCH + ' - OSX iPhone Browser',
-            tags            : [process.env.SAUCE_JOB_NAME + '_OSX_Chrome', 'try', 'OSX', 'iPhone', process.env.BUILD_NUMBER, process.env.GIT_UIBRANCH],
+            tags            : [process.env.SAUCE_JOB_NAME + '_OSX_iPhone', 'try', 'OSX', 'iPhone', process.env.BUILD_NUMBER, process.env.GIT_UIBRANCH],
         }
     ]
 };
