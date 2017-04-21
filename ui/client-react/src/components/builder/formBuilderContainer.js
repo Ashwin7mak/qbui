@@ -218,59 +218,7 @@ export const FormBuilderContainer = React.createClass({
             this.onCancel();
         }
     },
-
-    upArrowKeysShouldTab() {
-        //should drill down tab is number 9
-        // let all = document.getElementsByTagName("*");
-        // let result;
-        // let index;
-        // if (all) {
-        //     result = _.filter(all, (domNode) => {
-        //         if (domNode.attributes.tabIndex) {
-        //             return domNode.attributes.tabIndex !== "1";
-        //         }
-        //     });
-        //
-        //     result.forEach(function(domNode, i) {
-        //         if (domNode === document.activeElement) {
-        //             index = i;
-        //         }
-        //     });
-        //
-        //     if (result[index]) {
-        //         result[index - 1].focus();
-        //     } else if (result[0]) {
-        //         result[0].focus();
-        //     }
-        // }
-    },
-
-    downArrowKeysShouldTab() {
-        // this.updateChildrenTabIndex("-1");
-        // let all = document.getElementsByTagName("*");
-        // let result;
-        // let index;
-        // if (all) {
-        //     result = _.filter(all, (domNode) => {
-        //         if (domNode.attributes.tabIndex) {
-        //             return domNode.attributes.tabIndex !== "1";
-        //         }
-        //     });
-        //
-        //     result.forEach(function(domNode, i) {
-        //         if (domNode === document.activeElement) {
-        //             index = i;
-        //         }
-        //     });
-        //
-        //     if (result[index]) {
-        //         result[index + 1].focus();
-        //     } else if (result[0]) {
-        //         result[0].focus();
-        //     }
-        // }
-    },
-
+    
     toggleToolPaletteChildrenTabIndex(e) {
         //Test, will need to update to actually changing only tool palette children
         let formId = this.props.currentForm.id;
