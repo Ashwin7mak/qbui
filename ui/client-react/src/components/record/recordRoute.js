@@ -262,6 +262,25 @@ export const RecordRoute = React.createClass({
         return this.props.selectedTable;
     },
 
+    /**
+     * remove the drawer info from the url
+     */
+    closeDrawer() {
+        const currentPath = this.props.history.location.pathname;
+        const newPath = currentPath.slice(0, currentPath.indexOf('sr_') - 1);
+        this.props.history.push(newPath);
+    },
+
+    /**
+     * creates actions array with a close button only used in drawers
+     * @returns { Close button }
+     */
+    getDrawerAction() {
+        //only show the following cross button if in a drawer
+        const actions = [{msg: 'pageActions.close', icon:'close', className:'closeDrawer', onClick: this.closeDrawer}];
+        return (<IconActions className="pageActions" actions={actions} {...this.props}/>);
+    },
+
     getStageHeadline() {
         if (this.props.match.params) {
             const {appId, tblId, rptId} = this.props.match.params;
@@ -283,8 +302,8 @@ export const RecordRoute = React.createClass({
                 <div className="navLinks">
                     {this.props.selectedTable && <Link className="tableHomepageIconLink" to={tableLink}><Icon iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY} icon={this.props.selectedTable.tableIcon}/></Link>}
                     {this.props.selectedTable && <Link className="tableHomepageLink" to={tableLink}>{this.props.selectedTable.name}</Link>}
-                    {this.props.selectedTable && rptId && <span className="divider color-black-700">&nbsp;&nbsp;:&nbsp;&nbsp;</span>}
-                    {rptId && <a className="backToReport" href="#" onClick={this.returnToReport}>{reportName}</a>}
+                    {!this.props.isDrawerContext && this.props.selectedTable && rptId && <span className="divider color-black-700">&nbsp;&nbsp;:&nbsp;&nbsp;</span>}
+                    {!this.props.isDrawerContext && rptId && <a className="backToReport" href="#" onClick={this.returnToReport}>{reportName}</a>}
                 </div>
                 <div className="stageHeadline iconActions">
 
@@ -366,14 +385,6 @@ export const RecordRoute = React.createClass({
             actions.splice(2, 0, {msg: 'pageActions.approve', icon: 'thumbs-up', onClick: this.approveRecord});
         }
 
-        // TODO: onCloseHandler, add to Proptypes, icon, i18nMessage for other languages
-        if (this.props.isDrawerContext) {
-            actions.push({msg: 'pageActions.close', icon:'close', onClick: () => {
-                const currentPath = this.props.history.location.pathname;
-                const newPath = currentPath.slice(0, currentPath.indexOf('sr_app') - 1);
-                this.props.history.push(newPath);
-            }});
-        }
 
         return (<IconActions className="pageActions" actions={actions} {...this.props}/>);
     },
@@ -479,11 +490,6 @@ export const RecordRoute = React.createClass({
         this.setState({hasDrawer: true});
     },
 
-    //TODO: remove
-    closeDrawer() {
-        this.setState({hasDrawer: false});
-    },
-
     /**
      * render the stage, actions, and form
      *
@@ -509,7 +515,8 @@ export const RecordRoute = React.createClass({
             return (
                 <div className="recordContainer">
                     <Stage stageHeadline={this.getStageHeadline()}
-                           pageActions={this.getPageActions()}>
+                           pageActions={this.getPageActions()}
+                           drawerAction={this.props.isDrawerContext && this.getDrawerAction()}>
 
                         <div className="record-content">
                         </div>
