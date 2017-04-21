@@ -51,36 +51,36 @@ $edit-icon-font-size: 18px;
 
 
     //== grid header row
-    .qbHeaderCell {
-        min-width: 80px;
-
-        position: relative;
-        border-top: 1px solid $grid-column-header-border-color;
-        border-right: 1px solid $grid-column-header-grid-line-color;
-        border-bottom: 1px solid $grid-column-header-border-color;
-        padding: $grid-header-cell-padding;
-        color: $grid-column-header-text-color;
-        -webkit-font-smoothing: antialiased;
-        background-color: $grid-column-header-background-color;
-        cursor: default;
-        vertical-align: top;
-
-        // set the default z-index of header cells so the one displaying the popup menu can be made higher than these
-        z-index: $zindex-qbGrid-th;
-
-        // set the z-index of the header cell for the sticky column so the other column headers scroll underneath
-        &.stickyCell {
-            z-index: $zindex-qbGrid-header-stickyCell;
-            padding-left: $grid-default-cell-padding;
-            padding-right: $grid-default-cell-padding;
-            border-left: 1px solid $grid-column-header-border-color;
-            vertical-align: middle;
-        }
-
-        &:last-of-type {
-            border-right: 1px solid $grid-column-header-border-color;
-        }
-    }
+    //.qbHeaderCell {
+    //    min-width: 80px;
+    //
+    //    position: relative;
+    //    border-top: 1px solid $grid-column-header-border-color;
+    //    border-right: 1px solid $grid-column-header-grid-line-color;
+    //    border-bottom: 1px solid $grid-column-header-border-color;
+    //    padding: $grid-header-cell-padding;
+    //    color: $grid-column-header-text-color;
+    //    -webkit-font-smoothing: antialiased;
+    //    background-color: $grid-column-header-background-color;
+    //    cursor: default;
+    //    vertical-align: top;
+    //
+    //    // set the default z-index of header cells so the one displaying the popup menu can be made higher than these
+    //    z-index: $zindex-qbGrid-th;
+    //
+    //    // set the z-index of the header cell for the sticky column so the other column headers scroll underneath
+    //    &.stickyCell {
+    //        z-index: $zindex-qbGrid-header-stickyCell;
+    //        padding-left: $grid-default-cell-padding;
+    //        padding-right: $grid-default-cell-padding;
+    //        border-left: 1px solid $grid-column-header-border-color;
+    //        vertical-align: middle;
+    //    }
+    //
+    //    &:last-of-type {
+    //        border-right: 1px solid $grid-column-header-border-color;
+    //    }
+    //}
 
     // leftmost cell of the table header that serves as the vertical header for the sticky row actions column
     // contains the "select all" checkbox
@@ -115,10 +115,8 @@ $edit-icon-font-size: 18px;
     // this node goes inside the qbHeaderCell above
     .gridHeaderCell {
         display: flex;
-        //min-width: 80px;
+        min-width: 80px;
         height: 40px;
-
-        position: static;
         border-top: 1px solid $grid-column-header-border-color;
         border-right: 1px solid $grid-column-header-grid-line-color;
         border-bottom: 1px solid $grid-column-header-border-color;
@@ -139,7 +137,6 @@ $edit-icon-font-size: 18px;
             flex-grow: 1;
             padding-right: 4px;
             padding-top: 2px;
-
             white-space: nowrap;
             line-height: $line-height-text-multiline;
             font-size: $font-size-h6;
@@ -197,6 +194,14 @@ $edit-icon-font-size: 18px;
             opacity: 1;
             color: $grid-column-icon-hover-color;
         }
+
+        // hover effect on dropdown icon
+        &:hover {
+            opacity: 100;
+            color: #999299;
+            cursor: move;
+        }
+
     }
 
     //== styling for the sticky column cells
