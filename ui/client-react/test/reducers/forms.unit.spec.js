@@ -441,7 +441,7 @@ describe('Forms reducer functions', () => {
                 [VIEW]: {
                     ...stateWithViewForm[VIEW],
                     formData: {formMeta: testFormMeta},
-                    formBuilderChildrenTabIndex: ['0'],
+                    formBuilderChildrenTabIndex: ['4'],
                     toolPaletteChildrenTabIndex: ['-1'],
                     formFocus: [false],
                     toolPaletteFocus: [false]
@@ -471,8 +471,8 @@ describe('Forms reducer functions', () => {
                 [VIEW]: {
                     ...stateWithViewForm[VIEW],
                     formData: {formMeta: testFormMeta},
+                    toolPaletteChildrenTabIndex: ['3'],
                     formBuilderChildrenTabIndex: ['-1'],
-                    toolPaletteChildrenTabIndex: ['0'],
                     formFocus: [false],
                     toolPaletteFocus: [false]
                 }
