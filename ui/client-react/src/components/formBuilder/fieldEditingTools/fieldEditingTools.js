@@ -131,7 +131,6 @@ export class FieldEditingTools extends Component {
         let isDragging = document.querySelector(".dragging");
         if (selectedFormElement && !isDragging) {
             this.props.formBuilderContainerContentElement.scrollTop = this.props.formBuilderContainerContentElement.scrollTop - 400;
-            console.log(this.props.formBuilderContainerContentElement.scrollTop);
         }
     }
 
