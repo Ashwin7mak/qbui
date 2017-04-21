@@ -268,6 +268,10 @@ const routes = [
             {
                 path: `${LIB_ROUTE}/standardLeftNav`,
                 component: StandardLeftNavDoc
+            },
+            {
+                path: `${LIB_ROUTE}/pagination`,
+                component: PaginationDoc
             }
         ]
     }
