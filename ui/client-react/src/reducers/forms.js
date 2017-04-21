@@ -158,14 +158,12 @@ const forms = (
             return state;
         }
 
-        let {newField, newLocation} = action.content;
+        let {newField, newLocation} = _.cloneDeep(action.content);
         updatedForm = _.cloneDeep(currentForm);
-        let newFieldCopy = _.cloneDeep(newField);
-
         // Remove all keys that are not necessary for forms
-        Object.keys(newFieldCopy).forEach(key => {
+        Object.keys(newField).forEach(key => {
             if (key !== 'FormFieldElement' && key !== 'id') {
-                delete newFieldCopy[key];
+                delete newField[key];
             }
         });
 
@@ -183,13 +181,15 @@ const forms = (
             };
         } else if (newLocation.elementIndex !== updatedForm.formData.formMeta.tabs[0].sections[0].columns[0].elements.length) {
             //If a field is selected on the form and the selectedField is not located at the end of the form, then the new field will be added below the selected field
-            newLocation.elementIndex = newLocation.elementIndex + 1;
+            if (newLocation && newLocation.elementIndex) {
+                newLocation.elementIndex = newLocation.elementIndex + 1;
+            }
         }
 
         updatedForm.formData.formMeta = MoveFieldHelper.addNewFieldToForm(
             updatedForm.formData.formMeta,
             newLocation,
-            {...newFieldCopy}
+            {...newField}
         );
 
         if (!updatedForm.selectedFields) {

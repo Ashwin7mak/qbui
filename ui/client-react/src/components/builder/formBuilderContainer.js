@@ -62,23 +62,25 @@ const mapDispatchToProps = {
 
 /**
  * A container component that holds the FormBuilder.
- * FormBuilderContainer is rendered by ReactRouter and has access to location and params
+ * FormBuilderContainer is rendered by ReactRouter and has access to location and match.params
  * @type {*}
  */
 export const FormBuilderContainer = React.createClass({
     propTypes: {
-        params: PropTypes.shape({
-            /**
-             * the app id */
-            appId: PropTypes.string,
+        match: PropTypes.shape({
+            params: PropTypes.shape({
+                /**
+                 * the app id */
+                appId: PropTypes.string,
 
-            /**
-             * the table id */
-            tblId: PropTypes.string,
+                /**
+                 * the table id */
+                tblId: PropTypes.string,
 
-            /**
-             * the form id */
-            formId: PropTypes.string,
+                /**
+                 * the form id */
+                formId: PropTypes.string,
+            })
         }),
 
         location: PropTypes.shape({
@@ -106,12 +108,12 @@ export const FormBuilderContainer = React.createClass({
         // For easier unit tests without the Router, we can pass in default empty values
         return {
             location: {query: {}},
-            params: {}
+            match: {params: {}}
         };
     },
 
     componentDidMount() {
-        const {appId, tblId} = this.props.params;
+        const {appId, tblId} = this.props.match.params;
         const formType = _.get(this.props, 'location.query.formType');
 
         // We use the NEW_FORM_RECORD_ID so that the form does not load any record data
@@ -127,7 +129,7 @@ export const FormBuilderContainer = React.createClass({
     },
 
     onCancel() {
-        const {appId, tblId} = this.props.params;
+        const {appId, tblId} = this.props.match.params;
 
         NavigationUtils.goBackToLocationOrTable(appId, tblId, this.props.redirectRoute);
     },
@@ -308,7 +310,7 @@ export const FormBuilderContainer = React.createClass({
                              toggleToolPaletteChildrenTabIndex={this.toggleToolPaletteChildrenTabIndex}
                              toolPaletteChildrenTabIndex={this.props.toolPaletteChildrenTabIndex}
                              toolPaletteFocus={this.props.toolPaletteFocus} >
-                    <FieldProperties appId={this.props.params.appId} tableId={this.props.params.tblId} formId={formId}>
+                <FieldProperties appId={this.props.match.params.appId} tableId={this.props.match.params.tblId} formId={formId}>
                         <div className="formBuilderContainerContent" ref={element => formBuilderContainerContent = element}>
                             <AutoScroll parentContainer={formBuilderContainerContent} pixelsFromBottomForLargeDevices={100}>
                                 <div className="formBuilderContent">
