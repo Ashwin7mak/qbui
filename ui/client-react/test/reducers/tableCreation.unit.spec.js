@@ -22,6 +22,7 @@ function initializeState() {
     initialState = {
         //  default states
         dialogOpen: false,
+        showTableReadyDialog: false,
         pageIndex: 0,
         iconChooserOpen: false,
         savingTable: false,
@@ -71,7 +72,7 @@ describe('Test table creation reducers', () => {
             expect(state.iconChooserOpen).toBe(false);
         });
 
-        it('return updated page state after programatic edit', () => {
+        it('return updated page state after programmatic edit', () => {
 
             let action = {
                 type: types.SET_TABLE_CREATION_PROPERTY,
