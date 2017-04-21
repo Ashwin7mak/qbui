@@ -33,7 +33,7 @@ let AddRecordButton = React.createClass({
 
     render() {
         return (
-            <a href="#" className="addNewRecord" onClick={this.props.onClick}><QBicon icon="add" /></a>
+            <a href="#" className="addNewRecord" onClick={this.props.onClick}><QBicon icon="add-new-filled" /></a>
         );
     }
 });
@@ -140,7 +140,7 @@ export const UnconnectedReportToolsAndContent = React.createClass({
 
     getPageActions(maxButtonsBeforeMenu) {
         const actions = [
-            {msg: 'pageActions.addRecord', icon:'add', onClick: this.editNewRecord},
+            {msg: 'pageActions.addRecord', icon:'add-new-filled', onClick: this.editNewRecord},
             {msg: 'pageActions.favorite', icon:'star', disabled: true},
             {msg: 'pageActions.print', icon:'print', disabled: true},
         ];
