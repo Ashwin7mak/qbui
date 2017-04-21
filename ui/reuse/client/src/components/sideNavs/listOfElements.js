@@ -126,7 +126,7 @@ class ListOfElements extends Component {
     };
 
     componentDidUpdate = () => {
-        if (this.props.toolPaletteFocus) {
+        if (this.props.toolPaletteFocus && document.activeElement.tagName !== "INPUT") {
             this.listOfElementsContainer.focus();
         }
     }

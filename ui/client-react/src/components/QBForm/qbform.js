@@ -524,7 +524,7 @@ export const QBForm = React.createClass({
      * formFocus becomes true when a user is hitting escape to remove the children elements form the tabbing flow
      * */
     componentDidUpdate() {
-        if (this.props.formFocus) {
+        if (this.props.formFocus && document.activeElement.tagName !== "INPUT") {
             formBuilderEditForm.focus();
             document.querySelector('.qbPanelHeaderTitleText').scrollIntoView(false);
         }
