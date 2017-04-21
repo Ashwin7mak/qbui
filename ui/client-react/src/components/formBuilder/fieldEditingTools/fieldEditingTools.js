@@ -152,14 +152,9 @@ export class FieldEditingTools extends Component {
             let selectedElementTop = selectedFormElement.top;
             let selectedElementBottom = selectedFormElement.bottom;
 
-            console.log('selectedElementTop: ', selectedElementTop);
-            console.log('selectedElementBottom: ', selectedElementBottom);
-            console.log('this.props.formBuilderContainerContentElement.scrollTop : ', this.props.formBuilderContainerContentElement.scrollTop);
-            console.log('window.innerHeight : ', window.innerHeight);
-
             if (selectedElementBottom > window.innerHeight - 40) {
                 this.scrollElementDownIntoView();
-            } else if (selectedElementTop < 70) {
+            } else if (selectedElementTop < 150) {
                 this.scrollElementUpIntoView();
             }
         }
