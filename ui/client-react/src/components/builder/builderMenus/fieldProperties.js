@@ -66,7 +66,7 @@ export class FieldProperties extends Component {
      */
     createTextPropertyContainer(propertyTitle, propertyValue) {
         return (
-            <div className="fieldPropertyContainer">
+            <div className="textPropertyContainer">
                 <div className="textPropertyTitle">{propertyTitle}</div>
                 <TextFieldValueEditor value={propertyValue}
                                       classes="textPropertyValue"
@@ -104,8 +104,8 @@ export class FieldProperties extends Component {
      */
     createMultiChoiceTextPropertyContainer(propertyTitle, propertyValue) {
         return (
-            <div className="fieldPropertyContainer">
-                <div className="textPropertyTitle">{propertyTitle}</div>
+            <div className="multiChoicePropertyContainer">
+                <div className="multiChoicePropertyTitle">{propertyTitle}</div>
                 <MultiLineTextFieldValueEditor
                     value={propertyValue}
                     onChange={(newValue) => this.updateMultiChoiceFieldProps(newValue)}
