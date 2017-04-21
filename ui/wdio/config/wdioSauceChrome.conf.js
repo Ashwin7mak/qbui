@@ -18,13 +18,13 @@ var config = {
         //    maxInstances: 4
         //}
         {
-            browserName: '',
-            appiumVersion: '1.4.16',
-            deviceName: 'iPhone 6',
-            platformVersion: '8.4',
+            browserName: 'chrome',
+            appiumVersion: '1.5.3',
+            deviceName: 'iPhone 6 Device',
+            deviceOrientation: 'portrait',
+            platformVersion: '9.3',
             platformName: 'iOS',
-            name: 'Sample Test',
-            app: 'https://s3.amazonaws.com/appium/TestApp8.4.app.zip',
+            breakpointSize: 'large',
             tunnelIdentifier: process.env.ENV_TUNNEL_NAME,
             build           : 'WebdriverIO Jenkins Try Build #' + process.env.BUILD_NUMBER + ' - Git branch: ' + process.env.GIT_UIBRANCH + ' - OSX iPhone Browser',
             tags            : [process.env.SAUCE_JOB_NAME + '_OSX_Chrome', 'try', 'OSX', 'iPhone', process.env.BUILD_NUMBER, process.env.GIT_UIBRANCH],
