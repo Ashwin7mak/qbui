@@ -405,25 +405,25 @@ module.exports = function(grunt) {
                 configFile: 'karma.conf.js'
             },
             unit: {
-                // browsers: ["ChromeCanaryHeadless"],
-                browsers: ["PhantomJS_Desktop"],
+                // browsers: ["PhantomJS_Desktop"],
+                browsers: ["HeadlessChrome"],
                 singleRun : true
             },
             devunit: {
-                // browsers: ["ChromeCanaryHeadless"],
-                browsers: ["PhantomJS_Desktop"],
+                // browsers: ["PhantomJS_Desktop"],
+                browsers: ["HeadlessChrome"],
                 singleRun : false
             },
             governance: {
                 configFile: './governance/governance.karma.conf.js',
-                // browsers: ["ChromeCanaryHeadless"],
-                browsers: ["PhantomJS_Desktop"],
+                // browsers: ["PhantomJS_Desktop"],
+                browsers: ["HeadlessChrome"],
                 singleRun : true
             },
             reuse: {
                 configFile: './reuse/reuse.karma.conf.js',
-                // browsers: ["ChromeCanaryHeadless"],
-                browsers: ["PhantomJS_Desktop"],
+                // browsers: ["PhantomJS_Desktop"],
+                browsers: ["HeadlessChrome"],
                 singleRun : true
             }
         },
@@ -1075,7 +1075,6 @@ module.exports = function(grunt) {
         'shell:nodeVer',
         'clean:dist',
         'webpackbuild',
-        'logGitState',
         'copy:reactDist'
     ]);
 
