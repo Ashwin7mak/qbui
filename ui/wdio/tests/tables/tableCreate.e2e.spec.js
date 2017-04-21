@@ -105,7 +105,7 @@
             var searchReturnedIcons = tableCreatePO.getAllIconsFromIconChooser;
             //Verify it returns just one
             expect(searchReturnedIcons.value.length).toBe(1);
-            expect(searchReturnedIcons.getAttribute('className')).toBe('qbIcon iconTableSturdy-bicycle');
+            expect(searchReturnedIcons.getAttribute('className')).toContain('iconTableSturdy-bicycle');
 
         });
 

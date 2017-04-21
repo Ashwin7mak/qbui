@@ -1,5 +1,6 @@
 import * as Formatters from './AccountUsersGridFormatters';
 import _ from 'lodash';
+import * as FieldConsts from '../../../../../client-react/src/constants/schema';
 
 const boolColumnProps = {
     classes: ['BoolColumn'],
@@ -11,6 +12,12 @@ const columns = [
         property: 'firstName',
         header: {
             label: 'First Name'
+        },
+        fieldDef: {
+            id: 1,
+            datatypeAttributes: {
+                type: FieldConsts.TEXT
+            }
         }
     },
     {
@@ -18,6 +25,12 @@ const columns = [
         header: {
             label: 'Last Name'
         },
+        fieldDef: {
+            id: 2,
+            datatypeAttributes: {
+                type: FieldConsts.TEXT
+            }
+        }
     },
     {
         property: 'email',
@@ -26,6 +39,12 @@ const columns = [
         },
         props: {
             classes: ['EmailColumn']
+        },
+        fieldDef: {
+            id: 3,
+            datatypeAttributes: {
+                type: FieldConsts.EMAIL_ADDRESS
+            }
         }
     },
     {
@@ -35,6 +54,12 @@ const columns = [
         },
         props: {
             classes: ['ScreennameColumn']
+        },
+        fieldDef: {
+            id: 4,
+            datatypeAttributes: {
+                type: FieldConsts.TEXT
+            }
         }
     },
     {
@@ -47,6 +72,12 @@ const columns = [
         },
         internalQbProps: {
             forAccountAdminOnly: true
+        },
+        fieldDef: {
+            id: 5,
+            datatypeAttributes: {
+                type: FieldConsts.DATE_TIME
+            }
         }
     },
     {
@@ -56,6 +87,12 @@ const columns = [
         },
         cell: {
             formatters: [Formatters.FormatUserStatusHTML]
+        },
+        fieldDef: {
+            id: 6,
+            datatypeAttributes: {
+                type: FieldConsts.TEXT
+            }
         }
     },
     {
@@ -69,6 +106,12 @@ const columns = [
         props: boolColumnProps,
         internalQbProps: {
             forAccountAdminOnly: true
+        },
+        fieldDef: {
+            id: 7,
+            datatypeAttributes: {
+                type: FieldConsts.CHECKBOX
+            }
         }
     },
     {
@@ -82,6 +125,12 @@ const columns = [
         props: boolColumnProps,
         internalQbProps: {
             forAccountAdminOnly: true
+        },
+        fieldDef: {
+            id: 8,
+            datatypeAttributes: {
+                type: FieldConsts.CHECKBOX
+            }
         }
     },
     {
@@ -95,6 +144,12 @@ const columns = [
         props: boolColumnProps,
         internalQbProps: {
             forAccountAdminOnly: true
+        },
+        fieldDef: {
+            id: 9,
+            datatypeAttributes: {
+                type: FieldConsts.CHECKBOX
+            }
         }
     },
     {
@@ -108,6 +163,12 @@ const columns = [
         props: boolColumnProps,
         internalQbProps: {
             forAccountAdminOnly: true
+        },
+        fieldDef: {
+            id: 10,
+            datatypeAttributes: {
+                type: FieldConsts.CHECKBOX
+            }
         }
     },
     {
@@ -121,6 +182,12 @@ const columns = [
         props: boolColumnProps,
         internalQbProps: {
             forAccountAdminOnly: true
+        },
+        fieldDef: {
+            id: 11,
+            datatypeAttributes: {
+                type: FieldConsts.CHECKBOX
+            }
         }
     },
     {
@@ -134,6 +201,12 @@ const columns = [
         props: boolColumnProps,
         internalQbProps: {
             forRealmAdminOnly: true
+        },
+        fieldDef: {
+            id: 12,
+            datatypeAttributes: {
+                type: FieldConsts.CHECKBOX
+            }
         }
     },
     {
@@ -147,6 +220,12 @@ const columns = [
         props: boolColumnProps,
         internalQbProps: {
             forRealmAdminOnly: true
+        },
+        fieldDef: {
+            id: 13,
+            datatypeAttributes: {
+                type: FieldConsts.CHECKBOX
+            }
         }
     }
 ];

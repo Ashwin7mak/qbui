@@ -1,4 +1,4 @@
-version: '3'
+version: '2'
 
 # These overrides can be copied to docker-compose.override.yml to tweak the base Compose environment for your local
 # development needs. There is more information available about overrides at this link:
