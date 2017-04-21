@@ -62,7 +62,7 @@ export const TablePropertiesRoute = React.createClass({
     getConfirmDialog() {
         let msg = <div className="deleteTableDialogContent">
             <div className="note"><I18nMessage message="tableEdit.tableDeleteDialog.text"/></div>
-            <div className="prompt"><I18nMessage message="tableEdit.tableDeleteDialog.prompt"/><input className="deletePrompt" type="text" maxLength="3" size="5" value={this.state.confirmInputValue} onChange={this.handleDeletePrompt}/></div>
+            <div className="prompt"><I18nMessage message="tableEdit.tableDeleteDialog.prompt"/><input className="deletePrompt" type="text" maxLength="3" size="4" value={this.state.confirmInputValue} onChange={this.handleDeletePrompt}/></div>
         </div>;
         return (
             <QBModal

@@ -19,7 +19,7 @@
     .modal-content {
         border-bottom: none;
         border-left: 30px $color-black-100 solid;
-        border-radius: 2px;
+        border-radius: $border-radius-base;
         border-right: 30px $color-black-100 solid;
         border-top: none;
         padding-top: 10px;
@@ -104,7 +104,7 @@
 
     .modalIcon {
         display: inline-block;
-        font-size: 44px;
+        font-size: 50px;
         padding-top: 12px;
         padding-right: 10px;
         text-align: center;

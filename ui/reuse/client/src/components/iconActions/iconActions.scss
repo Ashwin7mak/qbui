@@ -52,13 +52,18 @@
                     height: 100%;
                     .buttonLabel {
                         font-size: $font-size-base;
+                        padding-left: 5px;
+                        padding-right: 20px;
+                        &:not(.disabled):hover {
+                            color: $link-hover-color;
+                        }
                     }
                     &:not(.disabled):hover {
                         background: initial;
                         cursor: pointer;
                     }
                 }
-                > div.tidChildWrapper > * {
+                .tidChildWrapper > * {
                     vertical-align: middle; /* align the icon and label vertically */
                 }
             }
