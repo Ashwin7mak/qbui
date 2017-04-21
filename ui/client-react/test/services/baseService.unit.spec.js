@@ -1,66 +1,47 @@
 import BaseService, {__RewireAPI__ as BaseServiceRewireAPI} from '../../src/services/baseService';
 import WindowLocationUtils from '../../src/utils/windowLocationUtils.js';
+import {UNAUTHORIZED} from '../../src/constants/urlConstants';
 
 describe('BaseService rewire tests', () => {
     'use strict';
 
     let baseService;
-    var mockCookie = {
-        load: function() {
-            return {loadMethodCalled:true};
-        }
+    const mockCookie = {
+        load: () => ({loadMethodCalled:true})
     };
-    var mockAxios = {
-        create: function() {
-            return {
-                delete: function() {
-                    return {deleteMethodCalled:true};
-                },
-                get: function() {
-                    return {getMethodCalled:true};
-                },
-                patch: function() {
-                    return {patchMethodCalled:true};
-                },
-                put: function() {
-                    return {putMethodCalled:true};
-                }
-            };
-        }
+    const mockAxios = {
+        create: () => ({
+            delete: () => ({deleteMethodCalled:true}),
+            get: ()  => ({getMethodCalled:true}),
+            patch: () => ({patchMethodCalled:true}),
+            put: () => ({putMethodCalled:true})
+        })
     };
 
-    var mockUnauthorizedRedirectConfiguration = {
-        unauthorizedRedirect: '/qbase/unauthorized'
+    const mockUnauthorizedRedirectConfiguration = {
+        unauthorizedRedirect: '/qbase/custom-unauthorized-route'
     };
 
-    var mockSimpleDomainConfiguration = {
+    const mockSimpleDomainConfiguration = {
         legacyBase: '.quickbase.com'
     };
 
-    var mockComplexSubdomainConfiguration = {
+    const mockComplexSubdomainConfiguration = {
         legacyBase: '.currentstack-int.quickbaserocks.com'
     };
 
-    var simpleSubdomain = {href: "https://team.quickbase.com", hostname: "team.quickbase.com",
+    const simpleSubdomain = {href: "https://team.quickbase.com", hostname: "team.quickbase.com",
         subdomain: "team", domain: "quickbase.com",
         expectedUrl: 'https://team.quickbase.com/db/main?a=nsredirect&nsurl='};
-    var complexSubdomain = {href: "https://team.qb3.quickbaserocks.com", hostname: "team.qb3.quickbaserocks.com",
+    const complexSubdomain = {href: "https://team.qb3.quickbaserocks.com", hostname: "team.qb3.quickbaserocks.com",
         subdomain: "team", domain: "currentstack-int.quickbaserocks.com",
         expectedUrl: 'https://team.currentstack-int.quickbaserocks.com/db/main?a=nsredirect&nsurl='};
 
-    var mockWindowUtils = {
-        update: function(url) {
-            return url;
-        },
-        replace: function(url) {
-            return url;
-        },
-        getHref: function() {
-            return simpleSubdomain.href;
-        },
-        getHostname: function() {
-            return simpleSubdomain.hostname;
-        }
+    const mockWindowUtils = {
+        update: url => url,
+        replace: url => url,
+        getHref: () => simpleSubdomain.href,
+        getHostname: () => simpleSubdomain.hostname
     };
 
     beforeEach(() => {
@@ -110,31 +91,31 @@ describe('BaseService rewire tests', () => {
 
     it('test getCookie', () => {
         baseService = new BaseService();
-        var cookie = baseService.getCookie('cookieName');
+        let cookie = baseService.getCookie('cookieName');
         expect(cookie.loadMethodCalled).toBeTruthy();
     });
 
     it('test axios delete method', () => {
         baseService = new BaseService();
-        var axios = baseService.delete('url', 'config');
+        let axios = baseService.delete('url', 'config');
         expect(axios.deleteMethodCalled).toBeTruthy();
     });
 
     it('test axios get method', () => {
         baseService = new BaseService();
-        var axios = baseService.get('url', 'config');
+        let axios = baseService.get('url', 'config');
         expect(axios.getMethodCalled).toBeTruthy();
     });
 
     it('test axios patch method', () => {
         baseService = new BaseService();
-        var axios = baseService.patch('url', 'config');
+        let axios = baseService.patch('url', 'config');
         expect(axios.patchMethodCalled).toBeTruthy();
     });
 
     it('test axios put method', () => {
         baseService = new BaseService();
-        var axios = baseService.put('url', 'config');
+        let axios = baseService.put('url', 'config');
         expect(axios.putMethodCalled).toBeTruthy();
     });
 
@@ -146,61 +127,67 @@ describe('BaseService rewire tests', () => {
      */
     it('test constructUrl method', () => {
         baseService = new BaseService();
-        var mask = '/api/v1/apps/{0}/tables/{0}/reports/{1}';
-        var tokens = ['123abc456', 'xyz123'];
-        var output = '/api/v1/apps/123abc456/tables/123abc456/reports/xyz123';
-        var url = baseService.constructUrl(mask, tokens);
+        let mask = '/api/v1/apps/{0}/tables/{0}/reports/{1}';
+        let tokens = ['123abc456', 'xyz123'];
+        let output = '/api/v1/apps/123abc456/tables/123abc456/reports/xyz123';
+        let url = baseService.constructUrl(mask, tokens);
         expect(output).toEqual(url);
     });
 
-    it('test constructRedirectUrl method with Configuration specifying unauthorizedRedirect', (done) => {
-        baseService = new BaseService();
-        baseService.constructRedirectUrl().then(function(url) {
-            expect(url).toEqual(mockUnauthorizedRedirectConfiguration.unauthorizedRedirect);
-        }).then(done, done);
+    describe('constructRedirectUrl', () => {
+        it('returns the pre-configured unauthorizedRedirect if it exists on Configuration', (done) => {
+            baseService = new BaseService();
+            baseService.constructRedirectUrl().then(url => {
+                expect(url).toEqual(mockUnauthorizedRedirectConfiguration.unauthorizedRedirect);
+            }).then(done, done);
+        });
+
+        const createMockAxiosForFederation = returnValue => ({
+            create: () => ({
+                get: () => returnValue
+            })
+        });
+
+        const mockGetSimpleSubdomainAxios = createMockAxiosForFederation(Promise.resolve({data: {legacyUrl: `https://${simpleSubdomain.subdomain}.${simpleSubdomain.domain}`}}));
+        const mockGetComplexSubdomainAxios = createMockAxiosForFederation(Promise.resolve({data: {legacyUrl: `https://${complexSubdomain.subdomain}.${complexSubdomain.domain}`}}));
+        const mockFailGettingSubdomainInAxios = createMockAxiosForFederation(Promise.reject());
+
+        it('returns a redirect URL with a simple subdomain', (done) => {
+            BaseServiceRewireAPI.__Rewire__('Configuration', mockSimpleDomainConfiguration);
+            BaseServiceRewireAPI.__Rewire__('axios', mockGetSimpleSubdomainAxios);
+            baseService = new BaseService();
+
+            let expectedUrl = simpleSubdomain.expectedUrl + mockWindowUtils.getHref();
+
+            baseService.constructRedirectUrl().then(url => {
+                expect(url).toEqual(expectedUrl);
+            }).then(done, done);
+        });
+
+        it('returns a redirect URL with complex subdomain', (done) => {
+            mockWindowUtils.getHref = function() {return complexSubdomain.href;};
+            mockWindowUtils.getHostname = function() {return complexSubdomain.hostname;};
+            BaseServiceRewireAPI.__Rewire__('WindowLocationUtils', mockWindowUtils);
+            BaseServiceRewireAPI.__Rewire__('Configuration', mockComplexSubdomainConfiguration);
+            BaseServiceRewireAPI.__Rewire__('axios', mockGetComplexSubdomainAxios);
+            baseService = new BaseService();
+
+            let expectedUrl = complexSubdomain.expectedUrl + mockWindowUtils.getHref();
+
+            baseService.constructRedirectUrl().then(url => {
+                expect(url).toEqual(expectedUrl);
+            }).then(done, done);
+        });
+
+        it('returns a standard redirect url if obtaining information from the Federation API fails', (done) => {
+            BaseServiceRewireAPI.__Rewire__('Configuration', mockSimpleDomainConfiguration);
+            BaseServiceRewireAPI.__Rewire__('axios', mockFailGettingSubdomainInAxios);
+
+            baseService = new BaseService();
+
+            baseService.constructRedirectUrl().then(url => {
+                expect(url).toEqual(UNAUTHORIZED);
+            }, error => expect(false).toEqual(true)).then(done, done);
+        });
     });
-
-    var mockGetSimpleSubdomainAxios = {
-        create: function() {
-            return {
-                get: function() {
-                    return Promise.resolve({data: {legacyUrl: `https://${simpleSubdomain.subdomain}.${simpleSubdomain.domain}`}});
-                }
-            };
-        }
-    };
-
-    var mockGetComplexSubdomainAxios = {
-        create: function() {
-            return {
-                get: function() {
-                    return Promise.resolve({data: {legacyUrl: `https://${complexSubdomain.subdomain}.${complexSubdomain.domain}`}});
-                }
-            };
-        }
-    };
-
-    it('test constructRedirectUrl method with simple subdomain', (done) => {
-        BaseServiceRewireAPI.__Rewire__('Configuration', mockSimpleDomainConfiguration);
-        BaseServiceRewireAPI.__Rewire__('axios', mockGetSimpleSubdomainAxios);
-        baseService = new BaseService();
-        var expectedUrl = simpleSubdomain.expectedUrl + mockWindowUtils.getHref();
-        baseService.constructRedirectUrl().then(function(url) {
-            expect(url).toEqual(expectedUrl);
-        }).then(done, done);
-    });
-
-    it('test constructRedirectUrl method with complex subdomain', (done) => {
-        mockWindowUtils.getHref = function() {return complexSubdomain.href;};
-        mockWindowUtils.getHostname = function() {return complexSubdomain.hostname;};
-        BaseServiceRewireAPI.__Rewire__('WindowLocationUtils', mockWindowUtils);
-        BaseServiceRewireAPI.__Rewire__('Configuration', mockComplexSubdomainConfiguration);
-        BaseServiceRewireAPI.__Rewire__('axios', mockGetComplexSubdomainAxios);
-        baseService = new BaseService();
-        var expectedUrl = complexSubdomain.expectedUrl + mockWindowUtils.getHref();
-        baseService.constructRedirectUrl().then(function(url) {
-            expect(url).toEqual(expectedUrl);
-        }).then(done, done);
-    });
-
 });

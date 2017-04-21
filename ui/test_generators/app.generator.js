@@ -130,6 +130,22 @@
             return builderInstance.build();
         },
 
+        generateNamedAppWithTablesFromMap: function(tableMap, appName) {
+            var builderInstance = appBuilder.builder();
+            builderInstance.withName(appName);
+            var tableNames = Object.keys(tableMap);
+            var fieldList;
+            var tableBuilder;
+            tableNames.forEach(function(tableName) {
+                tableBuilder = tableGenerator.getTableBuilder();
+                tableBuilder.withName(tableName);
+                fieldList = tableGenerator.generateFieldListFromMap(tableMap[tableName]);
+                tableBuilder.withFields(fieldList);
+                builderInstance.withTable(tableBuilder.build());
+            });
+            return builderInstance.build();
+        },
+
         validateAppProperties: function(app) {
             var tables = app[appConsts.TABLES];
             //TODO: add relationship generator and validation
