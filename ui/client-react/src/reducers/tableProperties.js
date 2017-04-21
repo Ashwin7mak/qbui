@@ -139,3 +139,13 @@ const tableProperties = (
 };
 
 export default tableProperties;
+
+export const getNeedToNotifyTableDeletion = (state) => {
+    return state.tableProperties.notifyTableDeleted;
+};
+export const getTableJustDeleted = (state) => {
+    if (state.tableProperties && state.tableProperties.tableInfo && state.tableProperties.tableInfo.name) {
+        return state.tableProperties.tableInfo.name.value;
+    }
+    return "";
+};

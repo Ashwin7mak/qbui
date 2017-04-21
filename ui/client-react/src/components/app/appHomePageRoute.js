@@ -9,6 +9,7 @@ import {connect} from 'react-redux';
 import {NotificationManager} from 'react-notifications';
 import Locale from '../../locales/locales';
 import {notifyTableDeleted} from '../../actions/tablePropertiesActions';
+import {getNeedToNotifyTableDeletion, getTableJustDeleted} from '../../reducers/tableProperties';
 import './appHomePage.scss';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
@@ -135,13 +136,15 @@ export const AppHomePageRoute = React.createClass({
 
 const mapStateToProps = (state) => {
     return {
-        notifyTableDeleted: state.tableProperties ? state.tableProperties.notifyTableDeleted : false,
-        tableJustDeleted: state.tableProperties && state.tableProperties.tableInfo ? state.tableProperties.tableInfo.name.value : ""
+        notifyTableDeleted: getNeedToNotifyTableDeletion(state),
+        tableJustDeleted: getTableJustDeleted(state)
     };
 };
 
-const mapDispatchToProps = {
-    resetTableDeleteNotification: notifyTableDeleted(false)
+const mapDispatchToProps = (dispatch) => {
+    return {
+        resetTableDeleteNotification: () => dispatch(notifyTableDeleted(false))
+    };
 };
 
 export default connect(
