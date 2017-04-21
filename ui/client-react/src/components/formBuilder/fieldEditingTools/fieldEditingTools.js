@@ -71,7 +71,7 @@ export class FieldEditingTools extends Component {
             return null;
         }
 
-        if (this.isFieldSelected() && this.props.tabIndex === tabIndexConstants.formTabIndex) {
+        if (this.isFieldSelected() && this.props.formBuilderChildrenTabIndex === tabIndexConstants.formTabIndex) {
             tabIndex = tabIndexConstants.formTabIndex;
         } else {
             tabIndex = '-1';
@@ -101,12 +101,12 @@ export class FieldEditingTools extends Component {
          * */
         if (this.props.previouslySelectedField &&
             this.props.previouslySelectedField[0] &&
-            this.props.tabIndex !== "-1") {
+            this.props.formBuilderChildrenTabIndex !== "-1") {
             let previouslySelectedField = document.querySelectorAll(".fieldEditingTools");
             previouslySelectedField[this.props.previouslySelectedField[0].elementIndex].focus();
         } else if (this.props.selectedFields &&
             this.props.selectedFields[0] &&
-            this.props.tabIndex !== "-1" &&
+            this.props.formBuilderChildrenTabIndex !== "-1" &&
             document.activeElement.tagName !== "INPUT") {
             let setFocusOnSelectedField = document.querySelectorAll(".fieldEditingTools")[this.props.selectedFields[0].elementIndex];
             if (setFocusOnSelectedField) {
@@ -172,7 +172,7 @@ export class FieldEditingTools extends Component {
     }
 
     render() {
-        let tabIndex = this.props.tabIndex ? this.props.tabIndex : "-1";
+        let tabIndex = this.props.formBuilderChildrenTabIndex ? this.props.formBuilderChildrenTabIndex : "-1";
 
         let isSmall = Breakpoints.isSmallBreakpoint();
         let classNames = ["fieldEditingTools"];
@@ -226,14 +226,14 @@ FieldEditingTools.defaultProps = {
 const mapStateToProps = (state, ownProps) => {
     let formId = (ownProps.formId || CONTEXT.FORM.VIEW);
     let currentForm = _.get(state, `forms[${formId}]`, {});
-    let tabIndex = _.get(currentForm, 'formBuilderChildrenTabIndex[0]', '-1');
+    let formBuilderChildrenTabIndex = _.get(currentForm, 'formBuilderChildrenTabIndex[0]', '-1');
     let selectedFields = (_.has(currentForm, "selectedFields") ? currentForm.selectedFields : []);
     let previouslySelectedField = (_.has(currentForm, "previouslySelectedField") ? currentForm.previouslySelectedField : []);
 
     return {
         selectedFields,
         previouslySelectedField,
-        tabIndex
+        formBuilderChildrenTabIndex
     };
 };
 

@@ -37,7 +37,7 @@ const mapStateToProps = state => {
         currentForm,
         selectedField: (_.has(currentForm, 'selectedFields') ? currentForm.selectedFields[0] : undefined),
         redirectRoute: getFormRedirectRoute(state),
-        tabIndex: (_.has(currentForm, 'formBuilderChildrenTabIndex') ? currentForm.formBuilderChildrenTabIndex[0] : "-1"),
+        formBuilderChildrenTabIndex: (_.has(currentForm, 'formBuilderChildrenTabIndex') ? currentForm.formBuilderChildrenTabIndex[0] : "-1"),
         toolPaletteChildrenTabIndex: (_.has(currentForm, 'toolPaletteChildrenTabIndex') ? currentForm.toolPaletteChildrenTabIndex[0] : "-1"),
         formFocus: (_.has(currentForm, 'formFocus') ? currentForm.formFocus[0] : undefined),
         toolPaletteFocus: (_.has(currentForm, 'toolPaletteFocus') ? currentForm.toolPaletteFocus[0] : undefined),
@@ -176,7 +176,7 @@ export const FormBuilderContainer = React.createClass({
     },
 
     updateChildrenTabIndex(e) {
-        let childrenTabIndex = this.props.tabIndex;
+        let childrenTabIndex = this.props.formBuilderChildrenTabIndex;
 
         if ((e.which === ENTER_KEY || e.which === SPACE_KEY) && childrenTabIndex !== tabIndexConstants.formTabIndex) {
             this.props.toggleFormBuilderChildrenTabIndex(this.props.currentForm.id, childrenTabIndex);
@@ -206,10 +206,10 @@ export const FormBuilderContainer = React.createClass({
     },
 
     escapeCurrentContext() {
-        let childrenTabIndex = this.props.tabIndex;
+        let childrenTabIndex = this.props.formBuilderChildrenTabIndex;
         let selectedField = this.props.selectedField;
         let formId = this.props.currentForm.id;
-        if (this.props.tabIndex === tabIndexConstants.formTabIndex) {
+        if (this.props.formBuilderChildrenTabIndex === tabIndexConstants.formTabIndex) {
             this.props.toggleFormBuilderChildrenTabIndex(formId, childrenTabIndex);
         } else if (this.props.toolPaletteChildrenTabIndex === tabIndexConstants.toolPaletteTabIndex) {
             this.props.toggleToolPaletteChildrenTabIndex(formId, tabIndexConstants.toolPaletteTabIndex);
