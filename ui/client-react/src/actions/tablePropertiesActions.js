@@ -4,6 +4,7 @@ import TableService from '../services/tableService';
 import Logger from '../utils/logger';
 import LogLevel from '../utils/logLevels';
 import AppHistory from '../globals/appHistory';
+import Locale from '../locales/locales';
 import UrlUtils from '../utils/urlUtils';
 import {NotificationManager} from 'react-notifications';
 

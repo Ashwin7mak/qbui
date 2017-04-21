@@ -75,7 +75,8 @@ const QBModal = React.createClass({
     },
     getDefaultProps() {
         return {
-            type: 'standard'
+            type: 'standard',
+            primaryButtonDisabled: false
         };
     },
     /**
