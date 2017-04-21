@@ -106,8 +106,9 @@ export class FieldProperties extends Component {
         return (
             <div className="fieldPropertyContainer">
                 <div className="textPropertyTitle">{propertyTitle}</div>
-                <MultiLineTextFieldValueEditor value={propertyValue}
-                                              onChange={(newValue) => this.updateMultiChoiceFieldProps(newValue)}
+                <MultiLineTextFieldValueEditor
+                    value={propertyValue}
+                    onChange={(newValue) => this.updateMultiChoiceFieldProps(newValue)}
                 />
             </div>
         );
@@ -122,7 +123,7 @@ export class FieldProperties extends Component {
     buildMultiChoiceDisplayList(choices) {
         let list = "";
         if (choices.length > 0) {
-            let choiceArr = choices.map(function(choice) {return choice.displayValue;});
+            let choiceArr = choices.map(choice => choice.displayValue);
             list = choiceArr.join("\n");
         }
         return list;
