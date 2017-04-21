@@ -1,14 +1,19 @@
 ---
 AWSTemplateFormatVersion: '2010-09-09'
-Description: ExperienceEngine ECS Deployment
+Description: QBUI ECS Deployment
 Parameters:
   VPCStackName:
     Type: String
     Default: general-vpc
-  Path:
+  SpecificPath:
     Type: String
     Default: "/qbase/*"
-  ECSClusterName:
+  DefaultPath:
+    Type: String
+    Default: "/*"
+  SwimlaneID:
+    Type: String
+  Environment:
     Type: String
   ServiceName:
     Type: String
@@ -21,7 +26,7 @@ Parameters:
     Default: 9443
   ContainerImage:
     Type: String
-    Default: 723670383381.dkr.ecr.us-west-2.amazonaws.com/quickbase/qbui:latest
+    Default: 717266932182.dkr.ecr.us-west-2.amazonaws.com/quickbase/ui:latest
   ContainerMemory:
     Type: String
     Default: 2048
@@ -30,55 +35,70 @@ Mappings:
   # 3381 = pre-prod
   # 1063 = prod
   AccountMap:
-    SplunkIndex:
-      "723670383381": "containers"
-      "729325871063": "containers"
+    DomainName:
+      "723670383381": "newstack.quickbaserocks.com"
+      "729325871063": "newstack.quickbase.com"
+    SecretsKmsKeyId:
+      "723670383381": "79461a25-ffdc-4fbf-ac4f-febb847dcb9b"
+      "729325871063": "7eb8ecf8-3894-4d3d-a3e4-74ed8b811c7e"
 
 Resources:
-  Service: 
+  Service:
     Type: AWS::ECS::Service
     DependsOn: ListenerRule
-    Properties: 
-        Cluster: !Ref ECSClusterName
-        Role: !Ref ServiceRole
-        DesiredCount: !Ref DesiredCount
-        TaskDefinition: !Ref TaskDefinition
-        LoadBalancers:
-          - ContainerName: !Ref ServiceName
-            ContainerPort: !Ref ContainerPort
-            TargetGroupArn: !Ref TargetGroup
+    Properties:
+      Cluster: !Sub ${SwimlaneID}-ecs
+      Role: !Ref ServiceRole
+      DesiredCount: !Ref DesiredCount
+      TaskDefinition: !Ref TaskDefinition
+      LoadBalancers:
+        - ContainerName: !Ref ServiceName
+          ContainerPort: !Ref ContainerPort
+          TargetGroupArn: !Ref TargetGroup
   TaskDefinition:
     Type: AWS::ECS::TaskDefinition
     Properties:
-        ContainerDefinitions:
-          - Name: !Ref ServiceName
-            Essential: true
-            Image: !Ref ContainerImage
-            Memory: !Ref ContainerMemory
-            PortMappings:
-              - ContainerPort: !Ref ContainerPort
-            LogConfiguration:
-              LogDriver: splunk
-              Options:
-                splunk-url: https://http-inputs-quickbase.splunkcloud.com
-                splunk-sourcetype: !Ref ServiceName
-                splunk-token: F3CA376D-74A5-5684-B563-5542B2F2E0F2
-                splunk-index: !FindInMap [AccountMap, "SplunkIndex", !Ref "AWS::AccountId"]
-                splunk-source: !Ref ServiceName
-                tag: "{{.Name}}/{{.ID}}"
-            Environment:
-              - Name: NODE_ENV
-                Value: container
+      TaskRoleArn: !GetAtt TaskRole.Arn
+      ContainerDefinitions:
+        - Name: !Ref ServiceName
+          Essential: true
+          Image: !Ref ContainerImage
+          Memory: !Ref ContainerMemory
+          PortMappings:
+            - ContainerPort: !Ref ContainerPort
+          MountPoints:
+            - SourceVolume: AppLogs
+              ContainerPath: /var/log
+          Environment:
+            - Name: NODE_ENV
+              Value: container
+      Volumes:
+        - Host:
+            SourcePath: !Sub "/var/log/containers/${ServiceName}"
+          Name: AppLogs
   ListenerRule:
     Type: AWS::ElasticLoadBalancingV2::ListenerRule
     Properties:
       ListenerArn:
-        "Fn::ImportValue": !Sub "${ECSClusterName}-ALBListenerARN"
+        "Fn::ImportValue": !Sub "${SwimlaneID}-ecs-ALBListenerARN"
       Priority: 3
       Conditions:
         - Field: path-pattern
-          Values: 
-            - !Ref Path
+          Values:
+            - !Ref SpecificPath
+      Actions:
+        - TargetGroupArn: !Ref TargetGroup
+          Type: forward
+  ListenerRule:
+    Type: AWS::ElasticLoadBalancingV2::ListenerRule
+    Properties:
+      ListenerArn:
+        "Fn::ImportValue": !Sub "${SwimlaneID}-ecs-ALBListenerARN"
+      Priority: 200
+      Conditions:
+        - Field: path-pattern
+          Values:
+            - !Ref DefaultPath
       Actions:
         - TargetGroupArn: !Ref TargetGroup
           Type: forward
@@ -89,17 +109,16 @@ Resources:
         "Fn::ImportValue": !Sub "${VPCStackName}-VPC"
       Port: 443
       Protocol: HTTPS
-      Matcher: 
+      Matcher:
         HttpCode: 200-299
       HealthCheckIntervalSeconds: 10
-      # FIXME (wrong path - should be /ee/v1/health)
-      HealthCheckPath: /qbase/
+      HealthCheckPath: /qbase/favicons/favicon.ico
       HealthCheckProtocol: HTTPS
       HealthCheckTimeoutSeconds: 5
       HealthyThresholdCount: 2
-  ServiceRole: 
+  ServiceRole:
     Type: AWS::IAM::Role
-    Properties: 
+    Properties:
       Path: /
       AssumeRolePolicyDocument:
         Statement:
@@ -115,9 +134,9 @@ Resources:
         PolicyName: alb-registration-policy
         PolicyDocument:
           Statement:
-            - 
+            -
               Effect: Allow
-              Action: 
+              Action:
                 - ec2:AuthorizeSecurityGroupIngress
                 - ec2:Describe*
                 - elasticloadbalancing:DeregisterInstancesFromLoadBalancer
@@ -128,3 +147,38 @@ Resources:
                 - elasticloadbalancing:DescribeTargetHealth
                 - elasticloadbalancing:RegisterTargets
               Resource: "*"
+  TaskRole:
+    Type: AWS::IAM::Role
+    Properties:
+      Path: /
+      AssumeRolePolicyDocument:
+        Statement:
+          -
+            Effect: "Allow"
+            Principal:
+              Service:
+                - "ecs-tasks.amazonaws.com"
+            Action:
+              - "sts:AssumeRole"
+      Policies:
+      -
+        PolicyName: parameter-store-policy
+        PolicyDocument:
+          Statement:
+            -
+              Effect: Allow
+              Action:
+                - ssm:DescribeParameters
+              Resource: "*"
+            -
+              Effect: Allow
+              Action:
+                - ssm:GetParameters
+              Resource: !Sub "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${SwimlaneID}-${Environment}-${ServiceName}-db.*"
+            -
+              Effect: Allow
+              Action:
+                - kms:Decrypt
+              Resource: !Sub
+                - arn:aws:kms:${Region}:${AID}:key/${SecretsKmsKeyId}
+                - { Region: !Ref "AWS::Region", AID: !Ref "AWS::AccountId", SecretsKmsKeyId: !FindInMap [AccountMap, "SecretsKmsKeyId", !Ref "AWS::AccountId"] }
