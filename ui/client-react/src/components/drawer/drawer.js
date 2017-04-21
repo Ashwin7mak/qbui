@@ -1,5 +1,6 @@
 import React, {PropTypes} from 'react';
 import _ from 'lodash';
+import {Route} from 'react-router-dom';
 
 import RecordRouteWithUniqueId from '../record/recordRoute';
 import './drawer.scss';

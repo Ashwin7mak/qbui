@@ -1,4 +1,5 @@
 import React, {PropTypes} from 'react';
+import {Route} from 'react-router-dom';
 import _ from 'lodash';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
@@ -16,7 +17,7 @@ import './drawer.scss';
  */
 class DrawerContainer extends React.Component {
     shouldRender = () => {
-        return !!this.props.isDrawerContext;
+        //return !!this.props.isDrawerContext;
         // const {appId, tblId, recordId, drawerTableId, drawerRecId, embeddedRptId} = this.props.match.params;
         // return [appId, tblId, recordId, drawerTableId, drawerRecId, embeddedRptId].every(id => id);
     };
@@ -25,20 +26,20 @@ class DrawerContainer extends React.Component {
     getDrawer = () => {
         // TODO: Once we integrate with the router, `getDrawer` will return:
         //           <Route path={/*something*/} component={component}>
-
-        if (this.shouldRender()) {
-            const component = (
+        //if (this.shouldRender()) {
+        return (
+            <Route path={`${this.props.match.url}/sr_app_:appId([A-Za-z0-9]+)_table_:tblId([A-Za-z0-9]+)_report_:reportId([A-Za-z0-9]+)_record_:recordId([A-Za-z0-9]+)`}>
                 <Drawer key={1} unmount={this.closeInvisiblePane}>
                     <RecordRouteWithUniqueId
                         {...this.props}
                         isDrawerContext={true}
                         hasDrawer={true}
                         />
-                </Drawer>);
-            return component;
-        } else {
+                </Drawer>
+            </Route>);
+        /*} else {
             return null;
-        }
+        }*/
     };
 
     // TODO: pass a closeDrawers function to drawers, drawers pass close button as a prop to
