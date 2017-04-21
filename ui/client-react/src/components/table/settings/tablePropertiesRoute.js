@@ -32,7 +32,7 @@ export const TablePropertiesRoute = React.createClass({
     },
     getPageActions(maxButtonsBeforeMenu) {
         const actions = [
-            {i18nMessageKey: 'pageActions.deleteTable', icon:'delete', className:'deleteTable', onClick:this.handleDelete}
+            {i18nMessageKey: 'pageActions.deleteTable', icon:'delete', className:'deleteTable', showLabel: true, onClick:this.handleDelete}
         ];
         return (<IconActions className="pageActions" actions={actions} maxButtonsBeforeMenu={maxButtonsBeforeMenu}/>);
     },

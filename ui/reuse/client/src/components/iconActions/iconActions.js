@@ -59,7 +59,11 @@ class IconActions extends Component {
         if (action.className) {
             classNames.push(action.className);
         }
+        if (action.showLabel) {
+            classNames.push('withLabel');
+        }
 
+        let buttonLabel = action.i18nMessageKey ? <I18nMessage message={action.i18nMessageKey}  /> : action.plainMessage;
         return (
             <Button
                 key={this.getActionKey(action)}
@@ -69,7 +73,7 @@ class IconActions extends Component {
                 onKeyDown={this.onKeyDown.bind(this, action)}
             >
                 <Tooltip i18nMessageKey={action.i18nMessageKey} plainMessage={action.plainMessage} placement="bottom">
-                    <Icon icon={action.icon}/>
+                    <Icon icon={action.icon}/> <span className="buttonLabel">{action.showLabel ? buttonLabel : ""}</span>
                 </Tooltip>
             </Button>
         );
@@ -175,7 +179,12 @@ IconActions.propTypes = {
 
         /**
          * Can optionally display the action as disabled */
-        disabled: PropTypes.bool
+        disabled: PropTypes.bool,
+
+        /**
+         * Can optionally show a label along with the button (only if the action is rendered as a button
+         */
+        showLabel: PropTypes.bool
     })).isRequired,
 
     /**
