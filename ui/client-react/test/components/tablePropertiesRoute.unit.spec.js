@@ -97,14 +97,14 @@ describe('TablePropertiesRoute functions', () => {
 
         it('test clicking on delete icon sets the state to open the modal', () => {
             let deleteTableIcon = TestUtils.scryRenderedDOMComponentsWithClass(component, "deleteTable")[0];
-            Simulate.click(deleteTableIcon);
+            Simulate.mouseDown(deleteTableIcon);
             //confirm that the state was updated that is supposed to throw up the Modal
             expect(component.state.confirmDeletesDialogOpen).toBe(true);
         });
 
         it('test clicking on cancel button of modal resets the state', () => {
             let deleteTableIcon = TestUtils.scryRenderedDOMComponentsWithClass(component, "deleteTable")[0];
-            Simulate.click(deleteTableIcon);
+            Simulate.mouseDown(deleteTableIcon);
             //confirm that the state was updated that is supposed to throw up the Modal
             expect(component.state.confirmDeletesDialogOpen).toBe(true);
             component.cancelTableDelete();
