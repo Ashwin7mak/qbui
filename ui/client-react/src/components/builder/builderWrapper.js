@@ -1,11 +1,13 @@
 import React, {PropTypes} from 'react';
+import {NotificationContainer} from "react-notifications";
+import {withRouter, Switch} from 'react-router-dom';
 import FormBuilderContainer from './formBuilderContainer';
 import Fluxxor from "fluxxor";
 import {connect} from 'react-redux';
 import commonNavActions from '../../../../reuse/client/src/components/sideNavs/commonNavActions';
 import './builderWrapper.scss';
 import GlobalActions from '../actions/globalActions';
-import {NotificationContainer} from "react-notifications";
+import RouteWithSubRoutes from "../../scripts/RouteWithSubRoutes";
 import TopNav from '../../../../reuse/client/src/components/topNav/topNav';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
@@ -53,7 +55,15 @@ export const BuilderWrapper = React.createClass({
                 />
 
                 <div className="builderWrapperBody">
-                    {this.props.children}
+                    {this.props.routes &&
+                        <Switch>
+                            {
+                                this.props.routes.map((route, i) => {
+                                    return RouteWithSubRoutes(route, i);
+                                })
+                            }
+                        </Switch>
+                    }
                 </div>
 
             </div>
@@ -61,4 +71,4 @@ export const BuilderWrapper = React.createClass({
     }
 });
 
-export default connect(null, commonNavActions('builder'))(BuilderWrapper);
+export default withRouter(connect(null, commonNavActions('builder'))(BuilderWrapper));

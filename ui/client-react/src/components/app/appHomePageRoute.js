@@ -45,7 +45,7 @@ export const AppHomePageRoute = React.createClass({
             }
 
             if (checkParams) {
-                if (this.props.params.appId === appId) {
+                if (_.get(this.props, 'match.params.appId') === appId) {
                     return;
                 }
             }
@@ -84,7 +84,7 @@ export const AppHomePageRoute = React.createClass({
         let flux = this.getFlux();
         flux.actions.showTopNav();
         flux.actions.setTopTitle();
-        this.selectAppFromParams(this.props.params);
+        this.selectAppFromParams(_.get(this.props, 'match.params'));
         flux.actions.doneRoute();
         if (this.props.notifyTableDeleted) {
             NotificationManager.success(Locale.getMessage('tableEdit.tableDeleted', {tableName: this.props.tableJustDeleted}), Locale.getMessage('success'));
@@ -93,7 +93,7 @@ export const AppHomePageRoute = React.createClass({
     },
     // Triggered when properties change
     componentWillReceiveProps: function(props) {
-        this.selectAppFromParams(props.params, true);
+        this.selectAppFromParams(_.get(this.props, 'match.params'), true);
     },
 
     getPageActions(maxButtonsBeforeMenu = 0) {
