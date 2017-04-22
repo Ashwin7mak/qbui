@@ -141,7 +141,7 @@ export class FeatureSwitchOverridesRoute extends React.Component {
                 primaryButtonOnClick={this.deleteSelectedOverrides}
                 leftButtonName={Locale.getMessage('selection.dontDelete')}
                 leftButtonOnClick={this.cancelDelete}
-                bodyMessage={msg}
+                title={msg}
                 type="alert"/>);
     }
 

@@ -128,7 +128,6 @@ const ReportRoute = React.createClass({
         return (<IconActions className="pageActions" actions={actions}/>);
     },
 
-
     getStageHeadline() {
         const reportName = this.props.reportData && this.props.reportData.data && this.props.reportData.data.name;
         const {appId, tblId} = this.props.match.params;

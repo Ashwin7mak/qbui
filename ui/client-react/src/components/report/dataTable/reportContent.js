@@ -360,7 +360,7 @@ export const ReportContent = React.createClass({
                 primaryButtonOnClick={this.deleteRecord}
                 leftButtonName={Locales.getMessage('selection.dontDelete')}
                 leftButtonOnClick={this.cancelRecordDelete}
-                bodyMessage={msg}
+                title={msg}
                 type="alert"/>);
     },
 

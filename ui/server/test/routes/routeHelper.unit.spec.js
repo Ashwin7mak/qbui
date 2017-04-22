@@ -552,4 +552,19 @@ describe('Validate RouteHelper unit tests', function() {
             });
         });
     });
+    describe('validate getEETablesRoute method', function() {
+        var testCases = [
+            {name: 'test empty input', url: '', tableId: null, expectation: ''},
+            {name: 'test null url', url: null, tableId: null, expectation: null},
+            {name: 'test with invalid url', url: 'apps/fakeapp/prefix', tableId: null, expectation: 'apps/fakeapp/tables'},
+            {name: 'test with valid url with tableId', url: 'apps/fakeapp/prefix', tableId: 123, expectation: 'apps/fakeapp/tables/123'}
+        ];
+
+        testCases.forEach(function(testCase) {
+            it('Test case: ' + testCase.name, function(done) {
+                assert.equal(routeHelper.getEETablesRoute(testCase.url, testCase.tableId), testCase.expectation);
+                done();
+            });
+        });
+    });
 });

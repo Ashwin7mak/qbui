@@ -662,7 +662,16 @@ export default {
         tableEdit: {
             tableUpdateFailed: "Impossible de mettre à jour le tableau",
             tableUpdated: "Informations sur la table enregistrées",
-            tableReset: "Informations sur la table non enregistrées"
+            tableReset: "Informations sur la table non enregistrées",
+            deleteThisTable: "Supprimez la table {tableName}?",
+            deleteTable: "Supprimer la table",
+            tableDeleted: "{tableName} tableau supprimé",
+            tableDeleteFailed: "Échec de la suppression du tableau",
+            tableDeleteDialog: {
+                text: "Cela ne peut pas être annulé. Vous supprimez toutes les données dans le tableau et romperez les relations avec d'autres tables.",
+                prompt: "Tapez OUI pour confirmer que vous souhaitez supprimer ce tableau."
+            },
+            YES: "OUI"
         }
     }
 };
