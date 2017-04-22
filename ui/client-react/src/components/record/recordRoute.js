@@ -37,7 +37,6 @@ import '../drawer/drawerContainer.scss';
 
 let logger = new Logger();
 let FluxMixin = Fluxxor.FluxMixin(React);
-const isDefined = o => (o !== undefined);
 //todo :remove the following variables once we start using react router 4
 let embeddedReport;
 /**
@@ -82,11 +81,16 @@ export const RecordRoute = React.createClass({
         }
     },
     componentDidMount() {
+        console.log('mounting: ' + (this.props.uniqueId || 'root recordRoute'));
         let flux = this.getFlux();
         flux.actions.hideTopNav();
         flux.actions.setTopTitle();
 
         this.loadRecordFromParams();
+    },
+
+    componentWillUnmount() {
+        console.log('unmounting: ' + (this.props.uniqueId || 'root recordRoute'));
     },
 
     componentDidUpdate(prev) {
@@ -598,18 +602,20 @@ const mapDispatchToProps = (dispatch) => {
 
 // named exports for unit testing router functions and redux actions
 
-export const RecordRouteWithRouter = withRouter(RecordRoute);
+//export const RecordRouteWithRouter = withRouter(RecordRoute);
 export const ConnectedRecordRoute = connect(
     mapStateToProps,
     mapDispatchToProps
 )(RecordRoute);
 
 // why do we have 2 connected RecordRoutes exported?
-export const ConnectedRecordRouteWithRouter = connect(
+export const ConnectedRecordRouteWithRouter = withRouter(connect(
     mapStateToProps,
     mapDispatchToProps
-)(RecordRouteWithRouter);
+)(RecordRoute));
 export default ConnectedRecordRouteWithRouter;
+
+
 
 // Wrap RecordRoute with `withUniqueId` hoc so that it has a unique ID used to identify its own
 // instance's data in the record store and form store. Used by stacked forms.

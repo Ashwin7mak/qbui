@@ -16,41 +16,21 @@ import './drawer.scss';
  * I think Route's children prop might come in handy https://reacttraining.com/react-router/web/api/Route/children-func
  */
 class DrawerContainer extends React.Component {
-    shouldRender = () => {
-        //return !!this.props.isDrawerContext;
-        // const {appId, tblId, recordId, drawerTableId, drawerRecId, embeddedRptId} = this.props.match.params;
-        // return [appId, tblId, recordId, drawerTableId, drawerRecId, embeddedRptId].every(id => id);
-    };
-
-
     getDrawer = () => {
-        // TODO: Once we integrate with the router, `getDrawer` will return:
-        //           <Route path={/*something*/} component={component}>
-        //if (this.shouldRender()) {
         return (
-            <Route path={`${this.props.match.url}/sr_app_:appId([A-Za-z0-9]+)_table_:tblId([A-Za-z0-9]+)_report_:reportId([A-Za-z0-9]+)_record_:recordId([A-Za-z0-9]+)`}>
-                <Drawer key={1} unmount={this.closeInvisiblePane}>
-                    <RecordRouteWithUniqueId
-                        {...this.props}
-                        isDrawerContext={true}
-                        hasDrawer={true}
-                        />
-                </Drawer>
-            </Route>);
-        /*} else {
-            return null;
-        }*/
+            <Drawer key={1} unmount={this.closeInvisiblePane}>
+                <RecordRouteWithUniqueId
+                    {...this.props}
+                    isDrawerContext={true}
+                    hasDrawer={true}
+                    />
+            </Drawer>);
     };
 
     // TODO: pass a closeDrawers function to drawers, drawers pass close button as a prop to
     //       RecordWrapper, RecordWrapper renders button. YES!
     render() {
         const classNames = ['drawerContainer', this.props.position];
-        classNames.push(this.props.visible ? 'visible' : '');
-        classNames.push(this.props.hasDrawer ? 'visible' : '');
-
-        const drawer = this.getDrawer();
-        classNames.push(drawer ? 'visible' : '');
 
         let closeHandleBackdrop = null;
         if (this.props.rootDrawer) {
@@ -58,20 +38,25 @@ class DrawerContainer extends React.Component {
             closeHandleBackdrop = <div className="closeHandleBackdrop" onClick={this.props.closeDrawer} />;
         }
         return (
-            <div className={classNames.join(' ')}>
-                {closeHandleBackdrop}
-                <ReactCSSTransitionGroup
-                    className="slidey-righty"
-                    transitionName="slidey-righty"
-                    transitionAppear={true}
-                    transitionAppearTimeout={1200}
-                    transitionEnterTimeout={1200}
-                    transitionLeaveTimeout={1200}
-                    >
-                    {drawer}
-                </ReactCSSTransitionGroup>
-            </div>
-        );
+            <Route
+                key={this.props.match.url}
+                path={`${this.props.match.url}/sr_app_:appId([A-Za-z0-9]+)_table_:tblId([A-Za-z0-9]+)_report_:reportId([A-Za-z0-9]+)_record_:recordId([A-Za-z0-9]+)`}
+                children={({match, ...rest}) => (
+                    <div className={[...classNames, (match && 'visible')].join(' ')}>
+                        {match && closeHandleBackdrop}
+                        <ReactCSSTransitionGroup
+                            className="slidey-righty"
+                            transitionName="slidey-righty"
+                            transitionAppear={true}
+                            transitionAppearTimeout={1200}
+                            transitionEnterTimeout={1200}
+                            transitionLeaveTimeout={1200}
+                            >
+                            {match && this.getDrawer()}
+                        </ReactCSSTransitionGroup>
+                    </div>
+                )}
+            />);
     }
 }
 
