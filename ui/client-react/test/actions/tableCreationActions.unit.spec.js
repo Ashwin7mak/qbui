@@ -49,7 +49,7 @@ describe('Table Creation actions', () => {
 
 
     it('should create an action for showing the table ready dialog', () => {
-        expect(actions.showTableReadyDialog()).toEqual({type: types.SHOW_TABLE_CREATION_DIALOG});
+        expect(actions.showTableReadyDialog()).toEqual({type: types.SHOW_TABLE_READY_DIALOG});
     });
 
     it('should create an action for hiding the table ready dialog', () => {
