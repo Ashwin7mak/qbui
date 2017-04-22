@@ -1,28 +1,22 @@
 import * as types from '../../app/actionTypes';
+import GetStatus from '../../common/reducer/RequestStatusReducer';
+import {combineReducers} from 'redux';
 
-const AccountUsers = (
-    state = {
-        // default states
-
-        // empty user list initially
-        users: []
-    },
-    action) => {
-
+const users = (state = [], action) => {
     // reducer - no mutations!
     switch (action.type) {
-    case types.SET_USERS:
-
+    case types.GET_USERS_SUCCESS:
         // update the state with the new users sent through action
-
-        return {
-            ...state,
-            users: [...action.users]
-        };
+        return [...action.users];
     default:
         // return existing state by default in redux
         return state;
     }
 };
+
+const AccountUsers = combineReducers({
+    users,
+    status: GetStatus
+});
 
 export default AccountUsers;

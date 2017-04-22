@@ -21,3 +21,4 @@ export const CHILD_REPORT_LINK = `${APP_ROUTE}/{0}/table/{1}/report/{2}?detailKe
 
 export const FORBIDDEN = `${BASE_CLIENT_ROUTE}/forbidden`;
 export const UNAUTHORIZED = `${BASE_CLIENT_ROUTE}/unauthorized`;
+export const INTERNAL_SERVER_ERROR = `${BASE_CLIENT_ROUTE}/internalServerError`;
