@@ -160,7 +160,7 @@ export class FieldProperties extends Component {
             this.createNameProperty(this.props.selectedField.name),
             this.createRequiredProperty(this.props.selectedField.required)];
         let formatType = FieldFormats.getFormatType(this.props.selectedField);
-        if (formatType === FieldFormats.TEXT_FORMAT_MULTICHOICE || formatType === FieldFormats.NUMBER_FORMAT_MULTICHOICE) {
+        if (formatType === FieldFormats.TEXT_FORMAT_MULTICHOICE) {
             let choices = this.buildMultiChoiceDisplayList(this.props.selectedField.multipleChoice.choices);
             fieldPropContainers.push(this.createMultiChoiceTextPropertyContainer(Locale.getMessage('fieldPropertyLabels.multiChoice'), choices));
         }
@@ -182,6 +182,7 @@ export class FieldProperties extends Component {
     /**
      * takes the new multichoice list value and creates the choices array for the field object
      * updates that value in the field object and then calls fieldAction to dispatch to reducer store
+     * TODO: figure out how to handle bad user data for Number Multi Choice fields
      * @param newValues
      */
     updateMultiChoiceFieldProps(newValues) {
@@ -189,11 +190,7 @@ export class FieldProperties extends Component {
         let choices = newValues.split("\n");
         let newChoices = [];
         choices.forEach(function(curChoice) {
-            if ((FieldFormats.getFormatType(field) === FieldFormats.NUMBER_FORMAT_MULTICHOICE) && Number(curChoice.replace(/,/g, ""))) {
-                newChoices.push({coercedValue: {value: Number(curChoice.replace(/,/g, ""))}, displayValue: curChoice});
-            } else {
-                newChoices.push({coercedValue: {value: curChoice}, displayValue: curChoice});
-            }
+            newChoices.push({coercedValue: {value: curChoice}, displayValue: curChoice});
         });
         field.multipleChoice.choices = newChoices;
         this.props.updateField(field, this.props.appId, this.props.tableId);

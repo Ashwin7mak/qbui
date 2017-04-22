@@ -17,11 +17,8 @@ let field = {id: 6, required: true, name: "Dat Field", datatypeAttributes: {type
 let multiChoiceField = {id: 7, required: false, name: "Leeloo Dallas MultiChoice", datatypeAttributes: {type: "TEXT"},
     multipleChoice: {choices: [{coercedValue: {value: "Fifth Element"}, displayValue: "Fifth Element"},
         {coercedValue: {value: "Ultimate Weapon"}, displayValue: "Ultimate Weapon"}]}};
-let multiChoiceNumberField = {id: 8, required: false, name: "Leeloo Dallas MultiChoice", datatypeAttributes: {type: "NUMBER"},
-    multipleChoice: {choices: [{coercedValue: {value: 5}, displayValue: "5"}]}};
 let formElement = {FormFieldElement: {fieldId: 6}};
 let formElementMultiChoice = {FormFieldElement: {fieldId: 7}};
-let formElementMultiChoiceNumber = {FormFieldElement: {fieldId: 8}};
 
 
 const mockActions = {
@@ -156,13 +153,14 @@ describe('FieldProperties', () => {
     });
 
     describe('updateMultiChoiceFieldProps', () => {
-        it('confirm that multiChoice Number fields do NOT save NaN values', () => {
-            let newValues = "5\nfifthElement\n1337";
-            let choices = [{coercedValue: {value: 5}, displayValue: "5"}, {coercedValue: {value: 1337}, displayValue: "1337"}];
-            let newField = multiChoiceNumberField;
+        it('confirm that multiChoice Text fields update correctly', () => {
+            let newValues = "5\nfifthElement";
+            let choices = [{coercedValue: {value: "5"}, displayValue: "5"},
+                {coercedValue: {value: "fifthElement"}, displayValue: "fifthElement"}];
+            let newField = multiChoiceField;
             newField.multipleChoice.choices = choices;
             component = shallow(<FieldProperties appId={appId} tableId={tableId} formId={formId}
-                                                 selectedField={multiChoiceNumberField} formElement={formElementMultiChoiceNumber}
+                                                 selectedField={multiChoiceField} formElement={formElementMultiChoice}
                                                  updateField={mockActions.updateField}/>);
 
             instance = component.instance();
