@@ -61,7 +61,7 @@ describe('TableCreationDialog', () => {
             hideTableReadyDialog: () => {}
         };
 
-        spyOn(props,'hideTableReadyDialog');
+        spyOn(props, 'hideTableReadyDialog');
         component = mount(<TableReadyDialog {...props}/>);
 
         domComponent = document.querySelector('.tableReadyDialog');
