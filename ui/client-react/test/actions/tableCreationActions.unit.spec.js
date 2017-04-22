@@ -126,4 +126,12 @@ describe('Table Creation actions', () => {
     it('should create an action for notifying of table creation', () => {
         expect(actions.notifyTableCreated(true)).toEqual({type: types.NOTIFY_TABLE_CREATED, notifyTableCreated: true});
     });
+
+    it('should create an action for showing the table ready dialog', () => {
+        expect(actions.showTableReadyDialog()).toEqual({type: types.SHOW_TABLE_CREATION_DIALOG});
+    });
+
+    it('should create an action for hiding the table ready dialog', () => {
+        expect(actions.hideTableReadyDialog().toEqual({type: types.HIDE_TABLE_READY_DIALOG});
+    });
 });
