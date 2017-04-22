@@ -26,13 +26,5 @@ export const DefaultFieldProperties = {
             "choices": [{"coercedValue": {"value": ""}, "displayValue": ""}],
             "sortAsGiven": false
         }
-    },
-
-    [FieldFormats.NUMBER_FORMAT_MULTICHOICE]: {
-        "multipleChoice": {
-            "allowNew": false,
-            "choices": [{"coercedValue": {"value": 0}, "displayValue": "0"}],
-            "sortAsGiven": false
-        }
     }
 };
