@@ -53,10 +53,23 @@ describe('Test table creation reducers', () => {
             expect(state.dialogOpen).toBe(true);
         });
 
-        it('return updated dialog open state', () => {
+        it('return updated dialog closed state', () => {
 
             const state = reducer(initialState, {type: types.HIDE_TABLE_CREATION_DIALOG});
             expect(state.dialogOpen).toBe(false);
+        });
+
+
+        it('return updated table ready dialog open state', () => {
+
+            const state = reducer(initialState, {type: types.SHOW_TABLE_READY_DIALOG});
+            expect(state.showTableReadyDialog).toBe(true);
+        });
+
+        it('return updated table ready dialog closed state', () => {
+
+            const state = reducer(initialState, {type: types.HIDE_TABLE_READY_DIALOG});
+            expect(state.showTableReadyDialog).toBe(false);
         });
 
         it('return updated page state icon chooser open', () => {

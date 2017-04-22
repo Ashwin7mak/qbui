@@ -12,18 +12,14 @@ export class TableReadyDialog extends React.Component {
 
     constructor(props) {
         super(props);
-
-        // bind to fix context for event handlers
-
-        this.onFinished = this.onFinished.bind(this);
     }
 
     /**
-     * last page has finished
+     * dialog finished
      */
-    onFinished() {
+    onFinished = () => {
         this.props.hideTableReadyDialog();
-    }
+    };
 
     /**
      * render the multi-step modal dialog for creating a table
@@ -54,6 +50,11 @@ export class TableReadyDialog extends React.Component {
         </MultiStepDialog>);
     }
 }
+
+TableReadyDialog.propTypes = {
+    tableCreation: PropTypes.object.isRequired,
+    onFinished: PropTypes.func.isRequired
+};
 
 const mapStateToProps = (state) => {
     return {
