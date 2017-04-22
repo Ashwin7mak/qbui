@@ -29,20 +29,21 @@ var config = {
         //    tags            : [process.env.SAUCE_JOB_NAME + '_OSX_iPhone', 'try', 'OSX', 'iPhone', process.env.BUILD_NUMBER, process.env.GIT_UIBRANCH],
         //}
         {
-            iOSClient: {
+            androidClient: {
                 port: 4723,
                 desiredCapabilities: {
                     maxInstances: 1,
-                    browserName: 'Safari',
+                    browserName: 'Chrome',
                     appiumVersion: '1.5.3',
-                    platformName: 'iOS',
-                    deviceName: 'iPad Pro Device',
-                    platformVersion: '9.3',
+                    platformName: 'Android',
+                    deviceName: 'Samsung Galaxy S7 Device',
+                    platformVersion: '6.0',
                     tunnelIdentifier: process.env.ENV_TUNNEL_NAME,
-                    build           : 'WebdriverIO Jenkins Try Build #' + process.env.BUILD_NUMBER + ' - Git branch: ' + process.env.GIT_UIBRANCH + ' - OSX iPad Browser',
-                    tags            : [process.env.SAUCE_JOB_NAME + '_OSX_iPad', 'try', 'OSX', 'iPad', process.env.BUILD_NUMBER, process.env.GIT_UIBRANCH],
+                    build           : 'WebdriverIO Jenkins Try Build #' + process.env.BUILD_NUMBER + ' - Git branch: ' + process.env.GIT_UIBRANCH + ' - Android Samsung Galaxy Chrome Browser',
+                    tags            : [process.env.SAUCE_JOB_NAME + '_Android_Samsung', 'try', 'Android', 'samsung', process.env.BUILD_NUMBER, process.env.GIT_UIBRANCH],
                 }
-            }
+            },
+
         }
     ]
 };
