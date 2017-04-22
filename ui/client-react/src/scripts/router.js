@@ -124,12 +124,12 @@ const routes = [
             },
             {
                 path: `${APP_ROUTE}/:appId/table/:tblId/report/:rptId/`,
-                exact: false,
+                exact: true,
                 component: ReportRoute
             },
             {
                 path: `${APP_ROUTE}/:appId/table/:tblId/record/:recordId`,
-                exact: true,
+                exact: false,
                 component: RecordRoute
             },
             {

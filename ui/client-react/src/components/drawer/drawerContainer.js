@@ -31,6 +31,7 @@ class DrawerContainer extends React.Component {
     //       RecordWrapper, RecordWrapper renders button. YES!
     render() {
         const classNames = ['drawerContainer', this.props.position];
+
         let closeHandleBackdrop = null;
         if (this.props.rootDrawer) {
             classNames.push('rootDrawer');
@@ -38,6 +39,7 @@ class DrawerContainer extends React.Component {
         }
         return (
             <Route
+                key={this.props.match.url}
                 path={`${this.props.match.url}/sr_app_:appId([A-Za-z0-9]+)_table_:tblId([A-Za-z0-9]+)_report_:reportId([A-Za-z0-9]+)_record_:recordId([A-Za-z0-9]+)`}
                 children={({match, ...rest}) => (
                     <div className={[...classNames, (match && 'visible')].join(' ')}>
