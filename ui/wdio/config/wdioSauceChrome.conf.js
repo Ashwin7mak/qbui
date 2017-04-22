@@ -17,16 +17,32 @@ var config = {
         //    shardTestFiles: true,
         //    maxInstances: 4
         //}
+        //{
+        //    browserName: 'safari',
+        //    appiumVersion: '1.5.3',
+        //    deviceName: 'iPhone 6 Device',
+        //    deviceOrientation: 'portrait',
+        //    platformVersion: '9.3',
+        //    platformName: 'iOS',
+        //    tunnelIdentifier: process.env.ENV_TUNNEL_NAME,
+        //    build           : 'WebdriverIO Jenkins Try Build #' + process.env.BUILD_NUMBER + ' - Git branch: ' + process.env.GIT_UIBRANCH + ' - OSX iPhone Browser',
+        //    tags            : [process.env.SAUCE_JOB_NAME + '_OSX_iPhone', 'try', 'OSX', 'iPhone', process.env.BUILD_NUMBER, process.env.GIT_UIBRANCH],
+        //}
         {
-            browserName: 'safari',
-            appiumVersion: '1.5.3',
-            deviceName: 'iPhone 6 Device',
-            deviceOrientation: 'portrait',
-            platformVersion: '9.3',
-            platformName: 'iOS',
-            tunnelIdentifier: process.env.ENV_TUNNEL_NAME,
-            build           : 'WebdriverIO Jenkins Try Build #' + process.env.BUILD_NUMBER + ' - Git branch: ' + process.env.GIT_UIBRANCH + ' - OSX iPhone Browser',
-            tags            : [process.env.SAUCE_JOB_NAME + '_OSX_iPhone', 'try', 'OSX', 'iPhone', process.env.BUILD_NUMBER, process.env.GIT_UIBRANCH],
+            iOSClient: {
+                port: 4723,
+                desiredCapabilities: {
+                    maxInstances: 1,
+                    browserName: 'Safari',
+                    appiumVersion: '1.5.3',
+                    platformName: 'iOS',
+                    deviceName: 'iPad Pro Device',
+                    platformVersion: '9.3',
+                    tunnelIdentifier: process.env.ENV_TUNNEL_NAME,
+                    build           : 'WebdriverIO Jenkins Try Build #' + process.env.BUILD_NUMBER + ' - Git branch: ' + process.env.GIT_UIBRANCH + ' - OSX iPad Browser',
+                    tags            : [process.env.SAUCE_JOB_NAME + '_OSX_iPad', 'try', 'OSX', 'iPad', process.env.BUILD_NUMBER, process.env.GIT_UIBRANCH],
+                }
+            }
         }
     ]
 };
