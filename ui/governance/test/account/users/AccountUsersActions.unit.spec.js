@@ -1,3 +1,4 @@
+import {FORBIDDEN, INTERNAL_SERVER_ERROR} from  "../../../../client-react/src/constants/urlConstants";
 import * as actions from "../../../src/account/users/AccountUsersActions";
 import {__RewireAPI__ as AccountUsersActionsRewireAPI} from "../../../src/account/users/AccountUsersActions";
 import * as types from "../../../src/app/actionTypes";
@@ -6,7 +7,6 @@ import thunk from "redux-thunk";
 import Promise from "bluebird";
 
 describe('Account Users Actions Tests', () => {
-
     // Dummy Data
     let ACCOUNT_USERS_DATA = [
         {
@@ -59,16 +59,17 @@ describe('Account Users Actions Tests', () => {
         }];
 
     describe('Fetch Actions', () => {
+        let mockAccountId = 1;
+        const mockWindowUtils = {
+            update: url => url,
+        };
 
         let middleware = [thunk];
         const mockStore = configureMockStore(middleware);
 
         // Mock the service
         class mockAccountUsersService {
-
-            constructor() {
-            }
-
+            constructor() {}
             // resolve the promise with dummy responseData
             getAccountUsers() {
                 return Promise.resolve({data: ACCOUNT_USERS_DATA});
@@ -76,33 +77,52 @@ describe('Account Users Actions Tests', () => {
         }
 
         beforeEach(() => {
+            spyOn(mockWindowUtils, 'update');
             AccountUsersActionsRewireAPI.__Rewire__('AccountUsersService', mockAccountUsersService);
+            AccountUsersActionsRewireAPI.__Rewire__('WindowLocationUtils', mockWindowUtils);
         });
 
         afterEach(() => {
-            AccountUsersActionsRewireAPI.__ResetDependency__('AccountUsersService');
+            AccountUsersActionsRewireAPI.__ResetDependency__('AccountUsersService', mockAccountUsersService);
+            AccountUsersActionsRewireAPI.__ResetDependency__('WindowLocationUtils', mockWindowUtils);
         });
 
         it('gets dummy users', (done) => {
-
             const expectedActions = [
-                {type: types.SET_USERS, users: ACCOUNT_USERS_DATA}
+                {type: types.GET_USERS_FETCHING},
+                {type: types.GET_USERS_SUCCESS, users: ACCOUNT_USERS_DATA}
             ];
-
-            const store = mockStore({});
-            const accountId = 1;
-
             // expect the dummy data when the fetchAccountUsers is called
-            return store.dispatch(actions.fetchAccountUsers(accountId)).then(
-                () => {
-                    expect(store.getActions(accountId)).toEqual(expectedActions);
-                    done();
-                },
+            const store = mockStore({});
+            return store.dispatch(actions.fetchAccountUsers(mockAccountId)).then(() =>
+                    expect(store.getActions(mockAccountId)).toEqual(expectedActions)
+                , error => expect(false).toBe(true)).then(done, done);
+        });
 
-                () => {
-                    expect(false).toBe(true);
-                    done();
-                });
+        it('should redirect to FORBIDDEN when encountering a 403', (done) => {
+            AccountUsersActionsRewireAPI.__Rewire__('AccountUsersService', class {
+                constructor() {}
+                getAccountUsers(accountId) {
+                    return Promise.reject({response: {status: 403}});
+                }
+            });
+            const store = mockStore({});
+            store.dispatch(actions.fetchAccountUsers(mockAccountId)).then(() => {
+                expect(mockWindowUtils.update).toHaveBeenCalledWith(FORBIDDEN);
+            }, e => expect(false).toEqual(true)).then(done, done);
+        });
+
+        it('should redirect to INTERNAL_SERVER_ERROR when encountering any other error', (done) => {
+            AccountUsersActionsRewireAPI.__Rewire__('AccountUsersService', class {
+                constructor() {}
+                getAccountUsers(accountId) {
+                    return Promise.reject({response: {status: 500}});
+                }
+            });
+            const store = mockStore({});
+            store.dispatch(actions.fetchAccountUsers(mockAccountId)).then(() => {
+                expect(mockWindowUtils.update).toHaveBeenCalledWith(INTERNAL_SERVER_ERROR);
+            }, e => expect(false).toEqual(true)).then(done, done);
         });
     });
 
@@ -142,7 +162,7 @@ describe('Account Users Actions Tests', () => {
 
             const store = mockStore({AccountUsers: {users: USERS}});
             store.dispatch(actions.doUpdate(1, {sortFids: [1]}));
-            expect(store.getActions(1)).toEqual([{type: types.SET_USERS, users: SORTED_USERS}]);
+            expect(store.getActions(1)).toEqual([{type: types.GET_USERS_SUCCESS, users: SORTED_USERS}]);
         });
     });
 

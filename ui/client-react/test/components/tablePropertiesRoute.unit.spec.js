@@ -7,6 +7,7 @@ import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import {Provider} from "react-redux";
 import Promise from 'bluebird';
+import QBModal from '../../src/components/qbModal/qbModal';
 import _ from 'lodash';
 
 const sampleTable = {id: 'table1', name: 'table1 name'};
@@ -19,7 +20,6 @@ const sampleTableProperties = {iconChooserOpen: false,
         description: {value: ''},
         tableIcon: {value: 'projects'}
     },
-    isDirty: false,
     editing: null
 };
 const flux = {
@@ -32,12 +32,15 @@ const props = {
     app: sampleApp,
     table: sampleTable,
     tableProperties: sampleTableProperties,
+    isDirty: false,
     updateTable: () => {return Promise.resolve({});},
     loadTableProperties: () => {},
     setTableProperty: () => {},
     closeIconChooser: () => {},
     setEditingProperty: () => {},
     resetEditedTableProperties: () => {},
+    deleteTable: () => {return Promise.resolve({});},
+    notifyTableDeleted: () => {},
     flux: flux
 };
 
@@ -81,11 +84,31 @@ describe('TablePropertiesRoute functions', () => {
 
         it('test buttons are not rendered if form is dirty', () => {
             let newProps = _.clone(props);
-            newProps.tableProperties.isDirty = true;
+            newProps.isDirty = true;
             component = TestUtils.renderIntoDocument(<TablePropertiesRoute {...newProps}/>);
             let buttonsPanel = TestUtils.scryRenderedDOMComponentsWithClass(component, "tableInfoButtons");
             expect(buttonsPanel.length).toEqual(1);
             expect(buttonsPanel[0].className.indexOf("open") !== -1).toBe(true);
+        });
+
+        it('test render of delete icon on page bar', () => {
+            expect(TestUtils.scryRenderedDOMComponentsWithClass(component, "deleteTable").length).toEqual(1);
+        });
+
+        it('test clicking on delete icon sets the state to open the modal', () => {
+            let deleteTableIcon = TestUtils.scryRenderedDOMComponentsWithClass(component, "deleteTable")[0];
+            Simulate.mouseDown(deleteTableIcon);
+            //confirm that the state was updated that is supposed to throw up the Modal
+            expect(component.state.confirmDeletesDialogOpen).toBe(true);
+        });
+
+        it('test clicking on cancel button of modal resets the state', () => {
+            let deleteTableIcon = TestUtils.scryRenderedDOMComponentsWithClass(component, "deleteTable")[0];
+            Simulate.mouseDown(deleteTableIcon);
+            //confirm that the state was updated that is supposed to throw up the Modal
+            expect(component.state.confirmDeletesDialogOpen).toBe(true);
+            component.cancelTableDelete();
+            expect(component.state.confirmDeletesDialogOpen).toBe(false);
         });
     });
 
@@ -95,6 +118,8 @@ describe('TablePropertiesRoute functions', () => {
             spyOn(props, 'updateTable').and.callThrough();
             spyOn(props, 'loadTableProperties').and.callThrough();
             spyOn(props, 'resetEditedTableProperties').and.callThrough();
+            spyOn(props, 'deleteTable').and.callThrough();
+            spyOn(props, 'notifyTableDeleted').and.callThrough();
             component = TestUtils.renderIntoDocument(<TablePropertiesRoute {...props}/>);
         });
 
@@ -103,6 +128,8 @@ describe('TablePropertiesRoute functions', () => {
             props.updateTable.calls.reset();
             props.loadTableProperties.calls.reset();
             props.resetEditedTableProperties.calls.reset();
+            props.deleteTable.calls.reset();
+            props.notifyTableDeleted.calls.reset();
         });
 
         it('test loadTableProperties is called', () => {
@@ -111,7 +138,7 @@ describe('TablePropertiesRoute functions', () => {
 
         it('test calls update on clicking apply button', () => {
             let newProps = _.clone(props);
-            newProps.tableProperties.isDirty = true;
+            newProps.isDirty = true;
             component = TestUtils.renderIntoDocument(<TablePropertiesRoute {...newProps}/>);
             let buttonsPanel = TestUtils.scryRenderedDOMComponentsWithClass(component, "tableInfoButtons");
             let applyButton = buttonsPanel[0].querySelectorAll('.primaryButton');
@@ -121,12 +148,19 @@ describe('TablePropertiesRoute functions', () => {
 
         it('test calls reset on clicking reset button', () => {
             let newProps = _.clone(props);
-            newProps.tableProperties.isDirty = true;
+            newProps.isDirty = true;
             component = TestUtils.renderIntoDocument(<TablePropertiesRoute {...newProps}/>);
             let buttonsPanel = TestUtils.scryRenderedDOMComponentsWithClass(component, "tableInfoButtons");
             let resetButton = buttonsPanel[0].querySelectorAll('.secondaryButton');
             Simulate.click(resetButton[0]);
             expect(props.resetEditedTableProperties).toHaveBeenCalled();
         });
+
+        it('test calls delete api when Delete button is clicked', () => {
+            component.handleTableDelete();
+            expect(props.deleteTable).toHaveBeenCalled();
+        });
+
+
     });
 });

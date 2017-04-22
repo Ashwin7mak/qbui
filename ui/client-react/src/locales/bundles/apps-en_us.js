@@ -668,7 +668,16 @@ export default {
         tableEdit: {
             tableUpdateFailed: "Failed to update table",
             tableUpdated: "Table information saved",
-            tableReset: "Table information not saved"
+            tableReset: "Table information not saved",
+            deleteThisTable: "Delete the {tableName} table?",
+            deleteTable: "Delete table",
+            tableDeleted: "{tableName} table deleted",
+            tableDeleteFailed: "Failed to delete table",
+            tableDeleteDialog: {
+                text: "This can't be undone. You'll be deleting all the data in the table, and break relationships with other tables.",
+                prompt: "Type YES to confirm that you want to delete this table"
+            },
+            YES: "YES"
         }
     }
 };

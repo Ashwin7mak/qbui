@@ -28,17 +28,6 @@ describe('<GovernanceLeftNav />', () => {
         expect(props.fetchData.calls.any()).toEqual(true);
     });
 
-    it("should should render an error state on data fetch error", ()=> {
-        let props = {
-            ...baseProps,
-            dataFetchingError: "Error"
-        };
-
-        let component = shallow(<GovernanceLeftNav {...props} />);
-        let errorSection = component.find("h1");
-        expect(errorSection.length).toEqual(1);
-    });
-
     it("should propagate necessary props to StandardLeftNav", ()=> {
         let props = {
             ...baseProps,
