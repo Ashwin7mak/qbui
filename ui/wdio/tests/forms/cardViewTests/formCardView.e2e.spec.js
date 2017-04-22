@@ -48,7 +48,7 @@
         it('Add a record from the form', function() {
             var origRecordCount;
             var fieldTypes = ['allTextFields', 'allPhoneFields', 'allEmailFields', 'allUrlFields', 'allDurationFields', 'allNumericFields', 'allDateFields', 'allTimeFields', 'allCheckboxFields', 'allUserField'];
-            browser.context(['NATIVE_APP']);
+            browser.context(['WEBVIEW']);
 
             //Step 2 - Click on Add Record Button on the report Stage
             reportContentMobilePO.clickAddRecordBtn();
