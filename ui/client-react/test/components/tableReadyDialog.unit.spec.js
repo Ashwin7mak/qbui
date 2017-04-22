@@ -27,7 +27,7 @@ describe('TableCreationDialog', () => {
             tableCreation: {
                 showTableReadyDialog: true
             },
-            onFinished: () => {}
+            hideTableReadyDialog: () => {}
         };
 
         component = mount(<TableReadyDialog {...props}/>);
@@ -42,7 +42,7 @@ describe('TableCreationDialog', () => {
             tableCreation: {
                 showTableReadyDialog: false
             },
-            onFinished: () => {}
+            hideTableReadyDialog: () => {}
         };
 
         component = mount(<TableReadyDialog {...props}/>);
@@ -58,10 +58,10 @@ describe('TableCreationDialog', () => {
             tableCreation: {
                 showTableReadyDialog: true
             },
-            onFinished: () => {}
+            hideTableReadyDialog: () => {}
         };
 
-        spyOn(props,'onFinished');
+        spyOn(props,'hideTableReadyDialog');
         component = mount(<TableReadyDialog {...props}/>);
 
         domComponent = document.querySelector('.tableReadyDialog');
@@ -72,6 +72,6 @@ describe('TableCreationDialog', () => {
         let finishedButton = domComponent.querySelector('.finishedButton');
         Simulate.click(finishedButton);
 
-        expect(props.onFinished).toHaveBeenCalled();
+        expect(props.hideTableReadyDialog).toHaveBeenCalled();
     });
 });

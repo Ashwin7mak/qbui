@@ -53,7 +53,7 @@ export class TableReadyDialog extends React.Component {
 
 TableReadyDialog.propTypes = {
     tableCreation: PropTypes.object.isRequired,
-    onFinished: PropTypes.func.isRequired
+    hideTableReadyDialog: PropTypes.func.isRequired
 };
 
 const mapStateToProps = (state) => {
