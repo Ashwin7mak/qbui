@@ -325,7 +325,8 @@
         });
 
         xit('verify field selection stickiness', function() {
-            // disabled until ESC doesn't deselect the selected field - is this going to happen? issue #?
+            // disabled pending MC-1424: Keyboard Nav for Adding New Field
+            // AND whether or not the ESC key continues to DEselect the selected field (issue# ?)
             let selectedField = formBuilderPO.KB_selectField(2);
             browser.keys([
                 'Escape', // deselect field
@@ -335,6 +336,7 @@
             );
             // verify that the field is still selected
             expect(formBuilderPO.selectedField.getText()).toEqual(selectedField);
+            // todo: select/add a new field via keyboard & verify that is inserted below the selected field
         });
 
         xit('check the REQUIRED checkbox, cancel & verify not checked', function() {
