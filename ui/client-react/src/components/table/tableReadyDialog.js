@@ -35,7 +35,7 @@ export class TableReadyDialog extends React.Component {
                                  finishedButtonLabel={"OK"}>
             <div className="tableReadyContent">
                 <div className="topTitle">
-                    <div className="dndImage">
+                    <div className="dndImage animated lightSpeedIn">
                         <img className="dndSvg" alt="Drag and drop" src={DnDImage} />
                     </div>
                     <div className="titleText">
