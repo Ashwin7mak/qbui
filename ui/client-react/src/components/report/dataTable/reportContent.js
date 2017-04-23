@@ -1,4 +1,4 @@
-import React from "react";
+import React, {PropTypes} from "react";
 import ReactIntl from "react-intl";
 import {NOTIFICATION_MESSAGE_DISMISS_TIME} from '../../../../../reuse/client/src/scripts/notificationManager';
 import CardViewListHolder from "../../../components/dataTable/cardView/cardViewListHolder";
@@ -14,7 +14,7 @@ import {GROUP_TYPE} from "../../../../../common/src/groupTypes";
 import Locales from "../../../locales/locales";
 import ReportFooter from '../reportFooter';
 import _ from 'lodash';
-import {withRouter} from 'react-router';
+import {withRouter} from 'react-router-dom';
 import ReportContentError from './reportContentError';
 import UrlUtils from '../../../utils/urlUtils';
 import QBModal from '../../qbModal/qbModal';
@@ -72,8 +72,8 @@ export const ReportContent = React.createClass({
         this.openRow(recId);
         //create the link we want to send the user to and then send them on their way
         const link = `${APP_ROUTE}/${appId}/table/${tblId}/report/${rptId}/record/${recId}`;
-        if (this.props.router) {
-            this.props.router.push(link);
+        if (this.props.history) {
+            this.props.history.push(link);
         }
     },
 
@@ -360,7 +360,7 @@ export const ReportContent = React.createClass({
                 primaryButtonOnClick={this.deleteRecord}
                 leftButtonName={Locales.getMessage('selection.dontDelete')}
                 leftButtonOnClick={this.cancelRecordDelete}
-                bodyMessage={msg}
+                title={msg}
                 type="alert"/>);
     },
 
@@ -931,7 +931,7 @@ export const ReportContent = React.createClass({
         const editErrors = pendEdits.editErrors || null;
 
         // onCellClick handler: do nothing for embedded reports phase1.
-        let openRowToView = !this.props.phase1 && this.openRowToView;
+        let openRowToView = this.props.phase1 ? undefined : this.openRowToView;
 
         let reportContent;
 
@@ -945,7 +945,7 @@ export const ReportContent = React.createClass({
                                 appId={this.props.reportData.appId}
                                 tblId={this.props.reportData.tblId}
                                 rptId={this.props.reportData.rptId}
-
+                                noRowsUI={this.props.noRowsUI}
                                 records={this.props.reportData.data ? _.cloneDeep(this.props.reportData.data.filteredRecords) : []}
                                 columns={this.props.reportData.data ? this.props.reportData.data.columns : []}
                                 primaryKeyName={this.props.primaryKeyName}
@@ -974,6 +974,7 @@ export const ReportContent = React.createClass({
                         }
                         {isSmall &&
                         <CardViewListHolder reportData={this.props.reportData}
+                                            noRowsUI={this.props.noRowsUI}
                                             appUsers={this.props.appUsers}
                                             primaryKeyName={this.props.primaryKeyName}
                                             reportHeader={this.props.reportHeader}
@@ -984,7 +985,8 @@ export const ReportContent = React.createClass({
                                             pageStart={this.props.cardViewPagination.props.pageStart}
                                             pageEnd={this.props.cardViewPagination.props.pageEnd}
                                             getNextReportPage={this.props.cardViewPagination.props.getNextReportPage}
-                                            getPreviousReportPage={this.props.cardViewPagination.props.getPreviousReportPage}/>
+                                            getPreviousReportPage={this.props.cardViewPagination.props.getPreviousReportPage}
+                                            onAddNewRecord={this.props.onAddNewRecord}/>
                         }
                         {this.getConfirmationDialog()}
                     </div>
@@ -1001,11 +1003,16 @@ export const ReportContent = React.createClass({
 });
 
 ReportContent.contextTypes = {
-    touch: React.PropTypes.bool
+    touch: PropTypes.bool
 };
 
 ReportContent.propTypes = {
-    primaryKeyName: React.PropTypes.string.isRequired
+    primaryKeyName: PropTypes.string.isRequired,
+
+    /**
+     * callback for creating a new record
+     */
+    onAddNewRecord: PropTypes.func
 };
 
 const mapStateToProps = (state, props) => {

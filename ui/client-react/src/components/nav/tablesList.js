@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {Link} from 'react-router';
+import {Link} from 'react-router-dom';
 import QBicon from '../qbIcon/qbIcon';
 import NavItem from './navItem';
 import Locale from '../../locales/locales';
@@ -91,7 +91,7 @@ let TablesList = React.createClass({
      * @returns {*}
      */
     tablesList() {
-        return this.props.getAppTables(this.props.selectedAppId, this.props.apps).map((table) => {
+        const tableItems = this.props.getAppTables(this.props.selectedAppId, this.props.apps).map((table) => {
             table.link = this.getTableLink(table);
             return this.searchMatches(table.name) &&
                 <NavItem item={table}
@@ -105,7 +105,13 @@ let TablesList = React.createClass({
                          selected={table.id === this.props.selectedTableId}
                          open={true}/>;
         });
+
+        if (this.props.onCreateNewTable) {
+            tableItems.push(this.getNewTableItem());
+        }
+        return tableItems;
     },
+
     getNavItem(msg, link, icon, selected) {
         const hoverComponent = (<div className="hoverComponent">
             <Link to={link}><I18nMessage message={msg}/></Link>
@@ -137,9 +143,9 @@ let TablesList = React.createClass({
     getNewTableItem() {
 
         return (
-            <li className="newTableItem link">
+            <li className="newTableItem link" key="newTable">
                 <div className="newTable" onClick={this.props.onCreateNewTable}>
-                    <QBicon icon="add-mini"/> New Table
+                    <QBicon icon="add-mini"/><I18nMessage message="tableCreation.newTablePageTitle"/>
                 </div>
             </li>);
     },
@@ -165,10 +171,7 @@ let TablesList = React.createClass({
                     {this.tablesList()}
                 </ul>
 
-                {this.props.onCreateNewTable &&
-                <ul className="tablesFooter">
-                    {this.getNewTableItem()}
-                </ul>}
+
             </div>
         );
     }

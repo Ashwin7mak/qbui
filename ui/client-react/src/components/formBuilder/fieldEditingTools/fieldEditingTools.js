@@ -97,14 +97,13 @@ export class FieldEditingTools extends Component {
 
     componentDidMount() {
         /**
-         * COMMENTED OUT: Will be fixed.
          * For keyboard, we need to reset the focus, to maintain proper tabbing order
          * and we need to keep the current form element in view, by scrolling it into view
          * */
         if (this.props.previouslySelectedField && this.props.previouslySelectedField[0] && this.props.tabIndex !== "-1") {
             let previouslySelectedField = document.querySelectorAll(".fieldEditingTools");
             previouslySelectedField[this.props.previouslySelectedField[0].elementIndex].focus();
-        } else if (this.props.selectedFields && this.props.selectedFields[0] && document.activeElement.tagName !== "INPUT") {
+        } else if (this.props.selectedFields && this.props.selectedFields[0] && (document.activeElement.tagName !== "INPUT" && document.activeElement.tagName !== "TEXTAREA")) {
             let setFocusOnSelectedField = document.querySelectorAll(".fieldEditingTools")[this.props.selectedFields[0].elementIndex];
             if (setFocusOnSelectedField) {
                 setFocusOnSelectedField.focus();
@@ -121,8 +120,12 @@ export class FieldEditingTools extends Component {
     }
 
     scrollElementIntoView() {
+        /**
+         * We only need to scroll into view for keyboard navigating
+         * */
         let selectedFormElement = document.querySelector(".selectedFormElement");
-        if (selectedFormElement) {
+        let isDragging = document.querySelector(".dragging");
+        if (selectedFormElement && !isDragging) {
             document.querySelector(".selectedFormElement").scrollIntoView(false);
         }
     }

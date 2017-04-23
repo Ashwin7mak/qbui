@@ -11,6 +11,7 @@ $settings-menu-padding-left: $spacing-xx-small;
                 margin: 0;
                 padding: 0;
                 cursor: default;
+                top: 38px;
             }
             padding-right: 10px;
             .configurationMenu {
@@ -21,6 +22,9 @@ $settings-menu-padding-left: $spacing-xx-small;
                         font-size: $font-size-h3;
                         color: $color-black-700;
                         height: $settings-menu-header-height;
+                    }
+                    .heading > a {
+                        cursor: default !important;
                     }
                     li {
                         padding: 0 $settings-menu-padding-left;

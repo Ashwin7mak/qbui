@@ -1,7 +1,7 @@
 import React from 'react';
 import Tooltip from 'react-bootstrap/lib/Tooltip';
 import OverlayTrigger from 'react-bootstrap/lib/OverlayTrigger';
-import {Link} from 'react-router';
+import {Link} from 'react-router-dom';
 import {I18nMessage} from '../../utils/i18nMessage';
 import QBicon from '../qbIcon/qbIcon';
 import Icon, {AVAILABLE_ICON_FONTS} from '../../../../reuse/client/src/components/icon/icon.js';

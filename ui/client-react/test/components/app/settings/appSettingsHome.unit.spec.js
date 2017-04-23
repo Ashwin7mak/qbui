@@ -1,8 +1,9 @@
 import React from 'react';
-import TestUtils from 'react-addons-test-utils';
+import {shallow, mount} from 'enzyme';
+///import createRouterContext from 'react-router-test-context';
 import * as UrlConstants from '../../../../src/constants/urlConstants';
 import AppSettingsHome  from '../../../../src/components/app/settings/appSettingsHome';
-
+import {MemoryRouter} from 'react-router-dom';
 describe('AppSettingsHome functions', () => {
     'use strict';
 
@@ -19,20 +20,27 @@ describe('AppSettingsHome functions', () => {
     const settingsLinkWithoutParameter = `${UrlConstants.SETTINGS_ROUTE}/app/${appId}/`;
 
     it('test render of component', () => {
-        let component = TestUtils.renderIntoDocument(<AppSettingsHome selectedApp={selectedApp}
-                                                                        appId={appId}
-                                                                        appUsers={appUsers}/>);
-        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+        let component = mount(<MemoryRouter>
+                                    <AppSettingsHome selectedApp={selectedApp}
+                                               appId={appId}
+                                               appUsers={appUsers}
+                                               />
+                                </MemoryRouter>);
+        expect(component.find(AppSettingsHome).length).toEqual(1);
     });
 
     it('test constructSettingsLink method', () => {
-        let component = TestUtils.renderIntoDocument(<AppSettingsHome selectedApp={selectedApp}
-                                                                      appId={appId}
-                                                                      appUsers={appUsers}/>);
-        let result = component.constructSettingsLink(setting);
+        let component = shallow(
+                <AppSettingsHome
+                    selectedApp={selectedApp}
+                    appId={appId}
+                    appUsers={appUsers}
+                />);
+        const instance = component.instance();
+        let result = instance.constructSettingsLink(setting);
         expect(result).toEqual(settingsLinkWithParameter);
 
-        result = component.constructSettingsLink("");
+        result = instance.constructSettingsLink("");
         expect(result).toEqual(settingsLinkWithoutParameter);
     });
 });

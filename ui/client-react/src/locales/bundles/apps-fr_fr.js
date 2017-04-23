@@ -114,7 +114,12 @@ export default {
             searchNoMatch: "Personne ne correspond à"
         },
         grid: {
-            no_data: "Il n'y a pas de données à afficher."
+            no_data: "Il n'y a pas de données à afficher.",
+            no_filter_matches: "Aucun enregistrement ne correspond à ce que vous recherchez. Essayez de rechercher un autre type d'enregistrement.",
+            no_rows: "Il n'y a aucun enregistrement à voir en ce moment.",
+            no_rows_but: "Il n'y a pas d'enregistrements, mais vous pouvez ",
+            no_rows_create_link:  "créer une"
+
         },
         globalActions: {
             user: "Utilisateur",
@@ -529,9 +534,10 @@ export default {
             FILE_ATTACHMENT: "Fichier"
         },
         fieldPropertyLabels: {
-            title: "propriétés",
+            title: "Propriétés du champ",
             name: "prénom",
-            required: "Doit être rempli"
+            required: "Doit être rempli",
+            multiChoice: "Les choix"
         },
         builder: {
             formBuilder: {
@@ -630,6 +636,15 @@ export default {
             validateTableNameEmpty: "Le nom de la table ne doit pas être vide",
             validateTableNameExists: "Le nom de la table doit être unique pour cette application",
             validateRecordNameEmpty: "Le nom de l'enregistrement ne doit pas être vide",
+
+            homePageInitialTitle: "Commencez à utiliser votre table",
+            homePageInitialDescription: "Nous avons créé quelques rapports pour accompagner votre nouvelle table afin que vous puissiez commencer à ajouter des enregistrements",
+            homePageAddRecordButton: "Ajouter un enregistrement",
+            homePageStillBuilding: "Bâtiment fixe?  ",
+            homePageCreateAnother: "Créer un autre tableau",
+
+            noSuggestedIcons: "Il n'y a pas d'icônes suggérées pour ce nom de table",
+            typeForSuggestions: "Tapez un nom de table pour obtenir des suggestions"
         },
         iconChooser: {
             searchPlaceholder: "Rechercher des icônes..."
@@ -645,7 +660,16 @@ export default {
         tableEdit: {
             tableUpdateFailed: "Impossible de mettre à jour le tableau",
             tableUpdated: "Informations sur la table enregistrées",
-            tableReset: "Informations sur la table non enregistrées"
+            tableReset: "Informations sur la table non enregistrées",
+            deleteThisTable: "Supprimez la table {tableName}?",
+            deleteTable: "Supprimer la table",
+            tableDeleted: "{tableName} tableau supprimé",
+            tableDeleteFailed: "Échec de la suppression du tableau",
+            tableDeleteDialog: {
+                text: "Cela ne peut pas être annulé. Vous supprimez toutes les données dans le tableau et romperez les relations avec d'autres tables.",
+                prompt: "Tapez OUI pour confirmer que vous souhaitez supprimer ce tableau."
+            },
+            YES: "OUI"
         }
     }
 };

@@ -100,7 +100,7 @@ export const RecordTrowser = React.createClass({
         const record = this.getRecordFromProps(this.props);
         if (record.navigateAfterSave === true) {
             let {appId, tblId} = this.props;
-            this.props.router.push(`${APP_ROUTE}/${appId}/table/${tblId}/record/${recId}`);
+            this.props.history.push(`${APP_ROUTE}/${appId}/table/${tblId}/record/${recId}`);
         }
     },
 
@@ -516,10 +516,10 @@ export const RecordTrowser = React.createClass({
                      breadcrumbs={this.getTrowserBreadcrumbs()}
                      onCancel={this.cancelEditing}
                      content={this.getTrowserContent()} >
-                <KeyboardShortcuts id="trowser"
+                {this.props.visible ? <KeyboardShortcuts id="trowser"
                                    shortcutBindingsPreventDefault={[
                                        {key: 'mod+s', callback: () => {this.keyboardOnSave(); return false;}},
-                                   ]} />
+                                   ]} /> : null}
                 <SaveOrCancelFooter
                     rightAlignedButtons={this.getTrowserRightIcons()}
                     centerAlignedButtons={this.getTrowserActions()}

@@ -121,7 +121,11 @@ export default {
             searchNoMatch: "Nobody matches"
         },
         grid: {
-            no_data: "There is no data to display."
+            no_data: "There is no data to display.",
+            no_filter_matches: "No records match what you're looking for.  Try looking for a different kind of record.",
+            no_rows: "There are no records to see right now.",
+            no_rows_but: "There are no records, but you can ",
+            no_rows_create_link:  "create one"
         },
         globalActions: {
             user: "User",
@@ -541,9 +545,10 @@ export default {
             FILE_ATTACHMENT: "File"
         },
         fieldPropertyLabels: {
-            title: "properties",
+            title: "Field Properties",
             name: "Name",
-            required: "Must be filled in"
+            required: "Must be filled in",
+            multiChoice: "Choices"
         },
         builder: {
             formBuilder: {
@@ -643,6 +648,15 @@ export default {
             validateTableNameEmpty: "Fill in the table name",
             validateTableNameExists: "Fill in a different value. Another table is already using this name",
             validateRecordNameEmpty: "Fill in the record name",
+
+            homePageInitialTitle: "Start using your table",
+            homePageInitialDescription: "We created a couple of reports to go along with your new table so you can get started adding records",
+            homePageAddRecordButton: "Add a record",
+            homePageStillBuilding: "Still building?  ",
+            homePageCreateAnother: "Create another table",
+
+            noSuggestedIcons: "There are no suggested icons for this table name",
+            typeForSuggestions: "Please type a table name to get suggestions"
         },
         iconChooser: {
             searchPlaceholder: "Search table icons..."
@@ -658,7 +672,16 @@ export default {
         tableEdit: {
             tableUpdateFailed: "Failed to update table",
             tableUpdated: "Table information saved",
-            tableReset: "Table information not saved"
+            tableReset: "Table information not saved",
+            deleteThisTable: "Delete the {tableName} table?",
+            deleteTable: "Delete table",
+            tableDeleted: "{tableName} table deleted",
+            tableDeleteFailed: "Failed to delete table",
+            tableDeleteDialog: {
+                text: "This can't be undone. You'll be deleting all the data in the table, and break relationships with other tables.",
+                prompt: "Type YES to confirm that you want to delete this table"
+            },
+            YES: "YES"
         }
     }
 };

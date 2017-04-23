@@ -32,7 +32,7 @@ describe('FeatureSwitchOverridesRoute', () => {
     ];
 
     const props = {
-        params: {id: 'fs-1'},
+        match:{params: {id: 'fs-1'}},
         switches: sampleSwitches,
         error: null,
         overrides: sampleSwitches[0].overrides,

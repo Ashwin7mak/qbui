@@ -23,7 +23,6 @@
 
         .tableInfoButtons {
             float: right;
-            margin-right: 15px;
 
             &.open {
                 opacity: 1;
@@ -41,6 +40,21 @@
             .primaryButton {
                 margin-left: 5px;
             }
+        }
+    }
+}
+
+.deleteTableDialogContent {
+    > * {
+        margin-bottom: $modal-vertical-spacer;
+    }
+    .note {
+        color: $alert-color;
+    }
+    .prompt {
+        .deletePrompt {
+            margin-left: 8px;
+            text-align: center;
         }
     }
 }
