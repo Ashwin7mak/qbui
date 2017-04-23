@@ -27,7 +27,7 @@ let BuilderDropDownAction = React.createClass({
 
     getTableSettingsLink() {
         let link = URLUtils.getTableSettingsLink(this.props.selectedApp.id, this.props.selectedTable.id);
-        this.props.router.push(link);
+        this.props.history.push(link);
     },
 
     getConfigOptions() {

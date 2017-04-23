@@ -7,7 +7,7 @@ import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import {Provider} from "react-redux";
 import {APP_ROUTE} from '../../src/constants/urlConstants';
-
+import {MemoryRouter} from 'react-router-dom';
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
 
@@ -55,9 +55,9 @@ describe('RecordRoute', () => {
 
     describe('Previous/Next/Return functions', () => {
         it('test render of component with missing url params', () => {
-            let badRouteParams = {appId: 1, tblId: 2};
+            let params = {appId: 1, tblId: 2};
 
-            component = TestUtils.renderIntoDocument(<RecordRoute params={badRouteParams} flux={flux}/>);
+            component = TestUtils.renderIntoDocument(<RecordRoute match={{params}} flux={flux}/>);
             expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 
             let qbForm = TestUtils.scryRenderedComponentsWithType(component, QBForm);
@@ -69,16 +69,18 @@ describe('RecordRoute', () => {
             const initialState = {};
             const store = mockStore(initialState);
 
-            let routeParams = {appId: 1, tblId: 2, recordId: 4};
+            let params = {appId: 1, tblId: 2, recordId: 4};
 
             component = TestUtils.renderIntoDocument(
-                <Provider store={store}>
-                    <ConnectedRecordRoute params={routeParams} flux={flux} selectedTable={{"name": "TestTable"}}/>
-                </Provider>);
+                <MemoryRouter>
+                    <Provider store={store}>
+                        <ConnectedRecordRoute match={{params}} flux={flux} selectedTable={{"name": "TestTable"}}/>
+                    </Provider>
+                </MemoryRouter>);
 
             expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 
-            expect(flux.actions.selectTableId).toHaveBeenCalledWith(routeParams.tblId);
+            expect(flux.actions.selectTableId).toHaveBeenCalledWith(params.tblId);
 
             let qbForm = TestUtils.scryRenderedComponentsWithType(component, QBForm);
             expect(qbForm.length).toBe(1);
@@ -98,12 +100,14 @@ describe('RecordRoute', () => {
             const initialState = {};
             const store = mockStore(initialState);
 
-            let routeParams = {appId: 1, tblId: 2, recordId: 3, rptId: 4};
+            let params = {appId: 1, tblId: 2, recordId: 3, rptId: 4};
 
             component = TestUtils.renderIntoDocument(
-                <Provider store={store}>
-                    <ConnectedRecordRoute params={routeParams} flux={flux} selectedTable={{"name": "TestTable"}}/>
-                </Provider>);
+                <MemoryRouter>
+                    <Provider store={store}>
+                        <ConnectedRecordRoute match={{params}} flux={flux} selectedTable={{"name": "TestTable"}}/>
+                    </Provider>
+                </MemoryRouter>);
 
             expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 
@@ -123,7 +127,7 @@ describe('RecordRoute', () => {
             const initialState = {};
             const store = mockStore(initialState);
 
-            let routeParams = {appId: 1, tblId: 2, rptId: 3, recordId: 2};
+            let params = {appId: 1, tblId: 2, rptId: 3, recordId: 2};
             let reportData = {
                 appId: 1,
                 tblId: 2,
@@ -153,13 +157,15 @@ describe('RecordRoute', () => {
                 }
             };
 
-            let router = [];
+            let history = [];
             let expectedRouter = [];
 
             component = TestUtils.renderIntoDocument(
-                <Provider store={store}>
-                    <RecordRoute params={routeParams} reportData={reportData} flux={flux} router={router} {...reduxProps} selectedTable={{"name": "TestTable"}}/>
-                </Provider>);
+                <MemoryRouter>
+                    <Provider store={store}>
+                        <RecordRoute match={{params}} reportData={reportData} flux={flux} history={history} {...reduxProps} selectedTable={{"name": "TestTable"}}/>
+                    </Provider>
+                </MemoryRouter>);
             expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 
             let prevRecord = TestUtils.scryRenderedDOMComponentsWithClass(component, "prevRecord");
@@ -185,7 +191,7 @@ describe('RecordRoute', () => {
             TestUtils.Simulate.click(returnToReport[0]);
             expectedRouter.push(`${APP_ROUTE}/1/table/2/report/3`);
 
-            expect(router).toEqual(expectedRouter);
+            expect(history).toEqual(expectedRouter);
         });
     });
 });

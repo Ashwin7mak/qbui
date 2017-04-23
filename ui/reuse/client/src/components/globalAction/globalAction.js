@@ -1,5 +1,5 @@
 import React, {PropTypes} from 'react';
-import {Link} from 'react-router';
+import {Link} from 'react-router-dom';
 import Icon from '../icon/icon';
 import {I18nMessage} from '../../utils/i18nMessage';
 
