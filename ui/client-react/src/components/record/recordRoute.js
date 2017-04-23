@@ -449,7 +449,8 @@ export const RecordRoute = React.createClass({
     /**
      * only re-render when our form data has changed */
     shouldComponentUpdate(nextProps, nextState) {
-        if (this.props.history.location.pathname.includes('sr_app')) {
+        // Update if a drawer is added or removed
+        if (this.props.location.pathname.lastIndexOf('sr_app') !== nextProps.location.pathname.lastIndexOf('sr_app')) {
             //TODO: add a check to see if drawer component data got updated
             return true;
         }
