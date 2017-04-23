@@ -559,9 +559,7 @@ export const RecordRoute = React.createClass({
                             hasEntry={!!this.getFormFromProps()}
                             />}
 
-                    {!formLoadingErrorStatus && this.props.history.location.pathname.includes('sr_app') &&
-                        this.getDrawerContainer()
-                    }
+                    {!formLoadingErrorStatus && this.getDrawerContainer()}
                     <button onClick={this.fakeRenderDrawer}>render child drawer</button>
                     {this.props.closeDrawer && <button onClick={this.props.closeDrawer}>close this drawer</button>}
                     {this.props.closeAll && <button onClick={this.props.closeAll}>close all drawers</button>}

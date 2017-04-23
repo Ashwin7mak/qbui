@@ -10,6 +10,12 @@ import './drawer.scss';
  * the right.
  */
 class Drawer extends React.Component {
+    componentWillMount() {
+        // TODO: name mount to something else
+        if (this.props.mount) {
+            this.props.mount();
+        }
+    }
     componentWillUnmount() {
         if (this.props.unmount) {
             this.props.unmount();

@@ -16,9 +16,15 @@ import './drawer.scss';
  * I think Route's children prop might come in handy https://reacttraining.com/react-router/web/api/Route/children-func
  */
 class DrawerContainer extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            visible: false
+        };
+    }
     getDrawer = () => {
         return (
-            <Drawer key={1} unmount={this.closeInvisiblePane}>
+            <Drawer key={1} mount={this.childWillMount} unmount={this.childWillUnmount}>
                 <RecordRouteWithUniqueId
                     {...this.props}
                     isDrawerContext={true}
@@ -27,10 +33,31 @@ class DrawerContainer extends React.Component {
             </Drawer>);
     };
 
+    childWillMount = () => {
+        this.setState({visible: true});
+    };
+
+    /**
+     * Called by the drawer component after it transitions off screen and is about to unmount. Set visibility to false
+     * so we don't block user interaction with parent record.
+     */
+    childWillUnmount = () => {
+        this.setState({visible: false});
+    };
+
+    logMatch = (match) => {
+        console.log('(re)render log match: ' + JSON.stringify(match));
+    };
+
+    logNotMatch = (match) => {
+        console.log('(re)render log NOT match: ' + JSON.stringify(match));
+    };
+
     // TODO: pass a closeDrawers function to drawers, drawers pass close button as a prop to
     //       RecordWrapper, RecordWrapper renders button. YES!
     render() {
         const classNames = ['drawerContainer', this.props.position];
+        classNames.push(this.state.visible ? 'visible' : '');
 
         let closeHandleBackdrop = null;
         if (this.props.rootDrawer) {
@@ -39,18 +66,17 @@ class DrawerContainer extends React.Component {
         }
         return (
             <Route
-                key={this.props.match.url}
                 path={`${this.props.match.url}/sr_app_:appId([A-Za-z0-9]+)_table_:tblId([A-Za-z0-9]+)_report_:reportId([A-Za-z0-9]+)_record_:recordId([A-Za-z0-9]+)`}
                 children={({match, ...rest}) => (
-                    <div className={[...classNames, (match && 'visible')].join(' ')}>
+                    <div className={classNames.join(' ')}>
                         {match && closeHandleBackdrop}
                         <ReactCSSTransitionGroup
                             className="slidey-righty"
                             transitionName="slidey-righty"
                             transitionAppear={true}
-                            transitionAppearTimeout={1200}
-                            transitionEnterTimeout={1200}
-                            transitionLeaveTimeout={1200}
+                            transitionAppearTimeout={1000}
+                            transitionEnterTimeout={1000}
+                            transitionLeaveTimeout={1000}
                             >
                             {match && this.getDrawer()}
                         </ReactCSSTransitionGroup>
