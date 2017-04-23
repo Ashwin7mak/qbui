@@ -299,7 +299,7 @@ export const RecordRoute = React.createClass({
             if (this.props.isDrawerContext) {
                 recordIdTitle = this.props.match.params.drawerRecId;
             }
-            const tableSelected =  this.getSelectedTable(this.props.match.params.drawerTableId);
+            const tableSelected =  this.getSelectedTable(this.props.match.params.tblId);
             const tableName = tableSelected !== undefined && tableSelected !== null ? tableSelected.name : '';
             return (<div className="recordStageHeadline">
 
