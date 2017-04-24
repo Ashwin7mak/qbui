@@ -439,6 +439,15 @@ export const RecordRoute = React.createClass({
      */
     getReportDataFromProps(props = this.props) {
         if (props.isDrawerContext) {
+            let {rptId} = this.props.match.params;
+            // TODO: remove the following after we move to reducers/embeddedReport
+            let embeddedReport;
+            if (rptId.includes(CONTEXT.REPORT.EMBEDDED) || rptId.includes(CONTEXT.FORM.DRAWER)) {
+                const embeddedReportId = rptId;
+                // TODO: move to reducers/embeddedReport
+                embeddedReport = _.find(this.props.embeddedReports, {'id' : embeddedReportId});
+                rptId = embeddedReport.rptId;
+            }
             return  embeddedReport;
         } else {
             return  props.reportData;
