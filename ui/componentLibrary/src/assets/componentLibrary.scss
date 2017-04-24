@@ -7,6 +7,10 @@ $font-path: '../../../client-react/src/assets/fonts/';
 // bootstrap that is not used in production and does not have production styling.
 $bs-table-border-color:                #dddddd;
 
+.router-wrapper {
+    height:100%
+}
+
 // We just let people scroll as they will on mobile
 @media (max-width: 767px) {
     html, body {
@@ -98,7 +102,7 @@ $bs-table-border-color:                #dddddd;
             color: $color-black-100;
         }
         @media (min-width: 768px) {
-            padding: 5px 10%;
+            padding: 2px 10%;
         }
     }
 

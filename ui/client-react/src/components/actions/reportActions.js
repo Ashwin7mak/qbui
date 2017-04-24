@@ -181,7 +181,7 @@ export const ReportActions = React.createClass({
                 primaryButtonOnClick={this.handleBulkDelete}
                 leftButtonName={Locale.getMessage('selection.dontDelete')}
                 leftButtonOnClick={this.cancelBulkDelete}
-                bodyMessage={msg}
+                title={msg}
                 type="alert"/>);
     },
     getEmailAction() {
