@@ -11,7 +11,6 @@ import UserFieldValueRenderer from '../fields/userFieldValueRenderer.js';
 import DragAndDropField from '../formBuilder/dragAndDropField';
 import RelatedChildReport from './relatedChildReport';
 import FlipMove from 'react-flip-move';
-import * as tabIndexConstants from '../formBuilder/tabindexConstants';
 
 import * as FieldsReducer from '../../reducers/fields';
 
@@ -20,7 +19,6 @@ import {connect} from 'react-redux';
 import './qbform.scss';
 import './tabs.scss';
 
-let formBuilderEditForm = null;
 /*
  Custom QuickBase Form component that has 1 property.
  activeTab: the tab we want to display first when viewing the form, defaults to the first tab
