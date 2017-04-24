@@ -300,13 +300,12 @@ const report = (state = [], action) => {
             reorderColumns(currentReport.data.columns);
             // since not all columns are visible, add the placeholder column to columns so it gets rendered on screen
             let params = action.content;
-            let data = {
+            let placeholder = {
                 fieldDef: {
                     isPlaceholder: true
                 },
                 isHidden: false
             };
-            let placeholder = ReportColumnTransformer.createFromApiColumn(data);
             // find the index of the column where 'add a column' was clicked
             let clickedColumn = currentReport.data.columns.filter(column => {
                 return column.id === params.clickedId;
