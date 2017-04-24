@@ -134,10 +134,6 @@ export const TableHomePageRoute = React.createClass({
         //  ensure there is a rptId property otherwise the report not found page is rendered in ReportToolsAndContent
         let homePageParams = _.assign(this.props.match.params, {rptId: null});
 
-        if (this.props.reportData.fieldSelectMenu === undefined) {
-            this.props.reportData.fieldSelectMenu = this.props.fieldSelectMenu;
-        }
-
         let mainContent;
 
         if (this.showInitialTableHomePage()) {
@@ -177,13 +173,7 @@ export const TableHomePageRoute = React.createClass({
 // (another bit of boilerplate to keep the component free of Redux dependencies)
 const mapStateToProps = (state) => {
     return {
-        report: state.report,
-        fieldSelectMenu: {
-            clickedColumn: null,
-            requestedColumn: null,
-            addBefore: null,
-            availableFieldsMenuCollapsed: true
-        }
+        report: state.report
     };
 };
 const mapDispatchToProps = (dispatch) => {
