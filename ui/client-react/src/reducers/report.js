@@ -311,10 +311,7 @@ const report = (state = [], action) => {
                 return column.id === params.clickedId;
             })[0];
             currentReport.data.columns.forEach(column => {
-                column.fieldDef.isAddingFrom = false;
-                if (column.fieldDef.id === params.clickedId) {
-                    column.fieldDef.isAddingFrom = true;
-                }
+                column.fieldDef.isAddingFrom = (column.fieldDef.id === params.clickedId);
             });
             let clickedColumnIndex = clickedColumn.order;
             // add before or after the clicked column depending on selection
