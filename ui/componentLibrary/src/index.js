@@ -73,6 +73,7 @@ import TooltipDoc from './docs/tooltip.js';
 import StandardLeftNavDoc from './docs/standardLeftNav.js';
 import PaginationDoc from './docs/pagination.js';
 // import RowActionsDoc from './docs/rowActions.js';
+import NotificationManagerDoc from './docs/notificationManager.js';
 // END OF IMPORT STATEMENTS
 // Above comment used for Grunt task. Please do not delete.
 
@@ -268,6 +269,10 @@ const routes = [
             {
                 path: `${LIB_ROUTE}/standardLeftNav`,
                 component: StandardLeftNavDoc
+            },
+            {
+                path: `${LIB_ROUTE}/notificationManager`,
+                component: NotificationManagerDoc
             }
         ]
     }
