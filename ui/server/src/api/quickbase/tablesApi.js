@@ -261,7 +261,7 @@
                     tableReq.headers[constants.CONTENT_LENGTH] = tableReq.rawBody.length;
                     this.createTable(tableReq).then(
                         (tableId) => {
-                            this.getFields(req, tableId).then(
+                            fieldsApi.getFieldsForTable(req, tableId).then(
                                 (fields) => {
                                     let fieldIds = [];
                                     fields.forEach((field) =>{
@@ -329,35 +329,6 @@
                     );
                 });
             },
-
-            /**
-             * Function to fetch schema for all fields that belong to a table
-             * @param req
-             * @param tableId
-             * @returns {Promise}
-             */
-            getFields:function(req, tableId) {
-                 //get fields
-                return new Promise((resolve, reject) =>{
-                    let tablesRootUrl = routeHelper.getTablesRoute(req.url, tableId);
-                    let fieldsRootUrl = routeHelper.getFieldsRoute(tablesRootUrl);
-
-                    let getFieldReq = _.clone(req);
-                    getFieldReq.url = fieldsRootUrl;
-                    getFieldReq.headers[constants.CONTENT_LENGTH] = getFieldReq.rawBody.length;
-                    fieldsApi.fetchFields(getFieldReq).then(
-                        (fieldsResponse) => {
-                            let fields = JSON.parse(fieldsResponse.body);
-                            resolve(fields);
-                        },
-                        (error) => {
-                            log.error({req: req}, "tablesApi.getFields(): Error getting field schema from core");
-                            reject(error);
-                        }
-                    );
-                });
-            },
-
 
             /**
              * The update Table call will send the whole object for TableProperties + name of the table if it has been updated.
