@@ -5,10 +5,10 @@ import FieldTokenInMenu from '../fieldToken/fieldTokenInMenu';
 
 const NewFieldsMenu = ({isCollapsed, isOpen, toggleToolPaletteChildrenTabIndex, toolPaletteChildrenTabIndex, toolPaletteFocus, toolPaletteTabIndex}) => (
     <ListOfElements
-        toolPaletteTabIndex={toolPaletteTabIndex}
-        toolPaletteChildrenTabIndex={toolPaletteChildrenTabIndex}
-        toggleToolPaletteChildrenTabIndex={toggleToolPaletteChildrenTabIndex}
-        toolPaletteFocus={toolPaletteFocus}
+        tabIndex={toolPaletteTabIndex}
+        childrenTabIndex={toolPaletteChildrenTabIndex}
+        toggleChildrenTabIndex={toggleToolPaletteChildrenTabIndex}
+        hasKeyBoardFocus={toolPaletteFocus}
         renderer={FieldTokenInMenu}
         isCollapsed={isCollapsed}
         isOpen={isOpen}

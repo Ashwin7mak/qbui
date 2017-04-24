@@ -29,7 +29,7 @@ export class FieldTokenInMenu extends Component {
         const fieldToken = <FieldToken onClick={this.clickToAddToForm} isDragging={false} {...this.props} />;
         if (this.props.tooltipText) {
             return (
-                <div tabIndex={this.props.toolPaletteChildrenTabIndex}
+                <div tabIndex={this.props.tabIndex}
                      onKeyDown={this.onEnterClickToAdd}>
                     <Tooltip location="right" plainMessage={this.props.tooltipText}>
                         {fieldToken}

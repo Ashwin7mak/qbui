@@ -94,7 +94,7 @@ class ListOfElements extends Component {
             <li key={fieldType.key || index} className="listOfElementsItem">
                 <TokenInMenu {...fieldType}
                              isCollapsed={this.props.isCollapsed}
-                             toolPaletteChildrenTabIndex={this.props.toolPaletteChildrenTabIndex} />
+                             tabIndex={this.props.childrenTabIndex} />
             </li>
         ));
     };
@@ -136,12 +136,12 @@ class ListOfElements extends Component {
     render() {
         return (
             <div className={`listOfElementsContainer ${this.props.isCollapsed ? 'listOfElementsCollapsed' : ''}`}
-                 tabIndex={this.props.toolPaletteTabIndex}
-                 onKeyDown={this.props.toggleToolPaletteChildrenTabIndex}
+                 tabIndex={this.props.tabIndex}
+                 onKeyDown={this.props.toggleChildrenTabIndex}
                  ref={(element) => {this.listOfElementsContainer = element;}}
                  role="button">
                 <SearchBox
-                    toolPaletteChildrenTabIndex={this.props.toolPaletteChildrenTabIndex}
+                    tabIndex={this.props.childrenTabIndex}
                     value={this.state.fieldFilter}
                     onChange={this.onChangeFilter}
                     placeholder={Locale.getMessage('listOfElements.searchPlaceholder')}
@@ -175,9 +175,19 @@ ListOfElements.propTypes = {
     renderer: PropTypes.func,
 
     /**
-     * tabIndex for listOfElements
+     * For Keyboard Nav: tabIndex for listOfElements
      * */
-    toolPaletteTabIndex: PropTypes.string,
+    tabIndex: PropTypes.string,
+
+    /**
+     * For Keyboard Nav: tabIndex for the children elements inside of listOfElements
+     * */
+    childrenTabIndex: PropTypes.string,
+
+    /**
+     * For Keyboard Nav: This functions toggles listOfElements children's tabIndices, to add or remove it form the tabbing flow
+     * */
+    toggleChildrenTabIndex: PropTypes.func,
 
     /**
      * A list of grouped elements to be displayed in the menu. */
