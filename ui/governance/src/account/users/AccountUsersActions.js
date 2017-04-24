@@ -1,7 +1,7 @@
 import AccountUsersService from "./AccountUsersService";
 import * as types from "../../app/actionTypes";
 import _ from 'lodash';
-import * as Formatters from './grid/AccountUsersGridFormatters';
+import * as Formatters from './Grid/AccountUsersGridFormatters';
 import * as RealmUserAccountFlagConstants from "../../common/constants/RealmUserAccountFlagConstants.js";
 
 /**

@@ -2,14 +2,14 @@ import React, {Component, PropTypes} from 'react';
 import Loader  from 'react-loader';
 import {connect} from 'react-redux';
 
-import AccountUsersGrid from './grid/AccountUsersGrid';
+import AccountUsersGrid from './Grid/AccountUsersGrid';
 import AccountUsersStage from './AccountUsersStage';
 
 import * as AccountUsersActions from './AccountUsersActions';
 import * as RequestContextActions from '../../common/requestContext/RequestContextActions';
 import * as RequestContextCommon from '../../common/requestContext/RequestContextCommon';
 import * as SpinnerConfigurations from "../../../../client-react/src/constants/spinnerConfigurations";
-import Pagination from "../../../../reuse/client/src/components/pagination/pagination";
+import AccountUsersToolBar from "./AccountUsersToolBar/AccountUsersToolBar";
 
 /**
  * Represents the top level page that contains the grid for account users
@@ -40,18 +40,11 @@ class AccountUsers extends Component {
                 <Loader loaded={!this.props.loading} options={SpinnerConfigurations.LARGE_BREAKPOINT}>
                     <div className="accountUsersContainer">
                         <AccountUsersStage users={this.props.users}/>
-
-                        <Pagination startRecord={1}
-                                    endRecord={3}
-                                    isPreviousDisabled={true}
-                                    isNextDisabled={false}
-                                    isHidden={false} />
-
+                        <AccountUsersToolBar/>
                         <AccountUsersGrid
                             users={this.props.users}
                             showAccountColumns={canSeeAccountColumns}
-                            showRealmColumns={canSeeRealmColumns}
-                        />
+                            showRealmColumns={canSeeRealmColumns}/>
                     </div>
                 </Loader>
             );
