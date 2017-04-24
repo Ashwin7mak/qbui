@@ -167,11 +167,9 @@ export const deleteRecords = (appId, tblId, recIds, nameForRecords) => {
                         logger.debug('RecordService deleteRecords success');
                         dispatch(event(recIds[0], types.REMOVE_REPORT_RECORDS, {appId, tblId, recIds}));
 
-                        // Since nameForRecords is hardcoded as "Records" in reportToolsAndContent.js, this should fix
-                        // the singular and plural for record.
-                        let recordName = recIds.length > 1 ? Locale.getMessage('records.plural') : Locale.getMessage('records.singular');
                         //  send out notification message on the client
-                        let message = `${recIds.length} ${recordName} ${Locale.getMessage('recordNotifications.deleted')}`;
+                        let record = recIds.length > 1 ? Locale.getMessage('records.plural') : Locale.getMessage('records.singular');
+                        let message = `${recIds.length} ${nameForRecords} ${record} ${Locale.getMessage('recordNotifications.deleted')}`;
                         NotificationManager.success(message, Locale.getMessage('success'), NOTIFICATION_MESSAGE_DISMISS_TIME);
 
                         // the delay allows for saving modal to trap inputs otherwise clicks get invoked after delete
