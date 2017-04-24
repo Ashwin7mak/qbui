@@ -14,8 +14,10 @@
     let simpleStringify = require('./../../../common/src/simpleStringify.js');
     let queryFormatter = require('../api/quickbase/formatter/queryFormatter');
     let commonConstants = require('./../../../common/src/constants.js');
+    const httpConstants = require('../constants/httpStatusCodes');
 
     //  these all are initialized with the config parameter
+    let healthApi;
     let requestHelper;
     let formsApi;
     let recordsApi;
@@ -33,6 +35,7 @@
         requestHelper = require('../api/quickbase/requestHelper')(config);
         routeGroup = config.routeGroup;
 
+        healthApi = require('../api/quickbase/healthApi')(config);
         formsApi = require('../api/quickbase/formsApi')(config);
         recordsApi = require('../api/quickbase/recordsApi')(config);
         reportsApi = require('../api/quickbase/reportsApi')(config);
@@ -52,6 +55,9 @@
          * routeToGetFunction maps each route to the proper function associated with that route for a GET request
          */
         var routeToGetFunction = {};
+
+        routeToGetFunction[routeConsts.QBUI_HEALTH_CHECK] = getHealthCheck;
+        routeToGetFunction[routeConsts.HEALTH_CHECK] = forwardApiRequest;
 
         routeToGetFunction[routeConsts.FEATURE_SWITCHES] = getFeatureSwitches;
         routeToGetFunction[routeConsts.FEATURE_STATES] = getFeatureStates;
@@ -94,8 +100,6 @@
         //  role endpoints
         routeToGetFunction[routeConsts.APP_ROLES] = getAppRoles;
 
-        routeToGetFunction[routeConsts.HEALTH_CHECK] = forwardApiRequest;
-
         //  users endpoints
         routeToGetFunction[routeConsts.REQ_USER] = getReqUser;
 
@@ -133,7 +137,7 @@
         var routeToDeleteFunction = {};
         routeToDeleteFunction[routeConsts.RECORD] = deleteSingleRecord;
         routeToDeleteFunction[routeConsts.RECORDS_BULK] = deleteRecordsBulk;
-
+        routeToDeleteFunction[routeConsts.TABLE] = deleteTableComponents;
 
         /*
          * routeToAllFunction maps each route to the proper function associated with the route for all HTTP verb requests
@@ -282,6 +286,26 @@
     }
 
     /**
+     * Completes a health check for the node layer
+     * Does not include any unnecessary tasks (e.g., performance logging) so
+     * that this request can be as fast as possible.
+     * @param req
+     * @param res
+     */
+    function getHealthCheck(req, res) {
+        healthApi.getShallowHealthCheck().then(
+            success => res.send(success),
+            error => {
+                if (error && error.statusCode) {
+                    res.status(error.statusCode).send(error);
+                } else {
+                    res.status(httpConstants.INTERNAL_SERVER_ERROR).send(error);
+                }
+            }
+        );
+    }
+
+    /**
      * get feature switches with overrides
      * @param req
      * @param res
@@ -303,7 +327,7 @@
                     if (response && response.statusCode) {
                         res.status(response.statusCode).send(response);
                     } else {
-                        res.status(500).send(response);
+                        res.status(httpConstants.INTERNAL_SERVER_ERROR).send(response);
                     }
                 }
             );
@@ -334,7 +358,7 @@
                     if (response && response.statusCode) {
                         res.status(response.statusCode).send(response);
                     } else {
-                        res.status(500).send(response);
+                        res.status(httpConstants.INTERNAL_SERVER_ERROR).send(response);
                     }
                 }
             );
@@ -365,7 +389,7 @@
                     if (response && response.statusCode) {
                         res.status(response.statusCode).send(response);
                     } else {
-                        res.status(500).send(response);
+                        res.status(httpConstants.INTERNAL_SERVER_ERROR).send(response);
                     }
                 }
             );
@@ -394,7 +418,7 @@
                 if (response && response.statusCode) {
                     res.status(response.statusCode).send(response);
                 } else {
-                    res.status(500).send(response);
+                    res.status(httpConstants.INTERNAL_SERVER_ERROR).send(response);
                 }
             }
         );
@@ -422,7 +446,7 @@
                 if (response && response.statusCode) {
                     res.status(response.statusCode).send(response);
                 } else {
-                    res.status(500).send(response);
+                    res.status(httpConstants.INTERNAL_SERVER_ERROR).send(response);
                 }
             }
         );
@@ -451,7 +475,7 @@
                 if (response && response.statusCode) {
                     res.status(response.statusCode).send(response);
                 } else {
-                    res.status(500).send(response);
+                    res.status(httpConstants.INTERNAL_SERVER_ERROR).send(response);
                 }
             }
         );
@@ -479,7 +503,7 @@
                 if (response && response.statusCode) {
                     res.status(response.statusCode).send(response);
                 } else {
-                    res.status(500).send(response);
+                    res.status(httpConstants.INTERNAL_SERVER_ERROR).send(response);
                 }
             }
         );
@@ -507,7 +531,7 @@
                 if (response && response.statusCode) {
                     res.status(response.statusCode).send(response);
                 } else {
-                    res.status(500).send(response);
+                    res.status(httpConstants.INTERNAL_SERVER_ERROR).send(response);
                 }
             }
         );
@@ -536,7 +560,7 @@
                 if (response && response.statusCode) {
                     res.status(response.statusCode).send(response);
                 } else {
-                    res.status(500).send(response);
+                    res.status(httpConstants.INTERNAL_SERVER_ERROR).send(response);
                 }
             }
         );
@@ -565,7 +589,7 @@
                 if (response && response.statusCode) {
                     res.status(response.statusCode).send(response);
                 } else {
-                    res.status(500).send(response);
+                    res.status(httpConstants.INTERNAL_SERVER_ERROR).send(response);
                 }
             }
         );
@@ -597,7 +621,7 @@
                     if (response && response.statusCode) {
                         res.status(response.statusCode).send(response);
                     } else {
-                        res.status(500).send(response);
+                        res.status(httpConstants.INTERNAL_SERVER_ERROR).send(response);
                     }
                 }
             );
@@ -627,7 +651,7 @@
                     if (response && response.statusCode) {
                         res.status(response.statusCode).send(response);
                     } else {
-                        res.status(500).send(response);
+                        res.status(httpConstants.INTERNAL_SERVER_ERROR).send(response);
                     }
                 }
             );
@@ -657,7 +681,7 @@
                     if (response && response.statusCode) {
                         res.status(response.statusCode).send(response);
                     } else {
-                        res.status(500).send(response);
+                        res.status(httpConstants.INTERNAL_SERVER_ERROR).send(response);
                     }
                 }
             );
@@ -688,7 +712,7 @@
                     if (response && response.statusCode) {
                         res.status(response.statusCode).send(response);
                     } else {
-                        res.status(500).send(response);
+                        res.status(httpConstants.INTERNAL_SERVER_ERROR).send(response);
                     }
                 }
             );
@@ -720,7 +744,7 @@
                     if (response && response.statusCode) {
                         res.status(response.statusCode).send(response);
                     } else {
-                        res.status(500).send(response);
+                        res.status(httpConstants.INTERNAL_SERVER_ERROR).send(response);
                     }
                 }
             );
@@ -749,7 +773,7 @@
                     if (response && response.statusCode) {
                         res.status(response.statusCode).send(response);
                     } else {
-                        res.status(500).send(response);
+                        res.status(httpConstants.INTERNAL_SERVER_ERROR).send(response);
                     }
                 }
             );
@@ -777,7 +801,7 @@
                     if (response && response.statusCode) {
                         res.status(response.statusCode).send(response);
                     } else {
-                        res.status(500).send(response);
+                        res.status(httpConstants.INTERNAL_SERVER_ERROR).send(response);
                     }
                 }
             );
@@ -805,7 +829,7 @@
                     if (response && response.statusCode) {
                         res.status(response.statusCode).send(response);
                     } else {
-                        res.status(500).send(response);
+                        res.status(httpConstants.INTERNAL_SERVER_ERROR).send(response);
                     }
                 }
             );
@@ -834,7 +858,7 @@
                     if (response && response.statusCode) {
                         res.status(response.statusCode).send(response);
                     } else {
-                        res.status(500).send(response);
+                        res.status(httpConstants.INTERNAL_SERVER_ERROR).send(response);
                     }
                 }
             );
@@ -904,7 +928,7 @@
                     if (response && response.statusCode) {
                         res.status(response.statusCode).send(response);
                     } else {
-                        res.status(500).send(response);
+                        res.status(httpConstants.INTERNAL_SERVER_ERROR).send(response);
                     }
                 }
             );
@@ -940,7 +964,7 @@
                 if (response && response.statusCode) {
                     res.status(response.statusCode).send(response);
                 } else {
-                    res.status(500).send(response);
+                    res.status(httpConstants.INTERNAL_SERVER_ERROR).send(response);
                 }
             }
         );
@@ -961,7 +985,7 @@
                 if (response && response.statusCode) {
                     res.status(response.statusCode).send(response);
                 } else {
-                    res.status(500).send(response);
+                    res.status(httpConstants.INTERNAL_SERVER_ERROR).send(response);
                 }
             }
         );
@@ -983,7 +1007,7 @@
                     if (response && response.statusCode) {
                         res.status(response.statusCode).send(response);
                     } else {
-                        res.status(500).send(response);
+                        res.status(httpConstants.INTERNAL_SERVER_ERROR).send(response);
                     }
                 }
             );
@@ -1006,7 +1030,7 @@
                     if (response && response.statusCode) {
                         res.status(response.statusCode).send(response);
                     } else {
-                        res.status(500).send(response);
+                        res.status(httpConstants.INTERNAL_SERVER_ERROR).send(response);
                     }
                 }
             );
@@ -1036,7 +1060,7 @@
                     if (response && response.statusCode) {
                         res.status(response.statusCode).send(response);
                     } else {
-                        res.status(500).send(response);
+                        res.status(httpConstants.INTERNAL_SERVER_ERROR).send(response);
                     }
                 }
             );
@@ -1060,7 +1084,7 @@
                     if (response && response.statusCode) {
                         res.status(response.statusCode).send(response);
                     } else {
-                        res.status(500).send(response);
+                        res.status(httpConstants.INTERNAL_SERVER_ERROR).send(response);
                     }
                 }
             );
@@ -1084,7 +1108,7 @@
                     if (response && response.statusCode) {
                         res.status(response.statusCode).send(response);
                     } else {
-                        res.status(500).send(response);
+                        res.status(httpConstants.INTERNAL_SERVER_ERROR).send(response);
                     }
                 }
             );
@@ -1103,6 +1127,30 @@
                 },
                 function(response) {
                     logApiFailure(req, response, perfLog, 'updateTable');
+
+                    //  client is waiting for a response..make sure one is always returned
+                    if (response && response.statusCode) {
+                        res.status(response.statusCode).send(response);
+                    } else {
+                        res.status(httpConstants.INTERNAL_SERVER_ERROR).send(response);
+                    }
+                }
+            );
+        });
+    }
+
+    function deleteTableComponents(req, res) {
+        let perfLog = perfLogger.getInstance();
+        perfLog.init('Delete table', {req:filterNodeReq(req)});
+
+        processRequest(req, res, function(req, res) {
+            tablesApi.deleteTableComponents(req).then(
+                function(response) {
+                    res.send(response);
+                    logApiSuccess(req, response, perfLog, 'deleteTableComponents');
+                },
+                function(response) {
+                    logApiFailure(req, response, perfLog, 'deleteTableComponents');
 
                     //  client is waiting for a response..make sure one is always returned
                     if (response && response.statusCode) {

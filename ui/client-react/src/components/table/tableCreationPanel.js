@@ -3,9 +3,10 @@ import {PropTypes} from 'react';
 import TableFieldInput from './tableFieldInput';
 import {I18nMessage} from "../../utils/i18nMessage";
 import Locale from '../../locales/locales';
-import {tableIconNames, tableIconsByTag, suggestedTableIcons} from '../../../../reuse/client/src/components/icon/tableIcons';
+import {tableIconNames, tableIconsByTag} from '../../../../reuse/client/src/components/icon/tableIcons';
 import IconChooser from '../../../../reuse/client/src/components/iconChooser/iconChooser';
 import Icon, {AVAILABLE_ICON_FONTS} from '../../../../reuse/client/src/components/icon/icon';
+import IconUtils from '../../../../reuse/client/src/components/icon/iconUtils';
 import _ from 'lodash';
 
 import './tableCreationPanel.scss';
@@ -47,15 +48,26 @@ class TableCreationPanel extends React.Component {
      * @returns {XML}
      */
     getSuggestedIcons() {
+        const name = _.has(this.props, "tableInfo.name.value") ? this.props.tableInfo.name.value.toLowerCase().trim() : '';
+
+        if (name === '') {
+            return <div className="noSuggestedIcons iconList"><I18nMessage message="tableCreation.typeForSuggestions"/></div>;
+        }
+
+        let suggestedIcons = tableIconNames.filter((icon) => IconUtils.filterMatches(tableIconsByTag, name, icon)).slice(0, 8);
+
+
+        if (suggestedIcons.length === 0) {
+            return <div className="noSuggestedIcons iconList"><I18nMessage message="tableCreation.noSuggestedIcons"/></div>;
+        }
 
         return (
             <div className="iconList">
-                {suggestedTableIcons.slice(0, 8).map((iconName, i) => (
+                {suggestedIcons.map((iconName, i) => (
                     <button key={i} onClick={() => this.selectIcon(iconName)}>
                         {this.getTableIcon(iconName)}
                     </button>))}
             </div>);
-
     }
 
     /**
@@ -135,7 +147,7 @@ class TableCreationPanel extends React.Component {
 
         // choose a default icon
         if (!_.has(this.props, 'tableInfo.tableIcon.value') && this.props.tableInfo.tableIcon.value) {
-            this.updateTableProperty('tableIcon', suggestedTableIcons[0], false);
+            this.updateTableProperty('tableIcon', tableIconNames[0], false);
         }
     }
 

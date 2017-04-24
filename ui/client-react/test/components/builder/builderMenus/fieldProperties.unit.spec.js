@@ -13,8 +13,12 @@ let instance;
 let appId = 1;
 let tableId = 2;
 let formId = "view";
-let field = {id: 6, required: true, name: "Dat Field"};
+let field = {id: 6, required: true, name: "Dat Field", datatypeAttributes: {type: "TEXT"}};
+let multiChoiceField = {id: 7, required: false, name: "Leeloo Dallas MultiChoice", datatypeAttributes: {type: "TEXT"},
+    multipleChoice: {choices: [{coercedValue: {value: "Fifth Element"}, displayValue: "Fifth Element"},
+        {coercedValue: {value: "Ultimate Weapon"}, displayValue: "Ultimate Weapon"}]}};
 let formElement = {FormFieldElement: {fieldId: 6}};
+let formElementMultiChoice = {FormFieldElement: {fieldId: 7}};
 
 
 const mockActions = {
@@ -54,17 +58,20 @@ describe('FieldProperties', () => {
             expect(component.find('.textPropertyTitle')).not.toBePresent();
         });
 
-        it('with selectedField prop', () => {
+        it('with selectedField prop that is multiChoice', () => {
             component = mount(<FieldProperties appId={appId} tableId={tableId} formId={formId}
-                                                 selectedField={field} formElement={formElement}/>);
+                                               selectedField={multiChoiceField} formElement={formElementMultiChoice}/>);
 
             expect(component).toBePresent();
+            instance = component.instance();
             expect(component.find('.fieldPropertiesTitle')).toBePresent();
-            expect(component.find('.fieldPropertiesTitle')).toHaveText(`${field.name} properties`);
+            expect(component.find('.fieldPropertiesTitle')).toHaveText(Locale.getMessage('fieldPropertyLabels.title'));
             expect(component.find('CheckBoxFieldValueEditor')).toBePresent();
-            expect(component.find('CheckBoxFieldValueEditor')).toHaveValue(field.required);
+            expect(component.find('CheckBoxFieldValueEditor')).toHaveValue(multiChoiceField.required);
             expect(component.find('.textPropertyTitle')).toBePresent();
-            expect(component.find('.textPropertyValue')).toHaveValue(field.name);
+            expect(component.find('.textPropertyValue')).toHaveValue(multiChoiceField.name);
+            expect(component.find('MultiLineTextFieldValueEditor')).toBePresent();
+            expect(component.find('MultiLineTextFieldValueEditor')).toHaveValue(instance.buildMultiChoiceDisplayList(multiChoiceField.multipleChoice.choices));
         });
     });
 
@@ -137,12 +144,28 @@ describe('FieldProperties', () => {
         it('renders with title container with proper name', () => {
             component = shallow(<FieldProperties />);
 
-            let name = "Meow";
-            let value = `${name} properties`;
+            let title = Locale.getMessage('fieldPropertyLabels.title');
 
             instance = component.instance();
-            let nameProperty = mount(instance.createPropertiesTitle(name));
-            expect(nameProperty.find('.fieldPropertiesTitle')).toHaveText(value);
+            let nameProperty = mount(instance.createPropertiesTitle());
+            expect(nameProperty.find('.fieldPropertiesTitle')).toHaveText(title);
+        });
+    });
+
+    describe('updateMultiChoiceFieldProps', () => {
+        it('confirm that multiChoice Text fields update correctly', () => {
+            let newValues = "5\nfifthElement";
+            let choices = [{coercedValue: {value: "5"}, displayValue: "5"},
+                {coercedValue: {value: "fifthElement"}, displayValue: "fifthElement"}];
+            let newField = multiChoiceField;
+            newField.multipleChoice.choices = choices;
+            component = shallow(<FieldProperties appId={appId} tableId={tableId} formId={formId}
+                                                 selectedField={multiChoiceField} formElement={formElementMultiChoice}
+                                                 updateField={mockActions.updateField}/>);
+
+            instance = component.instance();
+            instance.updateMultiChoiceFieldProps(newValues);
+            expect(mockActions.updateField).toHaveBeenCalledWith(newField, appId, tableId);
         });
     });
 });

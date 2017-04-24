@@ -49,6 +49,26 @@ describe('Report actions', () => {
                 done();
             });
     });
+
+    it('hideColumn action dispatches types.HIDE_COLUMN with parameters', (done) => {
+        const params = {
+            columnId: 6
+        };
+        const expectedActions = [
+            event(context, types.HIDE_COLUMN, params)
+        ];
+        const store = mockReportsStore({});
+
+        return store.dispatch(reportActions.hideColumn(context, appId, tblId, rptId, params)).then(
+            () => {
+                expect(store.getActions()).toEqual(expectedActions);
+                done();
+            },
+            () => {
+                expect(false).toBe(true);
+                done();
+            });
+    });
 });
 
 describe('Test ReportsActions function success workflow', () => {

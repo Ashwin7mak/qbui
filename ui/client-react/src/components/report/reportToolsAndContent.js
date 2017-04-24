@@ -33,7 +33,7 @@ let AddRecordButton = React.createClass({
 
     render() {
         return (
-            <a href="#" className="addNewRecord" onClick={this.props.onClick}><QBicon icon="add" /></a>
+            <a href="#" className="addNewRecord" onClick={this.props.onClick}><QBicon icon="add-new-filled" /></a>
         );
     }
 });
@@ -140,7 +140,7 @@ export const UnconnectedReportToolsAndContent = React.createClass({
 
     getPageActions(maxButtonsBeforeMenu) {
         const actions = [
-            {msg: 'pageActions.addRecord', icon:'add', onClick: this.editNewRecord},
+            {msg: 'pageActions.addRecord', icon:'add-new-filled', onClick: this.editNewRecord},
             {msg: 'pageActions.favorite', icon:'star', disabled: true},
             {msg: 'pageActions.print', icon:'print', disabled: true},
         ];
@@ -344,7 +344,7 @@ export const UnconnectedReportToolsAndContent = React.createClass({
                 this.getPageUsingOffsetMultiplicant(0);
             }
 
-            let {appId, tblId, rptId, reportData:{selections, ...otherReportData}} = this.props;
+            let {appId, tblId, rptId, reportData: {selections, ...otherReportData}} = this.props;
 
             let fields = this.props.fields;
             let primaryKeyName = FieldUtils.getPrimaryKeyFieldName(fields);
@@ -391,7 +391,7 @@ export const UnconnectedReportToolsAndContent = React.createClass({
                                    gridOptions={this.props.gridOptions}
                                    onAddNewRecord={this.editNewRecord}
                                    {...this.props}
-                                   // until all sub-components reference store directly, need to explicitly override this.props.fields
+                        // until all sub-components reference store directly, need to explicitly override this.props.fields
                                    fields={fields}/>
 
                     {!this.props.scrollingReport && <AddRecordButton onClick={this.editNewRecord}/>}

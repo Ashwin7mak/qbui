@@ -43,6 +43,8 @@ import TopNavMetadata from 'component-metadata!../../../reuse/client/src/compone
 import StageMetadata from 'component-metadata!../../../reuse/client/src/components/stage/stage.js';
 import TooltipMetadata from 'component-metadata!../../../reuse/client/src/components/tooltip/tooltip.js';
 import StandardLeftNavMetadata from 'component-metadata!../../../reuse/client/src/components/sideNavs/standardLeftNav.js';
+import PaginationMetadata from 'component-metadata!../../../reuse/client/src/components/pagination/pagination.js';
+// import RowActionsMetadata from 'component-metadata!../../../reuse/client/src/components/rowActions/rowActions.js';
 // END OF IMPORT STATEMENTS
 // above comment used for grunt task, please do not delete
 
@@ -88,7 +90,8 @@ var Metadata = () => {
         TopNavMetadata,
         StageMetadata,
         TooltipMetadata,
-        StandardLeftNavMetadata
+        StandardLeftNavMetadata,
+        PaginationMetadata
         // END OF METADATA MERGE
         // above comment used for grunt task, please do not delete
     };
