@@ -520,45 +520,6 @@ export const QBForm = React.createClass({
     },
 
     /**
-     * This is for keyboard navigation, it will add focus to a form only if formFocus is true
-     * formFocus becomes true when a user is hitting escape to remove the children elements form the tabbing flow
-     * */
-    componentDidUpdate() {
-        if (this.props.formFocus &&
-            document.activeElement.classList[0] !== "checkbox" &&
-            document.activeElement.tagName !== "INPUT") {
-            formBuilderEditForm.focus();
-            document.querySelector('.qbPanelHeaderTitleText').scrollIntoView(false);
-        }
-    },
-
-    /**
-     * We normally return a regular form based on whether or not it is in view or edit mode.
-     * However, for form builder we want the form to have a tabIndex.
-     * */
-    wrapFormContent(formContent) {
-        if (this.props.editingForm) {
-            return (
-                <form ref={(editForm) => {formBuilderEditForm = editForm;}} className="editForm" tabIndex={tabIndexConstants.formTabIndex} role="button" onKeyDown={this.props.formBuilderUpdateChildrenTabIndex}>
-                    {formContent}
-                </form>
-            );
-        } else if (this.props.edit) {
-            return (
-                <form className="editForm">
-                    {formContent}
-                </form>
-            );
-        } else {
-            return (
-                <form className="viewForm">
-                    {formContent}
-                </form>
-            );
-        }
-    },
-
-    /**
      * render a form as an set of tabs containing HTML tables (a la legacy QuickBase)
      */
     render() {
@@ -587,7 +548,9 @@ export const QBForm = React.createClass({
 
         return (
             <div className="formContainer">
-                {this.wrapFormContent(formContent)}
+                <form className={this.props.edit ? "editForm" : "viewForm"}>
+                    {formContent}
+                </form>
                 <div>{formFooter}</div>
             </div>
         );
