@@ -3,36 +3,41 @@ let topNavPO = requirePO('topNav');
 
 class formBuilderPage {
     // elements
-    get cancelBtn() {return browser.element('.cancelFormButton');}
-    get clearSearch() {return browser.element('.clearSearch .searchIcon');}
-    get deleteFieldIcon() {return browser.element('.deleteFieldIcon');}
-    get editForm() {return browser.element('.editForm');}
-    get fieldPreferencesIcon() {return browser.element('.fieldPreferencesIcon');}
-    get fieldProperty_Name() {return browser.element('.fieldPropertyContainer input[type="text"]');}
-    get fieldProperty_Required() {return browser.element('.checkboxPropertyContainer .checkbox');}
-    get fieldPropertiesTitle() {return browser.element('.fieldPropertiesTitle');}
-    get fieldTokenDragging() {return browser.element('.fieldTokenDragging');}
-    get fieldTokenIcon() {return browser.element('.fieldTokenIcon');}
-    get fieldTokenTitle() {return browser.element('.fieldTokenTitle');}
-    get formBuilderContainer() {return browser.element('.formBuilderContainer');}
-    get formContainer() {return browser.element('.formContainer');}
-    get listOfElementsItemGroup() {return browser.element('.listOfElementsItemGroup');}
-    get listOfElementsItem() {return browser.element('.listOfElementsItem');}
-    get previewContainer() {return browser.element('.previewContainer');}
-    get requiredCheckboxChecked() {return browser.element('.checkboxPropertyContainer .checkbox:checked');}
-    get requiredCheckboxNotChecked() {return browser.element('.checkboxPropertyContainer .checkbox:not(:checked)');}
-    get saveBtn() {return browser.element('.saveFormButton');}
-    get saveOrCancelFooter() {return browser.element('.saveOrCancelFooter');}
-    get searchInput() {
-        // SEARCH textbox in the NEW FIELDS panel
-        return browser.element('.searchInput');
-    }
-    get selectedField() {
-        // the selected field in the form builder
-        return browser.element('.selectedFormElement');
-    }
-    get success() {
-        // the FORM SUCCESSFULLY SAVED growl msg
+    get cancelBtn() {// CANCEL (form) button in footer bar
+        return browser.element('.cancelFormButton');}
+    get clearSearch() {// CLEAR (X) button in the SEARCH (new fields) textbox (left panel)
+        return browser.element('.clearSearch .searchIcon');}
+    get deleteFieldIcon() {// REMOVE (field from form) icon (when a field is selected or highlighted)
+        return browser.element('.deleteFieldIcon');}
+    get fieldProperty_Name() {// NAME textfield in the FIELD PROPERTIES panel (when a field is selected)
+        return browser.element('.fieldPropertyContainer input[type="text"]');}
+    get fieldProperty_Required() {// REQUIRED ('Must be filled in') checkbox in the FIELD PROPERTIES panel (when a field is selected)
+        return browser.element('.checkboxPropertyContainer .checkbox');}
+    get fieldPropertiesTitle() {// TITLE in the FIELD PROPERTIES panel (when a field is selected)
+        return browser.element('.fieldPropertiesTitle');}
+    get fieldTokenDragging() {// the token which appears when dragging a field to another position
+        return browser.element('.fieldTokenDragging');}
+    get fieldTokenTitle() {// the label of the first NEW FIELD token
+        return browser.element('.fieldTokenTitle');}
+    get formBuilderContainer() {// the whole form builder page (all 3 panels)
+        return browser.element('.formBuilderContainer');}
+    get listOfElementsItemGroup() {// The FIRST group in the list of NEW FIELDs (left panel)
+        return browser.element('.listOfElementsItemGroup');}
+    get listOfElementsItem() {// The FIRST field in the list of NEW FIELDs (left panel)
+        return browser.element('.listOfElementsItem');}
+    get requiredCheckboxChecked() {// The MUST BE FILLED IN checkbox in its CHECKED state
+        return browser.element('.checkboxPropertyContainer .checkbox:checked');}
+    get requiredCheckboxNotChecked() {// The MUST BE FILLED IN checkbox in its UNCHECKED state
+        return browser.element('.checkboxPropertyContainer .checkbox:not(:checked)');}
+    get saveBtn() {// SAVE (form) button in footer bar
+        return browser.element('.saveFormButton');}
+    get saveOrCancelFooter() {// footer bar (container for SAVE & CANCEL buttons)
+        return browser.element('.saveOrCancelFooter');}
+    get searchInput() {// SEARCH textbox in the NEW FIELDS panel
+        return browser.element('.searchInput');    }
+    get selectedField() {// The selected field in the form builder
+        return browser.element('.selectedFormElement');}
+    get success() {// FORM SUCCESSFULLY SAVED growl msg
         return browser.element('.notification-success');}
 
     getFieldLocator(index) {
@@ -73,7 +78,7 @@ class formBuilderPage {
         });
     }
     moveByName(source, target) {
-        // Clicks on the field with the specified (source) label (source) and drags it to the field with the specified (target) label
+        // Clicks on the field with the specified (source) label and drags it to the field with the specified (target) label
         let labels = this.getFieldLabels();
         // convert the source & target label strings to actual elements
         // add 1 to index because indexOf is zero-based whereas getFieldLocator is one-based
@@ -89,7 +94,7 @@ class formBuilderPage {
         topNavPO.formBuilderBtn.click();
         topNavPO.modifyThisForm.waitForExist(5000);
         topNavPO.modifyThisForm.click();
-        this.formContainer.waitForVisible();
+        this.formBuilderContainer.waitForVisible();
         browser.pause(5000);
         return this;
     }
@@ -114,6 +119,13 @@ class formBuilderPage {
             browser.pause(1000);
         }
         return newResults;
+    }
+    selectFieldByIndex(index) {
+        // Selects the field at the specified index and verifies that it is reflected in the properties panel
+        // Clicks in the upper left corner because clicking in the middle might hit the textfield & not select the field
+        browser.moveToObject(this.getFieldLocator(index) + ' .draggableField', 1, 1).buttonDown().buttonUp();
+        this.fieldProperty_Name.waitForExist();
+        return this.fieldProperty_Name.getText();
     }
     slowDrag(target, label) {
         // Moves the cursor to specified target field and waits until target displays the the specified label

@@ -226,7 +226,7 @@
         it('add a new field to bottom of form, cancel & verify absence', function() {
             let existingFields = formBuilderPO.getFieldLabels();
             let newField = formBuilderPO.listOfElementsItem;
-            // verify that the last existing field on the form - hopefully -
+            // verify that (hopefully) the last existing field on the form
             // doesn't have the same name as the first item in the NEW FIELDS list
             expect(existingFields[existingFields.length - 1]).not.toBe(newField.getText());
             // add the first new field item to the form
@@ -261,9 +261,7 @@
         });
 
         it('rename a field, save & verify revision', function() {
-            // click in the upper left corner of the first field on the form
-            browser.moveToObject(formBuilderPO.getFieldLocator(1) + ' .draggableField', 1, 1).buttonDown().buttonUp();
-            formBuilderPO.fieldProperty_Name.waitForExist();
+            selectFieldByIndex(1);
             // revise the field name
             let testString = 'testString';
             formBuilderPO.fieldProperty_Name.setValue(testString);
@@ -282,10 +280,8 @@
         });
 
         it('rename a field, cancel & verify no revision', function() {
-            // click in the upper left corner of the first field on the form
             let originalFields = formBuilderPO.getFieldLabels();
-            browser.moveToObject(formBuilderPO.getFieldLocator(1) + ' .draggableField', 1, 1).buttonDown().buttonUp();
-            formBuilderPO.fieldProperty_Name.waitForExist();
+            selectFieldByIndex(1);
             // revise the field name
             let testString = 'testString';
             formBuilderPO.fieldProperty_Name.setValue(testString);
@@ -324,9 +320,19 @@
             expect(formBuilderPO.getNewFieldLabels()).toEqual(newFields);
         });
 
-        xit('verify field selection stickiness', function() {
-            // disabled pending MC-1424: Keyboard Nav for Adding New Field
-            // AND whether or not the ESC key continues to DEselect the selected field (issue# ?)
+        it('select a field, add a new field, verify new field is added directly below selection', function() {
+            let selectedField = formBuilderPO.selectFieldByIndex(2);
+            let newField = formBuilderPO.listOfElementsItem;
+            let newFieldLabel = newField.getText();
+            expect(formBuilderPO.getFieldLabels()[2]).not.toBe(newFieldLabel);
+            // add the first new field item to the form
+            newField.click();
+            browser.pause(5000);
+            expect(formBuilderPO.getFieldLabels()[2]).toBe(newFieldLabel);
+        });
+
+        xit('select a field via KB, add a new field via KB, verify new field is added directly below selection', function() {
+            // disabled pending MC-1424: Keyboard Nav for Adding New Field & ESC key enhancements
             let selectedField = formBuilderPO.KB_selectField(2);
             browser.keys([
                 'Escape', // deselect field
@@ -336,7 +342,7 @@
             );
             // verify that the field is still selected
             expect(formBuilderPO.selectedField.getText()).toEqual(selectedField);
-            // todo: select/add a new field via keyboard & verify that is inserted below the selected field
+            // todo: select/add a new field via keyboard & verify that is inserted directly below the selected field
         });
 
         xit('check the REQUIRED checkbox, cancel & verify not checked', function() {
