@@ -135,7 +135,7 @@ class formBuilderPage {
             browser.pause(1000);
             browser.moveToObject(target);
             return label === browser.element(target).getText();
-        }, 5000, 'expected target preview to display source label after dragging');
+        }, 10000, 'expected target preview to display source label after dragging');
         return this;
     }
     slowDragAndDrop(source, target) {
