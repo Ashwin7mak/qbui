@@ -181,6 +181,7 @@ $edit-icon-font-size: 18px;
         left: 0;
         position: relative;
         vertical-align: top;
+        z-index: $zindex-qbGrid-firstOfType-stickyColumn;
         background-color: $color-black-100;
     }
 
@@ -525,7 +526,6 @@ $edit-icon-font-size: 18px;
     // on the first row, and add a border on the last row.
     .qbRow:first-of-type .qbCell {
         border-top: none;
-        z-index: 9;
     }
     .qbRow:last-of-type .qbCell {
         border-bottom: 1px solid $grid-line-color;

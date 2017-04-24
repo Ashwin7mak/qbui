@@ -6,7 +6,8 @@ let initialState = {};
 function initializeState() {
 
     initialState = {
-        users: []
+        users: [],
+        status: {isFetching: false, error: null}
     };
 }
 
@@ -61,7 +62,7 @@ describe('Account Users Reducers Tests', () => {
 
         it('returns new set of users on SET_USERS', () => {
             // change the state when the SET action type is sent
-            const state = AccountUsersReducer(initialState, {type: types.SET_USERS, users:ACCOUNT_USERS_DATA});
+            const state = AccountUsersReducer(initialState, {type: types.GET_USERS_SUCCESS, users:ACCOUNT_USERS_DATA});
             expect(state.users).toEqual(ACCOUNT_USERS_DATA);
         });
     });

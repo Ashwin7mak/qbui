@@ -47,6 +47,7 @@
         //
         //  TABLE ENDPOINTS for FORM, RECORD and REPORT
 
+        QBUI_HEALTH_CHECK           : baseUrl.QUICKBASE_HEALTH + '/qbuiHealth',
         HEALTH_CHECK                : baseUrl.QUICKBASE_HEALTH + '/health',
         FORM_AND_RECORD_COMPONENTS  : baseUrl.QUICKBASE + '/apps/:appId/tables/:tableId/records/:recordId/formComponents',
         FORM_COMPONENTS             : baseUrl.QUICKBASE + '/apps/:appId/tables/:tableId/formComponents',

@@ -1,16 +1,16 @@
 /**
- * E2E tests for Adding a Record via Inline 'Save and Add New Row' Button on Reports page.
+ * E2E tests for Adding a Record on Reports page.
  * Created by aagrawal on 10/29/2016
  */
 (function() {
     'use strict';
 
     //Load the page Objects
-    var e2ePageBase = require('../../pages/e2ePageBase.po');
-    var NewStackAuthPO = require('../../pages/newStackAuth.po');
-    var ReportContentPO = require('../../pages/reportContent.po');
-    var ReportInLineEditPO = require('../../pages/reportInLineEdit.po');
-    var ReportPagingPO = require('../../pages/reportPaging.po');
+    var e2ePageBase = requirePO('e2ePageBase');
+    var NewStackAuthPO = requirePO('newStackAuth');
+    var ReportContentPO = requirePO('reportContent');
+    var ReportInLineEditPO = requirePO('reportInLineEdit');
+    var ReportPagingPO = requirePO('reportPaging');
 
     describe('Reports - Add Record Tests: ', function() {
         var realmName;
