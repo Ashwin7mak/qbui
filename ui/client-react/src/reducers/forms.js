@@ -149,9 +149,10 @@ const forms = (
         return newState;
     }
 
-    /**If a location is not passed in, a location will be hardcoded, since there is no current implementation
-     *that sets the current tabIndex, sectionIndex, and columnIndex for a new field.
-     *Default location for a newField is always set to the bottom of the form.
+    /**
+     * If a location is not passed in, a location will be hardcoded, since there is no current implementation
+     * that sets the current tabIndex, sectionIndex, and columnIndex for a new field.
+     * Default location for a newField is always set to the bottom of the form.
      */
     case types.ADD_FIELD : {
         if (!currentForm) {
@@ -250,6 +251,19 @@ const forms = (
             ...newState,
             [id || formId]: updatedForm
         };
+    }
+
+    case types.UPDATE_NEW_FIELD_ID : {
+        if (currentForm) {
+            currentForm.newFieldId = action.newFieldId;
+
+            return {
+                ...newState,
+                [id || formId]: currentForm
+            };
+        }
+
+        return state;
     }
 
     case types.SELECT_FIELD : {

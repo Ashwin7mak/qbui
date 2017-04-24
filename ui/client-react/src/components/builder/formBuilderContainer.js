@@ -23,6 +23,9 @@ import {ENTER_KEY, SPACE_KEY} from '../../../../reuse/client/src/components/keyb
 import KeyboardShortcuts from '../../../../reuse/client/src/components/keyboardShortcuts/keyboardShortcuts';
 import _ from 'lodash';
 import NotificationManager from '../../../../reuse/client/src/scripts/notificationManager';
+import {DragDropContext} from 'react-dnd';
+import TouchBackend from 'react-dnd-touch-backend';
+import FormBuilderCustomDragLayer from '../formBuilder/formBuilderCustomDragLayer';
 
 import './formBuilderContainer.scss';
 
@@ -238,6 +241,8 @@ export const FormBuilderContainer = React.createClass({
 
                 <PageTitle title={Locale.getMessage('pageTitles.editForm')}/>
 
+                <FormBuilderCustomDragLayer />
+
                 <ToolPalette isCollapsed={this.props.isCollapsed} isOpen={this.props.isOpen}>
                     <FieldProperties appId={this.props.match.params.appId} tableId={this.props.match.params.tblId} formId={formId}>
                         <div className="formBuilderContainerContent" ref={element => formBuilderContainerContent = element}>
@@ -265,7 +270,7 @@ export const FormBuilderContainer = React.createClass({
     }
 });
 
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(FormBuilderContainer);
+export default
+    DragDropContext(TouchBackend({enableMouseEvents: true, delay: 30}))(
+    connect(mapStateToProps, mapDispatchToProps)
+    (FormBuilderContainer));

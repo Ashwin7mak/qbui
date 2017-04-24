@@ -73,11 +73,15 @@ export const supportedNewFieldTypesWithProperties = () => {
  */
 export function createFieldTypeProps(fieldType) {
     let title = Locale.getMessage(`fieldsDefaultLabels.${fieldType}`);
+    let id = `fieldType_${fieldType}`;
+    let field = createScalarDefaultFieldsProperties()[fieldType];
 
     return {
-        key: `fieldType_${fieldType}`,
+        containingElement: {id, FormFieldElement: {positionSameRow: false, ...field}}, // ID for identifying this field when dragging
+        location: {tabIndex: 0, sectionIndex: 0, columnIndex: 0, elementIndex: 0},
+        key: id, // Key for react to use to identify it in the array
         type: fieldType,
-        relatedField: {...createScalarDefaultFieldsProperties()[fieldType]},
+        relatedField: field,
         title,
         tooltipText: Locale.getMessage(`builder.formBuilder.tooltips.addNew${fieldType}`),
         isNewField: true

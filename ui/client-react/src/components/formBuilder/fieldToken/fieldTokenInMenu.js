@@ -2,10 +2,11 @@ import React, {PropTypes, Component} from 'react';
 import {connect} from "react-redux";
 import FieldToken from './fieldToken';
 import Tooltip from '../../../../../reuse/client/src/components/tooltip/tooltip';
-import {addNewFieldToForm} from "../../../actions/formActions";
+import {addNewFieldToForm, updateNewFieldId} from "../../../actions/formActions";
 import {getFormByContext} from '../../../reducers/forms';
 import {CONTEXT} from '../../../actions/context';
 import _ from 'lodash';
+import DraggableField from '../draggableField';
 
 /**
  * A FieldToken that is extended to be displayed in a menu (i.e., Tool Palette) when building a form.
@@ -18,7 +19,7 @@ export class FieldTokenInMenu extends Component {
     };
 
     render() {
-        const fieldToken = <FieldToken onClick={this.clickToAddToForm} isDragging={false} {...this.props} />;
+        const fieldToken = <FieldToken onMouseUp={this.clickToAddToForm} isDragging={false} {...this.props} />;
 
         if (this.props.tooltipText) {
             return (
@@ -47,25 +48,29 @@ FieldTokenInMenu.propTypes = {
 
     /**
      * Can optionally show the token in a collapsed state (icon only) */
-    isCollapsed: PropTypes.bool
+    isCollapsed: PropTypes.bool,
+
+    /**
+     * Holds information about the new field created to represent this element while dragging and once dropped */
+    newField: PropTypes.obj
 };
 
 const mapStateToProps = state => {
     let currentForm = getFormByContext(state, CONTEXT.FORM.VIEW);
+    let selectedField = (_.has(currentForm, 'selectedFields') ? currentForm.selectedFields[0] : null);
 
     return {
         formId: _.get(currentForm, 'id'),
         appId: _.get(currentForm, 'formData.formMeta.appId'),
         tblId: _.get(currentForm, 'formData.formMeta.tableId'),
-        selectedField: (_.has(currentForm, 'selectedFields') ? currentForm.selectedFields[0] : null)
+        selectedField: selectedField,
+        newFieldId: (currentForm ? currentForm.newFieldId : null)
     };
 };
 
 const mapDispatchToProps = {
-    addNewFieldToForm
+    addNewFieldToForm,
+    updateNewFieldId
 };
 
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(FieldTokenInMenu);
+export default connect(mapStateToProps, mapDispatchToProps)(DraggableField(FieldTokenInMenu));

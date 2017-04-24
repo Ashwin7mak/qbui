@@ -1,11 +1,13 @@
 import React, {Component, PropTypes} from 'react';
-import {DragDropContext} from 'react-dnd';
 import QbForm from '../QBForm/qbform';
-import FormBuilderCustomDragLayer from './formBuilderCustomDragLayer';
-import TouchBackend from 'react-dnd-touch-backend';
 import {findFormElementKey} from '../../utils/formUtils';
 import _ from 'lodash';
 import {findDOMNode} from 'react-dom';
+
+// TODO:: Remove or refactor
+import {DragDropContext} from 'react-dnd';
+import TouchBackend from 'react-dnd-touch-backend';
+import FormBuilderCustomDragLayer from './formBuilderCustomDragLayer';
 
 import './formBuilder.scss';
 
@@ -104,7 +106,7 @@ export class FormBuilder extends Component {
                     <input type="checkbox" checked={this.state.hasAnimation} onChange={evt => this.setState({hasAnimation: !this.state.hasAnimation})} />
                     Has drag animation
                 </label>
-                {this.props.showCustomDragLayer && <FormBuilderCustomDragLayer />}
+                {/*{this.props.showCustomDragLayer && <FormBuilderCustomDragLayer />}*/}
                 <QbForm
                     formFocus={this.props.formFocus}
                     selectedField={this.props.selectedField}
@@ -149,4 +151,4 @@ FormBuilder.defaultProps = {
  * delay is used to allow a user to scroll on mobile
  * if a user wants to drag and drop, the screen must be pressed on for 50ms before dragging will start
  * */
-export default DragDropContext(TouchBackend({enableMouseEvents: true, delay: 30}))(FormBuilder);
+export default FormBuilder;

@@ -13,11 +13,20 @@ import _ from 'lodash';
  */
 const fieldDragSource = {
     beginDrag(props, monitor, component) {
-        props.cacheDragElement(component);
+        if (props.cacheDragElement) {
+            props.cacheDragElement(component);
+        }
+
+        if (props.isNewField && !props.newFieldId) {
+            let {selectedField, formId, appId, tblId, relatedField} = props;
+            props.addNewFieldToForm(formId, appId, tblId, selectedField, relatedField);
+        }
+
         return {
             containingElement: props.containingElement,
             location: props.location,
             relatedField: props.relatedField,
+            component
         };
     },
 
@@ -33,13 +42,14 @@ const fieldDragSource = {
     },
 
     /**
-     * Calls this function once dragging has stopped. If the device is touch, then handle re-ordering of the field.
-     * Non-touch devices handle re-ordering during the drag.
+     * Calls this function once dragging has stopped.
      * @param props
      * @param monitor
      */
     endDrag(props, monitor) {
-        props.clearDragElementCache();
+        if (props.clearDragElementCache) {
+            props.clearDragElementCache();
+        }
     }
 };
 
