@@ -228,6 +228,18 @@ export const FormBuilderContainer = React.createClass({
         }
     },
 
+    /**
+     * This is for keyboard navigation, it will add focus to a form only if formFocus is true
+     * formFocus becomes true when a user is hitting escape to remove the children elements form the tabbing flow
+     * */
+    componentDidUpdate() {
+        if (this.props.formFocus &&
+            document.activeElement.classList[0] !== "checkbox" &&
+            document.activeElement.tagName !== "INPUT") {
+            formBuilderContainerContent.focus();
+        }
+    },
+
     render() {
         let loaded = (_.has(this.props, 'currentForm') && this.props.currentForm !== undefined && !this.props.currentForm.loading && !this.props.currentForm.saving);
         let formData = null;
@@ -258,15 +270,17 @@ export const FormBuilderContainer = React.createClass({
                              toolPaletteChildrenTabIndex={this.props.toolPaletteChildrenTabIndex}
                              toolPaletteFocus={this.props.toolPaletteFocus} >
                 <FieldProperties appId={this.props.match.params.appId} tableId={this.props.match.params.tblId} formId={formId}>
-                        <div className="formBuilderContainerContent" ref={element => formBuilderContainerContent = element}>
+                        <div tabIndex={tabIndexConstants.formTabIndex}
+                             className="formBuilderContainerContent"
+                             ref={element => formBuilderContainerContent = element}
+                             role="button"
+                             onKeyDown={this.updateChildrenTabIndex}>
                             <AutoScroll parentContainer={formBuilderContainerContent} pixelsFromBottomForLargeDevices={100}>
                                 <div className="formBuilderContent">
                                     <Loader loaded={loaded} options={LARGE_BREAKPOINT}>
                                         <FormBuilder
                                             formBuilderContainerContentElement={formBuilderContainerContent}
-                                            formFocus={this.props.formFocus}
                                             selectedField={this.props.selectedField}
-                                            formBuilderUpdateChildrenTabIndex={this.updateChildrenTabIndex}
                                             formId={formId}
                                             formData={formData}
                                             moveFieldOnForm={this.props.moveFieldOnForm}
