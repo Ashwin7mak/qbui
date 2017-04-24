@@ -50,7 +50,7 @@
          * of reports for that app and table, then displays the Users table in the browser
          */
         it('Should load the user table and verify the field names', function() {
-            expect (UsersTablePage.getUserColumnHeaders()).toEqual(e2eConsts.userTableFieldNames);
+            expect(UsersTablePage.getUserColumnHeaders()).toEqual(e2eConsts.userTableFieldNames);
         });
 
         /**

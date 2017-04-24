@@ -578,11 +578,6 @@ $label-link-hover-color: #fff !default;
 //
 //##
 
-//** Padding applied to the modal body
-$modal-inner-padding: 15px !default;
-
-//** Padding applied to the modal title
-$modal-title-padding: 15px !default;
 //** Modal title line-height
 $modal-title-line-height: $line-height-base !default;
 
@@ -604,7 +599,7 @@ $modal-footer-border-color: $modal-header-border-color !default;
 $modal-lg: 900px !default;
 $modal-md: 600px !default;
 $modal-sm: 300px !default;
-
+$modal-vertical-spacer: 10px; //spacer between any 2 lines on a modal ex: between icon and title or lines of text in the body
 
 //== Alerts
 //

@@ -113,6 +113,31 @@
                 });
             },
             /**
+             * Delete endpoint on EE to delete all the entities for a table. This includes tableProperties, forms for now.
+             * @param req
+             * @param tableId
+             * @returns {Promise}
+             */
+            deleteTableEntities: function(req, tableId) {
+                return new Promise((resolve, reject) =>{
+                    let opts = requestHelper.setOptions(req);
+                    opts.method = 'delete';
+                    opts.url = requestHelper.getRequestEeHost() + routeHelper.getEETablesRoute(req.url, tableId);
+
+                    requestHelper.executeRequest(req, opts).then(
+                        (eeResponse) =>{
+                            resolve(eeResponse);
+                        },
+                        (error) =>{
+                            log.error({req: req}, "tablesApi.deleteTableEntities(): Error deleting table entitied");
+                            reject(error);
+                        }).catch((ex) =>{
+                            requestHelper.logUnexpectedError('tablesApi.deleteTableEntities(): unexpected error deleting table entities', ex, true);
+                            reject(ex);
+                        });
+                });
+            },
+            /**
              * Create endpoint for the table object
              * @param req
              * @returns {Promise}
@@ -339,6 +364,28 @@
                 promises.push(this.replaceTableProperties(tableProperReq, req.params.tableId));
 
                 return Promise.all(promises);
+            },
+
+            /**
+             * deleteTableComponents calls deleteTable on Core + deleteTableEntities on EE
+             * deleteTableEntities needs to be called first because if the table doesnt exist in core, EE validation fails
+             * This is a restriction for now until a synchronization service is set up between the two.
+             * @param req
+             * @returns {Promise.<T>|Promise<R>}
+             */
+            deleteTableComponents: function(req) {
+                let tableProperReq = _.clone(req);
+                let tableReq = _.clone(req);
+                return this.deleteTableEntities(tableProperReq, tableProperReq.params.tableId).then(
+                    (success) => {return this.deleteTable(tableReq, tableReq.params.tableId);},
+                    (error) => {
+                        log.error({req: tableReq}, "tablesApi.deleteTableComponents(): Error deleting table entities in EE");
+                        return this.deleteTable(tableReq, tableReq.params.tableId);
+                    }
+                ).catch((ex) => {
+                    requestHelper.logUnexpectedError('tablesApi.deleteTableComponents(): unexpected error deleting table entities in EE', ex, true);
+                    return this.deleteTable(tableReq, tableReq.params.tableId);
+                });
             }
         };
         return tablesApi;

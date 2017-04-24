@@ -1,28 +1,14 @@
 import * as types from '../actions/types';
 
-const defaultTableInfo = {
-    name: {
-        value: ""
-    },
-    description: {
-        value: ""
-    },
-    tableIcon: {
-        value: ""
-    },
-    tableNoun: {
-        value: ""
-    }
-};
-
 const tableProperties = (
     state = {
         //  default states
         iconChooserOpen: false,
         savingTable: false,
-        tableInfo: defaultTableInfo,
+        tableInfo: null,
         isDirty: false,
-        editing: null
+        editing: null,
+        notifyTableDeleted: false
     },
     action) => {
 
@@ -127,6 +113,25 @@ const tableProperties = (
             savingTable: false
         };
     }
+    case types.TABLE_DELETED: {
+        return {
+            ...state,
+            savingTable: false,
+            notifyTableDeleted: true
+        };
+    }
+    case types.DELETING_TABLE_FAILED: {
+        return {
+            ...state,
+            savingTable: false
+        };
+    }
+    case types.NOTIFY_TABLE_DELETED: {
+        return {
+            ...state,
+            notifyTableDeleted: action.notifyTableDeleted
+        };
+    }
     default:
         // return existing state by default in redux
         return state;
@@ -134,3 +139,13 @@ const tableProperties = (
 };
 
 export default tableProperties;
+
+export const getNeedToNotifyTableDeletion = (state) => {
+    return state.tableProperties.notifyTableDeleted;
+};
+export const getTableJustDeleted = (state) => {
+    if (state.tableProperties && state.tableProperties.tableInfo && state.tableProperties.tableInfo.name) {
+        return state.tableProperties.tableInfo.name.value;
+    }
+    return "";
+};
