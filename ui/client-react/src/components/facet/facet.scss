@@ -53,6 +53,7 @@
 
     .filterButton {
         font-size: 18px;
+        cursor: pointer;
 
         @include small-breakpoint {
             font-size: $size-iconfont-large2;
@@ -70,6 +71,7 @@
 
     .filterButtonCaret {
         font-size: 16px;
+        cursor: pointer;
     }
 }
 
