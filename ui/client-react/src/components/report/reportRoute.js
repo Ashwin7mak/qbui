@@ -178,7 +178,7 @@ const ReportRoute = React.createClass({
                     selectedRows={this.props.reportData.selectedRows}
                     scrollingReport={this.props.scrollingReport}
                     loadDynamicReport={this.loadDynamicReport}
-                    fieldSelectMenu={this.props.fieldSelectMenu}
+                    isFieldSelectMenuOpen={this.props.isFieldSelectMenuOpen}
                     noRowsUI={true}
                 />
             </div>);

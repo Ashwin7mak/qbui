@@ -390,7 +390,7 @@ export const UnconnectedReportToolsAndContent = React.createClass({
                                    flux={this.getFlux()}
                                    gridOptions={this.props.gridOptions}
                                    onAddNewRecord={this.editNewRecord}
-                                   fieldSelectMenu={this.props.fieldSelectMenu}
+                                   isFieldSelectMenuOpen={this.props.isFieldSelectMenuOpen}
                                    {...this.props}
                         // until all sub-components reference store directly, need to explicitly override this.props.fields
                                    fields={fields}/>

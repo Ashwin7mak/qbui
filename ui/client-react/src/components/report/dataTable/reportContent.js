@@ -968,7 +968,7 @@ export const ReportContent = React.createClass({
                                 openRecordForEdit={this.openRecordForEditInTrowser}
                                 handleValidateFieldValue={this.handleValidateFieldValue}
                                 sortFids={this.props.reportData.data ? this.props.reportData.data.sortFids : []}
-                                fieldSelectMenu={this.props.fieldSelectMenu}
+                                isFieldSelectMenuOpen={this.props.isFieldSelectMenuOpen}
                                 // for relationships phase-1
                                 phase1={this.props.phase1}
                             />
