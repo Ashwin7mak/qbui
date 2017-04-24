@@ -17,26 +17,36 @@
  *
  * For future references:
  *
- * formBuilderToggleNavButtonTabIndex can be found in
+ * FORM_BUILDER_TOGGLE_NAV_BUTTON_TABINDEX can be found in
  *      - builderWrapper.js
- * userMenuTabIndex can be found in
+ * USER_MENU_TAB_INDEX can be found in
  *      - builderWrapper.js
- * toolPaletteTabIndex is set in
+ * TOOL_PALETTE_TABINDEX is set in
  *      - listOfElements.js
  * the children elements tabIndices are set in
  *      - fieldTokenInMenu.js
- * formTabIndex can be found in
+ * FORM_TAB_INDEX can be found in
  *      - qbForm.js
  * the children elements tabIndices are set in
  *      - fieldEditingTools.js
- * fieldPropsTabIndex can be found in
+ * FIELD_PROP_TABINDEX can be found in
  *      - fieldProperties.js
  * */
 
-export const formBuilderToggleNavButtonTabIndex = 1;
-export const userMenuTabIndex = 2;
-export const toolPaletteTabIndex = 3;
-export const formTabIndex = 4;
-export const fieldPropsTabIndex = 5;
-export const cancelButtonTabIndex = 6;
-export const saveButtonTabIndex = 7;
+// export const formBuilderToggleNavButtonTabIndex = 1;
+// export const userMenuTabIndex = 2;
+// export const toolPaletteTabIndex = 3;
+// export const formTabIndex = 4;
+// export const fieldPropsTabIndex = 5;
+// export const cancelButtonTabIndex = 6;
+// export const saveButtonTabIndex = 7;
+export const FORM_BUILDER_TOGGLE_NAV_BUTTON_TABINDEX = 1;
+export const USER_MENU_TAB_INDEX = 2;
+export const TOOL_PALETTE_TABINDEX = 3;
+export const FORM_TAB_INDEX = 4;
+export const FIELD_PROP_TABINDEX = 5;
+export const CANCEL_BUTTON_TABINDEX = 6;
+export const SAVE_BUTTON_TABINDEX = 7;
+
+
+

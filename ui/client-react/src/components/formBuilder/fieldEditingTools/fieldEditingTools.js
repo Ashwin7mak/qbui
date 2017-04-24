@@ -71,8 +71,8 @@ export class FieldEditingTools extends Component {
             return null;
         }
 
-        if (this.isFieldSelected() && this.props.formBuilderChildrenTabIndex === tabIndexConstants.formTabIndex) {
-            tabIndex = tabIndexConstants.formTabIndex;
+        if (this.isFieldSelected() && this.props.formBuilderChildrenTabIndex === tabIndexConstants.FORM_TAB_INDEX) {
+            tabIndex = tabIndexConstants.FORM_TAB_INDEX;
         } else {
             tabIndex = '-1';
         }

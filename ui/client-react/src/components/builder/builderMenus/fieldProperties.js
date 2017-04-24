@@ -70,7 +70,7 @@ export class FieldProperties extends Component {
             <div className="textPropertyContainer">
                 <div className="textPropertyTitle">{propertyTitle}</div>
                 <TextFieldValueEditor value={propertyValue}
-                                      tabIndex={tabIndexConstants.fieldPropsTabIndex}
+                                      tabIndex={tabIndexConstants.FIELD_PROP_TABINDEX}
                                       classes="textPropertyValue"
                                       inputType="text"
                                       onChange={(newValue) => this.updateFieldProps(newValue, 'name')}
@@ -91,7 +91,7 @@ export class FieldProperties extends Component {
             <div className="checkboxPropertyContainer">
                 <CheckBoxFieldValueEditor value={propertyValue}
                                           label={propertyTitle}
-                                          tabIndex={tabIndexConstants.fieldPropsTabIndex}
+                                          tabIndex={tabIndexConstants.FIELD_PROP_TABINDEX}
                                           onChange={(newValue) => this.updateFieldProps(newValue, 'required')}
                 />
             </div>

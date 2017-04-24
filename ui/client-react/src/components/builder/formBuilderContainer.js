@@ -153,8 +153,8 @@ export const FormBuilderContainer = React.createClass({
     getRightAlignedButtons() {
         return (
             <div>
-                <Button tabIndex={tabIndexConstants.cancelButtonTabIndex} bsStyle="primary" onClick={this.onCancel} className="cancelFormButton"><I18nMessage message="nav.cancel"/></Button>
-                <Button tabIndex={tabIndexConstants.saveButtonTabIndex} bsStyle="primary" onClick={this.saveClicked} className="saveFormButton"><I18nMessage message="nav.save"/></Button>
+                <Button tabIndex={tabIndexConstants.CANCEL_BUTTON_TABINDEX} bsStyle="primary" onClick={this.onCancel} className="cancelFormButton"><I18nMessage message="nav.cancel"/></Button>
+                <Button tabIndex={tabIndexConstants.SAVE_BUTTON_TABINDEX} bsStyle="primary" onClick={this.saveClicked} className="saveFormButton"><I18nMessage message="nav.save"/></Button>
             </div>
         );
     },
@@ -178,7 +178,7 @@ export const FormBuilderContainer = React.createClass({
     updateChildrenTabIndex(e) {
         let childrenTabIndex = this.props.formBuilderChildrenTabIndex;
 
-        if ((e.which === ENTER_KEY || e.which === SPACE_KEY) && childrenTabIndex !== tabIndexConstants.formTabIndex) {
+        if ((e.which === ENTER_KEY || e.which === SPACE_KEY) && childrenTabIndex !== tabIndexConstants.FORM_TAB_INDEX) {
             this.props.toggleFormBuilderChildrenTabIndex(this.props.currentForm.id, childrenTabIndex);
             e.preventDefault();
         }
@@ -206,13 +206,12 @@ export const FormBuilderContainer = React.createClass({
     },
 
     escapeCurrentContext() {
-        let childrenTabIndex = this.props.formBuilderChildrenTabIndex;
         let selectedField = this.props.selectedField;
         let formId = this.props.currentForm.id;
-        if (this.props.formBuilderChildrenTabIndex === tabIndexConstants.formTabIndex) {
-            this.props.toggleFormBuilderChildrenTabIndex(formId, childrenTabIndex);
-        } else if (this.props.toolPaletteChildrenTabIndex === tabIndexConstants.toolPaletteTabIndex) {
-            this.props.toggleToolPaletteChildrenTabIndex(formId, tabIndexConstants.toolPaletteTabIndex);
+        if (this.props.formBuilderChildrenTabIndex === tabIndexConstants.FORM_TAB_INDEX) {
+            this.props.toggleFormBuilderChildrenTabIndex(formId, tabIndexConstants.FORM_TAB_INDEX);
+        } else if (this.props.toolPaletteChildrenTabIndex === tabIndexConstants.TOOL_PALETTE_TABINDEX) {
+            this.props.toggleToolPaletteChildrenTabIndex(formId, tabIndexConstants.TOOL_PALETTE_TABINDEX);
         } else if (selectedField) {
             this.deselectField();
         } else {
@@ -270,7 +269,7 @@ export const FormBuilderContainer = React.createClass({
                              toolPaletteChildrenTabIndex={this.props.toolPaletteChildrenTabIndex}
                              toolPaletteFocus={this.props.toolPaletteFocus} >
                 <FieldProperties appId={this.props.match.params.appId} tableId={this.props.match.params.tblId} formId={formId}>
-                        <div tabIndex={tabIndexConstants.formTabIndex}
+                        <div tabIndex={tabIndexConstants.FORM_TAB_INDEX}
                              className="formBuilderContainerContent"
                              ref={element => formBuilderContainerContent = element}
                              role="button"

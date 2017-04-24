@@ -344,7 +344,7 @@ const forms = (
             return state;
         }
 
-        let formTabIndex = action.content.currentTabIndex === undefined || action.content.currentTabIndex === "-1" ? tabIndexConstants.formTabIndex : "-1";
+        let formTabIndex = action.content.currentTabIndex === undefined || action.content.currentTabIndex === "-1" ? tabIndexConstants.FORM_TAB_INDEX : "-1";
         let formFocus = false;
 
         if (action.content.currentTabIndex === undefined) {
@@ -375,7 +375,7 @@ const forms = (
         }
 
         let toolPaletteFocus = false;
-        let toolPaletteTabIndex = action.content.currentTabIndex === undefined || action.content.currentTabIndex === "-1" ? tabIndexConstants.toolPaletteTabIndex : "-1";
+        let toolPaletteTabIndex = action.content.currentTabIndex === undefined || action.content.currentTabIndex === "-1" ? tabIndexConstants.TOOL_PALETTE_TABINDEX : "-1";
 
         if (action.content.currentTabIndex === undefined) {
             toolPaletteFocus = false;

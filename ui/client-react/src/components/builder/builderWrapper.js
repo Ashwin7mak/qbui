@@ -42,7 +42,7 @@ export const BuilderWrapper = React.createClass({
                                position={"top"}
                                dropdownIcon="user"
                                dropdownMsg="globalActions.user"
-                               startTabIndex={tabIndexConstants.userMenuTabIndex}
+                               startTabIndex={tabIndexConstants.USER_MENU_TAB_INDEX}
                                app={this.getSelectedApp()}/>);
     },
 
@@ -53,7 +53,7 @@ export const BuilderWrapper = React.createClass({
                 <TopNav
                     onNavClick={this.props.toggleNav}
                     globalActions={this.getTopGlobalActions()}
-                    tabIndex={tabIndexConstants.formBuilderToggleNavButtonTabIndex}
+                    tabIndex={tabIndexConstants.FORM_BUILDER_TOGGLE_NAV_BUTTON_TABINDEX}
                 />
 
                 <div className="builderWrapperBody">
