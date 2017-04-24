@@ -219,8 +219,7 @@ export class ReportColumnHeaderMenu extends Component {
         if (this.props.isOnlyOneColumnVisible) {return;}
 
         let params = {
-            columnId: this.props.fieldDef.id,
-            isFieldSelectMenuOpen: this.props.isFieldSelectMenuOpen
+            columnId: this.props.fieldDef.id
         };
 
         this.props.hideColumn(CONTEXT.REPORT.NAV, this.props.appId, this.props.tblId, this.props.rptId, params);
@@ -228,6 +227,7 @@ export class ReportColumnHeaderMenu extends Component {
 
     openFieldSelector(before) {
         if (!this.hasRequiredIds()) {return;}
+
         let params = {
             open: true,
             clickedId: this.props.fieldDef.id,
@@ -296,8 +296,7 @@ export class ReportColumnHeaderMenu extends Component {
 ReportColumnHeaderMenu.propTypes = {
     fieldDef: PropTypes.object,
     sortFids: PropTypes.array,
-    isOnlyOneColumnVisible: PropTypes.bool,
-    isFieldSelectMenuOpen: PropTypes.bool
+    isOnlyOneColumnVisible: PropTypes.bool
 };
 
 const mapDispatchToProps = (dispatch) => {

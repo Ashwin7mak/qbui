@@ -66,59 +66,6 @@ const report = (state = [], action) => {
         });
     }
 
-    /**
-     * Adds a placeholder column to the correct position in a report based on the column that was clicked on.
-     * @param columns
-     */
-    function addPlaceholder(columns) {
-        // loop through to check if the placeholder column is already visible
-        let placeHolderAlreadyExists = columns.some(column => {
-            return column.fieldDef.isPlaceholder === true;
-        });
-        if (placeHolderAlreadyExists) {
-            // remove the placeholder column if it exists
-            let actualColumns = columns.filter(column => {
-                return column.fieldDef.isPlaceholder === undefined;
-            });
-            columns = actualColumns;
-        }
-        reorderColumns(columns);
-        // since not all columns are visible, add the placeholder column to columns so it gets rendered on screen
-        let params = action.content;
-        let placeholderColumn = {
-            fieldDef: {
-                isPlaceholder: true
-            },
-            isHidden: false
-        };
-        // find the index of the column where 'add a column' was clicked
-        let clickedColumn = columns.filter(column => {
-            return column.id === params.clickedId;
-        })[0];
-        let clickedColumnIndex = clickedColumn.order;
-        // add before or after the clicked column depending on selection
-        let insertionIndex;
-        if (params.addBefore) {
-            insertionIndex = clickedColumnIndex;
-        } else {
-            insertionIndex = clickedColumnIndex + 1;
-        }
-        columns.splice(insertionIndex, 0, placeholderColumn);
-        reorderColumns(columns);
-    }
-
-    /**
-     * Disables the hide option for the clicked column.
-     * @param columns
-     */
-    function disableHide(columns) {
-        columns.forEach(column => {
-            if (column.fieldDef.id === action.content.clickedId) {
-                column.fieldDef.isAddingFrom = true;
-            }
-        });
-    }
-
     //  what report action is being requested
     switch (action.type) {
     case types.LOAD_REPORT:
@@ -339,9 +286,55 @@ const report = (state = [], action) => {
     case types.OPEN_FIELD_SELECTOR: {
         let currentReport = getReportFromState(action.id);
         if (currentReport) {
-            addPlaceholder(currentReport.data.columns);
-            disableHide(currentReport.data.columns);
-            return newState(currentReport);
+            // loop through to check that if the columns are all visible
+            let allVisible = currentReport.data.columns.every(column => {
+                return column.isHidden !== true;
+            });
+            if (!allVisible) {
+                // loop through to check if the placeholder column is already visible
+                let placeHolderAlreadyExists = currentReport.data.columns.some(column => {
+                    return column.fieldDef.isPlaceholder === true;
+                });
+                if (placeHolderAlreadyExists) {
+                    // remove the placeholder column if it exists
+                    let actualColumns = currentReport.data.columns.filter(column => {
+                        return column.fieldDef.isPlaceholder === undefined;
+                    });
+                    currentReport.data.columns = actualColumns;
+                }
+                reorderColumns(currentReport.data.columns);
+                // since not all columns are visible, add the placeholder column to columns so it gets rendered on screen
+                let params = action.content;
+                let data = {
+                    id: -1,
+                    headerName: "placeholder",
+                    fieldDef: {
+                        isPlaceholder: true
+                    },
+                    isHidden: false
+                };
+                let placeholder = ReportColumnTransformer.createFromApiColumn(data);
+                // find the index of the column where 'add a column' was clicked
+                let clickedColumn = currentReport.data.columns.filter(column => {
+                    return column.id === params.clickedId;
+                })[0];
+                currentReport.data.columns.forEach(column => {
+                    if (column.fieldDef.id === params.clickedId) {
+                        column.fieldDef.isAddingFrom = true;
+                    }
+                });
+                let clickedColumnIndex = clickedColumn.order;
+                // add before or after the clicked column depending on selection
+                let insertionIndex;
+                if (params.addBefore) {
+                    insertionIndex = clickedColumnIndex;
+                } else {
+                    insertionIndex = clickedColumnIndex + 1;
+                }
+                currentReport.data.columns.splice(insertionIndex, 0, placeholder);
+                reorderColumns(currentReport.data.columns);
+                return newState(currentReport);
+            }
         }
         return state;
     }
@@ -351,9 +344,6 @@ const report = (state = [], action) => {
             // remove the placeholder column (if it exists) when the drawer is closed
             let actualColumns = currentReport.data.columns.filter(column => {
                 return column.fieldDef.isPlaceholder === undefined;
-            });
-            actualColumns.forEach(column => {
-               column.fieldDef.isAddingFrom = false;
             });
             reorderColumns(actualColumns);
             currentReport.data.columns = actualColumns;
