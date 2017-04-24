@@ -5,6 +5,7 @@ $toolpalette-header-color: $color-black-400;
 $toolpalette-header-font-size: 10px;
 
 .listOfElementsContainer {
+    overflow: auto;
     background-color: $leftnav-background-color;
     width: 100%;
     height: 100%;
@@ -86,6 +87,6 @@ $toolpalette-header-font-size: 10px;
     }
     &:focus {
         outline: none;
-        border: 2px solid $border-focused-color;
+        border: $stroke-width-thin solid $border-focused-color;
     }
 }
