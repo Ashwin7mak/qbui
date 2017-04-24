@@ -9,7 +9,8 @@
  *
  * XD Requested that the tab flow goes from left nav, to center form, to right nav. In order to accomplish this, tab order had to be numerically set. If multiple elements
  * on a page have the same tabIndex numeric value, then they will be tabbed through based on how they are laid out on the page. This is taken advantage of by switching children elements
- * from "-1" to the same tabIndex numeric value as its parent, allowing the children to then be tabbed.
+ * from "-1" to the same tabIndex numeric value as its parent, allowing the children to then be tabbed. For example if the parent'st tabIndex="7" then changing all of it's children's
+ * tabIndex from "-1" to "7" will force all children to be tabbed in order, after it's parent.
  *
  * NOTE: It is best to reorder the dom elements on the page, in order to get the desired tabbing flow order by using "0". However, in the case of formBuilder, the left and right nav
  * are dependent on the form being the child element, which knocks it out of the desired flow order.
