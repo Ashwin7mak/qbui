@@ -208,12 +208,3 @@ render((
         </Router>
     </Provider>
 ), document.getElementById('content'));
-
-const error = console.error;
-console.error = function() {
-    if (arguments[0].includes("Warning: Failed Context Types: Calling PropTypes validators directly is not supported by the `prop-types` package.")) {
-        //console.log(arguments);
-    } else {
-        error.apply(console, arguments);
-    }
-};

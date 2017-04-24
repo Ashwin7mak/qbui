@@ -9,7 +9,6 @@ import React, {PropTypes} from 'react';
 const unloadableWrapper = (Component) => {
     class Unloadable extends React.Component {
         componentDidMount() {
-            console.log('mounting ' + this.props.uniqueId);
             if (!this.props.hasEntry) {
                 this.loadEntry();
             }
@@ -32,7 +31,6 @@ const unloadableWrapper = (Component) => {
         }
 
         componentWillUnmount() {
-            console.log('unloading ' + this.props.uniqueId);
             if (this.props.unloadEntry) {
                 this.props.unloadEntry(this.props.uniqueId);
             }
