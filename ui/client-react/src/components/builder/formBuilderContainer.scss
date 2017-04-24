@@ -9,10 +9,10 @@
         min-width: 100%;
         overflow-y: scroll; /* has to be scroll, not auto */
         -webkit-overflow-scrolling: touch; /* This allows for momentum scrolling on touch devices */
-        &:focus{
+        &:focus {
             outline: none;
             border: $stroke-width-thin solid $border-focused-color;
-                border-bottom: #{$stroke-width-thin + 4} solid $border-focused-color;
+            border-bottom: #{$stroke-width-thin + 4} solid $border-focused-color;
         }
     }
 
