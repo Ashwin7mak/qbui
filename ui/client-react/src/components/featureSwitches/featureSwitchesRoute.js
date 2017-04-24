@@ -192,7 +192,7 @@ export class FeatureSwitchesRoute extends React.Component {
                 primaryButtonOnClick={this.deleteSelectedSwitches}
                 leftButtonName={Locale.getMessage('selection.dontDelete')}
                 leftButtonOnClick={this.cancelDelete}
-                bodyMessage={msg}
+                title={msg}
                 type="alert"/>);
     }
 

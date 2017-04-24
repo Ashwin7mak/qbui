@@ -1,5 +1,11 @@
 import AccountUsersService from "./AccountUsersService";
 import * as types from "../../app/actionTypes";
+import WindowLocationUtils from  "../../../../client-react/src/utils/windowLocationUtils";
+import {FORBIDDEN, INTERNAL_SERVER_ERROR} from  "../../../../client-react/src/constants/urlConstants";
+import Logger from '../../../../client-react/src/utils/logger';
+import LogLevel from '../../../../client-react/src/utils/logLevels';
+
+let logger = new Logger();
 import _ from 'lodash';
 import * as Formatters from './grid/AccountUsersGridFormatters';
 import * as RealmUserAccountFlagConstants from "../../common/constants/RealmUserAccountFlagConstants.js";
@@ -9,29 +15,45 @@ import * as RealmUserAccountFlagConstants from "../../common/constants/RealmUser
  * @param users
  */
 export const receiveAccountUsers = (users) => ({
-    type: types.SET_USERS,
+    type: types.GET_USERS_SUCCESS,
     users
+});
+export const failedAccountUsers = (error) => ({
+    error: error,
+    type: types.GET_USERS_FAILURE
+});
+
+export const fetchingAccountUsers = () => ({
+    type: types.GET_USERS_FETCHING
 });
 
 /**
  * Get all the users
  *
- * @returns {function(*=)}
+ * @returns {function(*)}
  */
 export const fetchAccountUsers = (accountId) => {
     return (dispatch) => {
         // get all the users from the account service
         const accountUsersService = new AccountUsersService();
         const promise = accountUsersService.getAccountUsers(accountId);
-
-        promise.then(response => {
+        dispatch(fetchingAccountUsers());
+        return promise.then(response => {
             _.each(response.data, item => {
                 item.id = item.uid;
             });
             // we have the users, update the redux store
             dispatch(receiveAccountUsers(response.data));
+        }).catch(error => {
+            dispatch(failedAccountUsers(error));
+            if (error.response && error.response.status === 403) {
+                logger.parseAndLogError(LogLevel.WARN, error.response, 'accountUserService.getAccountUsers:');
+                WindowLocationUtils.update(FORBIDDEN);
+            } else {
+                logger.parseAndLogError(LogLevel.ERROR, error.response, 'accountUserService.getAccountUsers:');
+                WindowLocationUtils.update(INTERNAL_SERVER_ERROR);
+            }
         });
-        return promise;
     };
 };
 
