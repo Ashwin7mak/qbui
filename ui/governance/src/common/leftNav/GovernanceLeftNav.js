@@ -48,8 +48,8 @@ const mapStateToProps = (state) => {
 
 GovernanceLeftNav.propTypes = {
     fetchData: PropTypes.func.isRequired,
-    isNavOpen: PropTypes.bool,
-    isNavCollapsed: PropTypes.bool,
+    isNavOpen: PropTypes.bool.isRequired,
+    isNavCollapsed: PropTypes.bool.isRequired,
     isLoading: PropTypes.bool,
     accountId: PropTypes.number,
     isRealmAdmin: PropTypes.bool,
