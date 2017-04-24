@@ -333,7 +333,8 @@ export const RecordRoute = React.createClass({
      * @param data row record data
      */
     openRecordForEdit() {
-        const recordId = this.props.match.params.recordId;
+        // convert to  a number from a string
+        const recordId = +this.props.match.params.recordId;
         this.navigateToRecord(recordId);
 
         WindowLocationUtils.pushWithQuery(EDIT_RECORD_KEY, recordId);
