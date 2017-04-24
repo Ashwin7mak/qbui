@@ -1,10 +1,11 @@
 import React, {PropTypes, Component} from "react";
-import {I18nMessage} from "../../../../reuse/client/src/utils/i18nMessage";
-import Locale from "../../../../reuse/client/src/locales/locale";
+import {I18nMessage} from "../../../../../reuse/client/src/utils/i18nMessage";
+import Locale from "../../../../../reuse/client/src/locales/locale";
+import AccountUsersNavigation from "./AccountUsersNavigation";
 import lodash from 'lodash';
 
 /**
- * The stage for the AccountUsers page
+ * The toolbar for the AccountUsers page
  */
 class AccountUsersToolBar extends React.Component {
 
@@ -14,7 +15,9 @@ class AccountUsersToolBar extends React.Component {
 
     render() {
         return (
-            <div>TOOLBAR</div>
+            <div>
+                <AccountUsersNavigation/>
+            </div>
         );
     }
 }

@@ -1,11 +1,35 @@
+import React, {PropTypes, Component} from "react";
+import {I18nMessage} from "../../../../../reuse/client/src/utils/i18nMessage";
+import Locale from "../../../../../reuse/client/src/locales/locale";
+import lodash from 'lodash';
+import Pagination from "../../../../../reuse/client/src/components/pagination/pagination";
+
 /**
- * Created by kkshetri on 4/24/17.
+ * The stage for the AccountUsers page
  */
+class AccountUsersNavigation extends React.Component {
 
-import Pagination from "../../../../reuse/client/src/components/pagination/pagination";
+    constructor(...args) {
+        super(...args);
+    }
 
-// <Pagination startRecord={1}
-//             endRecord={3}
-//             isPreviousDisabled={true}
-//             isNextDisabled={false}
-//             isHidden={false} />
+    render() {
+        return (
+            <Pagination startRecord={1}
+            endRecord={3}
+            isPreviousDisabled={true}
+            isNextDisabled={false}
+            isHidden={false} />
+        );
+    }
+}
+
+AccountUsersNavigation.defaultProps = {
+    users: []
+};
+
+AccountUsersNavigation.propTypes = {
+    users: PropTypes.array,
+};
+
+export default AccountUsersNavigation;
