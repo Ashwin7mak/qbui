@@ -359,7 +359,7 @@ const forms = (
             updatedForm.formFocus = [];
             updatedForm.toolPaletteFocus = [];
         }
-
+        //In order to maintain proper tabbing and focus, everything is updated accordingly
         updatedForm.formBuilderChildrenTabIndex[0] = formTabIndex;
         updatedForm.toolPaletteChildrenTabIndex[0] = "-1";
         updatedForm.formFocus[0] = formFocus;
@@ -389,7 +389,7 @@ const forms = (
             updatedForm.formFocus = [];
             updatedForm.toolPaletteFocus = [];
         }
-
+        //In order to maintain proper tabbing and focus, everything is updated accordingly
         updatedForm.toolPaletteChildrenTabIndex[0] = toolPaletteTabIndex;
         updatedForm.formBuilderChildrenTabIndex[0] = "-1";
         updatedForm.formFocus[0] = false;
