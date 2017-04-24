@@ -1,4 +1,5 @@
 import reducer, {__RewireAPI__ as ReducerRewireAPI} from '../../src/reducers/forms';
+import * as tabIndexConstants from '../../../client-react/src/components/formBuilder/tabindexConstants';
 import * as types from '../../src/actions/types';
 import _ from 'lodash';
 
@@ -441,7 +442,7 @@ describe('Forms reducer functions', () => {
                 [VIEW]: {
                     ...stateWithViewForm[VIEW],
                     formData: {formMeta: testFormMeta},
-                    formBuilderChildrenTabIndex: ['4'],
+                    formBuilderChildrenTabIndex: [tabIndexConstants.formTabIndex],
                     toolPaletteChildrenTabIndex: ['-1'],
                     formFocus: [false],
                     toolPaletteFocus: [false]
@@ -471,7 +472,7 @@ describe('Forms reducer functions', () => {
                 [VIEW]: {
                     ...stateWithViewForm[VIEW],
                     formData: {formMeta: testFormMeta},
-                    toolPaletteChildrenTabIndex: ['3'],
+                    toolPaletteChildrenTabIndex: [tabIndexConstants.toolPaletteTabIndex],
                     formBuilderChildrenTabIndex: ['-1'],
                     formFocus: [false],
                     toolPaletteFocus: [false]
