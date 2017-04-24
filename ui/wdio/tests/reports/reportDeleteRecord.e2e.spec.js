@@ -1,7 +1,3 @@
-/**
- * E2E tests for Deleting a Record via Checkbox and Dropdown menu.
- * Created by cperikal on 04/10/2017
- */
 (function() {
     'use strict';
 
@@ -12,11 +8,11 @@
     let reportInLineEditPO = requirePO('reportInLineEdit');
     let reportNavPO = requirePO('reportNavigation');
 
-    describe('Reports Page - Delete Record Tests', function() {
+    describe('Reports Page - Add Record Tests', function() {
         var realmName;
         var realmId;
         var testApp;
-        let recOffset = 5;
+        let numRows = 5;
         /**
          * Setup method. Creates test app then authenticates into the new stack
          */
@@ -24,7 +20,7 @@
             browser.logger.info('beforeAll spec function - Generating test data and logging in');
             // Need to return here. beforeAll is completely async, need to return the Promise chain in any before or after functions!
             // No need to call done() anymore
-            return e2eBase.basicAppSetup(null, e2eConsts.MAX_PAGING_SIZE - recOffset).then(function(createdApp) {
+            return e2eBase.basicAppSetup(null, numRows).then(function(createdApp) {
                 testApp = createdApp;
                 realmName = e2eBase.recordBase.apiBase.realm.subdomain;
                 realmId = e2eBase.recordBase.apiBase.realm.id;
@@ -43,7 +39,8 @@
 
             var deletedRecord;
             var rowToBeDeleted = 2;
-            var reportCount = e2eConsts.MAX_PAGING_SIZE - recOffset;
+            var successMessage = "1 Records deleted";
+            var reportCount = numRows;
 
             /**
              * Before each it block reload the list all report (can be used as a way to reset state between tests)
@@ -51,42 +48,58 @@
             beforeEach(function() {
                 // Load the List All report on Table 1
                 return e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
+
             });
+
+
+
             /**
-             * Test Method- Delete record by clicking on the checkbox
+             * Test Method- By clicking on the checkbox
              */
             it('Delete a Record and check for the success message', function() {
 
                 //Step 0: Get the row data for the delete verification
                 deletedRecord = reportContentPO.getRecordValues(rowToBeDeleted);
                 expect(reportNavPO.recordsCount.getText()).toEqual(reportCount + " records");
+
                 // Step 1: Select the checkbox and click on delete icon
                 reportContentPO.selectRow(rowToBeDeleted);
                 reportContentPO.deleteIcon.click();
+
                 // Step 2: Click on delete button from the dialogue box
                 reportContentPO.deleteButton.click();
+
                 // Step 3: Check for the deleted record on the first page
                 reportContentPO.checkForTheAbsenceDeletedRecordOnTheCurrentPage(deletedRecord);
+
                 // Step 4: Check if the record count is reduced or not after the deletion
                 expect(reportNavPO.recordsCount.getText()).toEqual(reportCount - 1 + " records") ;
+
             });
 
             /**
-             * Test Method- Click on Don't Delete from the DropDown Menu
+             * Test Method- By clicking on the DropDown Menu
              */
             it('Not to delete a Record and check for the record ', function() {
 
                 //Step 0: Get the row data for the delete verification
                 deletedRecord = reportContentPO.getRecordValues(rowToBeDeleted);
                 expect(reportNavPO.recordsCount.getText()).toEqual(reportCount - 1 + " records");
+
                 // Step 1: Select the DropDown menu and clicking on delete icon
                 reportContentPO.dropDownIcon.click();
                 reportContentPO.dropDownDeleteIcon.click();
+
                 // Step 2: Click on delete button from the dialogue box
                 reportContentPO.dontDeleteButton.click();
+
                 // Step 3: Check for the deleted record on the first page
                 reportContentPO.checkForThePresenceDeletedRecordOnTheCurrentPage(deletedRecord);
+
+
+
             });
         });
     });
 }());
+

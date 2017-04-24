@@ -11,7 +11,13 @@
 
     var ReportContentPage = Object.create(e2ePageBase, {
         // This gives you all the record checkboxes of the report page
-        recordCheckBoxes: {get: function() {return browser.elements('.selectRowCheckbox');}},
+        recordCheckBoxes: {
+            get: function() {
+                let checkBoxes = browser.elements('.selectRowCheckbox');
+                //shift() is used to remove the first item in the array
+                checkBoxes.value.splice(0, 1);
+                return checkBoxes;
+            }},
         deleteIcon: {get: function() {return browser.element('.icon-delete span');}},
 
         tableBody: {get: function() {return browser.element('.qbTbody');}},
@@ -92,7 +98,6 @@
         // this will get you every row of the actions column
         qbGridRowActionsElList: {get: function() {return this.qbGridLeftColsContainerEl.elements('.qbRow');}},
 
-
         // this will get you every record element on the grid
         qbGridRecordElList: {value: function() {return this.qbGridBodyEl.elements('.qbRow');}},
 
@@ -128,7 +133,7 @@
             return this.qbGridContainer.elements('.qbRow');
         }},
         getRecordRowElement: {value: function(recordIndex) {
-            return this.getAllRows.value[recordIndex - 1];
+            return this.getAllRows.value[recordIndex];
         }},
 
         /**
@@ -169,8 +174,7 @@
             // Return all record values if no cell number supplied
             if (typeof recordCellIndex === 'undefined') {
                 var cellValues = [];
-                //start at column 1 as column 0 is not an actual data column
-                for (var i = 1; i < recordRowCells.value.length; i++) {
+                for (var i = 0; i < recordRowCells.value.length; i++) {
                     var cellValue = this.getRecordCellValue(recordRowCells.value[i]);
                     cellValues.push(cellValue);
                 }
@@ -186,6 +190,15 @@
                 return this.formatRecordValue(cellValue2);
             }
         }},
+        /**
+         * Strip the data from the first column of the table row
+         * @param: recordIndex, recordCellIndex
+         */
+        getRecordData: {value: function(recordIndex, recordCellIndex) {
+            let data = this.getRecordValues(recordIndex, recordCellIndex);
+            data.shift();
+            return data;
+        }},
 
         /**
          * Function that will get all the records from the UI report table grid.
@@ -194,10 +207,12 @@
         getAllRecordsFromTable: {value: function() {
             var tableRecords = [];
             //get the count of records rows in a table
-            var numOfRows = this.reportDisplayedRecordCount();
+            var numOfRows = formsPO.getRecordsCountInATable();
+            console.log("the records count is: " + numOfRows);
             //for each record row get the cell values
             for (var i = 0; i < numOfRows; i++) {
                 var cellValues = this.getRecordValues(i);
+                console.log("the cell values are : " + cellValues);
                 //we need to remove record actions like print, email etc
                 cellValues.splice(0, 1);
                 tableRecords.push(cellValues);
@@ -225,8 +240,8 @@
          * @returns the number of displayed records on the report
          */
         reportDisplayedRecordCount: {value: function() {
-            this.qbGridRecordElList.waitForVisible();
-            var rows = this.qbGridRecordElList.elements('.qbRow');
+            this.qbGridBodyViewportEl.waitForVisible();
+            var rows = this.qbGridBodyViewportEl.elements('.qbRow');
             return rows.value.length;
         }},
 
@@ -305,6 +320,7 @@
             var getAllCheckBoxs = browser.elements('input.selectRowCheckbox').value.filter(function(checkbox) {
                 return checkbox.index === recordRowIndex;
             });
+
             if (getAllCheckBoxs !== []) {
                 //Click on filtered save button
                 getAllCheckBoxs[0].click();
@@ -322,10 +338,8 @@
         }},
 
         // TODO: Refactor these once we port over the delete record tests
-        /**
-         * Checking for the deleted record on the first page
-         * @param deletedRecord
-         */
+        // Checking for the deleted record on the first page
+
         checkForTheAbsenceDeletedRecordOnTheCurrentPage: {
             value: function(deletedRecord) {
                 console.log('Deleted record: ' + deletedRecord);
@@ -334,12 +348,8 @@
                     expect(deletedRecord).not.toEqual(this.getRecordValues(i));
                 }
             }},
-        /**
-         * Checks for the presence of the deleted record on the current page
-         * @param deletedRecord
-         */
-        checkForThePresenceDeletedRecordOnTheCurrentPage:
-        {
+
+        checkForThePresenceDeletedRecordOnTheCurrentPage: {
             value: function(deletedRecord) {
                 //this will check each row
                 for (var i = 1; i < browser.elements('.qbRow').value.length; i++) {
@@ -349,13 +359,10 @@
                 }
                 return false;
             }},
-        /**
-         * Compares rows to check for the deleted record, test fails if the deleted record is present
-         * @param rowA, rowB
-         */
-        compareTwoRows:
-        {
+
+        compareTwoRows: {
             value: function(rowA, rowB) {
+
                 expect(rowA.length).toBe(rowB.length);
                 for (var i = 1; i < rowA.length; i++) {
                     //comparing two cells from two rows
@@ -364,13 +371,16 @@
                     }
                 }
                 return true;
-            }
-        },
+
+            }},
+
         // Record Row to be selected:
         selectRow: {value: function(recordRow) {
             this.recordCheckBoxes.value[recordRow].click();
             this.deleteIcon.waitForExist();
         }},
     });
+
     module.exports = ReportContentPage;
 }());
+
