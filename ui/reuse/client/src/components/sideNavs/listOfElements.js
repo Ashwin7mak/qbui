@@ -178,7 +178,7 @@ ListOfElements.propTypes = {
     /**
      * For Keyboard Nav: tabIndex for listOfElements
      * */
-    tabIndex: PropTypes.string,
+    tabIndex: PropTypes.number,
 
     /**
      * For Keyboard Nav: if true it will set focus on listOfElements
@@ -188,7 +188,7 @@ ListOfElements.propTypes = {
     /**
      * For Keyboard Nav: tabIndex for the children elements inside of listOfElements
      * */
-    childrenTabIndex: PropTypes.string,
+    childrenTabIndex: PropTypes.number,
 
     /**
      * For Keyboard Nav: This functions toggles listOfElements children's tabIndices, to add or remove it form the tabbing flow

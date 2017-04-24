@@ -28,11 +28,11 @@ NewFieldsMenu.propTypes = {
 
     /**
      * Sets the tabIndex for the listOfElement tab*/
-    toolPaletteTabIndex: PropTypes.string,
+    toolPaletteTabIndex: PropTypes.number,
 
     /**
      * Sets the tabIndex for the listOfElement tab*/
-    toolPaletteChildrenTabIndex: PropTypes.string,
+    toolPaletteChildrenTabIndex: PropTypes.number,
 
     /**
      * Toggles tool Palette children*/

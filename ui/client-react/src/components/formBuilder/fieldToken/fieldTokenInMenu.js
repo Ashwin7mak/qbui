@@ -61,7 +61,7 @@ FieldTokenInMenu.propTypes = {
 
     /**
      * Tabindex */
-    toolPaletteChildrenTabIndex: PropTypes.string
+    toolPaletteChildrenTabIndex: PropTypes.number
 };
 
 const mapStateToProps = state => {
