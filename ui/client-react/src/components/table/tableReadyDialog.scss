@@ -16,7 +16,7 @@
             padding: 0;
 
             > *:first-child {
-                height: 285px;
+                height: 235px;
             }
 
             .tableReadyContent {
@@ -34,9 +34,13 @@
                         margin-right: 40px;
                     }
                 }
+
                 .tableReadyText {
-                    font-size: 16px;
                     margin: 30px 50px 0 50px;
+
+                    p {
+                        font-size: $font-size-dialog-text;
+                    }
                 }
             }
         }
