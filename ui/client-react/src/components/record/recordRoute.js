@@ -32,8 +32,6 @@ import {CONTEXT} from '../../actions/context';
 import './record.scss';
 import withUniqueId from '../hoc/withUniqueId';
 import DrawerContainer from '../drawer/drawerContainer';
-import '../drawer/drawer.scss';
-import '../drawer/drawerContainer.scss';
 
 let logger = new Logger();
 let FluxMixin = Fluxxor.FluxMixin(React);
@@ -59,16 +57,19 @@ export const RecordRoute = React.createClass({
 
         // ensure the search input is empty
         this.props.clearSearchInput();
-        if (this.props.hasDrawer || (this.props.isDrawerContext && this.props.history.location.pathname.includes('drawer'))) {
-            this.props.loadForm(appId, this.props.match.params.drawerTableId, rptId, formType, this.props.match.params.drawerRecId, this.props.uniqueId);
+        if (this.props.hasDrawer || (this.props.isDrawerContext && this.props.history.location.pathname.includes('sr_app'))) {
+            this.props.loadForm(appId, this.props.match.params.tblId, rptId, formType, this.props.match.params.recordId, this.props.uniqueId);
             const recordsArray = embeddedReport !== undefined ? embeddedReport.data.records : [];
-            this.navigateToRecord(this.props.match.params.drawerRecId, embeddedReport, recordsArray);
+            this.navigateToRecord(this.props.match.params.recordId, embeddedReport, recordsArray);
         } else {
             this.props.loadForm(appId, tblId, rptId, formType, recordId, 'view');
         }
     },
     loadRecordFromParams(params = this.props.match.params) {
-        const {appId, tblId, recordId, rptId} = params;
+        let {appId, tblId, recordId, rptId} = params;
+        appId = appId || this.props.selectedAppId;
+        tblId = tblId || this.props.match.params.drawerTableId;
+        recordId = recordId || this.props.match.params.embeddedReportId;
 
         if (appId && tblId && recordId) {
             //  report id is optional
@@ -78,11 +79,16 @@ export const RecordRoute = React.createClass({
         }
     },
     componentDidMount() {
+        console.log('mounting: ' + (this.props.uniqueId || 'root recordRoute'));
         let flux = this.getFlux();
         flux.actions.hideTopNav();
         flux.actions.setTopTitle();
 
         this.loadRecordFromParams();
+    },
+
+    componentWillUnmount() {
+        console.log('unmounting: ' + (this.props.uniqueId || 'root recordRoute'));
     },
 
     componentDidUpdate(prev) {
@@ -186,16 +192,13 @@ export const RecordRoute = React.createClass({
         const record = this.getRecordFromProps(this.props);
         const reportData = this.getReportDataFromProps(this.props);
         this.navigateToRecord(record.previousRecordId, reportData);
-        //the url shall always be using the app/table/rec id from reportsdata, and not from any embedded report
-        const {appId, tblId, rptId} = this.props.reportData;
         if (this.props.isDrawerContext) {
-            const existingPath = this.props.history.location.pathname;
-            const urlSegments = existingPath.split('/');
-            const lastBlockIndex = urlSegments.length - 1;
-            //replace the last drawerRecId(lastBlockIndex - 2) with the previous record Id
-            const newLink = this.getUpdatedUrl(urlSegments, lastBlockIndex - 2, record.previousRecordId);
+            // replace last drawer record
+            const newLink = this.props.location.pathname.replace(/record_.*?\/?$/, `record_${record.previousRecordId}`);
             this.props.history.push(newLink);
         } else {
+            //the url shall always be using the app/table/rec id from reportsdata, and not from any embedded report
+            const {appId, tblId, rptId} = this.props.reportData;
             const link = `${APP_ROUTE}/${appId}/table/${tblId}/report/${rptId}/record/${record.previousRecordId}`;
             this.props.history.push(link);
         }
@@ -220,16 +223,13 @@ export const RecordRoute = React.createClass({
         const record = this.getRecordFromProps(this.props);
         const reportData = this.getReportDataFromProps(this.props);
         this.navigateToRecord(record.nextRecordId, reportData);
-        //the url shall always be using the app/table/rec id from reportsdata, and not from any embedded report
-        const {appId, tblId, rptId} = this.props.reportData;
         if (this.props.isDrawerContext) {
-            const existingPath = this.props.history.location.pathname;
-            const urlSegments = existingPath.split('/');
-            const lastBlockIndex = urlSegments.length - 1;
-            //replace the last drawerRecId(lastBlockIndex - 2) with the next record Id
-            const newLink = this.getUpdatedUrl(urlSegments, lastBlockIndex - 2, record.nextRecordId);
+            // replace last drawer record
+            const newLink = this.props.location.pathname.replace(/record_.*?\/?$/, `record_${record.nextRecordId}`);
             this.props.history.push(newLink);
         } else {
+            //the url shall always be using the app/table/rec id from reportsdata, and not from any embedded report
+            const {appId, tblId, rptId} = this.props.reportData;
             const link = `${APP_ROUTE}/${appId}/table/${tblId}/report/${rptId}/record/${record.nextRecordId}`;
             this.props.history.push(link);
         }
@@ -258,6 +258,25 @@ export const RecordRoute = React.createClass({
         return this.props.selectedTable;
     },
 
+    /**
+     * remove the drawer info from the url
+     */
+    closeDrawer() {
+        const currentPath = this.props.history.location.pathname;
+        const newPath = currentPath.slice(0, currentPath.indexOf('sr_') - 1);
+        this.props.history.push(newPath);
+    },
+
+    /**
+     * creates actions array with a close button only used in drawers
+     * @returns { Close button }
+     */
+    getDrawerAction() {
+        //only show the following cross button if in a drawer
+        const actions = [{msg: 'pageActions.close', icon:'close', className:'closeDrawer', onClick: this.closeDrawer}];
+        return (<IconActions className="pageActions" actions={actions} {...this.props}/>);
+    },
+
     getStageHeadline() {
         if (this.props.match.params) {
             const {appId, tblId, rptId} = this.props.match.params;
@@ -272,15 +291,15 @@ export const RecordRoute = React.createClass({
             if (this.props.isDrawerContext) {
                 recordIdTitle = this.props.match.params.drawerRecId;
             }
-            const tableSelected =  this.getSelectedTable(this.props.match.params.drawerTableId);
+            const tableSelected =  this.getSelectedTable(this.props.match.params.tblId);
             const tableName = tableSelected !== undefined && tableSelected !== null ? tableSelected.name : '';
             return (<div className="recordStageHeadline">
 
                 <div className="navLinks">
                     {this.props.selectedTable && <Link className="tableHomepageIconLink" to={tableLink}><Icon iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY} icon={this.props.selectedTable.tableIcon}/></Link>}
                     {this.props.selectedTable && <Link className="tableHomepageLink" to={tableLink}>{this.props.selectedTable.name}</Link>}
-                    {this.props.selectedTable && rptId && <span className="divider color-black-700">&nbsp;&nbsp;:&nbsp;&nbsp;</span>}
-                    {rptId && <a className="backToReport" href="#" onClick={this.returnToReport}>{reportName}</a>}
+                    {!this.props.isDrawerContext && this.props.selectedTable && rptId && <span className="divider color-black-700">&nbsp;&nbsp;:&nbsp;&nbsp;</span>}
+                    {!this.props.isDrawerContext && rptId && <a className="backToReport" href="#" onClick={this.returnToReport}>{reportName}</a>}
                 </div>
                 <div className="stageHeadline iconActions">
 
@@ -362,14 +381,6 @@ export const RecordRoute = React.createClass({
             actions.splice(2, 0, {msg: 'pageActions.approve', icon: 'thumbs-up', onClick: this.approveRecord});
         }
 
-        // TODO: onCloseHandler, add to Proptypes, icon, i18nMessage for other languages
-        if (this.props.isDrawerContext) {
-            actions.push({msg: 'pageActions.close', icon:'close', onClick: () => {
-                const currentPath = this.props.history.location.pathname;
-                const newPath = currentPath.slice(0, currentPath.indexOf('drawer') - 1);
-                this.props.history.push(newPath);
-            }});
-        }
 
         return (<IconActions className="pageActions" actions={actions} {...this.props}/>);
     },
@@ -379,12 +390,15 @@ export const RecordRoute = React.createClass({
      */
     getDrawerContainer() {
         const closeAll = this.props.closeAll || this.closeDrawer;
+        //{/*isDrawerContext={!this.props.isDrawerContext}*/}
+        //                hasDrawer={!!this.props.match.params}
+        //TODO: make a hasDrawers() function
+
         return (
             <DrawerContainer
                 {...this.props}
-                isDrawerContext={!this.props.isDrawerContext}
                 rootDrawer={!this.props.isDrawerContext}
-                hasDrawer={this.state.hasDrawer}
+
                 closeDrawer={this.closeDrawer}
                 closeAll={closeAll}
                 >
@@ -427,7 +441,8 @@ export const RecordRoute = React.createClass({
     /**
      * only re-render when our form data has changed */
     shouldComponentUpdate(nextProps, nextState) {
-        if (this.props.history.location.pathname.includes('drawer')) {
+        // Update when the route is changed
+        if (this.props.location.pathname !== nextProps.location.pathname) {
             //TODO: add a check to see if drawer component data got updated
             return true;
         }
@@ -453,13 +468,15 @@ export const RecordRoute = React.createClass({
      * @param embeddedReportsUniqueId
      */
     //shold be removed as a param and instead be stored in react router state
-    renderDrawerContainer(tblId, recId, embeddedReportsUniqueId) {
+    renderDrawerContainer(/*appId,*/ tblId, recId, embeddedReportsUniqueId) {
         if (embeddedReportsUniqueId !== undefined) {
             embeddedReport = _.find(this.props.embeddedReports, {'id' : embeddedReportsUniqueId});
         }
         //todo : handle query params in the url
         const existingPath = this.props.history.location.pathname;
-        const link = `${existingPath}/drawerTableId/${tblId}/drawerRecId/${recId}/embeddedReportId/${embeddedReport.id}`;
+        const appId = _.get(this, 'props.match.params.appId', this.selectedAppId);
+        //TODO: move to url consts and make a function in urlUtils
+        const link = `${existingPath}/sr_app_${appId}_table_${tblId}_report_${embeddedReport.id}_record_${recId}`;
         if (this.props.history) {
             this.props.history.push(link);
         }
@@ -470,11 +487,6 @@ export const RecordRoute = React.createClass({
         this.setState({hasDrawer: true});
     },
 
-    //TODO: remove
-    closeDrawer() {
-        this.setState({hasDrawer: false});
-    },
-
     /**
      * render the stage, actions, and form
      *
@@ -483,9 +495,9 @@ export const RecordRoute = React.createClass({
      */
     render() {
         if (_.isUndefined(this.props.match.params) ||
-            _.isUndefined(this.props.match.params.appId) ||
+            (_.isUndefined(this.props.match.params.appId) && _.isUndefined(this.props.selectedAppId)) ||
             _.isUndefined(this.props.match.params.tblId) ||
-            (_.isUndefined(this.props.match.params.recordId))
+            _.isUndefined(this.props.match.params.recordId)
         ) {
             logger.info("the necessary params were not specified to recordRoute render params=" + simpleStringify(this.props.match.params));
             return null;
@@ -500,7 +512,8 @@ export const RecordRoute = React.createClass({
             return (
                 <div className="recordContainer">
                     <Stage stageHeadline={this.getStageHeadline()}
-                           pageActions={this.getPageActions()}>
+                           pageActions={this.getPageActions()}
+                           drawerAction={this.props.isDrawerContext && this.getDrawerAction()}>
 
                         <div className="record-content">
                         </div>
@@ -519,7 +532,7 @@ export const RecordRoute = React.createClass({
                                 options={SpinnerConfigurations.DRAWER_CONTENT}>
                             <Record key={key}
                                     selectedApp={this.props.selectedApp}
-                                    appId={this.props.match.params.appId}
+                                    appId={this.props.match.params.appId || this.props.selectedApp}
                                     tblId={this.props.match.params.tblId}
                                     recId={this.props.match.params.recordId}
                                     errorStatus={formLoadingErrorStatus ? viewData.errorStatus : null}
@@ -538,9 +551,7 @@ export const RecordRoute = React.createClass({
                             hasEntry={!!this.getFormFromProps()}
                             />}
 
-                    {!formLoadingErrorStatus && this.props.history.location.pathname.includes('drawer') &&
-                        this.getDrawerContainer()
-                    }
+                    {!formLoadingErrorStatus && this.getDrawerContainer()}
                     <button onClick={this.fakeRenderDrawer}>render child drawer</button>
                     {this.props.closeDrawer && <button onClick={this.props.closeDrawer}>close this drawer</button>}
                     {this.props.closeAll && <button onClick={this.props.closeAll}>close all drawers</button>}
@@ -582,18 +593,20 @@ const mapDispatchToProps = (dispatch) => {
 
 // named exports for unit testing router functions and redux actions
 
-export const RecordRouteWithRouter = withRouter(RecordRoute);
+//export const RecordRouteWithRouter = withRouter(RecordRoute);
 export const ConnectedRecordRoute = connect(
     mapStateToProps,
     mapDispatchToProps
 )(RecordRoute);
 
 // why do we have 2 connected RecordRoutes exported?
-export const ConnectedRecordRouteWithRouter = connect(
+export const ConnectedRecordRouteWithRouter = withRouter(connect(
     mapStateToProps,
     mapDispatchToProps
-)(RecordRouteWithRouter);
+)(RecordRoute));
 export default ConnectedRecordRouteWithRouter;
+
+
 
 // Wrap RecordRoute with `withUniqueId` hoc so that it has a unique ID used to identify its own
 // instance's data in the record store and form store. Used by stacked forms.
