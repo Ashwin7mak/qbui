@@ -245,7 +245,7 @@ export class ReportColumnHeaderMenu extends Component {
     };
 
     render() {
-        let isDisabled = this.props.isOnlyOneColumnVisible;
+        let isHideOptionDisabled = this.props.isOnlyOneColumnVisible || this.props.fieldDef.isAddingFrom;
         return (
             <Dropdown bsStyle="default" noCaret id="dropdown-no-caret">
                 <Button tabIndex="0" bsRole="toggle" className={"dropdownToggle iconActionButton"}>
@@ -283,7 +283,7 @@ export class ReportColumnHeaderMenu extends Component {
                         <I18nMessage message="report.menu.addColumnAfter"/>
                     </MenuItem>
 
-                    <MenuItem disabled={isDisabled} onSelect={this.hideThisColumn}>
+                    <MenuItem disabled={isHideOptionDisabled} onSelect={this.hideThisColumn}>
                         <span className="hideColumnText">{Locale.getMessage('report.menu.hideColumn')}</span>
                     </MenuItem>
                 </Dropdown.Menu>

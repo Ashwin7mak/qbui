@@ -315,9 +315,15 @@ const report = (state = [], action) => {
                 };
                 let placeholder = ReportColumnTransformer.createFromApiColumn(data);
                 // find the index of the column where 'add a column' was clicked
-                let clickedColumnIndex = currentReport.data.columns.filter(column => {
+                let clickedColumn = currentReport.data.columns.filter(column => {
                     return column.id === params.clickedId;
-                })[0].order;
+                })[0];
+                currentReport.data.columns.forEach(column => {
+                    if (column.fieldDef.id === params.clickedId) {
+                        column.fieldDef.isAddingFrom = true;
+                    }
+                });
+                let clickedColumnIndex = clickedColumn.order;
                 // add before or after the clicked column depending on selection
                 let insertionIndex;
                 if (params.addBefore) {
@@ -325,7 +331,6 @@ const report = (state = [], action) => {
                 } else {
                     insertionIndex = clickedColumnIndex + 1;
                 }
-
                 currentReport.data.columns.splice(insertionIndex, 0, placeholder);
                 reorderColumns(currentReport.data.columns);
                 return newState(currentReport);
