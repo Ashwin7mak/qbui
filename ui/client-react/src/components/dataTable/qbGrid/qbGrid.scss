@@ -51,42 +51,9 @@ $edit-icon-font-size: 18px;
 
 
     //== grid header row
-    //.qbHeaderCell {
-    //    min-width: 80px;
-    //
-    //    position: relative;
-    //    border-top: 1px solid $grid-column-header-border-color;
-    //    border-right: 1px solid $grid-column-header-grid-line-color;
-    //    border-bottom: 1px solid $grid-column-header-border-color;
-    //    padding: $grid-header-cell-padding;
-    //    color: $grid-column-header-text-color;
-    //    -webkit-font-smoothing: antialiased;
-    //    background-color: $grid-column-header-background-color;
-    //    cursor: default;
-    //    vertical-align: top;
-    //
-    //    // set the default z-index of header cells so the one displaying the popup menu can be made higher than these
-    //    z-index: $zindex-qbGrid-th;
-    //
-    //    // set the z-index of the header cell for the sticky column so the other column headers scroll underneath
-    //    &.stickyCell {
-    //        z-index: $zindex-qbGrid-header-stickyCell;
-    //        padding-left: $grid-default-cell-padding;
-    //        padding-right: $grid-default-cell-padding;
-    //        border-left: 1px solid $grid-column-header-border-color;
-    //        vertical-align: middle;
-    //    }
-    //
-    //    &:last-of-type {
-    //        border-right: 1px solid $grid-column-header-border-color;
-    //    }
-    //}
+    .qbHeaderCell {
+        min-width: 80px;
 
-    // leftmost cell of the table header that serves as the vertical header for the sticky row actions column
-    // contains the "select all" checkbox
-    .actionHeader {
-        display: flex;
-        align-items: center;
         position: relative;
         border-top: 1px solid $grid-column-header-border-color;
         border-right: 1px solid $grid-column-header-grid-line-color;
@@ -96,9 +63,39 @@ $edit-icon-font-size: 18px;
         -webkit-font-smoothing: antialiased;
         background-color: $grid-column-header-background-color;
         cursor: default;
-        z-index: $zindex-qbGrid-header-stickyCell;
         vertical-align: top;
-        height: 40px;
+
+        // set the default z-index of header cells so the one displaying the popup menu can be made higher than these
+        z-index: $zindex-qbGrid-th;
+
+        // set the z-index of the header cell for the sticky column so the other column headers scroll underneath
+        &.stickyCell {
+            z-index: $zindex-qbGrid-header-stickyCell;
+            padding-left: $grid-default-cell-padding;
+            padding-right: $grid-default-cell-padding;
+            border-left: 1px solid $grid-column-header-border-color;
+            vertical-align: middle;
+        }
+
+        &:last-of-type {
+            border-right: 1px solid $grid-column-header-border-color;
+        }
+
+        // hover effect on dropdown icon
+        &:hover {
+            opacity: 100;
+            color: orange;
+            cursor: move;
+            border: double;
+            border-color: orange;
+        }
+    }
+
+    // leftmost cell of the table header that serves as the vertical header for the sticky row actions column
+    // contains the "select all" checkbox
+    .actionHeader {
+        display: flex;
+        align-items: center;
 
         .selectRowCheckbox {
             margin-top: 0;
@@ -116,18 +113,6 @@ $edit-icon-font-size: 18px;
     .gridHeaderCell {
         display: flex;
         min-width: 80px;
-        height: 40px;
-        border-top: 1px solid $grid-column-header-border-color;
-        border-right: 1px solid $grid-column-header-grid-line-color;
-        border-bottom: 1px solid $grid-column-header-border-color;
-        padding: $grid-header-cell-padding;
-        color: $grid-column-header-text-color;
-        -webkit-font-smoothing: antialiased;
-        background-color: $grid-column-header-background-color;
-        cursor: default;
-        vertical-align: top;
-        z-index: $zindex-qbGrid-th;
-
 
         // text label for the header cell
         .gridHeaderLabel {
@@ -167,8 +152,8 @@ $edit-icon-font-size: 18px;
             // This temporary fix positions the menu below the entire header row so as not
             // to be clipped by adjacent cells.
             .dropdown {
-                //position: initial; // we want to position the popup menu relative to the <th> for now.
-                position: relative;
+                position: initial; // we want to position the popup menu relative to the <th> for now.
+                //position: relative;
             }
             .dropdown-menu {
                 top: calc(100% - 1px);
@@ -195,14 +180,7 @@ $edit-icon-font-size: 18px;
             color: $grid-column-icon-hover-color;
         }
 
-        // hover effect on dropdown icon
-        &:hover {
-            opacity: 100;
-            color: orange;
-            cursor: move;
-            border: double;
-            border-color: orange;
-        }
+
 
     }
 
