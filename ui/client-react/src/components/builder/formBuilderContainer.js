@@ -221,7 +221,6 @@ export const FormBuilderContainer = React.createClass({
     },
 
     toggleToolPaletteChildrenTabIndex(e) {
-        //Test, will need to update to actually changing only tool palette children
         let formId = this.props.currentForm.id;
         if (e.which === ENTER_KEY || e.which === SPACE_KEY) {
             this.props.toggleToolPaletteChildrenTabIndex(formId, "-1");
