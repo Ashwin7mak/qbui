@@ -656,7 +656,9 @@ export default {
 
             tableReadyTitle: "Your table's ready!",
             tableReadyText1: "Each bit of information you want to collect is a field.  We've started you off with a couple.",
-            tableReadyText2: "Design this form to collect info.  Drag and drop to add fields."
+            tableReadyText2: "Design this form to collect info.  Drag and drop to add fields.",
+
+            tableReadyDialogOK: "OK"
         },
         iconChooser: {
             searchPlaceholder: "Search table icons..."

@@ -22,7 +22,7 @@ export class TableReadyDialog extends React.Component {
     };
 
     /**
-     * render the multi-step modal dialog for creating a table
+     * render the modal dialog for creating a table
      * @returns {XML}
      */
     render() {
@@ -32,7 +32,7 @@ export class TableReadyDialog extends React.Component {
                                  onFinished={this.onFinished}
                                  onCancel={this.onFinished}
                                  showCancelButton={false}
-                                 finishedButtonLabel={"OK"}>
+                                 finishedButtonLabel={Locale.getMessage("tableCreation.tableReadyDialogOK")}>
             <div className="tableReadyContent">
                 <div className="topTitle">
                     <div className="dndImage animated lightSpeedIn">
