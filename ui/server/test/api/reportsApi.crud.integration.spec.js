@@ -13,23 +13,6 @@
 
     describe('API - Validate report CRUD operations', function() {
         var app;
-        //TODO Test Data should not hardcoded.
-        //var testRecord = '[{"id": 6 , "value": "abcdef"},{"id": 7 , "value": "2016-04-12"},{"id": 8,"value": "2016-04-12T05:51:19Z"},{"id": 9 , "value": "first_name_last_name@quickbase.com"},{"id": 10 , "value": true},{"id": 11 , "value": ""},{"id": 12 , "value": ""},{"id": 13 , "value": "2016-08-08"}]';
-        //var expectedRecords = [[
-        //    {"id":6, "value":"abcdef", "display":"abcdef"},
-        //    {"id":7, "value":"2016-04-12", "display":"04-12-2016"},
-        //    {"id":8, "value":"2016-04-12T05:51:19Z[UTC]", "display":"04-11-2016 10:51 pm"},
-        //    {"id":9, "value":"first_name_last_name@quickbase.com", "display":"first_name_last_name@quickbase.com"},
-        //    {"id":10, "value":true, "display":true},
-        //    {"id":11, "value":null, "display":""},
-        //    {"id":12, "value":null, "display":""},
-        //    {"id":13, "value":"2016-08-08", "display":"08-08-2016"},
-        //    {"id":3, "value":1, "display":"1"}
-        //]];
-
-        var FORMAT = 'display';
-
-
 
         // App variable with different data fields
         var appWithNoFlags = {
@@ -96,7 +79,6 @@
          * @returns the id of the newly created report
          */
         function createReport(reportToCreate) {
-            assert.not(reportEndpoint.empty(), `reportEndpoint must be set before calling ${functionName}`);
             return recordBase.apiBase.executeRequest(reportEndpoint, consts.POST, reportToCreate).then(createReportResponse => {
                 return JSON.parse(createReportResponse.body).id;
             }, errorResponse => {
