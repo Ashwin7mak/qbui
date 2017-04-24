@@ -340,6 +340,9 @@ const report = (state = [], action) => {
             });
             reorderColumns(actualColumns);
             currentReport.data.columns = actualColumns;
+            currentReport.data.columns.forEach(column => {
+                column.fieldDef.isAddingFrom = false;
+            });
             return newState(currentReport);
         }
         return state;
