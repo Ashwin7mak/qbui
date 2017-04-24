@@ -12,7 +12,7 @@
 
     var tablesPage = Object.create(e2ePageBase, {
         //new table button
-        newTableBtn : {get: function() {return browser.element('.tablesFooter .newTable');}},
+        newTableBtn : {get: function() {return browser.element('.newTableItem .newTable');}},
         //new table container
         tableContainer : {get: function() {return browser.element('.modal-dialog .bodyContainer');}},
         //new table header
@@ -33,7 +33,7 @@
         //Icon chooser
         tableFieldIconChooser: {get: function() {return browser.element('.iconChooser.closed');}},
         //Icon chooser down arrow
-        iconChooserSelect: {get: function() {return this.tableFieldIconChooser.element('.iconUISturdy-caret-filled-down');}},
+        iconChooserSelect: {get: function() {return this.tableFieldIconChooser.element('.showAllToggle');}},
         //Icon chooser search
         iconChooserSearch: {get: function() {return browser.element('.iconChooser.open .iconSearch input');}},
 
@@ -55,9 +55,9 @@
          * @returns Array of Icons
          */
         getAllIconsFromIconChooser: {get: function() {
-            browser.element('.allIcons').waitForVisible();
-            browser.element('.allIcons .qbIcon').waitForVisible();
-            return browser.elements('.allIcons .qbIcon');
+            browser.element('.allIcons button').waitForVisible();
+            browser.element('.allIcons button span').waitForVisible();
+            return browser.elements('.allIcons button span');
         }},
 
         /**
@@ -72,7 +72,7 @@
             //Get random Icon from the list of Icons
             var randomIcon = _.sample(icons.value);
             //Get the className of Icon
-            var randomIconClassName = randomIcon.getAttribute('className');
+            var randomIconClassName = randomIcon.getAttribute('className').split(' ').splice(-1)[0];
             //Select the Icon
             randomIcon.waitForVisible();
             randomIcon.click();
@@ -88,7 +88,9 @@
         verifyIconInIconChooserCombo: {value: function(expectedIconChoosedClassName) {
             //Wait untill you see closed Icon chooser
             this.tableFieldIconChooser.waitForVisible();
-            return expect(browser.element('.showAllToggle .qbIcon').getAttribute('className')).toBe(expectedIconChoosedClassName);
+            //Get the className of Icon
+            let iconChoosedClassName = browser.element('.showAllToggle .qbIcon').getAttribute('className').split(' ').splice(-1)[0];
+            return expect(iconChoosedClassName).toBe(expectedIconChoosedClassName);
         }},
 
         /**
@@ -206,8 +208,8 @@
         clickNextBtn : {value: function() {
             this.clickBtnOnTableDlgFooter('Next');
             //Verify the title and description in table summary in the dialogue
-            expect(this.tableHeader.getAttribute('textContent')).toBe('Get ready to add fields to your table');
-            return expect(this.tableDescription.getAttribute('textContent')).toBe('Each bit of information you want to collect is a field, like Customer Name.');
+            expect(this.tableHeader.getAttribute('textContent')).toContain('Get ready to add fields to your table');
+            return expect(this.tableDescription.getAttribute('textContent')).toContain('Each bit of information you want to collect is a field, like Customer Name.');
         }},
 
         /**
@@ -252,11 +254,11 @@
             //Wait until table container visible
             this.tableContainer.waitForVisible();
             //Verify table header
-            expect(this.tableHeader.getAttribute('textContent')).toBe('New Table');
+            expect(this.tableHeader.getAttribute('textContent')).toContain('New Table');
             //Verify table header description
-            expect(this.tableDescription.getAttribute('textContent')).toBe('Create a new table when you want to collect a new type of information.');
+            expect(this.tableDescription.getAttribute('textContent')).toContain('Create a new table when you want to collect a new type of information.');
             //Verify table title
-            expect(this.tableTitle.getAttribute('textContent')).toBe('Name your table');
+            expect(this.tableTitle.getAttribute('textContent')).toContain('Name your table');
             //Verify Icon choose is enabled
             expect(browser.isEnabled('.iconChooser.closed')).toBeTruthy();
             //Verify cancel button is enabled
@@ -291,25 +293,25 @@
         enterTableFieldValue : {value: function(tableField, fieldValue) {
             //Filter all fields in create new table dialogue
             var results = this.getAllTableFieldsList.value.filter(function(field) {
-                return field.getAttribute('textContent') === tableField;
+                return field.element('.tableFieldTitle').getAttribute('textContent') === tableField;
             });
 
             if (results !== []) {
                 //Enter values for 'table name' field
                 if (tableField.includes('Table Name')) {
                     //verify title of the field
-                    expect(results[0].element('.tableFieldTitle').getAttribute('textContent')).toBe(tableField);
-                    this.setInputValue(results[0], '.tableFieldInput INPUT', fieldValue);
+                    expect(results[0].element('.tableFieldTitle').getAttribute('textContent')).toContain(tableField);
+                    this.setInputValue(results[0], '.tableFieldInput input', fieldValue);
                     //Enter value of 'a record in the table is called a ' field
                 } else if (tableField.includes('A record in the table is called')) {
                     //verify title of the field
-                    expect(results[0].element('.tableFieldTitle').getAttribute('textContent')).toBe(tableField);
-                    this.setInputValue(results[0], '.tableFieldInput INPUT', fieldValue);
+                    expect(results[0].element('.tableFieldTitle').getAttribute('textContent')).toContain(tableField);
+                    this.setInputValue(results[0], '.tableFieldInput input', fieldValue);
                     //Enter value for Description field
                 } else if (tableField.includes('Description')) {
                     //verify title of the field
-                    expect(results[0].element('.tableFieldTitle').getAttribute('textContent')).toBe(tableField);
-                    this.setInputValue(results[0], '.tableFieldInput TEXTAREA', fieldValue);
+                    expect(results[0].element('.tableFieldTitle').getAttribute('textContent')).toContain(tableField);
+                    this.setInputValue(results[0], '.tableFieldInput textarea', fieldValue);
                 }
             } else {
                 throw new Error('Cannot set value for input of field type ' + JSON.stringify(results[0]));
@@ -324,20 +326,20 @@
         verifyTableFieldValues : {value: function(tableField, expectedFieldValue) {
             //Filter all fields in create new table dialogue
             var results = this.getAllTableFieldsList.value.filter(function(field) {
-                return field.getAttribute('textContent') === tableField;
+                return field.element('.tableFieldTitle').getAttribute('textContent') === tableField;
             });
 
             if (results !== []) {
                 //Enter values for 'table name' field
                 if (tableField.includes('Table Name')) {
                     //Verify the table name field value
-                    expect(results[0].element('.tableFieldInput INPUT').getAttribute('value')).toBe(expectedFieldValue);
+                    expect(results[0].element('.tableFieldInput input').getAttribute('value')).toContain(expectedFieldValue);
                 } else if (tableField.includes('A record in the table is called')) {
                     //Verify the record field value
-                    expect(results[0].element('.tableFieldInput INPUT').getAttribute('value')).toBe(expectedFieldValue);
+                    expect(results[0].element('.tableFieldInput input').getAttribute('value')).toContain(expectedFieldValue);
                 } else if (tableField.includes('Description')) {
                     //Verify the description field value
-                    expect(results[0].element('.tableFieldInput TEXTAREA').getAttribute('value')).toBe(expectedFieldValue);
+                    expect(results[0].element('.tableFieldInput textarea').getAttribute('value')).toContain(expectedFieldValue);
                 }
             } else {
                 throw new Error('Unexpected table field filtered element' + JSON.stringify(results[0]));
@@ -375,15 +377,15 @@
                 //Enter values for 'table name' field
                 if (tableField.includes('Table Name')) {
                     //Verify the placeholder inside input
-                    expect(results[0].element('.tableFieldInput input').getAttribute('placeholder')).toBe(expectedPlaceHolder);
+                    expect(results[0].element('.tableFieldInput input').getAttribute('placeholder')).toContain(expectedPlaceHolder);
                     //Enter value of 'a record in the table is called a ' field
                 } else if (tableField.includes('A record in the table is called')) {
                     //Verify the placeholder inside input
-                    expect(results[0].element('.tableFieldInput input').getAttribute('placeholder')).toBe(expectedPlaceHolder);
+                    expect(results[0].element('.tableFieldInput input').getAttribute('placeholder')).toContain(expectedPlaceHolder);
                     //Enter value for Description field
                 } else if (tableField.includes('Description')) {
                     //Verify the placeholder inside input
-                    expect(results[0].element('.tableFieldInput textarea').getAttribute('placeholder')).toBe(expectedPlaceHolder);
+                    expect(results[0].element('.tableFieldInput textarea').getAttribute('placeholder')).toContain(expectedPlaceHolder);
                 }
             } else {
                 throw new Error('Unexpected table field filtered element' + JSON.stringify(results[0]));
@@ -410,7 +412,7 @@
                     //Hover over to an element and verify the field error
                     results[0].moveToObject('.tableFieldInput');
                     browser.waitForExist('.invalidInput'); // Account for short timeout in showing tooltip
-                    expect(results[0].element('.invalidInput').getAttribute('textContent')).toBe(errorMsg);
+                    expect(results[0].element('.invalidInput').getAttribute('textContent')).toContain(errorMsg);
                     return results[0].click();
                 }
             }
@@ -427,9 +429,9 @@
             browser.elements('.configSet li').value.map(function(elm) {
                 liElements.push(elm.getAttribute('textContent'));
             });
-            expect(liElements[0]).toBe('Settings');
-            expect(liElements[1]).toBe('Table');
-            return expect(liElements[2]).toBe('Table properties & settings');
+            expect(liElements[0]).toContain('Settings');
+            expect(liElements[1]).toContain('Table');
+            return expect(liElements[2]).toContain('Table properties & settings');
         }},
 
         /**

@@ -14,7 +14,7 @@ import GlobalActions from "../actions/globalActions";
 import BuilderDropDownAction from '../actions/builderDropDownAction';
 import Breakpoints from "../../utils/breakpoints";
 import {NotificationContainer} from "react-notifications";
-import {withRouter} from 'react-router';
+import {withRouter, Switch} from 'react-router-dom';
 import _ from 'lodash';
 
 import * as TrowserConsts from "../../constants/trowserConstants";
@@ -44,7 +44,6 @@ import QBicon from '../qbIcon/qbIcon';
 
 import {NEW_TABLE_IDS_KEY} from '../../constants/localStorage';
 import {updateFormRedirectRoute} from '../../actions/formActions';
-
 // This shared view with the server layer must be loaded as raw HTML because
 // the current backend setup cannot handle a react component in a common directory. It is loaded
 // as a raw string and we tell react to interpret it as HTML. See more in common/src/views/Readme.md
@@ -54,6 +53,7 @@ import LoadingScreen from 'raw!../../../../common/src/views/loadingScreen.html';
 import "./nav.scss";
 import "react-notifications/lib/notifications.css";
 import "../../assets/css/animate.min.css";
+import RouteWithSubRoutes from "../../scripts/RouteWithSubRoutes";
 
 const OPEN_NAV = true;
 const CLOSE_NAV = false;
@@ -82,7 +82,7 @@ export const Nav = React.createClass({
          * a new unit test will need to be added to recordRoute.unit.spec.js
          * */
         const formId = null;
-        const {appId, tblId} = this.props.params;
+        const {appId, tblId} = this.props.match.params;
         let formType;
 
         // currently users can navigate to builder only from "view" context, will need to update
@@ -103,14 +103,14 @@ export const Nav = React.createClass({
 
         this.props.updateFormRedirectRoute(_.get(this.props, 'location.pathname'));
 
-        this.props.router.push(link);
+        this.props.history.push(link);
     },
 
     getTopGlobalActions() {
         const actions = [];
         let recordId;
-        if (this.props.params) {
-            recordId = this.props.params.recordId;
+        if (this.props.match.params) {
+            recordId = this.props.match.params.recordId;
         }
         let selectedApp = this.getSelectedApp();
         let isAdmin = false;
@@ -125,7 +125,7 @@ export const Nav = React.createClass({
                                app={selectedApp}>
             {isAdmin ?
                     <BuilderDropDownAction
-                                router={this.props.router}
+                                history={this.props.history}
                                 selectedApp={selectedApp}
                                 selectedTable={this.getSelectedTable(this.state.apps.selectedTableId)}
                                 recId={recordId}
@@ -140,8 +140,8 @@ export const Nav = React.createClass({
     getLeftGlobalActions() {
         const actions = [];
         let recordId;
-        if (this.props.params) {
-            recordId = this.props.params.recordId;
+        if (this.props.match.params) {
+            recordId = this.props.match.params.recordId;
         }
         return (<GlobalActions actions={actions}
                                onSelect={this.onSelectItem}
@@ -232,7 +232,7 @@ export const Nav = React.createClass({
      */
     updateRecordTrowser(oldRecId) {
 
-        const {appId, tblId, rptId} = this.props.params;
+        const {appId, tblId, rptId} = this.props.match.params;
 
         const editRec = this.props.location.query[UrlConsts.EDIT_RECORD_KEY];
 
@@ -370,7 +370,7 @@ export const Nav = React.createClass({
         if (!this.state.apps || this.state.apps.apps === null) {
             // don't render anything until we've made this first api call without being redirected to V2
             // The common loading screen html is shared across server and client as an HTML file and
-            // therefore must be loaded using the dnagerouslySetInnerHTML attribute
+            // therefore must be loaded using the dangerouslySetInnerHTML attribute
             // see more information in common/src/views/Readme.md
             return <div dangerouslySetInnerHTML={{__html: LoadingScreen}} />;
         }
@@ -406,12 +406,12 @@ export const Nav = React.createClass({
             {/* AppQbModal is an app-wide modal that can be called from non-react classes*/}
             <AppQbModal/>
 
-            {this.props.params && this.props.params.appId &&
+            {this.props.match.params && this.props.match.params.appId &&
                 <RecordTrowser visible={this.props.shell.trowserOpen && this.props.shell.trowserContent === TrowserConsts.TROWSER_EDIT_RECORD}
-                               router={this.props.router}
+                               history={this.props.history}
                                editForm={this.getEditFormFromProps()}
-                               appId={this.props.params.appId}
-                               tblId={this.props.params.tblId}
+                               appId={this.props.match.params.appId}
+                               tblId={this.props.match.params.tblId}
                                recId={editRecordId}
                                viewingRecordId={viewingRecordId}
                                pendEdits={pendEdits}
@@ -422,9 +422,10 @@ export const Nav = React.createClass({
                                errorPopupHidden={this.props.shell.errorPopupHidden}
                                onHideTrowser={this.hideTrowser}/>
             }
-            {this.props.params && this.props.params.appId &&
+
+            {this.props.match.params && this.props.match.params.appId &&
                 <ReportManagerTrowser visible={this.props.shell.trowserOpen && this.props.shell.trowserContent === TrowserConsts.TROWSER_REPORTS}
-                                      router={this.props.router}
+                                      history={this.props.history}
                                       selectedTable={this.getSelectedTable(reportsList.tblId)}
                                       filterReportsName={this.state.nav.filterReportsName}
                                       reportsData={reportsList}
@@ -453,7 +454,7 @@ export const Nav = React.createClass({
                         onNavClick={this.toggleNav}
                         showOnSmall={this.state.nav.showTopNav}
                 />
-                {this.props.children &&
+                {this.props.routes &&
                     <div className="mainContent" >
                         <ReportFieldSelectTrowser
                             sideMenuContent={menuContent}
@@ -461,24 +462,34 @@ export const Nav = React.createClass({
                             isDocked={false}
                             pullRight>
                         <TempMainErrorMessages apps={this.state.apps.apps} appsLoading={this.state.apps.loading} selectedAppId={this.state.apps.selectedAppId} />
-                        {/* insert the component passed in by the router */}
-                        {React.cloneElement(this.props.children, {
-                            key: this.props.location ? this.props.location.pathname : "",
-                            apps: this.state.apps.apps,
-                            selectedAppId: this.state.apps.selectedAppId,
-                            appsLoading: this.state.apps.loading,
-                            reportData: reportsData,
-                            appUsers: this.state.apps.appUsers,
-                            appUsersUnfiltered: this.state.apps.appUsersUnfiltered,
-                            appRoles: this.state.apps.appRoles,
-                            appOwner: this.state.apps.appOwner,
-                            locale: this.state.nav.locale,
-                            isRowPopUpMenuOpen: this.props.shell.isRowPopUpMenuOpen,
-                            selectedApp: this.getSelectedApp(),
-                            selectedTable: this.getSelectedTable(reportsData.tblId),
-                            scrollingReport: this.state.nav.scrollingReport,
-                            flux: flux}
-                        )}</ReportFieldSelectTrowser>
+                            <Switch>
+                                { this.props.routes.map((route, i) => {
+                                    //insert the child route passed in by the router
+                                    // with additional props
+                                    // the Switch wrapper will pick only one of the routes the first
+                                    // that matches.
+                                    let routeProps = {
+                                        key: this.props.location ? this.props.location.pathname : "",
+                                        apps: this.state.apps.apps,
+                                        selectedAppId: this.state.apps.selectedAppId,
+                                        appsLoading: this.state.apps.loading,
+                                        reportData: reportsData,
+                                        appUsers: this.state.apps.appUsers,
+                                        appUsersUnfiltered: this.state.apps.appUsersUnfiltered,
+                                        appRoles: this.state.apps.appRoles,
+                                        appOwner: this.state.apps.appOwner,
+                                        locale: this.state.nav.locale,
+                                        isRowPopUpMenuOpen: this.props.shell.isRowPopUpMenuOpen,
+                                        selectedApp: this.getSelectedApp(),
+                                        selectedTable: this.getSelectedTable(reportsData.tblId),
+                                        scrollingReport: this.state.nav.scrollingReport,
+                                        flux: flux
+                                        };
+                                    return RouteWithSubRoutes(route, i, routeProps);
+                                    }
+                                )}
+                            </Switch>
+                        </ReportFieldSelectTrowser>
                     </div>}
 
             </div>
@@ -580,12 +591,12 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 export const NavWithRouter = withRouter(Nav);
-export const ConnectedNavRoute = connect(
+export const ConnectedNavRoute = withRouter(connect(
     mapStateToProps,
     mapDispatchToProps
-)(Nav);
+)(Nav));
 
-export default connect(
+export default withRouter(connect(
     mapStateToProps,
     mapDispatchToProps
-)(NavWithRouter);
+)(NavWithRouter));

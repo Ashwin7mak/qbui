@@ -148,7 +148,18 @@ module.exports = function(config) {
                 },
                 flags: ['--user-data-dir=' + profilePath],
                 displayName: 'Custom Debugging',
-            }
+            },
+            'HeadlessChrome': {
+                base: 'Chrome',
+                flags: [
+                    // See https://chromium.googlesource.com/chromium/src/+/lkgr/headless/README.md
+                    '--no-sandbox',
+                    '--headless',
+                    '--disable-gpu',
+                    // Without a remote debugging port, Google Chrome exits immediately.
+                    ' --remote-debugging-port=9222',
+                ],
+            },
         },
         reporters: ["progress", "mocha", "junit"],
 

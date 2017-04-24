@@ -77,8 +77,8 @@ export const TableHomePageRoute = React.createClass({
         const flux = this.getFlux();
         flux.actions.hideTopNav();
 
-        if (this.props.params) {
-            this.loadHomePageForParams(this.props.params);
+        if (this.props.match.params) {
+            this.loadHomePageForParams(this.props.match.params);
         }
     },
 
@@ -91,7 +91,7 @@ export const TableHomePageRoute = React.createClass({
 
     getPageActions(maxButtonsBeforeMenu) {
         const actions = [
-            {msg: 'pageActions.addRecord', icon:'add', className:'addRecord', onClick: this.editNewRecord},
+            {msg: 'pageActions.addRecord', icon:'add-new-filled', className:'addRecord', onClick: this.editNewRecord},
             {msg: 'unimplemented.makeFavorite', icon:'star', disabled: true},
             {msg: 'unimplemented.print', icon:'print', disabled: true}
         ];
@@ -127,12 +127,12 @@ export const TableHomePageRoute = React.createClass({
 
         const newTableIds = newTablesJSONArrray.split(",");
 
-        return newTableIds.indexOf(this.props.params.tblId) !== -1;
+        return newTableIds.indexOf(this.props.match.params.tblId) !== -1;
     },
 
     render() {
         //  ensure there is a rptId property otherwise the report not found page is rendered in ReportToolsAndContent
-        let homePageParams = _.assign(this.props.params, {rptId: null});
+        let homePageParams = _.assign(this.props.match.params, {rptId: null});
 
         if (this.props.reportData.fieldSelectMenu === undefined) {
             this.props.reportData.fieldSelectMenu = this.props.fieldSelectMenu;
@@ -150,7 +150,7 @@ export const TableHomePageRoute = React.createClass({
                 params={homePageParams}
                 reportData={this.props.reportData}
                 appUsers={this.props.appUsers}
-                routeParams={this.props.routeParams}
+                routeParams={this.props.match.params}
                 selectedAppId={this.props.selectedAppId}
                 searchStringForFiltering={this.props.reportData.searchStringForFiltering}
                 selectedRows={this.props.reportData.selectedRows}

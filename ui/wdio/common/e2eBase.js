@@ -92,6 +92,11 @@
                 var sessionTicketRequestEndPoint = e2eBase.recordBase.apiBase.generateFullRequest(realmName, ticketEndpoint + realmId);
                 return sessionTicketRequestEndPoint;
             },
+            // Helper method to get the proper URL for loading the user management page containing a list of users for an app
+            getRequestUsersEndpoint: function(realmName, appId) {
+                var requestUsersEndPoint = e2eBase.recordBase.apiBase.generateFullRequest(realmName, '/qbase/app/' + appId + '/users');
+                return requestUsersEndPoint;
+            },
             /**
              * Setup method that generates an app, table, list all report, forms, default table homepage, a set of users and a specified number of records
              * @param tableToFieldToFieldTypeMap - Map containing the structure of the app, tables and fields

@@ -1,5 +1,6 @@
 import * as types from '../../app/actionTypes';
 import {combineReducers} from 'redux';
+import GetStatus from '../reducer/RequestStatusReducer';
 
 const realm = (state = {}, action) => {
     switch (action.type) {
@@ -34,40 +35,11 @@ const currentUser = (state = {}, action) => {
     }
 };
 
-const defaultStatus = {
-    isFetching: false,
-    error: null
-};
-
-const status = (state = defaultStatus, action) => {
-    switch (action.type) {
-    case types.REQUEST_CONTEXT_SUCCESS:
-        return {
-            ...state,
-            isFetching: false,
-            error: null
-        };
-    case types.REQUEST_CONTEXT_FETCHING:
-        return {
-            ...state,
-            isFetching: true
-        };
-    case types.REQUEST_CONTEXT_FAILURE:
-        return {
-            ...state,
-            isFetching: false,
-            error: action.error
-        };
-    default:
-        return state;
-    }
-};
-
 const RequestContext = combineReducers({
     realm,
     account,
     currentUser,
-    status
+    status: GetStatus
 });
 
 export default RequestContext;

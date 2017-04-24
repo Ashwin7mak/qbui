@@ -1,12 +1,8 @@
 import React, {PropTypes, Component} from 'react';
-import {connect} from "react-redux";
 import { DragSource } from 'react-dnd';
 import ItemTypes from '../draggableItemTypes';
 import FieldToken from './fieldToken';
 import Tooltip from '../../../../../reuse/client/src/components/tooltip/tooltip';
-import {getFormByContext} from '../../../reducers/forms';
-import {CONTEXT} from '../../../actions/context';
-import _ from 'lodash';
 
 const fieldSource = {
     beginDrag(props) {
