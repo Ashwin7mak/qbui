@@ -2,6 +2,7 @@ import React, {PropTypes, Component} from "react";
 import {I18nMessage} from "../../../../../reuse/client/src/utils/i18nMessage";
 import Locale from "../../../../../reuse/client/src/locales/locale";
 import lodash from 'lodash';
+import {connect} from 'react-redux';
 import Pagination from "../../../../../reuse/client/src/components/pagination/pagination";
 
 /**
@@ -40,4 +41,16 @@ AccountUsersNavigation.propTypes = {
     users: PropTypes.array,
 };
 
-export default AccountUsersNavigation;
+export {AccountUsersNavigation};
+
+const mapDispatchToProps = (dispatch) => ({
+});
+
+const mapStateToProps = (state) => {
+    return {
+        requestUser: state.RequestContext.currentUser
+    };
+};
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(AccountUsersNavigation);

@@ -17,6 +17,17 @@ export const setSort = (gridId, sortFid, asc, remove) => ({
 });
 
 /**
+ * Action to set the pagination order for a given grid
+ *
+ * @param gridId - the id of the grid we want to update
+ * @param direction - the direction to paginate
+ */
+export const setPaginate = (gridId, direction) => ({
+    type: types.SET_PAGINATE,
+    direction
+});
+
+/**
  * Update function that delegates the work to a passed in update action
  * but first calculates the state of the particular grid we are interested in
  *

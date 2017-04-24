@@ -3,6 +3,7 @@ import * as types from "../../app/actionTypes";
 import _ from 'lodash';
 import * as Formatters from './Grid/AccountUsersGridFormatters';
 import * as RealmUserAccountFlagConstants from "../../common/constants/RealmUserAccountFlagConstants.js";
+import * as StandardGridActions from './standardGridActions';
 
 /**
  * Action when there is successful user from the backend
@@ -63,13 +64,30 @@ export const sortUsers = (users, sortFids) => {
     return _.orderBy(users, sortFnArray, orderArray);
 };
 
-export const paginateUsers = (users, paginateDirection) => {
 
+export const paginateUsers = (users, paginationIndex) => {
+
+    return users;
 };
 
+/**
+ * Perform the Update on the Grid through transformations
+ */
 export const doUpdate = (gridId, gridState) => {
     return (dispatch, getState) => {
+        // First Filter
+
+        // Then Sort
         let sortFids = gridState.sortFids || [];
-        dispatch(receiveAccountUsers(sortUsers(getState().AccountUsers.users, sortFids)));
+        let sortedusers = sortUsers(getState().AccountUsers.users, sortFids);
+
+        // Then paginate
+        let paginationIndex = gridState.pagination.currentIndex;
+        let paginatedViewusers = paginateUsers(sortedusers, paginationIndex);
+
+        // Inform the grid of the new set up users
+        //dispatch(StandardGridActions.doUpdate(props.id, props.doUpdate));
+        dispatch(receiveAccountUsers(paginatedViewusers));
+        // trigger the standard grid action. no need for grid to receive
     };
 };

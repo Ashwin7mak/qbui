@@ -19,6 +19,9 @@ class AccountUsers extends Component {
         super(props);
     }
 
+    /**
+     * When the component mounts, get the users
+     */
     componentDidMount() {
         this.props.fetchData(this.props.match.params.accountId);
     }
@@ -41,10 +44,7 @@ class AccountUsers extends Component {
                     <div className="accountUsersContainer">
                         <AccountUsersStage users={this.props.users}/>
                         <AccountUsersToolBar users={this.props.users}/>
-                        <AccountUsersGrid
-                            users={this.props.users}
-                            showAccountColumns={canSeeAccountColumns}
-                            showRealmColumns={canSeeRealmColumns}/>
+                        <AccountUsersGrid users={this.props.users} showAccountColumns={canSeeAccountColumns} showRealmColumns={canSeeRealmColumns}/>
                     </div>
                 </Loader>
             );
