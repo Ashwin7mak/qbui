@@ -261,7 +261,7 @@
         });
 
         it('rename a field, save & verify revision', function() {
-            selectFieldByIndex(1);
+            formBuilderPO.selectFieldByIndex(1);
             // revise the field name
             let testString = 'testString';
             formBuilderPO.fieldProperty_Name.setValue(testString);
@@ -281,7 +281,7 @@
 
         it('rename a field, cancel & verify no revision', function() {
             let originalFields = formBuilderPO.getFieldLabels();
-            selectFieldByIndex(1);
+            formBuilderPO.selectFieldByIndex(1);
             // revise the field name
             let testString = 'testString';
             formBuilderPO.fieldProperty_Name.setValue(testString);
