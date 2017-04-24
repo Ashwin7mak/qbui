@@ -293,7 +293,7 @@
         enterTableFieldValue : {value: function(tableField, fieldValue) {
             //Filter all fields in create new table dialogue
             var results = this.getAllTableFieldsList.value.filter(function(field) {
-                return field.getAttribute('textContent') === tableField;
+                return field.element('.tableFieldTitle').getAttribute('textContent') === tableField;
             });
 
             if (results !== []) {
@@ -301,17 +301,17 @@
                 if (tableField.includes('Table Name')) {
                     //verify title of the field
                     expect(results[0].element('.tableFieldTitle').getAttribute('textContent')).toContain(tableField);
-                    this.setInputValue(results[0], '.tableFieldInput INPUT', fieldValue);
+                    this.setInputValue(results[0], '.tableFieldInput input', fieldValue);
                     //Enter value of 'a record in the table is called a ' field
                 } else if (tableField.includes('A record in the table is called')) {
                     //verify title of the field
                     expect(results[0].element('.tableFieldTitle').getAttribute('textContent')).toContain(tableField);
-                    this.setInputValue(results[0], '.tableFieldInput INPUT', fieldValue);
+                    this.setInputValue(results[0], '.tableFieldInput input', fieldValue);
                     //Enter value for Description field
                 } else if (tableField.includes('Description')) {
                     //verify title of the field
                     expect(results[0].element('.tableFieldTitle').getAttribute('textContent')).toContain(tableField);
-                    this.setInputValue(results[0], '.tableFieldInput TEXTAREA', fieldValue);
+                    this.setInputValue(results[0], '.tableFieldInput textarea', fieldValue);
                 }
             } else {
                 throw new Error('Cannot set value for input of field type ' + JSON.stringify(results[0]));
@@ -326,20 +326,20 @@
         verifyTableFieldValues : {value: function(tableField, expectedFieldValue) {
             //Filter all fields in create new table dialogue
             var results = this.getAllTableFieldsList.value.filter(function(field) {
-                return field.getAttribute('textContent') === tableField;
+                return field.element('.tableFieldTitle').getAttribute('textContent') === tableField;
             });
 
             if (results !== []) {
                 //Enter values for 'table name' field
                 if (tableField.includes('Table Name')) {
                     //Verify the table name field value
-                    expect(results[0].element('.tableFieldInput INPUT').getAttribute('value')).toContain(expectedFieldValue);
+                    expect(results[0].element('.tableFieldInput input').getAttribute('value')).toContain(expectedFieldValue);
                 } else if (tableField.includes('A record in the table is called')) {
                     //Verify the record field value
-                    expect(results[0].element('.tableFieldInput INPUT').getAttribute('value')).toContain(expectedFieldValue);
+                    expect(results[0].element('.tableFieldInput input').getAttribute('value')).toContain(expectedFieldValue);
                 } else if (tableField.includes('Description')) {
                     //Verify the description field value
-                    expect(results[0].element('.tableFieldInput TEXTAREA').getAttribute('value')).toContain(expectedFieldValue);
+                    expect(results[0].element('.tableFieldInput textarea').getAttribute('value')).toContain(expectedFieldValue);
                 }
             } else {
                 throw new Error('Unexpected table field filtered element' + JSON.stringify(results[0]));
