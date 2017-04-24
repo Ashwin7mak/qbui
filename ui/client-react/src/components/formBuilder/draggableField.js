@@ -42,7 +42,12 @@ const fieldDragSource = {
             return props.isDragging(item);
         }
 
-        return props.containingElement.id === item.containingElement.id;
+        if (props.containingElement && item.containingElement) {
+            return props.containingElement.id === item.containingElement.id;
+        }
+
+        // Default to true as this is the likely case.
+        return true;
     },
 
     /**

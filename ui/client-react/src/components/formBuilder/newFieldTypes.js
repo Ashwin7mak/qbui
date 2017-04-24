@@ -77,9 +77,9 @@ export function createFieldTypeProps(fieldType) {
     let field = createScalarDefaultFieldsProperties()[fieldType];
 
     return {
-        containingElement: {id, FormFieldElement: {positionSameRow: false, ...field}}, // ID for identifying this field when dragging
+        containingElement: {id, FormFieldElement: {positionSameRow: false, ...field}},
         location: {tabIndex: 0, sectionIndex: 0, columnIndex: 0, elementIndex: 0},
-        key: id, // Key for react to use to identify it in the array
+        key: `fieldType_${fieldType}`, // Key for react to use to identify it in the array
         type: fieldType,
         relatedField: field,
         title,

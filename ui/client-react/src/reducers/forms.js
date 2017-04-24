@@ -253,19 +253,6 @@ const forms = (
         };
     }
 
-    case types.UPDATE_NEW_FIELD_ID : {
-        if (currentForm) {
-            currentForm.newFieldId = action.newFieldId;
-
-            return {
-                ...newState,
-                [id || formId]: currentForm
-            };
-        }
-
-        return state;
-    }
-
     case types.SELECT_FIELD : {
 
         if (!currentForm || !_.has(action, 'content.location')) {

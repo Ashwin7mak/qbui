@@ -244,12 +244,6 @@ export const moveFieldOnForm = (formId, newLocation, draggedItemProps) => {
     });
 };
 
-export const updateNewFieldId = (formId, newFieldId) => ({
-    type: types.UPDATE_NEW_FIELD_ID,
-    formId,
-    newFieldId
-});
-
 /**
  * Selects a field on a form
  * @param formId

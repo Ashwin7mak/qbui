@@ -2,7 +2,7 @@ import React, {PropTypes, Component} from 'react';
 import {connect} from "react-redux";
 import FieldToken from './fieldToken';
 import Tooltip from '../../../../../reuse/client/src/components/tooltip/tooltip';
-import {addNewFieldToForm, updateNewFieldId} from "../../../actions/formActions";
+import {addNewFieldToForm} from "../../../actions/formActions";
 import {getFormByContext, getSelectedFormElement} from '../../../reducers/forms';
 import {CONTEXT} from '../../../actions/context';
 import _ from 'lodash';
@@ -63,11 +63,7 @@ FieldTokenInMenu.propTypes = {
 
     /**
      * Can optionally show the token in a collapsed state (icon only) */
-    isCollapsed: PropTypes.bool,
-
-    /**
-     * Holds information about the new field created to represent this element while dragging and once dropped */
-    newField: PropTypes.obj
+    isCollapsed: PropTypes.bool
 };
 
 const mapStateToProps = state => {
@@ -79,14 +75,12 @@ const mapStateToProps = state => {
         appId: _.get(currentForm, 'formData.formMeta.appId'),
         tblId: _.get(currentForm, 'formData.formMeta.tableId'),
         selectedField: selectedField,
-        selectedFormElement: (currentForm ? getSelectedFormElement(state, currentForm.id) : undefined),
-        newFieldId: (currentForm ? currentForm.newFieldId : null)
+        selectedFormElement: (currentForm ? getSelectedFormElement(state, currentForm.id) : undefined)
     };
 };
 
 const mapDispatchToProps = {
-    addNewFieldToForm,
-    updateNewFieldId
+    addNewFieldToForm
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(DraggableFieldToken);
