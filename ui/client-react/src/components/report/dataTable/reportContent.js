@@ -14,7 +14,7 @@ import {GROUP_TYPE} from "../../../../../common/src/groupTypes";
 import Locales from "../../../locales/locales";
 import ReportFooter from '../reportFooter';
 import _ from 'lodash';
-import {withRouter} from 'react-router';
+import {withRouter} from 'react-router-dom';
 import ReportContentError from './reportContentError';
 import UrlUtils from '../../../utils/urlUtils';
 import QBModal from '../../qbModal/qbModal';
@@ -72,8 +72,8 @@ export const ReportContent = React.createClass({
         this.openRow(recId);
         //create the link we want to send the user to and then send them on their way
         const link = `${APP_ROUTE}/${appId}/table/${tblId}/report/${rptId}/record/${recId}`;
-        if (this.props.router) {
-            this.props.router.push(link);
+        if (this.props.history) {
+            this.props.history.push(link);
         }
     },
 
@@ -360,7 +360,7 @@ export const ReportContent = React.createClass({
                 primaryButtonOnClick={this.deleteRecord}
                 leftButtonName={Locales.getMessage('selection.dontDelete')}
                 leftButtonOnClick={this.cancelRecordDelete}
-                bodyMessage={msg}
+                title={msg}
                 type="alert"/>);
     },
 

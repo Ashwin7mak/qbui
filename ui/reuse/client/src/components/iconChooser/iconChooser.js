@@ -1,6 +1,7 @@
 import React from 'react';
 import {PropTypes} from 'react';
 import Icon from '../icon/icon';
+import IconUtils from '../icon/iconUtils';
 
 // IMPORTS FROM CLIENT REACT
 import Locale from '../../../../../client-react/src/locales/locales';
@@ -49,10 +50,10 @@ class IconChooser extends React.Component {
      */
     renderIconToggle() {
         return (
-            <div className="showAllToggle" onClick={this.toggleAllIcons}>
-                <Icon iconFont={this.props.font} icon={this.props.selectedIcon}/>
+            <button tabIndex="0" className="showAllToggle" onClick={this.toggleAllIcons}>
+                <Icon className="showAllSelectedIcon" iconFont={this.props.font} icon={this.props.selectedIcon}/>
                 <Icon icon="caret-filled-down" className="toggleIcon"/>
-            </div>);
+            </button>);
     }
 
     /**
@@ -64,36 +65,10 @@ class IconChooser extends React.Component {
     }
 
     /**
-     * does filter text match icon?
-     * @param text lowercase filter text
-     * @param icon icon name
-     * @returns {boolean}
-     */
-    filterMatches(text, icon) {
-
-        if (text === '') {
-            // no filter, display all icons
-            return true;
-        }
-        const iconName = icon.toLowerCase();
-
-        // match agains icon name
-        if (iconName.indexOf(text) !== -1) {
-            return true;
-        }
-
-        // find all tags (sets of icons by name) containing the search text
-        const matchedTags = this.props.iconsByTag.filter((tagToIcons) => tagToIcons.tag.toLowerCase().indexOf(text) !== -1);
-
-        // filter matches if any tag matching the filter text contains the current icon
-        return matchedTags.find((taggedIcons) => taggedIcons.icons.find((taggedIcon) => taggedIcon === icon));
-    }
-
-    /**
      * get icons matching the current filter text
      */
     getFilteredIcons() {
-        return this.props.icons.filter((icon) => this.filterMatches(this.state.filterText.toLowerCase().trim(), icon));
+        return this.props.icons.filter((icon) => IconUtils.filterMatches(this.props.iconsByTag, this.state.filterText.toLowerCase().trim(), icon));
     }
 
     /**
@@ -124,7 +99,7 @@ class IconChooser extends React.Component {
                 </div>
 
                 <div className="allIcons">
-                    {this.getFilteredIcons().map((icon, i) => <Icon key={i} onClick={() => this.selectIcon(icon)} iconFont={this.props.font} icon={icon}/>)}
+                    {this.getFilteredIcons().map((icon, i) => <button alt={icon} className={"iconButton " + icon} tabIndex="0" key={i} onClick={() => this.selectIcon(icon)}><Icon iconFont={this.props.font} icon={icon}/></button>)}
                 </div>
             </div>);
     }

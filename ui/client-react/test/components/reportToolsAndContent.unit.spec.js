@@ -34,7 +34,9 @@ describe('ReportToolsAndContent functions', () => {
     };
 
     const rptId = '3';
-    let reportParams = {appId: 1, tblId: 2, rptId: rptId, format:true, offset: constants.PAGE.DEFAULT_OFFSET, numRows: constants.PAGE.DEFAULT_NUM_ROWS};
+    let reportParams = {
+        params: {appId: 1, tblId: 2, rptId: rptId, format:true, offset: constants.PAGE.DEFAULT_OFFSET, numRows: constants.PAGE.DEFAULT_NUM_ROWS}
+    };
     let reportDataParams = {
         reportData: {
             appId: 1,
@@ -125,7 +127,7 @@ describe('ReportToolsAndContent functions', () => {
 
     it('test report is not rendered with missing app data', () => {
         const div = document.createElement('div');
-        const reportParamsWithUndefinedAppId = Object.assign({}, reportParams, {appId: undefined});
+        const reportParamsWithUndefinedAppId = Object.assign({}, reportParams, {params: {appId: undefined}});
         component = shallow(<ReportToolsAndContent flux={flux} params={reportParamsWithUndefinedAppId} {...reportDataParams} />, div);
 
         //  test that the reportContentMock is rendered
@@ -168,10 +170,10 @@ describe('ReportToolsAndContent functions', () => {
                                                        params={reportParams} {...reportDataParams} {...modifiedReport} />);
 
             expect(loadDynamicReportSpy).toHaveBeenCalledWith(
-                reportParams.appId,
-                reportParams.tblId,
-                reportParams.rptId,
-                reportParams.format,
+                reportParams.params.appId,
+                reportParams.params.tblId,
+                reportParams.params.rptId,
+                reportParams.params.format,
                 jasmine.any(Object),
                 jasmine.any(Object)
             );
@@ -226,10 +228,10 @@ describe('ReportToolsAndContent functions', () => {
                 expect(obj.loadDynamicReport).not.toHaveBeenCalled();
             }).then(() => {
                 expect(obj.loadDynamicReport).toHaveBeenCalledWith(
-                    reportParams.appId,
-                    reportParams.tblId,
-                    reportParams.rptId,
-                    reportParams.format,
+                    reportParams.params.appId,
+                    reportParams.params.tblId,
+                    reportParams.params.rptId,
+                    reportParams.params.format,
                     jasmine.any(Object),
                     jasmine.any(Object)
                 );
@@ -248,10 +250,10 @@ describe('ReportToolsAndContent functions', () => {
             expect(clearSearchInput).toHaveBeenCalled();
             expect(obj.loadDynamicReport).toHaveBeenCalled();
             expect(obj.loadDynamicReport).toHaveBeenCalledWith(
-                reportParams.appId,
-                reportParams.tblId,
-                reportParams.rptId,
-                reportParams.format,
+                reportParams.params.appId,
+                reportParams.params.tblId,
+                reportParams.params.rptId,
+                reportParams.params.format,
                 jasmine.any(Object),
                 jasmine.any(Object)
             );

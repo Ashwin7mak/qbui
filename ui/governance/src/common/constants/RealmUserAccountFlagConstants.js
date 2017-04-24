@@ -10,7 +10,7 @@ export const RealmDirFlags = {
     RegisteredFlag : 0x0010
 };
 
-export const AccounTrusteeFlags = {
+export const AccountTrusteeFlags = {
     CanCreateAppFlag : 0x0004
 };
 
@@ -18,7 +18,7 @@ export const AccounTrusteeFlags = {
 export const HasFlag = (bits, flag) => (bits & flag) !== 0;
 export const IsDeactivated = userInfo => HasFlag(userInfo.userBasicFlags, UserFlags.DeactivatedFlag);
 export const IsDenied = userInfo => HasFlag(userInfo.realmDirectoryFlags, RealmDirFlags.DeniedFlag);
-export const CanCreateApps = userInfo => HasFlag(userInfo.accountTrusteeFlags, AccounTrusteeFlags.CanCreateAppFlag);
+export const CanCreateApps = userInfo => HasFlag(userInfo.accountTrusteeFlags, AccountTrusteeFlags.CanCreateAppFlag);
 export const IsApprovedInRealm = userInfo => HasFlag(userInfo.realmDirectoryFlags, RealmDirFlags.RealmApprovedFlag);
 export const HasAnyRealmPermissions = userInfo => userInfo.realmDirectoryFlags !== 0;
 export const HasAnySystemPermissions = userInfo => userInfo.systemRights !== 0;
