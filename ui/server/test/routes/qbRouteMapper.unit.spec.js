@@ -45,7 +45,6 @@ describe('Qb Route Mapper Unit Test', function() {
             {message: 'GET request to report invoke endpoint', request: '/qb/apps/fakeApp/tables/fakeTable/reports/2/invoke', expectedPath: '/api/api/v1/apps/fakeApp/tables/fakeTable/reports/2/invoke', route: routes.REPORT_INVOKE_RESULTS, method: routeMapper.fetchGetFunctionForRoute(routes.REPORT_INVOKE_RESULTS), expectedDefined: true, httpVerb: 'GET'},
             {message: 'GET request to report record count endpoint', request: '/qb/apps/fakeApp/tables/fakeTable/reports/2/recordsCount', expectedPath: '/api/api/v1/apps/fakeApp/tables/fakeTable/reports/2/recordsCount', route: routes.REPORT_RECORDS_COUNT, method: routeMapper.fetchGetFunctionForRoute(routes.REPORT_RECORDS_COUNT), expectedDefined: true, httpVerb: 'GET'},
             {message: 'GET request to table components endpoint', request: '/qb/apps/fakeApp/tables/tableComponents', expectedPath: '/api/api/v1/apps/fakeApp/tables/tableComponents', route: routes.TABLE_COMPONENTS, method: routeMapper.fetchGetFunctionForRoute(routes.TABLE_COMPONENTS), expectedDefined: false, httpVerb: 'GET'},
-            {message: 'GET request to resolve facets', request: '/n/v1/facets/parse', expectedPath: '/n/v1/facets/parse', route: routes.FACET_EXPRESSION_PARSE, method: routeMapper.fetchGetFunctionForRoute(routes.FACET_EXPRESSION_PARSE), expectedDefined: true, httpVerb: 'GET'},
             {message: 'GET request to apps endpoint', request: '/qb/apps/fakeApp', expectedPath: '/api/api/v1/apps/fakeApp', route: routes.APPS, method: routeMapper.fetchGetFunctionForRoute(routes.APPS), expectedDefined: true, httpVerb: 'GET'},
             {message: 'GET request to app roles endpoint', request: '/qb/apps/fakeApp/roles', expectedPath: '/api/api/v1/apps/fakeApp/roles', route: routes.APP_ROLES, method: routeMapper.fetchGetFunctionForRoute(routes.APP_ROLES), expectedDefined: true, httpVerb: 'GET'},
             {message: 'GET request to getReqUser endpoint', request: '/qb/users/reqUser', expectedPath: '/api/api/v1/users/reqUser', route: routes.REQ_USER, method: routeMapper.fetchGetFunctionForRoute(routes.REQ_USER), expectedDefined: true, httpVerb: 'GET'},
@@ -96,8 +95,15 @@ describe('Qb Route Mapper Unit Test', function() {
             //
             {message: 'POST request to table components endpoint', request: '/qb/apps/1/tables/tableComponents', expectedPath: '/api/api/v1/apps/1/tables/tableComponents', route: routes.TABLE_COMPONENTS, method: routeMapper.fetchPostFunctionForRoute(routes.TABLE_COMPONENTS), expectedDefined: true, httpVerb: 'POST'},
             {message: 'PATCH request to tables endpoint', request: '/qb/apps/1/tables/2', expectedPath: '/api/api/v1/apps/1/tables/2', route: routes.TABLE, method: routeMapper.fetchPatchFunctionForRoute(routes.TABLE), expectedDefined: true, httpVerb: 'PATCH'},
-            {message: 'GET request to Node/Express health check endpoint', request: '/api/v1/qbuiHealth', expectedPath: '/api/v1/qbuiHealth', route: routes.QBUI_HEALTH_CHECK, method: routeMapper.fetchGetFunctionForRoute(routes.QBUI_HEALTH_CHECK), expectedDefined: true, httpVerb: 'GET'},
             {message: 'GET request to the health check endpoint', request: '/qb/health', expectedPath: '/api/api/v1/health', route: routes.HEALTH_CHECK, method: routeMapper.fetchGetFunctionForRoute(routes.HEALTH_CHECK), expectedDefined: true, httpVerb: 'GET'}
+        ];
+    }
+
+    function nodePathProvider() {
+        return [
+            {message: 'GET request to resolve facets', request: '/n/facets/parse', expectedPath: '/n/facets/parse', route: routes.FACET_EXPRESSION_PARSE, method: routeMapper.fetchGetFunctionForRoute(routes.FACET_EXPRESSION_PARSE), expectedDefined: true, httpVerb: 'GET'},
+            {message: 'GET request to Node health check endpoint', request: '/api/v1/qbuiHealth', expectedPath: '/api/v1/qbuiHealth', route: routes.QBUI_HEALTH_CHECK, method: routeMapper.fetchGetFunctionForRoute(routes.QBUI_HEALTH_CHECK), expectedDefined: true, httpVerb: 'GET'},
+            {message: 'GET request to Nodes health check endpoint', request: '/n/qbuiHealth', expectedPath: '/n/qbuiHealth', route: routes.QBUI_HEALTH_CHECK, method: routeMapper.fetchGetFunctionForRoute(routes.QBUI_HEALTH_CHECK), expectedDefined: true, httpVerb: 'GET'}
         ];
     }
 
@@ -177,6 +183,9 @@ describe('Qb Route Mapper Unit Test', function() {
      */
     describe('test modify path for request', function() {
         corePathModificationProvider().forEach(function(entry) {
+            runTestCase(entry);
+        });
+        nodePathProvider().forEach(function(entry) {
             runTestCase(entry);
         });
         eePathModificationProvider().forEach(function(entry) {

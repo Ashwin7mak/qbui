@@ -41,7 +41,7 @@
      */
     let customFunctionApiEndpoints = {
         HEALTH_CHECK                : baseContext.CORE_HEALTH + '/health',
-        QBUI_HEALTH_CHECK           : baseUrl.QUICKBASE_HEALTH + '/qbuiHealth',
+        QBUI_HEALTH_CHECK           : baseUrl.CORE_HEALTH + '/qbuiHealth',   // remove with NODE_HEALTH_CHECK endpoint
 
         FORM_AND_RECORD_COMPONENTS  : baseContext.QUICKBASE_CLIENT + '/apps/:appId/tables/:tableId/records/:recordId/formComponents',
         FORM_COMPONENTS             : baseContext.QUICKBASE_CLIENT + '/apps/:appId/tables/:tableId/formComponents',
@@ -86,9 +86,12 @@
      */
 
     let nodeApiEndpoints = {
-        FACET_EXPRESSION_PARSE: baseContext.QUICKBASE_NODE + '/facets/parse',
-        LOG_CLIENT_MSG: baseContext.QUICKBASE_NODE + '/log',
-        LOG_CLIENT_PERF_MSG: baseContext.QUICKBASE_NODE + '/clientPerf'
+        //  log routes are defined in routes.js
+        LOG_CLIENT_MSG          : baseContext.QUICKBASE_NODE + '/log',
+        LOG_CLIENT_PERF_MSG     : baseContext.QUICKBASE_NODE + '/clientPerf',
+        //
+        FACET_EXPRESSION_PARSE  : baseContext.QUICKBASE_NODE + '/facets/parse',
+        NODE_HEALTH_CHECK       : baseContext.QUICKBASE_NODE + '/qbuiHealth'
     };
 
     /**
