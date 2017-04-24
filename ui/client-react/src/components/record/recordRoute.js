@@ -192,16 +192,13 @@ export const RecordRoute = React.createClass({
         const record = this.getRecordFromProps(this.props);
         const reportData = this.getReportDataFromProps(this.props);
         this.navigateToRecord(record.previousRecordId, reportData);
-        //the url shall always be using the app/table/rec id from reportsdata, and not from any embedded report
-        const {appId, tblId, rptId} = this.props.reportData;
         if (this.props.isDrawerContext) {
-            const existingPath = this.props.history.location.pathname;
-            const urlSegments = existingPath.split('/');
-            const lastBlockIndex = urlSegments.length - 1;
-            //replace the last drawerRecId(lastBlockIndex - 2) with the previous record Id
-            const newLink = this.getUpdatedUrl(urlSegments, lastBlockIndex - 2, record.previousRecordId);
+            // replace last drawer record
+            const newLink = this.props.location.pathname.replace(/record_.*?\/?$/, `record_${record.previousRecordId}`);
             this.props.history.push(newLink);
         } else {
+            //the url shall always be using the app/table/rec id from reportsdata, and not from any embedded report
+            const {appId, tblId, rptId} = this.props.reportData;
             const link = `${APP_ROUTE}/${appId}/table/${tblId}/report/${rptId}/record/${record.previousRecordId}`;
             this.props.history.push(link);
         }
@@ -226,16 +223,13 @@ export const RecordRoute = React.createClass({
         const record = this.getRecordFromProps(this.props);
         const reportData = this.getReportDataFromProps(this.props);
         this.navigateToRecord(record.nextRecordId, reportData);
-        //the url shall always be using the app/table/rec id from reportsdata, and not from any embedded report
-        const {appId, tblId, rptId} = this.props.reportData;
         if (this.props.isDrawerContext) {
-            const existingPath = this.props.history.location.pathname;
-            const urlSegments = existingPath.split('/');
-            const lastBlockIndex = urlSegments.length - 1;
-            //replace the last drawerRecId(lastBlockIndex - 2) with the next record Id
-            const newLink = this.getUpdatedUrl(urlSegments, lastBlockIndex - 2, record.nextRecordId);
+            // replace last drawer record
+            const newLink = this.props.location.pathname.replace(/record_.*?\/?$/, `record_${record.nextRecordId}`);
             this.props.history.push(newLink);
         } else {
+            //the url shall always be using the app/table/rec id from reportsdata, and not from any embedded report
+            const {appId, tblId, rptId} = this.props.reportData;
             const link = `${APP_ROUTE}/${appId}/table/${tblId}/report/${rptId}/record/${record.nextRecordId}`;
             this.props.history.push(link);
         }
@@ -447,8 +441,8 @@ export const RecordRoute = React.createClass({
     /**
      * only re-render when our form data has changed */
     shouldComponentUpdate(nextProps, nextState) {
-        // Update if a drawer is added or removed
-        if (this.props.location.pathname.lastIndexOf('sr_app') !== nextProps.location.pathname.lastIndexOf('sr_app')) {
+        // Update when the route is changed
+        if (this.props.location.pathname !== nextProps.location.pathname) {
             //TODO: add a check to see if drawer component data got updated
             return true;
         }
