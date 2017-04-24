@@ -5,13 +5,13 @@
 
     .formBuilderContainerContent {
         //height: 100%;
-        height: calc(100% - 55px);
+        height: calc(100% - #{$formBuilder-footer-height});
         min-width: 100%;
         overflow-y: scroll; /* has to be scroll, not auto */
         -webkit-overflow-scrolling: touch; /* This allows for momentum scrolling on touch devices */
         &:focus{
             border: $stroke-width-thin solid $border-focused-color;
-            border-bottom: #{$stroke-width-thin + 1} solid $border-focused-color;
+            border-bottom: #{$stroke-width-thin + 4} solid $border-focused-color;
         }
     }
 
