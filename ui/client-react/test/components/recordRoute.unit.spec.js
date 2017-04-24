@@ -8,7 +8,7 @@ import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import {Provider} from "react-redux";
 import {APP_ROUTE} from '../../src/constants/urlConstants';
-import {MemoryRouter} from 'react-router-dom';
+import {MemoryRouter, withRouter} from 'react-router-dom';
 import {mount} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
 const middlewares = [thunk];
@@ -71,12 +71,22 @@ describe('RecordRoute', () => {
             const initialState = {};
             const store = mockStore(initialState);
 
-            let params = {appId: 1, tblId: 2, recordId: 4};
+            let params = {appId: "1", tblId: "2", recordId: "4"};
 
+            const withMockParams = (ComponentToWrap) => {
+                class WrappedComponent extends React.Component {
+                    render() {
+                        const {...props} = this.props;
+                        return <ComponentToWrap {...props} match={{params:params}} />;
+                    }
+                }
+                return WrappedComponent;
+            };
+            const ComponentUnderTest = withMockParams(ConnectedRecordRoute);
             component = TestUtils.renderIntoDocument(
                 <MemoryRouter>
                     <Provider store={store}>
-                        <ConnectedRecordRoute match={{params}} flux={flux} selectedTable={{"name": "TestTable"}}/>
+                        <ComponentUnderTest flux={flux} selectedTable={{"name": "TestTable"}}/>
                     </Provider>
                 </MemoryRouter>);
 
@@ -107,7 +117,7 @@ describe('RecordRoute', () => {
             component = TestUtils.renderIntoDocument(
                 <MemoryRouter>
                     <Provider store={store}>
-                        <ConnectedRecordRoute match={{params}} flux={flux} selectedTable={{"name": "TestTable"}}/>
+                        <ConnectedRecordRoute match={{params:params}} flux={flux} selectedTable={{"name": "TestTable"}}/>
                     </Provider>
                 </MemoryRouter>);
 
@@ -165,7 +175,7 @@ describe('RecordRoute', () => {
             component = mount(
                 <MemoryRouter>
                     <Provider store={store}>
-                        <RecordRoute match={{params}} reportData={reportData} flux={flux} history={history} {...reduxProps} selectedTable={{"name": "TestTable"}}/>
+                        <RecordRoute match={{params:params}} reportData={reportData} flux={flux} history={history} {...reduxProps} selectedTable={{"name": "TestTable"}}/>
                     </Provider>
                 </MemoryRouter>);
             expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
@@ -230,8 +240,8 @@ describe('RecordRoute', () => {
         };
         const location = {search: 'drawer'};
         const routeParams = {appId: '1', tblId: '2', rptId: '3', recordId: '2'};
-        const initialState = {};
-        const store = mockStore(initialState);
+
+        const embedPrefix = "EMBEDDED";
         const reportData = {
             appId: 1,
             tblId: 2,
@@ -260,6 +270,9 @@ describe('RecordRoute', () => {
                 ]
             }
         };
+        const initialState = {embeddedReports: {[embedPrefix] : {reportData}}};
+        const store = mockStore(initialState);
+
         let router = [];
         beforeAll(() => {
             jasmineEnzyme();
@@ -277,51 +290,35 @@ describe('RecordRoute', () => {
          * test if drawer component gets created with isDrawerContext being false
          */
         it('test if drawer component gets created when having no drawers to start with', () => {
-            component = mount(
-                <Provider store={store}>
-                    <RecordRoute params={routeParams}
-                                 reportData={reportData}
-                                 flux={flux}
-                                 router={router}
-                                 {...reduxProps}
-                                 location={location}
-                                 isDrawerContext={false}
-                                 uniqueId="DRAWER123"/>
-                </Provider>);
 
-            //drawer exists
+            component = mount(
+                <MemoryRouter>
+                    <Provider store={store}>
+                        <RecordRoute match={{params:routeParams}}
+                                     reportData={reportData}
+                                     flux={flux}
+                                     router={router}
+                                     {...reduxProps}
+                                     location={location}
+                                     isDrawerContext={false}
+                                     uniqueId="DRAWER123"/>
+                    </Provider>
+                </MemoryRouter>
+                        );
+
+            //drawer does not exists
             let drawer = component.find('.drawer');
-            expect(drawer.length).toBe(1);
-        });
-
-        it('tests drawer component not rendering nested drawers', () => {
-            component = mount(
-                <Provider store={store}>
-                    <RecordRoute params={routeParams}
-                                 flux={flux}
-                                 {...reduxProps}
-                                 location={location}
-                                 isDrawerContext={false}
-                                 uniqueId="DRAWER123"/>
-                </Provider>);
-
-            component = mount(
-                <Provider store={store}>
-                    <RecordRoute params={routeParams}
-                                 flux={flux}
-                                 {...reduxProps}
-                                 uniqueId="DRAWER123"
-                                 isDrawerContext={true}/>
-                </Provider>);
-
-            let drawer = component.find('.drawer');
-            //not re-rendering a drawer
             expect(drawer.length).toBe(0);
+
+            //drawer container does exists
+            let drawerContainer = component.find('.drawerContainer');
+            expect(drawerContainer.length).toBe(1);
         });
 
         it('tests navigating records in drawer', () => {
 
-            const embeddedReports = [embeddedReport];
+            const uniqueId = "EMBEDDED123";
+            const embeddedReports = {[uniqueId] : embeddedReport};
 
             const selectedApp = {
                 id: "1",
@@ -330,21 +327,30 @@ describe('RecordRoute', () => {
                     {id: '2', name: 'country'}
                 ]
             };
+            const matchParams = {params: {appId: '1', tblId: '2', rptId: uniqueId, recordId: '2'}};
 
-            const record = [{id: 'DRAWER123', recId: 2, nextRecordId: 3, previousRecordId: 1}];
+            const record = [{id: uniqueId, recId: 2, nextRecordId: 3, previousRecordId: 1}];
+            let history = [];
+
             component = mount(
-                <Provider store={store}>
-                    <RecordRoute params={routeParams}
-                                 flux={flux}
-                                 {...reduxProps}
-                                 reportData={reportData}
-                                 uniqueId="DRAWER123"
-                                 isDrawerContext={true}
-                                 selectedApp={selectedApp}
-                                 record={record}
-                                 router={router}
-                                 embeddedReports={embeddedReports}/>
-                </Provider>);
+                    <MemoryRouter>
+                            <Provider store={store}>
+                                            <RecordRoute
+                                                         match={matchParams}
+                                                         flux={flux}
+                                                         history={history}
+                                                         {...reduxProps}
+                                                         reportData={reportData}
+                                                         uniqueId={uniqueId}
+                                                         isDrawerContext={true}
+                                                         selectedApp={selectedApp}
+                                                         location={{pathname:"path"}}
+                                                         record={record}
+                                                         router={router}
+                                                         embeddedReports={embeddedReports}/>
+                                            </Provider>
+                    </MemoryRouter>
+            );
 
             let prevRecord = component.find('.prevRecord');
             let nextRecord = component.find('.nextRecord');

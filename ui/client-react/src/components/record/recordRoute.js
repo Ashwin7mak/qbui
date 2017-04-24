@@ -57,7 +57,7 @@ export const RecordRoute = React.createClass({
 
         // ensure the search input is empty
         this.props.clearSearchInput();
-        if (this.props.hasDrawer || (this.props.isDrawerContext && this.props.history.location.pathname.includes('sr_app'))) {
+        if (this.props.hasDrawer || (this.props.isDrawerContext && this.props.location.pathname.includes('sr_app'))) {
             this.props.loadForm(appId, this.props.match.params.tblId, rptId, 'view', this.props.match.params.recordId, this.props.uniqueId);
             const recordsArray = _.get(embeddedReport, 'data.records', []);
             this.navigateToRecord(this.props.match.params.recordId, embeddedReport, recordsArray);
@@ -70,9 +70,13 @@ export const RecordRoute = React.createClass({
         appId = appId || this.props.selectedAppId;
 
         // TODO: currently this.props.match.rptId is the embeddedReport's unique ID, perhaps use a different matcher
-        // for rptId and uniqueId(embeddedReportId). We can then simplify some of the following smelly code.
-        let embeddedReport = this.getReportDataFromProps();
-        if (embeddedReport) {
+        // for rptId and uniqueId. We can then simplify some of the following smelly code.
+        let embeddedReport;
+        if (rptId !== undefined && typeof rptId === 'string' &&
+                (rptId.includes(CONTEXT.REPORT.EMBEDDED) || rptId.includes(CONTEXT.FORM.DRAWER))) {
+            const embeddedReportId = rptId;
+            // TODO: move to reducers/embeddedReport
+            embeddedReport = _.find(this.props.embeddedReports, {'id' : embeddedReportId});
             rptId = embeddedReport.rptId;
         }
 
@@ -264,7 +268,7 @@ export const RecordRoute = React.createClass({
      * remove the drawer info from the url
      */
     closeDrawer() {
-        const currentPath = this.props.history.location.pathname;
+        const currentPath = this.props.location.pathname;
         const newPath = currentPath.slice(0, currentPath.indexOf('sr_') - 1);
         this.props.history.push(newPath);
     },
@@ -476,7 +480,7 @@ export const RecordRoute = React.createClass({
         let embeddedReport = getEmbeddedReportByContext(this.props.embeddedReports, embeddedReportsUniqueId);
 
         //todo : handle query params in the url
-        const existingPath = this.props.history.location.pathname;
+        const existingPath = this.props.location.pathname;
         const appId = _.get(this, 'props.match.params.appId', this.selectedAppId);
         //TODO: move to url consts and make a function in urlUtils
         const link = `${existingPath}/sr_app_${appId}_table_${tblId}_report_${embeddedReport.id}_record_${recId}`;
@@ -488,7 +492,7 @@ export const RecordRoute = React.createClass({
     /**
      * render the stage, actions, and form
      *
-     * the QBForm gets a unique to allow ReactCSSTransitionGroup animation to work across route transitions (i.e. diffferent record IDs)
+     * the QBForm gets a unique to allow ReactCSSTransitionGroup animation to work across route transitions (i.e. different record IDs)
      * we implement shouldComponentUpdate() to prevent triggering animations unless the record has changed
      */
     render() {
@@ -588,7 +592,6 @@ const mapDispatchToProps = (dispatch) => {
 
 // named exports for unit testing router functions and redux actions
 
-//export const RecordRouteWithRouter = withRouter(RecordRoute);
 export const ConnectedRecordRoute = connect(
     mapStateToProps,
     mapDispatchToProps
@@ -600,7 +603,6 @@ export const ConnectedRecordRouteWithRouter = withRouter(connect(
     mapDispatchToProps
 )(RecordRoute));
 export default ConnectedRecordRouteWithRouter;
-
 
 
 // Wrap RecordRoute with `withUniqueId` hoc so that it has a unique ID used to identify its own

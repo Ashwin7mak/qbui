@@ -489,7 +489,8 @@ export const RecordTrowser = React.createClass({
     },
 
     getRecord() {
-        return  _.find(this.props.record, rec => rec.recId.toString() === this.props.recId) || {};
+        return  _.find(this.props.record, rec => (rec.recId === this.props.recId ||
+                                                  rec.recId.toString() === this.props.recId)) || {};
     },
 
     keyboardOnSave() {
