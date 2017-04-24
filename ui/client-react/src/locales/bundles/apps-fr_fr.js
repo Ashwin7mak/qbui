@@ -534,9 +534,10 @@ export default {
             FILE_ATTACHMENT: "Fichier"
         },
         fieldPropertyLabels: {
-            title: "propriétés",
+            title: "Propriétés du champ",
             name: "prénom",
-            required: "Doit être rempli"
+            required: "Doit être rempli",
+            multiChoice: "Les choix"
         },
         builder: {
             formBuilder: {
