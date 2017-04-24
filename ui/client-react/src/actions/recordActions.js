@@ -1,7 +1,7 @@
 /**
  * Any actions related to Record model are defined here. This is responsible for making calls to Node layer api based on the action.
  */
-import * as actions from '../constants/actions';
+
 import RecordService from '../services/recordService';
 import Logger from '../utils/logger';
 import LogLevel from '../utils/logLevels';
@@ -10,12 +10,11 @@ import Locale from '../locales/locales';
 import _ from 'lodash';
 import {NotificationManager} from 'react-notifications';
 import {NOTIFICATION_MESSAGE_DISMISS_TIME, NOTIFICATION_MESSAGE_FAIL_DISMISS_TIME} from '../../../reuse/client/src/scripts/notificationManager';
-import * as CompConsts from '../constants/componentConstants';
+import {NEW_TABLE_IDS_KEY} from '../constants/localStorage';
 import * as query from '../constants/query';
-import * as UrlConsts from "../constants/urlConstants";
 import * as SchemaConstants from "../constants/schema";
 import * as types from '../actions/types';
-import RecordModel from '../models/recordModel';
+
 
 let logger = new Logger();
 
@@ -290,6 +289,19 @@ export const createRecord = (appId, tblId, params = {}) => {
                 let recordService = new RecordService();
                 recordService.createRecord(appId, tblId, record).then(
                     response => {
+
+                        // when a record has been added, stop showing the new table UI
+                        // since the records array may be empty due to loading, empty filtering etc...
+                        if (window.sessionStorage) {
+                            let newTables = window.sessionStorage.getItem(NEW_TABLE_IDS_KEY);
+                            let tableIds = newTables ? newTables.split(",") : [];
+
+                            if (tableIds.indexOf(tblId) !== -1) {
+                                _.pull(tableIds, tblId);
+                                window.sessionStorage.setItem(NEW_TABLE_IDS_KEY, tableIds.join(","));
+                            }
+                        }
+
                         logger.debug('RecordService createRecord success');
                         let resJson = _.has(response, 'data.body') ? JSON.parse(response.data.body) : {};
 
