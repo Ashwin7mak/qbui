@@ -196,7 +196,8 @@ export const RecordRoute = React.createClass({
         this.navigateToRecord(record.previousRecordId, reportData);
         if (this.props.isDrawerContext) {
             // replace last drawer record
-            const newLink = this.props.location.pathname.replace(/record_.*?\/?$/, `record_${record.previousRecordId}`);
+            // TODO: query and hash
+            const newLink = this.props.location.pathname.replace(/(.*record_).*?$/, `$1${record.previousRecordId}`);
             this.props.history.push(newLink);
         } else {
             //the url shall always be using the app/table/rec id from reportsdata, and not from any embedded report
@@ -227,7 +228,8 @@ export const RecordRoute = React.createClass({
         this.navigateToRecord(record.nextRecordId, reportData);
         if (this.props.isDrawerContext) {
             // replace last drawer record
-            const newLink = this.props.location.pathname.replace(/record_.*?\/?$/, `record_${record.nextRecordId}`);
+            // TODO: query and hash
+            const newLink = this.props.location.pathname.replace(/(.*record_).*?$/, `$1${record.nextRecordId}#342`);
             this.props.history.push(newLink);
         } else {
             //the url shall always be using the app/table/rec id from reportsdata, and not from any embedded report

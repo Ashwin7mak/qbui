@@ -9,19 +9,18 @@
     z-index: 100;
 
     &.visible {
-        //display: inline;
         visibility: visible;
     }
 
     &.rootDrawer {
-        background: rgba(0, 0, 0, 0.1);
+        background: rgba($color-black-800, 0.1);
         
         > .slidey-righty {
             width: calc(100% - 40px);
             right: 0;
 
             > .drawer {
-                box-shadow: -10px 0px 20px #8f9395;
+                box-shadow: -10px 0px 20px $color-black-500;
             }
         }
     }
@@ -54,7 +53,7 @@
     opacity: 0.1;
     transform: translateX(100%);
     transition: all 750ms ease-in-out;
-    box-shadow: -10px 0px 20px #8f9395;
+    box-shadow: -10px 0px 20px $color-black-500;
 }
 
 .slidey-righty-enter.slidey-righty-enter-active {
@@ -65,7 +64,7 @@
 .slidey-righty-leave {
     opacity: 1;
     transition: all 750ms ease-in-out;
-    box-shadow: -10px 0px 20px #8f9395;
+    box-shadow: -10px 0px 20px $color-black-500;
 }
 
 .slidey-righty-leave.slidey-righty-leave-active {

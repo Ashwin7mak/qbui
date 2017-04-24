@@ -25,5 +25,9 @@ class Drawer extends React.Component {
         );
     }
 }
+Drawer.propTypes = {
+    onMount: PropTypes.func,
+    onUnmount: PropTypes.func
+};
 
 export default Drawer;
