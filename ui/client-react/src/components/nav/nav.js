@@ -487,7 +487,7 @@ export const Nav = React.createClass({
                                         selectedTable: this.getSelectedTable(reportsData.tblId),
                                         scrollingReport: this.state.nav.scrollingReport,
                                         flux: flux,
-                                        isFieldSelectMenuOpen: this.props.shell.fieldsSelectMenu ? !this.props.shell.fieldsSelectMenu.fieldsListCollapsed : false
+                                        fieldSelectMenu: this.props.shell.fieldsSelectMenu
                                         };
                                     return RouteWithSubRoutes(route, i, routeProps);
                                     }

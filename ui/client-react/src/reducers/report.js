@@ -4,7 +4,6 @@ import {NEW_RECORD_VALUE} from '../constants/urlConstants';
 import _ from 'lodash';
 import FacetSelections from '../components/facet/facetSelections';
 import ReportModelHelper from '../models/reportModelHelper';
-import ReportColumnTransformer from '../../src/components/dataTable/reportGrid/reportColumnTransformer';
 
 /**
  * Manage array of report states
@@ -93,12 +92,12 @@ const report = (state = [], action) => {
         };
         // find the index of the column where 'add a column' was clicked
         let clickedColumn = columns.filter(column => {
-            return column.id === params.clickedId;
+            return column.id === params.clickedId || column.id === params.fieldSelectMenu.clickedId;
         })[0];
         let clickedColumnIndex = clickedColumn.order;
         // add before or after the clicked column depending on selection
         let insertionIndex;
-        if (params.addBefore) {
+        if (params.addBefore || params.fieldSelectMenu.addBefore) {
             insertionIndex = clickedColumnIndex;
         } else {
             insertionIndex = clickedColumnIndex + 1;
@@ -339,7 +338,12 @@ const report = (state = [], action) => {
     case types.OPEN_FIELD_SELECTOR: {
         let currentReport = getReportFromState(action.id);
         if (currentReport) {
-            addPlaceholder(currentReport.data.columns);
+            let allVisible = currentReport.data.columns.every(column => {
+                return !column.isHidden
+            });
+            if (!allVisible) {
+                addPlaceholder(currentReport.data.columns);
+            }
             disableHide(currentReport.data.columns);
             return newState(currentReport);
         }
@@ -420,6 +424,11 @@ const report = (state = [], action) => {
                     column.isHidden = true;
                 }
             });
+            if (!action.content.fieldSelectMenu.fieldsListCollapsed) {
+                // add the placeholder column in if it is not already there
+                console.log("here");
+                addPlaceholder(currentReport.data.columns);
+            }
             return newState(currentReport);
         }
         return state;

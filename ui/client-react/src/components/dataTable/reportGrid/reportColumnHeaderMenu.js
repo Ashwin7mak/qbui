@@ -220,7 +220,7 @@ export class ReportColumnHeaderMenu extends Component {
 
         let params = {
             columnId: this.props.fieldDef.id,
-            isFieldSelectMenuOpen: this.props.isFieldSelectMenuOpen
+            fieldSelectMenu: this.props.fieldSelectMenu
         };
 
         this.props.hideColumn(CONTEXT.REPORT.NAV, this.props.appId, this.props.tblId, this.props.rptId, params);
@@ -297,7 +297,7 @@ ReportColumnHeaderMenu.propTypes = {
     fieldDef: PropTypes.object,
     sortFids: PropTypes.array,
     isOnlyOneColumnVisible: PropTypes.bool,
-    isFieldSelectMenuOpen: PropTypes.bool
+    fieldSelectMenu: PropTypes.object
 };
 
 const mapDispatchToProps = (dispatch) => {
