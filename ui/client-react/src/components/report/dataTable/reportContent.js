@@ -69,8 +69,8 @@ export const ReportContent = React.createClass({
             recId = row[this.props.primaryKeyName].value;
         }
 
-        if (this.props.renderDrawerContainer) {
-            this.props.renderDrawerContainer(tblId, recId, this.props.uniqueId);
+        if (this.props.handleDrillIntoChild) {
+            this.props.handleDrillIntoChild(tblId, recId, this.props.uniqueId);
         } else {
             this.openRow(recId);
             //create the link we want to send the user to and then send them on their way

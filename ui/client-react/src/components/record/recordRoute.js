@@ -27,6 +27,7 @@ import {loadForm, editNewRecord} from '../../actions/formActions';
 import {openRecord} from '../../actions/recordActions';
 import {clearSearchInput} from '../../actions/searchActions';
 import {APP_ROUTE, BUILDER_ROUTE, EDIT_RECORD_KEY} from '../../constants/urlConstants';
+import {getEmbeddedReportByContext} from '../../reducers/embeddedReports';
 import {CONTEXT} from '../../actions/context';
 
 import './record.scss';
@@ -68,13 +69,10 @@ export const RecordRoute = React.createClass({
         let {appId, tblId, recordId, rptId} = this.props.match.params;
         appId = appId || this.props.selectedAppId;
 
-        // TODO: currently this.props.match.rptId is the embeddedReport's unique ID, perhas use a different matcher
-        // for rptId and uniqueId. We can then simplify some of the following smelly code.
-        let embeddedReport;
-        if (rptId.includes(CONTEXT.REPORT.EMBEDDED) || rptId.includes(CONTEXT.FORM.DRAWER)) {
-            const embeddedReportId = rptId;
-            // TODO: move to reducers/embeddedReport
-            embeddedReport = _.find(this.props.embeddedReports, {'id' : embeddedReportId});
+        // TODO: currently this.props.match.rptId is the embeddedReport's unique ID, perhaps use a different matcher
+        // for rptId and uniqueId(embeddedReportId). We can then simplify some of the following smelly code.
+        let embeddedReport = this.getReportDataFromProps();
+        if (embeddedReport) {
             rptId = embeddedReport.rptId;
         }
 
@@ -391,21 +389,14 @@ export const RecordRoute = React.createClass({
     },
 
     /**
-     * Render drawer container
+     * Render drawer container. Always render a DrawerContainer even when no drawers exist.
      */
     getDrawerContainer() {
-        const closeAll = this.props.closeAll || this.closeDrawer;
-        //{/*isDrawerContext={!this.props.isDrawerContext}*/}
-        //                hasDrawer={!!this.props.match.params}
-        //TODO: make a hasDrawers() function
-
         return (
             <DrawerContainer
                 {...this.props}
                 rootDrawer={!this.props.isDrawerContext}
-
                 closeDrawer={this.closeDrawer}
-                closeAll={closeAll}
                 >
             </DrawerContainer>);
     },
@@ -442,8 +433,7 @@ export const RecordRoute = React.createClass({
             let embeddedReport;
             if (rptId.includes(CONTEXT.REPORT.EMBEDDED) || rptId.includes(CONTEXT.FORM.DRAWER)) {
                 const embeddedReportId = rptId;
-                // TODO: move to reducers/embeddedReport
-                embeddedReport = _.find(this.props.embeddedReports, {'id' : embeddedReportId});
+                embeddedReport = getEmbeddedReportByContext(this.props.embeddedReports, embeddedReportId);
                 rptId = embeddedReport.rptId;
             }
             return  embeddedReport;
@@ -476,15 +466,14 @@ export const RecordRoute = React.createClass({
     },
 
     /***
-     * method rendering the drawer conatiner
+     * Push a new url to drill down one more level. Should be called when we want to open a drawer.
      * @param tblId
      * @param recId
      * @param embeddedReportsUniqueId
      */
     //shold be removed as a param and instead be stored in react router state
-    renderDrawerContainer(/*appId,*/ tblId, recId, embeddedReportsUniqueId) {
-        // TODO: move to reducers/embeddedReport
-        let embeddedReport = _.find(this.props.embeddedReports, {'id' : embeddedReportsUniqueId});
+    handleDrillIntoChild(tblId, recId, embeddedReportsUniqueId) {
+        let embeddedReport = getEmbeddedReportByContext(this.props.embeddedReports, embeddedReportsUniqueId);
 
         //todo : handle query params in the url
         const existingPath = this.props.history.location.pathname;
@@ -494,11 +483,6 @@ export const RecordRoute = React.createClass({
         if (this.props.history) {
             this.props.history.push(link);
         }
-    },
-
-    //TODO: remove
-    fakeRenderDrawer() {
-        this.setState({hasDrawer: true});
     },
 
     /**
@@ -552,7 +536,7 @@ export const RecordRoute = React.createClass({
                                     errorStatus={formLoadingErrorStatus ? viewData.errorStatus : null}
                                     formData={viewData ? viewData.formData : null}
                                     appUsers={this.props.appUsers}
-                                    renderDrawerContainer={this.renderDrawerContainer}/>
+                                    handleDrillIntoChild={this.handleDrillIntoChild}/>
                         </Loader> : null }
                     {formInternalError && <pre><I18nMessage message="form.error.500"/></pre>}
                     {formAccessRightError && <pre><I18nMessage message="form.error.403"/></pre>}

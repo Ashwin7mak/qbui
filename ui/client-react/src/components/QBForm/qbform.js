@@ -426,7 +426,7 @@ export const QBForm = React.createClass({
                     detailKeyValue={detailKeyValue}
                     type={ReferenceElement.type}
                     appUsers={this.props.appUsers}
-                    renderDrawerContainer={this.props.renderDrawerContainer}
+                    handleDrillIntoChild={this.props.handleDrillIntoChild}
                 />
             </div>
         );
