@@ -110,6 +110,8 @@
 
             /**
              * Function to fetch schema for all fields that belong to a table
+             * Helper method that internally uses fetchFields without expecting
+             * the caller to create the url for the table.
              * @param req
              * @param tableId
              * @returns {Promise}
@@ -122,14 +124,13 @@
 
                     let getFieldReq = _.clone(req);
                     getFieldReq.url = fieldsRootUrl;
-                    getFieldReq.headers[constants.CONTENT_LENGTH] = getFieldReq.rawBody.length;
                     this.fetchFields(getFieldReq).then(
                         (fieldsResponse) => {
                             let fields = JSON.parse(fieldsResponse.body);
                             resolve(fields);
                         },
                         (error) => {
-                            log.error({req: req}, "tablesApi.getFields(): Error getting field schema from core");
+                            log.error({req: req}, "tablesApi.getFieldsForTable(): Error getting field schema from core");
                             reject(error);
                         }
                     );
