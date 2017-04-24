@@ -126,8 +126,9 @@ class ListOfElements extends Component {
     };
 
     componentDidUpdate = () => {
-        if (this.props.toolPaletteFocus &&
+        if (this.props.hasKeyBoardFocus &&
             document.activeElement.classList[0] !== "checkbox" &&
+            document.activeElement.tagName !== "TEXTAREA" &&
             document.activeElement.tagName !== "INPUT") {
             this.listOfElementsContainer.focus();
         }
@@ -178,6 +179,11 @@ ListOfElements.propTypes = {
      * For Keyboard Nav: tabIndex for listOfElements
      * */
     tabIndex: PropTypes.string,
+
+    /**
+     * For Keyboard Nav: if true it will set focus on listOfElements
+     * */
+    hasKeyBoardFocus: PropTypes.bool,
 
     /**
      * For Keyboard Nav: tabIndex for the children elements inside of listOfElements

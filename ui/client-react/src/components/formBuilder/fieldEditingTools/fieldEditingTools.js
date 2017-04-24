@@ -149,8 +149,13 @@ export class FieldEditingTools extends Component {
     updateScrollLocation() {
         if (this.props.selectedFields && this.props.selectedFields[0]) {
             let selectedFormElement = this.getSelectedFormElementContainer();
-            let selectedElementTop = selectedFormElement.top;
-            let selectedElementBottom = selectedFormElement.bottom;
+            let selectedElementTop;
+            let selectedElementBottom;
+
+            if (selectedFormElement) {
+                selectedElementTop = selectedFormElement.top;
+                selectedElementBottom = selectedFormElement.bottom;
+            }
 
             if (selectedElementBottom > window.innerHeight - 40) {
                 this.scrollElementDownIntoView();
@@ -211,7 +216,7 @@ export class FieldEditingTools extends Component {
 }
 
 FieldEditingTools.propTypes = {
-    formBuilderContainerContentElement: PropTypes.func,
+    formBuilderContainerContentElement: PropTypes.object,
     location: PropTypes.object,
     onClickDelete: PropTypes.func,
     onClickFieldPreferences: PropTypes.func,

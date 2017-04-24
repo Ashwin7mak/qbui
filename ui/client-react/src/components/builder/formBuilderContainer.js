@@ -256,7 +256,7 @@ export const FormBuilderContainer = React.createClass({
                                    shortcutBindings={[
                                        {key: 'shift+up', callback: () => {this.keyboardMoveFieldUp(); return false;}},
                                        {key: 'shift+down', callback: () => {this.keyboardMoveFieldDown(); return false;}},
-                                       {key: 'backspace', callback: () => {this.removeField(); return false;}},
+                                       {key: 'shift+backspace', callback: () => {this.removeField(); return false;}},
                                    ]}
                                    shortcutBindingsPreventDefault={[
                                        {key: 'esc', callback: () => {this.escapeCurrentContext(); return false;}},

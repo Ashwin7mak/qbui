@@ -76,7 +76,7 @@ ReDefaultTopNavGlobalActions.propTypes = {
 
     /**
      * Optionally pass in a different tabIndex to start with */
-    startTabIndex: PropTypes.number,
+    startTabIndex: PropTypes.string,
 
     /**
      * Optionally pass in additional actions */
