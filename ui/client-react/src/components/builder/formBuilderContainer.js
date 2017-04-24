@@ -235,6 +235,7 @@ export const FormBuilderContainer = React.createClass({
     componentDidUpdate() {
         if (this.props.formFocus &&
             document.activeElement.classList[0] !== "checkbox" &&
+            document.activeElement.tagName !== "TEXTAREA" &&
             document.activeElement.tagName !== "INPUT") {
             formBuilderContainerContent.focus();
         }
