@@ -22,7 +22,8 @@ let BuilderDropDownAction = React.createClass({
         navigateToBuilder: React.PropTypes.func.isRequired,
         position: React.PropTypes.string.isRequired,
         selectedApp: React.PropTypes.object,
-        selectedTable: React.PropTypes.object
+        selectedTable: React.PropTypes.object,
+        navigateToBuilderReport: React.PropTypes.func
     },
 
     getTableSettingsLink() {
@@ -58,7 +59,7 @@ let BuilderDropDownAction = React.createClass({
                     {isBuilderView ?
                         <div className="configSet currentContext">
                             <li className="heading"><a><span><I18nMessage message={"settings.reportsHeader"}/></span></a></li>
-                            <li><a className="modifyForm" onClick={this.props.navigateToBuilder}>
+                            <li><a className="modifyForm" onClick={this.props.navigateToBuilderReport}>
                                 <I18nMessage message={"settings.configureReportBuilder"}/></a></li>
                         </div> : null
                     }

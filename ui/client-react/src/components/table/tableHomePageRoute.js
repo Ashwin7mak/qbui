@@ -154,6 +154,7 @@ export const TableHomePageRoute = React.createClass({
                 rptId={this.props.reportData ? this.props.reportData.rptId : null}
                 nameForRecords={this.nameForRecords}
                 pendEdits={this.props.pendEdits}
+                inBuilderMode={this.props.inBuilderMode}
                 loadDynamicReport={this.loadDynamicReport}/>;
         }
 

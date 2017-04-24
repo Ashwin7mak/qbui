@@ -100,6 +100,12 @@ export const Nav = React.createClass({
         this.props.history.push(link);
     },
 
+    navigateToBuilderReport() {
+        this.props.enterBuilderMode();
+        console.log("Here");
+
+    },
+
     getTopGlobalActions() {
         const actions = [];
         let recordId;
@@ -127,6 +133,7 @@ export const Nav = React.createClass({
                                 position={"top"}
                                 icon="settings"
                                 navigateToBuilder={this.navigateToBuilder}
+                                navigateToBuilderReport={this.navigateToBuilderReport}
                                 startTabIndex={4}/> : null}
                 </GlobalActions>);
     },
@@ -417,7 +424,8 @@ export const Nav = React.createClass({
                                     selectedApp: this.getSelectedApp(),
                                     selectedTable: this.getSelectedTable(reportsData.tblId),
                                     scrollingReport: this.state.nav.scrollingReport,
-                                    flux: flux
+                                    flux: flux,
+                                    inBuilderMode: this.props.shell.inBuilderMode
                                 };
                                 return RouteWithSubRoutes(route, i, routeProps);
                             }
@@ -513,7 +521,9 @@ const mapDispatchToProps = (dispatch) => {
 
         loadReports: (context, appId, tblId) => dispatch(ReportActions.loadReports(context, appId, tblId)),
 
-        updateFormRedirectRoute: (route) => dispatch(updateFormRedirectRoute(route))
+        updateFormRedirectRoute: (route) => dispatch(updateFormRedirectRoute(route)),
+
+        enterBuilderMode: () => dispatch(ShellActions.enterBuilderMode())
     };
 };
 

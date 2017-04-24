@@ -98,3 +98,9 @@ export const changeLocale = (locale) => {
         locale
     };
 };
+
+export const enterBuilderMode = () => {
+    return {
+        type: types.ENTER_BUILDER_MODE
+    };
+};
