@@ -174,7 +174,7 @@
         {route: publicControllerEndpoints.PUBLIC_ROLES, regEx: /^\/apps\/.*\/roles(.*)?$/i, context: baseUrl.CORE},
         {route: publicControllerEndpoints.PUBLIC_WORKFLOW_FLOW_MGR, regEx: /^\/apps\/.*\/workflow\/flows(.*)?$/i, context: baseUrl.WORKFLOW.FLOW_MANAGER},
         {route: publicControllerEndpoints.PUBLIC_APPS, regEx: /^\/apps(.*)?$/i, context: baseUrl.CORE},                  // conflict with EE
-        {route: publicControllerEndpoints.PUBLIC_HEALTH, regEx: /^\/health(.*)?$/i, context: baseUrl.CORE},                // conflict with EE, Workflow
+        {route: publicControllerEndpoints.PUBLIC_HEALTH, regEx: /^\/health$/i, context: baseUrl.CORE},                // conflict with EE, Workflow
         {route: publicControllerEndpoints.PUBLIC_OPERATIONS, regEx: /^\/operations(.*)?$/i, context: baseUrl.CORE},        // conflict with EE
         {route: publicControllerEndpoints.PUBLIC_REALMS, regEx: /^\/realms(.*)?$/i, context: baseUrl.CORE},
         {route: publicControllerEndpoints.PUBLIC_TICKET, regEx: /^\/ticket(.*)?$/i, context: baseUrl.CORE},

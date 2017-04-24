@@ -64,9 +64,8 @@
 
         {route: routes.REQ_USER, methods: [constants.GET]},
 
-        {route: routes.HEALTH_CHECK, methods: [constants.GET]},
-
-        {route: routes.HEALTH_CHECK, methods: [constants.GET]},
+        {route: routes.QBUI_HEALTH_CHECK, methods: [constants.GET]},
+        {route: routes.NODE_HEALTH_CHECK, methods: [constants.GET]},
 
         {route: routes.GOVERNANCE_ACCOUNT_USERS, methods: [constants.GET]},
         {route: routes.GOVERNANCE_CONTEXT, methods: [constants.GET]},
@@ -75,16 +74,14 @@
         {route: routes.SWAGGER_EE, methods: [constants.GET]},
         {route: routes.SWAGGER_WE, methods: [constants.GET]},
 
-        // PUT requests are not supported on core
-        {route: routes.CORE_ENGINE, methods: [constants.DELETE, constants.GET, constants.PATCH, constants.POST]},
-
-        //  all http verbs are supported on EE and WE
+        //  all http verbs are supported with wildcard routes
+        {route: routes.CORE_ENGINE, methods: [constants.DELETE, constants.GET, constants.PATCH, constants.POST, constants.PUT]},
         {route: routes.EXPERIENCE_ENGINE, methods: [constants.DELETE, constants.GET, constants.PATCH, constants.POST, constants.PUT]},
         {route: routes.WORKFLOW_ENGINE, methods: [constants.DELETE, constants.GET, constants.PATCH, constants.POST, constants.PUT]},
         {route: routes.AUTOMATION_ENGINE, methods: [constants.DELETE, constants.GET, constants.PATCH, constants.POST, constants.PUT]}
     ];
 
-    //  enable the public short-hand endpoints
+    //  enable the public short-hand endpoints..all http verbs are supported
     publicRoutes.forEach(publicRoute => {
         routeList[routeGroups.LH_V1].push({route: publicRoute.route, methods: [constants.DELETE, constants.GET, constants.PATCH, constants.POST, constants.PUT]});
     });
