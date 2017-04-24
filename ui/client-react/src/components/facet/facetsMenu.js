@@ -252,9 +252,11 @@ const FacetsMenu = React.createClass({
                      ref="facetsMenuButton"
                      >
                     <span className="facetButtons" onClick={() => this.showMenu(!this.state.show)}>
+                        <QBToolTip location="bottom" tipId="filterButton" i18nMessageKey="report.facets.filter">
                         <QBicon className="filterButton" icon={(hasSelections) ?
                                     "filter-status" : "filter-tool"} />
                         <QBicon className="filterButtonCaret" icon="caret-filled-down" />
+                            </QBToolTip>
                     </span>
                 </div>
 

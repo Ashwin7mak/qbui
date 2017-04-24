@@ -259,7 +259,7 @@ export default {
                 noCheck : "Nein",
                 yesCheck : "Ja",
                 clearFacet: "Filter {facet} zurücksetzen",
-                clearFacetSelection: "Klicken Sie auf diese Filter zu löschen"
+                clearFacetSelection: "Klicken Sie auf diese Filter zu löschen",
             },
             filteredRecordCount : "{filteredRecordCount} von {recordCount} aufzeichnungen",
             filteredSingleRecordCount : "{filteredRecordCount} von {recordCount} aufzeichnen",
@@ -278,6 +278,7 @@ export default {
             previousPageLoadingOnSwipe: "Erste vorherige...",
             nextPageLoadingOnSwipe: "immer Mehr...",
             sortAndGroup : {
+                sortAndGroupIcon: "Sortieren & Gruppe",
                 addField: "Feld hinzufügen",
                 by: "nach",
                 changeGroupOrder: "Gruppe wechseln bestellen",

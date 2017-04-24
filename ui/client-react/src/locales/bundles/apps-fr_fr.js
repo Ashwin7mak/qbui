@@ -258,7 +258,7 @@ export default {
                 noCheck : "Non",
                 yesCheck : "Oui",
                 clearFacet: "Enlever le filtre {facet}",
-                clearFacetSelection: "Cliquez pour désactiver ce filtre"
+                clearFacetSelection: "Cliquez pour désactiver ce filtre",
             },
             filteredRecordCount : "{filteredRecordCount} des {recordCount} enregistrements",
             filteredSingleRecordCount : "{filteredRecordCount} de {recordCount} record",
@@ -277,6 +277,7 @@ export default {
             nextPageLoadingOnSwipe: "Obtenir plus...",
             searchPlaceHolder:  "Rechercher ces",
             sortAndGroup : {
+                sortAndGroupIcon: "Trier & Groupe",
                 addField: "Ajouter le champ",
                 by: "par",
                 changeGroupOrder: "Gruppe wechseln bestellen",
