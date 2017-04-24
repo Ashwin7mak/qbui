@@ -533,9 +533,10 @@ export default {
             FILE_ATTACHMENT: "Fichier"
         },
         fieldPropertyLabels: {
-            title: "propriétés",
+            title: "Propriétés du champ",
             name: "prénom",
-            required: "Doit être rempli"
+            required: "Doit être rempli",
+            multiChoice: "Les choix"
         },
         builder: {
             formBuilder: {
@@ -646,7 +647,9 @@ export default {
 
             tableReadyTitle: "Votre table est prête!",
             tableReadyText1: "Chaque élément d'information que vous souhaitez collecter est un champ. Nous vous avons commencé avec un couple.",
-            tableReadyText2: "Concevez ce formulaire pour collecter des informations. Faites glisser et déposez pour ajouter des champs."
+            tableReadyText2: "Concevez ce formulaire pour collecter des informations. Faites glisser et déposez pour ajouter des champs.",
+
+            tableReadyDialogOK: "D'accord"
         },
         iconChooser: {
             searchPlaceholder: "Rechercher des icônes..."
