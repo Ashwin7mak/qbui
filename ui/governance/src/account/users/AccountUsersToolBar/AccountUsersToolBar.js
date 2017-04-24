@@ -16,7 +16,7 @@ class AccountUsersToolBar extends React.Component {
     render() {
         return (
             <div>
-                <AccountUsersNavigation/>
+                <AccountUsersNavigation users={this.props.users}/>
             </div>
         );
     }

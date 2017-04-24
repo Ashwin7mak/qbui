@@ -13,12 +13,20 @@ class AccountUsersNavigation extends React.Component {
         super(...args);
     }
 
+    isNextDisabled() {
+        return false;
+    }
+
+    isPreviousDisabled() {
+        return false;
+    }
+
     render() {
         return (
             <Pagination startRecord={1}
-            endRecord={3}
-            isPreviousDisabled={true}
-            isNextDisabled={false}
+            endRecord={this.props.users.length}
+            isPreviousDisabled={this.isPreviousDisabled()}
+            isNextDisabled={this.isNextDisabled()}
             isHidden={false} />
         );
     }

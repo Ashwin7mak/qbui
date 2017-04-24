@@ -63,6 +63,10 @@ export const sortUsers = (users, sortFids) => {
     return _.orderBy(users, sortFnArray, orderArray);
 };
 
+export const paginateUsers = (users, paginateDirection) => {
+
+};
+
 export const doUpdate = (gridId, gridState) => {
     return (dispatch, getState) => {
         let sortFids = gridState.sortFids || [];
