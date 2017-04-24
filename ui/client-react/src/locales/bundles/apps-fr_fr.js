@@ -259,6 +259,7 @@ export default {
                 yesCheck : "Oui",
                 clearFacet: "Enlever le filtre {facet}",
                 clearFacetSelection: "Cliquez pour désactiver ce filtre",
+                filter: "Filtre"
             },
             filteredRecordCount : "{filteredRecordCount} des {recordCount} enregistrements",
             filteredSingleRecordCount : "{filteredRecordCount} de {recordCount} record",

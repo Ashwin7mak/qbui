@@ -260,6 +260,7 @@ export default {
                 yesCheck : "Ja",
                 clearFacet: "Filter {facet} zurücksetzen",
                 clearFacetSelection: "Klicken Sie auf diese Filter zu löschen",
+                filter: "Filter"
             },
             filteredRecordCount : "{filteredRecordCount} von {recordCount} aufzeichnungen",
             filteredSingleRecordCount : "{filteredRecordCount} von {recordCount} aufzeichnen",

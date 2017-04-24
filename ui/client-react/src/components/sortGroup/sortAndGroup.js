@@ -487,7 +487,8 @@ export const SortAndGroup = React.createClass({
             >
                 {/* the sort/group icon button */}
                 <div className={"sortAndGroupButton " + (this.state.show ? "shown " : "") }
-                     ref="SortAndGroupButton">
+                     ref="SortAndGroupButton"
+                     >
                     <span className="sortButtonSpan" tabIndex="0"  onClick={this.toggleShow}>
                         <QBToolTip location="bottom" tipId="sortButton" i18nMessageKey="report.sortAndGroup.sortAndGroupIcon">
                         <QBicon className="sortButton" icon="sort-az" />
