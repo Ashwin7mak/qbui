@@ -11,10 +11,6 @@ import * as SpinnerConfigurations from "../../constants/spinnerConfigurations";
 import LogoImg from '../../../../reuse/client/src/assets/images/QB3-logo.svg';
 
 let LeftNav = React.createClass({
-    componentWillUnmount() {
-        console.log('leftNav will unmount');
-    },
-
     propTypes: {
         expanded:React.PropTypes.bool,
         visible:React.PropTypes.bool,

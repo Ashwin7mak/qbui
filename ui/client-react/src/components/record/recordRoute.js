@@ -86,16 +86,11 @@ export const RecordRoute = React.createClass({
         }
     },
     componentDidMount() {
-        console.log('mounting: ' + (this.props.uniqueId || 'root recordRoute'));
         let flux = this.getFlux();
         flux.actions.hideTopNav();
         flux.actions.setTopTitle();
 
         this.loadRecordFromParams();
-    },
-
-    componentWillUnmount() {
-        console.log('unmounting: ' + (this.props.uniqueId || 'root recordRoute'));
     },
 
     componentDidUpdate(prev) {
