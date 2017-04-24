@@ -351,24 +351,24 @@ describe('Validate tablesApi', function() {
     describe('validate createTableComponents function', function() {
         let createTableStub = null;
         let createTablePropsStub = null;
-        let createFieldStub = null;
         let createReportStub = null;
         let createFormStub = null;
+        let getFieldsStub = null;
         let deleteTableSpy = null;
         let deleteTablePropsSpy = null;
         let createTableResp = {'body':'123'};
         let createTablePropsResp = {body: '{"tableNoun": "test"}'};
-        let createFieldResp = {'body': '{"id": "6"}'};
         let createReportResp = {'body':'{"id":"1"}'};
         let createFormResp = {'body':'{"formId":"1"}'};
         let errorPromise = Promise.reject({error: 'some error'});
+        let getFieldsResp = [{"builtIn":false, "id":"6"}] ;
 
         beforeEach(function() {
             createTableStub = sinon.stub(tablesApi, 'createTable');
             createTablePropsStub = sinon.stub(tablesApi, 'createTableProperties');
-            createFieldStub = sinon.stub(fieldsApi, 'createField');
             createReportStub = sinon.stub(reportsApi, 'createReport');
             createFormStub = sinon.stub(formsApi, 'createForm');
+            getFieldsStub = sinon.stub(tablesApi, 'getFields');
             tablesApi.setFieldsApi(fieldsApi);
             tablesApi.setFormsApi(formsApi);
             tablesApi.setReportsApi(reportsApi);
@@ -377,8 +377,7 @@ describe('Validate tablesApi', function() {
             req.method = 'post';
             createTableStub.returns(Promise.resolve(createTableResp));
             createTablePropsStub.returns(Promise.resolve(createTablePropsResp));
-            createFieldStub.returns(Promise.resolve(createFieldResp));
-            createReportStub.returns(Promise.resolve(createReportResp));
+            getFieldsStub.returns(Promise.resolve(getFieldsResp));
             createFormStub.returns(Promise.resolve(createFormResp));
             deleteTableSpy = sinon.spy(tablesApi, 'deleteTable');
             deleteTablePropsSpy = sinon.spy(tablesApi, 'deleteTableProperties');
@@ -389,9 +388,9 @@ describe('Validate tablesApi', function() {
             req.rawBody = {};
             createTableStub.restore();
             createTablePropsStub.restore();
-            createFieldStub.restore();
             createReportStub.restore();
             createFormStub.restore();
+            getFieldsStub.restore();
             deleteTableSpy.restore();
             deleteTablePropsSpy.restore();
         });
@@ -457,8 +456,8 @@ describe('Validate tablesApi', function() {
                 done(new Error('createTableComponents: exception processing success test: ' + JSON.stringify(errorMsg)));
             });
         });
-        it('deletes table & props if field creation fails', function(done) {
-            createFieldStub.returns(errorPromise);
+        it('deletes table if call to get fields fail', function(done) {
+            getFieldsStub.returns(errorPromise);
             let promise = tablesApi.createTableComponents(req);
 
             promise.then(
@@ -467,7 +466,6 @@ describe('Validate tablesApi', function() {
                 },
                 function(error) {
                     assert(deleteTableSpy.called);
-                    assert(deleteTablePropsSpy.called);
                     done();
                 }
             ).catch(function(errorMsg) {
@@ -508,9 +506,10 @@ describe('Validate tablesApi', function() {
                 done(new Error('createTableComponents: exception processing success test: ' + JSON.stringify(errorMsg)));
             });
         });
-        it('create field is not called if table creation fails', function(done) {
-            createFieldStub.restore();
-            createFieldStub = sinon.spy(fieldsApi, 'createField');
+        it('get field is not called if table creation fails', function(done) {
+            getFieldsStub.restore();
+            getFieldsStub = sinon.stub(tablesApi, 'getFields');
+            getFieldsStub.returns(Promise.resolve(getFieldsResp));
             createTableStub.returns(errorPromise);
             let promise = tablesApi.createTableComponents(req);
 
@@ -519,7 +518,7 @@ describe('Validate tablesApi', function() {
                     done(new Error('Unexpected success if table creation failed'));
                 },
                 function(error) {
-                    assert.equal(createFieldStub.callCount, 0);
+                    assert.equal(getFieldsStub.callCount, 0);
                     done();
                 }
             ).catch(function(errorMsg) {
@@ -547,7 +546,7 @@ describe('Validate tablesApi', function() {
         it('create report is not called if field creation fails', function(done) {
             createReportStub.restore();
             createReportStub = sinon.spy(reportsApi, 'createReport');
-            createFieldStub.returns(errorPromise);
+            getFieldsStub.returns(errorPromise);
             let promise = tablesApi.createTableComponents(req);
 
             promise.then(
@@ -565,7 +564,7 @@ describe('Validate tablesApi', function() {
         it('create form is not called if field creation fails', function(done) {
             createFormStub.restore();
             createFormStub = sinon.spy(formsApi, 'createForm');
-            createFieldStub.returns(errorPromise);
+            getFieldsStub.returns(errorPromise);
             let promise = tablesApi.createTableComponents(req);
 
             promise.then(
@@ -790,4 +789,5 @@ describe('Validate tablesApi', function() {
             });
         });
     });
+
 });

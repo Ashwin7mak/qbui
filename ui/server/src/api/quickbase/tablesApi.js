@@ -239,51 +239,47 @@
                 });
             },
 
-            /**
-             * This api creates a table in core, initializes a tableproperties object in EE.
-             * Adds 2 fields to the table - one Text and one Date.
+           /**
+             * This api creates a table with 2 fields to the table - one Text and one Datein core,
+            *  initializes a tableproperties object in EE.
              * Then creates 2 reports a List All and List Changes report
              * And a form with the previously created fields.
              * @param req
              * @returns {Promise}
              */
             createTableComponents: function(req) {
-                return new Promise((resolve, reject) => {
-                    // this has input for both creating table and props
-                    // core fails if its passed in props that are not recognized for some reason
-                    // so we need to parse this here and send only what's recognized.
+                return new Promise((resolve, reject) =>{
+                // this has input for both creating table and props
+                // core fails if its passed in props that are not recognized for some reason
+                // so we need to parse this here and send only what's recognized.
                     let reqPayload = req.body;
                     if (!reqPayload.name || !reqPayload.tableNoun) {
                         reject("Required parameters missing");
                     }
                     let tableReq = _.clone(req);
-                    tableReq.rawBody = JSON.stringify({name: reqPayload.name});
+                    tableReq.rawBody = JSON.stringify({name: reqPayload.name, fields :  cannedNewTableElements.getCannedFields()});
                     tableReq.headers[constants.CONTENT_LENGTH] = tableReq.rawBody.length;
-                    let tableProperReq = _.clone(req);
-                    tableProperReq.rawBody = JSON.stringify(_.pick(reqPayload, ['tableNoun', 'description', 'tableIcon']));
-                    tableProperReq.headers[constants.CONTENT_LENGTH] = tableProperReq.rawBody.length;
                     this.createTable(tableReq).then(
                         (tableId) => {
-                            this.createTableProperties(tableProperReq, tableId).then(
-                                () => {
-                                    //create the components
-                                    let tablesRootUrl = routeHelper.getTablesRoute(req.url, tableId);
-                                    let fieldsToCreate = cannedNewTableElements.getCannedFields();
-
-                                    let promises = [];
-                                    fieldsToCreate.forEach((field) => {
-                                        let fieldReq = _.clone(req);
-                                        fieldReq.url = tablesRootUrl;
-                                        fieldReq.rawBody = JSON.stringify(field);
-                                        fieldReq.headers[constants.CONTENT_LENGTH] = fieldReq.rawBody.length;
-                                        promises.push(fieldsApi.createField(fieldReq));
+                            this.getFields(req, tableId).then(
+                                (fields) => {
+                                    let fieldIds = [];
+                                    fields.forEach((field) =>{
+                                        if (field.builtIn === false) {
+                                            fieldIds.push(field.id);
+                                        }
                                     });
-                                    Promise.all(promises).then(
-                                        (fieldsResponse) => {
-                                            let fieldIds = [];
-                                            fieldIds.push(fieldsResponse[0], fieldsResponse[1]);
-                                            promises = [];
+
+                                    let tableProperReq = _.clone(req);
+                                    tableProperReq.rawBody = JSON.stringify(_.pick(reqPayload, ['tableNoun', 'description', 'tableIcon']));
+                                    tableProperReq.headers[constants.CONTENT_LENGTH] = tableProperReq.rawBody.length;
+
+                                    this.createTableProperties(tableProperReq, tableId).then(
+                                        () => {
+                                            let promises = [];
                                             let reportsToCreate = cannedNewTableElements.getCannedReports(reqPayload.name);
+                                            let tablesRootUrl = routeHelper.getTablesRoute(req.url, tableId);
+
                                             reportsToCreate.forEach((report) => {
                                                 let reportReq = _.clone(req);
                                                 reportReq.url = tablesRootUrl;
@@ -313,16 +309,15 @@
                                             );
                                         },
                                         (error) => {
-                                            // dont go forward with creation of report/form
-                                            this.deleteTableProperties(req, tableId);
+                                            //delete the table if table props creation failed to clean up core.
+                                            // Dont wait for response because what can you really do if it fails?
                                             this.deleteTable(req, tableId);
                                             reject(error);
                                         }
                                     );
                                 },
                                 (error) => {
-                                    //delete the table if table props creation failed to clean up core.
-                                    // Dont wait for response because what can you really do if it fails?
+                                    //delete the table if we don't get the id's for newly created canned fields(non-builtin).
                                     this.deleteTable(req, tableId);
                                     reject(error);
                                 }
@@ -334,6 +329,35 @@
                     );
                 });
             },
+
+            /**
+             * Function to fetch schema for all fields that belong to a table
+             * @param req
+             * @param tableId
+             * @returns {Promise}
+             */
+            getFields:function(req, tableId) {
+                 //get fields
+                return new Promise((resolve, reject) =>{
+                    let tablesRootUrl = routeHelper.getTablesRoute(req.url, tableId);
+                    let fieldsRootUrl = routeHelper.getFieldsRoute(tablesRootUrl);
+
+                    let getFieldReq = _.clone(req);
+                    getFieldReq.url = fieldsRootUrl;
+                    getFieldReq.headers[constants.CONTENT_LENGTH] = getFieldReq.rawBody.length;
+                    fieldsApi.fetchFields(getFieldReq).then(
+                        (fieldsResponse) => {
+                            let fields = JSON.parse(fieldsResponse.body);
+                            resolve(fields);
+                        },
+                        (error) => {
+                            log.error({req: req}, "tablesApi.getFields(): Error getting field schema from core");
+                            reject(error);
+                        }
+                    );
+                });
+            },
+
 
             /**
              * The update Table call will send the whole object for TableProperties + name of the table if it has been updated.
