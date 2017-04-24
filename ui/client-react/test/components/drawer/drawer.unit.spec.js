@@ -17,15 +17,6 @@ describe('Drawer functions ', () => {
         spyOn(props, 'onUnmount');
     });
 
-    afterEach(() => {
-        if (props.onMount) {
-            props.onMount.calls.reset();
-        }
-        if (props.onUnmount) {
-            props.onUnmount.calls.reset();
-        }
-    });
-
     it('test render of drawer', () => {
         let drawerWrapper = shallow(<Drawer {...props}/>);
         let drawer = drawerWrapper.find('.drawer');

@@ -69,8 +69,7 @@ export const ReportContent = React.createClass({
             recId = row[this.props.primaryKeyName].value;
         }
 
-
-        if (this.props.openDrawer) {
+        if (this.props.renderDrawerContainer) {
             this.props.renderDrawerContainer(tblId, recId, this.props.uniqueId);
         } else {
             this.openRow(recId);
