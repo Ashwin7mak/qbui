@@ -3,7 +3,7 @@ import * as types from "../../app/actionTypes";
 import _ from 'lodash';
 import * as Formatters from './Grid/AccountUsersGridFormatters';
 import * as RealmUserAccountFlagConstants from "../../common/constants/RealmUserAccountFlagConstants.js";
-import * as StandardGridActions from './standardGridActions';
+import * as StandardGridActions from '../../common/grid/standardGridActions';
 
 /**
  * Action when there is successful user from the backend
