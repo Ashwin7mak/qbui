@@ -167,7 +167,7 @@ const routes = [
         component: ConnectedBuilderNav,
         routes: [
             {
-                path: `${BUILDER_ROUTE}/app/:appId/table/:tblId/form/:formId`,
+                path: `${BUILDER_ROUTE}/app/:appId/table/:tblId/form/:formId?`,
                 component: FormBuilderContainer
             }
         ]
