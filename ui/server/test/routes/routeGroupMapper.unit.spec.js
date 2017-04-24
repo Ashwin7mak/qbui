@@ -5,15 +5,13 @@
 
 'use strict';
 
+let groupMapper = require('../../src/routes/qbRouteGroupMapper');
+let routeGroups = require('../../src/routes/routeGroups');
+let assert = require('assert');
 
-//var config = require('../../config/environment');
-var groupMapper = require('../../src/routes/qbRouteGroupMapper');
-var routeGroups = require('../../src/routes/routeGroups');
-var assert = require('assert');
-
-var routeConstants = require('../../src/routes/routeConstants');
-var routes = routeConstants.routes;
-var publicRoutes = routeConstants.publicEndPoints;
+let routeConstants = require('../../src/routes/routeConstants');
+let routes = routeConstants.routes;
+let publicRoutes = routeConstants.publicEndPoints;
 
 /**
  * Unit tests for app generator
@@ -24,6 +22,7 @@ describe('Group Route Mapper Unit Test', function() {
     function routeIsEnabledForGroupProvider() {
         let testRoutes = [];
 
+        //  for each route, define the request methods supported
         testRoutes.push({message:'LH_V1: ' + routes.APPS, routeGroup:routeGroups.LH_V1, route:routes.APPS, DELETE:false, GET:true, POST:false, PUT:false, PATCH:false});
         testRoutes.push({message:'LH_V1: ' + routes.APP_USERS, routeGroup:routeGroups.LH_V1, route:routes.APP_USERS, DELETE:false, GET:true, POST:false, PUT:false, PATCH:false});
         testRoutes.push({message:'LH_V1: ' + routes.APP_ROLES, routeGroup:routeGroups.LH_V1, route:routes.APP_ROLES, DELETE:false, GET:true, POST:false, PUT:false, PATCH:false});
@@ -52,14 +51,14 @@ describe('Group Route Mapper Unit Test', function() {
         testRoutes.push({message:'LH_V1: ' + routes.GOVERNANCE_ACCOUNT_USERS, routeGroup:routeGroups.LH_V1, route:routes.GOVERNANCE_ACCOUNT_USERS, DELETE:false, GET:true, POST:false, PUT:false, PATCH:false});
         testRoutes.push({message:'LH_V1: ' + routes.GOVERNANCE_CONTEXT, routeGroup:routeGroups.LH_V1, route:routes.GOVERNANCE_CONTEXT, DELETE:false, GET:true, POST:false, PUT:false, PATCH:false});
 
+        testRoutes.push({message:'LH_V1: ' + routes.SWAGGER_CORE, routeGroup:routeGroups.LH_V1, route:routes.SWAGGER_CORE, DELETE:false, GET:true, POST:false, PUT:false, PATCH:false});
+        testRoutes.push({message:'LH_V1: ' + routes.SWAGGER_EE, routeGroup:routeGroups.LH_V1, route:routes.SWAGGER_EE, DELETE:false, GET:true, POST:false, PUT:false, PATCH:false});
+        testRoutes.push({message:'LH_V1: ' + routes.SWAGGER_WE, routeGroup:routeGroups.LH_V1, route:routes.SWAGGER_WE, DELETE:false, GET:true, POST:false, PUT:false, PATCH:false});
+
         testRoutes.push({message:'LH_V1: ' + routes.CORE_ENGINE, routeGroup:routeGroups.LH_V1, route:routes.CORE_ENGINE, DELETE:true, GET:true, POST:true, PUT:true, PATCH:true});
         testRoutes.push({message:'LH_V1: ' + routes.EXPERIENCE_ENGINE, routeGroup:routeGroups.LH_V1, route:routes.EXPERIENCE_ENGINE, DELETE:true, GET:true, POST:true, PUT:true, PATCH:true});
         testRoutes.push({message:'LH_V1: ' + routes.WORKFLOW_ENGINE, routeGroup:routeGroups.LH_V1, route:routes.WORKFLOW_ENGINE, DELETE:true, GET:true, POST:true, PUT:true, PATCH:true});
         testRoutes.push({message:'LH_V1: ' + routes.AUTOMATION_ENGINE, routeGroup:routeGroups.LH_V1, route:routes.AUTOMATION_ENGINE, DELETE:true, GET:true, POST:true, PUT:true, PATCH:true});
-
-        testRoutes.push({message:'LH_V1: ' + routes.SWAGGER_CORE, routeGroup:routeGroups.LH_V1, route:routes.SWAGGER_CORE, DELETE:false, GET:true, POST:false, PUT:false, PATCH:false});
-        testRoutes.push({message:'LH_V1: ' + routes.SWAGGER_EE, routeGroup:routeGroups.LH_V1, route:routes.SWAGGER_EE, DELETE:false, GET:true, POST:false, PUT:false, PATCH:false});
-        testRoutes.push({message:'LH_V1: ' + routes.SWAGGER_WE, routeGroup:routeGroups.LH_V1, route:routes.SWAGGER_WE, DELETE:false, GET:true, POST:false, PUT:false, PATCH:false});
 
         //  public endpoints
         publicRoutes.forEach(publicRoute => {
@@ -83,12 +82,6 @@ describe('Group Route Mapper Unit Test', function() {
                     let isEnabled = groupMapper.routeIsEnabled(routeGroup, route, testMethod);
                     assert.equal(isEnabled, entry[testMethod], 'Expected route to be configured as ' + isEnabled + ' for method: ' + testMethod);
                 });
-
-                //var expectedOutput = entry.expectedOutput;
-                //var method = entry.method;
-                //
-                //var isEnabled = groupMapper.routeIsEnabled(routeGroup, route, method);
-                //assert.equal(isEnabled, expectedOutput, 'Found unexpected route enabled or disabled.');
                 done();
             });
         });
