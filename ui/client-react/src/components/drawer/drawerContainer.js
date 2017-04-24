@@ -100,7 +100,7 @@ class DrawerContainer extends React.Component {
         // <div className="drawerContainer"> is visible when either `match` is defined or `state.visible` is true
         return (
             <Route
-                path={`${this.props.match.url}/sr_app_:appId([A-Za-z0-9]+)_table_:tblId([A-Za-z0-9]+)_report_:reportId([A-Za-z0-9]+)_record_:recordId([A-Za-z0-9]+)`}
+                path={`${this.props.match.url}/sr_app_:appId([A-Za-z0-9]+)_table_:tblId([A-Za-z0-9]+)_report_:rptId([A-Za-z0-9]+)_record_:recordId([A-Za-z0-9]+)`}
                 children={({match, ...rest}) => (
                     <div className={classNames.join(' ')}>
                         {match && closeHandleBackdrop}

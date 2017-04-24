@@ -35,8 +35,7 @@ import DrawerContainer from '../drawer/drawerContainer';
 
 let logger = new Logger();
 let FluxMixin = Fluxxor.FluxMixin(React);
-//todo :remove the following variables once we start using react router 4
-let embeddedReport;
+
 /**
  * record route component
  *
@@ -50,7 +49,7 @@ export const RecordRoute = React.createClass({
         return {hasDrawer: false};
     },
 
-    loadRecord(appId, tblId, recordId, rptId, formType = "view") {
+    loadRecord(appId, tblId, recordId, rptId, embeddedReport) {
         const flux = this.getFlux();
 
         flux.actions.selectTableId(tblId);
@@ -58,24 +57,32 @@ export const RecordRoute = React.createClass({
         // ensure the search input is empty
         this.props.clearSearchInput();
         if (this.props.hasDrawer || (this.props.isDrawerContext && this.props.history.location.pathname.includes('sr_app'))) {
-            this.props.loadForm(appId, this.props.match.params.tblId, rptId, formType, this.props.match.params.recordId, this.props.uniqueId);
-            const recordsArray = embeddedReport !== undefined ? embeddedReport.data.records : [];
+            this.props.loadForm(appId, this.props.match.params.tblId, rptId, 'view', this.props.match.params.recordId, this.props.uniqueId);
+            const recordsArray = _.get(embeddedReport, 'data.records', []);
             this.navigateToRecord(this.props.match.params.recordId, embeddedReport, recordsArray);
         } else {
-            this.props.loadForm(appId, tblId, rptId, formType, recordId, 'view');
+            this.props.loadForm(appId, tblId, rptId, 'view', recordId, 'view');
         }
     },
-    loadRecordFromParams(params = this.props.match.params) {
-        let {appId, tblId, recordId, rptId} = params;
+    loadRecordFromParams() {
+        let {appId, tblId, recordId, rptId} = this.props.match.params;
         appId = appId || this.props.selectedAppId;
-        tblId = tblId || this.props.match.params.drawerTableId;
-        recordId = recordId || this.props.match.params.embeddedReportId;
+
+        // TODO: currently this.props.match.rptId is the embeddedReport's unique ID, perhas use a different matcher
+        // for rptId and uniqueId. We can then simplify some of the following smelly code.
+        let embeddedReport;
+        if (rptId.includes(CONTEXT.REPORT.EMBEDDED) || rptId.includes(CONTEXT.FORM.DRAWER)) {
+            const embeddedReportId = rptId;
+            // TODO: move to reducers/embeddedReport
+            embeddedReport = _.find(this.props.embeddedReports, {'id' : embeddedReportId});
+            rptId = embeddedReport.rptId;
+        }
 
         if (appId && tblId && recordId) {
             //  report id is optional
             //  TODO: add form type as a parameter
 
-            this.loadRecord(appId, tblId, recordId, rptId);
+            this.loadRecord(appId, tblId, recordId, rptId, embeddedReport);
         }
     },
     componentDidMount() {
@@ -356,7 +363,7 @@ export const RecordRoute = React.createClass({
         let tblId = this.props.match.params.tblId;
         let recId = this.props.match.params.recordId;
         AutomationUtils.approveRecord(appId, tblId, recId).then(() => {
-            this.loadRecordFromParams(this.props.match.params);
+            this.loadRecordFromParams();
         });
     },
 
@@ -469,9 +476,9 @@ export const RecordRoute = React.createClass({
      */
     //shold be removed as a param and instead be stored in react router state
     renderDrawerContainer(/*appId,*/ tblId, recId, embeddedReportsUniqueId) {
-        if (embeddedReportsUniqueId !== undefined) {
-            embeddedReport = _.find(this.props.embeddedReports, {'id' : embeddedReportsUniqueId});
-        }
+        // TODO: move to reducers/embeddedReport
+        let embeddedReport = _.find(this.props.embeddedReports, {'id' : embeddedReportsUniqueId});
+
         //todo : handle query params in the url
         const existingPath = this.props.history.location.pathname;
         const appId = _.get(this, 'props.match.params.appId', this.selectedAppId);
@@ -552,9 +559,6 @@ export const RecordRoute = React.createClass({
                             />}
 
                     {!formLoadingErrorStatus && this.getDrawerContainer()}
-                    <button onClick={this.fakeRenderDrawer}>render child drawer</button>
-                    {this.props.closeDrawer && <button onClick={this.props.closeDrawer}>close this drawer</button>}
-                    {this.props.closeAll && <button onClick={this.props.closeAll}>close all drawers</button>}
                 </div>);
         }
     }
