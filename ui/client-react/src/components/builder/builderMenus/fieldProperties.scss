@@ -2,7 +2,7 @@
 
 .fieldPropertiesContainer {
     width: 100%;
-    padding-top: 23px;
+    padding-top: 35px;
     padding-left: $spacing-xx-small;
     padding-right: $spacing-xx-small;
     display: flex;
@@ -10,14 +10,17 @@
     flex-wrap: wrap;
 
     .fieldPropertiesTitle {
-        width: 100%;
+        font-size: 18px;
         height: 24px;
-        font-size: 20px;
+        width: 100%;
         color: $default-text-onlight-color;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
     }
 
-    .fieldPropertyContainer {
-        padding-top: 25px;
+    .textPropertyContainer {
+        padding-top: 20px;
 
         .textPropertyTitle {
             margin-bottom: 7px;
@@ -28,6 +31,7 @@
         }
 
         .textPropertyValue {
+            padding-left: $spacing-xxx-small;
             width: 100%;
             height: 34px;
             border-radius: 2px;
@@ -36,8 +40,27 @@
         }
     }
 
+    .multiChoicePropertyContainer {
+        padding-top: $spacing-medium2;
+
+        .multiChoicePropertyTitle {
+            margin-bottom: 7px;
+            width: 100%;
+            height: 17px;
+            font-size: 14px;
+            color: $propertytitle-text-color;
+        }
+
+        textarea {
+            overflow-x: scroll;
+            overflow-wrap: normal;
+            white-space: pre;
+            resize: none;
+        }
+    }
+
     .checkboxPropertyContainer {
-        padding-top: 20px;
+        padding-top: $spacing-xx-small;
     }
 
     @include small-breakpoint {

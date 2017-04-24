@@ -541,9 +541,10 @@ export default {
             FILE_ATTACHMENT: "File"
         },
         fieldPropertyLabels: {
-            title: "properties",
+            title: "Field Properties",
             name: "Name",
-            required: "Must be filled in"
+            required: "Must be filled in",
+            multiChoice: "Choices"
         },
         builder: {
             formBuilder: {
