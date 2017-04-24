@@ -256,4 +256,57 @@ describe("Validate fieldsApi", function() {
         });
     });
 
+    describe('validate getFieldsForTable function', function() {
+        let fetchFieldsStub = null;
+        let errorPromise = Promise.reject({error: 'some error'});
+        let tableId = "456";
+        let fetchFieldsStubResp = {};
+        fetchFieldsStubResp.body = '[{}]';
+
+        beforeEach(function() {
+            fetchFieldsStub = sinon.stub(fieldsApi, 'fetchFields');
+            req.url = 'apps/123/tables';
+            req.method = 'get';
+            fetchFieldsStub.returns(Promise.resolve(fetchFieldsStubResp));
+        });
+
+        afterEach(function() {
+            req.url = '';
+            req.rawBody = {};
+            fetchFieldsStub.restore();
+        });
+
+        it('success return results ', function(done) {
+            req.url = 'apps/123/tables';
+            req.method = 'get';
+            fetchFieldsStub.returns(Promise.resolve(fetchFieldsStubResp));
+            let promise = fieldsApi.getFieldsForTable(req, tableId);
+
+            promise.then(
+                function(response) {
+                    done();
+                },
+                function(error) {
+                    done(new Error('Unexpected failure promise return when testing getFieldsForTable success'));
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('getFieldsForTable: exception processing success test: ' + JSON.stringify(errorMsg)));
+            });
+        });
+        it('fails if fetchFields fails', function(done) {
+            fetchFieldsStub.returns(errorPromise);
+            let promise = fieldsApi.getFieldsForTable(req, tableId);
+
+            promise.then(
+                function(response) {
+                    done(new Error('Unexpected success promise return when fetchFields in getFieldsForTable failed'));
+                },
+                function(error) {
+                    done();
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('getFieldsForTable: exception processing success test: ' + JSON.stringify(errorMsg)));
+            });
+        });
+    });
 });
