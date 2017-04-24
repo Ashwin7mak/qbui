@@ -109,39 +109,8 @@
             });
         });
 
-
-        /**
-         * Test to create a report with all fields and verify the results.
-         */
-        it('Should create a report, execute the report, and validate the resulting ' +
-            'record matches the created record in setup', function() {
-            this.timeout(testConsts.INTEGRATION_TIMEOUT * appWithNoFlags.length);
-
-            var reportEndpoint = recordBase.apiBase.resolveReportsEndpoint(app.id, app.tables[0].id);
-            var reportToCreate = {
-                name: 'test report',
-                type: 'TABLE',
-                tableId: app.tables[0].id
-            };
-            //Create a report
-            return recordBase.apiBase.executeRequest(reportEndpoint, consts.POST, reportToCreate).then(function(report) {
-                var r = JSON.parse(report.body);
-                //Execute a report
-                return recordBase.apiBase.executeRequest(reportEndpoint + r.id + '/results?format=' + FORMAT, consts.GET).then(function(reportResults) {
-                    return JSON.parse(reportResults.body);
-                }, error => {
-                    log.error(JSON.stringify(error));
-                });
-            })
-            .then(verifyRecords)
-            .catch(function(error) {
-                log.error(JSON.stringify(error));
-                return Promise.reject(error);
-            });
-        });
-
         it('should create a report, modify the report, and validate the modified report is as expected', function() {
-            let reportEndpoint = recordBase.apiBase.resolveReportsEndpoint(app.id, app.tables[0].id);
+            var reportEndpoint = recordBase.apiBase.resolveReportsEndpoint(app.id, app.tables[0].id);
 
             // This should have all fields in it, since none were specified
             let reportToCreate = {
@@ -150,15 +119,36 @@
                 tableId: app.tables[0].id
             };
 
-            recordBase.apiBase.executeRequest(reportEndpoint, consts.POST, reportToCreate).then(function(report) {
-                var r = JSON.parse(report.body);
-                console.log("report is " + report + " r is " + r);
+            /*
+             return JSON.parse(reportResults.body);
+             }, error => {
+             log.error(JSON.stringify(error));
+             });
+             })
+             .then(verifyRecords)
+             */
 
-            }).catch(function(error) {
+            var createdReport = recordBase.apiBase.executeRequest(reportEndpoint, consts.POST, reportToCreate).then(function(report) {
+                let createResponse = JSON.parse(report.body);
+                console.log("report is " + report.body + " createResponse is " + JSON.stringify(createResponse));
+                return recordBase.apiBase.executeRequest(reportEndpoint + createResponse.id, consts.GET).then((fetchResponse) => {
+                    let report = JSON.parse(fetchResponse.body);
+                    console.log("fetched report is " + report + " response is " + fetchResponse);
+                    return report;
+                }, error => {
+                    let stringError = JSON.stringify(error);
+                    console.log("ERROR is " + stringError);
+                    log.error(stringError);
+                });
+                /*.then((createdReport)=> {
+                    console.log("passed in to then createdReport is " + createdReport );
+
+                    assert.equal(reportToCreate, createdReport);
+                });*/
+            }).catch((error) => {
                 log.error(JSON.stringify(error));
-                done();
+                return Promise.reject(error);
             });
-
 
         });
 
