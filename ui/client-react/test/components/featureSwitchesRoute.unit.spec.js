@@ -1,7 +1,7 @@
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
 import {FeatureSwitchesRoute} from '../../src/components/featureSwitches/featureSwitchesRoute';
-
+import {MemoryRouter} from 'react-router-dom';
 describe('FeatureSwitchesRoute', () => {
     let component;
 
@@ -52,7 +52,14 @@ describe('FeatureSwitchesRoute', () => {
 
     it('test render of component ', () => {
 
-        component = TestUtils.renderIntoDocument(<FeatureSwitchesRoute {...props} />);
+        component = TestUtils.renderIntoDocument(
+            /**
+             * React Router relies on React context to work, instead of stubbing the router context,
+             * recommended approach is to wrap the component in staticRouter/MemoryRouter
+             */
+            <MemoryRouter>
+                <FeatureSwitchesRoute {...props} />
+            </MemoryRouter>);
 
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 
@@ -60,7 +67,10 @@ describe('FeatureSwitchesRoute', () => {
 
     it('test selecting a feature switch ', () => {
 
-        component = TestUtils.renderIntoDocument(<FeatureSwitchesRoute {...props} />);
+        component = TestUtils.renderIntoDocument(
+            <MemoryRouter>
+                <FeatureSwitchesRoute {...props} />
+            </MemoryRouter>);
 
         let checkbox = TestUtils.scryRenderedDOMComponentsWithClass(component, "selectRow");
 
@@ -71,7 +81,10 @@ describe('FeatureSwitchesRoute', () => {
 
     it('test selecting all feature switches ', () => {
 
-        component = TestUtils.renderIntoDocument(<FeatureSwitchesRoute {...props} />);
+        component = TestUtils.renderIntoDocument(
+            <MemoryRouter>
+                <FeatureSwitchesRoute {...props} />
+            </MemoryRouter>);
 
         let checkbox = TestUtils.scryRenderedDOMComponentsWithClass(component, "selectAll");
         expect(checkbox.length).toBe(1);
@@ -82,7 +95,10 @@ describe('FeatureSwitchesRoute', () => {
 
     it('test toggling all feature switches ', () => {
 
-        component = TestUtils.renderIntoDocument(<FeatureSwitchesRoute {...props} />);
+        component = TestUtils.renderIntoDocument(
+            <MemoryRouter>
+                <FeatureSwitchesRoute {...props} />
+            </MemoryRouter>);
 
         let checkbox = TestUtils.scryRenderedDOMComponentsWithClass(component, "selectAll");
         expect(checkbox.length).toBe(1);
@@ -104,7 +120,10 @@ describe('FeatureSwitchesRoute', () => {
 
     it('test deleting feature switches ', () => {
 
-        component = TestUtils.renderIntoDocument(<FeatureSwitchesRoute {...props} />);
+        component = TestUtils.renderIntoDocument(
+            <MemoryRouter>
+                <FeatureSwitchesRoute {...props} />
+            </MemoryRouter>);
 
         let checkbox = TestUtils.scryRenderedDOMComponentsWithClass(component, "selectAll");
 
@@ -124,7 +143,10 @@ describe('FeatureSwitchesRoute', () => {
 
     it('test adding a feature switch ', () => {
 
-        component = TestUtils.renderIntoDocument(<FeatureSwitchesRoute {...props} />);
+        component = TestUtils.renderIntoDocument(
+            <MemoryRouter>
+                <FeatureSwitchesRoute {...props} />
+            </MemoryRouter>);
 
         let addButton = TestUtils.scryRenderedDOMComponentsWithClass(component, "addButton");
 

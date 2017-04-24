@@ -1,6 +1,11 @@
 import * as types from "../../app/actionTypes";
 import RequestContextService from "./RequestContextService";
+import WindowLocationUtils from  "../../../../client-react/src/utils/windowLocationUtils";
+import {FORBIDDEN, INTERNAL_SERVER_ERROR} from  "../../../../client-react/src/constants/urlConstants";
+import Logger from '../../../../client-react/src/utils/logger';
+import LogLevel from '../../../../client-react/src/utils/logLevels';
 
+let logger = new Logger();
 
 const fetchingRequestContext = () => ({
     type: types.REQUEST_CONTEXT_FETCHING
@@ -25,7 +30,16 @@ const fetchRequestContext = (desiredAccountId) => {
         return promise
             .then(response => response.data)
             .then(context => dispatch(receiveRequestContext(context)))
-            .catch(error => dispatch(failedRequestContext(error)));
+            .catch(error => {
+                dispatch(failedRequestContext(error));
+                if (error.response && error.response.status === 403) {
+                    logger.parseAndLogError(LogLevel.WARN, error.response, 'requestContextService.getRequestContext:');
+                    WindowLocationUtils.update(FORBIDDEN);
+                } else {
+                    logger.parseAndLogError(LogLevel.ERROR, error.response, 'requestContextService.getRequestContext:');
+                    WindowLocationUtils.update(INTERNAL_SERVER_ERROR);
+                }
+            });
     };
 };
 

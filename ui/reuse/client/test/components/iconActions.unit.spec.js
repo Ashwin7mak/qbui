@@ -102,7 +102,7 @@ describe('IconActions', () => {
 
         let firstActionItem = component.find('.iconActionButton').at(0);
 
-        firstActionItem.simulate('click');
+        firstActionItem.simulate('mouseDown');
 
         expect(mockParentFunctions.onClick).toHaveBeenCalled();
     });

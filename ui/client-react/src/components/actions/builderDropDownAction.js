@@ -27,13 +27,13 @@ let BuilderDropDownAction = React.createClass({
 
     getTableSettingsLink() {
         let link = URLUtils.getTableSettingsLink(this.props.selectedApp.id, this.props.selectedTable.id);
-        this.props.router.push(link);
+        this.props.history.push(link);
     },
 
     getConfigOptions() {
-        let isAppView = this.props.selectedApp ? true : false;
-        let isTableView = isAppView && this.props.selectedTable ? true : false;
-        let isFormView = isTableView && this.props.recId ? true : false;
+        let isAppView = !!this.props.selectedApp; // !! converts to boolean
+        let isTableView = (isAppView && this.props.selectedTable);
+        let isFormView = (isTableView && this.props.recId);
         let classes = "dropdownToggle globalActionLink";
 
         let dropDown = <Dropdown className={classes} id="nav-right-dropdown" dropup={this.props.position === "left"} >

@@ -1,6 +1,7 @@
 import React, {PropTypes, Component} from 'react';
 import Fluxxor from "fluxxor";
 import {connect} from 'react-redux';
+import {withRouter, Switch} from 'react-router-dom';
 import * as UrlConsts from "../../constants/urlConstants";
 import AppShell from '../../../../reuse/client/src/components/appShell/appShell';
 import DefaultTopNavGlobalActions from '../../../../reuse/client/src/components/topNav/defaultTopNavGlobalActions';
@@ -10,6 +11,7 @@ import {AVAILABLE_ICON_FONTS} from '../../../../reuse/client/src/components/icon
 import {toggleLeftNav} from '../../actions/shellActions';
 import * as FeatureSwitchActions from '../../actions/featureSwitchActions';
 import {I18nMessage} from '../../utils/i18nMessage';
+import RouteWithSubRoutes from "../../scripts/RouteWithSubRoutes";
 
 let FluxMixin = Fluxxor.FluxMixin(React);
 let StoreWatchMixin = Fluxxor.StoreWatchMixin;
@@ -39,36 +41,36 @@ export const SettingsWrapper = React.createClass({
     componentDidMount() {
         this.props.flux.actions.loadApps(true);
 
-        if (this.props.params.appId) {
-            this.props.flux.actions.selectAppId(this.props.params.appId);
+        if (this.props.match.params.appId) {
+            this.props.flux.actions.selectAppId(this.props.match.params.appId);
 
-            this.props.dispatch(FeatureSwitchActions.getStates(this.props.params.appId));
+            this.props.dispatch(FeatureSwitchActions.getStates(this.props.match.params.appId));
 
-            if (this.props.params.tblId) {
-                this.props.flux.actions.selectTableId(this.props.params.tblId);
+            if (this.props.match.params.tblId) {
+                this.props.flux.actions.selectTableId(this.props.match.params.tblId);
             } else {
                 this.props.flux.actions.selectTableId(null);
             }
         }
     },
     componentWillReceiveProps(props) {
-        if (props.params.appId) {
-            if (this.props.params.appId !== props.params.appId) {
-                this.props.flux.actions.selectAppId(props.params.appId);
+        if (props.match.params.appId) {
+            if (this.props.match.params.appId !== props.match.params.appId) {
+                this.props.flux.actions.selectAppId(props.match.params.appId);
 
-                this.props.dispatch(FeatureSwitchActions.getStates(props.params.appId));
+                this.props.dispatch(FeatureSwitchActions.getStates(props.match.params.appId));
             }
         } else {
             this.props.flux.actions.selectAppId(null);
         }
 
-        if (this.props.params.appId !== props.params.appId) {
-            this.props.flux.actions.selectAppId(props.params.appId);
-            this.props.dispatch(FeatureSwitchActions.getStates(props.params.appId));
+        if (this.props.match.params.appId !== props.match.params.appId) {
+            this.props.flux.actions.selectAppId(props.match.params.appId);
+            this.props.dispatch(FeatureSwitchActions.getStates(props.match.params.appId));
         }
-        if (props.params.tblId) {
-            if (this.props.params.tblId !== props.params.tblId) {
-                this.props.flux.actions.selectTableId(props.params.tblId);
+        if (props.match.params.tblId) {
+            if (this.props.match.params.tblId !== props.match.params.tblId) {
+                this.props.flux.actions.selectTableId(props.match.params.tblId);
             }
         } else {
             this.props.flux.actions.selectTableId(null);
@@ -97,10 +99,18 @@ export const SettingsWrapper = React.createClass({
                 ]}
             >
                 <TopNav onNavClick={this.props.toggleNav}/>
-                {this.props.children ? React.cloneElement(this.props.children, {
-                    app: this.getSelectedApp(),
-                    table: this.getSelectedTable()
-                }) : null
+                {this.props.routes ? (
+                    <Switch>
+                        {
+                            this.props.routes.map((route, i) => {
+                                let routeProps = {
+                                    app: this.getSelectedApp(),
+                                    table: this.getSelectedTable()
+                                };
+                                return RouteWithSubRoutes(route, i, routeProps);
+                            })
+                        }
+                    </Switch>) : null
                 }
             </LeftNav>
         </AppShell>;
@@ -124,4 +134,4 @@ const mapDispatchToProps = (dispatch) => {
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(SettingsWrapper);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(SettingsWrapper));
