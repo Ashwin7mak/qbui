@@ -271,6 +271,10 @@ const routes = [
                 component: StandardLeftNavDoc
             },
             {
+                path: `${LIB_ROUTE}/pagination`,
+                component: PaginationDoc
+            },
+            {
                 path: `${LIB_ROUTE}/notificationManager`,
                 component: NotificationManagerDoc
             }
