@@ -6,6 +6,7 @@ import Dropdown from 'react-bootstrap/lib/Dropdown';
 import Icon from '../icon/icon';
 import Tooltip from '../tooltip/tooltip';
 import {I18nMessage} from '../../utils/i18nMessage';
+import {ENTER_KEY, SPACE_KEY} from '../keyboardShortcuts/keyCodeConstants';
 import './iconActions.scss';
 
 /**
@@ -41,6 +42,11 @@ class IconActions extends Component {
         return action.key || _.uniqueId('actionButton_');
     }
 
+    onKeyDown(action, e) {
+        if (e.which === ENTER_KEY || e.which === SPACE_KEY) {
+            action.onClick();
+        }
+    }
     /**
      * Render an action button
      * @param action
@@ -53,16 +59,21 @@ class IconActions extends Component {
         if (action.className) {
             classNames.push(action.className);
         }
+        if (action.showLabel) {
+            classNames.push('withLabel');
+        }
 
+        let buttonLabel = action.i18nMessageKey ? <I18nMessage message={action.i18nMessageKey}  /> : action.plainMessage;
         return (
             <Button
                 key={this.getActionKey(action)}
                 tabIndex="0"
                 className={classNames.join(' ')}
-                onClick={action.onClick}
+                onMouseDown={action.onClick}
+                onKeyDown={this.onKeyDown.bind(this, action)}
             >
                 <Tooltip i18nMessageKey={action.i18nMessageKey} plainMessage={action.plainMessage} placement="bottom">
-                    <Icon icon={action.icon}/>
+                    <Icon icon={action.icon}/> <span className="buttonLabel">{action.showLabel ? buttonLabel : ""}</span>
                 </Tooltip>
             </Button>
         );
@@ -168,7 +179,12 @@ IconActions.propTypes = {
 
         /**
          * Can optionally display the action as disabled */
-        disabled: PropTypes.bool
+        disabled: PropTypes.bool,
+
+        /**
+         * Can optionally show a label along with the button (only if the action is rendered as a button
+         */
+        showLabel: PropTypes.bool
     })).isRequired,
 
     /**

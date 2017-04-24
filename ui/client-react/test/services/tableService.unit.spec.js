@@ -13,6 +13,7 @@ describe('TableService functions', () => {
         spyOn(BaseService.prototype, 'get');
         spyOn(BaseService.prototype, 'post');
         spyOn(BaseService.prototype, 'patch');
+        spyOn(BaseService.prototype, 'delete');
 
         tableService = new TableService();
     });
@@ -76,5 +77,14 @@ describe('TableService functions', () => {
         var url = tableService.constructUrl(tableService.API.UPDATE_TABLE, [appId, tableId]);
         tableService.updateTable(appId, tableId, table);
         expect(BaseService.prototype.patch).toHaveBeenCalledWith(url, table);
+    });
+
+    it('test deleteTable', () => {
+        var appId = '123';
+        var tableId = '456';
+
+        var url = tableService.constructUrl(tableService.API.DELETE_TABLE, [appId, tableId]);
+        tableService.deleteTable(appId, tableId);
+        expect(BaseService.prototype.delete).toHaveBeenCalledWith(url);
     });
 });
