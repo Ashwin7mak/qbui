@@ -3,7 +3,7 @@ import {connect} from "react-redux";
 import FieldToken from './fieldToken';
 import Tooltip from '../../../../../reuse/client/src/components/tooltip/tooltip';
 import {addNewFieldToForm, updateNewFieldId} from "../../../actions/formActions";
-import {getFormByContext} from '../../../reducers/forms';
+import {getFormByContext, getSelectedFormElement} from '../../../reducers/forms';
 import {CONTEXT} from '../../../actions/context';
 import _ from 'lodash';
 import DraggableField from '../draggableField';
@@ -12,14 +12,8 @@ import DraggableField from '../draggableField';
  * A FieldToken that is extended to be displayed in a menu (i.e., Tool Palette) when building a form.
  * TODO: This will eventually be decorated with other methods like onClick for adding it to the form. */
 export class FieldTokenInMenu extends Component {
-
-    clickToAddToForm = () => {
-        let {selectedField, formId, appId, tblId, relatedField} = this.props;
-        this.props.addNewFieldToForm(formId, appId, tblId, selectedField, relatedField);
-    };
-
     render() {
-        const fieldToken = <FieldToken onMouseUp={this.clickToAddToForm} isDragging={false} {...this.props} />;
+        const fieldToken = <FieldToken isDragging={false} {...this.props} />;
 
         if (this.props.tooltipText) {
             return (
@@ -30,6 +24,27 @@ export class FieldTokenInMenu extends Component {
         }
 
         return fieldToken;
+    }
+}
+
+export class DraggableFieldToken extends Component {
+    clickToAddToForm = () => {
+        let {selectedField, formId, appId, tblId, relatedField} = this.props;
+        this.props.addNewFieldToForm(formId, appId, tblId, selectedField, relatedField);
+    };
+
+    beginDrag = () => {
+        this.clickToAddToForm();
+    };
+
+    render() {
+        const Element = DraggableField(FieldTokenInMenu, false);
+
+        return (
+            <div onClick={this.clickToAddToForm}>
+                <Element {...this.props} beginDrag={this.beginDrag} />
+            </div>
+        );
     }
 }
 
@@ -64,6 +79,7 @@ const mapStateToProps = state => {
         appId: _.get(currentForm, 'formData.formMeta.appId'),
         tblId: _.get(currentForm, 'formData.formMeta.tableId'),
         selectedField: selectedField,
+        selectedFormElement: (currentForm ? getSelectedFormElement(state, currentForm.id) : undefined),
         newFieldId: (currentForm ? currentForm.newFieldId : null)
     };
 };
@@ -73,4 +89,4 @@ const mapDispatchToProps = {
     updateNewFieldId
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(DraggableField(FieldTokenInMenu));
+export default connect(mapStateToProps, mapDispatchToProps)(DraggableFieldToken);

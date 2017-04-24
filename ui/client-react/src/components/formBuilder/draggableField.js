@@ -17,9 +17,8 @@ const fieldDragSource = {
             props.cacheDragElement(component);
         }
 
-        if (props.isNewField && !props.newFieldId) {
-            let {selectedField, formId, appId, tblId, relatedField} = props;
-            props.addNewFieldToForm(formId, appId, tblId, selectedField, relatedField);
+        if (props.beginDrag) {
+            props.beginDrag(props);
         }
 
         return {
@@ -33,11 +32,16 @@ const fieldDragSource = {
     /**
      * Identifies which element should be considered in a dragging state. The DOM element isn't actually moved until
      * the drop event, so we use this to apply CSS styles to hide or dim the element while a token version of that element is being dragged.
-     * @param props
-     * @param monitor
+     * @param props - The props of the current instance of this component
+     * @param monitor - monitor.getItem() returns the data representations of the element currently being dragged
      */
     isDragging(props, monitor) {
         let item = monitor.getItem();
+
+        if (props.isDragging) {
+            return props.isDragging(item);
+        }
+
         return props.containingElement.id === item.containingElement.id;
     },
 
@@ -47,6 +51,10 @@ const fieldDragSource = {
      * @param monitor
      */
     endDrag(props, monitor) {
+        if (props.endDrag) {
+            props.endDrag();
+        }
+
         if (props.clearDragElementCache) {
             props.clearDragElementCache();
         }
@@ -71,10 +79,11 @@ function collect(connect, monitor) {
 /**
  * A higher order component that accepts a field which will become draggable
  * @param FieldComponent
+ * @param showFieldEditingTools
  * @returns {*}
  * @constructor
  */
-const DraggableFieldHoc = FieldComponent => {
+const DraggableFieldHoc = (FieldComponent, showFieldEditingTools = true) => {
 
     class DraggableField extends Component {
         componentDidMount() {
@@ -96,7 +105,7 @@ const DraggableFieldHoc = FieldComponent => {
             return connectDragSource(
                 <div className={classNames.join(' ')}>
                     <div className={draggableFieldWrapper.join(' ')}>
-                        <FieldEditingTools location={location} isDragging={isDragging} />
+                        {showFieldEditingTools && <FieldEditingTools location={location} isDragging={isDragging} />}
                         <FieldComponent {...this.props} />
                     </div>
                 </div>

@@ -1,13 +1,7 @@
 import React, {Component, PropTypes} from 'react';
 import QbForm from '../QBForm/qbform';
 import {findFormElementKey} from '../../utils/formUtils';
-import _ from 'lodash';
 import {findDOMNode} from 'react-dom';
-
-// TODO:: Remove or refactor
-import {DragDropContext} from 'react-dnd';
-import TouchBackend from 'react-dnd-touch-backend';
-import FormBuilderCustomDragLayer from './formBuilderCustomDragLayer';
 
 import './formBuilder.scss';
 
@@ -42,11 +36,11 @@ export class FormBuilder extends Component {
      * @param moveImmediately - Helps with testing. Change to true to ignore the timeout that helps with fast dragging.
      */
     handleFormReorder(newLocation, draggedItemProps, moveImmediately = false) {
-        if (this.props.moveFieldOnForm && _.has(draggedItemProps, 'containingElement')) {
+        if (this.props.moveFieldOnForm && this.props.selectedFormElement) {
             let element = draggedItemProps.containingElement[findFormElementKey(draggedItemProps.containingElement)];
 
             if (moveImmediately) {
-                return this.props.moveFieldOnForm(this.props.formId, newLocation, Object.assign({}, draggedItemProps, {element}));
+                return this.props.moveFieldOnForm(this.props.formId, newLocation, Object.assign({}, draggedItemProps, {containingElement: this.props.selectedFormElement}, {element}));
             }
 
             if (this.reorderTimeout) {
@@ -55,7 +49,7 @@ export class FormBuilder extends Component {
 
             // Add a short timeout so that very fast dragging doesn't cause multiple reorders
             this.reorderTimeout = setTimeout(() => {
-                this.props.moveFieldOnForm(this.props.formId, newLocation, Object.assign({}, draggedItemProps, {element}));
+                this.props.moveFieldOnForm(this.props.formId, newLocation, Object.assign({}, draggedItemProps, {containingElement: this.props.selectedFormElement}, {element}));
             }, DRAG_PREVIEW_TIMEOUT);
         }
     }
@@ -102,11 +96,6 @@ export class FormBuilder extends Component {
     render() {
         return (
             <div className="formBuilderContainer">
-                <label style={{display: 'none'}} id="reactabularToggle">
-                    <input type="checkbox" checked={this.state.hasAnimation} onChange={evt => this.setState({hasAnimation: !this.state.hasAnimation})} />
-                    Has drag animation
-                </label>
-                {/*{this.props.showCustomDragLayer && <FormBuilderCustomDragLayer />}*/}
                 <QbForm
                     formFocus={this.props.formFocus}
                     selectedField={this.props.selectedField}

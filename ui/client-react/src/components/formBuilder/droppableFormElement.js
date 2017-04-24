@@ -38,13 +38,12 @@ const formTarget = {
 
         let dragItemProps = monitor.getItem();
 
+        if (dropTargetProps.onHover) {
+            return dropTargetProps.onHover(dropTargetProps, dragItemProps);
+        }
+
         // Don't allow dropping an element on itself (determined by the unique id attached to each element)
         if (dragItemProps.containingElement.id !== dropTargetProps.containingElement.id) {
-            if (dragItemProps.component.props.newFieldId) {
-                dragItemProps.containingElement.id = dragItemProps.component.props.newFieldId;
-                dragItemProps.relatedField.fieldId = dragItemProps.component.props.newFieldId;
-                dragItemProps.containingElement.FormFieldElement.fieldId = dragItemProps.component.props.newFieldId;
-            }
             dropTargetProps.handleFormReorder(dropTargetProps.location, dragItemProps);
         }
     }
@@ -93,10 +92,10 @@ const DroppableElement = (FieldComponent, connected = true) => {
         containingElement: PropTypes.object.isRequired
     };
 
+    // The first argument could be an array of draggable types (e.g., could add tabs and sections here)
     let wrappedComponent = DropTarget(DraggableItemTypes.FIELD, formTarget, collect)(component);
 
     if (connected) {
-        // The first argument could be an array of draggable types (e.g., could add tabs and sections here)
         return connect(mapStateToProps)(wrappedComponent);
     }
 

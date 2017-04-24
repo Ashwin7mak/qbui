@@ -17,7 +17,7 @@ import NavigationUtils from '../../utils/navigationUtils';
 import Logger from '../../utils/logger';
 import AutoScroll from '../autoScroll/autoScroll';
 import PageTitle from '../pageTitle/pageTitle';
-import {getFormByContext, getFormRedirectRoute} from '../../reducers/forms';
+import {getFormByContext, getFormRedirectRoute, getSelectedFormElement} from '../../reducers/forms';
 import {CONTEXT} from '../../actions/context';
 import {ENTER_KEY, SPACE_KEY} from '../../../../reuse/client/src/components/keyboardShortcuts/keyCodeConstants';
 import KeyboardShortcuts from '../../../../reuse/client/src/components/keyboardShortcuts/keyboardShortcuts';
@@ -38,6 +38,7 @@ const mapStateToProps = state => {
     return {
         currentForm,
         selectedField: (_.has(currentForm, 'selectedFields') ? currentForm.selectedFields[0] : undefined),
+        selectedFormElement: (currentForm ? getSelectedFormElement(state, currentForm.id) : undefined),
         redirectRoute: getFormRedirectRoute(state),
         tabIndex: (_.has(currentForm, 'formBuilderChildrenTabIndex') ? currentForm.formBuilderChildrenTabIndex[0] : undefined),
         formFocus: (_.has(currentForm, 'formFocus') ? currentForm.formFocus[0] : undefined),
@@ -257,6 +258,7 @@ export const FormBuilderContainer = React.createClass({
                                             formData={formData}
                                             moveFieldOnForm={this.props.moveFieldOnForm}
                                             updateAnimationState={this.props.updateFormAnimationState}
+                                            selectedFormElement={this.props.selectedFormElement}
                                         />
                                     </Loader>
                                 </div>
