@@ -32,8 +32,6 @@ import {CONTEXT} from '../../actions/context';
 import './record.scss';
 import withUniqueId from '../hoc/withUniqueId';
 import DrawerContainer from '../drawer/drawerContainer';
-import '../drawer/drawer.scss';
-import '../drawer/drawerContainer.scss';
 
 let logger = new Logger();
 let FluxMixin = Fluxxor.FluxMixin(React);

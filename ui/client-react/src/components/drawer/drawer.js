@@ -1,24 +1,19 @@
 import React, {PropTypes} from 'react';
-import _ from 'lodash';
-import {Route} from 'react-router-dom';
 
-import RecordRouteWithUniqueId from '../record/recordRoute';
 import './drawer.scss';
 
 /**
- * A blank container meant to wrap some other component. This Drawer component will slide in from
- * the right.
+ * A blank container meant to wrap some other component.
  */
 class Drawer extends React.Component {
     componentWillMount() {
-        // TODO: name mount to something else
-        if (this.props.mount) {
-            this.props.mount();
+        if (this.props.onMount) {
+            this.props.onMount();
         }
     }
     componentWillUnmount() {
-        if (this.props.unmount) {
-            this.props.unmount();
+        if (this.props.onUnmount) {
+            this.props.onUnmount();
         }
     }
     render() {
