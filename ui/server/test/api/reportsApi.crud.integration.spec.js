@@ -9,6 +9,7 @@
     var testConsts = require('./api.test.constants');
     var errorCodes = require('../../src/api/errorCodes');
     var testUtils = require('./api.test.Utils');
+    var reportEndpoint = "";
 
     describe('API - Validate report CRUD operations', function() {
         var app;
@@ -28,29 +29,6 @@
 
         var FORMAT = 'display';
 
-        ///**
-        // * Method to verify Records returned in reportResults with expectedRecords
-        // */
-        //function verifyRecords(reportResults) {
-        //    var actualReportResults = [];
-        //    var expectedReportRecords = [];
-        //
-        //    var records = reportResults;
-        //    if (!Array.isArray(records)) {
-        //        records = reportResults.records;
-        //    }
-        //    records.forEach(function(record) {
-        //        actualReportResults.push(record);
-        //    });
-        //
-        //    //Push the expected records to an array.
-        //    for (var j in expectedRecords) {
-        //        expectedReportRecords.push(expectedRecords[j]);
-        //    }
-        //    //Assert if records from report results matches expected records
-        //    assert.deepEqual(JSON.stringify(actualReportResults), JSON.stringify(expectedReportRecords), 'Unexpected report result returned: ' + JSON.stringify(actualReportResults) + ', ' + JSON.stringify(expectedReportRecords));
-        //}
-        //
 
 
         // App variable with different data fields
@@ -78,6 +56,7 @@
 
         };
 
+
         /**
          * Setup method. Generates JSON for an app, a table with different fields, and a single record with different field types.
          */
@@ -94,6 +73,8 @@
                     var value = testUtils.generateRandomString(10);
                     records.push([{id: 6, value: "' + value + '"}]);
                 }
+                reportEndpoint = recordBase.apiBase.resolveReportsEndpoint(app.id, app.tables[0].id);
+
                 var recordsEndpoint2 = recordBase.apiBase.resolveRecordsEndpoint(app.id, app.tables[1].id);
                 recordBase.createBulkRecords(recordsEndpoint2, records).then(
                     (success) => {
@@ -109,46 +90,104 @@
             });
         });
 
-        it('should create a report, modify the report, and validate the modified report is as expected', function() {
-            var reportEndpoint = recordBase.apiBase.resolveReportsEndpoint(app.id, app.tables[0].id);
+        /**
+         * Create a report.  Requires reportEndpoint to have been previously populated
+         * @param reportToCreate with any desired report properties set
+         * @returns the id of the newly created report
+         */
+        function createReport(reportToCreate) {
+            assert.not(reportEndpoint.empty(), `reportEndpoint must be set before calling ${functionName}`);
+            return recordBase.apiBase.executeRequest(reportEndpoint, consts.POST, reportToCreate).then(createReportResponse => {
+                return JSON.parse(createReportResponse.body).id;
+            }, errorResponse => {
+                // Pass through the error and expect the assertions to handle it correctly
+                return errorResponse;
+            });
+        }
 
+        /**
+         * Fetch a report based its id.  Requires reportEndpoint to have been previously populated
+         * @param reportId
+         * @returns the metadata for a report
+         */
+        function fetchReport(reportId) {
+            return recordBase.apiBase.executeRequest(reportEndpoint + reportId, consts.GET)
+                .then(fetchResponse => {
+                    let returnedBody = JSON.parse(fetchResponse.body);
+                    return JSON.parse(returnedBody.body);
+                });
+        }
+
+        /**
+         * Compares two reports and asserts that only the properties in the propsToChange object differ between the two
+         * @param updatedReport
+         * @param originalReport
+         * @param propsToChange
+         */
+        function assertExpected(updatedReport, originalReport, propsToChange) {
+            for (var prop in updatedReport) {
+                if (propsToChange.hasOwnProperty(prop)) {
+                    assert.deepEqual(updatedReport[prop], propsToChange[prop], `${prop} should have been updated`);
+                } else {
+                    assert.deepEqual(updatedReport[prop], originalReport[prop], `${prop} should NOT have been updated`);
+                }
+            }
+        }
+
+        /**
+         * Updates the specified properties of a report
+         * @param originalReport
+         * @param propsToChange
+         * @returns the report prior to its being updated (for use further down the chain)
+         */
+        function updateRecord(originalReport, propsToChange) {
+            return recordBase.apiBase.executeRequest(reportEndpoint + originalReport.id, consts.PATCH, propsToChange)
+                .then(patchResponse => {
+                    console.log(patchResponse.body);
+                    return originalReport;
+                });
+        }
+
+        /**
+         * Fetches an updated report, and compares it to its previous version to validate that only the specified
+         * properties changed and all other properties are the same as the original
+         * @param originalReport
+         * @param propsToChange
+         * @returns {*}
+         */
+        function assertUpdateCorrect(originalReport, propsToChange) {
+
+            return fetchReport(originalReport.id).then(updatedReport => {
+                assertExpected(updatedReport, originalReport, propsToChange);
+            });
+
+        }
+
+        it('should create a report, modify the report, and validate the modified report is as expected', function() {
+            reportEndpoint = recordBase.apiBase.resolveReportsEndpoint(app.id, app.tables[0].id);
             // This should have all fields in it, since none were specified
             let reportToCreate = {
                 name: 'test report',
                 type: 'TABLE',
-                tableId: app.tables[0].id
+                tableId: app.tables[0].id,
+                fids: [6,7,8,9]
             };
 
-            /*
-             return JSON.parse(reportResults.body);
-             }, error => {
-             log.error(JSON.stringify(error));
-             });
-             })
-             .then(verifyRecords)
-             */
+            let propsToChange = {
+                name: 'changed name',
+                type: 'TABLE',
+                tableId: app.tables[0].id,
+                fids: [9,10,7,8]
+            };
 
-            var createdReport = recordBase.apiBase.executeRequest(reportEndpoint, consts.POST, reportToCreate).then(function(report) {
-                let createResponse = JSON.parse(report.body);
-                console.log("report is " + report.body + " createResponse is " + JSON.stringify(createResponse));
-                return recordBase.apiBase.executeRequest(reportEndpoint + createResponse.id, consts.GET).then((fetchResponse) => {
-                    let report = JSON.parse(fetchResponse.body);
-                    console.log("fetched report is " + report + " response is " + fetchResponse);
-                    return report;
-                }, error => {
-                    let stringError = JSON.stringify(error);
-                    console.log("ERROR is " + stringError);
-                    log.error(stringError);
+            return createReport(reportToCreate)
+                .then(fetchReport)
+                .then(originalReport => updateRecord(originalReport, propsToChange))
+                .then(originalReport => assertUpdateCorrect(originalReport, propsToChange))
+                .catch((error) => {
+                    log.error(JSON.stringify(error));
+                    return Promise.reject(error);
                 });
-                /*.then((createdReport)=> {
-                    console.log("passed in to then createdReport is " + createdReport );
-
-                    assert.equal(reportToCreate, createdReport);
-                });*/
-            }).catch((error) => {
-                log.error(JSON.stringify(error));
-                return Promise.reject(error);
-            });
 
         });
 
