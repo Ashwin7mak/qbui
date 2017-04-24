@@ -8,11 +8,10 @@ import Icon, {AVAILABLE_ICON_FONTS} from '../../../../reuse/client/src/component
 import IconActions from '../actions/iconActions';
 import {I18nMessage} from '../../utils/i18nMessage';
 import Record from './../record/record';
-import {Link} from 'react-router-dom';
+import {Link, withRouter} from 'react-router-dom';
 import simpleStringify from '../../../../common/src/simpleStringify';
 import Fluxxor from 'fluxxor';
 import Logger from '../../utils/logger';
-import {withRouter} from 'react-router-dom';
 import Locale from '../../locales/locales';
 import Loader from 'react-loader';
 import RecordHeader from './recordHeader';
@@ -257,7 +256,7 @@ export const RecordRoute = React.createClass({
         //Using hard-coded table name here, to check if approve record button needs to be displayed.
         //TODO: Remove after Empower
         const automationTableName = "Project Request";
-        if (this.props.selectedTable.name === automationTableName)  {
+        if (this.props.selectedTable && (this.props.selectedTable.name === automationTableName))  {
             return true;
         }
         return false;
@@ -286,7 +285,7 @@ export const RecordRoute = React.createClass({
 
     getPageActions() {
         const actions = [
-            {msg: 'pageActions.addRecord', icon:'add', className:'addRecord', onClick: this.editNewRecord},
+            {msg: 'pageActions.addRecord', icon:'add-new-filled', className:'addRecord', onClick: this.editNewRecord},
             {msg: 'pageActions.edit', icon:'edit', onClick: this.openRecordForEdit},
             {msg: 'unimplemented.email', icon:'mail', disabled:true},
             {msg: 'unimplemented.print', icon:'print', disabled:true},

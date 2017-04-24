@@ -1,6 +1,7 @@
 import React, {PropTypes, Component} from 'react';
 import Fluxxor from "fluxxor";
 import {connect} from 'react-redux';
+import {withRouter, Switch} from 'react-router-dom';
 import * as UrlConsts from "../../constants/urlConstants";
 import AppShell from '../../../../reuse/client/src/components/appShell/appShell';
 import DefaultTopNavGlobalActions from '../../../../reuse/client/src/components/topNav/defaultTopNavGlobalActions';
@@ -10,6 +11,7 @@ import {AVAILABLE_ICON_FONTS} from '../../../../reuse/client/src/components/icon
 import {toggleLeftNav} from '../../actions/shellActions';
 import * as FeatureSwitchActions from '../../actions/featureSwitchActions';
 import {I18nMessage} from '../../utils/i18nMessage';
+import RouteWithSubRoutes from "../../scripts/RouteWithSubRoutes";
 
 let FluxMixin = Fluxxor.FluxMixin(React);
 let StoreWatchMixin = Fluxxor.StoreWatchMixin;
@@ -97,10 +99,18 @@ export const SettingsWrapper = React.createClass({
                 ]}
             >
                 <TopNav onNavClick={this.props.toggleNav}/>
-                {this.props.children ? React.cloneElement(this.props.children, {
-                    app: this.getSelectedApp(),
-                    table: this.getSelectedTable()
-                }) : null
+                {this.props.routes ? (
+                    <Switch>
+                        {
+                            this.props.routes.map((route, i) => {
+                                let routeProps = {
+                                    app: this.getSelectedApp(),
+                                    table: this.getSelectedTable()
+                                };
+                                return RouteWithSubRoutes(route, i, routeProps);
+                            })
+                        }
+                    </Switch>) : null
                 }
             </LeftNav>
         </AppShell>;
@@ -124,4 +134,4 @@ const mapDispatchToProps = (dispatch) => {
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(SettingsWrapper);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(SettingsWrapper));

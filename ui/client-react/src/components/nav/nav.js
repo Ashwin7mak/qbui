@@ -1,4 +1,6 @@
 import React from "react";
+import {Route} from 'react-router-dom';
+
 import Fluxxor from "fluxxor";
 import LeftNav from "./leftNav";
 import TopNav from "../header/topNav";
@@ -102,33 +104,34 @@ export const Nav = React.createClass({
 
     getTopGlobalActions() {
         const actions = [];
-        let recordId;
-        if (this.props.match.params) {
-            recordId = this.props.match.params.recordId;
-        }
         let selectedApp = this.getSelectedApp();
         let isAdmin = false;
         if (selectedApp) {
             isAdmin = AppUtils.hasAdminAccess(selectedApp.accessRights);
         }
-        return (<GlobalActions actions={actions}
+
+        return (
+            <Route path={UrlConsts.BUILDER_MENU_ROUTE} render={props => (
+                <GlobalActions actions={actions}
                                position={"top"}
                                dropdownIcon="user"
                                dropdownMsg="globalActions.user"
                                startTabIndex={4}
                                app={selectedApp}>
-            {isAdmin ?
-                    <BuilderDropDownAction
-                                history={this.props.history}
-                                selectedApp={selectedApp}
-                                selectedTable={this.getSelectedTable(this.state.apps.selectedTableId)}
-                                recId={recordId}
-                                actions={actions}
-                                position={"top"}
-                                icon="settings"
-                                navigateToBuilder={this.navigateToBuilder}
-                                startTabIndex={4}/> : null}
-                </GlobalActions>);
+                    {isAdmin ?
+                        <BuilderDropDownAction
+                            history={this.props.history}
+                            selectedApp={selectedApp}
+                            selectedTable={this.getSelectedTable(this.state.apps.selectedTableId)}
+                            recId={props.match.params.recordId}
+                            actions={actions}
+                            position={"top"}
+                            icon="settings"
+                            navigateToBuilder={this.navigateToBuilder}
+                            startTabIndex={4}/> : null}
+                </GlobalActions>
+            )} />
+        );
     },
 
     getLeftGlobalActions() {
@@ -363,7 +366,7 @@ export const Nav = React.createClass({
 
             {this.props.match.params && this.props.match.params.appId &&
                 <ReportManagerTrowser visible={this.props.shell.trowserOpen && this.props.shell.trowserContent === TrowserConsts.TROWSER_REPORTS}
-                                      router={this.props.history}
+                                      history={this.props.history}
                                       selectedTable={this.getSelectedTable(reportsList.tblId)}
                                       filterReportsName={this.state.nav.filterReportsName}
                                       reportsData={reportsList}
@@ -397,31 +400,31 @@ export const Nav = React.createClass({
                         <TempMainErrorMessages apps={this.state.apps.apps} appsLoading={this.state.apps.loading} selectedAppId={this.state.apps.selectedAppId} />
 
                         <Switch>
-
-                        { this.props.routes.map((route, i) => {
-                            //insert the child route passed in by the router
-                            // with additional props
-                            let routeProps = {
-                                key: this.props.location ? this.props.location.pathname : "",
-                                apps: this.state.apps.apps,
-                                selectedAppId: this.state.apps.selectedAppId,
-                                appsLoading: this.state.apps.loading,
-                                reportData: reportsData,
-                                appUsers: this.state.apps.appUsers,
-                                appUsersUnfiltered: this.state.apps.appUsersUnfiltered,
-                                appRoles: this.state.apps.appRoles,
-                                appOwner: this.state.apps.appOwner,
-                                locale: this.state.nav.locale,
-                                isRowPopUpMenuOpen: this.props.shell.isRowPopUpMenuOpen,
-                                selectedApp: this.getSelectedApp(),
-                                selectedTable: this.getSelectedTable(reportsData.tblId),
-                                scrollingReport: this.state.nav.scrollingReport,
-                                flux: flux
-                            };
-                            return RouteWithSubRoutes(route, i, routeProps);
-                        }
-                        )}
-
+                            { this.props.routes.map((route, i) => {
+                                //insert the child route passed in by the router
+                                // with additional props
+                                // the Switch wrapper will pick only one of the routes the first
+                                // that matches.
+                                let routeProps = {
+                                    key: this.props.location ? this.props.location.pathname : "",
+                                    apps: this.state.apps.apps,
+                                    selectedAppId: this.state.apps.selectedAppId,
+                                    appsLoading: this.state.apps.loading,
+                                    reportData: reportsData,
+                                    appUsers: this.state.apps.appUsers,
+                                    appUsersUnfiltered: this.state.apps.appUsersUnfiltered,
+                                    appRoles: this.state.apps.appRoles,
+                                    appOwner: this.state.apps.appOwner,
+                                    locale: this.state.nav.locale,
+                                    isRowPopUpMenuOpen: this.props.shell.isRowPopUpMenuOpen,
+                                    selectedApp: this.getSelectedApp(),
+                                    selectedTable: this.getSelectedTable(reportsData.tblId),
+                                    scrollingReport: this.state.nav.scrollingReport,
+                                    flux: flux
+                                };
+                                return RouteWithSubRoutes(route, i, routeProps);
+                            }
+                            )}
                         </Switch>
 
                     </div>}

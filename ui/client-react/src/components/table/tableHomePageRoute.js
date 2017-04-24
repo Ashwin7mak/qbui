@@ -91,7 +91,7 @@ export const TableHomePageRoute = React.createClass({
 
     getPageActions(maxButtonsBeforeMenu) {
         const actions = [
-            {msg: 'pageActions.addRecord', icon:'add', className:'addRecord', onClick: this.editNewRecord},
+            {msg: 'pageActions.addRecord', icon:'add-new-filled', className:'addRecord', onClick: this.editNewRecord},
             {msg: 'unimplemented.makeFavorite', icon:'star', disabled: true},
             {msg: 'unimplemented.print', icon:'print', disabled: true}
         ];
@@ -127,7 +127,7 @@ export const TableHomePageRoute = React.createClass({
 
         const newTableIds = newTablesJSONArrray.split(",");
 
-        return newTableIds.indexOf(this.props.params.tblId) !== -1;
+        return newTableIds.indexOf(this.props.match.params.tblId) !== -1;
     },
 
     render() {
@@ -146,7 +146,7 @@ export const TableHomePageRoute = React.createClass({
                 params={homePageParams}
                 reportData={this.props.reportData}
                 appUsers={this.props.appUsers}
-                routeParams={this.props.routeParams}
+                routeParams={this.props.match.params}
                 selectedAppId={this.props.selectedAppId}
                 searchStringForFiltering={this.props.reportData.searchStringForFiltering}
                 selectedRows={this.props.reportData.selectedRows}

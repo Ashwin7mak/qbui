@@ -1,6 +1,5 @@
 import React from 'react';
 import {render} from 'react-dom';
-import {Router, Route} from 'react-router-dom';
 import 'react-fastclick';
 import {GOVERNANCE_ACCOUNT_ROUTE, GOVERNANCE_ACCOUNT_USERS_ROUTE} from './routes';
 import AppShell from './appShell';
@@ -47,13 +46,3 @@ render((
         </BrowserRouter>
     </Provider>
 ), document.getElementById('content'));
-
-// render((
-//     <Provider store={store}>
-//         <Router>
-//             <Route path={GOVERNANCE_ACCOUNT_ROUTE} component={AppShell}>
-//                <Route path={GOVERNANCE_ACCOUNT_USERS_ROUTE} component={AccountUsers} />
-//             </Route>
-//         </Router>
-//     </Provider>
-// ), document.getElementById('content'));

@@ -77,16 +77,28 @@ describe('SettingsWrapper tests', () => {
         expect(TestUtils.scryRenderedComponentsWithType(component, TopNav).length).toEqual(1);
     });
 
-    it('test render of child components', () => {
-        const childComponent = React.createClass({
+    it('test render of child routes', () => {
+        const ChildComponent = React.createClass({
             render() {
                 return <div className="childComponentClass" />;
             }
         });
-        const childComponentEl = React.createFactory(childComponent);
-        component = TestUtils.renderIntoDocument(<MemoryRouter><SettingsWrapper {...props}>{childComponentEl}</SettingsWrapper></MemoryRouter>);
-        let child = TestUtils.scryRenderedComponentsWithType(component, childComponent);
+        const childRoute = [{
+            path: '/aRoute',
+            exact: true,
+            component: ChildComponent
+        }];
+        let initialEntries = ['/one', '/aRoute'];
+        component = TestUtils.renderIntoDocument(
+            <MemoryRouter initialEntries={initialEntries} initialIndex={1}>
+                <SettingsWrapper {...props} routes={childRoute}/>
+            </MemoryRouter>);
+        let child = TestUtils.scryRenderedComponentsWithType(component, ChildComponent);
         expect(child.length).toEqual(1);
-        expect(child[0].props).toEqual({app: apps[0], table: apps[0].tables[1]});
+        expect(child[0].props).toEqual(jasmine.objectContaining({app: apps[0], table: apps[0].tables[1]}));
+        expect(Object.keys(child[0].props)).toContain('match');
+        expect(Object.keys(child[0].props)).toContain('location');
+        expect(Object.keys(child[0].props)).toContain('history');
+
     });
 });

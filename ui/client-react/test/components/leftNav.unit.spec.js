@@ -1,9 +1,9 @@
 import React from 'react';
 import {mount} from 'enzyme';
-import createRouterContext from 'react-router-test-context';
 import LeftNav from '../../src/components/nav/leftNav';
-import NavItem, {__RewireAPI__ as NavItemRewireAPI} from '../../src/components/nav/navItem';
+import {__RewireAPI__ as NavItemRewireAPI} from '../../src/components/nav/navItem';
 import {MemoryRouter} from 'react-router-dom';
+
 var I18nMessageMock = React.createClass({
     render: function() {
         return (
@@ -30,18 +30,6 @@ let appsTestData = [
     }
 ];
 
-let reportsTestData = {
-    error: false,
-    loading: false,
-    list: [
-        {
-            id: 1,
-            name: 'List All',
-            link: '/app/app1/table/table1/report/1'
-        }
-    ]
-};
-
 let navItemsTestData = [
     {
         id:101,
@@ -57,25 +45,23 @@ let navItemsTestData = [
     }
 ];
 
-let navItemTestData =
-    describe('Left Nav functions', () => {
-        'use strict';
+describe('Left Nav functions', () => {
+    'use strict';
 
-        var component;
-        const context = createRouterContext();
+    var component;
 
-        beforeEach(() => {
-            NavItemRewireAPI.__Rewire__('I18nMessage', I18nMessageMock);
-        });
+    beforeEach(() => {
+        NavItemRewireAPI.__Rewire__('I18nMessage', I18nMessageMock);
+    });
 
-        afterEach(() => {
-            NavItemRewireAPI.__ResetDependency__('I18nMessage');
-        });
+    afterEach(() => {
+        NavItemRewireAPI.__ResetDependency__('I18nMessage');
+    });
 
 
-        it('test render opened with app list', () => {
+    it('test render opened with app list', () => {
 
-            component = mount(
+        component = mount(
                 <MemoryRouter>
                     <LeftNav open={true}
                          appsListOpen={true}
@@ -83,11 +69,11 @@ let navItemTestData =
                          items={navItemsTestData}
                              onToggleAppsList={() => {}} />
                 </MemoryRouter>);
-        });
+    });
 
 
-        it('test render opened with app,table,reports', () => {
-            component = mount(
+    it('test render opened with app,table,reports', () => {
+        component = mount(
                 <MemoryRouter>
                     <LeftNav open={true}
                          appsListOpen={true}
@@ -95,10 +81,10 @@ let navItemTestData =
                          selectedAppId={'app1'}
                          items={navItemsTestData}/>
                 </MemoryRouter>);
-        });
+    });
 
-        it('test render closed with app,table,reports', () => {
-            component = mount(
+    it('test render closed with app,table,reports', () => {
+        component = mount(
                 <MemoryRouter>
                     <LeftNav open={false}
                          appsListOpen={true}
@@ -107,14 +93,13 @@ let navItemTestData =
                          items={navItemsTestData}/>
                 </MemoryRouter>);
 
-        });
     });
+});
 
 describe('LeftNav', () => {
     let component;
     let validAppId = 'app1';
     let invalidAppId = 'doesnotexist';
-    const context = createRouterContext();
 
     it('renders the apps list if an app is not selected', () => {
         component = mount(

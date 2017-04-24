@@ -4,9 +4,8 @@ import UrlFileAttachmentReportLinkFormatter from '../../../common/src/formatter/
 import WindowLocationUtils from '../utils/windowLocationUtils';
 import CommonUrlUtils from '../../../common/src/commonUrlUtils';
 import StringUtils from '../utils/stringUtils';
-const queryString = require('query-string');
 
-import {SUPPORT_LINK_PATH, REPORT_LINK, CHILD_REPORT_LINK, USERS_ROUTE, BUILDER_ROUTE, SETTINGS_ROUTE} from '../constants/urlConstants';
+import {SUPPORT_LINK_PATH, REPORT_LINK, CHILD_REPORT_LINK, USERS_ROUTE, BUILDER_ROUTE, SETTINGS_ROUTE, APP_ROUTE} from '../constants/urlConstants';
 
 const UrlUtils = {
     getIconForProtocol(protocol) {
@@ -100,6 +99,12 @@ const UrlUtils = {
      */
     getTableSettingsLink(appId, tableId) {
         return `${SETTINGS_ROUTE}/app/${appId}/table/${tableId}/properties`;
+    },
+    /**
+     * Get the link for app home page
+     */
+    getAppHomePageLink(appId) {
+        return `${APP_ROUTE}/${appId}`;
     }
 };
 
