@@ -133,8 +133,8 @@ export class FieldEditingTools extends Component {
     updateScrollLocation() {
         if (this.props.selectedFields && this.props.selectedFields[0]) {
             let selectedFormElement = this.getSelectedFormElementContainer();
-            let absoluteElementTop = selectedFormElement.top + window.pageYOffset;
-            let bottom = absoluteElementTop + selectedFormElement.height;
+            let absoluteElementTop = (selectedFormElement ? selectedFormElement.top + window.pageYOffset : 0);
+            let bottom = (selectedFormElement ? absoluteElementTop + selectedFormElement.height : absoluteElementTop);
 
             if (bottom > window.innerHeight - 40 || absoluteElementTop < 50) {
                 this.scrollElementIntoView();
