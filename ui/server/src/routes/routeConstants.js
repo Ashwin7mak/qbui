@@ -35,7 +35,8 @@
      *  NOTE: there is no need to define a route here if the expectation is to only proxy/forward the request through node.
      */
     let qbuiApiEndpoints = {
-        QBUI_HEALTH_CHECK           : baseContext.CORE_HEALTH + '/qbuiHealth',   // TODO: remove with QBUI_HEALTH endpoint
+        // TODO: will be removed and replaced with QBUI_HEALTH endpoint once pit team makes changes in sprint 7
+        QBUI_HEALTH_CHECK           : baseContext.CORE_HEALTH + '/qbuiHealth',
 
         FORM_AND_RECORD_COMPONENTS  : baseContext.QUICKBASE_CLIENT + '/apps/:appId/tables/:tableId/records/:recordId/formComponents',
         FORM_COMPONENTS             : baseContext.QUICKBASE_CLIENT + '/apps/:appId/tables/:tableId/formComponents',
@@ -76,7 +77,7 @@
         // ************ TEMPORARY routes needed to allow E2E tests to continue to work under new routing scheme  *************
         // ************ PLEASE DO NOT ADD TO THIS LIST as these will go away once E2E is updated                 *************
         //  E2E needs these routes to be defined as some tests do not differentiate between the /qbui prefixed route or
-        //  the /api/api/v1 core routes.  JIRA-xxx has been created to refactor how routing is constructed so that the
+        //  the /api/api/v1 core routes.  JIRA MC-2268 has been created to refactor how routing is constructed so that the
         //  test framework does not call the custom routing using the incorrect prefix.
         E2E_FORM_AND_RECORD_COMPONENTS  : baseContext.CORE_ENGINE + '/apps/:appId/tables/:tableId/records/:recordId/formComponents',
         E2E_FORM_COMPONENTS             : baseContext.CORE_ENGINE + '/apps/:appId/tables/:tableId/formComponents',

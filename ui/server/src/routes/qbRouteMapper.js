@@ -104,7 +104,7 @@
             requestFunctions[routes.GOVERNANCE_CONTEXT] = getGovernanceContext;
 
 
-            // ****** TEMP E2E routes..to be removed once JIRA-xxx is complete ******
+            // ****** TEMP E2E routes..to be removed once JIRA MC-2268 is complete ******
             requestFunctions[routes.E2E_APPS] = getApps;
             requestFunctions[routes.E2E_APP_USERS] = getAppUsers;
             requestFunctions[routes.E2E_APP_ROLES] = getAppRoles;
@@ -133,7 +133,7 @@
             requestFunctions[routes.RECORD] = saveSingleRecord;
             requestFunctions[routes.TABLE] = updateTable;
 
-            // ****** TEMP E2E routes..to be removed once JIRA-xxx is complete ******
+            // ****** TEMP E2E routes..to be removed once JIRA MC-2268 is complete ******
             requestFunctions[routes.E2E_RECORD] = saveSingleRecord;
             requestFunctions[routes.E2E_TABLE] = updateTable;
             // **********
@@ -156,7 +156,7 @@
             requestFunctions[routes.RECORDS] = createSingleRecord;
             requestFunctions[routes.TABLE_COMPONENTS] = createTableComponents;
 
-            // ****** TEMP E2E routes..to be removed once JIRA-xxx is complete ******
+            // ****** TEMP E2E routes..to be removed once JIRA MC-2268 is complete ******
             requestFunctions[routes.E2E_RECORDS] = createSingleRecord;
             requestFunctions[routes.E2E_TABLE_COMPONENTS] = createTableComponents;
             // **********
