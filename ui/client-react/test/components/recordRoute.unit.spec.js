@@ -77,7 +77,7 @@ describe('RecordRoute', () => {
                 class WrappedComponent extends React.Component {
                     render() {
                         const {...props} = this.props;
-                        return <ComponentToWrap {...props} match={{params:params}} />;
+                        return <ComponentToWrap {...props} match={{params}} />;
                     }
                 }
                 return WrappedComponent;
@@ -117,7 +117,7 @@ describe('RecordRoute', () => {
             component = TestUtils.renderIntoDocument(
                 <MemoryRouter>
                     <Provider store={store}>
-                        <ConnectedRecordRoute match={{params:params}} flux={flux} selectedTable={{"name": "TestTable"}}/>
+                        <ConnectedRecordRoute match={{params}} flux={flux} selectedTable={{"name": "TestTable"}}/>
                     </Provider>
                 </MemoryRouter>);
 
@@ -175,7 +175,7 @@ describe('RecordRoute', () => {
             component = mount(
                 <MemoryRouter>
                     <Provider store={store}>
-                        <RecordRoute match={{params:params}} reportData={reportData} flux={flux} history={history} {...reduxProps} selectedTable={{"name": "TestTable"}}/>
+                        <RecordRoute match={{params}} reportData={reportData} flux={flux} history={history} {...reduxProps} selectedTable={{"name": "TestTable"}}/>
                     </Provider>
                 </MemoryRouter>);
             expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
