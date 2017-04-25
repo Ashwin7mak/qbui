@@ -19,6 +19,7 @@ const tableCreation = (
     state = {
         //  default states
         dialogOpen: false,
+        showTableReadyDialog: false,
         pageIndex: 0,
         iconChooserOpen: false,
         savingTable: false,
@@ -50,19 +51,20 @@ const tableCreation = (
         };
     }
 
-    case types.NEXT_TABLE_CREATION_PAGE: {
+    case types.SHOW_TABLE_READY_DIALOG: {
         return {
             ...state,
-            pageIndex: state.pageIndex + 1
+            showTableReadyDialog: true
         };
     }
 
-    case types.PREVIOUS_TABLE_CREATION_PAGE: {
+    case types.HIDE_TABLE_READY_DIALOG: {
         return {
             ...state,
-            pageIndex: state.pageIndex > 0 ? state.pageIndex - 1 : 0
+            showTableReadyDialog: false
         };
     }
+
     case types.TABLE_ICON_CHOOSER_OPEN: {
         return {
             ...state,

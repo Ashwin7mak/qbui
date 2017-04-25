@@ -41,6 +41,7 @@ import Button from 'react-bootstrap/lib/Button';
 import Tooltip from '../../../../reuse/client/src/components/tooltip/tooltip';
 import Icon from '../../../../reuse/client/src/components/icon/icon';
 import TableCreationDialog from '../table/tableCreationDialog';
+
 import AppUtils from '../../utils/appUtils';
 import QBicon from '../qbIcon/qbIcon';
 
@@ -502,6 +503,7 @@ export const Nav = React.createClass({
             }
 
             {this.state.apps.selectedAppId && <TableCreationDialog app={this.getSelectedApp()} onTableCreated={this.tableCreated}/>}
+
         </div>);
     },
 
@@ -522,6 +524,9 @@ export const Nav = React.createClass({
 
             window.sessionStorage.setItem(NEW_TABLE_IDS_KEY, tableIds.join(","));
         }
+
+
+        this.props.showTableReadyDialog();
     },
 
     onSelectItem() {
@@ -552,7 +557,7 @@ export const Nav = React.createClass({
      * open the create table wizard
      */
     createNewTable() {
-        this.props.dispatch(TableCreationActions.showTableCreationDialog());
+        this.props.showTableCreationDialog();
     }
 });
 
@@ -589,7 +594,9 @@ const mapDispatchToProps = (dispatch) => {
 
         loadReports: (context, appId, tblId) => dispatch(ReportActions.loadReports(context, appId, tblId)),
 
-        updateFormRedirectRoute: (route) => dispatch(updateFormRedirectRoute(route))
+        updateFormRedirectRoute: (route) => dispatch(updateFormRedirectRoute(route)),
+        showTableCreationDialog: () => dispatch(TableCreationActions.showTableCreationDialog()),
+        showTableReadyDialog: () => dispatch(TableCreationActions.showTableReadyDialog())
     };
 };
 
