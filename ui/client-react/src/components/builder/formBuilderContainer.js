@@ -4,7 +4,6 @@ import {I18nMessage} from '../../utils/i18nMessage';
 import Locale from '../../locales/locales';
 import {connect} from 'react-redux';
 import {loadForm, updateForm, moveFieldOnForm, toggleFormBuilderChildrenTabIndex, toggleToolPaletteChildrenTabIndex, keyboardMoveFieldUp, keyboardMoveFieldDown, selectFieldOnForm, deselectField, removeFieldFromForm, addNewFieldToForm} from '../../actions/formActions';
-import {notifyTableCreated} from '../../actions/tableCreationActions';
 import {updateFormAnimationState} from '../../actions/animationActions';
 import Loader from 'react-loader';
 import {LARGE_BREAKPOINT} from "../../constants/spinnerConfigurations";
@@ -45,7 +44,6 @@ const mapStateToProps = state => {
         toolPaletteChildrenTabIndex: (_.has(currentForm, 'toolPaletteChildrenTabIndex') ? currentForm.toolPaletteChildrenTabIndex[0] : "-1"),
         formFocus: (_.has(currentForm, 'formFocus') ? currentForm.formFocus[0] : undefined),
         toolPaletteFocus: (_.has(currentForm, 'toolPaletteFocus') ? currentForm.toolPaletteFocus[0] : undefined),
-        shouldNotifyTableCreated: state.tableCreation.notifyTableCreated,
         isOpen: state.builderNav.isNavOpen,
         isCollapsed: state.builderNav.isNavCollapsed
     };
@@ -63,7 +61,6 @@ const mapDispatchToProps = {
     selectFieldOnForm,
     deselectField,
     removeFieldFromForm,
-    notifyTableCreated,
     addNewFieldToForm
 };
 
@@ -126,19 +123,11 @@ export const FormBuilderContainer = React.createClass({
 
         // We use the NEW_FORM_RECORD_ID so that the form does not load any record data
         this.props.loadForm(appId, tblId, null, (formType || 'view'), NEW_FORM_RECORD_ID);
-
-        // if we've been sent here from the table creation flow, show a notification
-        if (this.props.shouldNotifyTableCreated) {
-            this.props.notifyTableCreated(false);
-            setTimeout(() => {
-                NotificationManager.success(Locale.getMessage('tableCreation.tableCreated'), Locale.getMessage('success'));
-            }, 1000);
-        }
     },
 
     onCancel() {
         const {appId, tblId} = this.props.match.params;
-        console.log('onCancel');
+
         NavigationUtils.goBackToLocationOrTable(appId, tblId, this.props.redirectRoute);
     },
 
@@ -149,7 +138,6 @@ export const FormBuilderContainer = React.createClass({
     },
 
     saveClicked() {
-        console.log('onSave');
         // get the form meta data from the store..hard code offset for now...this is going to change..
         if (this.props.currentForm && this.props.currentForm.formData) {
             let formMeta = this.props.currentForm.formData.formMeta;
