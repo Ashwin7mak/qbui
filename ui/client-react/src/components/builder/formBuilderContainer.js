@@ -104,11 +104,7 @@ export const FormBuilderContainer = React.createClass({
 
         /**
          * Controls the collapsed state of the left tool panel */
-        isCollapsed: PropTypes.bool,
-
-        /**
-         * Allows the <CustomDragLayer> to be turned off for unit testing */
-        showCustomDragLayer: PropTypes.bool
+        isCollapsed: PropTypes.bool
     },
 
     getDefaultProps() {
@@ -235,7 +231,7 @@ export const FormBuilderContainer = React.createClass({
 
         return (
             <div className="formBuilderContainer">
-                {this.props.showCustomDragLayer && <FormBuilderCustomDragLayer />}
+                <FormBuilderCustomDragLayer />
 
                 <KeyboardShortcuts id="formBuilderContainer"
                                    shortcutBindings={[

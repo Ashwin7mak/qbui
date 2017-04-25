@@ -52,6 +52,7 @@ describe('FormBuilderContainer', () => {
         FormBuilderRewireAPI.__Rewire__('FormBuilder', FormBuilderMock);
         NewfieldsMenuRewireAPI.__Rewire__('FieldTokenInMenu', FieldTokenInMenu);
         FormBuilderRewireAPI.__Rewire__('FieldProperties', FieldPropertiesMock);
+        FormBuilderRewireAPI.__Rewire__('FormBuilderCustomDragLayer', () => null); // Returning null so that DragDropContext error is not thrown in unit test
 
         spyOn(mockActions, 'loadForm');
         spyOn(mockActions, 'updateForm');
@@ -66,6 +67,7 @@ describe('FormBuilderContainer', () => {
         FormBuilderRewireAPI.__ResetDependency__('FormBuilder');
         NewfieldsMenuRewireAPI.__ResetDependency__('FieldTokenInMenu');
         FormBuilderRewireAPI.__ResetDependency__('FieldProperties');
+        FormBuilderRewireAPI.__ResetDependency__('FormBuilderCustomDragLayer');
 
         mockActions.loadForm.calls.reset();
         mockActions.updateForm.calls.reset();
@@ -161,8 +163,7 @@ describe('FormBuilderContainer', () => {
             component = mount(<FormBuilderContainer match={testParamsProp}
                                                     currentForm={currentForm}
                                                     loadForm={mockActions.loadForm}
-                                                    updateForm={mockActions.updateForm}
-                                                    showCustomDragLayer={false} />);
+                                                    updateForm={mockActions.updateForm} />);
 
             let saveButton = component.find('.saveFormButton');
 
@@ -184,8 +185,7 @@ describe('FormBuilderContainer', () => {
                                                     selectedField={selectedField}
                                                     loadForm={mockActions.loadForm}
                                                     toggleFormBuilderChildrenTabIndex={mockActions.toggleFormBuilderChildrenTabIndex}
-                                                    updateForm={mockActions.updateForm}
-                                                    showCustomDragLayer={false} />);
+                                                    updateForm={mockActions.updateForm} />);
 
 
             instance = component.instance();
@@ -204,8 +204,7 @@ describe('FormBuilderContainer', () => {
                                                     currentForm={currentForm}
                                                     loadForm={mockActions.loadForm}
                                                     toggleFormBuilderChildrenTabIndex={mockActions.toggleFormBuilderChildrenTabIndex}
-                                                    updateForm={mockActions.updateForm}
-                                                    showCustomDragLayer={false} />);
+                                                    updateForm={mockActions.updateForm} />);
 
 
             instance = component.instance();
@@ -225,8 +224,7 @@ describe('FormBuilderContainer', () => {
                                                     tabIndex="0"
                                                     loadForm={mockActions.loadForm}
                                                     toggleFormBuilderChildrenTabIndex={mockActions.toggleFormBuilderChildrenTabIndex}
-                                                    updateForm={mockActions.updateForm}
-                                                    showCustomDragLayer={false} />);
+                                                    updateForm={mockActions.updateForm} />);
 
 
             instance = component.instance();

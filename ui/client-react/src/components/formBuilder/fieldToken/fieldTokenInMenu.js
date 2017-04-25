@@ -110,13 +110,12 @@ FieldTokenInMenu.propTypes = {
 
 const mapStateToProps = state => {
     let currentForm = getFormByContext(state, CONTEXT.FORM.VIEW);
-    let selectedField = (_.has(currentForm, 'selectedFields') ? currentForm.selectedFields[0] : null);
 
     return {
         formId: _.get(currentForm, 'id'),
         appId: _.get(currentForm, 'formData.formMeta.appId'),
         tblId: _.get(currentForm, 'formData.formMeta.tableId'),
-        selectedField: selectedField,
+        selectedField: (_.has(currentForm, 'selectedFields') ? currentForm.selectedFields[0] : null),
         selectedFormElement: (currentForm ? getSelectedFormElement(state, currentForm.id) : undefined)
     };
 };
