@@ -483,8 +483,7 @@ export const SortAndGroup = React.createClass({
         let visGroupEls = _.has(this.props, 'reportData.data.groupEls') ?
                             this.getVisGroupEls(this.props.reportData.data.groupEls, fields) :  [];
         return (
-            <div ref="sortAndGroupContainer" className="sortAndGroupContainer"
-            >
+            <div ref="sortAndGroupContainer" className="sortAndGroupContainer">
                 {/* the sort/group icon button */}
                 <div className={"sortAndGroupButton " + (this.state.show ? "shown " : "") }
                      ref="SortAndGroupButton"
@@ -494,7 +493,6 @@ export const SortAndGroup = React.createClass({
                         <QBicon className="sortButton" icon="sort-az" />
                         </QBToolTip>
                     </span>
-
                 </div>
 
                 {/* options shown when icon clicked */}
