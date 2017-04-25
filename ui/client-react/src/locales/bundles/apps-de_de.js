@@ -316,8 +316,8 @@ export default {
                     uncheckedToChecked: "Gruppe ungeprüft geprüft",
                     checkedToUnchecked: "Gruppe geprüft ungeprüft"
                 },
-                addColumnBefore: "In Spalte vor",
-                addColumnAfter: "In Spalte nach",
+                addColumnBefore: "Fügen versteckt Spalte vor",
+                addColumnAfter: "Fügen versteckt Spalte nach",
                 hideColumn: "Ausblenden dieser Spalte",
                 newTable: "Neue Tabelle auf dieser Spalte über",
                 columnProps: "Spalteneigenschaften",
