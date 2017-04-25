@@ -4,6 +4,7 @@ import FieldToken from './fieldToken';
 import Tooltip from '../../../../../reuse/client/src/components/tooltip/tooltip';
 import {addNewFieldToForm} from "../../../actions/formActions";
 import {getFormByContext, getSelectedFormElement} from '../../../reducers/forms';
+import {updateFormAnimationState} from '../../../actions/animationActions';
 import {CONTEXT} from '../../../actions/context';
 import _ from 'lodash';
 import DraggableField from '../draggableField';
@@ -73,7 +74,10 @@ export class DraggableFieldToken extends Component {
     /**
      * It resets the state when dragging is complete so the new field can be added again
      */
-    endDrag = () => this.setState({addedToForm: false});
+    endDrag = () => {
+        this.setState({addedToForm: false});
+        this.props.updateFormAnimationState(false);
+    };
 
     render() {
         const Element = DraggableField(FieldTokenInMenu, false);
@@ -118,7 +122,8 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = {
-    addNewFieldToForm
+    addNewFieldToForm,
+    updateFormAnimationState
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(DraggableFieldToken);
