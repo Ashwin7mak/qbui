@@ -53,7 +53,7 @@ export class FieldProperties extends Component {
      */
     createPropertiesTitle() {
         return (
-            <div className="fieldPropertiesTitle">{Locale.getMessage('fieldPropertyLabels.title')}</div>
+            <div key={0} className="fieldPropertiesTitle">{Locale.getMessage('fieldPropertyLabels.title')}</div>
         );
     }
 
@@ -62,11 +62,12 @@ export class FieldProperties extends Component {
      * Using a textfieldvalueeditor to keep it green and it has handy props
      * @param propertyTitle
      * @param propertyValue
+     * @param key
      * @returns {XML}
      */
-    createTextPropertyContainer(propertyTitle, propertyValue) {
+    createTextPropertyContainer(propertyTitle, propertyValue, key = 1) {
         return (
-            <div className="textPropertyContainer">
+            <div key={key} className="textPropertyContainer">
                 <div className="textPropertyTitle">{propertyTitle}</div>
                 <TextFieldValueEditor value={propertyValue}
                                       classes="textPropertyValue"
@@ -82,11 +83,12 @@ export class FieldProperties extends Component {
      * Using a checkboxfieldvalueeditor to keep it green and the awesome label/onChange built in support
      * @param propertyTitle
      * @param propertyValue
+     * @param key
      * @returns {XML}
      */
-    createCheckBoxPropertyContainer(propertyTitle, propertyValue) {
+    createCheckBoxPropertyContainer(propertyTitle, propertyValue, key = 2) {
         return (
-            <div className="checkboxPropertyContainer">
+            <div key={key} className="checkboxPropertyContainer">
                 <CheckBoxFieldValueEditor value={propertyValue}
                                           label={propertyTitle}
                                           onChange={(newValue) => this.updateFieldProps(newValue, 'required')}
@@ -100,11 +102,12 @@ export class FieldProperties extends Component {
      * Using a MultiLinTextFieldValueEditor to keep it green and textarea built in support
      * @param propertyTitle
      * @param propertyValue
+     * @param key
      * @returns {XML}
      */
-    createMultiChoiceTextPropertyContainer(propertyTitle, propertyValue) {
+    createMultiChoiceTextPropertyContainer(propertyTitle, propertyValue, key = 3) {
         return (
-            <div className="multiChoicePropertyContainer">
+            <div key={key} className="multiChoicePropertyContainer">
                 <div className="multiChoicePropertyTitle">{propertyTitle}</div>
                 <MultiLineTextFieldValueEditor
                     value={propertyValue}
@@ -153,17 +156,23 @@ export class FieldProperties extends Component {
      * Find all field properties for a given field type
      * We know EVERY field type currently has a Name and Required property so generate those no matter what
      * We also know that we need to display the Title header for field properties so do that too.
+     * TODO:: Currently the key iterators are hardcoded. Once this comes from a json object, set keys to unique id or index in array
      * @returns {Array}
      */
     findFieldProperties() {
-        let fieldPropContainers = [this.createPropertiesTitle(),
+        let fieldPropContainers = [
+            this.createPropertiesTitle(),
             this.createNameProperty(this.props.selectedField.name),
-            this.createRequiredProperty(this.props.selectedField.required)];
+            this.createRequiredProperty(this.props.selectedField.required)
+        ];
+
         let formatType = FieldFormats.getFormatType(this.props.selectedField);
+
         if (formatType === FieldFormats.TEXT_FORMAT_MULTICHOICE) {
             let choices = this.buildMultiChoiceDisplayList(this.props.selectedField.multipleChoice.choices);
             fieldPropContainers.push(this.createMultiChoiceTextPropertyContainer(Locale.getMessage('fieldPropertyLabels.multiChoice'), choices));
         }
+
         return fieldPropContainers;
     }
 

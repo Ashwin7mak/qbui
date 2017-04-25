@@ -13,7 +13,7 @@ let createDefaultFieldsProperties = (type, defaultTypeProperties, userDefaultPro
     return _.merge(defaultScalarFieldsProperties, defaultTypeProperties, userDefaultProperties);
 };
 
-export const createScalarDefaultFieldsProperties = (userDefaultProperties = null) =>{
+export const createScalarDefaultFieldsProperties = (userDefaultProperties = null) => {
     return {
         [FieldFormats.NUMBER_FORMAT]: {
             ...createDefaultFieldsProperties(serverTypeConsts.NUMERIC, DefaultFieldProperties[FieldFormats.NUMBER_FORMAT], userDefaultProperties)
