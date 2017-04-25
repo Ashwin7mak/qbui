@@ -4,7 +4,6 @@ import {I18nMessage} from '../../utils/i18nMessage';
 import Locale from '../../locales/locales';
 import {connect} from 'react-redux';
 import {loadForm, updateForm, moveFieldOnForm, toggleFormBuilderChildrenTabIndex, keyboardMoveFieldUp, keyboardMoveFieldDown, deselectField, removeFieldFromForm} from '../../actions/formActions';
-import {notifyTableCreated} from '../../actions/tableCreationActions';
 import {updateFormAnimationState} from '../../actions/animationActions';
 import Loader from 'react-loader';
 import {LARGE_BREAKPOINT} from "../../constants/spinnerConfigurations";
@@ -38,7 +37,6 @@ const mapStateToProps = state => {
         redirectRoute: getFormRedirectRoute(state),
         tabIndex: (_.has(currentForm, 'formBuilderChildrenTabIndex') ? currentForm.formBuilderChildrenTabIndex[0] : undefined),
         formFocus: (_.has(currentForm, 'formFocus') ? currentForm.formFocus[0] : undefined),
-        shouldNotifyTableCreated: state.tableCreation.notifyTableCreated,
         isOpen: state.builderNav.isNavOpen,
         isCollapsed: state.builderNav.isNavCollapsed
     };
@@ -53,8 +51,7 @@ const mapDispatchToProps = {
     keyboardMoveFieldUp,
     keyboardMoveFieldDown,
     deselectField,
-    removeFieldFromForm,
-    notifyTableCreated
+    removeFieldFromForm
 };
 
 /**
@@ -115,14 +112,6 @@ export const FormBuilderContainer = React.createClass({
 
         // We use the NEW_FORM_RECORD_ID so that the form does not load any record data
         this.props.loadForm(appId, tblId, null, (formType || 'view'), NEW_FORM_RECORD_ID);
-
-        // if we've been sent here from the table creation flow, show a notification
-        if (this.props.shouldNotifyTableCreated) {
-            this.props.notifyTableCreated(false);
-            setTimeout(() => {
-                NotificationManager.success(Locale.getMessage('tableCreation.tableCreated'), Locale.getMessage('success'));
-            }, 1000);
-        }
     },
 
     onCancel() {
