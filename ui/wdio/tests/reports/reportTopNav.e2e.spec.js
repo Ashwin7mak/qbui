@@ -12,7 +12,6 @@
         var realmName;
         var realmId;
         var testApp;
-        let recOffset = 5;
         /**
          * Setup method. Creates test app then authenticates into the new stack
          */
@@ -20,7 +19,7 @@
             browser.logger.info('beforeAll spec function - Generating test data and logging in');
             // Need to return here. beforeAll is completely async, need to return the Promise chain in any before or after functions!
             // No need to call done() anymore
-            return e2eBase.basicAppSetup(null, e2eConsts.MAX_PAGING_SIZE - recOffset).then(function(createdApp) {
+            return e2eBase.basicAppSetup(null, 5).then(function(createdApp) {
                 testApp = createdApp;
                 realmName = e2eBase.recordBase.apiBase.realm.subdomain;
                 realmId = e2eBase.recordBase.apiBase.realm.id;
@@ -33,6 +32,10 @@
                 browser.logger.error('Error in beforeAll function:' + JSON.stringify(error));
                 return Promise.reject('Error in beforeAll function:' + JSON.stringify(error));
             });
+        });
+
+        beforeAll(function() {
+            return e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
         });
 
         /**
@@ -50,14 +53,15 @@
             TopNavPO.topNavCenterDivEl.waitForVisible();
             //Step2: Verify the no.of harmony buttons
             expect(TopNavPO.topNavHarButtonsListEl.value.length).toEqual(2);
-            //Step3: Verify the text for button
+            // Step3: Verify the text for harmony buttons
             expect(TopNavPO.topNavCenterDivEl.getText()).toBeFalsy();
         });
+
         it('Verify topNav global icons displayed/not displayed and verify text', function() {
             //Step1: Verify if the global icons are displayed
-            TopNavPO.topNavRightDivEl.waitForVisible();
+            TopNavPO.topNavGlobalActDivEl.waitForVisible();
             //Step2: Verify the no.of global action icons
-            expect(TopNavPO.topNavGlobalActionsListEl.value.length).toBe(2);
+            expect(TopNavPO.topNavGlobalActionsListEl.value.length).toBe(3);
             //Used HTML to get text as getText() returns empty string for <span> elements
             let innerHTML = browser.getHTML('.navLabel span', false);
             if (breakpointSize !== 'small') {
