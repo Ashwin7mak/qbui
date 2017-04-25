@@ -378,6 +378,7 @@ div.leftNavTooltip {
 
                 .newTableItem {
                     position: sticky;
+                    position: -webkit-sticky;
                     bottom: 0;
                     background-color: $leftnav-background-color;
                     border-top: 1px solid $leftnav-background-stroke-color;
