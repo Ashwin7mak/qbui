@@ -3,7 +3,7 @@ import {Button} from 'react-bootstrap';
 import {I18nMessage} from '../../utils/i18nMessage';
 import Locale from '../../locales/locales';
 import {connect} from 'react-redux';
-import {loadForm, updateForm, moveFieldOnForm, toggleFormBuilderChildrenTabIndex, toggleToolPaletteChildrenTabIndex, keyboardMoveFieldUp, keyboardMoveFieldDown, deselectField, removeFieldFromForm} from '../../actions/formActions';
+import {loadForm, updateForm, moveFieldOnForm, toggleFormBuilderChildrenTabIndex, toggleToolPaletteChildrenTabIndex, keyboardMoveFieldUp, keyboardMoveFieldDown, selectFieldOnForm, deselectField, removeFieldFromForm, addNewFieldToForm} from '../../actions/formActions';
 import {notifyTableCreated} from '../../actions/tableCreationActions';
 import {updateFormAnimationState} from '../../actions/animationActions';
 import Loader from 'react-loader';
@@ -17,13 +17,16 @@ import NavigationUtils from '../../utils/navigationUtils';
 import Logger from '../../utils/logger';
 import AutoScroll from '../autoScroll/autoScroll';
 import PageTitle from '../pageTitle/pageTitle';
-import {getFormByContext, getFormRedirectRoute} from '../../reducers/forms';
+import {getFormByContext, getFormRedirectRoute, getSelectedFormElement} from '../../reducers/forms';
 import {CONTEXT} from '../../actions/context';
 import {ENTER_KEY, SPACE_KEY} from '../../../../reuse/client/src/components/keyboardShortcuts/keyCodeConstants';
 import * as tabIndexConstants from '../formBuilder/tabindexConstants';
 import KeyboardShortcuts from '../../../../reuse/client/src/components/keyboardShortcuts/keyboardShortcuts';
 import _ from 'lodash';
 import NotificationManager from '../../../../reuse/client/src/scripts/notificationManager';
+import {DragDropContext} from 'react-dnd';
+import TouchBackend from 'react-dnd-touch-backend';
+import FormBuilderCustomDragLayer from '../formBuilder/formBuilderCustomDragLayer';
 
 import './formBuilderContainer.scss';
 
@@ -36,6 +39,7 @@ const mapStateToProps = state => {
     return {
         currentForm,
         selectedField: (_.has(currentForm, 'selectedFields') ? currentForm.selectedFields[0] : undefined),
+        selectedFormElement: (currentForm ? getSelectedFormElement(state, currentForm.id) : undefined),
         redirectRoute: getFormRedirectRoute(state),
         formBuilderChildrenTabIndex: (_.has(currentForm, 'formBuilderChildrenTabIndex') ? currentForm.formBuilderChildrenTabIndex[0] : "-1"),
         toolPaletteChildrenTabIndex: (_.has(currentForm, 'toolPaletteChildrenTabIndex') ? currentForm.toolPaletteChildrenTabIndex[0] : "-1"),
@@ -56,9 +60,11 @@ const mapDispatchToProps = {
     toggleToolPaletteChildrenTabIndex,
     keyboardMoveFieldUp,
     keyboardMoveFieldDown,
+    selectFieldOnForm,
     deselectField,
     removeFieldFromForm,
-    notifyTableCreated
+    notifyTableCreated,
+    addNewFieldToForm
 };
 
 /**
@@ -109,7 +115,8 @@ export const FormBuilderContainer = React.createClass({
         // For easier unit tests without the Router, we can pass in default empty values
         return {
             location: {query: {}},
-            match: {params: {}}
+            match: {params: {}},
+            showCustomDragLayer: true
         };
     },
 
@@ -252,6 +259,7 @@ export const FormBuilderContainer = React.createClass({
 
         return (
             <div className="formBuilderContainer">
+                <FormBuilderCustomDragLayer />
                 <KeyboardShortcuts id="formBuilderContainer"
                                    shortcutBindings={[
                                        {key: 'shift+up', callback: () => {this.keyboardMoveFieldUp(); return false;}},
@@ -283,9 +291,14 @@ export const FormBuilderContainer = React.createClass({
                                             formBuilderContainerContentElement={formBuilderContainerContent}
                                             selectedField={this.props.selectedField}
                                             formId={formId}
+                                            appId={this.props.match.params.appId}
+                                            tblId={this.props.match.params.tblId}
                                             formData={formData}
                                             moveFieldOnForm={this.props.moveFieldOnForm}
                                             updateAnimationState={this.props.updateFormAnimationState}
+                                            selectedFormElement={this.props.selectedFormElement}
+                                            addNewFieldToForm={this.props.addNewFieldToForm}
+                                            selectFieldOnForm={this.props.selectFieldOnForm}
                                         />
                                     </Loader>
                                 </div>
@@ -299,7 +312,6 @@ export const FormBuilderContainer = React.createClass({
     }
 });
 
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(FormBuilderContainer);
+export default
+    DragDropContext(TouchBackend({enableMouseEvents: true, delay: 30}))(
+    connect(mapStateToProps, mapDispatchToProps)(FormBuilderContainer));

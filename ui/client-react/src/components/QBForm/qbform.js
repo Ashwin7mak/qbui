@@ -357,6 +357,7 @@ export const QBForm = React.createClass({
                   location={location}
                   orderIndex={FormFieldElement.orderIndex}
                   formBuilderContainerContentElement={this.props.formBuilderContainerContentElement}
+                  beginDrag={this.props.beginDrag}
                   handleFormReorder={this.props.handleFormReorder}
                   cacheDragElement={this.props.cacheDragElement}
                   clearDragElementCache={this.props.clearDragElementCache}

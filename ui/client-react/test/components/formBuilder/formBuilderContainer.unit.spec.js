@@ -53,6 +53,7 @@ describe('FormBuilderContainer', () => {
         FormBuilderRewireAPI.__Rewire__('FormBuilder', FormBuilderMock);
         NewfieldsMenuRewireAPI.__Rewire__('FieldTokenInMenu', FieldTokenInMenu);
         FormBuilderRewireAPI.__Rewire__('FieldProperties', FieldPropertiesMock);
+        FormBuilderRewireAPI.__Rewire__('FormBuilderCustomDragLayer', () => null); // Returning null so that DragDropContext error is not thrown in unit test
 
         spyOn(mockActions, 'loadForm');
         spyOn(mockActions, 'updateForm');
@@ -67,6 +68,7 @@ describe('FormBuilderContainer', () => {
         FormBuilderRewireAPI.__ResetDependency__('FormBuilder');
         NewfieldsMenuRewireAPI.__ResetDependency__('FieldTokenInMenu');
         FormBuilderRewireAPI.__ResetDependency__('FieldProperties');
+        FormBuilderRewireAPI.__ResetDependency__('FormBuilderCustomDragLayer');
 
         mockActions.loadForm.calls.reset();
         mockActions.updateForm.calls.reset();

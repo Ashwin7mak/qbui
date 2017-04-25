@@ -1,10 +1,6 @@
 import React, {Component, PropTypes} from 'react';
-import {DragDropContext} from 'react-dnd';
 import QbForm from '../QBForm/qbform';
-import FormBuilderCustomDragLayer from './formBuilderCustomDragLayer';
-import TouchBackend from 'react-dnd-touch-backend';
 import {findFormElementKey} from '../../utils/formUtils';
-import _ from 'lodash';
 import {findDOMNode} from 'react-dom';
 
 import './formBuilder.scss';
@@ -34,17 +30,31 @@ export class FormBuilder extends Component {
     }
 
     /**
+     * When a user starts dragging an element, we make sure that element gets selected so there aren't multiple or incorrect selected elements.
+     * Needed because a drag event will prevent a click event. Normally the click event would select the field.
+     * @param dragItemProps
+     */
+    beginDrag = dragItemProps => {
+        this.props.selectFieldOnForm(this.props.formId, dragItemProps.location);
+    };
+
+    /**
      * Moves the dragged item to the location of the item that it was dropped on.
      * @param newLocation
      * @param draggedItemProps
      * @param moveImmediately - Helps with testing. Change to true to ignore the timeout that helps with fast dragging.
      */
     handleFormReorder(newLocation, draggedItemProps, moveImmediately = false) {
-        if (this.props.moveFieldOnForm && _.has(draggedItemProps, 'containingElement')) {
+        if (!this.props.moveFieldOnForm) {
+            // Exit if the required action is not present
+            return;
+        }
+
+        if (this.props.selectedFormElement) {
             let element = draggedItemProps.containingElement[findFormElementKey(draggedItemProps.containingElement)];
 
             if (moveImmediately) {
-                return this.props.moveFieldOnForm(this.props.formId, newLocation, Object.assign({}, draggedItemProps, {element}));
+                return this.props.moveFieldOnForm(this.props.formId, newLocation, Object.assign({}, draggedItemProps, {containingElement: this.props.selectedFormElement}, {element}));
             }
 
             if (this.reorderTimeout) {
@@ -53,7 +63,7 @@ export class FormBuilder extends Component {
 
             // Add a short timeout so that very fast dragging doesn't cause multiple reorders
             this.reorderTimeout = setTimeout(() => {
-                this.props.moveFieldOnForm(this.props.formId, newLocation, Object.assign({}, draggedItemProps, {element}));
+                this.props.moveFieldOnForm(this.props.formId, newLocation, Object.assign({}, draggedItemProps, {containingElement: this.props.selectedFormElement}, {element}));
             }, DRAG_PREVIEW_TIMEOUT);
         }
     }
@@ -100,11 +110,6 @@ export class FormBuilder extends Component {
     render() {
         return (
             <div className="formBuilderContainer">
-                <label style={{display: 'none'}} id="reactabularToggle">
-                    <input type="checkbox" checked={this.state.hasAnimation} onChange={evt => this.setState({hasAnimation: !this.state.hasAnimation})} />
-                    Has drag animation
-                </label>
-                {this.props.showCustomDragLayer && <FormBuilderCustomDragLayer />}
                 <QbForm
                     formBuilderContainerContentElement={this.props.formBuilderContainerContentElement}
                     formFocus={this.props.formFocus}
@@ -113,6 +118,7 @@ export class FormBuilder extends Component {
                     edit={true}
                     editingForm={true}
                     formData={this.props.formData}
+                    beginDrag={this.beginDrag}
                     handleFormReorder={this.handleFormReorder}
                     cacheDragElement={this.cacheDragElement}
                     clearDragElementCache={this.clearDragElementCache}
@@ -128,14 +134,12 @@ export class FormBuilder extends Component {
 }
 
 FormBuilder.propTypes = {
-    formId: PropTypes.string.isRequired,
-
-    showCustomDragLayer: PropTypes.bool,
+    formId: PropTypes.string,
 
     formData: PropTypes.shape({
         fields: PropTypes.array,
         formMeta: PropTypes.object
-    }).isRequired,
+    }),
 
     moveFieldOnForm: PropTypes.func,
 
@@ -150,4 +154,4 @@ FormBuilder.defaultProps = {
  * delay is used to allow a user to scroll on mobile
  * if a user wants to drag and drop, the screen must be pressed on for 50ms before dragging will start
  * */
-export default DragDropContext(TouchBackend({enableMouseEvents: true, delay: 30}))(FormBuilder);
+export default FormBuilder;

@@ -81,13 +81,13 @@ export class FieldEditingTools extends Component {
             <div className="actionIcons">
                     <div className="deleteFieldIcon">
                         <QbToolTip i18nMessageKey="builder.formBuilder.removeField">
-                           <button tabIndex={tabIndex} onClick={this.onClickDelete}> <QbIcon icon="delete" /> </button>
+                           <button type="button" tabIndex={tabIndex} onClick={this.onClickDelete}> <QbIcon icon="delete" /> </button>
                         </QbToolTip>
                     </div>
 
                     <div  className="fieldPreferencesIcon">
                         <QbToolTip i18nMessageKey="builder.formBuilder.unimplemented">
-                            <button tabIndex={tabIndex} onClick={this.onClickFieldPreferences}> <QbIcon iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY} icon="Dimensions"/> </button>
+                            <button type="button" tabIndex={tabIndex} onClick={this.onClickFieldPreferences}> <QbIcon iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY} icon="Dimensions"/> </button>
                         </QbToolTip>
                     </div>
             </div>
