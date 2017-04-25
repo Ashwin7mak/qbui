@@ -6,6 +6,7 @@ import {addNewFieldToForm} from "../../../actions/formActions";
 import {getFormByContext, getSelectedFormElement} from '../../../reducers/forms';
 import {updateFormAnimationState} from '../../../actions/animationActions';
 import {CONTEXT} from '../../../actions/context';
+import {ENTER_KEY, SPACE_KEY} from '../../../../../reuse/client/src/components/keyboardShortcuts/keyCodeConstants';
 import _ from 'lodash';
 import DraggableField from '../draggableField';
 
@@ -18,9 +19,11 @@ export class FieldTokenInMenu extends Component {
 
         if (this.props.tooltipText) {
             return (
-                <Tooltip location="right" plainMessage={this.props.tooltipText}>
-                    {fieldToken}
-                </Tooltip>
+                <div >
+                    <Tooltip location="right" plainMessage={this.props.tooltipText}>
+                        {fieldToken}
+                    </Tooltip>
+                </div>
             );
         }
 
@@ -56,6 +59,14 @@ export class DraggableFieldToken extends Component {
         this.props.addNewFieldToForm(formId, appId, tblId, selectedField, relatedField);
     };
 
+    onEnterClickToAdd = (e) => {
+        if (e.which === ENTER_KEY || e.which === SPACE_KEY) {
+            this.clickToAddToForm();
+            e.preventDefault();
+        }
+    };
+
+
     /**
      * This is called when the field token is dragged over a droppable target on the form
      * It adds the field if it has not been added yet.
@@ -83,7 +94,9 @@ export class DraggableFieldToken extends Component {
         const Element = DraggableField(FieldTokenInMenu, false);
 
         return (
-            <div onClick={this.clickToAddToForm}>
+            <div onClick={this.clickToAddToForm}
+                 tabIndex={this.props.tabIndex}
+                 onKeyDown={this.onEnterClickToAdd}>
                 <Element {...this.props} onHover={this.onHover} endDrag={this.endDrag} />
             </div>
         );
@@ -105,7 +118,11 @@ FieldTokenInMenu.propTypes = {
 
     /**
      * Can optionally show the token in a collapsed state (icon only) */
-    isCollapsed: PropTypes.bool
+    isCollapsed: PropTypes.bool,
+
+    /**
+     * Tabindex */
+    toolPaletteChildrenTabIndex: PropTypes.number
 };
 
 const mapStateToProps = state => {

@@ -9,6 +9,7 @@ import './builderWrapper.scss';
 import GlobalActions from '../actions/globalActions';
 import RouteWithSubRoutes from "../../scripts/RouteWithSubRoutes";
 import TopNav from '../../../../reuse/client/src/components/topNav/topNav';
+import * as tabIndexConstants from '../formBuilder/tabindexConstants';
 import TableReadyDialog from '../table/tableReadyDialog';
 let FluxMixin = Fluxxor.FluxMixin(React);
 let StoreWatchMixin = Fluxxor.StoreWatchMixin;
@@ -41,7 +42,7 @@ export const BuilderWrapper = React.createClass({
                                position={"top"}
                                dropdownIcon="user"
                                dropdownMsg="globalActions.user"
-                               startTabIndex={4}
+                               startTabIndex={tabIndexConstants.USER_MENU_TAB_INDEX}
                                app={this.getSelectedApp()}/>);
     },
 
@@ -52,6 +53,7 @@ export const BuilderWrapper = React.createClass({
                 <TopNav
                     onNavClick={this.props.toggleNav}
                     globalActions={this.getTopGlobalActions()}
+                    tabIndex={tabIndexConstants.FORM_BUILDER_TOGGLE_NAV_BUTTON_TABINDEX}
                 />
 
                 <div className="builderWrapperBody">

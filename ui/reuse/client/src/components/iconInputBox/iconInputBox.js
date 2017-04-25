@@ -27,6 +27,7 @@ const IconInputBox = React.createClass({
         return (
             <div className={className}>
                 <input className="searchInput" type="text"
+                   tabIndex={this.props.tabIndex}
                    key={this.props.iconInputBoxKey}
                    value={this.props.value}
                    onChange={this.props.onChange}
