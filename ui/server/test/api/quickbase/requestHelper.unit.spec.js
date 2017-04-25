@@ -180,6 +180,7 @@ describe('Validate RequestHelper unit tests', function() {
         it('Test setAutomationEngineOptions with GET method', function(done) {
             req.method = 'GET';
             req.originalUrl = '/someurl.com';
+            req.cookies = "TICKET=TestCookie";
             let request = requestHelper.setAutomationEngineOptions(req);
             should(request.url).be.exactly(config.automationHost + req.url);
             should.not.exist(request.body);
