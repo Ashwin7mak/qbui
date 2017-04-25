@@ -2,7 +2,7 @@ import React from 'react';
 import {shallow} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
 
-import {FieldTokenInMenu} from '../../../src/components/formBuilder/fieldToken/fieldTokenInMenu';
+import {FieldTokenInMenu, DraggableFieldToken} from '../../../src/components/formBuilder/fieldToken/fieldTokenInMenu';
 import FieldToken from '../../../src/components/formBuilder/fieldToken/fieldToken';
 
 let component;
@@ -36,8 +36,8 @@ describe('FieldTokenInMenu', () => {
     it('will invoke addNewFieldToForm when FieldToken node is clicked', () => {
         const type = 'textbox';
         const title = 'New Textbox';
-        component = shallow(<FieldTokenInMenu addNewFieldToForm={mockActions.addNewFieldToForm} relatedField={relatedField} type={type} title={title} formId={formId} selectedField={selectedField} appId={appId} tblId={tblId}/>);
-        component.find(FieldToken).simulate('click');
+        component = shallow(<DraggableFieldToken addNewFieldToForm={mockActions.addNewFieldToForm} relatedField={relatedField} type={type} title={title} formId={formId} selectedField={selectedField} appId={appId} tblId={tblId}/>);
+        component.simulate('click');
 
         expect(mockActions.addNewFieldToForm).toHaveBeenCalledWith(formId, appId, tblId, selectedField, relatedField);
     });

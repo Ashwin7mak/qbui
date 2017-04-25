@@ -104,14 +104,20 @@ export const FormBuilderContainer = React.createClass({
 
         /**
          * Controls the collapsed state of the left tool panel */
-        isCollapsed: PropTypes.bool
+        isCollapsed: PropTypes.bool,
+
+        /**
+         * Allows the customDragLayer to be turned off for unit testing
+         */
+        showCustomDragLayer: PropTypes.bool
     },
 
     getDefaultProps() {
         // For easier unit tests without the Router, we can pass in default empty values
         return {
             location: {query: {}},
-            match: {params: {}}
+            match: {params: {}},
+            showCustomDragLayer: true
         };
     },
 
@@ -230,7 +236,7 @@ export const FormBuilderContainer = React.createClass({
 
         return (
             <div className="formBuilderContainer">
-                <FormBuilderCustomDragLayer />
+                {this.props.showCustomDragLayer && <FormBuilderCustomDragLayer />}
 
                 <KeyboardShortcuts id="formBuilderContainer"
                                    shortcutBindings={[
@@ -279,5 +285,4 @@ export const FormBuilderContainer = React.createClass({
 
 export default
     DragDropContext(TouchBackend({enableMouseEvents: true, delay: 30}))(
-    connect(mapStateToProps, mapDispatchToProps)
-    (FormBuilderContainer));
+    connect(mapStateToProps, mapDispatchToProps)(FormBuilderContainer));

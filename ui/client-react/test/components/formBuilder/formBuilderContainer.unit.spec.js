@@ -161,7 +161,8 @@ describe('FormBuilderContainer', () => {
             component = mount(<FormBuilderContainer match={testParamsProp}
                                                     currentForm={currentForm}
                                                     loadForm={mockActions.loadForm}
-                                                    updateForm={mockActions.updateForm} />);
+                                                    updateForm={mockActions.updateForm}
+                                                    showCustomDragLayer={false} />);
 
             let saveButton = component.find('.saveFormButton');
 
@@ -183,7 +184,8 @@ describe('FormBuilderContainer', () => {
                                                     selectedField={selectedField}
                                                     loadForm={mockActions.loadForm}
                                                     toggleFormBuilderChildrenTabIndex={mockActions.toggleFormBuilderChildrenTabIndex}
-                                                    updateForm={mockActions.updateForm} />);
+                                                    updateForm={mockActions.updateForm}
+                                                    showCustomDragLayer={false} />);
 
 
             instance = component.instance();
@@ -202,7 +204,8 @@ describe('FormBuilderContainer', () => {
                                                     currentForm={currentForm}
                                                     loadForm={mockActions.loadForm}
                                                     toggleFormBuilderChildrenTabIndex={mockActions.toggleFormBuilderChildrenTabIndex}
-                                                    updateForm={mockActions.updateForm} />);
+                                                    updateForm={mockActions.updateForm}
+                                                    showCustomDragLayer={false} />);
 
 
             instance = component.instance();
@@ -222,7 +225,8 @@ describe('FormBuilderContainer', () => {
                                                     tabIndex="0"
                                                     loadForm={mockActions.loadForm}
                                                     toggleFormBuilderChildrenTabIndex={mockActions.toggleFormBuilderChildrenTabIndex}
-                                                    updateForm={mockActions.updateForm} />);
+                                                    updateForm={mockActions.updateForm}
+                                                    showCustomDragLayer={false} />);
 
 
             instance = component.instance();
