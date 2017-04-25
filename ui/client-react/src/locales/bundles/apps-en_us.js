@@ -40,7 +40,10 @@ export default {
                 addUser: "Adding a new user is not available yet",
                 users: "Users",
                 content: "This is the list of all the people who have been added to your application. You can get some quick insights about how many people are in each role in your application as well as find a specific person in the list and email them.",
-                manager: "Application Manager"
+                manager: "Application Manager",
+                removeUser: "Remove this user?",
+                unassignUser: "Users will no longer be able to access this application. Any data they have previously entered will remain in the application."
+
             }
         },
         appMenu: {

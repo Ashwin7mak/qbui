@@ -2,7 +2,6 @@
  * Created by rbeyer on 2/22/17.
  */
 import React from 'react';
-
 import {shallow} from 'enzyme';
 import TestUtils from 'react-addons-test-utils';
 import AppUsersRoute, {__RewireAPI__ as AppUsersRouteAPI} from '../../../../../src/components/app/settings/categories/appUsersRoute';

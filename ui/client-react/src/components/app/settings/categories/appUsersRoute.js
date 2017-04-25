@@ -104,7 +104,6 @@ const AppUsersRoute = React.createClass({
      */
 
     selectAllRows(){
-        console.log(this.props.appUsersUnfiltered);
         let roleId = this.roleId;
         let appUsers = this.props.appUsersUnfiltered;
         let selected = [];
@@ -121,7 +120,6 @@ const AppUsersRoute = React.createClass({
                 });
             }
         });
-console.log(selected);
         this.selectRows(selected);
     },
 
@@ -162,8 +160,6 @@ console.log(selected);
     },
     render() {
 
-        console.log(this.props.appUsersUnfiltered);
-        console.log(this.props.appUsers);
         return (
             <div>
                 <Stage stageHeadline={this.getStageHeadline()}

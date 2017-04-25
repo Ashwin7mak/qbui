@@ -169,10 +169,10 @@ export const UserActions = React.createClass({
             const deleteMSg = "Remove";
             msg = `${deleteMSg} ${this.props.selection.length} ${users}?`;
         } else {
-            msg = "Remove this user";
+            msg = Locale.getMessage('app.users.removeUser');
         }
 
-        let bodymsg  = "Users will no longer be able to access this application. Any data they have previously entered will remain in the application.";
+        const bodymsg  = Locale.getMessage('app.users.unassignUser');
 
         return (
             <QBModal
