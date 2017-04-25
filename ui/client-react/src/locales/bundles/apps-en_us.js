@@ -158,7 +158,7 @@ export default {
             recordNotAdded :"Record not added",
             recordSaved : "Record saved",
             recordNotSaved :"Record not saved",
-            deleted : "deleted",
+            deleted : "{recLen, plural, =0 {0 record} =1 {1 record} other {# records}} deleted",
             notDeleted : "not deleted",
             cannotLoad : "Cannot load record",
             error: {
