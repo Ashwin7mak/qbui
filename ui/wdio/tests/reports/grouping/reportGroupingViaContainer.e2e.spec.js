@@ -9,7 +9,7 @@
     //include underScore js
     var _ = require('underscore');
 
-    describe('Reports - Grouping Via Container Tests: ', function() {
+    describe('Reports - Grouping via Container Tests: ', function() {
         var realmName;
         var realmId;
         var app;

@@ -8,7 +8,7 @@
     let reportInLineEditPO = requirePO('reportInLineEdit');
     let reportNavPO = requirePO('reportNavigation');
 
-    describe('Reports Page - Add Record Tests', function() {
+    describe('Reports - Delete Record Tests: ', function() {
         var realmName;
         var realmId;
         var testApp;

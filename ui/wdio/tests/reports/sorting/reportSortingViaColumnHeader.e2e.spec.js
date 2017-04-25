@@ -7,7 +7,7 @@
     var reportSortingPO = requirePO('reportSortingGrouping');
     var reportContentPO = requirePO('reportContent');
 
-    describe('Reports - Sorting Via Column Header Tests: ', function() {
+    describe('Reports - Sorting via Column Header Tests: ', function() {
         var realmName;
         var realmId;
         var testApp;

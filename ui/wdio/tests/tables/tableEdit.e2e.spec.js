@@ -10,8 +10,7 @@
     var RequestSessionTicketPage = requirePO('requestSessionTicket');
     var rawValueGenerator = require('../../../test_generators/rawValue.generator');
 
-
-    describe('Tables - Edit a table via builder tests: ', function() {
+    describe('Tables - Edit a Table via Builder Tests: ', function() {
         var realmName;
         var realmId;
         var testApp;

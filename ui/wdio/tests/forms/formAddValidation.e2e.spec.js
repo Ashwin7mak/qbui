@@ -9,7 +9,7 @@
     var reportContentPO = requirePO('reportContent');
     var formsPO = requirePO('formsPage');
 
-    describe('Forms - Add Record via Form Validation Tests: ', function() {
+    describe('Forms - Add a Record via Form Validation Tests: ', function() {
 
         var realmName;
         var realmId;

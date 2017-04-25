@@ -12,7 +12,7 @@
     var FormsPO = requirePO('formsPage');
     var ReportTableActionsPO = requirePO('reportTableActions');
 
-    describe('Reports - Table Tests: ', function() {
+    describe('Reports - Table Report Tests: ', function() {
         var realmName;
         var realmId;
         var testApp;

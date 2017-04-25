@@ -11,7 +11,7 @@
     var RequestAppsPage = requirePO('requestApps');
     var UsersTablePage = requirePO('usersTable');
 
-    describe('Users - Application User Management Table Tests', function() {
+    describe('Users - Application User Management Table Tests: ', function() {
         var realmName;
         var realmId;
         var testApp;

@@ -13,7 +13,7 @@
     let RequestSessionTicketPage = requirePO('requestSessionTicket');
     let ReportContentPO = requirePO('reportContent');
 
-    describe('Reports - Table Home Page Tests', function() {
+    describe('Tables - Table Home Page Tests', function() {
         let realmName;
         let realmId;
         let app;
