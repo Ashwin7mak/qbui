@@ -22,6 +22,7 @@
         EXPERIENCE_ENGINE   : '/ee/v1',
         GOVERNANCE          : '/api/governance/:version',
         WORKFLOW : {
+            WORKFLOW        : '/we',
             FLOW_MANAGER    : '/we/api/v1',
             AUTOMATION      : '/we/workflow'
         }
@@ -178,8 +179,9 @@
         {route: publicControllerEndpoints.PUBLIC_REALMS, regEx: /^\/realms(.*)?$/i, context: baseContext.CORE_ENGINE},
         {route: publicControllerEndpoints.PUBLIC_TICKET, regEx: /^\/ticket(.*)?$/i, context: baseContext.CORE_ENGINE},
         {route: publicControllerEndpoints.PUBLIC_USERS, regEx: /^\/users(.*)?$/i, context: baseContext.CORE_ENGINE},
-        {route: publicControllerEndpoints.PUBLIC_WORKFLOW_AUTOMATION_API, regEx: /^\/workflow\/apps\/.*\/api(.*)?$/i, context: baseContext.WORKFLOW.AUTOMATION},
-        {route: publicControllerEndpoints.PUBLIC_WORKFLOW_AUTOMATION_INVOKE, regEx: /^\/workflow\/apps\/.*\/invokes(.*)?$/i, context: baseContext.WORKFLOW.AUTOMATION}
+        //  workflow team should consider having common context for their routes
+        {route: publicControllerEndpoints.PUBLIC_WORKFLOW_AUTOMATION_API, regEx: /^\/workflow\/apps\/.*\/api(.*)?$/i, context: baseContext.WORKFLOW.WORKFLOW},
+        {route: publicControllerEndpoints.PUBLIC_WORKFLOW_AUTOMATION_INVOKE, regEx: /^\/workflow\/apps\/.*\/invokes(.*)?$/i, context: baseContext.WORKFLOW.WORKFLOW}
     ];
 
     /**
