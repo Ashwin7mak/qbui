@@ -14,6 +14,7 @@ import Breakpoints from "../../utils/breakpoints";
 import {NotificationContainer} from "react-notifications";
 import {withRouter, Switch} from 'react-router-dom';
 import _ from 'lodash';
+import SaveOrCancelFooter from "../saveOrCancelFooter/saveOrCancelFooter";
 
 import * as TrowserConsts from "../../constants/trowserConstants";
 import * as UrlConsts from "../../constants/urlConstants";
@@ -44,6 +45,7 @@ import {updateFormRedirectRoute} from '../../actions/formActions';
 // the current backend setup cannot handle a react component in a common directory. It is loaded
 // as a raw string and we tell react to interpret it as HTML. See more in common/src/views/Readme.md
 import LoadingScreen from 'raw!../../../../common/src/views/loadingScreen.html';
+import {I18nMessage} from '../../utils/i18nMessage';
 
 //  import styles
 import "./nav.scss";
@@ -104,7 +106,6 @@ export const Nav = React.createClass({
 
     navigateToBuilderReport() {
         this.props.enterBuilderMode();
-        console.log("Here");
 
     },
 
@@ -315,8 +316,45 @@ export const Nav = React.createClass({
             </ButtonGroup>
         );
     },
+    saveClicked() {
+        // get the form meta data from the store..hard code offset for now...this is going to change..
+        if (this.props.currentForm && this.props.currentForm.formData) {
+            let formMeta = this.props.currentForm.formData.formMeta;
+            let formType = this.props.currentForm.id;
+            this.props.updateForm(formMeta.appId, formMeta.tableId, formType, formMeta, this.props.redirectRoute);
+        }
+    },
+
+    onCancel() {
+        this.props.exitBuilderMode();
+    },
+
+    getRightAlignedButtons() {
+        return (
+            <div>
+                <Button bsStyle="primary" onClick={this.onCancel} className="cancelFormButton"><I18nMessage message="nav.cancel"/></Button>
+                <Button bsStyle="primary" onClick={this.saveClicked} className="saveFormButton"><I18nMessage message="nav.save"/></Button>
+            </div>
+        );
+    },
+    /**
+     *  get actions element for bottom center of trowser (placeholders for now)
+     */
+    getTrowserActions() {
+        return (
+            <div className={"centerActions"} />);
+    },
+
+    getSaveOrCancelFooter() {
+        return <SaveOrCancelFooter
+            rightAlignedButtons={this.getRightAlignedButtons()}
+            centerAlignedButtons={this.getTrowserActions()}
+            leftAlignedButtons={this.getTrowserActions()}
+        />;
+    },
 
     render() {
+        let inBuilderMode = this.props.shell.inBuilderMode;
         if (!this.state.apps || this.state.apps.apps === null) {
             // don't render anything until we've made this first api call without being redirected to V2
             // The common loading screen html is shared across server and client as an HTML file and
@@ -407,6 +445,9 @@ export const Nav = React.createClass({
                     <div className="mainContent" >
                         <TempMainErrorMessages apps={this.state.apps.apps} appsLoading={this.state.apps.loading} selectedAppId={this.state.apps.selectedAppId} />
 
+                        {inBuilderMode ?
+                            this.getSaveOrCancelFooter() : null}
+
                         <Switch>
                             { this.props.routes.map((route, i) => {
                                 //insert the child route passed in by the router
@@ -435,8 +476,8 @@ export const Nav = React.createClass({
                             }
                             )}
                         </Switch>
-
-                    </div>}
+                    </div>
+                }
             </div>
 
             {pendEdits &&
@@ -527,7 +568,9 @@ const mapDispatchToProps = (dispatch) => {
 
         updateFormRedirectRoute: (route) => dispatch(updateFormRedirectRoute(route)),
 
-        enterBuilderMode: () => dispatch(ShellActions.enterBuilderMode())
+        enterBuilderMode: () => dispatch(ShellActions.enterBuilderMode()),
+
+        exitBuilderMode: () => dispatch(ShellActions.exitBuilderMode())
     };
 };
 

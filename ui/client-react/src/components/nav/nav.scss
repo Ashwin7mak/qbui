@@ -32,6 +32,11 @@
             min-height: 0;
             overflow: auto;
             background-color: $color-black-200;
+
+            .saveOrCancelFooter {
+                position: fixed;
+                bottom: 77px;
+            }
         }
 
         .footer {
