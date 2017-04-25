@@ -7,7 +7,7 @@ import * as StandardGridActions from "../../common/grid/standardGridActions";
 import * as StandardGridState from "../../common/grid/standardGridReducer";
 
 
-export const filterUsers = (users, searchTerm) => {
+export const searchUsers = (users, searchTerm) => {
 
     if (users.length === 0 || searchTerm.length === 0) {
         return users;
@@ -81,7 +81,7 @@ export const doUpdate = (gridId, gridState) => {
     return (dispatch, getState) => {
         // First Filter
         let searchTerm = gridState.searchTerm || [];
-        let filteredUsers = filterUsers(getState().AccountUsers.users, searchTerm);
+        let filteredUsers = searchUsers(getState().AccountUsers.users, searchTerm);
 
         // Then Sort
         let sortFids = gridState.sortFids || [];
