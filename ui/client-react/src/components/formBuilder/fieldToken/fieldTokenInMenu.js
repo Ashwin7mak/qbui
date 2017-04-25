@@ -47,7 +47,7 @@ export class DraggableFieldToken extends Component {
 
             // For a better user experience, we place the new element above the item is was dropped on, rather than below it.
             const location = dropTargetProps.location;
-            const elementIndex = (location && location.elementIndex > 1 ? location.elementIndex - 1 : 0);
+            const elementIndex = (_.has(location, 'elementIndex') && location.elementIndex > 1 ? location.elementIndex - 1 : 0);
 
             this.props.addNewFieldToForm(formId, appId, tblId, {...location, elementIndex}, relatedField);
             this.setState({addedToForm: true});
