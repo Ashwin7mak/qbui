@@ -7,9 +7,15 @@ import * as StandardGridActions from "../../common/grid/standardGridActions";
 import * as StandardGridState from "../../common/grid/standardGridReducer";
 
 
-export const filterUsers = (users, filterQuery) => {
+export const filterUsers = (users, searchTerm) => {
 
-    return users;
+    if (users.length === 0 || searchTerm.length === 0) {
+        return users;
+    }
+
+    return _.filter(users, function(user) {
+        return user.firstName === searchTerm;
+    });
 };
 
 export const paginateUsers = (users, _page) => {
@@ -68,8 +74,8 @@ export const receiveAccountUsers = (users) => ({
 export const doUpdate = (gridId, gridState) => {
     return (dispatch, getState) => {
         // First Filter
-        let filterFids = gridState.filterQuery || [];
-        let filteredUsers = filterUsers(getState().AccountUsers.users, filterFids);
+        let searchTerm = gridState.searchTerm || [];
+        let filteredUsers = filterUsers(getState().AccountUsers.users, searchTerm);
 
         // Then Sort
         let sortFids = gridState.sortFids || [];

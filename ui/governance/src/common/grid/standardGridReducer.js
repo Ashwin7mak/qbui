@@ -8,7 +8,7 @@ export const defaultGridState = {
     // the pagination to apply to the grid
     pageNumber: 1,
     // the filter to apply to the grid
-    filter : []
+    searchTerm : ""
 };
 
 /**
@@ -24,6 +24,11 @@ function grid(state = defaultGridState, action) {
         return {
             ...state,
             items: action.items
+        };
+    case types.SET_SEARCH:
+        return {
+            ...state,
+            searchTerm: action.searchTerm
         };
     case types.SET_SORT:
         return {
@@ -67,6 +72,7 @@ function gridById(state = {}, action) {
     case types.SET_SORT:
     case types.SET_ITEMS:
     case types.SET_PAGINATE:
+    case types.SET_SEARCH:
         return {
             ...state,
             [action.gridId]: grid(state[action.gridId], action)

@@ -13,6 +13,18 @@ export const setItems = (gridId, items) => ({
 });
 
 /**
+ * Action to set the filter query for a given grid
+ *
+ * @param gridId - the id of the grid we want to update
+ * @param searchTerm - the query to filter by
+ */
+export const setSearch = (gridId, searchTerm) => ({
+    type: types.SET_SEARCH,
+    gridId,
+    searchTerm
+});
+
+/**
  * Action to set the desired sort order for a given grid
  *
  * @param gridId - the id of the grid we want to update
