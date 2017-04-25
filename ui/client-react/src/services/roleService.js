@@ -36,6 +36,19 @@ class RoleService extends BaseService {
     }
 
     /**
+     * unassign users from app role
+     * @param appId
+     * @param roleId
+     */
+    unassignUsersFromRole(appId, roleId, userIds) {
+
+        let url = super.constructUrl(this.API.APP_ROLE_USERS, [appId, roleId]);
+
+        return super.delete(url,{data: userIds})
+    }
+
+
+    /**
      * assign users to an app role
      * @param appId
      * @param roleId

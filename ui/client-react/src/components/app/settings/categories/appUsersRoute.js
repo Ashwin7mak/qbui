@@ -8,10 +8,11 @@ import IconActions from '../../../actions/iconActions';
 import QBIcon from '../../../../../../reuse/client/src/components/icon/icon';
 import AppSettingsStage from '../appSettingsStage';
 import Locale from '../../../../../../reuse/client/src/locales/locale';
+import UserActions from '../../../actions/userActions';
 import './appUsersRoute.scss';
 
 const AppUsersRoute = React.createClass({
-
+    roleId:"",
     componentDidMount() {
         this.props.flux.actions.loadAppRoles(this.props.match.params.appId);
         this.props.flux.actions.loadAppOwner(this.props.selectedApp.ownerId);
@@ -58,7 +59,111 @@ const AppUsersRoute = React.createClass({
             </div>);
     },
 
+    getSelectionActions() {
+        return (<UserActions selection={this.props.selectedUserRows} actions={this.props.flux.actions} appId={this.props.match.params.appId} roleId={this.roleId}/>);
+    },
+
+    getTableActions() {
+        const selectedRows = this.props.selectedUserRows;
+        const hasSelection = !!(selectedRows && selectedRows.length > 0);
+        let classes = "tableActionsContainer secondaryBar userManagementAction";
+
+        if (hasSelection) {
+            classes += " selectionActionsOpen";
+        }
+        return (
+            hasSelection ? <div className={classes}> {this.getSelectionActions()} </div> : null
+        );
+    },
+
+    selectRows(selectedRows) {
+        this.props.flux.actions.selectUsersRows(selectedRows);
+    },
+
+    toggleSelectedRow(id, roleId) {
+
+        let selectedRows = this.props.selectedUserRows;
+        if (!Array.isArray(selectedRows)) {
+            selectedRows = [];
+        }
+        // add to selectedRows if id is not in the list
+        if (selectedRows.indexOf(id) === -1) {
+            selectedRows.push(id);
+        } else {
+            // id is in the list, remove it
+            selectedRows = _.without(selectedRows, id);
+        }
+
+        this.roleId = roleId;
+
+        this.props.flux.actions.selectUsersRows(selectedRows);
+    },
+
+    /**
+     * select all grid rows
+     */
+
+    selectAllRows(){
+        console.log(this.props.appUsersUnfiltered);
+        let roleId = this.roleId;
+        let appUsers = this.props.appUsersUnfiltered;
+        let selected = [];
+        // Transform the records first so that subHeaders (grouped records) can be handled appropriately
+        this.props.appRoles.map(role => {
+
+            if (appUsers[role.id]) {
+
+                selected = appUsers[role.id].map(user => {
+                    debugger;
+                    roleId = user.roleId;
+                    return user.userId;
+
+                });
+            }
+        });
+console.log(selected);
+        this.selectRows(selected);
+    },
+
+    deselectAllRows() {
+        this.selectRows([]);
+    },
+
+    toggleSelectAllRows() {
+        if (this.props.selectedUserRows.length === this.props.appUsers.length) {
+            this.deselectAllRows();
+        } else {
+            this.selectAllRows();
+        }
+    },
+    areAllRowsSelected(){
+        if (this.props.selectedUserRows.length === this.props.appUsers.length) {
+            return true;
+        } else {
+            return false;
+        }
+    },
+
+    addRoleIds(){
+        let appUsers = this.props.appUsers;
+        let selectedRows = this.props.selectedRows;
+        this.props.appRoles.forEach(function(role) {
+            if (appUsers[role.id]) {
+                appUsers[role.id].forEach(function(user) {
+                    user.roleName = role.name;
+                    user.name = `${user.firstName} ${user.lastName}`;
+                    user.roleId = role.id;
+                    user.isSelected = selectedRows.indexOf(user.userId) > -1 ;
+                    appUsersFiltered.push(user);
+                });
+            }
+        });
+        return appUsersFiltered;
+    },
     render() {
+
+        console.log(this.props.appUsersUnfiltered);
+        console.log(this.props.appUsers);
         return (
             <div>
                 <Stage stageHeadline={this.getStageHeadline()}
@@ -68,10 +173,15 @@ const AppUsersRoute = React.createClass({
                                       appRoles={this.props.appRoles}
                                       appOwner={this.props.appOwner}/>
                 </Stage>
+                {this.getTableActions()}
                 <div className="userManagementContainer">
                     <UserManagement appId={this.props.match.params.appId}
                                     appUsers={this.props.appUsersUnfiltered}
                                     appRoles={this.props.appRoles}
+                                    onClickToggleSelectedRow={this.toggleSelectedRow}
+                                    onClickToggleSelectAllRows={this.toggleSelectAllRows}
+                                    selectedRows={this.props.selectedUserRows}
+                                    areAllRowsSelected={this.areAllRowsSelected()}
                     />
                 </div>
             </div>

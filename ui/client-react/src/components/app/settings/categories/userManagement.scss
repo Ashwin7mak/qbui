@@ -1,8 +1,16 @@
 @import '../../../../../../reuse/client/src/assets/css/qbVariables';
 
+.userManagementAction{
+    padding-left:22px;
+    padding-top:0;
+}
+
+.userManagementAction + .userManagementContainer {
+    padding-top:0
+}
 .userManagementContainer {
     padding-left: 22px;
-    padding-top: 30px;
+    padding-top: 52px;
 
     .qbHeaderCell {
         &:first-of-type {
