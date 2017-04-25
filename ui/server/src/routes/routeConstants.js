@@ -194,9 +194,12 @@
      * Allow for swagger to render for each respective context
      */
     let swaggerEndpoints = {
-        SWAGGER_CORE           : '/api/*',
-        SWAGGER_EE             : '/ee/*',
-        SWAGGER_WE             : '/we/*'
+        SWAGGER_CORE           : '/api',
+        SWAGGER_EE             : '/ee',
+        SWAGGER_WE             : '/we',
+        SWAGGER_RESOURCES      : '/*/swagger-resources*',
+        SWAGGER_RESOURCE       : '/*/resources*',
+        SWAGGER_V2             : '/*/v2/api-docs*'
     };
 
     // List of routes used by the quickbase client to perform functionality either exclusively in node code or

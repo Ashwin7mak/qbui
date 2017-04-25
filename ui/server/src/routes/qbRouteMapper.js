@@ -103,6 +103,13 @@
             requestFunctions[routes.GOVERNANCE_ACCOUNT_USERS] = getAccountUsers;
             requestFunctions[routes.GOVERNANCE_CONTEXT] = getGovernanceContext;
 
+            requestFunctions[routes.SWAGGER_CORE] = forwardSwaggerRequest;
+            requestFunctions[routes.SWAGGER_EE] = forwardSwaggerRequest;
+            requestFunctions[routes.SWAGGER_WE] = forwardSwaggerRequest;
+
+            requestFunctions[routes.SWAGGER_RESOURCES] = forwardSwaggerRequest;
+            requestFunctions[routes.SWAGGER_RESOURCE] = forwardSwaggerRequest;
+            requestFunctions[routes.SWAGGER_V2] = forwardSwaggerRequest;
 
             // ****** TEMP E2E routes..to be removed once JIRA-xxx is complete ******
             requestFunctions[routes.E2E_APPS] = getApps;
@@ -194,10 +201,6 @@
             requestFunctions[routes.EXPERIENCE_ENGINE] = forwardApiRequest;
             requestFunctions[routes.WORKFLOW_ENGINE] = forwardApiRequest;
             requestFunctions[routes.AUTOMATION_ENGINE] = forwardApiRequest;
-            //
-            requestFunctions[routes.SWAGGER_CORE] = forwardApiRequest;
-            requestFunctions[routes.SWAGGER_EE] = forwardApiRequest;
-            requestFunctions[routes.SWAGGER_WE] = forwardApiRequest;
 
             return requestFunctions;
         }
@@ -1277,16 +1280,23 @@
         });
     }
 
+    function forwardSwaggerRequest(req, res) {
+        forwardRequest(req, res, true);
+    }
+
+    function forwardApiRequest(req, res) {
+        forwardRequest(req, res, false);
+    }
+
     /**
-     * This is the function for forwarding a request to the core server.  Expectation
-     * is that the data in the body of the response is a json structure for all requests.
+     * This is the function for forwarding a request to the core server.
      *
      * @param req
      * @param res
      */
-    function forwardApiRequest(req, res) {
+    function forwardRequest(req, res, pipeResponse) {
         let perfLog = perfLogger.getInstance();
-        perfLog.init('Forward API Request', {req:filterNodeReq(req)});
+        perfLog.init('Forward Request', {req:filterNodeReq(req)});
 
         processRequest(req, res, function(req, res) {
             let opts;
@@ -1303,16 +1313,35 @@
             }
 
             if (opts) {
-                request(opts)
-                    .on('response', function(response) {
-                        logApiSuccess(req, response, perfLog);
-                    })
-                    .on('error', function(error) {
-                        logApiFailure(req, error, perfLog);
-                    })
-                    .pipe(res);
+                if (pipeResponse === true) {
+                    request(opts)
+                        .on('response', function(response) {
+                            logApiSuccess(req, response, perfLog);
+                        })
+                        .on('error', function(error) {
+                            logApiFailure(req, error, perfLog);
+                        })
+                        .pipe(res);
+                } else {
+                    // return just the response body to the client as json
+                    opts.headers[commonConstants.CONTENT_TYPE] = commonConstants.APPLICATION_JSON;
+                    requestHelper.executeRequest(req, opts).then(
+                        function(response) {
+                            res.send(JSON.parse(response.body));
+                            logApiSuccess(req, response, perfLog);
+                        },
+                        function(response) {
+                            logApiFailure(req, response, perfLog);
+                            if (response && response.statusCode) {
+                                res.status(response.statusCode).send(response);
+                            } else {
+                                res.status(500).send(response);
+                            }
+                        }
+                    );
+                }
             } else {
-                log.error({req:req}, 'API Forward Request error.  Unable to determine route request.');
+                log.error({req:req}, 'Forward Request error.  Unable to determine route request.');
                 perfLog.log();
             }
         });
