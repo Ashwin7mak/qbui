@@ -11,6 +11,7 @@
     let consts = require('../../../../common/src/constants');
 
     module.exports = function(config) {
+        var TICKET_NAME = "TICKET";
         let request = defaultRequest;
         /**
          * Set of common methods used to parse out information from the http request object
@@ -162,6 +163,8 @@
 
                 //  override the url to use automation server
                 opts.url = this.getRequestAutomationUrl(req);
+                opts.headers[TICKET_NAME] = req.cookies.TICKET;
+                opts.cookies = req.cookies;
                 return opts;
             },
 
