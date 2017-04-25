@@ -1,4 +1,6 @@
 import React from "react";
+import {Route} from 'react-router-dom';
+
 import Fluxxor from "fluxxor";
 import LeftNav from "./leftNav";
 import TopNav from "../header/topNav";
@@ -103,33 +105,34 @@ export const Nav = React.createClass({
 
     getTopGlobalActions() {
         const actions = [];
-        let recordId;
-        if (this.props.match.params) {
-            recordId = this.props.match.params.recordId;
-        }
         let selectedApp = this.getSelectedApp();
         let isAdmin = false;
         if (selectedApp) {
             isAdmin = AppUtils.hasAdminAccess(selectedApp.accessRights);
         }
-        return (<GlobalActions actions={actions}
+
+        return (
+            <Route path={UrlConsts.BUILDER_MENU_ROUTE} render={props => (
+                <GlobalActions actions={actions}
                                position={"top"}
                                dropdownIcon="user"
                                dropdownMsg="globalActions.user"
                                startTabIndex={4}
                                app={selectedApp}>
-            {isAdmin ?
-                    <BuilderDropDownAction
-                                history={this.props.history}
-                                selectedApp={selectedApp}
-                                selectedTable={this.getSelectedTable(this.state.apps.selectedTableId)}
-                                recId={recordId}
-                                actions={actions}
-                                position={"top"}
-                                icon="settings"
-                                navigateToBuilder={this.navigateToBuilder}
-                                startTabIndex={4}/> : null}
-                </GlobalActions>);
+                    {isAdmin ?
+                        <BuilderDropDownAction
+                            history={this.props.history}
+                            selectedApp={selectedApp}
+                            selectedTable={this.getSelectedTable(this.state.apps.selectedTableId)}
+                            recId={props.match.params.recordId}
+                            actions={actions}
+                            position={"top"}
+                            icon="settings"
+                            navigateToBuilder={this.navigateToBuilder}
+                            startTabIndex={4}/> : null}
+                </GlobalActions>
+            )} />
+        );
     },
 
     getLeftGlobalActions() {
