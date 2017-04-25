@@ -223,7 +223,9 @@ const record = (state = [], action) => {
             let model = new RecordModel();
             model.set(currentRecd.pendEdits);
             model.setSaving(false, true);
-            delete currentRecd.pendEdits;
+            if (currentRecd.pendEdits.editErrors.ok) {
+                delete currentRecd.pendEdits;
+            }
             return newState(currentRecd);
         }
         return state;
