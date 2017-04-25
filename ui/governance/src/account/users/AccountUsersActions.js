@@ -15,7 +15,7 @@ export const receiveAccountUsers = (users) => ({
 });
 
 /**
- * Get all the users
+ * Get all the users from the service
  *
  * @returns {function(*=)}
  */

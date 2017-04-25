@@ -1,17 +1,14 @@
 import * as types from './standardGridActionTypes';
 
 const defaultGridState = {
+    // the items currently displayed on the grid
+    items: [],
     // the fields to sort the grid
     sortFids: [],
-
-    // the items on the grid
-    items: [],
-
     // the pagination to apply to the grid
     pagination: {currentIndex : 0, totalRecords : 0},
-
     // the filter to apply to the grid
-    filter : {}
+    filter : []
 };
 
 /**
@@ -23,6 +20,11 @@ const defaultGridState = {
  */
 function grid(state = defaultGridState, action) {
     switch (action.type) {
+    case types.SET_ITEMS:
+        return {
+            ...state,
+            items: action.items
+        };
     case types.SET_SORT:
         return {
             ...state,

@@ -57,7 +57,7 @@ class StandardGrid extends Component {
 
                     <Table.Body
                         className="qbTbody"
-                        rows={this.props.data}
+                        rows={this.props.items}
                         rowKey={this.getUniqueRowKey.bind(this)}
                         onRow={onRowFn}
                         />
@@ -69,7 +69,7 @@ class StandardGrid extends Component {
 
 StandardGrid.propTypes = {
     columns: PropTypes.array.isRequired,
-    data: PropTypes.array.isRequired,
+    items: PropTypes.array.isRequired,
     rowKey: PropTypes.string.isRequired,
     id: PropTypes.string.isRequired,
     columnTransforms: PropTypes.array,

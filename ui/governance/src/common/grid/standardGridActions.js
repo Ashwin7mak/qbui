@@ -1,6 +1,18 @@
 import * as types from './standardGridActionTypes';
 
 /**
+ * Action to set the visible items for a given grid
+ *
+ * @param gridId - the id of the grid we want to update
+ * @param items - the direction to paginate
+ */
+export const setItems = (gridId, items) => ({
+    type: types.SET_ITEMS,
+    gridId,
+    items
+});
+
+/**
  * Action to set the desired sort order for a given grid
  *
  * @param gridId - the id of the grid we want to update
@@ -24,6 +36,7 @@ export const setSort = (gridId, sortFid, asc, remove) => ({
  */
 export const setPaginate = (gridId, direction) => ({
     type: types.SET_PAGINATE,
+    gridId,
     direction
 });
 

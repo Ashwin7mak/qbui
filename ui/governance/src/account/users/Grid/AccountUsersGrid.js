@@ -15,7 +15,7 @@ class AccountUsersGrid extends Component {
             <StandardGrid
                 columns={GetAccountUsersGridColumns(this.props.showAccountColumns, this.props.showRealmColumns)}
                 doUpdate={Actions.doUpdate}
-                data={this.props.users}
+                items={this.props.users}
                 id="accountUsers"
                 rowKey="uid"
             />
