@@ -14,7 +14,6 @@ import {NEW_TABLE_IDS_KEY} from '../constants/localStorage';
 import * as query from '../constants/query';
 import * as SchemaConstants from "../constants/schema";
 import * as types from '../actions/types';
-import IntlMessageFormat from 'intl-messageformat';
 
 let logger = new Logger();
 
