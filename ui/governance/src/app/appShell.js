@@ -10,8 +10,8 @@ import RouteWithSubRoutes from "../../../client-react/src/scripts/RouteWithSubRo
 export const GovernanceAppShell = (props) => (
     <AppShell functionalAreaName="governance">
         <LeftNav
-            isCollapsed={props.isNavCollapsed}
-            isOpen={props.isNavOpen}
+            isNavCollapsed={props.isNavCollapsed}
+            isNavOpen={props.isNavOpen}
             accountId={Number.parseInt(props.match.params.accountId)}
         >
             <TopNav onNavClick={props.toggleNav} globalActions={

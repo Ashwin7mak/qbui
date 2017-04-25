@@ -10,7 +10,7 @@
     let baseContext = {
         //  custom client function endpoints
         QUICKBASE_CLIENT      : '/qbui',
-        QUICKBASE_CLIENT_NODE : '/qbui/n',
+        QUICKBASE_CLIENT_NODE : '/qbn',
 
         //  direct api endpoints
         //
@@ -34,8 +34,7 @@
      *  NOTE: there is no need to define a route here if the expectation is to only proxy/forward the request through node.
      */
     let qbuiApiEndpoints = {
-        HEALTH_CHECK                : baseContext.CORE_HEALTH + '/health',
-        QBUI_HEALTH_CHECK           : baseContext.CORE_HEALTH + '/qbuiHealth',   // remove with NODE_HEALTH_CHECK endpoint
+        QBUI_HEALTH_CHECK           : baseContext.CORE_HEALTH + '/qbuiHealth',   // TODO: remove with QBUI_HEALTH endpoint
 
         FORM_AND_RECORD_COMPONENTS  : baseContext.QUICKBASE_CLIENT + '/apps/:appId/tables/:tableId/records/:recordId/formComponents',
         FORM_COMPONENTS             : baseContext.QUICKBASE_CLIENT + '/apps/:appId/tables/:tableId/formComponents',
@@ -179,9 +178,9 @@
     // List of routes used by the quickbase client to perform functionality either exclusively in node code or
     // composition routes in support of a client request.  See qbRouteMapper.modifyRequestPathForApi() for
     // reference to this list and how it is used.
-    const qbuiRegEx = new RegExp('^' + baseContext.QUICKBASE_CLIENT + '/(.*)?$', 'i');
+    const regExExpression = `^${baseContext.QUICKBASE_CLIENT}/(.*)?$`;
     let clientEndPoints = [
-        {route: baseContext.QUICKBASE_CLIENT, regEx: qbuiRegEx, context: baseContext.CORE_ENGINE}        // replace QUICKBASE_CLIENT endpoint with CORE content
+        {route: baseContext.QUICKBASE_CLIENT, regEx: new RegExp(regExExpression, 'i'), context: baseContext.CORE_ENGINE}
     ];
 
     //  Export the combined list of routes.

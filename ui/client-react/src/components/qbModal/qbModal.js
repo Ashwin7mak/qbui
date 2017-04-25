@@ -35,7 +35,7 @@ const QBModal = React.createClass({
         /**
          *This is the message for the modal body
          */
-        bodyMessage: React.PropTypes.string,
+        bodyMessage: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.element]),
         /**
          * This is the title for the modal title
          */
@@ -52,6 +52,10 @@ const QBModal = React.createClass({
          * This is the primary button onClick function
          */
         primaryButtonOnClick: React.PropTypes.func,
+        /**
+         * Setting to true disables the primary button.
+         */
+        primaryButtonDisabled: React.PropTypes.bool,
         /**
          * This is the name for the middle button. There must be a primary button, in order for there to be a middle button.
          */
@@ -71,7 +75,8 @@ const QBModal = React.createClass({
     },
     getDefaultProps() {
         return {
-            type: 'standard'
+            type: 'standard',
+            primaryButtonDisabled: false
         };
     },
     /**
@@ -85,7 +90,7 @@ const QBModal = React.createClass({
             return null;
         }
         let classes = ['modalIcon'];
-        let icon = 'alert';
+        let icon = 'alert-fill';
 
         if (this.props.type === QB_MODAL_ALERT) {
             classes.push('modalIcon--alert');
@@ -127,7 +132,7 @@ const QBModal = React.createClass({
         }
 
         let buttons = [
-            <Button key={0} className="primaryButton" onClick={this.props.primaryButtonOnClick}>{this.props.primaryButtonName}</Button>
+            <Button key={0} className="primaryButton" onClick={this.props.primaryButtonOnClick} disabled={this.props.primaryButtonDisabled}>{this.props.primaryButtonName}</Button>
         ];
         if (this.props.link) {
             buttons = [

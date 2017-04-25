@@ -29,7 +29,7 @@
 
         var HTTP = 'http://';
         var HTTPS = 'https://';
-        var NODE_BASE_ENDPOINT = '/n';
+        var NODE_BASE_ENDPOINT = '/qbn';
         var JAVA_BASE_ENDPOINT = '/api/api/v1';
         var EE_BASE_ENDPOINT = '/ee/v1';
         var APPS_ENDPOINT = '/apps/';
@@ -176,15 +176,15 @@
             generateFullRequest         : function(subdomain, relativePath) {
                 return resolveFullUrl(subdomain, relativePath);
             },
-            resolveAppsEndpoint         : function(appId) {
-                var appsEndpoint = JAVA_BASE_ENDPOINT + APPS_ENDPOINT;
+            resolveAppsEndpoint         : function(appId, ee) {
+                var appsEndpoint = (ee === true ? EE_BASE_ENDPOINT : JAVA_BASE_ENDPOINT) + APPS_ENDPOINT;
                 if (appId) {
                     appsEndpoint = appsEndpoint + appId;
                 }
                 return appsEndpoint;
             },
             resolveRecordsEndpoint      : function(appId, tableId, recordId) {
-                var endpoint = NODE_BASE_ENDPOINT + APPS_ENDPOINT + appId + TABLES_ENDPOINT + tableId + RECORDS_ENDPOINT;
+                var endpoint = this.resolveAppsEndpoint(appId) + TABLES_ENDPOINT + tableId + RECORDS_ENDPOINT;
                 if (recordId) {
                     endpoint = endpoint + recordId;
                 }
@@ -212,7 +212,7 @@
                 return tableEndpoint;
             },
             resolveFormsEndpoint      : function(appId, tableId, formId, formType) {
-                var formEndpoint = EE_BASE_ENDPOINT + APPS_ENDPOINT + appId + TABLES_ENDPOINT + tableId + FORMS_ENDPOINT;
+                var formEndpoint = this.resolveAppsEndpoint(appId, true) + TABLES_ENDPOINT + tableId + FORMS_ENDPOINT;
                 if (formId) {
                     formEndpoint = formEndpoint + formId;
                 }
@@ -222,7 +222,7 @@
                 return formEndpoint;
             },
             resolveReportsEndpoint      : function(appId, tableId, reportId) {
-                var reportEndpoint = NODE_BASE_ENDPOINT + APPS_ENDPOINT + appId + TABLES_ENDPOINT + tableId + REPORTS_ENDPOINT;
+                var reportEndpoint = this.resolveAppsEndpoint(appId) + TABLES_ENDPOINT + tableId + REPORTS_ENDPOINT;
                 if (reportId) {
                     reportEndpoint = reportEndpoint + reportId + REPORTS_RESULTS_ENDPOINT;
                 }
@@ -278,7 +278,7 @@
                 return endpoint;
             },
             resolveTablePropertiesEndpoint      : function(appId, tableId) {
-                var endpoint = EE_BASE_ENDPOINT + APPS_ENDPOINT + appId + TABLES_ENDPOINT + tableId + TABLES_PROPERTIES;
+                var endpoint = this.resolveAppsEndpoint(appId, true) + TABLES_ENDPOINT + tableId + TABLES_PROPERTIES;
                 return endpoint;
             },
             resolveGetReqUserEndpoint       : function() {

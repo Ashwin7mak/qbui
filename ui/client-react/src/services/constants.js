@@ -19,7 +19,7 @@ export default {
     //  NODE:    indicates the route performs node only work.
     BASE_URL: {
         CLIENT        : '/qbui',
-        NODE          : '/qbui/n',
+        NODE          : '/qbn',
         PROXY         : '',
         AUTOMATION    : '/we/workflow'
     },

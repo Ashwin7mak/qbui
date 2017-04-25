@@ -62,6 +62,7 @@
             let requestFunctions = {};
             requestFunctions[routes.RECORD] = deleteSingleRecord;
             requestFunctions[routes.RECORDS_BULK] = deleteRecordsBulk;
+            requestFunctions[routes.TABLE] = deleteTableComponents;
 
             return requestFunctions;
         }
@@ -75,7 +76,6 @@
             let requestFunctions = {};
             requestFunctions[routes.APPS] = getApps;
             requestFunctions[routes.APP_USERS] = getAppUsers;
-
             requestFunctions[routes.APP_ROLES] = getAppRoles;
 
             requestFunctions[routes.FEATURE_SWITCHES] = getFeatureSwitches;
@@ -97,7 +97,6 @@
 
             requestFunctions[routes.REQ_USER] = getReqUser;
 
-            requestFunctions[routes.HEALTH_CHECK] = forwardApiRequest;
             requestFunctions[routes.QBUI_HEALTH_CHECK] = getHealthCheck;    // remove
             requestFunctions[routes.QBUI_HEALTH] = getHealthCheck;
 
@@ -144,6 +143,7 @@
          *
          * @returns List of get routes
          */
+
         function bindPutRequestRouteToFunction(routes) {
             let requestFunctions = {};
             requestFunctions[routes.FEATURE_SWITCH] = updateFeatureSwitch;
@@ -1221,6 +1221,30 @@
                         res.status(response.statusCode).send(response);
                     } else {
                         res.status(httpConstants.INTERNAL_SERVER_ERROR).send(response);
+                    }
+                }
+            );
+        });
+    }
+
+    function deleteTableComponents(req, res) {
+        let perfLog = perfLogger.getInstance();
+        perfLog.init('Delete table', {req:filterNodeReq(req)});
+
+        processRequest(req, res, function(req, res) {
+            tablesApi.deleteTableComponents(req).then(
+                function(response) {
+                    res.send(response);
+                    logApiSuccess(req, response, perfLog, 'deleteTableComponents');
+                },
+                function(response) {
+                    logApiFailure(req, response, perfLog, 'deleteTableComponents');
+
+                    //  client is waiting for a response..make sure one is always returned
+                    if (response && response.statusCode) {
+                        res.status(response.statusCode).send(response);
+                    } else {
+                        res.status(500).send(response);
                     }
                 }
             );
