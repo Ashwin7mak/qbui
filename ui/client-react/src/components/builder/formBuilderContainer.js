@@ -3,7 +3,7 @@ import {Button} from 'react-bootstrap';
 import {I18nMessage} from '../../utils/i18nMessage';
 import Locale from '../../locales/locales';
 import {connect} from 'react-redux';
-import {loadForm, updateForm, moveFieldOnForm, toggleFormBuilderChildrenTabIndex, keyboardMoveFieldUp, keyboardMoveFieldDown, selectFieldOnForm, deselectField, removeFieldFromForm, addNewFieldToForm} from '../../actions/formActions';
+import {loadForm, updateForm, moveFieldOnForm, toggleFormBuilderChildrenTabIndex, toggleToolPaletteChildrenTabIndex, keyboardMoveFieldUp, keyboardMoveFieldDown, selectFieldOnForm, deselectField, removeFieldFromForm, addNewFieldToForm} from '../../actions/formActions';
 import {updateFormAnimationState} from '../../actions/animationActions';
 import Loader from 'react-loader';
 import {LARGE_BREAKPOINT} from "../../constants/spinnerConfigurations";
@@ -19,6 +19,7 @@ import PageTitle from '../pageTitle/pageTitle';
 import {getFormByContext, getFormRedirectRoute, getSelectedFormElement} from '../../reducers/forms';
 import {CONTEXT} from '../../actions/context';
 import {ENTER_KEY, SPACE_KEY} from '../../../../reuse/client/src/components/keyboardShortcuts/keyCodeConstants';
+import * as tabIndexConstants from '../formBuilder/tabindexConstants';
 import KeyboardShortcuts from '../../../../reuse/client/src/components/keyboardShortcuts/keyboardShortcuts';
 import _ from 'lodash';
 import NotificationManager from '../../../../reuse/client/src/scripts/notificationManager';
@@ -39,8 +40,10 @@ const mapStateToProps = state => {
         selectedField: (_.has(currentForm, 'selectedFields') ? currentForm.selectedFields[0] : undefined),
         selectedFormElement: (currentForm ? getSelectedFormElement(state, currentForm.id) : undefined),
         redirectRoute: getFormRedirectRoute(state),
-        tabIndex: (_.has(currentForm, 'formBuilderChildrenTabIndex') ? currentForm.formBuilderChildrenTabIndex[0] : undefined),
+        formBuilderChildrenTabIndex: (_.has(currentForm, 'formBuilderChildrenTabIndex') ? currentForm.formBuilderChildrenTabIndex[0] : "-1"),
+        toolPaletteChildrenTabIndex: (_.has(currentForm, 'toolPaletteChildrenTabIndex') ? currentForm.toolPaletteChildrenTabIndex[0] : "-1"),
         formFocus: (_.has(currentForm, 'formFocus') ? currentForm.formFocus[0] : undefined),
+        toolPaletteFocus: (_.has(currentForm, 'toolPaletteFocus') ? currentForm.toolPaletteFocus[0] : undefined),
         isOpen: state.builderNav.isNavOpen,
         isCollapsed: state.builderNav.isNavCollapsed
     };
@@ -52,6 +55,7 @@ const mapDispatchToProps = {
     updateForm,
     updateFormAnimationState,
     toggleFormBuilderChildrenTabIndex,
+    toggleToolPaletteChildrenTabIndex,
     keyboardMoveFieldUp,
     keyboardMoveFieldDown,
     selectFieldOnForm,
@@ -123,7 +127,7 @@ export const FormBuilderContainer = React.createClass({
 
     onCancel() {
         const {appId, tblId} = this.props.match.params;
-
+        console.log('onCancel');
         NavigationUtils.goBackToLocationOrTable(appId, tblId, this.props.redirectRoute);
     },
 
@@ -134,6 +138,7 @@ export const FormBuilderContainer = React.createClass({
     },
 
     saveClicked() {
+        console.log('onSave');
         // get the form meta data from the store..hard code offset for now...this is going to change..
         if (this.props.currentForm && this.props.currentForm.formData) {
             let formMeta = this.props.currentForm.formData.formMeta;
@@ -145,8 +150,8 @@ export const FormBuilderContainer = React.createClass({
     getRightAlignedButtons() {
         return (
             <div>
-                <Button bsStyle="primary" onClick={this.onCancel} className="cancelFormButton"><I18nMessage message="nav.cancel"/></Button>
-                <Button bsStyle="primary" onClick={this.saveClicked} className="saveFormButton"><I18nMessage message="nav.save"/></Button>
+                <Button tabIndex={tabIndexConstants.CANCEL_BUTTON_TABINDEX} bsStyle="primary" onClick={this.onCancel} className="cancelFormButton"><I18nMessage message="nav.cancel"/></Button>
+                <Button tabIndex={tabIndexConstants.SAVE_BUTTON_TABINDEX} bsStyle="primary" onClick={this.saveClicked} className="saveFormButton"><I18nMessage message="nav.save"/></Button>
             </div>
         );
     },
@@ -168,11 +173,10 @@ export const FormBuilderContainer = React.createClass({
     },
 
     updateChildrenTabIndex(e) {
-        let childrenTabIndex = this.props.tabIndex;
+        let childrenTabIndex = this.props.formBuilderChildrenTabIndex;
 
-        if ((e.which === ENTER_KEY || e.which === SPACE_KEY) && childrenTabIndex !== "0") {
+        if ((e.which === ENTER_KEY || e.which === SPACE_KEY) && childrenTabIndex !== tabIndexConstants.FORM_TAB_INDEX) {
             this.props.toggleFormBuilderChildrenTabIndex(this.props.currentForm.id, childrenTabIndex);
-            e.preventDefault();
         }
     },
 
@@ -198,14 +202,38 @@ export const FormBuilderContainer = React.createClass({
     },
 
     escapeCurrentContext() {
-        let childrenTabIndex = this.props.tabIndex;
         let selectedField = this.props.selectedField;
-        if (selectedField) {
+        let formId = this.props.currentForm.id;
+        if (this.props.formBuilderChildrenTabIndex === tabIndexConstants.FORM_TAB_INDEX) {
+            this.props.toggleFormBuilderChildrenTabIndex(formId, tabIndexConstants.FORM_TAB_INDEX);
+        } else if (this.props.toolPaletteChildrenTabIndex === tabIndexConstants.TOOL_PALETTE_TABINDEX) {
+            this.props.toggleToolPaletteChildrenTabIndex(formId, tabIndexConstants.TOOL_PALETTE_TABINDEX);
+        } else if (selectedField) {
             this.deselectField();
-        } else if (this.props.tabIndex === "0") {
-            this.props.toggleFormBuilderChildrenTabIndex(this.props.currentForm.id, childrenTabIndex);
         } else {
             this.onCancel();
+        }
+    },
+
+    toggleToolPaletteChildrenTabIndex(e) {
+        let formId = this.props.currentForm.id;
+        if (e.which === ENTER_KEY || e.which === SPACE_KEY) {
+            this.props.toggleToolPaletteChildrenTabIndex(formId, "-1");
+            e.preventDefault();
+        }
+    },
+
+    /**
+     * This is for keyboard navigation, it will add focus to a form only if formFocus is true
+     * formFocus becomes true when a user is hitting escape to remove the children elements form the tabbing flow
+     * */
+    componentDidUpdate() {
+        if (this.props.formFocus &&
+            document.activeElement.classList[0] !== "checkbox" &&
+            document.activeElement.tagName !== "TEXTAREA" &&
+            document.activeElement.tagName !== "INPUT" &&
+            document.activeElement.tagName !== "BUTTON") {
+            formBuilderContainerContent.focus();
         }
     },
 
@@ -221,12 +249,11 @@ export const FormBuilderContainer = React.createClass({
         return (
             <div className="formBuilderContainer">
                 <FormBuilderCustomDragLayer />
-
                 <KeyboardShortcuts id="formBuilderContainer"
                                    shortcutBindings={[
                                        {key: 'shift+up', callback: () => {this.keyboardMoveFieldUp(); return false;}},
                                        {key: 'shift+down', callback: () => {this.keyboardMoveFieldDown(); return false;}},
-                                       {key: 'backspace', callback: () => {this.removeField(); return false;}}
+                                       {key: 'shift+backspace', callback: () => {this.removeField(); return false;}},
                                    ]}
                                    shortcutBindingsPreventDefault={[
                                        {key: 'esc', callback: () => {this.escapeCurrentContext(); return false;}},
@@ -235,16 +262,23 @@ export const FormBuilderContainer = React.createClass({
 
                 <PageTitle title={Locale.getMessage('pageTitles.editForm')}/>
 
-                <ToolPalette isCollapsed={this.props.isCollapsed} isOpen={this.props.isOpen}>
-                    <FieldProperties appId={this.props.match.params.appId} tableId={this.props.match.params.tblId} formId={formId}>
-                        <div className="formBuilderContainerContent" ref={element => formBuilderContainerContent = element}>
+                <ToolPalette isCollapsed={this.props.isCollapsed}
+                             isOpen={this.props.isOpen}
+                             toggleToolPaletteChildrenTabIndex={this.toggleToolPaletteChildrenTabIndex}
+                             toolPaletteChildrenTabIndex={this.props.toolPaletteChildrenTabIndex}
+                             toolPaletteFocus={this.props.toolPaletteFocus} >
+                <FieldProperties appId={this.props.match.params.appId} tableId={this.props.match.params.tblId} formId={formId}>
+                        <div tabIndex={tabIndexConstants.FORM_TAB_INDEX}
+                             className="formBuilderContainerContent"
+                             ref={element => formBuilderContainerContent = element}
+                             role="button"
+                             onKeyDown={this.updateChildrenTabIndex}>
                             <AutoScroll parentContainer={formBuilderContainerContent} pixelsFromBottomForLargeDevices={100}>
                                 <div className="formBuilderContent">
                                     <Loader loaded={loaded} options={LARGE_BREAKPOINT}>
                                         <FormBuilder
-                                            formFocus={this.props.formFocus}
+                                            formBuilderContainerContentElement={formBuilderContainerContent}
                                             selectedField={this.props.selectedField}
-                                            formBuilderUpdateChildrenTabIndex={this.updateChildrenTabIndex}
                                             formId={formId}
                                             appId={this.props.match.params.appId}
                                             tblId={this.props.match.params.tblId}

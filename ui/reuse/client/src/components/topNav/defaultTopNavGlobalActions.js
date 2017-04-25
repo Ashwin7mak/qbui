@@ -35,7 +35,7 @@ class ReDefaultTopNavGlobalActions extends Component {
                     {this.props.children}
                     {this.props.actions && this.props.actions.map((action, index) => (
                         <GlobalAction
-                            tabIndex={this.props.startTabIndex + index}
+                            tabIndex={this.props.startTabIndex}
                             key={action.msg}
                             linkClass={this.props.linkClass}
                             onSelect={this.props.onSelect}
@@ -47,7 +47,7 @@ class ReDefaultTopNavGlobalActions extends Component {
                         <UserDropDown
                             supportedLocales={Locale.getSupportedLocales()}
                             changeLocale={this.props.changeLocale}
-                            startTabIndex={this.props.startTabIndex + this.props.actions.length}
+                            startTabIndex={this.props.startTabIndex}
                             signOutUser={this.signOutUser}
                             app={this.props.app}
                             shouldOpenMenusUp={this.props.shouldOpenMenusUp}
