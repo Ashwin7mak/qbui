@@ -9,7 +9,8 @@ export default {
 
     messages: {
         test: {
-            testMsg: "test"
+            testMsg: "test",
+            testPluralize: "{value, plural, =0 {0 test} =1 {1 test} other {# tests}}"
         },
         apps: {
             header: "Apps"

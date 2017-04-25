@@ -3,6 +3,7 @@ import Logger from '../../../../client-react/src/utils/logger';
 import config from '../../../../client-react/src/config/app.config';
 import StringUtils from '../../../../client-react/src/utils/stringUtils';
 // IMPORTS FROM CLIENT REACT
+import IntlMessageFormat from 'intl-messageformat';
 
 let logger = new Logger();
 
@@ -92,6 +93,23 @@ class Locale {
         }
 
         return message;
+    }
+
+    /**
+     * Return a pluralize message based on the msgPath and format object.
+     *
+     * @param msgPath
+     * @param params
+     * @return {*}
+     */
+    static getPluralizeMessage(msgPath, params) {
+        let formattedMsg = new IntlMessageFormat(Locale.getMessage(msgPath));
+
+        if (!params) {
+            throw new Error('A format object is required to pluralize message.');
+        }
+
+        return formattedMsg.format(params);
     }
 
     static getSupportedLocales() {

@@ -63,6 +63,13 @@ describe('Locales', () => {
         expect(testMsg).toBe('test');
     });
 
+    it('test getPluralizeMessage', () => {
+        ReuseBundleLoader.changeLocale('en-us');
+        Locale.getI18nBundle();
+        const testMsg = Locale.getPluralizeMessage("test.testPluralize", {value: 2});
+        expect(testMsg).toBe('2 tests');
+    });
+
     it('test invalid change locale', () => {
         let mockConfig = {
             locale: {
