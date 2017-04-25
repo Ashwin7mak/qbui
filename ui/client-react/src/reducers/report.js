@@ -290,22 +290,20 @@ const report = (state = [], action) => {
             let addBefore = params.addBefore;
             // loop through to check if the placeholder column is already visible
             let placeHolderAlreadyExists = currentReport.data.columns.some(column => {
-                return column.fieldDef.isPlaceholder === true;
+                return column.isPlaceholder === true;
             });
             if (placeHolderAlreadyExists) {
                 // remove the placeholder column if it exists
-                let actualColumns = currentReport.data.columns.filter(column => {
-                    return column.fieldDef.isPlaceholder === undefined;
+                currentReport.data.columns = currentReport.data.columns.filter(column => {
+                    return !column.isPlaceholder;
                 });
-                currentReport.data.columns = actualColumns;
             }
             reorderColumns(currentReport.data.columns);
             // since not all columns are visible, add the placeholder column to columns so it gets rendered on screen
             let placeholder = {
-                fieldDef: {
-                    isPlaceholder: true
-                },
-                isHidden: false
+                isPlaceholder: true,
+                isHidden: false,
+                id: -1
             };
             // find the index of the column where 'add a column' was clicked
             let clickedColumn = currentReport.data.columns.filter(column => {
@@ -333,7 +331,7 @@ const report = (state = [], action) => {
         if (currentReport) {
             // remove the placeholder column (if it exists) when the drawer is closed
             let actualColumns = currentReport.data.columns.filter(column => {
-                return column.fieldDef.isPlaceholder === undefined;
+                return !column.isPlaceholder;
             });
             reorderColumns(actualColumns);
             currentReport.data.columns = actualColumns;
@@ -362,7 +360,7 @@ const report = (state = [], action) => {
             reorderColumns(columns);
             // searches through the current columns to find the index of the placeholder
             let placeholderIndex = columns.filter(column => {
-                return column.fieldDef.isPlaceholder === true;
+                return column.isPlaceholder;
             })[0].order - 1;
             // add the requested column to where the placeholder column is
             let fidInsertionIndex;
@@ -378,7 +376,7 @@ const report = (state = [], action) => {
 
             // show the currently hidden column that was just added
             columns.forEach(column => {
-                if (column.fieldDef.id === requestedColumnId) {
+                if (column.id === requestedColumnId) {
                     column.isHidden = false;
                 }
                 return column;
@@ -402,7 +400,7 @@ const report = (state = [], action) => {
             let clickedColumnId = params.clickedId;
             // mark the clicked column as hidden so it does not get rendered
             columns.forEach(column => {
-                if (column.fieldDef.id === clickedColumnId) {
+                if (column.id === clickedColumnId) {
                     column.isHidden = true;
                 }
             });
