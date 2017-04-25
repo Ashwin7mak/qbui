@@ -115,11 +115,10 @@ export default {
         },
         grid: {
             no_data: "Il n'y a pas de données à afficher.",
-            no_filter_matches: "Aucun enregistrement ne correspond à ce que vous recherchez. Essayez de rechercher un autre type d'enregistrement.",
-            no_rows: "Il n'y a aucun enregistrement à voir en ce moment.",
-            no_rows_but: "Il n'y a pas d'enregistrements, mais vous pouvez ",
+            no_filter_matches: "Aucun {recordsName} ne correspond à ce que vous recherchez. Essayez de rechercher un autre type d'{recordsName}.",
+            no_rows: "Il n'y a aucun {recordsName} à voir en ce moment.",
+            no_rows_but: "Il n'y a pas de {recordsName}, mais vous pouvez ",
             no_rows_create_link:  "créer une"
-
         },
         globalActions: {
             user: "Utilisateur",
@@ -644,7 +643,13 @@ export default {
             homePageCreateAnother: "Créer un autre tableau",
 
             noSuggestedIcons: "Il n'y a pas d'icônes suggérées pour ce nom de table",
-            typeForSuggestions: "Tapez un nom de table pour obtenir des suggestions"
+            typeForSuggestions: "Tapez un nom de table pour obtenir des suggestions",
+
+            tableReadyTitle: "Votre table est prête!",
+            tableReadyText1: "Chaque élément d'information que vous souhaitez collecter est un champ. Nous vous avons commencé avec un couple.",
+            tableReadyText2: "Concevez ce formulaire pour collecter des informations. Faites glisser et déposez pour ajouter des champs.",
+
+            tableReadyDialogOK: "D'accord"
         },
         iconChooser: {
             searchPlaceholder: "Rechercher des icônes..."

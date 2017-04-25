@@ -148,6 +148,7 @@ export const TableHomePageRoute = React.createClass({
                 appUsers={this.props.appUsers}
                 routeParams={this.props.match.params}
                 selectedAppId={this.props.selectedAppId}
+                selectedTable={this.props.selectedTable}
                 searchStringForFiltering={this.props.reportData.searchStringForFiltering}
                 selectedRows={this.props.reportData.selectedRows}
                 scrollingReport={this.props.scrollingReport}
