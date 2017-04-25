@@ -6,7 +6,7 @@ export const defaultGridState = {
     // the fields to sort the grid
     sortFids: [],
     // the pagination to apply to the grid
-    pagination: {currentIndex : 0},
+    pageNumber: 1,
     // the filter to apply to the grid
     filter : []
 };
@@ -33,7 +33,7 @@ function grid(state = defaultGridState, action) {
     case types.SET_PAGINATE:
         return {
             ...state,
-            pagination: {currentIndex: state.pagination.currentIndex + (action.direction * 100)}
+            pageNumber: action.direction === "prev" ? state.pagination.pageNumber - 1 : state.pagination.pageNumber  + 1
         };
     default:
         return state;

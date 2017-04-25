@@ -1,10 +1,10 @@
 import AccountUsersService from "./AccountUsersService";
 import * as types from "../../app/actionTypes";
-import _ from 'lodash';
-import * as Formatters from './Grid/AccountUsersGridFormatters';
+import _ from "lodash";
+import * as Formatters from "./Grid/AccountUsersGridFormatters";
 import * as RealmUserAccountFlagConstants from "../../common/constants/RealmUserAccountFlagConstants.js";
-import * as StandardGridActions from '../../common/grid/standardGridActions';
-import * as StandardGridState from '../../common/grid/standardGridReducer';
+import * as StandardGridActions from "../../common/grid/standardGridActions";
+import * as StandardGridState from "../../common/grid/standardGridReducer";
 
 
 export const filterUsers = (users, filterQuery) => {
@@ -12,9 +12,15 @@ export const filterUsers = (users, filterQuery) => {
     return users;
 };
 
-export const paginateUsers = (users, paginationIndex) => {
+export const paginateUsers = (users, _page) => {
+    if (users.length === 0) {
+        return users;
+    }
 
-    return users;
+    let page = _page || 1,
+        per_page = 10,
+        offset = (page - 1) * per_page;
+    return users.slice(offset, offset + per_page);
 };
 
 const sortFunctions = [

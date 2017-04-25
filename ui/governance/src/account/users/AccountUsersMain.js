@@ -45,7 +45,7 @@ class AccountUsers extends Component {
                 <Loader loaded={!this.props.loading} options={SpinnerConfigurations.LARGE_BREAKPOINT}>
                     <div className="accountUsersContainer">
                         <AccountUsersStage users={this.props.users}/>
-                        <AccountUsersToolBar totalRecords={this.props.users.length}/>
+                        <AccountUsersToolBar id={this.GRID} totalRecords={this.props.users.length}/>
                         <AccountUsersGrid id={this.GRID} showAccountColumns={canSeeAccountColumns} showRealmColumns={canSeeRealmColumns}/>
                     </div>
                 </Loader>

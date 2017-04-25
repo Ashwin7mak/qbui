@@ -1,6 +1,8 @@
 import React, {PropTypes, Component} from "react";
 import {connect} from 'react-redux';
 import Pagination from "../../../../../reuse/client/src/components/pagination/pagination";
+import * as StandardGridActions from "../../../common/grid/standardGridActions";
+import * as AccountUsersActions from "../AccountUsersActions";
 
 /**
  * The stage for the AccountUsers page
@@ -9,20 +11,21 @@ class AccountUsersNavigation extends React.Component {
 
     constructor(...args) {
         super(...args);
-        this.PAGE_ITEMS = 10;
     }
 
     isNextDisabled() {
-        return this.props.totalRecords < this.PAGE_ITEMS;
+        return false;// TODO: this.props.totalRecords === this.props.pageEnd;
     }
 
     isPreviousDisabled() {
-        return this.props.pagination.currentIndex === 0;
+        return this.props.pageNumber === 1;
     }
 
     render() {
         return (
             <Pagination startRecord={1}
+            onClickPrevious={this.props.getPreviousUsersPage(this.props.id)}
+            onClickNext={this.props.getNextUsersPage(this.props.id)}
             endRecord={this.props.totalRecords}
             isPreviousDisabled={this.isPreviousDisabled()}
             isNextDisabled={this.isNextDisabled()}
@@ -41,12 +44,23 @@ AccountUsersNavigation.propTypes = {
 
 export {AccountUsersNavigation};
 
-const mapDispatchToProps = (dispatch) => ({
-});
+const mapDispatchToProps = (dispatch) => {
+    return {
+        getPreviousUsersPage: (gridID) => {
+            dispatch(StandardGridActions.setPaginate(gridID, "previous"));
+            dispatch(StandardGridActions.doUpdate(gridID, AccountUsersActions.doUpdate));
+        },
+
+        getNextUsersPage: () =>  {
+            dispatch(StandardGridActions.setPaginate(gridID, "next"));
+            dispatch(StandardGridActions.doUpdate(gridID, AccountUsersActions.doUpdate));
+        }
+    };
+};
 
 const mapStateToProps = (state) => {
     return {
-        pagination: state.Grids.pagination
+        pageNumber: state.Grids.pageNumber
     };
 };
 

@@ -13,7 +13,7 @@ class AccountUsersToolBar extends React.Component {
     render() {
         return (
             <div>
-                <AccountUsersNavigation totalRecords={this.props.totalRecords}/>
+                <AccountUsersNavigation id={this.props.id} totalRecords={this.props.totalRecords}/>
             </div>
         );
     }
@@ -24,7 +24,8 @@ AccountUsersToolBar.defaultProps = {
 };
 
 AccountUsersToolBar.propTypes = {
-    totalRecords: PropTypes.Number
+    totalRecords: PropTypes.Number,
+    id: PropTypes.String
 };
 
 export default AccountUsersToolBar;
