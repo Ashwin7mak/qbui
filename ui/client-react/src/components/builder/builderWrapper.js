@@ -10,7 +10,7 @@ import GlobalActions from '../actions/globalActions';
 import RouteWithSubRoutes from "../../scripts/RouteWithSubRoutes";
 import TopNav from '../../../../reuse/client/src/components/topNav/topNav';
 import * as tabIndexConstants from '../formBuilder/tabindexConstants';
-
+import TableReadyDialog from '../table/tableReadyDialog';
 let FluxMixin = Fluxxor.FluxMixin(React);
 let StoreWatchMixin = Fluxxor.StoreWatchMixin;
 
@@ -67,7 +67,7 @@ export const BuilderWrapper = React.createClass({
                         </Switch>
                     }
                 </div>
-
+                <TableReadyDialog/>
             </div>
         );
     }
