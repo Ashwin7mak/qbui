@@ -46,7 +46,8 @@ if (__QB_PROD__) {
         },
         unauthorizedRedirect: null,
         // walkme java script
-        walkmeJSSnippet : 'https://cdn.walkme.com/users/897ca46385a543cbbeaffbc655cdf312/walkme_897ca46385a543cbbeaffbc655cdf312_https.js'
+        walkmeJSSnippet : 'https://cdn.walkme.com/users/897ca46385a543cbbeaffbc655cdf312/walkme_897ca46385a543cbbeaffbc655cdf312_https.js',
+        evergageDataset: 'test'
     });
 }
 
@@ -61,7 +62,8 @@ if (__QB_TEST__) {
         },
         unauthorizedRedirect: null,
         // walkme java script
-        walkmeJSSnippet : ''
+        walkmeJSSnippet : '',
+        evergageDataset: null
     });
 }
 
@@ -77,7 +79,8 @@ if (__QB_LOCAL__) {
         detectInvalidMutations: false, /* use redux-immutable-state-invariant middleware? */
         unauthorizedRedirect: '/qbase/unauthorized',
         // walkme java script
-        walkmeJSSnippet : ''
+        walkmeJSSnippet : '',
+        evergageDataset: 'dev_site_nick',
     });
 }
 
