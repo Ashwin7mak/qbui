@@ -544,6 +544,7 @@ export const updateRecord = (appId, tblId, recId, params = {}) => {
 
                                 // delay the response object so that the state gets updated with success settings
                                 Promise.delay(PRE_REQ_DELAY_MS).then(() => {
+                                    dispatch(event(recId, types.SAVE_RECORD_COMPLETE, {appId, tblId, recId}));
                                     let obj = {
                                         recId:recId,
                                         appId:appId,
