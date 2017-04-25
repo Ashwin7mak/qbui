@@ -38,7 +38,7 @@ function grid(state = defaultGridState, action) {
     case types.SET_PAGINATE:
         return {
             ...state,
-            pageNumber: action.direction === "prev" ? state.pagination.pageNumber - 1 : state.pagination.pageNumber  + 1
+            pageNumber: action.previous ? state.pageNumber - 1 : state.pageNumber  + 1
         };
     default:
         return state;

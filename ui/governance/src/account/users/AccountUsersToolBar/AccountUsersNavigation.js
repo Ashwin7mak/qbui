@@ -18,14 +18,14 @@ class AccountUsersNavigation extends React.Component {
     }
 
     isPreviousDisabled() {
-        return false;//this.props.pageNumber === 1;
+        return this.props.pageNumber === 1;
     }
 
     render() {
         return (
             <Pagination startRecord={1}
-                        onClickPrevious={this.props.getPreviousUsersPage(this.props.id)}
-                        onClickNext={this.props.getNextUsersPage(this.props.id)}
+                        onClickPrevious={this.props.getPreviousUsersPage}
+                        onClickNext={this.props.getNextUsersPage}
                         endRecord={this.props.totalRecords}
                         isPreviousDisabled={this.isPreviousDisabled()}
                         isNextDisabled={this.isNextDisabled()}
@@ -46,25 +46,11 @@ AccountUsersNavigation.propTypes = {
 
 export {AccountUsersNavigation};
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        getPreviousUsersPage: (gridID) => {
-            //dispatch(StandardGridActions.setPaginate(gridID, "previous"));
-            //dispatch(StandardGridActions.doUpdate(gridID, AccountUsersActions.doUpdate));
-        },
-
-        getNextUsersPage: (gridID) =>  {
-            //dispatch(StandardGridActions.setPaginate(gridID, "next"));
-            //dispatch(StandardGridActions.doUpdate(gridID, AccountUsersActions.doUpdate));
-        }
-    };
-};
-
 const mapStateToProps = (state) => {
     return {
-        // pageNumber: state.Grids.pageNumber
+        pageNumber: state.Grids.pageNumber
     };
 };
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(AccountUsersNavigation);
+export default connect(mapStateToProps, null)(AccountUsersNavigation);

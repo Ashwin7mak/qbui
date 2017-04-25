@@ -46,10 +46,10 @@ export const setSort = (gridId, sortFid, asc, remove) => ({
  * @param gridId - the id of the grid we want to update
  * @param direction - the direction to paginate
  */
-export const setPaginate = (gridId, direction) => ({
+export const setPaginate = (gridId, previous) => ({
     type: types.SET_PAGINATE,
     gridId,
-    direction
+    previous
 });
 
 /**

@@ -18,7 +18,9 @@ class AccountUsersToolBar extends React.Component {
         return (
             <div>
                 <IconInputBox placeholder="Search users"/>
-                <AccountUsersNavigation id={this.props.id} totalRecords={this.props.totalRecords}/>
+                <AccountUsersNavigation getPreviousUsersPage={this.props.getPreviousUsersPage}
+                                        getNextUsersPage={this.props.getNextUsersPage}
+                                        id={this.props.id} totalRecords={this.props.totalRecords}/>
             </div>
         );
     }
@@ -36,11 +38,20 @@ AccountUsersToolBar.propTypes = {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        // // TODO: Pass the search term
-        // onSearchChange: (gridID, searchTerm) => {
-        //     dispatch(StandardGridActions.setSearch(gridID, "previous"));
-        //     dispatch(StandardGridActions.doUpdate(gridID, AccountUsersActions.doUpdate));
-        // }
+        getPreviousUsersPage: () => {
+            dispatch(StandardGridActions.setPaginate("accountUsers", true));
+            dispatch(StandardGridActions.doUpdate("accountUsers", AccountUsersActions.doUpdate));
+        },
+
+        getNextUsersPage: () => {
+            dispatch(StandardGridActions.setPaginate("accountUsers", false));
+            dispatch(StandardGridActions.doUpdate("accountUsers", AccountUsersActions.doUpdate));
+        },
+
+        onSearchChange: (gridID, searchTerm) => {
+            dispatch(StandardGridActions.setSearch(gridID, "previous"));
+            dispatch(StandardGridActions.doUpdate(gridID, AccountUsersActions.doUpdate));
+        }
     };
 };
 
