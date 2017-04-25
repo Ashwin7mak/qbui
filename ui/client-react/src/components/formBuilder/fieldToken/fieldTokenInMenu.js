@@ -37,14 +37,19 @@ export class DraggableFieldToken extends Component {
     }
 
     clickToAddToForm = () => {
-        let {selectedField, formId, appId, tblId, relatedField} = this.props;
+        const {selectedField, formId, appId, tblId, relatedField} = this.props;
         this.props.addNewFieldToForm(formId, appId, tblId, selectedField, relatedField);
     };
 
     onHover = (dropTargetProps, dragItemProps) => {
         if (!this.state.addedToForm) {
-            let {formId, appId, tblId, relatedField} = this.props;
-            this.props.addNewFieldToForm(formId, appId, tblId, dropTargetProps.location, relatedField);
+            const {formId, appId, tblId, relatedField} = this.props;
+
+            // For a better user experience, we place the new element above the item is was dropped on, rather than below it.
+            const location = dropTargetProps.location;
+            const elementIndex = (location && location.elementIndex > 1 ? location.elementIndex - 1 : 0);
+
+            this.props.addNewFieldToForm(formId, appId, tblId, {...location, elementIndex}, relatedField);
             this.setState({addedToForm: true});
         }
     };

@@ -128,12 +128,12 @@ export class FormBuilder extends Component {
 }
 
 FormBuilder.propTypes = {
-    formId: PropTypes.string.isRequired,
+    formId: PropTypes.string,
 
     formData: PropTypes.shape({
         fields: PropTypes.array,
         formMeta: PropTypes.object
-    }).isRequired,
+    }),
 
     moveFieldOnForm: PropTypes.func,
 
