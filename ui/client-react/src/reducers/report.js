@@ -285,6 +285,9 @@ const report = (state = [], action) => {
     case types.OPEN_FIELD_SELECTOR: {
         let currentReport = getReportFromState(action.id);
         if (currentReport) {
+            let params = action.content;
+            let clickedColumnId = params.clickedId;
+            let addBefore = params.addBefore;
             // loop through to check if the placeholder column is already visible
             let placeHolderAlreadyExists = currentReport.data.columns.some(column => {
                 return column.fieldDef.isPlaceholder === true;
@@ -298,7 +301,6 @@ const report = (state = [], action) => {
             }
             reorderColumns(currentReport.data.columns);
             // since not all columns are visible, add the placeholder column to columns so it gets rendered on screen
-            let params = action.content;
             let placeholder = {
                 fieldDef: {
                     isPlaceholder: true
@@ -307,15 +309,15 @@ const report = (state = [], action) => {
             };
             // find the index of the column where 'add a column' was clicked
             let clickedColumn = currentReport.data.columns.filter(column => {
-                return column.id === params.clickedId;
+                return column.id === clickedColumnId;
             })[0];
             currentReport.data.columns.forEach(column => {
-                column.fieldDef.isAddingFrom = (column.fieldDef.id === params.clickedId);
+                column.fieldDef.isAddingFrom = (column.fieldDef.id === clickedColumnId);
             });
             let clickedColumnIndex = clickedColumn.order;
             // add before or after the clicked column depending on selection
             let insertionIndex;
-            if (params.addBefore) {
+            if (addBefore) {
                 insertionIndex = clickedColumnIndex;
             } else {
                 insertionIndex = clickedColumnIndex + 1;
@@ -406,7 +408,7 @@ const report = (state = [], action) => {
             });
 
             fids = fids.filter(fid => {
-                return fid !== action.content.columnId;
+                return fid !== clickedColumnId;
             });
             return newState(currentReport);
         }
