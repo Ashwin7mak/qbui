@@ -108,7 +108,8 @@ export class FieldEditingTools extends Component {
             this.props.selectedFields[0] &&
             this.props.formBuilderChildrenTabIndex !== "-1" &&
             document.activeElement.tagName !== "INPUT" &&
-            document.activeElement.tagName !== "TEXTAREA") {
+            document.activeElement.tagName !== "TEXTAREA" &&
+            document.activeElement.tagName !== "BUTTON") {
             let setFocusOnSelectedField = document.querySelectorAll(".fieldEditingTools")[this.props.selectedFields[0].elementIndex];
             if (setFocusOnSelectedField) {
                 setFocusOnSelectedField.focus();

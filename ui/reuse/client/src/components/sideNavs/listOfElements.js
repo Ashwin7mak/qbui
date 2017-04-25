@@ -129,7 +129,8 @@ class ListOfElements extends Component {
         if (this.props.hasKeyBoardFocus &&
             document.activeElement.classList[0] !== "checkbox" &&
             document.activeElement.tagName !== "TEXTAREA" &&
-            document.activeElement.tagName !== "INPUT") {
+            document.activeElement.tagName !== "INPUT" &&
+            document.activeElement.tagName !== "BUTTON") {
             this.listOfElementsContainer.focus();
         }
     }
