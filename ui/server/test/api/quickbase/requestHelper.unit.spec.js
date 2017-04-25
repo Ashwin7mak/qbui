@@ -181,7 +181,7 @@ describe('Validate RequestHelper unit tests', function() {
             req.method = 'GET';
             let request = requestHelper.getRequestAutomationUrl(req);
             request = requestHelper.setAutomationEngineOptions(req);
-            request.url='/someurl.com'
+            request.url = '/someurl.com';
             should(request.url).be.exactly(config.automationHost + req.url);
             should.not.exist(request.body);
             should(request.method).be.exactly(req.method);
