@@ -38,7 +38,7 @@ describe('ReportColumnHeaderMenu', () => {
         RewireAPI.__Rewire__('Locale', MockLocale);
         spyOn(testProps, 'loadDynamicReport').and.callThrough();
         spyOn(testProps, 'hideColumn').and.callThrough();
-        spyOn(testProps, 'toggleFieldSelectorMenu'.and.callThrough());
+        spyOn(testProps, 'toggleFieldSelectorMenu').and.callThrough();
     });
 
     afterEach(() => {
@@ -437,7 +437,7 @@ describe('ReportColumnHeaderMenu', () => {
         });
 
         it('does not call the group action if the required props are not passed in', () => {
-            component = shallow(<ReportColumnHeaderMenu fieldDef={...testFieldDef}/>);
+            component = shallow(<ReportColumnHeaderMenu fieldDef={testFieldDef}/>);
             instance = component.instance();
 
             instance.groupReport(true, false);
@@ -490,7 +490,7 @@ describe('ReportColumnHeaderMenu', () => {
         });
 
         it('does not call the group action if the required props are not passed in', () => {
-            component = shallow(<ReportColumnHeaderMenu />);
+            component = shallow(<ReportColumnHeaderMenu fieldDef={testFieldDef}/>);
             instance = component.instance();
 
             instance.groupReport(true);
@@ -529,7 +529,7 @@ describe('ReportColumnHeaderMenu', () => {
         });
 
         it('does not call the action to hide a column if the required props are not passed in', () => {
-            component = shallow(<ReportColumnHeaderMenu fieldDef={...testFieldDef} isOnlyOneColumnVisible={false}/>);
+            component = shallow(<ReportColumnHeaderMenu fieldDef={testFieldDef} isOnlyOneColumnVisible={false}/>);
             instance = component.instance();
 
             instance.hideThisColumn(testProps.fieldDef.id);
@@ -546,18 +546,17 @@ describe('ReportColumnHeaderMenu', () => {
             expect(testProps.hideColumn).not.toHaveBeenCalled();
         });
 
-        //
-
         it('adds a column before when that menu item is selected', () => {
+
             component = shallow(<ReportColumnHeaderMenu {...testProps}/>);
             instance = component.instance();
 
-            let hidingMenuItem = component.find(MenuItem).find({onSelect: instance.openFieldSelectorBefore});
-            expect(hidingMenuItem).toBePresent();
+            let addingMenuItem = component.find(MenuItem).find({onSelect: instance.openFieldSelectorBefore});
+            expect(addingMenuItem).toBePresent();
 
             spyOn(instance, "openFieldSelector");
 
-            expect(hidingMenuItem.find('.addColumnBeforeText')).toHaveText('report.menu.addColumnBefore');
+            expect(addingMenuItem.find('.addColumnBeforeText')).toHaveText('report.menu.addColumnBefore');
             instance.openFieldSelectorBefore();
 
             expect(instance.openFieldSelector).toHaveBeenCalledWith(true);
@@ -567,12 +566,12 @@ describe('ReportColumnHeaderMenu', () => {
             component = shallow(<ReportColumnHeaderMenu {...testProps}/>);
             instance = component.instance();
 
-            let hidingMenuItem = component.find(MenuItem).find({onSelect: instance.openFieldSelectorAfter});
-            expect(hidingMenuItem).toBePresent();
+            let addingMenuItem = component.find(MenuItem).find({onSelect: instance.openFieldSelectorAfter});
+            expect(addingMenuItem).toBePresent();
 
             spyOn(instance, "openFieldSelector");
 
-            expect(hidingMenuItem.find('.addColumnAfterText')).toHaveText('report.menu.addColumnAfter');
+            expect(addingMenuItem.find('.addColumnAfterText')).toHaveText('report.menu.addColumnAfter');
             instance.openFieldSelectorAfter();
 
             expect(instance.openFieldSelector).toHaveBeenCalledWith(false);
@@ -609,7 +608,7 @@ describe('ReportColumnHeaderMenu', () => {
         });
 
         it('does not call the action to open the menu to add a column if the required props are not passed in', () => {
-            component = shallow(<ReportColumnHeaderMenu fieldDef={...testFieldDef} isOnlyOneColumnVisible={false}/>);
+            component = shallow(<ReportColumnHeaderMenu fieldDef={testFieldDef} isOnlyOneColumnVisible={false}/>);
             instance = component.instance();
 
             instance.openFieldSelector(true);

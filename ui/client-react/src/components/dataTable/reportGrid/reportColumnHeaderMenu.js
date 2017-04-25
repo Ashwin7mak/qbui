@@ -276,11 +276,11 @@ export class ReportColumnHeaderMenu extends Component {
                     <MenuItem divider/>
 
                     <MenuItem onSelect={this.openFieldSelectorBefore}>
-                        <span className="addColumnBeforeText"><I18nMessage message="report.menu.addColumnBefore"/></span>
+                        <span className="addColumnBeforeText">{Locale.getMessage('report.menu.addColumnBefore')}</span>
                     </MenuItem>
 
                     <MenuItem onSelect={this.openFieldSelectorAfter}>
-                        <span className="addColumnAfterText"><I18nMessage message="report.menu.addColumnAfter"/></span>
+                        <span className="addColumnAfterText">{Locale.getMessage('report.menu.addColumnAfter')}</span>
                     </MenuItem>
 
                     <MenuItem disabled={isHideOptionDisabled} onSelect={this.hideThisColumn}>
