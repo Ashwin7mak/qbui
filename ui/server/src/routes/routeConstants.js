@@ -22,6 +22,7 @@
         EXPERIENCE_ENGINE   : '/ee/v1',
         GOVERNANCE          : '/api/governance/:version',
         WORKFLOW : {
+            WORKFLOW        : '/we',
             FLOW_MANAGER    : '/we/api/v1',
             AUTOMATION      : '/we/workflow'
         }
@@ -34,7 +35,8 @@
      *  NOTE: there is no need to define a route here if the expectation is to only proxy/forward the request through node.
      */
     let qbuiApiEndpoints = {
-        QBUI_HEALTH_CHECK           : baseContext.CORE_HEALTH + '/qbuiHealth',   // TODO: remove with QBUI_HEALTH endpoint
+        // TODO: will be removed and replaced with QBUI_HEALTH endpoint once pit team makes changes in sprint 7
+        QBUI_HEALTH_CHECK           : baseContext.CORE_HEALTH + '/qbuiHealth',
 
         FORM_AND_RECORD_COMPONENTS  : baseContext.QUICKBASE_CLIENT + '/apps/:appId/tables/:tableId/records/:recordId/formComponents',
         FORM_COMPONENTS             : baseContext.QUICKBASE_CLIENT + '/apps/:appId/tables/:tableId/formComponents',
@@ -75,7 +77,7 @@
         // ************ TEMPORARY routes needed to allow E2E tests to continue to work under new routing scheme  *************
         // ************ PLEASE DO NOT ADD TO THIS LIST as these will go away once E2E is updated                 *************
         //  E2E needs these routes to be defined as some tests do not differentiate between the /qbui prefixed route or
-        //  the /api/api/v1 core routes.  JIRA-xxx has been created to refactor how routing is constructed so that the
+        //  the /api/api/v1 core routes.  JIRA MC-2268 has been created to refactor how routing is constructed so that the
         //  test framework does not call the custom routing using the incorrect prefix.
         E2E_FORM_AND_RECORD_COMPONENTS  : baseContext.CORE_ENGINE + '/apps/:appId/tables/:tableId/records/:recordId/formComponents',
         E2E_FORM_COMPONENTS             : baseContext.CORE_ENGINE + '/apps/:appId/tables/:tableId/formComponents',
@@ -133,7 +135,8 @@
         PUBLIC_REALMS              : '/realms*',
         PUBLIC_TICKET              : '/ticket*',
         PUBLIC_USERS               : '/users*',
-        PUBLIC_WORKFLOW_AUTOMATION : '/workflow/apps/:appId/*'
+        PUBLIC_WORKFLOW_AUTOMATION_API : '/workflow/apps/:appId/api*',
+        PUBLIC_WORKFLOW_AUTOMATION_INVOKE : '/workflow/apps/:appId/invokes*'
     };
 
     // Define list of public 'short-hand' routes and its back-end server api context.  This list
@@ -177,7 +180,9 @@
         {route: publicControllerEndpoints.PUBLIC_REALMS, regEx: /^\/realms(.*)?$/i, context: baseContext.CORE_ENGINE},
         {route: publicControllerEndpoints.PUBLIC_TICKET, regEx: /^\/ticket(.*)?$/i, context: baseContext.CORE_ENGINE},
         {route: publicControllerEndpoints.PUBLIC_USERS, regEx: /^\/users(.*)?$/i, context: baseContext.CORE_ENGINE},
-        {route: publicControllerEndpoints.PUBLIC_WORKFLOW_AUTOMATION, regEx: /^\/workflow\/apps\/.*\/(.*)?$/i, context: baseContext.WORKFLOW.FLOW_MANAGER}
+        //  workflow team should consider having common context for their routes
+        {route: publicControllerEndpoints.PUBLIC_WORKFLOW_AUTOMATION_API, regEx: /^\/workflow\/apps\/.*\/api(.*)?$/i, context: baseContext.WORKFLOW.WORKFLOW},
+        {route: publicControllerEndpoints.PUBLIC_WORKFLOW_AUTOMATION_INVOKE, regEx: /^\/workflow\/apps\/.*\/invokes(.*)?$/i, context: baseContext.WORKFLOW.WORKFLOW}
     ];
 
     /**
