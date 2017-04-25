@@ -67,7 +67,7 @@
     };
     module.exports  = {
         getCannedFields: function() {
-            return [cannedDateField, cannedTextField];
+            return [cannedTextField, cannedDateField];
         },
 
         getCannedReports: function(tableName) {
