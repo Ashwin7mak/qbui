@@ -1,6 +1,7 @@
 import {loadForm, updateForm, createForm, __RewireAPI__ as FormActionsRewireAPI} from '../../src/actions/formActions';
 import * as types from '../../src/actions/types';
 import WindowLocationUtils from '../../src/utils/windowLocationUtils';
+import _ from 'lodash';
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import Promise from 'bluebird';
@@ -78,6 +79,7 @@ describe('Form Actions load form error functions', () => {
             }
         );
     });
+
     it('test missing params to createForm', (done) => {
         const store = mockStore({});
         return store.dispatch(createForm()).then(
@@ -92,14 +94,12 @@ describe('Form Actions load form error functions', () => {
         );
     });
 
-    var NEW = 'new';
-    var loadFormTestCases = [
+    const NEW = 'new';
+    const VIEW = 'view';
+
+    const loadFormTestCases = [
         {name:'test promise reject handling loadForm of new record', appId:'1', tblId:'2', rptId:'3', type:'edit', id:NEW},
         {name:'test promise reject handling loadForm', appId:'1', tblId:'2', rptId:'3', type:'edit', id:'123'}
-    ];
-    const loadFormExpectedActions = [
-        {type: types.LOADING_FORM, id: 'edit'},
-        {type: types.LOAD_FORM_ERROR, id: 'edit', error: 404}
     ];
     loadFormTestCases.forEach(testCase => {
         it(testCase.name, (done) => {
@@ -117,18 +117,14 @@ describe('Form Actions load form error functions', () => {
                         expect(mockFormService.prototype.getFormAndRecord).toHaveBeenCalled();
                         expect(mockFormService.prototype.getForm).not.toHaveBeenCalled();
                     }
-                    expect(store.getActions()).toEqual(loadFormExpectedActions);
+                    const errAction = _.find(store.getActions(), action => action.type === types.LOAD_FORM_ERROR);
+                    expect(errAction).toBeDefined();
                     done();
                 }
             );
         });
     });
 
-    var VIEW = 'view';
-    const saveFormExpectedActions = [
-        {id:VIEW, type:types.SAVING_FORM, content:null},
-        {id:VIEW, type:types.SAVING_FORM_ERROR, content:404}
-    ];
     it('test promise reject handling updateForm', (done) => {
         const store = mockStore({});
         return store.dispatch(updateForm(1, 2, VIEW, {})).then(
@@ -139,7 +135,8 @@ describe('Form Actions load form error functions', () => {
             () => {
                 expect(mockFormService.prototype.updateForm).toHaveBeenCalled();
                 expect(mockFormService.prototype.createForm).not.toHaveBeenCalled();
-                expect(store.getActions()).toEqual(saveFormExpectedActions);
+                const errAction = _.find(store.getActions(), action => action.type === types.SAVING_FORM_ERROR);
+                expect(errAction).toBeDefined();
                 done();
             }
         );
@@ -154,7 +151,8 @@ describe('Form Actions load form error functions', () => {
             () => {
                 expect(mockFormService.prototype.createForm).toHaveBeenCalled();
                 expect(mockFormService.prototype.updateForm).not.toHaveBeenCalled();
-                expect(store.getActions()).toEqual(saveFormExpectedActions);
+                const errAction = _.find(store.getActions(), action => action.type === types.SAVING_FORM_ERROR);
+                expect(errAction).toBeDefined();
                 done();
             }
         );

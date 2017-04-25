@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import TestUtils from 'react-addons-test-utils';
-import FieldsPanel  from '../../src/components/sortGroup/fieldsPanel';
+import FieldsPanel, {__RewireAPI__ as FieldsPanelRewireAPI}  from '../../src/components/sortGroup/fieldsPanel';
 
 var I18nMessageMock = React.createClass({
     render: function() {
@@ -45,11 +45,11 @@ describe('FieldsPanel functions', () => {
     };
 
     beforeEach(() => {
-        FieldsPanel.__Rewire__('I18nMessage', I18nMessageMock);
+        FieldsPanelRewireAPI.__Rewire__('I18nMessage', I18nMessageMock);
     });
 
     afterEach(() => {
-        FieldsPanel.__ResetDependency__('I18nMessage');
+        FieldsPanelRewireAPI.__ResetDependency__('I18nMessage');
     });
 
 

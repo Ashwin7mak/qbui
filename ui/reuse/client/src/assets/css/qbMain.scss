@@ -1,0 +1,147 @@
+//$icon-font-path: "../node_modules/bootstrap-sass/assets/fonts/bootstrap/";
+//@import "node_modules/bootstrap-sass/assets/stylesheets/_bootstrap.scss";
+
+@import 'qbVariables';
+
+h1, .h1 {
+    font-size: $font-size-h1;
+    font-weight: 400;
+}
+
+h2, .h2 {
+    font-size: $font-size-h2;
+    font-weight: 400;
+}
+
+h3, .h3 {
+    font-size: $font-size-h3;
+    font-weight: 400;
+}
+
+h4, .h4 {
+    font-size: $font-size-h4;
+    font-weight: 400;
+}
+
+h5, .h5 {
+    font-size: $font-size-h5;
+    font-weight: 900;
+}
+
+h6, .h6 {
+    font-size: $font-size-h6;
+    font-weight: 900;
+}
+
+p, .p {
+    font-size: $font-size-p;
+    font-weight: 400;
+}
+
+a {
+    cursor: pointer;
+}
+
+.button-text {
+    font-size: $font-size-button;
+    font-weight: 700;
+}
+
+.bold {
+    font-weight: bold;
+}
+
+//aka ghost text
+
+@include placeholder {
+    font-style: italic;
+    font-size: $font-size-placeholder;
+}
+
+//firefox marks email & url input type fields invalid before submit, not what xd wants
+input:-moz-ui-invalid {
+    box-shadow: none;
+}
+
+// below moved from nav.scss
+html, body {
+    margin: 0;
+    height: 100%;
+    min-height: 100%;
+    overflow: hidden;
+}
+
+html body {
+    font-family: Lato, "Open Sans", Arial, Sans-Serif;
+    font-size: $font-size-p;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: 400;
+    line-height: 1.3em;
+
+    h1 {
+        font-family: Lato, "Open Sans", Arial, Sans-Serif;
+        font-size: $font-size-h1;
+        font-style: normal;
+        font-variant: normal;
+        font-weight: 500;
+        line-height: 24px;
+    }
+
+    h3 {
+        font-family: Lato, "Open Sans", Arial, Sans-Serif;
+        font-size: $font-size-h3;
+        font-style: normal;
+        font-variant: normal;
+        font-weight: 500;
+        line-height: 24px;
+    }
+}
+
+.dropdown-menu {
+
+    border-radius:2px;
+
+    &:before {
+        position: absolute;
+        top: -7px;
+        left: 9px;
+        display: inline-block;
+        border-right: 7px solid transparent;
+        border-bottom: 7px solid #ccc;
+        border-left: 7px solid transparent;
+        border-bottom-color: rgba(0, 0, 0, 0.2);
+        content: '';
+    }
+
+    &:after {
+        position: absolute;
+        top: -6px;
+        left: 9px;
+        display: inline-block;
+        border-right: 7px solid transparent;
+        border-bottom: 7px solid #ffffff;
+        border-left: 7px solid transparent;
+        content: '';
+    }
+
+    li[role="presentation"]{
+        padding: 2px 0;
+    }
+
+    li.divider{
+        margin:3px 0;
+    }
+}
+
+.dropdown-menu[aria-labelledby="nav-right-dropdown"]{
+    &:before {
+        right:9px;
+        left:auto;
+    }
+
+    &:after {
+        right:9px;
+        left:auto;
+    }
+}

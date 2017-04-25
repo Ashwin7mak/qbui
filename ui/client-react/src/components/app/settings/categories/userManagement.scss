@@ -1,0 +1,18 @@
+@import '../../../../../../reuse/client/src/assets/css/qbVariables';
+
+.userManagementContainer {
+    padding-left: 22px;
+    padding-top: 30px;
+
+    .qbHeaderCell {
+        &:first-of-type {
+            border-left: 1px solid $grid-column-header-border-color;
+        }
+    }
+
+    .qbCell {
+        padding-top: 6px;
+        padding-bottom: 6px;
+        background-color: $color-black-100;
+    }
+}

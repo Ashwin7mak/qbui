@@ -1,0 +1,93 @@
+@import "../../assets/css/_qbVariables";
+@import "../sideMenuBase/sideMenuMixins";
+
+/*
+    A note on all the first-child selectors (">"):
+    The frequent first-child selectors are required here to successfully handle
+    multiple side navs on the page (e.g., a left side trowser and a right trowser).
+    We only want to select the first child so styles for the current instance do not affect
+    other navs that may be on the page as these components get nested.
+ */
+
+.sideTrowserBase {
+    height: 100%;
+    width: 100%;
+    position: relative;
+
+    &:not(.sideTrowserDocked) > .sideTrowserContent.sideTrowserOpen {
+        @include menuShadow;
+    }
+
+    &.sideTrowserDocked {
+        display: flex;
+
+        &.sideTrowserPullRight {
+            flex-direction: row-reverse;
+        }
+
+        > .sideTrowserMain {
+            position: relative;
+            flex: 1 auto;
+            overflow: auto;
+            height: 100%;
+        }
+
+        > .sideTrowserContent {
+            position: relative;
+            flex: 0;
+        }
+    }
+
+    > .sideTrowserContent {
+        position: absolute;
+        top: 0;
+
+        overflow: auto;
+        background-color: $leftnav-background-color;
+        z-index: $zindex-trowser;
+        height: 100%;
+
+        @include baseMenuWidths;
+
+        &.sideTrowserCollapsed {
+            min-width: $leftNav-width-collapsed;
+            // Min width alone doesn't work when translating over the top of the main content. Need max-width too.
+            max-width: $leftNav-width-collapsed;
+        }
+
+        // Styling when the side trowser is on the left
+        &:not(.sideTrowserPullRight):not(.sideTrowserDocked) {
+            left: 0;
+
+            // Hide menu by default
+            @include moveMenuToRight;
+            // On small breakpoint the menu should be all the way off the screen, but the width is dependent on the specific device size
+            @include small-breakpoint {
+                transform: translateX(-100%);
+            }
+
+            &.sideTrowserOpen {
+                transform: translateX(0);
+            }
+        }
+
+        // Styling when side trowser is on the right
+        &.sideTrowserPullRight:not(.sideTrowserDocked) {
+            left: auto;
+            right: 0;
+
+            // Hide menu by default
+            @include moveMenuToLeft;
+            // On small breakpoint the menu should be all the way off the screen, but the width is dependent on the specific device size
+            @include small-breakpoint {
+                transform: translateX(100%);
+            }
+
+            &.sideTrowserOpen {
+                transform: translateX(0);
+            }
+        }
+
+        transition: transform 0.5s, min-width 0.5s, max-width 0.5s;
+    }
+}

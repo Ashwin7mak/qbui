@@ -4,17 +4,18 @@ var config = {
         {
             platform : 'OS X 10.11',
             browserName     : 'chrome',
-            version: '55.0',
+            version: '57.0',
             tunnelIdentifier: process.env.ENV_TUNNEL_NAME,
-            name            : process.env.SAUCE_JOB_NAME + '_OSX_Chrome',
-            //Timeout in seconds for Sauce Labs to wait for another command (bumped this for sleeps in tests)
-            idleTimeout: '120',
-            screenResolution : '1600x1200',
+            build           : 'WebdriverIO Jenkins Try Build #' + process.env.BUILD_NUMBER + ' - Git branch: ' + process.env.GIT_UIBRANCH + ' - OSX Chrome Browser',
+            tags            : [process.env.SAUCE_JOB_NAME + '_OSX_Chrome', 'try', 'OSX', 'Chrome', process.env.BUILD_NUMBER, process.env.GIT_UIBRANCH],
+            screenResolution : '2048x1536',
+            // Timeout in seconds for Sauce Labs to wait for another command (bumped this for sleeps in tests)
+            idleTimeout: '180',
             maxDuration: 10800,
             breakpointSize: 'xlarge',
             // These two values enable parallel testing which will run a spec file per instance
             shardTestFiles: true,
-            maxInstances: 2
+            maxInstances: 4
         }
     ]
 };

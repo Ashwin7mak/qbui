@@ -45,8 +45,9 @@ describe('Qb Route Mapper Unit Test', function() {
             {message: 'GET request to report record count endpoint', request: '/api/v1/apps/fakeApp/tables/fakeTable/reports/2/recordsCount', expectedPath: '/api/api/v1/apps/fakeApp/tables/fakeTable/reports/2/recordsCount', route: routeConsts.REPORT_RECORDS_COUNT, method: routeMapper.fetchGetFunctionForRoute(routeConsts.REPORT_RECORDS_COUNT), expectedDefined: true, httpVerb: 'GET'},
             {message: 'GET request to health via tomcat all', request: '/api/v1/health', expectedPath: '/api/api/v1/health', route: routeConsts.TOMCAT_ALL, method: routeMapper.fetchAllFunctionForRoute(routeConsts.TOMCAT_ALL), expectedDefined: true, httpVerb: 'GET'},
             {message: 'GET request to resolve facets', request: '/api/n/v1/facets/parse', expectedPath: '/api/api/n/v1/facets/parse', route: routeConsts.FACET_EXPRESSION_PARSE, method: routeMapper.fetchGetFunctionForRoute(routeConsts.FACET_EXPRESSION_PARSE), expectedDefined: true, httpVerb: 'GET'},
-            {message: 'GET request to get v2v3 application preference', request: '/api/l/v1/apps/fakeApp/stack', expectedPath: '/api/api/l/v1/apps/fakeApp/stack', route: routeConsts.APP_STACK_PREFERENCE, method: routeMapper.fetchGetFunctionForRoute(routeConsts.APP_STACK_PREFERENCE), expectedDefined: true, httpVerb: 'GET'},
             {message: 'GET request to apps endpoint', request: '/api/l/v1/apps/fakeApp', expectedPath: '/api/api/l/v1/apps/fakeApp', route: routeConsts.APPS, method: routeMapper.fetchGetFunctionForRoute(routeConsts.APPS), expectedDefined: true, httpVerb: 'GET'},
+            {message: 'GET request to app roles endpoint', request: '/api/l/v1/apps/fakeApp/roles', expectedPath: '/api/api/l/v1/apps/fakeApp/roles', route: routeConsts.APP_ROLES, method: routeMapper.fetchGetFunctionForRoute(routeConsts.APP_ROLES), expectedDefined: true, httpVerb: 'GET'},
+            {message: 'GET request to getReqUser endpoint', request: '/api/l/v1/users/reqUser', expectedPath: '/api/api/l/v1/users/reqUser', route: routeConsts.REQ_USER, method: routeMapper.fetchGetFunctionForRoute(routeConsts.REQ_USER), expectedDefined: true, httpVerb: 'GET'},
 
             {message: 'POST request to form components endpoint', request: '/api/v1/apps/fakeApp/tables/fakeTable/records/fakeRecord', expectedPath: '/api/api/v1/apps/fakeApp/tables/fakeTable/records/fakeRecord', route: routeConsts.FORM_COMPONENTS, method: routeMapper.fetchGetFunctionForRoute(routeConsts.FORM_COMPONENTS), expectedDefined: false, httpVerb: 'POST'},
             {message: 'POST request to form and record components endpoint', request: '/api/v1/apps/fakeApp/tables/fakeTable/records/fakeRecord/formComponents', expectedPath: '/api/api/v1/apps/fakeApp/tables/fakeTable/records/fakeRecord/formComponents', route: routeConsts.FORM_AND_RECORD_COMPONENTS, method: routeMapper.fetchPostFunctionForRoute(routeConsts.FORM_AND_RECORD_COMPONENTS), expectedDefined: false, httpVerb: 'POST'},
@@ -58,8 +59,8 @@ describe('Qb Route Mapper Unit Test', function() {
             {message: 'POST request to report invoke endpoint', request: '/api/v1/apps/fakeApp/tables/fakeTable/reports/1/invoke', expectedPath: '/api/api/v1/apps/fakeApp/tables/fakeTable/reports/1/invoke', route: routeConsts.REPORT_INVOKE_RESULTS, method: routeMapper.fetchPostFunctionForRoute(routeConsts.REPORT_INVOKE_RESULTS), expectedDefined: false, httpVerb: 'POST'},
             {message: 'POST request to report record count endpoint', request: '/api/v1/apps/fakeApp/tables/fakeTable/reports/2/recordsCount', expectedPath: '/api/api/v1/apps/fakeApp/tables/fakeTable/reports/2/recordsCount', route: routeConsts.REPORT_RECORDS_COUNT, method: routeMapper.fetchPostFunctionForRoute(routeConsts.REPORT_RECORDS_COUNT), expectedDefined: false, httpVerb: 'POST'},
             {message: 'POST request to table homepage id endpoint', request: '/api/v1/apps/fakeApp/tables/fakeTable/homepage', expectedPath: '/api/api/v1/apps/fakeApp/tables/fakeTable/homepage', route: routeConsts.TABLE_HOMEPAGE_REPORT, method: routeMapper.fetchPostFunctionForRoute(routeConsts.TABLE_HOMEPAGE_REPORT), expectedDefined: false, httpVerb: 'POST'},
-            {message: 'POST request to get v2v3 application preference', request: '/api/l/v1/apps/fakeApp/stack', expectedPath: '/api/api/l/v1/apps/fakeApp/stack', route: routeConsts.APP_STACK_PREFERENCE, method: routeMapper.fetchPostFunctionForRoute(routeConsts.APP_STACK_PREFERENCE), expectedDefined: true, httpVerb: 'POST'},
             {message: 'POST request to apps endpoint', request: '/api/l/v1/apps/fakeApp', expectedPath: '/api/api/l/v1/apps/fakeApp', route: routeConsts.APPS, method: routeMapper.fetchPostFunctionForRoute(routeConsts.APPS), expectedDefined: false, httpVerb: 'POST'},
+            {message: 'POST request to app roles endpoint', request: '/api/l/v1/apps/fakeApp/roles', expectedPath: '/api/api/l/v1/apps/fakeApp/roles', route: routeConsts.APP_ROLES, method: routeMapper.fetchPostFunctionForRoute(routeConsts.APP_ROLES), expectedDefined: false, httpVerb: 'POST'},
 
             {message: 'DELETE request to form components endpoint', request: '/api/v1/apps/fakeApp/tables/fakeTable/records/fakeRecord', expectedPath: '/api/api/v1/apps/fakeApp/tables/fakeTable/records/fakeRecord', route: routeConsts.FORM_COMPONENTS, method: routeMapper.fetchGetFunctionForRoute(routeConsts.FORM_COMPONENTS), expectedDefined: false, httpVerb: 'DELETE'},
             {message: 'DELETE request to form and record components endpoint', request: '/api/v1/apps/fakeApp/tables/fakeTable/records/fakeRecord/formComponents', expectedPath: '/api/api/v1/apps/fakeApp/tables/fakeTable/records/fakeRecord/formComponents', route: routeConsts.FORM_AND_RECORD_COMPONENTS, method: routeMapper.fetchDeleteFunctionForRoute(routeConsts.FORM_AND_RECORD_COMPONENTS), expectedDefined: false, httpVerb: 'DELETE'},
@@ -71,8 +72,8 @@ describe('Qb Route Mapper Unit Test', function() {
             {message: 'DELETE request to report results endpoint', request: '/api/v1/apps/fakeApp/tables/fakeTable/reports/1/results', expectedPath: '/api/api/v1/apps/fakeApp/tables/fakeTable/reports/2/invoke', route: routeConsts.REPORT_INVOKE_RESULTS, method: routeMapper.fetchDeleteFunctionForRoute(routeConsts.REPORT_INVOKE_RESULTS), expectedDefined: false, httpVerb: 'DELETE'},
             {message: 'DELETE request to report record count endpoint', request: '/api/v1/apps/fakeApp/tables/fakeTable/reports/2/recordsCount', expectedPath: '/api/api/v1/apps/fakeApp/tables/fakeTable/reports/2/recordsCount', route: routeConsts.REPORT_RECORDS_COUNT, method: routeMapper.fetchDeleteFunctionForRoute(routeConsts.REPORT_RECORDS_COUNT), expectedDefined: false, httpVerb: 'POST'},
             {message: 'DELETE request to table homepage id endpoint', request: '/api/v1/apps/fakeApp/tables/fakeTable/homepage', expectedPath: '/api/api/v1/apps/fakeApp/tables/fakeTable/homepage', route: routeConsts.TABLE_HOMEPAGE_REPORT, method: routeMapper.fetchDeleteFunctionForRoute(routeConsts.TABLE_HOMEPAGE_REPORT), expectedDefined: false, httpVerb: 'DELETE'},
-            {message: 'DELETE request to get v2v3 application preference', request: '/api/l/v1/apps/fakeApp/stack', expectedPath: '/api/api/l/v1/apps/fakeApp/stack', route: routeConsts.APP_STACK_PREFERENCE, method: routeMapper.fetchDeleteFunctionForRoute(routeConsts.APP_STACK_PREFERENCE), expectedDefined: false, httpVerb: 'DELETE'},
             {message: 'DELETE request to apps endpoint', request: '/api/l/v1/apps/fakeApp', expectedPath: '/api/api/l/v1/apps/fakeApp', route: routeConsts.APPS, method: routeMapper.fetchDeleteFunctionForRoute(routeConsts.APPS), expectedDefined: false, httpVerb: 'DELETE'},
+            {message: 'DELETE request to app roles endpoint', request: '/api/l/v1/apps/fakeApp/roles', expectedPath: '/api/api/l/v1/apps/fakeApp/roles', route: routeConsts.APP_ROLES, method: routeMapper.fetchDeleteFunctionForRoute(routeConsts.APP_ROLES), expectedDefined: false, httpVerb: 'DELETE'},
 
             {message: 'PUT request to form components endpoint', request: '/api/v1/apps/fakeApp/tables/fakeTable/records/fakeRecord', expectedPath: '/api/api/v1/apps/fakeApp/tables/fakeTable/records/fakeRecord', route: routeConsts.FORM_COMPONENTS, method: routeMapper.fetchGetFunctionForRoute(routeConsts.FORM_COMPONENTS), expectedDefined: false, httpVerb: 'PUT'},
             {message: 'PUT request to form and record components endpoint', request: '/api/v1/apps/fakeApp/tables/fakeTable/records/fakeRecord/formComponents', expectedPath: '/api/api/v1/apps/fakeApp/tables/fakeTable/records/fakeRecord/formComponents', route: routeConsts.FORM_AND_RECORD_COMPONENTS, method: routeMapper.fetchPutFunctionForRoute(routeConsts.FORM_AND_RECORD_COMPONENTS), expectedDefined: false, httpVerb: 'PUT'},
@@ -84,8 +85,8 @@ describe('Qb Route Mapper Unit Test', function() {
             {message: 'PUT request to report results endpoint', request: '/api/v1/apps/fakeApp/tables/fakeTable/reports/1/results', expectedPath: '/api/api/v1/apps/fakeApp/tables/fakeTable/reports/2/invoke', route: routeConsts.REPORT_INVOKE_RESULTS, method: routeMapper.fetchPutFunctionForRoute(routeConsts.REPORT_INVOKE_RESULTS), expectedDefined: false, httpVerb: 'PUT'},
             {message: 'PUT request to report record count endpoint', request: '/api/v1/apps/fakeApp/tables/fakeTable/reports/2/recordsCount', expectedPath: '/api/api/v1/apps/fakeApp/tables/fakeTable/reports/2/recordsCount', route: routeConsts.REPORT_RECORDS_COUNT, method: routeMapper.fetchPutFunctionForRoute(routeConsts.REPORT_RECORDS_COUNT), expectedDefined: false, httpVerb: 'PUT'},
             {message: 'PUT request to table homepage id endpoint', request: '/api/v1/apps/fakeApp/tables/fakeTable/homepage', expectedPath: '/api/api/v1/apps/fakeApp/tables/fakeTable/homepage', route: routeConsts.TABLE_HOMEPAGE_REPORT, method: routeMapper.fetchPutFunctionForRoute(routeConsts.TABLE_HOMEPAGE_REPORT), expectedDefined: false, httpVerb: 'PUT'},
-            {message: 'PUT request to get v2v3 application preference', request: '/api/l/v1/apps/fakeApp/stack', expectedPath: '/api/l/v1/apps/fakeApp/stack', route: routeConsts.APP_STACK_PREFERENCE, method: routeMapper.fetchPutFunctionForRoute(routeConsts.APP_STACK_PREFERENCE), expectedDefined: false, httpVerb: 'PUT'},
             {message: 'PUT request to apps endpoint', request: '/api/l/v1/apps/fakeApp', expectedPath: '/api/api/l/v1/apps/fakeApp', route: routeConsts.APPS, method: routeMapper.fetchPutFunctionForRoute(routeConsts.APPS), expectedDefined: false, httpVerb: 'PUT'},
+            {message: 'PUT request to app roles endpoint', request: '/api/l/v1/apps/fakeApp/roles', expectedPath: '/api/api/l/v1/apps/fakeApp/roles', route: routeConsts.APP_ROLES, method: routeMapper.fetchPutFunctionForRoute(routeConsts.APP_ROLES), expectedDefined: false, httpVerb: 'PUT'},
 
             {message: 'PATCH request to form components endpoint', request: '/api/v1/apps/fakeApp/tables/fakeTable/records/fakeRecord', expectedPath: '/api/api/v1/apps/fakeApp/tables/fakeTable/records/fakeRecord', route: routeConsts.FORM_COMPONENTS, method: routeMapper.fetchGetFunctionForRoute(routeConsts.FORM_COMPONENTS), expectedDefined: false, httpVerb: 'PATCH'},
             {message: 'PATCH request to form and record components endpoint', request: '/api/v1/apps/fakeApp/tables/fakeTable/records/fakeRecord/formComponents', expectedPath: '/api/api/v1/apps/fakeApp/tables/fakeTable/records/fakeRecord/formComponents', route: routeConsts.FORM_AND_RECORD_COMPONENTS, method: routeMapper.fetchPatchFunctionForRoute(routeConsts.FORM_AND_RECORD_COMPONENTS), expectedDefined: false, httpVerb: 'PATCH'},
@@ -97,8 +98,8 @@ describe('Qb Route Mapper Unit Test', function() {
             {message: 'PATCH request to report results endpoint', request: '/api/v1/apps/fakeApp/tables/fakeTable/reports/1/results', expectedPath: '/api/api/v1/apps/fakeApp/tables/fakeTable/reports/2/invoke', route: routeConsts.REPORT_INVOKE_RESULTS, method: routeMapper.fetchPatchFunctionForRoute(routeConsts.REPORT_INVOKE_RESULTS), expectedDefined: false, httpVerb: 'PATCH'},
             {message: 'PATCH request to report record count endpoint', request: '/api/v1/apps/fakeApp/tables/fakeTable/reports/2/recordsCount', expectedPath: '/api/api/v1/apps/fakeApp/tables/fakeTable/reports/2/recordsCount', route: routeConsts.REPORT_RECORDS_COUNT, method: routeMapper.fetchPatchFunctionForRoute(routeConsts.REPORT_RECORDS_COUNT), expectedDefined: false, httpVerb: 'PATCH'},
             {message: 'PATCH request to table homepage id endpoint', request: '/api/v1/apps/fakeApp/tables/fakeTable/homepage', expectedPath: '/api/api/v1/apps/fakeApp/tables/fakeTable/homepage', route: routeConsts.TABLE_HOMEPAGE_REPORT, method: routeMapper.fetchPatchFunctionForRoute(routeConsts.TABLE_HOMEPAGE_REPORT), expectedDefined: false, httpVerb: 'PATCH'},
-            {message: 'PATCH request to get v2v3 application preference', request: '/api/l/v1/apps/fakeApp/stack', expectedPath: '/api/api/l/v1/apps/fakeApp/stack', route: routeConsts.APP_STACK_PREFERENCE, method: routeMapper.fetchPatchFunctionForRoute(routeConsts.APP_STACK_PREFERENCE), expectedDefined: false, httpVerb: 'PATCH'},
             {message: 'PATCH request to apps endpoint', request: '/api/l/v1/apps/fakeApp', expectedPath: '/api/api/l/v1/apps/fakeApp', route: routeConsts.APPS, method: routeMapper.fetchPatchFunctionForRoute(routeConsts.APPS), expectedDefined: false, httpVerb: 'PATCH'},
+            {message: 'PATCH request to app roles endpoint', request: '/api/l/v1/apps/fakeApp/roles', expectedPath: '/api/api/l/v1/apps/fakeApp/roles', route: routeConsts.APP_ROLES, method: routeMapper.fetchPatchFunctionForRoute(routeConsts.APP_ROLES), expectedDefined: false, httpVerb: 'PATCH'},
 
             {message: 'GET request to apps endpoint', request: '/api/v1/apps', expectedPath: '/api/api/v1/apps', route: routeConsts.TOMCAT_ALL, method: routeMapper.fetchAllFunctionForRoute(routeConsts.TOMCAT_ALL), expectedDefined: false, httpVerb: 'GET'},
             {message: 'GET request to app users endpoint', request: '/api/v1/apps/fakeApp/users', expectedPath: '/api/api/v1/apps/fakeApp/users', route: routeConsts.APP_USERS, method: routeMapper.fetchGetFunctionForRoute(routeConsts.APP_USERS), expectedDefined: true, httpVerb: 'GET'},
@@ -110,7 +111,12 @@ describe('Qb Route Mapper Unit Test', function() {
             {message: 'PATCH request to app users endpoint', request: '/api/v1/apps/fakeApp/users', expectedPath: '/api/api/v1/apps/fakeApp/users', route: routeConsts.APP_USERS, method: routeMapper.fetchPatchFunctionForRoute(routeConsts.APP_USERS), expectedDefined: false, httpVerb: 'PATCH'},
             {message: 'DELETE request to apps endpoint', request: '/api/v1/apps/fakeApp', expectedPath: '/api/api/v1/apps/fakeApp', route: routeConsts.TOMCAT_ALL, method: routeMapper.fetchAllFunctionForRoute(routeConsts.TOMCAT_ALL), expectedDefined: false, httpVerb: 'DELETE'},
             {message: 'DELETE request to app users endpoint', request: '/api/v1/apps/fakeApp/users', expectedPath: '/api/api/v1/apps/fakeApp/users', route: routeConsts.APP_USERS, method: routeMapper.fetchDeleteFunctionForRoute(routeConsts.APP_USERS), expectedDefined: false, httpVerb: 'DELETE'},
+            {message: 'DELETE request to tables endpoint', request: '/api/v1/apps/fakeApp/tables/fakeTable', expectedPath: '/api/api/v1/apps/fakeApp/tables/fakeTable', route: routeConsts.TABLE, method: routeMapper.fetchDeleteFunctionForRoute(routeConsts.TABLE), expectedDefined: false, httpVerb: 'DELETE'},
 
+            {message: 'POST request to table components endpoint', request: '/api/v1/apps/1/tables/tableComponents', expectedPath: '/api/api/v1/apps/1/tables/tableComponents', route: routeConsts.TABLE_COMPONENTS, method: routeMapper.fetchPostFunctionForRoute(routeConsts.TABLE_COMPONENTS), expectedDefined: true, httpVerb: 'POST'},
+            {message: 'PATCH request to tables endpoint', request: '/api/v1/apps/1/tables/2', expectedPath: '/api/api/v1/apps/1/tables/2', route: routeConsts.TABLE, method: routeMapper.fetchPatchFunctionForRoute(routeConsts.TABLE), expectedDefined: true, httpVerb: 'PATCH'},
+
+            {message: 'GET request to Node/Express health check endpoint', request: '/api/v1/qbuiHealth', expectedPath: '/api/v1/qbuiHealth', route: routeConsts.QBUI_HEALTH_CHECK, method: routeMapper.fetchGetFunctionForRoute(routeConsts.QBUI_HEALTH_CHECK), expectedDefined: true, httpVerb: 'GET'},
             {message: 'GET request to the health check endpoint', request: '/api/v1/health', expectedPath: '/api/api/v1/health', route: routeConsts.HEALTH_CHECK, method: routeMapper.fetchGetFunctionForRoute(routeConsts.HEALTH_CHECK), expectedDefined: true, httpVerb: 'GET'},
             {message: 'GET request to the swagger api endpoint', request: '/api/v1/someEndpoint', expectedPath: '/api/v1/someEndpoint', route: routeConsts.SWAGGER_API, method: routeMapper.fetchGetFunctionForRoute(routeConsts.SWAGGER_API), expectedDefined: true, httpVerb: 'GET'}
         ];
@@ -118,7 +124,41 @@ describe('Qb Route Mapper Unit Test', function() {
 
     function eePathModificationProvider() {
         return [
-            {message: 'GET request to the swagger experience engine api endpoint', request: '/ee/v1/someEndpoint', expectedPath: '/ee/v1/someEndpoint', route: routeConsts.SWAGGER_API_EE, method: routeMapper.fetchGetFunctionForRoute(routeConsts.SWAGGER_API_EE), expectedDefined: true, httpVerb: 'GET'}
+            {message: 'GET request to EE health via Experience Engine all', request: '/ee/v1/health', expectedPath: '/ee/v1/health', route: routeConsts.EXPERIENCE_ENGINE_ALL, method: routeMapper.fetchAllFunctionForRoute(routeConsts.EXPERIENCE_ENGINE_ALL), expectedDefined: true, httpVerb: 'GET'},
+            {message: 'POST request to EE api via Experience Engine all', request: '/ee/v1/someUrl', expectedPath: '/ee/v1/someUrl', route: routeConsts.EXPERIENCE_ENGINE_ALL, method: routeMapper.fetchAllFunctionForRoute(routeConsts.EXPERIENCE_ENGINE_ALL), expectedDefined: true, httpVerb: 'POST'},
+            {message: 'PATCH request to EE api via Experience Engine all', request: '/ee/v1/someUrl', expectedPath: '/ee/v1/someUrl', route: routeConsts.EXPERIENCE_ENGINE_ALL, method: routeMapper.fetchAllFunctionForRoute(routeConsts.EXPERIENCE_ENGINE_ALL), expectedDefined: true, httpVerb: 'PATCH'},
+            {message: 'PUT request to EE api via Experience Engine all', request: '/ee/v1/someUrl', expectedPath: '/ee/v1/someUrl', route: routeConsts.EXPERIENCE_ENGINE_ALL, method: routeMapper.fetchAllFunctionForRoute(routeConsts.EXPERIENCE_ENGINE_ALL), expectedDefined: true, httpVerb: 'PUT'},
+            {message: 'DELETE request to EE api via Experience Engine all', request: '/ee/v1/someUrl', expectedPath: '/ee/v1/someUrl', route: routeConsts.EXPERIENCE_ENGINE_ALL, method: routeMapper.fetchAllFunctionForRoute(routeConsts.EXPERIENCE_ENGINE_ALL), expectedDefined: true, httpVerb: 'DELETE'},
+            {message: 'GET request to the swagger experience engine api endpoint', request: '/ee', expectedPath: '/ee', route: routeConsts.SWAGGER_API_EE, method: routeMapper.fetchGetFunctionForRoute(routeConsts.SWAGGER_API_EE), expectedDefined: true, httpVerb: 'GET'}
+        ];
+    }
+
+    function automationModificationProvider()  {
+        return [
+            {message: 'GET request to automation engine health check', request: '/we/api/api/v1/health', expectedPath: '/we/api/api/v1/health', route: routeConsts.AUTOMATION_ENGINE_ALL, method: routeMapper.fetchAllFunctionForRoute(routeConsts.AUTOMATION_ENGINE_ALL), expectedDefined: true, httpVerb: 'GET'},
+        ];
+    }
+
+    function featureSwitchesPathModificationProvider() {
+        return [
+            {message: 'GET request to the feature states endpoint', request: '/api/v1/featureStates', expectedPath: '/api/v1/featureStates', route: routeConsts.FEATURE_STATES, method: routeMapper.fetchGetFunctionForRoute(routeConsts.FEATURE_STATES), expectedDefined: true, httpVerb: 'GET'},
+
+            {message: 'GET request to the feature switches endpoint', request: '/api/v1/admin/featureSwitches', expectedPath: '/api/api/v1/admin/featureSwitches', route: routeConsts.FEATURE_SWITCHES, method: routeMapper.fetchGetFunctionForRoute(routeConsts.FEATURE_SWITCHES), expectedDefined: true, httpVerb: 'GET'},
+            {message: 'POST request to feature switches endpoint', request: '/api/v1/admin/featureSwitches', expectedPath: '/api/v1/admin/featureSwitches', route: routeConsts.FEATURE_SWITCHES, method: routeMapper.fetchPostFunctionForRoute(routeConsts.FEATURE_SWITCHES), expectedDefined: true, httpVerb: 'POST'},
+            {message: 'PUT request to feature switches endpoint', request: '/api/v1/admin/featureSwitches/1', expectedPath: '/api/v1/admin/featureSwitches/1', route: routeConsts.FEATURE_SWITCH, method: routeMapper.fetchPutFunctionForRoute(routeConsts.FEATURE_SWITCH), expectedDefined: true, httpVerb: 'PUT'},
+            {message: 'POST request to feature switches bulk endpoint', request: '/api/v1/admin/featureSwitches/bulk', expectedPath: '/api/v1/admin/featureSwitches/bulk', route: routeConsts.FEATURE_SWITCHES_BULK, method: routeMapper.fetchPostFunctionForRoute(routeConsts.FEATURE_SWITCHES_BULK), expectedDefined: true, httpVerb: 'POST'},
+
+            {message: 'POST request to feature overrides endpoint', request: '/api/v1/admin/featureSwitches/1/overrides', expectedPath: '/api/v1/admin/featureSwitches/1/overrides', route: routeConsts.FEATURE_OVERRIDES, method: routeMapper.fetchPostFunctionForRoute(routeConsts.FEATURE_OVERRIDES), expectedDefined: true, httpVerb: 'POST'},
+            {message: 'PUT request to feature overrides endpoint', request: '/api/v1/admin/featureSwitches/1/overrides/1', expectedPath: '/api/v1/admin/featureSwitches/1/overrides/1', route: routeConsts.FEATURE_OVERRIDE, method: routeMapper.fetchPutFunctionForRoute(routeConsts.FEATURE_OVERRIDE), expectedDefined: true, httpVerb: 'PUT'},
+            {message: 'POST request to feature overrides bulk endpoint', request: '/api/v1/admin/featureSwitches/1/overrides/bulk', expectedPath: '/api/v1/admin/featureSwitches/1/overrides/bulk', route: routeConsts.FEATURE_OVERRIDES_BULK, method: routeMapper.fetchPostFunctionForRoute(routeConsts.FEATURE_OVERRIDES_BULK), expectedDefined: true, httpVerb: 'POST'},
+
+        ];
+    }
+
+    function governanceModificationProvider() {
+        return [
+            {message: 'GET request to governance users endpoint', request: '/api/governance/v1/12345/users', expectedPath: '/api/governance/v1/12345/users', route: routeConsts.GOVERNANCE_ACCOUNT_USERS, method: routeMapper.fetchGetFunctionForRoute(routeConsts.GOVERNANCE_ACCOUNT_USERS), expectedDefined: true, httpVerb: 'GET'},
+            {message: 'GET request to governance context endpoint', request: '/api/governance/v1/context', expectedPath: '/api/governance/v1/context', route: routeConsts.GOVERNANCE_CONTEXT, method: routeMapper.fetchGetFunctionForRoute(routeConsts.GOVERNANCE_CONTEXT), expectedDefined: true, httpVerb: 'GET'},
         ];
     }
 
@@ -130,6 +170,15 @@ describe('Qb Route Mapper Unit Test', function() {
             runTestCase(entry);
         });
         eePathModificationProvider().forEach(function(entry) {
+            runTestCase(entry);
+        });
+        automationModificationProvider().forEach(function(entry) {
+            runTestCase(entry);
+        });
+        featureSwitchesPathModificationProvider().forEach(function(entry) {
+            runTestCase(entry);
+        });
+        governanceModificationProvider().forEach(function(entry) {
             runTestCase(entry);
         });
     });

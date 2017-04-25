@@ -153,7 +153,7 @@ const FieldValueEditor = React.createClass({
             onBlur: this.onBlur,
             onValidated: this.props.onValidated,
             placeholder : placeholder,
-            tabIndex: "0",
+            tabIndex: this.props.tabIndex,
             idKey : this.props.idKey,
             ref:"fieldInput",
             required: (this.props.fieldDef ? this.props.fieldDef.required : false),
@@ -175,6 +175,17 @@ const FieldValueEditor = React.createClass({
         }
         switch (type) {
         case FieldFormats.CHECKBOX_FORMAT: {
+            if (typeof commonProps.value === 'string') {
+                if (commonProps.value.toLowerCase() === 'true') {
+                    commonProps.value = true;
+                } else {
+                    /*eslint no-lonely-if:0*/
+                    if (commonProps.value.toLowerCase() === 'false') {
+                        commonProps.value = false;
+                    }
+                }
+            }
+            commonProps.value = _.isBoolean(commonProps.value) ? commonProps.value : false;
             return <CheckBoxFieldValueEditor {...commonProps} label={this.props.label} />;
         }
 
@@ -211,18 +222,27 @@ const FieldValueEditor = React.createClass({
         case FieldFormats.RATING_FORMAT:
         case FieldFormats.CURRENCY_FORMAT:
         case FieldFormats.PERCENT_FORMAT: {
-            if (_.has(this.props, 'fieldDef.multipleChoice.choices')) {
-                return (
-                    <MultiChoiceFieldValueEditor choices={this.props.fieldDef.multipleChoice.choices}
-                        {...commonProps} showAsRadio={this.props.fieldDef.showAsRadio}/>
-                );
-            } else {
-                return <NumericFieldValueEditor {...commonProps}
-                    key={'nfve-' + this.props.idKey}
-                    onChange={this.props.onChange ? this.props.onChange : ()=>{}}
-                    classes="cellEdit"
-                />;
+            if (commonProps.value !== null && commonProps.value !== undefined) {
+                commonProps.value = commonProps.value + '';
             }
+            return <NumericFieldValueEditor {...commonProps}
+                key={'nfve-' + this.props.idKey}
+                onChange={this.props.onChange ? this.props.onChange : ()=>{}}
+                classes="cellEdit"
+            />;
+        }
+
+        case FieldFormats.TEXT_FORMAT_MULTICHOICE:
+        case FieldFormats.TEXT_FORMAT_RADIO_BUTTONS:
+        case FieldFormats.NUMBER_FORMAT_MULTICHOICE:
+        case FieldFormats.NUMBER_FORMAT_RADIO_BUTTONS:
+        case FieldFormats.RATING_FORMAT_MULTICHOICE:
+        case FieldFormats.CURRENCY_FORMAT_MULTICHOICE:
+        case FieldFormats.PERCENT_FORMAT_MULTICHOICE: {
+            return (
+                <MultiChoiceFieldValueEditor choices={this.props.fieldDef.multipleChoice.choices}
+                                             {...commonProps} showAsRadio={this.props.fieldDef.showAsRadio}/>
+            );
         }
 
         case FieldFormats.USER_FORMAT: {
@@ -245,25 +265,22 @@ const FieldValueEditor = React.createClass({
 
         case FieldFormats.TEXT_FORMAT:
         default: {
-
-            if (_.has(this.props, 'fieldDef.multipleChoice.choices')) {
-                return (
-                        <MultiChoiceFieldValueEditor choices={this.props.fieldDef.multipleChoice.choices}
-                                             {...commonProps} showAsRadio={this.props.fieldDef.showAsRadio}/>
-                    );
-            } else {
-                return <TextFieldValueEditor {...commonProps}
-                                            onChange={this.props.onChange ? this.props.onChange : ()=>{}}
-                                            key={'tfve-' + this.props.idKey}
-                                            classes="cellEdit"
-                                            showClearButton={true}
-                    />;
-                    //Drew's change per Andrew if users want text box that
-                    // grows in height use a multiline not single line text
-                    //  return <MultiLineTextFieldValueEditor value={this.props.value}
-                    //       placeholder={this.props.fieldDef.placeholder}
-                    //       onChange={this.props.onChange} />;
+            // react throws warning about rendering Input component with null input
+            if (commonProps.value === null || commonProps.value === undefined) {
+                commonProps.value = '';
             }
+
+            return <TextFieldValueEditor {...commonProps}
+                                        onChange={this.props.onChange ? this.props.onChange : ()=>{}}
+                                        key={'tfve-' + this.props.idKey}
+                                        classes="cellEdit"
+                                        showClearButton={true}
+                />;
+                //Drew's change per Andrew if users want text box that
+                // grows in height use a multiline not single line text
+                //  return <MultiLineTextFieldValueEditor value={this.props.value}
+                //       placeholder={this.props.fieldDef.placeholder}
+                //       onChange={this.props.onChange} />;
         }
         }
     },

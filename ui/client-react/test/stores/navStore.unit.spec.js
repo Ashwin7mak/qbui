@@ -1,6 +1,6 @@
 import * as actions from '../../src/constants/actions';
 
-import Store from '../../src/stores/navStore';
+import Store, {__RewireAPI__ as StoreRewireAPI} from '../../src/stores/navStore';
 import Fluxxor from 'fluxxor';
 
 describe('Test Nav Store', () => {
@@ -24,7 +24,7 @@ describe('Test Nav Store', () => {
     };
 
     beforeEach(() => {
-        Store.__Rewire__('Locale', mockLocale);
+        StoreRewireAPI.__Rewire__('Locale', mockLocale);
         store = new Store();
         stores = {NavStore: store};
         flux = new Fluxxor.Flux(stores);
@@ -36,31 +36,7 @@ describe('Test Nav Store', () => {
         flux.store(STORE_NAME).emit.calls.reset();
 
         store = null;
-        Store.__ResetDependency__('Locale');
-    });
-
-    it('test default nav store state', () => {
-        // verify default states
-        expect(flux.store(STORE_NAME).state.i18n).toBe(i18nBundle);
-
-        //  expect 3 bindActions
-        expect(flux.store(STORE_NAME).__actions__.CHANGE_LOCALE).toBeDefined();
-    });
-
-
-    it('test change locale action', () => {
-
-        let changeLocaleAction = {
-            type: actions.CHANGE_LOCALE
-        };
-        spyOn(mockLocale, 'getI18nBundle');
-        spyOn(flux.store(STORE_NAME), 'setLocaleBundle');
-
-        flux.dispatcher.dispatch(changeLocaleAction);
-        expect(flux.store(STORE_NAME).setLocaleBundle).toHaveBeenCalled();
-
-        expect(flux.store(STORE_NAME).emit).toHaveBeenCalledWith('change');
-        expect(flux.store(STORE_NAME).emit.calls.count()).toBe(1);
+        StoreRewireAPI.__ResetDependency__('Locale');
     });
 
     it('test toggle mobile nav searchbar action', () => {

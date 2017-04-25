@@ -8,8 +8,7 @@
     var formsPO = requirePO('formsPage');
     var ReportInLineEditPO = requirePO('reportInLineEdit');
 
-
-    describe('Add a record Via Form Tests : ', function() {
+    describe('Forms - Add a Record Via Form Tests: ', function() {
         var realmName;
         var realmId;
         var testApp;
@@ -22,7 +21,7 @@
             browser.logger.info('beforeAll spec function - Generating test data and logging in');
             // Need to return here. beforeAll is completely async, need to return the Promise chain in any before or after functions!
             // No need to call done() anymore
-            return e2eBase.basicAppSetup().then(function(createdApp) {
+            return e2eBase.basicAppSetup(null, 5).then(function(createdApp) {
                 // Set your global objects to use in the test functions
                 testApp = createdApp;
                 realmName = e2eBase.recordBase.apiBase.realm.subdomain;
@@ -33,7 +32,8 @@
             }).catch(function(error) {
                 // Global catch that will grab any errors from chain above
                 // Will appropriately fail the beforeAll method so other tests won't run
-                throw new Error('Error during test setup beforeAll: ' + error.message);
+                browser.logger.error('Error in beforeAll function:' + JSON.stringify(error));
+                return Promise.reject('Error in beforeAll function:' + JSON.stringify(error));
             });
         });
 

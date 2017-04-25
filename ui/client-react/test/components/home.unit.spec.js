@@ -1,7 +1,7 @@
 import Fluxxor from 'fluxxor';
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
-import Home  from '../../src/components/apps/home';
+import Home, {__RewireAPI__ as HomeRewireAPI}  from '../../src/components/apps/home';
 import Store from '../../src/stores/appsStore';
 
 //TODO this is a placeholder file to add tests as table home page gets built out
@@ -31,13 +31,13 @@ describe('Home page functions', () => {
     let flux = new Fluxxor.Flux(stores);
 
     beforeEach(() => {
-        Home.__Rewire__('AppsHeader', AppsHeaderMock);
-        Home.__Rewire__('AppsList', AppsListMock);
+        HomeRewireAPI.__Rewire__('AppsHeader', AppsHeaderMock);
+        HomeRewireAPI.__Rewire__('AppsList', AppsListMock);
     });
 
     afterEach(() => {
-        Home.__ResetDependency__('AppsHeader', AppsHeaderMock);
-        Home.__ResetDependency__('AppsList', AppsListMock);
+        HomeRewireAPI.__ResetDependency__('AppsHeader', AppsHeaderMock);
+        HomeRewireAPI.__ResetDependency__('AppsList', AppsListMock);
     });
 
     it('test render of component', () => {

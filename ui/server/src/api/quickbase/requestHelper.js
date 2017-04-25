@@ -41,6 +41,9 @@
             getRequestEeHost: function() {
                 return config ? config.eeHost : '';
             },
+            getRequestAWSHost: function() {
+                return config ? config.awsHost : '';
+            },
             getRequestEeHostEnable: function() {
                 return config ? config.eeHostEnable : '';
             },
@@ -50,8 +53,11 @@
             getRequestEEUrl  : function(req) {
                 return config ? config.eeHost + req.url : '';
             },
+            getRequestAutomationUrl  : function(req) {
+                return config ? config.automationHost + req.originalUrl : '';   //Using Original url here because automation does not use 'api/api' format
+            },
             getLegacyHost : function() {
-                return config ? config.legacyHost : '';
+                return config ? config.legacyBase : '';
             },
             getAgentOptions: function(req) {
                 let agentOptions = {
@@ -142,6 +148,58 @@
                 opts.url = this.getRequestEEUrl(req);
                 return opts;
             },
+
+            /**
+             * Set the request attributes for an automation server request
+             *
+             * @param req
+             * @returns request object used when submitting a server request
+             */
+            setAutomationEngineOptions: function(req) {
+                //  set the default request options
+                let opts = this.setAutomationOptions(req);
+
+                //  override the url to use automation server
+                opts.url = this.getRequestAutomationUrl(req);
+                opts.cookies = req.cookies;
+                return opts;
+            },
+
+            /**
+             * Set the request attributes for a automation server request
+             *
+             * @param req
+             * @returns request object used when submitting a server request
+             */
+            setAutomationOptions: function(req) {
+
+                this.setTidHeader(req);
+
+                let opts = {
+                    url         : this.getRequestAutomationUrl(req),
+                    method      : (req.method),
+                    agentOptions: this.getAgentOptions(req),
+                    headers     : req.headers
+                };
+
+                if (config) {
+                    if (config.isMockServer) {
+                        opts.gzip = false;
+                        opts.headers["accept-encoding"] = "";
+                    }
+                    if (config.proxyHost) {
+                        opts.host = config.proxyHost;
+                        if (config.proxyPort) {
+                            opts.port = config.proxyPort;
+                        }
+                    }
+                }
+
+                this.setBodyOption(req, opts);
+
+                return opts;
+            },
+
 
             /**
              * Set the request attributes for a core server request
@@ -322,7 +380,7 @@
                     return false;
                 }
                 let query = url.parse(req.url, true).query;
-                return (query && query.hasOwnProperty(parameterName));
+                return (query && Object.prototype.hasOwnProperty.call(query, parameterName));
             },
 
             /**
@@ -338,7 +396,7 @@
                     return null;
                 }
                 let query = url.parse(req.url, true).query;
-                return (query && query.hasOwnProperty(parameterName)) ? query[parameterName] : null;
+                return (query && Object.prototype.hasOwnProperty.call(query, parameterName)) ? query[parameterName] : null;
             },
 
             /**
@@ -366,7 +424,27 @@
 
             isRawFormat: function(req) {
                 return this.getQueryParameterValue(req, consts.REQUEST_PARAMETER.FORMAT) === consts.FORMAT.RAW;
-            }
+            },
+
+
+            /**
+             * Gets the path to the current stack for the realm
+             * we take the root realm and append the hostname
+             * @param req
+             * @returns {*}
+             */
+            getLegacyRealmBase: function(req, isSecure = true) {
+
+                let requestHost = this.getRequestHost(req, true, false);
+                let realmHost = requestHost ? requestHost.substr(0, requestHost.indexOf(".")) : '';
+                let realmURL = realmHost + config.legacyBase;
+
+                if (isSecure) {
+                    realmURL = consts.PROTOCOL.HTTPS + realmURL;
+                }
+
+                return realmURL;
+            },
         };
 
         return helper;

@@ -1,45 +1,137 @@
 @import "../../../assets/css/qbVariables";
 
-.draggableField:hover .fieldEditingTools {
-    opacity: 1;
-    transition: opacity 0.4s;
-}
-
 .fieldEditingTools {
-    border: $stroke-width-thin solid $color-black-400;
-    border-radius: $radius-base;
-
-    opacity: 0;
     transition: opacity 0.4s;
+    border-radius: $radius-base;
+    position: absolute;
+    height: 100%;
+    width: 310px;
 
-    .qbIcon {
-        color: $color-black-600;
-        transition: color 0.4s;
+    &:focus {
+        //For keyboard nav
+        opacity: 1;
+        outline: none;
+        border: $stroke-width-thin solid $border-focused-color;
     }
 
-    .deleteFieldIcon {
-        position: absolute;
-        top: 5px;
-        right: 25px;
+    &.selectedFormElement {
+        &:active {
+            //This opacity is needed to work for 'tabbing'
+            opacity: 1;
+            outline: none;
+            border: $stroke-width-thin solid $border-focused-color;
 
-        &:hover .qbIcon {
-            color: $color-red-700;
+            .deleteFieldIcon {
+                .qbIcon {
+                    opacity: 1;
+                    color: $color-red-700;
+                }
+            }
+
+            .fieldPreferencesIcon {
+                .qbIcon {
+                    opacity: 1;
+                    color: $color-cyan-700;
+                }
+            }
+        }
+    }
+
+    .actionIcons {
+        float: right;
+    }
+    .deleteFieldIcon {
+        font-size: $size-iconfont-small;
+        position: absolute;
+        top: 10px;
+        right: 50px;
+
+        .qbIcon {
+            color: $color-black-600;
+            opacity: 0;
             transition: color 0.4s;
         }
     }
 
     .fieldPreferencesIcon {
+        font-size: $size-iconfont-small;
         position: absolute;
-        top: 5px;
-        right: 5px;
+        top: 10px;
+        right: 16px;
 
-        &:hover .qbIcon {
-            color: $color-cyan-700;
+        .qbIcon {
+            color: $color-black-600;
+            opacity: 0;
             transition: color 0.4s;
+        }
+    }
+
+    &.notTouchDevice {
+        //No borders, icon, or drag handles are displayed when it is not a touch device
+        //Everything shows up on hover
+        .dragHandle {
+            opacity: 0;
+        }
+
+        .deleteFieldIcon .qbIcon {
+            &:hover {
+                opacity: 1;
+                color: $color-red-700;
+            }
+        }
+        .fieldPreferencesIcon .qbIcon {
+            &:hover {
+                opacity: 1;
+                color: $color-cyan-700;
+            }
+        }
+    }
+
+    &.isTablet {
+        //Icons and borders only display during focus
+        //Drag handle always show
+        border: none;
+
+        .deleteFieldIcon .qbIcon {
+            padding-right: $spacing-medium1;
+        }
+    }
+
+    @include small-breakpoint {
+        //Drag handles and borders always display during small breakpoints
+        //Icons only show up when it is focused
+        width: 100%;
+        border-bottom: $stroke-width-thin solid $color-black-400;
+
+        .deleteFieldIcon .qbIcon {
+            margin-right: $spacing-medium1;
+        }
+
+        //Scrolling triggers hover on touch, this hides the icon during scroll
+        &:hover {
+            .qbIcon {
+                opacity: 0;
+            }
         }
     }
 
     .tipChildWrapper {
         cursor: pointer;
+    }
+
+    &.active {
+        opacity: 1;
+        @include dragpreview-active-gradient;
+    }
+
+    button {
+        background: transparent;
+        outline: none;
+        border: none;
+        &:focus {
+            opacity: 1;
+            outline: none;
+            border: $stroke-width-thin solid $border-focused-color;
+        }
     }
 }

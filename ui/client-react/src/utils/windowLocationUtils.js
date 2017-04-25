@@ -54,6 +54,14 @@ class WindowLocationUtils {
     }
 
     /**
+     * Function to return the current pathname
+     * this exists for testability
+     */
+    static getPathname() {
+        return window.location.pathname;
+    }
+
+    /**
      * push current url with key=value query param
      * @param key
      * @param value
@@ -84,6 +92,20 @@ class WindowLocationUtils {
     static pushWithoutQuery() {
 
         AppHistory.history.push(location.pathname);
+    }
+
+    /**
+     * Calls window.addEventListener. This is mostly for ease of testing.
+     */
+    static addEventListener(...args) {
+        window.addEventListener(...args);
+    }
+
+    /**
+     * Calls window.removeEventListener. This is mostly for ease of testing.
+     */
+    static removeEventListener(...args) {
+        window.removeEventListener(...args);
     }
 }
 

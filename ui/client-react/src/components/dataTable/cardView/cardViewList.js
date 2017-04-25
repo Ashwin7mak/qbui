@@ -1,8 +1,6 @@
 import React from 'react';
-import {I18nMessage} from '../../../utils/i18nMessage';
 import CardView from './cardView';
-import Loader  from 'react-loader';
-import {Collapse} from 'react-bootstrap';
+import Collapse from 'react-bootstrap/lib/Collapse';
 import './cardViewList.scss';
 import QBicon from '../../qbIcon/qbIcon';
 
@@ -68,7 +66,7 @@ let CardViewList = React.createClass({
         }
 
         let className = "cardViewList group-level-" + this.props.groupLevel;
-        let groupIcon = this.state.open ? "caret-filled-down" : "caret-filled-right";
+        let groupIcon = this.state.open ? "caret-filled-up" : "caret-filled-down";
 
         let rowId = this.props.node[this.props.primaryKeyName] ? this.props.node[this.props.primaryKeyName].value : null;
 

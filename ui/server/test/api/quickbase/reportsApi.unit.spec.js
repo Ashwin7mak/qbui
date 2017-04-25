@@ -999,4 +999,66 @@ describe('Validate ReportsApi unit tests', function() {
             );
         });
     });
+
+    describe("validate createReport function", function() {
+        let req = {
+            headers: {
+                'tid': 'tid'
+            },
+            'Content-Type': 'content-type',
+            'url': '',
+            'method': 'get'
+        };
+        let executeReqStub = null;
+
+        beforeEach(function() {
+            executeReqStub = sinon.stub(requestHelper, "executeRequest");
+            reportsApi.setRequestHelper(requestHelper);
+            req.url = 'tables/123/reports';
+            req.method = 'post';
+            req.rawBody = {name: "test", type: 'TABLE'};
+        });
+
+        afterEach(function() {
+            req.url = '';
+            req.rawBody = {};
+            executeReqStub.restore();
+        });
+
+        it('success return results ', function(done) {
+            executeReqStub.returns(Promise.resolve({'body': '{"id": "1"}'}));
+            let promise = reportsApi.createReport(req);
+
+            promise.then(
+                function(response) {
+                    assert.deepEqual(response, 1);
+                    done();
+                },
+                function(error) {
+                    done(new Error("Unexpected failure promise return when testing createReport success"));
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('createReport: exception processing success test: ' + JSON.stringify(errorMsg)));
+            });
+        });
+
+        it('fail return results ', function(done) {
+            let error_message = "fail unit test case execution";
+
+            executeReqStub.returns(Promise.reject(new Error(error_message)));
+            let promise = reportsApi.createReport(req);
+
+            promise.then(
+                function() {
+                    done(new Error("Unexpected success promise return when testing createReport failure"));
+                },
+                function(error) {
+                    assert.equal(error, "Error: fail unit test case execution");
+                    done();
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('createReport: exception processing failure test: ' + JSON.stringify(errorMsg)));
+            });
+        });
+    });
 });

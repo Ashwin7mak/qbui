@@ -46,21 +46,4 @@ describe('AppService functions', () => {
         expect(BaseService.prototype.get).toHaveBeenCalledWith(appService.API.GET_APPS, {params:params});
     });
 
-    it('test getApplicationStack function', () => {
-        let appId = 1;
-        let url = StringUtils.format(appService.API.APPLICATION_STACK, [appId]);
-
-        appService.getApplicationStack(appId);
-        expect(BaseService.prototype.get).toHaveBeenCalledWith(url);
-    });
-
-    it('test setApplicationStack function', () => {
-        let appId = 1;
-        let params = {'value':'1'};
-        let url = StringUtils.format(appService.API.APPLICATION_STACK, [appId]);
-
-        appService.setApplicationStack(appId, params);
-        expect(BaseService.prototype.post).toHaveBeenCalledWith(url, params);
-    });
-
 });

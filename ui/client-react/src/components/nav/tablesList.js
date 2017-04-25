@@ -1,13 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {Link} from 'react-router';
+import {Link} from 'react-router-dom';
 import QBicon from '../qbIcon/qbIcon';
 import NavItem from './navItem';
 import Locale from '../../locales/locales';
 import {I18nMessage} from '../../utils/i18nMessage';
-import TableIconUtils from '../../utils/tableIconUtils';
 import SearchBox from '../search/searchBox';
 import {APP_ROUTE} from '../../constants/urlConstants';
+import WindowLocationUtils from '../../utils/windowLocationUtils';
+import UrlUtils from '../../utils/urlUtils';
 
 
 let TablesList = React.createClass({
@@ -16,7 +17,8 @@ let TablesList = React.createClass({
         selectedAppId: React.PropTypes.string.isRequired,
         onSelect: React.PropTypes.func,
         showReports: React.PropTypes.func.isRequired,
-        expanded: React.PropTypes.bool
+        expanded: React.PropTypes.bool,
+        onCreateNewTable: React.PropTypes.func
     },
     getDefaultProps() {
         return {
@@ -89,7 +91,7 @@ let TablesList = React.createClass({
      * @returns {*}
      */
     tablesList() {
-        return this.props.getAppTables(this.props.selectedAppId, this.props.apps).map((table) => {
+        const tableItems = this.props.getAppTables(this.props.selectedAppId, this.props.apps).map((table) => {
             table.link = this.getTableLink(table);
             return this.searchMatches(table.name) &&
                 <NavItem item={table}
@@ -103,7 +105,13 @@ let TablesList = React.createClass({
                          selected={table.id === this.props.selectedTableId}
                          open={true}/>;
         });
+
+        if (this.props.onCreateNewTable) {
+            tableItems.push(this.getNewTableItem());
+        }
+        return tableItems;
     },
+
     getNavItem(msg, link, icon, selected) {
         const hoverComponent = (<div className="hoverComponent">
             <Link to={link}><I18nMessage message={msg}/></Link>
@@ -114,14 +122,32 @@ let TablesList = React.createClass({
 
     },
     getTopLinksItem() {
-        const appHomePageSelected = !this.props.selectedTableId;
+        const appHomePageSelected = !this.props.selectedTableId &&
+            (WindowLocationUtils.getPathname() === `${APP_ROUTE}/${this.props.selectedAppId}`);
+        const appUsersPageSelected = !this.props.selectedTableId &&
+            (WindowLocationUtils.getPathname() === UrlUtils.getAppUsersLink(this.props.selectedAppId));
 
         return (
         <li className="horizontal">
             <ul className="topLinks">
                 {this.getNavItem('nav.home', `${APP_ROUTE}/${this.props.selectedAppId}`, 'home', appHomePageSelected)}
+                {this.getNavItem('app.users.users', UrlUtils.getAppUsersLink(this.props.selectedAppId), 'users', appUsersPageSelected)}
             </ul>
         </li>);
+    },
+
+    /**
+     * render fixed footer (new table link)
+     * @returns {XML}
+     */
+    getNewTableItem() {
+
+        return (
+            <li className="newTableItem link" key="newTable">
+                <div className="newTable" onClick={this.props.onCreateNewTable}>
+                    <QBicon icon="add-mini"/><I18nMessage message="tableCreation.newTablePageTitle"/>
+                </div>
+            </li>);
     },
 
     render() {
@@ -144,6 +170,8 @@ let TablesList = React.createClass({
                 <ul className="tablesList">
                     {this.tablesList()}
                 </ul>
+
+
             </div>
         );
     }

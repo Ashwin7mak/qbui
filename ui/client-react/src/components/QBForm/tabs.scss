@@ -310,6 +310,8 @@ $chevronFontSize: 16px;
 /*
  * Updated to use Harmony Icons
 */
+//todo: This code is not used right now. We don't have this font anymore either.
+//todo: When the code is refactored, we need to switch to using the <Icon> component for this.
 .rc-tabs-top .rc-tabs-tab-next-icon:before {
     font-family: "QuickBase-Sturdy";
     content: "\E902";
@@ -323,6 +325,8 @@ $chevronFontSize: 16px;
 /*
  * Updated to use Harmony Icons
 */
+//todo: This code is not used right now. We don't have this font anymore either.
+//todo: When the code is refactored, we need to switch to using the <Icon> component for this.
 .rc-tabs-top .rc-tabs-tab-prev-icon:before {
     font-family: "QuickBase-Sturdy";
     content: "\E8DD";

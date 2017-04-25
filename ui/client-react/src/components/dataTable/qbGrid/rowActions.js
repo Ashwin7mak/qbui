@@ -1,77 +1,76 @@
-import React, {PropTypes} from 'react';
-import {PositionedRowEditActions} from './rowEditActions';
+import React, {PropTypes, Component} from 'react';
+import RowActionsReuse from '../../../../../reuse/client/src/components/rowActions/rowActions';
 import QbIconActions from './qbIconActions';
 
-export const SELECT_ROW_CHECKBOX = 'selectRowCheckbox';
+class RowActions extends Component {
 
-/**
- * The actions that appear in the first column of the QbGrid.
- * @type {__React.ClassicComponentClass<P>}
- */
-const RowActions = React.createClass({
-    propTypes: {
-        rowId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-        isEditing: PropTypes.bool,
-        isSelected: PropTypes.bool,
-        editingRowId: PropTypes.number,
-        isEditingRowValid: PropTypes.bool.isRequired,
-        isEditingRowSaving: PropTypes.bool.isRequired,
-        isInlineEditOpen: PropTypes.bool.isRequired,
-        editingRowErrors: PropTypes.array.isRequired,
-        onCancelEditingRow: PropTypes.func.isRequired,
-        onClickAddNewRow: PropTypes.func.isRequired,
-        onClickToggleSelectedRow: PropTypes.func.isRequired,
-        onClickEditRowIcon: PropTypes.func,
-        onClickDeleteRowIcon: PropTypes.func,
-        onClickSaveRow: PropTypes.func.isRequired,
-    },
-
-    onClickEditRowIcon() {
+    onClickEditRowIcon = () => {
         if (this.props.onClickEditRowIcon) {
             return this.props.onClickEditRowIcon(this.props.rowId);
         }
-    },
+    }
 
-    onClickDeleteRowIcon() {
+    onClickDeleteRowIcon = () => {
         if (this.props.onClickDeleteRowIcon) {
             this.props.onClickDeleteRowIcon(this.props.rowId);
         }
-    },
+    }
 
     render() {
-        // Turn the row actions into edit actions when in inline edit mode
-        if (this.props.isEditing) {
-            return <PositionedRowEditActions
-                idKey={this.props.rowId ? this.props.rowId.toString() : 'noRowId'}
-                rowId={this.props.editingRowId}
-                isValid={this.props.isEditingRowValid}
-                isSaving={this.props.isEditingRowSaving}
-                rowEditErrors={this.props.editingRowErrors}
-                onClose={this.props.onCancelEditingRow}
-                onClickCancel={this.props.onCancelEditingRow}
-                onClickAdd={this.props.onClickAddNewRow}
-                onClickSave={this.props.onClickSaveRow}
-                gridComponent={true}
-            />;
-        }
-
-        // Display an empty div instead of row actions when inline edit is open
-        if (this.props.isInlineEditOpen) {
-            return <div className="emptyRowActions"></div>;
-        }
-
-        return (
-            <div className="actionsCol">
-                <input
-                    className={SELECT_ROW_CHECKBOX}
-                    type="checkbox"
-                    checked={this.props.isSelected}
-                    onChange={this.props.onClickToggleSelectedRow(this.props.rowId)}
-                />
-                <QbIconActions onClickEditRowIcon={this.onClickEditRowIcon} onClickDeleteRowIcon={this.onClickDeleteRowIcon} />
-            </div>
-        );
+        return <RowActionsReuse iconActionsNode={<QbIconActions onClickEditRowIcon={this.onClickEditRowIcon}
+                                                                onClickDeleteRowIcon={this.onClickDeleteRowIcon}
+                                                />}
+                                                {...this.props}
+                />;
     }
-});
+}
+
+RowActions.propTypes = {
+    /*
+    * Gets the row id - can either be a string or a number */
+    rowId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    /*
+    * when true, the row can be edited, initially set to false */
+    isEditing: PropTypes.bool,
+    /*
+    * Selects the corresponding row to be edited, can be enabled using checkbox */
+    isSelected: PropTypes.bool,
+    /*
+    * Holds the corresponding rowId of the row that is currently being edited */
+    editingRowId: PropTypes.number,
+    /*
+    * Shows or hides a loading spinner on the RowEditActions component*/
+    isEditingRowValid: PropTypes.bool.isRequired,
+    /*
+    * Saves the values inside the current editing row */
+    isEditingRowSaving: PropTypes.bool.isRequired,
+    /*
+    * Checks whether the inline edit is open or not */
+    isInlineEditOpen: PropTypes.bool.isRequired,
+    /*
+    * Checks for errors in the editing row */
+    editingRowErrors: PropTypes.array.isRequired,
+    /*
+    * Cancels editing of the row */
+    onCancelEditingRow: PropTypes.func.isRequired,
+    /*
+    * Adds a new row onClick */
+    onClickAddNewRow: PropTypes.func.isRequired,
+    /*
+    * Toggles between being selected and not being selected - selected means the current row can be edited */
+    onClickToggleSelectedRow: PropTypes.func.isRequired,
+    /*
+    * Icon through which the row can be edited on click */
+    onClickEditRowIcon: PropTypes.func,
+    /*
+    * Icon through which the row can be deleted on click */
+    onClickDeleteRowIcon: PropTypes.func,
+    /*
+    * Icon through which the row can be saved on click */
+    onClickSaveRow: PropTypes.func.isRequired,
+    /*
+    * Uses an IconActions component to render the icon menu by default, but you can override the renderer by passing in your own React class (e.g., QbIconActions). */
+    iconActionsNode: PropTypes.element
+};
 
 export default RowActions;

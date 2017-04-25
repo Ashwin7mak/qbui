@@ -7,15 +7,16 @@ import _ from 'lodash';
 
 import QbGrid from '../../../src/components/dataTable/qbGrid/qbGrid';
 import ColumnTransformer from '../../../src/components/dataTable/qbGrid/columnTransformer';
+import ReportColumnTransformer from '../../../src/components/dataTable/reportGrid/reportColumnTransformer';
 import RowTransformer from '../../../src/components/dataTable/qbGrid/rowTransformer';
-import QbIconActions from '../../../src/components/dataTable/qbGrid/qbIconActions';
+import QbIconActions, {__RewireAPI__ as QbIconActionsRewireAPI} from '../../../src/components/dataTable/qbGrid/qbIconActions';
 import * as Table from 'reactabular-table';
 import {UNSAVED_RECORD_ID} from '../../../src/constants/schema';
 
 const testColumns = [
-    new ColumnTransformer('Header 1', 1, 'header1class'),
-    new ColumnTransformer('Header 2', 2, 'header2class'),
-    new ColumnTransformer('Header 3', 3, 'header3class')
+    new ColumnTransformer('Header 1', 1, 'header1class', false),
+    new ColumnTransformer('Header 2', 2, 'header2class', false),
+    new ColumnTransformer('Header 3', 3, 'header3class', false)
 ];
 const rowIds = [1, 2];
 const testRows = [
@@ -87,11 +88,11 @@ describe('QbGrid', () => {
         jasmineEnzyme();
         // IconActions currently relies on the flux store which is difficult to unit test because of the mixin
         // TODO:: Refactor once redux stores are implemented. https://quickbase.atlassian.net/browse/MB-1920
-        QbIconActions.__Rewire__('IconActions', () => {return <div></div>;});
+        QbIconActionsRewireAPI.__Rewire__('IconActions', () => {return <div></div>;});
     });
 
     afterEach(() => {
-        QbIconActions.__ResetDependency__('IconActions');
+        QbIconActionsRewireAPI.__ResetDependency__('IconActions');
     });
 
     it('pass props to reactabular to display rows', () => {
@@ -107,6 +108,13 @@ describe('QbGrid', () => {
 
         let TableProvider = component.find(Table.Provider);
         expect(TableProvider.props().columns.length).toEqual(testColumns.length + 1);
+    });
+
+    it('does not add a first column for row actions when showRowActionsColumn prop is false', () => {
+        component = shallow(<QbGrid numberOfColumns={testColumns.length} columns={testColumns} rows={testRows} cellRenderer={testCellRenderer} showRowActionsColumn={false} />);
+
+        let TableProvider = component.find(Table.Provider);
+        expect(TableProvider.props().columns.length).toEqual(testColumns.length);
     });
 
     describe('addRowProps', () => {

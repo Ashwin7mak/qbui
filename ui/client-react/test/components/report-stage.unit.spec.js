@@ -7,6 +7,7 @@ import ReportStage  from '../../src/components/report/reportStage';
 describe('Report stage functions', () => {
     'use strict';
 
+
     it('test render of component', () => {
         const reportData = {
             data: {

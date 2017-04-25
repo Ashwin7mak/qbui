@@ -1,7 +1,7 @@
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
 import ReactDOM from 'react-dom';
-import CardViewList from '../../src/components/dataTable/cardView/cardViewList';
+import CardViewList, {__RewireAPI__ as CardViewListRewireAPI} from '../../src/components/dataTable/cardView/cardViewList';
 
 const singleNodeTreeData = {
     children : [
@@ -40,11 +40,11 @@ describe('CardViewList functions', () => {
     let component;
 
     beforeEach(() => {
-        CardViewList.__Rewire__('CardView', CardViewMock);
+        CardViewListRewireAPI.__Rewire__('CardView', CardViewMock);
     });
 
     afterEach(() => {
-        CardViewList.__ResetDependency__('CardView');
+        CardViewListRewireAPI.__ResetDependency__('CardView');
     });
 
     it('test render of loading component', () => {

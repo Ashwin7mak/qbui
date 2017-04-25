@@ -3,6 +3,8 @@ import {DragSource} from 'react-dnd';
 import DraggableItemTypes from './draggableItemTypes';
 import {getEmptyImage} from 'react-dnd-html5-backend';
 import FieldEditingTools from './fieldEditingTools/fieldEditingTools';
+import _ from 'lodash';
+
 /**
  * Specifies event handlers and props that are available during dragging events
  * Recommended: Call any actions that will modify the DOM in "endDrag" (instead of drop [on drop target]), because
@@ -10,21 +12,34 @@ import FieldEditingTools from './fieldEditingTools/fieldEditingTools';
  * @type {{beginDrag: ((props)), endDrag: ((props, monitor))}}
  */
 const fieldDragSource = {
-    beginDrag(props) {
+    beginDrag(props, monitor, component) {
+        props.cacheDragElement(component);
         return {
-            element: props.element,
+            containingElement: props.containingElement,
+            location: props.location,
             relatedField: props.relatedField,
-            tabIndex: props.tabIndex,
-            sectionIndex: props.sectionIndex,
-            orderIndex: props.orderIndex,
         };
     },
 
+    /**
+     * Identifies which element should be considered in a dragging state. The DOM element isn't actually moved until
+     * the drop event, so we use this to apply CSS styles to hide or dim the element while a token version of that element is being dragged.
+     * @param props
+     * @param monitor
+     */
+    isDragging(props, monitor) {
+        let item = monitor.getItem();
+        return props.containingElement.id === item.containingElement.id;
+    },
+
+    /**
+     * Calls this function once dragging has stopped. If the device is touch, then handle re-ordering of the field.
+     * Non-touch devices handle re-ordering during the drag.
+     * @param props
+     * @param monitor
+     */
     endDrag(props, monitor) {
-        if (monitor.didDrop()) {
-            let {tabIndex, sectionIndex, orderIndex} = monitor.getDropResult();
-            props.handleFormReorder(tabIndex, sectionIndex, orderIndex, props);
-        }
+        props.clearDragElementCache();
     }
 };
 
@@ -59,15 +74,21 @@ const DraggableFieldHoc = FieldComponent => {
         }
 
         render() {
-            const {connectDragSource, isDragging, tabIndex, sectionIndex, orderIndex} = this.props;
+            const {connectDragSource, isDragging, location, selectedField} = this.props;
 
             let classNames = ['draggableField'];
+            let draggableFieldWrapper = ['draggableFieldWrapper'];
             classNames.push(isDragging ? 'dragging' : 'notDragging');
+            if (_.isEqual(location, selectedField)) {
+                draggableFieldWrapper.push('selectedFormElement');
+            }
 
             return connectDragSource(
                 <div className={classNames.join(' ')}>
-                    <FieldEditingTools tabIndex={tabIndex} sectionIndex={sectionIndex} orderIndex={orderIndex} />
-                    <FieldComponent {...this.props}/>
+                    <div className={draggableFieldWrapper.join(' ')}>
+                        <FieldEditingTools location={location} isDragging={isDragging} />
+                        <FieldComponent {...this.props} />
+                    </div>
                 </div>
             );
         }

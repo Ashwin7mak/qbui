@@ -14,32 +14,7 @@ import AppHomePage from '../app/appHomePage';
 let AppsRoute = React.createClass({
     mixins: [FluxMixin],
 
-    /**
-     * allow access to apps if user has admin access to any of them
-     * or any app has openInV3 set or there are no apps
-     */
-    checkAccess(props) {
-
-        if (this.props.apps && this.props.apps.length > 0 && !props.appsLoading) {
-            const hasAnyAdmin = _.find(props.apps, app => AppUtils.hasAdminAccess(app.accessRights));
-
-            if (!hasAnyAdmin) {
-                const hasV3 = _.find(props.apps, {openInV3: true});
-                if (!hasV3) {
-                    WindowLocationUtils.update("/qbase/notAvailable");
-                }
-            }
-        }
-    },
-    componentWillReceiveProps(props) {
-
-        this.checkAccess(props);
-    },
-
     componentDidMount() {
-
-        this.checkAccess(this.props);
-
         // no title for now...
         let flux = this.getFlux();
         flux.actions.showTopNav();

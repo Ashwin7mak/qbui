@@ -17,15 +17,24 @@
     //  debug
     routeGroupDisabled[routeGroups.DEBUG] = [
         {route: routeConsts.APP_USERS, methods: [constants.POST, constants.DELETE, constants.PATCH, constants.PUT]},
-        {route: routeConsts.APPS, methods: [constants.POST, constants.DELETE, constants.PATCH, constants.PUT]}
+        {route: routeConsts.APPS, methods: [constants.POST, constants.DELETE, constants.PATCH, constants.PUT]},
+        {route: routeConsts.APP_ROLES, methods: [constants.POST, constants.DELETE, constants.PATCH, constants.PUT]}
     ];
 
     //  mercury v1
+    /**
+     * These routes are disabled in the prod environment. If you are getting an unexpected 404 error in prod you can:
+     * A) Enable that HTTP verb for all routes to that endpoint by modifying the wildcard routes (e.g., TOMCAT_ALL, EXPERIENCE_ENGINE_ALL)
+     * B) Enabled a specific subset of routes by defining the specific route in both routeConstants and qbRouteMapper.
+     */
     routeGroupDisabled[routeGroups.LH_V1] = [
+        {route: routeConsts.FEATURE_STATES, methods: [constants.POST, constants.DELETE, constants.PATCH, constants.PUT]},
+        {route: routeConsts.FEATURE_SWITCHES, methods: [constants.POST, constants.DELETE, constants.PATCH, constants.PUT]},
+        {route: routeConsts.FEATURE_SWITCH, methods: [constants.PATCH]},
+        {route: routeConsts.FEATURE_OVERRIDE, methods: [constants.PATCH]},
         //  app endpoints
         {route: routeConsts.APPS, methods: [constants.POST, constants.DELETE, constants.PATCH, constants.PUT]},
         {route: routeConsts.APP_USERS, methods: [constants.POST, constants.DELETE, constants.PATCH, constants.PUT]},
-        {route: routeConsts.APP_STACK_PREFERENCE, methods: [constants.DELETE, constants.PATCH, constants.PUT]},
         // form endpoints
         {route: routeConsts.FORM_COMPONENTS, methods: [constants.POST, constants.DELETE, constants.PATCH, constants.PUT]},
         {route: routeConsts.FORM_AND_RECORD_COMPONENTS, methods: [constants.POST, constants.DELETE, constants.PATCH, constants.PUT]},
@@ -39,14 +48,18 @@
         {route: routeConsts.RECORD, methods: [constants.POST, constants.PUT]}, //get, delete and patch allowed
         {route: routeConsts.RECORDS, methods: [constants.DELETE, constants.PATCH, constants.PUT]}, //get and post allowed
         {route: routeConsts.RECORDS_BULK, methods: [constants.POST, constants.GET, constants.PATCH, constants.PUT]}, //delete allowed
+        // role endpoints
+        {route: routeConsts.APP_ROLES, methods: [constants.POST, constants.DELETE, constants.PATCH, constants.PUT]},
         // swagger endpoints
         {route: routeConsts.SWAGGER_API, methods: [constants.GET, constants.POST, constants.DELETE, constants.PATCH, constants.PUT]},
         {route: routeConsts.SWAGGER_API_EE, methods: [constants.GET, constants.POST, constants.DELETE, constants.PATCH, constants.PUT]},
         {route: routeConsts.SWAGGER_RESOURCES, methods: [constants.GET, constants.POST, constants.DELETE, constants.PATCH, constants.PUT]},
         {route: routeConsts.SWAGGER_IMAGES, methods: [constants.GET, constants.POST, constants.DELETE, constants.PATCH, constants.PUT]},
         {route: routeConsts.SWAGGER_DOCUMENTATION, methods: [constants.GET, constants.POST, constants.DELETE, constants.PATCH, constants.PUT]},
-        {route: routeConsts.TOMCAT_ALL, methods: [constants.POST, constants.DELETE, constants.PATCH, constants.PUT]}, // get allowed
-        {route: routeConsts.EXPERIENCE_ENGINE_ALL, methods: [constants.POST, constants.DELETE, constants.PATCH, constants.PUT]}]; //get allowed
+        // allow get, post, patch and delete on core
+        {route: routeConsts.TOMCAT_ALL, methods: [constants.PUT]},
+        // allow get on ee
+        {route: routeConsts.EXPERIENCE_ENGINE_ALL, methods: [constants.POST, constants.DELETE, constants.PATCH, constants.PUT]}];
 
     module.exports = {
         /**

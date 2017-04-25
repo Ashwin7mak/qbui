@@ -1,0 +1,63 @@
+@import '../../../../../reuse/client/src/assets/css/qbVariables';
+
+.appOwnerContainer {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    padding-bottom: $spacing-small;
+
+    .appOwnerName {
+        flex: 1 1 auto;
+        height: 19px;
+        font-size: 16px;
+        text-align: left;
+        color: $default-text-onlight-color;
+    }
+
+    .appUsersManagementContent {
+        padding-top: 14px;
+        width: 597px;
+        height: 63px;
+        font-size: 16px;
+        line-height: 1.25;
+        color: $default-text-onlight-color;
+    }
+}
+
+.appRolesContent {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+
+    .appRolesPod {
+        flex: 0 1 auto;
+        min-width: 175px;
+        color: $default-text-onlight-color;
+
+        .appRolesDivider {
+            border-left: 3px solid $app-role-divider;
+            height: 60px;
+            flex: 1 1 auto;
+
+            div {
+                flex: 1 1 auto;
+                margin-left: 14px;
+            }
+
+            .appRolesPodCount {
+                font-weight: bold;
+                font-size: 24px;
+                padding-top: 10px;
+                height: 29px;
+                width: 70px;
+            }
+
+            .appRolesPodName {
+                padding-top: 4px;
+                width: 109px;
+                height: 17px;
+                font-size: 14px;
+            }
+        }
+    }
+}

@@ -4,9 +4,6 @@
      */
 
     'use strict';
-
-    var errors = require('./components/errors');
-    var authentication = require('./components/authentication');
     var log = require('./logger').getLogger();
     var _ = require('lodash');
     var httpStatusCodes = require('./constants/httpStatusCodes');
@@ -15,11 +12,12 @@
     require('./logger').getLogger();
 
     module.exports = function(app, config) {
-
+        var errors = require('./components/errors')(config);
+        var authentication = require('./components/authentication')(config);
         var requestHelper = require('./api/quickbase/requestHelper')();
         var routeConstants = require('./routes/routeConstants');
         var routeMapper = require('./routes/qbRouteMapper')(config);
-
+        var usersApi = require('./api/quickbase/usersApi')(config);
         /*
          *  Route to log a message. Only a post request is supported.
          *  This needs to be the first route defined.
@@ -86,6 +84,20 @@
             }
         });
 
+        app.all(routeConstants.ADMIN + '/*', function(req, res, next) {
+            usersApi.getReqUser(req).then(
+                function(response) {
+                    if (response.administrator) {
+                        return next();
+                    } else {
+                        res.status(httpStatusCodes.FORBIDDEN).send('User does not have permissions to access this content');
+                    }
+                },
+                function(error) {
+                    res.status(httpStatusCodes.METHOD_NOT_ALLOWED).send(JSON.stringify(error));
+                }
+            );
+        });
 
         //  For all requests:
         //     -- log the request route.
@@ -120,6 +132,12 @@
 
         app.route('/qbase/internalServerError*')
                 .get(errors[httpStatusCodes.INTERNAL_SERVER_ERROR]);
+
+        // Ticket Federation
+        app.route('/qbase/federation/shake')
+            .get(authentication.federation);
+        app.route('/qbase/federation/legacyUrl')
+            .get(authentication.legacyUrl);
 
         // All undefined asset or api routes should return a 404
         app.route('/:url(api|auth|components|app|bower_components|assets)/*')

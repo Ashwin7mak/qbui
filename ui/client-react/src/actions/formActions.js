@@ -2,18 +2,37 @@
 
 import FormService from '../services/formService';
 import Promise from 'bluebird';
-import _ from 'lodash';
 import Logger from '../utils/logger';
 import LogLevel from '../utils/logLevels';
 import WindowLocationUtils from '../utils/windowLocationUtils';
 import Locale from '../locales/locales';
-import {NotificationManager} from 'react-notifications';
-import * as CompConsts from '../constants/componentConstants';
+import NotificationManager from '../../../reuse/client/src/scripts/notificationManager';
 import * as types from '../actions/types';
-import * as UrlConsts from "../constants/urlConstants";
+import NavigationUtils from '../utils/navigationUtils';
 import {NEW_FORM_RECORD_ID} from '../constants/schema';
+import _ from 'lodash';
+import {convertFormToArrayForClient, convertFormToObjectForServer} from './actionHelpers/transformFormData';
+import {saveAllNewFields, updateAllFieldsWithEdits} from './fieldsActions';
 
 let logger = new Logger();
+
+/*
+ Redux event for saving a form
+ */
+function event(id, type, content) {
+    return {
+        id: id,
+        type: type,
+        content: content || null
+    };
+}
+
+export const updateFormRedirectRoute = route => {
+    return {
+        type: types.UPDATE_FORM_REDIRECT_ROUTE,
+        redirectRoute: route
+    };
+};
 
 /**
  * form load in progress
@@ -47,11 +66,13 @@ export const loadFormError = (id, error) => {
  * @param formData form data returned from server
  * @returns {{type, container: *, formData: *}}
  */
-export const loadFormSuccess = (id, formData) => {
+export const loadFormSuccess = (id, formData, appId, tblId) => {
     return {
         id,
         type: types.LOAD_FORM_SUCCESS,
-        formData
+        formData: convertFormToArrayForClient(formData),
+        appId,
+        tblId
     };
 };
 
@@ -67,78 +88,24 @@ export const syncForm = (id) => {
 };
 
 /**
- * save form in progress
+ * open the 'modal working' spinner/window when saving a form or form record.
+ *
  * @param container
  * @returns {{type, container: *}}
  */
-//TODO: MOVE TO RECORDS ACTION..THIS IS FIRED WHEN SAVING A RECORD
-export const savingForm = (id) => {
+export const saveForm = (id) => {
     return {
         id,
         type: types.SAVE_FORM
     };
 };
-
-/**
- * save form failed
- * @param container
- * @param error error message from server
- * @returns {{type, container: *, error: *}}
+/*
+ * hide the 'modal working' spinner/window when completing a form save request.
  */
-//TODO: MOVE TO RECORDS ACTION..THIS IS FIRED WHEN SAVING A RECORD
-export const saveFormError = (id, error) => {
+export const saveFormComplete = (id) => {
     return {
         id,
-        type: types.SAVE_FORM_FAILED,
-        error
-    };
-};
-
-/**
- * save form succeeded
- * @param container
- * @returns {{type, container: *}}
- */
-//TODO: MOVE TO RECORDS ACTION..THIS IS FIRED WHEN SAVING A RECORD
-export const saveFormSuccess = (id) => {
-    return {
-        id,
-        type: types.SAVE_FORM_SUCCESS
-    };
-};
-
-
-/**
- * open an existing record for editing
- * @param recId
- * @returns {{type, recId: *}}
- */
-export const openRecordForEdit = (recId) => {
-    // add editRec query param and let the router take action
-    WindowLocationUtils.pushWithQuery(UrlConsts.EDIT_RECORD_KEY, recId);
-
-    // let store know we're editing a record so we can navigate back and forth
-
-    return {
-        type: types.EDIT_REPORT_RECORD,
-        recId: recId,
-    };
-};
-
-/**
- * open a new record for editing
- * @param navigateAfterSave go to the new record after saving
- * @returns {{type, recId, navigateAfterSave: boolean}}
- */
-export const editNewRecord = (navigateAfterSave = false) => {
-
-    // add editRec=new query param and let the router take action
-    WindowLocationUtils.pushWithQuery(UrlConsts.EDIT_RECORD_KEY, UrlConsts.NEW_RECORD_VALUE);
-
-    return {
-        type: types.EDIT_REPORT_RECORD,
-        recId: UrlConsts.NEW_RECORD_VALUE,
-        navigateAfterSave
+        type: types.SAVE_FORM_COMPLETE
     };
 };
 
@@ -168,8 +135,10 @@ export const loadForm = (appId, tblId, rptId, formType, recordId) => {
             let formService = new FormService();
 
             let promise;
+
             if (recordId === NEW_FORM_RECORD_ID) {
                 promise = formService.getForm(appId, tblId, rptId, formType);
+
             } else {
                 promise = formService.getFormAndRecord(appId, tblId, recordId, rptId, formType);
             }
@@ -184,7 +153,7 @@ export const loadForm = (appId, tblId, rptId, formType, recordId) => {
                         response.data.recordId = recordId;
                     }
 
-                    dispatch(loadFormSuccess(formType, response.data));
+                    dispatch(loadFormSuccess(formType, response.data, appId, tblId));
                     resolve(response.data);
                 },
                 (error) => {
@@ -197,11 +166,9 @@ export const loadForm = (appId, tblId, rptId, formType, recordId) => {
                     }
 
                     if (error.response && error.response.status === 403) {
-                        NotificationManager.error(Locale.getMessage('form.error.403'), Locale.getMessage('failed'),
-                            CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);
+                        NotificationManager.error(Locale.getMessage('form.error.403'), Locale.getMessage('failed'));
                     } else {
-                        NotificationManager.error(Locale.getMessage('recordNotifications.cannotLoad'), Locale.getMessage('failed'),
-                            CompConsts.NOTIFICATION_MESSAGE_FAIL_DISMISS_TIME);
+                        NotificationManager.error(Locale.getMessage('recordNotifications.cannotLoad'), Locale.getMessage('failed'));
                     }
 
                     // remove the editRec query string since we are not successfully editing the form
@@ -212,8 +179,7 @@ export const loadForm = (appId, tblId, rptId, formType, recordId) => {
                 }
             ).catch((ex) => {
                 logger.logException(ex);
-                NotificationManager.error(Locale.getMessage('recordNotifications.cannotLoad'), Locale.getMessage('failed'),
-                    CompConsts.NOTIFICATION_MESSAGE_FAIL_DISMISS_TIME);
+                NotificationManager.error(Locale.getMessage('recordNotifications.cannotLoad'), Locale.getMessage('failed'));
                 // remove the editRec query string since we are not successfully editing the form
                 WindowLocationUtils.pushWithoutQuery();
                 reject(ex);
@@ -223,20 +189,125 @@ export const loadForm = (appId, tblId, rptId, formType, recordId) => {
 };
 
 /**
+ * Private function for addNewFieldToForm, not exported
+ * */
+const buildNewField = (newField) => {
+    let newId = _.uniqueId('newField_');
+    let displayText = 'New Text Field';
+
+    return _.merge({}, {
+        id: newId,
+        edit: true,
+        FormFieldElement: {
+            positionSameRow: false,
+            fieldId: newId,
+            displayText
+        }
+    }, newField);
+};
+
+/**
  * Move a field from one position on a form to a different position
  * @param formId
- * @param newTabIndex
- * @param newSectionIndex
- * @param newOrderIndex
+ * @param appId
+ * @param tblId
+ * @param newLocation
+ * @param newField
+ * @returns {{id, type, content}|*}
+ */
+export const addNewFieldToForm = (formId, appId, tblId, newLocation, newField) => {
+    newField = buildNewField(newField);
+
+    return {
+        type: types.ADD_FIELD,
+        id: formId,
+        appId,
+        tblId,
+        content: {
+            newLocation,
+            newField,
+        }
+    };
+};
+
+/**
+ * Move a field from one position on a form to a different position
+ * @param formId
+ * @param newLocation
  * @param draggedItemProps
  * @returns {{id, type, content}|*}
  */
-export const moveFieldOnForm = (formId, newTabIndex, newSectionIndex, newOrderIndex, draggedItemProps) => {
+export const moveFieldOnForm = (formId, newLocation, draggedItemProps) => {
     return event(formId, types.MOVE_FIELD, {
-        newTabIndex,
-        newSectionIndex,
-        newOrderIndex,
+        newLocation,
         draggedItemProps
+    });
+};
+
+/**
+ * Selects a field on a form
+ * @param formId
+ * @param location
+ * @returns {{id, type, content}|*}
+ */
+export const selectFieldOnForm = (formId, location) => {
+    return event(formId, types.SELECT_FIELD, {location});
+};
+
+/**
+ * Deselects a field on a form
+ * @param formId
+ * @param location
+ * @returns {{id, type, content}|*}
+ */
+export const deselectField = (formId, location) => {
+    return event(formId, types.DESELECT_FIELD, {location});
+};
+
+/**
+ * Removes a field from the form
+ * @param formId
+ * @param location
+ * @returns {{id, type, content}|*}
+ */
+export const removeFieldFromForm = (formId, location) => {
+    return event(formId, types.REMOVE_FIELD, {
+        location
+    });
+};
+
+/**
+ * Move a field up one position on a form
+ * @param formId
+ * location
+ * @returns {{id, type, content}|*}
+ */
+export const keyboardMoveFieldUp = (formId, location) => {
+    return event(formId, types.KEYBOARD_MOVE_FIELD_UP, {
+        location
+    });
+};
+
+/**
+ * Move a field down one position on a form
+ * @param formId
+ * location
+ * @returns {{id, type, content}|*}
+ */
+export const keyboardMoveFieldDown = (formId, location) => {
+    return event(formId, types.KEYBOARD_MOVE_FIELD_DOWN, {
+        location
+    });
+};
+
+/**
+ * Toggles children tabIndex for formBuilder
+ * @param formId
+ * @returns {{id, type, content}|*}
+ */
+export const toggleFormBuilderChildrenTabIndex = (formId, currentTabIndex) => {
+    return event(formId, types.TOGGLE_FORM_BUILDER_CHILDREN_TABINDEX, {
+        currentTabIndex
     });
 };
 
@@ -249,7 +320,7 @@ export const moveFieldOnForm = (formId, newTabIndex, newSectionIndex, newOrderIn
  * @param form
  */
 export const createForm = (appId, tblId, formType, form) => {
-    return saveForm(appId, tblId, formType, form, true);
+    return saveTheForm(appId, tblId, formType, form, true);
 };
 
 /**
@@ -259,70 +330,73 @@ export const createForm = (appId, tblId, formType, form) => {
  * @param tblId
  * @param formType
  * @param form
+ * @param redirectRoute
+ * @param shouldRedirectOnSave
  */
-export const updateForm = (appId, tblId, formType, form) => {
-    return saveForm(appId, tblId, formType, form, false);
+export const updateForm = (appId, tblId, formType, form, redirectRoute, shouldRedirectOnSave = true) => {
+    return saveTheForm(appId, tblId, formType, form, false, redirectRoute, shouldRedirectOnSave);
 };
 
 // we're returning a promise to the caller (not a Redux action) since this is an async action
 // (this is permitted when we're using redux-thunk middleware which invokes the store dispatch)
-function saveForm(appId, tblId, formType, form, isNew) {
-    return (dispatch) => {
-        return new Promise((resolve, reject) => {
-            if (appId && tblId) {
-                logger.debug(`Saving form -- appId:${appId}, tableId:${tblId}, isNew:${isNew}`);
+function saveTheForm(appId, tblId, formType, formMeta, isNew, redirectRoute, shouldRedirectOnSave) {
+    return (dispatch, getState) => {
+        dispatch(event(formType, types.SAVING_FORM));
 
-                //  TODO: refactor once record events are moved out..
-                dispatch(event(formType, types.SAVING_FORM));
+        return dispatch(saveAllNewFields(appId, tblId, formType))
+            .then(() => dispatch(updateAllFieldsWithEdits(appId, tblId)))
+            .then(() => {
+                return new Promise((resolve, reject) => {
+                    if (appId && tblId) {
+                        // Get the newest version of the form from state if it exists in state
+                        let form = formMeta;
+                        if (getState().forms && getState().forms[formType]) {
+                            form = getState().forms[formType].formData.formMeta;
+                        }
+                        form = convertFormToObjectForServer(form);
 
-                let formService = new FormService();
+                        logger.debug(`Saving form -- appId:${appId}, tableId:${tblId}, isNew:${isNew}`);
 
-                let formPromise = isNew ? formService.createForm(appId, tblId, form) : formService.updateForm(appId, tblId, form);
-                formPromise.then(
-                    (response) => {
-                        logger.debug('FormService saveForm success');
-                        //  for now return the original form..
-                        dispatch(event(formType, types.SAVING_FORM_SUCCESS, response.data));
+                        let formService = new FormService();
 
-                        NotificationManager.success(Locale.getMessage('form.notification.save.success'), Locale.getMessage('success'),
-                            CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);
+                        let formPromise = isNew ? formService.createForm(appId, tblId, form) : formService.updateForm(appId, tblId, form);
+                        formPromise.then(
+                            (response) => {
+                                logger.debug('FormService saveTheForm success');
+                                //  for now return the original form..
+                                dispatch(event(formType, types.SAVING_FORM_SUCCESS, convertFormToArrayForClient({formMeta: response.data}).formMeta));
 
-                        resolve();
-                    },
-                    (error) => {
-                        logger.parseAndLogError(LogLevel.ERROR, error.response, 'formService.getReports:');
-                        dispatch(event(formType, types.SAVING_FORM_ERROR, error.response ? error.response.status : error.response));
+                                if (shouldRedirectOnSave) {
+                                    NavigationUtils.goBackToLocationOrTable(appId, tblId, redirectRoute);
+                                }
 
-                        NotificationManager.error(Locale.getMessage('form.notification.save.error'), Locale.getMessage('failed'),
-                            CompConsts.NOTIFICATION_MESSAGE_FAIL_DISMISS_TIME);
-
-                        reject(error);
+                                NotificationManager.success(Locale.getMessage('form.notification.save.success'), Locale.getMessage('success'));
+                                resolve();
+                            },
+                            (error) => {
+                                logger.parseAndLogError(LogLevel.ERROR, error.response, 'formService.getReports:');
+                                dispatch(event(formType, types.SAVING_FORM_ERROR, error.response ? error.response.status : error.response));
+                                NotificationManager.error(Locale.getMessage('form.notification.save.error'), Locale.getMessage('failed'));
+                                reject(error);
+                            }
+                        ).catch((ex) => {
+                            logger.logException(ex);
+                            NotificationManager.error(Locale.getMessage('form.notification.save.error'), Locale.getMessage('failed'));
+                            reject(ex);
+                        });
+                    } else {
+                        logger.error(`formActions.saveTheForm: Missing required input parameters.  appId: ${appId}, tableId: ${tblId}`);
+                        dispatch(event(form.id, types.SAVING_FORM_ERROR, '500'));
+                        reject();
                     }
-                ).catch((ex) => {
-                    logger.logException(ex);
-                    NotificationManager.error(Locale.getMessage('form.notification.save.error'), Locale.getMessage('failed'),
-                        CompConsts.NOTIFICATION_MESSAGE_FAIL_DISMISS_TIME);
-                    reject(ex);
                 });
-            } else {
-                logger.error(`formActions.saveForm: Missing required input parameters.  appId: ${appId}, tableId: ${tblId}`);
-                dispatch(event(form.id, types.SAVING_FORM_ERROR, '500'));
-                reject();
-            }
-        });
+            });
     };
 }
 
-/*
- Redux event for saving a form
- TODO: refactor once record events moved
- */
-function event(id, type, content) {
+export const unloadForm = (id) => {
     return {
-        id: id,
-        type: type,
-        content: content || null
+        id,
+        type: types.UNLOAD_FORM
     };
-}
-
-
+};

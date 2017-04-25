@@ -22,26 +22,26 @@ let appsdata_valid = {
         tables: [],
         timeZone: "US/Pacific"
     },
+    {
+        aliases: {
+            _DBID_ACTIVITIES: "abc"
+        },
+        dateFormat: "MM-dd-uuuu",
+        firstDayOfWeek: 1,
+        id: "bkac9mqfh",
+        lastAccessed: null,
+        name: "app_YvujdPIsBs1",
+        relationships: [],
+        tables: [{
+            name: 'table1',
+            id: 1
+        },
         {
-            aliases: {
-                _DBID_ACTIVITIES: "abc"
-            },
-            dateFormat: "MM-dd-uuuu",
-            firstDayOfWeek: 1,
-            id: "bkac9mqfh",
-            lastAccessed: null,
-            name: "app_YvujdPIsBs1",
-            relationships: [],
-            tables: [{
-                name: 'table1',
-                id: 1
-            },
-                {
-                    name: 'table2',
-                    id: 2
-                }],
-            timeZone: "US/Pacific"
-        }]
+            name: 'table2',
+            id: 2
+        }],
+        timeZone: "US/Pacific"
+    }]
 };
 
 

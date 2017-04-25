@@ -5,41 +5,61 @@ const classNames = require('classnames');
 const React = require('react');
 const ReactDOM = require('react-dom');
 
-const CheckBoxFieldValueEditor = require('../../../client-react/src/components/fields/checkBoxFieldValueEditor');
-const CheckBoxFieldValueRenderer = require('../../../client-react/src/components/fields/checkBoxFieldValueRenderer');
-const DateFieldValueEditor = require('../../../client-react/src/components/fields/dateFieldValueEditor.js');
-const DateTimeFieldValueEditor = require('../../../client-react/src/components/fields/dateTimeFieldValueEditor.js');
-const DateTimeFieldValueRenderer = require('../../../client-react/src/components/fields/dateTimeFieldValueRenderer.js');
-const EmailFieldValueEditor = require('../../../client-react/src/components/fields/emailFieldValueEditor.js');
-const EmailFieldValueRenderer = require('../../../client-react/src/components/fields/emailFieldValueRenderer.js');
-const FieldValueEditor = require('../../../client-react/src/components/fields/fieldValueEditor');
-const FieldValueRenderer = require('../../../client-react/src/components/fields/fieldValueRenderer');
-const MultiChoiceFieldValueEditor = require('../../../client-react/src/components/fields/multiChoiceFieldValueEditor');
-const MultiLineTextFieldValueEditor = require('../../../client-react/src/components/fields/multiLineTextFieldValueEditor');
-const NumericFieldValueEditor = require('../../../client-react/src/components/fields/numericFieldValueEditor');
-const NumericFieldValueRenderer = require('../../../client-react/src/components/fields/numericFieldValueRenderer');
-const TextFieldValueEditor = require('../../../client-react/src/components/fields/textFieldValueEditor');
-const TextFieldValueRenderer = require('../../../client-react/src/components/fields/textFieldValueRenderer');
-const TimeFieldValueEditor = require('../../../client-react/src/components/fields/timeFieldValueEditor.js');
-const TimeFieldValueRenderer = require('../../../client-react/src/components/fields/timeFieldValueRenderer.js');
-const UrlFieldValueEditor = require('../../../client-react/src/components/fields/urlFieldValueEditor.js');
-const UrlFieldValueRenderer = require('../../../client-react/src/components/fields/urlFieldValueRenderer.js');
-const UserFieldValueEditor = require('../../../client-react/src/components/fields/userFieldValueEditor');
-const UserFieldValueRenderer = require('../../../client-react/src/components/fields/userFieldValueRenderer');
+const CheckBoxFieldValueEditor = require('../../../client-react/src/components/fields/checkBoxFieldValueEditor').default;
+const CheckBoxFieldValueRenderer = require('../../../client-react/src/components/fields/checkBoxFieldValueRenderer').default;
+const DateFieldValueEditor = require('../../../client-react/src/components/fields/dateFieldValueEditor.js').default;
+const DateTimeFieldValueEditor = require('../../../client-react/src/components/fields/dateTimeFieldValueEditor.js').default;
+const DateTimeFieldValueRenderer = require('../../../client-react/src/components/fields/dateTimeFieldValueRenderer.js').default;
+const EmailFieldValueEditor = require('../../../client-react/src/components/fields/emailFieldValueEditor.js').default;
+const EmailFieldValueRenderer = require('../../../client-react/src/components/fields/emailFieldValueRenderer.js').default;
+const FieldValueEditor = require('../../../client-react/src/components/fields/fieldValueEditor').default;
+const FieldValueRenderer = require('../../../client-react/src/components/fields/fieldValueRenderer').default;
+const MultiChoiceFieldValueEditor = require('../../../client-react/src/components/fields/multiChoiceFieldValueEditor').default;
+const MultiLineTextFieldValueEditor = require('../../../client-react/src/components/fields/multiLineTextFieldValueEditor').default;
+const NumericFieldValueEditor = require('../../../client-react/src/components/fields/numericFieldValueEditor').default;
+const NumericFieldValueRenderer = require('../../../client-react/src/components/fields/numericFieldValueRenderer').default;
+const TextFieldValueEditor = require('../../../client-react/src/components/fields/textFieldValueEditor').default;
+const TextFieldValueRenderer = require('../../../client-react/src/components/fields/textFieldValueRenderer').default;
+const TimeFieldValueEditor = require('../../../client-react/src/components/fields/timeFieldValueEditor.js').default;
+const TimeFieldValueRenderer = require('../../../client-react/src/components/fields/timeFieldValueRenderer.js').default;
+const UrlFieldValueEditor = require('../../../client-react/src/components/fields/urlFieldValueEditor.js').default;
+const UrlFieldValueRenderer = require('../../../client-react/src/components/fields/urlFieldValueRenderer.js').default;
+const UserFieldValueEditor = require('../../../client-react/src/components/fields/userFieldValueEditor').default;
+const UserFieldValueRenderer = require('../../../client-react/src/components/fields/userFieldValueRenderer').default;
 
-const QBicon = require('../../../client-react/src/components/qbIcon/qbIcon');
-const QBPanel = require('../../../client-react/src/components/QBPanel/qbpanel');
+const Icon = require('../../../reuse/client/src/components/icon/icon').default;
+const AVAILABLE_ICON_FONTS = require('../../../reuse/client/src/components/icon/icon').AVAILABLE_ICON_FONTS;
 
-const Trowser = require('../../../client-react/src/components/trowser/trowser.js');
-const QBModal = require('../../../client-react/src/components/qbModal/qbModal.js');
-const AlertBanner = require('../../../client-react/src/components/alertBanner/alertBanner.js');
-const PageTitle = require('../../../client-react/src/components/pageTitle/pageTitle.js');
-const InvisibleBackdrop = require('../../../client-react/src/components/qbModal/invisibleBackdrop.js');
-const PhoneFieldValueEditor = require('../../../client-react/src/components/fields/phoneFieldValueEditor.js');
-const PhoneFieldValueRenderer = require('../../../client-react/src/components/fields/phoneFieldValueRenderer.js');
-const DurationFieldValueRenderer = require('../../../client-react/src/components/fields/durationFieldValueRenderer.js');
-const DurationFieldValueEditor = require('../../../client-react/src/components/fields/durationFieldValueEditor.js');
-const QbGrid = require('../../../client-react/src/components/dataTable/qbGrid/qbGrid.js');
+const QBPanel = require('../../../client-react/src/components/QBPanel/qbpanel').default;
+
+const Trowser = require('../../../client-react/src/components/trowser/trowser.js').default;
+const QBModal = require('../../../client-react/src/components/qbModal/qbModal.js').default;
+const AlertBanner = require('../../../client-react/src/components/alertBanner/alertBanner.js').default;
+const PageTitle = require('../../../client-react/src/components/pageTitle/pageTitle.js').default;
+const InvisibleBackdrop = require('../../../client-react/src/components/qbModal/invisibleBackdrop.js').default;
+const PhoneFieldValueEditor = require('../../../client-react/src/components/fields/phoneFieldValueEditor.js').default;
+const PhoneFieldValueRenderer = require('../../../client-react/src/components/fields/phoneFieldValueRenderer.js').default;
+const DurationFieldValueRenderer = require('../../../client-react/src/components/fields/durationFieldValueRenderer.js').default;
+const DurationFieldValueEditor = require('../../../client-react/src/components/fields/durationFieldValueEditor.js').default;
+const QbGrid = require('../../../client-react/src/components/dataTable/qbGrid/qbGrid.js').default;
+const SideMenuBase = require('../../../reuse/client/src/components/sideMenuBase/sideMenuBase.js').default;
+const SideTrowserBase = require('../../../reuse/client/src/components/sideTrowserBase/sideTrowserBase.js').default;
+const IconChooser = require('../../../reuse/client/src/components/iconChooser/iconChooser.js').default;
+const IconInputBox = require('../../../reuse/client/src/components/iconInputBox/iconInputBox.js').default;
+const TopNav = require('../../../reuse/client/src/components/topNav/topNav.js').default;
+const DefaultTopNavGlobalActions = require('../../../reuse/client/src/components/topNav/defaultTopNavGlobalActions.js').default;
+const Stage = require('../../../reuse/client/src/components/stage/stage.js').default;
+const StageHeader = require('../../../reuse/client/src/components/stage/stageHeader').default;
+const StageHeaderCount = require('../../../reuse/client/src/components/stage/stageHeaderCounts').default;
+const Tooltip = require('../../../reuse/client/src/components/tooltip/tooltip.js').default;
+const StandardLeftNav = require('../../../reuse/client/src/components/sideNavs/standardLeftNav.js').default;
+const Pagination = require('../../../reuse/client/src/components/pagination/pagination.js').default;
+// const RowActions = require('../../../reuse/client/src/components/rowActions/rowActions.js').default;
+// const IconActions = require('../../../reuse/client/src/components/iconActions/iconActions').default;
+// const Locale = require('../../../reuse/client/src/locales/locale').default;
+// const PositionedRowEditActions = require('../../../client-react/src/components/dataTable/qbGrid/rowEditActions').default;
+const NotificationManager = require('../../../reuse/client/src/scripts/notificationManager.js').default;
+const NotificationContainer = require('react-notifications').NotificationContainer;
 // END OF IMPORT STATEMENTS
 // The comment above is used for a grunt task. Please do not delete.
 
@@ -226,4 +246,6 @@ const ReactPlayground = React.createClass({
     }
 });
 
-export default ReactPlayground;
+
+exports.default = ReactPlayground;
+module.exports = exports.default;

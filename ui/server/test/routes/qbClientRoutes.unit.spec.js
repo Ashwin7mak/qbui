@@ -1,4 +1,3 @@
-
 var sinon = require('sinon');
 var request = require('supertest');
 var should = require('should');
@@ -17,8 +16,6 @@ var assert = require('assert');
 var envConsts = require('../../src/config/environment/environmentConstants');
 require('../../src/routes')(app, mockConfig);
 
-/*eslint-disable no-invalid-this */
-
 /**
  * Unit tests for app generator
  */
@@ -28,7 +25,7 @@ describe('Express Client Routes', function() {
 
     beforeEach(function() {
         stubLog = sinon.stub(log, 'info').returns(true);
-        this.timeout(5000);
+        this.timeout(5000); // eslint-disable-line no-invalid-this
     });
     afterEach(function() {
         stubLog.restore();
@@ -52,6 +49,27 @@ describe('Express Client Routes', function() {
         request(app).
             get('/app/1').
             expect(200);
+        done();
+    });
+
+    it('Validate get app settings route', function(done) {
+        request(app).
+        get('/app/1/settings').
+        expect(200);
+        done();
+    });
+
+    it('Validate get app users route', function(done) {
+        request(app).
+        get('/app/1/users').
+        expect(200);
+        done();
+    });
+
+    it('Validate get app properties route', function(done) {
+        request(app).
+        get('/app/1/properties').
+        expect(200);
         done();
     });
 
@@ -114,6 +132,27 @@ describe('Express Client Routes', function() {
     it('validate get form builder route with formId', function(done) {
         request(app).
         get('/qbase/builder/app/1/table/2/form/3').
+        expect(200);
+        done();
+    });
+
+    it('validate get feature switches route', function(done) {
+        request(app).
+        get('/qbase/admin/featureSwitches').
+        expect(200);
+        done();
+    });
+
+    it('validate get feature switches route with feature ID', function(done) {
+        request(app).
+        get('/qbase/admin/featureSwitches/1').
+        expect(200);
+        done();
+    });
+
+    it('validate get governance route with account ID', function(done) {
+        request(app).
+        get('/qbase/governance/1/users').
         expect(200);
         done();
     });

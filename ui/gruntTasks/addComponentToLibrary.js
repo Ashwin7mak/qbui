@@ -17,10 +17,11 @@ module.exports = function(grunt) {
     //   Common locator across files
     var IMPORT_COMMENT = '// END OF IMPORT STATEMENTS';
     //   Locator comments in Metadata.js (extra spaces are needed to match tab indentation)
-    var METADATA_MERGE_COMMENT = '    // END OF METADATA MERGE';
+    var METADATA_MERGE_COMMENT = '        // END OF METADATA MERGE';
     //   Locator comments in Examples.js (extra spaces are needed to match tab indentation)
     var EXAMPLES_END_EXPORT_COMMENT = '    // END OF EXPORT';
-
+    const BASE_CLIENT_ROUTE = '/qbase';
+    const LIB_ROUTE = `${BASE_CLIENT_ROUTE}/components`;
     function getComponentFileName(componentPath) {
         var componentPathArray = componentPath.split('/');
         return componentPathArray.pop();
@@ -65,7 +66,7 @@ module.exports = function(grunt) {
             grunt.log.error(METADATA_MERGE_COMMENT + ' comment missing from Metadata.js. Statement may be misplaced.');
         }
         metaDataFileArray[endOfMerge - 1] = metaDataFileArray[endOfMerge - 1] + ',';
-        metaDataFileArray.splice(endOfMerge, 0, '    ' + componentData.componentName + 'Metadata');
+        metaDataFileArray.splice(endOfMerge, 0, '        ' + componentData.componentName + 'Metadata');
 
         grunt.file.write(componentData.metaDataFilePath, metaDataFileArray.join("\n"));
     }
@@ -101,7 +102,7 @@ module.exports = function(grunt) {
         if (endOfImport < 0) {
             grunt.log.error(IMPORT_COMMENT + ' comment missing from ReactPlayground.js. Import may be misplaced.');
         }
-        playgroundFileArray.splice(endOfImport, 0, 'const ' + componentData.componentName + " = require('../../../" + componentData.componentPath + "');");
+        playgroundFileArray.splice(endOfImport, 0, 'const ' + componentData.componentName + " = require('../../../" + componentData.componentPath + "').default;");
         grunt.file.write(componentData.playgroundFile, playgroundFileArray.join("\n"));
     }
 
@@ -116,10 +117,10 @@ module.exports = function(grunt) {
         indexFileArray.splice(endOfImport, 0, 'import ' + componentData.componentName + "Doc from './docs/" + componentData.componentFileName + "';");
 
         // Extra spacing here to match indentation
-        var endOfRoutes = indexFileArray.indexOf('        </Route>');
+        var endOfRoutes = indexFileArray.indexOf('        ]');
         var routeTemplate = grunt.file.read(componentData.componentLibraryTemplatePath + 'route.tmpl');
         // Slice on the end removes extra newline
-        indexFileArray.splice(endOfRoutes, 0, grunt.template.process(routeTemplate, {data: componentData}).slice(0, -1));
+        indexFileArray.splice(endOfRoutes - 1, 0, grunt.template.process(routeTemplate, {data: componentData}).slice(0, -1));
 
         grunt.file.write(componentData.indexFile, indexFileArray.join("\n"));
     }
@@ -160,7 +161,8 @@ module.exports = function(grunt) {
             examplesFile: componentLibrarySrcPath + 'components/Examples.js',
             playgroundFile: componentLibrarySrcPath + 'components/ReactPlayground.js',
             indexFile: componentLibrarySrcPath + 'index.js',
-            routesFile: componentLibrarySrcPath + 'components/componentLibrary.js'
+            routesFile: componentLibrarySrcPath + 'components/componentLibrary.js',
+            basePath: LIB_ROUTE
         };
 
         createDocFile(componentData);

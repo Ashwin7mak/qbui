@@ -35,7 +35,6 @@
         var APPS_ENDPOINT = '/apps/';
         var RELATIONSHIPS_ENDPOINT = '/relationships/';
         var TABLES_ENDPOINT = '/tables/';
-        var TABLE_DEFAULT_HOME_PAGE = '/defaulthomepage';
         var FIELDS_ENDPOINT = '/fields/';
         var FORMS_ENDPOINT = '/forms/';
         var FORM_TYPE_ENDPOINT = 'formType/';
@@ -61,6 +60,9 @@
         DEFAULT_HEADERS[CONTENT_TYPE] = APPLICATION_JSON;
         var ERROR_HPE_INVALID_CONSTANT = 'HPE_INVALID_CONSTANT';
         var ERROR_ENOTFOUND = 'ENOTFOUND';
+        var TABLES_PROPERTIES = '/tableproperties/';
+        var TABLE_COMPONENTS = 'tableComponents';
+        var REQ_USER = 'reqUser';
         //add comment about this usage
         baseUrl = config === undefined ? '' : config.DOMAIN;
 
@@ -112,8 +114,6 @@
             } else {
                 methodLess = baseUrl.replace(HTTP, '');
             }
-
-            methodLess = methodLess.replace('9001', '8081');
 
             log.debug('baseUrl: ' + baseUrl + ' methodLess: ' + methodLess);
             //If there is no subdomain, hit the javaHost directly and don't proxy through the node server
@@ -277,6 +277,16 @@
                 var endpoint = JAVA_BASE_ENDPOINT + APPS_ENDPOINT + appId + ROLES_ENDPOINT + roleId + TABLES_ENDPOINT + tableId + '/field/' + fieldId + FIELD_RIGHTS;
                 return endpoint;
             },
+            resolveTablePropertiesEndpoint      : function(appId, tableId) {
+                var endpoint = EE_BASE_ENDPOINT + APPS_ENDPOINT + appId + TABLES_ENDPOINT + tableId + TABLES_PROPERTIES;
+                return endpoint;
+            },
+            resolveGetReqUserEndpoint       : function() {
+                return NODE_BASE_ENDPOINT + USERS_ENDPOINT + REQ_USER;
+            },
+            resolveTableComponentsEndpoint       : function(appId) {
+                return NODE_BASE_ENDPOINT + APPS_ENDPOINT + appId + TABLES_ENDPOINT + TABLE_COMPONENTS;
+            },
             defaultHeaders              : DEFAULT_HEADERS,
 
             /**
@@ -314,7 +324,7 @@
                 var opts;
                 if (isEE) {
                     opts = generateEERequestOpts(stringPath, method, subdomain);
-                }else {
+                } else {
                     opts = generateRequestOpts(stringPath, method, subdomain);
                 }
                 if (body) {
@@ -337,82 +347,50 @@
                 }
                 var reqInfo = opts.url;
                 log.debug('About to execute the request: ' + jsonBigNum.stringify(opts));
-                //Make request and return promise
-                var deferred = promise.pending();
-                apiBase.executeRequestRetryable(opts, 3).then(function(resp) {
-                    log.debug('Response for reqInfo ' + reqInfo + ' got success response' + resp);
-                    deferred.resolve(resp);
-                }).catch(function(error) {
-                    log.debug('Response ERROR! for reqInfo ' + reqInfo + ' got error response' + error);
-                    deferred.reject(error);
-                });
-                return deferred.promise;
-            },
 
-            executeEERequest              : function(stringPath, method, body, headers, params) {
-                //if there is a realm & we're not making a ticket request, use the realm subdomain request URL
-                var subdomain = '';
-                if (this.realm) {
-                    subdomain = this.realm.subdomain;
-                }
-                var opts = generateEERequestOpts(stringPath, method, subdomain);
-                if (body) {
-                    opts.body = jsonBigNum.stringify(body);
-                }
-                // if we have a GET request and have params to add (since GET requests don't use JSON body values)
-                // we have to add those to the end of the generated URL as ?param=value
-                if (params) {
-                    // remove the trailing slash and add the parameters
-                    opts.url = opts.url.substring(0, opts.url.length - 1) + params;
-                }
-                //Setup headers
-                if (headers) {
-                    opts.headers = headers;
-                } else {
-                    opts.headers = DEFAULT_HEADERS;
-                }
-                if (this.authTicket) {
-                    opts.headers[TICKET_HEADER_KEY] = this.authTicket;
-                }
-                var reqInfo = opts.url;
-                log.debug('About to execute the request: ' + jsonBigNum.stringify(opts));
                 //Make request and return promise
-                var deferred = promise.pending();
-                apiBase.executeRequestRetryable(opts, 3).then(function(resp) {
-                    log.debug('Response for reqInfo ' + reqInfo + ' got success response' + resp);
-                    deferred.resolve(resp);
-                }).catch(function(error) {
-                    log.debug('Response ERROR! for reqInfo ' + reqInfo + ' got error response' + error);
-                    deferred.reject(error);
-                });
-                return deferred.promise;
+                return apiBase.executeRequestRetryable(opts, 3);
             },
 
             executeRequestRetryable: function(opts, numRetries) {
-                var deferred = promise.pending();
                 var tries = numRetries;
-                request(opts, function(error, response) {
-                    if (error || response.statusCode !== 200) {
-                        if (tries > 1 && error && (error.code === ERROR_HPE_INVALID_CONSTANT || error.code === ERROR_ENOTFOUND)) {
-                            tries--;
-                            log.debug('Attempting a retry: ' + JSON.stringify(opts) + ' Tries remaining: ' + tries);
-                            apiBase.executeRequestRetryable(opts, tries).then(function(res2) {
-                                log.debug('Success following retry/retries');
-                                deferred.resolve(res2);
-                            }).catch(function(err2) {
-                                log.debug('Failure after retries');
-                                deferred.reject(err2);
-                            });
+
+                return new promise(function(resolve, reject) {
+                    request(opts, function(error, response) {
+                        if (error || response.statusCode !== 200) {
+                            // These specific errors were due to an environment issue in Jenkins that we needed to check for and retry
+                            if (tries > 1 && error && (error.code === ERROR_HPE_INVALID_CONSTANT || error.code === ERROR_ENOTFOUND)) {
+                                tries--;
+                                log.debug('Attempting a retry: ' + JSON.stringify(opts) + ' Tries remaining: ' + tries);
+                                apiBase.executeRequestRetryable(opts, tries).then(function(res2) {
+                                    log.debug('Success following retry/retries');
+                                    resolve(res2);
+                                }).catch(function(err2) {
+                                    log.debug('Failure after retries');
+                                    reject(err2);
+                                });
+                            } else {
+                                // We need to handle if we get an error back from the network call (for example a 'ECONNREFUSED 127.0.0.1:8081' error)
+                                // Or if we get an API response back but with a non 200 status code
+                                var errorMsg = error ? JSON.stringify(error) : '';
+                                var responseMsg = response ? 'Response statusCode: ' + response.statusCode + ', body: ' + response.body : '';
+
+                                // Nice logging for Node output
+                                log.error('Network request failed, no retries left or an unsupported error for retry found ' + JSON.stringify(opts));
+                                log.error(`Unknown failure mode. ${errorMsg} ${responseMsg}`);
+
+                                // Return whatever kind of object we get back for the test frameworks to do validation with
+                                if (error) {
+                                    return reject(error);
+                                } else {
+                                    return reject(response);
+                                }
+                            }
                         } else {
-                            log.error('Network request failed, no retries left or an unsupported error for retry found');
-                            log.info('Unknown failure mode. Error: ' + JSON.stringify(error) + ' response: ' + JSON.stringify(response));
-                            deferred.reject({error: error, response: transformResponseBodyToJsonObject(response)});
+                            resolve(response);
                         }
-                    } else {
-                        deferred.resolve(response);
-                    }
+                    });
                 });
-                return deferred.promise;
             },
 
             //Creates a REST request Object against the instance's realm using the configured javaHost
@@ -449,19 +427,19 @@
             //Create a realm for API tests to run against and generates a ticket
             initialize        : function() {
                 var self = this;
-                var deferred = promise.pending();
-                if (!self.realm) {
-                    /*
-                     * What follows are the steps needed to create a realm and a ticket for that realm such that
-                     * subsequent requests can be made to that are realm without worrying about ticket creation
-                     * or realm subdomain resolution.  The steps:
-                     *  1) create an admin ticket
-                     *  2) use the admin ticket to create a realm
-                     *  3) create a ticket valid on the realm in question
-                     *  4) If any step above fails, assert!
-                     */
-                    self.createTicket(ADMIN_REALM_ID)
-                        .then(function(authResponse) {
+
+                return new promise(function(resolve, reject) {
+                    if (!self.realm) {
+                        /*
+                         * What follows are the steps needed to create a realm and a ticket for that realm such that
+                         * subsequent requests can be made to that are realm without worrying about ticket creation
+                         * or realm subdomain resolution.  The steps:
+                         *  1) create an admin ticket
+                         *  2) use the admin ticket to create a realm
+                         *  3) create a ticket valid on the realm in question
+                         *  4) If any step above fails, assert!
+                         */
+                        return self.createTicket(ADMIN_REALM_ID).then(function(authResponse) {
                             //TODO: tickets come back quoted, invalid JSON, we regex the quotes away.  hack.
                             self.authTicket = authResponse.body.replace(/"/g, '');
                             var realmPromise;
@@ -470,32 +448,29 @@
                             } else {
                                 realmPromise = self.createRealm();
                             }
-                            realmPromise.then(function(realmResponse) {
+                            return realmPromise.then(function(realmResponse) {
                                 self.realm = JSON.parse(realmResponse.body);
-                                self.createTicket(self.realm.id)
-                                    .then(function(realmTicketResponse) {
-                                        self.authTicket = realmTicketResponse.body.replace(/"/g, '');
-                                        deferred.resolve(self.realm);
-                                    }).catch(function(realmTicketError) {
-                                        deferred.reject(realmTicketError);
-                                        assert(false, 'failed to create ticket for realm: ' + self.realm.id);
-                                    });
+                                return self.createTicket(self.realm.id).then(function(realmTicketResponse) {
+                                    self.authTicket = realmTicketResponse.body.replace(/"/g, '');
+                                    resolve(self.realm);
+                                }).catch(function(realmTicketError) {
+                                    return reject(realmTicketError);
+                                });
                             }).catch(function(realmError) {
-                                deferred.reject(realmError);
-                                assert(false, 'failed to create realm: ' + JSON.stringify(realmError));
+                                return reject(realmError);
                             });
                         }).catch(function(authError) {
-                        //If auth request fails, delete the realm & fail the tests
-                            self.cleanup();
-                            deferred.reject(authError);
-                            assert(false, 'failed to resolve ticket: ' + JSON.stringify(authError));
+                            //If auth request fails, delete the realm & fail the tests
+                            return self.cleanup().then(function() {
+                                return reject(authError);
+                            });
                         });
-                } else {
-                    //The realm already exists, no-op
-                    deferred.resolve(self.realm);
-                }
-                return deferred.promise;
-
+                    } else {
+                        //The realm already exists, no-op
+                        log.info('Realm already exists: ' + self.realm);
+                        resolve(self.realm);
+                    }
+                });
             },
             //Create realm helper method generates an arbitrary realm, calls execute request and returns a promise
             createRealm       : function() {

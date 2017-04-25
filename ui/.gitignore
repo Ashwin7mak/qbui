@@ -16,6 +16,7 @@ client-react/dist/
 
 # exclude express server local configuration and logs directory
 server/src/config/environment/local.js
+server/src/config/environment/e2e.js
 server/src/logs/
 
 # local mock
@@ -32,6 +33,8 @@ node_modules/
 
 # don't want local configs accidentally checked in
 wdio/config/wdio.conf.js
+tests.custom.webpack.js
+
 # generated error screenshots shouldn't be tracked either
 wdio/screenshots/
 

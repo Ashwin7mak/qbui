@@ -2,35 +2,62 @@ import React from 'react';
 import {shallow} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
 
-import Container, {ReportColumnHeaderMenu} from '../../../src/components/dataTable/reportGrid/reportColumnHeaderMenu';
+import {ReportColumnHeaderMenu, __RewireAPI__ as RewireAPI} from '../../../src/components/dataTable/reportGrid/reportColumnHeaderMenu';
 import * as FieldConsts from '../../../src/constants/schema';
-import {MenuItem} from 'react-bootstrap';
+import * as query from '../../../src/constants/query';
+import MenuItem from 'react-bootstrap/lib/MenuItem';
+import {CONTEXT} from '../../../src/actions/context';
+import serverTypeConstants from '../../../../common/src/constants';
 
 const testPrependText = 'groupTest';
 const MockLocale = {
     getMessage(messageKey) {return messageKey;}
 };
-const actions = {
-    sortReport() {},
-    groupReport() {}
-};
 const testFieldDef = {
     id: 13,
     datatypeAttributes: {type: FieldConsts.NUMERIC}
 };
-
+const testProps = {
+    appId: 1,
+    tblId: 2,
+    rptId: 3,
+    filter: "somefilter",
+    fieldDef: testFieldDef,
+    sortFids: [],
+    isOnlyOneColumnVisible: false,
+    loadDynamicReport: (context, appId, tblId, rptId, queryParams) => {},
+    hideColumn: (context, appId, tblId, rptId, params) => {}
+};
 let component;
 let instance;
-
 describe('ReportColumnHeaderMenu', () => {
     beforeEach(() => {
         jasmineEnzyme();
-
-        Container.__Rewire__('Locale', MockLocale);
+        RewireAPI.__Rewire__('Locale', MockLocale);
+        spyOn(testProps, 'loadDynamicReport').and.callThrough();
+        spyOn(testProps, 'hideColumn').and.callThrough();
     });
 
     afterEach(() => {
-        Container.__ResetDependency__('Locale');
+        RewireAPI.__ResetDependency__('Locale');
+        testProps.loadDynamicReport.calls.reset();
+        testProps.hideColumn.calls.reset();
+    });
+
+    describe('hasRequiredIds', () => {
+        it('returns true if the appropriate props have been passed in to be able to call sort, group, and hide actions', () => {
+            component = shallow(<ReportColumnHeaderMenu {...testProps}/>);
+            instance = component.instance();
+
+            expect(instance.hasRequiredIds()).toBeTruthy();
+        });
+
+        it('returns false if the required props to call sort, group, and hide actions are missing', () => {
+            component = shallow(<ReportColumnHeaderMenu/>);
+            instance = component.instance();
+
+            expect(instance.hasRequiredIds()).toBeFalsy();
+        });
     });
 
     describe('getSortAscText', () => {
@@ -360,46 +387,65 @@ describe('ReportColumnHeaderMenu', () => {
     });
 
     describe('Sort and Group', () => {
-        // For these tests we check to make sure the appropriate action has been set on a menu item
-        // and then make sure when that action is called, it calls the correct function passed in through props
-
-        beforeEach(() => {
-            Object.keys(actions).forEach(action => {
-                spyOn(actions, action);
-            });
-        });
-
-
         it('sorts a field in ascending order when that menu item is selected', () => {
-            component = shallow(<ReportColumnHeaderMenu {...actions} fieldDef={testFieldDef}/>);
+            component = shallow(<ReportColumnHeaderMenu {...testProps}/>);
             instance = component.instance();
 
             let sortingMenuItem = component.find(MenuItem).find({onSelect: instance.sortReportAscending});
             expect(sortingMenuItem).toBePresent();
 
+            spyOn(instance, "sortReport");
+
             expect(sortingMenuItem.find('.sortAscendMenuText')).toHaveText('report.menu.sort.lowToHigh'); // Returns key because of mocked locale
             instance.sortReportAscending();
 
-            expect(actions.sortReport).toHaveBeenCalledWith(testFieldDef, true, false);
+            expect(instance.sortReport).toHaveBeenCalledWith(true);
         });
 
 
         it('sorts a field in descending order when that menu item is selected', () => {
-            component = shallow(<ReportColumnHeaderMenu {...actions} fieldDef={testFieldDef}/>);
+            component = shallow(<ReportColumnHeaderMenu {...testProps}/>);
             instance = component.instance();
 
             let sortingMenuItem = component.find(MenuItem).find({onSelect: instance.sortReportDescending});
             expect(sortingMenuItem).toBePresent();
 
+            spyOn(instance, "sortReport");
+
             expect(sortingMenuItem.find('.sortDescendMenuText')).toHaveText('report.menu.sort.highToLow'); // Returns key because of mocked locale
             instance.sortReportDescending();
 
-            expect(actions.sortReport).toHaveBeenCalledWith(testFieldDef, false, false);
+            expect(instance.sortReport).toHaveBeenCalledWith(false);
+        });
+
+        it('calls loadDynamicReport to sort a report', () => {
+            component = shallow(<ReportColumnHeaderMenu {...testProps}/>);
+            instance = component.instance();
+
+            instance.sortReport(true, false);
+
+            let expectedQueryParams = {};
+            expectedQueryParams[query.SORT_LIST_PARAM] = '13';
+            expectedQueryParams[query.OFFSET_PARAM] = serverTypeConstants.PAGE.DEFAULT_OFFSET;
+            expectedQueryParams[query.NUMROWS_PARAM] = serverTypeConstants.PAGE.DEFAULT_NUM_ROWS;
+
+            expect(testProps.loadDynamicReport).toHaveBeenCalledWith(CONTEXT.REPORT.NAV, testProps.appId, testProps.tblId, testProps.rptId, true, testProps.filter, expectedQueryParams);
+        });
+
+        it('does not call the group action if the required props are not passed in', () => {
+            component = shallow(<ReportColumnHeaderMenu />);
+            instance = component.instance();
+
+            instance.groupReport(true, false);
+
+            expect(testProps.loadDynamicReport).not.toHaveBeenCalled();
         });
 
         it('groups a field in ascending order when that menu item is selected', () => {
-            component = shallow(<ReportColumnHeaderMenu {...actions} fieldDef={testFieldDef}/>);
+            component = shallow(<ReportColumnHeaderMenu {...testProps}/>);
             instance = component.instance();
+
+            spyOn(instance, "groupReport");
 
             let sortingMenuItem = component.find(MenuItem).find({onSelect: instance.groupReportAscending});
             expect(sortingMenuItem).toBePresent();
@@ -407,12 +453,14 @@ describe('ReportColumnHeaderMenu', () => {
             expect(sortingMenuItem.find('.groupAscendMenuText')).toHaveText('report.menu.group.lowToHigh'); // Returns key because of mocked locale
             instance.groupReportAscending();
 
-            expect(actions.groupReport).toHaveBeenCalledWith(testFieldDef, true);
+            expect(instance.groupReport).toHaveBeenCalledWith(true);
         });
 
         it('groups a field in descending order when that menu item is selected', () => {
-            component = shallow(<ReportColumnHeaderMenu {...actions} fieldDef={testFieldDef}/>);
+            component = shallow(<ReportColumnHeaderMenu {...testProps}/>);
             instance = component.instance();
+
+            spyOn(instance, "groupReport");
 
             let sortingMenuItem = component.find(MenuItem).find({onSelect: instance.groupReportDescending});
             expect(sortingMenuItem).toBePresent();
@@ -420,7 +468,78 @@ describe('ReportColumnHeaderMenu', () => {
             expect(sortingMenuItem.find('.groupDescendMenuText')).toHaveText('report.menu.group.highToLow'); // Returns key because of mocked locale
             instance.groupReportDescending();
 
-            expect(actions.groupReport).toHaveBeenCalledWith(testFieldDef, false);
+            expect(instance.groupReport).toHaveBeenCalledWith(false);
+        });
+
+        it('calls loadDynamicReport to group a report', () => {
+            component = shallow(<ReportColumnHeaderMenu {...testProps}/>);
+            instance = component.instance();
+
+            instance.groupReport(true);
+
+            let expectedQueryParams = {};
+            expectedQueryParams[query.SORT_LIST_PARAM] = '13:EQUALS';
+            expectedQueryParams[query.OFFSET_PARAM] = serverTypeConstants.PAGE.DEFAULT_OFFSET;
+            expectedQueryParams[query.NUMROWS_PARAM] = serverTypeConstants.PAGE.DEFAULT_NUM_ROWS;
+
+            expect(testProps.loadDynamicReport).toHaveBeenCalledWith(CONTEXT.REPORT.NAV, testProps.appId, testProps.tblId, testProps.rptId, true, testProps.filter, expectedQueryParams);
+        });
+
+        it('does not call the group action if the required props are not passed in', () => {
+            component = shallow(<ReportColumnHeaderMenu />);
+            instance = component.instance();
+
+            instance.groupReport(true);
+
+            expect(testProps.loadDynamicReport).not.toHaveBeenCalled();
+        });
+    });
+
+    describe('Add and Hide', () => {
+        it('hides a column when that menu item is selected', () => {
+            component = shallow(<ReportColumnHeaderMenu {...testProps}/>);
+            instance = component.instance();
+
+            let hidingMenuItem = component.find(MenuItem).find({onSelect: instance.hideThisColumn});
+            expect(hidingMenuItem).toBePresent();
+
+            spyOn(instance, "hideThisColumn");
+
+            expect(hidingMenuItem.find('.hideColumnText')).toHaveText('report.menu.hideColumn');
+            instance.hideThisColumn();
+
+            expect(instance.hideThisColumn).toHaveBeenCalled();
+        });
+
+        it('calls hideColumn to hide a field', () => {
+            component = shallow(<ReportColumnHeaderMenu {...testProps}/>);
+            instance = component.instance();
+
+            instance.hideThisColumn(testProps.fieldDef.id);
+
+            let params = {
+                columnId: testProps.fieldDef.id
+            };
+
+            expect(testProps.hideColumn).toHaveBeenCalledWith(CONTEXT.REPORT.NAV, testProps.appId, testProps.tblId, testProps.rptId, params);
+        });
+
+        it('does not call the action to hide a column if the required props are not passed in', () => {
+            component = shallow(<ReportColumnHeaderMenu isOnlyOneColumnVisible={false}/>);
+            instance = component.instance();
+
+            instance.hideThisColumn(testProps.fieldDef.id);
+
+            expect(testProps.hideColumn).not.toHaveBeenCalled();
+        });
+
+        it('does not call the action to hide a column if there is only one column currently visible', () => {
+            component = shallow(<ReportColumnHeaderMenu {...testProps} isOnlyOneColumnVisible={true}/>);
+            instance = component.instance();
+
+            instance.hideThisColumn(testProps.fieldDef.id);
+
+            expect(testProps.hideColumn).not.toHaveBeenCalled();
         });
     });
 });

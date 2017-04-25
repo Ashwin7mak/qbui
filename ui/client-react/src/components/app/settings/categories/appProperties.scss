@@ -1,0 +1,22 @@
+@import '../../../../assets/css/qbVariables';
+
+.appPropertiesContainer {
+    padding: 20px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: stretch;
+}
+
+.field {
+    padding-bottom: 25px;
+    flex: 1 1 auto;
+    .fieldLabel {
+        display: block;
+        color: $color-cyan-700;
+    }
+    .fieldValue {
+        display: block;
+        min-width: 0;
+    }
+}

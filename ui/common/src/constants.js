@@ -90,10 +90,44 @@
             META_DATA: {
                 WITH_REPORT_DEFAULTS: 'withReportDefaults'
             },
+            REALM_ID: 'realmId',
+            USER_ID: 'userId',
             //  legacy stack request paameters
             LEGACY_STACK: {
                 ACTION: 'a',
                 VALUE: 'value'
+            },
+            TABLE: {
+                NAME: 'name',
+                ICON: 'tableIcon',
+                RECORD_NAME: 'tableNoun',
+                DESC: 'description'
+            },
+            FIELD: {
+                NAME: 'name',
+                TYPE: 'type',
+                DATA_TYPE_ATTRS: 'datatypeAttributes'
+            },
+            REPORT: {
+                NAME: 'name',
+                TYPE: 'type',
+                SORT_LIST: 'sortList',
+                SORT: {
+                    FIELD_ID: 'fieldId',
+                    SORT_ORDER: 'sortOrder',
+                    GROUP_TYPE: 'groupType'
+                }
+            },
+            FORM: {
+                NAME: 'name',
+                TABS: 'tabs',
+                ORDER_IDX: 'orderIndex',
+                SECTIONS: 'sections',
+                PSEUDO: 'pseudo',
+                ELEMENTS: 'elements',
+                FORM_FIELD_EL: 'FormFieldElement',
+                TYPE: 'type',
+                SHOW_AS_RADIO: 'showAsRadio'
             }
         },
         FORMAT : {
@@ -179,7 +213,7 @@
         },
         PAGE : {
             DEFAULT_OFFSET : 0,
-            DEFAULT_NUM_ROWS: 20,
+            DEFAULT_NUM_ROWS: 100,
             MAX_NUM_ROWS: 1000
         },
         SORT_ORDER: {
@@ -196,12 +230,22 @@
             DATE_CREATED: "Date Created",
             RECORD_OWNER: "Record Owner"
         },
+        BUILTIN_FIELD_ID: {
+            DATE_CREATED: 1,
+            DATE_MODIFIED: 2,
+            RECORD_ID: 3,
+            RECORD_OWNER: 4,
+            LAST_MODIFIED_BY: 5,
+        },
         ERROR_CODE:{
             DTS_ERROR_CODE: "DataOperationOrSyncError"
         },
         PROTOCOL: {
             HTTP: 'http://',
             HTTPS: 'https://'
+        },
+        ROUTES: {
+            BASE_CLIENT_ROUTE: '/qbase'
         },
         HttpStatusCode: {
             'CONTINUE': 100,

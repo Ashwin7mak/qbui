@@ -1,9 +1,7 @@
 import React from 'react';
-import ReactBootstrap from 'react-bootstrap';
-import {Panel}  from 'react-bootstrap';
 import QBicon from '../qbIcon/qbIcon';
 import './qbpanel.scss';
-import {Collapse} from 'react-bootstrap';
+import Collapse from 'react-bootstrap/lib/Collapse';
 
 /**
  *  # QBPanel

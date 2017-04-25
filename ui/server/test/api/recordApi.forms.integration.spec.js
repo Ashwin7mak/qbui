@@ -62,11 +62,11 @@
                 // Build forms using the info from created app
                 forms = formGenerator.generateSingleTabAndSecFormWithAddAndEdit(app);
 
-                let createRecordPromises = [];
+                let promises = [];
                 app.tables.map((table, index) => {
-                    createRecordPromises.push(createRecordforAppTable(app, table));
+                    promises.push(createRecordforAppTable(app, table));
                 });
-                promise.all(createRecordPromises).then(returnedRecords => {
+                promise.all(promises).then(result => {
                     let createReportPromises = [];
                     app.tables.map((table, index) => {
                         createReportPromises.push(createReportforTable(app, table));
@@ -166,7 +166,7 @@
 
             return new promise(function(resolve, reject) {
                 recordBase.apiBase.executeRequest(formEndpoint, 'GET', null, null, null, true).then(function(result) {
-                    const responseBody = JSON.parse(result.body);
+                    const responseBody =  JSON.parse(result.body);
                     let resultFormID = responseBody.formId;
                     let resultAppID = responseBody.appId;
                     let resultTableID = responseBody.tableId;

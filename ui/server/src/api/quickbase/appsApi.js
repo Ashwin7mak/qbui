@@ -57,6 +57,45 @@
                 });
             },
 
+            getTableProperties: function(req, tableId) {
+                return new Promise((resolve, reject) =>{
+                    let opts = requestHelper.setOptions(req);
+                    opts.url = requestHelper.getRequestEeHost() + routeHelper.getTablePropertiesRoute(req.url, tableId);
+
+                    requestHelper.executeRequest(req, opts).then(
+                        (eeResponse) =>{
+                            resolve(JSON.parse(eeResponse.body));
+                        },
+                        (error) =>{
+                            log.error({req: req}, "appsApi.getTableProperties(): Error getting table properties");
+                            //always resolve - we do not want to block the get Apps call on this failure
+                            resolve({});
+                        }).catch((ex) =>{
+                            requestHelper.logUnexpectedError('appsApi.getTableProperties(): unexpected error getting table properties', ex, true);
+                            //always resolve - we do not want to block the get Apps call on this failure
+                            resolve({});
+                        });
+                });
+            },
+
+            /**
+             * Helper method to update the app's tables after table properties have been retrieved
+             * @param app
+             * @param tables
+             * @private
+             */
+            _mergeTableProps(app, tablePropsArray) {
+                //ideally there should be same number of responses as tables but just to be sure look up which response corresponds to which table
+                app.tables.map((table) => {
+                    let idx = _.findIndex(tablePropsArray, function(props) {return props.tableId === table.id;});
+                    if (idx !== -1) {
+                        Object.keys(tablePropsArray[idx]).forEach(function(key, index) {
+                            table[key] = tablePropsArray[idx][key];
+                        });
+                    }
+                });
+            },
+
             getApp: function(req, appId) {
                 return new Promise((resolve, reject) => {
                     let opts = requestHelper.setOptions(req);
@@ -67,7 +106,28 @@
                     requestHelper.executeRequest(req, opts).then(
                         (response) => {
                             let app = JSON.parse(response.body);
-                            resolve(app);
+                            let tablePromises = [];
+                            if (Array.isArray(app.tables)) {
+                                app.tables.map((table) => {
+                                    let tablesRootUrl = routeHelper.getTablesRoute(routeHelper.getAppsRoute(req.url, appId), table.id);
+                                    let tableReq = _.clone(req);
+                                    tableReq.url = tablesRootUrl;
+                                    tablePromises.push(this.getTableProperties(tableReq, table.id));
+                                });
+                                Promise.all(tablePromises).then(
+                                    (responses) => {
+                                        this._mergeTableProps(app, responses);
+                                        resolve(app);
+                                    },
+                                    (error) => {
+                                        log.error({req: req}, "appsApi.getTableProperties(): Error retrieving table properties.");
+                                        resolve(app);
+                                    }
+                                ).catch((ex) => {
+                                    requestHelper.logUnexpectedError('appsApi.getTableProperties(): unexpected error retrieving table properties', ex, true);
+                                    resolve(app);
+                                });
+                            }
                         },
                         (error) => {
                             log.error({req: req}, "appsApi.getApp(): Error retrieving app.");
@@ -82,17 +142,11 @@
 
             getHydratedApp: function(req, appId) {
                 return new Promise((resolve, reject) => {
-                    let appRequests = [this.getApp(req, appId), this.getAppAccessRights(req, appId), this.stackPreference(req, appId)];
+                    let appRequests = [this.getApp(req, appId), this.getAppAccessRights(req, appId)];
                     Promise.all(appRequests).then(
                         function(response) {
                             let app = response[0];
                             app.accessRights = response[1];
-                            if (response[2].errorCode === 0) {
-                                app.openInV3 = (response[2].value === true);
-                            } else {
-                                log.warn('Error fetching application stack preference.  Setting to open in V3.  Error: ' + response[2].errorText);
-                                app.openInV3 = true;
-                            }
                             resolve(app);
                         },
                         function(error) {
@@ -187,17 +241,23 @@
                     requestHelper.executeRequest(req, opts).then(
                         (response) => {
                             let users = {};
+                            let usersFormatted = [];
                             if (response.body) {
                                 users = JSON.parse(response.body);
                                 if (users) {
                                     //  convert id property to userId for consistency with user values in records
-                                    users.forEach(user => {
-                                        user.userId = user.id;
-                                        _.unset(user, "id");
+                                    Object.keys(users).forEach(function(key) {
+                                        users[key].forEach(user => {
+                                            user.userId = user.id;
+                                            _.unset(user, "id");
+                                            usersFormatted.push(user);
+                                        });
                                     });
                                 }
                             }
-                            resolve(users);
+                            //we need to return the users formatted with userId as an array of users for the user picker
+                            //we also need to return the hashmap given to use from core for the App User Management screen
+                            resolve([usersFormatted, users]);
                         },
                         (error) => {
                             log.error({req: req}, "Error getting app users in getAppUsers()");
@@ -237,58 +297,7 @@
                         reject(ex);
                     });
                 });
-            },
-
-            /**
-             * Supports both GET and POST request to resolve an applications run-time stack
-             * preference.
-             *
-             * For a GET request, will return which stack (mercury or classic) the application is
-             * configured to run in.
-             *
-             * For a POST request, will set the application stack (mercury or classic) preference
-             * on where the application is to be run.
-             *
-             * @param req
-             * @returns Promise
-             */
-            stackPreference: function(req, appId) {
-                let opts = requestHelper.setOptions(req);
-                opts.headers[constants.CONTENT_TYPE] = constants.APPLICATION_JSON;
-
-                //  get the request host to help buld the Quickbase classic route
-                let host = requestHelper.getRequestHost(req, true, true);
-                if (requestHelper.isPost(req)) {
-                    //  if a post request, then updating stack preference
-                    let resp = JSON.parse(opts.body);
-                    let value = resp[constants.REQUEST_PARAMETER.OPEN_IN_V3] === true ? 1 : 0;
-                    opts.url = host + routeHelper.getApplicationStackPreferenceRoute(appId, true, value);
-                } else {
-                    opts.url = host + routeHelper.getApplicationStackPreferenceRoute(appId);
-                }
-
-                log.debug("Legacy Stack preference endpoint: " + opts.url);
-
-                return new Promise((resolve) => {
-                    requestHelper.executeRequest(req, opts).then(
-                        (response) => {
-                            let msg = JSON.parse(response.body);
-                            if (msg.errorCode !== 0) {
-                                log.error({req: req}, opts.url);
-                            }
-                            resolve(msg);
-                        },
-                        (error) => {
-                            log.error({req: req, res:error}, opts.url);
-                            resolve({errorText: error ? error.message : 'Unknown error thrown calling for stack preference.'});
-                        }
-                    ).catch((ex) => {
-                        requestHelper.logUnexpectedError('Unexpected error calling legacy stack preference: ' + opts.url, ex, true);
-                        resolve(ex);
-                    });
-                });
             }
-
         };
         return appsApi;
     };

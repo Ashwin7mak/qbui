@@ -14,11 +14,11 @@
         MEDIUM_SIZE : 'medium',
         SMALL_SIZE  : 'small',
 
-        XLARGE_BP_WIDTH : 1441,
+        XLARGE_BP_WIDTH : 2048,
         LARGE_BP_WIDTH : 1025,
         MEDIUM_BP_WIDTH : 641,
         SMALL_BP_WIDTH : 500,
-        DEFAULT_HEIGHT : 1440,
+        DEFAULT_HEIGHT : 1536,
 
         //Wait time Objects
         shortWaitTimeMs : 5000,
@@ -26,17 +26,25 @@
         longWaitTimeMs : 30000,
         extraLongWaitTimeMs : 150000,
 
+        userTableFieldNames : ['Name', 'Role', 'Email', 'User name'],
+
         reportFieldNames : ['Record ID#', 'Text Field', 'Numeric Field', 'Numeric Currency Field', 'Numeric Percent Field', 'Numeric Rating Field',
-            'Date Field', 'Date Time Field', 'Time of Day Field', 'Duration Field', 'Checkbox Field', 'Phone Number Field',
-            'Email Address Field', 'URL Field', 'User Field'],
+            'Date Field', 'Date Time Field', 'Time Of Day Field', 'Duration Field', 'Checkbox Field', 'Phone Number Field',
+            'Email Address Field', 'Url Field', 'User Field'],
 
         TABLE1 : 0,
         TABLE2 : 1,
         TABLE3 : 2,
         TABLE4 : 3,
         TABLE5 : 4,
+        TABLE6 : 5,
         TABLE7 : 7,
         TABLE8 : 8,
+        TABLE9 : 9,
+        TABLE10 : 10,
+        TABLE11 : 11,
+        TABLE12 : 12,
+        TABLE13 : 13,
 
         MAX_PAGING_SIZE : clientConsts.PAGE.DEFAULT_NUM_ROWS,
         DEFAULT_NUM_RECORDS_TO_CREATE : 10,
@@ -288,7 +296,7 @@
                 fieldType: consts.SCALAR,
                 dataType: consts.TEXT
             };
-            tableToFieldToFieldTypeMap[table3Name][e2eConsts.reportFieldNames[2]] = {
+            tableToFieldToFieldTypeMap[table3Name]['Parent Record ID'] = {
                 fieldType: consts.SCALAR,
                 dataType: consts.NUMERIC
             };
@@ -297,7 +305,7 @@
                 fieldType: consts.SCALAR,
                 dataType: consts.TEXT
             };
-            tableToFieldToFieldTypeMap[table4Name][e2eConsts.reportFieldNames[2]] = {
+            tableToFieldToFieldTypeMap[table4Name]['Parent Record ID'] = {
                 fieldType: consts.SCALAR,
                 dataType: consts.NUMERIC
             };

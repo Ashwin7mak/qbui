@@ -1,12 +1,11 @@
 // action creators
 import * as actions from '../constants/actions';
 import AppService from '../services/appService';
+import RoleService from '../services/roleService';
+import UserService from '../services/userService';
 import Promise from 'bluebird';
-import _ from 'lodash';
-
 import Logger from '../utils/logger';
 import LogLevel from '../utils/logLevels';
-import constants from '../../../common/src/constants';
 import appsModel from '../models/appsModel';
 
 //  Custom handling of 'possible unhandled rejection' error,  because we don't want
@@ -21,84 +20,6 @@ Promise.onPossiblyUnhandledRejection(function(err) {
 });
 
 let appsActions = {
-
-    /**
-     * Return which stack (mercury or classic) the application is configured to be viewed.
-     * @param appId
-     * @returns Promise
-     */
-    getApplicationStack(appId) {
-        let logger = new Logger();
-        return new Promise((resolve, reject) => {
-            if (appId) {
-                logger.debug('Get application stack preference for appId ' + appId);
-                let appService = new AppService();
-
-                appService.getApplicationStack(appId).then(
-                    (response) => {
-                        logger.debug('ApplicationService getApplicationStack success');
-                        //TODO dispatch success event
-                        resolve();
-                    },
-                    (error) => {
-                        logger.parseAndLogError(LogLevel.ERROR, error.response, 'ApplicationService.getApplicationStack:');
-                        //TODO dispatch failure event
-                        reject();
-                    }
-                ).catch((ex) => {
-                    // TODO - remove catch block and update onPossiblyUnhandledRejection bluebird handler
-                    logger.logException(ex);
-                    reject();
-                });
-            } else {
-                logger.error('ApplicationService.getApplicationStack: Missing required appId input parameter.');
-                //TODO: dispatch error event
-                reject();
-            }
-        });
-    },
-
-    /**
-     * Set the stack(mercury or classic) where the application is to be viewed.
-     *
-     * @param appId
-     * @param openInV3
-     * @returns Promise
-     */
-    setApplicationStack(appId, openInV3) {
-        let logger = new Logger();
-        return new Promise((resolve, reject) => {
-            if (appId && _.isBoolean(openInV3)) {
-                logger.debug('Setting application stack preference. AppId:' + appId + '; openInV3:' + openInV3);
-
-                let appService = new AppService();
-                let params = {};
-                params[constants.REQUEST_PARAMETER.OPEN_IN_V3] = openInV3;
-
-                this.dispatch(actions.SET_APP_STACK);
-                appService.setApplicationStack(appId, params).then(
-                    (response) => {
-                        logger.debug('ApplicationService setApplicationStack success');
-                        this.dispatch(actions.SET_APP_STACK_SUCCESS, {appId, openInV3});
-                        resolve();
-                    },
-                    (error) => {
-                        logger.parseAndLogError(LogLevel.ERROR, error.response, 'ApplicationService.setApplicationStack:');
-                        this.dispatch(actions.SET_APP_STACK_FAILED);
-                        reject();
-                    }
-                ).catch((ex) => {
-                    // TODO - remove catch block and update onPossiblyUnhandledRejection bluebird handler
-                    logger.logException(ex);
-                    reject();
-                });
-            } else {
-                logger.error('ApplicationService.getApplicationStack: Missing required method parameters. AppId:' + appId + ' ;openInV3:' + openInV3);
-                //TODO: dispatch error event
-                reject();
-            }
-        });
-    },
 
     /**
      * Retrieve a list of applications for this user.
@@ -140,11 +61,10 @@ let appsActions = {
         //  promise is returned in support of unit testing only
         return new Promise((resolve, reject) => {
             this.dispatch(actions.SELECT_APP, appId);
-
             let appService = new AppService();
 
             // fetch the app users list if we don't have it already
-            if (appId !== this.selectedAppId) {
+            if (appId && appId !== this.selectedAppId) {
                 appService.getAppUsers(appId).then(response => {
                     this.selectedAppId = appId;
                     this.dispatch(actions.LOAD_APP_USERS_SUCCESS, response.data);
@@ -159,8 +79,51 @@ let appsActions = {
         });
     },
 
+    /**
+     * Retrieve a list of roles for this app.
+     *
+     * @param appId
+     * @returns Promise
+     */
+    loadAppRoles(appId) {
+        //  promise is returned in support of unit testing only
+        return new Promise((resolve, reject) => {
+            let roleService = new RoleService();
+            // fetch the app roles list if we don't have it already
+            if (!this.appRoles || this.appRoles.length === 0) {
+                roleService.getAppRoles(appId).then(response => {
+                    this.dispatch(actions.LOAD_APP_ROLES_SUCCESS, response.data);
+                    resolve();
+                }, () => {
+                    this.dispatch(actions.LOAD_APP_ROLES_FAILED);
+                    reject();
+                });
+            } else {
+                resolve();
+            }
+        });
+    },
+
+    loadAppOwner(userId) {
+        //  promise is returned in support of unit testing only
+        return new Promise((resolve, reject) => {
+            let userService = new UserService();
+            userService.getUser(userId).then(response => {
+                this.dispatch(actions.LOAD_APP_OWNER_SUCCESS, response.data);
+                resolve();
+            }, () => {
+                this.dispatch(actions.LOAD_APP_OWNER_FAILED);
+                reject();
+            });
+        });
+    },
+
     selectTableId(tblId) {
         this.dispatch(actions.SELECT_TABLE, tblId);
+    },
+
+    updateTableProps(tableId, tableInfo) {
+        this.dispatch(actions.UPDATED_TABLE_PROPS, {tableId: tableId, tableInfo: tableInfo});
     }
 };
 

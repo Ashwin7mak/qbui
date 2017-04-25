@@ -125,6 +125,11 @@ html, body {
     -ms-flex: 1 auto;
 }
 
+.loadingScreen .qbLoader {
+    position: absolute;
+    width: 0;
+}
+
 /* Small breakpoing */
 @media (max-width: 640px) {
     .loadingScreen .leftNav {
@@ -146,6 +151,10 @@ html, body {
     .loadingScreen .cards {
         display: -ms-flexbox;
         display: flex;
+    }
+
+    .loadingScreen .qbLoader {
+        position: relative;
     }
 }
 
@@ -180,11 +189,6 @@ html, body {
     50% {
         opacity: 1;
     }
-}
-
-.loadingScreen .qbLoader {
-    position: absolute;
-    width: 0;
 }
 
 .loadingScreen .qbLoaderCircle {

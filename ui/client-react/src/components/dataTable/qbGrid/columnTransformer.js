@@ -13,8 +13,9 @@ class ColumnTransformer {
      * (e.g., in a report, the fieldId is part of each cell data and is matched to the fieldId of the column. It is an actual value (e.g., 3) and not a property name (e.g., fieldId)
      * @param headerClasses Optionally any css classes to add to the column header element
      * @param headerLabelClasses Optionally any css classes to add to the column header label element
+     * @param isHidden should this be rendered on screen
      */
-    constructor(headerLabel, cellIdentifierValue, headerClasses = '', headerLabelClasses = '') {
+    constructor(headerLabel, cellIdentifierValue, headerClasses = '', headerLabelClasses = '', isHidden = false) {
         this.headerLabel = headerLabel;
         this.headerClasses = headerClasses;
         this.headerLabelClasses = headerLabelClasses;
@@ -23,6 +24,7 @@ class ColumnTransformer {
         this.headerMenuComponent = null;
         this.headerMenuProps = {};
         this.classes = headerClasses;
+        this.isHidden = isHidden;
     }
 
     /**
@@ -88,7 +90,7 @@ class ColumnTransformer {
             headerComponent = (
                 <span className={this.headerClasses}>
                     <span className={this.headerLabelClasses}>
-                        {this.headerLabel}
+                        {this.headerLabel.toUpperCase()}
                     </span>
                     <div className="headerMenu">
                         <MenuComponent {...this.headerMenuProps} />

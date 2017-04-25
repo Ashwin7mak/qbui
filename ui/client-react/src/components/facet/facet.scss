@@ -36,7 +36,7 @@
     }
 
     .facetButtons {
-        color: $iconfont-on-light-normal-color;
+        color: $icon-color-hover;
 
         @include small-breakpoint {
             color: $secondary-bar-color;
@@ -52,10 +52,14 @@
     }
 
     .filterButton {
-        font-size: 20px;
+        font-size: 18px;
 
         &.qbIcon {
             display: inline;
+        }
+
+        &:hover {
+            color: $icon-light-color-hover;
         }
     }
 
@@ -70,6 +74,7 @@
     width: 300px;
     position: absolute;
     margin-left: -29px;
+    padding: 0;
 
     > .arrow {
         left: 13% !important;
@@ -80,6 +85,7 @@
         margin: 0;
         max-height: 280px;
         overflow-y: auto;
+        font-family: Lato, "Open Sans", Arial, Sans-Serif;
 
         @include height-medium-breakpoint {
             max-height: 420px;
@@ -155,9 +161,10 @@
     }
 
     .panel-default > .panel-heading .panel-title .facetName {
-        font-size: 16px;
+        font-size: 14px;
+        font-weight: normal;
         margin: 0;
-        padding: 10px 15px;
+        padding: 8px 15px;
     }
 
     .selectionInfo.small {
@@ -247,6 +254,7 @@
         color: $facetmenu-facet-token-color;
         display: flex;
         flex-direction: column;
+        border: 1px solid $facetmenu-facet-token-border-color;
 
         .selectedTokenName {
             white-space: normal;

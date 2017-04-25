@@ -6,7 +6,8 @@ import QbHeaderCell from './qbHeaderCell';
 import QbRow from './qbRow';
 import QbCell from './qbCell';
 import {UNSAVED_RECORD_ID} from '../../../constants/schema';
-import RowActions, {SELECT_ROW_CHECKBOX} from './rowActions';
+import RowActions from './rowActions';
+import {SELECT_ROW_CHECKBOX} from '../../../../../reuse/client/src/components/rowActions/rowActions';
 import QbIcon from '../../qbIcon/qbIcon';
 import CollapsedGroupsHelper from './collapsedGroupHelper';
 
@@ -122,7 +123,10 @@ const QbGrid = React.createClass({
 
         /**
          * Flag to include the first column that includes row specific actions. Currently requires fluxxor/FluxMixin to be available. */
-        showRowActionsColumn: PropTypes.bool
+        showRowActionsColumn: PropTypes.bool,
+
+        // relationship phase-1, will need remove when we allow editing
+        phase1: PropTypes.bool
     },
 
     getDefaultProps() {
@@ -202,19 +206,33 @@ const QbGrid = React.createClass({
     },
 
     /**
-     * Render a single column
+     * Gets all non-hidden columns.
      */
-    getColumns() {
-        return this.props.columns.map(column => {
-            try {
-                return column.addFormatter(this.renderCell).addHeaderMenu(this.props.menuComponent, this.props.menuProps).getGridHeader();
-            } catch (err) {
-                // If the column is not a type of ColumnTransformer with the appropriate methods, still pass through the column as the dev may have wanted to use a plain object (i.e., in the component library)
-                // but provide a warning in case using the ColumnTransformer class was forgotten.
-                logger.warn('The columns passed to QbGrid are not instances of ColumnTransformer. Use the ColumnTransformer helper class in the QbGrid folder for better results in the grid.');
-                return column;
-            }
+    getVisibleColumns() {
+        let visibleColumns = this.props.columns.filter(column => {
+            return !column.isHidden;
         });
+        return visibleColumns.map(column => {
+            return this.getColumn(column);
+        });
+    },
+
+    /**
+     * Renders a single column.
+     */
+    getColumn(column) {
+        try {
+            column.addFormatter(this.renderCell);
+            if (!this.props.phase1) {
+                column.addHeaderMenu(this.props.menuComponent, this.props.menuProps);
+            }
+            return column.getGridHeader();
+        } catch (err) {
+            // If the column is not a type of ColumnTransformer with the appropriate methods, still pass through the column as the dev may have wanted to use a plain object (i.e., in the component library)
+            // but provide a warning in case using the ColumnTransformer class was forgotten.
+            logger.warn('The columns passed to QbGrid are not instances of ColumnTransformer. Use the ColumnTransformer helper class in the QbGrid folder for better results in the grid.');
+            return column;
+        }
     },
 
     /**
@@ -317,27 +335,28 @@ const QbGrid = React.createClass({
     handleScroll() {
 
         let scrolled = this.tableRef;
+        if (scrolled) {
+            let currentLeftScroll = scrolled.scrollLeft;
+            let currentTopScroll = scrolled.scrollTop;
 
-        let currentLeftScroll = scrolled.scrollLeft;
-        let currentTopScroll = scrolled.scrollTop;
+            // move the headers down to their original positions
+            let stickyHeaders = scrolled.getElementsByClassName('qbHeaderCell');
+            for (let i = 0; i < stickyHeaders.length; i++) {
+                let translate = "translate(0," + currentTopScroll + "px)";
+                stickyHeaders[i].style.transform = translate;
+            }
 
-        // move the headers down to their original positions
-        let stickyHeaders = scrolled.getElementsByClassName('qbHeaderCell');
-        for (let i = 0; i < stickyHeaders.length; i++) {
-            let translate = "translate(0," + currentTopScroll + "px)";
-            stickyHeaders[i].style.transform = translate;
-        }
+            // move the sticky cells (1st col) right to their original positions
+            let stickyCells = scrolled.getElementsByClassName('stickyCell');
 
-        // move the sticky cells (1st col) right to their original positions
-        let stickyCells = scrolled.getElementsByClassName('stickyCell');
+            stickyCells[0].style.left = currentLeftScroll + 'px';
+            stickyCells[0].style.right = 0;
+            stickyCells[0].style.bottom = 0;
 
-        stickyCells[0].style.left = currentLeftScroll + 'px';
-        stickyCells[0].style.right = 0;
-        stickyCells[0].style.bottom = 0;
-
-        for (let i = 1; i < stickyCells.length; i++) {
-            let translate = "translate(" + currentLeftScroll + "px,0)";
-            stickyCells[i].style.transform = translate;
+            for (let i = 1; i < stickyCells.length; i++) {
+                let translate = "translate(" + currentLeftScroll + "px,0)";
+                stickyCells[i].style.transform = translate;
+            }
         }
     },
 
@@ -360,18 +379,18 @@ const QbGrid = React.createClass({
                         transforms: [this.getActionCellProps],
                     }
                 }],
-                ...this.getColumns()
+                ...this.getVisibleColumns()
             ];
         } else {
-            columns = this.getColumns();
+            columns = this.getVisibleColumns();
         }
-
         return (
 
             <Loader loaded={!this.props.loading} options={SpinnerConfigurations.LARGE_BREAKPOINT}>
                 <Table.Provider
                     ref="qbGridTable"
-                    className="qbGrid"
+                    // Turn off hover effects when in inline editing mode
+                    className={`qbGrid${this.props.isInlineEditOpen ? ' inlineEditing' : ''}`}
                     columns={columns}
                     onScroll={this.handleScroll}
                     components={{

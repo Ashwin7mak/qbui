@@ -1,4 +1,5 @@
 import * as shellActions from '../../src/actions/shellActions';
+import {__RewireAPI__ as shellActionsRewireAPI} from '../../src/actions/shellActions';
 import * as types from '../../src/actions/types';
 
 let smallBreakpoint = false;
@@ -20,20 +21,20 @@ describe('Shell actions', () => {
 
     it('create an action to toggle left nav for small breakpoint', () => {
         smallBreakpoint = true;
-        shellActions.__Rewire__('Breakpoints', BreakpointsMock);
+        shellActionsRewireAPI.__Rewire__('Breakpoints', BreakpointsMock);
 
         const navState = true;
         expect(shellActions.toggleLeftNav(navState)).toEqual({type: types.TOGGLE_LEFT_NAV_VISIBLE, navState});
-        shellActions.__ResetDependency__('Breakpoints');
+        shellActionsRewireAPI.__ResetDependency__('Breakpoints');
     });
 
     it('create an action to toggle left nav for non-small breakpoint', () => {
         smallBreakpoint = false;
-        shellActions.__Rewire__('Breakpoints', BreakpointsMock);
+        shellActionsRewireAPI.__Rewire__('Breakpoints', BreakpointsMock);
 
         const navState = true;
         expect(shellActions.toggleLeftNav(navState)).toEqual({type: types.TOGGLE_LEFT_NAV_EXPANDED, navState});
-        shellActions.__ResetDependency__('Breakpoints');
+        shellActionsRewireAPI.__ResetDependency__('Breakpoints');
     });
 
     it('should create an action to show row actions menu', () => {
@@ -51,4 +52,10 @@ describe('Shell actions', () => {
     it('should create an action to show error dialog', () => {
         expect(shellActions.showErrorMsgDialog()).toEqual({type: types.SHOW_ERROR_MSG_DIALOG});
     });
+
+    it('should create an action to change locale', () => {
+        let locale = 'en-us';
+        expect(shellActions.changeLocale(locale)).toEqual({type: types.CHANGE_LOCALE, locale});
+    });
+
 });

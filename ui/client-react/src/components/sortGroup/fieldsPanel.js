@@ -1,11 +1,11 @@
 import React from 'react';
 import {I18nMessage} from '../../utils/i18nMessage';
 import _ from 'lodash';
-import Logger from '../../utils/logger';
-import {ListGroup, ListGroupItem, Panel} from 'react-bootstrap';
+import ListGroup from 'react-bootstrap/lib/ListGroup';
+import ListGroupItem from 'react-bootstrap/lib/ListGroupItem';
+import Panel from 'react-bootstrap/lib/Panel';
 import QBToolTip from '../qbToolTip/qbToolTip';
 import WindowLocationUtils from '../../utils/windowLocationUtils';
-import QBicon from '../qbIcon/qbIcon';
 import './sortAndGroup.scss';
 
 
@@ -133,7 +133,7 @@ const FieldsPanel = React.createClass({
         }
         return (
             <ListGroup>{items}</ListGroup>
-           );
+        );
     },
 
     getFieldsInReportOrder(choicesList, usedInReport) {

@@ -27,7 +27,7 @@
         eeHostEnable: false,
 
         // api rest server endpoints for legacy quickbase..environments must configure
-        legacyHost: '',
+        legacyBase: '',
 
         // when starting up express server, fork as many listener forks as there are cpu cores.
         forkWorkers: false

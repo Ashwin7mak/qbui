@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {shallow} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
 
-import {FormBuilderCustomDragLayer, __RewireAPI__ as DragLayerRewireAPI} from '../../../src/components/formBuilder/formBuilderCustomDragLayer';
+import {FormBuilderCustomDragLayer, TOKEN_WIDTH, TOKEN_HEIGHT, TOKEN_ICON_WIDTH, __RewireAPI__ as DragLayerRewireAPI} from '../../../src/components/formBuilder/formBuilderCustomDragLayer';
 import FieldToken from '../../../src/components/formBuilder/fieldToken/fieldToken';
 import consts from '../../../../common/src/constants';
 import draggableTypes from '../../../src/components/formBuilder/draggableItemTypes';
@@ -47,6 +47,13 @@ describe('FormBuilderCustomDragLayer', () => {
             expect(component.find(FieldToken)).not.toBePresent();
         });
 
+        it('calls getMessage when a valid field type is passed through and name is not available', () => {
+            let item = {relatedField: {datatypeAttributes: {type: consts.NUMERIC}}};
+            component = shallow(<FormBuilderCustomDragLayer item={item} isDragging={true} itemType={draggableTypes.FIELD}/>);
+
+            expect(mockLocale.getMessage).toHaveBeenCalled();
+        });
+
         let testCases = [
             {
                 description: 'renders a default FieldToken',
@@ -62,9 +69,9 @@ describe('FormBuilderCustomDragLayer', () => {
             },
             {
                 description: 'uses the field type if present',
-                item: {relatedField: {datatypeAttributes: {type: 'custom type'}}},
+                item: {relatedField: {datatypeAttributes: {type: consts.NUMERIC}}},
                 expectedTitle: testFieldName,
-                expectedType: 'custom type'
+                expectedType: 2
             }
         ];
 
@@ -85,16 +92,34 @@ describe('FormBuilderCustomDragLayer', () => {
     });
 
     describe('getItemStyles', () => {
+        afterEach(() => {
+            DragLayerRewireAPI.__ResetDependency__('Device');
+        });
+
         it('hides the dragging preview if there is no position', () => {
             component = shallow(<FormBuilderCustomDragLayer isDragging={true} />);
 
             expect(component.find('.previewContainer')).toHaveProp('style', {display: 'none'});
         });
 
-        it('places the drag preview (specifically the field icon) under the cursor', () => {
+        it('places the drag preview (specifically the field icon) under the cursor on non-touch devices', () => {
+            DragLayerRewireAPI.__Rewire__('Device', {isTouch: () => false});
             component = shallow(<FormBuilderCustomDragLayer
                 isDragging={true}
-                currentOffset={{x: 17, y: 17}}
+                currentOffset={{x: TOKEN_ICON_WIDTH / 2, y: TOKEN_HEIGHT / 2}}
+            />);
+
+            expect(component.find('.previewContainer')).toHaveProp('style', {
+                transform: 'translate(0px, 0px)',
+                WebkitTransform: 'translate(0px, 0px)'
+            });
+        });
+
+        it('centers the drag preview under the cursor on touch devices', () => {
+            DragLayerRewireAPI.__Rewire__('Device', {isTouch: () => true});
+            component = shallow(<FormBuilderCustomDragLayer
+                isDragging={true}
+                currentOffset={{x: TOKEN_WIDTH / 2, y: TOKEN_HEIGHT / 2}}
             />);
 
             expect(component.find('.previewContainer')).toHaveProp('style', {

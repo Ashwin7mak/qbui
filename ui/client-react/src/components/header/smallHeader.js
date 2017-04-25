@@ -1,9 +1,9 @@
 import React from 'react';
 import QBicon from '../qbIcon/qbIcon';
 import {I18nMessage} from '../../utils/i18nMessage';
-import _ from 'lodash';
 import SearchBox from '../search/searchBox';
-import {OverlayTrigger, Tooltip} from 'react-bootstrap';
+import OverlayTrigger from 'react-bootstrap/lib/OverlayTrigger';
+import Tooltip from 'react-bootstrap/lib/Tooltip';
 import './smallHeader.scss';
 import {connect} from 'react-redux';
 import * as ShellActions from '../../actions/shellActions';

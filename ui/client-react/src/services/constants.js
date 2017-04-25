@@ -19,6 +19,7 @@ export default {
     BASE_URL: {
         QUICKBASE   : '/api/api/' + Configuration.api.qbVersion,
         EXPERIENCE  : '/ee/' + Configuration.api.eeVersion,
+        AUTOMATION  : '/we/workflow',          // + Configuration.api.automationVersion,
         NODE        : '/api/n/' + Configuration.api.nodeVersion,
         LEGACY      : '/api/l/' + Configuration.api.legacyVersion
     },
@@ -38,6 +39,14 @@ export default {
     USERS               : 'users',
     RIGHTS              : 'accessRights',
 
+    FEATURE_SWITCHES    : 'featureSwitches',
+    FEATURE_OVERRIDES   : 'overrides',
+    FEATURE_STATES      : 'featureStates',
+
+    ROLES               : 'roles',
+    TICKET              : 'ticket',
+    ADMIN               : 'admin',
+
     // Node Entity actions
     FORMCOMPONENTS      : 'formComponents',
     HOMEPAGE            : 'homePage',
@@ -46,7 +55,8 @@ export default {
     INVOKE              : 'invoke',
     PARSE               : 'parse',
     BULK                : 'bulk',
-
+    REQUSER             : 'reqUser',
+    TABLECOMPONENTS     : 'tableComponents',
     // Legacy actions
     STACK               : 'stack'
 };

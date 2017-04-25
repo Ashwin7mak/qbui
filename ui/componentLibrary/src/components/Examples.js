@@ -22,7 +22,7 @@ import UserFieldValueRendererExample from 'raw!../examples/UserFieldValueRendere
 import DurationFieldValueRendererExample from 'raw!../examples/DurationFieldValueRendererExample.js';
 
 import QBPanelExample from 'raw!../examples/QBPanelExample.js';
-import QBIconExample from 'raw!../examples/QBIconExample.js';
+import IconExample from 'raw!../examples/IconExample.js';
 
 import TrowserExample from 'raw!../examples/TrowserExample.js';
 import QBModalExample from 'raw!../examples/QBModalExample.js';
@@ -33,6 +33,17 @@ import PhoneFieldValueEditorExample from 'raw!../examples/PhoneFieldValueEditorE
 import PhoneFieldValueRendererExample from 'raw!../examples/PhoneFieldValueRendererExample.js';
 import DurationFieldValueEditorExample from 'raw!../examples/DurationFieldValueEditorExample.js';
 import QbGridExample from 'raw!../examples/QbGridExample.js';
+import SideMenuBaseExample from 'raw!../examples/SideMenuBaseExample.js';
+import SideTrowserBaseExample from 'raw!../examples/SideTrowserBaseExample.js';
+import IconChooserExample from 'raw!../examples/IconChooserExample.js';
+import IconInputBoxExample from 'raw!../examples/IconInputBoxExample.js';
+import TopNavExample from 'raw!../examples/TopNavExample.js';
+import StageExample from 'raw!../examples/StageExample.js';
+import TooltipExample from 'raw!../examples/TooltipExample.js';
+import StandardLeftNavExample from 'raw!../examples/StandardLeftNavExample.js';
+import PaginationExample from 'raw!../examples/PaginationExample.js';
+// import RowActionsExample from 'raw!../examples/RowActionsExample.js';
+import NotificationManagerExample from 'raw!../examples/NotificationManagerExample.js';
 // END OF IMPORT STATEMENTS
 // The comment above is used for a grunt task. Please do not delete.
 
@@ -60,7 +71,7 @@ export default {
     UserFieldValueEditor: UserFieldValueEditorExample,
     UserFieldValueRenderer: UserFieldValueRendererExample,
     QBPanel: QBPanelExample,
-    QBIcon: QBIconExample,
+    Icon: IconExample,
     QBModal: QBModalExample,
     AlertBanner: AlertBannerExample,
     PageTitle: PageTitleExample,
@@ -70,6 +81,17 @@ export default {
     DurationFieldValueRenderer: DurationFieldValueRendererExample,
     DurationFieldValueEditor: DurationFieldValueEditorExample,
     QbGrid: QbGridExample,
+    SideMenuBase: SideMenuBaseExample,
+    SideTrowserBase: SideTrowserBaseExample,
+    IconChooser: IconChooserExample,
+    IconInputBox: IconInputBoxExample,
+    TopNav: TopNavExample,
+    Stage: StageExample,
+    Tooltip: TooltipExample,
+    StandardLeftNav: StandardLeftNavExample,
+    Pagination: PaginationExample,
+    // RowActions: RowActionsExample,
+    NotificationManager: NotificationManagerExample,
     // END OF EXPORT
     // The comment above is used for a grunt task. Please do not delete.
 };

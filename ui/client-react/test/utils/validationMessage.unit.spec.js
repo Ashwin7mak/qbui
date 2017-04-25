@@ -1,4 +1,4 @@
-import ValidationMessage from '../../src/utils/validationMessage';
+import ValidationMessage, {__RewireAPI__ as ValidationMessageRewireAPI} from '../../src/utils/validationMessage';
 
 describe('ValidationMessage', () => {
     'use strict';
@@ -8,13 +8,13 @@ describe('ValidationMessage', () => {
     };
 
     beforeEach(() => {
-        ValidationMessage.__Rewire__('Locale', mockLocale);
+        ValidationMessageRewireAPI.__Rewire__('Locale', mockLocale);
         spyOn(mockLocale, 'getMessage').and.callThrough();
     });
 
     afterEach(() => {
         mockLocale.getMessage.calls.reset();
-        ValidationMessage.__ResetDependency__('Locale');
+        ValidationMessageRewireAPI.__ResetDependency__('Locale');
     });
 
     describe('error message key gets i18n message', () => {

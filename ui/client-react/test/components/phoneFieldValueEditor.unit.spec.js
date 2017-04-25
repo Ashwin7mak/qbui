@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import TestUtils, {Simulate} from 'react-addons-test-utils';
 import * as phoneNumberFormatter from '../../../common/src/formatter/phoneNumberFormatter';
-import PhoneFieldValueEditor from '../../src/components/fields/phoneFieldValueEditor';
+import PhoneFieldValueEditor, {__RewireAPI__ as PhoneFieldValueEditorRewireAPI} from '../../src/components/fields/phoneFieldValueEditor';
 import FieldValueEditor from '../../src/components/fields/fieldValueEditor';
 import FieldFormats from '../../src/utils/fieldFormats';
 import {ERROR_CSS_CLASSES} from '../../src/constants/componentConstants';
@@ -52,11 +52,11 @@ describe('PhoneFieldValueEditor', () => {
     };
 
     beforeAll(() => {
-        PhoneFieldValueEditor.__Rewire__('Locale', mockLocale);
+        PhoneFieldValueEditorRewireAPI.__Rewire__('Locale', mockLocale);
     });
 
     afterAll(() => {
-        PhoneFieldValueEditor.__ResetDependency__('Locale');
+        PhoneFieldValueEditorRewireAPI.__ResetDependency__('Locale');
     });
 
     it('allows a user to edit the value of a phone number', () => {

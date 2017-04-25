@@ -1,0 +1,100 @@
+@import '../../assets/css/qbVariables';
+
+.iconChooser {
+
+    display: flex;
+    flex-direction: column;
+    border: 1px solid $color-black-400;
+    background-color: $color-black-100;
+    padding: 2px;
+    padding-right: 0;
+
+    .qbIcon {
+        font-size: 24px;
+        width: 32px;
+        height: 32px;
+    }
+
+    .topRow {
+        display: flex;
+        flex-shrink: 0;
+        overflow: hidden;
+        .iconSearch {
+            margin: 2px;
+            input {
+                height: 30px;
+                width: 210px;
+            }
+        }
+        .showAllToggle {
+            display: flex;
+            flex-wrap: nowrap;
+            color: $color-black-700;
+            text-align: center;
+
+            margin: 4px 12px 4px 4px;
+            align-items: center;
+            background-color: $iconchooserbutton-background-color;
+            border: 0;
+            padding: 0;
+
+            .showAllSelectedIcon {
+                margin-right: -5px;
+                height: 28px;
+            }
+            .toggleIcon {
+                width: 24px;
+                height: 22px;
+                font-size: 18px;
+            }
+        }
+    }
+    .allIcons {
+        margin-top: 10px;
+        display: flex;
+        flex-wrap: wrap;
+        overflow-y: auto;
+        margin-left: -2px;
+
+        .iconButton {
+            background-color: $iconchooserbutton-background-color;
+            border: 0;
+            padding: 0;
+            margin: 6px;
+
+            .qbIcon {
+                color: $color-black-700;
+                padding: 4px;
+
+            }
+            .qbIcon:hover {
+                background-color: $color-cyan-600;
+                color: $color-black-100;
+                border-radius: $radius-base * 2;
+            }
+        }
+    }
+
+    &.closed {
+        .iconSearch {
+            display: none;
+        }
+        .allIcons {
+            visibility: hidden;
+        }
+    }
+
+    .qbIcon.toggleIcon {
+        transition: transform 300ms ease-in;
+        transform-origin: center 9px;
+        transform: rotate(0);
+    }
+
+    &.open {
+        .qbIcon.toggleIcon {
+            transform-origin: center 9px;
+            transform: rotate(-180deg);
+        }
+    }
+}
+

@@ -1,13 +1,14 @@
 import React from 'react';
 import Stage from '../stage/stage';
-import TableIcon from '../qbTableIcon/qbTableIcon';
+import Icon, {AVAILABLE_ICON_FONTS} from '../../../../reuse/client/src/components/icon/icon.js';
 import ReportStage from './reportStage';
 import ReportHeader from './reportHeader';
 import IconActions from '../actions/iconActions';
-import {Link} from 'react-router';
+import {Link} from 'react-router-dom';
 import Logger from '../../utils/logger';
 import QueryUtils from '../../utils/queryUtils';
 import NumberUtils from '../../utils/numberUtils';
+import WindowLocationUtils from '../../utils/windowLocationUtils';
 import simpleStringify from '../../../../common/src/simpleStringify';
 import constants from '../../../../common/src/constants';
 import Fluxxor from 'fluxxor';
@@ -15,8 +16,13 @@ import _ from 'lodash';
 import './report.scss';
 import ReportToolsAndContent from '../report/reportToolsAndContent';
 import {connect} from 'react-redux';
-import {editNewRecord} from '../../actions/formActions';
-import {APP_ROUTE} from '../../constants/urlConstants';
+import {clearSearchInput} from '../../actions/searchActions';
+import {loadReport, loadDynamicReport} from '../../actions/reportActions';
+import {loadFields} from '../../actions/fieldsActions';
+import {CONTEXT} from '../../actions/context';
+import {APP_ROUTE, EDIT_RECORD_KEY, NEW_RECORD_VALUE} from '../../constants/urlConstants';
+
+import * as FieldsReducer from '../../reducers/fields';
 
 let logger = new Logger();
 let FluxMixin = Fluxxor.FluxMixin(React);
@@ -33,17 +39,38 @@ const ReportRoute = React.createClass({
     loadReport(appId, tblId, rptId, offset, numRows) {
         const flux = this.getFlux();
         flux.actions.selectTableId(tblId);
-        flux.actions.loadFields(appId, tblId);
-        flux.actions.loadReport(appId, tblId, rptId, true, offset, numRows);
+
+        // ensure the search box is cleared for the new report
+        this.props.dispatch(clearSearchInput());
+
+        //  get the fields for this app/tbl
+        this.props.dispatch(loadFields(appId, tblId));
+
+        //  load the report
+        this.props.dispatch(loadReport(CONTEXT.REPORT.NAV, appId, tblId, rptId, true, offset, numRows));
     },
+
+    /**
+     * Load a report with query parameters.
+     */
+    loadDynamicReport(appId, tblId, rptId, format, filter, queryParams) {
+        this.props.dispatch(loadDynamicReport(CONTEXT.REPORT.NAV, appId, tblId, rptId, format, filter, queryParams));
+    },
+
     /**
      * Load a report with query parameters.
      */
     loadDynamicReportFromParams(appId, tblId, rptId, queryParams) {
         const flux = this.getFlux();
         flux.actions.selectTableId(tblId);
-        flux.actions.loadFields(appId, tblId);
-        flux.actions.loadDynamicReport(appId, tblId, rptId, true, /*filter*/{}, queryParams);
+
+        // ensure the search box is cleared for the new report
+        this.props.dispatch(clearSearchInput());
+
+        //  get the fields for this app/tbl
+        this.props.dispatch(loadFields(appId, tblId));
+
+        this.loadDynamicReport(appId, tblId, rptId, true, /*filter*/{}, queryParams);
     },
     loadReportFromParams(params) {
         let {appId, tblId} = params;
@@ -72,16 +99,14 @@ const ReportRoute = React.createClass({
     componentDidMount() {
         const flux = this.getFlux();
         flux.actions.hideTopNav();
-        flux.actions.resetRowMenu();
-        if (this.props.params) {
-            this.loadReportFromParams(this.props.params);
+
+        if (this.props.match.params) {
+            this.loadReportFromParams(this.props.match.params);
         }
     },
     getHeader() {
         return (
-            <ReportHeader reportData={this.props.reportData}
-                          nameForRecords={this.nameForRecords}
-                          searchData={this.props.reportSearchData}
+            <ReportHeader nameForRecords={this.nameForRecords}
                 {...this.props}
             />);
     },
@@ -91,33 +116,27 @@ const ReportRoute = React.createClass({
      * @param data row record data
      */
     editNewRecord() {
-
-        // need to dispatch to Fluxxor since report store handles this too...
-        const flux = this.getFlux();
-        flux.actions.editNewRecord();
-
-        this.props.dispatch(editNewRecord());
+        WindowLocationUtils.pushWithQuery(EDIT_RECORD_KEY, NEW_RECORD_VALUE);
     },
 
     getPageActions(maxButtonsBeforeMenu) {
         const actions = [
-            {msg: 'pageActions.addRecord', icon:'add', className:'addRecord', onClick: this.editNewRecord},
+            {msg: 'pageActions.addRecord', icon:'add-new-filled', className:'addRecord', onClick: this.editNewRecord},
             {msg: 'unimplemented.makeFavorite', icon:'star', disabled: true},
             {msg: 'unimplemented.print', icon:'print', disabled: true},
         ];
         return (<IconActions className="pageActions" actions={actions}/>);
     },
 
-
     getStageHeadline() {
         const reportName = this.props.reportData && this.props.reportData.data && this.props.reportData.data.name;
-        const {appId, tblId} = this.props.params;
+        const {appId, tblId} = this.props.match.params;
         const tableLink = `${APP_ROUTE}/${appId}/table/${tblId}`;
         return (
             <div className="reportStageHeadline">
 
                 <div className="navLinks">
-                    {this.props.selectedTable && <Link className="tableHomepageIconLink" to={tableLink}><TableIcon icon={this.props.selectedTable.icon}/></Link>}
+                    {this.props.selectedTable && <Link className="tableHomepageIconLink" to={tableLink}><Icon iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY} icon={this.props.selectedTable.tableIcon}/></Link>}
                     {this.props.selectedTable && <Link className="tableHomepageLink" to={tableLink}>{this.props.selectedTable.name}</Link>}
                 </div>
 
@@ -128,12 +147,12 @@ const ReportRoute = React.createClass({
     },
 
     render() {
-        if (_.isUndefined(this.props.params) ||
-            _.isUndefined(this.props.params.appId) ||
-            _.isUndefined(this.props.params.tblId) ||
-            (_.isUndefined(this.props.params.rptId) && _.isUndefined(this.props.rptId))
+        if (_.isUndefined(this.props.match.params) ||
+            _.isUndefined(this.props.match.params.appId) ||
+            _.isUndefined(this.props.match.params.tblId) ||
+            (_.isUndefined(this.props.match.params.rptId) && _.isUndefined(this.props.rptId))
         ) {
-            logger.info("the necessary params were not specified to reportRoute render params=" + simpleStringify(this.props.params));
+            logger.info("the necessary params were not specified to reportRoute render params=" + simpleStringify(this.props.match.params));
             return null;
         } else {
             return (<div className="reportContainer">
@@ -146,19 +165,22 @@ const ReportRoute = React.createClass({
                 {this.getHeader()}
 
                 <ReportToolsAndContent
-                    params={this.props.params}
+                    params={this.props.match.params}
                     reportData={this.props.reportData}
                     appUsers={this.props.appUsers}
                     pendEdits={this.props.pendEdits}
                     isRowPopUpMenuOpen={this.props.isRowPopUpMenuOpen}
-                    routeParams={this.props.routeParams}
+                    routeParams={this.props.match.params}
                     selectedAppId={this.props.selectedAppId}
-                    fields={this.props.fields}
+                    selectedTable={this.props.selectedTable}
                     searchStringForFiltering={this.props.reportData.searchStringForFiltering}
                     pageActions={this.getPageActions(0)}
                     nameForRecords={this.nameForRecords}
                     selectedRows={this.props.reportData.selectedRows}
-                    scrollingReport={this.props.scrollingReport} />
+                    scrollingReport={this.props.scrollingReport}
+                    loadDynamicReport={this.loadDynamicReport}
+                    noRowsUI={true}
+                />
             </div>);
         }
     }

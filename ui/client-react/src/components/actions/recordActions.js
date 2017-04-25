@@ -1,23 +1,21 @@
 import React from 'react';
 import ReactIntl from 'react-intl';
-import {I18nMessage, I18nDate} from '../../utils/i18nMessage';
 import Locale from '../../locales/locales';
-import {MenuItem, Dropdown, Input} from 'react-bootstrap';
 import * as SchemaConsts from "../../constants/schema";
 import ActionIcon from './actionIcon';
-import EmailReportLink from './emailReportLink';
 import QBModal from '../qbModal/qbModal';
-import Fluxxor from "fluxxor";
+import {deleteRecord} from '../../actions/recordActions';
+import {connect} from 'react-redux';
+
 import './recordActions.scss';
 
 let IntlMixin = ReactIntl.IntlMixin;
-let FluxMixin = Fluxxor.FluxMixin(React);
 
 /**
  * a set of record-level action icons
  */
-let RecordActions = React.createClass({
-    mixins: [FluxMixin, IntlMixin],
+export const RecordActions = React.createClass({
+    mixins: [IntlMixin],
     nameForRecords: "Records",
 
     propTypes: {
@@ -60,8 +58,7 @@ let RecordActions = React.createClass({
 
 
     handleRecordDelete() {
-        const flux = this.getFlux();
-        flux.actions.deleteRecord(this.props.appId, this.props.tblId, this.state.selectedRecordId, this.nameForRecords);
+        this.props.deleteRecord(this.props.appId, this.props.tblId, this.state.selectedRecordId, this.nameForRecords);
         this.setState({confirmDeletesDialogOpen: false});
     },
 
@@ -84,7 +81,7 @@ let RecordActions = React.createClass({
                 primaryButtonOnClick={this.handleRecordDelete}
                 leftButtonName={Locale.getMessage('selection.dontDelete')}
                 leftButtonOnClick={this.cancelRecordDelete}
-                bodyMessage={msg}
+                title={msg}
                 type="alert"/>);
     },
 
@@ -114,4 +111,23 @@ let RecordActions = React.createClass({
     }
 });
 
-export default RecordActions;
+
+// similarly, abstract out the Redux dispatcher from the presentational component
+// (another bit of boilerplate to keep the component free of Redux dependencies)
+const mapStateToProps = (state) => {
+    return {
+        record: state.record
+    };
+};
+const mapDispatchToProps = (dispatch) => {
+    return {
+        deleteRecord:  (appId, tblId, recId, nameForRecords) => {
+            dispatch(deleteRecord(appId, tblId, recId, nameForRecords));
+        }
+    };
+};
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(RecordActions);

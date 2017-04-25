@@ -1,4 +1,4 @@
-import Logger from '../../src/utils/logger.js';
+import Logger, {__RewireAPI__ as LoggerRewireAPI} from '../../src/utils/logger.js';
 import LogLevel from '../../src/utils/logLevels.js';
 
 describe('Logger', () => {
@@ -26,11 +26,11 @@ describe('Logger', () => {
         }
     }
     beforeEach(() => {
-        Logger.__Rewire__('LogService', mockLogService);
+        LoggerRewireAPI.__Rewire__('LogService', mockLogService);
     });
 
     afterEach(() => {
-        Logger.__ResetDependency__('LogService');
+        LoggerRewireAPI.__ResetDependency__('LogService');
     });
 
     it('test instantiation of Logger with default environment settings(PROD)', () => {
@@ -51,7 +51,7 @@ describe('Logger', () => {
             }
         };
 
-        Logger.__Rewire__('Configuration', mockConfig);
+        LoggerRewireAPI.__Rewire__('Configuration', mockConfig);
         let logger = new Logger();
 
         spyOn(console, 'log');
@@ -62,7 +62,7 @@ describe('Logger', () => {
         expect(logger.sendMessageToServer).toHaveBeenCalled();
         expect(console.log.calls.count()).toEqual(1);   // exception handling will output message to console
 
-        Logger.__ResetDependency__('Configuration');
+        LoggerRewireAPI.__ResetDependency__('Configuration');
     });
 
     it('test parseAndLogError function with error object', () => {
@@ -74,7 +74,7 @@ describe('Logger', () => {
             }
         };
 
-        Logger.__Rewire__('Configuration', mockConfig);
+        LoggerRewireAPI.__Rewire__('Configuration', mockConfig);
         let logger = new Logger();
 
         spyOn(logger, 'error');
@@ -90,7 +90,7 @@ describe('Logger', () => {
         logger.parseAndLogError(LogLevel.ERROR, error, 'prefix');
         expect(logger.error).toHaveBeenCalled();
 
-        Logger.__ResetDependency__('Configuration');
+        LoggerRewireAPI.__ResetDependency__('Configuration');
     });
 
     it('test parseAndLogError function with no body in error object', () => {
@@ -102,7 +102,7 @@ describe('Logger', () => {
             }
         };
 
-        Logger.__Rewire__('Configuration', mockConfig);
+        LoggerRewireAPI.__Rewire__('Configuration', mockConfig);
         let logger = new Logger();
 
         spyOn(logger, 'error');
@@ -118,7 +118,7 @@ describe('Logger', () => {
         logger.parseAndLogError(LogLevel.ERROR, error, 'prefix');
         expect(logger.error).toHaveBeenCalled();
 
-        Logger.__ResetDependency__('Configuration');
+        LoggerRewireAPI.__ResetDependency__('Configuration');
     });
 
     it('test parseAndLogError function with parsing exception', () => {
@@ -130,7 +130,7 @@ describe('Logger', () => {
             }
         };
 
-        Logger.__Rewire__('Configuration', mockConfig);
+        LoggerRewireAPI.__Rewire__('Configuration', mockConfig);
         let logger = new Logger();
 
         spyOn(logger, 'error');
@@ -146,7 +146,7 @@ describe('Logger', () => {
         logger.parseAndLogError(LogLevel.ERROR, error, 'prefix');
         expect(logger.error).toHaveBeenCalled();
 
-        Logger.__ResetDependency__('Configuration');
+        LoggerRewireAPI.__ResetDependency__('Configuration');
     });
 
     it('test logException function', () => {
@@ -158,7 +158,7 @@ describe('Logger', () => {
             }
         };
 
-        Logger.__Rewire__('Configuration', mockConfig);
+        LoggerRewireAPI.__Rewire__('Configuration', mockConfig);
         let logger = new Logger();
 
         spyOn(logger, 'error');
@@ -170,7 +170,7 @@ describe('Logger', () => {
         logger.logException(ex);
         expect(logger.error).toHaveBeenCalled();
 
-        Logger.__ResetDependency__('Configuration');
+        LoggerRewireAPI.__ResetDependency__('Configuration');
     });
 
     it('test debug handling of error stack', () => {
@@ -182,7 +182,7 @@ describe('Logger', () => {
             }
         };
 
-        Logger.__Rewire__('Configuration', mockConfig);
+        LoggerRewireAPI.__Rewire__('Configuration', mockConfig);
         const logger = new Logger();
 
         spyOn(console, 'debug');
@@ -199,7 +199,36 @@ describe('Logger', () => {
         expect(consoleDebugArg.indexOf(errorMessage) > -1).toBeTruthy();
         expect(consoleDebugArg.indexOf(ex.stack) > -1).toBeTruthy();
 
-        Logger.__ResetDependency__('Configuration');
+        LoggerRewireAPI.__ResetDependency__('Configuration');
+    });
+
+    it('test debug handling of error stack', () => {
+        const mockConfig = {
+            logger: {
+                logToConsole: true,
+                logToServer: true,
+                logLevel: LogLevel.DEBUG
+            }
+        };
+
+        LoggerRewireAPI.__Rewire__('Configuration', mockConfig);
+        const logger = new Logger();
+
+        spyOn(console, 'debug');
+
+        const ex = {
+            stack: 'fakestack',
+            name: 'name'
+        };
+        const errorMessage = `I make the best error messages, the best ones, they're great. Ask all my fiends. All my fiends agree I make the best.`;
+        logger.debug(errorMessage, ex);
+
+        let consoleDebugArg = console.debug.calls.argsFor(0)[0];
+        expect(console.debug).toHaveBeenCalled();
+        expect(consoleDebugArg.indexOf(errorMessage) > -1).toBeTruthy();
+        expect(consoleDebugArg.indexOf(ex.stack) > -1).toBeTruthy();
+
+        LoggerRewireAPI.__ResetDependency__('Configuration');
     });
 
     it('test Logger with console and server logging', () => {
@@ -211,7 +240,7 @@ describe('Logger', () => {
             }
         };
 
-        Logger.__Rewire__('Configuration', mockConfig);
+        LoggerRewireAPI.__Rewire__('Configuration', mockConfig);
         let logger = new Logger();
 
         expect(logger.logToConsole).toBeTruthy();
@@ -227,7 +256,7 @@ describe('Logger', () => {
         expect(console.debug).toHaveBeenCalled();
         expect(logger.sendMessageToServer).toHaveBeenCalled();
 
-        Logger.__ResetDependency__('Configuration');
+        LoggerRewireAPI.__ResetDependency__('Configuration');
     });
 
     it('test Logger with console only logging debug level', () => {
@@ -239,7 +268,7 @@ describe('Logger', () => {
             }
         };
 
-        Logger.__Rewire__('Configuration', mockConfig);
+        LoggerRewireAPI.__Rewire__('Configuration', mockConfig);
         let logger = new Logger();
 
         expect(logger.logToConsole).toBeTruthy();
@@ -255,7 +284,7 @@ describe('Logger', () => {
         expect(console.debug).toHaveBeenCalled();
         expect(logger.sendMessageToServer).not.toHaveBeenCalled();
 
-        Logger.__ResetDependency__('Configuration');
+        LoggerRewireAPI.__ResetDependency__('Configuration');
     });
     it('test Logger with console only logging error level', () => {
         let mockConfig = {
@@ -266,7 +295,7 @@ describe('Logger', () => {
             }
         };
 
-        Logger.__Rewire__('Configuration', mockConfig);
+        LoggerRewireAPI.__Rewire__('Configuration', mockConfig);
         let logger = new Logger();
 
         expect(logger.logToConsole).toBeTruthy();
@@ -282,7 +311,7 @@ describe('Logger', () => {
         expect(console.error).toHaveBeenCalled();
         expect(logger.sendMessageToServer).not.toHaveBeenCalled();
 
-        Logger.__ResetDependency__('Configuration');
+        LoggerRewireAPI.__ResetDependency__('Configuration');
     });
     it('test Logger with console only logging warn level', () => {
         let mockConfig = {
@@ -293,7 +322,7 @@ describe('Logger', () => {
             }
         };
 
-        Logger.__Rewire__('Configuration', mockConfig);
+        LoggerRewireAPI.__Rewire__('Configuration', mockConfig);
         let logger = new Logger();
 
         expect(logger.logToConsole).toBeTruthy();
@@ -309,7 +338,7 @@ describe('Logger', () => {
         expect(console.warn).toHaveBeenCalled();
         expect(logger.sendMessageToServer).not.toHaveBeenCalled();
 
-        Logger.__ResetDependency__('Configuration');
+        LoggerRewireAPI.__ResetDependency__('Configuration');
     });
     it('test Logger with console only logging info level', () => {
         let mockConfig = {
@@ -320,7 +349,7 @@ describe('Logger', () => {
             }
         };
 
-        Logger.__Rewire__('Configuration', mockConfig);
+        LoggerRewireAPI.__Rewire__('Configuration', mockConfig);
         let logger = new Logger();
 
         expect(logger.logToConsole).toBeTruthy();
@@ -336,7 +365,7 @@ describe('Logger', () => {
         expect(console.info).toHaveBeenCalled();
         expect(logger.sendMessageToServer).not.toHaveBeenCalled();
 
-        Logger.__ResetDependency__('Configuration');
+        LoggerRewireAPI.__ResetDependency__('Configuration');
     });
 
     it('test Logger with server only logging', () => {
@@ -348,7 +377,7 @@ describe('Logger', () => {
             }
         };
 
-        Logger.__Rewire__('Configuration', mockConfig);
+        LoggerRewireAPI.__Rewire__('Configuration', mockConfig);
         let logger = new Logger();
 
         expect(logger.logToConsole).toBeFalsy();
@@ -364,7 +393,7 @@ describe('Logger', () => {
         expect(console.log).not.toHaveBeenCalled();
         expect(logger.sendMessageToServer).toHaveBeenCalled();
 
-        Logger.__ResetDependency__('Configuration');
+        LoggerRewireAPI.__ResetDependency__('Configuration');
     });
 
     it('test Logger with no console and server logging', () => {
@@ -376,7 +405,7 @@ describe('Logger', () => {
             }
         };
 
-        Logger.__Rewire__('Configuration', mockConfig);
+        LoggerRewireAPI.__Rewire__('Configuration', mockConfig);
         let logger = new Logger();
 
         spyOn(logger, 'logTheMessage').and.callThrough();
@@ -389,7 +418,7 @@ describe('Logger', () => {
         expect(console.log).not.toHaveBeenCalled();
         expect(logger.sendMessageToServer).not.toHaveBeenCalled();
 
-        Logger.__ResetDependency__('Configuration');
+        LoggerRewireAPI.__ResetDependency__('Configuration');
     });
 
     it('test debug level logging', () => {
@@ -401,7 +430,7 @@ describe('Logger', () => {
             }
         };
 
-        Logger.__Rewire__('Configuration', mockConfig);
+        LoggerRewireAPI.__Rewire__('Configuration', mockConfig);
         let logger = new Logger();
 
         spyOn(logger, 'logTheMessage').and.returnValue('logTheMessage');
@@ -420,7 +449,7 @@ describe('Logger', () => {
         logger.error(logMsg);
         expect(logger.logTheMessage).toHaveBeenCalled();
 
-        Logger.__ResetDependency__('Configuration');
+        LoggerRewireAPI.__ResetDependency__('Configuration');
     });
 
     it('test info level logging', () => {
@@ -432,7 +461,7 @@ describe('Logger', () => {
             }
         };
 
-        Logger.__Rewire__('Configuration', mockConfig);
+        LoggerRewireAPI.__Rewire__('Configuration', mockConfig);
         let logger = new Logger();
 
         spyOn(logger, 'logTheMessage').and.returnValue('logTheMessage');
@@ -451,7 +480,7 @@ describe('Logger', () => {
         logger.error(logMsg);
         expect(logger.logTheMessage).toHaveBeenCalled();
 
-        Logger.__ResetDependency__('Configuration');
+        LoggerRewireAPI.__ResetDependency__('Configuration');
     });
 
     it('test warn level logging', () => {
@@ -463,7 +492,7 @@ describe('Logger', () => {
             }
         };
 
-        Logger.__Rewire__('Configuration', mockConfig);
+        LoggerRewireAPI.__Rewire__('Configuration', mockConfig);
         let logger = new Logger();
 
         spyOn(logger, 'logTheMessage').and.returnValue('logTheMessage');
@@ -482,7 +511,7 @@ describe('Logger', () => {
         logger.error(logMsg);
         expect(logger.logTheMessage).toHaveBeenCalled();
 
-        Logger.__ResetDependency__('Configuration');
+        LoggerRewireAPI.__ResetDependency__('Configuration');
     });
 
     it('test error level logging', () => {
@@ -494,7 +523,7 @@ describe('Logger', () => {
             }
         };
 
-        Logger.__Rewire__('Configuration', mockConfig);
+        LoggerRewireAPI.__Rewire__('Configuration', mockConfig);
         let logger = new Logger();
 
         spyOn(logger, 'logTheMessage').and.returnValue('logTheMessage');
@@ -513,7 +542,7 @@ describe('Logger', () => {
         logger.error(logMsg);
         expect(logger.logTheMessage).toHaveBeenCalled();
 
-        Logger.__ResetDependency__('Configuration');
+        LoggerRewireAPI.__ResetDependency__('Configuration');
     });
 
     it('test no logging', () => {
@@ -525,7 +554,7 @@ describe('Logger', () => {
             }
         };
 
-        Logger.__Rewire__('Configuration', mockConfig);
+        LoggerRewireAPI.__Rewire__('Configuration', mockConfig);
         let logger = new Logger();
         spyOn(logger, 'logTheMessage').and.returnValue('logTheMessage');
 
@@ -542,7 +571,7 @@ describe('Logger', () => {
 
         logger.error(logMsg);
         expect(logger.logTheMessage).not.toHaveBeenCalled();
-        Logger.__ResetDependency__('Configuration');
+        LoggerRewireAPI.__ResetDependency__('Configuration');
     });
 
     it('test logging service is called', () => {
@@ -553,7 +582,7 @@ describe('Logger', () => {
                 logLevel: LogLevel.DEBUG
             }
         };
-        Logger.__Rewire__('Configuration', mockConfig);
+        LoggerRewireAPI.__Rewire__('Configuration', mockConfig);
 
         let logger = new Logger();
 
@@ -562,7 +591,7 @@ describe('Logger', () => {
         logger.debug(logMsg);
         expect(logger.logService.log).toHaveBeenCalled();
 
-        Logger.__ResetDependency__('Configuration');
+        LoggerRewireAPI.__ResetDependency__('Configuration');
 
     });
 
@@ -574,7 +603,7 @@ describe('Logger', () => {
                 logLevel: LogLevel.DEBUG
             }
         };
-        Logger.__Rewire__('Configuration', mockConfig);
+        LoggerRewireAPI.__Rewire__('Configuration', mockConfig);
 
         let logger = new Logger();
 
@@ -629,7 +658,7 @@ describe('Logger', () => {
         expect(logger.warn).not.toHaveBeenCalled();
         expect(logger.error).toHaveBeenCalledWith('prefix:' + JSON.stringify(msg.data));
 
-        Logger.__ResetDependency__('Configuration');
+        LoggerRewireAPI.__ResetDependency__('Configuration');
 
     });
 

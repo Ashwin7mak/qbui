@@ -1,5 +1,5 @@
 
-#QuickBase UI
+# QuickBase UI
 
 The QuickBase ui project is the ui layer of the QuickBase application. It is an Node.js pass thru API server to the java backend as well as a React frontend.
 
@@ -13,11 +13,11 @@ see also:
 [QBUI project File structure](FILESSTRUCTURE.md)
 
 
-##Knowledge Prerequisites
+## Knowledge Prerequisites
 Writing Javascript, Node.js, React
 
 
-##Pre-installation
+## Pre-installation
 
 FIRST - Do all the Quickbase java backend development [setup instructions](https://github.com/QuickBase/QuickBase/blob/master/README.md) so that you have installed
 
@@ -28,32 +28,29 @@ FIRST - Do all the Quickbase java backend development [setup instructions](https
     * GitHub
     * NodeJS - ui web server plugin
     * SASS support - enhances css with variables and methods plugin
-  * Known working versions of Intellij are 14.1.2 and 14.1.4
+  * Known working versions of Intellij is 2016.3.x
   * Use the QuickBase/intelliJSettings.jar from the Quickbase project.
 * Java and Tomcat to run the backend
 
-##Installing
+## Installing
 
 To avoid permission issues caused by installing npm modules globally, you can either 1) [install NVM](https://github.com/QuickBase/qbui/blob/master/ui/README.md#install-node-via-nvm) (on Mac) OR 2) [install node and configure](https://github.com/QuickBase/qbui/blob/master/ui/README.md#install-node-and-configure-global-node-modules) where node installs global npm modules.
 
 #### Install Node via NVM
 
-[NVM](https://github.com/creationix/nvm) only works with Mac but is the easier and cleaner option.
-Install NVM (Node Version Manager) via Wget:
+NVM only works with Mac but is the easier and cleaner option.
+
+Follow the steps in this[nvm installation docs](https://github.com/creationix/nvm#installation)
+
+Next, install Node.js v6.9.5 and set v6.9.5 as your default version of node 
 
 ```bash
-    wget -qO- https://raw.githubusercontent.com/creationix/nvm/v0.32.0/install.sh | bash
-```
-
-Next, install Node.js v4.2.2 and set v4.2.2 as your default version of node (as of 2/1/2016, v5.5.0 is not fully tested with qbui).
-
-```bash
-    nvm install 4.2.2 && nvm alias default 4.2.2
+    nvm install 6.9.5 && nvm alias default 6.9.5
 ```
 
 To verify installation enter `nvm list default` which should print:
 ```bash
-    ->         v4.2.2
+    ->         v6.9.5
 ```
 If nvm and node were successfully installed, skip the next section about installing Node.js and global node configuration.
 
@@ -92,41 +89,21 @@ to automatically switch to the correct version of Node.
 
 #### Install Node and configure global node modules
 
-* Install node.js (v4.2.x or higher, as of 2/1/2016, v5.5.0 is not fully tested with qbui) from the [Node.js site](http://nodejs.org/)
+1. Install node.js (v6.9.5, as of 3/1/2016) via nvm 
 
-* (*Optional*) Make a place for any global node modules and no permission issues
 
-    1. Create a .node folder from command line.
-
-        ``` bash
-        mkdir ~/.node
-        ```
-
-    2. Adjust your node settings so that the global modules get installed locally for your login.
-
-        ``` bash
-        npm config set prefix=~/.node
-        ```
-          This is required because when you try to install modules globally (npm install -g), npm will install it in /usr/local/    and this will cause permission issues. In order to prevent this, adjust your node settings to install global modules     local for your login.
-
-    3. Add this directory to your PATH.
-
-       ``` bash
-       export PATH=$PATH:$HOME/.node/bin
-       ```
-
-* Install homebrew if it's not already installed. Test if it's install by running `brew --version` if says not found, install homebrew with:
+2. Install homebrew if it's not already installed. Test if it's install by running `brew --version` if says not found, install homebrew with:
 
     ```
         ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
     ```
-* Install grunt with npm
+3. Install grunt with npm
     ``` bash
     npm install -g grunt
     npm install -g grunt-cli
     ```
 
-* **qbui** project uses npm as its *package managers* and Grunt as its *task runner*.
+4. **qbui** project uses npm as its *package managers* and Grunt as its *task runner*.
 
     The top level of the project holds the CI Jenkins Gradle related files and the source for the ui is under the ui directory
 
@@ -135,7 +112,7 @@ to automatically switch to the correct version of Node.
     Grunt tasks are defined in the Gruntfile.js
 
 
-* Then get the qbui project repo
+5. Then get the qbui project repo
 
     ```
     git clone -b master ssh://git@github.com/quickbase/qbui.git
@@ -148,7 +125,21 @@ to automatically switch to the correct version of Node.
 
     *Note:* If you get an error about no developer tools found when executing git, make sure you have xCode from Apple installed (and the cli tools). Go to the AppStore application and [install xcode](http://itunes.apple.com/us/app/xcode/id497799835?ls=1&mt=12).
 
-##Configuring
+6. Last step is to install all the npm modules.
+
+First, you'll most likely need to amend the `.npmrc` file located in the `/<project root>/qbui/ui` folder.
+
+Comment out the following line:
+```
+;registry = https://nexus1.ci.quickbaserocks.com/nexus/content/repositories/npmjs/
+```
+
+Now `cd` into the `/<project root>/qbui/ui` directory and run
+```
+npm install
+```
+
+## Configuring
 Environment specific configurations reside in the qbui/ui/server/src/config/environment directory. The application requires a run-time environment to be defined and configured.  
 
 For developing set this environment variable in your bash profile
@@ -183,11 +174,7 @@ The following run-time environment variable is supported:
         will load the test.js file for configuration, default is local.js
 
 
-##Instructions to run server and watch for changes
-
-* `cd` to the \<project root\>qbui/ui directory.
-
-* run 'npm install' to install node modules
+## Instructions to run server and watch for changes
 
 * To launch the node web server (express) and it will update server as you make edits run
 
@@ -196,13 +183,13 @@ The following run-time environment variable is supported:
 * Current urls supported
     * http://localhost:9000/
 
-###Note :
+### Note :
  The Node Server only listen via a specific ip/hostname when running with dev hotloader,
  as the hotload server needs the ip of main express server. When running in production mode listen is just scoped to port, not ip.node -
 
 ## Testing
 cd to <project root>/qbui/ui directory
-###Lint and Code Style tests
+### Lint and Code Style tests
 Running `grunt codeStandards`from `/qbui/ui` directory will run the lint tasks. This task validates the javascript follows best practices and ensures the code is formatted to our qbui coding styles.
 
 * Linting check [ESLint](http://eslint.org/docs/rules/) -
@@ -243,7 +230,7 @@ Running `grunt codeStandards`from `/qbui/ui` directory will run the lint tasks. 
 
 
 
-###Unit tests
+### Unit tests
 Running `grunt test` will run the client and server unit tests with karma and mocha as well as the codeStandards.
 
 Use `grunt test:server` to only run server tests.
@@ -253,7 +240,7 @@ Use `grunt test:client` to only run client tests.
 Note: If you see a `Cannot find module './build/Release/DTraceProviderBindings'] code: 'MODULE_NOT_FOUND'` in the log from unit test run ` npm install bunyan ` to fix
 
 
-###Mocha Integration tests
+### Mocha Integration tests
 
 In order to run the integration tests you will need to have your Node.js express server and your Java API service running
 
@@ -320,11 +307,11 @@ With the Java API service running, from the qbui/ui directory run:
 
 Note that this command will launch your Node express server if it's not running.
 
-###WebdriverIO E2E tests
+### WebdriverIO E2E tests
 
 To setup WebdriverIO for browser end to end tests, follow the **README.md** setup guide in the `qbui/ui/wdio` directory. Make sure to check out the **NEWBIEGUIDE.md** as well!
 
-Edit and configure your own copy of **e2e.js** located in `qbui/ui/server/src/config/environment` if needed. The e2e tests have their own config file as they will launch their own node instance when running.
+Create your own copy of the **e2e.js** Node config file by copying and renaming **e2e.js.sample** located in `qbui/ui/server/src/config/environment`. The e2e tests have their own config file as they will launch their own node instance when running.
 
 Now run `npm run update-webdriver` in terminal from the `qbui/ui` directory
 
@@ -378,7 +365,8 @@ may want to change the `SAUCE_JOB_NAME` variable in your IntelliJ job to reflect
 *Bonus 3:* In your IntelliJ configuration, click the "+" button under "Before Launch" and add a task to run `npm run webpack` before the tests
 run to ensure you have the most up to date code running in your E2E test.
 
-##Using Gradle to build distribution node server
+## Using Gradle to build distribution node server
+
 Gradle is used to build a production version of the node server and client application.
 
 Output from the Gradle Build and Test task is saved under the /build folder.
@@ -411,7 +399,7 @@ To run the production distribution node server:
         NODE_ENV=prod node server/src/app.js
         NODE_ENV=prod npm start
 
-##Running with Forever
+## Running with Forever
 To start a node server with forever which ensures that a given node script runs continuously:
 
         NODE_ENV=prod PORT=9000 node_modules/forever/bin/forever start server/src/app.js
@@ -426,10 +414,12 @@ other forever options
     -o  OUTFILE      Logs stdout from child script to OUTFILE
     -e  ERRFILE      Logs stderr from child script to ERRFILE
 
-##Running NODE UI server code with SSL
+## Running NODE UI server code with SSL
 By default, the express server will only accept http requests. To also accept https requests, the following setup is required.
 
-CREATE CERTS:
+### Using existing certificate
+
+**Note: Go to next section to create a new certificate**
 
 The two files you need are a PEM encoded SSL certificate and private key.
 
@@ -451,6 +441,7 @@ For more information, click [here](http://security.stackexchange.com/questions/3
 
     openssl pkcs12 -in keystore.p12  -nodes -nocerts -out private.pem
 
+### Creating a new certificate
 
 If you do not have a certificate, you'll need to generate a private key and a certificate signing request, or CSR (which also contains your public key).
 The following highlights how to do so using OpenSSL.
@@ -462,13 +453,13 @@ For more information, click [here](http://stackoverflow.com/questions/12871565/h
 
     You will enter an interactive prompt to generate a 2048-bit RSA private key and a CSR that
     has all the information you choose to enter at the prompts. (Note: Common Name is where you'll want to
-    put the domain name you'll be using to access your site.)
+    put the domain name you'll be using to access your site. e.g., quickbase-dev.com)
 
   b) Generate a self-signed certificate (the below expires in 10 years):
 
     openssl req -newkey rsa:2048 -new -nodes -x509 -days 3650 -keyout private.pem -out cert.pem
 
-LOCALHOST CONFIGURATION
+### LOCALHOST CONFIGURATION
 
 Caution should be taken with your private key. The following highlights a recommended approach as to how a developer's localhost
 environment could be configured.  How other run-time environments like QA, E2E and PROD/AWS are configured/implemented will most likely differ
@@ -476,12 +467,12 @@ based on the security requirements of each.
 
   a) Copy the certificate(cert.pem) and private key(private.pem) to the 'keys' folder within the project.  The path is:
 
-     ../quickbaseui/ui/server/src/config/keys
+     ../quickbaseui/ui/server/src/config/environment/keys
 
      NOTE: this is a new folder intended to hold run-time environments certs.  Given the sensitive nature of the content, other than the
      .gitignore file, all files put into this folder are not tracked by git.
 
-  b) Modify the local.env.js file to define the path where your private key and certificate is located:
+  b) Modify the local.js file to define the path where your private key and certificate is located:
 
     SSL_KEY: {
         private: path.normalize(__dirname + '/keys/private.pem'),
@@ -489,7 +480,11 @@ based on the security requirements of each.
         requireCert: false  // set to false for self signed certs
     },
 
-  c) Modify the local.env.js file to change the default port for SSL.  Currently, it is set to 9443.  You can override as follows:
+  c) Modify the local.js file and uncomment the path
+
+    var path = require('path');
+
+  d) Optional: Modify the local.js file to change the default port for SSL.  Currently, it is set to 9443.  You can override as follows:
 
     sslPort: 9988,
 
@@ -499,17 +494,69 @@ Open a browser to verify.
 
 To stop or not accept SSL requests, comment out/remove the SSL_KEY object in your run-time environment configuration file...(ie: local.env.js).
 
-
-
-##Access REST endpoints over SSL
+## Access REST endpoints over SSL
 Update the javahost run-time configuration parameter to use the https protocol and appropriate port.  For example, include the following
 setting in the local.env.js file:
 
     //REST endpoint (protocol,server,port)
     javaHost: 'https://localhost.com:8443'
 
+## Accessing your development environment from another laptop or device
 
-##Troubleshooting
+To access your development environment from another laptop or device, you need to disable the
+hotloader. Edit local.js, and uncomment the line for the "noHotLoad" property.
+
+    //set notHotLoad true to disable hotloading
+    noHotLoad : true,
+
+This configures node to accept incoming connections from any host as opposed to only localhost.
+You can then access your development environment from other laptops or devices by IP address.
+To help determine the correct IP address for your machine (since you may have several) and to
+easily generate URLs to access your environment, a tool is available. Download it from here:
+
+    smb://qbfs01.corp.quickbase.net/Data/SoftwareEngineering/IPAddressTool/
+
+The tool presents you with a list of the network interfaces on your computer, their IP addresses,
+and a description. When you choose an interface from this list, the tool presents you with a list
+of text items (including things such as a "Create Ticket" URL) that you can easily copy to the clipboard and
+paste into a chat session with yourself or another person on the other laptop or device.
+You can configure the format of the text items in the tool to meet your own personal needs.
+
+By disabling the hotloader, you lose the ability for the watcher to automatically push the
+updates into the browser. However, you can run webpack with file watching enabled and
+see updates in the browser with a manual refresh instead of hotloading changes.
+This process is actually faster sometimes and less likely to crash node.
+Developers who refresh their browsers to reload JavaScript frequently may find this
+configuration preferable to "grunt serve". In this configuration
+you run node to serve the app separate from the watcher. To serve the app:
+
+    node server/src/app.js
+
+To run the watcher, in a different terminal:
+
+    npm run watch
+
+In order for a device or laptop to connect to your dev environment, they
+must both be on the same local network. Both can be connected to the office
+network or your home network. If both are not on the same local network,
+you can use the VPN to connect through the office network. You can connect from
+any laptop or device at the office to your dev environment running at home when
+your laptop at home has the VPN running. If two developers are at home, they
+can both run the VPN and connect from a laptop at one home to a dev
+environment at another home through the office network.
+
+Be aware that enabling other devices to access your dev environment enables *all* devices
+on the local network. This is not as big of an issue when at the office or your home.
+However, when using public networks (like at Starbucks), if that network does not block
+peer-to-peer connections, this will enable the people sitting at the table next
+to you, or the black hat network sniffer dude in a car in the parking lot,
+or a roaming trojan horse or virus to connect to your node server. So, use
+whatever caution you determine to be appropriate. Note that turning off the
+hotloader only opens up node on port 9000 to other devices. Other services
+(such as core on port 8080 or Experience Engine on port 8081) are always open to
+all devices on the network and aren't affected by the hotloader settings.
+
+## Troubleshooting
 POSSIBLE ISSUES -- and how to resolve
 
 1. First, since the ui has dependencies on the java backend make sure:
@@ -540,7 +587,7 @@ POSSIBLE ISSUES -- and how to resolve
 3. If when running your node server you see ECONNREFUSED in the logs make sure you have followed the instructions for the DNS workaround on mac above
 
 
-##Other Resources
+## Other Resources
 
 * Links for learning Node, react, etc - [https://github.com/QuickBase/QuickBaseUIProto/blob/development/ui/LEARNING.md]([https://github.com/QuickBase/QuickBaseUIProto/blob/development/ui/LEARNING.md)
 

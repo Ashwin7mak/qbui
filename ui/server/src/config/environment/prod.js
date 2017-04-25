@@ -52,7 +52,7 @@
         javaHost: 'http://localhost:8080',
 
         eeHost: 'http://localhost:8081',
-        eeHostEnable: false,
+        eeHostEnable: true,
 
         //Express Server
         //DOMAIN: 'https://localhost.intuit.com:9443',
@@ -60,7 +60,7 @@
         DOMAIN  : 'http://localhost:9000',
 
         //  legacy quickbase host
-        legacyHost: '',
+        legacyBase: '.quickbase.com',
 
         //Node understanding of RuntimeEnvironment
         env: envConsts.PRODUCTION,

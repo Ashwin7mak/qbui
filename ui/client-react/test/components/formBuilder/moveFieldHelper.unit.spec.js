@@ -1,457 +1,197 @@
 import MoveFieldHelper from '../../../src/components/formBuilder/moveFieldHelper';
+import {buildTestArrayBasedFormData} from '../../testHelpers/testFormData';
 
-// Helper variables to more easily find Ids in the formData
-const firstTab = 0;
-const firstSection = 0;
-const firstFieldId = 6;
-const firstFieldIndex = 0;
-const secondFieldId = 7;
-const secondFieldIndex = 1;
-const thirdFieldId = 8;
-const thirdFieldIndex = 2;
-const fourthFieldId = 9;
-const fourthFieldIndex = 3;
-const fieldIdInDifferentSection = 10;
-const fieldIndexInDifferentSection = 0;
-const fieldIdInDifferentTab = 13;
-const fieldIndexInDifferentTab = 0;
-const secondSection = 1;
-const secondTab = 1;
+const testFormData = buildTestArrayBasedFormData();
 
-const testFormData = {
-    formId: 1,
-    appId: 'app1',
-    tableId: 'table1',
-    name: 'Form name',
-    description: 'Form description',
-    wrapLabel: true,
-    includeBuiltIns: false,
-    wrapElements: true,
-    newFieldAction: "DO_NOTHING",
-    tabs: {
-        [firstTab]: {
-            orderIndex: 0,
-            title: 'Tab 1',
-            sections: {
-                [firstSection]: {
-                    orderIndex: firstSection,
-                    headerElement: {
-                        FormHeaderElement: {
-                            displayText: 'Section Header 1',
-                            displayOptions: [
-                                'ADD',
-                                'VIEW',
-                                'EDIT'
-                            ],
-                            labelPosition: 'LEFT',
-                            type: 'HEADER'
-                        }
-                    },
-                    elements: {
-                        [firstFieldIndex]: {
-                            FormFieldElement: {
-                                displayText: 'Section 1 Field 1',
-                                displayOptions: [
-                                    'ADD',
-                                    'VIEW',
-                                    'EDIT'
-                                ],
-                                labelPosition: 'LEFT',
-                                type: 'FIELD',
-                                orderIndex: firstFieldIndex,
-                                positionSameRow: false,
-                                useAlternateLabel: false,
-                                readOnly: false,
-                                required: false,
-                                fieldId: firstFieldId,
-                                showAsRadio: false
-                            }
-                        },
-                        [secondFieldIndex]: {
-                            FormFieldElement: {
-                                displayText: 'Section 1 Field 2',
-                                displayOptions: [
-                                    'ADD',
-                                    'VIEW',
-                                    'EDIT'
-                                ],
-                                labelPosition: 'LEFT',
-                                type: 'FIELD',
-                                orderIndex: secondFieldIndex,
-                                positionSameRow: false,
-                                useAlternateLabel: false,
-                                readOnly: false,
-                                required: true,
-                                fieldId: secondFieldId,
-                                showAsRadio: false
-                            }
-                        },
-                        [thirdFieldIndex]: {
-                            FormFieldElement: {
-                                displayText: 'Section 1 Field 3',
-                                displayOptions: [
-                                    'ADD',
-                                    'VIEW',
-                                    'EDIT'
-                                ],
-                                labelPosition: 'LEFT',
-                                type: 'FIELD',
-                                orderIndex: thirdFieldIndex,
-                                positionSameRow: false,
-                                useAlternateLabel: false,
-                                readOnly: false,
-                                required: false,
-                                fieldId: thirdFieldId,
-                                showAsRadio: false
-                            }
-                        },
-                        [fourthFieldIndex]: {
-                            FormFieldElement: {
-                                displayText: 'Section 1 Field 4',
-                                displayOptions: [
-                                    'ADD',
-                                    'VIEW',
-                                    'EDIT'
-                                ],
-                                labelPosition: 'LEFT',
-                                type: 'FIELD',
-                                orderIndex: fourthFieldIndex,
-                                positionSameRow: false,
-                                useAlternateLabel: false,
-                                readOnly: false,
-                                required: true,
-                                fieldId: fourthFieldId,
-                                showAsRadio: false
-                            }
-                        },
-                    },
-                    "fields": [
-                        firstFieldId,
-                        secondFieldId,
-                        thirdFieldId,
-                        fourthFieldId
-                    ],
-                    "pseudo": true
-                },
-                [secondSection]: {
-                    orderIndex: secondSection,
-                    headerElement: {
-                        FormHeaderElement: {
-                            displayText: 'Section Header 2',
-                            displayOptions: [
-                                'ADD',
-                                'VIEW',
-                                'EDIT'
-                            ],
-                            labelPosition: 'LEFT',
-                            type: 'HEADER'
-                        }
-                    },
-                    elements: {
-                        [fieldIndexInDifferentSection]: {
-                            FormFieldElement: {
-                                displayText: 'Section 2 Field 1',
-                                displayOptions: [
-                                    'ADD',
-                                    'VIEW',
-                                    'EDIT'
-                                ],
-                                labelPosition: 'LEFT',
-                                type: 'FIELD',
-                                orderIndex: fieldIndexInDifferentSection,
-                                positionSameRow: false,
-                                useAlternateLabel: false,
-                                readOnly: false,
-                                required: false,
-                                fieldId: fieldIdInDifferentSection,
-                                showAsRadio: false
-                            }
-                        },
-                        1: {
-                            FormFieldElement: {
-                                displayText: 'Section 2 Field 2',
-                                displayOptions: [
-                                    'ADD',
-                                    'VIEW',
-                                    'EDIT'
-                                ],
-                                labelPosition: 'LEFT',
-                                type: 'FIELD',
-                                orderIndex: 1,
-                                positionSameRow: false,
-                                useAlternateLabel: false,
-                                readOnly: false,
-                                required: true,
-                                fieldId: 7,
-                                showAsRadio: false
-                            }
-                        },
-                        2: {
-                            FormFieldElement: {
-                                displayText: 'Section 1 Field 3',
-                                displayOptions: [
-                                    'ADD',
-                                    'VIEW',
-                                    'EDIT'
-                                ],
-                                labelPosition: 'LEFT',
-                                type: 'FIELD',
-                                orderIndex: 2,
-                                positionSameRow: false,
-                                useAlternateLabel: false,
-                                readOnly: false,
-                                required: false,
-                                fieldId: 11,
-                                showAsRadio: false
-                            }
-                        },
-                        3: {
-                            FormFieldElement: {
-                                displayText: 'Section 1 Field 4',
-                                displayOptions: [
-                                    'ADD',
-                                    'VIEW',
-                                    'EDIT'
-                                ],
-                                labelPosition: 'LEFT',
-                                type: 'FIELD',
-                                orderIndex: 3,
-                                positionSameRow: false,
-                                useAlternateLabel: false,
-                                readOnly: false,
-                                required: true,
-                                fieldId: 12,
-                                showAsRadio: false
-                            }
-                        },
-                    },
-                    "fields": [
-                        fieldIdInDifferentSection,
-                        11,
-                        12
-                    ],
-                    "pseudo": true
-                }
-            },
-            "fields": [
-                6,
-                7,
-                8,
-                9,
-                10,
-                11,
-                12
-            ]
+function buildDraggedItemProps(tabIndex, sectionIndex, columnIndex, elementIndex, containingElement, element) {
+    return {
+        location: {
+            tabIndex,
+            sectionIndex,
+            columnIndex,
+            elementIndex
         },
-        [secondTab]: {
-            orderIndex: 0,
-            title: 'Tab 1',
-            sections: {
-                [firstSection]: {
-                    orderIndex: firstSection,
-                    headerElement: {
-                        FormHeaderElement: {
-                            displayText: 'Tab 2 Section Header 1',
-                            displayOptions: [
-                                'ADD',
-                                'VIEW',
-                                'EDIT'
-                            ],
-                            labelPosition: 'LEFT',
-                            type: 'HEADER'
-                        }
-                    },
-                    elements: {
-                        [fieldIndexInDifferentTab]: {
-                            FormFieldElement: {
-                                displayText: 'Tab 2 Section 1 Field 1',
-                                displayOptions: [
-                                    'ADD',
-                                    'VIEW',
-                                    'EDIT'
-                                ],
-                                labelPosition: 'LEFT',
-                                type: 'FIELD',
-                                orderIndex: fieldIndexInDifferentTab,
-                                positionSameRow: false,
-                                useAlternateLabel: false,
-                                readOnly: false,
-                                required: false,
-                                fieldId: fieldIdInDifferentTab,
-                                showAsRadio: false
-                            }
-                        },
-                        1: {
-                            FormFieldElement: {
-                                displayText: 'Tab 2 Section 1 Field 2',
-                                displayOptions: [
-                                    'ADD',
-                                    'VIEW',
-                                    'EDIT'
-                                ],
-                                labelPosition: 'LEFT',
-                                type: 'FIELD',
-                                orderIndex: 1,
-                                positionSameRow: false,
-                                useAlternateLabel: false,
-                                readOnly: false,
-                                required: false,
-                                fieldId: 14,
-                                showAsRadio: false
-                            }
-                        }
-                    },
-                    "fields": [
-                        fieldIdInDifferentTab,
-                        14
-                    ],
-                    "pseudo": true
-                }
-            },
-            "fields": [
-                fieldIdInDifferentTab,
-                14
-            ]
-        }
-    },
-};
+        containingElement,
+        element
+    };
+}
 
-function buildDraggedItemProps(tabIndex, sectionIndex, orderIndex, fieldId) {
+function buildNewLocation(tabIndex, sectionIndex, columnIndex, elementIndex) {
     return {
         tabIndex,
         sectionIndex,
-        orderIndex,
-        element: {
-            displayText: 'Moved Field',
-            displayOptions: [
-                'ADD',
-                'VIEW',
-                'EDIT'
-            ],
-            labelPosition: 'LEFT',
-            type: 'FIELD',
-            orderIndex: orderIndex,
-            positionSameRow: false,
-            useAlternateLabel: false,
-            readOnly: false,
-            required: false,
-            fieldId: fieldId,
-            showAsRadio: false
-        }
+        columnIndex,
+        elementIndex
     };
 }
 
 /**
  * A helper method to simplify the formMeta to get relevant data for an expectation
- * @param formData
+ * @param formMeta
  * @param tabIndex
  * @param sectionIndex
+ * @param columnIndex
  * @returns {Array}
  */
-function getFieldsAndTheirIndex(formData, tabIndex, sectionIndex) {
-    let result = [];
-    let elements = formData.tabs[tabIndex].sections[sectionIndex].elements;
+function getFieldsAndTheirIndex(formMeta, tabIndex, sectionIndex, columnIndex) {
+    let elements = formMeta.tabs[tabIndex].sections[sectionIndex].columns[columnIndex].elements;
 
-    Object.keys(elements).forEach(key => {
-        let element = elements[key].FormFieldElement;
-        result.push({orderIndex: element.orderIndex, fieldId: element.fieldId});
+    return elements.map(element => {
+        return {orderIndex: element.orderIndex, fieldId: element.FormFieldElement.fieldId};
     });
-
-    return result;
 }
 
 describe('MoveFieldHelper', () => {
-    describe('moveField', () => {
+    describe('methods', () => {
 
-        let testCases = [
+        let moveFieldTestCases = [
             {
-                description: 'moves a field down within the same section',
-                originalTab: firstTab,
-                originalSection: firstSection,
-                originalIndex: firstFieldIndex,
-                fieldId: firstFieldId,
-                newTab: firstTab,
-                newSection: firstSection,
-                newIndex: thirdFieldIndex,
+                description: 'moves a field down within the same section/column',
+                originalTab: 0,
+                originalSection: 0,
+                originalColumn: 0,
+                originalElementIndex: 0,
+                newTab: 0,
+                newSection: 0,
+                newColumn: 0,
+                newRow: 1,
+                expectedRemoveFieldResult: 3,
+                newElementIndex: 1,
                 expectedResult: [
-                    {orderIndex: 0, fieldId: secondFieldId},
-                    {orderIndex: 1, fieldId: firstFieldId},
-                    {orderIndex: 2, fieldId: thirdFieldId},
-                    {orderIndex: 3, fieldId: fourthFieldId}
+                    {orderIndex: 0, fieldId: 7},
+                    {orderIndex: 1, fieldId: 6},
+                    {orderIndex: 2, fieldId: 8},
+                    {orderIndex: 3, fieldId: 9},
                 ],
                 expectFieldToBeRemoved: false
             },
             {
-                description: 'moves a field up within the same section',
-                originalTab: firstTab,
-                originalSection: firstSection,
-                originalIndex: fourthFieldIndex,
-                fieldId: fourthFieldId,
-                newTab: firstTab,
-                newSection: firstSection,
-                newIndex: secondFieldIndex,
+                description: 'moves a field up within the same section/column',
+                originalTab: 0,
+                originalSection: 0,
+                originalColumn: 0,
+                originalElementIndex: 3,
+                fieldId: 9,
+                newTab: 0,
+                newSection: 0,
+                newColumn: 0,
+                newRow: 1,
+                expectedRemoveFieldResult: 3,
+                newElementIndex: 1,
                 expectedResult: [
-                    {orderIndex: 0, fieldId: firstFieldId},
-                    {orderIndex: 1, fieldId: fourthFieldId},
-                    {orderIndex: 2, fieldId: secondFieldId},
-                    {orderIndex: 3, fieldId: thirdFieldId}
+                    {orderIndex: 0, fieldId: 6},
+                    {orderIndex: 1, fieldId: 9},
+                    {orderIndex: 2, fieldId: 7},
+                    {orderIndex: 3, fieldId: 8}
                 ],
                 expectFieldToBeRemoved: false
             },
             {
                 description: 'moves a field across sections within a tab',
-                originalTab: firstTab,
-                originalSection: secondSection,
-                originalIndex: fieldIndexInDifferentSection,
-                fieldId: fieldIdInDifferentSection,
-                newTab: firstTab,
-                newSection: firstSection,
-                newIndex: secondFieldIndex,
+                originalTab: 0,
+                originalSection: 1,
+                originalColumn: 0,
+                originalElementIndex: 0,
+                fieldId: 11,
+                newTab: 0,
+                newSection: 0,
+                newColumn: 0,
+                newRow: 1,
+                expectedRemoveFieldResult: 4,
+                newElementIndex: 1,
                 expectedResult: [
-                    {orderIndex: 0, fieldId: firstFieldId},
-                    {orderIndex: 1, fieldId: fieldIdInDifferentSection},
-                    {orderIndex: 2, fieldId: secondFieldId},
-                    {orderIndex: 3, fieldId: thirdFieldId},
-                    {orderIndex: 4, fieldId: fourthFieldId}
+                    {orderIndex: 0, fieldId: 6},
+                    {orderIndex: 1, fieldId: 11},
+                    {orderIndex: 2, fieldId: 7},
+                    {orderIndex: 3, fieldId: 8},
+                    {orderIndex: 4, fieldId: 9}
                 ],
-                expectFieldToBeRemoved: true
+                expectedOriginalLocationSimplifiedResult: [
+                    {orderIndex: 0, fieldId: 12},
+                    {orderIndex: 1, fieldId: 13}
+                ]
             },
             {
-                description: 'moves a field across sections within a tab',
-                originalTab: secondTab,
-                originalSection: firstSection,
-                originalIndex: fieldIndexInDifferentTab,
-                fieldId: fieldIdInDifferentTab,
-                newTab: firstTab,
-                newSection: firstSection,
-                newIndex: secondFieldIndex,
+                description: 'moves a field across sections in different tabs',
+                originalTab: 1,
+                originalSection: 2,
+                originalColumn: 0,
+                originalElementIndex: 0,
+                fieldId: 21,
+                newTab: 0,
+                newSection: 0,
+                newColumn: 0,
+                newRow: 1,
+                expectedRemoveFieldResult: 4,
+                newElementIndex: 1,
                 expectedResult: [
-                    {orderIndex: 0, fieldId: firstFieldId},
-                    {orderIndex: 1, fieldId: fieldIdInDifferentTab},
-                    {orderIndex: 2, fieldId: secondFieldId},
-                    {orderIndex: 3, fieldId: thirdFieldId},
-                    {orderIndex: 4, fieldId: fourthFieldId}
+                    {orderIndex: 0, fieldId: 6},
+                    {orderIndex: 1, fieldId: 21},
+                    {orderIndex: 2, fieldId: 7},
+                    {orderIndex: 3, fieldId: 8},
+                    {orderIndex: 4, fieldId: 9}
                 ],
-                expectFieldToBeRemoved: true
+                expectedOriginalLocationSimplifiedResult: [
+                    {orderIndex: 0, fieldId: 22},
+                ]
             }
         ];
 
-        testCases.forEach(testCase => {
-            it(testCase.description, () => {
-                let elementProps = buildDraggedItemProps(testCase.originalTab, testCase.originalSection, testCase.originalIndex, testCase.fieldId);
+        let removeFieldTestCases = [
+            {
+                originalTab: 0,
+                originalSection: 0,
+                originalColumn: 0,
+                originalElementIndex: 0,
+                formMetaData: testFormData.formMeta.tabs[0].sections[0].columns[0].elements.length,
+                expectedRemoveFieldResult: 3
+            },
+            {
+                originalTab: 0,
+                originalSection: 1,
+                originalColumn: 0,
+                originalElementIndex: 0,
+                formMetaData: testFormData.formMeta.tabs[0].sections[1].columns[0].elements.length,
+                expectedRemoveFieldResult: 2
+            },
+            {
+                originalTab: 1,
+                originalSection: 2,
+                originalColumn: 0,
+                originalElementIndex: 0,
+                formMetaData: testFormData.formMeta.tabs[1].sections[2].columns[0].elements.length,
+                expectedRemoveFieldResult: 1
+            }
+        ];
 
-                let result = MoveFieldHelper.moveField(testFormData, testCase.newTab, testCase.newSection, testCase.newIndex, elementProps);
-                let simplifiedResult = getFieldsAndTheirIndex(result, testCase.newTab, testCase.newSection);
+        removeFieldTestCases.forEach(testCase => {
+            it(`removeField: The form has ${testCase.formMetaData} fields, one is removed, and only ${testCase.expectedRemoveFieldResult} remains`, () => {
+                let originalElement = testFormData.formMeta.tabs[testCase.originalTab].sections[testCase.originalSection].columns[testCase.originalColumn].elements[testCase.originalElementIndex];
+                let elementProps = buildDraggedItemProps(testCase.originalTab, testCase.originalSection, testCase.originalColumn, testCase.originalElementIndex, originalElement, originalElement.FormFieldElement);
+
+                let result = MoveFieldHelper.removeField(testFormData.formMeta, elementProps.location);
+                let simplifiedResult = getFieldsAndTheirIndex(result, testCase.originalTab, testCase.originalSection, testCase.originalColumn);
+
+                expect(simplifiedResult.length).toEqual(testCase.expectedRemoveFieldResult);
+            });
+        });
+
+        moveFieldTestCases.forEach(testCase => {
+            it(`moveField: ${testCase.description}`, () => {
+                let originalElement = testFormData.formMeta.tabs[testCase.originalTab].sections[testCase.originalSection].columns[testCase.originalColumn].elements[testCase.originalElementIndex];
+                let elementProps = buildDraggedItemProps(testCase.originalTab, testCase.originalSection, testCase.originalColumn, testCase.originalElementIndex, originalElement, originalElement.FormFieldElement);
+                let newLocation = buildNewLocation(testCase.newTab, testCase.newSection, testCase.newColumn, testCase.newElementIndex);
+
+                let result = MoveFieldHelper.moveField(testFormData.formMeta, newLocation, elementProps);
+                let simplifiedResult = getFieldsAndTheirIndex(result, testCase.newTab, testCase.newSection, testCase.newColumn);
 
                 expect(simplifiedResult).toEqual(testCase.expectedResult);
 
-                if (testCase.expectFieldToBeRemoved) {
-                    let simplifiedResultForSecondTab = getFieldsAndTheirIndex(result, testCase.originalTab, testCase.originalSection);
+                if (testCase.expectedOriginalLocationSimplifiedResult) {
                     // Expect the item to be removed from its original tab/section
-                    expect(simplifiedResultForSecondTab).not.toContain({orderIndex: testCase.originalIndex, fieldId: testCase.fieldId});
-                    // Makes sure the indexes of the original tab/section were updated now that the item was removed
-                    expect(result.tabs[testCase.originalTab].sections[testCase.originalSection].elements[testCase.originalIndex])
-                        .toEqual({FormFieldElement: Object.assign({}, testFormData.tabs[testCase.originalTab].sections[testCase.originalSection].elements[testCase.originalIndex + 1].FormFieldElement, {orderIndex: testCase.originalIndex})});
+                    let simplifiedResultForSecondTab = getFieldsAndTheirIndex(result, testCase.originalTab, testCase.originalSection, testCase.originalColumn);
+
+                    expect(simplifiedResultForSecondTab).toEqual(testCase.expectedOriginalLocationSimplifiedResult);
                 }
             });
         });
@@ -480,7 +220,7 @@ describe('MoveFieldHelper', () => {
             });
 
             it('returns errors if the draggedItemProps is missing required properties', () => {
-                MoveFieldHelper.moveField({}, 2, 3, 4, {});
+                MoveFieldHelper.moveField({}, buildNewLocation(1, 2, 3, 4, 5), {});
 
                 expect(errors.length).toEqual(1);
             });

@@ -87,8 +87,7 @@ const FieldValueRenderer = React.createClass({
         let fieldType = this.props.type;
 
         let attributes = null;
-        if (typeof this.props.fieldDef !== 'undefined' &&
-            typeof this.props.fieldDef.datatypeAttributes !== 'undefined') {
+        if (_.has(this.props, 'fieldDef.datatypeAttributes')) {
             attributes = this.props.fieldDef.datatypeAttributes;
             fieldType = FieldUtils.getFieldType(this.props.fieldDef, this.props.type, attributes);
         }
@@ -110,7 +109,7 @@ const FieldValueRenderer = React.createClass({
                                             value={this.props.value} display={this.props.display}
                                             key={'ufvr-' + this.props.idKey}
                                             />
-                );
+            );
         //  Date and dateTime use the same view formatter
         case FieldFormats.DATE_FORMAT:
         case FieldFormats.DATETIME_FORMAT:
@@ -128,16 +127,26 @@ const FieldValueRenderer = React.createClass({
                                             attributes={this.props.attributes}
                                             key={'tfvr-' + this.props.idKey}
                                             />
-                );
+            );
         case FieldFormats.CHECKBOX_FORMAT:
+            if (typeof this.props.value === 'string') {
+                if (this.props.value.toLowerCase() === 'true') {
+                    this.props.value = true;
+                } else {
+                    /*eslint no-lonely-if:0*/
+                    if (this.props.value.toLowerCase() === 'false') {
+                        this.props.value = false;
+                    }
+                }
+            }
             return (
                     <CheckBoxFieldValueRenderer {...commonProperties}
-                                                value={this.props.value}
+                                                value={_.isBoolean(this.props.value) ? this.props.value : false}
                                                 key={'cbfvr-' + this.props.idKey}
                                                 hideUncheckedCheckbox={this.props.hideUncheckedCheckbox}
                                                 label={this.props.label}
                                                  />
-                );
+            );
 
         case FieldFormats.MULTI_LINE_TEXT_FORMAT:
             return (
@@ -146,7 +155,7 @@ const FieldValueRenderer = React.createClass({
                                                      attributes={this.props.attributes}
                                                      key={'mltfvr-' + this.props.idKey}
                                                  />
-                );
+            );
         case FieldFormats.URL:
             let open_in_new_window, show_as_button;
             if (_.has(this.props, 'attributes.clientSideAttributes')) {
@@ -189,7 +198,7 @@ const FieldValueRenderer = React.createClass({
             return (
                 <DurationFieldValueRenderer {...commonProperties}
                                             value={this.props.value}
-                                            display={this.props.display}
+                                            display={this.props.display + ''}
                                             attributes={this.props.attributes}
                                             includeUnits={this.props.includeUnits}
                                             key={'drfvr-' + this.props.idKey}
@@ -204,7 +213,7 @@ const FieldValueRenderer = React.createClass({
                                             attributes={this.props.attributes}
                                             key={'tfvr-' + this.props.idKey}
                                             />
-                );
+            );
         }
         }
     },

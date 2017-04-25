@@ -1,8 +1,7 @@
 import React from 'react';
-import ReactIntl from 'react-intl';
-
 import QBicon from '../qbIcon/qbIcon';
-import {Tooltip, OverlayTrigger} from 'react-bootstrap';
+import Tooltip from 'react-bootstrap/lib/Tooltip';
+import OverlayTrigger from 'react-bootstrap/lib/OverlayTrigger';
 
 /**
  * mailto: icon link with a tooltip

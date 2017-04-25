@@ -1,7 +1,7 @@
 /* jshint proto: true */
 
 import Fluxxor from 'fluxxor';
-import navActions from '../../src/actions/navActions';
+import navActions, {__RewireAPI__ as navActionsRewireAPI} from '../../src/actions/navActions';
 import * as actions from '../../src/constants/actions';
 import Breakpoints from '../../src/utils/breakpoints';
 
@@ -12,12 +12,11 @@ describe('Nav Actions functions', () => {
     let flux = new Fluxxor.Flux(stores);
     flux.addActions(navActions);
 
-    var mockLocale = {
+    var mockAppsBundleLoader = {
         changeLocale: function(locale) {
             return locale;
         }
     };
-
     beforeEach(() => {
         spyOn(flux.dispatchBinder, 'dispatch');
     });
@@ -33,16 +32,14 @@ describe('Nav Actions functions', () => {
     });
 
     it('test change locale action', () => {
-        navActions.__Rewire__('Locale', mockLocale);
-        spyOn(mockLocale, 'changeLocale');
+        navActionsRewireAPI.__Rewire__('AppsBundleLoader', mockAppsBundleLoader);
+        spyOn(mockAppsBundleLoader, 'changeLocale');
 
         flux.actions.changeLocale('en-us');
 
-        expect(mockLocale.changeLocale).toHaveBeenCalledWith('en-us');
+        expect(mockAppsBundleLoader.changeLocale).toHaveBeenCalledWith('en-us');
         expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(actions.CHANGE_LOCALE);
 
-        navActions.__ResetDependency__('Locale');
+        navActionsRewireAPI.__ResetDependency__('AppsBundleLoader');
     });
-
-
 });

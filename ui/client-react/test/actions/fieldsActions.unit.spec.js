@@ -1,59 +1,360 @@
-import Fluxxor from 'fluxxor';
-import fieldsActions from '../../src/actions/fieldsActions';
-import * as actions from '../../src/constants/actions';
+import {__RewireAPI__ as FieldsActionsRewireAPI} from '../../src/actions/fieldsActions';
+import * as fieldActions from '../../src/actions/fieldsActions';
+import * as types from '../../src/actions/types';
 import Promise from 'bluebird';
 
-describe('Fields Actions functions', () => {
-    'use strict';
+import mockStore from 'redux-mock-store';
+import thunk from 'redux-thunk';
+const middlewares = [thunk];
+const mockReportsStore = mockStore(middlewares);
 
-    let appId = 'appId';
-    let tblId = 'tblId';
-    let responseData = [{data: [1, 2, 3]}];
+Promise.onPossiblyUnhandledRejection(function() {
+    // swallow the error..otherwise the log gets cluttered with the exception
+});
 
-    class mockFieldsService {
-        constructor() { }
+function event(appId, tblId, type, content) {
+    return {
+        appId,
+        tblId,
+        type: type,
+        content: content || null
+    };
+}
+
+describe('Field Actions success workflow', () => {
+
+    const appId = '1';
+    const tblId = '2';
+    const field = {id: 10};
+    const newFieldId = 20;
+    let mockResponseGetFields = {
+        data: [field]
+    };
+    let mockResponseCreateField = {
+        data: {id: newFieldId}
+    };
+    class mockFieldService {
         getFields() {
-            return Promise.resolve({data: responseData});
+            return Promise.resolve(mockResponseGetFields);
         }
-        getField(id) {
-            return Promise.resolve({data: {id:id}});
+        createField() {
+            return Promise.resolve(mockResponseCreateField);
+        }
+        updateField() {
+            return Promise.resolve();
         }
     }
 
-    let stores = {};
-    let flux = new Fluxxor.Flux(stores);
-    flux.addActions(fieldsActions);
-
     beforeEach(() => {
-        spyOn(flux.dispatchBinder, 'dispatch');
-        spyOn(mockFieldsService.prototype, 'getFields').and.callThrough();
-        spyOn(mockFieldsService.prototype, 'getField').and.callThrough();
-        fieldsActions.__Rewire__('FieldsService', mockFieldsService);
+        spyOn(mockFieldService.prototype, 'getFields').and.callThrough();
+        spyOn(mockFieldService.prototype, 'createField').and.callThrough();
+        spyOn(mockFieldService.prototype, 'updateField').and.callThrough();
+        FieldsActionsRewireAPI.__Rewire__('FieldsService', mockFieldService);
     });
 
     afterEach(() => {
-        fieldsActions.__ResetDependency__('FieldsService');
+        FieldsActionsRewireAPI.__ResetDependency__('FieldsService');
+        mockFieldService.prototype.getFields.calls.reset();
+        mockFieldService.prototype.createField.calls.reset();
+        mockFieldService.prototype.updateField.calls.reset();
     });
 
-    var fieldsActionTests = [
-        {name:'test load fields action', appId: appId, tblId: tblId},
-    ];
+    it('verify saveNewField action', (done) => {
+        const formId = null;
+        const expectedActions = [
+            {type: types.UPDATE_FIELD_ID, oldFieldId: field.id, newFieldId, formId, appId, tblId}
+        ];
+        const store = mockReportsStore({});
+        return store.dispatch(fieldActions.saveNewField(appId, tblId, field, formId)).then(
+            () => {
+                expect(mockFieldService.prototype.createField).toHaveBeenCalled();
+                expect(store.getActions()).toEqual(expectedActions);
+                done();
+            },
+            () => {
+                expect(false).toBe(true);
+                done();
+            });
+    });
 
-    fieldsActionTests.forEach(function(test) {
-        it(test.name, function(done) {
-            flux.actions.loadFields(test.appId, test.tblId).then(
+    it('verify updateFieldProperties action', (done) => {
+        const formId = null;
+        const expectedActions = [];
+        const store = mockReportsStore({});
+        return store.dispatch(fieldActions.updateFieldProperties(appId, tblId, field)).then(
+            () => {
+                expect(mockFieldService.prototype.updateField).toHaveBeenCalled();
+                expect(store.getActions()).toEqual(expectedActions);
+                done();
+            },
+            () => {
+                expect(false).toBe(true);
+                done();
+            });
+    });
+
+    it('verify loadFields action', (done) => {
+        const expectedActions = [
+            event(appId, tblId, types.LOAD_FIELDS),
+            event(appId, tblId, types.LOAD_FIELDS_SUCCESS, {fields: mockResponseGetFields.data})
+        ];
+        const store = mockReportsStore({});
+        return store.dispatch(fieldActions.loadFields(appId, tblId)).then(
+            () => {
+                expect(store.getActions()).toEqual(expectedActions);
+                expect(mockFieldService.prototype.getFields).toHaveBeenCalled();
+                done();
+            },
+            () => {
+                expect(false).toBe(true);
+                done();
+            });
+    });
+
+    describe('updateAllFieldsWIthEdits with no fields', () => {
+        let fields = [];
+        let mockGetFields = () => {
+            return fields;
+        };
+
+        beforeEach(() => {
+            FieldsActionsRewireAPI.__Rewire__('getFields', mockGetFields);
+        });
+        afterEach(() => {
+            FieldsActionsRewireAPI.__ResetDependency__('getFields');
+        });
+
+        it('verify no fields to update', (done) => {
+            fields = [];
+            const store = mockReportsStore({});
+            return store.dispatch(fieldActions.updateAllFieldsWithEdits(appId, tblId)).then(
                 () => {
-                    expect(mockFieldsService.prototype.getFields).toHaveBeenCalled();
-                    expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(2);
-                    expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_FIELDS]);
-                    expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.LOAD_FIELDS_SUCCESS, {appId, tblId, data:responseData}]);
+                    expect(mockFieldService.prototype.updateField).not.toHaveBeenCalled();
+                    expect(true).toBe(true);
                     done();
                 },
                 () => {
                     expect(false).toBe(true);
                     done();
-                }
-            );
+                });
+        });
+    });
+
+    describe('updateAllFieldsWIthEdits with multiple fields', () => {
+        let fields = [{id: 1}, {id: 2}, {id: 3}];
+        let mockGetFields = () => {
+            return fields;
+        };
+
+        beforeEach(() => {
+            FieldsActionsRewireAPI.__Rewire__('getFields', mockGetFields);
+        });
+        afterEach(() => {
+            FieldsActionsRewireAPI.__ResetDependency__('getFields');
+        });
+
+        it('verify multiple fields to update', (done) => {
+            fields = [];
+            const store = mockReportsStore({});
+            return store.dispatch(fieldActions.updateAllFieldsWithEdits(appId, tblId)).then(
+                () => {
+                    expect(mockFieldService.prototype.updateField.calls.count()).toEqual(fields.length);
+                    expect(true).toBe(true);
+                    done();
+                },
+                () => {
+                    expect(false).toBe(true);
+                    done();
+                });
+        });
+    });
+
+    describe('saveAllFieldsWIthEdits with no fields', () => {
+        let fields = [];
+        let mockGetFields = () => {
+            return fields;
+        };
+
+        beforeEach(() => {
+            FieldsActionsRewireAPI.__Rewire__('getFields', mockGetFields);
+        });
+        afterEach(() => {
+            FieldsActionsRewireAPI.__ResetDependency__('getFields');
+        });
+
+        it('verify no fields to update', (done) => {
+            fields = [];
+            const store = mockReportsStore({});
+            return store.dispatch(fieldActions.saveAllNewFields(appId, tblId)).then(
+                () => {
+                    expect(mockFieldService.prototype.createField).not.toHaveBeenCalled();
+                    expect(true).toBe(true);
+                    done();
+                },
+                () => {
+                    expect(false).toBe(true);
+                    done();
+                });
+        });
+    });
+
+    describe('saveAllFieldsWIthEdits with multiple fields', () => {
+        let fields = [{id: 1}, {id: 2}, {id: 3}];
+        let mockGetFields = () => {
+            return fields;
+        };
+
+        beforeEach(() => {
+            FieldsActionsRewireAPI.__Rewire__('getFields', mockGetFields);
+        });
+        afterEach(() => {
+            FieldsActionsRewireAPI.__ResetDependency__('getFields');
+        });
+
+        it('verify multiple fields to update', (done) => {
+            fields = [];
+            const store = mockReportsStore({});
+            return store.dispatch(fieldActions.saveAllNewFields(appId, tblId)).then(
+                () => {
+                    expect(mockFieldService.prototype.createField.calls.count()).toEqual(fields.length);
+                    expect(true).toBe(true);
+                    done();
+                },
+                () => {
+                    expect(false).toBe(true);
+                    done();
+                });
+        });
+    });
+});
+
+describe('Field Actions failure workflow', () => {
+    const appId = '1';
+    const tblId = '2';
+    const field = {id: 10};
+
+    let errorResponse = {
+        response: {
+            error: {status:500}
+        }
+    };
+    class mockFieldService {
+        getFields() {
+            return Promise.reject(errorResponse);
+        }
+        createField() {
+            return Promise.reject(errorResponse);
+        }
+        updateField() {
+            return Promise.reject(errorResponse);
+        }
+    }
+
+    beforeEach(() => {
+        spyOn(mockFieldService.prototype, 'getFields').and.callThrough();
+        spyOn(mockFieldService.prototype, 'createField').and.callThrough();
+        spyOn(mockFieldService.prototype, 'updateField').and.callThrough();
+        FieldsActionsRewireAPI.__Rewire__('FieldsService', mockFieldService);
+    });
+    afterEach(() => {
+        FieldsActionsRewireAPI.__ResetDependency__('FieldsService');
+        mockFieldService.prototype.getFields.calls.reset();
+        mockFieldService.prototype.createField.calls.reset();
+        mockFieldService.prototype.updateField.calls.reset();
+    });
+
+    let saveNewFieldTestCases = [
+        {name:'verify missing appId parameter', appId:null, tblId:tblId, field:field},
+        {name:'verify missing tblId parameter', appId:appId, tblId:null, field:field},
+        {name:'verify missing field parameter', appId:appId, tblId:tblId, field:null},
+        {name:'verify missing parameters'},
+        {name:'verify createField reject response', appId:appId, tblId:tblId, field:field, rejectTest:true}
+    ];
+
+    saveNewFieldTestCases.forEach(testCase => {
+        it(testCase.name, (done) => {
+            let expectedActions = [];
+            expectedActions.push(event(testCase.appId, testCase.tblId, types.LOAD_FIELDS_ERROR, {error:jasmine.any(Object)}));
+
+            const store = mockReportsStore({});
+            return store.dispatch(fieldActions.saveNewField(testCase.appId, testCase.tblId, testCase.field)).then(
+                () => {
+                    expect(false).toBe(true);
+                    done();
+                },
+                () => {
+                    expect(store.getActions()).toEqual(expectedActions);
+                    if (testCase.rejectTest === true) {
+                        expect(mockFieldService.prototype.createField).toHaveBeenCalled();
+                    } else {
+                        expect(mockFieldService.prototype.createField).not.toHaveBeenCalled();
+                    }
+                    done();
+                });
+        });
+    });
+
+    let updateFieldsPropertiesTestCases = [
+        {name:'verify missing appId parameter', appId:null, tblId:tblId, field:field},
+        {name:'verify missing tblId parameter', appId:appId, tblId:null, field:field},
+        {name:'verify missing field parameter', appId:appId, tblId:tblId, field:null},
+        {name:'verify missing parameters'},
+        {name:'verify createField reject response', appId:appId, tblId:tblId, field:field, rejectTest:true}
+    ];
+
+    updateFieldsPropertiesTestCases.forEach(testCase => {
+        it(testCase.name, (done) => {
+            let expectedActions = [];
+            expectedActions.push(event(testCase.appId, testCase.tblId, types.LOAD_FIELDS_ERROR, {error:jasmine.any(Object)}));
+
+            const store = mockReportsStore({});
+            return store.dispatch(fieldActions.updateFieldProperties(testCase.appId, testCase.tblId, testCase.field)).then(
+                () => {
+                    expect(false).toBe(true);
+                    done();
+                },
+                () => {
+                    expect(store.getActions()).toEqual(expectedActions);
+                    if (testCase.rejectTest === true) {
+                        expect(mockFieldService.prototype.updateField).toHaveBeenCalled();
+                    } else {
+                        expect(mockFieldService.prototype.updateField).not.toHaveBeenCalled();
+                    }
+                    done();
+                });
+        });
+    });
+
+    let loadFieldsTestCases = [
+        {name:'verify missing appId parameter', tblId:tblId},
+        {name:'verify missing tblId parameter', appId:appId},
+        {name:'verify missing parameters'},
+        {name:'verify getFields reject response', appId:appId, tblId:tblId, rejectTest:true}
+    ];
+
+    loadFieldsTestCases.forEach(testCase => {
+        it(testCase.name, (done) => {
+            let expectedActions = [];
+            if (testCase.rejectTest === true) {
+                expectedActions.push(event(testCase.appId, testCase.tblId, types.LOAD_FIELDS));
+            }
+            expectedActions.push(event(testCase.appId, testCase.tblId, types.LOAD_FIELDS_ERROR, {error:jasmine.any(Object)}));
+
+            const store = mockReportsStore({});
+            return store.dispatch(fieldActions.loadFields(testCase.appId, testCase.tblId)).then(
+                () => {
+                    expect(false).toBe(true);
+                    done();
+                },
+                () => {
+                    expect(store.getActions()).toEqual(expectedActions);
+                    if (testCase.rejectTest === true) {
+                        expect(mockFieldService.prototype.getFields).toHaveBeenCalled();
+                    } else {
+                        expect(mockFieldService.prototype.getFields).not.toHaveBeenCalled();
+                    }
+                    done();
+                });
         });
     });
 });

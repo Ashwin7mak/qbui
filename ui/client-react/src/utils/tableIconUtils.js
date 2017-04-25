@@ -4,9 +4,7 @@
 
 import _ from 'lodash';
 
-const DEFAULT_TABLE_ICON = "iconTableUISturdy-report-table";
-
-const ICON_PREFIX = "icon-TableIcons_sturdy_";
+const DEFAULT_TABLE_ICON = "Spreadsheet";
 
 const TAGS_TO_ICONS_MAP =  {
     "Regions": "dots",
@@ -22,7 +20,7 @@ const Tags = _.keys(TAGS_TO_ICONS_MAP);
 class TableIconUtils {
     static getTableIcon(tableName) {
         if (TAGS_TO_ICONS_MAP[tableName]) {
-            return ICON_PREFIX + TAGS_TO_ICONS_MAP[tableName];
+            return TAGS_TO_ICONS_MAP[tableName];
         }
         let matchedTag = _.find(Tags, function(tag) {
             if (tag.indexOf(tableName) !== -1 || (tableName && tableName.indexOf(tag) !== -1)) {
@@ -30,7 +28,7 @@ class TableIconUtils {
             }
         });
         if (matchedTag) {
-            return ICON_PREFIX + TAGS_TO_ICONS_MAP[matchedTag];
+            return TAGS_TO_ICONS_MAP[matchedTag];
         }
         return DEFAULT_TABLE_ICON;
     }

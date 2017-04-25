@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import TestUtils, {Simulate} from 'react-addons-test-utils';
 
-import EmailFieldValueEditor from '../../src/components/fields/emailFieldValueEditor';
+import EmailFieldValueEditor, {__RewireAPI__ as EmailFieldValueEditorRewireAPI} from '../../src/components/fields/emailFieldValueEditor';
 
 
 let placeholderText = 'name@domain.com';
@@ -44,11 +44,11 @@ let component, domComponent, emailInput;
 describe('EmailFieldValueEditor', () => {
 
     beforeAll(() => {
-        EmailFieldValueEditor.__Rewire__('Breakpoints', mockBreakpoints);
+        EmailFieldValueEditorRewireAPI.__Rewire__('Breakpoints', mockBreakpoints);
     });
 
     afterAll(() => {
-        EmailFieldValueEditor.__ResetDependency__('Breakpoints');
+        EmailFieldValueEditorRewireAPI.__ResetDependency__('Breakpoints');
     });
 
     it('has placeholder text', () => {

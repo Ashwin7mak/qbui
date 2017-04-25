@@ -135,10 +135,12 @@ $reportActionsMinHeight: $tableActionsContainerMinHeight;
         min-height: $tableActionsContainerMinHeight;
     }
 
+    .embeddedReportContainer .tableActionsContainer {
+        min-height: 30px;
+    }
+
     .reportActions {
         line-height: $reportActionsMinHeight;
         align-items: center;
     }
 }
-
-

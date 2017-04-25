@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import TestUtils from 'react-addons-test-utils';
-import FieldChoiceList  from '../../src/components/sortGroup/fieldChoiceList';
+import FieldChoiceList, {__RewireAPI__ as FieldChoiceListRewireAPI}  from '../../src/components/sortGroup/fieldChoiceList';
 
 
 var FieldChoice = React.createClass({
@@ -49,11 +49,11 @@ describe('FieldChoiceList functions', () => {
         };
         spyOn(mockCallbacks, 'showFields').and.callThrough();
 
-        FieldChoiceList.__Rewire__('FieldChoice', FieldChoice);
+        FieldChoiceListRewireAPI.__Rewire__('FieldChoice', FieldChoice);
     });
 
     afterEach(() => {
-        FieldChoiceList.__ResetDependency__('FieldChoice');
+        FieldChoiceListRewireAPI.__ResetDependency__('FieldChoice');
     });
 
 

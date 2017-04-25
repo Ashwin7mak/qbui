@@ -1,10 +1,17 @@
 import React, {PropTypes, Component} from 'react';
 import {DragLayer} from 'react-dnd';
+import FieldFormats from '../../utils/fieldFormats';
 import draggableItemTypes from './draggableItemTypes';
 import FieldToken from './fieldToken/fieldToken';
 import Locale from '../../locales/locales';
 import consts from '../../../../common/src/constants';
+import Device from '../../utils/device';
 import _ from 'lodash';
+
+// Values from fieldToken.scss
+export const TOKEN_WIDTH = 250;
+export const TOKEN_HEIGHT = 30;
+export const TOKEN_ICON_WIDTH = 35;
 
 const layerStyles = {
     cursor: 'move',
@@ -37,7 +44,11 @@ function getItemStyles(props) {
 
     let {x, y} = currentOffset;
 
-    const transform = `translate(${x - 17}px, ${y - 17}px)`;
+    // On small breakpoints, the center of the token is under the mouse. In larger breakpoints, the mouse is on the
+    // field token icon
+    const shiftTokenX = (Device.isTouch() ? (TOKEN_WIDTH / 2) : (TOKEN_ICON_WIDTH / 2));
+    const shiftTokenY = TOKEN_HEIGHT / 2;
+    const transform = `translate(${x - shiftTokenX}px, ${y - shiftTokenY}px)`;
 
     return {
         transform,
@@ -47,12 +58,12 @@ function getItemStyles(props) {
 
 export class FormBuilderCustomDragLayer extends Component {
     renderItem(type, item) {
-        let fieldType = (_.has(item, 'relatedField.datatypeAttributes.type') ? item.relatedField.datatypeAttributes.type : consts.TEXT);
-        let label = (_.has(item, 'relatedField.name') ? item.relatedField.name : Locale.getMessage(`builder.fields.${fieldType}`));
-
+        let fieldType = (_.has(item, 'relatedField.datatypeAttributes') ? FieldFormats.getFormatType(item.relatedField) : consts.TEXT);
+        let label = (_.has(item, 'relatedField.name') ? item.relatedField.name : Locale.getMessage(`fieldsDefaultLabels.${fieldType}`));
         switch (type) {
         case draggableItemTypes.FIELD :
-            return (<FieldToken title={label} type={fieldType} />);
+            // Show the FieldToken in its dragging state. Always dragging as part of customDragLayer so hardcoded to true.
+            return (<FieldToken title={label} type={fieldType} isDragging={true} />);
         default :
             return null;
         }

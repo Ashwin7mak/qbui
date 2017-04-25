@@ -4,6 +4,7 @@
     let constants = require('../../../common/src/constants');
 
     let ACCESS_RIGHTS = 'accessRights';
+    let ADMIN = 'admin';
     let APPS = 'apps';
     let DEFAULT_HOMEPAGE = 'defaulthomepage';
     let FACET_RESULTS = 'facets/results';
@@ -11,17 +12,21 @@
     let FORMS = 'forms';
     let FORM_TYPE = 'formType';
     let TABLES = 'tables';
+    let TICKET = 'ticket';
     let RECORDS = 'records';
     let COUNT_QUERY = 'countQuery';
     let REPORTS = 'reports';
     let REPORT_COUNT = 'count';
     let REPORT_RESULTS = 'results';
+    let ROLES = 'roles';
     let REPORT_INVOKE = 'invoke';
     let USERS = 'users';
     let RELATIONSHIPS = 'relationships';
+    let TABLEPROPERTIES = 'tableproperties';
 
-    let SET_APPLICATION_STACK_JBI = 'JBI_SetAdminRedirectToV3';
-    let GET_APPLICATION_STACK_JBI = 'JBI_GetAdminRedirectToV3';
+    let FEATURE_SWITCHES = 'featureSwitches';
+    let FEATURE_SWITCH_STATES = FEATURE_SWITCHES + '/status';
+    let WHOAMI = 'whoami';
 
     //  regular expressions to determine a url route. The expression is interpreted as:
     //      (.*)? - optionally match any character(s)
@@ -34,12 +39,19 @@
     let REGEX_RECORDS_ROUTE = /apps\/.*\/tables\/.*\/records(.*)?$/i;
     let REGEX_REPORT_RESULTS_ROUTE = /apps\/.*\/tables\/.*\/reports\/.*\/results(.*)?$/i;
     let REGEX_TABLE_HOMEPAGE_ROUTE = /apps\/.*\/tables\/.*\/homepage(.*)?$/i;
+    let REGEX_ADMIN_ROUTE = /admin(.*)?$/i;
+
 
     /**
-     *
+     * Root endpoint of current stack
+     * .NET handlers are /qb/
      */
-    function getLegacyRoot() {
-        return '/db';
+    function getLegacyStackDotNetRoot() {
+        return '/qb';
+    }
+
+    function getLegacyStackMainHandlerRoot() {
+        return '/db/main';
     }
 
     /**
@@ -47,6 +59,13 @@
      */
     function getEERoot() {
         return '/ee';
+    }
+
+    /**
+     *
+     */
+    function getAWSRoot() {
+        return '/dev';
     }
 
     /**
@@ -180,15 +199,24 @@
      * @returns {*}
      */
     function getEEFormsRoute(url, formId) {
-        if (!REGEX_RECORDS_FORMS_COMPONENT_ROUTE.test(url) &&
-            !REGEX_FORMS_COMPONENT_ROUTE.test(url)) {
-            return getEEReqURL(url);
-        } else {
-            let root = getUrlRoot(url, TABLES);
-            let eeUrl = getEEReqURL(root);
+        let root = getUrlRoot(url, TABLES);
+        if (!root) {
+            return url;
+        }
+
+        let eeUrl = getEEReqURL(root);
+
+        if (!eeUrl) {
+            //  no url root for TABLES found; return original url unchanged
+            return eeUrl;
+        }
+        eeUrl = eeUrl + '/' + FORMS;
+        if (REGEX_RECORDS_FORMS_COMPONENT_ROUTE.test(url) ||
+            REGEX_FORMS_COMPONENT_ROUTE.test(url)) {
             if (formId) {
-                return eeUrl + '/' + FORMS + (formId ? '/' + formId : '');
+                return eeUrl + (formId ? '/' + formId : '');
             }
+
             if (url.search('formType') !== -1) {
                 let formType;
                 url.split("&").forEach(item => {
@@ -200,12 +228,30 @@
                     }
                 });
 
-                return eeUrl + '/' + FORMS + (formType ? '/' + FORM_TYPE + '/' + formType.toUpperCase() : '');
+                return eeUrl + (formType ? '/' + FORM_TYPE + '/' + formType.toUpperCase() : '');
             }
-
-            //  no url root for TABLES found; return original url unchanged
-            return eeUrl;
         }
+        return eeUrl;
+    }
+
+    /**
+     * get feature switches route on AWS
+     * @param url
+     * @returns {string}
+     */
+    function getAWSFeatureSwitchesRoute(url) {
+
+        return getAWSRoot() + '/' + FEATURE_SWITCHES;
+    }
+
+    /**
+     * get feature switch states route on AWS
+     * @param url
+     * @returns {string}
+     */
+    function getAWSFeatureSwitchStatesRoute(url) {
+
+        return getAWSRoot() + '/' + FEATURE_SWITCH_STATES;
     }
 
     module.exports  = {
@@ -311,6 +357,26 @@
 
         /**
          * For the given req.url, extract the APPS identifier/id and
+         * append the ROLES identifier.
+         *
+         * Example:  url: /apps/123/rest/of/url
+         *           return: /apps/123/roles
+         *
+         * @param url
+         * @returns {*}
+         */
+        getAppRolesRoute: function(url) {
+            let root = getUrlRoot(url, APPS);
+            if (root) {
+                return root + '/' + ROLES + '/';
+            }
+
+            //  no url root for APPS found; return original url unchanged
+            return url;
+        },
+
+        /**
+         * For the given req.url, extract the APPS identifier/id and
          * append the TABLE identifier and optional tableId.
          *
          * Example:  url: /apps/123/rest/of/url
@@ -328,6 +394,32 @@
 
             //  no url root for APPS found; return original url unchanged
             return url;
+        },
+
+        getTablePropertiesRoute: function(url, tableId) {
+            let root = getUrlRoot(url, APPS);
+            if (root) {
+                let eeUrl = getEEReqURL(root);
+                if (eeUrl) {
+                    return eeUrl + '/' + TABLES + (tableId ? '/' + tableId : '') + '/' + TABLEPROPERTIES;
+                }
+            }
+
+            //  no url root for APPS found; return original url unchanged
+            return url;
+        },
+
+        /**
+         * For a given table url get the EE route
+         * For example url: api/api/apps/123/tables/456
+         *             returns: ee/apps/123/tables/456
+         * @param url
+         * @param tableId
+         * @returns {*}
+         */
+        getEETablesRoute: function(url, tableId) {
+            let root = this.getTablesRoute(url, tableId);
+            return getEEReqURL(root);
         },
 
         /**
@@ -579,33 +671,85 @@
             }
             return url;
         },
-
         /**
-         * Return the Quickbase classic url route to get the application's
-         * current stack preference or set the application's stack preference.
-         *
-         * Examples:
-         *      /db/<appid>/?a=JBI_GetAdminRedirectToV3
-         *      /db/<appid>/?a=JBI_SetAdminRedirectToV3&value=1
-         *
-         * @param appId
-         * @param isPost - is this a post request
-         * @param value - value to set the application preference for post request
-         *
+         * Return the ticket route from the req.url.
+         * @param url
          * @returns {*}
          */
-        getApplicationStackPreferenceRoute: function(appId, isPost, value) {
-            let root = getLegacyRoot();
-            if (appId) {
-                root += '/' + appId;
+        getTicketRoute: function(url) {
+            //if (typeof url === 'string') {
+            //    let offset = url.toLowerCase().indexOf(TICKET);
+            //    if (offset !== -1) {
+            //        let root = url.substring(0, offset) + TICKET;
+            //        return root;
+            //    }
+            //}
+            let root = getUrlRoot(url, TICKET);
+            if (root) {
+                return root;
+            }
+            return url;
+        },
 
-                if (isPost === true) {
-                    root += '?' + constants.REQUEST_PARAMETER.LEGACY_STACK.ACTION + '=' + SET_APPLICATION_STACK_JBI + '&' + constants.REQUEST_PARAMETER.LEGACY_STACK.VALUE + '=' + value;
-                } else {
-                    root += '?' + constants.REQUEST_PARAMETER.LEGACY_STACK.ACTION + '=' + GET_APPLICATION_STACK_JBI;
+        /**
+         * Return the ticket/whoAmI route from the req.url.
+         * @param url
+         * @returns {*}
+         */
+        getWhoAmIRoute: function(url) {
+            if (typeof url === 'string') {
+                let offset = url.toLowerCase().indexOf(TICKET);
+                if (offset !== -1) {
+                    let root = url.substring(0, offset) + TICKET + '/' + WHOAMI;
+                    return root;
                 }
             }
-            return root;
+            return url;
+        },
+
+        /**
+         * Return the users/{userId} route from the req.url.
+         * @param url
+         * @returns {*}
+         */
+        getUsersRoute: function(url, userId) {
+            if (typeof url === 'string') {
+                let offset = url.toLowerCase().indexOf(USERS);
+                if (offset !== -1) {
+                    let root = url.substring(0, offset) + USERS;
+                    if (userId) {
+                        root += '/' + userId;
+                    }
+                    return root;
+                }
+            }
+            return url;
+        },
+
+        /**
+         * Return the users/{userId} route from the req.url.
+         * @param url
+         * @returns {*}
+         */
+        getUsersRouteForAdmin: function(url, userId) {
+            if (typeof url === 'string') {
+                let offset = url.toLowerCase().indexOf(ADMIN);
+                if (offset !== -1) {
+                    let root = url.substring(0, offset) + USERS;
+                    if (userId) {
+                        root += '/' + userId;
+                    }
+                    return root;
+                }
+            }
+            return url;
+        },
+
+        isAdminRoute(url) {
+            if (typeof url === 'string') {
+                return REGEX_ADMIN_ROUTE.test(url);
+            }
+            return false;
         },
 
         /**
@@ -671,7 +815,102 @@
                 return REGEX_FIELDS_ROUTE.test(url);
             }
             return false;
+        },
+
+        /**
+         * get AWS route for feature switches
+         * @param url
+         * @param isOverrides
+         * @param switchId
+         * @param overrideId
+         * @returns {string}
+         */
+        getFeatureSwitchesRoute: function(url, isOverrides, switchId, overrideId) {
+
+            let route = getAWSFeatureSwitchesRoute(url);
+
+            if (switchId) {
+                route += '/' + switchId;
+            }
+
+            if (isOverrides) {
+                route += '/featureSwitchOverrides';
+            }
+
+            if (overrideId) {
+                route += '/' + overrideId;
+            }
+            return route;
+        },
+
+        /**
+         * get AWS route for feature switches bulk operations
+         * @param url
+         * @param isOverrides
+         * @param switchId
+         * @param overrideId
+         * @param ids
+         * @returns {string}
+         */
+        getFeatureSwitchesBulkRoute: function(url, isOverrides, switchId) {
+
+            let route = getAWSFeatureSwitchesRoute(url);
+
+            if (switchId) {
+                route += '/' + switchId;
+            }
+            if (isOverrides) {
+                route += '/featureSwitchOverrides';
+            }
+            route += '/bulk';
+
+            return route;
+        },
+
+        /**
+         * get AWS route for feature switch states
+         * @param url
+         * @param appId
+         * @param realmId
+         * @returns {string}
+         */
+        getFeatureSwitchStatesRoute: function(url, realmId, appId) {
+
+            let route = getAWSFeatureSwitchStatesRoute(url);
+
+            route += '?realmId=' + realmId;
+
+            if (appId) {
+                route += '&appId=' + appId;
+            }
+
+            return route;
+        },
+
+        /**
+         * Call .NET handler to return the Current Stack Account Users information
+         * @returns {string}
+         */
+        getAccountUsersLegacyStackRoute: function(accountId) {
+            return `${getLegacyStackDotNetRoot()}/governance/${accountId}/users`;
+        },
+
+        /**
+         * Call .NET handler to return the context of the account and user
+         * @returns {string}
+         */
+        getGovernanceContextLegacyStackRoute: function(accountId) {
+            return `${getLegacyStackDotNetRoot()}/governance/context/${accountId ? accountId : ''}`;
+        },
+
+        /**
+         * Navigate to the legacy stack 'My Apps' page
+         * @returns {string}
+         */
+        getMyAppsLegacyStackRoute: function() {
+            return `${getLegacyStackMainHandlerRoot()}?a=myqb`;
         }
+
 
     };
 

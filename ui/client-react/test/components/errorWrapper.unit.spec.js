@@ -1,6 +1,6 @@
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
-import ErrorWrapper  from '../../src/components/fields/errorWrapper';
+import ErrorWrapper, {__RewireAPI__ as ErrorWrapperRewireAPI}  from '../../src/components/fields/errorWrapper';
 import Breakpoints from '../../src/utils/breakpoints';
 
 class BreakpointsAlwaysSmallMock {
@@ -43,7 +43,7 @@ describe('ErrorWrapper functions', () => {
     });
 
     it('test render of component on small breakpoint', () => {
-        ErrorWrapper.__Rewire__('Breakpoints', BreakpointsAlwaysSmallMock);
+        ErrorWrapperRewireAPI.__Rewire__('Breakpoints', BreakpointsAlwaysSmallMock);
         component = TestUtils.renderIntoDocument(
             <ErrorWrapper isInvalid={true}
                           invalidMessage={"somethings wrong"}>
@@ -55,7 +55,7 @@ describe('ErrorWrapper functions', () => {
         let errorText = TestUtils.scryRenderedDOMComponentsWithClass(component, "errorText");
         expect(errorText.length).toBe(1);
         expect(errorText[0].innerHTML).toBe("somethings wrong");
-        ErrorWrapper.__ResetDependency__('Breakpoints');
+        ErrorWrapperRewireAPI.__ResetDependency__('Breakpoints');
     });
 
 });

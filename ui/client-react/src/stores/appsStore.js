@@ -10,11 +10,13 @@ let AppsStore = Fluxxor.createStore({
     initialize() {
         this.apps = null;
         this.appUsers = [];
+        this.appUsersUnfiltered = {};
+        this.appRoles = [];
+        this.appOwner = {};
         // Default is true because the apps must load before the website is usable
         this.loading = true;
         this.loadingAppUsers = false;
         this.error = false;
-        this.savingAppStack = false;
 
         this.bindActions(
             actions.LOAD_APPS, this.onLoadApps,
@@ -22,14 +24,19 @@ let AppsStore = Fluxxor.createStore({
             actions.LOAD_APPS_FAILED, this.onLoadAppsFailed,
             actions.SELECT_APP, this.onSelectApp,
             actions.SELECT_TABLE, this.onSelectTable,
+            actions.UPDATED_TABLE_PROPS, this.onUpdateTableProps,
 
             actions.LOAD_APP_USERS, this.onLoadAppUsers,
             actions.LOAD_APP_USERS_FAILED, this.onLoadAppUsersFailed,
             actions.LOAD_APP_USERS_SUCCESS, this.onLoadAppUsersSuccess,
 
-            actions.SET_APP_STACK, this.onSetAppStack,
-            actions.SET_APP_STACK_SUCCESS, this.onSetAppStackSuccess,
-            actions.SET_APP_STACK_FAILED, this.onSetAppStackFailed
+            actions.LOAD_APP_ROLES, this.onLoadAppRoles,
+            actions.LOAD_APP_ROLES_FAILED, this.onLoadAppRolesFailed,
+            actions.LOAD_APP_ROLES_SUCCESS, this.onLoadAppRolesSuccess,
+
+            actions.LOAD_APP_OWNER, this.onLoadAppOwner,
+            actions.LOAD_APP_OWNER_FAILED, this.onLoadAppOwnerFailed,
+            actions.LOAD_APP_OWNER_SUCCESS, this.onLoadAppOwnerSuccess
         );
 
         this.logger = new Logger();
@@ -47,7 +54,9 @@ let AppsStore = Fluxxor.createStore({
         this.apps.forEach((app) => {
             if (app.tables) {
                 app.tables.forEach((table) => {
-                    table.icon = TableIconUtils.getTableIcon(table.name);
+                    if (!table.tableIcon) {
+                        table.tableIcon = TableIconUtils.getTableIcon(table.name);
+                    }
                 });
             }
         });
@@ -70,9 +79,34 @@ let AppsStore = Fluxxor.createStore({
         this.loadingAppUsers = false;
         this.emit('change');
     },
-    onLoadAppUsersSuccess(users) {
+    /**
+     * userArray is structured so that the filtered list of users is mapped for our userPicker in index 0
+     * index 1 is the untouched response from Core's getAppUsers
+     */
+    onLoadAppUsersSuccess(userArray) {
         this.loadingAppUsers = false;
-        this.appUsers = users;
+        this.appUsers = userArray[0];
+        this.appUsersUnfiltered = userArray[1];
+        this.emit('change');
+    },
+    onLoadAppRoles() {
+        //place holder incase we want to in the future (I know we are going to migrate to redux as well)
+    },
+    onLoadAppRolesFailed() {
+        //place holder incase we want to in the future (I know we are going to migrate to redux as well)
+    },
+    onLoadAppRolesSuccess(roles) {
+        this.appRoles = roles;
+        this.emit('change');
+    },
+    onLoadAppOwner() {
+        //place holder incase we want to in the future (I know we are going to migrate to redux as well)
+    },
+    onLoadAppOwnerFailed() {
+        //place holder incase we want to in the future (I know we are going to migrate to redux as well)
+    },
+    onLoadAppOwnerSuccess(appOwner) {
+        this.appOwner = appOwner;
         this.emit('change');
     },
     onSelectApp(appId) {
@@ -85,25 +119,29 @@ let AppsStore = Fluxxor.createStore({
 
         this.emit('change');
     },
-    onSetAppStack() {
-        this.savingAppStack = true;
-
-        this.emit('change');
-    },
-    onSetAppStackSuccess(payload) {
-        const {appId, openInV3} = payload;
-
-        this.savingAppStack = false;
-
-        const app = _.find(this.apps, {id: appId});
-
-        if (app) {
-            app.openInV3 = openInV3;
-            this.emit('change');
-        }
-    },
-    onSetAppStackFailed(payLoad) {
-        this.savingAppStack = false;
+    /**
+     * A table's props were updated. Find the table in the selected app and replace its details with those passed in.
+     * An example of who updated the table might be user updated table name from settings pages.
+     * @param tblId
+     * @param tableInfo
+     */
+    onUpdateTableProps(payload) {
+        let tblId = payload.tableId;
+        let tableInfo = payload.tableInfo;
+        let newAppsList = this.apps.map((app) => {
+            if (app.id === this.selectedAppId) {
+                let newAppTables = app.tables.map((table) => {
+                    if (table.id === tblId) {
+                        return tableInfo;
+                    } else {
+                        return table;
+                    }
+                });
+                app.tables = newAppTables;
+            }
+            return app;
+        });
+        this.apps = newAppsList;
         this.emit('change');
     },
     getState() {
@@ -111,10 +149,12 @@ let AppsStore = Fluxxor.createStore({
             apps: this.apps,
             selectedAppId: this.selectedAppId,
             appUsers: this.appUsers,
+            appUsersUnfiltered: this.appUsersUnfiltered,
+            appRoles: this.appRoles,
+            appOwner: this.appOwner,
             selectedTableId: this.selectedTableId,
             loading: this.loading,
             loadingAppUsers: this.loadingAppUsers,
-            savingAppStack: this.savingAppStack,
             error: this.error
         };
     },

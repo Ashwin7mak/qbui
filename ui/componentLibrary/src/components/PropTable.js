@@ -7,7 +7,7 @@ let capitalize = str => str[0].toUpperCase() + str.substr(1);
 
 function getPropsData(component, metadata) {
     let componentData = metadata[component] || {};
-    let props = componentData.props || {};
+    let props = componentData.props || false;
 
     if (componentData.composes) {
         componentData.composes.forEach(other => {
@@ -41,6 +41,10 @@ const PropTable = React.createClass({
     render() {
         let propsData = this.propsData;
 
+        if (propsData === false) {
+            return <div className="text-muted"><em>This component was built with class or function syntax. Props are not available. Check the source code.</em></div>;
+        }
+
         if (!Object.keys(propsData).length) {
             return <div className="text-muted"><em>There are no public props for this component.</em></div>;
         }
@@ -61,6 +65,8 @@ const PropTable = React.createClass({
             </Table>
         );
     },
+
+
 
     _renderRows(propsData) {
         return Object.keys(propsData)

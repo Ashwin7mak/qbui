@@ -20,6 +20,18 @@ describe('Validate RouteHelper unit tests', function() {
         stubLog.restore();
     });
 
+    describe('current stack route helpers', function() {
+        var accountIds = [1, 100, 200];
+
+        accountIds.forEach(function(accountId) {
+            it('Testing account: ' + accountId, function(done) {
+                assert.equal(routeHelper.getAccountUsersLegacyStackRoute(accountId),
+                    `/qb/governance/${accountId}/users`);
+                done();
+            });
+        });
+    });
+
     describe('validate transformUrlRoute method', function() {
         var testCases = [
             {name: 'test empty url', url: '', curRoute:'abc', newRoute:'def', expectation: ''},
@@ -197,10 +209,10 @@ describe('Validate RouteHelper unit tests', function() {
             {name: 'test invalid url', url: '/non/parsing/url', expectation: '/non/parsing/url'},
             {name: 'test invalid url - no table id', url: '/apps/123/tables', expectation: '/apps/123/tables'},
             {name: 'test invalid url - no table id2', url: '/apps/123/tables/', expectation: '/apps/123/tables/'},
-            {name: 'test valid url with (/api/api) in record endpoint', url: '/api/api/apps/123/tables/456/records/789', expectation: '/ee/apps/123/tables/456/records/789'},
-            {name: 'test valid url with (/api/api) in table endpoint', url: '/api/api/apps/123/tables/456', expectation: '/ee/apps/123/tables/456'},
-            {name: 'test valid url with (/api) in record endpoint', url: '/api/apps/123/tables/456/records/789', expectation: '/ee/apps/123/tables/456/records/789'},
-            {name: 'test valid url with (/api) in table endpoint', url: '/api/apps/123/tables/456', expectation: '/ee/apps/123/tables/456'}
+            {name: 'test valid url with (/api/api) in record endpoint', url: '/api/api/apps/123/tables/456/records/789', expectation: '/ee/apps/123/tables/456/forms'},
+            {name: 'test valid url with (/api/api) in table endpoint', url: '/api/api/apps/123/tables/456', expectation: '/ee/apps/123/tables/456/forms'},
+            {name: 'test valid url with (/api) in record endpoint', url: '/api/apps/123/tables/456/records/789', expectation: '/ee/apps/123/tables/456/forms'},
+            {name: 'test valid url with (/api) in table endpoint', url: '/api/apps/123/tables/456', expectation: '/ee/apps/123/tables/456/forms'}
         ];
 
         testCases.forEach(function(testCase) {
@@ -461,24 +473,98 @@ describe('Validate RouteHelper unit tests', function() {
         });
     });
 
-    describe('validate getApplicationStackPreferenceRoute method', function() {
+    describe('validate getAppRolesRoute method', function() {
         var testCases = [
-            {name: 'test no app id', appId: '', expectation: '/db'},
-            {name: 'test undefined app id', expectation: '/db'},
-            {name: 'test get app preference with undefined value', appId: '12345', isPost: false, expectation: '/db/12345?a=JBI_GetAdminRedirectToV3'},
-            {name: 'test get app preference with value', appId: '12345', isPost: false, value: '1',  expectation: '/db/12345?a=JBI_GetAdminRedirectToV3'},
-            {name: 'test get app preference with only appId', appId: '12345',  expectation: '/db/12345?a=JBI_GetAdminRedirectToV3'},
-            {name: 'test set app preference with empty value', appId: '12345', isPost: true, value: '',  expectation: '/db/12345?a=JBI_SetAdminRedirectToV3&value='},
-            {name: 'test set app preference with undefined value', appId: '12345', isPost: true, expectation: '/db/12345?a=JBI_SetAdminRedirectToV3&value=undefined'},
-            {name: 'test set app preference', appId: '12345', isPost: true, value: '1', expectation: '/db/12345?a=JBI_SetAdminRedirectToV3&value=1'}
+            {name: 'test empty url', url: '', expectation: ''},
+            {name: 'test null url', url: null, expectation: null},
+            {name: 'test invalid url', url: '/non/parsing/url', expectation: '/non/parsing/url'},
+            {name: 'test invalid url - no app', url: '/apps/', expectation: '/apps/'},
+            {name: 'test valid url', url: '/apps/123/roles', expectation: '/apps/123/roles/'}
         ];
 
         testCases.forEach(function(testCase) {
             it('Test case: ' + testCase.name, function(done) {
-                assert.equal(routeHelper.getApplicationStackPreferenceRoute(testCase.appId, testCase.isPost, testCase.value), testCase.expectation);
+                assert.equal(routeHelper.getAppRolesRoute(testCase.url), testCase.expectation);
                 done();
             });
         });
     });
 
+    describe('validate getTicketRoute method', function() {
+        var testCases = [
+            {name: 'test empty input', url: '', expectation: ''},
+            {name: 'test null url', url: null, expectation: null},
+            {name: 'test with invalid url', url: '/url/prefix/', expectation: '/url/prefix/'},
+            {name: 'test with valid url with ticket', url: '/url/prefix/ticket', expectation: '/url/prefix/ticket'},
+            {name: 'test with valid url with ticket in path', url: '/url/prefix/ticket/abc', expectation: '/url/prefix/ticket/abc'}
+        ];
+
+        testCases.forEach(function(testCase) {
+            it('Test case: ' + testCase.name, function(done) {
+                assert.equal(routeHelper.getTicketRoute(testCase.url), testCase.expectation);
+                done();
+            });
+        });
+    });
+    describe('validate whoAmIRoute method', function() {
+        var testCases = [
+            {name: 'test empty input', url: '', expectation: ''},
+            {name: 'test null url', url: null, expectation: null},
+            {name: 'test with invalid url w/o ticket', url: '/url/prefix/', expectation: '/url/prefix/'},
+            {name: 'test with valid url w ticket', url: '/url/prefix/ticket', expectation: '/url/prefix/ticket/whoami'}
+        ];
+
+        testCases.forEach(function(testCase) {
+            it('Test case: ' + testCase.name, function(done) {
+                assert.equal(routeHelper.getWhoAmIRoute(testCase.url), testCase.expectation);
+                done();
+            });
+        });
+    });
+    describe('validate getUsersRouteForAdmin method', function() {
+        var testCases = [
+            {name: 'test empty input', url: '', userId: null, expectation: ''},
+            {name: 'test null url', url: null, userId: null, expectation: null},
+            {name: 'test with invalid url with admin', url: '/admin/prefix', userId: null, expectation: '/users'},
+            {name: 'test with valid url w/o admin', url: '/url/prefix/ticket', userId: null, expectation: '/url/prefix/ticket'},
+            {name: 'test with valid url with userid', url: '/admin/prefix', userId: 1000, expectation: '/users/1000'}
+        ];
+
+        testCases.forEach(function(testCase) {
+            it('Test case: ' + testCase.name, function(done) {
+                assert.equal(routeHelper.getUsersRouteForAdmin(testCase.url, testCase.userId), testCase.expectation);
+                done();
+            });
+        });
+    });
+    describe('validate isAdminRoute method', function() {
+        var testCases = [
+            {name: 'test empty input', url: '', expectation: false},
+            {name: 'test null url', url: null, expectation: false},
+            {name: 'test with valid input 1', url: '/admin', expectation: true},
+            {name: 'test with valid input 2', url: '/admin/prefix', expectation: true},
+        ];
+
+        testCases.forEach(function(testCase) {
+            it('Test case: ' + testCase.name, function(done) {
+                assert.equal(routeHelper.isAdminRoute(testCase.url), testCase.expectation);
+                done();
+            });
+        });
+    });
+    describe('validate getEETablesRoute method', function() {
+        var testCases = [
+            {name: 'test empty input', url: '', tableId: null, expectation: ''},
+            {name: 'test null url', url: null, tableId: null, expectation: null},
+            {name: 'test with invalid url', url: 'apps/fakeapp/prefix', tableId: null, expectation: 'apps/fakeapp/tables'},
+            {name: 'test with valid url with tableId', url: 'apps/fakeapp/prefix', tableId: 123, expectation: 'apps/fakeapp/tables/123'}
+        ];
+
+        testCases.forEach(function(testCase) {
+            it('Test case: ' + testCase.name, function(done) {
+                assert.equal(routeHelper.getEETablesRoute(testCase.url, testCase.tableId), testCase.expectation);
+                done();
+            });
+        });
+    });
 });

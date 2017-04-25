@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import TestUtils from 'react-addons-test-utils';
-import SortAndGroupDialog  from '../../src/components/sortGroup/sortAndGroupDialog';
+import SortAndGroupDialog, {__RewireAPI__ as SortAndGroupDialogRewireAPI}  from '../../src/components/sortGroup/sortAndGroupDialog';
 
 var I18nMessageMock = React.createClass({
     render: function() {
@@ -33,15 +33,15 @@ describe('SortAndGroupDialog functions', () => {
 
 
     beforeEach(() => {
-        SortAndGroupDialog.__Rewire__('I18nMessage', I18nMessageMock);
-        SortAndGroupDialog.__Rewire__('FieldsPanel', FieldsPanelMock);
-        SortAndGroupDialog.__Rewire__('FieldSettings', FieldSettingsMock);
+        SortAndGroupDialogRewireAPI.__Rewire__('I18nMessage', I18nMessageMock);
+        SortAndGroupDialogRewireAPI.__Rewire__('FieldsPanel', FieldsPanelMock);
+        SortAndGroupDialogRewireAPI.__Rewire__('FieldSettings', FieldSettingsMock);
     });
 
     afterEach(() => {
-        SortAndGroupDialog.__ResetDependency__('I18nMessage');
-        SortAndGroupDialog.__ResetDependency__('FieldsPanel');
-        SortAndGroupDialog.__ResetDependency__('FieldSettings');
+        SortAndGroupDialogRewireAPI.__ResetDependency__('I18nMessage');
+        SortAndGroupDialogRewireAPI.__ResetDependency__('FieldsPanel');
+        SortAndGroupDialogRewireAPI.__ResetDependency__('FieldSettings');
     });
 
 
