@@ -29,7 +29,7 @@
                     color: $color-black-100;
                     background-color: $newTableDialog-highlight-color;
                     font-size: $font-size-h2;
-                    text-rendering: geometricPrecision;
+                    -webkit-font-smoothing: antialiased;
                     .dndImage {
                         margin-left: 20px;
                         margin-right: 40px;
