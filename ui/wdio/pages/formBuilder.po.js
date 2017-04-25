@@ -2,45 +2,78 @@
 let topNavPO = requirePO('topNav');
 
 class formBuilderPage {
-    // elements
-    get cancelBtn() {// CANCEL (form) button in footer bar
-        return browser.element('.cancelFormButton');}
-    get clearSearch() {// CLEAR (X) button in the SEARCH (new fields) textbox (left panel)
-        return browser.element('.clearSearch .searchIcon');}
-    get deleteFieldIcon() {// REMOVE (field from form) icon (when a field is selected or highlighted)
-        return browser.element('.deleteFieldIcon');}
-    // get editForm() {// REMOVE (field from form) icon (when a field is selected or highlighted)
-    //     return browser.element('.editForm');}
-    get fieldProperty_Name() {// NAME textfield in the FIELD PROPERTIES panel (when a field is selected)
-        return browser.element('.textPropertyContainer input[type="text"]');}
-    get fieldProperty_Required() {// REQUIRED ('Must be filled in') checkbox in the FIELD PROPERTIES panel (when a field is selected)
-        return browser.element('.checkboxPropertyContainer .checkbox');}
-    get fieldPropertiesTitle() {// TITLE in the FIELD PROPERTIES panel (when a field is selected)
-        return browser.element('.fieldPropertiesTitle');}
-    get fieldTokenDragging() {// the token which appears when dragging a field to another position
-        return browser.element('.fieldTokenDragging');}
-    get fieldTokenTitle() {// the label of the first NEW FIELD token
-        return browser.element('.fieldTokenTitle');}
-    get formBuilderContainer() {// the whole form builder page (all 3 panels)
-        return browser.element('.formBuilderContainer');}
-    get listOfElementsItemGroup() {// The FIRST group in the list of NEW FIELDs (left panel)
-        return browser.element('.listOfElementsItemGroup');}
-    get listOfElementsItem() {// The FIRST field in the list of NEW FIELDs (left panel)
-        return browser.element('.listOfElementsItem');}
-    get requiredCheckboxChecked() {// The MUST BE FILLED IN checkbox in its CHECKED state
-        return browser.element('.checkboxPropertyContainer .checkbox:checked');}
-    get requiredCheckboxNotChecked() {// The MUST BE FILLED IN checkbox in its UNCHECKED state
-        return browser.element('.checkboxPropertyContainer .checkbox:not(:checked)');}
-    get saveBtn() {// SAVE (form) button in footer bar
-        return browser.element('.saveFormButton');}
-    get saveOrCancelFooter() {// footer bar (container for SAVE & CANCEL buttons)
-        return browser.element('.saveOrCancelFooter');}
-    get searchInput() {// SEARCH textbox in the NEW FIELDS panel
-        return browser.element('.searchInput');    }
-    get selectedField() {// The selected field in the form builder
-        return browser.element('.selectedFormElement');}
-    get success() {// FORM SUCCESSFULLY SAVED growl msg
-        return browser.element('.notification-success');}
+    get cancelBtn() {
+        // CANCEL (form) button in footer bar
+        return browser.element('.cancelFormButton');
+    }
+    get clearSearch() {
+        // CLEAR (X) button in the SEARCH (new fields) textbox (left panel)
+        return browser.element('.clearSearch .searchIcon');
+    }
+    get deleteFieldIcon() {
+        // REMOVE (field from form) icon (when a field is selected or highlighted)
+        return browser.element('.deleteFieldIcon');
+    }
+    get fieldProperty_Name() {
+        // NAME textfield in the FIELD PROPERTIES panel (when a field is selected)
+        return browser.element('.textPropertyContainer input[type="text"]');
+    }
+    get fieldProperty_Required() {
+        // REQUIRED ('Must be filled in') checkbox in the FIELD PROPERTIES panel (when a field is selected)
+        return browser.element('.checkboxPropertyContainer .checkbox');
+    }
+    get fieldPropertiesTitle() {
+        // TITLE in the FIELD PROPERTIES panel (when a field is selected)
+        return browser.element('.fieldPropertiesTitle');
+    }
+    get fieldTokenDragging() {
+        // the token which appears when dragging a field to another position
+        return browser.element('.fieldTokenDragging');
+    }
+    get fieldTokenTitle() {
+        // the label of the first NEW FIELD token
+        return browser.element('.fieldTokenTitle');
+    }
+    get formBuilderContainer() {
+        // the whole form builder page (all 3 panels)
+        return browser.element('.formBuilderContainer');
+    }
+    get listOfElementsItemGroup() {
+        // The FIRST group in the list of NEW FIELDs (left panel)
+        return browser.element('.listOfElementsItemGroup');
+    }
+    get listOfElementsItem() {
+        // The FIRST field in the list of NEW FIELDs (left panel)
+        return browser.element('.listOfElementsItem');
+    }
+    get requiredCheckboxChecked() {
+        // The MUST BE FILLED IN checkbox in its CHECKED state
+        return browser.element('.checkboxPropertyContainer .checkbox:checked');
+    }
+    get requiredCheckboxNotChecked() {
+        // The MUST BE FILLED IN checkbox in its UNCHECKED state
+        return browser.element('.checkboxPropertyContainer .checkbox:not(:checked)');
+    }
+    get saveBtn() {
+        // SAVE (form) button in footer bar
+        return browser.element('.saveFormButton');
+    }
+    get saveOrCancelFooter() {
+        // footer bar (container for SAVE & CANCEL buttons)
+        return browser.element('.saveOrCancelFooter');
+    }
+    get searchInput() {
+        // SEARCH textbox in the NEW FIELDS panel
+        return browser.element('.searchInput');
+    }
+    get selectedField() {
+        // The selected field in the form builder
+        return browser.element('.selectedFormElement');
+    }
+    get success() {
+        // FORM SUCCESSFULLY SAVED growl msg
+        return browser.element('.notification-success');
+    }
 
     getFieldLocator(index) {
         // Returns a locator string for a specific field in the form builder
@@ -111,10 +144,11 @@ class formBuilderPage {
         // Types the specified text into the SEARCH textfield (or clicks on CLEAR if text is not specified) and waits for search results
         let oldResults = this.getNewFieldLabels();
         let newResults = oldResults;
-        if (text)
+        if (text) {
             this.searchInput.setValue(text);
-        else
+        } else {
             this.clearSearch.click();
+        }
         // wait for the results to change
         while (JSON.stringify(oldResults) === JSON.stringify(newResults)) {
             newResults = this.getNewFieldLabels();
