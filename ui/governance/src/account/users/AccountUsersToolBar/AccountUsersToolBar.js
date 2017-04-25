@@ -1,5 +1,6 @@
 import React, {PropTypes, Component} from "react";
 import AccountUsersNavigation from "./AccountUsersNavigation";
+import IconInputBox from "../../../../../reuse/client/src/components/iconInputBox";
 
 /**
  * The toolbar for the AccountUsers page
@@ -13,14 +14,7 @@ class AccountUsersToolBar extends React.Component {
     render() {
         return (
             <div>
-                <div className="filterSearchBoxContainer">
-                    <SearchBox className="filterSearchBox"
-                               searchBoxKey={"filterSearchBox_" + this.props.searchBoxKey}
-                               value={this.props.search.searchInput}
-                               onChange={this.props.onChange}
-                               onClearSearch={this.props.clearSearchString}
-                               placeholder={"Search Users"} />
-                </div>
+                <IconInputBox placeholder="Search users"/>
                 <AccountUsersNavigation id={this.props.id} totalRecords={this.props.totalRecords}/>
             </div>
         );
