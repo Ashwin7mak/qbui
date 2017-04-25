@@ -119,8 +119,11 @@
             let value = reportContentPO.getRecordCellValue(cell);
             // search for that value, should return 2-3 matches w/default data
             reportContentPO.reportFilterSearchBox.setValue(value);
+            reportContentPO.waitForReportContent();
             // verify expected results
-            reportNavPO.reportNavigation.waitForExist(null, true);
+            //reportNavPO.reportNavigation.waitForExist(null, true);
+            expect(browser.waitForExist('.reportNavigation')).toBeTruthy();
+            expect(browser.isEnabled('.reportNavigation')).toBeTruthy();
         });
     });
 }());
