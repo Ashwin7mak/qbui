@@ -82,7 +82,7 @@ export const ADD_BLANK_REPORT_RECORD = 'ADD_BLANK_REPORT_RECORD';
 export const REMOVE_BLANK_REPORT_RECORD = 'REMOVE_BLANK_REPORT_RECORD';
 export const OPEN_FIELD_SELECTOR = 'OPEN_FIELD_SELECTOR';
 export const CLOSE_FIELD_SELECTOR = 'CLOSE_FIELD_SELECTOR';
-export const ADD_COLUMN_SUCCESS = 'ADD_COLUMN_SUCCESS';
+export const ADD_COLUMN = 'ADD_COLUMN';
 export const HIDE_COLUMN = 'HIDE_COLUMN';
 
 //  ******** table report list actions ********

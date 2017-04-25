@@ -381,7 +381,7 @@ export const toggleFieldSelectorMenu = (context, appId, tblId, rptId, params) =>
 export const addColumnFromExistingField = (context, appId, tblId, rptId, params) => {
     return (dispatch) => {
         if (appId && tblId && rptId) {
-            dispatch(event(context, types.ADD_COLUMN_SUCCESS, params));
+            dispatch(event(context, types.ADD_COLUMN, params));
         } else {
             logger.error(`reportActions.addColumnToTable: Missing one or more required input parameters.  AppId:${appId}; TblId:${tblId}; RptId:${rptId}`);
         }
