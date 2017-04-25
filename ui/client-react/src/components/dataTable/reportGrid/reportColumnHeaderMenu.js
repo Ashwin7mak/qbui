@@ -219,7 +219,7 @@ export class ReportColumnHeaderMenu extends Component {
         if (this.props.isOnlyOneColumnVisible) {return;}
 
         let params = {
-            columnId: this.props.fieldDef.id
+            clickedId: this.props.fieldDef.id
         };
 
         this.props.hideColumn(CONTEXT.REPORT.NAV, this.props.appId, this.props.tblId, this.props.rptId, params);

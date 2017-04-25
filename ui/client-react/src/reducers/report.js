@@ -4,7 +4,6 @@ import {NEW_RECORD_VALUE} from '../constants/urlConstants';
 import _ from 'lodash';
 import FacetSelections from '../components/facet/facetSelections';
 import ReportModelHelper from '../models/reportModelHelper';
-import ReportColumnTransformer from '../../src/components/dataTable/reportGrid/reportColumnTransformer';
 
 /**
  * Manage array of report states
@@ -343,22 +342,25 @@ const report = (state = [], action) => {
         }
         return state;
     }
-    case types.ADD_COLUMN: {
+    case types.ADD_COLUMN_FROM_EXISTING_FIELD: {
         let currentReport = getReportFromState(action.id);
         if (currentReport) {
+            // metadata
             let columns = currentReport.data.columns;
+            let fids = currentReport.data.fids;
+            // passed in params
             let params = action.content;
             let addBefore = params.addBefore;
-            let clickedId = params.clickedId;
+            let clickedColumnId = params.clickedId;
+            let requestedColumnId = params.requestedId;
+            let requestedColumnIndex = params.requestedCurrentPosition;
 
-            let requestedColumn = params.requested;
-            let requestedColumnIndex = requestedColumn.order;
             // remove the column that is going to get shown
             let columnMoving = columns.splice(requestedColumnIndex, 1)[0];
             reorderColumns(columns);
             // searches through the current columns to find the one that was selected
             let clickedColumnIndex = columns.filter((column) => {
-                return column.fieldDef.id === clickedId;
+                return column.fieldDef.id === clickedColumnId;
             })[0].order;
 
             // add before or after the clicked column
@@ -377,12 +379,12 @@ const report = (state = [], action) => {
 
             // show the currently hidden column that was just added
             columns.map(column => {
-                if (column.fieldDef.id === requestedColumn.fieldDef.id) {
+                if (column.fieldDef.id === requestedColumnId) {
                     column.isHidden = false;
                 }
                 return column;
             });
-            currentReport.data.fids.splice(fidInsertionIndex, 0, requestedColumn.fieldDef.id);
+            fids.splice(fidInsertionIndex, 0, requestedColumnId);
             return newState(currentReport);
         }
         return state;
@@ -390,12 +392,20 @@ const report = (state = [], action) => {
     case types.HIDE_COLUMN: {
         let currentReport = getReportFromState(action.id);
         if (currentReport) {
-            currentReport.data.columns.forEach(column => {
-                if (column.fieldDef.id === action.content.columnId) {
+            // metadata
+            let columns = currentReport.data.columns;
+            let fids = currentReport.data.fids;
+            // passed in params
+            let params = action.content;
+            let clickedColumnId = params.clickedId;
+
+            columns.forEach(column => {
+                if (column.fieldDef.id === clickedColumnId) {
                     column.isHidden = true;
                 }
             });
-            currentReport.data.fids = currentReport.data.fids.filter(fid => {
+
+            fids = fids.filter(fid => {
                 return fid !== action.content.columnId;
             });
             return newState(currentReport);

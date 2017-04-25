@@ -318,14 +318,15 @@ export const Nav = React.createClass({
         this.props.toggleFieldSelectorMenu(context, appId, tblId, rptId, params);
     },
 
-    addColumnToTable(columnData, reportData) {
+    addColumnFromExistingField(columnData, reportData) {
         let params = {
             clickedId: this.props.shell.fieldsSelectMenu.clickedId,
-            requested: columnData,
+            requestedId: columnData.fieldDef.id,
+            requestedCurrentPosition: columnData.order,
             addBefore: this.props.shell.fieldsSelectMenu.addBefore
         };
 
-        this.props.addColumnToTable(CONTEXT.REPORT.NAV, reportData.appId, reportData.tblId, reportData.rptId, params);
+        this.props.addColumnFromExistingField(CONTEXT.REPORT.NAV, reportData.appId, reportData.tblId, reportData.rptId, params);
     },
 
     getMenuContent(reportData) {
@@ -337,7 +338,7 @@ export const Nav = React.createClass({
                     key: columns[i].id + "",
                     title: columns[i].headerName,
                     onClick: (() => {
-                        this.addColumnToTable(columns[i], reportData)
+                        this.addColumnFromExistingField(columns[i], reportData)
                     })
                 });
             }
@@ -580,7 +581,7 @@ const mapDispatchToProps = (dispatch) => {
                 }
             });
         },
-        addColumnToTable: (context, appId, tblId, rptId, params) => {
+        addColumnFromExistingField: (context, appId, tblId, rptId, params) => {
             dispatch(addColumnFromExistingField(context, appId, tblId, rptId, params));
         },
         toggleFieldSelectorMenu: (context, appId, tblId, rptId, params) => {

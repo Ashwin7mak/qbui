@@ -353,7 +353,7 @@ export const loadReportRecordsCount = (context, appId, tblId, rptId, queryParams
  * @param appId
  * @param tblId
  * @param rptId
- * @param params { }
+ * @param params { open, clickedId, addBefore }
  */
 export const toggleFieldSelectorMenu = (context, appId, tblId, rptId, params) => {
     return (dispatch) => {
@@ -376,14 +376,15 @@ export const toggleFieldSelectorMenu = (context, appId, tblId, rptId, params) =>
  * @param appId
  * @param tblId
  * @param rptId
- * @param params { }
+ * @param params { clickedId, requestedId, requestedCurrentPosition, addBefore }
  */
 export const addColumnFromExistingField = (context, appId, tblId, rptId, params) => {
     return (dispatch) => {
         if (appId && tblId && rptId) {
-            dispatch(event(context, types.ADD_COLUMN, params));
+            logger.debug(`Adding column with id: ${params.requestedId} for appId: ${appId}, tblId:${tblId}, rptId:${rptId}`);
+            dispatch(event(context, types.ADD_COLUMN_FROM_EXISTING_FIELD, params));
         } else {
-            logger.error(`reportActions.addColumnToTable: Missing one or more required input parameters.  AppId:${appId}; TblId:${tblId}; RptId:${rptId}`);
+            logger.error(`reportActions.addColumnFromExistingField: Missing one or more required input parameters.  AppId:${appId}; TblId:${tblId}; RptId:${rptId}`);
         }
     }
 };
@@ -394,12 +395,12 @@ export const addColumnFromExistingField = (context, appId, tblId, rptId, params)
  * @param appId
  * @param tblId
  * @param rptId
- * @param params { columnId }
+ * @param params { clickedId }
  */
 export const hideColumn = (context, appId, tblId, rptId, params) => {
     return (dispatch) => {
         if (appId && tblId && rptId) {
-            logger.debug(`Hiding column with id: ${params.columnId} for appId: ${appId}, tblId:${tblId}, rptId:${rptId}`);
+            logger.debug(`Hiding column with id: ${params.clickedId} for appId: ${appId}, tblId:${tblId}, rptId:${rptId}`);
             // Temporary until API to persist hidden columns.
             return new Promise((resolve) => {
                 dispatch(event(context, types.HIDE_COLUMN, params));
