@@ -4,37 +4,17 @@ import _ from 'lodash';
 import * as Formatters from './Grid/AccountUsersGridFormatters';
 import * as RealmUserAccountFlagConstants from "../../common/constants/RealmUserAccountFlagConstants.js";
 import * as StandardGridActions from '../../common/grid/standardGridActions';
+import * as StandardGridState from '../../common/grid/standardGridReducer';
 
-/**
- * Action when there is successful user from the backend
- * @param users
- */
-export const receiveAccountUsers = (users) => ({
-    type: types.SET_USERS,
-    users
-});
 
-/**
- * Get all the users from the service
- *
- * @returns {function(*=)}
- */
-export const fetchAccountUsers = (accountId, gridID) => {
-    return (dispatch) => {
-        // get all the users from the account service
-        const accountUsersService = new AccountUsersService();
-        const promise = accountUsersService.getAccountUsers(accountId);
+export const filterUsers = (users, filterQuery) => {
 
-        promise.then(response => {
-            _.each(response.data, item => {
-                item.id = item.uid;
-            });
-            // we have the users, update the redux store
-            dispatch(receiveAccountUsers(response.data));
-            dispatch(StandardGridActions.doSetItems(gridID, response.data));
-        });
-        return promise;
-    };
+    return users;
+};
+
+export const paginateUsers = (users, paginationIndex) => {
+
+    return users;
 };
 
 const sortFunctions = [
@@ -66,10 +46,15 @@ export const sortUsers = (users, sortFids) => {
 };
 
 
-export const paginateUsers = (users, paginationIndex) => {
 
-    return users;
-};
+/**
+ * Action when there is successful user from the backend
+ * @param users
+ */
+export const receiveAccountUsers = (users) => ({
+    type: types.SET_USERS,
+    users
+});
 
 /**
  * Perform the Update on the Grid through transformations
@@ -77,18 +62,43 @@ export const paginateUsers = (users, paginationIndex) => {
 export const doUpdate = (gridId, gridState) => {
     return (dispatch, getState) => {
         // First Filter
+        let filterFids = gridState.filterQuery || [];
+        let filteredUsers = filterUsers(getState().AccountUsers.users, filterFids);
 
         // Then Sort
         let sortFids = gridState.sortFids || [];
-        let sortedusers = sortUsers(getState().AccountUsers.users, sortFids);
+        let sortedUsers = sortUsers(filteredUsers, sortFids);
 
-        // Then paginate
+        // Then Paginate
         let paginationIndex = gridState.pagination.currentIndex;
-        let paginatedViewusers = paginateUsers(sortedusers, paginationIndex);
+        let paginatedUsers = paginateUsers(sortedUsers, paginationIndex);
 
-        // Inform the grid of the new set up users
-        //dispatch(StandardGridActions.doUpdate(props.id, props.doUpdate));
-        dispatch(receiveAccountUsers(paginatedViewusers));
-        // trigger the standard grid action. no need for grid to receive
+        // Inform the grid of the new users
+        dispatch(StandardGridActions.doSetItems(gridId, paginatedUsers));
+
+    };
+};
+
+/**
+ * Get all the users from the service
+ *
+ * @returns {function(*=)}
+ */
+export const fetchAccountUsers = (accountId, gridID) => {
+    return (dispatch) => {
+        // get all the users from the account service
+        const accountUsersService = new AccountUsersService();
+        const promise = accountUsersService.getAccountUsers(accountId);
+
+        promise.then(response => {
+            _.each(response.data, item => {
+                item.id = item.uid;
+            });
+
+            // run through the pipleine and update the grid. temporarily use the default grid state
+            dispatch(receiveAccountUsers(response.data));
+            doUpdate(gridID, StandardGridState.defaultGridState);
+        });
+        return promise;
     };
 };

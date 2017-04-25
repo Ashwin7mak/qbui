@@ -25,7 +25,7 @@ class AccountUsers extends Component {
      * When the component mounts, get the users
      */
     componentDidMount() {
-        this.props.fetchData(this.props.match.params.accountId, this.GRID)
+        this.props.fetchData(this.props.match.params.accountId, this.GRID);
     }
 
     render() {
@@ -66,9 +66,9 @@ AccountUsers.propTypes = {
 export {AccountUsers};
 
 const mapDispatchToProps = (dispatch) => ({
-    fetchData(id, gridID) {
-        dispatch(RequestContextActions.fetchRequestContextIfNeeded(id));
-        dispatch(AccountUsersActions.fetchAccountUsers(id, gridID));
+    fetchData(accountID, gridID) {
+        dispatch(RequestContextActions.fetchRequestContextIfNeeded(accountID));
+        dispatch(AccountUsersActions.fetchAccountUsers(accountID, gridID));
     }
 });
 

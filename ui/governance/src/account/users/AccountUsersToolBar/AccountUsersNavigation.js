@@ -1,7 +1,4 @@
 import React, {PropTypes, Component} from "react";
-import {I18nMessage} from "../../../../../reuse/client/src/utils/i18nMessage";
-import Locale from "../../../../../reuse/client/src/locales/locale";
-import lodash from 'lodash';
 import {connect} from 'react-redux';
 import Pagination from "../../../../../reuse/client/src/components/pagination/pagination";
 

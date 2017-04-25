@@ -1,6 +1,6 @@
 import * as types from './standardGridActionTypes';
 
-const defaultGridState = {
+export const defaultGridState = {
     // the items currently displayed on the grid
     items: [],
     // the fields to sort the grid
@@ -33,7 +33,7 @@ function grid(state = defaultGridState, action) {
     case types.SET_PAGINATE:
         return {
             ...state,
-            pagination: {...state.pagination, currentIndex: state.pagination.currentIndex + (action.direction * 100)}
+            pagination: {currentIndex: state.pagination.currentIndex + (action.direction * 100)}
         };
     default:
         return state;
@@ -65,6 +65,8 @@ function grid(state = defaultGridState, action) {
 function gridById(state = {}, action) {
     switch (action.type) {
     case types.SET_SORT:
+    case types.SET_ITEMS:
+    case types.SET_PAGINATE:
         return {
             ...state,
             [action.gridId]: grid(state[action.gridId], action)

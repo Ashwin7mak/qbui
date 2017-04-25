@@ -40,9 +40,15 @@ export const setPaginate = (gridId, direction) => ({
     direction
 });
 
+/**
+ * Action to set the items for the grid
+ *
+ * @param gridId - the id of the grid we want to update
+ * @param direction - the direction to paginate
+ */
 export const doSetItems = (gridId, items) => {
     return (dispatch, getState) => {
-        dispatch(setItems(gridId, items));
+        return dispatch(setItems(gridId, items));
     };
 };
 

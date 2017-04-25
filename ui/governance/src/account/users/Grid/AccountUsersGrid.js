@@ -13,10 +13,10 @@ class AccountUsersGrid extends Component {
     render() {
         return (
             <StandardGrid
+                id={this.props.id}
                 columns={GetAccountUsersGridColumns(this.props.showAccountColumns, this.props.showRealmColumns)}
                 doUpdate={Actions.doUpdate}
                 items={this.props.users}
-                id={this.props.id}
                 rowKey="uid"
             />
         );
@@ -25,8 +25,8 @@ class AccountUsersGrid extends Component {
 
 // Provide type checking
 AccountUsersGrid.propTypes = {
-    users: PropTypes.array,
     id: PropTypes.string,
+    users: PropTypes.array,
     showAccountColumns: PropTypes.bool,
     showRealmColumns: PropTypes.bool
 };
