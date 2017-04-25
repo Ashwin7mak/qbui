@@ -4,6 +4,7 @@ let config = {
     legacyBase: '.quickbase-dev.com',
     javaHost: 'http://javaHost',
     eeHost: 'http://eeHost',
+    automationHost: 'http://automationHost',
     SSL_KEY : {
         private    : 'privateKey',
         cert       : 'cert',
