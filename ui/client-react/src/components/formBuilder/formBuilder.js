@@ -29,6 +29,10 @@ export class FormBuilder extends Component {
         this.clearDragElementCache = this.clearDragElementCache.bind(this);
     }
 
+    beginDrag = props => {
+        this.props.selectFieldOnForm(this.props.formId, props.location);
+    };
+
     /**
      * Moves the dragged item to the location of the item that it was dropped on.
      * @param newLocation
@@ -36,7 +40,12 @@ export class FormBuilder extends Component {
      * @param moveImmediately - Helps with testing. Change to true to ignore the timeout that helps with fast dragging.
      */
     handleFormReorder(newLocation, draggedItemProps, moveImmediately = false) {
-        if (this.props.moveFieldOnForm && this.props.selectedFormElement) {
+        if (!this.props.moveFieldOnForm) {
+            // Exit if the required action is not present
+            return;
+        }
+
+        if (this.props.selectedFormElement) {
             let element = draggedItemProps.containingElement[findFormElementKey(draggedItemProps.containingElement)];
 
             if (moveImmediately) {
@@ -103,6 +112,7 @@ export class FormBuilder extends Component {
                     edit={true}
                     editingForm={true}
                     formData={this.props.formData}
+                    beginDrag={this.beginDrag}
                     handleFormReorder={this.handleFormReorder}
                     cacheDragElement={this.cacheDragElement}
                     clearDragElementCache={this.clearDragElementCache}
@@ -119,8 +129,6 @@ export class FormBuilder extends Component {
 
 FormBuilder.propTypes = {
     formId: PropTypes.string.isRequired,
-
-    showCustomDragLayer: PropTypes.bool,
 
     formData: PropTypes.shape({
         fields: PropTypes.array,

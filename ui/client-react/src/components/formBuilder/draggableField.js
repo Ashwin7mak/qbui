@@ -25,7 +25,10 @@ const fieldDragSource = {
             containingElement: props.containingElement,
             location: props.location,
             relatedField: props.relatedField,
-            component
+
+            // If there is an onHover callback, we need to pass it through here so it is available
+            // when the dropTarget initiates this event
+            onHover: props.onHover
         };
     },
 

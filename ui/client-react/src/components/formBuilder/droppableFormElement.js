@@ -39,7 +39,11 @@ const formTarget = {
         let dragItemProps = monitor.getItem();
 
         if (dropTargetProps.onHover) {
-            return dropTargetProps.onHover(dropTargetProps, dragItemProps);
+            dropTargetProps.onHover(dropTargetProps, dragItemProps);
+        }
+
+        if (dragItemProps.onHover) {
+            dragItemProps.onHover(dropTargetProps, dragItemProps);
         }
 
         // Don't allow dropping an element on itself (determined by the unique id attached to each element)

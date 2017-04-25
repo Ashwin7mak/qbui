@@ -28,21 +28,35 @@ export class FieldTokenInMenu extends Component {
 }
 
 export class DraggableFieldToken extends Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            addedToForm: false
+        };
+    }
+
     clickToAddToForm = () => {
         let {selectedField, formId, appId, tblId, relatedField} = this.props;
         this.props.addNewFieldToForm(formId, appId, tblId, selectedField, relatedField);
     };
 
-    beginDrag = () => {
-        this.clickToAddToForm();
+    onHover = (dropTargetProps, dragItemProps) => {
+        if (!this.state.addedToForm) {
+            let {formId, appId, tblId, relatedField} = this.props;
+            this.props.addNewFieldToForm(formId, appId, tblId, dropTargetProps.location, relatedField);
+            this.setState({addedToForm: true});
+        }
     };
+
+    endDrag = () => this.setState({addedToForm: false});
 
     render() {
         const Element = DraggableField(FieldTokenInMenu, false);
 
         return (
             <div onClick={this.clickToAddToForm}>
-                <Element {...this.props} beginDrag={this.beginDrag} />
+                <Element {...this.props} onHover={this.onHover} endDrag={this.endDrag} />
             </div>
         );
     }

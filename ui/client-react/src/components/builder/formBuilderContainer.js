@@ -3,7 +3,7 @@ import {Button} from 'react-bootstrap';
 import {I18nMessage} from '../../utils/i18nMessage';
 import Locale from '../../locales/locales';
 import {connect} from 'react-redux';
-import {loadForm, updateForm, moveFieldOnForm, toggleFormBuilderChildrenTabIndex, keyboardMoveFieldUp, keyboardMoveFieldDown, deselectField, removeFieldFromForm} from '../../actions/formActions';
+import {loadForm, updateForm, moveFieldOnForm, toggleFormBuilderChildrenTabIndex, keyboardMoveFieldUp, keyboardMoveFieldDown, selectFieldOnForm, deselectField, removeFieldFromForm, addNewFieldToForm} from '../../actions/formActions';
 import {notifyTableCreated} from '../../actions/tableCreationActions';
 import {updateFormAnimationState} from '../../actions/animationActions';
 import Loader from 'react-loader';
@@ -56,9 +56,11 @@ const mapDispatchToProps = {
     toggleFormBuilderChildrenTabIndex,
     keyboardMoveFieldUp,
     keyboardMoveFieldDown,
+    selectFieldOnForm,
     deselectField,
     removeFieldFromForm,
-    notifyTableCreated
+    notifyTableCreated,
+    addNewFieldToForm
 };
 
 /**
@@ -228,6 +230,7 @@ export const FormBuilderContainer = React.createClass({
 
         return (
             <div className="formBuilderContainer">
+                <FormBuilderCustomDragLayer />
 
                 <KeyboardShortcuts id="formBuilderContainer"
                                    shortcutBindings={[
@@ -242,8 +245,6 @@ export const FormBuilderContainer = React.createClass({
 
                 <PageTitle title={Locale.getMessage('pageTitles.editForm')}/>
 
-                <FormBuilderCustomDragLayer />
-
                 <ToolPalette isCollapsed={this.props.isCollapsed} isOpen={this.props.isOpen}>
                     <FieldProperties appId={this.props.match.params.appId} tableId={this.props.match.params.tblId} formId={formId}>
                         <div className="formBuilderContainerContent" ref={element => formBuilderContainerContent = element}>
@@ -255,10 +256,14 @@ export const FormBuilderContainer = React.createClass({
                                             selectedField={this.props.selectedField}
                                             formBuilderUpdateChildrenTabIndex={this.updateChildrenTabIndex}
                                             formId={formId}
+                                            appId={this.props.match.params.appId}
+                                            tblId={this.props.match.params.tblId}
                                             formData={formData}
                                             moveFieldOnForm={this.props.moveFieldOnForm}
                                             updateAnimationState={this.props.updateFormAnimationState}
                                             selectedFormElement={this.props.selectedFormElement}
+                                            addNewFieldToForm={this.props.addNewFieldToForm}
+                                            selectFieldOnForm={this.props.selectFieldOnForm}
                                         />
                                     </Loader>
                                 </div>
