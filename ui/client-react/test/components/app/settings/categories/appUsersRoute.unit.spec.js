@@ -2,6 +2,8 @@
  * Created by rbeyer on 2/22/17.
  */
 import React from 'react';
+
+import {shallow} from 'enzyme';
 import TestUtils from 'react-addons-test-utils';
 import AppUsersRoute, {__RewireAPI__ as AppUsersRouteAPI} from '../../../../../src/components/app/settings/categories/appUsersRoute';
 
@@ -18,7 +20,8 @@ describe('AppUsersRoute functions', () => {
     const flux = {
         actions:{
             loadAppRoles: function() {return;},
-            loadAppOwner: function() {return;}
+            loadAppOwner: function() {return;},
+            selectUsersRows: function() {return;}
         }
     };
 
@@ -48,8 +51,24 @@ describe('AppUsersRoute functions', () => {
                                                                     appOwner={appOwner}
                                                                     flux={flux}
                                                                     selectedApp={selectedApp}
+                                                                    selectedUserRows={[]}
+                                                                    params={{appId: 1}}
+                                                                    appUsers={[]}
                                                                     match={match}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+        component = shallow(<AppUsersRoute appUsersUnfiltered={appUsersUnfiltered}
+                                                         appRoles={appRoles}
+                                                         appOwner={appOwner}
+                                                         flux={flux}
+                                                         selectedApp={selectedApp}
+                                                         selectedUserRows={[]}
+                                                         params={{appId: 1}}
+                                                         appUsers={[]}
+                                                         match={match}/>);
+        let instance = component.instance();
+        instance.componentDidMount();
+        instance.selectAllRows();
+        expect(flux.actions.loadAppRoles).toHaveBeenCalled();
         AppUsersRouteAPI.__ResetDependency__('IconActions');
     });
 });
