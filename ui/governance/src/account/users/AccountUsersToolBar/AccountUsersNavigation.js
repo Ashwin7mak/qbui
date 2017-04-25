@@ -1,11 +1,9 @@
 import React, {PropTypes, Component} from "react";
 import {connect} from 'react-redux';
 import Pagination from "../../../../../reuse/client/src/components/pagination/pagination";
-import * as StandardGridActions from "../../../common/grid/standardGridActions";
-import * as AccountUsersActions from "../AccountUsersActions";
 
 /**
- * The stage for the AccountUsers page
+ * The Navigation Component for the AccountUsers page
  */
 class AccountUsersNavigation extends React.Component {
 

@@ -22,7 +22,6 @@ class AccountUsersGrid extends Component {
     }
 }
 
-// Provide type checking
 AccountUsersGrid.propTypes = {
     id: PropTypes.string,
     showAccountColumns: PropTypes.bool,

@@ -13,8 +13,14 @@ export const filterUsers = (users, searchTerm) => {
         return users;
     }
 
+    searchTerm = searchTerm.toLowerCase();
+
     return _.filter(users, function(user) {
-        return user.firstName === searchTerm;
+        return _.includes(user.firstName.toLowerCase(), searchTerm) ||
+        _.includes(user.lastName.toLowerCase(), searchTerm) ||
+        _.includes(user.email.toLowerCase(), searchTerm) ||
+        _.includes(user.userName.toLowerCase(), searchTerm) ||
+        _.includes(user.userName.toLowerCase(), searchTerm);
     });
 };
 
@@ -24,7 +30,7 @@ export const paginateUsers = (users, _page) => {
     }
 
     let page = _page || 1,
-        per_page = 10,
+        per_page = 10, // TODO: PER PAGE
         offset = (page - 1) * per_page;
     return users.slice(offset, offset + per_page);
 };
@@ -108,7 +114,7 @@ export const fetchAccountUsers = (accountId, gridID) => {
                 item.id = item.uid;
             });
 
-            // run through the pipleine and update the grid. temporarily use the default grid state
+            // run through the pipleine and update the grid
             dispatch(receiveAccountUsers(response.data));
             dispatch(doUpdate(gridID, StandardGridState.defaultGridState));
         });

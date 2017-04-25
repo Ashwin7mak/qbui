@@ -17,10 +17,12 @@ class AccountUsersToolBar extends React.Component {
     render() {
         return (
             <div>
-                <IconInputBox placeholder="Search users"/>
+                <IconInputBox placeholder="Search users"
+                              onChange={this.props.onSearchChange}/>
                 <AccountUsersNavigation getPreviousUsersPage={this.props.getPreviousUsersPage}
                                         getNextUsersPage={this.props.getNextUsersPage}
-                                        id={this.props.id} totalRecords={this.props.totalRecords}/>
+                                        id={this.props.id}
+                                        totalRecords={this.props.totalRecords}/>
             </div>
         );
     }
@@ -36,21 +38,21 @@ AccountUsersToolBar.propTypes = {
 };
 
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = (dispatch, ownProps) => {
     return {
         getPreviousUsersPage: () => {
-            dispatch(StandardGridActions.setPaginate("accountUsers", true));
-            dispatch(StandardGridActions.doUpdate("accountUsers", AccountUsersActions.doUpdate));
+            dispatch(StandardGridActions.setPaginate(ownProps.id, true));
+            dispatch(StandardGridActions.doUpdate(ownProps.id, AccountUsersActions.doUpdate));
         },
 
         getNextUsersPage: () => {
-            dispatch(StandardGridActions.setPaginate("accountUsers", false));
-            dispatch(StandardGridActions.doUpdate("accountUsers", AccountUsersActions.doUpdate));
+            dispatch(StandardGridActions.setPaginate(ownProps.id, false));
+            dispatch(StandardGridActions.doUpdate(ownProps.id, AccountUsersActions.doUpdate));
         },
 
-        onSearchChange: (gridID, searchTerm) => {
-            dispatch(StandardGridActions.setSearch(gridID, "previous"));
-            dispatch(StandardGridActions.doUpdate(gridID, AccountUsersActions.doUpdate));
+        onSearchChange: (searchEvent) => {
+            dispatch(StandardGridActions.setSearch(ownProps.id, searchEvent.target.value));
+            dispatch(StandardGridActions.doUpdate(ownProps.id, AccountUsersActions.doUpdate));
         }
     };
 };
@@ -60,6 +62,7 @@ const mapStateToProps = (state) => {
     };
 };
 
+export {AccountUsersToolBar};
 
 export default connect(mapStateToProps, mapDispatchToProps)(AccountUsersToolBar);
 
