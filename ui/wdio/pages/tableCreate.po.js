@@ -190,9 +190,9 @@
          */
         waitUntilNotificationContainerGoesAway : {value: function() {
             //wait until notification container slides away
-            browser.waitForExist('.notification-container-empty', e2eConsts.shortWaitTimeMs);
+            browser.waitForExist('.notification-container-empty', e2eConsts.mediumWaitTimeMs);
             //Need this to wait for container to slide away
-            return browser.pause(e2eConsts.shortWaitTimeMs);
+            return browser.pause(e2eConsts.mediumWaitTimeMs);
         }},
 
         /**
