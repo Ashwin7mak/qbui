@@ -6,7 +6,7 @@ const defaultGridState = {
     // the fields to sort the grid
     sortFids: [],
     // the pagination to apply to the grid
-    pagination: {currentIndex : 0, totalRecords : 0},
+    pagination: {currentIndex : 0},
     // the filter to apply to the grid
     filter : []
 };

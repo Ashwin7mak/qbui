@@ -40,6 +40,12 @@ export const setPaginate = (gridId, direction) => ({
     direction
 });
 
+export const doSetItems = (gridId, items) => {
+    return (dispatch, getState) => {
+        dispatch(setItems(gridId, items));
+    };
+};
+
 /**
  * Update function that delegates the work to a passed in update action
  * but first calculates the state of the particular grid we are interested in

@@ -12,20 +12,21 @@ class AccountUsersNavigation extends React.Component {
 
     constructor(...args) {
         super(...args);
+        this.PAGE_ITEMS = 10;
     }
 
     isNextDisabled() {
-        return false;
+        return this.props.totalRecords < this.PAGE_ITEMS;
     }
 
     isPreviousDisabled() {
-        return false;
+        return this.props.pagination.currentIndex === 0;
     }
 
     render() {
         return (
             <Pagination startRecord={1}
-            endRecord={this.props.users.length}
+            endRecord={this.props.totalRecords}
             isPreviousDisabled={this.isPreviousDisabled()}
             isNextDisabled={this.isNextDisabled()}
             isHidden={false} />
@@ -34,11 +35,11 @@ class AccountUsersNavigation extends React.Component {
 }
 
 AccountUsersNavigation.defaultProps = {
-    users: []
+    pagination : {}
 };
 
 AccountUsersNavigation.propTypes = {
-    users: PropTypes.array,
+    pagination: PropTypes.object
 };
 
 export {AccountUsersNavigation};
@@ -48,7 +49,7 @@ const mapDispatchToProps = (dispatch) => ({
 
 const mapStateToProps = (state) => {
     return {
-        requestUser: state.RequestContext.currentUser
+        pagination: state.Grids.pagination
     };
 };
 

@@ -15,15 +15,17 @@ import AccountUsersToolBar from "./AccountUsersToolBar/AccountUsersToolBar";
  * Represents the top level page that contains the grid for account users
  */
 class AccountUsers extends Component {
+
     constructor(props) {
         super(props);
+        this.GRID = "accountUsers";
     }
 
     /**
      * When the component mounts, get the users
      */
     componentDidMount() {
-        this.props.fetchData(this.props.match.params.accountId);
+        this.props.fetchData(this.props.match.params.accountId, this.GRID)
     }
 
     render() {
@@ -43,8 +45,8 @@ class AccountUsers extends Component {
                 <Loader loaded={!this.props.loading} options={SpinnerConfigurations.LARGE_BREAKPOINT}>
                     <div className="accountUsersContainer">
                         <AccountUsersStage users={this.props.users}/>
-                        <AccountUsersToolBar users={this.props.users}/>
-                        <AccountUsersGrid users={this.props.users} showAccountColumns={canSeeAccountColumns} showRealmColumns={canSeeRealmColumns}/>
+                        <AccountUsersToolBar totalRecords={this.props.users.length}/>
+                        <AccountUsersGrid id={this.GRID} users={this.props.users} showAccountColumns={canSeeAccountColumns} showRealmColumns={canSeeRealmColumns}/>
                     </div>
                 </Loader>
             );
@@ -64,9 +66,9 @@ AccountUsers.propTypes = {
 export {AccountUsers};
 
 const mapDispatchToProps = (dispatch) => ({
-    fetchData(id) {
+    fetchData(id, gridID) {
         dispatch(RequestContextActions.fetchRequestContextIfNeeded(id));
-        dispatch(AccountUsersActions.fetchAccountUsers(id));
+        dispatch(AccountUsersActions.fetchAccountUsers(id, gridID));
     }
 });
 

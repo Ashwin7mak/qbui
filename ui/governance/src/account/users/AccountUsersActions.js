@@ -19,7 +19,7 @@ export const receiveAccountUsers = (users) => ({
  *
  * @returns {function(*=)}
  */
-export const fetchAccountUsers = (accountId) => {
+export const fetchAccountUsers = (accountId, gridID) => {
     return (dispatch) => {
         // get all the users from the account service
         const accountUsersService = new AccountUsersService();
@@ -31,6 +31,7 @@ export const fetchAccountUsers = (accountId) => {
             });
             // we have the users, update the redux store
             dispatch(receiveAccountUsers(response.data));
+            dispatch(StandardGridActions.doSetItems(gridID, response.data));
         });
         return promise;
     };
