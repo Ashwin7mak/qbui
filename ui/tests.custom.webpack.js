@@ -15,6 +15,6 @@
  *
  */
 
-var clientReactModules = require.context('./client-react/test/reducers', true, /report.unit.spec.js$/);
+var clientReactModules = require.context('./client-react/test/services', true, /reportService.unit.spec.js$/);
 console.log("Will run test for:" + JSON.stringify(clientReactModules.keys()));
 clientReactModules.keys().forEach(clientReactModules);

@@ -7,13 +7,11 @@ describe('ReportService functions', () => {
     'use strict';
     var reportService;
     var getSpy;
-    var patchSpy;
 
     beforeEach(() => {
         spyOn(BaseService.prototype, 'setRequestInterceptor');
         spyOn(BaseService.prototype, 'setResponseInterceptor');
         getSpy = spyOn(BaseService.prototype, 'get');
-        patchSpy = spyOn(BaseService.prototype, 'patch');
 
         reportService = new ReportService();
     });
@@ -231,7 +229,7 @@ describe('ReportService functions', () => {
         let appId = '123';
         let tableId = '456';
         let reportId = '1';
-        let report = {name: "report name", description: "desc", fids: [7,8,9]};
+        let report = {name: "report name", description: "desc", fids: [7, 8, 9]};
 
         let url = reportService.constructUrl(reportService.API.PATCH_REPORT_META, [appId, tableId, reportId]);
         reportService.updateReport(appId, tableId, reportId, report);
@@ -305,7 +303,4 @@ describe('ReportService functions', () => {
             expect(reportService._cached(signature1)).toEqual(undefined);
         });
     });
-
-
-
 });

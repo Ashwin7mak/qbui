@@ -232,7 +232,7 @@ class ReportService extends BaseService {
      * @returns promise
      */
     updateReport(appId, tableId, reportId, reportDef) {
-        if (reportDef != null && !_.isEmpty(reportDef)) {
+        if (reportDef !== null && !_.isEmpty(reportDef)) {
             let url = super.constructUrl(this.API.PATCH_REPORT_META, [appId, tableId, reportId]);
             return super.patch(url, reportDef);
         }

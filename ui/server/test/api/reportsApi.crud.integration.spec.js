@@ -1,21 +1,21 @@
 (function() {
     'use strict';
-    var assert = require('assert');
+    const assert = require('assert');
     require('../../src/app');
-    var config = require('../../src/config/environment');
-    var recordBase = require('./recordApi.base')(config);
-    var consts = require('../../../common/src/constants');
-    var log = require('../../src/logger').getLogger();
-    var testConsts = require('./api.test.constants');
-    var errorCodes = require('../../src/api/errorCodes');
-    var testUtils = require('./api.test.Utils');
+    const config = require('../../src/config/environment');
+    const recordBase = require('./recordApi.base')(config);
+    const consts = require('../../../common/src/constants');
+    const log = require('../../src/logger').getLogger();
+    const testConsts = require('./api.test.constants');
+    const errorCodes = require('../../src/api/errorCodes');
+    const testUtils = require('./api.test.Utils');
     var reportEndpoint = "";
 
     describe('API - Validate report CRUD operations', function() {
         var app;
 
         // App variable with different data fields
-        var appWithNoFlags = {
+        let appWithNoFlags = {
             name: 'Percent App - no flags',
             tables: [
                 {
@@ -29,48 +29,48 @@
                     {name: 'Empty Text Field', datatypeAttributes: {type: 'TEXT'}, type: 'SCALAR'},
                     {name: 'Date Field', datatypeAttributes: {type: 'DATE'}, type: 'SCALAR'}
                     ]
-                },
-                {
-                    name: 'table2', fields: [
-                    {name: 'Text Field', datatypeAttributes: {type: 'TEXT'}, type: 'SCALAR'}
-                    ]
                 }
             ]
 
         };
 
-
         /**
          * Setup method. Generates JSON for an app, a table with different fields, and a single record with different field types.
          */
         before(function(done) {
-            console.log("before function");
             this.timeout(testConsts.INTEGRATION_TIMEOUT * appWithNoFlags.length);
             recordBase.createApp(appWithNoFlags).then(function(appResponse) {
                 app = JSON.parse(appResponse.body);
-                var recordsEndpoint = recordBase.apiBase.resolveRecordsEndpoint(app.id, app.tables[0].id);
-                recordBase.createAndFetchRecord(recordsEndpoint, JSON.parse(testRecord), '?format=' + FORMAT);
-                //second table records
-                let records = [];
-                for (var i = 0; i <= 210; i++) {
-                    var value = testUtils.generateRandomString(10);
-                    records.push([{id: 6, value: "' + value + '"}]);
-                }
-                reportEndpoint = recordBase.apiBase.resolveReportsEndpoint(app.id, app.tables[0].id);
-
-                var recordsEndpoint2 = recordBase.apiBase.resolveRecordsEndpoint(app.id, app.tables[1].id);
-                recordBase.createBulkRecords(recordsEndpoint2, records).then(
-                    (success) => {
-                        done();
-                    },
-                    (error) => {
-                        throw new Error("Error in set up for ReportsApi" + JSON.stringify(error));
-                    }
-                );
             }).catch(function(error) {
                 log.error(JSON.stringify(error));
                 done();
             });
+        });
+
+        it('should create a report, modify the report, and validate the modified report is as expected', ()=> {
+            reportEndpoint = recordBase.apiBase.resolveReportsEndpoint(app.id, app.tables[0].id);
+
+            let reportToCreate = {
+                name: 'test report',
+                type: 'TABLE',
+                tableId: app.tables[0].id,
+                fids: [6, 7, 8, 9]
+            };
+
+            let propsToChange = {
+                name: 'changed name',
+                fids: [9, 10, 7, 8]
+            };
+
+            return createReport(reportToCreate)
+                .then(fetchReport)
+                .then(originalReport => updateRecord(originalReport, propsToChange))
+                .then(originalReport => assertUpdateCorrect(originalReport, propsToChange))
+                .catch((error) => {
+                    log.error(JSON.stringify(error));
+                    return Promise.reject(error);
+                });
+
         });
 
         /**
@@ -79,12 +79,10 @@
          * @returns the id of the newly created report
          */
         function createReport(reportToCreate) {
-            return recordBase.apiBase.executeRequest(reportEndpoint, consts.POST, reportToCreate).then(createReportResponse => {
-                return JSON.parse(createReportResponse.body).id;
-            }, errorResponse => {
-                // Pass through the error and expect the assertions to handle it correctly
-                return errorResponse;
-            });
+            return recordBase.apiBase.executeRequest(reportEndpoint, consts.POST, reportToCreate)
+                .then(createReportResponse => {
+                    return JSON.parse(createReportResponse.body).id;
+                });
         }
 
         /**
@@ -122,10 +120,10 @@
          * @param propsToChange
          * @returns the report prior to its being updated (for use further down the chain)
          */
-        function updateRecord(originalReport, propsToChange) {
+        function updateReport(originalReport, propsToChange) {
             return recordBase.apiBase.executeRequest(reportEndpoint + originalReport.id, consts.PATCH, propsToChange)
                 .then(patchResponse => {
-                    console.log(patchResponse.body);
+                    // The patch method doesn't return a body, so return the original report to make it easier to chain
                     return originalReport;
                 });
         }
@@ -138,41 +136,11 @@
          * @returns {*}
          */
         function assertUpdateCorrect(originalReport, propsToChange) {
-
             return fetchReport(originalReport.id).then(updatedReport => {
                 assertExpected(updatedReport, originalReport, propsToChange);
             });
 
         }
-
-        it('should create a report, modify the report, and validate the modified report is as expected', function() {
-            reportEndpoint = recordBase.apiBase.resolveReportsEndpoint(app.id, app.tables[0].id);
-            // This should have all fields in it, since none were specified
-            let reportToCreate = {
-                name: 'test report',
-                type: 'TABLE',
-                tableId: app.tables[0].id,
-                fids: [6,7,8,9]
-            };
-
-            let propsToChange = {
-                name: 'changed name',
-                type: 'TABLE',
-                tableId: app.tables[0].id,
-                fids: [9,10,7,8]
-            };
-
-            return createReport(reportToCreate)
-                .then(fetchReport)
-                .then(originalReport => updateRecord(originalReport, propsToChange))
-                .then(originalReport => assertUpdateCorrect(originalReport, propsToChange))
-                .catch((error) => {
-                    log.error(JSON.stringify(error));
-                    return Promise.reject(error);
-                });
-
-        });
-
 
         // Cleanup the test realm after all tests in the block
         after(function(done) {
