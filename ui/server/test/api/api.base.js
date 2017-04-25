@@ -29,7 +29,7 @@
 
         var HTTP = 'http://';
         var HTTPS = 'https://';
-        var NODE_BASE_ENDPOINT = '/api/api/v1';
+        var NODE_BASE_ENDPOINT = '/n';
         var JAVA_BASE_ENDPOINT = '/api/api/v1';
         var EE_BASE_ENDPOINT = '/ee/v1';
         var APPS_ENDPOINT = '/apps/';

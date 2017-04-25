@@ -8,40 +8,34 @@
     let _ = require('lodash');
 
     let baseContext = {
-        QUICKBASE_CLIENT    : '/qb',
-        QUICKBASE_NODE      : '/n',
-        CORE_ENGINE         : '/api/api/:version',
-        CORE_HEALTH         : '/api/:version',
-        EXPERIENCE_ENGINE   : '/ee/:version',
+        //  custom client function endpoints
+        QUICKBASE_CLIENT      : '/qbui',
+        QUICKBASE_CLIENT_NODE : '/qbui/n',
+
+        //  direct api endpoints
+        //
+        //  Note: current architect decision is that a breaking change to an api
+        //  will mean a new api endpoint and not a new version release. That's
+        //  why you are seeing hard-coded versions.
+        CORE_ENGINE         : '/api/api/v1',
+        CORE_HEALTH         : '/api/v1',
+        EXPERIENCE_ENGINE   : '/ee/v1',
         GOVERNANCE          : '/api/governance/:version',
         WORKFLOW : {
-            FLOW_MANAGER    : '/we/api/:version',
+            FLOW_MANAGER    : '/we/api/v1',
             AUTOMATION      : '/we/workflow'
         }
     };
 
-    //  base context routes for supported back-end servers.
-    //
-    //  Note: current architect decision is that a breaking change to an api
-    //  will mean a new api endpoint and not a new version release.
-    let baseUrl = {
-        CORE: '/api/api/v1',
-        EE: '/ee/v1',
-        WORKFLOW: {
-            FLOW_MANAGER: '/we/api/v1',
-            AUTOMATION: '/we/workflow'
-        }
-    };
-
     /*
-     *  List of QuickBase public API endpoints which call custom node functions.  The routes call a node
+     *  List of QuickBase public API client endpoints which call custom node functions.  The routes call a node
      *  function that processes the request based on business requirements.
      *
-     *  DO NOT define a route here if the expectation is to only proxy/forward the request through node.
+     *  NOTE: there is no need to define a route here if the expectation is to only proxy/forward the request through node.
      */
-    let customFunctionApiEndpoints = {
+    let qbuiApiEndpoints = {
         HEALTH_CHECK                : baseContext.CORE_HEALTH + '/health',
-        QBUI_HEALTH_CHECK           : baseUrl.CORE_HEALTH + '/qbuiHealth',   // remove with NODE_HEALTH_CHECK endpoint
+        QBUI_HEALTH_CHECK           : baseContext.CORE_HEALTH + '/qbuiHealth',   // remove with NODE_HEALTH_CHECK endpoint
 
         FORM_AND_RECORD_COMPONENTS  : baseContext.QUICKBASE_CLIENT + '/apps/:appId/tables/:tableId/records/:recordId/formComponents',
         FORM_COMPONENTS             : baseContext.QUICKBASE_CLIENT + '/apps/:appId/tables/:tableId/formComponents',
@@ -87,30 +81,11 @@
 
     let nodeApiEndpoints = {
         //  log routes are defined in routes.js
-        LOG_CLIENT_MSG          : baseContext.QUICKBASE_NODE + '/log',
-        LOG_CLIENT_PERF_MSG     : baseContext.QUICKBASE_NODE + '/clientPerf',
+        LOG_CLIENT_MSG          : baseContext.QUICKBASE_CLIENT_NODE + '/log',
+        LOG_CLIENT_PERF_MSG     : baseContext.QUICKBASE_CLIENT_NODE + '/clientPerf',
         //
-        FACET_EXPRESSION_PARSE  : baseContext.QUICKBASE_NODE + '/facets/parse',
-        NODE_HEALTH_CHECK       : baseContext.QUICKBASE_NODE + '/qbuiHealth'
-    };
-
-    /**
-     * Allow for swagger to render for each respective context
-     */
-    let swaggerEndpoints = {
-        SWAGGER_CORE           : '/api/*',
-        SWAGGER_EE             : '/ee/*',
-        SWAGGER_WE             : '/we/*'
-    };
-
-    /**
-     * Define the base context url for each respective context
-     */
-    let apiEndpoints = {
-        CORE_ENGINE            : baseContext.CORE_ENGINE + '/*',
-        EXPERIENCE_ENGINE      : baseContext.EXPERIENCE_ENGINE + '/*',
-        WORKFLOW_ENGINE        : baseContext.WORKFLOW.FLOW_MANAGER + '/*',
-        AUTOMATION_ENGINE      : baseContext.WORKFLOW.AUTOMATION + '/*'
+        FACET_EXPRESSION_PARSE  : baseContext.QUICKBASE_CLIENT_NODE + '/facets/parse',
+        QBUI_HEALTH             : baseContext.QUICKBASE_CLIENT_NODE + '/health'
     };
 
     /**
@@ -164,36 +139,62 @@
     //      /i    - case insensitive
     //
     let publicEndPoints = [
-        {route: publicControllerEndpoints.PUBLIC_FIELDS, regEx: /^\/apps\/.*\/tables\/.*\/fields(.*)?$/i, context: baseUrl.CORE},
-        {route: publicControllerEndpoints.PUBLIC_FORMS, regEx: /^\/apps\/.*\/tables\/.*\/forms(.*)?$/i, context: baseUrl.EE},
-        {route: publicControllerEndpoints.PUBLIC_RECORDS, regEx: /^\/apps\/.*\/tables\/.*\/records(.*)?$/i, context: baseUrl.CORE},
-        {route: publicControllerEndpoints.PUBLIC_REPORTS, regEx: /^\/apps\/.*\/tables\/.*\/reports(.*)?$/i, context: baseUrl.CORE},
-        {route: publicControllerEndpoints.PUBLIC_TABLE_PROPERTIES, regEx: /^\/apps\/.*\/tables\/.*\/tableproperties(.*)?$/i, context: baseUrl.EE},
-        {route: publicControllerEndpoints.PUBLIC_TABLES, regEx: /^\/apps\/.*\/tables(.*)?$/i, context: baseUrl.CORE},
-        {route: publicControllerEndpoints.PUBLIC_RELATIONSHIPS, regEx: /^\/apps\/.*\/relationships(.*)?$/i, context: baseUrl.CORE},
-        {route: publicControllerEndpoints.PUBLIC_ROLES, regEx: /^\/apps\/.*\/roles(.*)?$/i, context: baseUrl.CORE},
-        {route: publicControllerEndpoints.PUBLIC_WORKFLOW_FLOW_MGR, regEx: /^\/apps\/.*\/workflow\/flows(.*)?$/i, context: baseUrl.WORKFLOW.FLOW_MANAGER},
-        {route: publicControllerEndpoints.PUBLIC_APPS, regEx: /^\/apps(.*)?$/i, context: baseUrl.CORE},                  // conflict with EE
-        {route: publicControllerEndpoints.PUBLIC_HEALTH, regEx: /^\/health$/i, context: baseUrl.CORE},                // conflict with EE, Workflow
-        {route: publicControllerEndpoints.PUBLIC_OPERATIONS, regEx: /^\/operations(.*)?$/i, context: baseUrl.CORE},        // conflict with EE
-        {route: publicControllerEndpoints.PUBLIC_REALMS, regEx: /^\/realms(.*)?$/i, context: baseUrl.CORE},
-        {route: publicControllerEndpoints.PUBLIC_TICKET, regEx: /^\/ticket(.*)?$/i, context: baseUrl.CORE},
-        {route: publicControllerEndpoints.PUBLIC_USERS, regEx: /^\/users(.*)?$/i, context: baseUrl.CORE},
-        {route: publicControllerEndpoints.PUBLIC_WORKFLOW_AUTOMATION, regEx: /^\/workflow\/apps\/.*\/(.*)?$/i, context: baseUrl.WORKFLOW.AUTOMATION}
+        {route: publicControllerEndpoints.PUBLIC_FIELDS, regEx: /^\/apps\/.*\/tables\/.*\/fields(.*)?$/i, context: baseContext.CORE_ENGINE},
+        {route: publicControllerEndpoints.PUBLIC_FORMS, regEx: /^\/apps\/.*\/tables\/.*\/forms(.*)?$/i, context: baseContext.EXPERIENCE_ENGINE},
+        {route: publicControllerEndpoints.PUBLIC_RECORDS, regEx: /^\/apps\/.*\/tables\/.*\/records(.*)?$/i, context: baseContext.CORE_ENGINE},
+        {route: publicControllerEndpoints.PUBLIC_REPORTS, regEx: /^\/apps\/.*\/tables\/.*\/reports(.*)?$/i, context: baseContext.CORE_ENGINE},
+        {route: publicControllerEndpoints.PUBLIC_TABLE_PROPERTIES, regEx: /^\/apps\/.*\/tables\/.*\/tableproperties(.*)?$/i, context: baseContext.EXPERIENCE_ENGINE},
+        {route: publicControllerEndpoints.PUBLIC_TABLES, regEx: /^\/apps\/.*\/tables(.*)?$/i, context: baseContext.CORE_ENGINE},
+        {route: publicControllerEndpoints.PUBLIC_RELATIONSHIPS, regEx: /^\/apps\/.*\/relationships(.*)?$/i, context: baseContext.CORE_ENGINE},
+        {route: publicControllerEndpoints.PUBLIC_ROLES, regEx: /^\/apps\/.*\/roles(.*)?$/i, context: baseContext.CORE_ENGINE},
+        {route: publicControllerEndpoints.PUBLIC_WORKFLOW_FLOW_MGR, regEx: /^\/apps\/.*\/workflow\/flows(.*)?$/i, context: baseContext.WORKFLOW.FLOW_MANAGER},
+        {route: publicControllerEndpoints.PUBLIC_APPS, regEx: /^\/apps(.*)?$/i, context: baseContext.CORE_ENGINE},                  // conflict with EE
+        {route: publicControllerEndpoints.PUBLIC_HEALTH, regEx: /^\/health$/i, context: baseContext.CORE_ENGINE},                // conflict with EE, Workflow
+        {route: publicControllerEndpoints.PUBLIC_OPERATIONS, regEx: /^\/operations(.*)?$/i, context: baseContext.CORE_ENGINE},        // conflict with EE
+        {route: publicControllerEndpoints.PUBLIC_REALMS, regEx: /^\/realms(.*)?$/i, context: baseContext.CORE_ENGINE},
+        {route: publicControllerEndpoints.PUBLIC_TICKET, regEx: /^\/ticket(.*)?$/i, context: baseContext.CORE_ENGINE},
+        {route: publicControllerEndpoints.PUBLIC_USERS, regEx: /^\/users(.*)?$/i, context: baseContext.CORE_ENGINE},
+        {route: publicControllerEndpoints.PUBLIC_WORKFLOW_AUTOMATION, regEx: /^\/workflow\/apps\/.*\/(.*)?$/i, context: baseContext.WORKFLOW.FLOW_MANAGER}
     ];
+
+    /**
+     * Define the base context url for each respective context
+     */
+    let apiEndpoints = {
+        CORE_ENGINE            : baseContext.CORE_ENGINE + '/*',
+        EXPERIENCE_ENGINE      : baseContext.EXPERIENCE_ENGINE + '/*',
+        WORKFLOW_ENGINE        : baseContext.WORKFLOW.FLOW_MANAGER + '/*',
+        AUTOMATION_ENGINE      : baseContext.WORKFLOW.AUTOMATION + '/*'
+    };
+
+    /**
+     * Allow for swagger to render for each respective context
+     */
+    let swaggerEndpoints = {
+        SWAGGER_CORE           : '/api/*',
+        SWAGGER_EE             : '/ee/*',
+        SWAGGER_WE             : '/we/*'
+    };
 
     // List of routes used by the quickbase client to perform functionality either exclusively in node code or
     // composition routes in support of a client request.  See qbRouteMapper.modifyRequestPathForApi() for
     // reference to this list and how it is used.
+    const qbuiRegEx = new RegExp('^' + baseContext.QUICKBASE_CLIENT + '/(.*)?$', 'i');
     let clientEndPoints = [
-        {route: baseContext.QUICKBASE_CLIENT, regEx: /^\/qb\/(.*)?$/i, context: baseUrl.CORE}                  // replace QB_CLIENT endpoint with CORE content
+        {route: baseContext.QUICKBASE_CLIENT, regEx: qbuiRegEx, context: baseContext.CORE_ENGINE}        // replace QUICKBASE_CLIENT endpoint with CORE content
     ];
 
-    //  Export the public and client endpoints
+    //  Export the combined list of routes.
+    //
+    //  The ordering of the routes exported is important.  Make sure the most specific route definitions are
+    //  defined early in the return object and the more generic last.  Routes that resolve to multiple mappings
+    //  will always use the first route definition that it matches.
+    exports.routes = Object.freeze(_.assign({},
+        qbuiApiEndpoints, nodeApiEndpoints, publicControllerEndpoints, apiEndpoints, swaggerEndpoints));
+
+    //  Export the public and client endpoints.  These are exported to avoid the need of duplicating this
+    //  information in qbRouteMapper.
     exports.publicEndPoints = publicEndPoints;
     exports.clientEndPoints = clientEndPoints;
-    //  Export the combined list of routes.
-    exports.routes = Object.freeze(_.assign({},
-        customFunctionApiEndpoints, nodeApiEndpoints, publicControllerEndpoints, swaggerEndpoints, apiEndpoints));
 
 }());

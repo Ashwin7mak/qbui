@@ -52,7 +52,7 @@
          * Integration test that saves and retrives Checkbox records
          */
         it('Should create and retrieve valid checkbox records', function(done) {
-            this.timeout(testConsts.INTEGRATION_TIMEOUT * checkboxDataProvider().length);
+            this.timeout(testConsts.INTEGRATION_TIMEOUT * 1000 * checkboxDataProvider().length);
 
             recordBase.createApp(checkboxApp).then(function(appResponse) {
                 var app = JSON.parse(appResponse.body);

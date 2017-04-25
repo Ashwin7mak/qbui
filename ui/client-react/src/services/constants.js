@@ -12,18 +12,16 @@ export default {
     // Define the base context when calling node:
     //
     //  CLIENT:  indicates the route performs custom function handling in node
-    //           before proxying to external server endpoint(s).
     //  PROXY:   indicates the route will directly proxy through node to an
     //           external server endpoint.  Note the content is blank..this is
     //           intentional as this constant is to better self-document the
     //           endpoint call within the service.
-    //  NODE:    indicates the route performs node only work and the request
-    //           should not proxy to an external server endpoint.
+    //  NODE:    indicates the route performs node only work.
     BASE_URL: {
-        CLIENT        : '/qb',
-        NODE        : '/n',
-        PROXY          : '',
-        AUTOMATION  : '/we/workflow'
+        CLIENT        : '/qbui',
+        NODE          : '/qbui/n',
+        PROXY         : '',
+        AUTOMATION    : '/we/workflow'
     },
 
     // Entities

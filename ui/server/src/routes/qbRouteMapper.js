@@ -99,7 +99,7 @@
 
             requestFunctions[routes.HEALTH_CHECK] = forwardApiRequest;
             requestFunctions[routes.QBUI_HEALTH_CHECK] = getHealthCheck;    // remove
-            requestFunctions[routes.NODE_HEALTH_CHECK] = getHealthCheck;
+            requestFunctions[routes.QBUI_HEALTH] = getHealthCheck;
 
             requestFunctions[routes.GOVERNANCE_ACCOUNT_USERS] = getAccountUsers;
             requestFunctions[routes.GOVERNANCE_CONTEXT] = getGovernanceContext;
