@@ -60,4 +60,14 @@ describe('FieldTokenInMenu', () => {
 
         expect(mockActions.addNewFieldToForm).not.toHaveBeenCalled();
     });
+
+    it('resets the state when dragging is complete', () => {
+        component = shallow(<DraggableFieldToken addNewFieldToForm={mockActions.addNewFieldToForm} relatedField={relatedField} type={type} title={title} formId={formId} selectedField={selectedField} appId={appId} tblId={tblId}/>);
+        instance = component.instance();
+        component.setState({addedToForm: true});
+
+        instance.endDrag();
+
+        expect(component).toHaveState('addedToForm', false);
+    });
 });
