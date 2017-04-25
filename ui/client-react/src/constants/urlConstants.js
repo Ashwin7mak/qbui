@@ -12,6 +12,11 @@ export const WALKME_ID_FOR_SMALL_AND_MEDIUM = 272137;
 export const APPS_ROUTE = `${BASE_CLIENT_ROUTE}/apps`;
 export const APP_ROUTE = `${BASE_CLIENT_ROUTE}/app`;
 export const BUILDER_ROUTE = `${BASE_CLIENT_ROUTE}/builder`;
+
+// This is a special route that determines whether or not the settings button with routes to form and table builder is shown
+// It helps correctly pass props from the URL to that menu component
+export const BUILDER_MENU_ROUTE = `${APP_ROUTE}/:appId/table/:tblId/(report)?/:rptId?/(record)?/:recordId?`;
+
 export const ADMIN_ROUTE = `${BASE_CLIENT_ROUTE}/admin`;
 export const USERS_ROUTE = `${APP_ROUTE}/{0}/users`;
 export const TABLE_LINK = `${APP_ROUTE}/{0}/table/{1}`;

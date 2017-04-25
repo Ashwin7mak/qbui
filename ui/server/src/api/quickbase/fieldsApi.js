@@ -7,6 +7,7 @@
     let defaultRequest = require('request');
     let Promise = require('bluebird');
     let log = require('../../logger').getLogger();
+    let _ = require('lodash');
 
     module.exports = function(config) {
         let requestHelper = require('./requestHelper')(config);
@@ -105,6 +106,35 @@
                 }
 
                 return requestHelper.executeRequest(req, opts);
+            },
+
+            /**
+             * Function to fetch schema for all fields that belong to a table
+             * Helper method that internally uses fetchFields without expecting
+             * the caller to create the url for the table.
+             * @param req
+             * @param tableId
+             * @returns {Promise}
+             */
+            getFieldsForTable:function(req, tableId) {
+                //get fields
+                return new Promise((resolve, reject) =>{
+                    let tablesRootUrl = routeHelper.getTablesRoute(req.url, tableId);
+                    let fieldsRootUrl = routeHelper.getFieldsRoute(tablesRootUrl);
+
+                    let getFieldReq = _.clone(req);
+                    getFieldReq.url = fieldsRootUrl;
+                    this.fetchFields(getFieldReq).then(
+                        (fieldsResponse) => {
+                            let fields = JSON.parse(fieldsResponse.body);
+                            resolve(fields);
+                        },
+                        (error) => {
+                            log.error({req: req}, "tablesApi.getFieldsForTable(): Error getting field schema from core");
+                            reject(error);
+                        }
+                    );
+                });
             },
 
             createField: function(req) {
