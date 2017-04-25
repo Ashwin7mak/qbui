@@ -266,10 +266,6 @@
             let testString = 'testString';
             formBuilderPO.fieldProperty_Name.setValue(testString);
             browser.pause(5000);
-            // get the NAME component of the properties panel title by trimming " properties"
-            let propertyTitle = formBuilderPO.fieldPropertiesTitle.getText().split(' properties')[0];
-            // verify that the name you just parsed was revised
-            expect(propertyTitle).toEqual(testString);
             //  verify that the field label was revised
             let existingFields = formBuilderPO.getFieldLabels();
             expect(existingFields[0]).toEqual(testString);
@@ -286,10 +282,6 @@
             let testString = 'testString';
             formBuilderPO.fieldProperty_Name.setValue(testString);
             browser.pause(5000);
-            // get the NAME component of the properties panel title by trimming " properties"
-            let propertyTitle = formBuilderPO.fieldPropertiesTitle.getText().split(' properties')[0];
-            // verify that the name you just parsed was revised
-            expect(propertyTitle).toEqual(testString);
             //  verify that the field label was revised
             let existingFields = formBuilderPO.getFieldLabels();
             expect(existingFields[0]).toEqual(testString);

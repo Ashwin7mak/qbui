@@ -9,8 +9,10 @@ class formBuilderPage {
         return browser.element('.clearSearch .searchIcon');}
     get deleteFieldIcon() {// REMOVE (field from form) icon (when a field is selected or highlighted)
         return browser.element('.deleteFieldIcon');}
+    // get editForm() {// REMOVE (field from form) icon (when a field is selected or highlighted)
+    //     return browser.element('.editForm');}
     get fieldProperty_Name() {// NAME textfield in the FIELD PROPERTIES panel (when a field is selected)
-        return browser.element('.fieldPropertyContainer input[type="text"]');}
+        return browser.element('.textPropertyContainer input[type="text"]');}
     get fieldProperty_Required() {// REQUIRED ('Must be filled in') checkbox in the FIELD PROPERTIES panel (when a field is selected)
         return browser.element('.checkboxPropertyContainer .checkbox');}
     get fieldPropertiesTitle() {// TITLE in the FIELD PROPERTIES panel (when a field is selected)
@@ -122,7 +124,8 @@ class formBuilderPage {
     }
     selectFieldByIndex(index) {
         // Selects the field at the specified index and verifies that it is reflected in the properties panel
-        // Clicks in the upper left corner because clicking in the middle might hit the textfield & not select the field
+        // Clicks in the upper left corner because clicking in the middle might hit the textfield or other control
+        // & not select the field
         browser.moveToObject(this.getFieldLocator(index) + ' .draggableField', 1, 1).buttonDown().buttonUp();
         this.fieldProperty_Name.waitForExist();
         return this.fieldProperty_Name.getText();
@@ -206,15 +209,17 @@ class formBuilderPage {
         this.KB_selectField(index);
         let deletedField = this.selectedField.getText();
         browser.keys(['Tab', 'Enter']); // select & press DELETE icon
-        this.selectedField.waitForExist(5000, true);
+        browser.pause(5000);
+        expect(this.getFieldLabels()).not.toContain(deletedField);
         return deletedField;
     }
     KB_removeFieldViaBackspace(index) {
         // remove field via backspace key via keyboard
         this.KB_selectField(index); // field doesn't need to be selected
         let deletedField = this.selectedField.getText();
-        this.selectedField.keys(['Backspace']);
-        this.selectedField.waitForExist(5000, true);
+        this.selectedField.keys(['Shift', 'Backspace', 'Shift']);
+        browser.pause(5000);
+        expect(this.getFieldLabels()).not.toContain(deletedField);
         return deletedField;
     }
     KB_save(index) {
