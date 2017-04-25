@@ -10,7 +10,7 @@ import DraggableField from '../draggableField';
 
 /**
  * A FieldToken that is extended to be displayed in a menu (i.e., Tool Palette) when building a form.
- * TODO: This will eventually be decorated with other methods like onClick for adding it to the form. */
+ */
 export class FieldTokenInMenu extends Component {
     render() {
         const fieldToken = <FieldToken isDragging={false} {...this.props} />;
@@ -27,10 +27,24 @@ export class FieldTokenInMenu extends Component {
     }
 }
 
+/**
+ * A component which allows the field token to be clicked and dragged. The click and drag cannot be on the same element because drag
+ * will take precedence over click, making the element un-clickable.
+ *
+ * In addition, it allows some extra methods to be passed through to the DraggableField component which is
+ * not possible if this component only had one layer.
+ */
 export class DraggableFieldToken extends Component {
     constructor(props) {
         super(props);
 
+        /**
+         * This state is very particular to this component (e.g., does not need to be in a Redux store)
+         * It tracks whether or not the component has been added when dragging onto a form.
+         * addedToForm gets set to true the first time the component is dragged onto the form.
+         * addedToForm gets set to false when dragging has been completed (user dropped the item)
+         * @type {{addedToForm: boolean}}
+         */
         this.state = {
             addedToForm: false
         };
@@ -41,7 +55,13 @@ export class DraggableFieldToken extends Component {
         this.props.addNewFieldToForm(formId, appId, tblId, selectedField, relatedField);
     };
 
-    onHover = (dropTargetProps, dragItemProps) => {
+    /**
+     * This is called when a the field token is dragged over a droppable target on the form
+     * It adds the field if it has not been added yet.
+     * @param dropTargetProps
+     * @param _dragItemProps
+     */
+    onHover = (dropTargetProps, _dragItemProps) => {
         if (!this.state.addedToForm) {
             const {formId, appId, tblId, relatedField} = this.props;
 
@@ -54,6 +74,9 @@ export class DraggableFieldToken extends Component {
         }
     };
 
+    /**
+     * It resets the state when dragging is complete so the new field can be added again
+     */
     endDrag = () => this.setState({addedToForm: false});
 
     render() {
