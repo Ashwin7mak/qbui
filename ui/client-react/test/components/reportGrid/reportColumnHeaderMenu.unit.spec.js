@@ -15,7 +15,8 @@ const MockLocale = {
 };
 const testFieldDef = {
     id: 13,
-    datatypeAttributes: {type: FieldConsts.NUMERIC}
+    datatypeAttributes: {type: FieldConsts.NUMERIC},
+    isAddingFrom: false
 };
 const testProps = {
     appId: 1,
@@ -53,7 +54,7 @@ describe('ReportColumnHeaderMenu', () => {
         });
 
         it('returns false if the required props to call sort, group, and hide actions are missing', () => {
-            component = shallow(<ReportColumnHeaderMenu/>);
+            component = shallow(<ReportColumnHeaderMenu fieldDef={testFieldDef}/>);
             instance = component.instance();
 
             expect(instance.hasRequiredIds()).toBeFalsy();
@@ -433,7 +434,7 @@ describe('ReportColumnHeaderMenu', () => {
         });
 
         it('does not call the group action if the required props are not passed in', () => {
-            component = shallow(<ReportColumnHeaderMenu />);
+            component = shallow(<ReportColumnHeaderMenu fieldDef={...testFieldDef}/>);
             instance = component.instance();
 
             instance.groupReport(true, false);
@@ -518,14 +519,14 @@ describe('ReportColumnHeaderMenu', () => {
             instance.hideThisColumn(testProps.fieldDef.id);
 
             let params = {
-                columnId: testProps.fieldDef.id
+                clickedId: testProps.fieldDef.id
             };
 
             expect(testProps.hideColumn).toHaveBeenCalledWith(CONTEXT.REPORT.NAV, testProps.appId, testProps.tblId, testProps.rptId, params);
         });
 
         it('does not call the action to hide a column if the required props are not passed in', () => {
-            component = shallow(<ReportColumnHeaderMenu isOnlyOneColumnVisible={false}/>);
+            component = shallow(<ReportColumnHeaderMenu fieldDef={...testFieldDef} isOnlyOneColumnVisible={false}/>);
             instance = component.instance();
 
             instance.hideThisColumn(testProps.fieldDef.id);

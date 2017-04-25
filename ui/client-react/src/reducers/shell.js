@@ -16,7 +16,6 @@ const shell = (
         locale: Locale.getLocale(),
         i18n: Locale.getI18nBundle(),
         fieldsSelectMenu: {
-            clickedId: null,
             fieldsListCollapsed: true,
             addBefore: null,
         }

@@ -858,15 +858,21 @@ describe('Report reducer functions', () => {
                             fieldDef: {
                                 id: 6
                             },
-                            isHidden: false
+                            isHidden: false,
+                            id: 6
                         },
                         {
                             fieldDef: {
                                 id: 7
                             },
-                            isHidden: false
+                            isHidden: false,
+                            id: 7
                         }
-                    ]
+                    ],
+                    fids: [6, 7],
+                    metaData: {
+                        fids: [6, 7]
+                    }
                 }
             }
         ];
@@ -874,31 +880,43 @@ describe('Report reducer functions', () => {
             {
                 description: 'when fieldDef id of column equals column id of first',
                 initialState: initialState,
-                content : {columnId: 6},
+                content : {clickedId: 6},
                 expects : (testState) => {
                     expect(Array.isArray(testState)).toEqual(true);
                     expect(testState[0].data.columns[0].isHidden).toEqual(true);
                     expect(testState[0].data.columns[1].isHidden).toEqual(false);
+                    expect(testState[0].data.fids.length).toEqual(1);
+                    expect(testState[0].data.fids).toContain(7);
+                    expect(testState[0].data.metaData.fids.length).toEqual(1);
+                    expect(testState[0].data.metaData.fids).toContain(7);
                 }
             },
             {
                 description: 'when fieldDef id of column equals column id of second',
                 initialState: initialState,
-                content : {columnId: 7},
+                content : {clickedId: 7},
                 expects : (testState) => {
                     expect(Array.isArray(testState)).toEqual(true);
                     expect(testState[0].data.columns[0].isHidden).toEqual(false);
                     expect(testState[0].data.columns[1].isHidden).toEqual(true);
+                    expect(testState[0].data.fids.length).toEqual(1);
+                    expect(testState[0].data.fids).toContain(6);
+                    expect(testState[0].data.metaData.fids.length).toEqual(1);
+                    expect(testState[0].data.metaData.fids).toContain(6);
                 }
             },
             {
                 description: 'when fieldDef id of column does not equal any ids',
                 initialState: initialState,
-                content : {columnId: 8},
+                content : {clickedId: 8},
                 expects : (testState) => {
                     expect(Array.isArray(testState)).toEqual(true);
                     expect(testState[0].data.columns[0].isHidden).toEqual(false);
                     expect(testState[0].data.columns[1].isHidden).toEqual(false);
+                    expect(testState[0].data.fids.length).toEqual(2);
+                    expect(testState[0].data.fids).toContain(6, 7);
+                    expect(testState[0].data.metaData.fids.length).toEqual(2);
+                    expect(testState[0].data.metaData.fids).toContain(6, 7);
                 }
             },
             {
@@ -909,6 +927,10 @@ describe('Report reducer functions', () => {
                     expect(Array.isArray(testState)).toEqual(true);
                     expect(testState[0].data.columns[0].isHidden).toEqual(false);
                     expect(testState[0].data.columns[1].isHidden).toEqual(false);
+                    expect(testState[0].data.fids.length).toEqual(2);
+                    expect(testState[0].data.fids).toContain(6, 7);
+                    expect(testState[0].data.metaData.fids.length).toEqual(2);
+                    expect(testState[0].data.metaData.fids).toContain(6, 7);
                 }
             }
         ];

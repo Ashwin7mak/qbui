@@ -15,7 +15,11 @@ function initializeState() {
         trowserContent: null,
         openCount: 0,
         locale: Locale.getLocale(),
-        i18n: Locale.getI18nBundle()
+        i18n: Locale.getI18nBundle(),
+        fieldsSelectMenu: {
+            fieldsListCollapsed: true,
+            addBefore: null,
+        }
     };
 }
 
