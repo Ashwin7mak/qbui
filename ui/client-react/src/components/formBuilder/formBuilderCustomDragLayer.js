@@ -12,12 +12,13 @@ import _ from 'lodash';
 export const TOKEN_WIDTH = 250;
 export const TOKEN_HEIGHT = 30;
 export const TOKEN_ICON_WIDTH = 35;
+export const DRAG_ITEM_Z_INDEX = 2000; // from customVariables.scss
 
 const layerStyles = {
     cursor: 'move',
     position: 'fixed',
     pointerEvents: 'none',
-    zIndex: 100,
+    zIndex: DRAG_ITEM_Z_INDEX,
     left: 0,
     top: 0,
     width: '100%',

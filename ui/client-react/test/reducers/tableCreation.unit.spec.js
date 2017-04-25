@@ -22,6 +22,7 @@ function initializeState() {
     initialState = {
         //  default states
         dialogOpen: false,
+        showTableReadyDialog: false,
         pageIndex: 0,
         iconChooserOpen: false,
         savingTable: false,
@@ -52,28 +53,23 @@ describe('Test table creation reducers', () => {
             expect(state.dialogOpen).toBe(true);
         });
 
-        it('return updated dialog open state', () => {
+        it('return updated dialog closed state', () => {
 
             const state = reducer(initialState, {type: types.HIDE_TABLE_CREATION_DIALOG});
             expect(state.dialogOpen).toBe(false);
         });
 
 
-        it('return updated page state after next', () => {
+        it('return updated table ready dialog open state', () => {
 
-            const state = reducer(initialState, {type: types.NEXT_TABLE_CREATION_PAGE});
-            expect(state.pageIndex).toBe(1);
+            const state = reducer(initialState, {type: types.SHOW_TABLE_READY_DIALOG});
+            expect(state.showTableReadyDialog).toBe(true);
         });
 
+        it('return updated table ready dialog closed state', () => {
 
-        it('return updated page state after previous', () => {
-            let state = reducer(initialState, {type: types.NEXT_TABLE_CREATION_PAGE});
-            state = reducer(state, {type: types.PREVIOUS_TABLE_CREATION_PAGE});
-            expect(state.pageIndex).toBe(0);
-
-            // doesn't go negative
-            state = reducer(state, {type: types.PREVIOUS_TABLE_CREATION_PAGE});
-            expect(state.pageIndex).toBe(0);
+            const state = reducer(initialState, {type: types.HIDE_TABLE_READY_DIALOG});
+            expect(state.showTableReadyDialog).toBe(false);
         });
 
         it('return updated page state icon chooser open', () => {
@@ -89,7 +85,7 @@ describe('Test table creation reducers', () => {
             expect(state.iconChooserOpen).toBe(false);
         });
 
-        it('return updated page state after programatic edit', () => {
+        it('return updated page state after programmatic edit', () => {
 
             let action = {
                 type: types.SET_TABLE_CREATION_PROPERTY,
