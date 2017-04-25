@@ -8,7 +8,7 @@
     let newStackAuthPO = requirePO('newStackAuth');
     let TopNavPO = requirePO('topNav');
 
-    describe('Reports Page - Add Record Tests', function() {
+    describe('Reports Page - TopNav Tests', function() {
         var realmName;
         var realmId;
         var testApp;
@@ -60,7 +60,6 @@
             expect(TopNavPO.topNavGlobalActionsListEl.value.length).toBe(2);
             //Used HTML to get text as getText() returns empty string for <span> elements
             let innerHTML = browser.getHTML('.navLabel span', false);
-            console.log(innerHTML);
             if (breakpointSize !== 'small') {
                 // Verify global action icons is displayed in topNav
                 TopNavPO.topNavGlobalActionsListEl.waitForVisible();
