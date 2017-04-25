@@ -98,9 +98,22 @@ export const changeLocale = (locale) => {
         locale
     };
 };
-
+/**
+ * Enter Builder Mode
+ * @returns {{type}}
+ */
 export const enterBuilderMode = () => {
     return {
         type: types.ENTER_BUILDER_MODE
+    };
+};
+
+/**
+ * Exit Builder Mode
+ * @returns {{type: *}}
+ */
+export const exitBuilderMode = () => {
+    return {
+        type: types.EXIT_BUILDER_MODE
     };
 };
