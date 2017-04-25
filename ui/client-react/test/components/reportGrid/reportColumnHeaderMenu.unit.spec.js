@@ -27,7 +27,8 @@ const testProps = {
     sortFids: [],
     isOnlyOneColumnVisible: false,
     loadDynamicReport: (context, appId, tblId, rptId, queryParams) => {},
-    hideColumn: (context, appId, tblId, rptId, params) => {}
+    hideColumn: (context, appId, tblId, rptId, params) => {},
+    toggleFieldSelectorMenu: (context, appId, tblId, rptId, params) => {}
 };
 let component;
 let instance;
@@ -37,23 +38,25 @@ describe('ReportColumnHeaderMenu', () => {
         RewireAPI.__Rewire__('Locale', MockLocale);
         spyOn(testProps, 'loadDynamicReport').and.callThrough();
         spyOn(testProps, 'hideColumn').and.callThrough();
+        spyOn(testProps, 'toggleFieldSelectorMenu'.and.callThrough());
     });
 
     afterEach(() => {
         RewireAPI.__ResetDependency__('Locale');
         testProps.loadDynamicReport.calls.reset();
         testProps.hideColumn.calls.reset();
+        testProps.toggleFieldSelectorMenu.calls.reset();
     });
 
     describe('hasRequiredIds', () => {
-        it('returns true if the appropriate props have been passed in to be able to call sort, group, and hide actions', () => {
+        it('returns true if the appropriate props have been passed in to be able to call sort, group, add, and hide actions', () => {
             component = shallow(<ReportColumnHeaderMenu {...testProps}/>);
             instance = component.instance();
 
             expect(instance.hasRequiredIds()).toBeTruthy();
         });
 
-        it('returns false if the required props to call sort, group, and hide actions are missing', () => {
+        it('returns false if the required props to call sort, group, add, and hide actions are missing', () => {
             component = shallow(<ReportColumnHeaderMenu fieldDef={testFieldDef}/>);
             instance = component.instance();
 
@@ -541,6 +544,77 @@ describe('ReportColumnHeaderMenu', () => {
             instance.hideThisColumn(testProps.fieldDef.id);
 
             expect(testProps.hideColumn).not.toHaveBeenCalled();
+        });
+
+        //
+
+        it('adds a column before when that menu item is selected', () => {
+            component = shallow(<ReportColumnHeaderMenu {...testProps}/>);
+            instance = component.instance();
+
+            let hidingMenuItem = component.find(MenuItem).find({onSelect: instance.openFieldSelectorBefore});
+            expect(hidingMenuItem).toBePresent();
+
+            spyOn(instance, "openFieldSelector");
+
+            expect(hidingMenuItem.find('.addColumnBeforeText')).toHaveText('report.menu.addColumnBefore');
+            instance.openFieldSelectorBefore();
+
+            expect(instance.openFieldSelector).toHaveBeenCalledWith(true);
+        });
+
+        it('adds a column after when that menu item is selected', () => {
+            component = shallow(<ReportColumnHeaderMenu {...testProps}/>);
+            instance = component.instance();
+
+            let hidingMenuItem = component.find(MenuItem).find({onSelect: instance.openFieldSelectorAfter});
+            expect(hidingMenuItem).toBePresent();
+
+            spyOn(instance, "openFieldSelector");
+
+            expect(hidingMenuItem.find('.addColumnAfterText')).toHaveText('report.menu.addColumnAfter');
+            instance.openFieldSelectorAfter();
+
+            expect(instance.openFieldSelector).toHaveBeenCalledWith(false);
+        });
+
+        it('calls toggleFieldSelectorMenu to open the menu in order to add a column before', () => {
+            component = shallow(<ReportColumnHeaderMenu {...testProps}/>);
+            instance = component.instance();
+
+            instance.openFieldSelectorBefore();
+
+            let params = {
+                open: true,
+                clickedId: testFieldDef.id,
+                addBefore: true
+            };
+
+            expect(testProps.toggleFieldSelectorMenu).toHaveBeenCalledWith(CONTEXT.REPORT.NAV, testProps.appId, testProps.tblId, testProps.rptId, params);
+        });
+
+        it('calls toggleFieldSelectorMenu to open the menu in order to add a column after', () => {
+            component = shallow(<ReportColumnHeaderMenu {...testProps}/>);
+            instance = component.instance();
+
+            instance.openFieldSelectorAfter();
+
+            let params = {
+                open: true,
+                clickedId: testFieldDef.id,
+                addBefore: false
+            };
+
+            expect(testProps.toggleFieldSelectorMenu).toHaveBeenCalledWith(CONTEXT.REPORT.NAV, testProps.appId, testProps.tblId, testProps.rptId, params);
+        });
+
+        it('does not call the action to open the menu to add a column if the required props are not passed in', () => {
+            component = shallow(<ReportColumnHeaderMenu fieldDef={...testFieldDef} isOnlyOneColumnVisible={false}/>);
+            instance = component.instance();
+
+            instance.openFieldSelector(true);
+
+            expect(testProps.toggleFieldSelectorMenu).not.toHaveBeenCalled();
         });
     });
 });
