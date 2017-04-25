@@ -57,7 +57,7 @@ export class DraggableFieldToken extends Component {
     };
 
     /**
-     * This is called when a the field token is dragged over a droppable target on the form
+     * This is called when the field token is dragged over a droppable target on the form
      * It adds the field if it has not been added yet.
      * @param dropTargetProps
      * @param _dragItemProps

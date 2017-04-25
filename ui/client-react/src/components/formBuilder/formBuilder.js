@@ -32,10 +32,10 @@ export class FormBuilder extends Component {
     /**
      * When a user starts dragging an element, we make sure that element gets selected so there aren't multiple or incorrect selected elements.
      * Needed because a drag event will prevent a click event. Normally the click event would select the field.
-     * @param props
+     * @param dragItemProps
      */
-    beginDrag = props => {
-        this.props.selectFieldOnForm(this.props.formId, props.location);
+    beginDrag = dragItemProps => {
+        this.props.selectFieldOnForm(this.props.formId, dragItemProps.location);
     };
 
     /**
