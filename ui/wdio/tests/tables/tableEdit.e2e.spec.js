@@ -81,11 +81,11 @@
                     tableCreatePO.enterTableFieldValue(tableField.fieldTitle, tableField.fieldValue);
                 });
 
-                //Step 4 - Click next field and verify it landed in drag fields page
-                tableCreatePO.clickNextBtn();
-
-                //Step 5 - Click on finished button and make sure it landed in edit Form container page
+                //Step 4 - Click on finished button and make sure it landed in edit Form container page
                 tableCreatePO.clickFinishedBtn();
+
+                //Step 5 - Click OK button on create table dialogue
+                tableCreatePO.clickOkBtn();
 
                 //Step 6- Click on forms Cancel button
                 formsPO.clickFormCancelBtn();

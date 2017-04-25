@@ -12,7 +12,7 @@
         var realmName;
         var realmId;
         var testApp;
-        let recOffset = 5;
+        let numRows = 5;
         /**
          * Setup method. Creates test app then authenticates into the new stack
          */
@@ -20,7 +20,7 @@
             browser.logger.info('beforeAll spec function - Generating test data and logging in');
             // Need to return here. beforeAll is completely async, need to return the Promise chain in any before or after functions!
             // No need to call done() anymore
-            return e2eBase.basicAppSetup(null, e2eConsts.MAX_PAGING_SIZE - recOffset).then(function(createdApp) {
+            return e2eBase.basicAppSetup(null, numRows).then(function(createdApp) {
                 testApp = createdApp;
                 realmName = e2eBase.recordBase.apiBase.realm.subdomain;
                 realmId = e2eBase.recordBase.apiBase.realm.id;
@@ -40,7 +40,7 @@
             var deletedRecord;
             var rowToBeDeleted = 2;
             var successMessage = "1 Records deleted";
-            var reportCount = e2eConsts.MAX_PAGING_SIZE - recOffset;
+            var reportCount = numRows;
 
             /**
              * Before each it block reload the list all report (can be used as a way to reset state between tests)
@@ -69,14 +69,10 @@
                 // Step 2: Click on delete button from the dialogue box
                 reportContentPO.deleteButton.click();
 
-                // Step 3: Check for the success message '1 Records Deleted'
-                reportInLineEditPO.assertSuccessMessage(successMessage);
-                reportContentPO.waitForReportContent();
-
-                // Step 4: Check for the deleted record on the first page
+                // Step 3: Check for the deleted record on the first page
                 reportContentPO.checkForTheAbsenceDeletedRecordOnTheCurrentPage(deletedRecord);
 
-                // Step 5: Check if the record count is reduced or not after the deletion
+                // Step 4: Check if the record count is reduced or not after the deletion
                 expect(reportNavPO.recordsCount.getText()).toEqual(reportCount - 1 + " records") ;
 
             });
@@ -106,3 +102,4 @@
         });
     });
 }());
+
