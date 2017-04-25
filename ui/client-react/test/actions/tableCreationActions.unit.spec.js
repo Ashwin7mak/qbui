@@ -132,8 +132,5 @@ describe('Table Creation actions', () => {
             });
 
     });
-    it('should create an action for notifying of table creation', () => {
-        expect(actions.notifyTableCreated(true)).toEqual({type: types.NOTIFY_TABLE_CREATED, notifyTableCreated: true});
-    });
 
 });

@@ -28,8 +28,7 @@ function initializeState() {
         savingTable: false,
         tableInfo: defaultTableInfo,
         edited: false,
-        editing: null,
-        notifyTableCreated: false
+        editing: null
     };
 }
 
@@ -145,11 +144,6 @@ describe('Test table creation reducers', () => {
             expect(state.savingTable).toBe(false);
         });
 
-        it('return updated notification state', () => {
-            const state = reducer(initialState, {type: types.NOTIFY_TABLE_CREATED, notifyTableCreated: true});
-
-            expect(state.notifyTableCreated).toBe(true);
-        });
     });
 
 
