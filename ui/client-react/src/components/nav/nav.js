@@ -320,7 +320,6 @@ export const Nav = React.createClass({
 
     addColumnFromExistingField(columnData, reportData) {
         let params = {
-            clickedId: this.props.shell.fieldsSelectMenu.clickedId,
             requestedId: columnData.fieldDef.id,
             requestedCurrentPosition: columnData.order,
             addBefore: this.props.shell.fieldsSelectMenu.addBefore
