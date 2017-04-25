@@ -22,6 +22,7 @@
 
         tableBody: {get: function() {return browser.element('.qbTbody');}},
         reportsToolBar : {get: function() {return browser.element('.reportToolbar');}},
+        addRecordButton : {get: function() {return browser.element('.tableHomePageInitial .addRecordButton');}},
         reportFilterSearchBox : {get: function() {
             return this.reportsToolBar.element('.searchInput');
         }},
