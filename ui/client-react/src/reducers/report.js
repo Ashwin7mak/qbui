@@ -343,7 +343,7 @@ const report = (state = [], action) => {
         }
         return state;
     }
-    case types.ADD_COLUMN_SUCCESS: {
+    case types.ADD_COLUMN: {
         let currentReport = getReportFromState(action.id);
         if (currentReport) {
             let columns = currentReport.data.columns;
@@ -362,14 +362,17 @@ const report = (state = [], action) => {
             })[0].order;
 
             // add before or after the clicked column
-            let insertionIndex;
+            let colInsertionIndex;
+            let fidInsertionIndex;
             if (addBefore) {
-                insertionIndex = clickedColumnIndex - 1;
+                colInsertionIndex = clickedColumnIndex - 1;
+                fidInsertionIndex = clickedColumnIndex - 1;
             } else {
-                insertionIndex = clickedColumnIndex + 2;
+                colInsertionIndex = clickedColumnIndex + 2;
+                fidInsertionIndex = clickedColumnIndex + 1;
             }
             // insert the removed column in the correct place in the columns list
-            columns.splice(insertionIndex, 0, columnMoving);
+            columns.splice(colInsertionIndex, 0, columnMoving);
             reorderColumns(columns);
 
             // show the currently hidden column that was just added
@@ -379,6 +382,7 @@ const report = (state = [], action) => {
                 }
                 return column;
             });
+            currentReport.data.fids.splice(fidInsertionIndex, 0, requestedColumn.fieldDef.id);
             return newState(currentReport);
         }
         return state;
@@ -390,6 +394,9 @@ const report = (state = [], action) => {
                 if (column.fieldDef.id === action.content.columnId) {
                     column.isHidden = true;
                 }
+            });
+            currentReport.data.fids = currentReport.data.fids.filter(fid => {
+                return fid !== action.content.columnId;
             });
             return newState(currentReport);
         }
