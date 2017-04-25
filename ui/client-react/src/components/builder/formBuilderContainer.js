@@ -127,7 +127,7 @@ export const FormBuilderContainer = React.createClass({
 
     onCancel() {
         const {appId, tblId} = this.props.match.params;
-        console.log('onCancel');
+
         NavigationUtils.goBackToLocationOrTable(appId, tblId, this.props.redirectRoute);
     },
 
@@ -138,7 +138,6 @@ export const FormBuilderContainer = React.createClass({
     },
 
     saveClicked() {
-        console.log('onSave');
         // get the form meta data from the store..hard code offset for now...this is going to change..
         if (this.props.currentForm && this.props.currentForm.formData) {
             let formMeta = this.props.currentForm.formData.formMeta;
