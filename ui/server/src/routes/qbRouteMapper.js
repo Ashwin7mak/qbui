@@ -103,6 +103,23 @@
             requestFunctions[routes.GOVERNANCE_ACCOUNT_USERS] = getAccountUsers;
             requestFunctions[routes.GOVERNANCE_CONTEXT] = getGovernanceContext;
 
+
+            // ****** TEMP E2E routes..to be removed once JIRA-xxx is complete ******
+            requestFunctions[routes.E2E_APPS] = getApps;
+            requestFunctions[routes.E2E_APP_USERS] = getAppUsers;
+            requestFunctions[routes.E2E_APP_ROLES] = getAppRoles;
+            requestFunctions[routes.E2E_FORM_COMPONENTS] = fetchFormComponents;
+            requestFunctions[routes.E2E_FORM_AND_RECORD_COMPONENTS] = fetchFormAndRecordComponents;
+            requestFunctions[routes.E2E_RECORD] = fetchSingleRecord;
+            requestFunctions[routes.E2E_RECORDS] = fetchAllRecords;
+            requestFunctions[routes.E2E_REPORT_META] = fetchReportMeta;
+            requestFunctions[routes.E2E_REPORT_RESULTS] = fetchReportResults;
+            requestFunctions[routes.E2E_REPORT_INVOKE_RESULTS] = fetchReportInvokeResults;
+            requestFunctions[routes.E2E_REPORT_RECORDS_COUNT] = fetchReportRecordsCount;
+            requestFunctions[routes.E2E_TABLE_HOMEPAGE_REPORT] = fetchTableHomePageReport;
+            requestFunctions[routes.E2E_REQ_USER] = getReqUser;
+            // **********
+
             return requestFunctions;
         }
 
@@ -115,6 +132,11 @@
             let requestFunctions = {};
             requestFunctions[routes.RECORD] = saveSingleRecord;
             requestFunctions[routes.TABLE] = updateTable;
+
+            // ****** TEMP E2E routes..to be removed once JIRA-xxx is complete ******
+            requestFunctions[routes.E2E_RECORD] = saveSingleRecord;
+            requestFunctions[routes.E2E_TABLE] = updateTable;
+            // **********
 
             return requestFunctions;
         }
@@ -132,8 +154,12 @@
             requestFunctions[routes.FEATURE_OVERRIDES_BULK] = deleteFeatureSwitchOverridesBulk;
 
             requestFunctions[routes.RECORDS] = createSingleRecord;
-
             requestFunctions[routes.TABLE_COMPONENTS] = createTableComponents;
+
+            // ****** TEMP E2E routes..to be removed once JIRA-xxx is complete ******
+            requestFunctions[routes.E2E_RECORDS] = createSingleRecord;
+            requestFunctions[routes.E2E_TABLE_COMPONENTS] = createTableComponents;
+            // **********
 
             return requestFunctions;
         }

@@ -70,7 +70,31 @@
 
         GOVERNANCE_ACCOUNT_USERS     : baseContext.GOVERNANCE + '/:accountId/users',
         // the account id is an optional parameter
-        GOVERNANCE_CONTEXT           : baseContext.GOVERNANCE + '/context'
+        GOVERNANCE_CONTEXT           : baseContext.GOVERNANCE + '/context',
+
+        // ************ TEMPORARY routes needed to allow E2E tests to continue to work under new routing scheme  *************
+        // ************ PLEASE DO NOT ADD TO THIS LIST as these will go away once E2E is updated                 *************
+        //  E2E needs these routes to be defined as some tests do not differentiate between the /qbui prefixed route or
+        //  the /api/api/v1 core routes.  JIRA-xxx has been created to refactor how routing is constructed so that the
+        //  test framework does not call the custom routing using the incorrect prefix.
+        E2E_FORM_AND_RECORD_COMPONENTS  : baseContext.CORE_ENGINE + '/apps/:appId/tables/:tableId/records/:recordId/formComponents',
+        E2E_FORM_COMPONENTS             : baseContext.CORE_ENGINE + '/apps/:appId/tables/:tableId/formComponents',
+        E2E_RECORD                      : baseContext.CORE_ENGINE + '/apps/:appId/tables/:tableId/records/:recordId',
+        E2E_RECORDS                     : baseContext.CORE_ENGINE + '/apps/:appId/tables/:tableId/records',
+        E2E_RECORDS_BULK                : baseContext.CORE_ENGINE + '/apps/:appId/tables/:tableId/records/bulk',
+        E2E_REPORT_META                 : baseContext.CORE_ENGINE + '/apps/:appId/tables/:tableId/reports/:reportId',
+        E2E_REPORT_RESULTS              : baseContext.CORE_ENGINE + '/apps/:appId/tables/:tableId/reports/:reportId/results',
+        E2E_REPORT_INVOKE_RESULTS       : baseContext.CORE_ENGINE + '/apps/:appId/tables/:tableId/reports/:reportId/invoke',
+        E2E_REPORT_RECORDS_COUNT        : baseContext.CORE_ENGINE + '/apps/:appId/tables/:tableId/reports/:reportId/recordsCount',
+        E2E_TABLE_HOMEPAGE_REPORT       : baseContext.CORE_ENGINE + '/apps/:appId/tables/:tableId/homePage',
+        E2E_TABLE_COMPONENTS            : baseContext.CORE_ENGINE + '/apps/:appId/tables/tableComponents',
+        E2E_TABLE                       : baseContext.CORE_ENGINE + '/apps/:appId/tables/:tableId',
+        E2E_TABLES                      : baseContext.CORE_ENGINE + '/apps/:appId/tables',
+        E2E_APPS                        : baseContext.CORE_ENGINE + '/apps',
+        E2E_APP_USERS                   : baseContext.CORE_ENGINE + '/apps/:appId/users',
+        E2E_APP_ROLES                   : baseContext.CORE_ENGINE + '/apps/:appId/roles',
+        E2E_REQ_USER                    : baseContext.CORE_ENGINE + '/users/reqUser'
+        // ********************************************************************************
     };
 
     /*
