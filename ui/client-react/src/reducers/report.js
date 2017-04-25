@@ -59,8 +59,8 @@ const report = (state = [], action) => {
      * @param columns
      */
     function reorderColumns(columns) {
-        let newOrder = 0;
-        columns.map((column) => {
+        let newOrder = 1;
+        columns.forEach((column) => {
             column.order = newOrder++;
         });
     }
@@ -314,7 +314,7 @@ const report = (state = [], action) => {
             currentReport.data.columns.forEach(column => {
                 column.fieldDef.isAddingFrom = (column.fieldDef.id === clickedColumnId);
             });
-            let clickedColumnIndex = clickedColumn.order;
+            let clickedColumnIndex = clickedColumn.order - 1;
             // add before or after the clicked column depending on selection
             let insertionIndex;
             if (addBefore) {
@@ -350,43 +350,42 @@ const report = (state = [], action) => {
             // metadata
             let columns = currentReport.data.columns;
             let fids = currentReport.data.fids;
+            let metaFids = currentReport.data.metaData.fids;
             // passed in params
             let params = action.content;
             let addBefore = params.addBefore;
-            let clickedColumnId = params.clickedId;
             let requestedColumnId = params.requestedId;
-            let requestedColumnIndex = params.requestedCurrentPosition;
+            let requestedColumnIndex = params.requestedCurrentPosition - 1;
 
             // remove the column that is going to get shown
             let columnMoving = columns.splice(requestedColumnIndex, 1)[0];
             reorderColumns(columns);
-            // searches through the current columns to find the one that was selected
-            let clickedColumnIndex = columns.filter((column) => {
-                return column.fieldDef.id === clickedColumnId;
-            })[0].order;
-
-            // add before or after the clicked column
-            let colInsertionIndex;
+            // searches through the current columns to find the index of the placeholder
+            let placeholderIndex = columns.filter(column => {
+                return column.fieldDef.isPlaceholder === true;
+            })[0].order - 1;
+            // add the requested column to where the placeholder column is
             let fidInsertionIndex;
             if (addBefore) {
-                colInsertionIndex = clickedColumnIndex - 1;
-                fidInsertionIndex = clickedColumnIndex - 1;
+                fidInsertionIndex = placeholderIndex - 1;
             } else {
-                colInsertionIndex = clickedColumnIndex + 2;
-                fidInsertionIndex = clickedColumnIndex + 1;
+                placeholderIndex = placeholderIndex + 1;
+                fidInsertionIndex = placeholderIndex + 1;
             }
             // insert the removed column in the correct place in the columns list
-            columns.splice(colInsertionIndex, 0, columnMoving);
+            columns.splice(placeholderIndex, 0, columnMoving);
             reorderColumns(columns);
 
             // show the currently hidden column that was just added
-            columns.map(column => {
+            columns.forEach(column => {
                 if (column.fieldDef.id === requestedColumnId) {
                     column.isHidden = false;
                 }
                 return column;
             });
             fids.splice(fidInsertionIndex, 0, requestedColumnId);
+            metaFids.splice(fidInsertionIndex, 0, requestedColumnId);
+            reorderColumns(currentReport.data.columns);
             return newState(currentReport);
         }
         return state;
@@ -397,17 +396,21 @@ const report = (state = [], action) => {
             // metadata
             let columns = currentReport.data.columns;
             let fids = currentReport.data.fids;
+            let metaFids = currentReport.data.metaData.fids;
             // passed in params
             let params = action.content;
             let clickedColumnId = params.clickedId;
-
+            // mark the clicked column as hidden so it does not get rendered
             columns.forEach(column => {
                 if (column.fieldDef.id === clickedColumnId) {
                     column.isHidden = true;
                 }
             });
-
-            fids = fids.filter(fid => {
+            // update the fids and metafids to reflect the hidden column
+            currentReport.data.fids = fids.filter(fid => {
+                return fid !== clickedColumnId;
+            });
+            currentReport.data.metaData.fids = metaFids.filter(fid => {
                 return fid !== clickedColumnId;
             });
             return newState(currentReport);

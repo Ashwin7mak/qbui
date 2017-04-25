@@ -88,16 +88,14 @@ const shell = (
         return {
             ...state,
             fieldsSelectMenu: {
-                clickedId: action.content.clickedId,
                 fieldsListCollapsed: false,
                 addBefore: action.content.addBefore
             }
         };
-        case types.CLOSE_FIELD_SELECTOR:
+    case types.CLOSE_FIELD_SELECTOR:
         return {
             ...state,
             fieldsSelectMenu: {
-                clickedId: action.content.clickedId,
                 fieldsListCollapsed: true,
                 addBefore: action.content.addBefore
             }
