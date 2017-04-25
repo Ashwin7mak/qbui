@@ -69,7 +69,6 @@ class StandardGrid extends Component {
 
 StandardGrid.propTypes = {
     columns: PropTypes.array.isRequired,
-    items: PropTypes.array.isRequired,
     rowKey: PropTypes.string.isRequired,
     id: PropTypes.string.isRequired,
     columnTransforms: PropTypes.array,
@@ -92,6 +91,7 @@ const mapStateToProps = (state, props) => {
     var gridState = state.Grids[props.id] || {};
     return {
         sortFids: gridState.sortFids || [],
+        items : gridState.items
     };
 };
 

@@ -97,7 +97,7 @@ export const fetchAccountUsers = (accountId, gridID) => {
 
             // run through the pipleine and update the grid. temporarily use the default grid state
             dispatch(receiveAccountUsers(response.data));
-            doUpdate(gridID, StandardGridState.defaultGridState);
+            dispatch(doUpdate(gridID, StandardGridState.defaultGridState));
         });
         return promise;
     };
