@@ -613,7 +613,8 @@ describe('update Record Actions -- success workflow', () => {
     const addNewRow = true;
     const expectedActions = [
         event(recId, types.SAVE_RECORD, {appId, tblId, recId, changes:changes}),
-        event(recId, types.SAVE_RECORD_SUCCESS, {appId, tblId, recId, report:jasmine.any(Object), addNewRow})
+        event(recId, types.SAVE_RECORD_SUCCESS, {appId, tblId, recId, report:jasmine.any(Object), addNewRow}),
+        event(recId, types.SAVE_RECORD_COMPLETE, {appId, tblId, recId})
     ];
 
     let testCases = [
