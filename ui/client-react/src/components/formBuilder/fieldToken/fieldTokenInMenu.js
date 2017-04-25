@@ -65,7 +65,7 @@ export class DraggableFieldToken extends Component {
         if (!this.state.addedToForm) {
             const {formId, appId, tblId, relatedField} = this.props;
 
-            this.props.addNewFieldToForm(formId, appId, tblId, location, relatedField);
+            this.props.addNewFieldToForm(formId, appId, tblId, dropTargetProps.location, relatedField);
             this.setState({addedToForm: true});
         }
     };
