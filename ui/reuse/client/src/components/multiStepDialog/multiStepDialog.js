@@ -78,8 +78,8 @@ class MultiStepDialog extends React.Component {
             <Modal.Footer>
                 <div className="buttons">
                     <span className="spacer"/>
-                    <Button className="cancelButton" onClick={this.cancelClicked}><I18nMessage message="nav.cancel"/></Button>
-
+                    {this.props.showCancelButton &&
+                        <Button className="cancelButton" onClick={this.cancelClicked}><I18nMessage message="nav.cancel"/></Button>}
                     {showPrevious &&
                         <Button className="previousButton" onClick={this.previousClicked}><I18nMessage message="nav.previous"/></Button>}
                     {showNext &&
@@ -153,19 +153,23 @@ MultiStepDialog.propTypes = {
     /**
      * page index to display
      */
-    pageIndex: PropTypes.number.isRequired,
+    pageIndex: PropTypes.number,
     /**
      * cancel callback (client should set show prop to false)
      */
-    onCancel: PropTypes.func.isRequired,
+    onCancel: PropTypes.func,
+    /**
+     * show the cancel button
+     */
+    showCancelButton: PropTypes.bool,
     /**
      * next page (client should increment pageIndex)
      */
-    onNext: PropTypes.func.isRequired,
+    onNext: PropTypes.func,
     /**
      * previous page (client should decrement pageIndex)
      */
-    onPrevious: PropTypes.func.isRequired,
+    onPrevious: PropTypes.func,
     /**
      * finished callback (client should hide dialog and process it)
      */
@@ -189,8 +193,10 @@ MultiStepDialog.propTypes = {
 };
 
 MultiStepDialog.defaultProps = {
+    pageIndex: 0,
     canProceed: true,
     isLoading: false,
+    showCancelButton: true,
     finishedButtonLabel: Locale.getMessage("nav.finished")
 };
 

@@ -118,9 +118,9 @@ export default {
         },
         grid: {
             no_data: "There is no data to display.",
-            no_filter_matches: "No records match what you're looking for.  Try looking for a different kind of record.",
-            no_rows: "There are no records to see right now.",
-            no_rows_but: "There are no records, but you can ",
+            no_filter_matches: "No {recordsName} match what you're looking for.  Try looking for a different kind of {recordName}.",
+            no_rows: "There are no {recordsName} to see right now.",
+            no_rows_but: "There are no {recordsName}, but you can ",
             no_rows_create_link:  "create one"
         },
         globalActions: {
@@ -653,7 +653,13 @@ export default {
             homePageCreateAnother: "Create another table",
 
             noSuggestedIcons: "There are no suggested icons for this table name",
-            typeForSuggestions: "Please type a table name to get suggestions"
+            typeForSuggestions: "Please type a table name to get suggestions",
+
+            tableReadyTitle: "Your table's ready!",
+            tableReadyText1: "Each bit of information you want to collect is a field.  We've started you off with a couple.",
+            tableReadyText2: "Design this form to collect info.  Drag and drop to add fields.",
+
+            tableReadyDialogOK: "OK"
         },
         iconChooser: {
             searchPlaceholder: "Search table icons..."

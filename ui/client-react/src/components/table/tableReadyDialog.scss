@@ -1,0 +1,52 @@
+@import '../../assets/css/_qbVariables';
+
+
+@include not-small-breakpoint {
+
+    .multiStepModal.tableReadyDialog .modal-dialog .modal-content {
+
+        .multiStepDialogRightIcons {
+            z-index: 1;
+            color: $color-black-100;
+            &:hover {
+                color: $color-black-200;
+            }
+        }
+        .modal-body {
+            padding: 0;
+
+            > *:first-child {
+                height: 235px;
+            }
+
+            .tableReadyContent {
+
+                .topTitle {
+                    display: flex;
+                    flex-direction: row;
+                    align-items: center;
+                    height: 120px;
+                    color: $color-black-100;
+                    background-color: $newTableDialog-highlight-color;
+                    font-size: $font-size-h2;
+                    .dndImage {
+                        margin-left: 20px;
+                        margin-right: 40px;
+                    }
+                }
+
+                .tableReadyText {
+                    margin: 30px 50px 0 50px;
+
+                    p {
+                        font-size: $font-size-dialog-text;
+                    }
+                }
+            }
+        }
+
+        width: 580px;
+    }
+}
+
+

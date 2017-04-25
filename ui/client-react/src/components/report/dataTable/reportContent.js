@@ -949,6 +949,7 @@ export const ReportContent = React.createClass({
                                 appId={this.props.reportData.appId}
                                 tblId={this.props.reportData.tblId}
                                 rptId={this.props.reportData.rptId}
+                                selectedTable={this.props.selectedTable}
                                 noRowsUI={this.props.noRowsUI}
                                 records={this.props.reportData.data ? _.cloneDeep(this.props.reportData.data.filteredRecords) : []}
                                 columns={this.props.reportData.data ? this.props.reportData.data.columns : []}
@@ -980,6 +981,7 @@ export const ReportContent = React.createClass({
                         <CardViewListHolder reportData={this.props.reportData}
                                             noRowsUI={this.props.noRowsUI}
                                             appUsers={this.props.appUsers}
+                                            selectedTable={this.props.selectedTable}
                                             primaryKeyName={this.props.primaryKeyName}
                                             reportHeader={this.props.reportHeader}
                                             selectionActions={<ReportActions selection={this.props.selectedRows}/>}
