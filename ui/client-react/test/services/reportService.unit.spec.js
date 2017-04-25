@@ -12,6 +12,7 @@ describe('ReportService functions', () => {
         spyOn(BaseService.prototype, 'setRequestInterceptor');
         spyOn(BaseService.prototype, 'setResponseInterceptor');
         getSpy = spyOn(BaseService.prototype, 'get');
+        spyOn(BaseService.prototype, 'patch');
 
         reportService = new ReportService();
     });
