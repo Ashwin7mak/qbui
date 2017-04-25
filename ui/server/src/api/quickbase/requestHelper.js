@@ -161,6 +161,7 @@
 
                 //  override the url to use automation server
                 opts.url = this.getRequestAutomationUrl(req);
+                opts.cookies = req.cookies;
                 return opts;
             },
 

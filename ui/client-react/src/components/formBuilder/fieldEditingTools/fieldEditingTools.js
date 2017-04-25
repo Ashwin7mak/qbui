@@ -82,13 +82,13 @@ export class FieldEditingTools extends Component {
             <div className="actionIcons">
                     <div className="deleteFieldIcon">
                         <QbToolTip i18nMessageKey="builder.formBuilder.removeField">
-                           <button tabIndex={tabIndex} onClick={this.onClickDelete}> <QbIcon icon="delete" /> </button>
+                           <button type="button" tabIndex={tabIndex} onClick={this.onClickDelete}> <QbIcon icon="delete" /> </button>
                         </QbToolTip>
                     </div>
 
                     <div  className="fieldPreferencesIcon">
                         <QbToolTip i18nMessageKey="builder.formBuilder.unimplemented">
-                            <button tabIndex={tabIndex} onClick={this.onClickFieldPreferences}> <QbIcon iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY} icon="Dimensions"/> </button>
+                            <button type="button" tabIndex={tabIndex} onClick={this.onClickFieldPreferences}> <QbIcon iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY} icon="Dimensions"/> </button>
                         </QbToolTip>
                     </div>
             </div>
@@ -133,8 +133,8 @@ export class FieldEditingTools extends Component {
     updateScrollLocation() {
         if (this.props.selectedFields && this.props.selectedFields[0]) {
             let selectedFormElement = this.getSelectedFormElementContainer();
-            let absoluteElementTop = selectedFormElement.top + window.pageYOffset;
-            let bottom = absoluteElementTop + selectedFormElement.height;
+            let absoluteElementTop = (selectedFormElement ? selectedFormElement.top + window.pageYOffset : 0);
+            let bottom = (selectedFormElement ? absoluteElementTop + selectedFormElement.height : absoluteElementTop);
 
             if (bottom > window.innerHeight - 40 || absoluteElementTop < 50) {
                 this.scrollElementIntoView();

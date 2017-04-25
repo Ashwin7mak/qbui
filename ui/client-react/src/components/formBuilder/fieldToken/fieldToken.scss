@@ -35,15 +35,6 @@ $fieldtoken-title-margin-left: 12px;
         transition: opacity 0.3s, max-width 0.3s;
     }
 
-    &.fieldTokenCollapsed {
-        max-width: $fieldtoken-icon-width;
-
-        .fieldTokenTitle {
-            opacity: 0;
-            max-width: 0;
-        }
-    }
-
     .fieldTokenIconContainer {
         width: $fieldtoken-icon-width;
         height: $fieldtoken-height;
@@ -54,6 +45,19 @@ $fieldtoken-title-margin-left: 12px;
         display: flex;
         align-items: center;
         justify-content: center;
+    }
+
+    &.fieldTokenCollapsed {
+        max-width: $fieldtoken-icon-width;
+
+        .fieldTokenTitle {
+            opacity: 0;
+            max-width: 0;
+        }
+
+        .fieldTokenIconContainer {
+            width: 100%; // Fixes the positioning of the icon when there is no title text
+        }
     }
 
     &.fieldTokenDragging {
