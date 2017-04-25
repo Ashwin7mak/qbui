@@ -1,5 +1,5 @@
 import React from 'react';
-import {shallow, mount} from 'enzyme';
+import {mount} from 'enzyme';
 import {MemoryRouter, Route} from 'react-router-dom';
 import DrawerContainer, {
     __RewireAPI__ as DrawerContainerRewireAPI
@@ -23,7 +23,6 @@ describe('Drawer Container functions ', () => {
             rootDrawer: true,
             closeDrawer: () => {},
             match: {
-                path: "/qbase/app/:appId/table/:tblId/(report)?/:rptId?/record/:recordId",
                 url: "/qbase/app/app1/table/tbl1/report/rpt1/record/rcd1",
                 isExact: false,
             }
@@ -31,12 +30,6 @@ describe('Drawer Container functions ', () => {
 
         beforeEach(() => {
             spyOn(props, 'closeDrawer');
-        });
-
-        afterEach(() => {
-            if (props.closeDrawer()) {
-                props.closeDrawer().calls.reset();
-            }
         });
 
         it('test render of drawer container, drawer and transition group', () => {
@@ -47,148 +40,35 @@ describe('Drawer Container functions ', () => {
             expect(transitionGroupContainer.length).toBe(1);
         });
 
-        it('test that container calls getDrawer function when route match occurs', () => {
-            // blah
-        });
-
-
-        it('test that container render results in showDrawerContainer function being invoked', () => {
-            // let routeDiv = mount(<MemoryRouter><DrawerContainer {...props}/></MemoryRouter>);
-            // let drawerContainerWrapper = routeDiv.find('DrawerContainer');
-            // expect(drawerContainerWrapper.length).toBe(1);
-            // spyOn(drawerContainerWrapper.node, 'getDrawer');
-            // expect(drawerContainerWrapper.node.getDrawer).toHaveBeenCalled();
-            // // drawerContainerWrapper.node.showDrawerContainer().calls.reset();
-        });
-
-        it('test that hideDrawerContainer function is invoked when contained drawer is unmounted', () => {
-            // let routeDiv = mount(<MemoryRouter><DrawerContainer {...props}/></MemoryRouter>);
-            // let drawerContainerWrapper = routeDiv.find('DrawerContainer');
-            // drawerContainerWrapper.unmount();
-            // expect(drawerContainerWrapper.hideDrawerContainer).toHaveBeenCalled();
-        });
-
-
-        it('test that closeDrawer function is invoked', () => {
-            // let routeDiv = mount(<MemoryRouter><DrawerContainer {...props}/></MemoryRouter>);
-            // let drawerContainerWrapper = routeDiv.find('DrawerContainer');
-            // drawerContainerWrapper.unmount();
-            // expect(props.closeDrawer).toHaveBeenCalled();
-        });
-
-    });
-
-    describe('Non-root drawer', () => {
-        let childProps = {
-            rootDrawer: false,
-            closeDrawer: () => {
-            },
-            match: {
-                url: "/qbase/app/app1/table/tbl1/report/rpt2/record/rcd2",
-            }
-        };
-        let matchedChildProps = {
-            rootDrawer: false,
-            closeDrawer: () => {
-            },
-            match: {
-                url: "/qbase/app/app1/table/tbl1/report/rpt2/record/rcd2",
-            }
-        };
-
-        ///sr_app_app2_table_tbl2_report_rpt2_record_rcd2
-        //path: "/qbase/app/:appId/table/:tblId/(report)?/:rptId?/record/:recordId",
-
-        it('renders Route, DrawerContainer and TransitionGroup', () => {
-            let childRoute = mount(<MemoryRouter><DrawerContainer {...childProps}/></MemoryRouter>);
-            let childRouteContainer = childRoute.find('Route');
-            expect(childRouteContainer.length).toBe(1);
-            let childDrawerContainer = childRoute.find('DrawerContainer');
-            expect(childDrawerContainer.length).toBe(1);
-            let childTransitionGroupContainer = childRoute.find('ReactCSSTransitionGroup');
-            expect(childTransitionGroupContainer.length).toBe(1);
-        });
-
-        it('does not render backdrop', () => {
-            // only the root drawer should render a backdrop
-            let childRoute = mount(<MemoryRouter><DrawerContainer {...childProps}/></MemoryRouter>);
-            let backdrop = childRoute.find('.closeHandleBackdrop');
-            expect(backdrop.length).toBe(0);
-        });
-
-        it('test that drawer container is rendered when a match occurs', () => {
-            let childRoute = mount(
-                <MemoryRouter initialEntries={["/qbase/app/app1/table/tbl1/report/rpt2/record/rcd2/sr_app_app2_table_tbl2_report_rpt2_record_rcd2"]}>
-                    <DrawerContainer {...matchedChildProps}/>
-                </MemoryRouter>);
-            let drawer = childRoute.find('.drawer');
-            expect(drawer.length).toBe(1);
-        });
-
-        it('test that drawer container is not rendered when a match does not occur', () => {
-            // let parentRoute = mount(<DrawerContainer {...rootProps}/>);
-            // let childRoute = parentRoute.mount(<DrawerContainer {...childProps}/>);
-            // let childRouteContainer = childRoute.find('Route');
-            // let childDrawerContainer = childRouteContainer.find('DrawerContainer');
-            // expect(childDrawerContainer.showDrawerContainer).toHaveBeenCalled();
-        });
-
-        it('test that hide drawer container function is invoked', () => {
-            // let parentRoute = mount(<DrawerContainer {...rootProps}/>);
-            // let childRoute = parentRoute.mount(<DrawerContainer {...childProps}/>);
-            // let childRouteContainer = childRoute.find('Route');
-            // let childDrawerContainer = childRouteContainer.find('DrawerContainer');
-            // childDrawerContainer.unmount();
-            // expect(childDrawerContainer.hideDrawerContainer).toHaveBeenCalled();
-        });
-
-
-        it('test that close drawer function is invoked', () => {
-            // let parentRoute = mount(<DrawerContainer {...rootProps}/>);
-            // let childRoute = parentRoute.mount(<DrawerContainer {...childProps}/>);
-            // let childRouteContainer = childRoute.find('Route');
-            // let childDrawerContainer = childRouteContainer.find('DrawerContainer');
-            // childDrawerContainer.unmount();
-            // expect(childProps.closeDrawer).toHaveBeenCalled();
-        });
-
-        xit('test render of drawer container, drawer and transition group', () => {
-            let routeDiv = mount(<MemoryRouter><DrawerContainer {...props}/></MemoryRouter>);
+        it('test that container renders a drawer when route match occurs', () => {
+            let routeDiv = mount(<MemoryRouter initialEntries={["/qbase/app/app1/table/tbl1/report/rpt1/record/rcd1/sr_app_app1_table_tbl1_report_rpt2_record_rcd2"]}>
+                                        <DrawerContainer {...props}/>
+                                    </MemoryRouter>);
             let drawerContainerWrapper = routeDiv.find('DrawerContainer');
             expect(drawerContainerWrapper.length).toBe(1);
-            let transitionGroupContainer = drawerContainerWrapper.find('ReactCSSTransitionGroup');
-            expect(transitionGroupContainer.length).toBe(1);
+            let drawerWrapper = drawerContainerWrapper.find('Drawer');
+            expect(drawerWrapper.length).toBe(1);
         });
 
-        it('test that container calls getDrawer function when route match occurs', () => {
-            // blah
+        it('test that container does not render a drawer when path does not match', () => {
+            let routeDiv = mount(<MemoryRouter initialEntries={["/qbase/app/app1/table/tbl1/report/rpt1/records"]}>
+                <DrawerContainer {...props}/>
+            </MemoryRouter>);
+            let drawerContainerWrapper = routeDiv.find('DrawerContainer');
+            expect(drawerContainerWrapper.length).toBe(1);
+            let drawerWrapper = drawerContainerWrapper.find('Drawer');
+            expect(drawerWrapper.length).toBe(0);
         });
-
 
         it('test that container render results in showDrawerContainer function being invoked', () => {
-            // let routeDiv = mount(<MemoryRouter><DrawerContainer {...props}/></MemoryRouter>);
-            // let drawerContainerWrapper = routeDiv.find('DrawerContainer');
-            // expect(drawerContainerWrapper.length).toBe(1);
-            // spyOn(drawerContainerWrapper.node, 'getDrawer');
-            // expect(drawerContainerWrapper.node.getDrawer).toHaveBeenCalled();
-            // // drawerContainerWrapper.node.showDrawerContainer().calls.reset();
+            let routeDiv = mount(<MemoryRouter initialEntries={["/qbase/app/app1/table/tbl1/report/rpt1/record/rcd1/sr_app_app1_table_tbl1_report_rpt2_record_rcd2"]}>
+                <DrawerContainer {...props}/>
+            </MemoryRouter>);
+            let drawerContainerWrapper = routeDiv.find('DrawerContainer');
+            expect(drawerContainerWrapper.length).toBe(1);
+            expect(drawerContainerWrapper.node.state.visible).toBeTruthy();
         });
-
-        it('test that hideDrawerContainer function is invoked when contained drawer is unmounted', () => {
-            // let routeDiv = mount(<MemoryRouter><DrawerContainer {...props}/></MemoryRouter>);
-            // let drawerContainerWrapper = routeDiv.find('DrawerContainer');
-            // drawerContainerWrapper.unmount();
-            // expect(drawerContainerWrapper.hideDrawerContainer).toHaveBeenCalled();
-        });
-
-
-        it('test that closeDrawer function is invoked', () => {
-            // let routeDiv = mount(<MemoryRouter><DrawerContainer {...props}/></MemoryRouter>);
-            // let drawerContainerWrapper = routeDiv.find('DrawerContainer');
-            // drawerContainerWrapper.unmount();
-            // expect(props.closeDrawer).toHaveBeenCalled();
-        });
-
     });
+
 
 });
