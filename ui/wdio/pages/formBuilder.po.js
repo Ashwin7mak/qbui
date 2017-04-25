@@ -206,7 +206,7 @@ class formBuilderPage {
         this.KB_selectField(index);
         let deletedField = this.selectedField.getText();
         browser.keys(['Tab', 'Enter']); // select & press DELETE icon
-        this.selectedField.waitForExist(5000, false);
+        this.selectedField.waitForExist(5000, true);
         return deletedField;
     }
     KB_removeFieldViaBackspace(index) {
@@ -214,7 +214,7 @@ class formBuilderPage {
         this.KB_selectField(index); // field doesn't need to be selected
         let deletedField = this.selectedField.getText();
         this.selectedField.keys(['Backspace']);
-        this.selectedField.waitForExist(5000, false);
+        this.selectedField.waitForExist(5000, true);
         return deletedField;
     }
     KB_save(index) {
