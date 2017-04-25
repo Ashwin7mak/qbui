@@ -13,7 +13,8 @@ let appId = 1;
 let tblId = 1;
 let relatedField = {};
 let mockActions = {
-    addNewFieldToForm(_formId, _location, _field) {}
+    addNewFieldToForm(_formId, _location, _field) {},
+    updateFormAnimationState(_state) {}
 };
 
 describe('FieldTokenInMenu', () => {
@@ -23,6 +24,7 @@ describe('FieldTokenInMenu', () => {
     beforeEach(() => {
         jasmineEnzyme();
         spyOn(mockActions, 'addNewFieldToForm');
+        spyOn(mockActions, 'updateFormAnimationState');
     });
 
     it('renders a field token for display in a menu', () => {
@@ -48,7 +50,7 @@ describe('FieldTokenInMenu', () => {
         instance = component.instance();
         instance.onHover({location: selectedField});
 
-        expect(mockActions.addNewFieldToForm).toHaveBeenCalledWith(formId, appId, tblId, {elementIndex: 0}, relatedField);
+        expect(mockActions.addNewFieldToForm).toHaveBeenCalledWith(formId, appId, tblId, 1, relatedField);
     });
 
     it('does not add a new field when dragging if the field has already been added', () => {
@@ -62,12 +64,13 @@ describe('FieldTokenInMenu', () => {
     });
 
     it('resets the state when dragging is complete', () => {
-        component = shallow(<DraggableFieldToken addNewFieldToForm={mockActions.addNewFieldToForm} relatedField={relatedField} type={type} title={title} formId={formId} selectedField={selectedField} appId={appId} tblId={tblId}/>);
+        component = shallow(<DraggableFieldToken addNewFieldToForm={mockActions.addNewFieldToForm} updateFormAnimationState={mockActions.updateFormAnimationState} relatedField={relatedField} type={type} title={title} formId={formId} selectedField={selectedField} appId={appId} tblId={tblId}/>);
         instance = component.instance();
         component.setState({addedToForm: true});
 
         instance.endDrag();
 
         expect(component).toHaveState('addedToForm', false);
+        expect(mockActions.updateFormAnimationState).toHaveBeenCalledWith(false);
     });
 });
