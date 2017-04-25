@@ -35,8 +35,8 @@ let BuilderDropDownAction = React.createClass({
         let isAppView = !!this.props.selectedApp; // !! converts to boolean
         let isTableView = (isAppView && this.props.selectedTable);
         let isFormView = (isTableView && this.props.recId);
-        // builder view is equivalent to table
-        let isBuilderView = isAppView && this.props.selectedTable ? true : false;
+        // builder view is equivalent to table because everyone is admin right now
+        let isBuilderView = (isTableView && !this.props.recId);
 
         let classes = "dropdownToggle globalActionLink";
 

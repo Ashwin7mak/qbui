@@ -124,21 +124,7 @@ export const Nav = React.createClass({
                                dropdownMsg="globalActions.user"
                                startTabIndex={4}
                                app={selectedApp}>
-<<<<<<< HEAD
-            {isAdmin ?
-                    <BuilderDropDownAction
-                                history={this.props.history}
-                                selectedApp={selectedApp}
-                                selectedTable={this.getSelectedTable(this.state.apps.selectedTableId)}
-                                recId={recordId}
-                                actions={actions}
-                                position={"top"}
-                                icon="settings"
-                                navigateToBuilder={this.navigateToBuilder}
-                                navigateToBuilderReport={this.navigateToBuilderReport}
-                                startTabIndex={4}/> : null}
-                </GlobalActions>);
-=======
+
                     {isAdmin ?
                         <BuilderDropDownAction
                             history={this.props.history}
@@ -149,11 +135,11 @@ export const Nav = React.createClass({
                             position={"top"}
                             icon="settings"
                             navigateToBuilder={this.navigateToBuilder}
+                            navigateToBuilderReport={this.navigateToBuilderReport}
                             startTabIndex={4}/> : null}
                 </GlobalActions>
             )} />
         );
->>>>>>> master
     },
 
     getLeftGlobalActions() {

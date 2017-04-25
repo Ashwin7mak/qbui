@@ -80,7 +80,6 @@ const shell = (
             i18n: Locale.getI18nBundle()
         };
         case types.ENTER_BUILDER_MODE:
-            console.log("IN SHELL??")
             return {
                 ...state,
                 inBuilderMode: true
