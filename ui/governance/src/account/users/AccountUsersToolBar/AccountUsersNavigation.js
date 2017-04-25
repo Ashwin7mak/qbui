@@ -51,7 +51,7 @@ const mapDispatchToProps = (dispatch) => {
             dispatch(StandardGridActions.doUpdate(gridID, AccountUsersActions.doUpdate));
         },
 
-        getNextUsersPage: () =>  {
+        getNextUsersPage: (gridID) =>  {
             dispatch(StandardGridActions.setPaginate(gridID, "next"));
             dispatch(StandardGridActions.doUpdate(gridID, AccountUsersActions.doUpdate));
         }
