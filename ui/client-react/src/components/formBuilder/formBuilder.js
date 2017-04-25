@@ -29,6 +29,11 @@ export class FormBuilder extends Component {
         this.clearDragElementCache = this.clearDragElementCache.bind(this);
     }
 
+    /**
+     * When a user starts dragging an element, we make sure that element gets selected so there aren't multiple or incorrect selected elements.
+     * Needed because a drag event will prevent a click event. Normally the click event would select the field.
+     * @param props
+     */
     beginDrag = props => {
         this.props.selectFieldOnForm(this.props.formId, props.location);
     };

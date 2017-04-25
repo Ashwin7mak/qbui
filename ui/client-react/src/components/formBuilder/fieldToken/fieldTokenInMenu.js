@@ -39,7 +39,7 @@ export class DraggableFieldToken extends Component {
         super(props);
 
         /**
-         * This state is very particular to this component (e.g., does not need to be in a Redux store)
+         * This state is very particular to this component (i.e., does not need to be in a Redux store)
          * It tracks whether or not the component has been added when dragging onto a form.
          * addedToForm gets set to true the first time the component is dragged onto the form.
          * addedToForm gets set to false when dragging has been completed (user dropped the item)

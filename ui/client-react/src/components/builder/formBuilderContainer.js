@@ -107,8 +107,7 @@ export const FormBuilderContainer = React.createClass({
         isCollapsed: PropTypes.bool,
 
         /**
-         * Allows the customDragLayer to be turned off for unit testing
-         */
+         * Allows the <CustomDragLayer> to be turned off for unit testing */
         showCustomDragLayer: PropTypes.bool
     },
 
