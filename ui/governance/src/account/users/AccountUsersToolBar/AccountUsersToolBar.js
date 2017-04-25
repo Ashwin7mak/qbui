@@ -1,6 +1,6 @@
 import React, {PropTypes, Component} from "react";
 import AccountUsersNavigation from "./AccountUsersNavigation";
-import IconInputBox from "../../../../../reuse/client/src/components/iconInputBox";
+import IconInputBox from "../../../../../reuse/client/src/components/iconInputBox/iconInputBox";
 import * as StandardGridActions from "../../../common/grid/standardGridActions";
 import * as AccountUsersActions from "../AccountUsersActions";
 
