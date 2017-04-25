@@ -205,8 +205,7 @@ export class FieldEditingTools extends Component {
                 role="button"
                 className={classNames.join(' ')}
                 onClick={this.onClickField}
-                onKeyDown={this.selectedCurrentField}
-            >
+                onKeyDown={this.selectedCurrentField} >
 
                 <DragHandle />
 
