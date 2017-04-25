@@ -133,7 +133,8 @@
         PUBLIC_REALMS              : '/realms*',
         PUBLIC_TICKET              : '/ticket*',
         PUBLIC_USERS               : '/users*',
-        PUBLIC_WORKFLOW_AUTOMATION : '/workflow/apps/:appId/*'
+        PUBLIC_WORKFLOW_AUTOMATION_API : '/workflow/apps/:appId/api*',
+        PUBLIC_WORKFLOW_AUTOMATION_INVOKE : '/workflow/apps/:appId/invokes*'
     };
 
     // Define list of public 'short-hand' routes and its back-end server api context.  This list
@@ -177,7 +178,8 @@
         {route: publicControllerEndpoints.PUBLIC_REALMS, regEx: /^\/realms(.*)?$/i, context: baseContext.CORE_ENGINE},
         {route: publicControllerEndpoints.PUBLIC_TICKET, regEx: /^\/ticket(.*)?$/i, context: baseContext.CORE_ENGINE},
         {route: publicControllerEndpoints.PUBLIC_USERS, regEx: /^\/users(.*)?$/i, context: baseContext.CORE_ENGINE},
-        {route: publicControllerEndpoints.PUBLIC_WORKFLOW_AUTOMATION, regEx: /^\/workflow\/apps\/.*\/(.*)?$/i, context: baseContext.WORKFLOW.FLOW_MANAGER}
+        {route: publicControllerEndpoints.PUBLIC_WORKFLOW_AUTOMATION_API, regEx: /^\/workflow\/apps\/.*\/api(.*)?$/i, context: baseContext.WORKFLOW.AUTOMATION},
+        {route: publicControllerEndpoints.PUBLIC_WORKFLOW_AUTOMATION_INVOKE, regEx: /^\/workflow\/apps\/.*\/invokes(.*)?$/i, context: baseContext.WORKFLOW.AUTOMATION}
     ];
 
     /**
