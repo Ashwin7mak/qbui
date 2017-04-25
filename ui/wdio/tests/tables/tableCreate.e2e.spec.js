@@ -75,23 +75,26 @@
                 tableCreatePO.enterTableFieldValue(tableField.fieldTitle, tableField.fieldValue);
             });
 
-            //Step 6 - Click next field and verify it landed in drag fields page
-            tableCreatePO.clickNextBtn();
-
-            //Step 7 - Click on finished button and make sure it landed in edit Form container page
+            //Step 6 - Click on finished button and make sure it landed in edit Form container page
             tableCreatePO.clickFinishedBtn();
 
-            //Step 8 - Click on forms Cancel button
+            //Step 7 - Verify the create table dialogue
+            tableCreatePO.verifyNewTableCreateDialogue();
+
+            //Step 8 - Click OK button on create table dialogue
+            tableCreatePO.clickOkBtn();
+
+            //Step 9 - Click on forms Cancel button
             formsPO.clickFormCancelBtn();
             tableCreatePO.newTableBtn.waitForVisible();
 
-            //Step 9 - Get the new count of table links in the left nav
+            //Step 10 - Get the new count of table links in the left nav
             var newTableLinksCount = tableCreatePO.getAllTableLeftNavLinksList.value.length;
 
-            //Step 10 - Verify the table links count got increased by 1
+            //Step 11 - Verify the table links count got increased by 1
             expect(newTableLinksCount).toBe(originalTableLinksCount + 1);
 
-            //Step 11 - Select Table and make sure it lands in reports page
+            //Step 12 - Select Table and make sure it lands in reports page
             tableCreatePO.selectTable(tableName);
         });
 
@@ -168,8 +171,8 @@
                 //Step 4 - Verify validation
                 testCase.tableFieldError.forEach(function(tableField) {
                     tableCreatePO.verifyTableFieldValidation(tableField.fieldTitle, tableField.fieldError);
-                    //Verify next button is not enabled since there is error in field values
-                    expect(browser.isEnabled('.modal-footer .nextButton')).toBeFalsy();
+                    //Verify create table button is not enabled since there is error in field values
+                    expect(browser.isEnabled('.modal-footer .finishedButton')).toBeFalsy();
                 });
 
                 //Step 5 - Cancel table dialogue
@@ -182,42 +185,6 @@
                 expect(newTableLinksCount).toBe(originalTableLinksCount);
 
             });
-        });
-
-        it('Verify clicking on Previous button brings to previous page', function() {
-            var tableName = rawValueGenerator.generateStringWithFixLength(10);
-            var tableFields = [
-                {fieldTitle: '* Table Name', fieldValue: tableName},
-                {
-                    fieldTitle: '* A record in the table is called',
-                    fieldValue: rawValueGenerator.generateStringWithFixLength(10)
-                }
-            ];
-
-            //Step 1 - get the original count of table links in the left nav
-            tableCreatePO.newTableBtn.waitForVisible();
-            var originalTableLinksCount = tableCreatePO.getAllTableLeftNavLinksList.value.length;
-
-            //Step 2 - Click on new table button
-            tableCreatePO.clickCreateNewTable();
-
-            //Step 3 - Enter table field values
-            tableFields.forEach(function(tableField) {
-                tableCreatePO.enterTableFieldValue(tableField.fieldTitle, tableField.fieldValue);
-            });
-
-            //Step 4 - Click next field and verify it landed in drag fields page
-            tableCreatePO.clickNextBtn();
-
-            //Step 5 - Click on previous button on the dialogue
-            tableCreatePO.clickPreviousBtn();
-
-            //Step 6 - Verify Next button enabled
-            expect(browser.isEnabled('.modal-footer .nextButton')).toBeTruthy();
-
-            //Step 7 - Cancel table dialogue
-            tableCreatePO.clickCancelBtn();
-
         });
 
         it('Verify clicking on close button closes the new table dialogue without saving the table', function() {
@@ -239,9 +206,6 @@
             tableFields.forEach(function(tableField) {
                 tableCreatePO.enterTableFieldValue(tableField.fieldTitle, tableField.fieldValue);
             });
-
-            //Step 4 - Click next field and verify it landed in drag fields page
-            tableCreatePO.clickNextBtn();
 
             //Step 5 - Click on close button on the dialogue
             tableCreatePO.clickCloseBtn();
