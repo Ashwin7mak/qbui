@@ -47,12 +47,13 @@ describe('Table Creation actions', () => {
         expect(actions.hideTableCreationDialog()).toEqual({type: types.HIDE_TABLE_CREATION_DIALOG});
     });
 
-    it('should create an action for navigating next', () => {
-        expect(actions.nextTableCreationPage()).toEqual({type: types.NEXT_TABLE_CREATION_PAGE});
+
+    it('should create an action for showing the table ready dialog', () => {
+        expect(actions.showTableReadyDialog()).toEqual({type: types.SHOW_TABLE_READY_DIALOG});
     });
 
-    it('should create an action for navigating previous', () => {
-        expect(actions.previousTableCreationPage()).toEqual({type: types.PREVIOUS_TABLE_CREATION_PAGE});
+    it('should create an action for hiding the table ready dialog', () => {
+        expect(actions.hideTableReadyDialog()).toEqual({type: types.HIDE_TABLE_READY_DIALOG});
     });
 
     it('should create an action for opened icon chooser', () => {
@@ -134,4 +135,5 @@ describe('Table Creation actions', () => {
     it('should create an action for notifying of table creation', () => {
         expect(actions.notifyTableCreated(true)).toEqual({type: types.NOTIFY_TABLE_CREATED, notifyTableCreated: true});
     });
+
 });
