@@ -1,8 +1,9 @@
 import React, {PropTypes, Component} from "react";
 import AccountUsersNavigation from "./AccountUsersNavigation";
-import IconInputBox from "../../../../../reuse/client/src/components/iconInputBox/iconInputBox";
 import * as StandardGridActions from "../../../common/grid/standardGridActions";
 import * as AccountUsersActions from "../AccountUsersActions";
+import IconInputBox from "../../../../../reuse/client/src/components/iconInputBox/iconInputBox";
+import {connect} from 'react-redux';
 
 /**
  * The toolbar for the AccountUsers page
@@ -16,10 +17,7 @@ class AccountUsersToolBar extends React.Component {
     render() {
         return (
             <div>
-                <IconInputBox
-                    onClear={this.props.onClearSearch}
-                    placeholder="Search users"
-                    onChange={this.props.onSearchChange(this.props.id)}/>
+                <IconInputBox placeholder="Search users"/>
                 <AccountUsersNavigation id={this.props.id} totalRecords={this.props.totalRecords}/>
             </div>
         );
@@ -31,18 +29,18 @@ AccountUsersToolBar.defaultProps = {
 };
 
 AccountUsersToolBar.propTypes = {
-    totalRecords: PropTypes.Number,
-    id: PropTypes.String
+    totalRecords: PropTypes.number,
+    id: PropTypes.string
 };
 
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        // TODO: Pass the search term
-        onSearchChange: (gridID, searchTerm) => {
-            dispatch(StandardGridActions.setSearch(gridID, "previous"));
-            dispatch(StandardGridActions.doUpdate(gridID, AccountUsersActions.doUpdate));
-        }
+        // // TODO: Pass the search term
+        // onSearchChange: (gridID, searchTerm) => {
+        //     dispatch(StandardGridActions.setSearch(gridID, "previous"));
+        //     dispatch(StandardGridActions.doUpdate(gridID, AccountUsersActions.doUpdate));
+        // }
     };
 };
 

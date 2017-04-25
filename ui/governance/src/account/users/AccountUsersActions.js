@@ -82,7 +82,7 @@ export const doUpdate = (gridId, gridState) => {
         let sortedUsers = sortUsers(filteredUsers, sortFids);
 
         // Then Paginate
-        let paginationIndex = gridState.pagination.currentIndex;
+        let paginationIndex = gridState.pageNumber;
         let paginatedUsers = paginateUsers(sortedUsers, paginationIndex);
 
         // Inform the grid of the new users
@@ -103,6 +103,7 @@ export const fetchAccountUsers = (accountId, gridID) => {
         const promise = accountUsersService.getAccountUsers(accountId);
 
         promise.then(response => {
+
             _.each(response.data, item => {
                 item.id = item.uid;
             });

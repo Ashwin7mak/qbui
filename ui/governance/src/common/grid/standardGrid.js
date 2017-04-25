@@ -77,6 +77,7 @@ StandardGrid.propTypes = {
 };
 
 StandardGrid.defaultProps = {
+    items: [],
     columnTransformsClasses: [HeaderMenuColumnTransform],
     columnTransformProps: [
         {
