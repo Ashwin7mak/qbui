@@ -18,7 +18,7 @@ function initializeState() {
         i18n: Locale.getI18nBundle(),
         fieldsSelectMenu: {
             fieldsListCollapsed: true,
-            addBefore: null,
+            addBefore: null
         }
     };
 }
@@ -150,6 +150,52 @@ describe('Nav reducer functions for changing locale', () => {
             } else {
                 expect(changeState.locale).toEqual(origState.locale);
             }
+            done();
+        });
+    });
+});
+
+describe('Nav reducer functions for opening the field select menu', () => {
+    let testCases = [
+        {
+            name:'toggle field select menu open when adding before',
+            fieldsSelectMenu: {
+                fieldsListCollapsed: false,
+                addBefore: true
+            },
+            type: types.OPEN_FIELD_SELECTOR
+        },
+        {
+            name:'toggle field select menu open when adding after',
+            fieldsSelectMenu: {
+                fieldsListCollapsed: false,
+                addBefore: false
+            },
+            type: types.OPEN_FIELD_SELECTOR
+        },
+        {
+            name:'toggle field select menu closed when adding before',
+            fieldsSelectMenu: {
+                fieldsListCollapsed: true,
+                addBefore: true
+            },
+            type: types.CLOSE_FIELD_SELECTOR
+        },
+        {
+            name:'toggle field select menu closed when adding after',
+            fieldsSelectMenu: {
+                fieldsListCollapsed: true,
+                addBefore: false
+            },
+            type: types.CLOSE_FIELD_SELECTOR
+        }
+    ];
+    testCases.forEach(test => {
+        it(test.name, (done) => {
+            initializeState();
+            const changeState = reducer(initialState, {type: test.type, content: {addBefore: test.fieldsSelectMenu.addBefore}});
+            expect(changeState.fieldsSelectMenu.fieldsListCollapsed).toBe(test.fieldsSelectMenu.fieldsListCollapsed);
+            expect(changeState.fieldsSelectMenu.addBefore).toBe(test.fieldsSelectMenu.addBefore);
             done();
         });
     });
