@@ -7,9 +7,10 @@ import QbCell from "../../../../../client-react/src/components/dataTable/qbGrid/
 import configureMockStore from "redux-mock-store";
 import {Provider} from "react-redux";
 import {StandardGrid} from "../../../../src/common/grid/standardGrid";
+import * as StandardGridActions from "../../../../src/common/grid/standardGridActions";
 import * as Actions from "../../../../src/account/users/AccountUsersActions";
 import {GetAccountUsersGridColumns} from "../../../../src/account/users/Grid/AccountUsersGridColumns";
-
+import thunk from "redux-thunk";
 
 const mockStore = configureMockStore();
 
@@ -76,15 +77,18 @@ describe('AccountUsersGridColumns', () => {
 
     describe("firstName", () => {
         it("should render properly", () => {
-            let props = {
-                ...baseProps,
-                data: [{firstName: "Test", uid:0}],
-            };
+
+            const data = [{firstName: "Test", uid: 0}];
+            let middleware = [thunk];
+            const mockS = configureMockStore(middleware);
+            const store = mockS({});
 
             let component = mount(
-                <Provider store={mockStore({})}>
-                    <StandardGrid {...props} />
+                <Provider store={store}>
+                    <StandardGrid {...baseProps} />
                 </Provider>);
+            debugger;
+            store.dispatch(StandardGridActions.doSetItems(baseProps.id, data));
             let cell = component.find(QbCell).at(0);
             expect(cell.text()).toEqual(props.data[0].firstName);
         });
