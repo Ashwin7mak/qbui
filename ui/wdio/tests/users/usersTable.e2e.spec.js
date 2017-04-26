@@ -1,6 +1,5 @@
 /**
  * E2E tests for the App User Management table
- *
  */
 (function() {
     'use strict';
@@ -11,7 +10,7 @@
     var RequestAppsPage = requirePO('requestApps');
     var UsersTablePage = requirePO('usersTable');
 
-    describe('Users - Application User Management Table Tests: ', function() {
+    describe('Users - Application user management table tests: ', function() {
         var realmName;
         var realmId;
         var testApp;

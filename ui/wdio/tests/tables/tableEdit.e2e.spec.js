@@ -10,7 +10,7 @@
     var RequestSessionTicketPage = requirePO('requestSessionTicket');
     var rawValueGenerator = require('../../../test_generators/rawValue.generator');
 
-    describe('Tables - Edit a Table via Builder Tests: ', function() {
+    describe('Tables - Edit a table via builder tests: ', function() {
         var realmName;
         var realmId;
         var testApp;
@@ -331,8 +331,6 @@
 
             //Verify edit settings button not available for user other than ADMIN
             expect(browser.isVisible('.iconUISturdy-settings')).toBeFalsy();
-
         });
-
     });
 }());

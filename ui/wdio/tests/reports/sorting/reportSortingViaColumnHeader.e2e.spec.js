@@ -7,7 +7,7 @@
     var reportSortingPO = requirePO('reportSortingGrouping');
     var reportContentPO = requirePO('reportContent');
 
-    describe('Reports - Sorting via Column Header Tests: ', function() {
+    describe('Reports - Sorting via column header tests: ', function() {
         var realmName;
         var realmId;
         var testApp;
@@ -200,6 +200,5 @@
             //Step 3 - Verify item got selected under column header menu i.e verify the check mark beside the item
             reportSortingPO.expandColumnHeaderMenuAndVerifySelectedItem("Date Field", "Sort newest to oldest");
         });
-
     });
 }());

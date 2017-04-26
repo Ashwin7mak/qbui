@@ -2,8 +2,6 @@
  * E2E tests for the tableHomePage
  * Created by agade on 3/31/17.
  */
-
-
 (function() {
     'use strict';
 
@@ -13,7 +11,7 @@
     let RequestSessionTicketPage = requirePO('requestSessionTicket');
     let ReportContentPO = requirePO('reportContent');
 
-    describe('Tables - Table Home Page Tests', function() {
+    describe('Tables - Table homepage tests: ', function() {
         let realmName;
         let realmId;
         let app;
@@ -226,8 +224,5 @@
             //Assert report title to be expected
             expect(browser.element('.stageHeadline').getAttribute('textContent')).toBe('Viewer Report');
         });
-
-
     });
-
 }());

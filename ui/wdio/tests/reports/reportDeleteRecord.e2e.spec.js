@@ -8,7 +8,7 @@
     let reportInLineEditPO = requirePO('reportInLineEdit');
     let reportNavPO = requirePO('reportNavigation');
 
-    describe('Reports - Delete Record Tests: ', function() {
+    describe('Reports - Delete record tests: ', function() {
         var realmName;
         var realmId;
         var testApp;
@@ -95,9 +95,6 @@
 
                 // Step 3: Check for the deleted record on the first page
                 reportContentPO.checkForThePresenceDeletedRecordOnTheCurrentPage(deletedRecord);
-
-
-
             });
         });
     });

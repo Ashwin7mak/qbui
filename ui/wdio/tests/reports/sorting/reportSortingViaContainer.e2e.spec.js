@@ -8,7 +8,7 @@
     let reportContentPO = requirePO('reportContent');
     let _ = require('lodash');
 
-    describe('Reports - Sorting via Container Tests: ', function() {
+    describe('Reports - Sorting via container tests: ', function() {
         let realmName;
         let realmId;
         let testApp;
@@ -317,6 +317,5 @@
         });
 
         //TODO should add other testcase for doing sorting via UI. Right now its a bug that sortOrder Icon not showing up.
-
     });
 }());

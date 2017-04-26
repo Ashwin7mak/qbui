@@ -9,7 +9,7 @@
     //include underScore js
     var _ = require('underscore');
 
-    describe('Reports - Grouping via Container Tests: ', function() {
+    describe('Reports - Grouping via container tests: ', function() {
         var realmName;
         var realmId;
         var app;
@@ -466,7 +466,6 @@
 
             //Step 6 - Verify allFieldFromFieldsPanel also contain expectedMoreFields variable values
             expect(_.every(groupFields, function(val) {return allFieldFromFieldsPanel.indexOf(val) === -1;})).toBeTruthy();
-
         });
     });
 }());
