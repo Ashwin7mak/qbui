@@ -80,7 +80,7 @@ describe('UserActions', () => {
             );
         });
 
-        it('resets the loading status and logs an error when the api fails', () => {
+        it('resets the loading status and logs an error when the api fails', (done) => {
             spyOn(MockUserService.prototype, 'getRequestUser').and.returnValue(Promise.reject('some error'));
 
             const expectedActions = [
@@ -92,11 +92,11 @@ describe('UserActions', () => {
 
             return store.dispatch(getLoggedInUser()).then(
                 () => {
-                    expect(store.getActions()).toEqual(expectedActions);
+                    expect(false).toBe(true);
                     done();
                 },
                 () => {
-                    expect(false).toBe(true);
+                    expect(store.getActions()).toEqual(expectedActions);
                     done();
                 }
             );

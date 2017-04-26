@@ -25,4 +25,6 @@ const user = (state = {isLoading: false}, action) => {
 
 export const getLoggedInUser = state => state.user;
 
+export const getLoggedInUserId = state => state.user.id;
+
 export default user;

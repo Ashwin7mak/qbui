@@ -1,4 +1,4 @@
-import UserReducer from '../../../src/components/user/userReducer';
+import UserReducer, {getLoggedInUser, getLoggedInUserId} from '../../../src/components/user/userReducer';
 import {UPDATE_USER_LOADING_STATUS, UPDATE_LOGGED_IN_USER} from '../../../src/components/user/userActionTypes';
 
 const mockUser = {id: 13};
@@ -19,4 +19,14 @@ describe('User Reducer', () => {
     it('has a default state', () => {
         expect(UserReducer(undefined, {})).toEqual({isLoading: false});
     });
+
+    describe('getLoggedInUser', () => {
+        it('gets the currently logged in user from state', () => {
+            expect(getLoggedInUser({user: mockUser})).toEqual(mockUser);
+        });
+
+        it('gets the user id of the currently logged in user from state', () => {
+            expect(getLoggedInUserId({user: mockUser})).toEqual(mockUser.id);
+        });
+    })
 });
