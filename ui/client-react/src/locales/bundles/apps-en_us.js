@@ -264,7 +264,8 @@ export default {
                 noCheck : "No",
                 yesCheck : "Yes",
                 clearFacet: "Clear {facet} filter",
-                clearFacetSelection: "Click to clear this filter"
+                clearFacetSelection: "Click to clear this filter",
+                filter: "Filter"
             },
             filteredRecordCount : "{filteredRecordCount} of {recordCount} records",
             filteredSingleRecordCount : "{filteredRecordCount} of {recordCount} record",
@@ -283,6 +284,7 @@ export default {
             nextPageLoadingOnSwipe: "Getting more...",
             searchPlaceHolder:  "Search these",
             sortAndGroup : {
+                sortAndGroupIcon: "Sort & Group",
                 addField: "Add a field",
                 by: "by",
                 changeGroupOrder: "Change group order",

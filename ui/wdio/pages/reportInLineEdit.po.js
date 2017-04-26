@@ -169,7 +169,7 @@
          * @returns The record element being edited
          */
         getInlineEditRecord: {value: function() {
-            var recordRowElements = reportContent.qbGridRecordElList.elements('.qbRow');
+            var recordRowElements = reportContent.qbGridBodyViewportEl.elements('.qbRow');
             var recordBeingEdited;
             // Loop through the records and find the one being edited
             for (var i = 0; i < recordRowElements.value.length; i++) {

@@ -171,7 +171,7 @@
                     tableFieldError: [
                         {fieldTitle: '* Table Name', fieldError: 'Fill in a different value. Another table is already using this name'},
                     ]
-                },
+                }
             ];
         }
 
@@ -269,8 +269,6 @@
 
             //Verify New Table button not available for user other than ADMIN
             expect(browser.isVisible('.newTable')).toBeFalsy();
-
         });
-
     });
 }());
