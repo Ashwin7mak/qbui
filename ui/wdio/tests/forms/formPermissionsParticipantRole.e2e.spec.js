@@ -9,8 +9,7 @@
     var reportContentPO = requirePO('reportContent');
     var formsPO = requirePO('formsPage');
 
-    describe('Forms - Participant User Permission Tests: ', function() {
-
+    describe('Forms - Participant user permission tests: ', function() {
         var realmName;
         var realmId;
         var testApp;
@@ -182,6 +181,5 @@
             // Step 9 - Verify the records count not increased
             expect(formsPO.getRecordsCountInATable()).toBe(origRecordCount);
         });
-
     });
 }());
