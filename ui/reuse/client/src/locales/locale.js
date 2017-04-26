@@ -1,9 +1,9 @@
+import IntlMessageFormat from 'intl-messageformat';
 // IMPORTS FROM CLIENT REACT
 import Logger from '../../../../client-react/src/utils/logger';
 import config from '../../../../client-react/src/config/app.config';
 import StringUtils from '../../../../client-react/src/utils/stringUtils';
 // IMPORTS FROM CLIENT REACT
-import IntlMessageFormat from 'intl-messageformat';
 
 let logger = new Logger();
 
@@ -96,16 +96,28 @@ class Locale {
     }
 
     /**
-     * Return a pluralize message based on the msgPath and format object.
+     * Return a pluralized message based on the msgPath and format object.
+     * A value must be supplied for every argument in the message pattern (msgPath) the instance was constructed with.
+     *
+     * msgPath:
+     *      i.e: test.testMsg
+     *
+     * message: should be in ICU message syntax:
+     *      i.e: "{value, plural,\n =0 {0 {nameForRecord} record}\n =1 {1 {nameForRecord} record}\n other {# {nameForRecord} records}\n}"
+     *
+     * Usage: Locale.getPluralizeMessage('test.testMsg', {value: 2, nameForRecord: 'Customer'});
      *
      * @param msgPath
+     * @param nameForRecord
      * @param params
      * @return {*}
      */
-    static getPluralizeMessage(msgPath, params) {
+    static getPluralizedMessage(msgPath, params) {
         let formattedMsg = new IntlMessageFormat(Locale.getMessage(msgPath));
-        if (!params) {
-            logger.warn('An object parameter is required to pluralize the input message.');
+
+        // value and nameForRecord are required. Use empty string (nameForRecord: '') for empty value.
+        if (!params || !params.nameForRecord || !params.value) {
+            logger.warn('An object parameter and field is required to pluralize the input message.');
             return;
         }
 

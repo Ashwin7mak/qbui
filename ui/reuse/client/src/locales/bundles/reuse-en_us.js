@@ -10,7 +10,7 @@ export default {
         test: {
             testMsg: "test",
             testMsg2: "Test message for reuse library - en-us",
-            testPluralize: "{value, plural, =0 {0 test} =1 {1 test} other {# tests}}"
+            testPluralize: "{value, plural,\n =0 {0 {nameForRecord} record}\n =1 {1 {nameForRecord} record}\n other {# {nameForRecord} records}\n} deleted",
         },
         listOfElements: {
             noSearchResults: 'No fields match "{searchText}"',

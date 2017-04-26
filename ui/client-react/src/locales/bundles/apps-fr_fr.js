@@ -155,7 +155,7 @@ export default {
             recordNotAdded :"Enregistrement non ajouté",
             recordSaved : "Sauvegarder",
             recordNotSaved :"Enregistrement non enregistré",
-            deleted : "{value, plural, =0 {0 enregistrement} =1 {1 enregistrement} other {# enregistrement}} supprimés",
+            deleted : "{value, plural,\n =0 {0 {nameForRecord} enregistrement}\n =1 {1 {nameForRecord} enregistrement}\n other {# {nameForRecord} enregistrement}\n} supprimés",
             notDeleted : "non supprimés",
             cannotLoad : "Impossible de charger la fiche",
             error: {
