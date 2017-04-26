@@ -148,6 +148,18 @@ const QbGrid = React.createClass({
         };
     },
 
+    componentWillReceiveProps(nextProps){
+        if(this.state.columns && this.state.columns.length>1){
+            return;
+        }
+        this.setState({columns: nextProps.columns});
+    },
+    getDefaultState(){
+        return{
+            columns:[]
+        }
+    },
+
     getInitialState() {
         return {
             collapsedGroups: []
@@ -155,6 +167,16 @@ const QbGrid = React.createClass({
     },
 
     componentWillMount() {
+        this.collapsedGroupHelper = new CollapsedGroupsHelper();
+    },
+
+    componentDidUpdate(prevProps,nextProps) {
+        console.log("prev",prevProps);
+        console.log("next",nextProps);
+        if (prevProps.columns !== nextProps.columns){
+            console.log("woohooo",nextProps);
+            this.setState({columns: this.props.columns});
+        }
         this.collapsedGroupHelper = new CollapsedGroupsHelper();
     },
 
@@ -212,8 +234,8 @@ const QbGrid = React.createClass({
     },
 
     getVisibleColumns() {
-                if(!_.isArray(this.state.columns)) { return [];}
-                let visibleColumns = this.state.columns.filter(column => {
+        if(!_.isArray(this.state.columns)) { return [];}
+        let visibleColumns = this.state.columns.filter(column => {
             return !column.isHidden;
         });
         return visibleColumns.map(column => {
@@ -365,17 +387,7 @@ const QbGrid = React.createClass({
     },
 
 
-    componentWillReceiveProps(nextProps){
-        if(this.state.columns && this.state.columns.length>1){
-            return;
-        }
-        this.setState({columns: nextProps.columns});
-    },
-    getDefaultState(){
-        return{
-            columns:[]
-        }
-    },
+
 
     onMoveColumn(labels){
       console.log("moved", labels);
@@ -496,12 +508,13 @@ const mapStateToProps = (state) => {
     };
 };
 
-connect(
-    mapStateToProps
-)(QbGrid);
+// connect(
+//     mapStateToProps
+// )(QbGrid);
 
 
 // Set up drag and drop context
 //const DragAndDrop = DragDropContext(HTML5Backend)(QbGrid);
 
-export default DragDropContext(HTML5Backend)(QbGrid);
+export default DragDropContext(HTML5Backend)(connect(mapStateToProps)(QbGrid));
+//export default connect(mapStateToProps)(DragDropContext(HTML5Backend)(QbGrid));
