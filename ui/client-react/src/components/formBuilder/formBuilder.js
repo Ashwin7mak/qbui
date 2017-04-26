@@ -111,6 +111,7 @@ export class FormBuilder extends Component {
         return (
             <div className="formBuilderContainer">
                 <QbForm
+                    formBuilderContainerContentElement={this.props.formBuilderContainerContentElement}
                     formFocus={this.props.formFocus}
                     selectedField={this.props.selectedField}
                     formBuilderUpdateChildrenTabIndex={this.props.formBuilderUpdateChildrenTabIndex}

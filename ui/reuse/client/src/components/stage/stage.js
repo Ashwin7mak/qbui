@@ -33,6 +33,7 @@ class Stage extends Component {
                         {this.props.stageHeadline}
                     </div>
                     <div className="stageRight pageActions">
+                        {this.props.drawerAction}
                         {this.props.pageActions}
                     </div>
                 </div>
