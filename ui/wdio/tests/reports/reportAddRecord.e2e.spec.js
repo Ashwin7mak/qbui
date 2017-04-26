@@ -12,7 +12,7 @@
     var ReportInLineEditPO = requirePO('reportInLineEdit');
     var ReportPagingPO = requirePO('reportPaging');
 
-    describe('Reports - Add Record Tests: ', function() {
+    describe('Reports - Add record tests: ', function() {
         var realmName;
         var realmId;
         var testApp;
@@ -100,7 +100,6 @@
             } else {
                 expect(recordValues[6]).toBe(dateToEnter);
             }
-
         });
     });
 }());
