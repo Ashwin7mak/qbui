@@ -1,6 +1,6 @@
 'use strict';
 let topNavPO = requirePO('topNav');
-let oneSeconds = 1000; // millis
+let oneSecond = 1000; // millis
 let fiveSeconds = 5 * oneSecond;
 
 class formBuilderPage {
