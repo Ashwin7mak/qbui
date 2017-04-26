@@ -227,14 +227,9 @@ export const ReportGrid = React.createClass({
     },
 
     getPendEdits() {
-        //  TODO: just getting to work....improve this to support multi records...
-        let pendEdits = {};
-        if (Array.isArray(this.props.record) && this.props.record.length > 0) {
-            if (_.isEmpty(this.props.record[0]) === false) {
-                pendEdits = this.props.record[0].pendEdits || {};
-            }
-        }
-        return pendEdits;
+        // only one record should have the pendEdits , so return that
+        const recordCurrentlyEdited = _.find(this.props.record, rec=>rec.pendEdits);
+        return recordCurrentlyEdited ? recordCurrentlyEdited.pendEdits : {};
     },
 
     isOnlyOneColumnVisible() {

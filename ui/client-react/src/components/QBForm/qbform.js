@@ -19,7 +19,6 @@ import {connect} from 'react-redux';
 import './qbform.scss';
 import './tabs.scss';
 
-let formBuilderEditForm = null;
 /*
  Custom QuickBase Form component that has 1 property.
  activeTab: the tab we want to display first when viewing the form, defaults to the first tab
@@ -357,6 +356,7 @@ export const QBForm = React.createClass({
                   tabIndex={tabIndex}
                   location={location}
                   orderIndex={FormFieldElement.orderIndex}
+                  formBuilderContainerContentElement={this.props.formBuilderContainerContentElement}
                   beginDrag={this.props.beginDrag}
                   handleFormReorder={this.props.handleFormReorder}
                   cacheDragElement={this.props.cacheDragElement}
@@ -427,6 +427,7 @@ export const QBForm = React.createClass({
                     detailKeyValue={detailKeyValue}
                     type={ReferenceElement.type}
                     appUsers={this.props.appUsers}
+                    handleDrillIntoChild={this.props.handleDrillIntoChild}
                 />
             </div>
         );
@@ -519,43 +520,6 @@ export const QBForm = React.createClass({
     },
 
     /**
-     * This is for keyboard navigation, it will add focus to a form only if formFocus is true
-     * formFocus becomes true when a user is hitting escape to remove the children elements form the tabbing flow
-     * */
-    componentDidUpdate() {
-        if (this.props.formFocus) {
-            formBuilderEditForm.focus();
-            document.querySelector('.qbPanelHeaderTitleText').scrollIntoView(false);
-        }
-    },
-
-    /**
-     * We normally return a regular form based on whether or not it is in view or edit mode.
-     * However, for form builder we want the form to have a tabIndex.
-     * */
-    wrapFormContent(formContent) {
-        if (this.props.editingForm) {
-            return (
-                <form ref={(editForm) => {formBuilderEditForm = editForm;}} className="editForm" tabIndex="0" role="button" onKeyDown={this.props.formBuilderUpdateChildrenTabIndex}>
-                    {formContent}
-                </form>
-            );
-        } else if (this.props.edit) {
-            return (
-                <form className="editForm">
-                    {formContent}
-                </form>
-            );
-        } else {
-            return (
-                <form className="viewForm">
-                    {formContent}
-                </form>
-            );
-        }
-    },
-
-    /**
      * render a form as an set of tabs containing HTML tables (a la legacy QuickBase)
      */
     render() {
@@ -584,7 +548,9 @@ export const QBForm = React.createClass({
 
         return (
             <div className="formContainer">
-                {this.wrapFormContent(formContent)}
+                <form className={this.props.edit ? "editForm" : "viewForm"}>
+                    {formContent}
+                </form>
                 <div>{formFooter}</div>
             </div>
         );

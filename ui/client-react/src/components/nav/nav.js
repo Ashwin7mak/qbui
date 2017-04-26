@@ -289,14 +289,9 @@ export const Nav = React.createClass({
     },
 
     getPendEdits() {
-        let pendEdits = {};
-        //  TODO: just getting to work....improve this to support multi records...
-        if (Array.isArray(this.props.record) && this.props.record.length > 0) {
-            if (_.isEmpty(this.props.record[0]) === false) {
-                pendEdits = this.props.record[0].pendEdits || {};
-            }
-        }
-        return pendEdits;
+        // only one record should have the pendEdits , so return that
+        const recordCurrentlyEdited = _.find(this.props.record, rec=>rec.pendEdits);
+        return recordCurrentlyEdited ? recordCurrentlyEdited.pendEdits : {};
     },
 
     getCenterGlobalActions() {
@@ -466,34 +461,37 @@ export const Nav = React.createClass({
                             isDocked={false}
                             pullRight>
                         <TempMainErrorMessages apps={this.state.apps.apps} appsLoading={this.state.apps.loading} selectedAppId={this.state.apps.selectedAppId} />
+
                             <Switch>
                                 { this.props.routes.map((route, i) => {
-                                    //insert the child route passed in by the router
-                                    // with additional props
-                                    // the Switch wrapper will pick only one of the routes the first
-                                    // that matches.
-                                    let routeProps = {
-                                        key: this.props.location ? this.props.location.pathname : "",
-                                        apps: this.state.apps.apps,
-                                        selectedAppId: this.state.apps.selectedAppId,
-                                        appsLoading: this.state.apps.loading,
-                                        reportData: reportsData,
-                                        appUsers: this.state.apps.appUsers,
-                                        appUsersUnfiltered: this.state.apps.appUsersUnfiltered,
-                                        appRoles: this.state.apps.appRoles,
-                                        appOwner: this.state.apps.appOwner,
-                                        locale: this.state.nav.locale,
-                                        isRowPopUpMenuOpen: this.props.shell.isRowPopUpMenuOpen,
-                                        selectedApp: this.getSelectedApp(),
-                                        selectedTable: this.getSelectedTable(reportsData.tblId),
-                                        scrollingReport: this.state.nav.scrollingReport,
-                                        flux: flux
+                                        //insert the child route passed in by the router
+                                        // with additional props
+                                        // the Switch wrapper will pick only one of the routes the first
+                                        // that matches.
+                                        let routeProps = {
+                                            key : this.props.match ? this.props.match.url : "",
+                                            apps: this.state.apps.apps,
+                                            selectedAppId: this.state.apps.selectedAppId,
+                                            appsLoading: this.state.apps.loading,
+                                            reportData: reportsData,
+                                            appUsers: this.state.apps.appUsers,
+                                            appUsersUnfiltered: this.state.apps.appUsersUnfiltered,
+                                            appRoles: this.state.apps.appRoles,
+                                            appOwner: this.state.apps.appOwner,
+                                            locale: this.state.nav.locale,
+                                            isRowPopUpMenuOpen: this.props.shell.isRowPopUpMenuOpen,
+                                            selectedApp: this.getSelectedApp(),
+                                            selectedTable: this.getSelectedTable(reportsData.tblId),
+                                            scrollingReport: this.state.nav.scrollingReport,
+                                            flux: flux
                                         };
-                                    return RouteWithSubRoutes(route, i, routeProps);
+                                        return RouteWithSubRoutes(route, i, routeProps);
                                     }
                                 )}
                             </Switch>
+
                         </ReportFieldSelectTrowser>
+
                     </div>}
 
             </div>

@@ -25,8 +25,7 @@ const tableCreation = (
         savingTable: false,
         tableInfo: defaultTableInfo,
         edited: false,
-        editing: null,
-        notifyTableCreated: false
+        editing: null
     },
     action) => {
 
@@ -116,12 +115,6 @@ const tableCreation = (
         };
     }
 
-    case types.NOTIFY_TABLE_CREATED: {
-        return {
-            ...state,
-            notifyTableCreated: action.notifyTableCreated
-        };
-    }
     default:
         // return existing state by default in redux
         return state;

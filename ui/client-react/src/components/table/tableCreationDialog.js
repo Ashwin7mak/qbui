@@ -49,9 +49,6 @@ export class TableCreationDialog extends React.Component {
             (response) => {
                 this.props.hideTableCreationDialog();
 
-                // indicate that a table created notification will be needed
-                this.props.notifyTableCreated(true);
-
                 const tblId = response.data;
 
                 this.props.onTableCreated(tblId);
@@ -130,8 +127,7 @@ TableCreationDialog.propTypes = {
     setEditingProperty: PropTypes.func.isRequired,
     hideTableCreationDialog: PropTypes.func.isRequired,
     createTable: PropTypes.func.isRequired,
-    onTableCreated: PropTypes.func.isRequired,
-    notifyTableCreated: PropTypes.func.isRequired
+    onTableCreated: PropTypes.func.isRequired
 };
 
 const mapStateToProps = (state) => {

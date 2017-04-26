@@ -69,11 +69,15 @@ export const ReportContent = React.createClass({
             recId = row[this.props.primaryKeyName].value;
         }
 
-        this.openRow(recId);
-        //create the link we want to send the user to and then send them on their way
-        const link = `${APP_ROUTE}/${appId}/table/${tblId}/report/${rptId}/record/${recId}`;
-        if (this.props.history) {
-            this.props.history.push(link);
+        if (this.props.handleDrillIntoChild) {
+            this.props.handleDrillIntoChild(tblId, recId, this.props.uniqueId);
+        } else {
+            this.openRow(recId);
+            //create the link we want to send the user to and then send them on their way
+            const link = `${APP_ROUTE}/${appId}/table/${tblId}/report/${rptId}/record/${recId}`;
+            if (this.props.history) {
+                this.props.history.push(link);
+            }
         }
     },
 
@@ -522,7 +526,9 @@ export const ReportContent = React.createClass({
      * @param data row record data
      */
     openRecordForEditInTrowser(recordId) {
-        this.handleEditRecordStart();
+        //both actions should just add one record to the state, so passing the record id,
+        //so that the record gets updated
+        this.handleEditRecordStart(recordId);
         this.openRow(recordId);
         WindowLocationUtils.pushWithQuery(EDIT_RECORD_KEY, recordId);
     },
@@ -882,14 +888,9 @@ export const ReportContent = React.createClass({
     },
 
     getPendEdits() {
-        let pendEdits = {};
-        //  TODO: just getting to work....improve this to support multi records...
-        if (Array.isArray(this.props.record) && this.props.record.length > 0) {
-            if (_.isEmpty(this.props.record[0]) === false) {
-                pendEdits = this.props.record[0].pendEdits || {};
-            }
-        }
-        return pendEdits;
+        //there should be just one record with pending edit in the state, so return that
+        const recordCurrentlyEdited = _.find(this.props.record, rec=>rec.pendEdits);
+        return recordCurrentlyEdited ? recordCurrentlyEdited.pendEdits : {};
     },
 
     componentWillUpdate(nextProps) {
@@ -932,7 +933,7 @@ export const ReportContent = React.createClass({
         const editErrors = pendEdits.editErrors || null;
 
         // onCellClick handler: do nothing for embedded reports phase1.
-        let openRowToView = this.props.phase1 ? undefined : this.openRowToView;
+        let openRowToView = this.openRowToView;
 
         let reportContent;
 
