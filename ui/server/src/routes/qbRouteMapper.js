@@ -60,9 +60,14 @@
          */
         function bindDeleteRequestRouteToFunction(routes) {
             let requestFunctions = {};
-            requestFunctions[routes.RECORD] = deleteSingleRecord;
-            requestFunctions[routes.RECORDS_BULK] = deleteRecordsBulk;
-            requestFunctions[routes.TABLE] = deleteTableComponents;
+
+            //  With multiple node instances, want to have the option of deploying an instance
+            //  where only 'public' routes are defined.
+            if (config.publicRoutesOnly !== true) {
+                requestFunctions[routes.RECORD] = deleteSingleRecord;
+                requestFunctions[routes.RECORDS_BULK] = deleteRecordsBulk;
+                requestFunctions[routes.TABLE] = deleteTableComponents;
+            }
 
             return requestFunctions;
         }
@@ -74,34 +79,55 @@
          */
         function bindGetRequestRouteToFunction(routes) {
             let requestFunctions = {};
-            requestFunctions[routes.APPS] = getApps;
-            requestFunctions[routes.APP_USERS] = getAppUsers;
-            requestFunctions[routes.APP_ROLES] = getAppRoles;
 
-            requestFunctions[routes.FEATURE_SWITCHES] = getFeatureSwitches;
-            requestFunctions[routes.FEATURE_STATES] = getFeatureStates;
+            //  With multiple node instances, want to have the option of deploying an instance
+            //  where only 'public' routes are defined.
+            if (config.publicRoutesOnly !== true) {
+                requestFunctions[routes.APPS] = getApps;
+                requestFunctions[routes.APP_USERS] = getAppUsers;
+                requestFunctions[routes.APP_ROLES] = getAppRoles;
 
-            requestFunctions[routes.FORM_COMPONENTS] = fetchFormComponents;
-            requestFunctions[routes.FORM_AND_RECORD_COMPONENTS] = fetchFormAndRecordComponents;
+                requestFunctions[routes.FEATURE_SWITCHES] = getFeatureSwitches;
+                requestFunctions[routes.FEATURE_STATES] = getFeatureStates;
 
-            requestFunctions[routes.RECORD] = fetchSingleRecord;
-            requestFunctions[routes.RECORDS] = fetchAllRecords;
+                requestFunctions[routes.FORM_COMPONENTS] = fetchFormComponents;
+                requestFunctions[routes.FORM_AND_RECORD_COMPONENTS] = fetchFormAndRecordComponents;
 
-            requestFunctions[routes.REPORT_META] = fetchReportMeta;
-            requestFunctions[routes.REPORT_RESULTS] = fetchReportResults;
-            requestFunctions[routes.REPORT_INVOKE_RESULTS] = fetchReportInvokeResults;
-            requestFunctions[routes.REPORT_RECORDS_COUNT] = fetchReportRecordsCount;
-            requestFunctions[routes.FACET_EXPRESSION_PARSE] = resolveReportFacets;
+                requestFunctions[routes.RECORD] = fetchSingleRecord;
+                requestFunctions[routes.RECORDS] = fetchAllRecords;
 
-            requestFunctions[routes.TABLE_HOMEPAGE_REPORT] = fetchTableHomePageReport;
+                requestFunctions[routes.REPORT_META] = fetchReportMeta;
+                requestFunctions[routes.REPORT_RESULTS] = fetchReportResults;
+                requestFunctions[routes.REPORT_INVOKE_RESULTS] = fetchReportInvokeResults;
+                requestFunctions[routes.REPORT_RECORDS_COUNT] = fetchReportRecordsCount;
+                requestFunctions[routes.FACET_EXPRESSION_PARSE] = resolveReportFacets;
 
-            requestFunctions[routes.REQ_USER] = getReqUser;
+                requestFunctions[routes.TABLE_HOMEPAGE_REPORT] = fetchTableHomePageReport;
 
-            requestFunctions[routes.QBUI_HEALTH_CHECK] = getHealthCheck;    // remove
-            requestFunctions[routes.QBUI_HEALTH] = getHealthCheck;
+                requestFunctions[routes.REQ_USER] = getReqUser;
 
-            requestFunctions[routes.GOVERNANCE_ACCOUNT_USERS] = getAccountUsers;
-            requestFunctions[routes.GOVERNANCE_CONTEXT] = getGovernanceContext;
+                requestFunctions[routes.QBUI_HEALTH_CHECK] = getHealthCheck;    // remove
+                requestFunctions[routes.QBUI_HEALTH] = getHealthCheck;
+
+                requestFunctions[routes.GOVERNANCE_ACCOUNT_USERS] = getAccountUsers;
+                requestFunctions[routes.GOVERNANCE_CONTEXT] = getGovernanceContext;
+
+                // ****** TEMP E2E routes..to be removed once JIRA MC-2268 is complete ******
+                requestFunctions[routes.E2E_APPS] = getApps;
+                requestFunctions[routes.E2E_APP_USERS] = getAppUsers;
+                requestFunctions[routes.E2E_APP_ROLES] = getAppRoles;
+                requestFunctions[routes.E2E_FORM_COMPONENTS] = fetchFormComponents;
+                requestFunctions[routes.E2E_FORM_AND_RECORD_COMPONENTS] = fetchFormAndRecordComponents;
+                requestFunctions[routes.E2E_RECORD] = fetchSingleRecord;
+                requestFunctions[routes.E2E_RECORDS] = fetchAllRecords;
+                requestFunctions[routes.E2E_REPORT_META] = fetchReportMeta;
+                requestFunctions[routes.E2E_REPORT_RESULTS] = fetchReportResults;
+                requestFunctions[routes.E2E_REPORT_INVOKE_RESULTS] = fetchReportInvokeResults;
+                requestFunctions[routes.E2E_REPORT_RECORDS_COUNT] = fetchReportRecordsCount;
+                requestFunctions[routes.E2E_TABLE_HOMEPAGE_REPORT] = fetchTableHomePageReport;
+                requestFunctions[routes.E2E_REQ_USER] = getReqUser;
+                // **********
+            }
 
             requestFunctions[routes.SWAGGER_CORE] = forwardApiRequest;
             requestFunctions[routes.SWAGGER_EE] = forwardApiRequest;
@@ -109,22 +135,6 @@
 
             requestFunctions[routes.SWAGGER_RESOURCES] = forwardApiRequest;
             requestFunctions[routes.SWAGGER_V2] = forwardApiRequest;
-
-            // ****** TEMP E2E routes..to be removed once JIRA MC-2268 is complete ******
-            requestFunctions[routes.E2E_APPS] = getApps;
-            requestFunctions[routes.E2E_APP_USERS] = getAppUsers;
-            requestFunctions[routes.E2E_APP_ROLES] = getAppRoles;
-            requestFunctions[routes.E2E_FORM_COMPONENTS] = fetchFormComponents;
-            requestFunctions[routes.E2E_FORM_AND_RECORD_COMPONENTS] = fetchFormAndRecordComponents;
-            requestFunctions[routes.E2E_RECORD] = fetchSingleRecord;
-            requestFunctions[routes.E2E_RECORDS] = fetchAllRecords;
-            requestFunctions[routes.E2E_REPORT_META] = fetchReportMeta;
-            requestFunctions[routes.E2E_REPORT_RESULTS] = fetchReportResults;
-            requestFunctions[routes.E2E_REPORT_INVOKE_RESULTS] = fetchReportInvokeResults;
-            requestFunctions[routes.E2E_REPORT_RECORDS_COUNT] = fetchReportRecordsCount;
-            requestFunctions[routes.E2E_TABLE_HOMEPAGE_REPORT] = fetchTableHomePageReport;
-            requestFunctions[routes.E2E_REQ_USER] = getReqUser;
-            // **********
 
             return requestFunctions;
         }
@@ -136,13 +146,18 @@
          */
         function bindPatchRequestRouteToFunction(routes) {
             let requestFunctions = {};
-            requestFunctions[routes.RECORD] = saveSingleRecord;
-            requestFunctions[routes.TABLE] = updateTable;
 
-            // ****** TEMP E2E routes..to be removed once JIRA MC-2268 is complete ******
-            requestFunctions[routes.E2E_RECORD] = saveSingleRecord;
-            requestFunctions[routes.E2E_TABLE] = updateTable;
-            // **********
+            //  With multiple node instances, want to have the option of deploying an instance
+            //  where only 'public' routes are defined.
+            if (config.publicRoutesOnly !== true) {
+                requestFunctions[routes.RECORD] = saveSingleRecord;
+                requestFunctions[routes.TABLE] = updateTable;
+
+                // ****** TEMP E2E routes..to be removed once JIRA MC-2268 is complete ******
+                requestFunctions[routes.E2E_RECORD] = saveSingleRecord;
+                requestFunctions[routes.E2E_TABLE] = updateTable;
+                // **********
+            }
 
             return requestFunctions;
         }
@@ -154,18 +169,23 @@
          */
         function bindPostRequestRouteToFunction(routes) {
             let requestFunctions = {};
-            requestFunctions[routes.FEATURE_SWITCHES] = createFeatureSwitch;
-            requestFunctions[routes.FEATURE_OVERRIDES] = createFeatureSwitchOverride;
-            requestFunctions[routes.FEATURE_SWITCHES_BULK] = deleteFeatureSwitchesBulk;
-            requestFunctions[routes.FEATURE_OVERRIDES_BULK] = deleteFeatureSwitchOverridesBulk;
 
-            requestFunctions[routes.RECORDS] = createSingleRecord;
-            requestFunctions[routes.TABLE_COMPONENTS] = createTableComponents;
+            //  With multiple node instances, want to have the option of deploying an instance
+            //  where only 'public' routes are defined.
+            if (config.publicRoutesOnly !== true) {
+                requestFunctions[routes.FEATURE_SWITCHES] = createFeatureSwitch;
+                requestFunctions[routes.FEATURE_OVERRIDES] = createFeatureSwitchOverride;
+                requestFunctions[routes.FEATURE_SWITCHES_BULK] = deleteFeatureSwitchesBulk;
+                requestFunctions[routes.FEATURE_OVERRIDES_BULK] = deleteFeatureSwitchOverridesBulk;
 
-            // ****** TEMP E2E routes..to be removed once JIRA MC-2268 is complete ******
-            requestFunctions[routes.E2E_RECORDS] = createSingleRecord;
-            requestFunctions[routes.E2E_TABLE_COMPONENTS] = createTableComponents;
-            // **********
+                requestFunctions[routes.RECORDS] = createSingleRecord;
+                requestFunctions[routes.TABLE_COMPONENTS] = createTableComponents;
+
+                // ****** TEMP E2E routes..to be removed once JIRA MC-2268 is complete ******
+                requestFunctions[routes.E2E_RECORDS] = createSingleRecord;
+                requestFunctions[routes.E2E_TABLE_COMPONENTS] = createTableComponents;
+                // **********
+            }
 
             return requestFunctions;
         }
@@ -178,8 +198,13 @@
 
         function bindPutRequestRouteToFunction(routes) {
             let requestFunctions = {};
-            requestFunctions[routes.FEATURE_SWITCH] = updateFeatureSwitch;
-            requestFunctions[routes.FEATURE_OVERRIDE] = updateFeatureSwitchOverride;
+
+            //  With multiple node instances, want to have the option of deploying an instance
+            //  where only 'public' routes are defined.
+            if (config.publicRoutesOnly !== true) {
+                requestFunctions[routes.FEATURE_SWITCH] = updateFeatureSwitch;
+                requestFunctions[routes.FEATURE_OVERRIDE] = updateFeatureSwitchOverride;
+            }
 
             return requestFunctions;
         }
