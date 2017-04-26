@@ -128,7 +128,6 @@ const ReportRoute = React.createClass({
         return (<IconActions className="pageActions" actions={actions}/>);
     },
 
-
     getStageHeadline() {
         const reportName = this.props.reportData && this.props.reportData.data && this.props.reportData.data.name;
         const {appId, tblId} = this.props.match.params;
@@ -173,6 +172,7 @@ const ReportRoute = React.createClass({
                     isRowPopUpMenuOpen={this.props.isRowPopUpMenuOpen}
                     routeParams={this.props.match.params}
                     selectedAppId={this.props.selectedAppId}
+                    selectedTable={this.props.selectedTable}
                     searchStringForFiltering={this.props.reportData.searchStringForFiltering}
                     pageActions={this.getPageActions(0)}
                     nameForRecords={this.nameForRecords}

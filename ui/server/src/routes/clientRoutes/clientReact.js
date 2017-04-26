@@ -12,7 +12,8 @@ const routes = [
     '/apps',
     '/settings/app/:appId',
     '/settings/app/:appId/properties',
-    '/settings/app/:appId/table/:tblId/properties'
+    '/settings/app/:appId/table/:tblId/properties',
+    '/app/:appId/table/:tblId/report/:rptId/record/:recordId/drawerTableId/:drawerTableId/drawerRecId/:drawerRecId/embeddedReportId/:embeddedRptId*'
 ];
 
 // Routes related to base app functionality (viewing data, modifying records, etc.)

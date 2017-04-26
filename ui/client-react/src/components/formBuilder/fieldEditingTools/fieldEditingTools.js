@@ -10,7 +10,7 @@ import {ENTER_KEY, SPACE_KEY} from "../../../../../reuse/client/src/components/k
 import _ from "lodash";
 import {selectFieldOnForm, removeFieldFromForm, deselectField} from "../../../actions/formActions";
 import {CONTEXT} from "../../../actions/context";
-
+import * as tabIndexConstants from '../tabindexConstants';
 import "./fieldEditingTools.scss";
 
 /**
@@ -28,7 +28,6 @@ export class FieldEditingTools extends Component {
 
         this.selectedCurrentField = this.selectedCurrentField.bind(this);
         this.getSelectedFormElementContainer = this.getSelectedFormElementContainer.bind(this);
-        this.scrollElementIntoView = this.scrollElementIntoView.bind(this);
         this.updateScrollLocation = this.updateScrollLocation.bind(this);
     }
 
@@ -46,16 +45,16 @@ export class FieldEditingTools extends Component {
     }
 
     onClickField(e) {
-        if (this.props.selectFieldOnForm && !this.props.selectedFields[0]) {
+        let selectedField = this.props.selectedField ? this.props.selectedField[0] : undefined;
+
+        if (this.props.selectFieldOnForm &&
+            !(_.isEqual(this.props.location, selectedField))) {
             this.props.selectFieldOnForm(this.props.formId, this.props.location);
-            if (e) {
-                e.preventDefault();
-            }
-        } else if (this.props.selectFieldOnForm) {
+        } else if (this.props.deselectField) {
             this.props.deselectField(this.props.formId, this.props.location);
-            if (e) {
-                e.preventDefault();
-            }
+        }
+        if (e) {
+            e.preventDefault();
         }
     }
 
@@ -72,8 +71,8 @@ export class FieldEditingTools extends Component {
             return null;
         }
 
-        if (this.isFieldSelected()) {
-            tabIndex = '0';
+        if (this.isFieldSelected() && this.props.formBuilderChildrenTabIndex === tabIndexConstants.FORM_TAB_INDEX) {
+            tabIndex = tabIndexConstants.FORM_TAB_INDEX;
         } else {
             tabIndex = '-1';
         }
@@ -82,13 +81,13 @@ export class FieldEditingTools extends Component {
             <div className="actionIcons">
                     <div className="deleteFieldIcon">
                         <QbToolTip i18nMessageKey="builder.formBuilder.removeField">
-                           <button tabIndex={tabIndex} onClick={this.onClickDelete}> <QbIcon icon="delete" /> </button>
+                           <button type="button" tabIndex={tabIndex} onClick={this.onClickDelete}> <QbIcon icon="delete" /> </button>
                         </QbToolTip>
                     </div>
 
                     <div  className="fieldPreferencesIcon">
                         <QbToolTip i18nMessageKey="builder.formBuilder.unimplemented">
-                            <button tabIndex={tabIndex} onClick={this.onClickFieldPreferences}> <QbIcon iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY} icon="Dimensions"/> </button>
+                            <button type="button" tabIndex={tabIndex} onClick={this.onClickFieldPreferences}> <QbIcon iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY} icon="Dimensions"/> </button>
                         </QbToolTip>
                     </div>
             </div>
@@ -100,10 +99,17 @@ export class FieldEditingTools extends Component {
          * For keyboard, we need to reset the focus, to maintain proper tabbing order
          * and we need to keep the current form element in view, by scrolling it into view
          * */
-        if (this.props.previouslySelectedField && this.props.previouslySelectedField[0] && this.props.tabIndex !== "-1") {
+        if (this.props.previouslySelectedField &&
+            this.props.previouslySelectedField[0] &&
+            this.props.formBuilderChildrenTabIndex !== "-1") {
             let previouslySelectedField = document.querySelectorAll(".fieldEditingTools");
             previouslySelectedField[this.props.previouslySelectedField[0].elementIndex].focus();
-        } else if (this.props.selectedFields && this.props.selectedFields[0] && document.activeElement.tagName !== "INPUT") {
+        } else if (this.props.selectedFields &&
+            this.props.selectedFields[0] &&
+            this.props.formBuilderChildrenTabIndex !== "-1" &&
+            document.activeElement.tagName !== "INPUT" &&
+            document.activeElement.tagName !== "TEXTAREA" &&
+            document.activeElement.tagName !== "BUTTON") {
             let setFocusOnSelectedField = document.querySelectorAll(".fieldEditingTools")[this.props.selectedFields[0].elementIndex];
             if (setFocusOnSelectedField) {
                 setFocusOnSelectedField.focus();
@@ -119,25 +125,43 @@ export class FieldEditingTools extends Component {
         }
     }
 
-    scrollElementIntoView() {
+    scrollElementUpIntoView = () => {
         /**
          * We only need to scroll into view for keyboard navigating
          * */
         let selectedFormElement = document.querySelector(".selectedFormElement");
         let isDragging = document.querySelector(".dragging");
         if (selectedFormElement && !isDragging) {
-            document.querySelector(".selectedFormElement").scrollIntoView(false);
+            this.props.formBuilderContainerContentElement.scrollTop = this.props.formBuilderContainerContentElement.scrollTop - 400;
+        }
+    }
+
+    scrollElementDownIntoView = () => {
+        /**
+         * We only need to scroll into view for keyboard navigating
+         * */
+        let selectedFormElement = document.querySelector(".selectedFormElement");
+        let isDragging = document.querySelector(".dragging");
+        if (selectedFormElement && !isDragging) {
+            this.props.formBuilderContainerContentElement.scrollTop = this.props.formBuilderContainerContentElement.scrollTop + 400;
         }
     }
 
     updateScrollLocation() {
         if (this.props.selectedFields && this.props.selectedFields[0]) {
             let selectedFormElement = this.getSelectedFormElementContainer();
-            let absoluteElementTop = selectedFormElement.top + window.pageYOffset;
-            let bottom = absoluteElementTop + selectedFormElement.height;
+            let selectedElementTop;
+            let selectedElementBottom;
 
-            if (bottom > window.innerHeight - 40 || absoluteElementTop < 50) {
-                this.scrollElementIntoView();
+            if (selectedFormElement) {
+                selectedElementTop = selectedFormElement.top;
+                selectedElementBottom = selectedFormElement.bottom;
+            }
+
+            if (selectedElementBottom > window.innerHeight - 40) {
+                this.scrollElementDownIntoView();
+            } else if (selectedElementTop < 150) {
+                this.scrollElementUpIntoView();
             }
         }
     }
@@ -155,7 +179,7 @@ export class FieldEditingTools extends Component {
     }
 
     render() {
-        let tabIndex = this.props.selectedFields && this.props.selectedFields[0] ? "0" : this.props.tabIndex;
+        let tabIndex = this.props.formBuilderChildrenTabIndex ? this.props.formBuilderChildrenTabIndex : "-1";
 
         let isSmall = Breakpoints.isSmallBreakpoint();
         let classNames = ["fieldEditingTools"];
@@ -181,8 +205,7 @@ export class FieldEditingTools extends Component {
                 role="button"
                 className={classNames.join(' ')}
                 onClick={this.onClickField}
-                onKeyDown={this.selectedCurrentField}
-            >
+                onKeyDown={this.selectedCurrentField} >
 
                 <DragHandle />
 
@@ -193,6 +216,7 @@ export class FieldEditingTools extends Component {
 }
 
 FieldEditingTools.propTypes = {
+    formBuilderContainerContentElement: PropTypes.object,
     location: PropTypes.object,
     onClickDelete: PropTypes.func,
     onClickFieldPreferences: PropTypes.func,
@@ -208,14 +232,14 @@ FieldEditingTools.defaultProps = {
 const mapStateToProps = (state, ownProps) => {
     let formId = (ownProps.formId || CONTEXT.FORM.VIEW);
     let currentForm = _.get(state, `forms[${formId}]`, {});
-    let tabIndex = _.get(currentForm, 'formBuilderChildrenTabIndex[0]', '-1');
+    let formBuilderChildrenTabIndex = _.get(currentForm, 'formBuilderChildrenTabIndex[0]', '-1');
     let selectedFields = (_.has(currentForm, "selectedFields") ? currentForm.selectedFields : []);
     let previouslySelectedField = (_.has(currentForm, "previouslySelectedField") ? currentForm.previouslySelectedField : []);
 
     return {
         selectedFields,
         previouslySelectedField,
-        tabIndex
+        formBuilderChildrenTabIndex
     };
 };
 

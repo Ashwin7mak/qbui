@@ -1,4 +1,5 @@
 import reducer, {__RewireAPI__ as ReducerRewireAPI} from '../../src/reducers/forms';
+import * as tabIndexConstants from '../../../client-react/src/components/formBuilder/tabindexConstants';
 import * as types from '../../src/actions/types';
 import _ from 'lodash';
 
@@ -425,7 +426,7 @@ describe('Forms reducer functions', () => {
         });
     });
 
-    describe('toggle tab index', () => {
+    describe('toggle formBuilder children tab index', () => {
         const testFormMeta = 'some meta data';
 
         const actionPayload = {
@@ -441,8 +442,40 @@ describe('Forms reducer functions', () => {
                 [VIEW]: {
                     ...stateWithViewForm[VIEW],
                     formData: {formMeta: testFormMeta},
-                    formBuilderChildrenTabIndex: ['0'],
-                    formFocus: [false]
+                    formBuilderChildrenTabIndex: [tabIndexConstants.FORM_TAB_INDEX],
+                    toolPaletteChildrenTabIndex: ['-1'],
+                    formFocus: [false],
+                    toolPaletteFocus: [false]
+                }
+            });
+        });
+
+        it('returns existing state if there is no current form', () => {
+            expect(reducer(stateWithEditForm, actionPayload)).toEqual(stateWithEditForm);
+        });
+
+    });
+
+    describe('toggle toolPalette children tab index', () => {
+        const testFormMeta = 'some meta data';
+
+        const actionPayload = {
+            id: VIEW,
+            type: types.TOGGLE_TOOL_PALETTE_BUILDER_CHILDREN_TABINDEX,
+            content: {
+                currentTabIndex: '-1',
+            }
+        };
+
+        it('returns a new state with a tabindex toggled', () => {
+            expect(reducer(stateWithViewForm, actionPayload)).toEqual({
+                [VIEW]: {
+                    ...stateWithViewForm[VIEW],
+                    formData: {formMeta: testFormMeta},
+                    toolPaletteChildrenTabIndex: [tabIndexConstants.TOOL_PALETTE_TABINDEX],
+                    formBuilderChildrenTabIndex: ['-1'],
+                    formFocus: [false],
+                    toolPaletteFocus: [false]
                 }
             });
         });

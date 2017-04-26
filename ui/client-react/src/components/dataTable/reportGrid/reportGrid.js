@@ -7,6 +7,7 @@ import ReportUtils from '../../../utils/reportUtils';
 import ReportColumnHeaderMenu from './reportColumnHeaderMenu';
 import EmptyImage from '../../../../../client-react/src/assets/images/empty box graphic.svg';
 import {I18nMessage} from "../../../utils/i18nMessage";
+import Locale from '../../../locales/locales';
 import {connect} from 'react-redux';
 
 import _ from 'lodash';
@@ -226,14 +227,9 @@ export const ReportGrid = React.createClass({
     },
 
     getPendEdits() {
-        //  TODO: just getting to work....improve this to support multi records...
-        let pendEdits = {};
-        if (Array.isArray(this.props.record) && this.props.record.length > 0) {
-            if (_.isEmpty(this.props.record[0]) === false) {
-                pendEdits = this.props.record[0].pendEdits || {};
-            }
-        }
-        return pendEdits;
+        // only one record should have the pendEdits , so return that
+        const recordCurrentlyEdited = _.find(this.props.record, rec=>rec.pendEdits);
+        return recordCurrentlyEdited ? recordCurrentlyEdited.pendEdits : {};
     },
 
     isOnlyOneColumnVisible() {
@@ -250,6 +246,8 @@ export const ReportGrid = React.createClass({
 
         const hasSearch = this.props.searchString && this.props.searchString.trim().length > 0;
 
+        const recordsName = this.props.selectedTable ? this.props.selectedTable.name.toLowerCase() : Locale.getMessage("records.plural");
+        const recordName = this.props.selectedTable ? this.props.selectedTable.tableNoun.toLowerCase() : Locale.getMessage("records.singular");
         return (
             <div className="noRowsExist">
 
@@ -258,7 +256,7 @@ export const ReportGrid = React.createClass({
                 </div>
 
                 <div className="noRowsText">
-                    {hasSearch ? <I18nMessage message="grid.no_filter_matches"/> : <I18nMessage message="grid.no_rows"/>}
+                    {hasSearch ? <I18nMessage message="grid.no_filter_matches" recordsName={recordsName} recordName={recordName}/> : <I18nMessage message="grid.no_rows" recordsName={recordsName}/>}
                 </div>
             </div>);
     },

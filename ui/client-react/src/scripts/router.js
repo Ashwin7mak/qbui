@@ -88,8 +88,6 @@ const createElementWithFlux = (Component, props) => <Component {...props} flux={
  *          routes - an array child routes that occur under within the route (optional)
  *          props - object with any properties to be included when rendering the component (optional)
  **/
-
-
 const routes = [
     {
         path: ADMIN_ROUTE,
@@ -121,7 +119,7 @@ const routes = [
         routes:  [
             {
                 path: `${APP_ROUTE}/:appId/table/:tblId/(report)?/:rptId?/record/:recordId`,
-                exact: true,
+                exact: false,
                 component: RecordRoute
             },
             {
@@ -131,7 +129,7 @@ const routes = [
             },
             {
                 path: `${APP_ROUTE}/:appId/table/:tblId/record/:recordId`,
-                exact: true,
+                exact: false,
                 component: RecordRoute
             },
             {
@@ -167,7 +165,7 @@ const routes = [
         component: ConnectedBuilderNav,
         routes: [
             {
-                path: `${BUILDER_ROUTE}/app/:appId/table/:tblId/form/:formId`,
+                path: `${BUILDER_ROUTE}/app/:appId/table/:tblId/form/:formId?`,
                 component: FormBuilderContainer
             }
         ]

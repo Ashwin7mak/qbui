@@ -1,5 +1,6 @@
 import React, {PropTypes} from 'react';
 import {I18nMessage} from '../../../utils/i18nMessage';
+import Locale from '../../../locales/locales';
 import Loader  from 'react-loader';
 import Swipeable from 'react-swipeable';
 import Fluxxor from 'fluxxor';
@@ -413,7 +414,8 @@ export let CardViewListHolder = React.createClass({
     renderNoRowsExist() {
 
         const hasSearch = this.props.searchString && this.props.searchString.trim().length > 0;
-
+        const recordsName = this.props.selectedTable ? this.props.selectedTable.name.toLowerCase() : Locale.getMessage("records.plural");
+        const recordName = this.props.selectedTable ? this.props.selectedTable.tableNoun.toLowerCase() : Locale.getMessage("records.singular");
         return (
             <div className="noRowsExist">
 
@@ -422,9 +424,9 @@ export let CardViewListHolder = React.createClass({
                 </div>
 
                 <div className="noRowsText">
-                    {hasSearch ? <div className="searchNoRows"><I18nMessage message="grid.no_filter_matches"/></div> :
+                    {hasSearch ? <div className="searchNoRows"><I18nMessage message="grid.no_filter_matches" recordsName={recordsName} recordName={recordName}/></div> :
                         <div className="cardViewCreateOne">
-                            <I18nMessage message="grid.no_rows_but"/>
+                            <I18nMessage message="grid.no_rows_but" recordsName={recordsName}/>
                             <a href="#" onClick={this.props.onAddNewRecord}><I18nMessage message="grid.no_rows_create_link"/></a>...
                         </div>}
                 </div>
