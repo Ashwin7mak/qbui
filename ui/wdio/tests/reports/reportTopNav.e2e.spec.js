@@ -8,7 +8,7 @@
     let newStackAuthPO = requirePO('newStackAuth');
     let TopNavPO = requirePO('topNav');
 
-    describe('Reports Page - TopNav Tests', function() {
+    describe('Reports Page - TopNav Tests: ', function() {
         var realmName;
         var realmId;
         var testApp;
@@ -49,10 +49,10 @@
         });
 
         it('Verify topNav harmony icons displayed', function() {
-            //Step1: Verify if the harmony icons to be visible
-            TopNavPO.topNavCenterDivEl.waitForVisible();
-            //Step2: Verify the no.of harmony buttons
+            //Step1: Verify the no.of harmony buttons
             expect(TopNavPO.topNavHarButtonsListEl.value.length).toEqual(2);
+            //Step2: Verify if the harmony icons to be visible
+            TopNavPO.topNavCenterDivEl.waitForVisible();
             // Step3: Verify the text for harmony buttons
             expect(TopNavPO.topNavCenterDivEl.getText()).toBeFalsy();
         });
@@ -70,13 +70,6 @@
                 //Verify for the global action icons text
                 expect(innerHTML[2]).toEqual('User');
                 expect(innerHTML[3]).toEqual('Help');
-            }
-            if (breakpointSize === 'small') {
-                //Click on the topNav Hamburger menu
-                TopNavPO.clickTopNavHamburger();
-                //Verify for the global action icons text
-                expect(innerHTML[0]).toEqual('User');
-                expect(innerHTML[1]).toEqual('Help');
             }
         });
     });
