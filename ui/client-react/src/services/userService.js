@@ -8,7 +8,7 @@ class UserService extends BaseService {
 
         //  User api endpoints
         this.API = {
-            GET_REQ_USER : `${constants.BASE_URL.CLIENT}/${constants.USERS}/${constants.REQUSER}`,
+            GET_REQ_USER : `${constants.BASE_URL.QBUI}/${constants.USERS}/${constants.REQUSER}`,
             GET_USER : `${constants.BASE_URL.PROXY}/${constants.USERS}/{0}`
         };
     }

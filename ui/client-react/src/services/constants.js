@@ -11,14 +11,16 @@ export default {
 
     // Define the base context when calling node:
     //
-    //  CLIENT:  indicates the route performs custom function handling in node
+    //  QBUI:    indicates the route performs qbui custom/composition work in
+    //           the node layer before routing the request to the appropriate
+    //           back-end server for processing.
     //  PROXY:   indicates the route will directly proxy through node to an
-    //           external server endpoint.  Note the content is blank..this is
-    //           intentional as this constant is to better self-document the
-    //           endpoint call within the service.
+    //           external server endpoint.  Note the content of 'proxy' is
+    //           blank..this is intentional as this constant is to better
+    //           self-document the endpoint call within the service.
     //  NODE:    indicates the route performs node only work.
     BASE_URL: {
-        CLIENT        : '/qbui',
+        QBUI          : '/qbui',
         NODE          : '/qbn',
         PROXY         : '',
         AUTOMATION    : '/we/workflow'
