@@ -62,15 +62,6 @@
             TopNavPO.topNavGlobalActDivEl.waitForVisible();
             //Step2: Verify the no.of global action icons
             expect(TopNavPO.topNavGlobalActionsListEl.value.length).toBe(3);
-            //Used HTML to get text as getText() returns empty string for <span> elements
-            let innerHTML = browser.getHTML('.navLabel span', false);
-            if (breakpointSize !== 'small') {
-                // Verify global action icons is displayed in topNav
-                TopNavPO.topNavGlobalActionsListEl.waitForVisible();
-                //Verify for the global action icons text
-                expect(innerHTML[2]).toEqual('User');
-                expect(innerHTML[3]).toEqual('Help');
-            }
         });
     });
 }());
