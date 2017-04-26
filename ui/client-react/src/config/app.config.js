@@ -80,7 +80,7 @@ if (__QB_LOCAL__) {
         unauthorizedRedirect: '/qbase/unauthorized',
         // walkme java script
         walkmeJSSnippet : '',
-        evergageDataset: 'dev_site_nick',
+        evergageDataset: null,
     });
 }
 

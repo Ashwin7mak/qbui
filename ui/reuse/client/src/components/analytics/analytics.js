@@ -44,7 +44,7 @@ export class Analytics extends Component {
         if (!this.props.dataset) {
             return this.logger.debug('Dataset was not provided to analytics component. Analytics have not been loaded.');
         }
-        
+
         const analyticsScript = document.createElement('script');
         analyticsScript.type = 'text/javascript';
         analyticsScript.defer = true;
@@ -68,7 +68,7 @@ export class Analytics extends Component {
      */
     componentDidMount() {
         try {
-            if(this.props.getLoggedInUser) {
+            if (this.props.getLoggedInUser) {
                 this.props.getLoggedInUser();
             }
 
@@ -105,9 +105,10 @@ export class Analytics extends Component {
 Analytics.propTypes = {
     /**
      * This is a reference to the Evergage dataset that should be used for this instance of the analytics component.
+     * The evergage scripts will not be added if a dataset is not provided. I.e., this component won't do anything. Can be used to disable anlaytics.
      * Typically, this is set using app configuration.
      */
-    dataset: PropTypes.string.isRequired,
+    dataset: PropTypes.string,
 
     /**
      * The id of the currently logged in user to be used with Evergage.

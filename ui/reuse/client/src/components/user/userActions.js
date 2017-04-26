@@ -36,5 +36,5 @@ export const getLoggedInUser = () => {
 
                 return Promise.reject(failure);
             });
-    }
+    };
 };

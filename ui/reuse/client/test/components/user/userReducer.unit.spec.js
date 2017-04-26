@@ -9,7 +9,7 @@ describe('User Reducer', () => {
 
         expect(result).toEqual({isLoading: true});
     });
-    
+
     it('updates the currently logged in user', () => {
         let result = UserReducer({isLoading: false}, {type: UPDATE_LOGGED_IN_USER, user: mockUser, isLoading: true});
 
@@ -28,5 +28,5 @@ describe('User Reducer', () => {
         it('gets the user id of the currently logged in user from state', () => {
             expect(getLoggedInUserId({user: mockUser})).toEqual(mockUser.id);
         });
-    })
+    });
 });
