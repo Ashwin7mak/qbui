@@ -380,6 +380,7 @@
                       "rest_endpoint": {"Fn::Join": ["", ["https://t.tomcat.", {"Ref": "paramSwimlane"}, ".", {"Ref": "paramDomainName"}, ":8443"]]},
                       "ee_host": {"Fn::Join": ["", ["https://t.experienceengine.", {"Ref": "paramSwimlane"}, ".", {"Ref": "paramDomainName"}, ":443"]]},
                       "ee_host_enable": true,
+                      "automation_host": {"Fn::Join": ["", ["https://w.automation.", {"Ref": "paramSwimlane"}, ".", {"Ref": "paramDomainName"}, ":443"]]},
                       "legacy_base": {"Ref": "paramLegacyBase"},
                       "route_group": "LH_V1"
                     }
@@ -410,6 +411,7 @@
                       "rest_endpoint": {"Fn::Join": ["", ["https://t.tomcat.", {"Ref": "paramSwimlane"}, ".", {"Ref": "paramDomainName"}, ":8443"]]},
                       "ee_host": {"Fn::Join": ["", ["https://t.experienceengine.", {"Ref": "paramSwimlane"}, ".", {"Ref": "paramDomainName"}, ":443"]]},
                       "ee_host_enable": true,
+                      "automation_host": {"Fn::Join": ["", ["https://w.automation.", {"Ref": "paramSwimlane"}, ".", {"Ref": "paramDomainName"}, ":443"]]},
                       "legacy_base": {"Ref": "paramLegacyBase"},
                       "route_group": "LH_V1"
                     }
@@ -440,6 +442,7 @@
                       "rest_endpoint": {"Fn::Join": ["", ["https://t.tomcat.", {"Ref": "paramSwimlane"}, ".", {"Ref": "paramDomainName"}, ":8443"]]},
                       "ee_host": {"Fn::Join": ["", ["https://t.experienceengine.", {"Ref": "paramSwimlane"}, ".", {"Ref": "paramDomainName"}, ":443"]]},
                       "ee_host_enable": true,
+                      "automation_host": {"Fn::Join": ["", ["https://w.automation.", {"Ref": "paramSwimlane"}, ".", {"Ref": "paramDomainName"}, ":443"]]},
                       "legacy_base": {"Ref": "paramLegacyBase"},
                       "route_group": "LH_V1"
                     }
@@ -470,6 +473,7 @@
                       "rest_endpoint": {"Fn::Join": ["", ["https://t.tomcat.", {"Ref": "paramSwimlane"}, ".", {"Ref": "paramDomainName"}, ":8443"]]},
                       "ee_host": {"Fn::Join": ["", ["https://t.experienceengine.", {"Ref": "paramSwimlane"}, ".", {"Ref": "paramDomainName"}, ":443"]]},
                       "ee_host_enable": true,
+                      "automation_host": {"Fn::Join": ["", ["https://w.automation.", {"Ref": "paramSwimlane"}, ".", {"Ref": "paramDomainName"}, ":443"]]},
                       "legacy_base": {"Ref": "paramLegacyBase"},
                       "route_group": "LH_V1"
                     }
@@ -501,6 +505,7 @@
                       "rest_endpoint": {"Fn::Join": ["", ["https://t.tomcat.", {"Ref": "paramSwimlane"}, ".", {"Ref": "paramDomainName"}, ":8443"]]},
                       "ee_host": {"Fn::Join": ["", ["https://t.experienceengine.", {"Ref": "paramSwimlane"}, ".", {"Ref": "paramDomainName"}, ":443"]]},
                       "ee_host_enable": true,
+                      "automation_host": {"Fn::Join": ["", ["https://w.automation.", {"Ref": "paramSwimlane"}, ".", {"Ref": "paramDomainName"}, ":443"]]},
                       "legacy_base": {"Ref": "paramLegacyBase"},
                       "route_group": "LH_V1"
                     }

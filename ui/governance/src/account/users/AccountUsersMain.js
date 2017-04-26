@@ -1,13 +1,17 @@
-import React, {Component, PropTypes} from "react";
-import Loader from "react-loader";
-import {connect} from "react-redux";
-import AccountUsersGrid from "./Grid/AccountUsersGrid";
-import AccountUsersStage from "./AccountUsersStage";
-import * as AccountUsersActions from "./AccountUsersActions";
-import * as RequestContextActions from "../../common/requestContext/RequestContextActions";
-import * as RequestContextCommon from "../../common/requestContext/RequestContextCommon";
+import React, {Component, PropTypes} from 'react';
+import Loader  from 'react-loader';
+import {connect} from 'react-redux';
+
+import AccountUsersGrid from './grid/AccountUsersGrid';
+import AccountUsersStage from './AccountUsersStage';
+
+import * as AccountUsersActions from './AccountUsersActions';
+import * as RequestContextActions from '../../common/requestContext/RequestContextActions';
+import * as RequestContextCommon from '../../common/requestContext/RequestContextCommon';
 import * as SpinnerConfigurations from "../../../../client-react/src/constants/spinnerConfigurations";
 import AccountUsersToolBar from "./AccountUsersToolBar/AccountUsersToolBar";
+
+import {isFetching} from './AccountUsersReducer';
 
 /**
  * Represents the top level page that contains the grid for account users
@@ -51,6 +55,19 @@ class AccountUsers extends Component {
                 </Loader>
             );
         }
+
+        return (
+            <Loader loaded={!this.props.loading} options={SpinnerConfigurations.LARGE_BREAKPOINT}>
+                <div className="accountUsersContainer">
+                    <AccountUsersStage users={this.props.users}/>
+                    <AccountUsersGrid
+                        users={this.props.users}
+                        showAccountColumns={canSeeAccountColumns}
+                        showRealmColumns={canSeeRealmColumns}
+                    />
+                </div>
+            </Loader>
+        );
     }
 }
 
@@ -77,8 +94,7 @@ const mapStateToProps = (state) => {
         requestUser: state.RequestContext.currentUser,
         requestRealm: state.RequestContext.realm,
         users: state.AccountUsers.users,
-        loading: state.RequestContext.status.isFetching || !state.RequestContext.currentUser.id,
-        dataFetchingError: RequestContextCommon.checkDataFetchingError(state.RequestContext.status.error),
+        loading: isFetching(state)
     };
 };
 

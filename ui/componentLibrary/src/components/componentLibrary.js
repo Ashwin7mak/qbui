@@ -20,7 +20,7 @@ var ComponentLibraryWrapper = React.createClass({
                             <li><Link to="/qbase/components/uiIconFont" activeClassName="active">UI Icon Font</Link></li>
                             <li><Link to="/qbase/components/tableIconFont" activeClassName="active">Table Icon Font</Link></li>
                         </ul>
-                        <h4 className="header">Reuse Library</h4>
+                        <h4 className="header">Reuse Library Components</h4>
                         <ul>
                             <li><Link to="/qbase/components/icon" activeClassName="active">Icon</Link></li>
                             <li><Link to="/qbase/components/iconChooser" activeClassName="active">IconChooser</Link></li>
@@ -34,6 +34,10 @@ var ComponentLibraryWrapper = React.createClass({
                             <li><Link to="/qbase/components/standardLeftNav" activeClassName="active">StandardLeftNav</Link></li>
                             <li><Link to="/qbase/components/tooltip" activeClassName="active">Tooltip</Link></li>
                             <li><Link to="/qbase/components/topNav" activeClassName="active">TopNav</Link></li>
+                        </ul>
+                        <h4 className="header">Reuse Library Utilities</h4>
+                        <ul>
+                        <li><Link to="/qbase/components/notificationManager" activeClassName="active">NotificationManager</Link></li>
                         </ul>
                         <h4 className="header">Field Components</h4>
                         <ul>

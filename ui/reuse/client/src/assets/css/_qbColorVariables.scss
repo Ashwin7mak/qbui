@@ -88,7 +88,7 @@ $dropdown-hover-color:          $color-black-200;
 $selected-color:                $color-purple-600;
 $error-color:                   $color-red-700;
 $error-background-color:        $color-black-100;   // not in XD spreadsheet
-$alert-color:                   $color-orange-500;  // not in XD spreadsheet
+$alert-color:                   $color-red-600;
 $success-color:                 $color-green-600;   // not in XD spreadsheet
 $modal-icon-color:              $color-orange-500;  // new spec has this set to $color-orange-200 (to be updated later) // should be set to $alert-color
 
@@ -354,6 +354,10 @@ $rating-hover-color:        $color-orange-200;
 // menus
 $menu-header-color:         $color-black-800;   // not in XD spreadsheet
 $menu-item-disabled-color:  $color-black-400;   // not in XD spreadsheet
+
+// dialogs
+
+$newTableDialog-highlight-color: $color-purple-600;
 
 // Facet list
 // Why is the facet list any different than any other menu? Don't we need a combined menu spec for all these menus?

@@ -1,6 +1,5 @@
 import React from 'react';
 import {render} from 'react-dom';
-import {Router, Route} from 'react-router-dom';
 import 'react-fastclick';
 import {GOVERNANCE_ACCOUNT_ROUTE, GOVERNANCE_ACCOUNT_USERS_ROUTE} from './routes';
 import AppShell from './appShell';

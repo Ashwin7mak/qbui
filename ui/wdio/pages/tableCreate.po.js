@@ -49,6 +49,16 @@
         //edit table heading
         editTableHeading : {get: function() {return browser.element('.stageHeadLine');}},
 
+        //new table ready dialogue
+        tableReadyDialogue : {get: function() {return browser.element('.modal-dialog .tableReadyContent');}},
+        //new table ready title
+        tableReadyDialogueTitle : {get: function() {return this.tableReadyDialogue.element('.titleText');}},
+        //new table ready Text
+        tableReadyDialogueTextParagraph1 : {get: function() {return this.tableReadyDialogue.element('.tableReadyText p');}},
+        //new table ready Text
+        tableReadyDialogueTextParagraph2 : {get: function() {return this.tableReadyDialogue.element('.tableReadyText p p');}},
+
+
 
         /**
          * Returns all Icon List from the Icon Chooser
@@ -180,9 +190,9 @@
          */
         waitUntilNotificationContainerGoesAway : {value: function() {
             //wait until notification container slides away
-            browser.waitForExist('.notification-container-empty', e2eConsts.shortWaitTimeMs);
+            browser.waitForExist('.notification-container-empty', e2eConsts.mediumWaitTimeMs);
             //Need this to wait for container to slide away
-            return browser.pause(e2eConsts.shortWaitTimeMs);
+            return browser.pause(e2eConsts.mediumWaitTimeMs);
         }},
 
         /**
@@ -195,6 +205,7 @@
             });
 
             if (buttonToClick !== []) {
+                buttonToClick[0].waitForVisible();
                 //Click on filtered save button
                 return buttonToClick[0].click();
             } else {
@@ -203,13 +214,23 @@
         }},
 
         /**
-         * Method to click on Next button in create Table dialogue
+         * Method to verify new Table Dialogue contents
          */
-        clickNextBtn : {value: function() {
-            this.clickBtnOnTableDlgFooter('Next');
+        verifyNewTableCreateDialogue : {value: function() {
             //Verify the title and description in table summary in the dialogue
-            expect(this.tableHeader.getAttribute('textContent')).toContain('Get ready to add fields to your table');
-            return expect(this.tableDescription.getAttribute('textContent')).toContain('Each bit of information you want to collect is a field, like Customer Name.');
+            expect(this.tableReadyDialogueTitle.getAttribute('textContent')).toContain('Your table\'s ready!');
+            expect(this.tableReadyDialogueTextParagraph1.getAttribute('textContent')).toContain('Each bit of information you want to collect is a field.');
+            return browser.element('.modal-footer .finishedButton').waitForVisible();
+        }},
+
+        /**
+         * Method to click on OK button in new table dialogue
+         */
+        clickOkBtn: {value: function() {
+            browser.element('.modal-footer .finishedButton').waitForVisible();
+            expect(browser.element('.modal-footer .finishedButton').getAttribute('textContent')).toBe('OK');
+            browser.element('.modal-footer .finishedButton').click();
+            return formsPO.editFormContainerEl.waitForVisible();
         }},
 
         /**
@@ -225,7 +246,7 @@
         clickFinishedBtn: {value: function() {
             this.clickBtnOnTableDlgFooter('Create table');
             this.waitUntilNotificationContainerGoesAway();
-            return formsPO.editFormContainerEl.waitForVisible();
+            return this.tableReadyDialogue.waitForVisible();
         }},
 
         /**
@@ -263,8 +284,8 @@
             expect(browser.isEnabled('.iconChooser.closed')).toBeTruthy();
             //Verify cancel button is enabled
             expect(browser.isEnabled('.modal-footer .cancelButton')).toBeTruthy();
-            //Verify next button is disabled
-            expect(browser.isEnabled('.modal-footer .nextButton')).toBeFalsy();
+            //Verify create button is disabled
+            expect(browser.isEnabled('.modal-footer .finishedButton')).toBeFalsy();
             //verify close button enabled
             expect(browser.isEnabled('.rightIcons .iconUISturdy-close')).toBeTruthy();
         }},
@@ -293,7 +314,7 @@
         enterTableFieldValue : {value: function(tableField, fieldValue) {
             //Filter all fields in create new table dialogue
             var results = this.getAllTableFieldsList.value.filter(function(field) {
-                return field.getAttribute('textContent') === tableField;
+                return field.element('.tableFieldTitle').getAttribute('textContent') === tableField;
             });
 
             if (results !== []) {
@@ -301,17 +322,17 @@
                 if (tableField.includes('Table Name')) {
                     //verify title of the field
                     expect(results[0].element('.tableFieldTitle').getAttribute('textContent')).toContain(tableField);
-                    this.setInputValue(results[0], '.tableFieldInput INPUT', fieldValue);
+                    this.setInputValue(results[0], '.tableFieldInput input', fieldValue);
                     //Enter value of 'a record in the table is called a ' field
                 } else if (tableField.includes('A record in the table is called')) {
                     //verify title of the field
                     expect(results[0].element('.tableFieldTitle').getAttribute('textContent')).toContain(tableField);
-                    this.setInputValue(results[0], '.tableFieldInput INPUT', fieldValue);
+                    this.setInputValue(results[0], '.tableFieldInput input', fieldValue);
                     //Enter value for Description field
                 } else if (tableField.includes('Description')) {
                     //verify title of the field
                     expect(results[0].element('.tableFieldTitle').getAttribute('textContent')).toContain(tableField);
-                    this.setInputValue(results[0], '.tableFieldInput TEXTAREA', fieldValue);
+                    this.setInputValue(results[0], '.tableFieldInput textarea', fieldValue);
                 }
             } else {
                 throw new Error('Cannot set value for input of field type ' + JSON.stringify(results[0]));
@@ -326,20 +347,20 @@
         verifyTableFieldValues : {value: function(tableField, expectedFieldValue) {
             //Filter all fields in create new table dialogue
             var results = this.getAllTableFieldsList.value.filter(function(field) {
-                return field.getAttribute('textContent') === tableField;
+                return field.element('.tableFieldTitle').getAttribute('textContent') === tableField;
             });
 
             if (results !== []) {
                 //Enter values for 'table name' field
                 if (tableField.includes('Table Name')) {
                     //Verify the table name field value
-                    expect(results[0].element('.tableFieldInput INPUT').getAttribute('value')).toContain(expectedFieldValue);
+                    expect(results[0].element('.tableFieldInput input').getAttribute('value')).toContain(expectedFieldValue);
                 } else if (tableField.includes('A record in the table is called')) {
                     //Verify the record field value
-                    expect(results[0].element('.tableFieldInput INPUT').getAttribute('value')).toContain(expectedFieldValue);
+                    expect(results[0].element('.tableFieldInput input').getAttribute('value')).toContain(expectedFieldValue);
                 } else if (tableField.includes('Description')) {
                     //Verify the description field value
-                    expect(results[0].element('.tableFieldInput TEXTAREA').getAttribute('value')).toContain(expectedFieldValue);
+                    expect(results[0].element('.tableFieldInput textarea').getAttribute('value')).toContain(expectedFieldValue);
                 }
             } else {
                 throw new Error('Unexpected table field filtered element' + JSON.stringify(results[0]));

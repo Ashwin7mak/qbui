@@ -8,11 +8,21 @@ import * as StandardGridState from "../../common/grid/standardGridReducer";
 
 
 /**
- * Search across the users for the search term
+ * Action when there is successful user from the backend
  * @param users
- * @param searchTerm
- * @returns {*}
  */
+export const receiveAccountUsers = (users) => ({
+    type: types.GET_USERS_SUCCESS,
+    users
+});
+export const failedAccountUsers = (error) => ({
+    error: error,
+    type: types.GET_USERS_FAILURE
+});
+
+export const fetchingAccountUsers = () => ({
+    type: types.GET_USERS_FETCHING
+});
 export const searchUsers = (users, searchTerm) => {
 
     if (users.length === 0 || searchTerm.length === 0) {
@@ -32,6 +42,9 @@ export const searchUsers = (users, searchTerm) => {
 };
 
 /**
+ * Get all the users
+ *
+ * @returns {function(*)}
  * Paginate through the users array
  * @param users the users to filter
  * @param _page the current page
@@ -47,6 +60,29 @@ export const paginateUsers = (users, _page, _itemsPerPage) => {
         itemsPerPage = _itemsPerPage || 10;
     let offset = (page - 1) * itemsPerPage;
     return users.slice(offset, offset + itemsPerPage);
+export const fetchAccountUsers = (accountId) => {
+    return (dispatch) => {
+        // get all the users from the account service
+        const accountUsersService = new AccountUsersService();
+        const promise = accountUsersService.getAccountUsers(accountId);
+        dispatch(fetchingAccountUsers());
+        return promise.then(response => {
+            _.each(response.data, item => {
+                item.id = item.uid;
+            });
+            // we have the users, update the redux store
+            dispatch(receiveAccountUsers(response.data));
+        }).catch(error => {
+            dispatch(failedAccountUsers(error));
+            if (error.response && error.response.status === 403) {
+                logger.parseAndLogError(LogLevel.WARN, error.response, 'accountUserService.getAccountUsers:');
+                WindowLocationUtils.update(FORBIDDEN);
+            } else {
+                logger.parseAndLogError(LogLevel.ERROR, error.response, 'accountUserService.getAccountUsers:');
+                WindowLocationUtils.update(INTERNAL_SERVER_ERROR);
+            }
+        });
+    };
 };
 
 const sortFunctions = [

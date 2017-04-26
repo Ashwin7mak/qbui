@@ -9,6 +9,7 @@ $font-family: Lato, 'Open Sans', Helvetica, Arial, sans-serif;  /* default font 
 $font-size: $font-size-base;          /* base/default body font size */
 $font-color: $color-black-700;                 /* default font color */
 $top-nav-height: 40px;
+$formBuilder-footer-height: 50px;
 
 /* breakpoints and mixins */
 $small-breakpoint-width: 640px;
@@ -100,6 +101,7 @@ $font-size-h6: 12px;
 $font-size-p: 14px;
 $font-size-button: 14px;
 $font-size-placeholder: 14px; //aka ghost text
+$font-size-dialog-text: 16px;
 
 // Semantic names for formula fields
 $formula-spinner-large-size: 26px;

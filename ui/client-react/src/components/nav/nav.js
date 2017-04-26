@@ -1,4 +1,6 @@
 import React from "react";
+import {Route} from 'react-router-dom';
+
 import Fluxxor from "fluxxor";
 import LeftNav from "./leftNav";
 import TopNav from "../header/topNav";
@@ -34,6 +36,7 @@ import Button from 'react-bootstrap/lib/Button';
 import Tooltip from '../../../../reuse/client/src/components/tooltip/tooltip';
 import Icon from '../../../../reuse/client/src/components/icon/icon';
 import TableCreationDialog from '../table/tableCreationDialog';
+
 import AppUtils from '../../utils/appUtils';
 
 import {NEW_TABLE_IDS_KEY} from '../../constants/localStorage';
@@ -102,33 +105,34 @@ export const Nav = React.createClass({
 
     getTopGlobalActions() {
         const actions = [];
-        let recordId;
-        if (this.props.match.params) {
-            recordId = this.props.match.params.recordId;
-        }
         let selectedApp = this.getSelectedApp();
         let isAdmin = false;
         if (selectedApp) {
             isAdmin = AppUtils.hasAdminAccess(selectedApp.accessRights);
         }
-        return (<GlobalActions actions={actions}
+
+        return (
+            <Route path={UrlConsts.BUILDER_MENU_ROUTE} render={props => (
+                <GlobalActions actions={actions}
                                position={"top"}
                                dropdownIcon="user"
                                dropdownMsg="globalActions.user"
                                startTabIndex={4}
                                app={selectedApp}>
-            {isAdmin ?
-                    <BuilderDropDownAction
-                                history={this.props.history}
-                                selectedApp={selectedApp}
-                                selectedTable={this.getSelectedTable(this.state.apps.selectedTableId)}
-                                recId={recordId}
-                                actions={actions}
-                                position={"top"}
-                                icon="settings"
-                                navigateToBuilder={this.navigateToBuilder}
-                                startTabIndex={4}/> : null}
-                </GlobalActions>);
+                    {isAdmin ?
+                        <BuilderDropDownAction
+                            history={this.props.history}
+                            selectedApp={selectedApp}
+                            selectedTable={this.getSelectedTable(this.state.apps.selectedTableId)}
+                            recId={props.match.params.recordId}
+                            actions={actions}
+                            position={"top"}
+                            icon="settings"
+                            navigateToBuilder={this.navigateToBuilder}
+                            startTabIndex={4}/> : null}
+                </GlobalActions>
+            )} />
+        );
     },
 
     getLeftGlobalActions() {
@@ -279,14 +283,9 @@ export const Nav = React.createClass({
     },
 
     getPendEdits() {
-        let pendEdits = {};
-        //  TODO: just getting to work....improve this to support multi records...
-        if (Array.isArray(this.props.record) && this.props.record.length > 0) {
-            if (_.isEmpty(this.props.record[0]) === false) {
-                pendEdits = this.props.record[0].pendEdits || {};
-            }
-        }
-        return pendEdits;
+        // only one record should have the pendEdits , so return that
+        const recordCurrentlyEdited = _.find(this.props.record, rec=>rec.pendEdits);
+        return recordCurrentlyEdited ? recordCurrentlyEdited.pendEdits : {};
     },
 
     getCenterGlobalActions() {
@@ -403,7 +402,7 @@ export const Nav = React.createClass({
                                 // the Switch wrapper will pick only one of the routes the first
                                 // that matches.
                                 let routeProps = {
-                                    key: this.props.location ? this.props.location.pathname : "",
+                                    key : this.props.match ? this.props.match.url : "",
                                     apps: this.state.apps.apps,
                                     selectedAppId: this.state.apps.selectedAppId,
                                     appsLoading: this.state.apps.loading,
@@ -432,6 +431,7 @@ export const Nav = React.createClass({
             }
 
             {this.state.apps.selectedAppId && <TableCreationDialog app={this.getSelectedApp()} onTableCreated={this.tableCreated}/>}
+
         </div>);
     },
 
@@ -452,6 +452,9 @@ export const Nav = React.createClass({
 
             window.sessionStorage.setItem(NEW_TABLE_IDS_KEY, tableIds.join(","));
         }
+
+
+        this.props.showTableReadyDialog();
     },
 
     onSelectItem() {
@@ -482,7 +485,7 @@ export const Nav = React.createClass({
      * open the create table wizard
      */
     createNewTable() {
-        this.props.dispatch(TableCreationActions.showTableCreationDialog());
+        this.props.showTableCreationDialog();
     }
 });
 
@@ -513,7 +516,9 @@ const mapDispatchToProps = (dispatch) => {
 
         loadReports: (context, appId, tblId) => dispatch(ReportActions.loadReports(context, appId, tblId)),
 
-        updateFormRedirectRoute: (route) => dispatch(updateFormRedirectRoute(route))
+        updateFormRedirectRoute: (route) => dispatch(updateFormRedirectRoute(route)),
+        showTableCreationDialog: () => dispatch(TableCreationActions.showTableCreationDialog()),
+        showTableReadyDialog: () => dispatch(TableCreationActions.showTableReadyDialog())
     };
 };
 
