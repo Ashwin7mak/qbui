@@ -37,7 +37,8 @@ class ReportModelHelper {
      * level also `id, fieldType, fieldName, defaultValue, choices`
      *
      * @param fields
-     * @param hasGrouping
+     * @param fids
+     * @param groupEls
      * @returns {Array}
      */
     static getReportColumns(fields, fids  = [], groupEls = []) {
