@@ -113,7 +113,6 @@ const AppUsersRoute = React.createClass({
             if (appUsers[role.id]) {
 
                 selected = appUsers[role.id].map(user => {
-                    debugger;
                     roleId = user.roleId;
                     return user.userId;
 
