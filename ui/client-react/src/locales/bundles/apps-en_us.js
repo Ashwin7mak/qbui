@@ -137,6 +137,7 @@ export default {
             saveAndAddRecord: "Save and add a new row",
             saveAndAddRecordDisabled: "Adding records in the grid is not available yet",
             cancelSelection: "Cancel changes",
+            close: "Close",
             favorite: "Favorite",
             gridEdit: "Grid Edit",
             edit: "Edit",
@@ -263,7 +264,8 @@ export default {
                 noCheck : "No",
                 yesCheck : "Yes",
                 clearFacet: "Clear {facet} filter",
-                clearFacetSelection: "Click to clear this filter"
+                clearFacetSelection: "Click to clear this filter",
+                filter: "Filter"
             },
             filteredRecordCount : "{filteredRecordCount} of {recordCount} records",
             filteredSingleRecordCount : "{filteredRecordCount} of {recordCount} record",
@@ -282,6 +284,7 @@ export default {
             nextPageLoadingOnSwipe: "Getting more...",
             searchPlaceHolder:  "Search these",
             sortAndGroup : {
+                sortAndGroupIcon: "Sort & Group",
                 addField: "Add a field",
                 by: "by",
                 changeGroupOrder: "Change group order",

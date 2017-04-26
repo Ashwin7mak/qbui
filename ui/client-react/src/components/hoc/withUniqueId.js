@@ -19,7 +19,7 @@ const withUniqueIdWrapper = (Component, context, uniqueId) => {
         }
 
         render() {
-            return <Component uniqueId={this.uniqueId} {...this.props} />;
+            return <Component {...this.props} uniqueId={this.uniqueId} />;
         }
     }
 

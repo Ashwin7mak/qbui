@@ -133,6 +133,7 @@ export default {
             saveAndAddRecord: "Enregistrer et ajouter une nouvelle ligne",
             saveAndAddRecordDisabled: "Ajout de plusieurs enregistrements ne fonctionnant pas en ce moment",
             cancelSelection: "Annuler les modifications",
+            close: "Fermer",
             favorite: "Préféré",
             gridEdit: "Grille modifier",
             edit: "Modifier",
@@ -257,7 +258,8 @@ export default {
                 noCheck : "Non",
                 yesCheck : "Oui",
                 clearFacet: "Enlever le filtre {facet}",
-                clearFacetSelection: "Cliquez pour désactiver ce filtre"
+                clearFacetSelection: "Cliquez pour désactiver ce filtre",
+                filter: "Filtre"
             },
             filteredRecordCount : "{filteredRecordCount} des {recordCount} enregistrements",
             filteredSingleRecordCount : "{filteredRecordCount} de {recordCount} record",
@@ -276,6 +278,7 @@ export default {
             nextPageLoadingOnSwipe: "Obtenir plus...",
             searchPlaceHolder:  "Rechercher ces",
             sortAndGroup : {
+                sortAndGroupIcon: "Trier & Groupe",
                 addField: "Ajouter le champ",
                 by: "par",
                 changeGroupOrder: "Gruppe wechseln bestellen",

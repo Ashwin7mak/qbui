@@ -12,7 +12,7 @@
     var realmId;
     var testApp;
 
-    describe('Relationships - View Child Table on Form Tests: ', function() {
+    describe('Relationships - View child table on form tests: ', function() {
         /**
          * Setup method. Creates test app then authenticates into the new stack
          */

@@ -485,17 +485,14 @@ export const RecordTrowser = React.createClass({
     },
 
     getPendEdits() {
-        return this.getRecord().pendEdits || {};
+        // only one record should have the pendEdits , so return that
+        const recordCurrentlyEdited = _.find(this.props.record, rec=>rec.pendEdits);
+        return recordCurrentlyEdited ? recordCurrentlyEdited.pendEdits : {};
     },
 
     getRecord() {
-        let record = {};
-        if (Array.isArray(this.props.record) && this.props.record.length > 0) {
-            if (_.isEmpty(this.props.record[0]) === false) {
-                record = this.props.record[0];
-            }
-        }
-        return record;
+        return  _.find(this.props.record, rec => (rec.recId === this.props.recId ||
+                                                  rec.recId.toString() === this.props.recId)) || {};
     },
 
     keyboardOnSave() {
