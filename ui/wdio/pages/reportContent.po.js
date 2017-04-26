@@ -23,6 +23,7 @@
         tableBody: {get: function() {return browser.element('.qbTbody');}},
         reportsToolBar : {get: function() {return browser.element('.reportToolbar');}},
         addRecordButton : {get: function() {return browser.element('.tableHomePageInitial .addRecordButton');}},
+        //this variables may have better names
         settingsIcon: {get: function() {return browser.element('.qbIcon.iconUISturdy-settings');}},
         modifyTableSettings: {get: function() {return browser.element('.modifyTableSettings');}},
         deleteTableActionButton: {get: function() {return browser.element('.iconActionButton.deleteTable');}},
@@ -256,9 +257,9 @@
          */
         clickSettingsIcon: {value: function() {
             this.settingsIcon.waitForVisible();
-            //Click on add record button
+            //Click on settings icon
             this.settingsIcon.click();
-            //wait until you see edit container and save buttons in footer
+            //wait until you see dropdown list
             return this.modifyTableSettings.waitForVisible();
         }},
 
@@ -267,9 +268,9 @@
          */
         clickModifyTableSettings: {value: function() {
             this.modifyTableSettings.waitForVisible();
-            //Click on add record button
+            //Click on 'Table properties & settings'
             this.modifyTableSettings.click();
-            //wait until you see edit container and save buttons in footer
+            //wait until you see delete table action button
             return this.deleteTableActionButton.waitForVisible();
         }},
 
@@ -277,8 +278,9 @@
          * Method to click deleteTableActionButton
          */
         clickDeleteTableActionButton: {value: function() {
+            //Click on delete table action button
             this.deleteTableActionButton.click();
-            //Click on add record button
+            //wait untill you see deletePromtTextField
             return this.deletePromtTextField.waitForVisible();
         }},
 
@@ -286,9 +288,11 @@
          * Method to click deleteTableButton
          */
         clickDeleteTableButton: {value: function() {
+            //set the deletePromtTextField value to 'YES'
             this.setInputValue(this.deletePromtTextField, 'YES');
-            expect(browser.isEnabled('.primaryButton.btn')).toBeTruthy();
-            //Click on add record button
+            //use the predefined deleteTableButton here
+            expect(browser.isEnabled('.primaryButton.btn.btn-default')).toBeTruthy();
+            //Click on delete table button
             return this.deleteTableButton.click();
         }},
 
