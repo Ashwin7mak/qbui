@@ -343,7 +343,7 @@
      * @param req
      */
     function modifyRequestPathForApi(req) {
-        //   check if route is a client endpoint that performs custom function processing
+        //   modify client endpoint identifier to their respective back-end context.
         let clientEndpoint = false;
         routesConstants.clientEndPoints.some(endPoint => {
             if (endPoint.regEx.test(req.url)) {

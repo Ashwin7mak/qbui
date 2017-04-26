@@ -46,8 +46,7 @@ describe('Group Route Mapper Unit Test', function() {
         testRoutes.push({message:'LH_V1: ' + routes.TABLE_COMPONENTS, routeGroup:routeGroups.LH_V1, route:routes.TABLE_COMPONENTS, DELETE:false, GET:false, POST:true, PUT:false, PATCH:false});
         testRoutes.push({message:'LH_V1: ' + routes.TABLE_HOMEPAGE_REPORT, routeGroup:routeGroups.LH_V1, route:routes.TABLE_HOMEPAGE_REPORT, DELETE:false, GET:true, POST:false, PUT:false, PATCH:false});
         testRoutes.push({message:'LH_V1: ' + routes.REQ_USER, routeGroup:routeGroups.LH_V1, route:routes.REQ_USER, DELETE:false, GET:true, POST:false, PUT:false, PATCH:false});
-        testRoutes.push({message:'LH_V1: ' + routes.QBUI_HEALTH_CHECK, routeGroup:routeGroups.LH_V1, route:routes.QBUI_HEALTH_CHECK, DELETE:false, GET:true, POST:false, PUT:false, PATCH:false});
-        testRoutes.push({message:'LH_V1: ' + routes.NODE_HEALTH_CHECK, routeGroup:routeGroups.LH_V1, route:routes.NODE_HEALTH_CHECK, DELETE:false, GET:true, POST:false, PUT:false, PATCH:false});
+        testRoutes.push({message:'LH_V1: ' + routes.QBUI_HEALTH, routeGroup:routeGroups.LH_V1, route:routes.QBUI_HEALTH, DELETE:false, GET:true, POST:false, PUT:false, PATCH:false});
         testRoutes.push({message:'LH_V1: ' + routes.GOVERNANCE_ACCOUNT_USERS, routeGroup:routeGroups.LH_V1, route:routes.GOVERNANCE_ACCOUNT_USERS, DELETE:false, GET:true, POST:false, PUT:false, PATCH:false});
         testRoutes.push({message:'LH_V1: ' + routes.GOVERNANCE_CONTEXT, routeGroup:routeGroups.LH_V1, route:routes.GOVERNANCE_CONTEXT, DELETE:false, GET:true, POST:false, PUT:false, PATCH:false});
 

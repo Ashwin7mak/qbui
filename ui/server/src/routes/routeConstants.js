@@ -209,9 +209,8 @@
         SWAGGER_V2             : '/*/v2/api-docs*'
     };
 
-    // List of routes used by the quickbase client to perform functionality either exclusively in node code or
-    // composition routes in support of a client request.  See qbRouteMapper.modifyRequestPathForApi() for
-    // reference to this list and how it is used.
+    // List of client route identifiers and their associated back-end context.  See
+    // qbRouteMapper.modifyRequestPathForApi() for reference.
     const regExExpression = `^${context.client.QBUI}/(.*)?$`;
     let clientEndPoints = [
         {route: context.client.QBUI, regEx: new RegExp(regExExpression, 'i'), context: context.api.CORE}
@@ -225,7 +224,7 @@
     exports.routes = Object.freeze(_.assign({},
         clientApiEndpoints, nodeApiEndpoints, publicControllerEndpoints, apiEndpoints, swaggerEndpoints));
 
-    //  These are exported to avoid the need of duplicating in qbRouteMapper.
+    //  These are exported and used in qbRouteMapper.
     exports.publicEndPoints = publicEndPoints;
     exports.clientEndPoints = clientEndPoints;
 

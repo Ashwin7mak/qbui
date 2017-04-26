@@ -152,6 +152,8 @@
         //  Unknown page for custom client composition routes...valid routes should all be declared in qbRouteMapper
         app.route('/qbui/*')
             .get(errors[httpStatusCodes.NOT_FOUND]);
+        app.route('/qbn/*')
+            .get(errors[httpStatusCodes.NOT_FOUND]);
 
 
         function isClientLogEnabled() {
