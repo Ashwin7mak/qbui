@@ -17,13 +17,14 @@ class AccountUsers extends Component {
     constructor(props) {
         super(props);
         this.GRID_ID = "accountUsers";
+        this.ITEMS_PER_PAGE = 10;
     }
 
     /**
      * When the component mounts, get the users
      */
     componentDidMount() {
-        this.props.fetchData(this.props.match.params.accountId, this.GRID_ID);
+        this.props.fetchData(this.props.match.params.accountId, this.GRID_ID, this.ITEMS_PER_PAGE);
     }
 
     render() {
@@ -65,9 +66,9 @@ AccountUsers.propTypes = {
 export {AccountUsers};
 
 const mapDispatchToProps = (dispatch) => ({
-    fetchData(accountID, gridID) {
+    fetchData(accountID, gridID, itemsPerPage) {
         dispatch(RequestContextActions.fetchRequestContextIfNeeded(accountID));
-        dispatch(AccountUsersActions.fetchAccountUsers(accountID, gridID));
+        dispatch(AccountUsersActions.fetchAccountUsers(accountID, gridID, itemsPerPage));
     }
 });
 

@@ -36,15 +36,15 @@ export const searchUsers = (users, searchTerm) => {
  * @param _page
  * @returns {*}
  */
-export const paginateUsers = (users, _page) => {
+export const paginateUsers = (users, _page, _itemsPerPage) => {
     if (users.length === 0) {
         return users;
     }
 
     let page = _page || 1,
-        per_page = 10, // TODO: PER PAGE
-        offset = (page - 1) * per_page;
-    return users.slice(offset, offset + per_page);
+        itemsPerPage = _itemsPerPage || 10;
+    let offset = (page - 1) * itemsPerPage;
+    return users.slice(offset, offset + itemsPerPage);
 };
 
 const sortFunctions = [
@@ -94,8 +94,10 @@ export const receiveAccountUsers = (users) => ({
 
 /**
  * Perform the Update on the Grid through transformations
+ *
+ * NOTE: In the future, this is going to be at the server
  */
-export const doUpdate = (gridId, gridState) => {
+export const doUpdate = (gridId, gridState, _itemsPerPage) => {
     return (dispatch, getState) => {
         // First Filter
         let searchTerm = gridState.searchTerm || [];
@@ -107,13 +109,17 @@ export const doUpdate = (gridId, gridState) => {
 
         // Then Paginate
         let paginationIndex = gridState.pagination.currentPage;
-        let paginatedUsers = paginateUsers(sortedUsers, paginationIndex);
+        let itemsPerPage = _itemsPerPage || gridState.pagination.itemsPerPage;
+        let paginatedUsers = paginateUsers(sortedUsers, paginationIndex, itemsPerPage);
+
+        // This info in the future will be returned by the server
         let pagination = {
             totalRecords: sortedUsers.length,
-            totalPages: Math.ceil(sortedUsers.length / 10),
+            totalPages: Math.ceil(sortedUsers.length / itemsPerPage),
             currentPage: paginationIndex,
-            itemsPerPage: 10
+            itemsPerPage: itemsPerPage
         };
+        // Set the grid's pagination info
         dispatch(StandardGridActions.doSetPaginate(gridId, pagination));
 
         // Inform the grid of the new users
@@ -127,7 +133,7 @@ export const doUpdate = (gridId, gridState) => {
  *
  * @returns {function(*=)}
  */
-export const fetchAccountUsers = (accountId, gridID) => {
+export const fetchAccountUsers = (accountId, gridID, itemsPerPage) => {
     return (dispatch) => {
         // get all the users from the account service
         const accountUsersService = new AccountUsersService();
@@ -139,10 +145,11 @@ export const fetchAccountUsers = (accountId, gridID) => {
                 item.id = item.uid;
             });
 
+            // inform the redux store of all the users
             dispatch(receiveAccountUsers(response.data));
 
-            // run through the pipleine and update the grid
-            dispatch(doUpdate(gridID, StandardGridState.defaultGridState));
+            // run through the pipeline and update the grid
+            dispatch(doUpdate(gridID, StandardGridState.defaultGridState, itemsPerPage));
         });
         return promise;
     };
