@@ -1,4 +1,4 @@
-import RequestContextReducer from '../../../src/common/requestContext/RequestContextReducer';
+import RequestContextReducer, {isFetching} from '../../../src/common/requestContext/RequestContextReducer';
 import * as types from '../../../src/app/actionTypes';
 
 const initialState = {
@@ -11,7 +11,7 @@ const initialState = {
     }
 };
 
-describe('Account Users Reducers Tests', () => {
+describe('RequestContext Reducers Tests', () => {
 
     it('should have the correct initial state', () => {
         expect(RequestContextReducer(undefined, {})).toEqual(initialState);
@@ -50,8 +50,22 @@ describe('Account Users Reducers Tests', () => {
         };
 
         let state = RequestContextReducer(initialState, {type: types.REQUEST_CONTEXT_FETCHING});
+
         state = RequestContextReducer(state, {type: types.REQUEST_CONTEXT_SUCCESS, ...result});
         expect(state.status.isFetching).toEqual(false);
         expect(state.status.error).toEqual(null);
     });
+
+    describe('isFetching', () => {
+        it("should return true while fetching the request user's context", () => {
+            expect(isFetching({RequestContext:{...initialState, status: {...initialState.status, isFetching: true}}})).toEqual(true);
+        });
+        it("should return false if the state isFetching is false AND we don't have the current user's information", () => {
+            expect(isFetching({RequestContext:{...initialState}})).toEqual(true);
+        });
+        it("should return false while we have completed fetching the request user's context", () => {
+            expect(isFetching({RequestContext:{...initialState, currentUser:{id: 1}}})).toEqual(false);
+        });
+    });
+
 });
