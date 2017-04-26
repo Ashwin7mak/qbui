@@ -20,7 +20,6 @@ describe('Locales', () => {
         };
 
         LocaleRewireAPI.__Rewire__('config', mockConfig);
-        // LocaleRewireAPI.__Rewire__('config', mockConfig);
         LocaleRewireAPI.__Rewire__('locale', '');
 
         //  default is undefined...sets to default of en-us
@@ -65,7 +64,7 @@ describe('Locales', () => {
         expect(testMsg).toBe('test');
     });
 
-    it('test getPluralizeMessage', () => {
+    fit('test getPluralizeMessage', () => {
         ReuseBundleLoader.changeLocale('en-us');
         Locale.getI18nBundle();
         const testMsg = Locale.getPluralizeMessage("test.testPluralize", {value: 2});
