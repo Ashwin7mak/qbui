@@ -560,39 +560,58 @@ module.exports = function(grunt) {
         webdriver: {
             options: {
                 exclude: [
+                    // Reports Tests
+                    //TODO: MB-2115 this bug is logged in reactabular backlog under https://quickbase.atlassian.net/browse/MB-2115
                     // reportAddRecord is currently broken on Reactabular, the save and add a new row button for inline editing has been disabled
-                    // this bug is logged in reactabular backlog under https://quickbase.atlassian.net/browse/MB-2115
                     // because the save and add button is disabled we turned off the reportAddRecord test
                     // we will turn it back on once this button has been enabled again
                     './wdio/tests/reports/reportAddRecord.e2e.spec.js',
-                    // disabling formPermissionsViewerRole test as after moving to ExperienceEngine,
-                    // permissions for viewer are not working correctly
-                    //TODO MC-2105 should be fixed to enable permissions on forms
-                    './wdio/tests/forms/formPermissionsViewerRole.e2e.spec.js',
-                    './wdio/tests/forms/formPermissionsParticipantRole.e2e.spec.js',
-                    // currently intermittently broken in CI need to fix in another PR
+                    // Stabilize in CI before enabling
                     './wdio/tests/reports/reportEditRecord.e2e.spec.js',
                     './wdio/tests/reports/reportNavigation.e2e.spec.js',
                     './wdio/tests/reports/reportTable.e2e.spec.js',
                     './wdio/tests/reports/grouping/reportGroupingViaColumnHeader.e2e.spec.js',
                     './wdio/tests/reports/sorting/reportSortingViaColumnHeader.e2e.spec.js',
-                    './wdio/tests/relationships/relationshipViewChildTable.e2e.spec.js'
+
+                    // Forms Tests
+                    // Stabilize in CI before enabling
+                    './wdio/tests/forms/formDragDrop.e2e.spec.js',
+                    //TODO MC-2105 needs to be fixed to enable permissions on forms
+                    // disabling formPermissions tests as after moving to ExperienceEngine,
+                    // permissions for viewer and participant are not working correctly
+                    './wdio/tests/forms/formPermissionsViewerRole.e2e.spec.js',
+                    './wdio/tests/forms/formPermissionsParticipantRole.e2e.spec.js',
+
+                    // Tables Tests
+
+                    // Relationships Tests
+                    // Stabilize in CI before enabling
+                    './wdio/tests/relationships/relationshipViewChildTable.e2e.spec.js',
+
+                    // Users Tests
+                    // Stabilize in CI before enabling
+                    './wdio/tests/users/usersTable.e2e.spec.js'
                 ],
                 suites: {
                     reports: [
-                        './wdio/tests/reports/*.e2e.spec.js',
-                        './wdio/tests/reports/sorting/*.e2e.spec.js',
-                        './wdio/tests/reports/grouping/*.e2e.spec.js'
+                        './wdio/tests/reports/reportDeleteRecord.e2e.spec.js',
+                        './wdio/tests/reports/grouping/reportGroupingViaContainer.e2e.spec.js',
+                        './wdio/tests/reports/sorting/reportSortingViaContainer.e2e.spec.js',
+                        './wdio/tests/reports/reportTopNav.e2e.spec.js'
                     ],
                     forms: [
-                        './wdio/tests/forms/*.e2e.spec.js'
+                        './wdio/tests/forms/formAdd.e2e.spec.js',
+                        './wdio/tests/forms/formAddValidation.e2e.spec.js',
+                        './wdio/tests/forms/formEdit.e2e.spec.js',
+                        './wdio/tests/forms/formEditValidation.e2e.spec.js'
                     ],
                     tables: [
-                        './wdio/tests/tables/*.e2e.spec.js'
+                        './wdio/tests/tables/tableCreate.e2e.spec.js',
+                        './wdio/tests/tables/tableEdit.e2e.spec.js',
+                        './wdio/tests/tables/tableHomePage.e2e.spec.js'
                     ],
-                    relationships: [
-                        './wdio/tests/relationships/*.e2e.spec.js'
-                    ]
+                    relationships: [],
+                    users: []
                 }
             },
             test: {
