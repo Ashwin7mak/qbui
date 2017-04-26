@@ -202,8 +202,7 @@
         SWAGGER_CORE           : '/api',
         SWAGGER_EE             : '/ee',
         SWAGGER_WE             : '/we',
-        SWAGGER_RESOURCES      : '/*/swagger-resources*',
-        SWAGGER_RESOURCE       : '/*/resources*',
+        SWAGGER_RESOURCES      : '/*/*swagger*',
         SWAGGER_V2             : '/*/v2/api-docs*'
     };
 
@@ -223,8 +222,7 @@
     exports.routes = Object.freeze(_.assign({},
         qbuiApiEndpoints, nodeApiEndpoints, publicControllerEndpoints, apiEndpoints, swaggerEndpoints));
 
-    //  Export the public and client endpoints.  These are exported to avoid the need of duplicating this
-    //  information in qbRouteMapper.
+    //  These are exported to avoid the need of duplicating in qbRouteMapper.
     exports.publicEndPoints = publicEndPoints;
     exports.clientEndPoints = clientEndPoints;
 
