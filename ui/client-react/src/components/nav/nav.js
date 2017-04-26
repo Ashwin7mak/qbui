@@ -359,7 +359,6 @@ export const Nav = React.createClass({
                 <ListOfElements
                     renderer={FieldTokenInMenu}
                     elements={elements}
-                    emptyListMessage={Locale.getMessage('report.drawer.empty')}
                 />
             </div>
         );

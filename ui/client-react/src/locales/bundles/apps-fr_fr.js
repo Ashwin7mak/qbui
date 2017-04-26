@@ -328,7 +328,6 @@ export default {
             drawer: {
                 title: "Champs cachés",
                 info: "Ajoutez un champ au rapport",
-                empty: "Tous les champs sont montrés dans le rapport."
             }
         },
         errorMessagePopup: {

@@ -125,12 +125,6 @@ class ListOfElements extends Component {
         });
     };
 
-    getMessage() {
-        if (this.props.elements.length === 0 && this.props.emptyListMessage) {
-            return <div>{this.props.emptyListMessage}</div>;
-        }
-    };
-
     componentDidUpdate = () => {
         if (this.props.hasKeyBoardFocus &&
             document.activeElement.classList[0] !== "checkbox" &&
@@ -139,12 +133,9 @@ class ListOfElements extends Component {
             document.activeElement.tagName !== "BUTTON") {
             this.listOfElementsContainer.focus();
         }
-    };
+    }
 
     render() {
-
-        let message = this.getMessage();
-
         return (
             <div className={`listOfElementsContainer ${this.props.isCollapsed ? 'listOfElementsCollapsed' : ''}`}
                  tabIndex={this.props.tabIndex}
@@ -158,8 +149,6 @@ class ListOfElements extends Component {
                     placeholder={Locale.getMessage('listOfElements.searchPlaceholder')}
                     onClearSearch={this.clearFilter}
                 />
-
-                {message}
 
                 <FlipMove typeName="ul" className="listOfElementsMainList">
                     {this.renderElementGroups()}
@@ -183,11 +172,8 @@ ListOfElements.propTypes = {
     isFilterable: PropTypes.bool,
 
     /**
-     * A message to be displayed when the list is empty */
-    emptyListMessage: PropTypes.string,
-
-    /**
-     * Tokens are being passed in as a renderer to allow this component to be reusable*/
+     * Tokens are being passed in as a renderer to allow this component to be reusable
+     * */
     renderer: PropTypes.func,
 
     /**

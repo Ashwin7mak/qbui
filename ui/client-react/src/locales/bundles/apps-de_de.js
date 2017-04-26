@@ -329,7 +329,6 @@ export default {
             drawer: {
                 title: "Versteckte Felder",
                 info: "Fügen Sie ein Feld zum Bericht hinzu",
-                empty: "Alle Felder werden im Bericht gezeigt."
             }
         },
         errorMessagePopup: {

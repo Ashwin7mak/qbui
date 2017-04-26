@@ -334,7 +334,6 @@ export default {
             drawer: {
                 title: "Hidden fields",
                 info: "Add a field to the report",
-                empty: "All fields are shown in the report."
             }
         },
         errorMessagePopup: {
