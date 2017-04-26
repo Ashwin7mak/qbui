@@ -1,6 +1,5 @@
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
-import ReactDOM from 'react-dom';
 import {__RewireAPI__ as RecordTrowserRewireAPI} from '../../src/components/record/recordTrowser';
 import {RecordTrowser} from '../../src/components/record/recordTrowser';
 import RecordTrowserStore from '../../src/components/record/recordTrowser';
@@ -11,8 +10,6 @@ import jasmineEnzyme from 'jasmine-enzyme';
 import Promise from 'bluebird';
 import {Provider} from "react-redux";
 import configureMockStore from 'redux-mock-store';
-import {hideErrorMsgDialog} from '../../src/actions/shellActions';
-import {createRecord} from '../../src/actions/recordActions';
 
 import {mount} from 'enzyme';
 
@@ -175,18 +172,36 @@ describe('RecordTrowser functions', () => {
         });
     });
 
+    const newRecStoreContent = {
+        record: [{
+            pendEdits: {
+                hasAttemptedSave: true,
+                isPendingEdit: true,
+                recordChanges: {},
+                editErrors: {
+                    errors: [{id: 9, invalidMessage: "error message #1", def: {fieldName: "test field"}}]
+                }
+            },
+            id: UNSAVED_RECORD_ID, recId: UNSAVED_RECORD_ID, nextRecordId: nextId, previousRecordId: prevId
+        }],
+        shell: {
+            errorPopupHidden: false
+        }
+    };
     let errorValidationTestCases = [
-        {name:'test saving new record that throws a validation error', recId:UNSAVED_RECORD_ID},
+        {name:'test saving new record that throws a validation error', recId:UNSAVED_RECORD_ID, storeContent:newRecStoreContent},
         {name:'test updating a record that throws a validation error', recId:recId}
     ];
     errorValidationTestCases.forEach(testCase => {
-        it(testCase, () => {
+        it(testCase.name, () => {
             let reject = function(ev) {
                 return Promise.reject();
             };
 
             //  override the props.recId and props.dispatch
-            let wrapper = mount(<RecordTrowser {...props} recId={testCase.recId} dispatch={reject} shell={storeContent.shell} record={storeContent.record}/>);
+            let testStoreContent = testCase.storeContent || storeContent;
+            let wrapper = mount(<RecordTrowser {...props} recId={testCase.recId} dispatch={reject} shell={testStoreContent.shell}
+                                               record={testStoreContent.record}/>);
             const button = wrapper.find('.saveOrCancelFooter .rightIcons .btn').last();
             button.simulate('click');
 

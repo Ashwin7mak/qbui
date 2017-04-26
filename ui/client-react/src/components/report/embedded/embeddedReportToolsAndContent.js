@@ -88,6 +88,7 @@ export const EmbeddedReportToolsAndContent = React.createClass({
                     nameForRecords={this.nameForRecords}
                     phase1={true}
                     loadDynamicReport={this.loadDynamicReport}
+                    handleDrillIntoChild={this.props.handleDrillIntoChild}
                 />
             </div>);
     }

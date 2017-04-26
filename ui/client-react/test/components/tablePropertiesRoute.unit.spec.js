@@ -1,13 +1,8 @@
 import React from 'react';
 import TestUtils, {Simulate} from 'react-addons-test-utils';
-import ReactDOM from 'react-dom';
-import Fluxxor from 'fluxxor';
 import {TablePropertiesRoute, __RewireAPI__ as TablePropertiesRouteRewireAPI}  from '../../src/components/table/settings/tablePropertiesRoute';
-import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
-import {Provider} from "react-redux";
 import Promise from 'bluebird';
-import QBModal from '../../src/components/qbModal/qbModal';
 import _ from 'lodash';
 
 const sampleTable = {id: 'table1', name: 'table1 name'};
@@ -119,7 +114,6 @@ describe('TablePropertiesRoute functions', () => {
             spyOn(props, 'loadTableProperties').and.callThrough();
             spyOn(props, 'resetEditedTableProperties').and.callThrough();
             spyOn(props, 'deleteTable').and.callThrough();
-            spyOn(props, 'notifyTableDeleted').and.callThrough();
             component = TestUtils.renderIntoDocument(<TablePropertiesRoute {...props}/>);
         });
 
@@ -129,7 +123,6 @@ describe('TablePropertiesRoute functions', () => {
             props.loadTableProperties.calls.reset();
             props.resetEditedTableProperties.calls.reset();
             props.deleteTable.calls.reset();
-            props.notifyTableDeleted.calls.reset();
         });
 
         it('test loadTableProperties is called', () => {

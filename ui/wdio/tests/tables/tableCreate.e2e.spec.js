@@ -2,18 +2,19 @@
     'use strict';
 
     //Load the page Objects
-    var newStackAuthPO = requirePO('newStackAuth');
-    var e2ePageBase = requirePO('e2ePageBase');
-    var RequestAppsPage = requirePO('requestApps');
-    var tableCreatePO = requirePO('tableCreate');
-    var formsPO = requirePO('formsPage');
-    var RequestSessionTicketPage = requirePO('requestSessionTicket');
-    var rawValueGenerator = require('../../../test_generators/rawValue.generator');
+    let newStackAuthPO = requirePO('newStackAuth');
+    let e2ePageBase = requirePO('e2ePageBase');
+    let RequestAppsPage = requirePO('requestApps');
+    let tableCreatePO = requirePO('tableCreate');
+    let formsPO = requirePO('formsPage');
+    let RequestSessionTicketPage = requirePO('requestSessionTicket');
+    let rawValueGenerator = require('../../../test_generators/rawValue.generator');
+    let ReportContentPO = requirePO('reportContent');
 
     describe('Tables - Create a table via builder tests: ', function() {
-        var realmName;
-        var realmId;
-        var testApp;
+        let realmName;
+        let realmId;
+        let testApp;
 
         /**
          * Setup method. Creates test app then authenticates into the new stack
@@ -46,15 +47,15 @@
         });
 
         it('Create new table', function() {
-            var tableName = rawValueGenerator.generateStringWithFixLength(10);
-            var tableFields = [
+            let tableName = rawValueGenerator.generateStringWithFixLength(10);
+            let tableFields = [
                 {fieldTitle: '* Table Name', fieldValue: tableName, placeHolder: 'For example, Customers'},
                 {fieldTitle: '* A record in the table is called', fieldValue: rawValueGenerator.generateStringWithFixLength(10), placeHolder: 'For example, customer'},
                 {fieldTitle: 'Description', fieldValue: rawValueGenerator.generateStringWithFixLength(50), placeHolder: 'Text to show when hovering over the table name in the left navigation'}
             ];
 
             //Step 1 - get the original count of table links in the left nav
-            var originalTableLinksCount = tableCreatePO.getAllTableLeftNavLinksList.value.length;
+            let originalTableLinksCount = tableCreatePO.getAllTableLeftNavLinksList.value.length;
 
             //Step 2 - Click on new table button
             tableCreatePO.clickCreateNewTable();
@@ -63,7 +64,7 @@
             tableCreatePO.verifyTable();
 
             //Step 4 - Choose an Icon from Icon picker
-            var iconChoosedClassName = tableCreatePO.selectRandomIconFromIconChooser();
+            let iconChoosedClassName = tableCreatePO.selectRandomIconFromIconChooser();
             //Verify the choosed icon in closed combo
             tableCreatePO.verifyIconInIconChooserCombo(iconChoosedClassName);
 
@@ -89,13 +90,34 @@
             tableCreatePO.newTableBtn.waitForVisible();
 
             //Step 10 - Get the new count of table links in the left nav
-            var newTableLinksCount = tableCreatePO.getAllTableLeftNavLinksList.value.length;
+            let newTableLinksCount = tableCreatePO.getAllTableLeftNavLinksList.value.length;
 
             //Step 11 - Verify the table links count got increased by 1
             expect(newTableLinksCount).toBe(originalTableLinksCount + 1);
 
             //Step 12 - Select Table and make sure it lands in reports page
             tableCreatePO.selectTable(tableName);
+            //parse table ID from current browser URL; we need this to hit report endpoint for the table
+            let currentURL = browser.getUrl();
+            let tableId = currentURL.substring(currentURL.lastIndexOf("/") + 1, currentURL.length);
+
+            //Step 13 - make sure tableHomePage is visible
+            ReportContentPO.addRecordButton.waitForVisible();
+            //Verify 'Add a Record' button is enabled
+            expect(browser.isEnabled('.tableHomePageInitial .addRecordButton')).toBeTruthy();
+            //Verify text on the addRecord button
+            expect(ReportContentPO.addRecordButton.getAttribute('textContent')).toBe('Add a record');
+            //Verify a few other elements on tableHomePage
+            browser.element('.iconTableSturdy-Spreadsheet').waitForVisible();
+            expect(browser.element('.tableHomePageInitial .h1').getAttribute('textContent')).toBe('Start using your table');
+            expect(browser.element('.tableHomePageInitial .createTableLink').getAttribute('textContent')).toBe('Create another table');
+            expect(browser.isEnabled('.tableHomePageInitial .createTableLink')).toBeTruthy();
+
+            //Step 14 - Load a report for the table and verify report elements
+            RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, testApp.id, tableId, 1));
+            browser.element('.noRowsIcon').waitForVisible();
+            expect(browser.element('.recordsCount').getAttribute('textContent')).toBe('0 records');
+            expect(browser.element('.noRowsText').getAttribute('textContent')).toBe('There are no ' + tableName.toLowerCase() + ' to see right now.');
         });
 
         it('Verify ICON chooser search', function() {
@@ -105,7 +127,7 @@
 
             //Step 2 - Verify iconChooser search functionality
             tableCreatePO.searchIconFromChooser('bicycle');
-            var searchReturnedIcons = tableCreatePO.getAllIconsFromIconChooser;
+            let searchReturnedIcons = tableCreatePO.getAllIconsFromIconChooser;
             //Verify it returns just one
             expect(searchReturnedIcons.value.length).toBe(1);
             expect(searchReturnedIcons.getAttribute('className')).toContain('iconTableSturdy-bicycle');
@@ -158,7 +180,7 @@
 
                 //Step 1 - get the original count of table links in the left nav
                 tableCreatePO.newTableBtn.waitForVisible();
-                var originalTableLinksCount = tableCreatePO.getAllTableLeftNavLinksList.value.length;
+                let originalTableLinksCount = tableCreatePO.getAllTableLeftNavLinksList.value.length;
 
                 //Step 2 - Click on new table button
                 tableCreatePO.clickCreateNewTable();
@@ -179,7 +201,7 @@
                 tableCreatePO.clickCancelBtn();
 
                 //Step 6 - Get the new count of table links in the left nav
-                var newTableLinksCount = tableCreatePO.getAllTableLeftNavLinksList.value.length;
+                let newTableLinksCount = tableCreatePO.getAllTableLeftNavLinksList.value.length;
 
                 //Step 7 - Verify the table links NOT increased(ie table not saved)
                 expect(newTableLinksCount).toBe(originalTableLinksCount);
@@ -188,8 +210,8 @@
         });
 
         it('Verify clicking on close button closes the new table dialogue without saving the table', function() {
-            var tableName = rawValueGenerator.generateStringWithFixLength(10);
-            var tableFields = [
+            let tableName = rawValueGenerator.generateStringWithFixLength(10);
+            let tableFields = [
                 {fieldTitle: '* Table Name', fieldValue: tableName},
                 {fieldTitle: '* A record in the table is called', fieldValue: rawValueGenerator.generateStringWithFixLength(10)},
                 {fieldTitle: 'Description', fieldValue: rawValueGenerator.generateStringWithFixLength(50)}
@@ -197,7 +219,7 @@
 
             //Step 1 - get the original count of table links in the left nav
             tableCreatePO.newTableBtn.waitForVisible();
-            var originalTableLinksCount = tableCreatePO.getAllTableLeftNavLinksList.value.length;
+            let originalTableLinksCount = tableCreatePO.getAllTableLeftNavLinksList.value.length;
 
             //Step 2 - Click on new table button
             tableCreatePO.clickCreateNewTable();
@@ -211,19 +233,19 @@
             tableCreatePO.clickCloseBtn();
 
             //Step 6 - Get the new count of table links in the left nav
-            var newTableLinksCount = tableCreatePO.getAllTableLeftNavLinksList.value.length;
+            let newTableLinksCount = tableCreatePO.getAllTableLeftNavLinksList.value.length;
 
             //Step 7 - Verify the table links NOT increased(ie table not saved)
             expect(newTableLinksCount).toBe(originalTableLinksCount);
 
             //Step 8 - Verify the new table name is not in the list of the leftNav tables
-            var tableList = tableCreatePO.getAllTablesFromLeftNav();
+            let tableList = tableCreatePO.getAllTablesFromLeftNav();
             expect(tableList.indexOf(tableName)).toBe(-1);
 
         });
 
         it('Verify that only ADMIN can add a new table', function() {
-            var userId;
+            let userId;
 
             //Create a user
             browser.call(function() {
