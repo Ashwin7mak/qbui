@@ -208,7 +208,7 @@ class TableCreationPanel extends React.Component {
                                      value={this.props.tableInfo && this.props.tableInfo.description ? this.props.tableInfo.description.value : ""}
                                      onChange={this.updateTableProperty}
                                      component="textarea"
-                                     rows="8"/>
+                                     rows="7"/>
                 </div>
             </div>);
     }

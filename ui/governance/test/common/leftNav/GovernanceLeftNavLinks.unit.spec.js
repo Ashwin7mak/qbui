@@ -1,4 +1,6 @@
 import GetLeftNavLinks from '../../../src/common/leftNav/GovernanceLeftNavLinks';
+import GovernanceBundleLoader from '../../../src/locales/governanceBundleLoader';
+
 describe('GetLeftNavLinks', () => {
     const AccountAdminLinkNames = ['MY APPS', 'Account Summary', 'Manage Apps', 'Manage Users', 'Manage Groups',
         'Set Account Properties', 'Manage Billing', 'Contact Support'];
@@ -12,6 +14,10 @@ describe('GetLeftNavLinks', () => {
     const assertCorrectLink = (actual, expected) => {
         expect(actual.map((elem) => elem.title)).toEqual(expected);
     };
+
+    beforeEach(() => {
+        GovernanceBundleLoader.changeLocale('en-us');
+    });
 
     it("should retrieve the correct links for Account Admin for either AccountURL or Enterprise Realm", ()=> {
         // AccountURL Realm

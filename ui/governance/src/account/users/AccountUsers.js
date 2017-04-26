@@ -9,6 +9,8 @@ import * as AccountUsersActions from './AccountUsersActions';
 import * as RequestContextActions from '../../common/requestContext/RequestContextActions';
 import * as SpinnerConfigurations from "../../../../client-react/src/constants/spinnerConfigurations";
 
+import {isFetching} from './AccountUsersReducer';
+
 /**
  * Represents the top level page that contains the grid for account users
  */
@@ -68,7 +70,7 @@ const mapStateToProps = (state) => {
         requestUser: state.RequestContext.currentUser,
         requestRealm: state.RequestContext.realm,
         users: state.AccountUsers.users,
-        loading: state.RequestContext.status.isFetching || !state.RequestContext.currentUser.id
+        loading: isFetching(state)
     };
 };
 
