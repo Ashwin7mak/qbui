@@ -220,7 +220,8 @@
     //
     //  The ordering of the routes exported is important.  Make sure the most specific route definitions are
     //  defined early in the return object and the more generic last.  Routes that resolve to multiple mappings
-    //  will always use the first route definition that it matches.
+    //  will always use the first route definition that it matches.  For additional detail on how the ordering
+    //  is important, take a look at qbApiRoutes.js and how the initializeRoutes() method uses this export.
     exports.routes = Object.freeze(_.assign({},
         clientApiEndpoints, nodeApiEndpoints, publicControllerEndpoints, apiEndpoints, swaggerEndpoints));
 
