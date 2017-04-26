@@ -307,13 +307,12 @@ exports.config = {
         global.browserName = browser.desiredCapabilities.browserName;
 
         // Grab the browser settings from the capabilities object and set the browser size
-        //var browserDimensions = e2eUtils.getBrowserBreakpointDimensions(browser.desiredCapabilities.breakpointSize);
-        //global.breakpointSize = browserDimensions.breakpointSize;
-        //global.browserWidth = browserDimensions.browserWidth;
-        //global.browserHeight = browserDimensions.browserHeight;
-        //
-        //browser.logger.info('Setting browser size to ' + global.breakpointSize + ' breakpoint (' + global.browserWidth + ', ' + global.browserHeight + ')');
-        //browser.windowHandleSize({width: global.browserWidth, height: global.browserHeight});
+        var browserDimensions = e2eUtils.getBrowserBreakpointDimensions(browser.desiredCapabilities.breakpointSize);
+        global.breakpointSize = browserDimensions.breakpointSize;
+        global.browserWidth = browserDimensions.browserWidth;
+        global.browserHeight = browserDimensions.browserHeight;
+        browser.logger.info('Setting browser size to ' + global.breakpointSize + ' breakpoint (' + global.browserWidth + ', ' + global.browserHeight + ')');
+        browser.windowHandleSize({width: global.browserWidth, height: global.browserHeight});
 
         // recordApi.base (and api.base) will not initialize itself if you don't pass in a config object
         // This call creates a your test realm down in api.base
