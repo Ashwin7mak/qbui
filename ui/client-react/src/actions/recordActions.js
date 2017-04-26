@@ -166,7 +166,7 @@ export const deleteRecords = (appId, tblId, recIds, nameForRecords) => {
                         dispatch(event(recIds[0], types.REMOVE_REPORT_RECORDS, {appId, tblId, recIds}));
 
                         //  send out notification message on the client
-                        let message = Locale.getPluralizeMessage('recordNotifications.deleted', {recLen: recIds.length});
+                        let message = Locale.getPluralizeMessage('recordNotifications.deleted', {value: recIds.length});
                         NotificationManager.success(message, Locale.getMessage('success'), NOTIFICATION_MESSAGE_DISMISS_TIME);
 
                         // the delay allows for saving modal to trap inputs otherwise clicks get invoked after delete

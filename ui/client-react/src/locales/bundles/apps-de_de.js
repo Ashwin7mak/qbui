@@ -154,7 +154,7 @@ export default {
             recordNotAdded :"Nehmen Sie nicht hinzugefügt",
             recordSaved : "Datensatz gespeichert",
             recordNotSaved :"Nehmen Sie nicht gespeichert",
-            deleted : "{recLen, plural, =0 {0 rekord} =1 {1 rekord} other {# aufzeichnungen}} gelöscht",
+            deleted : "{value, plural, =0 {0 rekord} =1 {1 rekord} other {# aufzeichnungen}} gelöscht",
             notDeleted : "nicht gelöscht",
             cannotLoad : "Kann nicht Datensatz laden",
             error: {
