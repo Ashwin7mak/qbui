@@ -48,7 +48,7 @@ export const searchUsers = (users, searchTerm) => {
         _.includes(user.lastName.toLowerCase(), searchTerm) ||
         _.includes(user.email.toLowerCase(), searchTerm) ||
         _.includes(user.userName.toLowerCase(), searchTerm) ||
-        _.includes(Formatters.FormatUserStatusText(user.hasAppAccess, {rowData: user}).toLowerCase(), searchTerm) ||
+        _.includes(Formatters.FormatLastAccessString(user.lastAccess).toLowerCase(), searchTerm) ||
         _.includes(Formatters.FormatUserStatusText(user.hasAppAccess, {rowData: user}).toLowerCase(), searchTerm);
     });
 };
