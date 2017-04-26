@@ -40,12 +40,12 @@ AccountUsersToolBar.propTypes = {
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
         getPreviousUsersPage: () => {
-            dispatch(StandardGridActions.setPaginate(ownProps.id, true));
+            dispatch(StandardGridActions.setNavigate(ownProps.id, false));
             dispatch(StandardGridActions.doUpdate(ownProps.id, AccountUsersActions.doUpdate));
         },
 
         getNextUsersPage: () => {
-            dispatch(StandardGridActions.setPaginate(ownProps.id, false));
+            dispatch(StandardGridActions.setNavigate(ownProps.id, true));
             dispatch(StandardGridActions.doUpdate(ownProps.id, AccountUsersActions.doUpdate));
         },
 

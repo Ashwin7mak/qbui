@@ -1,4 +1,4 @@
-import * as types from './standardGridActionTypes';
+import * as types from "./standardGridActionTypes";
 
 export const defaultGridState = {
     // the items currently displayed on the grid
@@ -6,7 +6,7 @@ export const defaultGridState = {
     // the fields to sort the grid
     sortFids: [],
     // the pagination to apply to the grid
-    pageNumber: 1,
+    pagination: {totalRecords: 0, totalPages: 0, currentPage: 1, itemsPerPage: 10},
     // the filter to apply to the grid
     searchTerm : ""
 };
@@ -35,10 +35,23 @@ function grid(state = defaultGridState, action) {
             ...state,
             sortFids: action.remove ? [] : [(action.sortFid * (action.asc ? 1 : -1))]
         };
-    case types.SET_PAGINATE:
+    case types.SET_NAVIGATE:
+        if ((state.pagination.currentPage === 1 && !action.next) ||
+            (state.pagination.currentPage === state.pagination.totalPages && action.next)) {
+            return state;
+        }
+
         return {
             ...state,
-            pageNumber: action.previous ? state.pageNumber - 1 : state.pageNumber  + 1
+            pagination: {
+                ...state.pagination,
+                currentPage: action.next ? state.pagination.currentPage + 1 : state.pagination.currentPage - 1
+            }
+        };
+    case types.SET_PAGINATION:
+        return {
+            ...state,
+            pagination: action.pagination
         };
     default:
         return state;
@@ -71,7 +84,8 @@ function gridById(state = {}, action) {
     switch (action.type) {
     case types.SET_SORT:
     case types.SET_ITEMS:
-    case types.SET_PAGINATE:
+    case types.SET_PAGINATION:
+    case types.SET_NAVIGATE:
     case types.SET_SEARCH:
         return {
             ...state,

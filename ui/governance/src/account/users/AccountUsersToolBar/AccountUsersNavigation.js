@@ -13,19 +13,19 @@ class AccountUsersNavigation extends React.Component {
     }
 
     getStartRecord() {
-        return 1;
+        return this.props.paginationInfo.currentPage;
     }
 
     getEndRecord() {
-        return this.props.totalRecords;
+        return this.props.paginationInfo.totalPages;
     }
 
     isPreviousDisabled() {
-        return this.props.pageNumber === 1;
+        return this.props.paginationInfo.currentPage === 1;
     }
 
     isNextDisabled() {
-        return this.props.totalRecords <= 10;// TODO: this.props.totalRecords === this.props.pageEnd;
+        return this.props.paginationInfo.currentPage === this.props.paginationInfo.totalPages;
     }
 
     render() {
@@ -41,10 +41,6 @@ class AccountUsersNavigation extends React.Component {
     }
 }
 
-AccountUsersNavigation.defaultProps = {
-    pageNumber : 1
-};
-
 AccountUsersNavigation.propTypes = {
     id: PropTypes.string
 };
@@ -53,8 +49,7 @@ export {AccountUsersNavigation};
 
 const mapStateToProps = (state, ownProps) => {
     return {
-        totalRecords: _.has(state.Grids, ownProps.id) ? state.Grids[ownProps.id].items.length : 1,
-        pageNumber: _.has(state.Grids, ownProps.id) ? state.Grids[ownProps.id].pageNumber : 1
+        paginationInfo: _.has(state.Grids, ownProps.id) ? state.Grids[ownProps.id].pagination : {},
     };
 };
 

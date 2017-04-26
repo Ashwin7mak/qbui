@@ -1,4 +1,4 @@
-import * as types from './standardGridActionTypes';
+import * as types from "./standardGridActionTypes";
 
 /**
  * Action to set the visible items for a given grid
@@ -44,13 +44,31 @@ export const setSort = (gridId, sortFid, asc, remove) => ({
  * Action to set the pagination order for a given grid
  *
  * @param gridId - the id of the grid we want to update
+ * @param next - move to next page or backwards
+ */
+export const setNavigate = (gridId, next) => ({
+    type: types.SET_NAVIGATE,
+    gridId,
+    next
+});
+
+/**
+ * Action to set the pagination order for a given grid
+ *
+ * @param gridId - the id of the grid we want to update
  * @param direction - the direction to paginate
  */
-export const setPaginate = (gridId, previous) => ({
-    type: types.SET_PAGINATE,
+export const setPaginate = (gridId, pagination) => ({
+    type: types.SET_PAGINATION,
     gridId,
-    previous
+    pagination
 });
+
+export const doSetPaginate = (gridId, pagination) => {
+    return (dispatch, getState) => {
+        return dispatch(setPaginate(gridId, pagination));
+    };
+};
 
 /**
  * Action to set the items for the grid
