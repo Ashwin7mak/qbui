@@ -846,6 +846,10 @@ describe('Report reducer functions', () => {
 
     });
 
+    describe('Report reducer ADD_COLUMN test correct state', () => {
+
+    });
+
     describe('Report reducer HIDE_COLUMN test correct state', () => {
         let contextId = "HIDE_COLUMN";
         let initialState = [
@@ -948,6 +952,160 @@ describe('Report reducer functions', () => {
                 testCase.expects(testState);
             });
         });
+
+    });
+
+    describe('Report reducer OPEN_FIELD_SELECTOR test correct state', () => {
+        let contextId = "OPEN_FIELD_SELECTOR";
+        let initialStateWithoutPlaceholder = [
+            {
+                id: contextId,
+                data:
+                    {
+                        columns: [
+                            {
+                                fieldDef: {
+                                    isAddingFrom: false,
+                                    id: 6
+                                },
+                                isPlaceholder: false,
+                                isHidden: false,
+                                id: 6,
+                                order: 1
+                            },
+                            {
+                                fieldDef: {
+                                    isAddingFrom: false,
+                                    id: 7
+                                },
+                                isPlaceholder: false,
+                                isHidden: false,
+                                id: 7,
+                                order: 2
+                            }
+                        ],
+                        fids: [6, 7],
+                        metaData: {
+                            fids: [6, 7]
+                        }
+                    }
+            }
+        ];
+        let initialStateWithPlaceholder = [
+            {
+                id: contextId,
+                data:
+                    {
+                        columns: [
+                            {
+                                fieldDef: {
+                                    isAddingFrom: false,
+                                    id: 6
+                                },
+                                isPlaceholder: false,
+                                isHidden: false,
+                                id: 6,
+                                order: 1
+                            },
+                            {
+                                fieldDef: {
+                                    isAddingFrom: true,
+                                    id: 7
+                                },
+                                isPlaceholder: false,
+                                isHidden: false,
+                                id: 7,
+                                order: 2
+                            },
+                            {
+                                isPlaceholder: true,
+                                isHidden: false,
+                                id: -1,
+                                order: 3
+                            }
+                        ],
+                        fids: [6, 7],
+                        metaData: {
+                            fids: [6, 7]
+                        }
+                    }
+            }
+        ];
+        let testCases = [
+            {
+                description: 'when the placeholder column does not exist it is added to the columns before the clickedId',
+                initialState: initialStateWithoutPlaceholder,
+                content : {clickedId: 6, addBefore: true},
+                expects : (testState) => {
+                    expect(Array.isArray(testState)).toEqual(true);
+                    expect(testState[0].data.columns.length).toEqual(3);
+                    expect(testState[0].data.columns[0].isPlaceholder).toEqual(true);
+                    expect(testState[0].data.columns[1].fieldDef.isAddingFrom).toEqual(true);
+                }
+            },
+            {
+                description: 'when the placeholder column does not exist it is added to the columns after the clickedId',
+                initialState: initialStateWithoutPlaceholder,
+                content : {clickedId: 6, addBefore: false},
+                expects : (testState) => {
+                    expect(Array.isArray(testState)).toEqual(true);
+                    expect(testState[0].data.columns.length).toEqual(3);
+                    expect(testState[0].data.columns[1].isPlaceholder).toEqual(true);
+                    expect(testState[0].data.columns[0].fieldDef.isAddingFrom).toEqual(true);
+                }
+            },
+            {
+                description: 'when the placeholder column does exist it is added to the columns before the clickedId',
+                initialState: initialStateWithPlaceholder,
+                content : {clickedId: 6, addBefore: true},
+                expects : (testState) => {
+                    expect(Array.isArray(testState)).toEqual(true);
+                    expect(testState[0].data.columns.length).toEqual(3);
+                    expect(testState[0].data.columns[0].isPlaceholder).toEqual(true);
+                    expect(testState[0].data.columns[1].fieldDef.isAddingFrom).toEqual(true);
+                    expect(testState[0].data.columns[2].isPlaceholder).toEqual(false);
+                }
+            },
+            {
+                description: 'when the placeholder column does exist it is added to the columns after the clickedId',
+                initialState: initialStateWithPlaceholder,
+                content : {clickedId: 6, addBefore: false},
+                expects : (testState) => {
+                    expect(Array.isArray(testState)).toEqual(true);
+                    expect(testState[0].data.columns.length).toEqual(3);
+                    expect(testState[0].data.columns[1].isPlaceholder).toEqual(true);
+                    expect(testState[0].data.columns[0].fieldDef.isAddingFrom).toEqual(true);
+                    expect(testState[0].data.columns[2].isPlaceholder).toEqual(false);
+                }
+            },
+            {
+                description: 'when the clickedId is not an id of any of the columns the placeholder is not added',
+                initialState: initialStateWithoutPlaceholder,
+                content : {clickedId: 8, addBefore: true},
+                expects : (testState) => {
+                    expect(Array.isArray(testState)).toEqual(true);
+                    expect(testState[0].data.columns.length).toEqual(2);
+                    expect(testState[0].data.columns[0].isPlaceholder).toEqual(false);
+                    expect(testState[0].data.columns[1].isPlaceholder).toEqual(false);
+                }
+            }
+        ];
+        testCases.forEach(testCase => {
+            it(testCase.description, () => {
+                let testState = testCase.initialState;
+                actionObj.type = types.OPEN_FIELD_SELECTOR;
+                actionObj.id = contextId;
+                if (testCase.content) {
+                    actionObj.content = testCase.content;
+                }
+                testState = reducer(testState, actionObj);
+
+                testCase.expects(testState);
+            });
+        });
+    });
+
+    describe('Report reducer CLOSE_FIELD_SELECTOR test correct state', () => {
 
     });
 
