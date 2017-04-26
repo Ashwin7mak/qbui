@@ -26,14 +26,16 @@ export const searchUsers = (users, searchTerm) => {
         _.includes(user.lastName.toLowerCase(), searchTerm) ||
         _.includes(user.email.toLowerCase(), searchTerm) ||
         _.includes(user.userName.toLowerCase(), searchTerm) ||
-        _.includes(user.userName.toLowerCase(), searchTerm);
+        _.includes(Formatters.FormatUserStatusText(user.hasAppAccess, {rowData: user}).toLowerCase(), searchTerm) ||
+        _.includes(Formatters.FormatUserStatusText(user.hasAppAccess, {rowData: user}).toLowerCase(), searchTerm);
     });
 };
 
 /**
  * Paginate through the users array
- * @param users
- * @param _page
+ * @param users the users to filter
+ * @param _page the current page
+ * @param _itemsPerPage the total items per page
  * @returns {*}
  */
 export const paginateUsers = (users, _page, _itemsPerPage) => {
