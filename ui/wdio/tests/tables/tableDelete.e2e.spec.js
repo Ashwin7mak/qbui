@@ -60,11 +60,22 @@
             // wait for the report content to be visible
             ReportContentPO.waitForReportContent();
 
-            //Step 3 - Go to table settings
+            //Step 3 - Click table settings Icon
+            ReportContentPO.clickSettingsIcon();
 
-            //Verify 'Settings' button is enabled
-            expect(browser.isEnabled('.qbIcon.iconUISturdy-settings')).toBeTruthy();
+            //Step 4 - Go to 'Table properties & settings'
+            ReportContentPO.clickModifyTableSettings();
 
+            //Step 5 - Click delete table action button
+            ReportContentPO.clickDeleteTableActionButton();
+
+            //Step 6 - delete table
+            ReportContentPO.clickDeleteTableButton();
+
+            //Step 7 - make sure table is actually deleted
+            let newTableLinksCount = tableCreatePO.getAllTableLeftNavLinksList.value.length;
+            //Verify the table links count decreased by 1
+            expect(newTableLinksCount).toBe(originalTableLinksCount - 1);
         });
 
 

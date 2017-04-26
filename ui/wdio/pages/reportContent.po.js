@@ -23,6 +23,11 @@
         tableBody: {get: function() {return browser.element('.qbTbody');}},
         reportsToolBar : {get: function() {return browser.element('.reportToolbar');}},
         addRecordButton : {get: function() {return browser.element('.tableHomePageInitial .addRecordButton');}},
+        settingsIcon: {get: function() {return browser.element('.qbIcon.iconUISturdy-settings');}},
+        modifyTableSettings: {get: function() {return browser.element('.modifyTableSettings');}},
+        deleteTableActionButton: {get: function() {return browser.element('.iconActionButton.deleteTable');}},
+        deletePromtTextField: {get: function() {return browser.element('.deletePrompt');}},
+        deleteTableButton: {get: function() {return browser.element('.primaryButton.btn.btn-default');}},
         reportFilterSearchBox : {get: function() {
             return this.reportsToolBar.element('.searchInput');
         }},
@@ -244,6 +249,59 @@
             this.qbGridBodyViewportEl.waitForVisible();
             var rows = this.qbGridBodyViewportEl.elements('.qbRow');
             return rows.value.length;
+        }},
+
+        /**
+         * Method to click settings Icon on Report Table
+         */
+        clickSettingsIcon: {value: function() {
+            this.settingsIcon.waitForVisible();
+            //Click on add record button
+            this.settingsIcon.click();
+            //wait until you see edit container and save buttons in footer
+            return this.modifyTableSettings.waitForVisible();
+        }},
+
+        /**
+         * Method to click 'Table properties & settings' from the dropdown list
+         */
+        clickModifyTableSettings: {value: function() {
+            this.modifyTableSettings.waitForVisible();
+            //Click on add record button
+            this.modifyTableSettings.click();
+            //wait until you see edit container and save buttons in footer
+            return this.deleteTableActionButton.waitForVisible();
+        }},
+
+        /**
+         * Method to click deleteTableActionButton
+         */
+        clickDeleteTableActionButton: {value: function() {
+            this.deleteTableActionButton.click();
+            //Click on add record button
+            return this.deletePromtTextField.waitForVisible();
+        }},
+
+        /**
+         * Method to click deleteTableButton
+         */
+        clickDeleteTableButton: {value: function() {
+            this.setInputValue(this.deletePromtTextField, 'YES');
+            expect(browser.isEnabled('.primaryButton.btn')).toBeTruthy();
+            //Click on add record button
+            return this.deleteTableButton.click();
+        }},
+
+
+        /**
+         * Method to enter table field input values
+         * @filteredElement
+         * @filteredElementInputClassName
+         * @fieldValue
+         */
+        setInputValue : {value: function(field, fieldValue) {
+            field.click();
+            return browser.keys([fieldValue, '\uE004']);
         }},
 
         /**
