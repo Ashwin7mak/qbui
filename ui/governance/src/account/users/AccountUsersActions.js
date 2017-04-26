@@ -1,10 +1,14 @@
 import AccountUsersService from "./AccountUsersService";
 import * as types from "../../app/actionTypes";
-import _ from "lodash";
-import * as Formatters from "./Grid/AccountUsersGridFormatters";
-import * as RealmUserAccountFlagConstants from "../../common/constants/RealmUserAccountFlagConstants.js";
 import * as StandardGridActions from "../../common/grid/standardGridActions";
 import * as StandardGridState from "../../common/grid/standardGridReducer";
+import WindowLocationUtils from  "../../../../client-react/src/utils/windowLocationUtils";
+import {FORBIDDEN, INTERNAL_SERVER_ERROR} from  "../../../../client-react/src/constants/urlConstants";
+import * as Formatters from "./Grid/AccountUsersGridFormatters";
+import Logger from '../../../../client-react/src/utils/logger';
+import LogLevel from '../../../../client-react/src/utils/logLevels';
+let logger = new Logger();
+import * as RealmUserAccountFlagConstants from "../../common/constants/RealmUserAccountFlagConstants.js";
 
 
 /**
@@ -23,6 +27,13 @@ export const failedAccountUsers = (error) => ({
 export const fetchingAccountUsers = () => ({
     type: types.GET_USERS_FETCHING
 });
+
+/**
+ * Search searchTermAcross Users
+ * @param users
+ * @param searchTerm
+ * @returns {*}
+ */
 export const searchUsers = (users, searchTerm) => {
 
     if (users.length === 0 || searchTerm.length === 0) {
@@ -42,13 +53,10 @@ export const searchUsers = (users, searchTerm) => {
 };
 
 /**
- * Get all the users
- *
- * @returns {function(*)}
- * Paginate through the users array
- * @param users the users to filter
- * @param _page the current page
- * @param _itemsPerPage the total items per page
+ * Paginate through the users
+ * @param users
+ * @param _page
+ * @param _itemsPerPage
  * @returns {*}
  */
 export const paginateUsers = (users, _page, _itemsPerPage) => {
@@ -60,30 +68,7 @@ export const paginateUsers = (users, _page, _itemsPerPage) => {
         itemsPerPage = _itemsPerPage || 10;
     let offset = (page - 1) * itemsPerPage;
     return users.slice(offset, offset + itemsPerPage);
-export const fetchAccountUsers = (accountId) => {
-    return (dispatch) => {
-        // get all the users from the account service
-        const accountUsersService = new AccountUsersService();
-        const promise = accountUsersService.getAccountUsers(accountId);
-        dispatch(fetchingAccountUsers());
-        return promise.then(response => {
-            _.each(response.data, item => {
-                item.id = item.uid;
-            });
-            // we have the users, update the redux store
-            dispatch(receiveAccountUsers(response.data));
-        }).catch(error => {
-            dispatch(failedAccountUsers(error));
-            if (error.response && error.response.status === 403) {
-                logger.parseAndLogError(LogLevel.WARN, error.response, 'accountUserService.getAccountUsers:');
-                WindowLocationUtils.update(FORBIDDEN);
-            } else {
-                logger.parseAndLogError(LogLevel.ERROR, error.response, 'accountUserService.getAccountUsers:');
-                WindowLocationUtils.update(INTERNAL_SERVER_ERROR);
-            }
-        });
-    };
-};
+}
 
 const sortFunctions = [
     "uid",
@@ -122,15 +107,6 @@ export const sortUsers = (users, sortFids) => {
 
 
 /**
- * Action when there is successful user from the backend
- * @param users
- */
-export const receiveAccountUsers = (users) => ({
-    type: types.SET_USERS,
-    users
-});
-
-/**
  * Perform the Update on the Grid through transformations
  *
  * NOTE: In the future, this is going to be at the server
@@ -167,28 +143,39 @@ export const doUpdate = (gridId, gridState, _itemsPerPage) => {
 };
 
 /**
- * Get all the users from the service and inform the observers
+ * Get all the users
  *
- * @returns {function(*=)}
+ * @returns {function(*)}
+ * Paginate through the users array
+ * @param users the users to filter
+ * @param _page the current page
+ * @param _itemsPerPage the total items per page
+ * @returns {*}
  */
 export const fetchAccountUsers = (accountId, gridID, itemsPerPage) => {
     return (dispatch) => {
         // get all the users from the account service
         const accountUsersService = new AccountUsersService();
         const promise = accountUsersService.getAccountUsers(accountId);
-
-        promise.then(response => {
-
+        dispatch(fetchingAccountUsers());
+        return promise.then(response => {
             _.each(response.data, item => {
                 item.id = item.uid;
             });
-
             // inform the redux store of all the users
             dispatch(receiveAccountUsers(response.data));
 
             // run through the pipeline and update the grid
             dispatch(doUpdate(gridID, StandardGridState.defaultGridState, itemsPerPage));
+        }).catch(error => {
+            dispatch(failedAccountUsers(error));
+            if (error.response && error.response.status === 403) {
+                logger.parseAndLogError(LogLevel.WARN, error.response, 'accountUserService.getAccountUsers:');
+                WindowLocationUtils.update(FORBIDDEN);
+            } else {
+                logger.parseAndLogError(LogLevel.ERROR, error.response, 'accountUserService.getAccountUsers:');
+                WindowLocationUtils.update(INTERNAL_SERVER_ERROR);
+            }
         });
-        return promise;
     };
 };

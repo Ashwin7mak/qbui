@@ -7,7 +7,6 @@ import AccountUsersStage from './AccountUsersStage';
 
 import * as AccountUsersActions from './AccountUsersActions';
 import * as RequestContextActions from '../../common/requestContext/RequestContextActions';
-import * as RequestContextCommon from '../../common/requestContext/RequestContextCommon';
 import * as SpinnerConfigurations from "../../../../client-react/src/constants/spinnerConfigurations";
 import AccountUsersToolBar from "./AccountUsersToolBar/AccountUsersToolBar";
 
@@ -39,32 +38,14 @@ class AccountUsers extends Component {
             canSeeAccountColumns = this.props.requestUser.isAccountAdmin || this.props.requestUser.isCSR;
             canSeeRealmColumns = !this.props.requestRealm.isAccountURL && (this.props.requestUser.isRealmAdmin || this.props.requestUser.isCSR);
         }
-        if (this.props.dataFetchingError) {
-            return (
-                <h1>Error</h1>
-            );
-        } else {
-            return (
-                <Loader loaded={!this.props.loading} options={SpinnerConfigurations.LARGE_BREAKPOINT}>
-                    <div className="accountUsersContainer">
-                        <AccountUsersStage users={this.props.users}/>
-                        <AccountUsersToolBar id={this.GRID_ID}/>
-                        <AccountUsersGrid id={this.GRID_ID} showAccountColumns={canSeeAccountColumns}
-                                          showRealmColumns={canSeeRealmColumns}/>
-                    </div>
-                </Loader>
-            );
-        }
 
         return (
             <Loader loaded={!this.props.loading} options={SpinnerConfigurations.LARGE_BREAKPOINT}>
                 <div className="accountUsersContainer">
                     <AccountUsersStage users={this.props.users}/>
-                    <AccountUsersGrid
-                        users={this.props.users}
-                        showAccountColumns={canSeeAccountColumns}
-                        showRealmColumns={canSeeRealmColumns}
-                    />
+                    <AccountUsersToolBar id={this.GRID_ID}/>
+                    <AccountUsersGrid id={this.GRID_ID} showAccountColumns={canSeeAccountColumns}
+                                      showRealmColumns={canSeeRealmColumns}/>
                 </div>
             </Loader>
         );
