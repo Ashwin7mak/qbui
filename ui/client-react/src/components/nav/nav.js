@@ -462,33 +462,33 @@ export const Nav = React.createClass({
                             pullRight>
                         <TempMainErrorMessages apps={this.state.apps.apps} appsLoading={this.state.apps.loading} selectedAppId={this.state.apps.selectedAppId} />
 
-                            <Switch>
-                                { this.props.routes.map((route, i) => {
-                                        //insert the child route passed in by the router
-                                        // with additional props
-                                        // the Switch wrapper will pick only one of the routes the first
-                                        // that matches.
-                                        let routeProps = {
-                                            key : this.props.match ? this.props.match.url : "",
-                                            apps: this.state.apps.apps,
-                                            selectedAppId: this.state.apps.selectedAppId,
-                                            appsLoading: this.state.apps.loading,
-                                            reportData: reportsData,
-                                            appUsers: this.state.apps.appUsers,
-                                            appUsersUnfiltered: this.state.apps.appUsersUnfiltered,
-                                            appRoles: this.state.apps.appRoles,
-                                            appOwner: this.state.apps.appOwner,
-                                            locale: this.state.nav.locale,
-                                            isRowPopUpMenuOpen: this.props.shell.isRowPopUpMenuOpen,
-                                            selectedApp: this.getSelectedApp(),
-                                            selectedTable: this.getSelectedTable(reportsData.tblId),
-                                            scrollingReport: this.state.nav.scrollingReport,
-                                            flux: flux
-                                        };
-                                        return RouteWithSubRoutes(route, i, routeProps);
-                                    }
-                                )}
-                            </Switch>
+                        <Switch>
+                            { this.props.routes.map((route, i) => {
+                                //insert the child route passed in by the router
+                                // with additional props
+                                // the Switch wrapper will pick only one of the routes the first
+                                // that matches.
+                                let routeProps = {
+                                    key : this.props.match ? this.props.match.url : "",
+                                    apps: this.state.apps.apps,
+                                    selectedAppId: this.state.apps.selectedAppId,
+                                    appsLoading: this.state.apps.loading,
+                                    reportData: reportsData,
+                                    appUsers: this.state.apps.appUsers,
+                                    appUsersUnfiltered: this.state.apps.appUsersUnfiltered,
+                                    appRoles: this.state.apps.appRoles,
+                                    appOwner: this.state.apps.appOwner,
+                                    locale: this.state.nav.locale,
+                                    isRowPopUpMenuOpen: this.props.shell.isRowPopUpMenuOpen,
+                                    selectedApp: this.getSelectedApp(),
+                                    selectedTable: this.getSelectedTable(reportsData.tblId),
+                                    scrollingReport: this.state.nav.scrollingReport,
+                                    flux: flux
+                                };
+                                return RouteWithSubRoutes(route, i, routeProps);
+                            }
+                            )}
+                        </Switch>
 
                         </ReportFieldSelectTrowser>
 
