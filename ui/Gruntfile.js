@@ -571,7 +571,6 @@ module.exports = function(grunt) {
                     './wdio/tests/forms/formPermissionsViewerRole.e2e.spec.js',
                     './wdio/tests/forms/formPermissionsParticipantRole.e2e.spec.js',
                     // currently intermittently broken in CI need to fix in another PR
-                    './wdio/tests/forms/formDragDrop.e2e.spec.js',
                     './wdio/tests/reports/reportEditRecord.e2e.spec.js',
                     './wdio/tests/reports/reportNavigation.e2e.spec.js',
                     './wdio/tests/reports/reportTable.e2e.spec.js',
