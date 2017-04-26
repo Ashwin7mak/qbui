@@ -5,7 +5,10 @@
     var formsPO = requirePO('formsPage');
 
     var ReportContentPage = Object.create(e2ePageBase, {
-        addRecordBtn: {get: function() {return browser.element('.reportToolsAndContentContainer .iconUISturdy-add');}},
+        addRecordBtn: {get: function() {return browser.element('.reportToolsAndContentContainer .addNewRecord');}},
+        reportSortGrpBtn: {get: function() {return browser.element('.sortButton');}},
+
+
 
         /**
          * Helper method to ensure the report has been properly loaded with records. Will throw an error if no records are in the report.
@@ -13,8 +16,8 @@
          */
         waitForReportContent: {value: function() {
             // wait until you see .card rows
-            browser.element('.card').waitForVisible();
-            return browser.element('.reportToolsAndContentContainer .iconUISturdy-add').waitForVisible();
+            //browser.element('.card').waitForVisible();
+            return browser.element('.recordsCount').waitForVisible();
         }},
 
         /**
@@ -29,13 +32,18 @@
             //navigate to the url
             browser.url(e2eBase.getRequestReportsPageEndpoint(realmName, appId, tableId, reportId));
             //wait until addRecord button in table is visible
-            this.addRecordBtn.waitForVisible();
+            this.waitForReportContent();
         }},
 
         clickAddRecordBtn: {value: function() {
             //this.addRecordBtn.waitForVisible();
-            browser.element('.reportToolsAndContentContainer .iconUISturdy-add').click();
+            browser.element('.reportToolsAndContentContainer .addNewRecord').click();
             browser.element('.editForm').waitForVisible();
+        }},
+
+        clickSortGrpBtn: {value: function() {
+            //this.addRecordBtn.waitForVisible();
+            browser.element('.sortButton').click();
         }},
 
 
