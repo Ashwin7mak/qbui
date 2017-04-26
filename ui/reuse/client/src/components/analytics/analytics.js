@@ -11,6 +11,9 @@ var _aaq = window._aaq || (window._aaq = []);
 // The id for the script tag that is created when this component mounts
 export const ANALYTICS_SCRIPT_ID = 'evergage';
 
+// This will rarely, if ever, change. Therefore it is set as a variable here, rather than adding unnecessary keys to our configs.
+export const EVERGAGE_ACCOUNT_NAME = 'intuitquickbase';
+
 /**
  * Currently we use Evergage for analytics. Use the component once per functional area to setup tracking.
  * TODO: Create <AnalyticsEvent> component to track individual events when props change.
@@ -42,7 +45,7 @@ export class Analytics extends Component {
         analyticsScript.type = 'text/javascript';
         analyticsScript.defer = true;
         analyticsScript.async = true;
-        analyticsScript.src = `${document.location.protocol}//cdn.evergage.com/beacon/intuitquickbase/${this.props.dataset}/scripts/evergage.min.js`;
+        analyticsScript.src = `${document.location.protocol}//cdn.evergage.com/beacon/${EVERGAGE_ACCOUNT_NAME}/${this.props.dataset}/scripts/evergage.min.js`;
         const firstScript = document.getElementsByTagName('script')[0];
         firstScript.parentNode.insertBefore(analyticsScript, firstScript);
     };
@@ -77,9 +80,9 @@ export class Analytics extends Component {
      * Update the Evergage user if it has changed since the last update
      * @param prevProps
      */
-    componentDidUpdate(prevProps) {
-        if (prevProps.userId !== this.props.userId) {
-            this.updateEvergageUser();
+    componentWillUpdate(nextProps) {
+        if (nextProps.userId !== this.props.userId) {
+            this.updateEvergageUser(nextProps.userId);
         }
     }
 
