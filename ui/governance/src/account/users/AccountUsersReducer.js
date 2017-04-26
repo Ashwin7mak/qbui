@@ -19,4 +19,8 @@ const AccountUsers = combineReducers({
     status: GetStatus
 });
 
+export const isFetching = (state) => {
+    return state.AccountUsers.status.isFetching;
+};
+
 export default AccountUsers;

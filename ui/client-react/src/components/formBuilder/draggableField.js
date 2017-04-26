@@ -101,7 +101,7 @@ const DraggableFieldHoc = (FieldComponent, showFieldEditingTools = true) => {
         }
 
         render() {
-            const {connectDragSource, isDragging, location, selectedField} = this.props;
+            const {connectDragSource, isDragging, location, selectedField, formBuilderContainerContentElement} = this.props;
 
             let classNames = ['draggableField'];
             let draggableFieldWrapper = ['draggableFieldWrapper'];
@@ -113,7 +113,7 @@ const DraggableFieldHoc = (FieldComponent, showFieldEditingTools = true) => {
             return connectDragSource(
                 <div className={classNames.join(' ')}>
                     <div className={draggableFieldWrapper.join(' ')}>
-                        {showFieldEditingTools && <FieldEditingTools location={location} isDragging={isDragging} />}
+                        {showFieldEditingTools && <FieldEditingTools location={location} isDragging={isDragging} formBuilderContainerContentElement={formBuilderContainerContentElement}/>}
                         <FieldComponent {...this.props} />
                     </div>
                 </div>
