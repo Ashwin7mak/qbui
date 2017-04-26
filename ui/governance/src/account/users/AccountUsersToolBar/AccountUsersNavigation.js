@@ -1,6 +1,7 @@
 import React, {PropTypes, Component} from "react";
-import {connect} from 'react-redux';
+import {connect} from "react-redux";
 import Pagination from "../../../../../reuse/client/src/components/pagination/pagination";
+import * as _ from "lodash";
 
 /**
  * The Navigation Component for the AccountUsers page
@@ -22,9 +23,9 @@ class AccountUsersNavigation extends React.Component {
     render() {
         return (
             <Pagination startRecord={1}
+                        endRecord={this.props.totalRecords}
                         onClickPrevious={this.props.getPreviousUsersPage}
                         onClickNext={this.props.getNextUsersPage}
-                        endRecord={this.props.totalRecords}
                         isPreviousDisabled={this.isPreviousDisabled()}
                         isNextDisabled={this.isNextDisabled()}
                         isHidden={false} />
@@ -44,11 +45,11 @@ AccountUsersNavigation.propTypes = {
 
 export {AccountUsersNavigation};
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state, ownProps) => {
     return {
-        pageNumber: state.Grids.pageNumber
+        pageNumber: _.has(state.Grids, ownProps.id) ? state.Grids[ownProps.id].pageNumber : 1
     };
 };
 
 
-export default connect(mapStateToProps, null)(AccountUsersNavigation);
+export default connect(mapStateToProps)(AccountUsersNavigation);

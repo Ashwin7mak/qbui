@@ -1,13 +1,11 @@
-import React, {Component, PropTypes} from 'react';
-import Loader  from 'react-loader';
-import {connect} from 'react-redux';
-
-import AccountUsersGrid from './Grid/AccountUsersGrid';
-import AccountUsersStage from './AccountUsersStage';
-
-import * as AccountUsersActions from './AccountUsersActions';
-import * as RequestContextActions from '../../common/requestContext/RequestContextActions';
-import * as RequestContextCommon from '../../common/requestContext/RequestContextCommon';
+import React, {Component, PropTypes} from "react";
+import Loader from "react-loader";
+import {connect} from "react-redux";
+import AccountUsersGrid from "./Grid/AccountUsersGrid";
+import AccountUsersStage from "./AccountUsersStage";
+import * as AccountUsersActions from "./AccountUsersActions";
+import * as RequestContextActions from "../../common/requestContext/RequestContextActions";
+import * as RequestContextCommon from "../../common/requestContext/RequestContextCommon";
 import * as SpinnerConfigurations from "../../../../client-react/src/constants/spinnerConfigurations";
 import AccountUsersToolBar from "./AccountUsersToolBar/AccountUsersToolBar";
 
@@ -18,14 +16,14 @@ class AccountUsers extends Component {
 
     constructor(props) {
         super(props);
-        this.GRID = "accountUsers";
+        this.GRID_ID = "accountUsers";
     }
 
     /**
      * When the component mounts, get the users
      */
     componentDidMount() {
-        this.props.fetchData(this.props.match.params.accountId, this.GRID);
+        this.props.fetchData(this.props.match.params.accountId, this.GRID_ID);
     }
 
     render() {
@@ -45,8 +43,9 @@ class AccountUsers extends Component {
                 <Loader loaded={!this.props.loading} options={SpinnerConfigurations.LARGE_BREAKPOINT}>
                     <div className="accountUsersContainer">
                         <AccountUsersStage users={this.props.users}/>
-                        <AccountUsersToolBar id={this.GRID} totalRecords={this.props.users.length}/>
-                        <AccountUsersGrid id={this.GRID} showAccountColumns={canSeeAccountColumns} showRealmColumns={canSeeRealmColumns}/>
+                        <AccountUsersToolBar id={this.GRID_ID} totalRecords={this.props.users.length}/>
+                        <AccountUsersGrid id={this.GRID_ID} showAccountColumns={canSeeAccountColumns}
+                                          showRealmColumns={canSeeRealmColumns}/>
                     </div>
                 </Loader>
             );
