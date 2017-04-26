@@ -280,7 +280,7 @@
         cursor: pointer;
 
         @include small-breakpoint {
-            font-size: $size-iconfont-large2;
+            font-size: $size-iconfont-large;
             line-height: 0.8;
 
             &:hover {
