@@ -1,12 +1,14 @@
 import React, {PropTypes, Component} from 'react';
 import {connect} from 'react-redux';
+import {getLoggedInUserId} from '../user/userReducer';
+import {getLoggedInUser} from '../user/userActions';
 
 // IMPORT FROM CLIENT REACT
 import Logger from '../../../../../client-react/src/utils/logger';
 // IMPORT FROM CLIENT REACT
 
 // Evergage requires a global variable called _aaq to function
-var _aaq = window._aaq || (window._aaq = []);
+let _aaq = window._aaq || (window._aaq = []);
 
 // The id for the script tag that is created when this component mounts
 export const ANALYTICS_SCRIPT_ID = 'evergage';
@@ -16,8 +18,10 @@ export const EVERGAGE_ACCOUNT_NAME = 'intuitquickbase';
 
 /**
  * Currently we use Evergage for analytics. Use the component once per functional area to setup tracking.
+ * NOTE: For best use of this component, be sure to add the user reducer to your root reducer. See reducer in reuse/client/src/components/user
+ *
  * TODO: Create <AnalyticsEvent> component to track individual events when props change.
- * TODO: Place behind a feature switch once feature switches are fully implemented
+ * TODO: Place behind a feature switch once feature switches are fully implemented.
  */
 export class Analytics extends Component {
     constructor(props) {
@@ -53,8 +57,10 @@ export class Analytics extends Component {
     /**
      * Sets the currently logged in user to be tracked by Evergage
      */
-    updateEvergageUser = () => {
-        _aaq.push(['setUser', this.props.userId]);
+    updateEvergageUser = (userId = null) => {
+        if (userId || this.props.userId) {
+            _aaq.push(['setUser', userId || this.props.userId]);
+        }
     };
 
     /**
@@ -62,6 +68,10 @@ export class Analytics extends Component {
      */
     componentDidMount() {
         try {
+            if(this.props.getLoggedInUser) {
+                this.props.getLoggedInUser();
+            }
+
             this.updateEvergageUser();
             this.setupEvergage();
         } catch (error) {
@@ -107,9 +117,11 @@ Analytics.propTypes = {
 
     /**
      * A method used to obtain the userId
-     * Typically this is a redux action
+     * Typically this is a redux action. See pre-made actions in reuse/client/src/components/user.
      */
-    getCurrentUser: PropTypes.func
+    getLoggedInUser: PropTypes.func
 };
 
-export default connect()(Analytics);
+const mapStateToProps = state => ({userId: getLoggedInUserId(state)});
+
+export default connect(mapStateToProps, {getLoggedInUser})(Analytics);
