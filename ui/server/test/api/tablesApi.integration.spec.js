@@ -49,7 +49,8 @@
             this.timeout(testConsts.INTEGRATION_TIMEOUT);
 
             var tableComponentsEndpoint = recordBase.apiBase.resolveTableComponentsEndpoint(app.id);
-            const payload = {name: "name", description: "desc", tableIcon: "icon", tableNoun: "noun"};
+            let name = testUtils.generateRandomString(10);
+            const payload = {name: name, description: "desc", tableIcon: "icon", tableNoun: "noun"};
             recordBase.apiBase.executeRequest(tableComponentsEndpoint, consts.POST, payload).then(
                 (response) => {
                     var tableId = response.body;
@@ -116,7 +117,8 @@
 
             var tableId = app.tables[0].id;
             var tablesEndpoint = recordBase.apiBase.resolveTablesEndpoint(app.id, tableId);
-            const payload = {name: "name", description: "desc", tableIcon: "icon", tableNoun: "noun"};
+            let name = testUtils.generateRandomString(10);
+            const payload = {name: name, description: "desc", tableIcon: "icon", tableNoun: "noun"};
             recordBase.apiBase.executeRequest(tablesEndpoint, consts.PATCH, payload).then(
                 (response) => {
                     var promises = [];

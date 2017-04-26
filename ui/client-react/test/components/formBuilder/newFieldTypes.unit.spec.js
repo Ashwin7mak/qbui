@@ -17,13 +17,17 @@ describe('NewFieldTypes', () => {
     });
     describe('createFieldTypeProps', () => {
         it('returns an object with the correct field type props', () => {
+            const expectedId = `fieldType_${fieldFormats.TEXT_FORMAT}`;
+            const expectedElement = createScalarDefaultFieldsProperties()[fieldFormats.TEXT_FORMAT];
             expect(createFieldTypeProps(fieldFormats.TEXT_FORMAT)).toEqual({
-                key: `fieldType_${fieldFormats.TEXT_FORMAT}`,
+                containingElement: {id: expectedId, FormFieldElement: {positionSameRow: false, ...expectedElement}},
+                location: {tabIndex: 0, sectionIndex: 0, columnIndex: 0, elementIndex: 0},
+                key: expectedId,
                 type: fieldFormats.TEXT_FORMAT,
-                relatedField: {...createScalarDefaultFieldsProperties()[fieldFormats.TEXT_FORMAT]},
-                isNewField: true,
+                relatedField: expectedElement,
                 title: `fieldsDefaultLabels.${fieldFormats.TEXT_FORMAT}`,
-                tooltipText: `builder.formBuilder.tooltips.addNew${fieldFormats.TEXT_FORMAT}`
+                tooltipText: `builder.formBuilder.tooltips.addNew${fieldFormats.TEXT_FORMAT}`,
+                isNewField: true
             });
         });
     });
