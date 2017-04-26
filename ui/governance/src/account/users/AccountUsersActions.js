@@ -110,15 +110,15 @@ export const doUpdate = (gridId, gridState, _itemsPerPage) => {
         let sortedUsers = sortUsers(filteredUsers, sortFids);
 
         // Then Paginate
-        let paginationIndex = gridState.pagination.currentPage;
         let itemsPerPage = _itemsPerPage || gridState.pagination.itemsPerPage;
-        let paginatedUsers = paginateUsers(sortedUsers, paginationIndex, itemsPerPage);
+        let currentPage = sortedUsers.length <= itemsPerPage ? 1 : gridState.pagination.currentPage;
+        let paginatedUsers = paginateUsers(sortedUsers, currentPage, itemsPerPage);
 
         // This info in the future will be returned by the server
         let pagination = {
             totalRecords: sortedUsers.length,
             totalPages: Math.ceil(sortedUsers.length / itemsPerPage),
-            currentPage: paginationIndex,
+            currentPage: currentPage,
             itemsPerPage: itemsPerPage
         };
         // Set the grid's pagination info
