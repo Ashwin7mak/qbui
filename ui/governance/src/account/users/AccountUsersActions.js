@@ -4,10 +4,10 @@ import * as StandardGridActions from "../../common/grid/standardGridActions";
 import * as StandardGridState from "../../common/grid/standardGridReducer";
 import WindowLocationUtils from  "../../../../client-react/src/utils/windowLocationUtils";
 import {FORBIDDEN, INTERNAL_SERVER_ERROR} from  "../../../../client-react/src/constants/urlConstants";
-import * as Formatters from "./Grid/AccountUsersGridFormatters";
 import Logger from '../../../../client-react/src/utils/logger';
 import LogLevel from '../../../../client-react/src/utils/logLevels';
 let logger = new Logger();
+import * as Formatters from "./Grid/AccountUsersGridFormatters";
 import * as RealmUserAccountFlagConstants from "../../common/constants/RealmUserAccountFlagConstants.js";
 
 
@@ -30,9 +30,9 @@ export const fetchingAccountUsers = () => ({
 
 /**
  * Search searchTermAcross Users
- * @param users
- * @param searchTerm
- * @returns {*}
+ * @param users - list of users
+ * @param searchTerm - the search term to find
+ * @returns {filtered users}
  */
 export const searchUsers = (users, searchTerm) => {
 
@@ -54,10 +54,10 @@ export const searchUsers = (users, searchTerm) => {
 
 /**
  * Paginate through the users
- * @param users
- * @param _page
- * @param _itemsPerPage
- * @returns {*}
+ * @param users - the list of users to paginate through
+ * @param _page - the currentpage
+ * @param _itemsPerPage - items per page to display
+ * @returns {paginated/filtered users}
  */
 export const paginateUsers = (users, _page, _itemsPerPage) => {
     if (users.length === 0) {
@@ -157,18 +157,23 @@ export const fetchAccountUsers = (accountId, gridID, itemsPerPage) => {
         // get all the users from the account service
         const accountUsersService = new AccountUsersService();
         const promise = accountUsersService.getAccountUsers(accountId);
+
         dispatch(fetchingAccountUsers());
+
         return promise.then(response => {
             _.each(response.data, item => {
                 item.id = item.uid;
             });
+
             // inform the redux store of all the users
             dispatch(receiveAccountUsers(response.data));
 
             // run through the pipeline and update the grid
             dispatch(doUpdate(gridID, StandardGridState.defaultGridState, itemsPerPage));
+
         }).catch(error => {
             dispatch(failedAccountUsers(error));
+
             if (error.response && error.response.status === 403) {
                 logger.parseAndLogError(LogLevel.WARN, error.response, 'accountUserService.getAccountUsers:');
                 WindowLocationUtils.update(FORBIDDEN);
