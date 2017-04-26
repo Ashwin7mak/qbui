@@ -1,5 +1,6 @@
 import Locale, {__RewireAPI__ as LocaleRewireAPI} from '../../src/locales/locale';
 import ReuseBundleLoader from '../../src/locales/reuseBundleLoader';
+// This require is needed for karma-intl-shim locale error
 require('intl/locale-data/jsonp/en');
 
 fdescribe('Locales', () => {

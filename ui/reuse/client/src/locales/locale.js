@@ -108,7 +108,6 @@ class Locale {
      * Usage: Locale.getPluralizeMessage('test.testMsg', {value: 2, nameForRecord: 'Customer'});
      *
      * @param msgPath
-     * @param nameForRecord
      * @param params
      * @return {*}
      */
