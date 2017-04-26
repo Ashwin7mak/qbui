@@ -8,7 +8,9 @@ export default {
 
     messages: {
         test: {
-            testMsg2: "Test message for reuse library - en-us"
+            testMsg: "test",
+            testMsg2: "Test message for reuse library - en-us",
+            testPluralize: "{value, plural, =0 {0 test} =1 {1 test} other {# tests}}"
         },
         listOfElements: {
             noSearchResults: 'No fields match "{searchText}"',
