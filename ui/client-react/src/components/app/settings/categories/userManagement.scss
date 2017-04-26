@@ -16,6 +16,10 @@
         &:first-of-type {
             border-left: 1px solid $grid-column-header-border-color;
         }
+        &.stickyCell{
+            width:auto;
+            min-width:30px;
+        }
     }
 
     .qbCell {
@@ -23,4 +27,6 @@
         padding-bottom: 6px;
         background-color: $color-black-100;
     }
+
+
 }

@@ -40,9 +40,9 @@ export const UserActions = React.createClass({
 
     getSelectionTip(actionMsg) {
         const action = Locale.getMessage(actionMsg);
-        const record = Locale.getMessage('records.singular');
-        const records = Locale.getMessage('records.plural');
-        const suffix = this.props.selection.length === 1 ? record : records;
+        const user = Locale.getMessage('app.users.singular');
+        const users = Locale.getMessage('app.users.plural');
+        const suffix = this.props.selection.length === 1 ? user : users;
 
         return action + " " + this.props.selection.length + " " + suffix;
     },
@@ -177,12 +177,12 @@ export const UserActions = React.createClass({
         return (
             <QBModal
                 show={this.state.confirmDeletesDialogOpen}
-                primaryButtonName={Locale.getMessage('selection.delete')}
+                primaryButtonName={Locale.getMessage('app.users.remove')}
                 primaryButtonOnClick={this.handleBulkDelete}
-                leftButtonName={Locale.getMessage('selection.dontDelete')}
+                leftButtonName={Locale.getMessage('app.users.dontremove')}
                 leftButtonOnClick={this.cancelBulkDelete}
                 bodyMessage={bodymsg}
-                type="alert"
+                type="error"
                 title={msg}/>);
     },
     getEmailAction() {
@@ -205,7 +205,7 @@ export const UserActions = React.createClass({
                         <ActionIcon icon="print" tip={Locale.getMessage("unimplemented.print")} disabled={true}/>
                         {this.getEmailAction()}
                         <ActionIcon icon="duplicate" tip={Locale.getMessage("unimplemented.copy")} disabled={true}/>
-                        <ActionIcon icon="errorincircle-fill" tip={this.getSelectionTip("selection.delete")} onClick={this.handleDelete}/>
+                        <ActionIcon icon="errorincircle-fill" tip={this.getSelectionTip("app.users.remove")} onClick={this.handleDelete}/>
                     </div>
                 </div>
                 {this.getConfirmDialog()}

@@ -123,6 +123,10 @@
         color: $success-color;
     }
 
+    .modalIcon--error {
+        color: $error-color;
+    }
+
     .buttons {
         display: flex;
         justify-content: flex-end;
