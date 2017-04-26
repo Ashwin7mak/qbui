@@ -34,7 +34,7 @@
             });
         });
 
-        beforeAll(function() {
+        beforeEach(function() {
             return e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
         });
 
