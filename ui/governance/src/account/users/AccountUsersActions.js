@@ -7,6 +7,12 @@ import * as StandardGridActions from "../../common/grid/standardGridActions";
 import * as StandardGridState from "../../common/grid/standardGridReducer";
 
 
+/**
+ * Search across the users for the search term
+ * @param users
+ * @param searchTerm
+ * @returns {*}
+ */
 export const searchUsers = (users, searchTerm) => {
 
     if (users.length === 0 || searchTerm.length === 0) {
@@ -24,6 +30,12 @@ export const searchUsers = (users, searchTerm) => {
     });
 };
 
+/**
+ * Paginate through the users array
+ * @param users
+ * @param _page
+ * @returns {*}
+ */
 export const paginateUsers = (users, _page) => {
     if (users.length === 0) {
         return users;
@@ -52,6 +64,12 @@ const sortFunctions = [
     user => RealmUserAccountFlagConstants.IsApprovedInRealm(user)
 ];
 
+/**
+ * Sort the users array given the array of sort FIDs
+ * @param users
+ * @param sortFids
+ * @returns {Array|*}
+ */
 export const sortUsers = (users, sortFids) => {
 
     if (sortFids.length === 0) {
@@ -98,7 +116,7 @@ export const doUpdate = (gridId, gridState) => {
 };
 
 /**
- * Get all the users from the service
+ * Get all the users from the service and inform the observers
  *
  * @returns {function(*=)}
  */

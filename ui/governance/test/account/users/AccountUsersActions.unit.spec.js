@@ -1,6 +1,7 @@
 import * as actions from "../../../src/account/users/AccountUsersActions";
 import {__RewireAPI__ as AccountUsersActionsRewireAPI} from "../../../src/account/users/AccountUsersActions";
 import * as types from "../../../src/app/actionTypes";
+import * as StandardGridActionTypes from "../../../src/common/grid/standardGridActionTypes";
 import configureMockStore from "redux-mock-store";
 import thunk from "redux-thunk";
 import Promise from "bluebird";
@@ -142,7 +143,11 @@ describe('Account Users Actions Tests', () => {
 
             const store = mockStore({AccountUsers: {users: USERS}});
             store.dispatch(actions.doUpdate(1, {sortFids: [1]}));
-            expect(store.getActions(1)).toEqual([{type: types.SET_USERS, users: SORTED_USERS}]);
+            expect(store.getActions(1)).toEqual([{
+                type: StandardGridActionTypes.SET_ITEMS,
+                gridId: 1,
+                items: SORTED_USERS
+            }]);
         });
     });
 

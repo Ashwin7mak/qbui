@@ -1,6 +1,6 @@
 import React from "react";
 import {mount} from "enzyme";
-import moment from 'moment';
+import moment from "moment";
 import jasmineEnzyme from "jasmine-enzyme";
 import QbHeaderCell from "../../../../../client-react/src/components/dataTable/qbGrid/qbHeaderCell";
 import QbCell from "../../../../../client-react/src/components/dataTable/qbGrid/qbCell";
@@ -19,7 +19,6 @@ describe('AccountUsersGridColumns', () => {
     });
     const baseProps = {
         columns : GetAccountUsersGridColumns(true, true),
-        data: [],
         rowKey: 'uid',
         id: 'accountUsers',
         columnTransformProps :[],

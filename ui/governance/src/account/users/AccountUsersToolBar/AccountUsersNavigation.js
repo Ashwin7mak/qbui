@@ -25,7 +25,7 @@ class AccountUsersNavigation extends React.Component {
     }
 
     isNextDisabled() {
-        return false;// TODO: this.props.totalRecords === this.props.pageEnd;
+        return this.props.totalRecords <= 10;// TODO: this.props.totalRecords === this.props.pageEnd;
     }
 
     render() {
