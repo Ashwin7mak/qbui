@@ -9,13 +9,13 @@ var config = {
             build           : 'WebdriverIO Jenkins Try Build #' + process.env.BUILD_NUMBER + ' - Git branch: ' + process.env.GIT_UIBRANCH + ' - OSX Safari Browser',
             tags            : [process.env.SAUCE_JOB_NAME + '_OSX_Safari', 'try', 'OSX', 'Safari', process.env.BUILD_NUMBER, process.env.GIT_UIBRANCH],
             screenResolution: '1600x1200',
-            //Timeout in seconds for Sauce Labs to wait for another command (bumped this for sleeps in tests)
+            // Timeout in seconds for Sauce Labs to wait for another command (bumped this for sleeps in tests)
             idleTimeout: '180',
             maxDuration: 10800,
-            breakpointSize: 'large',
+            breakpointSize: 'xlarge',
             // These two values enable parallel testing which will run a spec file per instance
             shardTestFiles: true,
-            maxInstances: 2
+            maxInstances: 5
         }
     ]
 };

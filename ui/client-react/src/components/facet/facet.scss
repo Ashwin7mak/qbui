@@ -52,10 +52,12 @@
     }
 
     .filterButton {
-        font-size: $size-iconfont-medium;
+        font-size: 18px;
+        cursor: pointer;
 
         @include small-breakpoint {
-            font-size: $size-iconfont-large;
+            font-size: $size-iconfont-large2;
+            line-height: 1.7;
         }
 
         &.qbIcon {
@@ -69,6 +71,7 @@
 
     .filterButtonCaret {
         font-size: 16px;
+        cursor: pointer;
     }
 }
 
