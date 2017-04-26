@@ -88,6 +88,7 @@
                 ReportInLineEditPO.openDateFieldCalWidget(0);
                 ReportInLineEditPO.advanceCurrentlySelectedDate(0);
             }
+            browser.clearElement('.cellEdit.phoneNumber');
 
             // Step 4 - Save the edit
             ReportInLineEditPO.clickSaveChangesButton();

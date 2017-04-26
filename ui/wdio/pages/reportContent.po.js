@@ -100,7 +100,7 @@
         qbGridRowActionsElList: {get: function() {return this.qbGridLeftColsContainerEl.elements('.qbRow');}},
 
         // this will get you every record element on the grid
-        qbGridRecordElList: {value: function() {return this.qbGridBodyEl.elements('.qbRow');}},
+        qbGridRecordElList: {get: function() {return browser.element('.qbTbody');}},
 
         /**
          * Helper method to ensure the report has been properly loaded with records. Will throw an error if no records are in the report.
