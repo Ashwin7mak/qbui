@@ -108,6 +108,13 @@ export const doUpdate = (gridId, gridState) => {
         // Then Paginate
         let paginationIndex = gridState.pagination.currentPage;
         let paginatedUsers = paginateUsers(sortedUsers, paginationIndex);
+        let pagination = {
+            totalRecords: sortedUsers.length,
+            totalPages: Math.ceil(sortedUsers.length / 10),
+            currentPage: paginationIndex,
+            itemsPerPage: 10
+        };
+        dispatch(StandardGridActions.doSetPaginate(gridId, pagination));
 
         // Inform the grid of the new users
         dispatch(StandardGridActions.doSetItems(gridId, paginatedUsers));
@@ -132,15 +139,9 @@ export const fetchAccountUsers = (accountId, gridID) => {
                 item.id = item.uid;
             });
 
-            // run through the pipleine and update the grid
             dispatch(receiveAccountUsers(response.data));
-            let pagination = {
-                totalRecords: response.data.length,
-                totalPages: Math.ceil(response.data.length / 10),
-                currentPage: 1,
-                itemsPerPage: 10
-            };
-            dispatch(StandardGridActions.doSetPaginate(gridID, pagination));
+
+            // run through the pipleine and update the grid
             dispatch(doUpdate(gridID, StandardGridState.defaultGridState));
         });
         return promise;

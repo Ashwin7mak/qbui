@@ -21,11 +21,11 @@ class AccountUsersNavigation extends React.Component {
     }
 
     isPreviousDisabled() {
-        return this.props.paginationInfo.currentPage === 1;
+        return this.props.paginationInfo.totalRecords === 0 || this.props.paginationInfo.currentPage === 1;
     }
 
     isNextDisabled() {
-        return this.props.paginationInfo.currentPage === this.props.paginationInfo.totalPages;
+        return this.props.paginationInfo.totalRecords === 0 || this.props.paginationInfo.currentPage === this.props.paginationInfo.totalPages;
     }
 
     render() {

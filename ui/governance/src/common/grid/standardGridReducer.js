@@ -36,7 +36,8 @@ function grid(state = defaultGridState, action) {
             sortFids: action.remove ? [] : [(action.sortFid * (action.asc ? 1 : -1))]
         };
     case types.SET_NAVIGATE:
-        if ((state.pagination.currentPage === 1 && !action.next) ||
+        if (state.items.length === 0 ||
+            (state.pagination.currentPage === 1 && !action.next) ||
             (state.pagination.currentPage === state.pagination.totalPages && action.next)) {
             return state;
         }
