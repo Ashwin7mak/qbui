@@ -3,7 +3,7 @@ import ReuseBundleLoader from '../../src/locales/reuseBundleLoader';
 // This require is needed for karma-intl-shim locale error
 require('intl/locale-data/jsonp/en');
 
-fdescribe('Locales', () => {
+describe('Locales', () => {
     'use strict';
 
     // This test is failing and need futher investigation.
