@@ -12,18 +12,26 @@ class AccountUsersNavigation extends React.Component {
         super(...args);
     }
 
-    isNextDisabled() {
-        return false;// TODO: this.props.totalRecords === this.props.pageEnd;
+    getStartRecord() {
+        return 1;
+    }
+
+    getEndRecord() {
+        return this.props.totalRecords;
     }
 
     isPreviousDisabled() {
         return this.props.pageNumber === 1;
     }
 
+    isNextDisabled() {
+        return false;// TODO: this.props.totalRecords === this.props.pageEnd;
+    }
+
     render() {
         return (
-            <Pagination startRecord={1}
-                        endRecord={this.props.totalRecords}
+            <Pagination startRecord={this.getStartRecord()}
+                        endRecord={this.getEndRecord()}
                         onClickPrevious={this.props.getPreviousUsersPage}
                         onClickNext={this.props.getNextUsersPage}
                         isPreviousDisabled={this.isPreviousDisabled()}
@@ -38,7 +46,6 @@ AccountUsersNavigation.defaultProps = {
 };
 
 AccountUsersNavigation.propTypes = {
-    pageNumber: PropTypes.number,
     id: PropTypes.string
 };
 
