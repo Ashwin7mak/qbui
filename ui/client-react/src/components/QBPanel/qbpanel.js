@@ -43,7 +43,7 @@ class QBPanel extends React.Component {
                     <h3 className="qbPanelHeaderTitle">
                         <div className="qbPanelHeaderTitleText">{this.props.title}</div>
                         <OverlayTrigger placement="bottom" overlay={<Tooltip id="expandToolTip">{this.state.open ? <I18nMessage message="nav.collapseSection"/> : <I18nMessage message="nav.expandSection"/>}</Tooltip>}>
-                            <Button className="qbPanelHeaderButton" onClick={this.props.onCancel}><QBicon icon="caret-right" className={iconClass}/></Button>
+                            <Button className="qbPanelHeaderButton" onClick={this.props.onCancel}><QBicon icon="caret-up" className={iconClass}/></Button>
                             </OverlayTrigger>
                     </h3>
                 </div>

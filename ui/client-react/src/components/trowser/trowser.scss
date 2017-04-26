@@ -70,6 +70,9 @@
         .rightIcons {
             flex: 0 0 auto;
             button {
+                &:hover {
+                    color: $color-cyan-400;
+                }
                 height: 32px;
                 background: transparent;
                 padding: 0;
@@ -132,6 +135,9 @@
 
             .rightIcons .btn {
                 margin-top: -3px;
+            }
+            &:hover {
+                color: $color-cyan-400;
             }
         }
 
