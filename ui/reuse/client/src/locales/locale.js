@@ -104,9 +104,9 @@ class Locale {
      */
     static getPluralizeMessage(msgPath, params) {
         let formattedMsg = new IntlMessageFormat(Locale.getMessage(msgPath));
-
         if (!params) {
-            throw new Error('A format object is required to pluralize message.');
+            logger.warn('An object parameter is required to pluralize the input message.');
+            return;
         }
 
         return formattedMsg.format(params);
