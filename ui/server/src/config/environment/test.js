@@ -9,6 +9,7 @@
     var envConsts = require('./environmentConstants');
     var routeGroups = require('../../routes/routeGroups');
     var clientConsts = require('./clientConsts');
+    var _ = require('lodash');
 
     var client = clientConsts.REACT;
 
@@ -17,7 +18,7 @@
     var javaHost = 'http://quickbase-dev.com';
     var eeHost = 'http://quickbase-dev.com';
     // same thing with node so we don't have colliding ports
-    var nodeHostPort = 9000 + Number(process.env.EXECUTOR_NUMBER);
+    var nodeHostPort = 9000 + _.random(0, 99);
     var nodeHost = 'http://quickbase-dev.com:' + nodeHostPort;
     var eeHostEnable = true;
 
