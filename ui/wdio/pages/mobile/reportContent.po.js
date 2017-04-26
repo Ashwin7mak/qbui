@@ -7,9 +7,10 @@
     var ReportContentPage = Object.create(e2ePageBase, {
         addRecordBtn: {get: function() {return browser.element('.reportToolsAndContentContainer .addNewRecord');}},
         reportSortGrpBtn: {get: function() {return browser.element('.sortButton');}},
-
-
-
+        getAllRowsCellValues: {get: function() {
+            browser.element('.fieldRow').waitForVisible();
+            return browser.elements('.fieldValue');
+        }},
         /**
          * Helper method to ensure the report has been properly loaded with records. Will throw an error if no records are in the report.
          * @returns A promise that will resolve after waiting for the report records to be displayed
@@ -35,18 +36,13 @@
             this.waitForReportContent();
         }},
 
+        /**
+         * Function that will click on the Add record button on report page
+         */
         clickAddRecordBtn: {value: function() {
-            //this.addRecordBtn.waitForVisible();
             browser.element('.reportToolsAndContentContainer .addNewRecord').click();
             browser.element('.editForm').waitForVisible();
         }},
-
-        clickSortGrpBtn: {value: function() {
-            //this.addRecordBtn.waitForVisible();
-            browser.element('.sortButton').click();
-        }},
-
-
     });
 
     module.exports = ReportContentPage;

@@ -229,6 +229,33 @@
         }},
 
         /*
+         * Method to sort fields in sort container
+         * @param fieldToSort
+         */
+        sortFieldsFromSrtGrpDlg : {value: function(fieldToSort, sortOrder) {
+            this.sortBySettings.waitForVisible();
+            //Filter nonEmpty fields to match with fieldToSort
+            var results = this.sortBySettings.elements('.notEmpty').value.filter(function(field) {
+                return field.element('.fieldName').getAttribute('textContent') === fieldToSort;
+            });
+
+            //if filtered elements not empty
+            if (results !== []) {
+                //wait for sort button to be visible
+                results[0].element('.sortOrderIcon').waitForVisible();
+                //click on sort button
+                if (sortOrder === 'desc') {
+                    results[0].element('.sortOrderIcon').click();
+                    //Need this to wait for rendering
+                    return browser.pause(e2eConsts.shortWaitTimeMs);
+                }
+            } else {
+                browser.logger.error('The field with name ' + fieldToSort + ' is not found for container ' + this.sortBySettings);
+                throw new Error('Cannot sort value for field ' + fieldToSort);
+            }
+        }},
+
+        /*
          * Method to verify field Panel
          * @title
          */
