@@ -95,3 +95,6 @@ const embeddedReport = (state = {}, action) => {
 };
 
 export default embeddedReport;
+
+// Utility function which returns a component's state given it's context. The context is the 'key' in the state map.
+export const getEmbeddedReportByContext = (embeddedReports, context) => _.get(embeddedReports, `${context}`);

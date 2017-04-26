@@ -7,8 +7,7 @@
     var formsPO = requirePO('formsPage');
     var reportContentPO = requirePO('reportContent');
 
-    describe('Forms - Edit a Record Via Form Validation Tests: ', function() {
-
+    describe('Forms - Edit a record via form validation tests: ', function() {
         var realmName;
         var realmId;
         var testApp;
@@ -80,6 +79,5 @@
             //Step 10 - Verify text field value of 6th record since Clicking on 'Save and Next' button takes to next record which is 6 in this case
             expect(browser.element('input.input.textField.cellEdit').getAttribute('value')).toBe(expectedSixthRecordTextField);
         });
-
     });
 }());

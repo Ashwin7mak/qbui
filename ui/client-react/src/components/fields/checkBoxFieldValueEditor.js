@@ -55,7 +55,7 @@ const CheckBoxFieldValueEditor = React.createClass({
 
     onKeyDown(ev) {
         // Call on change if key press is space bar (for accessibility)
-        if (!this.props.disabled && ev.keyCode === 32) {
+        if (!this.props.disabled && ev.keyCode === 32 || ev.keyCode === 13) {
             this.onChange(ev);
         }
     },
