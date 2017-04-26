@@ -35,9 +35,13 @@ Mappings:
     DomainName:
       "723670383381": "newstack.quickbaserocks.com"
       "729325871063": "newstack.quickbase.com"
+      "717266932182": "newstack.quickbase.net"
+      "956858433230": "newstack.quickbase.me"
     SecretsKmsKeyId:
       "723670383381": "79461a25-ffdc-4fbf-ac4f-febb847dcb9b"
       "729325871063": "7eb8ecf8-3894-4d3d-a3e4-74ed8b811c7e"
+      "717266932182": "c66d258f-d4ec-4ba7-8e70-c9e977f8e56a"
+      "956858433230": "2a2988f8-f5ca-4f1a-9778-e5cf0ccff4f0"
 
 Resources:
   Service:
