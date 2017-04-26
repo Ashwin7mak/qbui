@@ -1,7 +1,5 @@
 import Locale, {__RewireAPI__ as LocaleRewireAPI} from '../../src/locales/locale';
 import ReuseBundleLoader from '../../src/locales/reuseBundleLoader';
-// This require is needed for karma-intl-shim locale error
-require('intl/locale-data/jsonp/en');
 
 describe('Locales', () => {
     'use strict';
@@ -67,7 +65,14 @@ describe('Locales', () => {
         expect(testMsg).toBe('test');
     });
 
-    it('test getPluralizedMessage', () => {
+    it('test singular getPluralizedMessage', () => {
+        ReuseBundleLoader.changeLocale('en-us');
+        Locale.getI18nBundle();
+        const testMsg = Locale.getPluralizedMessage("test.testPluralize",  {value: 1, nameForRecord: 'Customer'});
+        expect(testMsg).toBe('1 Customer record deleted');
+    });
+
+    it('test plural getPluralizedMessage', () => {
         ReuseBundleLoader.changeLocale('en-us');
         Locale.getI18nBundle();
         const testMsg = Locale.getPluralizedMessage("test.testPluralize",  {value: 2, nameForRecord: 'Customer'});
@@ -77,7 +82,7 @@ describe('Locales', () => {
     it('test empty params getPluralizedMessage', () => {
         ReuseBundleLoader.changeLocale('en-us');
         Locale.getI18nBundle();
-        const testMsg = Locale.getPluralizedMessage("test.testPluralize", {});
+        const testMsg = Locale.getPluralizedMessage("test.testPluralize");
         expect(testMsg).toBe(undefined);
     });
 

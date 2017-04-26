@@ -1,4 +1,4 @@
-import IntlMessageFormat from 'intl-messageformat';
+import MessageFormat from 'messageformat';
 // IMPORTS FROM CLIENT REACT
 import Logger from '../../../../client-react/src/utils/logger';
 import config from '../../../../client-react/src/config/app.config';
@@ -112,7 +112,7 @@ class Locale {
      * @return {*}
      */
     static getPluralizedMessage(msgPath, params) {
-        let formattedMsg = new IntlMessageFormat(Locale.getMessage(msgPath));
+        let formattedMsg = new MessageFormat(locale).compile(Locale.getMessage(msgPath));
 
         // value and nameForRecord are required. Use empty string (nameForRecord: '') for empty value.
         if (!params) {
@@ -120,7 +120,7 @@ class Locale {
             return;
         }
 
-        return formattedMsg.format(params);
+        return formattedMsg(params);
     }
 
     static getSupportedLocales() {
