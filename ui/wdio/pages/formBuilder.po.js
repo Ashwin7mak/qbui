@@ -1,7 +1,10 @@
 'use strict';
 let topNavPO = requirePO('topNav');
+let oneSeconds = 1000; // millis
+let fiveSeconds = 5 * oneSecond;
 
 class formBuilderPage {
+
     get cancelBtn() {
         // CANCEL (form) button in footer bar
         return browser.element('.cancelFormButton');
@@ -83,15 +86,15 @@ class formBuilderPage {
         // Clicks on CANCEL in the form builder and waits for the next page to render
         this.cancelBtn.click();
         // do we have a method to wait for spinner?
-        browser.pause(5000);
+        browser.pause(fiveSeconds);
         return this;
     }
     removeField(index) {
         // Removes a specific field in the form builder by clicking on its DELETE icon
         let field = browser.element(this.getFieldLocator(index));
         field.element('.deleteFieldIcon').click();
-        field.waitForExist(5000, false);
-        browser.pause(5000);
+        field.waitForExist(fiveSeconds, false);
+        browser.pause(fiveSeconds);
         return this;
     }
     getFieldLabels() {
@@ -125,19 +128,19 @@ class formBuilderPage {
     open() {
         // Invokes the form builder from the VIEW RECORD page
         topNavPO.formBuilderBtn.waitForVisible();
-        browser.pause(5000);
+        browser.pause(fiveSeconds);
         topNavPO.formBuilderBtn.click();
-        topNavPO.modifyThisForm.waitForExist(5000);
+        topNavPO.modifyThisForm.waitForExist(fiveSeconds);
         topNavPO.modifyThisForm.click();
         this.formBuilderContainer.waitForVisible();
-        browser.pause(5000);
+        browser.pause(fiveSeconds);
         return this;
     }
     save() {
         // Clicks on the SAVE button in the form builder and waits for the next page to appear
         this.saveBtn.click();
         // wait for spinner?
-        browser.pause(5000);
+        browser.pause(fiveSeconds);
         return this;
     }
     search(text) {
@@ -152,7 +155,7 @@ class formBuilderPage {
         // wait for the results to change
         while (JSON.stringify(oldResults) === JSON.stringify(newResults)) {
             newResults = this.getNewFieldLabels();
-            browser.pause(1000);
+            browser.pause(oneSecond);
         }
         return newResults;
     }
@@ -169,7 +172,7 @@ class formBuilderPage {
         browser.waitUntil(function() {
             // assuming that browser.buttonDown was just executed by the caller,
             // pause to initiate drag (which is one reason why we can't just call dragAndDrop)
-            browser.pause(1000);
+            browser.pause(oneSecond);
             browser.moveToObject(target);
             return label === browser.element(target).getText();
         }, 10000, 'expected target preview to display source label after dragging');
@@ -185,7 +188,7 @@ class formBuilderPage {
         // release button
         browser.buttonUp();
         // pause to terminate drag (which is one reason why we can't just call dragAndDrop)
-        browser.pause(5000);
+        browser.pause(fiveSeconds);
         return this;
     }
 
@@ -197,7 +200,7 @@ class formBuilderPage {
             'Escape', // defocus field
             'Escape']); // close page
         // wait for view record form
-        browser.pause(5000);
+        browser.pause(fiveSeconds);
         return this;
     }
     KB_focusField(index) {
@@ -232,7 +235,7 @@ class formBuilderPage {
             browser.keys([arrowKey]); // up or down
         }
         browser.keys(['Shift']); // release modifier key
-        browser.pause(5000);
+        browser.pause(fiveSeconds);
         let revisedOrder = this.getFieldLabels();
         expect(originalOrder).not.toEqual(revisedOrder);
         expect(revisedOrder[targetIndex - 1]).toEqual(sourceField);
@@ -243,7 +246,7 @@ class formBuilderPage {
         this.KB_selectField(index);
         let deletedField = this.selectedField.getText();
         browser.keys(['Tab', 'Enter']); // select & press DELETE icon
-        browser.pause(5000);
+        browser.pause(fiveSeconds);
         expect(this.getFieldLabels()).not.toContain(deletedField);
         return deletedField;
     }
@@ -252,7 +255,7 @@ class formBuilderPage {
         this.KB_selectField(index); // field doesn't need to be selected
         let deletedField = this.selectedField.getText();
         this.selectedField.keys(['Shift', 'Backspace', 'Shift']);
-        browser.pause(5000);
+        browser.pause(fiveSeconds);
         expect(this.getFieldLabels()).not.toContain(deletedField);
         return deletedField;
     }
@@ -260,14 +263,14 @@ class formBuilderPage {
         // save form via keyboard
         browser.keys(['Command', 's', 'Command']);
         // wait for view record form
-        browser.pause(5000);
+        browser.pause(fiveSeconds);
         return this;
     }
     KB_selectField(index) {
         // select field via keyboard
         this.KB_focusField(index);
         browser.keys(['Enter']); // select field
-        browser.pause(5000);
+        browser.pause(fiveSeconds);
         return this.selectedField.getText();
     }
 }
