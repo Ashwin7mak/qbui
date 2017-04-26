@@ -9,6 +9,7 @@ import {updateField} from '../../../actions/fieldsActions';
 import {getSelectedFormElement} from '../../../reducers/forms';
 import {getField} from '../../../reducers/fields';
 import SideTrowser from '../../../../../reuse/client/src/components/sideTrowserBase/sideTrowserBase';
+import * as tabIndexConstants from '../../formBuilder/tabindexConstants';
 
 import './fieldProperties.scss';
 
@@ -70,6 +71,7 @@ export class FieldProperties extends Component {
             <div key={key} className="textPropertyContainer">
                 <div className="textPropertyTitle">{propertyTitle}</div>
                 <TextFieldValueEditor value={propertyValue}
+                                      tabIndex={tabIndexConstants.FIELD_PROP_TABINDEX}
                                       classes="textPropertyValue"
                                       inputType="text"
                                       onChange={(newValue) => this.updateFieldProps(newValue, 'name')}
@@ -91,6 +93,7 @@ export class FieldProperties extends Component {
             <div key={key} className="checkboxPropertyContainer">
                 <CheckBoxFieldValueEditor value={propertyValue}
                                           label={propertyTitle}
+                                          tabIndex={tabIndexConstants.FIELD_PROP_TABINDEX}
                                           onChange={(newValue) => this.updateFieldProps(newValue, 'required')}
                 />
             </div>

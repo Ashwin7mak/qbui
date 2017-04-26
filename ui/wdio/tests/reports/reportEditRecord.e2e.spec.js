@@ -11,7 +11,7 @@
     var ReportInLineEditPO = require('../../pages/reportInLineEdit.po');
     var ReportPagingPO = require('../../pages/reportPaging.po');
 
-    describe('Reports - In-line Edit Record Tests: ', function() {
+    describe('Reports - In-line edit record tests: ', function() {
         var realmName;
         var realmId;
         var testApp;
@@ -215,8 +215,6 @@
                 expect(expectedValues[0]).toBe(originalText);
             }
         });
-
-
         //TODO: Required field test, Need to extend setup data for this
 
         //TODO: Invalid input value tests (text in a date field)
