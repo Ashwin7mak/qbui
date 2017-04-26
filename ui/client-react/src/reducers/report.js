@@ -288,41 +288,45 @@ const report = (state = [], action) => {
             let params = action.content;
             let clickedColumnId = params.clickedId;
             let addBefore = params.addBefore;
-            // loop through to check if the placeholder column is already visible
-            let placeHolderAlreadyExists = currentReport.data.columns.some(column => {
-                return column.isPlaceholder === true;
-            });
-            if (placeHolderAlreadyExists) {
-                // remove the placeholder column if it exists
-                currentReport.data.columns = currentReport.data.columns.filter(column => {
-                    return !column.isPlaceholder;
-                });
-            }
-            reorderColumns(currentReport.data.columns);
-            // since not all columns are visible, add the placeholder column to columns so it gets rendered on screen
-            let placeholder = {
-                isPlaceholder: true,
-                isHidden: false,
-                id: -1
-            };
             // find the index of the column where 'add a column' was clicked
             let clickedColumn = currentReport.data.columns.filter(column => {
                 return column.id === clickedColumnId;
             })[0];
-            currentReport.data.columns.forEach(column => {
-                column.fieldDef.isAddingFrom = (column.fieldDef.id === clickedColumnId);
-            });
-            let clickedColumnIndex = clickedColumn.order - 1;
-            // add before or after the clicked column depending on selection
-            let insertionIndex;
-            if (addBefore) {
-                insertionIndex = clickedColumnIndex;
-            } else {
-                insertionIndex = clickedColumnIndex + 1;
+            if (clickedColumn) {
+                // loop through to check if the placeholder column is already visible
+                let placeHolderAlreadyExists = currentReport.data.columns.some(column => {
+                    return column.isPlaceholder === true;
+                });
+
+                if (placeHolderAlreadyExists) {
+                    // remove the placeholder column if it exists
+                    currentReport.data.columns = currentReport.data.columns.filter(column => {
+                        return !column.isPlaceholder;
+                    });
+                }
+                reorderColumns(currentReport.data.columns);
+                // since not all columns are visible, add the placeholder column to columns so it gets rendered on screen
+                let placeholder = {
+                    isPlaceholder: true,
+                    isHidden: false,
+                    id: -1
+                };
+
+                currentReport.data.columns.forEach(column => {
+                    column.fieldDef.isAddingFrom = (column.fieldDef.id === clickedColumnId);
+                });
+                let clickedColumnIndex = clickedColumn.order - 1;
+                // add before or after the clicked column depending on selection
+                let insertionIndex;
+                if (addBefore) {
+                    insertionIndex = clickedColumnIndex;
+                } else {
+                    insertionIndex = clickedColumnIndex + 1;
+                }
+                currentReport.data.columns.splice(insertionIndex, 0, placeholder);
+                reorderColumns(currentReport.data.columns);
+                return newState(currentReport);
             }
-            currentReport.data.columns.splice(insertionIndex, 0, placeholder);
-            reorderColumns(currentReport.data.columns);
-            return newState(currentReport);
         }
         return state;
     }
