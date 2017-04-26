@@ -115,7 +115,7 @@ class Locale {
         let formattedMsg = new IntlMessageFormat(Locale.getMessage(msgPath));
 
         // value and nameForRecord are required. Use empty string (nameForRecord: '') for empty value.
-        if (!params || !params.nameForRecord || !params.value) {
+        if (!params) {
             logger.warn('An object parameter and field is required to pluralize the input message.');
             return;
         }

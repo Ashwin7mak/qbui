@@ -101,7 +101,6 @@ describe('Delete Record Actions -- success workflow', () => {
     let notificationSuccess = jasmine.createSpy();
     beforeEach(() => {
         spyOn(mockRecordService.prototype, 'deleteRecords').and.callThrough();
-        // spyOn(mockLocale, 'getPluralizedMessage').and.callThrough();
         RecordActionsRewireAPI.__Rewire__('RecordService', mockRecordService);
         RecordActionsRewireAPI.__Rewire__('NotificationManager', {success: notificationSuccess});
         RecordActionsRewireAPI.__Rewire__('Locale', mockLocale);
@@ -121,7 +120,7 @@ describe('Delete Record Actions -- success workflow', () => {
     ];
 
     testCases.forEach((testCase) => {
-        fit(testCase.name, (done) => {
+        it(testCase.name, (done) => {
             const expectedRecIds = Array.isArray(testCase.recIds) ? testCase.recIds : [testCase.recIds];
             const expectedActions = [
                 event(expectedRecIds[0], types.DELETE_RECORDS, {appId, tblId, recIds:expectedRecIds}),
@@ -131,14 +130,11 @@ describe('Delete Record Actions -- success workflow', () => {
             const store = mockStore({});
             return store.dispatch(testCase.func.apply(this, [appId, tblId, testCase.recIds, 'name'])).then(
                 () => {
-                    // debugger;
                     expect(store.getActions()).toEqual(expectedActions);
-                    // debugger;
                     expect(notificationSuccess).toHaveBeenCalled();
                     done();
                 },
                 () => {
-                    // debugger;
                     expect(false).toEqual(true);
                     done();
                 });
