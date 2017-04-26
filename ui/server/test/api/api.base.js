@@ -282,10 +282,10 @@
                 return endpoint;
             },
             resolveGetReqUserEndpoint       : function() {
-                return NODE_BASE_ENDPOINT + USERS_ENDPOINT + REQ_USER;
+                return JAVA_BASE_ENDPOINT + USERS_ENDPOINT + REQ_USER;
             },
             resolveTableComponentsEndpoint       : function(appId) {
-                return NODE_BASE_ENDPOINT + APPS_ENDPOINT + appId + TABLES_ENDPOINT + TABLE_COMPONENTS;
+                return JAVA_BASE_ENDPOINT + APPS_ENDPOINT + appId + TABLES_ENDPOINT + TABLE_COMPONENTS;
             },
             defaultHeaders              : DEFAULT_HEADERS,
 
