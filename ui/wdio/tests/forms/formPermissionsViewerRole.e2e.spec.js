@@ -8,8 +8,7 @@
     var formsPO = requirePO('formsPage');
     var reportContentPO = requirePO('reportContent');
 
-    describe('Forms - Viewer User Permission Tests: ', function() {
-
+    describe('Forms - Viewer user permission tests: ', function() {
         var realmName;
         var realmId;
         var testApp;
@@ -181,6 +180,5 @@
         });
 
         //TODO verify cannot delete a record when no permission.
-
     });
 }());

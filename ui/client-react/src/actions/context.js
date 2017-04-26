@@ -13,6 +13,7 @@ export const CONTEXT = {
 
     FORM: {
         VIEW: 'view',
-        EDIT: 'edit'
+        EDIT: 'edit',
+        DRAWER: 'DRAWER'
     }
 };

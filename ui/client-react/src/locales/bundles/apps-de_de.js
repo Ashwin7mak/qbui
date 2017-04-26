@@ -133,6 +133,7 @@ export default {
             saveAndAddRecord: "Speichern und fügen Sie eine neue Zeile",
             saveAndAddRecordDisabled: "Hinzufügen von mehreren Datensätzen funktioniert nicht sofort",
             cancelSelection: "Abbrechen Änderungen",
+            close: "Schließen",
             favorite: "Favorit",
             gridEdit: "Gitter bearbeiten",
             edit: "Bearbeiten",
@@ -258,7 +259,8 @@ export default {
                 noCheck : "Nein",
                 yesCheck : "Ja",
                 clearFacet: "Filter {facet} zurücksetzen",
-                clearFacetSelection: "Klicken Sie auf diese Filter zu löschen"
+                clearFacetSelection: "Klicken Sie auf diese Filter zu löschen",
+                filter: "Filter"
             },
             filteredRecordCount : "{filteredRecordCount} von {recordCount} aufzeichnungen",
             filteredSingleRecordCount : "{filteredRecordCount} von {recordCount} aufzeichnen",
@@ -277,6 +279,7 @@ export default {
             previousPageLoadingOnSwipe: "Erste vorherige...",
             nextPageLoadingOnSwipe: "immer Mehr...",
             sortAndGroup : {
+                sortAndGroupIcon: "Sortieren & Gruppe",
                 addField: "Feld hinzufügen",
                 by: "nach",
                 changeGroupOrder: "Gruppe wechseln bestellen",
