@@ -13,6 +13,9 @@ export default {
         listOfElements: {
             noSearchResults: 'No fields match "{searchText}"',
             searchPlaceholder: "Filter"
+        },
+        user: {
+            notLoggedIn: "Not logged in"
         }
     }
 };
