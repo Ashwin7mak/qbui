@@ -57,7 +57,7 @@
             expect(TopNavPO.topNavCenterDivEl.getText()).toBeFalsy();
         });
 
-        it('Verify topNav global icons displayed/not displayed and verify text', function() {
+        it('Verify topNav global icons displayed/not displayed', function() {
             //Step1: Verify if the global icons are displayed
             TopNavPO.topNavGlobalActDivEl.waitForVisible();
             //Step2: Verify the no.of global action icons
