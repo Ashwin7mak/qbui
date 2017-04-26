@@ -299,12 +299,12 @@
 
         /**
          * Method to enter table field input values
-         * @filteredElement
-         * @filteredElementInputClassName
+         * @fieldName
          * @fieldValue
          */
-        setInputValue : {value: function(field, fieldValue) {
-            field.click();
+        setInputValue : {value: function(fieldName, fieldValue) {
+            fieldName.click();
+            //add code for firefox browser
             return browser.keys([fieldValue, '\uE004']);
         }},
 
