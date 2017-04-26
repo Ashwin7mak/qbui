@@ -19,6 +19,7 @@ describe('Locales', () => {
         };
 
         LocaleRewireAPI.__Rewire__('config', mockConfig);
+        // LocaleRewireAPI.__Rewire__('config', mockConfig);
         LocaleRewireAPI.__Rewire__('locale', '');
 
         //  default is undefined...sets to default of en-us
@@ -68,6 +69,13 @@ describe('Locales', () => {
         Locale.getI18nBundle();
         const testMsg = Locale.getPluralizeMessage("test.testPluralize", {value: 2});
         expect(testMsg).toBe('2 tests');
+    });
+
+    it('test empty params getPluralizeMessage', () => {
+        ReuseBundleLoader.changeLocale('en-us');
+        Locale.getI18nBundle();
+        const testMsg = Locale.getPluralizeMessage("test.testPluralize", {});
+        expect(testMsg).toBe(undefined);
     });
 
     it('test invalid change locale', () => {
