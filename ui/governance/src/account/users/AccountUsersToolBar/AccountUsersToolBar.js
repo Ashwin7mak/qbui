@@ -3,7 +3,7 @@ import AccountUsersNavigation from "./AccountUsersNavigation";
 import * as StandardGridActions from "../../../common/grid/standardGridActions";
 import * as AccountUsersActions from "../AccountUsersActions";
 import IconInputBox from "../../../../../reuse/client/src/components/iconInputBox/iconInputBox";
-import {connect} from 'react-redux';
+import {connect} from "react-redux";
 
 /**
  * The toolbar for the AccountUsers page
@@ -21,8 +21,7 @@ class AccountUsersToolBar extends React.Component {
                               onChange={this.props.onSearchChange}/>
                 <AccountUsersNavigation getPreviousUsersPage={this.props.getPreviousUsersPage}
                                         getNextUsersPage={this.props.getNextUsersPage}
-                                        id={this.props.id}
-                                        totalRecords={this.props.totalRecords}/>
+                                        id={this.props.id}/>
             </div>
         );
     }

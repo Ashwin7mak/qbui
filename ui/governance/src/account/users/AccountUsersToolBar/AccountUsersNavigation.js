@@ -39,7 +39,6 @@ AccountUsersNavigation.defaultProps = {
 
 AccountUsersNavigation.propTypes = {
     pageNumber: PropTypes.number,
-    totalRecords: PropTypes.number,
     id: PropTypes.string
 };
 
@@ -47,6 +46,7 @@ export {AccountUsersNavigation};
 
 const mapStateToProps = (state, ownProps) => {
     return {
+        totalRecords: _.has(state.Grids, ownProps.id) ? state.Grids[ownProps.id].items.length : 1,
         pageNumber: _.has(state.Grids, ownProps.id) ? state.Grids[ownProps.id].pageNumber : 1
     };
 };
