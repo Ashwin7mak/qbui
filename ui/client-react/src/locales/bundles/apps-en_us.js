@@ -138,6 +138,7 @@ export default {
             saveAndAddRecord: "Save and add a new row",
             saveAndAddRecordDisabled: "Adding records in the grid is not available yet",
             cancelSelection: "Cancel changes",
+            close: "Close",
             favorite: "Favorite",
             gridEdit: "Grid Edit",
             edit: "Edit",

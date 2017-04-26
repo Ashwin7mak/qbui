@@ -80,10 +80,12 @@ function createEditRecordEventObject(appId, tblId, recId, origRec, changes, isIn
  * @param recId
  * @param nextRecordId
  * @param previousRecordId
+ * @param uniqueId the context for this action such as "VIEW" or "DRAWER"
  * @returns {{id, type, content}|{id: *, type: *, content: *}}
  */
-export const openRecord = (recId, nextRecordId, previousRecordId) => {
-    return event(recId, types.OPEN_RECORD, {recId, nextRecordId, previousRecordId});
+export const openRecord = (recId, nextRecordId, previousRecordId, uniqueId) => {
+    uniqueId = uniqueId || recId;
+    return event(uniqueId, types.OPEN_RECORD, {recId, nextRecordId, previousRecordId});
 };
 
 /**
@@ -541,6 +543,7 @@ export const updateRecord = (appId, tblId, recId, params = {}) => {
 
                                 // delay the response object so that the state gets updated with success settings
                                 Promise.delay(PRE_REQ_DELAY_MS).then(() => {
+                                    dispatch(event(recId, types.SAVE_RECORD_COMPLETE, {appId, tblId, recId}));
                                     let obj = {
                                         recId:recId,
                                         appId:appId,
