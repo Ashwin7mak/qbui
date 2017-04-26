@@ -6,6 +6,7 @@ import WindowLocationUtils from  "../../../../client-react/src/utils/windowLocat
 import {FORBIDDEN, INTERNAL_SERVER_ERROR} from  "../../../../client-react/src/constants/urlConstants";
 import Logger from '../../../../client-react/src/utils/logger';
 import LogLevel from '../../../../client-react/src/utils/logLevels';
+import _ from 'lodash';
 let logger = new Logger();
 import * as Formatters from "./Grid/AccountUsersGridFormatters";
 import * as RealmUserAccountFlagConstants from "../../common/constants/RealmUserAccountFlagConstants.js";
@@ -68,7 +69,7 @@ export const paginateUsers = (users, _page, _itemsPerPage) => {
         itemsPerPage = _itemsPerPage || 10;
     let offset = (page - 1) * itemsPerPage;
     return users.slice(offset, offset + itemsPerPage);
-}
+};
 
 const sortFunctions = [
     "uid",
