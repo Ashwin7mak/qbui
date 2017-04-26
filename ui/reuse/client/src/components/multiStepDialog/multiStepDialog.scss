@@ -3,7 +3,8 @@
 .multiStepModal {
 
     .modal-content {
-        border-radius: $radius-base;
+        border-radius: $border-radius-base;
+        box-shadow: none;
 
         .multiStepDialogRightIcons {
             font-size: 18px;

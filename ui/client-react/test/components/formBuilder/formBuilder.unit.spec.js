@@ -53,12 +53,15 @@ describe('FormBuilder (drag/drop container)', () => {
             let mockParent = {moveField(_formMeta, _newLocation, _draggedItemProps) {}};
             spyOn(mockParent, 'moveField');
 
-            component = shallow(<FormBuilder formId={'view'} formData={mockFormData} moveFieldOnForm={mockParent.moveField} />);
-            instance = component.instance();
-
             const newLocation = {location: 1};
             const element = {id: 1, positionSameRow: false};
-            const draggedItemProps = {draggedItem: 5, containingElement: {FormFieldItem: element}};
+            const containingElement = {FormFieldItem: element};
+            const draggedItemProps = {draggedItem: 5, containingElement};
+            const selectedFormElement = containingElement;
+
+            component = shallow(<FormBuilder formId={'view'} formData={mockFormData} moveFieldOnForm={mockParent.moveField} selectedFormElement={selectedFormElement}/>);
+            instance = component.instance();
+
             instance.handleFormReorder(newLocation, draggedItemProps, true);
 
             expect(mockParent.moveField).toHaveBeenCalledWith('view', newLocation, Object.assign({}, draggedItemProps, {element}));

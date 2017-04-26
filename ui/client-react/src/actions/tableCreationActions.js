@@ -14,12 +14,12 @@ export const hideTableCreationDialog = () => ({
     type: types.HIDE_TABLE_CREATION_DIALOG
 });
 
-export const nextTableCreationPage = () => ({
-    type: types.NEXT_TABLE_CREATION_PAGE
+export const showTableReadyDialog = () => ({
+    type: types.SHOW_TABLE_READY_DIALOG
 });
 
-export const previousTableCreationPage = () => ({
-    type: types.PREVIOUS_TABLE_CREATION_PAGE
+export const hideTableReadyDialog = () => ({
+    type: types.HIDE_TABLE_READY_DIALOG
 });
 
 /**
