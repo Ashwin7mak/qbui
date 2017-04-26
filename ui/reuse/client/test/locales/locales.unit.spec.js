@@ -6,6 +6,7 @@ describe('Locales', () => {
 
     it('test getI18nBundle default bundle using environment settings(PROD)', () => {
         expect(Locale.getLocale()).toBe('en-us');
+        ReuseBundleLoader.changeLocale('en-us');
         let i18n = Locale.getI18nBundle();
         expect(i18n.locales).toBe('en-us');
     });
