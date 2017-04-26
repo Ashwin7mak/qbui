@@ -7,24 +7,28 @@
 
     let _ = require('lodash');
 
-    let baseContext = {
-        //  custom client function endpoints
-        QUICKBASE_CLIENT      : '/qbui',
-        QUICKBASE_CLIENT_NODE : '/qbn',
-
-        //  direct api endpoints
-        //
-        //  Note: current architect decision is that a breaking change to an api
-        //  will mean a new api endpoint and not a new version release. That's
-        //  why you are seeing hard-coded versions.
-        CORE_ENGINE         : '/api/api/v1',
-        CORE_HEALTH         : '/api/v1',
-        EXPERIENCE_ENGINE   : '/ee/v1',
-        GOVERNANCE          : '/api/governance/:version',
-        WORKFLOW : {
-            WORKFLOW        : '/we',
-            FLOW_MANAGER    : '/we/api/v1',
-            AUTOMATION      : '/we/workflow'
+    //  Note: architect decision is that a breaking change to an api
+    //  will mean a new api endpoint and not a new version release. That's
+    //  why you are seeing hard-coded versions here and not on the client..
+    let context = {
+        base: {
+            //  if adding a new context, review qbRouteMapper.forwardApiRequest
+            CORE: '/api',
+            EE: '/ee',
+            WE: '/we'
+        },
+        client: {
+            QBUI: '/qbui',
+            NODE: '/qbn'
+        },
+        api: {
+            CORE: '/api/api/v1',
+            EE: '/ee/v1',
+            GOVERNANCE: '/api/governance/:version',
+            WORKFLOW: {
+                FLOW_MANAGER: '/we/api/v1',
+                AUTOMATION: '/we/workflow'
+            }
         }
     };
 
@@ -34,68 +38,68 @@
      *
      *  NOTE: there is no need to define a route here if the expectation is to only proxy/forward the request through node.
      */
-    let qbuiApiEndpoints = {
-        // TODO: will be removed and replaced with QBUI_HEALTH endpoint once pit team makes changes in sprint 7
-        QBUI_HEALTH_CHECK           : baseContext.CORE_HEALTH + '/qbuiHealth',
+    let clientApiEndpoints = {
+        // TODO: remove and replace with QBUI_HEALTH endpoint once pit team makes changes in sprint 7
+        QBUI_HEALTH_CHECK           : 'api/v1/qbuiHealth',
 
-        FORM_AND_RECORD_COMPONENTS  : baseContext.QUICKBASE_CLIENT + '/apps/:appId/tables/:tableId/records/:recordId/formComponents',
-        FORM_COMPONENTS             : baseContext.QUICKBASE_CLIENT + '/apps/:appId/tables/:tableId/formComponents',
+        FORM_AND_RECORD_COMPONENTS  : context.client.QBUI + '/apps/:appId/tables/:tableId/records/:recordId/formComponents',
+        FORM_COMPONENTS             : context.client.QBUI + '/apps/:appId/tables/:tableId/formComponents',
 
-        RECORD                      : baseContext.QUICKBASE_CLIENT + '/apps/:appId/tables/:tableId/records/:recordId',
-        RECORDS                     : baseContext.QUICKBASE_CLIENT + '/apps/:appId/tables/:tableId/records',
-        RECORDS_BULK                : baseContext.QUICKBASE_CLIENT + '/apps/:appId/tables/:tableId/records/bulk',
+        RECORD                      : context.client.QBUI + '/apps/:appId/tables/:tableId/records/:recordId',
+        RECORDS                     : context.client.QBUI + '/apps/:appId/tables/:tableId/records',
+        RECORDS_BULK                : context.client.QBUI + '/apps/:appId/tables/:tableId/records/bulk',
 
-        REPORT_META                 : baseContext.QUICKBASE_CLIENT + '/apps/:appId/tables/:tableId/reports/:reportId',
-        REPORT_RESULTS              : baseContext.QUICKBASE_CLIENT + '/apps/:appId/tables/:tableId/reports/:reportId/results',
-        REPORT_INVOKE_RESULTS       : baseContext.QUICKBASE_CLIENT + '/apps/:appId/tables/:tableId/reports/:reportId/invoke',
-        REPORT_RECORDS_COUNT        : baseContext.QUICKBASE_CLIENT + '/apps/:appId/tables/:tableId/reports/:reportId/recordsCount',
-        TABLE_HOMEPAGE_REPORT       : baseContext.QUICKBASE_CLIENT + '/apps/:appId/tables/:tableId/homePage',
+        REPORT_META                 : context.client.QBUI + '/apps/:appId/tables/:tableId/reports/:reportId',
+        REPORT_RESULTS              : context.client.QBUI + '/apps/:appId/tables/:tableId/reports/:reportId/results',
+        REPORT_INVOKE_RESULTS       : context.client.QBUI + '/apps/:appId/tables/:tableId/reports/:reportId/invoke',
+        REPORT_RECORDS_COUNT        : context.client.QBUI + '/apps/:appId/tables/:tableId/reports/:reportId/recordsCount',
+        TABLE_HOMEPAGE_REPORT       : context.client.QBUI + '/apps/:appId/tables/:tableId/homePage',
 
-        TABLE_COMPONENTS            : baseContext.QUICKBASE_CLIENT + '/apps/:appId/tables/tableComponents',
-        TABLE                       : baseContext.QUICKBASE_CLIENT + '/apps/:appId/tables/:tableId',
-        TABLES                      : baseContext.QUICKBASE_CLIENT + '/apps/:appId/tables',
+        TABLE_COMPONENTS            : context.client.QBUI + '/apps/:appId/tables/tableComponents',
+        TABLE                       : context.client.QBUI + '/apps/:appId/tables/:tableId',
+        TABLES                      : context.client.QBUI + '/apps/:appId/tables',
 
-        APPS                        : baseContext.QUICKBASE_CLIENT + '/apps',
-        APP_USERS                   : baseContext.QUICKBASE_CLIENT + '/apps/:appId/users',
-        APP_ROLES                   : baseContext.QUICKBASE_CLIENT + '/apps/:appId/roles',
+        APPS                        : context.client.QBUI + '/apps',
+        APP_USERS                   : context.client.QBUI + '/apps/:appId/users',
+        APP_ROLES                   : context.client.QBUI + '/apps/:appId/roles',
 
-        ADMIN                       : baseContext.QUICKBASE_CLIENT + '/admin',
-        FEATURE_SWITCHES            : baseContext.QUICKBASE_CLIENT + '/admin/featureSwitches',
-        FEATURE_SWITCHES_BULK       : baseContext.QUICKBASE_CLIENT + '/admin/featureSwitches/bulk',
-        FEATURE_SWITCH              : baseContext.QUICKBASE_CLIENT + '/admin/featureSwitches/:featureSwitchId',
-        FEATURE_OVERRIDES           : baseContext.QUICKBASE_CLIENT + '/admin/featureSwitches/:featureSwitchId/overrides',
-        FEATURE_OVERRIDES_BULK      : baseContext.QUICKBASE_CLIENT + '/admin/featureSwitches/:featureSwitchId/overrides/bulk',
-        FEATURE_OVERRIDE            : baseContext.QUICKBASE_CLIENT + '/admin/featureSwitches/:featureSwitchId/overrides/:overrideId',
-        FEATURE_STATES              : baseContext.QUICKBASE_CLIENT + '/featureStates',
+        ADMIN                       : context.client.QBUI + '/admin',
+        FEATURE_SWITCHES            : context.client.QBUI + '/admin/featureSwitches',
+        FEATURE_SWITCHES_BULK       : context.client.QBUI + '/admin/featureSwitches/bulk',
+        FEATURE_SWITCH              : context.client.QBUI + '/admin/featureSwitches/:featureSwitchId',
+        FEATURE_OVERRIDES           : context.client.QBUI + '/admin/featureSwitches/:featureSwitchId/overrides',
+        FEATURE_OVERRIDES_BULK      : context.client.QBUI + '/admin/featureSwitches/:featureSwitchId/overrides/bulk',
+        FEATURE_OVERRIDE            : context.client.QBUI + '/admin/featureSwitches/:featureSwitchId/overrides/:overrideId',
+        FEATURE_STATES              : context.client.QBUI + '/featureStates',
 
-        REQ_USER                    : baseContext.QUICKBASE_CLIENT + '/users/reqUser',
+        REQ_USER                    : context.client.QBUI + '/users/reqUser',
 
-        GOVERNANCE_ACCOUNT_USERS     : baseContext.GOVERNANCE + '/:accountId/users',
+        GOVERNANCE_ACCOUNT_USERS    : context.api.GOVERNANCE + '/:accountId/users',
         // the account id is an optional parameter
-        GOVERNANCE_CONTEXT           : baseContext.GOVERNANCE + '/context',
+        GOVERNANCE_CONTEXT          : context.api.GOVERNANCE + '/context',
 
         // ************ TEMPORARY routes needed to allow E2E tests to continue to work under new routing scheme  *************
         // ************ PLEASE DO NOT ADD TO THIS LIST as these will go away once E2E is updated                 *************
         //  E2E needs these routes to be defined as some tests do not differentiate between the /qbui prefixed route or
         //  the /api/api/v1 core routes.  JIRA MC-2268 has been created to refactor how routing is constructed so that the
         //  test framework does not call the custom routing using the incorrect prefix.
-        E2E_FORM_AND_RECORD_COMPONENTS  : baseContext.CORE_ENGINE + '/apps/:appId/tables/:tableId/records/:recordId/formComponents',
-        E2E_FORM_COMPONENTS             : baseContext.CORE_ENGINE + '/apps/:appId/tables/:tableId/formComponents',
-        E2E_RECORD                      : baseContext.CORE_ENGINE + '/apps/:appId/tables/:tableId/records/:recordId',
-        E2E_RECORDS                     : baseContext.CORE_ENGINE + '/apps/:appId/tables/:tableId/records',
-        E2E_RECORDS_BULK                : baseContext.CORE_ENGINE + '/apps/:appId/tables/:tableId/records/bulk',
-        E2E_REPORT_META                 : baseContext.CORE_ENGINE + '/apps/:appId/tables/:tableId/reports/:reportId',
-        E2E_REPORT_RESULTS              : baseContext.CORE_ENGINE + '/apps/:appId/tables/:tableId/reports/:reportId/results',
-        E2E_REPORT_INVOKE_RESULTS       : baseContext.CORE_ENGINE + '/apps/:appId/tables/:tableId/reports/:reportId/invoke',
-        E2E_REPORT_RECORDS_COUNT        : baseContext.CORE_ENGINE + '/apps/:appId/tables/:tableId/reports/:reportId/recordsCount',
-        E2E_TABLE_HOMEPAGE_REPORT       : baseContext.CORE_ENGINE + '/apps/:appId/tables/:tableId/homePage',
-        E2E_TABLE_COMPONENTS            : baseContext.CORE_ENGINE + '/apps/:appId/tables/tableComponents',
-        E2E_TABLE                       : baseContext.CORE_ENGINE + '/apps/:appId/tables/:tableId',
-        E2E_TABLES                      : baseContext.CORE_ENGINE + '/apps/:appId/tables',
-        E2E_APPS                        : baseContext.CORE_ENGINE + '/apps',
-        E2E_APP_USERS                   : baseContext.CORE_ENGINE + '/apps/:appId/users',
-        E2E_APP_ROLES                   : baseContext.CORE_ENGINE + '/apps/:appId/roles',
-        E2E_REQ_USER                    : baseContext.CORE_ENGINE + '/users/reqUser'
+        E2E_FORM_AND_RECORD_COMPONENTS  : context.api.CORE + '/apps/:appId/tables/:tableId/records/:recordId/formComponents',
+        E2E_FORM_COMPONENTS             : context.api.CORE + '/apps/:appId/tables/:tableId/formComponents',
+        E2E_RECORD                      : context.api.CORE + '/apps/:appId/tables/:tableId/records/:recordId',
+        E2E_RECORDS                     : context.api.CORE + '/apps/:appId/tables/:tableId/records',
+        E2E_RECORDS_BULK                : context.api.CORE + '/apps/:appId/tables/:tableId/records/bulk',
+        E2E_REPORT_META                 : context.api.CORE + '/apps/:appId/tables/:tableId/reports/:reportId',
+        E2E_REPORT_RESULTS              : context.api.CORE + '/apps/:appId/tables/:tableId/reports/:reportId/results',
+        E2E_REPORT_INVOKE_RESULTS       : context.api.CORE + '/apps/:appId/tables/:tableId/reports/:reportId/invoke',
+        E2E_REPORT_RECORDS_COUNT        : context.api.CORE + '/apps/:appId/tables/:tableId/reports/:reportId/recordsCount',
+        E2E_TABLE_HOMEPAGE_REPORT       : context.api.CORE + '/apps/:appId/tables/:tableId/homePage',
+        E2E_TABLE_COMPONENTS            : context.api.CORE + '/apps/:appId/tables/tableComponents',
+        E2E_TABLE                       : context.api.CORE + '/apps/:appId/tables/:tableId',
+        E2E_TABLES                      : context.api.CORE + '/apps/:appId/tables',
+        E2E_APPS                        : context.api.CORE + '/apps',
+        E2E_APP_USERS                   : context.api.CORE + '/apps/:appId/users',
+        E2E_APP_ROLES                   : context.api.CORE + '/apps/:appId/roles',
+        E2E_REQ_USER                    : context.api.CORE + '/users/reqUser'
         // ********************************************************************************
     };
 
@@ -106,11 +110,11 @@
 
     let nodeApiEndpoints = {
         //  log routes are defined in routes.js
-        LOG_CLIENT_MSG          : baseContext.QUICKBASE_CLIENT_NODE + '/log',
-        LOG_CLIENT_PERF_MSG     : baseContext.QUICKBASE_CLIENT_NODE + '/clientPerf',
+        LOG_CLIENT_MSG          : context.client.NODE + '/log',
+        LOG_CLIENT_PERF_MSG     : context.client.NODE + '/clientPerf',
         //
-        FACET_EXPRESSION_PARSE  : baseContext.QUICKBASE_CLIENT_NODE + '/facets/parse',
-        QBUI_HEALTH             : baseContext.QUICKBASE_CLIENT_NODE + '/health'
+        FACET_EXPRESSION_PARSE  : context.client.NODE + '/facets/parse',
+        QBUI_HEALTH             : context.client.NODE + '/health'
     };
 
     /**
@@ -165,34 +169,33 @@
     //      /i    - case insensitive
     //
     let publicEndPoints = [
-        {route: publicControllerEndpoints.PUBLIC_FIELDS, regEx: /^\/apps\/.*\/tables\/.*\/fields(.*)?$/i, context: baseContext.CORE_ENGINE},
-        {route: publicControllerEndpoints.PUBLIC_FORMS, regEx: /^\/apps\/.*\/tables\/.*\/forms(.*)?$/i, context: baseContext.EXPERIENCE_ENGINE},
-        {route: publicControllerEndpoints.PUBLIC_RECORDS, regEx: /^\/apps\/.*\/tables\/.*\/records(.*)?$/i, context: baseContext.CORE_ENGINE},
-        {route: publicControllerEndpoints.PUBLIC_REPORTS, regEx: /^\/apps\/.*\/tables\/.*\/reports(.*)?$/i, context: baseContext.CORE_ENGINE},
-        {route: publicControllerEndpoints.PUBLIC_TABLE_PROPERTIES, regEx: /^\/apps\/.*\/tables\/.*\/tableproperties(.*)?$/i, context: baseContext.EXPERIENCE_ENGINE},
-        {route: publicControllerEndpoints.PUBLIC_TABLES, regEx: /^\/apps\/.*\/tables(.*)?$/i, context: baseContext.CORE_ENGINE},
-        {route: publicControllerEndpoints.PUBLIC_RELATIONSHIPS, regEx: /^\/apps\/.*\/relationships(.*)?$/i, context: baseContext.CORE_ENGINE},
-        {route: publicControllerEndpoints.PUBLIC_ROLES, regEx: /^\/apps\/.*\/roles(.*)?$/i, context: baseContext.CORE_ENGINE},
-        {route: publicControllerEndpoints.PUBLIC_WORKFLOW_FLOW_MGR, regEx: /^\/apps\/.*\/workflow\/flows(.*)?$/i, context: baseContext.WORKFLOW.FLOW_MANAGER},
-        {route: publicControllerEndpoints.PUBLIC_APPS, regEx: /^\/apps(.*)?$/i, context: baseContext.CORE_ENGINE},                  // conflict with EE
-        {route: publicControllerEndpoints.PUBLIC_HEALTH, regEx: /^\/health$/i, context: baseContext.CORE_ENGINE},                // conflict with EE, Workflow
-        {route: publicControllerEndpoints.PUBLIC_OPERATIONS, regEx: /^\/operations(.*)?$/i, context: baseContext.CORE_ENGINE},        // conflict with EE
-        {route: publicControllerEndpoints.PUBLIC_REALMS, regEx: /^\/realms(.*)?$/i, context: baseContext.CORE_ENGINE},
-        {route: publicControllerEndpoints.PUBLIC_TICKET, regEx: /^\/ticket(.*)?$/i, context: baseContext.CORE_ENGINE},
-        {route: publicControllerEndpoints.PUBLIC_USERS, regEx: /^\/users(.*)?$/i, context: baseContext.CORE_ENGINE},
-        //  workflow team should consider having common context for their routes
-        {route: publicControllerEndpoints.PUBLIC_WORKFLOW_AUTOMATION_API, regEx: /^\/workflow\/apps\/.*\/api(.*)?$/i, context: baseContext.WORKFLOW.WORKFLOW},
-        {route: publicControllerEndpoints.PUBLIC_WORKFLOW_AUTOMATION_INVOKE, regEx: /^\/workflow\/apps\/.*\/invokes(.*)?$/i, context: baseContext.WORKFLOW.WORKFLOW}
+        {route: publicControllerEndpoints.PUBLIC_FIELDS, regEx: /^\/apps\/.*\/tables\/.*\/fields(.*)?$/i, context: context.api.CORE},
+        {route: publicControllerEndpoints.PUBLIC_FORMS, regEx: /^\/apps\/.*\/tables\/.*\/forms(.*)?$/i, context: context.api.EE},
+        {route: publicControllerEndpoints.PUBLIC_RECORDS, regEx: /^\/apps\/.*\/tables\/.*\/records(.*)?$/i, context: context.api.CORE},
+        {route: publicControllerEndpoints.PUBLIC_REPORTS, regEx: /^\/apps\/.*\/tables\/.*\/reports(.*)?$/i, context: context.api.CORE},
+        {route: publicControllerEndpoints.PUBLIC_TABLE_PROPERTIES, regEx: /^\/apps\/.*\/tables\/.*\/tableproperties(.*)?$/i, context: context.api.EE},
+        {route: publicControllerEndpoints.PUBLIC_TABLES, regEx: /^\/apps\/.*\/tables(.*)?$/i, context: context.api.CORE},
+        {route: publicControllerEndpoints.PUBLIC_RELATIONSHIPS, regEx: /^\/apps\/.*\/relationships(.*)?$/i, context: context.api.CORE},
+        {route: publicControllerEndpoints.PUBLIC_ROLES, regEx: /^\/apps\/.*\/roles(.*)?$/i, context: context.api.CORE},
+        {route: publicControllerEndpoints.PUBLIC_WORKFLOW_FLOW_MGR, regEx: /^\/apps\/.*\/workflow\/flows(.*)?$/i, context: context.api.WORKFLOW.FLOW_MANAGER},
+        {route: publicControllerEndpoints.PUBLIC_APPS, regEx: /^\/apps(.*)?$/i, context: context.api.CORE},                  // conflict with EE
+        {route: publicControllerEndpoints.PUBLIC_HEALTH, regEx: /^\/health$/i, context: context.api.CORE},                // conflict with EE, Workflow
+        {route: publicControllerEndpoints.PUBLIC_OPERATIONS, regEx: /^\/operations(.*)?$/i, context: context.api.CORE},        // conflict with EE
+        {route: publicControllerEndpoints.PUBLIC_REALMS, regEx: /^\/realms(.*)?$/i, context: context.api.CORE},
+        {route: publicControllerEndpoints.PUBLIC_TICKET, regEx: /^\/ticket(.*)?$/i, context: context.api.CORE},
+        {route: publicControllerEndpoints.PUBLIC_USERS, regEx: /^\/users(.*)?$/i, context: context.api.CORE},
+        {route: publicControllerEndpoints.PUBLIC_WORKFLOW_AUTOMATION_API, regEx: /^\/workflow\/apps\/.*\/api(.*)?$/i, context: context.base.WE},
+        {route: publicControllerEndpoints.PUBLIC_WORKFLOW_AUTOMATION_INVOKE, regEx: /^\/workflow\/apps\/.*\/invokes(.*)?$/i, context: context.base.WE}
     ];
 
     /**
      * Define the base context url for each respective context
      */
     let apiEndpoints = {
-        CORE_ENGINE            : baseContext.CORE_ENGINE + '/*',
-        EXPERIENCE_ENGINE      : baseContext.EXPERIENCE_ENGINE + '/*',
-        WORKFLOW_ENGINE        : baseContext.WORKFLOW.FLOW_MANAGER + '/*',
-        AUTOMATION_ENGINE      : baseContext.WORKFLOW.AUTOMATION + '/*'
+        CORE_ENGINE            : context.api.CORE + '/*',
+        EXPERIENCE_ENGINE      : context.api.EE + '/*',
+        WORKFLOW_ENGINE        : context.api.WORKFLOW.FLOW_MANAGER + '/*',
+        AUTOMATION_ENGINE      : context.api.WORKFLOW.AUTOMATION + '/*'
     };
 
     /**
@@ -209,9 +212,9 @@
     // List of routes used by the quickbase client to perform functionality either exclusively in node code or
     // composition routes in support of a client request.  See qbRouteMapper.modifyRequestPathForApi() for
     // reference to this list and how it is used.
-    const regExExpression = `^${baseContext.QUICKBASE_CLIENT}/(.*)?$`;
+    const regExExpression = `^${context.client.QBUI}/(.*)?$`;
     let clientEndPoints = [
-        {route: baseContext.QUICKBASE_CLIENT, regEx: new RegExp(regExExpression, 'i'), context: baseContext.CORE_ENGINE}
+        {route: context.client.QBUI, regEx: new RegExp(regExExpression, 'i'), context: context.api.CORE}
     ];
 
     //  Export the combined list of routes.
@@ -220,7 +223,7 @@
     //  defined early in the return object and the more generic last.  Routes that resolve to multiple mappings
     //  will always use the first route definition that it matches.
     exports.routes = Object.freeze(_.assign({},
-        qbuiApiEndpoints, nodeApiEndpoints, publicControllerEndpoints, apiEndpoints, swaggerEndpoints));
+        clientApiEndpoints, nodeApiEndpoints, publicControllerEndpoints, apiEndpoints, swaggerEndpoints));
 
     //  These are exported to avoid the need of duplicating in qbRouteMapper.
     exports.publicEndPoints = publicEndPoints;

@@ -1286,9 +1286,6 @@
      * @param res
      */
     function forwardApiRequest(req, res) {
-        let perfLog = perfLogger.getInstance();
-        perfLog.init('Forward Request', {req:filterNodeReq(req)});
-
         processRequest(req, res, function(req, res) {
             let opts;
             switch (true) {
@@ -1304,6 +1301,8 @@
             }
 
             if (opts) {
+                let perfLog = perfLogger.getInstance();
+                perfLog.init('Forward Request', {req:filterNodeReq(req)});
                 request(opts)
                     .on('response', function(response) {
                         logApiSuccess(req, response, perfLog);
