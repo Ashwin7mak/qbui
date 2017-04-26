@@ -37,8 +37,12 @@ const unloadableWrapper = (Component) => {
         }
 
         render() {
+            let classNames = ['unloadable' + (this.props.uniqueId || '')];
+            if (this.props.className) {
+                classNames = classNames.concatthis.props.className();
+            }
             if (this.props.hasEntry) {
-                return <Component {...this.props} />;
+                return <Component {...this.props} className={classNames.join(' ')} />;
             } else {
                 return null;
             }
@@ -61,3 +65,18 @@ const unloadableWrapper = (Component) => {
 };
 
 export default unloadableWrapper;
+
+/**
+ * An invisible div wrapped in the unloadable HOC. Use when there's no need to wrap a component with the HOC. Simply
+ * render the UnloadableNode. When the parent component mounts/unmounts, loadEntry and unloadEntry will be called
+ * respectively.
+ */
+class InvisibleNode extends React.Component {
+    render() {
+        return (
+            <div className={this.props.className} style={{display: 'none'}} >
+                {this.props.children}
+            </div>);
+    }
+}
+export const UnloadableNode = unloadableWrapper(InvisibleNode);
