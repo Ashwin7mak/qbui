@@ -115,11 +115,10 @@ export default {
         },
         grid: {
             no_data: "Es liegen keine Daten zum Anzeigen.",
-            no_filter_matches: "Keine Datensätze übereinstimmen, was du suchst. Versuchen Sie, nach einer anderen Art von Rekord zu suchen.",
-            no_rows: "TheEs gibt keine Aufzeichnungen, um jetzt zu sehen.",
-            no_rows_but: "Es gibt keine Aufzeichnungen, aber du kannst ",
+            no_filter_matches: "Keine {recordsName} übereinstimmen, was du suchst. Versuchen Sie, nach einer anderen Art von {recordName} zu suchen.",
+            no_rows: "Es gibt keine {recordsName}, um jetzt zu sehen.",
+            no_rows_but: "Es gibt keine {recordsName}, aber du kannst ",
             no_rows_create_link:  "erstelle einen"
-
         },
         globalActions: {
             user: "Benutzer",
@@ -134,6 +133,7 @@ export default {
             saveAndAddRecord: "Speichern und fügen Sie eine neue Zeile",
             saveAndAddRecordDisabled: "Hinzufügen von mehreren Datensätzen funktioniert nicht sofort",
             cancelSelection: "Abbrechen Änderungen",
+            close: "Schließen",
             favorite: "Favorit",
             gridEdit: "Gitter bearbeiten",
             edit: "Bearbeiten",
@@ -259,7 +259,8 @@ export default {
                 noCheck : "Nein",
                 yesCheck : "Ja",
                 clearFacet: "Filter {facet} zurücksetzen",
-                clearFacetSelection: "Klicken Sie auf diese Filter zu löschen"
+                clearFacetSelection: "Klicken Sie auf diese Filter zu löschen",
+                filter: "Filter"
             },
             filteredRecordCount : "{filteredRecordCount} von {recordCount} aufzeichnungen",
             filteredSingleRecordCount : "{filteredRecordCount} von {recordCount} aufzeichnen",
@@ -278,6 +279,7 @@ export default {
             previousPageLoadingOnSwipe: "Erste vorherige...",
             nextPageLoadingOnSwipe: "immer Mehr...",
             sortAndGroup : {
+                sortAndGroupIcon: "Sortieren & Gruppe",
                 addField: "Feld hinzufügen",
                 by: "nach",
                 changeGroupOrder: "Gruppe wechseln bestellen",
@@ -645,7 +647,13 @@ export default {
             homePageCreateAnother: "Erstellen Sie eine andere Tabelle",
 
             noSuggestedIcons: "Es gibt keine vorgeschlagenen Symbole für diesen Tabellennamen",
-            typeForSuggestions: "Bitte geben Sie einen Tabellennamen ein, um Vorschläge zu erhalten"
+            typeForSuggestions: "Bitte geben Sie einen Tabellennamen ein, um Vorschläge zu erhalten",
+
+            tableReadyTitle: "Dein Tisch ist fertig!",
+            tableReadyText1: "Jedes Bit von Informationen, die Sie sammeln möchten, ist ein Feld. Wir haben dich mit einem Paar angefangen.",
+            tableReadyText2: "Gestalte dieses Formular, um Infos zu sammeln. Ziehen und ziehen, um Felder hinzuzufügen.",
+
+            tableReadyDialogOK: "OK"
         },
         iconChooser: {
             searchPlaceholder: "Tabellensymbole suchen ......"

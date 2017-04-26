@@ -20,26 +20,10 @@ export class TableCreationDialog extends React.Component {
         super(props);
 
         // bind to fix context for event handlers
-        this.onPrevious = this.onPrevious.bind(this);
-        this.onNext = this.onNext.bind(this);
+
         this.onFinished = this.onFinished.bind(this);
         this.onCancel = this.onCancel.bind(this);
     }
-
-    /**
-     * navigate to next page
-     */
-    onNext() {
-        this.props.nextTableCreationPage();
-    }
-
-    /**
-     * navigate to previous page
-     */
-    onPrevious() {
-        this.props.previousTableCreationPage();
-    }
-
 
     /**
      * cancel
@@ -64,9 +48,6 @@ export class TableCreationDialog extends React.Component {
         this.props.createTable(this.props.app.id, tableInfo).then(
             (response) => {
                 this.props.hideTableCreationDialog();
-
-                // indicate that a table created notification will be needed
-                this.props.notifyTableCreated(true);
 
                 const tblId = response.data;
 
@@ -117,14 +98,11 @@ export class TableCreationDialog extends React.Component {
         return (<MultiStepDialog show={this.props.tableCreation.dialogOpen}
                                  isLoading={this.props.tableCreation.savingTable}
                                  classes={classes.join(' ')}
-                                 pageIndex={this.props.tableCreation.pageIndex}
                                  onCancel={this.onCancel}
-                                 onPrevious={this.onPrevious}
-                                 onNext={this.onNext}
                                  onFinished={this.onFinished}
                                  finishedButtonLabel={Locale.getMessage("tableCreation.finishedButtonLabel")}
                                  canProceed={this.isValid()}
-                                 titles={[Locale.getMessage("tableCreation.newTablePageTitle"), Locale.getMessage("tableCreation.addFieldsTitle")]}>
+                                 titles={[Locale.getMessage("tableCreation.newTablePageTitle")]}>
                 <div className="tableCreationPanel">
                     <div className="description"><I18nMessage message="tableCreation.newTableDescription"/></div>
                     <div className="title"><I18nMessage message="tableCreation.newTableTitle"/></div>
@@ -138,8 +116,6 @@ export class TableCreationDialog extends React.Component {
                                     validate={this.props.tableCreation.edited}
                                     appTables={this.getExistingTableNames()} />
                 </div>
-                <TableCreationSummaryPanel />
-
             </MultiStepDialog>);
     }
 }
@@ -149,12 +125,9 @@ TableCreationDialog.propTypes = {
     tableCreation: PropTypes.object.isRequired,
     tableInfo: PropTypes.object.isRequired,
     setEditingProperty: PropTypes.func.isRequired,
-    nextTableCreationPage: PropTypes.func.isRequired,
-    previousTableCreationPage: PropTypes.func.isRequired,
     hideTableCreationDialog: PropTypes.func.isRequired,
     createTable: PropTypes.func.isRequired,
-    onTableCreated: PropTypes.func.isRequired,
-    notifyTableCreated: PropTypes.func.isRequired
+    onTableCreated: PropTypes.func.isRequired
 };
 
 const mapStateToProps = (state) => {

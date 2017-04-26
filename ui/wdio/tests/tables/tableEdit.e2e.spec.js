@@ -10,7 +10,6 @@
     var RequestSessionTicketPage = requirePO('requestSessionTicket');
     var rawValueGenerator = require('../../../test_generators/rawValue.generator');
 
-
     describe('Tables - Edit a table via builder tests: ', function() {
         var realmName;
         var realmId;
@@ -81,11 +80,11 @@
                     tableCreatePO.enterTableFieldValue(tableField.fieldTitle, tableField.fieldValue);
                 });
 
-                //Step 4 - Click next field and verify it landed in drag fields page
-                tableCreatePO.clickNextBtn();
-
-                //Step 5 - Click on finished button and make sure it landed in edit Form container page
+                //Step 4 - Click on finished button and make sure it landed in edit Form container page
                 tableCreatePO.clickFinishedBtn();
+
+                //Step 5 - Click OK button on create table dialogue
+                tableCreatePO.clickOkBtn();
 
                 //Step 6- Click on forms Cancel button
                 formsPO.clickFormCancelBtn();
@@ -332,8 +331,6 @@
 
             //Verify edit settings button not available for user other than ADMIN
             expect(browser.isVisible('.iconUISturdy-settings')).toBeFalsy();
-
         });
-
     });
 }());

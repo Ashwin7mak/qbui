@@ -3,6 +3,7 @@ import {shallow, mount} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
 import {NEW_FORM_RECORD_ID} from '../../../src/constants/schema';
 import {FormBuilderContainer, __RewireAPI__ as FormBuilderRewireAPI} from '../../../src/components/builder/formBuilderContainer';
+import * as tabIndexConstants from '../../../../client-react/src/components/formBuilder/tabindexConstants';
 import NavigationUtils from '../../../src/utils/navigationUtils';
 import {__RewireAPI__ as NewfieldsMenuRewireAPI} from '../../../src/components/formBuilder/menus/newFieldsMenu';
 
@@ -52,6 +53,7 @@ describe('FormBuilderContainer', () => {
         FormBuilderRewireAPI.__Rewire__('FormBuilder', FormBuilderMock);
         NewfieldsMenuRewireAPI.__Rewire__('FieldTokenInMenu', FieldTokenInMenu);
         FormBuilderRewireAPI.__Rewire__('FieldProperties', FieldPropertiesMock);
+        FormBuilderRewireAPI.__Rewire__('FormBuilderCustomDragLayer', () => null); // Returning null so that DragDropContext error is not thrown in unit test
 
         spyOn(mockActions, 'loadForm');
         spyOn(mockActions, 'updateForm');
@@ -66,6 +68,7 @@ describe('FormBuilderContainer', () => {
         FormBuilderRewireAPI.__ResetDependency__('FormBuilder');
         NewfieldsMenuRewireAPI.__ResetDependency__('FieldTokenInMenu');
         FormBuilderRewireAPI.__ResetDependency__('FieldProperties');
+        FormBuilderRewireAPI.__ResetDependency__('FormBuilderCustomDragLayer');
 
         mockActions.loadForm.calls.reset();
         mockActions.updateForm.calls.reset();
@@ -172,7 +175,7 @@ describe('FormBuilderContainer', () => {
     });
 
     describe('keyboard navigation for formBuilder', () => {
-        it('will toggle the children tab indices if space is pressed and the tab indices are not already 0', () => {
+        it(`will toggle the children tab indices if space is pressed and the tab indices are not already ${tabIndexConstants.FORM_TAB_INDEX}`, () => {
             let e = {
                 which: 32,
                 preventDefault() {return;}
@@ -211,7 +214,7 @@ describe('FormBuilderContainer', () => {
             expect(mockActions.toggleFormBuilderChildrenTabIndex).not.toHaveBeenCalled();
         });
 
-        it('enter and space will not toggle the children tab indices if the tabIndex is currently 0', () => {
+        it(`enter and space will not toggle the children tab indices if the tabIndex is currently ${tabIndexConstants.FORM_TAB_INDEX}`, () => {
             let e = {
                 which: 32,
                 preventDefault() {return;}
@@ -219,7 +222,7 @@ describe('FormBuilderContainer', () => {
 
             component = mount(<FormBuilderContainer match={testParamsProp}
                                                     currentForm={currentForm}
-                                                    tabIndex="0"
+                                                    formBuilderChildrenTabIndex={tabIndexConstants.FORM_TAB_INDEX}
                                                     loadForm={mockActions.loadForm}
                                                     toggleFormBuilderChildrenTabIndex={mockActions.toggleFormBuilderChildrenTabIndex}
                                                     updateForm={mockActions.updateForm} />);

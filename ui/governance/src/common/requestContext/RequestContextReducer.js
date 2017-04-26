@@ -42,4 +42,9 @@ const RequestContext = combineReducers({
     status: GetStatus
 });
 
+export const isFetching = (state) => {
+    return state.RequestContext.status.isFetching || !state.RequestContext.currentUser.id;
+};
+
+
 export default RequestContext;

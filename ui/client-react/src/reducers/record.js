@@ -17,7 +17,7 @@ const record = (state = [], action) => {
 
     //  Store can be configured to hold just one record or array of records.
     //  NOTE: until a need to do so, only 1 record in the store
-    const singleRecordStore = true;
+    const singleRecordStore = false;
 
     /**
      * Create a deep clone of the state array.  If the new state obj
@@ -34,7 +34,7 @@ const record = (state = [], action) => {
         //  if obj is undefined/null, there's nothing to do..
         if (obj) {
             //  ensure obj id is stored as a numeric..unless it's a new record
-            obj.id = (obj.id === NEW_RECORD_VALUE || obj.id === UNSAVED_RECORD_ID ? NEW_RECORD_VALUE : +obj.id);
+            obj.id = (obj.id === NEW_RECORD_VALUE || obj.id === UNSAVED_RECORD_ID ? NEW_RECORD_VALUE : obj.id);
 
             //  TODO: the id is currently the record id, which is fine when only holding 1 record
             //  TODO: or working on the same table, but this will need to be refactored and set to
@@ -223,6 +223,9 @@ const record = (state = [], action) => {
             let model = new RecordModel();
             model.set(currentRecd.pendEdits);
             model.setSaving(false, true);
+            if (_.get(currentRecd.pendEdits, 'editErrors.ok')) {
+                delete currentRecd.pendEdits;
+            }
             return newState(currentRecd);
         }
         return state;
