@@ -72,8 +72,8 @@
             }
 
             .formElement .fieldLabel {
-                padding-top: 12px;
-                padding-left: 15px;
+                padding-top: 7px;
+                padding-left: 12px;
             }
 
             .cellWrapper {
@@ -111,5 +111,10 @@
      */
     .elementCache {
         display: none;
+    }
+
+    .formElement .field {
+        padding-left: 12px;
+        padding-bottom: 12px;
     }
 }

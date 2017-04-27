@@ -20,7 +20,6 @@ export class FieldEditingTools extends Component {
         super(props);
 
         this.onClickDelete = this.onClickDelete.bind(this);
-        this.onClickFieldPreferences = this.onClickFieldPreferences.bind(this);
         this.onClickField = this.onClickField.bind(this);
         this.isFieldSelected = this.isFieldSelected.bind(this);
         this.renderActionIcons = this.renderActionIcons.bind(this);
@@ -35,12 +34,6 @@ export class FieldEditingTools extends Component {
             return this.props.removeFieldFromForm(this.props.formId, this.props.location);
         }
         e.preventDefault();
-    }
-
-    onClickFieldPreferences() {
-        if (this.props.onClickFieldPreferences) {
-            return this.props.onClickFieldPreferences(this.props.location);
-        }
     }
 
     onClickField(e) {
@@ -210,7 +203,6 @@ FieldEditingTools.propTypes = {
     formBuilderContainerContentElement: PropTypes.object,
     location: PropTypes.object,
     onClickDelete: PropTypes.func,
-    onClickFieldPreferences: PropTypes.func,
     isDragging: PropTypes.bool,
     formId: PropTypes.string
 };

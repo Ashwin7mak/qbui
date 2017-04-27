@@ -6,7 +6,6 @@ import {FieldEditingTools} from '../../../src/components/formBuilder/fieldEditin
 
 const mockParentProps = {
     removeFieldFromForm(_location) {},
-    openFieldPreferences(_location) {},
     selectFieldOnForm(_formId, _location) {},
     deselectField(_formId, _location) {}
 };
@@ -39,25 +38,6 @@ describe('FieldEditingTools', () => {
         deleteButton.simulate('click');
 
         expect(mockParentProps.removeFieldFromForm).toHaveBeenCalledWith(formId, location);
-    });
-
-    it('has a field preferences button', () => {
-        spyOn(mockParentProps, 'openFieldPreferences');
-
-        component = shallow(<FieldEditingTools
-            formBuilderChildrenTabIndex={formBuilderChildrenTabIndex}
-            selectedFields={[]}
-            location={location}
-            onClickFieldPreferences={mockParentProps.openFieldPreferences}
-        />);
-
-        let preferencesIcon = component.find('.fieldPreferencesIcon button');
-
-        expect(preferencesIcon).toBePresent();
-
-        preferencesIcon.simulate('click');
-
-        expect(mockParentProps.openFieldPreferences).toHaveBeenCalledWith(location);
     });
 
     it('selects a field when an element is clicked', () => {
