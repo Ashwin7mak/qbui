@@ -77,7 +77,7 @@
             }
 
             .cellWrapper {
-                padding-left: 15px;
+                padding-left: 12px;
             }
 
             &.selectedFormElement {
@@ -113,8 +113,7 @@
         display: none;
     }
 
-    .formElement .field {
-        padding-left: 12px;
+    .field {
         padding-bottom: 12px;
     }
 }
