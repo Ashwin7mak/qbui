@@ -55,10 +55,6 @@ const QbGrid = React.createClass({
         areAllRowsSelected: PropTypes.bool,
 
         /**
-         * The action that will add a column */
-        onColumnAdd: PropTypes.func,
-
-        /**
          * The action that occurs when a row is selected (e.g., by clicking the checkboxes in the first column) */
         onClickToggleSelectedRow: PropTypes.func,
 
