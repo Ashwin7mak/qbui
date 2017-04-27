@@ -289,10 +289,8 @@ const report = (state = [], action) => {
             let clickedColumnId = params.clickedId;
             let addBefore = params.addBefore;
             // find the index of the column where 'add a column' was clicked
-            let clickedColumn = currentReport.data.columns.filter(column => {
-                return column.id === clickedColumnId;
-            })[0];
-            if (clickedColumn) {
+            let clickedColumnIndex = _.findIndex(currentReport.data.columns, (col) => {return col.id === clickedColumnId;});
+            if (clickedColumnIndex !== -1) {
                 // loop through to check if the placeholder column is already visible
                 let placeHolderAlreadyExists = currentReport.data.columns.some(column => {
                     return column.isPlaceholder === true;
@@ -315,7 +313,6 @@ const report = (state = [], action) => {
                 currentReport.data.columns.forEach(column => {
                     column.fieldDef.isAddingFrom = (column.fieldDef.id === clickedColumnId);
                 });
-                let clickedColumnIndex = clickedColumn.order - 1;
                 // add before or after the clicked column depending on selection
                 let insertionIndex;
                 if (addBefore) {
@@ -366,31 +363,24 @@ const report = (state = [], action) => {
             });
             let allColumns = ReportModelHelper.getReportColumns(fields, allFids);
 
-            let requestedColumnIndex = (_.findIndex(currentColumns, (col) => {return col.id === requestedColumnId;}));
+            let requestedColumnIndex = _.findIndex(currentColumns, (col) => {return col.id === requestedColumnId;});
             let requestedInCurrentColumns = requestedColumnIndex !== -1;
 
             let columnMoving;
             if (requestedInCurrentColumns) {
                 columnMoving = currentColumns.splice(requestedColumnIndex, 1)[0];
-                reorderColumns(currentColumns);
             } else {
                 columnMoving = _.find(allColumns, (col) => {return col.id === requestedColumnId});
             }
             // searches through the current columns to find the index of the placeholder
-            let placeholderIndex = currentColumns.filter(column => {
-                return column.isPlaceholder;
-            })[0].order - 1;
-            // add the requested column to where the placeholder column is
-            let fidInsertionIndex;
-            if (addBefore) {
-                fidInsertionIndex = placeholderIndex - 1;
-            } else {
-                placeholderIndex = placeholderIndex + 1;
-                fidInsertionIndex = placeholderIndex + 1;
+            let placeholderIndex = _.findIndex(currentColumns, (col) => {return col.isPlaceholder});
+            let fidInsertionIndex = placeholderIndex;
+            // when adding after, account for the index of the placeholder by adding 1
+            if (!addBefore) {
+                placeholderIndex++;
             }
-            // insert the removed column in the correct place in the columns list
+            // insert the requested column in the correct place in the columns list
             currentColumns.splice(placeholderIndex, 0, columnMoving);
-            reorderColumns(currentColumns);
 
             // show the currently hidden column that was just added
             currentColumns.forEach(column => {
