@@ -214,13 +214,8 @@ class formBuilderPage {
     }
     KB_focusForm() {
         // focus form via keyboard
-        // assumes that the page has just been invoked & nothing has focus
-        browser.keys([
-            'Tab', // hamburger
-            'Tab', // User
-            'Tab', // Filter
-            'Tab', // formSection
-            'Enter']); // redirect input to form/fields
+        this.searchInput.click();
+        browser.keys(['Tab', 'Enter']);
         return this;
     }
     KB_moveField(sourceIndex, targetIndex) {
@@ -267,11 +262,10 @@ class formBuilderPage {
         return this;
     }
     KB_selectField(index) {
-        // select field via keyboard
+        // select the specified field via keyboard
         this.KB_focusField(index);
         browser.keys(['Enter']); // select field
-        browser.pause(fiveSeconds);
-        browser.pause(fiveSeconds);
+        this.selectedField.waitForExist();
         return this.selectedField.getText();
     }
 }
