@@ -2,7 +2,6 @@ import React, {PropTypes, Component} from "react";
 import AVAILABLE_ICON_FONTS from "../../../constants/iconConstants";
 import QbIcon from "../../qbIcon/qbIcon";
 import QbToolTip from "../../qbToolTip/qbToolTip";
-import DragHandle from "../dragHandle/dragHandle";
 import Device from "../../../utils/device";
 import Breakpoints from "../../../utils/breakpoints";
 import {connect} from "react-redux";
@@ -82,12 +81,6 @@ export class FieldEditingTools extends Component {
                     <div className="deleteFieldIcon">
                         <QbToolTip i18nMessageKey="builder.formBuilder.removeField">
                            <button type="button" tabIndex={tabIndex} onClick={this.onClickDelete}> <QbIcon icon="delete" /> </button>
-                        </QbToolTip>
-                    </div>
-
-                    <div  className="fieldPreferencesIcon">
-                        <QbToolTip i18nMessageKey="builder.formBuilder.unimplemented">
-                            <button type="button" tabIndex={tabIndex} onClick={this.onClickFieldPreferences}> <QbIcon iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY} icon="Dimensions"/> </button>
                         </QbToolTip>
                     </div>
             </div>
@@ -206,8 +199,6 @@ export class FieldEditingTools extends Component {
                 className={classNames.join(' ')}
                 onClick={this.onClickField}
                 onKeyDown={this.selectedCurrentField} >
-
-                <DragHandle />
 
                 {this.renderActionIcons()}
             </div>

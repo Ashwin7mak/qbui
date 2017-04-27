@@ -3,7 +3,6 @@ import {shallow} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
 
 import {FieldEditingTools} from '../../../src/components/formBuilder/fieldEditingTools/fieldEditingTools';
-import DragHandle from '../../../src/components/formBuilder/dragHandle/dragHandle';
 
 const mockParentProps = {
     removeFieldFromForm(_location) {},
@@ -21,12 +20,6 @@ let component;
 describe('FieldEditingTools', () => {
     beforeEach(() => {
         jasmineEnzyme();
-    });
-
-    it('has a drag handle', () => {
-        component = shallow(<FieldEditingTools formBuilderChildrenTabIndex={formBuilderChildrenTabIndex} selectedFields={[]}/>);
-
-        expect(component.find(DragHandle)).toBePresent();
     });
 
     it('has a delete button', () => {

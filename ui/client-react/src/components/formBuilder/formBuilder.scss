@@ -51,13 +51,9 @@
 
             &:hover {
                 transition: background-color 0.5s ease;
-                background-color: $color-black-250;
-
+                border: $stroke-width-thin solid $border-focused-color;
                 .fieldEditingTools {
                     opacity: 1;
-                    .dragHandle {
-                        opacity: 1;
-                    }
                     .qbIcon {
                         opacity: 1;
                     }
@@ -86,27 +82,14 @@
 
             &.selectedFormElement {
                 transition: background-color 0.5s ease;
-                &:hover {
-                    background: $color-cyan-300;
-                }
-                background-color: $color-cyan-300;
+                border: 2px solid #009deb;
+                box-shadow: 0 0 4px 0px rgba(0, 157, 235, 0.75);
                 z-index: -1 !important;
-
-                .dragHandle {
-                    opacity: 1;
-                }
 
                 .deleteFieldIcon {
                     .qbIcon {
                         opacity: 1;
                         color: $color-red-700;
-                    }
-                }
-
-                .fieldPreferencesIcon {
-                    .qbIcon {
-                        opacity: 1;
-                        color: $color-cyan-700;
                     }
                 }
             }
