@@ -73,7 +73,7 @@ export class FieldEditingTools extends Component {
             <div className="actionIcons">
                     <div className="deleteFieldIcon">
                         <QbToolTip i18nMessageKey="builder.formBuilder.removeField">
-                           <button type="button" tabIndex={tabIndex} onClick={this.onClickDelete}> <QbIcon icon="delete" /> </button>
+                           <button type="button" tabIndex={tabIndex} onClick={this.onClickDelete}> <QbIcon icon="clear-mini" /> </button>
                         </QbToolTip>
                     </div>
             </div>

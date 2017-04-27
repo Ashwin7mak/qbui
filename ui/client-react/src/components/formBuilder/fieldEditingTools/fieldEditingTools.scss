@@ -5,7 +5,7 @@
     border-radius: $radius-base;
     position: absolute;
     height: 100%;
-    width: 310px;
+    width: 335px;
 
     &:focus {
         //For keyboard nav
@@ -23,26 +23,15 @@
         z-index: -1 !important;
 
         .deleteFieldIcon {
+            button {
+                border-radius: 50%;
+                padding: 0px;
+            }
             .qbIcon {
+                font-size: $size-iconfont-large2;
                 opacity: 1;
                 color: $color-red-700;
             }
-        }
-    }
-
-    &:hover {
-        transition: background-color 0.5s ease;
-        border: $stroke-width-thin solid $border-focused-color;
-        border-radius: $radius-base;
-        .fieldEditingTools {
-            opacity: 1;
-            .qbIcon {
-                opacity: 1;
-            }
-        }
-
-        @include small-breakpoint {
-            background: none;
         }
     }
 
@@ -52,8 +41,8 @@
     .deleteFieldIcon {
         font-size: $size-iconfont-small;
         position: absolute;
-        top: 30px;
-        right: -20px;
+        top: 25px;
+        right: 5px;
 
         .qbIcon {
             color: $color-black-600;
@@ -119,6 +108,22 @@
             opacity: 1;
             outline: none;
             border: $stroke-width-thin solid $border-focused-color;
+        }
+    }
+
+    &:hover {
+        transition: border-color 1.5s ease;
+        border: $stroke-width-thin solid $border-focused-color;
+        border-radius: $radius-base;
+        .fieldEditingTools {
+            opacity: 1;
+            .qbIcon {
+                opacity: 1;
+            }
+        }
+
+        @include small-breakpoint {
+            background: none;
         }
     }
 }
