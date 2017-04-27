@@ -22,7 +22,7 @@ const QbCell = React.createClass({
             classes.push('stickyCell');
         }
         if (this.props.isPlaceholderCell) {
-            classes.push('placeHolderCell')
+            classes.push('placeHolderCell');
         }
         // this is a tad bit hacky, remove when EmbeddedReportToolsAndContent supports editing
         if (_.get(this, 'props.children.props.phase1')) {

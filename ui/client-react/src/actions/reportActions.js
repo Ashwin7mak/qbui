@@ -371,7 +371,7 @@ export const toggleFieldSelectorMenu = (context, appId, tblId, rptId, params) =>
                         }).catch((error) => {
                             logger.parseAndLogError(LogLevel.ERROR, error.response, 'fieldsService.getFields:');
                             reject();
-                    });
+                        });
                 } else {
                     dispatch(event(context, types.CLOSE_FIELD_SELECTOR, params));
                     resolve();
@@ -397,17 +397,17 @@ export const addColumnFromExistingField = (context, appId, tblId, rptId, params)
         return new Promise((resolve, reject) => {
             if (appId && tblId && rptId) {
                 logger.debug(`Adding column with id: ${params.requestedId} for appId: ${appId}, tblId:${tblId}, rptId:${rptId}`);
-                    let fieldsService = new FieldsService();
-                    fieldsService.getFields(appId, tblId)
-                        .then((response) => {
-                            logger.debug('FieldsService getFields success');
-                            let content = {...params, response};
-                            dispatch(event(context, types.ADD_COLUMN_FROM_EXISTING_FIELD, content));
-                            resolve();
-                        }).catch((error) => {
-                            logger.parseAndLogError(LogLevel.ERROR, error.response, 'fieldsService.getFields:');
-                            reject();
-                        });
+                let fieldsService = new FieldsService();
+                fieldsService.getFields(appId, tblId)
+                    .then((response) => {
+                        logger.debug('FieldsService getFields success');
+                        let content = {...params, response};
+                        dispatch(event(context, types.ADD_COLUMN_FROM_EXISTING_FIELD, content));
+                        resolve();
+                    }).catch((error) => {
+                        logger.parseAndLogError(LogLevel.ERROR, error.response, 'fieldsService.getFields:');
+                        reject();
+                    });
             } else {
                 logger.error(`reportActions.addColumnFromExistingField: Missing one or more required input parameters.  AppId:${appId}; TblId:${tblId}; RptId:${rptId}`);
                 reject();

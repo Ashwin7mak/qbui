@@ -33,5 +33,5 @@ describe('QbHeaderCell', () => {
         expect(component).toHaveClassName('qbHeaderCell');
         expect(component).not.toHaveClassName('stickyCell');
         expect(component).toHaveClassName('placeHolderCell');
-    })
+    });
 });

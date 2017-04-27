@@ -32,5 +32,5 @@ describe('QbCell', () => {
         expect(component).toHaveClassName('qbCell');
         expect(component).not.toHaveClassName('stickyCell');
         expect(component).toHaveClassName('placeHolderCell');
-    })
+    });
 });

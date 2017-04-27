@@ -270,7 +270,7 @@ describe('QbGrid', () => {
 
             expect(instance.getPlaceholderCellProps()).toEqual({
                 isPlaceholderCell: true
-            })
+            });
         });
     });
 

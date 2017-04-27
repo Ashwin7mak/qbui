@@ -10,112 +10,112 @@
  */
 
 .reportFieldSelectTrowserBase {
-  height: 100%;
-  width: 100%;
-  position: relative;
+    height: 100%;
+    width: 100%;
+    position: relative;
 
-  .fieldSelectCloseIcon {
-    margin-left: 90%;
-    margin-top: 10px;
-    cursor: pointer;
-  }
-
-  .fieldSelectCloseIcon:hover {
-    color: $topnav-hover-color;
-  }
-
-  .header {
-    font-size: 20px;
-    margin-left: 10px;
-    margin-bottom: 10px;
-  }
-
-  .info {
-    margin-left: 10px;
-  }
-
-  .no-elements {
-    margin-top: 10px;
-    margin-left: 10px;
-  }
-
-  &:not(.reportFieldSelectTrowserDocked) > .reportFieldSelectTrowserContent.reportFieldSelectTrowserOpen {
-    @include menuShadow;
-  }
-
-  &.reportFieldSelectTrowserDocked {
-    display: flex;
-
-    &.reportFieldSelectTrowserPullRight {
-      flex-direction: row-reverse;
+    .fieldSelectCloseIcon {
+        margin-left: 90%;
+        margin-top: 10px;
+        cursor: pointer;
     }
 
-    > .reportFieldSelectTrowserMain {
-      position: relative;
-      flex: 1 auto;
-      overflow: auto;
-      height: 100%;
+    .fieldSelectCloseIcon:hover {
+        color: $topnav-hover-color;
+    }
+
+    .header {
+        font-size: 20px;
+        margin-left: 10px;
+        margin-bottom: 10px;
+    }
+
+    .info {
+        margin-left: 10px;
+    }
+
+    .no-elements {
+        margin-top: 10px;
+        margin-left: 10px;
+    }
+
+    &:not(.reportFieldSelectTrowserDocked) > .reportFieldSelectTrowserContent.reportFieldSelectTrowserOpen {
+        @include menuShadow;
+    }
+
+    &.reportFieldSelectTrowserDocked {
+        display: flex;
+
+        &.reportFieldSelectTrowserPullRight {
+            flex-direction: row-reverse;
+        }
+
+        > .reportFieldSelectTrowserMain {
+            position: relative;
+            flex: 1 auto;
+            overflow: auto;
+            height: 100%;
+        }
+
+        > .reportFieldSelectTrowserContent {
+            position: relative;
+            flex: 0;
+        }
     }
 
     > .reportFieldSelectTrowserContent {
-      position: relative;
-      flex: 0;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+
+        overflow: auto;
+        background-color: $leftnav-background-color;
+        border-left: 1px solid $leftnav-background-stroke-color;
+        border-bottom: 1px solid $leftnav-background-stroke-color;
+        z-index: $zindex-trowser;
+
+        @include baseMenuWidths;
+
+        &.reportFieldSelectTrowserCollapsed {
+            min-width: 0;
+            // Min width alone doesn't work when translating over the top of the main content. Need max-width too.
+            max-width: $leftNav-width-collapsed;
+            border: none;
+        }
+
+        // Styling when the side trowser is on the left
+        &:not(.reportFieldSelectTrowserPullRight):not(.reportFieldSelectTrowserDocked) {
+            left: 0;
+
+            // Hide menu by default
+            @include moveMenuToRight;
+            // On small breakpoint the menu should be all the way off the screen, but the width is dependent on the specific device size
+            @include small-breakpoint {
+                transform: translateX(-100%);
+            }
+
+            &.reportFieldSelectTrowserOpen {
+                transform: translateX(0);
+            }
+        }
+
+        // Styling when side trowser is on the right
+        &.reportFieldSelectTrowserPullRight:not(.reportFieldSelectTrowserDocked) {
+            left: auto;
+            right: 0;
+
+            // Hide menu by default
+            @include moveMenuToLeft;
+            // On small breakpoint the menu should be all the way off the screen, but the width is dependent on the specific device size
+            @include small-breakpoint {
+                transform: translateX(100%);
+            }
+
+            &.reportFieldSelectTrowserOpen {
+                transform: translateX(0);
+            }
+        }
+
+        transition: transform 0.5s, min-width 0.5s, max-width 0.5s;
     }
-  }
-
-  > .reportFieldSelectTrowserContent {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-
-    overflow: auto;
-    background-color: $leftnav-background-color;
-    border-left: 1px solid $leftnav-background-stroke-color;
-    border-bottom: 1px solid $leftnav-background-stroke-color;
-    z-index: $zindex-trowser;
-
-    @include baseMenuWidths;
-
-    &.reportFieldSelectTrowserCollapsed {
-      min-width: 0;
-      // Min width alone doesn't work when translating over the top of the main content. Need max-width too.
-      max-width: $leftNav-width-collapsed;
-      border: none;
-    }
-
-    // Styling when the side trowser is on the left
-    &:not(.reportFieldSelectTrowserPullRight):not(.reportFieldSelectTrowserDocked) {
-      left: 0;
-
-      // Hide menu by default
-      @include moveMenuToRight;
-      // On small breakpoint the menu should be all the way off the screen, but the width is dependent on the specific device size
-      @include small-breakpoint {
-        transform: translateX(-100%);
-      }
-
-      &.reportFieldSelectTrowserOpen {
-        transform: translateX(0);
-      }
-    }
-
-    // Styling when side trowser is on the right
-    &.reportFieldSelectTrowserPullRight:not(.reportFieldSelectTrowserDocked) {
-      left: auto;
-      right: 0;
-
-      // Hide menu by default
-      @include moveMenuToLeft;
-      // On small breakpoint the menu should be all the way off the screen, but the width is dependent on the specific device size
-      @include small-breakpoint {
-        transform: translateX(100%);
-      }
-
-      &.reportFieldSelectTrowserOpen {
-        transform: translateX(0);
-      }
-    }
-
-    transition: transform 0.5s, min-width 0.5s, max-width 0.5s;
-  }
 }

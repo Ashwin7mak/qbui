@@ -960,75 +960,73 @@ describe('Report reducer functions', () => {
         let initialStateWithoutPlaceholder = [
             {
                 id: contextId,
-                data:
-                    {
-                        columns: [
-                            {
-                                fieldDef: {
-                                    isAddingFrom: false,
-                                    id: 6
-                                },
-                                isPlaceholder: false,
-                                isHidden: false,
-                                id: 6,
-                                order: 1
+                data: {
+                    columns: [
+                        {
+                            fieldDef: {
+                                isAddingFrom: false,
+                                id: 6
                             },
-                            {
-                                fieldDef: {
-                                    isAddingFrom: false,
-                                    id: 7
-                                },
-                                isPlaceholder: false,
-                                isHidden: false,
-                                id: 7,
-                                order: 2
-                            }
-                        ],
-                        fids: [6, 7],
-                        metaData: {
-                            fids: [6, 7]
+                            isPlaceholder: false,
+                            isHidden: false,
+                            id: 6,
+                            order: 1
+                        },
+                        {
+                            fieldDef: {
+                                isAddingFrom: false,
+                                id: 7
+                            },
+                            isPlaceholder: false,
+                            isHidden: false,
+                            id: 7,
+                            order: 2
                         }
+                    ],
+                    fids: [6, 7],
+                    metaData: {
+                        fids: [6, 7]
                     }
+                }
             }
         ];
         let initialStateWithPlaceholder = [
             {
                 id: contextId,
-                data:
-                    {
-                        columns: [
-                            {
-                                fieldDef: {
-                                    isAddingFrom: false,
-                                    id: 6
-                                },
-                                isPlaceholder: false,
-                                isHidden: false,
-                                id: 6,
-                                order: 1
+                data: {
+                    columns: [
+                        {
+                            fieldDef: {
+                                isAddingFrom: false,
+                                id: 6
                             },
-                            {
-                                fieldDef: {
-                                    isAddingFrom: true,
-                                    id: 7
-                                },
-                                isPlaceholder: false,
-                                isHidden: false,
-                                id: 7,
-                                order: 2
+                            isPlaceholder: false,
+                            isHidden: false,
+                            id: 6,
+                            order: 1
+                        },
+                        {
+                            fieldDef: {
+                                isAddingFrom: true,
+                                id: 7
                             },
-                            {
-                                isPlaceholder: true,
-                                isHidden: false,
-                                id: -1,
-                                order: 3
-                            }
-                        ],
-                        fids: [6, 7],
-                        metaData: {
-                            fids: [6, 7]
+                            isPlaceholder: false,
+                            isHidden: false,
+                            id: 7,
+                            order: 2
+                        },
+                        {
+                            isPlaceholder: true,
+                            isHidden: false,
+                            id: -1,
+                            order: 3
                         }
+                    ],
+                    fids: [6, 7],
+                    metaData: {
+                        fids: [6, 7]
                     }
+                }
             }
         ];
         let testCases = [

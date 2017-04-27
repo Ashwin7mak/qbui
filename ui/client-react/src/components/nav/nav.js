@@ -337,9 +337,9 @@ export const Nav = React.createClass({
                 title: hiddenColumns[i].headerName,
                 type: hiddenColumns[i].fieldType,
                 onClick: (() => {
-                    this.addColumnFromExistingField(hiddenColumns[i], reportData)
+                    this.addColumnFromExistingField(hiddenColumns[i], reportData);
                 })
-            })
+            });
         }
 
         let params = {
