@@ -183,8 +183,8 @@ const ReportCell = React.createClass({
         }
 
         return (
-            <div className={classes.join(' ')}>
-                <div className="cellClickableArea" onClick={this.onCellClick}>
+            <div className={classes.join(' ')} onClick={this.onCellClick}>
+                <div className="cellClickableArea">
                     <CellValueRenderer
                         {...this.props}
                         type={uiFieldType}
