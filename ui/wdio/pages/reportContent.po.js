@@ -28,7 +28,6 @@
         modifyTableSettings: {get: function() {return browser.element('.modifyTableSettings');}},
         deleteTableActionButton: {get: function() {return browser.element('.iconActionButton.deleteTable');}},
         deletePromtTextField: {get: function() {return browser.element('.deletePrompt');}},
-        deleteTableButton: {get: function() {return browser.element('.primaryButton.btn.btn-default');}},
         reportFilterSearchBox : {get: function() {
             return this.reportsToolBar.element('.searchInput');
         }},
@@ -291,11 +290,18 @@
             //set the deletePromtTextField value to 'YES'
             this.setInputValue(this.deletePromtTextField, 'YES');
             //use the predefined deleteTableButton here
-            expect(browser.isEnabled('.primaryButton.btn.btn-default')).toBeTruthy();
+            expect(browser.isEnabled('.modal-dialog .primaryButton')).toBeTruthy();
             //Click on delete table button
-            return this.deleteTableButton.click();
+            return this.deleteButton.click();
         }},
 
+        /**
+         * Method to click don't delete Table button
+         */
+        clickDontDeleteTableButton: {value: function() {
+            //Click on don't delete table button
+            return this.dontDeleteButton.click();
+        }},
 
         /**
          * Method to enter table field input values

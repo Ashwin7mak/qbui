@@ -50,7 +50,7 @@
             return e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
         });
 
-        it('Delete table', function()   {
+        xit('Delete table', function()   {
 
             //Step 1 - get the original count of table links in the left nav
             let originalTableLinksCount = tableCreatePO.getAllTableLeftNavLinksList.value.length;
@@ -69,13 +69,71 @@
             //Step 5 - Click delete table action button
             ReportContentPO.clickDeleteTableActionButton();
 
-            //Step 6 - delete table
+            //Step 6 - Delete table
             ReportContentPO.clickDeleteTableButton();
 
-            //Step 7 - make sure table is actually deleted
+            //Step 7 - Make sure table is actually deleted
             let newTableLinksCount = tableCreatePO.getAllTableLeftNavLinksList.value.length;
             //Verify the table links count decreased by 1
             expect(newTableLinksCount).toBe(originalTableLinksCount - 1);
+        });
+
+        xit('Verify that clicking on "dont delete" button closes the delete table dialogue without deleting the table', function() {
+
+            //Step 1 - get the original count of table links in the left nav
+            let originalTableLinksCount = tableCreatePO.getAllTableLeftNavLinksList.value.length;
+
+            //Step 2 - Select table to delete ('Table 1' here) and make sure it lands in reports page
+            tableCreatePO.selectTable('Table 1');
+            // wait for the report content to be visible
+            ReportContentPO.waitForReportContent();
+
+            //Step 3 - Click table settings Icon
+            ReportContentPO.clickSettingsIcon();
+
+            //Step 4 - Go to 'Table properties & settings'
+            ReportContentPO.clickModifyTableSettings();
+
+            //Step 5 - Click delete table action button
+            ReportContentPO.clickDeleteTableActionButton();
+
+            //Step 6 - Click don't delete table button
+            ReportContentPO.clickDontDeleteTableButton();
+
+            //step 7 - go back to the tables page
+            RequestAppsPage.get(e2eBase.getRequestTableEndpoint(realmName, testApp.id, testApp.tables[0].id));
+
+            //Step 8 - Make sure table is not deleted
+            let newTableLinksCount = tableCreatePO.getAllTableLeftNavLinksList.value.length;
+            //Verify the table links count is same as original
+            expect(newTableLinksCount).toBe(originalTableLinksCount);
+        });
+
+        xit('Verify that only ADMIN can delete a Table', function() {
+            let userId;
+
+            //Create a user
+            browser.call(function() {
+                return e2eBase.recordBase.apiBase.createUser().then(function(userResponse) {
+                    userId = JSON.parse(userResponse.body).id;
+                });
+            });
+
+            //Add user to participant appRole
+            browser.call(function() {
+                return e2eBase.recordBase.apiBase.assignUsersToAppRole(testApp.id, "11", [userId]);
+            });
+
+            //get the user authentication
+            browser.call(function() {
+                return RequestSessionTicketPage.get(e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.recordBase.apiBase.resolveUserTicketEndpoint() + '?uid=' + userId + '&realmId='));
+            });
+
+            //Go to Tables Page
+            RequestAppsPage.get(e2eBase.getRequestTableEndpoint(realmName, testApp.id, testApp.tables[0].id));
+
+            //Verify settings icon not available for user other than ADMIN
+            expect(browser.isVisible('.qbIcon.iconUISturdy-settings')).toBeFalsy();
         });
 
 
