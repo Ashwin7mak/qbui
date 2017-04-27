@@ -112,8 +112,8 @@
         it('Table report should expand width past the browser size to show all available data (large num columns)', function() {
                 // Check there is a scrollbar in the griddle table
             var fetchRecordPromises = [];
-            fetchRecordPromises.push(ReportContentPO.qbGridRecordElList.getAttribute('scrollWidth'));
-            fetchRecordPromises.push(ReportContentPO.qbGridRecordElList.getAttribute('clientWidth'));
+            fetchRecordPromises.push(ReportContentPO.qbGridBodyViewportEl.getAttribute('scrollWidth'));
+            fetchRecordPromises.push(ReportContentPO.qbGridBodyViewportEl.getAttribute('clientWidth'));
                 //When all the dimensions have been fetched, assert the values match expectations
             Promise.all(fetchRecordPromises); {
                 expect(Number(fetchRecordPromises[0])).toBe(Number(fetchRecordPromises[1]));
