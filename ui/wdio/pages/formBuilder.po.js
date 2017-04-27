@@ -227,7 +227,7 @@ class formBuilderPage {
         // move field via keyboard
         let originalOrder = this.getFieldLabels();
         this.KB_selectField(sourceIndex);
-        let sourceField = this.selectedField.getText();
+        let sourceField = originalOrder[sourceIndex - 1];
         browser.keys(['Shift']);
         let arrowKey = sourceIndex < targetIndex ? 'ArrowDown' : 'ArrowUp';
         let distance = Math.abs(sourceIndex - targetIndex);
