@@ -36,11 +36,7 @@
         opacity: 1;
         z-index: 1;
         transition: opacity 0.5s;
-
-        /* When in builder mode we need to push out the
-        left padding to make room for the editing tools */
-        margin-left: $spacing-tiny;
-
+        
         .draggableFieldWrapper {
             width: 310px;
             height: 100%;
