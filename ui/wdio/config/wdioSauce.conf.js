@@ -94,7 +94,7 @@ exports.config = {
             breakpointSize: 'xlarge',
             // These two values enable parallel testing which will run a spec file per instance
             shardTestFiles: true,
-            maxInstances: 4,
+            maxInstances: 5
         },
         // {
         //     platform: 'OS X 10.11',
@@ -109,7 +109,7 @@ exports.config = {
         //     maxDuration: 10800,
         //     breakpointSize: 'xlarge',
         //     shardTestFiles: true,
-        //     maxInstances: 4
+        //     maxInstances: 5
         // },
         {
             platform: 'OS X 10.11',
@@ -125,7 +125,7 @@ exports.config = {
             breakpointSize: 'xlarge',
             // These two values enable parallel testing which will run a spec file per instance
             shardTestFiles: true,
-            maxInstances: 4,
+            maxInstances: 5
         },
         {
             platform: 'Windows 10',
@@ -141,7 +141,7 @@ exports.config = {
             breakpointSize: 'xlarge',
             // These two values enable parallel testing which will run a spec file per instance
             shardTestFiles: true,
-            maxInstances: 4,
+            maxInstances: 5
         }
     ],
     //

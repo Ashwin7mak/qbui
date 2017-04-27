@@ -81,7 +81,7 @@ export const RecordActions = React.createClass({
                 primaryButtonOnClick={this.handleRecordDelete}
                 leftButtonName={Locale.getMessage('selection.dontDelete')}
                 leftButtonOnClick={this.cancelRecordDelete}
-                bodyMessage={msg}
+                title={msg}
                 type="alert"/>);
     },
 

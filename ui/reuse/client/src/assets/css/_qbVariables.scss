@@ -9,6 +9,7 @@ $font-family: Lato, 'Open Sans', Helvetica, Arial, sans-serif;  /* default font 
 $font-size: $font-size-base;          /* base/default body font size */
 $font-color: $color-black-700;                 /* default font color */
 $top-nav-height: 40px;
+$formBuilder-footer-height: 50px;
 
 /* breakpoints and mixins */
 $small-breakpoint-width: 640px;
@@ -100,6 +101,7 @@ $font-size-h6: 12px;
 $font-size-p: 14px;
 $font-size-button: 14px;
 $font-size-placeholder: 14px; //aka ghost text
+$font-size-dialog-text: 16px;
 
 // Semantic names for formula fields
 $formula-spinner-large-size: 26px;
@@ -108,7 +110,7 @@ $formula-background-large-height: 34px;
 $formula-background-large-width: 100px;
 $formula-background-small-height: 38px;
 
-//inline edit input box height
+//inline edit input box heights
 $form-view-box-height: 32px;
 $inline-edit-input-box-height: 32px;
 $form-edit-input-width: 280px;
@@ -122,6 +124,7 @@ $stroke-width-thin: 1px;
 $size-iconfont-small: 16px;
 $size-iconfont-medium: 18px;
 $size-iconfont-large: 24px;
+$size-iconfont-large2: 30px;
 $size-iconfont-xlarge: 40px;
 
 // Semantic names for padding/margins

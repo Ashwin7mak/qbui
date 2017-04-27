@@ -118,9 +118,9 @@ export default {
         },
         grid: {
             no_data: "There is no data to display.",
-            no_filter_matches: "No records match what you're looking for.  Try looking for a different kind of record.",
-            no_rows: "There are no records to see right now.",
-            no_rows_but: "There are no records, but you can ",
+            no_filter_matches: "No {recordsName} match what you're looking for.  Try looking for a different kind of {recordName}.",
+            no_rows: "There are no {recordsName} to see right now.",
+            no_rows_but: "There are no {recordsName}, but you can ",
             no_rows_create_link:  "create one"
         },
         globalActions: {
@@ -137,6 +137,7 @@ export default {
             saveAndAddRecord: "Save and add a new row",
             saveAndAddRecordDisabled: "Adding records in the grid is not available yet",
             cancelSelection: "Cancel changes",
+            close: "Close",
             favorite: "Favorite",
             gridEdit: "Grid Edit",
             edit: "Edit",
@@ -158,7 +159,7 @@ export default {
             recordNotAdded :"Record not added",
             recordSaved : "Record saved",
             recordNotSaved :"Record not saved",
-            deleted : "deleted",
+            deleted : "{value, plural,\n =0 {0 {nameForRecord} record}\n =1 {1 {nameForRecord} record}\n other {# {nameForRecord} records}\n} deleted",
             notDeleted : "not deleted",
             cannotLoad : "Cannot load record",
             error: {
@@ -263,7 +264,8 @@ export default {
                 noCheck : "No",
                 yesCheck : "Yes",
                 clearFacet: "Clear {facet} filter",
-                clearFacetSelection: "Click to clear this filter"
+                clearFacetSelection: "Click to clear this filter",
+                filter: "Filter"
             },
             filteredRecordCount : "{filteredRecordCount} of {recordCount} records",
             filteredSingleRecordCount : "{filteredRecordCount} of {recordCount} record",
@@ -282,6 +284,7 @@ export default {
             nextPageLoadingOnSwipe: "Getting more...",
             searchPlaceHolder:  "Search these",
             sortAndGroup : {
+                sortAndGroupIcon: "Sort & Group",
                 addField: "Add a field",
                 by: "by",
                 changeGroupOrder: "Change group order",
@@ -541,9 +544,10 @@ export default {
             FILE_ATTACHMENT: "File"
         },
         fieldPropertyLabels: {
-            title: "properties",
+            title: "Field Properties",
             name: "Name",
-            required: "Must be filled in"
+            required: "Must be filled in",
+            multiChoice: "Choices"
         },
         builder: {
             formBuilder: {
@@ -651,7 +655,13 @@ export default {
             homePageCreateAnother: "Create another table",
 
             noSuggestedIcons: "There are no suggested icons for this table name",
-            typeForSuggestions: "Please type a table name to get suggestions"
+            typeForSuggestions: "Please type a table name to get suggestions",
+
+            tableReadyTitle: "Your table's ready!",
+            tableReadyText1: "Each bit of information you want to collect is a field.  We've started you off with a couple.",
+            tableReadyText2: "Design this form to collect info.  Drag and drop to add fields.",
+
+            tableReadyDialogOK: "OK"
         },
         iconChooser: {
             searchPlaceholder: "Search table icons..."
@@ -667,7 +677,16 @@ export default {
         tableEdit: {
             tableUpdateFailed: "Failed to update table",
             tableUpdated: "Table information saved",
-            tableReset: "Table information not saved"
+            tableReset: "Table information not saved",
+            deleteThisTable: "Delete the {tableName} table?",
+            deleteTable: "Delete table",
+            tableDeleted: "{tableName} table deleted",
+            tableDeleteFailed: "Failed to delete table",
+            tableDeleteDialog: {
+                text: "This can't be undone. You'll be deleting all the data in the table, and break relationships with other tables.",
+                prompt: "Type YES to confirm that you want to delete this table"
+            },
+            YES: "YES"
         }
     }
 };

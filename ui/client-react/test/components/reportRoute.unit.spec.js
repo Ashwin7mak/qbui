@@ -1,6 +1,5 @@
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
-import ReactDOM from 'react-dom';
 import Fluxxor from 'fluxxor';
 import ReportRoute, {__RewireAPI__ as ReportRouteRewireAPI}  from '../../src/components/report/reportRoute';
 import FacetSelections  from '../../src/components/facet/facetSelections';
@@ -27,7 +26,9 @@ describe('ReportRoute functions', () => {
     let offset = 0;
     let numRows = 10;
 
-    let routeParams = {appId, tblId, rptId, format: true};
+    let routeParams = {
+        params: {appId, tblId, rptId, format: true}
+    };
     let reportDataParams = {reportData: {selections: new FacetSelections(), data: {columns: [{field: "col_num", headerName: "col_num"}]}, pageOffset: offset, numRows: numRows}};
 
     let stores = {
@@ -70,7 +71,7 @@ describe('ReportRoute functions', () => {
 
         component = TestUtils.renderIntoDocument(
             <Provider store={store}>
-                <ReportRoute params={routeParams} reportData={reportDataParams.reportData} flux={flux} pendEdits={pendEdits}/>
+                <ReportRoute match={routeParams} reportData={reportDataParams.reportData} flux={flux} pendEdits={pendEdits}/>
             </Provider>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
     });
@@ -95,7 +96,7 @@ describe('ReportRoute functions', () => {
         it('loadReport is called with app data', () => {
             component = TestUtils.renderIntoDocument(
                 <Provider store={store}>
-                    <ReportRoute params={routeParams} reportData={reportDataParams.reportData} flux={flux} pendEdits={pendEdits}/>
+                    <ReportRoute match={routeParams} reportData={reportDataParams.reportData} flux={flux} pendEdits={pendEdits}/>
                 </Provider>);
             expect(loadReport).toHaveBeenCalledWith(
                 jasmine.any(String),
@@ -109,28 +110,28 @@ describe('ReportRoute functions', () => {
         });
 
         it('loadReport is not called when appId is missing', () => {
-            const missingRouteParams = Object.assign({}, routeParams, {appId: null});
+            const missingRouteParams = Object.assign({}, routeParams, {params: {appId: null}});
             component = TestUtils.renderIntoDocument(
                 <Provider store={store}>
-                    <ReportRoute params={missingRouteParams} reportData={reportDataParams.reportData} flux={flux} pendEdits={pendEdits}/>
+                    <ReportRoute match={missingRouteParams} reportData={reportDataParams.reportData} flux={flux} pendEdits={pendEdits}/>
                 </Provider>);
             expect(loadReport).not.toHaveBeenCalled();
         });
 
         it('loadReport is not called when tblId is missing', () => {
-            const missingRouteParams = Object.assign({}, routeParams, {tblId: null});
+            const missingRouteParams = Object.assign({}, routeParams, {params: {tblId: null}});
             component = TestUtils.renderIntoDocument(
                 <Provider store={store}>
-                    <ReportRoute params={missingRouteParams} reportData={reportDataParams.reportData} flux={flux} pendEdits={pendEdits}/>
+                    <ReportRoute match={missingRouteParams} reportData={reportDataParams.reportData} flux={flux} pendEdits={pendEdits}/>
                 </Provider>);
             expect(loadReport).not.toHaveBeenCalled();
         });
 
         it('loadReport is not called when rptId is missing', () => {
-            const missingRouteParams = Object.assign({}, routeParams, {rptId: null});
+            const missingRouteParams = Object.assign({}, routeParams, {params: {rptId: null}});
             component = TestUtils.renderIntoDocument(
                 <Provider store={store}>
-                    <ReportRoute params={missingRouteParams} reportData={reportDataParams.reportData} flux={flux} pendEdits={pendEdits}/>
+                    <ReportRoute match={missingRouteParams} reportData={reportDataParams.reportData} flux={flux} pendEdits={pendEdits}/>
                 </Provider>);
             expect(loadReport).not.toHaveBeenCalled();
         });

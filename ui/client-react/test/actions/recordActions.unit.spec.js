@@ -36,6 +36,16 @@ describe('Open/edit Record actions', () => {
         expect(recordActions.openRecord(obj.recId, obj.nextRecordId, obj.previousRecordId)).toEqual(event(obj.recId, types.OPEN_RECORD, obj));
     });
 
+    it('When an uniqueID is provided, opening a record creates an action using the uniqueID context instead of recordId', () => {
+        let obj = {
+            recId: 1,
+            nextRecordId: 2,
+            previousRecordId: 3
+        };
+        const uniqueId = 'UNIQUE';
+        expect(recordActions.openRecord(obj.recId, obj.nextRecordId, obj.previousRecordId, uniqueId)).toEqual(event(uniqueId, types.OPEN_RECORD, obj));
+    });
+
     let obj1 = {
         appId: 1,
         tblId: 2,
@@ -76,6 +86,11 @@ describe('Open/edit Record actions', () => {
 });
 
 describe('Delete Record Actions -- success workflow', () => {
+    let mockLocale = {
+        getPluralizedMessage() {return;},
+        getMessage() {return;}
+    };
+
     class mockRecordService  {
         constructor() { }
         deleteRecords(appId, tblId, recIds) {
@@ -88,11 +103,13 @@ describe('Delete Record Actions -- success workflow', () => {
         spyOn(mockRecordService.prototype, 'deleteRecords').and.callThrough();
         RecordActionsRewireAPI.__Rewire__('RecordService', mockRecordService);
         RecordActionsRewireAPI.__Rewire__('NotificationManager', {success: notificationSuccess});
+        RecordActionsRewireAPI.__Rewire__('Locale', mockLocale);
     });
 
     afterEach(() => {
         RecordActionsRewireAPI.__ResetDependency__('RecordService');
         RecordActionsRewireAPI.__ResetDependency__('NotificationManager');
+        RecordActionsRewireAPI.__ResetDependency__('Locale');
     });
 
     const appId = '1';
@@ -110,7 +127,6 @@ describe('Delete Record Actions -- success workflow', () => {
                 event(expectedRecIds[0], types.REMOVE_REPORT_RECORDS, {appId, tblId, recIds:expectedRecIds}),
                 event(expectedRecIds[0], types.DELETE_RECORDS_COMPLETE, {appId, tblId, recIds:expectedRecIds})
             ];
-
             const store = mockStore({});
             return store.dispatch(testCase.func.apply(this, [appId, tblId, testCase.recIds, 'name'])).then(
                 () => {
@@ -603,7 +619,8 @@ describe('update Record Actions -- success workflow', () => {
     const addNewRow = true;
     const expectedActions = [
         event(recId, types.SAVE_RECORD, {appId, tblId, recId, changes:changes}),
-        event(recId, types.SAVE_RECORD_SUCCESS, {appId, tblId, recId, report:jasmine.any(Object), addNewRow})
+        event(recId, types.SAVE_RECORD_SUCCESS, {appId, tblId, recId, report:jasmine.any(Object), addNewRow}),
+        event(recId, types.SAVE_RECORD_COMPLETE, {appId, tblId, recId})
     ];
 
     let testCases = [

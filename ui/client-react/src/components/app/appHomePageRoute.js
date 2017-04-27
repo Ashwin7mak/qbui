@@ -5,7 +5,11 @@ import Fluxxor from 'fluxxor';
 import Logger from '../../utils/logger';
 import AppHomePage from './appHomePage';
 import PageTitle from '../pageTitle/pageTitle';
-
+import {connect} from 'react-redux';
+import {NotificationManager} from 'react-notifications';
+import Locale from '../../locales/locales';
+import {notifyTableDeleted} from '../../actions/tablePropertiesActions';
+import {getNeedToNotifyTableDeletion, getTableJustDeleted} from '../../reducers/tableProperties';
 import './appHomePage.scss';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
@@ -14,7 +18,7 @@ let logger = new Logger();
 /**
  * placeholder for app dashboard route
  */
-let AppHomePageRoute = React.createClass({
+export const AppHomePageRoute = React.createClass({
     mixins: [FluxMixin],
 
     contextTypes: {
@@ -42,7 +46,7 @@ let AppHomePageRoute = React.createClass({
             }
 
             if (checkParams) {
-                if (this.props.params.appId === appId) {
+                if (_.get(this.props, 'match.params.appId') === appId) {
                     return;
                 }
             }
@@ -81,12 +85,16 @@ let AppHomePageRoute = React.createClass({
         let flux = this.getFlux();
         flux.actions.showTopNav();
         flux.actions.setTopTitle();
-        this.selectAppFromParams(this.props.params);
+        this.selectAppFromParams(_.get(this.props, 'match.params'));
         flux.actions.doneRoute();
+        if (this.props.notifyTableDeleted) {
+            NotificationManager.success(Locale.getMessage('tableEdit.tableDeleted', {tableName: this.props.tableJustDeleted}), Locale.getMessage('success'));
+            this.props.resetTableDeleteNotification();
+        }
     },
     // Triggered when properties change
     componentWillReceiveProps: function(props) {
-        this.selectAppFromParams(props.params, true);
+        this.selectAppFromParams(_.get(this.props, 'match.params'), true);
     },
 
     getPageActions(maxButtonsBeforeMenu = 0) {
@@ -126,4 +134,20 @@ let AppHomePageRoute = React.createClass({
     }
 });
 
-export default AppHomePageRoute;
+const mapStateToProps = (state) => {
+    return {
+        notifyTableDeleted: getNeedToNotifyTableDeletion(state),
+        tableJustDeleted: getTableJustDeleted(state)
+    };
+};
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        resetTableDeleteNotification: () => dispatch(notifyTableDeleted(false))
+    };
+};
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(AppHomePageRoute);

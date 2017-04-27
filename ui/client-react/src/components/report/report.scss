@@ -4,6 +4,8 @@
     flex: 1 1 auto;
     min-width: 0;
     overflow-y: auto;
+    display: flex;
+    flex-direction: column;
 
     .layout-stage {
         flex: 0 0 auto;
@@ -31,24 +33,6 @@
     .tableHomepageLink {
         display: flex;
         align-items: center;
-    }
-}
-
-.reportToolsAndContentWrapper {
-    // On larger devices, only take up as much space as needed by the grid
-    // This keeps the pagination and record count in line with the right side of the grid
-    display: inline-block;
-    max-width: 100%;
-
-    // When the loading spinner is displayed, center the spinner
-    &.isLoading {
-        display: block;
-    }
-
-    // On small breakpoints, the card view should always take up 100% of the width
-    @include small-breakpoint {
-        display: block;
-        width: 100%;
     }
 }
 
@@ -292,82 +276,23 @@
 
     .sortButton {
         font-size: 18px;
+        cursor: pointer;
 
-        &.qbIcon {
-            display: inline;
-        }
-    }
-}
+        @include small-breakpoint {
+            font-size: $size-iconfont-large;
+            line-height: 0.8;
 
-.reportNavigation {
-    float: left;
-    color: $pagination-iconfont-darkblack-color;
-    font-family: "Lato", sans-serif;
-    font-size: 14px;
-    display: flex;
-    align-items: center;
-
-    .tipChildWrapper {
-        width: auto;
-    }
-
-    .navigationButton {
-        text-decoration: none;
-        padding-top: 5px;
-
-        .disabled {
-            pointer-events: none;
-        }
-    }
-
-    .previousButton {
-        &.qbIcon {
-            display: inline;
-            font-size: 24px;
-            color: $pagination-iconfont-darkblack-color;
-
-            &.disabled {
-                color: $pagination-iconfont-disabled-color;
+            &:hover {
+                color: $icon-light-color-hover;
             }
         }
 
-        &:hover {
-            color: $pagination-arrow-dark-hover-color;
-        }
-    }
-
-    .pageNumbers {
-        display: inline;
-        padding-left: 3px;
-        padding-right: 3px;
-        white-space: nowrap;
-    }
-
-    .nextButton {
         &.qbIcon {
             display: inline;
-            font-size: 24px;
-            color: $pagination-iconfont-darkblack-color;
-
-            &.disabled {
-                color: $pagination-iconfont-disabled-color;
-            }
-        }
-
-        &:hover {
-            color: $pagination-arrow-dark-hover-color;
         }
     }
 }
 
-.navigationButton {
-    background-color: transparent;
-    background-repeat: no-repeat;
-    border: none;
-    cursor: pointer;
-    overflow: hidden;
-    outline: none;
-}
 $add-record-fg: $color-black-100;
 $add-record-bg: $color-cyan-500;
 $add-record-radius: 20px;
@@ -396,9 +321,8 @@ $add-record-radius: 20px;
         position: fixed;
         right: 24px;
         bottom: 24px;
-        font-size: 24px;
-        color: $add-record-fg;
-        background-color: $add-record-bg;
+        font-size: $size-iconfont-xlarge;
+        color: $add-user-button;
         text-align: center;
         width: $add-record-radius * 2;
         height: $add-record-radius * 2;
@@ -406,10 +330,25 @@ $add-record-radius: 20px;
         -webkit-border-radius: $add-record-radius;
         border-radius: $add-record-radius;
 
-        .qbIcon {
-            line-height: $add-record-radius * 2;
+        // This is temporary until the icon is fixed with a non-transparent plus sign
+        &:before {
+            position: absolute;
+            content: "";
+            z-index: -1;
+            left: 10px;
+            top: 10px;
+            background-color: $color-black-100;
+            height: 20px;
+            width: 20px;
         }
 
+        .qbIcon {
+            line-height: $add-record-radius * 2;
+
+            &:hover {
+                color: $default-hover-color;
+            }
+        }
         &:hover {
             color: $add-record-fg;
         }

@@ -5,7 +5,7 @@ import ReactDOM from 'react-dom';
 import ComponentLibraryWrapper from '../src/components/componentLibrary';
 import PropTable from '../src/components/PropTable';
 import ReactPlayground from '../src/components/ReactPlayground';
-
+import {MemoryRouter} from 'react-router-dom';
 import IconDoc from '../src/docs/icon';
 
 const fakeMetadata = {
@@ -115,7 +115,10 @@ describe('Component Library functions', () => {
     'use strict';
 
     it('test render component library wrapper', () => {
-        let component = TestUtils.renderIntoDocument(<ComponentLibraryWrapper />);
+        let component = TestUtils.renderIntoDocument(
+            <MemoryRouter>
+                <ComponentLibraryWrapper/>
+            </MemoryRouter>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
     });
 

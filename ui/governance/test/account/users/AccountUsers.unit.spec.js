@@ -4,9 +4,6 @@ import jasmineEnzyme from 'jasmine-enzyme';
 import {AccountUsers} from '../../../src/account/users/AccountUsers';
 import GovernanceBundleLoader from '../../../src/locales/governanceBundleLoader';
 import AccountUsersGrid from '../../../src/account/users/grid/AccountUsersGrid';
-import {Provider} from "react-redux";
-import configureMockStore from 'redux-mock-store';
-import StandardGrid from '../../../src/common/grid/standardGrid';
 
 
 describe('AccountUsers', () => {
@@ -17,22 +14,13 @@ describe('AccountUsers', () => {
 
     const baseProps = {
         fetchData: () => false,
-        params: {
-            accountId: "0"
+        match: {
+            params: {
+                accountId: "0"
+            }
         },
         loading: false
     };
-
-    it("should should render an error state", ()=> {
-        let props = {
-            ...baseProps,
-            dataFetchingError: "Error"
-        };
-
-        let component = mount(<AccountUsers {...props} />);
-        let errorSection = component.find("h1");
-        expect(errorSection.length).toEqual(1);
-    });
 
     // it("should should call fetch on mount", ()=> {
     //     let props = {

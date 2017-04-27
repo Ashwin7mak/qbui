@@ -1,4 +1,5 @@
 import * as types from '../actions/types';
+import * as tabIndexConstants from '../../../client-react/src/components/formBuilder/tabindexConstants';
 import _ from 'lodash';
 import MoveFieldHelper from '../components/formBuilder/moveFieldHelper';
 
@@ -149,23 +150,22 @@ const forms = (
         return newState;
     }
 
-    /**If a location is not passed in, a location will be hardcoded, since there is no current implementation
-     *that sets the current tabIndex, sectionIndex, and columnIndex for a new field.
-     *Default location for a newField is always set to the bottom of the form.
+    /**
+     * If a location is not passed in, a location will be hardcoded, since there is no current implementation
+     * that sets the current tabIndex, sectionIndex, and columnIndex for a new field.
+     * Default location for a newField is always set to the bottom of the form.
      */
     case types.ADD_FIELD : {
         if (!currentForm) {
             return state;
         }
 
-        let {newField, newLocation} = action.content;
+        let {newField, newLocation} = _.cloneDeep(action.content);
         updatedForm = _.cloneDeep(currentForm);
-        let newFieldCopy = _.cloneDeep(newField);
-
         // Remove all keys that are not necessary for forms
-        Object.keys(newFieldCopy).forEach(key => {
+        Object.keys(newField).forEach(key => {
             if (key !== 'FormFieldElement' && key !== 'id') {
-                delete newFieldCopy[key];
+                delete newField[key];
             }
         });
 
@@ -183,13 +183,15 @@ const forms = (
             };
         } else if (newLocation.elementIndex !== updatedForm.formData.formMeta.tabs[0].sections[0].columns[0].elements.length) {
             //If a field is selected on the form and the selectedField is not located at the end of the form, then the new field will be added below the selected field
-            newLocation.elementIndex = newLocation.elementIndex + 1;
+            if (newLocation && !_.isNil(newLocation.elementIndex)) {
+                newLocation.elementIndex = newLocation.elementIndex + 1;
+            }
         }
 
         updatedForm.formData.formMeta = MoveFieldHelper.addNewFieldToForm(
             updatedForm.formData.formMeta,
             newLocation,
-            {...newFieldCopy}
+            {...newField}
         );
 
         if (!updatedForm.selectedFields) {
@@ -343,22 +345,56 @@ const forms = (
             return state;
         }
 
-        let tabIndex = action.content.currentTabIndex === undefined || action.content.currentTabIndex === "-1" ? "0" : "-1";
+        let formTabIndex = action.content.currentTabIndex === undefined || action.content.currentTabIndex === "-1" ? tabIndexConstants.FORM_TAB_INDEX : "-1";
         let formFocus = false;
 
         if (action.content.currentTabIndex === undefined) {
             formFocus = false;
-        } else if (tabIndex === "-1") {
+        } else if (formTabIndex === "-1") {
             formFocus = true;
         }
 
         if (!updatedForm.formBuilderChildrenTabIndex && !updatedForm.formFocus) {
             updatedForm.formBuilderChildrenTabIndex = [];
+            updatedForm.toolPaletteChildrenTabIndex = [];
             updatedForm.formFocus = [];
+            updatedForm.toolPaletteFocus = [];
+        }
+        //In order to maintain proper tabbing and focus, everything is updated accordingly
+        updatedForm.formBuilderChildrenTabIndex[0] = formTabIndex;
+        updatedForm.toolPaletteChildrenTabIndex[0] = "-1";
+        updatedForm.formFocus[0] = formFocus;
+        updatedForm.toolPaletteFocus[0] = false;
+
+        newState[id] = updatedForm;
+        return newState;
+    }
+
+    case types.TOGGLE_TOOL_PALETTE_BUILDER_CHILDREN_TABINDEX : {
+        if (!currentForm) {
+            return state;
         }
 
-        updatedForm.formBuilderChildrenTabIndex[0] = tabIndex;
-        updatedForm.formFocus[0] = formFocus;
+        let toolPaletteFocus = false;
+        let toolPaletteTabIndex = action.content.currentTabIndex === undefined || action.content.currentTabIndex === "-1" ? tabIndexConstants.TOOL_PALETTE_TABINDEX : "-1";
+
+        if (action.content.currentTabIndex === undefined) {
+            toolPaletteFocus = false;
+        } else if (toolPaletteTabIndex === "-1") {
+            toolPaletteFocus = true;
+        }
+
+        if (!updatedForm.formBuilderChildrenTabIndex && !updatedForm.toolPaletteChildrenTabIndex && !updatedForm.formFocus) {
+            updatedForm.toolPaletteChildrenTabIndex = [];
+            updatedForm.formBuilderChildrenTabIndex = [];
+            updatedForm.formFocus = [];
+            updatedForm.toolPaletteFocus = [];
+        }
+        //In order to maintain proper tabbing and focus, everything is updated accordingly
+        updatedForm.toolPaletteChildrenTabIndex[0] = toolPaletteTabIndex;
+        updatedForm.formBuilderChildrenTabIndex[0] = "-1";
+        updatedForm.formFocus[0] = false;
+        updatedForm.toolPaletteFocus[0] = toolPaletteFocus;
 
         newState[id] = updatedForm;
         return newState;

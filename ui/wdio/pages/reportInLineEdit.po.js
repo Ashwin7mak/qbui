@@ -15,24 +15,6 @@
 
     var ReportInLineEditPage = Object.create(reportContent, {
 
-        //TODO: Move tableActionsContainer to another PO
-        // Report tools and content container (toolbar locators are in another PO)
-        //this.reportToolsAndContentEl = this.reportContainerEl.element(by.className('reportToolsAndContentContainer'));
-        //// Loaded Content Div
-        //this.loadedContentEl = this.reportToolsAndContentEl.all(by.className('loadedContent')).first();
-        //// Report table
-        //this.reportTable = this.loadedContentEl.element(by.className('reportTable'));
-        //// Table actions container
-        //this.reportToolbarContainerEl = this.reportToolsAndContentEl.element(by.className('reportToolbarContainer'));
-        //// Report toolbar
-        //this.reportsToolBar = element(by.className('reportToolbar'));
-        //// Report records count
-        //this.reportRecordsCount = element(by.className('recordsCount')).element(by.tagName('SPAN'));
-        //// Report filter search Box
-        //this.reportFilterSearchBox = this.reportsToolBar.element(by.className('searchInput'));
-        //// Table actions container
-        //this.tableActionsContainerEl = this.loadedContentEl.element(by.className('tableActionsContainer'));
-
         /**
          * In-line Edit Record Menu on the Reports Page
          */
@@ -187,7 +169,7 @@
          * @returns The record element being edited
          */
         getInlineEditRecord: {value: function() {
-            var recordRowElements = reportContent.qbGridRecordElList.elements('.qbRow');
+            var recordRowElements = reportContent.qbGridBodyViewportEl.elements('.qbRow');
             var recordBeingEdited;
             // Loop through the records and find the one being edited
             for (var i = 0; i < recordRowElements.value.length; i++) {

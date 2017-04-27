@@ -3,6 +3,10 @@ import constants from '../../../common/src/constants';
 import TableService from '../services/tableService';
 import Logger from '../utils/logger';
 import LogLevel from '../utils/logLevels';
+import AppHistory from '../globals/appHistory';
+import Locale from '../locales/locales';
+import UrlUtils from '../utils/urlUtils';
+import {NotificationManager} from 'react-notifications';
 
 /**
  * Actions related to table properties and settings page
@@ -73,6 +77,20 @@ export const tableSaved = (tableInfo) => ({
     tableInfo
 });
 
+/**
+ * delete failed
+ */
+export const deletingTableFailed = () => ({
+    type: types.DELETING_TABLE_FAILED
+});
+
+/**
+ * table was succesfully deleted
+ */
+export const tableDeleted = () => ({
+    type: types.TABLE_DELETED
+});
+
 export const resetEditedTableProperties = () => ({
     type: types.RESET_TABLE_PROPS
 });
@@ -118,7 +136,45 @@ export const updateTable = (appId, tableId, tableInfo) => {
     };
 };
 
+export const deleteTable = (appId, tableId) => {
+    return (dispatch) => {
+
+        return new Promise((resolve, reject) => {
+
+            dispatch(savingTable());
+            const tableService = new TableService();
+            tableService.deleteTable(appId, tableId).then((response) => {
+                dispatch(tableDeleted());
+                // navigate to app home page
+                let link = UrlUtils.getAppHomePageLink(appId);
+                AppHistory.history.push(link);
+                resolve(response);
+            }).catch(error => {
+                dispatch(deletingTableFailed(error));
+                NotificationManager.error(Locale.getMessage('tableEdit.tableDeleteFailed'), Locale.getMessage('failed'));
+                if (error.response) {
+                    if (error.response.status === constants.HttpStatusCode.FORBIDDEN) {
+                        logger.parseAndLogError(LogLevel.WARN, error.response, 'tableService.deleteTable:');
+                    } else {
+                        logger.parseAndLogError(LogLevel.ERROR, error.response, 'tableService.deleteTable:');
+                    }
+                }
+                reject(error);
+            });
+        });
+    };
+};
+
 export const loadTableProperties = (tableInfo) => ({
     type: types.LOADED_TABLE_PROPS,
     tableInfo
+});
+
+/**
+ * someone (the app homepage currently) needs to pop up a notification
+ * @param notify true if notification is needed, false if the notification has been performed
+ */
+export const notifyTableDeleted = (notify) => ({
+    type: types.NOTIFY_TABLE_DELETED,
+    notifyTableDeleted: notify
 });

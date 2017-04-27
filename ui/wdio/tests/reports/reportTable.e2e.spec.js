@@ -6,18 +6,17 @@
     'use strict';
 
     //Load the page Objects
-    var e2ePageBase = require('../../pages/e2ePageBase.po');
-    var NewStackAuthPO = require('../../pages/newStackAuth.po');
-    var ReportContentPO = require('../../pages/reportContent.po');
-    var FormsPO = require('../../pages/formsPage.po');
-    var ReportTableActionsPO = require('../../pages/reportTableActions.po');
+    var e2ePageBase = requirePO('e2ePageBase');
+    var NewStackAuthPO = requirePO('newStackAuth');
+    var ReportContentPO = requirePO('reportContent');
+    var FormsPO = requirePO('formsPage');
+    var ReportTableActionsPO = requirePO('reportTableActions');
 
-    describe('Reports - Table Tests: ', function() {
+    describe('Reports - Table report tests: ', function() {
         var realmName;
         var realmId;
         var testApp;
         var RECORD_COUNT = 20;
-
         /**
          * Setup method. Creates test app then authenticates into the new stack
          */
@@ -34,7 +33,8 @@
             }).catch(function(error) {
                 // Global catch that will grab any errors from chain above
                 // Will appropriately fail the beforeAll method so other tests won't run
-                Promise.reject(new Error('Error during test setup beforeAll: ' + error.message));
+                browser.logger.error('Error in beforeAll function:' + JSON.stringify(error));
+                return Promise.reject('Error in beforeAll function:' + JSON.stringify(error));
             });
         });
 
@@ -58,7 +58,6 @@
 
             // Assert column headers from the UI report table with expected headers. Remove the record ID first element in an array since its not showing up in UI.
             expect(ReportContentPO.getReportColumnHeaders().slice(1)).toEqual(e2eConsts.reportFieldNames.slice(1));
-
         });
 
         /**

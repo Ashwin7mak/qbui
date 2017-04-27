@@ -7,8 +7,9 @@ import AccountUsersStage from './AccountUsersStage';
 
 import * as AccountUsersActions from './AccountUsersActions';
 import * as RequestContextActions from '../../common/requestContext/RequestContextActions';
-import * as RequestContextCommon from '../../common/requestContext/RequestContextCommon';
 import * as SpinnerConfigurations from "../../../../client-react/src/constants/spinnerConfigurations";
+
+import {isFetching} from './AccountUsersReducer';
 
 /**
  * Represents the top level page that contains the grid for account users
@@ -19,7 +20,7 @@ class AccountUsers extends Component {
     }
 
     componentDidMount() {
-        this.props.fetchData(this.props.params.accountId);
+        this.props.fetchData(this.props.match.params.accountId);
     }
 
     render() {
@@ -30,24 +31,19 @@ class AccountUsers extends Component {
             canSeeAccountColumns = this.props.requestUser.isAccountAdmin || this.props.requestUser.isCSR;
             canSeeRealmColumns = !this.props.requestRealm.isAccountURL && (this.props.requestUser.isRealmAdmin || this.props.requestUser.isCSR);
         }
-        if (this.props.dataFetchingError) {
-            return (
-                <h1>Error</h1>
-            );
-        } else {
-            return (
-                <Loader loaded={!this.props.loading} options={SpinnerConfigurations.LARGE_BREAKPOINT}>
-                    <div className="accountUsersContainer">
-                        <AccountUsersStage users={this.props.users}/>
-                        <AccountUsersGrid
-                            users={this.props.users}
-                            showAccountColumns={canSeeAccountColumns}
-                            showRealmColumns={canSeeRealmColumns}
-                        />
-                    </div>
-                </Loader>
-            );
-        }
+
+        return (
+            <Loader loaded={!this.props.loading} options={SpinnerConfigurations.LARGE_BREAKPOINT}>
+                <div className="accountUsersContainer">
+                    <AccountUsersStage users={this.props.users}/>
+                    <AccountUsersGrid
+                        users={this.props.users}
+                        showAccountColumns={canSeeAccountColumns}
+                        showRealmColumns={canSeeRealmColumns}
+                    />
+                </div>
+            </Loader>
+        );
     }
 }
 
@@ -74,8 +70,7 @@ const mapStateToProps = (state) => {
         requestUser: state.RequestContext.currentUser,
         requestRealm: state.RequestContext.realm,
         users: state.AccountUsers.users,
-        loading: state.RequestContext.status.isFetching || !state.RequestContext.currentUser.id,
-        dataFetchingError: RequestContextCommon.checkDataFetchingError(state.RequestContext.status.error),
+        loading: isFetching(state)
     };
 };
 

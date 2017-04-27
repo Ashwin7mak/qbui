@@ -19,4 +19,12 @@ export const DefaultFieldProperties = {
             "treatNullAsZero": true
         }
     },
+
+    [FieldFormats.TEXT_FORMAT_MULTICHOICE]: {
+        "multipleChoice": {
+            "allowNew": false,
+            "choices": [{"coercedValue": {"value": ""}, "displayValue": ""}],
+            "sortAsGiven": false
+        }
+    }
 };

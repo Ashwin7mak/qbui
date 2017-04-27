@@ -20,7 +20,8 @@ module.exports = function(grunt) {
     var METADATA_MERGE_COMMENT = '        // END OF METADATA MERGE';
     //   Locator comments in Examples.js (extra spaces are needed to match tab indentation)
     var EXAMPLES_END_EXPORT_COMMENT = '    // END OF EXPORT';
-
+    const BASE_CLIENT_ROUTE = '/qbase';
+    const LIB_ROUTE = `${BASE_CLIENT_ROUTE}/components`;
     function getComponentFileName(componentPath) {
         var componentPathArray = componentPath.split('/');
         return componentPathArray.pop();
@@ -116,10 +117,10 @@ module.exports = function(grunt) {
         indexFileArray.splice(endOfImport, 0, 'import ' + componentData.componentName + "Doc from './docs/" + componentData.componentFileName + "';");
 
         // Extra spacing here to match indentation
-        var endOfRoutes = indexFileArray.indexOf('        </Route>');
+        var endOfRoutes = indexFileArray.indexOf('        ]');
         var routeTemplate = grunt.file.read(componentData.componentLibraryTemplatePath + 'route.tmpl');
         // Slice on the end removes extra newline
-        indexFileArray.splice(endOfRoutes, 0, grunt.template.process(routeTemplate, {data: componentData}).slice(0, -1));
+        indexFileArray.splice(endOfRoutes - 1, 0, grunt.template.process(routeTemplate, {data: componentData}).slice(0, -1));
 
         grunt.file.write(componentData.indexFile, indexFileArray.join("\n"));
     }
@@ -160,7 +161,8 @@ module.exports = function(grunt) {
             examplesFile: componentLibrarySrcPath + 'components/Examples.js',
             playgroundFile: componentLibrarySrcPath + 'components/ReactPlayground.js',
             indexFile: componentLibrarySrcPath + 'index.js',
-            routesFile: componentLibrarySrcPath + 'components/componentLibrary.js'
+            routesFile: componentLibrarySrcPath + 'components/componentLibrary.js',
+            basePath: LIB_ROUTE
         };
 
         createDocFile(componentData);

@@ -410,6 +410,19 @@
         },
 
         /**
+         * For a given table url get the EE route
+         * For example url: api/api/apps/123/tables/456
+         *             returns: ee/apps/123/tables/456
+         * @param url
+         * @param tableId
+         * @returns {*}
+         */
+        getEETablesRoute: function(url, tableId) {
+            let root = this.getTablesRoute(url, tableId);
+            return getEEReqURL(root);
+        },
+
+        /**
          * For the given req.url, extract the APPS and TABLES identifiers/ids and
          * append the DEFAULT HOMEPAGE identifier
          *

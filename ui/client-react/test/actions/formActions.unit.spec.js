@@ -493,4 +493,15 @@ describe('Form Actions', () => {
                 }});
         });
     });
+
+    describe('toggleToolPaletteChildrenTabIndex', () => {
+        it('creates an action that update toolPalette children tabindex', () => {
+            expect(formActions.toggleToolPaletteChildrenTabIndex('view', 1)).toEqual({
+                id: 'view',
+                type: types.TOGGLE_TOOL_PALETTE_BUILDER_CHILDREN_TABINDEX,
+                content: {
+                    currentTabIndex: 1
+                }});
+        });
+    });
 });
