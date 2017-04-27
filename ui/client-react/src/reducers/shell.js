@@ -86,13 +86,17 @@ const shell = (
             i18n: Locale.getI18nBundle()
         };
     case types.OPEN_FIELD_SELECTOR: {
-        let currentFieldsSelectMenu = state.fieldsSelectMenu;
+        let fields = action.content.response.data;
+        let fids = fields.map(field => {
+            return field.id;
+        });
+        let columns = ReportModelHelper.getReportColumns(fields, fids);
         return {
             ...state,
             fieldsSelectMenu: {
-                ...currentFieldsSelectMenu,
                 fieldsListCollapsed: false,
-                addBefore: action.content.addBefore
+                addBefore: action.content.addBefore,
+                availableColumns: columns
             }
         };
     }
@@ -106,21 +110,6 @@ const shell = (
                 addBefore: action.content.addBefore
             }
         };
-    }
-    case types.HIDE_COLUMN: {
-        let currentFieldsSelectMenu = state.fieldsSelectMenu;
-        let fields = action.content.response.data;
-        let fids = fields.map(field => {
-            return field.id;
-        });
-        let columns = ReportModelHelper.getReportColumns(fields, fids);
-        return {
-            ...state,
-            fieldsSelectMenu: {
-                ...currentFieldsSelectMenu,
-                availableColumns: columns
-            }
-        }
     }
     default:
         // return existing state by default in redux

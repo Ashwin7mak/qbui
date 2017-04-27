@@ -359,10 +359,19 @@ export const loadReportRecordsCount = (context, appId, tblId, rptId, queryParams
 export const toggleFieldSelectorMenu = (context, appId, tblId, rptId, params) => {
     return (dispatch) => {
         if (appId && tblId && rptId) {
-            let openOrClose = params.open ? types.OPEN_FIELD_SELECTOR : types.CLOSE_FIELD_SELECTOR;
             return new Promise((resolve) => {
-                dispatch(event(context, openOrClose, params));
-                resolve();
+                if (params.open) {
+                    let fieldsService = new FieldsService();
+                    fieldsService.getFields(appId, tblId).then(
+                        (response) => {
+                            let content = {...params, response};
+                            dispatch(event(context, types.OPEN_FIELD_SELECTOR, content));
+                            resolve();
+                        });
+                } else {
+                    dispatch(event(context, types.CLOSE_FIELD_SELECTOR, params));
+                    resolve();
+                }
             });
         } else {
             logger.error(`reportActions.toggleFieldSelectorMenu: Missing one or more required input parameters. AppId:${appId}; TblId:${tblId}; RptId:${rptId}`);
@@ -412,13 +421,8 @@ export const hideColumn = (context, appId, tblId, rptId, params) => {
         if (appId && tblId && rptId) {
             logger.debug(`Hiding column with id: ${params.clickedId} for appId: ${appId}, tblId:${tblId}, rptId:${rptId}`);
             return new Promise((resolve) => {
-                let fieldsService = new FieldsService();
-                fieldsService.getFields(appId, tblId).then(
-                    (response) => {
-                        let content = {...params, response};
-                        dispatch(event(context, types.HIDE_COLUMN, content));
-                        resolve();
-                    });
+                dispatch(event(context, types.HIDE_COLUMN, params));
+                resolve();
             });
         } else {
             logger.error(`reportActions.hideColumn: Missing one or more required input parameters.  AppId:${appId}; TblId:${tblId}; RptId:${rptId}`);
