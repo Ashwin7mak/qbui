@@ -1,14 +1,10 @@
 import React, {PropTypes, Component} from 'react';
 import Loader from 'react-loader';
-import {connect} from 'react-redux';
-import {getLoggedInUser} from './userActions';
-import {getLoggedInUser as getLoggedInUserFromState} from './userReducer';
 import {INLINE_UPDATING} from '../../../../../client-react/src/constants/spinnerConfigurations';
 import Locale from '../../locales/locale';
 
 /**
  * A simple User component that displays the name of the currently logged in user.
- * This component currently serves as a demo of the user reducer and actions, but is not used in the product.
  * TODO: Word with XD to flesh out this component and use it in menus where the currently logged in user should be displayed
  */
 export class User extends Component {
@@ -73,6 +69,4 @@ User.defaultProps = {
 };
 
 
-const mapStateToProps = state => ({user: getLoggedInUserFromState(state)});
-
-export default connect(mapStateToProps, {getLoggedInUser})(User);
+export default User;
