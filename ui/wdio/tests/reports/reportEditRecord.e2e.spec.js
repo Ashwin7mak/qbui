@@ -66,7 +66,8 @@
         /**
          * Test Method. Record in-line editing test on a report.
          */
-        it('Should allow you to in-line edit multiple fields in a report record', function() {
+        //TODO: MC-2309: Enable this when the phone number field validation is fixed.
+        xit('Should allow you to in-line edit multiple fields in a report record', function() {
 
             //Variable declarations
             var textToEnter = 'My new text';
@@ -88,8 +89,6 @@
                 ReportInLineEditPO.openDateFieldCalWidget(0);
                 ReportInLineEditPO.advanceCurrentlySelectedDate(0);
             }
-            // Hack until Phone Number validation is fixed
-            browser.setValue('.cellEdit.phoneNumber', ' ');
 
             // Step 4 - Save the edit
             ReportInLineEditPO.clickSaveChangesButton();
