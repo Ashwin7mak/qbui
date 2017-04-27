@@ -287,12 +287,18 @@
          * Method to click deleteTableButton
          */
         clickDeleteTableButton: {value: function() {
-            //set the deletePromtTextField value to 'YES'
-            this.setInputValue(this.deletePromtTextField, 'YES');
             //use the predefined deleteTableButton here
             expect(browser.isEnabled('.modal-dialog .primaryButton')).toBeTruthy();
             //Click on delete table button
             return this.deleteButton.click();
+        }},
+
+        /**
+         * Set the deletePromtTextField value
+         */
+        setDeletePromtTextFieldValue: {value: function(fieldValue) {
+            //set the deletePromtTextField value to 'YES'
+            return this.setInputValue(this.deletePromtTextField, fieldValue);
         }},
 
         /**

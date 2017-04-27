@@ -11,9 +11,7 @@
     let e2ePageBase = requirePO('e2ePageBase');
     let RequestAppsPage = requirePO('requestApps');
     let tableCreatePO = requirePO('tableCreate');
-    let formsPO = requirePO('formsPage');
     let RequestSessionTicketPage = requirePO('requestSessionTicket');
-    let rawValueGenerator = require('../../../test_generators/rawValue.generator');
     let ReportContentPO = requirePO('reportContent');
 
     describe('Tables - delete table tests: ', function() {
@@ -50,13 +48,13 @@
             return e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
         });
 
-        xit('Delete table', function()   {
+        it('Delete table', function()   {
 
             //Step 1 - get the original count of table links in the left nav
             let originalTableLinksCount = tableCreatePO.getAllTableLeftNavLinksList.value.length;
 
-            //Step 2 - Select table to delete ('Table 1' here) and make sure it lands in reports page
-            tableCreatePO.selectTable('Table 1');
+            //Step 2 - Select table to delete ('Table 2' here) and make sure it lands in reports page
+            tableCreatePO.selectTable('Table 2');
             // wait for the report content to be visible
             ReportContentPO.waitForReportContent();
 
@@ -69,16 +67,19 @@
             //Step 5 - Click delete table action button
             ReportContentPO.clickDeleteTableActionButton();
 
-            //Step 6 - Delete table
+            // Step 6 - Set the deletePromtTextField value to 'YES'
+            ReportContentPO.setDeletePromtTextFieldValue('YES');
+
+            //Step 7 - Delete table
             ReportContentPO.clickDeleteTableButton();
 
-            //Step 7 - Make sure table is actually deleted
+            //Step 8 - Make sure table is actually deleted
             let newTableLinksCount = tableCreatePO.getAllTableLeftNavLinksList.value.length;
             //Verify the table links count decreased by 1
             expect(newTableLinksCount).toBe(originalTableLinksCount - 1);
         });
 
-        xit('Verify that clicking on "dont delete" button closes the delete table dialogue without deleting the table', function() {
+        it('Verify that clicking on "dont delete" button closes the delete table dialogue without deleting the table', function() {
 
             //Step 1 - get the original count of table links in the left nav
             let originalTableLinksCount = tableCreatePO.getAllTableLeftNavLinksList.value.length;
@@ -97,19 +98,83 @@
             //Step 5 - Click delete table action button
             ReportContentPO.clickDeleteTableActionButton();
 
-            //Step 6 - Click don't delete table button
+            // Step 6 - Set the deletePromtTextField value to 'YES'
+            ReportContentPO.setDeletePromtTextFieldValue('YES');
+
+            //Step 7 - Click don't delete table button
             ReportContentPO.clickDontDeleteTableButton();
 
-            //step 7 - go back to the tables page
+            //step 8 - go back to the tables page
             RequestAppsPage.get(e2eBase.getRequestTableEndpoint(realmName, testApp.id, testApp.tables[0].id));
 
-            //Step 8 - Make sure table is not deleted
+            //Step 9 - Make sure table is not deleted
             let newTableLinksCount = tableCreatePO.getAllTableLeftNavLinksList.value.length;
             //Verify the table links count is same as original
             expect(newTableLinksCount).toBe(originalTableLinksCount);
         });
 
-        xit('Verify that only ADMIN can delete a Table', function() {
+        /**
+         * Data provider for deletePromt textField value validation testCases.
+         */
+        function deletePromtTextFieldTestCases() {
+            return [
+                {
+                    message: 'all lower case letters',
+                    fieldValue: 'yes'
+                },
+                {
+                    message: 'combination of lower and upper case letters',
+                    fieldValue: 'Yes'
+                },
+                {
+                    message: 'wrong string value',
+                    fieldValue: 'no'
+                },
+                {
+                    message: 'empty string',
+                    fieldValue: ''
+                }
+            ];
+        }
+
+        deletePromtTextFieldTestCases().forEach(function(testCase) {
+
+            it('Delete table negative test case with deletePromt TextField value is- ' + testCase.message, function()   {
+
+                //Step 1 - get the original count of table links in the left nav
+                let originalTableLinksCount = tableCreatePO.getAllTableLeftNavLinksList.value.length;
+
+                //Step 2 - Select table to delete ('Table 1' here) and make sure it lands in reports page
+                tableCreatePO.selectTable('Table 1');
+                // wait for the report content to be visible
+                ReportContentPO.waitForReportContent();
+
+                //Step 3 - Click table settings Icon
+                ReportContentPO.clickSettingsIcon();
+
+                //Step 4 - Go to 'Table properties & settings'
+                ReportContentPO.clickModifyTableSettings();
+
+                //Step 5 - Click delete table action button
+                ReportContentPO.clickDeleteTableActionButton();
+
+                // Step 6 - Set the deletePromtTextField value
+                ReportContentPO.setDeletePromtTextFieldValue(testCase.fieldValue);
+
+                //Step 7 - make sure delete table button is disabled
+                expect(browser.isEnabled('.modal-dialog .primaryButton')).toBeFalsy();
+
+                //step 8 - go back to the tables page
+                RequestAppsPage.get(e2eBase.getRequestTableEndpoint(realmName, testApp.id, testApp.tables[0].id));
+
+                //Step 9 - Make sure table is not deleted
+                let newTableLinksCount = tableCreatePO.getAllTableLeftNavLinksList.value.length;
+                //Verify the table links count is same as original
+                expect(newTableLinksCount).toBe(originalTableLinksCount);
+            });
+        });
+
+        it('Verify that only ADMIN can delete a Table', function() {
             let userId;
 
             //Create a user
