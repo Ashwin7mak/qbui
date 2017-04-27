@@ -39,9 +39,6 @@
      *  NOTE: there is no need to define a route here if the expectation is to only proxy/forward the request through node.
      */
     let clientApiEndpoints = {
-        // TODO: remove and replace with QBUI_HEALTH endpoint once pit crew team makes changes in sprint 7
-        QBUI_HEALTH_CHECK           : '/api/v1/qbuiHealth',
-
         FORM_AND_RECORD_COMPONENTS  : context.client.QBUI + '/apps/:appId/tables/:tableId/records/:recordId/formComponents',
         FORM_COMPONENTS             : context.client.QBUI + '/apps/:appId/tables/:tableId/formComponents',
 

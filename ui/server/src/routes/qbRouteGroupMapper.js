@@ -64,9 +64,6 @@
 
         {route: routes.REQ_USER, methods: [constants.GET]},
 
-        {route: routes.QBUI_HEALTH_CHECK, methods: [constants.GET]},
-        {route: routes.QBUI_HEALTH, methods: [constants.GET]},
-
         {route: routes.GOVERNANCE_ACCOUNT_USERS, methods: [constants.GET]},
         {route: routes.GOVERNANCE_CONTEXT, methods: [constants.GET]},
 
@@ -75,6 +72,8 @@
         {route: routes.SWAGGER_WE, methods: [constants.GET]},
         {route: routes.SWAGGER_RESOURCES, methods: [constants.GET]},
         {route: routes.SWAGGER_V2, methods: [constants.GET]},
+
+        {route: routes.QBUI_HEALTH, methods: [constants.GET]},
 
         //  all http verbs are supported with wildcard routes
         {route: routes.CORE_ENGINE, methods: [constants.DELETE, constants.GET, constants.PATCH, constants.POST, constants.PUT]},

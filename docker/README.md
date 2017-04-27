@@ -16,7 +16,7 @@
 * Stop and delete running containers for service: ```docker-compose down```
 
 ## Service
-* The health check for the UI should be reachable at ```https://localhost:9447/api/v1/health``` based on the default port assignment in the Compose YAML file.
+* The health check for the UI should be reachable at ```https://localhost:9447/qbn/health``` based on the default port assignment in the Compose YAML file.
 * The UI in this deployment can be referred to as 'service' and by container name as 'ui_service_1'. For example: ```docker inspect ui_service_1``` will display information about the deployed service container.
 
 ## Logs

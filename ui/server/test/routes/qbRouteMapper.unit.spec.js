@@ -105,7 +105,8 @@ describe('Qb Route Mapper Unit Test', function() {
         const expectedDefined = publicRoutesOnly ? false : true;
         return [
             {message: 'GET request to resolve facets', request: '/qbn/facets/parse', expectedPath: '/qbn/facets/parse', route: routes.FACET_EXPRESSION_PARSE, method: routeMapper.fetchGetFunctionForRoute(routes.FACET_EXPRESSION_PARSE), expectedDefined: expectedDefined, httpVerb: 'GET'},
-            {message: 'GET request to Node health check endpoint', request: '/qbn/health', expectedPath: '/qbn/health', route: routes.QBUI_HEALTH, method: routeMapper.fetchGetFunctionForRoute(routes.QBUI_HEALTH), expectedDefined: expectedDefined, httpVerb: 'GET'}
+            //  node health check is expected to always be available
+            {message: 'GET request to Node health check endpoint', request: '/qbn/health', expectedPath: '/qbn/health', route: routes.QBUI_HEALTH, method: routeMapper.fetchGetFunctionForRoute(routes.QBUI_HEALTH), expectedDefined: true, httpVerb: 'GET'}
         ];
     }
 

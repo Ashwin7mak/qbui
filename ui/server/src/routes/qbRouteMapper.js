@@ -106,9 +106,6 @@
 
                 requestFunctions[routes.REQ_USER] = getReqUser;
 
-                requestFunctions[routes.QBUI_HEALTH_CHECK] = getHealthCheck;    // remove
-                requestFunctions[routes.QBUI_HEALTH] = getHealthCheck;
-
                 requestFunctions[routes.GOVERNANCE_ACCOUNT_USERS] = getAccountUsers;
                 requestFunctions[routes.GOVERNANCE_CONTEXT] = getGovernanceContext;
 
@@ -129,6 +126,7 @@
                 // **********
             }
 
+            requestFunctions[routes.QBUI_HEALTH] = getHealthCheck;
             requestFunctions[routes.SWAGGER_CORE] = forwardApiRequest;
             requestFunctions[routes.SWAGGER_EE] = forwardApiRequest;
             requestFunctions[routes.SWAGGER_WE] = forwardApiRequest;
@@ -1297,7 +1295,7 @@
                     if (response && response.statusCode) {
                         res.status(response.statusCode).send(response);
                     } else {
-                        res.status(500).send(response);
+                        res.status(httpConstants.INTERNAL_SERVER_ERROR).send(response);
                     }
                 }
             );
