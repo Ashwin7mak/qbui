@@ -35,5 +35,26 @@ $builder-wrapper-border-color: $color-black-300;
         width: 100%;
         margin: 0;
         padding: 0 10px;
+
+        .rightIcons {
+            margin-right: 38px;
+        }
+
+        button {
+            width: 100.7px;
+            height: 38px;
+            border-radius: 4px;
+        }
+
+        .cancelFormButton {
+            background-color: $panel-footer-bg;
+            border: none;
+            color: $color-indigo-500;
+        }
+
+        .saveFormButton {
+            border: none;
+            background-color: $color-cyan-500;
+        }
     }
 }
