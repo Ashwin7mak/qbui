@@ -2,7 +2,7 @@ import React from 'react';
 import {shallow, mount} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
 
-import {Analytics, EVERGAGE_ACCOUNT_NAME} from '../../src/components/analytics/analytics';
+import {Analytics, EVERGAGE_ACCOUNT_NAME, ANALYTICS_SCRIPT_ID} from '../../src/components/analytics/analytics';
 
 const mockDataset = 'unitTest'; // Use a non-existing dataset in case test accidentally makes a call to Everage
 
@@ -62,6 +62,7 @@ describe('Analytics', () => {
 
         expect(document.createElement).toHaveBeenCalledWith('script');
         expect(testMockElement.type).toEqual('text/javascript');
+        expect(testMockElement.id).toEqual(ANALYTICS_SCRIPT_ID);
         expect(testMockElement.async).toEqual(true);
         expect(testMockElement.src).toEqual(`http://cdn.evergage.com/beacon/${EVERGAGE_ACCOUNT_NAME}/${mockDataset}/scripts/evergage.min.js`);
     });

@@ -46,6 +46,7 @@ export class Analytics extends Component {
         }
 
         const analyticsScript = document.createElement('script');
+        analyticsScript.id = ANALYTICS_SCRIPT_ID;
         analyticsScript.type = 'text/javascript';
         analyticsScript.defer = true;
         analyticsScript.async = true;
