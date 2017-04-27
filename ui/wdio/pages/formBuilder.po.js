@@ -2,7 +2,7 @@
 let topNavPO = requirePO('topNav');
 let oneSecond = 1000; // millis
 let fiveSeconds = 5 * oneSecond;
-let tenSeconds = 10 * oneSecond;
+
 class formBuilderPage {
 
     get cancelBtn() {
@@ -71,7 +71,7 @@ class formBuilderPage {
     }
     get selectedField() {
         // The selected field in the form builder
-        return browser.element('.selectedFormElement');
+        return browser.element('.formElementContainer .selectedFormElement');
     }
     get success() {
         // FORM SUCCESSFULLY SAVED growl msg
@@ -227,7 +227,7 @@ class formBuilderPage {
         // move field via keyboard
         let originalOrder = this.getFieldLabels();
         this.KB_selectField(sourceIndex);
-        let sourceField = originalOrder[sourceIndex - 1];
+        let sourceField = this.selectedField.getText();
         browser.keys(['Shift']);
         let arrowKey = sourceIndex < targetIndex ? 'ArrowDown' : 'ArrowUp';
         let distance = Math.abs(sourceIndex - targetIndex);
@@ -270,11 +270,8 @@ class formBuilderPage {
         // select field via keyboard
         this.KB_focusField(index);
         browser.keys(['Enter']); // select field
-        console.log('selected text immediately after selection: ' + this.selectedField.getText());
         browser.pause(fiveSeconds);
-        console.log('selected text 5 secs later: ' + this.selectedField.getText());
         browser.pause(fiveSeconds);
-        console.log('selected text 10 secs later: ' + this.selectedField.getText());
         return this.selectedField.getText();
     }
 }
