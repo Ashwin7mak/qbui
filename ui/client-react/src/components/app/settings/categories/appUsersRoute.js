@@ -103,7 +103,7 @@ const AppUsersRoute = React.createClass({
      * select all grid rows
      */
 
-    selectAllRows(){
+    selectAllRows() {
         let roleId = this.roleId;
         let appUsers = this.props.appUsersUnfiltered;
         let selected = [];
@@ -133,7 +133,7 @@ const AppUsersRoute = React.createClass({
             this.selectAllRows();
         }
     },
-    areAllRowsSelected(){
+    areAllRowsSelected() {
         if (this.props.selectedUserRows.length === this.props.appUsers.length) {
             return true;
         } else {
@@ -141,7 +141,7 @@ const AppUsersRoute = React.createClass({
         }
     },
 
-    addRoleIds(){
+    addRoleIds() {
         let appUsers = this.props.appUsers;
         let selectedRows = this.props.selectedRows;
         this.props.appRoles.forEach(function(role) {

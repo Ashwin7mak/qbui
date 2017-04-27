@@ -152,7 +152,7 @@ class UserManagement extends React.Component {
         );
     }
     onClickToggleSelectedRow(id, roleId) {
-        const { onClickToggleSelectedRow } = this.props;
+        const {onClickToggleSelectedRow} = this.props;
         onClickToggleSelectedRow(id, roleId);
     }
     render() {

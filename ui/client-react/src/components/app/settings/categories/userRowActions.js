@@ -13,20 +13,20 @@ const UserRowActions = React.createClass({
         onClickToggleSelectedRow: PropTypes.func.isRequired,
     },
 
-    getInitialState: function () {
+    getInitialState: function() {
         return {
             checked: this.props.isSelected || false
         };
     },
 
     componentWillReceiveProps(props) {
-        this.setState({checked:props.isSelected})
+        this.setState({checked:props.isSelected});
     },
 
     onClickToggleSelectedRow() {
-        const { onClickToggleSelectedRow, rowId, roleId } = this.props;
+        const {onClickToggleSelectedRow, rowId, roleId} = this.props;
 
-        this.setState(({ checked }) => (
+        this.setState(({checked}) => (
             {
                 checked: !checked,
             }

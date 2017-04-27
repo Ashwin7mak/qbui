@@ -44,7 +44,7 @@ class RoleService extends BaseService {
 
         let url = super.constructUrl(this.API.APP_ROLE_USERS, [appId, roleId]);
 
-        return super.delete(url,{data: userIds})
+        return super.delete(url, {data: userIds});
     }
 
 

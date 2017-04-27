@@ -132,19 +132,19 @@ let AppsStore = Fluxxor.createStore({
 
         this.emit('change');
     },
-    onUnasssignUsers(){
+    onUnasssignUsers() {
         this.emit('change');
     },
-    onUnasssignUsersSuccess(data){
+    onUnasssignUsersSuccess(data) {
         let appUsers = this.appUsers;
         let appUsersUnfiltered = this.appUsersUnfiltered[data.roleId];
         let users = data.userIds.length;
 
         (data.userIds).forEach(selectedUser => {
-            appUsers = appUsers.filter(function( obj ) {
+            appUsers = appUsers.filter(function(obj) {
                 return obj.userId !== selectedUser;
             });
-            appUsersUnfiltered = appUsersUnfiltered.filter(function( obj ) {
+            appUsersUnfiltered = appUsersUnfiltered.filter(function(obj) {
                 return obj.userId !== selectedUser;
             });
         });
@@ -152,10 +152,10 @@ let AppsStore = Fluxxor.createStore({
         this.appUsersUnfiltered[data.roleId] = appUsersUnfiltered;
         this.appUsers = appUsers;
         this.selectedUserRows = [];
-        NotificationManager.success((users+' Users have been removed'));
+        NotificationManager.success((users + 'Users have been removed'));
         this.emit('change');
     },
-    onUnasssignUsersFail(){
+    onUnasssignUsersFail() {
         this.emit('change');
     },
     /**
