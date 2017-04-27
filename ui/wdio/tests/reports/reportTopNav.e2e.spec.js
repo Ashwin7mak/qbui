@@ -8,7 +8,7 @@
     let newStackAuthPO = requirePO('newStackAuth');
     let TopNavPO = requirePO('topNav');
 
-    describe('Reports Page - TopNav Tests: ', function() {
+    describe('Reports - TopNav tests: ', function() {
         var realmName;
         var realmId;
         var testApp;

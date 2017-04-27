@@ -35,7 +35,7 @@
             });
         });
 
-        describe('Single Record Delete Tests', function() {
+        describe('Reports - Single Record Delete Tests: ', function() {
 
             var deletedRecord;
             var rowToBeDeleted = 2;
@@ -51,12 +51,10 @@
 
             });
 
-
-
             /**
              * Test Method- By clicking on the checkbox
              */
-            it('Delete a Record and check for the success message', function() {
+            it('Delete a Record and check for the success message ', function() {
 
                 //Step 0: Get the row data for the delete verification
                 deletedRecord = reportContentPO.getRecordValues(rowToBeDeleted);

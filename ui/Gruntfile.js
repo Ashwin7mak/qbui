@@ -595,13 +595,14 @@ module.exports = function(grunt) {
                 suites: {
                     reports: [
                         './wdio/tests/reports/reportDeleteRecord.e2e.spec.js',
+                        './wdio/tests/reports/reportTopNav.e2e.spec.js',
                         './wdio/tests/reports/grouping/reportGroupingViaContainer.e2e.spec.js',
-                        './wdio/tests/reports/sorting/reportSortingViaContainer.e2e.spec.js',
-                        './wdio/tests/reports/reportTopNav.e2e.spec.js'
+                        './wdio/tests/reports/sorting/reportSortingViaContainer.e2e.spec.js'
                     ],
                     forms: [
                         './wdio/tests/forms/formAdd.e2e.spec.js',
                         './wdio/tests/forms/formAddValidation.e2e.spec.js',
+                        './wdio/tests/forms/formBuilder.e2e.spec.js',
                         './wdio/tests/forms/formEdit.e2e.spec.js',
                         './wdio/tests/forms/formEditValidation.e2e.spec.js'
                     ],

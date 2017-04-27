@@ -61,12 +61,14 @@ exports.config = {
     suites: {
         reports: [
             './ui/wdio/tests/reports/reportDeleteRecord.e2e.spec.js',
+            './ui/wdio/tests/reports/reportTopNav.e2e.spec.js',
             './ui/wdio/tests/reports/grouping/reportGroupingViaContainer.e2e.spec.js',
             './ui/wdio/tests/reports/sorting/reportSortingViaContainer.e2e.spec.js'
         ],
         forms: [
             './ui/wdio/tests/forms/formAdd.e2e.spec.js',
             './ui/wdio/tests/forms/formAddValidation.e2e.spec.js',
+            './ui/wdio/tests/forms/formBuilder.e2e.spec.js',
             './ui/wdio/tests/forms/formEdit.e2e.spec.js',
             './ui/wdio/tests/forms/formEditValidation.e2e.spec.js'
         ],

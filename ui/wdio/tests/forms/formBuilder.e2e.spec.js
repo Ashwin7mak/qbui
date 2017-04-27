@@ -324,7 +324,7 @@
         });
 
         xit('select a field via KB, add a new field via KB, verify new field is added directly below selection', function() {
-            // disabled pending MC-1424: Keyboard Nav for Adding New Field & ESC key enhancements
+            //TODO: disabled pending MC-1424: Keyboard Nav for Adding New Field & ESC key enhancements
             let selectedField = formBuilderPO.KB_selectField(2);
             browser.keys([
                 'Escape', // deselect field
@@ -338,7 +338,7 @@
         });
 
         xit('check the REQUIRED checkbox, cancel & verify not checked', function() {
-            // disabled pending MC-2164: REQUIRED checkbox needs a reliable way to automate click & query
+            //TODO: disabled pending MC-2164: REQUIRED checkbox needs a reliable way to automate click & query
             let originalFields = formBuilderPO.getFieldLabels();
             browser.moveToObject(formBuilderPO.getFieldLocator(1) + ' .draggableField', 1, 1).buttonDown().buttonUp();
             // verify initial state of checkbox
@@ -357,7 +357,7 @@
         });
 
         xit('check the REQUIRED checkbox, save & verify checked', function() {
-             // MC-2164: REQUIRED checkbox needs a reliable way to automate click & query
+             //TODO: MC-2164: REQUIRED checkbox needs a reliable way to automate click & query
         });
     });
 }());
