@@ -29,7 +29,7 @@ export class User extends Component {
             <div className="user">
                 <Loader loaded={!isLoading} {...INLINE_UPDATING}>
                     {id && <div className="userInfo">
-                        <span className="hiddenUserInfo" data-user-id={id} data-user-administrator={administrator} />
+                        <span className="hiddenUserInfo" data-user-id={id} />
                         <span className="userFirstName">{firstName} </span>
                         <span className="userLastName">{lastName} </span>
                         <span className="userScreenName">({screenName})</span>

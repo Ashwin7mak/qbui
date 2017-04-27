@@ -43,6 +43,5 @@ describe('User', () => {
         const hiddenUserInfo = component.find('.hiddenUserInfo');
         expect(hiddenUserInfo).toBePresent();
         expect(hiddenUserInfo).toHaveProp('data-user-id', mockUser.id);
-        expect(hiddenUserInfo).toHaveProp('data-user-administrator', mockUser.administrator);
     });
 });
