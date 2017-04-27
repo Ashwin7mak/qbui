@@ -445,9 +445,6 @@ export const Nav = React.createClass({
                     <div className="mainContent" >
                         <TempMainErrorMessages apps={this.state.apps.apps} appsLoading={this.state.apps.loading} selectedAppId={this.state.apps.selectedAppId} />
 
-                        {inBuilderMode ?
-                            this.getSaveOrCancelFooter() : null}
-
                         <Switch>
                             { this.props.routes.map((route, i) => {
                                 //insert the child route passed in by the router
@@ -476,7 +473,9 @@ export const Nav = React.createClass({
                             }
                             )}
                         </Switch>
-                    </div>
+
+                        {inBuilderMode ?
+                            this.getSaveOrCancelFooter() : null}</div>
                 }
             </div>
 

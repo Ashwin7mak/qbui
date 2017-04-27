@@ -25,6 +25,7 @@ const testProps = {
     fieldDef: testFieldDef,
     sortFids: [],
     isOnlyOneColumnVisible: false,
+    inBuilderMode: false,
     loadDynamicReport: (context, appId, tblId, rptId, queryParams) => {},
     hideColumn: (context, appId, tblId, rptId, params) => {}
 };
