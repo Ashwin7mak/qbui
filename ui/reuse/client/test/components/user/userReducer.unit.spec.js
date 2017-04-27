@@ -24,7 +24,9 @@ describe('User Reducer', () => {
         it('gets the currently logged in user from state', () => {
             expect(getLoggedInUser({user: mockUser})).toEqual(mockUser);
         });
+    });
 
+    describe('getLoggedInUserId', () => {
         it('gets the user id of the currently logged in user from state', () => {
             expect(getLoggedInUserId({user: mockUser})).toEqual(mockUser.id);
         });
