@@ -288,21 +288,11 @@ const report = (state = [], action) => {
             let params = action.content;
             let clickedColumnId = params.clickedId;
             let addBefore = params.addBefore;
+            // remove the placeholder column if it exists
+            _.remove(currentReport.data.columns, (col) => {return col.isPlaceholder;});
             // find the index of the column where 'add a column' was clicked
             let clickedColumnIndex = _.findIndex(currentReport.data.columns, (col) => {return col.id === clickedColumnId;});
             if (clickedColumnIndex !== -1) {
-                // loop through to check if the placeholder column is already visible
-                let placeHolderAlreadyExists = currentReport.data.columns.some(column => {
-                    return column.isPlaceholder === true;
-                });
-
-                if (placeHolderAlreadyExists) {
-                    // remove the placeholder column if it exists
-                    currentReport.data.columns = currentReport.data.columns.filter(column => {
-                        return !column.isPlaceholder;
-                    });
-                }
-                reorderColumns(currentReport.data.columns);
                 // since not all columns are visible, add the placeholder column to columns so it gets rendered on screen
                 let placeholder = {
                     isPlaceholder: true,
@@ -311,7 +301,7 @@ const report = (state = [], action) => {
                 };
 
                 currentReport.data.columns.forEach(column => {
-                    column.fieldDef.isAddingFrom = (column.fieldDef.id === clickedColumnId);
+                    column.fieldDef.isAddingFrom = (column.id === clickedColumnId);
                 });
                 // add before or after the clicked column depending on selection
                 let insertionIndex;
@@ -331,11 +321,7 @@ const report = (state = [], action) => {
         let currentReport = getReportFromState(action.id);
         if (currentReport) {
             // remove the placeholder column (if it exists) when the drawer is closed
-            let actualColumns = currentReport.data.columns.filter(column => {
-                return !column.isPlaceholder;
-            });
-            reorderColumns(actualColumns);
-            currentReport.data.columns = actualColumns;
+            _.remove(currentReport.data.columns, (col) => {return col.isPlaceholder;});
             currentReport.data.columns.forEach(column => {
                 column.fieldDef.isAddingFrom = false;
             });
