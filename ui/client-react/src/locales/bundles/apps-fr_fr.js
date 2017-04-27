@@ -155,7 +155,7 @@ export default {
             recordNotAdded :"Enregistrement non ajouté",
             recordSaved : "Sauvegarder",
             recordNotSaved :"Enregistrement non enregistré",
-            deleted : "supprimé",
+            deleted : "{value, plural,\n =0 {0 {nameForRecord} enregistrement}\n =1 {1 {nameForRecord} enregistrement}\n other {# {nameForRecord} enregistrement}\n} supprimés",
             notDeleted : "non supprimés",
             cannotLoad : "Impossible de charger la fiche",
             error: {
@@ -258,7 +258,8 @@ export default {
                 noCheck : "Non",
                 yesCheck : "Oui",
                 clearFacet: "Enlever le filtre {facet}",
-                clearFacetSelection: "Cliquez pour désactiver ce filtre"
+                clearFacetSelection: "Cliquez pour désactiver ce filtre",
+                filter: "Filtre"
             },
             filteredRecordCount : "{filteredRecordCount} des {recordCount} enregistrements",
             filteredSingleRecordCount : "{filteredRecordCount} de {recordCount} record",
@@ -277,6 +278,7 @@ export default {
             nextPageLoadingOnSwipe: "Obtenir plus...",
             searchPlaceHolder:  "Rechercher ces",
             sortAndGroup : {
+                sortAndGroupIcon: "Trier & Groupe",
                 addField: "Ajouter le champ",
                 by: "par",
                 changeGroupOrder: "Gruppe wechseln bestellen",

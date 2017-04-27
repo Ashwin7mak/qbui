@@ -155,7 +155,7 @@ export default {
             recordNotAdded :"Nehmen Sie nicht hinzugefügt",
             recordSaved : "Datensatz gespeichert",
             recordNotSaved :"Nehmen Sie nicht gespeichert",
-            deleted : "gelöscht",
+            deleted : "{value, plural,\n =0 {0 {nameForRecord} rekord}\n =1 {1 {nameForRecord} rekord}\n other {# {nameForRecord} aufzeichnungen}\n} gelöscht",
             notDeleted : "nicht gelöscht",
             cannotLoad : "Kann nicht Datensatz laden",
             error: {
@@ -259,7 +259,8 @@ export default {
                 noCheck : "Nein",
                 yesCheck : "Ja",
                 clearFacet: "Filter {facet} zurücksetzen",
-                clearFacetSelection: "Klicken Sie auf diese Filter zu löschen"
+                clearFacetSelection: "Klicken Sie auf diese Filter zu löschen",
+                filter: "Filter"
             },
             filteredRecordCount : "{filteredRecordCount} von {recordCount} aufzeichnungen",
             filteredSingleRecordCount : "{filteredRecordCount} von {recordCount} aufzeichnen",
@@ -278,6 +279,7 @@ export default {
             previousPageLoadingOnSwipe: "Erste vorherige...",
             nextPageLoadingOnSwipe: "immer Mehr...",
             sortAndGroup : {
+                sortAndGroupIcon: "Sortieren & Gruppe",
                 addField: "Feld hinzufügen",
                 by: "nach",
                 changeGroupOrder: "Gruppe wechseln bestellen",
