@@ -497,9 +497,7 @@ export const Nav = React.createClass({
                         </Switch>
 
                         </ReportFieldSelectTrowser>
-
                     </div>}
-
             </div>
 
             {pendEdits &&
