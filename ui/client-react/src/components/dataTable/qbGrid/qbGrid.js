@@ -167,18 +167,6 @@ const QbGrid = React.createClass({
         };
     },
 
-    // componentWillReceiveProps(nextProps){
-    //     if(this.state.columns && this.state.columns.length>1){
-    //         return;
-    //     }
-    //     this.setState({columns: nextProps.columns});
-    // },
-    // getDefaultState(){
-    //     return{
-    //         columns:[]
-    //     }
-    // },
-
     getInitialState() {
         return {
             collapsedGroups: []
@@ -188,16 +176,6 @@ const QbGrid = React.createClass({
     componentWillMount() {
         this.collapsedGroupHelper = new CollapsedGroupsHelper();
     },
-
-    // componentDidUpdate(prevProps,nextProps) {
-    //     console.log("prev",prevProps);
-    //     console.log("next",nextProps);
-    //     if (prevProps.columns !== nextProps.columns){
-    //         console.log("woohooo",nextProps);
-    //         this.setState({columns: this.props.columns});
-    //     }
-    //     this.collapsedGroupHelper = new CollapsedGroupsHelper();
-    // },
 
     onClickAddNewRow() {
         if (this.props.onClickAddNewRow) {
@@ -405,34 +383,15 @@ const QbGrid = React.createClass({
         }
     },
 
-
-
-
-    onMoveColumn(labels){
-      console.log("moved", labels);
-        this.moveLabels(this.props.columns, labels);
-    },
-
-    moveLabels(columns, _ref2) {
+    /**
+     * Called when a column is dragged onto a target
+     */
+    onMoveColumn(_ref2) {
         let params = {
             sourceLabel :_ref2.sourceLabel,
             targetLabel : _ref2.targetLabel
         };
         this.props.moveColumn(CONTEXT.REPORT.NAV, this.props.appId,this.props.tblId,this.props.rptId, params);
-    },
-
-    move(data, sourceIndex, targetIndex) {
-        // Idea
-        // a, b, c, d, e -> move(b, d) -> a, c, d, b, e
-        // a, b, c, d, e -> move(d, a) -> d, a, b, c, e
-        // a, b, c, d, e -> move(a, d) -> b, c, d, a, e
-        var sourceItem = data[sourceIndex];
-
-        // 1. detach - a, c, d, e - a, b, c, e, - b, c, d, e
-        var ret = data.slice(0, sourceIndex).concat(data.slice(sourceIndex + 1));
-
-        // 2. attach - a, c, d, b, e - d, a, b, c, e - b, c, d, a, e
-        return ret.slice(0, targetIndex).concat([sourceItem]).concat(ret.slice(targetIndex));
     },
 
     render() {
@@ -475,7 +434,6 @@ const QbGrid = React.createClass({
                     components={{
                         header: {
                           cell: QbHeaderCell
-                           // cell: dnd.Header
                         },
                         body: {
                             row: QbRow,
