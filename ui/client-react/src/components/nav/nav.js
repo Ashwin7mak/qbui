@@ -330,11 +330,7 @@ export const Nav = React.createClass({
             return !column.isHidden;
         });
         let availableColumns = this.props.shell.fieldsSelectMenu.availableColumns;
-        let hiddenColumns = availableColumns.filter(column => {
-            return !visibleColumns.some(col => {
-                return col.id === column.id;
-            });
-        });
+        let hiddenColumns = _.differenceBy(availableColumns, visibleColumns, 'id');
         for (let i = 0; i < hiddenColumns.length; i++) {
             elements.push({
                 key: hiddenColumns[i].id + "",
