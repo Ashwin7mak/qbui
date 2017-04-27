@@ -386,7 +386,7 @@ export const toggleFieldSelectorMenu = (context, appId, tblId, rptId, params) =>
  * @param appId
  * @param tblId
  * @param rptId
- * @param params { requestedId, requestedCurrentPosition, addBefore }
+ * @param params { requestedId, addBefore }
  */
 export const addColumnFromExistingField = (context, appId, tblId, rptId, params) => {
     return (dispatch) => {
