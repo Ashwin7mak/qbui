@@ -596,7 +596,8 @@ module.exports = function(grunt) {
                     reports: [
                         './wdio/tests/reports/reportDeleteRecord.e2e.spec.js',
                         './wdio/tests/reports/grouping/reportGroupingViaContainer.e2e.spec.js',
-                        './wdio/tests/reports/sorting/reportSortingViaContainer.e2e.spec.js'
+                        './wdio/tests/reports/sorting/reportSortingViaContainer.e2e.spec.js',
+                        './wdio/tests/reports/reportTopNav.e2e.spec.js'
                     ],
                     forms: [
                         './wdio/tests/forms/formAdd.e2e.spec.js',
