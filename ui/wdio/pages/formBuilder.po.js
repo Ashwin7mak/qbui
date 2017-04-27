@@ -2,7 +2,7 @@
 let topNavPO = requirePO('topNav');
 let oneSecond = 1000; // millis
 let fiveSeconds = 5 * oneSecond;
-
+let tenSeconds = 10 * oneSecond;
 class formBuilderPage {
 
     get cancelBtn() {
@@ -270,7 +270,11 @@ class formBuilderPage {
         // select field via keyboard
         this.KB_focusField(index);
         browser.keys(['Enter']); // select field
+        console.log('selected text immediately after selection: ' + this.selectedField.getText());
         browser.pause(fiveSeconds);
+        console.log('selected text 5 secs later: ' + this.selectedField.getText());
+        browser.pause(fiveSeconds);
+        console.log('selected text 10 secs later: ' + this.selectedField.getText());
         return this.selectedField.getText();
     }
 }
