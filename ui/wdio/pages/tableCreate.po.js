@@ -49,6 +49,16 @@
         //edit table heading
         editTableHeading : {get: function() {return browser.element('.stageHeadLine');}},
 
+        //new table ready dialogue
+        tableReadyDialogue : {get: function() {return browser.element('.modal-dialog .tableReadyContent');}},
+        //new table ready title
+        tableReadyDialogueTitle : {get: function() {return this.tableReadyDialogue.element('.titleText');}},
+        //new table ready Text
+        tableReadyDialogueTextParagraph1 : {get: function() {return this.tableReadyDialogue.element('.tableReadyText p');}},
+        //new table ready Text
+        tableReadyDialogueTextParagraph2 : {get: function() {return this.tableReadyDialogue.element('.tableReadyText p p');}},
+
+
 
         /**
          * Returns all Icon List from the Icon Chooser
@@ -180,9 +190,9 @@
          */
         waitUntilNotificationContainerGoesAway : {value: function() {
             //wait until notification container slides away
-            browser.waitForExist('.notification-container-empty', e2eConsts.shortWaitTimeMs);
+            browser.waitForExist('.notification-container-empty', e2eConsts.mediumWaitTimeMs);
             //Need this to wait for container to slide away
-            return browser.pause(e2eConsts.shortWaitTimeMs);
+            return browser.pause(e2eConsts.mediumWaitTimeMs);
         }},
 
         /**
@@ -195,6 +205,7 @@
             });
 
             if (buttonToClick !== []) {
+                buttonToClick[0].waitForVisible();
                 //Click on filtered save button
                 return buttonToClick[0].click();
             } else {
@@ -203,13 +214,23 @@
         }},
 
         /**
-         * Method to click on Next button in create Table dialogue
+         * Method to verify new Table Dialogue contents
          */
-        clickNextBtn : {value: function() {
-            this.clickBtnOnTableDlgFooter('Next');
+        verifyNewTableCreateDialogue : {value: function() {
             //Verify the title and description in table summary in the dialogue
-            expect(this.tableHeader.getAttribute('textContent')).toContain('Get ready to add fields to your table');
-            return expect(this.tableDescription.getAttribute('textContent')).toContain('Each bit of information you want to collect is a field, like Customer Name.');
+            expect(this.tableReadyDialogueTitle.getAttribute('textContent')).toContain('Your table\'s ready!');
+            expect(this.tableReadyDialogueTextParagraph1.getAttribute('textContent')).toContain('Each bit of information you want to collect is a field.');
+            return browser.element('.modal-footer .finishedButton').waitForVisible();
+        }},
+
+        /**
+         * Method to click on OK button in new table dialogue
+         */
+        clickOkBtn: {value: function() {
+            browser.element('.modal-footer .finishedButton').waitForVisible();
+            expect(browser.element('.modal-footer .finishedButton').getAttribute('textContent')).toBe('OK');
+            browser.element('.modal-footer .finishedButton').click();
+            return formsPO.editFormContainerEl.waitForVisible();
         }},
 
         /**
@@ -225,7 +246,7 @@
         clickFinishedBtn: {value: function() {
             this.clickBtnOnTableDlgFooter('Create table');
             this.waitUntilNotificationContainerGoesAway();
-            return formsPO.editFormContainerEl.waitForVisible();
+            return this.tableReadyDialogue.waitForVisible();
         }},
 
         /**
@@ -263,8 +284,8 @@
             expect(browser.isEnabled('.iconChooser.closed')).toBeTruthy();
             //Verify cancel button is enabled
             expect(browser.isEnabled('.modal-footer .cancelButton')).toBeTruthy();
-            //Verify next button is disabled
-            expect(browser.isEnabled('.modal-footer .nextButton')).toBeFalsy();
+            //Verify create button is disabled
+            expect(browser.isEnabled('.modal-footer .finishedButton')).toBeFalsy();
             //verify close button enabled
             expect(browser.isEnabled('.rightIcons .iconUISturdy-close')).toBeTruthy();
         }},

@@ -9,6 +9,18 @@ export default {
 
     messages: {
         governance: {
+            leftNav: {
+                myApps: "MY APPS FR",
+                manageBilling: "Manage Billing FR",
+                contactSupport: "Contact Support FR",
+                manageUsers: "Manage Users FR",
+                accountSummary: "Account Summary FR",
+                manageApps: "Manage Apps FR",
+                manageGroups: "Manage Groups FR",
+                setAccountProperties: "Set Account Properties FR",
+                setRealmPolicies: "Set Realm Policies FR",
+                editRealmBranding: "Edit Realm Branding FR"
+            },
             account: {
                 users: {
                     paidSeats: "Paid seats FR",

@@ -4,6 +4,7 @@ let config = {
     legacyBase: '.quickbase-dev.com',
     javaHost: 'http://javaHost',
     eeHost: 'http://eeHost',
+    automationHost: 'http://automationHost',
     SSL_KEY : {
         private    : 'privateKey',
         cert       : 'cert',
@@ -171,6 +172,17 @@ describe('Validate RequestHelper unit tests', function() {
             req.method = 'GET';
             let request = requestHelper.setExperienceEngineOptions(req);
             should(request.url).be.exactly(config.eeHost + req.url);
+            should.not.exist(request.body);
+            should(request.method).be.exactly(req.method);
+            done();
+        });
+
+        it('Test setAutomationEngineOptions with GET method', function(done) {
+            req.method = 'GET';
+            req.originalUrl = '/someurl.com';
+            req.cookies = "TICKET=TestCookie";
+            let request = requestHelper.setAutomationEngineOptions(req);
+            should(request.url).be.exactly(config.automationHost + req.url);
             should.not.exist(request.body);
             should(request.method).be.exactly(req.method);
             done();

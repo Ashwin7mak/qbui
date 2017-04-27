@@ -25,8 +25,8 @@ class TopNav extends Component {
     };
 
     render() {
-        let {showOnSmall, onNavClick, globalActions} = this.props;
-
+        let {showOnSmall, onNavClick, globalActions, tabIndex} = this.props;
+        tabIndex = tabIndex ? tabIndex : "1";
         const classes = `topNav${(showOnSmall ? '' : ' hideSmall')}`;
 
         return (

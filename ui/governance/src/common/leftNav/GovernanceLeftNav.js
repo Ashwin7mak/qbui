@@ -4,6 +4,7 @@ import StandardLeftNav from '../../../../reuse/client/src/components/sideNavs/st
 import DefaultTopNavGlobalActions from '../../../../reuse/client/src/components/topNav/defaultTopNavGlobalActions';
 import GetLeftNavLinks from './GovernanceLeftNavLinks';
 import * as RequestContextActions from '../requestContext/RequestContextActions';
+import {isFetching} from '../requestContext/RequestContextReducer';
 
 class GovernanceLeftNav extends Component {
     componentDidMount() {
@@ -39,7 +40,7 @@ const mapDispatchToProps = (dispatch) => ({
 
 const mapStateToProps = (state) => {
     return {
-        isLoading: state.RequestContext.status.isFetching || !state.RequestContext.currentUser.id,
+        isLoading: isFetching(state),
         isAccountAdmin: state.RequestContext.currentUser.isAccountAdmin,
         isRealmAdmin: state.RequestContext.currentUser.isRealmAdmin,
         isAccountURL: state.RequestContext.realm.isAccountURL
