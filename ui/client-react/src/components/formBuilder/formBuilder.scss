@@ -49,22 +49,6 @@
                 width: 100%;
             }
 
-            &:hover {
-                transition: background-color 0.5s ease;
-                border: $stroke-width-thin solid $border-focused-color;
-                border-radius: $radius-base;
-                .fieldEditingTools {
-                    opacity: 1;
-                    .qbIcon {
-                        opacity: 1;
-                    }
-                }
-
-                @include small-breakpoint {
-                    background: none;
-                }
-            }
-
             &:active {
                 @include dragpreview-active-gradient;
                 .fieldEditingTools {
