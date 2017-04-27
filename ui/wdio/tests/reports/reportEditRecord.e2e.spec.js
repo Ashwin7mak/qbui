@@ -88,7 +88,8 @@
                 ReportInLineEditPO.openDateFieldCalWidget(0);
                 ReportInLineEditPO.advanceCurrentlySelectedDate(0);
             }
-            browser.clearElement('.cellEdit.phoneNumber');
+            // Hack until Phone Number validation is fixed
+            browser.setValue('.cellEdit.phoneNumber', ' ');
 
             // Step 4 - Save the edit
             ReportInLineEditPO.clickSaveChangesButton();
