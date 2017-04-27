@@ -18,7 +18,8 @@ function initializeState() {
         i18n: Locale.getI18nBundle(),
         fieldsSelectMenu: {
             fieldsListCollapsed: true,
-            addBefore: null
+            addBefore: null,
+            availableColumns: []
         }
     };
 }
@@ -161,7 +162,8 @@ describe('Nav reducer functions for opening the field select menu', () => {
             name:'toggle field select menu open when adding before',
             fieldsSelectMenu: {
                 fieldsListCollapsed: false,
-                addBefore: true
+                addBefore: true,
+                availableColumns: []
             },
             type: types.OPEN_FIELD_SELECTOR
         },
@@ -169,7 +171,8 @@ describe('Nav reducer functions for opening the field select menu', () => {
             name:'toggle field select menu open when adding after',
             fieldsSelectMenu: {
                 fieldsListCollapsed: false,
-                addBefore: false
+                addBefore: false,
+                availableColumns: []
             },
             type: types.OPEN_FIELD_SELECTOR
         },
@@ -177,7 +180,8 @@ describe('Nav reducer functions for opening the field select menu', () => {
             name:'toggle field select menu closed when adding before',
             fieldsSelectMenu: {
                 fieldsListCollapsed: true,
-                addBefore: true
+                addBefore: true,
+                availableColumns: []
             },
             type: types.CLOSE_FIELD_SELECTOR
         },
@@ -185,7 +189,8 @@ describe('Nav reducer functions for opening the field select menu', () => {
             name:'toggle field select menu closed when adding after',
             fieldsSelectMenu: {
                 fieldsListCollapsed: true,
-                addBefore: false
+                addBefore: false,
+                availableColumns: []
             },
             type: types.CLOSE_FIELD_SELECTOR
         }
@@ -193,9 +198,9 @@ describe('Nav reducer functions for opening the field select menu', () => {
     testCases.forEach(test => {
         it(test.name, (done) => {
             initializeState();
-            const changeState = reducer(initialState, {type: test.type, content: {addBefore: test.fieldsSelectMenu.addBefore}});
-            expect(changeState.fieldsSelectMenu.fieldsListCollapsed).toBe(test.fieldsSelectMenu.fieldsListCollapsed);
-            expect(changeState.fieldsSelectMenu.addBefore).toBe(test.fieldsSelectMenu.addBefore);
+            const changeState = reducer(initialState, {type: test.type, content: {addBefore: test.fieldsSelectMenu.addBefore, response: {data: []}}});
+            expect(changeState.fieldsSelectMenu.fieldsListCollapsed).toEqual(test.fieldsSelectMenu.fieldsListCollapsed);
+            expect(changeState.fieldsSelectMenu.addBefore).toEqual(test.fieldsSelectMenu.addBefore);
             done();
         });
     });

@@ -94,7 +94,12 @@ describe('Nav Unit tests', () => {
         forms: [{id: 'view'}],
         shell: {
             leftNavVisible: true,
-            leftNavExpanded: false
+            leftNavExpanded: false,
+            fieldsSelectMenu: {
+                fieldsListCollapsed: true,
+                addBefore: null,
+                availableColumns: []
+            }
         },
         reports: [],
         history: []
