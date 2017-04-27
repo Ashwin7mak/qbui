@@ -9,23 +9,23 @@
 
     &:focus {
         //For keyboard nav
-        opacity: 1;
+        opacity: 2;
         outline: none;
+        box-shadow: 0 0 2px 0px rgba(0, 157, 235, 0.75);
         border: $stroke-width-thin solid $border-focused-color;
     }
 
     &.selectedFormElement {
-        &:active {
-            //This opacity is needed to work for 'tabbing'
-            opacity: 1;
-            outline: none;
-            border: $stroke-width-thin solid $border-focused-color;
+        transition: background-color 0.5s ease;
+        border: 2px solid #009deb;
+        border-radius: $radius-base;
+        box-shadow: 0 0 4px 0px rgba(0, 157, 235, 0.75);
+        z-index: -1 !important;
 
-            .deleteFieldIcon {
-                .qbIcon {
-                    opacity: 1;
-                    color: $color-red-700;
-                }
+        .deleteFieldIcon {
+            .qbIcon {
+                opacity: 1;
+                color: $color-red-700;
             }
         }
     }

@@ -52,6 +52,7 @@
             &:hover {
                 transition: background-color 0.5s ease;
                 border: $stroke-width-thin solid $border-focused-color;
+                border-radius: $radius-base;
                 .fieldEditingTools {
                     opacity: 1;
                     .qbIcon {
@@ -78,20 +79,6 @@
 
             .cellWrapper {
                 padding-left: 12px;
-            }
-
-            &.selectedFormElement {
-                transition: background-color 0.5s ease;
-                border: 2px solid #009deb;
-                box-shadow: 0 0 4px 0px rgba(0, 157, 235, 0.75);
-                z-index: -1 !important;
-
-                .deleteFieldIcon {
-                    .qbIcon {
-                        opacity: 1;
-                        color: $color-red-700;
-                    }
-                }
             }
         }
     }
