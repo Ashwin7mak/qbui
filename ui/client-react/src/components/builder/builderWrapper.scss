@@ -25,7 +25,7 @@ $builder-wrapper-border-color: $color-black-300;
     }
 
     .saveOrCancelFooter {
-        z-index: 2;
+        z-index: 2000;
         flex: 0 auto;
         display: flex;
         flex-direction: row;

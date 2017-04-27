@@ -291,10 +291,10 @@ export const FormBuilderContainer = React.createClass({
                                     </Loader>
                                 </div>
                             </AutoScroll>
-                            {this.getSaveOrCancelFooter()}
                         </div>
                     </FieldProperties>
                 </ToolPalette>
+                {this.getSaveOrCancelFooter()}
             </div>
         );
     }
