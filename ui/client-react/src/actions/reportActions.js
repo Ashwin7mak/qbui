@@ -1,6 +1,7 @@
 import ReportService from '../services/reportService';
 import ReportModel from '../models/reportModel';
 import ReportsModel from '../models/reportsModel';
+import FieldsService from '../services/fieldsService';
 import Promise from 'bluebird';
 import QueryUtils from '../utils/queryUtils';
 import _ from 'lodash';
@@ -382,9 +383,18 @@ export const addColumnFromExistingField = (context, appId, tblId, rptId, params)
     return (dispatch) => {
         if (appId && tblId && rptId) {
             logger.debug(`Adding column with id: ${params.requestedId} for appId: ${appId}, tblId:${tblId}, rptId:${rptId}`);
-            dispatch(event(context, types.ADD_COLUMN_FROM_EXISTING_FIELD, params));
+            return new Promise((resolve) => {
+                let fieldsService = new FieldsService();
+                fieldsService.getFields(appId, tblId).then(
+                    (response) => {
+                        let content = {...params, response};
+                        dispatch(event(context, types.ADD_COLUMN_FROM_EXISTING_FIELD, content));
+                        resolve();
+                    });
+            });
         } else {
             logger.error(`reportActions.addColumnFromExistingField: Missing one or more required input parameters.  AppId:${appId}; TblId:${tblId}; RptId:${rptId}`);
+            return new Promise.reject();
         }
     }
 };
@@ -401,10 +411,14 @@ export const hideColumn = (context, appId, tblId, rptId, params) => {
     return (dispatch) => {
         if (appId && tblId && rptId) {
             logger.debug(`Hiding column with id: ${params.clickedId} for appId: ${appId}, tblId:${tblId}, rptId:${rptId}`);
-            // Temporary until API to persist hidden columns.
             return new Promise((resolve) => {
-                dispatch(event(context, types.HIDE_COLUMN, params));
-                resolve();
+                let fieldsService = new FieldsService();
+                fieldsService.getFields(appId, tblId).then(
+                    (response) => {
+                        let content = {...params, response};
+                        dispatch(event(context, types.HIDE_COLUMN, content));
+                        resolve();
+                    });
             });
         } else {
             logger.error(`reportActions.hideColumn: Missing one or more required input parameters.  AppId:${appId}; TblId:${tblId}; RptId:${rptId}`);

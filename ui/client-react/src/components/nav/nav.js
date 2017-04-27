@@ -9,7 +9,7 @@ import ReportManagerTrowser from "../report/reportManagerTrowser";
 import RecordTrowser from "../record/recordTrowser";
 import ReportFieldSelectTrowser from '../report/reportFieldSelectTrowser';
 import ListOfElements from '../../../../reuse/client/src/components/sideNavs/listOfElements';
-import FieldTokenInMenu from '../formBuilder/fieldToken/fieldTokenInMenu';
+import {FieldTokenInMenu} from '../formBuilder/fieldToken/fieldTokenInMenu';
 import Locale from '../../../../reuse/client/src/locales/locale';
 
 import GlobalActions from "../actions/globalActions";
@@ -316,8 +316,7 @@ export const Nav = React.createClass({
 
     addColumnFromExistingField(columnData, reportData) {
         let params = {
-            requestedId: columnData.fieldDef.id,
-            requestedCurrentPosition: columnData.order,
+            requestedId: columnData.id,
             addBefore: this.props.shell.fieldsSelectMenu.addBefore
         };
 
@@ -327,16 +326,24 @@ export const Nav = React.createClass({
     getMenuContent(reportData) {
         let elements = [];
         let columns = reportData.data ? reportData.data.columns : [];
-        for (let i = 0; i < columns.length; i++) {
-            if (columns[i].isHidden) {
-                elements.push({
-                    key: columns[i].id + "",
-                    title: columns[i].headerName,
-                    onClick: (() => {
-                        this.addColumnFromExistingField(columns[i], reportData)
-                    })
-                });
-            }
+        let visibleColumns = columns.filter(column => {
+            return !column.isHidden;
+        });
+        let availableColumns = this.props.shell.fieldsSelectMenu.availableColumns;
+        let hiddenColumns = availableColumns.filter(column => {
+            return !visibleColumns.some(col => {
+                return col.headerName === column.headerName;
+            });
+        });
+        for (let i = 0; i < hiddenColumns.length; i++) {
+            elements.push({
+                key: hiddenColumns[i].id + "",
+                title: hiddenColumns[i].headerName,
+                type: hiddenColumns[i].fieldType,
+                onClick: (() => {
+                    this.addColumnFromExistingField(hiddenColumns[i], reportData)
+                })
+            })
         }
 
         let params = {

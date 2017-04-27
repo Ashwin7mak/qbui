@@ -1,6 +1,7 @@
 import * as types from '../actions/types';
 import Locale from '../locales/locales';
 import AppsBundleLoader from '../locales/appsBundleLoader';
+import ReportModelHelper from '../models/reportModelHelper';
 
 const shell = (
     state = {
@@ -17,7 +18,8 @@ const shell = (
         i18n: Locale.getI18nBundle(),
         fieldsSelectMenu: {
             fieldsListCollapsed: true,
-            addBefore: null
+            addBefore: null,
+            availableColumns: []
         }
 
     },
@@ -83,22 +85,43 @@ const shell = (
             locale: Locale.getLocale(),
             i18n: Locale.getI18nBundle()
         };
-    case types.OPEN_FIELD_SELECTOR:
+    case types.OPEN_FIELD_SELECTOR: {
+        let currentFieldsSelectMenu = state.fieldsSelectMenu;
         return {
             ...state,
             fieldsSelectMenu: {
+                ...currentFieldsSelectMenu,
                 fieldsListCollapsed: false,
                 addBefore: action.content.addBefore
             }
         };
-    case types.CLOSE_FIELD_SELECTOR:
+    }
+    case types.CLOSE_FIELD_SELECTOR: {
+        let currentFieldsSelectMenu = state.fieldsSelectMenu;
         return {
             ...state,
             fieldsSelectMenu: {
+                ...currentFieldsSelectMenu,
                 fieldsListCollapsed: true,
                 addBefore: action.content.addBefore
             }
         };
+    }
+    case types.HIDE_COLUMN: {
+        let currentFieldsSelectMenu = state.fieldsSelectMenu;
+        let fields = action.content.response.data;
+        let fids = fields.map(field => {
+            return field.id;
+        });
+        let columns = ReportModelHelper.getReportColumns(fields, fids);
+        return {
+            ...state,
+            fieldsSelectMenu: {
+                ...currentFieldsSelectMenu,
+                availableColumns: columns
+            }
+        }
+    }
     default:
         // return existing state by default in redux
         return state;
