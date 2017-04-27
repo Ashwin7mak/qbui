@@ -20,7 +20,7 @@ import {EDIT_RECORD_KEY} from '../../constants/urlConstants';
 export const UserActions = React.createClass({
     propTypes: {
         selection: React.PropTypes.array,
-        roleId: React.PropTypes.number,
+        roleId: React.PropTypes.string,
         appId: React.PropTypes.string,
         onEditSelected: React.PropTypes.func
     },
@@ -187,7 +187,7 @@ export const UserActions = React.createClass({
     },
     getEmailAction() {
         //TODO Email action is disabled for now until its implemented.
-        return <ActionIcon icon="mail" tip={Locale.getMessage("unimplemented.email")} disabled={true}/>;
+        return <ActionIcon icon="download-cloud" tip={Locale.getMessage("unimplemented.downloadCloud")} disabled={true}/>;
     },
 
     /**
@@ -202,9 +202,9 @@ export const UserActions = React.createClass({
                         {this.props.selection.length === 1 &&
                         <ActionIcon icon="edit" onClick={this.onEditClicked} tip={this.getSelectionTip("selection.edit")}/>
                         }
-                        <ActionIcon icon="print" tip={Locale.getMessage("unimplemented.print")} disabled={true}/>
+                        <ActionIcon icon="mail" tip={Locale.getMessage("unimplemented.emailApp")} disabled={true}/>
                         {this.getEmailAction()}
-                        <ActionIcon icon="duplicate" tip={Locale.getMessage("unimplemented.copy")} disabled={true}/>
+                        <ActionIcon icon="settings" tip={Locale.getMessage("unimplemented.settingsRole")} disabled={true}/>
                         <ActionIcon icon="errorincircle-fill" tip={this.getSelectionTip("app.users.remove")} onClick={this.handleDelete}/>
                     </div>
                 </div>

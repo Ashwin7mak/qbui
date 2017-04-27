@@ -504,7 +504,10 @@ export default {
             print: "Printing is not available yet",
             copy: "Copying is not available yet",
             email: "Emailing is not available yet",
-            delete: "Deleting is not available yet"
+            delete: "Deleting is not available yet",
+            downloadCloud: "Export CSV is not available yet",
+            settingsRole: "Change role is not available yet",
+            emailApp: "Send app invite is not available yet",
         },
         pageTitles: {
             pageTitleSeparator: " - ",
