@@ -161,6 +161,7 @@
          * @returns either an array of cell values (as strings) or one value of a cell
          */
         getRecordValues: {value: function(recordIndex, recordCellIndex) {
+            this.waitForReportContent();
             var recordRowElement = this.getRecordRowElement(recordIndex);
             var recordRowCells = this.getRecordRowCells(recordRowElement);
             // Return all record values if no cell number supplied
