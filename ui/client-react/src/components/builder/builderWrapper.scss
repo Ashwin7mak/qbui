@@ -13,6 +13,9 @@ $builder-wrapper-border-color: $color-black-300;
         .navLabel {
             color: $color-black-100;
         }
+        .btn-group button {
+            background-color: $color-purple-600;
+        }
     }
     .builderWrapperBody {
         height: calc(100% - #{$top-nav-height} - 1px);
