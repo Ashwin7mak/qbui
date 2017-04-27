@@ -26,8 +26,9 @@
         left: -30px;
 
         &:hover {
-        color: $color-cyan-400;
-      }
+            color: $color-cyan-400;
+        }
+
         &:focus {
             outline: none;
         }
