@@ -18,8 +18,17 @@ import './reportGrid.scss';
 
 export const ReportGrid = React.createClass({
     propTypes: {
+
+        /**
+        * The appId for the report */
         appId: PropTypes.string,
+
+        /**
+         * The table ID for the report */
         tblId: PropTypes.string,
+
+        /**
+         * The report ID for the report */
         rptId: PropTypes.string,
 
         /**
@@ -277,6 +286,9 @@ export const ReportGrid = React.createClass({
 
             return (
                 <QbGrid
+                    appId={this.props.appId}
+                    tblId={this.props.tblId}
+                    rptId={this.props.rptId}
                 numberOfColumns={_.isArray(this.props.columns) ? this.props.columns.length : 0}
                 columns={this.transformColumns()}
                 rows={transformedRecords}
@@ -284,7 +296,6 @@ export const ReportGrid = React.createClass({
                 appUsers={this.props.appUsers}
                 phase1={this.props.phase1}
                 showRowActionsColumn={!this.props.phase1}
-
                 onStartEditingRow={this.startEditingRow}
                 editingRowId={editingRecordId}
                 isInlineEditOpen={isInLineEditOpen}

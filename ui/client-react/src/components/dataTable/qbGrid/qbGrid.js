@@ -15,6 +15,9 @@ import {SELECT_ROW_CHECKBOX} from '../../../../../reuse/client/src/components/ro
 import QbIcon from '../../qbIcon/qbIcon';
 import CollapsedGroupsHelper from './collapsedGroupHelper';
 
+import {moveColumn} from '../../../actions/reportActions';
+import {CONTEXT} from '../../../actions/context';
+
 import Logger from '../../../utils/logger';
 const logger = new Logger();
 
@@ -25,6 +28,18 @@ const ICON_ACTIONS_COLUMN_ID = 'ICON_ACTIONS';
 
 const QbGrid = React.createClass({
     propTypes: {
+        /**
+         * The appId for the report */
+        appId: PropTypes.string,
+
+        /**
+         * The table ID for the report */
+        tblId: PropTypes.string,
+
+        /**
+         * The report ID for the report */
+        rptId: PropTypes.string,
+
         /**
          * The total number of columns displayed on the grid. Passed in as a prop to prevent recalculating this value
          * multiple times across components */
@@ -134,6 +149,10 @@ const QbGrid = React.createClass({
         phase1: PropTypes.bool
     },
 
+    hasRequiredIds() {
+        let {appId, rptId, tblId} = this.props;
+        return (appId && rptId && tblId);
+    },
 
     getDefaultProps() {
         return {
@@ -148,17 +167,17 @@ const QbGrid = React.createClass({
         };
     },
 
-    componentWillReceiveProps(nextProps){
-        if(this.state.columns && this.state.columns.length>1){
-            return;
-        }
-        this.setState({columns: nextProps.columns});
-    },
-    getDefaultState(){
-        return{
-            columns:[]
-        }
-    },
+    // componentWillReceiveProps(nextProps){
+    //     if(this.state.columns && this.state.columns.length>1){
+    //         return;
+    //     }
+    //     this.setState({columns: nextProps.columns});
+    // },
+    // getDefaultState(){
+    //     return{
+    //         columns:[]
+    //     }
+    // },
 
     getInitialState() {
         return {
@@ -170,15 +189,15 @@ const QbGrid = React.createClass({
         this.collapsedGroupHelper = new CollapsedGroupsHelper();
     },
 
-    componentDidUpdate(prevProps,nextProps) {
-        console.log("prev",prevProps);
-        console.log("next",nextProps);
-        if (prevProps.columns !== nextProps.columns){
-            console.log("woohooo",nextProps);
-            this.setState({columns: this.props.columns});
-        }
-        this.collapsedGroupHelper = new CollapsedGroupsHelper();
-    },
+    // componentDidUpdate(prevProps,nextProps) {
+    //     console.log("prev",prevProps);
+    //     console.log("next",nextProps);
+    //     if (prevProps.columns !== nextProps.columns){
+    //         console.log("woohooo",nextProps);
+    //         this.setState({columns: this.props.columns});
+    //     }
+    //     this.collapsedGroupHelper = new CollapsedGroupsHelper();
+    // },
 
     onClickAddNewRow() {
         if (this.props.onClickAddNewRow) {
@@ -234,8 +253,8 @@ const QbGrid = React.createClass({
     },
 
     getVisibleColumns() {
-        if(!_.isArray(this.state.columns)) { return [];}
-        let visibleColumns = this.state.columns.filter(column => {
+        if(!_.isArray(this.props.columns)) { return [];}
+        let visibleColumns = this.props.columns.filter(column => {
             return !column.isHidden;
         });
         return visibleColumns.map(column => {
@@ -249,7 +268,7 @@ const QbGrid = React.createClass({
     getColumn(column) {
         try {
             column.addFormatter(this.renderCell);
-            if (!this.state.phase1) {
+            if (!this.props.phase1) {
                 column.addHeaderMenu(this.props.menuComponent, this.props.menuProps);
             }
             return column.getGridHeader(this.onMoveColumn);
@@ -391,35 +410,15 @@ const QbGrid = React.createClass({
 
     onMoveColumn(labels){
       console.log("moved", labels);
-        const movedColumns = this.moveLabels(this.state.columns, labels);
-        if (movedColumns) {
-            this.setState({
-                columns: movedColumns.columns
-            });
-        }
+        this.moveLabels(this.props.columns, labels);
     },
 
     moveLabels(columns, _ref2) {
-        var sourceLabel = _ref2.sourceLabel,
-            targetLabel = _ref2.targetLabel;
-
-        if (!columns) {
-            throw new Error('dnd.moveLabels - Missing columns!');
-        }
-        for(var i=0;i<columns.length;i++){
-            if(columns[i].headerLabel==sourceLabel)
-                var sourceIndex=i;
-            if(columns[i].headerLabel==targetLabel)
-                var targetIndex=i;
-        }
-
-        var movedColumns = this.move(columns, sourceIndex, targetIndex);
-
-        return {
-            source: movedColumns[sourceIndex],
-            target: movedColumns[targetIndex],
-            columns: movedColumns
+        let params = {
+            sourceLabel :_ref2.sourceLabel,
+            targetLabel : _ref2.targetLabel
         };
+        this.props.moveColumn(CONTEXT.REPORT.NAV, this.props.appId,this.props.tblId,this.props.rptId, params);
     },
 
     move(data, sourceIndex, targetIndex) {
@@ -508,13 +507,13 @@ const mapStateToProps = (state) => {
     };
 };
 
-// connect(
-//     mapStateToProps
-// )(QbGrid);
 
+const mapDispatchToProps = (dispatch) => {
+    return {
+        moveColumn: (context, appId, tblId, rptId, params) => {
+            dispatch(moveColumn(context, appId, tblId, rptId, params));
+        }
+    };
+};
 
-// Set up drag and drop context
-//const DragAndDrop = DragDropContext(HTML5Backend)(QbGrid);
-
-export default DragDropContext(HTML5Backend)(connect(mapStateToProps)(QbGrid));
-//export default connect(mapStateToProps)(DragDropContext(HTML5Backend)(QbGrid));
+export default connect(mapStateToProps,mapDispatchToProps)(DragDropContext(HTML5Backend)(QbGrid));
