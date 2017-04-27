@@ -263,6 +263,17 @@ describe('QbGrid', () => {
         });
     });
 
+    describe('getPlaceholderCellProps', () => {
+        it('adds the isPlaceholderCell prop to placeholder cells so the component can add the appropriate class', () => {
+            component = shallow(<QbGrid {...requiredProps}/>);
+            instance = component.instance();
+
+            expect(instance.getPlaceholderCellProps()).toEqual({
+                isPlaceholderCell: true
+            })
+        });
+    });
+
     describe('onClickToggleSelectedRow', () => {
         it('creates a function that can be used an event listener that includes the row id', () => {
             spyOn(actions, 'onClickToggle');
