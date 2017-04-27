@@ -41,6 +41,7 @@
             this.timeout(testConsts.INTEGRATION_TIMEOUT * appWithNoFlags.length);
             recordBase.createApp(appWithNoFlags).then(function(appResponse) {
                 app = JSON.parse(appResponse.body);
+                done();
             }).catch(function(error) {
                 log.error(JSON.stringify(error));
                 done();
@@ -64,7 +65,7 @@
 
             return createReport(reportToCreate)
                 .then(fetchReport)
-                .then(originalReport => updateRecord(originalReport, propsToChange))
+                .then(originalReport => updateReport(originalReport, propsToChange))
                 .then(originalReport => assertUpdateCorrect(originalReport, propsToChange))
                 .catch((error) => {
                     log.error(JSON.stringify(error));
