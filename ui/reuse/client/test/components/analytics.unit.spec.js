@@ -40,7 +40,7 @@ describe('Analytics', () => {
     });
 
     it('logs an error if the evergage script could not be setup', () => {
-        component = shallow(<Analytics />);
+        component = shallow(<Analytics dataset={mockDataset}/>);
         let instance = component.instance();
 
         spyOn(instance.logger, 'error');

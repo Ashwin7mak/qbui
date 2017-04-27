@@ -41,10 +41,6 @@ export class Analytics extends Component {
             return this.logger.debug('Analytics script has already been loaded for this page. Will not load again.');
         }
 
-        if (!this.props.dataset) {
-            return this.logger.debug('Dataset was not provided to analytics component. Analytics have not been loaded.');
-        }
-
         const analyticsScript = document.createElement('script');
         analyticsScript.id = ANALYTICS_SCRIPT_ID;
         analyticsScript.type = 'text/javascript';
@@ -69,6 +65,11 @@ export class Analytics extends Component {
      */
     componentDidMount() {
         try {
+            if (!this.props.dataset) {
+                return this.logger.debug('Dataset was not provided to analytics component. Analytics have not been loaded.');
+            }
+
+
             if (this.props.getLoggedInUser) {
                 this.props.getLoggedInUser();
             }
