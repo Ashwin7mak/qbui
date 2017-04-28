@@ -49,7 +49,9 @@ export const fetchAccountUsers = (accountId) => {
             if (error.response && error.response.status === 403) {
                 logger.parseAndLogError(LogLevel.WARN, error.response, 'accountUserService.getAccountUsers:');
                 WindowLocationUtils.update(FORBIDDEN);
-            } else {
+            } else if (!(error.response && error.response.status === 401)) {
+                // Since BaseService might be in the process of handling the redirect to current stack,
+                // we have to provide an additional IF guard here so that we don't redirect to INTERNAL_SERVER_ERROR
                 logger.parseAndLogError(LogLevel.ERROR, error.response, 'accountUserService.getAccountUsers:');
                 WindowLocationUtils.update(INTERNAL_SERVER_ERROR);
             }
