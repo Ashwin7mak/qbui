@@ -500,6 +500,7 @@ describe('ReportColumnHeaderMenu', () => {
         it('hides a column when that menu item is selected', () => {
             component = shallow(<ReportColumnHeaderMenu {...testProps}/>);
             instance = component.instance();
+            inBuilderMode = true;
 
             let hidingMenuItem = component.find(MenuItem).find({onSelect: instance.hideThisColumn});
             expect(hidingMenuItem).toBePresent();

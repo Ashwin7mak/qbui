@@ -566,15 +566,14 @@ const mapDispatchToProps = (dispatch) => {
         loadReports: (context, appId, tblId) => dispatch(ReportActions.loadReports(context, appId, tblId)),
 
         updateFormRedirectRoute: (route) => dispatch(updateFormRedirectRoute(route)),
-<<<<<<< HEAD
 
         enterBuilderMode: () => dispatch(ShellActions.enterBuilderMode()),
 
-        exitBuilderMode: () => dispatch(ShellActions.exitBuilderMode())
-=======
+        exitBuilderMode: () => dispatch(ShellActions.exitBuilderMode()),
+
         showTableCreationDialog: () => dispatch(TableCreationActions.showTableCreationDialog()),
+
         showTableReadyDialog: () => dispatch(TableCreationActions.showTableReadyDialog())
->>>>>>> master
     };
 };
 
