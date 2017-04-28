@@ -80,7 +80,6 @@ class formBuilderPage {
 
     getFieldLocator(index) {
         // Returns a locator string for a specific field in the form builder
-        // fieldLabel is a good place to click for dragging & contains text
         return '.formElementContainer:nth-child(' + index + ')';
     }
     cancel() {
@@ -182,10 +181,10 @@ class formBuilderPage {
     slowDragAndDrop(source, target) {
         // Clicks on the specified source field and drags it to the specified target field
         let label = browser.element(source).getText();
-        browser.moveToObject(source);
+        browser.moveToObject(source.element(',fieldLabel'));
         browser.buttonDown();
         // move to target & wait until preview appears
-        this.slowDrag(target, label);
+        this.slowDrag(target.element('.fieldLabel'), label);
         // release button
         browser.buttonUp();
         // pause to terminate drag (which is one reason why we can't just call dragAndDrop)
