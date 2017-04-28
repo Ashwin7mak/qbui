@@ -1,7 +1,6 @@
 import React, {PropTypes, Component} from "react";
 import {connect} from "react-redux";
 import Pagination from "../../../../../reuse/client/src/components/pagination/pagination";
-import * as _ from "lodash";
 
 /**
  * The Navigation Component

@@ -114,9 +114,16 @@ export const sortUsers = (users, sortFids) => {
  */
 export const doUpdate = (gridId, gridState, _itemsPerPage) => {
     return (dispatch, getState) => {
+
+        let users = getState().AccountUsers ? getState().AccountUsers.users : [];
+
+        if (users.length === 0) {
+            return;
+        }
+
         // First Filter
         let searchTerm = gridState.searchTerm || "";
-        let filteredUsers = searchUsers(getState().AccountUsers.users, searchTerm);
+        let filteredUsers = searchUsers(users, searchTerm);
 
         // Then Sort
         let sortFids = gridState.sortFids || [];

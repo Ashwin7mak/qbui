@@ -180,7 +180,7 @@ describe('Account Users Actions Tests', () => {
                     items: SORTED_USERS
                 }
             ];
-            expect(store.getActions(1)).toEqual(expectedActions);
+            expect(store.getActions(gridId)).toEqual(expectedActions);
         });
     });
 

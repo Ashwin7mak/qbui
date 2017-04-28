@@ -1,16 +1,14 @@
 import React from "react";
-import {mount} from "enzyme";
+import {mount, shallow} from "enzyme";
 import moment from "moment";
 import jasmineEnzyme from "jasmine-enzyme";
 import QbHeaderCell from "../../../../../client-react/src/components/dataTable/qbGrid/qbHeaderCell";
 import QbCell from "../../../../../client-react/src/components/dataTable/qbGrid/qbCell";
 import configureMockStore from "redux-mock-store";
 import {Provider} from "react-redux";
-import {StandardGrid} from "../../../../src/common/grid/standardGrid";
-import * as StandardGridActions from "../../../../src/common/grid/standardGridActions";
+import StandardGrid from "../../../../src/common/grid/standardGrid";
 import * as Actions from "../../../../src/account/users/AccountUsersActions";
 import {GetAccountUsersGridColumns} from "../../../../src/account/users/Grid/AccountUsersGridColumns";
-import thunk from "redux-thunk";
 
 const mockStore = configureMockStore();
 
@@ -18,10 +16,11 @@ describe('AccountUsersGridColumns', () => {
     beforeEach(() => {
         jasmineEnzyme();
     });
+    const GRID_ID = 'accountUsers';
     const baseProps = {
         columns : GetAccountUsersGridColumns(true, true),
         rowKey: 'uid',
-        id: 'accountUsers',
+        id: GRID_ID,
         columnTransformProps :[],
         columnTransformsClasses :[],
         doUpdate: Actions.doUpdate
@@ -46,9 +45,8 @@ describe('AccountUsersGridColumns', () => {
                 ...baseProps,
                 columns: GetAccountUsersGridColumns(false, true),
             };
-
             let component = mount(
-                <Provider store={mockStore({})}>
+                <Provider store={mockStore({Grids : 1})}>
                     <StandardGrid {...props} />
                 </Provider>);
 
@@ -65,7 +63,7 @@ describe('AccountUsersGridColumns', () => {
             };
 
             let component = mount(
-                <Provider store={mockStore({})}>
+                <Provider store={mockStore({Grids : 1})}>
                     <StandardGrid {...props} />
                 </Provider>);
             let headers = component.find(QbHeaderCell).map(node => node.text());
@@ -79,102 +77,85 @@ describe('AccountUsersGridColumns', () => {
         it("should render properly", () => {
 
             const data = [{firstName: "Test", uid: 0}];
-            let middleware = [thunk];
-            const mockS = configureMockStore(middleware);
-            const store = mockS({});
+            const mockS = configureMockStore();
+            const store = mockS({Grids: {"accountUsers" : {items: data, pagination:{currentPage:1}}}});
 
             let component = mount(
                 <Provider store={store}>
                     <StandardGrid {...baseProps} />
                 </Provider>);
-            debugger;
-            store.dispatch(StandardGridActions.doSetItems(baseProps.id, data));
             let cell = component.find(QbCell).at(0);
-            expect(cell.text()).toEqual(props.data[0].firstName);
+            expect(cell.text()).toEqual(data[0].firstName);
         });
     });
 
     describe("lastName", () => {
         it("should render properly", () => {
-            let props = {
-                ...baseProps,
-                data: [{lastName: "Test", uid:0}],
-            };
+            const data = [{lastName: "Test", uid: 0}];
+            const mockS = configureMockStore();
+            const store = mockS({Grids: {"accountUsers" : {items: data, pagination:{currentPage:1}}}});
 
             let component = mount(
-                <Provider store={mockStore({})}>
-                    <StandardGrid {...props} />
+                <Provider store={store}>
+                    <StandardGrid {...baseProps} />
                 </Provider>);
-
-
             let cell = component.find(QbCell).at(1);
-            expect(cell.text()).toEqual(props.data[0].lastName);
+            expect(cell.text()).toEqual(data[0].lastName);
         });
     });
 
     describe("email", () => {
         it("should render properly", () => {
-            let props = {
-                ...baseProps,
-                data: [{email: "Test", uid:0}],
-            };
+            const data = [{email: "Test", uid: 0}];
+            const mockS = configureMockStore();
+            const store = mockS({Grids: {"accountUsers" : {items: data, pagination:{currentPage:1}}}});
 
             let component = mount(
-                <Provider store={mockStore({})}>
-                    <StandardGrid {...props} />
+                <Provider store={store}>
+                    <StandardGrid {...baseProps} />
                 </Provider>);
-
-
             let cell = component.find(QbCell).at(2);
-            expect(cell.text()).toEqual(props.data[0].email);
+            expect(cell.text()).toEqual(data[0].email);
         });
     });
 
     describe("userName", () => {
         it("should render properly", () => {
-            let props = {
-                ...baseProps,
-                data: [{userName: "Test", uid:0}],
-            };
+            const data = [{userName: "Test", uid: 0}];
+            const mockS = configureMockStore();
+            const store = mockS({Grids: {"accountUsers" : {items: data, pagination:{currentPage:1}}}});
 
             let component = mount(
-                <Provider store={mockStore({})}>
-                    <StandardGrid {...props} />
+                <Provider store={store}>
+                    <StandardGrid {...baseProps} />
                 </Provider>);
-
-
             let cell = component.find(QbCell).at(3);
-            expect(cell.text()).toEqual(props.data[0].userName);
+            expect(cell.text()).toEqual(data[0].userName);
         });
     });
 
     describe("lastAccess", () => {
         it("should render null properly", () => {
-            let props = {
-                ...baseProps,
-                data: [{lastAccess: "1900-01-01T00:00:00Z", uid:0}],
-            };
+            const data = [{lastAccess: "1900-01-01T00:00:00Z", uid: 0}];
+            const mockS = configureMockStore();
+            const store = mockS({Grids: {"accountUsers" : {items: data, pagination:{currentPage:1}}}});
 
             let component = mount(
-                <Provider store={mockStore({})}>
-                    <StandardGrid {...props} />
+                <Provider store={store}>
+                    <StandardGrid {...baseProps} />
                 </Provider>);
             let cell = component.find(QbCell).at(4);
             expect(cell.text()).toEqual("never");
-
-
         });
 
         it("should render properly", () => {
-            let props = {
-                ...baseProps,
-                data: [{lastAccess: "2017-03-01T16:00:00Z", uid:0}],
-            };
-
+            const data = [{lastAccess: "2017-03-01T16:00:00Z", uid: 0}];
+            const mockS = configureMockStore();
+            const store = mockS({Grids: {"accountUsers" : {items: data, pagination:{currentPage:1}}}});
 
             let component = mount(
-                <Provider store={mockStore({})}>
-                    <StandardGrid {...props} />
+                <Provider store={store}>
+                    <StandardGrid {...baseProps} />
                 </Provider>);
             let cell = component.find(QbCell).at(4);
             expect(cell.text()).toEqual("March 1 2017");
@@ -196,7 +177,7 @@ describe('AccountUsersGridColumns', () => {
 
 
             let component = mount(
-                <Provider store={mockStore({})}>
+                <Provider store={mockStore({Grids : 1})}>
                     <StandardGrid {...props} />
                 </Provider>);
             let cell = component.find(QbCell).at(5);
@@ -217,7 +198,7 @@ describe('AccountUsersGridColumns', () => {
 
 
             let component = mount(
-                <Provider store={mockStore({})}>
+                <Provider store={mockStore({Grids : 1})}>
                     <StandardGrid {...props} />
                 </Provider>);
             let cell = component.find(QbCell).at(5);
@@ -237,7 +218,7 @@ describe('AccountUsersGridColumns', () => {
             };
 
             let component = mount(
-                <Provider store={mockStore({})}>
+                <Provider store={mockStore({Grids : 1})}>
                     <StandardGrid {...props} />
                 </Provider>);
             let cell = component.find(QbCell).at(5);
@@ -257,7 +238,7 @@ describe('AccountUsersGridColumns', () => {
             };
 
             let component = mount(
-                <Provider store={mockStore({})}>
+                <Provider store={mockStore({Grids : 1})}>
                     <StandardGrid {...props} />
                 </Provider>);
             let cell = component.find(QbCell).at(5);
@@ -277,7 +258,7 @@ describe('AccountUsersGridColumns', () => {
             };
 
             let component = mount(
-                <Provider store={mockStore({})}>
+                <Provider store={mockStore({Grids : 1})}>
                     <StandardGrid {...props} />
                 </Provider>);
             let cell = component.find(QbCell).at(5);
@@ -293,7 +274,7 @@ describe('AccountUsersGridColumns', () => {
             };
 
             let component = mount(
-                <Provider store={mockStore({})}>
+                <Provider store={mockStore({Grids : 1})}>
                     <StandardGrid {...props} />
                 </Provider>);
             let cell = component.find(QbCell).at(6);
@@ -307,7 +288,7 @@ describe('AccountUsersGridColumns', () => {
             };
 
             let component = mount(
-                <Provider store={mockStore({})}>
+                <Provider store={mockStore({Grids : 1})}>
                     <StandardGrid {...props} />
                 </Provider>);
             let cell = component.find(QbCell).at(6);
@@ -321,7 +302,7 @@ describe('AccountUsersGridColumns', () => {
             };
 
             let component = mount(
-                <Provider store={mockStore({})}>
+                <Provider store={mockStore({Grids : 1})}>
                     <StandardGrid {...props} />
                 </Provider>);
             let cell = component.find(QbCell).at(6);
@@ -338,7 +319,7 @@ describe('AccountUsersGridColumns', () => {
             };
 
             let component = mount(
-                <Provider store={mockStore({})}>
+                <Provider store={mockStore({Grids : 1})}>
                     <StandardGrid {...props} />
                 </Provider>);
             let cell = component.find(QbCell).at(7);
@@ -352,7 +333,7 @@ describe('AccountUsersGridColumns', () => {
             };
 
             let component = mount(
-                <Provider store={mockStore({})}>
+                <Provider store={mockStore({Grids : 1})}>
                     <StandardGrid {...props} />
                 </Provider>);
             let cell = component.find(QbCell).at(7);
@@ -369,7 +350,7 @@ describe('AccountUsersGridColumns', () => {
             };
 
             let component = mount(
-                <Provider store={mockStore({})}>
+                <Provider store={mockStore({Grids : 1})}>
                     <StandardGrid {...props} />
                 </Provider>);
             let cell = component.find(QbCell).at(8);
@@ -383,7 +364,7 @@ describe('AccountUsersGridColumns', () => {
             };
 
             let component = mount(
-                <Provider store={mockStore({})}>
+                <Provider store={mockStore({Grids : 1})}>
                     <StandardGrid {...props} />
                 </Provider>);
             let cell = component.find(QbCell).at(8);
@@ -400,7 +381,7 @@ describe('AccountUsersGridColumns', () => {
             };
 
             let component = mount(
-                <Provider store={mockStore({})}>
+                <Provider store={mockStore({Grids : 1})}>
                     <StandardGrid {...props} />
                 </Provider>);
             let cell = component.find(QbCell).at(9);
