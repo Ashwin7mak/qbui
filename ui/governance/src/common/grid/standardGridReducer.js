@@ -37,7 +37,7 @@ function grid(state = defaultGridState, action) {
         };
     case types.SET_CURRENTPAGE_OFFSET:
         if (state.items.length === 0 ||
-            (state.pagination.currentPage + action.offset < 0) ||
+            (state.pagination.currentPage + action.offset <= 0) ||
             (state.pagination.currentPage + action.offset > state.pagination.totalPages)) {
             return state;
         }
