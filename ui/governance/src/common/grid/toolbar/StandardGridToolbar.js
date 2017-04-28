@@ -51,12 +51,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     };
 };
 
-const mapStateToProps = (state) => {
-    return {
-    };
-};
-
 export {StandardGridToolBar};
 
-export default connect(mapStateToProps, mapDispatchToProps)(StandardGridToolBar);
+export default connect(undefined, mapDispatchToProps)(StandardGridToolBar);
 
