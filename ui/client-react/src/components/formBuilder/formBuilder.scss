@@ -46,12 +46,16 @@
             }
 
             &:active {
-                //@include dragpreview-active-gradient;
-                //box-shadow: none;
                 border: $stroke-width-thick dashed $color-black-300;
                 background-color: $color-orange-100;
                 width: 335px;
                 .fieldEditingTools {
+                    opacity: 0;
+                }
+                .cellWrapper {
+                    opacity: 0;
+                }
+                .field {
                     opacity: 0;
                 }
             }

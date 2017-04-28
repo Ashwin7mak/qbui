@@ -147,9 +147,3 @@ $line-height-text-compact:      14px;
 $line-height-text-comfortable:  16px;
 $line-height-text-generous:     24px;
 $line-height-text-multiline:    13px;
-
-// -- FormBuilder - Drag & Drop
-@mixin dragpreview-active-gradient {
-    border: $stroke-width-thin solid $color-black-400;
-    background: linear-gradient(rgba($color-black-400, 0), rgba($color-black-400, 0.2));
-}

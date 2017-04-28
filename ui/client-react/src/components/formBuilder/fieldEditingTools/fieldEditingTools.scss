@@ -117,8 +117,6 @@
     }
 
     &.active {
-        //opacity: .2;
-        //@include dragpreview-active-gradient;
         box-shadow: none;
         border: $stroke-width-thick dashed $color-black-300;
         background-color: $color-orange-100;
