@@ -275,10 +275,6 @@ exports.config = {
             return require(baseE2EPath + 'pages/' + relativePath + '.po.js');
         };
 
-        global.requireMobilePO = function(relativePath) {
-            return require(baseE2EPath + 'pages/mobile/' + relativePath + '.po.js');
-        };
-
         // Initialize all Common Files
         global.requireCommon = function(relativePath) {
             return require(baseE2EPath + relativePath + '.js');
