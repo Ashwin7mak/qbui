@@ -25,17 +25,6 @@ describe('AccountUsers', () => {
         loading: false
     };
 
-    it("should should render an error state", ()=> {
-        let props = {
-            ...baseProps,
-            dataFetchingError: "Error"
-        };
-
-        let component = mount(<AccountUsers {...props} />);
-        let errorSection = component.find("h1");
-        expect(errorSection.length).toEqual(1);
-    });
-
     // it("should should call fetch on mount", ()=> {
     //     let props = {
     //         ...baseProps
@@ -63,7 +52,7 @@ describe('AccountUsers', () => {
             }
         };
         let component = shallow(<AccountUsers {...props} />);
-        let grid = component.find(AccountUsersGrid);
+        let grid = component.find("AccountUsersGrid");
         expect(grid.props().showAccountColumns).toEqual(true);
         expect(grid.props().showRealmColumns).toEqual(false);
     });
