@@ -7,6 +7,7 @@ import AppHomePage from './appHomePage';
 import PageTitle from '../pageTitle/pageTitle';
 import {connect} from 'react-redux';
 import {NotificationManager} from 'react-notifications';
+import Stage from '../../../../reuse/client/src/components/stage/stage'
 import Locale from '../../locales/locales';
 import {notifyTableDeleted} from '../../actions/tablePropertiesActions';
 import {getNeedToNotifyTableDeletion, getTableJustDeleted} from '../../reducers/tableProperties';
@@ -106,17 +107,12 @@ export const AppHomePageRoute = React.createClass({
     },
 
     getStageHeadline() {
-        return (this.props.selectedApp &&
-            <div className="stageHeadline">
-                <h3 className="appName breadCrumbs"><QBicon icon="favicon"/> {this.props.selectedApp.name}</h3>
-            </div>
-        );
-    },
-
-    getSecondaryBar() {
+        const userHeadLine = `Welcome to Quick Base`;
         return (
-            <div className="secondaryAppHomePageActions">
-                {/* todo */}
+            <div className="appHomePageStage">
+                <div className="appStageHeadline">
+                    <h3 className="appHeadLine">{userHeadLine}</h3>
+                </div>
             </div>);
     },
 
@@ -128,6 +124,10 @@ export const AppHomePageRoute = React.createClass({
         return (
             <div className="appHomePageContainer">
                 <PageTitle title={this.getSelectedAppName()} />
+                <Stage stageHeadline={this.getStageHeadline()}
+                       pageActions={null}>
+                    <div></div>
+                </Stage>
                 <AppHomePage />
             </div>
         );
