@@ -44,12 +44,12 @@ export const setSort = (gridId, sortFid, asc, remove) => ({
  * Action to set the pagination order for a given grid
  *
  * @param gridId - the id of the grid we want to update
- * @param next - move to next page or backwards
+ * @param offset - ho
  */
-export const setNavigate = (gridId, next) => ({
-    type: types.SET_NAVIGATE,
+export const setCurrentPageOffset = (gridId, offset) => ({
+    type: types.SET_CURRENTPAGE_OFFSET,
     gridId,
-    next
+    offset
 });
 
 /**
@@ -63,24 +63,6 @@ export const setPaginate = (gridId, pagination) => ({
     gridId,
     pagination
 });
-
-export const doSetPaginate = (gridId, pagination) => {
-    return (dispatch, getState) => {
-        return dispatch(setPaginate(gridId, pagination));
-    };
-};
-
-/**
- * Action to set the items for the grid
- *
- * @param gridId - the id of the grid we want to update
- * @param direction - the direction to paginate
- */
-export const doSetItems = (gridId, items) => {
-    return (dispatch, getState) => {
-        return dispatch(setItems(gridId, items));
-    };
-};
 
 /**
  * Update function that delegates the work to a passed in update action

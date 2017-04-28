@@ -49,7 +49,7 @@ export {AccountUsersNavigation};
 
 const mapStateToProps = (state, ownProps) => {
     return {
-        paginationInfo: _.has(state.Grids, ownProps.id) ? state.Grids[ownProps.id].pagination : {},
+        paginationInfo: state.Grids[ownProps.id] ? state.Grids[ownProps.id].pagination : {},
     };
 };
 

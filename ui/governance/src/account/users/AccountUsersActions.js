@@ -135,10 +135,10 @@ export const doUpdate = (gridId, gridState, _itemsPerPage) => {
             itemsPerPage: itemsPerPage
         };
         // Set the grid's pagination info
-        dispatch(StandardGridActions.doSetPaginate(gridId, pagination));
+        dispatch(StandardGridActions.setPaginate(gridId, pagination));
 
         // Inform the grid of the new users
-        dispatch(StandardGridActions.doSetItems(gridId, paginatedUsers));
+        dispatch(StandardGridActions.setItems(gridId, paginatedUsers));
 
     };
 };

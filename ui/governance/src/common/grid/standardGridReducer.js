@@ -35,10 +35,10 @@ function grid(state = defaultGridState, action) {
             ...state,
             sortFids: action.remove ? [] : [(action.sortFid * (action.asc ? 1 : -1))]
         };
-    case types.SET_NAVIGATE:
+    case types.SET_CURRENTPAGE_OFFSET:
         if (state.items.length === 0 ||
-            (state.pagination.currentPage === 1 && !action.next) ||
-            (state.pagination.currentPage === state.pagination.totalPages && action.next)) {
+            (state.pagination.currentPage + action.offset < 0) ||
+            (state.pagination.currentPage + action.offset > state.pagination.totalPages)) {
             return state;
         }
 
@@ -46,7 +46,7 @@ function grid(state = defaultGridState, action) {
             ...state,
             pagination: {
                 ...state.pagination,
-                currentPage: action.next ? state.pagination.currentPage + 1 : state.pagination.currentPage - 1
+                currentPage: state.pagination.currentPage + action.offset
             }
         };
     case types.SET_PAGINATION:
@@ -86,7 +86,7 @@ function gridById(state = {}, action) {
     case types.SET_SORT:
     case types.SET_ITEMS:
     case types.SET_PAGINATION:
-    case types.SET_NAVIGATE:
+    case types.SET_CURRENTPAGE_OFFSET:
     case types.SET_SEARCH:
         return {
             ...state,
