@@ -443,7 +443,7 @@ $edit-icon-font-size: 18px;
         .dropdown-menu {
 
             // position menu to the right of the sticky cells
-            top: 28px;
+           /* top: 28px;
             left: -5px;
 
             &:before {
@@ -455,6 +455,25 @@ $edit-icon-font-size: 18px;
                 right: auto;
                 left: 10px;
             }
+*/
+            // Start Temporary Fix
+            top: -3px;
+            left: 25px;
+
+            &:before {
+                right: auto;
+                left: -10px;
+                top: 10px;
+                transform: rotate(270deg);
+            }
+
+            &:after {
+                right: auto;
+                left: -10px;
+                top: 10px;
+                transform: rotate(270deg);
+            }
+            // End Temporary Fix
 
             a {
                 padding-left: 4px;
