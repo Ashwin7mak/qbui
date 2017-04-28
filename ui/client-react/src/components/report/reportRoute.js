@@ -21,6 +21,7 @@ import {loadReport, loadDynamicReport, changeReportName} from '../../actions/rep
 import {loadFields} from '../../actions/fieldsActions';
 import {CONTEXT} from '../../actions/context';
 import {APP_ROUTE, EDIT_RECORD_KEY, NEW_RECORD_VALUE} from '../../constants/urlConstants';
+import TextFieldValueEditor from '../fields/textFieldValueEditor';
 
 import * as FieldsReducer from '../../reducers/fields';
 
@@ -128,10 +129,8 @@ const ReportRoute = React.createClass({
         return (<IconActions className="pageActions" actions={actions}/>);
     },
 
-    setReportName(e) {
-        console.log(this, e.target.value);
-        //this.props.reportData.data.name = e.target.value;
-        this.props.dispatch(changeReportName(CONTEXT.REPORT.NAV, e.target.value));
+    setReportName(new_name) {
+        this.props.dispatch(changeReportName(CONTEXT.REPORT.NAV, new_name));
     },
 
     getStageHeadline() {
@@ -148,7 +147,10 @@ const ReportRoute = React.createClass({
 
                 <div className="stageHeadline">
                     <h3 className="reportName">{reportName}</h3>
-                    <input value={reportName} onChange={this.setReportName} />
+                    <TextFieldValueEditor value={reportName}
+                                          inputType="text"
+                                          onChange={this.setReportName}
+                    />
                 </div>
             </div>);
     },
