@@ -1,5 +1,5 @@
-import UserReducer, {getLoggedInUser, getLoggedInUserId} from '../../../src/components/user/userReducer';
-import {UPDATE_USER_LOADING_STATUS, UPDATE_LOGGED_IN_USER} from '../../../src/components/user/userActionTypes';
+import UserReducer, {getLoggedInUser, getLoggedInUserId} from '../../src/reducers/userReducer';
+import {UPDATE_USER_LOADING_STATUS, UPDATE_LOGGED_IN_USER} from '../../src/actions/userActions';
 
 const mockUser = {id: 13};
 

@@ -1,10 +1,13 @@
 import Promise from 'bluebird';
-import {UPDATE_LOGGED_IN_USER, UPDATE_USER_LOADING_STATUS} from './userActionTypes';
 
 // IMPORT FROM CLIENT REACT
-import UserService from '../../../../../client-react/src/services/userService';
-import Logger from '../../../../../client-react/src/utils/logger';
+import UserService from '../../../../client-react/src/services/userService';
+import Logger from '../../../../client-react/src/utils/logger';
 // IMPORT FROM CLIENT REACT
+
+// ACTIONS AVAILABLE
+export const UPDATE_USER_LOADING_STATUS = 'UPDATE_USER_LOADING_STATUS';
+export const UPDATE_LOGGED_IN_USER = 'UPDATE_LOGGED_IN_USER';
 
 export const updateLoadingUserStatus = isLoading => ({type: UPDATE_USER_LOADING_STATUS, isLoading});
 

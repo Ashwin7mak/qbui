@@ -1,7 +1,7 @@
 import React, {PropTypes, Component} from 'react';
 import {connect} from 'react-redux';
-import {getLoggedInUserId} from '../user/userReducer';
-import {getLoggedInUser} from '../user/userActions';
+import {getLoggedInUserId} from '../../reducers/userReducer';
+import {getLoggedInUser} from '../../actions/userActions';
 
 // IMPORT FROM CLIENT REACT
 import Logger from '../../../../../client-react/src/utils/logger';
