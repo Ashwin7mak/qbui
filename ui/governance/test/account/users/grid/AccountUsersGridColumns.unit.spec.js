@@ -226,40 +226,38 @@ describe('AccountUsersGridColumns', () => {
         });
 
         it("should quickbase staff above everything but denied and deactivated", () => {
-            let props = {
-                ...baseProps,
-                data: [{
-                    hasAppAccess: true,
-                    userBasicFlags: 4,
-                    realmDirectoryFlags: 4,
-                    systemRights: 6,
-                    uid:0
-                }],
-            };
+            const data = [{
+                hasAppAccess: true,
+                userBasicFlags: 4,
+                realmDirectoryFlags: 4,
+                systemRights: 6,
+                uid:0
+            }];
+            const mockS = configureMockStore();
+            const store = mockS({Grids: {"accountUsers" : {items: data, pagination:{currentPage:1}}}});
 
             let component = mount(
-                <Provider store={mockStore({Grids : 1})}>
-                    <StandardGrid {...props} />
+                <Provider store={store}>
+                    <StandardGrid {...baseProps} />
                 </Provider>);
             let cell = component.find(QbCell).at(5);
             expect(cell.text().trim()).toEqual("QuickBase Staff");
         });
 
         it("should show paid seat if has access", () => {
-            let props = {
-                ...baseProps,
-                data: [{
-                    hasAppAccess: true,
-                    userBasicFlags: 4,
-                    realmDirectoryFlags: 4,
-                    systemRights: 0,
-                    uid:0
-                }],
-            };
+            const data = [{
+                hasAppAccess: true,
+                userBasicFlags: 4,
+                realmDirectoryFlags: 4,
+                systemRights: 0,
+                uid:0
+            }];
+            const mockS = configureMockStore();
+            const store = mockS({Grids: {"accountUsers" : {items: data, pagination:{currentPage:1}}}});
 
             let component = mount(
-                <Provider store={mockStore({Grids : 1})}>
-                    <StandardGrid {...props} />
+                <Provider store={store}>
+                    <StandardGrid {...baseProps} />
                 </Provider>);
             let cell = component.find(QbCell).at(5);
             expect(cell.text().trim()).toEqual("Paid Seat");
@@ -268,42 +266,39 @@ describe('AccountUsersGridColumns', () => {
 
     describe("Inactive?", () => {
         it("should render null properly", () => {
-            let props = {
-                ...baseProps,
-                data: [{lastAccess: "1900-01-01T00:00:00Z", uid:0}],
-            };
+            const data = [{lastAccess: "1900-01-01T00:00:00Z", uid:0}];
+            const mockS = configureMockStore();
+            const store = mockS({Grids: {"accountUsers" : {items: data, pagination:{currentPage:1}}}});
 
             let component = mount(
-                <Provider store={mockStore({Grids : 1})}>
-                    <StandardGrid {...props} />
+                <Provider store={store}>
+                    <StandardGrid {...baseProps} />
                 </Provider>);
             let cell = component.find(QbCell).at(6);
             expect(cell.text()).toEqual("--");
         });
 
         it("should render inactive properly", () => {
-            let props = {
-                ...baseProps,
-                data: [{lastAccess: moment().subtract(181, 'days').toISOString(), uid:0}],
-            };
+            const data = [{lastAccess: moment().subtract(181, 'days').toISOString(), uid:0}];
+            const mockS = configureMockStore();
+            const store = mockS({Grids: {"accountUsers" : {items: data, pagination:{currentPage:1}}}});
 
             let component = mount(
-                <Provider store={mockStore({Grids : 1})}>
-                    <StandardGrid {...props} />
+                <Provider store={store}>
+                    <StandardGrid {...baseProps} />
                 </Provider>);
             let cell = component.find(QbCell).at(6);
             expect(cell.text()).toEqual("Y");
         });
 
         it("should render NOT inactive properly", () => {
-            let props = {
-                ...baseProps,
-                data: [{lastAccess: moment().subtract(179, 'days').toISOString(), uid:0}],
-            };
+            const data = [{lastAccess: moment().subtract(179, 'days').toISOString(), uid:0}];
+            const mockS = configureMockStore();
+            const store = mockS({Grids: {"accountUsers" : {items: data, pagination:{currentPage:1}}}});
 
             let component = mount(
-                <Provider store={mockStore({Grids : 1})}>
-                    <StandardGrid {...props} />
+                <Provider store={store}>
+                    <StandardGrid {...baseProps} />
                 </Provider>);
             let cell = component.find(QbCell).at(6);
             expect(cell.text()).toEqual("--");
@@ -313,28 +308,26 @@ describe('AccountUsersGridColumns', () => {
     describe("In Any Group?", () => {
 
         it("should render numGroupsMember correctly when a number", () => {
-            let props = {
-                ...baseProps,
-                data: [{numGroupsMember: 1, uid:0}],
-            };
+            const data = [{numGroupsMember: 1, uid:0}];
+            const mockS = configureMockStore();
+            const store = mockS({Grids: {"accountUsers" : {items: data, pagination:{currentPage:1}}}});
 
             let component = mount(
-                <Provider store={mockStore({Grids : 1})}>
-                    <StandardGrid {...props} />
+                <Provider store={store}>
+                    <StandardGrid {...baseProps} />
                 </Provider>);
             let cell = component.find(QbCell).at(7);
             expect(cell.text()).toEqual("Y");
         });
 
         it("should render numGroupsMember correctly when 0", () => {
-            let props = {
-                ...baseProps,
-                data: [{numGroupsMember: 0, uid:0}],
-            };
+            const data = [{numGroupsMember: 0, uid:0}];
+            const mockS = configureMockStore();
+            const store = mockS({Grids: {"accountUsers" : {items: data, pagination:{currentPage:1}}}});
 
             let component = mount(
-                <Provider store={mockStore({Grids : 1})}>
-                    <StandardGrid {...props} />
+                <Provider store={store}>
+                    <StandardGrid {...baseProps} />
                 </Provider>);
             let cell = component.find(QbCell).at(7);
             expect(cell.text()).toEqual("--");
@@ -344,28 +337,26 @@ describe('AccountUsersGridColumns', () => {
     describe("Group manager?", () => {
 
         it("should render numGroupsManaged correctly when a number", () => {
-            let props = {
-                ...baseProps,
-                data: [{numGroupsManaged: 1, uid:0}],
-            };
+            const data = [{numGroupsManaged: 1, uid:0}];
+            const mockS = configureMockStore();
+            const store = mockS({Grids: {"accountUsers" : {items: data, pagination:{currentPage:1}}}});
 
             let component = mount(
-                <Provider store={mockStore({Grids : 1})}>
-                    <StandardGrid {...props} />
+                <Provider store={store}>
+                    <StandardGrid {...baseProps} />
                 </Provider>);
             let cell = component.find(QbCell).at(8);
             expect(cell.text()).toEqual("Y");
         });
 
         it("should render numGroupsManaged correctly when 0", () => {
-            let props = {
-                ...baseProps,
-                data: [{numGroupsManaged: 0, uid:0}],
-            };
+            const data = [{numGroupsManaged: 0, uid:0}];
+            const mockS = configureMockStore();
+            const store = mockS({Grids: {"accountUsers" : {items: data, pagination:{currentPage:1}}}});
 
             let component = mount(
-                <Provider store={mockStore({Grids : 1})}>
-                    <StandardGrid {...props} />
+                <Provider store={store}>
+                    <StandardGrid {...baseProps} />
                 </Provider>);
             let cell = component.find(QbCell).at(8);
             expect(cell.text()).toEqual("--");
@@ -375,29 +366,26 @@ describe('AccountUsersGridColumns', () => {
     describe("Can create apps?", () => {
 
         it("should render can create apps correctly when user has flag", () => {
-            let props = {
-                ...baseProps,
-                data: [{accountTrusteeFlags: 5, uid:0}],
-            };
+            const data = [{accountTrusteeFlags: 5, uid:0}];
+            const mockS = configureMockStore();
+            const store = mockS({Grids: {"accountUsers" : {items: data, pagination:{currentPage:1}}}});
 
             let component = mount(
-                <Provider store={mockStore({Grids : 1})}>
-                    <StandardGrid {...props} />
+                <Provider store={store}>
+                    <StandardGrid {...baseProps} />
                 </Provider>);
             let cell = component.find(QbCell).at(9);
             expect(cell.text()).toEqual("Y");
         });
 
         it("should render can create apps correctly when user does NOT have flag", () => {
-            let props = {
-                ...baseProps,
-                data: [{accountTrusteeFlags: 1, uid:0}],
-            };
-
+            const data = [{accountTrusteeFlags: 1, uid:0}];
+            const mockS = configureMockStore();
+            const store = mockS({Grids: {"accountUsers" : {items: data, pagination:{currentPage:1}}}});
 
             let component = mount(
-                <Provider store={mockStore({})}>
-                    <StandardGrid {...props} />
+                <Provider store={store}>
+                    <StandardGrid {...baseProps} />
                 </Provider>);
             let cell = component.find(QbCell).at(9);
             expect(cell.text()).toEqual("--");
@@ -407,30 +395,26 @@ describe('AccountUsersGridColumns', () => {
     describe("App Manager?", () => {
 
         it("should render no apps correctly", () => {
-            let props = {
-                ...baseProps,
-                data: [{numAppsManaged: 0, uid:0}],
-            };
-
+            const data = [{numAppsManaged: 0, uid:0}];
+            const mockS = configureMockStore();
+            const store = mockS({Grids: {"accountUsers" : {items: data, pagination:{currentPage:1}}}});
 
             let component = mount(
-                <Provider store={mockStore({})}>
-                    <StandardGrid {...props} />
+                <Provider store={store}>
+                    <StandardGrid {...baseProps} />
                 </Provider>);
             let cell = component.find(QbCell).at(10);
             expect(cell.text()).toEqual("--");
         });
 
         it("should render some apps correctly", () => {
-            let props = {
-                ...baseProps,
-                data: [{numAppsManaged: 1, uid:0}],
-            };
-
+            const data = [{numAppsManaged: 1, uid:0}];
+            const mockS = configureMockStore();
+            const store = mockS({Grids: {"accountUsers" : {items: data, pagination:{currentPage:1}}}});
 
             let component = mount(
-                <Provider store={mockStore({})}>
-                    <StandardGrid {...props} />
+                <Provider store={store}>
+                    <StandardGrid {...baseProps} />
                 </Provider>);
             let cell = component.find(QbCell).at(10);
             expect(cell.text()).toEqual("Y");
@@ -440,30 +424,26 @@ describe('AccountUsersGridColumns', () => {
     describe("In Realm Directory?", () => {
 
         it("should render in realm directory correctly when 0", () => {
-            let props = {
-                ...baseProps,
-                data: [{realmDirectoryFlags: 0, uid:0}],
-            };
-
+            const data = [{realmDirectoryFlags: 0, uid:0}];
+            const mockS = configureMockStore();
+            const store = mockS({Grids: {"accountUsers" : {items: data, pagination:{currentPage:1}}}});
 
             let component = mount(
-                <Provider store={mockStore({})}>
-                    <StandardGrid {...props} />
+                <Provider store={store}>
+                    <StandardGrid {...baseProps} />
                 </Provider>);
             let cell = component.find(QbCell).at(11);
             expect(cell.text()).toEqual("--");
         });
 
         it("should render in realm directory correctly when has some flags", () => {
-            let props = {
-                ...baseProps,
-                data: [{realmDirectoryFlags: 1, uid:0}],
-            };
-
+            const data = [{realmDirectoryFlags: 1, uid:0}];
+            const mockS = configureMockStore();
+            const store = mockS({Grids: {"accountUsers" : {items: data, pagination:{currentPage:1}}}});
 
             let component = mount(
-                <Provider store={mockStore({})}>
-                    <StandardGrid {...props} />
+                <Provider store={store}>
+                    <StandardGrid {...baseProps} />
                 </Provider>);
             let cell = component.find(QbCell).at(11);
             expect(cell.text()).toEqual("Y");
