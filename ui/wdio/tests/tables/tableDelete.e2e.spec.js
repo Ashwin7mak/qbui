@@ -200,7 +200,6 @@
             //Step 5 - Verify settings icon not available for user other than ADMIN
             expect(browser.isVisible('.qbIcon.iconUISturdy-settings')).toBeFalsy();
         });
-
-
+        
     });
 }());
