@@ -2,7 +2,13 @@
 
 .formBuilderContainer {
     height: 100%;
-
+    .listOfElementsContainer {
+        height: calc(100% - #{$formBuilder-footer-height + 5px} );
+        @include medium-breakpoint {
+            //for tablets and smaller, to keep footer from vanishing
+            height: 100%;
+        }
+    }
     .formBuilderContainerContent {
         height: calc(100% - #{$formBuilder-footer-height});
         @include medium-breakpoint {

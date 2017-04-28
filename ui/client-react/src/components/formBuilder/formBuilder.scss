@@ -76,8 +76,15 @@
     }
 
     .dragging {
+        max-height: 170px;
         opacity: 0.9;
         transition: opacity 0.5s;
+        .cellWrapper {
+            opacity: 0;
+        }
+        .field {
+            opacity: 0;
+        }
     }
 
     /**
