@@ -85,22 +85,13 @@
         // List of all field column headers from qbGrid
         qbGridColHeaderElList: {get: function() {return browser.elements('.qbHeaderCell');}},
 
-        // qbGrid is divided up into two columns: one is the actions column (pinned on the left) and the second is the record data
-        qbGridBodyEl: {get: function() {
-            this.qbGridContainer.element('.qbTbody').waitForVisible();
-            return this.qbGridContainer.element('.qbTbody');
-        }},
-
         qbGridBodyViewportEl : {get: function() {return browser.element('.qbTbody');}},
 
         // Container for each records action column
-        qbGridLeftColsContainerEl: {get: function() {return this.qbGridBodyEl.element('.qbCell.stickyCell');}},
+        qbGridLeftColsContainerEl: {get: function() {return this.qbGridBodyViewportEl.element('.qbCell.stickyCell');}},
 
         // this will get you every row of the actions column
         qbGridRowActionsElList: {get: function() {return this.qbGridLeftColsContainerEl.elements('.qbRow');}},
-
-        // this will get you every record element on the grid
-        qbGridRecordElList: {value: function() {return this.qbGridBodyEl.elements('.qbRow');}},
 
         /**
          * Helper method to ensure the report has been properly loaded with records. Will throw an error if no records are in the report.
@@ -130,7 +121,7 @@
          * @returns Resolved record row element at specified index
          */
         getAllRows: {get: function() {
-            this.qbGridBodyEl.element('.qbRow').waitForVisible();
+            this.qbGridBodyViewportEl.element('.qbRow').waitForVisible();
             return this.qbGridContainer.elements('.qbRow');
         }},
         getRecordRowElement: {value: function(recordIndex) {
@@ -170,6 +161,7 @@
          * @returns either an array of cell values (as strings) or one value of a cell
          */
         getRecordValues: {value: function(recordIndex, recordCellIndex) {
+            this.waitForReportContent();
             var recordRowElement = this.getRecordRowElement(recordIndex);
             var recordRowCells = this.getRecordRowCells(recordRowElement);
             // Return all record values if no cell number supplied
