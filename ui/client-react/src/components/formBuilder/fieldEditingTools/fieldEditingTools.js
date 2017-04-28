@@ -1,5 +1,4 @@
 import React, {PropTypes, Component} from "react";
-import AVAILABLE_ICON_FONTS from "../../../constants/iconConstants";
 import QbIcon from "../../qbIcon/qbIcon";
 import QbToolTip from "../../qbToolTip/qbToolTip";
 import Device from "../../../utils/device";
