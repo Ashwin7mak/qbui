@@ -95,7 +95,7 @@ describe('Account Users Actions Tests', () => {
             // expect the dummy data when the fetchAccountUsers is called
             const store = mockStore({});
             return store.dispatch(actions.fetchAccountUsers(mockAccountId, mockGridID, mockItemsPerPage)).then(() =>
-                    expect(store.getActions(mockAccountId)).toEqual(expectedActions)
+                    expect(store.getActions(mockAccountId, mockGridID, mockItemsPerPage)).toEqual(expectedActions)
                 , error => expect(false).toBe(true)).then(done, done);
         });
 
@@ -161,8 +161,8 @@ describe('Account Users Actions Tests', () => {
         it('dispatches correctly', () => {
 
             const store = mockStore({AccountUsers: {users: USERS}});
-            store.dispatch(actions.doUpdate(1, {sortFids: [1]}));
-            expect(store.getActions(1)).toEqual([{type: types.GET_USERS_SUCCESS, users: SORTED_USERS}]);
+            store.dispatch(actions.doUpdate(1, {sortFids: [1], pagination:{itemsPerpage:10}}));
+            expect(store.getActions(1).items).toEqual(SORTED_USERS);
         });
     });
 
