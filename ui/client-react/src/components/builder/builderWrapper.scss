@@ -18,9 +18,9 @@ $builder-wrapper-border-color: $color-black-300;
         }
 
         .topTitle {
-            padding-top: 10px;
             display: block;
-            font-family: Lato;
+            padding-top: 9px;
+            font-family: Lato, "Open Sans", Arial, Sans-Serif;
             font-size: $font-size-h4;
             color: $color-black-100;
         }
