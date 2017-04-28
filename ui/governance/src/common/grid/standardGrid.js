@@ -47,7 +47,7 @@ class StandardGrid extends Component {
 
     render() {
         return (
-            <div>
+            <div className="gridWrapper">
                 <StandardGridToolbar id={this.props.id}
                                      doUpdate={this.props.doUpdate}/>
                 <div className="gridContainer">
