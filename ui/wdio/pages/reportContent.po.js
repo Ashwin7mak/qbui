@@ -23,7 +23,6 @@
         tableBody: {get: function() {return browser.element('.qbTbody');}},
         reportsToolBar : {get: function() {return browser.element('.reportToolbar');}},
         addRecordButton : {get: function() {return browser.element('.tableHomePageInitial .addRecordButton');}},
-        //this variables may have better names
         settingsIcon: {get: function() {return browser.element('.qbIcon.iconUISturdy-settings');}},
         modifyTableSettings: {get: function() {return browser.element('.modifyTableSettings');}},
         deleteTableActionButton: {get: function() {return browser.element('.iconActionButton.deleteTable');}},
@@ -310,9 +309,9 @@
         }},
 
         /**
-         * Method to enter table field input values
+         * Method to enter input values in a field
          * @fieldName
-         * @fieldValue
+         * @fieldValue ter
          */
         setInputValue : {value: function(fieldName, fieldValue) {
             fieldName.click();
