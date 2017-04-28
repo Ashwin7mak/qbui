@@ -568,9 +568,6 @@ module.exports = function(grunt) {
                     './wdio/tests/reports/reportAddRecord.e2e.spec.js',
                     // Stabilize in CI before enabling
                     './wdio/tests/reports/reportTable.e2e.spec.js',
-                    './wdio/tests/reports/grouping/reportGroupingViaColumnHeader.e2e.spec.js',
-                    './wdio/tests/reports/sorting/reportSortingViaColumnHeader.e2e.spec.js',
-
                     // Forms Tests
                     // Stabilize in CI before enabling
                     './wdio/tests/forms/formDragDrop.e2e.spec.js',
@@ -598,6 +595,8 @@ module.exports = function(grunt) {
                         './wdio/tests/reports/reportTopNav.e2e.spec.js',
                         './wdio/tests/reports/reportEditRecord.e2e.spec.js',
                         './wdio/tests/reports/reportNavigation.e2e.spec.js',
+                        './wdio/tests/reports/grouping/reportGroupingViaColumnHeader.e2e.spec.js',
+                        './wdio/tests/reports/sorting/reportSortingViaColumnHeader.e2e.spec.js',
                     ],
                     forms: [
                         './wdio/tests/forms/formAdd.e2e.spec.js',
