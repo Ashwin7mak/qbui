@@ -45,7 +45,7 @@
         a.iconLink {
             color: $color-black-100;
             display: inline-block;
-            height: 40px;
+            height: 32px;
             width: 32px;
             margin: 0;
         }
@@ -140,7 +140,6 @@ $reportActionsMinHeight: $tableActionsContainerMinHeight;
     }
 
     .reportActions {
-        line-height: $reportActionsMinHeight;
         align-items: center;
     }
 }
