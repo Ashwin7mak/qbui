@@ -282,6 +282,14 @@ const report = (state = [], action) => {
         }
         return state;
     }
+    case types.CHANGE_REPORT_NAME: {
+        let currentReport = getReportFromState(action.id);
+        if (currentReport) {
+            currentReport.data.name = action.content;
+            return newState(currentReport);
+        }
+        return state;
+    }
     default:
         // by default, return existing state
         return state;

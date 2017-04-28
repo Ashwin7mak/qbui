@@ -370,3 +370,14 @@ export const hideColumn = (context, appId, tblId, rptId, params) => {
     };
 };
 
+/**
+ * Change the reportName of the report
+ * @param context
+ * @param new_name - the new report name
+ * @returns {function(*)}
+ */
+export const changeReportName = (context, new_name) => {
+    return (dispatch) => {
+        dispatch(event(context, types.CHANGE_REPORT_NAME, new_name));
+    }
+};
