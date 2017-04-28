@@ -67,6 +67,25 @@ describe('Analytics', () => {
         expect(testMockElement.src).toEqual(`http://cdn.evergage.com/beacon/${EVERGAGE_ACCOUNT_NAME}/${mockDataset}/scripts/evergage.min.js`);
     });
 
+    it('removes the evergage script from the page if it exists', () => {
+        let testMockElement = {remove() {}};
+        spyOn(testMockElement, 'remove');
+        spyOn(document, 'getElementById').and.returnValue(testMockElement);
+
+        component = shallow(<Analytics dataset={mockDataset} />);
+        component.instance().componentWillUnmount();
+
+        expect(testMockElement.remove).toHaveBeenCalled();
+    });
+
+    it('does not remove the evergage script if it does not exist', () => {
+        spyOn(document, 'getElementById').and.returnValue(false);
+
+        component = shallow(<Analytics dataset={mockDataset} />);
+
+        expect(component.instance().componentWillUnmount).not.toThrow();
+    });
+
     describe('updating the user', () => {
         const testFirstUserId = 1;
 
