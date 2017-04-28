@@ -85,7 +85,10 @@ export class Analytics extends Component {
      * Removes the analytics script when the component unmounts
      */
     componentWillUnmount() {
-        document.getElementById(ANALYTICS_SCRIPT_ID).remove();
+        let analyticsScript = document.getElementById(ANALYTICS_SCRIPT_ID);
+        if (analyticsScript) {
+            analyticsScript.remove();
+        }
     }
 
     /**
