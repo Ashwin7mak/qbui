@@ -2,6 +2,7 @@ import {FORBIDDEN, INTERNAL_SERVER_ERROR} from  "../../../../client-react/src/co
 import * as actions from "../../../src/account/users/AccountUsersActions";
 import {__RewireAPI__ as AccountUsersActionsRewireAPI} from "../../../src/account/users/AccountUsersActions";
 import * as types from "../../../src/app/actionTypes";
+import * as gridTypes from "../../../src/common/grid/standardGridActionTypes";
 import configureMockStore from "redux-mock-store";
 import thunk from "redux-thunk";
 import Promise from "bluebird";
@@ -161,8 +162,25 @@ describe('Account Users Actions Tests', () => {
         it('dispatches correctly', () => {
 
             const store = mockStore({AccountUsers: {users: USERS}});
-            store.dispatch(actions.doUpdate(1, {sortFids: [1], pagination:{itemsPerpage:10}}));
-            expect(store.getActions(1).items).toEqual(SORTED_USERS);
+            let gridId = 1;
+            let itemsPerpage = 10;
+            let gridState = {
+                sortFids: [1],
+                pagination: {currentPage:1}};
+
+            store.dispatch(actions.doUpdate(gridId, gridState, itemsPerpage));
+            const expectedActions = [
+                {
+                    type: gridTypes.SET_PAGINATION,
+                    gridId: gridId,
+                    pagination: {totalRecords: USERS.length, totalPages: 1, currentPage: 1, itemsPerPage: itemsPerpage}},
+                {
+                    type: gridTypes.SET_ITEMS,
+                    gridId: gridId,
+                    items: SORTED_USERS
+                }
+            ];
+            expect(store.getActions(1)).toEqual(expectedActions);
         });
     });
 
