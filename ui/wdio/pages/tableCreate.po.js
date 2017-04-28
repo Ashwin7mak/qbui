@@ -179,7 +179,7 @@
             //Verify the name of the button
             expect(this.newTableBtn.getAttribute('textContent')).toContain('New Table');
             //Verify there is also + Icon associated with it
-            this.newTableBtn.element('.iconUISturdy-add-mini').waitForVisible();
+            this.newTableBtn.element('.iconUISturdy-add-new-stroke').waitForVisible();
             //Click on the new Table Btn
             this.newTableBtn.click();
             return browser.element('.tableFieldInput').waitForVisible();
