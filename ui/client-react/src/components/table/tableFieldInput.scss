@@ -1,7 +1,7 @@
 @import '../../assets/css/_qbVariables';
 
 .tableField {
-    min-width: 50%;
+    width: 50%;
     margin-bottom: 30px;
 
     &:first-of-type {
@@ -36,5 +36,12 @@
             border-left-width: 5px;
             box-shadow: none;
         }
+    }
+}
+
+@include small-breakpoint {
+    .tableField {
+        min-width: 50%;
+        width: inherit;
     }
 }

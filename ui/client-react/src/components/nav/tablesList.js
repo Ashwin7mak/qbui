@@ -144,9 +144,9 @@ let TablesList = React.createClass({
 
         return (
             <li className="newTableItem link" key="newTable">
-                <div className="newTable" onClick={this.props.onCreateNewTable}>
-                    <QBicon icon="add-mini"/><I18nMessage message="tableCreation.newTablePageTitle"/>
-                </div>
+                <a className="newTable leftNavLink" onClick={this.props.onCreateNewTable}>
+                    <QBicon icon="add-mini"/><span className="leftNavLabel"><I18nMessage message="tableCreation.newTablePageTitle"/></span>
+                </a>
             </li>);
     },
 
