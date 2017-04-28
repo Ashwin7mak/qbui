@@ -1,7 +1,6 @@
 import React, {PropTypes} from 'react';
 import {NotificationContainer} from "react-notifications";
 import {withRouter, Switch} from 'react-router-dom';
-import FormBuilderContainer from './formBuilderContainer';
 import Fluxxor from "fluxxor";
 import {connect} from 'react-redux';
 import commonNavActions from '../../../../reuse/client/src/components/sideNavs/commonNavActions';
@@ -48,13 +47,23 @@ export const BuilderWrapper = React.createClass({
     },
 
     render() {
-        console.log('BUILDERWRAPPER: ', this.props);
         let title = `${Locale.getMessage('builder.modify')}`;
+        let section = this.props.qbui.forms.view && this.props.qbui.forms.view.formData ? this.props.qbui.forms.view.formData.formMeta.tabs[0].sections[0] : undefined;
+        let sectionTitle = '';
+        // build the section header.
+        if (section && _.has(section, 'headerElement.FormHeaderElement.displayText')) {
+            sectionTitle = section.headerElement.FormHeaderElement.displayText;
+            if (sectionTitle.length > 20) {
+                let tempSectionTitle = sectionTitle.slice(0, 20);
+                sectionTitle = `${tempSectionTitle}...`;
+            }
+        }
+
         return (
             <div className="builderWrapperContent">
                 <NotificationContainer/>
                 <TopNav
-                    title={title}
+                    title={`${title} ${sectionTitle}`}
                     onNavClick={this.props.toggleNav}
                     globalActions={this.getTopGlobalActions()}
                     tabIndex={tabIndexConstants.FORM_BUILDER_TOGGLE_NAV_BUTTON_TABINDEX}
