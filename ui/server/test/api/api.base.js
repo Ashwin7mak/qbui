@@ -29,7 +29,7 @@
 
         var HTTP = 'http://';
         var HTTPS = 'https://';
-        var NODE_BASE_ENDPOINT = '/qbn';
+        var NODE_BASE_ENDPOINT = '/qbui';
         var JAVA_BASE_ENDPOINT = '/api/api/v1';
         var EE_BASE_ENDPOINT = '/ee/v1';
         var APPS_ENDPOINT = '/apps/';
@@ -41,6 +41,7 @@
         var REPORTS_ENDPOINT = '/reports/';
         var REPORTS_RESULTS_ENDPOINT = '/results';
         var RECORDS_ENDPOINT = '/records/';
+        var RECORDS_BULK = '/records/bulk';
         var REALMS_ENDPOINT = '/realms/';
         var USERS_ENDPOINT = '/users/';
         var BULK_USERS_ENDPOINT = '/users/bulk';
@@ -184,11 +185,14 @@
                 return appsEndpoint;
             },
             resolveRecordsEndpoint      : function(appId, tableId, recordId) {
-                var endpoint = this.resolveAppsEndpoint(appId) + TABLES_ENDPOINT + tableId + RECORDS_ENDPOINT;
+                var endpoint = NODE_BASE_ENDPOINT + APPS_ENDPOINT + appId + TABLES_ENDPOINT + tableId + RECORDS_ENDPOINT;
                 if (recordId) {
                     endpoint = endpoint + recordId;
                 }
                 return endpoint;
+            },
+            resolveRecordsBulkEndpoint      : function(appId, tableId) {
+                return this.resolveAppsEndpoint(appId) + TABLES_ENDPOINT + tableId + RECORDS_BULK;
             },
             resolveRelationshipsEndpoint: function(appId, realmId) {
                 var endpoint = this.resolveAppsEndpoint(appId) + RELATIONSHIPS_ENDPOINT;
@@ -204,8 +208,14 @@
                 }
                 return endpoint;
             },
-            resolveTablesEndpoint       : function(appId, tableId) {
-                var tableEndpoint = this.resolveAppsEndpoint(appId) + TABLES_ENDPOINT;
+            resolveTablesEndpoint       : function(appId, tableId, nodeRoute) {
+                var tableEndpoint;
+                if (nodeRoute) {
+                    tableEndpoint = NODE_BASE_ENDPOINT + APPS_ENDPOINT + appId + TABLES_ENDPOINT;
+                } else {
+                    tableEndpoint = this.resolveAppsEndpoint(appId) + TABLES_ENDPOINT;
+                }
+
                 if (tableId) {
                     tableEndpoint = tableEndpoint + tableId;
                 }
@@ -221,10 +231,16 @@
                 }
                 return formEndpoint;
             },
-            resolveReportsEndpoint      : function(appId, tableId, reportId) {
-                var reportEndpoint = this.resolveAppsEndpoint(appId) + TABLES_ENDPOINT + tableId + REPORTS_ENDPOINT;
+            resolveReportsEndpoint      : function(appId, tableId, reportId, nodeRoute) {
+                var reportEndpoint;
+                if (nodeRoute) {
+                    reportEndpoint = NODE_BASE_ENDPOINT + APPS_ENDPOINT + appId + TABLES_ENDPOINT + tableId + REPORTS_ENDPOINT;
+                } else {
+                    reportEndpoint = this.resolveAppsEndpoint(appId) + TABLES_ENDPOINT + tableId + REPORTS_ENDPOINT;
+                }
+
                 if (reportId) {
-                    reportEndpoint = reportEndpoint + reportId + REPORTS_RESULTS_ENDPOINT;
+                    reportEndpoint =  reportEndpoint + reportId;
                 }
                 return reportEndpoint;
             },
@@ -282,10 +298,10 @@
                 return endpoint;
             },
             resolveGetReqUserEndpoint       : function() {
-                return JAVA_BASE_ENDPOINT + USERS_ENDPOINT + REQ_USER;
+                return NODE_BASE_ENDPOINT + USERS_ENDPOINT + REQ_USER;
             },
             resolveTableComponentsEndpoint       : function(appId) {
-                return JAVA_BASE_ENDPOINT + APPS_ENDPOINT + appId + TABLES_ENDPOINT + TABLE_COMPONENTS;
+                return NODE_BASE_ENDPOINT + APPS_ENDPOINT + appId + TABLES_ENDPOINT + TABLE_COMPONENTS;
             },
             defaultHeaders              : DEFAULT_HEADERS,
 

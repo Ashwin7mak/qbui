@@ -108,22 +108,6 @@
 
                 requestFunctions[routes.GOVERNANCE_ACCOUNT_USERS] = getAccountUsers;
                 requestFunctions[routes.GOVERNANCE_CONTEXT] = getGovernanceContext;
-
-                // ****** TEMP E2E routes..to be removed once JIRA MC-2268 is complete ******
-                requestFunctions[routes.E2E_APPS] = getApps;
-                requestFunctions[routes.E2E_APP_USERS] = getAppUsers;
-                requestFunctions[routes.E2E_APP_ROLES] = getAppRoles;
-                requestFunctions[routes.E2E_FORM_COMPONENTS] = fetchFormComponents;
-                requestFunctions[routes.E2E_FORM_AND_RECORD_COMPONENTS] = fetchFormAndRecordComponents;
-                requestFunctions[routes.E2E_RECORD] = fetchSingleRecord;
-                requestFunctions[routes.E2E_RECORDS] = fetchAllRecords;
-                requestFunctions[routes.E2E_REPORT_META] = fetchReportMeta;
-                requestFunctions[routes.E2E_REPORT_RESULTS] = fetchReportResults;
-                requestFunctions[routes.E2E_REPORT_INVOKE_RESULTS] = fetchReportInvokeResults;
-                requestFunctions[routes.E2E_REPORT_RECORDS_COUNT] = fetchReportRecordsCount;
-                requestFunctions[routes.E2E_TABLE_HOMEPAGE_REPORT] = fetchTableHomePageReport;
-                requestFunctions[routes.E2E_REQ_USER] = getReqUser;
-                // **********
             }
 
             requestFunctions[routes.QBUI_HEALTH] = getHealthCheck;
@@ -150,11 +134,6 @@
             if (config.publicRoutesOnly !== true) {
                 requestFunctions[routes.RECORD] = saveSingleRecord;
                 requestFunctions[routes.TABLE] = updateTable;
-
-                // ****** TEMP E2E routes..to be removed once JIRA MC-2268 is complete ******
-                requestFunctions[routes.E2E_RECORD] = saveSingleRecord;
-                requestFunctions[routes.E2E_TABLE] = updateTable;
-                // **********
             }
 
             return requestFunctions;
@@ -178,11 +157,6 @@
 
                 requestFunctions[routes.RECORDS] = createSingleRecord;
                 requestFunctions[routes.TABLE_COMPONENTS] = createTableComponents;
-
-                // ****** TEMP E2E routes..to be removed once JIRA MC-2268 is complete ******
-                requestFunctions[routes.E2E_RECORDS] = createSingleRecord;
-                requestFunctions[routes.E2E_TABLE_COMPONENTS] = createTableComponents;
-                // **********
             }
 
             return requestFunctions;
@@ -213,7 +187,7 @@
          * @returns List of get routes
          */
         function bindAllRequestRouteToFunction(routes) {
-            var requestFunctions = {};
+            let requestFunctions = {};
             //
             routesConstants.publicEndPoints.forEach(endPoint => {
                 requestFunctions[endPoint.route] = forwardApiRequest;
@@ -228,12 +202,12 @@
         }
 
         // Map all requests
-        var routeToGetFunction = bindGetRequestRouteToFunction(routesConstants.routes);
-        var routeToPostFunction = bindPostRequestRouteToFunction(routesConstants.routes);
-        var routeToPutFunction = bindPutRequestRouteToFunction(routesConstants.routes);
-        var routeToPatchFunction = bindPatchRequestRouteToFunction(routesConstants.routes);
-        var routeToDeleteFunction = bindDeleteRequestRouteToFunction(routesConstants.routes);
-        var routeToAllFunction = bindAllRequestRouteToFunction(routesConstants.routes);
+        let routeToGetFunction = bindGetRequestRouteToFunction(routesConstants.routes);
+        let routeToPostFunction = bindPostRequestRouteToFunction(routesConstants.routes);
+        let routeToPutFunction = bindPutRequestRouteToFunction(routesConstants.routes);
+        let routeToPatchFunction = bindPatchRequestRouteToFunction(routesConstants.routes);
+        let routeToDeleteFunction = bindDeleteRequestRouteToFunction(routesConstants.routes);
+        let routeToAllFunction = bindAllRequestRouteToFunction(routesConstants.routes);
 
         return {
 
@@ -1303,7 +1277,7 @@
     }
 
     /**
-     * This is the function for forwarding a request to the core server.
+     * Forward a request
      *
      * @param req
      * @param res

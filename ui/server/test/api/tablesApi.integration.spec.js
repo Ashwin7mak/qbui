@@ -55,7 +55,7 @@
                 (response) => {
                     var tableId = response.body;
                     //get table, tableprops, fields, report and form
-                    var tableEndpoint = recordBase.apiBase.resolveTablesEndpoint(app.id, tableId);
+                    var tableEndpoint = recordBase.apiBase.resolveTablesEndpoint(app.id, tableId, true);
                     recordBase.apiBase.executeRequest(tableEndpoint, consts.GET).then(
                         (tableResponse) => {
                             var table = JSON.parse(tableResponse.body);
@@ -116,13 +116,13 @@
             this.timeout(testConsts.INTEGRATION_TIMEOUT);
 
             var tableId = app.tables[0].id;
-            var tablesEndpoint = recordBase.apiBase.resolveTablesEndpoint(app.id, tableId);
+            var tablesEndpoint = recordBase.apiBase.resolveTablesEndpoint(app.id, tableId, true);
             let name = testUtils.generateRandomString(10);
             const payload = {name: name, description: "desc", tableIcon: "icon", tableNoun: "noun"};
             recordBase.apiBase.executeRequest(tablesEndpoint, consts.PATCH, payload).then(
                 (response) => {
                     var promises = [];
-                    var tableEndpoint = recordBase.apiBase.resolveTablesEndpoint(app.id, tableId);
+                    var tableEndpoint = recordBase.apiBase.resolveTablesEndpoint(app.id, tableId, true);
                     promises.push(recordBase.apiBase.executeRequest(tableEndpoint, consts.GET));
                     var tablePropsEndpoint = recordBase.apiBase.resolveTablePropertiesEndpoint(app.id, tableId);
                     promises.push(recordBase.apiBase.executeRequest(tablePropsEndpoint, consts.GET));
@@ -155,7 +155,7 @@
             this.timeout(testConsts.INTEGRATION_TIMEOUT);
 
             var tableId = app.tables[0].id;
-            var tablesEndpoint = recordBase.apiBase.resolveTablesEndpoint(app.id, tableId);
+            var tablesEndpoint = recordBase.apiBase.resolveTablesEndpoint(app.id, tableId, true);
             recordBase.apiBase.executeRequest(tablesEndpoint, consts.DELETE).then(
                 (response) => {
                     var tablePropsEndpoint = recordBase.apiBase.resolveTablePropertiesEndpoint(app.id, tableId);
@@ -165,7 +165,7 @@
                         },
                         (eeError) => {
                             assert.equal(eeError.statusCode, 404, "Table should have been deleted on EE");
-                            var tableEndpoint = recordBase.apiBase.resolveTablesEndpoint(app.id, tableId);
+                            var tableEndpoint = recordBase.apiBase.resolveTablesEndpoint(app.id, tableId, true);
                             recordBase.apiBase.executeRequest(tableEndpoint, consts.GET).then(
                                 () => {
                                     done(new Error("Unexpected error, table expected to be deleted on Core and EE"));

@@ -73,31 +73,7 @@
 
         GOVERNANCE_ACCOUNT_USERS    : context.api.GOVERNANCE + '/:accountId/users',
         // the account id is an optional parameter
-        GOVERNANCE_CONTEXT          : context.api.GOVERNANCE + '/context',
-
-        // ************ TEMPORARY routes needed to allow E2E tests to continue to work under new routing scheme  *************
-        // ************ PLEASE DO NOT ADD TO THIS LIST as these will go away once E2E is updated                 *************
-        //  E2E needs these routes to be defined as some tests do not differentiate between the /qbui prefixed route or
-        //  the /api/api/v1 core routes.  JIRA MC-2268 has been created to refactor how routing is constructed so that the
-        //  test framework does not call the custom routing using the incorrect prefix.
-        E2E_FORM_AND_RECORD_COMPONENTS  : context.api.CORE + '/apps/:appId/tables/:tableId/records/:recordId/formComponents',
-        E2E_FORM_COMPONENTS             : context.api.CORE + '/apps/:appId/tables/:tableId/formComponents',
-        E2E_RECORD                      : context.api.CORE + '/apps/:appId/tables/:tableId/records/:recordId',
-        E2E_RECORDS                     : context.api.CORE + '/apps/:appId/tables/:tableId/records',
-        E2E_RECORDS_BULK                : context.api.CORE + '/apps/:appId/tables/:tableId/records/bulk',
-        E2E_REPORT_META                 : context.api.CORE + '/apps/:appId/tables/:tableId/reports/:reportId',
-        E2E_REPORT_RESULTS              : context.api.CORE + '/apps/:appId/tables/:tableId/reports/:reportId/results',
-        E2E_REPORT_INVOKE_RESULTS       : context.api.CORE + '/apps/:appId/tables/:tableId/reports/:reportId/invoke',
-        E2E_REPORT_RECORDS_COUNT        : context.api.CORE + '/apps/:appId/tables/:tableId/reports/:reportId/recordsCount',
-        E2E_TABLE_HOMEPAGE_REPORT       : context.api.CORE + '/apps/:appId/tables/:tableId/homePage',
-        E2E_TABLE_COMPONENTS            : context.api.CORE + '/apps/:appId/tables/tableComponents',
-        E2E_TABLE                       : context.api.CORE + '/apps/:appId/tables/:tableId',
-        E2E_TABLES                      : context.api.CORE + '/apps/:appId/tables',
-        E2E_APPS                        : context.api.CORE + '/apps',
-        E2E_APP_USERS                   : context.api.CORE + '/apps/:appId/users',
-        E2E_APP_ROLES                   : context.api.CORE + '/apps/:appId/roles',
-        E2E_REQ_USER                    : context.api.CORE + '/users/reqUser'
-        // ********************************************************************************
+        GOVERNANCE_CONTEXT          : context.api.GOVERNANCE + '/context'
     };
 
     /*
