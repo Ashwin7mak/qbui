@@ -578,7 +578,8 @@ export default {
                 numeric: 'Nombre',
                 date: 'Date',
                 other: 'Autre'
-            }
+            },
+            modify: 'Modifier'
         },
         featureSwitchAdmin: {
             defaultFeatureName: "Fonctionnalité",

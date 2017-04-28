@@ -16,6 +16,14 @@ $builder-wrapper-border-color: $color-black-300;
         .btn-group button {
             background-color: $color-purple-600;
         }
+
+        .topTitle {
+            padding-top: 10px;
+            display: block;
+            font-family: Lato;
+            font-size: $font-size-h4;
+            color: $color-black-100;
+        }
     }
     .builderWrapperBody {
         height: calc(100% - #{$top-nav-height} - 1px);

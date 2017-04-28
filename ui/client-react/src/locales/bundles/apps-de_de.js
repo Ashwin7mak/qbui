@@ -579,7 +579,8 @@ export default {
                 numeric: "Nummer",
                 date: "Datum",
                 other: "Andere"
-            }
+            },
+            modify: 'Ändern'
         },
         featureSwitchAdmin: {
             defaultFeatureName: "Feature",
