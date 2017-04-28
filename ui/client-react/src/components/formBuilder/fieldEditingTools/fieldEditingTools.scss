@@ -27,13 +27,6 @@
         cursor: pointer;
     }
 
-    &.active {
-        //opacity: .2;
-        //@include dragpreview-active-gradient;
-        border: 1px dashed gray;
-        background-color: orange;
-    }
-
     button {
         background: transparent;
         outline: none;
@@ -122,4 +115,14 @@
         box-shadow: 0 0 2px 0px rgba(0, 157, 235, 0.75);
         border: $stroke-width-thin solid $border-focused-color;
     }
+
+    &.active {
+        //opacity: .2;
+        //@include dragpreview-active-gradient;
+        box-shadow: none;
+        border: $stroke-width-thick dashed $color-black-300;
+        background-color: $color-orange-100;
+        width: 335px;
+    }
+
 }

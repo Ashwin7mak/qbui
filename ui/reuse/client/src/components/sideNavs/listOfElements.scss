@@ -25,11 +25,14 @@ $toolpalette-header-font-size: 10px;
 
     .listOfElementsMainList, .listOfElementsItemList {
         list-style-type: none;
-        padding: 0 0 $spacing-xxx-small 0;
+        padding: 0;
     }
 
     .listOfElementsMainList {
         margin-bottom: $spacing-medium3; // Add margin to the bottom so the last element can be seen when scrolled to the bottom
+        .listOfElementsItemGroup {
+            padding-top: $spacing-xx-small;
+        }
     }
 
     .listOfElementsItemList {

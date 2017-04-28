@@ -112,8 +112,6 @@ class ListOfElements extends Component {
             if (element.children) {
                 return (
                     <li key={element.key || `group_${index}`} className="listOfElementsItemGroup">
-                        <h6 className="listOfElementsItemHeader">{element.title}</h6>
-
                         <ul className="listOfElementsItemList">
                             {this.renderElements(element.children)}
                         </ul>
