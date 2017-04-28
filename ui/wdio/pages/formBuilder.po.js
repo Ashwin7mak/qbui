@@ -181,10 +181,10 @@ class formBuilderPage {
     slowDragAndDrop(source, target) {
         // Clicks on the specified source field and drags it to the specified target field
         let label = browser.element(source).getText();
-        browser.moveToObject(source.element(',fieldLabel'));
+        browser.moveToObject(source + ' .fieldLabel');
         browser.buttonDown();
         // move to target & wait until preview appears
-        this.slowDrag(target.element('.fieldLabel'), label);
+        this.slowDrag(target + ' .fieldLabel', label);
         // release button
         browser.buttonUp();
         // pause to terminate drag (which is one reason why we can't just call dragAndDrop)
