@@ -62,6 +62,13 @@ describe('ListOfElements', () => {
         expect(headers.at(1)).toHaveText(testElements[1].title);
     });
 
+    it('does not display groups of fields', () => {
+        component = mount(<ListOfElements hideTitle={true} renderer={FieldTokenInMenuMock} elements={testElements}/>);
+
+        const headers = component.find('.listOfElementsItemHeader');
+        expect(headers.length).toEqual(0); // Subtract one to account for single ungrouped element
+    });
+
     it('displays an un-grouped element', () => {
         component = mount(<ListOfElements renderer={FieldTokenInMenuMock} elements={testElements} />);
 

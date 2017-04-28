@@ -64,7 +64,7 @@
         transition: background-color 0.5s ease;
         border: $stroke-width-thick solid $border-focused-color;
         border-radius: $radius-base;
-        box-shadow: 0 0 4px 0px rgba(0, 157, 235, 0.75);
+        box-shadow: 0 0 4px 0px rgba($color-indigo-500, 0.75);
 
         .deleteFieldIcon {
             button {
@@ -112,7 +112,7 @@
         //For keyboard nav
         opacity: 1;
         outline: none;
-        box-shadow: 0 0 2px 0px rgba(0, 157, 235, 0.75);
+        box-shadow: 0 0 2px 0px rgba($color-indigo-500, 0.75);
         border: $stroke-width-thin solid $border-focused-color;
     }
 

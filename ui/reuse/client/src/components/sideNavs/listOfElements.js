@@ -112,6 +112,8 @@ class ListOfElements extends Component {
             if (element.children) {
                 return (
                     <li key={element.key || `group_${index}`} className="listOfElementsItemGroup">
+                        {this.props.hideTitle ? null : <h6 className="listOfElementsItemHeader">{element.title}</h6>}
+
                         <ul className="listOfElementsItemList">
                             {this.renderElements(element.children)}
                         </ul>
@@ -164,6 +166,10 @@ ListOfElements.propTypes = {
     /**
      * Show the list of elements in an open state */
     isOpen: PropTypes.bool,
+
+    /**
+     * Hide the title of a group of elements */
+    hideTitle: PropTypes.bool,
 
     /**
      * Displays the filter box at the top of the menu */
