@@ -131,7 +131,7 @@
         beforeAll(function() {
             var reportRecordsViaAPI;
             //report Endpoint
-            var reportEndpoint = e2eBase.recordBase.apiBase.resolveReportsEndpoint(app.id, app.tables[e2eConsts.TABLE1].id, DEFAULT_REPORT_ID);
+            var reportEndpoint = e2eBase.recordBase.apiBase.resolveReportsEndpoint(app.id, app.tables[e2eConsts.TABLE1].id, DEFAULT_REPORT_ID, true);
             //GET report results
             browser.call(function() {
                 return e2eBase.recordBase.apiBase.executeRequest(reportEndpoint, consts.GET).then(function(reportResult) {
