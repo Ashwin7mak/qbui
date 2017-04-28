@@ -130,12 +130,14 @@ describe('UserManagement functions', () => {
         expect(users).toEqual(usersResolved);
     });
 
-    it('test createRows method with NO users and roles data', () => {
+    it('test getActionCellProps method', () => {
         let component = TestUtils.renderIntoDocument(<UserManagement appUsers={appUsersEmpty}
                                                                      appRoles={appRoles}
                                                                      selectedRows={selectedRows}
                                                                      appId={appId}/>);
-        let users = component.createUserRows();
-        expect(users).toEqual([]);
+        let cellProps = component.getActionCellProps();
+        expect(cellProps).toEqual({isStickyCell: true});
     });
+
+
 });

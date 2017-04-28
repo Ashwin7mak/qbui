@@ -2,8 +2,7 @@ import React, {PropTypes} from 'react';
 export const SELECT_ROW_CHECKBOX = 'selectRowCheckbox';
 
 /**
- * The actions that appear in the first column of the QbGrid.
- * @type {__React.ClassicComponentClass<P>}
+ * The actions that appear in the first column of the Table.
  */
 const UserRowActions = React.createClass({
     propTypes: {

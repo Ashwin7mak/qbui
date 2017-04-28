@@ -1,5 +1,5 @@
 import * as actions from '../constants/actions';
-
+import Locale from '../locales/locales';
 import Fluxxor from 'fluxxor';
 import Logger from '../utils/logger';
 var logger = new Logger();
@@ -152,7 +152,11 @@ let AppsStore = Fluxxor.createStore({
         this.appUsersUnfiltered[data.roleId] = appUsersUnfiltered;
         this.appUsers = appUsers;
         this.selectedUserRows = [];
-        NotificationManager.success((users + 'Users have been removed'));
+        let msg = " ";
+        msg = (users > 1) ? users + Locale.getMessage('app.users.usersRemoved') :
+        msg = users + Locale.getMessage('app.users.userRemoved');
+
+        NotificationManager.success(msg);
         this.emit('change');
     },
     onUnasssignUsersFail() {

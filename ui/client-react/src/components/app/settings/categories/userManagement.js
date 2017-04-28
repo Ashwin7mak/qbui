@@ -30,10 +30,8 @@ class UserManagement extends React.Component {
         this.createUserRows = this.createUserRows.bind(this);
         this.getActionsCell = this.getActionsCell.bind(this);
         this.getActionCellProps = this.getActionCellProps.bind(this);
-        this.getActionCellProps = this.getActionCellProps.bind(this);
         this.getCheckboxHeader = this.getCheckboxHeader.bind(this);
         this.onClickToggleSelectedRow = this.onClickToggleSelectedRow.bind(this);
-        this.handleScroll = this.handleScroll.bind(this);
     }
 
     createUserColumns(cellFormatter) {
@@ -102,37 +100,6 @@ class UserManagement extends React.Component {
             isStickyCell: true
         };
     }
-
-    /**
-     * stick the header and sticky first column when the grid scrolls
-     */
-    handleScroll() {
-        let scrolled = this.tableRef;
-        if (scrolled) {
-            let currentLeftScroll = scrolled.scrollLeft;
-            let currentTopScroll = scrolled.scrollTop;
-
-            // move the headers down to their original positions
-            let stickyHeaders = scrolled.getElementsByClassName('qbHeaderCell');
-            for (let i = 0; i < stickyHeaders.length; i++) {
-                let translate = "translate(0," + currentTopScroll + "px)";
-                stickyHeaders[i].style.transform = translate;
-            }
-
-            // move the sticky cells (1st col) right to their original positions
-            let stickyCells = scrolled.getElementsByClassName('stickyCell');
-
-            stickyCells[0].style.left = currentLeftScroll + 'px';
-            stickyCells[0].style.right = 0;
-            stickyCells[0].style.bottom = 0;
-
-            for (let i = 1; i < stickyCells.length; i++) {
-                let translate = "translate(" + currentLeftScroll + "px,0)";
-                stickyCells[i].style.transform = translate;
-            }
-        }
-    }
-
     /**
      * get the 1st column header (select-all toggle)
      * @returns {React}
@@ -180,7 +147,7 @@ class UserManagement extends React.Component {
         return (
             <div className="userManagementReport">
                 <Table.Provider columns={columns} className="qbGrid"
-                    onScroll={this.handleScroll}
+
                     components={{
                         header: {
                             cell: QbHeaderCell

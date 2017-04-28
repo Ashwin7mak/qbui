@@ -212,4 +212,49 @@ describe('Apps Actions functions with Tables', () => {
         });
     });
 
+    it("Test unassign Users", function(done) {
+        var test = {appId: 187, userIds: 187, roleId: 1};
+        appsActionsRewireAPI.__Rewire__('RoleService', mockRoleServiceFailure);
+        flux.actions.unassignUsers(test.appId, test.roleId, test.userIds).then(
+            () => {
+                expect(true).toBe(true);
+                done();
+            },
+            () => {
+                expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([]);
+                expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(0);
+                done();
+            }
+        );
+    });
+
+    it("Test Select Table Id ", function(done) {
+        var test = {tableId: 1};
+        appsActionsRewireAPI.__Rewire__('UserService', mockUserServiceFailure);
+        var result = flux.actions.selectTableId(test.tableId);
+        expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.SELECT_TABLE, 1]);
+        expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(1);
+        done();
+    });
+
+
+    it("Test updateTableProps", function(done) {
+        var test = {tableId: 1, tableInfo: ''};
+        appsActionsRewireAPI.__Rewire__('UserService', mockUserServiceFailure);
+        var result = flux.actions.updateTableProps(test.tableId, test.tableInfo);
+        expect(flux.dispatchBinder.dispatch.calls.argsFor(0)[0]).toEqual(actions.UPDATED_TABLE_PROPS);
+        expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(1);
+        done();
+    });
+
+
+    it("Test selectUsersRows", function(done) {
+        var test = {selectedDetails: 1};
+        appsActionsRewireAPI.__Rewire__('UserService', mockUserServiceFailure);
+        var result = flux.actions.selectUsersRows(test.selectedDetails);
+        expect(flux.dispatchBinder.dispatch.calls.argsFor(0)[0]).toEqual(actions.SELECT_USERS_DETAILS);
+        expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(1);
+        done();
+    });
+
 });

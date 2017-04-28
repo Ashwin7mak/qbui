@@ -68,7 +68,7 @@ describe('QbModal', () => {
         component = buildMockParentComponent();
         domComponent = document.querySelector(qbModalClass);
 
-        expect(domComponent).toBeNull();
+        expect(domComponent).not.toBeNull();
     });
 
     it('can have a title', () => {

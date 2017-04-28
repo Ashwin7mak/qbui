@@ -44,9 +44,11 @@ export default {
                 removeUser: "Remove this user?",
                 unassignUser: "Users will no longer be able to access this application. Any data they have previously entered will remain in the application.",
                 remove: "Remove",
-                dontremove: "Don't remove",
+                cancel: "Cancel",
                 singular: "user",
-                plural: "users"
+                plural: "users",
+                usersRemoved: " users have been removed",
+                userRemoved: " user has been removed"
 
             }
         },
@@ -505,9 +507,9 @@ export default {
             copy: "Copying is not available yet",
             email: "Emailing is not available yet",
             delete: "Deleting is not available yet",
-            downloadCloud: "Export CSV is not available yet",
-            settingsRole: "Change role is not available yet",
-            emailApp: "Send app invite is not available yet",
+            downloadCloud: "Exporting CSV is not available yet",
+            settingsRole: "Changing role is not available yet",
+            emailApp: "Sending app invite is not available yet",
         },
         pageTitles: {
             pageTitleSeparator: " - ",

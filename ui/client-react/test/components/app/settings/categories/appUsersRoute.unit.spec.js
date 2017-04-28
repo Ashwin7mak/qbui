@@ -16,11 +16,13 @@ describe('AppUsersRoute functions', () => {
     const appOwner = {firstName: "Captain", lastName: "Falcon", email: "cfalc@fzero.com"};
     const appOwerNoEmail = {firstName: "Captain", lastName: "Falcon"};
     const match = {params: {appId: appId}};
+    const nextMatch = {params: {appId: 2}};
     const flux = {
         actions:{
             loadAppRoles: function() {return;},
             loadAppOwner: function() {return;},
-            selectUsersRows: function() {return;}
+            selectUsersRows: function() {return;},
+            selectedUsersRows: function() {return;}
         }
     };
 
@@ -35,6 +37,7 @@ describe('AppUsersRoute functions', () => {
     beforeEach(() => {
         spyOn(flux.actions, 'loadAppRoles');
         spyOn(flux.actions, 'loadAppOwner');
+        spyOn(flux.actions, 'selectedUsersRows');
     });
 
     afterEach(() => {
@@ -68,6 +71,45 @@ describe('AppUsersRoute functions', () => {
         instance.componentDidMount();
         instance.selectAllRows();
         expect(flux.actions.loadAppRoles).toHaveBeenCalled();
+        AppUsersRouteAPI.__ResetDependency__('IconActions');
+    });
+
+    it('test component will receive props', () => {
+        AppUsersRouteAPI.__Rewire__('IconActions', IconActionsMock);
+
+        // expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+        let component = shallow(<AppUsersRoute appUsersUnfiltered={appUsersUnfiltered}
+                                           appRoles={appRoles}
+                                           appOwner={appOwner}
+                                           flux={flux}
+                                           selectedApp={selectedApp}
+                                           selectedUserRows={[]}
+                                           params={{appId: 1}}
+                                           appUsers={[]}
+                                           match={match}/>);
+        let instance = component.instance();
+        instance.componentWillReceiveProps({appUsersUnfiltered, match: nextMatch, appRoles, appOwner, flux, selectedApp, selectedUserRows: [], params:{appId:2}, appUsers:[]});
+        expect(flux.actions.loadAppRoles).toHaveBeenCalled();
+        AppUsersRouteAPI.__ResetDependency__('IconActions');
+    });
+    it('test Selections', () => {
+        AppUsersRouteAPI.__Rewire__('IconActions', IconActionsMock);
+        let component = shallow(<AppUsersRoute appUsersUnfiltered={appUsersUnfiltered}
+                                           appRoles={appRoles}
+                                           appOwner={appOwner}
+                                           flux={flux}
+                                           selectedApp={selectedApp}
+                                           selectedUserRows={[]}
+                                           params={{appId: 1}}
+                                           appUsers={[]}
+                                           match={match}/>);
+        let instance = component.instance();
+        // let filteredUsers = instance.addRoleIds();
+        instance.toggleSelectedRow(1, 1);
+        instance.toggleSelectAllRows();
+        instance.deselectAllRows();
+        // console.log(filteredUsers);
+        // expect(flux.actions.selectedUsersRows).toHaveBeenCalled();
         AppUsersRouteAPI.__ResetDependency__('IconActions');
     });
 });
