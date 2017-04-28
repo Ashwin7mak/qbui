@@ -32,7 +32,8 @@ $custom-row-card-horizontal-padding: $custom-row-card-padding-left + $custom-row
     position: relative;
     padding: 5px $custom-row-card-padding-right 15px $custom-row-card-padding-left;
     background: $card-expanded-background-color;
-    margin-bottom: 5px;
+    border-top: 1px solid $color-black-300;
+    /*margin-bottom: 5px;*/
     overflow: hidden;
     cursor: pointer;
 
@@ -171,10 +172,11 @@ $custom-row-card-horizontal-padding: $custom-row-card-padding-left + $custom-row
 }
 
 .custom-row-card.expanded {
-    border: 0;
+    /*border: 0;
     -webkit-box-shadow: 0 0px 2px 2px $card-view-shadow-color;
     -moz-box-shadow: 0 0px 2px 2px $card-view-shadow-color;
     box-shadow: 0 0px 2px 2px $card-view-shadow-color;
+    */
 }
 
 .checkboxContainer {
