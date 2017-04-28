@@ -26,12 +26,7 @@ class StandardGridToolBar extends React.Component {
     }
 }
 
-StandardGridToolBar.defaultProps = {
-    totalRecords: 0
-};
-
 StandardGridToolBar.propTypes = {
-    totalRecords: PropTypes.number,
     id: PropTypes.string,
     doUpdate: PropTypes.func.isRequired
 };
