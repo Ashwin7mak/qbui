@@ -80,7 +80,8 @@ class formBuilderPage {
 
     getFieldLocator(index) {
         // Returns a locator string for a specific field in the form builder
-        return '.formElementContainer:nth-child(' + index + ')';
+        // fieldLabel is a good place to click for dragging & contains text
+        return '.formElementContainer:nth-child(' + index + ') .fieldLabel';
     }
     cancel() {
         // Clicks on CANCEL in the form builder and waits for the next page to render
