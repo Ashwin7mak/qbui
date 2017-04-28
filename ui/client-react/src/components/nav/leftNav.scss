@@ -148,7 +148,7 @@ div.leftNavTooltip {
 
 @include not-small-breakpoint {
     .leftNav.collapsed {
-        width: 40px;
+        width: 50px;
         transition: width 100ms ease;
 
         .appsToggleArea {
@@ -212,6 +212,10 @@ div.leftNavTooltip {
 
         .transitionGroup .tablesHeadingAndList .tablesList {
             overflow: visible;
+        }
+
+        .leftNavLink {
+            text-overflow: clip;
         }
     }
 }
@@ -380,21 +384,22 @@ div.leftNavTooltip {
                     position: sticky;
                     position: -webkit-sticky;
                     bottom: 0;
-                    background-color: $leftnav-background-color;
-                    border-top: 1px solid $leftnav-background-stroke-color;
                 }
                 .newTable {
                     cursor: pointer;
                     line-height: 40px;
+                    background-color: $leftnav-background-color;
+                    border-top: 1px solid $leftnav-background-stroke-color;
 
                     &:hover {
                         color: $left-nav-link-hover-color;
                         background-color: $leftnav-table-selected-color;
                     }
-                    .qbIcon {
-                        font-size: 32px;
-                        margin-left: -8px;
-                        margin-right: 10px;
+                    .hoverComponent {
+                        margin-top: 1px;
+                        span {
+                            padding-left: 15px;
+                        }
                     }
                 }
             }
@@ -427,7 +432,7 @@ div.leftNavTooltip {
 
             a.leftNavLink, a.right, .hoverComponent > a, .globalActionLink {
                 line-height: 40px;
-                padding-left: 10px;
+                padding-left: 15px;
                 color: $leftnav-tablenames-color;
                 display: inline-block;
                 cursor: pointer;
