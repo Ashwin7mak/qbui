@@ -54,32 +54,25 @@
             browser.windowHandleSize({width: browserSize.value.width, height: firstFieldSize.height * 4});
             expect(lastField.isVisibleWithinViewport()).toBe(false);
             // click on first field & drag DOWN until autoscroll begins
-            firstField.element('.fieldEditingTools').moveToObject(1, 1).buttonDown();
+            firstField.element('.fieldLabel').moveToObject().buttonDown();
             while (firstField.isVisibleWithinViewport()) {
                 browser.moveTo(null, 0, 1);
             }
             // wait for autoscroll to reach the bottom (or timeout)
-            let seconds = 0;
-            while (!lastField.isVisibleWithinViewport() && seconds++ < autoscrollTimeout) {
-                browser.pause(1000);
+            while (!lastField.isVisibleWithinViewport()) {
+                browser.pause(100);
             }
-            // verify that the last field is visible & first field is not
-            expect(lastField.isVisibleWithinViewport()).toBe(true, 'autoscroll DOWN failed; lastField not visible');
-            expect(firstField.isVisibleWithinViewport()).toBe(false, 'autoscroll DOWN failed; firstField visible');
             // release mouse button
             browser.buttonUp();
             // click on last field & drag UP until autoscroll begins
-            lastField.element('.fieldEditingTools').moveToObject(1, 1).buttonDown();
+            lastField.element('.fieldLabel').moveToObject().buttonDown();
             while (lastField.isVisibleWithinViewport()) {
                 browser.moveTo(null, 0, -1);
             }
             // wait for first field to become visible
-            seconds = 0;
-            while (!firstField.isVisibleWithinViewport() && seconds++ < autoscrollTimeout) {
-                browser.pause(1000);
+            while (!firstField.isVisibleWithinViewport()) {
+                browser.pause(100);
             }
-            // verify that the first field is visible
-            expect(firstField.isVisibleWithinViewport()).toBe(true, 'autoscroll UP failed');
             // release button & restore window
             browser.buttonUp();
             browser.windowHandleSize({width: browserSize.value.width, height: browserSize.value.width});
