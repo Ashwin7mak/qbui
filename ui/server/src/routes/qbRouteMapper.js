@@ -156,6 +156,7 @@
                 requestFunctions[routes.FEATURE_OVERRIDES_BULK] = deleteFeatureSwitchOverridesBulk;
 
                 requestFunctions[routes.RECORDS] = createSingleRecord;
+                requestFunctions[routes.RECORDS_BULK] = forwardApiRequest;
                 requestFunctions[routes.TABLE_COMPONENTS] = createTableComponents;
             }
 
