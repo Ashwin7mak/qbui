@@ -7,53 +7,48 @@
     height: 100%;
     width: 335px;
 
-    &:focus {
-        //For keyboard nav
-        opacity: 2;
-        outline: none;
-        box-shadow: 0 0 2px 0px rgba(0, 157, 235, 0.75);
-        border: $stroke-width-thin solid $border-focused-color;
-    }
-
-    &.selectedFormElement {
-        transition: background-color 0.5s ease;
-        border: 2px solid #009deb;
-        border-radius: $radius-base;
-        box-shadow: 0 0 4px 0px rgba(0, 157, 235, 0.75);
-        z-index: -1 !important;
-
-        .deleteFieldIcon {
-            button {
-                padding: 0px;
-            }
-            .qbIcon {
-                font-size: $size-iconfont-large2;
-                opacity: 1;
-                color: $color-red-700;
-            }
-        }
-    }
-
     .actionIcons {
         float: right;
     }
+
     .deleteFieldIcon {
-        font-size: $size-iconfont-small;
+        font-size: $size-iconfont-large2;
         position: absolute;
         top: 25px;
         right: 5px;
 
         .qbIcon {
             color: $color-black-600;
-            opacity: 0;
             transition: color 0.4s;
         }
     }
 
-    &.notTouchDevice {
-        //No borders, icon, or drag handles are displayed when it is not a touch device
-        //Everything shows up on hover
+    .tipChildWrapper {
+        cursor: pointer;
+    }
 
+    &.active {
+        //opacity: .2;
+        //@include dragpreview-active-gradient;
+        border: 1px dashed gray;
+        background-color: orange;
+    }
+
+    button {
+        background: transparent;
+        outline: none;
+        border: none;
+        &:focus {
+            opacity: 1;
+            outline: none;
+            border: $stroke-width-thin solid $border-focused-color;
+        }
+    }
+
+    &.notTouchDevice {
+        //No borders or icon are displayed when it is not a touch device
+        //Everything shows up on hover
+        opacity: 0;
         .deleteFieldIcon .qbIcon {
             &:hover {
                 opacity: 1;
@@ -63,8 +58,7 @@
     }
 
     &.isTablet {
-        //Icons and borders only display during focus
-        //Drag handle always show
+        //Icon and borders only display during focus
         border: none;
 
         .deleteFieldIcon .qbIcon {
@@ -72,9 +66,40 @@
         }
     }
 
+    &.selectedFormElement {
+        opacity: 1;
+        transition: background-color 0.5s ease;
+        border: $stroke-width-thick solid $border-focused-color;
+        border-radius: $radius-base;
+        box-shadow: 0 0 4px 0px rgba(0, 157, 235, 0.75);
+
+        .deleteFieldIcon {
+            button {
+                padding: 0px;
+            }
+            .qbIcon {
+                opacity: 1;
+                color: $color-red-700;
+            }
+        }
+    }
+
+    &:hover {
+        transition: border-color 0.3s;
+        opacity: 1;
+        border: $stroke-width-thin solid $border-focused-color;
+        border-radius: $radius-base;
+        .fieldEditingTools {
+            opacity: 1;
+            .qbIcon {
+                opacity: 1;
+            }
+        }
+    }
+
     @include small-breakpoint {
-        //Drag handles and borders always display during small breakpoints
-        //Icons only show up when it is focused
+        //Borders always display during small breakpoints
+        //Icon only show up when it is focused
         width: 100%;
         border-bottom: $stroke-width-thin solid $color-black-400;
 
@@ -90,39 +115,11 @@
         }
     }
 
-    .tipChildWrapper {
-        cursor: pointer;
-    }
-
-    &.active {
+    &:focus {
+        //For keyboard nav
         opacity: 1;
-        @include dragpreview-active-gradient;
-    }
-
-    button {
-        background: transparent;
         outline: none;
-        border: none;
-        &:focus {
-            opacity: 1;
-            outline: none;
-            border: $stroke-width-thin solid $border-focused-color;
-        }
-    }
-
-    &:hover {
-        transition: border-color 1.5s ease;
+        box-shadow: 0 0 2px 0px rgba(0, 157, 235, 0.75);
         border: $stroke-width-thin solid $border-focused-color;
-        border-radius: $radius-base;
-        .fieldEditingTools {
-            opacity: 1;
-            .qbIcon {
-                opacity: 1;
-            }
-        }
-
-        @include small-breakpoint {
-            background: none;
-        }
     }
 }
