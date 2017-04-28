@@ -11,6 +11,7 @@ import QbCell from '../../../../client-react/src/components/dataTable/qbGrid/qbC
 import HeaderMenuColumnTransform from './transforms/headerMenuColumnTransform';
 import SortMenuItems from './headerMenu/sort/sortMenuItems';
 import * as StandardGridActions from './standardGridActions';
+import StandardGridToolbar from "./toolbar/StandardGridToolbar";
 
 // Sub-component pieces we will be using to override React Tabular's default components
 const tableSubComponents = {
@@ -46,22 +47,26 @@ class StandardGrid extends Component {
 
     render() {
         return (
-            <div className="gridContainer">
-                <Table.Provider
-                    className="qbGrid"
-                    columns={this.getColumns()}
-                    components={tableSubComponents}
-                    >
+            <div>
+                <StandardGridToolbar id={this.props.id}
+                                     doUpdate={this.props.doUpdate}/>
+                <div className="gridContainer">
+                    <Table.Provider
+                        className="qbGrid"
+                        columns={this.getColumns()}
+                        components={tableSubComponents}
+                        >
 
-                    <Table.Header className="qbHeader" />
+                        <Table.Header className="qbHeader" />
 
-                    <Table.Body
-                        className="qbTbody"
-                        rows={this.props.items}
-                        rowKey={this.getUniqueRowKey.bind(this)}
-                        onRow={onRowFn}
-                        />
-                </Table.Provider>
+                        <Table.Body
+                            className="qbTbody"
+                            rows={this.props.items}
+                            rowKey={this.getUniqueRowKey.bind(this)}
+                            onRow={onRowFn}
+                            />
+                    </Table.Provider>
+                </div>
             </div>
         );
     }

@@ -8,7 +8,6 @@ import AccountUsersStage from './AccountUsersStage';
 import * as AccountUsersActions from './AccountUsersActions';
 import * as RequestContextActions from '../../common/requestContext/RequestContextActions';
 import * as SpinnerConfigurations from "../../../../client-react/src/constants/spinnerConfigurations";
-import AccountUsersToolBar from "./AccountUsersToolBar/AccountUsersToolBar";
 
 import {isFetching} from './AccountUsersReducer';
 
@@ -43,8 +42,8 @@ class AccountUsers extends Component {
             <Loader loaded={!this.props.loading} options={SpinnerConfigurations.LARGE_BREAKPOINT}>
                 <div className="accountUsersContainer">
                     <AccountUsersStage users={this.props.users}/>
-                    <AccountUsersToolBar id={this.GRID_ID}/>
-                    <AccountUsersGrid id={this.GRID_ID} showAccountColumns={canSeeAccountColumns}
+                    <AccountUsersGrid id={this.GRID_ID}
+                                      showAccountColumns={canSeeAccountColumns}
                                       showRealmColumns={canSeeRealmColumns}/>
                 </div>
             </Loader>

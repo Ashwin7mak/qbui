@@ -4,9 +4,9 @@ import Pagination from "../../../../../reuse/client/src/components/pagination/pa
 import * as _ from "lodash";
 
 /**
- * The Navigation Component for the AccountUsers page
+ * The Navigation Component
  */
-class AccountUsersNavigation extends React.Component {
+class StandardGridNavigation extends React.Component {
 
     constructor(...args) {
         super(...args);
@@ -41,11 +41,11 @@ class AccountUsersNavigation extends React.Component {
     }
 }
 
-AccountUsersNavigation.propTypes = {
+StandardGridNavigation.propTypes = {
     id: PropTypes.string
 };
 
-export {AccountUsersNavigation};
+export {StandardGridNavigation};
 
 const mapStateToProps = (state, ownProps) => {
     return {
@@ -54,4 +54,4 @@ const mapStateToProps = (state, ownProps) => {
 };
 
 
-export default connect(mapStateToProps)(AccountUsersNavigation);
+export default connect(mapStateToProps)(StandardGridNavigation);
