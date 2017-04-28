@@ -23,7 +23,8 @@
         tableBody: {get: function() {return browser.element('.qbTbody');}},
         reportsToolBar : {get: function() {return browser.element('.reportToolbar');}},
         addRecordButton : {get: function() {return browser.element('.tableHomePageInitial .addRecordButton');}},
-        settingsIcon: {get: function() {return browser.element('.qbIcon.iconUISturdy-settings');}},
+        settingsIconName : {get: function() {return '.qbIcon.iconUISturdy-settings';}},
+        settingsIcon: {get: function() {return browser.element(this.settingsIconName);}},
         modifyTableSettings: {get: function() {return browser.element('.modifyTableSettings');}},
         deleteTableActionButton: {get: function() {return browser.element('.iconActionButton.deleteTable');}},
         deletePromtTextField: {get: function() {return browser.element('.deletePrompt');}},
@@ -53,7 +54,8 @@
             return browser.element('.reportContainer');
         }},
         // Delete and Don't Delete button on modal dialog box
-        deleteButton : {get: function() {return browser.element('.modal-dialog .primaryButton');}},
+        deleteButtonClassName: {get: function() {return '.modal-dialog .primaryButton';}},
+        deleteButton : {get: function() {return browser.element(this.deleteButtonClassName);}},
         dontDeleteButton : {get: function() {return browser.element('.modal-dialog .secondaryButton');}},
 
         //Drop down menu actions icon

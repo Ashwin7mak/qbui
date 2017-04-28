@@ -18,6 +18,8 @@
         let realmName;
         let realmId;
         let testApp;
+        let EXISTING_TABLE_NAME_1 = 'Table 1';
+        let EXISTING_TABLE_NAME_2 = 'Table 2';
 
         /**
          * Setup method. Creates test app then authenticates into the new stack
@@ -54,7 +56,7 @@
             let originalTableLinksCount = tableCreatePO.getAllTableLeftNavLinksList.value.length;
 
             //Step 2 - Select table to delete ('Table 2' here) and make sure it lands in reports page
-            tableCreatePO.selectTable('Table 2');
+            tableCreatePO.selectTable(EXISTING_TABLE_NAME_2);
             // wait for the report content to be visible
             ReportContentPO.waitForReportContent();
 
@@ -85,7 +87,7 @@
             let originalTableLinksCount = tableCreatePO.getAllTableLeftNavLinksList.value.length;
 
             //Step 2 - Select table to delete ('Table 1' here) and make sure it lands in reports page
-            tableCreatePO.selectTable('Table 1');
+            tableCreatePO.selectTable(EXISTING_TABLE_NAME_1);
             // wait for the report content to be visible
             ReportContentPO.waitForReportContent();
 
@@ -145,7 +147,7 @@
                 let originalTableLinksCount = tableCreatePO.getAllTableLeftNavLinksList.value.length;
 
                 //Step 2 - Select table to delete ('Table 1' here) and make sure it lands in reports page
-                tableCreatePO.selectTable('Table 1');
+                tableCreatePO.selectTable(EXISTING_TABLE_NAME_1);
                 // wait for the report content to be visible
                 ReportContentPO.waitForReportContent();
 
@@ -162,7 +164,7 @@
                 ReportContentPO.setDeletePromtTextFieldValue(testCase.fieldValue);
 
                 //Step 7 - make sure delete table button is disabled
-                expect(browser.isEnabled('.modal-dialog .primaryButton')).toBeFalsy();
+                expect(browser.isEnabled(ReportContentPO.deleteButtonClassName)).toBeFalsy();
 
                 //step 8 - go back to the tables page
                 RequestAppsPage.get(e2eBase.getRequestTableEndpoint(realmName, testApp.id, testApp.tables[0].id));
@@ -198,8 +200,8 @@
             RequestAppsPage.get(e2eBase.getRequestTableEndpoint(realmName, testApp.id, testApp.tables[0].id));
 
             //Step 5 - Verify settings icon not available for user other than ADMIN
-            expect(browser.isVisible('.qbIcon.iconUISturdy-settings')).toBeFalsy();
+            expect(browser.isVisible(ReportContentPO.settingsIconName)).toBeFalsy();
         });
-        
+
     });
 }());
