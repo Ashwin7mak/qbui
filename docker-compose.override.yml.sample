@@ -36,7 +36,7 @@ services:
       image: 717266932182.dkr.ecr.us-west-2.amazonaws.com/quickbase/ee-db
       ports:
         - "5533:5432"
-    service:
+    ui:
       environment:
         - javaHost=https://core:8443
         - eeHost=https://ee:8443
