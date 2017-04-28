@@ -148,7 +148,7 @@ div.leftNavTooltip {
 
 @include not-small-breakpoint {
     .leftNav.collapsed {
-        width: 50px;
+        width: 40px;
         transition: width 100ms ease;
 
         .appsToggleArea {
@@ -384,12 +384,12 @@ div.leftNavTooltip {
                     position: sticky;
                     position: -webkit-sticky;
                     bottom: 0;
+                    background-color: $leftnav-background-color;
+                    border-top: 1px solid $leftnav-background-stroke-color;
                 }
                 .newTable {
                     cursor: pointer;
                     line-height: 40px;
-                    background-color: $leftnav-background-color;
-                    border-top: 1px solid $leftnav-background-stroke-color;
 
                     &:hover {
                         color: $left-nav-link-hover-color;
@@ -432,7 +432,7 @@ div.leftNavTooltip {
 
             a.leftNavLink, a.right, .hoverComponent > a, .globalActionLink {
                 line-height: 40px;
-                padding-left: 15px;
+                padding-left: 10px;
                 color: $leftnav-tablenames-color;
                 display: inline-block;
                 cursor: pointer;
