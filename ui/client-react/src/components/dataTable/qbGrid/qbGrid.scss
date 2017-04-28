@@ -84,10 +84,7 @@ $edit-icon-font-size: 18px;
         // hover effect on dropdown icon
         &:hover {
             opacity: 100;
-            color: orange;
             cursor: move;
-            border: double;
-            border-color: orange;
         }
     }
 
@@ -153,7 +150,6 @@ $edit-icon-font-size: 18px;
             // to be clipped by adjacent cells.
             .dropdown {
                 position: initial; // we want to position the popup menu relative to the <th> for now.
-                //position: relative;
             }
             .dropdown-menu {
                 top: calc(100% - 1px);
@@ -179,9 +175,6 @@ $edit-icon-font-size: 18px;
             opacity: 1;
             color: $grid-column-icon-hover-color;
         }
-
-
-
     }
 
     //== styling for the sticky column cells

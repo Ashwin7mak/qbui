@@ -53,7 +53,7 @@ const report = (state = [], action) => {
         return null;
     }
 
-    function move(data, sourceIndex, targetIndex) {
+    function columnMove(data, sourceIndex, targetIndex) {
         // Idea
         // a, b, c, d, e -> move(b, d) -> a, c, d, b, e
         // a, b, c, d, e -> move(d, a) -> d, a, b, c, e
@@ -306,7 +306,7 @@ const report = (state = [], action) => {
                     if(columns[i].headerName==action.content.targetLabel)
                         var targetIndex=i;
                 }
-                var movedColumns = move(columns, sourceIndex, targetIndex);
+                var movedColumns = columnMove(columns, sourceIndex, targetIndex);
                 currentReport.data.columns=movedColumns;
                 return newState(currentReport);
             }

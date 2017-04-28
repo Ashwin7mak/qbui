@@ -433,7 +433,7 @@ const QbGrid = React.createClass({
 
                     components={{
                         header: {
-                          cell: QbHeaderCell
+                            cell: QbHeaderCell
                         },
                         body: {
                             row: QbRow,
@@ -466,12 +466,6 @@ const mapStateToProps = (state) => {
 };
 
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        moveColumn: (context, appId, tblId, rptId, params) => {
-            dispatch(moveColumn(context, appId, tblId, rptId, params));
-        }
-    };
-};
+const mapDispatchToProps = {moveColumn};
 
 export default connect(mapStateToProps,mapDispatchToProps)(DragDropContext(HTML5Backend)(QbGrid));
