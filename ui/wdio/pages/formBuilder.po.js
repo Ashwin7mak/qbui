@@ -99,11 +99,12 @@ class formBuilderPage {
     }
     getFieldLabels() {
         // Gets the list of field labels from the form builder
-        let labelEls = browser.elements('.field');
-        return labelEls.value.map(function(labelEl) {
-            let label = labelEl.element('.fieldLabel').getText();
-            if (label === '') { // checkbox labels are in a child
-                label = labelEl.element('.label').getText();
+        let fields = browser.elements('.field');
+        return fields.value.map(function(field) {
+            let label = field.element('.fieldLabel').getText();
+            if (label === '') {
+                // checkbox labels are in a child
+                label = field.element('.label').getText();
             }
             return label;
         });
@@ -170,10 +171,10 @@ class formBuilderPage {
     slowDrag(target, label) {
         // Moves the cursor to specified target field and waits until target displays the the specified label
         browser.waitUntil(function() {
-            // assuming that browser.buttonDown was just executed by the caller,
+            // assuming that buttonDown was just executed by the caller,
             // pause to initiate drag (which is one reason why we can't just call dragAndDrop)
             browser.pause(oneSecond);
-            browser.moveToObject(target);
+            browser.moveToObject(target, 1, 1);
             return label === browser.element(target).getText();
         }, 10000, 'expected target preview to display source label after dragging');
         return this;
