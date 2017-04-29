@@ -8,7 +8,7 @@ import configureMockStore from "redux-mock-store";
 import {Provider} from "react-redux";
 import StandardGrid from "../../../../src/common/grid/standardGrid";
 import * as Actions from "../../../../src/account/users/AccountUsersActions";
-import {GetAccountUsersGridColumns} from "../../../../src/account/users/Grid/AccountUsersGridColumns";
+import {GetAccountUsersGridColumns} from "../../../../src/account/users/grid/AccountUsersGridColumns";
 
 const mockStore = configureMockStore();
 

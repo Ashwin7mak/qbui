@@ -1,6 +1,6 @@
 import React from "react";
 import jasmineEnzyme from "jasmine-enzyme";
-import * as Formatters from "../../../../src/account/users/Grid/AccountUsersGridFormatters";
+import * as Formatters from "../../../../src/account/users/grid/AccountUsersGridFormatters";
 
 describe('AccountUsersGridFormatter', () => {
     beforeEach(() => {

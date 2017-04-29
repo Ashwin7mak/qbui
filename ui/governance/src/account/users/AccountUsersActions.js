@@ -8,7 +8,7 @@ import Logger from '../../../../client-react/src/utils/logger';
 import LogLevel from '../../../../client-react/src/utils/logLevels';
 import _ from 'lodash';
 let logger = new Logger();
-import * as Formatters from "./Grid/AccountUsersGridFormatters";
+import * as Formatters from "./grid/AccountUsersGridFormatters";
 import * as RealmUserAccountFlagConstants from "../../common/constants/RealmUserAccountFlagConstants.js";
 
 
