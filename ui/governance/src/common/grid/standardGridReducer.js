@@ -18,7 +18,7 @@ export const defaultGridState = {
  * @param action - the action to apply
  * @returns {*}
  */
-function grid(state = defaultGridState, action) {
+export function grid(state = defaultGridState, action) {
     switch (action.type) {
     case types.SET_ITEMS:
         return {
@@ -81,7 +81,7 @@ function grid(state = defaultGridState, action) {
  * @param action - the action to apply
  * @returns {{}}
  */
-function gridById(state = {}, action) {
+export function gridById(state = {}, action) {
     switch (action.type) {
     case types.SET_SORT:
     case types.SET_ITEMS:
