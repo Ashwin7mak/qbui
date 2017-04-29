@@ -442,19 +442,18 @@ $edit-icon-font-size: 18px;
         // menu to access additional row actions such as print, email, copy, and delete
         .dropdown-menu {
             // position menu to the right of the sticky cells
-           //top: 28px;
-           // left: -5px;
-           //
-           // &:before {
-           //     right: auto;
-           //     left: 10px;
-           // }
-           //
-           // &:after {
-           //     right: auto;
-           //     left: 10px;
-           // }
+           /* top: 28px;
+            left: -5px;
+            &:before {
+                right: auto;
+                left: 10px;
+            }
 
+            &:after {
+                right: auto;
+                left: 10px;
+            }
+*/
             //We have a problem with the stacking contexts where we cannot display this popup menu below the more button
             // as required by XD without some additional function in popup menus that we do not have coded at this time.
             // As such, we have temporarily moved the menu to the right and relocated the pointer arrow so it doesn't look broken.
