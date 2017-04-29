@@ -174,6 +174,8 @@ class formBuilderPage {
             // assuming that buttonDown was just executed by the caller,
             // pause to initiate drag (which is one reason why we can't just call dragAndDrop)
             browser.pause(oneSecond);
+            browser.moveToObject(target);
+            browser.pause(oneSecond);
             browser.moveToObject(target, 1, 1);
             return label === browser.element(target).getText();
         }, 10000, 'expected target preview to display source label after dragging');
@@ -185,7 +187,7 @@ class formBuilderPage {
         browser.moveToObject(source + ' .fieldLabel');
         browser.buttonDown();
         // move to target & wait until preview appears
-        this.slowDrag(target + ' .fieldLabel', label);
+        this.slowDrag(target, label);
         // release button
         browser.buttonUp();
         // pause to terminate drag (which is one reason why we can't just call dragAndDrop)
