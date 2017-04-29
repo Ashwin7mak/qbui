@@ -39,28 +39,31 @@ describe('StandardGridReducer', () => {
         expect(state).toEqual(init);
     });
 
-    // it('should set page offset when current page is last page', () => {
-    //     const state = StandardGridReducer.grid({...initialState, pagination: {totalPages: 1, currentPage: 1}},
-    //         {offset: 1, type: StandardGridActionType.SET_CURRENTPAGE_OFFSET});
-    //     expect(state).toEqual(initialState);
-    // });
-    //
-    // it('should set page offset to next', () => {
-    //     const state = StandardGridReducer.grid({...initialState, pagination: {totalPages: 2, currentPage: 1}},
-    //         {offset: 1, type: StandardGridActionType.SET_CURRENTPAGE_OFFSET});
-    //     expect(state.pagination.currentPage).toEqual(2);
-    // });
-    //
-    // it('should set page offset to previous', () => {
-    //     const state = StandardGridReducer.grid({...initialState, pagination: {totalPages: 2, currentPage: 2}},
-    //         {offset: -1, type: StandardGridActionType.SET_CURRENTPAGE_OFFSET});
-    //     expect(state.pagination.currentPage).toEqual(1);
-    // });
-    //
-    // it('should set pagination state', () => {
-    //     const pagination = {pagination: {totalRecords: 0, totalPages: 0, currentPage: 1, itemsPerPage: 10}};
-    //     const state = StandardGridReducer.grid(initialState,
-    //         {pagination: pagination, type: StandardGridActionType.SET_PAGINATION});
-    //     expect(state.pagination).toEqual(pagination);
-    // });
+    it('should set page offset when current page is last page', () => {
+        const init = {...initialState, items: [{'firstName':'test'}], pagination: {totalPages: 1, currentPage: 1}};
+        const state = StandardGridReducer.grid(init,
+            {offset: 1, type: StandardGridActionType.SET_CURRENTPAGE_OFFSET});
+        expect(state).toEqual(init);
+    });
+
+    it('should set page offset to previous', () => {
+        const init = {...initialState, items: [{'firstName':'test'}], pagination: {totalPages: 2, currentPage: 2}};
+        const state = StandardGridReducer.grid(init,
+            {offset: -1, type: StandardGridActionType.SET_CURRENTPAGE_OFFSET});
+        expect(state.pagination.currentPage).toEqual(1);
+    });
+
+    it('should set page offset to next', () => {
+        const init = {...initialState, items: [{'firstName':'test'}], pagination: {totalPages: 2, currentPage: 1}};
+        const state = StandardGridReducer.grid(init,
+            {offset: 1, type: StandardGridActionType.SET_CURRENTPAGE_OFFSET});
+        expect(state.pagination.currentPage).toEqual(2);
+    });
+
+    it('should set pagination state', () => {
+        const pagination = {pagination: {totalRecords: 10, totalPages: 10, currentPage: 1, itemsPerPage: 10}};
+        const state = StandardGridReducer.grid(initialState,
+            {pagination: pagination, type: StandardGridActionType.SET_PAGINATION});
+        expect(state.pagination).toEqual(pagination);
+    });
 });
