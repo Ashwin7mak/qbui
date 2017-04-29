@@ -103,7 +103,7 @@ class formBuilderPage {
         return fields.value.map(function(field) {
             let label = field.element('.fieldLabel').getText();
             if (label === '') {
-                // checkbox labels are in a child
+                // checkbox labels are in a different child
                 label = field.element('.label').getText();
             }
             return label;
@@ -162,7 +162,7 @@ class formBuilderPage {
     }
     selectFieldByIndex(index) {
         // Selects the field at the specified index and verifies that it is reflected in the properties panel
-        browser.moveToObject(this.getFieldLocator(index) + ' .fieldLabel').click();
+        browser.element(this.getFieldLocator(index) + ' .fieldLabel').click();
         this.fieldProperty_Name.waitForExist(); // assume it didn't exist, i.e. nothing was previously selected
         return this.fieldProperty_Name.getText();
     }
@@ -196,12 +196,11 @@ class formBuilderPage {
     KB_cancel() {
         // Types ESC multiple times to return to the VIEW RECORD form.  Assumes that a field is selected & has focus.
         // This s/b smarter/able to handle other initial states (e.g. when no field has focus)
-        browser.keys([
-            'Escape', // deselect field
-            'Escape', // defocus field
-            'Escape']); // close page
-        // wait for view record form
-        browser.pause(fiveSeconds);
+        browser.keys(['Escape']); // deselect field
+        browser.pause(oneSecond);
+        browser.keys(['Escape']); // defocus field
+        browser.pause(oneSecond); // without delays, sometimes it gets stuck here (with builder focused)
+        browser.keys(['Escape']); // close page
         return this;
     }
     KB_focusField(index) {
