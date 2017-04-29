@@ -162,7 +162,7 @@ class formBuilderPage {
     }
     selectFieldByIndex(index) {
         // Selects the field at the specified index and verifies that it is reflected in the properties panel
-        browser.element(this.getFieldLocator(index) + ' .fieldLabel').click();
+        browser.moveToObject(this.getFieldLocator(index) + ' .fieldLabel', 1, 1).buttonDown().buttonUp();
         this.fieldProperty_Name.waitForExist(); // assume it didn't exist, i.e. nothing was previously selected
         return this.fieldProperty_Name.getText();
     }
