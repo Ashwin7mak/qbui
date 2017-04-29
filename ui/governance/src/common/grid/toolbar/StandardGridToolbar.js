@@ -28,6 +28,8 @@ class StandardGridToolBar extends React.Component {
 
 StandardGridToolBar.propTypes = {
     id: PropTypes.string,
+    getPreviousUsersPage: PropTypes.func.isRequired,
+    getNextUsersPage: PropTypes.func.isRequired,
     doUpdate: PropTypes.func.isRequired
 };
 
