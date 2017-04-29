@@ -69,31 +69,6 @@ export const paginateUsers = (users, _page, _itemsPerPage) => {
         itemsPerPage = _itemsPerPage || 10;
     let offset = (page - 1) * itemsPerPage;
     return users.slice(offset, offset + itemsPerPage);
-export const fetchAccountUsers = (accountId) => {
-    return (dispatch) => {
-        // get all the users from the account service
-        const accountUsersService = new AccountUsersService();
-        const promise = accountUsersService.getAccountUsers(accountId);
-        dispatch(fetchingAccountUsers());
-        return promise.then(response => {
-            _.each(response.data, item => {
-                item.id = item.uid;
-            });
-            // we have the users, update the redux store
-            dispatch(receiveAccountUsers(response.data));
-        }).catch(error => {
-            dispatch(failedAccountUsers(error));
-            if (error.response && error.response.status === 403) {
-                logger.parseAndLogError(LogLevel.WARN, error.response, 'accountUserService.getAccountUsers:');
-                WindowLocationUtils.update(FORBIDDEN);
-            } else if (!(error.response && error.response.status === 401)) {
-                // Since BaseService might be in the process of handling the redirect to current stack,
-                // we have to provide an additional IF guard here so that we don't redirect to INTERNAL_SERVER_ERROR
-                logger.parseAndLogError(LogLevel.ERROR, error.response, 'accountUserService.getAccountUsers:');
-                WindowLocationUtils.update(INTERNAL_SERVER_ERROR);
-            }
-        });
-    };
 };
 
 const sortFunctions = [
@@ -194,11 +169,12 @@ export const fetchAccountUsers = (accountId, gridID, itemsPerPage) => {
 
         }).catch(error => {
             dispatch(failedAccountUsers(error));
-
             if (error.response && error.response.status === 403) {
                 logger.parseAndLogError(LogLevel.WARN, error.response, 'accountUserService.getAccountUsers:');
                 WindowLocationUtils.update(FORBIDDEN);
-            } else {
+            } else if (!(error.response && error.response.status === 401)) {
+                // Since BaseService might be in the process of handling the redirect to current stack,
+                // we have to provide an additional IF guard here so that we don't redirect to INTERNAL_SERVER_ERROR
                 logger.parseAndLogError(LogLevel.ERROR, error.response, 'accountUserService.getAccountUsers:');
                 WindowLocationUtils.update(INTERNAL_SERVER_ERROR);
             }
