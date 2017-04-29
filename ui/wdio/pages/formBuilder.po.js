@@ -37,6 +37,10 @@ class formBuilderPage {
         // the label of the first NEW FIELD token
         return browser.element('.fieldTokenTitle');
     }
+    get firstFieldLabel() {
+        // the first field label (wait for it after open)
+        return browser.element('.fieldLabel');
+    }
     get formBuilderContainer() {
         // the whole form builder page (all 3 panels)
         return browser.element('.formBuilderContainer');
@@ -80,7 +84,7 @@ class formBuilderPage {
 
     getFieldLocator(index) {
         // Returns a locator string for a specific field in the form builder
-        return '.formElementContainer:nth-child(' + index + ')';
+        return '.formElementContainer:nth-child(' + index + ') .draggableField';
     }
     cancel() {
         // Clicks on CANCEL in the form builder and waits for the next page to render
@@ -133,8 +137,7 @@ class formBuilderPage {
         topNavPO.formBuilderBtn.click();
         topNavPO.modifyThisForm.waitForExist();
         topNavPO.modifyThisForm.click();
-        this.formBuilderContainer.waitForExist();
-        browser.pause(fiveSeconds);
+        this.firstFieldLabel.waitForVisible();
         return this;
     }
     save() {
