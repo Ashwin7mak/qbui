@@ -66,4 +66,22 @@ describe('StandardGridReducer', () => {
             {pagination: pagination, type: StandardGridActionType.SET_PAGINATION});
         expect(state.pagination).toEqual(pagination);
     });
+
+    it('should set sort asc', () => {
+        const state = StandardGridReducer.grid(initialState,
+            {sortFid: [1], asc: true, type: StandardGridActionType.SET_SORT});
+        expect(state.sortFids).toEqual([1]);
+    });
+
+    it('should set sort desc', () => {
+        const state = StandardGridReducer.grid(initialState,
+            {sortFid: [1], asc: false, type: StandardGridActionType.SET_SORT});
+        expect(state.sortFids).toEqual([-1]);
+    });
+
+    it('should remove sort', () => {
+        const state = StandardGridReducer.grid(initialState,
+            {sortFid: [1], remove: true, type: StandardGridActionType.SET_SORT});
+        expect(state.sortFids).toEqual([]);
+    });
 });
