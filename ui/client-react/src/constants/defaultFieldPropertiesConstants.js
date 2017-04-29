@@ -26,5 +26,9 @@ export const DefaultFieldProperties = {
             "choices": [{"coercedValue": {"value": ""}, "displayValue": ""}],
             "sortAsGiven": false
         }
+    },
+
+    [FieldFormats.USER_FORMAT]: {
+        "indexed": true
     }
 };

@@ -100,6 +100,20 @@ describe('Account Users Actions Tests', () => {
                 , error => expect(false).toBe(true)).then(done, done);
         });
 
+        it('should do nothing if we receive a 401', (done) => {
+            AccountUsersActionsRewireAPI.__Rewire__('AccountUsersService', class {
+                constructor() {}
+                getAccountUsers(accountId) {
+                    return Promise.reject({response: {status: 401}});
+                }
+            });
+            const store = mockStore({});
+            store.dispatch(actions.fetchAccountUsers(mockAccountId)).then(() => {
+                expect(mockWindowUtils.update).not.toHaveBeenCalledWith(FORBIDDEN);
+                expect(mockWindowUtils.update).not.toHaveBeenCalledWith(INTERNAL_SERVER_ERROR);
+            }, e => expect(false).toEqual(true)).then(done, done);
+        });
+
         it('should redirect to FORBIDDEN when encountering a 403', (done) => {
             AccountUsersActionsRewireAPI.__Rewire__('AccountUsersService', class {
                 constructor() {}

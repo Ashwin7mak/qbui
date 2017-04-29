@@ -6,11 +6,11 @@ import WindowLocationUtils from  "../../../../client-react/src/utils/windowLocat
 import {FORBIDDEN, INTERNAL_SERVER_ERROR} from  "../../../../client-react/src/constants/urlConstants";
 import Logger from '../../../../client-react/src/utils/logger';
 import LogLevel from '../../../../client-react/src/utils/logLevels';
-import _ from 'lodash';
-let logger = new Logger();
-import * as Formatters from "./grid/AccountUsersGridFormatters";
-import * as RealmUserAccountFlagConstants from "../../common/constants/RealmUserAccountFlagConstants.js";
 
+let logger = new Logger();
+import _ from 'lodash';
+import * as Formatters from './grid/AccountUsersGridFormatters';
+import * as RealmUserAccountFlagConstants from "../../common/constants/RealmUserAccountFlagConstants.js";
 
 /**
  * Action when there is successful user from the backend
@@ -69,6 +69,31 @@ export const paginateUsers = (users, _page, _itemsPerPage) => {
         itemsPerPage = _itemsPerPage || 10;
     let offset = (page - 1) * itemsPerPage;
     return users.slice(offset, offset + itemsPerPage);
+export const fetchAccountUsers = (accountId) => {
+    return (dispatch) => {
+        // get all the users from the account service
+        const accountUsersService = new AccountUsersService();
+        const promise = accountUsersService.getAccountUsers(accountId);
+        dispatch(fetchingAccountUsers());
+        return promise.then(response => {
+            _.each(response.data, item => {
+                item.id = item.uid;
+            });
+            // we have the users, update the redux store
+            dispatch(receiveAccountUsers(response.data));
+        }).catch(error => {
+            dispatch(failedAccountUsers(error));
+            if (error.response && error.response.status === 403) {
+                logger.parseAndLogError(LogLevel.WARN, error.response, 'accountUserService.getAccountUsers:');
+                WindowLocationUtils.update(FORBIDDEN);
+            } else if (!(error.response && error.response.status === 401)) {
+                // Since BaseService might be in the process of handling the redirect to current stack,
+                // we have to provide an additional IF guard here so that we don't redirect to INTERNAL_SERVER_ERROR
+                logger.parseAndLogError(LogLevel.ERROR, error.response, 'accountUserService.getAccountUsers:');
+                WindowLocationUtils.update(INTERNAL_SERVER_ERROR);
+            }
+        });
+    };
 };
 
 const sortFunctions = [
@@ -114,18 +139,6 @@ export const sortUsers = (users, sortFids) => {
  */
 export const doUpdate = (gridId, gridState, _itemsPerPage) => {
     return (dispatch, getState) => {
-
-        let users = getState().AccountUsers ? getState().AccountUsers.users : [];
-
-        if (users.length === 0) {
-            return;
-        }
-
-        // First Filter
-        let searchTerm = gridState.searchTerm || "";
-        let filteredUsers = searchUsers(users, searchTerm);
-
-        // Then Sort
         let sortFids = gridState.sortFids || [];
         let sortedUsers = sortUsers(filteredUsers, sortFids);
 
