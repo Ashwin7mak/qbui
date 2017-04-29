@@ -30,7 +30,8 @@ StandardGridToolBar.propTypes = {
     id: PropTypes.string,
     getPreviousUsersPage: PropTypes.func.isRequired,
     getNextUsersPage: PropTypes.func.isRequired,
-    doUpdate: PropTypes.func.isRequired
+    doUpdate: PropTypes.func.isRequired,
+    onSearchChange: PropTypes.func.isRequired
 };
 
 

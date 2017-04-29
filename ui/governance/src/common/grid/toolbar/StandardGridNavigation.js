@@ -41,7 +41,9 @@ class StandardGridNavigation extends React.Component {
 }
 
 StandardGridNavigation.propTypes = {
-    id: PropTypes.string
+    id: PropTypes.string.required,
+    getPreviousUsersPage :PropTypes.func.required,
+    getNextUsersPage :PropTypes.func.required
 };
 
 export {StandardGridNavigation};
