@@ -471,9 +471,6 @@ describe('AccountUsersGridColumns', () => {
                 </Provider>);
             let cell = component.find(QbCell).at(12);
             expect(cell.text()).toEqual("--");
-            expect(cell.text().trim()).toEqual("No App Access");
-
-
         });
     });
 });
