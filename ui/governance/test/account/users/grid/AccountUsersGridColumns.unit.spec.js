@@ -164,62 +164,57 @@ describe('AccountUsersGridColumns', () => {
 
     describe("quickbase access status", () => {
         it("should render no app access correctly", () => {
-            let props = {
-                ...baseProps,
-                data: [{
-                    hasAppAccess: false,
-                    userBasicFlags: 4,
-                    realmDirectoryFlags: 4,
-                    systemRights: 0,
-                    uid:0
-                }],
-            };
-
+            const data = [{
+                hasAppAccess: false,
+                userBasicFlags: 4,
+                realmDirectoryFlags: 4,
+                systemRights: 0,
+                uid:0
+            }];
+            const mockS = configureMockStore();
+            const store = mockS({Grids: {"accountUsers" : {items: data, pagination:{currentPage:1}}}});
 
             let component = mount(
-                <Provider store={mockStore({Grids : 1})}>
-                    <StandardGrid {...props} />
+                <Provider store={store}>
+                    <StandardGrid {...baseProps} />
                 </Provider>);
             let cell = component.find(QbCell).at(5);
             expect(cell.text().trim()).toEqual("No App Access");
         });
 
         it("should show deactivated above all else", () => {
-            let props = {
-                ...baseProps,
-                data: [{
-                    hasAppAccess: true,
-                    userBasicFlags: 64,
-                    realmDirectoryFlags: 4,
-                    systemRights: 2,
-                    uid:0
-                }],
-            };
-
+            const data = [{
+                hasAppAccess: true,
+                userBasicFlags: 64,
+                realmDirectoryFlags: 4,
+                systemRights: 2,
+                uid:0
+            }];
+            const mockS = configureMockStore();
+            const store = mockS({Grids: {"accountUsers" : {items: data, pagination:{currentPage:1}}}});
 
             let component = mount(
-                <Provider store={mockStore({Grids : 1})}>
-                    <StandardGrid {...props} />
+                <Provider store={store}>
+                    <StandardGrid {...baseProps} />
                 </Provider>);
             let cell = component.find(QbCell).at(5);
             expect(cell.text().trim()).toEqual("Deactivated");
         });
 
         it("should show denied above everything other than deactivated", () => {
-            let props = {
-                ...baseProps,
-                data: [{
-                    hasAppAccess: true,
-                    userBasicFlags: 0,
-                    realmDirectoryFlags: 8,
-                    systemRights: 2,
-                    uid:0
-                }],
-            };
+            const data = [{
+                hasAppAccess: true,
+                userBasicFlags: 0,
+                realmDirectoryFlags: 8,
+                systemRights: 2,
+                uid:0
+            }];
+            const mockS = configureMockStore();
+            const store = mockS({Grids: {"accountUsers" : {items: data, pagination:{currentPage:1}}}});
 
             let component = mount(
-                <Provider store={mockStore({Grids : 1})}>
-                    <StandardGrid {...props} />
+                <Provider store={store}>
+                    <StandardGrid {...baseProps} />
                 </Provider>);
             let cell = component.find(QbCell).at(5);
             expect(cell.text().trim()).toEqual("Denied");
@@ -453,33 +448,32 @@ describe('AccountUsersGridColumns', () => {
     describe("Realm Approved?", () => {
 
         it("should render realm approved correctly when flag is set", () => {
-            let props = {
-                ...baseProps,
-                data: [{realmDirectoryFlags: 5, uid:0}],
-            };
-
+            const data = [{realmDirectoryFlags: 5, uid:0}];
+            const mockS = configureMockStore();
+            const store = mockS({Grids: {"accountUsers" : {items: data, pagination:{currentPage:1}}}});
 
             let component = mount(
-                <Provider store={mockStore({})}>
-                    <StandardGrid {...props} />
+                <Provider store={store}>
+                    <StandardGrid {...baseProps} />
                 </Provider>);
             let cell = component.find(QbCell).at(12);
             expect(cell.text()).toEqual("Y");
         });
 
         it("should render realm approved correctly when flag is not set", () => {
-            let props = {
-                ...baseProps,
-                data: [{realmDirectoryFlags: 1, uid:0}],
-            };
-
+            const data = [{realmDirectoryFlags: 1, uid:0}];
+            const mockS = configureMockStore();
+            const store = mockS({Grids: {"accountUsers" : {items: data, pagination:{currentPage:1}}}});
 
             let component = mount(
-                <Provider store={mockStore({})}>
-                    <StandardGrid {...props} />
+                <Provider store={store}>
+                    <StandardGrid {...baseProps} />
                 </Provider>);
             let cell = component.find(QbCell).at(12);
             expect(cell.text()).toEqual("--");
+            expect(cell.text().trim()).toEqual("No App Access");
+
+
         });
     });
 });
