@@ -2,15 +2,15 @@ import AccountUsersService from "./AccountUsersService";
 import * as types from "../../app/actionTypes";
 import * as StandardGridActions from "../../common/grid/standardGridActions";
 import * as StandardGridState from "../../common/grid/standardGridReducer";
-import WindowLocationUtils from  "../../../../client-react/src/utils/windowLocationUtils";
-import {FORBIDDEN, INTERNAL_SERVER_ERROR} from  "../../../../client-react/src/constants/urlConstants";
-import Logger from '../../../../client-react/src/utils/logger';
-import LogLevel from '../../../../client-react/src/utils/logLevels';
+import WindowLocationUtils from "../../../../client-react/src/utils/windowLocationUtils";
+import {FORBIDDEN, INTERNAL_SERVER_ERROR} from "../../../../client-react/src/constants/urlConstants";
+import Logger from "../../../../client-react/src/utils/logger";
+import LogLevel from "../../../../client-react/src/utils/logLevels";
+import _ from "lodash";
+import * as Formatters from "./grid/AccountUsersGridFormatters";
+import * as RealmUserAccountFlagConstants from "../../common/constants/RealmUserAccountFlagConstants.js";
 
 let logger = new Logger();
-import _ from 'lodash';
-import * as Formatters from './grid/AccountUsersGridFormatters';
-import * as RealmUserAccountFlagConstants from "../../common/constants/RealmUserAccountFlagConstants.js";
 
 /**
  * Action when there is successful user from the backend
@@ -114,6 +114,16 @@ export const sortUsers = (users, sortFids) => {
  */
 export const doUpdate = (gridId, gridState, _itemsPerPage) => {
     return (dispatch, getState) => {
+        let users = getState().AccountUsers ? getState().AccountUsers.users : [];
+
+        if (users.length === 0) {
+            return;
+        }
+
+        // First Filter
+        let searchTerm = gridState.searchTerm || "";
+        let filteredUsers = searchUsers(users, searchTerm);
+
         let sortFids = gridState.sortFids || [];
         let sortedUsers = sortUsers(filteredUsers, sortFids);
 
