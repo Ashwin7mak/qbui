@@ -12,7 +12,7 @@
         },
         formBuilderBtn: {
             get: function() {
-                return browser.element('.topNav .dropdown');
+                return browser.element('.topNav .builder');
             }
         },
         modifyThisForm: {

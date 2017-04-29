@@ -128,12 +128,12 @@ class formBuilderPage {
     }
     open() {
         // Invokes the form builder from the VIEW RECORD page
-        topNavPO.formBuilderBtn.waitForVisible();
+        topNavPO.formBuilderBtn.waitForExist();
         browser.pause(fiveSeconds);
         topNavPO.formBuilderBtn.click();
-        topNavPO.modifyThisForm.waitForExist(fiveSeconds);
+        topNavPO.modifyThisForm.waitForExist();
         topNavPO.modifyThisForm.click();
-        this.formBuilderContainer.waitForVisible();
+        this.formBuilderContainer.waitForExist();
         browser.pause(fiveSeconds);
         return this;
     }
@@ -162,10 +162,8 @@ class formBuilderPage {
     }
     selectFieldByIndex(index) {
         // Selects the field at the specified index and verifies that it is reflected in the properties panel
-        // Clicks in the upper left corner because clicking in the middle might hit the textfield or other control
-        // & not select the field
-        browser.moveToObject(this.getFieldLocator(index) + ' .draggableField', 1, 1).buttonDown().buttonUp();
-        this.fieldProperty_Name.waitForExist();
+        browser.moveToObject(this.getFieldLocator(index) + ' .fieldLabel').click();
+        this.fieldProperty_Name.waitForExist(); // assume it didn't exist, i.e. nothing was previously selected
         return this.fieldProperty_Name.getText();
     }
     slowDrag(target, label) {
