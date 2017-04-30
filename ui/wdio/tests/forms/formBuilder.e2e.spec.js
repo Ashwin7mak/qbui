@@ -45,9 +45,9 @@
         });
 
         it('drags a field outside of viewport & verifies autoscroll', function() {
-            let autoscrollTimeout = 10; // seconds
+            let numFields = formBuilderPO.getFieldLabels().length;
             let firstField = browser.element(formBuilderPO.getFieldLocator(1));
-            let lastField = browser.element(formBuilderPO.getFieldLocator(formBuilderPO.getFieldLabels().length));
+            let lastField = browser.element(formBuilderPO.getFieldLocator(numFields));
             let firstFieldSize = firstField.getElementSize();
             let browserSize = browser.windowHandleSize();
             // temporarily shrink the window to cause last element to not be visible
@@ -65,6 +65,7 @@
             // release mouse button
             browser.buttonUp();
             // click on last field & drag UP until autoscroll begins
+            lastField = browser.element(formBuilderPO.getFieldLocator(numFields);
             lastField.element('.fieldLabel').moveToObject().buttonDown();
             while (lastField.isVisibleWithinViewport()) {
                 browser.moveTo(null, 0, -1);
@@ -352,5 +353,6 @@
         xit('check the REQUIRED checkbox, save & verify checked', function() {
              //TODO: MC-2164: REQUIRED checkbox needs a reliable way to automate click & query
         });
+
     });
 }());
