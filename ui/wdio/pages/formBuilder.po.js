@@ -137,7 +137,7 @@ class formBuilderPage {
         topNavPO.formBuilderBtn.click();
         topNavPO.modifyThisForm.waitForExist();
         topNavPO.modifyThisForm.click();
-        this.firstFieldLabel.waitForVisible();
+        this.firstFieldLabel.waitForExist();
         return this;
     }
     save() {
