@@ -161,7 +161,7 @@
     // The regular expression is used to identify the client routes when determining which
     // back-end server to send the request.  See qbRouteMapper.modifyRequestPathForApi() method for
     // reference to this list and how it is used..
-    const regExCoreExpression = `^${context.client.QBUI}/(apps|admin|users|feature)(.*)?$`;
+    const regExCoreExpression = `^${context.client.QBUI}/(admin|apps|featureStates|users)(.*)?$`;
     const regExNodeExpression = `^${context.client.QBUI}/(log|health|facets)(.*)?$`;
     let clientEndPoints = [
         {route: context.client.QBUI, regEx: new RegExp(regExNodeExpression, 'i'), context: context.api.NODE},
