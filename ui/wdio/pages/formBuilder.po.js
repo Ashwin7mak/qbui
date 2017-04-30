@@ -37,9 +37,9 @@ class formBuilderPage {
         // the label of the first NEW FIELD token
         return browser.element('.fieldTokenTitle');
     }
-    get firstFieldLabel() {
-        // the first field label (wait for it after open)
-        return browser.element('.fieldLabel');
+    get firstField() {
+        // the first field (wait for it after open)
+        return browser.element('.field');
     }
     get formBuilderContainer() {
         // the whole form builder page (all 3 panels)
@@ -137,7 +137,8 @@ class formBuilderPage {
         topNavPO.formBuilderBtn.click();
         topNavPO.modifyThisForm.waitForExist();
         topNavPO.modifyThisForm.click();
-        this.firstFieldLabel.waitForExist();
+        this.firstField.waitForExist();
+        browser.pause(fiveSeconds);
         return this;
     }
     save() {
