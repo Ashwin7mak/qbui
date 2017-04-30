@@ -92,11 +92,10 @@
          * @returns the metadata for a report
          */
         function fetchReport(reportId) {
-            let reportResultsEndpoint = recordBase.apiBase.resolveReportsResultsEndpoint(app.id, app.tables[0].id, reportId);
-            return recordBase.apiBase.executeRequest(reportResultsEndpoint, consts.GET)
+            return recordBase.apiBase.executeRequest(reportEndpoint + reportId, consts.GET)
                 .then(fetchResponse => {
                     let returnedBody = JSON.parse(fetchResponse.body);
-                    return JSON.parse(returnedBody.body);
+                    return returnedBody;
                 });
         }
 
