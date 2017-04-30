@@ -44,11 +44,11 @@ describe('Account Users Actions Tests', () => {
         },
         {
             "uid": 20000,
-            "firstName": "Koala",
-            "lastName": "Bumbles",
-            "email": "koala.bumbles.jr@g88.net",
-            "userName": "koala.bumbles.jr@g88.net",
-            "lastAccess": "2017-02-22T23:29:02.56Z",
+            "firstName": "FirstNameFilter",
+            "lastName": "lastNameFilter",
+            "email": "emailFilter@g88.net",
+            "userName": "userNameFilter",
+            "lastAccess": "1900-01-01T00:00:00Z",
             "numGroupsMember": 0,
             "numGroupsManaged": 1,
             "hasAppAccess": true,
@@ -177,12 +177,12 @@ describe('Account Users Actions Tests', () => {
 
             const store = mockStore({AccountUsers: {users: USERS}});
             let gridId = 1;
-            let itemsPerpage = 10;
+            let itemsPerPage = 10;
             let gridState = {
                 sortFids: [1],
                 pagination: {currentPage:1}};
 
-            store.dispatch(actions.doUpdate(gridId, gridState, itemsPerpage));
+            store.dispatch(actions.doUpdate(gridId, gridState, itemsPerPage));
             const expectedActions = [
                 {
                     type: gridTypes.SET_PAGINATION,
@@ -191,7 +191,7 @@ describe('Account Users Actions Tests', () => {
                         totalRecords: USERS.length,
                         totalPages: 1,
                         currentPage: 1,
-                        itemsPerPage: itemsPerpage,
+                        itemsPerPage: itemsPerPage,
                         firstRecordInCurrentPage: 1,
                         lastRecordInCurrentPage: 3
                     }
@@ -206,17 +206,78 @@ describe('Account Users Actions Tests', () => {
         });
     });
 
+    describe('Filter Action', () => {
+
+        it('Filter the text columns by firstName correctly', () => {
+            let filteredUsers = actions.searchUsers(ACCOUNT_USERS_DATA, "FirstNameFilter");
+            expect(filteredUsers.length).toEqual(1);
+            expect(filteredUsers[0].firstName).toEqual('FirstNameFilter');
+        });
+
+        it('Filter the text columns by lastName correctly', () => {
+            let filteredUsers = actions.searchUsers(ACCOUNT_USERS_DATA, "lastNameFilter");
+            expect(filteredUsers.length).toEqual(1);
+            expect(filteredUsers[0].lastName).toEqual('lastNameFilter');
+        });
+
+        it('Filter the text columns by email correctly', () => {
+            let filteredUsers = actions.searchUsers(ACCOUNT_USERS_DATA, "emailFilter");
+            expect(filteredUsers.length).toEqual(1);
+            expect(filteredUsers[0].email).toEqual('emailFilter@g88.net');
+        });
+
+        it('Filter the text columns by userName correctly', () => {
+            let filteredUsers = actions.searchUsers(ACCOUNT_USERS_DATA, "userNameFilter");
+            expect(filteredUsers.length).toEqual(1);
+            expect(filteredUsers[0].userName).toEqual('userNameFilter');
+        });
+
+        it('Filter the text columns by lastAccess correctly', () => {
+            let filteredUsers = actions.searchUsers(ACCOUNT_USERS_DATA, "never");
+            expect(filteredUsers.length).toEqual(1);
+            expect(filteredUsers[0].lastAccess).toEqual("1900-01-01T00:00:00Z");
+        });
+
+        it('Filter the text columns by hasAppAccess correctly', () => {
+            let filteredUsers = actions.searchUsers(ACCOUNT_USERS_DATA, "QuickBase Staff");
+            expect(filteredUsers.length).toEqual(1);
+            expect(filteredUsers[0].userName).toEqual('administrator');
+        });
+
+        it('Filter case insensitive search', () => {
+            let filteredUsers = actions.searchUsers(ACCOUNT_USERS_DATA, "quickBase staff");
+            expect(filteredUsers.length).toEqual(1);
+            expect(filteredUsers[0].userName).toEqual('administrator');
+        });
+
+        it('Filter substring search', () => {
+            let filteredUsers = actions.searchUsers(ACCOUNT_USERS_DATA, "staff");
+            expect(filteredUsers.length).toEqual(1);
+            expect(filteredUsers[0].userName).toEqual('administrator');
+        });
+
+        it('Filter the text columns by unknown search term', () => {
+            let filteredUsers = actions.searchUsers(ACCOUNT_USERS_DATA, "randomText");
+            expect(filteredUsers.length).toEqual(0);
+        });
+
+        it('Filter the text columns when array or search items are empty', () => {
+            expect(actions.searchUsers([], "searchTerm")).toEqual([]);
+            expect(actions.searchUsers(ACCOUNT_USERS_DATA, "")).toEqual(ACCOUNT_USERS_DATA);
+        });
+    });
+
     describe('Sort Action', () => {
 
         it('sorts the text columns by firstname correctly', () => {
             let sortedUsersAsc = actions.sortUsers(ACCOUNT_USERS_DATA, [1]);
             expect(sortedUsersAsc[0].firstName).toEqual('Administrator');
-            expect(sortedUsersAsc[1].firstName).toEqual('Koala');
+            expect(sortedUsersAsc[1].firstName).toEqual('FirstNameFilter');
             expect(sortedUsersAsc[2].firstName).toEqual('Zadministrator');
 
             let sortedUsersDsc = actions.sortUsers(ACCOUNT_USERS_DATA, [-1]);
             expect(sortedUsersDsc[0].firstName).toEqual('Zadministrator');
-            expect(sortedUsersDsc[1].firstName).toEqual('Koala');
+            expect(sortedUsersDsc[1].firstName).toEqual('FirstNameFilter');
             expect(sortedUsersDsc[2].firstName).toEqual('Administrator');
         });
 

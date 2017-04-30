@@ -163,7 +163,7 @@ describe('StandardGridNavigation', () => {
                                         id={"accountUsers"}
                                         paginationInfo={paginationInfo}/>);
 
-            expect(StandardGridNavigationComponent.props().isNextDisabled).toEqual(true);
+            expect(StandardGridNavigationComponent.props().isNextDisabled).toEqual(false);
         });
     });
 });
