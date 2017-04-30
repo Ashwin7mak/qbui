@@ -13,15 +13,13 @@ export default {
     //
     //  QBUI:    indicates the route performs qbui custom/composition work in
     //           the node layer before routing the request to the appropriate
-    //           back-end server for processing.
+    //           back-end server (if required) for processing.
     //  PROXY:   indicates the route will directly proxy through node to an
     //           external server endpoint.  Note the content of 'proxy' is
     //           blank..this is intentional as this constant is to better
     //           self-document the endpoint call within the service.
-    //  NODE:    indicates the route performs node only work.
     BASE_URL: {
         QBUI          : '/qbui',
-        NODE          : '/qbn',
         PROXY         : '',
         AUTOMATION    : '/we/workflow'
     },
@@ -37,7 +35,6 @@ export default {
     FORMS               : 'forms',
     FORMS_TYPE          : 'formsType',
     LOG                 : 'log',
-    LOG_PERF            : 'clientPerf',
     USERS               : 'users',
     RIGHTS              : 'accessRights',
 

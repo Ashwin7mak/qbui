@@ -23,7 +23,7 @@ class ReportService extends BaseService {
             GET_REPORTS                 : `${constants.BASE_URL.PROXY}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.REPORTS}`,
             GET_REPORT_RESULTS          : `${constants.BASE_URL.QBUI}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.REPORTS}/{2}/${constants.RESULTS}`,
             GET_INVOKE_RESULTS          : `${constants.BASE_URL.QBUI}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.REPORTS}/{2}/${constants.INVOKE}`,
-            PARSE_FACET_EXPR            : `${constants.BASE_URL.NODE}/${constants.FACETS}/${constants.PARSE}`
+            PARSE_FACET_EXPR            : `${constants.BASE_URL.QBUI}/${constants.FACETS}/${constants.PARSE}`
         };
     }
 

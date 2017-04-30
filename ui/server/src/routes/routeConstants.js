@@ -18,11 +18,11 @@
             WE: '/we'
         },
         client: {
-            QBUI: '/qbui',
-            NODE: '/qbn'
+            QBUI: '/qbui'
         },
         api: {
             CORE: '/api/api/v1',
+            NODE: '/qbui',
             EE: '/ee/v1',
             GOVERNANCE: '/api/governance/:version',
             WORKFLOW: {
@@ -83,11 +83,9 @@
 
     let nodeApiEndpoints = {
         //  log routes are defined in routes.js
-        LOG_CLIENT_MSG          : context.client.NODE + '/log',
-        LOG_CLIENT_PERF_MSG     : context.client.NODE + '/clientPerf',
-        //
-        FACET_EXPRESSION_PARSE  : context.client.NODE + '/facets/parse',
-        QBUI_HEALTH             : context.client.NODE + '/health'
+        LOG_CLIENT_MSG          : context.client.QBUI + '/log',
+        FACET_EXPRESSION_PARSE  : context.client.QBUI + '/facets/parse',
+        QBUI_HEALTH             : context.client.QBUI + '/health'
     };
 
     /**
@@ -116,8 +114,7 @@
         PUBLIC_WORKFLOW_AUTOMATION_INVOKE : '/workflow/apps/:appId/invokes*'
     };
 
-    // Define list of public 'short-hand' routes and its back-end server api context.  This list
-    // allows users to call an endpoint but not care/know which back end server fulfills the request.
+    // Define list of public 'short-hand' routes and its back-end server api context.
     //
     // Examples:
     //    - testRealm.domain.com/apps/1/tables/2/fields will resolve to call CORE
@@ -161,6 +158,16 @@
         {route: publicControllerEndpoints.PUBLIC_WORKFLOW_AUTOMATION_INVOKE, regEx: /^\/workflow\/apps\/.*\/invokes(.*)?$/i, context: context.base.WE}
     ];
 
+    // The regular expression is used to identify the client routes when determining which
+    // back-end server to send the request.  See qbRouteMapper.modifyRequestPathForApi() method for
+    // reference to this list and how it is used..
+    const regExCoreExpression = `^${context.client.QBUI}/(apps|admin|users|feature)(.*)?$`;
+    const regExNodeExpression = `^${context.client.QBUI}/(log|health|facets)(.*)?$`;
+    let clientEndPoints = [
+        {route: context.client.QBUI, regEx: new RegExp(regExNodeExpression, 'i'), context: context.api.NODE},
+        {route: context.client.QBUI, regEx: new RegExp(regExCoreExpression, 'i'), context: context.api.CORE}
+    ];
+
     /**
      * Define the base context url for each respective context
      */
@@ -181,13 +188,6 @@
         SWAGGER_RESOURCES      : '/*/*swagger*',
         SWAGGER_V2             : '/*/v2/api-docs*'
     };
-
-    // List of client route identifiers and their associated back-end context.  See
-    // qbRouteMapper.modifyRequestPathForApi() for reference.
-    const regExExpression = `^${context.client.QBUI}/(.*)?$`;
-    let clientEndPoints = [
-        {route: context.client.QBUI, regEx: new RegExp(regExExpression, 'i'), context: context.api.CORE}
-    ];
 
     //  Export the combined list of routes.
     //

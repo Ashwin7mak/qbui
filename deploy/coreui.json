@@ -179,7 +179,7 @@
           }
         ],
         "HealthCheck": {
-          "Target": {"Fn::Join" : [ "", [ "HTTPS:", {"Ref": "paramSSLInstancePort"}, "/qbn/health" ] ]},
+          "Target": {"Fn::Join" : [ "", [ "HTTPS:", {"Ref": "paramSSLInstancePort"}, "/qbui/health" ] ]},
           "HealthyThreshold": "2",
           "UnhealthyThreshold": "5",
           "Interval": "10",

@@ -34,30 +34,6 @@
             }
         });
 
-
-        /*
-         *  Route to log a performance stats from the client. Only a post request is supported.
-         */
-        log.debug('Routing POST method for route ' + routes.LOG_CLIENT_PERF_MSG);
-        app.all(routes.LOG_CLIENT_PERF_MSG, function(req, res, next) {
-            // TODO: this endpoint needs to be protected...validate that the requested
-            // TODO: endpoint includes a valid authenticated ticket.
-            if (requestHelper.isPost(req)) {
-                // serialize all the params for message output
-                let stats = req.body;
-                if (req.useragent) {
-                    stats.browser = req.useragent.browser ? req.useragent.browser : 'unspecified';
-                    stats.browserVersion = req.useragent.browser ? req.useragent.version : 'unspecified';
-                }
-                let msg = "Client Perf stats (ms): " +
-                    JSON.stringify(_.sortKeysBy(stats, (val, key) => key.toLowerCase()));
-                sendOutLogMessage(req, res, 'info', 'CLIENT_PERF', msg);
-            } else {
-                res.status(httpStatusCodes.METHOD_NOT_ALLOWED).send('Method not supported');
-            }
-            // ...route terminates...logging a client side message only
-        });
-
         /*
          * intercept all record bulk requests because express can't route them properly. We need to handle them manually
          */
@@ -152,7 +128,9 @@
         //  Unknown page for custom client composition routes...valid routes should all be declared in qbRouteMapper
         app.route('/qbui/*')
             .get(errors[httpStatusCodes.NOT_FOUND]);
-        app.route('/qbn/*')
+
+        //  Unknown route
+        app.route('/*')
             .get(errors[httpStatusCodes.NOT_FOUND]);
 
 
