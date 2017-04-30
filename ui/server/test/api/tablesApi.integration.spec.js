@@ -55,7 +55,7 @@
                 (response) => {
                     var tableId = response.body;
                     //get table, tableprops, fields, report and form
-                    var tableEndpoint = recordBase.apiBase.resolveTablesEndpoint(app.id, tableId, true);
+                    var tableEndpoint = recordBase.apiBase.resolveTablesEndpoint(app.id, tableId);
                     recordBase.apiBase.executeRequest(tableEndpoint, consts.GET).then(
                         (tableResponse) => {
                             var table = JSON.parse(tableResponse.body);
@@ -122,7 +122,7 @@
             recordBase.apiBase.executeRequest(tablesEndpoint, consts.PATCH, payload).then(
                 (response) => {
                     var promises = [];
-                    var tableEndpoint = recordBase.apiBase.resolveTablesEndpoint(app.id, tableId, true);
+                    var tableEndpoint = recordBase.apiBase.resolveTablesEndpoint(app.id, tableId);
                     promises.push(recordBase.apiBase.executeRequest(tableEndpoint, consts.GET));
                     var tablePropsEndpoint = recordBase.apiBase.resolveTablePropertiesEndpoint(app.id, tableId);
                     promises.push(recordBase.apiBase.executeRequest(tablePropsEndpoint, consts.GET));
@@ -165,7 +165,7 @@
                         },
                         (eeError) => {
                             assert.equal(eeError.statusCode, 404, "Table should have been deleted on EE");
-                            var tableEndpoint = recordBase.apiBase.resolveTablesEndpoint(app.id, tableId, true);
+                            var tableEndpoint = recordBase.apiBase.resolveTablesEndpoint(app.id, tableId);
                             recordBase.apiBase.executeRequest(tableEndpoint, consts.GET).then(
                                 () => {
                                     done(new Error("Unexpected error, table expected to be deleted on Core and EE"));

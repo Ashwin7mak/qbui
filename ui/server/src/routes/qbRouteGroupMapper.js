@@ -48,7 +48,7 @@
 
         {route: routes.RECORD, methods: [constants.DELETE, constants.GET, constants.PATCH]},
         {route: routes.RECORDS, methods: [constants.GET, constants.POST]},
-        {route: routes.RECORDS_BULK, methods: [constants.DELETE]},
+        {route: routes.RECORDS_BULK, methods: [constants.DELETE, constants.POST]},
 
         {route: routes.REPORT_META, methods: [constants.GET]},
         {route: routes.REPORT_RESULTS, methods: [constants.GET]},
@@ -58,7 +58,7 @@
         {route: routes.FACET_EXPRESSION_PARSE, methods: [constants.GET]},
         //  don't need to define the log routes as they are explicitly checked in routes.js
 
-        {route: routes.TABLE, methods: [constants.PATCH]},
+        {route: routes.TABLE, methods: [constants.DELETE, constants.PATCH]},
         {route: routes.TABLE_COMPONENTS, methods: [constants.POST]},
         {route: routes.TABLE_HOMEPAGE_REPORT, methods: [constants.GET]},
 
