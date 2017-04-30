@@ -40,6 +40,14 @@ class StandardGridNavigation extends React.Component {
     }
 }
 
+StandardGridNavigation.defaultProps = {
+    firstRecordInCurrentPage: 0,
+    lastRecordInCurrentPage: 0,
+    totalRecords: 0,
+    totalPages: 0,
+    currentPage: 1,
+};
+
 StandardGridNavigation.propTypes = {
     id: PropTypes.string.required,
     firstRecordInCurrentPage: PropTypes.number,
