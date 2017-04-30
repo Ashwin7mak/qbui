@@ -10,6 +10,10 @@ describe('<GovernanceLeftNav />', () => {
         GovernanceBundleLoader.changeLocale('en-us');
     });
 
+    afterEach(() => {
+        GovernanceBundleLoader.changeLocale('en-us');
+    });
+
     const baseProps = {
         fetchData: () => false,
         isNavOpen: false,
