@@ -61,6 +61,12 @@ export const searchUsers = (users, searchTerm) => {
  * @returns {paginated/filtered users}
  */
 export const paginateUsers = (users, _page, _itemsPerPage) => {
+
+    let page = _page || 1,
+        itemsPerPage = _itemsPerPage || 10;
+
+    let offset = (page - 1) * itemsPerPage;
+
     if (users.length === 0) {
         return {
             users: users,
@@ -69,9 +75,14 @@ export const paginateUsers = (users, _page, _itemsPerPage) => {
         };
     }
 
-    let page = _page || 1,
-        itemsPerPage = _itemsPerPage || 10;
-    let offset = (page - 1) * itemsPerPage;
+    if (offset > users.length || itemsPerPage >= users.length) {
+        return {
+            users: users,
+            firstUser: 1,
+            lastUser: users.length
+        };
+    }
+
     let slicedUsers = users.slice(offset, offset + itemsPerPage);
     return {
         users: slicedUsers,

@@ -267,6 +267,49 @@ describe('Account Users Actions Tests', () => {
         });
     });
 
+    describe('Paginate Action', () => {
+
+
+        const users = [{firstName :'user1'}, {firstName :'user2'}, {firstName :'user3'}];
+
+        it('return correct pagination result when no records', () => {
+
+            let paginatedUsers = actions.paginateUsers([]);
+            expect(paginatedUsers.users).toEqual([]);
+            expect(paginatedUsers.firstUser).toEqual(0);
+            expect(paginatedUsers.lastUser).toEqual(0);
+        });
+
+        it('return correct pagination result when going previous', () => {
+
+            let paginatedUsers = actions.paginateUsers(users, 1, 2);
+            expect(paginatedUsers.users).toEqual([users[0], users[1]]);
+            expect(paginatedUsers.firstUser).toEqual(1);
+            expect(paginatedUsers.lastUser).toEqual(2);
+        });
+
+        it('return correct pagination when going next', () => {
+
+            let paginatedUsers = actions.paginateUsers(users, 2, 2);
+            expect(paginatedUsers.users).toEqual([users[2]]);
+            expect(paginatedUsers.firstUser).toEqual(3);
+            expect(paginatedUsers.lastUser).toEqual(3);
+        });
+
+        it('return correct pagination when page number > length of record next', () => {
+
+            let userOverflow1 = actions.paginateUsers(users, 3, 2);
+            expect(userOverflow1.users).toEqual(users);
+            expect(userOverflow1.firstUser).toEqual(1);
+            expect(userOverflow1.lastUser).toEqual(users.length);
+
+            let userOverflow2 = actions.paginateUsers(users, 2, 3);
+            expect(userOverflow2.users).toEqual(users);
+            expect(userOverflow2.firstUser).toEqual(1);
+            expect(userOverflow2.lastUser).toEqual(users.length);
+        });
+    });
+
     describe('Sort Action', () => {
 
         it('sorts the text columns by firstname correctly', () => {
