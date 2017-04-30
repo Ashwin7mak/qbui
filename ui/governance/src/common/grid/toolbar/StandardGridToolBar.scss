@@ -1,0 +1,18 @@
+@import '../../../../../reuse/client/src/assets/css/qbVariables';
+
+.standardGridToolBar {
+    display: flex;
+    justify-content: space-between;
+    color: $search-input-color;
+
+    .standardGridSearch {
+        flex-shrink: 0;
+        min-width: 300px;
+        max-width: 300px;
+    }
+
+    .standardGridNavigation {
+        display: flex;
+        align-items: center;
+    }
+}
