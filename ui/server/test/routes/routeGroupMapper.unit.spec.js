@@ -42,7 +42,7 @@ describe('Group Route Mapper Unit Test', function() {
         testRoutes.push({message:'LH_V1: ' + routes.REPORT_INVOKE_RESULTS, routeGroup:routeGroups.LH_V1, route:routes.REPORT_INVOKE_RESULTS, DELETE:false, GET:true, POST:false, PUT:false, PATCH:false});
         testRoutes.push({message:'LH_V1: ' + routes.REPORT_RECORDS_COUNT, routeGroup:routeGroups.LH_V1, route:routes.REPORT_RECORDS_COUNT, DELETE:false, GET:true, POST:false, PUT:false, PATCH:false});
         testRoutes.push({message:'LH_V1: ' + routes.FACET_EXPRESSION_PARSE, routeGroup:routeGroups.LH_V1, route:routes.FACET_EXPRESSION_PARSE, DELETE:false, GET:true, POST:false, PUT:false, PATCH:false});
-        testRoutes.push({message:'LH_V1: ' + routes.TABLE, routeGroup:routeGroups.LH_V1, route:routes.TABLE, DELETE:false, GET:false, POST:false, PUT:false, PATCH:true});
+        testRoutes.push({message:'LH_V1: ' + routes.TABLE, routeGroup:routeGroups.LH_V1, route:routes.TABLE, DELETE:true, GET:false, POST:false, PUT:false, PATCH:true});
         testRoutes.push({message:'LH_V1: ' + routes.TABLE_COMPONENTS, routeGroup:routeGroups.LH_V1, route:routes.TABLE_COMPONENTS, DELETE:false, GET:false, POST:true, PUT:false, PATCH:false});
         testRoutes.push({message:'LH_V1: ' + routes.TABLE_HOMEPAGE_REPORT, routeGroup:routeGroups.LH_V1, route:routes.TABLE_HOMEPAGE_REPORT, DELETE:false, GET:true, POST:false, PUT:false, PATCH:false});
         testRoutes.push({message:'LH_V1: ' + routes.REQ_USER, routeGroup:routeGroups.LH_V1, route:routes.REQ_USER, DELETE:false, GET:true, POST:false, PUT:false, PATCH:false});
