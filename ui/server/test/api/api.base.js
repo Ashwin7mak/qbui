@@ -29,7 +29,7 @@
 
         var HTTP = 'http://';
         var HTTPS = 'https://';
-        var NODE_BASE_ENDPOINT = '/qbui';
+        var QBUI_BASE_ENDPOINT = '/qbui';
         var JAVA_BASE_ENDPOINT = '/api/api/v1';
         var EE_BASE_ENDPOINT = '/ee/v1';
         var APPS_ENDPOINT = '/apps/';
@@ -185,7 +185,7 @@
                 return appsEndpoint;
             },
             resolveRecordsEndpoint      : function(appId, tableId, recordId) {
-                var endpoint = NODE_BASE_ENDPOINT + APPS_ENDPOINT + appId + TABLES_ENDPOINT + tableId + RECORDS_ENDPOINT;
+                var endpoint = QBUI_BASE_ENDPOINT + APPS_ENDPOINT + appId + TABLES_ENDPOINT + tableId + RECORDS_ENDPOINT;
                 if (recordId) {
                     endpoint = endpoint + recordId;
                 }
@@ -208,10 +208,10 @@
                 }
                 return endpoint;
             },
-            resolveTablesEndpoint       : function(appId, tableId, nodeRoute) {
+            resolveTablesEndpoint       : function(appId, tableId, qbuiRoute) {
                 var tableEndpoint;
-                if (nodeRoute) {
-                    tableEndpoint = NODE_BASE_ENDPOINT + APPS_ENDPOINT + appId + TABLES_ENDPOINT;
+                if (qbuiRoute) {
+                    tableEndpoint = QBUI_BASE_ENDPOINT + APPS_ENDPOINT + appId + TABLES_ENDPOINT;
                 } else {
                     tableEndpoint = this.resolveAppsEndpoint(appId) + TABLES_ENDPOINT;
                 }
@@ -231,10 +231,10 @@
                 }
                 return formEndpoint;
             },
-            resolveReportsEndpoint      : function(appId, tableId, reportId, nodeRoute) {
+            resolveReportsEndpoint      : function(appId, tableId, reportId, qbuiRoute) {
                 var reportEndpoint;
-                if (nodeRoute) {
-                    reportEndpoint = NODE_BASE_ENDPOINT + APPS_ENDPOINT + appId + TABLES_ENDPOINT + tableId + REPORTS_ENDPOINT;
+                if (qbuiRoute) {
+                    reportEndpoint = QBUI_BASE_ENDPOINT + APPS_ENDPOINT + appId + TABLES_ENDPOINT + tableId + REPORTS_ENDPOINT;
                 } else {
                     reportEndpoint = this.resolveAppsEndpoint(appId) + TABLES_ENDPOINT + tableId + REPORTS_ENDPOINT;
                 }
@@ -298,10 +298,10 @@
                 return endpoint;
             },
             resolveGetReqUserEndpoint       : function() {
-                return NODE_BASE_ENDPOINT + USERS_ENDPOINT + REQ_USER;
+                return QBUI_BASE_ENDPOINT + USERS_ENDPOINT + REQ_USER;
             },
             resolveTableComponentsEndpoint       : function(appId) {
-                return NODE_BASE_ENDPOINT + APPS_ENDPOINT + appId + TABLES_ENDPOINT + TABLE_COMPONENTS;
+                return QBUI_BASE_ENDPOINT + APPS_ENDPOINT + appId + TABLES_ENDPOINT + TABLE_COMPONENTS;
             },
             defaultHeaders              : DEFAULT_HEADERS,
 
