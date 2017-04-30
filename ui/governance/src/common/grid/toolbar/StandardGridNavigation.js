@@ -12,11 +12,11 @@ class StandardGridNavigation extends React.Component {
     }
 
     getStartRecord() {
-        return this.props.paginationInfo.currentPage;
+        return this.props.paginationInfo.firstRecordInCurrentPage;
     }
 
     getEndRecord() {
-        return this.props.paginationInfo.totalPages;
+        return this.props.paginationInfo.lastRecordInCurrentPage;
     }
 
     isPreviousDisabled() {
@@ -42,6 +42,11 @@ class StandardGridNavigation extends React.Component {
 
 StandardGridNavigation.propTypes = {
     id: PropTypes.string.required,
+    firstRecordInCurrentPage: PropTypes.number,
+    lastRecordInCurrentPage: PropTypes.number,
+    totalRecords: PropTypes.number,
+    totalPages: PropTypes.number,
+    currentPage: PropTypes.number,
     getPreviousUsersPage :PropTypes.func.required,
     getNextUsersPage :PropTypes.func.required
 };

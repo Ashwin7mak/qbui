@@ -187,7 +187,15 @@ describe('Account Users Actions Tests', () => {
                 {
                     type: gridTypes.SET_PAGINATION,
                     gridId: gridId,
-                    pagination: {totalRecords: USERS.length, totalPages: 1, currentPage: 1, itemsPerPage: itemsPerpage}},
+                    pagination: {
+                        totalRecords: USERS.length,
+                        totalPages: 1,
+                        currentPage: 1,
+                        itemsPerPage: itemsPerpage,
+                        firstRecordInCurrentPage: 1,
+                        lastRecordInCurrentPage: 3
+                    }
+                },
                 {
                     type: gridTypes.SET_ITEMS,
                     gridId: gridId,
