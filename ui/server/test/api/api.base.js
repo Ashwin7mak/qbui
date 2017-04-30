@@ -244,6 +244,9 @@
                 }
                 return reportEndpoint;
             },
+            resolveReportsResultsEndpoint      : function(appId, tableId, reportId) {
+                return QBUI_BASE_ENDPOINT + APPS_ENDPOINT + appId + TABLES_ENDPOINT + tableId + REPORTS_ENDPOINT + reportId + REPORTS_RESULTS_ENDPOINT;
+            },
             resolveRealmsEndpoint       : function(realmId) {
                 var endpoint = JAVA_BASE_ENDPOINT + REALMS_ENDPOINT;
                 if (realmId) {
