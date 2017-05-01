@@ -43,3 +43,6 @@ wdio/junitOutput/
 
 #this folder is created everytime I run webdriverIO, do not commit
 wdio/ui
+
+# Don't store webpack manifests to git. That should be generated on the environment that is using it.
+server/src/manifest

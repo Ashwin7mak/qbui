@@ -79,11 +79,12 @@ class MyNotifyPlugin {
 class MoveManifestPlugin {
     apply(compiler) {
         compiler.plugin('done', () => {
-            require('fs').rename(buildPath + '/manifest.json', webpackManifestFileName)
+            require('fs').rename(buildPath + '/manifest.json', webpackManifestFileName);
         });
     }
 }
 
+// ------ START CONFIG ------
 const config = {
     // devtool Makes sure errors in console map to the correct file
     // and line number
