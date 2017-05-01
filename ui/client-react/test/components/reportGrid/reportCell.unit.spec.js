@@ -82,7 +82,7 @@ describe('ReportCell', () => {
         spyOn(actions, 'onCellClick');
         component = shallow(<ReportCell {...actions} isEditing={false} fieldDef={fieldDef} recordId={testRecordId}/>);
 
-        let cellClickableArea = component.find('.cellClickableArea');
+        let cellClickableArea = component.find('.cellWrapper');
         cellClickableArea.simulate('click');
 
         expect(actions.onCellClick).toHaveBeenCalledWith(testRecordId);
