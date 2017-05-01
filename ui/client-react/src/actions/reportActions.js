@@ -353,13 +353,12 @@ export const loadReportRecordsCount = (context, appId, tblId, rptId, queryParams
  * @param context
  * @param appId
  * @param tblId
- * @param rptId
  * @param params { open, clickedId, addBefore }
  */
-export const toggleFieldSelectorMenu = (context, appId, tblId, rptId, params) => {
+const toggleFieldSelectorMenu = (context, appId, tblId, params) => {
     return (dispatch) => {
         return new Promise((resolve, reject) => {
-            if (appId && tblId && rptId) {
+            if (appId && tblId) {
                 if (params.open) {
                     let fieldsService = new FieldsService();
                     fieldsService.getFields(appId, tblId)
@@ -377,7 +376,7 @@ export const toggleFieldSelectorMenu = (context, appId, tblId, rptId, params) =>
                     resolve();
                 }
             } else {
-                logger.error(`reportActions.toggleFieldSelectorMenu: Missing one or more required input parameters. AppId:${appId}; TblId:${tblId}; RptId:${rptId}`);
+                logger.error(`reportActions.toggleFieldSelectorMenu: Missing one or more required input parameters. AppId:${appId}; TblId:${tblId};`);
                 reject();
             }
         });
@@ -389,14 +388,13 @@ export const toggleFieldSelectorMenu = (context, appId, tblId, rptId, params) =>
  * @param context
  * @param appId
  * @param tblId
- * @param rptId
  * @param params { requestedId, addBefore }
  */
-export const addColumnFromExistingField = (context, appId, tblId, rptId, params) => {
+const addColumnFromExistingField = (context, appId, tblId, params) => {
     return (dispatch) => {
         return new Promise((resolve, reject) => {
-            if (appId && tblId && rptId) {
-                logger.debug(`Adding column with id: ${params.requestedId} for appId: ${appId}, tblId:${tblId}, rptId:${rptId}`);
+            if (appId && tblId) {
+                logger.debug(`Adding column with id: ${params.requestedId} for appId: ${appId}, tblId:${tblId}`);
                 let fieldsService = new FieldsService();
                 fieldsService.getFields(appId, tblId)
                     .then((response) => {
@@ -409,7 +407,7 @@ export const addColumnFromExistingField = (context, appId, tblId, rptId, params)
                         reject();
                     });
             } else {
-                logger.error(`reportActions.addColumnFromExistingField: Missing one or more required input parameters.  AppId:${appId}; TblId:${tblId}; RptId:${rptId}`);
+                logger.error(`reportActions.addColumnFromExistingField: Missing one or more required input parameters.  AppId:${appId}; TblId:${tblId};`);
                 reject();
             }
         });

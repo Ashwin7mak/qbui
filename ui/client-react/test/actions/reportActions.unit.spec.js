@@ -234,7 +234,7 @@ describe('Test ReportsActions function success workflow', () => {
         ];
         const store = mockReportsStore({});
 
-        return store.dispatch(reportActions.toggleFieldSelectorMenu(context, appId, tblId, rptId, params)).then(
+        return store.dispatch(reportActions.toggleFieldSelectorMenu(context, appId, tblId, params)).then(
             () => {
                 expect(store.getActions()).toEqual(expectedAction);
                 done();
@@ -256,7 +256,7 @@ describe('Test ReportsActions function success workflow', () => {
         ];
         const store = mockReportsStore({});
 
-        return store.dispatch(reportActions.toggleFieldSelectorMenu(context, appId, tblId, rptId, params)).then(
+        return store.dispatch(reportActions.toggleFieldSelectorMenu(context, appId, tblId, params)).then(
             () => {
                 expect(store.getActions()).toEqual(expectedAction);
                 done();
@@ -278,7 +278,7 @@ describe('Test ReportsActions function success workflow', () => {
         ];
         const store = mockReportsStore({});
 
-        return store.dispatch(reportActions.addColumnFromExistingField(context, appId, tblId, rptId, params)).then(
+        return store.dispatch(reportActions.addColumnFromExistingField(context, appId, tblId, params)).then(
             () => {
                 expect(store.getActions()).toEqual(expectedAction);
                 done();

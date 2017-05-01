@@ -584,10 +584,10 @@ const mapDispatchToProps = (dispatch) => {
             });
         },
         addColumnFromExistingField: (context, appId, tblId, rptId, params) => {
-            dispatch(addColumnFromExistingField(context, appId, tblId, rptId, params));
+            dispatch(addColumnFromExistingField(context, appId, tblId, params));
         },
         toggleFieldSelectorMenu: (context, appId, tblId, rptId, params) => {
-            dispatch(toggleFieldSelectorMenu(context, appId, tblId, rptId, params));
+            dispatch(toggleFieldSelectorMenu(context, appId, tblId, params));
         },
 
         loadReports: (context, appId, tblId) => dispatch(ReportActions.loadReports(context, appId, tblId)),

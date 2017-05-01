@@ -308,7 +308,7 @@ const mapDispatchToProps = (dispatch) => {
             dispatch(hideColumn(context, appId, tblId, rptId, params));
         },
         toggleFieldSelectorMenu: (context, appId, tblId, rptId, params) => {
-            dispatch(toggleFieldSelectorMenu(context, appId, tblId, rptId, params));
+            dispatch(toggleFieldSelectorMenu(context, appId, tblId, params));
         }
     };
 };
