@@ -4,16 +4,24 @@ import jasmineEnzyme from 'jasmine-enzyme';
 
 import AccountUsersStage from '../../../src/account/users/AccountUsersStage';
 import Locale from "../../../../reuse/client/src/locales/locale";
+import GovernanceBundleLoader from '../../../src/locales/governanceBundleLoader';
 
 let component;
 
 describe('AccountUsersStage', () => {
+
+
     beforeEach(() => {
         jasmineEnzyme();
+        GovernanceBundleLoader.changeLocale('en-us');
+    });
+
+    afterEach(() => {
+        GovernanceBundleLoader.changeLocale('en-us');
     });
 
     it('has the correct header', () => {
-        component = mount(<AccountUsersStage />);
+        component = mount(<AccountUsersStage users={[{'hasAppAccess': false}]}/>);
         expect(component.find('.stageHeaderTitle')).toHaveText(Locale.getMessage("governance.account.users.stageTitle"));
     });
 
