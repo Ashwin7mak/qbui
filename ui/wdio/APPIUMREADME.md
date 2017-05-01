@@ -3,7 +3,7 @@ Written by skamineni 05/01/17
 
 ##Pre-requisites for IOS devices:
 Mac OS X 10.10 or higher.
-XCode >= 6.0, 7.1.1 recommended. Don't use xCode 8.
+XCode >= 6.0, 7.2 recommended. Don't use xCode 8.
 Apple Developer Tools (iPhone simulator SDK, command line tools)
 
 ##Pre-requisites for Android devices:
