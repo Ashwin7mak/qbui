@@ -3,7 +3,7 @@ Written by skamineni 05/01/17
 
 ##Pre-requisites for IOS devices:
 Mac OS X 10.10 or higher.
-XCode >= 6.0, 7.2 recommended. Don't use xCode 8.
+Install Xcode version 7.2 which is found at https://developer.apple.com/download/more/
 Apple Developer Tools (iPhone simulator SDK, command line tools)
 
 ##Pre-requisites for Android devices:
@@ -26,6 +26,7 @@ For more info on Appium please see their website here: [http://appium.io/getting
 
 ##Configuration:
 go to qbui/ui and run npm install. This should install appium version 1.6.4 and appium-service 0.2.3
+run sudo xcode-select --switch /Applications/Xcode.app in the terminal
 First copy the checked in **sample** file to the same directory renaming it to **wdio.conf.js** to create your local config (this has already been added to **.gitignore**). The sample file is located in
 
 `qbui/ui/wdio/config/wdioMobile.conf.js.sample`
@@ -37,6 +38,10 @@ This is to prevent port collision if you have Node already running. This also lo
 ###Choosing which tests run:
 Edit the **specs** parameter of **wdio.conf.js** (the path is dependent on where u run the wdio.conf.js from - see above).If all above works good the checkpoint is the test './ui/wdio/tests/reports/reportTable.e2e.spec.js' should 100% pass on iPad2(tablet)
 and './ui/wdio/tests/mobile/reportSortingViaContainer.e2e.spec.js' should work on iPhone(card view)
+
+##Troubleshooting:
+Please make ure xCode 7.2 is installed
+
 
 
 
