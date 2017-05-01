@@ -1,7 +1,7 @@
 import React, {PropTypes, Component} from 'react';
 import SideTrowser from '../../../../../reuse/client/src/components/sideTrowserBase/sideTrowserBase';
 import NewFieldsMenu from '../../formBuilder/menus/newFieldsMenu';
-
+import * as tabIndexConstants from '../../formBuilder/tabindexConstants';
 import './toolPalette.scss';
 
 /**
@@ -14,7 +14,11 @@ class ToolPalette extends Component {
 
         return (
             <div className="toolPaletteContainer">
-                <NewFieldsMenu isCollapsed={isCollapsed} isOpen={isOpen}/>
+                <NewFieldsMenu isCollapsed={isCollapsed} isOpen={isOpen}
+                               toolPaletteTabIndex={tabIndexConstants.TOOL_PALETTE_TABINDEX}
+                               toggleToolPaletteChildrenTabIndex={this.props.toggleToolPaletteChildrenTabIndex}
+                               toolPaletteChildrenTabIndex={this.props.toolPaletteChildrenTabIndex}
+                               toolPaletteFocus={this.props.toolPaletteFocus} />
             </div>
         );
     };

@@ -40,7 +40,7 @@ export const SUPPORTED_NEW_FIELD_TYPES = [
         titleI18nKey: 'builder.fieldGroups.other',
         fieldTypes: [
             fieldFormats.CHECKBOX_FORMAT,
-            // fieldFormats.USER_FORMAT,
+            fieldFormats.USER_FORMAT,
             fieldFormats.URL,
             fieldFormats.EMAIL_ADDRESS,
             fieldFormats.PHONE_FORMAT,
@@ -73,11 +73,15 @@ export const supportedNewFieldTypesWithProperties = () => {
  */
 export function createFieldTypeProps(fieldType) {
     let title = Locale.getMessage(`fieldsDefaultLabels.${fieldType}`);
+    let id = `fieldType_${fieldType}`;
+    let field = createScalarDefaultFieldsProperties()[fieldType];
 
     return {
-        key: `fieldType_${fieldType}`,
+        containingElement: {id, FormFieldElement: {positionSameRow: false, ...field}},
+        location: {tabIndex: 0, sectionIndex: 0, columnIndex: 0, elementIndex: 0},
+        key: `fieldType_${fieldType}`, // Key for react to use to identify it in the array
         type: fieldType,
-        relatedField: {...createScalarDefaultFieldsProperties()[fieldType]},
+        relatedField: field,
         title,
         tooltipText: Locale.getMessage(`builder.formBuilder.tooltips.addNew${fieldType}`),
         isNewField: true

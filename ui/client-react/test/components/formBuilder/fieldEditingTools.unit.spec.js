@@ -111,7 +111,7 @@ describe('FieldEditingTools', () => {
 
     it('scrolls into view when the selectedFormElement is at the bottom of the page', () => {
         let container = {
-            height: 1500,
+            bottom: 1500,
             top: 100
         };
 
@@ -123,16 +123,16 @@ describe('FieldEditingTools', () => {
 
         let instance = component.instance();
         spyOn(instance, 'getSelectedFormElementContainer').and.returnValue(container);
-        spyOn(instance, 'scrollElementIntoView');
+        spyOn(instance, 'scrollElementDownIntoView');
 
         instance.updateScrollLocation();
 
-        expect(instance.scrollElementIntoView).toHaveBeenCalled();
+        expect(instance.scrollElementDownIntoView).toHaveBeenCalled();
     });
 
     it('scrolls into view when the selectedFormElement is at the top of the page', () => {
         let container = {
-            height: 50,
+            bottom: 50,
             top: 10
         };
 
@@ -144,16 +144,16 @@ describe('FieldEditingTools', () => {
 
         let instance = component.instance();
         spyOn(instance, 'getSelectedFormElementContainer').and.returnValue(container);
-        spyOn(instance, 'scrollElementIntoView');
+        spyOn(instance, 'scrollElementUpIntoView');
 
         instance.updateScrollLocation();
 
-        expect(instance.scrollElementIntoView).toHaveBeenCalled();
+        expect(instance.scrollElementUpIntoView).toHaveBeenCalled();
     });
 
-    it('will not scroll into view when the selectedFormElement is already in view', () => {
+    it('will not scroll down into view when the selectedFormElement is already in view', () => {
         let container = {
-            height: 50,
+            bottom: 50,
             top: 50
         };
 
@@ -165,11 +165,32 @@ describe('FieldEditingTools', () => {
 
         let instance = component.instance();
         spyOn(instance, 'getSelectedFormElementContainer').and.returnValue(container);
-        spyOn(instance, 'scrollElementIntoView');
+        spyOn(instance, 'scrollElementDownIntoView');
 
         instance.updateScrollLocation();
 
-        expect(instance.scrollElementIntoView).not.toHaveBeenCalled();
+        expect(instance.scrollElementDownIntoView).not.toHaveBeenCalled();
+    });
+
+    it('will not scroll up into view when the selectedFormElement is already in view', () => {
+        let container = {
+            bottom: 50,
+            top: 350
+        };
+
+        component = shallow(<FieldEditingTools
+            formBuilderChildrenTabIndex={formBuilderChildrenTabIndex}
+            location={location}
+            selectedFields={[location]}
+        />);
+
+        let instance = component.instance();
+        spyOn(instance, 'getSelectedFormElementContainer').and.returnValue(container);
+        spyOn(instance, 'scrollElementUpIntoView');
+
+        instance.updateScrollLocation();
+
+        expect(instance.scrollElementUpIntoView).not.toHaveBeenCalled();
     });
 
     it('will select a field when enter is pressed', () => {

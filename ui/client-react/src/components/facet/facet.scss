@@ -55,6 +55,11 @@
         font-size: 18px;
         cursor: pointer;
 
+        @include small-breakpoint {
+            font-size: $size-iconfont-large;
+            line-height: 1.9;
+        }
+
         &.qbIcon {
             display: inline;
         }
