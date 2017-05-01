@@ -14,7 +14,7 @@ import RowActions from './rowActions';
 import {SELECT_ROW_CHECKBOX} from '../../../../../reuse/client/src/components/rowActions/rowActions';
 import QbIcon from '../../qbIcon/qbIcon';
 import CollapsedGroupsHelper from './collapsedGroupHelper';
-
+import TouchBackend from 'react-dnd-touch-backend';
 import {moveColumn} from '../../../actions/reportActions';
 import {CONTEXT} from '../../../actions/context';
 
@@ -465,4 +465,4 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = {moveColumn};
 
-export default connect(mapStateToProps, mapDispatchToProps)(DragDropContext(HTML5Backend)(QbGrid));
+export default connect(mapStateToProps, mapDispatchToProps)(DragDropContext(TouchBackend({enableMouseEvents: true, delay: 30}))(QbGrid));
