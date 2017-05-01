@@ -274,10 +274,8 @@
          */
         ClickMoreFieldsLinkInFieldsPanel : {value: function() {
             this.fieldsPanel.waitForVisible();
-            //scroll to more fields.scroll wont work for safari so added below to work for all browsers.
-            while (this.fieldsPanel.element('.list-group .moreFields').isVisibleWithinViewport()) {
-                browser.moveTo(null, 0, 1);
-            }
+            //scroll to more fields
+            this.fieldsPanel.element('.list-group .moreFields').scroll();
             //click on more fields
             this.fieldsPanel.element('.list-group .moreFields').waitForVisible();
             this.fieldsPanel.element('.list-group .moreFields').click();
