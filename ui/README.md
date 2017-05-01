@@ -352,9 +352,11 @@ and
 
 3. You will need to have any services your tests will use running locally on your machine (e.g., Qbui, Core, EE)
 
-4. By default, `wdioSauce.conf.js` does not have any tests activated. Add tests or directories in the `specs` array in `wdioSauce.conf.js`.
+4. In `wdioSauce.conf.js`, uncomment the `dns: '127.0.0.1'`, line uner `sauceConnectOpts` toward the top of the file.
 
-5. Run the tests with the play or debug button in Intellij.
+5. By default, `wdioSauce.conf.js` does not have any tests activated. Add tests or directories in the `specs` array in `wdioSauce.conf.js`.
+
+6. Run the tests with the play or debug button in Intellij.
 
 *Bonus 1:* You can login to SauceLabs and watch the tests run live (go to Dashboard -> Automated Tests)
 
@@ -365,6 +367,8 @@ may want to change the `SAUCE_JOB_NAME` variable in your IntelliJ job to reflect
 
 *Bonus 3:* In your IntelliJ configuration, click the "+" button under "Before Launch" and add a task to run `npm run webpack` before the tests
 run to ensure you have the most up to date code running in your E2E test.
+
+*Bonus 4:* Give your jobs a name so they are more easily identifiable in Sauce Labs. Under `capabilities` in `wdioSauce.config.js`, add a `name` key to the browsers. Can be something like `[initials]ChromeTest`, but you can name it anything you would like.
 
 ## Using Gradle to build distribution node server
 
