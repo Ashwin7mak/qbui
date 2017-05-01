@@ -6,8 +6,7 @@
     flex-direction: column;
     border: 1px solid $color-black-400;
     background-color: $color-black-100;
-    padding: 2px;
-    padding-right: 0;
+    padding: 0;
 
     .qbIcon {
         font-size: 24px;
@@ -31,12 +30,12 @@
             flex-wrap: nowrap;
             color: $color-black-700;
             text-align: center;
-
-            margin: 4px 12px 4px 4px;
             align-items: center;
             background-color: $iconchooserbutton-background-color;
             border: 0;
-            padding: 0;
+            padding: 4px;
+            height: 39px;
+            width: 64px;
 
             .showAllSelectedIcon {
                 margin-right: -5px;

@@ -24,9 +24,12 @@
         height: 34px;
     }
 
-    textarea:focus {
-        outline: -webkit-focus-ring-color auto 5px;
+    input {
+        &:focus {
+            @include text-input-focus;
+        }
     }
+
     &.validationFailed {
         .tableFieldTitle {
             color: $error-color;

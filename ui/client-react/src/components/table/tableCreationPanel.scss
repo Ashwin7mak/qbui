@@ -39,6 +39,15 @@
             }
         }
 
+        .iconChooser.closed .showAllToggle {
+            &:focus {
+                @include text-input-focus;
+            }
+        }
+        .iconChooser.open .showAllToggle:focus {
+            outline: none;
+        }
+
         .suggestedIcons {
             margin-left: 100px;
             .iconList {
