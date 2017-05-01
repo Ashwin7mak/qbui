@@ -256,7 +256,7 @@
 
             //Add user to participant appRole
             browser.call(function() {
-                return e2eBase.recordBase.apiBase.assignUsersToAppRole(testApp.id, e2eConsts.PARTICIPANT_ROLEID, [userId]);
+                return e2eBase.recordBase.apiBase.assignUsersToAppRole(testApp.id, "11", [userId]);
             });
 
             //get the user authentication
