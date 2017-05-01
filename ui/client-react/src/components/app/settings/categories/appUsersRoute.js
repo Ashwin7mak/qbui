@@ -35,6 +35,10 @@ const AppUsersRoute = React.createClass({
         }
     },
 
+    componentWillUnmount() {
+        this.selectRows([]);
+    },
+
     getPageActions() {
         const actions = [
             {msg: 'app.users.addUser', icon: 'add-new-filled', className: 'addRecord', disabled: true},

@@ -145,6 +145,7 @@ class UserManagement extends React.Component {
         ];
 
         return (
+        resolvedRows.length > 0 ?
             <div className="userManagementReport">
                 <Table.Provider columns={columns} className="qbGrid"
 
@@ -171,7 +172,7 @@ class UserManagement extends React.Component {
                                 }}
                     />
                 </Table.Provider>
-            </div>
+            </div> : null
         );
     }
 
