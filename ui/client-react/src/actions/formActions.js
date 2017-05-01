@@ -325,6 +325,26 @@ export const toggleToolPaletteChildrenTabIndex = (formId, currentTabIndex) => {
 };
 
 /**
+ * endDraggingState updates the dragging state to false for drag and drop
+ * @param formId
+ * @returns {{id, type, content}|*}
+ */
+export const endDraggingState = (formId) => {
+    console.log('endDraggingState Action');
+    return event(formId, types.END_DRAG);
+};
+
+/**
+ * isInDraggingState updates the dragging state to true for drag and drop
+ * @param formId
+ * @returns {{id, type, content}|*}
+ */
+export const isInDraggingState = (formId) => {
+    console.log('isInDraggingState Action');
+    return event(formId, types.IS_DRAGGING);
+};
+
+/**
  * Create a new form
  *
  * @param appId

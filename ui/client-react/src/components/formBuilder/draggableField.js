@@ -4,6 +4,7 @@ import DraggableItemTypes from './draggableItemTypes';
 import {getEmptyImage} from 'react-dnd-html5-backend';
 import FieldEditingTools from './fieldEditingTools/fieldEditingTools';
 
+
 /**
  * Specifies event handlers and props that are available during dragging events
  * Recommended: Call any actions that will modify the DOM in "endDrag" (instead of drop [on drop target]), because
@@ -18,6 +19,10 @@ const fieldDragSource = {
 
         if (props.beginDrag) {
             props.beginDrag(props);
+        }
+
+        if (props.isInDraggingState) {
+            props.isInDraggingState(props.formId);
         }
 
         return {
@@ -64,6 +69,9 @@ const fieldDragSource = {
 
         if (props.clearDragElementCache) {
             props.clearDragElementCache();
+        }
+        if (props.endDraggingState) {
+            props.endDraggingState(props.formId);
         }
     }
 };
