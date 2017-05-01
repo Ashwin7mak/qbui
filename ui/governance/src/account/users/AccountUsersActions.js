@@ -61,14 +61,34 @@ export const searchUsers = (users, searchTerm) => {
  * @returns {paginated/filtered users}
  */
 export const paginateUsers = (users, _page, _itemsPerPage) => {
-    if (users.length === 0) {
-        return users;
-    }
 
     let page = _page || 1,
         itemsPerPage = _itemsPerPage || 10;
+
     let offset = (page - 1) * itemsPerPage;
-    return users.slice(offset, offset + itemsPerPage);
+
+    if (users.length === 0) {
+        return {
+            users: users,
+            firstUser: 0,
+            lastUser: 0
+        };
+    }
+
+    if (offset > users.length || itemsPerPage >= users.length) {
+        return {
+            users: users,
+            firstUser: 1,
+            lastUser: users.length
+        };
+    }
+
+    let slicedUsers = users.slice(offset, offset + itemsPerPage);
+    return {
+        users: slicedUsers,
+        firstUser: offset + 1, // 0th indexed array
+        lastUser: offset + slicedUsers.length
+    };
 };
 
 const sortFunctions = [
@@ -137,13 +157,20 @@ export const doUpdate = (gridId, gridState, _itemsPerPage) => {
             totalRecords: sortedUsers.length,
             totalPages: Math.ceil(sortedUsers.length / itemsPerPage),
             currentPage: currentPage,
-            itemsPerPage: itemsPerPage
+            itemsPerPage: itemsPerPage,
+            firstRecordInCurrentPage: paginatedUsers.firstUser,
+            lastRecordInCurrentPage: paginatedUsers.lastUser
+
         };
+
+        // Set the grid's search term
+        dispatch(StandardGridActions.setSearch(gridId, searchTerm));
+
         // Set the grid's pagination info
         dispatch(StandardGridActions.setPaginate(gridId, pagination));
 
         // Inform the grid of the new users
-        dispatch(StandardGridActions.setItems(gridId, paginatedUsers));
+        dispatch(StandardGridActions.setItems(gridId, paginatedUsers.users));
 
     };
 };
