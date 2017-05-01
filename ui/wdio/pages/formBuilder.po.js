@@ -95,9 +95,14 @@ class formBuilderPage {
     }
     removeField(index) {
         // Removes a specific field in the form builder by clicking on its DELETE icon
-        let field = browser.element(this.getFieldLocator(index));
-        field.element('.deleteFieldIcon').click();
-        field.waitForExist(fiveSeconds, false);
+        let fieldLocator = this.getFieldLocator(index);
+        let field = browser.element(fieldLocator);
+        let deleteBtn = field.element('.deleteFieldIcon');
+        browser.moveToObject(field);
+        deleteBtn.click();
+        // wait for the field to disappear
+        field.waitForExist(fiveSeconds, true);
+        // and give the rest of the fields time to settle...
         browser.pause(fiveSeconds);
         return this;
     }
