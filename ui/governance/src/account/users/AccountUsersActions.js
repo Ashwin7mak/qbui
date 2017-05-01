@@ -162,6 +162,10 @@ export const doUpdate = (gridId, gridState, _itemsPerPage) => {
             lastRecordInCurrentPage: paginatedUsers.lastUser
 
         };
+
+        // Set the grid's search term
+        dispatch(StandardGridActions.setSearch(gridId, searchTerm));
+
         // Set the grid's pagination info
         dispatch(StandardGridActions.setPaginate(gridId, pagination));
 

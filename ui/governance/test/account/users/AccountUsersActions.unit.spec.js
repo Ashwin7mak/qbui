@@ -144,65 +144,222 @@ describe('Account Users Actions Tests', () => {
     describe('Update Actions', () => {
 
         let middleware = [thunk];
-        const mockStore = configureMockStore(middleware);
-        let USERS = [
-            {
-                "uid": 10000,
-                "firstName": "Administrator",
-            },
-            {
-                "uid": 10000,
-                "firstName": "ZAdministrator",
-            },
-            {
-                "uid": 10000,
-                "firstName": "BAdministrator",
-            }];
+        const mockStore = configureMockStore(middleware),
+            GRID_ID = 1,
+            ITERMS_PER_PAGE = 10;
 
-        let SORTED_USERS = [
-            {
-                "uid": 10000,
-                "firstName": "Administrator",
-            },
-            {
-                "uid": 10000,
-                "firstName": "BAdministrator",
-            },
-            {
-                "uid": 10000,
-                "firstName": "ZAdministrator",
-            }];
 
-        it('dispatches correctly', () => {
+        it('dispatches sort correctly', () => {
 
-            const store = mockStore({AccountUsers: {users: USERS}});
-            let gridId = 1;
-            let itemsPerPage = 10;
+            const store = mockStore({AccountUsers: {users: ACCOUNT_USERS_DATA}});
+
             let gridState = {
-                sortFids: [1],
-                pagination: {currentPage:1}};
+                sortFids: [1],                      // sort by firstName ascending
+                pagination: {
+                    currentPage: 1,
+                    itemsPerPage: ITERMS_PER_PAGE}, // no pagination
+                searchTerm: ""                      // search term
+            };
 
-            store.dispatch(actions.doUpdate(gridId, gridState, itemsPerPage));
-            const expectedActions = [
+            store.dispatch(actions.doUpdate(GRID_ID, gridState));
+
+            const expectedAction = [
+                {
+                    type: gridTypes.SET_SEARCH,
+                    gridId: GRID_ID,
+                    searchTerm: ""
+                },
                 {
                     type: gridTypes.SET_PAGINATION,
-                    gridId: gridId,
+                    gridId: GRID_ID,
                     pagination: {
-                        totalRecords: USERS.length,
+                        totalRecords: ACCOUNT_USERS_DATA.length,
                         totalPages: 1,
                         currentPage: 1,
-                        itemsPerPage: itemsPerPage,
+                        itemsPerPage: ITERMS_PER_PAGE,
                         firstRecordInCurrentPage: 1,
                         lastRecordInCurrentPage: 3
                     }
                 },
                 {
                     type: gridTypes.SET_ITEMS,
-                    gridId: gridId,
-                    items: SORTED_USERS
+                    gridId: GRID_ID,
+                    items: [
+                        {
+                            "uid": 10000,
+                            "id": 10000,
+                            "firstName": "Administrator",
+                            "lastName": "User for default SQL Installation",
+                            "email": "koala_bumbles@quickbase.com",
+                            "userName": "administrator",
+                            "lastAccess": "2017-02-28T19:32:04.223Z",
+                            "numGroupsMember": 0,
+                            "numGroupsManaged": 0,
+                            "hasAppAccess": true,
+                            "numAppsManaged": 2,
+                            "userBasicFlags": 24576,
+                            "accountTrusteeFlags": 0,
+                            "realmDirectoryFlags": 0,
+                            "systemRights": -1
+                        },
+                        {
+                            "uid": 20000,
+                            "id": 20000,
+                            "firstName": "FirstNameFilter",
+                            "lastName": "lastNameFilter",
+                            "email": "emailFilter@g88.net",
+                            "userName": "userNameFilter",
+                            "lastAccess": "1900-01-01T00:00:00Z",
+                            "numGroupsMember": 0,
+                            "numGroupsManaged": 1,
+                            "hasAppAccess": true,
+                            "numAppsManaged": 0,
+                            "userBasicFlags": 8192,
+                            "accountTrusteeFlags": 0,
+                            "realmDirectoryFlags": 4,
+                            "systemRights": 0
+                        },
+                        {
+                            "uid": 30000,
+                            "id": 30000,
+                            "firstName": "Zadministrator",
+                            "lastName": "ZUser for default SQL Installation",
+                            "email": "Zkoala_bumbles@quickbase.com",
+                            "userName": "Zadministrator",
+                            "lastAccess": "2019-02-28T19:32:04.223Z",
+                            "numGroupsMember": 100,
+                            "numGroupsManaged": 100,
+                            "hasAppAccess": false,
+                            "numAppsManaged": 200,
+                            "userBasicFlags": 24576,
+                            "accountTrusteeFlags": 0,
+                            "realmDirectoryFlags": 0,
+                            "systemRights": 0
+                        }]
                 }
             ];
-            expect(store.getActions(gridId)).toEqual(expectedActions);
+
+            expect(store.getActions(GRID_ID)).toEqual(expectedAction);
+        });
+
+        it('dispatches search correctly', () => {
+
+            const store = mockStore({AccountUsers: {users: ACCOUNT_USERS_DATA}});
+
+            const searchTerm = "ZAdministrator";
+
+            let gridState = {
+                sortFids: [],                       // no sorting
+                pagination: {
+                    currentPage: 1,
+                    itemsPerPage: ITERMS_PER_PAGE}, // no pagination
+                searchTerm: searchTerm        // search for Zadministrator
+            };
+
+            store.dispatch(actions.doUpdate(GRID_ID, gridState));
+
+            const expectedActions = [
+                {
+                    type: gridTypes.SET_SEARCH,
+                    gridId: GRID_ID,
+                    searchTerm: searchTerm
+                },
+                {
+                    type: gridTypes.SET_PAGINATION,
+                    gridId: GRID_ID,
+                    pagination: {
+                        totalRecords: 1,
+                        totalPages: 1,
+                        currentPage: 1,
+                        itemsPerPage: ITERMS_PER_PAGE,
+                        firstRecordInCurrentPage: 1,
+                        lastRecordInCurrentPage: 1
+                    }
+                },
+                {
+                    type: gridTypes.SET_ITEMS,
+                    gridId: GRID_ID,
+                    items: [
+                        {
+                            "uid": 30000,
+                            "id": 30000,
+                            "firstName": "Zadministrator",
+                            "lastName": "ZUser for default SQL Installation",
+                            "email": "Zkoala_bumbles@quickbase.com",
+                            "userName": "Zadministrator",
+                            "lastAccess": "2019-02-28T19:32:04.223Z",
+                            "numGroupsMember": 100,
+                            "numGroupsManaged": 100,
+                            "hasAppAccess": false,
+                            "numAppsManaged": 200,
+                            "userBasicFlags": 24576,
+                            "accountTrusteeFlags": 0,
+                            "realmDirectoryFlags": 0,
+                            "systemRights": 0
+                        }]
+                }
+            ];
+
+            expect(store.getActions(GRID_ID)).toEqual(expectedActions);
+        });
+
+        it('dispatches pagination correctly', () => {
+
+            const store = mockStore({AccountUsers: {users: ACCOUNT_USERS_DATA}});
+
+            let gridState = {
+                sortFids: [1],                       // no sorting
+                pagination: {
+                    currentPage: 2,
+                    itemsPerPage: 2},               // paginate to next page
+                searchTerm: ""                      // no search
+            };
+
+            store.dispatch(actions.doUpdate(GRID_ID, gridState));
+
+            const expectedActions = [
+                {
+                    type: gridTypes.SET_SEARCH,
+                    gridId: GRID_ID,
+                    searchTerm: ""
+                },
+                {
+                    type: gridTypes.SET_PAGINATION,
+                    gridId: GRID_ID,
+                    pagination: {
+                        totalRecords: 3,
+                        totalPages: 2,
+                        currentPage: 2,
+                        itemsPerPage: 2,
+                        firstRecordInCurrentPage: 3,
+                        lastRecordInCurrentPage: 3
+                    }
+                },
+                {
+                    type: gridTypes.SET_ITEMS,
+                    gridId: GRID_ID,
+                    items: [
+                        {
+                            "uid": 30000,
+                            "id": 30000,
+                            "firstName": "Zadministrator",
+                            "lastName": "ZUser for default SQL Installation",
+                            "email": "Zkoala_bumbles@quickbase.com",
+                            "userName": "Zadministrator",
+                            "lastAccess": "2019-02-28T19:32:04.223Z",
+                            "numGroupsMember": 100,
+                            "numGroupsManaged": 100,
+                            "hasAppAccess": false,
+                            "numAppsManaged": 200,
+                            "userBasicFlags": 24576,
+                            "accountTrusteeFlags": 0,
+                            "realmDirectoryFlags": 0,
+                            "systemRights": 0
+                        }]
+                }
+            ];
+
+            expect(store.getActions(GRID_ID)).toEqual(expectedActions);
         });
     });
 
