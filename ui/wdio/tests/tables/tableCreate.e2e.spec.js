@@ -12,6 +12,7 @@
     let ReportContentPO = requirePO('reportContent');
     const tableNameFieldTitleText = '* Table name';
     const recordNameFieldTitleText = '* A record in the table is called';
+    const descFieldTitleText = 'Description';
 
     describe('Tables - Create a table via builder tests: ', function() {
         let realmName;
@@ -53,7 +54,7 @@
             let tableFields = [
                 {fieldTitle: tableNameFieldTitleText, fieldValue: tableName, placeHolder: 'For example, Customers'},
                 {fieldTitle: recordNameFieldTitleText, fieldValue: rawValueGenerator.generateStringWithFixLength(10), placeHolder: 'For example, customer'},
-                {fieldTitle: 'Description', fieldValue: rawValueGenerator.generateStringWithFixLength(50), placeHolder: 'Text to show when hovering over the table name in the left navigation'}
+                {fieldTitle: descFieldTitleText, fieldValue: rawValueGenerator.generateStringWithFixLength(50), placeHolder: 'Text to show when hovering over the table name in the left navigation'}
             ];
 
             //Step 1 - get the original count of table links in the left nav
@@ -145,7 +146,7 @@
                     message: 'with empty table name',
                     tableFields: [
                         {fieldTitle: tableNameFieldTitleText, fieldValue: ' '},
-                        {fieldTitle: 'Description', fieldValue: 'test Description'}
+                        {fieldTitle: descFieldTitleText, fieldValue: 'test Description'}
                     ],
                     tableFieldError: [
                         {fieldTitle: tableNameFieldTitleText, fieldError: 'Fill in the table name'},
@@ -156,7 +157,7 @@
                     tableFields: [
                         {fieldTitle: tableNameFieldTitleText, fieldValue: ' '},
                         {fieldTitle: recordNameFieldTitleText, fieldValue: ' '},
-                        {fieldTitle: 'Description', fieldValue: 'test Description'}
+                        {fieldTitle: descFieldTitleText, fieldValue: 'test Description'}
                     ],
                     tableFieldError: [
                         {fieldTitle: tableNameFieldTitleText, fieldError: 'Fill in the table name'},
@@ -168,7 +169,7 @@
                     tableFields: [
                         {fieldTitle: tableNameFieldTitleText, fieldValue: 'Table 1'},
                         {fieldTitle: recordNameFieldTitleText, fieldValue: 'Table 1'},
-                        {fieldTitle: 'Description', fieldValue: 'test Description'}
+                        {fieldTitle: descFieldTitleText, fieldValue: 'test Description'}
                     ],
                     tableFieldError: [
                         {fieldTitle: tableNameFieldTitleText, fieldError: 'Fill in a different value. Another table is already using this name'},
@@ -216,7 +217,7 @@
             let tableFields = [
                 {fieldTitle: tableNameFieldTitleText, fieldValue: tableName},
                 {fieldTitle: recordNameFieldTitleText, fieldValue: rawValueGenerator.generateStringWithFixLength(10)},
-                {fieldTitle: 'Description', fieldValue: rawValueGenerator.generateStringWithFixLength(50)}
+                {fieldTitle: descFieldTitleText, fieldValue: rawValueGenerator.generateStringWithFixLength(50)}
             ];
 
             //Step 1 - get the original count of table links in the left nav

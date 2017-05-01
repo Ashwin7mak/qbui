@@ -11,6 +11,7 @@
     var rawValueGenerator = require('../../../test_generators/rawValue.generator');
     const tableNameFieldTitleText = '* Table name';
     const recordNameFieldTitleText = '* A record in the table is called';
+    const descFieldTitleText = 'Description';
 
     describe('Tables - Edit a table via builder tests: ', function() {
         var realmName;
@@ -60,12 +61,12 @@
                 var tableFields = [
                     {fieldTitle: tableNameFieldTitleText, fieldValue: tableName},
                     {fieldTitle: recordNameFieldTitleText, fieldValue: tableRecord},
-                    {fieldTitle: 'Description', fieldValue: tableDescription}
+                    {fieldTitle: descFieldTitleText, fieldValue: tableDescription}
                 ];
                 var newTableFields = [
                     {fieldTitle: tableNameFieldTitleText, fieldValue: 'New ' + tableName},
                     {fieldTitle: recordNameFieldTitleText, fieldValue: 'New ' + tableRecord},
-                    {fieldTitle: 'Description', fieldValue: 'New ' + tableDescription}
+                    {fieldTitle: descFieldTitleText, fieldValue: 'New ' + tableDescription}
                 ];
 
                 //Step 1 - Click on new table button
@@ -192,7 +193,7 @@
             var tableFields = [
                 {fieldTitle: tableNameFieldTitleText, fieldValue: tableName},
                 {fieldTitle: recordNameFieldTitleText, fieldValue: tableRecord},
-                {fieldTitle: 'Description', fieldValue: tableDescription}
+                {fieldTitle: descFieldTitleText, fieldValue: tableDescription}
             ];
             var originalFieldValues;
             var newFieldValues;
@@ -242,7 +243,7 @@
                     message: 'with empty table name',
                     tableFields: [
                         {fieldTitle: tableNameFieldTitleText, fieldValue: ' '},
-                        {fieldTitle: 'Description', fieldValue: 'test Description'}
+                        {fieldTitle: descFieldTitleText, fieldValue: 'test Description'}
                     ],
                     tableFieldError: [
                         {fieldTitle: tableNameFieldTitleText, fieldError: 'Fill in the table name'},
@@ -253,7 +254,7 @@
                     tableFields: [
                         {fieldTitle: tableNameFieldTitleText, fieldValue: ' '},
                         {fieldTitle: recordNameFieldTitleText, fieldValue: ' '},
-                        {fieldTitle: 'Description', fieldValue: 'test Description'}
+                        {fieldTitle: descFieldTitleText, fieldValue: 'test Description'}
                     ],
                     tableFieldError: [
                         {fieldTitle: tableNameFieldTitleText, fieldError: 'Fill in the table name'},
@@ -265,7 +266,7 @@
                     tableFields: [
                         {fieldTitle: tableNameFieldTitleText, fieldValue: 'Table 1'},
                         {fieldTitle: recordNameFieldTitleText, fieldValue: 'Table 1'},
-                        {fieldTitle: 'Description', fieldValue: 'test Description'}
+                        {fieldTitle: descFieldTitleText, fieldValue: 'test Description'}
                     ],
                     tableFieldError: [
                         {fieldTitle: tableNameFieldTitleText, fieldError: 'Fill in a different value. Another table is already using this name'},
