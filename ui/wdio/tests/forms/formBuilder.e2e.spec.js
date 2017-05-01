@@ -54,6 +54,7 @@
             browser.windowHandleSize({width: browserSize.value.width, height: firstFieldSize.height * 4});
             expect(lastField.isVisibleWithinViewport()).toBe(false);
             // click on first field & drag DOWN until autoscroll begins
+            firstField.click();
             firstField.element('.fieldLabel').moveToObject().buttonDown();
             while (firstField.isVisibleWithinViewport()) {
                 browser.moveTo(null, 0, 1);

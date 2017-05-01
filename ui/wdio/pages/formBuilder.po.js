@@ -99,6 +99,7 @@ class formBuilderPage {
         let field = browser.element(fieldLocator);
         let deleteBtn = field.element('.deleteFieldIcon');
         browser.moveToObject(fieldLocator);
+        deleteBtn.waitForVisible();
         deleteBtn.click();
         // wait for the field to disappear
         field.waitForExist(fiveSeconds, true);
