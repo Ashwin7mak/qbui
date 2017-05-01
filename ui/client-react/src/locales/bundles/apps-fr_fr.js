@@ -318,8 +318,8 @@ export default {
                     uncheckedToChecked: "Groupe décochée à vérifier",
                     checkedToUnchecked: "Groupe cochés décochée"
                 },
-                addColumnBefore: "Montrez colonne caché avant",
-                addColumnAfter: "Montrez colonne caché après",
+                addColumnBefore: "Ajouter une colonne avant",
+                addColumnAfter: "Ajouter colonne après",
                 hideColumn: "Masquer cette colonne",
                 newTable: "Nouvelle table basée sur cette colonne",
                 columnProps: "Propriétés de la colonne",
