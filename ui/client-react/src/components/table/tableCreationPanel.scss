@@ -39,13 +39,13 @@
             }
         }
 
-        .iconChooser.closed .showAllToggle {
-            &:focus {
-                @include text-input-focus;
-            }
-        }
-        .iconChooser.open .showAllToggle:focus {
+        .iconChooser.closed .showAllToggle, .iconChooser.open .showAllToggle:focus {
             outline: none;
+            border: 1px solid #fff;
+        }
+        .iconChooser.closed .showAllToggle:focus {
+            /* we currently dont have button styles implemented. In the meantime match the focus styling to input box's */
+            @include text-input-focus;
         }
 
         .suggestedIcons {
