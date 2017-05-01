@@ -290,7 +290,6 @@ const forms = (
     }
 
     case types.IS_DRAGGING : {
-        console.log('Yo IS_DRAGGING!');
         if (!currentForm) {
             return state;
         }
@@ -306,7 +305,6 @@ const forms = (
     }
 
     case types.END_DRAG : {
-        console.log('Yo END_DRAG!');
         if (!currentForm) {
             return state;
         }
