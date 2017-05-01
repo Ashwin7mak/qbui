@@ -10,6 +10,8 @@
     let RequestSessionTicketPage = requirePO('requestSessionTicket');
     let rawValueGenerator = require('../../../test_generators/rawValue.generator');
     let ReportContentPO = requirePO('reportContent');
+    const tableNameFieldTitleText = '* Table name';
+    const recordNameFieldTitleText = '* A record in the table is called';
 
     describe('Tables - Create a table via builder tests: ', function() {
         let realmName;
@@ -49,8 +51,8 @@
         it('Create new table', function() {
             let tableName = rawValueGenerator.generateStringWithFixLength(10);
             let tableFields = [
-                {fieldTitle: '* Table Name', fieldValue: tableName, placeHolder: 'For example, Customers'},
-                {fieldTitle: '* A record in the table is called', fieldValue: rawValueGenerator.generateStringWithFixLength(10), placeHolder: 'For example, customer'},
+                {fieldTitle: tableNameFieldTitleText, fieldValue: tableName, placeHolder: 'For example, Customers'},
+                {fieldTitle: recordNameFieldTitleText, fieldValue: rawValueGenerator.generateStringWithFixLength(10), placeHolder: 'For example, customer'},
                 {fieldTitle: 'Description', fieldValue: rawValueGenerator.generateStringWithFixLength(50), placeHolder: 'Text to show when hovering over the table name in the left navigation'}
             ];
 
@@ -142,34 +144,34 @@
                 {
                     message: 'with empty table name',
                     tableFields: [
-                        {fieldTitle: '* Table Name', fieldValue: ' '},
+                        {fieldTitle: tableNameFieldTitleText, fieldValue: ' '},
                         {fieldTitle: 'Description', fieldValue: 'test Description'}
                     ],
                     tableFieldError: [
-                        {fieldTitle: '* Table Name', fieldError: 'Fill in the table name'},
+                        {fieldTitle: tableNameFieldTitleText, fieldError: 'Fill in the table name'},
                     ]
                 },
                 {
                     message: 'with empty required fields',
                     tableFields: [
-                        {fieldTitle: '* Table Name', fieldValue: ' '},
-                        {fieldTitle: '* A record in the table is called', fieldValue: ' '},
+                        {fieldTitle: tableNameFieldTitleText, fieldValue: ' '},
+                        {fieldTitle: recordNameFieldTitleText, fieldValue: ' '},
                         {fieldTitle: 'Description', fieldValue: 'test Description'}
                     ],
                     tableFieldError: [
-                        {fieldTitle: '* Table Name', fieldError: 'Fill in the table name'},
-                        {fieldTitle: '* A record in the table is called', fieldError: 'Fill in the record name'}
+                        {fieldTitle: tableNameFieldTitleText, fieldError: 'Fill in the table name'},
+                        {fieldTitle: recordNameFieldTitleText, fieldError: 'Fill in the record name'}
                     ]
                 },
                 {
                     message: 'with duplicate table name',
                     tableFields: [
-                        {fieldTitle: '* Table Name', fieldValue: 'Table 1'},
-                        {fieldTitle: '* A record in the table is called', fieldValue: 'Table 1'},
+                        {fieldTitle: tableNameFieldTitleText, fieldValue: 'Table 1'},
+                        {fieldTitle: recordNameFieldTitleText, fieldValue: 'Table 1'},
                         {fieldTitle: 'Description', fieldValue: 'test Description'}
                     ],
                     tableFieldError: [
-                        {fieldTitle: '* Table Name', fieldError: 'Fill in a different value. Another table is already using this name'},
+                        {fieldTitle: tableNameFieldTitleText, fieldError: 'Fill in a different value. Another table is already using this name'},
                     ]
                 }
             ];
@@ -212,8 +214,8 @@
         it('Verify clicking on close button closes the new table dialogue without saving the table', function() {
             let tableName = rawValueGenerator.generateStringWithFixLength(10);
             let tableFields = [
-                {fieldTitle: '* Table Name', fieldValue: tableName},
-                {fieldTitle: '* A record in the table is called', fieldValue: rawValueGenerator.generateStringWithFixLength(10)},
+                {fieldTitle: tableNameFieldTitleText, fieldValue: tableName},
+                {fieldTitle: recordNameFieldTitleText, fieldValue: rawValueGenerator.generateStringWithFixLength(10)},
                 {fieldTitle: 'Description', fieldValue: rawValueGenerator.generateStringWithFixLength(50)}
             ];
 

@@ -9,6 +9,8 @@
     var formsPO = requirePO('formsPage');
     var RequestSessionTicketPage = requirePO('requestSessionTicket');
     var rawValueGenerator = require('../../../test_generators/rawValue.generator');
+    const tableNameFieldTitleText = '* Table name';
+    const recordNameFieldTitleText = '* A record in the table is called';
 
     describe('Tables - Edit a table via builder tests: ', function() {
         var realmName;
@@ -57,12 +59,12 @@
                 var tableDescription = rawValueGenerator.generateStringWithFixLength(10);
                 var tableFields = [
                     {fieldTitle: '* Table Name', fieldValue: tableName},
-                    {fieldTitle: '* A record in the table is called', fieldValue: tableRecord},
+                    {fieldTitle: recordNameFieldTitleText, fieldValue: tableRecord},
                     {fieldTitle: 'Description', fieldValue: tableDescription}
                 ];
                 var newTableFields = [
                     {fieldTitle: '* Table Name', fieldValue: 'New ' + tableName},
-                    {fieldTitle: '* A record in the table is called', fieldValue: 'New ' + tableRecord},
+                    {fieldTitle: recordNameFieldTitleText, fieldValue: 'New ' + tableRecord},
                     {fieldTitle: 'Description', fieldValue: 'New ' + tableDescription}
                 ];
 
@@ -144,7 +146,7 @@
 
                 var tableFields = [
                     {fieldTitle: '* Table Name', fieldValue: tableName},
-                    {fieldTitle: '* A record in the table is called', fieldValue: tableRecord}
+                    {fieldTitle: recordNameFieldTitleText, fieldValue: tableRecord}
                 ];
 
                 //Step 1 - Click on existing table 'Table 2'
@@ -189,7 +191,7 @@
             var tableDescription = rawValueGenerator.generateStringWithFixLength(10);
             var tableFields = [
                 {fieldTitle: '* Table Name', fieldValue: tableName},
-                {fieldTitle: '* A record in the table is called', fieldValue: tableRecord},
+                {fieldTitle: recordNameFieldTitleText, fieldValue: tableRecord},
                 {fieldTitle: 'Description', fieldValue: tableDescription}
             ];
             var originalFieldValues;
@@ -250,19 +252,19 @@
                     message: 'with empty required fields',
                     tableFields: [
                         {fieldTitle: '* Table Name', fieldValue: ' '},
-                        {fieldTitle: '* A record in the table is called', fieldValue: ' '},
+                        {fieldTitle: recordNameFieldTitleText, fieldValue: ' '},
                         {fieldTitle: 'Description', fieldValue: 'test Description'}
                     ],
                     tableFieldError: [
                         {fieldTitle: '* Table Name', fieldError: 'Fill in the table name'},
-                        {fieldTitle: '* A record in the table is called', fieldError: 'Fill in the record name'}
+                        {fieldTitle: recordNameFieldTitleText, fieldError: 'Fill in the record name'}
                     ]
                 },
                 {
                     message: 'with duplicate table name',
                     tableFields: [
                         {fieldTitle: '* Table Name', fieldValue: 'Table 1'},
-                        {fieldTitle: '* A record in the table is called', fieldValue: 'Table 1'},
+                        {fieldTitle: recordNameFieldTitleText, fieldValue: 'Table 1'},
                         {fieldTitle: 'Description', fieldValue: 'test Description'}
                     ],
                     tableFieldError: [
