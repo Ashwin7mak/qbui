@@ -65,7 +65,6 @@ class ColumnTransformer {
                 label: this._buildHeaderComponent(),
             },
             props:{
-                //label: _.uniqueId("header"),
                 label: this.headerLabel,
                 onMove
 

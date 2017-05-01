@@ -217,7 +217,6 @@ export class ReportColumnHeaderMenu extends Component {
      hideThisColumn = () => {
         if (!this.hasRequiredIds()) {return;}
         if (this.props.isOnlyOneColumnVisible) {return;}
-
         let params = {
             columnId: this.props.fieldDef.id
         };
@@ -264,11 +263,10 @@ export class ReportColumnHeaderMenu extends Component {
                         <span className="hideColumnText">{Locale.getMessage('report.menu.hideColumn')}</span>
                     </MenuItem>
                 </Dropdown.Menu>
-
             </Dropdown>
         );
     }
-};
+}
 
 ReportColumnHeaderMenu.propTypes = {
     fieldDef: PropTypes.object,

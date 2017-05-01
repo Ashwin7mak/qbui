@@ -1,7 +1,7 @@
 import React, {PropTypes} from 'react';
 import * as Table from 'reactabular-table';
 import * as dnd from 'reactabular-dnd';
-import { DragDropContext } from 'react-dnd';
+import {DragDropContext} from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import _ from 'lodash';
 import Loader  from 'react-loader';
@@ -231,7 +231,9 @@ const QbGrid = React.createClass({
     },
 
     getVisibleColumns() {
-        if(!_.isArray(this.props.columns)) { return [];}
+        if (!_.isArray(this.props.columns)) {
+            return [];
+        }
         let visibleColumns = this.props.columns.filter(column => {
             return !column.isHidden;
         });
@@ -299,7 +301,7 @@ const QbGrid = React.createClass({
 
             collapseAllIcon = (
                 <div className="collapseAllIcon">
-                    <QbIcon icon={iconType} onClick={this.toggleCollapseAllGroups} />
+                    <QbIcon icon={iconType} onClick={this.toggleCollapseAllGroups}/>
                 </div>
             );
         }
@@ -388,16 +390,14 @@ const QbGrid = React.createClass({
      */
     onMoveColumn(_ref2) {
         let params = {
-            sourceLabel :_ref2.sourceLabel,
-            targetLabel : _ref2.targetLabel
+            sourceLabel: _ref2.sourceLabel,
+            targetLabel: _ref2.targetLabel
         };
-        this.props.moveColumn(CONTEXT.REPORT.NAV, this.props.appId,this.props.tblId,this.props.rptId, params);
+        this.props.moveColumn(CONTEXT.REPORT.NAV, this.props.appId, this.props.tblId, this.props.rptId, params);
     },
 
     render() {
-
         let columns;
-
         if (this.props.showRowActionsColumn) {
             columns = [
                 ...[{
@@ -422,7 +422,6 @@ const QbGrid = React.createClass({
             columns = this.getVisibleColumns();
         }
         return (
-
             <Loader loaded={!this.props.loading} options={SpinnerConfigurations.AG_GRID}>
                 <Table.Provider
                     ref="qbGridTable"
@@ -430,7 +429,6 @@ const QbGrid = React.createClass({
                     className={`qbGrid${this.props.isInlineEditOpen ? ' inlineEditing' : ''}`}
                     columns={columns}
                     onScroll={this.handleScroll}
-
                     components={{
                         header: {
                             cell: QbHeaderCell
@@ -442,15 +440,14 @@ const QbGrid = React.createClass({
                     }}
                 >
 
-
-        <Table.Header className="qbHeader" />
+                    <Table.Header className="qbHeader"/>
                     <Table.Body className="qbTbody"
-                        onRow={this.addRowProps}
-                        rows={this.collapsedGroupHelper.filterRows(this.props.rows)}
-                        rowKey={this.getUniqueRowKey}
-                        ref={body => {
-                            this.tableRef = body && body.getRef().parentNode;
-                        }}
+                                onRow={this.addRowProps}
+                                rows={this.collapsedGroupHelper.filterRows(this.props.rows)}
+                                rowKey={this.getUniqueRowKey}
+                                ref={body => {
+                                    this.tableRef = body && body.getRef().parentNode;
+                                }}
                     />
                 </Table.Provider>
             </Loader>
@@ -468,4 +465,4 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = {moveColumn};
 
-export default connect(mapStateToProps,mapDispatchToProps)(DragDropContext(HTML5Backend)(QbGrid));
+export default connect(mapStateToProps, mapDispatchToProps)(DragDropContext(HTML5Backend)(QbGrid));
