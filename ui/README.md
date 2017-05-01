@@ -347,7 +347,8 @@ and
     - `ENV_TUNNEL_NAME` = `<your initials>SauceTunnel` (or whatever you want)
     - `SAUCE_DOMAIN` = `http://localhost:9000` (or the route you access your local server in the browser)
     - `SAUCE_USERNAME` = Obtain this from another Dev or QA
-    - `SAUCE_KEY` = Obtain this from another DEV or QA
+    - `SAUCE_KEY` = Obtain this from another DEV or QA. If you are able to login to SauceLabs, you can find the key by clicking the username in the top right of the screen and choosing 'User Settings', then under 'Access Key', choose to show your key and then use the copy button to copy the key to your clipboard.
+    - `BUILD_NUMBER` = Any number you would like. I use `1` or `13`.
 
 3. You will need to have any services your tests will use running locally on your machine (e.g., Qbui, Core, EE)
 
