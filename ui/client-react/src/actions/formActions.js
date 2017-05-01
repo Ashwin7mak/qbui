@@ -330,7 +330,6 @@ export const toggleToolPaletteChildrenTabIndex = (formId, currentTabIndex) => {
  * @returns {{id, type, content}|*}
  */
 export const endDraggingState = (formId) => {
-    console.log('endDraggingState Action');
     return event(formId, types.END_DRAG);
 };
 
@@ -340,7 +339,6 @@ export const endDraggingState = (formId) => {
  * @returns {{id, type, content}|*}
  */
 export const isInDraggingState = (formId) => {
-    console.log('isInDraggingState Action');
     return event(formId, types.IS_DRAGGING);
 };
 
