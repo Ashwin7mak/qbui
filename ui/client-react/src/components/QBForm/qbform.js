@@ -550,15 +550,6 @@ export const QBForm = React.createClass({
             );
         }
 
-        let formClassName;
-        if (this.props.edit && !this.props.editingForm) {
-            formClassName = 'addNewRecord';
-        } else if (this.props.editingForm) {
-            formClassName = 'editForm';
-        } else {
-            formClassName = 'viewForm';
-        }
-
         return (
             <div className="formContainer">
                 <form className={this.props.edit ? "editForm" : "viewForm"}>
