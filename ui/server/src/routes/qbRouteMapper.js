@@ -341,24 +341,18 @@
      * @param req
      */
     function modifyRequestPathForApi(req) {
-        //   modify client endpoint identifier to their respective back-end context.
-        let clientEndpoint = false;
-        routesConstants.clientEndPoints.some(endPoint => {
-            if (endPoint.regEx.test(req.url)) {
-                req.url = req.url.replace(endPoint.route, endPoint.context);
-                clientEndpoint = true;
-                return true;
-            }
-        });
+        //   if this is a client endpoint route, replace the client route identifier with its back-end context.
+        let clientRoute = routesConstants.clientEndPoints.find(endPoint => endPoint.regEx.test(req.url) === true);
+        if (clientRoute) {
+            req.url = req.url.replace(clientRoute.route, clientRoute.context);
+            return;
+        }
 
-        // check if route is a public endpoint.  prepend the configured context if found
-        if (!clientEndpoint) {
-            routesConstants.publicEndPoints.some(endPoint => {
-                if (endPoint.regEx.test(req.url)) {
-                    req.url = endPoint.context + req.url;
-                    return true;
-                }
-            });
+        //  if this is a public endpoint route, prepend its back-end context
+        let publicRoute = routesConstants.publicEndPoints.find(endPoint => endPoint.regEx.test(req.url) === true);
+        if (publicRoute) {
+            req.url = publicRoute.context + req.url;
+            return;
         }
     }
 

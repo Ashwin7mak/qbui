@@ -38,7 +38,7 @@
          * intercept all record bulk requests because express can't route them properly. We need to handle them manually
          */
 
-        //  TODO look into why this block needs to be here..
+        //  TODO look into why this block needs to be here and not in qbRouteMapper..jira mc-2412
         app.all(routes.RECORDS_BULK, function(req, res, next) {
             //be awesome
             if (requestHelper.isDelete(req)) {
