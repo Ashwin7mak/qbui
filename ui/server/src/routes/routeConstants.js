@@ -1,6 +1,32 @@
 /**
- * route constants encapsulate the valid routes for a quickbase app
- * Created by cschneider1 on 6/30/15.
+ * Route constants encapsulate the valid routes defined when calling the node layer of Quick Base.
+ *
+ * Routes are grouped into 2 segments:
+ *    - custom/composition routes: these routes have custom functions defined in node to fulfill the request
+ *    - proxy/pass-through routes:  these are immediately forwarded to a back-end system for fulfillment.
+ *
+ * Follow these steps when adding a new route:
+ *
+ * FOR CUSTOM/COMPOSITION ROUTES:
+ *    a) review clientApiEndpoints and nodeApiEndpoints and add the route definition if not already defined to
+ *    the appropriate object.
+ *    b) if adding to clientEndPoints array:
+ *        Review regExCoreDefinition.  Verify new route evaluates to true when tested against the reg expression. If
+ *        route evaluates to false, update the expression.
+ *    c) if adding to nodeApiEndpoints array:
+ *        Review regExNodeDefinition.  Verify new route evaluates to true when tested against the reg expression. If
+ *        route evaluates to false, update the expression.
+ *    d) add the new route to qbRouteMapper and cooresponding function and define how the request should get processed
+ *    e) enable the new route in qbRouteGroupMapper.js and which http methods are supported
+ *    f) add tests against the new route to qbRouteMapper.unit.spec.js and qbRouteGroupMapper.unit.spec.js
+ *
+ * 2) FOR PUBLIC/PROXY ROUTES:
+ *    a) review publicControllerEndpoints and add the route definition if not already defined.
+ *    b) review the publicEndPoints array.  Verify if the new route evaluates to true when tested against the list of
+ *    associated reg expression. If route is not defined, then add the list with the new route definition.
+ *    NOTE: if adding a new route, ORDER OF ENTRY IN THE LIST IS IMPORTANT
+ *    c) should be a no-op, but verify the new route in qbRouteGroupMapper.js is enabled
+ *    d) should be a no-op, but verify the new route in qbRouteMapper.unit.spec.js and qbRouteGroupMapper.unit.spec.js
  */
 (function() {
     'use strict';
@@ -12,15 +38,18 @@
     //  why you are seeing hard-coded versions here and not on the client..
     let context = {
         base: {
-            //  if adding a new context, review qbRouteMapper.forwardApiRequest
+            //  base context for supported back-end system.
+            //  NOTE: review qbRouteMapper.forwardApiRequest if adding/changing
             CORE: '/api',
             EE: '/ee',
             WE: '/we'
         },
         client: {
+            // QB UI context prefix
             QBUI: '/qbui'
         },
         api: {
+            // API prefixes defined for each back-end system that node calls when fulfilling a route request
             CORE: '/api/api/v1',
             NODE: '/qbui',
             EE: '/ee/v1',
@@ -33,8 +62,9 @@
     };
 
     /*
-     *  List of QuickBase public API client endpoints which call custom node functions.  The routes call a node
-     *  function that processes the request based on business requirements.
+     *  List of QuickBase public API client endpoints which are expected to call node functions that processes the
+     *  request based on business requirements.  The assumption is these routes will call back-end services to fulfill
+     *  its request.
      *
      *  NOTE: there is no need to define a route here if the expectation is to only proxy/forward the request through node.
      */
@@ -77,10 +107,10 @@
     };
 
     /*
-     *  List of node server endpoints used by the Quickbase client.  These endpoints are
-     *  intended for requests where processing is performed strictly on the node server.
+     *  An extension to clientApiEndpoints list...these endpoints are intended for requests where processing
+     *  is performed strictly on the node server.  Another words, no back-end service work is expected/required
+     *  to fulfill the request.
      */
-
     let nodeApiEndpoints = {
         //  log routes are defined in routes.js
         LOG_CLIENT_MSG          : context.client.QBUI + '/log',
@@ -161,6 +191,9 @@
     // The regular expression is used to identify the client routes when determining which
     // back-end server to send the request.  See qbRouteMapper.modifyRequestPathForApi() method for
     // reference to this list and how it is used..
+    //
+    // NOTE: currently only CORE and NODE are setup.  EE, WORKFLOW, etc should be added when needed.
+    //
     const regExCoreExpression = `^${context.client.QBUI}/(admin|apps|featureStates|users)(.*)?$`;
     const regExNodeExpression = `^${context.client.QBUI}/(log|health|facets)(.*)?$`;
     let clientEndPoints = [
