@@ -18,11 +18,8 @@
         let userId;
         let numOfRecords = 5;
 
-        let viewerRoleId = 10;
         let viewerReportId = 1;
-        let participantRoleId = 11;
         let participantReportId = 2;
-        let adminRoleId = 12;
         let adminReportId = 3;
 
         let tableToFieldToFieldTypeMap = {};
@@ -119,19 +116,19 @@
             return [
                 {
                     message: 'Viewer Role',
-                    roleId: viewerRoleId,
+                    roleId: e2eConsts.VIEWER_ROLEID,
                     reportId: viewerReportId,
                     reportTitle: 'Viewer Report'
                 },
                 {
                     message: 'Participant Role',
-                    roleId: participantRoleId,
+                    roleId: e2eConsts.PARTICIPANT_ROLEID,
                     reportId: participantReportId,
                     reportTitle: 'Participant Report'
                 },
                 {
                     message: 'Admin Role',
-                    roleId: adminRoleId,
+                    roleId: e2eConsts.ADMIN_ROLEID,
                     reportId: adminReportId,
                     reportTitle: 'Admin Report'
                 },
