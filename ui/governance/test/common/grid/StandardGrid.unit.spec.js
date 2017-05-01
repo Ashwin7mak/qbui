@@ -4,6 +4,7 @@ import jasmineEnzyme from "jasmine-enzyme";
 import {StandardGrid} from "../../../src/common/grid/standardGrid";
 import * as Actions from "../../../src/account/users/AccountUsersActions";
 import * as FieldConsts from '../../../../client-react/src/constants/schema';
+import StandardGridToolBar from "../../../src/common/grid/toolbar/StandardGridToolbar";
 
 describe('StandardGrid', () => {
 
@@ -35,6 +36,11 @@ describe('StandardGrid', () => {
         );
         expect(StandardGridShallow).toBeDefined();
         expect(StandardGridShallow.length).toBeTruthy();
+
+        let StandardGridToolbarComponent = StandardGridShallow.find(StandardGridToolBar);
+        expect(StandardGridToolbarComponent).toBeDefined();
+        expect(StandardGridToolbarComponent.props().id).toEqual("accountUsers");
+        expect(StandardGridToolbarComponent.props().doUpdate).toEqual(Actions.doUpdate);
     });
 });
 
