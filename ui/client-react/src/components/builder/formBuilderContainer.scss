@@ -20,8 +20,8 @@
         -webkit-overflow-scrolling: touch; /* This allows for momentum scrolling on touch devices */
         &:focus {
             outline: none;
-            border: $stroke-width-thin solid $border-focused-color;
-            border-bottom: #{$stroke-width-thin + 4} solid $border-focused-color;
+            border: $stroke-width-thin solid $color-purple-600;
+            border-bottom: #{$stroke-width-thin + 4} solid $color-purple-600;
         }
     }
 
@@ -38,12 +38,6 @@
 
     .formContainer {
         padding-bottom: 90px;
-        .editForm {
-            &:focus {
-                outline: none;
-                border: $stroke-width-thin solid $border-focused-color;
-            }
-        }
     }
 
     .qbPanel .qbPanelHeader .qbPanelHeaderTitle .qbPanelHeaderTitleText {

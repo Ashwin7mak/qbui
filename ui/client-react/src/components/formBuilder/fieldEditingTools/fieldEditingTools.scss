@@ -61,10 +61,9 @@
 
     &.selectedFormElement {
         opacity: 1;
-        transition: background-color 0.5s ease;
-        border: $stroke-width-thick solid $border-focused-color;
+        border: $stroke-width-thick solid $color-purple-600;
         border-radius: $radius-base;
-        box-shadow: 0 0 4px 0px rgba($color-indigo-500, 0.75);
+        box-shadow: 0 0 4px 0px rgba($color-purple-600, 0.75);
 
         .deleteFieldIcon {
             button {
@@ -78,10 +77,10 @@
     }
 
     &:hover {
-        transition: border-color 0.3s;
         opacity: 1;
-        border: $stroke-width-thin solid $border-focused-color;
         border-radius: $radius-base;
+        border: $stroke-width-thin solid $color-purple-600;
+        transition: border-color 0.3s ease;
         .fieldEditingTools {
             opacity: 1;
             .qbIcon {
@@ -94,7 +93,7 @@
         //Borders always display during small breakpoints
         //Icon only show up when it is focused
         width: 100%;
-        border-bottom: $stroke-width-thin solid $color-black-400;
+        border-bottom: $stroke-width-thin solid $color-purple-600;
 
         .deleteFieldIcon .qbIcon {
             margin-right: $spacing-medium1;
@@ -112,24 +111,24 @@
         //For keyboard nav
         opacity: 1;
         outline: none;
-        box-shadow: 0 0 2px 0px rgba($color-indigo-500, 0.75);
-        border: $stroke-width-thin solid $border-focused-color;
+        box-shadow: 0 0 2px 0px rgba($color-purple-600, 0.75);
+        border: $stroke-width-thin solid $color-purple-600;
     }
 
     &.active {
         box-shadow: none;
         border: $stroke-width-thick dashed $color-black-300;
-        background-color: $color-orange-100;
+        background-color: rgba($color-purple-600, .80);
         width: 335px;
     }
 
     &:active {
         box-shadow: none;
         border: $stroke-width-thick dashed $color-black-300;
-        background-color: $color-orange-100;
+        background-color: rgba($color-purple-600, .80);
         width: 335px;
         z-index: 2;
-        .qbIcon {
+        .deleteFieldIcon .qbIcon {
             opacity: 0;
         }
     }

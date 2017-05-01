@@ -164,6 +164,7 @@ export class FieldEditingTools extends Component {
     }
 
     render() {
+        console.log('this.props: ', this.props);
         let tabIndex = this.props.formBuilderChildrenTabIndex ? this.props.formBuilderChildrenTabIndex : "-1";
 
         let isSmall = Breakpoints.isSmallBreakpoint();

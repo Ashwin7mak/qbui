@@ -53,6 +53,14 @@
             .cellWrapper {
                 padding-left: 12px;
             }
+            &:active {
+                .formElement .fieldLabel {
+                    opacity: 0;
+                }
+                .cellWrapper {
+                    opacity: 0;
+                }
+            }
         }
     }
 
@@ -84,3 +92,4 @@
         padding-bottom: 12px;
     }
 }
+

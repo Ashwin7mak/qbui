@@ -90,6 +90,6 @@ $toolpalette-header-font-size: 10px;
     }
     &:focus {
         outline: none;
-        border: $stroke-width-thin solid $border-focused-color;
+        border: $stroke-width-thin solid $color-purple-600;
     }
 }
