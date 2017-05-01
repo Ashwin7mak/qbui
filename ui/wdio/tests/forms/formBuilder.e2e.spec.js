@@ -65,7 +65,7 @@
             // release mouse button
             browser.buttonUp();
             // click on last field & drag UP until autoscroll begins
-            lastField = browser.element(formBuilderPO.getFieldLocator(numFields);
+            lastField = browser.element(formBuilderPO.getFieldLocator(numFields));
             lastField.element('.fieldLabel').moveToObject().buttonDown();
             while (lastField.isVisibleWithinViewport()) {
                 browser.moveTo(null, 0, -1);
