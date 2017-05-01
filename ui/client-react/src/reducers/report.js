@@ -316,7 +316,7 @@ const report = (state = [], action) => {
     }
     case types.CLOSE_FIELD_SELECTOR: {
         let currentReport = getReportFromState(action.id);
-        if (currentReport) {
+        if (currentReport && currentReport.data) {
             // remove the placeholder column (if it exists) when the drawer is closed
             _.remove(currentReport.data.columns, (col) => {return col.isPlaceholder;});
             return newState(currentReport);

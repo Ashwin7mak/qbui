@@ -7,10 +7,6 @@ import TopNav from "../header/topNav";
 import TempMainErrorMessages from './tempMainErrorMessages';
 import ReportManagerTrowser from "../report/reportManagerTrowser";
 import RecordTrowser from "../record/recordTrowser";
-import ReportFieldSelectTrowser from '../report/reportFieldSelectTrowser';
-import ListOfElements from '../../../../reuse/client/src/components/sideNavs/listOfElements';
-import {FieldTokenInMenu} from '../formBuilder/fieldToken/fieldTokenInMenu';
-import Locale from '../../../../reuse/client/src/locales/locale';
 
 import GlobalActions from "../actions/globalActions";
 import BuilderDropDownAction from '../actions/builderDropDownAction';
@@ -33,7 +29,6 @@ import * as ShellActions from '../../actions/shellActions';
 import * as FormActions from '../../actions/formActions';
 import * as ReportActions from '../../actions/reportActions';
 import * as TableCreationActions from '../../actions/tableCreationActions';
-import {addColumnFromExistingField, toggleFieldSelectorMenu} from '../../actions/reportActions';
 
 import {CONTEXT} from '../../actions/context';
 import ButtonGroup from 'react-bootstrap/lib/ButtonGroup';
@@ -43,7 +38,6 @@ import Icon from '../../../../reuse/client/src/components/icon/icon';
 import TableCreationDialog from '../table/tableCreationDialog';
 
 import AppUtils from '../../utils/appUtils';
-import QBicon from '../qbIcon/qbIcon';
 
 import {NEW_TABLE_IDS_KEY} from '../../constants/localStorage';
 import {updateFormRedirectRoute} from '../../actions/formActions';
@@ -153,7 +147,7 @@ export const Nav = React.createClass({
                                dropdownMsg="globalActions.user"
                                startTabIndex={100}
                                position="left">
-                </GlobalActions>);
+        </GlobalActions>);
     },
 
     onSelectTableReports(tableId) {
@@ -310,63 +304,6 @@ export const Nav = React.createClass({
         );
     },
 
-    toggleFieldSelectorMenu(context, appId, tblId, rptId, params) {
-        this.props.toggleFieldSelectorMenu(context, appId, tblId, rptId, params);
-    },
-
-    addColumnFromExistingField(columnData, reportData) {
-        let params = {
-            requestedColumn: columnData,
-            addBefore: this.props.shell.fieldsSelectMenu.addBefore
-        };
-
-        this.props.addColumnFromExistingField(CONTEXT.REPORT.NAV, reportData.appId, reportData.tblId, reportData.rptId, params);
-    },
-
-    getMenuContent(reportData) {
-        let elements = [];
-        let columns = reportData.data ? reportData.data.columns : [];
-        let visibleColumns = columns.filter(column => {
-            return !column.isHidden;
-        });
-        let availableColumns = this.props.shell.fieldsSelectMenu.availableColumns;
-        let hiddenColumns = _.differenceBy(availableColumns, visibleColumns, 'id');
-        for (let i = 0; i < hiddenColumns.length; i++) {
-            elements.push({
-                key: hiddenColumns[i].id + "",
-                title: hiddenColumns[i].headerName,
-                type: hiddenColumns[i].fieldType,
-                onClick: (() => {
-                    this.addColumnFromExistingField(hiddenColumns[i], reportData);
-                })
-            });
-        }
-
-        let params = {
-            open: false
-        };
-
-        return (
-            <div className="fieldSelect">
-                <QBicon
-                    icon="close"
-                    onClick={() => this.toggleFieldSelectorMenu(CONTEXT.REPORT.NAV, reportData.appId, reportData.tblId, reportData.rptId, params)}
-                    className="fieldSelectCloseIcon"
-                />
-                <div className="header">
-                    {Locale.getMessage('report.drawer.title')}
-                </div>
-                <div className="info">
-                    {Locale.getMessage('report.drawer.info')}
-                </div>
-                <ListOfElements
-                    renderer={FieldTokenInMenu}
-                    elements={elements}
-                />
-            </div>
-        );
-    },
-
     render() {
         if (!this.state.apps || this.state.apps.apps === null) {
             // don't render anything until we've made this first api call without being redirected to V2
@@ -393,7 +330,6 @@ export const Nav = React.createClass({
         let reportsData = this.getReportsData();
         let reportsList = this.getReportsList();
         let pendEdits = this.getPendEdits();
-        let menuContent = this.getMenuContent(reportsData);
 
         return (<div className={classes}>
             <NavPageTitle
@@ -408,29 +344,29 @@ export const Nav = React.createClass({
             <AppQbModal/>
 
             {this.props.match.params && this.props.match.params.appId &&
-                <RecordTrowser visible={this.props.shell.trowserOpen && this.props.shell.trowserContent === TrowserConsts.TROWSER_EDIT_RECORD}
-                               history={this.props.history}
-                               editForm={this.getEditFormFromProps()}
-                               appId={this.props.match.params.appId}
-                               tblId={this.props.match.params.tblId}
-                               recId={editRecordId}
-                               viewingRecordId={viewingRecordId}
-                               pendEdits={pendEdits}
-                               appUsers={this.state.apps.appUsers}
-                               selectedApp={this.getSelectedApp()}
-                               selectedTable={this.getSelectedTable(reportsData.tblId)}
-                               reportData={reportsData}
-                               errorPopupHidden={this.props.shell.errorPopupHidden}
-                               onHideTrowser={this.hideTrowser}/>
+            <RecordTrowser visible={this.props.shell.trowserOpen && this.props.shell.trowserContent === TrowserConsts.TROWSER_EDIT_RECORD}
+                           history={this.props.history}
+                           editForm={this.getEditFormFromProps()}
+                           appId={this.props.match.params.appId}
+                           tblId={this.props.match.params.tblId}
+                           recId={editRecordId}
+                           viewingRecordId={viewingRecordId}
+                           pendEdits={pendEdits}
+                           appUsers={this.state.apps.appUsers}
+                           selectedApp={this.getSelectedApp()}
+                           selectedTable={this.getSelectedTable(reportsData.tblId)}
+                           reportData={reportsData}
+                           errorPopupHidden={this.props.shell.errorPopupHidden}
+                           onHideTrowser={this.hideTrowser}/>
             }
 
             {this.props.match.params && this.props.match.params.appId &&
-                <ReportManagerTrowser visible={this.props.shell.trowserOpen && this.props.shell.trowserContent === TrowserConsts.TROWSER_REPORTS}
-                                      history={this.props.history}
-                                      selectedTable={this.getSelectedTable(reportsList.tblId)}
-                                      filterReportsName={this.state.nav.filterReportsName}
-                                      reportsData={reportsList}
-                                      onHideTrowser={this.hideTrowser}/>
+            <ReportManagerTrowser visible={this.props.shell.trowserOpen && this.props.shell.trowserContent === TrowserConsts.TROWSER_REPORTS}
+                                  history={this.props.history}
+                                  selectedTable={this.getSelectedTable(reportsList.tblId)}
+                                  filterReportsName={this.state.nav.filterReportsName}
+                                  reportsData={reportsList}
+                                  onHideTrowser={this.hideTrowser}/>
             }
 
             <LeftNav
@@ -456,48 +392,41 @@ export const Nav = React.createClass({
                         showOnSmall={this.state.nav.showTopNav}
                 />
                 {this.props.routes &&
-                    <div className="mainContent" >
-                        <ReportFieldSelectTrowser
-                            sideMenuContent={menuContent}
-                            isCollapsed={this.props.shell.fieldsSelectMenu.fieldsListCollapsed}
-                            isDocked={false}
-                            pullRight>
-                        <TempMainErrorMessages apps={this.state.apps.apps} appsLoading={this.state.apps.loading} selectedAppId={this.state.apps.selectedAppId} />
+                <div className="mainContent" >
+                    <TempMainErrorMessages apps={this.state.apps.apps} appsLoading={this.state.apps.loading} selectedAppId={this.state.apps.selectedAppId} />
 
-                        <Switch>
-                            { this.props.routes.map((route, i) => {
+                    <Switch>
+                        { this.props.routes.map((route, i) => {
                                 //insert the child route passed in by the router
                                 // with additional props
                                 // the Switch wrapper will pick only one of the routes the first
                                 // that matches.
-                                let routeProps = {
-                                    key : this.props.match ? this.props.match.url : "",
-                                    apps: this.state.apps.apps,
-                                    selectedAppId: this.state.apps.selectedAppId,
-                                    appsLoading: this.state.apps.loading,
-                                    reportData: reportsData,
-                                    appUsers: this.state.apps.appUsers,
-                                    appUsersUnfiltered: this.state.apps.appUsersUnfiltered,
-                                    appRoles: this.state.apps.appRoles,
-                                    appOwner: this.state.apps.appOwner,
-                                    locale: this.state.nav.locale,
-                                    isRowPopUpMenuOpen: this.props.shell.isRowPopUpMenuOpen,
-                                    selectedApp: this.getSelectedApp(),
-                                    selectedTable: this.getSelectedTable(reportsData.tblId),
-                                    scrollingReport: this.state.nav.scrollingReport,
-                                    flux: flux
-                                };
-                                return RouteWithSubRoutes(route, i, routeProps);
-                            }
-                            )}
-                        </Switch>
+                            let routeProps = {
+                                key : this.props.match ? this.props.match.url : "",
+                                apps: this.state.apps.apps,
+                                selectedAppId: this.state.apps.selectedAppId,
+                                appsLoading: this.state.apps.loading,
+                                reportData: reportsData,
+                                appUsers: this.state.apps.appUsers,
+                                appUsersUnfiltered: this.state.apps.appUsersUnfiltered,
+                                appRoles: this.state.apps.appRoles,
+                                appOwner: this.state.apps.appOwner,
+                                locale: this.state.nav.locale,
+                                isRowPopUpMenuOpen: this.props.shell.isRowPopUpMenuOpen,
+                                selectedApp: this.getSelectedApp(),
+                                selectedTable: this.getSelectedTable(reportsData.tblId),
+                                scrollingReport: this.state.nav.scrollingReport,
+                                flux: flux
+                            };
+                            return RouteWithSubRoutes(route, i, routeProps);
+                        })}
+                    </Switch>
 
-                        </ReportFieldSelectTrowser>
-                    </div>}
+                </div>}
             </div>
 
             {pendEdits &&
-                this.renderSavingModal(pendEdits.saving)
+            this.renderSavingModal(pendEdits.saving)
             }
 
             {this.state.apps.selectedAppId && <TableCreationDialog app={this.getSelectedApp()} onTableCreated={this.tableCreated}/>}
@@ -582,12 +511,6 @@ const mapDispatchToProps = (dispatch) => {
                     dispatch(ShellActions.showTrowser(TrowserConsts.TROWSER_EDIT_RECORD));
                 }
             });
-        },
-        addColumnFromExistingField: (context, appId, tblId, rptId, params) => {
-            dispatch(addColumnFromExistingField(context, appId, tblId, params));
-        },
-        toggleFieldSelectorMenu: (context, appId, tblId, rptId, params) => {
-            dispatch(toggleFieldSelectorMenu(context, appId, tblId, params));
         },
 
         loadReports: (context, appId, tblId) => dispatch(ReportActions.loadReports(context, appId, tblId)),
