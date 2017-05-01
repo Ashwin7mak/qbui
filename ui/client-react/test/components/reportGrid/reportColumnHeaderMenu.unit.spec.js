@@ -16,7 +16,6 @@ const MockLocale = {
 const testFieldDef = {
     id: 13,
     datatypeAttributes: {type: FieldConsts.NUMERIC},
-    isAddingFrom: false
 };
 const testProps = {
     appId: 1,

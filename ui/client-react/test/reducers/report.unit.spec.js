@@ -964,7 +964,6 @@ describe('Report reducer functions', () => {
                     columns: [
                         {
                             fieldDef: {
-                                isAddingFrom: false,
                                 id: 6
                             },
                             isPlaceholder: false,
@@ -974,7 +973,6 @@ describe('Report reducer functions', () => {
                         },
                         {
                             fieldDef: {
-                                isAddingFrom: false,
                                 id: 7
                             },
                             isPlaceholder: false,
@@ -997,7 +995,6 @@ describe('Report reducer functions', () => {
                     columns: [
                         {
                             fieldDef: {
-                                isAddingFrom: false,
                                 id: 6
                             },
                             isPlaceholder: false,
@@ -1007,7 +1004,6 @@ describe('Report reducer functions', () => {
                         },
                         {
                             fieldDef: {
-                                isAddingFrom: true,
                                 id: 7
                             },
                             isPlaceholder: false,
@@ -1038,7 +1034,6 @@ describe('Report reducer functions', () => {
                     expect(Array.isArray(testState)).toEqual(true);
                     expect(testState[0].data.columns.length).toEqual(3);
                     expect(testState[0].data.columns[0].isPlaceholder).toEqual(true);
-                    expect(testState[0].data.columns[1].fieldDef.isAddingFrom).toEqual(true);
                 }
             },
             {
@@ -1049,7 +1044,6 @@ describe('Report reducer functions', () => {
                     expect(Array.isArray(testState)).toEqual(true);
                     expect(testState[0].data.columns.length).toEqual(3);
                     expect(testState[0].data.columns[1].isPlaceholder).toEqual(true);
-                    expect(testState[0].data.columns[0].fieldDef.isAddingFrom).toEqual(true);
                 }
             },
             {
@@ -1060,7 +1054,6 @@ describe('Report reducer functions', () => {
                     expect(Array.isArray(testState)).toEqual(true);
                     expect(testState[0].data.columns.length).toEqual(3);
                     expect(testState[0].data.columns[0].isPlaceholder).toEqual(true);
-                    expect(testState[0].data.columns[1].fieldDef.isAddingFrom).toEqual(true);
                     expect(testState[0].data.columns[2].isPlaceholder).toEqual(false);
                 }
             },
@@ -1072,7 +1065,6 @@ describe('Report reducer functions', () => {
                     expect(Array.isArray(testState)).toEqual(true);
                     expect(testState[0].data.columns.length).toEqual(3);
                     expect(testState[0].data.columns[1].isPlaceholder).toEqual(true);
-                    expect(testState[0].data.columns[0].fieldDef.isAddingFrom).toEqual(true);
                     expect(testState[0].data.columns[2].isPlaceholder).toEqual(false);
                 }
             },

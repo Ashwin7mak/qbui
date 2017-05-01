@@ -58,7 +58,6 @@ class ReportModelHelper {
                     column.fieldDef = fieldDef; //fieldDef props below tobe refactored to just get info from fieldObj property instead.
                     column.isHidden = false; // should this column be hidden?
                     column.isPlaceholder = false; // is this a dummy placeholder column?
-                    column.fieldDef.isAddingFrom = false; // are columns being added from this column?
 
                     // get the column units to add to the column header, currently only duration fields gets the units from
                     // the field definition if its a scale that has units (non time type and non smart units)

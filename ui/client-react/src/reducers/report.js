@@ -300,9 +300,6 @@ const report = (state = [], action) => {
                     id: -1
                 };
 
-                currentReport.data.columns.forEach(column => {
-                    column.fieldDef.isAddingFrom = (column.id === clickedColumnId);
-                });
                 // add before or after the clicked column depending on selection
                 let insertionIndex;
                 if (addBefore) {
@@ -322,9 +319,6 @@ const report = (state = [], action) => {
         if (currentReport) {
             // remove the placeholder column (if it exists) when the drawer is closed
             _.remove(currentReport.data.columns, (col) => {return col.isPlaceholder;});
-            currentReport.data.columns.forEach(column => {
-                column.fieldDef.isAddingFrom = false;
-            });
             return newState(currentReport);
         }
         return state;
