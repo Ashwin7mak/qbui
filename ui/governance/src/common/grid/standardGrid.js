@@ -11,6 +11,7 @@ import QbCell from '../../../../client-react/src/components/dataTable/qbGrid/qbC
 import HeaderMenuColumnTransform from './transforms/headerMenuColumnTransform';
 import SortMenuItems from './headerMenu/sort/sortMenuItems';
 import * as StandardGridActions from './standardGridActions';
+import StandardGridToolbar from "./toolbar/StandardGridToolbar";
 
 // Sub-component pieces we will be using to override React Tabular's default components
 const tableSubComponents = {
@@ -46,22 +47,26 @@ class StandardGrid extends Component {
 
     render() {
         return (
-            <div className="gridContainer">
-                <Table.Provider
-                    className="qbGrid"
-                    columns={this.getColumns()}
-                    components={tableSubComponents}
-                    >
+            <div className="gridWrapper">
+                <StandardGridToolbar id={this.props.id}
+                                     doUpdate={this.props.doUpdate}/>
+                <div className="gridContainer">
+                    <Table.Provider
+                        className="qbGrid"
+                        columns={this.getColumns()}
+                        components={tableSubComponents}
+                        >
 
-                    <Table.Header className="qbHeader" />
+                        <Table.Header className="qbHeader" />
 
-                    <Table.Body
-                        className="qbTbody"
-                        rows={this.props.data}
-                        rowKey={this.getUniqueRowKey.bind(this)}
-                        onRow={onRowFn}
-                        />
-                </Table.Provider>
+                        <Table.Body
+                            className="qbTbody"
+                            rows={this.props.items}
+                            rowKey={this.getUniqueRowKey.bind(this)}
+                            onRow={onRowFn}
+                            />
+                    </Table.Provider>
+                </div>
             </div>
         );
     }
@@ -69,7 +74,6 @@ class StandardGrid extends Component {
 
 StandardGrid.propTypes = {
     columns: PropTypes.array.isRequired,
-    data: PropTypes.array.isRequired,
     rowKey: PropTypes.string.isRequired,
     id: PropTypes.string.isRequired,
     columnTransforms: PropTypes.array,
@@ -78,6 +82,7 @@ StandardGrid.propTypes = {
 };
 
 StandardGrid.defaultProps = {
+    items: [],
     columnTransformsClasses: [HeaderMenuColumnTransform],
     columnTransformProps: [
         {
@@ -92,6 +97,7 @@ const mapStateToProps = (state, props) => {
     var gridState = state.Grids[props.id] || {};
     return {
         sortFids: gridState.sortFids || [],
+        items : gridState.items
     };
 };
 

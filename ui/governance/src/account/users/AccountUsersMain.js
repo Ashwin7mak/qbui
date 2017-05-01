@@ -15,12 +15,18 @@ import {isFetching} from './AccountUsersReducer';
  * Represents the top level page that contains the grid for account users
  */
 class AccountUsers extends Component {
+
     constructor(props) {
         super(props);
+        this.GRID_ID = "accountUsers";
+        this.ITEMS_PER_PAGE = 500;
     }
 
+    /**
+     * When the component mounts, get the users
+     */
     componentDidMount() {
-        this.props.fetchData(this.props.match.params.accountId);
+        this.props.fetchData(this.props.match.params.accountId, this.GRID_ID, this.ITEMS_PER_PAGE);
     }
 
     render() {
@@ -36,11 +42,9 @@ class AccountUsers extends Component {
             <Loader loaded={!this.props.loading} options={SpinnerConfigurations.LARGE_BREAKPOINT}>
                 <div className="accountUsersContainer">
                     <AccountUsersStage users={this.props.users}/>
-                    <AccountUsersGrid
-                        users={this.props.users}
-                        showAccountColumns={canSeeAccountColumns}
-                        showRealmColumns={canSeeRealmColumns}
-                    />
+                    <AccountUsersGrid id={this.GRID_ID}
+                                      showAccountColumns={canSeeAccountColumns}
+                                      showRealmColumns={canSeeRealmColumns}/>
                 </div>
             </Loader>
         );
@@ -59,9 +63,9 @@ AccountUsers.propTypes = {
 export {AccountUsers};
 
 const mapDispatchToProps = (dispatch) => ({
-    fetchData(id) {
-        dispatch(RequestContextActions.fetchRequestContextIfNeeded(id));
-        dispatch(AccountUsersActions.fetchAccountUsers(id));
+    fetchData(accountID, gridID, itemsPerPage) {
+        dispatch(RequestContextActions.fetchRequestContextIfNeeded(accountID));
+        dispatch(AccountUsersActions.fetchAccountUsers(accountID, gridID, itemsPerPage));
     }
 });
 

@@ -13,26 +13,19 @@ class AccountUsersGrid extends Component {
     render() {
         return (
             <StandardGrid
+                id={this.props.id}
                 columns={GetAccountUsersGridColumns(this.props.showAccountColumns, this.props.showRealmColumns)}
                 doUpdate={Actions.doUpdate}
-                data={this.props.users}
-                id="accountUsers"
                 rowKey="uid"
             />
         );
     }
 }
 
-// Provide type checking
 AccountUsersGrid.propTypes = {
-    users: PropTypes.array,
+    id: PropTypes.string,
     showAccountColumns: PropTypes.bool,
     showRealmColumns: PropTypes.bool
-};
-
-// Provide default val
-AccountUsersGrid.defaultProps = {
-    users: []
 };
 
 export default AccountUsersGrid;
