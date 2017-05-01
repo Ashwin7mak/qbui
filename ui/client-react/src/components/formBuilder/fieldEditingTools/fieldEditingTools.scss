@@ -123,4 +123,14 @@
         width: 335px;
     }
 
+    &:active {
+        box-shadow: none;
+        border: $stroke-width-thick dashed $color-black-300;
+        background-color: $color-orange-100;
+        width: 335px;
+        z-index: 2;
+        .qbIcon {
+            opacity: 0;
+        }
+    }
 }
