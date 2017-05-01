@@ -1,6 +1,7 @@
 import React from 'react';
 import {I18nMessage} from '../../utils/i18nMessage';
 import EmptyImage from '../../../src/assets/images/QB_logo_ghost-opt.svg';
+import Locale from '../../../../reuse/client/src/locales/locale';
 import './appHomePage.scss';
 
 /**
@@ -42,7 +43,7 @@ const AppHomePage = React.createClass({
     render() {
         return (
             <div className="appHomePageBody">
-                <div className="header">Stay tuned, app dashboards are coming soon</div>
+                <div className="header">{Locale.getMessage('app.dashboards.missing')}</div>
                 <div className="main">
                     <div className="article">{this.horizontalPlaceHolder()}{this.horizontalPlaceHolder()}</div>
                     <div className="nav">{this.verticalPlaceHolder()}</div>
