@@ -192,7 +192,7 @@
     // back-end server to send the request.  See qbRouteMapper.modifyRequestPathForApi() method for
     // reference to this list and how it is used..
     //
-    // NOTE: currently only CORE and NODE are setup.  EE, WORKFLOW, etc should be added when needed.
+    // NOTE: currently only CORE and NODE are setup.  EE, WORKFLOW, etc to be added when needed.
     //
     const regExCoreExpression = `^${context.client.QBUI}/(admin|apps|featureStates|users)(.*)?$`;
     const regExNodeExpression = `^${context.client.QBUI}/(log|health|facets)(.*)?$`;
