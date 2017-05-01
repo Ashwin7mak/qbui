@@ -58,12 +58,12 @@
                 var tableRecord = rawValueGenerator.generateStringWithFixLength(10);
                 var tableDescription = rawValueGenerator.generateStringWithFixLength(10);
                 var tableFields = [
-                    {fieldTitle: '* Table Name', fieldValue: tableName},
+                    {fieldTitle: tableNameFieldTitleText, fieldValue: tableName},
                     {fieldTitle: recordNameFieldTitleText, fieldValue: tableRecord},
                     {fieldTitle: 'Description', fieldValue: tableDescription}
                 ];
                 var newTableFields = [
-                    {fieldTitle: '* Table Name', fieldValue: 'New ' + tableName},
+                    {fieldTitle: tableNameFieldTitleText, fieldValue: 'New ' + tableName},
                     {fieldTitle: recordNameFieldTitleText, fieldValue: 'New ' + tableRecord},
                     {fieldTitle: 'Description', fieldValue: 'New ' + tableDescription}
                 ];
@@ -145,7 +145,7 @@
                 var tableRecord = rawValueGenerator.generateStringWithFixLength(10) + ' updated record a';
 
                 var tableFields = [
-                    {fieldTitle: '* Table Name', fieldValue: tableName},
+                    {fieldTitle: tableNameFieldTitleText, fieldValue: tableName},
                     {fieldTitle: recordNameFieldTitleText, fieldValue: tableRecord}
                 ];
 
@@ -190,7 +190,7 @@
             var tableRecord = rawValueGenerator.generateStringWithFixLength(10);
             var tableDescription = rawValueGenerator.generateStringWithFixLength(10);
             var tableFields = [
-                {fieldTitle: '* Table Name', fieldValue: tableName},
+                {fieldTitle: tableNameFieldTitleText, fieldValue: tableName},
                 {fieldTitle: recordNameFieldTitleText, fieldValue: tableRecord},
                 {fieldTitle: 'Description', fieldValue: tableDescription}
             ];
@@ -241,34 +241,34 @@
                 {
                     message: 'with empty table name',
                     tableFields: [
-                        {fieldTitle: '* Table Name', fieldValue: ' '},
+                        {fieldTitle: tableNameFieldTitleText, fieldValue: ' '},
                         {fieldTitle: 'Description', fieldValue: 'test Description'}
                     ],
                     tableFieldError: [
-                        {fieldTitle: '* Table Name', fieldError: 'Fill in the table name'},
+                        {fieldTitle: tableNameFieldTitleText, fieldError: 'Fill in the table name'},
                     ]
                 },
                 {
                     message: 'with empty required fields',
                     tableFields: [
-                        {fieldTitle: '* Table Name', fieldValue: ' '},
+                        {fieldTitle: tableNameFieldTitleText, fieldValue: ' '},
                         {fieldTitle: recordNameFieldTitleText, fieldValue: ' '},
                         {fieldTitle: 'Description', fieldValue: 'test Description'}
                     ],
                     tableFieldError: [
-                        {fieldTitle: '* Table Name', fieldError: 'Fill in the table name'},
+                        {fieldTitle: tableNameFieldTitleText, fieldError: 'Fill in the table name'},
                         {fieldTitle: recordNameFieldTitleText, fieldError: 'Fill in the record name'}
                     ]
                 },
                 {
                     message: 'with duplicate table name',
                     tableFields: [
-                        {fieldTitle: '* Table Name', fieldValue: 'Table 1'},
+                        {fieldTitle: tableNameFieldTitleText, fieldValue: 'Table 1'},
                         {fieldTitle: recordNameFieldTitleText, fieldValue: 'Table 1'},
                         {fieldTitle: 'Description', fieldValue: 'test Description'}
                     ],
                     tableFieldError: [
-                        {fieldTitle: '* Table Name', fieldError: 'Fill in a different value. Another table is already using this name'},
+                        {fieldTitle: tableNameFieldTitleText, fieldError: 'Fill in a different value. Another table is already using this name'},
                     ]
                 },
             ];
