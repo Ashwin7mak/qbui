@@ -69,6 +69,33 @@ describe('Report actions', () => {
                 done();
             });
     });
+
+    it('addColumnFromExistingField action dispatches type.ADD_COLUMN_FROM_EXISTING_FIELD', (done) => {
+        let params = {
+            requestedColumn: {
+                fieldDef: {
+                    id: 7
+                },
+                isHidden: true,
+                isPlaceholder: false
+            },
+            addBefore: true
+        };
+        const expectedAction = [
+            event(context, types.ADD_COLUMN_FROM_EXISTING_FIELD, params)
+        ];
+        const store = mockReportsStore({});
+
+        return store.dispatch(reportActions.addColumnFromExistingField(context, appId, tblId, params)).then(
+            () => {
+                expect(store.getActions()).toEqual(expectedAction);
+                done();
+            },
+            () => {
+                expect(false).toBe(true);
+                done();
+            });
+    });
 });
 
 describe('Test ReportsActions function success workflow', () => {
@@ -257,28 +284,6 @@ describe('Test ReportsActions function success workflow', () => {
         const store = mockReportsStore({});
 
         return store.dispatch(reportActions.toggleFieldSelectorMenu(context, appId, tblId, params)).then(
-            () => {
-                expect(store.getActions()).toEqual(expectedAction);
-                done();
-            },
-            () => {
-                expect(false).toBe(true);
-                done();
-            });
-    });
-
-    it('addColumnFromExistingField action dispatches type.ADD_COLUMN_FROM_EXISTING_FIELD', (done) => {
-        let params = {
-            requestedId: 7,
-            addBefore: true,
-            response: mockResponseGetFields
-        };
-        const expectedAction = [
-            event(context, types.ADD_COLUMN_FROM_EXISTING_FIELD, params)
-        ];
-        const store = mockReportsStore({});
-
-        return store.dispatch(reportActions.addColumnFromExistingField(context, appId, tblId, params)).then(
             () => {
                 expect(store.getActions()).toEqual(expectedAction);
                 done();

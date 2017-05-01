@@ -334,23 +334,16 @@ const report = (state = [], action) => {
             // passed in params
             let params = action.content;
             let addBefore = params.addBefore;
-            let requestedColumnId = params.requestedId;
+            let requestedColumn = params.requestedColumn;
 
-            // all of the columns available
-            let fields = params.response.data;
-            let allFids = fields.map(field => {
-                return field.id;
-            });
-            let allColumns = ReportModelHelper.getReportColumns(fields, allFids);
-
-            let requestedColumnIndex = _.findIndex(currentColumns, (col) => {return col.id === requestedColumnId;});
+            let requestedColumnIndex = _.findIndex(currentColumns, (col) => {return col.id === requestedColumn.id;});
             let requestedInCurrentColumns = requestedColumnIndex !== -1;
 
             let columnMoving;
             if (requestedInCurrentColumns) {
                 columnMoving = currentColumns.splice(requestedColumnIndex, 1)[0];
             } else {
-                columnMoving = _.find(allColumns, (col) => {return col.id === requestedColumnId;});
+                columnMoving = requestedColumn;
             }
             // searches through the current columns to find the index of the placeholder
             let placeholderIndex = _.findIndex(currentColumns, (col) => {return col.isPlaceholder;});
@@ -364,14 +357,14 @@ const report = (state = [], action) => {
 
             // show the currently hidden column that was just added
             currentColumns.forEach(column => {
-                if (column.id === requestedColumnId) {
+                if (column.id === requestedColumn.id) {
                     column.isHidden = false;
                 }
                 return column;
             });
 
-            fids.splice(fidInsertionIndex, 0, requestedColumnId);
-            metaFids.splice(fidInsertionIndex, 0, requestedColumnId);
+            fids.splice(fidInsertionIndex, 0, requestedColumn.id);
+            metaFids.splice(fidInsertionIndex, 0, requestedColumn.id);
             reorderColumns(currentReport.data.columns);
             return newState(currentReport);
         }
