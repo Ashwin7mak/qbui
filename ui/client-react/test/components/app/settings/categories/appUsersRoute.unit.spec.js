@@ -77,7 +77,6 @@ describe('AppUsersRoute functions', () => {
     it('test component will receive props', () => {
         AppUsersRouteAPI.__Rewire__('IconActions', IconActionsMock);
 
-        // expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
         let component = shallow(<AppUsersRoute appUsersUnfiltered={appUsersUnfiltered}
                                            appRoles={appRoles}
                                            appOwner={appOwner}
@@ -104,12 +103,9 @@ describe('AppUsersRoute functions', () => {
                                            appUsers={[]}
                                            match={match}/>);
         let instance = component.instance();
-        // let filteredUsers = instance.addRoleIds();
         instance.toggleSelectedRow(1, 1);
         instance.toggleSelectAllRows();
         instance.deselectAllRows();
-        // console.log(filteredUsers);
-        // expect(flux.actions.selectedUsersRows).toHaveBeenCalled();
         AppUsersRouteAPI.__ResetDependency__('IconActions');
     });
 });
