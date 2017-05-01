@@ -118,14 +118,14 @@
     &.active {
         box-shadow: none;
         border: $stroke-width-thick dashed $color-black-300;
-        background-color: rgba($color-purple-600, .80);
+        background-color: rgba($color-purple-600, .08);
         width: 335px;
     }
 
     &:active {
         box-shadow: none;
         border: $stroke-width-thick dashed $color-black-300;
-        background-color: rgba($color-purple-600, .80);
+        background-color: rgba($color-purple-600, .08);
         width: 335px;
         z-index: 2;
         .deleteFieldIcon .qbIcon {
