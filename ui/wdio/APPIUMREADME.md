@@ -35,7 +35,9 @@ By default the E2E tests will launch a **separate** Node server automatically us
 This is to prevent port collision if you have Node already running. This also loads appium server by default listening to 0.0.0.0:4723. This service is started before test run and stopped after the tests are run.
 
 ###Choosing which tests run:
-Edit the **specs** parameter of **wdio.conf.js** (the path is dependent on where u run the wdio.conf.js from - see above)
+Edit the **specs** parameter of **wdio.conf.js** (the path is dependent on where u run the wdio.conf.js from - see above).If all above works good the checkpoint is the test './ui/wdio/tests/reports/reportTable.e2e.spec.js' should 100% pass on iPad2(tablet)
+and './ui/wdio/tests/mobile/reportSortingViaContainer.e2e.spec.js' should work on iPhone(card view)
+
 
 
 
