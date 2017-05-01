@@ -25,6 +25,8 @@
   .qbGrid {
     display: table;
     table-layout: auto;
+    display: flex;
+    flex-direction: column;
 
     .gridHeaderCell {
       .gridHeaderLabel {
