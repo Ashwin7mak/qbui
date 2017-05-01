@@ -84,7 +84,7 @@ class formBuilderPage {
 
     getFieldLocator(index) {
         // Returns a locator string for a specific field in the form builder
-        return '.formElementContainer:nth-child(' + index + ') .draggableField';
+        return '.formElementContainer:nth-child(' + index + ') .dragAndDropField';
     }
     cancel() {
         // Clicks on CANCEL in the form builder and waits for the next page to render
