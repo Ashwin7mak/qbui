@@ -9,6 +9,7 @@
     var e2ePageBase = requirePO('e2ePageBase');
     var formsPO = requirePO('formsPage');
     var reportContentPO = requirePO('reportContent');
+    const tableNameFieldTitle = "Table name";
 
     var tablesPage = Object.create(e2ePageBase, {
         //new table button
@@ -319,7 +320,7 @@
 
             if (results !== []) {
                 //Enter values for 'table name' field
-                if (tableField.includes('Table Name')) {
+                if (tableField.includes(tableNameFieldTitle)) {
                     //verify title of the field
                     expect(results[0].element('.tableFieldTitle').getAttribute('textContent')).toContain(tableField);
                     this.setInputValue(results[0], '.tableFieldInput input', fieldValue);
@@ -352,7 +353,7 @@
 
             if (results !== []) {
                 //Enter values for 'table name' field
-                if (tableField.includes('Table Name')) {
+                if (tableField.includes(tableNameFieldTitle)) {
                     //Verify the table name field value
                     expect(results[0].element('.tableFieldInput input').getAttribute('value')).toContain(expectedFieldValue);
                 } else if (tableField.includes('A record in the table is called')) {
@@ -396,7 +397,7 @@
 
             if (results !== []) {
                 //Enter values for 'table name' field
-                if (tableField.includes('Table Name')) {
+                if (tableField.includes(tableNameFieldTitle)) {
                     //Verify the placeholder inside input
                     expect(results[0].element('.tableFieldInput input').getAttribute('placeholder')).toContain(expectedPlaceHolder);
                     //Enter value of 'a record in the table is called a ' field
