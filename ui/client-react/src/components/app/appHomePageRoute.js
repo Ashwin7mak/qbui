@@ -7,7 +7,7 @@ import AppHomePage from './appHomePage';
 import PageTitle from '../pageTitle/pageTitle';
 import {connect} from 'react-redux';
 import {NotificationManager} from 'react-notifications';
-import Stage from '../../../../reuse/client/src/components/stage/stage'
+import Stage from '../../../../reuse/client/src/components/stage/stage';
 import Locale from '../../locales/locales';
 import {notifyTableDeleted} from '../../actions/tablePropertiesActions';
 import {getNeedToNotifyTableDeletion, getTableJustDeleted} from '../../reducers/tableProperties';

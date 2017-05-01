@@ -9,7 +9,7 @@
     background-color: $color-black-200;
 
     .appHomePageStage {
-        padding-left: 40px;
+        padding-left: 30px;
 
         .appStageHeadline {
             display: flex;
@@ -43,7 +43,7 @@
 }
 
 .appHomePageBody {
-    margin: 40px;
+    margin: 25px 40px 40px 40px;
 
     .main {
         padding: 0;
@@ -100,11 +100,11 @@
 
     .header {
         display: block;
-        margin-bottom: 40px;
+        margin-bottom: 25px;
         padding: 5px;
         min-height: 10px;
         font-size: 18px;
-        color: #8f9395;
+        color: $color-black-500;
     }
 
     @media all and (max-width: 640px) {
@@ -129,7 +129,7 @@
 
         .header {
             max-height: 5px;
-            margin: 10px;
+            margin: 10px 10px 10px 0px;
             font-size: 16px;
         }
     }
