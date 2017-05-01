@@ -355,7 +355,7 @@ export const loadReportRecordsCount = (context, appId, tblId, rptId, queryParams
  * @param tblId
  * @param params { open, clickedId, addBefore }
  */
-const toggleFieldSelectorMenu = (context, appId, tblId, params) => {
+export const toggleFieldSelectorMenu = (context, appId, tblId, params) => {
     return (dispatch) => {
         return new Promise((resolve, reject) => {
             if (appId && tblId) {
@@ -390,7 +390,7 @@ const toggleFieldSelectorMenu = (context, appId, tblId, params) => {
  * @param tblId
  * @param params { requestedId, addBefore }
  */
-const addColumnFromExistingField = (context, appId, tblId, params) => {
+export const addColumnFromExistingField = (context, appId, tblId, params) => {
     return (dispatch) => {
         return new Promise((resolve, reject) => {
             if (appId && tblId) {
