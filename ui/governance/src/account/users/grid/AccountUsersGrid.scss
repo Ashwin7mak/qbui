@@ -23,10 +23,11 @@
     min-width: 80px;
   }
   .qbGrid {
-    display: table;
     table-layout: auto;
-    display: flex;
     flex-direction: column;
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow-y: auto;
 
     .gridHeaderCell {
       .gridHeaderLabel {
