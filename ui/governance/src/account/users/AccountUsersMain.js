@@ -19,7 +19,7 @@ class AccountUsers extends Component {
     constructor(props) {
         super(props);
         this.GRID_ID = "accountUsers";
-        this.ITEMS_PER_PAGE = 500;
+        this.ITEMS_PER_PAGE = 10;
     }
 
     /**

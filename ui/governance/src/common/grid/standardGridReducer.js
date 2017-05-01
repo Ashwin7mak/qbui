@@ -6,8 +6,8 @@ export const defaultGridState = {
     // the fields to sort the grid
     sortFids: [],
     // the pagination to apply to the grid
-    pagination: {totalRecords: 0, totalPages: 0, currentPage: 1, itemsPerPage: 10},
-    // the filter to apply to the grid
+    pagination: {totalRecords: 0, totalPages: 0, currentPage: 1, itemsPerPage: 10, firstRecordInCurrentPage: 0, lastRecordInCurrentPage: 0},
+    // the filter search term to apply to the grid
     searchTerm : ""
 };
 
