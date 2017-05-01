@@ -1,7 +1,14 @@
-import * as types from './standardGridActionTypes';
+import * as types from "./standardGridActionTypes";
 
-const defaultGridState = {
-    sortFids: []
+export const defaultGridState = {
+    // the items currently displayed on the grid
+    items: [],
+    // the fields to sort the grid
+    sortFids: [],
+    // the pagination to apply to the grid
+    pagination: {totalRecords: 0, totalPages: 0, currentPage: 1, itemsPerPage: 10},
+    // the filter to apply to the grid
+    searchTerm : ""
 };
 
 /**
@@ -11,12 +18,41 @@ const defaultGridState = {
  * @param action - the action to apply
  * @returns {*}
  */
-function grid(state = defaultGridState, action) {
+export function grid(state = defaultGridState, action) {
     switch (action.type) {
+    case types.SET_ITEMS:
+        return {
+            ...state,
+            items: action.items
+        };
+    case types.SET_SEARCH:
+        return {
+            ...state,
+            searchTerm: action.searchTerm
+        };
     case types.SET_SORT:
         return {
             ...state,
             sortFids: action.remove ? [] : [(action.sortFid * (action.asc ? 1 : -1))]
+        };
+    case types.SET_CURRENTPAGE_OFFSET:
+        if (state.items.length === 0 ||
+            (state.pagination.currentPage + action.offset <= 0) ||
+            (state.pagination.currentPage + action.offset > state.pagination.totalPages)) {
+            return state;
+        }
+
+        return {
+            ...state,
+            pagination: {
+                ...state.pagination,
+                currentPage: state.pagination.currentPage + action.offset
+            }
+        };
+    case types.SET_PAGINATION:
+        return {
+            ...state,
+            pagination: action.pagination
         };
     default:
         return state;
@@ -45,9 +81,13 @@ function grid(state = defaultGridState, action) {
  * @param action - the action to apply
  * @returns {{}}
  */
-function gridById(state = {}, action) {
+export function gridById(state = {}, action) {
     switch (action.type) {
     case types.SET_SORT:
+    case types.SET_ITEMS:
+    case types.SET_PAGINATION:
+    case types.SET_CURRENTPAGE_OFFSET:
+    case types.SET_SEARCH:
         return {
             ...state,
             [action.gridId]: grid(state[action.gridId], action)

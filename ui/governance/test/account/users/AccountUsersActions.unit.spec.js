@@ -2,6 +2,7 @@ import {FORBIDDEN, INTERNAL_SERVER_ERROR} from  "../../../../client-react/src/co
 import * as actions from "../../../src/account/users/AccountUsersActions";
 import {__RewireAPI__ as AccountUsersActionsRewireAPI} from "../../../src/account/users/AccountUsersActions";
 import * as types from "../../../src/app/actionTypes";
+import * as gridTypes from "../../../src/common/grid/standardGridActionTypes";
 import configureMockStore from "redux-mock-store";
 import thunk from "redux-thunk";
 import Promise from "bluebird";
@@ -59,7 +60,7 @@ describe('Account Users Actions Tests', () => {
         }];
 
     describe('Fetch Actions', () => {
-        let mockAccountId = 1;
+        let mockAccountId = 1, mockGridID = 1, mockItemsPerPage = 10;
         const mockWindowUtils = {
             update: url => url,
         };
@@ -94,8 +95,8 @@ describe('Account Users Actions Tests', () => {
             ];
             // expect the dummy data when the fetchAccountUsers is called
             const store = mockStore({});
-            return store.dispatch(actions.fetchAccountUsers(mockAccountId)).then(() =>
-                    expect(store.getActions(mockAccountId)).toEqual(expectedActions)
+            return store.dispatch(actions.fetchAccountUsers(mockAccountId, mockGridID, mockItemsPerPage)).then(() =>
+                    expect(store.getActions(mockAccountId, mockGridID, mockItemsPerPage)).toEqual(expectedActions)
                 , error => expect(false).toBe(true)).then(done, done);
         });
 
@@ -121,7 +122,7 @@ describe('Account Users Actions Tests', () => {
                 }
             });
             const store = mockStore({});
-            store.dispatch(actions.fetchAccountUsers(mockAccountId)).then(() => {
+            store.dispatch(actions.fetchAccountUsers(mockAccountId, mockGridID, mockItemsPerPage)).then(() => {
                 expect(mockWindowUtils.update).toHaveBeenCalledWith(FORBIDDEN);
             }, e => expect(false).toEqual(true)).then(done, done);
         });
@@ -134,7 +135,7 @@ describe('Account Users Actions Tests', () => {
                 }
             });
             const store = mockStore({});
-            store.dispatch(actions.fetchAccountUsers(mockAccountId)).then(() => {
+            store.dispatch(actions.fetchAccountUsers(mockAccountId, mockGridID, mockItemsPerPage)).then(() => {
                 expect(mockWindowUtils.update).toHaveBeenCalledWith(INTERNAL_SERVER_ERROR);
             }, e => expect(false).toEqual(true)).then(done, done);
         });
@@ -175,8 +176,25 @@ describe('Account Users Actions Tests', () => {
         it('dispatches correctly', () => {
 
             const store = mockStore({AccountUsers: {users: USERS}});
-            store.dispatch(actions.doUpdate(1, {sortFids: [1]}));
-            expect(store.getActions(1)).toEqual([{type: types.GET_USERS_SUCCESS, users: SORTED_USERS}]);
+            let gridId = 1;
+            let itemsPerpage = 10;
+            let gridState = {
+                sortFids: [1],
+                pagination: {currentPage:1}};
+
+            store.dispatch(actions.doUpdate(gridId, gridState, itemsPerpage));
+            const expectedActions = [
+                {
+                    type: gridTypes.SET_PAGINATION,
+                    gridId: gridId,
+                    pagination: {totalRecords: USERS.length, totalPages: 1, currentPage: 1, itemsPerPage: itemsPerpage}},
+                {
+                    type: gridTypes.SET_ITEMS,
+                    gridId: gridId,
+                    items: SORTED_USERS
+                }
+            ];
+            expect(store.getActions(gridId)).toEqual(expectedActions);
         });
     });
 
