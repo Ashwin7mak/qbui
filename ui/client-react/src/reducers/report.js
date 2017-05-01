@@ -362,9 +362,10 @@ const report = (state = [], action) => {
                 }
                 return column;
             });
-
-            fids.splice(fidInsertionIndex, 0, requestedColumn.id);
-            metaFids.splice(fidInsertionIndex, 0, requestedColumn.id);
+            _.remove(currentReport.data.metaData.fids, fid => {return fid === requestedColumn.id;});
+            currentReport.data.metaData.fids.splice(fidInsertionIndex, 0, requestedColumn.id);
+            _.remove(currentReport.data.fids, fid => {return fid === requestedColumn.id;});
+            currentReport.data.fids.splice(fidInsertionIndex, 0, requestedColumn.id);
             reorderColumns(currentReport.data.columns);
             return newState(currentReport);
         }

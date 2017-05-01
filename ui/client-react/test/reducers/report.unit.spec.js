@@ -846,8 +846,195 @@ describe('Report reducer functions', () => {
 
     });
 
-    describe('Report reducer ADD_COLUMN test correct state', () => {
+    describe('Report reducer ADD_COLUMN_FROM_EXISTING_FIELD test correct state', () => {
+        let contextId = "ADD_COLUMN_FROM_EXISTING_FIELD";
+        let initialStateAddBefore = [
+            {
+                id: contextId,
+                data: {
+                    columns: [
+                        {
+                            id: -1,
+                            isHidden: false,
+                            isPlaceholder: true
+                        },
+                        {
+                            fieldDef: {
+                                id: 6
+                            },
+                            isHidden: false,
+                            isPlaceholder: false,
+                            id: 6
+                        },
+                        {
+                            fieldDef: {
+                                id: 7
+                            },
+                            isHidden: true,
+                            isPlaceholder: false,
+                            id: 7
+                        }
+                    ],
+                    fids: [6, 7],
+                    metaData: {
+                        fids: [6, 7]
+                    }
+                }
+            }
+        ];
+        let initialStateAddAfter = [
+            {
+                id: contextId,
+                data: {
+                    columns: [
+                        {
+                            fieldDef: {
+                                id: 6
+                            },
+                            isHidden: true,
+                            isPlaceholder: false,
+                            id: 6
+                        },
+                        {
+                            fieldDef: {
+                                id: 7
+                            },
+                            isHidden: false,
+                            isPlaceholder: false,
+                            id: 7
+                        },
+                        {
+                            id: -1,
+                            isHidden: false,
+                            isPlaceholder: true
+                        },
+                    ],
+                    fids: [6, 7],
+                    metaData: {
+                        fids: [6, 7]
+                    }
+                }
+            }
+        ];
+        let requestedColumnId6InColumns = {
+            fieldDef: {
+                id: 6
+            },
+            isHidden: true,
+            isPlaceholder: false,
+            id: 6
+        };
+        let requestedColumnId7InColumns = {
+            fieldDef: {
+                id: 7
+            },
+            isHidden: true,
+            isPlaceholder: false,
+            id: 7
+        };
+        let requestedColumnIdNotInColumns = {
+            fieldDef: {
+                id: 8
+            },
+            isHidden: true,
+            isPlaceholder: false,
+            id: 8
+        };
+        let testCases = [
+            {
+                description: 'when adding the requested column that already exists in the columns before the clicked column',
+                initialState: initialStateAddBefore,
+                content : {addBefore: true, requestedColumn: requestedColumnId7InColumns},
+                expects : (testState) => {
+                    expect(Array.isArray(testState)).toEqual(true);
+                    expect(testState[0].data.columns.length).toEqual(3);
+                    expect(testState[0].data.columns[0].id).toEqual(7);
+                    expect(testState[0].data.columns[1].isPlaceholder).toEqual(true);
+                    expect(testState[0].data.columns[2].id).toEqual(6);
+                    expect(testState[0].data.columns[0].isHidden).toEqual(false);
+                    expect(testState[0].data.fids.length).toEqual(2);
+                    expect(testState[0].data.metaData.fids.length).toEqual(2);
+                    expect(testState[0].data.fids[0]).toEqual(7);
+                    expect(testState[0].data.metaData.fids[0]).toEqual(7);
+                    expect(testState[0].data.fids[1]).toEqual(6);
+                    expect(testState[0].data.metaData.fids[1]).toEqual(6);
+                }
+            },
+            {
+                description: 'when adding the requested column that does not exist in the columns before the clicked column',
+                initialState: initialStateAddBefore,
+                content : {addBefore: true, requestedColumn: requestedColumnIdNotInColumns},
+                expects : (testState) => {
+                    expect(Array.isArray(testState)).toEqual(true);
+                    expect(testState[0].data.columns.length).toEqual(4);
+                    expect(testState[0].data.columns[0].id).toEqual(8);
+                    expect(testState[0].data.columns[1].isPlaceholder).toEqual(true);
+                    expect(testState[0].data.columns[2].id).toEqual(6);
+                    expect(testState[0].data.columns[3].id).toEqual(7);
+                    expect(testState[0].data.fids.length).toEqual(3);
+                    expect(testState[0].data.metaData.fids.length).toEqual(3);
+                    expect(testState[0].data.fids[0]).toEqual(8);
+                    expect(testState[0].data.metaData.fids[0]).toEqual(8);
+                    expect(testState[0].data.fids[1]).toEqual(6);
+                    expect(testState[0].data.metaData.fids[1]).toEqual(6);
+                    expect(testState[0].data.fids[2]).toEqual(7);
+                    expect(testState[0].data.metaData.fids[2]).toEqual(7);
+                }
+            },
+            {
+                description: 'when adding the requested column that already exists in the columns after the clicked column',
+                initialState: initialStateAddAfter,
+                content : {addBefore: false, requestedColumn: requestedColumnId6InColumns},
+                expects : (testState) => {
+                    expect(Array.isArray(testState)).toEqual(true);
+                    expect(testState[0].data.columns.length).toEqual(3);
+                    expect(testState[0].data.columns[0].id).toEqual(7);
+                    expect(testState[0].data.columns[1].isPlaceholder).toEqual(true);
+                    expect(testState[0].data.columns[2].id).toEqual(6);
+                    expect(testState[0].data.fids.length).toEqual(2);
+                    expect(testState[0].data.metaData.fids.length).toEqual(2);
+                    expect(testState[0].data.fids[0]).toEqual(7);
+                    expect(testState[0].data.metaData.fids[0]).toEqual(7);
+                    expect(testState[0].data.fids[1]).toEqual(6);
+                    expect(testState[0].data.metaData.fids[1]).toEqual(6);
+                }
+            },
+            {
+                description: 'when adding the requested column that does not exist in the columns after the clicked column',
+                initialState: initialStateAddAfter,
+                content : {addBefore: false, requestedColumn: requestedColumnIdNotInColumns},
+                expects : (testState) => {
+                    expect(Array.isArray(testState)).toEqual(true);
+                    expect(testState[0].data.columns.length).toEqual(4);
+                    expect(testState[0].data.columns[0].id).toEqual(6);
+                    expect(testState[0].data.columns[1].id).toEqual(7);
+                    expect(testState[0].data.columns[2].isPlaceholder).toEqual(true);
+                    expect(testState[0].data.columns[3].id).toEqual(8);
+                    expect(testState[0].data.fids.length).toEqual(3);
+                    expect(testState[0].data.metaData.fids.length).toEqual(3);
+                    expect(testState[0].data.fids[0]).toEqual(6);
+                    expect(testState[0].data.metaData.fids[0]).toEqual(6);
+                    expect(testState[0].data.fids[1]).toEqual(7);
+                    expect(testState[0].data.metaData.fids[1]).toEqual(7);
+                    expect(testState[0].data.fids[2]).toEqual(8);
+                    expect(testState[0].data.metaData.fids[2]).toEqual(8);
+                }
+            }
+        ];
 
+        testCases.forEach(testCase => {
+            it(testCase.description, () => {
+                let testState = testCase.initialState;
+                actionObj.type = types.ADD_COLUMN_FROM_EXISTING_FIELD;
+                actionObj.id = contextId;
+                if (testCase.content) {
+                    actionObj.content = testCase.content;
+                }
+                testState = reducer(testState, actionObj);
+
+                testCase.expects(testState);
+            });
+        });
     });
 
     describe('Report reducer HIDE_COLUMN test correct state', () => {
@@ -855,8 +1042,7 @@ describe('Report reducer functions', () => {
         let initialState = [
             {
                 id: contextId,
-                data:
-                {
+                data: {
                     columns: [
                         {
                             fieldDef: {
@@ -1100,61 +1286,59 @@ describe('Report reducer functions', () => {
         let initialStateWithoutPlaceholder = [
             {
                 id: contextId,
-                data:
-                    {
-                        columns: [
-                            {
-                                fieldDef: {
-                                    id: 6
-                                },
-                                isHidden: false,
-                                isPlaceholder: false,
+                data: {
+                    columns: [
+                        {
+                            fieldDef: {
                                 id: 6
                             },
-                            {
-                                fieldDef: {
-                                    id: 7
-                                },
-                                isHidden: false,
-                                isPlaceholder: false,
+                            isHidden: false,
+                            isPlaceholder: false,
+                            id: 6
+                        },
+                        {
+                            fieldDef: {
                                 id: 7
-                            }
-                        ],
-                        fids: [6, 7],
-                        metaData: {
-                            fids: [6, 7]
+                            },
+                            isHidden: false,
+                            isPlaceholder: false,
+                            id: 7
                         }
+                    ],
+                    fids: [6, 7],
+                    metaData: {
+                        fids: [6, 7]
                     }
+                }
             }
         ];
         let initialStateWithPlaceholder = [
             {
                 id: contextId,
-                data:
-                    {
-                        columns: [
-                            {
-                                fieldDef: {
-                                    id: 6
-                                },
-                                isHidden: false,
-                                isPlaceholder: false,
+                data: {
+                    columns: [
+                        {
+                            fieldDef: {
                                 id: 6
                             },
-                            {
-                                fieldDef: {
-                                    id: 7
-                                },
-                                isHidden: false,
-                                isPlaceholder: true,
+                            isHidden: false,
+                            isPlaceholder: false,
+                            id: 6
+                        },
+                        {
+                            fieldDef: {
                                 id: 7
-                            }
-                        ],
-                        fids: [6, 7],
-                        metaData: {
-                            fids: [6, 7]
+                            },
+                            isHidden: false,
+                            isPlaceholder: true,
+                            id: 7
                         }
+                    ],
+                    fids: [6, 7],
+                    metaData: {
+                        fids: [6, 7]
                     }
+                }
             }
         ];
         let testCases = [
