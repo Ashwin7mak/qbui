@@ -233,6 +233,24 @@
     }
 }
 
+.disabledDatePicker {
+    .input-group {
+        cursor: default;
+    }
+    input, span {
+        pointer-events: none;
+    }
+}
+
+.disabledTimeField {
+    .Select {
+        cursor: default;
+    }
+    .Select-control {
+        pointer-events: none;
+    }
+}
+
 //  edit mode styles for a date cell
 .dateCell.cellEdit {
     display: inline-block;

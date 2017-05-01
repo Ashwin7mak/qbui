@@ -181,6 +181,10 @@ const DateFieldValueEditor = React.createClass({
             classes.push('ghost-text');
         }
 
+        if (this.props.isDisabled) {
+            classes.push('disabledDatePicker');
+        }
+
         // display native input only for smallbreakpoint touch devices
         return (useNativeInput ?
             <div className={classes.concat('nativeInput').join(' ')}>
@@ -190,7 +194,8 @@ const DateFieldValueEditor = React.createClass({
                     onChange={this.onInputChange}
                     value={theDate}
                     placeholder={DATE_FORMATTED}
-                    tabIndex={this.props.tabIndex}/>
+                    tabIndex={this.props.tabIndex}
+                    disabled={this.props.isDisabled}/>
             </div> :
             <div className={classes.join(' ')}>
                 <DatePicker

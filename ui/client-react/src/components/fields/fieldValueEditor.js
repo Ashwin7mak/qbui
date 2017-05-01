@@ -154,6 +154,7 @@ const FieldValueEditor = React.createClass({
             onValidated: this.props.onValidated,
             placeholder : placeholder,
             tabIndex: this.props.tabIndex,
+            isDisabled: this.props.isDisabled,
             idKey : this.props.idKey,
             ref:"fieldInput",
             required: (this.props.fieldDef ? this.props.fieldDef.required : false),

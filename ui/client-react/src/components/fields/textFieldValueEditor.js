@@ -31,6 +31,7 @@ const TextInput = React.createClass({
                        onChange={this.props.onChange}
                        onBlur={this.props.onBlur}
                        tabIndex={this.props.tabIndex}
+                       disabled={this.props.isDisabled}
                  />);
     }
 });
@@ -142,6 +143,7 @@ const TextFieldValueEditor = React.createClass({
                     onChange={this.onChange}
                     onBlur={this.onBlur}
                     tabIndex={this.props.tabIndex}
+                    isDisabled={this.props.isDisabled}
                 />);
     }
 });

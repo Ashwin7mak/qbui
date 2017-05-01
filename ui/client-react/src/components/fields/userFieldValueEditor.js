@@ -189,6 +189,7 @@ const UserFieldValueEditor = React.createClass({
             <Select
                 className={classes}
                 tabIndex={this.props.tabIndex}
+                disabled={this.props.isDisabled}
                 filterOption={this.filterOption}
                 value={this.state.selectedUserId}
                 optionRenderer={this.renderOption}
@@ -199,7 +200,7 @@ const UserFieldValueEditor = React.createClass({
                 noResultsText={noResultsText}
                 autosize={false}
                 clearable={false}
-                onBlur={this.onBlur} />
+                onBlur={this.onBlur}/>
         );
     }
 });

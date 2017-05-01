@@ -26,6 +26,7 @@ const input = React.createClass({
                 onBlur={this.props.onBlur}
                 size={this.props.width}
                 tabIndex={this.props.tabIndex}
+                disabled={this.props.isDisabled}
             />
         );
     }
