@@ -99,31 +99,6 @@ ReportFieldSelectMenu.propTypes = {
     /**
      * Data of this report */
     reportData: PropTypes.object,
-
-    /**
-     * Boolean value indicating whether the side menu is open or closed. Only applicable on small devices. */
-    isOpen: PropTypes.bool,
-
-    /**
-     * Displays the panel at a collapsed width. Side menu must be open or docked to be visible. */
-    isCollapsed: PropTypes.bool,
-
-    /**
-     * Sometimes, the side menu needs to open or close itself (e.g., on some touch events, when the screen size changes).
-     * This callback will fire when the component needs to open or close itself. The response should be to update the state that is controlling isOpen. */
-    onUpdateOpenState: PropTypes.func,
-
-    /**
-     * Sets the location of the side menu to the right side of the screen if true */
-    pullRight: PropTypes.bool,
-
-    /**
-     * Determines whether the side menu will dock (stay open) at the medium or large breakpoints.
-     * If false, visible behavior is only determined by isOpen.
-     * Two warnings about this prop:
-     *   1. Careful with this one as it breaks the XD pattern for left navs.
-     *   2. If a new prop is passed at runtime, it won't visibly update until the next page resize */
-    willDock: PropTypes.bool,
 };
 
 const mapStateToProps = (state) => {
