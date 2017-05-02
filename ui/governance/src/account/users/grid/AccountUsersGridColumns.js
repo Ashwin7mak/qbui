@@ -11,7 +11,7 @@ const columns = [
     {
         property: 'firstName',
         header: {
-            label: 'First Name'
+            label: 'First name'
         },
         fieldDef: {
             id: 1,
@@ -23,7 +23,7 @@ const columns = [
     {
         property: 'lastName',
         header: {
-            label: 'Last Name'
+            label: 'Last name'
         },
         fieldDef: {
             id: 2,
@@ -50,7 +50,7 @@ const columns = [
     {
         property: 'userName',
         header: {
-            label: 'User Name'
+            label: 'User name'
         },
         props: {
             classes: ['ScreennameColumn']
@@ -65,7 +65,7 @@ const columns = [
     {
         property: 'lastAccess',
         header: {
-            label: 'Last Access'
+            label: 'Last access'
         },
         cell: {
             formatters: [Formatters.FormatLastAccessString]
@@ -83,7 +83,7 @@ const columns = [
     {
         property: 'hasAppAccess',
         header: {
-            label: 'QuickBase Access Status'
+            label: 'QuickBase access status'
         },
         cell: {
             formatters: [Formatters.FormatUserStatusHTML]
@@ -117,7 +117,7 @@ const columns = [
     {
         property: 'numGroupsMember',
         header: {
-            label: 'In Any Group?'
+            label: 'In any group?'
         },
         cell: {
             formatters: [Formatters.FormatIsGroupMember]
@@ -136,7 +136,7 @@ const columns = [
     {
         property: 'numGroupsManaged',
         header: {
-            label: 'Group Manager?'
+            label: 'Group manager?'
         },
         cell: {
             formatters: [Formatters.FormatIsGroupManager]
@@ -174,7 +174,7 @@ const columns = [
     {
         property: 'numAppsManaged',
         header: {
-            label: 'App Manager?'
+            label: 'App manager?'
         },
         cell: {
             formatters: [Formatters.FormatIsAppManager]
@@ -193,7 +193,7 @@ const columns = [
     {
         property: 'realmDirectoryFlags',
         header: {
-            label: 'In Realm Directory?'
+            label: 'In realm directory?'
         },
         cell: {
             formatters: [Formatters.FormatIsInRealmDirectory]
@@ -212,7 +212,7 @@ const columns = [
     {
         property: 'realmDirectoryFlags',
         header: {
-            label: 'Realm Approved?'
+            label: 'Realm approved?'
         },
         cell: {
             formatters: [Formatters.FormatIsRealmApproved]
