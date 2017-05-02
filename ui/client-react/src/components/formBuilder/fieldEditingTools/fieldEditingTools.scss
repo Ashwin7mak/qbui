@@ -2,7 +2,9 @@
 
 .fieldEditingTools {
     transition: opacity 0.4s;
-    border-radius: $radius-base;
+    border-radius: $border-radius-base;
+    border: $stroke-width-thick solid transparent;
+    box-shadow: 0 0 4px 0px rgba(transparent, 0);
     position: absolute;
     height: 100%;
     width: 335px;
@@ -21,22 +23,26 @@
             color: $iconfont-on-light-normal-color;
             transition: color 0.4s;
         }
+        button {
+            background: transparent;
+            outline: none;
+            padding: 0px;
+            //By giving it a border the same size as the focus border and a transparent background,
+            //it keeps the container from 'jumping' on focus
+            border: $stroke-width-thin solid transparent;
+            &:focus {
+                opacity: 1;
+                outline: none;
+                border: $stroke-width-thin solid $selected-color;
+            }
+        }
     }
 
     .tipChildWrapper {
         cursor: pointer;
     }
 
-    button {
-        background: transparent;
-        outline: none;
-        border: none;
-        &:focus {
-            opacity: 1;
-            outline: none;
-            border: $stroke-width-thin solid $selected-color;
-        }
-    }
+
 
     &.notTouchDevice {
         //No borders or icon are displayed when it is not a touch device
@@ -57,6 +63,14 @@
         .deleteFieldIcon .qbIcon {
             padding-right: $spacing-medium1;
         }
+    }
+
+    &:focus {
+        //For keyboard nav
+        opacity: 1;
+        outline: none;
+        box-shadow: 0 0 2px 0px rgba($selected-color, 0.75);
+        border: $stroke-width-thin solid $selected-color;
     }
 
     &.selectedFormElement {
@@ -105,14 +119,6 @@
                 opacity: 0;
             }
         }
-    }
-
-    &:focus {
-        //For keyboard nav
-        opacity: 1;
-        outline: none;
-        box-shadow: 0 0 2px 0px rgba($selected-color, 0.75);
-        border: $stroke-width-thin solid $selected-color;
     }
 
     &.active {
