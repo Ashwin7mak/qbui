@@ -13,20 +13,20 @@ import QBicon from '../qbIcon/qbIcon';
 import Locale from '../../../../reuse/client/src/locales/locale';
 import SideMenuBase from '../../../../reuse/client/src/components/sideMenuBase/sideMenuBase';
 
-import './reportFieldSelectMenu.scss'
+import './reportFieldSelectMenu.scss';
 
 export class ReportFieldSelectMenu extends Component {
     constructor(props) {
         super(props);
 
         this.refreshMenuContent();
-    };
+    }
 
     componentDidMount() {
         if (this.props.appId && this.props.tblId) {
             this.refreshMenuContent();
         }
-    };
+    }
 
     refreshMenuContent = () => {
         this.props.refreshFieldSelectMenu(CONTEXT.REPORT.NAV, this.props.appId, this.props.tblId);
@@ -75,7 +75,7 @@ export class ReportFieldSelectMenu extends Component {
                 />
             </div>
         );
-    };
+    }
 
     render() {
         let content = this.getMenuContent();
@@ -83,7 +83,7 @@ export class ReportFieldSelectMenu extends Component {
         return (
             <SideMenuBase {...this.props} baseClass="reportFieldSelectMenu" sideMenuContent={content}/>
         );
-    };
+    }
 }
 
 ReportFieldSelectMenu.propTypes = {
@@ -128,7 +128,7 @@ ReportFieldSelectMenu.propTypes = {
 const mapStateToProps = (state) => {
     return {
         shell: state.shell
-    }
+    };
 };
 
 const mapDispatchToProps = (dispatch) => {

@@ -1213,9 +1213,9 @@ describe('Report reducer functions', () => {
         ];
         let testCases = [
             {
-                description: 'when the placeholder column does not exist it is added to the columns before the clickedId',
+                description: 'when the placeholder column does not exist it is added to the columns before the clickedColumnId',
                 initialState: initialStateWithoutPlaceholder,
-                content : {clickedId: 6, addBefore: true},
+                content : {clickedColumnId: 6, addBeforeColumn: true},
                 expects : (testState) => {
                     expect(Array.isArray(testState)).toEqual(true);
                     expect(testState[0].data.columns.length).toEqual(3);
@@ -1223,9 +1223,9 @@ describe('Report reducer functions', () => {
                 }
             },
             {
-                description: 'when the placeholder column does not exist it is added to the columns after the clickedId',
+                description: 'when the placeholder column does not exist it is added to the columns after the clickedColumnId',
                 initialState: initialStateWithoutPlaceholder,
-                content : {clickedId: 6, addBefore: false},
+                content : {clickedColumnId: 6, addBeforeColumn: false},
                 expects : (testState) => {
                     expect(Array.isArray(testState)).toEqual(true);
                     expect(testState[0].data.columns.length).toEqual(3);
@@ -1233,9 +1233,9 @@ describe('Report reducer functions', () => {
                 }
             },
             {
-                description: 'when the placeholder column does exist it is added to the columns before the clickedId',
+                description: 'when the placeholder column does exist it is added to the columns before the clickedColumnId',
                 initialState: initialStateWithPlaceholder,
-                content : {clickedId: 6, addBefore: true},
+                content : {clickedColumnId: 6, addBeforeColumn: true},
                 expects : (testState) => {
                     expect(Array.isArray(testState)).toEqual(true);
                     expect(testState[0].data.columns.length).toEqual(3);
@@ -1244,9 +1244,9 @@ describe('Report reducer functions', () => {
                 }
             },
             {
-                description: 'when the placeholder column does exist it is added to the columns after the clickedId',
+                description: 'when the placeholder column does exist it is added to the columns after the clickedColumnId',
                 initialState: initialStateWithPlaceholder,
-                content : {clickedId: 6, addBefore: false},
+                content : {clickedColumnId: 6, addBeforeColumn: false},
                 expects : (testState) => {
                     expect(Array.isArray(testState)).toEqual(true);
                     expect(testState[0].data.columns.length).toEqual(3);
@@ -1255,9 +1255,9 @@ describe('Report reducer functions', () => {
                 }
             },
             {
-                description: 'when the clickedId is not an id of any of the columns the placeholder is not added',
+                description: 'when the clickedColumnId is not an id of any of the columns the placeholder is not added',
                 initialState: initialStateWithoutPlaceholder,
-                content : {clickedId: 8, addBefore: true},
+                content : {clickedColumnId: 8, addBeforeColumn: true},
                 expects : (testState) => {
                     expect(Array.isArray(testState)).toEqual(true);
                     expect(testState[0].data.columns.length).toEqual(2);

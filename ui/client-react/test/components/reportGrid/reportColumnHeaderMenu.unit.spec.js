@@ -591,7 +591,7 @@ describe('ReportColumnHeaderMenu', () => {
 
             instance.openFieldSelectorAfter();
 
-            expect(testProps.openFieldSelectMenu).toHaveBeenCalledWith(CONTEXT.REPORT.NAV,testFieldDef.id, false);
+            expect(testProps.openFieldSelectMenu).toHaveBeenCalledWith(CONTEXT.REPORT.NAV, testFieldDef.id, false);
         });
 
         it('does not call the action to open the menu to add a column if the required props are not passed in', () => {

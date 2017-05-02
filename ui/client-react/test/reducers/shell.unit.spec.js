@@ -198,7 +198,7 @@ describe('Nav reducer functions for opening the field select menu', () => {
     testCases.forEach(test => {
         it(test.name, (done) => {
             initializeState();
-            const changeState = reducer(initialState, {type: test.type, content: {addBefore: test.fieldsSelectMenu.addBefore, response: {data: []}}});
+            const changeState = reducer(initialState, {type: test.type, content: {addBeforeColumn: test.fieldsSelectMenu.addBefore, response: {data: []}}});
             expect(changeState.fieldsSelectMenu.fieldsListCollapsed).toEqual(test.fieldsSelectMenu.fieldsListCollapsed);
             expect(changeState.fieldsSelectMenu.addBefore).toEqual(test.fieldsSelectMenu.addBefore);
             done();
