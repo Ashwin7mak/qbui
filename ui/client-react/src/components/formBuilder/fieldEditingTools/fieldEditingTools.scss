@@ -92,9 +92,9 @@
     }
 
     &:hover {
+        transition: 0.4s;
         opacity: 1;
         border: $stroke-width-thin solid $input-text-focus-border-color;
-        transition: border 0.4s;
         .fieldEditingTools {
             opacity: 1;
             .qbIcon {
