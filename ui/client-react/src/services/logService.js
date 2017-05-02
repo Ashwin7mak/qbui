@@ -8,7 +8,7 @@ class LogService extends BaseService {
 
         //  Log service API endpoints
         this.API = {
-            LOG     : `${constants.BASE_URL.NODE}/${constants.LOG}`
+            LOG     : `${constants.BASE_URL.QBUI}/${constants.LOG}`
         };
     }
 
