@@ -9,7 +9,7 @@ var express = require('express');
 var app = express();
 
 var mockConfig = {
-    routeGroup: routeGroups.DEBUG
+    routeGroup: routeGroups.DEFAULT
 };
 var assert = require('assert');
 

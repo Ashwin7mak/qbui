@@ -32,6 +32,10 @@
      * @param routeMapper
      */
     function initializeRoutes(routes, app, routeMapper) {
+        //
+        //  loop through the list of routes and define the express route.  note the ordering of the routes
+        //  in the array is important.  A route that qualifies for multiple route definitions will always
+        //  resolve to the first route definition.
         _.forEach(routes, function(route) {
 
             var getFunctionForRoute = routeMapper.fetchGetFunctionForRoute(route);
