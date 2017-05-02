@@ -99,7 +99,8 @@ $toolpalette-header-font-size: 10px;
         &:focus {
             outline: none;
             border-radius: $border-radius-base;
-            border: $stroke-width-thin solid $color-purple-600;
+            box-shadow: 0 0 2px 0px rgba($selected-color, 0.75);
+            border: $stroke-width-thin solid $selected-color;
         }
     }
 }

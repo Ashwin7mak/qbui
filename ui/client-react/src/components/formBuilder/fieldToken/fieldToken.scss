@@ -27,7 +27,7 @@ $fieldtoken-title-margin-left: 12px;
         border: $stroke-width-thin solid $fieldtoken-hover-border-color;
         box-shadow: 0 0 8px 0 rgba($color-black-800, 0.3);
     }
-    
+
     .fieldTokenTitle {
         max-width: $fieldtoken-width;
         opacity: 1;
@@ -63,7 +63,7 @@ $fieldtoken-title-margin-left: 12px;
     &.fieldTokenDragging {
         color: $dragtoken-text-color;
         background-color: $dragtoken-background-color2;
-        border: $stroke-width-thin solid $dragtoken-border-color;
+        border: $stroke-width-thick solid $dragtoken-border-color;
 
         .fieldTokenIconContainer {
             background-color: $dragtoken-background-color1;
