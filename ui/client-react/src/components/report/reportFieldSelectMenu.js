@@ -24,6 +24,7 @@ export class ReportFieldSelectMenu extends Component {
     componentDidMount() {
         if (this.props.appId && this.props.tblId) {
             this.refreshMenuContent();
+            this.props.closeFieldSelectMenu(CONTEXT.REPORT.NAV);
         }
     }
 
