@@ -66,18 +66,23 @@
     }
 
     button {
-        width: 100.7px;
+        min-width: 100.7px;
         height: 38px;
-        border-radius: 4px;
+        border-radius: $border-radius-base;
+        &:focus {
+            outline: none;
+            @include text-input-focus;
+
+        }
     }
 
-    .cancelFormButton {
+    .alternativeButton {
         background-color: $panel-footer-bg;
         border: none;
         color: $color-indigo-500;
     }
 
-    .saveFormButton {
+    .mainButton {
         border: none;
         background-color: $color-cyan-500;
     }

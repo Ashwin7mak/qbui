@@ -19,6 +19,7 @@ let SaveOrCancelFooter = React.createClass({
 
 
     render() {
+        console.log('this.props.rightAlignedButtons: ', this.props.rightAlignedButtons);
         return (
             <div className="saveOrCancelFooter">
                 <div className="leftActions">
