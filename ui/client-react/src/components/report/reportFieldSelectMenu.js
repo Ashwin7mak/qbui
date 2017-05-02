@@ -5,6 +5,8 @@ import _ from 'lodash';
 import {CONTEXT} from '../../actions/context';
 import {refreshFieldSelectMenu, closeFieldSelectMenu, addColumnFromExistingField} from '../../actions/reportActions';
 
+import ReportUtils from '../../utils/reportUtils';
+
 import {FieldTokenInMenu} from '../formBuilder/fieldToken/fieldTokenInMenu';
 import ListOfElements from '../../../../reuse/client/src/components/sideNavs/listOfElements';
 import QBicon from '../qbIcon/qbIcon';
@@ -38,7 +40,7 @@ export class ReportFieldSelectMenu extends Component {
             return !column.isHidden;
         });
         let availableColumns = this.props.shell.fieldsSelectMenu.availableColumns;
-        let hiddenColumns = _.differenceBy(availableColumns, visibleColumns, 'id');
+        let hiddenColumns = ReportUtils.getDifferenceOfColumns(availableColumns, visibleColumns, 'id');
         for (let i = 0; i < hiddenColumns.length; i++) {
             let params = {
                 requestedColumn: hiddenColumns[i],
