@@ -67,6 +67,17 @@ const report = (state = [], action) => {
         return ret.slice(0, targetIndex).concat([sourceItem]).concat(ret.slice(targetIndex));
     }
 
+    function updateColumnFids(data, sourceItem, targetItem) {
+        for(i=0;i<data.length;i++){
+            if(data[i]==sourceItem)
+                sourceIndex=i;
+            if(data[i]==targetItem)
+                targetIndex=i;
+        }
+        var ret = data.slice(0, sourceIndex).concat(data.slice(sourceIndex + 1));
+        return ret.slice(0, targetIndex).concat([sourceItem]).concat(ret.slice(targetIndex));
+    }
+
     //  what report action is being requested
     switch (action.type) {
     case types.LOAD_REPORT:
@@ -296,19 +307,28 @@ const report = (state = [], action) => {
         }
         return state;
     }
-        case types.MOVE_COLUMN: {
-            let currentReport = getReportFromState(action.id);
-            if (currentReport) {
-                let columns = currentReport.data.columns;
-                for(var i=0;i<columns.length;i++){
-                    if(columns[i].headerName==action.content.sourceLabel)
-                        var sourceIndex=i;
-                    if(columns[i].headerName==action.content.targetLabel)
-                        var targetIndex=i;
+    case types.MOVE_COLUMN: {
+        let currentReport = getReportFromState(action.id);
+        if (currentReport) {
+            let columns = currentReport.data.columns;
+            let fids=currentReport.data.fids;
+            for(var i=0;i<columns.length;i++){
+                if(columns[i].headerName==action.content.sourceLabel){
+                    var sourceIndex=i;
+                    var sourceFid=columns[i].id;
                 }
-                var movedColumns = columnMove(columns, sourceIndex, targetIndex);
-                currentReport.data.columns=movedColumns;
-                return newState(currentReport);
+                if(columns[i].headerName==action.content.targetLabel){
+                    var targetIndex=i;
+                    var targetFid=columns[i].id;
+                }
+            }
+            var movedColumns = columnMove(columns, sourceIndex, targetIndex);
+            var updateFids= updateColumnFids(fids,sourceFid,targetFid);
+
+            currentReport.data.columns=movedColumns;
+            currentReport.data.fids=updateFids;
+            currentReport.data.metaData.fids=updateFids;
+            return newState(currentReport);
             }
             return state;
         }
