@@ -53,10 +53,6 @@ export const BuilderWrapper = React.createClass({
         // build the section header.
         if (section && _.has(section, 'headerElement.FormHeaderElement.displayText')) {
             sectionTitle = section.headerElement.FormHeaderElement.displayText;
-            if (sectionTitle.length > 20) {
-                let tempSectionTitle = sectionTitle.slice(0, 20);
-                sectionTitle = `${tempSectionTitle}...`;
-            }
         }
 
         return (
