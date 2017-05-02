@@ -74,6 +74,7 @@ class StandardGrid extends Component {
 
 StandardGrid.propTypes = {
     columns: PropTypes.array.isRequired,
+    items: PropTypes.array.isRequired,
     rowKey: PropTypes.string.isRequired,
     id: PropTypes.string.isRequired,
     columnTransforms: PropTypes.array,
