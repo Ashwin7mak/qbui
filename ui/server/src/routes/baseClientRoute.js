@@ -1,7 +1,10 @@
 const reactViews = require('express-react-views');
 const log = require('../logger').getLogger();
-const path = require('path');
-const fs = require('fs');
+
+// These two imports are `let` because they are rewired in a unit test. Rewire doesn't currently support rewiring const.
+let path = require('path');
+let fs = require('fs');
+
 let baseRoute = require('../../../common/src/constants').ROUTES.BASE_CLIENT_ROUTE;
 
 const engineOptions = {
