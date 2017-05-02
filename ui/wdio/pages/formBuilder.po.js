@@ -98,7 +98,8 @@ class formBuilderPage {
         let fieldLocator = this.getFieldLocator(index);
         let field = browser.element(fieldLocator);
         let deleteBtn = field.element('.deleteFieldIcon');
-        browser.moveToObject(fieldLocator);
+//        browser.moveToObject(fieldLocator);
+        field.click();
         deleteBtn.waitForVisible();
         deleteBtn.click();
         // wait for the field to disappear
@@ -172,7 +173,8 @@ class formBuilderPage {
     }
     selectFieldByIndex(index) {
         // Selects the field at the specified index and verifies that it is reflected in the properties panel
-        browser.moveToObject(this.getFieldLocator(index), 1, 1).buttonDown().buttonUp();
+//        browser.moveToObject(this.getFieldLocator(index), 1, 1).buttonDown().buttonUp();
+        browser.element(this.getFieldLocator(index) + ' .fieldLabel').click();
         this.fieldProperty_Name.waitForExist(); // assume it didn't exist, i.e. nothing was previously selected
         return this.fieldProperty_Name.getText();
     }

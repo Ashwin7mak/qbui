@@ -46,7 +46,8 @@
 
         it('drags a field outside of viewport & verifies autoscroll', function() {
             let numFields = formBuilderPO.getFieldLabels().length;
-            let firstField = browser.element(formBuilderPO.getFieldLocator(1));
+            let firstFieldLocator = formBuilderPO.getFieldLocator(1);
+            let firstField = browser.element(firstFieldLocator);
             let lastField = browser.element(formBuilderPO.getFieldLocator(numFields));
             let firstFieldSize = firstField.getElementSize();
             let browserSize = browser.windowHandleSize();
@@ -54,8 +55,9 @@
             browser.windowHandleSize({width: browserSize.value.width, height: firstFieldSize.height * 4});
             expect(lastField.isVisibleWithinViewport()).toBe(false);
             // click on first field & drag DOWN until autoscroll begins
-            firstField.click();
-            firstField.element('.fieldLabel').moveToObject().buttonDown();
+//            browser.moveToObject(firstFieldLocator, 1, 1).buttonDown();
+            browser.element(firstFieldLocator + ' .fieldLabel').click();
+            browser.buttonDown();
             while (firstField.isVisibleWithinViewport()) {
                 browser.moveTo(null, 0, 1);
             }
