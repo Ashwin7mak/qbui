@@ -283,7 +283,11 @@ export const Nav = React.createClass({
     },
 
     getPendEdits() {
-        return getPendEdits(this.props.record);
+        if (this.props.record) {
+            return getPendEdits(this.props.record);
+        } else {
+            return {};
+        }
     },
 
     getCenterGlobalActions() {
