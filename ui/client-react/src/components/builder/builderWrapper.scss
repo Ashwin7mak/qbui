@@ -6,7 +6,7 @@ $builder-wrapper-border-color: $color-black-300;
     height: 100%;
     width: 100%;
     .topNav {
-        background-color: $color-purple-600;
+        background-color: $topnav-builder-background-color;
         .qbIcon {
             color: $color-black-100;
         }
@@ -14,7 +14,7 @@ $builder-wrapper-border-color: $color-black-300;
             color: $color-black-100;
         }
         .btn-group button {
-            background-color: $color-purple-600;
+            background-color: $topnav-builder-background-color;
         }
 
         .topTitle {
