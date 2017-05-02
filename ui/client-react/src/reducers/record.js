@@ -336,11 +336,18 @@ export default record;
  * @returns {{}}
  */
 export const getPendEdits = (recordState, recId) => {
-    if (!recordState) {
+    /**
+     * return empty object if either is true
+     * record state or records in the state is undefined
+     * recId and recordId_recordBeingEdited both are undefined
+     */
+    if (!recordState || !recordState.records || (!recId && !recordState.recordId_recordBeingEdited)) {
         return {};
     }
+    // the record returned is the one having the id matching recId if passed in or record state's recordId_recordBeingEdited
+    const recordId = recId || recordState.recordId_recordBeingEdited.toString();
     const recordCurrentlyEdited = _.find(recordState.records,
-        rec=>rec.id.toString() === recId || recordState.recordId_recordBeingEdited.toString());
+        rec=>rec.id.toString() === recordId);
     return (recordCurrentlyEdited ? recordCurrentlyEdited.pendEdits : {}) || {};
 };
 
