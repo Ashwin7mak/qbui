@@ -371,7 +371,7 @@
             var sortedExpectedRecords = [];
 
             //report Endpoint
-            var reportEndpoint = e2eBase.recordBase.apiBase.resolveReportsEndpoint(appId, tableId, reportId);
+            var reportEndpoint = e2eBase.recordBase.apiBase.resolveReportsResultsEndpoint(appId, tableId, reportId);
             //GET report results
             browser.call(function() {
                 return e2eBase.recordBase.apiBase.executeRequest(reportEndpoint, consts.GET).then(function(reportResult) {
