@@ -216,8 +216,10 @@ export const ReportContent = React.createClass({
      * to be saved.
      * Then initiate the recordPendingEditsStart action with the app/table/recId and originalRec if there
      * was one or changes if it's a new record
+     * inlineEdit set to true by default, if its called from a trowser, the value passed in is going to be false
      * @param recId
      * @param fieldToStartEditing
+     * @param inLineEdit
      */
     handleEditRecordStart(recId, fieldToStartEditing = null, inLineEdit = true) {
         if (_.has(this.props, 'reportData.data')) {
