@@ -184,23 +184,21 @@ const ReportCell = React.createClass({
 
         return (
             <div className={classes.join(' ')} onClick={this.onCellClick}>
-                <div className="cellClickableArea">
-                    <CellValueRenderer
-                        {...this.props}
-                        type={uiFieldType}
-                        classes={this.props.cellClass}
-                        attributes={fieldDef.datatypeAttributes}
-                        isEditable={isFieldEditable}
-                        idKey={`fvr-${this.props.uniqueElementKey}`}
-                        key={`fvr-${this.props.uniqueElementKey}`}
+                <CellValueRenderer
+                    {...this.props}
+                    type={uiFieldType}
+                    classes={this.props.cellClass}
+                    attributes={fieldDef.datatypeAttributes}
+                    isEditable={isFieldEditable}
+                    idKey={`fvr-${this.props.uniqueElementKey}`}
+                    key={`fvr-${this.props.uniqueElementKey}`}
 
-                        // Don't show duration units in the grid
-                        includeUnits={false}
+                    // Don't show duration units in the grid
+                    includeUnits={false}
 
-                        // Don't show unchecked checkboxes in the grid
-                        hideUncheckedCheckbox={true}
-                    />
-                </div>
+                    // Don't show unchecked checkboxes in the grid
+                    hideUncheckedCheckbox={true}
+                />
                 {this.renderEditIcon(isFieldEditable)}
             </div>
         );
