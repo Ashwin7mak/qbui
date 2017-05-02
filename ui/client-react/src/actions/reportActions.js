@@ -370,20 +370,3 @@ export const hideColumn = (context, appId, tblId, rptId, params) => {
     };
 };
 
-
-export const moveColumn = (context, appId, tblId, rptId, params) => {
-    return (dispatch) => {
-        if (appId &&tblId && rptId) {
-            logger.debug(`moving column with id: for appId: ${appId}, tblId:${tblId}, rptId:${rptId}`);
-            // Temporary until API to persist hidden columns.
-            return new Promise((resolve) => {
-                dispatch(event(context, types.MOVE_COLUMN, params));
-                resolve();
-            });
-        } else {
-            logger.error(`reportActions.moving: Missing one or more required input parameters.  AppId:${appId}; TblId:${tblId}; RptId:${rptId}`);
-            return new Promise.reject();
-        }
-    };
-};
-
