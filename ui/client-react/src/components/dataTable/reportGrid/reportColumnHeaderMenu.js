@@ -214,10 +214,9 @@ export class ReportColumnHeaderMenu extends Component {
     /**
      * On selection of hide option from menu fire off the action to hide the column
      */
-    hideThisColumn = () => {
+     hideThisColumn = () => {
         if (!this.hasRequiredIds()) {return;}
         if (this.props.isOnlyOneColumnVisible) {return;}
-
         let params = {
             columnId: this.props.fieldDef.id
         };
@@ -228,6 +227,7 @@ export class ReportColumnHeaderMenu extends Component {
     render() {
         let isDisabled = this.props.isOnlyOneColumnVisible;
         return (
+
             <Dropdown bsStyle="default" noCaret id="dropdown-no-caret">
                 <Button tabIndex="0" bsRole="toggle" className={"dropdownToggle iconActionButton"}>
                     <QbIcon icon="caret-filled-down"/>
@@ -248,6 +248,7 @@ export class ReportColumnHeaderMenu extends Component {
 
                     <MenuItem onSelect={this.groupReportAscending}>
                         <span className="groupAscendMenuText">{this.getSortAscText(GROUPING_MESSAGE)}</span>
+
                     </MenuItem>
                     <MenuItem onSelect={this.groupReportDescending}>
                         <span className="groupDescendMenuText">{this.getSortDescText(GROUPING_MESSAGE)}</span>
@@ -283,6 +284,7 @@ const mapDispatchToProps = (dispatch) => {
         }
     };
 };
+
 
 // --- PRIVATE FUNCTIONS
 

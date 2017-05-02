@@ -22,13 +22,6 @@ let configuration = null;
 
 let defaultConfig = {
     uid: uuid.v1(),
-    api: {
-        qbVersion: 'v1',
-        eeVersion: 'v1',
-        automationVersion: 'v1',
-        nodeVersion: 'v1',
-        legacyVersion: 'v1'
-    },
     locale: {
         supported: ['en-us', 'de-de', 'fr-fr'],
         default: 'en-us'

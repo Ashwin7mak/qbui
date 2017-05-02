@@ -114,7 +114,7 @@
                 recordBase.apiBase.executeRequest(recordBase.apiBase.resolveTablesEndpoint(app.id, app.tables[0].id) + '/defaulthomepage?format=' + FORMAT, consts.GET).then(function(defaultHomePageResults) {
                     assert.deepEqual(JSON.parse(defaultHomePageResults.body).id, "1");
                     //Execute a GET report homepage
-                    recordBase.apiBase.executeRequest(recordBase.apiBase.resolveTablesEndpoint(app.id, app.tables[0].id) + '/homepage?format=' + FORMAT, consts.GET).then(function(reportHomePageResults) {
+                    recordBase.apiBase.executeRequest(recordBase.apiBase.resolveTablesEndpoint(app.id, app.tables[0].id, true) + '/homepage?format=' + FORMAT, consts.GET).then(function(reportHomePageResults) {
                         var results = JSON.parse(reportHomePageResults.body);
                         //verify report meta Data
                         assert.ok(results, "expected results from report homepage request");
@@ -152,7 +152,7 @@
                                             //verify GET defaulthomepage returns "1"(list all)
                                             assert.deepEqual(JSON.parse(defaultHomePageResults.body).id, "1");
                                             //Execute a GET report homepage
-                                            recordBase.apiBase.executeRequest(recordBase.apiBase.resolveTablesEndpoint(app.id, app.tables[0].id) + '/homepage?format=' + FORMAT, consts.GET).then(function(reportHomePageResults) {
+                                            recordBase.apiBase.executeRequest(recordBase.apiBase.resolveTablesEndpoint(app.id, app.tables[0].id, true) + '/homepage?format=' + FORMAT, consts.GET).then(function(reportHomePageResults) {
                                                 var results = JSON.parse(reportHomePageResults.body);
                                                 //verify report meta Data
                                                 assert.ok(results, "expected results from report homepage request");
@@ -227,7 +227,7 @@
                             //get the user authentication
                             recordBase.apiBase.createUserAuthentication(userId).then(function() {
                                 //Execute a GET report homepage which returns report object (metaData and data)
-                                recordBase.apiBase.executeRequest(recordBase.apiBase.resolveTablesEndpoint(app.id, app.tables[0].id) + '/homepage?format=' + FORMAT, consts.GET).then(function(reportHomePageResults) {
+                                recordBase.apiBase.executeRequest(recordBase.apiBase.resolveTablesEndpoint(app.id, app.tables[0].id, true) + '/homepage?format=' + FORMAT, consts.GET).then(function(reportHomePageResults) {
                                     var results = JSON.parse(reportHomePageResults.body);
                                     //Verify returned results has right report Id and role info
                                     //verify report meta Data
