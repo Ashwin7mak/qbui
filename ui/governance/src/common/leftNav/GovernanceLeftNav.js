@@ -1,7 +1,7 @@
 import React, {PropTypes, Component} from 'react';
 import {connect} from 'react-redux';
 import StandardLeftNav from '../../../../reuse/client/src/components/sideNavs/standardLeftNav';
-import {AVAILABLE_ICOUI_STURDY.N_FONTS} from '../../../../reuse/client/src/components/icon/icon';
+import {AVAILABLE_ICON_FONTS} from '../../../../reuse/client/src/components/icon/icon';
 import DefaultTopNavGlobalActions from '../../../../reuse/client/src/components/topNav/defaultTopNavGlobalActions';
 import GetLeftNavLinks from './GovernanceLeftNavLinks';
 import * as RequestContextActions from '../requestContext/RequestContextActions';
