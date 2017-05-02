@@ -53,20 +53,6 @@ const report = (state = [], action) => {
         return null;
     }
 
-    function columnMove(data, sourceIndex, targetIndex) {
-        // Idea
-        // a, b, c, d, e -> move(b, d) -> a, c, d, b, e
-        // a, b, c, d, e -> move(d, a) -> d, a, b, c, e
-        // a, b, c, d, e -> move(a, d) -> b, c, d, a, e
-        var sourceItem = data[sourceIndex];
-
-        // 1. detach - a, c, d, e - a, b, c, e, - b, c, d, e
-        var ret = data.slice(0, sourceIndex).concat(data.slice(sourceIndex + 1));
-
-        // 2. attach - a, c, d, b, e - d, a, b, c, e - b, c, d, a, e
-        return ret.slice(0, targetIndex).concat([sourceItem]).concat(ret.slice(targetIndex));
-    }
-
     //  what report action is being requested
     switch (action.type) {
     case types.LOAD_REPORT:
@@ -296,22 +282,6 @@ const report = (state = [], action) => {
         }
         return state;
     }
-        case types.MOVE_COLUMN: {
-            let currentReport = getReportFromState(action.id);
-            if (currentReport) {
-                let columns = currentReport.data.columns;
-                for(var i=0;i<columns.length;i++){
-                    if(columns[i].headerName==action.content.sourceLabel)
-                        var sourceIndex=i;
-                    if(columns[i].headerName==action.content.targetLabel)
-                        var targetIndex=i;
-                }
-                var movedColumns = columnMove(columns, sourceIndex, targetIndex);
-                currentReport.data.columns=movedColumns;
-                return newState(currentReport);
-            }
-            return state;
-        }
     default:
         // by default, return existing state
         return state;
