@@ -1,6 +1,7 @@
 import React, {PropTypes, Component} from 'react';
 import {connect} from 'react-redux';
 import StandardLeftNav from '../../../../reuse/client/src/components/sideNavs/standardLeftNav';
+import {AVAILABLE_ICOUI_STURDY.N_FONTS} from '../../../../reuse/client/src/components/icon/icon';
 import DefaultTopNavGlobalActions from '../../../../reuse/client/src/components/topNav/defaultTopNavGlobalActions';
 import GetLeftNavLinks from './GovernanceLeftNavLinks';
 import * as RequestContextActions from '../requestContext/RequestContextActions';
@@ -19,7 +20,7 @@ class GovernanceLeftNav extends Component {
                 showLoadingIndicator={this.props.isLoading}
                 isContextHeaderSmall={true}
                 showContextHeader={true}
-                contextHeaderIcon="settings"
+                contextHeaderIcon="AVAILABLE_ICON_FONTS.UI_STURDY.settings"
                 contextHeaderTitle="Manage QuickBase"
                 navItems={GetLeftNavLinks(this.props.isAccountAdmin, this.props.isRealmAdmin, this.props.isAccountURL)}
                 globalActions={<DefaultTopNavGlobalActions dropdownIcon="user" dropdownMsg="globalActions.user" shouldOpenMenusUp={true} />}
