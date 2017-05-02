@@ -211,10 +211,6 @@ export const QBForm = React.createClass({
         let sectionTitle = '';
         if (_.has(section, 'headerElement.FormHeaderElement.displayText')) {
             sectionTitle = section.headerElement.FormHeaderElement.displayText;
-            if (sectionTitle.length > 20) {
-                let tempSectionTitle = sectionTitle.slice(0, 20);
-                sectionTitle = `${tempSectionTitle}...`;
-            }
         }
 
         /*
