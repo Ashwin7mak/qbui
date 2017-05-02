@@ -23,9 +23,9 @@ import KeyboardShortcuts from '../../../../reuse/client/src/components/keyboardS
 import {APP_ROUTE, EDIT_RECORD_KEY} from '../../constants/urlConstants';
 import {CONTEXT} from '../../actions/context';
 import SaveOrCancelFooter from '../saveOrCancelFooter/saveOrCancelFooter';
-
+import {getPendEdits} from '../../reducers/record';
 import './recordTrowser.scss';
-
+import {NEW_RECORD_VALUE} from "../../constants/urlConstants";
 
 /**
  * trowser containing a record component
@@ -485,10 +485,7 @@ export const RecordTrowser = React.createClass({
     },
 
     getPendEdits() {
-        // only one record should have the pendEdits , so return that
-        const recordCurrentlyEdited = _.find(this.props.record.records, rec=>rec.id.toString() === this.props.recId ||
-        (!this.props.recId && rec.id === "new"));
-        return recordCurrentlyEdited ? recordCurrentlyEdited.pendEdits : {};
+        return getPendEdits(this.props.record, this.props.recId || NEW_RECORD_VALUE);
     },
 
     getRecord() {

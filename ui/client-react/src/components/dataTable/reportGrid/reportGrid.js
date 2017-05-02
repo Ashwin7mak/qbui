@@ -227,7 +227,7 @@ export const ReportGrid = React.createClass({
     },
 
     getPendEdits() {
-        return getPendEdits(this.props.record.records, this.props.record.recordEdited);
+        return getPendEdits(this.props.record);
     },
 
     isOnlyOneColumnVisible() {

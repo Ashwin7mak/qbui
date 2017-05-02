@@ -887,7 +887,7 @@ export const ReportContent = React.createClass({
     },
 
     getPendEdits() {
-        return getPendEdits(this.props.record.records, this.props.record.recordEdited);
+        return getPendEdits(this.props.record);
     },
 
     componentWillUpdate(nextProps) {
