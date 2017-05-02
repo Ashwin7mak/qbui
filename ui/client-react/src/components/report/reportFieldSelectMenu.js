@@ -1,6 +1,5 @@
 import React, {Component, PropTypes} from 'react';
 import {connect} from 'react-redux';
-import _ from 'lodash';
 
 import {CONTEXT} from '../../actions/context';
 import {refreshFieldSelectMenu, closeFieldSelectMenu, addColumnFromExistingField} from '../../actions/reportActions';
@@ -33,18 +32,19 @@ export class ReportFieldSelectMenu extends Component {
     };
 
     getMenuContent = () => {
+        if (!this.props.menu) {return <div></div>;}
         let reportData = this.props.reportData;
         let elements = [];
         let columns = reportData.data ? reportData.data.columns : [];
         let visibleColumns = columns.filter(column => {
             return !column.isHidden;
         });
-        let availableColumns = this.props.shell.fieldsSelectMenu.availableColumns;
+        let availableColumns = this.props.menu.availableColumns;
         let hiddenColumns = ReportUtils.getDifferenceOfColumns(availableColumns, visibleColumns, 'id');
         for (let i = 0; i < hiddenColumns.length; i++) {
             let params = {
                 requestedColumn: hiddenColumns[i],
-                addBefore: this.props.shell.fieldsSelectMenu.addBefore
+                addBefore: this.props.menu.addBeforeColumn
             };
             elements.push({
                 key: hiddenColumns[i].id + "",
@@ -75,13 +75,14 @@ export class ReportFieldSelectMenu extends Component {
                 />
             </div>
         );
-    }
+    };
 
     render() {
         let content = this.getMenuContent();
+        let isCollapsed = this.props.menu ? this.props.menu.isCollapsed : true;
 
         return (
-            <SideMenuBase {...this.props} baseClass="reportFieldSelectMenu" sideMenuContent={content}/>
+            <SideMenuBase {...this.props} baseClass="reportFieldSelectMenu" sideMenuContent={content} isCollapsed={isCollapsed}/>
         );
     }
 }
@@ -127,7 +128,7 @@ ReportFieldSelectMenu.propTypes = {
 
 const mapStateToProps = (state) => {
     return {
-        shell: state.shell
+        menu: state.reportFieldSelectMenu
     };
 };
 

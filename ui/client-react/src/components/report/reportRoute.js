@@ -165,8 +165,6 @@ const ReportRoute = React.createClass({
                         appId={this.props.match.params.appId}
                         tblId={this.props.match.params.tblId}
                         reportData={this.props.reportData}
-                        isCollapsed={this.props.shell.fieldsSelectMenu.fieldsListCollapsed}
-                        isDocked={false}
                         pullRight>
 
                         <Stage stageHeadline={this.getStageHeadline()}
@@ -201,12 +199,6 @@ const ReportRoute = React.createClass({
     }
 });
 
-const mapStateToProps = (state) => {
-    return {
-        shell: state.shell
-    };
-};
-
 const mapDispatchToProps = (dispatch) => {
     return {
         clearSearchInput: () => {
@@ -224,4 +216,4 @@ const mapDispatchToProps = (dispatch) => {
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(ReportRoute);
+export default connect(null, mapDispatchToProps)(ReportRoute);

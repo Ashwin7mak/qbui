@@ -1,7 +1,6 @@
 import * as types from '../actions/types';
 import Locale from '../locales/locales';
 import AppsBundleLoader from '../locales/appsBundleLoader';
-import ReportModelHelper from '../models/reportModelHelper';
 
 const shell = (
     state = {
@@ -15,13 +14,7 @@ const shell = (
         trowserContent: null,
         openCount: 0,
         locale: Locale.getLocale(),
-        i18n: Locale.getI18nBundle(),
-        fieldsSelectMenu: {
-            fieldsListCollapsed: true,
-            addBefore: null,
-            availableColumns: []
-        }
-
+        i18n: Locale.getI18nBundle()
     },
     action) => {
 
@@ -85,40 +78,6 @@ const shell = (
             locale: Locale.getLocale(),
             i18n: Locale.getI18nBundle()
         };
-    case types.REFRESH_FIELD_SELECT_MENU: {
-        let fields = action.content.response.data;
-        let fids = fields.map(field => {
-            return field.id;
-        });
-        let columns = ReportModelHelper.getReportColumns(fields, fids);
-        return {
-            ...state,
-            fieldsSelectMenu: {
-                ...state.fieldsSelectMenu,
-                availableColumns: columns
-            }
-        };
-    }
-    case types.OPEN_FIELD_SELECT_MENU: {
-        return {
-            ...state,
-            fieldsSelectMenu: {
-                ...state.fieldsSelectMenu,
-                fieldsListCollapsed: false,
-                addBefore: action.content.addBeforeColumn
-            }
-        };
-    }
-    case types.CLOSE_FIELD_SELECT_MENU: {
-        return {
-            ...state,
-            fieldsSelectMenu: {
-                ...state.fieldsSelectMenu,
-                fieldsListCollapsed: true,
-                addBefore: action.content.addBeforeColumn
-            }
-        };
-    }
     default:
         // return existing state by default in redux
         return state;

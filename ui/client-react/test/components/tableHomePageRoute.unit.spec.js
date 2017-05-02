@@ -32,13 +32,6 @@ describe('TableHomePageRoute functions', () => {
                 offset:Constants.PAGE.DEFAULT_OFFSET,
                 numRows:Constants.PAGE.DEFAULT_NUM_ROWS
             }
-        },
-        shell: {
-            fieldsSelectMenu: {
-                fieldsListCollapsed: true,
-                addBefore: true,
-                availableColumns: []
-            }
         }
     };
 

@@ -24,14 +24,7 @@ describe('ReportRoute functions', () => {
         clearSearchInput: () => {},
         loadFields: (app, tbl) => {},
         loadReport: (context, appId, tblId, rptId, format, offset, rows) => {},
-        loadTableHomePage: (context, appId, tblId, rptId, format, filter, queryParams) => {},
-        shell: {
-            fieldsSelectMenu: {
-                fieldsListCollapsed: true,
-                addBefore: true,
-                availableColumns: []
-            }
-        }
+        loadTableHomePage: (context, appId, tblId, rptId, format, filter, queryParams) => {}
     };
 
     let appId = 1;
@@ -95,15 +88,7 @@ describe('ReportRoute functions', () => {
     });
 
     it('test render of component with url params', () => {
-        const initialState = {
-            shell: {
-                fieldsSelectMenu: {
-                    fieldsListCollapsed: true,
-                    addBefore: true,
-                    availableColumns: []
-                }
-            }
-        };
+        const initialState = {};
         const store = mockStore(initialState);
 
         component = TestUtils.renderIntoDocument(
@@ -115,15 +100,7 @@ describe('ReportRoute functions', () => {
 
     describe('loadReport', () => {
         let loadReport = null;
-        let initialState = {
-            shell: {
-                fieldsSelectMenu: {
-                    fieldsListCollapsed: true,
-                    addBefore: true,
-                    availableColumns: []
-                }
-            }
-        };
+        let initialState = {};
         let store = null;
         beforeEach(() => {
             loadReport = jasmine.createSpy('loadReport').and.callFake(() => {

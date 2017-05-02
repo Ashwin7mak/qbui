@@ -167,8 +167,6 @@ export const TableHomePageRoute = React.createClass({
                     appId={this.props.match.params.appId}
                     tblId={this.props.match.params.tblId}
                     reportData={this.props.reportData}
-                    isCollapsed={this.props.shell.fieldsSelectMenu.fieldsListCollapsed}
-                    isDocked={false}
                     pullRight>
 
                     <Stage stageHeadline={this.getStageHeadline()} pageActions={this.getPageActions(5)}>
@@ -189,8 +187,7 @@ export const TableHomePageRoute = React.createClass({
 // (another bit of boilerplate to keep the component free of Redux dependencies)
 const mapStateToProps = (state) => {
     return {
-        report: state.report,
-        shell: state.shell
+        report: state.report
     };
 };
 const mapDispatchToProps = (dispatch) => {
