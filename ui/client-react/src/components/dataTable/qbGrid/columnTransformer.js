@@ -58,11 +58,16 @@ class ColumnTransformer {
      * @params MenuComponent An optional React Element (e.g., menu dropdown) to display next to the header text
      * @returns {{property: *, header: {label: XML}}}
      */
-    getGridHeader() {
+    getGridHeader(onMove) {
         let transformedColumn = {
             property: this.cellIdentifierValue,
             header: {
                 label: this._buildHeaderComponent(),
+            },
+            props:{
+                label: this.headerLabel,
+                onMove
+
             }
         };
 
