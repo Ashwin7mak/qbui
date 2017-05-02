@@ -29,7 +29,7 @@ import {clearSearchInput} from '../../actions/searchActions';
 import {APP_ROUTE, BUILDER_ROUTE, EDIT_RECORD_KEY} from '../../constants/urlConstants';
 import {getEmbeddedReportByContext} from '../../reducers/embeddedReports';
 import {CONTEXT} from '../../actions/context';
-
+import {getRecord} from '../../reducers/record';
 import './record.scss';
 import withUniqueId from '../hoc/withUniqueId';
 import DrawerContainer from '../drawer/drawerContainer';
@@ -420,9 +420,9 @@ export const RecordRoute = React.createClass({
 
     getRecordFromProps(props = this.props) {
         if (this.props.isDrawerContext) {
-            return  _.find(props.record.records, rec=>rec.id === props.uniqueId) || {};
+            return  getRecord(props.record.records, props.uniqueId.toString());
         } else {
-            return  _.find(props.record.records, rec=>rec.id.toString() === props.match.params.recordId) || {};
+            return getRecord(props.record.records, props.match.params.recordId);
         }
     },
     /**

@@ -23,7 +23,7 @@ import KeyboardShortcuts from '../../../../reuse/client/src/components/keyboardS
 import {APP_ROUTE, EDIT_RECORD_KEY} from '../../constants/urlConstants';
 import {CONTEXT} from '../../actions/context';
 import SaveOrCancelFooter from '../saveOrCancelFooter/saveOrCancelFooter';
-import {getPendEdits} from '../../reducers/record';
+import {getPendEdits, getRecord} from '../../reducers/record';
 import './recordTrowser.scss';
 import {NEW_RECORD_VALUE} from "../../constants/urlConstants";
 
@@ -383,7 +383,7 @@ export const RecordTrowser = React.createClass({
     },
 
     getRecordFromProps(props = this.props) {
-        return  _.find(props.record.records, rec => rec.id.toString() === props.recId) || {};
+        return  getRecord(props.record.records, props.recId);
     },
 
     /**
@@ -486,10 +486,6 @@ export const RecordTrowser = React.createClass({
 
     getPendEdits() {
         return getPendEdits(this.props.record, this.props.recId || NEW_RECORD_VALUE);
-    },
-
-    getRecord() {
-        return  _.find(this.props.record.records, rec => (rec.id.toString() === this.props.recId)) || {};
     },
 
     keyboardOnSave() {

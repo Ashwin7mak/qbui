@@ -340,3 +340,13 @@ export const getPendEdits = (recordState, recId) => {
         rec=>rec.id.toString() === recId || recordState.recordEdited.toString());
     return (recordCurrentlyEdited ? recordCurrentlyEdited.pendEdits : {}) || {};
 };
+
+/***
+ * returns record matching the rec Id from the records array passed in
+ * @param records array
+ * @param recId (should always be a string)
+ * @returns {{}}
+ */
+export const getRecord = (records, recId) => {
+    return  _.find(records, rec=>rec.id.toString() === recId) || {};
+};
