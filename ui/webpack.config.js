@@ -73,19 +73,6 @@ class MyNotifyPlugin {
     }
 }
 
-/**
- * A small webpack plugin that moves the webpack manifest json from ManifestPlugin to a place where prod node server can access it.
- * ManifestPlugin does not currently support a custom file path for the manifest.json
- */
-class MoveManifestPlugin {
-    apply(compiler) {
-        compiler.plugin('done', (compilation, callback) => {
-            const manifestFilePath = buildPath + '/manifest.json';
-            fs.rename(manifestFilePath, webpackManifestFileName, callback);
-        });
-    }
-}
-
 // ------ START CONFIG ------
 const config = {
     // devtool Makes sure errors in console map to the correct file
@@ -291,7 +278,6 @@ const config = {
         // Creates a manifest.json file in the /server/source/routes directory that contains the hash values for each bundle
         // This allows us to load the cache-busting file correctly in index.html
         new ManifestPlugin(),
-        new MoveManifestPlugin(),
 
         // Keeps the imports in the same order across webpack runs so that the chunkhash updates when, and only when, the code changes.
         new webpack.optimize.OccurrenceOrderPlugin(true),

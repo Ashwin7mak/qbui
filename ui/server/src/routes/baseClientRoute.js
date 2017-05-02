@@ -45,7 +45,11 @@ class BaseClientRoute {
      * @returns {*}
      */
     generateWebpackBundleFilePath(bundleFileName) {
-        const manifestPath = path.join(__dirname, '../manifest/manifest.json');
+        // This filepath only works when running in prod mode which is the only mode that currently has cache-busting.
+        // In that mode, the folder structure is:
+        //   - public/dist - contains all webpack output (there is no client-react folder)
+        //   - server
+        const manifestPath = path.join(__dirname, '../../../public/dist/manifest.json');
         if (this.appConfig.isProduction && fs.existsSync(manifestPath)) {
             const webpackManifest = require(manifestPath);
             return webpackManifest[`${bundleFileName}.js`];
