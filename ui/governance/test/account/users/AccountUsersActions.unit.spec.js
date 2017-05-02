@@ -44,11 +44,11 @@ describe('Account Users Actions Tests', () => {
         },
         {
             "uid": 20000,
-            "firstName": "Koala",
-            "lastName": "Bumbles",
-            "email": "koala.bumbles.jr@g88.net",
-            "userName": "koala.bumbles.jr@g88.net",
-            "lastAccess": "2017-02-22T23:29:02.56Z",
+            "firstName": "FirstNameFilter",
+            "lastName": "lastNameFilter",
+            "email": "emailFilter@g88.net",
+            "userName": "userNameFilter",
+            "lastAccess": "1900-01-01T00:00:00Z",
             "numGroupsMember": 0,
             "numGroupsManaged": 1,
             "hasAppAccess": true,
@@ -144,57 +144,326 @@ describe('Account Users Actions Tests', () => {
     describe('Update Actions', () => {
 
         let middleware = [thunk];
-        const mockStore = configureMockStore(middleware);
-        let USERS = [
-            {
-                "uid": 10000,
-                "firstName": "Administrator",
-            },
-            {
-                "uid": 10000,
-                "firstName": "ZAdministrator",
-            },
-            {
-                "uid": 10000,
-                "firstName": "BAdministrator",
-            }];
+        const mockStore = configureMockStore(middleware),
+            GRID_ID = 1,
+            ITERMS_PER_PAGE = 10;
 
-        let SORTED_USERS = [
-            {
-                "uid": 10000,
-                "firstName": "Administrator",
-            },
-            {
-                "uid": 10000,
-                "firstName": "BAdministrator",
-            },
-            {
-                "uid": 10000,
-                "firstName": "ZAdministrator",
-            }];
 
-        it('dispatches correctly', () => {
+        it('dispatches sort correctly', () => {
 
-            const store = mockStore({AccountUsers: {users: USERS}});
-            let gridId = 1;
-            let itemsPerpage = 10;
+            const store = mockStore({AccountUsers: {users: ACCOUNT_USERS_DATA}});
+
             let gridState = {
-                sortFids: [1],
-                pagination: {currentPage:1}};
+                sortFids: [1],                      // sort by firstName ascending
+                pagination: {
+                    currentPage: 1,
+                    itemsPerPage: ITERMS_PER_PAGE}, // no pagination
+                searchTerm: ""                      // search term
+            };
 
-            store.dispatch(actions.doUpdate(gridId, gridState, itemsPerpage));
-            const expectedActions = [
+            store.dispatch(actions.doUpdate(GRID_ID, gridState));
+
+            const expectedAction = [
+                {
+                    type: gridTypes.SET_SEARCH,
+                    gridId: GRID_ID,
+                    searchTerm: ""
+                },
                 {
                     type: gridTypes.SET_PAGINATION,
-                    gridId: gridId,
-                    pagination: {totalRecords: USERS.length, totalPages: 1, currentPage: 1, itemsPerPage: itemsPerpage}},
+                    gridId: GRID_ID,
+                    pagination: {
+                        totalRecords: ACCOUNT_USERS_DATA.length,
+                        totalPages: 1,
+                        currentPage: 1,
+                        itemsPerPage: ITERMS_PER_PAGE,
+                        firstRecordInCurrentPage: 1,
+                        lastRecordInCurrentPage: 3
+                    }
+                },
                 {
                     type: gridTypes.SET_ITEMS,
-                    gridId: gridId,
-                    items: SORTED_USERS
+                    gridId: GRID_ID,
+                    items: [
+                        {
+                            "uid": 10000,
+                            "id": 10000,
+                            "firstName": "Administrator",
+                            "lastName": "User for default SQL Installation",
+                            "email": "koala_bumbles@quickbase.com",
+                            "userName": "administrator",
+                            "lastAccess": "2017-02-28T19:32:04.223Z",
+                            "numGroupsMember": 0,
+                            "numGroupsManaged": 0,
+                            "hasAppAccess": true,
+                            "numAppsManaged": 2,
+                            "userBasicFlags": 24576,
+                            "accountTrusteeFlags": 0,
+                            "realmDirectoryFlags": 0,
+                            "systemRights": -1
+                        },
+                        {
+                            "uid": 20000,
+                            "id": 20000,
+                            "firstName": "FirstNameFilter",
+                            "lastName": "lastNameFilter",
+                            "email": "emailFilter@g88.net",
+                            "userName": "userNameFilter",
+                            "lastAccess": "1900-01-01T00:00:00Z",
+                            "numGroupsMember": 0,
+                            "numGroupsManaged": 1,
+                            "hasAppAccess": true,
+                            "numAppsManaged": 0,
+                            "userBasicFlags": 8192,
+                            "accountTrusteeFlags": 0,
+                            "realmDirectoryFlags": 4,
+                            "systemRights": 0
+                        },
+                        {
+                            "uid": 30000,
+                            "id": 30000,
+                            "firstName": "Zadministrator",
+                            "lastName": "ZUser for default SQL Installation",
+                            "email": "Zkoala_bumbles@quickbase.com",
+                            "userName": "Zadministrator",
+                            "lastAccess": "2019-02-28T19:32:04.223Z",
+                            "numGroupsMember": 100,
+                            "numGroupsManaged": 100,
+                            "hasAppAccess": false,
+                            "numAppsManaged": 200,
+                            "userBasicFlags": 24576,
+                            "accountTrusteeFlags": 0,
+                            "realmDirectoryFlags": 0,
+                            "systemRights": 0
+                        }]
                 }
             ];
-            expect(store.getActions(gridId)).toEqual(expectedActions);
+
+            expect(store.getActions(GRID_ID)).toEqual(expectedAction);
+        });
+
+        it('dispatches search correctly', () => {
+
+            const store = mockStore({AccountUsers: {users: ACCOUNT_USERS_DATA}});
+
+            const searchTerm = "ZAdministrator";
+
+            let gridState = {
+                sortFids: [],                       // no sorting
+                pagination: {
+                    currentPage: 1,
+                    itemsPerPage: ITERMS_PER_PAGE}, // no pagination
+                searchTerm: searchTerm        // search for Zadministrator
+            };
+
+            store.dispatch(actions.doUpdate(GRID_ID, gridState));
+
+            const expectedActions = [
+                {
+                    type: gridTypes.SET_SEARCH,
+                    gridId: GRID_ID,
+                    searchTerm: searchTerm
+                },
+                {
+                    type: gridTypes.SET_PAGINATION,
+                    gridId: GRID_ID,
+                    pagination: {
+                        totalRecords: 1,
+                        totalPages: 1,
+                        currentPage: 1,
+                        itemsPerPage: ITERMS_PER_PAGE,
+                        firstRecordInCurrentPage: 1,
+                        lastRecordInCurrentPage: 1
+                    }
+                },
+                {
+                    type: gridTypes.SET_ITEMS,
+                    gridId: GRID_ID,
+                    items: [
+                        {
+                            "uid": 30000,
+                            "id": 30000,
+                            "firstName": "Zadministrator",
+                            "lastName": "ZUser for default SQL Installation",
+                            "email": "Zkoala_bumbles@quickbase.com",
+                            "userName": "Zadministrator",
+                            "lastAccess": "2019-02-28T19:32:04.223Z",
+                            "numGroupsMember": 100,
+                            "numGroupsManaged": 100,
+                            "hasAppAccess": false,
+                            "numAppsManaged": 200,
+                            "userBasicFlags": 24576,
+                            "accountTrusteeFlags": 0,
+                            "realmDirectoryFlags": 0,
+                            "systemRights": 0
+                        }]
+                }
+            ];
+
+            expect(store.getActions(GRID_ID)).toEqual(expectedActions);
+        });
+
+        it('dispatches pagination correctly', () => {
+
+            const store = mockStore({AccountUsers: {users: ACCOUNT_USERS_DATA}});
+
+            let gridState = {
+                sortFids: [1],                       // no sorting
+                pagination: {
+                    currentPage: 2,
+                    itemsPerPage: 2},               // paginate to next page
+                searchTerm: ""                      // no search
+            };
+
+            store.dispatch(actions.doUpdate(GRID_ID, gridState));
+
+            const expectedActions = [
+                {
+                    type: gridTypes.SET_SEARCH,
+                    gridId: GRID_ID,
+                    searchTerm: ""
+                },
+                {
+                    type: gridTypes.SET_PAGINATION,
+                    gridId: GRID_ID,
+                    pagination: {
+                        totalRecords: 3,
+                        totalPages: 2,
+                        currentPage: 2,
+                        itemsPerPage: 2,
+                        firstRecordInCurrentPage: 3,
+                        lastRecordInCurrentPage: 3
+                    }
+                },
+                {
+                    type: gridTypes.SET_ITEMS,
+                    gridId: GRID_ID,
+                    items: [
+                        {
+                            "uid": 30000,
+                            "id": 30000,
+                            "firstName": "Zadministrator",
+                            "lastName": "ZUser for default SQL Installation",
+                            "email": "Zkoala_bumbles@quickbase.com",
+                            "userName": "Zadministrator",
+                            "lastAccess": "2019-02-28T19:32:04.223Z",
+                            "numGroupsMember": 100,
+                            "numGroupsManaged": 100,
+                            "hasAppAccess": false,
+                            "numAppsManaged": 200,
+                            "userBasicFlags": 24576,
+                            "accountTrusteeFlags": 0,
+                            "realmDirectoryFlags": 0,
+                            "systemRights": 0
+                        }]
+                }
+            ];
+
+            expect(store.getActions(GRID_ID)).toEqual(expectedActions);
+        });
+    });
+
+    describe('Filter Action', () => {
+
+        it('Filter the text columns by firstName correctly', () => {
+            let filteredUsers = actions.searchUsers(ACCOUNT_USERS_DATA, "FirstNameFilter");
+            expect(filteredUsers.length).toEqual(1);
+            expect(filteredUsers[0].firstName).toEqual('FirstNameFilter');
+        });
+
+        it('Filter the text columns by lastName correctly', () => {
+            let filteredUsers = actions.searchUsers(ACCOUNT_USERS_DATA, "lastNameFilter");
+            expect(filteredUsers.length).toEqual(1);
+            expect(filteredUsers[0].lastName).toEqual('lastNameFilter');
+        });
+
+        it('Filter the text columns by email correctly', () => {
+            let filteredUsers = actions.searchUsers(ACCOUNT_USERS_DATA, "emailFilter");
+            expect(filteredUsers.length).toEqual(1);
+            expect(filteredUsers[0].email).toEqual('emailFilter@g88.net');
+        });
+
+        it('Filter the text columns by userName correctly', () => {
+            let filteredUsers = actions.searchUsers(ACCOUNT_USERS_DATA, "userNameFilter");
+            expect(filteredUsers.length).toEqual(1);
+            expect(filteredUsers[0].userName).toEqual('userNameFilter');
+        });
+
+        it('Filter the text columns by lastAccess correctly', () => {
+            let filteredUsers = actions.searchUsers(ACCOUNT_USERS_DATA, "never");
+            expect(filteredUsers.length).toEqual(1);
+            expect(filteredUsers[0].lastAccess).toEqual("1900-01-01T00:00:00Z");
+        });
+
+        it('Filter the text columns by hasAppAccess correctly', () => {
+            let filteredUsers = actions.searchUsers(ACCOUNT_USERS_DATA, "QuickBase Staff");
+            expect(filteredUsers.length).toEqual(1);
+            expect(filteredUsers[0].userName).toEqual('administrator');
+        });
+
+        it('Filter case insensitive search', () => {
+            let filteredUsers = actions.searchUsers(ACCOUNT_USERS_DATA, "quickBase staff");
+            expect(filteredUsers.length).toEqual(1);
+            expect(filteredUsers[0].userName).toEqual('administrator');
+        });
+
+        it('Filter substring search', () => {
+            let filteredUsers = actions.searchUsers(ACCOUNT_USERS_DATA, "staff");
+            expect(filteredUsers.length).toEqual(1);
+            expect(filteredUsers[0].userName).toEqual('administrator');
+        });
+
+        it('Filter the text columns by unknown search term', () => {
+            let filteredUsers = actions.searchUsers(ACCOUNT_USERS_DATA, "randomText");
+            expect(filteredUsers.length).toEqual(0);
+        });
+
+        it('Filter the text columns when array or search items are empty', () => {
+            expect(actions.searchUsers([], "searchTerm")).toEqual([]);
+            expect(actions.searchUsers(ACCOUNT_USERS_DATA, "")).toEqual(ACCOUNT_USERS_DATA);
+        });
+    });
+
+    describe('Paginate Action', () => {
+
+
+        const users = [{firstName :'user1'}, {firstName :'user2'}, {firstName :'user3'}];
+
+        it('return correct pagination result when no records', () => {
+
+            let paginatedUsers = actions.paginateUsers([]);
+            expect(paginatedUsers.users).toEqual([]);
+            expect(paginatedUsers.firstUser).toEqual(0);
+            expect(paginatedUsers.lastUser).toEqual(0);
+        });
+
+        it('return correct pagination result when going previous', () => {
+
+            let paginatedUsers = actions.paginateUsers(users, 1, 2);
+            expect(paginatedUsers.users).toEqual([users[0], users[1]]);
+            expect(paginatedUsers.firstUser).toEqual(1);
+            expect(paginatedUsers.lastUser).toEqual(2);
+        });
+
+        it('return correct pagination when going next', () => {
+
+            let paginatedUsers = actions.paginateUsers(users, 2, 2);
+            expect(paginatedUsers.users).toEqual([users[2]]);
+            expect(paginatedUsers.firstUser).toEqual(3);
+            expect(paginatedUsers.lastUser).toEqual(3);
+        });
+
+        it('return correct pagination when page number > length of record next', () => {
+
+            let userOverflow1 = actions.paginateUsers(users, 3, 2);
+            expect(userOverflow1.users).toEqual(users);
+            expect(userOverflow1.firstUser).toEqual(1);
+            expect(userOverflow1.lastUser).toEqual(users.length);
+
+            let userOverflow2 = actions.paginateUsers(users, 2, 3);
+            expect(userOverflow2.users).toEqual(users);
+            expect(userOverflow2.firstUser).toEqual(1);
+            expect(userOverflow2.lastUser).toEqual(users.length);
         });
     });
 
@@ -203,12 +472,12 @@ describe('Account Users Actions Tests', () => {
         it('sorts the text columns by firstname correctly', () => {
             let sortedUsersAsc = actions.sortUsers(ACCOUNT_USERS_DATA, [1]);
             expect(sortedUsersAsc[0].firstName).toEqual('Administrator');
-            expect(sortedUsersAsc[1].firstName).toEqual('Koala');
+            expect(sortedUsersAsc[1].firstName).toEqual('FirstNameFilter');
             expect(sortedUsersAsc[2].firstName).toEqual('Zadministrator');
 
             let sortedUsersDsc = actions.sortUsers(ACCOUNT_USERS_DATA, [-1]);
             expect(sortedUsersDsc[0].firstName).toEqual('Zadministrator');
-            expect(sortedUsersDsc[1].firstName).toEqual('Koala');
+            expect(sortedUsersDsc[1].firstName).toEqual('FirstNameFilter');
             expect(sortedUsersDsc[2].firstName).toEqual('Administrator');
         });
 
