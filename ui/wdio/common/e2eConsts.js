@@ -296,7 +296,7 @@
                 fieldType: consts.SCALAR,
                 dataType: consts.TEXT
             };
-            tableToFieldToFieldTypeMap[table3Name]['Parent Record ID'] = {
+            tableToFieldToFieldTypeMap[table3Name][e2eConsts.reportFieldNames[2]] = {
                 fieldType: consts.SCALAR,
                 dataType: consts.NUMERIC
             };

@@ -280,7 +280,8 @@
             var requestRecordPageEndPoint = e2eBase.recordBase.apiBase.generateFullRequest(realmName, '/qbase/app/' + appId + '/table/' + tableId + '/report/' + reportId + '/record/' + recordId);
             browser.url(requestRecordPageEndPoint);
             //wait until view form is visible
-            return formsPO.viewFormContainerEl.waitForVisible();
+            browser.waitForVisible('#content');
+            return browser.waitForVisible('.viewForm');
         }},
 
         /**

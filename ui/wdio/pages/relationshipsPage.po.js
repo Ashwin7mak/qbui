@@ -8,6 +8,7 @@
     // Import the base page object
     var e2ePageBase = requirePO('./e2ePageBase');
     var formsPO = requirePO('formsPage');
+    var reportContentPO = requirePO('reportContent');
 
     var relationshipsPage = Object.create(e2ePageBase, {
 
@@ -33,27 +34,59 @@
         recordsCountEl: {value: function(qbPanelFormSection) {return qbPanelFormSection.element('.recordsCount');}},
 
         /**
-         * Navigates to a record containing a child table on the form.
-         * Makes use of the relationshipPrototype param in the URL to show the hidden table.
-         * @param realmName
-         * @param appId
-         * @param tableId
-         * @param reportId
-         * @param recordId
-         * @param relationshipId
+         * Given a record element in agGrid, click on the record.
+         * @param recordRowIndex
          */
-        viewRecordWithChildTable : {value: function(realmName, appId, tableId, reportId, recordId, relationshipId) {
-            // Navigate to record form directly with relationship child table displayed
-            //TODO: Currently hidden behind this param switch. Won't need to use this in the future
-            var requestRecordPageEndPoint = e2eBase.recordBase.apiBase.generateFullRequest(realmName, '/qbase/app/' + appId + '/table/' + tableId + '/report/' + reportId + '/record/' + recordId + '?relationshipPrototype=1');
-            browser.url(requestRecordPageEndPoint);
+        clickOnRecordInChildTable : {value: function(recordRowIndex) {
+            browser.waitForVisible('.viewForm');
+            reportContentPO.waitForReportContent();
+            let recordRowEl = reportContentPO.getRecordRowElement(recordRowIndex);
+            // Hardcoded to click on the first cell of the record
+            let recordCellEl = reportContentPO.getRecordRowCells(recordRowEl).value[1];
 
-            // Wait for the form to load
-            formsPO.viewFormContainerEl.waitForVisible();
-            // Wait until child table section is visible
-            return this.qbPanelFormSectionEl(relationshipId).waitForVisible();
+            // Scroll to the cell of recordRowIndex row
+            if (browserName === 'chrome') {
+                recordCellEl.moveToObject();
+            } else {
+                browser.execute(function(element) {
+                    element.scrollIntoView(false);
+                }, recordCellEl);
+            }
+            // Click on the cell
+            recordCellEl.click();
+
+            // Wait for slidey-righty to be present
+            return browser.waitForVisible('.slidey-righty');
+        }},
+
+        getChildRecordValuesFromForm : {value: function() {
+            browser.waitForExist('.slidey-righty .viewForm .formTable');
+            let fieldElements = browser.elements('.slidey-righty .viewForm .formTable .viewElement');
+            return fieldElements.value.map(function(element) {
+                return element.getAttribute('textContent');
+            });
+        }},
+
+        navigateToNextChildRecord : {value: function(reverse) {
+            browser.waitForExist('.slidey-righty .stageHeadline.iconActions');
+            if (!reverse) {
+                let nextButtonEl = browser.element('.iconActionButton.nextRecord');
+                nextButtonEl.waitForVisible();
+                return nextButtonEl.click();
+            } else {
+                let prevButtonEl = browser.element('.iconActionButton.prevRecord');
+                prevButtonEl.waitForVisible();
+                return prevButtonEl.click();
+            }
+        }},
+
+        closeSlideyRighty : {value: function() {
+            browser.waitForVisible('.slidey-righty .iconActionButton.closeDrawer');
+            browser.waitForExist('.slidey-righty .viewForm .formTable');
+            browser.click('.slidey-righty .iconActionButton.closeDrawer');
+            browser.waitForVisible('.slidey-righty .iconActionButton.closeDrawer', e2eConsts.shortWaitTimeMs, true);
+
         }}
-
     });
 
     module.exports = relationshipsPage;
