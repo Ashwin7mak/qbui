@@ -27,7 +27,7 @@ import {tableFieldsReportDataObj} from '../../../reducers/fields';
 import {APP_ROUTE, EDIT_RECORD_KEY} from '../../../constants/urlConstants';
 import * as SchemaConstants from '../../../constants/schema';
 import {CONTEXT} from '../../../actions/context';
-
+import {getPendEdits} from '../../../reducers/record';
 let logger = new Logger();
 
 let IntlMixin = ReactIntl.IntlMixin;
@@ -887,9 +887,7 @@ export const ReportContent = React.createClass({
     },
 
     getPendEdits() {
-        //there should be just one record with pending edit in the state, so return that
-        const recordCurrentlyEdited = _.find(this.props.record.records, rec=>rec.id.toString() === this.props.record.recordEdited.toString());
-        return (recordCurrentlyEdited ? recordCurrentlyEdited.pendEdits : {}) || {};
+        return getPendEdits(this.props.record.records, this.props.record.recordEdited);
     },
 
     componentWillUpdate(nextProps) {

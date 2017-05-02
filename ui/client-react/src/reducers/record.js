@@ -323,3 +323,15 @@ const record = (state = {}, action) => {
     }
 };
 export default record;
+
+/***
+ * return the record currently being edited
+ * @param records
+ * @param recordEdited
+ * @returns {{}}
+ */
+export const getPendEdits = (records, recordEdited) => {
+    const recordCurrentlyEdited = _.find(records,
+        rec=>rec.id.toString() === recordEdited.toString());
+    return (recordCurrentlyEdited ? recordCurrentlyEdited.pendEdits : {}) || {};
+};
