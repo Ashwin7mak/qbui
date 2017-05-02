@@ -12,7 +12,8 @@
     require('./logger').getLogger();
 
     module.exports = function(app, config) {
-        var errors = require('./components/errors')(config);
+        var errors = require('./components/errors'
+        )(config);
         var authentication = require('./components/authentication')(config);
         var requestHelper = require('./api/quickbase/requestHelper')();
         var routeConstants = require('./routes/routeConstants');
