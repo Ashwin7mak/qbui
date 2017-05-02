@@ -24,4 +24,10 @@
         width: 14px !important;
         cursor: pointer;
     }
+
+    .iconUISturdy-clear-mini {
+        right: 13px;
+        top: calc(50% - #{$font-size-base});
+        font-size: #{$font-size-base*2} !important;
+    }
 }
