@@ -234,20 +234,16 @@
 }
 
 .disabledDatePicker {
-    .input-group {
-        cursor: default;
-    }
     input, span {
         pointer-events: none;
+        cursor: pointer;
     }
 }
 
 .disabledTimeField {
-    .Select {
-        cursor: default;
-    }
     .Select-control {
         pointer-events: none;
+        cursor: pointer;
     }
 }
 

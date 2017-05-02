@@ -176,7 +176,7 @@ const PhoneFieldValueEditor = React.createClass({
                                       onBlur={this.onBlur}
                                       value={phoneNumber}
                                       inputType="tel"
-                                      showClearButton={true} />
+                                      showClearButton={this.props.isDisabled ? false : true} />
                 {ext}
                 {extInput}
             </div>

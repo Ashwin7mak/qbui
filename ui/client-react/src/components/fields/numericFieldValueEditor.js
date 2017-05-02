@@ -158,8 +158,10 @@ const NumericFieldValueEditor = React.createClass({
 
         let width = _.get(this.props, 'fieldDef.datatypeAttributes.clientSideAttributes.width', null);
 
+        let Input = this.props.isDisabled ? input : ClearableNumericField;
+
         return (
-            <ClearableNumericField
+            <Input
                 {...this.props}
                 onChange={this.onChange}
                 onBlur={this.onBlur}

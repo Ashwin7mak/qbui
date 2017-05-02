@@ -209,7 +209,8 @@ const DateFieldValueEditor = React.createClass({
                     showToday={true}
                     mode="date"
                     defaultText={theDate ? theDate : DATE_INPUT.toLowerCase()}
-                    tabIndex={this.props.tabIndex}/>
+                    tabIndex={this.props.tabIndex}
+                    disabled={this.props.isDisabled}/>
             </div>
         );
     }

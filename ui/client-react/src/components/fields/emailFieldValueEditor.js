@@ -73,7 +73,7 @@ const EmailFieldValueEditor = React.createClass({
                                      placeholder={(this.props.placeholder || Locales.getMessage('placeholder.email'))}
                                      inputType="email"
                                      invalidMessage={(this.props.invalidMessage || 'Email is required')}
-                                     showClearButton={Breakpoints.isSmallBreakpoint()}
+                                     showClearButton={this.props.isDisabled ? false : Breakpoints.isSmallBreakpoint()}
                                      {...otherProps}
                                      />;
     }
