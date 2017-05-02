@@ -68,7 +68,7 @@ $edit-icon-font-size: 18px;
         // set the default z-index of header cells so the one displaying the popup menu can be made higher than these
         z-index: $zindex-qbGrid-th;
 
-        &.placeHolderCell {
+        &.placeholderCell {
             background-color: $color-orange-100;
             border-left: 1px dashed $color-black-600;
             border-right: 1px dashed $color-black-600;
@@ -198,7 +198,7 @@ $edit-icon-font-size: 18px;
     }
 
     //== styling for the placeholder column cells
-    .qbRow .placeHolderCell {
+    .qbRow .placeholderCell {
         left: 0;
         width: 80px;
         max-width: 80px;
@@ -297,6 +297,11 @@ $edit-icon-font-size: 18px;
     .qbRow:not(.editing) .qbCell,
     .qbCell .tipChildWrapper {
         cursor: pointer;
+    }
+
+    .qbRow:not(.editing) .placeholderCell,
+    .placeholderCell .tipChildWrapper {
+        cursor: default;
     }
 
     // styles for specific types of data cells
@@ -560,7 +565,7 @@ $edit-icon-font-size: 18px;
     .qbRow:last-of-type .qbCell {
         border-bottom: 1px solid $grid-line-color;
     }
-    .qbRow:last-of-type .placeHolderCell {
+    .qbRow:last-of-type .placeholderCell {
         border-bottom: 1px dashed $color-black-600;
     }
 
@@ -568,12 +573,8 @@ $edit-icon-font-size: 18px;
     &:not(.inlineEditing) {
 
         // highlight the row when mouse is over the row
-        .qbRow:hover .qbCell {
+        .qbRow:hover .qbCell:not(.placeholderCell) {
             background: $grid-row-hover-color;
-        }
-
-        .qbRow:hover .placeHolderCell {
-            background: $color-orange-100;
         }
 
         // Outline the data cells in the row when the use hovers over a pencil.

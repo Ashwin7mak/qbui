@@ -21,7 +21,7 @@ const QbHeaderCell = React.createClass({
             classes.push(['stickyCell']);
         }
         if (this.props.isPlaceholderCell) {
-            classes.push('placeHolderCell');
+            classes.push('placeholderCell');
         }
 
         return <th className={classes.join(' ')} {...this.props} />;
