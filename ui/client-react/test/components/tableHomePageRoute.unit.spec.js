@@ -32,6 +32,13 @@ describe('TableHomePageRoute functions', () => {
                 offset:Constants.PAGE.DEFAULT_OFFSET,
                 numRows:Constants.PAGE.DEFAULT_NUM_ROWS
             }
+        },
+        shell: {
+            fieldsSelectMenu: {
+                fieldsListCollapsed: true,
+                addBefore: true,
+                availableColumns: []
+            }
         }
     };
 
@@ -69,6 +76,12 @@ describe('TableHomePageRoute functions', () => {
         }
     }
 
+    class mockReportFieldSelectMenu extends React.Component {
+        render() {
+            return <div></div>;
+        }
+    }
+
     beforeEach(() => {
         spyOn(flux.actions, 'hideTopNav');
         spyOn(flux.actions, 'selectTableId');
@@ -76,6 +89,7 @@ describe('TableHomePageRoute functions', () => {
         spyOn(props, 'loadFields');
         spyOn(props, 'loadTableHomePage');
         TableHomePageRewireAPI.__Rewire__('ReportToolsAndContent', mockReportToolsAndContent);
+        TableHomePageRewireAPI.__Rewire__('ReportFieldSelectMenu', mockReportFieldSelectMenu);
     });
 
     afterEach(() => {
@@ -85,6 +99,7 @@ describe('TableHomePageRoute functions', () => {
         props.loadFields.calls.reset();
         props.loadTableHomePage.calls.reset();
         TableHomePageRewireAPI.__ResetDependency__('ReportToolsAndContent');
+        TableHomePageRewireAPI.__ResetDependency__('ReportFieldSelectMenu');
     });
 
     const initialState = {};
