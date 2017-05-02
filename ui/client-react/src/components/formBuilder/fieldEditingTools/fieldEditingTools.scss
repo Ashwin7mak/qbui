@@ -71,8 +71,8 @@
         //For keyboard nav
         opacity: 1;
         outline: none;
-        box-shadow: 0 0 2px 0px rgba($selected-color, 0.75);
-        border: $stroke-width-thin solid $selected-color;
+        box-shadow: 0 0 2px 0px rgba($input-text-focus-border-color, 0.75);
+        border: $stroke-width-thin solid $input-text-focus-border-color;
     }
 
     &.selectedFormElement {

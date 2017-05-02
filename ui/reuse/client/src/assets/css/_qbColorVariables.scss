@@ -446,7 +446,7 @@ $app-role-divider: $color-yellow-500;
 //-------------------------------------------------------------------
 
 $input-bg-color: $color-black-100;
-$input-text-focus-border-color: $color-indigo-800;
+$input-text-focus-border-color: $color-purple-600;
 $input-text-normal-border-color: $color-black-400;
 $input-text-error-border-color: $error-color;
 $tootip-error-color: $error-color;
@@ -455,7 +455,7 @@ $field-input-shadow-color: rgba($color-indigo-700, 0.25);
 $selection-badge-color: $color-purple-600;
 $selected-check-color: $color-green-700;
 
-$input-border-focus-color: $color-indigo-700;
+$input-border-focus-color:  $color-purple-600;
 @mixin focus-shadow($color: $input-border-focus-color) {
     box-shadow: 0 0 2px 1.5px rgba($color, 0.25);
     outline: none;
