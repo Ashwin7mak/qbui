@@ -131,7 +131,8 @@ const MultiChoiceFieldValueEditor = React.createClass({
                        value={CompConstants.MULTICHOICE_RADIOGROUP.NONE_OPTION_VALUE}
                        onChange={this.onClick} onBlur={this.onBlur}
                        tabIndex={this.props.tabIndex}
-                       checked={selectedValue === CompConstants.MULTICHOICE_RADIOGROUP.NONE_OPTION_VALUE}/>
+                       checked={selectedValue === CompConstants.MULTICHOICE_RADIOGROUP.NONE_OPTION_VALUE}
+                       disabled={this.props.isDisabled}/>
                         <div className="check"><div className="inside"></div></div>
                 <span className="choiceText"><I18nMessage message={"noneOption"}/></span>
             </label>);
@@ -168,6 +169,7 @@ const MultiChoiceFieldValueEditor = React.createClass({
 
         return <Select
             tabIndex={this.props.tabIndex}
+            isDisabled={this.props.isDisabled}
             value={selectedValue && {label: selectedValue}}
             optionRenderer={this.renderOption}
             options={choices}

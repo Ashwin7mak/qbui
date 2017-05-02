@@ -189,7 +189,7 @@ const UserFieldValueEditor = React.createClass({
             <Select
                 className={classes}
                 tabIndex={this.props.tabIndex}
-                disabled={this.props.isDisabled}
+                isDisabled={this.props.isDisabled}
                 filterOption={this.filterOption}
                 value={this.state.selectedUserId}
                 optionRenderer={this.renderOption}
