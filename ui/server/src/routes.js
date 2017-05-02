@@ -15,15 +15,15 @@
         var errors = require('./components/errors')(config);
         var authentication = require('./components/authentication')(config);
         var requestHelper = require('./api/quickbase/requestHelper')();
-        var routes = require('./routes/routeConstants').routes;
+        var routeConstants = require('./routes/routeConstants');
         var routeMapper = require('./routes/qbRouteMapper')(config);
         var usersApi = require('./api/quickbase/usersApi')(config);
         /*
          *  Route to log a message. Only a post request is supported.
          *  This needs to be the first route defined.
          */
-        log.debug('Routing POST method for route ' + routes.LOG_CLIENT_MSG);
-        app.all(routes.LOG_CLIENT_MSG, function(req, res, next) {
+        log.debug('Routing POST method for route ' + routeConstants.LOG_CLIENT_MSG);
+        app.all(routeConstants.LOG_CLIENT_MSG, function(req, res, next) {
             // TODO: this endpoint needs to be protected...validate that the requested
             // TODO: endpoint includes a valid authenticated ticket.
             if (requestHelper.isPost(req)) {
@@ -34,15 +34,37 @@
             }
         });
 
+
+        /*
+         *  Route to log a performance stats from the client. Only a post request is supported.
+         */
+        log.debug('Routing POST method for route ' + routeConstants.LOG_CLIENT_PERF_MSG);
+        app.all(routeConstants.LOG_CLIENT_PERF_MSG, function(req, res, next) {
+            // TODO: this endpoint needs to be protected...validate that the requested
+            // TODO: endpoint includes a valid authenticated ticket.
+            if (requestHelper.isPost(req)) {
+                // serialize all the params for message output
+                let stats = req.body;
+                if (req.useragent) {
+                    stats.browser = req.useragent.browser ? req.useragent.browser : 'unspecified';
+                    stats.browserVersion = req.useragent.browser ? req.useragent.version : 'unspecified';
+                }
+                let msg = "Client Perf stats (ms): " +
+                    JSON.stringify(_.sortKeysBy(stats, (val, key) => key.toLowerCase()));
+                sendOutLogMessage(req, res, 'info', 'CLIENT_PERF', msg);
+            } else {
+                res.status(httpStatusCodes.METHOD_NOT_ALLOWED).send('Method not supported');
+            }
+            // ...route terminates...logging a client side message only
+        });
+
         /*
          * intercept all record bulk requests because express can't route them properly. We need to handle them manually
          */
-
-        //  TODO look into why this block needs to be here and not in qbRouteMapper..jira mc-2412
-        app.all(routes.RECORDS_BULK, function(req, res, next) {
+        app.all(routeConstants.RECORDS_BULK, function(req, res, next) {
             //be awesome
             if (requestHelper.isDelete(req)) {
-                var recordBulkDelete = routeMapper.fetchDeleteFunctionForRoute(routes.RECORDS_BULK);
+                var recordBulkDelete = routeMapper.fetchDeleteFunctionForRoute(routeConstants.RECORDS_BULK);
                 if (recordBulkDelete !== null) {
                     recordBulkDelete(req, res);
                 } else {
@@ -62,7 +84,7 @@
             }
         });
 
-        app.all(routes.ADMIN + '/*', function(req, res, next) {
+        app.all(routeConstants.ADMIN + '/*', function(req, res, next) {
             usersApi.getReqUser(req).then(
                 function(response) {
                     if (response.administrator) {
@@ -124,14 +146,6 @@
         //  Unknown page
         app.route('/qbase/*')
                 .get(errors[httpStatusCodes.NOT_FOUND]);
-
-        //  Unknown page for custom client composition routes...valid routes should all be declared in qbRouteMapper
-        app.route('/qbui/*')
-            .get(errors[httpStatusCodes.NOT_FOUND]);
-
-        //  Unknown route
-        app.route('/*')
-            .get(errors[httpStatusCodes.NOT_FOUND]);
 
 
         function isClientLogEnabled() {

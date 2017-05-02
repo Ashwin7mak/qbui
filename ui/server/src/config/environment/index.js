@@ -30,11 +30,7 @@
         legacyBase: '',
 
         // when starting up express server, fork as many listener forks as there are cpu cores.
-        forkWorkers: false,
-
-        //  allow for a node instance to be setup where only 'public' routes are configured.  By
-        //  default all routes are exposed.
-        publicRoutesOnly: false
+        forkWorkers: false
     };
 
     /**

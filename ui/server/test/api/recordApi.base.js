@@ -222,11 +222,11 @@
                 return fetchRecordDeferred.promise;
             },
             // Creates a list of records using the bulk record endpoint, returning a promise that is resolved or rejected on successful
-            createBulkRecords: function(recordsBulkEndpoint, records) {
+            createBulkRecords: function(recordsEndpoint, records) {
                 log.debug('Records to create: ' + JSON.stringify(records));
                 var fetchRecordDeferred = promise.pending();
                 init.then(function() {
-                    var recordBulkEndpoint = recordsBulkEndpoint;
+                    var recordBulkEndpoint = recordsEndpoint + 'bulk';
 
                     apiBase.executeRequest(recordBulkEndpoint, consts.POST, records)
                         .then(function(recordBulkResponse) {
@@ -332,8 +332,8 @@
              */
             addRecords: function(createdApp, createdTable, genRecords) {
                 return new Promise((resolve, reject) => {
-                    var recordsBulkEndpoint = recordBase.apiBase.resolveRecordsBulkEndpoint(createdApp.id, createdTable.id);
-                    recordBase.createBulkRecords(recordsBulkEndpoint, genRecords).then(
+                    var recordsEndpoint = recordBase.apiBase.resolveRecordsEndpoint(createdApp.id, createdTable.id);
+                    recordBase.createBulkRecords(recordsEndpoint, genRecords).then(
                         (recordIdList) => {
                             var fetchRecordPromises = [];
                             var query = "";

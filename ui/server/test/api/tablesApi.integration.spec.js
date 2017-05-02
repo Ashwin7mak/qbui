@@ -116,7 +116,7 @@
             this.timeout(testConsts.INTEGRATION_TIMEOUT);
 
             var tableId = app.tables[0].id;
-            var tablesEndpoint = recordBase.apiBase.resolveTablesEndpoint(app.id, tableId, true);
+            var tablesEndpoint = recordBase.apiBase.resolveTablesEndpoint(app.id, tableId);
             let name = testUtils.generateRandomString(10);
             const payload = {name: name, description: "desc", tableIcon: "icon", tableNoun: "noun"};
             recordBase.apiBase.executeRequest(tablesEndpoint, consts.PATCH, payload).then(
@@ -155,7 +155,7 @@
             this.timeout(testConsts.INTEGRATION_TIMEOUT);
 
             var tableId = app.tables[0].id;
-            var tablesEndpoint = recordBase.apiBase.resolveTablesEndpoint(app.id, tableId, true);
+            var tablesEndpoint = recordBase.apiBase.resolveTablesEndpoint(app.id, tableId);
             recordBase.apiBase.executeRequest(tablesEndpoint, consts.DELETE).then(
                 (response) => {
                     var tablePropsEndpoint = recordBase.apiBase.resolveTablePropertiesEndpoint(app.id, tableId);

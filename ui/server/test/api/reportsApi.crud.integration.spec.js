@@ -9,7 +9,7 @@
     const testConsts = require('./api.test.constants');
     const errorCodes = require('../../src/api/errorCodes');
     const testUtils = require('./api.test.Utils');
-    let reportEndpoint = "";
+    var reportEndpoint = "";
 
     describe('API - Validate report CRUD operations', function() {
         var app;
@@ -95,7 +95,7 @@
             return recordBase.apiBase.executeRequest(reportEndpoint + reportId, consts.GET)
                 .then(fetchResponse => {
                     let returnedBody = JSON.parse(fetchResponse.body);
-                    return returnedBody;
+                    return JSON.parse(returnedBody.body);
                 });
         }
 

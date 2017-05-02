@@ -48,7 +48,7 @@
             getRequestEeHostEnable: function() {
                 return config ? config.eeHostEnable : '';
             },
-            getRequestCoreUrl  : function(req) {
+            getRequestUrl  : function(req) {
                 return config ? config.javaHost + req.url : '';
             },
             getRequestEEUrl  : function(req) {
@@ -147,7 +147,6 @@
 
                 //  override the url to use the experience engine
                 opts.url = this.getRequestEEUrl(req);
-
                 return opts;
             },
 
@@ -159,7 +158,7 @@
              */
             setAutomationEngineOptions: function(req) {
                 //  set the default request options
-                let opts = this.setOptions(req);
+                let opts = this.setAutomationOptions(req);
 
                 //  override the url to use automation server
                 opts.url = this.getRequestAutomationUrl(req);
@@ -167,6 +166,42 @@
                 opts.cookies = req.cookies;
                 return opts;
             },
+
+            /**
+             * Set the request attributes for a automation server request
+             *
+             * @param req
+             * @returns request object used when submitting a server request
+             */
+            setAutomationOptions: function(req) {
+
+                this.setTidHeader(req);
+
+                let opts = {
+                    url         : this.getRequestAutomationUrl(req),
+                    method      : (req.method),
+                    agentOptions: this.getAgentOptions(req),
+                    headers     : req.headers
+                };
+
+                if (config) {
+                    if (config.isMockServer) {
+                        opts.gzip = false;
+                        opts.headers["accept-encoding"] = "";
+                    }
+                    if (config.proxyHost) {
+                        opts.host = config.proxyHost;
+                        if (config.proxyPort) {
+                            opts.port = config.proxyPort;
+                        }
+                    }
+                }
+
+                this.setBodyOption(req, opts);
+
+                return opts;
+            },
+
 
             /**
              * Set the request attributes for a core server request
@@ -180,7 +215,7 @@
                 this.setTidHeader(req);
 
                 let opts = {
-                    url         : this.getRequestCoreUrl(req),
+                    url         : this.getRequestUrl(req),
                     method      : (forceGet === true ? 'GET' : req.method),
                     agentOptions: this.getAgentOptions(req),
                     headers     : req.headers

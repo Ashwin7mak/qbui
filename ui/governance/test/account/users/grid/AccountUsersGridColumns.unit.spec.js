@@ -37,7 +37,7 @@ describe('AccountUsersGridColumns', () => {
                     <StandardGrid  {...props}/>
                 </Provider>);
             let headers = component.find(QbHeaderCell).map(node => node.text());
-            expect(headers).toEqual(["First name", "Last name", "Email", "User name", "Last access", "QuickBase access status", "Inactive?", "In any group?", "Group manager?", "Can create apps?", "App manager?", "In realm directory?", "Realm approved?"]);
+            expect(headers).toEqual(["First Name", "Last Name", "Email", "User Name", "Last Access", "QuickBase Access Status", "Inactive?", "In Any Group?", "Group Manager?", "Can create apps?", "App Manager?", "In Realm Directory?", "Realm Approved?"]);
         });
 
         it("should show the correct set of headers when not account admin", () => {
@@ -51,7 +51,7 @@ describe('AccountUsersGridColumns', () => {
                 </Provider>);
 
             let headers = component.find(QbHeaderCell).map(node => node.text());
-            expect(headers).toEqual(["First name", "Last name", "Email", "User name", "QuickBase access status", "In realm directory?", "Realm approved?"]);
+            expect(headers).toEqual(["First Name", "Last Name", "Email", "User Name", "QuickBase Access Status", "In Realm Directory?", "Realm Approved?"]);
         });
 
 
@@ -67,7 +67,7 @@ describe('AccountUsersGridColumns', () => {
                     <StandardGrid {...props} />
                 </Provider>);
             let headers = component.find(QbHeaderCell).map(node => node.text());
-            expect(headers).toEqual(["First name", "Last name", "Email", "User name", "Last access", "QuickBase access status", "Inactive?", "In any group?", "Group manager?", "Can create apps?", "App manager?"]);
+            expect(headers).toEqual(["First Name", "Last Name", "Email", "User Name", "Last Access", "QuickBase Access Status", "Inactive?", "In Any Group?", "Group Manager?", "Can create apps?", "App Manager?"]);
         });
     });
 
