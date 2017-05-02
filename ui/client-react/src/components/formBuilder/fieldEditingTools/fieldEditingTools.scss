@@ -71,14 +71,12 @@
         //For keyboard nav
         opacity: 1;
         outline: none;
-        box-shadow: 0 0 2px 0px rgba($input-text-focus-border-color, 0.75);
-        border: $stroke-width-thin solid $input-text-focus-border-color;
+        @include text-input-focus;
     }
 
     &.selectedFormElement {
         opacity: 1;
-        border: $stroke-width-thick solid $selected-color;
-        box-shadow: 0 0 4px 0px rgba($color-purple-600, 0.75);
+        @include text-input-focus-thick;
 
         .deleteFieldIcon {
             button {
@@ -93,7 +91,7 @@
 
     &:hover {
         opacity: 1;
-        border: $stroke-width-thin solid $selected-color;
+        border: $stroke-width-thin solid $input-text-focus-border-color;
         transition: border 0.5s ease;
         .fieldEditingTools {
             opacity: 1;
