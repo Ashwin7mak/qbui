@@ -123,14 +123,14 @@
 
     &.active {
         box-shadow: none;
-        border: $stroke-width-thick dashed $color-black-300;
+        border: $stroke-width-thin dashed $color-black-300;
         background-color: rgba($color-purple-600, 0.08);
         width: 335px;
     }
 
     &:active {
         box-shadow: none;
-        border: $stroke-width-thick dashed $color-black-300;
+        border: $stroke-width-thin dashed $color-black-300;
         background-color: rgba($dragPreview-background-color, 0.08);
         width: 335px;
         z-index: 2;
