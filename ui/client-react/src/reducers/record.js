@@ -10,11 +10,11 @@ import _ from 'lodash';
  * Manage array of record states
  * record state looks like following:
  * {
- *   recordEdited: id,
+ *   recordId_recordBeingEdited: id,
  *   records : [array of records....]
  * }
  * example :
- * recordEdited : 3
+ * recordId_recordBeingEdited : 3
  * records : [
  * {
  * id : "DRAWER10299", => if in a drawer id has a drawer context
@@ -45,9 +45,10 @@ const record = (state = {}, action) => {
      * Otherwise, replace the existing entry with its new state.
      *
      * @param obj - data object associated with new state
+     * @param recordId_RecordBeingEdited - recordId of Record Being Edited
      * @returns {*}
      */
-    function newState(obj, recordEdited) {
+    function newState(obj, recordId_recordBeingEdited) {
         // reducer - no mutations against current state!
         const stateClone = _.cloneDeep(state);
 
@@ -65,8 +66,8 @@ const record = (state = {}, action) => {
             } else {
                 stateClone.records.push(obj);
             }
-            if (recordEdited || obj.id  === NEW_RECORD_VALUE) {
-                stateClone.recordEdited = (recordEdited === NEW_RECORD_VALUE || recordEdited === UNSAVED_RECORD_ID ? NEW_RECORD_VALUE : +recordEdited);
+            if (recordId_recordBeingEdited || obj.id  === NEW_RECORD_VALUE) {
+                stateClone.recordId_recordBeingEdited = (recordId_recordBeingEdited === NEW_RECORD_VALUE || recordId_recordBeingEdited === UNSAVED_RECORD_ID ? NEW_RECORD_VALUE : +recordId_recordBeingEdited);
             }
         }
         return stateClone;
@@ -98,7 +99,7 @@ const record = (state = {}, action) => {
     case types.DELETE_RECORDS: {
         const ids = action.content.recIds;
         let states = {};
-        states.recordEdited = '';
+        states.recordId_recordBeingEdited = '';
         states.records = [];
         ids.forEach((recId) => {
             let currentRecd = getRecordFromState(recId);
@@ -119,7 +120,7 @@ const record = (state = {}, action) => {
     case types.DELETE_RECORDS_COMPLETE: {
         const ids = action.content.recIds;
         let states = {};
-        states.recordEdited = '';
+        states.recordId_recordBeingEdited = '';
         states.records = [];
         ids.forEach((recId) => {
             let currentRecd = getRecordFromState(recId);
@@ -136,7 +137,7 @@ const record = (state = {}, action) => {
     }
     case types.DELETE_RECORDS_ERROR: {
         let states = {};
-        states.recordEdited = '';
+        states.recordId_recordBeingEdited = '';
         states.records = [];
         let errors = action.content.errors;
         if (Array.isArray(errors) && errors.length > 0) {
@@ -330,9 +331,8 @@ export default record;
 
 /***
  * return the pendEdits of the matched record of record currently being edited or matched with recId if available
- * @param records
+ * @param record state
  * @param recId
- * @param recordEdited
  * @returns {{}}
  */
 export const getPendEdits = (recordState, recId) => {
@@ -340,7 +340,7 @@ export const getPendEdits = (recordState, recId) => {
         return {};
     }
     const recordCurrentlyEdited = _.find(recordState.records,
-        rec=>rec.id.toString() === recId || recordState.recordEdited.toString());
+        rec=>rec.id.toString() === recId || recordState.recordId_recordBeingEdited.toString());
     return (recordCurrentlyEdited ? recordCurrentlyEdited.pendEdits : {}) || {};
 };
 
