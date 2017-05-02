@@ -1,20 +1,6 @@
 @import '../../../src/assets/css/qbVariables';
 $data-font-size: $font-size-p;
 
-@mixin text-input-focus {
-    border: solid 1px $input-text-focus-border-color;
-    //Added border-color for multi choice text box
-    border-color: $input-text-focus-border-color !important;
-
-    @include focus-shadow();
-}
-
-@mixin text-input-focus-with-rounding {
-
-    @include text-input-focus;
-    border-radius: 2px;
-}
-
 // plain user data
 .data {
     color: $field-user-data-color;
