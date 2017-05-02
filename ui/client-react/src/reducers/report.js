@@ -282,13 +282,6 @@ const report = (state = [], action) => {
         });
         return reports;
     }
-    case types.REFRESH_FIELD_SELECT_MENU: {
-        let currentReport = getReportFromState(action.id);
-        if (currentReport) {
-            return newState(currentReport);
-        }
-        return state;
-    }
     case types.OPEN_FIELD_SELECT_MENU: {
         let currentReport = getReportFromState(action.id);
         if (currentReport) {
@@ -335,9 +328,6 @@ const report = (state = [], action) => {
         if (currentReport) {
             // metadata
             let currentColumns = currentReport.data.columns;
-            let fids = currentReport.data.fids;
-            let metaFids = currentReport.data.metaData.fids;
-
             // passed in params
             let params = action.content;
             let addBefore = params.addBefore;
