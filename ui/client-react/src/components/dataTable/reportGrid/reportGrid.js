@@ -228,8 +228,8 @@ export const ReportGrid = React.createClass({
 
     getPendEdits() {
         // only one record should have the pendEdits , so return that
-        const recordCurrentlyEdited = _.find(this.props.record, rec=>rec.pendEdits);
-        return recordCurrentlyEdited ? recordCurrentlyEdited.pendEdits : {};
+        const recordCurrentlyEdited = _.find(this.props.record.records, rec=>rec.id.toString() === this.props.record.recordEdited.toString());
+        return (recordCurrentlyEdited ? recordCurrentlyEdited.pendEdits : {}) || {};
     },
 
     isOnlyOneColumnVisible() {

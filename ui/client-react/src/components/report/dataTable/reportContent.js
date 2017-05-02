@@ -219,7 +219,7 @@ export const ReportContent = React.createClass({
      * @param recId
      * @param fieldToStartEditing
      */
-    handleEditRecordStart(recId, fieldToStartEditing = null) {
+    handleEditRecordStart(recId, fieldToStartEditing = null, inLineEdit = true) {
         if (_.has(this.props, 'reportData.data')) {
             let origRec = null;
             let changes = {};
@@ -231,8 +231,7 @@ export const ReportContent = React.createClass({
             } else {
                 changes = this.setNewRowFieldChanges(recId);
             }
-
-            this.props.editRecordStart(this.props.appId, this.props.tblId, recId, origRec, changes, true, fieldToStartEditing);
+            this.props.editRecordStart(this.props.appId, this.props.tblId, recId, origRec, changes, inLineEdit, fieldToStartEditing);
         }
     },
 
@@ -528,8 +527,8 @@ export const ReportContent = React.createClass({
     openRecordForEditInTrowser(recordId) {
         //both actions should just add one record to the state, so passing the record id,
         //so that the record gets updated
-        this.handleEditRecordStart(recordId);
         this.openRow(recordId);
+        this.handleEditRecordStart(recordId, null, false);
         WindowLocationUtils.pushWithQuery(EDIT_RECORD_KEY, recordId);
     },
 
@@ -889,8 +888,8 @@ export const ReportContent = React.createClass({
 
     getPendEdits() {
         //there should be just one record with pending edit in the state, so return that
-        const recordCurrentlyEdited = _.find(this.props.record, rec=>rec.pendEdits);
-        return recordCurrentlyEdited ? recordCurrentlyEdited.pendEdits : {};
+        const recordCurrentlyEdited = _.find(this.props.record.records, rec=>rec.id.toString() === this.props.record.recordEdited.toString());
+        return (recordCurrentlyEdited ? recordCurrentlyEdited.pendEdits : {}) || {};
     },
 
     componentWillUpdate(nextProps) {
