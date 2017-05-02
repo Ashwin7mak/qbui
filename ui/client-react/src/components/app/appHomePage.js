@@ -51,18 +51,6 @@ const AppHomePage = React.createClass({
             </div>
         );
     },
-
-    duder() {
-        return (
-            <div className="appHomePage">
-                <div className="appHomePageWidthConstraint">
-                    {this.verticalPlaceHolder()}
-                    {this.horizontalPlaceHolder()}
-                    {this.horizontalPlaceHolder()}
-                </div>
-            </div>
-        );
-    }
 });
 
 export default AppHomePage;
