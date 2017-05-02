@@ -9,7 +9,7 @@
     other navs that may be on the page as these components get nested.
  */
 
-.reportFieldSelectTrowserBase {
+.reportFieldSelectMenuBase {
     height: 100%;
     width: 100%;
     position: relative;
@@ -39,31 +39,31 @@
         margin-left: 10px;
     }
 
-    &:not(.reportFieldSelectTrowserDocked) > .reportFieldSelectTrowserContent.reportFieldSelectTrowserOpen {
+    &:not(.reportFieldSelectMenuDocked) > .reportFieldSelectMenuContent.reportFieldSelectMenuOpen {
         @include menuShadow;
     }
 
-    &.reportFieldSelectTrowserDocked {
+    &.reportFieldSelectMenuDocked {
         display: flex;
 
-        &.reportFieldSelectTrowserPullRight {
+        &.reportFieldSelectMenuPullRight {
             flex-direction: row-reverse;
         }
 
-        > .reportFieldSelectTrowserMain {
+        > .reportFieldSelectMenuMain {
             position: relative;
             flex: 1 auto;
             overflow: auto;
             height: 100%;
         }
 
-        > .reportFieldSelectTrowserContent {
+        > .reportFieldSelectMenuContent {
             position: relative;
             flex: 0;
         }
     }
 
-    > .reportFieldSelectTrowserContent {
+    > .reportFieldSelectMenuContent {
         position: absolute;
         top: 0;
         bottom: 0;
@@ -76,7 +76,7 @@
 
         @include baseMenuWidths;
 
-        &.reportFieldSelectTrowserCollapsed {
+        &.reportFieldSelectMenuCollapsed {
             min-width: 0;
             // Min width alone doesn't work when translating over the top of the main content. Need max-width too.
             max-width: $leftNav-width-collapsed;
@@ -84,7 +84,7 @@
         }
 
         // Styling when the side trowser is on the left
-        &:not(.reportFieldSelectTrowserPullRight):not(.reportFieldSelectTrowserDocked) {
+        &:not(.reportFieldSelectMenuPullRight):not(.reportFieldSelectMenuDocked) {
             left: 0;
 
             // Hide menu by default
@@ -94,13 +94,13 @@
                 transform: translateX(-100%);
             }
 
-            &.reportFieldSelectTrowserOpen {
+            &.reportFieldSelectMenuOpen {
                 transform: translateX(0);
             }
         }
 
         // Styling when side trowser is on the right
-        &.reportFieldSelectTrowserPullRight:not(.reportFieldSelectTrowserDocked) {
+        &.reportFieldSelectMenuPullRight:not(.reportFieldSelectMenuDocked) {
             left: auto;
             right: 0;
 
@@ -111,7 +111,7 @@
                 transform: translateX(100%);
             }
 
-            &.reportFieldSelectTrowserOpen {
+            &.reportFieldSelectMenuOpen {
                 transform: translateX(0);
             }
         }

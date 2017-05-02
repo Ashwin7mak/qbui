@@ -85,7 +85,7 @@ const shell = (
             locale: Locale.getLocale(),
             i18n: Locale.getI18nBundle()
         };
-    case types.OPEN_FIELD_SELECTOR: {
+    case types.REFRESH_FIELD_SELECT_MENU: {
         let fields = action.content.response.data;
         let fids = fields.map(field => {
             return field.id;
@@ -94,20 +94,28 @@ const shell = (
         return {
             ...state,
             fieldsSelectMenu: {
-                fieldsListCollapsed: false,
-                addBefore: action.content.addBefore,
+                ...state.fieldsSelectMenu,
                 availableColumns: columns
             }
         };
     }
-    case types.CLOSE_FIELD_SELECTOR: {
-        let currentFieldsSelectMenu = state.fieldsSelectMenu;
+    case types.OPEN_FIELD_SELECT_MENU: {
         return {
             ...state,
             fieldsSelectMenu: {
-                ...currentFieldsSelectMenu,
+                ...state.fieldsSelectMenu,
+                fieldsListCollapsed: false,
+                addBefore: action.content.addBeforeColumn
+            }
+        };
+    }
+    case types.CLOSE_FIELD_SELECT_MENU: {
+        return {
+            ...state,
+            fieldsSelectMenu: {
+                ...state.fieldsSelectMenu,
                 fieldsListCollapsed: true,
-                addBefore: action.content.addBefore
+                addBefore: action.content.addBeforeColumn
             }
         };
     }

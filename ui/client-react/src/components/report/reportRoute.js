@@ -15,14 +15,10 @@ import Fluxxor from 'fluxxor';
 import _ from 'lodash';
 import './report.scss';
 import ReportToolsAndContent from '../report/reportToolsAndContent';
-import ReportFieldSelectTrowser from '../report/reportFieldSelectTrowser';
-import {FieldTokenInMenu} from '../formBuilder/fieldToken/fieldTokenInMenu';
-import ListOfElements from '../../../../reuse/client/src/components/sideNavs/listOfElements';
-import QBicon from '../qbIcon/qbIcon';
-import Locale from '../../../../reuse/client/src/locales/locale';
+import ReportFieldSelectMenu from './reportFieldSelectMenu';
 import {connect} from 'react-redux';
 import {clearSearchInput} from '../../actions/searchActions';
-import {loadReport, loadDynamicReport, addColumnFromExistingField, toggleFieldSelectorMenu} from '../../actions/reportActions';
+import {loadReport, loadDynamicReport} from '../../actions/reportActions';
 import {loadFields} from '../../actions/fieldsActions';
 import {CONTEXT} from '../../actions/context';
 import {APP_ROUTE, EDIT_RECORD_KEY, NEW_RECORD_VALUE} from '../../constants/urlConstants';
@@ -83,9 +79,6 @@ const ReportRoute = React.createClass({
         let rptId = typeof this.props.rptId !== "undefined" ? this.props.rptId : params.rptId;
 
         if (appId && tblId && rptId) {
-            // make sure the trowser is closed
-            this.toggleFieldSelectorMenu(CONTEXT.REPORT.NAV, appId, tblId, {open: false});
-
             //  loading a report..always render the 1st page on initial load
             let offset = constants.PAGE.DEFAULT_OFFSET;
             let numRows = NumberUtils.getNumericPropertyValue(this.props.reportData, 'numRows') || constants.PAGE.DEFAULT_NUM_ROWS;
@@ -157,64 +150,6 @@ const ReportRoute = React.createClass({
             </div>);
     },
 
-    toggleFieldSelectorMenu(context, appId, tblId, rptId, params) {
-        this.props.toggleFieldSelectorMenu(context, appId, tblId, rptId, params);
-    },
-
-    addColumnFromExistingField(columnData, reportData) {
-        let params = {
-            requestedColumn: columnData,
-            addBefore: this.props.shell.fieldsSelectMenu.addBefore
-        };
-
-        this.props.addColumnFromExistingField(CONTEXT.REPORT.NAV, reportData.appId, reportData.tblId, params);
-    },
-
-    getTrowserContent() {
-        let reportData = this.props.reportData;
-        let elements = [];
-        let columns = reportData.data ? reportData.data.columns : [];
-        let visibleColumns = columns.filter(column => {
-            return !column.isHidden;
-        });
-        let availableColumns = this.props.shell.fieldsSelectMenu.availableColumns;
-        let hiddenColumns = _.differenceBy(availableColumns, visibleColumns, 'id');
-        for (let i = 0; i < hiddenColumns.length; i++) {
-            elements.push({
-                key: hiddenColumns[i].id + "",
-                title: hiddenColumns[i].headerName,
-                type: hiddenColumns[i].fieldType,
-                onClick: (() => {
-                    this.addColumnFromExistingField(hiddenColumns[i], reportData);
-                })
-            });
-        }
-
-        let params = {
-            open: false
-        };
-
-        return (
-            <div className="fieldSelect">
-                <QBicon
-                    icon="close"
-                    onClick={() => this.toggleFieldSelectorMenu(CONTEXT.REPORT.NAV, reportData.appId, reportData.tblId, reportData.rptId, params)}
-                    className="fieldSelectCloseIcon"
-                />
-                <div className="header">
-                    {Locale.getMessage('report.drawer.title')}
-                </div>
-                <div className="info">
-                    {Locale.getMessage('report.drawer.info')}
-                </div>
-                <ListOfElements
-                    renderer={FieldTokenInMenu}
-                    elements={elements}
-                />
-            </div>
-        );
-    },
-
     render() {
         if (_.isUndefined(this.props.match.params) ||
             _.isUndefined(this.props.match.params.appId) ||
@@ -224,18 +159,19 @@ const ReportRoute = React.createClass({
             logger.info("the necessary params were not specified to reportRoute render params=" + simpleStringify(this.props.match.params));
             return null;
         } else {
-            let trowserContent = this.getTrowserContent();
             return (
                 <div className="reportContainer">
-                    <ReportFieldSelectTrowser
-                        sideMenuContent={trowserContent}
+                    <ReportFieldSelectMenu
+                        appId={this.props.match.params.appId}
+                        tblId={this.props.match.params.tblId}
+                        reportData={this.props.reportData}
                         isCollapsed={this.props.shell.fieldsSelectMenu.fieldsListCollapsed}
                         isDocked={false}
                         pullRight>
 
                         <Stage stageHeadline={this.getStageHeadline()}
-                           pageActions={this.getPageActions(5)}>
-                            <ReportStage reportData={this.props.reportData} />
+                               pageActions={this.getPageActions(5)}>
+                            <ReportStage reportData={this.props.reportData}/>
                         </Stage>
 
                         {this.getHeader()}
@@ -257,7 +193,8 @@ const ReportRoute = React.createClass({
                             loadDynamicReport={this.loadDynamicReport}
                             noRowsUI={true}
                         />
-                    </ReportFieldSelectTrowser>
+
+                    </ReportFieldSelectMenu>
                 </div>
             );
         }
@@ -272,12 +209,6 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        addColumnFromExistingField: (context, appId, tblId, params) => {
-            dispatch(addColumnFromExistingField(context, appId, tblId, params));
-        },
-        toggleFieldSelectorMenu: (context, appId, tblId, params) => {
-            dispatch(toggleFieldSelectorMenu(context, appId, tblId, params));
-        },
         clearSearchInput: () => {
             dispatch(clearSearchInput());
         },

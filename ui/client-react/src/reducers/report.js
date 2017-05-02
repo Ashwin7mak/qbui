@@ -282,12 +282,19 @@ const report = (state = [], action) => {
         });
         return reports;
     }
-    case types.OPEN_FIELD_SELECTOR: {
+    case types.REFRESH_FIELD_SELECT_MENU: {
+        let currentReport = getReportFromState(action.id);
+        if (currentReport) {
+            return newState(currentReport);
+        }
+        return state;
+    }
+    case types.OPEN_FIELD_SELECT_MENU: {
         let currentReport = getReportFromState(action.id);
         if (currentReport) {
             let params = action.content;
-            let clickedColumnId = params.clickedId;
-            let addBefore = params.addBefore;
+            let clickedColumnId = params.clickedColumnId;
+            let addBefore = params.addBeforeColumn;
             // remove the placeholder column if it exists
             _.remove(currentReport.data.columns, (col) => {return col.isPlaceholder;});
             // find the index of the column where 'add a column' was clicked
@@ -314,7 +321,7 @@ const report = (state = [], action) => {
         }
         return state;
     }
-    case types.CLOSE_FIELD_SELECTOR: {
+    case types.CLOSE_FIELD_SELECT_MENU: {
         let currentReport = getReportFromState(action.id);
         if (currentReport && currentReport.data) {
             // remove the placeholder column (if it exists) when the drawer is closed

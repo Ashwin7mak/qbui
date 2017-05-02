@@ -7,7 +7,7 @@ import Locale from '../../../locales/locales';
 import {I18nMessage} from '../../../utils/i18nMessage';
 import QbIcon from '../../qbIcon/qbIcon';
 import {connect} from 'react-redux';
-import {loadDynamicReport, hideColumn, toggleFieldSelectorMenu} from '../../../actions/reportActions';
+import {loadDynamicReport, hideColumn, openFieldSelectMenu} from '../../../actions/reportActions';
 import _ from 'lodash';
 
 import ReportUtils from '../../../utils/reportUtils';
@@ -228,12 +228,7 @@ export class ReportColumnHeaderMenu extends Component {
     openFieldSelector(before) {
         if (!this.hasRequiredIds()) {return;}
 
-        let params = {
-            open: true,
-            clickedId: this.props.fieldDef.id,
-            addBefore: before
-        };
-        this.props.toggleFieldSelectorMenu(CONTEXT.REPORT.NAV, this.props.appId, this.props.tblId, this.props.rptId, params);
+        this.props.openFieldSelectMenu(CONTEXT.REPORT.NAV, this.props.fieldDef.id, before);
     }
 
     openFieldSelectorBefore = () => {
@@ -307,8 +302,8 @@ const mapDispatchToProps = (dispatch) => {
         hideColumn: (context, appId, tblId, rptId, params) => {
             dispatch(hideColumn(context, appId, tblId, rptId, params));
         },
-        toggleFieldSelectorMenu: (context, appId, tblId, rptId, params) => {
-            dispatch(toggleFieldSelectorMenu(context, appId, tblId, params));
+        openFieldSelectMenu: (context, clickedColumn, addBeforeColumn) => {
+            dispatch(openFieldSelectMenu(context, clickedColumn, addBeforeColumn));
         }
     };
 };

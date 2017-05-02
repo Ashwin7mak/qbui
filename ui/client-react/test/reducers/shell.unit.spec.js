@@ -165,7 +165,7 @@ describe('Nav reducer functions for opening the field select menu', () => {
                 addBefore: true,
                 availableColumns: []
             },
-            type: types.OPEN_FIELD_SELECTOR
+            type: types.OPEN_FIELD_SELECT_MENU
         },
         {
             name:'toggle field select menu open when adding after',
@@ -174,7 +174,7 @@ describe('Nav reducer functions for opening the field select menu', () => {
                 addBefore: false,
                 availableColumns: []
             },
-            type: types.OPEN_FIELD_SELECTOR
+            type: types.OPEN_FIELD_SELECT_MENU
         },
         {
             name:'toggle field select menu closed when adding before',
@@ -183,7 +183,7 @@ describe('Nav reducer functions for opening the field select menu', () => {
                 addBefore: true,
                 availableColumns: []
             },
-            type: types.CLOSE_FIELD_SELECTOR
+            type: types.CLOSE_FIELD_SELECT_MENU
         },
         {
             name:'toggle field select menu closed when adding after',
@@ -192,7 +192,7 @@ describe('Nav reducer functions for opening the field select menu', () => {
                 addBefore: false,
                 availableColumns: []
             },
-            type: types.CLOSE_FIELD_SELECTOR
+            type: types.CLOSE_FIELD_SELECT_MENU
         }
     ];
     testCases.forEach(test => {

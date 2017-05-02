@@ -249,19 +249,17 @@ describe('Test ReportsActions function success workflow', () => {
             });
     });
 
-    it('toggleFieldSelectMenu action dispatches type.OPEN_FIELD_SELECTOR with open parameter', (done) => {
+    it('openFieldSelectMenu action dispatches type.OPEN_FIELD_SELECT_MENU with open parameter', (done) => {
         const params = {
-            open: true,
-            clickedId: 6,
-            addBefore: true,
-            response: mockResponseGetFields
+            clickedColumnId: 6,
+            addBeforeColumn: true
         };
         const expectedAction = [
-            event(context, types.OPEN_FIELD_SELECTOR, params)
+            event(context, types.OPEN_FIELD_SELECT_MENU, params)
         ];
         const store = mockReportsStore({});
 
-        return store.dispatch(reportActions.toggleFieldSelectorMenu(context, appId, tblId, params)).then(
+        return store.dispatch(reportActions.openFieldSelectMenu(context, 6, true)).then(
             () => {
                 expect(store.getActions()).toEqual(expectedAction);
                 done();
@@ -272,18 +270,13 @@ describe('Test ReportsActions function success workflow', () => {
             });
     });
 
-    it('toggleFieldSelectMenu action dispatches type.CLOSE_FIELD_SELECTOR with closed parameter', (done) => {
-        const params = {
-            open: false,
-            clickedId: 6,
-            addBefore: true
-        };
+    it('closeFieldSelectMenu action dispatches type.CLOSE_FIELD_SELECT_MENU with closed parameter', (done) => {
         const expectedAction = [
-            event(context, types.CLOSE_FIELD_SELECTOR, params)
+            event(context, types.CLOSE_FIELD_SELECT_MENU, {})
         ];
         const store = mockReportsStore({});
 
-        return store.dispatch(reportActions.toggleFieldSelectorMenu(context, appId, tblId, params)).then(
+        return store.dispatch(reportActions.closeFieldSelectMenu(context)).then(
             () => {
                 expect(store.getActions()).toEqual(expectedAction);
                 done();

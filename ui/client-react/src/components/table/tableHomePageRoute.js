@@ -7,11 +7,8 @@ import TableHomePageInitial from './tableHomePageInitial';
 import Icon, {AVAILABLE_ICON_FONTS} from '../../../../reuse/client/src/components/icon/icon.js';
 import IconActions from '../actions/iconActions';
 import ReportToolsAndContent from '../report/reportToolsAndContent';
-import ReportFieldSelectTrowser from '../report/reportFieldSelectTrowser';
-import {FieldTokenInMenu} from '../formBuilder/fieldToken/fieldTokenInMenu';
-import ListOfElements from '../../../../reuse/client/src/components/sideNavs/listOfElements';
-import QBicon from '../qbIcon/qbIcon';
-import Locale from '../../../../reuse/client/src/locales/locale';
+import ReportFieldSelectMenu from '../report/reportFieldSelectMenu';
+
 import Fluxxor from 'fluxxor';
 import {I18nMessage} from "../../utils/i18nMessage";
 import Constants from '../../../../common/src/constants';
@@ -20,7 +17,7 @@ import * as SearchActions from '../../actions/searchActions';
 import * as TableActions from '../../actions/tableActions';
 import * as FieldsActions from '../../actions/fieldsActions';
 import {showTableCreationDialog} from '../../actions/tableCreationActions';
-import {loadDynamicReport, toggleFieldSelectorMenu, addColumnFromExistingField} from '../../actions/reportActions';
+import {loadDynamicReport} from '../../actions/reportActions';
 import {CONTEXT} from '../../actions/context';
 import WindowLocationUtils from '../../utils/windowLocationUtils';
 import {EDIT_RECORD_KEY, NEW_RECORD_VALUE} from '../../constants/urlConstants';
@@ -64,9 +61,6 @@ export const TableHomePageRoute = React.createClass({
 
         //  loads from the report Nav context
         this.props.loadTableHomePage(CONTEXT.REPORT.NAV, appId, tblId, offset, numRows);
-
-        // make sure the trowser is closed
-        this.toggleFieldSelectorMenu(CONTEXT.REPORT.NAV, appId, tblId, {open: false});
     },
 
     loadHomePageForParams(params) {
@@ -139,64 +133,6 @@ export const TableHomePageRoute = React.createClass({
         return newTableIds.indexOf(this.props.match.params.tblId) !== -1;
     },
 
-    toggleFieldSelectorMenu(context, appId, tblId, params) {
-        this.props.toggleFieldSelectorMenu(context, appId, tblId, params);
-    },
-
-    addColumnFromExistingField(columnData, reportData) {
-        let params = {
-            requestedColumn: columnData,
-            addBefore: this.props.shell.fieldsSelectMenu.addBefore
-        };
-
-        this.props.addColumnFromExistingField(CONTEXT.REPORT.NAV, reportData.appId, reportData.tblId, params);
-    },
-
-    getTrowserContent() {
-        let reportData = this.props.reportData;
-        let elements = [];
-        let columns = reportData.data ? reportData.data.columns : [];
-        let visibleColumns = columns.filter(column => {
-            return !column.isHidden;
-        });
-        let availableColumns = this.props.shell.fieldsSelectMenu.availableColumns;
-        let hiddenColumns = _.differenceBy(availableColumns, visibleColumns, 'id');
-        for (let i = 0; i < hiddenColumns.length; i++) {
-            elements.push({
-                key: hiddenColumns[i].id + "",
-                title: hiddenColumns[i].headerName,
-                type: hiddenColumns[i].fieldType,
-                onClick: (() => {
-                    this.addColumnFromExistingField(hiddenColumns[i], reportData);
-                })
-            });
-        }
-
-        let params = {
-            open: false
-        };
-
-        return (
-            <div className="fieldSelect">
-                <QBicon
-                    icon="close"
-                    onClick={() => this.toggleFieldSelectorMenu(CONTEXT.REPORT.NAV, reportData.appId, reportData.tblId, params)}
-                    className="fieldSelectCloseIcon"
-                />
-                <div className="header">
-                    {Locale.getMessage('report.drawer.title')}
-                </div>
-                <div className="info">
-                    {Locale.getMessage('report.drawer.info')}
-                </div>
-                <ListOfElements
-                    renderer={FieldTokenInMenu}
-                    elements={elements}
-                />
-            </div>
-        );
-    },
-
     render() {
         //  ensure there is a rptId property otherwise the report not found page is rendered in ReportToolsAndContent
         let homePageParams = _.assign(this.props.match.params, {rptId: null});
@@ -225,24 +161,25 @@ export const TableHomePageRoute = React.createClass({
                 loadDynamicReport={this.loadDynamicReport}/>;
         }
 
-        let trowserContent = this.getTrowserContent();
-
         return (
             <div className="reportContainer">
-                <ReportFieldSelectTrowser
-                    sideMenuContent={trowserContent}
+                <ReportFieldSelectMenu
+                    appId={this.props.match.params.appId}
+                    tblId={this.props.match.params.tblId}
+                    reportData={this.props.reportData}
                     isCollapsed={this.props.shell.fieldsSelectMenu.fieldsListCollapsed}
                     isDocked={false}
                     pullRight>
 
                     <Stage stageHeadline={this.getStageHeadline()} pageActions={this.getPageActions(5)}>
-                        <ReportStage reportData={this.props.reportData} />
+                        <ReportStage reportData={this.props.reportData}/>
                     </Stage>
 
                     {this.getHeader()}
 
                     {mainContent}
-                </ReportFieldSelectTrowser>
+
+                </ReportFieldSelectMenu>
             </div>
         );
     }
@@ -272,13 +209,7 @@ const mapDispatchToProps = (dispatch) => {
         },
         showTableCreationDialog: () => {
             dispatch(showTableCreationDialog());
-        },
-        addColumnFromExistingField: (context, appId, tblId, params) => {
-            dispatch(addColumnFromExistingField(context, appId, tblId, params));
-        },
-        toggleFieldSelectorMenu: (context, appId, tblId, params) => {
-            dispatch(toggleFieldSelectorMenu(context, appId, tblId, params));
-        },
+        }
     };
 };
 

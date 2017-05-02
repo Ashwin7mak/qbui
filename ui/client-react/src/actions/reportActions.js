@@ -349,36 +349,52 @@ export const loadReportRecordsCount = (context, appId, tblId, rptId, queryParams
 };
 
 /**
- * Toggle the field select menu which displays hidden fields.
+ * Refresh the fields for the field select menu.
  * @param context
  * @param appId
  * @param tblId
- * @param params { open, clickedId, addBefore }
  */
-export const toggleFieldSelectorMenu = (context, appId, tblId, params) => {
+export const refreshFieldSelectMenu = (context, appId, tblId) => {
     return (dispatch) => {
         return new Promise((resolve, reject) => {
-            if (appId && tblId) {
-                if (params.open) {
-                    let fieldsService = new FieldsService();
-                    fieldsService.getFields(appId, tblId)
-                        .then((response) => {
-                            logger.debug('FieldsService getFields success');
-                            let content = {...params, response};
-                            dispatch(event(context, types.OPEN_FIELD_SELECTOR, content));
-                            resolve();
-                        }).catch((error) => {
-                            logger.parseAndLogError(LogLevel.ERROR, error.response, 'fieldsService.getFields:');
-                            reject();
-                        });
-                } else {
-                    dispatch(event(context, types.CLOSE_FIELD_SELECTOR, params));
+            let fieldsService = new FieldsService();
+            fieldsService.getFields(appId, tblId)
+                .then(response => {
+                    logger.debug('FieldsService getFields success');
+                    dispatch(event(context, types.REFRESH_FIELD_SELECT_MENU, {response}));
                     resolve();
-                }
-            } else {
-                logger.error(`reportActions.toggleFieldSelectorMenu: Missing one or more required input parameters. AppId:${appId}; TblId:${tblId};`);
-                reject();
-            }
+                }).catch(error => {
+                    logger.parseAndLogError(LogLevel.ERROR, error.response, 'fieldsService.getFields:');
+                    reject();
+                });
+        });
+    };
+};
+
+/**
+ * Toggle the field select menu open.
+ * @param context
+ * @param clickedColumnId
+ * @param addBeforeColumn
+ */
+export const openFieldSelectMenu = (context, clickedColumnId, addBeforeColumn) => {
+    return (dispatch) => {
+        return new Promise(resolve => {
+            dispatch(event(context, types.OPEN_FIELD_SELECT_MENU, {clickedColumnId, addBeforeColumn}));
+            resolve();
+        });
+    };
+};
+
+/**
+ * Toggle the field select menu closed.
+ * @param context
+ */
+export const closeFieldSelectMenu = (context) => {
+    return (dispatch) => {
+        return new Promise(resolve => {
+            dispatch(event(context, types.CLOSE_FIELD_SELECT_MENU, {}));
+            resolve();
         });
     };
 };

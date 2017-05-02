@@ -1141,8 +1141,8 @@ describe('Report reducer functions', () => {
 
     });
 
-    describe('Report reducer OPEN_FIELD_SELECTOR test correct state', () => {
-        let contextId = "OPEN_FIELD_SELECTOR";
+    describe('Report reducer OPEN_FIELD_SELECT_MENU test correct state', () => {
+        let contextId = "OPEN_FIELD_SELECT_MENU";
         let initialStateWithoutPlaceholder = [
             {
                 id: contextId,
@@ -1269,7 +1269,7 @@ describe('Report reducer functions', () => {
         testCases.forEach(testCase => {
             it(testCase.description, () => {
                 let testState = testCase.initialState;
-                actionObj.type = types.OPEN_FIELD_SELECTOR;
+                actionObj.type = types.OPEN_FIELD_SELECT_MENU;
                 actionObj.id = contextId;
                 if (testCase.content) {
                     actionObj.content = testCase.content;
@@ -1281,8 +1281,8 @@ describe('Report reducer functions', () => {
         });
     });
 
-    describe('Report reducer CLOSE_FIELD_SELECTOR test correct state', () => {
-        let contextId = "CLOSE_FIELD_SELECTOR";
+    describe('Report reducer CLOSE_FIELD_SELECT_MENU test correct state', () => {
+        let contextId = "CLOSE_FIELD_SELECT_MENU";
         let initialStateWithoutPlaceholder = [
             {
                 id: contextId,
@@ -1368,7 +1368,7 @@ describe('Report reducer functions', () => {
         testCases.forEach(testCase => {
             it(testCase.description, () => {
                 let testState = testCase.initialState;
-                actionObj.type = types.CLOSE_FIELD_SELECTOR;
+                actionObj.type = types.CLOSE_FIELD_SELECT_MENU;
                 actionObj.id = contextId;
                 if (testCase.content) {
                     actionObj.content = testCase.content;
