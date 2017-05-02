@@ -39,6 +39,8 @@
     }
 
     > .sideTrowserContent {
+        border-right: $stroke-width-thin  solid $trowser-right-trowser-nav-border-color;
+        border-left: $stroke-width-thin  solid $trowser-left-trowser-nav-border-color;
         position: absolute;
         top: 0;
 
@@ -57,6 +59,7 @@
 
         // Styling when the side trowser is on the left
         &:not(.sideTrowserPullRight):not(.sideTrowserDocked) {
+
             left: 0;
 
             // Hide menu by default
@@ -73,6 +76,7 @@
 
         // Styling when side trowser is on the right
         &.sideTrowserPullRight:not(.sideTrowserDocked) {
+
             left: auto;
             right: 0;
 
