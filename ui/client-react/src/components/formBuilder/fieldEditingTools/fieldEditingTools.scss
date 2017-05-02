@@ -76,7 +76,6 @@
     &.selectedFormElement {
         opacity: 1;
         border: $stroke-width-thick solid $selected-color;
-        border-radius: $radius-base;
         box-shadow: 0 0 4px 0px rgba($color-purple-600, 0.75);
 
         .deleteFieldIcon {
@@ -92,7 +91,6 @@
 
     &:hover {
         opacity: 1;
-        border-radius: $radius-base;
         border: $stroke-width-thin solid $selected-color;
         transition: border 0.5s ease;
         .fieldEditingTools {
