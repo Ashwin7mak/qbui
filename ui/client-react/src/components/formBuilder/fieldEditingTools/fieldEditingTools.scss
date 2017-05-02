@@ -34,7 +34,7 @@
         &:focus {
             opacity: 1;
             outline: none;
-            border: $stroke-width-thin solid $border-focused-color;
+            border: $stroke-width-thin solid $selected-color;
         }
     }
 
@@ -61,7 +61,7 @@
 
     &.selectedFormElement {
         opacity: 1;
-        border: $stroke-width-thick solid $color-purple-600;
+        border: $stroke-width-thick solid $selected-color;
         border-radius: $radius-base;
         box-shadow: 0 0 4px 0px rgba($color-purple-600, 0.75);
 
@@ -79,7 +79,7 @@
     &:hover {
         opacity: 1;
         border-radius: $radius-base;
-        border: $stroke-width-thin solid $color-purple-600;
+        border: $stroke-width-thin solid $selected-color;
         transition: border 0.5s ease;
         .fieldEditingTools {
             opacity: 1;
@@ -93,7 +93,7 @@
         //Borders always display during small breakpoints
         //Icon only show up when it is focused
         width: 100%;
-        border-bottom: $stroke-width-thin solid $color-purple-600;
+        border-bottom: $stroke-width-thin solid $selected-color;
 
         .deleteFieldIcon .qbIcon {
             margin-right: $spacing-medium1;
@@ -111,8 +111,8 @@
         //For keyboard nav
         opacity: 1;
         outline: none;
-        box-shadow: 0 0 2px 0px rgba($color-purple-600, 0.75);
-        border: $stroke-width-thin solid $color-purple-600;
+        box-shadow: 0 0 2px 0px rgba($selected-color, 0.75);
+        border: $stroke-width-thin solid $selected-color;
     }
 
     &.active {
@@ -125,7 +125,7 @@
     &:active {
         box-shadow: none;
         border: $stroke-width-thick dashed $color-black-300;
-        background-color: rgba($color-purple-600, 0.08);
+        background-color: rgba($dragPreview-background-color, 0.08);
         width: 335px;
         z-index: 2;
         .deleteFieldIcon .qbIcon {

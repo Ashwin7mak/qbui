@@ -9,7 +9,7 @@ $fieldtoken-title-margin-left: 12px;
 .fieldToken {
     // Overflow: hidden is used here to create the effect that the icon is rounded on the left, but flat on the right.
     overflow: hidden;
-
+    outline: none;
     border-radius: $fieldtoken-border-radius;
     height: $fieldtoken-height;
     width: $fieldtoken-width;
@@ -27,7 +27,7 @@ $fieldtoken-title-margin-left: 12px;
         border: $stroke-width-thin solid $fieldtoken-hover-border-color;
         box-shadow: 0 0 8px 0 rgba($color-black-800, 0.3);
     }
-
+    
     .fieldTokenTitle {
         max-width: $fieldtoken-width;
         opacity: 1;

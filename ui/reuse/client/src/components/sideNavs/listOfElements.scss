@@ -56,7 +56,9 @@ $toolpalette-header-font-size: 10px;
 
     .listOfElementsItem {
         padding-bottom: 3px; // No semantic spacing for 3px, but requested by design
-
+        &:focus {
+            outline: none;
+        }
         .fieldToken:not(.fieldTokenCollapsed) {
             width: 100%;
         }
@@ -91,5 +93,13 @@ $toolpalette-header-font-size: 10px;
     &:focus {
         outline: none;
         border: $stroke-width-thin solid $color-purple-600;
+    }
+
+    .fieldTokenInMenuWrapper {
+        &:focus {
+            outline: none;
+            border-radius: $border-radius-base;
+            border: $stroke-width-thin solid $color-purple-600;
+        }
     }
 }

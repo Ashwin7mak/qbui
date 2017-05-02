@@ -411,8 +411,10 @@ $fieldtoken-background-color2: $color-black-100;
 $fieldtoken-text-color: $iconfont-on-light-alternate-color;
 $fieldtoken-icon-color: $color-black-100;
 $fieldtoken-border-color: $color-black-300;
-$fieldtoken-hover-border-color: $color-orange-500;
+$fieldtoken-hover-border-color: $color-purple-600;
+$fieldtoken-focus-border-color: $color-purple-600;
 
+$dragPreview-background-color: $color-purple-600;
 $dragtoken-background-color1: $color-orange-500;
 $dragtoken-background-color2: $color-black-100;
 $dragtoken-text-color: $iconfont-on-light-alternate-color;

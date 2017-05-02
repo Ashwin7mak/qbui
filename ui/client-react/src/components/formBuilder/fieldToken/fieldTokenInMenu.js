@@ -94,7 +94,8 @@ export class DraggableFieldToken extends Component {
         const Element = DraggableField(FieldTokenInMenu, false);
 
         return (
-            <div onClick={this.clickToAddToForm}
+            <div className="fieldTokenInMenuWrapper"
+                 onClick={this.clickToAddToForm}
                  tabIndex={this.props.tabIndex}
                  onKeyDown={this.onEnterClickToAdd}>
                 <Element {...this.props}
