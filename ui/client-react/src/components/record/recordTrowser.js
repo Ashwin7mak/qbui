@@ -485,11 +485,7 @@ export const RecordTrowser = React.createClass({
     },
 
     getPendEdits() {
-        if (this.props.record) {
-            return getPendEdits(this.props.record, this.props.recId || NEW_RECORD_VALUE);
-        } else {
-            return {};
-        }
+        return getPendEdits(this.props.record, this.props.recId || NEW_RECORD_VALUE);
     },
 
     keyboardOnSave() {

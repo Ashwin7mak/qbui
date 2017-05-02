@@ -336,6 +336,9 @@ export default record;
  * @returns {{}}
  */
 export const getPendEdits = (recordState, recId) => {
+    if (!recordState) {
+        return {};
+    }
     const recordCurrentlyEdited = _.find(recordState.records,
         rec=>rec.id.toString() === recId || recordState.recordEdited.toString());
     return (recordCurrentlyEdited ? recordCurrentlyEdited.pendEdits : {}) || {};
