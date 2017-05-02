@@ -18,6 +18,8 @@ var componentLibraryPath = path.join(__dirname, 'componentLibrary/src');
 
 var governancePath = path.join(__dirname, 'governance');
 
+var automationPath = path.join(__dirname, 'automation');
+
 var envConfig = require('./server/src/config/environment');
 
 // 3 supported run-time environments..ONE and ONLY ONE variable is to be set to true.
@@ -76,6 +78,11 @@ var config = {
             'bootstrap-sass!./client-react/bootstrap-sass.config.js',
             path.resolve(reuseLibraryPath, 'client/src/assets/css/qbMain.scss'),
             path.resolve(governancePath, 'src/app/index.js')
+        ],
+        automation: [
+            'bootstrap-sass!./client-react/bootstrap-sass.config.js',
+            path.resolve(reuseLibraryPath, 'client/src/assets/css/qbMain.scss'),
+            path.resolve(automationPath, 'src/app/index.js')
         ]
     },
     output: {
@@ -107,6 +114,29 @@ var config = {
                     componentLibraryPath,
                     path.resolve(__dirname, 'governance/src'),
                     path.resolve(__dirname, 'governance/test'),
+                ],
+                exclude: [
+                    nodeModulesPath,
+                    // We don't want these to get compiled because ReactPlayground does that in the browser
+                    path.resolve(componentLibraryPath, 'examples')
+                ],
+                loaders: ['react-hot-loader', 'babel-loader']
+            },
+            {
+                // all js src and test files get treated by babel
+                // we get ES6/7 syntax and JSX transpiling out of the box with babel
+                // the react-hot-loader loader when processing the .js
+                // (it will add some js to magically do the hot reloading)
+                test: /\.js?$/,
+                include: [
+                    path.resolve(__dirname, 'reuse/client/src'),
+                    path.resolve(__dirname, 'reuse/client/test'),
+                    path.resolve(__dirname, 'client-react/src'),
+                    path.resolve(__dirname, 'client-react/test'),
+                    reuseLibraryPath,
+                    componentLibraryPath,
+                    path.resolve(__dirname, 'automation/src'),
+                    path.resolve(__dirname, 'automation/test'),
                 ],
                 exclude: [
                     nodeModulesPath,
