@@ -255,7 +255,7 @@ export const RecordRoute = React.createClass({
      * @returns table only in case, tableId is passed in
      */
     getSelectedTable(tableId) {
-        if (tableId && this.props.isDrawerContext) {
+        if (tableId && (this.props.isDrawerContext || !this.props.selectedTable)) {
             const app = this.props.selectedApp;
             if (app) {
                 return _.find(app.tables, (t) => t.id === tableId);
@@ -287,13 +287,14 @@ export const RecordRoute = React.createClass({
         if (this.props.match.params) {
             const {appId, tblId, rptId} = this.props.match.params;
             const record = this.getRecordFromProps(this.props);
+            const reportData = this.getReportDataFromProps(this.props);
             let recordIdTitle;
             const tableLink = `${APP_ROUTE}/${appId}/table/${tblId}`;
 
             //  ensure the property exists and it has some content
-            const reportName = _.has(this.props.reportData, 'data.name') && this.props.reportData.data.name ? this.props.reportData.data.name : Locale.getMessage('nav.backToReport');
-            const showBack = _.get(record, 'previousRecordId') && _.get(this.props, 'reportData.data.keyField.name');
-            const showNext = _.get(record, 'nextRecordId') && _.get(this.props, 'reportData.data.keyField.name');
+            const reportName = _.has(reportData, 'data.name') && reportData.data.name ? reportData.data.name : Locale.getMessage('nav.backToReport');
+            const showBack = _.get(record, 'previousRecordId') && _.get(reportData, 'data.keyField.name');
+            const showNext = _.get(record, 'nextRecordId') && _.get(reportData, 'data.keyField.name');
             if (this.props.isDrawerContext) {
                 recordIdTitle = this.props.match.params.drawerRecId;
             }
@@ -302,9 +303,9 @@ export const RecordRoute = React.createClass({
             return (<div className="recordStageHeadline">
 
                 <div className="navLinks">
-                    {this.props.selectedTable && <Link className="tableHomepageIconLink" to={tableLink}><Icon iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY} icon={this.props.selectedTable.tableIcon}/></Link>}
-                    {this.props.selectedTable && <Link className="tableHomepageLink" to={tableLink}>{this.props.selectedTable.name}</Link>}
-                    {!this.props.isDrawerContext && this.props.selectedTable && rptId && <span className="divider color-black-700">&nbsp;&nbsp;:&nbsp;&nbsp;</span>}
+                    {tableSelected && <Link className="tableHomepageIconLink" to={tableLink}><Icon iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY} icon={tableSelected.tableIcon}/></Link>}
+                    {tableSelected && <Link className="tableHomepageLink" to={tableLink}>{tableSelected.name}</Link>}
+                    {!this.props.isDrawerContext && tableSelected && rptId && <span className="divider color-black-700">&nbsp;&nbsp;:&nbsp;&nbsp;</span>}
                     {!this.props.isDrawerContext && rptId && <a className="backToReport" href="#" onClick={this.returnToReport}>{reportName}</a>}
                 </div>
                 <div className="stageHeadline iconActions">
