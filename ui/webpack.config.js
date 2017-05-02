@@ -54,6 +54,11 @@ const envPlugin = new webpack.DefinePlugin({
     __QB_LOCAL__: JSON.stringify(LOCAL)
 });
 
+// We only minify and uglify files when the environment is 'prod' and on the master branch.
+// This speeds up the test runs and builds for individual branches where we don't need to export the minified bundle.
+// Other setting such as whether or not to make source maps or display paths is still only determined by the environment.
+const shouldMinify = PROD && process.env.GIT_UIBRANCH === 'master';
+
 /**
  * A plugin that shows a notification when webpack has completed.
  */
@@ -155,7 +160,7 @@ const config = {
         path: buildPath,
 
         // generated js file
-        filename: PROD ? '[name].[chunkhash].min.js' : '[name].js',
+        filename: shouldMinify ? '[name].[chunkhash].min.js' : '[name].js',
 
         //publicPath is path from the view of the Javascript / HTML page.
         // where all js/css http://.. references will use for relative base
@@ -248,7 +253,8 @@ const config = {
         extensions: ['', '.js', '.json', '.scss']
     },
 
-    plugins: PROD ? [
+
+    plugins: shouldMinify ? [
         // This has beneficial effect on the react lib size for deploy
         new webpack.DefinePlugin({'process.env': {NODE_ENV: JSON.stringify('production')}}),
 

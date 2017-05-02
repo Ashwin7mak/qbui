@@ -71,7 +71,7 @@ class BaseClientRoute {
         }
 
         // Use this as a fallback in case webpack manifest has not been generated or operating in a non-prod environment.
-        return (this.appConfig.isProduction ? `${bundleFileName}.min.js` : `${bundleFileName}.js`);
+        return `${bundleFileName}.js`;
     }
 
     /**
