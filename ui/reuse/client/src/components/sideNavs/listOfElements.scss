@@ -100,6 +100,10 @@ $toolpalette-header-font-size: 10px;
     }
 
     .fieldTokenInMenuWrapper {
+        //By giving it a border the same size as the focus border and a transparent background,
+        //it keeps the container from 'jumping' on focus
+        border: $stroke-width-thin solid transparent;
+        box-shadow: 0 0 2px 0px rgba(transparent, 0);
         &:focus {
             outline: none;
             border-radius: $border-radius-base;
