@@ -2,8 +2,7 @@
 
 
 .saveOrCancelFooter {
-    color: $color-black-100;
-    background-color: $color-black-200;
+    background-color: $trowser-footer-background-color;
     flex: 0 0 auto;
     display: flex;
     flex-direction: row;
@@ -45,6 +44,7 @@
     .rightIcons {
         flex: 0 0 auto;
         align-self: center;
+        margin-right: 38px;
 
         button {
             margin: 10px 0 10px 10px;
@@ -63,5 +63,22 @@
         border-color: transparent;
         margin: 4px 0px 0px 4px;
         padding: 0 0px 0px 1px;
+    }
+
+    button {
+        width: 100.7px;
+        height: 38px;
+        border-radius: 4px;
+    }
+
+    .cancelFormButton {
+        background-color: $panel-footer-bg;
+        border: none;
+        color: $color-indigo-500;
+    }
+
+    .saveFormButton {
+        border: none;
+        background-color: $color-cyan-500;
     }
 }
