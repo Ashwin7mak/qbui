@@ -10,10 +10,10 @@ class FieldsService extends BaseService {
     constructor() {
         super();
 
-        //  Fields Service API endpoints
+        //  Fields Service API endpoints.
         this.API = {
-            GET_FIELD     : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.FIELDS}/{2}`,
-            GET_FIELDS    : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.FIELDS}`
+            GET_FIELD     : `${constants.BASE_URL.PROXY}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.FIELDS}/{2}`,
+            GET_FIELDS    : `${constants.BASE_URL.PROXY}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.FIELDS}`
         };
     }
 
