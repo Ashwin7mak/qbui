@@ -18,7 +18,7 @@
         right: 5px;
 
         .qbIcon {
-            color: $color-black-600;
+            color: $iconfont-on-light-normal-color;
             transition: color 0.4s;
         }
     }
@@ -80,7 +80,7 @@
         opacity: 1;
         border-radius: $radius-base;
         border: $stroke-width-thin solid $color-purple-600;
-        transition: border-color 0.3s ease;
+        transition: border 0.5s ease;
         .fieldEditingTools {
             opacity: 1;
             .qbIcon {

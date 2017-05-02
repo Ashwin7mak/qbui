@@ -112,8 +112,11 @@ const DraggableFieldHoc = (FieldComponent, showFieldEditingTools = true) => {
 
             let classNames = ['draggableField'];
             let draggableFieldWrapper = ['draggableFieldWrapper'];
-            classNames.push(isDragging  ? 'dragging' : 'notDragging');
-            classNames.push(_.isEqual(location, selectedField) && isTokenInMenuDragging ? 'dragging' : 'notDragging');
+            if (isDragging || (_.isEqual(location, selectedField) && isTokenInMenuDragging)) {
+                classNames.push('dragging');
+            } else {
+                classNames.push('notDragging');
+            }
 
             return connectDragSource(
                 <div className={classNames.join(' ')}>

@@ -41,4 +41,11 @@ describe('DraggableField', () => {
         expect(component.find('.dragging')).toBePresent();
         expect(component.find('.notDragging')).not.toBePresent();
     });
+
+    it('adds a dragging class when a left nav menu field token is being dragged', () => {
+        component = shallow(<DraggableComponent connectDragSource={mockConnectDragSource} isTokenInMenuDragging={true} location={{a: 'b'}} selectedField={{a: 'b'}} formBuilderChildrenTabIndex={[]}/>);
+
+        expect(component.find('.dragging')).toBePresent();
+        expect(component.find('.notDragging')).not.toBePresent();
+    });
 });
