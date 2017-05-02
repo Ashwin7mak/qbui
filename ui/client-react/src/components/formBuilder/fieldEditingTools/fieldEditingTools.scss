@@ -61,6 +61,7 @@
 
     &.isTablet {
         //Icon and borders only display during focus
+        opacity: 1;
         border: none;
 
         .deleteFieldIcon .qbIcon {
