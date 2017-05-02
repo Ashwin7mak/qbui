@@ -9,8 +9,12 @@ import _ from 'lodash';
 /**
  * Manage array of record states
  * record state looks like following:
- * { recordEdited: id, records : [array of records....] }
- * id : 3
+ * {
+ *   recordEdited: id,
+ *   records : [array of records....]
+ * }
+ * example :
+ * recordEdited : 3
  * records : [
  * {
  * id : "DRAWER10299", => if in a drawer id has a drawer context
