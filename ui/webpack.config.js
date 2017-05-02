@@ -9,6 +9,7 @@
  */
 
 const path = require('path');
+const fs = require('fs');
 const webpack = require('webpack');
 const exec = require('child_process').exec;
 
@@ -78,8 +79,9 @@ class MyNotifyPlugin {
  */
 class MoveManifestPlugin {
     apply(compiler) {
-        compiler.plugin('done', () => {
-            require('fs').rename(buildPath + '/manifest.json', webpackManifestFileName);
+        compiler.plugin('done', (compilation, callback) => {
+            const manifestFilePath = buildPath + '/manifest.json';
+            fs.rename(manifestFilePath, webpackManifestFileName, callback);
         });
     }
 }

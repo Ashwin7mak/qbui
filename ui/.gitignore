@@ -45,4 +45,4 @@ wdio/junitOutput/
 wdio/ui
 
 # Don't store webpack manifests to git. That should be generated on the environment that is using it.
-server/src/manifest
+server/src/manifest/manifest.json
