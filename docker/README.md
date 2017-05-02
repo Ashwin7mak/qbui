@@ -27,3 +27,73 @@
 ## Execute Commands
 * Run ```docker-compose exec service ${command}``` (where ${command} is any command) to execute a command inside the service container
 ** Example: ```docker exec -it core_service_1 /bin/ash``` to open an ash shell inside the core container.
+
+## Run Core + Experience Engine as Dependencies from this Project
+1) Rename ```docker-compose.override.yml.sample``` to ```docker-compose.override.yml```. 
+    * By default, the override sample file defines relative paths in the 'build' config for each container service that references the QuickBase and ExperienceEngine repositories.
+    * This is defined as such with a 'build context' so that each image for Core and Experience Engine can be iterated in branches in those repos in parallel with the UI code and then rebuilt and re-launched with ```docker-compose up -d --build```.
+    * Each image is custom named (```quickbase/ui-core``` and ```quickbase/ui-ee```) for the override sample in this repository in order to avoid conflicts with the
+    ```quickbase/core``` and ```quickbase/ee``` imaged that may exist on your machine and to specify that they are 'owned' by the Docker Compose environment defined in this project.
+2) Run ```docker-compose up -d```. It should bring up Core, Oracle, Experience Engine and PostGres in addition to the existing UI service.
+
+## Run the Service in Docker Compose from IntelliJ
+### Prerequisites
+* [IntelliJ 2017.1.1](https://www.jetbrains.com/idea/download/)
+* [Docker Plugin for IntelliJ](https://www.jetbrains.com/help/idea/2017.1/docker.html)
+
+The following walkthrough will explain to set up a 'Run' config that uses Docker Compose for the deployment of code from IntelliJ
+1) The first step is configure the Docker plugin for IntelliJ to attach it to the Docker for Mac Docker server. Copy the exact configuration as shown below to bind a socket connection from IntelliJ to the Docker server.
+
+![Preferences](../docs/images/01_configure_plugin.png)
+
+![Docker Menu Item](../docs/images/02_configure_plugin.png)
+
+![New Server](../docs/images/03_configure_plugin.png)
+
+2) Create a new Docker Deployment item and configure as shown. Make sure to pick the correct ```docker-compose.yml```
+for this deployment (the QBUI YAML file).
+
+![Edit Configurations](../docs/images/04_run_config.png)
+
+![Docker Deploy](../docs/images/05_run_config.png)
+
+![Edit Configuration](../docs/images/06_run_config.png)
+
+3) The Run configuration can now be launched with the command ```Ctrl + Alt + R``` or the Run button in the IDE. Note: this example is for
+Core but functions the same way for the UI run configuration
+
+![Run It](../docs/images/11_run_it.png)
+
+5) The Run configuration will launch a build with logs, then show log output from the deployment. To view the running containers
+at the Docker service, use this button to connect to the running Docker server from Docker for Mac.
+
+![Connect It](../docs/images/12_run_it.png)
+
+6) To kill the deployment, use this button to 'Undeploy' it.
+
+![Kill It](../docs/images/13_run_it.png)
+
+## Debug the Service Running in Docker Compose from IntelliJ
+The direction below explain how to attach a remote debugger to NodeJS running in the Docker container for the UI service.
+
+1) Create a new Run/Debug Remote configuration and configure as shown. Make sure the remote debugger port specified matches what is mapped to your host machine in the ```docker-compose.yml``` file.
+
+![IntelliJ Dropdown](../docs/images/debug_01.png)
+
+![Remote Configuration](../docs/images/debug_02.png)
+
+![Port Configuration](../docs/images/debug_03.png)
+
+2) If it is not already running, bring up the Docker Compose environment as explained earlier in this README.
+
+3) Run the newly created Run configuration from IntelliJ with the Debug command
+
+![Debugger](../docs/images/debug_04.png)
+
+4) The debugger console should pop up and show a similar message to the image below that confirms the remote debugger
+is attached.
+![Debugger Console](../docs/images/debug_06.png)
+
+5) A breakpoint can now be attached to any source code that requires debugging, and when the code is executed at that
+breakpoint, the debugger should swap to the frame view as it normally would for local debugging. All other functionality
+for debugging should now work identically to any prior workflow (watches, stepping, etc).
