@@ -1,4 +1,28 @@
-import * as types from './standardGridActionTypes';
+import * as types from "./standardGridActionTypes";
+
+/**
+ * Action to set the visible items for a given grid
+ *
+ * @param gridId - the id of the grid we want to update
+ * @param items - the direction to paginate
+ */
+export const setItems = (gridId, items) => ({
+    type: types.SET_ITEMS,
+    gridId,
+    items
+});
+
+/**
+ * Action to set the filter query for a given grid
+ *
+ * @param gridId - the id of the grid we want to update
+ * @param searchTerm - the query to filter by
+ */
+export const setSearch = (gridId, searchTerm) => ({
+    type: types.SET_SEARCH,
+    gridId,
+    searchTerm
+});
 
 /**
  * Action to set the desired sort order for a given grid
@@ -14,6 +38,30 @@ export const setSort = (gridId, sortFid, asc, remove) => ({
     asc,
     gridId,
     remove
+});
+
+/**
+ * Action to set the pagination order for a given grid
+ *
+ * @param gridId - the id of the grid we want to update
+ * @param offset - ho
+ */
+export const setCurrentPageOffset = (gridId, offset) => ({
+    type: types.SET_CURRENTPAGE_OFFSET,
+    gridId,
+    offset
+});
+
+/**
+ * Action to set the pagination order for a given grid
+ *
+ * @param gridId - the id of the grid we want to update
+ * @param direction - the direction to paginate
+ */
+export const setPaginate = (gridId, pagination) => ({
+    type: types.SET_PAGINATION,
+    gridId,
+    pagination
 });
 
 /**
