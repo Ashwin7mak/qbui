@@ -72,7 +72,7 @@ describe('Validate RequestHelper unit tests', function() {
         let req = {};
         req.url = '/someurl.com';
         it('Test request url method', function(done) {
-            let request = requestHelper.getRequestUrl(req);
+            let request = requestHelper.getRequestCoreUrl(req);
             should(request).be.exactly(config.javaHost + req.url);
             done();
         });
