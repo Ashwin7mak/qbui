@@ -250,7 +250,9 @@ export const RecordRoute = React.createClass({
     },
 
     /**
-     * finds and returns the table from the selected app using the table id
+     * finds and returns the table from the selected app using the table id or returns selected table from props
+     * tableId is a required param in the following situations :
+     * if record route is in a drawer or you refresh a page and do not have the selected table in props
      * @param tableId
      * @returns table only in case, tableId is passed in
      */
@@ -286,26 +288,28 @@ export const RecordRoute = React.createClass({
     getStageHeadline() {
         if (this.props.match.params) {
             const {appId, tblId, rptId} = this.props.match.params;
-            const record = this.getRecordFromProps(this.props);
-            const reportData = this.getReportDataFromProps(this.props);
+            const record = this.getRecordFromProps();
+            const reportData = this.getReportDataFromProps();
             let recordIdTitle;
             const tableLink = `${APP_ROUTE}/${appId}/table/${tblId}`;
 
             //  ensure the property exists and it has some content
-            const reportName = _.has(reportData, 'data.name') && reportData.data.name ? reportData.data.name : Locale.getMessage('nav.backToReport');
+            const reportName = _.get(reportData, 'data.name') || Locale.getMessage('nav.backToReport');
             const showBack = _.get(record, 'previousRecordId') && _.get(reportData, 'data.keyField.name');
             const showNext = _.get(record, 'nextRecordId') && _.get(reportData, 'data.keyField.name');
             if (this.props.isDrawerContext) {
                 recordIdTitle = this.props.match.params.drawerRecId;
             }
-            const tableSelected =  this.getSelectedTable(this.props.match.params.tblId);
-            const tableName = tableSelected !== undefined && tableSelected !== null ? tableSelected.name : '';
+            const selectedTable = this.getSelectedTable(this.props.match.params.tblId);
+            const tableName = _.get(selectedTable, 'name') || '';
             return (<div className="recordStageHeadline">
 
                 <div className="navLinks">
-                    {tableSelected && <Link className="tableHomepageIconLink" to={tableLink}><Icon iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY} icon={tableSelected.tableIcon}/></Link>}
-                    {tableSelected && <Link className="tableHomepageLink" to={tableLink}>{tableSelected.name}</Link>}
-                    {!this.props.isDrawerContext && tableSelected && rptId && <span className="divider color-black-700">&nbsp;&nbsp;:&nbsp;&nbsp;</span>}
+                    {selectedTable && <Link className="tableHomepageIconLink" to={tableLink}><Icon
+                        iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY} icon={selectedTable.tableIcon}/></Link>}
+                    {selectedTable && <Link className="tableHomepageLink" to={tableLink}>{tableName}</Link>}
+                    {!this.props.isDrawerContext && selectedTable && rptId &&
+                    <span className="divider color-black-700">&nbsp;&nbsp;:&nbsp;&nbsp;</span>}
                     {!this.props.isDrawerContext && rptId && <a className="backToReport" href="#" onClick={this.returnToReport}>{reportName}</a>}
                 </div>
                 <div className="stageHeadline iconActions">
