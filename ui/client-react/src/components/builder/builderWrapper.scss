@@ -13,22 +13,31 @@ $builder-wrapper-border-color: $color-black-300;
         .navLabel {
             color: $topnav-builder-icon-color;
         }
+        //for user button
         .btn-group button {
             //Keeps icon from 'jumping' when a focus border is added
             border: 1px solid transparent;
             background-color: $topnav-builder-background-color;
             &:focus {
                 outline: none;
-                @include topnav-button-focus;
+                border: $stroke-width-thin solid $topnav-button-focus-border-color;
             }
+        }
+        //for user button
+        .btn-group, .btn-group-vertical {
+            vertical-align: inherit;
         }
 
         .dropdownToggle {
             //Keeps icon from 'jumping' when a focus border is added
             border: 1px solid transparent;
+            height: 40px;
             &:focus {
                 outline: none;
-                @include topnav-button-focus;
+                border: $stroke-width-thin solid $topnav-button-focus-border-color;
+            }
+            .qbIcon {
+                vertical-align: inherit;
             }
         }
 
