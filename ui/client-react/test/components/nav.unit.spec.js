@@ -113,6 +113,7 @@ describe('Nav Unit tests', () => {
         NavRewireAPI.__Rewire__('TopNav', TopNavMock);
         NavRewireAPI.__Rewire__('TableCreationDialog', TableCreationDialogMock);
         NavRewireAPI.__Rewire__('WindowLocationUtils', WindowLocationUtilsMock);
+        NavRewireAPI.__Rewire__('Analytics', () => null); // Turn off analytics component for unit tests
     });
 
     afterEach(() => {
@@ -128,6 +129,7 @@ describe('Nav Unit tests', () => {
         NavRewireAPI.__ResetDependency__('TopNav');
         NavRewireAPI.__ResetDependency__('TableCreationDialog');
         NavRewireAPI.__ResetDependency__('WindowLocationUtils');
+        NavRewireAPI.__ResetDependency__('Analytics');
     });
 
     it('test render of component', () => {

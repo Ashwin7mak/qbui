@@ -71,6 +71,26 @@ describe('RequestContextActions', () => {
             }, error => expect(false).toEqual(true)).then(done, done);
     });
 
+    it('does nothing when receiving a 401 error case', (done) => {
+        const store = mockStore(defaultState);
+        const accountId = 1;
+        const error = {response: {status:401}};
+        spyOn(RequestContextService.prototype, 'getRequestContext').and.returnValue(Promise.reject(error));
+
+        const expectedActions = [
+            {type: types.REQUEST_CONTEXT_FETCHING},
+            {type: types.REQUEST_CONTEXT_FAILURE, error: error}
+        ];
+
+        return store
+            .dispatch(RequestContextActions.fetchRequestContextIfNeeded(accountId))
+            .then(() => {
+                expect(store.getActions()).toEqual(expectedActions);
+                expect(mockWindowUtils.update).not.toHaveBeenCalledWith(FORBIDDEN);
+                expect(mockWindowUtils.update).not.toHaveBeenCalledWith(INTERNAL_SERVER_ERROR);
+            }, e => expect(false).toEqual(true)).then(done, done);
+    });
+
     it('handles a 403 error case correctly', (done) => {
         const store = mockStore(defaultState);
         const accountId = 1;
