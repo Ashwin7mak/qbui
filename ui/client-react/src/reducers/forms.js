@@ -313,7 +313,7 @@ const forms = (
             updatedForm.isDragging = [];
         }
 
-        updatedForm.isDragging[0] = undefined;
+        updatedForm.isDragging[0] = false;
 
         newState[id] = updatedForm;
         return newState;

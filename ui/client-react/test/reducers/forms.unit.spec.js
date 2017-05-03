@@ -525,7 +525,7 @@ describe('Forms reducer functions', () => {
                 [VIEW]: {
                     ...stateWithViewForm[VIEW],
                     formData: {formMeta: testFormMeta},
-                    isDragging: [undefined]
+                    isDragging: [false]
                 }
             });
         });

@@ -220,7 +220,7 @@ const mapStateToProps = (state, ownProps) => {
     let isDragging = (_.has(currentForm, "isDragging") ? currentForm.isDragging[0] : undefined);
     //If a new field is added to form builder we use the state isDragging to indicate whether or not it is in a dragon state,
     //If isDragging is undefined, then we use the components ownProps to indicate whether or not the field is in a dragon state
-    isDragging = isDragging === undefined ? ownProps.isDragging : isDragging;
+    isDragging = isDragging === undefined || ownProps.isDragging === true ? ownProps.isDragging : isDragging;
 
     return {
         selectedFields,
