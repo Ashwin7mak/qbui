@@ -213,6 +213,10 @@ div.leftNavTooltip {
         .transitionGroup .tablesHeadingAndList .tablesList {
             overflow: visible;
         }
+
+        .leftNavLink {
+            text-overflow: clip;
+        }
     }
 }
 
@@ -391,10 +395,10 @@ div.leftNavTooltip {
                         color: $left-nav-link-hover-color;
                         background-color: $leftnav-table-selected-color;
                     }
-                    .qbIcon {
-                        vertical-align: middle;
-                        width: 32px;
-                        font-size: 32px;
+                    .hoverComponent {
+                        span {
+                            padding-left: 15px;
+                        }
                     }
                 }
             }
