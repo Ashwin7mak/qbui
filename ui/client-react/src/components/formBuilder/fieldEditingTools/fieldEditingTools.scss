@@ -1,6 +1,7 @@
 @import "../../../assets/css/qbVariables";
 
 .fieldEditingTools {
+    opacity: 0;
     transition: opacity 0.4s;
     border-radius: $border-radius-base;
     //By giving it a border the same size as the focus border and a transparent background,
@@ -44,9 +45,7 @@
     &.notTouchDevice {
         //No borders or icon are displayed when it is not a touch device
         //Everything shows up on hover
-        opacity: 0;
         .deleteFieldIcon .qbIcon {
-            opacity: 0;
             &:hover {
                 opacity: 1;
                 color: $color-red-700;
@@ -89,7 +88,7 @@
         transition: 0.4s;
         opacity: 1;
         border: $stroke-width-thin solid $input-text-focus-border-color;
-        .fieldEditingTools {
+        .deleteFieldIcon {
             opacity: 1;
             .qbIcon {
                 opacity: 1;
