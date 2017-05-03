@@ -166,7 +166,7 @@ describe('FormBuilderContainer', () => {
                                                     loadForm={mockActions.loadForm}
                                                     updateForm={mockActions.updateForm} />);
 
-            let saveButton = component.find('.mainButton');
+            let saveButton = component.find('.mainTrowserFooterButton');
 
             saveButton.simulate('click');
 
