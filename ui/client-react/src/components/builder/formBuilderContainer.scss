@@ -3,7 +3,7 @@
 .formBuilderContainer {
     height: 100%;
     .listOfElementsContainer {
-        height: calc(100% - #{$trowser-footer-height + 5px});
+        height: calc(100% - #{$trowser-footer-height});
         @include medium-breakpoint {
             //for tablets and smaller, to keep footer from vanishing
             height: 100%;
@@ -24,7 +24,6 @@
         &:focus {
             outline: none;
             border: $stroke-width-thin solid $input-text-focus-border-color;
-            border-bottom: #{$stroke-width-thin + 4} solid $input-text-focus-border-color;
         }
     }
 
