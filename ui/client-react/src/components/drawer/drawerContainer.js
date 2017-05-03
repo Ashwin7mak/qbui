@@ -108,9 +108,9 @@ class DrawerContainer extends React.Component {
                             className="slidey-righty"
                             transitionName="slidey-righty"
                             transitionAppear={true}
-                            transitionAppearTimeout={300}
-                            transitionEnterTimeout={300}
-                            transitionLeaveTimeout={300}
+                            transitionAppearTimeout={400}
+                            transitionEnterTimeout={400}
+                            transitionLeaveTimeout={400}
                             >
                             {match && this.getDrawer()}
                         </ReactCSSTransitionGroup>
