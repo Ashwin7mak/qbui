@@ -12,7 +12,11 @@ import UserActions from '../../../actions/userActions';
 import './appUsersRoute.scss';
 
 const AppUsersRoute = React.createClass({
-    roleId:"",
+    getInitialState() {
+        return {
+            roleId: ''
+        };
+    },
     componentDidMount() {
         this.props.flux.actions.loadAppRoles(this.props.match.params.appId);
         this.props.flux.actions.loadAppOwner(this.props.selectedApp.ownerId);
@@ -64,7 +68,7 @@ const AppUsersRoute = React.createClass({
     },
 
     getSelectionActions() {
-        return (<UserActions selection={this.props.selectedUserRows} actions={this.props.flux.actions} appId={this.props.match.params.appId} roleId={this.roleId}/>);
+        return (<UserActions selection={this.props.selectedUserRows} actions={this.props.flux.actions} appId={this.props.match.params.appId} roleId={this.state.roleId}/>);
     },
 
     getTableActions() {
@@ -97,8 +101,7 @@ const AppUsersRoute = React.createClass({
             // id is in the list, remove it
             selectedRows = _.without(selectedRows, id);
         }
-
-        this.roleId = roleId;
+        this.setState({roleId:roleId});
 
         this.props.flux.actions.selectUsersRows(selectedRows);
     },
@@ -108,7 +111,7 @@ const AppUsersRoute = React.createClass({
      */
 
     selectAllRows() {
-        let roleId = this.roleId;
+        let roleId = this.state.roleId;
         let appUsers = this.props.appUsersUnfiltered;
         let selected = [];
         // Transform the records first so that subHeaders (grouped records) can be handled appropriately
@@ -138,17 +141,13 @@ const AppUsersRoute = React.createClass({
         }
     },
     areAllRowsSelected() {
-        if (this.props.selectedUserRows.length === this.props.appUsers.length) {
-            return true;
-        } else {
-            return false;
-        }
+        return this.props.selectedUserRows.length === this.props.appUsers.length;
     },
 
     addRoleIds() {
         let appUsers = this.props.appUsers;
         let selectedRows = this.props.selectedRows;
-        this.props.appRoles.forEach(function(role) {
+        this.props.appRoles.forEach(role => {
             if (appUsers[role.id]) {
                 appUsers[role.id].forEach(function(user) {
                     user.roleName = role.name;

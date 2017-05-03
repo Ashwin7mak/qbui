@@ -1,26 +1,36 @@
 /* eslint-disable babel/no-invalid-this */
 
-import {UserActions} from '../../src/components/actions/userActions';
+import UserActions from '../../src/components/actions/userActions';
 import React from  'react';
 import {mount, shallow} from 'enzyme';
 
 const props = {
     selection: ['10000'],
-    roleId: 12,
+    roleId: '12',
     appId: '0duiiaaaanc',
     onEditSelected: () => {}
 };
 
-describe('Manages user account', () => {
+const unselectedProps = {
+    selection: [],
+    roleId: null,
+    appId: null,
+    onEditSelected: () => {}
+};
+
+describe('UserActions', () => {
     let component;
     beforeEach(() => {
         component = mount(<UserActions {...props}/>);
     });
 
-    it('Should have all necessary element', () => {
+    it('Should have all necessary elements', () => {
         expect(component.find('.actionIcons').length).toEqual(1);
+        expect(component.find('.reportActions').length).toEqual(1);
+        expect(component.find('.reportActionsBlock').length).toEqual(1);
         expect(component.find('a').length).toEqual(4);
         expect(component.find('.selectedRowsLabel').length).toEqual(1);
+
     });
 
     it('Selected Row label should have the correct number of selected Item', () => {
@@ -36,5 +46,10 @@ describe('Manages user account', () => {
     it('Should call handleDelete when remove is clicked', () => {
         component.find('.icon-errorincircle-fill').simulate('click');
         expect(component.state().confirmDeletesDialogOpen).toEqual(true);
+    });
+
+    it('Should not select a Row when an empty selection Props is passed', () => {
+        let unselectedComponent = mount(<UserActions {...unselectedProps}/>);
+        expect(unselectedComponent.find('.selectedRowsLabel').node.innerHTML).toEqual('0');
     });
 });

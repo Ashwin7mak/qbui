@@ -11,7 +11,7 @@ const props = {
     onClickToggleSelectedRow: () => {}
 };
 
-describe('Manages user account', () => {
+describe('UserRowActions', () => {
     let component;
     let spy;
     beforeEach(() => {
@@ -20,12 +20,13 @@ describe('Manages user account', () => {
     });
 
     it('Should have all necessary element', () => {
-        expect(component.find('div').length).toEqual(1);
-        expect(component.find('input').length).toEqual(1);
+        expect(component.find('.actionsCol').length).toEqual(1);
+        expect(component.find('.selectRowCheckbox').length).toEqual(1);
     });
 
     it('Should call onClickToggleSelectedRow when checkbox is clicked', () => {
         component.find('.selectRowCheckbox').simulate('click');
+        expect(component.state().checked).toEqual(true)
         expect(spy).toHaveBeenCalled();
     });
 });

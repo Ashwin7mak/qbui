@@ -145,7 +145,7 @@ class UserManagement extends React.Component {
         ];
 
         return (
-        resolvedRows.length > 0 ?
+        resolvedRows.length > 0 &&
             <div className="userManagementReport">
                 <Table.Provider columns={columns} className="qbGrid"
 
@@ -167,12 +167,9 @@ class UserManagement extends React.Component {
                                         className: 'qbRow'
                                     };
                                 }}
-                                ref={body => {
-                                    this.tableRef = body && body.getRef().parentNode;
-                                }}
                     />
                 </Table.Provider>
-            </div> : null
+            </div>
         );
     }
 

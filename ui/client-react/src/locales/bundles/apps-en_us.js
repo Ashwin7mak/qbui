@@ -507,7 +507,7 @@ export default {
             copy: "Copying is not available yet",
             email: "Emailing is not available yet",
             delete: "Deleting is not available yet",
-            downloadCloud: "Exporting CSV is not available yet",
+            emailUsers: "Exporting CSV is not available yet",
             settingsRole: "Changing role is not available yet",
             emailApp: "Sending app invite is not available yet",
         },

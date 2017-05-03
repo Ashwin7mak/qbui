@@ -217,7 +217,7 @@ describe('Apps Actions functions with Tables', () => {
         appsActionsRewireAPI.__Rewire__('RoleService', mockRoleServiceFailure);
         flux.actions.unassignUsers(test.appId, test.roleId, test.userIds).then(
             () => {
-                expect(true).toBe(true);
+                expect(false).toBe(true);
                 done();
             },
             () => {
