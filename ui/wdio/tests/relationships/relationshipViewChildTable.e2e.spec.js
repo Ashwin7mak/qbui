@@ -112,11 +112,10 @@ describe('Relationships - View child table on form tests: ', () => {
         expect(recordFormValues[0]).toEqual(childRecordsTextValues[0]);
     });
 
-    //TODO: Test is disabled due to MC-2467
     /**
      *  Navigate between child records from within slidey-righty
      */
-    xit('Navigate between child records from within slidey-righty', () => {
+    it('Navigate between child records from within slidey-righty', () => {
         // Click into one of the child records to view the record form (second record)
         relationshipsPO.clickOnRecordInChildTable(1);
 
@@ -169,6 +168,5 @@ describe('Relationships - View child table on form tests: ', () => {
 
     //TODO: MC-2274 Navigate back to parent report via Parent Report Link
 
-    //TODO: MC-2470 Test to ensure Add and Edit buttons on child record form are disabled (as they are not implemented yet)
 });
 
