@@ -583,11 +583,11 @@ export default {
                 }
             },
             fieldGroups: {
-                text: 'Text',
-                numeric: 'Number',
-                date: 'Date',
-                other: 'Other',
-                relationships: 'Relationships'
+                text: "Text",
+                numeric: "Number",
+                date: "Date",
+                other: "Other",
+                relationships: "Relationships"
             },
             defaultMultichoiceOptions: {
                 first: "Option 1",

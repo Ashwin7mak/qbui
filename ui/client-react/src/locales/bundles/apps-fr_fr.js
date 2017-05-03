@@ -574,10 +574,10 @@ export default {
                 }
             },
             fieldGroups: {
-                text: 'Texte',
-                numeric: 'Nombre',
-                date: 'Date',
-                other: 'Autre',
+                text: "Texte",
+                numeric: "Nombre",
+                date: "Date",
+                other: "Autre",
                 relationships: "Des relations"
             },
             defaultMultichoiceOptions: {
