@@ -577,7 +577,13 @@ export default {
                 text: 'Texte',
                 numeric: 'Nombre',
                 date: 'Date',
-                other: 'Autre'
+                other: 'Autre',
+                relationships: "Des relations"
+            },
+            defaultMultichoiceOptions: {
+                first: "Option 1",
+                second: "Option 2",
+                third: "Option 3"
             }
         },
         featureSwitchAdmin: {
