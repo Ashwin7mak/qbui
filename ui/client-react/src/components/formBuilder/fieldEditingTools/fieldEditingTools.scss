@@ -53,14 +53,6 @@
         }
     }
 
-    &.isTablet {
-        //This is an extra check to keep this code from triggering firefox
-        .deleteFieldIcon .qbIcon {
-            opacity: 1;
-            padding-right: $spacing-medium1;
-        }
-    }
-
     &:focus {
         //For keyboard nav
         opacity: 1;
@@ -110,6 +102,16 @@
         &:hover {
             .qbIcon {
                 opacity: 0;
+            }
+        }
+    }
+    &.isTablet {
+        opacity: 1;
+        //This is an extra check to keep this code from triggering firefox
+        .deleteFieldIcon {
+            opacity: 1;
+            .qbIcon {
+                opacity: 1;
             }
         }
     }
