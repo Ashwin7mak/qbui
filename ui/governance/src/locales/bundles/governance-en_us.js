@@ -37,6 +37,8 @@ export default {
                 singleUserCount : "{usersCount} user",
                 usersCountPlaceHolder : "Counting users...",
                 cardViewCountPlaceHolder : "Counting...",
+                filteredUsersCount : "{filteredUsersCount} of {usersCount} users",
+                filteredSingleUserCount : "{filteredUsersCount} of {usersCount} users",
             }
         }
     }

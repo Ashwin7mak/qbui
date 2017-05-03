@@ -1,6 +1,6 @@
 import React, {PropTypes, Component} from "react";
 import StandardGridNavigation from "./StandardGridNavigation";
-import UsersCount from "../usersCount/usersCount";
+import StandardGridUsersCount from "./StandardGridUsersCount";
 import * as StandardGridActions from "../../../common/grid/standardGridActions";
 import IconInputBox from "../../../../../reuse/client/src/components/iconInputBox/iconInputBox";
 import {connect} from "react-redux";
@@ -15,6 +15,7 @@ class StandardGridToolBar extends React.Component {
         super(...args);
     }
 
+// && (!_.isUndefined(this.props.reportData))
     render() {
         console.log("THIS.PROPS", this.props);
         return (
@@ -23,15 +24,14 @@ class StandardGridToolBar extends React.Component {
                     <IconInputBox placeholder="Search users"
                                   onChange={this.props.onSearchChange}/>
                 </div>
-                {!isLoading && !isError ?
-                    <UsersCount usersCount={usersCount}
-                                isFiltered={this.isFiltered() && (!_.isUndefined(this.props.reportData))}
-                                filteredUsersCount={filteredUsersCount}
-                                clearAllFilters={this.props.clearAllFilters}
-                                isCounting={this.props.reportData.countingTotalRecords}
-                    /> :
-                    null
-                }
+                <div>
+                    <StandardGridUsersCount usersCount={usersCount}
+                                            // isFiltered={this.isFiltered()}
+                                            filteredUsersCount={filteredUsersCount}
+                                            clearAllFilters={this.props.clearAllFilters}
+                                            // isCounting={this.props.reportData.countingTotalRecords}
+                    />
+                </div>
                 <div className="standardGridNavigation">
                     <StandardGridNavigation getPreviousUsersPage={this.props.getPreviousUsersPage}
                                             getNextUsersPage={this.props.getNextUsersPage}
@@ -73,4 +73,3 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 export {StandardGridToolBar};
 
 export default connect(undefined, mapDispatchToProps)(StandardGridToolBar);
-

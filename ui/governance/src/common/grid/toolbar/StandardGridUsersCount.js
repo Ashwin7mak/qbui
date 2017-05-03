@@ -5,12 +5,12 @@ import * as SpinnerConfigurations from "../../../../../client-react/src/constant
 import Breakpoints from "../../../../../client-react/src/utils/breakpoints";
 import {colorBlack700, colorBlack100} from '../../../../../client-react/src/constants/colors';
 
-import './usersCount.scss';
+import './StandardGridUsersCount.scss';
 
 const largeBreakpointColor = colorBlack700;
 const smallBreakpointColor = colorBlack100;
 
-class UsersCount extends Component {
+class StandardGridUsersCount extends Component {
     /**
      * renders the users count
      * if we have some dynamic filtering in effect include the number of filtered users out of the total
@@ -32,7 +32,7 @@ class UsersCount extends Component {
 
         if (this.props.isFiltered && this.props.usersCount !== this.props.filteredUsersCount) {
             dbl = this.props.clearAllFilters;
-            message = (this.props.usersCount === 1) ? "report.filteredSingleRecordCount" : "report.filteredRecordCount";
+            message = (this.props.usersCount === 1) ? "count.filteredSingleUserCount" : "count.filteredUsersCount";
         }
 
         let loaderOptions = SpinnerConfigurations.RECORD_COUNT;
@@ -58,7 +58,7 @@ class UsersCount extends Component {
     }
 }
 
-UsersCount.propTypes = {
+StandardGridUsersCount.propTypes = {
     isFiltered: React.PropTypes.bool,
     usersCount: React.PropTypes.number,
     filteredUsersCount: React.PropTypes.number,
@@ -67,4 +67,4 @@ UsersCount.propTypes = {
 };
 
 
-export default UsersCount;
+export default StandardGridUsersCount;
