@@ -59,9 +59,6 @@ $toolpalette-header-font-size: 10px;
 
     .listOfElementsItem {
         padding-bottom: 3px; // No semantic spacing for 3px, but requested by design
-        &:focus {
-            outline: none;
-        }
         .fieldToken:not(.fieldTokenCollapsed) {
             width: 100%;
         }
@@ -93,7 +90,7 @@ $toolpalette-header-font-size: 10px;
             transition: opacity 0.3s, max-width 0.3s, max-height 0.3s;
         }
     }
-
+    //For the left nav focus
     &:focus {
         outline: none;
         border: $stroke-width-thin solid $selected-color;
