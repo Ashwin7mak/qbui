@@ -1,5 +1,7 @@
 @import '../../../../../reuse/client/src/assets/css/qbVariables';
 
+$table-properties-panel-width: 776px;
+
 .settingsAppShell {
     .pageActions {
         .deleteTable {
@@ -19,7 +21,15 @@
     }
     .tableInfoPanel {
         margin: 15px;
-        max-width: 776px;
+        max-width: $table-properties-panel-width;
+
+        .tableField {
+            padding-right: 20px;
+        }
+
+        .tableInfo .sections .iconSelection .iconChooser.open {
+            width: calc(200% - 20px);
+        }
 
         .tableInfoButtons {
             float: right;
@@ -58,3 +68,4 @@
         }
     }
 }
+

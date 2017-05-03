@@ -159,7 +159,7 @@ export default {
             recordNotAdded :"Record not added",
             recordSaved : "Record saved",
             recordNotSaved :"Record not saved",
-            deleted : "deleted",
+            deleted : "{value, plural,\n =0 {0 {nameForRecord} record}\n =1 {1 {nameForRecord} record}\n other {# {nameForRecord} records}\n} deleted",
             notDeleted : "not deleted",
             cannotLoad : "Cannot load record",
             error: {
@@ -631,7 +631,7 @@ export default {
             summaryTitle: "Drag and drop fields you want to add to your table onto the form.  You can arrange the fields in the order you want people to use them.",
 
             addFieldsTitle: "Get ready to add fields to your table",
-            tableNameHeading: "Table Name",
+            tableNameHeading: "Table name",
             recordNameHeading: "A record in the table is called",
             descriptionHeading: "Description",
             iconHeading: "Icon",

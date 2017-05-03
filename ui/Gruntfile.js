@@ -583,8 +583,6 @@ module.exports = function(grunt) {
                     // we will turn it back on once this button has been enabled again
                     './wdio/tests/reports/reportAddRecord.e2e.spec.js',
                     // Stabilize in CI before enabling
-                    './wdio/tests/reports/reportEditRecord.e2e.spec.js',
-                    './wdio/tests/reports/reportNavigation.e2e.spec.js',
                     './wdio/tests/reports/reportTable.e2e.spec.js',
                     './wdio/tests/reports/grouping/reportGroupingViaColumnHeader.e2e.spec.js',
                     './wdio/tests/reports/sorting/reportSortingViaColumnHeader.e2e.spec.js',
@@ -612,7 +610,10 @@ module.exports = function(grunt) {
                     reports: [
                         './wdio/tests/reports/reportDeleteRecord.e2e.spec.js',
                         './wdio/tests/reports/grouping/reportGroupingViaContainer.e2e.spec.js',
-                        './wdio/tests/reports/sorting/reportSortingViaContainer.e2e.spec.js'
+                        './wdio/tests/reports/sorting/reportSortingViaContainer.e2e.spec.js',
+                        './wdio/tests/reports/reportTopNav.e2e.spec.js',
+                        './wdio/tests/reports/reportEditRecord.e2e.spec.js',
+                        './wdio/tests/reports/reportNavigation.e2e.spec.js',
                     ],
                     forms: [
                         './wdio/tests/forms/formAdd.e2e.spec.js',

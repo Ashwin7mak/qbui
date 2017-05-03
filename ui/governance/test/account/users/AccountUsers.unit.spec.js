@@ -1,9 +1,12 @@
 import React from 'react';
 import {mount, shallow} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
-import {AccountUsers} from '../../../src/account/users/AccountUsers';
+import {AccountUsers} from '../../../src/account/users/AccountUsersMain';
 import GovernanceBundleLoader from '../../../src/locales/governanceBundleLoader';
 import AccountUsersGrid from '../../../src/account/users/grid/AccountUsersGrid';
+import {Provider} from "react-redux";
+import configureMockStore from 'redux-mock-store';
+import StandardGrid from '../../../src/common/grid/standardGrid';
 
 
 describe('AccountUsers', () => {
@@ -49,7 +52,7 @@ describe('AccountUsers', () => {
             }
         };
         let component = shallow(<AccountUsers {...props} />);
-        let grid = component.find(AccountUsersGrid);
+        let grid = component.find("AccountUsersGrid");
         expect(grid.props().showAccountColumns).toEqual(true);
         expect(grid.props().showRealmColumns).toEqual(false);
     });

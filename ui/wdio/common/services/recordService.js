@@ -109,8 +109,8 @@
              */
             addBulkRecords: function(app, table, genRecords) {
                 //Resolve the proper record endpoint specific to the generated app and table
-                var recordsEndpoint = recordBase.apiBase.resolveRecordsEndpoint(app.id, table.id);
-                return recordBase.createBulkRecords(recordsEndpoint, genRecords).catch(function(error) {
+                var recordsBulkEndpoint = recordBase.apiBase.resolveRecordsBulkEndpoint(app.id, table.id);
+                return recordBase.createBulkRecords(recordsBulkEndpoint, genRecords).catch(function(error) {
                     log.error('Error adding bulk records (possible random dataGen issue)');
                     return promise.reject(error);
                 });
