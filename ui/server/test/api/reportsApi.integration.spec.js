@@ -92,7 +92,7 @@
                     var value = testUtils.generateRandomString(10);
                     records.push([{id: 6, value: "' + value + '"}]);
                 }
-                var recordsEndpoint2 = recordBase.apiBase.resolveRecordsEndpoint(app.id, app.tables[1].id);
+                var recordsEndpoint2 = recordBase.apiBase.resolveRecordsBulkEndpoint(app.id, app.tables[1].id);
                 recordBase.createBulkRecords(recordsEndpoint2, records).then(
                     (success) => {
                         done();
@@ -125,7 +125,8 @@
             return recordBase.apiBase.executeRequest(reportEndpoint, consts.POST, reportToCreate).then(function(report) {
                 var r = JSON.parse(report.body);
                 //Execute a report
-                return recordBase.apiBase.executeRequest(reportEndpoint + r.id + '/results?format=' + FORMAT, consts.GET).then(function(reportResults) {
+                reportEndpoint = recordBase.apiBase.resolveReportsEndpoint(app.id, app.tables[0].id, r.id, true);
+                return recordBase.apiBase.executeRequest(reportEndpoint + '/results?format=' + FORMAT, consts.GET).then(function(reportResults) {
                     return JSON.parse(reportResults.body);
                 }, error => {
                     log.error(JSON.stringify(error));
@@ -209,7 +210,8 @@
                 recordBase.apiBase.executeRequest(reportEndpoint, consts.POST, reportToCreate).then(function(report) {
                     var r = JSON.parse(report.body);
                     //Execute report against 'resultComponents' endpoint.
-                    recordBase.apiBase.executeRequest(reportEndpoint + r.id + '/results?format=' + FORMAT, consts.GET).then(function(reportResults) {
+                    var reportResultsEndpoint = recordBase.apiBase.resolveReportsEndpoint(app.id, app.tables[0].id, r.id, true);
+                    recordBase.apiBase.executeRequest(reportResultsEndpoint + '/results?format=' + FORMAT, consts.GET).then(function(reportResults) {
                         var results = JSON.parse(reportResults.body);
                         //Verify records
                         verifyRecords(results);

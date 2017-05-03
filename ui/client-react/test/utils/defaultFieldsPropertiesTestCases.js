@@ -98,7 +98,8 @@ const testCases = [
             "datatypeAttributes": {
                 "type": "USER"
             },
-            "name": "User"
+            "name": "User",
+            "indexed": true
         }
     },
     {

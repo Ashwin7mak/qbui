@@ -9,7 +9,7 @@
     const testConsts = require('./api.test.constants');
     const errorCodes = require('../../src/api/errorCodes');
     const testUtils = require('./api.test.Utils');
-    var reportEndpoint = "";
+    let reportEndpoint = "";
 
     describe('API - Validate report CRUD operations', function() {
         var app;
@@ -41,6 +41,7 @@
             this.timeout(testConsts.INTEGRATION_TIMEOUT * appWithNoFlags.length);
             recordBase.createApp(appWithNoFlags).then(function(appResponse) {
                 app = JSON.parse(appResponse.body);
+                done();
             }).catch(function(error) {
                 log.error(JSON.stringify(error));
                 done();
@@ -64,7 +65,7 @@
 
             return createReport(reportToCreate)
                 .then(fetchReport)
-                .then(originalReport => updateRecord(originalReport, propsToChange))
+                .then(originalReport => updateReport(originalReport, propsToChange))
                 .then(originalReport => assertUpdateCorrect(originalReport, propsToChange))
                 .catch((error) => {
                     log.error(JSON.stringify(error));
@@ -94,7 +95,7 @@
             return recordBase.apiBase.executeRequest(reportEndpoint + reportId, consts.GET)
                 .then(fetchResponse => {
                     let returnedBody = JSON.parse(fetchResponse.body);
-                    return JSON.parse(returnedBody.body);
+                    return returnedBody;
                 });
         }
 

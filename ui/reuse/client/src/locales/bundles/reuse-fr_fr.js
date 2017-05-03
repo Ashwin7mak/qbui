@@ -13,6 +13,9 @@ export default {
         listOfElements: {
             noSearchResultsInToolPalette: 'Aucun champ ne correspond "{searchText}"',
             searchPlaceholder: "Filtre"
+        },
+        user: {
+            notLoggedIn: "Pas connecté"
         }
     }
 };
