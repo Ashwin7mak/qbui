@@ -164,7 +164,6 @@ export class FieldEditingTools extends Component {
     }
 
     render() {
-        console.log('this.props.isDragging: ', this.props.isDragging);
         let tabIndex = this.props.formBuilderChildrenTabIndex ? this.props.formBuilderChildrenTabIndex : "-1";
 
         let isSmall = Breakpoints.isSmallBreakpoint();
