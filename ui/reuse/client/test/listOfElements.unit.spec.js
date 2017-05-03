@@ -62,7 +62,7 @@ describe('ListOfElements', () => {
         expect(headers.at(1)).toHaveText(testElements[1].title);
     });
 
-    it('does not display groups of fields', () => {
+    it('does not display titles for a group of fields', () => {
         component = mount(<ListOfElements hideTitle={true} renderer={FieldTokenInMenuMock} elements={testElements}/>);
 
         const headers = component.find('.listOfElementsItemHeader');
