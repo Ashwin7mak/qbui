@@ -262,7 +262,7 @@ const record = (state = {}, action) => {
         currentRecd.pendEdits = model.get();
 
         let savedState = newState(currentRecd);
-        savedState.recordIdBeingEdited = +action.id;
+        savedState.recordIdBeingEdited = getRecordIdBeingEdited(action.id);
         return savedState;
     }
     case types.EDIT_RECORD_CHANGE: {
@@ -290,7 +290,7 @@ const record = (state = {}, action) => {
         //  could be a new model instance, so need to set the pending changes object
         currentRecd.pendEdits = model.get();
         let savedState = newState(currentRecd);
-        savedState.recordIdBeingEdited = +action.id;
+        savedState.recordIdBeingEdited = getRecordIdBeingEdited(action.id);
         return savedState;
     }
     case types.EDIT_RECORD_VALIDATE_FIELD: {
@@ -300,7 +300,7 @@ const record = (state = {}, action) => {
             model.set(currentRecd.pendEdits);
             model.setEditRecordValidate(action.content);
             let savedState = newState(currentRecd);
-            savedState.recordIdBeingEdited = +action.id;
+            savedState.recordIdBeingEdited = getRecordIdBeingEdited(action.id);
             return savedState;
         }
         return state;
@@ -330,6 +330,15 @@ const record = (state = {}, action) => {
         return state;
     }
 };
+
+/**
+ * converts id to number and returns value if id not equal to null/new else returns new
+ * @param id
+ * @returns number or 'new'
+ */
+function getRecordIdBeingEdited(id) {
+    return id === NEW_RECORD_VALUE || id === UNSAVED_RECORD_ID ? NEW_RECORD_VALUE : +id;
+}
 export default record;
 
 /***
