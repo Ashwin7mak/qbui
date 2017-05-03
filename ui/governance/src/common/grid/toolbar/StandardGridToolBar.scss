@@ -4,6 +4,7 @@
     display: flex;
     justify-content: space-between;
     color: $search-input-color;
+    min-height: 52px;
 
     .standardGridSearch {
         flex-shrink: 0;

@@ -1,6 +1,7 @@
 import React, {Component, PropTypes} from 'react';
 import _ from 'lodash';
 import '../../../../client-react/src/components/dataTable/qbGrid/qbGrid.scss';
+import './standardGrid.scss';
 import * as Table from 'reactabular-table';
 import {connect} from 'react-redux';
 
