@@ -59,7 +59,6 @@
 
         // Styling when the side trowser is on the left
         &:not(.sideTrowserPullRight):not(.sideTrowserDocked) {
-
             left: 0;
 
             // Hide menu by default
@@ -76,7 +75,6 @@
 
         // Styling when side trowser is on the right
         &.sideTrowserPullRight:not(.sideTrowserDocked) {
-
             left: auto;
             right: 0;
 
