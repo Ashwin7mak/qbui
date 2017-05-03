@@ -155,7 +155,7 @@ const columns = [
     {
         property: 'accountTrusteeFlags',
         header: {
-            label: 'CAN CERATE APPS?'
+            label: 'CAN CREATE APPS?'
         },
         cell: {
             formatters: [Formatters.FormatCanCreateApps]
