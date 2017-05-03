@@ -58,49 +58,47 @@ export let CardViewListHolder = React.createClass({
      * card has requested card selection (by swiping right)
      * or has finished card selection (by swiping left to hide selection column)
      */
-    onToggleCardSelection(allow = true, rowData = null) {
+    onToggleCardSelection(allow = true, rowId = null) {
 
         if (this.state.rowActionsRowId !== -1) {
             return;
         }
         this.setState({allowCardSelection: allow, swiping: false});
 
-        const flux = this.getFlux();
         if (!allow) {
-            flux.actions.selectedRows([]);
-        } else if (rowData) {
-            this.onCardRowSelected(rowData); // pre-select the card that started selection
+            this.props.selectRows([]);
+        } else if (rowId) {
+            this.props.selectRows([rowId]);
         }
     },
 
     /**
      * is row selected callback
      */
-    isRowSelected(row) {
-
-        return this.props.selectedRows.indexOf(row) !== -1;
+    isRowSelected(rowId) {
+        if (this.props.selectedRows && Array.isArray(this.props.selectedRows)) {
+            return this.props.selectedRows.indexOf(rowId) !== -1;
+        }
+        return false;
     },
 
     /**
      * card row selection callback
-     * @param row
+     * @param rowId
      */
-    onCardRowSelected(row) {
-
-        const flux = this.getFlux();
-
-        const id = row[this.props.primaryKeyName].value;
+    onCardRowSelected(rowId) {
+       // const id = row[this.props.primaryKeyName].value;
 
         let selectedRows = this.props.selectedRows;
 
-        if (selectedRows.indexOf(id) === -1) {
+        if (selectedRows.indexOf(rowId) === -1) {
             // not already selected, add to selectedRows
-            selectedRows.push(id);
+            selectedRows.push(rowId);
         } else {
             // already selected, remove from selectedRows
-            selectedRows = _.without(selectedRows, id);
+            selectedRows = _.without(selectedRows, rowId);
         }
-        flux.actions.selectedRows(selectedRows);
+        this.props.selectRows(selectedRows);
     },
 
     /** swiping to expose/hide checkbox column */
@@ -315,9 +313,9 @@ export let CardViewListHolder = React.createClass({
                               tblId={this.props.reportData.tblId}
                               allowCardSelection={this.allowCardSelection}
                               onToggleCardSelection={this.onToggleCardSelection}
-                              onRowSelected={this.onCardRowSelected}
                               onRowClicked={this.props.onRowClicked}
                               isRowSelected={this.isRowSelected}
+                              onRowSelected={this.onCardRowSelected}
                               onEditRecord={this.openRecordForEdit}
                               onSwipe={this.onSwipe}
                               onActionsOpened={this.rowActionsOpened}
