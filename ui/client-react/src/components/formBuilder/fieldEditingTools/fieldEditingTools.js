@@ -165,7 +165,7 @@ export class FieldEditingTools extends Component {
 
     render() {
         let tabIndex = this.props.formBuilderChildrenTabIndex ? this.props.formBuilderChildrenTabIndex : "-1";
-
+        let selectedField = this.props.selectedFields ? this.props.selectedFields[0] : {};
         let isSmall = Breakpoints.isSmallBreakpoint();
         let classNames = ["fieldEditingTools"];
         let isTouch = Device.isTouch();
@@ -176,7 +176,7 @@ export class FieldEditingTools extends Component {
             classNames.push("notTouchDevice");
         }
 
-        if (this.props.isDragging && _.isEqual(this.props.location, this.props.selectedFields[0])) {
+        if (this.props.isDragging && _.isEqual(this.props.location, selectedField)) {
             classNames.push("active");
         }
 
