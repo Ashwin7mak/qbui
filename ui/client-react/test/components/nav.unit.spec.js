@@ -81,6 +81,8 @@ describe('Nav Unit tests', () => {
         showTrowser: (content) => {},
         loadForm: (app, tbl, rpt, type, edit, show) => {},
         loadReports: (ctx, app, tbl) => {},
+        enterBuilderMode: () => {},
+        exitBuilderMode: () => {},
         fields: [],
         record: [],
         report: [],
@@ -94,7 +96,8 @@ describe('Nav Unit tests', () => {
         forms: [{id: 'view'}],
         shell: {
             leftNavVisible: true,
-            leftNavExpanded: false
+            leftNavExpanded: false,
+            inBuilderMode: false
         },
         reports: [],
         history: []
@@ -260,5 +263,23 @@ describe('Nav Unit tests', () => {
         component.navigateToBuilder();
 
         expect(mockFormStore.updateFormRedirectRoute).toHaveBeenCalledWith(testLocation.pathname);
+    });
+
+    it('enters report builder', () => {
+        let component = shallow(<Nav {...props} flux={flux} />);
+
+        component.instance().navigateToBuilderReport();
+
+        expect(props.enterBuilderMode);
+        expect(props.shell.inBuilderMode).toEqual(true);
+    });
+
+    it('exits report builder onCancel', () => {
+        let component = shallow(<Nav {...props} flux={flux} />);
+
+        component.instance().onCancel();
+
+        expect(props.exitBuilderMode);
+        expect(props.shell.inBuilderMode).toEqual(false);
     });
 });
