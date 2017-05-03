@@ -9,7 +9,7 @@ let profilePath = path.resolve(__dirname, '../build/chromeDebugPath'); //use to 
 
 // To run a custom set of tests, use `grunt test:client`
 
-// TODO:: Once governance folder is clean of dependencies on client-react, remove client-react auto-imports and transpilation throughout this file
+// TODO:: Once automation folder is clean of dependencies on client-react, remove client-react auto-imports and transpilation throughout this file
 module.exports = function(config) {
     "use strict";
 
@@ -235,9 +235,6 @@ module.exports = function(config) {
 
         newConf.reporters.push("coverage");
     }
-    // console.log("testsFile = " + testsFile);
-    // console.log("testWithCoverage = " + testWithCoverage);
-    // console.log("newConf =  \n" + JSON.stringify(newConf));
     config.set(newConf);
 
 };
