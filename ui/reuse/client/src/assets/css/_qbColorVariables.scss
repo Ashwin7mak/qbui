@@ -163,8 +163,9 @@ $microtext-normal-color:                $color-black-600;
 
 // top navigation
 $topnav-builder-background-color:       $color-purple-600;
+$topnav-button-focus-border-color:      $color-purple-400;
 $topnav-builder-icon-color:             $color-black-100;
-$topnav-builder-title-color:             $color-black-100;
+$topnav-builder-title-color:            $color-black-100;
 $topnav-title-icon-color:               $color-purple-600;
 $topnav-icon-color:                     $color-black-700;                       // not in XD spreadsheet
 $topnav-hover-color:                    $color-black-500;                       // not in XD spreadsheet
@@ -393,6 +394,9 @@ $trowser-icons-color: $color-black-100;                             // not in XD
 $trowser-header-background-color: $color-purple-600;                  // not in XD spreadsheet
 $trowser-footer-border-color: $color-black-300;
 $trowser-footer-background-color: $color-black-200;
+$trowser-footer-main-button-color: $color-cyan-500;
+$trowser-footer-alternative-button-color: $color-black-200;
+$trowser-footer-alternative-button-text-color: $color-indigo-500;
 $trowser-left-trowser-nav-border-color: $color-black-300;
 $trowser-right-trowser-nav-border-color: $color-black-300;
 $trowser-action-separator-color: $color-black-300;                   // not in XD spreadsheet
@@ -471,6 +475,12 @@ $input-border-focus-color:  $color-purple-600;
 @mixin text-input-focus {
     border: solid 1px $input-text-focus-border-color;
     border-color: $input-text-focus-border-color !important;
+    @include focus-shadow();
+}
+
+@mixin topnav-button-focus {
+    border: solid 1px $topnav-button-focus-border-color;
+    border-color: $topnav-button-focus-border-color !important;
     @include focus-shadow();
 }
 

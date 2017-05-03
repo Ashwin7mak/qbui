@@ -78,13 +78,13 @@
     }
 
     .alternativeButton {
-        background-color: $panel-footer-bg;
+        background-color: $trowser-footer-alternative-button-color;
         border: none;
-        color: $color-indigo-500;
+        color: $trowser-footer-alternative-button-text-color;
     }
 
     .mainButton {
         border: none;
-        background-color: $color-cyan-500;
+        background-color: $trowser-footer-main-button-color;
     }
 }
