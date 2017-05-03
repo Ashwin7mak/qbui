@@ -8,10 +8,10 @@ $builder-wrapper-border-color: $color-black-300;
     .topNav {
         background-color: $topnav-builder-background-color;
         .qbIcon {
-            color: $color-black-100;
+            color: $topnav-builder-icon-color;
         }
         .navLabel {
-            color: $color-black-100;
+            color: $topnav-builder-icon-color;
         }
         .btn-group button {
             background-color: $topnav-builder-background-color;
@@ -22,8 +22,8 @@ $builder-wrapper-border-color: $color-black-300;
             padding-top: 9px;
             margin-left: 5px;
             font-family: Lato, "Open Sans", Arial, Sans-Serif;
-            font-size: $font-size-h4;
-            color: $color-black-100;
+            font-size: $topnav-title-text-size;
+            color: $topnav-builder-title-color;
         }
     }
     .builderWrapperBody {

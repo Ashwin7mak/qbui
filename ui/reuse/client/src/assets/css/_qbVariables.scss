@@ -8,8 +8,6 @@
 $font-family: Lato, 'Open Sans', Helvetica, Arial, sans-serif;  /* default font face stack */
 $font-size: $font-size-base;          /* base/default body font size */
 $font-color: $color-black-700;                 /* default font color */
-$top-nav-height: 40px;
-$formBuilder-footer-height: 55px;
 
 /* breakpoints and mixins */
 $small-breakpoint-width: 640px;
@@ -147,3 +145,7 @@ $line-height-text-compact:      14px;
 $line-height-text-comfortable:  16px;
 $line-height-text-generous:     24px;
 $line-height-text-multiline:    13px;
+
+$top-nav-height: 40px;
+$trowser-footer-height: 60px;
+$topnav-title-text-size: $font-size-h4;
