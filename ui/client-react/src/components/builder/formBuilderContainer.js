@@ -149,8 +149,8 @@ export const FormBuilderContainer = React.createClass({
     getRightAlignedButtons() {
         return (
             <div>
-                <Button tabIndex={tabIndexConstants.CANCEL_BUTTON_TABINDEX} bsStyle="primary" onClick={this.onCancel} className="alternativeButton"><I18nMessage message="nav.cancel"/></Button>
-                <Button tabIndex={tabIndexConstants.SAVE_BUTTON_TABINDEX} bsStyle="primary" onClick={this.saveClicked} className="mainButton"><I18nMessage message="nav.save"/></Button>
+                <Button tabIndex={tabIndexConstants.CANCEL_BUTTON_TABINDEX} bsStyle="primary" onClick={this.onCancel} className="alternativeTrowserFooterButton"><I18nMessage message="nav.cancel"/></Button>
+                <Button tabIndex={tabIndexConstants.SAVE_BUTTON_TABINDEX} bsStyle="primary" onClick={this.saveClicked} className="mainTrowserFooterButton"><I18nMessage message="nav.save"/></Button>
             </div>
         );
     },
