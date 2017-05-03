@@ -10,11 +10,11 @@ import _ from 'lodash';
  * Manage array of record states
  * record state looks like following:
  * {
- *   recordId_recordBeingEdited: id,
+ *   recordIdBeingEdited: id,
  *   records : [array of records....]
  * }
  * example :
- * recordId_recordBeingEdited : 3
+ * recordIdBeingEdited : 3
  * records : [
  * {
  * id : "DRAWER10299", => if in a drawer id has a drawer context
@@ -45,10 +45,10 @@ const record = (state = {}, action) => {
      * Otherwise, replace the existing entry with its new state.
      *
      * @param obj - data object associated with new state
-     * @param recordId_RecordBeingEdited - recordId of Record Being Edited
+     * @param recordIdBeingEdited - recordId of Record Being Edited
      * @returns {*}
      */
-    function newState(obj, recordId_recordBeingEdited) {
+    function newState(obj, recordIdBeingEdited) {
         // reducer - no mutations against current state!
         const stateClone = _.cloneDeep(state);
 
@@ -66,8 +66,8 @@ const record = (state = {}, action) => {
             } else {
                 stateClone.records.push(obj);
             }
-            if (recordId_recordBeingEdited || obj.id  === NEW_RECORD_VALUE) {
-                stateClone.recordId_recordBeingEdited = (recordId_recordBeingEdited === NEW_RECORD_VALUE || recordId_recordBeingEdited === UNSAVED_RECORD_ID ? NEW_RECORD_VALUE : +recordId_recordBeingEdited);
+            if (recordIdBeingEdited || obj.id  === NEW_RECORD_VALUE) {
+                stateClone.recordIdBeingEdited = (recordIdBeingEdited === NEW_RECORD_VALUE || recordIdBeingEdited === UNSAVED_RECORD_ID ? NEW_RECORD_VALUE : +recordIdBeingEdited);
             }
         }
         return stateClone;
@@ -99,7 +99,7 @@ const record = (state = {}, action) => {
     case types.DELETE_RECORDS: {
         const ids = action.content.recIds;
         let states = {};
-        states.recordId_recordBeingEdited = '';
+        states.recordIdBeingEdited = '';
         states.records = [];
         ids.forEach((recId) => {
             let currentRecd = getRecordFromState(recId);
@@ -120,7 +120,7 @@ const record = (state = {}, action) => {
     case types.DELETE_RECORDS_COMPLETE: {
         const ids = action.content.recIds;
         let states = {};
-        states.recordId_recordBeingEdited = '';
+        states.recordIdBeingEdited = '';
         states.records = [];
         ids.forEach((recId) => {
             let currentRecd = getRecordFromState(recId);
@@ -137,7 +137,7 @@ const record = (state = {}, action) => {
     }
     case types.DELETE_RECORDS_ERROR: {
         let states = {};
-        states.recordId_recordBeingEdited = '';
+        states.recordIdBeingEdited = '';
         states.records = [];
         let errors = action.content.errors;
         if (Array.isArray(errors) && errors.length > 0) {
@@ -330,7 +330,9 @@ const record = (state = {}, action) => {
 export default record;
 
 /***
- * return the pendEdits of the matched record of record currently being edited or matched with recId if available
+ * return the pendEdits of the matched record
+ * if recId is passed in , that is used to get the record from the record store
+ * else record state's recordIdBeingEdited is used to get the record from the record store
  * @param record state
  * @param recId
  * @returns {{}}
@@ -339,13 +341,13 @@ export const getPendEdits = (recordState, recId) => {
     /**
      * return empty object if either is true
      * record state or records in the state is undefined
-     * recId and recordId_recordBeingEdited both are undefined
+     * recId and recordIdBeingEdited both are undefined
      */
-    if (!recordState || !recordState.records || (!recId && !recordState.recordId_recordBeingEdited)) {
+    if (!recordState || !recordState.records || (!recId && !recordState.recordIdBeingEdited)) {
         return {};
     }
-    // the record returned is the one having the id matching recId if passed in or record state's recordId_recordBeingEdited
-    const recordId = recId || recordState.recordId_recordBeingEdited.toString();
+    // the record returned is the one having the id matching recId if passed in or record state's recordIdBeingEdited
+    const recordId = recId || recordState.recordIdBeingEdited.toString();
     const recordCurrentlyEdited = _.find(recordState.records,
         rec=>rec.id.toString() === recordId);
     return (recordCurrentlyEdited ? recordCurrentlyEdited.pendEdits : {}) || {};
