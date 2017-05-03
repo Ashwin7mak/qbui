@@ -93,14 +93,6 @@ class formBuilderPage {
         browser.pause(fiveSeconds);
         return this;
     }
-    removeField(index) {
-        // Removes a specific field in the form builder by clicking on its DELETE icon
-        let field = browser.element(this.getFieldLocator(index));
-        let deletedFieldName = field.getText();
-        field.element('.deleteFieldIcon').click();
-        browser.pause(oneSecond);
-        return deletedFieldName;
-    }
     getFieldLabels() {
         // Gets the list of field labels from the form builder
         let fields = browser.elements('.field');
@@ -136,9 +128,17 @@ class formBuilderPage {
         topNavPO.formBuilderBtn.click();
         topNavPO.modifyThisForm.waitForExist();
         topNavPO.modifyThisForm.click();
-        this.firstField.waitForExist();
+        this.firstField.waitForVisible();
         browser.pause(fiveSeconds);
         return this;
+    }
+    removeField(index) {
+        // Removes the specified field by clicking on its DELETE icon
+        let field = browser.element(this.getFieldLocator(index));
+        let deletedFieldName = field.getText();
+        field.element('.deleteFieldIcon').click();
+        browser.pause(oneSecond);
+        return deletedFieldName;
     }
     save() {
         // Clicks on the SAVE button in the form builder and waits for the next page to appear
@@ -192,7 +192,7 @@ class formBuilderPage {
         this.slowDrag(target, label);
         // release button
         browser.buttonUp();
-        // pause to terminate drag (which is one reason why we can't just call dragAndDrop)
+        // pause to terminate drag
         browser.pause(fiveSeconds);
         return this;
     }

@@ -36,13 +36,26 @@
         });
 
         beforeEach(function() {
+            // clean up any 'mess' which might have been left by a previously failed test
             browser.windowHandleMaximize();
+            browser.buttonUp();
             // open first table
             e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
             // edit first record
             reportContentPO.clickOnRecordInReportTable(0);
             // invoke form builder
             return formBuilderPO.open();
+        });
+
+        it('select a field, add a new field, verify new field is added directly below selection', function() {
+            let selectedField = formBuilderPO.selectFieldByIndex(1);
+            let newField = formBuilderPO.listOfElementsItem;
+            let newFieldLabel = newField.getText();
+            expect(formBuilderPO.getFieldLabels()[0]).not.toBe(newFieldLabel);
+            // add the first new field item to the form
+            newField.click();
+            browser.pause(5000);
+            expect(formBuilderPO.getFieldLabels()[0]).toBe(newFieldLabel);
         });
 
         it('drags a field outside of viewport & verifies autoscroll', function() {
@@ -54,13 +67,13 @@
             let browserSize = browser.windowHandleSize();
             browser.setViewportSize({width: browserSize.value.width, height: firstFieldSize.height * 4}, true);
             expect(lastField.isVisibleWithinViewport()).toBe(false);
-            // move cursor to first field label
-            firstField.element('.fieldLabel').moveToObject(1, 1).buttonDown();
-            // move cursor down until autoscroll begins
+            // move cursor to first field label & press MB1
+            firstField.element('.fieldLabel').moveToObject().buttonDown();
+            // drag DOWN down until autoscroll begins
             while (firstField.isVisibleWithinViewport()) {
                 browser.moveTo(null, 0, 1);
             }
-            // wait for autoscroll to reach the bottom (or timeout)
+            // wait for autoscroll to reach the bottom
             while (!lastField.isVisibleWithinViewport()) {
                 browser.pause(formBuilderPO.oneSecond);
             }
@@ -82,13 +95,13 @@
             // delete the first field
             formBuilderPO.removeField(1);
             // verify that the first item is removed
-            expect(formBuilderPO.getFieldLabels().indexOf(firstField)).toEqual(-1);
+            expect(formBuilderPO.getFieldLabels()).not.toContain(firstField);
             // save & reopen
             formBuilderPO.save().open();
             // verify that the first item is still gone
-            expect(formBuilderPO.getFieldLabels().indexOf(firstField)).toEqual(-1);
+            expect(formBuilderPO.getFieldLabels()).not.toContain(firstField);
         });
-
+/*
         it('remove a field & verify presence after CANCEL', function() {
             // store the list of fields before deletion
             let firstField = formBuilderPO.getFieldLabels()[0];
@@ -133,17 +146,6 @@
             expect(formBuilderPO.getFieldLabels()).toEqual(originalFields);
         });
 
-        it('select a field, add a new field, verify new field is added directly below selection', function() {
-            let selectedField = formBuilderPO.selectFieldByIndex(2);
-            let newField = formBuilderPO.listOfElementsItem;
-            let newFieldLabel = newField.getText();
-            expect(formBuilderPO.getFieldLabels()[2]).not.toBe(newFieldLabel);
-            // add the first new field item to the form
-            newField.click();
-            browser.pause(5000);
-            expect(formBuilderPO.getFieldLabels()[2]).toBe(newFieldLabel);
-        });
-
         it('search for fields in the new field picker', function() {
             let newFields = formBuilderPO.getNewFieldLabels();
             let label = formBuilderPO.fieldTokenTitle.getText();
@@ -169,8 +171,8 @@
             // store the list of fields before moving
             let origFields = formBuilderPO.getFieldLabels();
             // drag the 1st field below the 2nd one
-            let source = formBuilderPO.getFieldLocator(1);
-            let target = formBuilderPO.getFieldLocator(2);
+            let source = formBuilderPO.getFieldLocator(1) + ' .fieldLabel';
+            let target = formBuilderPO.getFieldLocator(2) + ' .fieldLabel';
             formBuilderPO.slowDragAndDrop(source, target);
             // verify that the first 2 items have changed position
             let movedFields = formBuilderPO.getFieldLabels();
@@ -186,8 +188,8 @@
             // store the list of fields before moving
             let origFields = formBuilderPO.getFieldLabels();
             // drag the 1st field below the 2nd one
-            let source = formBuilderPO.getFieldLocator(1);
-            let target = formBuilderPO.getFieldLocator(2);
+            let source = formBuilderPO.getFieldLocator(1) + ' .fieldLabel';
+            let target = formBuilderPO.getFieldLocator(2) + ' .fieldLabel';
             formBuilderPO.slowDragAndDrop(source, target);
             // verify that the first 2 items have changed position
             let movedFields = formBuilderPO.getFieldLabels();
@@ -350,6 +352,6 @@
         xit('check the REQUIRED checkbox, save & verify checked', function() {
              //TODO: MC-2164: REQUIRED checkbox needs a reliable way to automate click & query
         });
-
+*/
     });
 }());
