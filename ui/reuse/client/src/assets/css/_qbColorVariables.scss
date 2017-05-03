@@ -468,7 +468,7 @@ $input-border-focus-color:  $color-purple-600;
 }
 
 @mixin focus-shadow-thick($color: $input-border-focus-color) {
-    box-shadow: 0 0 4px 0px rgba($color, 0.75);
+    box-shadow: 0 0 4px 0px rgba($input-border-focus-color, 0.75);
     outline: none;
 }
 
