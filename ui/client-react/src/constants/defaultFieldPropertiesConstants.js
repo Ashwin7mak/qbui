@@ -1,7 +1,7 @@
 import FieldFormats from '../../src/utils/fieldFormats';
 import Locale from '../locales/locales';
 
-const defaultOptionsI18nPath = `builder.defaultMultichoiceOptions`;
+export const defaultOptionsI18nPath = 'builder.defaultMultichoiceOptions';
 
 export const DefaultFieldProperties = {
     defaultScalarFieldsProperties(type, fieldType) {
@@ -29,7 +29,8 @@ export const DefaultFieldProperties = {
             "choices": [
                 {"coercedValue": {"value": Locale.getMessage(`${defaultOptionsI18nPath}.first`)}, "displayValue": Locale.getMessage(`${defaultOptionsI18nPath}.first`)},
                 {"coercedValue": {"value": Locale.getMessage(`${defaultOptionsI18nPath}.second`)}, "displayValue": Locale.getMessage(`${defaultOptionsI18nPath}.second`)},
-                {"coercedValue": {"value": Locale.getMessage(`${defaultOptionsI18nPath}.third`)}, "displayValue": Locale.getMessage(`${defaultOptionsI18nPath}.third`)}],
+                {"coercedValue": {"value": Locale.getMessage(`${defaultOptionsI18nPath}.third`)}, "displayValue": Locale.getMessage(`${defaultOptionsI18nPath}.third`)}
+            ],
             "sortAsGiven": false
         }
     },
