@@ -547,7 +547,7 @@
 
             if (items !== []) {
                 //verify the check mark beside the item selected
-                expect(items[0].element('.iconUISturdy-check').isVisible()).toBeTruthy();
+                expect(items[0].element('.iconUISturdy-checkmarkincircle-outline').isVisible()).toBeTruthy();
             } else {
                 browser.logger.error('Item with name ' + itemToVerify + ' not found under column header menu');
                 throw new Error('Item with name ' + itemToVerify + ' not found under column header menu');
