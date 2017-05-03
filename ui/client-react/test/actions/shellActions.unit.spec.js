@@ -58,11 +58,4 @@ describe('Shell actions', () => {
         expect(shellActions.changeLocale(locale)).toEqual({type: types.CHANGE_LOCALE, locale});
     });
 
-    it('should create an action to enter builder mode', () => {
-        expect(shellActions.enterBuilderMode()).toEqual({type: types.ENTER_BUILDER_MODE});
-    });
-
-    it('should create an action to exit builder mode', () => {
-        expect(shellActions.exitBuilderMode()).toEqual({type: types.EXIT_BUILDER_MODE});
-    });
 });

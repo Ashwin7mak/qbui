@@ -369,4 +369,18 @@ export const hideColumn = (context, appId, tblId, rptId, params) => {
         }
     };
 };
+/**
+ * Enter Builder Mode
+ * @returns {{type}}
+ */
+export const enterBuilderMode = (context) => {
+    return event(context, types.ENTER_BUILDER_MODE, {});
+};
 
+/**
+ * Exit Builder Mode
+ * @returns {{type: *}}
+ */
+export const exitBuilderMode = (context) => {
+    return event(context, types.EXIT_BUILDER_MODE, {});
+};

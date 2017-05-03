@@ -29,6 +29,7 @@ import {connect} from 'react-redux';
 import * as ShellActions from '../../actions/shellActions';
 import * as FormActions from '../../actions/formActions';
 import * as ReportActions from '../../actions/reportActions';
+import {enterBuilderMode, exitBuilderMode} from '../../../src/actions/reportActions';
 import * as TableCreationActions from '../../actions/tableCreationActions';
 
 import {CONTEXT} from '../../actions/context';
@@ -110,7 +111,7 @@ export const Nav = React.createClass({
     },
 
     navigateToBuilderReport() {
-        this.props.enterBuilderMode();
+        this.props.enterBuilderMode(CONTEXT.REPORT.NAV);
 
     },
 
@@ -326,7 +327,7 @@ export const Nav = React.createClass({
     },
 
     onCancel() {
-        this.props.exitBuilderMode();
+        this.props.exitBuilderMode(CONTEXT.REPORT.NAV);
     },
 
     getRightAlignedButtons() {
@@ -575,9 +576,9 @@ const mapDispatchToProps = (dispatch) => {
 
         updateFormRedirectRoute: (route) => dispatch(updateFormRedirectRoute(route)),
 
-        enterBuilderMode: () => dispatch(ShellActions.enterBuilderMode()),
+        enterBuilderMode: (context) => dispatch(enterBuilderMode(context)),
 
-        exitBuilderMode: () => dispatch(ShellActions.exitBuilderMode()),
+        exitBuilderMode: (context) => dispatch(exitBuilderMode(context)),
 
         showTableCreationDialog: () => dispatch(TableCreationActions.showTableCreationDialog()),
 
