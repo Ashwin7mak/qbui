@@ -407,11 +407,11 @@ class ReportUtils {
      * Returns an array of columns that are in allColumns but not in currentColumns.
      * @param allColumns
      * @param currentColumns
-     * @param differenceBy iterate by this
+     * @param columnProperty iterate by this
      * @return array
      */
-    static getDifferenceOfColumns(allColumns, currentColumns, differenceBy) {
-        return _.differenceBy(allColumns, currentColumns, differenceBy);
+    static getDifferenceOfColumns(allColumns, currentColumns, columnProperty = 'id') {
+        return _.differenceBy(allColumns, currentColumns, columnProperty);
     }
 }
 
