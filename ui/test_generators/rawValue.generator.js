@@ -193,13 +193,13 @@
         },
 
         //Generates and returns a date
-        generateDate: function() {
-            return chance.apiFormattedDate();
+        generateDate: function(options) {
+            return chance.apiFormattedDate(options);
         },
 
         //Generates and returns a dateTime that can be sent to the api
-        generateDateTime: function() {
-            return chance.apiFormattedDateTime();
+        generateDateTime: function(options) {
+            return chance.apiFormattedDateTime(options);
         },
 
         //Generates and returns a time that can be sent to the api
