@@ -50,20 +50,28 @@ describe('ReportFieldSelectMenu reducer functions for refreshing fields', () => 
     });
 
     it('returns correct state with the menu open', () => {
+        const state = reducer(initialState, {type: types.OPEN_FIELD_SELECT_MENU, content: {}});
+        expect(state.isCollapsed).toEqual(false);
+    });
+
+    it('returns correct state with the menu closed', () => {
+        const state = reducer(initialState, {type: types.CLOSE_FIELD_SELECT_MENU, content: {}});
+        expect(state.isCollapsed).toEqual(true);
+    });
+
+    it('returns correct state with addBeforeColumn set to true', () => {
         let content = {
             addBeforeColumn: true
         };
         const state = reducer(initialState, {type: types.OPEN_FIELD_SELECT_MENU, content: content});
-        expect(state.isCollapsed).toEqual(false);
         expect(state.addBeforeColumn).toEqual(true);
     });
 
-    it('returns correct state with the menu closed', () => {
+    it('returns correct state with addBeforeColumn set to true', () => {
         let content = {
             addBeforeColumn: false
         };
-        const state = reducer(initialState, {type: types.CLOSE_FIELD_SELECT_MENU, content: content});
-        expect(state.isCollapsed).toEqual(true);
+        const state = reducer(initialState, {type: types.OPEN_FIELD_SELECT_MENU, content: content});
         expect(state.addBeforeColumn).toEqual(false);
     });
 });

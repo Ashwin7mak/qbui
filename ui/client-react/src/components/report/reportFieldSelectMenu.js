@@ -18,14 +18,11 @@ export class ReportFieldSelectMenu extends Component {
     constructor(props) {
         super(props);
 
-        this.refreshMenuContent();
     }
 
     componentDidMount() {
-        if (this.props.appId && this.props.tblId) {
-            this.refreshMenuContent();
-            this.props.closeFieldSelectMenu(CONTEXT.REPORT.NAV);
-        }
+        this.refreshMenuContent();
+        this.props.closeFieldSelectMenu(CONTEXT.REPORT.NAV);
     }
 
     refreshMenuContent = () => {
