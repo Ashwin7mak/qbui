@@ -586,6 +586,6 @@ describe('ReportUtils', () => {
                 }
             ];
             expect(ReportUtils.getDifferenceOfColumns(testAllColumns, testCurrColumns, 'id')).toEqual(expectedOutput);
-        })
-    })
+        });
+    });
 });
