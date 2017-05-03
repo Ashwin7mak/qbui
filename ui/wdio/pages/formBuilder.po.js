@@ -84,7 +84,7 @@ class formBuilderPage {
 
     getFieldLocator(index) {
         // Returns a locator string for a specific field in the form builder
-        return '.formElementContainer:nth-child(' + index + ') .dragAndDropField';
+        return '.formElementContainer:nth-child(' + index + ')';
     }
     cancel() {
         // Clicks on CANCEL in the form builder and waits for the next page to render
@@ -95,17 +95,11 @@ class formBuilderPage {
     }
     removeField(index) {
         // Removes a specific field in the form builder by clicking on its DELETE icon
-        let fieldLocator = this.getFieldLocator(index);
-        let field = browser.element(fieldLocator);
-        let deleteBtn = field.element('.deleteFieldIcon');
-        browser.moveToObject(fieldLocator);
-        deleteBtn.waitForVisible();
-        deleteBtn.click();
-        // wait for the field to disappear
-        field.waitForExist(fiveSeconds, true);
-        // and give the rest of the fields time to settle...
-        browser.pause(fiveSeconds);
-        return this;
+        let field = browser.element(this.getFieldLocator(index));
+        let deletedFieldName = field.getText();
+        field.element('.deleteFieldIcon').click();
+        browser.pause(oneSecond);
+        return deletedFieldName;
     }
     getFieldLabels() {
         // Gets the list of field labels from the form builder
@@ -139,7 +133,6 @@ class formBuilderPage {
     open() {
         // Invokes the form builder from the VIEW RECORD page
         topNavPO.formBuilderBtn.waitForExist();
-        browser.pause(fiveSeconds);
         topNavPO.formBuilderBtn.click();
         topNavPO.modifyThisForm.waitForExist();
         topNavPO.modifyThisForm.click();
@@ -172,7 +165,8 @@ class formBuilderPage {
     }
     selectFieldByIndex(index) {
         // Selects the field at the specified index and verifies that it is reflected in the properties panel
-        browser.element(this.getFieldLocator(index) + ' .fieldLabel').click();
+        // can't click on fieldLabel due to 'other element would get the click...'
+        browser.moveToObject(this.getFieldLocator(index) + ' .fieldLabel').buttonDown().buttonUp();
         this.fieldProperty_Name.waitForExist(); // assume it didn't exist, i.e. nothing was previously selected
         return this.fieldProperty_Name.getText();
     }

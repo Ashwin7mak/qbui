@@ -36,6 +36,7 @@
         });
 
         beforeEach(function() {
+            browser.windowHandleMaximize();
             // open first table
             e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
             // edit first record
@@ -46,39 +47,122 @@
 
         it('drags a field outside of viewport & verifies autoscroll', function() {
             let numFields = formBuilderPO.getFieldLabels().length;
-            let firstFieldLocator = formBuilderPO.getFieldLocator(1);
-            let firstField = browser.element(firstFieldLocator);
+            let firstField = browser.element(formBuilderPO.getFieldLocator(1));
             let lastField = browser.element(formBuilderPO.getFieldLocator(numFields));
             let firstFieldSize = firstField.getElementSize();
+            // shrink the window to cause last element to not be visible and make autoscroll faster
             let browserSize = browser.windowHandleSize();
-            // temporarily shrink the window to cause last element to not be visible
-            browser.windowHandleSize({width: browserSize.value.width, height: firstFieldSize.height * 4});
+            browser.setViewportSize({width: browserSize.value.width, height: firstFieldSize.height * 4}, true);
             expect(lastField.isVisibleWithinViewport()).toBe(false);
-            // click on first field & drag DOWN until autoscroll begins
-            browser.element(firstFieldLocator + ' .fieldLabel').click();
-            browser.buttonDown();
+            // move cursor to first field label
+            firstField.element('.fieldLabel').moveToObject(1, 1).buttonDown();
+            // move cursor down until autoscroll begins
             while (firstField.isVisibleWithinViewport()) {
                 browser.moveTo(null, 0, 1);
             }
             // wait for autoscroll to reach the bottom (or timeout)
             while (!lastField.isVisibleWithinViewport()) {
-                browser.pause(100);
+                browser.pause(formBuilderPO.oneSecond);
             }
-            // release mouse button
-            browser.buttonUp();
-            // click on last field & drag UP until autoscroll begins
-            lastField = browser.element(formBuilderPO.getFieldLocator(numFields));
-            lastField.element('.fieldLabel').moveToObject().buttonDown();
+            // drag UP until autoscroll begins
             while (lastField.isVisibleWithinViewport()) {
                 browser.moveTo(null, 0, -1);
             }
             // wait for first field to become visible
             while (!firstField.isVisibleWithinViewport()) {
-                browser.pause(100);
+                browser.pause(formBuilderPO.oneSecond);
             }
-            // release button & restore window
+            // release button
             browser.buttonUp();
-            browser.windowHandleSize({width: browserSize.value.width, height: browserSize.value.width});
+        });
+
+        it('remove a field & verify absence after SAVE', function() {
+            // store the list of fields before deletion
+            let firstField = formBuilderPO.getFieldLabels()[0];
+            // delete the first field
+            formBuilderPO.removeField(1);
+            // verify that the first item is removed
+            expect(formBuilderPO.getFieldLabels().indexOf(firstField)).toEqual(-1);
+            // save & reopen
+            formBuilderPO.save().open();
+            // verify that the first item is still gone
+            expect(formBuilderPO.getFieldLabels().indexOf(firstField)).toEqual(-1);
+        });
+
+        it('remove a field & verify presence after CANCEL', function() {
+            // store the list of fields before deletion
+            let firstField = formBuilderPO.getFieldLabels()[0];
+            // delete the first field
+            formBuilderPO.removeField(1);
+            // verify that the first item is removed
+            expect(formBuilderPO.getFieldLabels().indexOf(firstField)).toEqual(-1);
+            // cancel & reopen
+            formBuilderPO.cancel().open();
+            // verify that the first item has been restored
+            expect(formBuilderPO.getFieldLabels().indexOf(firstField)).toEqual(0);
+        });
+
+        it('rename a field, save & verify revision', function() {
+            formBuilderPO.selectFieldByIndex(1);
+            // revise the field name
+            let testString = 'testString';
+            formBuilderPO.fieldProperty_Name.setValue(testString);
+            browser.pause(5000);
+            //  verify that the field label was revised
+            let existingFields = formBuilderPO.getFieldLabels();
+            expect(existingFields[0]).toEqual(testString);
+            // save & reopen
+            formBuilderPO.save().open();
+            // verify field name is revised
+            expect(formBuilderPO.getFieldLabels()).toEqual(existingFields);
+        });
+
+        it('rename a field, cancel & verify no revision', function() {
+            let originalFields = formBuilderPO.getFieldLabels();
+            formBuilderPO.selectFieldByIndex(1);
+            // revise the field name
+            let testString = 'testString';
+            formBuilderPO.fieldProperty_Name.setValue(testString);
+            browser.pause(5000);
+            //  verify that the field label was revised
+            let existingFields = formBuilderPO.getFieldLabels();
+            expect(existingFields[0]).toEqual(testString);
+            // cancel & reopen
+            formBuilderPO.cancel().open();
+            // verify field name is not revised
+            expect(formBuilderPO.getFieldLabels()).toEqual(originalFields);
+        });
+
+        it('select a field, add a new field, verify new field is added directly below selection', function() {
+            let selectedField = formBuilderPO.selectFieldByIndex(2);
+            let newField = formBuilderPO.listOfElementsItem;
+            let newFieldLabel = newField.getText();
+            expect(formBuilderPO.getFieldLabels()[2]).not.toBe(newFieldLabel);
+            // add the first new field item to the form
+            newField.click();
+            browser.pause(5000);
+            expect(formBuilderPO.getFieldLabels()[2]).toBe(newFieldLabel);
+        });
+
+        it('search for fields in the new field picker', function() {
+            let newFields = formBuilderPO.getNewFieldLabels();
+            let label = formBuilderPO.fieldTokenTitle.getText();
+            // verify expected initial state (because we're about to verify that it changes)
+            formBuilderPO.listOfElementsItemGroup.waitForExist();
+            // search for label of first new field token
+            formBuilderPO.search(label);
+            // wait for groups to disappear
+            formBuilderPO.listOfElementsItemGroup.waitForExist(null, true);
+            // expect a single match in search results
+            expect(formBuilderPO.getNewFieldLabels().length).toBe(1);
+            // expect that label to match the search term
+            expect(formBuilderPO.fieldTokenTitle.getText()).toBe(label);
+            // remove the search term
+            formBuilderPO.search();
+            // wait for groups to reappear
+            formBuilderPO.listOfElementsItemGroup.waitForExist();
+            // expect original new field tokens to reappear
+            expect(formBuilderPO.getNewFieldLabels()).toEqual(newFields);
         });
 
         it('move a field via drag/drop & verify revised order after SAVE', function() {
@@ -128,32 +212,6 @@
             formBuilderPO.KB_cancel();
             formBuilderPO.open();
             expect(formBuilderPO.getFieldLabels()).toEqual(originalOrder);
-        });
-
-        it('remove a field & verify absence after SAVE', function() {
-            // store the list of fields before deletion
-            let firstField = formBuilderPO.getFieldLabels()[0];
-            // delete the first field
-            formBuilderPO.removeField(1);
-            // verify that the first item is removed
-            expect(formBuilderPO.getFieldLabels().indexOf(firstField)).toEqual(-1);
-            // save & reopen
-            formBuilderPO.save().open();
-            // verify that the first item is still gone
-            expect(formBuilderPO.getFieldLabels().indexOf(firstField)).toEqual(-1);
-        });
-
-        it('remove a field & verify presence after CANCEL', function() {
-            // store the list of fields before deletion
-            let firstField = formBuilderPO.getFieldLabels()[0];
-            // delete the first field
-            formBuilderPO.removeField(1);
-            // verify that the first item is removed
-            expect(formBuilderPO.getFieldLabels().indexOf(firstField)).toEqual(-1);
-            // cancel & reopen
-            formBuilderPO.cancel().open();
-            // verify that the first item has been restored
-            expect(formBuilderPO.getFieldLabels().indexOf(firstField)).toEqual(0);
         });
 
         it('remove a field via keyboard & verify presence after CANCEL', function() {
@@ -254,69 +312,6 @@
             formBuilderPO.save().open();
             // verify new field is present
             expect(formBuilderPO.getFieldLabels()).toEqual(existingFields);
-        });
-
-        it('rename a field, save & verify revision', function() {
-            formBuilderPO.selectFieldByIndex(1);
-            // revise the field name
-            let testString = 'testString';
-            formBuilderPO.fieldProperty_Name.setValue(testString);
-            browser.pause(5000);
-            //  verify that the field label was revised
-            let existingFields = formBuilderPO.getFieldLabels();
-            expect(existingFields[0]).toEqual(testString);
-            // save & reopen
-            formBuilderPO.save().open();
-            // verify field name is revised
-            expect(formBuilderPO.getFieldLabels()).toEqual(existingFields);
-        });
-
-        it('rename a field, cancel & verify no revision', function() {
-            let originalFields = formBuilderPO.getFieldLabels();
-            formBuilderPO.selectFieldByIndex(1);
-            // revise the field name
-            let testString = 'testString';
-            formBuilderPO.fieldProperty_Name.setValue(testString);
-            browser.pause(5000);
-            //  verify that the field label was revised
-            let existingFields = formBuilderPO.getFieldLabels();
-            expect(existingFields[0]).toEqual(testString);
-            // cancel & reopen
-            formBuilderPO.cancel().open();
-            // verify field name is not revised
-            expect(formBuilderPO.getFieldLabels()).toEqual(originalFields);
-        });
-
-        it('search for fields in the new field picker', function() {
-            let newFields = formBuilderPO.getNewFieldLabels();
-            let label = formBuilderPO.fieldTokenTitle.getText();
-            // verify expected initial state (because we're about to verify that it changes)
-            formBuilderPO.listOfElementsItemGroup.waitForExist();
-            // search for label of first new field token
-            formBuilderPO.search(label);
-            // wait for groups to disappear
-            formBuilderPO.listOfElementsItemGroup.waitForExist(null, true);
-            // expect a single match in search results
-            expect(formBuilderPO.getNewFieldLabels().length).toBe(1);
-            // expect that label to match the search term
-            expect(formBuilderPO.fieldTokenTitle.getText()).toBe(label);
-            // remove the search term
-            formBuilderPO.search();
-            // wait for groups to reappear
-            formBuilderPO.listOfElementsItemGroup.waitForExist();
-            // expect original new field tokens to reappear
-            expect(formBuilderPO.getNewFieldLabels()).toEqual(newFields);
-        });
-
-        it('select a field, add a new field, verify new field is added directly below selection', function() {
-            let selectedField = formBuilderPO.selectFieldByIndex(2);
-            let newField = formBuilderPO.listOfElementsItem;
-            let newFieldLabel = newField.getText();
-            expect(formBuilderPO.getFieldLabels()[2]).not.toBe(newFieldLabel);
-            // add the first new field item to the form
-            newField.click();
-            browser.pause(5000);
-            expect(formBuilderPO.getFieldLabels()[2]).toBe(newFieldLabel);
         });
 
         xit('select a field via KB, add a new field via KB, verify new field is added directly below selection', function() {
