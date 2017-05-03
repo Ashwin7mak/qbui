@@ -2,6 +2,7 @@ import React, {PropTypes} from "react";
 import _ from "lodash";
 
 import favicons from '../../constants/favicons';
+import {routes} from '../routeConstants';
 
 var Html = React.createClass({
     propTypes: {
@@ -38,7 +39,7 @@ var Html = React.createClass({
                 EPISODES.run = function(fn, context, params) { EPISODES.q.push( ["run", fn, context, params] ); };
 
                 EPISODES.bSendBeacon = 1;         // 1 == beacon back the resulting metrics
-                EPISODES.beaconUrl = '/api/n/v1/clientPerf';  // URL to use for the metrics beacon
+                EPISODES.beaconUrl = "${routes.LOG_CLIENT_PERF_MSG}";  // URL to use for the metrics beacon
                 EPISODES.beaconType = 'POST';  // URL to use for the metrics beacon
                 EPISODES.bPostMessage = false; // no iframes to notify
                 EPISODES.autorun = false; // done will be called after all routes rendering is done

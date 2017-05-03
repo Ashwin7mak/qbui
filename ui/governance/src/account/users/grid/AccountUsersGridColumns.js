@@ -11,7 +11,7 @@ const columns = [
     {
         property: 'firstName',
         header: {
-            label: 'First name'
+            label: 'FIRST NAME'
         },
         fieldDef: {
             id: 1,
@@ -23,7 +23,7 @@ const columns = [
     {
         property: 'lastName',
         header: {
-            label: 'Last name'
+            label: 'LAST NAME'
         },
         fieldDef: {
             id: 2,
@@ -35,7 +35,7 @@ const columns = [
     {
         property: 'email',
         header: {
-            label: 'Email'
+            label: 'EMAIL'
         },
         props: {
             classes: ['EmailColumn']
@@ -50,7 +50,7 @@ const columns = [
     {
         property: 'userName',
         header: {
-            label: 'User name'
+            label: 'USER NAME'
         },
         props: {
             classes: ['ScreennameColumn']
@@ -65,7 +65,7 @@ const columns = [
     {
         property: 'lastAccess',
         header: {
-            label: 'Last access'
+            label: 'LAST ACCESS'
         },
         cell: {
             formatters: [Formatters.FormatLastAccessString]
@@ -83,7 +83,7 @@ const columns = [
     {
         property: 'hasAppAccess',
         header: {
-            label: 'QuickBase access status'
+            label: 'QUICKBASE ACCESS STATUS'
         },
         cell: {
             formatters: [Formatters.FormatUserStatusHTML]
@@ -98,7 +98,7 @@ const columns = [
     {
         property: 'lastAccess',
         header: {
-            label: 'Inactive?'
+            label: 'INACTIVE?'
         },
         cell: {
             formatters: [Formatters.FormatIsInactive]
@@ -117,7 +117,7 @@ const columns = [
     {
         property: 'numGroupsMember',
         header: {
-            label: 'In any group?'
+            label: 'IN ANY GROUP?'
         },
         cell: {
             formatters: [Formatters.FormatIsGroupMember]
@@ -136,7 +136,7 @@ const columns = [
     {
         property: 'numGroupsManaged',
         header: {
-            label: 'Group manager?'
+            label: 'GROUP MANAGER?'
         },
         cell: {
             formatters: [Formatters.FormatIsGroupManager]
@@ -155,7 +155,7 @@ const columns = [
     {
         property: 'accountTrusteeFlags',
         header: {
-            label: 'Can create apps?'
+            label: 'CAN CREATE APPS?'
         },
         cell: {
             formatters: [Formatters.FormatCanCreateApps]
@@ -174,7 +174,7 @@ const columns = [
     {
         property: 'numAppsManaged',
         header: {
-            label: 'App manager?'
+            label: 'APP MANAGER?'
         },
         cell: {
             formatters: [Formatters.FormatIsAppManager]
@@ -193,7 +193,7 @@ const columns = [
     {
         property: 'realmDirectoryFlags',
         header: {
-            label: 'In realm directory?'
+            label: 'IN REALM DIRECTORY?'
         },
         cell: {
             formatters: [Formatters.FormatIsInRealmDirectory]
@@ -212,7 +212,7 @@ const columns = [
     {
         property: 'realmDirectoryFlags',
         header: {
-            label: 'Realm approved?'
+            label: 'REALM APPROVED?'
         },
         cell: {
             formatters: [Formatters.FormatIsRealmApproved]
