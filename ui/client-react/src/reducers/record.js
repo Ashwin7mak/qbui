@@ -14,25 +14,27 @@ import _ from 'lodash';
  *   records : [array of records....]
  * }
  * example :
- * recordIdBeingEdited : 3
- * records : [
  * {
- * id : "DRAWER10299", => if in a drawer id has a drawer context
- * recId : "4",
- * nextRecordId : 5,
- * previousRecordId : null,
- * navigateAfterSave : false,
- * nextOrPreviousEdit : ""
- * },
- * {
- * id : 2, => if not in a drawer id is numeric
- * recId : 2,
- * nextRecordId : 3,
- * previousRecordId : 1,
- * navigateAfterSave : false,
- * nextOrPreviousEdit : ""
- * }
- * ]
+ *      recordIdBeingEdited : 3
+ *      records : [
+ *                  {
+ *                      id : "DRAWER10299", => if in a drawer id has a drawer context
+ *                      recId : "4",
+ *                      nextRecordId : 5,
+ *                      previousRecordId : null,
+ *                      navigateAfterSave : false,
+ *                      nextOrPreviousEdit : ""
+ *                  },
+ *                  {
+ *                      id : 2, => if not in a drawer id is numeric
+ *                      recId : 2,
+ *                      nextRecordId : 3,
+ *                      previousRecordId : 1,
+ *                      navigateAfterSave : false,
+ *                      nextOrPreviousEdit : ""
+ *                  }
+ *               ]
+ *  }
  * @param state - array of records and id of currently edited record
  * @param action - event type
  * @returns {Object}
@@ -45,10 +47,9 @@ const record = (state = {}, action) => {
      * Otherwise, replace the existing entry with its new state.
      *
      * @param obj - data object associated with new state
-     * @param recordIdBeingEdited - recordId of Record Being Edited
      * @returns {*}
      */
-    function newState(obj, recordIdBeingEdited) {
+    function newState(obj) {
         // reducer - no mutations against current state!
         const stateClone = _.cloneDeep(state);
 
@@ -65,9 +66,6 @@ const record = (state = {}, action) => {
                 stateClone.records[index] = obj;
             } else {
                 stateClone.records.push(obj);
-            }
-            if (recordIdBeingEdited || obj.id  === NEW_RECORD_VALUE) {
-                stateClone.recordIdBeingEdited = (recordIdBeingEdited === NEW_RECORD_VALUE || recordIdBeingEdited === UNSAVED_RECORD_ID ? NEW_RECORD_VALUE : +recordIdBeingEdited);
             }
         }
         return stateClone;
@@ -137,10 +135,10 @@ const record = (state = {}, action) => {
     }
     case types.DELETE_RECORDS_ERROR: {
         let states = {};
-        states.recordIdBeingEdited = '';
-        states.records = [];
         let errors = action.content.errors;
         if (Array.isArray(errors) && errors.length > 0) {
+            states.recordIdBeingEdited = '';
+            states.records = [];
             const ids = action.content.recIds;
             ids.forEach((recId) => {
                 let currentRecd = getRecordFromState(recId);
@@ -154,7 +152,7 @@ const record = (state = {}, action) => {
                 }
             });
         }
-        return states;
+        return _.has(states, 'records') && states.records.length > 0 ? states : state;
     }
     case types.OPEN_RECORD: {
         const obj = {
@@ -219,9 +217,10 @@ const record = (state = {}, action) => {
             };
             model.setEditRecordStart(obj);
             newRecd.pendEdits = model.get();
-            savedState = newState(newRecd, NEW_RECORD_VALUE);
+            savedState = newState(newRecd);
+            savedState.recordIdBeingEdited = NEW_RECORD_VALUE;
         }
-        return savedState;
+        return savedState ? savedState : state;
     }
     case types.SAVE_RECORD_ERROR: {
         let currentRecd = getRecordFromState(action.id);
@@ -262,7 +261,9 @@ const record = (state = {}, action) => {
         //  set currentRecd with the pendEdits model
         currentRecd.pendEdits = model.get();
 
-        return newState(currentRecd, action.id);
+        let savedState = newState(currentRecd);
+        savedState.recordIdBeingEdited = +action.id;
+        return savedState;
     }
     case types.EDIT_RECORD_CHANGE: {
         let currentRecd = getRecordFromState(action.id);
@@ -288,7 +289,9 @@ const record = (state = {}, action) => {
 
         //  could be a new model instance, so need to set the pending changes object
         currentRecd.pendEdits = model.get();
-        return newState(currentRecd, action.id);
+        let savedState = newState(currentRecd);
+        savedState.recordIdBeingEdited = +action.id;
+        return savedState;
     }
     case types.EDIT_RECORD_VALIDATE_FIELD: {
         const currentRecd = getRecordFromState(action.id);
@@ -296,16 +299,16 @@ const record = (state = {}, action) => {
             let model = new RecordModel();
             model.set(currentRecd.pendEdits);
             model.setEditRecordValidate(action.content);
-            return newState(currentRecd, action.id);
+            let savedState = newState(currentRecd);
+            savedState.recordIdBeingEdited = +action.id;
+            return savedState;
         }
         return state;
     }
     case types.EDIT_RECORD_CANCEL: {
         const currentRecd = getRecordFromState(action.id);
         if (_.has(currentRecd, 'pendEdits')) {
-            let model = new RecordModel();
-            model.setEditRecordCancel(currentRecd.appId, currentRecd.tblId, currentRecd.recId);
-            currentRecd.pendEdits = model.get();
+            delete currentRecd.pendEdits;
             return newState(currentRecd);
         }
         return state;
