@@ -23,8 +23,8 @@
         -webkit-overflow-scrolling: touch; /* This allows for momentum scrolling on touch devices */
         &:focus {
             outline: none;
-            border: $stroke-width-thin solid $color-purple-600;
-            border-bottom: #{$stroke-width-thin + 4} solid $color-purple-600;
+            border: $stroke-width-thin solid $input-text-focus-border-color;
+            border-bottom: #{$stroke-width-thin + 4} solid $input-text-focus-border-color;
         }
     }
 
