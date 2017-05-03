@@ -20,6 +20,7 @@ class GovernanceLeftNav extends Component {
                 isContextHeaderSmall={true}
                 showContextHeader={true}
                 contextHeaderIcon="settings"
+                contextHeaderIconFont="iconUISturdy"
                 contextHeaderTitle="Manage QuickBase"
                 navItems={GetLeftNavLinks(this.props.isAccountAdmin, this.props.isRealmAdmin, this.props.isAccountURL)}
                 globalActions={<DefaultTopNavGlobalActions dropdownIcon="user" dropdownMsg="globalActions.user" shouldOpenMenusUp={true} />}
