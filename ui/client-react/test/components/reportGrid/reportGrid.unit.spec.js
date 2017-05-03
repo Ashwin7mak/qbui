@@ -313,6 +313,7 @@ describe('ReportGrid', () => {
         const rptId = 'rptId';
         const sortFids = [5, 6];
         const testAppUsers = [7, 8];
+        const builderMode = false;
 
         let phase1 = undefined;
 
@@ -351,6 +352,7 @@ describe('ReportGrid', () => {
                 sortFids={sortFids}
                 appUsers={testAppUsers}
                 phase1={phase1}
+                inBuilderMode={builderMode}
             />);
             instance = component.instance();
 
@@ -393,7 +395,8 @@ describe('ReportGrid', () => {
                 tblId: tblId,
                 rptId: rptId,
                 sortFids: sortFids,
-                isOnlyOneColumnVisible: false
+                isOnlyOneColumnVisible: false,
+                inBuilderMode: false
             });
         });
 

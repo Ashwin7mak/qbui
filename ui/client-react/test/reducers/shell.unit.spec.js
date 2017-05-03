@@ -15,7 +15,8 @@ function initializeState() {
         trowserContent: null,
         openCount: 0,
         locale: Locale.getLocale(),
-        i18n: Locale.getI18nBundle()
+        i18n: Locale.getI18nBundle(),
+        inBuilderMode: false
     };
 }
 
@@ -148,5 +149,18 @@ describe('Nav reducer functions for changing locale', () => {
             }
             done();
         });
+    });
+});
+
+describe('Nav reducer functions for toggling builder mode', () => {
+    it('enter builder mode', () => {
+        const state = reducer(initialState, {type: types.ENTER_BUILDER_MODE});
+        expect(state.inBuilderMode).toEqual(true);
+    });
+
+    let openState = {inBuilderMode: true};
+    it('exit builder mode', () => {
+        const state = reducer(openState, {type: types.EXIT_BUILDER_MODE});
+        expect(state.inBuilderMode).toEqual(false);
     });
 });
