@@ -566,11 +566,6 @@ module.exports = function(grunt) {
                     // because the save and add button is disabled we turned off the reportAddRecord test
                     // we will turn it back on once this button has been enabled again
                     './wdio/tests/reports/reportAddRecord.e2e.spec.js',
-                    // Stabilize in CI before enabling
-                    './wdio/tests/reports/reportTable.e2e.spec.js',
-                    './wdio/tests/reports/grouping/reportGroupingViaColumnHeader.e2e.spec.js',
-                    './wdio/tests/reports/sorting/reportSortingViaColumnHeader.e2e.spec.js',
-
                     // Forms Tests
                     // Stabilize in CI before enabling
                     './wdio/tests/forms/formDragDrop.e2e.spec.js',
@@ -579,16 +574,12 @@ module.exports = function(grunt) {
                     // permissions for viewer and participant are not working correctly
                     './wdio/tests/forms/formPermissionsViewerRole.e2e.spec.js',
                     './wdio/tests/forms/formPermissionsParticipantRole.e2e.spec.js',
-
                     // Tables Tests
-
+                    // Users Tests
                     // Relationships Tests
                     // Stabilize in CI before enabling
                     './wdio/tests/relationships/relationshipViewChildTable.e2e.spec.js',
 
-                    // Users Tests
-                    // Stabilize in CI before enabling
-                    './wdio/tests/users/usersTable.e2e.spec.js'
                 ],
                 suites: {
                     reports: [
@@ -598,6 +589,9 @@ module.exports = function(grunt) {
                         './wdio/tests/reports/reportTopNav.e2e.spec.js',
                         './wdio/tests/reports/reportEditRecord.e2e.spec.js',
                         './wdio/tests/reports/reportNavigation.e2e.spec.js',
+                        './wdio/tests/reports/grouping/reportGroupingViaColumnHeader.e2e.spec.js',
+                        './wdio/tests/reports/sorting/reportSortingViaColumnHeader.e2e.spec.js',
+                        './wdio/tests/reports/reportTable.e2e.spec.js',
                     ],
                     forms: [
                         './wdio/tests/forms/formAdd.e2e.spec.js',
@@ -612,14 +606,16 @@ module.exports = function(grunt) {
                         './wdio/tests/tables/tableHomePage.e2e.spec.js'
                     ],
                     relationships: [],
-                    users: []
+                    users: [
+                        './wdio/tests/users/usersTable.e2e.spec.js',
+                    ]
                 }
             },
             test: {
                 // Use the wdioSauce.conf.js file setting the options above
                 configFile: './wdio/config/' + wdioSauceConfig,
                 // Make sure there are no spaces between test suites here
-                suite: 'reports,forms,tables'
+                suite: 'reports,forms,tables,users'
             }
         },
 
