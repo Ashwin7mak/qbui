@@ -77,8 +77,11 @@ export const CARD_VIEW_REPORT = LARGE_RELATIVE_SPINNER;
 // Used in records count is not initially available very large datasets
 export const RECORD_COUNT = SMALL_SPINNER;
 
-// Used in records count is not initially available very large datasets
+// Used while saving an record when editing inline in a report
 export const INLINE_SAVING = SMALL_SPINNER;
+
+// Used when updating a small piece of the UI (e.g., when loading the currently logged in user's name)
+export const INLINE_UPDATING = SMALL_SPINNER;
 
 // Use on next swipe area in CARD_VIEW
 export const CARD_VIEW_NAVIGATION =  SMALL_PALE_SPINNER;

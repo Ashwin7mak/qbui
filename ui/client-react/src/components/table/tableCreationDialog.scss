@@ -29,6 +29,17 @@
     }
 }
 
+@include medium-breakpoint {
+
+    .multiStepModal.tableCreationDialog .modal-dialog {
+
+        .modal-body > *:first-child {
+            height: 350px;
+        }
+        width: 600px;
+    }
+}
+
 /* some initial small styles in case we support small */
 @include small-breakpoint {
 

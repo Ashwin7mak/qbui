@@ -13,6 +13,9 @@ export default {
         listOfElements: {
             noSearchResults: 'Keine Felder passen "{searchText}"',
             searchPlaceholder: "Filter"
+        },
+        user: {
+            notLoggedIn: "Nicht eingeloggt"
         }
     }
 };
