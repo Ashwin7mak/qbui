@@ -38,7 +38,8 @@
         beforeEach(function() {
             // clean up any 'mess' which might have been left by a previously failed test
             browser.windowHandleMaximize();
-            // browser.buttonUp();
+            try {browser.buttonUp();}
+            catch (err) {}
             // open first table
             e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
             // edit first record
@@ -61,28 +62,33 @@
 
         it('drags a field outside of viewport & verifies autoscroll', function() {
             let numFields = formBuilderPO.getFieldLabels().length;
-            let firstField = browser.element(formBuilderPO.getFieldLocator(1));
+            let firstFieldLocator = formBuilderPO.getFieldLocator(1);
+            let firstField = browser.element(firstFieldLocator);
             let lastField = browser.element(formBuilderPO.getFieldLocator(numFields));
             let firstFieldSize = firstField.getElementSize();
             // shrink the window to cause last element to not be visible and make autoscroll faster
             let browserSize = browser.windowHandleSize();
             browser.setViewportSize({width: browserSize.value.width, height: firstFieldSize.height * 4}, true);
             expect(lastField.isVisibleWithinViewport()).toBe(false);
-            // move cursor to first field label & press MB1
-            firstField.element('.fieldLabel').moveToObject().buttonDown();
+            // move cursor to first field & press MB1
+            browser.moveToObject(firstFieldLocator).buttonDown();
             // drag DOWN down until autoscroll begins
+            browser.logger.info('Initiating autoscroll DOWN');
             while (firstField.isVisibleWithinViewport()) {
                 browser.moveTo(null, 0, 1);
             }
             // wait for autoscroll to reach the bottom
+            browser.logger.info('Autoscrolling DOWN');
             while (!lastField.isVisibleWithinViewport()) {
                 browser.pause(formBuilderPO.oneSecond);
             }
             // drag UP until autoscroll begins
+            browser.logger.info('Initiating autoscroll UP');
             while (lastField.isVisibleWithinViewport()) {
                 browser.moveTo(null, 0, -1);
             }
             // wait for first field to become visible
+            browser.logger.info('Autoscrolling UP');
             while (!firstField.isVisibleWithinViewport()) {
                 browser.pause(formBuilderPO.oneSecond);
             }
@@ -172,8 +178,8 @@
             // store the list of fields before moving
             let origFields = formBuilderPO.getFieldLabels();
             // drag the 1st field below the 2nd one
-            let source = formBuilderPO.getFieldLocator(1) + ' .fieldLabel';
-            let target = formBuilderPO.getFieldLocator(2) + ' .fieldLabel';
+            let source = formBuilderPO.getFieldLocator(1);
+            let target = formBuilderPO.getFieldLocator(2);
             formBuilderPO.slowDragAndDrop(source, target);
             // verify that the first 2 items have changed position
             let movedFields = formBuilderPO.getFieldLabels();
@@ -189,8 +195,8 @@
             // store the list of fields before moving
             let origFields = formBuilderPO.getFieldLabels();
             // drag the 1st field below the 2nd one
-            let source = formBuilderPO.getFieldLocator(1) + ' .fieldLabel';
-            let target = formBuilderPO.getFieldLocator(2) + ' .fieldLabel';
+            let source = formBuilderPO.getFieldLocator(1);
+            let target = formBuilderPO.getFieldLocator(2);
             formBuilderPO.slowDragAndDrop(source, target);
             // verify that the first 2 items have changed position
             let movedFields = formBuilderPO.getFieldLabels();

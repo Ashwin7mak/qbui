@@ -134,8 +134,10 @@ class formBuilderPage {
     }
     removeField(index) {
         // Removes the specified field by clicking on its DELETE icon
-        let field = browser.element(this.getFieldLocator(index));
+        let fieldLocator = this.getFieldLocator(index);
+        let field = browser.element(fieldLocator);
         let deletedFieldName = field.getText();
+        browser.moveToObject(fieldLocator + ' .fieldLabel');
         field.element('.deleteFieldIcon').click();
         browser.pause(oneSecond);
         return deletedFieldName;
@@ -170,24 +172,21 @@ class formBuilderPage {
         this.fieldProperty_Name.waitForExist(); // assume it didn't exist, i.e. nothing was previously selected
         return this.fieldProperty_Name.getText();
     }
-    slowDrag(target, label) {
+    slowDrag(target, sourceLabel) {
         // Moves the cursor to specified target field and waits until target displays the the specified label
+        browser.moveToObject(target);
         browser.waitUntil(function() {
-            // assuming that buttonDown was just executed by the caller,
-            // pause to initiate drag (which is one reason why we can't just call dragAndDrop)
-            browser.pause(oneSecond);
-            browser.moveToObject(target);
-            browser.pause(oneSecond);
-            browser.moveToObject(target, 1, 1);
-            return label === browser.element(target).getText();
-        }, 10000, 'expected target preview to display source label after dragging');
+            return sourceLabel === browser.element(target).getText();
+        }, 10000, 'expected target preview label to match source label after dragging');
         return this;
     }
     slowDragAndDrop(source, target) {
         // Clicks on the specified source field and drags it to the specified target field
         let label = browser.element(source).getText();
-        browser.moveToObject(source + ' .fieldLabel');
+        browser.moveToObject(source);
+        browser.pause(oneSecond);
         browser.buttonDown();
+        browser.pause(oneSecond);
         // move to target & wait until preview appears
         this.slowDrag(target, label);
         // release button
