@@ -102,7 +102,7 @@
             // verify that the first item is still gone
             expect(formBuilderPO.getFieldLabels()).not.toContain(firstField);
         });
-/*
+
         it('remove a field & verify presence after CANCEL', function() {
             // store the list of fields before deletion
             let firstField = formBuilderPO.getFieldLabels()[0];
@@ -353,6 +353,6 @@
         xit('check the REQUIRED checkbox, save & verify checked', function() {
              //TODO: MC-2164: REQUIRED checkbox needs a reliable way to automate click & query
         });
-*/
+
     });
 }());
