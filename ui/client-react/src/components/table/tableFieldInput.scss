@@ -1,7 +1,7 @@
 @import '../../assets/css/_qbVariables';
 
 .tableField {
-    min-width: 50%;
+    width: 50%;
     margin-bottom: 30px;
 
     &:first-of-type {
@@ -24,9 +24,12 @@
         height: 34px;
     }
 
-    textarea:focus {
-        outline: -webkit-focus-ring-color auto 5px;
+    input {
+        &:focus {
+            @include text-input-focus;
+        }
     }
+
     &.validationFailed {
         .tableFieldTitle {
             color: $error-color;
@@ -36,5 +39,12 @@
             border-left-width: 5px;
             box-shadow: none;
         }
+    }
+}
+
+@include small-breakpoint {
+    .tableField {
+        min-width: 50%;
+        width: inherit;
     }
 }
