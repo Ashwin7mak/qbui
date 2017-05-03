@@ -41,7 +41,7 @@
             addBulkRecords: function(app, table, genRecords) {
                 var deferred = promise.pending();
                 //Resolve the proper record endpoint specific to the generated app and table
-                var recordsEndpoint = recordBase.apiBase.resolveRecordsEndpoint(app.id, table.id);
+                var recordsEndpoint = recordBase.apiBase.resolveRecordsBulkEndpoint(app.id, table.id);
                 return recordBase.createBulkRecords(recordsEndpoint, genRecords, null);
             },
 
