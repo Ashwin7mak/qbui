@@ -1,5 +1,6 @@
 import React, {PropTypes, Component} from "react";
 import StandardGridNavigation from "./StandardGridNavigation";
+import UsersCount from "../usersCount/usersCount";
 import * as StandardGridActions from "../../../common/grid/standardGridActions";
 import IconInputBox from "../../../../../reuse/client/src/components/iconInputBox/iconInputBox";
 import {connect} from "react-redux";
@@ -15,12 +16,22 @@ class StandardGridToolBar extends React.Component {
     }
 
     render() {
+        console.log("THIS.PROPS", this.props);
         return (
             <div className="standardGridToolBar">
                 <div className="standardGridSearch">
                     <IconInputBox placeholder="Search users"
                                   onChange={this.props.onSearchChange}/>
                 </div>
+                {!isLoading && !isError ?
+                    <UsersCount usersCount={usersCount}
+                                isFiltered={this.isFiltered() && (!_.isUndefined(this.props.reportData))}
+                                filteredUsersCount={filteredUsersCount}
+                                clearAllFilters={this.props.clearAllFilters}
+                                isCounting={this.props.reportData.countingTotalRecords}
+                    /> :
+                    null
+                }
                 <div className="standardGridNavigation">
                     <StandardGridNavigation getPreviousUsersPage={this.props.getPreviousUsersPage}
                                             getNextUsersPage={this.props.getNextUsersPage}
