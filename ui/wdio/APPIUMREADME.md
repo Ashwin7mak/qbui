@@ -20,7 +20,7 @@ Setting $Path and Configuring
 
 
 ##Overview:
-Appium is an open-source tool for automating mobile web on iOS and Android platforms.Mobile web apps are web apps accessed using a mobile browser (Appium supports Safari on iOS and Chrome or the built-in ‘Browser’ app on Android).
+Appium is an open-source tool for automating mobile web on iOS and Android platforms. Mobile web apps are web apps accessed using a mobile browser (Appium supports Safari on iOS and Chrome or the built-in ‘Browser’ app on Android).
 
 For more info on Appium please see their website here: [http://appium.io/getting-started.html?lang=en)].
 
@@ -40,7 +40,7 @@ Edit the **specs** parameter of **wdio.conf.js** (the path is dependent on where
 and './ui/wdio/tests/mobile/reportSortingViaContainer.e2e.spec.js' should work on iPhone(card view)
 
 ##Troubleshooting:
-Please make ure xCode 7.2 is installed
+Please make sure xCode 7.2 is installed
 
 
 
