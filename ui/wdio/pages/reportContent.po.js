@@ -26,6 +26,15 @@
         reportFilterSearchBox : {get: function() {
             return this.reportsToolBar.element('.searchInput');
         }},
+        reportSearchEnterValues: {value: function(field) {
+            //Check for the visibility of search box
+            this.reportFilterSearchBox.waitForVisible();
+            //Enter the value in the search box
+            this.reportFilterSearchBox.setValue(field);
+            this.waitForReportContent();
+            browser.pause(e2eConsts.shortWaitTimeMs);
+        }},
+        clearSearch: {get: function() {return this.reportsToolBar.element('.clearSearch .searchIcon');}},
         clickAndWaitForGrid: {value: function(button) {
             button.click();
             this.qbGridContainer.waitForVisible();
