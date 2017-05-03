@@ -11,15 +11,11 @@
     height: 100%;
     width: 335px;
 
-    .actionIcons {
-        float: right;
-    }
-
     .deleteFieldIcon {
         font-size: $size-iconfont-large2;
         position: absolute;
         bottom: 15%;
-        right: 5px;
+        padding-left: 295px;
 
         .qbIcon {
             color: $iconfont-on-light-normal-color;
@@ -45,13 +41,12 @@
         cursor: pointer;
     }
 
-
-
     &.notTouchDevice {
         //No borders or icon are displayed when it is not a touch device
         //Everything shows up on hover
         opacity: 0;
         .deleteFieldIcon .qbIcon {
+            opacity: 0;
             &:hover {
                 opacity: 1;
                 color: $color-red-700;
@@ -60,11 +55,9 @@
     }
 
     &.isTablet {
-        //Icon and borders only display during focus
-        opacity: 1;
-        border: none;
-
+        //This is an extra check to keep this code from triggering firefox
         .deleteFieldIcon .qbIcon {
+            opacity: 1;
             padding-right: $spacing-medium1;
         }
     }
