@@ -1,7 +1,7 @@
 import * as types from '../actions/types';
 import ReportModelHelper from '../models/reportModelHelper';
-// Eventually this will get refactored into the reducer for Report Builder (like form builder but for reports)
-const reportFieldSelectMenu = (
+
+const reportBuilder = (
     state = {
         isCollapsed: true,
         addBeforeColumn: null,
@@ -40,4 +40,4 @@ const reportFieldSelectMenu = (
     }
 };
 
-export default reportFieldSelectMenu;
+export default reportBuilder;
