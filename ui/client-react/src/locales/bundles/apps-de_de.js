@@ -580,7 +580,7 @@ export default {
                 date: "Datum",
                 other: "Andere"
             },
-            modify: 'Ändern'
+            modify: 'Formular ändern'
         },
         featureSwitchAdmin: {
             defaultFeatureName: "Feature",

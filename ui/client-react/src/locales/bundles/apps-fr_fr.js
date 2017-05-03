@@ -579,7 +579,7 @@ export default {
                 date: 'Date',
                 other: 'Autre'
             },
-            modify: 'Modifier'
+            modify: 'Modifier formulaire'
         },
         featureSwitchAdmin: {
             defaultFeatureName: "Fonctionnalité",

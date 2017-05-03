@@ -46,8 +46,10 @@ $builder-wrapper-border-color: $color-black-300;
             padding-top: 9px;
             margin-left: 5px;
             font-family: Lato, "Open Sans", Arial, Sans-Serif;
+            -webkit-font-smoothing: antialiased;
             font-size: $topnav-title-text-size;
             color: $topnav-builder-title-color;
+            font-weight: 400;
         }
     }
     .builderWrapperBody {

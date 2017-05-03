@@ -588,7 +588,7 @@ export default {
                 date: 'Date',
                 other: 'Other'
             },
-            modify: 'Modify'
+            modify: 'Modify form'
         },
         featureSwitchAdmin: {
             defaultFeatureName: "Feature",

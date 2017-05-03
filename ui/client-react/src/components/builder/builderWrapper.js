@@ -48,18 +48,11 @@ export const BuilderWrapper = React.createClass({
 
     render() {
         let title = `${Locale.getMessage('builder.modify')}`;
-        let section = this.props.qbui.forms.view && this.props.qbui.forms.view.formData ? this.props.qbui.forms.view.formData.formMeta.tabs[0].sections[0] : undefined;
-        let sectionTitle = '';
-        // build the section header.
-        if (section && _.has(section, 'headerElement.FormHeaderElement.displayText')) {
-            sectionTitle = section.headerElement.FormHeaderElement.displayText;
-        }
-
         return (
             <div className="builderWrapperContent">
                 <NotificationContainer/>
                 <TopNav
-                    title={`${title} ${sectionTitle}`}
+                    title={title}
                     onNavClick={this.props.toggleNav}
                     globalActions={this.getTopGlobalActions()}
                     tabIndex={tabIndexConstants.FORM_BUILDER_TOGGLE_NAV_BUTTON_TABINDEX}
