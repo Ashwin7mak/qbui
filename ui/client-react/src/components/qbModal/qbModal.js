@@ -107,8 +107,6 @@ const QBModal = React.createClass({
             icon = 'errorincircle-fill';
         }
 
-
-
         return (
             <div className={classes.join(' ')}>
                 <QbIcon icon={icon} />
