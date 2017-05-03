@@ -529,4 +529,63 @@ describe('ReportUtils', () => {
             expect(ReportUtils.areAllRowsSelected(testRows, selectedRows)).toBeFalsy();
         });
     });
+
+    /*
+     static getDifferenceOfColumns(allColumns, currentColumns, differenceBy) {
+     return _.differenceBy(allColumns, currentColumns, differenceBy);
+     }
+     */
+    describe('getDifferenceOfColumns', () => {
+        it('gets the correct difference', () => {
+            let testAllColumns = [
+                {
+                    fieldDef: {
+                        id: 6
+                    },
+                    id: 6,
+                    isHidden: false
+                },
+                {
+                    fieldDef: {
+                        id: 7
+                    },
+                    id: 7,
+                    isHidden: true
+                },
+                {
+                    fieldDef: {
+                        id: 8
+                    },
+                    id: 8,
+                    isHidden: true
+                }
+            ];
+            let testCurrColumns = [
+                {
+                    fieldDef: {
+                        id: 6
+                    },
+                    id: 6,
+                    isHidden: false
+                }
+            ];
+            let expectedOutput = [
+                {
+                    fieldDef: {
+                        id: 7
+                    },
+                    id: 7,
+                    isHidden: true
+                },
+                {
+                    fieldDef: {
+                        id: 8
+                    },
+                    id: 8,
+                    isHidden: true
+                }
+            ];
+            expect(ReportUtils.getDifferenceOfColumns(testAllColumns, testCurrColumns, 'id')).toEqual(expectedOutput);
+        })
+    })
 });
