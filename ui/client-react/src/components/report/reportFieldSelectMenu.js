@@ -85,6 +85,7 @@ export class ReportFieldSelectMenu extends Component {
                           baseClass="reportFieldSelectMenu"
                           sideMenuContent={content}
                           isCollapsed={isCollapsed}
+                          isDocked={false}
             />
         );
     }

@@ -58,7 +58,6 @@
         }
 
         > .reportFieldSelectMenuContent {
-            position: relative;
             flex: 0;
         }
     }
@@ -79,7 +78,7 @@
         &.reportFieldSelectMenuCollapsed {
             min-width: 0;
             // Min width alone doesn't work when translating over the top of the main content. Need max-width too.
-            max-width: $leftNav-width-collapsed;
+            max-width: 0;
             border: none;
         }
 
