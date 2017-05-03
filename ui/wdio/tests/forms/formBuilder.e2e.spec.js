@@ -38,7 +38,7 @@
         beforeEach(function() {
             // clean up any 'mess' which might have been left by a previously failed test
             browser.windowHandleMaximize();
-            browser.buttonUp();
+            // browser.buttonUp();
             // open first table
             e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
             // edit first record
@@ -55,7 +55,8 @@
             // add the first new field item to the form
             newField.click();
             browser.pause(5000);
-            expect(formBuilderPO.getFieldLabels()[0]).toBe(newFieldLabel);
+            // verify that the new row has the expected label
+            expect(formBuilderPO.getFieldLabels()[1]).toBe(newFieldLabel);
         });
 
         it('drags a field outside of viewport & verifies autoscroll', function() {
