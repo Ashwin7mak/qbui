@@ -97,42 +97,18 @@ describe('Report actions', () => {
             });
     });
 
-    it('openFieldSelectMenu action dispatches type.OPEN_FIELD_SELECT_MENU with open parameter', (done) => {
+    it('openFieldSelectMenu action dispatches type.OPEN_FIELD_SELECT_MENU with open parameter', () => {
         const params = {
             clickedColumnId: 6,
             addBeforeColumn: true
         };
-        const expectedAction = [
-            event(context, types.OPEN_FIELD_SELECT_MENU, params)
-        ];
-        const store = mockReportsStore({});
-
-        return store.dispatch(reportActions.openFieldSelectMenu(context, 6, true)).then(
-            () => {
-                expect(store.getActions()).toEqual(expectedAction);
-                done();
-            },
-            () => {
-                expect(false).toBe(true);
-                done();
-            });
+        const expectedAction = event(context, types.OPEN_FIELD_SELECT_MENU, params);
+        expect(reportActions.openFieldSelectMenu(context, 6, true)).toEqual(expectedAction);
     });
 
-    it('closeFieldSelectMenu action dispatches type.CLOSE_FIELD_SELECT_MENU with closed parameter', (done) => {
-        const expectedAction = [
-            event(context, types.CLOSE_FIELD_SELECT_MENU, {})
-        ];
-        const store = mockReportsStore({});
-
-        return store.dispatch(reportActions.closeFieldSelectMenu(context)).then(
-            () => {
-                expect(store.getActions()).toEqual(expectedAction);
-                done();
-            },
-            () => {
-                expect(false).toBe(true);
-                done();
-            });
+    it('closeFieldSelectMenu action dispatches type.CLOSE_FIELD_SELECT_MENU with closed parameter', () => {
+        const expectedAction = event(context, types.CLOSE_FIELD_SELECT_MENU, {});
+        expect(reportActions.closeFieldSelectMenu(context)).toEqual(expectedAction);
     });
 
 });

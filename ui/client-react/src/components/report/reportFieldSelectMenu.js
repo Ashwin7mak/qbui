@@ -30,7 +30,8 @@ export class ReportFieldSelectMenu extends Component {
     };
 
     getMenuContent = () => {
-        if (!this.props.menu) {return <div></div>;}
+        if (!this.props.menu) {return <div />;}
+
         let reportData = this.props.reportData;
         let elements = [];
         let columns = reportData.data ? reportData.data.columns : [];
@@ -38,7 +39,7 @@ export class ReportFieldSelectMenu extends Component {
             return !column.isHidden;
         });
         let availableColumns = this.props.menu.availableColumns;
-        let hiddenColumns = ReportUtils.getDifferenceOfColumns(availableColumns, visibleColumns, 'id');
+        let hiddenColumns = ReportUtils.getDifferenceOfColumns(availableColumns, visibleColumns);
         for (let i = 0; i < hiddenColumns.length; i++) {
             let params = {
                 requestedColumn: hiddenColumns[i],
@@ -80,7 +81,11 @@ export class ReportFieldSelectMenu extends Component {
         let isCollapsed = this.props.menu ? this.props.menu.isCollapsed : true;
 
         return (
-            <SideMenuBase {...this.props} baseClass="reportFieldSelectMenu" sideMenuContent={content} isCollapsed={isCollapsed}/>
+            <SideMenuBase {...this.props}
+                          baseClass="reportFieldSelectMenu"
+                          sideMenuContent={content}
+                          isCollapsed={isCollapsed}
+            />
         );
     }
 }
@@ -101,7 +106,7 @@ ReportFieldSelectMenu.propTypes = {
 
 const mapStateToProps = (state) => {
     return {
-        menu: state.reportFieldSelectMenu
+        menu: state.reportBuilder
     };
 };
 

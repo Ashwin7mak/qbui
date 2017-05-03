@@ -84,7 +84,7 @@ const MockLocale = {
 };
 
 const MockReportUtils = {
-    getDifferenceOfColumns(allColumns, currentColumns, differenceBy) {return hiddenColumns;}
+    getDifferenceOfColumns(allColumns, currentColumns) {return hiddenColumns;}
 };
 
 describe('ReportFieldSelectMenu', () => {

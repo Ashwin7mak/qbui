@@ -530,11 +530,6 @@ describe('ReportUtils', () => {
         });
     });
 
-    /*
-     static getDifferenceOfColumns(allColumns, currentColumns, differenceBy) {
-     return _.differenceBy(allColumns, currentColumns, differenceBy);
-     }
-     */
     describe('getDifferenceOfColumns', () => {
         it('gets the correct difference', () => {
             let testAllColumns = [
@@ -585,7 +580,7 @@ describe('ReportUtils', () => {
                     isHidden: true
                 }
             ];
-            expect(ReportUtils.getDifferenceOfColumns(testAllColumns, testCurrColumns, 'id')).toEqual(expectedOutput);
+            expect(ReportUtils.getDifferenceOfColumns(testAllColumns, testCurrColumns)).toEqual(expectedOutput);
         });
     });
 });

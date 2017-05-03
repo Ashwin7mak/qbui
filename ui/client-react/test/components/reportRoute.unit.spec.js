@@ -62,7 +62,7 @@ describe('ReportRoute functions', () => {
 
     class mockReportFieldSelectMenu extends React.Component {
         render() {
-            return <div></div>;
+            return <div />;
         }
     }
 

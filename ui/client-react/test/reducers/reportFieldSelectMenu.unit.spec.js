@@ -1,4 +1,4 @@
-import reducer from '../../src/reducers/reportFieldSelectMenu';
+import reducer from '../../src/reducers/reportBuilder';
 import * as types from '../../src/actions/types';
 
 let initialState = {};
