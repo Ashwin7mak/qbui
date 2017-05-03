@@ -378,12 +378,7 @@ export const refreshFieldSelectMenu = (context, appId, tblId) => {
  * @param addBeforeColumn
  */
 export const openFieldSelectMenu = (context, clickedColumnId, addBeforeColumn) => {
-    return (dispatch) => {
-        return new Promise(resolve => {
-            dispatch(event(context, types.OPEN_FIELD_SELECT_MENU, {clickedColumnId, addBeforeColumn}));
-            resolve();
-        });
-    };
+    return event(context, types.OPEN_FIELD_SELECT_MENU, {clickedColumnId, addBeforeColumn});
 };
 
 /**
@@ -391,12 +386,7 @@ export const openFieldSelectMenu = (context, clickedColumnId, addBeforeColumn) =
  * @param context
  */
 export const closeFieldSelectMenu = (context) => {
-    return (dispatch) => {
-        return new Promise(resolve => {
-            dispatch(event(context, types.CLOSE_FIELD_SELECT_MENU, {}));
-            resolve();
-        });
-    };
+    return event(context, types.CLOSE_FIELD_SELECT_MENU, {});
 };
 
 /**
