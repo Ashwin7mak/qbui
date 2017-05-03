@@ -16,8 +16,7 @@
          * @returns A promise that will resolve after waiting for the report records to be displayed
          */
         waitForReportContent: {value: function() {
-            // wait until you see .card rows
-            //browser.element('.card').waitForVisible();
+            // wait until you see .records count
             return browser.element('.recordsCount').waitForVisible();
         }},
 
@@ -40,6 +39,7 @@
          * Function that will click on the Add record button on report page
          */
         clickAddRecordBtn: {value: function() {
+            browser.element('.reportToolsAndContentContainer .addNewRecord').waitForVisible();
             browser.element('.reportToolsAndContentContainer .addNewRecord').click();
             browser.element('.editForm').waitForVisible();
         }},

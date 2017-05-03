@@ -7,7 +7,6 @@
     var reportContentPO = requirePO('reportContent');
     var reportContentMobilePO = requireMobilePO('reportContent');
     var formsPO = requirePO('formsPage');
-    var ReportInLineEditPO = requirePO('reportInLineEdit');
 
     describe('Add and Edit a record via Form in mobile view', function() {
         var realmName;

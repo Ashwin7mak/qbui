@@ -172,6 +172,6 @@ exports.config = {
     // the test.
     after: function(result, capabilities, specs) {
         browser.logger.info('after function hook - Cleaning up the test realm');
-        // return e2eBase.cleanup();
+        return e2eBase.cleanup();
     }
 };
