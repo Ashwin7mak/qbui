@@ -1,3 +1,10 @@
+@import "../../../src/assets/css/customVariables";
+
 .qbIcon {
     display: inline-block;
+}
+
+.toolTip-iconChooser {
+    z-index: $zindex-tooltip;
+    max-width: $tooltip-max-width;
 }

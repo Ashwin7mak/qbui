@@ -1,4 +1,3 @@
-
 const IconUtils = {
 
     /**
@@ -26,6 +25,29 @@ const IconUtils = {
 
         // filter matches if any tag matching the filter text contains the current icon
         return matchedTags.find((taggedIcons) => taggedIcons.icons.find((taggedIcon) => taggedIcon === icon)) !== undefined;
+    },
+
+    /**
+     * get title for each icon to use in tooltip
+     * @param icon - icon name
+     * @return {string} icon tooltip
+     */
+    getIconTitle(iconsByTag, icon) {
+        let title = [icon];
+        let iconName = icon.toLowerCase();
+        let tagsLength = iconsByTag.length;
+        if (icon && iconsByTag) {
+            for (let i = 0; i < tagsLength; i++) {
+                iconsByTag[i].icons.forEach(elem => {
+                    if (iconName === elem.toLowerCase()) {
+                        if (!title.includes(iconsByTag[i].tag)) {
+                            title.push(iconsByTag[i].tag);
+                        }
+                    }
+                });
+            }
+        }
+        return title.join(', ');
     }
 };
 

@@ -1,6 +1,7 @@
 import React from 'react';
 import OverlayTrigger from 'react-bootstrap/lib/OverlayTrigger';
 import Tooltip from 'react-bootstrap/lib/Tooltip';
+import Locale from '../../../src/locales/locale.js';
 import './icon.scss';
 import './uiIcons.css';
 import './tableIcons.css';
@@ -42,18 +43,22 @@ const Icon = React.createClass({
         return {
             className: '',
             isTableIcon: false,
+            title: '',
             iconFont: AVAILABLE_ICON_FONTS.DEFAULT
         };
     },
     render: function() {
         let {className, iconFont, icon} = this.props;
         let iconClassName = `${className} qbIcon ${iconFont}-${icon}`;
-        return (
-            <OverlayTrigger placement="bottom" overlay={<Tooltip id="toolTipIcon">{this.props.title}</Tooltip>}>
+        return (this.props.title ?
+            <OverlayTrigger placement="bottom" overlay={<Tooltip id="toolTipIcon" className="toolTip-iconChooser">{this.props.title}</Tooltip>}>
                 <span className={iconClassName} onClick={this.props.onClick}>
                 {this.props.children}
                 </span>
-            </OverlayTrigger>
+            </OverlayTrigger> :
+            <span className={iconClassName} onClick={this.props.onClick}>
+                {this.props.children}
+            </span>
         );
     }
 });

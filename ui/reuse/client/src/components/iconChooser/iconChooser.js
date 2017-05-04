@@ -51,7 +51,7 @@ class IconChooser extends React.Component {
     renderIconToggle() {
         return (
             <button tabIndex="0" className="showAllToggle" onClick={this.toggleAllIcons}>
-                <Icon className="showAllSelectedIcon" iconFont={this.props.font} icon={this.props.selectedIcon}/>
+                <Icon className="showAllSelectedIcon" iconFont={this.props.font} icon={this.props.selectedIcon} title={IconUtils.getIconTitle(this.props.iconsByTag, this.props.selectedIcon)}/>
                 <Icon icon="caret-down" className="toggleIcon"/>
             </button>);
     }
@@ -70,24 +70,6 @@ class IconChooser extends React.Component {
     getFilteredIcons() {
         return this.props.icons.filter((icon) => IconUtils.filterMatches(this.props.iconsByTag, this.state.filterText.toLowerCase().trim(), icon));
     }
-
-    /**
-     * get title for each icon to use in tooltip
-     */
-    getIconTitle(icon) {
-        let title = [];
-        if (icon) {
-            let l;
-            let iconsByTag = this.props.iconsByTag;
-            for (let i = 0; l = iconsByTag.length, i < l; i++) {
-                if (iconsByTag[i].icons.includes(icon)) {
-                    title.push(iconsByTag[i].tag);
-                }
-            }
-        }
-        return title.join(', ');
-    }
-
 
     /**
      * icon selected callback
@@ -117,7 +99,7 @@ class IconChooser extends React.Component {
                 </div>
 
                 <div className="allIcons">
-                    {this.getFilteredIcons().map((icon, i) => <button alt={icon} className={"iconButton " + icon} tabIndex="0" key={i} onClick={() => this.selectIcon(icon)}><Icon iconFont={this.props.font} icon={icon} title={this.getIconTitle(icon)}/></button>)}
+                    {this.getFilteredIcons().map((icon, i) => <button alt={icon} className={"iconButton " + icon} tabIndex="0" key={i} onClick={() => this.selectIcon(icon)}><Icon iconFont={this.props.font} icon={icon} title={IconUtils.getIconTitle(this.props.iconsByTag, icon)}/></button>)}
                 </div>
             </div>);
     }
