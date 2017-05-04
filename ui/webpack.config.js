@@ -18,6 +18,8 @@ var componentLibraryPath = path.join(__dirname, 'componentLibrary/src');
 
 var governancePath = path.join(__dirname, 'governance');
 
+var automationPath = path.join(__dirname, 'automation');
+
 var envConfig = require('./server/src/config/environment');
 
 // 3 supported run-time environments..ONE and ONLY ONE variable is to be set to true.
@@ -76,6 +78,11 @@ var config = {
             'bootstrap-sass!./client-react/bootstrap-sass.config.js',
             path.resolve(reuseLibraryPath, 'client/src/assets/css/qbMain.scss'),
             path.resolve(governancePath, 'src/app/index.js')
+        ],
+        automation: [
+            'bootstrap-sass!./client-react/bootstrap-sass.config.js',
+            path.resolve(reuseLibraryPath, 'client/src/assets/css/qbMain.scss'),
+            path.resolve(automationPath, 'src/app/index.js')
         ]
     },
     output: {
@@ -107,6 +114,8 @@ var config = {
                     componentLibraryPath,
                     path.resolve(__dirname, 'governance/src'),
                     path.resolve(__dirname, 'governance/test'),
+                    path.resolve(__dirname, 'automation/src'),
+                    path.resolve(__dirname, 'automation/test')
                 ],
                 exclude: [
                     nodeModulesPath,

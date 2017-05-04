@@ -381,7 +381,7 @@ export const RecordRoute = React.createClass({
     },
 
     getPageActions() {
-        const actions = [
+        let actions = [
             {msg: 'pageActions.addRecord', icon:'add-new-filled', className:'addRecord', onClick: this.editNewRecord},
             {msg: 'pageActions.edit', icon:'edit', onClick: this.openRecordForEdit},
             {msg: 'unimplemented.email', icon:'mail', disabled:true},
@@ -393,7 +393,10 @@ export const RecordRoute = React.createClass({
             actions.splice(2, 0, {msg: 'pageActions.approve', icon: 'thumbs-up', onClick: this.approveRecord});
         }
 
-
+        // Currently page actions are disabled for child records shown in drawers.
+        if (this.props.isDrawerContext) {
+            actions = actions.map(action => Object.assign(action, {disabled:true, onClick: null}));
+        }
         return (<IconActions className="pageActions" actions={actions} {...this.props}/>);
     },
 
