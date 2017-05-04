@@ -26,6 +26,11 @@ const UserFieldValueEditor = React.createClass({
         appUsers: React.PropTypes.array.isRequired,
 
         /**
+         * A boolean to disabled field on form builder
+         */
+        isDisabled: React.PropTypes.bool,
+
+        /**
          * the currently selected user
          */
         value: React.PropTypes.any,
@@ -189,6 +194,7 @@ const UserFieldValueEditor = React.createClass({
             <Select
                 className={classes}
                 tabIndex={this.props.tabIndex}
+                isDisabled={this.props.isDisabled}
                 filterOption={this.filterOption}
                 value={this.state.selectedUserId}
                 optionRenderer={this.renderOption}
@@ -199,7 +205,7 @@ const UserFieldValueEditor = React.createClass({
                 noResultsText={noResultsText}
                 autosize={false}
                 clearable={false}
-                onBlur={this.onBlur} />
+                onBlur={this.onBlur}/>
         );
     }
 });
