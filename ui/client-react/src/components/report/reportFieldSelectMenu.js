@@ -5,6 +5,7 @@ import {CONTEXT} from '../../actions/context';
 import {refreshFieldSelectMenu, closeFieldSelectMenu, addColumnFromExistingField} from '../../actions/reportActions';
 
 import ReportUtils from '../../utils/reportUtils';
+import FieldFormats from '../../utils/fieldFormats';
 
 import {FieldTokenInMenu} from '../formBuilder/fieldToken/fieldTokenInMenu';
 import ListOfElements from '../../../../reuse/client/src/components/sideNavs/listOfElements';
@@ -29,27 +30,37 @@ export class ReportFieldSelectMenu extends Component {
         this.props.refreshFieldSelectMenu(CONTEXT.REPORT.NAV, this.props.appId, this.props.tblId);
     };
 
-    getMenuContent = () => {
-        if (!this.props.menu) {return <div />;}
-
+    getHiddenColumns = () => {
         let reportData = this.props.reportData;
-        let elements = [];
         let columns = reportData.data ? reportData.data.columns : [];
         let visibleColumns = columns.filter(column => {
             return !column.isHidden;
         });
         let availableColumns = this.props.menu.availableColumns;
-        let hiddenColumns = ReportUtils.getDifferenceOfColumns(availableColumns, visibleColumns);
+        return ReportUtils.getDifferenceOfColumns(availableColumns, visibleColumns);
+    };
+
+    getElements = () => {
+        let hiddenColumns = this.getHiddenColumns();
+        let elements = [];
         for (let i = 0; i < hiddenColumns.length; i++) {
+            let type = FieldFormats.getFormatType(hiddenColumns[i].fieldDef);
             elements.push({
                 key: hiddenColumns[i].id + "",
                 title: hiddenColumns[i].headerName,
-                type: hiddenColumns[i].fieldType,
+                type: type,
                 onClick: (() => {
                     this.props.addColumnFromExistingField(CONTEXT.REPORT.NAV, hiddenColumns[i], this.props.menu.addBeforeColumn);
                 })
             });
         }
+        return elements;
+    };
+
+    getMenuContent = () => {
+        if (!this.props.menu) {return <div />;}
+
+        let elements = this.getElements();
 
         return (
             <div className="fieldSelect">

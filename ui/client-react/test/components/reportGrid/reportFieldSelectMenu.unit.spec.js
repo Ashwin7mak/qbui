@@ -5,9 +5,7 @@ import jasmineEnzyme from 'jasmine-enzyme';
 import {CONTEXT} from '../../../src/actions/context';
 import {ReportFieldSelectMenu, __RewireAPI__ as RewireAPI} from '../../../src/components/report/reportFieldSelectMenu';
 import SideMenuBase from '../../../../reuse/client/src/components/sideMenuBase/sideMenuBase';
-import FieldTokenInMenu from '../../../src/components/formBuilder/fieldToken/fieldTokenInMenu';
-import ListOfElements from '../../../../reuse/client/src/components/sideNavs/listOfElements';
-import QBicon from '../../../src/components/qbIcon/qbIcon';
+import FieldFormats from '../../../src/utils/fieldFormats';
 import Locale from '../../../../reuse/client/src/locales/locale';
 
 let component;
@@ -18,10 +16,12 @@ let reportData = {
         columns: [
             {
                 fieldDef: {
+                    datatypeAttributes: {
+                        type: "TEXT"
+                    },
                     id: 7
                 },
                 headerName: "Test Column 2",
-                type: "TEXT",
                 isPlaceholder: false,
                 isHidden: false,
                 id: 7,
@@ -38,10 +38,12 @@ let testProps = {
         availableColumns: [
             {
                 fieldDef: {
+                    datatypeAttributes: {
+                        type: "TEXT"
+                    },
                     id: 6
                 },
                 headerName: "Test Column 1",
-                type: "TEXT",
                 isPlaceholder: false,
                 isHidden: true,
                 id: 6,
@@ -49,10 +51,12 @@ let testProps = {
             },
             {
                 fieldDef: {
+                    datatypeAttributes: {
+                        type: "TEXT"
+                    },
                     id: 7
                 },
                 headerName: "Test Column 2",
-                type: "TEXT",
                 isPlaceholder: false,
                 isHidden: false,
                 id: 7,
@@ -68,14 +72,27 @@ let testProps = {
 let hiddenColumns = [
     {
         fieldDef: {
+            datatypeAttributes: {
+                type: "TEXT"
+            },
             id: 6
         },
         headerName: "Test Column 1",
-        type: "TEXT",
         isPlaceholder: false,
         isHidden: true,
         id: 6,
         order: 1
+    }
+];
+
+let expectedElements = [
+    {
+        key: "6",
+        title: "Test Column 1",
+        type: "TEXT",
+        onClick: (() => {
+            testProps.addColumnFromExistingField(CONTEXT.REPORT.NAV, hiddenColumns[0].fieldDef, true);
+        })
     }
 ];
 
@@ -123,5 +140,17 @@ describe('ReportFieldSelectMenu', () => {
         component = mount(<ReportFieldSelectMenu {...testProps} appId={appId} tblId={tblId} reportData={reportData}/>);
 
         expect(testProps.closeFieldSelectMenu).toHaveBeenCalledWith(CONTEXT.REPORT.NAV);
+    });
+
+    it('has the correct columns in the list based on the reportData prop', () => {
+        component = shallow(<ReportFieldSelectMenu {...testProps} appId={appId} tblId={tblId} reportData={reportData}/>);
+
+        let instance = component.instance();
+
+        let elements = instance.getElements();
+
+        expect(elements[0].key).toEqual('6');
+        expect(elements[0].title).toEqual('Test Column 1');
+        expect(elements[0].type).toEqual(FieldFormats.TEXT_FORMAT);
     });
 });
