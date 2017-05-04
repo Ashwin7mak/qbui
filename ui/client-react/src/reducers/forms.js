@@ -17,7 +17,6 @@ const forms = (
         // remove any entries where the entry's formData.recordId matches the passed in id
         return _.omit(newState, ['formData.recordId', _id]);
     }
-
     // reducer - no mutations!
     switch (action.type) {
 
@@ -285,6 +284,36 @@ const forms = (
 
         updatedForm.previouslySelectedField[0] = action.content.location;
         updatedForm.selectedFields[0] = undefined;
+
+        newState[id] = updatedForm;
+        return newState;
+    }
+
+    case types.IS_DRAGGING : {
+        if (!currentForm) {
+            return state;
+        }
+
+        if (!updatedForm.isDragging) {
+            updatedForm.isDragging = [];
+        }
+
+        updatedForm.isDragging[0] = true;
+
+        newState[id] = updatedForm;
+        return newState;
+    }
+
+    case types.END_DRAG : {
+        if (!currentForm) {
+            return state;
+        }
+
+        if (!updatedForm.isDragging) {
+            updatedForm.isDragging = [];
+        }
+
+        updatedForm.isDragging[0] = false;
 
         newState[id] = updatedForm;
         return newState;
