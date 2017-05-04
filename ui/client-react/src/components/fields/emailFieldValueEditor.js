@@ -77,6 +77,7 @@ const EmailFieldValueEditor = React.createClass({
                                      inputType="email"
                                      invalidMessage={(this.props.invalidMessage || 'Email is required')}
                                      showClearButton={this.props.isDisabled ? false : Breakpoints.isSmallBreakpoint()}
+                                     isDisabled={this.props.isDisabled}
                                      {...otherProps}
                                      />;
     }

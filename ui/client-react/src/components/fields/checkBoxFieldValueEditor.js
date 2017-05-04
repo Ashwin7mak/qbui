@@ -145,7 +145,8 @@ const CheckBoxFieldValueEditor = React.createClass({
                        ref="fieldInput"
                        type="checkbox"
                        onChange={this.onChange}
-                       tabIndex="-1" />
+                       tabIndex="-1"
+                       disabled={this.props.isDisabled}/>
                 {this.renderLabel()}
                 {this.renderRequiredSymbol()}
             </div>
