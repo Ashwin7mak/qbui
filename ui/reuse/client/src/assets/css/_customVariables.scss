@@ -157,8 +157,8 @@ $btn-danger-color: #fff !default;
 $btn-danger-bg: $brand-danger !default;
 $btn-danger-border: darken($btn-danger-bg, 5%) !default;
 $btn-link-disabled-color: $gray-light !default;
-$btn-min-footer-trowser-width: 100px;
-$btn-footer-trowser-height: 38px;
+$btn-min-width: 100px;
+$btn-height: 38px;
 $btn-footerheight: 100px;
 
 // Allows for customizing button radius independently from global border radius
