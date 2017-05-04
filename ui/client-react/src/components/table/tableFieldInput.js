@@ -50,7 +50,8 @@ class TableFieldInput extends React.Component {
      * @returns true only if we have a validation error AND we don't have focus AND the user has edited the field
      */
     showValidationError() {
-        return /*!this.props.hasFocus && */ this.props.validationError && this.props.edited;
+
+        return this.props.validationError && this.props.edited;
     }
 
     /**
@@ -66,7 +67,7 @@ class TableFieldInput extends React.Component {
             placeholder: this.props.placeholder,
             onChange: (e) => this.props.onChange(this.props.name, e.target.value),
             onFocus: () => this.props.onFocus && this.props.onFocus(this.props.name),
-            onBlur: () => this.props.onBlur && this.props.onBlur(this.props.name),
+            onBlur: (e) => this.props.onBlur && this.props.onBlur(this.props.name, e.target.value),
             ref: (input) => {this.input = input;}
         };
 

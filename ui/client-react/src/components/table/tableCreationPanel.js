@@ -81,14 +81,12 @@ class TableCreationPanel extends React.Component {
     }
 
     /**
-     * updata a table property
-     * @param property 'name' etc
-     * @param value new value for property
-     * @param isUserEdit did user initiate the edit?
+     * get validation error property/value
+     * @returns {*}
      */
-    updateTableProperty(property, value, isUserEdit = true) {
-
+    getValidationError(property, value) {
         let validationError = null;
+
         const trimmed = typeof value === "string" ? value.trim() : value;
 
         switch (property) {
@@ -108,7 +106,34 @@ class TableCreationPanel extends React.Component {
         }
         }
 
-        this.props.setTableProperty(property, value, validationError, isUserEdit);
+        return validationError;
+    }
+
+    /**
+     * update a table property
+     * @param property 'name' etc
+     * @param value new value for property
+     * @param isUserEdit did user initiate the edit?
+     */
+    updateTableProperty(property, value, isUserEdit = true) {
+
+        const pendingValidationError = this.getValidationError(property, value);
+
+        let validationError = this.props.tableInfo[property] ? this.props.tableInfo[property].validationError : null;
+
+        this.props.setTableProperty(property, value, pendingValidationError, validationError, isUserEdit);
+    }
+
+    /**
+     * unset edited property when focus is lost
+     */
+    onBlurInput(property, value) {
+
+        const validationError = this.getValidationError(property, value);
+
+        this.props.setTableProperty(property, value, validationError, validationError, false);
+
+        this.props.setEditingProperty(null);
     }
 
     /**
@@ -159,12 +184,6 @@ class TableCreationPanel extends React.Component {
         this.props.setEditingProperty(name);
     }
 
-    /**
-     * unset edited property when focus is lost
-     */
-    onBlurInput() {
-        this.props.setEditingProperty(null);
-    }
 
     /**
      * render the table settings UI

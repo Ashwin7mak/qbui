@@ -51,13 +51,15 @@ export const setEditingProperty = (editing) => ({
  * update a table property
  * @param property 'name', 'description' etc.
  * @param value input value
- * @param validationError validation error message (or null if none)
+ * @param pendingValidationError pending validation error message if user left field (or null if none)
+ * @param validationError validation error message to display (or null if none)
  * @param isUserEdit is a user edit (edit was initiated by the user)
  */
-export const setTableProperty = (property, value, validationError, isUserEdit) => ({
+export const setTableProperty = (property, value, pendingValidationError, validationError, isUserEdit) => ({
     type: types.SET_TABLE_CREATION_PROPERTY,
     property,
     value,
+    pendingValidationError,
     validationError,
     isUserEdit
 });
