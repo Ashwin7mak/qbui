@@ -307,7 +307,6 @@ exports.config = {
         global.breakpointSize = browserDimensions.breakpointSize;
         global.browserWidth = browserDimensions.browserWidth;
         global.browserHeight = browserDimensions.browserHeight;
-
         browser.logger.info('Setting browser size to ' + global.breakpointSize + ' breakpoint (' + global.browserWidth + ', ' + global.browserHeight + ')');
         browser.windowHandleSize({width: global.browserWidth, height: global.browserHeight});
 
