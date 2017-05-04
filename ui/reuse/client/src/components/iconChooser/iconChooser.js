@@ -85,7 +85,7 @@ class IconChooser extends React.Component {
                 }
             }
         }
-        return title.join();
+        return title.join(', ');
     }
 
 
