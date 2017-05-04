@@ -605,8 +605,8 @@ $edit-icon-font-size: 18px;
         // It makes it more complicated... but... if we don't, then we can't style the way we want below
         // because CSS does not have a *previous sibling* selector. We have no way to change the border
         // of the row *above* the row that will be edited. Only the one after.
-        .qbRow.willEdit .qbCell:not(.stickyCell),
-        .qbRow.willEdit + .qbRow .qbCell:not(.stickyCell) {
+        .qbRow.willEdit .qbCell:not(.stickyCell):not(.placeholderCell),
+        .qbRow.willEdit + .qbRow .qbCell:not(.stickyCell):not(.placeholderCell) {
             border-top: 1px solid $grid-onpencil-row-border-color;
             transition: border 150ms ease-in;
         }
