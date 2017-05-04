@@ -17,8 +17,6 @@ import {EDIT_RECORD_KEY} from '../../../constants/urlConstants';
 import {CONTEXT} from '../../../actions/context';
 import EmptyImage from '../../../../../client-react/src/assets/images/empty box graphic.svg';
 
-let FluxMixin = Fluxxor.FluxMixin(React);
-
 /**
  * A list of CardView items used to render a report at the small breakpoint
  */
@@ -26,7 +24,6 @@ const CHECKBOX_COL_WIDTH = 40; // 40px checkbox column can be toggled
 const MAX_SWIPE_DISTANCE = 150; // Drag distance when swiping up or down. Applies to report pagination.
 
 export let CardViewListHolder = React.createClass({
-    mixins: [FluxMixin],
     propTypes: {
         reportData: PropTypes.object.isRequired,
         primaryKeyName: PropTypes.string,
