@@ -359,8 +359,6 @@ const report = (state = [], action) => {
                 }
                 return column;
             });
-            _.remove(currentReport.data.metaData.fids, fid => {return fid === requestedColumn.id;});
-            currentReport.data.metaData.fids.splice(fidInsertionIndex, 0, requestedColumn.id);
             _.remove(currentReport.data.fids, fid => {return fid === requestedColumn.id;});
             currentReport.data.fids.splice(fidInsertionIndex, 0, requestedColumn.id);
             reorderColumns(currentReport.data.columns);
@@ -374,7 +372,6 @@ const report = (state = [], action) => {
             // metadata
             let columns = currentReport.data.columns;
             let fids = currentReport.data.fids;
-            let metaFids = currentReport.data.metaData.fids;
             // passed in params
             let params = action.content;
             let clickedColumnId = params.clickedId;
@@ -386,9 +383,6 @@ const report = (state = [], action) => {
             });
             // update the fids and metafids to reflect the hidden column
             currentReport.data.fids = fids.filter(fid => {
-                return fid !== clickedColumnId;
-            });
-            currentReport.data.metaData.fids = metaFids.filter(fid => {
                 return fid !== clickedColumnId;
             });
             return newState(currentReport);
