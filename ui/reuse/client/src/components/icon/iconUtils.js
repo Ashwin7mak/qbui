@@ -33,7 +33,7 @@ const IconUtils = {
      * @return {string} icon tooltip
      */
     getIconTitle(iconsByTag, icon) {
-        let title = [icon];
+        let title = [];
         let iconName = icon.toLowerCase();
         let tagsLength = iconsByTag.length;
         if (icon && iconsByTag) {

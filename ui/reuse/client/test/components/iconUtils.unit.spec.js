@@ -14,6 +14,18 @@ let iconsByTag = [
             "Plane"
         ]
     },
+    {
+        "tag": "tag1",
+        "icons": [
+            "Apple"
+        ]
+    },
+    {
+        "tag": "tag2",
+        "icons": [
+            "aPpLe", "banana"
+        ]
+    }
 ];
 
 describe('IconUtils', () => {
@@ -44,5 +56,13 @@ describe('IconUtils', () => {
         // text not lowercased
         expect(IconUtils.filterMatches(iconsByTag, "Addresses", "Location")).toBe(false);
         expect(IconUtils.filterMatches(iconsByTag, "Location", "Location")).toBe(false);
+    });
+
+    it('should return correct string', () => {
+        expect(IconUtils.getIconTitle(iconsByTag, 'apple')).toBe('apple, Apple, aPpLe');
+    });
+
+    it('should return empty string', () => {
+        expect(IconUtils.getIconTitle([], '')).toBe('');
     });
 });
