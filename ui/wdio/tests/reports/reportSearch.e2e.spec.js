@@ -45,7 +45,7 @@
          */
         beforeEach(function() {
             e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, DEFAULT_REPORT_ID);
-            let reportEndpoint = e2eBase.recordBase.apiBase.resolveReportsEndpoint(testApp.id, testApp.tables[e2eConsts.TABLE1].id, DEFAULT_REPORT_ID);
+            let reportEndpoint = e2eBase.recordBase.apiBase.resolveReportsResultsEndpoint(testApp.id, testApp.tables[e2eConsts.TABLE1].id, DEFAULT_REPORT_ID);
             browser.call(function() {
                 return e2eBase.recordBase.apiBase.executeRequest(reportEndpoint, consts.GET).then(function(reportResult) {
                     let results = JSON.parse(reportResult.body);
@@ -54,13 +54,13 @@
             });
             let math = Math.floor(Math.random() * (actualRecords.length - 1));
             randomRecord = actualRecords[math];
-            browser.logger.info('The random record: ' + math);
         });
 
         /**
          * Test methods to verify various kinds of input types in search box
          */
-        it("Verify for the search box and clear button", function() {
+
+        it("Verify the search box and clear button", function() {
 
             //Step 1 - Verify if the search box is visible
             reportContentPO.reportFilterSearchBox.waitForVisible();
@@ -80,7 +80,8 @@
             //Step 2 - Get the actual table value
             let searchedTableRecords = reportContentPO.getAllRecordsFromTable();
 
-            //Step 3 - Verify the Value
+            //Step 3 - Verify the Value present in each of the searchedTableRecords
+            expect(searchedTableRecords.length).toBeGreaterThan(0);
             searchedTableRecords.forEach(function(expectedRecord) {
                 expect(expectedRecord.includes(_.find(randomRecord, {id: 6}).value)).toBeTruthy();
             });
@@ -96,10 +97,12 @@
             let searchedTableRecords = reportContentPO.getAllRecordsFromTable();
 
             //Step 3 - Verify the Value
+            expect(searchedTableRecords.length).toBeGreaterThan(0);
             searchedTableRecords.forEach(function(expectedRecord) {
                 expect(expectedRecord).toContain(numericValue);
             });
         });
+
         it('Verify search results for Currency', function() {
 
             //Step 1 - Enter the value into search box
@@ -110,6 +113,7 @@
             let searchedTableRecords = reportContentPO.getAllRecordsFromTable();
 
             //Step 3 - Verify the Value
+            expect(searchedTableRecords.length).toBeGreaterThan(0);
             searchedTableRecords.forEach(function(expectedRecord) {
                 expect(expectedRecord).toContain('$' + currencyValue);
             });
@@ -125,6 +129,7 @@
             let searchedTableRecords = reportContentPO.getAllRecordsFromTable();
 
             //Step 3 - Verify the Value
+            expect(searchedTableRecords.length).toBeGreaterThan(0);
             searchedTableRecords.forEach(function(expectedRecord) {
                 expect(expectedRecord).toContain((percentageValue * 100) + '%');
             });

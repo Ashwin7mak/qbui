@@ -32,6 +32,7 @@
             //Enter the value in the search box
             this.reportFilterSearchBox.setValue(field);
             this.waitForReportContent();
+            //Needs this for the Dom to stabilize after loading the searched data
             browser.pause(e2eConsts.shortWaitTimeMs);
         }},
         clearSearch: {get: function() {return this.reportsToolBar.element('.clearSearch .searchIcon');}},
