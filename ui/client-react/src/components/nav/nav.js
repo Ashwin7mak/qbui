@@ -318,12 +318,7 @@ export const Nav = React.createClass({
         );
     },
     saveClicked() {
-        // get the form meta data from the store..hard code offset for now...this is going to change..
-        if (this.props.currentForm && this.props.currentForm.formData) {
-            let formMeta = this.props.currentForm.formData.formMeta;
-            let formType = this.props.currentForm.id;
-            this.props.updateForm(formMeta.appId, formMeta.tableId, formType, formMeta, this.props.redirectRoute);
-        }
+        // save report
     },
 
     onCancel() {
