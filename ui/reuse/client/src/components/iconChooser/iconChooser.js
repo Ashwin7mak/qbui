@@ -52,7 +52,7 @@ class IconChooser extends React.Component {
         return (
             <button tabIndex="0" className="showAllToggle" onClick={this.toggleAllIcons}>
                 <Icon className="showAllSelectedIcon" iconFont={this.props.font} icon={this.props.selectedIcon}/>
-                <Icon icon="caret-filled-down" className="toggleIcon"/>
+                <Icon icon="caret-down" className="toggleIcon"/>
             </button>);
     }
 

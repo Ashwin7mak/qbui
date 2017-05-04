@@ -41,6 +41,10 @@ import AppUtils from '../../utils/appUtils';
 
 import {NEW_TABLE_IDS_KEY} from '../../constants/localStorage';
 import {updateFormRedirectRoute} from '../../actions/formActions';
+
+import Analytics from '../../../../reuse/client/src/components/analytics/analytics';
+import Config from '../../config/app.config';
+
 // This shared view with the server layer must be loaded as raw HTML because
 // the current backend setup cannot handle a react component in a common directory. It is loaded
 // as a raw string and we tell react to interpret it as HTML. See more in common/src/views/Readme.md
@@ -337,7 +341,11 @@ export const Nav = React.createClass({
                 editingRecordId={editRecordIdForPageTitle}
                 selectedRecordId={viewingRecordId}
             />
+
+            <Analytics dataset={Config.evergageDataset} />
+
             <NotificationContainer/>
+
             {/* AppQbModal is an app-wide modal that can be called from non-react classes*/}
             <AppQbModal/>
 

@@ -22,13 +22,6 @@ let configuration = null;
 
 let defaultConfig = {
     uid: uuid.v1(),
-    api: {
-        qbVersion: 'v1',
-        eeVersion: 'v1',
-        automationVersion: 'v1',
-        nodeVersion: 'v1',
-        legacyVersion: 'v1'
-    },
     locale: {
         supported: ['en-us', 'de-de', 'fr-fr'],
         default: 'en-us'
@@ -46,7 +39,8 @@ if (__QB_PROD__) {
         },
         unauthorizedRedirect: null,
         // walkme java script
-        walkmeJSSnippet : 'https://cdn.walkme.com/users/897ca46385a543cbbeaffbc655cdf312/walkme_897ca46385a543cbbeaffbc655cdf312_https.js'
+        walkmeJSSnippet : 'https://cdn.walkme.com/users/897ca46385a543cbbeaffbc655cdf312/walkme_897ca46385a543cbbeaffbc655cdf312_https.js',
+        evergageDataset: 'test'
     });
 }
 
@@ -61,7 +55,8 @@ if (__QB_TEST__) {
         },
         unauthorizedRedirect: null,
         // walkme java script
-        walkmeJSSnippet : ''
+        walkmeJSSnippet : '',
+        evergageDataset: null
     });
 }
 
@@ -77,7 +72,8 @@ if (__QB_LOCAL__) {
         detectInvalidMutations: false, /* use redux-immutable-state-invariant middleware? */
         unauthorizedRedirect: '/qbase/unauthorized',
         // walkme java script
-        walkmeJSSnippet : ''
+        walkmeJSSnippet : '',
+        evergageDataset: null,
     });
 }
 

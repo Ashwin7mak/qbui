@@ -30,6 +30,12 @@ $edit-icon-font-size: 18px;
     // when there are only 1 or two rows. We may need to re-visit this if we start adding content below the grid.
     min-height: 275px;
 
+    // There may be cases where no rows are shown when we display a grid in an embedded report. Override the default
+    // 275px to a lower number.
+    .embeddedReportContainer & {
+        min-height: 50px;
+    }
+
     .qbTbody {
         background-color: $color-black-100;
     }
@@ -79,6 +85,7 @@ $edit-icon-font-size: 18px;
 
         &:last-of-type {
             border-right: 1px solid $grid-column-header-border-color;
+            width: 100%;
         }
     }
 
@@ -441,11 +448,9 @@ $edit-icon-font-size: 18px;
 
         // menu to access additional row actions such as print, email, copy, and delete
         .dropdown-menu {
-
             // position menu to the right of the sticky cells
-            top: 28px;
+            /* top: 28px;
             left: -5px;
-
             &:before {
                 right: auto;
                 left: 10px;
@@ -455,6 +460,28 @@ $edit-icon-font-size: 18px;
                 right: auto;
                 left: 10px;
             }
+*/
+            //We have a problem with the stacking contexts where we cannot display this popup menu below the more button
+            // as required by XD without some additional function in popup menus that we do not have coded at this time.
+            // As such, we have temporarily moved the menu to the right and relocated the pointer arrow so it doesn't look broken.
+            // This styling will be pulled back out once we have the necessary function in the popup menu to place it where it is desired.
+            top: 0;
+            left: 28px;
+
+            &:before {
+                right: auto;
+                left: -11px;
+                top: 10px;
+                transform: rotate(270deg);
+            }
+
+            &:after {
+                right: auto;
+                left: -10px;
+                top: 10px;
+                transform: rotate(270deg);
+            }
+            // End Temporary Fix
 
             a {
                 padding-left: 4px;

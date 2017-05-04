@@ -454,6 +454,16 @@ $input-border-focus-color: $color-indigo-700;
     box-shadow: 0 0 2px 1.5px rgba($color, 0.25);
     outline: none;
 }
+@mixin text-input-focus {
+    border: solid 1px $input-text-focus-border-color;
+    border-color: $input-text-focus-border-color !important;
+    @include focus-shadow();
+}
+
+@mixin text-input-focus-with-rounding {
+    @include text-input-focus;
+    border-radius: 2px;
+}
 
 //-------------------------------------------------------------------
 // END SEMANTIC NAMES TO CLEANUP

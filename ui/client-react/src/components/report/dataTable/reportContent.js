@@ -925,6 +925,9 @@ export const ReportContent = React.createClass({
         } else if (isRowPopUpMenuOpen) {
             classNames.push('rowPopUpMenuOpen');
         }
+        if (isSmall) {
+            classNames.push('small');
+        }
 
         classNames.push(this.props.reportData.loading ? 'loading' : '');
 
@@ -984,6 +987,7 @@ export const ReportContent = React.createClass({
                                             onScroll={this.onScrollRecords}
                                             onRowClicked={this.openRowToView}
                                             selectedRows={this.props.selectedRows}
+                                            selectRows={this.selectRows}
                                             pageStart={this.props.cardViewPagination.props.pageStart}
                                             pageEnd={this.props.cardViewPagination.props.pageEnd}
                                             getNextReportPage={this.props.cardViewPagination.props.getNextReportPage}

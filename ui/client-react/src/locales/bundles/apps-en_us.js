@@ -583,10 +583,16 @@ export default {
                 }
             },
             fieldGroups: {
-                text: 'Text',
-                numeric: 'Number',
-                date: 'Date',
-                other: 'Other'
+                text: "Text",
+                numeric: "Number",
+                date: "Date",
+                other: "Other",
+                relationships: "Relationships"
+            },
+            defaultMultichoiceOptions: {
+                first: "Option 1",
+                second: "Option 2",
+                third: "Option 3"
             }
         },
         featureSwitchAdmin: {
@@ -631,7 +637,7 @@ export default {
             summaryTitle: "Drag and drop fields you want to add to your table onto the form.  You can arrange the fields in the order you want people to use them.",
 
             addFieldsTitle: "Get ready to add fields to your table",
-            tableNameHeading: "Table Name",
+            tableNameHeading: "Table name",
             recordNameHeading: "A record in the table is called",
             descriptionHeading: "Description",
             iconHeading: "Icon",
