@@ -46,7 +46,7 @@ $data-font-size: $font-size-p;
     }
 
     .dateCell.cellEdit {
-        span.input-group-addon, input-group.date  {
+        span.input-group-addon, .input-group.date {
             background-color: $disabled-field-value-editor-background-color !important;
         }
     }
