@@ -26,6 +26,11 @@ import NotificationManager from '../../../../reuse/client/src/scripts/notificati
 import {DragDropContext} from 'react-dnd';
 import TouchBackend from 'react-dnd-touch-backend';
 import FormBuilderCustomDragLayer from '../formBuilder/formBuilderCustomDragLayer';
+import AppHistory from '../../globals/appHistory';
+import {HideAppModal} from '../qbModal/appQbModalFunctions';
+import AppQbModal from '../qbModal/appQbModal';
+
+
 
 import './formBuilderContainer.scss';
 
@@ -126,6 +131,7 @@ export const FormBuilderContainer = React.createClass({
     },
 
     onCancel() {
+        HideAppModal();
         const {appId, tblId} = this.props.match.params;
 
         NavigationUtils.goBackToLocationOrTable(appId, tblId, this.props.redirectRoute);
@@ -138,6 +144,7 @@ export const FormBuilderContainer = React.createClass({
     },
 
     saveClicked() {
+        HideAppModal();
         // get the form meta data from the store..hard code offset for now...this is going to change..
         if (this.props.currentForm && this.props.currentForm.formData) {
             let formMeta = this.props.currentForm.formData.formMeta;
@@ -149,7 +156,7 @@ export const FormBuilderContainer = React.createClass({
     getRightAlignedButtons() {
         return (
             <div>
-                <Button tabIndex={tabIndexConstants.CANCEL_BUTTON_TABINDEX} bsStyle="primary" onClick={this.onCancel} className="alternativeTrowserFooterButton"><I18nMessage message="nav.cancel"/></Button>
+                <Button tabIndex={tabIndexConstants.CANCEL_BUTTON_TABINDEX} bsStyle="primary" onClick={this.cancelEditingForm} className="alternativeTrowserFooterButton"><I18nMessage message="nav.cancel"/></Button>
                 <Button tabIndex={tabIndexConstants.SAVE_BUTTON_TABINDEX} bsStyle="primary" onClick={this.saveClicked} className="mainTrowserFooterButton"><I18nMessage message="nav.save"/></Button>
             </div>
         );
@@ -169,6 +176,19 @@ export const FormBuilderContainer = React.createClass({
             centerAlignedButtons={this.getTrowserActions()}
             leftAlignedButtons={this.getTrowserActions()}
         />;
+    },
+
+    cancelEditingForm() {
+        // const pendEdits = this.getPendEdits();
+        console.log('formBuilderContainer');
+        AppHistory.showPendingEditsConfirmationModal(this.onCancel, this.saveClicked, function() {HideAppModal();});
+        // if (pendEdits && pendEdits.isPendingEdit) {
+        //     console.log('\' ello?');
+        //     AppHistory.showPendingEditsConfirmationModal(this.onCancel, this.saveClicked, function() {HideAppModal();});
+        // } else {
+        //     // Clean up before exiting the trowser
+        //     this.onCancel();
+        // }
     },
 
     updateChildrenTabIndex(e) {
@@ -247,6 +267,8 @@ export const FormBuilderContainer = React.createClass({
 
         return (
             <div className="formBuilderContainer">
+                {/* AppQbModal is an app-wide modal that can be called from non-react classes*/}
+                <AppQbModal/>
                 <FormBuilderCustomDragLayer />
                 <KeyboardShortcuts id="formBuilderContainer"
                                    shortcutBindings={[
