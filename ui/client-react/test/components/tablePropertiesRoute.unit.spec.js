@@ -136,7 +136,7 @@ describe('TablePropertiesRoute functions', () => {
             let buttonsPanel = TestUtils.scryRenderedDOMComponentsWithClass(component, "tableInfoButtons");
             let applyButton = buttonsPanel[0].querySelectorAll('.primaryButton');
             Simulate.click(applyButton[0]);
-            //expect(props.updateTable).toHaveBeenCalled();
+            expect(props.updateTable).toHaveBeenCalled();
         });
 
         it('test calls reset on clicking reset button', () => {

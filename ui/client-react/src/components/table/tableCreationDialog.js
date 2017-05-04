@@ -70,7 +70,7 @@ export class TableCreationDialog extends React.Component {
      */
     isValid() {
 
-        // form is invalid if any tableInfo properties have a pendingValidationError value
+        // form can be saved if the state if the fields is valid, regardless of what previous validation error is being shown
 
         return this.props.tableCreation.edited && !_.findKey(this.props.tableInfo, (field) => field.pendingValidationError);
     }
