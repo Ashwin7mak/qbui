@@ -520,11 +520,7 @@ describe('ReportColumnHeaderMenu', () => {
 
             instance.hideThisColumn(testProps.fieldDef.id);
 
-            let params = {
-                clickedId: testProps.fieldDef.id
-            };
-
-            expect(testProps.hideColumn).toHaveBeenCalledWith(CONTEXT.REPORT.NAV, testProps.appId, testProps.tblId, testProps.rptId, params);
+            expect(testProps.hideColumn).toHaveBeenCalledWith(CONTEXT.REPORT.NAV, testProps.fieldDef.id);
         });
 
         it('does not call the action to hide a column if the required props are not passed in', () => {

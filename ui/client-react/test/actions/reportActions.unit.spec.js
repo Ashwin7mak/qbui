@@ -55,7 +55,7 @@ describe('Report actions', () => {
             clickedId: 6
         };
         const expectedAction = event(context, types.HIDE_COLUMN, params);
-        expect(reportActions.hideColumn(context, appId, tblId, rptId, params)).toEqual(expectedAction);
+        expect(reportActions.hideColumn(context, 6)).toEqual(expectedAction);
     });
 
     it('addColumnFromExistingField action dispatches type.ADD_COLUMN_FROM_EXISTING_FIELD', () => {
@@ -70,7 +70,8 @@ describe('Report actions', () => {
             addBefore: true
         };
         const expectedAction = event(context, types.ADD_COLUMN_FROM_EXISTING_FIELD, params);
-        expect(reportActions.addColumnFromExistingField(context, params)).toEqual(expectedAction);
+        expect(reportActions.addColumnFromExistingField(context, {fieldDef: {id: 7}, isHidden: true, isPlaceholder: false}, true))
+            .toEqual(expectedAction);
     });
 
     it('openFieldSelectMenu action dispatches type.OPEN_FIELD_SELECT_MENU with open parameter', () => {
