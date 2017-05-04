@@ -25,6 +25,8 @@ export default {
                 feedbackTitle: "Wir freuen uns über Ihr Feedback",
                 feedbackText: "Unser Team wartet darauf, von Ihnen zu hören! Wir sind so eifrig zu hören, was Sie über Mercury denken, dass wir einen Feedback-Button auf jeder Seite Ihrer App enthalten haben.",
                 feedbackButton: "Feedback geben",
+                feedbackMenuTitle: "Feedback",
+                reportFeedBackButton: "Ein Problem melden",
                 tipTitle: "Nichts geschah, als ich anklickte ...",
                 tipText: "Dies ist in Arbeit, so dass, wenn Sie auf eine Schaltfläche klicken und es macht nichts, keine Sorgen. Wir arbeiten noch an dieser Funktion.",
                 helpTitle: "Brauche Hilfe?",
