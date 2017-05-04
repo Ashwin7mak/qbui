@@ -17,6 +17,17 @@ const forms = (
         // remove any entries where the entry's formData.recordId matches the passed in id
         return _.omit(newState, ['formData.recordId', _id]);
     }
+
+    function checkIsFormBuilderDirty(tabIndex = 0, sectionIndex = 0, columnIndex = 0) {
+        let formElements = updatedForm.formData.formMeta.tabs[tabIndex].sections[sectionIndex].columns[columnIndex].elements;
+        updatedForm.isFormDirty = false;
+        updatedForm.originalFormState = !updatedForm.originalFormState ? formElements : updatedForm.originalFormState;
+
+        if (!(_.isEqual(updatedForm.originalFormState, formElements))) {
+            updatedForm.isFormDirty = true;
+        }
+    }
+
     // reducer - no mutations!
     switch (action.type) {
 
@@ -145,6 +156,7 @@ const forms = (
 
         updatedForm.selectedFields[0] = newLocation;
 
+        checkIsFormBuilderDirty();
         newState[action.id] = updatedForm;
         return newState;
     }
@@ -200,6 +212,7 @@ const forms = (
 
         updatedForm.selectedFields[0] = newLocation;
 
+        checkIsFormBuilderDirty();
         newState[action.id] = updatedForm;
         return newState;
     }
@@ -216,6 +229,7 @@ const forms = (
             location
         );
 
+        checkIsFormBuilderDirty();
         newState[id] = updatedForm;
         return newState;
     }
@@ -267,6 +281,7 @@ const forms = (
         updatedForm.selectedFields[0] = action.content.location;
         updatedForm.previouslySelectedField = undefined;
 
+        checkIsFormBuilderDirty();
         newState[id] = updatedForm;
         return newState;
     }
@@ -285,6 +300,7 @@ const forms = (
         updatedForm.previouslySelectedField[0] = action.content.location;
         updatedForm.selectedFields[0] = undefined;
 
+        checkIsFormBuilderDirty();
         newState[id] = updatedForm;
         return newState;
     }
@@ -300,6 +316,7 @@ const forms = (
 
         updatedForm.isDragging[0] = true;
 
+        checkIsFormBuilderDirty();
         newState[id] = updatedForm;
         return newState;
     }
@@ -315,6 +332,7 @@ const forms = (
 
         updatedForm.isDragging[0] = false;
 
+        checkIsFormBuilderDirty();
         newState[id] = updatedForm;
         return newState;
     }
@@ -323,17 +341,16 @@ const forms = (
         if (!currentForm) {
             return state;
         }
-        console.log('updatedForm: ', updatedForm);
-        console.log('action.content: ', action.content);
         let {tabIndex, sectionIndex, columnIndex} = action.content;
         let formElements = updatedForm.formData.formMeta.tabs[tabIndex].sections[sectionIndex].columns[columnIndex].elements;
         updatedForm.isFormDirty = false;
         updatedForm.originalFormState = !updatedForm.originalFormState ? formElements : updatedForm.originalFormState;
-
+        console.log('formElements: ', formElements);
         if (!(_.isEqual(updatedForm.originalFormState, formElements))) {
             updatedForm.isFormDirty = true;
         }
 
+        checkIsFormBuilderDirty();
         newState[id] = updatedForm;
         return newState;
     }
@@ -359,6 +376,7 @@ const forms = (
             -1
         );
 
+        checkIsFormBuilderDirty();
         newState[id] = updatedForm;
         return newState;
     }
@@ -384,6 +402,7 @@ const forms = (
             1
         );
 
+        checkIsFormBuilderDirty();
         newState[id] = updatedForm;
         return newState;
     }
