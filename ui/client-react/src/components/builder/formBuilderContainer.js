@@ -3,7 +3,7 @@ import {Button} from 'react-bootstrap';
 import {I18nMessage} from '../../utils/i18nMessage';
 import Locale from '../../locales/locales';
 import {connect} from 'react-redux';
-import {loadForm, updateForm, moveFieldOnForm, toggleFormBuilderChildrenTabIndex, toggleToolPaletteChildrenTabIndex, keyboardMoveFieldUp, keyboardMoveFieldDown, selectFieldOnForm, deselectField, removeFieldFromForm, addNewFieldToForm} from '../../actions/formActions';
+import {loadForm, updateForm, checkIsFormDirty, moveFieldOnForm, toggleFormBuilderChildrenTabIndex, toggleToolPaletteChildrenTabIndex, keyboardMoveFieldUp, keyboardMoveFieldDown, selectFieldOnForm, deselectField, removeFieldFromForm, addNewFieldToForm} from '../../actions/formActions';
 import {updateFormAnimationState} from '../../actions/animationActions';
 import Loader from 'react-loader';
 import {LARGE_BREAKPOINT} from "../../constants/spinnerConfigurations";
@@ -49,6 +49,7 @@ const mapStateToProps = state => {
         toolPaletteChildrenTabIndex: (_.has(currentForm, 'toolPaletteChildrenTabIndex') ? currentForm.toolPaletteChildrenTabIndex[0] : "-1"),
         formFocus: (_.has(currentForm, 'formFocus') ? currentForm.formFocus[0] : undefined),
         toolPaletteFocus: (_.has(currentForm, 'toolPaletteFocus') ? currentForm.toolPaletteFocus[0] : undefined),
+        isFormDirty: (_.has(currentForm, 'isFormDirty') ? currentForm.isFormDirty : undefined),
         isOpen: state.builderNav.isNavOpen,
         isCollapsed: state.builderNav.isNavCollapsed
     };
@@ -58,6 +59,7 @@ const mapDispatchToProps = {
     loadForm,
     moveFieldOnForm,
     updateForm,
+    checkIsFormDirty,
     updateFormAnimationState,
     toggleFormBuilderChildrenTabIndex,
     toggleToolPaletteChildrenTabIndex,
@@ -181,6 +183,9 @@ export const FormBuilderContainer = React.createClass({
     cancelEditingForm() {
         // const pendEdits = this.getPendEdits();
         console.log('formBuilderContainer');
+        if (this.props.checkIsFormDirty) {
+            this.props.checkIsFormDirty(this.props.currentForm.id);
+        }
         AppHistory.showPendingEditsConfirmationModal(this.onCancel, this.saveClicked, function() {HideAppModal();});
         // if (pendEdits && pendEdits.isPendingEdit) {
         //     console.log('\' ello?');
@@ -257,6 +262,7 @@ export const FormBuilderContainer = React.createClass({
     },
 
     render() {
+        console.log('this.props: ', this.props);
         let loaded = (_.has(this.props, 'currentForm') && this.props.currentForm !== undefined && !this.props.currentForm.loading && !this.props.currentForm.saving);
         let formData = null;
         let formId = null;

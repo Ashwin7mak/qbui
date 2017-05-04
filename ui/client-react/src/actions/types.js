@@ -29,6 +29,7 @@ export const SELECT_FIELD = 'SELECT_FIELD';
 export const DESELECT_FIELD = 'DESELECT_FIELD';
 export const END_DRAG = 'END_DRAG';
 export const IS_DRAGGING = 'IS_DRAGGING';
+export const IS_FORM_DIRTY = 'IS_FORM_DIRTY';
 export const UNLOAD_FORM = 'UNLOAD_FORM';
 
 //  ********  Nav shell actions ********

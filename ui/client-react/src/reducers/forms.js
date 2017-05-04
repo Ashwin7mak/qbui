@@ -319,6 +319,25 @@ const forms = (
         return newState;
     }
 
+    case types.IS_FORM_DIRTY : {
+        if (!currentForm) {
+            return state;
+        }
+        console.log('updatedForm: ', updatedForm);
+        console.log('action.content: ', action.content);
+        let {tabIndex, sectionIndex, columnIndex} = action.content;
+        let formElements = updatedForm.formData.formMeta.tabs[tabIndex].sections[sectionIndex].columns[columnIndex].elements;
+        updatedForm.isFormDirty = false;
+        updatedForm.originalFormState = !updatedForm.originalFormState ? formElements : updatedForm.originalFormState;
+
+        if (!(_.isEqual(updatedForm.originalFormState, formElements))) {
+            updatedForm.isFormDirty = true;
+        }
+
+        newState[id] = updatedForm;
+        return newState;
+    }
+
     case types.KEYBOARD_MOVE_FIELD_UP : {
         if (!currentForm) {
             return state;

@@ -343,6 +343,20 @@ export const isInDraggingState = (formId) => {
 };
 
 /**
+ * isInDraggingState updates the dragging state to true for drag and drop
+ * @param formId
+ * @returns {{id, type, content}|*}
+ */
+export const checkIsFormDirty = (formId, tabIndex = 0, sectionIndex = 0, columnIndex = 0) => {
+    console.log('isFormDirty Action');
+    return event(formId, types.IS_FORM_DIRTY, {
+        tabIndex,
+        sectionIndex,
+        columnIndex
+    });
+};
+
+/**
  * Create a new form
  *
  * @param appId
