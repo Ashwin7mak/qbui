@@ -1,6 +1,7 @@
 import React, {PropTypes, Component} from 'react';
 import GlobalAction from '../globalAction/globalAction';
 import UserDropDown from './supportingComponents/userDropDown';
+import UserFeedBack from './supportingComponents/userFeedBack';
 import HelpButton from '../helpButton/helpButton';
 
 // IMPORTING FROM CLIENT REACT
@@ -43,6 +44,12 @@ class ReDefaultTopNavGlobalActions extends Component {
                             shouldOpenMenusUp={this.props.shouldOpenMenusUp}
                         />
                     ))}
+                    <li className="link globalAction withDropdown">
+                        <UserFeedBack
+                            startTabIndex={this.props.startTabIndex}
+                            shouldOpenMenusUp={this.props.shouldOpenMenusUp}
+                            />
+                    </li>
                     <li className="link globalAction withDropdown">
                         <UserDropDown
                             supportedLocales={Locale.getSupportedLocales()}
