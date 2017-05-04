@@ -41,10 +41,3 @@
         }
     }
 }
-
-@include small-breakpoint {
-    .tableField {
-        min-width: 50%;
-        width: inherit;
-    }
-}
