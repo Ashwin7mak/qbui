@@ -493,7 +493,9 @@ export const Nav = React.createClass({
      * open the create table wizard
      */
     createNewTable() {
-        this.props.showTableCreationDialog();
+        setTimeout(() => {
+            this.props.showTableCreationDialog();
+        });
     }
 });
 

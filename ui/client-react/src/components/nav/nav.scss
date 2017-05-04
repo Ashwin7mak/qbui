@@ -50,6 +50,13 @@ body:not(.touch) .navShell .main .topNav .iconLink:hover {
     color: $topnav-hover-color;
 }
 
+body.touch .qbtooltip {
+    display: none;
+}
+body.touch .qbtooltip.invalidInput {
+    display: block;
+}
+
 @include small-breakpoint {
     .layout-stage {
         display: none;
