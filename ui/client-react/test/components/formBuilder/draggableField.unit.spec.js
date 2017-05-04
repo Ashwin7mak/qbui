@@ -48,4 +48,25 @@ describe('DraggableField', () => {
         expect(component.find('.dragging')).toBePresent();
         expect(component.find('.notDragging')).not.toBePresent();
     });
+
+    it('does not add a dragging class isTokenInMenuDragging is false', () => {
+        component = shallow(<DraggableComponent connectDragSource={mockConnectDragSource} isTokenInMenuDragging={false} location={{a: 'b'}} selectedField={{a: 'b'}} formBuilderChildrenTabIndex={[]}/>);
+
+        expect(component.find('.notDragging')).toBePresent();
+        expect(component.find('.dragging')).not.toBePresent();
+    });
+
+    it('does not add a dragging class isDragging is false', () => {
+        component = shallow(<DraggableComponent connectDragSource={mockConnectDragSource} isDragging={false} location={{a: 'b'}} selectedField={{a: 'b'}} formBuilderChildrenTabIndex={[]}/>);
+
+        expect(component.find('.notDragging')).toBePresent();
+        expect(component.find('.dragging')).not.toBePresent();
+    });
+
+    it('does not add a dragging class when isTokenInMenuDragging is true but the location and selection are not the same', () => {
+        component = shallow(<DraggableComponent connectDragSource={mockConnectDragSource} isTokenInMenuDragging={true} location={{a: 'c'}} selectedField={{a: 'b'}} formBuilderChildrenTabIndex={[]}/>);
+
+        expect(component.find('.notDragging')).toBePresent();
+        expect(component.find('.dragging')).not.toBePresent();
+    });
 });

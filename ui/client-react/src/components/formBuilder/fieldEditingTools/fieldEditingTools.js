@@ -217,10 +217,12 @@ const mapStateToProps = (state, ownProps) => {
     let formBuilderChildrenTabIndex = _.get(currentForm, 'formBuilderChildrenTabIndex[0]', '-1');
     let selectedFields = (_.has(currentForm, "selectedFields") ? currentForm.selectedFields : []);
     let previouslySelectedField = (_.has(currentForm, "previouslySelectedField") ? currentForm.previouslySelectedField : []);
-    let isDragging = (_.has(currentForm, "isDragging") ? currentForm.isDragging : undefined);
     //If a new field is added to form builder we use the state isDragging to indicate whether or not it is in a dragon state,
     //If isDragging is undefined, then we use the components ownProps to indicate whether or not the field is in a dragon state
-    isDragging = isDragging === undefined || ownProps.isDragging === true ? ownProps.isDragging : isDragging;
+    let isDragging = ownProps.isDragging;
+    if (!isDragging && _.has(currentForm, 'isDragging')) {
+        isDragging = currentForm.isDragging[0];
+    }
 
     return {
         selectedFields,
