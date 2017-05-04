@@ -238,10 +238,6 @@
     position: relative;
     overflow: auto;
 
-    .loadedContent {
-        padding: 0 10px;
-    }
-
     &.loading {
         // allow space for the loader spinner
         min-width: 100%;
@@ -357,5 +353,11 @@ $add-record-radius: 20px;
         &:focus {
             color: $add-record-fg;
         }
+    }
+}
+
+@include not-small-breakpoint {
+    .reportContent .loadedContent {
+        padding: 0 10px;
     }
 }
