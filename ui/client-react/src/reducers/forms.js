@@ -298,7 +298,7 @@ const forms = (
             updatedForm.isDragging = [];
         }
 
-        updatedForm.isDragging[0] = true;
+        updatedForm.isDragging = true;
 
         newState[id] = updatedForm;
         return newState;
