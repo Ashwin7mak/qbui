@@ -274,10 +274,8 @@
          */
         ClickMoreFieldsLinkInFieldsPanel : {value: function() {
             this.fieldsPanel.waitForVisible();
-            //scroll to more fields
-            this.fieldsPanel.element('.list-group .moreFields').scroll();
-            //click on more fields
-            this.fieldsPanel.element('.list-group .moreFields').waitForVisible();
+            //Directly clicking on the element rather than scrolling to the element and waiting for it to be visible
+            //Element already loaded in the DOM
             this.fieldsPanel.element('.list-group .moreFields').click();
             //Need this to wait for more fields to load
             return browser.pause(e2eConsts.shortWaitTimeMs);
