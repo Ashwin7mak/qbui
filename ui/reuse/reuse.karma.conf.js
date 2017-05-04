@@ -108,6 +108,16 @@ module.exports = function(config) {
                 'react/addons': true,
                 'react/lib/ExecutionEnvironment': true,
                 'react/lib/ReactContext': true
+            },
+            resolve: {
+                root: path.resolve(__dirname),
+                // Allow easier imports for commonly imported folders
+                alias: {
+                    APP: 'client-react/src',
+                    REUSE: 'reuse/client/src',
+                    GOVERNANCE: 'governance/src',
+                    COMMON: 'common/src'
+                }
             }
         },
         webpackServer: {
