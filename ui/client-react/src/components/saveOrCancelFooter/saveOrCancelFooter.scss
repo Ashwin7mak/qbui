@@ -67,8 +67,8 @@
     }
 
     button {
-        min-width: 100.7px;
-        height: 38px;
+        min-width: $btn-min-footer-trowser-width;
+        height: $btn-footer-trowser-height;
         border-radius: $border-radius-base;
         &:focus {
             outline: none;
