@@ -581,7 +581,7 @@ const mapStateToProps = (state, ownProps) => {
     let currentForm = _.get(state, `forms[${formId}]`, {});
     return {
         fields: state.fields,
-        isTokenInMenuDragging: (_.has(currentForm, 'isDragging') ? currentForm.isDragging[0] : undefined),
+        isTokenInMenuDragging: (_.has(currentForm, 'isDragging') ? currentForm.isDragging : undefined),
     };
 };
 

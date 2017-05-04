@@ -221,7 +221,7 @@ const mapStateToProps = (state, ownProps) => {
     //If isDragging is undefined, then we use the components ownProps to indicate whether or not the field is in a dragon state
     let isDragging = ownProps.isDragging;
     if (!isDragging && _.has(currentForm, 'isDragging')) {
-        isDragging = currentForm.isDragging[0];
+        isDragging = currentForm.isDragging;
     }
 
     return {
