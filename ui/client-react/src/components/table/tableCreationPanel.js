@@ -129,11 +129,13 @@ class TableCreationPanel extends React.Component {
      */
     onBlurInput(property, value) {
 
-        const validationError = this.getValidationError(property, value);
+        if (this.props.tableInfo[property].edited) {
+            const validationError = this.getValidationError(property, value);
 
-        this.props.setTableProperty(property, value, validationError, validationError, false);
+            this.props.setTableProperty(property, value, validationError, validationError, false);
 
-        this.props.setEditingProperty(null);
+            this.props.setEditingProperty(null);
+        }
     }
 
     /**
