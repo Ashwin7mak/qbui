@@ -69,6 +69,14 @@ describe('Report actions', () => {
                 done();
             });
     });
+
+    it('should create an action to enter builder mode', () => {
+        expect(reportActions.enterBuilderMode(context)).toEqual(event(context, types.ENTER_BUILDER_MODE, {}));
+    });
+
+    it('should create an action to exit builder mode', () => {
+        expect(reportActions.exitBuilderMode(context)).toEqual(event(context, types.EXIT_BUILDER_MODE, {}));
+    });
 });
 
 describe('Test ReportsActions function success workflow', () => {
@@ -391,11 +399,4 @@ describe('Test ReportsActions function failure workflow', () => {
             });
     });
 
-    it('should create an action to enter builder mode', () => {
-        expect(shellActions.enterBuilderMode()).toEqual({type: types.ENTER_BUILDER_MODE});
-    });
-
-    it('should create an action to exit builder mode', () => {
-        expect(shellActions.exitBuilderMode()).toEqual({type: types.EXIT_BUILDER_MODE});
-    });
 });
