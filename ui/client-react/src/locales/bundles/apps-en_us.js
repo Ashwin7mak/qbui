@@ -48,8 +48,8 @@ export default {
                 cancel: "Cancel",
                 singular: "user",
                 plural: "users",
-                usersRemoved: " users have been removed",
-                userRemoved: " user has been removed"
+                usersRemoved: "users have been removed",
+                userRemoved: "user has been removed"
 
             }
         },

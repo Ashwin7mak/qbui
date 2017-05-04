@@ -37,7 +37,17 @@ export default {
                 addUser: "Das Hinzufügen eines neuen Benutzers ist noch nicht verfügbar",
                 users: "Benutzer",
                 content: "Dies ist die Liste aller Personen, die zu Ihrer Bewerbung hinzugefügt wurden. Sie können einige kurze Einblicke darüber, wie viele Menschen sind in jeder Rolle in Ihrer Anwendung sowie finden Sie eine bestimmte Person in der Liste und E-Mail sie.",
-                manager: "Anwendungsmanager"
+                manager: "Anwendungsmanager",
+                removeUser: "Diesen Benutzer entfernen?",
+                unassignUser: "Benutzer können nicht mehr auf diese Anwendung zugreifen. Alle Daten, die sie zuvor eingegeben haben, bleiben in der Anwendung.",
+                remove: "Entfernen {Wert} {Suffix}",
+                removeButton: "Entfernen",
+                cancel: "Stornieren",
+                singular: "Benutzer",
+                plural: "Benutzer",
+                usersRemoved: "Benutzer wurden entfernt",
+                userRemoved: "Benutzer wurde entfernt"
+
             }
         },
         appMenu: {
@@ -491,7 +501,10 @@ export default {
             copy: "Kopieren ist noch nicht verfügbar",
             email: "E-Mail ist noch nicht verfügbar",
             delete: "Das Löschen ist noch nicht verfügbar",
-            viewRecord: "Eintrag anzeigen # {recordId}"
+            viewRecord: "Eintrag anzeigen # {recordId}",
+            emailUsers: "Der Export von CSV ist noch nicht verfügbar",
+            settingsRole: "Rollenwechsel ist noch nicht verfügbar",
+            emailApp: "Die App-Einladung ist noch nicht verfügbar",
         },
         pageTitles: {
             pageTitleSeparator: " - ",
