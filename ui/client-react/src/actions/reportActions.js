@@ -392,44 +392,18 @@ export const closeFieldSelectMenu = (context) => {
 /**
  * Add the selected field to the report table.
  * @param context
- * @param appId
- * @param tblId
- * @param params { requestedColumn, addBefore }
+ * @param requestedColumn
+ * @param addBefore
  */
-export const addColumnFromExistingField = (context, appId, tblId, params) => {
-    return (dispatch) => {
-        return new Promise((resolve, reject) => {
-            if (appId && tblId) {
-                logger.debug(`Adding column with id: ${params.requestedColumn.id} for appId: ${appId}, tblId:${tblId}`);
-                dispatch(event(context, types.ADD_COLUMN_FROM_EXISTING_FIELD, params));
-                resolve();
-            } else {
-                logger.error(`reportActions.addColumnFromExistingField: Missing one or more required input parameters.  AppId:${appId}; TblId:${tblId};`);
-                reject();
-            }
-        });
-    };
+export const addColumnFromExistingField = (context, requestedColumn, addBefore) => {
+    return event(context, types.ADD_COLUMN_FROM_EXISTING_FIELD, {requestedColumn, addBefore});
 };
 
 /**
  * Hide a column based on the column id given.
  * @param context
- * @param appId
- * @param tblId
- * @param rptId
- * @param params { clickedId }
+ * @param clickedId
  */
-export const hideColumn = (context, appId, tblId, rptId, params) => {
-    return (dispatch) => {
-        return new Promise((resolve, reject) => {
-            if (appId && tblId && rptId) {
-                logger.debug(`Hiding column with id: ${params.clickedId} for appId: ${appId}, tblId:${tblId}, rptId:${rptId}`);
-                dispatch(event(context, types.HIDE_COLUMN, params));
-                resolve();
-            } else {
-                logger.error(`reportActions.hideColumn: Missing one or more required input parameters.  AppId:${appId}; TblId:${tblId}; RptId:${rptId}`);
-                reject();
-            }
-        });
-    };
+export const hideColumn = (context, clickedId) => {
+    return event(context, types.HIDE_COLUMN, {clickedId});
 };

@@ -50,27 +50,15 @@ describe('Report actions', () => {
             });
     });
 
-    it('hideColumn action dispatches types.HIDE_COLUMN with parameters', (done) => {
+    it('hideColumn action dispatches types.HIDE_COLUMN with parameters', () => {
         const params = {
             clickedId: 6
         };
-        const expectedAction = [
-            event(context, types.HIDE_COLUMN, params)
-        ];
-        const store = mockReportsStore({});
-
-        return store.dispatch(reportActions.hideColumn(context, appId, tblId, rptId, params)).then(
-            () => {
-                expect(store.getActions()).toEqual(expectedAction);
-                done();
-            },
-            () => {
-                expect(false).toBe(true);
-                done();
-            });
+        const expectedAction = event(context, types.HIDE_COLUMN, params);
+        expect(reportActions.hideColumn(context, appId, tblId, rptId, params)).toEqual(expectedAction);
     });
 
-    it('addColumnFromExistingField action dispatches type.ADD_COLUMN_FROM_EXISTING_FIELD', (done) => {
+    it('addColumnFromExistingField action dispatches type.ADD_COLUMN_FROM_EXISTING_FIELD', () => {
         let params = {
             requestedColumn: {
                 fieldDef: {
@@ -81,20 +69,8 @@ describe('Report actions', () => {
             },
             addBefore: true
         };
-        const expectedAction = [
-            event(context, types.ADD_COLUMN_FROM_EXISTING_FIELD, params)
-        ];
-        const store = mockReportsStore({});
-
-        return store.dispatch(reportActions.addColumnFromExistingField(context, appId, tblId, params)).then(
-            () => {
-                expect(store.getActions()).toEqual(expectedAction);
-                done();
-            },
-            () => {
-                expect(false).toBe(true);
-                done();
-            });
+        const expectedAction = event(context, types.ADD_COLUMN_FROM_EXISTING_FIELD, params);
+        expect(reportActions.addColumnFromExistingField(context, params)).toEqual(expectedAction);
     });
 
     it('openFieldSelectMenu action dispatches type.OPEN_FIELD_SELECT_MENU with open parameter', () => {

@@ -218,11 +218,7 @@ export class ReportColumnHeaderMenu extends Component {
         if (!this.hasRequiredIds()) {return;}
         if (this.props.isOnlyOneColumnVisible) {return;}
 
-        let params = {
-            clickedId: this.props.fieldDef.id
-        };
-
-        this.props.hideColumn(CONTEXT.REPORT.NAV, this.props.appId, this.props.tblId, this.props.rptId, params);
+        this.props.hideColumn(CONTEXT.REPORT.NAV, this.props.fieldDef.id);
     };
 
     openFieldSelector(before) {
@@ -299,8 +295,8 @@ const mapDispatchToProps = (dispatch) => {
         loadDynamicReport: (context, appId, tblId, rptId, format, filter, queryParams) => {
             dispatch(loadDynamicReport(context, appId, tblId, rptId, format, filter, queryParams));
         },
-        hideColumn: (context, appId, tblId, rptId, params) => {
-            dispatch(hideColumn(context, appId, tblId, rptId, params));
+        hideColumn: (context, clickedId) => {
+            dispatch(hideColumn(context, clickedId));
         },
         openFieldSelectMenu: (context, clickedColumn, addBeforeColumn) => {
             dispatch(openFieldSelectMenu(context, clickedColumn, addBeforeColumn));

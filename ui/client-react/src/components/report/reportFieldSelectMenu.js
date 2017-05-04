@@ -41,16 +41,12 @@ export class ReportFieldSelectMenu extends Component {
         let availableColumns = this.props.menu.availableColumns;
         let hiddenColumns = ReportUtils.getDifferenceOfColumns(availableColumns, visibleColumns);
         for (let i = 0; i < hiddenColumns.length; i++) {
-            let params = {
-                requestedColumn: hiddenColumns[i],
-                addBefore: this.props.menu.addBeforeColumn
-            };
             elements.push({
                 key: hiddenColumns[i].id + "",
                 title: hiddenColumns[i].headerName,
                 type: hiddenColumns[i].fieldType,
                 onClick: (() => {
-                    this.props.addColumnFromExistingField(CONTEXT.REPORT.NAV, this.props.appId, this.props.tblId, params);
+                    this.props.addColumnFromExistingField(CONTEXT.REPORT.NAV, hiddenColumns[i], this.props.menu.addBeforeColumn);
                 })
             });
         }
@@ -119,8 +115,8 @@ const mapDispatchToProps = (dispatch) => {
         refreshFieldSelectMenu: (context, appId, tblId) => {
             dispatch(refreshFieldSelectMenu(context, appId, tblId));
         },
-        addColumnFromExistingField: (context, appId, tblId, params) => {
-            dispatch(addColumnFromExistingField(context, appId, tblId, params));
+        addColumnFromExistingField: (context, requestedColumn, addBefore) => {
+            dispatch(addColumnFromExistingField(context, requestedColumn, addBefore));
         }
     };
 };

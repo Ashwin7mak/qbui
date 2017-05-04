@@ -62,7 +62,7 @@ let testProps = {
     },
     closeFieldSelectMenu: (context) => {},
     refreshFieldSelectMenu: (context, applicationId, tableId) => {},
-    addColumnFromExistingField: (context, applicationId, tableId, params) => {}
+    addColumnFromExistingField: (context, requestedColumn, addBefore) => {}
 };
 
 let hiddenColumns = [
