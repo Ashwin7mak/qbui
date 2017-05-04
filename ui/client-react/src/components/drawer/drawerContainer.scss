@@ -36,8 +36,10 @@
 }
 
 .slidey-righty-appear {
-    transform: translateX(100%);
+    // using translate3d forces hardware acceleration for better performance, even with no movement in y and z axis
+    transform: translate3d(100%, 0, 0);
     transition: all 400ms ease-in-out;
+    box-shadow: -10px 0px 20px $color-black-500;
 }
 
 .slidey-righty-appear.slidey-righty-appear-active {
@@ -45,6 +47,7 @@
 }
 
 .slidey-righty-enter {
+    // using translate3d forces hardware acceleration for better performance, even with no movement in y and z axis
     transform: translate3d(100%, 0, 0);
     transition: all 400ms ease-in-out;
     box-shadow: -10px 0px 20px $color-black-500;
@@ -55,8 +58,9 @@
 }
 
 .slidey-righty-leave {
-    transition: all 400ms ease-in-out;
+    // using translate3d forces hardware acceleration for better performance, even with no movement in y and z axis
     transform: translate3d(0, 0, 0);
+    transition: all 400ms ease-in-out;
     box-shadow: -10px 0px 20px $color-black-500;
 }
 
