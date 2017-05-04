@@ -36,9 +36,11 @@
         });
 
         beforeEach(function() {
-            // clean up any 'mess' which might have been left by a previously failed test
-            browser.windowHandleMaximize();
-            try {browser.buttonUp();}
+            // clean up any 'mess' (e.g. resized window, buttonDown) which might have been left by a previously failed test
+            try {
+                browser.windowHandleMaximize();
+                browser.buttonUp();
+            }
             catch (err) {}
             // open first table
             e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
@@ -181,8 +183,13 @@
             let source = formBuilderPO.getFieldLocator(1);
             let target = formBuilderPO.getFieldLocator(2);
             formBuilderPO.slowDragAndDrop(source, target);
-            // verify that the first 2 items have changed position
+            // get the revised field list & make sure it's not 'polluted' due to DOM still settling after swap)
+            // (i.e. contains an unexpected array like ['Must be filled in', ...])
             let movedFields = formBuilderPO.getFieldLabels();
+            while (!movedFields.length === origFields.length) {
+                movedFields = formBuilderPO.getFieldLabels();
+            }
+            // verify that the first 2 items have changed position
             expect(movedFields[0]).toBe(origFields[1]);
             expect(movedFields[1]).toBe(origFields[0]);
             // save & reopen
@@ -198,8 +205,13 @@
             let source = formBuilderPO.getFieldLocator(1);
             let target = formBuilderPO.getFieldLocator(2);
             formBuilderPO.slowDragAndDrop(source, target);
-            // verify that the first 2 items have changed position
+            // get the revised field list & make sure it's not 'polluted' due to DOM still settling after swap)
+            // (i.e. contains an unexpected array like ['Must be filled in', ...])
             let movedFields = formBuilderPO.getFieldLabels();
+            while (!movedFields.length === origFields.length) {
+                movedFields = formBuilderPO.getFieldLabels();
+            }
+            // verify that the first 2 items have changed position
             expect(movedFields[0]).toBe(origFields[1]);
             expect(movedFields[1]).toBe(origFields[0]);
             // cancel & reopen
