@@ -75,62 +75,6 @@ module.exports = function(chance) {
             addColumn(tableToFieldToFieldTypeMap[tableCompaniesName], e2eConsts.dataType.EMAIL_ADDRESS, 'Email', {unique: true});
             addColumn(tableToFieldToFieldTypeMap[tableCompaniesName], e2eConsts.dataType.URL, 'URL');
             addColumn(tableToFieldToFieldTypeMap[tableCompaniesName], e2eConsts.dataType.PHONE_NUMBER, 'Phone', {unique: true});
-        },
-        /**
-         * Generate a company with random properties
-         * @param options
-         * @returns {*}
-         */
-        companyToJson: function(company) {
-            return JSON.stringify(company);
-        },
-
-        /**
-         * Generate a company with random properties
-         * @param options
-         * @returns {*}
-         */
-        generateCompany: function() {
-            return chance.company();
-        },
-
-        /**
-         * Generate a company with certain fields populated with concrete values to generate contrived situations
-         * </p>
-         * Available options are:
-         * {
-         *  name: <name>
-         *  overview: <overview text>
-         *  phone: <phone>
-         *  rank: <number>
-         *  url: <url>
-         *  email: <emailAddress>
-         * }
-         * </p>
-         * These options may be sparsely populated and we will generate values for those keys not present.
-         * @param options
-         * @returns {*}
-         */
-        generatePopulatedCompany: function(options) {
-            return chance.company(options);
-        },
-
-
-        /**
-         * Generate X number of companies
-         * </p>
-         * @returns {*}
-         */
-        generateDefaultCompanies: function(numberOfCompanies) {
-            let companyResultList = [];
-
-            if (numberOfCompanies === undefined) {
-                numberOfCompanies = DEFAULT_NUM_COMPANIES;
-            }
-            Array(numberOfCompanies).fill().map((_, i) => {
-                companyResultList.push(this.generateCompany());
-            });
-            return companyResultList;
         }
     };
     return api;

@@ -14,7 +14,6 @@ module.exports = function(chance) {
     const MIN_BUDGET = 1000;
     const rawValueGenerator = require('../../../../test_generators/rawValue.generator');
 
-    const namesUsed = [];
     let loremHipsum = require('lorem-hipsum');
 
     let loremConf  = {
@@ -29,8 +28,7 @@ module.exports = function(chance) {
             return chance.floating({min:0, max:1, fixed: 12});
         },
     };
-    function init() {
-    }
+
     chance.mixin({
         overview: function(options) {
             let paraConfig = {units: 'paragraph', count: chance.integer({min:MIN_OVERVIEW_PARAS, max: MAX_OVERVIEW_PARAS})};
@@ -41,12 +39,19 @@ module.exports = function(chance) {
             answer = chance.capitalize(answer);
             return answer;
         },
+        projectDepartment : function(options) {
+            if (options.availableDepts) {
+                return chance.pickone(options.availableDepts);
+            } else {
+                return chance.department();
+            }
+        },
         project: function(options) {
             let name = options && options.name ? options.name : chance.projectName(options);
             let overview = options && options.overview ? options.overview : chance.overview(options);
             let startDate = options && options.date ? options.date : rawValueGenerator.generateDate(Object.assign({year: chance.integer(START_YEAR_RANGE)}, options));
             let budget = options && options.budget ? options.budget : chance.floating(Object.assign({max: MAX_BUDGET, min:MIN_BUDGET, fixed: 2}, options));
-            let department = options && options.department ? options.department : chance.department();
+            let department = options && options.department ? options.department : chance.projectDepartment(options);
             let companyName = options && options.companyName ? options.companyName : '';
             let projectLeader = options && options.projectLeader ? options.projectLeader : '';
 
@@ -84,7 +89,7 @@ module.exports = function(chance) {
     };
 
     let api = {
-        init,
+        init : () => {},
 
         getPropFromFid : function(fid) {
             return fidToProp[fid];
@@ -104,60 +109,6 @@ module.exports = function(chance) {
             addColumn(tableToFieldToFieldTypeMap[tableProjectsName], e2eConsts.dataType.TEXT, 'Project Lead');
             addColumn(tableToFieldToFieldTypeMap[tableProjectsName], e2eConsts.dataType.TEXT, 'Company');
         },
-            /**
-         * Generate a project with random properties
-         * @param options
-         * @returns {*}
-         */
-        projectToJson: function(project) {
-            return JSON.stringify(project);
-        },
-
-        /**
-         * Generate a project with random properties
-         * @param options
-         * @returns {*}
-         */
-        generateProject: function() {
-            return chance.project();
-        },
-
-        /**
-         * Generate a project with certain fields populated with concrete values to generate contrived situations
-         * </p>
-         * Available options are:
-         * {
-         *  name: <name>
-         *  startDate: <startDate>
-         *  budget: <budget>
-         *  companyName: <companyName>
-         * }
-         * </p>
-         * These options may be sparsely populated and we will generate values for those keys not present.
-         * @param options
-         * @returns {*}
-         */
-        generatePopulatedProject: function(options) {
-            return chance.project(options);
-        },
-
-
-        /**
-         * Generate X number of projects
-         * </p>
-         * @returns {*}
-         */
-        generateDefaultAdminUsers: function(numberOfProjects) {
-            let projectResultList = [];
-
-            if (numberOfProjects === undefined) {
-                numberOfProjects = DEFAULT_NUM_PROJECTS;
-            }
-            Array(numberOfProjects).fill().map((_, i) => {
-                projectResultList.push(this.generateProject());
-            });
-            return projectResultList;
-        }
 
     };
     return api;

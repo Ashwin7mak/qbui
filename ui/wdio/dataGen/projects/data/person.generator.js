@@ -15,34 +15,100 @@ module.exports = function(chance) {
     let titlesByDept = {
         'Ops' : {name: ['Director', 'Manager', 'Network Admin', 'System Admin', 'Sr Application Operations Engineer',
             'Application Operations Engineer', 'IT Support'],
-            weight : [1, 5, 1, 1, 10, 10, 10]},
+            weight : [0, 0, 1, 1, 10, 10, 10]},
         'R&D' : {name: ['Director', 'Manager', 'Architect', 'Principle Engineer', 'Sr Engineer',
             'XD', 'Visual Designer', 'Quality Engineer', 'Engineer'],
-            weight : [1, 5, 1, 1, 4, 2, 2, 10, 20]},
+            weight : [0, 0, 1, 1, 4, 2, 2, 10, 20]},
         'Finance and Admin' :  {name: ['CEO', 'VP', 'Director', 'Manager', 'Billing Collector', 'Bookkeeper',
             'HR Specialist', 'Accounting Specialist', 'Legal Secretary', 'Office Manager', 'Payroll', 'Clerk', 'Admin'],
-            weight : [1, 1, 1, 5, 1, 2, 2, 2, 2, 2, 2, 2, 20]},
+            weight : [0, 0, 0, 0, 1, 2, 2, 2, 2, 2, 2, 2, 20]},
         'Marketing' :  {name: ['Director', 'Manager',  'Webmaster', 'Events Planner',
             'Media Specialist',  'Marketing Specialist', 'Communications Specialist'],
-            weight : [1, 5, 1, 1, 1, 10, 10]},
+            weight : [0, 0, 1, 1, 1, 10, 10]},
         'Sales' :  {name: ['Director', 'Regional Manager', 'Account Executive', 'Sales Representative'],
-            weight : [1, 5, 10, 20]},
+            weight : [0, 0, 10, 20]},
         'Customer Care' :  {name: ['Director', 'Manager', 'Account Executive', 'Support Representative'],
-            weight : [1, 5, 2, 10]},
+            weight : [0, 0, 2, 10]},
     };
 
     function init() {
-        persons = {};
         directors = [];
         managers = [];
         ceos = [];
     }
+    function getDepartments(employees) {
+        let uniqueDeps = _.unionBy(employees, 'department');
+        return _.map(uniqueDeps, 'department');
+    }
+    function genManagers(options) {
+        //get the departments from the options.employees
+        let answer = [];
+        if (options.employees) {
+            let depts = getDepartments(options.employees);
+            //create 1 - 2 managers for each department
+            depts.forEach(department => {
+                let title = titlesByDept[department].name.find(item => item.indexOf('Manager') !== -1);
+                let dptManagers = chance.n(chance.person, chance.integer({min:1, max:4}), Object.assign(options, {department, title}));
+                answer = answer.concat(dptManagers);
+            });
+        }
+        managers.concat(answer);
+        return answer;
+    }
+    function genDirectors(options) {
+        //get the departments from the options.employees
+        let answer = [];
+        if (options.employees) {
+            let depts = getDepartments(options.employees);
+            // for each department create a director
+            // for F&A create CEO and VPs too
+            depts.forEach(department => {
+                let dptDirector = chance.n(chance.person,  chance.integer({min:1, max:2}), Object.assign(options, {department, title:'Director'}));
+                answer.concat(dptDirector);
+                directors.concat(dptDirector);
+                if (department === 'Finance and Admin') {
+                    let VP = chance.person(Object.assign(options, {department, title:'VP'}));
+                    answer.concat(VP);
+                    directors.concat(VP);
+                    let CEO = chance.person(Object.assign(options, {department, title:'CEO'}));
+                    answer.concat(CEO);
+                    ceos.concat(CEO);
+                }
+            });
+        }
+        return answer;
+
+    }
+
+    function addSchemaFields(tableToFieldToFieldTypeMap, tablePeopleName, addColumn) {
+        tableToFieldToFieldTypeMap[tablePeopleName] = {};
+        addColumn(tableToFieldToFieldTypeMap[tablePeopleName], e2eConsts.dataType.TEXT, 'Full Name', {unique: true});
+        addColumn(tableToFieldToFieldTypeMap[tablePeopleName], e2eConsts.dataType.TEXT, 'Title');
+        addColumn(tableToFieldToFieldTypeMap[tablePeopleName], e2eConsts.dataType.DATE, 'Birthday');
+        addColumn(tableToFieldToFieldTypeMap[tablePeopleName], e2eConsts.dataType.TEXT, 'Department');
+        addColumn(tableToFieldToFieldTypeMap[tablePeopleName], e2eConsts.dataType.TEXT, 'Manager');
+        addColumn(tableToFieldToFieldTypeMap[tablePeopleName], e2eConsts.dataType.TEXT, 'Company');
+    }
+
+
+    function getManager(person) {
+        let answer;
+        if (isNonMgt(person.title)) {
+            answer = chance.pickone(managers.filter(leader => leader.department === person.department)).fullname;
+        } else if (isManager(person.title)) {
+            answer = chance.pickone(directors.filter(leader => leader.department === person.department)).fullname;
+        } else if (isDirector(person.title)) {
+            answer = chance.pickone(ceos).fullname;
+        }
+        return answer;
+    }
+
     function isManager(title) {
         return (title.indexOf('Manager') !== -1);
     }
 
     function isDirector(title) {
-        return (title === 'Director');
+        return (title === 'Director' || title === 'VP');
     }
 
     function isCEO(title) {
@@ -113,6 +179,9 @@ module.exports = function(chance) {
 
     let api = {
         init,
+        genManagers,
+        genDirectors,
+        getManager,
 
         getPropFromFid : function(fid) {
             return fidToProp[fid];
@@ -120,38 +189,12 @@ module.exports = function(chance) {
         getFidFromProp : function(prop) {
             return propToFid[prop];
         },
-
-        addSchemaFields: function(tableToFieldToFieldTypeMap, tablePeopleName, addColumn) {
-            tableToFieldToFieldTypeMap[tablePeopleName] = {};
-            addColumn(tableToFieldToFieldTypeMap[tablePeopleName], e2eConsts.dataType.TEXT, 'Full Name', {unique: true});
-            addColumn(tableToFieldToFieldTypeMap[tablePeopleName], e2eConsts.dataType.TEXT, 'Title');
-            addColumn(tableToFieldToFieldTypeMap[tablePeopleName], e2eConsts.dataType.DATE, 'Birthday');
-            addColumn(tableToFieldToFieldTypeMap[tablePeopleName], e2eConsts.dataType.TEXT, 'Department');
-            addColumn(tableToFieldToFieldTypeMap[tablePeopleName], e2eConsts.dataType.TEXT, 'Manager');
-            addColumn(tableToFieldToFieldTypeMap[tablePeopleName], e2eConsts.dataType.TEXT, 'Company');
-        },
-            /**
-         * Generate a person with random properties
-         * @param options
-         * @returns {*}
-         */
-        personToJson: function(person) {
-            return JSON.stringify(person);
-        },
+        addSchemaFields,
 
         getPerson : function(fullName) {
             return persons[fullname];
         },
 
-        getManager : function(person) {
-            if (isNonMgt(person.title)) {
-                return  _.pick(managers).fullname;
-            } else if (isManager(person.title)) {
-                return _.pick(directors).fullname;
-            } else if (isDirector(person.title)) {
-                return _.pick(ceos).fullname;
-            }
-        }
     };
     return api;
 };

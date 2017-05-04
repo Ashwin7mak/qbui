@@ -29,6 +29,7 @@ if (realmToUse) {
 // gen a repeatable seed for random values, so any random generated info can be reproduced
 var Chance = require('chance');
 let seed = new Chance().integer({min: 1, max: 1000000000});
+seed = 775205028;
 let chance = new Chance(seed);
 
 // Require the e2e base and constants modules
@@ -67,17 +68,35 @@ projGen = require('./projects/projectsGen.js')(chance);
 
     // set which tables to create or set to null to create all
     var tablesToCreate = [
-        // table1Name,
+        //table1Name,
         projGen.tableCompaniesName,
         projGen.tableProjectsName,
         projGen.tableTasksName,
-        projGen.tablePeopleName
+        projGen.tablePeopleName,
+        projGen.tableAssignmentsName,
+        projGen.tableCommentsName
     ];
-
     // or use null to create all the tables
     //tablesToCreate = null;
 
-    // Generate an app and console log the app and tables it created when done
+    log.debug('dataGenCustomize seed: ' + seed);
+
+    // set the range of number of entities to generate
+    const  minCompany = projGen.defaultMinNumOfCompanies;
+    const  maxCompany = projGen.defaultMaxNumOfCompanies;
+    const  minProj = projGen.defaultMinNumOfProjects;
+    const  maxProj = projGen.defaultMaxNumOfProjects;
+    const  minPeople = projGen.defaultMinNumOfPeople;
+    const  maxPeople = projGen.defaultMaxNumOfPeople;
+    const  minTask = projGen.defaultMinNumOfTasks;
+    const  maxTask = projGen.defaultMaxNumOfTasks;
+    const  minAssignee = projGen.defaultMinNumOfAssignees;
+    const  maxAssignee = projGen.defaultMaxNumOfAssignees;
+    const  minComment = projGen.defaultMaxNumOfComments;
+    const  maxComment = projGen.defaultMaxNumOfComments;
+
+
+    // Generate an app and log the app and tables it created when done
     generateNewData(() => {
         createdRecs();
     });
@@ -485,7 +504,7 @@ projGen = require('./projects/projectsGen.js')(chance);
     }
 
     function createReport(app, tableName, fids, title) {
-        // Create a report that includes fields that are not editable by the user in Table 1
+        // Create a report that includes fields
         let table = getTable(app, tableName);
         if (table) {
             return e2eBase.reportService.createReportWithFids(app.id, table.id, fids, null, title);
@@ -493,9 +512,21 @@ projGen = require('./projects/projectsGen.js')(chance);
             return promise.resolve('noop');
         }
     }
+    function createReportExtended(app, tableName, {fids, facetFids, sortFids, query, reportName}) {
+        // Create a report that includes fields, facets, sort and group
+        let table = getTable(app, tableName);
+        if (table) {
+            return e2eBase.reportService.createReportWithFidsAndFacetsAndSortLists(
+                app.id, table.id, fids, facetFids, sortFids, query, reportName);
+        } else {
+            return promise.resolve('noop');
+        }
+    }
+
+
 
     function createReportFacets(app, tableName, fids, title) {
-        // Create a report that includes fields that are not editable by the user in Table 1
+        // Create a report with facets
         let table = getTable(app, tableName);
         if (table) {
             return e2eBase.reportService.createReportWithFacets(app.id, table.id, fids, null, title);
@@ -520,6 +551,20 @@ projGen = require('./projects/projectsGen.js')(chance);
             promises.push(function() {
                 // Create a report with ID field in Table
                 return createReport(app, tableName, fids, title);
+            });
+            promises.push(function() {
+                // Reset default report for Table
+                return createDefaultTableHome(app, tableName, reportId);
+            });
+        }
+    }
+
+    function createSetDefaultHomeExtended(promises, app, tableName, options, reportId) {
+        let table = getTable(app, tableName);
+        if (table) {
+            promises.push(function() {
+                // Create a report with options
+                return createReportExtended(app, tableName, options);
             });
             promises.push(function() {
                 // Reset default report for Table
@@ -560,7 +605,7 @@ projGen = require('./projects/projectsGen.js')(chance);
                 fields += `${fIndex}.) ${JSON.stringify(smallSet)}\n`;
             }
         });
-        console.log(`appId:${createdApp.id} appName:${createdApp.name} tableId:${table.id} tableName:${table.name} fields: \n${fields}`);
+        log.debug(`appId:${createdApp.id} appName:${createdApp.name} tableId:${table.id} tableName:${table.name} fields: \n${fields}`);
 
     }
 
@@ -673,6 +718,8 @@ projGen = require('./projects/projectsGen.js')(chance);
             configNumRecordsToCreate(Object.assign({}, configNumParams, {tableName: projGen.tablePeopleName, numRecords:0}));
             configNumRecordsToCreate(Object.assign({}, configNumParams, {tableName: projGen.tableProjectsName, numRecords:0}));
             configNumRecordsToCreate(Object.assign({}, configNumParams, {tableName: projGen.tableTasksName, numRecords:0}));
+            configNumRecordsToCreate(Object.assign({}, configNumParams, {tableName: projGen.tableAssignmentsName, numRecords:0}));
+            configNumRecordsToCreate(Object.assign({}, configNumParams, {tableName: projGen.tableCommentsName, numRecords:0}));
 
             return e2eBase.recordService.createRecords(createdApp, recordsConfig);
 
@@ -681,66 +728,101 @@ projGen = require('./projects/projectsGen.js')(chance);
 
 
             //for each level create records for company & proj etc tables
-            //Company  ->> Projects ->> Tasks <<- Person <<- Manager
-            //             Projects <<- Leader
+            // one to many ->>
+            //Company ->> Projects ->> Tasks ->> Assignment ->> Comments
+            //            Projects <<- Manager
+            //            Assignments <<- Person <<- Manager
             // male the list of companies, for each company create a company record
 
-            // set the range of number of entities to generate
-            const  minCompany = projGen.defaultMinNumOfCompanies;
-            const  maxCompany = projGen.defaultMaxNumOfCompanies;
 
-            const  minProj = projGen.defaultMinNumOfProjects;
-            const  maxProj = projGen.defaultMaxNumOfProjects;
-
-            const  minPeople = projGen.defaultMinNumOfPeople;
-            const  maxPeople = projGen.defaultMaxNumOfPeople;
-
-            const  minTask = projGen.defaultMinNumOfTasks;
-            const  maxTask = projGen.defaultMaxNumOfTasks;
 
             projGen.initCompanies();
             const companies = projGen.genCompanies({},  chance.integer({min:minCompany, max:maxCompany}));
             let companyRecords = makeRecordsInput(createdApp, projGen.tableCompaniesName, projGen.getCompanyPropFromFid, companies);
 
             companies.forEach((company, companyIndex) => {
-                //write out the company entry
+                //write out the company record
                 projPromises.push(function() {
-                    return addBulkRecords(createdApp, projGen.tableCompaniesName, getTable(createdApp, projGen.tableCompaniesName), [companyRecords[companyIndex]]);
+                    return addBulkRecords(createdApp, projGen.tableCompaniesName,
+                        getTable(createdApp, projGen.tableCompaniesName), [companyRecords[companyIndex]]);
                 });
                 // create a list of employees with this current company
                 projGen.initPeople();
                 let employees = projGen.genPeople({companyName : company.name}, chance.integer({min:minPeople, max:maxPeople}));
+                let managers = projGen. genManagers({companyName : company.name, employees});
+                let directors = projGen.genDirectors({companyName : company.name, employees}, chance.integer({min:1, max:4}));
 
-                // set a manager for each employee from the list of employees
-                employees.forEach(person => {
+                // set a manager for everyone
+                let everyone = [].concat(employees, managers, directors);
+                everyone.forEach(person => {
                     let mgr = projGen.getManager(person);
                     if (mgr !== undefined) {
                         person.manger = mgr;
                     }
                 });
 
-                // make records creation input for the employees for the company
-                let employeeRecords = makeRecordsInput(createdApp, projGen.tablePeopleName, projGen.getPeoplePropFromFid, employees);
+                let departmentsWithEmployees = _.map(_.unionBy(everyone, 'department'), 'department');
+
+                // make records input for the employees for the company
+                let employeeRecords = makeRecordsInput(createdApp, projGen.tablePeopleName, projGen.getPeoplePropFromFid, everyone);
                 if (employeeRecords && employeeRecords.length) {
                     projPromises.push(function() {
                         return addBulkRecords(createdApp, projGen.tablePeopleName, getTable(createdApp, projGen.tablePeopleName), employeeRecords);
                     });
                 }
 
-                // create a set project records for the current company
+                // create a set projects for the current company
                 projGen.initProjects();
-                const projects = projGen.genProjects({companyName: company.name}, chance.integer({min:minProj, max:maxProj}));
+                const projects = projGen.genProjects({companyName: company.name, availableDepts:departmentsWithEmployees}, chance.integer({min:minProj, max:maxProj}));
 
                 //create tasks for each project
                 projects.forEach((project) => {
                     //assign a leader to the project
-                    project.projectLeader = chance.pickone(employees).fullname;
+                    project.projectLeader = chance.pickone([].concat(managers, directors)).fullname;
 
-                    // create a  set of tasks for the project with assignee from employee list
-                    projGen.initTasks();
-                    const tasks = projGen.genTasks({projectName: project.name, assignee: chance.pickone(employees).fullname},  chance.integer({min:minTask, max:maxTask}));
+                    // create a set of tasks for the project with assignee from employee list
+                    projGen.initTasks(everyone);
+                    const tasks = projGen.genTasks({
+                        projectName: project.name,
+                        dict:{num: chance.integer({min:0, max:2})}},
+                        chance.integer({min:minTask, max:maxTask}));
 
-                    // make records creation input for the tasks for the project
+                    //create a set of assignments for each task
+                    tasks.forEach(task => {
+                        const assignees = projGen.genAssignees({
+                            taskName : task.name,
+                            taskId : task.taskId,
+                            peopleList: everyone.filter(they => they.department === project.department),
+                            department: project.department, projectName: project.name, companyName: company.name},
+                            chance.integer({min:minAssignee, max:maxAssignee}));
+
+                        //add some comments for the assignments progress
+                        assignees.forEach(assignment => {
+                            const comments = projGen.genComments({
+                                topicId: assignment.assignmentId,
+                                authors:[assignment.assignee, project.projectLeader]},
+                                chance.integer({min:minComment, max:maxComment}));
+                            // make records input for the comments for the assignment
+                            let commentRecords = makeRecordsInput(createdApp, projGen.tableCommentsName, projGen.getCommentPropFromFid, comments);
+                            if (commentRecords && commentRecords.length) {
+                                projPromises.push(function() {
+                                    return addBulkRecords(createdApp, projGen.tableCommentsName,
+                                        getTable(createdApp, projGen.tableCommentsName), commentRecords);
+                                });
+                            }
+                        });
+
+                        // make records input for the assignees for the task
+                        let assigneeRecords = makeRecordsInput(createdApp, projGen.tableAssignmentsName, projGen.getAssigneePropFromFid, assignees);
+                        if (assigneeRecords && assigneeRecords.length) {
+                            projPromises.push(function() {
+                                return addBulkRecords(createdApp, projGen.tableAssignmentsName,
+                                    getTable(createdApp, projGen.tableAssignmentsName), assigneeRecords);
+                            });
+                        }
+                    });
+
+                    // make records input for the tasks for the project
                     let taskRecords = makeRecordsInput(createdApp, projGen.tableTasksName, projGen.getTaskPropFromFid, tasks);
                     if (taskRecords && taskRecords.length) {
                         projPromises.push(function() {
@@ -756,12 +838,6 @@ projGen = require('./projects/projectsGen.js')(chance);
                     });
                 });
             });
-
-            // if (companyRecords && companyRecords.length) {
-            //     projPromises.push(function() {
-            //         return addBulkRecords(createdApp, projGen.tableCompaniesName, getTable(createdApp, projGen.tableCompaniesName), companyRecords);
-            //     });
-            // }
 
             // Bluebird's promise.each function (executes each promise sequentially)
             return promise.each(projPromises, function(queueItem) {
@@ -802,15 +878,40 @@ projGen = require('./projects/projectsGen.js')(chance);
             createSetDefaultHome(rptPromises, createdApp, projGen.tableTasksName, [3,
                 projGen.getTaskFid('name'),
                 projGen.getTaskFid('projectName'),
-                projGen.getTaskFid('assignee'),
                 projGen.getTaskFid('status')], 'Task Report with ID field', 2);
-            createSetDefaultHome(rptPromises, createdApp, projGen.tablePeopleName, [3,
-                projGen.getPeopleFid('fullname'),
-                projGen.getPeopleFid('title'),
-                projGen.getPeopleFid('birthday'),
-                projGen.getPeopleFid('department'),
-                projGen.getPeopleFid('manager'),
-                projGen.getPeopleFid('companyName')], 'Employee Report with ID field', 2);
+            createSetDefaultHomeExtended(rptPromises, createdApp, projGen.tablePeopleName, {
+                fids:[3,
+                    projGen.getPeopleFid('fullname'),
+                    projGen.getPeopleFid('title'),
+                    projGen.getPeopleFid('birthday'),
+                    projGen.getPeopleFid('manager'),
+                    projGen.getPeopleFid('companyName'),
+                    projGen.getPeopleFid('department')
+                ],
+                facetFids: [
+                    projGen.getPeopleFid('companyName'),
+                    projGen.getPeopleFid('department'),
+                    projGen.getPeopleFid('title'),
+                    projGen.getPeopleFid('manager')
+                ],
+                sortFids: [
+                    `${projGen.getPeopleFid('companyName')}:V`,
+                    `${projGen.getPeopleFid('department')}:V`,
+                    `${projGen.getPeopleFid('title')}`
+                ],
+                reportName:'Employee Report with ID field'}, 2);
+            createSetDefaultHome(rptPromises, createdApp, projGen.tableAssignmentsName, [3,
+                projGen.getAssigneeFid('taskName'),
+                projGen.getAssigneeFid('taskId'),
+                projGen.getAssigneeFid('assigneeName'),
+                projGen.getAssigneeFid('department'),
+                projGen.getAssigneeFid('projectName'),
+                projGen.getAssigneeFid('companyName'),
+            ], 'Assignments Report with ID field', 2);
+            createSetDefaultHome(rptPromises, createdApp, projGen.tableCommentsName, [3,
+                projGen.getCommentFid('content'),
+                projGen.getCommentFid('date'),
+                projGen.getCommentFid('author')], 'Comment Report with ID field', 2);
 
             // Bluebird's promise.each function (executes each promise sequentially)
             return promise.each(rptPromises, function(queueItem) {
@@ -896,11 +997,11 @@ projGen = require('./projects/projectsGen.js')(chance);
             setupRelationship(addRelationshipPromises, createdApp, projGen.tableProjectsName, projGen.tableTasksName,
                 projGen.getTaskFid('projectName'),  projGen.getProjectFid('name'));
 
-            // Create table relationship, People are related to Tasks
-            setupRelationship(addRelationshipPromises, createdApp, projGen.tablePeopleName, projGen.tableTasksName,
-                projGen.getTaskFid('assignee'), projGen.getPeopleFid('fullname'));
+            // Create table relationship, People have Assignments
+            setupRelationship(addRelationshipPromises, createdApp, projGen.tablePeopleName, projGen.tableAssignmentsName,
+                projGen.getAssigneeFid('assigneeName'), projGen.getPeopleFid('fullname'));
 
-            // Create table relationship, People are related to Projects
+            // Create table relationship, People lead Projects
             setupRelationship(addRelationshipPromises, createdApp, projGen.tablePeopleName,  projGen.tableProjectsName,
                  projGen.getProjectFid('projectLeader'), projGen.getPeopleFid('fullname'));
 
@@ -908,6 +1009,13 @@ projGen = require('./projects/projectsGen.js')(chance);
             setupRelationship(addRelationshipPromises, createdApp, projGen.tableCompaniesName, projGen.tablePeopleName,
                 projGen.getPeopleFid('companyName'),  projGen.getCompanyFid('name'));
 
+            // Create table relationship, Assignments are related to Tasks
+            setupRelationship(addRelationshipPromises, createdApp, projGen.tableTasksName, projGen.tableAssignmentsName,
+                projGen.getAssigneeFid('taskId'), projGen.getTaskFid('taskId'));
+
+            // Create table relationship, Comments are related Assignments
+            setupRelationship(addRelationshipPromises, createdApp, projGen.tableAssignmentsName, projGen.tableCommentsName,
+                projGen.getCommentFid('topicId'), projGen.getAssigneeFid('assignmentId'));
 
             // Bluebird's promise.each function (executes each promise sequentially)
             return promise.each(addRelationshipPromises, function(queueItem) {
@@ -920,10 +1028,10 @@ projGen = require('./projects/projectsGen.js')(chance);
         }).catch(function(error) {
             // Global catch that will grab any errors from chain above
             if (error) {
-                log.error('Error during data setup:  ' + error.message);
+                log.error('Error during data seed:' + seed + ' setup:  ' + error.message);
                 log.error('Stacktrace: ' + error.stack);
             } else {
-                log.error('Exiting on catch null error: ' + console.trace());
+                log.error('Exiting on catch null seed:' + seed + ' error: ' + console.trace());
             }
         });
     }
@@ -937,7 +1045,9 @@ projGen = require('./projects/projectsGen.js')(chance);
         var appId = createdApp.id;
 
         var ticketEndpointRequest = e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.ticketEndpoint);
-        var appEndpointRequest = e2eBase.getRequestAppsPageEndpoint(realmName);
+        var appEndpointRequest = e2eBase.recordBase.apiBase.generateFullRequest(realmName, '/qbase/app/' + appId);
+
+        var appsEndpointRequest = e2eBase.getRequestAppsPageEndpoint(realmName);
 
         var tableNames = '';
         createdApp.tables.forEach((table, index) => {
@@ -952,9 +1062,11 @@ projGen = require('./projects/projectsGen.js')(chance);
             'appName: ' +  createdApp.name + '\n' +
             'appId: ' + appId + '\n' +
             'To generate a session ticket for your realm paste this into your browser: \n' +
-            ticketEndpointRequest + '\n' +
-            'Access your test app here (must have generated a ticket first): \n' +
+            ticketEndpointRequest + '\n\n' +
+            'Access your new generated app here (must have generated a ticket first): \n' +
             appEndpointRequest + '\n\n' +
+            'Access all apps here (must have generated a ticket first): \n' +
+            appsEndpointRequest + '\n\n' +
             tableNames
         );
     }
