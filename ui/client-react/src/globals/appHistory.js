@@ -6,7 +6,6 @@ import {ShowAppModal, HideAppModal} from '../components/qbModal/appQbModalFuncti
 import WindowUtils from '../utils/windowLocationUtils';
 import {CONTEXT} from '../actions/context';
 import _ from 'lodash';
-import {getPendEdits} from '../reducers/record';
 // Uses singleton pattern
 // Only one instance of this class may be instantiated so that the same history can be used
 // throughout the app
@@ -128,7 +127,15 @@ class AppHistory {
             const state = self.store.getState();
             //  fetch the record's pendEdits in the store currently being edited
             const recordStore = state.record;
-            pendEdits = getPendEdits(recordStore);
+            //TODO : use record store's getPendEdits method
+            if (!recordStore || !recordStore.records || (!recordStore.recordIdBeingEdited)) {
+                return {};
+            }
+            // the record returned is the one having the id matching record state's recordIdBeingEdited
+            const recordId = recordStore.recordIdBeingEdited.toString();
+            const recordCurrentlyEdited = _.find(recordStore.records,
+                rec => rec.id.toString() === recordId);
+            pendEdits = (recordCurrentlyEdited ? recordCurrentlyEdited.pendEdits : {}) || {};
         }
         return pendEdits;
     }
