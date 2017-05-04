@@ -13,7 +13,7 @@ export const SUPPORTED_NEW_FIELD_TYPES = [
         fieldTypes: [
             fieldFormats.TEXT_FORMAT,
             // fieldFormats.MULTI_LINE_TEXT_FORMAT,
-            // fieldFormats.TEXT_FORMAT_MULTICHOICE,
+            fieldFormats.TEXT_FORMAT_MULTICHOICE,
             // fieldFormats.TEXT_FORMAT_RADIO_BUTTONS
         ]
     },

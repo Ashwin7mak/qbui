@@ -27,9 +27,7 @@ const clientPath = path.join(__dirname, 'client-react');
 const reuseLibraryPath = path.join(__dirname, 'reuse');
 const componentLibraryPath = path.join(__dirname, 'componentLibrary/src');
 const governancePath = path.join(__dirname, 'governance');
-
-// The name of the webpack manifest file that is generated in prod config.
-const webpackManifestFileName = path.join(__dirname, 'server/src/manifest/manifest.json');
+var automationPath = path.join(__dirname, 'automation');
 
 // A plugin that helps create the webpack manifest file so that we can identify the bundle names (e.g., bundle.382sdjfkeo.min.js) correctly.
 const ManifestPlugin = require('webpack-manifest-plugin');
@@ -39,7 +37,7 @@ const ManifestPlugin = require('webpack-manifest-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 // A plugin that gives each bundle a pre-defined hash such that re-bundling will produce the same chunkhash each time if no code changes.
-// Allows cache-busting to work correctly by only updating the hash when the code has actually changed.
+// Allows cache-busting to work ANALYZEcorrectly by only updating the hash when the code has actually changed.
 const WebpackMd5Hash = require('webpack-md5-hash');
 
 // 3 supported run-time environments..ONE and ONLY ONE constiable is to be set to true.
@@ -107,6 +105,12 @@ const config = {
             'bootstrap-sass!./client-react/bootstrap-sass.config.js',
             path.resolve(reuseLibraryPath, 'client/src/assets/css/qbMain.scss'),
             path.resolve(governancePath, 'src/app/index.js')
+        ],
+        automation: [
+            'bootstrap-sass!./client-react/bootstrap-sass.config.js',
+            path.resolve(reuseLibraryPath, 'client/src/assets/css/qbMain.scss'),
+            path.resolve(automationPath, 'src/app/index.js')
+
         ],
 
         // A list of shared node modules across functional areas. These are split out so that the vendor bundle
@@ -183,6 +187,8 @@ const config = {
                     componentLibraryPath,
                     path.resolve(__dirname, 'governance/src'),
                     path.resolve(__dirname, 'governance/test'),
+                    path.resolve(__dirname, 'automation/src'),
+                    path.resolve(__dirname, 'automation/test')
                 ],
                 exclude: [
                     // We don't want these to get compiled because ReactPlayground does that in the browser
@@ -254,7 +260,7 @@ const config = {
     },
 
 
-    plugins: shouldMinify ? [
+    plugins: true ? [
         // This has beneficial effect on the react lib size for deploy
         new webpack.DefinePlugin({'process.env': {NODE_ENV: JSON.stringify('production')}}),
 
@@ -300,6 +306,12 @@ const config = {
 
         // Shows a growl notification when webpack completes.
         new MyNotifyPlugin(),
+
+        // Separates common node modules identified above into a separate vendor bundle
+        new webpack.optimize.CommonsChunkPlugin({
+            name: 'vendor',
+            minChunks: Infinity
+        }),
 
         // Optionally run the analyzer.
         ...(process.env.ANALYZE_WEBPACK ? [new BundleAnalyzerPlugin()] : [])
