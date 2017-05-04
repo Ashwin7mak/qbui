@@ -68,13 +68,13 @@
         }},
 
         navigateToNextChildRecord : {value: function(reverse) {
-            browser.waitForExist('.slidey-righty .stageHeadline.iconActions');
+            browser.waitForVisible('.slidey-righty .stageHeadline .iconActions');
             if (!reverse) {
-                let nextButtonEl = browser.element('.iconActionButton.nextRecord');
+                let nextButtonEl = browser.element('.stageHeadline .iconActions .iconUISturdy-caret-filled-right');
                 nextButtonEl.waitForVisible();
                 return nextButtonEl.click();
             } else {
-                let prevButtonEl = browser.element('.iconActionButton.prevRecord');
+                let prevButtonEl = browser.element('.stageHeadline .iconActions .iconUISturdy-caret-filled-left');
                 prevButtonEl.waitForVisible();
                 return prevButtonEl.click();
             }
