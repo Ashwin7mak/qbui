@@ -110,7 +110,7 @@ module.exports = function(config) {
                 'react/lib/ReactContext': true
             },
             resolve: {
-                root: path.resolve(__dirname),
+                root: path.resolve(__dirname, '../'),
                 // Allow easier imports for commonly imported folders
                 alias: {
                     APP: 'client-react/src',
