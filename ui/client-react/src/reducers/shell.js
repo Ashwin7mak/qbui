@@ -79,16 +79,16 @@ const shell = (
             locale: Locale.getLocale(),
             i18n: Locale.getI18nBundle()
         };
-        case types.ENTER_BUILDER_MODE:
-            return {
-                ...state,
-                inBuilderMode: true
-            };
-        case types.EXIT_BUILDER_MODE:
-            return {
-                ...state,
-                inBuilderMode: false
-            };
+    case types.ENTER_BUILDER_MODE:
+        return {
+            ...state,
+            inBuilderMode: true
+        };
+    case types.EXIT_BUILDER_MODE:
+        return {
+            ...state,
+            inBuilderMode: false
+        };
     default:
         // return existing state by default in redux
         return state;

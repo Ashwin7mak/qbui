@@ -265,8 +265,8 @@ export class ReportColumnHeaderMenu extends Component {
                     <MenuItem disabled={isDisabled} onSelect={this.hideThisColumn}>
                         <span className="hideColumnText">{Locale.getMessage('report.menu.hideColumn')}</span>
                     </MenuItem>
-                </Dropdown.Menu>
-                    : <Dropdown.Menu>
+                </Dropdown.Menu> :
+                    <Dropdown.Menu>
 
                         <MenuItem onSelect={this.sortReportAscending}>
                             {this.isFieldSortedAscending() && <QbIcon icon="checkmarkincircle-outline"/>}
