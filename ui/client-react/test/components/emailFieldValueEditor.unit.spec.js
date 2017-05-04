@@ -107,8 +107,8 @@ describe('EmailFieldValueEditor', () => {
         component = TestUtils.renderIntoDocument(React.createElement(mockParentElement));
         emailInput = ReactDOM.findDOMNode(component);
 
-        expect(emailInput.value).toEqual(undefined);
-        expect(emailInput.innerText).toEqual(testValue);
+        expect(emailInput.value).toEqual(testValue);
+        expect(emailInput.innerText).toEqual('');
     });
 
     it('shows only text when readOnly', () => {
@@ -117,8 +117,8 @@ describe('EmailFieldValueEditor', () => {
         component = TestUtils.renderIntoDocument(React.createElement(mockParentElement));
         emailInput = ReactDOM.findDOMNode(component);
 
-        expect(emailInput.value).toEqual(undefined);
-        expect(emailInput.innerText).toEqual(testValue);
+        expect(emailInput.value).toEqual(testValue);
+        expect(emailInput.innerText).toEqual('');
     });
 
     it('uses the value (not the display) for editing', () => {
