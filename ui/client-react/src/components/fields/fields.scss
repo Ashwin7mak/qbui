@@ -27,7 +27,7 @@ $data-font-size: $font-size-p;
 
 // Disabled field background color for form builder
 .disabledField {
-    .Select-placeholder, .Select-control {
+    .Select-placeholder, input, span, .Select-control {
         cursor: pointer;
         pointer-events: none;
     }
