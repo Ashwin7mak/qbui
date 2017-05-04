@@ -45,6 +45,11 @@ const FieldValueEditor = React.createClass({
         display: React.PropTypes.any,
 
         /**
+         * A boolean to disabled field on form builder
+         */
+        isDisabled: React.PropTypes.bool,
+
+        /**
          * optional additional classes for the input to customize styling */
         classes: React.PropTypes.string,
 
@@ -154,6 +159,7 @@ const FieldValueEditor = React.createClass({
             onValidated: this.props.onValidated,
             placeholder : placeholder,
             tabIndex: this.props.tabIndex,
+            isDisabled: this.props.isDisabled,
             idKey : this.props.idKey,
             ref:"fieldInput",
             required: (this.props.fieldDef ? this.props.fieldDef.required : false),
@@ -346,6 +352,10 @@ const FieldValueEditor = React.createClass({
         let renderedType = null;
         if (this.props.type) {
             renderedType =  this.getEditorForType(this.props.type);
+        }
+
+        if (this.props.isDisabled) {
+            classes += ' disabledField';
         }
 
         return (
