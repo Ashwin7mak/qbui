@@ -125,17 +125,23 @@ class TableCreationPanel extends React.Component {
     }
 
     /**
-     * unset edited property when focus is lost
+     * handle loss of focus
      */
     onBlurInput(property, value) {
 
+        // do validation on loss of focus unless it hasn't been edited
+
         if (this.props.tableInfo[property].edited) {
+
+            // set the validation error and the live validation error for the field (same)
+
             const validationError = this.getValidationError(property, value);
 
             this.props.setTableProperty(property, value, validationError, validationError, false);
-
-            this.props.setEditingProperty(null);
         }
+
+        // unset edited property
+        this.props.setEditingProperty(null);
     }
 
     /**
