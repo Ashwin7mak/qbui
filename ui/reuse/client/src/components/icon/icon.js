@@ -28,6 +28,7 @@ const Icon = React.createClass({
         icon: React.PropTypes.string.isRequired,
         className: React.PropTypes.string,
         onClick: React.PropTypes.func,
+        title: React.PropTypes.string,
 
         /**
          * Optionally set the font set to use for this icon
@@ -47,7 +48,7 @@ const Icon = React.createClass({
         let iconClassName = `${className} qbIcon ${iconFont}-${icon}`;
 
         return (
-            <span className={iconClassName} onClick={this.props.onClick}>
+            <span className={iconClassName} onClick={this.props.onClick} title={this.props.title}>
                 {this.props.children}
             </span>
         );

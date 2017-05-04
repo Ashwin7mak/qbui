@@ -72,6 +72,24 @@ class IconChooser extends React.Component {
     }
 
     /**
+     * get title for each icon to use in tooltip
+     */
+    getIconTitle(icon) {
+        let title = [];
+        if (icon) {
+            let l;
+            let iconsByTag = this.props.iconsByTag;
+            for (let i = 0; l = iconsByTag.length, i < l; i++) {
+                if (iconsByTag[i].icons.includes(icon)) {
+                    title.push(iconsByTag[i].tag);
+                }
+            }
+        }
+        return title.join();
+    }
+
+
+    /**
      * icon selected callback
      * @param icon
      */
@@ -99,7 +117,7 @@ class IconChooser extends React.Component {
                 </div>
 
                 <div className="allIcons">
-                    {this.getFilteredIcons().map((icon, i) => <button alt={icon} className={"iconButton " + icon} tabIndex="0" key={i} onClick={() => this.selectIcon(icon)}><Icon iconFont={this.props.font} icon={icon}/></button>)}
+                    {this.getFilteredIcons().map((icon, i) => <button alt={icon} className={"iconButton " + icon} tabIndex="0" key={i} onClick={() => this.selectIcon(icon)}><Icon iconFont={this.props.font} icon={icon} title={this.getIconTitle(icon)}/></button>)}
                 </div>
             </div>);
     }
