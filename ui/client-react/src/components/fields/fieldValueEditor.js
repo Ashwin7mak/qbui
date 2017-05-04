@@ -349,6 +349,10 @@ const FieldValueEditor = React.createClass({
             renderedType =  this.getEditorForType(this.props.type);
         }
 
+        if (this.props.isDisabled) {
+            classes += ' disabledField';
+        }
+
         return (
             <div className={classes}>
                 {/* optionally show required symbol */}

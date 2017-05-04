@@ -355,10 +355,6 @@ const TimeFieldValueEditor = React.createClass({
             placeholder = this.props.attributes && this.props.attributes.scale ? this.props.attributes.scale.toLowerCase() : 'hh:mm';
         }
 
-        if (this.props.isDisabled) {
-            classes.push('disabledTimeField');
-        }
-
         return (useNativeInput ?
                 <div className={classes.concat('nativeInput').join(' ')}>
                     <input type="time"

@@ -25,6 +25,36 @@ $data-font-size: $font-size-p;
     box-shadow: none;
 }
 
+// Disabled field background
+.disabledField {
+    .Select-placeholder, input, span, .Select-control {
+        cursor: pointer;
+        pointer-events: none;
+    }
+
+    [type="text"],
+    [type="url"],
+    [type="email"],
+    [type="tel"] {
+        &.input, &.form-control {
+            background-color: $disabled-field-value-editor-color;
+        }
+    }
+
+    .dateCell.cellEdit {
+        span.input-group-addon {
+            background-color: $disabled-field-value-editor-color !important;
+        }
+    }
+
+    .timeCell.cellEdit {
+        .Select-control,
+        .Select-arrow-zone {
+            background-color: $disabled-field-value-editor-color;
+        }
+    }
+}
+
 [type="text"],
 [type="url"],
 [type="email"],
