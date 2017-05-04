@@ -45,6 +45,11 @@ const FieldValueEditor = React.createClass({
         display: React.PropTypes.any,
 
         /**
+         * A boolean to disabled field on form builder
+         */
+        isDisabled: React.PropTypes.bool,
+
+        /**
          * optional additional classes for the input to customize styling */
         classes: React.PropTypes.string,
 

@@ -26,6 +26,11 @@ const UserFieldValueEditor = React.createClass({
         appUsers: React.PropTypes.array.isRequired,
 
         /**
+         * A boolean to disabled field on form builder
+         */
+        isDisabled: React.PropTypes.bool,
+
+        /**
          * the currently selected user
          */
         value: React.PropTypes.any,

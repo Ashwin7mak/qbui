@@ -24,7 +24,10 @@ const EmailFieldValueEditor = React.createClass({
 
         invalid: PropTypes.bool,
 
-        disabled: PropTypes.bool,
+        /**
+         * A boolean to disabled field on form builder
+         */
+        isDisabled: React.PropTypes.bool,
 
         readOnly: PropTypes.bool,
 
@@ -36,7 +39,7 @@ const EmailFieldValueEditor = React.createClass({
             value: '',
             validateFieldValue: true,
             invalid: false,
-            disabled: false,
+            isDisabled: false,
             readOnly: false,
         };
     },
@@ -60,9 +63,9 @@ const EmailFieldValueEditor = React.createClass({
     render() {
         // Remove some properties before passing to TextFieldValueEditor
         // TextFieldValueEditor uses the display value by default, so it cannot be passed in for Email and URL
-        let {onChange, onBlur, display, placeholder, disabled, readOnly, classes, ...otherProps} = this.props;
+        let {onChange, onBlur, display, placeholder, isDisabled, readOnly, classes, ...otherProps} = this.props;
 
-        if (disabled || readOnly) {
+        if (isDisabled || readOnly) {
             // Return a read only email
             return <EmailFieldValueRenderer display={display} {...otherProps} />;
         }

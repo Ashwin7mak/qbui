@@ -28,7 +28,10 @@ const CheckBoxFieldValueEditor = React.createClass({
 
         invalid: PropTypes.bool,
 
-        disabled: PropTypes.bool,
+        /**
+         * A boolean to disabled field on form builder
+         */
+        isDisabled: PropTypes.bool,
 
         readOnly: PropTypes.bool,
 
@@ -46,7 +49,7 @@ const CheckBoxFieldValueEditor = React.createClass({
             value: false,
             label: ' ',
             invalid: false,
-            disabled: false,
+            isDisabled: false,
             readOnly: false,
             required: false,
             requiredSymbol: '*'
@@ -55,7 +58,7 @@ const CheckBoxFieldValueEditor = React.createClass({
 
     onKeyDown(ev) {
         // Call on change if key press is space bar (for accessibility)
-        if (!this.props.disabled && ev.keyCode === 32 || ev.keyCode === 13) {
+        if (!this.props.isDisabled && ev.keyCode === 32 || ev.keyCode === 13) {
             this.onChange(ev);
         }
     },
@@ -70,7 +73,7 @@ const CheckBoxFieldValueEditor = React.createClass({
         ev.preventDefault();
 
         // Don't change the value if the checkbox is disabled/read only
-        if (this.props.disabled || this.props.readOnly) {
+        if (this.props.isDisabled || this.props.readOnly) {
             return;
         }
 
@@ -131,7 +134,7 @@ const CheckBoxFieldValueEditor = React.createClass({
         // If a checkbox is readonly, return the renderer instead
         // Need to return a renderer if value is true and checkbox is disabled
         // because could not get the checkmark to be in the correct place
-        if (this.props.readOnly || (this.props.disabled && this.props.value)) {
+        if (this.props.readOnly || (this.props.isDisabled && this.props.value)) {
             return <CheckBoxFieldValueRenderer {...this.props} />;
         }
 

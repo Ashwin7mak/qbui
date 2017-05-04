@@ -62,6 +62,11 @@ const TextFieldValueEditor = React.createClass({
         classes: React.PropTypes.string,
 
         /**
+         * A boolean to disabled field on form builder
+         */
+        isDisabled: React.PropTypes.bool,
+
+        /**
         * shows a button that will allow a user to clear the field in one click */
         showClearButton: React.PropTypes.bool,
 

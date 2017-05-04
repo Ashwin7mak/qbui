@@ -44,6 +44,12 @@ const NumericFieldValueEditor = React.createClass({
         })]), //as of now it should be a number only. if we decide to add currency symbol etc within the box then thats diff
 
         display: React.PropTypes.string,
+
+        /**
+         * A boolean to disabled field on form builder
+         */
+        isDisabled: React.PropTypes.bool,
+
         /**
          * optional string to display when input is empty aka ghost text */
         placeholder: React.PropTypes.string,

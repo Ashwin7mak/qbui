@@ -348,7 +348,7 @@ export const QBForm = React.createClass({
         let CurrentFieldElement = (this.props.editingForm ? DragAndDropField(FieldElement) : FieldElement);
 
         // This isDisable is used to disable the input and controls in form builder.
-        let isDisabled = (this.props.edit && !this.props.editingForm) ? false : true;
+        let isDisabled = !(this.props.edit && !this.props.editingForm);
 
         //This tabIndex is for form builder keyboard navigation. It is removing all field value editors from the tabbing flow
         let tabIndex = (this.props.editingForm ? "-1" : 0);

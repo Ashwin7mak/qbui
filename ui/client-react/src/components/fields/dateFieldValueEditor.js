@@ -38,6 +38,11 @@ const DateFieldValueEditor = React.createClass({
         attributes: React.PropTypes.object,
 
         /**
+         * A boolean to disabled field on form builder
+         */
+        isDisabled: React.PropTypes.bool,
+
+        /**
          * renders with red border if true */
         invalid: React.PropTypes.bool,
 

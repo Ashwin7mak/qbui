@@ -22,6 +22,10 @@ const MultiChoiceFieldValueEditor = React.createClass({
          * expects an array of choices */
         choices: React.PropTypes.array,
         /**
+         * A boolean to disabled field on form builder
+         */
+        isDisabled: React.PropTypes.bool,
+        /**
          * gets the selected value for input box for multi choice */
         value: React.PropTypes.any,
         /**
