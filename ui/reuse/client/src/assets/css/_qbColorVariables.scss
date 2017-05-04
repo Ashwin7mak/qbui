@@ -449,7 +449,8 @@ $field-input-shadow-color: rgba($color-indigo-700, 0.25);
 $selection-badge-color: $color-purple-600;
 $selected-check-color: $color-green-700;
 
-$disabled-field-value-editor-color: $color-black-200;
+// disabled background color for input, select in form builder
+$disabled-field-value-editor-background-color: $color-black-200;
 
 $input-border-focus-color: $color-indigo-700;
 @mixin focus-shadow($color: $input-border-focus-color) {

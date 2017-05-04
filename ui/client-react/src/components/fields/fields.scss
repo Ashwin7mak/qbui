@@ -25,9 +25,9 @@ $data-font-size: $font-size-p;
     box-shadow: none;
 }
 
-// Disabled field background
+// Disabled field background color for form builder
 .disabledField {
-    .Select-placeholder, input, span, .Select-control {
+    .Select-placeholder, .Select-control {
         cursor: pointer;
         pointer-events: none;
     }
@@ -37,20 +37,24 @@ $data-font-size: $font-size-p;
     [type="email"],
     [type="tel"] {
         &.input, &.form-control {
-            background-color: $disabled-field-value-editor-color;
+            background-color: $disabled-field-value-editor-background-color;
         }
+    }
+
+    .checkbox [type="checkbox"]:not(:checked) + label:after {
+        background-color: $disabled-field-value-editor-background-color;
     }
 
     .dateCell.cellEdit {
-        span.input-group-addon {
-            background-color: $disabled-field-value-editor-color !important;
+        span.input-group-addon, input-group.date  {
+            background-color: $disabled-field-value-editor-background-color !important;
         }
     }
 
-    .timeCell.cellEdit {
+    .timeCell.cellEdit, .Select {
         .Select-control,
         .Select-arrow-zone {
-            background-color: $disabled-field-value-editor-color;
+            background-color: $disabled-field-value-editor-background-color !important;
         }
     }
 }

@@ -1,6 +1,6 @@
 import React, {PropTypes} from 'react';
 import _ from 'lodash';
-
+import {ENTER_KEY, SPACE_KEY} from '../../../../reuse/client/src/components/keyboardShortcuts/keyCodeConstants';
 import CheckBoxFieldValueRenderer from './checkBoxFieldValueRenderer';
 
 import './checkbox.scss';
@@ -58,7 +58,7 @@ const CheckBoxFieldValueEditor = React.createClass({
 
     onKeyDown(ev) {
         // Call on change if key press is space bar (for accessibility)
-        if (!this.props.isDisabled && ev.keyCode === 32 || ev.keyCode === 13) {
+        if (!this.props.isDisabled && ev.keyCode === SPACE_KEY || ev.keyCode === ENTER_KEY) {
             this.onChange(ev);
         }
     },
