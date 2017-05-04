@@ -3,6 +3,7 @@
 import UserActions from '../../src/components/actions/userActions';
 import React from  'react';
 import {mount, shallow} from 'enzyme';
+import TestUtils, {Simulate} from 'react-addons-test-utils';
 
 const props = {
     selection: ['10000'],
@@ -38,14 +39,33 @@ describe('UserActions', () => {
     });
 
     it('Action bar items should be disabled', () => {
-        expect(component.find('.iconUISturdy-mail').hasClass('disabled')).toEqual(true);
-        expect(component.find('.iconUISturdy-download-cloud').hasClass('disabled')).toEqual(true);
-        expect(component.find('.iconUISturdy-settings').hasClass('disabled')).toEqual(true);
+        expect(component.find('.mail').childAt(0).hasClass('disabled')).toEqual(true);
+        expect(component.find('.download-cloud').childAt(0).hasClass('disabled')).toEqual(true);
+        expect(component.find('.settings').childAt(0).hasClass('disabled')).toEqual(true);
     });
 
-    it('Should call handleDelete when remove is clicked', () => {
+    it('Should call unassignUsers when remove is clicked', () => {
+        let mockUnassignUsers = {
+            unassignUsers() {
+            }
+        };
+
+        spyOn(mockUnassignUsers, 'unassignUsers');
+        let clickProps = {
+            selection: ['10000'],
+            roleId: '12',
+            appId: '0duiiaaaanc',
+            onEditSelected: () => {},
+            actions:{unassignUsers: mockUnassignUsers.unassignUsers}
+        };
+        component = mount(<UserActions {...clickProps}/>);
         component.find('.icon-errorincircle-fill').simulate('click');
         expect(component.state().confirmDeletesDialogOpen).toEqual(true);
+        let primaryButton = document.querySelector(`.qbModal .primaryButton`);
+        Simulate.click(primaryButton);
+        expect(component.state().confirmDeletesDialogOpen).toEqual(false);
+        expect(mockUnassignUsers.unassignUsers).toHaveBeenCalled();
+
     });
 
     it('Should not select a Row when an empty selection Props is passed', () => {

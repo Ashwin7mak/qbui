@@ -31,12 +31,11 @@ class UserActions extends React.Component {
     }
 
     getSelectionTip(actionMsg) {
-        const action = Locale.getMessage(actionMsg);
-        const user = Locale.getMessage('app.users.singular');
-        const users = Locale.getMessage('app.users.plural');
+        const user = 'app.users.singular';
+        const users = 'app.users.plural';
         const suffix = this.props.selection.length === 1 ? user : users;
 
-        return action + " " + this.props.selection.length + " " + suffix;
+        return Locale.getPluralizedMessage(actionMsg, {value: this.props.selection.length, suffix: Locale.getMessage(suffix)});
     }
 
     /**
@@ -67,11 +66,10 @@ class UserActions extends React.Component {
     getConfirmDialog() {
 
         let msg;
+        const actionMsg = "app.users.remove";
 
         if (this.props.selection.length > 1) {
-            const users = "users";
-            const deleteMSg = "Remove";
-            msg = `${deleteMSg} ${this.props.selection.length} ${users}?`;
+            msg = Locale.getPluralizedMessage(actionMsg, {value: this.props.selection.length, suffix: Locale.getMessage('app.users.plural')}) + '?';
         } else {
             msg = Locale.getMessage('app.users.removeUser');
         }
@@ -81,7 +79,7 @@ class UserActions extends React.Component {
         return (
             <QBModal
                 show={this.state.confirmDeletesDialogOpen}
-                primaryButtonName={Locale.getMessage('app.users.remove')}
+                primaryButtonName={Locale.getMessage('app.users.removeButton')}
                 primaryButtonOnClick={this.handleBulkDelete}
                 leftButtonName={Locale.getMessage('app.users.cancel')}
                 leftButtonOnClick={this.cancelBulkDelete}
@@ -91,7 +89,7 @@ class UserActions extends React.Component {
     }
     getEmailAction() {
         //TODO Email action is disabled for now until its implemented.
-        return <ActionIcon icon="download-cloud" tip={Locale.getMessage("unimplemented.emailUsers")} disabled={true}/>;
+        return <ActionIcon icon="download-cloud" tip={Locale.getMessage("unimplemented.emailUsers")} disabled={true} identifier="download-cloud"/>;
     }
 
     /**
@@ -103,10 +101,10 @@ class UserActions extends React.Component {
                 <div className={'reportActionsBlock'}>
                     {<span className="selectedRowsLabel">{this.props.selection.length}</span>}
                     <div className="actionIcons">
-                        <ActionIcon icon="mail" tip={Locale.getMessage("unimplemented.emailApp")} disabled={true}/>
+                        <ActionIcon icon="mail" tip={Locale.getMessage("unimplemented.emailApp")} disabled={true} identifier="mail"/>
                         {this.getEmailAction()}
-                        <ActionIcon icon="settings" tip={Locale.getMessage("unimplemented.settingsRole")} disabled={true}/>
-                        <ActionIcon icon="errorincircle-fill" tip={this.getSelectionTip("app.users.remove")} onClick={this.handleDelete}/>
+                        <ActionIcon icon="settings" tip={Locale.getMessage("unimplemented.settingsRole")} disabled={true} identifier="settings"/>
+                        <ActionIcon icon="errorincircle-fill" tip={this.getSelectionTip("app.users.remove")} onClick={this.handleDelete} identifier="errorincircle-fill"/>
                     </div>
                 </div>
                 {this.getConfirmDialog()}
