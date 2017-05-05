@@ -24,6 +24,7 @@ module.exports = function(grunt) {
     var clientReportDir = buildDir + '/reports/client';
     var reuseReportDir = buildDir + '/reports/reuse';
     var governanceReportDir = buildDir + '/reports/governance';
+    var automationReportDir = buildDir + '/reports/automation';
 
     var mochaUnitTest = grunt.option('test') || '*.unit.spec.js';
     var mochaIntTest = grunt.option('test') || '*.integration.spec.js';
@@ -240,6 +241,15 @@ module.exports = function(grunt) {
                     ]
                 }]
             },
+            automation: {
+                files: [{
+                    dot: true,
+                    src: [
+                        automationReportDir + '/coverage/*',
+                        automationReportDir + '/unit/*'
+                    ]
+                }]
+            },
             server: {
                 files: [{
                     dot: true,
@@ -420,6 +430,12 @@ module.exports = function(grunt) {
                 // browsers: ["HeadlessChrome"],
                 singleRun : true
             },
+            automation: {
+                configFile: './automation/automation.karma.conf.js',
+                browsers: ["PhantomJS_Desktop"],
+                // browsers: ["HeadlessChrome"],
+                singleRun : true
+            },
             reuse: {
                 configFile: './reuse/reuse.karma.conf.js',
                 browsers: ["PhantomJS_Desktop"],
@@ -566,13 +582,6 @@ module.exports = function(grunt) {
                     // because the save and add button is disabled we turned off the reportAddRecord test
                     // we will turn it back on once this button has been enabled again
                     './wdio/tests/reports/reportAddRecord.e2e.spec.js',
-                    // Stabilize in CI before enabling
-                    './wdio/tests/reports/reportEditRecord.e2e.spec.js',
-                    './wdio/tests/reports/reportNavigation.e2e.spec.js',
-                    './wdio/tests/reports/reportTable.e2e.spec.js',
-                    './wdio/tests/reports/grouping/reportGroupingViaColumnHeader.e2e.spec.js',
-                    './wdio/tests/reports/sorting/reportSortingViaColumnHeader.e2e.spec.js',
-
                     // Forms Tests
                     // Stabilize in CI before enabling
                     './wdio/tests/forms/formDragDrop.e2e.spec.js',
@@ -581,23 +590,24 @@ module.exports = function(grunt) {
                     // permissions for viewer and participant are not working correctly
                     './wdio/tests/forms/formPermissionsViewerRole.e2e.spec.js',
                     './wdio/tests/forms/formPermissionsParticipantRole.e2e.spec.js',
-
                     // Tables Tests
-
+                    // Users Tests
                     // Relationships Tests
                     // Stabilize in CI before enabling
                     './wdio/tests/relationships/relationshipViewChildTable.e2e.spec.js',
 
-                    // Users Tests
-                    // Stabilize in CI before enabling
-                    './wdio/tests/users/usersTable.e2e.spec.js'
                 ],
                 suites: {
                     reports: [
                         './wdio/tests/reports/reportDeleteRecord.e2e.spec.js',
                         './wdio/tests/reports/grouping/reportGroupingViaContainer.e2e.spec.js',
                         './wdio/tests/reports/sorting/reportSortingViaContainer.e2e.spec.js',
-                        './wdio/tests/reports/reportTopNav.e2e.spec.js'
+                        './wdio/tests/reports/reportTopNav.e2e.spec.js',
+                        './wdio/tests/reports/reportEditRecord.e2e.spec.js',
+                        './wdio/tests/reports/reportNavigation.e2e.spec.js',
+                        './wdio/tests/reports/grouping/reportGroupingViaColumnHeader.e2e.spec.js',
+                        './wdio/tests/reports/sorting/reportSortingViaColumnHeader.e2e.spec.js',
+                        './wdio/tests/reports/reportTable.e2e.spec.js',
                     ],
                     forms: [
                         './wdio/tests/forms/formAdd.e2e.spec.js',
@@ -611,14 +621,16 @@ module.exports = function(grunt) {
                         './wdio/tests/tables/tableHomePage.e2e.spec.js'
                     ],
                     relationships: [],
-                    users: []
+                    users: [
+                        './wdio/tests/users/usersTable.e2e.spec.js',
+                    ]
                 }
             },
             test: {
                 // Use the wdioSauce.conf.js file setting the options above
                 configFile: './wdio/config/' + wdioSauceConfig,
                 // Make sure there are no spaces between test suites here
-                suite: 'reports,forms,tables'
+                suite: 'reports,forms,tables,users'
             }
         },
 
@@ -831,6 +843,10 @@ module.exports = function(grunt) {
             return grunt.task.run([
                 'clean:governance']);
         }
+        if (target === 'automation') {
+            return grunt.task.run([
+                'clean:automation']);
+        }
         if (target === 'server') {
             return grunt.task.run([
                 'clean:server']);
@@ -980,6 +996,14 @@ module.exports = function(grunt) {
             ]);
         }
 
+        if (target === 'automation') {
+            return grunt.task.run([
+                'clean:automation',
+                'autoprefixer',
+                'karma:automation'
+            ]);
+        }
+
         // Run your protractor tests locally against your dev env
         if (target === 'e2eLocal') {
             return grunt.task.run([
@@ -1047,6 +1071,7 @@ module.exports = function(grunt) {
             'test:client',
             'test:governance',
             'test:reuse',
+            'test:automation',
             'test:coverage' // server with coverage
         ]);
 

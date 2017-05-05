@@ -1,13 +1,13 @@
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
-import PageTitle from '../../src/components/pageTitle/pageTitle';
+import PageTitle from 'REUSE/components/pageTitle/pageTitle';
 
-import Locale from '../../src/locales/locale';
+import Locale from 'REUSE/locales/locale';
 
 // TEMPORARY IMPORTS FROM CLIENT-REACT
-import HtmlUtils from '../../../../client-react/src/utils/htmlUtils';
-import WindowLocationUtils from '../../../../client-react/src/utils/windowLocationUtils';
-import {DEFAULT_PAGE_TITLE} from '../../../../client-react/src/constants/urlConstants';
+import HtmlUtils from 'APP/utils/htmlUtils';
+import WindowLocationUtils from 'APP/utils/windowLocationUtils';
+import {DEFAULT_PAGE_TITLE} from 'APP/constants/urlConstants';
 // TEMPORARY IMPORTS FROM CLIENT-REACT
 
 let component;

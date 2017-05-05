@@ -38,7 +38,22 @@ export const SettingsWrapper = React.createClass({
             return _.find(app.tables, (t) => t.id === this.state.apps.selectedTableId);
         }
     },
+    /**
+     * force re-render since breakpoint may have changed
+     */
+    handleResize() {
+        this.setState(this.state);
+    },
+
+    /**
+     * clean up listener
+     */
+    componentWillUnmount() {
+        window.removeEventListener('resize', this.handleResize);
+    },
     componentDidMount() {
+        // listen for resizes (nicely) in case we need to re-render for a new breakpoint
+        window.addEventListener('resize', this.handleResize);
         this.props.flux.actions.loadApps(true);
 
         if (this.props.match.params.appId) {
@@ -89,7 +104,7 @@ export const SettingsWrapper = React.createClass({
         return <AppShell functionalAreaName="settings">
             <LeftNav
                 isCollapsed={this.props.isNavCollapsed}
-                isOpen={true}
+                isOpen={this.props.isOpen}
                 showContextHeader={true}
                 contextHeaderIcon={selectedTable ? selectedTable.tableIcon : null}
                 contextHeaderIconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY}
@@ -119,11 +134,13 @@ export const SettingsWrapper = React.createClass({
 
 SettingsWrapper.propTypes = {
     isNavCollapsed: PropTypes.bool,
+    isOpen: PropTypes.bool,
     toggleNav: PropTypes.func
 };
 
 const mapStateToProps = (state) => ({
-    isNavCollapsed: !state.shell.leftNavExpanded
+    isNavCollapsed: !state.shell.leftNavExpanded,
+    isOpen: state.shell.leftNavVisible
 });
 
 const mapDispatchToProps = (dispatch) => {

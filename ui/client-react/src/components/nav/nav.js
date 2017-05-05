@@ -41,6 +41,10 @@ import AppUtils from '../../utils/appUtils';
 
 import {NEW_TABLE_IDS_KEY} from '../../constants/localStorage';
 import {updateFormRedirectRoute} from '../../actions/formActions';
+
+import Analytics from '../../../../reuse/client/src/components/analytics/analytics';
+import Config from '../../config/app.config';
+
 // This shared view with the server layer must be loaded as raw HTML because
 // the current backend setup cannot handle a react component in a common directory. It is loaded
 // as a raw string and we tell react to interpret it as HTML. See more in common/src/views/Readme.md
@@ -51,7 +55,7 @@ import "./nav.scss";
 import "react-notifications/lib/notifications.css";
 import "../../assets/css/animate.min.css";
 import RouteWithSubRoutes from "../../scripts/RouteWithSubRoutes";
-
+import {getPendEdits} from '../../reducers/record';
 const OPEN_NAV = true;
 const CLOSE_NAV = false;
 const OPEN_APPS_LIST = true;
@@ -283,9 +287,7 @@ export const Nav = React.createClass({
     },
 
     getPendEdits() {
-        // only one record should have the pendEdits , so return that
-        const recordCurrentlyEdited = _.find(this.props.record, rec=>rec.pendEdits);
-        return recordCurrentlyEdited ? recordCurrentlyEdited.pendEdits : {};
+        return getPendEdits(this.props.record);
     },
 
     getCenterGlobalActions() {
@@ -339,7 +341,11 @@ export const Nav = React.createClass({
                 editingRecordId={editRecordIdForPageTitle}
                 selectedRecordId={viewingRecordId}
             />
+
+            <Analytics dataset={Config.evergageDataset} />
+
             <NotificationContainer/>
+
             {/* AppQbModal is an app-wide modal that can be called from non-react classes*/}
             <AppQbModal/>
 
