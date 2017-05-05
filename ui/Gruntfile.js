@@ -595,6 +595,8 @@ module.exports = function(grunt) {
                     // Relationships Tests
                     // Stabilize in CI before enabling
                     './wdio/tests/relationships/relationshipViewChildTable.e2e.spec.js',
+                    // Stabilize in CI before enabling
+                    './wdio/tests/reports/reportSearch.e2e.spec.js',
 
                 ],
                 suites: {
@@ -603,7 +605,6 @@ module.exports = function(grunt) {
                         './wdio/tests/reports/grouping/reportGroupingViaContainer.e2e.spec.js',
                         './wdio/tests/reports/sorting/reportSortingViaContainer.e2e.spec.js',
                         './wdio/tests/reports/reportTopNav.e2e.spec.js',
-                        './wdio/tests/reports/reportSearch.e2e.spec.js',
                         './wdio/tests/reports/reportEditRecord.e2e.spec.js',
                         './wdio/tests/reports/reportNavigation.e2e.spec.js',
                         './wdio/tests/reports/grouping/reportGroupingViaColumnHeader.e2e.spec.js',
