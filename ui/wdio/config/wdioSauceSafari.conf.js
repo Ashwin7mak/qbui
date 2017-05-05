@@ -17,33 +17,33 @@ var config = {
         //    shardTestFiles: true,
         //    maxInstances: 5
         //}
-        {
-            maxInstances: 1,
-            //For tablet capabilities
-            appiumVersion: '1.6.4',
-            platformName: 'Android',
-            platformVersion: '4.4',
-            browserName: 'Browser',
-            deviceName: 'Samsung Galaxy Nexus Emulator',
-            deviceOrientation: 'landscape',
-            tunnelIdentifier: process.env.ENV_TUNNEL_NAME,
-            build           : 'WebdriverIO Jenkins Try Build #' + process.env.BUILD_NUMBER + ' - Git branch: ' + process.env.GIT_UIBRANCH + ' - Android Chrome Browser',
-            tags            : [process.env.SAUCE_JOB_NAME + '_Android_Safari', 'try', 'Android', 'Chrome', process.env.BUILD_NUMBER, process.env.GIT_UIBRANCH],
-        }
         //{
         //    maxInstances: 1,
-        //    //For IPAD capabilities
+        //    //For tablet capabilities
         //    appiumVersion: '1.6.4',
-        //    deviceName: 'iPad Simulator',
+        //    platformName: 'Android',
+        //    platformVersion: '4.4',
+        //    browserName: 'Browser',
+        //    deviceName: 'Samsung Galaxy Nexus Emulator',
         //    deviceOrientation: 'landscape',
-        //    platformVersion: '9.2',
-        //    platformName: 'iOS',
-        //    browserName: 'safari',
-        //   // automationName: 'Appium',
         //    tunnelIdentifier: process.env.ENV_TUNNEL_NAME,
-        //    build           : 'WebdriverIO Jenkins Try Build #' + process.env.BUILD_NUMBER + ' - Git branch: ' + process.env.GIT_UIBRANCH + ' - iOS Safari Browser',
-        //    tags            : [process.env.SAUCE_JOB_NAME + '_iOS_Safari', 'try', 'iOS', 'Safari', process.env.BUILD_NUMBER, process.env.GIT_UIBRANCH],
+        //    build           : 'WebdriverIO Jenkins Try Build #' + process.env.BUILD_NUMBER + ' - Git branch: ' + process.env.GIT_UIBRANCH + ' - Android Chrome Browser',
+        //    tags            : [process.env.SAUCE_JOB_NAME + '_Android_Safari', 'try', 'Android', 'Chrome', process.env.BUILD_NUMBER, process.env.GIT_UIBRANCH],
         //}
+        {
+            maxInstances: 1,
+            //For IPAD capabilities
+            appiumVersion: '1.6.4',
+            deviceName: 'iPad Air 2',
+            deviceOrientation: 'landscape',
+            platformVersion: '9.3',
+            platformName: 'iOS',
+            browserName: 'safari',
+           // automationName: 'Appium',
+            tunnelIdentifier: process.env.ENV_TUNNEL_NAME,
+            build           : 'WebdriverIO Jenkins Try Build #' + process.env.BUILD_NUMBER + ' - Git branch: ' + process.env.GIT_UIBRANCH + ' - iOS Safari Browser',
+            tags            : [process.env.SAUCE_JOB_NAME + '_iOS_Safari', 'try', 'iOS', 'Safari', process.env.BUILD_NUMBER, process.env.GIT_UIBRANCH],
+        }
     ]
 };
 var exportConfig = Object.assign(baseConf.config, config);

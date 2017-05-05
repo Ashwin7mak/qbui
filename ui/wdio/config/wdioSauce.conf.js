@@ -79,6 +79,8 @@ exports.config = {
     // Sauce Labs platform configurator - a great tool to configure your capabilities:
     // https://docs.saucelabs.com/reference/platforms-configurator
     //
+    host: 'localhost',
+    port: '4723',
     capabilities: [
         //{
         //    platform : 'OS X 10.11',
