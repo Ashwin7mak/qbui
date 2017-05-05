@@ -84,6 +84,65 @@ describe("Validate appsApi", function() {
         });
     });
 
+    describe("validate getTablesForApp function", function() {
+        let executeReqStub = null;
+        let originalUrl;
+
+        before(function() {
+            originalUrl = req.url;
+        });
+
+        beforeEach(function() {
+            executeReqStub = sinon.stub(requestHelper, "executeRequest");
+            appsApi.setRequestHelperObject(requestHelper);
+            req.url = '/apps/123/tables/456';
+            req.method = 'get';
+        });
+
+        afterEach(function() {
+            req.method = 'get';
+            req.url = originalUrl;
+            executeReqStub.restore();
+        });
+
+        it('success return results', function(done) {
+            executeReqStub.returns(Promise.resolve({body: '[{"id":1, "appId":2, "name":"tableName1"}, {"id":10, "appId":11, "name":"tableName2"}]'}));
+            let promise = appsApi.getTablesForApp(req);
+
+            promise.then(
+                function(response) {
+                    assert.deepEqual(response, [{"id":1, "appId":2, "name":"tableName1"}, {"id":10, "appId":11, "name":"tableName2"}]);
+                    done();
+                },
+                function(error) {
+                    done(new Error("Unexpected failure promise return when testing getTablesForApp success"));
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('getTablesForApp: exception processing success test: ' + JSON.stringify(errorMsg)));
+            });
+        });
+
+        it('fail return results ', function(done) {
+            let error_message = "fail unit test case execution";
+
+            executeReqStub.returns(Promise.reject(new Error(error_message)));
+            let promise = appsApi.getTablesForApp(req);
+
+            promise.then(
+                function(error) {
+                    done(new Error("Unexpected success promise return when testing getTablesForApp failure"));
+                },
+                function(error) {
+                    assert.equal(error, "Error: fail unit test case execution");
+                    done();
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('getTablesForApp: exception processing fail test: ' + JSON.stringify(errorMsg)));
+            });
+        });
+    });
+
+
     describe("validate getRelationshipsForApp function", function() {
         let executeReqStub = null;
         let originalUrl;
@@ -126,7 +185,7 @@ describe("Validate appsApi", function() {
             let error_message = "fail unit test case execution";
 
             executeReqStub.returns(Promise.reject(new Error(error_message)));
-            let promise = appsApi.getAppUsers(req);
+            let promise = appsApi.getRelationshipsForApp(req);
 
             promise.then(
                 function(error) {

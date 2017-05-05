@@ -515,11 +515,10 @@ const mapDispatchToProps = (dispatch) => {
         showTrowser: (content) => dispatch(ShellActions.showTrowser(content)),
 
         loadForm: (appId, tblId, rptId, formType, editRec, showTrowser) => {
-            dispatch(FormActions.loadForm(appId, tblId, rptId, formType, editRec)).then(() => {
-                if (showTrowser) {
-                    dispatch(ShellActions.showTrowser(TrowserConsts.TROWSER_EDIT_RECORD));
-                }
-            });
+            if (showTrowser) {
+                dispatch(ShellActions.showTrowser(TrowserConsts.TROWSER_EDIT_RECORD));
+            }
+            dispatch(FormActions.loadForm(appId, tblId, rptId, formType, editRec));
         },
 
         loadReports: (context, appId, tblId) => dispatch(ReportActions.loadReports(context, appId, tblId)),
