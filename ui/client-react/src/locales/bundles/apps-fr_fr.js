@@ -40,13 +40,14 @@ export default {
                 manager: "Gestionnaire d'applications",
                 removeUser: "Supprimer cet utilisateur?",
                 unassignUser: "Les utilisateurs ne pourront plus accéder à cette application. Toutes les données qu'ils ont déjà entrées restent dans la demande.",
-                remove: "Retirer {valeur} {suffixe}",
+                deleteUser: "Retirer {valeur} utilisateur",
+                deleteUsers: "Retirer {valeur} utilisateurs",
                 removeButton: "Retirer",
                 cancel: "Annuler",
                 singular: "utilisateur",
                 plural: "utilisateurs",
-                usersRemoved: "Les utilisateurs ont été enlevés",
-                userRemoved: "L'utilisateur a été supprimé"
+                usersRemoved: " Les utilisateurs ont été enlevés",
+                userRemoved: " L'utilisateur a été supprimé"
 
             }
         },

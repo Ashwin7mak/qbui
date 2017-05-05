@@ -31,11 +31,7 @@ class UserActions extends React.Component {
     }
 
     getSelectionTip(actionMsg) {
-        const user = 'app.users.singular';
-        const users = 'app.users.plural';
-        const suffix = this.props.selection.length === 1 ? user : users;
-
-        return Locale.getPluralizedMessage(actionMsg, {value: this.props.selection.length, suffix: Locale.getMessage(suffix)});
+        return Locale.getPluralizedMessage(actionMsg, {value: this.props.selection.length});
     }
 
     /**
@@ -66,14 +62,11 @@ class UserActions extends React.Component {
     getConfirmDialog() {
 
         let msg;
-        const actionMsg = "app.users.remove";
-
         if (this.props.selection.length > 1) {
-            msg = Locale.getPluralizedMessage(actionMsg, {value: this.props.selection.length, suffix: Locale.getMessage('app.users.plural')}) + '?';
+            msg = this.getSelectionTip("app.users.deleteUsers") + '?';
         } else {
             msg = Locale.getMessage('app.users.removeUser');
         }
-
         const bodymsg  = Locale.getMessage('app.users.unassignUser');
 
         return (
@@ -104,7 +97,7 @@ class UserActions extends React.Component {
                         <ActionIcon icon="mail" tip={Locale.getMessage("unimplemented.emailApp")} disabled={true} identifier="mail"/>
                         {this.getEmailAction()}
                         <ActionIcon icon="settings" tip={Locale.getMessage("unimplemented.settingsRole")} disabled={true} identifier="settings"/>
-                        <ActionIcon icon="errorincircle-fill" tip={this.getSelectionTip("app.users.remove")} onClick={this.handleDelete} identifier="errorincircle-fill"/>
+                        <ActionIcon icon="errorincircle-fill" tip={this.getSelectionTip(this.props.selection.length > 1 ? "app.users.deleteUsers" : "app.users.deleteUser")} onClick={this.handleDelete} identifier="errorincircle-fill"/>
                     </div>
                 </div>
                 {this.getConfirmDialog()}

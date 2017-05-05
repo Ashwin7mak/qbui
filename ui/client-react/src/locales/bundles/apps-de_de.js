@@ -40,13 +40,14 @@ export default {
                 manager: "Anwendungsmanager",
                 removeUser: "Diesen Benutzer entfernen?",
                 unassignUser: "Benutzer können nicht mehr auf diese Anwendung zugreifen. Alle Daten, die sie zuvor eingegeben haben, bleiben in der Anwendung.",
-                remove: "Entfernen {Wert} {Suffix}",
+                deleteUser: "Entfernen {Wert} Benutzer",
+                deleteUsers: "Entfernen {Wert} Benutzer",
                 removeButton: "Entfernen",
                 cancel: "Stornieren",
                 singular: "Benutzer",
                 plural: "Benutzer",
-                usersRemoved: "Benutzer wurden entfernt",
-                userRemoved: "Benutzer wurde entfernt"
+                usersRemoved: " Benutzer wurden entfernt",
+                userRemoved: " Benutzer wurde entfernt"
 
             }
         },
