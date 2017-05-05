@@ -1,5 +1,5 @@
 /**
- * E2E tests for the topNav of the Reports page
+ * E2E tests for the reportSearch of the Reports page
  * cperikal 05/03/2017
  */
 (function() {
@@ -65,17 +65,28 @@
             //Step 1 - Verify if the search box is visible
             reportContentPO.reportFilterSearchBox.waitForVisible();
 
-            //Step 2 - Verify to enter the text in the searchBox
+            //Step 2 - Verify the no.of displayed records
+            let rowsBeforeClear = reportContentPO.reportDisplayedRecordCount();
+
+            //Step 3 - Verify to enter the text in the searchBox
             reportContentPO.reportFilterSearchBox.setValue(sampleText);
 
-            //Step 3 - Verify if the clear(X) search button is clickable
+            //Step 4 - Verify if the clear(X) search button is clickable
             reportContentPO.clearSearch.click();
+
+            //Step 5 - Verify the no.of records after clearing search
+            let rowsAfterClear = reportContentPO.reportDisplayedRecordCount();
+
+            //Step 6 - Verify no.of records before and after clear search to be equal
+            expect(rowsBeforeClear).toEqual(rowsAfterClear);
         });
 
         it('Verify search results for Text', function() {
 
             //Step 1 - Enter the value into search box
-            reportContentPO.reportSearchEnterValues([_.find(randomRecord, {id: 6}).value]);
+
+            let textValue = _.find(randomRecord, {id: 6}).value ;
+            reportContentPO.reportSearchEnterValues(textValue);
 
             //Step 2 - Get the actual table value
             let searchedTableRecords = reportContentPO.getAllRecordsFromTable();
@@ -83,7 +94,7 @@
             //Step 3 - Verify the Value present in each of the searchedTableRecords
             expect(searchedTableRecords.length).toBeGreaterThan(0);
             searchedTableRecords.forEach(function(expectedRecord) {
-                expect(expectedRecord.includes(_.find(randomRecord, {id: 6}).value)).toBeTruthy();
+                expect(expectedRecord).toContain(textValue);
             });
         });
 
