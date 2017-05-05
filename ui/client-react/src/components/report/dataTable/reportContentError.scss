@@ -1,4 +1,4 @@
-@import '../../../assets/css/_qbVariables';
+@import "../../../../../reuse/client/src/assets/css/_qbVariables";
 
 .reportContentError {
     align-items: center;
@@ -10,45 +10,10 @@
     overflow-y: scroll;
     width: 100%;
 
-    .errorImage {
-        border: 1px solid $color-black-200;
-        border-radius: 5px;
-        max-width: 600px;
-        width: 40%;
-
-        @include small-breakpoint {
-            max-width: 100%;
-            width: 75%;
-        }
-    }
-
     img:focus {
         outline: none;
 
         @include focus-shadow;
-    }
-
-    /* For Firefox */
-    .errorImage:after {
-        display: flex;
-    }
-
-    /* For Chrome/Safari */
-    .errorImage--still {
-        content: url("./fix_report_error_still_image.png");
-    }
-    /* For Firefox */
-    .errorImage--still:after {
-        content: url("./fix_report_error_still_image.png");
-    }
-
-    .errorImage--animation {
-        content: url("./fix_report_error.gif");
-    }
-
-    /* For Firefox */
-    .errorImage--animation:after {
-        content: url("./fix_report_error.gif");
     }
 
     .additionalHelp {
