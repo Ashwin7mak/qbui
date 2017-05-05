@@ -4,6 +4,7 @@ import DropDown from 'react-bootstrap/lib/Dropdown';
 import Icon from '../../icon/icon';
 import {I18nMessage} from '../../../utils/i18nMessage';
 import UrlUtils from '../../../../../../client-react/src/utils/urlUtils';
+import Tooltip from '../../tooltip/tooltip';
 
 import './userFeedBack.scss';
 
@@ -26,10 +27,12 @@ class userFeedBack extends Component {
 
         return (
             <DropDown id="nav-right-dropdown" className="userFeedBack globalActionLink" dropup={this.props.shouldOpenMenusUp}>
-                <a bsRole="toggle" className="dropdownToggle" tabIndex={startTabIndex}>
-                    <Icon icon={dropDownIcon} iconFont="iconTableSturdy"/>
-                    <span className="navLabel"><I18nMessage message={dropDownMessage}/></span>
-                </a>
+                <Tooltip bsRole="toggle" tipId="feedback" i18nMessageKey="header.menu.feedbackTooltip" key="feedback" location="bottom">
+                    <a bsRole="toggle" className="dropdownToggle" tabIndex={startTabIndex}>
+                        <Icon icon={dropDownIcon} iconFont="iconTableSturdy"/>
+                        <span className="navLabel"><I18nMessage message={dropDownMessage}/></span>
+                    </a>
+                </Tooltip>
 
                 <DropDown.Menu>
                     <MenuItem href={UrlUtils.getFeedBackLink()} target="_blank" className="feedbackMenuButton">

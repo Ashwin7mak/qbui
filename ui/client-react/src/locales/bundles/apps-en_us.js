@@ -178,7 +178,8 @@ export default {
                 sign_out: "Sign out",
                 feedbackMenuButton: "Give feedback",
                 feedbackMenuTitle: "Feed back",
-                reportFeedBackButton: "Report an issue"
+                reportFeedBackButton: "Report an issue",
+                feedbackTooltip: "Share ideas and issues"
             }
         },
         fields: {

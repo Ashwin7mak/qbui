@@ -174,7 +174,8 @@ export default {
                 sign_out: "Austragen",
                 feedbackMenuButton: "Feedback geben",
                 feedbackMenuTitle: "Feedback",
-                reportFeedBackButton: "Ein Problem melden"
+                reportFeedBackButton: "Ein Problem melden",
+                feedbackTooltip: "Teilen Sie Ideen und Fragen"
             }
 
         },

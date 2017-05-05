@@ -5,7 +5,7 @@ import  UserFeedBack, {__RewireAPI__ as UserFeedBackRewireAPI}  from '../../src/
 
 let component;
 const mockI18nMessage = ({message}) => <div className="i18nMessage">{message}</div>;
-const props = { startTabIndex: 4, shouldOpenMenusUp: false }
+const props = {startTabIndex: 4, shouldOpenMenusUp: false};
 
 describe('UserDropDown', () => {
     beforeEach(() => {

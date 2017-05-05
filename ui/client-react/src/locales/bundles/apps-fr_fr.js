@@ -174,7 +174,8 @@ export default {
                 sign_out: "Se déconnecter",
                 feedbackMenuButton: "Donnez votre avis",
                 feedbackMenuTitle: "Retour d'information",
-                reportFeedBackButton: "Signaler un problème"
+                reportFeedBackButton: "Signaler un problème",
+                feedbackTooltip: "Partagez des idées et des problèmes"
             }
         },
         fields: {
