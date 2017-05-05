@@ -20,7 +20,7 @@ var config = {
         {
             maxInstances: 1,
             //For IPAD capabilities
-            appiumVersion: '1.6.3',
+            appiumVersion: '1.6.4',
             platformName: 'Android',
             platformVersion: '6.0',
             browserName: 'Chrome',
@@ -29,8 +29,8 @@ var config = {
             deviceOrientation: 'landscape',
             automationName: 'Selendroid',
             tunnelIdentifier: process.env.ENV_TUNNEL_NAME,
-            build           : 'WebdriverIO Jenkins Try Build #' + process.env.BUILD_NUMBER + ' - Git branch: ' + process.env.GIT_UIBRANCH + ' - iOS Safari Browser',
-            tags            : [process.env.SAUCE_JOB_NAME + '_iOS_Safari', 'try', 'iOS', 'Safari', process.env.BUILD_NUMBER, process.env.GIT_UIBRANCH],
+            build           : 'WebdriverIO Jenkins Try Build #' + process.env.BUILD_NUMBER + ' - Git branch: ' + process.env.GIT_UIBRANCH + ' - Android Chrome Browser',
+            tags            : [process.env.SAUCE_JOB_NAME + '_Android_Safari', 'try', 'Android', 'Chrome', process.env.BUILD_NUMBER, process.env.GIT_UIBRANCH],
         }
     ]
 };
