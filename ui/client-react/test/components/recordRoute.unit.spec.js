@@ -33,9 +33,10 @@ describe('RecordRoute', () => {
         loadForm: () => {},
         openRecord: () => {},
         clearSearchInput: () => {},
-        record: [
-            {id: 2, recId: 2, nextRecordId: 3, previousRecordId: 1}
-        ]
+        record: {
+            recordIdBeingEdited: 2,
+            records: [{id: 2, recId: 2, nextRecordId: 3, previousRecordId: 1}]
+        }
     };
 
     beforeEach(() => {
@@ -68,7 +69,12 @@ describe('RecordRoute', () => {
 
         it('test render of component without report param', () => {
 
-            const initialState = {};
+            const initialState = {
+                record: {
+                    recordIdBeingEdited: 2,
+                    records: [{id: 2, recId: 2, nextRecordId: 3, previousRecordId: 1}]
+                }
+            };
             const store = mockStore(initialState);
 
             let params = {appId: "1", tblId: "2", recordId: "4"};
@@ -109,7 +115,12 @@ describe('RecordRoute', () => {
 
         it('test render of component with report param', () => {
 
-            const initialState = {};
+            const initialState = {
+                record: {
+                    recordIdBeingEdited: 2,
+                    records: [{id: 2, recId: 2, nextRecordId: 3, previousRecordId: 1}]
+                }
+            };
             const store = mockStore(initialState);
 
             let params = {appId: 1, tblId: 2, recordId: 3, rptId: 4};
@@ -329,7 +340,10 @@ describe('RecordRoute', () => {
             };
             const matchParams = {params: {appId: '1', tblId: '2', rptId: uniqueId, recordId: '2'}};
 
-            const record = [{id: uniqueId, recId: 2, nextRecordId: 3, previousRecordId: 1}];
+            const record = {
+                recordIdBeingEdited: 2,
+                records: [{id: uniqueId, recId: 2, nextRecordId: 3, previousRecordId: 1}]
+            };
             let history = [];
 
             component = mount(

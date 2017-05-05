@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import HelloWorld from '../../src/workflow/HelloWorld';
-import AutomationBundleLoader from '../../src/locales/automationBundleLoader';
+import HelloWorld from 'AUTOMATION/workflow/HelloWorld';
+import AutomationBundleLoader from 'AUTOMATION/locales/automationBundleLoader';
 import TestUtils from 'react-addons-test-utils';
 
 describe('HelloWorld', () => {

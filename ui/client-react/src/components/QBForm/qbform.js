@@ -10,6 +10,7 @@ import Constants from '../../../../common/src/constants';
 import UserFieldValueRenderer from '../fields/userFieldValueRenderer.js';
 import DragAndDropField from '../formBuilder/dragAndDropField';
 import RelatedChildReport from './relatedChildReport';
+import {CONTEXT} from "../../actions/context";
 import FlipMove from 'react-flip-move';
 
 import * as FieldsReducer from '../../reducers/fields';
@@ -347,6 +348,9 @@ export const QBForm = React.createClass({
 
         let CurrentFieldElement = (this.props.editingForm ? DragAndDropField(FieldElement) : FieldElement);
 
+        // This isDisable is used to disable the input and controls in form builder.
+        let isDisabled = !(this.props.edit && !this.props.editingForm);
+
         //This tabIndex is for form builder keyboard navigation. It is removing all field value editors from the tabbing flow
         let tabIndex = (this.props.editingForm ? "-1" : 0);
         return (
@@ -369,6 +373,7 @@ export const QBForm = React.createClass({
                   fieldRecord={fieldRecord}
                   includeLabel={true}
                   indicateRequiredOnLabel={this.props.edit}
+                  isDisabled={isDisabled}
                   edit={this.props.edit && !FormFieldElement.readOnly}
                   onChange={this.props.onFieldChange}
                   onBlur={this.props.onFieldChange}
@@ -376,6 +381,7 @@ export const QBForm = React.createClass({
                   invalidMessage={validationStatus.invalidMessage}
                   appUsers={this.props.appUsers}
                   recId={recId}
+                  isTokenInMenuDragging={this.props.isTokenInMenuDragging}
               />
             </div>
         );
@@ -574,9 +580,12 @@ function buildUserField(id, fieldValue, name) {
     };
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state, ownProps) => {
+    let formId = (ownProps.formId || CONTEXT.FORM.VIEW);
+    let currentForm = _.get(state, `forms[${formId}]`, {});
     return {
-        fields: state.fields
+        fields: state.fields,
+        isTokenInMenuDragging: (_.has(currentForm, 'isDragging') ? currentForm.isDragging : undefined),
     };
 };
 

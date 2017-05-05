@@ -255,6 +255,14 @@ const config = {
     },
 
     resolve: {
+        root: path.resolve(__dirname),
+        // Allow easier imports for commonly imported folders
+        alias: {
+            APP: 'client-react/src',
+            REUSE: 'reuse/client/src',
+            GOVERNANCE: 'governance/src',
+            COMMON: 'common/src'
+        },
         // extensions are so we can require('file') instead of require('file.js')
         extensions: ['', '.js', '.json', '.scss']
     },

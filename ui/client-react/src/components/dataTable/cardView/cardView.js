@@ -207,14 +207,14 @@ let CardView = React.createClass({
             this.setState({
                 swipingSelection:false
             }, () => {
-                this.props.onToggleCardSelection(true, this.props.data);
+                this.props.onToggleCardSelection(true, this.props.rowId);
             });
         }
     },
     /* callback when row is selected */
     onRowSelected(e) {
         if (this.props.onRowSelected) {
-            this.props.onRowSelected(this.props.data);
+            this.props.onRowSelected(this.props.rowId);
         }
     },
     /* close actions when row is clicked */
@@ -258,7 +258,7 @@ let CardView = React.createClass({
                 rowActionsClasses += this.state.showActions ? "open" : "closed";
             }
 
-            const isSelected = _.has(this.props.data, this.props.primaryKeyName) && this.props.isRowSelected(this.props.data[this.props.primaryKeyName].value);
+            const isSelected = this.props.isRowSelected(this.props.rowId);
 
             return (
                 <Swipeable  className={"swipeable " + (this.state.showActions && !this.state.swipingActions ? "actionsOpen" : "actionsClosed") }
