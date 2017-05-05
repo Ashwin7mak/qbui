@@ -62,7 +62,7 @@ const Icon = React.createClass({
             </QBToolTip>
         );
     },
-    render: function() {
+    render() {
         let {className, iconFont, icon, tooltipTitle} = this.props;
         let iconClassName = `${className} qbIcon ${iconFont}-${icon}`;
         let toolTipId = `toolTip-${icon}`;
