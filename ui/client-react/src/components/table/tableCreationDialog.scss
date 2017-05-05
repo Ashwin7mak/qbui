@@ -49,5 +49,14 @@
             height: 550px;
         }
         width: 420px;
+        .iconChooser.open {
+            width: 100%;
+        }
+        .tableField {
+            width: 100%;
+        }
+        .tableField:first-of-type {
+            padding-right: 0;
+        }
     }
 }

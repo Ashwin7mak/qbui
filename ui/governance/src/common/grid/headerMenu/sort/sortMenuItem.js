@@ -1,8 +1,8 @@
 import React, {Component, PropTypes} from 'react';
 import MenuItem from 'react-bootstrap/lib/MenuItem';
-import Locale from '../../../../../../client-react/src/locales/locales';
-import * as FieldConsts from '../../../../../../client-react/src/constants/schema';
-import Icon from '../../../../../../reuse/client/src/components/icon/icon';
+import Locale from 'APP/locales/locales';
+import * as FieldConsts from 'APP/constants/schema';
+import Icon from 'REUSE/components/icon/icon';
 
 /**
  * Describes a single Sort menu item. Supports handling of either the Ascending or

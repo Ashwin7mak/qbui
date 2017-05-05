@@ -9,7 +9,7 @@ $fieldtoken-title-margin-left: 12px;
 .fieldToken {
     // Overflow: hidden is used here to create the effect that the icon is rounded on the left, but flat on the right.
     overflow: hidden;
-
+    outline: none;
     border-radius: $fieldtoken-border-radius;
     height: $fieldtoken-height;
     width: $fieldtoken-width;
@@ -63,7 +63,7 @@ $fieldtoken-title-margin-left: 12px;
     &.fieldTokenDragging {
         color: $dragtoken-text-color;
         background-color: $dragtoken-background-color2;
-        border: $stroke-width-thin solid $dragtoken-border-color;
+        border: $stroke-width-thick solid $dragtoken-border-color;
 
         .fieldTokenIconContainer {
             background-color: $dragtoken-background-color1;

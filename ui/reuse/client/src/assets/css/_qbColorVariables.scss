@@ -162,6 +162,10 @@ $microtext-link-color:                  $color-indigo-700;
 $microtext-normal-color:                $color-black-600;
 
 // top navigation
+$topnav-builder-background-color:       $color-purple-600;
+$topnav-button-focus-border-color:      $color-black-100    ;
+$topnav-builder-icon-color:             $color-black-100;
+$topnav-builder-title-color:            $color-black-100;
 $topnav-title-icon-color:               $color-purple-600;
 $topnav-icon-color:                     $color-black-700;                       // not in XD spreadsheet
 $topnav-hover-color:                    $color-black-500;                       // not in XD spreadsheet
@@ -389,6 +393,12 @@ $trowser-color: $color-black-800;                                   // not in XD
 $trowser-icons-color: $color-black-100;                             // not in XD spreadsheet
 $trowser-header-background-color: $color-purple-600;                  // not in XD spreadsheet
 $trowser-footer-border-color: $color-black-300;
+$trowser-footer-background-color: $color-black-200;
+$trowser-footer-main-button-color: $color-cyan-500;
+$trowser-footer-alternative-button-color: $color-black-200;
+$trowser-footer-alternative-button-text-color: $color-indigo-500;
+$trowser-left-trowser-nav-border-color: $color-black-300;
+$trowser-right-trowser-nav-border-color: $color-black-300;
 $trowser-action-separator-color: $color-black-300;                   // not in XD spreadsheet
 $trowser-header-nav-icon-hover-background-color: $color-cyan-800;   // not in XD spreadsheet
 
@@ -409,12 +419,14 @@ $fieldtoken-background-color2: $color-black-100;
 $fieldtoken-text-color: $iconfont-on-light-alternate-color;
 $fieldtoken-icon-color: $color-black-100;
 $fieldtoken-border-color: $color-black-300;
-$fieldtoken-hover-border-color: $color-orange-500;
+$fieldtoken-hover-border-color: $color-purple-600;
+$fieldtoken-focus-border-color: $color-purple-600;
 
+$dragPreview-background-color: $color-purple-600;
 $dragtoken-background-color1: $color-orange-500;
 $dragtoken-background-color2: $color-black-100;
 $dragtoken-text-color: $iconfont-on-light-alternate-color;
-$dragtoken-border-color: $color-orange-500;
+$dragtoken-border-color: $color-purple-600;
 
 $dragtoken-shadow-color: rgba($color-black-800, 0.5);
 // dragtoken-active-gradient is defined in qbVariables because of a circular dependency on stroke-width
@@ -440,7 +452,7 @@ $app-role-divider: $color-yellow-500;
 //-------------------------------------------------------------------
 
 $input-bg-color: $color-black-100;
-$input-text-focus-border-color: $color-indigo-800;
+$input-text-focus-border-color: $color-purple-600;
 $input-text-normal-border-color: $color-black-400;
 $input-text-error-border-color: $error-color;
 $tootip-error-color: $error-color;
@@ -449,15 +461,29 @@ $field-input-shadow-color: rgba($color-indigo-700, 0.25);
 $selection-badge-color: $color-purple-600;
 $selected-check-color: $color-green-700;
 
-$input-border-focus-color: $color-indigo-700;
+$input-border-focus-color:  $color-purple-600;
+// disabled background color for input, select in form builder
+$disabled-field-value-editor-background-color: $color-black-200;
 @mixin focus-shadow($color: $input-border-focus-color) {
     box-shadow: 0 0 2px 1.5px rgba($color, 0.25);
     outline: none;
 }
+
+@mixin focus-shadow-thick($color: $input-border-focus-color) {
+    box-shadow: 0 0 4px 0px rgba($input-border-focus-color, 0.75);
+    outline: none;
+}
+
 @mixin text-input-focus {
     border: solid 1px $input-text-focus-border-color;
     border-color: $input-text-focus-border-color !important;
     @include focus-shadow();
+}
+
+@mixin text-input-focus-thick {
+    border: solid 2px $input-text-focus-border-color;
+    border-color: $input-text-focus-border-color !important;
+    @include focus-shadow-thick();
 }
 
 @mixin text-input-focus-with-rounding {

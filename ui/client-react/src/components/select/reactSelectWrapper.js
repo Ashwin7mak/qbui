@@ -58,6 +58,7 @@ const reactSelectWrapper = React.createClass({
                 onClose={this.onClose}
                 {...this.props}
                 tabIndex={this.props.tabIndex}
+                disabled={this.props.isDisabled}
             >
                 {this.props.children}
             </Select>

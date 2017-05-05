@@ -27,6 +27,8 @@ export const TOGGLE_TOOL_PALETTE_BUILDER_CHILDREN_TABINDEX = 'TOGGLE_TOOL_PALETT
 export const SYNC_FORM = 'SYNC_FORM';
 export const SELECT_FIELD = 'SELECT_FIELD';
 export const DESELECT_FIELD = 'DESELECT_FIELD';
+export const END_DRAG = 'END_DRAG';
+export const IS_DRAGGING = 'IS_DRAGGING';
 export const UNLOAD_FORM = 'UNLOAD_FORM';
 
 //  ********  Nav shell actions ********
