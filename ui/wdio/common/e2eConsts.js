@@ -53,6 +53,10 @@
 
         ADMIN_USERID : 10000,
 
+        ADMIN_ROLEID : 12,
+        PARTICIPANT_ROLEID : 11,
+        VIEWER_ROLEID : 10,
+
         invalidCredentials: 'Invalid Credentials\nYour authorization credentials are invalid or expired.\nPlease click here to return to QuickBase.',
 
         fieldType : {
