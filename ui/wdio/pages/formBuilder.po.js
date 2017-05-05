@@ -179,7 +179,7 @@ class formBuilderPage {
         browser.waitUntil(function() {
             targetLabel = browser.element(target).getText();
             return sourceLabel === targetLabel;
-        }, fiveSeconds, 'target preview label (' + targetLabel + ") didn't match source label (" + sourceLabel + ') after dragging');
+        }, 10000, 'target preview label (' + targetLabel + ") didn't match source label (" + sourceLabel + ') after dragging');
         return this;
     }
     slowDragAndDrop(source, target) {
