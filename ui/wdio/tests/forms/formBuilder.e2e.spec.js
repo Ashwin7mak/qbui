@@ -40,8 +40,8 @@
             try {
                 browser.windowHandleMaximize();
                 browser.buttonUp();
+            } catch (err) {
             }
-            catch (err) {}
             // open first table
             e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
             // edit first record
@@ -50,16 +50,30 @@
             return formBuilderPO.open();
         });
 
-        it('select a field, add a new field, verify new field is added directly below selection', function() {
-            let selectedField = formBuilderPO.selectFieldByIndex(1);
-            let newField = formBuilderPO.listOfElementsItem;
-            let newFieldLabel = newField.getText();
-            expect(formBuilderPO.getFieldLabels()[0]).not.toBe(newFieldLabel);
-            // add the first new field item to the form
-            newField.click();
-            browser.pause(5000);
-            // verify that the new row has the expected label
-            expect(formBuilderPO.getFieldLabels()[1]).toBe(newFieldLabel);
+        it('move a field via drag/drop & verify revised order after SAVE', function() {
+            // store the list of fields before moving
+            let origFields = formBuilderPO.getFieldLabels();
+            // drag the 1st field below the 2nd one
+            let source = formBuilderPO.getFieldLocator(1);
+            let target = formBuilderPO.getFieldLocator(2);
+            formBuilderPO.slowDragAndDrop(source, target);
+            // get the revised field list & make sure it's not 'polluted' due to DOM still settling after swap)
+            // (i.e. contains an unexpected array like ['Must be filled in', ...])
+            let movedFields = formBuilderPO.getFieldLabels();
+            // verify that the first 2 items have changed position
+            expect(movedFields[0]).toBe(origFields[1]);
+            expect(movedFields[1]).toBe(origFields[0]);
+            // save & reopen
+            formBuilderPO.save().open();
+            // verify persistence
+            expect(formBuilderPO.getFieldLabels()).toEqual(movedFields);
+        });
+
+        it('remove a field via keyboard & verify presence after CANCEL', function() {
+            let deletedField = formBuilderPO.KB_removeFieldViaIcon(1);
+            // cancel & reopen
+            formBuilderPO.cancel().open();
+            expect(formBuilderPO.getFieldLabels()).toContain(deletedField);
         });
 
         it('drags a field outside of viewport & verifies autoscroll', function() {
@@ -68,6 +82,7 @@
             let firstField = browser.element(firstFieldLocator);
             let lastField = browser.element(formBuilderPO.getFieldLocator(numFields));
             let firstFieldSize = firstField.getElementSize();
+            let firstFieldXLoc = firstField.getLocation('x');
             // shrink the window to cause last element to not be visible and make autoscroll faster
             let browserSize = browser.windowHandleSize();
             browser.setViewportSize({width: browserSize.value.width, height: firstFieldSize.height * 4}, true);
@@ -76,22 +91,24 @@
             browser.moveToObject(firstFieldLocator).buttonDown();
             // drag DOWN down until autoscroll begins
             browser.logger.info('Initiating autoscroll DOWN');
-            while (firstField.isVisibleWithinViewport()) {
-                browser.moveTo(null, 0, 1);
+            while (firstFieldXLoc === firstField.getLocation('x')) {//WithinViewport()) {
+                browser.moveTo(null, 0, 2);
             }
             // wait for autoscroll to reach the bottom
             browser.logger.info('Autoscrolling DOWN');
-            while (!lastField.isVisibleWithinViewport()) {
+            while (!firstFieldXLoc === firstField.getLocation('x')) {
+                firstFieldXLoc = firstField.getLocation('x');
                 browser.pause(formBuilderPO.oneSecond);
             }
             // drag UP until autoscroll begins
             browser.logger.info('Initiating autoscroll UP');
-            while (lastField.isVisibleWithinViewport()) {
-                browser.moveTo(null, 0, -1);
+            while (firstFieldXLoc === firstField.getLocation('x')) {
+                browser.moveTo(null, 0, -2);
             }
             // wait for first field to become visible
             browser.logger.info('Autoscrolling UP');
-            while (!firstField.isVisibleWithinViewport()) {
+            while (!firstFieldXLoc === firstField.getLocation('x')) {
+                firstFieldXLoc = firstField.getLocation('x');
                 browser.pause(formBuilderPO.oneSecond);
             }
             // release button
@@ -109,6 +126,61 @@
             formBuilderPO.save().open();
             // verify that the first item is still gone
             expect(formBuilderPO.getFieldLabels()).not.toContain(firstField);
+        });
+
+        it('remove a field via keyboard & verify absence after SAVE', function() {
+            let deletedField = formBuilderPO.KB_removeFieldViaIcon(1);
+            // save & reopen
+            formBuilderPO.save().open();
+            expect(formBuilderPO.getFieldLabels()).not.toContain(deletedField);
+        });
+
+        it('remove the selected field with BACKSPACE & verify presence after CANCEL', function() {
+            let removedField = formBuilderPO.KB_removeFieldViaBackspace(1);
+            // cancel & reopen
+            formBuilderPO.cancel().open();
+            expect(formBuilderPO.getFieldLabels()).toContain(removedField);
+        });
+
+        it('remove the selected field with BACKSPACE & verify absence after SAVE', function() {
+            let removedField = formBuilderPO.KB_removeFieldViaBackspace(1);
+            // save & reopen
+            formBuilderPO.save().open();
+            expect(formBuilderPO.getFieldLabels()).not.toContain(removedField);
+        });
+
+        it('move a field via drag/drop & verify original order after CANCEL', function() {
+            // store the list of fields before moving
+            let origFields = formBuilderPO.getFieldLabels();
+            // drag the 1st field below the 2nd one
+            let source = formBuilderPO.getFieldLocator(1);
+            let target = formBuilderPO.getFieldLocator(2);
+            formBuilderPO.slowDragAndDrop(source, target);
+            // get the revised field list & make sure it's not 'polluted' due to DOM still settling after swap)
+            // (i.e. contains an unexpected array like ['Must be filled in', ...])
+            let movedFields = formBuilderPO.getFieldLabels();
+            while (!movedFields.length === origFields.length) {
+                movedFields = formBuilderPO.getFieldLabels();
+            }
+            // verify that the first 2 items have changed position
+            expect(movedFields[0]).toBe(origFields[1]);
+            expect(movedFields[1]).toBe(origFields[0]);
+            // cancel & reopen
+            formBuilderPO.cancel().open();
+            // verify lack of persistence
+            expect(formBuilderPO.getFieldLabels()).toEqual(origFields);
+        });
+
+        it('select a field, add a new field, verify new field is added directly below selection', function() {
+            let selectedField = formBuilderPO.selectFieldByIndex(1);
+            let newField = formBuilderPO.listOfElementsItem;
+            let newFieldLabel = newField.getText();
+            expect(formBuilderPO.getFieldLabels()[0]).not.toBe(newFieldLabel);
+            // add the first new field item to the form
+            newField.click();
+            browser.pause(5000);
+            // verify that the new row has the expected label
+            expect(formBuilderPO.getFieldLabels()[1]).toBe(newFieldLabel);
         });
 
         it('remove a field & verify presence after CANCEL', function() {
@@ -176,50 +248,6 @@
             expect(formBuilderPO.getNewFieldLabels()).toEqual(newFields);
         });
 
-        it('move a field via drag/drop & verify revised order after SAVE', function() {
-            // store the list of fields before moving
-            let origFields = formBuilderPO.getFieldLabels();
-            // drag the 1st field below the 2nd one
-            let source = formBuilderPO.getFieldLocator(1);
-            let target = formBuilderPO.getFieldLocator(2);
-            formBuilderPO.slowDragAndDrop(source, target);
-            // get the revised field list & make sure it's not 'polluted' due to DOM still settling after swap)
-            // (i.e. contains an unexpected array like ['Must be filled in', ...])
-            let movedFields = formBuilderPO.getFieldLabels();
-            while (!movedFields.length === origFields.length) {
-                movedFields = formBuilderPO.getFieldLabels();
-            }
-            // verify that the first 2 items have changed position
-            expect(movedFields[0]).toBe(origFields[1]);
-            expect(movedFields[1]).toBe(origFields[0]);
-            // save & reopen
-            formBuilderPO.save().open();
-            // verify persistence
-            expect(formBuilderPO.getFieldLabels()).toEqual(movedFields);
-        });
-
-        it('move a field via drag/drop & verify original order after CANCEL', function() {
-            // store the list of fields before moving
-            let origFields = formBuilderPO.getFieldLabels();
-            // drag the 1st field below the 2nd one
-            let source = formBuilderPO.getFieldLocator(1);
-            let target = formBuilderPO.getFieldLocator(2);
-            formBuilderPO.slowDragAndDrop(source, target);
-            // get the revised field list & make sure it's not 'polluted' due to DOM still settling after swap)
-            // (i.e. contains an unexpected array like ['Must be filled in', ...])
-            let movedFields = formBuilderPO.getFieldLabels();
-            while (!movedFields.length === origFields.length) {
-                movedFields = formBuilderPO.getFieldLabels();
-            }
-            // verify that the first 2 items have changed position
-            expect(movedFields[0]).toBe(origFields[1]);
-            expect(movedFields[1]).toBe(origFields[0]);
-            // cancel & reopen
-            formBuilderPO.cancel().open();
-            // verify lack of persistence
-            expect(formBuilderPO.getFieldLabels()).toEqual(origFields);
-        });
-
         it('move a field via keyboard & verify revised order after SAVE', function() {
             let revisedOrder = formBuilderPO.KB_moveField(1, 2);
             formBuilderPO.KB_save();
@@ -233,34 +261,6 @@
             formBuilderPO.KB_cancel();
             formBuilderPO.open();
             expect(formBuilderPO.getFieldLabels()).toEqual(originalOrder);
-        });
-
-        it('remove a field via keyboard & verify presence after CANCEL', function() {
-            let deletedField = formBuilderPO.KB_removeFieldViaIcon(1);
-            // cancel & reopen
-            formBuilderPO.cancel().open();
-            expect(formBuilderPO.getFieldLabels()).toContain(deletedField);
-        });
-
-        it('remove a field via keyboard & verify absence after SAVE', function() {
-            let deletedField = formBuilderPO.KB_removeFieldViaIcon(1);
-            // save & reopen
-            formBuilderPO.save().open();
-            expect(formBuilderPO.getFieldLabels()).not.toContain(deletedField);
-        });
-
-        it('remove the selected field with BACKSPACE & verify presence after CANCEL', function() {
-            let removedField = formBuilderPO.KB_removeFieldViaBackspace(1);
-            // cancel & reopen
-            formBuilderPO.cancel().open();
-            expect(formBuilderPO.getFieldLabels()).toContain(removedField);
-        });
-
-        it('remove the selected field with BACKSPACE & verify absence after SAVE', function() {
-            let removedField = formBuilderPO.KB_removeFieldViaBackspace(1);
-            // save & reopen
-            formBuilderPO.save().open();
-            expect(formBuilderPO.getFieldLabels()).not.toContain(removedField);
         });
 
         it('drag/drop a field to another by name & verify move', function() {
@@ -284,7 +284,7 @@
             let source = formBuilderPO.getFieldLocator(1);
             let target = formBuilderPO.getFieldLocator(2);
             let label = browser.element(source).getText();
-             // drag source to target without dropping
+            // drag source to target without dropping
             browser.moveToObject(source);
             browser.buttonDown();
             formBuilderPO.slowDrag(target, label);
@@ -369,8 +369,7 @@
         });
 
         xit('check the REQUIRED checkbox, save & verify checked', function() {
-             //TODO: MC-2164: REQUIRED checkbox needs a reliable way to automate click & query
+            //TODO: MC-2164: REQUIRED checkbox needs a reliable way to automate click & query
         });
-
     });
 }());

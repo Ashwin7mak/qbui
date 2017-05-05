@@ -174,10 +174,12 @@ class formBuilderPage {
     }
     slowDrag(target, sourceLabel) {
         // Moves the cursor to specified target field and waits until target displays the the specified label
-        browser.moveToObject(target);
+        browser.moveToObject(target + ' .fieldLabel');
+        let targetLabel;
         browser.waitUntil(function() {
-            return sourceLabel === browser.element(target).getText();
-        }, 10000, 'expected target preview label to match source label after dragging');
+            targetLabel = browser.element(target).getText();
+            return sourceLabel === targetLabel;
+        }, fiveSeconds, 'target preview label (' + targetLabel + ") didn't match source label (" + sourceLabel + ') after dragging');
         return this;
     }
     slowDragAndDrop(source, target) {
@@ -191,8 +193,8 @@ class formBuilderPage {
         this.slowDrag(target, label);
         // release button
         browser.buttonUp();
-        // pause to terminate drag
-        browser.pause(fiveSeconds);
+        // this is necessary for Edge... without it, the dragToken remains displayed
+        browser.element(target).click();
         return this;
     }
 
