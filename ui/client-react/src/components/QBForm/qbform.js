@@ -422,6 +422,12 @@ export const QBForm = React.createClass({
         const childTable = _.find(tables, {id: relationship.detailTableId}) || {};
         const childTableName = childTable.name;
 
+        // Handler for clicking on a record in an embedded report. Drilling down to a child should open the clicked
+        // child record in a drawer.
+        // When this.props.edit is true, this form is inside a trowser. Disable drilling down to child records when an
+        // embedded report is in a trowser.
+        const handleDrillIntoChild = this.props.edit ? () => {} : this.props.handleDrillIntoChild;
+
         return (
             <div key={id} className="formElementContainer formElement referenceElement">
                 <RelatedChildReport
@@ -433,7 +439,7 @@ export const QBForm = React.createClass({
                     detailKeyValue={detailKeyValue}
                     type={ReferenceElement.type}
                     appUsers={this.props.appUsers}
-                    handleDrillIntoChild={this.props.handleDrillIntoChild}
+                    handleDrillIntoChild={handleDrillIntoChild}
                 />
             </div>
         );
