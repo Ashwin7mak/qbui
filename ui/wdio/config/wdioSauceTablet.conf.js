@@ -2,7 +2,7 @@ var baseConf = require('./wdioSauce.conf');
 var config = {
     capabilities: [
         {
-            maxInstances: 1,
+            maxInstances: 5,
             //For tablet capabilities
             appiumVersion: '1.6.4',
             platformName: 'Android',
