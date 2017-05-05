@@ -185,6 +185,13 @@
                                         for (let i = 0; i < resp.length; i++) {
                                             hydratedApps.push(resp[i]);
                                         }
+
+                                        hydratedApps.forEach(app => {
+                                            //sort tables by id to match create order
+                                            if (app.tables) {
+                                                app.tables = _.sortBy(app.tables, 'id');
+                                            }
+                                        });
                                         resolve(hydratedApps);
                                     },
                                     function(err) {
