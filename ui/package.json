@@ -81,6 +81,7 @@
   "devDependencies": {
     "async": "^0.2.9",
     "appium": "^1.6.4",
+    "authorize-ios":"^1.0.5",
     "babel-core": "~6.20.0",
     "babel-eslint": "^7.2.1",
     "babel-loader": "~6.2.10",

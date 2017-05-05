@@ -79,7 +79,7 @@ exports.config = {
     // Sauce Labs platform configurator - a great tool to configure your capabilities:
     // https://docs.saucelabs.com/reference/platforms-configurator
     //
-    host: 'localhost',
+    //host: '127.0.0.1',
     port: '4723',
     capabilities: [
         //{
