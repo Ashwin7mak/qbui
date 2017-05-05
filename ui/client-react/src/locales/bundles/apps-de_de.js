@@ -599,7 +599,8 @@ export default {
                 first: "Option 1",
                 second: "Option 2",
                 third: "Option 3"
-            }
+            },
+            modify: 'Formular ändern'
         },
         featureSwitchAdmin: {
             defaultFeatureName: "Feature",

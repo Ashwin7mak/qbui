@@ -1,6 +1,6 @@
-import ReportRowTransformer, {__RewireAPI__ as ReportRowTransformerRewireAPI} from '../../../src/components/dataTable/reportGrid/reportRowTransformer';
-import SchemaConsts from '../../../../common/src/constants';
-import {DEFAULT_RECORD_KEY} from '../../../src/constants/schema';
+import ReportRowTransformer, {__RewireAPI__ as ReportRowTransformerRewireAPI} from 'APP/components/dataTable/reportGrid/reportRowTransformer';
+import SchemaConsts from 'COMMON/constants';
+import {DEFAULT_RECORD_KEY} from 'APP/constants/schema';
 
 
 
