@@ -37,7 +37,7 @@ var config = {
             //For IPAD capabilities
             platform: 'OS X 10.11',
             version: '10.0',
-            deviceName: 'iPad 2',
+            deviceName: 'iPad Retina',
             deviceType: 'tablet',
             //platformName: 'iOS',
             //platformVersion: '9.2',
