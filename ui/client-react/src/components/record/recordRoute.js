@@ -27,7 +27,7 @@ import {loadForm, editNewRecord} from '../../actions/formActions';
 import {openRecord} from '../../actions/recordActions';
 import {clearSearchInput} from '../../actions/searchActions';
 import {APP_ROUTE, BUILDER_ROUTE, EDIT_RECORD_KEY} from '../../constants/urlConstants';
-import {getEmbeddedReportByContext, getEmbeddedReport} from '../../reducers/embeddedReports';
+import {getEmbeddedReportByContext} from '../../reducers/embeddedReports';
 import {CONTEXT} from '../../actions/context';
 import {getRecord} from '../../reducers/record';
 import './record.scss';
@@ -71,17 +71,18 @@ export const RecordRoute = React.createClass({
 
         // TODO: currently this.props.match.rptId is the embeddedReport's unique ID, perhaps use a different matcher
         // for rptId and uniqueId. We can then simplify some of the following smelly code.
-        let embeddedReport;
+        let embeddedReport = {};
         if (rptId !== undefined && typeof rptId === 'string' &&
                 (rptId.includes(CONTEXT.REPORT.EMBEDDED) || rptId.includes(CONTEXT.FORM.DRAWER))) {
             const embeddedReportId = rptId;
-            embeddedReport = getEmbeddedReport(this.props.embeddedReports, embeddedReportId);
+            embeddedReport = getEmbeddedReportByContext(this.props.embeddedReports, embeddedReportId) || {};
             rptId = embeddedReport.rptId;
         }
 
         if (appId && tblId && recordId) {
             //  report id is optional
             //  TODO: add form type as a parameter
+
             this.loadRecord(appId, tblId, recordId, rptId, embeddedReport);
         }
     },
@@ -440,10 +441,10 @@ export const RecordRoute = React.createClass({
         if (props.isDrawerContext) {
             let {rptId} = this.props.match.params;
             // TODO: remove the following after we move to reducers/embeddedReport
-            let embeddedReport;
+            let embeddedReport = {};
             if (rptId.includes(CONTEXT.REPORT.EMBEDDED) || rptId.includes(CONTEXT.FORM.DRAWER)) {
                 const embeddedReportId = rptId;
-                embeddedReport = getEmbeddedReportByContext(this.props.embeddedReports, embeddedReportId);
+                embeddedReport = getEmbeddedReportByContext(this.props.embeddedReports, embeddedReportId) || {};
                 rptId = embeddedReport.rptId;
             }
             return  embeddedReport;
@@ -587,8 +588,8 @@ const mapDispatchToProps = (dispatch) => {
         loadForm: (appId, tblId, rptId, formType, recordId, context) => {
             dispatch(loadForm(appId, tblId, rptId, formType, recordId, context));
         },
-        openRecord: (recId, nextId, prevId, viewContextId) => {
-            dispatch(openRecord(recId, nextId, prevId, viewContextId));
+        openRecord: (recId, nextId, prevId, uniqueId) => {
+            dispatch(openRecord(recId, nextId, prevId, uniqueId));
         },
         clearSearchInput: () => {
             dispatch(clearSearchInput());
