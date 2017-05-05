@@ -138,14 +138,14 @@ module.exports = function(e2eBase, chance) {
         projects.forEach((project) => {
             //assign a leader to the project
             project.projectLeader = chance.pickone(managers.concat(directors)).fullName;
-        if (tasksTable) {
-            genAndSetupTaskRecords(project, everyone, company, createdApp, minMaxToGen, projPromises);
-        }
-    });
+            if (tasksTable) {
+                genAndSetupTaskRecords(project, everyone, company, createdApp, minMaxToGen, projPromises);
+            }
+        });
 
-let projectRecords = makeRecordsInput(createdApp, projGen.tableProjectsName, projGen.getProjectPropFromFid, projects);
-projectRecords.forEach((projectRecord) => {
-    projPromises.push(function() {
+        let projectRecords = makeRecordsInput(createdApp, projGen.tableProjectsName, projGen.getProjectPropFromFid, projects);
+        projectRecords.forEach((projectRecord) => {
+            projPromises.push(function() {
                 return addBulkRecords(createdApp, projGen.tableProjectsName, getTable(createdApp, projGen.tableProjectsName), [projectRecord]);
             });
         });

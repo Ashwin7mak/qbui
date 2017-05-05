@@ -28,7 +28,7 @@ module.exports = function(chance) {
         comment: function(options) {
             let topicId = options && options.topicId ? options.topicId : '';
             let content = options && options.commentText ? options.commentText : chance.commentText(options);
-            let date = options && options.date ? options.date : rawValueGenerator.generateDate();
+            let date = options && options.date ? options.date : rawValueGenerator.generateDateTime();
             let author = options && options.authors ? chance.pickone(options.authors) : '';
 
             return {
@@ -70,7 +70,7 @@ module.exports = function(chance) {
             tableToFieldToFieldTypeMap[tableProjectsName] = {};
             addColumn(tableToFieldToFieldTypeMap[tableProjectsName], e2eConsts.dataType.TEXT, 'Topic Id');
             addColumn(tableToFieldToFieldTypeMap[tableProjectsName], e2eConsts.dataType.TEXT, 'Content', multiLineProps);
-            addColumn(tableToFieldToFieldTypeMap[tableProjectsName], e2eConsts.dataType.DATE, 'Date');
+            addColumn(tableToFieldToFieldTypeMap[tableProjectsName], e2eConsts.dataType.DATE_TIME, 'Date');
             addColumn(tableToFieldToFieldTypeMap[tableProjectsName], e2eConsts.dataType.TEXT, 'Author');
         }
     };
