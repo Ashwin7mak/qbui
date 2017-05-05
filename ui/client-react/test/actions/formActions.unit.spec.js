@@ -504,4 +504,22 @@ describe('Form Actions', () => {
                 }});
         });
     });
+
+    describe('endDraggingState', () => {
+        it('creates an action that update updates the dragging state to false', () => {
+            expect(formActions.endDraggingState('view')).toEqual({
+                id: 'view',
+                type: types.END_DRAG,
+                content: null});
+        });
+    });
+
+    describe('isInDraggingState', () => {
+        it('creates an action that updates dragging state to true', () => {
+            expect(formActions.isInDraggingState('view')).toEqual({
+                id: 'view',
+                type: types.IS_DRAGGING,
+                content: null});
+        });
+    });
 });

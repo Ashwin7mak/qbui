@@ -161,7 +161,7 @@
 
     .secondaryButton {
         background-color: $color-black-200;
-        color: $color-indigo-700;
+        color: $color-indigo-800;
         stroke: $color-black-300;
     }
 
@@ -177,7 +177,7 @@
 
     .primaryButton {
         color: $color-black-100;
-        background-color: $color-indigo-700;
+        background-color: $color-indigo-800;
         display: inline-block;
         margin-right: -15px;
         &:disabled:hover { /* This is temp while the button spec is not done. Right now this doesnt have a good handling for hover and disabled button */
