@@ -1,6 +1,7 @@
 import React, {Component, PropTypes} from 'react';
 import _ from 'lodash';
 import '../../../../client-react/src/components/dataTable/qbGrid/qbGrid.scss';
+import './standardGrid.scss';
 import * as Table from 'reactabular-table';
 import {connect} from 'react-redux';
 
@@ -74,6 +75,7 @@ class StandardGrid extends Component {
 
 StandardGrid.propTypes = {
     columns: PropTypes.array.isRequired,
+    items: PropTypes.array.isRequired,
     rowKey: PropTypes.string.isRequired,
     id: PropTypes.string.isRequired,
     columnTransforms: PropTypes.array,

@@ -19,13 +19,13 @@ class ReportService extends BaseService {
 
         //  Report service API endpoints
         this.API = {
-            GET_REPORT_META             : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.REPORTS}/{2}`,
-            PATCH_REPORT_META           : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.REPORTS}/{2}`,
-            GET_REPORT_RECORDS_COUNT    : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.REPORTS}/{2}/${constants.RECORDSCOUNT}`,
-            GET_REPORTS                 : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.REPORTS}`,
-            GET_REPORT_RESULTS          : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.REPORTS}/{2}/${constants.RESULTS}`,
-            GET_INVOKE_RESULTS          : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.REPORTS}/{2}/${constants.INVOKE}`,
-            PARSE_FACET_EXPR            : `${constants.BASE_URL.NODE}/${constants.FACETS}/${constants.PARSE}`
+            GET_REPORT_META             : `${constants.BASE_URL.QBUI}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.REPORTS}/{2}`,
+            PATCH_REPORT_META           : `${constants.BASE_URL.PROXY}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.REPORTS}/{2}`,
+            GET_REPORT_RECORDS_COUNT    : `${constants.BASE_URL.QBUI}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.REPORTS}/{2}/${constants.RECORDSCOUNT}`,
+            GET_REPORTS                 : `${constants.BASE_URL.PROXY}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.REPORTS}`,
+            GET_REPORT_RESULTS          : `${constants.BASE_URL.QBUI}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.REPORTS}/{2}/${constants.RESULTS}`,
+            GET_INVOKE_RESULTS          : `${constants.BASE_URL.QBUI}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.REPORTS}/{2}/${constants.INVOKE}`,
+            PARSE_FACET_EXPR            : `${constants.BASE_URL.QBUI}/${constants.FACETS}/${constants.PARSE}`
         };
     }
 
