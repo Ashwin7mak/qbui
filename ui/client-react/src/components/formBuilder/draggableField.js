@@ -3,7 +3,7 @@ import {DragSource} from 'react-dnd';
 import DraggableItemTypes from './draggableItemTypes';
 import {getEmptyImage} from 'react-dnd-html5-backend';
 import FieldEditingTools from './fieldEditingTools/fieldEditingTools';
-import _ from 'lodash';
+import _ from "lodash";
 
 /**
  * Specifies event handlers and props that are available during dragging events
@@ -19,6 +19,10 @@ const fieldDragSource = {
 
         if (props.beginDrag) {
             props.beginDrag(props);
+        }
+
+        if (props.isInDraggingState) {
+            props.isInDraggingState(props.formId);
         }
 
         return {
@@ -66,6 +70,9 @@ const fieldDragSource = {
         if (props.clearDragElementCache) {
             props.clearDragElementCache();
         }
+        if (props.endDraggingState) {
+            props.endDraggingState(props.formId);
+        }
     }
 };
 
@@ -101,13 +108,14 @@ const DraggableFieldHoc = (FieldComponent, showFieldEditingTools = true) => {
         }
 
         render() {
-            const {connectDragSource, isDragging, location, selectedField, formBuilderContainerContentElement} = this.props;
+            const {connectDragSource, isDragging, isTokenInMenuDragging, location, formBuilderContainerContentElement, selectedField} = this.props;
 
             let classNames = ['draggableField'];
             let draggableFieldWrapper = ['draggableFieldWrapper'];
-            classNames.push(isDragging ? 'dragging' : 'notDragging');
-            if (_.isEqual(location, selectedField)) {
-                draggableFieldWrapper.push('selectedFormElement');
+            if (isDragging || (_.isEqual(location, selectedField) && isTokenInMenuDragging)) {
+                classNames.push('dragging');
+            } else {
+                classNames.push('notDragging');
             }
 
             return connectDragSource(

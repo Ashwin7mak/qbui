@@ -1,8 +1,6 @@
 import React, {PropTypes, Component} from "react";
-import AVAILABLE_ICON_FONTS from "../../../constants/iconConstants";
 import QbIcon from "../../qbIcon/qbIcon";
 import QbToolTip from "../../qbToolTip/qbToolTip";
-import DragHandle from "../dragHandle/dragHandle";
 import Device from "../../../utils/device";
 import Breakpoints from "../../../utils/breakpoints";
 import {connect} from "react-redux";
@@ -21,7 +19,6 @@ export class FieldEditingTools extends Component {
         super(props);
 
         this.onClickDelete = this.onClickDelete.bind(this);
-        this.onClickFieldPreferences = this.onClickFieldPreferences.bind(this);
         this.onClickField = this.onClickField.bind(this);
         this.isFieldSelected = this.isFieldSelected.bind(this);
         this.renderActionIcons = this.renderActionIcons.bind(this);
@@ -36,12 +33,6 @@ export class FieldEditingTools extends Component {
             return this.props.removeFieldFromForm(this.props.formId, this.props.location);
         }
         e.preventDefault();
-    }
-
-    onClickFieldPreferences() {
-        if (this.props.onClickFieldPreferences) {
-            return this.props.onClickFieldPreferences(this.props.location);
-        }
     }
 
     onClickField(e) {
@@ -81,13 +72,7 @@ export class FieldEditingTools extends Component {
             <div className="actionIcons">
                     <div className="deleteFieldIcon">
                         <QbToolTip i18nMessageKey="builder.formBuilder.removeField">
-                           <button type="button" tabIndex={tabIndex} onClick={this.onClickDelete}> <QbIcon icon="delete" /> </button>
-                        </QbToolTip>
-                    </div>
-
-                    <div  className="fieldPreferencesIcon">
-                        <QbToolTip i18nMessageKey="builder.formBuilder.unimplemented">
-                            <button type="button" tabIndex={tabIndex} onClick={this.onClickFieldPreferences}> <QbIcon iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY} icon="Dimensions"/> </button>
+                           <button type="button" tabIndex={tabIndex} onClick={this.onClickDelete}> <QbIcon icon="clear-mini" /> </button>
                         </QbToolTip>
                     </div>
             </div>
@@ -180,7 +165,7 @@ export class FieldEditingTools extends Component {
 
     render() {
         let tabIndex = this.props.formBuilderChildrenTabIndex ? this.props.formBuilderChildrenTabIndex : "-1";
-
+        let selectedField = this.props.selectedFields ? this.props.selectedFields[0] : {};
         let isSmall = Breakpoints.isSmallBreakpoint();
         let classNames = ["fieldEditingTools"];
         let isTouch = Device.isTouch();
@@ -191,7 +176,7 @@ export class FieldEditingTools extends Component {
             classNames.push("notTouchDevice");
         }
 
-        if (this.props.isDragging) {
+        if (this.props.isDragging && _.isEqual(this.props.location, selectedField)) {
             classNames.push("active");
         }
 
@@ -207,8 +192,6 @@ export class FieldEditingTools extends Component {
                 onClick={this.onClickField}
                 onKeyDown={this.selectedCurrentField} >
 
-                <DragHandle />
-
                 {this.renderActionIcons()}
             </div>
         );
@@ -219,7 +202,6 @@ FieldEditingTools.propTypes = {
     formBuilderContainerContentElement: PropTypes.object,
     location: PropTypes.object,
     onClickDelete: PropTypes.func,
-    onClickFieldPreferences: PropTypes.func,
     isDragging: PropTypes.bool,
     formId: PropTypes.string
 };
@@ -235,11 +217,18 @@ const mapStateToProps = (state, ownProps) => {
     let formBuilderChildrenTabIndex = _.get(currentForm, 'formBuilderChildrenTabIndex[0]', '-1');
     let selectedFields = (_.has(currentForm, "selectedFields") ? currentForm.selectedFields : []);
     let previouslySelectedField = (_.has(currentForm, "previouslySelectedField") ? currentForm.previouslySelectedField : []);
+    //If a new field is added to form builder we use the state isDragging to indicate whether or not it is in a dragon state,
+    //If isDragging is undefined, then we use the components ownProps to indicate whether or not the field is in a dragon state
+    let isDragging = ownProps.isDragging;
+    if (!isDragging && _.has(currentForm, 'isDragging')) {
+        isDragging = currentForm.isDragging;
+    }
 
     return {
         selectedFields,
         previouslySelectedField,
-        formBuilderChildrenTabIndex
+        formBuilderChildrenTabIndex,
+        isDragging
     };
 };
 
