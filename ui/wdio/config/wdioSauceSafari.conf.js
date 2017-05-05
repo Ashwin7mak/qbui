@@ -22,8 +22,8 @@ var config = {
             //For IPAD capabilities
             appiumVersion: '1.6.4',
             platformName: 'Android',
-            platformVersion: '6.0',
-            browserName: 'Browser',
+            platformVersion: '5.0',
+            browserName: '',
             deviceName: 'Android Emulator',
             deviceType: 'tablet',
             deviceOrientation: 'landscape',
