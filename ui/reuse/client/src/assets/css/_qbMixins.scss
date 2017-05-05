@@ -71,3 +71,10 @@
         @content;
     }
 }
+
+//Use this when you are displaying light colored text on a dark background because
+//sub-pixels font antialiasing makes text look unnecessarily bold.
+@mixin correctFontWeightForLightTextOnDarkBackground {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
