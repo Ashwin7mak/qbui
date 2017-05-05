@@ -261,6 +261,7 @@ const config = {
             APP: 'client-react/src',
             REUSE: 'reuse/client/src',
             GOVERNANCE: 'governance/src',
+            AUTOMATION: 'automation/src',
             COMMON: 'common/src'
         },
         // extensions are so we can require('file') instead of require('file.js')
@@ -268,7 +269,7 @@ const config = {
     },
 
 
-    plugins: true ? [
+    plugins: shouldMinify ? [
         // This has beneficial effect on the react lib size for deploy
         new webpack.DefinePlugin({'process.env': {NODE_ENV: JSON.stringify('production')}}),
 
