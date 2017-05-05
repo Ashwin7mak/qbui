@@ -29,7 +29,7 @@ import {clearSearchInput} from '../../actions/searchActions';
 import {APP_ROUTE, BUILDER_ROUTE, EDIT_RECORD_KEY} from '../../constants/urlConstants';
 import {getEmbeddedReportByContext} from '../../reducers/embeddedReports';
 import {CONTEXT} from '../../actions/context';
-
+import {getRecord} from '../../reducers/record';
 import './record.scss';
 import withUniqueId from '../hoc/withUniqueId';
 import DrawerContainer from '../drawer/drawerContainer';
@@ -381,7 +381,7 @@ export const RecordRoute = React.createClass({
     },
 
     getPageActions() {
-        const actions = [
+        let actions = [
             {msg: 'pageActions.addRecord', icon:'add-new-filled', className:'addRecord', onClick: this.editNewRecord},
             {msg: 'pageActions.edit', icon:'edit', onClick: this.openRecordForEdit},
             {msg: 'unimplemented.email', icon:'mail', disabled:true},
@@ -393,7 +393,10 @@ export const RecordRoute = React.createClass({
             actions.splice(2, 0, {msg: 'pageActions.approve', icon: 'thumbs-up', onClick: this.approveRecord});
         }
 
-
+        // Currently page actions are disabled for child records shown in drawers.
+        if (this.props.isDrawerContext) {
+            actions = actions.map(action => Object.assign(action, {disabled:true, onClick: null}));
+        }
         return (<IconActions className="pageActions" actions={actions} {...this.props}/>);
     },
 
@@ -425,13 +428,9 @@ export const RecordRoute = React.createClass({
 
     getRecordFromProps(props = this.props) {
         if (this.props.isDrawerContext) {
-            return  _.find(props.record, rec => rec.id === props.uniqueId) || {};
+            return  getRecord(props.record.records, props.uniqueId.toString());
         } else {
-            return  _.find(props.record, rec => {
-                if (rec.recId) {
-                    return rec.recId.toString() === props.match.params.recordId;
-                }
-            }) || {};
+            return getRecord(props.record.records, props.match.params.recordId);
         }
     },
     /**

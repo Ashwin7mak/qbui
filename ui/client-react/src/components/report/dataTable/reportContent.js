@@ -27,7 +27,7 @@ import {tableFieldsReportDataObj} from '../../../reducers/fields';
 import {APP_ROUTE, EDIT_RECORD_KEY} from '../../../constants/urlConstants';
 import * as SchemaConstants from '../../../constants/schema';
 import {CONTEXT} from '../../../actions/context';
-
+import {getPendEdits} from '../../../reducers/record';
 let logger = new Logger();
 
 let IntlMixin = ReactIntl.IntlMixin;
@@ -216,10 +216,12 @@ export const ReportContent = React.createClass({
      * to be saved.
      * Then initiate the recordPendingEditsStart action with the app/table/recId and originalRec if there
      * was one or changes if it's a new record
+     * inlineEdit set to true by default, if its called from a trowser, the value passed in is going to be false
      * @param recId
      * @param fieldToStartEditing
+     * @param inLineEdit
      */
-    handleEditRecordStart(recId, fieldToStartEditing = null) {
+    handleEditRecordStart(recId, fieldToStartEditing = null, inLineEdit = true) {
         if (_.has(this.props, 'reportData.data')) {
             let origRec = null;
             let changes = {};
@@ -231,8 +233,7 @@ export const ReportContent = React.createClass({
             } else {
                 changes = this.setNewRowFieldChanges(recId);
             }
-
-            this.props.editRecordStart(this.props.appId, this.props.tblId, recId, origRec, changes, true, fieldToStartEditing);
+            this.props.editRecordStart(this.props.appId, this.props.tblId, recId, origRec, changes, inLineEdit, fieldToStartEditing);
         }
     },
 
@@ -528,8 +529,8 @@ export const ReportContent = React.createClass({
     openRecordForEditInTrowser(recordId) {
         //both actions should just add one record to the state, so passing the record id,
         //so that the record gets updated
-        this.handleEditRecordStart(recordId);
         this.openRow(recordId);
+        this.handleEditRecordStart(recordId, null, false);
         WindowLocationUtils.pushWithQuery(EDIT_RECORD_KEY, recordId);
     },
 
@@ -888,9 +889,7 @@ export const ReportContent = React.createClass({
     },
 
     getPendEdits() {
-        //there should be just one record with pending edit in the state, so return that
-        const recordCurrentlyEdited = _.find(this.props.record, rec=>rec.pendEdits);
-        return recordCurrentlyEdited ? recordCurrentlyEdited.pendEdits : {};
+        return getPendEdits(this.props.record);
     },
 
     componentWillUpdate(nextProps) {
@@ -925,6 +924,9 @@ export const ReportContent = React.createClass({
             classNames.push('inlineEditing');
         } else if (isRowPopUpMenuOpen) {
             classNames.push('rowPopUpMenuOpen');
+        }
+        if (isSmall) {
+            classNames.push('small');
         }
 
         classNames.push(this.props.reportData.loading ? 'loading' : '');
@@ -985,6 +987,7 @@ export const ReportContent = React.createClass({
                                             onScroll={this.onScrollRecords}
                                             onRowClicked={this.openRowToView}
                                             selectedRows={this.props.selectedRows}
+                                            selectRows={this.selectRows}
                                             pageStart={this.props.cardViewPagination.props.pageStart}
                                             pageEnd={this.props.cardViewPagination.props.pageEnd}
                                             getNextReportPage={this.props.cardViewPagination.props.getNextReportPage}
