@@ -203,18 +203,6 @@ exports.config = {
     // your test setup with almost no effort. Unlike plugins, they don't add new
     // commands. Instead, they hook themselves up into the test process.
     services: ['sauce', 'firefox-profile'],
-    //appium: {
-    //    waitStartTime: 6000,
-    //    command: 'appium.app',
-    //    logFileName: 'appium163.log',
-    //    args: {
-    //        address: '127.0.0.1',
-    //        //port: 4723,
-    //        commandTimeout: '7200',
-    //        sessionOverride: true,
-    //        debugLogSpacing: true
-    //    }
-    //},
     // Firefox profile enabled by wdio-firefox-profile-service
     // Firefox does not fire certain blur events when Firefox window does not have OS level focus. The following
     // setting enable blur events to fire during e2e tests even when the window does not have OS level focus.
