@@ -20,35 +20,35 @@ class StandardGridUsersCount extends Component {
      * and it changes the text header from 'Counting {users}' to 'Counting...'
      */
     render() {
-        // No users check
-        if ((this.props.isFiltered && (this.props.filteredUsersCount === null) || this.props.usersCount === null)) {
+        // No records check
+        if ((this.props.isFiltered && (this.props.filteredRecordCount === null) || this.props.totalRecords === null)) {
             return null;
         }
         // Set resource property name
-        let message = (this.props.usersCount === 1) ? "count.singleUserCount" : "count.usersCount";
+        let message = (this.props.totalRecords === 1) ? "count.singleRecordCount" : "count.totalRecords";
         let placeHolderMessage = (Breakpoints.isSmallBreakpoint()) ? "count.cardViewCountPlaceHolder" : "count.usersCountPlaceHolder";
 
         let dbl = null;
 
-        if (this.props.isFiltered && this.props.usersCount !== this.props.filteredUsersCount) {
+        if (this.props.isFiltered && this.props.totalRecords !== this.props.filteredRecordCount) {
             dbl = this.props.clearAllFilters;
-            message = (this.props.usersCount === 1) ? "count.filteredSingleUserCount" : "count.filteredUsersCount";
+            message = (this.props.totalRecords === 1) ? "count.filteredSingleRecordCount" : "count.filteredRecordCount";
         }
 
         let loaderOptions = SpinnerConfigurations.RECORD_COUNT;
         loaderOptions.color = !Breakpoints.isSmallBreakpoint() ? largeBreakpointColor : smallBreakpointColor;
         return (
-            <div className="usersCountLoaderContainer">
+            <div className="recordsCountLoaderContainer">
                 <Loader loaded={!this.props.isCounting} options={loaderOptions}>
-                    <div className="usersCount" onDoubleClick={dbl}>
+                    <div className="recordsCount" onDoubleClick={dbl}>
                         <I18nMessage message={message}
-                                     filteredUsersCount={this.props.filteredUsersCount + ''}
-                                     usersCount={this.props.usersCount + ''}
+                                     filteredRecordCount={this.props.filteredRecordCount + ''}
+                                     totalRecords={this.props.totalRecords + ''}
                         />
                     </div>
                 </Loader>
                 {   this.props.isCounting ?
-                    <div className="usersCount">
+                    <div className="recordsCount">
                         <I18nMessage message={placeHolderMessage} />
                     </div> :
                     null
@@ -60,8 +60,8 @@ class StandardGridUsersCount extends Component {
 
 StandardGridUsersCount.propTypes = {
     isFiltered: React.PropTypes.bool,
-    usersCount: React.PropTypes.number,
-    filteredUsersCount: React.PropTypes.number,
+    totalRecords: React.PropTypes.number,
+    filteredRecordCount: React.PropTypes.number,
     clearAllFilters: React.PropTypes.func,
     isCounting: React.PropTypes.bool
 };

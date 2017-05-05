@@ -33,12 +33,12 @@ export default {
                 }
             },
             count: {
-                usersCount : "{usersCount} users",
-                singleUserCount : "{usersCount} user",
+                totalRecords : "{totalRecords} users",
+                singleRecordCount : "{totalRecords} user",
                 usersCountPlaceHolder : "Counting users...",
                 cardViewCountPlaceHolder : "Counting...",
-                filteredUsersCount : "{filteredUsersCount} of {usersCount} users",
-                filteredSingleUserCount : "{filteredUsersCount} of {usersCount} users",
+                filteredRecordCount : "{filteredRecordCount} of {totalRecords} records",
+                filteredSingleRecordCount : "{filteredRecordCount} of {totalRecords} record",
             }
         }
     }

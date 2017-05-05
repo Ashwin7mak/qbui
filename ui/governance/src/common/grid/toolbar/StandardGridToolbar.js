@@ -15,9 +15,14 @@ class StandardGridToolBar extends React.Component {
         super(...args);
     }
 
+
 // && (!_.isUndefined(this.props.reportData))
     render() {
-        console.log("THIS.PROPS", this.props);
+        let isLoading = false;
+        let isError = false;
+        let filteredRecordCount = null;
+        // This is the count of all records that apply to this report
+        let totalRecords = 0;
         return (
             <div className="standardGridToolBar">
                 <div className="standardGridSearch">
@@ -25,12 +30,15 @@ class StandardGridToolBar extends React.Component {
                                   onChange={this.props.onSearchChange}/>
                 </div>
                 <div>
-                    <StandardGridUsersCount usersCount={usersCount}
-                                            // isFiltered={this.isFiltered()}
-                                            filteredUsersCount={filteredUsersCount}
-                                            clearAllFilters={this.props.clearAllFilters}
-                                            // isCounting={this.props.reportData.countingTotalRecords}
-                    />
+                    {!isLoading && !isError ?
+                        <StandardGridUsersCount totalRecords={totalRecords}
+                                      // isFiltered={this.isFiltered() && (!_.isUndefined(this.props.reportData))}
+                                      filteredRecordCount={filteredRecordCount}
+                                      // clearAllFilters={this.props.clearAllFilters}
+                                      isCounting={this.props.reportData.countingTotalRecords}
+                        /> :
+                        null
+                    }
                 </div>
                 <div className="standardGridNavigation">
                     <StandardGridNavigation getPreviousUsersPage={this.props.getPreviousUsersPage}
@@ -47,7 +55,8 @@ StandardGridToolBar.propTypes = {
     getPreviousUsersPage: PropTypes.func.isRequired,
     getNextUsersPage: PropTypes.func.isRequired,
     doUpdate: PropTypes.func.isRequired,
-    onSearchChange: PropTypes.func.isRequired
+    onSearchChange: PropTypes.func.isRequired,
+    totalRecords: PropTypes.number.isRequired
 };
 
 
