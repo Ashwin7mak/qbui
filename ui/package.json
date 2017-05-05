@@ -197,7 +197,7 @@
     "time-grunt": "~1.4.0",
     "unique-random-array": "^1.0.0",
     "url-loader": "^0.5.6",
-    "wdio-appium-service": "^0.2.3",
+    "wdio-appium-service": "^0.2.2",
     "wdio-firefox-profile-service": "0.0.1",
     "wdio-jasmine-framework": "^0.2.19",
     "wdio-junit-reporter": "^0.2.0",
