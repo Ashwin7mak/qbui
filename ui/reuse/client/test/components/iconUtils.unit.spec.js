@@ -59,10 +59,14 @@ describe('IconUtils', () => {
     });
 
     it('should return correct string', () => {
-        expect(IconUtils.getIconTitle(iconsByTag, 'apple')).toBe('apple, Apple, aPpLe');
+        expect(IconUtils.getIconTitle(iconsByTag, 'apple')).toEqual('tag1, tag2');
+    });
+
+    it('should handle incorrect parameters', () => {
+        expect(IconUtils.getIconTitle(undefined, undefined)).toEqual('');
     });
 
     it('should return empty string', () => {
-        expect(IconUtils.getIconTitle([], '')).toBe('');
+        expect(IconUtils.getIconTitle([], '')).toEqual('');
     });
 });

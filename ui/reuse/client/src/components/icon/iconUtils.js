@@ -29,25 +29,36 @@ const IconUtils = {
 
     /**
      * get title for each icon to use in tooltip
+     * @param iconsByTag - array of object which contains tag and icons
      * @param icon - icon name
-     * @return {string} icon tooltip
+     * @return {string} icon tooltip string
      */
     getIconTitle(iconsByTag, icon) {
-        let title = [];
-        let iconName = icon.toLowerCase();
-        let tagsLength = iconsByTag.length;
+        // Store all unique title
+        let titles = [];
         if (icon && iconsByTag) {
+            let iconName = icon.toLowerCase();
+            let tagsLength = iconsByTag.length;
             for (let i = 0; i < tagsLength; i++) {
+                // Continue the loop if one of the array is empty
+                if (iconsByTag[i].icons.length < 0) {
+                    continue;
+                }
+                // Otherwise iterate through the icons array
                 iconsByTag[i].icons.forEach(elem => {
+                    // Check if the icon name is equal to the element in the icons array
                     if (iconName === elem.toLowerCase()) {
-                        if (!title.includes(iconsByTag[i].tag)) {
-                            title.push(iconsByTag[i].tag);
+                        // We want the unique name to be in the array
+                        if (!titles.includes(iconsByTag[i].tag)) {
+                            // Then push the new title into the array
+                            titles.push(iconsByTag[i].tag);
                         }
                     }
                 });
             }
         }
-        return title.join(', ');
+        // Desired output string need to be delimited by comma
+        return titles.join(', ');
     }
 };
 
