@@ -73,6 +73,8 @@ exports.config = {
     // and 30 processes will get spawned. The property handles how many capabilities
     // from the same test should run tests.
     //
+    host: 'localhost',
+    port: 4723,
     maxInstances: 10,
     //
     // If you have trouble getting all important capabilities together, check out the
@@ -80,69 +82,69 @@ exports.config = {
     // https://docs.saucelabs.com/reference/platforms-configurator
     //
     capabilities: [
-        {
-            platform : 'OS X 10.11',
-            browserName     : 'chrome',
-            version: '55.0',
-            tunnelIdentifier: process.env.ENV_TUNNEL_NAME,
-            build           : 'WebdriverIO Jenkins Master Build #' + process.env.BUILD_NUMBER + ' - OSX Chrome Browser',
-            tags            : [process.env.SAUCE_JOB_NAME + '_OSX_Chrome', 'master', 'OSX', 'Chrome', process.env.BUILD_NUMBER],
-            screenResolution : '2048x1536',
-            // Timeout in seconds for Sauce Labs to wait for another command (bumped this for sleeps in tests)
-            idleTimeout: '180',
-            maxDuration: 10800,
-            breakpointSize: 'xlarge',
-            // These two values enable parallel testing which will run a spec file per instance
-            shardTestFiles: true,
-            maxInstances: 5
-        },
-        // {
-        //     platform: 'OS X 10.11',
-        //     browserName: 'safari',
-        //     version: '10.0',
-        //     tunnelIdentifier: process.env.ENV_TUNNEL_NAME,
-        //     build           : 'WebdriverIO Jenkins Master Build #' + process.env.BUILD_NUMBER + ' - OSX Safari Browser',
-        //     tags            : [process.env.SAUCE_JOB_NAME + '_OSX_Safari', 'master', 'OSX', 'Safari', process.env.BUILD_NUMBER],
-        //     screenResolution : '2048x1536',
-        //     // Timeout in seconds for Sauce Labs to wait for another command (bumped this for sleeps in tests)
-        //     idleTimeout: '180',
-        //     maxDuration: 10800,
-        //     breakpointSize: 'xlarge',
-        //     shardTestFiles: true,
-        //     maxInstances: 5
-        // },
-        {
-            platform: 'OS X 10.11',
-            browserName: 'firefox',
-            version: '46.0',
-            tunnelIdentifier: process.env.ENV_TUNNEL_NAME,
-            build           : 'WebdriverIO Jenkins Master Build #' + process.env.BUILD_NUMBER + ' - OSX Firefox Browser',
-            tags            : [process.env.SAUCE_JOB_NAME + '_OSX_Firefox', 'master', 'OSX', 'Firefox', process.env.BUILD_NUMBER],
-            screenResolution: '2048x1536',
-            // Timeout in seconds for Sauce Labs to wait for another command (bumped this for sleeps in tests)
-            idleTimeout: '180',
-            maxDuration: 10800,
-            breakpointSize: 'xlarge',
-            // These two values enable parallel testing which will run a spec file per instance
-            shardTestFiles: true,
-            maxInstances: 5
-        },
-        {
-            platform: 'Windows 10',
-            browserName: 'MicrosoftEdge',
-            version: '14.14393',
-            tunnelIdentifier: process.env.ENV_TUNNEL_NAME,
-            build           : 'WebdriverIO Jenkins Master Build #' + process.env.BUILD_NUMBER + ' - Windows 10 Edge Browser',
-            tags            : [process.env.SAUCE_JOB_NAME + '_Win10_Edge', 'master', 'Win10', 'Edge', process.env.BUILD_NUMBER],
-            screenResolution: '2560x1600',
-            // Timeout in seconds for Sauce Labs to wait for another command (bumped this for sleeps in tests)
-            idleTimeout: '180',
-            maxDuration: 10800,
-            breakpointSize: 'xlarge',
-            // These two values enable parallel testing which will run a spec file per instance
-            shardTestFiles: true,
-            maxInstances: 5
-        }
+        //{
+        //    platform : 'OS X 10.11',
+        //    browserName     : 'chrome',
+        //    version: '55.0',
+        //    tunnelIdentifier: process.env.ENV_TUNNEL_NAME,
+        //    build           : 'WebdriverIO Jenkins Master Build #' + process.env.BUILD_NUMBER + ' - OSX Chrome Browser',
+        //    tags            : [process.env.SAUCE_JOB_NAME + '_OSX_Chrome', 'master', 'OSX', 'Chrome', process.env.BUILD_NUMBER],
+        //    screenResolution : '2048x1536',
+        //    // Timeout in seconds for Sauce Labs to wait for another command (bumped this for sleeps in tests)
+        //    idleTimeout: '180',
+        //    maxDuration: 10800,
+        //    breakpointSize: 'xlarge',
+        //    // These two values enable parallel testing which will run a spec file per instance
+        //    shardTestFiles: true,
+        //    maxInstances: 5
+        //},
+        //// {
+        ////     platform: 'OS X 10.11',
+        ////     browserName: 'safari',
+        ////     version: '10.0',
+        ////     tunnelIdentifier: process.env.ENV_TUNNEL_NAME,
+        ////     build           : 'WebdriverIO Jenkins Master Build #' + process.env.BUILD_NUMBER + ' - OSX Safari Browser',
+        ////     tags            : [process.env.SAUCE_JOB_NAME + '_OSX_Safari', 'master', 'OSX', 'Safari', process.env.BUILD_NUMBER],
+        ////     screenResolution : '2048x1536',
+        ////     // Timeout in seconds for Sauce Labs to wait for another command (bumped this for sleeps in tests)
+        ////     idleTimeout: '180',
+        ////     maxDuration: 10800,
+        ////     breakpointSize: 'xlarge',
+        ////     shardTestFiles: true,
+        ////     maxInstances: 5
+        //// },
+        //{
+        //    platform: 'OS X 10.11',
+        //    browserName: 'firefox',
+        //    version: '46.0',
+        //    tunnelIdentifier: process.env.ENV_TUNNEL_NAME,
+        //    build           : 'WebdriverIO Jenkins Master Build #' + process.env.BUILD_NUMBER + ' - OSX Firefox Browser',
+        //    tags            : [process.env.SAUCE_JOB_NAME + '_OSX_Firefox', 'master', 'OSX', 'Firefox', process.env.BUILD_NUMBER],
+        //    screenResolution: '2048x1536',
+        //    // Timeout in seconds for Sauce Labs to wait for another command (bumped this for sleeps in tests)
+        //    idleTimeout: '180',
+        //    maxDuration: 10800,
+        //    breakpointSize: 'xlarge',
+        //    // These two values enable parallel testing which will run a spec file per instance
+        //    shardTestFiles: true,
+        //    maxInstances: 5
+        //},
+        //{
+        //    platform: 'Windows 10',
+        //    browserName: 'MicrosoftEdge',
+        //    version: '14.14393',
+        //    tunnelIdentifier: process.env.ENV_TUNNEL_NAME,
+        //    build           : 'WebdriverIO Jenkins Master Build #' + process.env.BUILD_NUMBER + ' - Windows 10 Edge Browser',
+        //    tags            : [process.env.SAUCE_JOB_NAME + '_Win10_Edge', 'master', 'Win10', 'Edge', process.env.BUILD_NUMBER],
+        //    screenResolution: '2560x1600',
+        //    // Timeout in seconds for Sauce Labs to wait for another command (bumped this for sleeps in tests)
+        //    idleTimeout: '180',
+        //    maxDuration: 10800,
+        //    breakpointSize: 'xlarge',
+        //    // These two values enable parallel testing which will run a spec file per instance
+        //    shardTestFiles: true,
+        //    maxInstances: 5
+        //}
     ],
     //
     // ===================
@@ -200,7 +202,7 @@ exports.config = {
     // Services take over a specific job you don't want to take care of. They enhance
     // your test setup with almost no effort. Unlike plugins, they don't add new
     // commands. Instead, they hook themselves up into the test process.
-    services: ['sauce', 'firefox-profile'],
+    services: ['sauce', 'appium', 'firefox-profile'],
     // Firefox profile enabled by wdio-firefox-profile-service
     // Firefox does not fire certain blur events when Firefox window does not have OS level focus. The following
     // setting enable blur events to fire during e2e tests even when the window does not have OS level focus.

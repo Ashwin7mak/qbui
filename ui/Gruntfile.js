@@ -599,26 +599,26 @@ module.exports = function(grunt) {
                 ],
                 suites: {
                     reports: [
-                        './wdio/tests/reports/reportDeleteRecord.e2e.spec.js',
-                        './wdio/tests/reports/grouping/reportGroupingViaContainer.e2e.spec.js',
-                        './wdio/tests/reports/sorting/reportSortingViaContainer.e2e.spec.js',
-                        './wdio/tests/reports/reportTopNav.e2e.spec.js',
-                        './wdio/tests/reports/reportEditRecord.e2e.spec.js',
-                        './wdio/tests/reports/reportNavigation.e2e.spec.js',
-                        './wdio/tests/reports/grouping/reportGroupingViaColumnHeader.e2e.spec.js',
-                        './wdio/tests/reports/sorting/reportSortingViaColumnHeader.e2e.spec.js',
-                        './wdio/tests/reports/reportTable.e2e.spec.js',
+                        //'./wdio/tests/reports/reportDeleteRecord.e2e.spec.js',
+                        //'./wdio/tests/reports/grouping/reportGroupingViaContainer.e2e.spec.js',
+                        //'./wdio/tests/reports/sorting/reportSortingViaContainer.e2e.spec.js',
+                        //'./wdio/tests/reports/reportTopNav.e2e.spec.js',
+                        //'./wdio/tests/reports/reportEditRecord.e2e.spec.js',
+                        //'./wdio/tests/reports/reportNavigation.e2e.spec.js',
+                        //'./wdio/tests/reports/grouping/reportGroupingViaColumnHeader.e2e.spec.js',
+                        //'./wdio/tests/reports/sorting/reportSortingViaColumnHeader.e2e.spec.js',
+                        //'./wdio/tests/reports/reportTable.e2e.spec.js',
                     ],
                     forms: [
-                        './wdio/tests/forms/formAdd.e2e.spec.js',
-                        './wdio/tests/forms/formAddValidation.e2e.spec.js',
-                        './wdio/tests/forms/formEdit.e2e.spec.js',
-                        './wdio/tests/forms/formEditValidation.e2e.spec.js'
+                        //'./wdio/tests/forms/formAdd.e2e.spec.js',
+                        //'./wdio/tests/forms/formAddValidation.e2e.spec.js',
+                        //'./wdio/tests/forms/formEdit.e2e.spec.js',
+                        //'./wdio/tests/forms/formEditValidation.e2e.spec.js'
                     ],
                     tables: [
-                        './wdio/tests/tables/tableCreate.e2e.spec.js',
-                        './wdio/tests/tables/tableEdit.e2e.spec.js',
-                        './wdio/tests/tables/tableHomePage.e2e.spec.js'
+                        //'./wdio/tests/tables/tableCreate.e2e.spec.js',
+                        //'./wdio/tests/tables/tableEdit.e2e.spec.js',
+                        //'./wdio/tests/tables/tableHomePage.e2e.spec.js'
                     ],
                     relationships: [],
                     users: [
@@ -630,7 +630,7 @@ module.exports = function(grunt) {
                 // Use the wdioSauce.conf.js file setting the options above
                 configFile: './wdio/config/' + wdioSauceConfig,
                 // Make sure there are no spaces between test suites here
-                suite: 'reports,forms,tables,users'
+                suite: 'reports,forms,tables,users,mobile'
             }
         },
 
