@@ -5,17 +5,16 @@
 module.exports = function(chance) {
     'use strict';
     const _ = require('lodash');
-    let asignmentIndex = 0;
     chance.mixin({
         assignee: function(options) {
             if (options.peopleList) {
-                return chance.pickone(options.peopleList).fullname;
+                return chance.pickone(options.peopleList).fullName;
             }
         },
         assignment: function(options) {
             let taskName = options && options.taskName ? options.taskName : '';
             let taskId = options && options.taskId ? options.taskId : '';
-            let assignmentId = '' + asignmentIndex++;
+            let assignmentId = chance.hash({length:13});
             let assigneeName = options ? chance.assignee(options) : '';
             let department = options && options.department ? options.department : '';
             let projectName  = options && options.projectName ? options.projectName : '';
@@ -69,7 +68,7 @@ module.exports = function(chance) {
             tableToFieldToFieldTypeMap[tableAssignmentsName] = {};
             addColumn(tableToFieldToFieldTypeMap[tableAssignmentsName], e2eConsts.dataType.TEXT, 'Task Name');
             addColumn(tableToFieldToFieldTypeMap[tableAssignmentsName], e2eConsts.dataType.TEXT, 'Task Id');
-            addColumn(tableToFieldToFieldTypeMap[tableAssignmentsName], e2eConsts.dataType.TEXT, 'Assignee Id');
+            addColumn(tableToFieldToFieldTypeMap[tableAssignmentsName], e2eConsts.dataType.TEXT, 'Assignee Id', {unique: true});
             addColumn(tableToFieldToFieldTypeMap[tableAssignmentsName], e2eConsts.dataType.TEXT, 'Assignee');
             addColumn(tableToFieldToFieldTypeMap[tableAssignmentsName], e2eConsts.dataType.TEXT, 'Department');
             addColumn(tableToFieldToFieldTypeMap[tableAssignmentsName], e2eConsts.dataType.TEXT, 'Project');

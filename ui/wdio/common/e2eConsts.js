@@ -45,10 +45,6 @@
         TABLE11 : 11,
         TABLE12 : 12,
         TABLE13 : 13,
-        COMPANY_TABLE : 14,
-        PROJECT_TABLE : 15,
-        TASK_TABLE : 16,
-        PEOPLE_TABLE : 17,
 
         MAX_PAGING_SIZE : clientConsts.PAGE.DEFAULT_NUM_ROWS,
         DEFAULT_NUM_RECORDS_TO_CREATE : 10,

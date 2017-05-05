@@ -45,14 +45,14 @@ module.exports = function(chance) {
         let answer = [];
         if (options.employees) {
             let depts = getDepartments(options.employees);
-            //create 1 - 2 managers for each department
+            //create some managers for each department
             depts.forEach(department => {
                 let title = titlesByDept[department].name.find(item => item.indexOf('Manager') !== -1);
-                let dptManagers = chance.n(chance.person, chance.integer({min:1, max:4}), Object.assign(options, {department, title}));
+                let dptManagers = chance.n(chance.person, chance.integer({min:2, max:4}), Object.assign(options, {department, title}));
                 answer = answer.concat(dptManagers);
             });
         }
-        managers.concat(answer);
+        managers = managers.concat(answer);
         return answer;
     }
     function genDirectors(options) {
@@ -61,20 +61,22 @@ module.exports = function(chance) {
         if (options.employees) {
             let depts = getDepartments(options.employees);
             // for each department create a director
-            // for F&A create CEO and VPs too
+            // for F&A create CEO too
             depts.forEach(department => {
                 let dptDirector = chance.n(chance.person,  chance.integer({min:1, max:2}), Object.assign(options, {department, title:'Director'}));
-                answer.concat(dptDirector);
-                directors.concat(dptDirector);
-                if (department === 'Finance and Admin') {
-                    let VP = chance.person(Object.assign(options, {department, title:'VP'}));
-                    answer.concat(VP);
-                    directors.concat(VP);
-                    let CEO = chance.person(Object.assign(options, {department, title:'CEO'}));
-                    answer.concat(CEO);
-                    ceos.concat(CEO);
-                }
+                answer = answer.concat(dptDirector);
+                directors = directors.concat(dptDirector);
+                let VP = chance.person(Object.assign(options, {department, title:'VP'}));
+                answer = answer.concat(VP);
+                directors = directors.concat(VP);
             });
+            let department = 'Finance and Admin';
+            let VP = chance.person(Object.assign(options, {department, title:'VP'}));
+            answer = answer.concat(VP);
+            directors = directors.concat(VP);
+            let CEO = chance.person(Object.assign(options, {department, title:'CEO'}));
+            answer = answer.concat(CEO);
+            ceos = ceos.concat(CEO);
         }
         return answer;
 
@@ -94,12 +96,15 @@ module.exports = function(chance) {
     function getManager(person) {
         let answer;
         if (isNonMgt(person.title)) {
-            answer = chance.pickone(managers.filter(leader => leader.department === person.department)).fullname;
+            answer = chance.pickone(managers.filter(leader => leader.department === person.department)).fullName;
         } else if (isManager(person.title)) {
-            answer = chance.pickone(directors.filter(leader => leader.department === person.department)).fullname;
+            answer = chance.pickone(directors.filter(leader => leader.department === person.department)).fullName;
         } else if (isDirector(person.title)) {
-            answer = chance.pickone(ceos).fullname;
+            answer = chance.pickone(ceos).fullName;
+        } else {
+            answer = person.fullName;
         }
+
         return answer;
     }
 
@@ -128,7 +133,7 @@ module.exports = function(chance) {
             return answer;
         },
         person: function(options) {
-            let fullname = options && options.fullname ? options.fullname : chance.uniqueName(options);
+            let fullName = options && options.fullName ? options.fullName : chance.uniqueName(options);
             let birthday = options && options.birthday ? options.birthday : rawValueGenerator.generateDate({year: chance.integer(BDAY_YEAR_RANGE)});
             let department = options && options.department ? options.department : chance.department();
             let dptTitle  = titlesByDept[department];
@@ -138,7 +143,7 @@ module.exports = function(chance) {
 
 
             let newPerson = {
-                fullname,
+                fullName,
                 title,
                 birthday,
                 department,
@@ -154,14 +159,14 @@ module.exports = function(chance) {
             if (isCEO(title)) {
                 ceos.push(newPerson);
             }
-            persons[fullname] = newPerson;
+            persons[fullName] = newPerson;
             return newPerson;
         }
     });
 
 
     const fidToProp = {
-        6 : 'fullname',
+        6 : 'fullName',
         7 : 'title',
         8 : 'birthday',
         9 : 'department',
@@ -169,7 +174,7 @@ module.exports = function(chance) {
         11 : 'companyName',
     };
     const propToFid = {
-        'fullname' : 6,
+        'fullName' : 6,
         'title' : 7,
         'birthday' : 8,
         'department' : 9,
@@ -192,7 +197,7 @@ module.exports = function(chance) {
         addSchemaFields,
 
         getPerson : function(fullName) {
-            return persons[fullname];
+            return persons[fullName];
         },
 
     };

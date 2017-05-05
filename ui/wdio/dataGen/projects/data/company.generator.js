@@ -4,15 +4,14 @@
  */
 module.exports = function(chance) {
     'use strict';
-    const DEFAULT_NUM_COMPANIES = 10;
-    const RANK_RANGE ={min:10, max:50};
+    const RANK_RANGE = {min:1, max:100};
     const fs = require('fs');
     let usedName = 0;
     const companies = [
-        "Apple", "Microsoft", "AT & T", "IBM", "Johnson & Johnson", "Deer",
-        "Dataware", "Intuit", "QuickBase", "Walgreens", "Black & Decker", "Tesla",
-        "Ford", "Staples", "Boeing", "Intel", "Motorola", "FedEx", "Cisco", "Heliosety Energy",
-        "Good Idea",
+        "Apple", "Microsoft", "AT&T", "Xerox", "Johnson & Johnson", "J.Deere",
+        "Time", "Intuit", "QuickBase", "Walgreens", "Black & Decker", "Tesla",
+        "Ford", "Staples", "Boeing", "Intel", "Motorola", "FedEx", "Cisco", "Rutoxio Energy",
+        "Gartner",
     ];
 
     function init() {

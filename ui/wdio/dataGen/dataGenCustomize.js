@@ -13,6 +13,7 @@
 
 // jshint sub: true
 // jscs:disable requireDotNotation
+console.time('dataGen');
 
 // if you set realmToUse null it will randomly generated a new realm name
 // change this to a string i.e. "myRealm" of an existing realm to use
@@ -29,14 +30,17 @@ if (realmToUse) {
 // gen a repeatable seed for random values, so any random generated info can be reproduced
 var Chance = require('chance');
 let seed = new Chance().integer({min: 1, max: 1000000000});
-seed = 775205028;
+
 let chance = new Chance(seed);
 
 // Require the e2e base and constants modules
 e2eBase = require('../common/e2eBase.js')(config);
 e2eConsts = require('../common/e2eConsts');
 consts = require('../../common/src/constants.js');
-projGen = require('./projects/projectsGen.js')(chance);
+const projGen = require('./projects/projectsGen.js')(chance);
+const projRecs = require('./projects/projectsRecs')(e2eBase, chance);
+projRecs.init(projGen);
+
 
 (function() {
     'use strict';
@@ -55,46 +59,47 @@ projGen = require('./projects/projectsGen.js')(chance);
     var table2Name = 'Table 2 ';
     var table3Name = 'Table 3 ';
     var table4Name = 'Table 4 ';
-    var table5Name = 'All Required';
-    var table6Name = 'Durations';
-    var table7Name = 'Unique Fields';
-    var table8Name = 'Parent Table 1';
-    var table9Name = 'Child Table 1';
-    var table10Name = 'Parent Table 2';
-    var table11Name = 'Child Table 2';
-    var table12Name = 'Country';
-    var table13Name = 'State';
-    var table14Name = 'City';
+    var table5ReqName = 'All Required';
+    var table6DurName = 'Durations';
+    var table7UniqName = 'Unique Fields';
+    var table8Par1Name = 'Parent Table 1';
+    var table9Ch1Name = 'Child Table 1';
+    var table10Par1Name = 'Parent Table 2';
+    var table11Ch2Name = 'Child Table 2';
+    var table12CntryName = 'Country';
+    var table13StateName = 'State';
+    var table14CityName = 'City';
 
-    // set which tables to create or set to null to create all
+    // use this array to limit which tables to create or set tablesToCreate to null to create all
     var tablesToCreate = [
-        //table1Name,
-        projGen.tableCompaniesName,
-        projGen.tableProjectsName,
-        projGen.tableTasksName,
-        projGen.tablePeopleName,
-        projGen.tableAssignmentsName,
-        projGen.tableCommentsName
+        // table1Name,
+        // table2Name,
+        // table3Name,
+        // table4Name,
+        // table5ReqName,
+        // table6DurName,
+
+        // table7UniqName,
+        // table8Par1Name,
+        // table9Ch1Name,
+        // table10Par1Name,
+        // table11Ch2Name,
+
+        // table12CntryName,
+        // table13StateName,
+        // table14CityName,
+        //
+        // projGen.tableCompaniesName,
+        // projGen.tableProjectsName,
+        // projGen.tableTasksName,
+        // projGen.tablePeopleName,
+        // projGen.tableAssignmentsName,
+        // projGen.tableCommentsName
     ];
     // or use null to create all the tables
-    //tablesToCreate = null;
+    tablesToCreate = null;
 
     log.debug('dataGenCustomize seed: ' + seed);
-
-    // set the range of number of entities to generate
-    const  minCompany = projGen.defaultMinNumOfCompanies;
-    const  maxCompany = projGen.defaultMaxNumOfCompanies;
-    const  minProj = projGen.defaultMinNumOfProjects;
-    const  maxProj = projGen.defaultMaxNumOfProjects;
-    const  minPeople = projGen.defaultMinNumOfPeople;
-    const  maxPeople = projGen.defaultMaxNumOfPeople;
-    const  minTask = projGen.defaultMinNumOfTasks;
-    const  maxTask = projGen.defaultMaxNumOfTasks;
-    const  minAssignee = projGen.defaultMinNumOfAssignees;
-    const  maxAssignee = projGen.defaultMaxNumOfAssignees;
-    const  minComment = projGen.defaultMaxNumOfComments;
-    const  maxComment = projGen.defaultMaxNumOfComments;
-
 
     // Generate an app and log the app and tables it created when done
     generateNewData(() => {
@@ -299,9 +304,9 @@ projGen = require('./projects/projectsGen.js')(chance);
 
         // Table 5 //
 
-        tableToFieldToFieldTypeMap[table5Name] = {};
-        addColumn(tableToFieldToFieldTypeMap[table5Name], e2eConsts.dataType.TEXT, null, {required: true});
-        addColumn(tableToFieldToFieldTypeMap[table5Name], e2eConsts.dataType.TEXT, "Text MultiChoice",
+        tableToFieldToFieldTypeMap[table5ReqName] = {};
+        addColumn(tableToFieldToFieldTypeMap[table5ReqName], e2eConsts.dataType.TEXT, null, {required: true});
+        addColumn(tableToFieldToFieldTypeMap[table5ReqName], e2eConsts.dataType.TEXT, "Text MultiChoice",
             {
                 required: true,
                 dataAttr: {htmlAllowed: true, clientSideAttributes: Object.assign({}, baseTextClientRequiredProps)},
@@ -311,13 +316,13 @@ projGen = require('./projects/projectsGen.js')(chance);
                     sortAsGiven: true
                 }
             });
-        addColumn(tableToFieldToFieldTypeMap[table5Name], e2eConsts.dataType.TEXT, "MultiLine",
+        addColumn(tableToFieldToFieldTypeMap[table5ReqName], e2eConsts.dataType.TEXT, "MultiLine",
             {
                 required: true,
                 dataAttr: {clientSideAttributes: Object.assign({}, baseTextClientRequiredProps, {num_lines: 5})}
             });
-        addColumn(tableToFieldToFieldTypeMap[table5Name], e2eConsts.dataType.NUMERIC, null, {required: true});
-        addColumn(tableToFieldToFieldTypeMap[table5Name], e2eConsts.dataType.NUMERIC, "Numeric MultiChoice",
+        addColumn(tableToFieldToFieldTypeMap[table5ReqName], e2eConsts.dataType.NUMERIC, null, {required: true});
+        addColumn(tableToFieldToFieldTypeMap[table5ReqName], e2eConsts.dataType.NUMERIC, "Numeric MultiChoice",
             {
                 required: true,
                 dataAttr: {clientSideAttributes: baseNumClientRequiredProps},
@@ -330,81 +335,81 @@ projGen = require('./projects/projectsGen.js')(chance);
                     sortAsGiven: false
                 }
             });
-        addColumn(tableToFieldToFieldTypeMap[table5Name], e2eConsts.dataType.CURRENCY, null, {required: true});
-        addColumn(tableToFieldToFieldTypeMap[table5Name], e2eConsts.dataType.PERCENT, null, {required: false});
-        addColumn(tableToFieldToFieldTypeMap[table5Name], e2eConsts.dataType.RATING, null, {required: true});
-        addColumn(tableToFieldToFieldTypeMap[table5Name], e2eConsts.dataType.DATE, null, {required: true});
-        addColumn(tableToFieldToFieldTypeMap[table5Name], e2eConsts.dataType.DATE_TIME, null, {required: true});
-        addColumn(tableToFieldToFieldTypeMap[table5Name], e2eConsts.dataType.TIME_OF_DAY, null, {required: true});
-        addColumn(tableToFieldToFieldTypeMap[table5Name], e2eConsts.dataType.DURATION, null, {required: true});
-        addColumn(tableToFieldToFieldTypeMap[table5Name], e2eConsts.dataType.CHECKBOX, null, {required: true});
-        addColumn(tableToFieldToFieldTypeMap[table5Name], e2eConsts.dataType.PHONE_NUMBER, null, {required: true});
-        addColumn(tableToFieldToFieldTypeMap[table5Name], e2eConsts.dataType.EMAIL_ADDRESS, null, {required: true});
-        addColumn(tableToFieldToFieldTypeMap[table5Name], e2eConsts.dataType.URL, null, {required: true});
-        addColumn(tableToFieldToFieldTypeMap[table5Name], e2eConsts.dataType.PHONE_NUMBER, "Phone Number without Ext", {
+        addColumn(tableToFieldToFieldTypeMap[table5ReqName], e2eConsts.dataType.CURRENCY, null, {required: true});
+        addColumn(tableToFieldToFieldTypeMap[table5ReqName], e2eConsts.dataType.PERCENT, null, {required: false});
+        addColumn(tableToFieldToFieldTypeMap[table5ReqName], e2eConsts.dataType.RATING, null, {required: true});
+        addColumn(tableToFieldToFieldTypeMap[table5ReqName], e2eConsts.dataType.DATE, null, {required: true});
+        addColumn(tableToFieldToFieldTypeMap[table5ReqName], e2eConsts.dataType.DATE_TIME, null, {required: true});
+        addColumn(tableToFieldToFieldTypeMap[table5ReqName], e2eConsts.dataType.TIME_OF_DAY, null, {required: true});
+        addColumn(tableToFieldToFieldTypeMap[table5ReqName], e2eConsts.dataType.DURATION, null, {required: true});
+        addColumn(tableToFieldToFieldTypeMap[table5ReqName], e2eConsts.dataType.CHECKBOX, null, {required: true});
+        addColumn(tableToFieldToFieldTypeMap[table5ReqName], e2eConsts.dataType.PHONE_NUMBER, null, {required: true});
+        addColumn(tableToFieldToFieldTypeMap[table5ReqName], e2eConsts.dataType.EMAIL_ADDRESS, null, {required: true});
+        addColumn(tableToFieldToFieldTypeMap[table5ReqName], e2eConsts.dataType.URL, null, {required: true});
+        addColumn(tableToFieldToFieldTypeMap[table5ReqName], e2eConsts.dataType.PHONE_NUMBER, "Phone Number without Ext", {
             required: true,
             dataAttr: {clientSideAttributes: baseTextClientRequiredProps, includeExtension: false}
         });
 
         // Table 6 //
 
-        tableToFieldToFieldTypeMap[table6Name] = {};
+        tableToFieldToFieldTypeMap[table6DurName] = {};
         let baseDurationProps = {
             dataAttr: {
                 clientSideAttributes: baseNumClientRequiredProps,
                 type: 'DURATION'
             }
         };
-        addColumn(tableToFieldToFieldTypeMap[table6Name], e2eConsts.dataType.DURATION, 'Duration default');
-        addColumn(tableToFieldToFieldTypeMap[table6Name], e2eConsts.dataType.DURATION, 'Duration A',
+        addColumn(tableToFieldToFieldTypeMap[table6DurName], e2eConsts.dataType.DURATION, 'Duration default');
+        addColumn(tableToFieldToFieldTypeMap[table6DurName], e2eConsts.dataType.DURATION, 'Duration A',
             Object.assign({}, baseDurationProps, {
                 dataAttr: {
                     scale: consts.DURATION_CONSTS.SCALES.WEEKS
                 }
             }));
-        addColumn(tableToFieldToFieldTypeMap[table6Name], e2eConsts.dataType.DURATION, 'Duration B',
+        addColumn(tableToFieldToFieldTypeMap[table6DurName], e2eConsts.dataType.DURATION, 'Duration B',
             Object.assign({}, baseDurationProps, {
                 dataAttr: {
                     scale: consts.DURATION_CONSTS.SCALES.DAYS
                 }
             }));
-        addColumn(tableToFieldToFieldTypeMap[table6Name], e2eConsts.dataType.DURATION, 'Duration C',
+        addColumn(tableToFieldToFieldTypeMap[table6DurName], e2eConsts.dataType.DURATION, 'Duration C',
             Object.assign({}, baseDurationProps, {
                 dataAttr: {
                     scale: consts.DURATION_CONSTS.SCALES.HOURS
                 }
             }));
-        addColumn(tableToFieldToFieldTypeMap[table6Name], e2eConsts.dataType.DURATION, 'Duration D',
+        addColumn(tableToFieldToFieldTypeMap[table6DurName], e2eConsts.dataType.DURATION, 'Duration D',
             Object.assign({}, baseDurationProps, {
                 dataAttr: {
                     scale: consts.DURATION_CONSTS.SCALES.MINUTES
                 }
             }));
-        addColumn(tableToFieldToFieldTypeMap[table6Name], e2eConsts.dataType.DURATION, 'Duration E',
+        addColumn(tableToFieldToFieldTypeMap[table6DurName], e2eConsts.dataType.DURATION, 'Duration E',
             Object.assign({}, baseDurationProps, {
                 dataAttr: {
                     scale: consts.DURATION_CONSTS.SCALES.SECONDS
                 }
             }));
-        addColumn(tableToFieldToFieldTypeMap[table6Name], e2eConsts.dataType.DURATION, 'Duration :HH:MM',
+        addColumn(tableToFieldToFieldTypeMap[table6DurName], e2eConsts.dataType.DURATION, 'Duration :HH:MM',
             Object.assign({}, baseDurationProps, {
                 dataAttr: {
                     scale: consts.DURATION_CONSTS.SCALES.HHMM
                 }
             }));
-        addColumn(tableToFieldToFieldTypeMap[table6Name], e2eConsts.dataType.DURATION, 'Duration :HH:MM:SS',
+        addColumn(tableToFieldToFieldTypeMap[table6DurName], e2eConsts.dataType.DURATION, 'Duration :HH:MM:SS',
             Object.assign({}, baseDurationProps, {
                 dataAttr: {
                     scale: consts.DURATION_CONSTS.SCALES.HHMMSS
                 }
             }));
-        addColumn(tableToFieldToFieldTypeMap[table6Name], e2eConsts.dataType.DURATION, 'Duration :MM',
+        addColumn(tableToFieldToFieldTypeMap[table6DurName], e2eConsts.dataType.DURATION, 'Duration :MM',
             Object.assign({}, baseDurationProps, {
                 dataAttr: {
                     scale: consts.DURATION_CONSTS.SCALES.MM
                 }
             }));
-        addColumn(tableToFieldToFieldTypeMap[table6Name], e2eConsts.dataType.DURATION, 'Duration :MM:SS',
+        addColumn(tableToFieldToFieldTypeMap[table6DurName], e2eConsts.dataType.DURATION, 'Duration :MM:SS',
             Object.assign({}, baseDurationProps, {
                 dataAttr: {
                     scale: consts.DURATION_CONSTS.SCALES.MMSS
@@ -413,9 +418,9 @@ projGen = require('./projects/projectsGen.js')(chance);
 
         // Table 7 //
 
-        tableToFieldToFieldTypeMap[table7Name] = {};
-        addColumn(tableToFieldToFieldTypeMap[table7Name], e2eConsts.dataType.TEXT, 'Unique Text', {unique: true});
-        addColumn(tableToFieldToFieldTypeMap[table7Name], e2eConsts.dataType.TEXT, 'Unique Text MultiChoice',
+        tableToFieldToFieldTypeMap[table7UniqName] = {};
+        addColumn(tableToFieldToFieldTypeMap[table7UniqName], e2eConsts.dataType.TEXT, 'Unique Text', {unique: true});
+        addColumn(tableToFieldToFieldTypeMap[table7UniqName], e2eConsts.dataType.TEXT, 'Unique Text MultiChoice',
             {
                 unique: true,
                 dataAttr: {htmlAllowed: true, clientSideAttributes: Object.assign({}, baseTextClientRequiredProps)},
@@ -425,13 +430,13 @@ projGen = require('./projects/projectsGen.js')(chance);
                     sortAsGiven: true
                 }
             });
-        addColumn(tableToFieldToFieldTypeMap[table7Name], e2eConsts.dataType.TEXT, 'Unique MultiLine',
+        addColumn(tableToFieldToFieldTypeMap[table7UniqName], e2eConsts.dataType.TEXT, 'Unique MultiLine',
             {
                 unique: true,
                 dataAttr: {clientSideAttributes: Object.assign({}, baseTextClientRequiredProps, {num_lines: 5})}
             });
-        addColumn(tableToFieldToFieldTypeMap[table7Name], e2eConsts.dataType.NUMERIC, 'Unique Numeric', {unique: true});
-        addColumn(tableToFieldToFieldTypeMap[table7Name], e2eConsts.dataType.NUMERIC, 'Unique Numeric MultiChoice',
+        addColumn(tableToFieldToFieldTypeMap[table7UniqName], e2eConsts.dataType.NUMERIC, 'Unique Numeric', {unique: true});
+        addColumn(tableToFieldToFieldTypeMap[table7UniqName], e2eConsts.dataType.NUMERIC, 'Unique Numeric MultiChoice',
             {
                 unique: true,
                 dataAttr: {clientSideAttributes: baseNumClientRequiredProps},
@@ -444,47 +449,47 @@ projGen = require('./projects/projectsGen.js')(chance);
                     sortAsGiven: false
                 }
             });
-        addColumn(tableToFieldToFieldTypeMap[table7Name], e2eConsts.dataType.CURRENCY, 'Unique Currency', {unique: true});
-        addColumn(tableToFieldToFieldTypeMap[table7Name], e2eConsts.dataType.PERCENT, 'Unique Percent', {unique: true});
-        addColumn(tableToFieldToFieldTypeMap[table7Name], e2eConsts.dataType.RATING, 'Unique Rating', {unique: true});
-        addColumn(tableToFieldToFieldTypeMap[table7Name], e2eConsts.dataType.DATE, 'Unique Date', {unique: true});
-        addColumn(tableToFieldToFieldTypeMap[table7Name], e2eConsts.dataType.DATE_TIME, 'Unique Date Time', {unique: true});
-        addColumn(tableToFieldToFieldTypeMap[table7Name], e2eConsts.dataType.TIME_OF_DAY, 'Unique Time', {unique: true});
-        addColumn(tableToFieldToFieldTypeMap[table7Name], e2eConsts.dataType.DURATION, 'Unique Duration', {unique: true});
-        addColumn(tableToFieldToFieldTypeMap[table7Name], e2eConsts.dataType.PHONE_NUMBER, 'Unique Phone', {unique: true});
-        addColumn(tableToFieldToFieldTypeMap[table7Name], e2eConsts.dataType.EMAIL_ADDRESS, 'Unique Email', {unique: true});
-        addColumn(tableToFieldToFieldTypeMap[table7Name], e2eConsts.dataType.URL, 'Unique URL', {unique: true});
+        addColumn(tableToFieldToFieldTypeMap[table7UniqName], e2eConsts.dataType.CURRENCY, 'Unique Currency', {unique: true});
+        addColumn(tableToFieldToFieldTypeMap[table7UniqName], e2eConsts.dataType.PERCENT, 'Unique Percent', {unique: true});
+        addColumn(tableToFieldToFieldTypeMap[table7UniqName], e2eConsts.dataType.RATING, 'Unique Rating', {unique: true});
+        addColumn(tableToFieldToFieldTypeMap[table7UniqName], e2eConsts.dataType.DATE, 'Unique Date', {unique: true});
+        addColumn(tableToFieldToFieldTypeMap[table7UniqName], e2eConsts.dataType.DATE_TIME, 'Unique Date Time', {unique: true});
+        addColumn(tableToFieldToFieldTypeMap[table7UniqName], e2eConsts.dataType.TIME_OF_DAY, 'Unique Time', {unique: true});
+        addColumn(tableToFieldToFieldTypeMap[table7UniqName], e2eConsts.dataType.DURATION, 'Unique Duration', {unique: true});
+        addColumn(tableToFieldToFieldTypeMap[table7UniqName], e2eConsts.dataType.PHONE_NUMBER, 'Unique Phone', {unique: true});
+        addColumn(tableToFieldToFieldTypeMap[table7UniqName], e2eConsts.dataType.EMAIL_ADDRESS, 'Unique Email', {unique: true});
+        addColumn(tableToFieldToFieldTypeMap[table7UniqName], e2eConsts.dataType.URL, 'Unique URL', {unique: true});
 
         // Table 8 //
 
         // Parent table 1 is a parent to child table1 and child table2
-        tableToFieldToFieldTypeMap[table8Name] = {};
-        addColumn(tableToFieldToFieldTypeMap[table8Name], e2eConsts.dataType.TEXT, 'Text Field', {unique: true});
-        addColumn(tableToFieldToFieldTypeMap[table8Name], e2eConsts.dataType.NUMERIC, 'Numeric Field', {unique: false});
+        tableToFieldToFieldTypeMap[table8Par1Name] = {};
+        addColumn(tableToFieldToFieldTypeMap[table8Par1Name], e2eConsts.dataType.TEXT, 'Text Field', {unique: true});
+        addColumn(tableToFieldToFieldTypeMap[table8Par1Name], e2eConsts.dataType.NUMERIC, 'Numeric Field', {unique: false});
         // Child table 1 is a child of Parent table 1
-        tableToFieldToFieldTypeMap[table9Name] = {};
-        addColumn(tableToFieldToFieldTypeMap[table9Name], e2eConsts.dataType.TEXT, 'Text Field', {unique: true});
-        addColumn(tableToFieldToFieldTypeMap[table9Name], e2eConsts.dataType.NUMERIC, 'Numeric Parent1 ID', {unique: false});
+        tableToFieldToFieldTypeMap[table9Ch1Name] = {};
+        addColumn(tableToFieldToFieldTypeMap[table9Ch1Name], e2eConsts.dataType.TEXT, 'Text Field', {unique: true});
+        addColumn(tableToFieldToFieldTypeMap[table9Ch1Name], e2eConsts.dataType.NUMERIC, 'Numeric Parent1 ID', {unique: false});
         // Parent table 2 is a parent to Child table 2
-        tableToFieldToFieldTypeMap[table10Name] = {};
-        addColumn(tableToFieldToFieldTypeMap[table10Name], e2eConsts.dataType.TEXT, 'Text Field', {unique: true});
-        addColumn(tableToFieldToFieldTypeMap[table10Name], e2eConsts.dataType.NUMERIC, 'Numeric Field', {unique: false});
+        tableToFieldToFieldTypeMap[table10Par1Name] = {};
+        addColumn(tableToFieldToFieldTypeMap[table10Par1Name], e2eConsts.dataType.TEXT, 'Text Field', {unique: true});
+        addColumn(tableToFieldToFieldTypeMap[table10Par1Name], e2eConsts.dataType.NUMERIC, 'Numeric Field', {unique: false});
         // Child table 2 is a child of Parent table 1 and Parent table 2
-        tableToFieldToFieldTypeMap[table11Name] = {};
-        addColumn(tableToFieldToFieldTypeMap[table11Name], e2eConsts.dataType.TEXT, 'Text Field', {unique: true});
-        addColumn(tableToFieldToFieldTypeMap[table11Name], e2eConsts.dataType.NUMERIC, 'Numeric Parent1 ID', {unique: false});
-        addColumn(tableToFieldToFieldTypeMap[table11Name], e2eConsts.dataType.NUMERIC, 'Numeric Parent2 ID', {unique: false});
+        tableToFieldToFieldTypeMap[table11Ch2Name] = {};
+        addColumn(tableToFieldToFieldTypeMap[table11Ch2Name], e2eConsts.dataType.TEXT, 'Text Field', {unique: true});
+        addColumn(tableToFieldToFieldTypeMap[table11Ch2Name], e2eConsts.dataType.NUMERIC, 'Numeric Parent1 ID', {unique: false});
+        addColumn(tableToFieldToFieldTypeMap[table11Ch2Name], e2eConsts.dataType.NUMERIC, 'Numeric Parent2 ID', {unique: false});
         //Country table is parent to State table
-        tableToFieldToFieldTypeMap[table12Name] = {};
-        addColumn(tableToFieldToFieldTypeMap[table12Name], e2eConsts.dataType.TEXT, 'Country', {unique: true});
+        tableToFieldToFieldTypeMap[table12CntryName] = {};
+        addColumn(tableToFieldToFieldTypeMap[table12CntryName], e2eConsts.dataType.TEXT, 'Country', {unique: true});
         // State Table Table
-        tableToFieldToFieldTypeMap[table13Name] = {};
-        addColumn(tableToFieldToFieldTypeMap[table13Name], e2eConsts.dataType.TEXT, 'State', {unique: true});
-        addColumn(tableToFieldToFieldTypeMap[table13Name], e2eConsts.dataType.TEXT, 'Country', {unique: false});
+        tableToFieldToFieldTypeMap[table13StateName] = {};
+        addColumn(tableToFieldToFieldTypeMap[table13StateName], e2eConsts.dataType.TEXT, 'State', {unique: true});
+        addColumn(tableToFieldToFieldTypeMap[table13StateName], e2eConsts.dataType.TEXT, 'Country', {unique: false});
         // City Table
-        tableToFieldToFieldTypeMap[table14Name] = {};
-        addColumn(tableToFieldToFieldTypeMap[table14Name], e2eConsts.dataType.TEXT, 'City', {unique: true});
-        addColumn(tableToFieldToFieldTypeMap[table14Name], e2eConsts.dataType.TEXT, 'State', {unique: false});
+        tableToFieldToFieldTypeMap[table14CityName] = {};
+        addColumn(tableToFieldToFieldTypeMap[table14CityName], e2eConsts.dataType.TEXT, 'City', {unique: true});
+        addColumn(tableToFieldToFieldTypeMap[table14CityName], e2eConsts.dataType.TEXT, 'State', {unique: false});
 
         tableToFieldToFieldTypeMap = projGen.genSchema(tableToFieldToFieldTypeMap, addColumn);
 
@@ -597,38 +602,18 @@ projGen = require('./projects/projectsGen.js')(chance);
         }
     }
 
-    function logTableFields(table) {
+    function logTableFields(table, idx) {
         let fields = '';
         table.fields.forEach((field, fIndex) => {
-            if (fIndex > 4) {
+            if (idx === 0 || fIndex > 4) {
                 let smallSet = _.pick(field, ['id', 'name', 'datatypeAttributes.type']);
-                fields += `${fIndex}.) ${JSON.stringify(smallSet)}\n`;
+                fields += `\t${fIndex}) ${JSON.stringify(smallSet)}\n`;
             }
         });
-        log.debug(`appId:${createdApp.id} appName:${createdApp.name} tableId:${table.id} tableName:${table.name} fields: \n${fields}`);
+        console.log(`Table index:${idx}) appId:${createdApp.id} appName:${createdApp.name} tableId:${table.id} tableName:${table.name} fields: \n${fields}`);
 
     }
 
-    function makeRecordsInput(app, tableName, objToFidMapper, arrayOfObjs) {
-        let table = getTable(app, tableName);
-        if (table) {
-            // Get the appropriate fields out of the table
-            let nonBuiltInFields = e2eBase.tableService.getNonBuiltInFields(table);
-
-            // Generate the record JSON objects
-            let generatedRecords = e2eBase.recordService.generateEmptyRecords(nonBuiltInFields, arrayOfObjs.length);
-            e2eBase.recordService.editRecordsWithFieldsCallback(generatedRecords, (field, recordIndx) => {
-                let objKey = objToFidMapper(field.id);
-                return objKey ? arrayOfObjs[recordIndx][objKey] : undefined;
-            });
-            return generatedRecords;
-        }
-        return [];
-    }
-    function addBulkRecords(app, tableName, table, records) {
-        log.debug('adding ' + records.length + ' records to ' + tableName);
-        e2eBase.recordService.addBulkRecords(app, table, records);
-    }
     /**
      * Calls the e2eBase and service classes to create test data via the API
      * @param _createdRecs - Print function to call when dataGen is finished
@@ -672,9 +657,9 @@ projGen = require('./projects/projectsGen.js')(chance);
             // If using JS for loops with promise functions make sure to use Bluebird's Promise.each function
             // otherwise errors can be swallowed!
             createdApp.tables.forEach(function(table, index) {
+                logTableFields(table, index);
                 tableSetupPromises.push(function() {
                     // Create a List all report for each table
-                    logTableFields(table);
                     return e2eBase.reportService.createCustomReport(createdApp.id, table.id, 'List All Report', null, null, null, null);
                 });
                 tableSetupPromises.push(function() {
@@ -699,19 +684,19 @@ projGen = require('./projects/projectsGen.js')(chance);
             // Change # of records for some of the tables
             configNumRecordsToCreate(Object.assign({}, configNumParams, {tableName: table3Name, numRecords:45}));
             configNumRecordsToCreate(Object.assign({}, configNumParams, {tableName: table4Name, numRecords:100}));
-            configNumRecordsToCreate(Object.assign({}, configNumParams, {tableName: table5Name, numRecords:3}));
+            configNumRecordsToCreate(Object.assign({}, configNumParams, {tableName: table6DurName, numRecords:3}));
 
-            //TODO: Table 6 contains records with all unique fields so don't generate any records (currently broken)
+            //TODO: Table 7 contains records with all unique fields so don't generate any records (currently broken)
             //TODO: Enhance record data generation to handle unique and all required fields
-            configNumRecordsToCreate(Object.assign({}, configNumParams, {tableName: table6Name, numRecords:0}));
+            configNumRecordsToCreate(Object.assign({}, configNumParams, {tableName: table7UniqName, numRecords:0}));
 
-            configNumRecordsToCreate(Object.assign({}, configNumParams, {tableName: table7Name, numRecords:5}));
-            configNumRecordsToCreate(Object.assign({}, configNumParams, {tableName: table8Name, numRecords:6}));
-            configNumRecordsToCreate(Object.assign({}, configNumParams, {tableName: table9Name, numRecords:6}));
-            configNumRecordsToCreate(Object.assign({}, configNumParams, {tableName: table10Name, numRecords:6}));
-            configNumRecordsToCreate(Object.assign({}, configNumParams, {tableName: table11Name, numRecords:31}));
-            configNumRecordsToCreate(Object.assign({}, configNumParams, {tableName: table12Name, numRecords:31}));
-            configNumRecordsToCreate(Object.assign({}, configNumParams, {tableName: table13Name, numRecords:31}));
+            configNumRecordsToCreate(Object.assign({}, configNumParams, {tableName: table8Par1Name, numRecords:5}));
+            configNumRecordsToCreate(Object.assign({}, configNumParams, {tableName: table9Ch1Name, numRecords:6}));
+            configNumRecordsToCreate(Object.assign({}, configNumParams, {tableName: table10Par1Name, numRecords:6}));
+            configNumRecordsToCreate(Object.assign({}, configNumParams, {tableName: table11Ch2Name, numRecords:6}));
+            configNumRecordsToCreate(Object.assign({}, configNumParams, {tableName: table12CntryName, numRecords:31}));
+            configNumRecordsToCreate(Object.assign({}, configNumParams, {tableName: table13StateName, numRecords:31}));
+            configNumRecordsToCreate(Object.assign({}, configNumParams, {tableName: table14CityName, numRecords:31}));
 
             //project records will be created in a different way in the next then function below, so make no records here
             configNumRecordsToCreate(Object.assign({}, configNumParams, {tableName: projGen.tableCompaniesName, numRecords:0}));
@@ -726,124 +711,48 @@ projGen = require('./projects/projectsGen.js')(chance);
         }).then(function() {
             const projPromises = [];
 
+            // set the range of number of entities to generate for project tables
+            let minMaxToGen = projGen.minMaxToGen;
 
             //for each level create records for company & proj etc tables
             // one to many ->>
             //Company ->> Projects ->> Tasks ->> Assignment ->> Comments
             //            Projects <<- Manager
-            //            Assignments <<- Person <<- Manager
+            // Company ->> Person  ->> Assignments
             // male the list of companies, for each company create a company record
 
+            const companyTable = getTable(createdApp, projGen.tableCompaniesName);
+            if (companyTable) {
+                projGen.initCompanies();
+                let numCompaniesToCreate = chance.integer({min: minMaxToGen.minCompany, max: minMaxToGen.maxCompany});
+                const companies = projGen.genCompanies({}, numCompaniesToCreate);
+                let companyRecords = projRecs.makeRecordsInput(createdApp, projGen.tableCompaniesName,
+                    projGen.getCompanyPropFromFid, companies);
 
+                companies.forEach((company, companyIndex) => {
+                    //write out the company record
+                    projPromises.push(function() {
+                        return projRecs.addBulkRecords(createdApp, projGen.tableCompaniesName,
+                            getTable(createdApp, projGen.tableCompaniesName), [companyRecords[companyIndex]]);
+                    });
 
-            projGen.initCompanies();
-            const companies = projGen.genCompanies({},  chance.integer({min:minCompany, max:maxCompany}));
-            let companyRecords = makeRecordsInput(createdApp, projGen.tableCompaniesName, projGen.getCompanyPropFromFid, companies);
+                    const peopleTable = getTable(createdApp, projGen.tablePeopleName);
+                    if (peopleTable) {
+                        //create the employees for the company
+                        let peopleSets = projRecs.genAndSetupEmployeeRecords(company, createdApp, minMaxToGen, projPromises);
 
-            companies.forEach((company, companyIndex) => {
-                //write out the company record
-                projPromises.push(function() {
-                    return addBulkRecords(createdApp, projGen.tableCompaniesName,
-                        getTable(createdApp, projGen.tableCompaniesName), [companyRecords[companyIndex]]);
-                });
-                // create a list of employees with this current company
-                projGen.initPeople();
-                let employees = projGen.genPeople({companyName : company.name}, chance.integer({min:minPeople, max:maxPeople}));
-                let managers = projGen. genManagers({companyName : company.name, employees});
-                let directors = projGen.genDirectors({companyName : company.name, employees}, chance.integer({min:1, max:4}));
-
-                // set a manager for everyone
-                let everyone = [].concat(employees, managers, directors);
-                everyone.forEach(person => {
-                    let mgr = projGen.getManager(person);
-                    if (mgr !== undefined) {
-                        person.manger = mgr;
+                        //create the projects (tasks, assignments, comments) for the company
+                        projRecs.getAndSetupProjectRecords(company, peopleSets, createdApp, minMaxToGen, projPromises);
                     }
                 });
 
-                let departmentsWithEmployees = _.map(_.unionBy(everyone, 'department'), 'department');
-
-                // make records input for the employees for the company
-                let employeeRecords = makeRecordsInput(createdApp, projGen.tablePeopleName, projGen.getPeoplePropFromFid, everyone);
-                if (employeeRecords && employeeRecords.length) {
-                    projPromises.push(function() {
-                        return addBulkRecords(createdApp, projGen.tablePeopleName, getTable(createdApp, projGen.tablePeopleName), employeeRecords);
-                    });
-                }
-
-                // create a set projects for the current company
-                projGen.initProjects();
-                const projects = projGen.genProjects({companyName: company.name, availableDepts:departmentsWithEmployees}, chance.integer({min:minProj, max:maxProj}));
-
-                //create tasks for each project
-                projects.forEach((project) => {
-                    //assign a leader to the project
-                    project.projectLeader = chance.pickone([].concat(managers, directors)).fullname;
-
-                    // create a set of tasks for the project with assignee from employee list
-                    projGen.initTasks(everyone);
-                    const tasks = projGen.genTasks({
-                        projectName: project.name,
-                        dict:{num: chance.integer({min:0, max:2})}},
-                        chance.integer({min:minTask, max:maxTask}));
-
-                    //create a set of assignments for each task
-                    tasks.forEach(task => {
-                        const assignees = projGen.genAssignees({
-                            taskName : task.name,
-                            taskId : task.taskId,
-                            peopleList: everyone.filter(they => they.department === project.department),
-                            department: project.department, projectName: project.name, companyName: company.name},
-                            chance.integer({min:minAssignee, max:maxAssignee}));
-
-                        //add some comments for the assignments progress
-                        assignees.forEach(assignment => {
-                            const comments = projGen.genComments({
-                                topicId: assignment.assignmentId,
-                                authors:[assignment.assignee, project.projectLeader]},
-                                chance.integer({min:minComment, max:maxComment}));
-                            // make records input for the comments for the assignment
-                            let commentRecords = makeRecordsInput(createdApp, projGen.tableCommentsName, projGen.getCommentPropFromFid, comments);
-                            if (commentRecords && commentRecords.length) {
-                                projPromises.push(function() {
-                                    return addBulkRecords(createdApp, projGen.tableCommentsName,
-                                        getTable(createdApp, projGen.tableCommentsName), commentRecords);
-                                });
-                            }
-                        });
-
-                        // make records input for the assignees for the task
-                        let assigneeRecords = makeRecordsInput(createdApp, projGen.tableAssignmentsName, projGen.getAssigneePropFromFid, assignees);
-                        if (assigneeRecords && assigneeRecords.length) {
-                            projPromises.push(function() {
-                                return addBulkRecords(createdApp, projGen.tableAssignmentsName,
-                                    getTable(createdApp, projGen.tableAssignmentsName), assigneeRecords);
-                            });
-                        }
-                    });
-
-                    // make records input for the tasks for the project
-                    let taskRecords = makeRecordsInput(createdApp, projGen.tableTasksName, projGen.getTaskPropFromFid, tasks);
-                    if (taskRecords && taskRecords.length) {
-                        projPromises.push(function() {
-                            return addBulkRecords(createdApp, projGen.tableTasksName, getTable(createdApp, projGen.tableTasksName), taskRecords);
-                        });
-                    }
+                // Bluebird's promise.each function (executes each promise sequentially)
+                return promise.each(projPromises, function(queueItem) {
+                    return queueItem();
                 });
-
-                let projectRecords = makeRecordsInput(createdApp, projGen.tableProjectsName, projGen.getProjectPropFromFid, projects);
-                projectRecords.forEach((projectRecord) => {
-                    projPromises.push(function() {
-                        return addBulkRecords(createdApp, projGen.tableProjectsName, getTable(createdApp, projGen.tableProjectsName), [projectRecord]);
-                    });
-                });
-            });
-
-            // Bluebird's promise.each function (executes each promise sequentially)
-            return promise.each(projPromises, function(queueItem) {
-                return queueItem();
-            });
-
+            } else {
+                return promise.resolve();
+            }
         }).then(function() {
             // Report Creation //
             let rptPromises = [];
@@ -857,31 +766,38 @@ projGen = require('./projects/projectsGen.js')(chance);
                 return createReportFacets(createdApp, table3Name, [6, 7, 8, 9]);
             });
             //setup default home pages
-            createSetDefaultHome(rptPromises, createdApp, table7Name, [3, 6, 7], 'Report with ID field', 2);
-            createSetDefaultHome(rptPromises, createdApp, table8Name, [3, 6, 7], 'Report with ID field', 2);
-            createSetDefaultHome(rptPromises, createdApp, table11Name, [3, 6], 'Report with ID field', 2);
-            createSetDefaultHome(rptPromises, createdApp, table12Name, [3, 6, 7], 'Report with ID field', 2);
-            createSetDefaultHome(rptPromises, createdApp, table13Name, [3, 6, 7], 'Report with ID field', 2);
-            createSetDefaultHome(rptPromises, createdApp, projGen.tableCompaniesName, [3,
+            createSetDefaultHome(rptPromises, createdApp, table8Par1Name, [3, 6, 7], 'Report with ID field', 2);
+            createSetDefaultHome(rptPromises, createdApp, table9Ch1Name, [3, 6, 7], 'Report with ID field', 2);
+            createSetDefaultHome(rptPromises, createdApp, table12CntryName, [3, 6],   'Report with ID field', 2);
+            createSetDefaultHome(rptPromises, createdApp, table13StateName, [3, 6, 7], 'Report with ID field', 2);
+            createSetDefaultHome(rptPromises, createdApp, table14CityName, [3, 6, 7], 'Report with ID field', 2);
+
+            createSetDefaultHome(rptPromises, createdApp, projGen.tableCompaniesName, [
+                3,
                 projGen.getCompanyFid('name'),
                 projGen.getCompanyFid('rank'),
                 projGen.getCompanyFid('email'),
                 projGen.getCompanyFid('url'),
                 projGen.getCompanyFid('phone')], 'Report with ID field', 2);
-            createSetDefaultHome(rptPromises, createdApp, projGen.tableProjectsName, [3,
+
+            createSetDefaultHome(rptPromises, createdApp, projGen.tableProjectsName, [
+                3,
                 projGen.getProjectFid('name'),
                 projGen.getProjectFid('department'),
                 projGen.getProjectFid('startDate'),
                 projGen.getProjectFid('budget'),
                 projGen.getProjectFid('projectLeader'),
                 projGen.getProjectFid('companyName')], 'Report with ID field', 2);
-            createSetDefaultHome(rptPromises, createdApp, projGen.tableTasksName, [3,
+
+            createSetDefaultHome(rptPromises, createdApp, projGen.tableTasksName, [
+                3,
                 projGen.getTaskFid('name'),
                 projGen.getTaskFid('projectName'),
                 projGen.getTaskFid('status')], 'Task Report with ID field', 2);
+
             createSetDefaultHomeExtended(rptPromises, createdApp, projGen.tablePeopleName, {
                 fids:[3,
-                    projGen.getPeopleFid('fullname'),
+                    projGen.getPeopleFid('fullName'),
                     projGen.getPeopleFid('title'),
                     projGen.getPeopleFid('birthday'),
                     projGen.getPeopleFid('manager'),
@@ -895,23 +811,30 @@ projGen = require('./projects/projectsGen.js')(chance);
                     projGen.getPeopleFid('manager')
                 ],
                 sortFids: [
-                    `${projGen.getPeopleFid('companyName')}:V`,
-                    `${projGen.getPeopleFid('department')}:V`,
-                    `${projGen.getPeopleFid('title')}`
+                    projGen.getPeopleFid('companyName'),
+                    projGen.getPeopleFid('department'),
+                    projGen.getPeopleFid('title')
                 ],
                 reportName:'Employee Report with ID field'}, 2);
-            createSetDefaultHome(rptPromises, createdApp, projGen.tableAssignmentsName, [3,
+
+            createSetDefaultHome(rptPromises, createdApp, projGen.tableAssignmentsName, [
+                3,
                 projGen.getAssigneeFid('taskName'),
                 projGen.getAssigneeFid('taskId'),
                 projGen.getAssigneeFid('assigneeName'),
+                projGen.getAssigneeFid('assignmentId'),
                 projGen.getAssigneeFid('department'),
                 projGen.getAssigneeFid('projectName'),
                 projGen.getAssigneeFid('companyName'),
             ], 'Assignments Report with ID field', 2);
-            createSetDefaultHome(rptPromises, createdApp, projGen.tableCommentsName, [3,
+
+            createSetDefaultHome(rptPromises, createdApp, projGen.tableCommentsName, [
+                3,
                 projGen.getCommentFid('content'),
                 projGen.getCommentFid('date'),
-                projGen.getCommentFid('author')], 'Comment Report with ID field', 2);
+                projGen.getCommentFid('author'),
+                projGen.getCommentFid('topicId')
+            ], 'Comment Report with ID field', 2);
 
             // Bluebird's promise.each function (executes each promise sequentially)
             return promise.each(rptPromises, function(queueItem) {
@@ -932,21 +855,21 @@ projGen = require('./projects/projectsGen.js')(chance);
             // These need to be integers in the range of 1~n, n being the number of parent records
             // We also want these to be consistent, as opposed to randomly generated numbers, for
             // testing purposes.
-            editRelationshipRecords(editRecordPromises, createdApp, table8Name, 6, [1, 1, 2, 2, 2]);
+            editRelationshipRecords(editRecordPromises, createdApp, table9Ch1Name, 6, [1, 1, 2, 2, 2]);
 
-            // Table 10 has 2 parents, set first numeric field
-            editRelationshipRecords(editRecordPromises, createdApp, table10Name, 6, [1, 1, 2, 2, 2]);
+            // Child table 2 has 2 parents, set first numeric field
+            editRelationshipRecords(editRecordPromises, createdApp, table11Ch2Name, 6, [1, 1, 2, 2, 2]);
 
-            // Table 10 has 2 parents, set second numeric field
-            editRelationshipRecords(editRecordPromises, createdApp, table10Name, 7, [1, 1, 2, 2, 2]);
+            // Child table 2  has 2 parents, set second numeric field
+            editRelationshipRecords(editRecordPromises, createdApp, table11Ch2Name, 7, [1, 1, 2, 2, 2]);
 
-            // Table 11
-            editRelationshipRecords(editRecordPromises, createdApp, table11Name, 5, countries);
+            // Table 12
+            editRelationshipRecords(editRecordPromises, createdApp, table12CntryName, 5, countries);
 
-            // Table 12 has 1 parent, set first Text field displaying the states
-            editRelationshipRecords(editRecordPromises, createdApp, table12Name, 5, states);
+            // Table 13 has 1 parent, set first Text field displaying the states
+            editRelationshipRecords(editRecordPromises, createdApp, table13StateName, 5, states);
 
-            // Table 12 , set second Text field with countries that is the relationship with parent table(Country)
+            // Table 13 , set second Text field with countries that is the relationship with parent table(Country)
             let countriesTemp = [];
             for (let i = 0; i < 10; i++) {
                 //repeating first 10 countries for n(numOfStatesPerCountry) number of times for all states
@@ -954,12 +877,12 @@ projGen = require('./projects/projectsGen.js')(chance);
                     countriesTemp.push(countries[i]);
                 }
             }
-            editRelationshipRecords(editRecordPromises, createdApp, table12Name, 6, countriesTemp);
+            editRelationshipRecords(editRecordPromises, createdApp, table13StateName, 6, countriesTemp);
 
-            // Table 13 has 1 parent, set first Text field displaying the city
-            editRelationshipRecords(editRecordPromises, createdApp, table13Name, 5, cities);
+            // Table 14 has 1 parent, set first Text field displaying the city
+            editRelationshipRecords(editRecordPromises, createdApp, table14CityName, 5, cities);
 
-            // Table 13, set second Text field with states that is the relationship with parent table(State)
+            // Table 14, set second Text field with states that is the relationship with parent table(State)
             let statesTemp = [];
             for (let i = 0; i < 10; i++) {
                 //repeating first 10 states for n(numOfCitiesPerState) number of times for all cities
@@ -967,7 +890,7 @@ projGen = require('./projects/projectsGen.js')(chance);
                     statesTemp.push(states[i]);
                 }
             }
-            editRelationshipRecords(editRecordPromises, createdApp, table13Name, 6, statesTemp);
+            editRelationshipRecords(editRecordPromises, createdApp, table14CityName, 6, statesTemp);
 
             // Bluebird's promise.each function (executes each promise sequentially)
             return promise.each(editRecordPromises, function(queueItem) {
@@ -976,46 +899,48 @@ projGen = require('./projects/projectsGen.js')(chance);
         }).then(function() {
             const addRelationshipPromises = [];
 
-            // Create table relationship, Table 8 is a child of Table 7
-            setupRelationship(addRelationshipPromises, createdApp, table7Name, table8Name, 7);
+            // Create table relationship, Table 9 is a child of Table 8
+            setupRelationship(addRelationshipPromises, createdApp, table8Par1Name, table9Ch1Name, 7);
 
-            // Table 10 is a child of both Table 7 and Table 9
-            setupRelationship(addRelationshipPromises, createdApp, table7Name, table10Name, 7);
-            setupRelationship(addRelationshipPromises, createdApp, table9Name, table10Name, 8);
+            // Table 11 is a child of both Table 8 and Table 10
+            setupRelationship(addRelationshipPromises, createdApp, table8Par1Name, table11Ch2Name, 7);
+            setupRelationship(addRelationshipPromises, createdApp, table10Par1Name, table11Ch2Name, 8);
 
-            // Create table relationship, Table 13(City) is a child of Table 12(State)
-            setupRelationship(addRelationshipPromises, createdApp, table12Name, table13Name, 7, 6);
+            // Create table relationship, Table 14(City) is a child of Table 13(State)
+            setupRelationship(addRelationshipPromises, createdApp, table13StateName, table14CityName, 7, 6);
 
-            // Create table relationship, Table 12(State) is a child of Table 11(Country)
-            setupRelationship(addRelationshipPromises, createdApp, table11Name, table12Name, 7, 6);
+            // Create table relationship, Table 13(State) is a child of Table 12(Country)
+            setupRelationship(addRelationshipPromises, createdApp, table12CntryName, table13StateName, 7, 6);
 
-            // Create table relationship, Project is a child of Company
+            // Create table relationship, Companies(parent) have many Projects(child)
             setupRelationship(addRelationshipPromises, createdApp, projGen.tableCompaniesName, projGen.tableProjectsName,
                 projGen.getProjectFid('companyName'), projGen.getCompanyFid('name'));
 
-            // Create table relationship, Task is a child of Project
-            setupRelationship(addRelationshipPromises, createdApp, projGen.tableProjectsName, projGen.tableTasksName,
-                projGen.getTaskFid('projectName'),  projGen.getProjectFid('name'));
-
-            // Create table relationship, People have Assignments
-            setupRelationship(addRelationshipPromises, createdApp, projGen.tablePeopleName, projGen.tableAssignmentsName,
-                projGen.getAssigneeFid('assigneeName'), projGen.getPeopleFid('fullname'));
-
-            // Create table relationship, People lead Projects
-            setupRelationship(addRelationshipPromises, createdApp, projGen.tablePeopleName,  projGen.tableProjectsName,
-                 projGen.getProjectFid('projectLeader'), projGen.getPeopleFid('fullname'));
-
-            // Create table relationship, People is a child of Company
+            // Create table relationship, Company(Parent) has many People(child)
             setupRelationship(addRelationshipPromises, createdApp, projGen.tableCompaniesName, projGen.tablePeopleName,
                 projGen.getPeopleFid('companyName'),  projGen.getCompanyFid('name'));
 
-            // Create table relationship, Assignments are related to Tasks
+
+            // Create table relationship, Projects(Parent) have many Tasks(child)
+            setupRelationship(addRelationshipPromises, createdApp, projGen.tableProjectsName, projGen.tableTasksName,
+                projGen.getTaskFid('projectName'),  projGen.getProjectFid('name'));
+
+            // Create table relationship, Tasks(Parent) have many Assignments(child)
             setupRelationship(addRelationshipPromises, createdApp, projGen.tableTasksName, projGen.tableAssignmentsName,
                 projGen.getAssigneeFid('taskId'), projGen.getTaskFid('taskId'));
 
-            // Create table relationship, Comments are related Assignments
+            // Create table relationship, Assignments(Parent) have many Comments(child)
             setupRelationship(addRelationshipPromises, createdApp, projGen.tableAssignmentsName, projGen.tableCommentsName,
                 projGen.getCommentFid('topicId'), projGen.getAssigneeFid('assignmentId'));
+
+
+            // Create table relationship, People(Parent) have many Assignments(child)
+            setupRelationship(addRelationshipPromises, createdApp, projGen.tablePeopleName, projGen.tableAssignmentsName,
+                projGen.getAssigneeFid('assigneeName'), projGen.getPeopleFid('fullName'));
+
+            // Create table relationship, People Managers(Parent) lead many People(child)
+            setupRelationship(addRelationshipPromises, createdApp, projGen.tablePeopleName,  projGen.tablePeopleName,
+                projGen.getPeopleFid('manager'), projGen.getPeopleFid('fullName'));
 
             // Bluebird's promise.each function (executes each promise sequentially)
             return promise.each(addRelationshipPromises, function(queueItem) {
@@ -1069,5 +994,6 @@ projGen = require('./projects/projectsGen.js')(chance);
             appsEndpointRequest + '\n\n' +
             tableNames
         );
+        console.timeEnd('dataGen');
     }
 }());

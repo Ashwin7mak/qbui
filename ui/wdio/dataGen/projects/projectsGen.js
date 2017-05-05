@@ -4,7 +4,6 @@
  */
 module.exports = function(chance) {
     'use strict';
-    const e2eConsts = require('../../common/e2eConsts');
     const departments = ['Ops', 'R&D', 'Finance and Admin', 'Marketing', 'Sales', 'Customer Care'];
     chance.mixin({
         department: function() {
@@ -18,12 +17,6 @@ module.exports = function(chance) {
     const peopleGen = require('./data/person.generator.js')(chance);
     const assignmentGen = require('./data/assignments.generator.js')(chance);
 
-    const baseTextClientRequiredProps = {
-        width: 50,
-        bold: false,
-        word_wrap: false
-    };
-
     const tableCompaniesName = 'Companies';
     const tableProjectsName = 'Projects';
     const tableTasksName = 'Tasks';
@@ -31,36 +24,48 @@ module.exports = function(chance) {
     const tablePeopleName = 'Employees';
     const tableAssignmentsName = 'Assignments';
 
-    // const defaultMinNumOfPeople = 22;
-    // const defaultMaxNumOfPeople = 200;
-    // const defaultMinNumOfCompanies = 5;
-    // const defaultMaxNumOfCompanies = 21;
-    // const defaultMinNumOfProjects = 10;
-    // const defaultMaxNumOfProjects = 20;
-    // const defaultMinNumOfTasks = 4;
-    // const defaultMaxNumOfTasks = 10;
-    // const defaultMinNumOfComments = 4;
-    // const defaultMaxNumOfComments = 10;
-    // const defaultMinNumOfAssignees = 4;
-    // const defaultMaxNumOfAssignees = 10;
-    //
-    const defaultMinNumOfPeople = 10;
-    const defaultMaxNumOfPeople = 40;
-    const defaultMinNumOfCompanies = 1;
-    const defaultMaxNumOfCompanies = 3;
-    const defaultMinNumOfProjects = 4;
-    const defaultMaxNumOfProjects = 6;
-    const defaultMinNumOfTasks = 4;
-    const defaultMaxNumOfTasks = 10;
-    const defaultMinNumOfAssignees = 1;
-    const defaultMaxNumOfAssignees = 7;
-    const defaultMinNumOfComments = 3;
-    const defaultMaxNumOfComments = 10;
+    const defaultMinNumOfCompanies = 4;
+    const defaultMaxNumOfCompanies = 7;
+    const defaultMinNumOfPeople = 25;
+    const defaultMaxNumOfPeople = 100;
+    const defaultMinNumOfProjects = 10;
+    const defaultMaxNumOfProjects = 20;
+    const defaultMinNumOfTasks = 1;
+    const defaultMaxNumOfTasks = 4;
+    const defaultMinNumOfAssignees = 2;
+    const defaultMaxNumOfAssignees = 6;
+    const defaultMinNumOfComments = 1;
+    const defaultMaxNumOfComments = 3;
+
+    const minMaxToGen = {
+        minCompany: defaultMinNumOfCompanies,
+        maxCompany: defaultMaxNumOfCompanies,
+        minProj: defaultMinNumOfProjects,
+        maxProj: defaultMaxNumOfProjects,
+        minPeople: defaultMinNumOfPeople,
+        maxPeople: defaultMaxNumOfPeople,
+        minTask: defaultMinNumOfTasks,
+        maxTask: defaultMaxNumOfTasks,
+        minAssignee: defaultMinNumOfAssignees,
+        maxAssignee: defaultMaxNumOfAssignees,
+        minComment: defaultMinNumOfComments,
+        maxComment: defaultMaxNumOfComments,
+    };
 
     const api = {
 
         genSchema: (tableToFieldToFieldTypeMap, addColumn) => {
-            const multiLineProps = {dataAttr: {clientSideAttributes: Object.assign({}, baseTextClientRequiredProps, {num_lines: 6})}};
+            const baseTextClientRequiredProps = {
+                width: 50,
+                bold: false,
+                word_wrap: false
+            };
+            const multiLineProps = {
+                dataAttr: {
+                    clientSideAttributes: Object.assign({}, baseTextClientRequiredProps, {num_lines: 6})
+                }
+            };
+
             //Company
             companyGen.addSchemaFields(tableToFieldToFieldTypeMap, tableCompaniesName, addColumn);
             //Project
@@ -83,20 +88,6 @@ module.exports = function(chance) {
         tablePeopleName,
         tableAssignmentsName,
         tableCommentsName,
-
-        defaultMinNumOfProjects,
-        defaultMaxNumOfProjects,
-        defaultMinNumOfTasks,
-        defaultMaxNumOfTasks,
-        defaultMinNumOfPeople,
-        defaultMaxNumOfPeople,
-        defaultMinNumOfCompanies,
-        defaultMaxNumOfCompanies,
-        defaultMinNumOfAssignees,
-        defaultMaxNumOfAssignees,
-        defaultMinNumOfComments,
-        defaultMaxNumOfComments,
-
 
         companyGen,
         initCompanies: companyGen.init,
@@ -136,6 +127,8 @@ module.exports = function(chance) {
         genComments : (opts, num = defaultMinNumOfComments) => chance.n(chance.comment, num, opts),
         getCommentPropFromFid : commentGen.getPropFromFid,
         getCommentFid : commentGen.getFidFromProp,
+
+        minMaxToGen
 
     };
     return api;

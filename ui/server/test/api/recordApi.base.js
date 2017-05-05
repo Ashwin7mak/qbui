@@ -223,14 +223,14 @@
             },
             // Creates a list of records using the bulk record endpoint, returning a promise that is resolved or rejected on successful
             createBulkRecords: function(recordsBulkEndpoint, records) {
-                log.debug('Records to create: ' + JSON.stringify(records));
+                log.trace('Records to create: ' + JSON.stringify(records));
                 var fetchRecordDeferred = promise.pending();
                 init.then(function() {
                     var recordBulkEndpoint = recordsBulkEndpoint;
 
                     apiBase.executeRequest(recordBulkEndpoint, consts.POST, records)
                         .then(function(recordBulkResponse) {
-                            log.debug('set bulk rec add response: ' + JSON.stringify(recordBulkResponse));
+                            log.trace('set bulk rec add response: ' + JSON.stringify(recordBulkResponse));
 
                             var parsedRecordIdList = JSON.parse(recordBulkResponse.body);
 

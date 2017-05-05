@@ -9,7 +9,7 @@ import SearchBox from '../search/searchBox';
 import {APP_ROUTE} from '../../constants/urlConstants';
 import WindowLocationUtils from '../../utils/windowLocationUtils';
 import UrlUtils from '../../utils/urlUtils';
-
+import _ from 'lodash';
 
 let TablesList = React.createClass({
 
@@ -91,7 +91,7 @@ let TablesList = React.createClass({
      * @returns {*}
      */
     tablesList() {
-        const tableItems = this.props.getAppTables(this.props.selectedAppId, this.props.apps).map((table) => {
+        const tableItems = _.sortBy(this.props.getAppTables(this.props.selectedAppId, this.props.apps), 'id').map((table) => {
             table.link = this.getTableLink(table);
             return this.searchMatches(table.name) &&
                 <NavItem item={table}
