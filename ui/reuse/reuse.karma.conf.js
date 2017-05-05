@@ -116,6 +116,7 @@ module.exports = function(config) {
                     APP: 'client-react/src',
                     REUSE: 'reuse/client/src',
                     GOVERNANCE: 'governance/src',
+                    AUTOMATION: 'automation/src',
                     COMMON: 'common/src'
                 }
             }
