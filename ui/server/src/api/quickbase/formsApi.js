@@ -169,7 +169,7 @@
              * @returns {Promise}
              */
             createReferenceElements: (req, opts) => {
-                const promises = [requestHelper.executeRequest(req, opts), appsApi.getRelationshipsForApp(req), appsApi.getHydratedApp(req, req.params.appId)];
+                const promises = [requestHelper.executeRequest(req, opts), appsApi.getRelationshipsForApp(req), appsApi.getTablesForApp(req)];
                 /* istanbul ignore next  */
                 return Promise.all(promises).then(response => {
                     const formMeta = JSON.parse(response[0].body);
@@ -201,11 +201,13 @@
                                 referenceElements.push(mockReferenceElement(relationshipIdx));
                             }
                         });
+
                         // place each referenceElement in its own section and append the new
                         // sections to the tab
                         referenceElements.forEach(referenceElement => {
                             const sections = formMeta.tabs[0].sections;
                             const length = Object.keys(sections).length;
+
                             sections[length] = Object.assign(lodash.cloneDeep(sections[0]), {
                                 elements: {0: referenceElement},
                                 fields: [],
