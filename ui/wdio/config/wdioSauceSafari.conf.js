@@ -31,7 +31,7 @@ var config = {
         //    tags            : [process.env.SAUCE_JOB_NAME + '_Android_Safari', 'try', 'Android', 'Chrome', process.env.BUILD_NUMBER, process.env.GIT_UIBRANCH],
         //}
         {
-            maxInstances: 1,
+            maxInstances: 5,
             //For IPAD capabilities
             appiumVersion: '1.6.4',
             deviceName: 'iPad Air 2',
