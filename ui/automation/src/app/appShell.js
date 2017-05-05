@@ -1,11 +1,11 @@
 import React, {PropTypes, Component} from 'react';
 import {connect} from 'react-redux';
-import {toggleNav} from '../../../reuse/client/src/components/sideNavs/commonNavActions';
-import AppShell from '../../../reuse/client/src/components/appShell/appShell';
-import DefaultTopNavGlobalActions from '../../../reuse/client/src/components/topNav/defaultTopNavGlobalActions';
-import TopNav from '../../../reuse/client/src/components/topNav/topNav';
+import {toggleNav} from 'REUSE/components/sideNavs/commonNavActions';
+import AppShell from 'REUSE/components/appShell/appShell';
+import DefaultTopNavGlobalActions from 'REUSE/components/topNav/defaultTopNavGlobalActions';
+import TopNav from 'REUSE/components/topNav/topNav';
 import {Switch} from 'react-router-dom';
-import RouteWithSubRoutes from "../../../client-react/src/scripts/RouteWithSubRoutes";
+import RouteWithSubRoutes from "APP/scripts/RouteWithSubRoutes";
 export const AutomationAppShell = (props) => (
     <AppShell functionalAreaName="automation">
             <TopNav onNavClick={props.toggleNav} globalActions={
