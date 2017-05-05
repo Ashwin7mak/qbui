@@ -39,6 +39,8 @@
     }
 
     > .sideTrowserContent {
+        border-right: $stroke-width-thin  solid $trowser-right-trowser-nav-border-color;
+        border-left: $stroke-width-thin  solid $trowser-left-trowser-nav-border-color;
         position: absolute;
         top: 0;
 

@@ -9,7 +9,7 @@ import EmptyImage from '../../../../../client-react/src/assets/images/empty box 
 import {I18nMessage} from "../../../utils/i18nMessage";
 import Locale from '../../../locales/locales';
 import {connect} from 'react-redux';
-
+import {getPendEdits} from '../../../reducers/record';
 import _ from 'lodash';
 
 import ReportCell from './reportCell';
@@ -227,9 +227,7 @@ export const ReportGrid = React.createClass({
     },
 
     getPendEdits() {
-        // only one record should have the pendEdits , so return that
-        const recordCurrentlyEdited = _.find(this.props.record, rec=>rec.pendEdits);
-        return recordCurrentlyEdited ? recordCurrentlyEdited.pendEdits : {};
+        return getPendEdits(this.props.record);
     },
 
     isOnlyOneColumnVisible() {
