@@ -500,7 +500,7 @@ describe('Forms reducer functions', () => {
                 [VIEW]: {
                     ...stateWithViewForm[VIEW],
                     formData: {formMeta: testFormMeta},
-                    isDragging: [true]
+                    isDragging: true
                 }
             });
         });
@@ -525,7 +525,7 @@ describe('Forms reducer functions', () => {
                 [VIEW]: {
                     ...stateWithViewForm[VIEW],
                     formData: {formMeta: testFormMeta},
-                    isDragging: [false]
+                    isDragging: false
                 }
             });
         });

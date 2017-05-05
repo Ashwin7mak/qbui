@@ -2,7 +2,7 @@ import React from 'react';
 import {mount} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
 
-import StandardLeftNav from '../../src/components/sideNavs/standardLeftNav';
+import StandardLeftNav from 'REUSE/components/sideNavs/standardLeftNav';
 
 let component;
 
