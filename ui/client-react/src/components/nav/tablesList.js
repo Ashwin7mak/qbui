@@ -9,7 +9,6 @@ import SearchBox from '../search/searchBox';
 import {APP_ROUTE} from '../../constants/urlConstants';
 import WindowLocationUtils from '../../utils/windowLocationUtils';
 import UrlUtils from '../../utils/urlUtils';
-import _ from 'lodash';
 
 let TablesList = React.createClass({
 
@@ -91,7 +90,9 @@ let TablesList = React.createClass({
      * @returns {*}
      */
     tablesList() {
-        const tableItems = _.sortBy(this.props.getAppTables(this.props.selectedAppId, this.props.apps), 'id').map((table) => {
+        // sorts tables list in order of id which is approx order of creation
+        // if the tables list gets very large this should happen server side instead
+        const tableItems = this.props.getAppTables(this.props.selectedAppId, this.props.apps).map((table) => {
             table.link = this.getTableLink(table);
             return this.searchMatches(table.name) &&
                 <NavItem item={table}
