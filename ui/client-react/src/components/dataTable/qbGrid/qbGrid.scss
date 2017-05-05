@@ -274,6 +274,10 @@ $edit-icon-font-size: 18px;
     .qbRow:not(.editing) .qbCell,
     .qbCell .tipChildWrapper {
         cursor: pointer;
+        // embedded tables in trowser are not clickable/editable
+        .trowser & {
+            cursor: auto;
+        }
     }
 
     // styles for specific types of data cells
@@ -302,6 +306,7 @@ $edit-icon-font-size: 18px;
     // div sitting inside the table cell wrapping the contents
     .cellWrapper {
         width: 100%;
+        height: 100%;
         padding-top: 6px;
         position: relative;
 

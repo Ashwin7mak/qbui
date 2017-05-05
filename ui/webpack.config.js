@@ -52,10 +52,10 @@ const envPlugin = new webpack.DefinePlugin({
     __QB_LOCAL__: JSON.stringify(LOCAL)
 });
 
-// We only minify and uglify files when the environment is 'prod' and on the master branch.
+// We only minify and uglify files when the environment is 'prod' and on the master branch or when deploying and no branch is specified.
 // This speeds up the test runs and builds for individual branches where we don't need to export the minified bundle.
 // Other setting such as whether or not to make source maps or display paths is still only determined by the environment.
-const shouldMinify = PROD && process.env.GIT_UIBRANCH === 'master';
+const shouldMinify = PROD && (!process.env.GIT_UIBRANCH || process.env.GIT_UIBRANCH === 'master');
 
 /**
  * A plugin that shows a notification when webpack has completed.
