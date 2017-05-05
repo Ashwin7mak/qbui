@@ -26,7 +26,7 @@ describe('UserRowActions', () => {
 
     it('Should call onClickToggleSelectedRow when checkbox is clicked', () => {
         component.find('.selectRowCheckbox').simulate('click');
-        expect(component.state().checked).toEqual(true)
+        expect(component.state().checked).toEqual(true);
         expect(spy).toHaveBeenCalled();
     });
 });
