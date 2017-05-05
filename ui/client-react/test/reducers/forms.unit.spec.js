@@ -35,6 +35,8 @@ describe('Forms reducer functions', () => {
         }
     };
 
+    let updatedFormMeta = {appId: 'appId', tableId: 'tblId', tabs: [{sections: [{columns: [{elements: []}]}]}]};
+
     it('returns correct initial state', () => {
         expect(reducer(undefined, {})).toEqual(initialState);
     });
@@ -92,7 +94,7 @@ describe('Forms reducer functions', () => {
         it('returns correct state when load succeeds', () => {
             let currentAppId = 'appId';
             let currentblId = 'tblId';
-            let formData = {formMeta: {appId: currentAppId, tableId: currentblId}};
+            let formData = {formMeta: {appId: currentAppId, tableId: currentblId, tabs: [{sections: [{columns: [{elements: []}]}]}]}};
             /**
              * This test checks to be sure the actual appId and tblId from the response are
              * the ones being used. So here I made the backup id's different for testing purposes.
@@ -110,14 +112,15 @@ describe('Forms reducer functions', () => {
                 'view': {
                     id: 'view',
                     loading: false,
-                    formData: {formMeta: {appId: currentAppId, tableId: currentblId}},
+                    formData: {formMeta: {appId: currentAppId, tableId: currentblId, tabs: [{sections: [{columns: [{elements: []}]}]}]}},
+                    originalFormBuilderState: {},
                     errorStatus: null
                 }
             });
         });
 
         it('returns correct appId and tableId if they are missing', () => {
-            let formData = {formMeta: {appId: null, tableId: null}};
+            let formData = {formMeta: {appId: null, tableId: null, tabs: [{sections: [{columns: [{elements: []}]}]}]}};
             let backUpAppId = 'banana';
             let backUpTblId = 'apple';
             let loadingFormState = {
@@ -132,7 +135,8 @@ describe('Forms reducer functions', () => {
                 'view': {
                     id: 'view',
                     loading: false,
-                    formData: {formMeta: {appId: backUpAppId, tableId: backUpTblId}},
+                    formData: {formMeta: {appId: backUpAppId, tableId: backUpTblId, tabs: [{sections: [{columns: [{elements: []}]}]}]}},
+                    originalFormBuilderState: {},
                     errorStatus: null
                 }
             });
@@ -162,7 +166,6 @@ describe('Forms reducer functions', () => {
     });
 
     describe('moving a field', () => {
-        const updatedFormMeta = 'updated form meta';
         const mockMoveFieldHelper = {
             moveField(_formMeta, newTabIndex, newSectionIndex, newOrderIndex, draggedItemProps) {return updatedFormMeta;}
         };
@@ -191,6 +194,7 @@ describe('Forms reducer functions', () => {
                     ...stateWithViewForm[VIEW],
                     formData: {formMeta: updatedFormMeta},
                     selectedFields: [1],
+                    isPendingEdits: true,
                     previouslySelectedField: []
                 }
             });
@@ -208,7 +212,6 @@ describe('Forms reducer functions', () => {
     });
 
     describe('removing a field', () => {
-        const updatedFormMeta = 'updated form meta';
         const mockMoveFieldHelper = {
             removeField(_formMeta, location) {return updatedFormMeta;}
         };
@@ -234,7 +237,8 @@ describe('Forms reducer functions', () => {
             expect(reducer(stateWithViewForm, actionPayload)).toEqual({
                 [VIEW]: {
                     ...stateWithViewForm[VIEW],
-                    formData: {formMeta: updatedFormMeta}
+                    formData: {formMeta: updatedFormMeta},
+                    isPendingEdits: true,
                 }
             });
             expect(mockMoveFieldHelper.removeField).toHaveBeenCalledWith(
@@ -250,7 +254,6 @@ describe('Forms reducer functions', () => {
     });
 
     describe('adding a field', () => {
-        const updatedFormMeta = 'updated form meta';
         const stateForAddingField = {
             'view': {
                 id: 'view',
@@ -285,7 +288,8 @@ describe('Forms reducer functions', () => {
                     ...stateForAddingField[VIEW],
                     selectedFields: [1],
                     previouslySelectedField: [],
-                    formData: {formMeta: updatedFormMeta}
+                    formData: {formMeta: updatedFormMeta},
+                    isPendingEdits: true,
                 }
             });
             expect(mockMoveFieldHelper.addNewFieldToForm).toHaveBeenCalledWith(
@@ -329,7 +333,6 @@ describe('Forms reducer functions', () => {
     });
 
     describe('(keyboard) move a field up', () => {
-        const updatedFormMeta = 'updated form meta';
         const mockMoveFieldHelper = {
             keyBoardMoveFieldUp(_formMeta, _location) {return updatedFormMeta;},
             updateSelectedFieldLocation(_location, _Updatedlocation) {return updatedFormMeta;}
@@ -358,7 +361,8 @@ describe('Forms reducer functions', () => {
                 [VIEW]: {
                     ...stateWithViewForm[VIEW],
                     formData: {formMeta: updatedFormMeta},
-                    selectedFields: [updatedFormMeta]
+                    selectedFields: [updatedFormMeta],
+                    isPendingEdits: true
                 }
             });
             expect(mockMoveFieldHelper.keyBoardMoveFieldUp).toHaveBeenCalledWith(
@@ -378,7 +382,6 @@ describe('Forms reducer functions', () => {
     });
 
     describe('(keyboard) move a field down', () => {
-        const updatedFormMeta = 'updated form meta';
         const mockMoveFieldHelper = {
             keyBoardMoveFieldDown(_formMeta, _location) {return updatedFormMeta;},
             updateSelectedFieldLocation(_location, _updatedLocation) {return updatedFormMeta;}
@@ -407,7 +410,8 @@ describe('Forms reducer functions', () => {
                 [VIEW]: {
                     ...stateWithViewForm[VIEW],
                     formData: {formMeta: updatedFormMeta},
-                    selectedFields: [updatedFormMeta]
+                    selectedFields: [updatedFormMeta],
+                    isPendingEdits: true
                 }
             });
             expect(mockMoveFieldHelper.keyBoardMoveFieldDown).toHaveBeenCalledWith(

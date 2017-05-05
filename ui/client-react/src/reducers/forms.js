@@ -20,7 +20,7 @@ const forms = (
 
     function checkIsFormBuilderDirty(tabIndex = 0, sectionIndex = 0, columnIndex = 0) {
         let formElements = Object.assign({}, updatedForm.formData.formMeta.tabs[tabIndex].sections[sectionIndex].columns[columnIndex].elements);
-        // updatedForm.originalFormState = !updatedForm.originalFormState ? formElements : updatedForm.originalFormState;
+
         updatedForm.isPendingEdits = false;
         if (!_.isEqual(currentForm.originalFormBuilderState, formElements)) {
             updatedForm.isPendingEdits = true;
