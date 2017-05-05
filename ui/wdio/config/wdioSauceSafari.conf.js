@@ -19,15 +19,13 @@ var config = {
         //}
         {
             maxInstances: 1,
-            //For IPAD capabilities
+            //For tablet capabilities
             appiumVersion: '1.6.4',
             platformName: 'Android',
-            platformVersion: '5.0',
-            browserName: 'android',
-            deviceName: 'Android Emulator',
-            deviceType: 'tablet',
+            platformVersion: '4.4',
+            browserName: 'Browser',
+            deviceName: 'Samsung Galaxy Nexus Emulator',
             deviceOrientation: 'landscape',
-            automationName: 'Selendroid',
             tunnelIdentifier: process.env.ENV_TUNNEL_NAME,
             build           : 'WebdriverIO Jenkins Try Build #' + process.env.BUILD_NUMBER + ' - Git branch: ' + process.env.GIT_UIBRANCH + ' - Android Chrome Browser',
             tags            : [process.env.SAUCE_JOB_NAME + '_Android_Safari', 'try', 'Android', 'Chrome', process.env.BUILD_NUMBER, process.env.GIT_UIBRANCH],
