@@ -68,8 +68,4 @@ describe('getIconTooltipTitle', () => {
     it('handles incorrect parameters', () => {
         expect(IconUtils.getIconToolTipTitle(undefined, undefined)).toEqual('');
     });
-
-    it('returns empty string', () => {
-        expect(IconUtils.getIconToolTipTitle([], '')).toEqual('');
-    });
 });
