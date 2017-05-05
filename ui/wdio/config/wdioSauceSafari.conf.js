@@ -20,11 +20,13 @@ var config = {
         {
             maxInstances: 1,
             //For IPAD capabilities
-            platformName: 'iOS',
-            browserName: 'safari',
-            deviceName: 'iPad 2',
+            appiumVersion: '1.6.4',
+            platformName: 'Android',
+            browserName: '',
+            deviceName: 'Android Emulator',
+            deviceType: 'tablet',
             deviceOrientation: 'landscape',
-            automationName: 'Appium',
+            automationName: 'Selendroid',
             tunnelIdentifier: process.env.ENV_TUNNEL_NAME,
             build           : 'WebdriverIO Jenkins Try Build #' + process.env.BUILD_NUMBER + ' - Git branch: ' + process.env.GIT_UIBRANCH + ' - iOS Safari Browser',
             tags            : [process.env.SAUCE_JOB_NAME + '_iOS_Safari', 'try', 'iOS', 'Safari', process.env.BUILD_NUMBER, process.env.GIT_UIBRANCH],

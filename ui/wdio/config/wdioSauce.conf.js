@@ -73,8 +73,6 @@ exports.config = {
     // and 30 processes will get spawned. The property handles how many capabilities
     // from the same test should run tests.
     //
-    host: 'localhost',
-    port: 4723,
     maxInstances: 10,
     //
     // If you have trouble getting all important capabilities together, check out the
@@ -202,7 +200,7 @@ exports.config = {
     // Services take over a specific job you don't want to take care of. They enhance
     // your test setup with almost no effort. Unlike plugins, they don't add new
     // commands. Instead, they hook themselves up into the test process.
-    services: ['sauce', 'appium', 'firefox-profile'],
+    services: ['sauce', 'firefox-profile'],
     // Firefox profile enabled by wdio-firefox-profile-service
     // Firefox does not fire certain blur events when Firefox window does not have OS level focus. The following
     // setting enable blur events to fire during e2e tests even when the window does not have OS level focus.
