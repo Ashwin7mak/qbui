@@ -55,7 +55,7 @@ import "./nav.scss";
 import "react-notifications/lib/notifications.css";
 import "../../assets/css/animate.min.css";
 import RouteWithSubRoutes from "../../scripts/RouteWithSubRoutes";
-
+import {getPendEdits} from '../../reducers/record';
 const OPEN_NAV = true;
 const CLOSE_NAV = false;
 const OPEN_APPS_LIST = true;
@@ -287,9 +287,7 @@ export const Nav = React.createClass({
     },
 
     getPendEdits() {
-        // only one record should have the pendEdits , so return that
-        const recordCurrentlyEdited = _.find(this.props.record, rec=>rec.pendEdits);
-        return recordCurrentlyEdited ? recordCurrentlyEdited.pendEdits : {};
+        return getPendEdits(this.props.record);
     },
 
     getCenterGlobalActions() {

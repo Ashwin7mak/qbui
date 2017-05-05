@@ -23,9 +23,9 @@ import KeyboardShortcuts from '../../../../reuse/client/src/components/keyboardS
 import {APP_ROUTE, EDIT_RECORD_KEY} from '../../constants/urlConstants';
 import {CONTEXT} from '../../actions/context';
 import SaveOrCancelFooter from '../saveOrCancelFooter/saveOrCancelFooter';
-
+import {getPendEdits, getRecord} from '../../reducers/record';
 import './recordTrowser.scss';
-
+import {NEW_RECORD_VALUE} from "../../constants/urlConstants";
 
 /**
  * trowser containing a record component
@@ -383,7 +383,7 @@ export const RecordTrowser = React.createClass({
     },
 
     getRecordFromProps(props = this.props) {
-        return _.nth(props.record, 0) || {};
+        return  getRecord(props.record.records, props.recId);
     },
 
     /**
@@ -433,12 +433,12 @@ export const RecordTrowser = React.createClass({
                     </OverlayTrigger>
                 }
                 {showNext &&
-                    <Button bsStyle="primary" onClick={this.saveAndNextClicked}><I18nMessage message="nav.saveAndNext"/></Button>
+                    <Button className="alternativeTrowserFooterButton" bsStyle="primary" onClick={this.saveAndNextClicked}><I18nMessage message="nav.saveAndNext"/></Button>
                 }
                 {this.props.recId === null &&
-                <Button bsStyle="primary" onClick={() => {this.saveClicked(true);}}><I18nMessage message="nav.saveAndAddAnother"/></Button>
+                <Button className="alternativeTrowserFooterButton" bsStyle="primary" onClick={() => {this.saveClicked(true);}}><I18nMessage message="nav.saveAndAddAnother"/></Button>
                 }
-                <Button bsStyle="primary" onClick={() => {this.saveClicked(false);}}><I18nMessage message="nav.save"/></Button>
+                <Button className="mainTrowserFooterButton" bsStyle="primary" onClick={() => {this.saveClicked(false);}}><I18nMessage message="nav.save"/></Button>
             </div>);
     },
 
@@ -485,14 +485,7 @@ export const RecordTrowser = React.createClass({
     },
 
     getPendEdits() {
-        // only one record should have the pendEdits , so return that
-        const recordCurrentlyEdited = _.find(this.props.record, rec=>rec.pendEdits);
-        return recordCurrentlyEdited ? recordCurrentlyEdited.pendEdits : {};
-    },
-
-    getRecord() {
-        return  _.find(this.props.record, rec => (rec.recId === this.props.recId ||
-                                                  rec.recId.toString() === this.props.recId)) || {};
+        return getPendEdits(this.props.record, this.props.recId || NEW_RECORD_VALUE);
     },
 
     keyboardOnSave() {
