@@ -4,6 +4,7 @@ import {I18nMessage} from '../../../../../reuse/client/src/utils/i18nMessage';
 import * as SpinnerConfigurations from "../../../../../client-react/src/constants/spinnerConfigurations";
 import Breakpoints from "../../../../../client-react/src/utils/breakpoints";
 import {colorBlack700, colorBlack100} from '../../../../../client-react/src/constants/colors';
+import Locale from '../../../../../reuse/client/src/locales/locale';
 
 import './StandardGridUsersCount.scss';
 
@@ -25,14 +26,14 @@ class StandardGridUsersCount extends Component {
             return null;
         }
         // Set resource property name
-        let message = (this.props.totalRecords === 1) ? "count.singleRecordCount" : "count.totalRecords";
-        let placeHolderMessage = (Breakpoints.isSmallBreakpoint()) ? "count.cardViewCountPlaceHolder" : "count.usersCountPlaceHolder";
+        let message = (this.props.totalRecords === 1) ? Locale.getMessage("governance.count.singleRecordCount") : Locale.getMessage("governance.count.totalRecords");
+        let placeHolderMessage = (Breakpoints.isSmallBreakpoint()) ? Locale.getMessage("governance.count.cardViewCountPlaceHolder") : Locale.getMessage("governance.count.usersCountPlaceHolder");
 
         let dbl = null;
 
         if (this.props.isFiltered && this.props.totalRecords !== this.props.filteredRecordCount) {
             dbl = this.props.clearAllFilters;
-            message = (this.props.totalRecords === 1) ? "count.filteredSingleRecordCount" : "count.filteredRecordCount";
+            message = (this.props.totalRecords === 1) ? Locale.getMessage("governance.count.filteredSingleRecordCount") : Locale.getMessage("governance.count.filteredRecordCount");
         }
 
         let loaderOptions = SpinnerConfigurations.RECORD_COUNT;
