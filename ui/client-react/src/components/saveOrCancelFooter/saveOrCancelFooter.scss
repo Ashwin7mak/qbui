@@ -11,10 +11,6 @@
     border-top: $stroke-width-thin  solid $trowser-footer-border-color;
     margin: 0 10px;
 
-    .leftActions {
-        flex: 0 0 auto;
-    }
-
     .centerActions {
         display: flex;
         flex: 1 1 auto;
@@ -39,6 +35,21 @@
 
         a:last-child {
             border-right: 1px solid $trowser-action-separator-color;
+        }
+    }
+
+    .leftActions {
+        flex: 0 0 auto;
+        align-self: center;
+        margin-right: 38px;
+
+        button {
+            margin: 10px 0 10px 10px;
+        }
+        display: flex;
+        .qbIcon {
+            font-size: 18px;
+            padding-right: 10px;
         }
     }
 

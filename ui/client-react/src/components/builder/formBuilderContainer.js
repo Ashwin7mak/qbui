@@ -23,6 +23,7 @@ import * as tabIndexConstants from '../formBuilder/tabindexConstants';
 import KeyboardShortcuts from '../../../../reuse/client/src/components/keyboardShortcuts/keyboardShortcuts';
 import _ from 'lodash';
 import NotificationManager from '../../../../reuse/client/src/scripts/notificationManager';
+import QBIcon from '../../../../reuse/client/src/components/icon/icon';
 import {DragDropContext} from 'react-dnd';
 import TouchBackend from 'react-dnd-touch-backend';
 import FormBuilderCustomDragLayer from '../formBuilder/formBuilderCustomDragLayer';
@@ -166,6 +167,14 @@ export const FormBuilderContainer = React.createClass({
         );
     },
 
+    getLeftAlignButtons() {
+        return (
+            <div>
+                <Button tabIndex={tabIndexConstants.CANCEL_BUTTON_TABINDEX} bsStyle="primary" onClick={this.cancelEditingForm} className="alternativeTrowserFooterButton"><QBIcon icon="user"/><I18nMessage message="nav.cancel"/></Button>
+            </div>
+        );
+    },
+
     /**
      *  get actions element for bottom center of trowser (placeholders for now)
      */
@@ -178,7 +187,7 @@ export const FormBuilderContainer = React.createClass({
         return <SaveOrCancelFooter
             rightAlignedButtons={this.getRightAlignedButtons()}
             centerAlignedButtons={this.getTrowserActions()}
-            leftAlignedButtons={this.getTrowserActions()}
+            leftAlignedButtons={this.getLeftAlignButtons()}
         />;
     },
 
