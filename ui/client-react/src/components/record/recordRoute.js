@@ -27,7 +27,7 @@ import {loadForm, editNewRecord} from '../../actions/formActions';
 import {openRecord} from '../../actions/recordActions';
 import {clearSearchInput} from '../../actions/searchActions';
 import {APP_ROUTE, BUILDER_ROUTE, EDIT_RECORD_KEY} from '../../constants/urlConstants';
-import {getEmbeddedReportByContext} from '../../reducers/embeddedReports';
+import {getEmbeddedReportByContext, getEmbeddedReport} from '../../reducers/embeddedReports';
 import {CONTEXT} from '../../actions/context';
 import {getRecord} from '../../reducers/record';
 import './record.scss';
@@ -75,15 +75,13 @@ export const RecordRoute = React.createClass({
         if (rptId !== undefined && typeof rptId === 'string' &&
                 (rptId.includes(CONTEXT.REPORT.EMBEDDED) || rptId.includes(CONTEXT.FORM.DRAWER))) {
             const embeddedReportId = rptId;
-            // TODO: move to reducers/embeddedReport
-            embeddedReport = _.find(this.props.embeddedReports, {'id' : embeddedReportId});
+            embeddedReport = getEmbeddedReport(this.props.embeddedReports, embeddedReportId);
             rptId = embeddedReport.rptId;
         }
 
         if (appId && tblId && recordId) {
             //  report id is optional
             //  TODO: add form type as a parameter
-
             this.loadRecord(appId, tblId, recordId, rptId, embeddedReport);
         }
     },
@@ -589,8 +587,8 @@ const mapDispatchToProps = (dispatch) => {
         loadForm: (appId, tblId, rptId, formType, recordId, context) => {
             dispatch(loadForm(appId, tblId, rptId, formType, recordId, context));
         },
-        openRecord: (recId, nextId, prevId, uniqueId) => {
-            dispatch(openRecord(recId, nextId, prevId, uniqueId));
+        openRecord: (recId, nextId, prevId, viewContextId) => {
+            dispatch(openRecord(recId, nextId, prevId, viewContextId));
         },
         clearSearchInput: () => {
             dispatch(clearSearchInput());

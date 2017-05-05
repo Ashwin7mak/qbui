@@ -61,8 +61,8 @@ describe('Drawer Container functions ', () => {
 
         it('test that container renders a drawer when route match occurs', () => {
             let routeDiv = mount(<MemoryRouter initialEntries={[matchedUrl]}>
-                                        <DrawerContainer {...props}/>
-                                    </MemoryRouter>);
+                <DrawerContainer {...props}/>
+            </MemoryRouter>);
             let drawerContainerWrapper = routeDiv.find('DrawerContainer');
             expect(drawerContainerWrapper.length).toBe(1);
             let drawerWrapper = drawerContainerWrapper.find('Drawer');
