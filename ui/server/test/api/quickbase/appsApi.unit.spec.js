@@ -105,13 +105,30 @@ describe("Validate appsApi", function() {
             executeReqStub.restore();
         });
 
-        it('success return results', function(done) {
+        it('success return results for all app tables', function(done) {
             executeReqStub.returns(Promise.resolve({body: '[{"id":1, "appId":2, "name":"tableName1"}, {"id":10, "appId":11, "name":"tableName2"}]'}));
             let promise = appsApi.getTablesForApp(req);
 
             promise.then(
                 function(response) {
                     assert.deepEqual(response, [{"id":1, "appId":2, "name":"tableName1"}, {"id":10, "appId":11, "name":"tableName2"}]);
+                    done();
+                },
+                function(error) {
+                    done(new Error("Unexpected failure promise return when testing getTablesForApp success"));
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('getTablesForApp: exception processing success test: ' + JSON.stringify(errorMsg)));
+            });
+        });
+
+        it('success return results for single app table', function(done) {
+            executeReqStub.returns(Promise.resolve({body: '[{"id":1, "appId":2, "name":"tableName1"}]'}));
+            let promise = appsApi.getTablesForApp(req, 1);
+
+            promise.then(
+                function(response) {
+                    assert.deepEqual(response, [{"id":1, "appId":2, "name":"tableName1"}]);
                     done();
                 },
                 function(error) {
