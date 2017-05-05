@@ -10,6 +10,7 @@ import Constants from '../../../../common/src/constants';
 import UserFieldValueRenderer from '../fields/userFieldValueRenderer.js';
 import DragAndDropField from '../formBuilder/dragAndDropField';
 import RelatedChildReport from './relatedChildReport';
+import {CONTEXT} from "../../actions/context";
 import FlipMove from 'react-flip-move';
 
 import * as FieldsReducer from '../../reducers/fields';
@@ -380,6 +381,7 @@ export const QBForm = React.createClass({
                   invalidMessage={validationStatus.invalidMessage}
                   appUsers={this.props.appUsers}
                   recId={recId}
+                  isTokenInMenuDragging={this.props.isTokenInMenuDragging}
               />
             </div>
         );
@@ -420,6 +422,12 @@ export const QBForm = React.createClass({
         const childTable = _.find(tables, {id: relationship.detailTableId}) || {};
         const childTableName = childTable.name;
 
+        // Handler for clicking on a record in an embedded report. Drilling down to a child should open the clicked
+        // child record in a drawer.
+        // When this.props.edit is true, this form is inside a trowser. Disable drilling down to child records when an
+        // embedded report is in a trowser.
+        const handleDrillIntoChild = this.props.edit ? () => {} : this.props.handleDrillIntoChild;
+
         return (
             <div key={id} className="formElementContainer formElement referenceElement">
                 <RelatedChildReport
@@ -431,7 +439,7 @@ export const QBForm = React.createClass({
                     detailKeyValue={detailKeyValue}
                     type={ReferenceElement.type}
                     appUsers={this.props.appUsers}
-                    handleDrillIntoChild={this.props.handleDrillIntoChild}
+                    handleDrillIntoChild={handleDrillIntoChild}
                 />
             </div>
         );
@@ -578,9 +586,12 @@ function buildUserField(id, fieldValue, name) {
     };
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state, ownProps) => {
+    let formId = (ownProps.formId || CONTEXT.FORM.VIEW);
+    let currentForm = _.get(state, `forms[${formId}]`, {});
     return {
-        fields: state.fields
+        fields: state.fields,
+        isTokenInMenuDragging: (_.has(currentForm, 'isDragging') ? currentForm.isDragging : undefined),
     };
 };
 

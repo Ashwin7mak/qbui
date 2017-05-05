@@ -22,7 +22,8 @@ module.exports = (app, appConfig, baseProps) => {
 
     return {
         addRoutes() {
-            const options = {};
+            const compBundleFileName = baseClientRoute.generateBundleFilePath('bundle');
+            const options = {bundleFileName: compBundleFileName};
 
             baseClientRoute.addRoutesFromArrayOfPaths(routes, options);
         }

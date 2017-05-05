@@ -597,7 +597,8 @@ export default {
                 first: "Option 1",
                 second: "Option 2",
                 third: "Option 3"
-            }
+            },
+            modify: 'Modify form'
         },
         featureSwitchAdmin: {
             defaultFeatureName: "Feature",

@@ -9,8 +9,8 @@ import Tooltip from '../tooltip/tooltip';
 import SimpleNavItem from '../simpleNavItem/simpleNavItem';
 
 // CLIENT REACT IMPORTS
-import {LEFT_NAV_BAR} from '../../../../../client-react/src/constants/spinnerConfigurations';
-import Breakpoints from '../../../../../client-react/src/utils/breakpoints';
+import {LEFT_NAV_BAR} from 'APP/constants/spinnerConfigurations';
+import Breakpoints from 'APP/utils/breakpoints';
 // CLIENT REACT IMPORTS
 
 import QbLogoImage from '../../assets/images/QB-logo.svg';
