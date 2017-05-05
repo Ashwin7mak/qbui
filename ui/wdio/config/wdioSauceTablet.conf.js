@@ -6,9 +6,9 @@ var config = {
             //For tablet capabilities
             appiumVersion: '1.6.4',
             platformName: 'Android',
-            platformVersion: '4.4',
+            platformVersion: '6.0',
             browserName: 'Browser',
-            deviceName: 'Samsung Galaxy Nexus Emulator',
+            deviceName: 'Samsung Galaxy S7 Device',
             deviceOrientation: 'landscape',
             tunnelIdentifier: process.env.ENV_TUNNEL_NAME,
             build           : 'WebdriverIO Jenkins Try Build #' + process.env.BUILD_NUMBER + ' - Git branch: ' + process.env.GIT_UIBRANCH + ' - Android Chrome Browser',
