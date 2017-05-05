@@ -1,7 +1,5 @@
 import React from 'react';
 import QBToolTip from '../../../../../client-react/src/components/qbToolTip/qbToolTip';
-import OverlayTrigger from 'react-bootstrap/lib/OverlayTrigger';
-import Tooltip from 'react-bootstrap/lib/Tooltip';
 import './icon.scss';
 import './uiIcons.css';
 import './tableIcons.css';
@@ -46,15 +44,15 @@ const Icon = React.createClass({
         return {
             className: '',
             isTableIcon: false,
-            tooltipTitle: '',
             iconFont: AVAILABLE_ICON_FONTS.DEFAULT
         };
     },
     render: function() {
         let {className, iconFont, icon} = this.props;
         let iconClassName = `${className} qbIcon ${iconFont}-${icon}`;
+        let toolTipId = `toolTip-${icon}`;
         return (this.props.tooltipTitle ?
-            <QBToolTip location="bottom" tipId="toolTipTitle" className="toolTip-iconChooser" plainMessage={this.props.tooltipTitle}>
+            <QBToolTip location="bottom" tipId={toolTipId} className="toolTip-iconChooser" plainMessage={this.props.tooltipTitle}>
                 <span className={iconClassName} onClick={this.props.onClick}>
                 {this.props.children}
                 </span>

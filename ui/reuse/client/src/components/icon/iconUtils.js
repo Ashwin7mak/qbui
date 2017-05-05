@@ -49,7 +49,7 @@ const IconUtils = {
                     // Check if the icon name is equal to the element in the icons array
                     if (iconName === elem.toLowerCase()) {
                         // We want the unique name to be in the array
-                        if (!titles.includes(iconsByTag[i].tag)) {
+                        if (titles.indexOf(iconsByTag[i].tag) === -1) {
                             // Then push the new title into the array
                             titles.push(iconsByTag[i].tag);
                         }
