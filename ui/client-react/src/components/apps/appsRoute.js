@@ -1,12 +1,11 @@
 import React from 'react';
 import PageTitle from '../pageTitle/pageTitle';
 import Fluxxor from 'fluxxor';
-import AppUtils from '../../utils/appUtils';
-import WindowLocationUtils from '../../utils/windowLocationUtils';
+import Stage from '../../../../reuse/client/src/components/stage/stage';
+import Locale from '../../locales/locales';
+import MyAppsPage from './myAppsPage';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
-
-import AppHomePage from '../app/appHomePage';
 
 /**
  * placeholder for my apps route
@@ -22,12 +21,26 @@ let AppsRoute = React.createClass({
 
     },
 
+    getStageHeadline() {
+        const userHeadLine = `${Locale.getMessage('app.homepage.welcomeTitle')} Mercury`;
+        return (
+            <div className="appHomePageStage">
+                <div className="appStageHeadline">
+                    <h3 className="appHeadLine">{userHeadLine}</h3>
+                </div>
+            </div>);
+    },
+
     render() {
         return (
-            <div>
+            <div className="appHomePageContainer">
                 {/* Reset the page title on the apps page to the realm */}
                 <PageTitle />
-                <AppHomePage />
+                <Stage stageHeadline={this.getStageHeadline()}
+                       pageActions={null}>
+                    <div></div>
+                </Stage>
+                <MyAppsPage />
             </div>
         );
     }
