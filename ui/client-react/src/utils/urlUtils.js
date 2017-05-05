@@ -52,7 +52,6 @@ const UrlUtils = {
         return `https://${CommonUrlUtils.getSubdomain(hostname)}.${CommonUrlUtils.getDomain(hostname)}${SUPPORT_LINK_PATH}`;
     },
     getFeedBackLink() {
-        let hostname = WindowLocationUtils.getHostname();
         return `https://${FEEDBACK_LINK_PATH}`;
     },
     getReportFeedBackLink() {
