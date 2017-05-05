@@ -30,7 +30,7 @@ class TableCreationPanel extends React.Component {
      * @returns {XML}
      */
     getTableIcon(name) {
-        return <Icon iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY} icon={name} title={IconUtils.getIconTitle(tableIconsByTag, name)}/>;
+        return <Icon iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY} icon={name} tooltipTitle={IconUtils.getIconToolTipTitle(tableIconsByTag, name)}/>;
     }
 
     /**

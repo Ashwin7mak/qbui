@@ -33,7 +33,7 @@ const IconUtils = {
      * @param icon - icon name
      * @return {string} icon tooltip string
      */
-    getIconTitle(iconsByTag, icon) {
+    getIconToolTipTitle(iconsByTag, icon) {
         // Store all unique title
         let titles = [];
         if (icon && iconsByTag) {

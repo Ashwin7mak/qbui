@@ -1,7 +1,7 @@
 import React from 'react';
+import QBToolTip from '../../../../../client-react/src/components/qbToolTip/qbToolTip';
 import OverlayTrigger from 'react-bootstrap/lib/OverlayTrigger';
 import Tooltip from 'react-bootstrap/lib/Tooltip';
-import Locale from '../../../src/locales/locale.js';
 import './icon.scss';
 import './uiIcons.css';
 import './tableIcons.css';
@@ -31,7 +31,10 @@ const Icon = React.createClass({
         icon: React.PropTypes.string.isRequired,
         className: React.PropTypes.string,
         onClick: React.PropTypes.func,
-        title: React.PropTypes.string,
+        /**
+         * A tooltip string title for icon in icon chooser
+         */
+        tooltipTitle: React.PropTypes.string,
 
         /**
          * Optionally set the font set to use for this icon
@@ -43,19 +46,19 @@ const Icon = React.createClass({
         return {
             className: '',
             isTableIcon: false,
-            title: '',
+            tooltipTitle: '',
             iconFont: AVAILABLE_ICON_FONTS.DEFAULT
         };
     },
     render: function() {
         let {className, iconFont, icon} = this.props;
         let iconClassName = `${className} qbIcon ${iconFont}-${icon}`;
-        return (this.props.title ?
-            <OverlayTrigger placement="bottom" overlay={<Tooltip id="toolTipIcon" className="toolTip-iconChooser">{this.props.title}</Tooltip>}>
+        return (this.props.tooltipTitle ?
+            <QBToolTip location="bottom" tipId="toolTipTitle" className="toolTip-iconChooser" plainMessage={this.props.tooltipTitle}>
                 <span className={iconClassName} onClick={this.props.onClick}>
                 {this.props.children}
                 </span>
-            </OverlayTrigger> :
+            </QBToolTip> :
             <span className={iconClassName} onClick={this.props.onClick}>
                 {this.props.children}
             </span>

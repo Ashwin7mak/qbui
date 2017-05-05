@@ -4,7 +4,11 @@
     display: inline-block;
 }
 
-.toolTip-iconChooser {
-    z-index: $zindex-tooltip;
+.tipChildWrapper {
+    cursor: pointer;
+}
+
+.tooltip {
+    z-index: $zindex-tooltip !important;
     max-width: $tooltip-max-width;
 }
