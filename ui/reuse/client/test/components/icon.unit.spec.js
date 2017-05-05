@@ -36,9 +36,11 @@ describe('tooltipTitle', () => {
         expect(component.find(QBToolTip).find({plainMessage: 'Videocamera'})).toBePresent();
     });
 
-    it('renders empty tooltip title when tooltipTitle is empty string', () => {
-        component = shallow(<Icon icon="video" tooltipTitle=""/>);
 
-        expect(component.find(QBToolTip).find({tooltipTitle: ''})).toBeTruthy();
+    it('does not render QBToolTip if tooltipTitle is provided as prop', () => {
+        component = shallow(<Icon icon="video" />);
+
+        expect(component.find({tipId: 'toolTip-video'})).toBeUndefined();
+        expect(component.find(QBToolTip)).toBeUndefined();
     });
 });

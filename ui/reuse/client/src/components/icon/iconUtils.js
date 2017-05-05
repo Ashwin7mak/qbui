@@ -44,10 +44,8 @@ const IconUtils = {
                 if (iconsByTag[i].icons.length < 0) {
                     continue;
                 }
-                // Otherwise iterate through the icons array
-                iconsByTag[i].icons.forEach(elem => {
-                    // Check if the icon name is equal to the element in the icons array
-                    if (iconName === elem.toLowerCase()) {
+                iconsByTag[i].icons.some(val => {
+                    if (iconName === val.toLowerCase()) {
                         // We want the unique name to be in the array
                         if (titles.indexOf(iconsByTag[i].tag) === -1) {
                             // Then push the new title into the array

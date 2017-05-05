@@ -44,23 +44,29 @@ const Icon = React.createClass({
         return {
             className: '',
             isTableIcon: false,
+            tooltipTitle: '',
             iconFont: AVAILABLE_ICON_FONTS.DEFAULT
         };
     },
-    render: function() {
-        let {className, iconFont, icon} = this.props;
-        let iconClassName = `${className} qbIcon ${iconFont}-${icon}`;
-        let toolTipId = `toolTip-${icon}`;
-        return (this.props.tooltipTitle ?
-            <QBToolTip location="bottom" tipId={toolTipId} className="toolTip-iconChooser" plainMessage={this.props.tooltipTitle}>
-                <span className={iconClassName} onClick={this.props.onClick}>
-                {this.props.children}
-                </span>
-            </QBToolTip> :
+    renderIcon(iconClassName) {
+        return (
             <span className={iconClassName} onClick={this.props.onClick}>
                 {this.props.children}
             </span>
         );
+    },
+    renderToolTipIcon(iconClassName, toolTipId, tooltipTitle) {
+        return (
+            <QBToolTip location="bottom" tipId={toolTipId} className="toolTip-iconChooser" plainMessage={tooltipTitle}>
+                {this.renderIcon(iconClassName)}
+            </QBToolTip>
+        );
+    },
+    render: function() {
+        let {className, iconFont, icon, tooltipTitle} = this.props;
+        let iconClassName = `${className} qbIcon ${iconFont}-${icon}`;
+        let toolTipId = `toolTip-${icon}`;
+        return (tooltipTitle ? this.renderToolTipIcon(iconClassName, toolTipId, tooltipTitle) : this.renderIcon(iconClassName));
     }
 });
 
