@@ -38,6 +38,7 @@ var config = {
             deviceOrientation: 'landscape',
             platformVersion: '9.3',
             platformName: 'iOS',
+            networkConnectionEnabled: 'true',
             browserName: 'safari',
            // automationName: 'Appium',
             tunnelIdentifier: process.env.ENV_TUNNEL_NAME,
