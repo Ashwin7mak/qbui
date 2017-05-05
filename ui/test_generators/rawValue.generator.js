@@ -52,7 +52,7 @@
             var day = date.getDate();
             // date.getHours() returns 1-12;
             // Date time and Time of day fields both allow 0-23
-            var hour = chance.hour({twentyfour: true}) - 1;
+            var hour = chance.hour({twentyfour: true});
             var minute = date.getMinutes();
             var seconds = date.getSeconds();
             var millis = date.getMilliseconds();
@@ -67,7 +67,7 @@
 
             // date.getHours() returns 1-12;
             // Date time and Time of day fields both allow 0-23
-            var hour = chance.hour({twentyfour: true}) - 1;
+            var hour = chance.hour({twentyfour: true});
             var minute = date.getMinutes();
             var seconds = date.getSeconds();
             var millis = date.getMilliseconds();
