@@ -293,7 +293,7 @@
                 testCase.tableFieldError.forEach(function(tableField) {
                     tableCreatePO.verifyTableFieldValidation(tableField.fieldTitle, tableField.fieldError);
                     //Verify Apply button is enabled
-                    expect(browser.isEnabled('.tableInfoButtons.open .primaryButton')).toBeTruthy();
+                    expect(browser.isExisting('.tableInfoButtons.open .primaryButton')).toBeTruthy();
                     //Verify Reset button is enabled
                     expect(browser.isEnabled('.tableInfoButtons.open .secondaryButton')).toBeTruthy();
                 });
