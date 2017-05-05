@@ -607,7 +607,7 @@ module.exports = function(grunt) {
                         //'./wdio/tests/reports/reportNavigation.e2e.spec.js',
                         //'./wdio/tests/reports/grouping/reportGroupingViaColumnHeader.e2e.spec.js',
                         //'./wdio/tests/reports/sorting/reportSortingViaColumnHeader.e2e.spec.js',
-                        //'./wdio/tests/reports/reportTable.e2e.spec.js',
+                        './wdio/tests/reports/reportTable.e2e.spec.js',
                     ],
                     forms: [
                         //'./wdio/tests/forms/formAdd.e2e.spec.js',
@@ -622,7 +622,7 @@ module.exports = function(grunt) {
                     ],
                     relationships: [],
                     users: [
-                        './wdio/tests/users/usersTable.e2e.spec.js',
+                        //'./wdio/tests/users/usersTable.e2e.spec.js',
                     ]
                 }
             },
