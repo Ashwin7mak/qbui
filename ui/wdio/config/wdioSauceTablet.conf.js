@@ -6,10 +6,11 @@ var config = {
             //For tablet capabilities
             appiumVersion: '1.6.4',
             platformName: 'Android',
-            platformVersion: '6.0',
+            platformVersion: '7.0',
             browserName: 'Chrome',
             deviceName: 'Android GoogleAPI Emulator',
-            deviceOrientation: 'landscape',
+            deviceType: 'tablet',
+            deviceOrientation: 'potrait',
             tunnelIdentifier: process.env.ENV_TUNNEL_NAME,
             build           : 'WebdriverIO Jenkins Try Build #' + process.env.BUILD_NUMBER + ' - Git branch: ' + process.env.GIT_UIBRANCH + ' - Android Chrome Browser',
             tags            : [process.env.SAUCE_JOB_NAME + '_Android_Safari', 'try', 'Android', 'Chrome', process.env.BUILD_NUMBER, process.env.GIT_UIBRANCH],
