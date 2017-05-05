@@ -20,9 +20,10 @@ var config = {
         {
             maxInstances: 1,
             //For IPAD capabilities
-            appiumVersion: '1.6.4',
+            appiumVersion: '1.6.3',
             platformName: 'Android',
-            browserName: '',
+            platformVersion: '6.0',
+            browserName: 'Chrome',
             deviceName: 'Android Emulator',
             deviceType: 'tablet',
             deviceOrientation: 'landscape',
