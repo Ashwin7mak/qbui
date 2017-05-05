@@ -23,7 +23,7 @@ var config = {
             appiumVersion: '1.6.4',
             platformName: 'Android',
             platformVersion: '5.0',
-            browserName: 'browser',
+            browserName: 'android',
             deviceName: 'Android Emulator',
             deviceType: 'tablet',
             deviceOrientation: 'landscape',
