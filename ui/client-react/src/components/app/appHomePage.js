@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Component} from "react";
 import {I18nMessage} from '../../utils/i18nMessage';
 import EmptyImage from '../../../src/assets/images/QB_logo_ghost-opt.svg';
 import Locale from '../../../../reuse/client/src/locales/locale';
@@ -7,10 +7,15 @@ import './appHomePage.scss';
 /**
  * App Home page (displays when no app or table is selected)
  */
-const AppHomePage = React.createClass({
-    contextTypes: {
-        touch: React.PropTypes.bool
-    },
+
+export class AppHomePage extends Component {
+    constructor(props) {
+        super(props);
+
+        this.getPlaceHolderText = this.getPlaceHolderText.bind(this);
+        this.horizontalPlaceHolder = this.horizontalPlaceHolder.bind(this);
+        this.verticalPlaceHolder = this.verticalPlaceHolder.bind(this);
+    }
 
     getPlaceHolderText() {
         return (
@@ -18,7 +23,7 @@ const AppHomePage = React.createClass({
                 <I18nMessage message="grid.no_rows"/>
             </div>
         );
-    },
+    }
 
     horizontalPlaceHolder() {
         return (
@@ -28,7 +33,7 @@ const AppHomePage = React.createClass({
                 </div>
             </div>
         );
-    },
+    }
 
     verticalPlaceHolder() {
         return (
@@ -38,7 +43,7 @@ const AppHomePage = React.createClass({
                 </div>
             </div>
         );
-    },
+    }
 
     render() {
         return (
@@ -50,7 +55,7 @@ const AppHomePage = React.createClass({
                 </div>
             </div>
         );
-    },
-});
+    }
+}
 
 export default AppHomePage;

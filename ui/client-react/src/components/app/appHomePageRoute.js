@@ -107,7 +107,7 @@ export const AppHomePageRoute = React.createClass({
     },
 
     getStageHeadline() {
-        const userHeadLine = `${Locale.getMessage('app.homepage.welcomeTitle')} Mercury`;
+        const userHeadLine = `${Locale.getMessage('app.homepage.welcomeTitle')} ${this.props.selectedApp.name}`;
         return (
             <div className="appHomePageStage">
                 <div className="appStageHeadline">

@@ -12,7 +12,8 @@ export default {
             testMsg: "test"
         },
         apps: {
-            header: "Apps"
+            header: "Apps",
+            missing: "Stay tuned, my apps is coming soon"
         },
         app: {
             homepage: {

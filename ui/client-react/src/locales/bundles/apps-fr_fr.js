@@ -9,7 +9,8 @@ export default {
 
     messages: {
         apps: {
-            header: "Vos Apps"
+            header: "Vos Apps",
+            missing: "Restez connecté, mes applications arrivent bientôt"
         },
         app: {
             homepage: {
