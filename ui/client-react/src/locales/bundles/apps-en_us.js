@@ -28,8 +28,6 @@ export default {
                 feedbackTitle: "We want your feedback",
                 feedbackText: "Our team is waiting to hear from you! We’re so eager to hear what you think about Mercury that we’ve included a Feedback button on each page of your app.",
                 feedbackButton: "Give feedback",
-                feedbackMenuTitle: "Feed back",
-                reportFeedBackButton: "Report an issue",
                 tipTitle: "Nothing happened when I clicked...",
                 tipText: "This is work in progress, so if you click a button and it doesn’t do anything, no worries. We’re still working on that feature.",
                 helpTitle: "Need help?",
@@ -177,7 +175,10 @@ export default {
                     "de-de": "German"
                 },
                 preferences: "Preferences",
-                sign_out: "Sign out"
+                sign_out: "Sign out",
+                feedbackMenuButton: "Give feedback",
+                feedbackMenuTitle: "Feed back",
+                reportFeedBackButton: "Report an issue"
             }
         },
         fields: {

@@ -33,6 +33,12 @@ class ReDefaultTopNavGlobalActions extends Component {
         return (
             <div className="globalActions defaultTopNavGlobalActions">
                 <ul className="globalActionsList">
+                    <li className="link globalAction withDropdown">
+                        <UserFeedBack
+                            startTabIndex={this.props.startTabIndex}
+                            shouldOpenMenusUp={this.props.shouldOpenMenusUp}
+                        />
+                    </li>
                     {this.props.children}
                     {this.props.actions && this.props.actions.map((action, index) => (
                         <GlobalAction
@@ -44,12 +50,6 @@ class ReDefaultTopNavGlobalActions extends Component {
                             shouldOpenMenusUp={this.props.shouldOpenMenusUp}
                         />
                     ))}
-                    <li className="link globalAction withDropdown">
-                        <UserFeedBack
-                            startTabIndex={this.props.startTabIndex}
-                            shouldOpenMenusUp={this.props.shouldOpenMenusUp}
-                            />
-                    </li>
                     <li className="link globalAction withDropdown">
                         <UserDropDown
                             supportedLocales={Locale.getSupportedLocales()}

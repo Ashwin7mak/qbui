@@ -8,7 +8,7 @@ import UrlUtils from '../../../../../../client-react/src/utils/urlUtils';
 import './userFeedBack.scss';
 
 // Uses defaults messages an icons specific to a feedback dropdown in the DefaultTopNav
-const dropDownMessage = 'app.homepage.feedbackMenuTitle';
+const dropDownMessage = 'header.menu.feedbackMenuTitle';
 const dropDownIcon = 'Advertising';
 
 /**
@@ -32,11 +32,11 @@ class userFeedBack extends Component {
                 </a>
 
                 <DropDown.Menu>
-                    <MenuItem href={UrlUtils.getFeedBackLink()} target="_blank" className="preferencesButton">
-                        <I18nMessage message="app.homepage.feedbackButton"/>
+                    <MenuItem href={UrlUtils.getFeedBackLink()} target="_blank" className="feedbackMenuButton">
+                        <I18nMessage message="header.menu.feedbackMenuButton"/>
                     </MenuItem>
-                    <MenuItem href={UrlUtils.getReportFeedBackLink()} target="_blank" className="preferencesButton">
-                        <I18nMessage message="app.homepage.reportFeedBackButton"/>
+                    <MenuItem href={UrlUtils.getReportFeedBackLink()} target="_blank" className="reportFeedBackButton">
+                        <I18nMessage message="header.menu.reportFeedBackButton"/>
                     </MenuItem>
                 </DropDown.Menu>
             </DropDown>
