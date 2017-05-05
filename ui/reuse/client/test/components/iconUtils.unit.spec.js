@@ -57,16 +57,19 @@ describe('IconUtils', () => {
         expect(IconUtils.filterMatches(iconsByTag, "Addresses", "Location")).toBe(false);
         expect(IconUtils.filterMatches(iconsByTag, "Location", "Location")).toBe(false);
     });
+});
 
-    it('should return correct string', () => {
+describe('getIconTooltipTitle', () => {
+
+    it('returns correct string', () => {
         expect(IconUtils.getIconToolTipTitle(iconsByTag, 'apple')).toEqual('tag1, tag2');
     });
 
-    it('should handle incorrect parameters', () => {
+    it('handles incorrect parameters', () => {
         expect(IconUtils.getIconToolTipTitle(undefined, undefined)).toEqual('');
     });
 
-    it('should return empty string', () => {
+    it('returns empty string', () => {
         expect(IconUtils.getIconToolTipTitle([], '')).toEqual('');
     });
 });

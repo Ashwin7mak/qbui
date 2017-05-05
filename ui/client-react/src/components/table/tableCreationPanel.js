@@ -64,7 +64,7 @@ class TableCreationPanel extends React.Component {
         return (
             <div className="iconList">
                 {suggestedIcons.map((iconName, i) => (
-                    <button key={i} onClick={() => this.selectIcon(iconName)}>
+                    <button key={i} onClick={() => this.selectIcon(iconName)} type="button">
                         {this.getTableIcon(iconName)}
                     </button>))}
             </div>);
