@@ -1,6 +1,6 @@
 import React, {PropTypes} from 'react';
 
-import Locale from '../../locales/locale';
+import Locale from 'REUSE/locales/locale';
 
 // TEMPORARY IMPORTS FROM CLIENT-REACT
 import HtmlUtils from 'APP/utils/htmlUtils';

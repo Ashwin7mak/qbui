@@ -1,7 +1,7 @@
 import React, {PropTypes, Component} from 'react';
 import ButtonGroup from 'react-bootstrap/lib/ButtonGroup';
 import Button from 'react-bootstrap/lib/Button';
-import Icon from '../icon/icon';
+import Icon from 'REUSE/components/icon/icon';
 
 import './topNav.scss';
 
