@@ -337,24 +337,6 @@ const forms = (
         return newState;
     }
 
-    // case types.IS_FORM_DIRTY : {
-    //     if (!currentForm) {
-    //         return state;
-    //     }
-    //     let {tabIndex, sectionIndex, columnIndex} = action.content;
-    //     let formElements = updatedForm.formData.formMeta.tabs[tabIndex].sections[sectionIndex].columns[columnIndex].elements;
-    //     updatedForm.isFormDirty = false;
-    //     updatedForm.originalFormState = !updatedForm.originalFormState ? formElements : updatedForm.originalFormState;
-    //     console.log('formElements: ', formElements);
-    //     if (!(_.isEqual(updatedForm.originalFormState, formElements))) {
-    //         updatedForm.isFormDirty = true;
-    //     }
-    //
-    //     checkIsFormBuilderDirty();
-    //     newState[id] = updatedForm;
-    //     return newState;
-    // }
-
     case types.KEYBOARD_MOVE_FIELD_UP : {
         if (!currentForm) {
             return state;
