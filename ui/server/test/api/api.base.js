@@ -376,7 +376,7 @@
 
                 return new promise(function(resolve, reject) {
                     request(opts, function(error, response) {
-                        if (error || response.statusCode !== 200) {
+                        if (error || !(response.statusCode < 300)) {
                             // These specific errors were due to an environment issue in Jenkins that we needed to check for and retry
                             if (tries > 1 && error && (error.code === ERROR_HPE_INVALID_CONSTANT || error.code === ERROR_ENOTFOUND)) {
                                 tries--;

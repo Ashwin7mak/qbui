@@ -1,4 +1,5 @@
 const assert = require('assert');
+const assertStatusOk = require('../testHelpers/assertStatusOk');
 require('../../src/app');
 const config = require('../../src/config/environment');
 const recordBase = require('./recordApi.base')(config);
@@ -181,7 +182,7 @@ function assertFieldsWereReturned(fields) {
 }
 
 function assertFieldWasCreatedWithUniqueName(payload) {
-    assert.equal(payload.statusCode, constants.HttpStatusCode.OK);
+    assertStatusOk(payload.statusCode);
 
     // Assert the server returns the id of the new field
     assert.notEqual(payload.createdField.id, null);
@@ -198,7 +199,7 @@ function assertFieldWasCreatedWithUniqueName(payload) {
 }
 
 function assertFieldWasCreated(payload) {
-    assert.equal(payload.statusCode, constants.HttpStatusCode.OK, 'Expected creating a new field to be successful, but it failed');
+    assertStatusOk(payload.statusCode);
 
     // Assert the server returns the id of the new field
     assert.notEqual(payload.createdField.id, null, 'The server did not return a new id for the created field');
@@ -214,7 +215,7 @@ function assertFieldWasCreated(payload) {
 }
 
 function assertFieldWasUpdated(payload) {
-    assert.equal(payload.statusCode, constants.HttpStatusCode.OK, 'Expected the field update to be successful, but it failed');
+    assertStatusOk(payload.statusCode);
 
     // The response body is empty on a patch request
     assert.equal(payload.responseBody, '', 'The body was not empty on a patch request. Core probably changed something');
