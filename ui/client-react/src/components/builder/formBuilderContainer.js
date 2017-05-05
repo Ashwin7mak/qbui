@@ -39,6 +39,9 @@ let formBuilderContainerContent = null;
 
 const mapStateToProps = state => {
     let currentForm = getFormByContext(state, CONTEXT.FORM.VIEW);
+    let fields = state.fields[0];
+    let isFormDirty = (_.has(currentForm, 'isPendingEdits') ? currentForm.isPendingEdits : false);
+    let isFieldPropertiesDirty = (_.has(fields, 'isPendingEdits') ? fields.isPendingEdits : false);
 
     return {
         currentForm,
@@ -49,7 +52,7 @@ const mapStateToProps = state => {
         toolPaletteChildrenTabIndex: (_.has(currentForm, 'toolPaletteChildrenTabIndex') ? currentForm.toolPaletteChildrenTabIndex[0] : "-1"),
         formFocus: (_.has(currentForm, 'formFocus') ? currentForm.formFocus[0] : undefined),
         toolPaletteFocus: (_.has(currentForm, 'toolPaletteFocus') ? currentForm.toolPaletteFocus[0] : undefined),
-        isFormDirty: (_.has(currentForm, 'isFormDirty') ? currentForm.isFormDirty : undefined),
+        isPendingEdits: isFormDirty || isFieldPropertiesDirty,
         isOpen: state.builderNav.isNavOpen,
         isCollapsed: state.builderNav.isNavCollapsed
     };
@@ -180,7 +183,7 @@ export const FormBuilderContainer = React.createClass({
     },
 
     cancelEditingForm() {
-        if (this.props.isFormDirty) {
+        if (this.props.isPendingEdits) {
             AppHistory.showPendingEditsConfirmationModal(this.onCancel, this.saveClicked, function() {HideAppModal();});
         } else {
             this.onCancel();

@@ -21,15 +21,10 @@ const forms = (
     function checkIsFormBuilderDirty(tabIndex = 0, sectionIndex = 0, columnIndex = 0) {
         let formElements = Object.assign({}, updatedForm.formData.formMeta.tabs[tabIndex].sections[sectionIndex].columns[columnIndex].elements);
         // updatedForm.originalFormState = !updatedForm.originalFormState ? formElements : updatedForm.originalFormState;
-        updatedForm.isFormDirty = false;
+        updatedForm.isPendingEdits = false;
         if (!_.isEqual(currentForm.originalFormBuilderState, formElements)) {
-            updatedForm.isFormDirty = true;
+            updatedForm.isPendingEdits = true;
         }
-        console.log('updatedForm.originalFormState: ', updatedForm.originalFormBuilderState);
-        console.log('formElements: ', formElements);
-        console.log('do they equal each other? ', _.isEqual(updatedForm.originalFormBuilderState, formElements));
-        console.log('!_.isEqual(updatedForm.originalFormState, formElements) ', !_.isEqual(updatedForm.originalFormBuilderState, formElements));
-        console.log('updatedForm.isFormDirty: ', updatedForm.isFormDirty);
     }
 
     // reducer - no mutations!
