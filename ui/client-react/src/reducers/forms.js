@@ -19,13 +19,17 @@ const forms = (
     }
 
     function checkIsFormBuilderDirty(tabIndex = 0, sectionIndex = 0, columnIndex = 0) {
-        let formElements = updatedForm.formData.formMeta.tabs[tabIndex].sections[sectionIndex].columns[columnIndex].elements;
+        let formElements = Object.assign({}, updatedForm.formData.formMeta.tabs[tabIndex].sections[sectionIndex].columns[columnIndex].elements);
+        // updatedForm.originalFormState = !updatedForm.originalFormState ? formElements : updatedForm.originalFormState;
         updatedForm.isFormDirty = false;
-        updatedForm.originalFormState = !updatedForm.originalFormState ? formElements : updatedForm.originalFormState;
-
-        if (!(_.isEqual(updatedForm.originalFormState, formElements))) {
+        if (!_.isEqual(currentForm.originalFormBuilderState, formElements)) {
             updatedForm.isFormDirty = true;
         }
+        console.log('updatedForm.originalFormState: ', updatedForm.originalFormBuilderState);
+        console.log('formElements: ', formElements);
+        console.log('do they equal each other? ', _.isEqual(updatedForm.originalFormBuilderState, formElements));
+        console.log('!_.isEqual(updatedForm.originalFormState, formElements) ', !_.isEqual(updatedForm.originalFormBuilderState, formElements));
+        console.log('updatedForm.isFormDirty: ', updatedForm.isFormDirty);
     }
 
     // reducer - no mutations!
@@ -61,10 +65,10 @@ const forms = (
         newState[id] = ({
             id,
             formData: action.formData,
+            originalFormBuilderState: Object.assign({}, action.formData.formMeta.tabs[0].sections[0].columns[0].elements),
             loading: false,
             errorStatus: null
         });
-
         return newState;
     }
 
@@ -281,7 +285,6 @@ const forms = (
         updatedForm.selectedFields[0] = action.content.location;
         updatedForm.previouslySelectedField = undefined;
 
-        checkIsFormBuilderDirty();
         newState[id] = updatedForm;
         return newState;
     }
@@ -300,7 +303,6 @@ const forms = (
         updatedForm.previouslySelectedField[0] = action.content.location;
         updatedForm.selectedFields[0] = undefined;
 
-        checkIsFormBuilderDirty();
         newState[id] = updatedForm;
         return newState;
     }
@@ -316,7 +318,6 @@ const forms = (
 
         updatedForm.isDragging[0] = true;
 
-        checkIsFormBuilderDirty();
         newState[id] = updatedForm;
         return newState;
     }
@@ -332,28 +333,27 @@ const forms = (
 
         updatedForm.isDragging[0] = false;
 
-        checkIsFormBuilderDirty();
         newState[id] = updatedForm;
         return newState;
     }
 
-    case types.IS_FORM_DIRTY : {
-        if (!currentForm) {
-            return state;
-        }
-        let {tabIndex, sectionIndex, columnIndex} = action.content;
-        let formElements = updatedForm.formData.formMeta.tabs[tabIndex].sections[sectionIndex].columns[columnIndex].elements;
-        updatedForm.isFormDirty = false;
-        updatedForm.originalFormState = !updatedForm.originalFormState ? formElements : updatedForm.originalFormState;
-        console.log('formElements: ', formElements);
-        if (!(_.isEqual(updatedForm.originalFormState, formElements))) {
-            updatedForm.isFormDirty = true;
-        }
-
-        checkIsFormBuilderDirty();
-        newState[id] = updatedForm;
-        return newState;
-    }
+    // case types.IS_FORM_DIRTY : {
+    //     if (!currentForm) {
+    //         return state;
+    //     }
+    //     let {tabIndex, sectionIndex, columnIndex} = action.content;
+    //     let formElements = updatedForm.formData.formMeta.tabs[tabIndex].sections[sectionIndex].columns[columnIndex].elements;
+    //     updatedForm.isFormDirty = false;
+    //     updatedForm.originalFormState = !updatedForm.originalFormState ? formElements : updatedForm.originalFormState;
+    //     console.log('formElements: ', formElements);
+    //     if (!(_.isEqual(updatedForm.originalFormState, formElements))) {
+    //         updatedForm.isFormDirty = true;
+    //     }
+    //
+    //     checkIsFormBuilderDirty();
+    //     newState[id] = updatedForm;
+    //     return newState;
+    // }
 
     case types.KEYBOARD_MOVE_FIELD_UP : {
         if (!currentForm) {
