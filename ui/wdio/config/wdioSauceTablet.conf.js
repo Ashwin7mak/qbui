@@ -6,9 +6,9 @@ var config = {
             //For tablet capabilities
             appiumVersion: '1.6.4',
             platformName: 'Android',
-            platformVersion: '7.0',
+            platformVersion: '6.0',
             browserName: 'Chrome',
-            deviceName: 'Android GoogleAPI Emulator',
+            deviceName: 'Android Emulator',
             deviceType: 'tablet',
             deviceOrientation: 'potrait',
             automationName: 'Selendroid',
