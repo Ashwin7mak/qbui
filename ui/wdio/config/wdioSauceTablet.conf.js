@@ -4,7 +4,7 @@ var config = {
         {
             maxInstances: 5,
             //For tablet capabilities
-            browserName: 'chrome',
+            browserName: 'android',
             appiumVersion: '1.6.4',
             platformName: 'Android',
             deviceName: 'Amazon Kindle Fire HD 8.9 GoogleAPI Emulator',
