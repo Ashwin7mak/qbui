@@ -54,16 +54,11 @@ module.exports = function(e2eBase, chance) {
             const comments = projGen.genComments({
                 topicId: assignment.assignmentId,
                 authors: [assignment.assigneeName, project.projectLeader]
-            },
-                chance.integer({min: minComment, max: maxComment}));
+            }, chance.integer({min: minComment, max: maxComment}));
+
             // make records input for the comments for the assignment
             let commentRecords = makeRecordsInput(createdApp, projGen.tableCommentsName, projGen.getCommentPropFromFid, comments);
-            if (commentRecords && commentRecords.length) {
-                projPromises.push(function() {
-                    return addBulkRecords(createdApp, projGen.tableCommentsName,
-                        getTable(createdApp, projGen.tableCommentsName), commentRecords);
-                });
-            }
+            return commentRecords;
         }
     };
 
@@ -73,6 +68,8 @@ module.exports = function(e2eBase, chance) {
         //create a set of assignments for each task
         let {minAssignee, maxAssignee} = minMaxToGen;
 
+        let commentRecs = [];
+        let assignmentRecs = [];
         tasks.forEach(task => {
             const assignees = projGen.genAssignees({
                 taskName: task.name,
@@ -83,24 +80,32 @@ module.exports = function(e2eBase, chance) {
                 chance.integer({min: minAssignee, max: maxAssignee}));
 
             //add some comments for the assignments progress
-            assignees.forEach(assignment =>
-                genAndSetupCommentRecords(assignment, project, createdApp, minMaxToGen, projPromises));
-
+            assignees.forEach(assignment => {
+                let moreCommentRecs = genAndSetupCommentRecords(assignment, project, createdApp, minMaxToGen, projPromises);
+                commentRecs = commentRecs.concat(moreCommentRecs);
+            });
 
             // make records input for the assignees for the task
-            let assigneeRecords = makeRecordsInput(createdApp, projGen.tableAssignmentsName, projGen.getAssigneePropFromFid, assignees);
-            if (assigneeRecords && assigneeRecords.length) {
-                projPromises.push(function() {
-                    return addBulkRecords(createdApp, projGen.tableAssignmentsName,
-                        getTable(createdApp, projGen.tableAssignmentsName), assigneeRecords);
-                });
-            }
+            let moreAssigneeRecords = makeRecordsInput(createdApp, projGen.tableAssignmentsName, projGen.getAssigneePropFromFid, assignees);
+            assignmentRecs = assignmentRecs.concat(moreAssigneeRecords);
         });
-
+        if (commentRecs && commentRecs.length) {
+            projPromises.push(function() {
+                return addBulkRecords(createdApp, projGen.tableCommentsName,
+                    getTable(createdApp, projGen.tableCommentsName), commentRecs);
+            });
+        }
+        if (assignmentRecs && assignmentRecs.length) {
+            projPromises.push(function() {
+                return addBulkRecords(createdApp, projGen.tableAssignmentsName,
+                    getTable(createdApp, projGen.tableAssignmentsName), assignmentRecs);
+            });
+        }
     };
+
     const genAndSetupTaskRecords = function(project, everyone, company, createdApp, minMaxToGen, projPromises) {
 
-        let {minTask, maxTask, minAssignee, maxAssignee, minComment, maxComment} = minMaxToGen;
+        let {minTask, maxTask} = minMaxToGen;
         // create a set of tasks for the project with assignee from employee list
         projGen.initTasks(everyone);
 
@@ -116,12 +121,8 @@ module.exports = function(e2eBase, chance) {
         }
 
         // make records input for the tasks for the project
-        let taskRecords = makeRecordsInput(createdApp, projGen.tableTasksName, projGen.getTaskPropFromFid, tasks);
-        if (taskRecords && taskRecords.length) {
-            projPromises.push(function() {
-                return addBulkRecords(createdApp, projGen.tableTasksName, getTable(createdApp, projGen.tableTasksName), taskRecords);
-            });
-        }
+        return  makeRecordsInput(createdApp, projGen.tableTasksName, projGen.getTaskPropFromFid, tasks);
+
     };
 
     const getAndSetupProjectRecords = function(company, peopleSets, createdApp, minMaxToGen, projPromises) {
@@ -134,20 +135,26 @@ module.exports = function(e2eBase, chance) {
         }, chance.integer({min: minMaxToGen.minProj, max: minMaxToGen.maxProj}));
 
         //create tasks for each project
+        let taskRecs = [];
         const tasksTable = getTable(createdApp, projGen.tableTasksName);
         projects.forEach((project) => {
             //assign a leader to the project
             project.projectLeader = chance.pickone(managers.concat(directors)).fullName;
             if (tasksTable) {
-                genAndSetupTaskRecords(project, everyone, company, createdApp, minMaxToGen, projPromises);
+                let moreTasks = genAndSetupTaskRecords(project, everyone, company, createdApp, minMaxToGen, projPromises);
+                taskRecs = taskRecs.concat(moreTasks);
             }
         });
 
-        let projectRecords = makeRecordsInput(createdApp, projGen.tableProjectsName, projGen.getProjectPropFromFid, projects);
-        projectRecords.forEach((projectRecord) => {
+        if (taskRecs && taskRecs.length) {
             projPromises.push(function() {
-                return addBulkRecords(createdApp, projGen.tableProjectsName, getTable(createdApp, projGen.tableProjectsName), [projectRecord]);
+                return addBulkRecords(createdApp, projGen.tableTasksName, getTable(createdApp, projGen.tableTasksName), taskRecs);
             });
+        }
+
+        let projectRecords = makeRecordsInput(createdApp, projGen.tableProjectsName, projGen.getProjectPropFromFid, projects);
+        projPromises.push(function() {
+            return addBulkRecords(createdApp, projGen.tableProjectsName, getTable(createdApp, projGen.tableProjectsName), projectRecords);
         });
     };
 
