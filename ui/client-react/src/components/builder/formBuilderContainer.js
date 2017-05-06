@@ -22,10 +22,7 @@ import {ENTER_KEY, SPACE_KEY} from '../../../../reuse/client/src/components/keyb
 import * as tabIndexConstants from '../formBuilder/tabindexConstants';
 import KeyboardShortcuts from '../../../../reuse/client/src/components/keyboardShortcuts/keyboardShortcuts';
 import _ from 'lodash';
-import NotificationManager from '../../../../reuse/client/src/scripts/notificationManager';
-import QBIcon from '../../../../reuse/client/src/components/icon/icon';
 import Icon from '../../../../reuse/client/src/components/icon/icon';
-// import IconUtils from '../../../../reuse/client/src/components/icon/iconUtils';
 import {DragDropContext} from 'react-dnd';
 import TouchBackend from 'react-dnd-touch-backend';
 import FormBuilderCustomDragLayer from '../formBuilder/formBuilderCustomDragLayer';
