@@ -4,13 +4,12 @@ var config = {
         {
             maxInstances: 5,
             //For tablet capabilities
+            browserName: 'Browser',
             appiumVersion: '1.6.4',
             platformName: 'Android',
-            platformVersion: '7.0',
-            browserName: '',
-            deviceName: 'Android GoogleAPI Emulator',
-            deviceType: 'tablet',
+            deviceName: 'Amazon Kindle Fire HD 8.9 GoogleAPI Emulator',
             deviceOrientation: 'potrait',
+            platformVersion: '4.4',
             automationName: 'Selendroid',
             tunnelIdentifier: process.env.ENV_TUNNEL_NAME,
             build           : 'WebdriverIO Jenkins Try Build #' + process.env.BUILD_NUMBER + ' - Git branch: ' + process.env.GIT_UIBRANCH + ' - Android Chrome Browser',
