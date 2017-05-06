@@ -135,17 +135,13 @@ export const FormBuilderContainer = React.createClass({
     },
 
     onCancel() {
-        HideAppModal();
-        const {appId, tblId} = this.props.match.params;
-
-        NavigationUtils.goBackToLocationOrTable(appId, tblId, this.props.redirectRoute);
-    },
-
-    cancelEditingForm() {
         if (this.props.isPendingEdits) {
             AppHistory.showPendingEditsConfirmationModal(this.onCancel, this.saveClicked, function() {HideAppModal();});
         } else {
-            this.onCancel();
+            HideAppModal();
+            const {appId, tblId} = this.props.match.params;
+
+            NavigationUtils.goBackToLocationOrTable(appId, tblId, this.props.redirectRoute);
         }
     },
 
@@ -168,7 +164,7 @@ export const FormBuilderContainer = React.createClass({
     getRightAlignedButtons() {
         return (
             <div>
-                <Button tabIndex={tabIndexConstants.CANCEL_BUTTON_TABINDEX} bsStyle="primary" onClick={this.cancelEditingForm} className="alternativeTrowserFooterButton"><I18nMessage message="nav.cancel"/></Button>
+                <Button tabIndex={tabIndexConstants.CANCEL_BUTTON_TABINDEX} bsStyle="primary" onClick={this.onCancel} className="alternativeTrowserFooterButton"><I18nMessage message="nav.cancel"/></Button>
                 <Button tabIndex={tabIndexConstants.SAVE_BUTTON_TABINDEX} bsStyle="primary" onClick={this.saveClicked} className="mainTrowserFooterButton"><I18nMessage message="nav.save"/></Button>
             </div>
         );
@@ -181,7 +177,7 @@ export const FormBuilderContainer = React.createClass({
         }
         return (
             <div>
-                <Button tabIndex={tabIndexConstants.CANCEL_BUTTON_TABINDEX} bsStyle="primary" onClick={this.cancelEditingForm} className="alternativeTrowserFooterButton"><Icon iconFont="iconTableSturdy" icon="arrowleft"/>{back}</Button>
+                <Button tabIndex={tabIndexConstants.CANCEL_BUTTON_TABINDEX} bsStyle="primary" onClick={this.onCancel} className="alternativeTrowserFooterButton"><Icon iconFont="iconTableSturdy" icon="arrowleft"/>{back}</Button>
             </div>
         );
     },
@@ -240,7 +236,7 @@ export const FormBuilderContainer = React.createClass({
         } else if (selectedField) {
             this.deselectField();
         } else {
-            this.cancelEditingForm();
+            this.onCancel();
         }
     },
 
