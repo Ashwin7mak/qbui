@@ -45,11 +45,13 @@
 
         button {
             margin: 10px 0 10px 10px;
+            font-size: $font-size-dialog-text;
         }
         display: flex;
         .qbIcon {
-            font-size: 18px;
+            font-size: $size-iconfont-medium;
             padding-right: 10px;
+            vertical-align: middle;
         }
     }
 
