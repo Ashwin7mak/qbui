@@ -17,16 +17,6 @@ const forms = (
         // remove any entries where the entry's formData.recordId matches the passed in id
         return _.omit(newState, ['formData.recordId', _id]);
     }
-
-    function checkIsFormBuilderDirty(tabIndex = 0, sectionIndex = 0, columnIndex = 0) {
-        let formElements = Object.assign({}, updatedForm.formData.formMeta.tabs[tabIndex].sections[sectionIndex].columns[columnIndex].elements);
-
-        updatedForm.isPendingEdits = false;
-        if (!_.isEqual(currentForm.originalFormBuilderState, formElements)) {
-            updatedForm.isPendingEdits = true;
-        }
-    }
-
     // reducer - no mutations!
     switch (action.type) {
 
@@ -60,7 +50,6 @@ const forms = (
         newState[id] = ({
             id,
             formData: action.formData,
-            originalFormBuilderState: Object.assign({}, action.formData.formMeta.tabs[0].sections[0].columns[0].elements),
             loading: false,
             errorStatus: null
         });
@@ -155,7 +144,7 @@ const forms = (
 
         updatedForm.selectedFields[0] = newLocation;
 
-        checkIsFormBuilderDirty();
+        updatedForm.isPendingEdits = true;
         newState[action.id] = updatedForm;
         return newState;
     }
@@ -211,7 +200,7 @@ const forms = (
 
         updatedForm.selectedFields[0] = newLocation;
 
-        checkIsFormBuilderDirty();
+        updatedForm.isPendingEdits = true;
         newState[action.id] = updatedForm;
         return newState;
     }
@@ -228,7 +217,7 @@ const forms = (
             location
         );
 
-        checkIsFormBuilderDirty();
+        updatedForm.isPendingEdits = true;
         newState[id] = updatedForm;
         return newState;
     }
@@ -353,7 +342,7 @@ const forms = (
             -1
         );
 
-        checkIsFormBuilderDirty();
+        updatedForm.isPendingEdits = true;
         newState[id] = updatedForm;
         return newState;
     }
@@ -379,7 +368,7 @@ const forms = (
             1
         );
 
-        checkIsFormBuilderDirty();
+        updatedForm.isPendingEdits = true;
         newState[id] = updatedForm;
         return newState;
     }

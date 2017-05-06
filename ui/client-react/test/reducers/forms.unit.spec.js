@@ -113,7 +113,6 @@ describe('Forms reducer functions', () => {
                     id: 'view',
                     loading: false,
                     formData: {formMeta: {appId: currentAppId, tableId: currentblId, tabs: [{sections: [{columns: [{elements: []}]}]}]}},
-                    originalFormBuilderState: {},
                     errorStatus: null
                 }
             });
@@ -136,7 +135,6 @@ describe('Forms reducer functions', () => {
                     id: 'view',
                     loading: false,
                     formData: {formMeta: {appId: backUpAppId, tableId: backUpTblId, tabs: [{sections: [{columns: [{elements: []}]}]}]}},
-                    originalFormBuilderState: {},
                     errorStatus: null
                 }
             });
