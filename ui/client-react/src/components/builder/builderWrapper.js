@@ -63,7 +63,10 @@ export const BuilderWrapper = React.createClass({
                         <Switch>
                             {
                                 this.props.routes.map((route, i) => {
-                                    return RouteWithSubRoutes(route, i);
+                                    let routeProps = {
+                                        apps: this.state.apps.apps,
+                                    };
+                                    return RouteWithSubRoutes(route, i, routeProps);
                                 })
                             }
                         </Switch>

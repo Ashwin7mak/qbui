@@ -24,6 +24,8 @@ import KeyboardShortcuts from '../../../../reuse/client/src/components/keyboardS
 import _ from 'lodash';
 import NotificationManager from '../../../../reuse/client/src/scripts/notificationManager';
 import QBIcon from '../../../../reuse/client/src/components/icon/icon';
+import Icon from '../../../../reuse/client/src/components/icon/icon';
+// import IconUtils from '../../../../reuse/client/src/components/icon/iconUtils';
 import {DragDropContext} from 'react-dnd';
 import TouchBackend from 'react-dnd-touch-backend';
 import FormBuilderCustomDragLayer from '../formBuilder/formBuilderCustomDragLayer';
@@ -142,6 +144,14 @@ export const FormBuilderContainer = React.createClass({
         NavigationUtils.goBackToLocationOrTable(appId, tblId, this.props.redirectRoute);
     },
 
+    cancelEditingForm() {
+        if (this.props.isPendingEdits) {
+            AppHistory.showPendingEditsConfirmationModal(this.onCancel, this.saveClicked, function() {HideAppModal();});
+        } else {
+            this.onCancel();
+        }
+    },
+
     removeField() {
         if (this.props.removeFieldFromForm) {
             return this.props.removeFieldFromForm(this.props.currentForm.id, this.props.selectedField);
@@ -168,9 +178,13 @@ export const FormBuilderContainer = React.createClass({
     },
 
     getLeftAlignButtons() {
+        let back = Locale.getMessage('builder.formBuilder.back');
+        if (this.props.redirectRoute && this.props.apps && this.props.apps[0].name) {
+            back = `${Locale.getMessage('builder.formBuilder.backTo')} ${this.props.apps[0].name}`;
+        }
         return (
             <div>
-                <Button tabIndex={tabIndexConstants.CANCEL_BUTTON_TABINDEX} bsStyle="primary" onClick={this.cancelEditingForm} className="alternativeTrowserFooterButton"><QBIcon icon="user"/><I18nMessage message="nav.cancel"/></Button>
+                <Button tabIndex={tabIndexConstants.CANCEL_BUTTON_TABINDEX} bsStyle="primary" onClick={this.cancelEditingForm} className="alternativeTrowserFooterButton"><Icon iconFont="iconTableSturdy" icon="arrowleft"/>{back}</Button>
             </div>
         );
     },
@@ -189,14 +203,6 @@ export const FormBuilderContainer = React.createClass({
             centerAlignedButtons={this.getTrowserActions()}
             leftAlignedButtons={this.getLeftAlignButtons()}
         />;
-    },
-
-    cancelEditingForm() {
-        if (this.props.isPendingEdits) {
-            AppHistory.showPendingEditsConfirmationModal(this.onCancel, this.saveClicked, function() {HideAppModal();});
-        } else {
-            this.onCancel();
-        }
     },
 
     updateChildrenTabIndex(e) {
