@@ -26,6 +26,10 @@ const mockActions = {
     deselectField(_formId, _location) {}
 };
 
+const mockAppHistory = {
+    showPendingEditsConfirmationModal() {}
+};
+
 const previousLocation = '/somewhere/over/the/rainbow';
 const testParamsProp = {params: {appId, tblId}};
 const testLocationProp = {query: {formType, previous: previousLocation}};
@@ -51,6 +55,7 @@ describe('FormBuilderContainer', () => {
     beforeEach(() => {
         jasmineEnzyme();
         FormBuilderRewireAPI.__Rewire__('FormBuilder', FormBuilderMock);
+        FormBuilderRewireAPI.__Rewire__('AppHistory', mockAppHistory);
         NewfieldsMenuRewireAPI.__Rewire__('FieldTokenInMenu', FieldTokenInMenu);
         FormBuilderRewireAPI.__Rewire__('FieldProperties', FieldPropertiesMock);
         FormBuilderRewireAPI.__Rewire__('FormBuilderCustomDragLayer', () => null); // Returning null so that DragDropContext error is not thrown in unit test
@@ -62,6 +67,7 @@ describe('FormBuilderContainer', () => {
         spyOn(mockActions, 'keyboardMoveFieldDown');
         spyOn(mockActions, 'removeFieldFromForm');
         spyOn(mockActions, 'deselectField');
+        spyOn(mockAppHistory, 'showPendingEditsConfirmationModal');
     });
 
     afterEach(() => {
@@ -69,6 +75,7 @@ describe('FormBuilderContainer', () => {
         NewfieldsMenuRewireAPI.__ResetDependency__('FieldTokenInMenu');
         FormBuilderRewireAPI.__ResetDependency__('FieldProperties');
         FormBuilderRewireAPI.__ResetDependency__('FormBuilderCustomDragLayer');
+        FormBuilderRewireAPI.__ResetDependency__('AppHistory');
 
         mockActions.loadForm.calls.reset();
         mockActions.updateForm.calls.reset();
@@ -119,6 +126,34 @@ describe('FormBuilderContainer', () => {
             component.instance().onCancel();
 
             expect(NavigationUtils.goBackToLocationOrTable).toHaveBeenCalledWith(appId, tblId, previousLocation);
+        });
+
+        it('will not exit form builder if pendingEdits is true', () => {
+            spyOn(NavigationUtils, 'goBackToLocationOrTable');
+
+            component = shallow(<FormBuilderContainer match={testParamsProp} isPendingEdits={true} location={testLocationProp} redirectRoute={previousLocation} />);
+
+            component.instance().onCancel();
+
+            let appModal = component.find('.appModal');
+            console.log('appModal: ', appModal);
+            expect(NavigationUtils.goBackToLocationOrTable).not.toHaveBeenCalled();
+        });
+
+        fit('will invoke showPendingEditsConfirmationModal when isPendingEdits is true', () => {
+            spyOn(NavigationUtils, 'goBackToLocationOrTable');
+
+            component = shallow(<FormBuilderContainer match={testParamsProp}
+                                                      isPendingEdits={true}
+                                                      location={testLocationProp}
+                                                      redirectRoute={previousLocation} />);
+            instance = component.instance();
+            instance().onCancel();
+
+            // let appModal = component.find('.appModal');
+            // console.log('appModal: ', appModal);
+            // expect(mockAppHistory.showPendingEditsConfirmationModal).toHaveBeenCalledWith(instance.onCancel, instance.onSave, () => {});
+            expect(mockAppHistory.showPendingEditsConfirmationModal).toHaveBeenCalled();
         });
     });
 
