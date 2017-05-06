@@ -53,6 +53,7 @@ const forms = (
             loading: false,
             errorStatus: null
         });
+
         return newState;
     }
 
