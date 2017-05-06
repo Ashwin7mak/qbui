@@ -36,7 +36,7 @@
         padding: 0 10px;
 
         .qbIcon {
-            font-size: $size-iconfont-medium;
+            font-size: 18px;
             vertical-align: middle;
             margin-bottom: $spacing-tiny;
             padding-right: $spacing-xxx-small;
@@ -51,6 +51,11 @@
                 overflow: hidden;
                 text-overflow: ellipsis;
                 margin-top: 3px;
+
+                span {
+                    display: inline-flex;
+                    margin-left: 3px;
+                }
 
                 .primaryIcon {
                     margin-right: 10px;
