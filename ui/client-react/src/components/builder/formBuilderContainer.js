@@ -220,21 +220,22 @@ export const FormBuilderContainer = React.createClass({
         }
     },
 
-    deselectField() {
-        if (this.props.deselectField) {
-            this.props.deselectField(this.props.currentForm.id, this.props.selectedField);
-        }
-    },
-
     escapeCurrentContext() {
         let selectedField = this.props.selectedField;
         let formId = this.props.currentForm.id;
+
         if (this.props.formBuilderChildrenTabIndex === tabIndexConstants.FORM_TAB_INDEX) {
-            this.props.toggleFormBuilderChildrenTabIndex(formId, tabIndexConstants.FORM_TAB_INDEX);
+            if (this.props.toggleFormBuilderChildrenTabIndex) {
+                this.props.toggleFormBuilderChildrenTabIndex(formId, tabIndexConstants.FORM_TAB_INDEX);
+            }
         } else if (this.props.toolPaletteChildrenTabIndex === tabIndexConstants.TOOL_PALETTE_TABINDEX) {
-            this.props.toggleToolPaletteChildrenTabIndex(formId, tabIndexConstants.TOOL_PALETTE_TABINDEX);
+            if (this.props.toggleToolPaletteChildrenTabIndex) {
+                this.props.toggleToolPaletteChildrenTabIndex(formId, tabIndexConstants.TOOL_PALETTE_TABINDEX);
+            }
         } else if (selectedField) {
-            this.deselectField();
+            if (this.props.deselectField) {
+                this.props.deselectField(this.props.currentForm.id, this.props.selectedField);
+            }
         } else {
             this.onCancel();
         }
