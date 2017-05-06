@@ -7,13 +7,13 @@ import QbIcon from '../qbIcon/qbIcon';
 const QB_MODAL_ALERT = 'alert';
 const QB_MODAL_STANDARD = 'standard';
 const QB_MODAL_SUCCESS = 'success';
-const QB_MODAL_ERROR = 'error';
+const QB_MODAL_DELETE = 'delete';
 /**
  * qbModal's size automatically defaults to small, QB_MODAL_SIZE will be left as an array,
  * so in the future when there are specs for a 'medium' size it can be added here
  */
 const QB_MODAL_SIZE = ['large'];
-const QB_MODAL_TYPES = [QB_MODAL_ALERT, QB_MODAL_STANDARD, QB_MODAL_SUCCESS, QB_MODAL_ERROR];
+const QB_MODAL_TYPES = [QB_MODAL_ALERT, QB_MODAL_STANDARD, QB_MODAL_SUCCESS, QB_MODAL_DELETE];
 
 const QBModal = React.createClass({
     propTypes: {
@@ -102,7 +102,7 @@ const QBModal = React.createClass({
             icon = 'check-reversed';
         }
 
-        if (this.props.type === QB_MODAL_ERROR) {
+        if (this.props.type === QB_MODAL_DELETE) {
             classes.push('modalIcon--error');
             icon = 'errorincircle-fill';
         }

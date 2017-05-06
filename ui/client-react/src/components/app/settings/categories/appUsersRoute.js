@@ -144,22 +144,6 @@ const AppUsersRoute = React.createClass({
         return this.props.selectedUserRows.length === this.props.appUsers.length;
     },
 
-    addRoleIds() {
-        let appUsers = this.props.appUsers;
-        let selectedRows = this.props.selectedRows;
-        this.props.appRoles.forEach(role => {
-            if (appUsers[role.id]) {
-                appUsers[role.id].forEach(function(user) {
-                    user.roleName = role.name;
-                    user.name = `${user.firstName} ${user.lastName}`;
-                    user.roleId = role.id;
-                    user.isSelected = selectedRows.indexOf(user.userId) > -1 ;
-                    appUsersFiltered.push(user);
-                });
-            }
-        });
-        return appUsersFiltered;
-    },
     render() {
 
         return (

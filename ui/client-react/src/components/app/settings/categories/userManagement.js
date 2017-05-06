@@ -86,6 +86,7 @@ class UserManagement extends React.Component {
         });
         return appUsersFiltered;
     }
+
     getActionsCell(_cellDataRow, rowProps) {
         return <UserRowActions
             rowId={rowProps.rowData.userId}
@@ -100,6 +101,7 @@ class UserManagement extends React.Component {
             isStickyCell: true
         };
     }
+
     /**
      * get the 1st column header (select-all toggle)
      * @returns {React}
@@ -118,10 +120,12 @@ class UserManagement extends React.Component {
             </div>
         );
     }
+
     onClickToggleSelectedRow(id, roleId) {
         const {onClickToggleSelectedRow} = this.props;
         onClickToggleSelectedRow(id, roleId);
     }
+
     render() {
         const resolvedRows = this.createUserRows();
         const cellFormatter = (cellData) => {return <span>{cellData}</span>;};

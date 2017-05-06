@@ -1,5 +1,5 @@
 import * as actions from '../constants/actions';
-import Locale from '../locales/locales';
+import Locale from '../../../reuse/client/src/locales/locale';
 import Fluxxor from 'fluxxor';
 import Logger from '../utils/logger';
 var logger = new Logger();

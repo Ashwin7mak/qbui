@@ -77,7 +77,7 @@ class UserActions extends React.Component {
                 leftButtonName={Locale.getMessage('app.users.cancel')}
                 leftButtonOnClick={this.cancelBulkDelete}
                 bodyMessage={bodymsg}
-                type="error"
+                type="delete"
                 title={msg}/>);
     }
     getEmailAction() {
