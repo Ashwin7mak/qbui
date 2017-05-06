@@ -616,9 +616,9 @@ module.exports = function(grunt) {
                         //'./wdio/tests/forms/formEditValidation.e2e.spec.js'
                     ],
                     tables: [
-                        './wdio/tests/tables/tableCreate.e2e.spec.js',
-                        './wdio/tests/tables/tableEdit.e2e.spec.js',
-                        './wdio/tests/tables/tableHomePage.e2e.spec.js'
+                        //'./wdio/tests/tables/tableCreate.e2e.spec.js',
+                        //'./wdio/tests/tables/tableEdit.e2e.spec.js',
+                        //'./wdio/tests/tables/tableHomePage.e2e.spec.js'
                     ],
                     relationships: [],
                     users: [
