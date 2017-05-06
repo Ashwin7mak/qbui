@@ -71,12 +71,11 @@ export const RecordRoute = React.createClass({
 
         // TODO: currently this.props.match.rptId is the embeddedReport's unique ID, perhaps use a different matcher
         // for rptId and uniqueId. We can then simplify some of the following smelly code.
-        let embeddedReport;
+        let embeddedReport = {};
         if (rptId !== undefined && typeof rptId === 'string' &&
                 (rptId.includes(CONTEXT.REPORT.EMBEDDED) || rptId.includes(CONTEXT.FORM.DRAWER))) {
             const embeddedReportId = rptId;
-            // TODO: move to reducers/embeddedReport
-            embeddedReport = _.find(this.props.embeddedReports, {'id' : embeddedReportId});
+            embeddedReport = getEmbeddedReportByContext(this.props.embeddedReports, embeddedReportId) || {};
             rptId = embeddedReport.rptId;
         }
 
@@ -442,10 +441,10 @@ export const RecordRoute = React.createClass({
         if (props.isDrawerContext) {
             let {rptId} = this.props.match.params;
             // TODO: remove the following after we move to reducers/embeddedReport
-            let embeddedReport;
+            let embeddedReport = {};
             if (rptId.includes(CONTEXT.REPORT.EMBEDDED) || rptId.includes(CONTEXT.FORM.DRAWER)) {
                 const embeddedReportId = rptId;
-                embeddedReport = getEmbeddedReportByContext(this.props.embeddedReports, embeddedReportId);
+                embeddedReport = getEmbeddedReportByContext(this.props.embeddedReports, embeddedReportId) || {};
                 rptId = embeddedReport.rptId;
             }
             return  embeddedReport;
