@@ -288,7 +288,7 @@ describe('FormBuilderContainer', () => {
             instance = component.instance();
             instance.escapeCurrentContext();
 
-            expect(mockActions.toggleFormBuilderChildrenTabIndex).toHaveBeenCalled();
+            expect(mockActions.toggleFormBuilderChildrenTabIndex).toHaveBeenCalledWith(currentForm.id, tabIndexConstants.FORM_TAB_INDEX);
         });
 
         it('escapeCurrentContext hotKey will invoke toggleToolPaletteChildrenTabIndex if toolPaletteChildrenTabIndex has the same index as tool palette tab index', () => {
@@ -306,7 +306,7 @@ describe('FormBuilderContainer', () => {
             instance = component.instance();
             instance.escapeCurrentContext();
 
-            expect(mockActions.toggleToolPaletteChildrenTabIndex).toHaveBeenCalled();
+            expect(mockActions.toggleToolPaletteChildrenTabIndex).toHaveBeenCalledWith(currentForm.id, tabIndexConstants.TOOL_PALETTE_TABINDEX);
         });
 
         it('escapeCurrentContext hotKey will invoke deselectField if a field is selected', () => {
@@ -315,7 +315,7 @@ describe('FormBuilderContainer', () => {
                                                     currentForm={currentForm}
                                                     formBuilderChildrenTabIndex={undefined}
                                                     toolPaletteChildrenTabIndex={undefined}
-                                                    selectedField={[]}
+                                                    selectedField={selectedField}
                                                     deselectField={mockActions.deselectField}
                                                     loadForm={mockActions.loadForm}
                                                     updateForm={mockActions.updateForm} />);
@@ -324,7 +324,7 @@ describe('FormBuilderContainer', () => {
             instance = component.instance();
             instance.escapeCurrentContext();
 
-            expect(mockActions.deselectField).toHaveBeenCalled();
+            expect(mockActions.deselectField).toHaveBeenCalledWith(currentForm.id, selectedField);
         });
 
         it(`enter and space will not toggle the children tab indices if the tabIndex is currently ${tabIndexConstants.FORM_TAB_INDEX}`, () => {
@@ -361,7 +361,7 @@ describe('FormBuilderContainer', () => {
 
             expect(mockActions.removeFieldFromForm).toHaveBeenCalledWith(currentForm.id, selectedField);
         });
-        
+
         it('will move a field up if the selected form element is not at index 0', () => {
             component = shallow(<FormBuilderContainer
                 selectedField={selectedField}
