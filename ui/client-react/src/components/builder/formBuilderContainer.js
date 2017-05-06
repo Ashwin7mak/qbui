@@ -134,14 +134,18 @@ export const FormBuilderContainer = React.createClass({
         this.props.loadForm(appId, tblId, null, (formType || 'view'), NEW_FORM_RECORD_ID);
     },
 
+    closeFormBuilder() {
+        const {appId, tblId} = this.props.match.params;
+
+        NavigationUtils.goBackToLocationOrTable(appId, tblId, this.props.redirectRoute);
+    },
+
     onCancel() {
         if (this.props.isPendingEdits) {
-            AppHistory.showPendingEditsConfirmationModal(this.onCancel, this.saveClicked, function() {HideAppModal();});
+            AppHistory.showPendingEditsConfirmationModal(this.saveClicked, this.closeFormBuilder, function() {HideAppModal();});
         } else {
             HideAppModal();
-            const {appId, tblId} = this.props.match.params;
-
-            NavigationUtils.goBackToLocationOrTable(appId, tblId, this.props.redirectRoute);
+            this.closeFormBuilder();
         }
     },
 

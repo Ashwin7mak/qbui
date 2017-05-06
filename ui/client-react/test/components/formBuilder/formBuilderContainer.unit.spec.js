@@ -124,12 +124,16 @@ describe('FormBuilderContainer', () => {
             spyOn(NavigationUtils, 'goBackToLocationOrTable');
 
             component = shallow(<FormBuilderContainer match={testParamsProp}
+                                                      isPendingEdits={false}
                                                       location={testLocationProp}
                                                       redirectRoute={previousLocation}/>);
 
-            component.instance().onCancel();
+            instance = component.instance();
+            spyOn(instance, 'closeFormBuilder').and.callThrough();
+            instance.onCancel();
 
             expect(NavigationUtils.goBackToLocationOrTable).toHaveBeenCalledWith(appId, tblId, previousLocation);
+            expect(instance.closeFormBuilder).toHaveBeenCalled();
         });
 
         it('will not exit form builder if pendingEdits is true', () => {
@@ -146,8 +150,6 @@ describe('FormBuilderContainer', () => {
         });
 
         it('will invoke showPendingEditsConfirmationModal if pendingEdits is true', () => {
-            spyOn(NavigationUtils, 'goBackToLocationOrTable');
-
             component = mount(<FormBuilderContainer match={testParamsProp}
                                                       isPendingEdits={true}
                                                       location={testLocationProp}
