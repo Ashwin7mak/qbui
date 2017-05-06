@@ -371,4 +371,50 @@ describe('FormBuilderContainer', () => {
             expect(mockActions.keyboardMoveFieldDown).not.toHaveBeenCalled();
         });
     });
+
+    describe('formBuilderContainer save and cancel footer', () => {
+        it('will return two right align buttons on the footer', () => {
+            component = mount(<FormBuilderContainer
+                selectedField={selectedField}
+                location={location}
+                loadForm={mockActions.loadForm}
+                keyboardMoveFieldDown={mockActions.keyboardMoveFieldDown}
+            />);
+
+            expect(component.find('.rightIcons .alternativeTrowserFooterButton').length).toEqual(1);
+            expect(component.find('.mainTrowserFooterButton').length).toEqual(1);
+        });
+
+        it('will return a single left align button on the footer with app name', () => {
+            component = mount(<FormBuilderContainer
+                selectedField={selectedField}
+                location={location}
+                loadForm={mockActions.loadForm}
+                redirectRoute={true}
+                apps={[{name: 'mockAppName'}]}
+                keyboardMoveFieldDown={mockActions.keyboardMoveFieldDown}
+            />);
+            instance = component.instance();
+            let leftFooterButton = component.find('.leftActions .alternativeTrowserFooterButton');
+
+            expect(component.find('.leftActions .alternativeTrowserFooterButton').length).toEqual(1);
+            expect(leftFooterButton.text()).toEqual('Back to mockAppName');
+        });
+
+        it('will return a single left align button on the footer without app name', () => {
+            component = mount(<FormBuilderContainer
+                selectedField={selectedField}
+                location={location}
+                loadForm={mockActions.loadForm}
+                redirectRoute={false}
+                apps={undefined}
+                keyboardMoveFieldDown={mockActions.keyboardMoveFieldDown}
+            />);
+            instance = component.instance();
+            let leftFooterButton = component.find('.leftActions .alternativeTrowserFooterButton');
+
+            expect(component.find('.leftActions .alternativeTrowserFooterButton').length).toEqual(1);
+            expect(leftFooterButton.text()).toEqual('Back');
+        });
+    });
 });
