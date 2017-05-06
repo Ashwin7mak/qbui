@@ -121,7 +121,9 @@ describe('FormBuilderContainer', () => {
         it('exits form builder', () => {
             spyOn(NavigationUtils, 'goBackToLocationOrTable');
 
-            component = shallow(<FormBuilderContainer match={testParamsProp} location={testLocationProp} redirectRoute={previousLocation} />);
+            component = shallow(<FormBuilderContainer match={testParamsProp}
+                                                      location={testLocationProp}
+                                                      redirectRoute={previousLocation}/>);
 
             component.instance().onCancel();
 
@@ -131,31 +133,35 @@ describe('FormBuilderContainer', () => {
         it('will not exit form builder if pendingEdits is true', () => {
             spyOn(NavigationUtils, 'goBackToLocationOrTable');
 
-            component = shallow(<FormBuilderContainer match={testParamsProp} isPendingEdits={true} location={testLocationProp} redirectRoute={previousLocation} />);
+            component = shallow(<FormBuilderContainer match={testParamsProp}
+                                                      isPendingEdits={true}
+                                                      location={testLocationProp}
+                                                      redirectRoute={previousLocation}/>);
 
             component.instance().onCancel();
 
             let appModal = component.find('.appModal');
-            console.log('appModal: ', appModal);
             expect(NavigationUtils.goBackToLocationOrTable).not.toHaveBeenCalled();
         });
 
-        fit('will invoke showPendingEditsConfirmationModal when isPendingEdits is true', () => {
+        it('will invoke showPendingEditsConfirmationModal if pendingEdits is true', () => {
             spyOn(NavigationUtils, 'goBackToLocationOrTable');
 
-            component = shallow(<FormBuilderContainer match={testParamsProp}
+            component = mount(<FormBuilderContainer match={testParamsProp}
                                                       isPendingEdits={true}
                                                       location={testLocationProp}
-                                                      redirectRoute={previousLocation} />);
-            instance = component.instance();
-            instance().onCancel();
+                                                      redirectRoute={previousLocation}
+                                                      loadForm={mockActions.loadForm}/>);
 
-            // let appModal = component.find('.appModal');
-            // console.log('appModal: ', appModal);
-            // expect(mockAppHistory.showPendingEditsConfirmationModal).toHaveBeenCalledWith(instance.onCancel, instance.onSave, () => {});
+            instance = component.instance();
+            instance.onCancel();
+            spyOn(instance, 'onCancel');
+            spyOn(instance, 'saveClicked');
+            expect(component.find('#appModal').length).toEqual(1);
             expect(mockAppHistory.showPendingEditsConfirmationModal).toHaveBeenCalled();
         });
     });
+
 
     describe('showing FormBuilder', () => {
         const testFormData = {fields: [], formMeta: {name: 'some form', includeBuiltIns: false}};
