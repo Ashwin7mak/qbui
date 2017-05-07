@@ -272,7 +272,7 @@
                         request(opts, function(error, response) {
                             if (error) {
                                 reject(new Error(error));
-                            } else if (requestUtils.wasRequestSuccessful(response.statusCode)) {
+                            } else if (!requestUtils.wasRequestSuccessful(response.statusCode)) {
                                 reject(response);
                             } else {
                                 resolve(response);
