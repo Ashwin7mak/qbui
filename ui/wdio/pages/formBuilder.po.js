@@ -130,7 +130,7 @@ class formBuilderPage {
         topNavPO.modifyThisForm.click();
         this.firstField.waitForVisible();
         browser.pause(fiveSeconds);
-        return this;
+        return this.getFieldLabels(); // add'l delay, not used yet
     }
     removeField(index) {
         // Removes the specified field by clicking on its DELETE icon
