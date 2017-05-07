@@ -14,6 +14,9 @@ var basePath = require('../../../common/src/constants').ROUTES.BASE_CLIENT_ROUTE
     function getBaseOpts(config) {
         // for hot loading we need to prefix the requests in the html wih the hot loader url
         HOT_BASE = 'http://' + config.ip + ':' + (config.webpackDevServerPort || 3000);
+
+        let vendorFileName = new baseClientRoute(null, config).generateBundleFilePath('vendor');
+
         BASE_PROPS = {
             title   : '',
             lang    : 'en-us',
@@ -21,6 +24,7 @@ var basePath = require('../../../common/src/constants').ROUTES.BASE_CLIENT_ROUTE
             settings: {views: viewPath},
             hostBase: (config.isProduction || config.noHotLoad) ? '' : HOT_BASE,
             bundleFileName: config.isProduction ? 'bundle.min.js' : 'bundle.js',
+            vendorFileName: vendorFileName,
             wistiaJs1: config.wistiaScriptPart1,
             wistiaJs2: config.wistiaScriptPart2,
             isClientPerfTrackingEnabled: config.isProduction || !!config.isClientPerfTrackingEnabled

@@ -2,9 +2,18 @@
 
 .formBuilderContainer {
     height: 100%;
-
+    .listOfElementsContainer {
+        height: calc(100% - #{$trowser-footer-height});
+        @include medium-breakpoint {
+            //for tablets and smaller, to keep footer from vanishing
+            height: 100%;
+        }
+    }
     .formBuilderContainerContent {
-        height: calc(100% - #{$formBuilder-footer-height});
+        //By giving it a border the same size as the focus border and a transparent background,
+        //it keeps the container from 'jumping' on focus
+        border: $stroke-width-thin solid transparent;
+        height: calc(100% - #{$trowser-footer-height});
         @include medium-breakpoint {
             //for tablets and smaller, to keep footer from vanishing
             height: 100%;
@@ -14,8 +23,7 @@
         -webkit-overflow-scrolling: touch; /* This allows for momentum scrolling on touch devices */
         &:focus {
             outline: none;
-            border: $stroke-width-thin solid $border-focused-color;
-            border-bottom: #{$stroke-width-thin + 4} solid $border-focused-color;
+            border: $stroke-width-thin solid $input-text-focus-border-color;
         }
     }
 
@@ -32,12 +40,6 @@
 
     .formContainer {
         padding-bottom: 90px;
-        .editForm {
-            &:focus {
-                outline: none;
-                border: $stroke-width-thin solid $border-focused-color;
-            }
-        }
     }
 
     .qbPanel .qbPanelHeader .qbPanelHeaderTitle .qbPanelHeaderTitleText {
