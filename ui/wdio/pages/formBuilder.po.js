@@ -174,7 +174,10 @@ class formBuilderPage {
     }
     slowDrag(target, sourceLabel) {
         // Moves the cursor to specified target field and waits until target displays the the specified label
+        browser.moveToObject(target);
+        browser.pause(oneSecond);
         browser.moveToObject(target + ' .fieldLabel');
+        browser.pause(oneSecond);
         let targetLabel;
         browser.waitUntil(function() {
             targetLabel = browser.element(target).getText();
