@@ -271,7 +271,7 @@
                         request(opts, function(error, response) {
                             if (error) {
                                 reject(new Error(error));
-                            } else if (response.statusCode !== 200) {
+                            } else if (response.statusCode >= 300) {
                                 reject(response);
                             } else {
                                 resolve(response);
