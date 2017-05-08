@@ -38,7 +38,6 @@
         .qbIcon {
             font-size: 18px;
             vertical-align: middle;
-            margin-right: 6px;
         }
 
         .breadcrumbs {
@@ -52,6 +51,11 @@
 
                 * {
                     vertical-align: middle;
+                }
+
+                span {
+                    display: inline-flex;
+                    margin-left: 3px;
                 }
 
                 .primaryIcon {
