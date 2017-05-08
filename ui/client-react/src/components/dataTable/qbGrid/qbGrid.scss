@@ -30,6 +30,12 @@ $edit-icon-font-size: 18px;
     // when there are only 1 or two rows. We may need to re-visit this if we start adding content below the grid.
     min-height: 275px;
 
+    // There may be cases where no rows are shown when we display a grid in an embedded report. Override the default
+    // 275px to a lower number.
+    .embeddedReportContainer & {
+        min-height: 50px;
+    }
+
     .qbTbody {
         background-color: $color-black-100;
     }
@@ -79,6 +85,7 @@ $edit-icon-font-size: 18px;
 
         &:last-of-type {
             border-right: 1px solid $grid-column-header-border-color;
+            width: 100%;
         }
     }
 
@@ -267,6 +274,10 @@ $edit-icon-font-size: 18px;
     .qbRow:not(.editing) .qbCell,
     .qbCell .tipChildWrapper {
         cursor: pointer;
+        // embedded tables in trowser are not clickable/editable
+        .trowser & {
+            cursor: auto;
+        }
     }
 
     // styles for specific types of data cells
@@ -295,6 +306,7 @@ $edit-icon-font-size: 18px;
     // div sitting inside the table cell wrapping the contents
     .cellWrapper {
         width: 100%;
+        height: 100%;
         padding-top: 6px;
         position: relative;
 

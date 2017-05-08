@@ -12,11 +12,12 @@ export default {
             testMsg: "test"
         },
         apps: {
-            header: "Apps"
+            header: "Apps",
+            missing: "Stay tuned, my apps is coming soon"
         },
         app: {
             homepage: {
-                welcomeTitle: "Welcome to Mercury Beta",
+                welcomeTitle: "Welcome to",
                 welcomeText: "While you learn your way around, use this area in place of your app homepage. " +
                 "This is your real app in Mercury. You won’t see your app homepage yet, but all your " +
                 "data is here. Work you do here displays immediately in Classic view, too.",
@@ -34,6 +35,9 @@ export default {
                 helpText: "We want you to be successful; that’s why we’re always here to help.",
                 helpLinkPreText: "Please ",
                 helpLinkText: "contact our Care team"
+            },
+            dashboards: {
+                missing: "Stay tuned, app dashboards are coming soon"
             },
             settings: "Settings",
             users: {
@@ -593,7 +597,8 @@ export default {
                 first: "Option 1",
                 second: "Option 2",
                 third: "Option 3"
-            }
+            },
+            modify: 'Modify form'
         },
         featureSwitchAdmin: {
             defaultFeatureName: "Feature",

@@ -3,11 +3,11 @@ import {shallow} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
 
 import {ReportColumnHeaderMenu, __RewireAPI__ as RewireAPI} from '../../../src/components/dataTable/reportGrid/reportColumnHeaderMenu';
-import * as FieldConsts from '../../../src/constants/schema';
-import * as query from '../../../src/constants/query';
+import * as FieldConsts from 'APP/constants/schema';
+import * as query from 'APP/constants/query';
 import MenuItem from 'react-bootstrap/lib/MenuItem';
-import {CONTEXT} from '../../../src/actions/context';
-import serverTypeConstants from '../../../../common/src/constants';
+import {CONTEXT} from 'APP/actions/context';
+import serverTypeConstants from 'COMMON/constants';
 
 const testPrependText = 'groupTest';
 const MockLocale = {
