@@ -33,7 +33,7 @@ describe('Drawer Container functions ', () => {
             spyOn(props, 'closeDrawer');
         });
 
-        it('renders drawer container, drawer and transition group', () => {
+        it('renders drawer container and transition group', () => {
             let routeDiv = mount(<MemoryRouter><DrawerContainer {...props}/></MemoryRouter>);
             let drawerContainerWrapper = routeDiv.find('DrawerContainer');
             expect(drawerContainerWrapper.length).toBe(1);
