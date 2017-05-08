@@ -90,7 +90,7 @@ describe('Relationships - View child table on form tests: ', () => {
 
         // Check the displayed record count
         let recordCount = relationshipsPO.recordsCountEl(childTableFormSection).getText();
-        expect(recordCount).toEqual('3 records');
+        expect(recordCount).toContain('3 records');
 
         // Check the number of created related records in the table
         let rowCount = reportContentPO.getAllRows.value.length;
@@ -157,11 +157,11 @@ describe('Relationships - View child table on form tests: ', () => {
 
         // Check the table name
         let sectionText =  relationshipsPO.qbPanelHeaderTitleTextEl(childTableFormSection).getText();
-        expect(sectionText).toEqual('Child Table A');
+        expect(sectionText).toContain('Child Table A');
 
         // Check the displayed record count
         let recordCount = relationshipsPO.recordsCountEl(childTableFormSection).getText();
-        expect(recordCount).toEqual('0 records');
+        expect(recordCount).toContain('0 records');
 
         // Check there are no records in the child table
         browser.waitForExist('.qbRow', 1000, true);
@@ -176,14 +176,14 @@ describe('Relationships - View child table on form tests: ', () => {
 
         // Assert that the name of the link is for the Parent table
         let parentLinkText = relationshipsPO.tableHomePageLinkEl.getText();
-        expect(parentLinkText).toEqual('Child Table A');
+        expect(parentLinkText).toContain('Child Table A');
 
         // Click the tablehomepage link (should send you back to the table homepage of the child table)
         relationshipsPO.clickTableHomePageLink();
 
         // Check the stage title to make sure we are on the right report
         let tableHomepageText = reportContentPO.stageTableHomepageTitleEl.getText();
-        expect(tableHomepageText).toEqual('Child Table A Home');
+        expect(tableHomepageText).toContain('Child Table A Home');
 
         // Check the url as well
         let currentURL = browser.url().value;
