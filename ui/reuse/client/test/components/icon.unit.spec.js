@@ -23,7 +23,7 @@ describe('Icon', () => {
     });
 });
 
-describe('tooltipTitle', () => {
+describe('tooltipTitle prop', () => {
 
     beforeEach(() => {
         jasmineEnzyme();
@@ -40,7 +40,7 @@ describe('tooltipTitle', () => {
     it('does not render QBToolTip if tooltipTitle is provided as prop', () => {
         component = shallow(<Icon icon="video" />);
 
-        expect(component.find({tipId: 'toolTip-video'})).toBeUndefined();
-        expect(component.find(QBToolTip)).toBeUndefined();
+        expect(component.find({tipId: 'toolTip-video'}).length).toEqual(0);
+        expect(component.find({plainMessage: 'Videocamera'}).length).toEqual(0);
     });
 });
