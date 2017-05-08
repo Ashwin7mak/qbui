@@ -5,7 +5,7 @@ import TestUtils from 'react-addons-test-utils';
 import _ from 'lodash';
 
 
-import QbGrid from '../../../src/components/dataTable/qbGrid/qbGrid';
+import {QbGrid} from '../../../src/components/dataTable/qbGrid/qbGrid';
 import ColumnTransformer from '../../../src/components/dataTable/qbGrid/columnTransformer';
 import RowTransformer from '../../../src/components/dataTable/qbGrid/rowTransformer';
 import QbIconActions, {__RewireAPI__ as QbIconActionsRewireAPI} from '../../../src/components/dataTable/qbGrid/qbIconActions';

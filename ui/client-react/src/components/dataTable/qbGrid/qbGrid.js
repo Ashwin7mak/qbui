@@ -23,7 +23,7 @@ import './qbGrid.scss';
 
 const ICON_ACTIONS_COLUMN_ID = 'ICON_ACTIONS';
 
-const QbGrid = React.createClass({
+export const QbGrid = React.createClass({
     propTypes: {
         /**
          * The total number of columns displayed on the grid. Passed in as a prop to prevent recalculating this value
@@ -461,15 +461,8 @@ const QbGrid = React.createClass({
     }
 });
 
-const mapStateToProps = (state) => {
-    return {
-        report: state.report,
-        record: state.record
-    };
-};
-
 const mapDispatchToProps = {
     moveColumn
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(DragDropContext(TouchBackend({enableMouseEvents: true, delay: 30}))(QbGrid));
+export default connect(null, mapDispatchToProps)(DragDropContext(TouchBackend({enableMouseEvents: true, delay: 30}))(QbGrid));
