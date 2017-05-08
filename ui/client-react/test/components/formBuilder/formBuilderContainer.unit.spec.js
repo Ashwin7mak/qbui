@@ -158,6 +158,7 @@ describe('FormBuilderContainer', () => {
             instance = component.instance();
             instance.onCancel();
 
+            //I am not rendering a modal in the DOM for this test. I am just verifying that it exists. Just making sure it does not accidentally get deleted.
             expect(component.find('#appModal').length).toEqual(1);
             expect(mockAppHistory.showPendingEditsConfirmationModal).toHaveBeenCalled();
         });
