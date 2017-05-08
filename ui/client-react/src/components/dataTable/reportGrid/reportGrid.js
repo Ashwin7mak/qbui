@@ -316,8 +316,7 @@ export const ReportGrid = React.createClass({
                     tblId: this.props.tblId,
                     rptId: this.props.rptId,
                     sortFids: this.props.sortFids,
-                    isOnlyOneColumnVisible: this.isOnlyOneColumnVisible(),
-                    inBuilderMode: this.props.inBuilderMode
+                    isOnlyOneColumnVisible: this.isOnlyOneColumnVisible()
                 }}/>);
         } else {
             // instead of grid, render a "no records" UI

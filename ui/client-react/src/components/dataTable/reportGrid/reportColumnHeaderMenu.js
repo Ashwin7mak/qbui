@@ -236,8 +236,7 @@ export class ReportColumnHeaderMenu extends Component {
     };
 
     render() {
-        let isDisabled = this.props.isOnlyOneColumnVisible;
-        let inBuilderMode = this.props.inBuilderMode;
+        let inBuilderMode = this.props.reportBuilder.inBuilderMode;
         let isHideOptionDisabled = this.props.isOnlyOneColumnVisible;
 
         return (
@@ -312,8 +311,13 @@ export class ReportColumnHeaderMenu extends Component {
 ReportColumnHeaderMenu.propTypes = {
     fieldDef: PropTypes.object,
     sortFids: PropTypes.array,
-    isOnlyOneColumnVisible: PropTypes.bool,
-    inBuilderMode : PropTypes.bool
+    isOnlyOneColumnVisible: PropTypes.bool
+};
+
+const mapStateToProps = (state) => {
+    return {
+        reportBuilder: state.reportBuilder
+    }
 };
 
 const mapDispatchToProps = (dispatch) => {
@@ -336,4 +340,4 @@ function convertSortingMessageToI18nMessage(prependText, message) {
     return Locale.getMessage(`report.menu.${prependText}.${message}`);
 }
 
-export default connect(null, mapDispatchToProps)(ReportColumnHeaderMenu);
+export default connect(mapStateToProps, mapDispatchToProps)(ReportColumnHeaderMenu);

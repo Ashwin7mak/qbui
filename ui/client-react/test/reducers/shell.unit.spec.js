@@ -151,16 +151,3 @@ describe('Nav reducer functions for changing locale', () => {
         });
     });
 });
-
-describe('Nav reducer functions for toggling builder mode', () => {
-    it('enter builder mode', () => {
-        const state = reducer(initialState, {type: types.ENTER_BUILDER_MODE});
-        expect(state.inBuilderMode).toEqual(true);
-    });
-
-    let openState = {inBuilderMode: true};
-    it('exit builder mode', () => {
-        const state = reducer(openState, {type: types.EXIT_BUILDER_MODE});
-        expect(state.inBuilderMode).toEqual(false);
-    });
-});

@@ -14,8 +14,7 @@ const shell = (
         trowserContent: null,
         openCount: 0,
         locale: Locale.getLocale(),
-        i18n: Locale.getI18nBundle(),
-        inBuilderMode: false
+        i18n: Locale.getI18nBundle()
     },
     action) => {
 
@@ -78,16 +77,6 @@ const shell = (
             ...state,
             locale: Locale.getLocale(),
             i18n: Locale.getI18nBundle()
-        };
-    case types.ENTER_BUILDER_MODE:
-        return {
-            ...state,
-            inBuilderMode: true
-        };
-    case types.EXIT_BUILDER_MODE:
-        return {
-            ...state,
-            inBuilderMode: false
         };
     default:
         // return existing state by default in redux

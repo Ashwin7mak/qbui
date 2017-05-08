@@ -90,6 +90,7 @@ describe('Report actions', () => {
     it('should create an action to exit builder mode', () => {
         expect(reportActions.exitBuilderMode(context)).toEqual(event(context, types.EXIT_BUILDER_MODE, {}));
     });
+
     it('closeFieldSelectMenu action dispatches type.CLOSE_FIELD_SELECT_MENU with closed parameter', () => {
         const expectedAction = event(context, types.CLOSE_FIELD_SELECT_MENU, {});
         expect(reportActions.closeFieldSelectMenu(context)).toEqual(expectedAction);

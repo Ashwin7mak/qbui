@@ -348,7 +348,7 @@ export const Nav = React.createClass({
     },
 
     render() {
-        let inBuilderMode = this.props.shell.inBuilderMode;
+        let inBuilderMode = this.props.reportBuilder.inBuilderMode;
         if (!this.state.apps || this.state.apps.apps === null) {
             // don't render anything until we've made this first api call without being redirected to V2
             // The common loading screen html is shared across server and client as an HTML file and
@@ -467,7 +467,7 @@ export const Nav = React.createClass({
                                     selectedUserRows: this.state.apps.selectedUserRows,
                                     scrollingReport: this.state.nav.scrollingReport,
                                     flux: flux,
-                                    inBuilderMode: this.props.shell.inBuilderMode
+                                    inBuilderMode: this.props.reportBuilder.inBuilderMode
                                 };
                                 return RouteWithSubRoutes(route, i, routeProps);
                             }
@@ -547,7 +547,8 @@ const mapStateToProps = (state) => {
         forms: state.forms,
         shell: state.shell,
         record: state.record,
-        report: state.report
+        report: state.report,
+        reportBuilder: state.reportBuilder
     };
 };
 

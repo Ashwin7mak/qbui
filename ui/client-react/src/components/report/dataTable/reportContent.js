@@ -972,7 +972,6 @@ export const ReportContent = React.createClass({
                                 openRecordForEdit={this.openRecordForEditInTrowser}
                                 handleValidateFieldValue={this.handleValidateFieldValue}
                                 sortFids={this.props.reportData.data ? this.props.reportData.data.sortFids : []}
-                                inBuilderMode={this.props.inBuilderMode}
 
                                 // for relationships phase-1
                                 phase1={this.props.phase1}
