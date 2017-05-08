@@ -49,6 +49,9 @@ let NavWrapper = React.createClass({
         let paramVals = this.props.match.params;
         if (paramVals.appId) {
             this.props.flux.actions.selectAppId(paramVals.appId);
+            if (this.isAppTablesHydrated(paramVals.appId)) {
+                this.props.flux.actions.loadHydratedApp(paramVals.appId);
+            }
 
             this.props.dispatch(FeatureSwitchActions.getStates(paramVals.appId));
 
