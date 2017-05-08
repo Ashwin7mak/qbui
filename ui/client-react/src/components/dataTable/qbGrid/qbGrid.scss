@@ -74,6 +74,18 @@ $edit-icon-font-size: 18px;
         // set the default z-index of header cells so the one displaying the popup menu can be made higher than these
         z-index: $zindex-qbGrid-th;
 
+        &.placeholderCell {
+            background-color: $color-orange-100;
+            border-left: 1px dashed $color-black-600;
+            border-right: 1px dashed $color-black-600;
+            border-bottom: none;
+            border-top: 1px dashed $color-black-600;
+
+            &:last-of-type {
+                border-right: 1px dashed $color-black-600;
+            }
+        }
+
         // set the z-index of the header cell for the sticky column so the other column headers scroll underneath
         &.stickyCell {
             z-index: $zindex-qbGrid-header-stickyCell;
@@ -192,6 +204,24 @@ $edit-icon-font-size: 18px;
         background-color: $color-black-100;
     }
 
+    //== styling for the placeholder column cells
+    .qbRow .placeholderCell {
+        left: 0;
+        width: 80px;
+        max-width: 80px;
+        position: relative;
+        vertical-align: top;
+        background-color: $color-orange-100;
+        border-left: 1px dashed $color-black-600;
+        border-right: 1px dashed $color-black-600;
+        border-bottom: none;
+        border-top: none;
+
+        &:last-of-type {
+            border-right: 1px dashed $color-black-600;
+        }
+    }
+
     //== header row above groups of rows
     .groupHeader .subHeaderCell {
         // padding-left: $grid-default-group-padding + 3;   // TODO: We need to see what the spec requires for this. It looks strange with it right now.
@@ -278,6 +308,11 @@ $edit-icon-font-size: 18px;
         .trowser & {
             cursor: auto;
         }
+    }
+
+    .qbRow:not(.editing) .placeholderCell,
+    .placeholderCell .tipChildWrapper {
+        cursor: default;
     }
 
     // styles for specific types of data cells
@@ -562,12 +597,15 @@ $edit-icon-font-size: 18px;
     .qbRow:last-of-type .qbCell {
         border-bottom: 1px solid $grid-line-color;
     }
+    .qbRow:last-of-type .placeholderCell {
+        border-bottom: 1px dashed $color-black-600;
+    }
 
     // row hover highlighting - only done while not inline editing
     &:not(.inlineEditing) {
 
         // highlight the row when mouse is over the row
-        .qbRow:hover .qbCell {
+        .qbRow:hover .qbCell:not(.placeholderCell) {
             background: $grid-row-hover-color;
         }
 
@@ -579,8 +617,8 @@ $edit-icon-font-size: 18px;
         // It makes it more complicated... but... if we don't, then we can't style the way we want below
         // because CSS does not have a *previous sibling* selector. We have no way to change the border
         // of the row *above* the row that will be edited. Only the one after.
-        .qbRow.willEdit .qbCell:not(.stickyCell),
-        .qbRow.willEdit + .qbRow .qbCell:not(.stickyCell) {
+        .qbRow.willEdit .qbCell:not(.stickyCell):not(.placeholderCell),
+        .qbRow.willEdit + .qbRow .qbCell:not(.stickyCell):not(.placeholderCell) {
             border-top: 1px solid $grid-onpencil-row-border-color;
             transition: border 150ms ease-in;
         }
