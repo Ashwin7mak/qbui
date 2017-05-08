@@ -18,7 +18,7 @@ describe('Drawer Container functions ', () => {
         DrawerContainerRewireAPI.__ResetDependency__('RecordRouteWithUniqueId');
     });
 
-    describe('Root drawer', () => {
+    describe('Root Drawer Container', () => {
         let props = {
             rootDrawer: true,
             closeDrawer: () => {},
@@ -33,7 +33,7 @@ describe('Drawer Container functions ', () => {
             spyOn(props, 'closeDrawer');
         });
 
-        it('test render of drawer container, drawer and transition group', () => {
+        it('renders drawer container, drawer and transition group', () => {
             let routeDiv = mount(<MemoryRouter><DrawerContainer {...props}/></MemoryRouter>);
             let drawerContainerWrapper = routeDiv.find('DrawerContainer');
             expect(drawerContainerWrapper.length).toBe(1);
@@ -59,7 +59,7 @@ describe('Drawer Container functions ', () => {
             expect(backdrop.length).toBe(0);
         });
 
-        it('test that container renders a drawer when route match occurs', () => {
+        it('renders a drawer when route match occurs', () => {
             let routeDiv = mount(<MemoryRouter initialEntries={[matchedUrl]}>
                 <DrawerContainer {...props}/>
             </MemoryRouter>);
@@ -69,7 +69,7 @@ describe('Drawer Container functions ', () => {
             expect(drawerWrapper.length).toBe(1);
         });
 
-        it('test that container does not render a drawer when path does not match', () => {
+        it('does not render a drawer when path does not match', () => {
             let routeDiv = mount(<MemoryRouter initialEntries={["/qbase/app/app1/table/tbl1/report/rpt1/records"]}>
                 <DrawerContainer {...props}/>
             </MemoryRouter>);
@@ -79,7 +79,7 @@ describe('Drawer Container functions ', () => {
             expect(drawerWrapper.length).toBe(0);
         });
 
-        it('test that container render results in showDrawerContainer function being invoked', () => {
+        it('renders results in showDrawerContainer function being invoked', () => {
             let routeDiv = mount(<MemoryRouter initialEntries={[matchedUrl]}>
                 <DrawerContainer {...props}/>
             </MemoryRouter>);
@@ -89,7 +89,7 @@ describe('Drawer Container functions ', () => {
         });
     });
 
-    describe('Non-root drawer', () => {
+    describe('Non-root Drawer Container', () => {
         let childProps = {
             rootDrawer: false,
             closeDrawer: () => {
@@ -117,7 +117,7 @@ describe('Drawer Container functions ', () => {
             expect(backdrop.length).toBe(0);
         });
 
-        it('test that drawer container is rendered when a match occurs', () => {
+        it('renders when a url match occurs', () => {
             let childRoute = mount(
                 <MemoryRouter initialEntries={[matchedUrl]}>
                     <DrawerContainer {...childProps}/>
@@ -126,7 +126,7 @@ describe('Drawer Container functions ', () => {
             expect(drawer.length).toBe(1);
         });
 
-        it('test that drawer container is not rendered when a match does not occur', () => {
+        it('does not render when a url match does not occur', () => {
             let childRoute = mount(
                 <MemoryRouter>
                     <DrawerContainer {...childProps}/>

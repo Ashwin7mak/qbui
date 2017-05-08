@@ -36,7 +36,7 @@ describe('Open/edit Record actions', () => {
         expect(recordActions.openRecord(obj.recId, obj.nextRecordId, obj.previousRecordId)).toEqual(event(obj.recId, types.OPEN_RECORD, obj));
     });
 
-    it('When an viewContextId is provided, opening a record creates an action using the viewContextId instead of recordId', () => {
+    it('When a viewContextId is provided, opening a record creates an action using the viewContextId instead of recordId', () => {
         let obj = {
             recId: 1,
             nextRecordId: 2,
