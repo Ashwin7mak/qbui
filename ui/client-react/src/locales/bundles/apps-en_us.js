@@ -334,6 +334,10 @@ export default {
                 newTable: "New table based on this column",
                 columnProps: "Column properties",
                 fieldProps: "Field properties"
+            },
+            drawer: {
+                title: "Hidden fields",
+                info: "Add a field to the report",
             }
         },
         errorMessagePopup: {
