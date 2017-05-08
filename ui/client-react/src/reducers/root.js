@@ -5,6 +5,7 @@ import fields from './fields';
 import forms from './forms';
 import record from './record';
 import report from './report';
+import reportBuilder from './reportBuilder';
 import search from './search';
 import shell from './shell';
 import featureSwitches from './featureSwitches';
@@ -23,6 +24,7 @@ export default combineReducers({
     forms,
     record,
     report,
+    reportBuilder,
     search,
     shell,
     tableCreation,

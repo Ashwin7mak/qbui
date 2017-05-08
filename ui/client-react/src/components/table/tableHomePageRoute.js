@@ -7,6 +7,8 @@ import TableHomePageInitial from './tableHomePageInitial';
 import Icon, {AVAILABLE_ICON_FONTS} from '../../../../reuse/client/src/components/icon/icon.js';
 import IconActions from '../actions/iconActions';
 import ReportToolsAndContent from '../report/reportToolsAndContent';
+import ReportFieldSelectMenu from '../report/reportFieldSelectMenu';
+
 import Fluxxor from 'fluxxor';
 import {I18nMessage} from "../../utils/i18nMessage";
 import Constants from '../../../../common/src/constants';
@@ -60,6 +62,7 @@ export const TableHomePageRoute = React.createClass({
         //  loads from the report Nav context
         this.props.loadTableHomePage(CONTEXT.REPORT.NAV, appId, tblId, offset, numRows);
     },
+
     loadHomePageForParams(params) {
         let appId = params.appId;
         let tblId = params.tblId;
@@ -159,15 +162,25 @@ export const TableHomePageRoute = React.createClass({
                 loadDynamicReport={this.loadDynamicReport}/>;
         }
 
-        return (<div className="reportContainer">
-            <Stage stageHeadline={this.getStageHeadline()} pageActions={this.getPageActions(5)}>
-                <ReportStage reportData={this.props.reportData} />
-            </Stage>
+        return (
+            <div className="reportContainer">
+                <ReportFieldSelectMenu
+                    appId={this.props.match.params.appId}
+                    tblId={this.props.match.params.tblId}
+                    reportData={this.props.reportData}
+                    pullRight>
 
-            {this.getHeader()}
-            {mainContent}
+                    <Stage stageHeadline={this.getStageHeadline()} pageActions={this.getPageActions(5)}>
+                        <ReportStage reportData={this.props.reportData}/>
+                    </Stage>
 
-        </div>);
+                    {this.getHeader()}
+
+                    {mainContent}
+
+                </ReportFieldSelectMenu>
+            </div>
+        );
     }
 });
 

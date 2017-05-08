@@ -328,6 +328,10 @@ export default {
                 newTable: "Nouvelle table basée sur cette colonne",
                 columnProps: "Propriétés de la colonne",
                 fieldProps: "Propriétés de champ"
+            },
+            drawer: {
+                title: "Champs cachés",
+                info: "Ajoutez un champ au rapport",
             }
         },
         errorMessagePopup: {

@@ -232,7 +232,7 @@ export const ReportGrid = React.createClass({
 
     isOnlyOneColumnVisible() {
         return this.props.columns.filter(column => {
-            return !column.isHidden;
+            return !column.isHidden && !column.isPlaceholder;
         }).length === 1;
     },
 
