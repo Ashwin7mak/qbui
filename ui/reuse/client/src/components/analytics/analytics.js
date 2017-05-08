@@ -1,10 +1,10 @@
 import React, {PropTypes, Component} from 'react';
 import {connect} from 'react-redux';
-import {getLoggedInUserId} from '../../reducers/userReducer';
-import {getLoggedInUser} from '../../actions/userActions';
+import {getLoggedInUserId} from 'REUSE/reducers/userReducer';
+import {getLoggedInUser} from 'REUSE/actions/userActions';
 
 // IMPORT FROM CLIENT REACT
-import Logger from '../../../../../client-react/src/utils/logger';
+import Logger from 'APP/utils/logger';
 // IMPORT FROM CLIENT REACT
 
 // Evergage requires a global variable called _aaq to function

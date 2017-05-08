@@ -185,6 +185,13 @@
                                         for (let i = 0; i < resp.length; i++) {
                                             hydratedApps.push(resp[i]);
                                         }
+
+                                        hydratedApps.forEach(app => {
+                                            //sort tables by id to match create order
+                                            if (app.tables) {
+                                                app.tables = _.sortBy(app.tables, 'id');
+                                            }
+                                        });
                                         resolve(hydratedApps);
                                     },
                                     function(err) {
@@ -294,6 +301,33 @@
                         }
                     ).catch((ex) => {
                         requestHelper.logUnexpectedError('appsApi.getRelationshipsForApp(): unexpected error fetching relationships', ex, true);
+                        reject(ex);
+                    });
+                });
+            },
+
+            /**
+             * Get a single table or all tables for an app
+             *
+             * @param req
+             * @returns {Promise}
+             */
+            getTablesForApp: function(req, tableId) {
+                return new Promise((resolve, reject) => {
+                    let opts = requestHelper.setOptions(req, true);
+                    opts.url = requestHelper.getRequestJavaHost() + routeHelper.getTablesRoute(req.url, tableId);
+
+                    requestHelper.executeRequest(req, opts).then(
+                        (response) => {
+                            const tables = JSON.parse(response.body);
+                            resolve(tables);
+                        },
+                        (error) => {
+                            log.error({req: req}, "appsApi.getTablesForApp(): Error fetching app tables on core");
+                            reject(error);
+                        }
+                    ).catch((ex) => {
+                        requestHelper.logUnexpectedError('appsApi.getTablesForApp(): unexpected error fetching app tables on core', ex, true);
                         reject(ex);
                     });
                 });

@@ -53,6 +53,18 @@ const report = (state = [], action) => {
         return null;
     }
 
+    /**
+     * Makes sure the order of the columns isn't out of sync with their actual position.
+     * Used in adding/hiding columns and when opening/closing field select menu.
+     * @param columns
+     */
+    function reorderColumns(columns) {
+        let newOrder = 1;
+        columns.forEach((column) => {
+            column.order = newOrder++;
+        });
+    }
+
     //  what report action is being requested
     switch (action.type) {
     case types.LOAD_REPORT:
@@ -270,13 +282,108 @@ const report = (state = [], action) => {
         });
         return reports;
     }
+    case types.OPEN_FIELD_SELECT_MENU: {
+        let currentReport = getReportFromState(action.id);
+        if (currentReport) {
+            let params = action.content;
+            let clickedColumnId = params.clickedColumnId;
+            let addBefore = params.addBeforeColumn;
+            // remove the placeholder column if it exists
+            _.remove(currentReport.data.columns, (col) => {return col.isPlaceholder;});
+            // find the index of the column where 'add a column' was clicked
+            let clickedColumnIndex = _.findIndex(currentReport.data.columns, (col) => {return col.id === clickedColumnId;});
+            if (clickedColumnIndex !== -1) {
+                // since not all columns are visible, add the placeholder column to columns so it gets rendered on screen
+                let placeholder = {
+                    isPlaceholder: true,
+                    isHidden: false,
+                    id: -1
+                };
+
+                // add before or after the clicked column depending on selection
+                let insertionIndex;
+                if (addBefore) {
+                    insertionIndex = clickedColumnIndex;
+                } else {
+                    insertionIndex = clickedColumnIndex + 1;
+                }
+                currentReport.data.columns.splice(insertionIndex, 0, placeholder);
+                reorderColumns(currentReport.data.columns);
+                return newState(currentReport);
+            }
+        }
+        return state;
+    }
+    case types.CLOSE_FIELD_SELECT_MENU: {
+        let currentReport = getReportFromState(action.id);
+        if (currentReport && currentReport.data) {
+            // remove the placeholder column (if it exists) when the drawer is closed
+            _.remove(currentReport.data.columns, (col) => {return col.isPlaceholder;});
+            return newState(currentReport);
+        }
+        return state;
+    }
+    case types.ADD_COLUMN_FROM_EXISTING_FIELD: {
+        let currentReport = getReportFromState(action.id);
+        if (currentReport) {
+            // metadata
+            let currentColumns = currentReport.data.columns;
+            // passed in params
+            let params = action.content;
+            let addBefore = params.addBefore;
+            let requestedColumn = params.requestedColumn;
+
+            let requestedColumnIndex = _.findIndex(currentColumns, (col) => {return col.id === requestedColumn.id;});
+            let requestedInCurrentColumns = requestedColumnIndex !== -1;
+
+            let columnMoving;
+            if (requestedInCurrentColumns) {
+                columnMoving = currentColumns.splice(requestedColumnIndex, 1)[0];
+            } else {
+                columnMoving = requestedColumn;
+            }
+            // searches through the current columns to find the index of the placeholder
+            let placeholderIndex = _.findIndex(currentColumns, (col) => {return col.isPlaceholder;});
+            let fidInsertionIndex = placeholderIndex;
+            // when adding after, account for the index of the placeholder by adding 1
+            if (!addBefore) {
+                placeholderIndex++;
+            }
+            // insert the requested column in the correct place in the columns list
+            currentColumns.splice(placeholderIndex, 0, columnMoving);
+
+            // show the currently hidden column that was just added
+            currentColumns.forEach(column => {
+                if (column.id === requestedColumn.id) {
+                    column.isHidden = false;
+                }
+                return column;
+            });
+            _.remove(currentReport.data.fids, fid => {return fid === requestedColumn.id;});
+            currentReport.data.fids.splice(fidInsertionIndex, 0, requestedColumn.id);
+            reorderColumns(currentReport.data.columns);
+            return newState(currentReport);
+        }
+        return state;
+    }
     case types.HIDE_COLUMN: {
         let currentReport = getReportFromState(action.id);
         if (currentReport) {
-            currentReport.data.columns.forEach(column => {
-                if (column.fieldDef.id === action.content.columnId) {
+            // metadata
+            let columns = currentReport.data.columns;
+            let fids = currentReport.data.fids;
+            // passed in params
+            let params = action.content;
+            let clickedColumnId = params.clickedId;
+            // mark the clicked column as hidden so it does not get rendered
+            columns.forEach(column => {
+                if (column.id === clickedColumnId) {
                     column.isHidden = true;
                 }
+            });
+            // update the fids and metafids to reflect the hidden column
+            currentReport.data.fids = fids.filter(fid => {
+                return fid !== clickedColumnId;
             });
             return newState(currentReport);
         }

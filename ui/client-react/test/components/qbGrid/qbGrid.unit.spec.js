@@ -7,7 +7,6 @@ import _ from 'lodash';
 
 import QbGrid from '../../../src/components/dataTable/qbGrid/qbGrid';
 import ColumnTransformer from '../../../src/components/dataTable/qbGrid/columnTransformer';
-import ReportColumnTransformer from '../../../src/components/dataTable/reportGrid/reportColumnTransformer';
 import RowTransformer from '../../../src/components/dataTable/qbGrid/rowTransformer';
 import QbIconActions, {__RewireAPI__ as QbIconActionsRewireAPI} from '../../../src/components/dataTable/qbGrid/qbIconActions';
 import * as Table from 'reactabular-table';
@@ -260,6 +259,17 @@ describe('QbGrid', () => {
 
             expect(instance.getActionCellProps()).toEqual({
                 isStickyCell: true
+            });
+        });
+    });
+
+    describe('getPlaceholderCellProps', () => {
+        it('adds the isPlaceholderCell prop to placeholder cells so the component can add the appropriate class', () => {
+            component = shallow(<QbGrid {...requiredProps}/>);
+            instance = component.instance();
+
+            expect(instance.getPlaceholderCellProps()).toEqual({
+                isPlaceholderCell: true
             });
         });
     });

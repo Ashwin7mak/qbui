@@ -1,17 +1,17 @@
 import React, {PropTypes} from 'react';
 import * as Table from 'reactabular-table';
 import Loader  from 'react-loader';
-import * as SpinnerConfigurations from "../../../constants/spinnerConfigurations";
+import * as SpinnerConfigurations from 'APP/constants/spinnerConfigurations';
 import QbHeaderCell from './qbHeaderCell';
 import QbRow from './qbRow';
 import QbCell from './qbCell';
-import {UNSAVED_RECORD_ID} from '../../../constants/schema';
+import {UNSAVED_RECORD_ID} from 'APP/constants/schema';
 import RowActions from './rowActions';
-import {SELECT_ROW_CHECKBOX} from '../../../../../reuse/client/src/components/rowActions/rowActions';
+import {SELECT_ROW_CHECKBOX} from 'REUSE/components/rowActions/rowActions';
 import QbIcon from '../../qbIcon/qbIcon';
 import CollapsedGroupsHelper from './collapsedGroupHelper';
 
-import Logger from '../../../utils/logger';
+import Logger from 'APP/utils/logger';
 const logger = new Logger();
 
 import './qbGrid.scss';
@@ -195,6 +195,12 @@ const QbGrid = React.createClass({
         };
     },
 
+    getPlaceholderCellProps() {
+        return {
+            isPlaceholderCell: true
+        };
+    },
+
     /**
      * Render a single cell
      * @param cellData
@@ -223,10 +229,15 @@ const QbGrid = React.createClass({
     getColumn(column) {
         try {
             column.addFormatter(this.renderCell);
-            if (!this.props.phase1) {
+            if (!this.props.phase1 && !column.isPlaceholder) {
                 column.addHeaderMenu(this.props.menuComponent, this.props.menuProps);
             }
-            return column.getGridHeader();
+            let c = column.getGridHeader();
+            if (column.isPlaceholder) {
+                c.cell.transforms = [this.getPlaceholderCellProps];
+                c.header.transforms = [this.getPlaceholderCellProps];
+            }
+            return c;
         } catch (err) {
             // If the column is not a type of ColumnTransformer with the appropriate methods, still pass through the column as the dev may have wanted to use a plain object (i.e., in the component library)
             // but provide a warning in case using the ColumnTransformer class was forgotten.

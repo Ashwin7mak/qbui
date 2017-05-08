@@ -9,11 +9,12 @@ export default {
 
     messages: {
         apps: {
-            header: "Anwendungen"
+            header: "Anwendungen",
+            missing: "Bleiben Sie dran, meine Apps kommen bald"
         },
         app: {
             homepage: {
-                welcomeTitle: "Willkommen bei Mercury Beta",
+                welcomeTitle: "Willkommen zu",
                 welcomeText: "Während Sie Ihren Weg lernen, verwenden Sie diesen Bereich anstelle der App-Homepage. " +
                 "Dies ist Ihre echte App in Mercury. Sie werden Ihre App-Homepage noch nicht sehen, aber alle Ihre " +
                 "daten sind hier. Die Arbeit, die Sie hier vornehmen, wird auch in der klassischen Ansicht angezeigt.",
@@ -31,6 +32,9 @@ export default {
                 helpText: "Wir wollen, dass Sie erfolgreich sind; Deshalb sind wir immer hier, um zu helfen.",
                 helpLinkPreText: "Bitte ",
                 helpLinkText: "wenden Sie sich an unser Care-Team"
+            },
+            dashboards: {
+                missing: "Bleiben Sie dran, App Dashboards kommen bald"
             },
             settings: "Einstellungen",
             users: {
@@ -325,6 +329,10 @@ export default {
                 newTable: "Neue Tabelle auf dieser Spalte über",
                 columnProps: "Spalteneigenschaften",
                 fieldProps: "Feldeigenschaften"
+            },
+            drawer: {
+                title: "Versteckte Felder",
+                info: "Fügen Sie ein Feld zum Bericht hinzu",
             }
         },
         errorMessagePopup: {
@@ -585,7 +593,8 @@ export default {
                 first: "Option 1",
                 second: "Option 2",
                 third: "Option 3"
-            }
+            },
+            modify: 'Formular ändern'
         },
         featureSwitchAdmin: {
             defaultFeatureName: "Feature",

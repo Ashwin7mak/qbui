@@ -1,12 +1,12 @@
 import React, {PropTypes, Component} from 'react';
-import GlobalAction from '../globalAction/globalAction';
+import GlobalAction from 'REUSE/components/globalAction/globalAction';
+import HelpButton from 'REUSE/components/helpButton/helpButton';
 import UserDropDown from './supportingComponents/userDropDown';
-import HelpButton from '../helpButton/helpButton';
 
 // IMPORTING FROM CLIENT REACT
 // Needs to be refactored once these components are added to the reuse library
-import Locale from '../../../../../client-react/src/locales/locales';
-import WindowLocationUtils from '../../../../../client-react/src/utils/windowLocationUtils';
+import Locale from 'APP/locales/locales';
+import WindowLocationUtils from 'APP/utils/windowLocationUtils';
 // IMPORTING FROM CLIENT REACT
 
 import './defaultTopNavGlobalActions.scss';

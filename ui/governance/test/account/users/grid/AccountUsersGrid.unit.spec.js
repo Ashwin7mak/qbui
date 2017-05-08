@@ -1,10 +1,10 @@
 import React from "react";
 import {shallow} from "enzyme";
 import jasmineEnzyme from "jasmine-enzyme";
-import AccountUsersGrid from "../../../../src/account/users/grid/AccountUsersGrid";
-import {GetAccountUsersGridColumns} from "../../../../src/account/users/grid/AccountUsersGridColumns";
-import StandardGrid from "../../../../src/common/grid/standardGrid";
-import * as Actions from "../../../../src/account/users/AccountUsersActions";
+import AccountUsersGrid from "GOVERNANCE/account/users/grid/AccountUsersGrid";
+import {GetAccountUsersGridColumns} from "GOVERNANCE/account/users/grid/AccountUsersGridColumns";
+import StandardGrid from "GOVERNANCE/common/grid/standardGrid";
+import * as Actions from "GOVERNANCE/account/users/AccountUsersActions";
 
 describe('AccountUsersGrid', () => {
     beforeEach(() => {

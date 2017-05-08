@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="355px" height="495px" viewBox="0 0 355 495" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 43.2 (39069) - http://www.bohemiancoding.com/sketch -->
+    <title>small</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <rect id="path-1" x="0" y="0" width="355" height="494"></rect>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="small">
+            <g id="Oval-2-Copy-4" stroke-width="1" fill-rule="evenodd">
+                <mask id="mask-2" fill="white">
+                    <use xlink:href="#path-1"></use>
+                </mask>
+                <use id="Mask" fill="#FFFFFF" xlink:href="#path-1"></use>
+                <circle fill="#FF6E5A" mask="url(#mask-2)" cx="65" cy="506" r="45"></circle>
+            </g>
+            <circle id="Oval-2" fill="#7CBE35" fill-rule="evenodd" cx="65" cy="66" r="45"></circle>
+            <circle id="Oval-2-Copy-3" fill="#40CAF8" fill-rule="evenodd" cx="65" cy="397" r="45"></circle>
+            <circle id="Oval-2-Copy" fill="#F4C100" fill-rule="evenodd" cx="64" cy="176" r="45"></circle>
+            <text id="" font-family="QuickBaseIconTableSturdy" font-size="40" font-weight="normal" fill="#FFFFFF">
+                <tspan x="45.0761719" y="84"></tspan>
+            </text>
+            <text id="" font-family="QuickBaseIconTableSturdy" font-size="40" font-weight="normal" fill="#FFFFFF">
+                <tspan x="45.0761719" y="415"></tspan>
+            </text>
+            <text id="" font-family="QuickBaseIconTableSturdy" font-size="40" font-weight="normal" fill="#FFFFFF">
+                <tspan x="44.0761719" y="194"></tspan>
+            </text>
+            <text id="Course-Catalog-Fall’" font-family="Lato-Regular, Lato" font-size="16" font-weight="normal" fill="#404040">
+                <tspan x="129" y="69">Course Catalog Fall’17</tspan>
+            </text>
+            <text id="Student-Feedback-Req" font-family="Lato-Regular, Lato" font-size="16" font-weight="normal" fill="#404040">
+                <tspan x="129" y="400">Student Feedback Request </tspan>
+                <tspan x="129" y="419">App</tspan>
+            </text>
+            <text id="Student-Roster" font-family="Lato-Regular, Lato" font-size="16" font-weight="normal" fill="#3E4245">
+                <tspan x="129" y="183">Student Roster</tspan>
+            </text>
+            <circle id="Oval-2-Copy-2" fill="#B80D6F" fill-rule="evenodd" cx="65" cy="287" r="45"></circle>
+            <text id="" font-family="QuickBaseIconTableSturdy" font-size="40" font-weight="normal" fill="#FFFFFF">
+                <tspan x="45.0761719" y="305"></tspan>
+            </text>
+            <text id="Science-Department-A" font-family="Lato-Regular, Lato" font-size="16" font-weight="normal" fill="#3E4245">
+                <tspan x="129" y="294">Science Department App</tspan>
+            </text>
+            <rect id="Rectangle-2" fill-opacity="0.699999988" fill="#E5E5E5" fill-rule="evenodd" x="0" y="1" width="355" height="494"></rect>
+        </g>
+    </g>
+</svg>
