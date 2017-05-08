@@ -9,11 +9,12 @@ export default {
 
     messages: {
         apps: {
-            header: "Vos Apps"
+            header: "Vos Apps",
+            missing: "Restez connecté, mes applications arrivent bientôt"
         },
         app: {
             homepage: {
-                welcomeTitle: "Bienvenue sur Mercury Beta",
+                welcomeTitle: "Bienvenue à",
                 welcomeText: "Pendant que vous apprenez votre chemin, utilisez cette zone à la place de votre page d'accueil d'application. " +
                 "C'est votre application réelle dans Mercury. Vous ne verrez pas encore la page d'accueil de votre application, mais " +
                 "données sont ici. Les travaux effectués ici s'affichent immédiatement en mode Classique.",
@@ -31,6 +32,9 @@ export default {
                 helpText: "Nous voulons que vous réussissiez; C'est pourquoi nous sommes toujours là pour vous aider.",
                 helpLinkPreText: "Veuillez ",
                 helpLinkText: "contacter notre équipe de soins"
+            },
+            dashboards: {
+                missing: "Restez à l'écoute, les tableaux de bord de l'application arrivent bientôt"
             },
             settings: "Paramètres",
             users: {
@@ -324,6 +328,10 @@ export default {
                 newTable: "Nouvelle table basée sur cette colonne",
                 columnProps: "Propriétés de la colonne",
                 fieldProps: "Propriétés de champ"
+            },
+            drawer: {
+                title: "Champs cachés",
+                info: "Ajoutez un champ au rapport",
             }
         },
         errorMessagePopup: {

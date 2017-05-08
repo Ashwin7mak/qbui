@@ -2,7 +2,7 @@ import React from 'react';
 import {shallow, mount} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
 
-import Stage from '../../../src/components/stage/stage';
+import Stage from 'REUSE/components/stage/stage';
 
 let component;
 

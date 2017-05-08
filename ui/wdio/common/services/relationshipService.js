@@ -11,6 +11,16 @@
     // Logging library
     var log = require('../../../server/src/logger').getLogger();
 
+    function getFieldName(table, fieldId) {
+        let answer = '';
+        if (table && table.fields) {
+            let theField = table.fields.find(field => fieldId === field.id);
+            if (theField) {
+                answer = theField.name;
+            }
+        }
+        return answer;
+    }
     module.exports = function(recordBase) {
         var relationshipService = {
             /**
@@ -28,6 +38,10 @@
                 let detailTableId = childTable.id;
                 let masterTablePkFieldId = lookUpFieldId;
                 let detailTableFkFieldId = detailFieldId;
+                let masterTableName = parentTable.name;
+                let detailTableName = childTable.name;
+                let masterFieldName = getFieldName(parentTable, masterTablePkFieldId);
+                let detailFieldName = getFieldName(childTable, detailTableFkFieldId);
 
                 parentTable.fields.forEach(field => {
                     if (masterTablePkFieldId === undefined && field.name === RECORD_ID_NAME) {
@@ -40,14 +54,17 @@
                         detailTableFkFieldId = field.id;
                     }
                 });
-
                 const relationshipToCreate = {
                     appId        : app.id,
                     masterAppId  : app.id,
-                    masterTableId: masterTableId,
+                    masterTableName,
+                    masterTableId,
                     masterFieldId: masterTablePkFieldId,
+                    masterFieldName,
                     detailAppId  : app.id,
-                    detailTableId: detailTableId,
+                    detailTableName,
+                    detailTableId,
+                    detailFieldName,
                     detailFieldId: detailTableFkFieldId,
                     referentialIntegrity: false,
                     cascadeDelete: false,
