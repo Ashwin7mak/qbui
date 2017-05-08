@@ -41,7 +41,18 @@ export default {
                 addUser: "L'ajout d'un nouvel utilisateur n'est pas encore disponible",
                 users: "Utilisateurs",
                 content: "C'est la liste de toutes les personnes qui ont été ajoutées à votre application. Vous pouvez obtenir quelques idées rapides sur le nombre de personnes dans chaque rôle dans votre application ainsi que de trouver une personne spécifique dans la liste et de les envoyer par courrier électronique.",
-                manager: "Gestionnaire d'applications"
+                manager: "Gestionnaire d'applications",
+                removeUser: "Supprimer cet utilisateur?",
+                unassignUser: "Les utilisateurs ne pourront plus accéder à cette application. Toutes les données qu'ils ont déjà entrées restent dans la demande.",
+                deleteUser: "Retirer {valeur} utilisateur",
+                deleteUsers: "Retirer {valeur} utilisateurs",
+                removeButton: "Retirer",
+                cancel: "Annuler",
+                singular: "utilisateur",
+                plural: "utilisateurs",
+                usersRemoved: " Les utilisateurs ont été enlevés",
+                userRemoved: " L'utilisateur a été supprimé"
+
             }
         },
         appMenu: {
@@ -501,7 +512,10 @@ export default {
             print: "L'impression n'est pas encore disponible",
             copy: "La copie n'est pas encore disponible",
             email: "L'envoi par courriel n'est pas encore disponible",
-            delete: "La suppression n'est pas encore disponible"
+            delete: "La suppression n'est pas encore disponible",
+            emailUsers: "L'exportation de CSV n'est pas encore disponible",
+            settingsRole: "Changer de rôle n'est pas encore disponible",
+            emailApp: "Envoi de l'invitation de l'application n'est pas encore disponible",
         },
         pageTitles: {
             pageTitleSeparator: " - ",
