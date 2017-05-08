@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {PropTypes} from 'react';
 import shallowCompare from 'react-addons-shallow-compare';
 import * as dnd from 'reactabular-dnd';
 
@@ -25,7 +25,7 @@ const QbHeaderCell = React.createClass({
             classes.push('placeholderCell');
         }
 
-        return <dnd.header className={classes.join(' ')} {...this.props} />;
+        return <dnd.Header className={classes.join(' ')} {...this.props} />;
     }
 });
 
