@@ -64,7 +64,6 @@ describe('FormBuilderContainer', () => {
         spyOn(mockActions, 'loadForm');
         spyOn(mockActions, 'updateForm');
         spyOn(mockActions, 'toggleFormBuilderChildrenTabIndex');
-        spyOn(mockActions, 'toggleToolPaletteChildrenTabIndex');
         spyOn(mockActions, 'keyboardMoveFieldUp');
         spyOn(mockActions, 'keyboardMoveFieldDown');
         spyOn(mockActions, 'removeFieldFromForm');
