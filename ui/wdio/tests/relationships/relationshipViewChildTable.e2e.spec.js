@@ -153,6 +153,7 @@ describe('Relationships - View child table on form tests: ', () => {
 
         // Do assertions on the child table form section
         let childTableFormSection = relationshipsPO.qbPanelFormSectionEl(1);
+        childTableFormSection.waitForVisible();
 
         // Check the table name
         let sectionText =  relationshipsPO.qbPanelHeaderTitleTextEl(childTableFormSection).getText();
@@ -163,10 +164,30 @@ describe('Relationships - View child table on form tests: ', () => {
         expect(recordCount).toEqual('0 records');
 
         // Check there are no records in the child table
-        browser.waitForExist('.qbTbody', true);
+        browser.waitForExist('.qbRow', 1000, true);
     });
 
-    //TODO: MC-2274 Navigate back to parent report via Parent Report Link
+    /**
+     * Navigate back to the correct child report via link in open slidey-righty
+     */
+    it('Navigate back to the child table homepage via link in open child record', () => {
+        // Click into one of the child records to view the record form
+        relationshipsPO.clickOnRecordInChildTable(0);
 
+        // Assert that the name of the link is for the Parent table
+        let parentLinkText = relationshipsPO.tableHomePageLinkEl.getText();
+        expect(parentLinkText).toEqual('Child Table A');
+
+        // Click the tablehomepage link (should send you back to the table homepage of the child table)
+        relationshipsPO.clickTableHomePageLink();
+
+        // Check the stage title to make sure we are on the right report
+        let tableHomepageText = reportContentPO.stageTableHomepageTitleEl.getText();
+        expect(tableHomepageText).toEqual('Child Table A Home');
+
+        // Check the url as well
+        let currentURL = browser.url().value;
+        expect(currentURL).toContain(testApp.tables[e2eConsts.TABLE4].id);
+    });
 });
 

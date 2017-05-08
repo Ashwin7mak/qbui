@@ -10,8 +10,22 @@
     var formsPO = requirePO('formsPage');
     var reportContentPO = requirePO('reportContent');
 
-    var relationshipsPage = Object.create(e2ePageBase, {
+    // slidey-righty animation const
+    var slideyRightyPause = 2000;
 
+    var relationshipsPage = Object.create(e2ePageBase, {
+        // Element locators
+
+        // Slidey-righty which is a drawer component for showing child records of a parent record
+        slideyRightyEl: {get: function() {return browser.element('.slidey-righty');}},
+        viewFormTableEl: {get: function() {return this.slideyRightyEl.element('.viewForm .formTable');}},
+        tableHomePageLinkEl: {get: function() {return this.slideyRightyEl.element('.navLinks .tableHomepageLink');}},
+        iconActionsEl: {get: function() {return this.slideyRightyEl.element('.stageHeadline .iconActions');}},
+        iconActionsRightButtonEl: {get: function() {return this.iconActionsEl.element('.iconUISturdy-caret-filled-right');}},
+        iconActionsLeftButtonEl: {get: function() {return this.iconActionsEl.element('.iconUISturdy-caret-filled-left');}},
+        iconActionsCloseDrawerButtonEl: {get: function() {return this.slideyRightyEl.element('.iconActionButton.closeDrawer');}},
+
+        // Page Object functions
         /**
          * Returns form section containing the child table for a relationship
          * @param panelId - id used return corresponding section element
@@ -38,7 +52,7 @@
          * @param recordRowIndex
          */
         clickOnRecordInChildTable : {value: function(recordRowIndex) {
-            browser.waitForVisible('.viewForm');
+            formsPO.viewFormContainerEl.waitForVisible();
             reportContentPO.waitForReportContent();
             let recordRowEl = reportContentPO.getRecordRowElement(recordRowIndex);
             // Hardcoded to click on the first cell of the record
@@ -56,36 +70,58 @@
             recordCellEl.click();
 
             // Wait for slidey-righty to be present
-            return browser.waitForVisible('.slidey-righty');
+            return this.slideyRightyEl.waitForVisible();
         }},
 
+        /**
+         * While viewing a parent record on a form get the values of each record in the child table
+         * @returns An array of record values for all child records
+         */
         getChildRecordValuesFromForm : {value: function() {
-            browser.waitForExist('.slidey-righty .viewForm .formTable');
-            let fieldElements = browser.elements('.slidey-righty .viewForm .formTable .viewElement');
+            this.viewFormTableEl.waitForExist();
+            let fieldElements = this.viewFormTableEl.elements('.viewElement');
             return fieldElements.value.map(function(element) {
                 return element.getAttribute('textContent');
             });
         }},
 
+        /**
+         * While viewing a child record in slidey-righty click the next button to view the next child record in succession
+         * @param Reverse flag, if set to true the function will click the previous button instead
+         */
         navigateToNextChildRecord : {value: function(reverse) {
-            browser.waitForVisible('.slidey-righty .stageHeadline .iconActions');
+            this.iconActionsEl.waitForVisible();
             if (!reverse) {
-                let nextButtonEl = browser.element('.stageHeadline .iconActions .iconUISturdy-caret-filled-right');
-                nextButtonEl.waitForVisible();
-                return nextButtonEl.click();
+                this.iconActionsRightButtonEl.waitForVisible();
+                // Needed for animation of slidey-righty
+                browser.pause(slideyRightyPause);
+                return this.iconActionsRightButtonEl.click();
             } else {
-                let prevButtonEl = browser.element('.stageHeadline .iconActions .iconUISturdy-caret-filled-left');
-                prevButtonEl.waitForVisible();
-                return prevButtonEl.click();
+                this.iconActionsLeftButtonEl.waitForVisible();
+                // Needed for animation of slidey-righty
+                browser.pause(slideyRightyPause);
+                return this.iconActionsLeftButtonEl.click();
             }
         }},
 
+        /**
+         * Close the open slidey-righty by clicking the X button
+         */
         closeSlideyRighty : {value: function() {
-            browser.waitForVisible('.slidey-righty .iconActionButton.closeDrawer');
-            browser.waitForExist('.slidey-righty .viewForm .formTable');
-            browser.click('.slidey-righty .iconActionButton.closeDrawer');
+            this.iconActionsCloseDrawerButtonEl.waitForVisible();
+            this.viewFormTableEl.waitForExist();
+            this.iconActionsCloseDrawerButtonEl.click();
             browser.waitForVisible('.slidey-righty .iconActionButton.closeDrawer', e2eConsts.shortWaitTimeMs, true);
+        }},
 
+        /**
+         * While viewing a child record in s-r click the table homepage link
+         */
+        clickTableHomePageLink : {value: function() {
+            this.tableHomePageLinkEl.waitForVisible();
+            // Needed for animation of slidey-righty
+            browser.pause(slideyRightyPause);
+            this.tableHomePageLinkEl.click();
         }}
     });
 

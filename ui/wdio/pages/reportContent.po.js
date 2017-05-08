@@ -28,6 +28,7 @@
         modifyTableSettings: {get: function() {return browser.element('.modifyTableSettings');}},
         deleteTableActionButton: {get: function() {return browser.element('.iconActionButton.deleteTable');}},
         deletePromtTextField: {get: function() {return browser.element('.deletePrompt');}},
+
         reportFilterSearchBox : {get: function() {
             return this.reportsToolBar.element('.searchInput');
         }},
@@ -63,6 +64,9 @@
             browser.element('.reportContainer').waitForVisible();
             return browser.element('.reportContainer');
         }},
+        // Title for report (found in the stage)
+        stageTableHomepageTitleEl: {get: function() {return this.reportContainerEl.element('.tableHomepageStageHeadline');}},
+
         // Delete and Don't Delete button on modal dialog box
         deleteButtonClassName: {get: function() {return '.modal-dialog .primaryButton';}},
         deleteButton : {get: function() {return browser.element(this.deleteButtonClassName);}},
