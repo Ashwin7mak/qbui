@@ -175,7 +175,11 @@ export default {
                     "de-de": "Deutsche"
                 },
                 preferences: "Einstellungen",
-                sign_out: "Austragen"
+                sign_out: "Austragen",
+                feedbackMenuButton: "Feedback geben",
+                feedbackMenuTitle: "Feedback",
+                reportFeedBackButton: "Ein Problem melden",
+                feedbackTooltip: "Teilen Sie Ideen und Fragen"
             }
 
         },
