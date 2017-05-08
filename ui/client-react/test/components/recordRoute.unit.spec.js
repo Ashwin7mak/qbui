@@ -249,7 +249,6 @@ describe('RecordRoute', () => {
                 ]
             }
         };
-        const location = {search: 'drawer'};
         const routeParams = {appId: '1', tblId: '2', rptId: '3', recordId: '2'};
 
         const embedPrefix = "EMBEDDED";
@@ -310,7 +309,6 @@ describe('RecordRoute', () => {
                                      flux={flux}
                                      router={router}
                                      {...reduxProps}
-                                     location={location}
                                      isDrawerContext={false}
                                      uniqueId="DRAWER123"/>
                     </Provider>
@@ -380,6 +378,8 @@ describe('RecordRoute', () => {
             // next record
             nextRecord.simulate('click');
             expect(reduxProps.openRecord).toHaveBeenCalled();
+            //selectTableId action is not called when in a drawer
+            expect(flux.actions.selectTableId).not.toHaveBeenCalled();
         });
 
     });
