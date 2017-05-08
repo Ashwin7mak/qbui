@@ -71,10 +71,10 @@
                             //always resolve - we do not want to block the get Apps call on this failure
                             resolve({});
                         }).catch((ex) =>{
-                            requestHelper.logUnexpectedError('appsApi.getTableProperties(): unexpected error getting table properties', ex, true);
-                            //always resolve - we do not want to block the get Apps call on this failure
-                            resolve({});
-                        });
+                        requestHelper.logUnexpectedError('appsApi.getTableProperties(): unexpected error getting table properties', ex, true);
+                        //always resolve - we do not want to block the get Apps call on this failure
+                        resolve({});
+                    });
                 });
             },
 
@@ -106,27 +106,68 @@
                     requestHelper.executeRequest(req, opts).then(
                         (response) => {
                             let app = JSON.parse(response.body);
-                            let tablePromises = [];
                             if (Array.isArray(app.tables)) {
-                                app.tables.map((table) => {
-                                    let tablesRootUrl = routeHelper.getTablesRoute(routeHelper.getAppsRoute(req.url, appId), table.id);
+                                //
+                                if (app.tables.length > 0) {
+                                    let firstTable = app.tables[0];
                                     let tableReq = _.clone(req);
-                                    tableReq.url = tablesRootUrl;
-                                    tablePromises.push(this.getTableProperties(tableReq, table.id));
-                                });
-                                Promise.all(tablePromises).then(
-                                    (responses) => {
-                                        this._mergeTableProps(app, responses);
+                                    tableReq.url = routeHelper.getAppsRoute(req.url, appId);
+                                    this.getTableProperties(tableReq, firstTable.id).then(
+                                        (firstTableResponse) => {
+                                            //  if only 1 table in the app, we're all done
+                                            if (app.tables.length === 1) {
+                                                this._mergeTableProps(app, [firstTableResponse]);
+                                                resolve(app);
+                                            } else {
+                                                //
+                                                let tablePropertiesList = [firstTableResponse];
+
+                                                //  retrieve the remaining tables
+                                                let tablePromises = [];
+                                                app.tables.map((table) => {
+                                                    if (table.id !== firstTable.id) {
+                                                        tablePromises.push(this.getTableProperties(tableReq, table.id));
+                                                    }
+                                                });
+                                                Promise.all(tablePromises).then(
+                                                    (tablePropertiesResponse) => {
+                                                        tablePropertiesList.concat(tablePropertiesResponse);
+                                                        this._mergeTableProps(app, tablePropertiesList);
+                                                        resolve(app);
+                                                    },
+                                                    (error) => {
+                                                        log.error({req: req}, "appsApi.getTableProperties(): Error retrieving table properties using promise all.");
+                                                        resolve(app);
+                                                    }
+                                                );
+                                            }
+                                        }
+                                    ).catch((ex) => {
+                                        requestHelper.logUnexpectedError('appsApi.getTableProperties(): unexpected error retrieving table properties', ex, true);
                                         resolve(app);
-                                    },
-                                    (error) => {
-                                        log.error({req: req}, "appsApi.getTableProperties(): Error retrieving table properties.");
-                                        resolve(app);
-                                    }
-                                ).catch((ex) => {
-                                    requestHelper.logUnexpectedError('appsApi.getTableProperties(): unexpected error retrieving table properties', ex, true);
-                                    resolve(app);
-                                });
+                                    });
+                                }
+
+                                //let tablePromises = [];
+                                //app.tables.map((table) => {
+                                //    let tablesRootUrl = routeHelper.getTablesRoute(routeHelper.getAppsRoute(req.url, appId), table.id);
+                                //    let tableReq = _.clone(req);
+                                //    tableReq.url = tablesRootUrl;
+                                //    tablePromises.push(this.getTableProperties(tableReq, table.id));
+                                //});
+                                //Promise.all(tablePromises).then(
+                                //    (responses) => {
+                                //        this._mergeTableProps(app, responses);
+                                //        resolve(app);
+                                //    },
+                                //    (error) => {
+                                //        log.error({req: req}, "appsApi.getTableProperties(): Error retrieving table properties.");
+                                //        resolve(app);
+                                //    }
+                                //).catch((ex) => {
+                                //    requestHelper.logUnexpectedError('appsApi.getTableProperties(): unexpected error retrieving table properties', ex, true);
+                                //    resolve(app);
+                                //});
                             }
                         },
                         (error) => {

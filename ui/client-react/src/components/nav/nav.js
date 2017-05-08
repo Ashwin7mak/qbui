@@ -175,7 +175,7 @@ export const Nav = React.createClass({
 
     getSelectedApp() {
         if (this.state.apps.selectedAppId) {
-            return _.find(this.state.apps.apps, (a) => a.id === this.state.apps.selectedAppId);
+            let app = _.find(this.state.apps.apps, (a) => a.id === this.state.apps.selectedAppId);
         }
         return null;
     },
@@ -523,7 +523,7 @@ const mapDispatchToProps = (dispatch) => {
 
         updateFormRedirectRoute: (route) => dispatch(updateFormRedirectRoute(route)),
         showTableCreationDialog: () => dispatch(TableCreationActions.showTableCreationDialog()),
-        showTableReadyDialog: () => dispatch(TableCreationActions.showTableReadyDialog())
+        showTableReadyDialog: () => dispatch(TableCreationActions.showTableReadyDialog()),
     };
 };
 

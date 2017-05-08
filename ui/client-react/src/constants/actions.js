@@ -9,6 +9,11 @@ export const FILTER_REPORTS_BY_NAME = 'FILTER_REPORTS_BY_NAME';
 export const LOAD_APPS = 'LOAD_APPS';
 export const LOAD_APPS_SUCCESS = 'LOAD_APPS_SUCCESS';
 export const LOAD_APPS_FAILED = 'LOAD_APPS_FAILED';
+
+export const LOAD_APP = 'LOAD_APP';
+export const LOAD_APP_SUCCESS = 'LOAD_APP_SUCCESS';
+export const LOAD_APP_FAILED = 'LOAD_APP_FAILED';
+
 export const SELECT_APP = 'SELECT_APP';
 export const SELECT_TABLE = 'SELECT_TABLE';
 export const UPDATED_TABLE_PROPS = 'UPDATED_TABLE_PROPS';

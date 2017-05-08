@@ -5,6 +5,8 @@ import Logger from '../utils/logger';
 var logger = new Logger();
 import TableIconUtils from '../utils/tableIconUtils';
 
+import _ from 'lodash';
+
 let AppsStore = Fluxxor.createStore({
 
     initialize() {
@@ -19,6 +21,10 @@ let AppsStore = Fluxxor.createStore({
         this.error = false;
 
         this.bindActions(
+            actions.LOAD_APP, this.onLoadApps,
+            actions.LOAD_APP_SUCCESS, this.onLoadAppSuccess,
+            actions.LOAD_APP_FAILED, this.onLoadAppsFailed,
+
             actions.LOAD_APPS, this.onLoadApps,
             actions.LOAD_APPS_SUCCESS, this.onLoadAppsSuccess,
             actions.LOAD_APPS_FAILED, this.onLoadAppsFailed,
@@ -60,6 +66,19 @@ let AppsStore = Fluxxor.createStore({
                 });
             }
         });
+    },
+    onLoadAppSuccess(app) {
+
+        this.loading = false;
+        this.error = false;
+
+        //  find the app and replace
+        let appInStore = _.find(this.apps, (a) => a.id === app.id);
+        appInStore = app;
+
+        this.setTableIcons();
+
+        this.emit('change');
     },
     onLoadAppsSuccess(apps) {
 

@@ -86,6 +86,7 @@
                 requestFunctions[routes.APPS] = getApps;
                 requestFunctions[routes.APP_USERS] = getAppUsers;
                 requestFunctions[routes.APP_ROLES] = getAppRoles;
+                requestFunctions[routes.APP_HYDRATED] = getAppHydrated;
 
                 requestFunctions[routes.FEATURE_SWITCHES] = getFeatureSwitches;
                 requestFunctions[routes.FEATURE_STATES] = getFeatureStates;
@@ -688,6 +689,38 @@
                 },
                 function(response) {
                     logApiFailure(req, response, perfLog, 'Get feature states');
+
+                    //  client is waiting for a response..make sure one is always returned
+                    if (response && response.statusCode) {
+                        res.status(response.statusCode).send(response);
+                    } else {
+                        res.status(httpConstants.INTERNAL_SERVER_ERROR).send(response);
+                    }
+                }
+            );
+        });
+    }
+
+    /**
+     * Return an app (hydrated with table information and app rights)
+     *
+     * @param req
+     * @param res
+     */
+    function getAppHydrated(req, res) {
+        let perfLog = perfLogger.getInstance();
+        perfLog.init('Get App Hydrated', {req:filterNodeReq(req)});
+
+        processRequest(req, res, function(req, res) {
+
+            let appId = req.params.appId ? req.params.appId : null;
+            appsApi.getHydratedApp(req, appId).then(
+                function(response) {
+                    res.send(response);
+                    logApiSuccess(req, response, perfLog, 'Get App Hydrated');
+                },
+                function(response) {
+                    logApiFailure(req, response, perfLog, 'Get App Hydrated');
 
                     //  client is waiting for a response..make sure one is always returned
                     if (response && response.statusCode) {

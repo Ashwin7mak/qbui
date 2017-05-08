@@ -89,6 +89,7 @@
         APPS                        : context.client.QBUI + '/apps',
         APP_USERS                   : context.client.QBUI + '/apps/:appId/users',
         APP_ROLES                   : context.client.QBUI + '/apps/:appId/roles',
+        APP_HYDRATED                : context.client.QBUI + '/apps/:appId/hydrate',
 
         ADMIN                       : context.client.QBUI + '/admin',
         FEATURE_SWITCHES            : context.client.QBUI + '/admin/featureSwitches',

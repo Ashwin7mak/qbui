@@ -45,7 +45,7 @@ let NavWrapper = React.createClass({
             document.body.className = "touch";
         }
 
-        this.props.flux.actions.loadApps(true);
+        this.props.flux.actions.loadApps();
         let paramVals = this.props.match.params;
         if (paramVals.appId) {
             this.props.flux.actions.selectAppId(paramVals.appId);
@@ -80,6 +80,9 @@ let NavWrapper = React.createClass({
         if (incomingProps.match.params.appId) {
             if (this.props.match.params.appId !== incomingProps.match.params.appId) {
                 this.props.flux.actions.selectAppId(incomingProps.match.params.appId);
+                if (this.isAppTablesHydrated(incomingProps.match.params.appId)) {
+                    this.props.flux.actions.loadHydratedApp(incomingProps.match.params.appId);
+                }
                 // TODO: once the above SELECT_TABLE action is migrated to redux, the search store should
                 // TODO: listen for the new event to clear out any input.
                 //this.incomingProps.dispatch(SearchActions.clearSearchInput());
@@ -94,6 +97,9 @@ let NavWrapper = React.createClass({
 
         if (this.props.match.params.appId !== incomingProps.match.params.appId) {
             this.props.flux.actions.selectAppId(incomingProps.match.params.appId);
+            if (this.isAppTablesHydrated(incomingProps.match.params.appId)) {
+                this.props.flux.actions.loadHydratedApp(incomingProps.match.params.appId);
+            }
             this.props.dispatch(FeatureSwitchActions.getStates(incomingProps.match.params.appId));
         }
         if (incomingProps.match.params.tblId) {
@@ -104,6 +110,17 @@ let NavWrapper = React.createClass({
         } else {
             this.props.flux.actions.selectTableId(null);
         }
+    },
+
+    isAppTablesHydrated(appId) {
+        let app = _.find(this.state.apps.apps, (a) => a.id === appId);
+        if (_.has(app, 'tables')) {
+            if (app.tables.length > 0) {
+                return app.tables[0].hasOwnProperty('name');
+            }
+        }
+        return true;
+
     }
 });
 

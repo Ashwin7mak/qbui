@@ -22,6 +22,38 @@ Promise.onPossiblyUnhandledRejection(function(err) {
 let appsActions = {
 
     /**
+     * Retrieve an app that is fully hydrated (with table properties).
+     *
+     * @returns Promise
+     */
+    loadHydratedApp(appId) {
+        let logger = new Logger();
+        //  promise is returned in support of unit testing only
+        return new Promise((resolve, reject) => {
+            this.dispatch(actions.LOAD_APP);
+            let appService = new AppService();
+
+            appService.getHydratedApp(appId).then(
+                response => {
+                    logger.debug('AppService getHydratedApp success');
+                    let model = appsModel.set(response.data);
+                    this.dispatch(actions.LOAD_APP_SUCCESS, model);
+                    resolve();
+                },
+                error => {
+                    logger.parseAndLogError(LogLevel.ERROR, error.response, 'appService.getHydratedApp:');
+                    this.dispatch(actions.LOAD_APP_FAILED, error.response.status);
+                    reject();
+                }
+            ).catch(ex => {
+                // TODO - remove catch block and update onPossiblyUnhandledRejection bluebird handler
+                logger.logException(ex);
+                reject();
+            });
+        });
+    },
+
+    /**
      * Retrieve a list of applications for this user.
      *
      * @param hydrate
