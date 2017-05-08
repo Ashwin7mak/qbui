@@ -22,7 +22,6 @@ import {ENTER_KEY, SPACE_KEY} from '../../../../reuse/client/src/components/keyb
 import * as tabIndexConstants from '../formBuilder/tabindexConstants';
 import KeyboardShortcuts from '../../../../reuse/client/src/components/keyboardShortcuts/keyboardShortcuts';
 import _ from 'lodash';
-import Icon from 'REUSE/components/icon/icon';
 import {DragDropContext} from 'react-dnd';
 import TouchBackend from 'react-dnd-touch-backend';
 import FormBuilderCustomDragLayer from '../formBuilder/formBuilderCustomDragLayer';
