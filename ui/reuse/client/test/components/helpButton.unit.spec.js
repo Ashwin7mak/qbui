@@ -2,8 +2,8 @@ import React from 'react';
 import {shallow} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
 
-import HelpButton from '../../src/components/helpButton/helpButton';
-import Icon from '../../src/components/icon/icon';
+import HelpButton from 'REUSE/components/helpButton/helpButton';
+import Icon from 'REUSE/components/icon/icon';
 
 let component;
 

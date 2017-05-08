@@ -7,7 +7,7 @@ import Locale from '../../../locales/locales';
 import {I18nMessage} from '../../../utils/i18nMessage';
 import QbIcon from '../../qbIcon/qbIcon';
 import {connect} from 'react-redux';
-import {loadDynamicReport, hideColumn} from '../../../actions/reportActions';
+import {loadDynamicReport, hideColumn, openFieldSelectMenu} from '../../../actions/reportActions';
 import _ from 'lodash';
 
 import ReportUtils from '../../../utils/reportUtils';
@@ -218,15 +218,25 @@ export class ReportColumnHeaderMenu extends Component {
         if (!this.hasRequiredIds()) {return;}
         if (this.props.isOnlyOneColumnVisible) {return;}
 
-        let params = {
-            columnId: this.props.fieldDef.id
-        };
+        this.props.hideColumn(CONTEXT.REPORT.NAV, this.props.fieldDef.id);
+    };
 
-        this.props.hideColumn(CONTEXT.REPORT.NAV, this.props.appId, this.props.tblId, this.props.rptId, params);
+    openFieldSelector(before) {
+        if (!this.hasRequiredIds()) {return;}
+
+        this.props.openFieldSelectMenu(CONTEXT.REPORT.NAV, this.props.fieldDef.id, before);
+    }
+
+    openFieldSelectorBefore = () => {
+        this.openFieldSelector(true);
+    };
+
+    openFieldSelectorAfter = () => {
+        this.openFieldSelector(false);
     };
 
     render() {
-        let isDisabled = this.props.isOnlyOneColumnVisible;
+        let isHideOptionDisabled = this.props.isOnlyOneColumnVisible;
         return (
             <Dropdown bsStyle="default" noCaret id="dropdown-no-caret">
                 <Button tabIndex="0" bsRole="toggle" className={"dropdownToggle iconActionButton"}>
@@ -249,19 +259,26 @@ export class ReportColumnHeaderMenu extends Component {
                     <MenuItem onSelect={this.groupReportAscending}>
                         <span className="groupAscendMenuText">{this.getSortAscText(GROUPING_MESSAGE)}</span>
                     </MenuItem>
+
                     <MenuItem onSelect={this.groupReportDescending}>
                         <span className="groupDescendMenuText">{this.getSortDescText(GROUPING_MESSAGE)}</span>
                     </MenuItem>
 
                     <MenuItem divider/>
 
-                    <MenuItem disabled><I18nMessage message="report.menu.addColumnBefore"/></MenuItem>
-                    <MenuItem disabled><I18nMessage message="report.menu.addColumnAfter"/></MenuItem>
+                    <MenuItem onSelect={this.openFieldSelectorBefore}>
+                        <span className="addColumnBeforeText">{Locale.getMessage('report.menu.addColumnBefore')}</span>
+                    </MenuItem>
 
-                    <MenuItem disabled={isDisabled} onSelect={this.hideThisColumn}>
+                    <MenuItem onSelect={this.openFieldSelectorAfter}>
+                        <span className="addColumnAfterText">{Locale.getMessage('report.menu.addColumnAfter')}</span>
+                    </MenuItem>
+
+                    <MenuItem disabled={isHideOptionDisabled} onSelect={this.hideThisColumn}>
                         <span className="hideColumnText">{Locale.getMessage('report.menu.hideColumn')}</span>
                     </MenuItem>
                 </Dropdown.Menu>
+
             </Dropdown>
         );
     }
@@ -278,8 +295,11 @@ const mapDispatchToProps = (dispatch) => {
         loadDynamicReport: (context, appId, tblId, rptId, format, filter, queryParams) => {
             dispatch(loadDynamicReport(context, appId, tblId, rptId, format, filter, queryParams));
         },
-        hideColumn: (context, appId, tblId, rptId, params) => {
-            dispatch(hideColumn(context, appId, tblId, rptId, params));
+        hideColumn: (context, clickedId) => {
+            dispatch(hideColumn(context, clickedId));
+        },
+        openFieldSelectMenu: (context, clickedColumn, addBeforeColumn) => {
+            dispatch(openFieldSelectMenu(context, clickedColumn, addBeforeColumn));
         }
     };
 };

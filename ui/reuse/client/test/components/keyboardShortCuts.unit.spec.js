@@ -1,7 +1,7 @@
 import React from 'react';
 import {shallow} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
-import KeyboardShortCuts, {__RewireAPI__ as KeyboardShortCutsRewireAPI} from '../../src/components/keyboardShortcuts/keyboardShortcuts';
+import KeyboardShortCuts, {__RewireAPI__ as KeyboardShortCutsRewireAPI} from 'REUSE/components/keyboardShortcuts/keyboardShortcuts';
 
 let MockMouseTrap = {
     bind: (_keyBindings) => {},

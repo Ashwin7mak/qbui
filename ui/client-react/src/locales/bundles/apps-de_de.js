@@ -333,6 +333,10 @@ export default {
                 newTable: "Neue Tabelle auf dieser Spalte über",
                 columnProps: "Spalteneigenschaften",
                 fieldProps: "Feldeigenschaften"
+            },
+            drawer: {
+                title: "Versteckte Felder",
+                info: "Fügen Sie ein Feld zum Bericht hinzu",
             }
         },
         errorMessagePopup: {

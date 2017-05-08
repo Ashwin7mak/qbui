@@ -1,14 +1,14 @@
 import React from 'react';
 import {shallow, mount} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
-import {I18nMessage} from '../../src/utils/i18nMessage';
+import {I18nMessage} from 'REUSE/utils/i18nMessage';
 
 const mockParentFunctions = {
     onClickPrevious() {},
     onClickNext() {},
 };
 
-import Pagination, {__RewireAPI__ as PaginationRewireAPI} from '../../src/components/pagination/pagination';
+import Pagination, {__RewireAPI__ as PaginationRewireAPI} from 'REUSE/components/pagination/pagination';
 
 describe('Pagination ', () => {
     beforeEach(() => {
