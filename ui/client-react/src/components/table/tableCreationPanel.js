@@ -30,7 +30,7 @@ class TableCreationPanel extends React.Component {
      * @returns {XML}
      */
     getTableIcon(name) {
-        return <Icon iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY} icon={name}/>;
+        return <Icon iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY} icon={name} tooltipTitle={IconUtils.getIconToolTipTitle(tableIconsByTag, name)}/>;
     }
 
     /**
@@ -64,7 +64,7 @@ class TableCreationPanel extends React.Component {
         return (
             <div className="iconList">
                 {suggestedIcons.map((iconName, i) => (
-                    <button key={i} onClick={() => this.selectIcon(iconName)}>
+                    <button key={i} onClick={() => this.selectIcon(iconName)} type="button">
                         {this.getTableIcon(iconName)}
                     </button>))}
             </div>);
