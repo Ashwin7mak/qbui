@@ -60,7 +60,7 @@ export const LARGE_RELATIVE_LIGHT_SPINNER = _.merge({}, LARGE_RELATIVE_SPINNER, 
 
 // Used in AgGrid when refreshing the full report, for large breakpoint.
 export const LARGE_BREAKPOINT = LARGE_ABSOLUTE_CENTERED_SPINNER;
-export const AG_GRID = Object.assign({}, LARGE_ABSOLUTE_CENTERED_SPINNER, {zIndex: 50});
+export const QB_GRID = Object.assign({}, LARGE_ABSOLUTE_CENTERED_SPINNER, {zIndex: 50});
 
 // Used in the left navbar when apps or tables are loading
 export const LEFT_NAV_BAR =  LARGE_RELATIVE_LIGHT_SPINNER;
@@ -69,7 +69,7 @@ export const LEFT_NAV_BAR =  LARGE_RELATIVE_LIGHT_SPINNER;
 export const TROWSER_CONTENT =  LARGE_RELATIVE_SPINNER;
 
 // Used in the stacked forms in drawer content
-export const DRAWER_CONTENT = AG_GRID;
+export const DRAWER_CONTENT = QB_GRID;
 
 // Used in card view when refreshing the full report, for large breakpoint.
 export const CARD_VIEW_REPORT = LARGE_RELATIVE_SPINNER;
