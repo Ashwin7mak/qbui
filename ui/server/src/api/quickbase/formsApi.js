@@ -174,7 +174,7 @@
                 return Promise.all(promises).then(response => {
                     const formMeta = JSON.parse(response[0].body);
                     const relationships = response[1] || [];
-                    const app = response[2];
+                    const appTables = response[2];
                     if (relationships.length) {
                         formMeta.relationships = relationships;
                         let referenceElements = [];
@@ -215,7 +215,7 @@
                             });
 
                             const childTableId = relationships[referenceElement.ReferenceElement.relationshipId].detailTableId;
-                            const childTableName = lodash.find(app.tables, {id:childTableId}).name;
+                            const childTableName = lodash.find(appTables, {id:childTableId}).name;
                             sections[length].headerElement.FormHeaderElement.displayText = childTableName;
                         });
                     }
