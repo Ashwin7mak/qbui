@@ -1,17 +1,17 @@
 import React, {PropTypes} from 'react';
 import * as Table from 'reactabular-table';
 import Loader  from 'react-loader';
-import * as SpinnerConfigurations from "../../../constants/spinnerConfigurations";
+import * as SpinnerConfigurations from 'APP/constants/spinnerConfigurations';
 import QbHeaderCell from './qbHeaderCell';
 import QbRow from './qbRow';
 import QbCell from './qbCell';
-import {UNSAVED_RECORD_ID} from '../../../constants/schema';
+import {UNSAVED_RECORD_ID} from 'APP/constants/schema';
 import RowActions from './rowActions';
-import {SELECT_ROW_CHECKBOX} from '../../../../../reuse/client/src/components/rowActions/rowActions';
+import {SELECT_ROW_CHECKBOX} from 'REUSE/components/rowActions/rowActions';
 import QbIcon from '../../qbIcon/qbIcon';
 import CollapsedGroupsHelper from './collapsedGroupHelper';
 
-import Logger from '../../../utils/logger';
+import Logger from 'APP/utils/logger';
 const logger = new Logger();
 
 import './qbGrid.scss';
