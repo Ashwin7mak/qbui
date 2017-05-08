@@ -585,24 +585,31 @@ module.exports = function(grunt) {
                     // Forms Tests
                     // Stabilize in CI before enabling
                     './wdio/tests/forms/formDragDrop.e2e.spec.js',
-                    //TODO MC-2105 needs to be fixed to enable permission testing on forms
+                    //TODO MC-2105 needs to be fixed to enable permissions on forms
                     // disabling formPermissions tests as after moving to ExperienceEngine,
                     // permissions for viewer and participant are not working correctly
                     './wdio/tests/forms/formPermissionsViewerRole.e2e.spec.js',
-                    './wdio/tests/forms/formPermissionsParticipantRole.e2e.spec.js'
+                    './wdio/tests/forms/formPermissionsParticipantRole.e2e.spec.js',
+                    // Tables Tests
+                    // Users Tests
+                    // Relationships Tests
+                    // Stabilize in CI before enabling
+                    './wdio/tests/relationships/relationshipViewChildTable.e2e.spec.js',
+                    // Stabilize in CI before enabling
+                    './wdio/tests/reports/reportSearch.e2e.spec.js',
+
                 ],
                 suites: {
-                    // Please alphabetize these by folder level
                     reports: [
                         './wdio/tests/reports/reportDeleteRecord.e2e.spec.js',
+                        './wdio/tests/reports/grouping/reportGroupingViaContainer.e2e.spec.js',
+                        './wdio/tests/reports/sorting/reportSortingViaContainer.e2e.spec.js',
+                        './wdio/tests/reports/reportTopNav.e2e.spec.js',
                         './wdio/tests/reports/reportEditRecord.e2e.spec.js',
                         './wdio/tests/reports/reportNavigation.e2e.spec.js',
-                        './wdio/tests/reports/reportTable.e2e.spec.js',
-                        './wdio/tests/reports/reportTopNav.e2e.spec.js',
                         './wdio/tests/reports/grouping/reportGroupingViaColumnHeader.e2e.spec.js',
-                        './wdio/tests/reports/grouping/reportGroupingViaContainer.e2e.spec.js',
                         './wdio/tests/reports/sorting/reportSortingViaColumnHeader.e2e.spec.js',
-                        './wdio/tests/reports/sorting/reportSortingViaContainer.e2e.spec.js'
+                        './wdio/tests/reports/reportTable.e2e.spec.js',
                     ],
                     forms: [
                         './wdio/tests/forms/formAdd.e2e.spec.js',
@@ -616,11 +623,9 @@ module.exports = function(grunt) {
                         './wdio/tests/tables/tableEdit.e2e.spec.js',
                         './wdio/tests/tables/tableHomePage.e2e.spec.js'
                     ],
-                    relationships: [
-                        './wdio/tests/relationships/relationshipViewChildTable.e2e.spec.js'
-                    ],
+                    relationships: [],
                     users: [
-                        './wdio/tests/users/usersTable.e2e.spec.js'
+                        './wdio/tests/users/usersTable.e2e.spec.js',
                     ]
                 }
             },
