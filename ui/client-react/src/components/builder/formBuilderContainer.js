@@ -139,7 +139,7 @@ export const FormBuilderContainer = React.createClass({
 
     onCancel() {
         if (this.props.isPendingEdits) {
-            AppHistory.showPendingEditsConfirmationModal(this.saveClicked, this.closeFormBuilder, function() {HideAppModal();});
+            AppHistory.showPendingEditsConfirmationModal(this.saveClicked, this.closeFormBuilder, () => HideAppModal());
         } else {
             HideAppModal();
             this.closeFormBuilder();
