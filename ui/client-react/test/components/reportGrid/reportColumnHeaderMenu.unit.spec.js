@@ -15,7 +15,7 @@ const MockLocale = {
 };
 const testFieldDef = {
     id: 13,
-    datatypeAttributes: {type: FieldConsts.NUMERIC}
+    datatypeAttributes: {type: FieldConsts.NUMERIC},
 };
 const testProps = {
     appId: 1,
@@ -26,7 +26,8 @@ const testProps = {
     sortFids: [],
     isOnlyOneColumnVisible: false,
     loadDynamicReport: (context, appId, tblId, rptId, queryParams) => {},
-    hideColumn: (context, appId, tblId, rptId, params) => {}
+    hideColumn: (context, appId, tblId, rptId, params) => {},
+    openFieldSelectMenu: (context, clickedColumn, addBeforeColumn) => {}
 };
 let component;
 let instance;
@@ -36,24 +37,26 @@ describe('ReportColumnHeaderMenu', () => {
         RewireAPI.__Rewire__('Locale', MockLocale);
         spyOn(testProps, 'loadDynamicReport').and.callThrough();
         spyOn(testProps, 'hideColumn').and.callThrough();
+        spyOn(testProps, 'openFieldSelectMenu').and.callThrough();
     });
 
     afterEach(() => {
         RewireAPI.__ResetDependency__('Locale');
         testProps.loadDynamicReport.calls.reset();
         testProps.hideColumn.calls.reset();
+        testProps.openFieldSelectMenu.calls.reset();
     });
 
     describe('hasRequiredIds', () => {
-        it('returns true if the appropriate props have been passed in to be able to call sort, group, and hide actions', () => {
+        it('returns true if the appropriate props have been passed in to be able to call sort, group, add, and hide actions', () => {
             component = shallow(<ReportColumnHeaderMenu {...testProps}/>);
             instance = component.instance();
 
             expect(instance.hasRequiredIds()).toBeTruthy();
         });
 
-        it('returns false if the required props to call sort, group, and hide actions are missing', () => {
-            component = shallow(<ReportColumnHeaderMenu/>);
+        it('returns false if the required props to call sort, group, add, and hide actions are missing', () => {
+            component = shallow(<ReportColumnHeaderMenu fieldDef={testFieldDef}/>);
             instance = component.instance();
 
             expect(instance.hasRequiredIds()).toBeFalsy();
@@ -433,7 +436,7 @@ describe('ReportColumnHeaderMenu', () => {
         });
 
         it('does not call the group action if the required props are not passed in', () => {
-            component = shallow(<ReportColumnHeaderMenu />);
+            component = shallow(<ReportColumnHeaderMenu fieldDef={testFieldDef}/>);
             instance = component.instance();
 
             instance.groupReport(true, false);
@@ -486,7 +489,7 @@ describe('ReportColumnHeaderMenu', () => {
         });
 
         it('does not call the group action if the required props are not passed in', () => {
-            component = shallow(<ReportColumnHeaderMenu />);
+            component = shallow(<ReportColumnHeaderMenu fieldDef={testFieldDef}/>);
             instance = component.instance();
 
             instance.groupReport(true);
@@ -517,15 +520,11 @@ describe('ReportColumnHeaderMenu', () => {
 
             instance.hideThisColumn(testProps.fieldDef.id);
 
-            let params = {
-                columnId: testProps.fieldDef.id
-            };
-
-            expect(testProps.hideColumn).toHaveBeenCalledWith(CONTEXT.REPORT.NAV, testProps.appId, testProps.tblId, testProps.rptId, params);
+            expect(testProps.hideColumn).toHaveBeenCalledWith(CONTEXT.REPORT.NAV, testProps.fieldDef.id);
         });
 
         it('does not call the action to hide a column if the required props are not passed in', () => {
-            component = shallow(<ReportColumnHeaderMenu isOnlyOneColumnVisible={false}/>);
+            component = shallow(<ReportColumnHeaderMenu fieldDef={testFieldDef} isOnlyOneColumnVisible={false}/>);
             instance = component.instance();
 
             instance.hideThisColumn(testProps.fieldDef.id);
@@ -540,6 +539,64 @@ describe('ReportColumnHeaderMenu', () => {
             instance.hideThisColumn(testProps.fieldDef.id);
 
             expect(testProps.hideColumn).not.toHaveBeenCalled();
+        });
+
+        it('adds a column before when that menu item is selected', () => {
+
+            component = shallow(<ReportColumnHeaderMenu {...testProps}/>);
+            instance = component.instance();
+
+            let addingMenuItem = component.find(MenuItem).find({onSelect: instance.openFieldSelectorBefore});
+            expect(addingMenuItem).toBePresent();
+
+            spyOn(instance, "openFieldSelector");
+
+            expect(addingMenuItem.find('.addColumnBeforeText')).toHaveText('report.menu.addColumnBefore');
+            instance.openFieldSelectorBefore();
+
+            expect(instance.openFieldSelector).toHaveBeenCalledWith(true);
+        });
+
+        it('adds a column after when that menu item is selected', () => {
+            component = shallow(<ReportColumnHeaderMenu {...testProps}/>);
+            instance = component.instance();
+
+            let addingMenuItem = component.find(MenuItem).find({onSelect: instance.openFieldSelectorAfter});
+            expect(addingMenuItem).toBePresent();
+
+            spyOn(instance, "openFieldSelector");
+
+            expect(addingMenuItem.find('.addColumnAfterText')).toHaveText('report.menu.addColumnAfter');
+            instance.openFieldSelectorAfter();
+
+            expect(instance.openFieldSelector).toHaveBeenCalledWith(false);
+        });
+
+        it('calls openFieldSelectMenu to open the menu in order to add a column before', () => {
+            component = shallow(<ReportColumnHeaderMenu {...testProps}/>);
+            instance = component.instance();
+
+            instance.openFieldSelectorBefore();
+
+            expect(testProps.openFieldSelectMenu).toHaveBeenCalledWith(CONTEXT.REPORT.NAV, testFieldDef.id, true);
+        });
+
+        it('calls openFieldSelectMenu to open the menu in order to add a column after', () => {
+            component = shallow(<ReportColumnHeaderMenu {...testProps}/>);
+            instance = component.instance();
+
+            instance.openFieldSelectorAfter();
+
+            expect(testProps.openFieldSelectMenu).toHaveBeenCalledWith(CONTEXT.REPORT.NAV, testFieldDef.id, false);
+        });
+
+        it('does not call the action to open the menu to add a column if the required props are not passed in', () => {
+            component = shallow(<ReportColumnHeaderMenu fieldDef={testFieldDef} isOnlyOneColumnVisible={false}/>);
+            instance = component.instance();
+
+            instance.openFieldSelector(true);
+
+            expect(testProps.openFieldSelectMenu).not.toHaveBeenCalled();
         });
     });
 });
