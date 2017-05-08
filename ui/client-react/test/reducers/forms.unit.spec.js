@@ -35,7 +35,7 @@ describe('Forms reducer functions', () => {
         }
     };
 
-    let updatedFormMeta = 'updated form meta';
+    const updatedFormMeta = 'updated form meta';
 
     it('returns correct initial state', () => {
         expect(reducer(undefined, {})).toEqual(initialState);
