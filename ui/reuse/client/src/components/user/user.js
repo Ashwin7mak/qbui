@@ -1,7 +1,10 @@
 import React, {PropTypes, Component} from 'react';
 import Loader from 'react-loader';
-import {INLINE_UPDATING} from '../../../../../client-react/src/constants/spinnerConfigurations';
-import Locale from '../../locales/locale';
+import Locale from 'REUSE/locales/locale';
+
+// IMPORTING FROM CLIENT REACT
+import {INLINE_UPDATING} from 'APP/constants/spinnerConfigurations';
+// IMPORTING FROM CLIENT REACT
 
 /**
  * A simple User component that displays the name of the currently logged in user.
