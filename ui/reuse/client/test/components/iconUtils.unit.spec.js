@@ -1,4 +1,4 @@
-import IconUtils from '../../src/components/icon/iconUtils';
+import IconUtils from 'REUSE/components/icon/iconUtils';
 
 let iconsByTag = [
     {

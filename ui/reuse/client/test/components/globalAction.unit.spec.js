@@ -2,7 +2,7 @@ import React from 'react';
 import {shallow, mount} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
 
-import GlobalAction, {__RewireAPI__ as GlobalActionRewireAPI} from '../../src/components/globalAction/globalAction';
+import GlobalAction, {__RewireAPI__ as GlobalActionRewireAPI} from 'REUSE/components/globalAction/globalAction';
 
 let component;
 

@@ -1,8 +1,8 @@
 import Promise from 'bluebird';
 
 // IMPORT FROM CLIENT REACT
-import UserService from '../../../../client-react/src/services/userService';
-import Logger from '../../../../client-react/src/utils/logger';
+import UserService from 'APP/services/userService';
+import Logger from 'APP/utils/logger';
 // IMPORT FROM CLIENT REACT
 
 // ACTIONS AVAILABLE

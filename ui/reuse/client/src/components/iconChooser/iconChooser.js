@@ -1,10 +1,10 @@
 import React from 'react';
 import {PropTypes} from 'react';
-import Icon from '../icon/icon';
-import IconUtils from '../icon/iconUtils';
+import Icon from 'REUSE/components/icon/icon';
+import IconUtils from 'REUSE/components/icon/iconUtils';
 
 // IMPORTS FROM CLIENT REACT
-import Locale from '../../../../../client-react/src/locales/locales';
+import Locale from 'APP/locales/locales';
 // IMPORTS FROM CLIENT REACT
 
 import './iconChooser.scss';

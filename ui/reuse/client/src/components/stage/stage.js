@@ -1,7 +1,7 @@
 import React, {PropTypes, Component} from 'react';
 import Collapse from 'react-bootstrap/lib/Collapse';
 import Well from 'react-bootstrap/lib/Well';
-import Icon from '../icon/icon';
+import Icon from 'REUSE/components/icon/icon';
 
 import './stage.scss';
 

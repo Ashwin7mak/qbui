@@ -3,6 +3,7 @@ import {shallow} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
 import Icon, {AVAILABLE_ICON_FONTS} from '../../src/components/icon/icon';
 import QBToolTip from 'REUSE/components/tooltip/tooltip.js';
+
 let component;
 
 describe('Icon', () => {

@@ -1,7 +1,7 @@
 import React, {PropTypes, Component} from 'react';
-import Icon from '../icon/icon';
-import Tooltip from '../tooltip/tooltip';
-import {I18nMessage} from '../../utils/i18nMessage';
+import Icon from 'REUSE/components/icon/icon';
+import Tooltip from 'REUSE/components/tooltip/tooltip';
+import {I18nMessage} from 'REUSE/utils/i18nMessage';
 import './pagination.scss';
 
 class Pagination extends Component {
