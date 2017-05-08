@@ -190,6 +190,7 @@ const ReportRoute = React.createClass({
                             scrollingReport={this.props.scrollingReport}
                             loadDynamicReport={this.loadDynamicReport}
                             noRowsUI={true}
+                            inBuilderMode={this.props.inBuilderMode}
                         />
 
                     </ReportFieldSelectMenu>
