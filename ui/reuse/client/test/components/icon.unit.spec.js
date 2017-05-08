@@ -1,7 +1,7 @@
 import React from 'react';
 import {shallow} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
-import Icon, {AVAILABLE_ICON_FONTS} from '../../src/components/icon/icon';
+import Icon, {AVAILABLE_ICON_FONTS} from 'REUSE/components/icon/icon';
 
 let component;
 

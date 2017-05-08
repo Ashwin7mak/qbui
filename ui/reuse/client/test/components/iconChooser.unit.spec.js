@@ -1,7 +1,7 @@
 import React from 'react';
 import {mount} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
-import IconChooser from '../../src/components/iconChooser/iconChooser';
+import IconChooser from 'REUSE/components/iconChooser/iconChooser';
 
 let component;
 

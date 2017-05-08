@@ -1,5 +1,5 @@
-import Locale, {__RewireAPI__ as LocaleRewireAPI} from '../../src/locales/locale';
-import ReuseBundleLoader from '../../src/locales/reuseBundleLoader';
+import Locale, {__RewireAPI__ as LocaleRewireAPI} from 'REUSE/locales/locale';
+import ReuseBundleLoader from 'REUSE/locales/reuseBundleLoader';
 
 describe('Locales', () => {
     'use strict';
