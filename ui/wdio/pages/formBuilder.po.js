@@ -105,6 +105,15 @@ class formBuilderPage {
             return label;
         });
     }
+    waitForLabels(numLabels) {
+        // get the field list & wait to be sure it's not 'polluted' due to DOM still settling after other activity
+        // (i.e. contains an unexpected array like ['Must be filled in', ...] after moving or adding fields)
+        let newFields = this.getFieldLabels();
+        while (!newFields.length === numLabels) {
+            newFields = this.getFieldLabels();
+        }
+        return newFields;
+    }
     getNewFieldLabels() {
         // Gets the list of field labels from the NEW FIELD panel
         let labelEls = browser.elements('.listOfElementsItem');
@@ -113,7 +122,7 @@ class formBuilderPage {
         });
     }
     moveByName(source, target) {
-        // Clicks on the field with the specified (source) label and drags it to the field with the specified (target) label
+        // Clicks on the specified source field label and drags it to the specified target field label
         let labels = this.getFieldLabels();
         // convert the source & target label strings to actual elements
         // add 1 to index because indexOf is zero-based whereas getFieldLocator is one-based
@@ -146,7 +155,7 @@ class formBuilderPage {
     save() {
         // Clicks on the SAVE button in the form builder and waits for the next page to appear
         this.saveBtn.click();
-        // wait for spinner?
+        // wait for spinner instead if we have code for it...?
         browser.pause(fiveSeconds);
         return this;
     }

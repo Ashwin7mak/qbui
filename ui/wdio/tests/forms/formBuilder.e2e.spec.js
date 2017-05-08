@@ -84,10 +84,8 @@
             let source = formBuilderPO.getFieldLocator(1);
             let target = formBuilderPO.getFieldLocator(2);
             formBuilderPO.slowDragAndDrop(source, target);
-            // get the revised field list & make sure it's not 'polluted' due to DOM still settling after swap)
-            // (i.e. contains an unexpected array like ['Must be filled in', ...])
-            let movedFields = formBuilderPO.getFieldLabels();
             // verify that the first 2 items have changed position
+            let movedFields = formBuilderPO.waitForLabels(origFields.length);
             expect(movedFields[0]).toBe(origFields[1]);
             expect(movedFields[1]).toBe(origFields[0]);
             // save & reopen
@@ -200,13 +198,8 @@
             let source = formBuilderPO.getFieldLocator(1);
             let target = formBuilderPO.getFieldLocator(2);
             formBuilderPO.slowDragAndDrop(source, target);
-            // get the revised field list & make sure it's not 'polluted' due to DOM still settling after swap)
-            // (i.e. contains an unexpected array like ['Must be filled in', ...])
-            let movedFields = formBuilderPO.getFieldLabels();
-            while (!movedFields.length === origFields.length) {
-                movedFields = formBuilderPO.getFieldLabels();
-            }
             // verify that the first 2 items have changed position
+            let movedFields = formBuilderPO.waitForLabels(origFields.length);
             expect(movedFields[0]).toBe(origFields[1]);
             expect(movedFields[1]).toBe(origFields[0]);
             // cancel & reopen
@@ -216,15 +209,18 @@
         });
 
         it('select a field, add a new field, verify new field is added directly below selection', function() {
+            // store the list of fields before adding
+            let origFields = formBuilderPO.getFieldLabels();
             let selectedField = formBuilderPO.selectFieldByIndex(1);
             let newField = formBuilderPO.listOfElementsItem;
             let newFieldLabel = newField.getText();
             expect(formBuilderPO.getFieldLabels()[0]).not.toBe(newFieldLabel);
             // add the first new field item to the form
             newField.click();
-            browser.pause(5000);
+            browser.pause(formBuilderPO.oneSecond);
             // verify that the new row has the expected label
-            expect(formBuilderPO.getFieldLabels()[1]).toBe(newFieldLabel);
+            let newFields = formBuilderPO.waitForLabels(origFields.length + 1);
+            expect(newFields[1]).toBe(newFieldLabel);
         });
 
         it('remove a field & verify presence after CANCEL', function() {
@@ -348,7 +344,7 @@
             );
             // verify that the field is still selected
             expect(formBuilderPO.selectedField.getText()).toEqual(selectedField);
-            // todo: select/add a new field via keyboard & verify that is inserted directly below the selected field
+            // TODO: select/add a new field via keyboard & verify that is inserted directly below the selected field
         });
 
         xit('check the REQUIRED checkbox, cancel & verify not checked', function() {
