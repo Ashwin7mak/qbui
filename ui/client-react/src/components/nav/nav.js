@@ -151,7 +151,7 @@ export const Nav = React.createClass({
                                dropdownMsg="globalActions.user"
                                startTabIndex={100}
                                position="left">
-                </GlobalActions>);
+        </GlobalActions>);
     },
 
     onSelectTableReports(tableId) {
@@ -350,29 +350,29 @@ export const Nav = React.createClass({
             <AppQbModal/>
 
             {this.props.match.params && this.props.match.params.appId &&
-                <RecordTrowser visible={this.props.shell.trowserOpen && this.props.shell.trowserContent === TrowserConsts.TROWSER_EDIT_RECORD}
-                               history={this.props.history}
-                               editForm={this.getEditFormFromProps()}
-                               appId={this.props.match.params.appId}
-                               tblId={this.props.match.params.tblId}
-                               recId={editRecordId}
-                               viewingRecordId={viewingRecordId}
-                               pendEdits={pendEdits}
-                               appUsers={this.state.apps.appUsers}
-                               selectedApp={this.getSelectedApp()}
-                               selectedTable={this.getSelectedTable(reportsData.tblId)}
-                               reportData={reportsData}
-                               errorPopupHidden={this.props.shell.errorPopupHidden}
-                               onHideTrowser={this.hideTrowser}/>
+            <RecordTrowser visible={this.props.shell.trowserOpen && this.props.shell.trowserContent === TrowserConsts.TROWSER_EDIT_RECORD}
+                           history={this.props.history}
+                           editForm={this.getEditFormFromProps()}
+                           appId={this.props.match.params.appId}
+                           tblId={this.props.match.params.tblId}
+                           recId={editRecordId}
+                           viewingRecordId={viewingRecordId}
+                           pendEdits={pendEdits}
+                           appUsers={this.state.apps.appUsers}
+                           selectedApp={this.getSelectedApp()}
+                           selectedTable={this.getSelectedTable(reportsData.tblId)}
+                           reportData={reportsData}
+                           errorPopupHidden={this.props.shell.errorPopupHidden}
+                           onHideTrowser={this.hideTrowser}/>
             }
 
             {this.props.match.params && this.props.match.params.appId &&
-                <ReportManagerTrowser visible={this.props.shell.trowserOpen && this.props.shell.trowserContent === TrowserConsts.TROWSER_REPORTS}
-                                      history={this.props.history}
-                                      selectedTable={this.getSelectedTable(reportsList.tblId)}
-                                      filterReportsName={this.state.nav.filterReportsName}
-                                      reportsData={reportsList}
-                                      onHideTrowser={this.hideTrowser}/>
+            <ReportManagerTrowser visible={this.props.shell.trowserOpen && this.props.shell.trowserContent === TrowserConsts.TROWSER_REPORTS}
+                                  history={this.props.history}
+                                  selectedTable={this.getSelectedTable(reportsList.tblId)}
+                                  filterReportsName={this.state.nav.filterReportsName}
+                                  reportsData={reportsList}
+                                  onHideTrowser={this.hideTrowser}/>
             }
 
             <LeftNav
@@ -398,42 +398,42 @@ export const Nav = React.createClass({
                         showOnSmall={this.state.nav.showTopNav}
                 />
                 {this.props.routes &&
-                    <div className="mainContent" >
-                        <TempMainErrorMessages apps={this.state.apps.apps} appsLoading={this.state.apps.loading} selectedAppId={this.state.apps.selectedAppId} />
+                <div className="mainContent" >
+                    <TempMainErrorMessages apps={this.state.apps.apps} appsLoading={this.state.apps.loading} selectedAppId={this.state.apps.selectedAppId} />
 
-                        <Switch>
-                            { this.props.routes.map((route, i) => {
+                    <Switch>
+                        { this.props.routes.map((route, i) => {
                                 //insert the child route passed in by the router
                                 // with additional props
                                 // the Switch wrapper will pick only one of the routes the first
                                 // that matches.
-                                let routeProps = {
-                                    key : this.props.match ? this.props.match.url : "",
-                                    apps: this.state.apps.apps,
-                                    selectedAppId: this.state.apps.selectedAppId,
-                                    appsLoading: this.state.apps.loading,
-                                    reportData: reportsData,
-                                    appUsers: this.state.apps.appUsers,
-                                    appUsersUnfiltered: this.state.apps.appUsersUnfiltered,
-                                    appRoles: this.state.apps.appRoles,
-                                    appOwner: this.state.apps.appOwner,
-                                    locale: this.state.nav.locale,
-                                    isRowPopUpMenuOpen: this.props.shell.isRowPopUpMenuOpen,
-                                    selectedApp: this.getSelectedApp(),
-                                    selectedTable: this.getSelectedTable(reportsData.tblId),
-                                    scrollingReport: this.state.nav.scrollingReport,
-                                    flux: flux
-                                };
-                                return RouteWithSubRoutes(route, i, routeProps);
-                            }
-                            )}
-                        </Switch>
+                            let routeProps = {
+                                key : this.props.match ? this.props.match.url : "",
+                                apps: this.state.apps.apps,
+                                selectedAppId: this.state.apps.selectedAppId,
+                                appsLoading: this.state.apps.loading,
+                                reportData: reportsData,
+                                appUsers: this.state.apps.appUsers,
+                                appUsersUnfiltered: this.state.apps.appUsersUnfiltered,
+                                appRoles: this.state.apps.appRoles,
+                                appOwner: this.state.apps.appOwner,
+                                locale: this.state.nav.locale,
+                                isRowPopUpMenuOpen: this.props.shell.isRowPopUpMenuOpen,
+                                selectedApp: this.getSelectedApp(),
+                                selectedTable: this.getSelectedTable(reportsData.tblId),
+                                selectedUserRows: this.state.apps.selectedUserRows,
+                                scrollingReport: this.state.nav.scrollingReport,
+                                flux: flux
+                            };
+                            return RouteWithSubRoutes(route, i, routeProps);
+                        })}
+                    </Switch>
 
-                    </div>}
+                </div>}
             </div>
 
             {pendEdits &&
-                this.renderSavingModal(pendEdits.saving)
+            this.renderSavingModal(pendEdits.saving)
             }
 
             {this.state.apps.selectedAppId && <TableCreationDialog app={this.getSelectedApp()} onTableCreated={this.tableCreated}/>}

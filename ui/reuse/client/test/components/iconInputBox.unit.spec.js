@@ -1,7 +1,7 @@
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
-import IconInputBox  from '../../src/components/iconInputBox/iconInputBox';
-import Icon, {AVAILABLE_ICON_FONTS}  from '../../src/components/icon/icon';
+import IconInputBox  from 'REUSE/components/iconInputBox/iconInputBox';
+import Icon, {AVAILABLE_ICON_FONTS}  from 'REUSE/components/icon/icon';
 
 describe('IconInputBox functions', () => {
     'use strict';

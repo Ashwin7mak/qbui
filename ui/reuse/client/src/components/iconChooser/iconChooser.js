@@ -1,10 +1,10 @@
 import React from 'react';
 import {PropTypes} from 'react';
-import Icon from '../icon/icon';
-import IconUtils from '../icon/iconUtils';
+import Icon from 'REUSE/components/icon/icon';
+import IconUtils from 'REUSE/components/icon/iconUtils';
 
 // IMPORTS FROM CLIENT REACT
-import Locale from '../../../../../client-react/src/locales/locales';
+import Locale from 'APP/locales/locales';
 // IMPORTS FROM CLIENT REACT
 
 import './iconChooser.scss';
@@ -50,8 +50,8 @@ class IconChooser extends React.Component {
      */
     renderIconToggle() {
         return (
-            <button tabIndex="0" className="showAllToggle" onClick={this.toggleAllIcons}>
-                <Icon className="showAllSelectedIcon" iconFont={this.props.font} icon={this.props.selectedIcon}/>
+            <button tabIndex="0" className="showAllToggle" onClick={this.toggleAllIcons} type="button">
+                <Icon className="showAllSelectedIcon" iconFont={this.props.font} icon={this.props.selectedIcon} tooltipTitle={IconUtils.getIconToolTipTitle(this.props.iconsByTag, this.props.selectedIcon)}/>
                 <Icon icon="caret-down" className="toggleIcon"/>
             </button>);
     }
@@ -99,7 +99,7 @@ class IconChooser extends React.Component {
                 </div>
 
                 <div className="allIcons">
-                    {this.getFilteredIcons().map((icon, i) => <button alt={icon} className={"iconButton " + icon} tabIndex="0" key={i} onClick={() => this.selectIcon(icon)}><Icon iconFont={this.props.font} icon={icon}/></button>)}
+                    {this.getFilteredIcons().map((icon, i) => <button alt={icon} className={"iconButton " + icon} tabIndex="0" key={i} onClick={() => this.selectIcon(icon)} type="button"><Icon iconFont={this.props.font} icon={icon} tooltipTitle={IconUtils.getIconToolTipTitle(this.props.iconsByTag, icon)}/></button>)}
                 </div>
             </div>);
     }

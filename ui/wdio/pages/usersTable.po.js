@@ -36,7 +36,7 @@
          */
         getUserColumnHeaders: {value: function() {
             var colHeaders = [];
-            for (var i = 0; i < this.userHeaderElList.value.length; i++) {colHeaders.push(this.userHeaderElList.value[i].getAttribute('innerText'));}
+            for (var i = 1; i < this.userHeaderElList.value.length; i++) {colHeaders.push(this.userHeaderElList.value[i].getAttribute('innerText'));}
             return colHeaders;
         }},
     });
