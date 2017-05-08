@@ -35,7 +35,7 @@ describe('Forms reducer functions', () => {
         }
     };
 
-    let updatedFormMeta = {appId: 'appId', tableId: 'tblId', tabs: [{sections: [{columns: [{elements: []}]}]}]};
+    let updatedFormMeta = 'updated form meta';
 
     it('returns correct initial state', () => {
         expect(reducer(undefined, {})).toEqual(initialState);
@@ -94,7 +94,7 @@ describe('Forms reducer functions', () => {
         it('returns correct state when load succeeds', () => {
             let currentAppId = 'appId';
             let currentblId = 'tblId';
-            let formData = {formMeta: {appId: currentAppId, tableId: currentblId, tabs: [{sections: [{columns: [{elements: []}]}]}]}};
+            let formData = {formMeta: {appId: currentAppId, tableId: currentblId}};
             /**
              * This test checks to be sure the actual appId and tblId from the response are
              * the ones being used. So here I made the backup id's different for testing purposes.
@@ -112,14 +112,14 @@ describe('Forms reducer functions', () => {
                 'view': {
                     id: 'view',
                     loading: false,
-                    formData: {formMeta: {appId: currentAppId, tableId: currentblId, tabs: [{sections: [{columns: [{elements: []}]}]}]}},
+                    formData: {formMeta: {appId: currentAppId, tableId: currentblId}},
                     errorStatus: null
                 }
             });
         });
 
         it('returns correct appId and tableId if they are missing', () => {
-            let formData = {formMeta: {appId: null, tableId: null, tabs: [{sections: [{columns: [{elements: []}]}]}]}};
+            let formData = {formMeta: {appId: null, tableId: null}};
             let backUpAppId = 'banana';
             let backUpTblId = 'apple';
             let loadingFormState = {
@@ -134,7 +134,7 @@ describe('Forms reducer functions', () => {
                 'view': {
                     id: 'view',
                     loading: false,
-                    formData: {formMeta: {appId: backUpAppId, tableId: backUpTblId, tabs: [{sections: [{columns: [{elements: []}]}]}]}},
+                    formData: {formMeta: {appId: backUpAppId, tableId: backUpTblId}},
                     errorStatus: null
                 }
             });
