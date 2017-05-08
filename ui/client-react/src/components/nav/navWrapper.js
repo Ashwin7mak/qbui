@@ -9,7 +9,19 @@ import Configuration from '../../config/app.config';
 const walkMeScript = document.createElement("script");
 walkMeScript.src = Configuration.walkmeJSSnippet;
 
+import Fluxxor from "fluxxor";
+let FluxMixin = Fluxxor.FluxMixin(React);
+let StoreWatchMixin = Fluxxor.StoreWatchMixin;
+
 let NavWrapper = React.createClass({
+    mixins: [FluxMixin, StoreWatchMixin('AppsStore')],
+
+    getStateFromFlux() {
+        let flux = this.getFlux();
+        return {
+            apps: flux.store('AppsStore').getState()
+        };
+    },
 
     /* touch detection */
     isTouchDevice() {
@@ -49,7 +61,7 @@ let NavWrapper = React.createClass({
         let paramVals = this.props.match.params;
         if (paramVals.appId) {
             this.props.flux.actions.selectAppId(paramVals.appId);
-            if (this.isAppTablesHydrated(paramVals.appId)) {
+            if (!this.isAppTablesHydrated(paramVals.appId)) {
                 this.props.flux.actions.loadHydratedApp(paramVals.appId);
             }
 
@@ -116,10 +128,12 @@ let NavWrapper = React.createClass({
     },
 
     isAppTablesHydrated(appId) {
-        let app = _.find(this.state.apps.apps, (a) => a.id === appId);
-        if (_.has(app, 'tables')) {
-            if (app.tables.length > 0) {
-                return app.tables[0].hasOwnProperty('name');
+        if (_.has(this.state.apps, 'apps')) {
+            let app = _.find(this.state.apps.apps, (a) => a.id === appId);
+            if (_.has(app, 'tables')) {
+                if (app.tables.length > 0) {
+                    return app.tables[0].hasOwnProperty('name');
+                }
             }
         }
         return true;

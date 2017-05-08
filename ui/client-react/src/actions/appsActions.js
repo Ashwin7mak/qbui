@@ -36,8 +36,8 @@ let appsActions = {
             appService.getHydratedApp(appId).then(
                 response => {
                     logger.debug('AppService getHydratedApp success');
-                    let model = appsModel.set(response.data);
-                    this.dispatch(actions.LOAD_APP_SUCCESS, model);
+                    let model = appsModel.set([response.data]);
+                    this.dispatch(actions.LOAD_APP_SUCCESS, model[0]);
                     resolve();
                 },
                 error => {

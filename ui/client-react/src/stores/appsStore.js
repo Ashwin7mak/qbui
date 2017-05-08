@@ -72,9 +72,11 @@ let AppsStore = Fluxxor.createStore({
         this.loading = false;
         this.error = false;
 
-        //  find the app and replace
-        let appInStore = _.find(this.apps, (a) => a.id === app.id);
-        appInStore = app;
+        //  find the app in the list and replace
+        let index = _.findIndex(this.apps, (a) => a.id === app.id);
+        if (index !== -1) {
+            this.apps[index] = app;
+        }
 
         this.setTableIcons();
 
