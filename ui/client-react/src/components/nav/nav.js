@@ -449,6 +449,7 @@ export const Nav = React.createClass({
                                 // with additional props
                                 // the Switch wrapper will pick only one of the routes the first
                                 // that matches.
+
                                 let routeProps = {
                                     key : this.props.match ? this.props.match.url : "",
                                     apps: this.state.apps.apps,
@@ -463,6 +464,7 @@ export const Nav = React.createClass({
                                     isRowPopUpMenuOpen: this.props.shell.isRowPopUpMenuOpen,
                                     selectedApp: this.getSelectedApp(),
                                     selectedTable: this.getSelectedTable(reportsData.tblId),
+                                    selectedUserRows: this.state.apps.selectedUserRows,
                                     scrollingReport: this.state.nav.scrollingReport,
                                     flux: flux,
                                     inBuilderMode: this.props.shell.inBuilderMode
