@@ -36,7 +36,7 @@ let BuilderDropDownAction = React.createClass({
         let isTableView = (isAppView && this.props.selectedTable);
         let isFormView = (isTableView && this.props.recId);
         // builder view is equivalent to table because everyone is admin right now
-        let isBuilderView = (isTableView && !this.props.recId);
+        let isReportView = (isTableView && !this.props.recId);
 
         let classes = "dropdownToggle globalActionLink";
 
@@ -57,7 +57,7 @@ let BuilderDropDownAction = React.createClass({
                         <li><a className="modifyTableSettings" onClick={this.getTableSettingsLink}><I18nMessage message={"settings.tableSettings"}/></a></li>
                     </div> : null}
 
-                    {isBuilderView ?
+                    {isReportView ?
                         <div className="configSet currentContext">
                             <li className="heading"><a><span><I18nMessage message={"settings.reportsHeader"}/></span></a></li>
                             <li><a className="modifyForm" onClick={this.props.navigateToBuilderReport}>
