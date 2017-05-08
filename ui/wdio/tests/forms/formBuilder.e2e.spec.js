@@ -49,13 +49,6 @@
             return formBuilderPO.open();
         });
 
-        it('move a field via keyboard & verify revised order after SAVE', function() {
-            let revisedOrder = formBuilderPO.KB_moveField(1, 2);
-            formBuilderPO.KB_save();
-            formBuilderPO.open();
-            expect(formBuilderPO.getFieldLabels()).toEqual(revisedOrder);
-        });
-
         it('drag a field onto another without dropping, then drag back to original field, release & verify no change', function() {
             // store the list of fields before moving
             let origFields = formBuilderPO.getFieldLabels();
@@ -75,6 +68,13 @@
             browser.buttonUp();
             browser.pause(5000);
             expect(formBuilderPO.getFieldLabels()).toEqual(origFields);
+        });
+
+        it('move a field via keyboard & verify revised order after SAVE', function() {
+            let revisedOrder = formBuilderPO.KB_moveField(1, 2);
+            formBuilderPO.KB_save();
+            formBuilderPO.open();
+            expect(formBuilderPO.getFieldLabels()).toEqual(revisedOrder);
         });
 
         it('move a field via drag/drop & verify revised order after SAVE', function() {
@@ -118,7 +118,8 @@
             browser.moveToObject(firstFieldLocator).buttonDown();
             // drag DOWN down until autoscroll begins
             browser.logger.info('Initiating autoscroll DOWN');
-            while (firstFieldXLoc === firstField.getLocation('x')) {//WithinViewport()) {
+            while (firstFieldXLoc === firstField.getLocation('x') &&
+                firstField.isVisibleWithinViewport()) {//WithinViewport()) {
                 browser.moveTo(null, 0, 2);
             }
             // wait for autoscroll to reach the bottom
@@ -129,7 +130,8 @@
             }
             // drag UP until autoscroll begins
             browser.logger.info('Initiating autoscroll UP');
-            while (firstFieldXLoc === firstField.getLocation('x')) {
+            while (firstFieldXLoc === firstField.getLocation('x') &&
+                lastField.isVisibleWithinViewport()) {
                 browser.moveTo(null, 0, -2);
             }
             // wait for first field to become visible
