@@ -408,7 +408,7 @@ export const Nav = React.createClass({
                                 // the Switch wrapper will pick only one of the routes the first
                                 // that matches.
                             let routeProps = {
-                                    key : this.props.match ? this.props.match.url : "",
+                                key : this.props.match ? this.props.match.url : "",
                                 apps: this.state.apps.apps,
                                 selectedAppId: this.state.apps.selectedAppId,
                                 appsLoading: this.state.apps.loading,
