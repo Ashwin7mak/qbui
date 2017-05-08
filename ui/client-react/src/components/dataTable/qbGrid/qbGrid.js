@@ -1,9 +1,6 @@
 import React, {PropTypes} from 'react';
 import * as Table from 'reactabular-table';
-import * as dnd from 'reactabular-dnd';
 import {DragDropContext} from 'react-dnd';
-import HTML5Backend from 'react-dnd-html5-backend';
-import _ from 'lodash';
 import Loader  from 'react-loader';
 import * as SpinnerConfigurations from 'APP/constants/spinnerConfigurations';
 import QbHeaderCell from './qbHeaderCell';
@@ -53,6 +50,10 @@ const QbGrid = React.createClass({
         /**
          * A boolean value indicating if inline editing is currently open*/
         isInlineEditOpen: PropTypes.bool,
+
+        /**
+         * Should this grid be draggable? */
+        isDraggable: PropTypes.bool,
 
         /**
          * The currently selected rows (e.g., by clicking the checkboxes in the first column) */
@@ -146,7 +147,8 @@ const QbGrid = React.createClass({
             isInlineEditOpen: false,
             isEditingRowValid: true,
             isEditingRowSaving: false,
-            showRowActionsColumn: true
+            showRowActionsColumn: true,
+            isDraggable: false
         };
     },
 
@@ -209,6 +211,12 @@ const QbGrid = React.createClass({
         };
     },
 
+    getDraggableCellProps() {
+        return {
+            isDraggable: true
+        }
+    },
+
     /**
      * Render a single cell
      * @param cellData
@@ -244,6 +252,9 @@ const QbGrid = React.createClass({
             if (column.isPlaceholder) {
                 c.cell.transforms = [this.getPlaceholderCellProps];
                 c.header.transforms = [this.getPlaceholderCellProps];
+            }
+            if (this.props.isDraggable) {
+                c.header.transforms = [this.getDraggableCellProps];
             }
             return c;
         } catch (err) {

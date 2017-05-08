@@ -294,6 +294,7 @@ export const ReportGrid = React.createClass({
                     onStartEditingRow={this.startEditingRow}
                     editingRowId={editingRecordId}
                     isInlineEditOpen={isInLineEditOpen}
+                    isDraggable={true}
                     selectedRows={this.props.selectedRows}
                     areAllRowsSelected={ReportUtils.areAllRowsSelected(transformedRecords, this.props.selectedRows)}
                     onClickToggleSelectedRow={this.props.toggleSelectedRow}
