@@ -595,6 +595,8 @@ module.exports = function(grunt) {
                     // Relationships Tests
                     // Stabilize in CI before enabling
                     './wdio/tests/relationships/relationshipViewChildTable.e2e.spec.js',
+                    // Stabilize in CI before enabling
+                    './wdio/tests/reports/reportSearch.e2e.spec.js',
 
                 ],
                 suites: {
