@@ -145,7 +145,7 @@ const forms = (
 
         updatedForm.selectedFields[0] = newLocation;
 
-        updatedForm.isPendingEdits = true;
+        updatedForm.isPendingEdit = true;
         newState[action.id] = updatedForm;
         return newState;
     }
@@ -201,7 +201,7 @@ const forms = (
 
         updatedForm.selectedFields[0] = newLocation;
 
-        updatedForm.isPendingEdits = true;
+        updatedForm.isPendingEdit = true;
         newState[action.id] = updatedForm;
         return newState;
     }
@@ -218,7 +218,7 @@ const forms = (
             location
         );
 
-        updatedForm.isPendingEdits = true;
+        updatedForm.isPendingEdit = true;
         newState[id] = updatedForm;
         return newState;
     }
@@ -343,7 +343,7 @@ const forms = (
             -1
         );
 
-        updatedForm.isPendingEdits = true;
+        updatedForm.isPendingEdit = true;
         newState[id] = updatedForm;
         return newState;
     }
@@ -369,7 +369,7 @@ const forms = (
             1
         );
 
-        updatedForm.isPendingEdits = true;
+        updatedForm.isPendingEdit = true;
         newState[id] = updatedForm;
         return newState;
     }

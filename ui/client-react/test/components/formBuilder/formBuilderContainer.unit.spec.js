@@ -66,6 +66,7 @@ describe('FormBuilderContainer', () => {
         spyOn(mockActions, 'toggleFormBuilderChildrenTabIndex');
         spyOn(mockActions, 'keyboardMoveFieldUp');
         spyOn(mockActions, 'keyboardMoveFieldDown');
+        spyOn(mockActions, 'toggleToolPaletteChildrenTabIndex');
         spyOn(mockActions, 'removeFieldFromForm');
         spyOn(mockActions, 'deselectField');
         spyOn(mockAppHistory, 'showPendingEditsConfirmationModal');
@@ -123,7 +124,7 @@ describe('FormBuilderContainer', () => {
             spyOn(NavigationUtils, 'goBackToLocationOrTable');
 
             component = shallow(<FormBuilderContainer match={testParamsProp}
-                                                      isPendingEdits={false}
+                                                      isPendingEdit={false}
                                                       location={testLocationProp}
                                                       redirectRoute={previousLocation}/>);
 
@@ -139,7 +140,7 @@ describe('FormBuilderContainer', () => {
             spyOn(NavigationUtils, 'goBackToLocationOrTable');
 
             component = shallow(<FormBuilderContainer match={testParamsProp}
-                                                      isPendingEdits={true}
+                                                      isPendingEdit={true}
                                                       location={testLocationProp}
                                                       redirectRoute={previousLocation}/>);
 
@@ -150,7 +151,7 @@ describe('FormBuilderContainer', () => {
 
         it('will invoke showPendingEditsConfirmationModal if pendingEdits is true', () => {
             component = mount(<FormBuilderContainer match={testParamsProp}
-                                                      isPendingEdits={true}
+                                                      isPendingEdit={true}
                                                       location={testLocationProp}
                                                       redirectRoute={previousLocation}
                                                       loadForm={mockActions.loadForm}/>);
@@ -277,7 +278,7 @@ describe('FormBuilderContainer', () => {
 
         it('escapeCurrentContext hotKey will invoke toggleFormBuilderChildrenTabIndex if formBuilderChildrenTabIndex has the same index as form tab index', () => {
             component = mount(<FormBuilderContainer match={testParamsProp}
-                                                    isPendingEdits={true}
+                                                    isPendingEdit={true}
                                                     currentForm={currentForm}
                                                     formBuilderChildrenTabIndex={tabIndexConstants.FORM_TAB_INDEX}
                                                     toolPaletteChildrenTabIndex={undefined}
@@ -295,7 +296,7 @@ describe('FormBuilderContainer', () => {
 
         it('escapeCurrentContext hotKey will invoke toggleToolPaletteChildrenTabIndex if toolPaletteChildrenTabIndex has the same index as tool palette tab index', () => {
             component = mount(<FormBuilderContainer match={testParamsProp}
-                                                    isPendingEdits={true}
+                                                    isPendingEdit={true}
                                                     currentForm={currentForm}
                                                     formBuilderChildrenTabIndex={undefined}
                                                     toolPaletteChildrenTabIndex={tabIndexConstants.TOOL_PALETTE_TABINDEX}
@@ -313,7 +314,7 @@ describe('FormBuilderContainer', () => {
 
         it('escapeCurrentContext hotKey will invoke deselectField if a field is selected', () => {
             component = mount(<FormBuilderContainer match={testParamsProp}
-                                                    isPendingEdits={true}
+                                                    isPendingEdit={true}
                                                     currentForm={currentForm}
                                                     formBuilderChildrenTabIndex={undefined}
                                                     toolPaletteChildrenTabIndex={undefined}

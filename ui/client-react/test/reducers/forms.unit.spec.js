@@ -192,7 +192,7 @@ describe('Forms reducer functions', () => {
                     ...stateWithViewForm[VIEW],
                     formData: {formMeta: updatedFormMeta},
                     selectedFields: [1],
-                    isPendingEdits: true,
+                    isPendingEdit: true,
                     previouslySelectedField: []
                 }
             });
@@ -236,7 +236,7 @@ describe('Forms reducer functions', () => {
                 [VIEW]: {
                     ...stateWithViewForm[VIEW],
                     formData: {formMeta: updatedFormMeta},
-                    isPendingEdits: true,
+                    isPendingEdit: true,
                 }
             });
             expect(mockMoveFieldHelper.removeField).toHaveBeenCalledWith(
@@ -287,7 +287,7 @@ describe('Forms reducer functions', () => {
                     selectedFields: [1],
                     previouslySelectedField: [],
                     formData: {formMeta: updatedFormMeta},
-                    isPendingEdits: true,
+                    isPendingEdit: true,
                 }
             });
             expect(mockMoveFieldHelper.addNewFieldToForm).toHaveBeenCalledWith(
@@ -360,7 +360,7 @@ describe('Forms reducer functions', () => {
                     ...stateWithViewForm[VIEW],
                     formData: {formMeta: updatedFormMeta},
                     selectedFields: [updatedFormMeta],
-                    isPendingEdits: true
+                    isPendingEdit: true
                 }
             });
             expect(mockMoveFieldHelper.keyBoardMoveFieldUp).toHaveBeenCalledWith(
@@ -409,7 +409,7 @@ describe('Forms reducer functions', () => {
                     ...stateWithViewForm[VIEW],
                     formData: {formMeta: updatedFormMeta},
                     selectedFields: [updatedFormMeta],
-                    isPendingEdits: true
+                    isPendingEdit: true
                 }
             });
             expect(mockMoveFieldHelper.keyBoardMoveFieldDown).toHaveBeenCalledWith(
