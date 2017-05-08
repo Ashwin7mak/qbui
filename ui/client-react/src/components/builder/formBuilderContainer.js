@@ -174,18 +174,6 @@ export const FormBuilderContainer = React.createClass({
         );
     },
 
-    getLeftAlignButtons() {
-        let back = Locale.getMessage('builder.formBuilder.back');
-        if (this.props.redirectRoute && this.props.apps && this.props.apps[0].name) {
-            back = `${Locale.getMessage('builder.formBuilder.backTo')} ${this.props.apps[0].name}`;
-        }
-        return (
-            <div>
-                <Button tabIndex={tabIndexConstants.CANCEL_BUTTON_TABINDEX} bsStyle="primary" onClick={this.onCancel} className="alternativeTrowserFooterButton"><Icon iconFont="iconTableSturdy" icon="arrowleft"/>{back}</Button>
-            </div>
-        );
-    },
-
     /**
      *  get actions element for bottom center of trowser (placeholders for now)
      */
@@ -198,7 +186,7 @@ export const FormBuilderContainer = React.createClass({
         return <SaveOrCancelFooter
             rightAlignedButtons={this.getRightAlignedButtons()}
             centerAlignedButtons={this.getTrowserActions()}
-            leftAlignedButtons={this.getLeftAlignButtons()}
+            leftAlignedButtons={this.getTrowserActions()}
         />;
     },
 
