@@ -2,7 +2,7 @@ import thunk from 'redux-thunk';
 import Promise from 'bluebird';
 import configureMockStore from 'redux-mock-store';
 
-import {updateLoadingUserStatus, updateLoggedInUser, getLoggedInUser, UPDATE_LOGGED_IN_USER, UPDATE_USER_LOADING_STATUS, __RewireAPI__ as UserActionsRewireAPI} from '../../src/actions/userActions';
+import {updateLoadingUserStatus, updateLoggedInUser, getLoggedInUser, UPDATE_LOGGED_IN_USER, UPDATE_USER_LOADING_STATUS, __RewireAPI__ as UserActionsRewireAPI} from 'REUSE/actions/userActions';
 
 const testUser = {id: 13};
 

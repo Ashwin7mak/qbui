@@ -2,7 +2,7 @@ import React from 'react';
 import {shallow, mount} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
 
-import SimpleNavItem from '../../src/components/simpleNavItem/simpleNavItem';
+import SimpleNavItem from 'REUSE/components/simpleNavItem/simpleNavItem';
 import {MemoryRouter, Link} from 'react-router-dom';
 
 let component;
