@@ -65,14 +65,22 @@ const report = (state = [], action) => {
         });
     }
 
+    function columnMove(data, sourceIndex, targetIndex) {
+        let sourceItem = data[sourceIndex];
+        let ret = data.slice(0, sourceIndex).concat(data.slice(sourceIndex + 1));
+        return ret.slice(0, targetIndex).concat([sourceItem]).concat(ret.slice(targetIndex));
+    }
+
     function updateColumnFids(data, sourceItem, targetItem) {
-        for(i=0;i<data.length;i++){
-            if(data[i]==sourceItem)
-                sourceIndex=i;
-            if(data[i]==targetItem)
-                targetIndex=i;
+        for (let i = 0; i < data.length; i++) {
+            if (data[i] == sourceItem) {
+                sourceIndex = i;
+            }
+            if (data[i] == targetItem) {
+                targetIndex = i;
+            }
         }
-        var ret = data.slice(0, sourceIndex).concat(data.slice(sourceIndex + 1));
+        let ret = data.slice(0, sourceIndex).concat(data.slice(sourceIndex + 1));
         return ret.slice(0, targetIndex).concat([sourceItem]).concat(ret.slice(targetIndex));
     }
 
@@ -377,6 +385,29 @@ const report = (state = [], action) => {
         }
         return state;
     }
+    case types.HIDE_COLUMN: {
+        let currentReport = getReportFromState(action.id);
+        if (currentReport) {
+            // metadata
+            let columns = currentReport.data.columns;
+            let fids = currentReport.data.fids;
+            // passed in params
+            let params = action.content;
+            let clickedColumnId = params.clickedId;
+            // mark the clicked column as hidden so it does not get rendered
+            columns.forEach(column => {
+                if (column.id === clickedColumnId) {
+                    column.isHidden = true;
+                }
+            });
+            // update the fids and metafids to reflect the hidden column
+            currentReport.data.fids = fids.filter(fid => {
+                return fid !== clickedColumnId;
+            });
+            return newState(currentReport);
+        }
+        return state;
+    }
     case types.MOVE_COLUMN: {
         let currentReport = getReportFromState(action.id);
         if (currentReport) {
@@ -398,29 +429,6 @@ const report = (state = [], action) => {
             currentReport.data.columns = movedColumns;
             currentReport.data.fids = updateFids;
             currentReport.data.metaData.fids = updateFids;
-            return newState(currentReport);
-        }
-        return state;
-    }
-    case types.HIDE_COLUMN: {
-        let currentReport = getReportFromState(action.id);
-        if (currentReport) {
-            // metadata
-            let columns = currentReport.data.columns;
-            let fids = currentReport.data.fids;
-            // passed in params
-            let params = action.content;
-            let clickedColumnId = params.clickedId;
-            // mark the clicked column as hidden so it does not get rendered
-            columns.forEach(column => {
-                if (column.id === clickedColumnId) {
-                    column.isHidden = true;
-                }
-            });
-            // update the fids and metafids to reflect the hidden column
-            currentReport.data.fids = fids.filter(fid => {
-                return fid !== clickedColumnId;
-            });
             return newState(currentReport);
         }
         return state;

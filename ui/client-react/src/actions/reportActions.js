@@ -407,3 +407,7 @@ export const addColumnFromExistingField = (context, requestedColumn, addBefore) 
 export const hideColumn = (context, clickedId) => {
     return event(context, types.HIDE_COLUMN, {clickedId});
 };
+
+export const moveColumn = (context, params) => {
+    return event(context, types.MOVE_COLUMN, params);
+};

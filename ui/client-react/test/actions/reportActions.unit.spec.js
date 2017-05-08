@@ -88,6 +88,16 @@ describe('Report actions', () => {
         expect(reportActions.closeFieldSelectMenu(context)).toEqual(expectedAction);
     });
 
+    it('moveColumn actions dispatches types.MOVE_COLUMN with params', () => {
+        const params = {
+            sourceLabel: 6,
+            targetLabel: 7
+        };
+        const expectedAction = event(context, types.MOVE_COLUMN, params);
+        expect(reportActions.moveColumn(context, params)).toEqual(expectedAction);
+
+    });
+
 });
 
 describe('Test ReportsActions function success workflow', () => {

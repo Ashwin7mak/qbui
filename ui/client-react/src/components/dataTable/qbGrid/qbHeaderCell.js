@@ -1,5 +1,6 @@
 import React from 'react';
 import shallowCompare from 'react-addons-shallow-compare';
+import * as dnd from 'reactabular-dnd';
 
 /**
  * The header cell component used in the QbGrid
@@ -24,7 +25,7 @@ const QbHeaderCell = React.createClass({
             classes.push('placeholderCell');
         }
 
-        return <th className={classes.join(' ')} {...this.props} />;
+        return <dnd.header className={classes.join(' ')} {...this.props} />;
     }
 });
 
