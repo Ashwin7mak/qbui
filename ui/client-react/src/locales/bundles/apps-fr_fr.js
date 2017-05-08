@@ -696,9 +696,9 @@ export default {
             appsHeader: "App",
             formsHeader: "Forme",
             tableSettings: "Propriétés et paramètres de la table",
-            configureFormBuilder: 'Modifier ce formulaire',
+            configureFormBuilder: 'Modifiez ce formulaire',
             reportsHeader: 'Rapport',
-            configureReportBuilder: 'Modifier ce rapport'
+            configureReportBuilder: 'Modifiez ce rapport'
         },
         tableEdit: {
             tableUpdateFailed: "Impossible de mettre à jour le tableau",
