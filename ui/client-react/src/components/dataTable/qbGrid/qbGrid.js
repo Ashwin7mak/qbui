@@ -254,7 +254,11 @@ export const QbGrid = React.createClass({
                 c.header.transforms = [this.getPlaceholderCellProps];
             }
             if (this.props.isDraggable) {
-                c.header.transforms = [this.getDraggableCellProps];
+                if (c.header.transforms) {
+                    c.header.transforms.push(this.getDraggableCellProps);
+                } else {
+                    c.header.transforms = [this.getDraggableCellProps];
+                }
             }
             return c;
         } catch (err) {
