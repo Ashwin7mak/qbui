@@ -130,7 +130,8 @@ class formBuilderPage {
         topNavPO.modifyThisForm.click();
         this.firstField.waitForVisible();
         browser.pause(fiveSeconds);
-        return this.getFieldLabels(); // add'l delay, not used yet
+        browser.pause(fiveSeconds);
+        return this;
     }
     removeField(index) {
         // Removes the specified field by clicking on its DELETE icon
@@ -168,18 +169,22 @@ class formBuilderPage {
     selectFieldByIndex(index) {
         // Selects the field at the specified index and verifies that it is reflected in the properties panel
         // can't click on fieldLabel due to 'other element would get the click...'
-        browser.moveToObject(this.getFieldLocator(index) + ' .fieldLabel').buttonDown().buttonUp();
+        let fieldLocator = this.getFieldLocator(index);
+        let field = browser.element(fieldLocator);
+        field.click();
+        browser.moveToObject(fieldLocator + ' .fieldLabel').buttonDown().buttonUp();
         this.fieldProperty_Name.waitForExist(); // assume it didn't exist, i.e. nothing was previously selected
         return this.fieldProperty_Name.getText();
     }
     slowDrag(target, sourceLabel) {
         // Moves the cursor to specified target field and waits until target displays the the specified label
-        browser.moveToObject(target);
-        browser.pause(oneSecond);
-        browser.moveToObject(target + ' .fieldLabel');
-        browser.pause(oneSecond);
         let targetLabel;
         browser.waitUntil(function() {
+            // jiggle the cursor around the target field
+            browser.moveToObject(target + ' .fieldLabel', 1, 1);
+            browser.pause(oneSecond);
+            browser.moveToObject(target + ' .fieldLabel', 2, 2);
+            browser.pause(oneSecond);
             targetLabel = browser.element(target).getText();
             return sourceLabel === targetLabel;
         }, 10000, 'target preview label (' + targetLabel + ") didn't match source label (" + sourceLabel + ') after dragging');
@@ -264,7 +269,8 @@ class formBuilderPage {
     }
     KB_save(index) {
         // save form via keyboard
-        browser.keys(['Command', 's', 'Command']);
+        //browser.keys(['Command', 's', 'Command']);
+        this.save(); // cmd above doesn't work on EDGE... file a bug if manually reproducible!
         // wait for view record form
         browser.pause(fiveSeconds);
         return this;

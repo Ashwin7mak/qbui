@@ -40,14 +40,41 @@
             try {
                 browser.windowHandleMaximize();
                 browser.buttonUp();
-            } catch (err) {
-            }
+            } catch (err) {}
             // open first table
             e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
             // edit first record
             reportContentPO.clickOnRecordInReportTable(0);
             // invoke form builder
             return formBuilderPO.open();
+        });
+
+        it('move a field via keyboard & verify revised order after SAVE', function() {
+            let revisedOrder = formBuilderPO.KB_moveField(1, 2);
+            formBuilderPO.KB_save();
+            formBuilderPO.open();
+            expect(formBuilderPO.getFieldLabels()).toEqual(revisedOrder);
+        });
+
+        it('drag a field onto another without dropping, then drag back to original field, release & verify no change', function() {
+            // store the list of fields before moving
+            let origFields = formBuilderPO.getFieldLabels();
+            // drag 1st field onto 2nd
+            let source = formBuilderPO.getFieldLocator(1);
+            let target = formBuilderPO.getFieldLocator(2);
+            let label = browser.element(source).getText();
+            // drag source to target without dropping
+            browser.moveToObject(source);
+            browser.buttonDown();
+            formBuilderPO.slowDrag(target, label);
+            // verify drag token label
+            browser.element('.fieldTokenDragging').waitForExist();
+            expect(formBuilderPO.fieldTokenDragging.getText()).toEqual(origFields[0].replace('* ', ''));
+            // drag back to source & drop
+            formBuilderPO.slowDrag(source, label);
+            browser.buttonUp();
+            browser.pause(5000);
+            expect(formBuilderPO.getFieldLabels()).toEqual(origFields);
         });
 
         it('move a field via drag/drop & verify revised order after SAVE', function() {
@@ -134,6 +161,21 @@
             formBuilderPO.save().open();
             expect(formBuilderPO.getFieldLabels()).not.toContain(deletedField);
         });
+
+        it('drag/drop a field to another by name & verify move', function() {
+            // this isn't a real test yet, but rather a POC for name-based field reference; this technique
+            // will come in handy later when we start creating fields on the fly, renaming fields, etc.
+
+            // store the list of fields before moving
+            let origFields = formBuilderPO.getFieldLabels();
+            // drag the 1st field below the 2nd one
+            formBuilderPO.moveByName(origFields[0], origFields[1]);
+            // verify that the first 2 items have changed position
+            let movedFields = formBuilderPO.getFieldLabels();
+            expect(movedFields[0]).toBe(origFields[1]);
+            expect(movedFields[1]).toBe(origFields[0]);
+        });
+
 
         it('remove the selected field with BACKSPACE & verify presence after CANCEL', function() {
             let removedField = formBuilderPO.KB_removeFieldViaBackspace(1);
@@ -248,54 +290,12 @@
             expect(formBuilderPO.getNewFieldLabels()).toEqual(newFields);
         });
 
-        it('move a field via keyboard & verify revised order after SAVE', function() {
-            let revisedOrder = formBuilderPO.KB_moveField(1, 2);
-            formBuilderPO.KB_save();
-            formBuilderPO.open();
-            expect(formBuilderPO.getFieldLabels()).toEqual(revisedOrder);
-        });
-
         it('move a field via keyboard & verify original order after CANCEL', function() {
             let originalOrder = formBuilderPO.getFieldLabels();
             formBuilderPO.KB_moveField(1, 2);
             formBuilderPO.KB_cancel();
             formBuilderPO.open();
             expect(formBuilderPO.getFieldLabels()).toEqual(originalOrder);
-        });
-
-        it('drag/drop a field to another by name & verify move', function() {
-            // this isn't a real test yet, but rather a POC for name-based field reference; this technique
-            // will come in handy later when we start creating fields on the fly, renaming fields, etc.
-
-            // store the list of fields before moving
-            let origFields = formBuilderPO.getFieldLabels();
-            // drag the 1st field below the 2nd one
-            formBuilderPO.moveByName(origFields[0], origFields[1]);
-            // verify that the first 2 items have changed position
-            let movedFields = formBuilderPO.getFieldLabels();
-            expect(movedFields[0]).toBe(origFields[1]);
-            expect(movedFields[1]).toBe(origFields[0]);
-        });
-
-        it('drag a field onto another without dropping, then drag back to original field, release & verify no change', function() {
-            // store the list of fields before moving
-            let origFields = formBuilderPO.getFieldLabels();
-            // drag 1st field onto 2nd
-            let source = formBuilderPO.getFieldLocator(1);
-            let target = formBuilderPO.getFieldLocator(2);
-            let label = browser.element(source).getText();
-            // drag source to target without dropping
-            browser.moveToObject(source);
-            browser.buttonDown();
-            formBuilderPO.slowDrag(target, label);
-            // verify drag token label
-            browser.element('.fieldTokenDragging').waitForExist();
-            expect(formBuilderPO.fieldTokenDragging.getText()).toEqual(origFields[0].replace('* ', ''));
-            // drag back to source & drop
-            formBuilderPO.slowDrag(source, label);
-            browser.buttonUp();
-            browser.pause(5000);
-            expect(formBuilderPO.getFieldLabels()).toEqual(origFields);
         });
 
         it('add a new field to bottom of form, cancel & verify absence', function() {
