@@ -214,7 +214,7 @@ export const QbGrid = React.createClass({
     getDraggableCellProps() {
         return {
             isDraggable: true
-        }
+        };
     },
 
     /**

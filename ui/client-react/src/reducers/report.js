@@ -72,11 +72,13 @@ const report = (state = [], action) => {
     }
 
     function updateColumnFids(data, sourceItem, targetItem) {
+        let sourceIndex;
+        let targetIndex;
         for (let i = 0; i < data.length; i++) {
-            if (data[i] == sourceItem) {
+            if (data[i] === sourceItem) {
                 sourceIndex = i;
             }
-            if (data[i] == targetItem) {
+            if (data[i] === targetItem) {
                 targetIndex = i;
             }
         }
@@ -413,18 +415,22 @@ const report = (state = [], action) => {
         if (currentReport) {
             let columns = currentReport.data.columns;
             let fids = currentReport.data.fids;
-            for (var i = 0; i < columns.length; i++) {
-                if (columns[i].headerName == action.content.sourceLabel) {
-                    var sourceIndex = i;
-                    var sourceFid = columns[i].id;
+            let sourceIndex;
+            let sourceFid;
+            let targetIndex;
+            let targetFid;
+            for (let i = 0; i < columns.length; i++) {
+                if (columns[i].headerName === action.content.sourceLabel) {
+                    sourceIndex = i;
+                    sourceFid = columns[i].id;
                 }
-                if (columns[i].headerName == action.content.targetLabel) {
-                    var targetIndex = i;
-                    var targetFid = columns[i].id;
+                if (columns[i].headerName === action.content.targetLabel) {
+                    targetIndex = i;
+                    targetFid = columns[i].id;
                 }
             }
-            var movedColumns = columnMove(columns, sourceIndex, targetIndex);
-            var updateFids = updateColumnFids(fids, sourceFid, targetFid);
+            let movedColumns = columnMove(columns, sourceIndex, targetIndex);
+            let updateFids = updateColumnFids(fids, sourceFid, targetFid);
 
             currentReport.data.columns = movedColumns;
             currentReport.data.fids = updateFids;
