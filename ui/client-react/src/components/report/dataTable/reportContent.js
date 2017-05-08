@@ -899,6 +899,7 @@ export const ReportContent = React.createClass({
     componentDidUpdate(prevProps) {
         this.capturePerfTiming(prevProps);
     },
+
     render() {
         //  Get the pending props from the redux store..
         let pendEdits = this.getPendEdits();
