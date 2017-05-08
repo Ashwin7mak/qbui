@@ -742,7 +742,10 @@ projRecs.init(projGen);
                         let peopleSets = projRecs.genAndSetupEmployeeRecords(company, createdApp, minMaxToGen, projPromises);
 
                         //create the projects (tasks, assignments, comments) for the company
-                        projRecs.getAndSetupProjectRecords(company, peopleSets, createdApp, minMaxToGen, projPromises);
+                        const projTable = getTable(createdApp, projGen.tableProjectsName);
+                        if (projTable) {
+                            projRecs.getAndSetupProjectRecords(company, peopleSets, createdApp, minMaxToGen, projPromises);
+                        }
                     }
                 });
 
