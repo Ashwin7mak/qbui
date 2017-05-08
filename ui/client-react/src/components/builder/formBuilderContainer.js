@@ -29,8 +29,6 @@ import AppHistory from '../../globals/appHistory';
 import {HideAppModal} from '../qbModal/appQbModalFunctions';
 import AppQbModal from '../qbModal/appQbModal';
 
-
-
 import './formBuilderContainer.scss';
 
 let logger = new Logger();
