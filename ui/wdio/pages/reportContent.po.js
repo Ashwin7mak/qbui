@@ -23,9 +23,24 @@
         tableBody: {get: function() {return browser.element('.qbTbody');}},
         reportsToolBar : {get: function() {return browser.element('.reportToolbar');}},
         addRecordButton : {get: function() {return browser.element('.tableHomePageInitial .addRecordButton');}},
+        settingsIconName : {get: function() {return '.qbIcon.iconUISturdy-settings';}},
+        settingsIcon: {get: function() {return browser.element(this.settingsIconName);}},
+        modifyTableSettings: {get: function() {return browser.element('.modifyTableSettings');}},
+        deleteTableActionButton: {get: function() {return browser.element('.iconActionButton.deleteTable');}},
+        deletePromtTextField: {get: function() {return browser.element('.deletePrompt');}},
         reportFilterSearchBox : {get: function() {
             return this.reportsToolBar.element('.searchInput');
         }},
+        reportSearchEnterValues: {value: function(field) {
+            //Check for the visibility of search box
+            this.reportFilterSearchBox.waitForVisible();
+            //Enter the value in the search box
+            this.reportFilterSearchBox.setValue(field);
+            this.waitForReportContent();
+            //Needs this for the Dom to stabilize after loading the searched data
+            browser.pause(e2eConsts.shortWaitTimeMs);
+        }},
+        clearSearch: {get: function() {return this.reportsToolBar.element('.clearSearch .searchIcon');}},
         clickAndWaitForGrid: {value: function(button) {
             button.click();
             this.qbGridContainer.waitForVisible();
@@ -49,7 +64,8 @@
             return browser.element('.reportContainer');
         }},
         // Delete and Don't Delete button on modal dialog box
-        deleteButton : {get: function() {return browser.element('.modal-dialog .primaryButton');}},
+        deleteButtonClassName: {get: function() {return '.modal-dialog .primaryButton';}},
+        deleteButton : {get: function() {return browser.element(this.deleteButtonClassName);}},
         dontDeleteButton : {get: function() {return browser.element('.modal-dialog .secondaryButton');}},
 
         //Drop down menu actions icon
@@ -85,22 +101,13 @@
         // List of all field column headers from qbGrid
         qbGridColHeaderElList: {get: function() {return browser.elements('.qbHeaderCell');}},
 
-        // qbGrid is divided up into two columns: one is the actions column (pinned on the left) and the second is the record data
-        qbGridBodyEl: {get: function() {
-            this.qbGridContainer.element('.qbTbody').waitForVisible();
-            return this.qbGridContainer.element('.qbTbody');
-        }},
-
         qbGridBodyViewportEl : {get: function() {return browser.element('.qbTbody');}},
 
         // Container for each records action column
-        qbGridLeftColsContainerEl: {get: function() {return this.qbGridBodyEl.element('.qbCell.stickyCell');}},
+        qbGridLeftColsContainerEl: {get: function() {return this.qbGridBodyViewportEl.element('.qbCell.stickyCell');}},
 
         // this will get you every row of the actions column
         qbGridRowActionsElList: {get: function() {return this.qbGridLeftColsContainerEl.elements('.qbRow');}},
-
-        // this will get you every record element on the grid
-        qbGridRecordElList: {value: function() {return this.qbGridBodyEl.elements('.qbRow');}},
 
         /**
          * Helper method to ensure the report has been properly loaded with records. Will throw an error if no records are in the report.
@@ -130,7 +137,7 @@
          * @returns Resolved record row element at specified index
          */
         getAllRows: {get: function() {
-            this.qbGridBodyEl.element('.qbRow').waitForVisible();
+            this.qbGridBodyViewportEl.element('.qbRow').waitForVisible();
             return this.qbGridContainer.elements('.qbRow');
         }},
         getRecordRowElement: {value: function(recordIndex) {
@@ -170,6 +177,7 @@
          * @returns either an array of cell values (as strings) or one value of a cell
          */
         getRecordValues: {value: function(recordIndex, recordCellIndex) {
+            this.waitForReportContent();
             var recordRowElement = this.getRecordRowElement(recordIndex);
             var recordRowCells = this.getRecordRowCells(recordRowElement);
             // Return all record values if no cell number supplied
@@ -244,6 +252,75 @@
             this.qbGridBodyViewportEl.waitForVisible();
             var rows = this.qbGridBodyViewportEl.elements('.qbRow');
             return rows.value.length;
+        }},
+
+        /**
+         * Method to click settings Icon on Report Table
+         */
+        clickSettingsIcon: {value: function() {
+            this.settingsIcon.waitForVisible();
+            //Click on settings icon
+            this.settingsIcon.click();
+            //wait until you see dropdown list
+            return this.modifyTableSettings.waitForVisible();
+        }},
+
+        /**
+         * Method to click 'Table properties & settings' from the dropdown list
+         */
+        clickModifyTableSettings: {value: function() {
+            this.modifyTableSettings.waitForVisible();
+            //Click on 'Table properties & settings'
+            this.modifyTableSettings.click();
+            //wait until you see delete table action button
+            return this.deleteTableActionButton.waitForVisible();
+        }},
+
+        /**
+         * Method to click deleteTableActionButton
+         */
+        clickDeleteTableActionButton: {value: function() {
+            //Click on delete table action button
+            this.deleteTableActionButton.click();
+            //wait untill you see deletePromtTextField
+            return this.deletePromtTextField.waitForVisible();
+        }},
+
+        /**
+         * Method to click deleteTableButton
+         */
+        clickDeleteTableButton: {value: function() {
+            //use the predefined deleteTableButton here
+            expect(browser.isEnabled('.modal-dialog .primaryButton')).toBeTruthy();
+            //Click on delete table button
+            return this.deleteButton.click();
+        }},
+
+        /**
+         * Set the deletePromtTextField value
+         */
+        setDeletePromtTextFieldValue: {value: function(fieldValue) {
+            //set the deletePromtTextField value to 'YES'
+            return this.setInputValue(this.deletePromtTextField, fieldValue);
+        }},
+
+        /**
+         * Method to click don't delete Table button
+         */
+        clickDontDeleteTableButton: {value: function() {
+            //Click on don't delete table button
+            return this.dontDeleteButton.click();
+        }},
+
+        /**
+         * Method to enter input values in a field
+         * @fieldName
+         * @fieldValue ter
+         */
+        setInputValue : {value: function(fieldName, fieldValue) {
+            fieldName.click();
+            //add code for firefox browser
+            return browser.keys([fieldValue, '\uE004']);
         }},
 
         /**

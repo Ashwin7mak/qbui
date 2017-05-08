@@ -50,46 +50,44 @@ describe('Report actions', () => {
             });
     });
 
-    it('hideColumn action dispatches types.HIDE_COLUMN with parameters', (done) => {
+    it('hideColumn action dispatches types.HIDE_COLUMN with parameters', () => {
         const params = {
-            columnId: 6
+            clickedId: 6
         };
-        const expectedActions = [
-            event(context, types.HIDE_COLUMN, params)
-        ];
-        const store = mockReportsStore({});
-
-        return store.dispatch(reportActions.hideColumn(context, appId, tblId, rptId, params)).then(
-            () => {
-                expect(store.getActions()).toEqual(expectedActions);
-                done();
-            },
-            () => {
-                expect(false).toBe(true);
-                done();
-            });
+        const expectedAction = event(context, types.HIDE_COLUMN, params);
+        expect(reportActions.hideColumn(context, 6)).toEqual(expectedAction);
     });
 
-    it('moveColumn action dispatches types.MOVE_COLUMN with parameters', (done) => {
-        const params = {
-            sourceLabel: 6,
-            targetLabel: 7
-        };
-        const expectedActions = [
-            event(context, types.HIDE_COLUMN, params)
-        ];
-        const store = mockReportsStore({});
-
-        return store.dispatch(reportActions.moveColumn(context, appId, tblId, rptId, params)).then(
-            () => {
-                expect(store.getActions()).toEqual(expectedActions);
-                done();
+    it('addColumnFromExistingField action dispatches type.ADD_COLUMN_FROM_EXISTING_FIELD', () => {
+        let params = {
+            requestedColumn: {
+                fieldDef: {
+                    id: 7
+                },
+                isHidden: true,
+                isPlaceholder: false
             },
-            () => {
-                expect(false).toBe(true);
-                done();
-            });
+            addBefore: true
+        };
+        const expectedAction = event(context, types.ADD_COLUMN_FROM_EXISTING_FIELD, params);
+        expect(reportActions.addColumnFromExistingField(context, {fieldDef: {id: 7}, isHidden: true, isPlaceholder: false}, true))
+            .toEqual(expectedAction);
     });
+
+    it('openFieldSelectMenu action dispatches type.OPEN_FIELD_SELECT_MENU with open parameter', () => {
+        const params = {
+            clickedColumnId: 6,
+            addBeforeColumn: true
+        };
+        const expectedAction = event(context, types.OPEN_FIELD_SELECT_MENU, params);
+        expect(reportActions.openFieldSelectMenu(context, 6, true)).toEqual(expectedAction);
+    });
+
+    it('closeFieldSelectMenu action dispatches type.CLOSE_FIELD_SELECT_MENU with closed parameter', () => {
+        const expectedAction = event(context, types.CLOSE_FIELD_SELECT_MENU, {});
+        expect(reportActions.closeFieldSelectMenu(context)).toEqual(expectedAction);
+    });
+
 });
 
 describe('Test ReportsActions function success workflow', () => {
@@ -114,6 +112,11 @@ describe('Test ReportsActions function success workflow', () => {
             body: 3
         }
     };
+    let mockResponseGetFields = {
+        data: [
+            {id: 10}
+        ]
+    };
 
     class mockReportService {
         getReports() {
@@ -133,15 +136,24 @@ describe('Test ReportsActions function success workflow', () => {
         }
     }
 
+    class mockFieldService {
+        getFields() {
+            return Promise.resolve(mockResponseGetFields);
+        }
+    }
+
     beforeEach(() => {
         spyOn(mockReportService.prototype, 'getReports').and.callThrough();
         spyOn(mockReportService.prototype, 'getReportResults').and.callThrough();
         spyOn(mockReportService.prototype, 'getDynamicReportResults').and.callThrough();
+        spyOn(mockFieldService.prototype, 'getFields').and.callThrough();
         ReportsActionsRewireAPI.__Rewire__('ReportService', mockReportService);
+        ReportsActionsRewireAPI.__Rewire__('FieldsService', mockFieldService);
     });
 
     afterEach(() => {
         ReportsActionsRewireAPI.__ResetDependency__('ReportService');
+        ReportsActionsRewireAPI.__ResetDependency__('FieldsService');
     });
 
     it('verify loadReports action', (done) => {
@@ -228,6 +240,23 @@ describe('Test ReportsActions function success workflow', () => {
                 done();
             });
     });
+
+    it('refreshFieldSelectMenu action dispatches type:REFRESH_FIELD_SELECT_MENU', (done) => {
+        const expectedActions = [
+            event(context, types.REFRESH_FIELD_SELECT_MENU, {response: mockResponseGetFields})
+        ];
+        const store = mockReportsStore({});
+
+        return store.dispatch(reportActions.refreshFieldSelectMenu(context, appId, tblId)).then(
+            () => {
+                expect(store.getActions()).toEqual(expectedActions);
+                done();
+            },
+            () => {
+                expect(false).toBe(true);
+                done();
+            });
+    });
 });
 
 describe('Test ReportsActions function failure workflow', () => {
@@ -258,18 +287,28 @@ describe('Test ReportsActions function failure workflow', () => {
         }
     }
 
+    class mockFieldService {
+        getFields() {
+            return Promise.reject(mockErrorResponse);
+        }
+    }
+
     beforeEach(() => {
         spyOn(mockReportService.prototype, 'getReports').and.callThrough();
         spyOn(mockReportService.prototype, 'getReportResults').and.callThrough();
         spyOn(mockReportService.prototype, 'getDynamicReportResults').and.callThrough();
+        spyOn(mockFieldService.prototype, 'getFields').and.callThrough();
         ReportsActionsRewireAPI.__Rewire__('ReportService', mockReportService);
+        ReportsActionsRewireAPI.__Rewire__('FieldsService', mockFieldService);
     });
 
     afterEach(() => {
         mockReportService.prototype.getReports.calls.reset();
         mockReportService.prototype.getReportResults.calls.reset();
         mockReportService.prototype.getDynamicReportResults.calls.reset();
+        mockFieldService.prototype.getFields.calls.reset();
         ReportsActionsRewireAPI.__ResetDependency__('ReportService');
+        ReportsActionsRewireAPI.__ResetDependency__('FieldsService');
     });
 
     it('verify loadReports action with promise reject', (done) => {

@@ -27,6 +27,10 @@ const DurationFieldValueEditor = React.createClass({
          * the display to render */
         display: React.PropTypes.any,
         /**
+         * A boolean to disabled field on form builder
+         */
+        isDisabled: React.PropTypes.bool,
+        /**
          * the class to use */
         classes: React.PropTypes.string,
         /**
@@ -99,7 +103,7 @@ const DurationFieldValueEditor = React.createClass({
                                       placeholder={placeholder || defaultPlaceholder}
                                       value={this.state.display || displayZero}
                                       invalidMessage={this.props.invalidMessage || ''}
-                                      showClearButton={true}
+                                      showClearButton={!this.props.isDisabled}
                                       {...otherProps}/>;
     }
 });

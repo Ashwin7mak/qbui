@@ -1,6 +1,6 @@
 import React from 'react';
 import shallowCompare from 'react-addons-shallow-compare';
-import * as dnd from 'reactabular-dnd';
+
 /**
  * The header cell component used in the QbGrid
  * @type {__React.ClassicComponentClass<P>}
@@ -20,14 +20,21 @@ const QbHeaderCell = React.createClass({
         if (this.props.isStickyCell) {
             classes.push(['stickyCell']);
         }
+        if (this.props.isPlaceholderCell) {
+            classes.push('placeholderCell');
+        }
 
-        return <dnd.Header className={classes.join(' ')} {...this.props} />;
+        return <th className={classes.join(' ')} {...this.props} />;
     }
 });
 
 QbHeaderCell.propTypes = {
     classes: React.PropTypes.array,
-    isStickyCell: React.PropTypes.bool
+    isStickyCell: React.PropTypes.bool,
+    /**
+     * This prop is for styling of a placeholder cell.
+     * Use it to indicate that a column with actual data can/should be placed there. */
+    isPlaceholderCell: React.PropTypes.bool
 };
 
 // Provide default val

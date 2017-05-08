@@ -2,14 +2,14 @@ import React, {PropTypes} from 'react';
 import QbGrid from '../qbGrid/qbGrid';
 import ReportColumnTransformer from './reportColumnTransformer';
 import ReportRowTransformer from './reportRowTransformer';
-import FieldUtils from '../../../utils/fieldUtils';
-import ReportUtils from '../../../utils/reportUtils';
+import FieldUtils from 'APP/utils/fieldUtils';
+import ReportUtils from 'APP/utils/reportUtils';
 import ReportColumnHeaderMenu from './reportColumnHeaderMenu';
-import EmptyImage from '../../../../../client-react/src/assets/images/empty box graphic.svg';
-import {I18nMessage} from "../../../utils/i18nMessage";
-import Locale from '../../../locales/locales';
+import EmptyImage from 'APP/assets/images/empty box graphic.svg';
+import {I18nMessage} from 'APP/utils/i18nMessage';
+import Locale from 'APP/locales/locales';
 import {connect} from 'react-redux';
-
+import {getPendEdits} from '../../../reducers/record';
 import _ from 'lodash';
 
 import ReportCell from './reportCell';
@@ -18,17 +18,8 @@ import './reportGrid.scss';
 
 export const ReportGrid = React.createClass({
     propTypes: {
-
-        /**
-         * The appId for the report */
         appId: PropTypes.string,
-
-        /**
-         * The table ID for the report */
         tblId: PropTypes.string,
-
-        /**
-         * The report ID for the report */
         rptId: PropTypes.string,
 
         /**
@@ -236,15 +227,13 @@ export const ReportGrid = React.createClass({
     },
 
     getPendEdits() {
-        // only one record should have the pendEdits , so return that
-        const recordCurrentlyEdited = _.find(this.props.record, rec => rec.pendEdits);
-        return recordCurrentlyEdited ? recordCurrentlyEdited.pendEdits : {};
+        return getPendEdits(this.props.record);
     },
 
     isOnlyOneColumnVisible() {
         return this.props.columns.filter(column => {
-                return !column.isHidden;
-            }).length === 1;
+            return !column.isHidden && !column.isPlaceholder;
+        }).length === 1;
     },
 
     /**
@@ -261,13 +250,11 @@ export const ReportGrid = React.createClass({
             <div className="noRowsExist">
 
                 <div className="noRowsIconLine">
-                    <img className="noRowsIcon animated zoomInDown" alt="No Rows" src={EmptyImage}/>
+                    <img className="noRowsIcon animated zoomInDown" alt="No Rows" src={EmptyImage} />
                 </div>
 
                 <div className="noRowsText">
-                    {hasSearch ? <I18nMessage message="grid.no_filter_matches" recordsName={recordsName}
-                                              recordName={recordName}/> :
-                        <I18nMessage message="grid.no_rows" recordsName={recordsName}/>}
+                    {hasSearch ? <I18nMessage message="grid.no_filter_matches" recordsName={recordsName} recordName={recordName}/> : <I18nMessage message="grid.no_rows" recordsName={recordsName}/>}
                 </div>
             </div>);
     },
@@ -288,51 +275,49 @@ export const ReportGrid = React.createClass({
 
             return (
                 <QbGrid
-                    appId={this.props.appId}
-                    tblId={this.props.tblId}
-                    rptId={this.props.rptId}
-                    numberOfColumns={_.isArray(this.props.columns) ? this.props.columns.length : 0}
-                    columns={this.transformColumns()}
-                    rows={transformedRecords}
-                    loading={this.props.loading}
-                    appUsers={this.props.appUsers}
-                    phase1={this.props.phase1}
-                    showRowActionsColumn={!this.props.phase1}
-                    onStartEditingRow={this.startEditingRow}
-                    editingRowId={editingRecordId}
-                    isInlineEditOpen={isInLineEditOpen}
-                    selectedRows={this.props.selectedRows}
-                    areAllRowsSelected={ReportUtils.areAllRowsSelected(transformedRecords, this.props.selectedRows)}
-                    onClickToggleSelectedRow={this.props.toggleSelectedRow}
-                    onClickEditIcon={this.props.openRecordForEdit}
-                    onClickDeleteIcon={this.onClickDelete}
-                    onClickToggleSelectAllRows={this.toggleSelectAllRows}
-                    onCancelEditingRow={this.props.onEditRecordCancel}
-                    editingRowErrors={this.props.editErrors ? this.props.editErrors.errors : []}
-                    isEditingRowValid={isRecordValid}
-                    onClickAddNewRow={this.props.onRecordNewBlank}
-                    onClickSaveRow={this.props.onClickRecordSave}
-                    isEditingRowSaving={_.has(pendEdits, 'saving') ? pendEdits.saving : false}
-                    cellRenderer={ReportCell}
-                    commonCellProps={{
-                        appUsers: this.props.appUsers,
-                        onCellChange: this.onCellChange,
-                        onCellBlur: this.onCellBlur,
-                        onCellClick: this.props.onCellClick,
-                        onCellClickEditIcon: this.startEditingRow,
-                        validateFieldValue: this.props.handleValidateFieldValue,
-                        isInlineEditOpen: isInLineEditOpen,
-                        phase1: this.props.phase1
-                    }}
-                    compareCellChanges={FieldUtils.compareFieldValues}
-                    menuComponent={ReportColumnHeaderMenu}
-                    menuProps={{
-                        appId: this.props.appId,
-                        tblId: this.props.tblId,
-                        rptId: this.props.rptId,
-                        sortFids: this.props.sortFids,
-                        isOnlyOneColumnVisible: this.isOnlyOneColumnVisible()
-                    }}/>);
+                numberOfColumns={_.isArray(this.props.columns) ? this.props.columns.length : 0}
+                columns={this.transformColumns()}
+                rows={transformedRecords}
+                loading={this.props.loading}
+                appUsers={this.props.appUsers}
+                phase1={this.props.phase1}
+                showRowActionsColumn={!this.props.phase1}
+
+                onStartEditingRow={this.startEditingRow}
+                editingRowId={editingRecordId}
+                isInlineEditOpen={isInLineEditOpen}
+                selectedRows={this.props.selectedRows}
+                areAllRowsSelected={ReportUtils.areAllRowsSelected(transformedRecords, this.props.selectedRows)}
+                onClickToggleSelectedRow={this.props.toggleSelectedRow}
+                onClickEditIcon={this.props.openRecordForEdit}
+                onClickDeleteIcon={this.onClickDelete}
+                onClickToggleSelectAllRows={this.toggleSelectAllRows}
+                onCancelEditingRow={this.props.onEditRecordCancel}
+                editingRowErrors={this.props.editErrors ? this.props.editErrors.errors : []}
+                isEditingRowValid={isRecordValid}
+                onClickAddNewRow={this.props.onRecordNewBlank}
+                onClickSaveRow={this.props.onClickRecordSave}
+                isEditingRowSaving={_.has(pendEdits, 'saving') ? pendEdits.saving : false}
+                cellRenderer={ReportCell}
+                commonCellProps={{
+                    appUsers: this.props.appUsers,
+                    onCellChange: this.onCellChange,
+                    onCellBlur: this.onCellBlur,
+                    onCellClick: this.props.onCellClick,
+                    onCellClickEditIcon: this.startEditingRow,
+                    validateFieldValue: this.props.handleValidateFieldValue,
+                    isInlineEditOpen: isInLineEditOpen,
+                    phase1: this.props.phase1
+                }}
+                compareCellChanges={FieldUtils.compareFieldValues}
+                menuComponent={ReportColumnHeaderMenu}
+                menuProps={{
+                    appId: this.props.appId,
+                    tblId: this.props.tblId,
+                    rptId: this.props.rptId,
+                    sortFids: this.props.sortFids,
+                    isOnlyOneColumnVisible: this.isOnlyOneColumnVisible()
+                }}/>);
         } else {
             // instead of grid, render a "no records" UI
             return this.renderNoRowsExist();
@@ -365,4 +350,3 @@ const mapStateToProps = (state) => {
 export default connect(
     mapStateToProps
 )(ReportGrid);
-

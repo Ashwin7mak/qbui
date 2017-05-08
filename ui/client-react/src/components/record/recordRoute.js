@@ -29,7 +29,7 @@ import {clearSearchInput} from '../../actions/searchActions';
 import {APP_ROUTE, BUILDER_ROUTE, EDIT_RECORD_KEY} from '../../constants/urlConstants';
 import {getEmbeddedReportByContext} from '../../reducers/embeddedReports';
 import {CONTEXT} from '../../actions/context';
-
+import {getRecord} from '../../reducers/record';
 import './record.scss';
 import withUniqueId from '../hoc/withUniqueId';
 import DrawerContainer from '../drawer/drawerContainer';
@@ -71,12 +71,11 @@ export const RecordRoute = React.createClass({
 
         // TODO: currently this.props.match.rptId is the embeddedReport's unique ID, perhaps use a different matcher
         // for rptId and uniqueId. We can then simplify some of the following smelly code.
-        let embeddedReport;
+        let embeddedReport = {};
         if (rptId !== undefined && typeof rptId === 'string' &&
                 (rptId.includes(CONTEXT.REPORT.EMBEDDED) || rptId.includes(CONTEXT.FORM.DRAWER))) {
             const embeddedReportId = rptId;
-            // TODO: move to reducers/embeddedReport
-            embeddedReport = _.find(this.props.embeddedReports, {'id' : embeddedReportId});
+            embeddedReport = getEmbeddedReportByContext(this.props.embeddedReports, embeddedReportId) || {};
             rptId = embeddedReport.rptId;
         }
 
@@ -250,12 +249,14 @@ export const RecordRoute = React.createClass({
     },
 
     /**
-     * finds and returns the table from the selected app using the table id
+     * finds and returns the table from the selected app using the table id or returns selected table from props
+     * tableId is a required param in the following situations :
+     * if record route is in a drawer or you refresh a page and do not have the selected table in props
      * @param tableId
      * @returns table only in case, tableId is passed in
      */
     getSelectedTable(tableId) {
-        if (tableId && this.props.isDrawerContext) {
+        if (tableId && (this.props.isDrawerContext || !this.props.selectedTable)) {
             const app = this.props.selectedApp;
             if (app) {
                 return _.find(app.tables, (t) => t.id === tableId);
@@ -286,25 +287,28 @@ export const RecordRoute = React.createClass({
     getStageHeadline() {
         if (this.props.match.params) {
             const {appId, tblId, rptId} = this.props.match.params;
-            const record = this.getRecordFromProps(this.props);
+            const record = this.getRecordFromProps();
+            const reportData = this.getReportDataFromProps();
             let recordIdTitle;
             const tableLink = `${APP_ROUTE}/${appId}/table/${tblId}`;
 
             //  ensure the property exists and it has some content
-            const reportName = _.has(this.props.reportData, 'data.name') && this.props.reportData.data.name ? this.props.reportData.data.name : Locale.getMessage('nav.backToReport');
-            const showBack = _.get(record, 'previousRecordId') && _.get(this.props, 'reportData.data.keyField.name');
-            const showNext = _.get(record, 'nextRecordId') && _.get(this.props, 'reportData.data.keyField.name');
+            const reportName = _.get(reportData, 'data.name') || Locale.getMessage('nav.backToReport');
+            const showBack = _.get(record, 'previousRecordId') && _.get(reportData, 'data.keyField.name');
+            const showNext = _.get(record, 'nextRecordId') && _.get(reportData, 'data.keyField.name');
             if (this.props.isDrawerContext) {
                 recordIdTitle = this.props.match.params.drawerRecId;
             }
-            const tableSelected =  this.getSelectedTable(this.props.match.params.tblId);
-            const tableName = tableSelected !== undefined && tableSelected !== null ? tableSelected.name : '';
+            const selectedTable = this.getSelectedTable(this.props.match.params.tblId);
+            const tableName = _.get(selectedTable, 'name') || '';
             return (<div className="recordStageHeadline">
 
                 <div className="navLinks">
-                    {this.props.selectedTable && <Link className="tableHomepageIconLink" to={tableLink}><Icon iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY} icon={this.props.selectedTable.tableIcon}/></Link>}
-                    {this.props.selectedTable && <Link className="tableHomepageLink" to={tableLink}>{this.props.selectedTable.name}</Link>}
-                    {!this.props.isDrawerContext && this.props.selectedTable && rptId && <span className="divider color-black-700">&nbsp;&nbsp;:&nbsp;&nbsp;</span>}
+                    {selectedTable && <Link className="tableHomepageIconLink" to={tableLink}><Icon
+                        iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY} icon={selectedTable.tableIcon}/></Link>}
+                    {selectedTable && <Link className="tableHomepageLink" to={tableLink}>{tableName}</Link>}
+                    {!this.props.isDrawerContext && selectedTable && rptId &&
+                    <span className="divider color-black-700">&nbsp;&nbsp;:&nbsp;&nbsp;</span>}
                     {!this.props.isDrawerContext && rptId && <a className="backToReport" href="#" onClick={this.returnToReport}>{reportName}</a>}
                 </div>
                 <div className="stageHeadline iconActions">
@@ -376,7 +380,7 @@ export const RecordRoute = React.createClass({
     },
 
     getPageActions() {
-        const actions = [
+        let actions = [
             {msg: 'pageActions.addRecord', icon:'add-new-filled', className:'addRecord', onClick: this.editNewRecord},
             {msg: 'pageActions.edit', icon:'edit', onClick: this.openRecordForEdit},
             {msg: 'unimplemented.email', icon:'mail', disabled:true},
@@ -388,7 +392,10 @@ export const RecordRoute = React.createClass({
             actions.splice(2, 0, {msg: 'pageActions.approve', icon: 'thumbs-up', onClick: this.approveRecord});
         }
 
-
+        // Currently page actions are disabled for child records shown in drawers.
+        if (this.props.isDrawerContext) {
+            actions = actions.map(action => Object.assign(action, {disabled:true, onClick: null}));
+        }
         return (<IconActions className="pageActions" actions={actions} {...this.props}/>);
     },
 
@@ -420,13 +427,9 @@ export const RecordRoute = React.createClass({
 
     getRecordFromProps(props = this.props) {
         if (this.props.isDrawerContext) {
-            return  _.find(props.record, rec => rec.id === props.uniqueId) || {};
+            return  getRecord(props.record.records, props.uniqueId.toString());
         } else {
-            return  _.find(props.record, rec => {
-                if (rec.recId) {
-                    return rec.recId.toString() === props.match.params.recordId;
-                }
-            }) || {};
+            return getRecord(props.record.records, props.match.params.recordId);
         }
     },
     /**
@@ -438,10 +441,10 @@ export const RecordRoute = React.createClass({
         if (props.isDrawerContext) {
             let {rptId} = this.props.match.params;
             // TODO: remove the following after we move to reducers/embeddedReport
-            let embeddedReport;
+            let embeddedReport = {};
             if (rptId.includes(CONTEXT.REPORT.EMBEDDED) || rptId.includes(CONTEXT.FORM.DRAWER)) {
                 const embeddedReportId = rptId;
-                embeddedReport = getEmbeddedReportByContext(this.props.embeddedReports, embeddedReportId);
+                embeddedReport = getEmbeddedReportByContext(this.props.embeddedReports, embeddedReportId) || {};
                 rptId = embeddedReport.rptId;
             }
             return  embeddedReport;

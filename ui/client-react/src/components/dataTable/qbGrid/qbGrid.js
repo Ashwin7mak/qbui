@@ -1,45 +1,25 @@
 import React, {PropTypes} from 'react';
 import * as Table from 'reactabular-table';
-import * as dnd from 'reactabular-dnd';
-import {DragDropContext} from 'react-dnd';
-import HTML5Backend from 'react-dnd-html5-backend';
-import _ from 'lodash';
 import Loader  from 'react-loader';
-import * as SpinnerConfigurations from "../../../constants/spinnerConfigurations";
+import * as SpinnerConfigurations from 'APP/constants/spinnerConfigurations';
+import QbHeaderCell from './qbHeaderCell';
 import QbRow from './qbRow';
 import QbCell from './qbCell';
-import QbHeaderCell from './qbHeaderCell';
-import {UNSAVED_RECORD_ID} from '../../../constants/schema';
+import {UNSAVED_RECORD_ID} from 'APP/constants/schema';
 import RowActions from './rowActions';
-import {SELECT_ROW_CHECKBOX} from '../../../../../reuse/client/src/components/rowActions/rowActions';
+import {SELECT_ROW_CHECKBOX} from 'REUSE/components/rowActions/rowActions';
 import QbIcon from '../../qbIcon/qbIcon';
 import CollapsedGroupsHelper from './collapsedGroupHelper';
-import TouchBackend from 'react-dnd-touch-backend';
-import {moveColumn} from '../../../actions/reportActions';
-import {CONTEXT} from '../../../actions/context';
 
-import Logger from '../../../utils/logger';
+import Logger from 'APP/utils/logger';
 const logger = new Logger();
 
 import './qbGrid.scss';
-import {connect} from 'react-redux';
 
 const ICON_ACTIONS_COLUMN_ID = 'ICON_ACTIONS';
 
 const QbGrid = React.createClass({
     propTypes: {
-        /**
-         * The appId for the report */
-        appId: PropTypes.string,
-
-        /**
-         * The table ID for the report */
-        tblId: PropTypes.string,
-
-        /**
-         * The report ID for the report */
-        rptId: PropTypes.string,
-
         /**
          * The total number of columns displayed on the grid. Passed in as a prop to prevent recalculating this value
          * multiple times across components */
@@ -149,11 +129,6 @@ const QbGrid = React.createClass({
         phase1: PropTypes.bool
     },
 
-    hasRequiredIds() {
-        let {appId, rptId, tblId} = this.props;
-        return (appId && rptId && tblId);
-    },
-
     getDefaultProps() {
         return {
             numberOfColumns: 0,
@@ -220,6 +195,12 @@ const QbGrid = React.createClass({
         };
     },
 
+    getPlaceholderCellProps() {
+        return {
+            isPlaceholderCell: true
+        };
+    },
+
     /**
      * Render a single cell
      * @param cellData
@@ -230,10 +211,10 @@ const QbGrid = React.createClass({
         return React.createElement(this.props.cellRenderer, Object.assign({}, cellData, this.props.commonCellProps));
     },
 
+    /**
+     * Gets all non-hidden columns.
+     */
     getVisibleColumns() {
-        if (!_.isArray(this.props.columns)) {
-            return [];
-        }
         let visibleColumns = this.props.columns.filter(column => {
             return !column.isHidden;
         });
@@ -248,10 +229,15 @@ const QbGrid = React.createClass({
     getColumn(column) {
         try {
             column.addFormatter(this.renderCell);
-            if (!this.props.phase1) {
+            if (!this.props.phase1 && !column.isPlaceholder) {
                 column.addHeaderMenu(this.props.menuComponent, this.props.menuProps);
             }
-            return column.getGridHeader(this.onMoveColumn);
+            let c = column.getGridHeader();
+            if (column.isPlaceholder) {
+                c.cell.transforms = [this.getPlaceholderCellProps];
+                c.header.transforms = [this.getPlaceholderCellProps];
+            }
+            return c;
         } catch (err) {
             // If the column is not a type of ColumnTransformer with the appropriate methods, still pass through the column as the dev may have wanted to use a plain object (i.e., in the component library)
             // but provide a warning in case using the ColumnTransformer class was forgotten.
@@ -301,7 +287,7 @@ const QbGrid = React.createClass({
 
             collapseAllIcon = (
                 <div className="collapseAllIcon">
-                    <QbIcon icon={iconType} onClick={this.toggleCollapseAllGroups}/>
+                    <QbIcon icon={iconType} onClick={this.toggleCollapseAllGroups} />
                 </div>
             );
         }
@@ -385,17 +371,6 @@ const QbGrid = React.createClass({
         }
     },
 
-    /**
-     * Called when a column is dragged onto a target
-     */
-    onMoveColumn(_ref2) {
-        let params = {
-            sourceLabel: _ref2.sourceLabel,
-            targetLabel: _ref2.targetLabel
-        };
-        this.props.moveColumn(CONTEXT.REPORT.NAV, this.props.appId, this.props.tblId, this.props.rptId, params);
-    },
-
     render() {
         let columns;
         if (this.props.showRowActionsColumn) {
@@ -405,8 +380,7 @@ const QbGrid = React.createClass({
                     headerClass: "gridHeaderCell",
                     header: {
                         props: {
-                            scope: 'col',
-                            onMove: o => this.onMoveColumn(o)
+                            scope: 'col'
                         },
                         label: this.getCheckboxHeader(),
                         transforms: [this.getActionCellProps],
@@ -422,6 +396,7 @@ const QbGrid = React.createClass({
             columns = this.getVisibleColumns();
         }
         return (
+
             <Loader loaded={!this.props.loading} options={SpinnerConfigurations.AG_GRID}>
                 <Table.Provider
                     ref="qbGridTable"
@@ -439,15 +414,15 @@ const QbGrid = React.createClass({
                         }
                     }}
                 >
-
                     <Table.Header className="qbHeader"/>
+
                     <Table.Body className="qbTbody"
-                                onRow={this.addRowProps}
-                                rows={this.collapsedGroupHelper.filterRows(this.props.rows)}
-                                rowKey={this.getUniqueRowKey}
-                                ref={body => {
-                                    this.tableRef = body && body.getRef().parentNode;
-                                }}
+                        onRow={this.addRowProps}
+                        rows={this.collapsedGroupHelper.filterRows(this.props.rows)}
+                        rowKey={this.getUniqueRowKey}
+                        ref={body => {
+                            this.tableRef = body && body.getRef().parentNode;
+                        }}
                     />
                 </Table.Provider>
             </Loader>
@@ -455,14 +430,4 @@ const QbGrid = React.createClass({
     }
 });
 
-const mapStateToProps = (state) => {
-    return {
-        report: state.report,
-        record: state.record
-    };
-};
-
-
-const mapDispatchToProps = {moveColumn};
-
-export default connect(mapStateToProps, mapDispatchToProps)(DragDropContext(TouchBackend({enableMouseEvents: true, delay: 30}))(QbGrid));
+export default QbGrid;
