@@ -1,7 +1,7 @@
 import {TOGGLE_NAV} from './commonNavActions';
 
 // CLIENT REACT IMPORTS
-import Breakpoints from '../../../../../client-react/src/utils/breakpoints';
+import Breakpoints from 'APP/utils/breakpoints';
 // CLIENT REACT IMPORTS
 
 /**
