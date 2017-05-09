@@ -525,7 +525,7 @@ const mapDispatchToProps = (dispatch) => {
 
         updateFormRedirectRoute: (route) => dispatch(updateFormRedirectRoute(route)),
         showTableCreationDialog: () => dispatch(TableCreationActions.showTableCreationDialog()),
-        showTableReadyDialog: () => dispatch(TableCreationActions.showTableReadyDialog()),
+        showTableReadyDialog: () => dispatch(TableCreationActions.showTableReadyDialog())
     };
 };
 

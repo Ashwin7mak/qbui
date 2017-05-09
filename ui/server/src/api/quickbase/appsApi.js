@@ -335,7 +335,7 @@
             },
 
             /**
-             * Fetch app users and a hydrated app(w/table info)
+             * Fetch app users, app roles and app table properties
              *
              * @param req
              * @param appId

@@ -46,4 +46,10 @@ describe('AppService functions', () => {
         expect(BaseService.prototype.get).toHaveBeenCalledWith(appService.API.GET_APPS, {params:params});
     });
 
+    it('test getAppComponent function', () => {
+        appService.getAppComponents();
+        let params = {};
+        expect(BaseService.prototype.get).toHaveBeenCalledWith(appService.API.GET_APP_COMPONENTS, {params:params});
+    });
+
 });
