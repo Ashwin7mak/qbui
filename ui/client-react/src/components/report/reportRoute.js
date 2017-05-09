@@ -16,13 +16,13 @@ import _ from 'lodash';
 import './report.scss';
 import ReportToolsAndContent from '../report/reportToolsAndContent';
 import ReportFieldSelectMenu from './reportFieldSelectMenu';
+import ReportNameEditor from './reportNameEditor';
 import {connect} from 'react-redux';
 import {clearSearchInput} from '../../actions/searchActions';
 import {loadReport, loadDynamicReport, changeReportName} from '../../actions/reportActions';
 import {loadFields} from '../../actions/fieldsActions';
 import {CONTEXT} from '../../actions/context';
 import {APP_ROUTE, EDIT_RECORD_KEY, NEW_RECORD_VALUE} from '../../constants/urlConstants';
-import TextFieldValueEditor from '../fields/textFieldValueEditor';
 
 import * as FieldsReducer from '../../reducers/fields';
 
@@ -133,14 +133,15 @@ const ReportRoute = React.createClass({
         return (<IconActions className="pageActions" actions={actions}/>);
     },
 
-    setReportName(new_name) {
-        this.props.dispatch(changeReportName(CONTEXT.REPORT.NAV, new_name));
+    setReportName(newName)  {
+        this.props.changeReportName(CONTEXT.REPORT.NAV, newName);
     },
 
     getStageHeadline() {
         const reportName = this.props.reportData && this.props.reportData.data && this.props.reportData.data.name;
         const {appId, tblId} = this.props.match.params;
         const tableLink = `${APP_ROUTE}/${appId}/table/${tblId}`;
+        const updateName = _.debounce((name) => { this.setReportName(name) }, 300);
         return (
             <div className="reportStageHeadline">
 
@@ -150,11 +151,7 @@ const ReportRoute = React.createClass({
                 </div>
 
                 <div className="stageHeadline">
-                    <h3 className="reportName">{reportName}</h3>
-                    <TextFieldValueEditor value={reportName}
-                                          inputType="text"
-                                          onChange={this.setReportName}
-                    />
+                    <ReportNameEditor name={reportName} onChangeUpdateName={updateName}/>
                 </div>
             </div>);
     },
@@ -221,6 +218,9 @@ const mapDispatchToProps = (dispatch) => {
         },
         loadDynamicReport: (context, appId, tblId, rptId, format, filter, queryParams) => {
             dispatch(loadDynamicReport(context, appId, tblId, rptId, format, filter, queryParams));
+        },
+        changeReportName: (context, newName) => {
+            dispatch(changeReportName(context, newName));
         }
     };
 };
