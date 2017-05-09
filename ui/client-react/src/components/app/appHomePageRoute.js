@@ -27,39 +27,6 @@ export const AppHomePageRoute = React.createClass({
     },
 
     /**
-     * Select an app by ID
-     */
-    selectAppId(appId) {
-        let flux = this.getFlux();
-        flux.actions.selectAppId(appId);
-        //flux.actions.loadAppRoles(appId);
-    },
-
-    /**
-     * Select an app from the route params
-     */
-    selectAppFromParams(params, checkParams) {
-        if (params) {
-            let appId = params.appId;
-
-            if (this.props.selectedAppId === appId) {
-                return;
-            }
-
-            if (checkParams) {
-                if (_.get(this.props, 'match.params.appId') === appId) {
-                    return;
-                }
-            }
-
-            if (appId) {
-                logger.debug('Loading app. AppId:' + appId);
-                //this.selectAppId(appId);
-            }
-        }
-    },
-
-    /**
      * Gets the name of the currently selected app or returns null
      * @returns {null|string}
      */
@@ -86,16 +53,11 @@ export const AppHomePageRoute = React.createClass({
         let flux = this.getFlux();
         flux.actions.showTopNav();
         flux.actions.setTopTitle();
-        this.selectAppFromParams(_.get(this.props, 'match.params'));
         flux.actions.doneRoute();
         if (this.props.notifyTableDeleted) {
             NotificationManager.success(Locale.getMessage('tableEdit.tableDeleted', {tableName: this.props.tableJustDeleted}), Locale.getMessage('success'));
             this.props.resetTableDeleteNotification();
         }
-    },
-    // Triggered when properties change
-    componentWillReceiveProps: function(props) {
-        this.selectAppFromParams(_.get(this.props, 'match.params'), true);
     },
 
     getPageActions(maxButtonsBeforeMenu = 0) {

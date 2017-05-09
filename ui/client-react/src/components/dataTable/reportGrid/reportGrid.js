@@ -244,8 +244,17 @@ export const ReportGrid = React.createClass({
 
         const hasSearch = this.props.searchString && this.props.searchString.trim().length > 0;
 
-        const recordsName = _.nil(this.props.selectedTable, 'name') ? Locale.getMessage("records.plural") : this.props.selectedTable.name.toLowerCase();
-        const recordName = _.nil(this.props.selectedTable, 'tableNoun') ? Locale.getMessage("records.singular") : this.props.selectedTable.tableNoun.toLowerCase();
+        let recordsName = Locale.getMessage("records.plural");
+        let recordName = Locale.getMessage("records.singular");
+        if (_.has(this.props, 'selectedTable')) {
+            if (this.props.selectedTable.name) {
+                recordsName = this.props.selectedTable.name.toLowerCase();
+            }
+            if (this.props.selectedTable.tableNoun) {
+                recordName = this.props.selectedTable.tableNoun.toLowerCase();
+            }
+        }
+
         return (
             <div className="noRowsExist">
 
