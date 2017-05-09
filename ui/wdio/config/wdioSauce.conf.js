@@ -74,12 +74,12 @@ exports.config = {
     // from the same test should run tests.
     //
     maxInstances: 10,
-    // =============================
-    // Appium Server Configuration
-    // =============================
-    // Define all options that are relevant for connecting to appium server
-    host: '127.0.0.1',
-    port: '4723',
+    //// =============================
+    //// Appium Server Configuration
+    //// =============================
+    //// Define all options that are relevant for connecting to appium server
+    //host: '127.0.0.1',
+    //port: '4723',
     //
     // If you have trouble getting all important capabilities together, check out the
     // Sauce Labs platform configurator - a great tool to configure your capabilities:
@@ -149,24 +149,24 @@ exports.config = {
             shardTestFiles: true,
             maxInstances: 5
         },
-        {
-            //For iOS Tablet
-            appiumVersion: '1.6.4',
-            deviceName: 'iPad Air 2',
-            deviceOrientation: 'landscape',
-            platformVersion: '9.3',
-            platformName: 'iOS',
-            networkConnectionEnabled: 'true',
-            browserName: 'safari',
-            automationName: 'Appium',
-            tunnelIdentifier: process.env.ENV_TUNNEL_NAME,
-            build           : 'WebdriverIO Jenkins Try Build #' + process.env.BUILD_NUMBER + ' - Git branch: ' + process.env.GIT_UIBRANCH + ' - iOS Safari Browser',
-            tags            : [process.env.SAUCE_JOB_NAME + '_iOS_Safari', 'try', 'iOS', 'Safari', process.env.BUILD_NUMBER, process.env.GIT_UIBRANCH],
-            // Timeout in seconds for Sauce Labs to wait for another command (bumped this for sleeps in tests)
-            idleTimeout: '180',
-            maxDuration: 10800,
-            maxInstances: 5,
-        }
+        //{
+        //    //For iOS Tablet
+        //    appiumVersion: '1.6.4',
+        //    deviceName: 'iPad Air 2',
+        //    deviceOrientation: 'landscape',
+        //    platformVersion: '9.3',
+        //    platformName: 'iOS',
+        //    networkConnectionEnabled: 'true',
+        //    browserName: 'safari',
+        //    automationName: 'Appium',
+        //    tunnelIdentifier: process.env.ENV_TUNNEL_NAME,
+        //    build           : 'WebdriverIO Jenkins Try Build #' + process.env.BUILD_NUMBER + ' - Git branch: ' + process.env.GIT_UIBRANCH + ' - iOS Safari Browser',
+        //    tags            : [process.env.SAUCE_JOB_NAME + '_iOS_Safari', 'try', 'iOS', 'Safari', process.env.BUILD_NUMBER, process.env.GIT_UIBRANCH],
+        //    // Timeout in seconds for Sauce Labs to wait for another command (bumped this for sleeps in tests)
+        //    idleTimeout: '180',
+        //    maxDuration: 10800,
+        //    maxInstances: 5,
+        //}
     ],
     //
     // ===================

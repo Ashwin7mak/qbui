@@ -1,5 +1,11 @@
 var baseConf = require('./wdioSauce.conf');
 var config = {
+    // =============================
+    // Appium Server Configuration
+    // =============================
+    // Define all options that are relevant for connecting to appium server
+    host: '127.0.0.1',
+    port: '4723',
     capabilities: [
         //{
         //    maxInstances: 5,
