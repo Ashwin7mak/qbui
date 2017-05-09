@@ -88,6 +88,10 @@ describe('Report actions', () => {
         expect(reportActions.closeFieldSelectMenu(context)).toEqual(expectedAction);
     });
 
+    it('changeReportName action dispatches type.CHANGE_REPORT_NAME', () => {
+        const expectedAction = event(context, types.CHANGE_REPORT_NAME, {newName: 'name'});
+        expect(reportActions.changeReportName(context, 'name')).toEqual(expectedAction);
+    });
 });
 
 describe('Test ReportsActions function success workflow', () => {

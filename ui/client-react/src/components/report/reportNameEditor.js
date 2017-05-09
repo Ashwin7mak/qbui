@@ -11,7 +11,7 @@ class ReportNameEditor extends Component {
 
         this.state = {
             name: ''
-        }
+        };
     }
 
     componentWillReceiveProps(nextProps) {
@@ -19,14 +19,14 @@ class ReportNameEditor extends Component {
             this.setState(() => {
                 return {
                     name: nextProps.name,
-                }
+                };
             })
         }
     }
 
     updateName = (name) => {
         this.setState(() => {
-            return {name}
+            return {name};
         });
         this.props.onChangeUpdateName(name);
     };
@@ -44,8 +44,7 @@ class ReportNameEditor extends Component {
                             onChange={this.updateName}
                         />
                     </h3>
-                </div>:
-                <h3>{this.state.name}</h3>
+                </div> : <h3>{this.state.name}</h3>
             }
             </div>
         );
@@ -64,7 +63,7 @@ ReportNameEditor.propTypes = {
 const mapStateToProps = (state) => {
     return {
         reportBuilder: state.reportBuilder
-    }
+    };
 };
 
 export default connect(mapStateToProps)(ReportNameEditor);
