@@ -109,67 +109,26 @@
                         (response) => {
                             let app = JSON.parse(response.body);
                             if (Array.isArray(app.tables)) {
-                                //
-                                if (app.tables.length > 0) {
-                                    let firstTable = app.tables[0];
+                                let tablePromises = [];
+                                app.tables.map((table) => {
+                                    let tablesRootUrl = routeHelper.getTablesRoute(routeHelper.getAppsRoute(req.url, appId), table.id);
                                     let tableReq = _.clone(req);
-                                    tableReq.url = routeHelper.getAppsRoute(req.url, appId);
-                                    this.getTableProperties(tableReq, firstTable.id).then(
-                                        (firstTableResponse) => {
-                                            //  if only 1 table in the app, we're all done
-                                            if (app.tables.length === 1) {
-                                                this._mergeTableProps(app, [firstTableResponse]);
-                                                resolve(app);
-                                            } else {
-                                                //
-                                                let tablePropertiesList = [firstTableResponse];
-
-                                                //  retrieve the remaining tables
-                                                let tablePromises = [];
-                                                app.tables.map((table) => {
-                                                    if (table.id !== firstTable.id) {
-                                                        tablePromises.push(this.getTableProperties(tableReq, table.id));
-                                                    }
-                                                });
-                                                Promise.all(tablePromises).then(
-                                                    (tablePropertiesResponse) => {
-                                                        tablePropertiesList.concat(tablePropertiesResponse);
-                                                        this._mergeTableProps(app, tablePropertiesList);
-                                                        resolve(app);
-                                                    },
-                                                    (error) => {
-                                                        log.error({req: req}, "appsApi.getTableProperties(): Error retrieving table properties using promise all.");
-                                                        resolve(app);
-                                                    }
-                                                );
-                                            }
-                                        }
-                                    ).catch((ex) => {
-                                        requestHelper.logUnexpectedError('appsApi.getTableProperties(): unexpected error retrieving table properties', ex, true);
+                                    tableReq.url = tablesRootUrl;
+                                    tablePromises.push(this.getTableProperties(tableReq, table.id));
+                                });
+                                Promise.all(tablePromises).then(
+                                    (responses) => {
+                                        this._mergeTableProps(app, responses);
                                         resolve(app);
-                                    });
-                                }
-
-                                //let tablePromises = [];
-                                //app.tables.map((table) => {
-                                //    let tablesRootUrl = routeHelper.getTablesRoute(routeHelper.getAppsRoute(req.url, appId), table.id);
-                                //    let tableReq = _.clone(req);
-                                //    tableReq.url = tablesRootUrl;
-                                //    tablePromises.push(this.getTableProperties(tableReq, table.id));
-                                //});
-                                //Promise.all(tablePromises).then(
-                                //    (responses) => {
-                                //        this._mergeTableProps(app, responses);
-                                //        resolve(app);
-                                //    },
-                                //    (error) => {
-                                //        log.error({req: req}, "appsApi.getTableProperties(): Error retrieving table properties.");
-                                //        resolve(app);
-                                //    }
-                                //).catch((ex) => {
-                                //    requestHelper.logUnexpectedError('appsApi.getTableProperties(): unexpected error retrieving table properties', ex, true);
-                                //    resolve(app);
-                                //});
+                                    },
+                                    (error) => {
+                                        log.error({req: req}, "appsApi.getTableProperties(): Error retrieving table properties.");
+                                        resolve(app);
+                                    }
+                                ).catch((ex) => {
+                                    requestHelper.logUnexpectedError('appsApi.getTableProperties(): unexpected error retrieving table properties', ex, true);
+                                    resolve(app);
+                                });
                             }
                         },
                         (error) => {
@@ -190,6 +149,12 @@
                         function(response) {
                             let app = response[0];
                             app.accessRights = response[1];
+
+                            //sort tables by id to match create order
+                            if (app.tables) {
+                                app.tables = _.sortBy(app.tables, 'id');
+                            }
+
                             resolve(app);
                         },
                         function(error) {
@@ -228,13 +193,6 @@
                                         for (let i = 0; i < resp.length; i++) {
                                             hydratedApps.push(resp[i]);
                                         }
-
-                                        hydratedApps.forEach(app => {
-                                            //sort tables by id to match create order
-                                            if (app.tables) {
-                                                app.tables = _.sortBy(app.tables, 'id');
-                                            }
-                                        });
                                         resolve(hydratedApps);
                                     },
                                     function(err) {
