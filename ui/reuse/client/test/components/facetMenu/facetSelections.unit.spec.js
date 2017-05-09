@@ -1,5 +1,8 @@
-import FacetSelections from '../../src/components/facet/facetSelections';
-import * as schemaConsts from '../../src/constants/schema.js';
+import FacetSelections from '../../../src/components/facets/facetSelections';
+
+// IMPORTS FROM CLIENT REACT
+import * as schemaConsts from '../../../../../client-react/src/constants/schema.js';
+// IMPORTS FROM CLIENT REACT
 
 describe('FacetSelections', () => {
     'use strict';
