@@ -192,7 +192,7 @@ export default {
                 preferences: "Preferences",
                 sign_out: "Sign out",
                 feedbackMenuButton: "Give feedback",
-                feedbackMenuTitle: "Feed back",
+                feedbackMenuTitle: "Feedback",
                 reportFeedBackButton: "Report an issue",
                 feedbackTooltip: "Share ideas and issues"
             }

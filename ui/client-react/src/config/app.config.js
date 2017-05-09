@@ -39,7 +39,7 @@ if (__QB_PROD__) {
         },
         unauthorizedRedirect: null,
         // walkme java script
-        walkmeJSSnippet : '',
+        walkmeJSSnippet : 'https://cdn.walkme.com/users/897ca46385a543cbbeaffbc655cdf312/walkme_897ca46385a543cbbeaffbc655cdf312_https.js',
         evergageDataset: 'test'
     });
 }
