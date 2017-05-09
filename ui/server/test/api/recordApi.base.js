@@ -80,7 +80,7 @@
                                 deferred.resolve(relResponse);
                             }).catch(function(error) {
                                 deferred.reject(error);
-                                assert(false, 'failed to create app: ' + JSON.stringify(error));
+                                assert(false, 'failed to create relationship: err:' + JSON.stringify(error) + '\n relationship: ' + JSON.stringify(relationshipToCreate));
                             });
                 });
                 return deferred.promise;
@@ -222,14 +222,16 @@
                 return fetchRecordDeferred.promise;
             },
             // Creates a list of records using the bulk record endpoint, returning a promise that is resolved or rejected on successful
-            createBulkRecords: function(recordsEndpoint, records) {
-                log.debug('Records to create: ' + JSON.stringify(records));
+            createBulkRecords: function(recordsBulkEndpoint, records) {
+                log.trace('Records to create: ' + JSON.stringify(records));
                 var fetchRecordDeferred = promise.pending();
                 init.then(function() {
-                    var recordBulkEndpoint = recordsEndpoint + 'bulk';
+                    var recordBulkEndpoint = recordsBulkEndpoint;
 
                     apiBase.executeRequest(recordBulkEndpoint, consts.POST, records)
                         .then(function(recordBulkResponse) {
+                            log.trace('set bulk rec add response: ' + JSON.stringify(recordBulkResponse));
+
                             var parsedRecordIdList = JSON.parse(recordBulkResponse.body);
 
                             var recordIdList = [];
@@ -332,8 +334,8 @@
              */
             addRecords: function(createdApp, createdTable, genRecords) {
                 return new Promise((resolve, reject) => {
-                    var recordsEndpoint = recordBase.apiBase.resolveRecordsEndpoint(createdApp.id, createdTable.id);
-                    recordBase.createBulkRecords(recordsEndpoint, genRecords).then(
+                    var recordsBulkEndpoint = recordBase.apiBase.resolveRecordsBulkEndpoint(createdApp.id, createdTable.id);
+                    recordBase.createBulkRecords(recordsBulkEndpoint, genRecords).then(
                         (recordIdList) => {
                             var fetchRecordPromises = [];
                             var query = "";

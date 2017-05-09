@@ -9,11 +9,12 @@ export default {
 
     messages: {
         apps: {
-            header: "Vos Apps"
+            header: "Vos Apps",
+            missing: "Restez connecté, mes applications arrivent bientôt"
         },
         app: {
             homepage: {
-                welcomeTitle: "Bienvenue sur Mercury Beta",
+                welcomeTitle: "Bienvenue à",
                 welcomeText: "Pendant que vous apprenez votre chemin, utilisez cette zone à la place de votre page d'accueil d'application. " +
                 "C'est votre application réelle dans Mercury. Vous ne verrez pas encore la page d'accueil de votre application, mais " +
                 "données sont ici. Les travaux effectués ici s'affichent immédiatement en mode Classique.",
@@ -32,12 +33,26 @@ export default {
                 helpLinkPreText: "Veuillez ",
                 helpLinkText: "contacter notre équipe de soins"
             },
+            dashboards: {
+                missing: "Restez à l'écoute, les tableaux de bord de l'application arrivent bientôt"
+            },
             settings: "Paramètres",
             users: {
                 addUser: "L'ajout d'un nouvel utilisateur n'est pas encore disponible",
                 users: "Utilisateurs",
                 content: "C'est la liste de toutes les personnes qui ont été ajoutées à votre application. Vous pouvez obtenir quelques idées rapides sur le nombre de personnes dans chaque rôle dans votre application ainsi que de trouver une personne spécifique dans la liste et de les envoyer par courrier électronique.",
-                manager: "Gestionnaire d'applications"
+                manager: "Gestionnaire d'applications",
+                removeUser: "Supprimer cet utilisateur?",
+                unassignUser: "Les utilisateurs ne pourront plus accéder à cette application. Toutes les données qu'ils ont déjà entrées restent dans la demande.",
+                deleteUser: "Retirer {valeur} utilisateur",
+                deleteUsers: "Retirer {valeur} utilisateurs",
+                removeButton: "Retirer",
+                cancel: "Annuler",
+                singular: "utilisateur",
+                plural: "utilisateurs",
+                usersRemoved: " Les utilisateurs ont été enlevés",
+                userRemoved: " L'utilisateur a été supprimé"
+
             }
         },
         appMenu: {
@@ -107,7 +122,10 @@ export default {
             apply: "Appliquer",
             new: "Nouveau",
             backToApp: "Retour à l'application",
-            reset: "Réinitialiser"
+            reset: "Réinitialiser",
+            closeRecord: "Fermer record",
+            expandSection: "Développer section",
+            collapseSection: "Effondrer section"
         },
         field: {
             search: "Chercher",
@@ -171,7 +189,11 @@ export default {
                     "de-de": "Allemand"
                 },
                 preferences: "Préférences",
-                sign_out: "Se déconnecter"
+                sign_out: "Se déconnecter",
+                feedbackMenuButton: "Donnez votre avis",
+                feedbackMenuTitle: "Retour d'information",
+                reportFeedBackButton: "Signaler un problème",
+                feedbackTooltip: "Partagez des idées et des problèmes"
             }
         },
         fields: {
@@ -324,6 +346,10 @@ export default {
                 newTable: "Nouvelle table basée sur cette colonne",
                 columnProps: "Propriétés de la colonne",
                 fieldProps: "Propriétés de champ"
+            },
+            drawer: {
+                title: "Champs cachés",
+                info: "Ajoutez un champ au rapport",
             }
         },
         errorMessagePopup: {
@@ -489,7 +515,10 @@ export default {
             print: "L'impression n'est pas encore disponible",
             copy: "La copie n'est pas encore disponible",
             email: "L'envoi par courriel n'est pas encore disponible",
-            delete: "La suppression n'est pas encore disponible"
+            delete: "La suppression n'est pas encore disponible",
+            emailUsers: "L'exportation de CSV n'est pas encore disponible",
+            settingsRole: "Changer de rôle n'est pas encore disponible",
+            emailApp: "Envoi de l'invitation de l'application n'est pas encore disponible",
         },
         pageTitles: {
             pageTitleSeparator: " - ",
@@ -574,11 +603,18 @@ export default {
                 }
             },
             fieldGroups: {
-                text: 'Texte',
-                numeric: 'Nombre',
-                date: 'Date',
-                other: 'Autre'
-            }
+                text: "Texte",
+                numeric: "Nombre",
+                date: "Date",
+                other: "Autre",
+                relationships: "Des relations"
+            },
+            defaultMultichoiceOptions: {
+                first: "Option 1",
+                second: "Option 2",
+                third: "Option 3"
+            },
+            modify: 'Modifier formulaire'
         },
         featureSwitchAdmin: {
             defaultFeatureName: "Fonctionnalité",

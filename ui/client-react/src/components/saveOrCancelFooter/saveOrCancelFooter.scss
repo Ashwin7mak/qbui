@@ -2,18 +2,14 @@
 
 
 .saveOrCancelFooter {
-    color: $color-black-100;
-    background-color: $color-black-200;
+    height: $trowser-footer-height;
+    background-color: $trowser-footer-background-color;
     flex: 0 0 auto;
     display: flex;
     flex-direction: row;
     padding: 0;
-    border-top: 1px solid $trowser-footer-border-color;
+    border-top: $stroke-width-thin  solid $trowser-footer-border-color;
     margin: 0 10px;
-
-    .leftActions {
-        flex: 0 0 auto;
-    }
 
     .centerActions {
         display: flex;
@@ -41,10 +37,28 @@
             border-right: 1px solid $trowser-action-separator-color;
         }
     }
+    //Future left button style for footer for settings page
+    .leftActions {
+        flex: 0 0 auto;
+        align-self: center;
+        margin-right: 38px;
+
+        button {
+            margin: 10px 0 10px 10px;
+            font-size: $font-size-dialog-text;
+        }
+        display: flex;
+        .qbIcon {
+            font-size: $size-iconfont-medium;
+            padding-right: 10px;
+            vertical-align: middle;
+        }
+    }
 
     .rightIcons {
         flex: 0 0 auto;
         align-self: center;
+        margin-right: 38px;
 
         button {
             margin: 10px 0 10px 10px;
@@ -63,5 +77,27 @@
         border-color: transparent;
         margin: 4px 0px 0px 4px;
         padding: 0 0px 0px 1px;
+    }
+
+    button {
+        min-width: $btn-min-width;
+        height: $btn-height;
+        border-radius: $border-radius-base;
+        &:focus {
+            outline: none;
+            @include text-input-focus;
+
+        }
+    }
+
+    .alternativeTrowserFooterButton {
+        background-color: $trowser-footer-alternative-button-color;
+        border: none;
+        color: $trowser-footer-alternative-button-text-color;
+    }
+
+    .mainTrowserFooterButton {
+        border: none;
+        background-color: $trowser-footer-main-button-color;
     }
 }

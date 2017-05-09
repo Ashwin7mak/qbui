@@ -3,11 +3,9 @@ import {shallow} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
 
 import {FieldEditingTools} from '../../../src/components/formBuilder/fieldEditingTools/fieldEditingTools';
-import DragHandle from '../../../src/components/formBuilder/dragHandle/dragHandle';
 
 const mockParentProps = {
     removeFieldFromForm(_location) {},
-    openFieldPreferences(_location) {},
     selectFieldOnForm(_formId, _location) {},
     deselectField(_formId, _location) {}
 };
@@ -21,12 +19,6 @@ let component;
 describe('FieldEditingTools', () => {
     beforeEach(() => {
         jasmineEnzyme();
-    });
-
-    it('has a drag handle', () => {
-        component = shallow(<FieldEditingTools formBuilderChildrenTabIndex={formBuilderChildrenTabIndex} selectedFields={[]}/>);
-
-        expect(component.find(DragHandle)).toBePresent();
     });
 
     it('has a delete button', () => {
@@ -46,25 +38,6 @@ describe('FieldEditingTools', () => {
         deleteButton.simulate('click');
 
         expect(mockParentProps.removeFieldFromForm).toHaveBeenCalledWith(formId, location);
-    });
-
-    it('has a field preferences button', () => {
-        spyOn(mockParentProps, 'openFieldPreferences');
-
-        component = shallow(<FieldEditingTools
-            formBuilderChildrenTabIndex={formBuilderChildrenTabIndex}
-            selectedFields={[]}
-            location={location}
-            onClickFieldPreferences={mockParentProps.openFieldPreferences}
-        />);
-
-        let preferencesIcon = component.find('.fieldPreferencesIcon button');
-
-        expect(preferencesIcon).toBePresent();
-
-        preferencesIcon.simulate('click');
-
-        expect(mockParentProps.openFieldPreferences).toHaveBeenCalledWith(location);
     });
 
     it('selects a field when an element is clicked', () => {

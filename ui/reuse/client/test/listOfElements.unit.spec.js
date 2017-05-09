@@ -2,7 +2,7 @@ import React from 'react';
 import {mount} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
 
-import ListOfElements, {__RewireAPI__ as ListOfElementsRewireAPI} from '../src/components/sideNavs/listOfElements';
+import ListOfElements, {__RewireAPI__ as ListOfElementsRewireAPI} from 'REUSE/components/sideNavs/listOfElements';
 
 const FieldTokenInMenuMock = React.createClass({
     render: function() {
@@ -60,6 +60,13 @@ describe('ListOfElements', () => {
         expect(headers.length).toEqual(testElements.length - 1); // Subtract one to account for single ungrouped element
         expect(headers.at(0)).toHaveText(testElements[0].title);
         expect(headers.at(1)).toHaveText(testElements[1].title);
+    });
+
+    it('does not display titles for a group of fields', () => {
+        component = mount(<ListOfElements hideTitle={true} renderer={FieldTokenInMenuMock} elements={testElements}/>);
+
+        const headers = component.find('.listOfElementsItemHeader');
+        expect(headers.length).toEqual(0); // Subtract one to account for single ungrouped element
     });
 
     it('displays an un-grouped element', () => {

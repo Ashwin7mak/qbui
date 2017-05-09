@@ -10,6 +10,9 @@
     let RequestSessionTicketPage = requirePO('requestSessionTicket');
     let rawValueGenerator = require('../../../test_generators/rawValue.generator');
     let ReportContentPO = requirePO('reportContent');
+    const tableNameFieldTitleText = '* Table name';
+    const recordNameFieldTitleText = '* A record in the table is called';
+    const descFieldTitleText = 'Description';
 
     describe('Tables - Create a table via builder tests: ', function() {
         let realmName;
@@ -49,9 +52,9 @@
         it('Create new table', function() {
             let tableName = rawValueGenerator.generateStringWithFixLength(10);
             let tableFields = [
-                {fieldTitle: '* Table Name', fieldValue: tableName, placeHolder: 'For example, Customers'},
-                {fieldTitle: '* A record in the table is called', fieldValue: rawValueGenerator.generateStringWithFixLength(10), placeHolder: 'For example, customer'},
-                {fieldTitle: 'Description', fieldValue: rawValueGenerator.generateStringWithFixLength(50), placeHolder: 'Text to show when hovering over the table name in the left navigation'}
+                {fieldTitle: tableNameFieldTitleText, fieldValue: tableName, placeHolder: 'For example, Customers'},
+                {fieldTitle: recordNameFieldTitleText, fieldValue: rawValueGenerator.generateStringWithFixLength(10), placeHolder: 'For example, customer'},
+                {fieldTitle: descFieldTitleText, fieldValue: rawValueGenerator.generateStringWithFixLength(50), placeHolder: 'Text to show when hovering over the table name in the left navigation'}
             ];
 
             //Step 1 - get the original count of table links in the left nav
@@ -142,34 +145,34 @@
                 {
                     message: 'with empty table name',
                     tableFields: [
-                        {fieldTitle: '* Table Name', fieldValue: ' '},
-                        {fieldTitle: 'Description', fieldValue: 'test Description'}
+                        {fieldTitle: tableNameFieldTitleText, fieldValue: ' '},
+                        {fieldTitle: descFieldTitleText, fieldValue: 'test Description'}
                     ],
                     tableFieldError: [
-                        {fieldTitle: '* Table Name', fieldError: 'Fill in the table name'},
+                        {fieldTitle: tableNameFieldTitleText, fieldError: 'Fill in the table name'},
                     ]
                 },
                 {
                     message: 'with empty required fields',
                     tableFields: [
-                        {fieldTitle: '* Table Name', fieldValue: ' '},
-                        {fieldTitle: '* A record in the table is called', fieldValue: ' '},
-                        {fieldTitle: 'Description', fieldValue: 'test Description'}
+                        {fieldTitle: tableNameFieldTitleText, fieldValue: ' '},
+                        {fieldTitle: recordNameFieldTitleText, fieldValue: ' '},
+                        {fieldTitle: descFieldTitleText, fieldValue: 'test Description'}
                     ],
                     tableFieldError: [
-                        {fieldTitle: '* Table Name', fieldError: 'Fill in the table name'},
-                        {fieldTitle: '* A record in the table is called', fieldError: 'Fill in the record name'}
+                        {fieldTitle: tableNameFieldTitleText, fieldError: 'Fill in the table name'},
+                        {fieldTitle: recordNameFieldTitleText, fieldError: 'Fill in the record name'}
                     ]
                 },
                 {
                     message: 'with duplicate table name',
                     tableFields: [
-                        {fieldTitle: '* Table Name', fieldValue: 'Table 1'},
-                        {fieldTitle: '* A record in the table is called', fieldValue: 'Table 1'},
-                        {fieldTitle: 'Description', fieldValue: 'test Description'}
+                        {fieldTitle: tableNameFieldTitleText, fieldValue: 'Table 1'},
+                        {fieldTitle: recordNameFieldTitleText, fieldValue: 'Table 1'},
+                        {fieldTitle: descFieldTitleText, fieldValue: 'test Description'}
                     ],
                     tableFieldError: [
-                        {fieldTitle: '* Table Name', fieldError: 'Fill in a different value. Another table is already using this name'},
+                        {fieldTitle: tableNameFieldTitleText, fieldError: 'Fill in a different value. Another table is already using this name'},
                     ]
                 }
             ];
@@ -212,9 +215,9 @@
         it('Verify clicking on close button closes the new table dialogue without saving the table', function() {
             let tableName = rawValueGenerator.generateStringWithFixLength(10);
             let tableFields = [
-                {fieldTitle: '* Table Name', fieldValue: tableName},
-                {fieldTitle: '* A record in the table is called', fieldValue: rawValueGenerator.generateStringWithFixLength(10)},
-                {fieldTitle: 'Description', fieldValue: rawValueGenerator.generateStringWithFixLength(50)}
+                {fieldTitle: tableNameFieldTitleText, fieldValue: tableName},
+                {fieldTitle: recordNameFieldTitleText, fieldValue: rawValueGenerator.generateStringWithFixLength(10)},
+                {fieldTitle: descFieldTitleText, fieldValue: rawValueGenerator.generateStringWithFixLength(50)}
             ];
 
             //Step 1 - get the original count of table links in the left nav
@@ -256,7 +259,7 @@
 
             //Add user to participant appRole
             browser.call(function() {
-                return e2eBase.recordBase.apiBase.assignUsersToAppRole(testApp.id, "11", [userId]);
+                return e2eBase.recordBase.apiBase.assignUsersToAppRole(testApp.id, e2eConsts.PARTICIPANT_ROLEID, [userId]);
             });
 
             //get the user authentication

@@ -18,6 +18,12 @@ describe('BaseService rewire tests', () => {
         })
     };
 
+    const getMockAxios = returnValue => ({
+        create: () => ({
+            get: () => returnValue
+        })
+    });
+
     const mockUnauthorizedRedirectConfiguration = {
         unauthorizedRedirect: '/qbase/custom-unauthorized-route'
     };
@@ -69,24 +75,26 @@ describe('BaseService rewire tests', () => {
         expect(BaseService.prototype.setResponseInterceptor).toHaveBeenCalled();
     });
 
-
-    it('test checkResponseStatus with 401 status', (done) => {
-        baseService = new BaseService();
-        baseService.checkResponseStatus({response: {status: 401}}).then(() => {
-            expect(mockWindowUtils.update).not.toHaveBeenCalledWith('');
-            expect(mockWindowUtils.replace).not.toHaveBeenCalled();
-            done();
-        }).catch(() => {
-            expect(false).toEqual(true);
-            done();
+    describe('checkResponseStatus', () => {
+        beforeEach(() => {
+            BaseServiceRewireAPI.__Rewire__('Configuration', mockSimpleDomainConfiguration);
         });
-    });
 
-    it('test checkResponseStatus with 200 status', () => {
-        baseService = new BaseService();
-        baseService.checkResponseStatus({status: 200});
-        expect(mockWindowUtils.replace).not.toHaveBeenCalled();
-        expect(mockWindowUtils.update).not.toHaveBeenCalled();
+        it('should not do anything when 200 status', () => {
+            baseService = new BaseService();
+            baseService.checkResponseStatus({status: 200});
+            expect(mockWindowUtils.replace).not.toHaveBeenCalled();
+            expect(mockWindowUtils.update).not.toHaveBeenCalled();
+        });
+
+        it('should not do anything when request fails with a null statusCode', () => {
+            BaseServiceRewireAPI.__Rewire__('Configuration', mockSimpleDomainConfiguration);
+            BaseServiceRewireAPI.__Rewire__('axios', getMockAxios(Promise.reject({statusCode: null})));
+            baseService = new BaseService();
+            baseService.checkResponseStatus({status: 401});
+            expect(mockWindowUtils.replace).not.toHaveBeenCalled();
+            expect(mockWindowUtils.update).not.toHaveBeenCalled();
+        });
     });
 
     it('test getCookie', () => {
@@ -142,15 +150,10 @@ describe('BaseService rewire tests', () => {
             }).then(done, done);
         });
 
-        const createMockAxiosForFederation = returnValue => ({
-            create: () => ({
-                get: () => returnValue
-            })
-        });
-
-        const mockGetSimpleSubdomainAxios = createMockAxiosForFederation(Promise.resolve({data: {legacyUrl: `https://${simpleSubdomain.subdomain}.${simpleSubdomain.domain}`}}));
-        const mockGetComplexSubdomainAxios = createMockAxiosForFederation(Promise.resolve({data: {legacyUrl: `https://${complexSubdomain.subdomain}.${complexSubdomain.domain}`}}));
-        const mockFailGettingSubdomainInAxios = createMockAxiosForFederation(Promise.reject());
+        const mockGetSimpleSubdomainAxios = getMockAxios(Promise.resolve({data: {legacyUrl: `https://${simpleSubdomain.subdomain}.${simpleSubdomain.domain}`}}));
+        const mockGetComplexSubdomainAxios = getMockAxios(Promise.resolve({data: {legacyUrl: `https://${complexSubdomain.subdomain}.${complexSubdomain.domain}`}}));
+        const mockFailGettingSubdomainAxios = getMockAxios(Promise.reject({statusCode: 500}));
+        const mockFailGettingSubdomainFirefoxAxios = getMockAxios(Promise.reject({statusCode: null}));
 
         it('returns a redirect URL with a simple subdomain', (done) => {
             BaseServiceRewireAPI.__Rewire__('Configuration', mockSimpleDomainConfiguration);
@@ -181,13 +184,24 @@ describe('BaseService rewire tests', () => {
 
         it('returns a standard redirect url if obtaining information from the Federation API fails', (done) => {
             BaseServiceRewireAPI.__Rewire__('Configuration', mockSimpleDomainConfiguration);
-            BaseServiceRewireAPI.__Rewire__('axios', mockFailGettingSubdomainInAxios);
-
+            BaseServiceRewireAPI.__Rewire__('axios', mockFailGettingSubdomainAxios);
             baseService = new BaseService();
-
             baseService.constructRedirectUrl().then(url => {
                 expect(url).toEqual(UNAUTHORIZED);
             }, error => expect(false).toEqual(true)).then(done, done);
+        });
+
+        // This is a test for Firefox related behavior.  When Firefox encounters a redirect while executing
+        // this.get(FEDERATION_LEGACY_URL, {}) in constructRedirectUrl(), the promise will reject() and return
+        // an error object with null fields.  We are verifying here that if we encounter that situation,
+        // we will propagate the reject() to the next caller in the promise chain.
+        it('returns a rejected promise when error object contains null fields', (done) => {
+            BaseServiceRewireAPI.__Rewire__('Configuration', mockSimpleDomainConfiguration);
+            BaseServiceRewireAPI.__Rewire__('axios', mockFailGettingSubdomainFirefoxAxios);
+            baseService = new BaseService();
+            baseService.constructRedirectUrl().then(url => {
+                expect(false).toEqual(true);
+            }, () => done()).then(done, done);
         });
     });
 });

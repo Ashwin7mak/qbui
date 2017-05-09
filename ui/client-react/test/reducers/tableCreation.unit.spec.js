@@ -90,11 +90,13 @@ describe('Test table creation reducers', () => {
                 type: types.SET_TABLE_CREATION_PROPERTY,
                 property: 'name',
                 value: '',
+                pendingValidationError: 'pendingValueIsEmpty',
                 validationError: 'valueIsEmpty',
                 isUserEdit: false
             };
             const state = reducer(initialState, action);
             expect(state.tableInfo.name.value).toBe('');
+            expect(state.tableInfo.name.pendingValidationError).toBe('pendingValueIsEmpty');
             expect(state.tableInfo.name.validationError).toBe('valueIsEmpty');
             expect(state.tableInfo.name.edited).toBeFalsy();
 
@@ -107,12 +109,14 @@ describe('Test table creation reducers', () => {
                 type: types.SET_TABLE_CREATION_PROPERTY,
                 property: 'name',
                 value: 'newName',
+                pendingValidationError: null,
                 validationError: null,
                 isUserEdit: true
             };
             const state = reducer(initialState, action);
             expect(state.tableInfo.name.value).toBe('newName');
             expect(state.tableInfo.name.validationError).toBe(null);
+            expect(state.tableInfo.name.pendingValidationError).toBe(null);
             expect(state.tableInfo.name.edited).toBeTruthy();
 
             expect(state.edited).toBeTruthy();

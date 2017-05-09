@@ -15,6 +15,7 @@ import Fluxxor from 'fluxxor';
 import _ from 'lodash';
 import './report.scss';
 import ReportToolsAndContent from '../report/reportToolsAndContent';
+import ReportFieldSelectMenu from './reportFieldSelectMenu';
 import {connect} from 'react-redux';
 import {clearSearchInput} from '../../actions/searchActions';
 import {loadReport, loadDynamicReport, changeReportName} from '../../actions/reportActions';
@@ -42,20 +43,20 @@ const ReportRoute = React.createClass({
         flux.actions.selectTableId(tblId);
 
         // ensure the search box is cleared for the new report
-        this.props.dispatch(clearSearchInput());
+        this.props.clearSearchInput();
 
         //  get the fields for this app/tbl
-        this.props.dispatch(loadFields(appId, tblId));
+        this.props.loadFields(appId, tblId);
 
         //  load the report
-        this.props.dispatch(loadReport(CONTEXT.REPORT.NAV, appId, tblId, rptId, true, offset, numRows));
+        this.props.loadReport(CONTEXT.REPORT.NAV, appId, tblId, rptId, true, offset, numRows);
     },
 
     /**
      * Load a report with query parameters.
      */
     loadDynamicReport(appId, tblId, rptId, format, filter, queryParams) {
-        this.props.dispatch(loadDynamicReport(CONTEXT.REPORT.NAV, appId, tblId, rptId, format, filter, queryParams));
+        this.props.loadDynamicReport(CONTEXT.REPORT.NAV, appId, tblId, rptId, format, filter, queryParams);
     },
 
     /**
@@ -66,13 +67,14 @@ const ReportRoute = React.createClass({
         flux.actions.selectTableId(tblId);
 
         // ensure the search box is cleared for the new report
-        this.props.dispatch(clearSearchInput());
+        this.props.clearSearchInput();
 
         //  get the fields for this app/tbl
-        this.props.dispatch(loadFields(appId, tblId));
+        this.props.loadFields(appId, tblId);
 
         this.loadDynamicReport(appId, tblId, rptId, true, /*filter*/{}, queryParams);
     },
+
     loadReportFromParams(params) {
         let {appId, tblId} = params;
         let rptId = typeof this.props.rptId !== "undefined" ? this.props.rptId : params.rptId;
@@ -97,6 +99,7 @@ const ReportRoute = React.createClass({
             }
         }
     },
+
     componentDidMount() {
         const flux = this.getFlux();
         flux.actions.hideTopNav();
@@ -105,6 +108,7 @@ const ReportRoute = React.createClass({
             this.loadReportFromParams(this.props.match.params);
         }
     },
+
     getHeader() {
         return (
             <ReportHeader nameForRecords={this.nameForRecords}
@@ -164,35 +168,61 @@ const ReportRoute = React.createClass({
             logger.info("the necessary params were not specified to reportRoute render params=" + simpleStringify(this.props.match.params));
             return null;
         } else {
-            return (<div className="reportContainer">
-                <Stage stageHeadline={this.getStageHeadline()}
-                       pageActions={this.getPageActions(5)}>
+            return (
+                <div className="reportContainer">
+                    <ReportFieldSelectMenu
+                        appId={this.props.match.params.appId}
+                        tblId={this.props.match.params.tblId}
+                        reportData={this.props.reportData}
+                        pullRight>
 
-                    <ReportStage reportData={this.props.reportData} />
-                </Stage>
+                        <Stage stageHeadline={this.getStageHeadline()}
+                               pageActions={this.getPageActions(5)}>
+                            <ReportStage reportData={this.props.reportData}/>
+                        </Stage>
 
-                {this.getHeader()}
+                        {this.getHeader()}
 
-                <ReportToolsAndContent
-                    params={this.props.match.params}
-                    reportData={this.props.reportData}
-                    appUsers={this.props.appUsers}
-                    pendEdits={this.props.pendEdits}
-                    isRowPopUpMenuOpen={this.props.isRowPopUpMenuOpen}
-                    routeParams={this.props.match.params}
-                    selectedAppId={this.props.selectedAppId}
-                    selectedTable={this.props.selectedTable}
-                    searchStringForFiltering={this.props.reportData.searchStringForFiltering}
-                    pageActions={this.getPageActions(0)}
-                    nameForRecords={this.nameForRecords}
-                    selectedRows={this.props.reportData.selectedRows}
-                    scrollingReport={this.props.scrollingReport}
-                    loadDynamicReport={this.loadDynamicReport}
-                    noRowsUI={true}
-                />
-            </div>);
+                        <ReportToolsAndContent
+                            params={this.props.match.params}
+                            reportData={this.props.reportData}
+                            appUsers={this.props.appUsers}
+                            pendEdits={this.props.pendEdits}
+                            isRowPopUpMenuOpen={this.props.isRowPopUpMenuOpen}
+                            routeParams={this.props.match.params}
+                            selectedAppId={this.props.selectedAppId}
+                            selectedTable={this.props.selectedTable}
+                            searchStringForFiltering={this.props.reportData.searchStringForFiltering}
+                            pageActions={this.getPageActions(0)}
+                            nameForRecords={this.nameForRecords}
+                            selectedRows={this.props.reportData.selectedRows}
+                            scrollingReport={this.props.scrollingReport}
+                            loadDynamicReport={this.loadDynamicReport}
+                            noRowsUI={true}
+                        />
+
+                    </ReportFieldSelectMenu>
+                </div>
+            );
         }
     }
 });
 
-export default connect()(ReportRoute);
+const mapDispatchToProps = (dispatch) => {
+    return {
+        clearSearchInput: () => {
+            dispatch(clearSearchInput());
+        },
+        loadFields: (appId, tblId) => {
+            dispatch(loadFields(appId, tblId));
+        },
+        loadReport: (context, appId, tblId, rptId, format, offset, rows) => {
+            dispatch(loadReport(context, appId, tblId, rptId, format, offset, rows));
+        },
+        loadDynamicReport: (context, appId, tblId, rptId, format, filter, queryParams) => {
+            dispatch(loadDynamicReport(context, appId, tblId, rptId, format, filter, queryParams));
+        }
+    };
+};
+
+export default connect(null, mapDispatchToProps)(ReportRoute);

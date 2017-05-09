@@ -1,8 +1,10 @@
 import ReportService from '../services/reportService';
 import ReportModel from '../models/reportModel';
 import ReportsModel from '../models/reportsModel';
+import FieldsService from '../services/fieldsService';
 import Promise from 'bluebird';
 import QueryUtils from '../utils/queryUtils';
+import _ from 'lodash';
 
 import Logger from '../utils/logger';
 import LogLevel from '../utils/logLevels';
@@ -347,29 +349,64 @@ export const loadReportRecordsCount = (context, appId, tblId, rptId, queryParams
 };
 
 /**
- * Hide a column based on the column id given.
+ * Refresh the fields for the field select menu.
  * @param context
  * @param appId
  * @param tblId
- * @param rptId
- * @param params { columnId }
  */
-export const hideColumn = (context, appId, tblId, rptId, params) => {
+export const refreshFieldSelectMenu = (context, appId, tblId) => {
     return (dispatch) => {
-        if (appId && tblId && rptId) {
-            logger.debug(`Hiding column with id: ${params.columnId} for appId: ${appId}, tblId:${tblId}, rptId:${rptId}`);
-            // Temporary until API to persist hidden columns.
-            return new Promise((resolve) => {
-                dispatch(event(context, types.HIDE_COLUMN, params));
-                resolve();
-            });
-        } else {
-            logger.error(`reportActions.hideColumn: Missing one or more required input parameters.  AppId:${appId}; TblId:${tblId}; RptId:${rptId}`);
-            return new Promise.reject();
-        }
+        return new Promise((resolve, reject) => {
+            let fieldsService = new FieldsService();
+            fieldsService.getFields(appId, tblId)
+                .then(response => {
+                    logger.debug('FieldsService getFields success');
+                    dispatch(event(context, types.REFRESH_FIELD_SELECT_MENU, {response}));
+                    resolve();
+                }).catch(error => {
+                    logger.parseAndLogError(LogLevel.ERROR, error.response, 'fieldsService.getFields:');
+                    reject();
+                });
+        });
     };
 };
 
+/**
+ * Toggle the field select menu open.
+ * @param context
+ * @param clickedColumnId
+ * @param addBeforeColumn
+ */
+export const openFieldSelectMenu = (context, clickedColumnId, addBeforeColumn) => {
+    return event(context, types.OPEN_FIELD_SELECT_MENU, {clickedColumnId, addBeforeColumn});
+};
+
+/**
+ * Toggle the field select menu closed.
+ * @param context
+ */
+export const closeFieldSelectMenu = (context) => {
+    return event(context, types.CLOSE_FIELD_SELECT_MENU, {});
+};
+
+/**
+ * Add the selected field to the report table.
+ * @param context
+ * @param requestedColumn
+ * @param addBefore
+ */
+export const addColumnFromExistingField = (context, requestedColumn, addBefore) => {
+    return event(context, types.ADD_COLUMN_FROM_EXISTING_FIELD, {requestedColumn, addBefore});
+};
+
+/**
+ * Hide a column based on the column id given.
+ * @param context
+ * @param clickedId
+ */
+export const hideColumn = (context, clickedId) => {
+    return event(context, types.HIDE_COLUMN, {clickedId});
+};
 /**
  * Change the reportName of the report
  * @param context
