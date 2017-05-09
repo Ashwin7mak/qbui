@@ -22,21 +22,20 @@ let AppsStore = Fluxxor.createStore({
         this.error = false;
         this.selectedUserRows = [];
 
-        this.bindActions(
-            actions.LOAD_APP, this.onLoadApps,
-            actions.LOAD_APP_SUCCESS, this.onLoadAppSuccess,
-            actions.LOAD_APP_FAILED, this.onLoadAppsFailed,
+        this.selectedAppId = null;
+        this.selectedTableId = null;
 
+        this.bindActions(
             actions.LOAD_APPS, this.onLoadApps,
             actions.LOAD_APPS_SUCCESS, this.onLoadAppsSuccess,
             actions.LOAD_APPS_FAILED, this.onLoadAppsFailed,
+
             actions.SELECT_APP, this.onSelectApp,
+            actions.SELECT_APP_SUCCESS, this.onSelectAppSuccess,
+            actions.SELECT_APP_FAILED, this.onSelectAppFailed,
+
             actions.SELECT_TABLE, this.onSelectTable,
             actions.UPDATED_TABLE_PROPS, this.onUpdateTableProps,
-
-            actions.LOAD_APP_USERS, this.onLoadAppUsers,
-            actions.LOAD_APP_USERS_FAILED, this.onLoadAppUsersFailed,
-            actions.LOAD_APP_USERS_SUCCESS, this.onLoadAppUsersSuccess,
 
             actions.LOAD_APP_ROLES, this.onLoadAppRoles,
             actions.LOAD_APP_ROLES_FAILED, this.onLoadAppRolesFailed,
@@ -50,7 +49,7 @@ let AppsStore = Fluxxor.createStore({
 
             actions.UNASSIGN_USERS, this.onUnasssignUsers,
             actions.UNASSIGN_USERS_FAILED, this.onUnasssignUsersFail,
-            actions.UNASSIGN_USERS_SUCCESS, this.onUnasssignUsersSuccess,
+            actions.UNASSIGN_USERS_SUCCESS, this.onUnasssignUsersSuccess
         );
 
         this.logger = new Logger();
@@ -75,27 +74,7 @@ let AppsStore = Fluxxor.createStore({
             }
         });
     },
-    onLoadAppSuccess(app, emitEvent = true) {
 
-        this.loading = false;
-        this.error = false;
-
-        //  find the app in the list and replace
-        let index = _.findIndex(this.apps, (a) => a.id === app.id);
-        if (index !== -1) {
-            this.apps[index] = app;
-        }
-
-        this.setTableIcons();
-
-        // clean this up..npe
-        this.selectedAppId = app.id;
-        //this.selectedTableId = null;
-
-        if (emitEvent) {
-            this.emit('change');
-        }
-    },
     onLoadAppsSuccess(apps) {
 
         this.loading = false;
@@ -106,29 +85,57 @@ let AppsStore = Fluxxor.createStore({
 
         this.emit('change');
     },
-    onLoadAppUsers() {
-        this.loadingAppUsers = true;
+
+    onSelectApp(appId) {
+        this.selectedAppId = appId;
+
+        //  appId can be null when clearing selection
+        if (appId) {
+            this.loading = true;
+        }
         this.emit('change');
     },
-    onLoadAppUsersFailed() {
-        this.loadingAppUsers = false;
+
+    onSelectAppFailed() {
+        this.loading = false;
+        this.error = true;
         this.emit('change');
     },
     /**
      * userArray is structured so that the filtered list of users is mapped for our userPicker in index 0
      * index 1 is the untouched response from Core's getAppUsers
      */
-    onLoadAppUsersSuccess(app) {
-        const userArray = app.users;
+    onSelectAppSuccess(selectedApp) {
+        this.loading = false;
+        this.error = false;
 
-        this.loadingAppUsers = false;
-        this.appUsers = userArray[0];
-        this.appUsersUnfiltered = userArray[1];
+        //  update app users list
+        if (_.has(selectedApp, 'users')) {
+            const userArray = selectedApp.users;
+            this.appUsers = userArray[0];
+            this.appUsersUnfiltered = userArray[1];
+        }
 
-        this.onLoadAppSuccess(app.hydratedApp, false);
+        //  update app roles list
+        if (_.has(selectedApp, 'roles')) {
+            this.appRoles = selectedApp.roles;
+        }
+
+        //  update the tables for the selected app
+        if (_.has(selectedApp, 'app')) {
+            const app = selectedApp.app;
+            //  find the app in the list and replace
+            let index = _.findIndex(this.apps, (a) => a.id === app.id);
+            if (index !== -1) {
+                this.apps[index] = app;
+            }
+            this.setTableIcons();
+            this.selectedAppId = app.id;
+        }
 
         this.emit('change');
     },
+
     onLoadAppRoles() {
         //place holder incase we want to in the future (I know we are going to migrate to redux as well)
     },
@@ -149,11 +156,7 @@ let AppsStore = Fluxxor.createStore({
         this.appOwner = appOwner;
         this.emit('change');
     },
-    onSelectApp(appId) {
-        this.selectedAppId = appId;
 
-        this.emit('change');
-    },
     onSelectTable(tblId) {
         this.selectedTableId = tblId;
 

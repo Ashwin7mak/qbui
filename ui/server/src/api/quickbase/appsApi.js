@@ -14,6 +14,7 @@
         let requestHelper = require('./requestHelper')(config);
         let routeHelper = require('../../routes/routeHelper');
         let constants = require('../../../../common/src/constants');
+        let rolesApi = require('./rolesApi')(config);
 
         let request = defaultRequest;
 
@@ -63,14 +64,15 @@
                     opts.url = requestHelper.getRequestEeHost() + routeHelper.getTablePropertiesRoute(req.url, tableId);
 
                     requestHelper.executeRequest(req, opts).then(
-                        (eeResponse) =>{
+                        (eeResponse) => {
                             resolve(JSON.parse(eeResponse.body));
                         },
-                        (error) =>{
+                        (error) => {
                             log.error({req: req}, "appsApi.getTableProperties(): Error getting table properties");
                             //always resolve - we do not want to block the get Apps call on this failure
                             resolve({});
-                        }).catch((ex) =>{
+                        }
+                    ).catch((ex) => {
                         requestHelper.logUnexpectedError('appsApi.getTableProperties(): unexpected error getting table properties', ex, true);
                         //always resolve - we do not want to block the get Apps call on this failure
                         resolve({});
@@ -372,7 +374,37 @@
                         reject(ex);
                     });
                 });
+            },
+
+            /**
+             * Fetch app users and a hydrated app(w/table info)
+             *
+             * @param req
+             * @param appId
+             * @returns {Promise}
+             */
+            getAppComponents: function(req, appId) {
+                return new Promise((resolve, reject) => {
+                    let appComponents = [this.getAppUsers(req), rolesApi.getAppRoles(req), this.getHydratedApp(req, appId)];
+                    Promise.all(appComponents).then(
+                        function(response) {
+                            resolve({
+                                users: response[0],
+                                roles: response[1],
+                                app: response[2]
+                            });
+                        },
+                        function(error) {
+                            log.error({req: req}, "appsApi.getAppComponents(): Error retrieving app components.");
+                            reject(error);
+                        }
+                    ).catch(function(error) {
+                        requestHelper.logUnexpectedError('reportsAPI..getAppComponents', error, true);
+                        reject(error);
+                    });
+                });
             }
+
         };
         return appsApi;
     };

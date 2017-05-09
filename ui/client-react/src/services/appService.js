@@ -11,7 +11,7 @@ class AppService extends BaseService {
         //  App Service API endpoints
         this.API = {
             GET_APP                  : `${constants.BASE_URL.QBUI}/${constants.APPS}/{0}`,
-            GET_APP_HYDRATE          : `${constants.BASE_URL.QBUI}/${constants.APPS}/{0}/${constants.HYDRATE}`,
+            GET_APP_COMPONENTS       : `${constants.BASE_URL.QBUI}/${constants.APPS}/{0}/${constants.APPCOMPONENTS}`,
             GET_APP_USERS            : `${constants.BASE_URL.QBUI}/${constants.APPS}/{0}/${constants.USERS}`,
             GET_APPS                 : `${constants.BASE_URL.QBUI}/${constants.APPS}`
         };
@@ -34,8 +34,8 @@ class AppService extends BaseService {
      * @param appId
      * @returns promise
      */
-    getHydratedApp(appId) {
-        let url = super.constructUrl(this.API.GET_APP_HYDRATE, [appId]);
+    getAppComponents(appId) {
+        let url = super.constructUrl(this.API.GET_APP_COMPONENTS, [appId]);
         return super.get(url);
     }
 

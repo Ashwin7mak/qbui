@@ -22,38 +22,6 @@ Promise.onPossiblyUnhandledRejection(function(err) {
 let appsActions = {
 
     /**
-     * Retrieve an app that is fully hydrated (with table properties).
-     *
-     * @returns Promise
-     */
-    loadHydratedApp(appId) {
-        let logger = new Logger();
-        //  promise is returned in support of unit testing only
-        return new Promise((resolve, reject) => {
-            this.dispatch(actions.LOAD_APP);
-            let appService = new AppService();
-
-            appService.getHydratedApp(appId).then(
-                response => {
-                    logger.debug('AppService getHydratedApp success');
-                    let model = appsModel.set([response.data]);
-                    this.dispatch(actions.LOAD_APP_SUCCESS, model[0]);
-                    resolve();
-                },
-                error => {
-                    logger.parseAndLogError(LogLevel.ERROR, error.response, 'appService.getHydratedApp:');
-                    this.dispatch(actions.LOAD_APP_FAILED, error.response.status);
-                    reject();
-                }
-            ).catch(ex => {
-                // TODO - remove catch block and update onPossiblyUnhandledRejection bluebird handler
-                logger.logException(ex);
-                reject();
-            });
-        });
-    },
-
-    /**
      * Retrieve a list of applications for this user.
      *
      * @param hydrate
@@ -92,32 +60,22 @@ let appsActions = {
     selectAppId(appId) {
         //  promise is returned in support of unit testing only
         return new Promise((resolve, reject) => {
-            // fetch the app users list if we don't have it already
-            //if (appId && appId !== this.selectedAppId) {
-            if (appId) {
-                this.dispatch(actions.LOAD_APPS);
-                let appService = new AppService();
+            //  display select app event; note appId can be null
+            this.dispatch(actions.SELECT_APP, appId);
 
-                let promises = [appService.getAppUsers(appId), appService.getHydratedApp(appId)];
-                //if (hydrateApp) {
-                //promises.push(appService.getHydratedApp(appId));
-                //}
-                Promise.all(promises).then(response => {
-                    this.selectedAppId = appId;
-                    let model = appsModel.set([response[1].data]);
-                    this.dispatch(actions.LOAD_APP_USERS_SUCCESS, {users: response[0].data, hydratedApp: model[0]});
+            if (appId) {
+                let appService = new AppService();
+                appService.getAppComponents(appId).then(response => {
+                    let users = response.data.users;
+                    let roles = response.data.roles;
+                    let model = appsModel.set([response.data.app]);
+                    this.dispatch(actions.SELECT_APP_SUCCESS, {users: users, roles: roles, app: model[0]});
                     resolve();
-                //}
-                //appService.getAppUsers(appId).then(response => {
-                //    this.selectedAppId = appId;
-                //    this.dispatch(actions.LOAD_APP_USERS_SUCCESS, response.data);
-                //    resolve();
                 }, () => {
-                    this.dispatch(actions.LOAD_APP_USERS_FAILED);
+                    this.dispatch(actions.SELECT_APP_FAILED);
                     reject();
                 });
             } else {
-                this.dispatch(actions.SELECT_APP, appId);
                 resolve();
             }
         });

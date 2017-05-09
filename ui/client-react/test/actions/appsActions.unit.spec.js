@@ -111,7 +111,7 @@ describe('Apps Actions functions with Tables', () => {
                         expect(mockAppService.prototype.getAppUsers).toHaveBeenCalledWith(test.appId);
                         expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(2);
                         expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.SELECT_APP, test.appId]);
-                        expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.LOAD_APP_USERS_SUCCESS, responseData]);
+                        expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.SELECT_APP_SUCCESS, responseData]);
                     }
                     done();
                 },

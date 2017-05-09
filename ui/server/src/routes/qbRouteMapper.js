@@ -86,7 +86,7 @@
                 requestFunctions[routes.APPS] = getApps;
                 requestFunctions[routes.APP_USERS] = getAppUsers;
                 requestFunctions[routes.APP_ROLES] = getAppRoles;
-                requestFunctions[routes.APP_HYDRATED] = getAppHydrated;
+                requestFunctions[routes.APP_COMPONENTS] = getAppComponents;
 
                 requestFunctions[routes.FEATURE_SWITCHES] = getFeatureSwitches;
                 requestFunctions[routes.FEATURE_STATES] = getFeatureStates;
@@ -702,19 +702,18 @@
     }
 
     /**
-     * Return an app (hydrated with table information and app rights)
-     *
+     * Return an app with table information and app rights
      * @param req
      * @param res
      */
-    function getAppHydrated(req, res) {
+    function getAppComponents(req, res) {
         let perfLog = perfLogger.getInstance();
-        perfLog.init('Get App Hydrated', {req:filterNodeReq(req)});
+        perfLog.init('Get App Components', {req:filterNodeReq(req)});
 
         processRequest(req, res, function(req, res) {
 
             let appId = req.params.appId ? req.params.appId : null;
-            appsApi.getHydratedApp(req, appId).then(
+            appsApi.getAppComponents(req, appId).then(
                 function(response) {
                     res.send(response);
                     logApiSuccess(req, response, perfLog, 'Get App Hydrated');

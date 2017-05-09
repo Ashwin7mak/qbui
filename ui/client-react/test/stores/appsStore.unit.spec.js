@@ -39,10 +39,9 @@ describe('Test Apps Store', () => {
         expect(flux.store(STORE_NAME).__actions__.LOAD_APPS_SUCCESS).toBeDefined();
         expect(flux.store(STORE_NAME).__actions__.LOAD_APPS_FAILED).toBeDefined();
         expect(flux.store(STORE_NAME).__actions__.SELECT_APP).toBeDefined();
+        expect(flux.store(STORE_NAME).__actions__.SELECT_APP_SUCCESS).toBeDefined();
+        expect(flux.store(STORE_NAME).__actions__.SELECT_APP_FAILED).toBeDefined();
         expect(flux.store(STORE_NAME).__actions__.SELECT_TABLE).toBeDefined();
-        expect(flux.store(STORE_NAME).__actions__.LOAD_APP_USERS).toBeDefined();
-        expect(flux.store(STORE_NAME).__actions__.LOAD_APP_USERS_SUCCESS).toBeDefined();
-        expect(flux.store(STORE_NAME).__actions__.LOAD_APP_USERS_FAILED).toBeDefined();
         expect(flux.store(STORE_NAME).__actions__.LOAD_APP_ROLES).toBeDefined();
         expect(flux.store(STORE_NAME).__actions__.LOAD_APP_ROLES_SUCCESS).toBeDefined();
         expect(flux.store(STORE_NAME).__actions__.LOAD_APP_ROLES_FAILED).toBeDefined();
@@ -126,24 +125,10 @@ describe('Test Apps Store', () => {
         expect(flux.store(STORE_NAME).emit.calls.count()).toBe(1);
     });
 
-    it('test load app users action', () => {
-
-        let loadAppsAction = {
-            type: actions.LOAD_APP_USERS
-        };
-
-        flux.dispatcher.dispatch(loadAppsAction);
-        expect(flux.store(STORE_NAME).loadingAppUsers).toBeTruthy();
-
-
-        expect(flux.store(STORE_NAME).emit).toHaveBeenCalledWith('change');
-        expect(flux.store(STORE_NAME).emit.calls.count()).toBe(1);
-    });
-
     it('test load app users failed action', () => {
 
         let loadAppsAction = {
-            type: actions.LOAD_APP_USERS_FAILED
+            type: actions.SELECT_APP_FAILED
         };
 
         flux.dispatcher.dispatch(loadAppsAction);
@@ -157,7 +142,7 @@ describe('Test Apps Store', () => {
         let users = [{"userId":1}];
         let unfilteredUsers = {"1": [{"userId":1}]};
         let loadAppsAction = {
-            type: actions.LOAD_APP_USERS_SUCCESS,
+            type: actions.SELECT_APP_SUCCESS,
             payload: [users, unfilteredUsers]
         };
 
