@@ -74,12 +74,6 @@ exports.config = {
     // from the same test should run tests.
     //
     maxInstances: 10,
-    //// =============================
-    //// Appium Server Configuration
-    //// =============================
-    //// Define all options that are relevant for connecting to appium server
-    //host: '127.0.0.1',
-    //port: '4723',
     //
     // If you have trouble getting all important capabilities together, check out the
     // Sauce Labs platform configurator - a great tool to configure your capabilities:
@@ -148,25 +142,7 @@ exports.config = {
             // These two values enable parallel testing which will run a spec file per instance
             shardTestFiles: true,
             maxInstances: 5
-        },
-        //{
-        //    //For iOS Tablet
-        //    appiumVersion: '1.6.4',
-        //    deviceName: 'iPad Air 2',
-        //    deviceOrientation: 'landscape',
-        //    platformVersion: '9.3',
-        //    platformName: 'iOS',
-        //    networkConnectionEnabled: 'true',
-        //    browserName: 'safari',
-        //    automationName: 'Appium',
-        //    tunnelIdentifier: process.env.ENV_TUNNEL_NAME,
-        //    build           : 'WebdriverIO Jenkins Try Build #' + process.env.BUILD_NUMBER + ' - Git branch: ' + process.env.GIT_UIBRANCH + ' - iOS Safari Browser',
-        //    tags            : [process.env.SAUCE_JOB_NAME + '_iOS_Safari', 'try', 'iOS', 'Safari', process.env.BUILD_NUMBER, process.env.GIT_UIBRANCH],
-        //    // Timeout in seconds for Sauce Labs to wait for another command (bumped this for sleeps in tests)
-        //    idleTimeout: '180',
-        //    maxDuration: 10800,
-        //    maxInstances: 5,
-        //}
+        }
     ],
     //
     // ===================
@@ -327,14 +303,12 @@ exports.config = {
         global.browserName = browser.desiredCapabilities.browserName;
 
         // Grab the browser settings from the capabilities object and set the browser size
-        if (browser.desiredCapabilities.breakpointSize) {
-            var browserDimensions = e2eUtils.getBrowserBreakpointDimensions(browser.desiredCapabilities.breakpointSize);
-            global.breakpointSize = browserDimensions.breakpointSize;
-            global.browserWidth = browserDimensions.browserWidth;
-            global.browserHeight = browserDimensions.browserHeight;
-            browser.logger.info('Setting browser size to ' + global.breakpointSize + ' breakpoint (' + global.browserWidth + ', ' + global.browserHeight + ')');
-            browser.windowHandleSize({width: global.browserWidth, height: global.browserHeight});
-        }
+        var browserDimensions = e2eUtils.getBrowserBreakpointDimensions(browser.desiredCapabilities.breakpointSize);
+        global.breakpointSize = browserDimensions.breakpointSize;
+        global.browserWidth = browserDimensions.browserWidth;
+        global.browserHeight = browserDimensions.browserHeight;
+        browser.logger.info('Setting browser size to ' + global.breakpointSize + ' breakpoint (' + global.browserWidth + ', ' + global.browserHeight + ')');
+        browser.windowHandleSize({width: global.browserWidth, height: global.browserHeight});
 
         // recordApi.base (and api.base) will not initialize itself if you don't pass in a config object
         // This call creates a your test realm down in api.base
