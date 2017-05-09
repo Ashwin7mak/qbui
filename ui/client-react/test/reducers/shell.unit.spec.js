@@ -16,7 +16,6 @@ function initializeState() {
         openCount: 0,
         locale: Locale.getLocale(),
         i18n: Locale.getI18nBundle(),
-        inBuilderMode: false
     };
 }
 

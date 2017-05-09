@@ -97,7 +97,6 @@ describe('Nav Unit tests', () => {
         shell: {
             leftNavVisible: true,
             leftNavExpanded: false,
-            inBuilderMode: false,
             fieldsSelectMenu: {
                 fieldsListCollapsed: true,
                 addBefore: null,
@@ -105,7 +104,8 @@ describe('Nav Unit tests', () => {
             }
         },
         reports: [],
-        history: []
+        history: [],
+        reportBuilder: true
     };
 
     beforeEach(() => {

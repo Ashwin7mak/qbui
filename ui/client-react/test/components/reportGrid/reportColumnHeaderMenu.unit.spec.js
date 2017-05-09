@@ -24,8 +24,13 @@ const testProps = {
     filter: "somefilter",
     fieldDef: testFieldDef,
     sortFids: [],
+    reportBuilder: {
+        inBuilderMode: true,
+        isCollapsed: true,
+        addBeforeColumn: null,
+        availableColumns: []
+    },
     isOnlyOneColumnVisible: false,
-    inBuilderMode: true,
     loadDynamicReport: (context, appId, tblId, rptId, queryParams) => {},
     hideColumn: (context, appId, tblId, rptId, params) => {},
     openFieldSelectMenu: (context, clickedColumn, addBeforeColumn) => {}
@@ -57,7 +62,7 @@ describe('ReportColumnHeaderMenu', () => {
         });
 
         it('returns false if the required props to call sort, group, add, and hide actions are missing', () => {
-            component = shallow(<ReportColumnHeaderMenu fieldDef={testFieldDef}/>);
+            component = shallow(<ReportColumnHeaderMenu fieldDef={testFieldDef} {{reportBuilder: testProps.reportBuilder}}/>);
             instance = component.instance();
 
             expect(instance.hasRequiredIds()).toBeFalsy();
