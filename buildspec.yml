@@ -1,47 +1,38 @@
 version: 0.1
 environment_variables:
  plaintext:
-  NODE_ENV: "container"
+  NODE_ENV: container
 phases:
   install:
     commands:
+      - echo "dash dash/sh boolean false" | debconf-set-selections # Set default shell to bash (Step 1)
+      - DEBIAN_FRONTEND=noninteractive dpkg-reconfigure dash       # Set default shell to bash (Step 2)
+      - chmod -R +x . # Workaround Codebuild issue where executable bits are not preserved on github clones
       # All of the 'install' should be moved to a container creation.  Once AWS releases the DIND container for extension, it should be the objective to move the to a custom container
-      - chmod -R a+x ./
-      - sudo apt-get -y update 
-      - sudo apt-get install -y software-properties-common
-      - sudo add-apt-repository ppa:openjdk-r/ppa
-      - sudo apt-get -y update 
-      - sudo apt-get install -y openjdk-8-jdk jq build-essential libssl-dev 
-      - curl -sL https://deb.nodesource.com/setup_6.x | bash 
-      - sudo apt-get install -y nodejs
-      - npm install -g grunt 
-      - npm install -g grunt-cli
+      - apt-get -y update # Update list of available software (required for the next step)
+      - apt-get install -y software-properties-common # Needed for the add-apt-repository command in the next step
+      - add-apt-repository -y ppa:openjdk-r/ppa # Add JDK repo
+      - apt-get -y update # Update list of available software (due to the previous step)
+      - apt-get install -y openjdk-8-jdk jq build-essential libssl-dev # JDK for gradle; not sure about the other deps
+      - bin/nvminstall.sh
+      - bin/envwrap.sh npm install -g grunt
+      - bin/envwrap.sh npm install -g grunt-cli
       - curl -L "https://github.com/docker/compose/releases/download/1.9.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose && chmod +x /usr/local/bin/docker-compose
   pre_build:
     commands:
-      # sed -e 's/^\(.\{7\}\).*/\1/' /tmp/commitid - currently the codebuild id is used in the tag, but we can use the git commit hash identifier
-      - echo -n "$CODEBUILD_BUILD_ID" | sed "s/.*:\([[:xdigit:]]\{7\}\).*/\1/" > /tmp/build_id.out
-      - printf "%s:%s" "$REPOSITORY_URI" "$(cat /tmp/build_id.out)" > /tmp/build_tag.out
-      - printf "%s:%s" "$REPOSITORY_URI" "latest" > /tmp/build_latest.out
-      - printf '{"tag":"%s"}' "$(cat /tmp/build_tag.out)" > /tmp/build.json
-      - cd bin && bash ./opensg.sh "$NEXUS_SG"
+      - bin/opensg.sh "${NEXUS_SG}"
   build:
     commands:
-      - $(aws ecr get-login --registry-ids $REGISTRYID --region $AWS_DEFAULT_REGION)  
-      - cd ui && ../gradlew npmPrune npmInstallLean clean npmRunLint npmListConfig test build -Pdocker -Ddocker
-      - docker build -t "$(cat /tmp/build_tag.out)" -t "$(cat /tmp/build_latest.out)" .
+      - cd ui && ../bin/envwrap.sh ../gradlew npmPrune npmInstallLean clean npmRunLint npmListConfig test build -Pdocker
+      - docker build -t "${REPOSITORY_URI}:${CODEBUILD_RESOLVED_SOURCE_VERSION}" -t "${REPOSITORY_URI}:latest" .
   post_build:
     commands:
-      - echo "Publishing reports"
-#      - cd eeServices/build/reports/tests && aws s3 sync ./ s3://$BUILD_REPORT_BUCKET/$CODEBUILD_BUILD_ID --acl public-read
       # There is a gap here - if the build errors out, post-build is not executed.  Lambda to monitor builds in order to clear SG entries possibly
-      - cd bin && bash ./closesg.sh "$NEXUS_SG"
-      - docker push "$(cat /tmp/build_tag.out)"
-      - docker push "$(cat /tmp/build_latest.out)"
-#      - "aws sns publish --topic-arn $SNS_TOPIC_ARN --subject \"AWS CodeBuild $CODEBUILD_BUILD_ID - Build Completed\" --message \"The build has completed - https://$AWS_DEFAULT_REGION.console.aws.amazon.com/codebuild/home?region=$AWS_DEFAULT_REGION#/builds/$CODEBUILD_BUILD_ID/view/new 
-#      Reports are viewable here [https://s3-$AWS_DEFAULT_REGION.amazonaws.com/$BUILD_REPORT_BUCKET/$CODEBUILD_BUILD_ID/index.html]\""
+      - bin/closesg.sh "${NEXUS_SG}"
+      - $(aws ecr get-login --registry-ids ${REGISTRYID})
+      - docker push "${REPOSITORY_URI}:${CODEBUILD_RESOLVED_SOURCE_VERSION}"
+      - test "${BRANCH}" = "master" && docker push "${REPOSITORY_URI}:latest" || true
+      - printf '{"image":"%s"}' "${REPOSITORY_URI}:${CODEBUILD_RESOLVED_SOURCE_VERSION}" > build.json
 artifacts:
   files:
-    - /tmp/build.json
-    - deploy/ecs.yml
-  discard-paths: yes
+    - build.json
