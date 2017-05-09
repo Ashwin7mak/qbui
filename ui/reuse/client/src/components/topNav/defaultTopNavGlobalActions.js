@@ -1,12 +1,13 @@
 import React, {PropTypes, Component} from 'react';
-import GlobalAction from '../globalAction/globalAction';
+import GlobalAction from 'REUSE/components/globalAction/globalAction';
+import HelpButton from 'REUSE/components/helpButton/helpButton';
 import UserDropDown from './supportingComponents/userDropDown';
-import HelpButton from '../helpButton/helpButton';
+import UserFeedBack from './supportingComponents/userFeedBack';
 
 // IMPORTING FROM CLIENT REACT
 // Needs to be refactored once these components are added to the reuse library
-import Locale from '../../../../../client-react/src/locales/locales';
-import WindowLocationUtils from '../../../../../client-react/src/utils/windowLocationUtils';
+import Locale from 'APP/locales/locales';
+import WindowLocationUtils from 'APP/utils/windowLocationUtils';
 // IMPORTING FROM CLIENT REACT
 
 import './defaultTopNavGlobalActions.scss';
@@ -32,6 +33,12 @@ class ReDefaultTopNavGlobalActions extends Component {
         return (
             <div className="globalActions defaultTopNavGlobalActions">
                 <ul className="globalActionsList">
+                    <li className="link globalAction withDropdown">
+                        <UserFeedBack
+                            startTabIndex={this.props.startTabIndex}
+                            shouldOpenMenusUp={this.props.shouldOpenMenusUp}
+                        />
+                    </li>
                     {this.props.children}
                     {this.props.actions && this.props.actions.map((action, index) => (
                         <GlobalAction

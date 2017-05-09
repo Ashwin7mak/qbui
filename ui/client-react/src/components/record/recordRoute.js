@@ -53,7 +53,10 @@ export const RecordRoute = React.createClass({
     loadRecord(appId, tblId, recordId, rptId, embeddedReport) {
         const flux = this.getFlux();
 
-        flux.actions.selectTableId(tblId);
+        //selected table does not chane when in a drawer
+        if (!this.props.isDrawerContext) {
+            flux.actions.selectTableId(tblId);
+        }
 
         // ensure the search input is empty
         this.props.clearSearchInput();
@@ -71,12 +74,11 @@ export const RecordRoute = React.createClass({
 
         // TODO: currently this.props.match.rptId is the embeddedReport's unique ID, perhaps use a different matcher
         // for rptId and uniqueId. We can then simplify some of the following smelly code.
-        let embeddedReport;
+        let embeddedReport = {};
         if (rptId !== undefined && typeof rptId === 'string' &&
                 (rptId.includes(CONTEXT.REPORT.EMBEDDED) || rptId.includes(CONTEXT.FORM.DRAWER))) {
             const embeddedReportId = rptId;
-            // TODO: move to reducers/embeddedReport
-            embeddedReport = _.find(this.props.embeddedReports, {'id' : embeddedReportId});
+            embeddedReport = getEmbeddedReportByContext(this.props.embeddedReports, embeddedReportId) || {};
             rptId = embeddedReport.rptId;
         }
 
@@ -442,10 +444,10 @@ export const RecordRoute = React.createClass({
         if (props.isDrawerContext) {
             let {rptId} = this.props.match.params;
             // TODO: remove the following after we move to reducers/embeddedReport
-            let embeddedReport;
+            let embeddedReport = {};
             if (rptId.includes(CONTEXT.REPORT.EMBEDDED) || rptId.includes(CONTEXT.FORM.DRAWER)) {
                 const embeddedReportId = rptId;
-                embeddedReport = getEmbeddedReportByContext(this.props.embeddedReports, embeddedReportId);
+                embeddedReport = getEmbeddedReportByContext(this.props.embeddedReports, embeddedReportId) || {};
                 rptId = embeddedReport.rptId;
             }
             return  embeddedReport;

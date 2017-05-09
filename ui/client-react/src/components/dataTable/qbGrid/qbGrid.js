@@ -195,6 +195,12 @@ const QbGrid = React.createClass({
         };
     },
 
+    getPlaceholderCellProps() {
+        return {
+            isPlaceholderCell: true
+        };
+    },
+
     /**
      * Render a single cell
      * @param cellData
@@ -223,10 +229,15 @@ const QbGrid = React.createClass({
     getColumn(column) {
         try {
             column.addFormatter(this.renderCell);
-            if (!this.props.phase1) {
+            if (!this.props.phase1 && !column.isPlaceholder) {
                 column.addHeaderMenu(this.props.menuComponent, this.props.menuProps);
             }
-            return column.getGridHeader();
+            let c = column.getGridHeader();
+            if (column.isPlaceholder) {
+                c.cell.transforms = [this.getPlaceholderCellProps];
+                c.header.transforms = [this.getPlaceholderCellProps];
+            }
+            return c;
         } catch (err) {
             // If the column is not a type of ColumnTransformer with the appropriate methods, still pass through the column as the dev may have wanted to use a plain object (i.e., in the component library)
             // but provide a warning in case using the ColumnTransformer class was forgotten.
@@ -386,7 +397,7 @@ const QbGrid = React.createClass({
         }
         return (
 
-            <Loader loaded={!this.props.loading} options={SpinnerConfigurations.AG_GRID}>
+            <Loader loaded={!this.props.loading} options={SpinnerConfigurations.QB_GRID}>
                 <Table.Provider
                     ref="qbGridTable"
                     // Turn off hover effects when in inline editing mode

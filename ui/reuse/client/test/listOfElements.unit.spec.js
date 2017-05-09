@@ -2,7 +2,7 @@ import React from 'react';
 import {mount} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
 
-import ListOfElements, {__RewireAPI__ as ListOfElementsRewireAPI} from '../src/components/sideNavs/listOfElements';
+import ListOfElements, {__RewireAPI__ as ListOfElementsRewireAPI} from 'REUSE/components/sideNavs/listOfElements';
 
 const FieldTokenInMenuMock = React.createClass({
     render: function() {

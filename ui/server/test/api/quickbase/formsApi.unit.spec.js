@@ -47,11 +47,13 @@ describe('Validate FormsApi unit tests', function() {
         let executeReqStub;
         let getHydratedAppStub;
         let getRelationshipForAppStub;
+        let getTablesForAppStub;
         beforeEach(function() {
             executeReqStub = sinon.stub(requestHelper, "executeRequest");
             formsApi.setRequestHelperObject(requestHelper);
             getHydratedAppStub = sinon.stub(appsApi, "getHydratedApp");
             getRelationshipForAppStub = sinon.stub(appsApi, "getRelationshipsForApp");
+            getTablesForAppStub = sinon.stub(appsApi, "getTablesForApp");
             formsApi.setAppsApiObject(appsApi);
         });
 
@@ -59,6 +61,7 @@ describe('Validate FormsApi unit tests', function() {
             executeReqStub.restore();
             getHydratedAppStub.restore();
             getRelationshipForAppStub.restore();
+            getTablesForAppStub.restore();
         });
 
         it('success return results ', function(done) {
