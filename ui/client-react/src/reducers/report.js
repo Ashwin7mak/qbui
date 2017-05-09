@@ -392,7 +392,8 @@ const report = (state = [], action) => {
     case types.CHANGE_REPORT_NAME: {
         let currentReport = getReportFromState(action.id);
         if (currentReport) {
-            currentReport.data.name = action.content;
+            currentReport.data.name = action.content.newName;
+            currentReport.data.metaData.name = action.content.newName;
             return newState(currentReport);
         }
         return state;
