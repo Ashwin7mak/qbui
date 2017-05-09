@@ -4,6 +4,7 @@ import './drawer.scss';
 
 /**
  * A blank container meant to wrap some other component.
+ * @see DrawerContainer
  */
 class Drawer extends React.Component {
     componentWillMount() {

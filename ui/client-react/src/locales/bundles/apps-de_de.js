@@ -122,7 +122,10 @@ export default {
             apply: "Sich bewerben",
             new: "Neu",
             backToApp: "Zurück zur App",
-            reset: "Zurücksetzen"
+            reset: "Zurücksetzen",
+            closeRecord: "Schließen Aufzeichnung",
+            expandSection: "Erweitern Abschnitt",
+            collapseSection: "Zusammenbruch Abschnitt"
         },
         field: {
             search: "Suche",
