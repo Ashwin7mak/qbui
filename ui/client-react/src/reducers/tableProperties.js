@@ -28,13 +28,14 @@ const tableProperties = (
         tableInfo[action.property] = {
             origValue: fieldInfo ? fieldInfo.origValue : "",
             value: action.value,
+            pendingValidationError: action.pendingValidationError,
             validationError: action.validationError,
             edited: fieldInfo ? fieldInfo.edited || action.isUserEdit : action.isUserEdit
         };
 
         return {
             ...state,
-            isDirty: state.edited || action.isUserEdit,
+            isDirty: state.isDirty || action.isUserEdit,
             tableInfo: tableInfo
         };
     }
@@ -48,6 +49,7 @@ const tableProperties = (
             newTableInfo[key] = {
                 origValue: tableInfo[key],
                 value: tableInfo[key],
+                pendingValidationError: action.pendingValidationError,
                 validationError: action.validationError,
                 edited: action.isUserEdit
             };
@@ -84,6 +86,7 @@ const tableProperties = (
             newTableInfo[key] = {
                 origValue: tableInfo[key].value,
                 value: tableInfo[key].value,
+                pendingValidationError: null,
                 validationError: null,
                 edited: null
             };
@@ -102,6 +105,7 @@ const tableProperties = (
             newTableInfo[key] = {
                 origValue: tableInfo[key].origValue,
                 value: tableInfo[key].origValue,
+                pendingValidationError: null,
                 validationError: null,
                 edited: null
             };

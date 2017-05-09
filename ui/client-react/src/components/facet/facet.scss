@@ -56,8 +56,8 @@
         cursor: pointer;
 
         @include small-breakpoint {
-            font-size: $size-iconfont-large;
-            line-height: 1.9;
+            font-size: $size-iconfont-large2;
+            line-height: 1.7;
         }
 
         &.qbIcon {
@@ -307,6 +307,7 @@
         }
 
         .facetsMenuContainer {
+            margin-left: 16px;
             flex: 0 0 auto;
         }
 
@@ -314,8 +315,9 @@
             display: none;
         }
 
-        .facetsMenuButton.withoutSelections {
-            margin: 0; // no search box to effect centered height in small
+        .facetsMenuButton.withoutSelections,
+        .facetsMenuButton.withSelections {
+            margin: 10px 0 0; // no search box to effect centered height in small
         }
 
         .popover.bottom > .arrow {

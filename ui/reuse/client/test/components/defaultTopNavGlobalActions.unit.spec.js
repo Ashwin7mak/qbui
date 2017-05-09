@@ -2,10 +2,10 @@ import React from 'react';
 import {shallow, mount} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
 
-import DefaultTopNavGlobalActions from '../../src/components/topNav/defaultTopNavGlobalActions';
-import UserDropDown from '../../src/components/topNav/supportingComponents/userDropDown';
-import ReHelpButton from '../../src/components/helpButton/helpButton';
-import ReGlobalAction from '../../src/components/globalAction/globalAction';
+import DefaultTopNavGlobalActions from 'REUSE/components/topNav/defaultTopNavGlobalActions';
+import UserDropDown from 'REUSE/components/topNav/supportingComponents/userDropDown';
+import ReHelpButton from 'REUSE/components/helpButton/helpButton';
+import ReGlobalAction from 'REUSE/components/globalAction/globalAction';
 
 let component;
 

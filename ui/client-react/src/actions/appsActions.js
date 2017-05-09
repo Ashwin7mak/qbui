@@ -168,6 +168,32 @@ let appsActions = {
 
     updateTableProps(tableId, tableInfo) {
         this.dispatch(actions.UPDATED_TABLE_PROPS, {tableId: tableId, tableInfo: tableInfo});
+    },
+
+    selectUsersRows(selectedRows) {
+        this.dispatch(actions.SELECT_USERS_DETAILS, selectedRows);
+    },
+
+    unassignUsers(appId, roleId, userIds) {
+        let logger = new Logger();
+        //  promise is returned in support of unit testing only
+        return new Promise((resolve, reject) => {
+
+            let roleService = new RoleService();
+
+            // Unassign users service call
+            roleService.unassignUsersFromRole(appId, roleId, userIds).then(response => {
+                logger.debug('RoleService unassignUsers success');
+                    // after success
+                this.dispatch(actions.UNASSIGN_USERS_SUCCESS, {appId: appId, roleId: roleId, userIds:userIds});
+                resolve();
+            }, (error) => {
+                logger.parseAndLogError(LogLevel.ERROR, error.response, 'roleService.unassignUsersFromRole:');
+                this.dispatch(actions.UNASSIGN_USERS_FAILED);
+                reject();
+            });
+
+        });
     }
 };
 

@@ -53,7 +53,10 @@ export const RecordRoute = React.createClass({
     loadRecord(appId, tblId, recordId, rptId, embeddedReport) {
         const flux = this.getFlux();
 
-        flux.actions.selectTableId(tblId);
+        //selected table does not chane when in a drawer
+        if (!this.props.isDrawerContext) {
+            flux.actions.selectTableId(tblId);
+        }
 
         // ensure the search input is empty
         this.props.clearSearchInput();

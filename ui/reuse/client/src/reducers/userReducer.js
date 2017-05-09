@@ -1,4 +1,4 @@
-import {UPDATE_LOGGED_IN_USER, UPDATE_USER_LOADING_STATUS} from './../actions/userActions';
+import {UPDATE_LOGGED_IN_USER, UPDATE_USER_LOADING_STATUS} from 'REUSE/actions/userActions';
 
 const user = (state = {isLoading: false}, action) => {
     switch (action.type) {

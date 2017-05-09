@@ -61,6 +61,7 @@ export class TableCreationDialog extends React.Component {
                 // leave the dialog open but issue a growl indicating an error
                 NotificationManager.error(Locale.getMessage('tableCreation.tableCreationFailed'), Locale.getMessage('failed'));
             });
+
     }
 
     /**
@@ -69,9 +70,9 @@ export class TableCreationDialog extends React.Component {
      */
     isValid() {
 
-        // form is invalid if any tableInfo properties have a validationError value
+        // form can be saved if the state if the fields is valid, regardless of what previous validation error is being shown
 
-        return !_.findKey(this.props.tableInfo, (field) => field.validationError);
+        return this.props.tableCreation.edited && !_.findKey(this.props.tableInfo, (field) => field.pendingValidationError);
     }
 
     /**

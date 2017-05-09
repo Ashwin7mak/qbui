@@ -1,9 +1,10 @@
 import * as actions from '../constants/actions';
-
+import Locale from '../../../reuse/client/src/locales/locale';
 import Fluxxor from 'fluxxor';
 import Logger from '../utils/logger';
 var logger = new Logger();
 import TableIconUtils from '../utils/tableIconUtils';
+import NotificationManager from '../../../reuse/client/src/scripts/notificationManager';
 
 import _ from 'lodash';
 
@@ -19,6 +20,7 @@ let AppsStore = Fluxxor.createStore({
         this.loading = true;
         this.loadingAppUsers = false;
         this.error = false;
+        this.selectedUserRows = [];
 
         this.bindActions(
             actions.LOAD_APP, this.onLoadApps,
@@ -42,7 +44,13 @@ let AppsStore = Fluxxor.createStore({
 
             actions.LOAD_APP_OWNER, this.onLoadAppOwner,
             actions.LOAD_APP_OWNER_FAILED, this.onLoadAppOwnerFailed,
-            actions.LOAD_APP_OWNER_SUCCESS, this.onLoadAppOwnerSuccess
+            actions.LOAD_APP_OWNER_SUCCESS, this.onLoadAppOwnerSuccess,
+
+            actions.SELECT_USERS_DETAILS, this.onSelectedRows,
+
+            actions.UNASSIGN_USERS, this.onUnasssignUsers,
+            actions.UNASSIGN_USERS_FAILED, this.onUnasssignUsersFail,
+            actions.UNASSIGN_USERS_SUCCESS, this.onUnasssignUsersSuccess,
         );
 
         this.logger = new Logger();
@@ -151,6 +159,41 @@ let AppsStore = Fluxxor.createStore({
 
         this.emit('change');
     },
+    onSelectedRows(selectedRows) {
+        this.selectedUserRows = selectedRows;
+
+        this.emit('change');
+    },
+    onUnasssignUsers() {
+        this.emit('change');
+    },
+    onUnasssignUsersSuccess(data) {
+        let appUsers = this.appUsers;
+        let appUsersUnfiltered = this.appUsersUnfiltered[data.roleId];
+        let users = data.userIds.length;
+
+        (data.userIds).forEach(selectedUser => {
+            appUsers = appUsers.filter(function(obj) {
+                return obj.userId !== selectedUser;
+            });
+            appUsersUnfiltered = appUsersUnfiltered.filter(function(obj) {
+                return obj.userId !== selectedUser;
+            });
+        });
+
+        this.appUsersUnfiltered[data.roleId] = appUsersUnfiltered;
+        this.appUsers = appUsers;
+        this.selectedUserRows = [];
+        let msg = " ";
+        msg = (users > 1) ? users + Locale.getMessage('app.users.usersRemoved') :
+        msg = users + Locale.getMessage('app.users.userRemoved');
+
+        NotificationManager.success(msg);
+        this.emit('change');
+    },
+    onUnasssignUsersFail() {
+        this.emit('change');
+    },
     /**
      * A table's props were updated. Find the table in the selected app and replace its details with those passed in.
      * An example of who updated the table might be user updated table name from settings pages.
@@ -187,7 +230,8 @@ let AppsStore = Fluxxor.createStore({
             selectedTableId: this.selectedTableId,
             loading: this.loading,
             loadingAppUsers: this.loadingAppUsers,
-            error: this.error
+            error: this.error,
+            selectedUserRows:this.selectedUserRows
         };
     },
 });
