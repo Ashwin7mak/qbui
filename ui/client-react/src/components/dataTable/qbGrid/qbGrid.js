@@ -432,7 +432,7 @@ export const QbGrid = React.createClass({
         }
         return (
 
-            <Loader loaded={!this.props.loading} options={SpinnerConfigurations.AG_GRID}>
+            <Loader loaded={!this.props.loading} options={SpinnerConfigurations.QB_GRID}>
                 <Table.Provider
                     ref="qbGridTable"
                     // Turn off hover effects when in inline editing mode

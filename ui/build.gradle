@@ -240,6 +240,10 @@ task gruntBuildNoColor(type: GruntTask) {
     args = ["build", "--no-color"]
 }
 
+task gruntLogGitState(type: GruntTask) {
+    args = ["logGitState"]
+}
+
 task gruntUnitTestsNoColor(type: GruntTask) {
     args = ["ciTest", "--no-color"]
 }

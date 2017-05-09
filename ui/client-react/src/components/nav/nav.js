@@ -421,6 +421,7 @@ export const Nav = React.createClass({
                                 isRowPopUpMenuOpen: this.props.shell.isRowPopUpMenuOpen,
                                 selectedApp: this.getSelectedApp(),
                                 selectedTable: this.getSelectedTable(reportsData.tblId),
+                                selectedUserRows: this.state.apps.selectedUserRows,
                                 scrollingReport: this.state.nav.scrollingReport,
                                 flux: flux
                             };
@@ -490,7 +491,9 @@ export const Nav = React.createClass({
      * open the create table wizard
      */
     createNewTable() {
-        this.props.showTableCreationDialog();
+        setTimeout(() => {
+            this.props.showTableCreationDialog();
+        });
     }
 });
 

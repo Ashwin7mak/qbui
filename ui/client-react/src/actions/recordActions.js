@@ -80,12 +80,12 @@ function createEditRecordEventObject(appId, tblId, recId, origRec, changes, isIn
  * @param recId
  * @param nextRecordId
  * @param previousRecordId
- * @param uniqueId the context for this action such as "VIEW" or "DRAWER"
+ * @param viewContextId the context for this action such as "VIEW" or "DRAWER"
  * @returns {{id, type, content}|{id: *, type: *, content: *}}
  */
-export const openRecord = (recId, nextRecordId, previousRecordId, uniqueId) => {
-    uniqueId = uniqueId || recId;
-    return event(uniqueId, types.OPEN_RECORD, {recId, nextRecordId, previousRecordId});
+export const openRecord = (recId, nextRecordId, previousRecordId, viewContextId) => {
+    viewContextId = viewContextId || recId;
+    return event(viewContextId, types.OPEN_RECORD, {recId, nextRecordId, previousRecordId});
 };
 
 /**
