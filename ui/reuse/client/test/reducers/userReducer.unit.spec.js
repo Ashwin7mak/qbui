@@ -30,11 +30,19 @@ describe('User Reducer', () => {
         it('gets the user id of the currently logged in user from state', () => {
             expect(getLoggedInUserId({user: mockUser})).toEqual(mockUser.id);
         });
+
+        it('returns undefined if there is no user in the state', () => {
+            expect(getLoggedInUserId({})).toEqual(undefined);
+        });
     });
 
     describe('getLoggedInUserAdminStatus', () => {
         it('gets the admin status of the currently logged in user from state', () => {
             expect(getLoggedInUserAdminStatus({user: mockUser})).toEqual(mockUser.administrator);
+        });
+
+        it('returns undefined if there is no user in the state', () => {
+            expect(getLoggedInUserAdminStatus({})).toEqual(undefined);
         });
     })
 });
