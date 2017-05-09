@@ -7,6 +7,7 @@ import TopNav from "../header/topNav";
 import TempMainErrorMessages from './tempMainErrorMessages';
 import ReportManagerTrowser from "../report/reportManagerTrowser";
 import RecordTrowser from "../record/recordTrowser";
+import {enterBuilderMode} from '../../../src/actions/reportActions';
 
 import GlobalActions from "../actions/globalActions";
 import BuilderDropDownAction from '../actions/builderDropDownAction';
@@ -14,8 +15,6 @@ import Breakpoints from "../../utils/breakpoints";
 import {NotificationContainer} from "react-notifications";
 import {withRouter, Switch} from 'react-router-dom';
 import _ from 'lodash';
-import SaveOrCancelFooter from "../saveOrCancelFooter/saveOrCancelFooter";
-
 import * as TrowserConsts from "../../constants/trowserConstants";
 import * as UrlConsts from "../../constants/urlConstants";
 import * as SchemaConsts from "../../constants/schema";
@@ -29,7 +28,6 @@ import {connect} from 'react-redux';
 import * as ShellActions from '../../actions/shellActions';
 import * as FormActions from '../../actions/formActions';
 import * as ReportActions from '../../actions/reportActions';
-import {enterBuilderMode, exitBuilderMode} from '../../../src/actions/reportActions';
 import * as TableCreationActions from '../../actions/tableCreationActions';
 
 import {CONTEXT} from '../../actions/context';
@@ -51,7 +49,6 @@ import Config from '../../config/app.config';
 // the current backend setup cannot handle a react component in a common directory. It is loaded
 // as a raw string and we tell react to interpret it as HTML. See more in common/src/views/Readme.md
 import LoadingScreen from 'raw!../../../../common/src/views/loadingScreen.html';
-import {I18nMessage} from '../../utils/i18nMessage';
 
 //  import styles
 import "./nav.scss";
@@ -143,7 +140,8 @@ export const Nav = React.createClass({
                             icon="settings"
                             navigateToBuilder={this.navigateToBuilder}
                             navigateToBuilderReport={this.navigateToBuilderReport}
-                            startTabIndex={4}/> : null}
+                            startTabIndex={4}
+                            rptId={this.getReportsData().rptId} /> : null}
                 </GlobalActions>
             )} />
         );
@@ -286,6 +284,7 @@ export const Nav = React.createClass({
         });
         return report || {};
     },
+
     /**
      *  Fetch the report list content.
      */
@@ -315,40 +314,8 @@ export const Nav = React.createClass({
             </ButtonGroup>
         );
     },
-    onClickSave() {
-        // save report
-    },
-
-    onCancel() {
-        this.props.exitBuilderMode(CONTEXT.REPORT.NAV);
-    },
-
-    getRightAlignedButtons() {
-        return (
-            <div>
-                <Button bsStyle="primary" onClick={this.onCancel} className="cancelFormButton"><I18nMessage message="nav.cancel"/></Button>
-                <Button bsStyle="primary" onClick={this.onClickSave} className="saveFormButton"><I18nMessage message="nav.save"/></Button>
-            </div>
-        );
-    },
-    /**
-     *  get actions element for bottom center of trowser (placeholders for now)
-     */
-    getTrowserActions() {
-        return (
-            <div className={"centerActions"} />);
-    },
-
-    getSaveOrCancelFooter() {
-        return <SaveOrCancelFooter
-            rightAlignedButtons={this.getRightAlignedButtons()}
-            centerAlignedButtons={this.getTrowserActions()}
-            leftAlignedButtons={this.getTrowserActions()}
-        />;
-    },
 
     render() {
-        let inBuilderMode = this.props.reportBuilder.inBuilderMode;
         if (!this.state.apps || this.state.apps.apps === null) {
             // don't render anything until we've made this first api call without being redirected to V2
             // The common loading screen html is shared across server and client as an HTML file and
@@ -466,15 +433,13 @@ export const Nav = React.createClass({
                                     selectedTable: this.getSelectedTable(reportsData.tblId),
                                     selectedUserRows: this.state.apps.selectedUserRows,
                                     scrollingReport: this.state.nav.scrollingReport,
-                                    flux: flux,
-                                    inBuilderMode: this.props.reportBuilder.inBuilderMode
+                                    flux: flux
                                 };
                                 return RouteWithSubRoutes(route, i, routeProps);
                             }
                         )}
                         </Switch>
-                    {inBuilderMode ?
-                    this.getSaveOrCancelFooter() : null}</div>
+                </div>
                 }
 
             </div>
@@ -571,13 +536,11 @@ const mapDispatchToProps = (dispatch) => {
 
         updateFormRedirectRoute: (route) => dispatch(updateFormRedirectRoute(route)),
 
-        enterBuilderMode: (context) => dispatch(enterBuilderMode(context)),
-
-        exitBuilderMode: (context) => dispatch(exitBuilderMode(context)),
-
         showTableCreationDialog: () => dispatch(TableCreationActions.showTableCreationDialog()),
 
-        showTableReadyDialog: () => dispatch(TableCreationActions.showTableReadyDialog())
+        showTableReadyDialog: () => dispatch(TableCreationActions.showTableReadyDialog()),
+
+        enterBuilderMode: (context) => dispatch(enterBuilderMode(context))
     };
 };
 

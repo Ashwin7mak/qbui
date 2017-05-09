@@ -17,9 +17,9 @@ import './reportFieldSelectMenu.scss';
 
 export class ReportFieldSelectMenu extends Component {
     constructor(props) {
-        super(props);
+    super(props);
 
-    }
+}
 
     componentDidMount() {
         this.refreshMenuContent();
