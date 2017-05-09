@@ -130,8 +130,8 @@ const fieldsStore = (state = [], action) => {
 
             let fieldIndex = _.findIndex(fieldList.fields, field => field.id === action.field.id);
 
-            fieldList.fields[fieldIndex] = {...action.field, isPendingEdits: true};
-
+            fieldList.fields[fieldIndex] = {...action.field, isPendingEdit: true};
+            fieldList.isPendingEdit = true;
             newState.push(fieldList);
             return newState;
 
