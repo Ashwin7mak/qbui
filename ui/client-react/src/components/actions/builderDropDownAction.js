@@ -23,7 +23,8 @@ let BuilderDropDownAction = React.createClass({
         position: React.PropTypes.string.isRequired,
         selectedApp: React.PropTypes.object,
         selectedTable: React.PropTypes.object,
-        navigateToBuilderReport: React.PropTypes.func
+        navigateToBuilderReport: React.PropTypes.func,
+        rptId: React.PropTypes.number
     },
 
     getTableSettingsLink() {
@@ -35,9 +36,7 @@ let BuilderDropDownAction = React.createClass({
         let isAppView = !!this.props.selectedApp; // !! converts to boolean
         let isTableView = (isAppView && this.props.selectedTable);
         let isFormView = (isTableView && this.props.recId);
-        // builder view is equivalent to table because everyone is admin right now
-        let isReportView = (isTableView && !this.props.recId);
-
+        let isReportView = (isTableView && !this.props.recId && this.props.rptId > 0);
         let classes = "dropdownToggle globalActionLink";
 
         let dropDown = <Dropdown className={classes} id="nav-right-dropdown" dropup={this.props.position === "left"} >

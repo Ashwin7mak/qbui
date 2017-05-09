@@ -3,6 +3,7 @@ import Stage from '../stage/stage';
 import Icon, {AVAILABLE_ICON_FONTS} from '../../../../reuse/client/src/components/icon/icon.js';
 import ReportStage from './reportStage';
 import ReportHeader from './reportHeader';
+import ReportSaveOrCancelFooter from '../reportBuilder/reportSaveOrCancelFooter';
 import IconActions from '../actions/iconActions';
 import {Link} from 'react-router-dom';
 import Logger from '../../utils/logger';
@@ -151,6 +152,7 @@ const ReportRoute = React.createClass({
     },
 
     render() {
+        let inBuilderMode = this.props.reportBuilder.inBuilderMode;
         if (_.isUndefined(this.props.match.params) ||
             _.isUndefined(this.props.match.params.appId) ||
             _.isUndefined(this.props.match.params.tblId) ||
@@ -193,6 +195,10 @@ const ReportRoute = React.createClass({
                         />
 
                     </ReportFieldSelectMenu>
+
+                    {inBuilderMode ?
+                        <ReportSaveOrCancelFooter /> :null}
+
                 </div>
             );
         }
@@ -216,4 +222,10 @@ const mapDispatchToProps = (dispatch) => {
     };
 };
 
-export default connect(null, mapDispatchToProps)(ReportRoute);
+const mapStateToProps = (state) => {
+    return {
+        reportBuilder: state.reportBuilder
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ReportRoute);
