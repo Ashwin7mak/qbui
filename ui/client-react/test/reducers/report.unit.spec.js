@@ -1381,21 +1381,24 @@ describe('Report reducer functions', () => {
                                 id: 6
                             },
                             isHidden: false,
-                            id: 6
+                            id: 6,
+                            headerName: 6
                         },
                         {
                             fieldDef: {
                                 id: 7
                             },
                             isHidden: false,
-                            id: 7
+                            id: 7,
+                            headerName: 7
                         },
                         {
                             fieldDef: {
                                 id: 8
                             },
                             isHidden: false,
-                            id: 8
+                            id: 8,
+                            headerName: 8
                         }
                     ],
                     fids: [6, 7, 8],
@@ -1409,14 +1412,16 @@ describe('Report reducer functions', () => {
             {
                 description: 'when fieldDef id of column does not equal any ids',
                 initialState: initialState,
-                content : {sourceIndex: 6, targetIndex: 7},
+                content : {sourceLabel: 6, targetLabel: 7},
                 expects : (testState) => {
                     expect(Array.isArray(testState)).toEqual(true);
-                    expect(testState[0].data.columns[0].isHidden).toEqual(false);
-                    expect(testState[0].data.columns[1].isHidden).toEqual(false);
-                    expect(testState[0].data.columns[2].isHidden).toEqual(false);
-                    expect(testState[0].data.fids.length).toEqual(3);
-                    expect(testState[0].data.fids).toContain(6, 7, 8);
+                    expect(testState[0].data.columns[0].id).toEqual(7);
+                    expect(testState[0].data.columns[1].id).toEqual(6);
+                    expect(testState[0].data.columns[2].id).toEqual(8);
+                    expect(testState[0].data.fids[0]).toEqual(7);
+                    expect(testState[0].data.fids[1]).toEqual(6);
+                    expect(testState[0].data.fids[2]).toEqual(8);
+
                 }
             }
         ];
