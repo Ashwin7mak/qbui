@@ -239,71 +239,58 @@ export class ReportColumnHeaderMenu extends Component {
         let inBuilderMode = this.props.reportBuilder.inBuilderMode;
         let isHideOptionDisabled = this.props.isOnlyOneColumnVisible;
 
+        let builderMenus = [];
+        if (inBuilderMode) {
+            builderMenus = [
+                <MenuItem divider/>,
+
+                <MenuItem onSelect={this.openFieldSelectorBefore}>
+                    <span className="addColumnBeforeText">{Locale.getMessage('report.menu.addColumnBefore')}</span>
+                </MenuItem>,
+
+                <MenuItem onSelect={this.openFieldSelectorAfter}>
+                    <span className="addColumnAfterText">{Locale.getMessage('report.menu.addColumnAfter')}</span>
+                </MenuItem>,
+
+                <MenuItem disabled={isHideOptionDisabled} onSelect={this.hideThisColumn}>
+                    <span className="hideColumnText">{Locale.getMessage('report.menu.hideColumn')}</span>
+                </MenuItem>
+            ];
+        }
+
+        const headerMenus = [
+            <MenuItem onSelect={this.sortReportAscending}>
+                {this.isFieldSortedAscending() && <QbIcon icon="checkmarkincircle-outline"/>}
+                <span className="sortAscendMenuText">{this.getSortAscText(SORTING_MESSAGE)}</span>
+            </MenuItem>,
+
+            <MenuItem onSelect={this.sortReportDescending}>
+                {this.isFieldSortedDescending() && <QbIcon icon="checkmarkincircle-outline"/>}
+                <span className="sortDescendMenuText">{this.getSortDescText(SORTING_MESSAGE)}</span>
+            </MenuItem>,
+
+            <MenuItem divider/>,
+
+            <MenuItem onSelect={this.groupReportAscending}>
+                <span className="groupAscendMenuText">{this.getSortAscText(GROUPING_MESSAGE)}</span>
+            </MenuItem>,
+
+            <MenuItem onSelect={this.groupReportDescending}>
+                <span className="groupDescendMenuText">{this.getSortDescText(GROUPING_MESSAGE)}</span>
+            </MenuItem>,
+            ...builderMenus
+        ];
+
         return (
             <Dropdown bsStyle="default" noCaret id="dropdown-no-caret">
                 <Button tabIndex="0" bsRole="toggle" className={"dropdownToggle iconActionButton"}>
                     <QbIcon icon="caret-filled-down"/>
                 </Button>
 
-                {inBuilderMode ?
                 <Dropdown.Menu>
-
-                    <MenuItem onSelect={this.sortReportAscending}>
-                        {this.isFieldSortedAscending() && <QbIcon icon="checkmarkincircle-outline"/>}
-                        <span className="sortAscendMenuText">{this.getSortAscText(SORTING_MESSAGE)}</span>
-                    </MenuItem>
-
-                    <MenuItem onSelect={this.sortReportDescending}>
-                        {this.isFieldSortedDescending() && <QbIcon icon="checkmarkincircle-outline"/>}
-                        <span className="sortDescendMenuText">{this.getSortDescText(SORTING_MESSAGE)}</span>
-                    </MenuItem>
-
-                    <MenuItem divider/>
-
-                    <MenuItem onSelect={this.groupReportAscending}>
-                        <span className="groupAscendMenuText">{this.getSortAscText(GROUPING_MESSAGE)}</span>
-                    </MenuItem>
-
-                    <MenuItem onSelect={this.groupReportDescending}>
-                        <span className="groupDescendMenuText">{this.getSortDescText(GROUPING_MESSAGE)}</span>
-                    </MenuItem>
-
-                    <MenuItem divider/>
-
-                    <MenuItem onSelect={this.openFieldSelectorBefore}>
-                        <span className="addColumnBeforeText">{Locale.getMessage('report.menu.addColumnBefore')}</span>
-                    </MenuItem>
-
-                    <MenuItem onSelect={this.openFieldSelectorAfter}>
-                        <span className="addColumnAfterText">{Locale.getMessage('report.menu.addColumnAfter')}</span>
-                    </MenuItem>
-
-                    <MenuItem disabled={isHideOptionDisabled} onSelect={this.hideThisColumn}>
-                        <span className="hideColumnText">{Locale.getMessage('report.menu.hideColumn')}</span>
-                    </MenuItem>
-                </Dropdown.Menu> :
-                    <Dropdown.Menu>
-
-                        <MenuItem onSelect={this.sortReportAscending}>
-                            {this.isFieldSortedAscending() && <QbIcon icon="checkmarkincircle-outline"/>}
-                            <span className="sortAscendMenuText">{this.getSortAscText(SORTING_MESSAGE)}</span>
-                        </MenuItem>
-
-                        <MenuItem onSelect={this.sortReportDescending}>
-                            {this.isFieldSortedDescending() && <QbIcon icon="checkmarkincircle-outline"/>}
-                            <span className="sortDescendMenuText">{this.getSortDescText(SORTING_MESSAGE)}</span>
-                        </MenuItem>
-
-                        <MenuItem divider/>
-
-                        <MenuItem onSelect={this.groupReportAscending}>
-                            <span className="groupAscendMenuText">{this.getSortAscText(GROUPING_MESSAGE)}</span>
-                        </MenuItem>
-                        <MenuItem onSelect={this.groupReportDescending}>
-                            <span className="groupDescendMenuText">{this.getSortDescText(GROUPING_MESSAGE)}</span>
-                        </MenuItem>
-                    </Dropdown.Menu>}
-                </Dropdown>
+                    {headerMenus}
+                </Dropdown.Menu>
+            </Dropdown>
         );
     }
 }
