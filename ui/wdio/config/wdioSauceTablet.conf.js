@@ -9,7 +9,7 @@ var config = {
             platformName: 'Android',
             deviceName: 'Android GoogleAPI Emulator',
             deviceType: 'tablet',
-            //deviceOrientation: 'landscape',
+            deviceOrientation: 'landscape',
             platformVersion: '6.0',
             automationName: 'Appium',
             tunnelIdentifier: process.env.ENV_TUNNEL_NAME,
