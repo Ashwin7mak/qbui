@@ -5,6 +5,7 @@
     var assert = require('assert');
     var consts = require('../../../common/src/constants');
     var log = require('../../src/logger').getLogger();
+    var requestUtils = require('../../src/utility/requestUtils');
     var _ = require('lodash');
     //This is the url that will be used for making requests to the node server or the java server
     var baseUrl;
@@ -376,7 +377,7 @@
 
                 return new promise(function(resolve, reject) {
                     request(opts, function(error, response) {
-                        if (error || response.statusCode !== 200) {
+                        if (error || !requestUtils.wasRequestSuccessful(response.statusCode)) {
                             // These specific errors were due to an environment issue in Jenkins that we needed to check for and retry
                             if (tries > 1 && error && (error.code === ERROR_HPE_INVALID_CONSTANT || error.code === ERROR_ENOTFOUND)) {
                                 tries--;

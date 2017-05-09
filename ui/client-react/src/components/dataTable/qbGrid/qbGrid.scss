@@ -433,7 +433,7 @@ $edit-icon-font-size: 18px;
                 }
 
                 &:hover {
-                    color: $iconfont-on-hover-color;
+                    color: $iconfont-on-light-hover-color;
                 }
 
                 &.deleteRecord {
@@ -537,44 +537,16 @@ $edit-icon-font-size: 18px;
                     vertical-align: middle;
                     width: 28px;
                     padding: 4px;
-
-                    &.print {
-                        color: $print-icon-normal-color;
-                    }
-
-                    &.email {
-                        color: $mail-icon-normal-color;
-                    }
-
-                    &.duplicate {
-                        color: $copy-icon-normal-color;
-                    }
-
-                    &.delete {
-                        color: $delete-icon-normal-color;
-                    }
-
+                    color: $iconfont-on-light-normal-color;
                 }
 
                 // dropdown menu hover icon colors
                 &:hover {
                     .qbIcon {
-                        color: $color-black-100;
-
-                        &.print {
-                            background-color: $print-icon-normal-color;
-                        }
-
-                        &.email {
-                            background-color: $mail-icon-normal-color;
-                        }
-
-                        &.duplicate {
-                            background-color: $copy-icon-normal-color;
-                        }
+                        color: $iconfont-on-light-hover-color;
 
                         &.delete {
-                            background-color: $delete-icon-normal-color;
+                            color: $iconfont-on-light-hover-danger-color;
                         }
                     }
                 }
@@ -583,7 +555,6 @@ $edit-icon-font-size: 18px;
             // disabled icon colors
             .disabled a .qbIcon {
                 color: $iconfont-on-light-disabled-color;
-                background-color: transparent;
             }
         }
     }
