@@ -5,6 +5,7 @@
     margin-left: 8px;
     justify-content: space-between;
     line-height: 32px;
+    font-size: 20px;
 
     button {
         margin-right: 8px;
@@ -63,10 +64,8 @@
         }
         display: inline-block;
     }
-}
 
-.reportActions {
-
+    // icons
     a.iconLink {
         text-decoration: none;
     }
@@ -80,11 +79,6 @@
     a.iconLink.icon-errorincircle-fill:hover {
         color: $iconfont-on-light-hover-danger-color;
     }
-
-}
-
-.reportActions {
-    font-size: 20px;
 
     .actionIcons a.iconLink .qbIcon {
         line-height: 32px;
