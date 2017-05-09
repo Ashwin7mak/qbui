@@ -27,4 +27,6 @@ export const getLoggedInUser = state => state.user;
 
 export const getLoggedInUserId = state => state.user.id;
 
+export const getLoggedInUserAdminStatus = state => state.user.administrator;
+
 export default user;

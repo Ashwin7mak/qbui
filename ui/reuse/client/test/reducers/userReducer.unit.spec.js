@@ -1,7 +1,7 @@
-import UserReducer, {getLoggedInUser, getLoggedInUserId} from 'REUSE/reducers/userReducer';
+import UserReducer, {getLoggedInUser, getLoggedInUserId, getLoggedInUserAdminStatus} from 'REUSE/reducers/userReducer';
 import {UPDATE_USER_LOADING_STATUS, UPDATE_LOGGED_IN_USER} from 'REUSE/actions/userActions';
 
-const mockUser = {id: 13};
+const mockUser = {id: 13, administrator: true};
 
 describe('User Reducer', () => {
     it('updates the loading status for the user', () => {
@@ -31,4 +31,10 @@ describe('User Reducer', () => {
             expect(getLoggedInUserId({user: mockUser})).toEqual(mockUser.id);
         });
     });
+
+    describe('getLoggedInUserAdminStatus', () => {
+        it('gets the admin status of the currently logged in user from state', () => {
+            expect(getLoggedInUserAdminStatus({user: mockUser})).toEqual(mockUser.administrator);
+        });
+    })
 });
