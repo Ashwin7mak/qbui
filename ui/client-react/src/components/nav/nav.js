@@ -175,7 +175,7 @@ export const Nav = React.createClass({
 
     getSelectedApp() {
         if (this.state.apps.selectedAppId) {
-            let app = _.find(this.state.apps.apps, (a) => a.id === this.state.apps.selectedAppId);
+            return _.find(this.state.apps.apps, (a) => a.id === this.state.apps.selectedAppId);
         }
         return null;
     },
@@ -447,7 +447,7 @@ export const Nav = React.createClass({
     tableCreated(tblId) {
         const flux = this.getFlux();
 
-        flux.actions.loadApps(true);
+        flux.actions.loadApps();
 
         // store any new table IDs for duration of session for table homepage
         if (window.sessionStorage) {

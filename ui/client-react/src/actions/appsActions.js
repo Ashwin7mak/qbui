@@ -92,20 +92,32 @@ let appsActions = {
     selectAppId(appId) {
         //  promise is returned in support of unit testing only
         return new Promise((resolve, reject) => {
-            this.dispatch(actions.SELECT_APP, appId);
-            let appService = new AppService();
-
             // fetch the app users list if we don't have it already
-            if (appId && appId !== this.selectedAppId) {
-                appService.getAppUsers(appId).then(response => {
+            //if (appId && appId !== this.selectedAppId) {
+            if (appId) {
+                this.dispatch(actions.LOAD_APPS);
+                let appService = new AppService();
+
+                let promises = [appService.getAppUsers(appId), appService.getHydratedApp(appId)];
+                //if (hydrateApp) {
+                //promises.push(appService.getHydratedApp(appId));
+                //}
+                Promise.all(promises).then(response => {
                     this.selectedAppId = appId;
-                    this.dispatch(actions.LOAD_APP_USERS_SUCCESS, response.data);
+                    let model = appsModel.set([response[1].data]);
+                    this.dispatch(actions.LOAD_APP_USERS_SUCCESS, {users: response[0].data, hydratedApp: model[0]});
                     resolve();
+                //}
+                //appService.getAppUsers(appId).then(response => {
+                //    this.selectedAppId = appId;
+                //    this.dispatch(actions.LOAD_APP_USERS_SUCCESS, response.data);
+                //    resolve();
                 }, () => {
                     this.dispatch(actions.LOAD_APP_USERS_FAILED);
                     reject();
                 });
             } else {
+                this.dispatch(actions.SELECT_APP, appId);
                 resolve();
             }
         });

@@ -54,7 +54,7 @@ export const SettingsWrapper = React.createClass({
     componentDidMount() {
         // listen for resizes (nicely) in case we need to re-render for a new breakpoint
         window.addEventListener('resize', this.handleResize);
-        this.props.flux.actions.loadApps(true);
+        this.props.flux.actions.loadApps();
 
         if (this.props.match.params.appId) {
             this.props.flux.actions.selectAppId(this.props.match.params.appId);

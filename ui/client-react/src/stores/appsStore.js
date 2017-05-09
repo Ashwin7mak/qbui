@@ -67,7 +67,7 @@ let AppsStore = Fluxxor.createStore({
             }
         });
     },
-    onLoadAppSuccess(app) {
+    onLoadAppSuccess(app, emitEvent = true) {
 
         this.loading = false;
         this.error = false;
@@ -80,7 +80,13 @@ let AppsStore = Fluxxor.createStore({
 
         this.setTableIcons();
 
-        this.emit('change');
+        // clean this up..npe
+        this.selectedAppId = app.id;
+        //this.selectedTableId = null;
+
+        if (emitEvent) {
+            this.emit('change');
+        }
     },
     onLoadAppsSuccess(apps) {
 
@@ -104,10 +110,15 @@ let AppsStore = Fluxxor.createStore({
      * userArray is structured so that the filtered list of users is mapped for our userPicker in index 0
      * index 1 is the untouched response from Core's getAppUsers
      */
-    onLoadAppUsersSuccess(userArray) {
+    onLoadAppUsersSuccess(app) {
+        const userArray = app.users;
+
         this.loadingAppUsers = false;
         this.appUsers = userArray[0];
         this.appUsersUnfiltered = userArray[1];
+
+        this.onLoadAppSuccess(app.hydratedApp, false);
+
         this.emit('change');
     },
     onLoadAppRoles() {
