@@ -11,7 +11,7 @@ var config = {
             deviceType: 'tablet',
             deviceOrientation: 'portrait',
             platformVersion: '6.0',
-            automationName: 'Appium',
+            automationName: 'landscape',
             tunnelIdentifier: process.env.ENV_TUNNEL_NAME,
             build           : 'WebdriverIO Jenkins Try Build #' + process.env.BUILD_NUMBER + ' - Git branch: ' + process.env.GIT_UIBRANCH + ' - Android Chrome Browser',
             tags            : [process.env.SAUCE_JOB_NAME + '_Android_Chrome', 'try', 'Android', 'Chrome', process.env.BUILD_NUMBER, process.env.GIT_UIBRANCH],
