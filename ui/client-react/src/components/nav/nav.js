@@ -290,6 +290,7 @@ export const Nav = React.createClass({
         return getPendEdits(this.props.record);
     },
 
+/*
     getCenterGlobalActions() {
         return (
             <ButtonGroup className="navItem">
@@ -305,6 +306,7 @@ export const Nav = React.createClass({
             </ButtonGroup>
         );
     },
+*/
 
     render() {
         if (!this.state.apps || this.state.apps.apps === null) {
@@ -392,7 +394,7 @@ export const Nav = React.createClass({
 
             <div className="main" >
                 <TopNav title={this.state.nav.topTitle}
-                        centerGlobalActions={this.getCenterGlobalActions()}
+                        // centerGlobalActions={this.getCenterGlobalActions()}
                         globalActions={this.getTopGlobalActions()}
                         onNavClick={this.toggleNav}
                         showOnSmall={this.state.nav.showTopNav}

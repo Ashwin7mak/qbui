@@ -103,7 +103,8 @@ $iconfont-on-dark-disabled-color:       $color-black-300;
 $iconfont-on-light-normal-color:        $color-black-700;
 $iconfont-on-light-alternate-color:     $color-black-700;
 $iconfont-on-light-disabled-color:      $color-black-400;
-$iconfont-on-hover-color:               $color-black-500;
+$iconfont-on-light-hover-color:         $color-cyan-400;
+$iconfont-on-light-hover-danger-color:  $color-red-500;     // used for destructive operations like delete
 
 // this old color needs to be merged with one of the iconfont colors above???
 $icon-color-hover:                      $color-black-700;
@@ -459,7 +460,8 @@ $input-text-error-border-color: $error-color;
 $tootip-error-color: $error-color;
 $field-input-shadow-color: rgba($color-indigo-800, 0.25);
 
-$selection-badge-color: $color-purple-600;
+$selection-badge-color: $color-black-100;
+$selection-badge-background-color: $color-purple-600;
 $selected-check-color: $color-green-700;
 
 $input-border-focus-color:  $color-purple-600;
