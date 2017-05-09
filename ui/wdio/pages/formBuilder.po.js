@@ -133,14 +133,26 @@ class formBuilderPage {
     }
     open() {
         // Invokes the form builder from the VIEW RECORD page
-        topNavPO.formBuilderBtn.waitForExist();
-        topNavPO.formBuilderBtn.click();
+        this.openMenu();
         topNavPO.modifyThisForm.waitForExist();
         topNavPO.modifyThisForm.click();
         this.firstField.waitForVisible();
         browser.pause(fiveSeconds);
         browser.pause(fiveSeconds);
         return this;
+    }
+    openMenu() {
+        topNavPO.formBuilderBtn.waitForExist();
+        try {
+            topNavPO.formBuilderBtn.click();
+        }
+        catch (err) {
+            // wait & try again to avoid 'other element would receive the click...."
+            // which is presumably due to the SAVE SUCCESSFUL growl msg
+            // which apparently we're not supposed to wait for due to other issues
+            browser.pause(oneSecond);
+            this.openMenu();
+        }
     }
     removeField(index) {
         // Removes the specified field by clicking on its DELETE icon
