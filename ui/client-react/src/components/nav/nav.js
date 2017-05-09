@@ -299,6 +299,10 @@ export const Nav = React.createClass({
         return getPendEdits(this.props.record);
     },
 
+/*
+    // Commenting out this function to render the top nav items in the center.
+    // These items weren't enabled yet and were simply placeholders. We will need
+    // to put some of them back so, leaving the code here for now.
     getCenterGlobalActions() {
         return (
             <ButtonGroup className="navItem">
@@ -314,6 +318,7 @@ export const Nav = React.createClass({
             </ButtonGroup>
         );
     },
+*/
 
     render() {
         if (!this.state.apps || this.state.apps.apps === null) {
@@ -401,7 +406,7 @@ export const Nav = React.createClass({
 
             <div className="main" >
                 <TopNav title={this.state.nav.topTitle}
-                        centerGlobalActions={this.getCenterGlobalActions()}
+                        // centerGlobalActions={this.getCenterGlobalActions()} // commented out placeholders for now. See comments by getCenterGlobalActions()
                         globalActions={this.getTopGlobalActions()}
                         onNavClick={this.toggleNav}
                         showOnSmall={this.state.nav.showTopNav}
@@ -503,7 +508,9 @@ export const Nav = React.createClass({
      * open the create table wizard
      */
     createNewTable() {
-        this.props.showTableCreationDialog();
+        setTimeout(() => {
+            this.props.showTableCreationDialog();
+        });
     }
 });
 

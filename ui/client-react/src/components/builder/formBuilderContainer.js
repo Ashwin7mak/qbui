@@ -22,10 +22,12 @@ import {ENTER_KEY, SPACE_KEY} from '../../../../reuse/client/src/components/keyb
 import * as tabIndexConstants from '../formBuilder/tabindexConstants';
 import KeyboardShortcuts from '../../../../reuse/client/src/components/keyboardShortcuts/keyboardShortcuts';
 import _ from 'lodash';
-import NotificationManager from '../../../../reuse/client/src/scripts/notificationManager';
 import {DragDropContext} from 'react-dnd';
 import TouchBackend from 'react-dnd-touch-backend';
 import FormBuilderCustomDragLayer from '../formBuilder/formBuilderCustomDragLayer';
+import AppHistory from '../../globals/appHistory';
+import {HideAppModal} from '../qbModal/appQbModalFunctions';
+import AppQbModal from '../qbModal/appQbModal';
 
 import './formBuilderContainer.scss';
 
@@ -34,6 +36,9 @@ let formBuilderContainerContent = null;
 
 const mapStateToProps = state => {
     let currentForm = getFormByContext(state, CONTEXT.FORM.VIEW);
+    let fields = state.fields[0];
+    let isFormDirty = (_.has(currentForm, 'isPendingEdit') ? currentForm.isPendingEdit : false);
+    let isFieldPropertiesDirty = (_.has(fields, 'isPendingEdit') ? fields.isPendingEdit : false);
 
     return {
         currentForm,
@@ -44,6 +49,7 @@ const mapStateToProps = state => {
         toolPaletteChildrenTabIndex: (_.has(currentForm, 'toolPaletteChildrenTabIndex') ? currentForm.toolPaletteChildrenTabIndex[0] : "-1"),
         formFocus: (_.has(currentForm, 'formFocus') ? currentForm.formFocus[0] : undefined),
         toolPaletteFocus: (_.has(currentForm, 'toolPaletteFocus') ? currentForm.toolPaletteFocus[0] : undefined),
+        isPendingEdit: isFormDirty || isFieldPropertiesDirty,
         isOpen: state.builderNav.isNavOpen,
         isCollapsed: state.builderNav.isNavCollapsed
     };
@@ -125,10 +131,19 @@ export const FormBuilderContainer = React.createClass({
         this.props.loadForm(appId, tblId, null, (formType || 'view'), NEW_FORM_RECORD_ID);
     },
 
-    onCancel() {
+    closeFormBuilder() {
         const {appId, tblId} = this.props.match.params;
 
         NavigationUtils.goBackToLocationOrTable(appId, tblId, this.props.redirectRoute);
+    },
+
+    onCancel() {
+        if (this.props.isPendingEdit) {
+            AppHistory.showPendingEditsConfirmationModal(this.saveClicked, this.closeFormBuilder, () => HideAppModal());
+        } else {
+            HideAppModal();
+            this.closeFormBuilder();
+        }
     },
 
     removeField() {
@@ -138,6 +153,7 @@ export const FormBuilderContainer = React.createClass({
     },
 
     saveClicked() {
+        HideAppModal();
         // get the form meta data from the store..hard code offset for now...this is going to change..
         if (this.props.currentForm && this.props.currentForm.formData) {
             let formMeta = this.props.currentForm.formData.formMeta;
@@ -188,27 +204,27 @@ export const FormBuilderContainer = React.createClass({
     keyboardMoveFieldDown() {
         let {tabIndex, sectionIndex, columnIndex} = this.props.selectedField;
         let formDataLength = this.props.currentForm.formData.formMeta.tabs[tabIndex].sections[sectionIndex].columns[columnIndex].elements.length - 1;
-
         if (this.props.selectedField.elementIndex < formDataLength) {
             this.props.keyboardMoveFieldDown(this.props.currentForm.id, this.props.selectedField);
-        }
-    },
-
-    deselectField() {
-        if (this.props.deselectField) {
-            this.props.deselectField(this.props.currentForm.id, this.props.selectedField);
         }
     },
 
     escapeCurrentContext() {
         let selectedField = this.props.selectedField;
         let formId = this.props.currentForm.id;
+
         if (this.props.formBuilderChildrenTabIndex === tabIndexConstants.FORM_TAB_INDEX) {
-            this.props.toggleFormBuilderChildrenTabIndex(formId, tabIndexConstants.FORM_TAB_INDEX);
+            if (this.props.toggleFormBuilderChildrenTabIndex) {
+                this.props.toggleFormBuilderChildrenTabIndex(formId, tabIndexConstants.FORM_TAB_INDEX);
+            }
         } else if (this.props.toolPaletteChildrenTabIndex === tabIndexConstants.TOOL_PALETTE_TABINDEX) {
-            this.props.toggleToolPaletteChildrenTabIndex(formId, tabIndexConstants.TOOL_PALETTE_TABINDEX);
+            if (this.props.toggleToolPaletteChildrenTabIndex) {
+                this.props.toggleToolPaletteChildrenTabIndex(formId, tabIndexConstants.TOOL_PALETTE_TABINDEX);
+            }
         } else if (selectedField) {
-            this.deselectField();
+            if (this.props.deselectField) {
+                this.props.deselectField(this.props.currentForm.id, this.props.selectedField);
+            }
         } else {
             this.onCancel();
         }
@@ -247,6 +263,8 @@ export const FormBuilderContainer = React.createClass({
 
         return (
             <div className="formBuilderContainer">
+                {/* AppQbModal is an app-wide modal that can be called from non-react classes*/}
+                <AppQbModal/>
                 <FormBuilderCustomDragLayer />
                 <KeyboardShortcuts id="formBuilderContainer"
                                    shortcutBindings={[

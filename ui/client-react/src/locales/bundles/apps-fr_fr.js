@@ -122,7 +122,10 @@ export default {
             apply: "Appliquer",
             new: "Nouveau",
             backToApp: "Retour à l'application",
-            reset: "Réinitialiser"
+            reset: "Réinitialiser",
+            closeRecord: "Fermer record",
+            expandSection: "Développer section",
+            collapseSection: "Effondrer section"
         },
         field: {
             search: "Chercher",

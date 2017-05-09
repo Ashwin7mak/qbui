@@ -22,9 +22,7 @@
 
     input {
         height: 34px;
-    }
 
-    input {
         &:focus {
             @include text-input-focus;
         }
@@ -34,10 +32,19 @@
         .tableFieldTitle {
             color: $error-color;
         }
-        input:not(:focus) {
-            border: 1px solid $input-text-error-border-color;
+        input, input:focus {
+            border: solid 1px $input-text-error-border-color;
+            border-color: $input-text-error-border-color !important;
             border-left-width: 5px;
             box-shadow: none;
         }
     }
 }
+
+@include small-breakpoint {
+    .tableField {
+        min-width: 50%;
+        width: inherit;
+    }
+}
+

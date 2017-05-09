@@ -35,6 +35,8 @@ describe('Forms reducer functions', () => {
         }
     };
 
+    const updatedFormMeta = 'updated form meta';
+
     it('returns correct initial state', () => {
         expect(reducer(undefined, {})).toEqual(initialState);
     });
@@ -162,7 +164,6 @@ describe('Forms reducer functions', () => {
     });
 
     describe('moving a field', () => {
-        const updatedFormMeta = 'updated form meta';
         const mockMoveFieldHelper = {
             moveField(_formMeta, newTabIndex, newSectionIndex, newOrderIndex, draggedItemProps) {return updatedFormMeta;}
         };
@@ -191,6 +192,7 @@ describe('Forms reducer functions', () => {
                     ...stateWithViewForm[VIEW],
                     formData: {formMeta: updatedFormMeta},
                     selectedFields: [1],
+                    isPendingEdit: true,
                     previouslySelectedField: []
                 }
             });
@@ -208,7 +210,6 @@ describe('Forms reducer functions', () => {
     });
 
     describe('removing a field', () => {
-        const updatedFormMeta = 'updated form meta';
         const mockMoveFieldHelper = {
             removeField(_formMeta, location) {return updatedFormMeta;}
         };
@@ -234,7 +235,8 @@ describe('Forms reducer functions', () => {
             expect(reducer(stateWithViewForm, actionPayload)).toEqual({
                 [VIEW]: {
                     ...stateWithViewForm[VIEW],
-                    formData: {formMeta: updatedFormMeta}
+                    formData: {formMeta: updatedFormMeta},
+                    isPendingEdit: true,
                 }
             });
             expect(mockMoveFieldHelper.removeField).toHaveBeenCalledWith(
@@ -250,7 +252,6 @@ describe('Forms reducer functions', () => {
     });
 
     describe('adding a field', () => {
-        const updatedFormMeta = 'updated form meta';
         const stateForAddingField = {
             'view': {
                 id: 'view',
@@ -285,7 +286,8 @@ describe('Forms reducer functions', () => {
                     ...stateForAddingField[VIEW],
                     selectedFields: [1],
                     previouslySelectedField: [],
-                    formData: {formMeta: updatedFormMeta}
+                    formData: {formMeta: updatedFormMeta},
+                    isPendingEdit: true,
                 }
             });
             expect(mockMoveFieldHelper.addNewFieldToForm).toHaveBeenCalledWith(
@@ -329,7 +331,6 @@ describe('Forms reducer functions', () => {
     });
 
     describe('(keyboard) move a field up', () => {
-        const updatedFormMeta = 'updated form meta';
         const mockMoveFieldHelper = {
             keyBoardMoveFieldUp(_formMeta, _location) {return updatedFormMeta;},
             updateSelectedFieldLocation(_location, _Updatedlocation) {return updatedFormMeta;}
@@ -358,7 +359,8 @@ describe('Forms reducer functions', () => {
                 [VIEW]: {
                     ...stateWithViewForm[VIEW],
                     formData: {formMeta: updatedFormMeta},
-                    selectedFields: [updatedFormMeta]
+                    selectedFields: [updatedFormMeta],
+                    isPendingEdit: true
                 }
             });
             expect(mockMoveFieldHelper.keyBoardMoveFieldUp).toHaveBeenCalledWith(
@@ -378,7 +380,6 @@ describe('Forms reducer functions', () => {
     });
 
     describe('(keyboard) move a field down', () => {
-        const updatedFormMeta = 'updated form meta';
         const mockMoveFieldHelper = {
             keyBoardMoveFieldDown(_formMeta, _location) {return updatedFormMeta;},
             updateSelectedFieldLocation(_location, _updatedLocation) {return updatedFormMeta;}
@@ -407,7 +408,8 @@ describe('Forms reducer functions', () => {
                 [VIEW]: {
                     ...stateWithViewForm[VIEW],
                     formData: {formMeta: updatedFormMeta},
-                    selectedFields: [updatedFormMeta]
+                    selectedFields: [updatedFormMeta],
+                    isPendingEdit: true
                 }
             });
             expect(mockMoveFieldHelper.keyBoardMoveFieldDown).toHaveBeenCalledWith(
