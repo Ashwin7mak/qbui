@@ -54,7 +54,7 @@
     }
 
     .qbPanelHeader {
-        padding: 20px 0 30px 20px;
+        padding: 20px 0 30px 40px;
         min-width: 30%;
 
         .qbPanelHeaderTitle {
@@ -98,15 +98,7 @@
         }
     }
 
-    &.iconLeft {
-        .qbPanelHeaderTitleText {
-            margin-left: 30px;
-        }
 
-        .qbPanelBody {
-            margin-left: 30px;
-        }
-    }
     /*
      * Overwrite the following bootstrap classes in their panel component so we have the proper layout
      * panel, panel-default, panel-body
@@ -133,7 +125,7 @@
 @include small-breakpoint {
     .qbPanel {
         .qbPanelHeader {
-            padding: 10px 0 20px 10px;
+            padding: 10px 0 20px 40px;
         }
     }
 }
