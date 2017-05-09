@@ -178,10 +178,7 @@ class formBuilderPage {
     selectFieldByIndex(index) {
         // Selects the field at the specified index and verifies that it is reflected in the properties panel
         // can't click on fieldLabel due to 'other element would get the click...'
-        let fieldLocator = this.getFieldLocator(index);
-        let field = browser.element(fieldLocator);
-        field.click();
-        browser.moveToObject(fieldLocator + ' .fieldLabel').buttonDown().buttonUp();
+        browser.moveToObject(this.getFieldLocator(index) + ' .fieldLabel').buttonDown().buttonUp();
         this.fieldProperty_Name.waitForExist(); // assume it didn't exist, i.e. nothing was previously selected
         return this.fieldProperty_Name.getText();
     }
