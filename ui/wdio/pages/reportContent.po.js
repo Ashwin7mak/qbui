@@ -26,8 +26,8 @@
         settingsIconName : {get: function() {return '.qbIcon.iconUISturdy-settings';}},
         settingsIcon: {get: function() {return browser.element(this.settingsIconName);}},
         modifyTableSettings: {get: function() {return browser.element('.modifyTableSettings');}},
-        deleteTableActionButton: {get: function() {return browser.element('.iconActionButton.deleteTable');}},
-        deletePromtTextField: {get: function() {return browser.element('.deletePrompt');}},
+        deleteTableActionButton: {get: function() {return browser.element('.iconActions .iconActionButton .buttonLabel');}},
+        deletePromtTextField: {get: function() {return browser.element('.deleteTableDialogContent .prompt .deletePrompt');}},
         reportFilterSearchBox : {get: function() {
             return this.reportsToolBar.element('.searchInput');
         }},
@@ -269,6 +269,7 @@
          * Method to click 'Table properties & settings' from the dropdown list
          */
         clickModifyTableSettings: {value: function() {
+            // wait for 'Table properties & settings' button tobe visible
             this.modifyTableSettings.waitForVisible();
             //Click on 'Table properties & settings'
             this.modifyTableSettings.click();
@@ -280,6 +281,8 @@
          * Method to click deleteTableActionButton
          */
         clickDeleteTableActionButton: {value: function() {
+            //wait until you see delete table action button
+            this.deleteTableActionButton.waitForVisible();
             //Click on delete table action button
             this.deleteTableActionButton.click();
             //wait untill you see deletePromtTextField
@@ -292,6 +295,8 @@
         clickDeleteTableButton: {value: function() {
             //use the predefined deleteTableButton here
             expect(browser.isEnabled('.modal-dialog .primaryButton')).toBeTruthy();
+            //wait for deletetable button to be visible
+            this.deleteButton.waitForVisible();
             //Click on delete table button
             return this.deleteButton.click();
         }},
@@ -300,6 +305,8 @@
          * Set the deletePromtTextField value
          */
         setDeletePromtTextFieldValue: {value: function(fieldValue) {
+            //wait for deletePromtTextField tobe visible
+            this.deletePromtTextField.waitForVisible();
             //set the deletePromtTextField value to 'YES'
             return this.setInputValue(this.deletePromtTextField, fieldValue);
         }},
@@ -308,6 +315,8 @@
          * Method to click don't delete Table button
          */
         clickDontDeleteTableButton: {value: function() {
+            //wait for the button tobe visible
+            this.dontDeleteButton.waitForVisible();
             //Click on don't delete table button
             return this.dontDeleteButton.click();
         }},
