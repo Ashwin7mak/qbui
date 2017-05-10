@@ -27,7 +27,7 @@ describe('Apps Actions functions with Tables', () => {
             return Promise.resolve({data: responseData});
         }
         getAppComponents(id) {
-            return Promise.resolve({data: responseComponentData})
+            return Promise.resolve({data: responseComponentData});
         }
     }
 

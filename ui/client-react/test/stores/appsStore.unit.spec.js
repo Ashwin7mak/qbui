@@ -116,7 +116,7 @@ describe('Test Apps Store', () => {
                 expect(flux.store(STORE_NAME).emit).toHaveBeenCalledWith('change');
                 expect(flux.store(STORE_NAME).emit.calls.count()).toBe(1);
             });
-        })
+        });
 
     });
 
