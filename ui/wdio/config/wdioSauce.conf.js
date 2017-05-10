@@ -1,6 +1,7 @@
 // Global variable that allows you to set wdio to use a realm defined in your node config file
 // (see onPrepare hook below)
 var localConf;
+var metricsPort = 8800 + (Math.floor((Math.random() * (100 - 1) + 1)));
 
 exports.config = {
     //
@@ -20,7 +21,11 @@ exports.config = {
         // Uncomment this if you are running Sauce against your local dev
         //dns             : '127.0.0.1',
         // Use a random int to make the port unique between Jenkins jobs
-        port            : 4400 + (Math.floor((Math.random() * (100 - 1) + 1)))
+        port            : 4400 + (Math.floor((Math.random() * (100 - 1) + 1))),
+        connectRetries : 5,
+        connectRetryTimeout: 5000,
+        metricsAddress : 'localhost:' + metricsPort.toString()
+
     },
     //
     //
