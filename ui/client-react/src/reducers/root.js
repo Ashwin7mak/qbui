@@ -14,6 +14,7 @@ import tableProperties from './tableProperties';
 import animation from './animation';
 import embeddedReports from './embeddedReports';
 import commonNavReducer from '../../../reuse/client/src/components/sideNavs/commonNavReducer';
+import facets from '../../../reuse/client/src/components/facets/facetMenuReducer';
 
 // combine individual reducers into a single root reducer (qbui)
 export default combineReducers({
@@ -30,5 +31,6 @@ export default combineReducers({
     tableCreation,
     embeddedReports,
     tableProperties,
-    builderNav: commonNavReducer('builder')
+    builderNav: commonNavReducer('builder'),
+    facets
 });

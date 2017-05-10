@@ -34,7 +34,7 @@
         //Icon chooser
         tableFieldIconChooser: {get: function() {return browser.element('.iconChooser.closed');}},
         //Icon chooser down arrow
-        iconChooserSelect: {get: function() {return this.tableFieldIconChooser.element('.showAllToggle');}},
+        iconChooserSelect: {get: function() {return this.tableFieldIconChooser.element('.showAllToggle .showAllSelectedIcon');}},
         //Icon chooser search
         iconChooserSearch: {get: function() {return browser.element('.iconChooser.open .iconSearch input');}},
 

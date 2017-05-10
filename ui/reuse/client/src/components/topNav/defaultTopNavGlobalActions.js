@@ -1,12 +1,12 @@
 import React, {PropTypes, Component} from 'react';
-import GlobalAction from '../globalAction/globalAction';
+import GlobalAction from 'REUSE/components/globalAction/globalAction';
 import UserDropDown from './supportingComponents/userDropDown';
-import HelpButton from '../helpButton/helpButton';
+import UserFeedBack from './supportingComponents/userFeedBack';
 
 // IMPORTING FROM CLIENT REACT
 // Needs to be refactored once these components are added to the reuse library
-import Locale from '../../../../../client-react/src/locales/locales';
-import WindowLocationUtils from '../../../../../client-react/src/utils/windowLocationUtils';
+import Locale from 'APP/locales/locales';
+import WindowLocationUtils from 'APP/utils/windowLocationUtils';
 // IMPORTING FROM CLIENT REACT
 
 import './defaultTopNavGlobalActions.scss';
@@ -20,7 +20,7 @@ const signOutHref = '/qbase/signout';
  * Alternatively, pass in additional top bar elements by wrapping them with this component as children: <ReDefaultTopNavGlobalActions> <div>CustomMenuItem</div> </ReDefaultTopNavGlobalActions>
  * Check out the propTypes for other values you can change if you need.
  * If these default actions don't suit your needs, try creating a custom top nav by using the ReTopNav with an array of GlobalAction components */
-class ReDefaultTopNavGlobalActions extends Component {
+class DefaultTopNavGlobalActions extends Component {
     /**
      * A link to sign the user out
      * (MenuItem href is currently incompatible with react-fastclick) */
@@ -32,6 +32,12 @@ class ReDefaultTopNavGlobalActions extends Component {
         return (
             <div className="globalActions defaultTopNavGlobalActions">
                 <ul className="globalActionsList">
+                    <li className="link globalAction withDropdown">
+                        <UserFeedBack
+                            startTabIndex={this.props.startTabIndex}
+                            shouldOpenMenusUp={this.props.shouldOpenMenusUp}
+                        />
+                    </li>
                     {this.props.children}
                     {this.props.actions && this.props.actions.map((action, index) => (
                         <GlobalAction
@@ -54,7 +60,6 @@ class ReDefaultTopNavGlobalActions extends Component {
                             position = {"center"}
                         />
                     </li>
-                    <li className="link globalAction"><HelpButton/></li>
                 </ul>
             </div>
         );
@@ -67,7 +72,7 @@ const actionPropType = React.PropTypes.shape({
     link: React.PropTypes.string
 });
 
-ReDefaultTopNavGlobalActions.propTypes = {
+DefaultTopNavGlobalActions.propTypes = {
     linkClass: PropTypes.string,
 
     /**
@@ -97,9 +102,9 @@ ReDefaultTopNavGlobalActions.propTypes = {
     shouldOpenMenusUp: React.PropTypes.bool
 };
 
-ReDefaultTopNavGlobalActions.defaultProps = {
+DefaultTopNavGlobalActions.defaultProps = {
     startTabIndex: 0,
     actions: [],
 };
 
-export default ReDefaultTopNavGlobalActions;
+export default DefaultTopNavGlobalActions;

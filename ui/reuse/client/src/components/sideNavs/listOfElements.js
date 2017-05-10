@@ -1,9 +1,12 @@
 import React, {PropTypes, Component} from 'react';
 import _ from 'lodash';
 import FlipMove from 'react-flip-move';
-import Locale from '../../locales/locale';
+import Locale from 'REUSE/locales/locale';
+
 // IMPORT FROM CLIENT REACT
-import SearchBox from '../../../../../client-react/src/components/search/searchBox';
+import SearchBox from 'APP/components/search/searchBox';
+// IMPORT FROM CLIENT REACT
+
 import './listOfElements.scss';
 
 const FILTER_DEBOUNCE_TIMEOUT = 100;

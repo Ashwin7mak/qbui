@@ -2,7 +2,7 @@ import React from 'react';
 import {mount} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
 
-import User from '../../src/components/user/user';
+import User from 'REUSE/components/user/user';
 import Loader from 'react-loader';
 
 const mockUser = {

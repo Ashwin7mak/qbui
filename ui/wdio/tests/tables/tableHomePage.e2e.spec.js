@@ -167,7 +167,7 @@
                 expect(browser.element('.tableHomepageStageHeadline').getAttribute('textContent')).toBe('table 1 Home');
 
                 //Expand the stage
-                browser.element('.iconUISturdy-caret-down').click();
+                browser.element('button.toggleStage').click();
                 browser.element('.stage-showHide-content').waitForVisible();
 
                 //Assert description of the stage

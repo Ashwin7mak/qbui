@@ -2,10 +2,9 @@ import React from 'react';
 import {shallow, mount} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
 
-import DefaultTopNavGlobalActions from '../../src/components/topNav/defaultTopNavGlobalActions';
-import UserDropDown from '../../src/components/topNav/supportingComponents/userDropDown';
-import ReHelpButton from '../../src/components/helpButton/helpButton';
-import ReGlobalAction from '../../src/components/globalAction/globalAction';
+import DefaultTopNavGlobalActions from 'REUSE/components/topNav/defaultTopNavGlobalActions';
+import UserDropDown from 'REUSE/components/topNav/supportingComponents/userDropDown';
+import ReGlobalAction from 'REUSE/components/globalAction/globalAction';
 
 let component;
 
@@ -18,12 +17,6 @@ describe('DefaultTopNavGlobalActions', () => {
         component = mount(<DefaultTopNavGlobalActions/>);
 
         expect(component.find(UserDropDown)).toBePresent();
-    });
-
-    it('has a help button', () => {
-        component = mount(<DefaultTopNavGlobalActions/>);
-
-        expect(component.find(ReHelpButton)).toBePresent();
     });
 
     it('can optionally display an array of global actions', () => {
