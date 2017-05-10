@@ -49,7 +49,15 @@ export const SUPPORTED_NEW_FIELD_TYPES = [
             // fieldFormats.NUMERIC_FORMULA_FORMAT,
             // fieldFormats.URL_FORMULA_FORMAT
         ]
+    },
+    {
+        titleI18nKey: 'builder.fieldGroups.tableDataConnections',
+        fieldTypes: [
+            fieldFormats.LINK_TO_RECORD,
+            fieldFormats.LIST_OF_RECORDS
+        ]
     }
+
 ];
 
 /**

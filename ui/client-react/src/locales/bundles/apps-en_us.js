@@ -565,6 +565,8 @@ export default {
             [FieldFormats.RATING_FORMAT]: "Rating",
             [FieldFormats.RATING_FORMAT_MULTICHOICE]: "Rating",
             [FieldFormats.URL_FORMULA_FORMAT]: "URL Formula",
+            [FieldFormats.LINK_TO_RECORD]: "Link to single record",
+            [FieldFormats.LIST_OF_RECORDS]: "Show a list or records",
             FORMULA: "Formula",
             SCALAR: "Scalar",
             CONCRETE: "Concrete",
@@ -610,6 +612,8 @@ export default {
                     [`addNew${FieldFormats.NUMBER_FORMAT_MULTICHOICE}`]: "Create a numeric choice list and add it to the form",
                     [`addNew${FieldFormats.NUMBER_FORMAT_RADIO_BUTTONS}`]: "Create numeric radio buttons and add them to the form",
                     [`addNew${FieldFormats.TEXT_FORMAT_RADIO_BUTTONS}`]: "Create radio buttons field and add them to the form",
+                    [`addNew${FieldFormats.LINK_TO_RECORD}`]: "Create link to a record in another table",
+                    [`addNew${FieldFormats.LIST_OF_RECORDS}`]: "Create an embedded report",
                 }
             },
             fieldGroups: {
@@ -617,7 +621,8 @@ export default {
                 numeric: "Number",
                 date: "Date",
                 other: "Other",
-                relationships: "Relationships"
+                relationships: "Relationships",
+                tableDataConnections: "Table data connections"
             },
             defaultMultichoiceOptions: {
                 first: "Option 1",

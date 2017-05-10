@@ -23,7 +23,8 @@ import UrlFieldValueEditor from './urlFieldValueEditor';
 import UserFieldValueEditor from './userFieldValueEditor';
 import ErrorWrapper from '../fields/errorWrapper';
 import PhoneFieldValueEditor from './phoneFieldValueEditor';
-
+import LinkToRecordFieldValueEditor from './linkToRecordFieldValueEditor';
+import ListOfRecordsFieldValueEditor from './listOfRecordsFieldValueEditor';
 /**
  * # FieldValueEditor
  *
@@ -269,6 +270,12 @@ const FieldValueEditor = React.createClass({
             return <EmailFieldValueEditor {...commonProps} classes="cellEdit" />;
         }
 
+        case FieldFormats.LINK_TO_RECORD: {
+            return <LinkToRecordFieldValueEditor{...commonProps} classes="cellEdit" />;
+        }
+        case FieldFormats.LIST_OF_RECORDS: {
+            return <ListOfRecordsFieldValueEditor{...commonProps} classes="cellEdit" />;
+        }
         case FieldFormats.TEXT_FORMAT:
         default: {
             // react throws warning about rendering Input component with null input
