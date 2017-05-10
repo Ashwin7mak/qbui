@@ -27,7 +27,7 @@
         settingsIcon: {get: function() {return browser.element(this.settingsIconName);}},
         modifyTableSettings: {get: function() {return browser.element('.modifyTableSettings');}},
         deleteTableActionButton: {get: function() {return browser.element('.iconActions .iconActionButton .buttonLabel');}},
-        deletePromtTextField: {get: function() {return browser.element('.deleteTableDialogContent .prompt .deletePrompt');}},
+        deletePromtTextField: {get: function() {return browser.element('.modal-dialog .deleteTableDialogContent .deletePrompt');}},
         reportFilterSearchBox : {get: function() {
             return this.reportsToolBar.element('.searchInput');
         }},
@@ -285,8 +285,7 @@
             this.deleteTableActionButton.waitForVisible();
             //Click on delete table action button
             this.deleteTableActionButton.click();
-            //wait untill you see deletePromtTextField
-            return this.deletePromtTextField.waitForVisible();
+            return browser.waitForExist('.modal-dialog .deleteTableDialogContent');
         }},
 
         /**
@@ -305,6 +304,8 @@
          * Set the deletePromtTextField value
          */
         setDeletePromtTextFieldValue: {value: function(fieldValue) {
+            //wait for model dialogue
+            browser.waitForExist('.modal-dialog .deleteTableDialogContent');
             //wait for deletePromtTextField tobe visible
             this.deletePromtTextField.waitForVisible();
             //set the deletePromtTextField value to 'YES'
