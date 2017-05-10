@@ -282,10 +282,8 @@ describe('AppHistory', () => {
             expect(AppHistory.saveChangesForRecord).toHaveBeenCalled();
         });
 
-        // it('halt route change when save new record pending edits error', () => {
+        // fit('halt route change when save new record pending edits error', () => {
         //     mockRecordState.recordStore.isPendingEdit = true;
-        //     spyOn(AppHistory, 'getStores').and.returnValue(mockRecordState);
-        //
         //     store.record.records[0].pendEdits.currentEditingRecordId = 1;
         //     AppHistory.setup(mockStoreReject);
         //
