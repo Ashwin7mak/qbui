@@ -67,9 +67,8 @@ let appsActions = {
                 let appService = new AppService();
                 appService.getAppComponents(appId).then(response => {
                     let users = response.data.users;
-                    let roles = response.data.roles;
                     let model = appsModel.set([response.data.app]);
-                    this.dispatch(actions.SELECT_APP_SUCCESS, {users: users, roles: roles, app: model[0]});
+                    this.dispatch(actions.SELECT_APP_SUCCESS, {users: users, app: model[0]});
                     resolve();
                 }, () => {
                     this.dispatch(actions.SELECT_APP_FAILED);

@@ -343,13 +343,12 @@
              */
             getAppComponents: function(req, appId) {
                 return new Promise((resolve, reject) => {
-                    let appComponents = [this.getAppUsers(req), rolesApi.getAppRoles(req), this.getHydratedApp(req, appId)];
+                    let appComponents = [this.getAppUsers(req), this.getHydratedApp(req, appId)];
                     Promise.all(appComponents).then(
                         function(response) {
                             resolve({
                                 users: response[0],
-                                roles: response[1],
-                                app: response[2]
+                                app: response[1]
                             });
                         },
                         function(error) {

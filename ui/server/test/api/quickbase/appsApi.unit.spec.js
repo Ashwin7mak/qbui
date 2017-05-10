@@ -703,6 +703,97 @@ describe("Validate appsApi", function() {
                 done(new Error('getApps: exception processing exception test(hydrate=true): ' + JSON.stringify(errorMsg)));
             });
         });
+    });
+
+    describe("validate getAppComponent function", function() {
+        let getAppUsersStub = null;
+        let getHydratedAppStub = null;
+
+        beforeEach(function() {
+            getAppUsersStub = sinon.stub(appsApi, "getAppUsers");
+            getHydratedAppStub = sinon.stub(appsApi, "getHydratedApp");
+
+            req.url = '/app/123/appComponents';
+            req.method = 'get';
+        });
+
+        afterEach(function() {
+            req.method = 'get';
+            req.url = '';
+            getAppUsersStub.restore();
+            getHydratedAppStub.restore();
+        });
+
+        it('success return results with getAppComponents', function(done) {
+            let appUserResults = {"id":1};
+            let getHydratedAppResults = {"id":1};
+
+            getAppUsersStub.returns(Promise.resolve(appUserResults));
+            getHydratedAppStub.returns(Promise.resolve(getHydratedAppResults));
+
+            //  build the expected response object
+            let responseObj = {
+                users: appUserResults,
+                app: getHydratedAppResults
+            };
+
+            let promise = appsApi.getAppComponents(req, req.params.appId);
+            promise.then(
+                function(response) {
+                    assert.deepEqual(response, responseObj);
+                    done();
+                },
+                function(error) {
+                    done(new Error("Unexpected failure promise return when testing getAppComponents success"));
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('getAppComponents: exception processing success test: ' + JSON.stringify(errorMsg)));
+            });
+        });
+
+        it('fail return results with getAppComponents error -- test getHydratedApp reject', function(done) {
+            let appUserResults = {"id":1};
+            let getHydratedAppResults = {"id":1};
+
+            let errMsg = new Error('errorMsg');
+            getAppUsersStub.returns(Promise.resolve(appUserResults));
+            getHydratedAppStub.returns(Promise.reject(errMsg));
+
+            let promise = appsApi.getAppComponents(req, req.params.appId);
+            promise.then(
+                function(response) {
+                    done(new Error("Unexpected success promise return when testing getAppComponents failure"));
+                },
+                function(error) {
+                    assert.deepEqual(error, errMsg);
+                    done();
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('getAppComponents: exception processing failure test: ' + JSON.stringify(errorMsg)));
+            });
+        });
+
+        it('fail return results with getAppComponents error -- test getHydratedApp reject', function(done) {
+            let appUserResults = {"id":1};
+            let getHydratedAppResults = {"id":1};
+
+            let errMsg = new Error('errorMsg');
+            getAppUsersStub.returns(Promise.reject(errMsg));
+            getHydratedAppStub.returns(Promise.resolve(getHydratedAppResults));
+
+            let promise = appsApi.getAppComponents(req, req.params.appId);
+            promise.then(
+                function(response) {
+                    done(new Error("Unexpected success promise return when testing getAppComponents failure"));
+                },
+                function(error) {
+                    assert.deepEqual(error, errMsg);
+                    done();
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('getAppComponents: exception processing failure test: ' + JSON.stringify(errorMsg)));
+            });
+        });
 
     });
 });

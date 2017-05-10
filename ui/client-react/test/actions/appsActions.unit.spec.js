@@ -11,7 +11,6 @@ describe('Apps Actions functions with Tables', () => {
     let appRoleResponeData = [4, 5, 6];
     let responseComponentData = {
         users: [],
-        roles: [],
         app: [{id: 'tableId'}]
     };
 

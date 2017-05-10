@@ -164,12 +164,11 @@ describe('Test Apps Store', () => {
     it('test load app users success action', () => {
         let users = [{"userId":1}];
         let unfilteredUsers = {"1": [{"userId":1}]};
-        let roles = ['someRoles'];
         let app = {id:1};
 
         let loadAppsAction = {
             type: actions.SELECT_APP_SUCCESS,
-            payload: {users:[users, unfilteredUsers], roles: roles, app:app}
+            payload: {users:[users, unfilteredUsers], app:app}
         };
 
         flux.dispatcher.dispatch(loadAppsAction);
@@ -178,8 +177,6 @@ describe('Test Apps Store', () => {
 
         expect(flux.store(STORE_NAME).appUsers).toEqual(users);
         expect(flux.store(STORE_NAME).appUsersUnfiltered).toEqual(unfilteredUsers);
-
-        expect(flux.store(STORE_NAME).appRoles).toEqual(roles);
 
         expect(flux.store(STORE_NAME).emit).toHaveBeenCalledWith('change');
         expect(flux.store(STORE_NAME).emit.calls.count()).toBe(1);

@@ -115,11 +115,6 @@ let AppsStore = Fluxxor.createStore({
             this.appUsersUnfiltered = userArray[1];
         }
 
-        //  update app roles list
-        if (_.has(selectedApp, 'roles')) {
-            this.appRoles = selectedApp.roles;
-        }
-
         //  update the tables for the selected app..if the app is not in the store,
         //  we'll add to it
         const app = selectedApp.app;
