@@ -17,6 +17,8 @@ var config = {
             tags            : [process.env.SAUCE_JOB_NAME + '_Android_Chrome', 'try', 'Android', 'Chrome', process.env.BUILD_NUMBER, process.env.GIT_UIBRANCH],
             exclude: [
                 './wdio/tests/reports/reportEditRecord.e2e.spec.js',
+                './wdio/tests/forms/formAdd.e2e.spec.js',
+                './wdio/tests/forms/formEdit.e2e.spec.js',
             ]
         },
         //{
