@@ -516,28 +516,26 @@ describe('ReportColumnHeaderMenu', () => {
 
     describe('Report Builder Mode', () => {
         it('when not in builder mode, should not see options to add or hide', () => {
-            let testProps2 = {
-
+            let testPropsNotInBuilderMode = {
+                ...testProps,
                 reportBuilder: {
                     inBuilderMode: false,
                     isCollapsed: true,
                     addBeforeColumn: null,
                     availableColumns: []
-                },
-                ...testProps
-            }
-            component = shallow(<ReportColumnHeaderMenu {...testProps2}/>);
+                }
+            };
+            component = shallow(<ReportColumnHeaderMenu {...testPropsNotInBuilderMode}/>);
             instance = component.instance();
 
             let hidingMenuItem = component.find(MenuItem).find({onSelect: instance.hideThisColumn});
-            expect(hidingMenuItem).toBeFalsy();
-            //expect(hidingMenuItem).not.toBePresent();
+            expect(hidingMenuItem).not.toBePresent();
 
             let addingMenuItemBefore = component.find(MenuItem).find({onSelect: instance.openFieldSelectorBefore});
-            //expect(addingMenuItemBefore).not.toBePresent();
+            expect(addingMenuItemBefore).not.toBePresent();
 
             let addingMenuItemAfter = component.find(MenuItem).find({onSelect: instance.openFieldSelectorAfter});
-            //expect(addingMenuItemAfter).not.toBePresent();
+            expect(addingMenuItemAfter).not.toBePresent();
         });
     });
 
