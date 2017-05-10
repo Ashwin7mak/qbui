@@ -348,8 +348,8 @@ class AppHistory {
             const state = self.store.getState();
             let {recordStore, formsStore, fieldsStore} = self.getStores(state);
 
+            // debugger;
             if (formsStore.isPendingEdit || fieldsStore.isPendingEdit) {
-
                 self.saveChangesForFormBuilder();
             } else if (recordStore.isPendingEdit) {
 
