@@ -1,17 +1,21 @@
 import * as Formatters from './AccountUsersGridFormatters';
 import _ from 'lodash';
 import * as FieldConsts from '../../../../../client-react/src/constants/schema';
+import Locale from '../../../../../client-react/src/locales/locales';
+import GovernanceBundleLoader from '../../../locales/governanceBundleLoader';
 
 const boolColumnProps = {
     classes: ['BoolColumn'],
 };
+
+GovernanceBundleLoader.changeLocale('en-us');
 
 // Column Definitions
 const columns = [
     {
         property: 'firstName',
         header: {
-            label: 'FIRST NAME'
+            label: Locale.getMessage('governance.grid.firstName')
         },
         fieldDef: {
             id: 1,
@@ -23,7 +27,7 @@ const columns = [
     {
         property: 'lastName',
         header: {
-            label: 'LAST NAME'
+            label: Locale.getMessage('governance.grid.lastName')
         },
         fieldDef: {
             id: 2,
@@ -35,7 +39,7 @@ const columns = [
     {
         property: 'email',
         header: {
-            label: 'EMAIL'
+            label: Locale.getMessage('governance.grid.email')
         },
         props: {
             classes: ['EmailColumn']
@@ -50,7 +54,7 @@ const columns = [
     {
         property: 'userName',
         header: {
-            label: 'USER NAME'
+            label: Locale.getMessage('governance.grid.userName')
         },
         props: {
             classes: ['ScreennameColumn']
@@ -65,7 +69,7 @@ const columns = [
     {
         property: 'lastAccess',
         header: {
-            label: 'LAST ACCESS'
+            label: Locale.getMessage('governance.grid.lastAccess')
         },
         cell: {
             formatters: [Formatters.FormatLastAccessString]
@@ -83,7 +87,7 @@ const columns = [
     {
         property: 'hasAppAccess',
         header: {
-            label: 'QUICKBASE ACCESS STATUS'
+            label: Locale.getMessage('governance.grid.quickbaseAccessStatus')
         },
         cell: {
             formatters: [Formatters.FormatUserStatusHTML]
@@ -98,7 +102,7 @@ const columns = [
     {
         property: 'lastAccess',
         header: {
-            label: 'INACTIVE?'
+            label: Locale.getMessage('governance.grid.inactive')
         },
         cell: {
             formatters: [Formatters.FormatIsInactive]
@@ -117,7 +121,7 @@ const columns = [
     {
         property: 'numGroupsMember',
         header: {
-            label: 'IN ANY GROUP?'
+            label: Locale.getMessage('governance.grid.inAnyGroup')
         },
         cell: {
             formatters: [Formatters.FormatIsGroupMember]
@@ -136,7 +140,7 @@ const columns = [
     {
         property: 'numGroupsManaged',
         header: {
-            label: 'GROUP MANAGER?'
+            label: Locale.getMessage('governance.grid.groupManager')
         },
         cell: {
             formatters: [Formatters.FormatIsGroupManager]
@@ -155,7 +159,7 @@ const columns = [
     {
         property: 'accountTrusteeFlags',
         header: {
-            label: 'CAN CREATE APPS?'
+            label: Locale.getMessage('governance.grid.canCreateApps')
         },
         cell: {
             formatters: [Formatters.FormatCanCreateApps]
@@ -174,7 +178,7 @@ const columns = [
     {
         property: 'numAppsManaged',
         header: {
-            label: 'APP MANAGER?'
+            label: Locale.getMessage('governance.grid.appManager')
         },
         cell: {
             formatters: [Formatters.FormatIsAppManager]
@@ -193,7 +197,7 @@ const columns = [
     {
         property: 'realmDirectoryFlags',
         header: {
-            label: 'IN REALM DIRECTORY?'
+            label: Locale.getMessage('governance.grid.inRealmDirectory')
         },
         cell: {
             formatters: [Formatters.FormatIsInRealmDirectory]
@@ -212,7 +216,7 @@ const columns = [
     {
         property: 'realmDirectoryFlags',
         header: {
-            label: 'REALM APPROVED?'
+            label: Locale.getMessage('governance.grid.realmApproved')
         },
         cell: {
             formatters: [Formatters.FormatIsRealmApproved]
