@@ -236,11 +236,15 @@ class AppHistory {
      */
     getFields() {
         let fields = null;
-        const pendEdits = self.getPendingEditsFromStore();
-        if (pendEdits.isInlineEditOpen) {
-            fields = self.getFieldsFromReportStore();
-        } else {
-            fields = self.getFieldsFromFormStore();
+        if (self.store) {
+            const state = self.store.getState();
+            const {recordStore} = self.getStores(state);
+
+            if (recordStore.isInlineEditOpen) {
+                fields = self.getFieldsFromReportStore();
+            } else {
+                fields = self.getFieldsFromFormStore();
+            }
         }
         return fields;
     }
