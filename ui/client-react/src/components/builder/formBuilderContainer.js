@@ -3,8 +3,9 @@ import {Button} from 'react-bootstrap';
 import {I18nMessage} from '../../utils/i18nMessage';
 import Locale from '../../locales/locales';
 import {connect} from 'react-redux';
-import {loadForm, updateForm, moveFieldOnForm, toggleFormBuilderChildrenTabIndex, toggleToolPaletteChildrenTabIndex, keyboardMoveFieldUp, keyboardMoveFieldDown, selectFieldOnForm, deselectField, removeFieldFromForm, addNewFieldToForm} from '../../actions/formActions';
+import {loadForm, updateForm, moveFieldOnForm, toggleFormBuilderChildrenTabIndex, toggleToolPaletteChildrenTabIndex, keyboardMoveFieldUp, keyboardMoveFieldDown, selectFieldOnForm, deselectField, removeFieldFromForm, addNewFieldToForm, setFormBuilderPendingEditToFalse} from '../../actions/formActions';
 import {updateFormAnimationState} from '../../actions/animationActions';
+import {setfieldsPendingEditToFalse} from '../../actions/fieldsActions';
 import Loader from 'react-loader';
 import {LARGE_BREAKPOINT} from "../../constants/spinnerConfigurations";
 import {NEW_FORM_RECORD_ID} from '../../constants/schema';
@@ -37,8 +38,6 @@ let formBuilderContainerContent = null;
 const mapStateToProps = state => {
     let currentForm = getFormByContext(state, CONTEXT.FORM.VIEW);
     let fields = state.fields[0];
-    let isFormDirty = (_.has(currentForm, 'isPendingEdit') ? currentForm.isPendingEdit : false);
-    let isFieldPropertiesDirty = (_.has(fields, 'isPendingEdit') ? fields.isPendingEdit : false);
 
     return {
         currentForm,
@@ -49,7 +48,8 @@ const mapStateToProps = state => {
         toolPaletteChildrenTabIndex: (_.has(currentForm, 'toolPaletteChildrenTabIndex') ? currentForm.toolPaletteChildrenTabIndex[0] : "-1"),
         formFocus: (_.has(currentForm, 'formFocus') ? currentForm.formFocus[0] : undefined),
         toolPaletteFocus: (_.has(currentForm, 'toolPaletteFocus') ? currentForm.toolPaletteFocus[0] : undefined),
-        isPendingEdit: isFormDirty || isFieldPropertiesDirty,
+        isFormDirty: (_.has(currentForm, 'isPendingEdit') ? currentForm.isPendingEdit : false),
+        isFieldPropertiesDirty: (_.has(fields, 'isPendingEdit') ? fields.isPendingEdit : false),
         isOpen: state.builderNav.isNavOpen,
         isCollapsed: state.builderNav.isNavCollapsed
     };
@@ -67,7 +67,9 @@ const mapDispatchToProps = {
     selectFieldOnForm,
     deselectField,
     removeFieldFromForm,
-    addNewFieldToForm
+    addNewFieldToForm,
+    setFormBuilderPendingEditToFalse,
+    setfieldsPendingEditToFalse
 };
 
 /**
@@ -133,15 +135,27 @@ export const FormBuilderContainer = React.createClass({
 
     closeFormBuilder() {
         const {appId, tblId} = this.props.match.params;
-
         NavigationUtils.goBackToLocationOrTable(appId, tblId, this.props.redirectRoute);
+
+        if (this.props.isFormDirty) {
+            if (this.props.setFormBuilderPendingEditToFalse) {
+                this.props.setFormBuilderPendingEditToFalse(this.props.currentForm.id);
+            }
+        }
+
+        if (this.props.isFieldPropertiesDirty) {
+            if (this.props.setfieldsPendingEditToFalse) {
+                this.props.setfieldsPendingEditToFalse();
+            }
+        }
     },
 
     onCancel() {
-        if (this.props.isPendingEdit) {
+        if (this.props.isFormDirty || this.props.isFieldPropertiesDirty) {
             AppHistory.showPendingEditsConfirmationModal(this.saveClicked, this.closeFormBuilder, () => HideAppModal());
         } else {
             HideAppModal();
+
             this.closeFormBuilder();
         }
     },

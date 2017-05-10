@@ -140,7 +140,14 @@ const fieldsStore = (state = [], action) => {
             return state;
         }
     }
-
+    case types.SET_IS_PENDING_EDIT_TO_FALSE: {
+        newState[0].isPendingEdit = false;
+        return newState;
+    }
+    case types.SAVING_FORM: {
+        newState[0].isPendingEdit = false;
+        return newState;
+    }
     case types.UPDATE_FIELD_ID : {
         let fieldList = _.find(state, fieldlist => fieldlist.appId === action.appId && fieldlist.tblId === action.tblId);
         fieldList = _.cloneDeep(fieldList);
