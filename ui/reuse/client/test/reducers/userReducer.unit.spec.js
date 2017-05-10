@@ -44,5 +44,5 @@ describe('User Reducer', () => {
         it('returns undefined if there is no user in the state', () => {
             expect(getLoggedInUserAdminStatus({})).toEqual(undefined);
         });
-    })
+    });
 });
