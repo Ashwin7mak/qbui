@@ -151,8 +151,8 @@ class AppHistory {
         recordStore = recordStore ? getPendEdits(recordStore) : {};
         return {
             recordStore: recordStore,
-            formsStore: (state.forms && state.forms.view && state.forms.view.isPendingEdit) ? state.forms.view : {},
-            fieldsStore: (state.fields && state.fields[0] && state.fields[0].isPendingEdit) ? state.fields[0] : {}
+            formsStore: (state.forms && state.forms.view) ? state.forms.view : {},
+            fieldsStore: (state.fields && state.fields[0]) ? state.fields[0] : {}
         };
     }
 
@@ -325,7 +325,7 @@ class AppHistory {
                 tableId = formsStore.formData.formMeta.tableId;
                 formType = formsStore.formData.formType;
                 formMeta = formsStore.formData.formMeta;
-                debugger;
+
                 self.store.dispatch(self.updateForm(appId, tableId, formType, formMeta)).then(
                     () => {
                         self._continueToDestination();
@@ -347,7 +347,7 @@ class AppHistory {
         if (self.store) {
             const state = self.store.getState();
             let {recordStore, formsStore, fieldsStore} = self.getStores(state);
-            debugger;
+
             if (formsStore.isPendingEdit || fieldsStore.isPendingEdit) {
 
                 self.saveChangesForFormBuilder();
