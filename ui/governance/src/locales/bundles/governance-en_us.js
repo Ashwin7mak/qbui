@@ -38,24 +38,22 @@ export default {
                     realmDirectoryUsers: "In realm directory",
                     stageTitle: "Manage All Users",
                     stageDescription: "Use this page to manage QuickBase users at the account and realm levels. Take a look around and try out the functionality. If you have any feedback, we'd love to hear it:",
-                    feedbackLinkText: "https://some.quickbase.com/link/to/feedback"
+                    feedbackLinkText: "https://some.quickbase.com/link/to/feedback",
+                    firstName: "FIRST NAME",
+                    lastName: "LAST NAME",
+                    email: "EMAIL",
+                    userName: "USER NAME",
+                    lastAccess: "LAST ACCESS",
+                    quickbaseAccessStatus: "QUICKBASE ACCESS STATUS",
+                    inactive: "INACTIVE?",
+                    inAnyGroup: "IN ANY GROUP",
+                    groupManager: "GROUP MANAGER",
+                    canCreateApps: "CAN CREATE APPS",
+                    appManager: "APP MANAGER",
+                    inRealmDirectory: "IN REALM DIRECTORY?",
+                    realmApproved: "REALM APPROVED?"
                 }
             },
-            grid: {
-                firstName: "FIRST NAME",
-                lastName: "LAST NAME",
-                email: "EMAIL",
-                userName: "USER NAME",
-                lastAccess: "LAST ACCESS",
-                quickbaseAccessStatus: "QUICKBASE ACCESS STATUS",
-                inactive: "INACTIVE?",
-                inAnyGroup: "IN ANY GROUP",
-                groupManager: "GROUP MANAGER",
-                canCreateApps: "CAN CREATE APPS",
-                appManager: "APP MANAGER",
-                inRealmDirectory: "IN REALM DIRECTORY?",
-                realmApproved: "REALM APPROVED?"
-            }
         }
     }
 };

@@ -15,7 +15,7 @@ const columns = [
     {
         property: 'firstName',
         header: {
-            label: Locale.getMessage('governance.grid.firstName')
+            label: Locale.getMessage('governance.account.users.firstName')
         },
         fieldDef: {
             id: 1,
@@ -27,7 +27,7 @@ const columns = [
     {
         property: 'lastName',
         header: {
-            label: Locale.getMessage('governance.grid.lastName')
+            label: Locale.getMessage('governance.account.users.lastName')
         },
         fieldDef: {
             id: 2,
@@ -39,7 +39,7 @@ const columns = [
     {
         property: 'email',
         header: {
-            label: Locale.getMessage('governance.grid.email')
+            label: Locale.getMessage('governance.account.users.email')
         },
         props: {
             classes: ['EmailColumn']
@@ -54,7 +54,7 @@ const columns = [
     {
         property: 'userName',
         header: {
-            label: Locale.getMessage('governance.grid.userName')
+            label: Locale.getMessage('governance.account.users.userName')
         },
         props: {
             classes: ['ScreennameColumn']
@@ -69,7 +69,7 @@ const columns = [
     {
         property: 'lastAccess',
         header: {
-            label: Locale.getMessage('governance.grid.lastAccess')
+            label: Locale.getMessage('governance.account.users.lastAccess')
         },
         cell: {
             formatters: [Formatters.FormatLastAccessString]
@@ -87,7 +87,7 @@ const columns = [
     {
         property: 'hasAppAccess',
         header: {
-            label: Locale.getMessage('governance.grid.quickbaseAccessStatus')
+            label: Locale.getMessage('governance.account.users.quickbaseAccessStatus')
         },
         cell: {
             formatters: [Formatters.FormatUserStatusHTML]
@@ -102,7 +102,7 @@ const columns = [
     {
         property: 'lastAccess',
         header: {
-            label: Locale.getMessage('governance.grid.inactive')
+            label: Locale.getMessage('governance.account.users.inactive')
         },
         cell: {
             formatters: [Formatters.FormatIsInactive]
@@ -121,7 +121,7 @@ const columns = [
     {
         property: 'numGroupsMember',
         header: {
-            label: Locale.getMessage('governance.grid.inAnyGroup')
+            label: Locale.getMessage('governance.account.users.inAnyGroup')
         },
         cell: {
             formatters: [Formatters.FormatIsGroupMember]
@@ -140,7 +140,7 @@ const columns = [
     {
         property: 'numGroupsManaged',
         header: {
-            label: Locale.getMessage('governance.grid.groupManager')
+            label: Locale.getMessage('governance.account.users.groupManager')
         },
         cell: {
             formatters: [Formatters.FormatIsGroupManager]
@@ -159,7 +159,7 @@ const columns = [
     {
         property: 'accountTrusteeFlags',
         header: {
-            label: Locale.getMessage('governance.grid.canCreateApps')
+            label: Locale.getMessage('governance.account.users.canCreateApps')
         },
         cell: {
             formatters: [Formatters.FormatCanCreateApps]
@@ -178,7 +178,7 @@ const columns = [
     {
         property: 'numAppsManaged',
         header: {
-            label: Locale.getMessage('governance.grid.appManager')
+            label: Locale.getMessage('governance.account.users.appManager')
         },
         cell: {
             formatters: [Formatters.FormatIsAppManager]
@@ -197,7 +197,7 @@ const columns = [
     {
         property: 'realmDirectoryFlags',
         header: {
-            label: Locale.getMessage('governance.grid.inRealmDirectory')
+            label: Locale.getMessage('governance.account.users.inRealmDirectory')
         },
         cell: {
             formatters: [Formatters.FormatIsInRealmDirectory]
@@ -216,7 +216,7 @@ const columns = [
     {
         property: 'realmDirectoryFlags',
         header: {
-            label: Locale.getMessage('governance.grid.realmApproved')
+            label: Locale.getMessage('governance.account.users.realmApproved')
         },
         cell: {
             formatters: [Formatters.FormatIsRealmApproved]
