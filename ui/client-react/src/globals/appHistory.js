@@ -1,6 +1,7 @@
 import createHistory from "history/createBrowserHistory";
 import qhistory from 'qhistory';
 import {stringify, parse} from 'query-string';
+import {getPendEdits} from '../reducers/record';
 import {UNSAVED_RECORD_ID} from '../constants/schema';
 import {ShowAppModal, HideAppModal} from '../components/qbModal/appQbModalFunctions';
 import WindowUtils from '../utils/windowLocationUtils';
@@ -45,6 +46,9 @@ class AppHistory {
             this.editRecordCancel = null;
             this.createRecord = null;
             this.updateRecord = null;
+            this.updateForm = null;
+            this.saveFormComplete = null;
+            this.hideTrowser = null;
 
             // Keep track of the event listeners so they can be canceled
             this.cancelListenBefore = null;
@@ -67,6 +71,9 @@ class AppHistory {
             self.editRecordCancel = storeFunc.editRecordCancel;
             self.createRecord = storeFunc.createRecord;
             self.updateRecord = storeFunc.updateRecord;
+            self.updateForm = storeFunc.updateForm;
+            self.saveFormComplete = storeFunc.saveFormComplete;
+            self.hideTrowser = storeFunc.hideTrowser;
         }
 
         self._setupHistoryListeners();
@@ -116,28 +123,56 @@ class AppHistory {
         };
     }
 
+    /**
+     * isPendingEdit checks to see if there are any pending edits
+     * @param recordStore, formsStore, fieldsStore
+     * @return boolean
+     * */
+    isPendingEdit = (recordStore, formsStore, fieldsStore) => {
+        let hasPendingEdit = false;
+
+        if (recordStore.isPendingEdit) {
+
+            hasPendingEdit = true;
+        } else if (formsStore.isPendingEdit || fieldsStore.isPendingEdit) {
+            //for form builder
+            hasPendingEdit = true;
+        }
+        return hasPendingEdit;
+    }
+
     getIsPendingEdit() {
         const pendEdits = self.getPendingEditsFromStore();
-        return pendEdits.isPendingEdit === true;
+        return pendEdits;
+    }
+
+    getStores(state) {
+        let recordStore = (state.record && state.record.records && state.record.recordIdBeingEdited) ? state.record : undefined;
+        recordStore = recordStore ? getPendEdits(recordStore) : {};
+        return {
+            recordStore: recordStore,
+            formsStore: (state.forms && state.forms.view && state.forms.view.isPendingEdit) ? state.forms.view : {},
+            fieldsStore: (state.fields && state.fields[0] && state.fields[0].isPendingEdit) ? state.fields[0] : {}
+        };
+    }
+
+    getIsPendingEdit(store) {
+        const pendEdits = self.getPendingEditsFromStore(store);
+        return pendEdits;
     }
 
     getPendingEditsFromStore() {
-        let pendEdits = {};
+        let pendEdits = false;
         if (self.store) {
             const state = self.store.getState();
-            //  fetch the record's pendEdits in the store currently being edited
-            const recordStore = state.record;
-            //TODO : use record store's getPendEdits method
-            if (!recordStore || !recordStore.records || (!recordStore.recordIdBeingEdited)) {
-                return {};
+            //fetch stores that have pendEdits
+            let {recordStore, formsStore, fieldsStore} = self.getStores(state);
+
+            if (recordStore.isPendingEdit || formsStore.isPendingEdit || fieldsStore.isPendingEdit) {
+                pendEdits = self.isPendingEdit(recordStore, formsStore, fieldsStore);
             }
-            // the record returned is the one having the id matching record state's recordIdBeingEdited
-            const recordId = recordStore.recordIdBeingEdited.toString();
-            const recordCurrentlyEdited = _.find(recordStore.records,
-                rec => rec.id.toString() === recordId);
-            pendEdits = (recordCurrentlyEdited ? recordCurrentlyEdited.pendEdits : {}) || {};
+            return pendEdits;
         }
-        return pendEdits;
     }
 
     getFieldsFromFormStore() {
@@ -210,48 +245,88 @@ class AppHistory {
         return fields;
     }
 
-    /*
-    * All functions below reference 'self' instead of 'this' because of a context change
-    * after being called from the modal
-    */
-    _saveChanges() {
-        self._hideModal();
+    /**
+     * Default save changes for record
+     * @param store, recordStore, continueToDestination, haltRouteChange
+     */
+    saveChangesForRecord(store, recordStore, continueToDestination, haltRouteChange) {
+        if (store && self.createRecord && self.updateRecord) {
+            const appId = recordStore.currentEditingAppId;
+            const tableId = recordStore.currentEditingTableId;
+            const recordId = recordStore.currentEditingRecordId;
 
-        if (self.store && _.isFunction(self.createRecord) && _.isFunction(self.updateRecord)) {
-            const pendEdits = self.getPendingEditsFromStore();
-            const appId = pendEdits.currentEditingAppId;
-            const tableId = pendEdits.currentEditingTableId;
-            const recordId = pendEdits.currentEditingRecordId;
+            let fields = self.getFields(store);
 
-            let fields = self.getFields();
-
-            if (pendEdits.currentEditingRecordId === UNSAVED_RECORD_ID) {
+            if (recordStore.currentEditingRecordId === UNSAVED_RECORD_ID) {
                 let params = {
-                    context: null,
-                    recordChanges: pendEdits.recordChanges,
+                    context: CONTEXT.REPORT.NAV,
+                    recordChanges: recordStore.recordChanges,
                     fields: fields,
                     colList: [],
-                    showNotificationOnSuccess: false,
+                    showNotificationOnSuccess: true,
                     addNewRow: false
                 };
-                self.store.dispatch(self.createRecord(appId, tableId, params)).then(
+                store.dispatch(self.createRecord(appId, tableId, params)).then(
+                    () => {
+                        continueToDestination();
+                    },
+                    () => {
+                        haltRouteChange();
+                    }
+                ).then(
+                    () => {
+                        store.dispatch(self.saveFormComplete(CONTEXT.FORM.EDIT));
+                        store.dispatch(self.hideTrowser());
+                    }
+                );
+            } else {
+                let params = {
+                    context: CONTEXT.REPORT.NAV,
+                    pendEdits: recordStore,
+                    fields: fields,
+                    colList: [],
+                    showNotificationOnSuccess: true,
+                    addNewRow: false
+                };
+
+                store.dispatch(self.updateRecord(appId, tableId, recordId, params)).then(
                     () => {
                         self._continueToDestination();
                     },
                     () => {
                         self._haltRouteChange();
                     }
+                ).then(
+                    () => {
+                        store.dispatch(self.saveFormComplete(CONTEXT.FORM.EDIT));
+                        store.dispatch(self.hideTrowser());
+                    }
                 );
-            } else {
-                let params = {
-                    context: null,              // no report context to worry about...
-                    pendEdits: pendEdits,
-                    fields: fields,
-                    colList: null,
-                    showNotificationOnSuccess: false,
-                    addNewRow: false
-                };
-                self.store.dispatch(self.updateRecord(appId, tableId, recordId, params)).then(
+            }
+        }
+    }
+
+    /**
+     * Default save changes for form builder
+     * @param store, formStore, continueToDestination, haltRouteChange
+     */
+    saveChangesForFormBuilder() {
+        if (self.store) {
+            const state = self.store.getState();
+            //fetch stores that have pendEdits
+            let {formsStore} = self.getStores(state);
+            let appId;
+            let tableId;
+            let formType;
+            let formMeta;
+
+            if (formsStore && formsStore.formData) {
+                appId = formsStore.formData.formMeta.appId;
+                tableId = formsStore.formData.formMeta.tableId;
+                formType = formsStore.formData.formType;
+                formMeta = formsStore.formData.formMeta;
+                debugger;
+                self.store.dispatch(self.updateForm(appId, tableId, formType, formMeta)).then(
                     () => {
                         self._continueToDestination();
                     },
@@ -263,17 +338,39 @@ class AppHistory {
         }
     }
 
-    _discardChanges(hideModal = true) {
+    /*
+     * All functions below reference 'self' instead of 'this' because of a context change
+     * after being called from the modal
+     */
+    _saveChanges() {
+        self._hideModal();
+        if (self.store) {
+            const state = self.store.getState();
+            let {recordStore, formsStore, fieldsStore} = self.getStores(state);
+            debugger;
+            if (formsStore.isPendingEdit || fieldsStore.isPendingEdit) {
 
+                self.saveChangesForFormBuilder();
+            } else if (recordStore.isPendingEdit) {
+
+                self.saveChangesForRecord();
+            }
+        }
+    }
+
+    _discardChanges(hideModal = true) {
         if (hideModal) {
             self._hideModal();
         }
 
-        if (self.store && _.isFunction(self.editRecordCancel)) {
+        if (self.store) {
             //  clean up pending edits in store
-            const pendEdits = self.getPendingEditsFromStore();
-            if (_.isEmpty(pendEdits) === false) {
-                self.store.dispatch(self.editRecordCancel(pendEdits.currentEditingAppId, pendEdits.currentEditingTableId, pendEdits.currentEditingRecordId));
+            const state = self.store.getState();
+            let {recordStore} = self.getStores(state);
+
+            if (_.isEmpty(recordStore) === false) {
+                self.store.dispatch(self.editRecordCancel(recordStore.currentEditingAppId, recordStore.currentEditingTableId, recordStore.currentEditingRecordId));
+                self.store.dispatch(self.hideTrowser());
             }
         }
         self._continueToDestination();
