@@ -36,7 +36,7 @@ let BuilderDropDownAction = React.createClass({
         let isAppView = !!this.props.selectedApp; // !! converts to boolean
         let isTableView = (isAppView && this.props.selectedTable);
         let isFormView = (isTableView && this.props.recId);
-        let isReportView = (isTableView && !this.props.recId && this.props.rptId > 0);
+        let isReportView = (isTableView && !this.props.recId && this.props.rptId);
         let classes = "dropdownToggle globalActionLink";
 
         let dropDown = <Dropdown className={classes} id="nav-right-dropdown" dropup={this.props.position === "left"} >

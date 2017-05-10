@@ -2,7 +2,7 @@ import React from 'react';
 import Stage from '../stage/stage';
 import ReportStage from '../report/reportStage';
 import ReportHeader from '../report/reportHeader';
-
+import ReportSaveOrCancelFooter from '../reportBuilder/reportSaveOrCancelFooter';
 import TableHomePageInitial from './tableHomePageInitial';
 import Icon, {AVAILABLE_ICON_FONTS} from '../../../../reuse/client/src/components/icon/icon.js';
 import IconActions from '../actions/iconActions';
@@ -134,6 +134,7 @@ export const TableHomePageRoute = React.createClass({
     },
 
     render() {
+        let inBuilderMode = this.props.reportBuilder.inBuilderMode;
         //  ensure there is a rptId property otherwise the report not found page is rendered in ReportToolsAndContent
         let homePageParams = _.assign(this.props.match.params, {rptId: null});
 
@@ -178,6 +179,9 @@ export const TableHomePageRoute = React.createClass({
                     {mainContent}
 
                 </ReportFieldSelectMenu>
+
+                {inBuilderMode ?
+                    <ReportSaveOrCancelFooter /> :null}
             </div>
         );
     }
@@ -187,7 +191,8 @@ export const TableHomePageRoute = React.createClass({
 // (another bit of boilerplate to keep the component free of Redux dependencies)
 const mapStateToProps = (state) => {
     return {
-        report: state.report
+        report: state.report,
+        reportBuilder: state.reportBuilder
     };
 };
 const mapDispatchToProps = (dispatch) => {
