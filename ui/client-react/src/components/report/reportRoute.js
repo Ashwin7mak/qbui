@@ -133,15 +133,11 @@ const ReportRoute = React.createClass({
         return (<IconActions className="pageActions" actions={actions}/>);
     },
 
-    setReportName(newName)  {
-        this.props.changeReportName(CONTEXT.REPORT.NAV, newName);
-    },
-
     getStageHeadline() {
         const reportName = this.props.reportData && this.props.reportData.data && this.props.reportData.data.name;
         const {appId, tblId} = this.props.match.params;
         const tableLink = `${APP_ROUTE}/${appId}/table/${tblId}`;
-        const updateName = _.debounce((name) => {this.setReportName(name);}, 300);
+        const updateName = _.debounce((name) => {this.props.changeReportName(CONTEXT.REPORT.NAV, name);}, 300);
         return (
             <div className="reportStageHeadline">
 

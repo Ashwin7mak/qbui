@@ -314,7 +314,7 @@ export const loadDynamicReport = (context, appId, tblId, rptId, format, filter, 
 export const unloadEmbeddedReport = (context) =>
     event(context, types.UNLOAD_EMBEDDED_REPORT);
 
-/* Find the records count for a report. Allows customized report that optionally allows for query
+/** Find the records count for a report. Allows customized report that optionally allows for query
  * parameters. The overrides are expected to be defined in the queryParams parameter.
  *
  * When the results are returned from the node layer a LOAD_REPORT_SUCCESS event is fired and the
@@ -407,6 +407,7 @@ export const addColumnFromExistingField = (context, requestedColumn, addBefore) 
 export const hideColumn = (context, clickedId) => {
     return event(context, types.HIDE_COLUMN, {clickedId});
 };
+
 /**
  * Change the reportName of the report
  * @param context
