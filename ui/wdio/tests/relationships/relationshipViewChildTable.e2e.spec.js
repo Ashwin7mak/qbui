@@ -186,7 +186,7 @@ describe('Relationships - View child table on form tests: ', () => {
 
         //TODO: This is failing in Edge even tho we are getting the exact same text back we expect to
         //TODO: See https://jenkins1.ci.quickbaserocks.com/view/Try%20UX%20Builds/job/try-ui-wdio-Edge/1361/console
-        if (browserName != 'MicrosoftEdge') {
+        if (browserName !== 'MicrosoftEdge') {
             expect(tableHomepageText).toContain('Child Table A Home');
         }
 
