@@ -48,6 +48,10 @@
             expect(TopNavPO.topNavToggleHamburgerEl.getText()).toBeFalsy();
         });
 
+        /*
+        // The two buttons here were placeholders and have been removed.
+        // This test remains because one or more of them will be coming back when the function is actually implemented.
+        // The buttons were only there to make it look like there was function when there wasn't.
         it('Verify topNav harmony icons displayed', function() {
             //Step1: Verify the no.of harmony buttons
             expect(TopNavPO.topNavHarButtonsListEl.value.length).toEqual(2);
@@ -56,6 +60,7 @@
             // Step3: Verify the text for harmony buttons
             expect(TopNavPO.topNavCenterDivEl.getText()).toBeFalsy();
         });
+        */
 
         it('Verify topNav global icons displayed/not displayed', function() {
             //Step1: Verify if the global icons are displayed
