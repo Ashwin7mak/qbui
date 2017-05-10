@@ -30,19 +30,21 @@ export default {
                     stageTitle: "Manage all Users FR",
                     stageDescription: "FR Use this page to manage QuickBase users at the account and realm levels. Take a look around and try out the functionality. If you have any feedback, we'd love to hear it:",
                     feedbackLinkText: "https://some.quickbase.com/link/to/feedback",
-                    firstName: "PRÉNOM",
-                    lastName: "NOM DE FAMILLE",
-                    email: "EMAIL",
-                    userName: "NOM D'UTILISATEUR",
-                    lastAccess: "DERNIER ACCÈS",
-                    quickbaseAccessStatus: "ÉTAT D'ACCÈS QUICKBASE",
-                    inactive: "INACTIF?",
-                    inAnyGroup: "DANS TOUT GROUPE",
-                    groupManager: "CHEF DE GROUPE",
-                    canCreateApps: "POUVEZ CRÉER DES APPS",
-                    appManager: "APP MANAGER",
-                    inRealmDirectory: "DANS LE REALM DE RÉPERTOIRE?",
-                    realmApproved: "REALM APPROUVÉ?"                    
+                    grid: {
+                        firstName: "PRÉNOM",
+                        lastName: "NOM DE FAMILLE",
+                        email: "EMAIL",
+                        userName: "NOM D'UTILISATEUR",
+                        lastAccess: "DERNIER ACCÈS",
+                        quickbaseAccessStatus: "ÉTAT D'ACCÈS QUICKBASE",
+                        inactive: "INACTIF?",
+                        inAnyGroup: "DANS TOUT GROUPE",
+                        groupManager: "CHEF DE GROUPE",
+                        canCreateApps: "POUVEZ CRÉER DES APPS",
+                        appManager: "APP MANAGER",
+                        inRealmDirectory: "DANS LE REALM DE RÉPERTOIRE?",
+                        realmApproved: "REALM APPROUVÉ?"
+                    }                    
                 }
             },
         }
