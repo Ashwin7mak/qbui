@@ -232,7 +232,8 @@ export default {
             }
         },
         relationship: {
-            childTable: "Kind Tisch"
+            childTable: "Kind Tisch",
+            addChildRecord: "{tableNoun} hinzufügen"
         },
         durationWithUnits: {
             Weeks:"{value, plural, \n =0 {0 Wochen}\n =1 {1 Woche}\n other {{value} Wochen}\n} ",

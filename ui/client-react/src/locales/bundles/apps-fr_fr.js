@@ -231,7 +231,8 @@ export default {
             }
         },
         relationship: {
-            childTable: "Table Enfant"
+            childTable: "Table Enfant",
+            addChildRecord: "Ajouter {tableNoun}"
         },
         durationWithUnits: {
             Weeks:"{value, plural, \n =0 {0 semaines}\n =1 {1 semaine}\n other {{value}  semaines}\n} ",

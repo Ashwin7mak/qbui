@@ -5,7 +5,7 @@ import WindowLocationUtils from '../utils/windowLocationUtils';
 import CommonUrlUtils from '../../../common/src/commonUrlUtils';
 import StringUtils from '../utils/stringUtils';
 
-import {SUPPORT_LINK_PATH, REPORT_LINK, CHILD_REPORT_LINK, USERS_ROUTE, BUILDER_ROUTE, SETTINGS_ROUTE, APP_ROUTE, FEEDBACK_LINK_PATH} from '../constants/urlConstants';
+import {SUPPORT_LINK_PATH, REPORT_LINK, CHILD_REPORT_LINK, ADD_RELATED_CHILD_LINK, USERS_ROUTE, BUILDER_ROUTE, SETTINGS_ROUTE, APP_ROUTE, FEEDBACK_LINK_PATH} from '../constants/urlConstants';
 
 const UrlUtils = {
     getIconForProtocol(protocol) {
@@ -80,6 +80,17 @@ const UrlUtils = {
      */
     getRelatedChildReportLink(appId, tableId, reportId, detailKeyFid, detailKeyValue) {
         return StringUtils.format(CHILD_REPORT_LINK, [...arguments]);
+    },
+
+    /**
+     * Return URL of route for adding a related child in the following form:
+     *
+     *   `/qbase/app/${appId}/table/${tableId}/report/${reportId}?action=addChild&defailKeyFid=${detailKeyFid}&detailKeyValue=${detailKeyValue}`
+     *
+     * @return {string} URL of route for showing new child record
+     */
+    getAddRelatedChildLink(appId, tableId, reportId, detailKeyFid, detailKeyValue) {
+        return StringUtils.format(ADD_RELATED_CHILD_LINK, [...arguments]);
     },
 
     /**

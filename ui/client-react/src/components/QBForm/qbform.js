@@ -421,6 +421,7 @@ export const QBForm = React.createClass({
         const tables = _.get(this, 'props.selectedApp.tables');
         const childTable = _.find(tables, {id: relationship.detailTableId}) || {};
         const childTableName = childTable.name;
+        const childTableNoun = childTable.tableNoun;
 
         // Handler for clicking on a record in an embedded report. Drilling down to a child should open the clicked
         // child record in a drawer.
@@ -435,6 +436,7 @@ export const QBForm = React.createClass({
                     childTableId={_.get(relationship, "detailTableId")}
                     childReportId={_.get(relationship, 'childDefaultReportId')}
                     childTableName={childTableName}
+                    childTableNoun={childTableNoun}
                     detailKeyFid={_.get(relationship, "detailFieldId")}
                     detailKeyValue={detailKeyValue}
                     type={ReferenceElement.type}

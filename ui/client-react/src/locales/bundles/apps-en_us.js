@@ -236,7 +236,8 @@ export default {
             }
         },
         relationship: {
-            childTable: "Child Table"
+            childTable: "Child Table",
+            addChildRecord: "Add {tableNoun}"
         },
         durationWithUnits: {
             // these keys can't change they correspond to the

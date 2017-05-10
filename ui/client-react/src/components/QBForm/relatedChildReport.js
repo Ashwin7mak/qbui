@@ -2,6 +2,7 @@ import React, {PropTypes} from 'react';
 
 import EmbeddedReportToolsAndContent from '../report/embedded/embeddedReportToolsAndContent';
 import EmbeddedReportLink from '../report/embedded/embeddedReportLink';
+import EmbeddedAddChildLink from '../report/embedded/embeddedAddChildLink';
 
 import Breakpoints from '../../utils/breakpoints';
 
@@ -14,12 +15,8 @@ class ChildReport extends React.Component {
         super(...args);
     }
 
-    render() {
-        const {appId, childTableId, childReportId, detailKeyFid, detailKeyValue} = this.props;
-        const validProps = [appId, childTableId, childReportId, detailKeyFid, detailKeyValue].every(prop => prop || typeof prop === 'number');
-        if (!validProps) {
-            return null;
-        } else if (Breakpoints.isSmallBreakpoint() || this.props.type === 'REPORTLINK') {
+    renderChildReportOrLink(childTableId, childReportId) {
+        if (Breakpoints.isSmallBreakpoint() || this.props.type === 'REPORTLINK') {
             return (
                 <EmbeddedReportLink {...this.props}/>
             );
@@ -32,6 +29,32 @@ class ChildReport extends React.Component {
                 />);
         } else {
             return null;
+        }
+    }
+
+    renderAddChildLink() {
+        return <EmbeddedAddChildLink {...this.props}/>;
+    }
+
+    render() {
+        const {appId, childTableId, childReportId, detailKeyFid, detailKeyValue} = this.props;
+        const validProps = [appId, childTableId, childReportId, detailKeyFid, detailKeyValue].every(prop => prop || typeof prop === 'number');
+        if (!validProps) {
+            return null;
+        } else {
+            let item1, item2;
+            if (Breakpoints.isSmallBreakpoint() || this.props.type === 'REPORTLINK') {
+                item1 = this.renderChildReportOrLink(childTableId, childReportId);
+                item2 =  this.renderAddChildLink();
+            } else {
+                item1 = this.renderAddChildLink();
+                item2 = this.renderChildReportOrLink(childTableId, childReportId);
+            }
+            return (
+                <div>
+                    {item1}
+                    {item2}
+                </div>);
         }
     }
 }
