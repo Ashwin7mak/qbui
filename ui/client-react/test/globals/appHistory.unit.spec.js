@@ -222,7 +222,7 @@ describe('AppHistory', () => {
     });
 
     describe('verify save functions', () => {
-        let mockRecordState = {
+        let mockState = {
             fieldsStore: {
                 isPendingEdit: false
             },
@@ -239,9 +239,10 @@ describe('AppHistory', () => {
             spyOn(AppHistory, 'showPendingEditsConfirmationModal');
             spyOn(mockStore, 'dispatch').and.callThrough();
             spyOn(mockStoreReject, 'dispatch').and.callThrough();
-            spyOn(AppHistory, 'saveChangesForRecord');
-            spyOn(AppHistory, 'saveChangesForFormBuilder');
-            spyOn(AppHistory, 'getStores').and.returnValue(mockRecordState);
+            spyOn(AppHistory, '_saveChangesForRecord');
+            spyOn(AppHistory, '_saveChangesForFormBuilder').and.callThrough();
+            spyOn(mockStoreFunc, 'updateForm');
+            spyOn(AppHistory, 'getStores').and.returnValue(mockState);
         });
         afterEach(() => {
             AppHistory.getStores.calls.reset();
@@ -261,29 +262,29 @@ describe('AppHistory', () => {
         });
 
         it('will save new record pending edits before navigating', () => {
-            mockRecordState.recordStore.isPendingEdit = true;
+            mockState.recordStore.isPendingEdit = true;
             store.record.records[0].pendEdits.currentEditingRecordId = UNSAVED_RECORD_ID;
             AppHistory.setup(mockStore);
 
             goToNewPage();
             AppHistory._saveChanges();
 
-            expect(AppHistory.saveChangesForRecord).toHaveBeenCalled();
+            expect(AppHistory._saveChangesForRecord).toHaveBeenCalled();
         });
 
         it('will save existing record pending edits before navigating', () => {
-            mockRecordState.recordStore.isPendingEdit = true;
+            mockState.recordStore.isPendingEdit = true;
             store.record.records[0].pendEdits.currentEditingRecordId = 1;
             AppHistory.setup(mockStore);
 
             goToNewPage();
             AppHistory._saveChanges();
 
-            expect(AppHistory.saveChangesForRecord).toHaveBeenCalled();
+            expect(AppHistory._saveChangesForRecord).toHaveBeenCalled();
         });
 
         // fit('halt route change when save new record pending edits error', () => {
-        //     mockRecordState.recordStore.isPendingEdit = true;
+        //     mockState.recordStore.isPendingEdit = true;
         //     store.record.records[0].pendEdits.currentEditingRecordId = 1;
         //     AppHistory.setup(mockStoreReject);
         //
@@ -294,22 +295,49 @@ describe('AppHistory', () => {
         // });
 
         it('will save form builder if there is a pending edit in the forms store', () => {
-            mockRecordState.formsStore.isPendingEdit = true;
+            mockState.formsStore.isPendingEdit = true;
 
             goToNewPage();
             AppHistory._saveChanges();
 
-            expect(AppHistory.saveChangesForFormBuilder).toHaveBeenCalled();
+            expect(AppHistory._saveChangesForFormBuilder).toHaveBeenCalled();
         });
 
         it('will save form builder if there is a pending edit in the fields store', () => {
-            mockRecordState.fieldsStore.isPendingEdit = true;
+            mockState.fieldsStore.isPendingEdit = true;
 
             goToNewPage();
             AppHistory._saveChanges();
 
-            expect(AppHistory.saveChangesForFormBuilder).toHaveBeenCalled();
+            expect(AppHistory._saveChangesForFormBuilder).toHaveBeenCalled();
         });
+
+        it('will save invoke updateForm if there is a formStore', (done) => {
+            mockState.formsStore.formData = {
+                formMeta: {
+                    appId: 'appId',
+                    tableId: 'tableId'
+                },
+                formType: 'type'
+            };
+            AppHistory.setup(mockStore, mockStoreFunc);
+
+            AppHistory._saveChangesForFormBuilder();
+
+            expect(mockStoreFunc.updateForm).toHaveBeenCalled();
+            expect(mockStore.dispatch).toHaveBeenCalled();
+            done();
+        });
+
+        // fit('will save invoke updateForm if there is a formStore', (done) => {
+        //     AppHistory.setup(mockStore, mockStoreFunc);
+        //
+        //     AppHistory._saveChangesForFormBuilder();
+        //
+        //     expect(mockStoreFunc.updateForm).toHaveBeenCalled();
+        //     expect(mockStore.dispatch).toHaveBeenCalled();
+        //     done();
+        // });
     });
 });
 
