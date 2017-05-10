@@ -116,7 +116,6 @@ describe('Nav Unit tests', () => {
         spyOn(props, 'loadForm').and.callThrough();
         spyOn(props, 'loadReports').and.callThrough();
         spyOn(props, 'enterBuilderMode').and.callThrough();
-        spyOn(props, 'exitBuilderMode').and.callThrough();
         NavRewireAPI.__Rewire__('LeftNav', LeftNavMock);
         NavRewireAPI.__Rewire__('RecordTrowser', TrowserMock);
         NavRewireAPI.__Rewire__('ReportManagerTrowser', TrowserMock);
@@ -134,7 +133,6 @@ describe('Nav Unit tests', () => {
         props.loadForm.calls.reset();
         props.loadReports.calls.reset();
         props.enterBuilderMode.calls.reset();
-        props.exitBuilderMode.calls.reset();
         NavRewireAPI.__ResetDependency__('LeftNav');
         NavRewireAPI.__ResetDependency__('RecordTrowser');
         NavRewireAPI.__ResetDependency__('ReportManagerTrowser');
@@ -284,17 +282,4 @@ describe('Nav Unit tests', () => {
         expect(props.enterBuilderMode).toHaveBeenCalled();
     });
 
-    it('exits report builder onCancel', () => {
-        let component = shallow(<Nav {...props} flux={flux} />);
-
-        component.instance().onCancel();
-
-        expect(props.exitBuilderMode).toHaveBeenCalled();
-        /**
-         * Call nav... it will call enterBM, it won't set props,
-         * check props get set in report actions
-         *
-         * so just make sure that it gets called
-         */
-    });
 });

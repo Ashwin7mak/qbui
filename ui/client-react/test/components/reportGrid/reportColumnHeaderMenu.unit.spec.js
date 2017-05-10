@@ -504,6 +504,22 @@ describe('ReportColumnHeaderMenu', () => {
         });
     });
 
+    describe('Report Builder Mode', () => {
+        it('when not in builder mode, should not see options to add or hide', () => {
+            component = shallow(<ReportColumnHeaderMenu {...testProps} inBuilderMode= {false} />);
+            instance = component.instance();
+
+            let hidingMenuItem = component.find(MenuItem).find({onSelect: instance.hideThisColumn});
+            expect(hidingMenuItem).not.toBePresent();
+
+            let addingMenuItemBefore = component.find(MenuItem).find({onSelect: instance.openFieldSelectorBefore});
+            expect(addingMenuItemBefore).not.toBePresent();
+
+            let addingMenuItemAfter = component.find(MenuItem).find({onSelect: instance.openFieldSelectorAfter});
+            expect(addingMenuItemAfter).not.toBePresent();
+        });
+    });
+
     describe('Add and Hide', () => {
         it('hides a column when that menu item is selected', () => {
             component = shallow(<ReportColumnHeaderMenu {...testProps}/>);
