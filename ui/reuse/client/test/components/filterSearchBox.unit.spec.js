@@ -1,6 +1,5 @@
 import React from 'react';
-import {FilterSearchBox}  from '../../src/components/facet/filterSearchBox';
-import * as actions from '../../src/constants/actions';
+import {FilterSearchBox}  from '../../src/components/facets/filterSearchBox';
 import {shallow} from 'enzyme';
 
 describe('Filter Search box tests', () => {
