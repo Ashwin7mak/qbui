@@ -5,7 +5,7 @@ import TextFieldValueEditor from '../fields/textFieldValueEditor';
 /**
  * Editable text field for a report name.
  */
-class ReportNameEditor extends Component {
+export class ReportNameEditor extends Component {
     constructor(props) {
         super(props);
 
@@ -20,7 +20,7 @@ class ReportNameEditor extends Component {
                 return {
                     name: nextProps.name,
                 };
-            })
+            });
         }
     }
 
@@ -39,12 +39,13 @@ class ReportNameEditor extends Component {
                 <div className="editor">
                     <h3>
                         <TextFieldValueEditor
+                            className="editableReportName"
                             value={this.state.name}
                             inputType="text"
                             onChange={this.updateName}
                         />
                     </h3>
-                </div> : <h3>{this.state.name}</h3>
+                </div> : <h3 className="nonEditableReportName">{this.state.name}</h3>
             }
             </div>
         );
