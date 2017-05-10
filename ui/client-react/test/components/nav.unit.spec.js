@@ -82,7 +82,6 @@ describe('Nav Unit tests', () => {
         loadForm: (app, tbl, rpt, type, edit, show) => {},
         loadReports: (ctx, app, tbl) => {},
         enterBuilderMode: (context) => {},
-        exitBuilderMode: (context) => {},
         fields: [],
         record: [],
         report: [],

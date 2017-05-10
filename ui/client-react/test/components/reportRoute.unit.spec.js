@@ -1,8 +1,7 @@
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
-import {shallow} from 'enzyme';
 import Fluxxor from 'fluxxor';
-import ReportRoute, {__RewireAPI__ as ReportRouteRewireAPI}  from '../../src/components/report/reportRoute';
+import {ReportRoute, __RewireAPI__ as ReportRouteRewireAPI}  from '../../src/components/report/reportRoute';
 import FacetSelections  from '../../src/components/facet/facetSelections';
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
@@ -74,17 +73,22 @@ describe('ReportRoute functions', () => {
         }
     }
 
+    class mockReportSaveOrCancelFooter extends React.Component {
+        render() {
+            return <div />;
+        }
+    }
+
     beforeEach(() => {
         spyOn(flux.actions, 'selectTableId');
         spyOn(props, 'clearSearchInput');
         spyOn(props, 'loadFields');
         spyOn(props, 'loadReport');
         spyOn(props, 'loadTableHomePage');
-        spyOn(props, 'exitBuilderMode').and.callThrough();
-        spyOn(props, 'closeFieldSelectMenu').and.callThrough();
         ReportRouteRewireAPI.__Rewire__('Stage', StageMock);
         ReportRouteRewireAPI.__Rewire__('ReportToolsAndContent', ReportToolsAndContentMock);
         ReportRouteRewireAPI.__Rewire__('ReportFieldSelectMenu', mockReportFieldSelectMenu);
+        ReportRouteRewireAPI.__Rewire__('ReportSaveOrCancelFooter', mockReportSaveOrCancelFooter);
     });
 
     afterEach(() => {
@@ -92,11 +96,10 @@ describe('ReportRoute functions', () => {
         props.clearSearchInput.calls.reset();
         props.loadFields.calls.reset();
         props.loadTableHomePage.calls.reset();
-        props.exitBuilderMode.calls.reset();
-        props.closeFieldSelectMenu.calls.reset();
         ReportRouteRewireAPI.__ResetDependency__('Stage');
         ReportRouteRewireAPI.__ResetDependency__('ReportToolsAndContent');
         ReportRouteRewireAPI.__ResetDependency__('ReportFieldSelectMenu');
+        ReportRouteRewireAPI.__ResetDependency__('ReportSaveOrCancelFooter');
     });
 
     it('test render of component with url params', () => {
@@ -105,7 +108,7 @@ describe('ReportRoute functions', () => {
 
         component = TestUtils.renderIntoDocument(
             <Provider store={store}>
-                <ReportRoute {...props} match={routeParams} reportData={reportDataParams.reportData} flux={flux} pendEdits={pendEdits} {{reportBuilder: props.reportBuilder}}/>
+                <ReportRoute {...props} match={routeParams} reportData={reportDataParams.reportData} flux={flux} pendEdits={pendEdits}/>
             </Provider>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
     });
@@ -161,16 +164,5 @@ describe('ReportRoute functions', () => {
                 </Provider>);
             expect(loadReport).not.toHaveBeenCalled();
         });
-
-        it('when not in report builder mode, should not see footer', () => {
-            let component = shallow(<ReportRoute {...props} inBuilderMode={false}/>);
-            let instance = component.instance();
-
-            let cancelButton = component.find(ReportSaveOrCancelFooter).find({onClick: instance.onCancel});
-            expect(cancelButton).not.toBePresent();
-
-            let saveButton = component.find(ReportSaveOrCancelFooter).find({onClick: instance.onClickSave()});
-            expect(saveButton).not.toBePresent();
-        })
     });
 });
