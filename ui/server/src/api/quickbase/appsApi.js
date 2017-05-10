@@ -57,8 +57,9 @@
                 });
             },
 
-            /** This method has been copied from tableApi.js but will be refactored to be removed once
+            /** TODO: This method has been copied from tableApi.js but will be refactored to be removed once
              *  circular dependencies between tableApi.js and appsApi.js have been sorted out.
+             *
              * Create endpoint on the tableProperties object.
              * @param req
              * @param tableId
@@ -74,15 +75,21 @@
                             resolve(JSON.parse(eeResponse.body));
                         },
                         (error) =>{
-                            log.error({req: req}, "tablesApi.createTableProperties(): Error setting table properties");
+                            log.error({req: req}, "tablesApi.createTableProperties(): Error creating table properties on EE");
                             reject(error);
                         }).catch((ex) =>{
-                        requestHelper.logUnexpectedError('tablesApi.createTableProperties(): unexpected error setting table properties', ex, true);
+                        requestHelper.logUnexpectedError('tablesApi.createTableProperties(): unexpected error creating table properties', ex, true);
                         reject(ex);
                     });
                 });
             },
 
+            /**
+             * Get endpoint for tableProperties object.
+             * @param req
+             * @param table
+             * @returns {Promise}
+             */
             getTableProperties: function (req, table) {
                 return new Promise((resolve, reject) => {
                     let opts = requestHelper.setOptions(req);
@@ -108,7 +115,7 @@
                                     },
                                     (error) => {
                                         //resolve - we do not want to block the get Apps call on this failure
-                                        log.error({req: req}, "appsApi.getTableProperties(): Error getting table properties from EE");
+                                        log.error({req: req}, "appsApi._createTableProperties(): Error getting table properties from EE");
                                         resolve({});
                                     }
                                 ).catch((ex) => {
