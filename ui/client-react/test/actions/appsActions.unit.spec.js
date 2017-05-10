@@ -9,6 +9,11 @@ describe('Apps Actions functions with Tables', () => {
 
     let responseData = [{id: 'tableId', link: `${APP_ROUTE}/tableId`}];
     let appRoleResponeData = [4, 5, 6];
+    let responseComponentData = {
+        users: [],
+        roles: [],
+        app: [{id: 'tableId'}]
+    };
 
     class mockAppService {
         constructor() { }
@@ -20,6 +25,9 @@ describe('Apps Actions functions with Tables', () => {
         }
         getAppUsers(id) {
             return Promise.resolve({data: responseData});
+        }
+        getAppComponents(id) {
+            return Promise.resolve({data: responseComponentData})
         }
     }
 
@@ -59,6 +67,7 @@ describe('Apps Actions functions with Tables', () => {
         spyOn(flux.dispatchBinder, 'dispatch');
         spyOn(mockAppService.prototype, 'getApps').and.callThrough();
         spyOn(mockAppService.prototype, 'getApp').and.callThrough();
+        spyOn(mockAppService.prototype, 'getAppComponents').and.callThrough();
         spyOn(mockAppService.prototype, 'getAppUsers').and.callThrough();
         spyOn(mockRoleService.prototype, 'getAppRoles').and.callThrough();
         spyOn(mockUserService.prototype, 'getUser').and.callThrough();
@@ -97,21 +106,22 @@ describe('Apps Actions functions with Tables', () => {
     });
 
     var selectAppIdTests = [
-        {name:'select app id', appId: 123, cached: false},
-        {name:'select app id cached', appId: 123, cached: true}
+        {name:'select app id', appId: 123},
+        {name:'select app id of null', appId: null}
     ];
     selectAppIdTests.forEach(function(test) {
         it(test.name, function(done) {
-            flux.actions.selectedAppId = test.cached === true ? test.appId : '';
             flux.actions.selectAppId(test.appId).then(
                 () => {
-                    if (test.cached === true) {
-                        expect(mockAppService.prototype.getAppUsers).not.toHaveBeenCalled();
-                    } else {
-                        expect(mockAppService.prototype.getAppUsers).toHaveBeenCalledWith(test.appId);
-                        expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(2);
+                    if (test.appId) {
+                        expect(mockAppService.prototype.getAppComponents).toHaveBeenCalled();
                         expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.SELECT_APP, test.appId]);
-                        expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.SELECT_APP_SUCCESS, responseData]);
+                        expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.SELECT_APP_SUCCESS, jasmine.any(Object)]);
+                        expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(2);
+                    } else {
+                        expect(mockAppService.prototype.getAppComponents).not.toHaveBeenCalled();
+                        expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.SELECT_APP, test.appId]);
+                        expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(1);
                     }
                     done();
                 },

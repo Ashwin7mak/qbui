@@ -18,7 +18,6 @@ let AppsStore = Fluxxor.createStore({
         this.appOwner = {};
         // Default is true because the apps must load before the website is usable
         this.loading = true;
-        this.loadingAppUsers = false;
         this.error = false;
         this.selectedUserRows = [];
 
@@ -121,16 +120,23 @@ let AppsStore = Fluxxor.createStore({
             this.appRoles = selectedApp.roles;
         }
 
-        //  update the tables for the selected app
-        if (_.has(selectedApp, 'app')) {
-            const app = selectedApp.app;
-            //  find the app in the list and replace
-            let index = _.findIndex(this.apps, (a) => a.id === app.id);
-            if (index !== -1) {
-                this.apps[index] = app;
+        //  update the tables for the selected app..if the app is not in the store,
+        //  we'll add to it
+        const app = selectedApp.app;
+        if (Array.isArray(this.apps)) {
+            if (_.has(selectedApp, 'app')) {
+                //  find the app in the list and replace
+                let index = _.findIndex(this.apps, (a) => a.id === app.id);
+                if (index !== -1) {
+                    this.apps[index] = app;
+                } else {
+                    this.apps.push(app);
+                }
+                this.setTableIcons();
+                this.selectedAppId = app.id;
             }
-            this.setTableIcons();
-            this.selectedAppId = app.id;
+        } else {
+            this.apps = [app];
         }
 
         this.emit('change');
@@ -232,7 +238,6 @@ let AppsStore = Fluxxor.createStore({
             appOwner: this.appOwner,
             selectedTableId: this.selectedTableId,
             loading: this.loading,
-            loadingAppUsers: this.loadingAppUsers,
             error: this.error,
             selectedUserRows:this.selectedUserRows
         };

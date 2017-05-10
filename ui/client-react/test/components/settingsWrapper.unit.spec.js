@@ -66,8 +66,8 @@ describe('SettingsWrapper tests', () => {
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
     });
 
-    it('test default action on mount', () => {
-        expect(flux.actions.loadApps).toHaveBeenCalled();
+    it('test default action on mount with app already in store', () => {
+        expect(flux.actions.loadApps).not.toHaveBeenCalled();
         expect(flux.actions.selectAppId).toHaveBeenCalledWith(props.match.params.appId);
         expect(flux.actions.selectTableId).toHaveBeenCalledWith(props.match.params.tblId);
     });
