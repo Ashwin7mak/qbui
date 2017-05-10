@@ -221,7 +221,7 @@ describe('AppHistory', () => {
         });
     });
 
-    describe('verify save functions', () => {
+    fdescribe('verify save functions', () => {
         let mockState = {
             fieldsStore: {
                 isPendingEdit: false
@@ -240,7 +240,7 @@ describe('AppHistory', () => {
             spyOn(AppHistory, 'showPendingEditsConfirmationModal');
             spyOn(mockStore, 'dispatch').and.callThrough();
             spyOn(mockStoreReject, 'dispatch').and.callThrough();
-            spyOn(AppHistory, '_saveChangesForRecord');
+            spyOn(AppHistory, '_saveChangesForRecord').and.callThrough();
             spyOn(AppHistory, '_saveChangesForFormBuilder').and.callThrough();
             spyOn(mockStoreFunc, 'updateForm');
             spyOn(AppHistory, 'getStores').and.returnValue(mockState);
@@ -329,19 +329,26 @@ describe('AppHistory', () => {
             expect(mockStoreFunc.updateForm).toHaveBeenCalled();
             expect(mockStore.dispatch).toHaveBeenCalled();
             expect(AppHistory._continueToDestination).toHaveBeenCalled();
-            expect(AppHistory._haltRouteChange).toHaveBeenCalled();
             done();
         });
 
-        // fit('will save invoke updateForm if there is a formStore', (done) => {
-        //     AppHistory.setup(mockStore, mockStoreFunc);
-        //
-        //     AppHistory._saveChangesForFormBuilder();
-        //
-        //     expect(mockStoreFunc.updateForm).toHaveBeenCalled();
-        //     expect(mockStore.dispatch).toHaveBeenCalled();
-        //     done();
-        // });
+        fit('will save invoke createRecord if currentEditingRecordId === null', (done) => {
+            mockState.recordStore = {
+                currentEditingAppId: 'appId',
+                currentEditingTableId: 'tableId',
+                currentEditingRecordId: null
+
+            };
+            AppHistory.setup(mockStore, mockStoreFunc);
+
+            AppHistory._saveChangesForRecord();
+
+            expect(mockStoreFunc.createRecord).toHaveBeenCalled();
+            expect(mockStore.dispatch).toHaveBeenCalled();
+            expect(AppHistory._continueToDestination).toHaveBeenCalled();
+            done();
+        });
+
     });
 });
 
