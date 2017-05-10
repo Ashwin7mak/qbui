@@ -236,6 +236,7 @@ describe('AppHistory', () => {
 
         beforeEach(() => {
             spyOn(AppHistory, '_continueToDestination');
+            spyOn(AppHistory, '_haltRouteChange');
             spyOn(AppHistory, 'showPendingEditsConfirmationModal');
             spyOn(mockStore, 'dispatch').and.callThrough();
             spyOn(mockStoreReject, 'dispatch').and.callThrough();
@@ -247,6 +248,7 @@ describe('AppHistory', () => {
         afterEach(() => {
             AppHistory.getStores.calls.reset();
             AppHistory._continueToDestination.calls.reset();
+            AppHistory._haltRouteChange.calls.reset();
             AppHistory.showPendingEditsConfirmationModal.calls.reset();
             mockStore.dispatch.calls.reset();
             mockStoreReject.dispatch.calls.reset();
@@ -326,6 +328,8 @@ describe('AppHistory', () => {
 
             expect(mockStoreFunc.updateForm).toHaveBeenCalled();
             expect(mockStore.dispatch).toHaveBeenCalled();
+            expect(AppHistory._continueToDestination).toHaveBeenCalled();
+            expect(AppHistory._haltRouteChange).toHaveBeenCalled();
             done();
         });
 

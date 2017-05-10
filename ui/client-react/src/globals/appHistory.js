@@ -253,8 +253,8 @@ class AppHistory {
      * Default save changes for record
      * @param store, recordStore, continueToDestination, haltRouteChange
      */
-    saveChangesForRecord(store, recordStore, continueToDestination, haltRouteChange) {
-        if (store && self.createRecord && self.updateRecord) {
+    _saveChangesForRecord(store, recordStore, continueToDestination, haltRouteChange) {
+        if (store && _.isFunction(self.createRecord) && _.isFunction(self.updateRecord)) {
             const appId = recordStore.currentEditingAppId;
             const tableId = recordStore.currentEditingTableId;
             const recordId = recordStore.currentEditingRecordId;
@@ -314,8 +314,8 @@ class AppHistory {
      * Default save changes for form builder
      * @param store, formStore, continueToDestination, haltRouteChange
      */
-    saveChangesForFormBuilder() {
-        if (self.store) {
+    _saveChangesForFormBuilder() {
+        if (self.store && _.isFunction(self.updateForm)) {
             const state = self.store.getState();
             //fetch stores that have pendEdits
             let {formsStore} = self.getStores(state);
@@ -354,10 +354,10 @@ class AppHistory {
 
             // debugger;
             if (formsStore.isPendingEdit || fieldsStore.isPendingEdit) {
-                self.saveChangesForFormBuilder();
+                self._saveChangesForFormBuilder();
             } else if (recordStore.isPendingEdit) {
 
-                self.saveChangesForRecord();
+                self._saveChangesForRecord();
             }
         }
     }
