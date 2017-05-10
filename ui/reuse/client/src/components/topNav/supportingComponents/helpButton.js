@@ -29,7 +29,7 @@ function getHelpWalkme() {
  * Which WalkMe starts is configured within the Walkme system based the current URL.
  */
 const ReHelpButton = () => (
-    <a className="dropdownToggle globalActionLink" onClick={getHelpWalkme}>
+    <a className="dropdownToggle globalActionLink reHelpButton" onClick={getHelpWalkme}>
         <Icon icon="help" />
         <span className="navLabel"><I18nMessage message="globalActions.help" /></span>
     </a>
