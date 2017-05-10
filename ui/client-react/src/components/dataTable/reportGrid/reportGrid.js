@@ -246,7 +246,7 @@ export const ReportGrid = React.createClass({
 
         let recordsName = Locale.getMessage("records.plural");
         let recordName = Locale.getMessage("records.singular");
-        if (_.has(this.props, 'selectedTable')) {
+        if (this.props.selectedTable) {
             if (this.props.selectedTable.name) {
                 recordsName = this.props.selectedTable.name.toLowerCase();
             }
