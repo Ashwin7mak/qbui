@@ -1410,7 +1410,7 @@ describe('Report reducer functions', () => {
         ];
         let testCases = [
             {
-                description: 'when fieldDef id of column does not equal any ids',
+                description: 'when id of column and fids are rearranged',
                 initialState: initialState,
                 content : {sourceLabel: 6, targetLabel: 7},
                 expects : (testState) => {
