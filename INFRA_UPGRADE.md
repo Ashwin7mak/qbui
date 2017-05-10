@@ -15,4 +15,9 @@
 5. bootstrap-sass-loader no longer valid, bootstrap-loader is the new version
 6. bunyans
 7. grunt-protractor-runner
-8. ag-grid enterprise 4.1.x has breaking changes, we need to address these. all the ag-grid modules need to be at the same major update to move forwards (requirement at build time)
+8. react-redux Anything above 4.4.6 logs a ton of "Warnings: Failed Context Types: Calling PropTypes validators directly is not supported by the 'prop-types' packages" in the console.
+9. react-bootstrap Anything above 0.30.7 logs a ton of "Warnings: Failed Context Types: Calling PropTypes validators directly is not supported by the 'prop-types' packages" in the console.
+10. webdriverio - Version locked because of breaking change in minor update (trimming strings). Ken will investigate fixes and upgrades.
+11. webpack-dev-server - Version locked to 1.16.3 because subsequent minor versions cause problems with icons in Chrome.
+12. jasmine-core - Verision locked to 2.5.2. Version 2.6.1 cleans up the document which causes our unit tests to fail. The fault is in our unit tests for not properly cleaning up old DOM nodes.
+13. jasmine - Version locked to 2.5.3. Locked along with jasmine-core, see above.

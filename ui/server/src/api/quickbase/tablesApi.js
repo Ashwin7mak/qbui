@@ -113,6 +113,31 @@
                 });
             },
             /**
+             * Delete endpoint on EE to delete all the entities for a table. This includes tableProperties, forms for now.
+             * @param req
+             * @param tableId
+             * @returns {Promise}
+             */
+            deleteTableEntities: function(req, tableId) {
+                return new Promise((resolve, reject) =>{
+                    let opts = requestHelper.setOptions(req);
+                    opts.method = 'delete';
+                    opts.url = requestHelper.getRequestEeHost() + routeHelper.getEETablesRoute(req.url, tableId);
+
+                    requestHelper.executeRequest(req, opts).then(
+                        (eeResponse) =>{
+                            resolve(eeResponse);
+                        },
+                        (error) =>{
+                            log.error({req: req}, "tablesApi.deleteTableEntities(): Error deleting table entitied");
+                            reject(error);
+                        }).catch((ex) =>{
+                            requestHelper.logUnexpectedError('tablesApi.deleteTableEntities(): unexpected error deleting table entities', ex, true);
+                            reject(ex);
+                        });
+                });
+            },
+            /**
              * Create endpoint for the table object
              * @param req
              * @returns {Promise}
@@ -214,51 +239,47 @@
                 });
             },
 
-            /**
-             * This api creates a table in core, initializes a tableproperties object in EE.
-             * Adds 2 fields to the table - one Text and one Date.
+           /**
+             * This api creates a table with 2 fields to the table - one Text and one Datein core,
+            *  initializes a tableproperties object in EE.
              * Then creates 2 reports a List All and List Changes report
              * And a form with the previously created fields.
              * @param req
              * @returns {Promise}
              */
             createTableComponents: function(req) {
-                return new Promise((resolve, reject) => {
-                    // this has input for both creating table and props
-                    // core fails if its passed in props that are not recognized for some reason
-                    // so we need to parse this here and send only what's recognized.
+                return new Promise((resolve, reject) =>{
+                // this has input for both creating table and props
+                // core fails if its passed in props that are not recognized for some reason
+                // so we need to parse this here and send only what's recognized.
                     let reqPayload = req.body;
                     if (!reqPayload.name || !reqPayload.tableNoun) {
                         reject("Required parameters missing");
                     }
                     let tableReq = _.clone(req);
-                    tableReq.rawBody = JSON.stringify({name: reqPayload.name});
+                    tableReq.rawBody = JSON.stringify({name: reqPayload.name, fields :  cannedNewTableElements.getCannedFields()});
                     tableReq.headers[constants.CONTENT_LENGTH] = tableReq.rawBody.length;
-                    let tableProperReq = _.clone(req);
-                    tableProperReq.rawBody = JSON.stringify(_.pick(reqPayload, ['tableNoun', 'description', 'tableIcon']));
-                    tableProperReq.headers[constants.CONTENT_LENGTH] = tableProperReq.rawBody.length;
                     this.createTable(tableReq).then(
                         (tableId) => {
-                            this.createTableProperties(tableProperReq, tableId).then(
-                                () => {
-                                    //create the components
-                                    let tablesRootUrl = routeHelper.getTablesRoute(req.url, tableId);
-                                    let fieldsToCreate = cannedNewTableElements.getCannedFields();
-
-                                    let promises = [];
-                                    fieldsToCreate.forEach((field) => {
-                                        let fieldReq = _.clone(req);
-                                        fieldReq.url = tablesRootUrl;
-                                        fieldReq.rawBody = JSON.stringify(field);
-                                        fieldReq.headers[constants.CONTENT_LENGTH] = fieldReq.rawBody.length;
-                                        promises.push(fieldsApi.createField(fieldReq));
+                            fieldsApi.getFieldsForTable(req, tableId).then(
+                                (fields) => {
+                                    let fieldIds = [];
+                                    fields.forEach((field) =>{
+                                        if (field.builtIn === false) {
+                                            fieldIds.push(field.id);
+                                        }
                                     });
-                                    Promise.all(promises).then(
-                                        (fieldsResponse) => {
-                                            let fieldIds = [];
-                                            fieldIds.push(fieldsResponse[0], fieldsResponse[1]);
-                                            promises = [];
+
+                                    let tableProperReq = _.clone(req);
+                                    tableProperReq.rawBody = JSON.stringify(_.pick(reqPayload, ['tableNoun', 'description', 'tableIcon']));
+                                    tableProperReq.headers[constants.CONTENT_LENGTH] = tableProperReq.rawBody.length;
+
+                                    this.createTableProperties(tableProperReq, tableId).then(
+                                        () => {
+                                            let promises = [];
                                             let reportsToCreate = cannedNewTableElements.getCannedReports(reqPayload.name);
+                                            let tablesRootUrl = routeHelper.getTablesRoute(req.url, tableId);
+
                                             reportsToCreate.forEach((report) => {
                                                 let reportReq = _.clone(req);
                                                 reportReq.url = tablesRootUrl;
@@ -288,16 +309,15 @@
                                             );
                                         },
                                         (error) => {
-                                            // dont go forward with creation of report/form
-                                            this.deleteTableProperties(req, tableId);
+                                            //delete the table if table props creation failed to clean up core.
+                                            // Dont wait for response because what can you really do if it fails?
                                             this.deleteTable(req, tableId);
                                             reject(error);
                                         }
                                     );
                                 },
                                 (error) => {
-                                    //delete the table if table props creation failed to clean up core.
-                                    // Dont wait for response because what can you really do if it fails?
+                                    //delete the table if we don't get the id's for newly created canned fields(non-builtin).
                                     this.deleteTable(req, tableId);
                                     reject(error);
                                 }
@@ -339,6 +359,28 @@
                 promises.push(this.replaceTableProperties(tableProperReq, req.params.tableId));
 
                 return Promise.all(promises);
+            },
+
+            /**
+             * deleteTableComponents calls deleteTable on Core + deleteTableEntities on EE
+             * deleteTableEntities needs to be called first because if the table doesnt exist in core, EE validation fails
+             * This is a restriction for now until a synchronization service is set up between the two.
+             * @param req
+             * @returns {Promise.<T>|Promise<R>}
+             */
+            deleteTableComponents: function(req) {
+                let tableProperReq = _.clone(req);
+                let tableReq = _.clone(req);
+                return this.deleteTableEntities(tableProperReq, tableProperReq.params.tableId).then(
+                    (success) => {return this.deleteTable(tableReq, tableReq.params.tableId);},
+                    (error) => {
+                        log.error({req: tableReq}, "tablesApi.deleteTableComponents(): Error deleting table entities in EE");
+                        return this.deleteTable(tableReq, tableReq.params.tableId);
+                    }
+                ).catch((ex) => {
+                    requestHelper.logUnexpectedError('tablesApi.deleteTableComponents(): unexpected error deleting table entities in EE', ex, true);
+                    return this.deleteTable(tableReq, tableReq.params.tableId);
+                });
             }
         };
         return tablesApi;

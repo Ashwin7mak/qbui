@@ -2,14 +2,19 @@ import React, {PropTypes} from 'react';
 import QbGrid from '../qbGrid/qbGrid';
 import ReportColumnTransformer from './reportColumnTransformer';
 import ReportRowTransformer from './reportRowTransformer';
-import FieldUtils from '../../../utils/fieldUtils';
-import ReportUtils from '../../../utils/reportUtils';
+import FieldUtils from 'APP/utils/fieldUtils';
+import ReportUtils from 'APP/utils/reportUtils';
 import ReportColumnHeaderMenu from './reportColumnHeaderMenu';
+import EmptyImage from 'APP/assets/images/empty box graphic.svg';
+import {I18nMessage} from 'APP/utils/i18nMessage';
+import Locale from 'APP/locales/locales';
 import {connect} from 'react-redux';
-
+import {getPendEdits} from '../../../reducers/record';
 import _ from 'lodash';
 
 import ReportCell from './reportCell';
+
+import './reportGrid.scss';
 
 export const ReportGrid = React.createClass({
     propTypes: {
@@ -114,14 +119,25 @@ export const ReportGrid = React.createClass({
          * A list of ids by which the report has been sorted (used for displaying the report header menu) */
         sortFids: PropTypes.array,
 
+        /**
+         * search text
+         */
+        searchString: PropTypes.string,
         // relationship phase-1, will need remove when we allow editing
-        phase1: PropTypes.bool
+        phase1: PropTypes.bool,
+
+        /**
+         * present an alternate UI instead of an empty grid if on rows are present?
+         */
+        noRowsUI: PropTypes.bool
+
     },
 
     getDefaultProps() {
         return {
             records: [],
-            columns: []
+            columns: [],
+            noRowsUI: false
         };
     },
 
@@ -199,37 +215,48 @@ export const ReportGrid = React.createClass({
     },
 
     getCurrentlyEditingRecordId() {
-        // Editing Id trumps editingRowId when editingIndex is set
-        // Editing index comes from the reportDataStore whereas editingRecord comes from the pending edits store
-        // When saveAndAddANewRow is clicked, then the reportDataStore sets the editingIndex (index of new row in array)
-        // and editingId (id of newly created row). The editingIndex could be any integer, but if it is not null, we can assume a new row is added.
-        // TODO:: This process can be refactored once AgGrid is removed. https://quickbase.atlassian.net/browse/MB-1920
         let editingRowId = null;
 
+        //  if inline edit is open, get the current editing record id
         let pendEdits = this.getPendEdits();
-        //if (this.props.pendEdits && this.props.pendEdits.isInlineEditOpen && this.props.pendEdits.currentEditingRecordId) {
-        //    editingRowId = this.props.pendEdits.currentEditingRecordId;
-        //}
-        if (pendEdits && pendEdits.isInlineEditOpen && pendEdits.currentEditingRecordId) {
+        if (pendEdits && pendEdits.isInlineEditOpen) {
             editingRowId = pendEdits.currentEditingRecordId;
-        }
-
-        if (Number.isInteger(this.props.editingIndex) && this.props.editingId !== editingRowId) {
-            editingRowId = this.props.editingId;
         }
 
         return editingRowId;
     },
 
     getPendEdits() {
-        //  TODO: just getting to work....improve this to support multi records...
-        let pendEdits = {};
-        if (Array.isArray(this.props.record) && this.props.record.length > 0) {
-            if (_.isEmpty(this.props.record[0]) === false) {
-                pendEdits = this.props.record[0].pendEdits || {};
-            }
-        }
-        return pendEdits;
+        return getPendEdits(this.props.record);
+    },
+
+    isOnlyOneColumnVisible() {
+        return this.props.columns.filter(column => {
+            return !column.isHidden && !column.isPlaceholder;
+        }).length === 1;
+    },
+
+    /**
+     * get text to display below grid if no rows are displayed
+     * @returns {*}
+     */
+    renderNoRowsExist() {
+
+        const hasSearch = this.props.searchString && this.props.searchString.trim().length > 0;
+
+        const recordsName = this.props.selectedTable ? this.props.selectedTable.name.toLowerCase() : Locale.getMessage("records.plural");
+        const recordName = this.props.selectedTable ? this.props.selectedTable.tableNoun.toLowerCase() : Locale.getMessage("records.singular");
+        return (
+            <div className="noRowsExist">
+
+                <div className="noRowsIconLine">
+                    <img className="noRowsIcon animated zoomInDown" alt="No Rows" src={EmptyImage} />
+                </div>
+
+                <div className="noRowsText">
+                    {hasSearch ? <I18nMessage message="grid.no_filter_matches" recordsName={recordsName} recordName={recordName}/> : <I18nMessage message="grid.no_rows" recordsName={recordsName}/>}
+                </div>
+            </div>);
     },
 
     render() {
@@ -244,56 +271,57 @@ export const ReportGrid = React.createClass({
         let pendEdits = this.getPendEdits();
         let isInLineEditOpen = (pendEdits.isInlineEditOpen === true);
 
-        return <QbGrid
-            numberOfColumns={_.isArray(this.props.columns) ? this.props.columns.length : 0}
-            columns={this.transformColumns()}
-            rows={transformedRecords}
-            loading={this.props.loading}
-            appUsers={this.props.appUsers}
-            phase1={this.props.phase1}
-            showRowActionsColumn={!this.props.phase1}
+        if (!this.props.noRowsUI || this.props.loading || transformedRecords.length > 0) {
 
-            onStartEditingRow={this.startEditingRow}
-            editingRowId={editingRecordId}
-            // TODO:: Refactor out need for this prop once AgGrid is removed. https://quickbase.atlassian.net/browse/MB-1920
-            // Currently required because editingRowId could be null for a new record so it is difficult to check if
-            // in editing mode with only that property. Future implementation might set a new record's id to 0 or 'new'
-            //isInlineEditOpen={this.props.isInlineEditOpen}
-            isInlineEditOpen={isInLineEditOpen}
-            selectedRows={this.props.selectedRows}
-            areAllRowsSelected={ReportUtils.areAllRowsSelected(transformedRecords, this.props.selectedRows)}
-            onClickToggleSelectedRow={this.props.toggleSelectedRow}
-            onClickEditIcon={this.props.openRecordForEdit}
-            onClickDeleteIcon={this.onClickDelete}
-            onClickToggleSelectAllRows={this.toggleSelectAllRows}
-            onCancelEditingRow={this.props.onEditRecordCancel}
-            editingRowErrors={this.props.editErrors ? this.props.editErrors.errors : []}
-            isEditingRowValid={isRecordValid}
-            onClickAddNewRow={this.props.onRecordNewBlank}
-            onClickSaveRow={this.props.onClickRecordSave}
-            //isEditingRowSaving={_.has(this.props, 'pendEdits.saving') ? this.props.pendEdits.saving : false}
-            isEditingRowSaving={_.has(pendEdits, 'saving') ? pendEdits.saving : false}
-            cellRenderer={ReportCell}
-            commonCellProps={{
-                appUsers: this.props.appUsers,
-                onCellChange: this.onCellChange,
-                onCellBlur: this.onCellBlur,
-                onCellClick: this.props.onCellClick,
-                onCellClickEditIcon: this.startEditingRow,
-                validateFieldValue: this.props.handleValidateFieldValue,
-                //isInlineEditOpen: this.props.isInlineEditOpen
-                isInlineEditOpen: isInLineEditOpen,
-                phase1: this.props.phase1
-            }}
-            compareCellChanges={FieldUtils.compareFieldValues}
-            menuComponent={ReportColumnHeaderMenu}
-            menuProps={{
-                appId: this.props.appId,
-                tblId: this.props.tblId,
-                rptId: this.props.rptId,
-                sortFids: this.props.sortFids
-            }}
-        />;
+            return (
+                <QbGrid
+                numberOfColumns={_.isArray(this.props.columns) ? this.props.columns.length : 0}
+                columns={this.transformColumns()}
+                rows={transformedRecords}
+                loading={this.props.loading}
+                appUsers={this.props.appUsers}
+                phase1={this.props.phase1}
+                showRowActionsColumn={!this.props.phase1}
+
+                onStartEditingRow={this.startEditingRow}
+                editingRowId={editingRecordId}
+                isInlineEditOpen={isInLineEditOpen}
+                selectedRows={this.props.selectedRows}
+                areAllRowsSelected={ReportUtils.areAllRowsSelected(transformedRecords, this.props.selectedRows)}
+                onClickToggleSelectedRow={this.props.toggleSelectedRow}
+                onClickEditIcon={this.props.openRecordForEdit}
+                onClickDeleteIcon={this.onClickDelete}
+                onClickToggleSelectAllRows={this.toggleSelectAllRows}
+                onCancelEditingRow={this.props.onEditRecordCancel}
+                editingRowErrors={this.props.editErrors ? this.props.editErrors.errors : []}
+                isEditingRowValid={isRecordValid}
+                onClickAddNewRow={this.props.onRecordNewBlank}
+                onClickSaveRow={this.props.onClickRecordSave}
+                isEditingRowSaving={_.has(pendEdits, 'saving') ? pendEdits.saving : false}
+                cellRenderer={ReportCell}
+                commonCellProps={{
+                    appUsers: this.props.appUsers,
+                    onCellChange: this.onCellChange,
+                    onCellBlur: this.onCellBlur,
+                    onCellClick: this.props.onCellClick,
+                    onCellClickEditIcon: this.startEditingRow,
+                    validateFieldValue: this.props.handleValidateFieldValue,
+                    isInlineEditOpen: isInLineEditOpen,
+                    phase1: this.props.phase1
+                }}
+                compareCellChanges={FieldUtils.compareFieldValues}
+                menuComponent={ReportColumnHeaderMenu}
+                menuProps={{
+                    appId: this.props.appId,
+                    tblId: this.props.tblId,
+                    rptId: this.props.rptId,
+                    sortFids: this.props.sortFids,
+                    isOnlyOneColumnVisible: this.isOnlyOneColumnVisible()
+                }}/>);
+        } else {
+            // instead of grid, render a "no records" UI
+            return this.renderNoRowsExist();
+        }
     }
 });
 
@@ -314,7 +342,8 @@ function formatChange(updatedValues, colDef) {
 const mapStateToProps = (state) => {
     return {
         report: state.report,
-        record: state.record
+        record: state.record,
+        searchString: state.search && state.search.searchInput
     };
 };
 

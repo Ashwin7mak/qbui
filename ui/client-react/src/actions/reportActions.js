@@ -1,8 +1,10 @@
 import ReportService from '../services/reportService';
 import ReportModel from '../models/reportModel';
 import ReportsModel from '../models/reportsModel';
+import FieldsService from '../services/fieldsService';
 import Promise from 'bluebird';
 import QueryUtils from '../utils/queryUtils';
+import _ from 'lodash';
 
 import Logger from '../utils/logger';
 import LogLevel from '../utils/logLevels';
@@ -48,6 +50,10 @@ export const addBlankRecordToReport = (context, afterRecId) => {
             resolve();
         });
     };
+};
+
+export const removeBlankRecordFromReport = (context, appId, tblId, recId) => {
+    return event(context, types.REMOVE_BLANK_REPORT_RECORD, {appId, tblId, recId});
 };
 
 /**
@@ -308,7 +314,7 @@ export const loadDynamicReport = (context, appId, tblId, rptId, format, filter, 
 export const unloadEmbeddedReport = (context) =>
     event(context, types.UNLOAD_EMBEDDED_REPORT);
 
-/* Find the records count for a report. Allows customized report that optionally allows for query
+/** Find the records count for a report. Allows customized report that optionally allows for query
  * parameters. The overrides are expected to be defined in the queryParams parameter.
  *
  * When the results are returned from the node layer a LOAD_REPORT_SUCCESS event is fired and the
@@ -340,4 +346,64 @@ export const loadReportRecordsCount = (context, appId, tblId, rptId, queryParams
             return new Promise.reject();
         }
     };
+};
+
+/**
+ * Refresh the fields for the field select menu.
+ * @param context
+ * @param appId
+ * @param tblId
+ */
+export const refreshFieldSelectMenu = (context, appId, tblId) => {
+    return (dispatch) => {
+        return new Promise((resolve, reject) => {
+            let fieldsService = new FieldsService();
+            fieldsService.getFields(appId, tblId)
+                .then(response => {
+                    logger.debug('FieldsService getFields success');
+                    dispatch(event(context, types.REFRESH_FIELD_SELECT_MENU, {response}));
+                    resolve();
+                }).catch(error => {
+                    logger.parseAndLogError(LogLevel.ERROR, error.response, 'fieldsService.getFields:');
+                    reject();
+                });
+        });
+    };
+};
+
+/**
+ * Toggle the field select menu open.
+ * @param context
+ * @param clickedColumnId
+ * @param addBeforeColumn
+ */
+export const openFieldSelectMenu = (context, clickedColumnId, addBeforeColumn) => {
+    return event(context, types.OPEN_FIELD_SELECT_MENU, {clickedColumnId, addBeforeColumn});
+};
+
+/**
+ * Toggle the field select menu closed.
+ * @param context
+ */
+export const closeFieldSelectMenu = (context) => {
+    return event(context, types.CLOSE_FIELD_SELECT_MENU, {});
+};
+
+/**
+ * Add the selected field to the report table.
+ * @param context
+ * @param requestedColumn
+ * @param addBefore
+ */
+export const addColumnFromExistingField = (context, requestedColumn, addBefore) => {
+    return event(context, types.ADD_COLUMN_FROM_EXISTING_FIELD, {requestedColumn, addBefore});
+};
+
+/**
+ * Hide a column based on the column id given.
+ * @param context
+ * @param clickedId
+ */
+export const hideColumn = (context, clickedId) => {
+    return event(context, types.HIDE_COLUMN, {clickedId});
 };

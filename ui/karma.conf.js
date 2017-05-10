@@ -50,8 +50,6 @@ module.exports = function(config) {
                             path.resolve(__dirname, "reuse/client/test"),
                             path.resolve(__dirname, "componentLibrary/src"),
                             path.resolve(__dirname, "componentLibrary/test"),
-                            path.resolve(__dirname, "governance/src"),
-                            path.resolve(__dirname, "governance/test")
                         ],
                         exclude: [nodeModulesPath, nodeComponentsPath],
                         loader: "babel-loader",
@@ -79,7 +77,6 @@ module.exports = function(config) {
                         include: [
                             path.resolve(__dirname, "client-react/src"),
                             path.resolve(__dirname, "reuse/client/src"),
-                            path.resolve(__dirname, "governance/src")
                         ],
                         loader: "url-loader"
                     },
@@ -90,7 +87,6 @@ module.exports = function(config) {
                         include: [
                             path.resolve(__dirname, "client-react/src"),
                             path.resolve(__dirname, "reuse/client/src"),
-                            path.resolve(__dirname, "governance/src"),
                             path.resolve(__dirname, "componentLibrary/src")
                         ]
                     },
@@ -121,6 +117,17 @@ module.exports = function(config) {
                 'react/addons': true,
                 'react/lib/ExecutionEnvironment': true,
                 'react/lib/ReactContext': true
+            },
+            resolve: {
+                root: path.resolve(__dirname),
+                // Allow easier imports for commonly imported folders
+                alias: {
+                    APP: 'client-react/src',
+                    REUSE: 'reuse/client/src',
+                    GOVERNANCE: 'governance/src',
+                    AUTOMATION: 'automation/src',
+                    COMMON: 'common/src'
+                }
             }
         },
         webpackServer: {
@@ -152,7 +159,18 @@ module.exports = function(config) {
                 },
                 flags: ['--user-data-dir=' + profilePath],
                 displayName: 'Custom Debugging',
-            }
+            },
+            'HeadlessChrome': {
+                base: 'Chrome',
+                flags: [
+                    // See https://chromium.googlesource.com/chromium/src/+/lkgr/headless/README.md
+                    '--no-sandbox',
+                    '--headless',
+                    '--disable-gpu',
+                    // Without a remote debugging port, Google Chrome exits immediately.
+                    ' --remote-debugging-port=9222',
+                ],
+            },
         },
         reporters: ["progress", "mocha", "junit"],
 
@@ -195,25 +213,22 @@ module.exports = function(config) {
     if (testWithCoverage) {
         newConf.preprocessors = Object.assign({}, newConf.preprocessors, {
             "client-react/src/!(components/node)/**/*.js" : ["coverage"],
-            "reuse/client/src/**/*.js" : ["coverage"],
-            "governance/src/**/*.js" : ["coverage"]
+
+            // Test coverage within reuse should not count for or against client-react
+            "!reuse/client/src/**/*.js" : ["coverage"],
         });
         newConf.webpack.module.postLoaders = [
             { //delays coverage til after tests are run, fixing transpiled source coverage error
                 test: /\.js$/,
                 include: [
                     path.resolve(__dirname, "client-react/src"),
-                    path.resolve(__dirname, "reuse/client/src"),
                     path.resolve(__dirname, "componentLibrary/src"),
-                    path.resolve(__dirname, "governance/src")
                 ],
                 exclude: [
                     nodeModulesPath,
                     nodeComponentsPath,
                     path.resolve(__dirname, "client-react/test"),
-                    path.resolve(__dirname, "reuse/client/test"),
                     path.resolve(__dirname, "componentLibrary/test"),
-                    path.resolve(__dirname, "governance/test")
                 ],
                 loader: "istanbul-instrumenter"
             }

@@ -9,8 +9,10 @@
     let perfLogger = require('../../perfLogger');
     let url = require('url');
     let consts = require('../../../../common/src/constants');
+    let requestUtils = require('../../utility/requestUtils');
 
     module.exports = function(config) {
+        var TICKET_NAME = "TICKET";
         let request = defaultRequest;
         /**
          * Set of common methods used to parse out information from the http request object
@@ -47,11 +49,14 @@
             getRequestEeHostEnable: function() {
                 return config ? config.eeHostEnable : '';
             },
-            getRequestUrl  : function(req) {
+            getRequestCoreUrl  : function(req) {
                 return config ? config.javaHost + req.url : '';
             },
             getRequestEEUrl  : function(req) {
                 return config ? config.eeHost + req.url : '';
+            },
+            getRequestAutomationUrl  : function(req) {
+                return config ? config.automationHost + req.originalUrl : '';   //Using Original url here because automation does not use 'api/api' format
             },
             getLegacyHost : function() {
                 return config ? config.legacyBase : '';
@@ -143,6 +148,24 @@
 
                 //  override the url to use the experience engine
                 opts.url = this.getRequestEEUrl(req);
+
+                return opts;
+            },
+
+            /**
+             * Set the request attributes for an automation server request
+             *
+             * @param req
+             * @returns request object used when submitting a server request
+             */
+            setAutomationEngineOptions: function(req) {
+                //  set the default request options
+                let opts = this.setOptions(req);
+
+                //  override the url to use automation server
+                opts.url = this.getRequestAutomationUrl(req);
+                opts.headers[TICKET_NAME] = req.cookies.TICKET;
+                opts.cookies = req.cookies;
                 return opts;
             },
 
@@ -158,7 +181,7 @@
                 this.setTidHeader(req);
 
                 let opts = {
-                    url         : this.getRequestUrl(req),
+                    url         : this.getRequestCoreUrl(req),
                     method      : (forceGet === true ? 'GET' : req.method),
                     agentOptions: this.getAgentOptions(req),
                     headers     : req.headers
@@ -249,7 +272,7 @@
                         request(opts, function(error, response) {
                             if (error) {
                                 reject(new Error(error));
-                            } else if (response.statusCode !== 200) {
+                            } else if (!requestUtils.wasRequestSuccessful(response.statusCode)) {
                                 reject(response);
                             } else {
                                 resolve(response);

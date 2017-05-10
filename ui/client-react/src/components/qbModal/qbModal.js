@@ -7,12 +7,13 @@ import QbIcon from '../qbIcon/qbIcon';
 const QB_MODAL_ALERT = 'alert';
 const QB_MODAL_STANDARD = 'standard';
 const QB_MODAL_SUCCESS = 'success';
+const QB_MODAL_DELETE = 'delete';
 /**
  * qbModal's size automatically defaults to small, QB_MODAL_SIZE will be left as an array,
  * so in the future when there are specs for a 'medium' size it can be added here
  */
 const QB_MODAL_SIZE = ['large'];
-const QB_MODAL_TYPES = [QB_MODAL_ALERT, QB_MODAL_STANDARD, QB_MODAL_SUCCESS];
+const QB_MODAL_TYPES = [QB_MODAL_ALERT, QB_MODAL_STANDARD, QB_MODAL_SUCCESS, QB_MODAL_DELETE];
 
 const QBModal = React.createClass({
     propTypes: {
@@ -35,7 +36,7 @@ const QBModal = React.createClass({
         /**
          *This is the message for the modal body
          */
-        bodyMessage: React.PropTypes.string,
+        bodyMessage: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.element]),
         /**
          * This is the title for the modal title
          */
@@ -52,6 +53,10 @@ const QBModal = React.createClass({
          * This is the primary button onClick function
          */
         primaryButtonOnClick: React.PropTypes.func,
+        /**
+         * Setting to true disables the primary button.
+         */
+        primaryButtonDisabled: React.PropTypes.bool,
         /**
          * This is the name for the middle button. There must be a primary button, in order for there to be a middle button.
          */
@@ -71,7 +76,8 @@ const QBModal = React.createClass({
     },
     getDefaultProps() {
         return {
-            type: 'standard'
+            type: 'standard',
+            primaryButtonDisabled: false
         };
     },
     /**
@@ -85,7 +91,7 @@ const QBModal = React.createClass({
             return null;
         }
         let classes = ['modalIcon'];
-        let icon = 'alert';
+        let icon = 'alert-fill';
 
         if (this.props.type === QB_MODAL_ALERT) {
             classes.push('modalIcon--alert');
@@ -94,6 +100,11 @@ const QBModal = React.createClass({
         if (this.props.type === QB_MODAL_SUCCESS) {
             classes.push('modalIcon--success');
             icon = 'check-reversed';
+        }
+
+        if (this.props.type === QB_MODAL_DELETE) {
+            classes.push('modalIcon--error');
+            icon = 'errorincircle-fill';
         }
 
         return (
@@ -127,7 +138,7 @@ const QBModal = React.createClass({
         }
 
         let buttons = [
-            <Button key={0} className="primaryButton" onClick={this.props.primaryButtonOnClick}>{this.props.primaryButtonName}</Button>
+            <Button key={0} className="primaryButton" onClick={this.props.primaryButtonOnClick} disabled={this.props.primaryButtonDisabled}>{this.props.primaryButtonName}</Button>
         ];
         if (this.props.link) {
             buttons = [

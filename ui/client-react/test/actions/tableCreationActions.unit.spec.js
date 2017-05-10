@@ -47,12 +47,13 @@ describe('Table Creation actions', () => {
         expect(actions.hideTableCreationDialog()).toEqual({type: types.HIDE_TABLE_CREATION_DIALOG});
     });
 
-    it('should create an action for navigating next', () => {
-        expect(actions.nextTableCreationPage()).toEqual({type: types.NEXT_TABLE_CREATION_PAGE});
+
+    it('should create an action for showing the table ready dialog', () => {
+        expect(actions.showTableReadyDialog()).toEqual({type: types.SHOW_TABLE_READY_DIALOG});
     });
 
-    it('should create an action for navigating previous', () => {
-        expect(actions.previousTableCreationPage()).toEqual({type: types.PREVIOUS_TABLE_CREATION_PAGE});
+    it('should create an action for hiding the table ready dialog', () => {
+        expect(actions.hideTableReadyDialog()).toEqual({type: types.HIDE_TABLE_READY_DIALOG});
     });
 
     it('should create an action for opened icon chooser', () => {
@@ -69,17 +70,17 @@ describe('Table Creation actions', () => {
 
     it('should create an action for setting the editing property', () => {
         const expected = {
-            type: types.SET_TABLE_CREATION_PROPERTY, property: 'name', value:'newName', validationError: 'badInput', isUserEdit: false
+            type: types.SET_TABLE_CREATION_PROPERTY, property: 'name', value:'newName', pendingValidationError: 'emptyField', validationError: 'badInput', isUserEdit: false
         };
-        expect(actions.setTableProperty('name', 'newName', 'badInput', false)).toEqual(expected);
+        expect(actions.setTableProperty('name', 'newName', 'emptyField', 'badInput', false)).toEqual(expected);
     });
 
     it('should create an action for saving table', () => {
-        expect(actions.savingTable('description')).toEqual({type: types.SAVING_TABLE});
+        expect(actions.creatingTable('description')).toEqual({type: types.CREATING_TABLE});
     });
 
     it('should create an action for saving table failed', () => {
-        expect(actions.savingTableFailed('description')).toEqual({type: types.SAVING_TABLE_FAILED});
+        expect(actions.creatingTableFailed('description')).toEqual({type: types.CREATING_TABLE_FAILED});
     });
     it('should create an action for created table', () => {
         expect(actions.createdTable('description')).toEqual({type: types.CREATED_TABLE});
@@ -95,7 +96,7 @@ describe('Table Creation actions', () => {
         // so we don't need to spy on the dispatcher etc.
 
         const expectedActions = [
-            {type: types.SAVING_TABLE},
+            {type: types.CREATING_TABLE},
             {type: types.CREATED_TABLE}
         ];
         const store = mockStore({});
@@ -116,7 +117,7 @@ describe('Table Creation actions', () => {
         TableCreationsActionsRewireAPI.__Rewire__('TableService', mockTableFailureService);
 
         const expectedActions = [
-            {type: types.SAVING_TABLE},
+            {type: types.CREATING_TABLE},
             {type: types.CREATED_TABLE}
         ];
         const store = mockStore({});
@@ -131,7 +132,5 @@ describe('Table Creation actions', () => {
             });
 
     });
-    it('should create an action for notifying of table creation', () => {
-        expect(actions.notifyTableCreated(true)).toEqual({type: types.NOTIFY_TABLE_CREATED, notifyTableCreated: true});
-    });
+
 });

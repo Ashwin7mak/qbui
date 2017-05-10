@@ -12,11 +12,12 @@ export default {
             testMsg: "test"
         },
         apps: {
-            header: "Apps"
+            header: "Apps",
+            missing: "Stay tuned, my apps is coming soon"
         },
         app: {
             homepage: {
-                welcomeTitle: "Welcome to Mercury Beta",
+                welcomeTitle: "Welcome to",
                 welcomeText: "While you learn your way around, use this area in place of your app homepage. " +
                 "This is your real app in Mercury. You won’t see your app homepage yet, but all your " +
                 "data is here. Work you do here displays immediately in Classic view, too.",
@@ -35,12 +36,26 @@ export default {
                 helpLinkPreText: "Please ",
                 helpLinkText: "contact our Care team"
             },
+            dashboards: {
+                missing: "Stay tuned, app dashboards are coming soon"
+            },
             settings: "Settings",
             users: {
                 addUser: "Adding a new user is not available yet",
                 users: "Users",
                 content: "This is the list of all the people who have been added to your application. You can get some quick insights about how many people are in each role in your application as well as find a specific person in the list and email them.",
-                manager: "Application Manager"
+                manager: "Application Manager",
+                removeUser: "Remove this user?",
+                unassignUser: "Users will no longer be able to access this application. Any data they have previously entered will remain in the application.",
+                deleteUser: "Remove {value} user",
+                deleteUsers: "Remove {value} users",
+                removeButton: "Remove",
+                cancel: "Cancel",
+                singular: "user",
+                plural: "users",
+                usersRemoved: " users have been removed",
+                userRemoved: " user has been removed"
+
             }
         },
         appMenu: {
@@ -107,14 +122,25 @@ export default {
             next: "Next",
             previous: "Previous",
             finished: "Finished",
-            new: "New"
+            new: "New",
+            apply: "Apply",
+            backToApp: "Back to app",
+            reset: "Reset",
+            closeRecord: "Close record",
+            expandSection: "Expand section",
+            collapseSection: "Collapse section"
+
         },
         field: {
             search: "Search",
             searchNoMatch: "Nobody matches"
         },
         grid: {
-            no_data: "There is no data to display."
+            no_data: "There is no data to display.",
+            no_filter_matches: "No {recordsName} match what you're looking for.  Try looking for a different kind of {recordName}.",
+            no_rows: "There are no {recordsName} to see right now.",
+            no_rows_but: "There are no {recordsName}, but you can ",
+            no_rows_create_link:  "create one"
         },
         globalActions: {
             user: "User",
@@ -124,11 +150,13 @@ export default {
         },
         pageActions: {
             addRecord: "Add a record",
+            approve: "Approve this record",
             configureFormBuilder: 'Modify this form',
             saveRecord: "Save changes",
             saveAndAddRecord: "Save and add a new row",
             saveAndAddRecordDisabled: "Adding records in the grid is not available yet",
             cancelSelection: "Cancel changes",
+            close: "Close",
             favorite: "Favorite",
             gridEdit: "Grid Edit",
             edit: "Edit",
@@ -137,7 +165,8 @@ export default {
             print: "Print",
             customizeReport: "Customize this Report",
             customizeForm: "Customize this Form",
-            customizePage: "Customize this Page"
+            customizePage: "Customize this Page",
+            deleteTable: "Delete Table"
         },
         recordActions: {
             previous: "Previous",
@@ -149,7 +178,7 @@ export default {
             recordNotAdded :"Record not added",
             recordSaved : "Record saved",
             recordNotSaved :"Record not saved",
-            deleted : "deleted",
+            deleted : "{value, plural,\n =0 {0 {nameForRecord} record}\n =1 {1 {nameForRecord} record}\n other {# {nameForRecord} records}\n} deleted",
             notDeleted : "not deleted",
             cannotLoad : "Cannot load record",
             error: {
@@ -165,7 +194,11 @@ export default {
                     "de-de": "German"
                 },
                 preferences: "Preferences",
-                sign_out: "Sign out"
+                sign_out: "Sign out",
+                feedbackMenuButton: "Give feedback",
+                feedbackMenuTitle: "Feedback",
+                reportFeedBackButton: "Report an issue",
+                feedbackTooltip: "Share ideas and issues"
             }
         },
         fields: {
@@ -193,6 +226,12 @@ export default {
                 save: {
                     success: "Form saved",
                     error: "Error saving form"
+                }
+            },
+            automation: {
+                approverecord: {
+                    success: "Record Approved.",
+                    error: "An error occured when approving this record."
                 }
             }
         },
@@ -248,7 +287,8 @@ export default {
                 noCheck : "No",
                 yesCheck : "Yes",
                 clearFacet: "Clear {facet} filter",
-                clearFacetSelection: "Click to clear this filter"
+                clearFacetSelection: "Click to clear this filter",
+                filter: "Filter"
             },
             filteredRecordCount : "{filteredRecordCount} of {recordCount} records",
             filteredSingleRecordCount : "{filteredRecordCount} of {recordCount} record",
@@ -267,6 +307,7 @@ export default {
             nextPageLoadingOnSwipe: "Getting more...",
             searchPlaceHolder:  "Search these",
             sortAndGroup : {
+                sortAndGroupIcon: "Sort & Group",
                 addField: "Add a field",
                 by: "by",
                 changeGroupOrder: "Change group order",
@@ -312,6 +353,10 @@ export default {
                 newTable: "New table based on this column",
                 columnProps: "Column properties",
                 fieldProps: "Field properties"
+            },
+            drawer: {
+                title: "Hidden fields",
+                info: "Add a field to the report",
             }
         },
         errorMessagePopup: {
@@ -479,7 +524,10 @@ export default {
             print: "Printing is not available yet",
             copy: "Copying is not available yet",
             email: "Emailing is not available yet",
-            delete: "Deleting is not available yet"
+            delete: "Deleting is not available yet",
+            emailUsers: "Exporting CSV is not available yet",
+            settingsRole: "Changing role is not available yet",
+            emailApp: "Sending app invite is not available yet",
         },
         pageTitles: {
             pageTitleSeparator: " - ",
@@ -525,6 +573,12 @@ export default {
             LOOKUP: "Lookup",
             FILE_ATTACHMENT: "File"
         },
+        fieldPropertyLabels: {
+            title: "Field Properties",
+            name: "Name",
+            required: "Must be filled in",
+            multiChoice: "Choices"
+        },
         builder: {
             formBuilder: {
                 unimplemented: "Feature is not available right now",
@@ -561,11 +615,18 @@ export default {
                 }
             },
             fieldGroups: {
-                text: 'Text',
-                numeric: 'Number',
-                date: 'Date',
-                other: 'Other'
-            }
+                text: "Text",
+                numeric: "Number",
+                date: "Date",
+                other: "Other",
+                relationships: "Relationships"
+            },
+            defaultMultichoiceOptions: {
+                first: "Option 1",
+                second: "Option 2",
+                third: "Option 3"
+            },
+            modify: 'Modify form'
         },
         featureSwitchAdmin: {
             defaultFeatureName: "Feature",
@@ -609,7 +670,7 @@ export default {
             summaryTitle: "Drag and drop fields you want to add to your table onto the form.  You can arrange the fields in the order you want people to use them.",
 
             addFieldsTitle: "Get ready to add fields to your table",
-            tableNameHeading: "Table Name",
+            tableNameHeading: "Table name",
             recordNameHeading: "A record in the table is called",
             descriptionHeading: "Description",
             iconHeading: "Icon",
@@ -625,9 +686,46 @@ export default {
             validateTableNameEmpty: "Fill in the table name",
             validateTableNameExists: "Fill in a different value. Another table is already using this name",
             validateRecordNameEmpty: "Fill in the record name",
+
+            homePageInitialTitle: "Start using your table",
+            homePageInitialDescription: "We created a couple of reports to go along with your new table so you can get started adding records",
+            homePageAddRecordButton: "Add a record",
+            homePageStillBuilding: "Still building?  ",
+            homePageCreateAnother: "Create another table",
+
+            noSuggestedIcons: "There are no suggested icons for this table name",
+            typeForSuggestions: "Please type a table name to get suggestions",
+
+            tableReadyTitle: "Your table's ready!",
+            tableReadyText1: "Each bit of information you want to collect is a field.  We've started you off with a couple.",
+            tableReadyText2: "Design this form to collect info.  Drag and drop to add fields.",
+
+            tableReadyDialogOK: "OK"
         },
         iconChooser: {
             searchPlaceholder: "Search table icons..."
+        },
+        settings: {
+            header: "Settings",
+            tablesHeader: "Table",
+            appsHeader: "Table",
+            formsHeader: "Form",
+            tableSettings: 'Table properties & settings',
+            configureFormBuilder: 'Modify this form',
+        },
+        tableEdit: {
+            tableUpdateFailed: "Failed to update table",
+            tableUpdated: "Table information saved",
+            tableReset: "Table information not saved",
+            deleteThisTable: "Delete the {tableName} table?",
+            deleteTable: "Delete table",
+            tableDeleted: "{tableName} table deleted",
+            tableDeleteFailed: "Failed to delete table",
+            tableDeleteDialog: {
+                text: "This can't be undone. You'll be deleting all the data in the table, and break relationships with other tables.",
+                prompt: "Type YES to confirm that you want to delete this table"
+            },
+            YES: "YES"
         }
     }
 };

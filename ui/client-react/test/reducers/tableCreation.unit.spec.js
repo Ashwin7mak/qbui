@@ -12,7 +12,7 @@ function initializeState() {
             value: "",
         },
         tableIcon: {
-            value: "",
+            value: "Spreadsheet",
         },
         tableNoun: {
             value: "",
@@ -22,13 +22,13 @@ function initializeState() {
     initialState = {
         //  default states
         dialogOpen: false,
+        showTableReadyDialog: false,
         pageIndex: 0,
         iconChooserOpen: false,
         savingTable: false,
         tableInfo: defaultTableInfo,
         edited: false,
-        editing: null,
-        notifyTableCreated: false
+        editing: null
     };
 }
 
@@ -52,28 +52,23 @@ describe('Test table creation reducers', () => {
             expect(state.dialogOpen).toBe(true);
         });
 
-        it('return updated dialog open state', () => {
+        it('return updated dialog closed state', () => {
 
             const state = reducer(initialState, {type: types.HIDE_TABLE_CREATION_DIALOG});
             expect(state.dialogOpen).toBe(false);
         });
 
 
-        it('return updated page state after next', () => {
+        it('return updated table ready dialog open state', () => {
 
-            const state = reducer(initialState, {type: types.NEXT_TABLE_CREATION_PAGE});
-            expect(state.pageIndex).toBe(1);
+            const state = reducer(initialState, {type: types.SHOW_TABLE_READY_DIALOG});
+            expect(state.showTableReadyDialog).toBe(true);
         });
 
+        it('return updated table ready dialog closed state', () => {
 
-        it('return updated page state after previous', () => {
-            let state = reducer(initialState, {type: types.NEXT_TABLE_CREATION_PAGE});
-            state = reducer(state, {type: types.PREVIOUS_TABLE_CREATION_PAGE});
-            expect(state.pageIndex).toBe(0);
-
-            // doesn't go negative
-            state = reducer(state, {type: types.PREVIOUS_TABLE_CREATION_PAGE});
-            expect(state.pageIndex).toBe(0);
+            const state = reducer(initialState, {type: types.HIDE_TABLE_READY_DIALOG});
+            expect(state.showTableReadyDialog).toBe(false);
         });
 
         it('return updated page state icon chooser open', () => {
@@ -89,17 +84,19 @@ describe('Test table creation reducers', () => {
             expect(state.iconChooserOpen).toBe(false);
         });
 
-        it('return updated page state after programatic edit', () => {
+        it('return updated page state after programmatic edit', () => {
 
             let action = {
                 type: types.SET_TABLE_CREATION_PROPERTY,
                 property: 'name',
                 value: '',
+                pendingValidationError: 'pendingValueIsEmpty',
                 validationError: 'valueIsEmpty',
                 isUserEdit: false
             };
             const state = reducer(initialState, action);
             expect(state.tableInfo.name.value).toBe('');
+            expect(state.tableInfo.name.pendingValidationError).toBe('pendingValueIsEmpty');
             expect(state.tableInfo.name.validationError).toBe('valueIsEmpty');
             expect(state.tableInfo.name.edited).toBeFalsy();
 
@@ -112,12 +109,14 @@ describe('Test table creation reducers', () => {
                 type: types.SET_TABLE_CREATION_PROPERTY,
                 property: 'name',
                 value: 'newName',
+                pendingValidationError: null,
                 validationError: null,
                 isUserEdit: true
             };
             const state = reducer(initialState, action);
             expect(state.tableInfo.name.value).toBe('newName');
             expect(state.tableInfo.name.validationError).toBe(null);
+            expect(state.tableInfo.name.pendingValidationError).toBe(null);
             expect(state.tableInfo.name.edited).toBeTruthy();
 
             expect(state.edited).toBeTruthy();
@@ -149,11 +148,6 @@ describe('Test table creation reducers', () => {
             expect(state.savingTable).toBe(false);
         });
 
-        it('return updated notification state', () => {
-            const state = reducer(initialState, {type: types.NOTIFY_TABLE_CREATED, notifyTableCreated: true});
-
-            expect(state.notifyTableCreated).toBe(true);
-        });
     });
 
 

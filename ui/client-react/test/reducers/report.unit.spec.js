@@ -39,8 +39,8 @@ describe('Report reducer functions', () => {
         updateReportRecord: () => {},
         deleteRecordFromReport: () => {},
         getReportColumns: () => {},
+        isBlankRecInReport: () => {}
     };
-
 
     beforeEach(() => {
         state = undefined;
@@ -406,7 +406,7 @@ describe('Report reducer functions', () => {
 
     });
 
-    describe('Report reducer SAVE_RECORD_SUCCESS test correct state', () => {
+    describe('Report reducer SAVE_RECORD_SUCCESS test correct state for update', () => {
         let contextId = "SAVE_RECORD_SUCCESS";
         let reportContentAdd = {report : {
             context: contextId,
@@ -423,19 +423,18 @@ describe('Report reducer functions', () => {
             afterRecId: 6,
             info: 'report stuff'
         }};
+
+        beforeEach(() => {
+            spyOn(mockReportModelHelper, 'isBlankRecInReport');
+        });
+
+        afterEach(() => {
+            mockReportModelHelper.isBlankRecInReport.calls.reset();
+            mockReportModelHelper.updateReportRecord.calls.reset();
+            mockReportModelHelper.addReportRecord.calls.reset();
+        });
+
         let testCases = [
-            {
-                initialState:  [{id:contextId}],
-                description: 'when report matches add record',
-                content : reportContentAdd,
-                expects : (testState) => {
-                    expect(Array.isArray(testState)).toEqual(true);
-                    expect(testState.length).toEqual(1);
-                    expect(testState[0].loading).toEqual(false);
-                    expect(testState[0].error).toEqual(false);
-                    expect(mockReportModelHelper.addReportRecord).toHaveBeenCalled();
-                }
-            },
             {
                 description: 'when report matches update record',
                 initialState: [{id:contextId}],
@@ -445,6 +444,8 @@ describe('Report reducer functions', () => {
                     expect(testState.length).toEqual(1);
                     expect(testState[0].loading).toEqual(false);
                     expect(testState[0].error).toEqual(false);
+                    expect(mockReportModelHelper.isBlankRecInReport).not.toHaveBeenCalled();
+                    expect(mockReportModelHelper.addReportRecord).not.toHaveBeenCalled();
                     expect(mockReportModelHelper.updateReportRecord).toHaveBeenCalled();
                 }
             },
@@ -462,6 +463,8 @@ describe('Report reducer functions', () => {
                     expect(testCase.length).toEqual(1);
                     expect(testCase[0].loading).toEqual(false);
                     expect(testCase[0].error).toEqual(false);
+                    expect(mockReportModelHelper.isBlankRecInReport).not.toHaveBeenCalled();
+                    expect(mockReportModelHelper.addReportRecord).not.toHaveBeenCalled();
                     expect(mockReportModelHelper.updateReportRecord).toHaveBeenCalled();
                 }
             },
@@ -472,6 +475,8 @@ describe('Report reducer functions', () => {
                 expects: (testCase) => {
                     expect(Array.isArray(testCase)).toEqual(true);
                     expect(testCase.length).toEqual(0);
+                    expect(mockReportModelHelper.addReportRecord).not.toHaveBeenCalled();
+                    expect(mockReportModelHelper.updateReportRecord).not.toHaveBeenCalled();
                 }
             },
             {
@@ -480,6 +485,8 @@ describe('Report reducer functions', () => {
                 expects: (testCase) => {
                     expect(Array.isArray(testCase)).toEqual(true);
                     expect(testCase.length).toEqual(0);
+                    expect(mockReportModelHelper.addReportRecord).not.toHaveBeenCalled();
+                    expect(mockReportModelHelper.updateReportRecord).not.toHaveBeenCalled();
                 }
             }
         ];
@@ -493,6 +500,81 @@ describe('Report reducer functions', () => {
                 }
                 testState = reducer(testState, actionObj);
 
+                testCase.expects(testState);
+            });
+        });
+
+    });
+
+    describe('Report reducer SAVE_RECORD_SUCCESS test correct state for add', () => {
+        let contextId = "SAVE_RECORD_SUCCESS";
+        let reportContentAdd = {report : {
+            context: contextId,
+            recId: 2,
+            record: [4, 5, 6],
+            newRecId :55,
+            afterRecId: 6,
+            info: 'report stuff'
+        }};
+        let reportContent = {report : {
+            context: contextId,
+            recId: 2,
+            record: [4, 5, 6],
+            afterRecId: 6,
+            info: 'report stuff'
+        }};
+
+        afterEach(() => {
+            mockReportModelHelper.isBlankRecInReport.calls.reset();
+            mockReportModelHelper.deleteRecordFromReport.calls.reset();
+            mockReportModelHelper.updateReportRecord.calls.reset();
+            mockReportModelHelper.addReportRecord.calls.reset();
+        });
+
+        let testCases = [
+            {
+                initialState:  [{id:contextId}],
+                description: 'when report matches add record',
+                content : reportContentAdd,
+                expects : (testState) => {
+                    expect(Array.isArray(testState)).toEqual(true);
+                    expect(testState.length).toEqual(1);
+                    expect(testState[0].loading).toEqual(false);
+                    expect(testState[0].error).toEqual(false);
+                    expect(mockReportModelHelper.isBlankRecInReport).toHaveBeenCalled();
+                    expect(mockReportModelHelper.addReportRecord).toHaveBeenCalled();
+                    expect(mockReportModelHelper.updateReportRecord).not.toHaveBeenCalled();
+                    expect(mockReportModelHelper.deleteRecordFromReport).not.toHaveBeenCalled();
+                },
+                blankRec: false
+            },
+            {
+                initialState:  [{id:contextId}],
+                description: 'when report matches add record',
+                content : reportContentAdd,
+                expects : (testState) => {
+                    expect(Array.isArray(testState)).toEqual(true);
+                    expect(testState.length).toEqual(1);
+                    expect(testState[0].loading).toEqual(false);
+                    expect(testState[0].error).toEqual(false);
+                    expect(mockReportModelHelper.isBlankRecInReport).toHaveBeenCalled();
+                    expect(mockReportModelHelper.addReportRecord).toHaveBeenCalled();
+                    expect(mockReportModelHelper.updateReportRecord).not.toHaveBeenCalled();
+                    expect(mockReportModelHelper.deleteRecordFromReport).toHaveBeenCalled();
+                },
+                blankRec: true
+            }
+        ];
+        testCases.forEach(testCase => {
+            it(testCase.description, () => {
+                let testState = testCase.initialState;
+                actionObj.type = types.SAVE_RECORD_SUCCESS;
+                actionObj.id = contextId;
+                if (testCase.content) {
+                    actionObj.content = testCase.content;
+                }
+                spyOn(mockReportModelHelper, 'isBlankRecInReport').and.returnValue(testCase.blankRec);
+                testState = reducer(testState, actionObj);
                 testCase.expects(testState);
             });
         });
@@ -762,6 +844,518 @@ describe('Report reducer functions', () => {
             });
         });
 
+    });
+
+    describe('Report reducer ADD_COLUMN_FROM_EXISTING_FIELD test correct state', () => {
+        let contextId = "ADD_COLUMN_FROM_EXISTING_FIELD";
+        let initialStateAddBefore = [
+            {
+                id: contextId,
+                data: {
+                    columns: [
+                        {
+                            id: -1,
+                            isHidden: false,
+                            isPlaceholder: true
+                        },
+                        {
+                            fieldDef: {
+                                id: 6
+                            },
+                            isHidden: false,
+                            isPlaceholder: false,
+                            id: 6
+                        },
+                        {
+                            fieldDef: {
+                                id: 7
+                            },
+                            isHidden: true,
+                            isPlaceholder: false,
+                            id: 7
+                        }
+                    ],
+                    fids: [6, 7],
+                    metaData: {
+                        fids: [6, 7]
+                    }
+                }
+            }
+        ];
+        let initialStateAddAfter = [
+            {
+                id: contextId,
+                data: {
+                    columns: [
+                        {
+                            fieldDef: {
+                                id: 6
+                            },
+                            isHidden: true,
+                            isPlaceholder: false,
+                            id: 6
+                        },
+                        {
+                            fieldDef: {
+                                id: 7
+                            },
+                            isHidden: false,
+                            isPlaceholder: false,
+                            id: 7
+                        },
+                        {
+                            id: -1,
+                            isHidden: false,
+                            isPlaceholder: true
+                        },
+                    ],
+                    fids: [6, 7],
+                    metaData: {
+                        fids: [6, 7]
+                    }
+                }
+            }
+        ];
+        let requestedColumnId6InColumns = {
+            fieldDef: {
+                id: 6
+            },
+            isHidden: true,
+            isPlaceholder: false,
+            id: 6
+        };
+        let requestedColumnId7InColumns = {
+            fieldDef: {
+                id: 7
+            },
+            isHidden: true,
+            isPlaceholder: false,
+            id: 7
+        };
+        let requestedColumnIdNotInColumns = {
+            fieldDef: {
+                id: 8
+            },
+            isHidden: true,
+            isPlaceholder: false,
+            id: 8
+        };
+        let testCases = [
+            {
+                description: 'when adding the requested column that already exists in the columns before the clicked column',
+                initialState: initialStateAddBefore,
+                content : {addBefore: true, requestedColumn: requestedColumnId7InColumns},
+                expects : (testState) => {
+                    expect(Array.isArray(testState)).toEqual(true);
+                    expect(testState[0].data.columns.length).toEqual(3);
+                    expect(testState[0].data.columns[0].id).toEqual(7);
+                    expect(testState[0].data.columns[1].isPlaceholder).toEqual(true);
+                    expect(testState[0].data.columns[2].id).toEqual(6);
+                    expect(testState[0].data.columns[0].isHidden).toEqual(false);
+                    expect(testState[0].data.fids.length).toEqual(2);
+                    expect(testState[0].data.fids[0]).toEqual(7);
+                    expect(testState[0].data.fids[1]).toEqual(6);
+                }
+            },
+            {
+                description: 'when adding the requested column that does not exist in the columns before the clicked column',
+                initialState: initialStateAddBefore,
+                content : {addBefore: true, requestedColumn: requestedColumnIdNotInColumns},
+                expects : (testState) => {
+                    expect(Array.isArray(testState)).toEqual(true);
+                    expect(testState[0].data.columns.length).toEqual(4);
+                    expect(testState[0].data.columns[0].id).toEqual(8);
+                    expect(testState[0].data.columns[1].isPlaceholder).toEqual(true);
+                    expect(testState[0].data.columns[2].id).toEqual(6);
+                    expect(testState[0].data.columns[3].id).toEqual(7);
+                    expect(testState[0].data.fids.length).toEqual(3);
+                    expect(testState[0].data.fids[0]).toEqual(8);
+                    expect(testState[0].data.fids[1]).toEqual(6);
+                    expect(testState[0].data.fids[2]).toEqual(7);
+                }
+            },
+            {
+                description: 'when adding the requested column that already exists in the columns after the clicked column',
+                initialState: initialStateAddAfter,
+                content : {addBefore: false, requestedColumn: requestedColumnId6InColumns},
+                expects : (testState) => {
+                    expect(Array.isArray(testState)).toEqual(true);
+                    expect(testState[0].data.columns.length).toEqual(3);
+                    expect(testState[0].data.columns[0].id).toEqual(7);
+                    expect(testState[0].data.columns[1].isPlaceholder).toEqual(true);
+                    expect(testState[0].data.columns[2].id).toEqual(6);
+                    expect(testState[0].data.fids.length).toEqual(2);
+                    expect(testState[0].data.fids[0]).toEqual(7);
+                    expect(testState[0].data.fids[1]).toEqual(6);
+                }
+            },
+            {
+                description: 'when adding the requested column that does not exist in the columns after the clicked column',
+                initialState: initialStateAddAfter,
+                content : {addBefore: false, requestedColumn: requestedColumnIdNotInColumns},
+                expects : (testState) => {
+                    expect(Array.isArray(testState)).toEqual(true);
+                    expect(testState[0].data.columns.length).toEqual(4);
+                    expect(testState[0].data.columns[0].id).toEqual(6);
+                    expect(testState[0].data.columns[1].id).toEqual(7);
+                    expect(testState[0].data.columns[2].isPlaceholder).toEqual(true);
+                    expect(testState[0].data.columns[3].id).toEqual(8);
+                    expect(testState[0].data.fids.length).toEqual(3);
+                    expect(testState[0].data.fids[0]).toEqual(6);
+                    expect(testState[0].data.fids[1]).toEqual(7);
+                    expect(testState[0].data.fids[2]).toEqual(8);
+                }
+            }
+        ];
+
+        testCases.forEach(testCase => {
+            it(testCase.description, () => {
+                let testState = testCase.initialState;
+                actionObj.type = types.ADD_COLUMN_FROM_EXISTING_FIELD;
+                actionObj.id = contextId;
+                if (testCase.content) {
+                    actionObj.content = testCase.content;
+                }
+                testState = reducer(testState, actionObj);
+
+                testCase.expects(testState);
+            });
+        });
+    });
+
+    describe('Report reducer HIDE_COLUMN test correct state', () => {
+        let contextId = "HIDE_COLUMN";
+        let initialState = [
+            {
+                id: contextId,
+                data: {
+                    columns: [
+                        {
+                            fieldDef: {
+                                id: 6
+                            },
+                            isHidden: false,
+                            id: 6
+                        },
+                        {
+                            fieldDef: {
+                                id: 7
+                            },
+                            isHidden: false,
+                            id: 7
+                        }
+                    ],
+                    fids: [6, 7],
+                    metaData: {
+                        fids: [6, 7]
+                    }
+                }
+            }
+        ];
+        let testCases = [
+            {
+                description: 'when fieldDef id of column equals column id of first',
+                initialState: initialState,
+                content : {clickedId: 6},
+                expects : (testState) => {
+                    expect(Array.isArray(testState)).toEqual(true);
+                    expect(testState[0].data.columns[0].isHidden).toEqual(true);
+                    expect(testState[0].data.columns[1].isHidden).toEqual(false);
+                    expect(testState[0].data.fids.length).toEqual(1);
+                    expect(testState[0].data.fids).toContain(7);
+                }
+            },
+            {
+                description: 'when fieldDef id of column equals column id of second',
+                initialState: initialState,
+                content : {clickedId: 7},
+                expects : (testState) => {
+                    expect(Array.isArray(testState)).toEqual(true);
+                    expect(testState[0].data.columns[0].isHidden).toEqual(false);
+                    expect(testState[0].data.columns[1].isHidden).toEqual(true);
+                    expect(testState[0].data.fids.length).toEqual(1);
+                    expect(testState[0].data.fids).toContain(6);
+                }
+            },
+            {
+                description: 'when fieldDef id of column does not equal any ids',
+                initialState: initialState,
+                content : {clickedId: 8},
+                expects : (testState) => {
+                    expect(Array.isArray(testState)).toEqual(true);
+                    expect(testState[0].data.columns[0].isHidden).toEqual(false);
+                    expect(testState[0].data.columns[1].isHidden).toEqual(false);
+                    expect(testState[0].data.fids.length).toEqual(2);
+                    expect(testState[0].data.fids).toContain(6, 7);
+                }
+            },
+            {
+                description: 'when no columnId provided',
+                initialState: initialState,
+                content : {},
+                expects : (testState) => {
+                    expect(Array.isArray(testState)).toEqual(true);
+                    expect(testState[0].data.columns[0].isHidden).toEqual(false);
+                    expect(testState[0].data.columns[1].isHidden).toEqual(false);
+                    expect(testState[0].data.fids.length).toEqual(2);
+                    expect(testState[0].data.fids).toContain(6, 7);
+                }
+            }
+        ];
+
+        testCases.forEach(testCase => {
+            it(testCase.description, () => {
+                let testState = testCase.initialState;
+                actionObj.type = types.HIDE_COLUMN;
+                actionObj.id = contextId;
+                if (testCase.content) {
+                    actionObj.content = testCase.content;
+                }
+                testState = reducer(testState, actionObj);
+
+                testCase.expects(testState);
+            });
+        });
+
+    });
+
+    describe('Report reducer OPEN_FIELD_SELECT_MENU test correct state', () => {
+        let contextId = "OPEN_FIELD_SELECT_MENU";
+        let initialStateWithoutPlaceholder = [
+            {
+                id: contextId,
+                data: {
+                    columns: [
+                        {
+                            fieldDef: {
+                                id: 6
+                            },
+                            isPlaceholder: false,
+                            isHidden: false,
+                            id: 6,
+                            order: 1
+                        },
+                        {
+                            fieldDef: {
+                                id: 7
+                            },
+                            isPlaceholder: false,
+                            isHidden: false,
+                            id: 7,
+                            order: 2
+                        }
+                    ],
+                    fids: [6, 7],
+                    metaData: {
+                        fids: [6, 7]
+                    }
+                }
+            }
+        ];
+        let initialStateWithPlaceholder = [
+            {
+                id: contextId,
+                data: {
+                    columns: [
+                        {
+                            fieldDef: {
+                                id: 6
+                            },
+                            isPlaceholder: false,
+                            isHidden: false,
+                            id: 6,
+                            order: 1
+                        },
+                        {
+                            fieldDef: {
+                                id: 7
+                            },
+                            isPlaceholder: false,
+                            isHidden: false,
+                            id: 7,
+                            order: 2
+                        },
+                        {
+                            isPlaceholder: true,
+                            isHidden: false,
+                            id: -1,
+                            order: 3
+                        }
+                    ],
+                    fids: [6, 7],
+                    metaData: {
+                        fids: [6, 7]
+                    }
+                }
+            }
+        ];
+        let testCases = [
+            {
+                description: 'when the placeholder column does not exist it is added to the columns before the clickedColumnId',
+                initialState: initialStateWithoutPlaceholder,
+                content : {clickedColumnId: 6, addBeforeColumn: true},
+                expects : (testState) => {
+                    expect(Array.isArray(testState)).toEqual(true);
+                    expect(testState[0].data.columns.length).toEqual(3);
+                    expect(testState[0].data.columns[0].isPlaceholder).toEqual(true);
+                }
+            },
+            {
+                description: 'when the placeholder column does not exist it is added to the columns after the clickedColumnId',
+                initialState: initialStateWithoutPlaceholder,
+                content : {clickedColumnId: 6, addBeforeColumn: false},
+                expects : (testState) => {
+                    expect(Array.isArray(testState)).toEqual(true);
+                    expect(testState[0].data.columns.length).toEqual(3);
+                    expect(testState[0].data.columns[1].isPlaceholder).toEqual(true);
+                }
+            },
+            {
+                description: 'when the placeholder column does exist it is added to the columns before the clickedColumnId',
+                initialState: initialStateWithPlaceholder,
+                content : {clickedColumnId: 6, addBeforeColumn: true},
+                expects : (testState) => {
+                    expect(Array.isArray(testState)).toEqual(true);
+                    expect(testState[0].data.columns.length).toEqual(3);
+                    expect(testState[0].data.columns[0].isPlaceholder).toEqual(true);
+                    expect(testState[0].data.columns[2].isPlaceholder).toEqual(false);
+                }
+            },
+            {
+                description: 'when the placeholder column does exist it is added to the columns after the clickedColumnId',
+                initialState: initialStateWithPlaceholder,
+                content : {clickedColumnId: 6, addBeforeColumn: false},
+                expects : (testState) => {
+                    expect(Array.isArray(testState)).toEqual(true);
+                    expect(testState[0].data.columns.length).toEqual(3);
+                    expect(testState[0].data.columns[1].isPlaceholder).toEqual(true);
+                    expect(testState[0].data.columns[2].isPlaceholder).toEqual(false);
+                }
+            },
+            {
+                description: 'when the clickedColumnId is not an id of any of the columns the placeholder is not added',
+                initialState: initialStateWithoutPlaceholder,
+                content : {clickedColumnId: 8, addBeforeColumn: true},
+                expects : (testState) => {
+                    expect(Array.isArray(testState)).toEqual(true);
+                    expect(testState[0].data.columns.length).toEqual(2);
+                    expect(testState[0].data.columns[0].isPlaceholder).toEqual(false);
+                    expect(testState[0].data.columns[1].isPlaceholder).toEqual(false);
+                }
+            }
+        ];
+        testCases.forEach(testCase => {
+            it(testCase.description, () => {
+                let testState = testCase.initialState;
+                actionObj.type = types.OPEN_FIELD_SELECT_MENU;
+                actionObj.id = contextId;
+                if (testCase.content) {
+                    actionObj.content = testCase.content;
+                }
+                testState = reducer(testState, actionObj);
+
+                testCase.expects(testState);
+            });
+        });
+    });
+
+    describe('Report reducer CLOSE_FIELD_SELECT_MENU test correct state', () => {
+        let contextId = "CLOSE_FIELD_SELECT_MENU";
+        let initialStateWithoutPlaceholder = [
+            {
+                id: contextId,
+                data: {
+                    columns: [
+                        {
+                            fieldDef: {
+                                id: 6
+                            },
+                            isHidden: false,
+                            isPlaceholder: false,
+                            id: 6
+                        },
+                        {
+                            fieldDef: {
+                                id: 7
+                            },
+                            isHidden: false,
+                            isPlaceholder: false,
+                            id: 7
+                        }
+                    ],
+                    fids: [6, 7],
+                    metaData: {
+                        fids: [6, 7]
+                    }
+                }
+            }
+        ];
+        let initialStateWithPlaceholder = [
+            {
+                id: contextId,
+                data: {
+                    columns: [
+                        {
+                            fieldDef: {
+                                id: 6
+                            },
+                            isHidden: false,
+                            isPlaceholder: false,
+                            id: 6
+                        },
+                        {
+                            fieldDef: {
+                                id: 7
+                            },
+                            isHidden: false,
+                            isPlaceholder: true,
+                            id: 7
+                        }
+                    ],
+                    fids: [6, 7],
+                    metaData: {
+                        fids: [6, 7]
+                    }
+                }
+            }
+        ];
+        let testCases = [
+            {
+                description: 'when placeholder does not exist in the columns the state remains the same',
+                initialState: initialStateWithoutPlaceholder,
+                content : {},
+                expects : (testState) => {
+                    expect(Array.isArray(testState)).toEqual(true);
+                    expect(testState[0].data.columns.length).toEqual(2);
+                    expect(testState[0].data.columns[0].id).toEqual(6);
+                    expect(testState[0].data.columns[1].id).toEqual(7);
+                }
+            },
+            {
+                description: 'when placeholder does exist in the columns that column is removed',
+                initialState: initialStateWithPlaceholder,
+                content : {},
+                expects : (testState) => {
+                    expect(Array.isArray(testState)).toEqual(true);
+                    expect(testState[0].data.columns.length).toEqual(1);
+                    expect(testState[0].data.columns[0].id).toEqual(6);
+                }
+            }
+        ];
+
+        testCases.forEach(testCase => {
+            it(testCase.description, () => {
+                let testState = testCase.initialState;
+                actionObj.type = types.CLOSE_FIELD_SELECT_MENU;
+                actionObj.id = contextId;
+                if (testCase.content) {
+                    actionObj.content = testCase.content;
+                }
+                testState = reducer(testState, actionObj);
+
+                testCase.expects(testState);
+            });
+        });
     });
 
     describe('Report reducer INVALID_ACTION test correct state', () => {

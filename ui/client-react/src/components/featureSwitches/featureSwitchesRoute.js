@@ -6,7 +6,7 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import NotificationManager from '../../../../reuse/client/src/scripts/notificationManager';
 import Loader from 'react-loader';
-import {Link} from 'react-router';
+import {Link} from 'react-router-dom';
 import ToggleButton from 'react-toggle-button';
 import PageTitle from '../pageTitle/pageTitle';
 import QBModal from '../qbModal/qbModal';
@@ -192,7 +192,7 @@ export class FeatureSwitchesRoute extends React.Component {
                 primaryButtonOnClick={this.deleteSelectedSwitches}
                 leftButtonName={Locale.getMessage('selection.dontDelete')}
                 leftButtonOnClick={this.cancelDelete}
-                bodyMessage={msg}
+                title={msg}
                 type="alert"/>);
     }
 

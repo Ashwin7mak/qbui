@@ -1,4 +1,5 @@
-import {ROUTES} from '../../../common/src/constants';
+import {ROUTES} from 'COMMON/constants';
 
 export const GOVERNANCE_BASE_ROUTE = `${ROUTES.BASE_CLIENT_ROUTE}/governance`;
-export const GOVERNANCE_USERS_ROUTE = `${GOVERNANCE_BASE_ROUTE}/:accountId/users`;
+export const GOVERNANCE_ACCOUNT_ROUTE = `${GOVERNANCE_BASE_ROUTE}/:accountId`;
+export const GOVERNANCE_ACCOUNT_USERS_ROUTE = `${GOVERNANCE_ACCOUNT_ROUTE}/users`;

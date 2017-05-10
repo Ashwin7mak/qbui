@@ -45,15 +45,19 @@ describe('AppHistory', () => {
     }
 
     let store = {
-        record: [{
-            pendEdits: {
-                isPendingEdit: false,
-                isInlineEditOpen: false,
-                currentEditingAppId: '1',
-                currentEditingTableId: '2',
-                currentEditingRecordId: '3'
-            }
-        }],
+        record: {
+            recordIdBeingEdited: 3,
+            records: [{
+                id: 3,
+                pendEdits: {
+                    isPendingEdit: false,
+                    isInlineEditOpen: false,
+                    currentEditingAppId: '1',
+                    currentEditingTableId: '2',
+                    currentEditingRecordId: '3'
+                }
+            }]
+        },
         forms: [{
             formData: {
                 fields: {}
@@ -125,15 +129,25 @@ describe('AppHistory', () => {
         });
 
         it('sets a listener for internal app route changes', () => {
-            spyOn(AppHistory.history, 'listenBefore');
+            spyOn(AppHistory.history, 'block');
             AppHistory.setup(mockStore, mockStoreFunc);
-            expect(AppHistory.history.listenBefore).toHaveBeenCalled();
+            expect(AppHistory.history.block).toHaveBeenCalled();
         });
 
         it('sets a listener for browser chrome route changes (e.g., pasting a link in the URL bar)', () => {
-            spyOn(AppHistory.history, 'listenBeforeUnload');
+            const windowUtilsSpy = {
+                addEventListener: {}
+            };
+            AppHistoryRewireAPI.__Rewire__('WindowUtils', windowUtilsSpy);
+
+            spyOn(windowUtilsSpy, 'addEventListener');
             AppHistory.setup(mockStore, mockStoreFunc);
-            expect(AppHistory.history.listenBeforeUnload).toHaveBeenCalled();
+            expect(windowUtilsSpy.addEventListener).toHaveBeenCalledWith(
+                "beforeunload",
+                jasmine.any(Function)
+            );
+
+            AppHistoryRewireAPI.__ResetDependency__('WindowUtils');
         });
     });
 
@@ -152,7 +166,7 @@ describe('AppHistory', () => {
         ];
         testCases.forEach(testCase => {
             it(testCase.name, () => {
-                store.record[0].pendEdits.isInlineEditOpen = testCase.isInlineEditOpen;
+                store.record.records[0].pendEdits.isInlineEditOpen = testCase.isInlineEditOpen;
                 AppHistory.setup(mockStore, mockStoreFunc);
                 AppHistory.getFields();
                 if (testCase.isInlineEditOpen) {
@@ -224,7 +238,7 @@ describe('AppHistory', () => {
         });
 
         it('displays a modal which allows a user to choose what they want to do with unsaved changes', () => {
-            store.record[0].pendEdits.isPendingEdit = true;
+            store.record.records[0].pendEdits.isPendingEdit = true;
             AppHistory.setup(mockStore, mockStoreFunc);
             goToNewPage();
 
@@ -250,8 +264,8 @@ describe('AppHistory', () => {
         ];
         testCases.forEach(testCase => {
             it(testCase.name, (done) => {
-                store.record[0].pendEdits.isPendingEdit = true;
-                store.record[0].pendEdits.currentEditingRecordId = testCase.recId;
+                store.record.records[0].pendEdits.isPendingEdit = true;
+                store.record.records[0].pendEdits.currentEditingRecordId = testCase.recId;
                 AppHistory.setup(testCase.successFlow ? mockStore : mockStoreReject, mockStoreFunc);
 
                 goToNewPage();

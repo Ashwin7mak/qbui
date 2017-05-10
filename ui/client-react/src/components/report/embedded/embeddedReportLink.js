@@ -1,9 +1,10 @@
 import React, {PropTypes} from 'react';
 import {connect} from 'react-redux';
-import {Link} from 'react-router';
+import {Link} from 'react-router-dom';
 import _ from 'lodash';
 
 import {loadReportRecordsCount, unloadEmbeddedReport} from '../../../actions/reportActions';
+import withUniqueId from '../../hoc/withUniqueId';
 import {CONTEXT} from '../../../actions/context';
 import QBicon from '../../qbIcon/qbIcon';
 
@@ -31,6 +32,7 @@ export const EmbeddedReportLink = React.createClass({
      * Load a report with query parameters.
      */
     loadReportRecordsCount() {
+
         const {appId, childTableId, childReportId, detailKeyFid, detailKeyValue} = this.props;
         // Display a filtered child report, the child report should only contain children that
         // belong to a parent. A child has a parent if its detailKey field contains the
@@ -39,20 +41,19 @@ export const EmbeddedReportLink = React.createClass({
             query: QueryUtils.parseStringIntoExactMatchExpression(detailKeyFid, detailKeyValue)
         };
 
-        this.props.loadReportRecordsCount(this.uniqueId, appId, childTableId, childReportId, queryParams);
+        this.props.loadReportRecordsCount(this.props.uniqueId, appId, childTableId, childReportId, queryParams);
     },
 
     componentDidMount() {
-        this.uniqueId = CONTEXT.REPORT.EMBEDDED + Math.floor(Math.random() * Number.MAX_SAFE_INTEGER);
         this.loadReportRecordsCount();
     },
 
     componentWillUnmount() {
-        this.props.unloadEmbeddedReport(this.uniqueId);
+        this.props.unloadEmbeddedReport(this.props.uniqueId);
     },
 
     reportDetails(tableName) {
-        const count = _.get(this, `props.reports[${this.uniqueId}].recordsCount`);
+        const count = _.get(this, `props.report.recordsCount`);
         let recordsCount = '';
         if (typeof count === 'number') {
             recordsCount = ` (${count})`;
@@ -86,9 +87,9 @@ export const EmbeddedReportLink = React.createClass({
 // instead of relying on our parent route component to pass our props down,
 // the react-redux container will generate the required props for this route
 // from the Redux state (the presentational component has no code dependency on Redux!)
-const mapStateToProps = (state) => {
+const mapStateToProps = (state, ownProps) => {
     return {
-        reports: state.embeddedReports
+        reports: state.embeddedReports[ownProps.uniqueId]
     };
 };
 
@@ -104,7 +105,9 @@ const mapDispatchToProps = (dispatch) => {
     };
 };
 
-export default connect(
+const ConnectedEmbeddedReportLink = connect(
     mapStateToProps,
     mapDispatchToProps
 )(EmbeddedReportLink);
+
+export default withUniqueId(ConnectedEmbeddedReportLink, CONTEXT.REPORT.EMBEDDED);

@@ -1,12 +1,13 @@
 import React, {PropTypes, Component} from 'react';
-import GlobalAction from '../globalAction/globalAction';
+import GlobalAction from 'REUSE/components/globalAction/globalAction';
+import HelpButton from 'REUSE/components/helpButton/helpButton';
 import UserDropDown from './supportingComponents/userDropDown';
-import HelpButton from '../helpButton/helpButton';
+import UserFeedBack from './supportingComponents/userFeedBack';
 
 // IMPORTING FROM CLIENT REACT
 // Needs to be refactored once these components are added to the reuse library
-import Locale from '../../../../../client-react/src/locales/locales';
-import WindowLocationUtils from '../../../../../client-react/src/utils/windowLocationUtils';
+import Locale from 'APP/locales/locales';
+import WindowLocationUtils from 'APP/utils/windowLocationUtils';
 // IMPORTING FROM CLIENT REACT
 
 import './defaultTopNavGlobalActions.scss';
@@ -32,10 +33,16 @@ class ReDefaultTopNavGlobalActions extends Component {
         return (
             <div className="globalActions defaultTopNavGlobalActions">
                 <ul className="globalActionsList">
+                    <li className="link globalAction withDropdown">
+                        <UserFeedBack
+                            startTabIndex={this.props.startTabIndex}
+                            shouldOpenMenusUp={this.props.shouldOpenMenusUp}
+                        />
+                    </li>
                     {this.props.children}
                     {this.props.actions && this.props.actions.map((action, index) => (
                         <GlobalAction
-                            tabIndex={this.props.startTabIndex + index}
+                            tabIndex={this.props.startTabIndex}
                             key={action.msg}
                             linkClass={this.props.linkClass}
                             onSelect={this.props.onSelect}
@@ -47,10 +54,11 @@ class ReDefaultTopNavGlobalActions extends Component {
                         <UserDropDown
                             supportedLocales={Locale.getSupportedLocales()}
                             changeLocale={this.props.changeLocale}
-                            startTabIndex={this.props.startTabIndex + this.props.actions.length}
+                            startTabIndex={this.props.startTabIndex}
                             signOutUser={this.signOutUser}
                             app={this.props.app}
                             shouldOpenMenusUp={this.props.shouldOpenMenusUp}
+                            position = {"center"}
                         />
                     </li>
                     <li className="link globalAction"><HelpButton/></li>

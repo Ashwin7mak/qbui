@@ -112,6 +112,7 @@ export const FieldElement = React.createClass({
                                              key={'fve-' + this.props.idKey}
                                              idKey={'fve-' + this.props.idKey}
                                              invalidMessage={this.props.invalidMessage}
+                                             isDisabled={this.props.isDisabled}
                                              classes={classes}
                                              appUsers={this.props.appUsers}
                                              label={FieldUtils.getFieldLabel(this.props.element, this.props.relatedField)}
@@ -134,7 +135,6 @@ export const FieldElement = React.createClass({
             <div className="formElement field">
                 {this.props.includeLabel &&
                 <FieldLabelElement
-                    element={this.props.element}
                     relatedField={this.props.relatedField}
                     indicateRequiredOnLabel={this.props.indicateRequiredOnLabel}
                     isInvalid={this.props.isInvalid}

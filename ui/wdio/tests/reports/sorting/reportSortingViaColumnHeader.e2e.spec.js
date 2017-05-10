@@ -7,7 +7,7 @@
     var reportSortingPO = requirePO('reportSortingGrouping');
     var reportContentPO = requirePO('reportContent');
 
-    describe('Reports - Sorting Via Column Header Tests: ', function() {
+    describe('Reports - Sorting via column header tests: ', function() {
         var realmName;
         var realmId;
         var testApp;
@@ -163,10 +163,10 @@
             e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, reportId);
 
             //Step 3 - Expand 'Text Field' column header and select 'Sort Z to A'
-            reportSortingPO.expandColumnHeaderMenuAndSelectItem("Text Field", "Sort Z to A");
+            reportSortingPO.expandColumnHeaderMenuAndSelectItem("TEXT FIELD", "Sort Z to A");
 
             //Step 4 - Verify item got selected under column header menu i.e verify the check mark beside the item
-            reportSortingPO.expandColumnHeaderMenuAndVerifySelectedItem("Text Field", "Sort Z to A");
+            reportSortingPO.expandColumnHeaderMenuAndVerifySelectedItem("TEXT FIELD", "Sort Z to A");
 
             //Step 5 - get the sorted table results
             actualTableRecords = reportContentPO.getAllRecordsFromTable();
@@ -198,8 +198,7 @@
             e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, reportId);
 
             //Step 3 - Verify item got selected under column header menu i.e verify the check mark beside the item
-            reportSortingPO.expandColumnHeaderMenuAndVerifySelectedItem("Date Field", "Sort newest to oldest");
+            reportSortingPO.expandColumnHeaderMenuAndVerifySelectedItem("DATE FIELD", "Sort newest to oldest");
         });
-
     });
 }());

@@ -1,0 +1,80 @@
+@import "../../assets/css/_qbVariables";
+@import "../../assets/css/_customVariables";
+
+// semantic names to go through and scrub
+$grid-default-cell-height: 30px;
+
+// When a row is in inline edit mode, this class is used on an empty DOM
+// node in all sticky cells (row headers) that are not on the row being edited.
+// Used in place of actionsCol below
+.emptyRowActions {
+    min-height: $inline-edit-input-box-height;
+    width: 75px;
+}
+
+// contains all the row actions such as the checkbox to select the row, edit data, or access the dropdown menu
+.actionsCol {
+    white-space: nowrap;
+
+    > * {
+        display: inline-block;
+    }
+
+    // Select row checkbox
+    input[type=checkbox] {
+        margin-right: 12px;
+    }
+    .iconActions {
+        line-height: inherit;
+    }
+
+    .iconActionButton {
+        color: $grid-lefticon-normal-color;
+        transition: color 200ms ease-in-out;
+        height: $grid-default-cell-height;
+        width: auto;
+        margin-right: 4px;
+        background: inherit;
+
+        &:hover {
+            color: $topnav-icon-color;
+        }
+    }
+
+    // menu to access additional row actions such as print, email, copy, and delete
+    .dropdown-menu {
+
+        // position menu to the right of the sticky cells
+        top: 0;
+        left: 27px;
+
+        a {
+            padding-left: 4px;
+
+            // dropdown menu icon colors and default properties
+            .qbIcon {
+                margin-right: 6px;
+                vertical-align: middle;
+                width: 28px;
+                padding: 4px;
+                color: $iconfont-on-light-normal-color;
+            }
+
+            // dropdown menu hover icon colors
+            &:hover {
+                .qbIcon {
+                    color: $iconfont-on-light-hover-color;
+
+                    &.delete {
+                        color: $iconfont-on-light-hover-danger-color;
+                    }
+                }
+            }
+        }
+
+        // disabled icon colors
+        .disabled a .qbIcon {
+            color: $iconfont-on-light-disabled-color;
+        }
+    }
+}

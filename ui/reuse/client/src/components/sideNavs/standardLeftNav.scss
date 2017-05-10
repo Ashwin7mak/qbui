@@ -23,6 +23,7 @@
     .contextHeader {
         flex: 0 0 auto; // Don't shrink this on a short window.
         background-color: $leftnav-app-background-color; // Default for the left nav
+        @include correctFontWeightForLightTextOnDarkBackground;
         min-height: 40px;
         max-height: 105px;
 
@@ -213,6 +214,15 @@
         text-align: center;
 
         transition: opacity 0.3s;
+
+        .leftNavLogo {
+            width: 45%;
+
+            @include small-breakpoint {
+                width: 28%;
+
+            }
+        }
     }
 
     &.isCollapsedStandardLeftNav {

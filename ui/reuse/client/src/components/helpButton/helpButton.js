@@ -1,11 +1,11 @@
 import React from 'react';
-import NotificationManager from '../../scripts/notificationManager';
-import Icon from '../icon/icon';
+import NotificationManager from 'REUSE/scripts/notificationManager';
+import Icon from 'REUSE/components/icon/icon';
+import {I18nMessage} from 'REUSE/utils/i18nMessage';
+import Locale from 'REUSE/locales/locale';
 
 // IMPORTS FROM CLIENT REACT
-import Device from '../../../../../client-react/src/utils/device';
-import Locale from '../../../../../client-react/src/locales/locales';
-import {I18nMessage} from '../../../../../client-react/src/utils/i18nMessage';
+import Device from 'APP/utils/device';
 // IMPORTS FROM CLIENT REACT
 
 /**

@@ -3,9 +3,11 @@ import {PropTypes} from 'react';
 import TableFieldInput from './tableFieldInput';
 import {I18nMessage} from "../../utils/i18nMessage";
 import Locale from '../../locales/locales';
-import {tableIconNames, tableIconsByTag, suggestedTableIcons} from '../../../../reuse/client/src/components/icon/tableIcons';
+import {tableIconNames, tableIconsByTag} from '../../../../reuse/client/src/components/icon/tableIcons';
 import IconChooser from '../../../../reuse/client/src/components/iconChooser/iconChooser';
 import Icon, {AVAILABLE_ICON_FONTS} from '../../../../reuse/client/src/components/icon/icon';
+import IconUtils from '../../../../reuse/client/src/components/icon/iconUtils';
+import _ from 'lodash';
 
 import './tableCreationPanel.scss';
 
@@ -28,7 +30,7 @@ class TableCreationPanel extends React.Component {
      * @returns {XML}
      */
     getTableIcon(name) {
-        return <Icon iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY} icon={name}/>;
+        return <Icon iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY} icon={name} tooltipTitle={IconUtils.getIconToolTipTitle(tableIconsByTag, name)}/>;
     }
 
     /**
@@ -46,15 +48,26 @@ class TableCreationPanel extends React.Component {
      * @returns {XML}
      */
     getSuggestedIcons() {
+        const name = _.has(this.props, "tableInfo.name.value") ? this.props.tableInfo.name.value.toLowerCase().trim() : '';
+
+        if (name === '') {
+            return <div className="noSuggestedIcons iconList"><I18nMessage message="tableCreation.typeForSuggestions"/></div>;
+        }
+
+        let suggestedIcons = tableIconNames.filter((icon) => IconUtils.filterMatches(tableIconsByTag, name, icon)).slice(0, 8);
+
+
+        if (suggestedIcons.length === 0) {
+            return <div className="noSuggestedIcons iconList"><I18nMessage message="tableCreation.noSuggestedIcons"/></div>;
+        }
 
         return (
             <div className="iconList">
-                {suggestedTableIcons.slice(0, 8).map((iconName, i) => (
-                    <button key={i} onClick={() => this.selectIcon(iconName)}>
+                {suggestedIcons.map((iconName, i) => (
+                    <button key={i} onClick={() => this.selectIcon(iconName)} type="button">
                         {this.getTableIcon(iconName)}
                     </button>))}
             </div>);
-
     }
 
     /**
@@ -68,15 +81,13 @@ class TableCreationPanel extends React.Component {
     }
 
     /**
-     * updata a table property
-     * @param property 'name' etc
-     * @param value new value for property
-     * @param isUserEdit did user initiate the edit?
+     * get validation error property/value
+     * @returns {*}
      */
-    updateTableProperty(property, value, isUserEdit = true) {
-
+    getValidationError(property, value) {
         let validationError = null;
-        const trimmed = value.trim();
+
+        const trimmed = typeof value === "string" ? value.trim() : value;
 
         switch (property) {
         case 'name': {
@@ -95,7 +106,42 @@ class TableCreationPanel extends React.Component {
         }
         }
 
-        this.props.setTableProperty(property, value, validationError, isUserEdit);
+        return validationError;
+    }
+
+    /**
+     * update a table property
+     * @param property 'name' etc
+     * @param value new value for property
+     * @param isUserEdit did user initiate the edit?
+     */
+    updateTableProperty(property, value, isUserEdit = true) {
+
+        const pendingValidationError = this.getValidationError(property, value);
+
+        let validationError = this.props.tableInfo[property] ? this.props.tableInfo[property].validationError : null;
+
+        this.props.setTableProperty(property, value, pendingValidationError, validationError, isUserEdit);
+    }
+
+    /**
+     * handle loss of focus
+     */
+    onBlurInput(property, value) {
+
+        // do validation on loss of focus unless it hasn't been edited
+
+        if (this.props.tableInfo[property].edited) {
+
+            // set the validation error and the live validation error for the field (same)
+
+            const validationError = this.getValidationError(property, value);
+
+            this.props.setTableProperty(property, value, validationError, validationError, false);
+        }
+
+        // unset edited property
+        this.props.setEditingProperty(null);
     }
 
     /**
@@ -105,7 +151,7 @@ class TableCreationPanel extends React.Component {
     renderIconSection() {
 
         return (<div className="tableField iconSelection">
-            <IconChooser selectedIcon={this.props.tableInfo.tableIcon.value}
+            <IconChooser selectedIcon={this.props.tableInfo && this.props.tableInfo.tableIcon ? this.props.tableInfo.tableIcon.value : null}
                          isOpen={this.props.iconChooserOpen}
                          onOpen={this.props.openIconChooser}
                          onClose={this.props.closeIconChooser}
@@ -114,7 +160,7 @@ class TableCreationPanel extends React.Component {
                          iconsByTag={tableIconsByTag}
                          onSelect={this.selectIcon} />
 
-            <div className="suggestedIcons">
+            <div className="tableFieldTitle suggestedIcons">
                 <div><I18nMessage message="tableCreation.suggestedIconsHeading"/></div>
                 {this.getSuggestedIcons()}
             </div>
@@ -133,8 +179,8 @@ class TableCreationPanel extends React.Component {
         });
 
         // choose a default icon
-        if (!this.props.tableInfo.tableIcon.value) {
-            this.updateTableProperty('tableIcon', suggestedTableIcons[0], false);
+        if (!_.has(this.props, 'tableInfo.tableIcon.value') && this.props.tableInfo.tableIcon.value) {
+            this.updateTableProperty('tableIcon', tableIconNames[0], false);
         }
     }
 
@@ -146,12 +192,6 @@ class TableCreationPanel extends React.Component {
         this.props.setEditingProperty(name);
     }
 
-    /**
-     * unset edited property when focus is lost
-     */
-    onBlurInput() {
-        this.props.setEditingProperty(null);
-    }
 
     /**
      * render the table settings UI
@@ -161,34 +201,30 @@ class TableCreationPanel extends React.Component {
 
         return (
             <div className="tableInfo">
-
-                <div className="description"><I18nMessage message="tableCreation.newTableDescription"/></div>
-                <div className="title"><I18nMessage message="tableCreation.newTableTitle"/></div>
-
                 <div className="sections">
                     <TableFieldInput title={Locale.getMessage("tableCreation.tableNameHeading")}
                                      name="name"
                                      placeholder={Locale.getMessage("tableCreation.tableNamePlaceholder")}
-                                     value={this.props.tableInfo.name.value}
+                                     value={this.props.tableInfo && this.props.tableInfo.name ? this.props.tableInfo.name.value : ""}
                                      onChange={this.updateTableProperty}
                                      onFocus={this.onFocusInput}
                                      onBlur={this.onBlurInput}
                                      required
                                      autofocus
                                      hasFocus={this.props.focusOn === "name"}
-                                     edited={this.props.tableInfo.name.edited}
-                                     validationError={this.props.validate ? this.props.tableInfo.name.validationError : null}/>
+                                     edited={this.props.tableInfo && this.props.tableInfo.name ? this.props.tableInfo.name.edited : false}
+                                     validationError={this.props.validate && this.props.tableInfo && this.props.tableInfo.name ? this.props.tableInfo.name.validationError : null}/>
 
                     <TableFieldInput title={Locale.getMessage("tableCreation.recordNameHeading")}
                                      name="tableNoun"
                                      placeholder={Locale.getMessage("tableCreation.recordNamePlaceholder")}
-                                     value={this.props.tableInfo.tableNoun.value}
+                                     value={this.props.tableInfo && this.props.tableInfo.tableNoun ? this.props.tableInfo.tableNoun.value : ""}
                                      onChange={this.updateTableProperty}
                                      onFocus={this.onFocusInput}
                                      onBlur={this.onBlurInput}
                                      required
                                      hasFocus={this.props.focusOn === "tableNoun"}
-                                     edited={this.props.tableInfo.tableNoun.edited}
+                                     edited={this.props.tableInfo && this.props.tableInfo.tableNoun ? this.props.tableInfo.tableNoun.edited : false}
                                      validationError={this.props.validate ? this.props.tableInfo.tableNoun.validationError : null}/>
 
                     {this.renderIconSection()}
@@ -196,10 +232,10 @@ class TableCreationPanel extends React.Component {
                     <TableFieldInput title={Locale.getMessage("tableCreation.descriptionHeading")}
                                      name="description"
                                      placeholder={Locale.getMessage("tableCreation.descriptionPlaceholder")}
-                                     value={this.props.tableInfo.description.value}
+                                     value={this.props.tableInfo && this.props.tableInfo.description ? this.props.tableInfo.description.value : ""}
                                      onChange={this.updateTableProperty}
                                      component="textarea"
-                                     rows="8"/>
+                                     rows="7"/>
                 </div>
             </div>);
     }

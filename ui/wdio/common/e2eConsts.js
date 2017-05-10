@@ -26,9 +26,11 @@
         longWaitTimeMs : 30000,
         extraLongWaitTimeMs : 150000,
 
+        userTableFieldNames : ['Name', 'Role', 'Email', 'User name'],
+
         reportFieldNames : ['Record ID#', 'Text Field', 'Numeric Field', 'Numeric Currency Field', 'Numeric Percent Field', 'Numeric Rating Field',
-            'Date Field', 'Date Time Field', 'Time of Day Field', 'Duration Field', 'Checkbox Field', 'Phone Number Field',
-            'Email Address Field', 'URL Field', 'User Field'],
+            'Date Field', 'Date Time Field', 'Time Of Day Field', 'Duration Field', 'Checkbox Field', 'Phone Number Field',
+            'Email Address Field', 'Url Field', 'User Field'],
 
         TABLE1 : 0,
         TABLE2 : 1,
@@ -50,6 +52,10 @@
         DEFAULT_ADMIN_ROLE : 12,
 
         ADMIN_USERID : 10000,
+
+        ADMIN_ROLEID : 12,
+        PARTICIPANT_ROLEID : 11,
+        VIEWER_ROLEID : 10,
 
         invalidCredentials: 'Invalid Credentials\nYour authorization credentials are invalid or expired.\nPlease click here to return to QuickBase.',
 
@@ -294,7 +300,7 @@
                 fieldType: consts.SCALAR,
                 dataType: consts.TEXT
             };
-            tableToFieldToFieldTypeMap[table3Name][e2eConsts.reportFieldNames[2]] = {
+            tableToFieldToFieldTypeMap[table3Name]['Parent Record ID'] = {
                 fieldType: consts.SCALAR,
                 dataType: consts.NUMERIC
             };
@@ -303,7 +309,7 @@
                 fieldType: consts.SCALAR,
                 dataType: consts.TEXT
             };
-            tableToFieldToFieldTypeMap[table4Name][e2eConsts.reportFieldNames[2]] = {
+            tableToFieldToFieldTypeMap[table4Name]['Parent Record ID'] = {
                 fieldType: consts.SCALAR,
                 dataType: consts.NUMERIC
             };

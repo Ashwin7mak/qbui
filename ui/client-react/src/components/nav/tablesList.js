@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {Link} from 'react-router';
+import {Link} from 'react-router-dom';
 import QBicon from '../qbIcon/qbIcon';
 import NavItem from './navItem';
 import Locale from '../../locales/locales';
@@ -9,7 +9,6 @@ import SearchBox from '../search/searchBox';
 import {APP_ROUTE} from '../../constants/urlConstants';
 import WindowLocationUtils from '../../utils/windowLocationUtils';
 import UrlUtils from '../../utils/urlUtils';
-
 
 let TablesList = React.createClass({
 
@@ -91,7 +90,9 @@ let TablesList = React.createClass({
      * @returns {*}
      */
     tablesList() {
-        return this.props.getAppTables(this.props.selectedAppId, this.props.apps).map((table) => {
+        // sorts tables list in order of id which is approx order of creation
+        // if the tables list gets very large this should happen server side instead
+        const tableItems = this.props.getAppTables(this.props.selectedAppId, this.props.apps).map((table) => {
             table.link = this.getTableLink(table);
             return this.searchMatches(table.name) &&
                 <NavItem item={table}
@@ -105,7 +106,13 @@ let TablesList = React.createClass({
                          selected={table.id === this.props.selectedTableId}
                          open={true}/>;
         });
+
+        if (this.props.onCreateNewTable) {
+            tableItems.push(this.getNewTableItem());
+        }
+        return tableItems;
     },
+
     getNavItem(msg, link, icon, selected) {
         const hoverComponent = (<div className="hoverComponent">
             <Link to={link}><I18nMessage message={msg}/></Link>
@@ -137,10 +144,13 @@ let TablesList = React.createClass({
     getNewTableItem() {
 
         return (
-            <li className="newTableItem link">
-                <div className="newTable" onClick={this.props.onCreateNewTable}>
-                    <QBicon icon="add-mini"/> New Table
-                </div>
+            <li className="newTableItem link" key="newTable">
+                <a className="newTable leftNavLink" onClick={this.props.onCreateNewTable}>
+                    <QBicon icon="add-new-stroke"/><span className="leftNavLabel"><I18nMessage message="tableCreation.newTablePageTitle"/></span>
+                    <div className="hoverComponent">
+                        <I18nMessage message="tableCreation.newTablePageTitle"/>
+                    </div>
+                </a>
             </li>);
     },
 
@@ -165,10 +175,7 @@ let TablesList = React.createClass({
                     {this.tablesList()}
                 </ul>
 
-                {this.props.onCreateNewTable &&
-                <ul className="tablesFooter">
-                    {this.getNewTableItem()}
-                </ul>}
+
             </div>
         );
     }

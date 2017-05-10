@@ -16,15 +16,31 @@ const mockTransformHelper = {
     convertFormToObjectForServer(data) {return data;}
 };
 
+const mockFieldsActions = {
+    saveAllNewFields(_appId, _tableId, formType) {
+        return (dispatch) => {
+            return Promise.resolve().then(() => (dispatch({type: 'AllFieldsSaved'})));
+        };
+    },
+    updateAllFieldsWithEdits(_appId, _tableId) {
+        return (dispatch) => {
+            return Promise.resolve().then(() => (dispatch({type: 'AllFieldsSaved'})));
+        };
+    }
+};
+
 describe('Form Actions', () => {
 
     beforeEach(() => {
         FormActionsRewireAPI.__Rewire__('WindowLocationUtils', WindowLocationUtilsMock);
+        // Mock out Lodash's uniqueId function so it produces a predictable output for tests. Other functions remain the same.
+        FormActionsRewireAPI.__Rewire__('_',  Object.assign({}, _, {uniqueId:() => 'newField_1'}));
 
     });
 
     afterEach(() => {
         FormActionsRewireAPI.__ResetDependency__('WindowLocationUtils');
+        FormActionsRewireAPI.__ResetDependency__('_');
     });
 
     describe('syncing actions', () => {
@@ -203,9 +219,13 @@ describe('Form Actions', () => {
 
         const expectedSaveActions = [
             {id:'view', type:types.SAVING_FORM, content: null},
+            {type: 'AllFieldsSaved'},
+            {type: 'AllFieldsSaved'},
             {id: 'view', type: types.SAVING_FORM_SUCCESS, content: formData.formMeta}
         ];
         const expectedActions = [
+            {type: 'AllFieldsSaved'},
+            {type: 'AllFieldsSaved'},
             {id:'view', type:types.SAVING_FORM, content: null},
             {id: 'view', type: types.SAVING_FORM_SUCCESS, content: formData}
         ];
@@ -226,11 +246,17 @@ describe('Form Actions', () => {
 
             spyOn(mockTransformHelper, 'convertFormToArrayForClient').and.returnValue(formData);
             FormActionsRewireAPI.__Rewire__('convertFormToArrayForClient', mockTransformHelper.convertFormToArrayForClient);
+
+            spyOn(mockFieldsActions, 'saveAllNewFields').and.callThrough();
+            spyOn(mockFieldsActions, 'updateAllFieldsWithEdits').and.callThrough();
+            FormActionsRewireAPI.__Rewire__('saveAllNewFields', mockFieldsActions.saveAllNewFields);
+            FormActionsRewireAPI.__Rewire__('updateAllFieldsWithEdits', mockFieldsActions.updateAllFieldsWithEdits);
         });
 
         afterEach(() => {
             FormActionsRewireAPI.__ResetDependency__('FormService');
             FormActionsRewireAPI.__ResetDependency__('convertFormToArrayForClient');
+            FormActionsRewireAPI.__ResetDependency__('saveAllNewFields');
         });
 
         it('saves a form update', (done) => {
@@ -269,6 +295,44 @@ describe('Form Actions', () => {
                     expect(false).toBe(true);
                     done();
                 });
+        });
+
+        it('saves new fields added to the form', (done) => {
+            const appId = 'appId';
+            const tableId = 'tableId';
+            const formType = 'view';
+
+            const store = mockStore({});
+
+            return store.dispatch(updateForm(appId, tableId, formType, formData)).then(
+                () => {
+                    expect(mockFieldsActions.saveAllNewFields).toHaveBeenCalledWith(appId, tableId, formType);
+                    done();
+                },
+                () => {
+                    expect(false).toBe(true);
+                    done();
+                }
+            );
+        });
+
+        it('saves existing fields that were edited on the form', (done) => {
+            const appId = 'appId';
+            const tableId = 'tableId';
+            const formType = 'view';
+
+            const store = mockStore({});
+
+            return store.dispatch(updateForm(appId, tableId, formType, formData)).then(
+                () => {
+                    expect(mockFieldsActions.updateAllFieldsWithEdits).toHaveBeenCalledWith(appId, tableId);
+                    done();
+                },
+                () => {
+                    expect(false).toBe(true);
+                    done();
+                }
+            );
         });
     });
 
@@ -322,7 +386,7 @@ describe('Form Actions', () => {
         it('transforms the returned response data after the save', (done) => {
             const store = mockStore({});
 
-            return store.dispatch(createForm("appId", "tblId", "view", formData)).then(
+            store.dispatch(createForm("appId", "tblId", "view", formData)).then(
                 () => {
                     expect(mockTransformHelper.convertFormToArrayForClient).toHaveBeenCalled();
                     done();
@@ -343,6 +407,22 @@ describe('Form Actions', () => {
                 content: {
                     newLocation: 2,
                     draggedItemProps: 3
+                }
+            });
+        });
+    });
+    describe('addNewFieldToForm', () => {
+        it('creates an action that will add a field', () => {
+            const testNewField = {id: 'newField_1', edit: true, FormFieldElement: {positionSameRow: false, fieldId: 'newField_1', displayText: 'New Text Field'}};
+            expect(formActions.addNewFieldToForm('view', 1, 2, 3, testNewField)).toEqual({
+                id: 'view',
+                type: types.ADD_FIELD,
+                appId: 1,
+                tblId: 2,
+                content: {
+                    newLocation: 3,
+                    newField: testNewField,
+
                 }
             });
         });
@@ -411,6 +491,35 @@ describe('Form Actions', () => {
                 content: {
                     currentTabIndex: 1
                 }});
+        });
+    });
+
+    describe('toggleToolPaletteChildrenTabIndex', () => {
+        it('creates an action that update toolPalette children tabindex', () => {
+            expect(formActions.toggleToolPaletteChildrenTabIndex('view', 1)).toEqual({
+                id: 'view',
+                type: types.TOGGLE_TOOL_PALETTE_BUILDER_CHILDREN_TABINDEX,
+                content: {
+                    currentTabIndex: 1
+                }});
+        });
+    });
+
+    describe('endDraggingState', () => {
+        it('creates an action that update updates the dragging state to false', () => {
+            expect(formActions.endDraggingState('view')).toEqual({
+                id: 'view',
+                type: types.END_DRAG,
+                content: null});
+        });
+    });
+
+    describe('isInDraggingState', () => {
+        it('creates an action that updates dragging state to true', () => {
+            expect(formActions.isInDraggingState('view')).toEqual({
+                id: 'view',
+                type: types.IS_DRAGGING,
+                content: null});
         });
     });
 });

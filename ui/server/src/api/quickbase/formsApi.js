@@ -67,8 +67,18 @@
                                             return fieldId === field.id;
                                         });
 
+                                        // search the tableFields array for the field element by id
+                                        // set the formFieldElement to the table setting for required
+                                        // tableFields[].required
+
                                         //  add the field if defined on the table
                                         if (tableField) {
+                                            //  NOTE: jira MC-1687 is work to remove the 'required' constraint attribute from
+                                            //  the form.  For now, set the FormFieldElement.required to the field setting until
+                                            //  that work is complete so that the UI will continue to work today.  Part of that
+                                            //  jira should include reworking the UI to no longer reference this form attribute
+                                            //  but instead reference the fields object to determine whether input is required.
+                                            element.FormFieldElement.required = tableField.required || false;
                                             let required = element.FormFieldElement.required;
                                             fidList.push({id: fieldId, required: required});
                                         } else {
@@ -96,18 +106,6 @@
             return tableFieldsFidList;
         }
 
-        function mergeConstraintsFromFidlist(fields, constraintList) {
-            return fields.map((field) => {
-                let matchingField = lodash.find(constraintList, (constraintField) => {
-                    return field.id === constraintField.id;
-                });
-                if (matchingField) {
-                    field.required = field.required || matchingField.required;
-                }
-                return field;
-            });
-        }
-
         let formsApi = {
 
             /**
@@ -124,6 +122,14 @@
              */
             setRecordsApiObject: function(obj) {
                 recordsApi = obj;
+            },
+
+            /**
+             * Allows you to override the appsApi object for unit tests.
+             * @param requestRequestOverride
+             */
+            setAppsApiObject: function(obj) {
+                appsApi = obj;
             },
 
             /**
@@ -149,14 +155,9 @@
                     opts.url += search;
                 }
 
-                if (lodash.get(req, 'query.relationshipPrototype')) {
-                    // Eventually FormMetaData returned from the experience engine should include ReferenceElements.
-                    // For now we are manually adding to the form when the 'relationshipPrototype' query parameter is true.
-                    return this.createReferenceElements(req, opts);
-                } else {
-                    return requestHelper.executeRequest(req, opts)
-                        .then(response => JSON.parse(response.body));
-                }
+                // Eventually FormMetaData returned from the experience engine should include ReferenceElements.
+                // For now we are manually adding to the form.
+                return this.createReferenceElements(req, opts);
             },
 
             /**
@@ -168,12 +169,12 @@
              * @returns {Promise}
              */
             createReferenceElements: (req, opts) => {
-                const promises = [requestHelper.executeRequest(req, opts), appsApi.getRelationshipsForApp(req), appsApi.getHydratedApp(req, req.params.appId)];
+                const promises = [requestHelper.executeRequest(req, opts), appsApi.getRelationshipsForApp(req), appsApi.getTablesForApp(req)];
                 /* istanbul ignore next  */
                 return Promise.all(promises).then(response => {
                     const formMeta = JSON.parse(response[0].body);
                     const relationships = response[1] || [];
-                    const app = response[2];
+                    const appTables = response[2];
                     if (relationships.length) {
                         formMeta.relationships = relationships;
                         let referenceElements = [];
@@ -200,11 +201,13 @@
                                 referenceElements.push(mockReferenceElement(relationshipIdx));
                             }
                         });
+
                         // place each referenceElement in its own section and append the new
                         // sections to the tab
                         referenceElements.forEach(referenceElement => {
                             const sections = formMeta.tabs[0].sections;
                             const length = Object.keys(sections).length;
+
                             sections[length] = Object.assign(lodash.cloneDeep(sections[0]), {
                                 elements: {0: referenceElement},
                                 fields: [],
@@ -212,7 +215,7 @@
                             });
 
                             const childTableId = relationships[referenceElement.ReferenceElement.relationshipId].detailTableId;
-                            const childTableName = lodash.find(app.tables, {id:childTableId}).name;
+                            const childTableName = lodash.find(appTables, {id:childTableId}).name;
                             sections[length].headerElement.FormHeaderElement.displayText = childTableName;
                         });
                     }
@@ -282,6 +285,7 @@
                             //  for record and fields; otherwise will return just the form meta data and empty
                             //  object for records and fields.
                             let fidList = extractFidsListFromForm(obj.formMeta, obj.tableFields);
+
                             if (obj.formMeta.includeBuiltIns) {
                                 let builtInFieldsFids = getBuiltInFieldsFids(obj.tableFields);
                                 fidList.push.apply(fidList, builtInFieldsFids);
@@ -305,7 +309,8 @@
                                         function(resp) {
                                             obj.record = resp.record;
                                             obj.fields = resp.fields;
-                                            obj.fields = mergeConstraintsFromFidlist(obj.fields, fidList);
+                                            //  NOTE: do not override the 'required' field constraint with the setting defined on the
+                                            //  form.  jira MC-1687 is work to remove that attribute from the form.
                                             resolve(obj);
                                         },
                                         function(err) {
@@ -316,7 +321,8 @@
                                     recordsApi.fetchFields(req).then(
                                         function(resp) {
                                             obj.fields = JSON.parse(resp.body);
-                                            obj.fields = mergeConstraintsFromFidlist(obj.fields, fidList);
+                                            //  NOTE: do not override the 'required' field constraint with the setting defined on the
+                                            //  form.  jira MC-1687 is work to remove that attribute from the form.
                                             resolve(obj);
                                         },
                                         function(err) {

@@ -49,7 +49,8 @@
             this.timeout(testConsts.INTEGRATION_TIMEOUT);
 
             var tableComponentsEndpoint = recordBase.apiBase.resolveTableComponentsEndpoint(app.id);
-            const payload = {name: "name", description: "desc", tableIcon: "icon", tableNoun: "noun"};
+            let name = testUtils.generateRandomString(10);
+            const payload = {name: name, description: "desc", tableIcon: "icon", tableNoun: "noun"};
             recordBase.apiBase.executeRequest(tableComponentsEndpoint, consts.POST, payload).then(
                 (response) => {
                     var tableId = response.body;
@@ -115,8 +116,9 @@
             this.timeout(testConsts.INTEGRATION_TIMEOUT);
 
             var tableId = app.tables[0].id;
-            var tablesEndpoint = recordBase.apiBase.resolveTablesEndpoint(app.id, tableId);
-            const payload = {name: "name", description: "desc", tableIcon: "icon", tableNoun: "noun"};
+            var tablesEndpoint = recordBase.apiBase.resolveTablesEndpoint(app.id, tableId, true);
+            let name = testUtils.generateRandomString(10);
+            const payload = {name: name, description: "desc", tableIcon: "icon", tableNoun: "noun"};
             recordBase.apiBase.executeRequest(tablesEndpoint, consts.PATCH, payload).then(
                 (response) => {
                     var promises = [];
@@ -146,6 +148,45 @@
                 }
             ).catch((error) => {
                 done(new Error("Unexpected exception calling update Table " + JSON.stringify(error)));
+            });
+        });
+
+        it('Should delete table', function(done) {
+            this.timeout(testConsts.INTEGRATION_TIMEOUT);
+
+            var tableId = app.tables[0].id;
+            var tablesEndpoint = recordBase.apiBase.resolveTablesEndpoint(app.id, tableId, true);
+            recordBase.apiBase.executeRequest(tablesEndpoint, consts.DELETE).then(
+                (response) => {
+                    var tablePropsEndpoint = recordBase.apiBase.resolveTablePropertiesEndpoint(app.id, tableId);
+                    recordBase.apiBase.executeRequest(tablePropsEndpoint, consts.GET).then(
+                        (responses) => {
+                            done(new Error("Unexpected error, table expected to be deleted on EE"));
+                        },
+                        (eeError) => {
+                            assert.equal(eeError.statusCode, 404, "Table should have been deleted on EE");
+                            var tableEndpoint = recordBase.apiBase.resolveTablesEndpoint(app.id, tableId);
+                            recordBase.apiBase.executeRequest(tableEndpoint, consts.GET).then(
+                                () => {
+                                    done(new Error("Unexpected error, table expected to be deleted on Core and EE"));
+                                },
+                                (coreError) => {
+                                    assert.equal(coreError.statusCode, 404, "Table should have been deleted on core");
+                                    done();
+                                }
+                            ).catch((error) => {
+                                done(new Error("Assertion failure: " + JSON.stringify(error)));
+                            });
+                        }
+                    ).catch((error) => {
+                        done(new Error("Assertion failure: " + JSON.stringify(error)));
+                    });
+                },
+                (error) => {
+                    done(new Error("Error calling delete Table " + JSON.stringify(error)));
+                }
+            ).catch((error) => {
+                done(new Error("Unexpected exception calling delete Table " + JSON.stringify(error)));
             });
         });
 

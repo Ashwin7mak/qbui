@@ -1,107 +1,98 @@
 @import "../../../assets/css/qbVariables";
 
 .fieldEditingTools {
+    opacity: 0;
     transition: opacity 0.4s;
-    border-radius: $radius-base;
+    border-radius: $border-radius-base;
+    //By giving it a border the same size as the focus border and a transparent background,
+    //it keeps the container from 'jumping' on focus
+    border: $stroke-width-thick solid transparent;
+    box-shadow: 0 0 4px 0px rgba($color-black-100, 0);
     position: absolute;
     height: 100%;
-    width: 310px;
+    width: 335px;
 
-    &:focus {
-        //For keyboard nav
-        opacity: 1;
-        outline: none;
-        border: $stroke-width-thin solid $border-focused-color;
-    }
-
-    &.selectedFormElement {
-        &:active {
-            //This opacity is needed to work for 'tabbing'
-            opacity: 1;
-            outline: none;
-            border: $stroke-width-thin solid $border-focused-color;
-
-            .deleteFieldIcon {
-                .qbIcon {
-                    opacity: 1;
-                    color: $color-red-700;
-                }
-            }
-
-            .fieldPreferencesIcon {
-                .qbIcon {
-                    opacity: 1;
-                    color: $color-cyan-700;
-                }
-            }
-        }
-    }
-
-    .actionIcons {
-        float: right;
-    }
     .deleteFieldIcon {
-        font-size: $size-iconfont-small;
+        font-size: $size-iconfont-large2;
         position: absolute;
-        top: 10px;
-        right: 50px;
+        bottom: 15%;
+        padding-left: 295px;
 
         .qbIcon {
-            color: $color-black-600;
-            opacity: 0;
-            transition: color 0.4s;
+            color: $iconfont-on-light-normal-color;
+            transition: color 0.3s;
+            padding-left: 1px;
+        }
+        button {
+            background: transparent;
+            outline: none;
+            padding: 0;
+            //By giving it a border the same size as the focus border and a transparent background,
+            //it keeps the container from 'jumping' on focus
+            border: $stroke-width-thin solid transparent;
+            &:focus {
+                opacity: 1;
+                outline: none;
+                @include text-input-focus;
+            }
         }
     }
 
-    .fieldPreferencesIcon {
-        font-size: $size-iconfont-small;
-        position: absolute;
-        top: 10px;
-        right: 16px;
-
-        .qbIcon {
-            color: $color-black-600;
-            opacity: 0;
-            transition: color 0.4s;
-        }
+    .tipChildWrapper {
+        cursor: pointer;
     }
 
     &.notTouchDevice {
-        //No borders, icon, or drag handles are displayed when it is not a touch device
+        //No borders or icon are displayed when it is not a touch device
         //Everything shows up on hover
-        .dragHandle {
-            opacity: 0;
-        }
-
         .deleteFieldIcon .qbIcon {
             &:hover {
                 opacity: 1;
                 color: $color-red-700;
             }
         }
-        .fieldPreferencesIcon .qbIcon {
-            &:hover {
+    }
+
+    &:focus {
+        //For keyboard nav
+        opacity: 1;
+        outline: none;
+        @include text-input-focus;
+    }
+
+    &.selectedFormElement {
+        opacity: 1;
+        @include text-input-focus-thick;
+
+        .deleteFieldIcon {
+            button {
+                padding: 0;
+            }
+            .qbIcon {
+                padding-left: 1px;
                 opacity: 1;
-                color: $color-cyan-700;
+                color: $color-red-700;
             }
         }
     }
 
-    &.isTablet {
-        //Icons and borders only display during focus
-        //Drag handle always show
-        border: none;
-
-        .deleteFieldIcon .qbIcon {
-            padding-right: $spacing-medium1;
+    &:hover {
+        transition: 0.4s;
+        opacity: 1;
+        border: $stroke-width-thin solid $input-text-focus-border-color;
+        .deleteFieldIcon {
+            opacity: 1;
+            .qbIcon {
+                opacity: 1;
+            }
         }
     }
 
     @include small-breakpoint {
-        //Drag handles and borders always display during small breakpoints
-        //Icons only show up when it is focused
+        //Borders always display during small breakpoints
+        //Icon only show up when it is focused
         width: 100%;
-        border-bottom: $stroke-width-thin solid $color-black-400;
+        border-bottom: $stroke-width-thin solid $selected-color;
 
         .deleteFieldIcon .qbIcon {
             margin-right: $spacing-medium1;
@@ -114,24 +105,32 @@
             }
         }
     }
-
-    .tipChildWrapper {
-        cursor: pointer;
+    &.isTablet {
+        opacity: 1;
+        //This is an extra check to keep this code from triggering firefox
+        .deleteFieldIcon {
+            opacity: 1;
+            .qbIcon {
+                opacity: 1;
+            }
+        }
     }
 
     &.active {
-        opacity: 1;
-        @include dragpreview-active-gradient;
+        box-shadow: none;
+        border: $stroke-width-thin dashed $color-black-300;
+        background-color: rgba($color-purple-600, 0.08);
+        width: 335px;
     }
 
-    button {
-        background: transparent;
-        outline: none;
-        border: none;
-        &:focus {
-            opacity: 1;
-            outline: none;
-            border: $stroke-width-thin solid $border-focused-color;
+    &:active {
+        box-shadow: none;
+        border: $stroke-width-thin dashed $color-black-300;
+        background-color: rgba($dragPreview-background-color, 0.08);
+        width: 335px;
+        z-index: 2;
+        .deleteFieldIcon .qbIcon {
+            opacity: 0;
         }
     }
 }

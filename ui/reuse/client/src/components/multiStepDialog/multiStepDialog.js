@@ -3,13 +3,10 @@ import {PropTypes} from 'react';
 import Modal from 'react-bootstrap/lib/Modal';
 import Button from 'react-bootstrap/lib/Button';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
-import Icon from '../icon/icon';
+import Icon from 'REUSE/components/icon/icon';
 import Loader from 'react-loader';
-
-// IMPORTS FROM CLIENT REACT
-import {I18nMessage} from '../../../../../client-react/src/utils/i18nMessage';
-import Locale from '../../../../../client-react/src/locales/locales';
-// IMPORTS FROM CLIENT REACT
+import {I18nMessage} from 'REUSE/utils/i18nMessage';
+import Locale from 'REUSE/locales/locale';
 
 import './multiStepDialog.scss';
 
@@ -81,8 +78,8 @@ class MultiStepDialog extends React.Component {
             <Modal.Footer>
                 <div className="buttons">
                     <span className="spacer"/>
-                    <Button className="cancelButton" onClick={this.cancelClicked}><I18nMessage message="nav.cancel"/></Button>
-
+                    {this.props.showCancelButton &&
+                        <Button className="cancelButton" onClick={this.cancelClicked}><I18nMessage message="nav.cancel"/></Button>}
                     {showPrevious &&
                         <Button className="previousButton" onClick={this.previousClicked}><I18nMessage message="nav.previous"/></Button>}
                     {showNext &&
@@ -156,19 +153,23 @@ MultiStepDialog.propTypes = {
     /**
      * page index to display
      */
-    pageIndex: PropTypes.number.isRequired,
+    pageIndex: PropTypes.number,
     /**
      * cancel callback (client should set show prop to false)
      */
-    onCancel: PropTypes.func.isRequired,
+    onCancel: PropTypes.func,
+    /**
+     * show the cancel button
+     */
+    showCancelButton: PropTypes.bool,
     /**
      * next page (client should increment pageIndex)
      */
-    onNext: PropTypes.func.isRequired,
+    onNext: PropTypes.func,
     /**
      * previous page (client should decrement pageIndex)
      */
-    onPrevious: PropTypes.func.isRequired,
+    onPrevious: PropTypes.func,
     /**
      * finished callback (client should hide dialog and process it)
      */
@@ -192,8 +193,10 @@ MultiStepDialog.propTypes = {
 };
 
 MultiStepDialog.defaultProps = {
+    pageIndex: 0,
     canProceed: true,
     isLoading: false,
+    showCancelButton: true,
     finishedButtonLabel: Locale.getMessage("nav.finished")
 };
 

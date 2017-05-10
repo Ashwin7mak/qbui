@@ -1,7 +1,6 @@
 @import '../../assets/css/_qbVariables';
 
 .tableInfo {
-
     .title {
         color: $color-black-700;
         font-size: $font-size-large;
@@ -17,24 +16,32 @@
         flex-direction: row;
         flex-wrap: wrap;
         margin-left: 2px;
+        -webkit-flex-direction: row;
+        -webkit-flex-wrap: wrap;
 
         .iconSelection {
             position: relative;
-
             .iconChooser {
                 position: absolute;
+                background-color: $color-black-100;
+                z-index: 1;
             }
             .iconChooser.closed {
                 transition: all 300ms ease-in;
-                height: 42px;
+                height: 41px;
                 width: 64px;
             }
             .iconChooser.open {
                 transition: all 300ms ease-in;
 
-                width: 766px;
-                height: 182px;
+                width: 200%;
+                height: 256px;
             }
+        }
+
+        .iconChooser .showAllToggle:focus {
+            /* we currently dont have button styles implemented. In the meantime match the focus styling to input box's */
+            @include text-input-focus;
         }
 
         .suggestedIcons {

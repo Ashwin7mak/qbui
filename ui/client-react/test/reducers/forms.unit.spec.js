@@ -1,4 +1,5 @@
 import reducer, {__RewireAPI__ as ReducerRewireAPI} from '../../src/reducers/forms';
+import * as tabIndexConstants from '../../../client-react/src/components/formBuilder/tabindexConstants';
 import * as types from '../../src/actions/types';
 import _ from 'lodash';
 
@@ -33,6 +34,8 @@ describe('Forms reducer functions', () => {
             formData: {formMeta: 'some meta data'}
         }
     };
+
+    const updatedFormMeta = 'updated form meta';
 
     it('returns correct initial state', () => {
         expect(reducer(undefined, {})).toEqual(initialState);
@@ -161,7 +164,6 @@ describe('Forms reducer functions', () => {
     });
 
     describe('moving a field', () => {
-        const updatedFormMeta = 'updated form meta';
         const mockMoveFieldHelper = {
             moveField(_formMeta, newTabIndex, newSectionIndex, newOrderIndex, draggedItemProps) {return updatedFormMeta;}
         };
@@ -188,7 +190,10 @@ describe('Forms reducer functions', () => {
             expect(reducer(stateWithViewForm, actionPayload)).toEqual({
                 [VIEW]: {
                     ...stateWithViewForm[VIEW],
-                    formData: {formMeta: updatedFormMeta}
+                    formData: {formMeta: updatedFormMeta},
+                    selectedFields: [1],
+                    isPendingEdit: true,
+                    previouslySelectedField: []
                 }
             });
 
@@ -205,7 +210,6 @@ describe('Forms reducer functions', () => {
     });
 
     describe('removing a field', () => {
-        const updatedFormMeta = 'updated form meta';
         const mockMoveFieldHelper = {
             removeField(_formMeta, location) {return updatedFormMeta;}
         };
@@ -231,7 +235,8 @@ describe('Forms reducer functions', () => {
             expect(reducer(stateWithViewForm, actionPayload)).toEqual({
                 [VIEW]: {
                     ...stateWithViewForm[VIEW],
-                    formData: {formMeta: updatedFormMeta}
+                    formData: {formMeta: updatedFormMeta},
+                    isPendingEdit: true,
                 }
             });
             expect(mockMoveFieldHelper.removeField).toHaveBeenCalledWith(
@@ -243,6 +248,57 @@ describe('Forms reducer functions', () => {
             expect(reducer(stateWithEditForm, actionPayload)).toEqual(stateWithEditForm);
 
             expect(mockMoveFieldHelper.removeField).not.toHaveBeenCalled();
+        });
+    });
+
+    describe('adding a field', () => {
+        const stateForAddingField = {
+            'view': {
+                id: 'view',
+                formData: {formMeta: {tabs: [{sections: [{columns: [{elements: []}]}]}]}}
+            }
+        };
+        const mockMoveFieldHelper = {
+            addNewFieldToForm(_formMeta, _location, _field) {return updatedFormMeta;}
+        };
+
+        const actionPayload = {
+            id: VIEW,
+            type: types.ADD_FIELD,
+            content: {
+                newLocation: 1,
+                newField: {}
+            }
+        };
+
+        beforeEach(() => {
+            spyOn(mockMoveFieldHelper, 'addNewFieldToForm').and.callThrough();
+            ReducerRewireAPI.__Rewire__('MoveFieldHelper', mockMoveFieldHelper);
+        });
+
+        afterEach(() => {
+            ReducerRewireAPI.__ResetDependency__('MoveFieldHelper');
+        });
+
+        it('returns a new state with a single field added', () => {
+            expect(reducer(stateForAddingField, actionPayload)).toEqual({
+                [VIEW]: {
+                    ...stateForAddingField[VIEW],
+                    selectedFields: [1],
+                    previouslySelectedField: [],
+                    formData: {formMeta: updatedFormMeta},
+                    isPendingEdit: true,
+                }
+            });
+            expect(mockMoveFieldHelper.addNewFieldToForm).toHaveBeenCalledWith(
+                stateForAddingField[VIEW].formData.formMeta, 1, {}
+            );
+        });
+
+        it('returns existing state if there is no current form', () => {
+            expect(reducer(stateWithEditForm, actionPayload)).toEqual(stateWithEditForm);
+
+            expect(mockMoveFieldHelper.addNewFieldToForm).not.toHaveBeenCalled();
         });
     });
 
@@ -275,7 +331,6 @@ describe('Forms reducer functions', () => {
     });
 
     describe('(keyboard) move a field up', () => {
-        const updatedFormMeta = 'updated form meta';
         const mockMoveFieldHelper = {
             keyBoardMoveFieldUp(_formMeta, _location) {return updatedFormMeta;},
             updateSelectedFieldLocation(_location, _Updatedlocation) {return updatedFormMeta;}
@@ -304,7 +359,8 @@ describe('Forms reducer functions', () => {
                 [VIEW]: {
                     ...stateWithViewForm[VIEW],
                     formData: {formMeta: updatedFormMeta},
-                    selectedFields: [updatedFormMeta]
+                    selectedFields: [updatedFormMeta],
+                    isPendingEdit: true
                 }
             });
             expect(mockMoveFieldHelper.keyBoardMoveFieldUp).toHaveBeenCalledWith(
@@ -324,7 +380,6 @@ describe('Forms reducer functions', () => {
     });
 
     describe('(keyboard) move a field down', () => {
-        const updatedFormMeta = 'updated form meta';
         const mockMoveFieldHelper = {
             keyBoardMoveFieldDown(_formMeta, _location) {return updatedFormMeta;},
             updateSelectedFieldLocation(_location, _updatedLocation) {return updatedFormMeta;}
@@ -353,7 +408,8 @@ describe('Forms reducer functions', () => {
                 [VIEW]: {
                     ...stateWithViewForm[VIEW],
                     formData: {formMeta: updatedFormMeta},
-                    selectedFields: [updatedFormMeta]
+                    selectedFields: [updatedFormMeta],
+                    isPendingEdit: true
                 }
             });
             expect(mockMoveFieldHelper.keyBoardMoveFieldDown).toHaveBeenCalledWith(
@@ -372,7 +428,7 @@ describe('Forms reducer functions', () => {
         });
     });
 
-    describe('toggle tab index', () => {
+    describe('toggle formBuilder children tab index', () => {
         const testFormMeta = 'some meta data';
 
         const actionPayload = {
@@ -388,8 +444,90 @@ describe('Forms reducer functions', () => {
                 [VIEW]: {
                     ...stateWithViewForm[VIEW],
                     formData: {formMeta: testFormMeta},
-                    formBuilderChildrenTabIndex: ['0'],
-                    formFocus: [false]
+                    formBuilderChildrenTabIndex: [tabIndexConstants.FORM_TAB_INDEX],
+                    toolPaletteChildrenTabIndex: ['-1'],
+                    formFocus: [false],
+                    toolPaletteFocus: [false]
+                }
+            });
+        });
+
+        it('returns existing state if there is no current form', () => {
+            expect(reducer(stateWithEditForm, actionPayload)).toEqual(stateWithEditForm);
+        });
+
+    });
+
+    describe('toggle toolPalette children tab index', () => {
+        const testFormMeta = 'some meta data';
+
+        const actionPayload = {
+            id: VIEW,
+            type: types.TOGGLE_TOOL_PALETTE_BUILDER_CHILDREN_TABINDEX,
+            content: {
+                currentTabIndex: '-1',
+            }
+        };
+
+        it('returns a new state with a tabindex toggled', () => {
+            expect(reducer(stateWithViewForm, actionPayload)).toEqual({
+                [VIEW]: {
+                    ...stateWithViewForm[VIEW],
+                    formData: {formMeta: testFormMeta},
+                    toolPaletteChildrenTabIndex: [tabIndexConstants.TOOL_PALETTE_TABINDEX],
+                    formBuilderChildrenTabIndex: ['-1'],
+                    formFocus: [false],
+                    toolPaletteFocus: [false]
+                }
+            });
+        });
+
+        it('returns existing state if there is no current form', () => {
+            expect(reducer(stateWithEditForm, actionPayload)).toEqual(stateWithEditForm);
+        });
+
+    });
+
+    describe('isDragging state', () => {
+        const testFormMeta = 'some meta data';
+
+        const actionPayload = {
+            id: VIEW,
+            type: types.IS_DRAGGING,
+            content: null
+        };
+
+        it('returns a new state with isDragging set to true', () => {
+            expect(reducer(stateWithViewForm, actionPayload)).toEqual({
+                [VIEW]: {
+                    ...stateWithViewForm[VIEW],
+                    formData: {formMeta: testFormMeta},
+                    isDragging: true
+                }
+            });
+        });
+
+        it('returns existing state if there is no current form', () => {
+            expect(reducer(stateWithEditForm, actionPayload)).toEqual(stateWithEditForm);
+        });
+
+    });
+
+    describe('endDragging state', () => {
+        const testFormMeta = 'some meta data';
+
+        const actionPayload = {
+            id: VIEW,
+            type: types.END_DRAG,
+            content: null
+        };
+
+        it('returns a new state with endDragging set to undefined', () => {
+            expect(reducer(stateWithViewForm, actionPayload)).toEqual({
+                [VIEW]: {
+                    ...stateWithViewForm[VIEW],
+                    formData: {formMeta: testFormMeta},
+                    isDragging: false
                 }
             });
         });

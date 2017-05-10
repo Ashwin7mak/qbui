@@ -5,7 +5,7 @@ import WindowLocationUtils from '../utils/windowLocationUtils';
 import CommonUrlUtils from '../../../common/src/commonUrlUtils';
 import StringUtils from '../utils/stringUtils';
 
-import {SUPPORT_LINK_PATH, REPORT_LINK, CHILD_REPORT_LINK, USERS_ROUTE, BUILDER_ROUTE} from '../constants/urlConstants';
+import {SUPPORT_LINK_PATH, REPORT_LINK, CHILD_REPORT_LINK, USERS_ROUTE, BUILDER_ROUTE, SETTINGS_ROUTE, APP_ROUTE, FEEDBACK_LINK_PATH} from '../constants/urlConstants';
 
 const UrlUtils = {
     getIconForProtocol(protocol) {
@@ -51,6 +51,13 @@ const UrlUtils = {
         let hostname = WindowLocationUtils.getHostname();
         return `https://${CommonUrlUtils.getSubdomain(hostname)}.${CommonUrlUtils.getDomain(hostname)}${SUPPORT_LINK_PATH}`;
     },
+    getFeedBackLink() {
+        return `https://${FEEDBACK_LINK_PATH}`;
+    },
+    getReportFeedBackLink() {
+        let hostname = WindowLocationUtils.getHostname();
+        return `https://${CommonUrlUtils.getSubdomain(hostname)}.${CommonUrlUtils.getDomain(hostname)}${SUPPORT_LINK_PATH}`;
+    },
 
     /**
      * Build client url link to render a report
@@ -92,6 +99,19 @@ const UrlUtils = {
      */
     getAfterTableCreatedLink(appId, tblId) {
         return `${BUILDER_ROUTE}/app/${appId}/table/${tblId}/form/1`;
+    },
+
+    /**
+     * Get the link for Table Properties & Settings page
+     */
+    getTableSettingsLink(appId, tableId) {
+        return `${SETTINGS_ROUTE}/app/${appId}/table/${tableId}/properties`;
+    },
+    /**
+     * Get the link for app home page
+     */
+    getAppHomePageLink(appId) {
+        return `${APP_ROUTE}/${appId}`;
     }
 };
 

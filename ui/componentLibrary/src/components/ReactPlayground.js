@@ -28,6 +28,8 @@ const UserFieldValueEditor = require('../../../client-react/src/components/field
 const UserFieldValueRenderer = require('../../../client-react/src/components/fields/userFieldValueRenderer').default;
 
 const Icon = require('../../../reuse/client/src/components/icon/icon').default;
+const AVAILABLE_ICON_FONTS = require('../../../reuse/client/src/components/icon/icon').AVAILABLE_ICON_FONTS;
+
 const QBPanel = require('../../../client-react/src/components/QBPanel/qbpanel').default;
 
 const Trowser = require('../../../client-react/src/components/trowser/trowser.js').default;
@@ -42,6 +44,22 @@ const DurationFieldValueEditor = require('../../../client-react/src/components/f
 const QbGrid = require('../../../client-react/src/components/dataTable/qbGrid/qbGrid.js').default;
 const SideMenuBase = require('../../../reuse/client/src/components/sideMenuBase/sideMenuBase.js').default;
 const SideTrowserBase = require('../../../reuse/client/src/components/sideTrowserBase/sideTrowserBase.js').default;
+const IconChooser = require('../../../reuse/client/src/components/iconChooser/iconChooser.js').default;
+const IconInputBox = require('../../../reuse/client/src/components/iconInputBox/iconInputBox.js').default;
+const TopNav = require('../../../reuse/client/src/components/topNav/topNav.js').default;
+const DefaultTopNavGlobalActions = require('../../../reuse/client/src/components/topNav/defaultTopNavGlobalActions.js').default;
+const Stage = require('../../../reuse/client/src/components/stage/stage.js').default;
+const StageHeader = require('../../../reuse/client/src/components/stage/stageHeader').default;
+const StageHeaderCount = require('../../../reuse/client/src/components/stage/stageHeaderCounts').default;
+const Tooltip = require('../../../reuse/client/src/components/tooltip/tooltip.js').default;
+const StandardLeftNav = require('../../../reuse/client/src/components/sideNavs/standardLeftNav.js').default;
+const Pagination = require('../../../reuse/client/src/components/pagination/pagination.js').default;
+// const RowActions = require('../../../reuse/client/src/components/rowActions/rowActions.js').default;
+// const IconActions = require('../../../reuse/client/src/components/iconActions/iconActions').default;
+// const Locale = require('../../../reuse/client/src/locales/locale').default;
+// const PositionedRowEditActions = require('../../../client-react/src/components/dataTable/qbGrid/rowEditActions').default;
+const NotificationManager = require('../../../reuse/client/src/scripts/notificationManager.js').default;
+const NotificationContainer = require('react-notifications').NotificationContainer;
 // END OF IMPORT STATEMENTS
 // The comment above is used for a grunt task. Please do not delete.
 

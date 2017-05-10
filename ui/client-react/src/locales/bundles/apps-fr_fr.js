@@ -9,11 +9,12 @@ export default {
 
     messages: {
         apps: {
-            header: "Vos Apps"
+            header: "Vos Apps",
+            missing: "Restez connecté, mes applications arrivent bientôt"
         },
         app: {
             homepage: {
-                welcomeTitle: "Bienvenue sur Mercury Beta",
+                welcomeTitle: "Bienvenue à",
                 welcomeText: "Pendant que vous apprenez votre chemin, utilisez cette zone à la place de votre page d'accueil d'application. " +
                 "C'est votre application réelle dans Mercury. Vous ne verrez pas encore la page d'accueil de votre application, mais " +
                 "données sont ici. Les travaux effectués ici s'affichent immédiatement en mode Classique.",
@@ -32,12 +33,26 @@ export default {
                 helpLinkPreText: "Veuillez ",
                 helpLinkText: "contacter notre équipe de soins"
             },
+            dashboards: {
+                missing: "Restez à l'écoute, les tableaux de bord de l'application arrivent bientôt"
+            },
             settings: "Paramètres",
             users: {
                 addUser: "L'ajout d'un nouvel utilisateur n'est pas encore disponible",
                 users: "Utilisateurs",
                 content: "C'est la liste de toutes les personnes qui ont été ajoutées à votre application. Vous pouvez obtenir quelques idées rapides sur le nombre de personnes dans chaque rôle dans votre application ainsi que de trouver une personne spécifique dans la liste et de les envoyer par courrier électronique.",
-                manager: "Gestionnaire d'applications"
+                manager: "Gestionnaire d'applications",
+                removeUser: "Supprimer cet utilisateur?",
+                unassignUser: "Les utilisateurs ne pourront plus accéder à cette application. Toutes les données qu'ils ont déjà entrées restent dans la demande.",
+                deleteUser: "Retirer {valeur} utilisateur",
+                deleteUsers: "Retirer {valeur} utilisateurs",
+                removeButton: "Retirer",
+                cancel: "Annuler",
+                singular: "utilisateur",
+                plural: "utilisateurs",
+                usersRemoved: " Les utilisateurs ont été enlevés",
+                userRemoved: " L'utilisateur a été supprimé"
+
             }
         },
         appMenu: {
@@ -104,14 +119,24 @@ export default {
             next: "Prochain",
             previous: "Orécédent",
             finished: "Fini",
-            new: "Nouveau"
+            apply: "Appliquer",
+            new: "Nouveau",
+            backToApp: "Retour à l'application",
+            reset: "Réinitialiser",
+            closeRecord: "Fermer record",
+            expandSection: "Développer section",
+            collapseSection: "Effondrer section"
         },
         field: {
             search: "Chercher",
             searchNoMatch: "Personne ne correspond à"
         },
         grid: {
-            no_data: "Il n'y a pas de données à afficher."
+            no_data: "Il n'y a pas de données à afficher.",
+            no_filter_matches: "Aucun {recordsName} ne correspond à ce que vous recherchez. Essayez de rechercher un autre type d'{recordsName}.",
+            no_rows: "Il n'y a aucun {recordsName} à voir en ce moment.",
+            no_rows_but: "Il n'y a pas de {recordsName}, mais vous pouvez ",
+            no_rows_create_link:  "créer une"
         },
         globalActions: {
             user: "Utilisateur",
@@ -121,11 +146,12 @@ export default {
         },
         pageActions: {
             addRecord: "Ajouter un enregistrement",
-            configureFormBuilder: 'Modifier ce formulaire',
+            approve: "Approuve ce disque",
             saveRecord: "Sauvegarder les modifications",
             saveAndAddRecord: "Enregistrer et ajouter une nouvelle ligne",
             saveAndAddRecordDisabled: "Ajout de plusieurs enregistrements ne fonctionnant pas en ce moment",
             cancelSelection: "Annuler les modifications",
+            close: "Fermer",
             favorite: "Préféré",
             gridEdit: "Grille modifier",
             edit: "Modifier",
@@ -134,7 +160,8 @@ export default {
             print: "Imprimer",
             customizeReport: "Personnaliser ce Rapport",
             customizeForm: "Personnaliser ce formulaire",
-            customizePage: "Personnaliser cette page"
+            customizePage: "Personnaliser cette page",
+            deleteTable: "Supprimer la table"
         },
         recordActions: {
             previous: "Précédent",
@@ -146,7 +173,7 @@ export default {
             recordNotAdded :"Enregistrement non ajouté",
             recordSaved : "Sauvegarder",
             recordNotSaved :"Enregistrement non enregistré",
-            deleted : "supprimé",
+            deleted : "{value, plural,\n =0 {0 {nameForRecord} enregistrement}\n =1 {1 {nameForRecord} enregistrement}\n other {# {nameForRecord} enregistrement}\n} supprimés",
             notDeleted : "non supprimés",
             cannotLoad : "Impossible de charger la fiche",
             error: {
@@ -162,7 +189,11 @@ export default {
                     "de-de": "Allemand"
                 },
                 preferences: "Préférences",
-                sign_out: "Se déconnecter"
+                sign_out: "Se déconnecter",
+                feedbackMenuButton: "Donnez votre avis",
+                feedbackMenuTitle: "Retour d'information",
+                reportFeedBackButton: "Signaler un problème",
+                feedbackTooltip: "Partagez des idées et des problèmes"
             }
         },
         fields: {
@@ -190,6 +221,12 @@ export default {
                 save: {
                     success: "Formulaire enregistré",
                     error: "Erreur lors de l'enregistrement du formulaire"
+                }
+            },
+            automation: {
+                approverecord: {
+                    success: "Enregistrement approuvé.",
+                    error: "Une erreur s'est produite lors de l'approbation de ce document."
                 }
             }
         },
@@ -243,7 +280,8 @@ export default {
                 noCheck : "Non",
                 yesCheck : "Oui",
                 clearFacet: "Enlever le filtre {facet}",
-                clearFacetSelection: "Cliquez pour désactiver ce filtre"
+                clearFacetSelection: "Cliquez pour désactiver ce filtre",
+                filter: "Filtre"
             },
             filteredRecordCount : "{filteredRecordCount} des {recordCount} enregistrements",
             filteredSingleRecordCount : "{filteredRecordCount} de {recordCount} record",
@@ -262,6 +300,7 @@ export default {
             nextPageLoadingOnSwipe: "Obtenir plus...",
             searchPlaceHolder:  "Rechercher ces",
             sortAndGroup : {
+                sortAndGroupIcon: "Trier & Groupe",
                 addField: "Ajouter le champ",
                 by: "par",
                 changeGroupOrder: "Gruppe wechseln bestellen",
@@ -307,6 +346,10 @@ export default {
                 newTable: "Nouvelle table basée sur cette colonne",
                 columnProps: "Propriétés de la colonne",
                 fieldProps: "Propriétés de champ"
+            },
+            drawer: {
+                title: "Champs cachés",
+                info: "Ajoutez un champ au rapport",
             }
         },
         errorMessagePopup: {
@@ -472,7 +515,10 @@ export default {
             print: "L'impression n'est pas encore disponible",
             copy: "La copie n'est pas encore disponible",
             email: "L'envoi par courriel n'est pas encore disponible",
-            delete: "La suppression n'est pas encore disponible"
+            delete: "La suppression n'est pas encore disponible",
+            emailUsers: "L'exportation de CSV n'est pas encore disponible",
+            settingsRole: "Changer de rôle n'est pas encore disponible",
+            emailApp: "Envoi de l'invitation de l'application n'est pas encore disponible",
         },
         pageTitles: {
             pageTitleSeparator: " - ",
@@ -518,6 +564,12 @@ export default {
             LOOKUP: "Chercher",
             FILE_ATTACHMENT: "Fichier"
         },
+        fieldPropertyLabels: {
+            title: "Propriétés du champ",
+            name: "prénom",
+            required: "Doit être rempli",
+            multiChoice: "Les choix"
+        },
         builder: {
             formBuilder: {
                 unimplemented: "La fonctionnalité n'est pas disponible en ce moment",
@@ -553,11 +605,18 @@ export default {
                 }
             },
             fieldGroups: {
-                text: 'Texte',
-                numeric: 'Nombre',
-                date: 'Date',
-                other: 'Autre'
-            }
+                text: "Texte",
+                numeric: "Nombre",
+                date: "Date",
+                other: "Autre",
+                relationships: "Des relations"
+            },
+            defaultMultichoiceOptions: {
+                first: "Option 1",
+                second: "Option 2",
+                third: "Option 3"
+            },
+            modify: 'Modifier formulaire'
         },
         featureSwitchAdmin: {
             defaultFeatureName: "Fonctionnalité",
@@ -617,10 +676,46 @@ export default {
             validateTableNameEmpty: "Le nom de la table ne doit pas être vide",
             validateTableNameExists: "Le nom de la table doit être unique pour cette application",
             validateRecordNameEmpty: "Le nom de l'enregistrement ne doit pas être vide",
+
+            homePageInitialTitle: "Commencez à utiliser votre table",
+            homePageInitialDescription: "Nous avons créé quelques rapports pour accompagner votre nouvelle table afin que vous puissiez commencer à ajouter des enregistrements",
+            homePageAddRecordButton: "Ajouter un enregistrement",
+            homePageStillBuilding: "Bâtiment fixe?  ",
+            homePageCreateAnother: "Créer un autre tableau",
+
+            noSuggestedIcons: "Il n'y a pas d'icônes suggérées pour ce nom de table",
+            typeForSuggestions: "Tapez un nom de table pour obtenir des suggestions",
+
+            tableReadyTitle: "Votre table est prête!",
+            tableReadyText1: "Chaque élément d'information que vous souhaitez collecter est un champ. Nous vous avons commencé avec un couple.",
+            tableReadyText2: "Concevez ce formulaire pour collecter des informations. Faites glisser et déposez pour ajouter des champs.",
+
+            tableReadyDialogOK: "D'accord"
         },
         iconChooser: {
             searchPlaceholder: "Rechercher des icônes..."
+        },
+        settings: {
+            header: "Paramètres",
+            tablesHeader: "Table",
+            appsHeader: "App",
+            formsHeader: "Forme",
+            tableSettings: "Propriétés et paramètres de la table",
+            configureFormBuilder: 'Modifier ce formulaire',
+        },
+        tableEdit: {
+            tableUpdateFailed: "Impossible de mettre à jour le tableau",
+            tableUpdated: "Informations sur la table enregistrées",
+            tableReset: "Informations sur la table non enregistrées",
+            deleteThisTable: "Supprimez la table {tableName}?",
+            deleteTable: "Supprimer la table",
+            tableDeleted: "{tableName} tableau supprimé",
+            tableDeleteFailed: "Échec de la suppression du tableau",
+            tableDeleteDialog: {
+                text: "Cela ne peut pas être annulé. Vous supprimez toutes les données dans le tableau et romperez les relations avec d'autres tables.",
+                prompt: "Tapez OUI pour confirmer que vous souhaitez supprimer ce tableau."
+            },
+            YES: "OUI"
         }
-
     }
 };

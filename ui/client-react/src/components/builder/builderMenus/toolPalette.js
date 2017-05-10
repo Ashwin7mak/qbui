@@ -4,6 +4,7 @@ import SideTrowser from '../../../../../reuse/client/src/components/sideTrowserB
 import TabMenu from '../../../../../reuse/client/src/components/sideNavs/tabbedSideMenu';
 import NewFieldsMenu from '../../formBuilder/menus/newFieldsMenu';
 import ExistingFieldsMenu from '../../formBuilder/menus/existingFieldsMenu';
+import * as tabIndexConstants from '../../formBuilder/tabindexConstants';
 
 import './toolPalette.scss';
 
@@ -13,7 +14,13 @@ import './toolPalette.scss';
  */
 class ToolPalette extends Component {
 
-    renderNewFieldsMenu = () => (<NewFieldsMenu isCollapsed={this.props.isCollapsed} isOpen={this.props.isOpen}/>);
+    renderNewFieldsMenu = () => (
+        <NewFieldsMenu isCollapsed={this.props.isCollapsed} isOpen={this.props.isOpen}
+                       toolPaletteTabIndex={tabIndexConstants.TOOL_PALETTE_TABINDEX}
+                       toggleToolPaletteChildrenTabIndex={this.props.toggleToolPaletteChildrenTabIndex}
+                       toolPaletteChildrenTabIndex={this.props.toolPaletteChildrenTabIndex}
+                       toolPaletteFocus={this.props.toolPaletteFocus} />
+    );
 
     renderExistingFieldsMenu = () => (<ExistingFieldsMenu isCollapsed={this.props.isCollapsed} isOpen={this.props.isOpen} />);
 

@@ -13,8 +13,11 @@ let createDefaultFieldsProperties = (type, defaultTypeProperties, userDefaultPro
     return _.merge(defaultScalarFieldsProperties, defaultTypeProperties, userDefaultProperties);
 };
 
-export const createScalarDefaultFieldsProperties = (userDefaultProperties = null) =>{
+export const createScalarDefaultFieldsProperties = (userDefaultProperties = null) => {
     return {
+        [FieldFormats.TEXT_FORMAT_MULTICHOICE]: {
+            ...createDefaultFieldsProperties(serverTypeConsts.TEXT, DefaultFieldProperties[FieldFormats.TEXT_FORMAT_MULTICHOICE], userDefaultProperties)
+        },
         [FieldFormats.NUMBER_FORMAT]: {
             ...createDefaultFieldsProperties(serverTypeConsts.NUMERIC, DefaultFieldProperties[FieldFormats.NUMBER_FORMAT], userDefaultProperties)
         },
@@ -27,8 +30,8 @@ export const createScalarDefaultFieldsProperties = (userDefaultProperties = null
         [FieldFormats.DATETIME_FORMAT]: {
             ...createDefaultFieldsProperties(serverTypeConsts.DATE_TIME, DefaultFieldProperties[FieldFormats.DATETIME_FORMAT], userDefaultProperties)
         },
-        [FieldFormats.TIME_OF_DAY]: {
-            ...createDefaultFieldsProperties(serverTypeConsts.TIME_OF_DAY, DefaultFieldProperties[FieldFormats.TIME_OF_DAY], userDefaultProperties)
+        [FieldFormats.TIME_FORMAT]: {
+            ...createDefaultFieldsProperties(serverTypeConsts.TIME_OF_DAY, DefaultFieldProperties[FieldFormats.TIME_FORMAT], userDefaultProperties)
         },
         [FieldFormats.CHECKBOX_FORMAT]: {
             ...createDefaultFieldsProperties(serverTypeConsts.CHECKBOX, DefaultFieldProperties[FieldFormats.CHECKBOX_FORMAT], userDefaultProperties)

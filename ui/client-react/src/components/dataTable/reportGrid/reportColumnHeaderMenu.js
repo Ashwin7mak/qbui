@@ -1,4 +1,4 @@
-import React, {PropTypes} from 'react';
+import React, {Component, PropTypes} from 'react';
 import Button from 'react-bootstrap/lib/Button';
 import Dropdown from 'react-bootstrap/lib/Dropdown';
 import MenuItem from 'react-bootstrap/lib/MenuItem';
@@ -7,26 +7,38 @@ import Locale from '../../../locales/locales';
 import {I18nMessage} from '../../../utils/i18nMessage';
 import QbIcon from '../../qbIcon/qbIcon';
 import {connect} from 'react-redux';
-import ReportColumnHeaderMenuContainer from './reportColumnHeaderMenuContainer';
+import {loadDynamicReport, hideColumn, openFieldSelectMenu} from '../../../actions/reportActions';
+import _ from 'lodash';
+
+import ReportUtils from '../../../utils/reportUtils';
+import serverTypeConsts from '../../../../../common/src/constants';
+import * as query from '../../../constants/query';
+import {GROUP_TYPE} from '../../../../../common/src/groupTypes';
+import {CONTEXT} from '../../../actions/context';
 
 const SORTING_MESSAGE = 'sort';
 const GROUPING_MESSAGE = 'group';
 
 /**
- * A presentational component that displays the column header menu for grouping and sorting on a report
- * @type {__React.ClassicComponentClass<P>}
+ * A component that displays the column header menu for grouping/sorting records and adding/hiding columns on a report
  */
-export const ReportColumnHeaderMenu = React.createClass({
-    propTypes: {
-        fieldDef: PropTypes.object,
-        sortFids: PropTypes.array,
-        sortReport: PropTypes.func,
-        groupReport: PropTypes.func,
-    },
+export class ReportColumnHeaderMenu extends Component {
+    constructor(props) {
+        super(props);
+
+    }
+
+    /**
+     * Checks to make sure appId, tblId, and reportId have been passed in and are not null.
+     * We can't use required here, because the component may load before the ids are available and passed down.
+     */
+    hasRequiredIds() {
+        let {appId, rptId, tblId} = this.props;
+        return (appId && rptId && tblId);
+    }
 
     /**
      * Build the menu items for sort/group (ascending)
-     * @param column
      * @param prependText
      * @returns {*}
      */
@@ -59,7 +71,7 @@ export const ReportColumnHeaderMenu = React.createClass({
             break;
         }
         return convertSortingMessageToI18nMessage(prependText, message);
-    },
+    }
 
     /**
      * Build the menu items for sort group (descending)
@@ -96,7 +108,7 @@ export const ReportColumnHeaderMenu = React.createClass({
         }
 
         return convertSortingMessageToI18nMessage(prependText, message);
-    },
+    }
 
     /**
      * Checks if a particular field has been sorted in ascending order
@@ -109,7 +121,7 @@ export const ReportColumnHeaderMenu = React.createClass({
             // When a field is sorted in descending order, the field is returned as a negative value
             return ((Math.abs(fid) === this.props.fieldDef.id) && fid > 0);
         });
-    },
+    }
 
     /**
      * Checks if a particular field has been sorted
@@ -122,45 +134,109 @@ export const ReportColumnHeaderMenu = React.createClass({
             // Math.abs is needed because when a field is sorted in descending order, the field id is a negative value
             return Math.abs(fid) === this.props.fieldDef.id;
         });
-    },
+    }
 
     isFieldSortedAscending() {
         return this.isFieldSorted() && this.isSortedAsc();
-    },
+    }
 
     isFieldSortedDescending() {
         return this.isFieldSorted() && !this.isSortedAsc();
-    },
+    }
 
-    sortReport(asc, alreadySorted) {
-        if (this.props.sortReport) {
-            this.props.sortReport(this.props.fieldDef, asc, alreadySorted);
-        }
-    },
+    /**
+     * On selection of sort option from menu fire off the action to sort the data
+     * @param asc
+     */
+    sortReport(asc) {
+        if (!this.hasRequiredIds()) {return;}
 
-    sortReportAscending() {
-        this.sortReport(true, this.isFieldSortedAscending());
-    },
+        if (asc && this.isFieldSortedAscending()) {return;}
+        if (!asc && this.isFieldSortedDescending()) {return;}
 
-    sortReportDescending() {
-        this.sortReport(false, this.isFieldSortedDescending());
-    },
+        let column = this.props.fieldDef;
+        let queryParams = {};
+        // for on-the-fly sort selection, this selection will result in removal of old sort order
+        // BUT since out grouped fields are also sorted we still need to keep those in the sort list.
+        let sortFid = asc ? column.id.toString() : "-" + column.id.toString();
 
+        let sortList = ReportUtils.getSortListString(this.props.groupEls);
+        queryParams[query.SORT_LIST_PARAM] = ReportUtils.appendSortFidToList(sortList, sortFid);
+        queryParams[query.OFFSET_PARAM] = this.props.reportData && this.props.reportData.pageOffset ? this.props.reportData.pageOffset : serverTypeConsts.PAGE.DEFAULT_OFFSET;
+        queryParams[query.NUMROWS_PARAM] = this.props.reportData && this.props.reportData.numRows ? this.props.reportData.numRows : serverTypeConsts.PAGE.DEFAULT_NUM_ROWS;
+
+        this.props.loadDynamicReport(CONTEXT.REPORT.NAV, this.props.appId, this.props.tblId, this.props.rptId, true, this.props.filter, queryParams);
+    }
+
+    sortReportAscending = () => {
+        this.sortReport(true);
+    };
+
+    sortReportDescending = () => {
+        this.sortReport(false);
+    };
+
+    /**
+     * On selection of group option from menu fire off the action to sort the data
+     * @param asc
+     */
     groupReport(asc) {
-        if (this.props.groupReport) {
-            this.props.groupReport(this.props.fieldDef, asc);
-        }
-    },
+        if (!this.hasRequiredIds()) {return;}
 
-    groupReportAscending() {
+        let column = this.props.fieldDef;
+
+        //for on-the-fly grouping, forget the previous group and go with the selection but add the previous sort fids.
+        let sortFid = column.id.toString();
+        let groupString = ReportUtils.getGroupString(sortFid, asc, GROUP_TYPE.TEXT.equals);
+
+        let sortList = ReportUtils.getSortListString(this.props.sortFids);
+        let sortListParam = ReportUtils.prependSortFidToList(sortList, groupString);
+
+        let offset = this.props.reportData && this.props.reportData.pageOffset ? this.props.reportData.pageOffset : serverTypeConsts.PAGE.DEFAULT_OFFSET;
+        let numRows = this.props.reportData && this.props.reportData.numRows ? this.props.reportData.numRows : serverTypeConsts.PAGE.DEFAULT_NUM_ROWS;
+
+        let queryParams = {};
+        queryParams[query.OFFSET_PARAM] = offset;
+        queryParams[query.NUMROWS_PARAM] = numRows;
+        queryParams[query.SORT_LIST_PARAM] = sortListParam;
+
+        this.props.loadDynamicReport(CONTEXT.REPORT.NAV, this.props.appId, this.props.tblId, this.props.rptId, true, this.props.filter, queryParams);
+    }
+
+    groupReportAscending = () => {
         this.groupReport(true);
-    },
+    };
 
-    groupReportDescending() {
+    groupReportDescending = () => {
         this.groupReport(false);
-    },
+    };
+
+    /**
+     * On selection of hide option from menu fire off the action to hide the column
+     */
+    hideThisColumn = () => {
+        if (!this.hasRequiredIds()) {return;}
+        if (this.props.isOnlyOneColumnVisible) {return;}
+
+        this.props.hideColumn(CONTEXT.REPORT.NAV, this.props.fieldDef.id);
+    };
+
+    openFieldSelector(before) {
+        if (!this.hasRequiredIds()) {return;}
+
+        this.props.openFieldSelectMenu(CONTEXT.REPORT.NAV, this.props.fieldDef.id, before);
+    }
+
+    openFieldSelectorBefore = () => {
+        this.openFieldSelector(true);
+    };
+
+    openFieldSelectorAfter = () => {
+        this.openFieldSelector(false);
+    };
 
     render() {
+        let isHideOptionDisabled = this.props.isOnlyOneColumnVisible;
         return (
             <Dropdown bsStyle="default" noCaret id="dropdown-no-caret">
                 <Button tabIndex="0" bsRole="toggle" className={"dropdownToggle iconActionButton"}>
@@ -169,12 +245,12 @@ export const ReportColumnHeaderMenu = React.createClass({
 
                 <Dropdown.Menu>
                     <MenuItem onSelect={this.sortReportAscending}>
-                        {this.isFieldSortedAscending() && <QbIcon icon="check"/>}
+                        {this.isFieldSortedAscending() && <QbIcon icon="checkmarkincircle-outline"/>}
                         <span className="sortAscendMenuText">{this.getSortAscText(SORTING_MESSAGE)}</span>
                     </MenuItem>
 
                     <MenuItem onSelect={this.sortReportDescending}>
-                        {this.isFieldSortedDescending() && <QbIcon icon="check"/>}
+                        {this.isFieldSortedDescending() && <QbIcon icon="checkmarkincircle-outline"/>}
                         <span className="sortDescendMenuText">{this.getSortDescText(SORTING_MESSAGE)}</span>
                     </MenuItem>
 
@@ -183,20 +259,50 @@ export const ReportColumnHeaderMenu = React.createClass({
                     <MenuItem onSelect={this.groupReportAscending}>
                         <span className="groupAscendMenuText">{this.getSortAscText(GROUPING_MESSAGE)}</span>
                     </MenuItem>
+
                     <MenuItem onSelect={this.groupReportDescending}>
                         <span className="groupDescendMenuText">{this.getSortDescText(GROUPING_MESSAGE)}</span>
                     </MenuItem>
 
                     <MenuItem divider/>
 
-                    <MenuItem disabled><I18nMessage message="report.menu.addColumnBefore"/></MenuItem>
-                    <MenuItem disabled><I18nMessage message="report.menu.addColumnAfter"/></MenuItem>
-                    <MenuItem disabled><I18nMessage message="report.menu.hideColumn"/></MenuItem>
+                    <MenuItem onSelect={this.openFieldSelectorBefore}>
+                        <span className="addColumnBeforeText">{Locale.getMessage('report.menu.addColumnBefore')}</span>
+                    </MenuItem>
+
+                    <MenuItem onSelect={this.openFieldSelectorAfter}>
+                        <span className="addColumnAfterText">{Locale.getMessage('report.menu.addColumnAfter')}</span>
+                    </MenuItem>
+
+                    <MenuItem disabled={isHideOptionDisabled} onSelect={this.hideThisColumn}>
+                        <span className="hideColumnText">{Locale.getMessage('report.menu.hideColumn')}</span>
+                    </MenuItem>
                 </Dropdown.Menu>
+
             </Dropdown>
         );
     }
-});
+}
+
+ReportColumnHeaderMenu.propTypes = {
+    fieldDef: PropTypes.object,
+    sortFids: PropTypes.array,
+    isOnlyOneColumnVisible: PropTypes.bool
+};
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        loadDynamicReport: (context, appId, tblId, rptId, format, filter, queryParams) => {
+            dispatch(loadDynamicReport(context, appId, tblId, rptId, format, filter, queryParams));
+        },
+        hideColumn: (context, clickedId) => {
+            dispatch(hideColumn(context, clickedId));
+        },
+        openFieldSelectMenu: (context, clickedColumn, addBeforeColumn) => {
+            dispatch(openFieldSelectMenu(context, clickedColumn, addBeforeColumn));
+        }
+    };
+};
 
 // --- PRIVATE FUNCTIONS
 
@@ -204,4 +310,4 @@ function convertSortingMessageToI18nMessage(prependText, message) {
     return Locale.getMessage(`report.menu.${prependText}.${message}`);
 }
 
-export default connect()(ReportColumnHeaderMenuContainer(ReportColumnHeaderMenu));
+export default connect(null, mapDispatchToProps)(ReportColumnHeaderMenu);

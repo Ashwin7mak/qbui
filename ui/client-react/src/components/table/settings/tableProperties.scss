@@ -1,0 +1,71 @@
+@import '../../../../../reuse/client/src/assets/css/qbVariables';
+
+$table-properties-panel-width: 776px;
+
+.settingsAppShell {
+    .pageActions {
+        .deleteTable {
+            color: $color-red-700;
+        }
+    }
+    .tableSettingsStage {
+        font-size: 24px;
+        color: $stage-headline-color;
+        .qbIcon {
+            font-size: 28px;
+            margin-right: 10px;
+        }
+        & > * {
+            vertical-align: middle;
+        }
+    }
+    .tableInfoPanel {
+        margin: 15px;
+        max-width: $table-properties-panel-width;
+
+        .tableField {
+            padding-right: 20px;
+        }
+
+        .tableInfo .sections .iconSelection .iconChooser.open {
+            width: calc(200% - 20px);
+        }
+
+        .tableInfoButtons {
+            float: right;
+
+            &.open {
+                opacity: 1;
+                transition: all 300ms ease-in;
+            }
+            &.closed {
+                opacity: 0;
+                transition: all 300ms ease-in;
+            }
+
+            & > * {
+                vertical-align: middle;
+            }
+
+            .primaryButton {
+                margin-left: 5px;
+            }
+        }
+    }
+}
+
+.deleteTableDialogContent {
+    > * {
+        margin-bottom: $modal-vertical-spacer;
+    }
+    .note {
+        color: $alert-color;
+    }
+    .prompt {
+        .deletePrompt {
+            margin-left: 8px;
+            text-align: center;
+        }
+    }
+}
+

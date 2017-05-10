@@ -1,10 +1,67 @@
-@import '../../../../src/assets/css/qbVariables';
+@import '../../../../../reuse/client/src/assets/css/qbVariables';
 
 .fieldPropertiesContainer {
-    border: $stroke-width-thin solid  $formBuilder-border-color;
-    border-top: none;
-    width: 220px;
-    background-color: $color-black-250;
+    width: 100%;
+    padding-top: 35px;
+    padding-left: $spacing-xx-small;
+    padding-right: $spacing-xx-small;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+
+    .fieldPropertiesTitle {
+        font-size: 18px;
+        height: 24px;
+        width: 100%;
+        color: $default-text-onlight-color;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+
+    .textPropertyContainer {
+        padding-top: 20px;
+
+        .textPropertyTitle {
+            margin-bottom: 7px;
+            width: 100%;
+            height: 17px;
+            font-size: 14px;
+            color: $propertytitle-text-color;
+        }
+
+        .textPropertyValue {
+            padding-left: $spacing-xxx-small;
+            width: 100%;
+            height: 34px;
+            border-radius: 2px;
+            background-color: $propertyvalue-background-color;
+            border: solid 1px $propertyvalue-border-color;
+        }
+    }
+
+    .multiChoicePropertyContainer {
+        padding-top: $spacing-medium2;
+
+        .multiChoicePropertyTitle {
+            margin-bottom: 7px;
+            width: 100%;
+            height: 17px;
+            font-size: 14px;
+            color: $propertytitle-text-color;
+        }
+
+        textarea {
+            overflow-x: scroll;
+            overflow-wrap: normal;
+            white-space: pre;
+            resize: none;
+        }
+    }
+
+    .checkboxPropertyContainer {
+        padding-top: $spacing-xx-small;
+    }
 
     @include small-breakpoint {
         display: none;

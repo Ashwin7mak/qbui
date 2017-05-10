@@ -395,9 +395,11 @@ const props = {
     appId: '1',
     tblId: '2',
     flux: flux,
-    record: [
-        {pendEdits: {}}
-    ],
+    record: {
+        records: [
+            {pendEdits: {}}
+        ]
+    },
     report: [],
     selectReportRecords: () => {},
     openRecord: () => {},
@@ -407,8 +409,8 @@ const props = {
     editRecordValidateField: () => {},
     addBlankRecordToReport: () => {},
     deleteRecord: () => {},
-    updateRecord: () => {},
-    createRecord: () => {}
+    updateRecord: () => {return Promise.resolve();},
+    createRecord: () => {return Promise.resolve();}
 };
 
 const fakeReportGroupDataTemplate = {
@@ -489,9 +491,9 @@ describe('ReportContent grouping functions', () => {
 
         //  initialize redux stores
         props.reports = [];
-        props.record = [
-            {pendEdits: {}}
-        ];
+        props.record = {
+            records: [{pendEdits: {}}]
+        };
     });
 
     var groupByNumberCases = [
@@ -992,9 +994,18 @@ describe('ReportContent functions', () => {
 
     it('test handleValidateFieldValue with fieldDef', () => {
         props.report[0] = fakeReportDataEmpty;
-        props.record[0].pendEdits = {
-            isInlineEditOpen: true,
-            currentEditingRecordId: 3
+        props.record = {
+            recordIdBeingEdited: 3,
+            records: [
+                {
+                    id: 3,
+                    recId: 3,
+                    pendEdits: {
+                        isInlineEditOpen: true,
+                        currentEditingRecordId: 3
+                    }
+                }
+            ]
         };
         component = TestUtils.renderIntoDocument(<ReportContent {...props}
                                                                 reportData={fakeReportDataEmpty}
@@ -1381,7 +1392,16 @@ describe('ReportContent functions', () => {
         };
 
         props.report[0] = fakeReportDataSimple;
-        props.record[0].pendEdits = edits;
+        props.record = {
+            recordIdBeingEdited: recordId,
+            records: [
+                {
+                    id: recordId,
+                    recId: recordId,
+                    pendEdits: edits
+                }
+            ]
+        };
         component = TestUtils.renderIntoDocument(<ReportContent {...props}
                                                                 reportData={fakeReportDataSimple}
                                                                 fields={fakeReportDataFieldsSimple}
@@ -1474,7 +1494,16 @@ describe('ReportContent functions', () => {
         };
 
         props.report[0] = fakeReportDataSimple;
-        props.record[0].pendEdits = edits;
+        props.record = {
+            recordIdBeingEdited: 1,
+            records: [
+                {
+                    id: 1,
+                    recId: 1,
+                    pendEdits: edits
+                }
+            ]
+        };
         component = TestUtils.renderIntoDocument(
             <ReportContent {...props}
                            reportData={fakeReportDataSimple}
@@ -1494,7 +1523,8 @@ describe('ReportContent functions', () => {
             pendEdits: edits,
             fields: fakeReportDataFieldsSimple.fields.data,
             colList: colList,
-            showNotificationOnSuccess: true
+            showNotificationOnSuccess: true,
+            addNewRow: false
         };
         expect(props.updateRecord).toHaveBeenCalledWith(props.appId, props.tblId, 100, params);
     });

@@ -3,7 +3,6 @@ import {UNSAVED_RECORD_ID} from '../constants/schema';
 import {NEW_RECORD_VALUE} from '../constants/urlConstants';
 import _ from 'lodash';
 import FacetSelections from '../components/facet/facetSelections';
-import ReportUtils from '../utils/reportUtils';
 import ReportModelHelper from '../models/reportModelHelper';
 
 /**
@@ -52,6 +51,18 @@ const report = (state = [], action) => {
             return _.cloneDeep(state[index]);
         }
         return null;
+    }
+
+    /**
+     * Makes sure the order of the columns isn't out of sync with their actual position.
+     * Used in adding/hiding columns and when opening/closing field select menu.
+     * @param columns
+     */
+    function reorderColumns(columns) {
+        let newOrder = 1;
+        columns.forEach((column) => {
+            column.order = newOrder++;
+        });
     }
 
     //  what report action is being requested
@@ -149,8 +160,7 @@ const report = (state = [], action) => {
         return state;
     }
     case types.SAVE_RECORD_SUCCESS: {
-        //  listen to record save event.  If there is a report context
-        //  defined, then the report is updated with the new/updated record.
+        //  NOTE: this event is listened to in the record reducer to avoid multiple grid renders.
         let rpt = _.get(action, 'content.report');
         if (rpt && rpt.context) {
             let currentReport = getReportFromState(rpt.context);
@@ -162,13 +172,32 @@ const report = (state = [], action) => {
                     afterRecId: rpt.afterRecId
                 };
 
-                //  if this is a new record, add it to the report; otherwise
-                //  update the report row with the changes
                 if (content.newRecId) {
+                    //  if there is a blank record created from inline editing, we'll remove the blank record
+                    //  from the report and then add the new row based on recId supplied when creating the blank row
+                    const hasBlankRec = ReportModelHelper.isBlankRecInReport(currentReport);
+                    if (hasBlankRec) {
+                        //  delete the blank row from the report
+                        ReportModelHelper.deleteRecordFromReport(currentReport, UNSAVED_RECORD_ID);
+                        //  add the new row where the blank row was sitting...we know where that is because we
+                        //  saved the rec id immediately prior to the blank row when it was added to the report.
+                        content.afterRecId = currentReport.recIdBeforeBlankRow;
+                    }
                     ReportModelHelper.addReportRecord(currentReport, content);
                 } else {
+                    // update the existing report row
                     ReportModelHelper.updateReportRecord(currentReport, content);
                 }
+
+                //  has the user elected to add a new row to the grid via inline edit after update/save
+                if (action.content.addNewRow === true) {
+                    let newRowContent = {
+                        newRecId: UNSAVED_RECORD_ID,
+                        afterRecId: content.newRecId || content.recId
+                    };
+                    ReportModelHelper.addReportRecord(currentReport, newRowContent);
+                }
+
                 currentReport.loading = false;
                 currentReport.error = false;
                 return newState(currentReport);
@@ -186,17 +215,14 @@ const report = (state = [], action) => {
         if (appId && tblId && Array.isArray(ids)) {
             const reports = _.cloneDeep(state);
             reports.forEach((rpt) => {
-                //  table reports have a data model object
-                if (_.has(rpt, 'data')) {
-                    //  search each report entry and remove the record
-                    //  from any report for the appId/tblId/recId combination
-                    if (rpt.appId === appId && rpt.tblId === tblId) {
-                        ids.forEach((recId) => {
-                            //  remove the record from the report
-                            ReportModelHelper.deleteRecordFromReport(rpt.data, recId);
-                            rpt.selectedRows = _.without(rpt.selectedRows, recId);
-                        });
-                    }
+                //  search each report entry and remove the record
+                //  from any report for the appId/tblId/recId combination
+                if (rpt.appId === appId && rpt.tblId === tblId) {
+                    ids.forEach((recId) => {
+                        //  remove the record from the report
+                        ReportModelHelper.deleteRecordFromReport(rpt, recId);
+                        rpt.selectedRows = _.without(rpt.selectedRows, recId);
+                    });
                 }
             });
             return reports;
@@ -221,8 +247,20 @@ const report = (state = [], action) => {
                     currentReport.editingIndex = undefined;
                     currentReport.editingId = undefined;
                 }
-
                 ReportModelHelper.addReportRecord(currentReport, content);
+                return newState(currentReport);
+            }
+        }
+        return state;
+    }
+    case types.REMOVE_BLANK_REPORT_RECORD: {
+        //  NOTE: this event is listened to in the record reducer to avoid multiple grid renders.
+        let currentReport = getReportFromState(action.id);
+        if (currentReport && action.content) {
+            const appId = action.content.appId;
+            const tblId = action.content.tblId;
+            if (currentReport.appId === appId && currentReport.tblId === tblId) {
+                ReportModelHelper.deleteRecordFromReport(currentReport, action.content.recId);
                 return newState(currentReport);
             }
         }
@@ -243,6 +281,113 @@ const report = (state = [], action) => {
             }
         });
         return reports;
+    }
+    case types.OPEN_FIELD_SELECT_MENU: {
+        let currentReport = getReportFromState(action.id);
+        if (currentReport) {
+            let params = action.content;
+            let clickedColumnId = params.clickedColumnId;
+            let addBefore = params.addBeforeColumn;
+            // remove the placeholder column if it exists
+            _.remove(currentReport.data.columns, (col) => {return col.isPlaceholder;});
+            // find the index of the column where 'add a column' was clicked
+            let clickedColumnIndex = _.findIndex(currentReport.data.columns, (col) => {return col.id === clickedColumnId;});
+            if (clickedColumnIndex !== -1) {
+                // since not all columns are visible, add the placeholder column to columns so it gets rendered on screen
+                let placeholder = {
+                    isPlaceholder: true,
+                    isHidden: false,
+                    id: -1
+                };
+
+                // add before or after the clicked column depending on selection
+                let insertionIndex;
+                if (addBefore) {
+                    insertionIndex = clickedColumnIndex;
+                } else {
+                    insertionIndex = clickedColumnIndex + 1;
+                }
+                currentReport.data.columns.splice(insertionIndex, 0, placeholder);
+                reorderColumns(currentReport.data.columns);
+                return newState(currentReport);
+            }
+        }
+        return state;
+    }
+    case types.CLOSE_FIELD_SELECT_MENU: {
+        let currentReport = getReportFromState(action.id);
+        if (currentReport && currentReport.data) {
+            // remove the placeholder column (if it exists) when the drawer is closed
+            _.remove(currentReport.data.columns, (col) => {return col.isPlaceholder;});
+            return newState(currentReport);
+        }
+        return state;
+    }
+    case types.ADD_COLUMN_FROM_EXISTING_FIELD: {
+        let currentReport = getReportFromState(action.id);
+        if (currentReport) {
+            // metadata
+            let currentColumns = currentReport.data.columns;
+            // passed in params
+            let params = action.content;
+            let addBefore = params.addBefore;
+            let requestedColumn = params.requestedColumn;
+
+            let requestedColumnIndex = _.findIndex(currentColumns, (col) => {return col.id === requestedColumn.id;});
+            let requestedInCurrentColumns = requestedColumnIndex !== -1;
+
+            let columnMoving;
+            if (requestedInCurrentColumns) {
+                columnMoving = currentColumns.splice(requestedColumnIndex, 1)[0];
+            } else {
+                columnMoving = requestedColumn;
+            }
+            // searches through the current columns to find the index of the placeholder
+            let placeholderIndex = _.findIndex(currentColumns, (col) => {return col.isPlaceholder;});
+            let fidInsertionIndex = placeholderIndex;
+            // when adding after, account for the index of the placeholder by adding 1
+            if (!addBefore) {
+                placeholderIndex++;
+            }
+            // insert the requested column in the correct place in the columns list
+            currentColumns.splice(placeholderIndex, 0, columnMoving);
+
+            // show the currently hidden column that was just added
+            currentColumns.forEach(column => {
+                if (column.id === requestedColumn.id) {
+                    column.isHidden = false;
+                }
+                return column;
+            });
+            _.remove(currentReport.data.fids, fid => {return fid === requestedColumn.id;});
+            currentReport.data.fids.splice(fidInsertionIndex, 0, requestedColumn.id);
+            reorderColumns(currentReport.data.columns);
+            return newState(currentReport);
+        }
+        return state;
+    }
+    case types.HIDE_COLUMN: {
+        let currentReport = getReportFromState(action.id);
+        if (currentReport) {
+            // metadata
+            let columns = currentReport.data.columns;
+            let fids = currentReport.data.fids;
+            // passed in params
+            let params = action.content;
+            let clickedColumnId = params.clickedId;
+            // mark the clicked column as hidden so it does not get rendered
+            columns.forEach(column => {
+                if (column.id === clickedColumnId) {
+                    column.isHidden = true;
+                }
+            });
+            // update the fids and metafids to reflect the hidden column
+            currentReport.data.fids = fids.filter(fid => {
+                return fid !== clickedColumnId;
+            });
+            return newState(currentReport);
+        }
+        return state;
     }
     default:
         // by default, return existing state

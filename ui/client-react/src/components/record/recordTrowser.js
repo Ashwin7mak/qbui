@@ -6,7 +6,7 @@ import Button from 'react-bootstrap/lib/Button';
 import OverlayTrigger from 'react-bootstrap/lib/OverlayTrigger';
 import Tooltip from 'react-bootstrap/lib/Tooltip';
 import QBicon from "../qbIcon/qbIcon";
-import TableIcon from "../qbTableIcon/qbTableIcon";
+import Icon, {AVAILABLE_ICON_FONTS} from '../../../../reuse/client/src/components/icon/icon.js';
 import Loader from 'react-loader';
 import QBErrorMessage from "../QBErrorMessage/qbErrorMessage";
 import WindowLocationUtils from '../../utils/windowLocationUtils';
@@ -23,9 +23,9 @@ import KeyboardShortcuts from '../../../../reuse/client/src/components/keyboardS
 import {APP_ROUTE, EDIT_RECORD_KEY} from '../../constants/urlConstants';
 import {CONTEXT} from '../../actions/context';
 import SaveOrCancelFooter from '../saveOrCancelFooter/saveOrCancelFooter';
-
+import {getPendEdits, getRecord} from '../../reducers/record';
 import './recordTrowser.scss';
-
+import {NEW_RECORD_VALUE} from "../../constants/urlConstants";
 
 /**
  * trowser containing a record component
@@ -100,7 +100,7 @@ export const RecordTrowser = React.createClass({
         const record = this.getRecordFromProps(this.props);
         if (record.navigateAfterSave === true) {
             let {appId, tblId} = this.props;
-            this.props.router.push(`${APP_ROUTE}/${appId}/table/${tblId}/record/${recId}`);
+            this.props.history.push(`${APP_ROUTE}/${appId}/table/${tblId}/record/${recId}`);
         }
     },
 
@@ -238,7 +238,8 @@ export const RecordTrowser = React.createClass({
             pendEdits: pendEdits,
             fields: _.has(this.props.editForm, 'formData.fields') ? this.props.editForm.formData.fields : {},
             colList: colList,
-            showNotificationOnSuccess: true
+            showNotificationOnSuccess: true,
+            addNewRow: false
         };
         this.props.dispatch(updateRecord(this.props.appId, this.props.tblId, this.props.recId, params)).then(
             (obj) => {
@@ -289,7 +290,8 @@ export const RecordTrowser = React.createClass({
             recordChanges: recordChanges,
             fields: _.has(this.props.editForm, 'formData.fields') ? this.props.editForm.formData.fields : {},
             colList: colList,
-            showNotificationOnSuccess: true
+            showNotificationOnSuccess: true,
+            addNewRow: false
         };
         this.props.dispatch(createRecord(this.props.appId, this.props.tblId, params)).then(
             (obj) => {
@@ -381,7 +383,7 @@ export const RecordTrowser = React.createClass({
     },
 
     getRecordFromProps(props = this.props) {
-        return _.nth(props.record, 0) || {};
+        return  getRecord(props.record.records, props.recId);
     },
 
     /**
@@ -412,7 +414,7 @@ export const RecordTrowser = React.createClass({
                         <Button className="iconActionButton nextRecord" disabled={!showNext} onClick={this.nextRecord}><QBicon icon="caret-filled-right"/></Button>
                     </OverlayTrigger>
                 </div> }
-                <TableIcon classes="primaryIcon" icon={table ? table.icon : ""}/>{title}
+                <Icon iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY} classes="primaryIcon" icon={table ? table.tableIcon : ""}/>{title}
             </div>);
 
     },
@@ -431,12 +433,12 @@ export const RecordTrowser = React.createClass({
                     </OverlayTrigger>
                 }
                 {showNext &&
-                    <Button bsStyle="primary" onClick={this.saveAndNextClicked}><I18nMessage message="nav.saveAndNext"/></Button>
+                    <Button className="alternativeTrowserFooterButton" bsStyle="primary" onClick={this.saveAndNextClicked}><I18nMessage message="nav.saveAndNext"/></Button>
                 }
                 {this.props.recId === null &&
-                <Button bsStyle="primary" onClick={() => {this.saveClicked(true);}}><I18nMessage message="nav.saveAndAddAnother"/></Button>
+                <Button className="alternativeTrowserFooterButton" bsStyle="primary" onClick={() => {this.saveClicked(true);}}><I18nMessage message="nav.saveAndAddAnother"/></Button>
                 }
-                <Button bsStyle="primary" onClick={() => {this.saveClicked(false);}}><I18nMessage message="nav.save"/></Button>
+                <Button className="mainTrowserFooterButton" bsStyle="primary" onClick={() => {this.saveClicked(false);}}><I18nMessage message="nav.save"/></Button>
             </div>);
     },
 
@@ -483,17 +485,7 @@ export const RecordTrowser = React.createClass({
     },
 
     getPendEdits() {
-        return this.getRecord().pendEdits || {};
-    },
-
-    getRecord() {
-        let record = {};
-        if (Array.isArray(this.props.record) && this.props.record.length > 0) {
-            if (_.isEmpty(this.props.record[0]) === false) {
-                record = this.props.record[0];
-            }
-        }
-        return record;
+        return getPendEdits(this.props.record, this.props.recId || NEW_RECORD_VALUE);
     },
 
     keyboardOnSave() {
@@ -514,10 +506,10 @@ export const RecordTrowser = React.createClass({
                      breadcrumbs={this.getTrowserBreadcrumbs()}
                      onCancel={this.cancelEditing}
                      content={this.getTrowserContent()} >
-                <KeyboardShortcuts id="trowser"
+                {this.props.visible ? <KeyboardShortcuts id="trowser"
                                    shortcutBindingsPreventDefault={[
                                        {key: 'mod+s', callback: () => {this.keyboardOnSave(); return false;}},
-                                   ]} />
+                                   ]} /> : null}
                 <SaveOrCancelFooter
                     rightAlignedButtons={this.getTrowserRightIcons()}
                     centerAlignedButtons={this.getTrowserActions()}

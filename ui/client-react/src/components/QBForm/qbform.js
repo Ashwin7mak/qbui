@@ -10,6 +10,7 @@ import Constants from '../../../../common/src/constants';
 import UserFieldValueRenderer from '../fields/userFieldValueRenderer.js';
 import DragAndDropField from '../formBuilder/dragAndDropField';
 import RelatedChildReport from './relatedChildReport';
+import {CONTEXT} from "../../actions/context";
 import FlipMove from 'react-flip-move';
 
 import * as FieldsReducer from '../../reducers/fields';
@@ -19,7 +20,6 @@ import {connect} from 'react-redux';
 import './qbform.scss';
 import './tabs.scss';
 
-let formBuilderEditForm = null;
 /*
  Custom QuickBase Form component that has 1 property.
  activeTab: the tab we want to display first when viewing the form, defaults to the first tab
@@ -338,12 +338,18 @@ export const QBForm = React.createClass({
         let fieldRecord = this.getFieldRecord(relatedField);
         let recId = _.has(this.props.formData, 'recordId') ? this.props.formData.recordId : null;
 
-        //if the form prop calls for element to be required update fieldDef accordingly
+        /* if the form prop calls for element to be required update fieldDef accordingly
+         * This isn't functionality that currently exists in newstack. Its causing issues with updating field properties
+         * in form builder. Once we had support for forms to have required fields,etc we will need to address this
         if (relatedField) {
             relatedField.required = relatedField.required || FormFieldElement.required;
         }
+        */
 
         let CurrentFieldElement = (this.props.editingForm ? DragAndDropField(FieldElement) : FieldElement);
+
+        // This isDisable is used to disable the input and controls in form builder.
+        let isDisabled = !(this.props.edit && !this.props.editingForm);
 
         //This tabIndex is for form builder keyboard navigation. It is removing all field value editors from the tabbing flow
         let tabIndex = (this.props.editingForm ? "-1" : 0);
@@ -354,6 +360,8 @@ export const QBForm = React.createClass({
                   tabIndex={tabIndex}
                   location={location}
                   orderIndex={FormFieldElement.orderIndex}
+                  formBuilderContainerContentElement={this.props.formBuilderContainerContentElement}
+                  beginDrag={this.props.beginDrag}
                   handleFormReorder={this.props.handleFormReorder}
                   cacheDragElement={this.props.cacheDragElement}
                   clearDragElementCache={this.props.clearDragElementCache}
@@ -365,6 +373,7 @@ export const QBForm = React.createClass({
                   fieldRecord={fieldRecord}
                   includeLabel={true}
                   indicateRequiredOnLabel={this.props.edit}
+                  isDisabled={isDisabled}
                   edit={this.props.edit && !FormFieldElement.readOnly}
                   onChange={this.props.onFieldChange}
                   onBlur={this.props.onFieldChange}
@@ -372,6 +381,7 @@ export const QBForm = React.createClass({
                   invalidMessage={validationStatus.invalidMessage}
                   appUsers={this.props.appUsers}
                   recId={recId}
+                  isTokenInMenuDragging={this.props.isTokenInMenuDragging}
               />
             </div>
         );
@@ -412,6 +422,12 @@ export const QBForm = React.createClass({
         const childTable = _.find(tables, {id: relationship.detailTableId}) || {};
         const childTableName = childTable.name;
 
+        // Handler for clicking on a record in an embedded report. Drilling down to a child should open the clicked
+        // child record in a drawer.
+        // When this.props.edit is true, this form is inside a trowser. Disable drilling down to child records when an
+        // embedded report is in a trowser.
+        const handleDrillIntoChild = this.props.edit ? () => {} : this.props.handleDrillIntoChild;
+
         return (
             <div key={id} className="formElementContainer formElement referenceElement">
                 <RelatedChildReport
@@ -423,6 +439,7 @@ export const QBForm = React.createClass({
                     detailKeyValue={detailKeyValue}
                     type={ReferenceElement.type}
                     appUsers={this.props.appUsers}
+                    handleDrillIntoChild={handleDrillIntoChild}
                 />
             </div>
         );
@@ -515,43 +532,6 @@ export const QBForm = React.createClass({
     },
 
     /**
-     * This is for keyboard navigation, it will add focus to a form only if formFocus is true
-     * formFocus becomes true when a user is hitting escape to remove the children elements form the tabbing flow
-     * */
-    componentDidUpdate() {
-        if (this.props.formFocus) {
-            formBuilderEditForm.focus();
-            document.querySelector('.qbPanelHeaderTitleText').scrollIntoView(false);
-        }
-    },
-
-    /**
-     * We normally return a regular form based on whether or not it is in view or edit mode.
-     * However, for form builder we want the form to have a tabIndex.
-     * */
-    wrapFormContent(formContent) {
-        if (this.props.editingForm) {
-            return (
-                <form ref={(editForm) => {formBuilderEditForm = editForm;}} className="editForm" tabIndex="0" role="button" onKeyDown={this.props.formBuilderUpdateChildrenTabIndex}>
-                    {formContent}
-                </form>
-            );
-        } else if (this.props.edit) {
-            return (
-                <form className="editForm">
-                    {formContent}
-                </form>
-            );
-        } else {
-            return (
-                <form className="viewForm">
-                    {formContent}
-                </form>
-            );
-        }
-    },
-
-    /**
      * render a form as an set of tabs containing HTML tables (a la legacy QuickBase)
      */
     render() {
@@ -580,7 +560,9 @@ export const QBForm = React.createClass({
 
         return (
             <div className="formContainer">
-                {this.wrapFormContent(formContent)}
+                <form className={this.props.edit ? "editForm" : "viewForm"}>
+                    {formContent}
+                </form>
                 <div>{formFooter}</div>
             </div>
         );
@@ -604,9 +586,12 @@ function buildUserField(id, fieldValue, name) {
     };
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state, ownProps) => {
+    let formId = (ownProps.formId || CONTEXT.FORM.VIEW);
+    let currentForm = _.get(state, `forms[${formId}]`, {});
     return {
-        fields: state.fields
+        fields: state.fields,
+        isTokenInMenuDragging: (_.has(currentForm, 'isDragging') ? currentForm.isDragging : undefined),
     };
 };
 

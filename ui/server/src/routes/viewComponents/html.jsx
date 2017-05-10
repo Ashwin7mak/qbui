@@ -2,6 +2,7 @@ import React, {PropTypes} from "react";
 import _ from "lodash";
 
 import favicons from '../../constants/favicons';
+import {routes} from '../routeConstants';
 
 var Html = React.createClass({
     propTypes: {
@@ -38,7 +39,7 @@ var Html = React.createClass({
                 EPISODES.run = function(fn, context, params) { EPISODES.q.push( ["run", fn, context, params] ); };
 
                 EPISODES.bSendBeacon = 1;         // 1 == beacon back the resulting metrics
-                EPISODES.beaconUrl = '/api/n/v1/clientPerf';  // URL to use for the metrics beacon
+                EPISODES.beaconUrl = "${routes.LOG_CLIENT_PERF_MSG}";  // URL to use for the metrics beacon
                 EPISODES.beaconType = 'POST';  // URL to use for the metrics beacon
                 EPISODES.bPostMessage = false; // no iframes to notify
                 EPISODES.autorun = false; // done will be called after all routes rendering is done
@@ -53,6 +54,34 @@ var Html = React.createClass({
             `}} ></script>);
         }
         return components;
+    },
+
+    /**
+     * TODO: remove this function when React is upgraded to v15.3 or above.
+     *
+     * Using React Router 4 with older React versions throws LOTS of errors like the following:
+     *   ERROR: 'Warning: Failed Context Types: Calling PropTypes validators directly is not supported
+     *   by the `prop-types` package. Use `PropTypes.checkPropTypes()` to call them. Read more at
+     *   http://fb.me/use-check-prop-types Check the render method of `Constructor`.'
+     *
+     * these warnings will go away once we upgrade to react v15.3.
+     * Untils then, disable printing
+     * see https://github.com/reactjs/prop-types/blob/master/README.md#what-happens-on-other-react-versions
+     */
+    renderReactRouter4ErrorHandler() {
+        let initialUrl = _.has(this.props, 'req.url') ? this.props.req.url : 'undefined';
+        return (
+            <script dangerouslySetInnerHTML={{__html:`
+                console.error("All 'Failed Context Types' warning messages logged by the use of React Router 4 are"
+                + " temporarily disabled from printing to the console until React is upgraded to v15.3.0"
+                + " see http://fb.me/use-check-prop-types");
+                var error = console.error;
+                console.error = function() {
+                    if (arguments && arguments[0] && !arguments[0].includes("Warning: Failed Context Types: Calling PropTypes validators directly is not supported by the \`prop-types\` package.")) {
+                        error.apply(console, arguments);
+                    }
+                };
+            `}} ></script>);
     },
 
     renderFavicons() {
@@ -75,6 +104,8 @@ var Html = React.createClass({
                 <head>
                     <meta charSet="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
                     <link rel="stylesheet" href="/qbase/css/loadingScreen.css" />
+                    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Lato" />
+                    {this.renderReactRouter4ErrorHandler()}
                     {this.renderPerfList()}
 
                         <title>{this.props.title}</title>

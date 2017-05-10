@@ -16,7 +16,7 @@ let testMiddleText = 'Middle Button';
 let testLeftText = 'Left Button';
 
 let alertType = 'alert';
-let alertIconClass = `iconUISturdy-alert`;
+let alertIconClass = `iconUISturdy-alert-fill`;
 let successType = 'success';
 let successIconClass = `iconUISturdy-check-reversed`;
 let standardType = 'standard';
@@ -116,7 +116,7 @@ describe('QbModal', () => {
                                                           primaryButtonOnClick={mockParent.onPrimaryClick}
                                                           link={testLink}/>);
         let anchorTag = document.querySelector(`${qbModalClass} a`);
-        expect(anchorTag.pathname).toEqual('/' + testLink);
+        expect(anchorTag.pathname).toContain('/' + testLink);
     });
 
     it('can have a middle button with an anchor tag', () => {
@@ -131,7 +131,7 @@ describe('QbModal', () => {
                                                           middleButtonOnClick={mockParent.onMiddleClick}
                                                           link={testLink}/>);
         let anchorTag = document.querySelector(`${qbModalClass} a`);
-        expect(anchorTag.pathname).toEqual('/' + testLink);
+        expect(anchorTag.pathname).toContain('/' + testLink);
     });
 
     it('can have a left button with an anchor tag', () => {
@@ -146,7 +146,7 @@ describe('QbModal', () => {
                                                           leftButtonOnClick={mockParent.onLeftClick}
                                                           link={testLink}/>);
         let anchorTag = document.querySelector(`${qbModalClass} a`);
-        expect(anchorTag.pathname).toEqual('/' + testLink);
+        expect(anchorTag.pathname).toContain('/' + testLink);
     });
 
     it('can have no buttons', () => {

@@ -1,7 +1,7 @@
 import React, {PropTypes, Component} from 'react';
 import ButtonGroup from 'react-bootstrap/lib/ButtonGroup';
 import Button from 'react-bootstrap/lib/Button';
-import Icon from '../icon/icon';
+import Icon from 'REUSE/components/icon/icon';
 
 import './topNav.scss';
 
@@ -25,8 +25,8 @@ class TopNav extends Component {
     };
 
     render() {
-        let {showOnSmall, onNavClick, globalActions} = this.props;
-
+        let {showOnSmall, onNavClick, globalActions, tabIndex} = this.props;
+        tabIndex = tabIndex ? tabIndex : "1";
         const classes = `topNav${(showOnSmall ? '' : ' hideSmall')}`;
 
         return (

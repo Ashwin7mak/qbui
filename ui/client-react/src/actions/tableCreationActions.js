@@ -14,12 +14,12 @@ export const hideTableCreationDialog = () => ({
     type: types.HIDE_TABLE_CREATION_DIALOG
 });
 
-export const nextTableCreationPage = () => ({
-    type: types.NEXT_TABLE_CREATION_PAGE
+export const showTableReadyDialog = () => ({
+    type: types.SHOW_TABLE_READY_DIALOG
 });
 
-export const previousTableCreationPage = () => ({
-    type: types.PREVIOUS_TABLE_CREATION_PAGE
+export const hideTableReadyDialog = () => ({
+    type: types.HIDE_TABLE_READY_DIALOG
 });
 
 /**
@@ -51,13 +51,15 @@ export const setEditingProperty = (editing) => ({
  * update a table property
  * @param property 'name', 'description' etc.
  * @param value input value
- * @param validationError validation error message (or null if none)
+ * @param pendingValidationError pending validation error message if user left field (or null if none)
+ * @param validationError validation error message to display (or null if none)
  * @param isUserEdit is a user edit (edit was initiated by the user)
  */
-export const setTableProperty = (property, value, validationError, isUserEdit) => ({
+export const setTableProperty = (property, value, pendingValidationError, validationError, isUserEdit) => ({
     type: types.SET_TABLE_CREATION_PROPERTY,
     property,
     value,
+    pendingValidationError,
     validationError,
     isUserEdit
 });
@@ -65,15 +67,15 @@ export const setTableProperty = (property, value, validationError, isUserEdit) =
 /**
  * save in progress
  */
-export const savingTable = () => ({
-    type: types.SAVING_TABLE
+export const creatingTable = () => ({
+    type: types.CREATING_TABLE
 });
 
 /**
  * save failed
  */
-export const savingTableFailed = () => ({
-    type: types.SAVING_TABLE_FAILED
+export const creatingTableFailed = () => ({
+    type: types.CREATING_TABLE_FAILED
 });
 
 /**
@@ -95,7 +97,7 @@ export const createTable = (appId, tableInfo) => {
 
         return new Promise((resolve, reject) => {
 
-            dispatch(savingTable());
+            dispatch(creatingTable());
 
             const tableService = new TableService();
 
@@ -105,7 +107,7 @@ export const createTable = (appId, tableInfo) => {
                 dispatch(createdTable());
                 resolve(response);
             }).catch(error => {
-                dispatch(savingTableFailed());
+                dispatch(creatingTableFailed());
                 if (error.response) {
                     if (error.response.status === constants.HttpStatusCode.FORBIDDEN) {
                         logger.parseAndLogError(LogLevel.WARN, error.response, 'tableService.createTable:');

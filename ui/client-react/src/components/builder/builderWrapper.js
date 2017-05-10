@@ -1,13 +1,16 @@
 import React, {PropTypes} from 'react';
-import FormBuilderContainer from './formBuilderContainer';
+import {NotificationContainer} from "react-notifications";
+import {withRouter, Switch} from 'react-router-dom';
 import Fluxxor from "fluxxor";
 import {connect} from 'react-redux';
 import commonNavActions from '../../../../reuse/client/src/components/sideNavs/commonNavActions';
 import './builderWrapper.scss';
 import GlobalActions from '../actions/globalActions';
-import {NotificationContainer} from "react-notifications";
+import RouteWithSubRoutes from "../../scripts/RouteWithSubRoutes";
 import TopNav from '../../../../reuse/client/src/components/topNav/topNav';
-
+import * as tabIndexConstants from '../formBuilder/tabindexConstants';
+import TableReadyDialog from '../table/tableReadyDialog';
+import Locale from '../../locales/locales';
 let FluxMixin = Fluxxor.FluxMixin(React);
 let StoreWatchMixin = Fluxxor.StoreWatchMixin;
 
@@ -39,37 +42,37 @@ export const BuilderWrapper = React.createClass({
                                position={"top"}
                                dropdownIcon="user"
                                dropdownMsg="globalActions.user"
-                               startTabIndex={4}
+                               startTabIndex={tabIndexConstants.USER_MENU_TAB_INDEX}
                                app={this.getSelectedApp()}/>);
     },
 
     render() {
-        /**
-         *formId is set to null for now, it is left here, because formId will need to be passed down as a prop in a future story
-         * */
-        const formId = null;
-        const {appId, tblId} = this.props.params;
-        const formType = this.props.location.query.formType;
-
+        let title = `${Locale.getMessage('builder.modify')}`;
         return (
             <div className="builderWrapperContent">
                 <NotificationContainer/>
                 <TopNav
+                    title={title}
                     onNavClick={this.props.toggleNav}
                     globalActions={this.getTopGlobalActions()}
+                    tabIndex={tabIndexConstants.FORM_BUILDER_TOGGLE_NAV_BUTTON_TABINDEX}
                 />
 
                 <div className="builderWrapperBody">
-                    <FormBuilderContainer
-                    appId={appId}
-                    tblId={tblId}
-                    formType={formType}
-                    formId={formId} />
+                    {this.props.routes &&
+                        <Switch>
+                            {
+                                this.props.routes.map((route, i) => {
+                                    return RouteWithSubRoutes(route, i);
+                                })
+                            }
+                        </Switch>
+                    }
                 </div>
-
+                <TableReadyDialog/>
             </div>
         );
     }
 });
 
-export default connect(null, commonNavActions('builder'))(BuilderWrapper);
+export default withRouter(connect(null, commonNavActions('builder'))(BuilderWrapper));

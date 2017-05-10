@@ -8,7 +8,7 @@
     var formsPO = requirePO('formsPage');
     var ReportInLineEditPO = requirePO('reportInLineEdit');
 
-    xdescribe('Forms - Add a Record Via Form Tests: ', function() {
+    describe('Forms - Add a record via form tests: ', function() {
         var realmName;
         var realmId;
         var testApp;
@@ -21,7 +21,7 @@
             browser.logger.info('beforeAll spec function - Generating test data and logging in');
             // Need to return here. beforeAll is completely async, need to return the Promise chain in any before or after functions!
             // No need to call done() anymore
-            return e2eBase.basicAppSetup().then(function(createdApp) {
+            return e2eBase.basicAppSetup(null, 5).then(function(createdApp) {
                 // Set your global objects to use in the test functions
                 testApp = createdApp;
                 realmName = e2eBase.recordBase.apiBase.realm.subdomain;
@@ -49,7 +49,7 @@
          * Test to add a record via form.
          * Fields Tested : text, url, phone, email, numeric, currency, duration, rating, date, dateTime, checkbox and userField.
          */
-        xit('Add a record via form', function() {
+        it('Add a record via form', function() {
             var origRecordCount;
             var fieldTypes = ['allTextFields', 'allPhoneFields', 'allEmailFields', 'allUrlFields', 'allDurationFields', 'allNumericFields', 'allDateFields', 'allTimeFields', 'allCheckboxFields', 'allUserField'];
 
@@ -79,6 +79,5 @@
             // Step 7 - Verify the records count got increased by 1
             expect(formsPO.getRecordsCountInATable()).toBe(origRecordCount + 1);
         });
-
     });
 }());

@@ -1,13 +1,16 @@
 import React from 'react';
-import {shallow} from 'enzyme';
+import {shallow, mount} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
 import AutoScroll from '../../../client-react/src/components/autoScroll/autoScroll';
 
 let container = {
-    offsetWidth: 50,
-    offsetLeft: 50,
-    offsetHeight: 50,
-    offsetTop: 10
+    containerBottom: 50,
+    containerTop: 10
+};
+
+let mockParentContainer = <div></div>;
+let mockGetBoundingClientRect = {
+    getBoundingClientRect() {return container;}
 };
 
 describe('AutoScroll', () => {
@@ -20,15 +23,14 @@ describe('AutoScroll', () => {
         it('should call scrollUp when the mouse is in the top scroll zone', function() {
 
             let e = {
-                clientX: 55,
                 clientY: 0
             };
 
-            let component = shallow(<AutoScroll/>);
+            let component = shallow(<AutoScroll parentContainer={mockParentContainer} />);
             let instance = component.instance();
 
             spyOn(window, 'requestAnimationFrame');
-            spyOn(instance, 'getContainer').and.returnValue(container);
+            spyOn(instance, 'getContainerDimension').and.returnValue(container);
             spyOn(instance, 'stopScrolling');
 
             instance.updateMouseLocation(e);
@@ -40,15 +42,14 @@ describe('AutoScroll', () => {
         it('should call scrollDown when the mouse is in the bottom scroll zone', function() {
 
             let e = {
-                clientX: 55,
                 clientY: 100
             };
 
-            let component = shallow(<AutoScroll/>);
+            let component = shallow(<AutoScroll parentContainer={mockParentContainer}/>);
             let instance = component.instance();
 
             spyOn(window, 'requestAnimationFrame');
-            spyOn(instance, 'getContainer').and.returnValue(container);
+            spyOn(instance, 'getContainerDimension').and.returnValue(container);
             spyOn(instance, 'stopScrolling');
 
             instance.updateMouseLocation(e);
@@ -60,21 +61,20 @@ describe('AutoScroll', () => {
         it('should call stopScrolling when the mouse is not in a scroll zone', function() {
 
             let e = {
-                clientX: 45,
                 clientY: 50
             };
 
-            let component = shallow(<AutoScroll/>);
+            let component = shallow(<AutoScroll parentContainer={mockParentContainer}/>);
             let instance = component.instance();
 
             spyOn(window, 'requestAnimationFrame');
-            spyOn(instance, 'getContainer').and.returnValue(container);
+            spyOn(instance, 'getContainerDimension').and.returnValue(container);
             spyOn(instance, 'stopScrolling');
 
             instance.updateMouseLocation(e);
             instance.updateScrolling();
 
-            expect(instance.stopScrolling.calls.count()).toBe(2);
+            expect(instance.stopScrolling.calls.count()).toBe(1);
         });
 
         it('should add extra pixels to the top of the container scroll zone when pixelsFromTopForLargeDevices prop is passed through', function() {
@@ -82,7 +82,7 @@ describe('AutoScroll', () => {
             let component = shallow(<AutoScroll pixelsFromTopForLargeDevices={5}/>);
             let instance = component.instance();
 
-            spyOn(instance, 'getContainer').and.returnValue(container);
+            spyOn(instance, 'getContainerDimension').and.returnValue(container);
             spyOn(instance, 'getContainerTop');
 
             instance.updateScrolling();
@@ -92,10 +92,10 @@ describe('AutoScroll', () => {
 
         it('should add extra pixels to the bottom of the container scroll zone when pixelsFromBottomForLargeDevices prop is passed through', function() {
 
-            let component = shallow(<AutoScroll pixelsFromBottomForLargeDevices={5}/>);
+            let component = shallow(<AutoScroll parentContainer={mockParentContainer} pixelsFromBottomForLargeDevices={5}/>);
             let instance = component.instance();
 
-            spyOn(instance, 'getContainer').and.returnValue(container);
+            spyOn(instance, 'getContainerDimension').and.returnValue(container);
             spyOn(instance, 'getContainerBottom');
 
             instance.updateScrolling();
@@ -113,11 +113,11 @@ describe('AutoScroll', () => {
                 touches: [{clientY: 0, clientX: 55}]
             };
 
-            let component = shallow(<AutoScroll/>);
+            let component = shallow(<AutoScroll parentContainer={mockParentContainer} />);
             let instance = component.instance();
 
             spyOn(window, 'requestAnimationFrame');
-            spyOn(instance, 'getContainer').and.returnValue(container);
+            spyOn(instance, 'getContainerDimension').and.returnValue(container);
             spyOn(instance, 'stopScrolling');
 
             instance.updateScrolling(e);
@@ -132,11 +132,11 @@ describe('AutoScroll', () => {
                 touches: [{clientY: 100, clientX: 55}]
             };
 
-            let component = shallow(<AutoScroll/>);
+            let component = shallow(<AutoScroll parentContainer={mockParentContainer} />);
             let instance = component.instance();
 
             spyOn(window, 'requestAnimationFrame');
-            spyOn(instance, 'getContainer').and.returnValue(container);
+            spyOn(instance, 'getContainerDimension').and.returnValue(container);
             spyOn(instance, 'stopScrolling');
 
             instance.updateScrolling(e);
@@ -151,42 +151,47 @@ describe('AutoScroll', () => {
                 touches: [{clientY: 50, clientX: 45}]
             };
 
-            let component = shallow(<AutoScroll/>);
+            let component = shallow(<AutoScroll parentContainer={mockParentContainer} />);
             let instance = component.instance();
 
             spyOn(window, 'requestAnimationFrame');
-            spyOn(instance, 'getContainer').and.returnValue(container);
+            spyOn(instance, 'getContainerDimension').and.returnValue(container);
             spyOn(instance, 'stopScrolling');
 
             instance.updateScrolling(e);
 
-            expect(instance.stopScrolling.calls.count()).toBe(2);
+            expect(instance.stopScrolling.calls.count()).toBe(1);
         });
 
-        it('should add extra pixels to the top of the container scroll zone when pixelsFromTopForMobile prop is passed through', function() {
+        it('should have default props', function() {
 
-            let component = shallow(<AutoScroll pixelsFromTopForMobile={5}/>);
-            let instance = component.instance();
+            let component = mount(<AutoScroll parentContainer={mockParentContainer} />);
 
-            spyOn(instance, 'getContainer').and.returnValue(container);
-            spyOn(instance, 'getContainerTop');
-
-            instance.updateScrolling();
-
-            expect(instance.getContainerTop).toHaveBeenCalled();
+            expect(component.props().pixelsPerFrame).toBe(10);
+            expect(component.props().pixelsFromBottomForLargeDevices).toBe(30);
+            expect(component.props().pixelsFromTopForLargeDevices).toBe(30);
+            expect(component.props().pixelsFromTopForMobile).toBe(30);
+            expect(component.props().pixelsFromBottomForMobile).toBe(30);
         });
 
-        it('should add extra pixels to the bottom of the container scroll zone when pixelsFromBottomForMobile prop is passed through', function() {
+        it('remove touch & mouse events on unmount', () => {
+            spyOn(document, 'removeEventListener');
+            spyOn(document, 'addEventListener');
+            const mockAutoScrollProp = {
+                addEventListener() {},
+                removeEventListener() {}
+            };
+            spyOn(mockAutoScrollProp, 'addEventListener');
+            spyOn(mockAutoScrollProp, 'removeEventListener');
 
-            let component = shallow(<AutoScroll pixelsFromBottomForMobile={5}/>);
-            let instance = component.instance();
+            const component = mount(<AutoScroll parentContainer={mockParentContainer} />);
+            const instance = component.instance();
+            instance.autoScroll = mockAutoScrollProp;
 
-            spyOn(instance, 'getContainer').and.returnValue(container);
-            spyOn(instance, 'getContainerBottom');
+            instance.componentWillUnmount();
 
-            instance.updateScrolling();
-
-            expect(instance.getContainerBottom).toHaveBeenCalled();
+            expect(document.removeEventListener).toHaveBeenCalled();
+            expect(mockAutoScrollProp.removeEventListener).toHaveBeenCalled();
         });
     });
 });

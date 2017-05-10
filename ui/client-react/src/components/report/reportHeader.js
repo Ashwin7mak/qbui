@@ -1,5 +1,6 @@
 import React from 'react';
 import QBicon from '../qbIcon/qbIcon';
+import Icon, {AVAILABLE_ICON_FONTS} from '../../../../reuse/client/src/components/icon/icon.js';
 import Locale from '../../locales/locales';
 import {I18nMessage} from '../../utils/i18nMessage';
 import _ from 'lodash';
@@ -106,8 +107,17 @@ export const ReportHeader = React.createClass({
     render: function() {
         const headerClasses = "reportHeader";
 
-        const reportName = this.getReportData().name;
-        const title = <div className="title"><QBicon icon="report-menu-3"/><span className="reportLabel">{reportName}</span></div>;
+        let reportIcon = <QBicon icon="report-menu-3"/>;
+        if (this.props.selectedTable && this.props.selectedTable.tableIcon) {
+            reportIcon = <Icon iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY} icon={this.props.selectedTable.tableIcon}/>;
+        }
+
+        let reportName = this.getReportData().name;
+        if (!reportName && this.props.selectedTable) {
+            reportName = this.props.selectedTable.name;
+        }
+
+        const title = <div className="title">{reportIcon}<span className="reportLabel">{reportName}</span></div>;
         let placeMsg = Locale.getMessage("report.searchPlaceHolder") + " " + Locale.getMessage("records.plural");
 
         return <Header

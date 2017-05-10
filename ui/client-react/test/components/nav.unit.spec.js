@@ -13,29 +13,32 @@ class BreakpointsMock {
     }
 }
 
-var LeftNavMock = React.createClass({
+const LeftNavMock = React.createClass({
     render() {
         return <div className="leftMenu"><a className="leftNavLink" onClick={() => this.props.onSelect()}>mock left
             nav</a></div>;
     }
 });
 
-var TrowserMock = React.createClass({
+const TrowserMock = React.createClass({
     render() {
         return <div>mock trowser</div>;
     }
 });
-var TopNavMock = React.createClass({
+
+const TopNavMock = React.createClass({
     render() {
         return <div className="topNav">mock top nav</div>;
     }
 });
 
-var TableCreationDialogMock = React.createClass({
+const TableCreationDialogMock = React.createClass({
     render() {
         return <div>mock table creation dialog</div>;
     }
 });
+
+const mockFormStore = {updateFormRedirectRoute(_route) {}};
 
 class WindowLocationUtilsMock {
     static update(url) { }
@@ -81,18 +84,25 @@ describe('Nav Unit tests', () => {
         fields: [],
         record: [],
         report: [],
-        params: {
-            appId: '1',
-            tblId: '2',
-            recordId: '3'
+        match:{
+            params: {
+                appId: '1',
+                tblId: '2',
+                recordId: '3'
+            }
         },
         forms: [{id: 'view'}],
         shell: {
             leftNavVisible: true,
-            leftNavExpanded: false
+            leftNavExpanded: false,
+            fieldsSelectMenu: {
+                fieldsListCollapsed: true,
+                addBefore: null,
+                availableColumns: []
+            }
         },
         reports: [],
-        router: []
+        history: []
     };
 
     beforeEach(() => {
@@ -108,6 +118,7 @@ describe('Nav Unit tests', () => {
         NavRewireAPI.__Rewire__('TopNav', TopNavMock);
         NavRewireAPI.__Rewire__('TableCreationDialog', TableCreationDialogMock);
         NavRewireAPI.__Rewire__('WindowLocationUtils', WindowLocationUtilsMock);
+        NavRewireAPI.__Rewire__('Analytics', () => null); // Turn off analytics component for unit tests
     });
 
     afterEach(() => {
@@ -123,15 +134,16 @@ describe('Nav Unit tests', () => {
         NavRewireAPI.__ResetDependency__('TopNav');
         NavRewireAPI.__ResetDependency__('TableCreationDialog');
         NavRewireAPI.__ResetDependency__('WindowLocationUtils');
+        NavRewireAPI.__ResetDependency__('Analytics');
     });
 
     it('test render of component', () => {
-        let component = shallow(<Nav {...props} flux={flux}></Nav>);
+        let component = shallow(<Nav {...props} flux={flux} />);
         expect(component).toBeDefined();
     });
 
     it('test renders large by default', () => {
-        let component = mount(<Nav {...props} flux={flux}></Nav>);
+        let component = mount(<Nav {...props} flux={flux} />);
         let leftNav = component.find('.leftMenu');
         expect(leftNav.length).toBe(1);
         let topNav = component.find('.topNav');
@@ -176,7 +188,7 @@ describe('Nav Unit tests', () => {
         NavRewireAPI.__Rewire__('Breakpoints', BreakpointsMock);
         smallBreakpoint = true;
 
-        let component = TestUtils.renderIntoDocument(<Nav {...props} flux={flux}></Nav>);
+        let component = TestUtils.renderIntoDocument(<Nav {...props} flux={flux} />);
         component.onSelectItem();
         expect(props.toggleLeftNav).toHaveBeenCalled();
 
@@ -184,20 +196,20 @@ describe('Nav Unit tests', () => {
     });
 
     it('test toggleNav method', () => {
-        let component = TestUtils.renderIntoDocument(<Nav {...props} flux={flux}></Nav>);
+        let component = TestUtils.renderIntoDocument(<Nav {...props} flux={flux} />);
         component.toggleNav();
         expect(props.toggleLeftNav).toHaveBeenCalled();
     });
 
     it('test onSelectTableReports method', () => {
-        let component = TestUtils.renderIntoDocument(<Nav {...props} flux={flux}></Nav>);
+        let component = TestUtils.renderIntoDocument(<Nav {...props} flux={flux} />);
         component.onSelectTableReports();
         expect(props.showTrowser).toHaveBeenCalled();
         expect(props.loadReports).toHaveBeenCalled();
     });
 
     it('test hideTrowser method', () => {
-        let component = TestUtils.renderIntoDocument(<Nav {...props} flux={flux}></Nav>);
+        let component = TestUtils.renderIntoDocument(<Nav {...props} flux={flux} />);
         component.hideTrowser();
         expect(props.hideTrowser).toHaveBeenCalled();
     });
@@ -209,7 +221,7 @@ describe('Nav Unit tests', () => {
         ];
         testCases.forEach(testCase => {
             props.shell.leftNavExpanded = testCase.expanded;
-            let component = TestUtils.renderIntoDocument(<Nav {...props} flux={flux}></Nav>);
+            let component = TestUtils.renderIntoDocument(<Nav {...props} flux={flux} />);
             component.toggleAppsList(testCase.expanded);
             if (testCase.expanded) {
                 expect(props.toggleAppsList(testCase.expanded));
@@ -223,23 +235,35 @@ describe('Nav Unit tests', () => {
     it('renders form builder component without form type or form id', () => {
         let expectedRouter = ['/qbase/builder/app/1/table/2/form'];
         props.forms = {};
-        props.router = [];
+        props.history = [];
 
-        let component = TestUtils.renderIntoDocument(<Nav {...props} flux={flux}></Nav>);
+        let component = TestUtils.renderIntoDocument(<Nav {...props} flux={flux} updateFormRedirectRoute={mockFormStore.updateFormRedirectRoute} />);
         component.navigateToBuilder();
 
-        expect(props.router).toEqual(expectedRouter);
+        expect(props.history).toEqual(expectedRouter);
     });
 
     it('renders form builder component with a form type', () => {
         let expectedRouter = ['/qbase/builder/app/1/table/2/form?formType=view'];
         props.forms = {'view': {}};
-        props.router = [];
+        props.history = [];
 
-        let component = TestUtils.renderIntoDocument(<Nav {...props} flux={flux}></Nav>);
+        let component = TestUtils.renderIntoDocument(<Nav {...props} flux={flux} updateFormRedirectRoute={mockFormStore.updateFormRedirectRoute} />);
         component.navigateToBuilder();
 
-        expect(props.router).toEqual(expectedRouter);
+        expect(props.history).toEqual(expectedRouter);
     });
 
+    it('renders form builder and sets the redirect route', () => {
+        spyOn(mockFormStore, 'updateFormRedirectRoute');
+
+        const testLocation = {pathname: '/previousLocation'};
+        props.forms = [];
+        props.history = [];
+
+        let component = TestUtils.renderIntoDocument(<Nav {...props} flux={flux} location={testLocation} updateFormRedirectRoute={mockFormStore.updateFormRedirectRoute} />);
+        component.navigateToBuilder();
+
+        expect(mockFormStore.updateFormRedirectRoute).toHaveBeenCalledWith(testLocation.pathname);
+    });
 });

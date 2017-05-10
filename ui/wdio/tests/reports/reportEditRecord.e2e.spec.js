@@ -5,13 +5,14 @@
 (function() {
     'use strict';
     //Load the page Objects
-    var e2ePageBase = require('../../pages/e2ePageBase.po');
-    var NewStackAuthPO = require('../../pages/newStackAuth.po');
-    var ReportContentPO = require('../../pages/reportContent.po');
-    var ReportInLineEditPO = require('../../pages/reportInLineEdit.po');
-    var ReportPagingPO = require('../../pages/reportPaging.po');
+    var e2ePageBase = requirePO('./e2ePageBase');
+    var NewStackAuthPO = requirePO('./newStackAuth');
+    var ReportContentPO = requirePO('./reportContent');
+    var ReportInLineEditPO = requirePO('./reportInLineEdit');
+    var ReportPagingPO = requirePO('./reportPaging');
 
-    describe('Reports - In-line Edit Record Tests: ', function() {
+
+    describe('Reports - In-line edit record tests: ', function() {
         var realmName;
         var realmId;
         var testApp;
@@ -65,7 +66,8 @@
         /**
          * Test Method. Record in-line editing test on a report.
          */
-        it('Should allow you to in-line edit multiple fields in a report record', function() {
+        //TODO: MC-2309: Enable this when the phone number field validation is fixed.
+        xit('Should allow you to in-line edit multiple fields in a report record', function() {
 
             //Variable declarations
             var textToEnter = 'My new text';
@@ -110,42 +112,6 @@
                 expect(recordValues[6]).toBe(dateToEnter, 'Expected date is not present');
             }
 
-        });
-
-        /**
-         * Test Method. Tests in-line editing with Pagination.
-         */
-        it('Should allow you to in-line edit a record on the second page', function() {
-            //Variable declarations
-            var textToEnter = 'My new text on page 2';
-            var successMessage = 'Record saved';
-
-            // Steps 1- Go to the second page of records
-            ReportPagingPO.clickPagingNavButton(ReportPagingPO.pagingToolbarNextButton);
-
-            // Step 2 - Open the in-line edit menu for the first record on that page
-            ReportInLineEditPO.openRecordEditMenu(0);
-
-            // Step 3 - Edit the Text Field
-            ReportInLineEditPO.editTextField(0, textToEnter);
-
-            // Step 4 - Save the edit
-            ReportInLineEditPO.clickSaveChangesButton();
-            // browser.waitForText(textToEnter);
-            expect(browser.isVisible('.qbRow.editing .saveRecord')).toBeFalsy();
-            expect(browser.isVisible('.qbRow.editing .cancelSelection')).toBeFalsy();
-            expect(browser.isVisible('.qbRow.editing .addRecord')).toBeFalsy();
-
-            // Step 5 - Check for the success message 'Record added'
-            //TODO: See if we can handle this a different way so it will work 100%. Would like to have this assertion
-            //ReportInLineEditPO.assertSuccessMessage(successMessage);
-
-            // Step 6 - Check that the edit persisted on the report
-            var recordValues = ReportContentPO.getRecordValues(0);
-            expect(recordValues[1]).toBe(textToEnter);
-
-            // Step 7 - Go back to the first page of records
-            ReportPagingPO.clickPagingNavButton(ReportPagingPO.pagingToolbarPrevButton);
         });
 
         /**
@@ -215,8 +181,6 @@
                 expect(expectedValues[0]).toBe(originalText);
             }
         });
-
-
         //TODO: Required field test, Need to extend setup data for this
 
         //TODO: Invalid input value tests (text in a date field)

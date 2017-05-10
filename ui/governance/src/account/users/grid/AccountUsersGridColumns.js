@@ -1,5 +1,6 @@
 import * as Formatters from './AccountUsersGridFormatters';
 import _ from 'lodash';
+import * as FieldConsts from '../../../../../client-react/src/constants/schema';
 
 const boolColumnProps = {
     classes: ['BoolColumn'],
@@ -10,58 +11,94 @@ const columns = [
     {
         property: 'firstName',
         header: {
-            label: 'First Name'
+            label: 'FIRST NAME'
+        },
+        fieldDef: {
+            id: 1,
+            datatypeAttributes: {
+                type: FieldConsts.TEXT
+            }
         }
     },
     {
         property: 'lastName',
         header: {
-            label: 'Last Name'
+            label: 'LAST NAME'
         },
+        fieldDef: {
+            id: 2,
+            datatypeAttributes: {
+                type: FieldConsts.TEXT
+            }
+        }
     },
     {
         property: 'email',
         header: {
-            label: 'Email'
+            label: 'EMAIL'
         },
         props: {
             classes: ['EmailColumn']
+        },
+        fieldDef: {
+            id: 3,
+            datatypeAttributes: {
+                type: FieldConsts.EMAIL_ADDRESS
+            }
         }
     },
     {
         property: 'userName',
         header: {
-            label: 'User Name'
+            label: 'USER NAME'
         },
         props: {
             classes: ['ScreennameColumn']
+        },
+        fieldDef: {
+            id: 4,
+            datatypeAttributes: {
+                type: FieldConsts.TEXT
+            }
         }
     },
     {
         property: 'lastAccess',
         header: {
-            label: 'Last Access'
+            label: 'LAST ACCESS'
         },
         cell: {
             formatters: [Formatters.FormatLastAccessString]
         },
         internalQbProps: {
             forAccountAdminOnly: true
+        },
+        fieldDef: {
+            id: 5,
+            datatypeAttributes: {
+                type: FieldConsts.DATE_TIME
+            }
         }
     },
     {
         property: 'hasAppAccess',
         header: {
-            label: 'QuickBase Access Status'
+            label: 'QUICKBASE ACCESS STATUS'
         },
         cell: {
             formatters: [Formatters.FormatUserStatusHTML]
+        },
+        fieldDef: {
+            id: 6,
+            datatypeAttributes: {
+                type: FieldConsts.TEXT
+            }
         }
     },
     {
         property: 'lastAccess',
         header: {
-            label: 'Inactive?'
+            label: 'INACTIVE?'
         },
         cell: {
             formatters: [Formatters.FormatIsInactive]
@@ -69,12 +106,18 @@ const columns = [
         props: boolColumnProps,
         internalQbProps: {
             forAccountAdminOnly: true
+        },
+        fieldDef: {
+            id: 7,
+            datatypeAttributes: {
+                type: FieldConsts.CHECKBOX
+            }
         }
     },
     {
         property: 'numGroupsMember',
         header: {
-            label: 'In Any Group?'
+            label: 'IN ANY GROUP?'
         },
         cell: {
             formatters: [Formatters.FormatIsGroupMember]
@@ -82,12 +125,18 @@ const columns = [
         props: boolColumnProps,
         internalQbProps: {
             forAccountAdminOnly: true
+        },
+        fieldDef: {
+            id: 8,
+            datatypeAttributes: {
+                type: FieldConsts.CHECKBOX
+            }
         }
     },
     {
         property: 'numGroupsManaged',
         header: {
-            label: 'Group Manager?'
+            label: 'GROUP MANAGER?'
         },
         cell: {
             formatters: [Formatters.FormatIsGroupManager]
@@ -95,12 +144,18 @@ const columns = [
         props: boolColumnProps,
         internalQbProps: {
             forAccountAdminOnly: true
+        },
+        fieldDef: {
+            id: 9,
+            datatypeAttributes: {
+                type: FieldConsts.CHECKBOX
+            }
         }
     },
     {
         property: 'accountTrusteeFlags',
         header: {
-            label: 'Can create apps?'
+            label: 'CAN CREATE APPS?'
         },
         cell: {
             formatters: [Formatters.FormatCanCreateApps]
@@ -108,12 +163,18 @@ const columns = [
         props: boolColumnProps,
         internalQbProps: {
             forAccountAdminOnly: true
+        },
+        fieldDef: {
+            id: 10,
+            datatypeAttributes: {
+                type: FieldConsts.CHECKBOX
+            }
         }
     },
     {
         property: 'numAppsManaged',
         header: {
-            label: 'App Manager?'
+            label: 'APP MANAGER?'
         },
         cell: {
             formatters: [Formatters.FormatIsAppManager]
@@ -121,12 +182,18 @@ const columns = [
         props: boolColumnProps,
         internalQbProps: {
             forAccountAdminOnly: true
+        },
+        fieldDef: {
+            id: 11,
+            datatypeAttributes: {
+                type: FieldConsts.CHECKBOX
+            }
         }
     },
     {
         property: 'realmDirectoryFlags',
         header: {
-            label: 'In Realm Directory?'
+            label: 'IN REALM DIRECTORY?'
         },
         cell: {
             formatters: [Formatters.FormatIsInRealmDirectory]
@@ -134,12 +201,18 @@ const columns = [
         props: boolColumnProps,
         internalQbProps: {
             forRealmAdminOnly: true
+        },
+        fieldDef: {
+            id: 12,
+            datatypeAttributes: {
+                type: FieldConsts.CHECKBOX
+            }
         }
     },
     {
         property: 'realmDirectoryFlags',
         header: {
-            label: 'Realm Approved?'
+            label: 'REALM APPROVED?'
         },
         cell: {
             formatters: [Formatters.FormatIsRealmApproved]
@@ -147,6 +220,12 @@ const columns = [
         props: boolColumnProps,
         internalQbProps: {
             forRealmAdminOnly: true
+        },
+        fieldDef: {
+            id: 13,
+            datatypeAttributes: {
+                type: FieldConsts.CHECKBOX
+            }
         }
     }
 ];

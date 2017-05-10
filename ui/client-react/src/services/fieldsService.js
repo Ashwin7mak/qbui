@@ -10,10 +10,10 @@ class FieldsService extends BaseService {
     constructor() {
         super();
 
-        //  Fields Service API endpoints
+        //  Fields Service API endpoints.
         this.API = {
-            GET_FIELD     : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.FIELDS}/{2}`,
-            GET_FIELDS    : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.FIELDS}`
+            GET_FIELD     : `${constants.BASE_URL.PROXY}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.FIELDS}/{2}`,
+            GET_FIELDS    : `${constants.BASE_URL.PROXY}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.FIELDS}`
         };
     }
 
@@ -41,6 +41,25 @@ class FieldsService extends BaseService {
     getFields(appId, tableId) {
         let url = super.constructUrl(this.API.GET_FIELDS, [appId, tableId]);
         return super.get(url);
+    }
+
+    /**
+     * Create a field
+     *
+     * @param appId
+     * @param tableId
+     * @param field
+     * @returns {*}
+     */
+    createField(appId, tableId, field) {
+        let url = super.constructUrl(this.API.GET_FIELDS, [appId, tableId]);
+        return super.post(url, field);
+    }
+
+    updateField(appId, tableId, field) {
+        // TODO: npe if field is undefined
+        let url = super.constructUrl(this.API.GET_FIELD, [appId, tableId, field.id]);
+        return super.patch(url, field);
     }
 
 }

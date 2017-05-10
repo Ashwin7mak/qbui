@@ -1,58 +1,87 @@
 'use strict';
 
-var path = require('path');
-var webpack = require('webpack');
-var exec = require('child_process').exec;
+/**
+ * These configurations build the javascript bundles that run the app.
+ * Configuration options (set as ENV vars, e.g., `NODE_ENV=prod ANLAYZE_WEBPACK=true webpack`)
+ * - NODE_ENV - =prod will minify, uglify, and set cache-busting for all bundles. Other values will only bundle.
+ *               Note: The final value of ENV is set through the config files in server/src/config/environments
+ * - ANALYZE_WEBPACK - =true will run the webpack analyzer after building. Useful for identifying webpack bundle optimizations.
+ */
 
-// node modules
-var nodeModulesPath = path.resolve(__dirname, 'node_modules');
+const path = require('path');
+const fs = require('fs');
+const webpack = require('webpack');
+const exec = require('child_process').exec;
 
-// where generated files go
-var buildPath = path.join(__dirname, 'client-react/dist');
+// Environment variable constants
+const envConstants = require(path.join(__dirname, 'server/src/config/environment/environmentConstants'));
 
-var clientPath = path.join(__dirname, 'client-react');
+// The current environment configuration. Uses NODE_ENV to determine environment.
+const envConfig = require('./server/src/config/environment');
 
-var reuseLibraryPath = path.join(__dirname, 'reuse');
+// Where generated files go
+const buildPath = path.join(__dirname, 'client-react/dist');
 
-var componentLibraryPath = path.join(__dirname, 'componentLibrary/src');
+// Paths to functional area directories
+const clientPath = path.join(__dirname, 'client-react');
+const reuseLibraryPath = path.join(__dirname, 'reuse');
+const componentLibraryPath = path.join(__dirname, 'componentLibrary/src');
+const governancePath = path.join(__dirname, 'governance');
+var automationPath = path.join(__dirname, 'automation');
 
-var governancePath = path.join(__dirname, 'governance');
+// A plugin that helps create the webpack manifest file so that we can identify the bundle names (e.g., bundle.382sdjfkeo.min.js) correctly.
+const ManifestPlugin = require('webpack-manifest-plugin');
 
-var envConfig = require('./server/src/config/environment');
+// A plugin that helps identify possible optimizations and effects of configuration changes when building webpack bundles.
+// This should not be used in production or during normal development.
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
-// 3 supported run-time environments..ONE and ONLY ONE variable is to be set to true.
-var PROD = (envConfig.env === 'PRODUCTION' || false);
-var TEST = (envConfig.env === 'TEST' || false);
-var LOCAL = !PROD && !TEST ? true : false;
+// A plugin that gives each bundle a pre-defined hash such that re-bundling will produce the same chunkhash each time if no code changes.
+// Allows cache-busting to work ANALYZEcorrectly by only updating the hash when the code has actually changed.
+const WebpackMd5Hash = require('webpack-md5-hash');
 
-// Variables referenced by our application to determine the run-time environment (ie: configuration)
-var envPlugin = new webpack.DefinePlugin({
+// 3 supported run-time environments..ONE and ONLY ONE constiable is to be set to true.
+const PROD = (envConfig.env === envConstants.PRODUCTION || false);
+const TEST = (envConfig.env === envConstants.TEST || false);
+const LOCAL = (!PROD && !TEST);
+
+// constiables referenced by our application to determine the run-time environment (ie: configuration)
+const envPlugin = new webpack.DefinePlugin({
     __QB_PROD__: JSON.stringify(PROD),
     __QB_TEST__: JSON.stringify(TEST),
     __QB_LOCAL__: JSON.stringify(LOCAL)
 });
 
-function MyNotifyPlugin() {
-}
-MyNotifyPlugin.prototype.apply = function(compiler) {
-    if (envConfig.growlNotify) {
-        compiler.plugin('done', function(stats) {
-            //notify watched update is done
-            process.stdout.write('\x07');
-            if (stats.hasErrors()) {
-                exec('growlnotify -n "Build" -m "Failed"');
-            } else {
-                exec('growlnotify -n "Build" -m "Built"');
-            }
-        });
-    }
-};
+// We only minify and uglify files when the environment is 'prod' and on the master branch or when deploying and no branch is specified.
+// This speeds up the test runs and builds for individual branches where we don't need to export the minified bundle.
+// Other setting such as whether or not to make source maps or display paths is still only determined by the environment.
+const shouldMinify = PROD && (!process.env.GIT_UIBRANCH || process.env.GIT_UIBRANCH === 'master');
 
-var config = {
+/**
+ * A plugin that shows a notification when webpack has completed.
+ */
+class MyNotifyPlugin {
+    apply(compiler) {
+        if (envConfig.growlNotify) {
+            compiler.plugin('done', function(stats) {
+                //notify watched update is done
+                process.stdout.write('\x07');
+                if (stats.hasErrors()) {
+                    exec('growlnotify -n "Build" -m "Failed"');
+                } else {
+                    exec('growlnotify -n "Build" -m "Built"');
+                }
+            });
+        }
+    }
+}
+
+// ------ START CONFIG ------
+const config = {
     // devtool Makes sure errors in console map to the correct file
     // and line number
-    // eval is faster than 'source-map' for dev but eval is not supported for prod
-    devtool: PROD ? 'source-map' : 'eval',
+    // eval-source-map is faster than 'source-map' for dev but eval is not supported for prod
+    devtool: PROD ? 'source-map' : 'eval-source-map',
     watchDelay: 50,
 
     entry: {
@@ -64,31 +93,79 @@ var config = {
         // urls() that aren't inlined must not be loaded into a blob:// URL by webpack.
         bundle: [
             'bootstrap-sass!./client-react/bootstrap-sass.config.js',
-            path.resolve(reuseLibraryPath, 'client/src/assets/fonts/lato-font.css'),
             path.resolve(reuseLibraryPath, 'client/src/assets/css/qbMain.scss'),
             path.resolve(clientPath, 'src/scripts/router.js')
         ],
         componentLibrary: [
             'bootstrap-sass!./client-react/bootstrap-sass.config.js',
-            path.resolve(reuseLibraryPath, 'client/src/assets/fonts/lato-font.css'),
             path.resolve(reuseLibraryPath, 'client/src/assets/css/qbMain.scss'),
             path.resolve(componentLibraryPath, 'index.js')
         ],
         governance: [
             'bootstrap-sass!./client-react/bootstrap-sass.config.js',
-            path.resolve(reuseLibraryPath, 'client/src/assets/fonts/lato-font.css'),
             path.resolve(reuseLibraryPath, 'client/src/assets/css/qbMain.scss'),
             path.resolve(governancePath, 'src/app/index.js')
+        ],
+        automation: [
+            'bootstrap-sass!./client-react/bootstrap-sass.config.js',
+            path.resolve(reuseLibraryPath, 'client/src/assets/css/qbMain.scss'),
+            path.resolve(automationPath, 'src/app/index.js')
+
+        ],
+
+        // A list of shared node modules across functional areas. These are split out so that the vendor bundle
+        // can be cached by the browser and not downloaded on every request.
+        vendor: [
+            'axios',
+            'bigdecimal',
+            'bluebird',
+            'cookie-parser',
+            'fluxxor',
+            'intl',
+            'intl/locale-data/jsonp/en',
+            'intl/locale-data/jsonp/de',
+            'intl/locale-data/jsonp/fr',
+            'lodash',
+            'messageformat',
+            'moment',
+            'moment-timezone',
+            'mousetrap',
+            'rc-tabs',
+            'react',
+            'react-addons-css-transition-group',
+            'react-bootstrap',
+            'react-cookie',
+            'react-dnd',
+            'react-dnd-touch-backend',
+            'react-dom',
+            'react-fastclick',
+            'react-flip-move',
+            'react-intl',
+            'react-loader',
+            'react-notifications',
+            'react-radio-group',
+            'react-redux',
+            'react-router-dom',
+            'react-select',
+            'react-swipeable',
+            'react-toggle-button',
+            'reactabular-table',
+            'redux',
+            'redux-thunk',
+            'searchtabular'
         ]
     },
+
     output: {
         // pathinfo - false disable outputting file info comments in prod bundle
         pathinfo: !PROD,
+
         // generated files directory for output
         path: buildPath,
+
         // generated js file
-        filename: PROD ? '[name].min.js' : '[name].js',
-        chunkFilename: PROD ? '[id].bundle.min.js' : '[id].bundle.js',
+        filename: shouldMinify ? '[name].[chunkhash].min.js' : '[name].js',
+
         //publicPath is path from the view of the Javascript / HTML page.
         // where all js/css http://.. references will use for relative base
         publicPath: '/dist/' // Required for webpack-dev-server
@@ -110,9 +187,10 @@ var config = {
                     componentLibraryPath,
                     path.resolve(__dirname, 'governance/src'),
                     path.resolve(__dirname, 'governance/test'),
+                    path.resolve(__dirname, 'automation/src'),
+                    path.resolve(__dirname, 'automation/test')
                 ],
                 exclude: [
-                    nodeModulesPath,
                     // We don't want these to get compiled because ReactPlayground does that in the browser
                     path.resolve(componentLibraryPath, 'examples')
                 ],
@@ -175,13 +253,28 @@ var config = {
 
         ]
     },
+
     resolve: {
+        root: path.resolve(__dirname),
+        // Allow easier imports for commonly imported folders
+        alias: {
+            APP: 'client-react/src',
+            REUSE: 'reuse/client/src',
+            GOVERNANCE: 'governance/src',
+            AUTOMATION: 'automation/src',
+            COMMON: 'common/src'
+        },
         // extensions are so we can require('file') instead of require('file.js')
         extensions: ['', '.js', '.json', '.scss']
     },
-    plugins: PROD ? [
+
+
+    plugins: shouldMinify ? [
         // This has beneficial effect on the react lib size for deploy
         new webpack.DefinePlugin({'process.env': {NODE_ENV: JSON.stringify('production')}}),
+
+        //  run-time environment for our application
+        envPlugin,
 
         // for prod we also de-dupe, obfuscate and minimize
         new webpack.optimize.DedupePlugin(),
@@ -193,16 +286,44 @@ var config = {
             }
         }),
 
-        //  run-time environment for our application
-        envPlugin
+        // Separates common node modules identified above into a separate vendor bundle
+        new webpack.optimize.CommonsChunkPlugin({
+            name: 'vendor',
+            filename: 'vendor.[chunkhash].min.js',
+            minChunks: Infinity
+        }),
+
+        // Makes sure that the chunkhash changes when, and only when, the code changes.
+        new WebpackMd5Hash(),
+
+        // Creates a manifest.json file in the /server/source/routes directory that contains the hash values for each bundle
+        // This allows us to load the cache-busting file correctly in index.html
+        new ManifestPlugin(),
+
+        // Keeps the imports in the same order across webpack runs so that the chunkhash updates when, and only when, the code changes.
+        new webpack.optimize.OccurrenceOrderPlugin(true),
+
+        // Optionally run the analyzer.
+        ...(process.env.ANALYZE_WEBPACK ? [new BundleAnalyzerPlugin()] : [])
     ] :  [
+
         // When there are compilation errors, this plugin skips the emitting (and recording) phase.
         // This means there are no assets emitted that include errors.
         new webpack.NoErrorsPlugin(),
         //  run-time environment for our application
         envPlugin,
 
-        new MyNotifyPlugin()
+        // Shows a growl notification when webpack completes.
+        new MyNotifyPlugin(),
+
+        // Separates common node modules identified above into a separate vendor bundle
+        new webpack.optimize.CommonsChunkPlugin({
+            name: 'vendor',
+            minChunks: Infinity
+        }),
+
+        // Optionally run the analyzer.
+        ...(process.env.ANALYZE_WEBPACK ? [new BundleAnalyzerPlugin()] : [])
     ]
 };
 

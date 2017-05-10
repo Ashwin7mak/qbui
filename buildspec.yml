@@ -1,0 +1,38 @@
+version: 0.1
+environment_variables:
+ plaintext:
+  NODE_ENV: container
+phases:
+  install:
+    commands:
+      - echo "dash dash/sh boolean false" | debconf-set-selections # Set default shell to bash (Step 1)
+      - DEBIAN_FRONTEND=noninteractive dpkg-reconfigure dash       # Set default shell to bash (Step 2)
+      - chmod -R +x . # Workaround Codebuild issue where executable bits are not preserved on github clones
+      # All of the 'install' should be moved to a container creation.  Once AWS releases the DIND container for extension, it should be the objective to move the to a custom container
+      - apt-get -y update # Update list of available software (required for the next step)
+      - apt-get install -y software-properties-common # Needed for the add-apt-repository command in the next step
+      - add-apt-repository -y ppa:openjdk-r/ppa # Add JDK repo
+      - apt-get -y update # Update list of available software (due to the previous step)
+      - apt-get install -y openjdk-8-jdk jq build-essential libssl-dev # JDK for gradle; not sure about the other deps
+      - bin/nvminstall.sh
+      - bin/envwrap.sh npm install -g grunt
+      - bin/envwrap.sh npm install -g grunt-cli
+      - curl -L "https://github.com/docker/compose/releases/download/1.9.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose && chmod +x /usr/local/bin/docker-compose
+  pre_build:
+    commands:
+      - bin/opensg.sh "${NEXUS_SG}"
+  build:
+    commands:
+      - cd ui && ../bin/envwrap.sh ../gradlew npmPrune npmInstallLean clean npmRunLint npmListConfig test build -Pdocker
+      - docker build -t "${REPOSITORY_URI}:${CODEBUILD_RESOLVED_SOURCE_VERSION}" -t "${REPOSITORY_URI}:latest" .
+  post_build:
+    commands:
+      # There is a gap here - if the build errors out, post-build is not executed.  Lambda to monitor builds in order to clear SG entries possibly
+      - bin/closesg.sh "${NEXUS_SG}"
+      - $(aws ecr get-login --registry-ids ${REGISTRYID})
+      - docker push "${REPOSITORY_URI}:${CODEBUILD_RESOLVED_SOURCE_VERSION}"
+      - test "${BRANCH}" = "master" && docker push "${REPOSITORY_URI}:latest" || true
+      - printf '{"image":"%s"}' "${REPOSITORY_URI}:${CODEBUILD_RESOLVED_SOURCE_VERSION}" > build.json
+artifacts:
+  files:
+    - build.json

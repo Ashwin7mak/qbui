@@ -2,7 +2,15 @@ import React from 'react';
 import {mount} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
 
-import ListOfElements, {__RewireAPI__ as ListOfElementsRewireAPI} from '../src/components/sideNavs/listOfElements';
+import ListOfElements, {__RewireAPI__ as ListOfElementsRewireAPI} from 'REUSE/components/sideNavs/listOfElements';
+
+const FieldTokenInMenuMock = React.createClass({
+    render: function() {
+        return (
+            <div>{this.props.title}</div>
+        );
+    }
+});
 
 const testElements = [
     {
@@ -46,7 +54,7 @@ describe('ListOfElements', () => {
     });
 
     it('displays groups of fields', () => {
-        component = mount(<ListOfElements elements={testElements}/>);
+        component = mount(<ListOfElements renderer={FieldTokenInMenuMock} elements={testElements}/>);
 
         const headers = component.find('.listOfElementsItemHeader');
         expect(headers.length).toEqual(testElements.length - 1); // Subtract one to account for single ungrouped element
@@ -54,8 +62,15 @@ describe('ListOfElements', () => {
         expect(headers.at(1)).toHaveText(testElements[1].title);
     });
 
+    it('does not display titles for a group of fields', () => {
+        component = mount(<ListOfElements hideTitle={true} renderer={FieldTokenInMenuMock} elements={testElements}/>);
+
+        const headers = component.find('.listOfElementsItemHeader');
+        expect(headers.length).toEqual(0); // Subtract one to account for single ungrouped element
+    });
+
     it('displays an un-grouped element', () => {
-        component = mount(<ListOfElements elements={testElements} />);
+        component = mount(<ListOfElements renderer={FieldTokenInMenuMock} elements={testElements} />);
 
         const unGroupedElement = component.find('.listOfElementsMainList > .listOfElementsItem');
 
@@ -64,7 +79,7 @@ describe('ListOfElements', () => {
     });
 
     it('displays grouped child elements', () => {
-        component = mount(<ListOfElements elements={testElements} />);
+        component = mount(<ListOfElements renderer={FieldTokenInMenuMock} elements={testElements} />);
 
         const groupedElements = component.find('.listOfElementsItemList .listOfElementsItem');
 
@@ -76,7 +91,7 @@ describe('ListOfElements', () => {
 
     describe('filtering elements', () => {
         it('filters elements based on the filter text', () => {
-            component = mount(<ListOfElements elements={testElements} />);
+            component = mount(<ListOfElements renderer={FieldTokenInMenuMock} elements={testElements} />);
 
             component.setState({activeFieldFilter: 'elementa'});
 
@@ -85,7 +100,7 @@ describe('ListOfElements', () => {
         });
 
         it('shows a message if no fields match the filter text', () => {
-            component = mount(<ListOfElements elements={testElements} />);
+            component = mount(<ListOfElements renderer={FieldTokenInMenuMock} elements={testElements} />);
 
             component.setState({activeFieldFilter: 'zzz'});
 

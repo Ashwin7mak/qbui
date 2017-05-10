@@ -2,18 +2,22 @@
     'use strict';
 
     //Load the page Objects
-    var newStackAuthPO = requirePO('newStackAuth');
-    var e2ePageBase = requirePO('e2ePageBase');
-    var RequestAppsPage = requirePO('requestApps');
-    var tableCreatePO = requirePO('tableCreate');
-    var formsPO = requirePO('formsPage');
-    var RequestSessionTicketPage = requirePO('requestSessionTicket');
-    var rawValueGenerator = require('../../../test_generators/rawValue.generator');
+    let newStackAuthPO = requirePO('newStackAuth');
+    let e2ePageBase = requirePO('e2ePageBase');
+    let RequestAppsPage = requirePO('requestApps');
+    let tableCreatePO = requirePO('tableCreate');
+    let formsPO = requirePO('formsPage');
+    let RequestSessionTicketPage = requirePO('requestSessionTicket');
+    let rawValueGenerator = require('../../../test_generators/rawValue.generator');
+    let ReportContentPO = requirePO('reportContent');
+    const tableNameFieldTitleText = '* Table name';
+    const recordNameFieldTitleText = '* A record in the table is called';
+    const descFieldTitleText = 'Description';
 
     describe('Tables - Create a table via builder tests: ', function() {
-        var realmName;
-        var realmId;
-        var testApp;
+        let realmName;
+        let realmId;
+        let testApp;
 
         /**
          * Setup method. Creates test app then authenticates into the new stack
@@ -42,21 +46,19 @@
          * Before each it block reload the list all report (can be used as a way to reset state between tests)
          */
         beforeEach(function() {
-            //load the tables page
-            RequestAppsPage.get(e2eBase.getRequestTableEndpoint(realmName, testApp.id, testApp.tables[0].id));
-            return tableCreatePO.newTableBtn.waitForVisible();
+            return e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
         });
 
         it('Create new table', function() {
-            var tableName = rawValueGenerator.generateStringWithFixLength(10);
-            var tableFields = [
-                {fieldTitle: '* Table Name', fieldValue: tableName, placeHolder: 'For example, Customers'},
-                {fieldTitle: '* A record in the table is called', fieldValue: rawValueGenerator.generateStringWithFixLength(10), placeHolder: 'For example, customer'},
-                {fieldTitle: 'Description', fieldValue: rawValueGenerator.generateStringWithFixLength(50), placeHolder: 'Text to show when hovering over the table name in the left navigation'}
+            let tableName = rawValueGenerator.generateStringWithFixLength(10);
+            let tableFields = [
+                {fieldTitle: tableNameFieldTitleText, fieldValue: tableName, placeHolder: 'For example, Customers'},
+                {fieldTitle: recordNameFieldTitleText, fieldValue: rawValueGenerator.generateStringWithFixLength(10), placeHolder: 'For example, customer'},
+                {fieldTitle: descFieldTitleText, fieldValue: rawValueGenerator.generateStringWithFixLength(50), placeHolder: 'Text to show when hovering over the table name in the left navigation'}
             ];
 
             //Step 1 - get the original count of table links in the left nav
-            var originalTableLinksCount = tableCreatePO.getAllTableLeftNavLinksList.value.length;
+            let originalTableLinksCount = tableCreatePO.getAllTableLeftNavLinksList.value.length;
 
             //Step 2 - Click on new table button
             tableCreatePO.clickCreateNewTable();
@@ -64,7 +66,12 @@
             //Step 3 - Verify table elements
             tableCreatePO.verifyTable();
 
-            //Step 4 - Enter table field values
+            //Step 4 - Choose an Icon from Icon picker
+            let iconChoosedClassName = tableCreatePO.selectRandomIconFromIconChooser();
+            //Verify the choosed icon in closed combo
+            tableCreatePO.verifyIconInIconChooserCombo(iconChoosedClassName);
+
+            //Step 5 - Enter table field values
             tableFields.forEach(function(tableField) {
                 //verify place holders for each table field
                 tableCreatePO.verifyTableFieldPlaceHolders(tableField.fieldTitle, tableField.placeHolder);
@@ -72,35 +79,62 @@
                 tableCreatePO.enterTableFieldValue(tableField.fieldTitle, tableField.fieldValue);
             });
 
-            //Step 6 - Choose an Icon from Icon picker
-            tableCreatePO.selectRandomIconFromIconChooser();
-
-            //Step 5 - Verify iconChooser search functionality
-            tableCreatePO.searchIconFromChooser('bicycle');
-            var searchReturnedIcons = tableCreatePO.getAllIconsFromIconChooser;
-            //Verify it returns just one
-            expect(searchReturnedIcons.value.length).toBe(1);
-            expect(searchReturnedIcons.getAttribute('className')).toBe('qbIcon iconTableSturdy-bicycle');
-
-            //Step 7 - Click next field and verify it landed in drag fields page
-            tableCreatePO.clickNextBtn();
-
-            //Step 8 - Click on finished button and make sure it landed in edit Form container page
+            //Step 6 - Click on finished button and make sure it landed in edit Form container page
             tableCreatePO.clickFinishedBtn();
+
+            //Step 7 - Verify the create table dialogue
+            tableCreatePO.verifyNewTableCreateDialogue();
+
+            //Step 8 - Click OK button on create table dialogue
+            tableCreatePO.clickOkBtn();
 
             //Step 9 - Click on forms Cancel button
             formsPO.clickFormCancelBtn();
             tableCreatePO.newTableBtn.waitForVisible();
 
-
             //Step 10 - Get the new count of table links in the left nav
-            var newTableLinksCount = tableCreatePO.getAllTableLeftNavLinksList.value.length;
+            let newTableLinksCount = tableCreatePO.getAllTableLeftNavLinksList.value.length;
 
             //Step 11 - Verify the table links count got increased by 1
             expect(newTableLinksCount).toBe(originalTableLinksCount + 1);
 
             //Step 12 - Select Table and make sure it lands in reports page
             tableCreatePO.selectTable(tableName);
+            //parse table ID from current browser URL; we need this to hit report endpoint for the table
+            let currentURL = browser.getUrl();
+            let tableId = currentURL.substring(currentURL.lastIndexOf("/") + 1, currentURL.length);
+
+            //Step 13 - make sure tableHomePage is visible
+            ReportContentPO.addRecordButton.waitForVisible();
+            //Verify 'Add a Record' button is enabled
+            expect(browser.isEnabled('.tableHomePageInitial .addRecordButton')).toBeTruthy();
+            //Verify text on the addRecord button
+            expect(ReportContentPO.addRecordButton.getAttribute('textContent')).toBe('Add a record');
+            //Verify a few other elements on tableHomePage
+            browser.element('.iconTableSturdy-Spreadsheet').waitForVisible();
+            expect(browser.element('.tableHomePageInitial .h1').getAttribute('textContent')).toBe('Start using your table');
+            expect(browser.element('.tableHomePageInitial .createTableLink').getAttribute('textContent')).toBe('Create another table');
+            expect(browser.isEnabled('.tableHomePageInitial .createTableLink')).toBeTruthy();
+
+            //Step 14 - Load a report for the table and verify report elements
+            RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, testApp.id, tableId, 1));
+            browser.element('.noRowsIcon').waitForVisible();
+            expect(browser.element('.recordsCount').getAttribute('textContent')).toBe('0 records');
+            expect(browser.element('.noRowsText').getAttribute('textContent')).toBe('There are no ' + tableName.toLowerCase() + ' to see right now.');
+        });
+
+        it('Verify ICON chooser search', function() {
+
+            //Step 1 - Click on new table button
+            tableCreatePO.clickCreateNewTable();
+
+            //Step 2 - Verify iconChooser search functionality
+            tableCreatePO.searchIconFromChooser('bicycle');
+            let searchReturnedIcons = tableCreatePO.getAllIconsFromIconChooser;
+            //Verify it returns just one
+            expect(searchReturnedIcons.value.length).toBe(1);
+            expect(searchReturnedIcons.getAttribute('className')).toContain('iconTableSturdy-bicycle');
+
         });
 
         /**
@@ -111,36 +145,36 @@
                 {
                     message: 'with empty table name',
                     tableFields: [
-                        {fieldTitle: '* Table Name', fieldValue: ' '},
-                        {fieldTitle: 'Description', fieldValue: 'test Description'}
+                        {fieldTitle: tableNameFieldTitleText, fieldValue: ' '},
+                        {fieldTitle: descFieldTitleText, fieldValue: 'test Description'}
                     ],
                     tableFieldError: [
-                        {fieldTitle: '* Table Name', fieldError: 'Fill in the table name'},
+                        {fieldTitle: tableNameFieldTitleText, fieldError: 'Fill in the table name'},
                     ]
                 },
                 {
                     message: 'with empty required fields',
                     tableFields: [
-                        {fieldTitle: '* Table Name', fieldValue: ' '},
-                        {fieldTitle: '* A record in the table is called', fieldValue: ' '},
-                        {fieldTitle: 'Description', fieldValue: 'test Description'}
+                        {fieldTitle: tableNameFieldTitleText, fieldValue: ' '},
+                        {fieldTitle: recordNameFieldTitleText, fieldValue: ' '},
+                        {fieldTitle: descFieldTitleText, fieldValue: 'test Description'}
                     ],
                     tableFieldError: [
-                        {fieldTitle: '* Table Name', fieldError: 'Fill in the table name'},
-                        {fieldTitle: '* A record in the table is called', fieldError: 'Fill in the record name'}
+                        {fieldTitle: tableNameFieldTitleText, fieldError: 'Fill in the table name'},
+                        {fieldTitle: recordNameFieldTitleText, fieldError: 'Fill in the record name'}
                     ]
                 },
                 {
                     message: 'with duplicate table name',
                     tableFields: [
-                        {fieldTitle: '* Table Name', fieldValue: 'Table 1'},
-                        {fieldTitle: '* A record in the table is called', fieldValue: 'Table 1'},
-                        {fieldTitle: 'Description', fieldValue: 'test Description'}
+                        {fieldTitle: tableNameFieldTitleText, fieldValue: 'Table 1'},
+                        {fieldTitle: recordNameFieldTitleText, fieldValue: 'Table 1'},
+                        {fieldTitle: descFieldTitleText, fieldValue: 'test Description'}
                     ],
                     tableFieldError: [
-                        {fieldTitle: '* Table Name', fieldError: 'Fill in a different value. Another table is already using this name'},
+                        {fieldTitle: tableNameFieldTitleText, fieldError: 'Fill in a different value. Another table is already using this name'},
                     ]
-                },
+                }
             ];
         }
 
@@ -149,7 +183,7 @@
 
                 //Step 1 - get the original count of table links in the left nav
                 tableCreatePO.newTableBtn.waitForVisible();
-                var originalTableLinksCount = tableCreatePO.getAllTableLeftNavLinksList.value.length;
+                let originalTableLinksCount = tableCreatePO.getAllTableLeftNavLinksList.value.length;
 
                 //Step 2 - Click on new table button
                 tableCreatePO.clickCreateNewTable();
@@ -162,15 +196,15 @@
                 //Step 4 - Verify validation
                 testCase.tableFieldError.forEach(function(tableField) {
                     tableCreatePO.verifyTableFieldValidation(tableField.fieldTitle, tableField.fieldError);
-                    //Verify next button is not enabled since there is error in field values
-                    expect(browser.isEnabled('.modal-footer .nextButton')).toBeFalsy();
+                    //Verify create table button is not enabled since there is error in field values
+                    expect(browser.isEnabled('.modal-footer .finishedButton')).toBeFalsy();
                 });
 
                 //Step 5 - Cancel table dialogue
                 tableCreatePO.clickCancelBtn();
 
                 //Step 6 - Get the new count of table links in the left nav
-                var newTableLinksCount = tableCreatePO.getAllTableLeftNavLinksList.value.length;
+                let newTableLinksCount = tableCreatePO.getAllTableLeftNavLinksList.value.length;
 
                 //Step 7 - Verify the table links NOT increased(ie table not saved)
                 expect(newTableLinksCount).toBe(originalTableLinksCount);
@@ -178,53 +212,17 @@
             });
         });
 
-        it('Verify clicking on Previous button brings to previous page', function() {
-            var tableName = rawValueGenerator.generateStringWithFixLength(10);
-            var tableFields = [
-                {fieldTitle: '* Table Name', fieldValue: tableName},
-                {
-                    fieldTitle: '* A record in the table is called',
-                    fieldValue: rawValueGenerator.generateStringWithFixLength(10)
-                }
-            ];
-
-            //Step 1 - get the original count of table links in the left nav
-            tableCreatePO.newTableBtn.waitForVisible();
-            var originalTableLinksCount = tableCreatePO.getAllTableLeftNavLinksList.value.length;
-
-            //Step 2 - Click on new table button
-            tableCreatePO.clickCreateNewTable();
-
-            //Step 3 - Enter table field values
-            tableFields.forEach(function(tableField) {
-                tableCreatePO.enterTableFieldValue(tableField.fieldTitle, tableField.fieldValue);
-            });
-
-            //Step 4 - Click next field and verify it landed in drag fields page
-            tableCreatePO.clickNextBtn();
-
-            //Step 5 - Click on previous button on the dialogue
-            tableCreatePO.clickPreviousBtn();
-
-            //Step 6 - Verify Next button enabled
-            expect(browser.isEnabled('.modal-footer .nextButton')).toBeTruthy();
-
-            //Step 7 - Cancel table dialogue
-            tableCreatePO.clickCancelBtn();
-
-        });
-
         it('Verify clicking on close button closes the new table dialogue without saving the table', function() {
-            var tableName = rawValueGenerator.generateStringWithFixLength(10);
-            var tableFields = [
-                {fieldTitle: '* Table Name', fieldValue: tableName},
-                {fieldTitle: '* A record in the table is called', fieldValue: rawValueGenerator.generateStringWithFixLength(10)},
-                {fieldTitle: 'Description', fieldValue: rawValueGenerator.generateStringWithFixLength(50)}
+            let tableName = rawValueGenerator.generateStringWithFixLength(10);
+            let tableFields = [
+                {fieldTitle: tableNameFieldTitleText, fieldValue: tableName},
+                {fieldTitle: recordNameFieldTitleText, fieldValue: rawValueGenerator.generateStringWithFixLength(10)},
+                {fieldTitle: descFieldTitleText, fieldValue: rawValueGenerator.generateStringWithFixLength(50)}
             ];
 
             //Step 1 - get the original count of table links in the left nav
             tableCreatePO.newTableBtn.waitForVisible();
-            var originalTableLinksCount = tableCreatePO.getAllTableLeftNavLinksList.value.length;
+            let originalTableLinksCount = tableCreatePO.getAllTableLeftNavLinksList.value.length;
 
             //Step 2 - Click on new table button
             tableCreatePO.clickCreateNewTable();
@@ -233,27 +231,24 @@
             tableFields.forEach(function(tableField) {
                 tableCreatePO.enterTableFieldValue(tableField.fieldTitle, tableField.fieldValue);
             });
-
-            //Step 4 - Click next field and verify it landed in drag fields page
-            tableCreatePO.clickNextBtn();
 
             //Step 5 - Click on close button on the dialogue
             tableCreatePO.clickCloseBtn();
 
             //Step 6 - Get the new count of table links in the left nav
-            var newTableLinksCount = tableCreatePO.getAllTableLeftNavLinksList.value.length;
+            let newTableLinksCount = tableCreatePO.getAllTableLeftNavLinksList.value.length;
 
             //Step 7 - Verify the table links NOT increased(ie table not saved)
             expect(newTableLinksCount).toBe(originalTableLinksCount);
 
             //Step 8 - Verify the new table name is not in the list of the leftNav tables
-            var tableList = tableCreatePO.getAllTablesFromLeftNav();
+            let tableList = tableCreatePO.getAllTablesFromLeftNav();
             expect(tableList.indexOf(tableName)).toBe(-1);
 
         });
 
         it('Verify that only ADMIN can add a new table', function() {
-            var userId;
+            let userId;
 
             //Create a user
             browser.call(function() {
@@ -264,7 +259,7 @@
 
             //Add user to participant appRole
             browser.call(function() {
-                return e2eBase.recordBase.apiBase.assignUsersToAppRole(testApp.id, "11", [userId]);
+                return e2eBase.recordBase.apiBase.assignUsersToAppRole(testApp.id, e2eConsts.PARTICIPANT_ROLEID, [userId]);
             });
 
             //get the user authentication
@@ -277,8 +272,6 @@
 
             //Verify New Table button not available for user other than ADMIN
             expect(browser.isVisible('.newTable')).toBeFalsy();
-
         });
-
     });
 }());

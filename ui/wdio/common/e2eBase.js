@@ -92,6 +92,11 @@
                 var sessionTicketRequestEndPoint = e2eBase.recordBase.apiBase.generateFullRequest(realmName, ticketEndpoint + realmId);
                 return sessionTicketRequestEndPoint;
             },
+            // Helper method to get the proper URL for loading the user management page containing a list of users for an app
+            getRequestUsersEndpoint: function(realmName, appId) {
+                var requestUsersEndPoint = e2eBase.recordBase.apiBase.generateFullRequest(realmName, '/qbase/app/' + appId + '/users');
+                return requestUsersEndPoint;
+            },
             /**
              * Setup method that generates an app, table, list all report, forms, default table homepage, a set of users and a specified number of records
              * @param tableToFieldToFieldTypeMap - Map containing the structure of the app, tables and fields
@@ -106,9 +111,9 @@
                     tableToFieldToFieldTypeMap  = e2eConsts.createDefaultTableMap();
                 }
 
-                // Use num of records to generate or use 25 by default to enable paging
+                // Use num of records to generate or use the default
                 if (!numberOfRecords) {
-                    numberOfRecords  = e2eConsts.MAX_PAGING_SIZE + 5;
+                    numberOfRecords  = e2eConsts.DEFAULT_NUM_RECORDS_TO_CREATE;
                 }
 
                 // Generate the app JSON object
@@ -148,9 +153,9 @@
                     // Create forms for both tables
                     return e2eBase.formService.createDefaultForms(createdApp);
                 }).then(function() {
-                    // Create a relationship between the 3rd and 4th tables
+                    // Create a relationship between the 3rd and 4th tables (Child Table's Numeric Field relates to Parent Table's Record ID)
                     if (createdApp.tables[2] && createdApp.tables[3]) {
-                        return e2eBase.relationshipService.createOneToOneRelationship(createdApp, createdApp.tables[2], createdApp.tables[3]);
+                        return e2eBase.relationshipService.createOneToOneRelationship(createdApp, createdApp.tables[2], createdApp.tables[3], 7);
                     }
                 }).then(function() {
                     // Return the createdApp object

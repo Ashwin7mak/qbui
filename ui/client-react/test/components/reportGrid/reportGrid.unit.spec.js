@@ -7,6 +7,7 @@ import ReportGrid, {
     __RewireAPI__ as ReportGridRewireAPI
 } from '../../../src/components/dataTable/reportGrid/reportGrid';
 import QbGrid from '../../../src/components/dataTable/qbGrid/qbGrid';
+import ReportColumnTransformer from '../../../src/components/dataTable/reportGrid/reportColumnTransformer';
 import ReportCell from '../../../src/components/dataTable/reportGrid/reportCell';
 import ReportColumnHeaderMenu from '../../../src/components/dataTable/reportGrid/reportColumnHeaderMenu';
 import FieldUtils from '../../../src/utils/fieldUtils';
@@ -46,6 +47,59 @@ const testGroupedRecords = [
         group: 'test group',
         children: testRecords
     }
+];
+const testColumns = [
+    new ReportColumnTransformer(1,
+        {
+            builtIn: false,
+            dataIsCopyable: true,
+            id: 1,
+            includeInQuickSearch: true,
+            indexed: false,
+            isHidden: false,
+            multiChoiceSourceAllowed: false,
+            name: 'Header 1',
+            required: true,
+            tableId: '1',
+            type: "SCALAR",
+            unique: false,
+            userEditableValue: true
+        },
+        'Header 1', 'header1class', ''),
+    new ReportColumnTransformer(2,
+        {
+            builtIn: false,
+            dataIsCopyable: true,
+            id: 2,
+            includeInQuickSearch: true,
+            indexed: false,
+            isHidden: false,
+            multiChoiceSourceAllowed: false,
+            name: 'Header 2',
+            required: true,
+            tableId: '1',
+            type: "SCALAR",
+            unique: false,
+            userEditableValue: true
+        },
+        'Header 2', 'header2class', ''),
+    new ReportColumnTransformer(3,
+        {
+            builtIn: false,
+            dataIsCopyable: true,
+            id: 3,
+            includeInQuickSearch: true,
+            indexed: false,
+            isHidden: false,
+            multiChoiceSourceAllowed: false,
+            name: 'Header 3',
+            required: true,
+            tableId: '3',
+            type: "SCALAR",
+            unique: false,
+            userEditableValue: true
+        },
+        'Header 3', 'header3class', ''),
 ];
 
 
@@ -226,21 +280,22 @@ describe('ReportGrid', () => {
                 editingIndex: null,
                 editingId: null,
                 expectedValue: testRecordId
-            },
-            {
-                description: 'returns the current record id if a record is being edited according to the reportDataStore (applies for new records, see comments in method on reportGrid)',
-                pendEdits: null,
-                editingIndex: testRecordId,
-                editingId: testRecordId,
-                expectedValue: testRecordId
-            },
+            }
         ];
 
         testCases.forEach(testCase => {
+            const record = {
+                recordIdBeingEdited: testRecordId,
+                records: [{
+                    id: testRecordId,
+                    recId: testRecordId,
+                    pendEdits: testCase.pendEdits
+                }]
+            };
             it(testCase.description, () => {
                 component = shallow(<UnconnectedReportGrid
                     {...requiredProps}
-                    record={[{pendEdits: testCase.pendEdits}]}
+                    record={record}
                     editingIndex={testCase.editingIndex}
                     editingId={testCase.editingId}
                 />);
@@ -252,9 +307,14 @@ describe('ReportGrid', () => {
     });
 
     describe('QbGrid props test', () => {
-        const testColumns = [1, 2, 3];
         const isInlineEditOpen = true;
-        const pendEdits = {isInlineEditOpen: isInlineEditOpen, currentEditingRecordId: testRecordId, errors: ['an error'], ok: false, saving: true};
+        const pendEdits = {
+            isInlineEditOpen: isInlineEditOpen,
+            currentEditingRecordId: testRecordId,
+            errors: ['an error'],
+            ok: false,
+            saving: true
+        };
         const selectedRows = [4];
         const appId = 'appId';
         const tblId = 'tblId';
@@ -263,10 +323,25 @@ describe('ReportGrid', () => {
         const testAppUsers = [7, 8];
 
         let phase1 = undefined;
-
+        const record = {
+            recordIdBeingEdited: testRecordId,
+            records: [{
+                id: testRecordId,
+                recId: testRecordId,
+                pendEdits: pendEdits
+            }]
+        };
         beforeAll(() => {
-            ReportGridRewireAPI.__Rewire__('ReportRowTransformer', {transformRecordsForGrid() {return testRecords;}});
-            ReportGridRewireAPI.__Rewire__('ReportColumnTransformer', {transformColumnsForGrid() {return testColumns;}});
+            ReportGridRewireAPI.__Rewire__('ReportRowTransformer', {
+                transformRecordsForGrid() {
+                    return testRecords;
+                }
+            });
+            ReportGridRewireAPI.__Rewire__('ReportColumnTransformer', {
+                transformColumnsForGrid() {
+                    return testColumns;
+                }
+            });
         });
 
         afterAll(() => {
@@ -281,7 +356,7 @@ describe('ReportGrid', () => {
                 columns={testColumns}
                 records={testRecords}
                 isInlineEditOpen={isInlineEditOpen}
-                record={[{pendEdits}]}
+                record={record}
                 loading={false}
                 selectedRows={selectedRows}
                 editErrors={pendEdits}
@@ -332,7 +407,8 @@ describe('ReportGrid', () => {
                 appId: appId,
                 tblId: tblId,
                 rptId: rptId,
-                sortFids: sortFids
+                sortFids: sortFids,
+                isOnlyOneColumnVisible: false
             });
         });
 
@@ -344,7 +420,7 @@ describe('ReportGrid', () => {
                 columns={testColumns}
                 records={testRecords}
                 isInlineEditOpen={isInlineEditOpen}
-                record={[{pendEdits}]}
+                record={record}
                 loading={false}
                 selectedRows={selectedRows}
                 editErrors={pendEdits}
@@ -370,6 +446,37 @@ describe('ReportGrid', () => {
                 onCellClickEditIcon: instance.startEditingRow,
                 validateFieldValue: actions.handleValidateFieldValue
             });
+        });
+
+        it('renders the no rows present UI', () => {
+            phase1 = true;
+            component = shallow(<UnconnectedReportGrid
+                {...requiredProps}
+                {...actions}
+                columns={testColumns}
+                records={[]}
+                isInlineEditOpen={isInlineEditOpen}
+                record={[{pendEdits}]}
+                loading={false}
+                selectedRows={selectedRows}
+                editErrors={pendEdits}
+                appId={appId}
+                tblId={tblId}
+                rptId={rptId}
+                sortFids={sortFids}
+                appUsers={testAppUsers}
+                phase1={phase1}
+                noRowsUI={true}
+            />);
+            instance = component.instance();
+
+            // grid should not be present
+            let qbGrid = component.find(QbGrid);
+            expect(qbGrid.length).toBe(0);
+
+            // check for 'no rows' element
+            let noRows = component.find(".noRowsExist");
+            expect(noRows.length).toBe(1);
         });
     });
 });

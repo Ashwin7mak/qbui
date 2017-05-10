@@ -37,6 +37,14 @@ import DurationFieldValueEditorMetadata from 'component-metadata!../../../client
 import QbGridMetadata from 'component-metadata!../../../client-react/src/components/dataTable/qbGrid/qbGrid.js';
 import SideMenuBaseMetadata from 'component-metadata!../../../reuse/client/src/components/sideMenuBase/sideMenuBase.js';
 import SideTrowserBaseMetadata from 'component-metadata!../../../reuse/client/src/components/sideTrowserBase/sideTrowserBase.js';
+import IconChooserMetadata from 'component-metadata!../../../reuse/client/src/components/iconChooser/iconChooser.js';
+import IconInputBoxMetadata from 'component-metadata!../../../reuse/client/src/components/iconInputBox/iconInputBox.js';
+import TopNavMetadata from 'component-metadata!../../../reuse/client/src/components/topNav/topNav.js';
+import StageMetadata from 'component-metadata!../../../reuse/client/src/components/stage/stage.js';
+import TooltipMetadata from 'component-metadata!../../../reuse/client/src/components/tooltip/tooltip.js';
+import StandardLeftNavMetadata from 'component-metadata!../../../reuse/client/src/components/sideNavs/standardLeftNav.js';
+import PaginationMetadata from 'component-metadata!../../../reuse/client/src/components/pagination/pagination.js';
+// import RowActionsMetadata from 'component-metadata!../../../reuse/client/src/components/rowActions/rowActions.js';
 // END OF IMPORT STATEMENTS
 // above comment used for grunt task, please do not delete
 
@@ -76,7 +84,14 @@ var Metadata = () => {
         DurationFieldValueEditorMetadata,
         QbGridMetadata,
         SideMenuBaseMetadata,
-        SideTrowserBaseMetadata
+        SideTrowserBaseMetadata,
+        IconChooserMetadata,
+        IconInputBoxMetadata,
+        TopNavMetadata,
+        StageMetadata,
+        TooltipMetadata,
+        StandardLeftNavMetadata,
+        PaginationMetadata
         // END OF METADATA MERGE
         // above comment used for grunt task, please do not delete
     };

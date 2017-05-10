@@ -3,7 +3,7 @@
 import * as recordActions from '../../src/actions/recordActions';
 import {__RewireAPI__ as RecordActionsRewireAPI} from '../../src/actions/recordActions';
 import * as types from '../../src/actions/types';
-import {NEW_RECORD_VALUE} from '../../src/constants/urlConstants';
+import {UNSAVED_RECORD_ID} from '../../src/constants/schema';
 
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
@@ -11,7 +11,7 @@ import thunk from 'redux-thunk';
 import Promise from 'bluebird';
 
 Promise.onPossiblyUnhandledRejection(function() {
-    // swallow the error..
+    // swallow the error..otherwise the log gets cluttered with the exception
 });
 
 // we mock the Redux store when testing async action creators
@@ -34,6 +34,16 @@ describe('Open/edit Record actions', () => {
             previousRecordId: 3
         };
         expect(recordActions.openRecord(obj.recId, obj.nextRecordId, obj.previousRecordId)).toEqual(event(obj.recId, types.OPEN_RECORD, obj));
+    });
+
+    it('When a viewContextId is provided, opening a record creates an action using the viewContextId instead of recordId', () => {
+        let obj = {
+            recId: 1,
+            nextRecordId: 2,
+            previousRecordId: 3
+        };
+        const viewContextId = 'UNIQUE_VIEW_CONTEXT';
+        expect(recordActions.openRecord(obj.recId, obj.nextRecordId, obj.previousRecordId, viewContextId)).toEqual(event(viewContextId, types.OPEN_RECORD, obj));
     });
 
     let obj1 = {
@@ -76,6 +86,11 @@ describe('Open/edit Record actions', () => {
 });
 
 describe('Delete Record Actions -- success workflow', () => {
+    let mockLocale = {
+        getPluralizedMessage() {return;},
+        getMessage() {return;}
+    };
+
     class mockRecordService  {
         constructor() { }
         deleteRecords(appId, tblId, recIds) {
@@ -88,11 +103,13 @@ describe('Delete Record Actions -- success workflow', () => {
         spyOn(mockRecordService.prototype, 'deleteRecords').and.callThrough();
         RecordActionsRewireAPI.__Rewire__('RecordService', mockRecordService);
         RecordActionsRewireAPI.__Rewire__('NotificationManager', {success: notificationSuccess});
+        RecordActionsRewireAPI.__Rewire__('Locale', mockLocale);
     });
 
     afterEach(() => {
         RecordActionsRewireAPI.__ResetDependency__('RecordService');
         RecordActionsRewireAPI.__ResetDependency__('NotificationManager');
+        RecordActionsRewireAPI.__ResetDependency__('Locale');
     });
 
     const appId = '1';
@@ -110,7 +127,6 @@ describe('Delete Record Actions -- success workflow', () => {
                 event(expectedRecIds[0], types.REMOVE_REPORT_RECORDS, {appId, tblId, recIds:expectedRecIds}),
                 event(expectedRecIds[0], types.DELETE_RECORDS_COMPLETE, {appId, tblId, recIds:expectedRecIds})
             ];
-
             const store = mockStore({});
             return store.dispatch(testCase.func.apply(this, [appId, tblId, testCase.recIds, 'name'])).then(
                 () => {
@@ -258,7 +274,7 @@ describe('create Record Actions -- success workflow', () => {
 
     const appId = '1';
     const tblId = '2';
-    const recId = NEW_RECORD_VALUE;
+    const recId = UNSAVED_RECORD_ID;
 
     let fields = [
         {id: 4, builtIn: false, datatypeAttributes :true},
@@ -271,9 +287,10 @@ describe('create Record Actions -- success workflow', () => {
         5:{fieldName : 'col_builtin', fieldDef: fields[1], newVal: {value:"5", display:"no edit"}}
     };
 
+    const addNewRow = false;
     const expectedActions = [
         event(recId, types.SAVE_RECORD, {appId, tblId, recId, changes:recordChanges}),
-        event(recId, types.SAVE_RECORD_SUCCESS, {appId, tblId, recId, report:jasmine.any(Object)}),
+        event(recId, types.SAVE_RECORD_SUCCESS, {appId, tblId, recId, report:jasmine.any(Object), addNewRow}),
         event(recId, types.SAVE_RECORD_COMPLETE, {appId, tblId, recId})
     ];
 
@@ -287,7 +304,8 @@ describe('create Record Actions -- success workflow', () => {
             const params = {
                 fields: fields,
                 recordChanges: recordChanges,
-                showNotificationOnSuccess: testCase.showNotification
+                showNotificationOnSuccess: testCase.showNotification,
+                addNewRow: addNewRow
             };
 
             return store.dispatch(recordActions.createRecord(appId, tblId, params)).then(
@@ -359,7 +377,7 @@ describe('create Record Actions -- create record failure', () => {
 
     const appId = '1';
     const tblId = '2';
-    const recId = NEW_RECORD_VALUE;
+    const recId = UNSAVED_RECORD_ID;
 
     let fields = [
         {id: 4, builtIn: false, datatypeAttributes :true},
@@ -492,7 +510,7 @@ describe('create Record Actions -- get record failure', () => {
 
     const appId = '1';
     const tblId = '2';
-    const recId = NEW_RECORD_VALUE;
+    const recId = UNSAVED_RECORD_ID;
 
     let fields = [
         {id: 4, builtIn: false, datatypeAttributes :true},
@@ -598,9 +616,11 @@ describe('update Record Actions -- success workflow', () => {
         {display : "display", fieldDef: fields[0], fieldName: "test", id: 6, value: "value"}
     ];
 
+    const addNewRow = true;
     const expectedActions = [
         event(recId, types.SAVE_RECORD, {appId, tblId, recId, changes:changes}),
-        event(recId, types.SAVE_RECORD_SUCCESS, {appId, tblId, recId, report:jasmine.any(Object)})
+        event(recId, types.SAVE_RECORD_SUCCESS, {appId, tblId, recId, report:jasmine.any(Object), addNewRow}),
+        event(recId, types.SAVE_RECORD_COMPLETE, {appId, tblId, recId})
     ];
 
     let testCases = [
@@ -615,7 +635,8 @@ describe('update Record Actions -- success workflow', () => {
                 fields: fields,
                 pendEdits: pendEdits,
                 colList: [],
-                showNotificationOnSuccess: testCase.showNotification
+                showNotificationOnSuccess: testCase.showNotification,
+                addNewRow: addNewRow
             };
 
             return store.dispatch(recordActions.updateRecord(appId, tblId, recId, params)).then(

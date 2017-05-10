@@ -8,11 +8,16 @@ export default {
 
     messages: {
         test: {
-            testMsg2: "Test message for reuse library - en-us"
+            testMsg: "test",
+            testMsg2: "Test message for reuse library - en-us",
+            testPluralize: "{value, plural,\n =0 {0 {nameForRecord} record}\n =1 {1 {nameForRecord} record}\n other {# {nameForRecord} records}\n} deleted",
         },
         listOfElements: {
             noSearchResults: 'No fields match "{searchText}"',
             searchPlaceholder: "Filter"
+        },
+        user: {
+            notLoggedIn: "Not logged in"
         }
     }
 };

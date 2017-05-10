@@ -1,6 +1,9 @@
 import React from 'react';
 import Button from 'react-bootstrap/lib/Button';
 import KeyboardShortcuts from '../../../../reuse/client/src/components/keyboardShortcuts/keyboardShortcuts';
+import OverlayTrigger from 'react-bootstrap/lib/OverlayTrigger';
+import Tooltip from 'react-bootstrap/lib/Tooltip';
+import {I18nMessage} from '../../utils/i18nMessage';
 import QBicon from '../qbIcon/qbIcon';
 import './trowser.scss';
 
@@ -60,17 +63,19 @@ let Trowser = React.createClass({
         return (
             <div className={trowserClasses} >
                 <div className={"trowserBackground"} onClick={this.props.onCancel}/>
-                <KeyboardShortcuts id="trowser"
+                {this.props.visible ? <KeyboardShortcuts id="trowser"
                                    shortcutBindingsPreventDefault={[
                                        {key: 'esc', callback: () => {this.keyboardOnCancel(); return false;}}
-                                   ]} />
+                                   ]} /> : null}
                 <div className={"trowserContent"}>
                     <div className={"trowserHeader"}>
                         <div className={"breadcrumbs h4"}>
                             {this.props.breadcrumbs}
                         </div>
                         <div className={"rightIcons"}>
-                            <Button onClick={this.props.onCancel}><QBicon icon={"close"}/></Button>
+                            <OverlayTrigger placement="bottom" overlay={<Tooltip id="alertIconTooltip"><I18nMessage message="nav.closeRecord"/></Tooltip>}>
+                                <Button onClick={this.props.onCancel}><QBicon icon={"close"}/></Button>
+                            </OverlayTrigger>
                         </div>
                     </div>
 

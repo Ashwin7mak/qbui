@@ -157,6 +157,9 @@ $btn-danger-color: #fff !default;
 $btn-danger-bg: $brand-danger !default;
 $btn-danger-border: darken($btn-danger-bg, 5%) !default;
 $btn-link-disabled-color: $gray-light !default;
+$btn-min-width: 100px;
+$btn-height: 38px;
+$btn-footerheight: 100px;
 
 // Allows for customizing button radius independently from global border radius
 $btn-border-radius-base: $border-radius-base !default;
@@ -265,6 +268,8 @@ $zindex-tooltip: 1070 !default;
 $zindex-navbar-fixed: 1030 !default;
 $zindex-modal-background: 1040 !default;
 $zindex-modal: 1050 !default;
+$zindex-drag-item: 2000 !default;
+$zindex-drawer: 3000 !default;
 
 //Z-index for qbGrid.scss
 //The below zindex are used to keep row action menus from clipping during inline edit
@@ -279,6 +284,7 @@ $zindex-qbGrid-firstOfType-stickyColumn: 2 !default;
 $zindex-qbGrid-editing-firstOfType: 4 !default;
 $zindex-qbGrid-stickyCell: 3 !default;
 $zindex-qbGrid-header-stickyCell: 4 !default;
+
 
 //== Media queries breakpoints
 //
@@ -578,11 +584,6 @@ $label-link-hover-color: #fff !default;
 //
 //##
 
-//** Padding applied to the modal body
-$modal-inner-padding: 15px !default;
-
-//** Padding applied to the modal title
-$modal-title-padding: 15px !default;
 //** Modal title line-height
 $modal-title-line-height: $line-height-base !default;
 
@@ -604,7 +605,7 @@ $modal-footer-border-color: $modal-header-border-color !default;
 $modal-lg: 900px !default;
 $modal-md: 600px !default;
 $modal-sm: 300px !default;
-
+$modal-vertical-spacer: 10px; //spacer between any 2 lines on a modal ex: between icon and title or lines of text in the body
 
 //== Alerts
 //

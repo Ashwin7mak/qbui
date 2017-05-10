@@ -22,6 +22,9 @@ module.exports = function(grunt) {
 
     var serverReportDir = buildDir + '/reports/server';
     var clientReportDir = buildDir + '/reports/client';
+    var reuseReportDir = buildDir + '/reports/reuse';
+    var governanceReportDir = buildDir + '/reports/governance';
+    var automationReportDir = buildDir + '/reports/automation';
 
     var mochaUnitTest = grunt.option('test') || '*.unit.spec.js';
     var mochaIntTest = grunt.option('test') || '*.integration.spec.js';
@@ -220,6 +223,33 @@ module.exports = function(grunt) {
                     ]
                 }]
             },
+            reuse: {
+                files: [{
+                    dot: true,
+                    src: [
+                        reuseReportDir + '/coverage/*',
+                        reuseReportDir + '/unit/*'
+                    ]
+                }]
+            },
+            governance: {
+                files: [{
+                    dot: true,
+                    src: [
+                        governanceReportDir + '/coverage/*',
+                        governanceReportDir + '/unit/*'
+                    ]
+                }]
+            },
+            automation: {
+                files: [{
+                    dot: true,
+                    src: [
+                        automationReportDir + '/coverage/*',
+                        automationReportDir + '/unit/*'
+                    ]
+                }]
+            },
             server: {
                 files: [{
                     dot: true,
@@ -386,11 +416,31 @@ module.exports = function(grunt) {
             },
             unit: {
                 browsers: ["PhantomJS_Desktop"],
+                // browsers: ["HeadlessChrome"],
                 singleRun : true
             },
             devunit: {
                 browsers: ["Chrome"],
+                // browsers: ["HeadlessChrome"],
                 singleRun : false
+            },
+            governance: {
+                configFile: './governance/governance.karma.conf.js',
+                browsers: ["PhantomJS_Desktop"],
+                // browsers: ["HeadlessChrome"],
+                singleRun : true
+            },
+            automation: {
+                configFile: './automation/automation.karma.conf.js',
+                browsers: ["PhantomJS_Desktop"],
+                // browsers: ["HeadlessChrome"],
+                singleRun : true
+            },
+            reuse: {
+                configFile: './reuse/reuse.karma.conf.js',
+                browsers: ["PhantomJS_Desktop"],
+                // browsers: ["HeadlessChrome"],
+                singleRun : true
             }
         },
 
@@ -526,28 +576,56 @@ module.exports = function(grunt) {
         webdriver: {
             options: {
                 exclude: [
+                    // Reports Tests
+                    //TODO: MB-2115 this bug is logged in reactabular backlog under https://quickbase.atlassian.net/browse/MB-2115
                     // reportAddRecord is currently broken on Reactabular, the save and add a new row button for inline editing has been disabled
-                    // this bug is logged in reactabular backlog under https://quickbase.atlassian.net/browse/MB-2115
                     // because the save and add button is disabled we turned off the reportAddRecord test
                     // we will turn it back on once this button has been enabled again
                     './wdio/tests/reports/reportAddRecord.e2e.spec.js',
-                    // disabling formPermissionsViewerRole test as after moving to ExperienceEngine,
-                    // permissions for viewer are not working correctly
+                    // Forms Tests
+                    // Stabilize in CI before enabling
+                    './wdio/tests/forms/formDragDrop.e2e.spec.js',
+                    //TODO MC-2105 needs to be fixed to enable permissions on forms
+                    // disabling formPermissions tests as after moving to ExperienceEngine,
+                    // permissions for viewer and participant are not working correctly
                     './wdio/tests/forms/formPermissionsViewerRole.e2e.spec.js',
-                    // currently intermittently broken in CI need to fix in another PR
-                    './wdio/tests/forms/formDragDrop.e2e.spec.js'
+                    './wdio/tests/forms/formPermissionsParticipantRole.e2e.spec.js',
+                    // Tables Tests
+                    // Users Tests
+                    // Relationships Tests
+                    // Stabilize in CI before enabling
+                    './wdio/tests/relationships/relationshipViewChildTable.e2e.spec.js',
+                    // Stabilize in CI before enabling
+                    './wdio/tests/reports/reportSearch.e2e.spec.js',
+
                 ],
                 suites: {
                     reports: [
-                        './wdio/tests/reports/*.e2e.spec.js',
-                        './wdio/tests/reports/sorting/*.e2e.spec.js',
-                        './wdio/tests/reports/grouping/*.e2e.spec.js'
+                        './wdio/tests/reports/reportDeleteRecord.e2e.spec.js',
+                        './wdio/tests/reports/grouping/reportGroupingViaContainer.e2e.spec.js',
+                        './wdio/tests/reports/sorting/reportSortingViaContainer.e2e.spec.js',
+                        './wdio/tests/reports/reportTopNav.e2e.spec.js',
+                        './wdio/tests/reports/reportEditRecord.e2e.spec.js',
+                        './wdio/tests/reports/reportNavigation.e2e.spec.js',
+                        './wdio/tests/reports/grouping/reportGroupingViaColumnHeader.e2e.spec.js',
+                        './wdio/tests/reports/sorting/reportSortingViaColumnHeader.e2e.spec.js',
+                        './wdio/tests/reports/reportTable.e2e.spec.js',
                     ],
                     forms: [
-                        './wdio/tests/forms/*.e2e.spec.js'
+                        './wdio/tests/forms/formAdd.e2e.spec.js',
+                        './wdio/tests/forms/formAddValidation.e2e.spec.js',
+                        './wdio/tests/forms/formEdit.e2e.spec.js',
+                        './wdio/tests/forms/formEditValidation.e2e.spec.js'
                     ],
                     tables: [
-                        './wdio/tests/tables/*.e2e.spec.js'
+                        './wdio/tests/tables/tableCreate.e2e.spec.js',
+                        './wdio/tests/tables/tableDelete.e2e.spec.js',
+                        './wdio/tests/tables/tableEdit.e2e.spec.js',
+                        './wdio/tests/tables/tableHomePage.e2e.spec.js'
+                    ],
+                    relationships: [],
+                    users: [
+                        './wdio/tests/users/usersTable.e2e.spec.js',
                     ]
                 }
             },
@@ -555,7 +633,7 @@ module.exports = function(grunt) {
                 // Use the wdioSauce.conf.js file setting the options above
                 configFile: './wdio/config/' + wdioSauceConfig,
                 // Make sure there are no spaces between test suites here
-                suite: 'reports,forms,tables'
+                suite: 'reports,forms,tables,users'
             }
         },
 
@@ -760,6 +838,18 @@ module.exports = function(grunt) {
             return grunt.task.run([
                 'clean:client']);
         }
+        if (target === 'reuse') {
+            return grunt.task.run([
+                'clean:reuse']);
+        }
+        if (target === 'governance') {
+            return grunt.task.run([
+                'clean:governance']);
+        }
+        if (target === 'automation') {
+            return grunt.task.run([
+                'clean:automation']);
+        }
         if (target === 'server') {
             return grunt.task.run([
                 'clean:server']);
@@ -820,20 +910,6 @@ module.exports = function(grunt) {
     grunt.registerTask('server', function() {
         grunt.log.warn('The `server` task has been deprecated. Use `grunt serve` to start a server.');
         grunt.task.run(['serve']);
-    });
-
-    grunt.registerTask('fixCoveragePaths', function() {
-        // Workaround: The lcov report generated by karma-coverage for clientside js code
-        // does not contain the absolute path and thus sonar cannot use the report file
-        // for coverage, an issue is open on this https://github.com/karma-runner/karma/issues/528
-        // meanwhile we can workaround it by fixing the paths in the client coverage file
-        var clientCoverageReport = clientReportDir + '/coverage/lcov.info';
-        var absoluteFilePrefix =  path.join('SF:', __dirname, '/');
-        if (grunt.file.exists(clientCoverageReport)) {
-            var lcovString = grunt.file.read(clientCoverageReport);
-            var newLcovString = lcovString.replace(/SF\:\.\//g, absoluteFilePrefix);
-            grunt.file.write(clientCoverageReport, newLcovString);
-        }
     });
 
     grunt.registerTask('setEnv', function(envName, envVal) {
@@ -899,23 +975,35 @@ module.exports = function(grunt) {
             ]);
         }
 
-        if (target === 'client-wip') {
-            //client unit tests
+        if (target === 'client') {
             return grunt.task.run([
                 'clean:client',
                 'autoprefixer',
-                'karma:unit',
-                'fixCoveragePaths'
+                'karma:unit'
             ]);
         }
 
-        if (target === 'client') {
-            //client dummy placeholder
+        if (target === 'reuse') {
             return grunt.task.run([
-                'clean:client',
+                'clean:reuse',
                 'autoprefixer',
-                'karma:unit',
-                'fixCoveragePaths'
+                'karma:reuse'
+            ]);
+        }
+
+        if (target === 'governance') {
+            return grunt.task.run([
+                'clean:governance',
+                'autoprefixer',
+                'karma:governance'
+            ]);
+        }
+
+        if (target === 'automation') {
+            return grunt.task.run([
+                'clean:automation',
+                'autoprefixer',
+                'karma:automation'
             ]);
         }
 
@@ -984,7 +1072,9 @@ module.exports = function(grunt) {
             'codeStandards',
             // run unit tests
             'test:client',
-            //'test:server' // no coverage
+            'test:governance',
+            'test:reuse',
+            'test:automation',
             'test:coverage' // server with coverage
         ]);
 
@@ -1031,7 +1121,6 @@ module.exports = function(grunt) {
         'shell:nodeVer',
         'clean:dist',
         'webpackbuild',
-        'logGitState',
         'copy:reactDist'
     ]);
 

@@ -15,24 +15,6 @@
 
     var ReportInLineEditPage = Object.create(reportContent, {
 
-        //TODO: Move tableActionsContainer to another PO
-        // Report tools and content container (toolbar locators are in another PO)
-        //this.reportToolsAndContentEl = this.reportContainerEl.element(by.className('reportToolsAndContentContainer'));
-        //// Loaded Content Div
-        //this.loadedContentEl = this.reportToolsAndContentEl.all(by.className('loadedContent')).first();
-        //// Report table
-        //this.reportTable = this.loadedContentEl.element(by.className('reportTable'));
-        //// Table actions container
-        //this.reportToolbarContainerEl = this.reportToolsAndContentEl.element(by.className('reportToolbarContainer'));
-        //// Report toolbar
-        //this.reportsToolBar = element(by.className('reportToolbar'));
-        //// Report records count
-        //this.reportRecordsCount = element(by.className('recordsCount')).element(by.tagName('SPAN'));
-        //// Report filter search Box
-        //this.reportFilterSearchBox = this.reportsToolBar.element(by.className('searchInput'));
-        //// Table actions container
-        //this.tableActionsContainerEl = this.loadedContentEl.element(by.className('tableActionsContainer'));
-
         /**
          * In-line Edit Record Menu on the Reports Page
          */
@@ -65,24 +47,23 @@
          * @param recordRowIndex
          */
         openRecordEditMenu: {value: function(recordIndex) {
-            //This will return a qbRow from the specified recordIndex
+            // This will return a qbRow from the specified recordIndex
             var recordRowEl = reportContent.getRecordRowElement(recordIndex);
 
-            var recordCellEl = reportContent.getRecordRowCells(recordRowEl).value[0];
-            //This focuses on the cellData from qbCell at the specified recordIndex
-            var cellData = recordCellEl.elements('.cellData.NoWrap');
-            //Get the pencil from the qbCell
-            var cellEditIcon = recordCellEl.elements('.cellEditIcon');
+            // This focuses on the cellData from qbCell at the specified recordIndex
+            var cellData = recordRowEl.element('.cellData.NoWrap');
+            // Get the pencil from the qbCell
+            var cellEditIcon = recordRowEl.element('.cellEditIcon');
             //TODO: moveToObject does not work on safari, a javascript workaround needs to be implemented
             //TODO: moveToObject on Chrome and Firefox does not move to the exact qbCell that is returned from recordCellEl
             //TODO: the challenge is all cell's have the same className of qbCell, so the browser will move the mouse to the first
             //TODO: qbCell on the DOM. More research is required, in order to get moveToObject to move to the exact qbCell that is specified
             if (browserName !== 'safari') {
-                //Hover over the cell
-                browser.moveToObject(cellData.selector);
-                //Then once the pencil is visible hover over the pencil
-                browser.moveToObject(cellEditIcon.selector);
-                browser.element(cellEditIcon.selector).click();
+                // Hover over the cell
+                cellData.moveToObject();
+                // Then once the pencil is visible hover over the pencil and click
+                cellEditIcon.moveToObject();
+                cellEditIcon.click();
             }
 
             this.getInlineEditRecord().waitForVisible();
@@ -188,7 +169,7 @@
          * @returns The record element being edited
          */
         getInlineEditRecord: {value: function() {
-            var recordRowElements = reportContent.qbGridRecordElList.elements('.qbRow');
+            var recordRowElements = reportContent.qbGridBodyViewportEl.elements('.qbRow');
             var recordBeingEdited;
             // Loop through the records and find the one being edited
             for (var i = 0; i < recordRowElements.value.length; i++) {

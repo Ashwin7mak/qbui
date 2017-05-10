@@ -5,6 +5,7 @@
     margin-left: 8px;
     justify-content: space-between;
     line-height: 32px;
+    font-size: 20px;
 
     button {
         margin-right: 8px;
@@ -19,8 +20,8 @@
     .selectedRowsLabel {
         padding: 2px 8px;
         margin-right: 10px;
-        color: $color-black-100;
-        background-color: $selection-badge-color;
+        color: $selection-badge-color;
+        background-color: $selection-badge-background-color;
         border-radius: 12px;
         font-size: 10px;
         font-weight: 500;
@@ -39,11 +40,11 @@
             height: 32px;
             margin: 0;
             text-align: center;
-            color: $color-black-100;
+            color: $iconfont-on-light-normal-color;
         }
 
         a.iconLink {
-            color: $color-black-100;
+            color: $iconfont-on-light-normal-color;
             display: inline-block;
             height: 32px;
             width: 32px;
@@ -63,65 +64,21 @@
         }
         display: inline-block;
     }
-}
 
-.reportActions {
-    a.iconLink.icon-edit {
-        color: $edit-icon-normal-color;
-    }
-
-    a.iconLink.icon-print {
-        color: $print-icon-normal-color;
-    }
-
-    a.iconLink.icon-mail {
-        color: $mail-icon-normal-color;
-    }
-
-    a.iconLink.icon-duplicate {
-        color: $copy-icon-normal-color;
-    }
-
-    a.iconLink.icon-delete {
-        color: $delete-icon-normal-color;
-    }
-
+    // icons
     a.iconLink {
         text-decoration: none;
     }
 
-    a.iconLink.icon-edit:hover {
-        background-color: $edit-icon-normal-color;
-    }
-
-    a.iconLink.icon-print:hover {
-        background-color: $print-icon-normal-color;
-    }
-
-    a.iconLink.icon-mail:hover {
-        background-color: $mail-icon-normal-color;
-    }
-
-    a.iconLink.icon-duplicate:hover {
-        background-color: $copy-icon-normal-color;
-    }
-
-    a.iconLink.icon-delete:hover {
-        background-color: $delete-icon-normal-color;
-    }
-
     a.iconLink:hover {
         text-decoration: none;
-        color: $color-black-100;
+        color: $iconfont-on-light-hover-color;
     }
 
-    a.iconLink[disabled]:hover {
-        background-color: inherit;
+    a.iconLink.icon-delete:hover,
+    a.iconLink.icon-errorincircle-fill:hover {
+        color: $iconfont-on-light-hover-danger-color;
     }
-}
-
-.reportActions {
-    font-size: 20px;
 
     .actionIcons a.iconLink .qbIcon {
         line-height: 32px;
@@ -140,7 +97,6 @@ $reportActionsMinHeight: $tableActionsContainerMinHeight;
     }
 
     .reportActions {
-        line-height: $reportActionsMinHeight;
         align-items: center;
     }
 }

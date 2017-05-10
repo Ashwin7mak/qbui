@@ -1,6 +1,6 @@
 import React, {PropTypes} from 'react';
 import './iconInputBox.scss';
-import Icon from '../icon/icon';
+import Icon from 'REUSE/components/icon/icon';
 /**
  * Generic component that renders a search box
  */
@@ -27,6 +27,7 @@ const IconInputBox = React.createClass({
         return (
             <div className={className}>
                 <input className="searchInput" type="text"
+                   tabIndex={this.props.tabIndex}
                    key={this.props.iconInputBoxKey}
                    value={this.props.value}
                    onChange={this.props.onChange}

@@ -87,18 +87,24 @@
                 var recordsEndpoint = recordBase.apiBase.resolveRecordsEndpoint(app.id, app.tables[0].id);
                 recordBase.createAndFetchRecord(recordsEndpoint, JSON.parse(testRecord), '?format=' + FORMAT);
                 //second table records
+                let records = [];
                 for (var i = 0; i <= 210; i++) {
                     var value = testUtils.generateRandomString(10);
-                    var record = '[{"id": 6 , "value": "' + value + '"}]';
-                    var recordsEndpoint2 = recordBase.apiBase.resolveRecordsEndpoint(app.id, app.tables[1].id);
-                    recordBase.createAndFetchRecord(recordsEndpoint2, JSON.parse(record), '?format=' + FORMAT);
+                    records.push([{id: 6, value: "' + value + '"}]);
                 }
-                done();
+                var recordsEndpoint2 = recordBase.apiBase.resolveRecordsBulkEndpoint(app.id, app.tables[1].id);
+                recordBase.createBulkRecords(recordsEndpoint2, records).then(
+                    (success) => {
+                        done();
+                    },
+                    (error) => {
+                        throw new Error("Error in set up for ReportsApi" + JSON.stringify(error));
+                    }
+                );
             }).catch(function(error) {
                 log.error(JSON.stringify(error));
                 done();
             });
-            return app;
         });
 
 
@@ -106,7 +112,7 @@
          * Test to create a report with all fields and verify the results.
          */
         it('Should create a report, execute the report, and validate the resulting ' +
-            'record matches the created record in setup', function(done) {
+            'record matches the created record in setup', function() {
             this.timeout(testConsts.INTEGRATION_TIMEOUT * appWithNoFlags.length);
 
             var reportEndpoint = recordBase.apiBase.resolveReportsEndpoint(app.id, app.tables[0].id);
@@ -116,18 +122,20 @@
                 tableId: app.tables[0].id
             };
             //Create a report
-            recordBase.apiBase.executeRequest(reportEndpoint, consts.POST, reportToCreate).then(function(report) {
+            return recordBase.apiBase.executeRequest(reportEndpoint, consts.POST, reportToCreate).then(function(report) {
                 var r = JSON.parse(report.body);
                 //Execute a report
-                recordBase.apiBase.executeRequest(reportEndpoint + r.id + '/results?format=' + FORMAT, consts.GET).then(function(reportResults) {
-                    var results = JSON.parse(reportResults.body);
-                    //Verify records
-                    verifyRecords(results);
-                    done();
+                reportEndpoint = recordBase.apiBase.resolveReportsEndpoint(app.id, app.tables[0].id, r.id, true);
+                return recordBase.apiBase.executeRequest(reportEndpoint + '/results?format=' + FORMAT, consts.GET).then(function(reportResults) {
+                    return JSON.parse(reportResults.body);
+                }, error => {
+                    log.error(JSON.stringify(error));
                 });
-            }).catch(function(error) {
+            })
+            .then(verifyRecords)
+            .catch(function(error) {
                 log.error(JSON.stringify(error));
-                done();
+                return Promise.reject(error);
             });
         });
 
@@ -202,7 +210,8 @@
                 recordBase.apiBase.executeRequest(reportEndpoint, consts.POST, reportToCreate).then(function(report) {
                     var r = JSON.parse(report.body);
                     //Execute report against 'resultComponents' endpoint.
-                    recordBase.apiBase.executeRequest(reportEndpoint + r.id + '/results?format=' + FORMAT, consts.GET).then(function(reportResults) {
+                    var reportResultsEndpoint = recordBase.apiBase.resolveReportsEndpoint(app.id, app.tables[0].id, r.id, true);
+                    recordBase.apiBase.executeRequest(reportResultsEndpoint + '/results?format=' + FORMAT, consts.GET).then(function(reportResults) {
                         var results = JSON.parse(reportResults.body);
                         //Verify records
                         verifyRecords(results);

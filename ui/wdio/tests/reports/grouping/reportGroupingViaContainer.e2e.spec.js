@@ -9,7 +9,7 @@
     //include underScore js
     var _ = require('underscore');
 
-    describe('Reports - Grouping Via Container Tests: ', function() {
+    describe('Reports - Grouping via container tests: ', function() {
         var realmName;
         var realmId;
         var app;
@@ -131,7 +131,7 @@
         beforeAll(function() {
             var reportRecordsViaAPI;
             //report Endpoint
-            var reportEndpoint = e2eBase.recordBase.apiBase.resolveReportsEndpoint(app.id, app.tables[e2eConsts.TABLE1].id, DEFAULT_REPORT_ID);
+            var reportEndpoint = e2eBase.recordBase.apiBase.resolveReportsResultsEndpoint(app.id, app.tables[e2eConsts.TABLE1].id, DEFAULT_REPORT_ID);
             //GET report results
             browser.call(function() {
                 return e2eBase.recordBase.apiBase.executeRequest(reportEndpoint, consts.GET).then(function(reportResult) {
@@ -381,7 +381,7 @@
 
         });
 
-        it("Verify Delete group fields functionality", function() {
+        xit("Verify Delete group fields functionality", function() {
             var fieldToDelete = 'Project Phase';
             var actualGroupedTableRecords;
             var groupedViaLODASHResults;
@@ -466,7 +466,6 @@
 
             //Step 6 - Verify allFieldFromFieldsPanel also contain expectedMoreFields variable values
             expect(_.every(groupFields, function(val) {return allFieldFromFieldsPanel.indexOf(val) === -1;})).toBeTruthy();
-
         });
     });
 }());
