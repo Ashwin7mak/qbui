@@ -221,7 +221,7 @@ describe('AppHistory', () => {
         });
     });
 
-    fdescribe('verify save functions', () => {
+    describe('verify save functions', () => {
         let mockState = {
             fieldsStore: {
                 isPendingEdit: false
@@ -243,6 +243,10 @@ describe('AppHistory', () => {
             spyOn(AppHistory, '_saveChangesForRecord').and.callThrough();
             spyOn(AppHistory, '_saveChangesForFormBuilder').and.callThrough();
             spyOn(mockStoreFunc, 'updateForm');
+            spyOn(mockStoreFunc, 'createRecord');
+            spyOn(mockStoreFunc, 'updateRecord');
+            spyOn(mockStoreFunc, 'saveFormComplete');
+            spyOn(mockStoreFunc, 'hideTrowser');
             spyOn(AppHistory, 'getStores').and.returnValue(mockState);
         });
         afterEach(() => {
@@ -332,7 +336,7 @@ describe('AppHistory', () => {
             done();
         });
 
-        fit('will save invoke createRecord if currentEditingRecordId === null', (done) => {
+        it('will save invoke createRecord if currentEditingRecordId === null', (done) => {
             mockState.recordStore = {
                 currentEditingAppId: 'appId',
                 currentEditingTableId: 'tableId',
@@ -343,9 +347,30 @@ describe('AppHistory', () => {
 
             AppHistory._saveChangesForRecord();
 
-            expect(mockStoreFunc.createRecord).toHaveBeenCalled();
             expect(mockStore.dispatch).toHaveBeenCalled();
             expect(AppHistory._continueToDestination).toHaveBeenCalled();
+            expect(mockStoreFunc.createRecord).toHaveBeenCalled();
+            expect(mockStoreFunc.saveFormComplete).toHaveBeenCalled();
+            expect(mockStoreFunc.hideTrowser).toHaveBeenCalled();
+            done();
+        });
+
+        it('will save invoke updateRecord if currentEditingRecordId !== null', (done) => {
+            mockState.recordStore = {
+                currentEditingAppId: 'appId',
+                currentEditingTableId: 'tableId',
+                currentEditingRecordId: 'recId'
+
+            };
+            AppHistory.setup(mockStore, mockStoreFunc);
+
+            AppHistory._saveChangesForRecord();
+
+            expect(mockStore.dispatch).toHaveBeenCalled();
+            expect(AppHistory._continueToDestination).toHaveBeenCalled();
+            expect(mockStoreFunc.updateRecord).toHaveBeenCalled();
+            expect(mockStoreFunc.saveFormComplete).toHaveBeenCalled();
+            expect(mockStoreFunc.hideTrowser).toHaveBeenCalled();
             done();
         });
 

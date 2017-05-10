@@ -253,13 +253,16 @@ class AppHistory {
      * Default save changes for record
      * @param store, recordStore, continueToDestination, haltRouteChange
      */
-    _saveChangesForRecord(store, recordStore, continueToDestination, haltRouteChange) {
-        if (store && _.isFunction(self.createRecord) && _.isFunction(self.updateRecord)) {
+    _saveChangesForRecord() {
+        if (self.store && _.isFunction(self.createRecord) && _.isFunction(self.updateRecord)) {
+            const state = self.store.getState();
+            const {recordStore} = self.getStores(state);
+
             const appId = recordStore.currentEditingAppId;
             const tableId = recordStore.currentEditingTableId;
             const recordId = recordStore.currentEditingRecordId;
 
-            let fields = self.getFields(store);
+            let fields = self.getFields(self.store);
 
             if (recordStore.currentEditingRecordId === UNSAVED_RECORD_ID) {
                 let params = {
@@ -270,17 +273,11 @@ class AppHistory {
                     showNotificationOnSuccess: true,
                     addNewRow: false
                 };
-                store.dispatch(self.createRecord(appId, tableId, params)).then(
+                self.store.dispatch(self.createRecord(appId, tableId, params)).then(
                     () => {
-                        continueToDestination();
-                    },
-                    () => {
-                        haltRouteChange();
-                    }
-                ).then(
-                    () => {
-                        store.dispatch(self.saveFormComplete(CONTEXT.FORM.EDIT));
-                        store.dispatch(self.hideTrowser());
+                        self._continueToDestination();
+                        self.store.dispatch(self.saveFormComplete(CONTEXT.FORM.EDIT));
+                        self.store.dispatch(self.hideTrowser());
                     }
                 );
             } else {
@@ -293,17 +290,11 @@ class AppHistory {
                     addNewRow: false
                 };
 
-                store.dispatch(self.updateRecord(appId, tableId, recordId, params)).then(
+                self.store.dispatch(self.updateRecord(appId, tableId, recordId, params)).then(
                     () => {
                         self._continueToDestination();
-                    },
-                    () => {
-                        self._haltRouteChange();
-                    }
-                ).then(
-                    () => {
-                        store.dispatch(self.saveFormComplete(CONTEXT.FORM.EDIT));
-                        store.dispatch(self.hideTrowser());
+                        self.store.dispatch(self.saveFormComplete(CONTEXT.FORM.EDIT));
+                        self.store.dispatch(self.hideTrowser());
                     }
                 );
             }
@@ -333,9 +324,6 @@ class AppHistory {
                 self.store.dispatch(self.updateForm(appId, tableId, formType, formMeta)).then(
                     () => {
                         self._continueToDestination();
-                    },
-                    () => {
-                        self._haltRouteChange();
                     }
                 );
             }
@@ -352,7 +340,6 @@ class AppHistory {
             const state = self.store.getState();
             let {recordStore, formsStore, fieldsStore} = self.getStores(state);
 
-            // debugger;
             if (formsStore.isPendingEdit || fieldsStore.isPendingEdit) {
                 self._saveChangesForFormBuilder();
             } else if (recordStore.isPendingEdit) {
