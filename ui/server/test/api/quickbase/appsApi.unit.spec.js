@@ -214,6 +214,44 @@ describe("Validate appsApi", function() {
         });
     });
 
+    describe("validate getTableProperties function", function () {
+        let executeReqStub = null;
+        let getTablePropertiesStub = null;
+
+        beforeEach(function () {
+            executeReqStub = sinon.stub(requestHelper, "executeRequest");
+            //getTablePropertiesStub = sinon.stub(appsApi, "getTableProperties");
+            appsApi.setRequestHelperObject(requestHelper);
+            req.url = 'apps/123/tables/456/tableproperties/';
+            req.method = 'get';
+        });
+
+        afterEach(function () {
+            req.method = 'get';
+            req.url = '';
+            //getTablePropertiesStub.restore();
+            executeReqStub.restore();
+        });
+
+        it("getTableProperties returns success response on a valid input", function (done) {
+            executeReqStub.returns(Promise.resolve({'body': '{"tableNoun": "test noun", "description": "desc", "tableIcon": "icon"}'}));
+            let promise = appsApi.getTableProperties(req, "{name: 'test'}");
+            promise.then(
+                function (response) {
+                    assert.deepEqual(response, {tableNoun: 'test noun', description: 'desc', tableIcon: 'icon'});
+                    done();
+                },
+                function (error) {
+                    done(new Error("Unexpected error while testing getTableProperties"));
+                }
+            ).catch(function (errorMsg) {
+                done(new Error('getTableProperties: exception processing success test: ' + JSON.stringify(errorMsg)));
+            });
+        });
+
+        it("getTableProperties returns exceptions on an invalid server response")
+    });
+
     describe("validate getApp function", function() {
         let executeReqStub = null;
         let getTablePropertiesStub = null;

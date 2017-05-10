@@ -296,9 +296,11 @@ describe('Validate tablesApi', function() {
 
     describe('validate replaceTableProperties function', function() {
         let executeReqStub = null;
+        let createTablePropsStub = null;
 
         beforeEach(function() {
             executeReqStub = sinon.stub(requestHelper, 'executeRequest');
+            createTablePropsStub = sinon.stub(tablesApi, 'createTableProperties');
             tablesApi.setRequestHelperObject(requestHelper);
             req.url = 'apps/123/tableproperties/';
             req.method = 'post';
@@ -309,6 +311,7 @@ describe('Validate tablesApi', function() {
             req.url = '';
             req.rawBody = {};
             executeReqStub.restore();
+            createTablePropsStub.restore();
         });
 
         it('success return results ', function(done) {
@@ -343,6 +346,94 @@ describe('Validate tablesApi', function() {
                 }
             ).catch(function(errorMsg) {
                 done(new Error('replaceTableProperties: exception processing failure test: ' + JSON.stringify(errorMsg)));
+            });
+        });
+
+        it('a non 404 error on replaceTableProperties results in success', function (done) {
+            let error = {statusCode: 400};
+            executeReqStub.returns(Promise.reject(error));
+            let promise = tablesApi.replaceTableProperties(req, '123');
+
+            promise.then(
+                function () {
+                    done();
+                },
+                function (error) {
+                    done("Unexpected error in updating table props");
+                }
+            ).catch(function (errorMsg) {
+                done(new Error('replaceTableProperties: exception processing success test: ' + JSON.stringify(errorMsg)));
+            });
+        });
+
+        it('error on replaceTableProperties results in success of table properties creation', function (done) {
+            let error = {statusCode: 404};
+            executeReqStub.returns(Promise.reject(error));
+            req.body = {tableNoun: 'test noun', description: 'desc', tableIcon: 'icon'};
+
+            //let createTablePropsStub = sinon.stub(tablesApi, 'createTableProperties');
+            let createTablePropsResp = {body: '{"tableNoun": "updated table noun"}'};
+            createTablePropsStub.returns(Promise.resolve(createTablePropsResp));
+
+            let promise = tablesApi.replaceTableProperties(req, '123');
+
+            promise.then(
+                function (response) {
+                    assert.deepEqual({tableNoun: "updated table noun"}, response);
+                    done();
+                },
+                function (error) {
+                    done("Unexpected error in updating table props");
+                }
+            ).catch(function (errorMsg) {
+                done(new Error('replaceTableProperties: exception processing success test: ' + JSON.stringify(errorMsg)));
+            });
+        });
+
+        it('error on replaceTableProperties results in failure of table properties creation', function (done) {
+            let error = {statusCode: 404};
+            executeReqStub.returns(Promise.reject(error));
+            req.body = {tableNoun: 'test noun', description: 'desc', tableIcon: 'icon'};
+
+            //let createTablePropsStub = sinon.stub(tablesApi, 'createTableProperties');
+            let createTablePropsResp = {error: 'some error'};
+            createTablePropsStub.returns(Promise.reject(createTablePropsResp));
+
+            let promise = tablesApi.replaceTableProperties(req, '123');
+
+            promise.then(
+                function () {
+                    done("Unexpected success in updating table props");
+                },
+                function (error) {
+                    assert.deepEqual(error, createTablePropsResp);
+                    done();
+                }
+            ).catch(function (errorMsg) {
+                done(new Error('replaceTableProperties: exception processing success test: ' + JSON.stringify(errorMsg)));
+            });
+        });
+
+        it('error on replaceTableProperties results in exception during table properties creation', function (done) {
+            let error = {statusCode: 404};
+            executeReqStub.returns(Promise.reject(error));
+            req.body = {tableNoun: 'test noun', description: 'desc', tableIcon: 'icon'};
+
+           // let createTablePropsStub = sinon.stub(tablesApi, 'createTableProperties');
+            let createTablePropsResp = null;
+            createTablePropsStub.returns(Promise.resolve(createTablePropsResp));
+
+            let promise = tablesApi.replaceTableProperties(req, '123');
+
+            promise.then(
+                function () {
+                    done("Unexpected success in updating table props");
+                },
+                function () {
+                    done();
+                }
+            ).catch(function (errorMsg) {
+                done(new Error('replaceTableProperties: exception processing success test: ' + JSON.stringify(errorMsg)));
             });
         });
     });

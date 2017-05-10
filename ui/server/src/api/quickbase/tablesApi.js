@@ -230,7 +230,32 @@
                         },
                         (error) => {
                             log.error({req: req}, "tablesApi.replaceTableProperties(): Error replacing tableprops on EE");
-                            reject(error);
+                            // If the table properties object is not in ee, create one with table noun in it.
+                            if (error.statusCode === 404) {
+                                let tableProperReq = _.clone(req);
+
+                                tableProperReq.method = 'POST';
+                                tableProperReq.rawBody = JSON.stringify({"tableNoun": req.body.tableNoun});
+                                tableProperReq.headers[constants.CONTENT_LENGTH] = tableProperReq.rawBody.length;
+
+                                this.createTableProperties(tableProperReq, tableId).then(
+                                    (eeResponse) => {
+                                        resolve(JSON.parse(eeResponse.body));
+                                    },
+                                    (error) => {
+                                        // Reject, let the caller know that the properties creation failed
+                                        log.error({req: req}, "tablesApi.createTableProperties(): Error replacing tableprops on EE");
+                                        reject(error);
+                                    }
+                                ).catch((ex) => {
+                                    requestHelper.logUnexpectedError('tablesApi.createTableProperties(): unexpected error creating tableprops on EE', ex, true);
+                                    reject(ex);
+                                });
+                            }
+                            else {
+                                //resolve - we do not want to block the get Apps call on this failure
+                                resolve({});
+                            }
                         }
                     ).catch((ex) => {
                         requestHelper.logUnexpectedError('tablesApi.replaceTableProperties(): unexpected error replacing tableprops on EE', ex, true);
