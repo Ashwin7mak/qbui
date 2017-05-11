@@ -133,6 +133,7 @@
          * @returns Array of table links
          */
         getAllTableLeftNavLinksList: {get: function() {
+            browser.element('.tablesList').waitForVisible();
             browser.element('.leftNavLabel').waitForVisible();
             return browser.elements('.leftNavLabel');
         }},
@@ -153,9 +154,10 @@
          */
         selectTable: {value: function(tableName) {
             //wait until you see tableLists got loaded
-            browser.element('.tablesList .link').waitForVisible();
+            browser.waitForExist('.tablesList .leftNavLabel');
             //filter table names from leftNav links
             var results = this.getAllTableLeftNavLinksList.value.filter(function(table) {
+                console.log("the tables are: "+table.getAttribute('textContent'));
                 return table.getAttribute('textContent') === tableName;
             });
 
