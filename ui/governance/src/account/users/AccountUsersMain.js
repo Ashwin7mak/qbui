@@ -43,6 +43,8 @@ class AccountUsers extends Component {
                 <div className="accountUsersContainer">
                     <AccountUsersStage users={this.props.users}/>
                     <AccountUsersGrid id={this.GRID_ID}
+                                      itemTypePlural="users"
+                                      itemTypeSingular="user"
                                       showAccountColumns={canSeeAccountColumns}
                                       showRealmColumns={canSeeRealmColumns}/>
                 </div>
