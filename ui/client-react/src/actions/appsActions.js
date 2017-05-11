@@ -40,6 +40,7 @@ let appsActions = {
             appService.getApps(hydrate).then(
                 response => {
                     logger.debug('AppService getApps success');
+                    // TODO: move model reference into store when migrate to redux
                     let model = appsModel.set(response.data);
                     this.dispatch(actions.LOAD_APPS_SUCCESS, model);
                     resolve();
@@ -67,6 +68,7 @@ let appsActions = {
                 let appService = new AppService();
                 appService.getAppComponents(appId).then(response => {
                     let users = response.data.users;
+                    // TODO: move model reference into store when migrate to redux
                     let model = appsModel.set([response.data.app]);
                     this.dispatch(actions.SELECT_APP_SUCCESS, {users: users, app: model[0]});
                     resolve();

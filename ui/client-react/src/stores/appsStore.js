@@ -115,11 +115,11 @@ let AppsStore = Fluxxor.createStore({
             this.appUsersUnfiltered = userArray[1];
         }
 
-        //  update the tables for the selected app..if the app is not in the store,
-        //  we'll add to it
-        const app = selectedApp.app;
-        if (Array.isArray(this.apps)) {
-            if (_.has(selectedApp, 'app')) {
+        //  update the tables for the selected app..if the app
+        //  is not in the store, we'll add to it
+        if (_.has(selectedApp, 'app')) {
+            const app = selectedApp.app;
+            if (Array.isArray(this.apps)) {
                 //  find the app in the list and replace
                 let index = _.findIndex(this.apps, (a) => a.id === app.id);
                 if (index !== -1) {
@@ -127,11 +127,11 @@ let AppsStore = Fluxxor.createStore({
                 } else {
                     this.apps.push(app);
                 }
-                this.setTableIcons();
-                this.selectedAppId = app.id;
+            } else {
+                this.apps = [app];
             }
-        } else {
-            this.apps = [app];
+            this.setTableIcons();
+            this.selectedAppId = app.id;
         }
 
         this.emit('change');

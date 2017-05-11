@@ -751,7 +751,7 @@ describe("Validate appsApi", function() {
             });
         });
 
-        it('fail return results with getAppComponents error -- test getHydratedApp reject', function(done) {
+        it('fail return results with getAppComponents error -- test getAppUsers reject', function(done) {
             let appUserResults = {"id":1};
             let getHydratedAppResults = {"id":1};
 
@@ -762,14 +762,14 @@ describe("Validate appsApi", function() {
             let promise = appsApi.getAppComponents(req, req.params.appId);
             promise.then(
                 function(response) {
-                    done(new Error("Unexpected success promise return when testing getAppComponents failure"));
+                    done(new Error("Unexpected success promise return when testing getAppComponents failure with getAppUsers"));
                 },
                 function(error) {
                     assert.deepEqual(error, errMsg);
                     done();
                 }
             ).catch(function(errorMsg) {
-                done(new Error('getAppComponents: exception processing failure test: ' + JSON.stringify(errorMsg)));
+                done(new Error('getAppComponents: exception processing failure test with getAppUsers: ' + JSON.stringify(errorMsg)));
             });
         });
 
@@ -784,14 +784,14 @@ describe("Validate appsApi", function() {
             let promise = appsApi.getAppComponents(req, req.params.appId);
             promise.then(
                 function(response) {
-                    done(new Error("Unexpected success promise return when testing getAppComponents failure"));
+                    done(new Error("Unexpected success promise return when testing getAppComponents failure with getHydratedApp"));
                 },
                 function(error) {
                     assert.deepEqual(error, errMsg);
                     done();
                 }
             ).catch(function(errorMsg) {
-                done(new Error('getAppComponents: exception processing failure test: ' + JSON.stringify(errorMsg)));
+                done(new Error('getAppComponents: exception processing failure test with getHydratedApp: ' + JSON.stringify(errorMsg)));
             });
         });
 

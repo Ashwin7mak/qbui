@@ -142,6 +142,13 @@
                 });
             },
 
+            /**
+             * Return a hydrated app; this includes appAccessRights, core table properties and client table properties
+             *
+             * @param req
+             * @param appId
+             * @returns {Promise}
+             */
             getHydratedApp: function(req, appId) {
                 return new Promise((resolve, reject) => {
                     let appRequests = [this.getApp(req, appId), this.getAppAccessRights(req, appId)];
@@ -181,7 +188,6 @@
                             (response) => {
                                 let apps = JSON.parse(response.body);
 
-                                //  TODO: investigate...concern if the number of apps is large???
                                 let promises = [];
                                 apps.forEach((app) => {
                                     promises.push(this.getHydratedApp(_.clone(req), app.id));
@@ -335,7 +341,7 @@
             },
 
             /**
-             * Fetch app users, app roles and app table properties
+             * Fetch app users and a hydrated app
              *
              * @param req
              * @param appId

@@ -90,9 +90,9 @@ describe('Test Apps Store', () => {
         const roles = ['roles'];
 
         const appSuccessActionTests = [
-            {name:'test with empty store', app:{id: 'tableId'}, appExpectation: 1},
-            {name:'test store with content', app:{id: 'tableId'}, appExpectation: 1},
-            {name:'test store with content', app:{id: 'tableId2'}, appExpectation: 2}
+            {name:'test loading app into an empty store', app:{id: 'tableId'}, appExpectation: 1},
+            {name:'test loading app with app in store', app:{id: 'tableId'}, appExpectation: 1},
+            {name:'test loading app with app not in store', app:{id: 'tableId2'}, appExpectation: 2}
         ];
 
         appSuccessActionTests.forEach(test => {
