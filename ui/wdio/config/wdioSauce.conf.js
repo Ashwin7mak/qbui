@@ -26,6 +26,7 @@ exports.config = {
         port            : seleniumPort,
         connectRetries : 5,
         connectRetryTimeout: 5000,
+        // Custom ip to query for test metrics
         metricsAddress : 'localhost:' + metricsPort
     },
     //
