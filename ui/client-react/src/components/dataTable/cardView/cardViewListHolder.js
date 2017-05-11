@@ -282,6 +282,14 @@ export let CardViewListHolder = React.createClass({
             };
         }
 
+        // columns map for easy/fast lookup by column ID
+        const columnsMap = new Map();
+        if (_.has(this.props, "reportData.data.columns")) {
+            for (let column of this.props.reportData.data.columns) {
+                columnsMap.set(column.id, column);
+            }
+        }
+
         return (<Swipeable className="swipeable"
                            onSwipingUp={(ev, delta) => {
                                this.swiping(ev.target, delta, true);
@@ -303,6 +311,7 @@ export let CardViewListHolder = React.createClass({
                 <CardViewList ref="cardViewList"
                               node={recordNodes}
                               columns={_.has(this.props, "reportData.data.columns") ? this.props.reportData.data.columns : []}
+                              columnsMap={columnsMap}
                               primaryKeyName={this.props.primaryKeyName}
                               groupId=""
                               groupLevel={-1}
