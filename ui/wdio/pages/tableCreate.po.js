@@ -13,7 +13,7 @@
 
     var tablesPage = Object.create(e2ePageBase, {
         //new table button
-        newTableBtn : {get: function() {return browser.element('.tablesList .newTableItem .newTable');}},
+        newTableBtn : {get: function() {return browser.element('.newTableItem .newTable');}},
         //new table container
         tableContainer : {get: function() {return browser.element('.modal-dialog .bodyContainer');}},
         //new table header
@@ -184,6 +184,7 @@
          * Method to click on create new table
          */
         clickCreateNewTable : {value: function() {
+            browser.waitForExists('.tablesList');
             //Wait until new table button visible
             this.newTableBtn.waitForVisible();
             //Verify the name of the button
@@ -486,6 +487,7 @@
         clickBackToAppsLink : {value: function() {
             browser.element('.standardLeftNav .navItemContent').waitForVisible();
             browser.element('.standardLeftNav .navItemContent').click();
+            browser.waitForExists('.tablesList');
             return this.newTableBtn.waitForVisible();
         }},
 
