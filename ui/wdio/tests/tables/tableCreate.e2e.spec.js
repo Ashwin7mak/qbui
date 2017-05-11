@@ -90,6 +90,8 @@
 
             //Step 9 - Click on forms Cancel button
             formsPO.clickFormCancelBtn();
+            //wait until you see tableLists got loaded
+            browser.element('.tablesList').waitForVisible();
             tableCreatePO.newTableBtn.waitForVisible();
 
             //Step 10 - Get the new count of table links in the left nav
@@ -268,7 +270,11 @@
             });
 
             //Go to Tables Page
-            RequestAppsPage.get(e2eBase.getRequestTableEndpoint(realmName, testApp.id, testApp.tables[0].id));
+            browser.call(function() {
+                return RequestAppsPage.get(e2eBase.getRequestTableEndpoint(realmName, testApp.id, testApp.tables[0].id));
+            });
+            //wait until you see tableLists got loaded
+            browser.element('.tablesList').waitForVisible();
 
             //Verify New Table button not available for user other than ADMIN
             expect(browser.isVisible('.newTable')).toBeFalsy();

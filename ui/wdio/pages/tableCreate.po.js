@@ -51,7 +51,7 @@
         editTableHeading : {get: function() {return browser.element('.stageHeadLine');}},
 
         //new table ready dialogue
-        tableReadyDialogue : {get: function() {return browser.element('.modal-dialog .tableReadyContent');}},
+        tableReadyDialogue : {get: function() {return browser.element('.tableReadyDialog .modal-dialog');}},
         //new table ready title
         tableReadyDialogueTitle : {get: function() {return this.tableReadyDialogue.element('.titleText');}},
         //new table ready Text
@@ -145,6 +145,8 @@
          * @params tableName
          */
         selectTable: {value: function(tableName) {
+            //wait until you see tableLists got loaded
+            browser.element('.tablesList').waitForVisible();
             //filter table names from leftNav links
             var results = this.getAllTableLeftNavLinksList.value.filter(function(table) {
                 return table.getAttribute('textContent') === tableName;
@@ -218,19 +220,23 @@
          * Method to verify new Table Dialogue contents
          */
         verifyNewTableCreateDialogue : {value: function() {
+            this.tableReadyDialogue.waitForVisible();
             //Verify the title and description in table summary in the dialogue
             expect(this.tableReadyDialogueTitle.getAttribute('textContent')).toContain('Your table\'s ready!');
             expect(this.tableReadyDialogueTextParagraph1.getAttribute('textContent')).toContain('Each bit of information you want to collect is a field.');
-            return browser.element('.modal-footer .finishedButton').waitForVisible();
+            return this.tableReadyDialogue.element('.modal-footer .finishedButton').waitForVisible();
         }},
 
         /**
          * Method to click on OK button in new table dialogue
          */
         clickOkBtn: {value: function() {
-            browser.element('.modal-footer .finishedButton').waitForVisible();
-            expect(browser.element('.modal-footer .finishedButton').getAttribute('textContent')).toBe('OK');
-            browser.element('.modal-footer .finishedButton').click();
+            this.tableReadyDialogue.waitForVisible();
+            this.tableReadyDialogue.element('.modal-footer .finishedButton').waitForVisible();
+            expect(this.tableReadyDialogue.element('.modal-footer .finishedButton').getAttribute('textContent')).toBe('OK');
+            this.tableReadyDialogue.element('.modal-footer .finishedButton').click();
+            //Need small wait for the container to dissapear
+            browser.pause(e2eConsts.shortWaitTimeMs);
             return formsPO.editFormContainerEl.waitForVisible();
         }},
 
