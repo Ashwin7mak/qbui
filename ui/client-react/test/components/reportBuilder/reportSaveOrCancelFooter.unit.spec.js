@@ -1,7 +1,7 @@
 import React from 'react';
 import {ReportSaveOrCancelFooter} from '../../../src/components/reportBuilder/reportSaveOrCancelFooter';
-import TestUtils from 'react-addons-test-utils';
 import {shallow} from 'enzyme';
+import jasmineEnzyme from 'jasmine-enzyme';
 import SaveOrCancelFooter from '../../../src/components/saveOrCancelFooter/saveOrCancelFooter';
 
 describe('Report Builder Save and Cancel Footer', () => {
@@ -12,6 +12,7 @@ describe('Report Builder Save and Cancel Footer', () => {
     };
 
     beforeEach(() => {
+        jasmineEnzyme();
         spyOn(props, 'exitBuilderMode').and.callThrough();
         spyOn(props, 'closeFieldSelectMenu').and.callThrough();
     });
@@ -29,9 +30,7 @@ describe('Report Builder Save and Cancel Footer', () => {
     });
 
     it('save and cancel button are present', () => {
-        let component2 = TestUtils.renderIntoDocument(<ReportSaveOrCancelFooter {...props} />);
-
-        expect(TestUtils.isElementOfType(component2, 'saveOrCancelFooter').toBeTruthy);
-        let saveOrCancelFooter = TestUtils.scryRenderedDOMComponentsWithTag(component, "saveOrCancelFooter");
+        let saveOrCancelFooter = component.find(SaveOrCancelFooter);
+        expect(saveOrCancelFooter).toBePresent();
     })
 });
