@@ -37,8 +37,9 @@ export default {
                     deactivatedUsers: "Deactivated users",
                     realmDirectoryUsers: "In realm directory",
                     stageTitle: "Manage All Users",
-                    stageDescription: "Use this page to manage QuickBase users at the account and realm levels. Take a look around and try out the functionality. If you have any feedback, we'd love to hear it:",
-                    feedbackLinkText: "https://some.quickbase.com/link/to/feedback"
+                    stageDescription: "Use this page to manage all your QuickBase account and realm users. Take a look around, and ",
+                    feedbackLink: "https://team.quickbase.com/db/bmrrmm53x?a=nwr",
+                    feedbackLinkText: "give us feedback"
                 }
             }
         }
