@@ -42,8 +42,9 @@ class AccountUsersStage extends React.Component {
                     iconClassName="governanceAccountUsersStageIcon"
                     description={
                         <p>
-                            <I18nMessage message="governance.account.users.stageDescription"/> <a href="#"><I18nMessage
-                            message="governance.account.users.feedbackLinkText"/></a>
+                            <I18nMessage message="governance.account.users.stageDescription"/>
+                            <a target="_blank" href={Locale.getMessage('governance.account.users.feedbackLink')}>
+                                <I18nMessage message="governance.account.users.feedbackLinkText"/></a>.
                         </p>
                     }
                 />
