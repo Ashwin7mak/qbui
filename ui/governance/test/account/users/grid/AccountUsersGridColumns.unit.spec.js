@@ -10,6 +10,11 @@ import StandardGrid from "../../../../src/common/grid/standardGrid";
 import * as Actions from "../../../../src/account/users/AccountUsersActions";
 import {GetAccountUsersGridColumns} from "../../../../src/account/users/grid/AccountUsersGridColumns";
 
+import GovernanceBundleLoader from '../../../../src/locales/governanceBundleLoader';
+import Locale from '../../../../../reuse/client/src/locales/locale';
+
+GovernanceBundleLoader.changeLocale('en-us');
+
 const mockStore = configureMockStore();
 
 describe('AccountUsersGridColumns', () => {
@@ -37,7 +42,7 @@ describe('AccountUsersGridColumns', () => {
                     <StandardGrid  {...props}/>
                 </Provider>);
             let headers = component.find(QbHeaderCell).map(node => node.text());
-            expect(headers).toEqual(["FIRST NAME", "LAST NAME", "EMAIL", "USER NAME", "LAST ACCESS", "QUICKBASE ACCESS STATUS", "INACTIVE?", "IN ANY GROUP?", "GROUP MANAGER?", "CAN CREATE APPS?", "APP MANAGER?", "IN REALM DIRECTORY?", "REALM APPROVED?"]);
+            expect(headers).toEqual([Locale.getMessage('governance.account.users.grid.firstName'), Locale.getMessage('governance.account.users.grid.lastName'), Locale.getMessage('governance.account.users.grid.email'), Locale.getMessage('governance.account.users.grid.userName'), Locale.getMessage('governance.account.users.grid.lastAccess'), Locale.getMessage('governance.account.users.grid.quickbaseAccessStatus'), Locale.getMessage('governance.account.users.grid.inactive'), Locale.getMessage('governance.account.users.grid.inAnyGroup'), Locale.getMessage('governance.account.users.grid.groupManager'), Locale.getMessage('governance.account.users.grid.canCreateApps'), Locale.getMessage('governance.account.users.grid.appManager'), Locale.getMessage('governance.account.users.grid.inRealmDirectory'), Locale.getMessage('governance.account.users.grid.realmApproved')]);
         });
 
         it("should show the correct set of headers when not account admin", () => {
@@ -51,7 +56,7 @@ describe('AccountUsersGridColumns', () => {
                 </Provider>);
 
             let headers = component.find(QbHeaderCell).map(node => node.text());
-            expect(headers).toEqual(["FIRST NAME", "LAST NAME", "EMAIL", "USER NAME", "QUICKBASE ACCESS STATUS", "IN REALM DIRECTORY?", "REALM APPROVED?"]);
+            expect(headers).toEqual([Locale.getMessage('governance.account.users.grid.firstName'), Locale.getMessage('governance.account.users.grid.lastName'), Locale.getMessage('governance.account.users.grid.email'), Locale.getMessage('governance.account.users.grid.userName'), Locale.getMessage('governance.account.users.grid.quickbaseAccessStatus'), Locale.getMessage('governance.account.users.grid.inRealmDirectory'), Locale.getMessage('governance.account.users.grid.realmApproved')]);
         });
 
 
@@ -67,7 +72,7 @@ describe('AccountUsersGridColumns', () => {
                     <StandardGrid {...props} />
                 </Provider>);
             let headers = component.find(QbHeaderCell).map(node => node.text());
-            expect(headers).toEqual(["FIRST NAME", "LAST NAME", "EMAIL", "USER NAME", "LAST ACCESS", "QUICKBASE ACCESS STATUS", "INACTIVE?", "IN ANY GROUP?", "GROUP MANAGER?", "CAN CREATE APPS?", "APP MANAGER?"]);
+            expect(headers).toEqual([Locale.getMessage('governance.account.users.grid.firstName'), Locale.getMessage('governance.account.users.grid.lastName'), Locale.getMessage('governance.account.users.grid.email'), Locale.getMessage('governance.account.users.grid.userName'), Locale.getMessage('governance.account.users.grid.lastAccess'), Locale.getMessage('governance.account.users.grid.quickbaseAccessStatus'), Locale.getMessage('governance.account.users.grid.inactive'), Locale.getMessage('governance.account.users.grid.inAnyGroup'), Locale.getMessage('governance.account.users.grid.groupManager'), Locale.getMessage('governance.account.users.grid.canCreateApps'), Locale.getMessage('governance.account.users.grid.appManager')]);
         });
     });
 
