@@ -354,7 +354,7 @@ export const Nav = React.createClass({
             {/* AppQbModal is an app-wide modal that can be called from non-react classes*/}
             <AppQbModal/>
 
-            {this.props.match.params && this.props.match.params.appId && editRecordId &&
+            {this.props.match.params && this.props.match.params.appId && this.props.location.search !== "" &&
             <RecordTrowser visible={this.props.shell.trowserOpen && this.props.shell.trowserContent === TrowserConsts.TROWSER_EDIT_RECORD}
                            history={this.props.history}
                            editForm={this.getEditFormFromProps()}
