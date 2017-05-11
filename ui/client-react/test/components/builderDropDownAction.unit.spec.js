@@ -13,7 +13,7 @@ describe('Build drop down action functions', () => {
         push: () =>{}
     };
     const callbacks = {
-        navigateToBuilder: () =>{}
+        navigateToFormBuilder: () =>{}
     };
 
     it('test render of component', () => {
@@ -49,13 +49,13 @@ describe('Build drop down action functions', () => {
     });
 
     it('test form builder link', () => {
-        spyOn(callbacks, "navigateToBuilder").and.callThrough();
-        component = TestUtils.renderIntoDocument(<BuilderDropDownAction selectedApp={sampleApp} selectedTable={sampleTable} recId="2" navigateToBuilder={callbacks.navigateToBuilder}/>);
+        spyOn(callbacks, "navigateToFormBuilder").and.callThrough();
+        component = TestUtils.renderIntoDocument(<BuilderDropDownAction selectedApp={sampleApp} selectedTable={sampleTable} recId="2" navigateToBuilder={callbacks.navigateToFormBuilder}/>);
         let gearIcon = TestUtils.scryRenderedDOMComponentsWithClass(component, "globalActionLink");
         Simulate.click(gearIcon[0]);
         let formBuilderLink = TestUtils.scryRenderedDOMComponentsWithClass(component, "modifyForm");
         Simulate.click(formBuilderLink[0]);
-        expect(callbacks.navigateToBuilder).toHaveBeenCalled();
+        expect(callbacks.navigateToFormBuilder).toHaveBeenCalled();
     });
 });
 

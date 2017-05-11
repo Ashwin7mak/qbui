@@ -238,7 +238,7 @@ describe('Nav Unit tests', () => {
         props.history = [];
 
         let component = TestUtils.renderIntoDocument(<Nav {...props} flux={flux} updateFormRedirectRoute={mockFormStore.updateFormRedirectRoute} />);
-        component.navigateToBuilder();
+        component.navigateToFormBuilder();
 
         expect(props.history).toEqual(expectedRouter);
     });
@@ -249,7 +249,7 @@ describe('Nav Unit tests', () => {
         props.history = [];
 
         let component = TestUtils.renderIntoDocument(<Nav {...props} flux={flux} updateFormRedirectRoute={mockFormStore.updateFormRedirectRoute} />);
-        component.navigateToBuilder();
+        component.navigateToFormBuilder();
 
         expect(props.history).toEqual(expectedRouter);
     });
@@ -262,7 +262,7 @@ describe('Nav Unit tests', () => {
         props.history = [];
 
         let component = TestUtils.renderIntoDocument(<Nav {...props} flux={flux} location={testLocation} updateFormRedirectRoute={mockFormStore.updateFormRedirectRoute} />);
-        component.navigateToBuilder();
+        component.navigateToFormBuilder();
 
         expect(mockFormStore.updateFormRedirectRoute).toHaveBeenCalledWith(testLocation.pathname);
     });

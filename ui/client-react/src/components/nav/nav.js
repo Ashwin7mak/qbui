@@ -78,7 +78,7 @@ export const Nav = React.createClass({
         };
     },
 
-    navigateToBuilder() {
+    navigateToFormBuilder() {
         /**
          *formId is set to null for now, it is left here, because formId will need to be passed down as a prop in a future story
          * a new unit test will need to be added to recordRoute.unit.spec.js
@@ -143,7 +143,7 @@ export const Nav = React.createClass({
                             actions={actions}
                             position={"top"}
                             icon="settings"
-                            navigateToBuilder={this.navigateToBuilder}
+                            navigateToBuilder={this.navigateToFormBuilder}
                             startTabIndex={4}/> : null}
                 </GlobalActions>
             )} />
