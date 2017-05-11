@@ -253,7 +253,7 @@
             'NOT_EXTENDED': 510,
             'NETWORK_AUTHENTICATION_REQUIRED': 511
         }
-    }
+    };
     module.exports = Object.freeze(Object.assign(constants, requestParamConsts));
 
 }());
