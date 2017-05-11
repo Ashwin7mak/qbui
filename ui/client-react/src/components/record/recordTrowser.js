@@ -394,12 +394,15 @@ export const RecordTrowser = React.createClass({
 
         let record = this.getRecordFromProps(this.props);
 
-        const showBack = !!(record.previousRecordId !== null);
-        const showNext = !!(record.nextRecordId !== null);
+        const showBack = !!(record.previousRecordId);
+        const showNext = !!(record.nextRecordId);
 
-        const recordName = this.props.selectedTable && this.props.selectedTable.name;
+        let recordName = "";
+        if (table) {
+            recordName = table.tableNoun ? table.tableNoun : table.name;
+        }
 
-        let title = this.props.recId === SchemaConsts.UNSAVED_RECORD_ID ? <span><I18nMessage message="nav.new"/><span>&nbsp;{table ? table.name : ""}</span></span> :
+        let title = this.props.recId === SchemaConsts.UNSAVED_RECORD_ID ? <span><I18nMessage message="nav.new"/><span>&nbsp;{recordName}</span></span> :
             <span>{recordName} #{this.props.recId}</span>;
 
 

@@ -32,7 +32,7 @@ export const SettingsWrapper = React.createClass({
         }
         return null;
     },
-    getSelectedTable(tableId) {
+    getSelectedTable() {
         const app = this.getSelectedApp();
         if (app) {
             return _.find(app.tables, (t) => t.id === this.state.apps.selectedTableId);
