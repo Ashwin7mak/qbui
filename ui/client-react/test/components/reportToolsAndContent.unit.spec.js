@@ -9,7 +9,7 @@ import {CONTEXT} from '../../src/actions/context';
 import {DEFAULT_RECORD_KEY} from '../../src/constants/schema';
 import Promise from 'bluebird';
 
-class WindowLocationUtilsMock {
+class WindowHistoryMock {
     static pushWithQuery(key, recId) { }
 }
 describe('ReportToolsAndContent functions', () => {
@@ -90,8 +90,8 @@ describe('ReportToolsAndContent functions', () => {
     beforeEach(() => {
         jasmineEnzyme();
         ReportToolsAndContentRewireAPI.__Rewire__('ReportContent', ReportContentMock);
-        ReportToolsAndContentRewireAPI.__Rewire__('WindowLocationUtils', WindowLocationUtilsMock);
-        spyOn(WindowLocationUtilsMock, 'pushWithQuery').and.callThrough();
+        ReportToolsAndContentRewireAPI.__Rewire__('WindowHistory', WindowHistoryMock);
+        spyOn(WindowHistoryMock, 'pushWithQuery').and.callThrough();
         spyOn(flux.actions, 'selectTableId');
         spyOn(flux.actions, 'loadReport');
         spyOn(flux.actions, 'loadFields');
@@ -105,7 +105,7 @@ describe('ReportToolsAndContent functions', () => {
 
     afterEach(() => {
         ReportToolsAndContentRewireAPI.__ResetDependency__('ReportContent');
-        WindowLocationUtilsMock.pushWithQuery.calls.reset();
+        WindowHistoryMock.pushWithQuery.calls.reset();
         flux.actions.selectTableId.calls.reset();
         flux.actions.loadReport.calls.reset();
         flux.actions.loadFields.calls.reset();
@@ -153,7 +153,7 @@ describe('ReportToolsAndContent functions', () => {
                 {...reportDataParams}
             />);
         component.instance().editNewRecord();
-        expect(WindowLocationUtilsMock.pushWithQuery).toHaveBeenCalled();
+        expect(WindowHistoryMock.pushWithQuery).toHaveBeenCalled();
     });
 
     describe('load dynamic report Action tests', () => {

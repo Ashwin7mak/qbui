@@ -26,9 +26,9 @@ var LocalesMock = {
     }
 };
 
-class WindowLocationUtilsMock {
-    static pushWithQuery(key, recId) { }
-}
+let WindowHistoryMock = {
+    pushWithQuery(key, recId) { }
+};
 
 var ReportGridMock = React.createClass({
     render: function() {
@@ -808,9 +808,9 @@ describe('ReportContent functions', () => {
     beforeEach(() => {
         ReportContentRewireAPI.__Rewire__('ReportGrid', ReportGridMock);
         ReportContentRewireAPI.__Rewire__('Locales', LocalesMock);
-        ReportContentRewireAPI.__Rewire__('WindowLocationUtils', WindowLocationUtilsMock);
+        ReportContentRewireAPI.__Rewire__('WindowHistory', WindowHistoryMock);
 
-        spyOn(WindowLocationUtilsMock, 'pushWithQuery').and.callThrough();
+        spyOn(WindowHistoryMock, 'pushWithQuery').and.callThrough();
         //   spy on redux methods
         spyOn(props, 'selectReportRecords').and.callThrough();
         spyOn(props, 'openRecord').and.callThrough();
@@ -829,7 +829,7 @@ describe('ReportContent functions', () => {
         ReportContentRewireAPI.__ResetDependency__('ReportGrid');
         ReportContentRewireAPI.__ResetDependency__('WindowLocationUtils');
 
-        WindowLocationUtilsMock.pushWithQuery.calls.reset();
+        WindowHistoryMock.pushWithQuery.calls.reset();
         props.selectReportRecords.calls.reset();
         props.openRecord.calls.reset();
         props.editRecordStart.calls.reset();
@@ -1095,7 +1095,7 @@ describe('ReportContent functions', () => {
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
         component.openRecordForEditInTrowser(1);
         expect(props.openRecord).toHaveBeenCalled();
-        expect(WindowLocationUtilsMock.pushWithQuery).toHaveBeenCalled();
+        expect(WindowHistoryMock.pushWithQuery).toHaveBeenCalled();
     });
 
     it('test onScrollRecords', () => {
