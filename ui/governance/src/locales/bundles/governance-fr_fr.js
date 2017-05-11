@@ -44,7 +44,7 @@ export default {
                         appManager: "APP MANAGER",
                         inRealmDirectory: "DANS LE REALM DE RÉPERTOIRE?",
                         realmApproved: "REALM APPROUVÉ?"
-                    }                    
+                    }
                 }
             }
         }
