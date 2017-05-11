@@ -48,9 +48,9 @@ export const BuilderWrapper = React.createClass({
 
     render() {
         let title = '';
-        if (this.props.location.pathname.contains('form')) {
+        if (this.props.location.pathname.includes('form')) {
             title = `${Locale.getMessage('builder.formBuilder.modify')}`;
-        } else if (this.props.location.pathname.contains('report')) {
+        } else if (this.props.location.pathname.includes('report')) {
             title = `${Locale.getMessage('builder.reportBuilder.modify')}`;
         }
         return (
