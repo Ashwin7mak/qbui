@@ -21,6 +21,7 @@ import WindowLocationUtils from '../../utils/windowLocationUtils';
 import AutomationUtils from '../../utils/automationUtils';
 import * as SpinnerConfigurations from '../../constants/spinnerConfigurations';
 import * as UrlConsts from "../../constants/urlConstants";
+import urlUtils from '../../utils/urlUtils';
 import _ from 'lodash';
 import {connect} from 'react-redux';
 import {loadForm, editNewRecord} from '../../actions/formActions';
@@ -411,7 +412,15 @@ export const RecordRoute = React.createClass({
                 {...this.props}
                 rootDrawer={!this.props.isDrawerContext}
                 closeDrawer={this.closeDrawer}
+                pathToAdd="/sr_app_:appId([A-Za-z0-9]+)_table_:tblId([A-Za-z0-9]+)_report_:rptId([A-Za-z0-9]+)_record_:recordId([A-Za-z0-9]+)"
                 >
+                <RecordRouteWithUniqueId
+                    {...this.props}
+                    rootDrawer={!this.props.isDrawerContext}
+                    closeDrawer={this.closeDrawer}
+                    isDrawerContext={true}
+                    hasDrawer={true}
+                />
             </DrawerContainer>);
     },
 
@@ -493,7 +502,8 @@ export const RecordRoute = React.createClass({
         const existingPath = this.props.location.pathname;
         const appId = _.get(this, 'props.match.params.appId', this.selectedAppId);
         //TODO: move to url consts and make a function in urlUtils
-        const link = `${existingPath}/sr_app_${appId}_table_${tblId}_report_${embeddedReport.id}_record_${recId}`;
+        const recordDrawerSegment = urlUtils.getRecordDrawerSegment(appId, tblId, embeddedReport.id, recId);
+        const link = existingPath + recordDrawerSegment;
         if (this.props.history) {
             this.props.history.push(link);
         }

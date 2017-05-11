@@ -63,8 +63,7 @@ export const EmbeddedReportLink = React.createClass({
 
     render() {
         const {appId, childTableId, childReportId, detailKeyFid, detailKeyValue} = this.props;
-        // render report link for small-breakpoint or if the element type is defined as a
-        // reportLink
+
         const link = UrlUtils.getRelatedChildReportLink(appId, childTableId, childReportId, detailKeyFid, detailKeyValue);
         let tableName;
         if (this.props.childTableName) {
