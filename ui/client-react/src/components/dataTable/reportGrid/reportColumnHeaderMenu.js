@@ -7,7 +7,8 @@ import Locale from '../../../locales/locales';
 import {I18nMessage} from '../../../utils/i18nMessage';
 import QbIcon from '../../qbIcon/qbIcon';
 import {connect} from 'react-redux';
-import {loadDynamicReport, hideColumn, openFieldSelectMenu} from '../../../actions/reportActions';
+import {loadDynamicReport} from '../../../actions/reportActions';
+import {hideColumn, openFieldSelectMenu} from '../../../actions/reportBuilderActions';
 import _ from 'lodash';
 
 import ReportUtils from '../../../utils/reportUtils';
