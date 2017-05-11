@@ -2,6 +2,7 @@ import React, {PropTypes, Component} from 'react';
 import GlobalAction from 'REUSE/components/globalAction/globalAction';
 import UserDropDown from './supportingComponents/userDropDown';
 import UserFeedBack from './supportingComponents/userFeedBack';
+import HelpButton from './supportingComponents/helpButton';
 
 // IMPORTING FROM CLIENT REACT
 // Needs to be refactored once these components are added to the reuse library
@@ -60,6 +61,8 @@ class DefaultTopNavGlobalActions extends Component {
                             position = {"center"}
                         />
                     </li>
+
+                    <li className="link globalAction"><HelpButton/></li>
                 </ul>
             </div>
         );
