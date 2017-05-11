@@ -90,7 +90,7 @@ export class Analytics extends Component {
      * Updates Evergage about whether the user is the manager for the current app
      */
     updateAppManagerStatus = () => {
-        if (_.has(this.props, 'userId') && _.has(this.props, 'app.ownerId')) {
+        if (this.props.userId && _.has(this.props, 'app.ownerId')) {
             const isAppManager = (this.props.userId === this.props.app.ownerId);
             this._aaq.push(['setCustomField', 'is_app_mgr', isAppManager, 'request']);
         }
