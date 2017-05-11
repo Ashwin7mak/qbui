@@ -5,6 +5,7 @@ let initialState = {};
 
 function initializeState() {
     initialState = {
+        redirectRoute: null,
         isCollapsed: true,
         addBeforeColumn: null,
         availableColumns: []
@@ -15,13 +16,13 @@ beforeEach(() => {
     initializeState();
 });
 
-describe('Test initial state of reportFieldSelectMenu reducer', () => {
+describe('Test initial state of reportBuilder reducer', () => {
     it('return correct initial state', () => {
         expect(reducer(undefined, {})).toEqual(initialState);
     });
 });
 
-describe('ReportFieldSelectMenu reducer functions for refreshing fields', () => {
+describe('ReportBuilder reducer functions for refreshing fields', () => {
     it('returns correct state with the correct fields', () => {
         let content = {
             response: {
