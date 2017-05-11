@@ -13,7 +13,7 @@
 
     var tablesPage = Object.create(e2ePageBase, {
         //new table button
-        newTableBtn : {get: function() {return browser.element('.newTableItem .newTable');}},
+        newTableBtn : {get: function() {return browser.element('.tablesList .newTableItem .newTable');}},
         //new table container
         tableContainer : {get: function() {return browser.element('.modal-dialog .bodyContainer');}},
         //new table header
@@ -58,6 +58,14 @@
         tableReadyDialogueTextParagraph1 : {get: function() {return this.tableReadyDialogue.element('.tableReadyText p');}},
         //new table ready Text
         tableReadyDialogueTextParagraph2 : {get: function() {return this.tableReadyDialogue.element('.tableReadyText p p');}},
+
+        //Delete Table
+        deleteTableActionButton: {get: function() {return browser.element('.iconActions .iconActionButton .buttonLabel');}},
+        deletePromtTextField: {get: function() {return browser.element('.modal-dialog .deleteTableDialogContent .prompt');}},
+        // Delete and Don't Delete button on modal dialog box
+        deleteButtonClassName: {get: function() {return '.modal-dialog .primaryButton';}},
+        deleteButton : {get: function() {return browser.element(this.deleteButtonClassName);}},
+        dontDeleteButton : {get: function() {return browser.element('.modal-dialog .secondaryButton');}},
 
 
 
@@ -146,7 +154,7 @@
          */
         selectTable: {value: function(tableName) {
             //wait until you see tableLists got loaded
-            browser.element('.tablesList').waitForVisible();
+            browser.element('.tablesList .link').waitForVisible();
             //filter table names from leftNav links
             var results = this.getAllTableLeftNavLinksList.value.filter(function(table) {
                 return table.getAttribute('textContent') === tableName;
@@ -503,6 +511,51 @@
             this.editTableResetBtn.click();
             //Need this for notification container to slide away
             return browser.pause(e2eConsts.shortWaitTimeMs);
+        }},
+
+        /**
+         * Method to click deleteTableActionButton
+         */
+        clickDeleteTableActionButton: {value: function() {
+            //wait until you see delete table action button
+            this.deleteTableActionButton.waitForVisible();
+            //Click on delete table action button
+            this.deleteTableActionButton.click();
+            return browser.waitForExist('.modal-dialog .deleteTableDialogContent');
+        }},
+
+        /**
+         * Method to click deleteTableButton
+         */
+        clickDeleteTableButton: {value: function() {
+            //use the predefined deleteTableButton here
+            expect(browser.isEnabled('.modal-dialog .primaryButton')).toBeTruthy();
+            //wait for deletetable button to be visible
+            this.deleteButton.waitForVisible();
+            //Click on delete table button
+            return this.deleteButton.click();
+        }},
+
+        /**
+         * Set the deletePromtTextField value
+         */
+        setDeletePromtTextFieldValue: {value: function(fieldValue) {
+            //wait for model dialogue
+            browser.waitForExist('.modal-dialog .deleteTableDialogContent');
+            //wait for deletePromtTextField tobe visible
+            this.deletePromtTextField.waitForVisible();
+            //set the deletePromtTextField value to 'YES'
+            return this.setInputValue(this.deletePromtTextField, 'input', fieldValue);
+        }},
+
+        /**
+         * Method to click don't delete Table button
+         */
+        clickDontDeleteTableButton: {value: function() {
+            //wait for the button tobe visible
+            this.dontDeleteButton.waitForVisible();
+            //Click on don't delete table button
+            return this.dontDeleteButton.click();
         }},
 
     });

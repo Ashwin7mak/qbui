@@ -67,13 +67,13 @@
             ReportContentPO.clickModifyTableSettings();
 
             //Step 5 - Click delete table action button
-            ReportContentPO.clickDeleteTableActionButton();
+            tableCreatePO.clickDeleteTableActionButton();
 
             // Step 6 - Set the deletePromtTextField value to 'YES'
-            ReportContentPO.setDeletePromtTextFieldValue('YES');
+            tableCreatePO.setDeletePromtTextFieldValue('YES');
 
             //Step 7 - Delete table
-            ReportContentPO.clickDeleteTableButton();
+            tableCreatePO.clickDeleteTableButton();
 
             //Need small wait here for the success container to slide away
             browser.pause(e2eConsts.shortWaitTimeMs);
@@ -104,13 +104,13 @@
             ReportContentPO.clickModifyTableSettings();
 
             //Step 5 - Click delete table action button
-            ReportContentPO.clickDeleteTableActionButton();
+            tableCreatePO.clickDeleteTableActionButton();
 
             // Step 6 - Set the deletePromtTextField value to 'YES'
-            ReportContentPO.setDeletePromtTextFieldValue('YES');
+            tableCreatePO.setDeletePromtTextFieldValue('YES');
 
             //Step 7 - Click don't delete table button
-            ReportContentPO.clickDontDeleteTableButton();
+            tableCreatePO.clickDontDeleteTableButton();
 
             //step 8 - go back to the tables page
             RequestAppsPage.get(e2eBase.getRequestTableEndpoint(realmName, testApp.id, testApp.tables[0].id));
@@ -164,10 +164,10 @@
                 ReportContentPO.clickModifyTableSettings();
 
                 //Step 5 - Click delete table action button
-                ReportContentPO.clickDeleteTableActionButton();
+                tableCreatePO.clickDeleteTableActionButton();
 
                 // Step 6 - Set the deletePromtTextField value
-                ReportContentPO.setDeletePromtTextFieldValue(testCase.fieldValue);
+                tableCreatePO.setDeletePromtTextFieldValue(testCase.fieldValue);
 
                 //Step 7 - make sure delete table button is disabled
                 expect(browser.isEnabled(ReportContentPO.deleteButtonClassName)).toBeFalsy();
