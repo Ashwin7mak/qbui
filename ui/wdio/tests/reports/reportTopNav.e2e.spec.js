@@ -66,7 +66,7 @@
             //Step1: Verify if the global icons are displayed
             TopNavPO.topNavGlobalActDivEl.waitForVisible();
             //Step2: Verify the no.of global action icons
-            expect(TopNavPO.topNavGlobalActionsListEl.value.length).toBe(4);
+            expect(TopNavPO.topNavGlobalActionsListEl.value.length).toBe(3);
         });
     });
 }());

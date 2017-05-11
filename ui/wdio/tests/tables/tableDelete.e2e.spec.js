@@ -75,6 +75,12 @@
             //Step 7 - Delete table
             ReportContentPO.clickDeleteTableButton();
 
+            //Need small wait here for the success container to slide away
+            browser.pause(e2eConsts.shortWaitTimeMs);
+
+            //Wait until new table button visible
+            tableCreatePO.newTableBtn.waitForVisible();
+
             //Step 8 - Make sure table is actually deleted
             let newTableLinksCount = tableCreatePO.getAllTableLeftNavLinksList.value.length;
             //Verify the table links count decreased by 1
