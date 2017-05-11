@@ -6,7 +6,6 @@ import {UNSAVED_RECORD_ID} from '../constants/schema';
 import {ShowAppModal, HideAppModal} from '../components/qbModal/appQbModalFunctions';
 import WindowUtils from '../utils/windowLocationUtils';
 import {CONTEXT} from '../actions/context';
-import {NEW_RECORD_VALUE} from "../constants/urlConstants";
 import _ from 'lodash';
 // Uses singleton pattern
 // Only one instance of this class may be instantiated so that the same history can be used
@@ -151,13 +150,12 @@ class AppHistory {
 
     getStores(state) {
         let recordStore = (state.record && state.record.records && state.record.recordIdBeingEdited) ? state.record : undefined;
-        console.log('RECORDSTORE: ', recordStore);
 
         if (!recordStore) {
             recordStore = {};
         } else if (recordStore.records[0] && recordStore.records[0].pendEdits) {
             let recId = recordStore.records[0].pendEdits.recId;
-            recordStore = getPendEdits(recordStore, recId || NEW_RECORD_VALUE);
+            recordStore = getPendEdits(recordStore);
         } else {
             recordStore = getPendEdits(recordStore);
         }
@@ -208,7 +206,7 @@ class AppHistory {
                 //  fetch the 1st report in the store
                 //  TODO: revisit to ensure appropriate support for store with multiple reports
                 if (_.isEmpty(state.report[0]) === false) {
-                    const reportStore = state.report[0];
+                    const reportStore = state;
                     if (_.has(reportStore, 'data.fields')) {
                         fields = reportStore.data.fields;
                     }
@@ -241,7 +239,7 @@ class AppHistory {
         HideAppModal();
     }
 
-    /*
+    /**
      * Helper method to get fields from the right store.
      * For inline edit on reports get fields from ReportStore
      * Otherwise, get fields from FormStore.
@@ -252,11 +250,15 @@ class AppHistory {
             const state = self.store.getState();
             const {recordStore} = self.getStores(state);
 
-            if (recordStore.isInlineEditOpen) {
-                fields = self.getFieldsFromReportStore();
-            } else {
-                fields = self.getFieldsFromFormStore();
-            }
+            //TODO: Currently isInLineEditOpen is hardcoded to true, this broke the navigation confirmation modal for form view edit and form view add a new record
+            //TODO: inline edit confirmation modal is broken and needs to be fixed
+
+            // if (recordStore.isInlineEditOpen) {
+            //     fields = self.getFieldsFromReportStore();
+            // } else {
+            //     fields = self.getFieldsFromFormStore();
+            // }
+            fields = self.getFieldsFromFormStore();
         }
         return fields;
     }
@@ -289,7 +291,6 @@ class AppHistory {
                     () => {
                         self._continueToDestination();
                         self.store.dispatch(self.saveFormComplete(CONTEXT.FORM.EDIT));
-                        self.store.dispatch(self.showErrorMsgDialog());
                         self.store.dispatch(self.hideTrowser());
                     }
                 );
@@ -307,11 +308,11 @@ class AppHistory {
                     () => {
                         self._continueToDestination();
                         self.store.dispatch(self.saveFormComplete(CONTEXT.FORM.EDIT));
-                        self.store.dispatch(self.showErrorMsgDialog());
                         self.store.dispatch(self.hideTrowser());
                     }
                 );
             }
+            self.store.dispatch(self.showErrorMsgDialog());
         }
     }
 
