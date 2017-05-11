@@ -34,7 +34,20 @@ describe('HelpButton', () => {
         expect(component.find(Icon)).toHaveProp('icon', 'help');
     });
 
-    it('does not display the walkme on touch devices', () => {
+    it('shows a notification that help is not currently available', () => {
+        spyOn(mockNotificationManager, 'info');
+
+        component = shallow(<HelpButton/>);
+
+        component.find('.reHelpButton').simulate('click');
+
+        expect(mockNotificationManager.info).toHaveBeenCalled();
+    });
+
+    // The following 3 tests are disabled because the help button has
+    // been disabled for beta. Per PO/XD, the help button will be re-enabled
+    // or deleted before Early Access when customers are on the app.
+    xit('does not display the walkme on touch devices', () => {
         spyOn(mockDevice, 'isTouch').and.returnValue(true);
         spyOn(window.WalkMePlayerAPI, 'toggleMenu');
 
@@ -45,7 +58,7 @@ describe('HelpButton', () => {
         expect(window.WalkMePlayerAPI.toggleMenu).not.toHaveBeenCalled();
     });
 
-    it('displays the help walkme when clicked', () => {
+    xit('displays the help walkme when clicked', () => {
         spyOn(window.WalkMePlayerAPI, 'toggleMenu');
 
         component = shallow(<HelpButton />);
@@ -55,7 +68,7 @@ describe('HelpButton', () => {
         expect(window.WalkMePlayerAPI.toggleMenu).toHaveBeenCalled();
     });
 
-    it('displays a message if the help walkme fails', () => {
+    xit('displays a message if the help walkme fails', () => {
         spyOn(window.WalkMePlayerAPI, 'toggleMenu').and.throwError('failed');
         spyOn(mockNotificationManager, 'info');
 
