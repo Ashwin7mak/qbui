@@ -530,9 +530,9 @@
             //use the predefined deleteTableButton here
             expect(browser.isEnabled('.modal-dialog .primaryButton')).toBeTruthy();
             //wait for deletetable button to be visible
-            reportContentPO.deleteButton.waitForVisible();
+            browser.element('.modal-dialog .modal-footer .primaryButton').waitForVisible();
             //Click on delete table button
-            return reportContentPO.deleteButton.click();
+            return browser.element('.modal-dialog .modal-footer .primaryButton').click();
         }},
 
         /**
@@ -552,9 +552,9 @@
          */
         clickDontDeleteTableButton: {value: function() {
             //wait for the button tobe visible
-            reportContentPO.dontDeleteButton.waitForVisible();
+            browser.element('.modal-dialog .modal-footer .secondaryButton').waitForVisible();
             //Click on don't delete table button
-            return reportContentPO.dontDeleteButton.click();
+            return browser.element('.modal-dialog .modal-footer .secondaryButton').click();
         }},
 
     });
