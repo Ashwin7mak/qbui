@@ -359,7 +359,7 @@ export const Nav = React.createClass({
                 selectedRecordId={viewingRecordId}
             />
 
-            <Analytics dataset={Config.evergageDataset} />
+            <Analytics dataset={Config.evergageDataset} app={this.getSelectedApp()} />
 
             <NotificationContainer/>
 
