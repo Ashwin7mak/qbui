@@ -78,8 +78,12 @@ exports.config = {
     // Appium Server Configuration
     // =============================
     // Define all options that are relevant for connecting to appium server
-    host: '127.0.0.1',
-    port: '4723',
+    appium: {
+        args: {
+            host: '127.0.0.1',
+            port: '4723',
+        }
+    },
     //
     // If you have trouble getting all important capabilities together, check out the
     // Sauce Labs platform configurator - a great tool to configure your capabilities:
