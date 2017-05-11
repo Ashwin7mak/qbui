@@ -114,12 +114,12 @@
             browser.moveToObject(source);
             browser.buttonDown();
             browser.pause(formBuilderPO.oneSecond);
-            formBuilderPO.slowDrag(target, label);
+            briwser.moveToObject(target);
             // verify drag token label (which won't ever feature a 'required' asterisk)
             formBuilderPO.fieldTokenDragging.waitForExist();
             expect(formBuilderPO.fieldTokenDragging.getText()).toEqual(label.replace('* ', ''));
             // drag back to source & drop
-            formBuilderPO.slowDrag(source, label);
+            browser.moveToObject(source);
             browser.buttonUp();
             browser.pause(formBuilderPO.fiveSeconds);
             expect(formBuilderPO.getFieldLabels()).toEqual(origFields);
