@@ -572,7 +572,11 @@ export default {
             multiChoice: "Les choix"
         },
         builder: {
+            reportBuilder: {
+                modify: 'Modifiez rapport'
+            },
             formBuilder: {
+                modify: 'Modifier formulaire',
                 unimplemented: "La fonctionnalité n'est pas disponible en ce moment",
                 removeField: "Supprimer le champ du formulaire",
                 tooltips: {
@@ -614,8 +618,7 @@ export default {
                 first: "Option 1",
                 second: "Option 2",
                 third: "Option 3"
-            },
-            modify: 'Modifier formulaire'
+            }
         },
         featureSwitchAdmin: {
             defaultFeatureName: "Fonctionnalité",

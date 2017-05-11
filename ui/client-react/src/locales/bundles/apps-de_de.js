@@ -573,7 +573,11 @@ export default {
             multiChoice: "Wahlen"
         },
         builder: {
+            reportBuilder: {
+                modify: 'Bericht ändern'
+            },
             formBuilder: {
+                modify: 'Formular ändern',
                 unimplemented: "Feature ist momentan nicht verfügbar",
                 removeField: "Feld aus Form entfernen",
                 tooltips: {
@@ -615,8 +619,7 @@ export default {
                 first: "Option 1",
                 second: "Option 2",
                 third: "Option 3"
-            },
-            modify: 'Formular ändern'
+            }
         },
         featureSwitchAdmin: {
             defaultFeatureName: "Feature",

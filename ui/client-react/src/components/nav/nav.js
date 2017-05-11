@@ -109,7 +109,8 @@ export const Nav = React.createClass({
     },
 
     navigateToReportBuilder() {
-        const {appId, tblId, rptId} = this.props.match.params;
+        const {appId, tblId} = this.props.match.params;
+        const {rptId} = this.getReportsData();
 
         let link = `${UrlConsts.BUILDER_ROUTE}/app/${appId}/table/${tblId}/report/${rptId}`;
 

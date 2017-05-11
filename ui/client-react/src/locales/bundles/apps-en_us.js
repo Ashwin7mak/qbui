@@ -581,7 +581,11 @@ export default {
             multiChoice: "Choices"
         },
         builder: {
+            reportBuilder: {
+                modify: 'Modify report'
+            },
             formBuilder: {
+                modify: 'Modify form',
                 unimplemented: "Feature is not available right now",
                 removeField: "Remove field from form",
                 tooltips: {
@@ -624,8 +628,7 @@ export default {
                 first: "Option 1",
                 second: "Option 2",
                 third: "Option 3"
-            },
-            modify: 'Modify form'
+            }
         },
         featureSwitchAdmin: {
             defaultFeatureName: "Feature",
