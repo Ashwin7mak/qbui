@@ -70,6 +70,8 @@
                 // Step 2: Click on delete button from the dialogue box
                 reportContentPO.deleteButton.waitForVisible();
                 reportContentPO.deleteButton.click();
+                //Need this to wait for delete success container to slide away
+                browser.pause(e2eConsts.mediumWaitTimeMs);
 
                 // Step 3: Check for the deleted record on the first page
                 reportContentPO.checkForTheAbsenceDeletedRecordOnTheCurrentPage(deletedRecord);
@@ -97,6 +99,8 @@
                 // Step 2: Click on delete button from the dialogue box
                 reportContentPO.dontDeleteButton.waitForVisible();
                 reportContentPO.dontDeleteButton.click();
+                //Need this to wait for delete success container to slide away
+                browser.pause(e2eConsts.mediumWaitTimeMs);
 
                 // Step 3: Check for the deleted record on the first page
                 reportContentPO.checkForThePresenceDeletedRecordOnTheCurrentPage(deletedRecord);
