@@ -110,8 +110,6 @@
          * @returns A promise that will resolve after waiting for the report records to be displayed
          */
         waitForReportContent: {value: function() {
-            //wait until you see tableLists got loaded
-            browser.waitForExist('.tablesList .leftNavLabel');
             // wait until you see .qbTbody
             browser.element('.qbTbody').waitForVisible();
             return browser.element('.qbRow').waitForVisible();
