@@ -33,7 +33,8 @@ import {CONTEXT} from '../../actions/context';
 import {getRecord} from '../../reducers/record';
 import './record.scss';
 import withUniqueId from '../hoc/withUniqueId';
-import DrawerContainer from '../drawer/drawerContainer';
+//import DrawerContainer from '../drawer/drawerContainer';
+import RecordInDrawer from '../drawer/recordInDrawer';
 
 let logger = new Logger();
 let FluxMixin = Fluxxor.FluxMixin(React);
@@ -408,20 +409,12 @@ export const RecordRoute = React.createClass({
      */
     getDrawerContainer() {
         return (
-            <DrawerContainer
+            <RecordInDrawer
                 {...this.props}
                 rootDrawer={!this.props.isDrawerContext}
                 closeDrawer={this.closeDrawer}
                 pathToAdd="/sr_app_:appId([A-Za-z0-9]+)_table_:tblId([A-Za-z0-9]+)_report_:rptId([A-Za-z0-9]+)_record_:recordId([A-Za-z0-9]+)"
-                >
-                <RecordRouteWithUniqueId
-                    {...this.props}
-                    rootDrawer={!this.props.isDrawerContext}
-                    closeDrawer={this.closeDrawer}
-                    isDrawerContext={true}
-                    hasDrawer={true}
-                />
-            </DrawerContainer>);
+                />);
     },
 
     /**
