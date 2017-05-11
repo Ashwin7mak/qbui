@@ -25,6 +25,8 @@ const user = (state = {isLoading: false}, action) => {
 
 export const getLoggedInUser = state => state.user;
 
-export const getLoggedInUserId = state => state.user.id;
+export const getLoggedInUserId = state => (state.user ? state.user.id : undefined);
+
+export const getLoggedInUserAdminStatus = state => (state.user ? state.user.administrator : undefined);
 
 export default user;

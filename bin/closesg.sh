@@ -12,4 +12,4 @@ IP=$(curl http://checkip.amazonaws.com)/32
 echo $IP is the IP of the CodeBuild Instance
 
 cmd="aws ec2 revoke-security-group-ingress --group-id ${1} --protocol tcp --port 443 --cidr $IP --region us-west-2"
-with_role "arn:aws:iam::723670383381:role/CodePipelineCrossAccountRole-us-west-2" $cmd
+with_role "arn:aws:iam::723670383381:role/CodeBuildCrossAccountRole-us-west-2" $cmd

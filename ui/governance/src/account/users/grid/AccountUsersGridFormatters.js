@@ -36,13 +36,19 @@ export const FormatUserStatusHTML = (hasAppAccess, cellInfo) => {
     }
 };
 
-export const FormatIsInactive = (lastAccessString, cellInfo) => {
+
+
+export const FormatIsInactiveBool = (lastAccessString) => {
     if (IsTimeNull(lastAccessString)) {
-        return RenderBoolColumn(false);
+        return false;
     } else {
         const daysSinceLastAccess = moment().diff(lastAccessString, 'days');
-        return RenderBoolColumn(daysSinceLastAccess >= 180);
+        return daysSinceLastAccess >= 180;
     }
+};
+
+export const FormatIsInactive = (lastAccessString, cellInfo) => {
+    return RenderBoolColumn(FormatIsInactiveBool(lastAccessString));
 };
 
 export const FormatLastAccessString = (lastAccessString, cellInfo) => IsTimeNull(lastAccessString) ? 'never' : moment(lastAccessString).format("MMMM D YYYY");
