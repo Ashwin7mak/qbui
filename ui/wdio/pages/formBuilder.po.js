@@ -225,7 +225,9 @@ class formBuilderPage {
         let targetLabel;
         browser.waitUntil(function() {
             // jiggle the cursor around the target field
-            browser.moveToObject(target);// + ' .fieldLabel', 1, 1);
+            browser.moveToObject(target);
+            browser.pause(oneSecond);
+            browser.moveToObject(target + ' .fieldLabel');
             browser.pause(oneSecond);
             targetLabel = browser.element(target).getText();
             return sourceLabel === targetLabel;
@@ -327,7 +329,9 @@ class formBuilderPage {
     KB_save(index) {
         // save form via keyboard
         //browser.keys(['Command', 's', 'Command']);
-        this.save(); // cmd above doesn't work on EDGE... file a bug if manually reproducible!
+        // cmd above doesn't work on EDGE...
+        // todo: figure out this problem; not reproducible manually
+        this.save();
         // wait for view record form
         browser.pause(fiveSeconds);
         return this;
