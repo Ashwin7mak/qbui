@@ -90,8 +90,8 @@ describe('Report actions', () => {
 
     it('moveColumn actions dispatches types.MOVE_COLUMN with params', () => {
         const params = {
-            sourceLabel: 6,
-            targetLabel: 7
+            sourceLabel: 'Column A',
+            targetLabel: 'Column B'
         };
         const expectedAction = event(context, types.MOVE_COLUMN, params);
         expect(reportActions.moveColumn(context, params)).toEqual(expectedAction);

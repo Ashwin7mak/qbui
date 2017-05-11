@@ -396,11 +396,13 @@ export const QbGrid = React.createClass({
 
     /**
      * Called when a column is dragged onto a target
+     * @param object which has the drag source and drop target
      */
-    onMoveColumn(_ref2) {
+    onMoveColumn(labels) {
+        debugger;
         let params = {
-            sourceLabel: _ref2.sourceLabel,
-            targetLabel: _ref2.targetLabel
+            sourceLabel: labels.sourceLabel,
+            targetLabel: labels.targetLabel
         };
         this.props.moveColumn(CONTEXT.REPORT.NAV, params);
     },
@@ -415,7 +417,7 @@ export const QbGrid = React.createClass({
                     header: {
                         props: {
                             scope: 'col',
-                            onMove: o => this.onMoveColumn(o)
+                            onMove: this.onMoveColumn
                         },
                         label: this.getCheckboxHeader(),
                         transforms: [this.getActionCellProps],
