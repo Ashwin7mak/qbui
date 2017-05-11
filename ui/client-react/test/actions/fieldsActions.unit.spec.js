@@ -357,4 +357,12 @@ describe('Field Actions failure workflow', () => {
                 });
         });
     });
+
+    describe('setfieldsPendingEditToFalse', () => {
+        it('creates an action that sets isPendingEdit to false', () => {
+            expect(fieldActions.setfieldsPendingEditToFalse()).toEqual({
+                type: types.SET_IS_PENDING_EDIT_TO_FALSE,
+                content: null});
+        });
+    });
 });
