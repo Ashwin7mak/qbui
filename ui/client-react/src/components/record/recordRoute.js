@@ -17,7 +17,7 @@ import Loader from 'react-loader';
 import RecordHeader from './recordHeader';
 import {UnloadableNode} from '../../components/hoc/unloadable';
 import Breakpoints from '../../utils/breakpoints';
-import WindowLocationUtils from '../../utils/windowLocationUtils';
+import {WindowHistory} from '../../utils/windowHistoryUtils';
 import AutomationUtils from '../../utils/automationUtils';
 import * as SpinnerConfigurations from '../../constants/spinnerConfigurations';
 import * as UrlConsts from "../../constants/urlConstants";
@@ -348,7 +348,7 @@ export const RecordRoute = React.createClass({
         const recordId = +this.props.match.params.recordId;
         this.navigateToRecord(recordId);
 
-        WindowLocationUtils.pushWithQuery(EDIT_RECORD_KEY, recordId);
+        WindowHistory.pushWithQuery(EDIT_RECORD_KEY, recordId);
     },
 
     isAutomationEnabled() {
@@ -379,7 +379,7 @@ export const RecordRoute = React.createClass({
      * @param data row record data
      */
     editNewRecord() {
-        WindowLocationUtils.pushWithQuery(EDIT_RECORD_KEY, UrlConsts.NEW_RECORD_VALUE);
+        WindowHistory.pushWithQuery(EDIT_RECORD_KEY, UrlConsts.NEW_RECORD_VALUE);
     },
 
     getPageActions() {

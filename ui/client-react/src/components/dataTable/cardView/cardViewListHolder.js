@@ -12,7 +12,7 @@ import * as SpinnerConfigurations from "../../../constants/spinnerConfigurations
 import _ from 'lodash';
 import {connect} from 'react-redux';
 import {openRecord} from '../../../actions/recordActions';
-import WindowLocationUtils from '../../../utils/windowLocationUtils';
+import {WindowHistory} from '../../../utils/windowHistoryUtils';
 import {EDIT_RECORD_KEY} from '../../../constants/urlConstants';
 import {CONTEXT} from '../../../actions/context';
 import EmptyImage from '../../../../../client-react/src/assets/images/empty box graphic.svg';
@@ -363,7 +363,7 @@ export let CardViewListHolder = React.createClass({
                     let previousRecordId = index > 0 ? recordsArray[index - 1][key].value : null;
 
                     this.props.openRecord(recId, nextRecordId, previousRecordId);
-                    WindowLocationUtils.pushWithQuery(EDIT_RECORD_KEY, recId);
+                    WindowHistory.pushWithQuery(EDIT_RECORD_KEY, recId);
                 }
             }
         }

@@ -7,7 +7,7 @@ import Logger from "../../../utils/logger";
 import Breakpoints from "../../../utils/breakpoints";
 import ReportActions from "../../actions/reportActions";
 import ReportUtils from '../../../utils/reportUtils';
-import WindowLocationUtils from '../../../utils/windowLocationUtils';
+import {WindowHistory} from '../../../utils/windowHistoryUtils';
 import Fluxxor from "fluxxor";
 import * as SchemaConsts from "../../../constants/schema";
 import {GROUP_TYPE} from "../../../../../common/src/groupTypes";
@@ -531,7 +531,7 @@ export const ReportContent = React.createClass({
         //so that the record gets updated
         this.openRow(recordId);
         this.handleEditRecordStart(recordId, null, false);
-        WindowLocationUtils.pushWithQuery(EDIT_RECORD_KEY, recordId);
+        WindowHistory.pushWithQuery(EDIT_RECORD_KEY, recordId);
     },
 
     /**

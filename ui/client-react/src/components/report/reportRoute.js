@@ -8,7 +8,7 @@ import {Link} from 'react-router-dom';
 import Logger from '../../utils/logger';
 import QueryUtils from '../../utils/queryUtils';
 import NumberUtils from '../../utils/numberUtils';
-import WindowLocationUtils from '../../utils/windowLocationUtils';
+import {WindowHistory} from '../../utils/windowHistoryUtils';
 import simpleStringify from '../../../../common/src/simpleStringify';
 import constants from '../../../../common/src/constants';
 import Fluxxor from 'fluxxor';
@@ -120,7 +120,7 @@ const ReportRoute = React.createClass({
      * @param data row record data
      */
     editNewRecord() {
-        WindowLocationUtils.pushWithQuery(EDIT_RECORD_KEY, NEW_RECORD_VALUE);
+        WindowHistory.pushWithQuery(EDIT_RECORD_KEY, NEW_RECORD_VALUE);
     },
 
     getPageActions(maxButtonsBeforeMenu) {

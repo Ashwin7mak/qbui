@@ -151,12 +151,16 @@ class AppHistory {
 
     getStores(state) {
         let recordStore = (state.record && state.record.records && state.record.recordIdBeingEdited) ? state.record : undefined;
-        // let recId = recordStore.records[0] && recordStore.records[0].pendEdits ? recordStore.records[0].pendEdits.recId : null;
-        // console.log('RECORDSTORE: ', recordStore);
+        console.log('RECORDSTORE: ', recordStore);
 
-        // recordStore = recordStore ? getPendEdits(recordStore, recId || NEW_RECORD_VALUE) : {};
-        recordStore = recordStore ? getPendEdits(recordStore) : {};
-
+        if (!recordStore) {
+            recordStore = {};
+        } else if (recordStore.records[0] && recordStore.records[0].pendEdits) {
+            let recId = recordStore.records[0].pendEdits.recId;
+            recordStore = getPendEdits(recordStore, recId || NEW_RECORD_VALUE);
+        } else {
+            recordStore = getPendEdits(recordStore);
+        }
         return {
             recordStore: recordStore,
             formsStore: (state.forms && state.forms.view) ? state.forms.view : {},
