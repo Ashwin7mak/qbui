@@ -9,74 +9,92 @@ class formBuilderPage {
         // CANCEL (form) button in footer bar
         return browser.element('.cancelFormButton');
     }
+
     get clearSearch() {
         // CLEAR (X) button in the SEARCH (new fields) textbox (left panel)
         return browser.element('.clearSearch .searchIcon');
     }
+
     get deleteFieldIcon() {
         // REMOVE (field from form) icon (when a field is selected or highlighted)
         return browser.element('.deleteFieldIcon');
     }
+
     get fieldProperty_Name() {
         // NAME textfield in the FIELD PROPERTIES panel (when a field is selected)
         return browser.element('.textPropertyContainer input[type="text"]');
     }
+
     get fieldProperty_Required() {
         // REQUIRED ('Must be filled in') checkbox in the FIELD PROPERTIES panel (when a field is selected)
         return browser.element('.checkboxPropertyContainer .checkbox');
     }
+
     get fieldPropertiesTitle() {
         // TITLE in the FIELD PROPERTIES panel (when a field is selected)
         return browser.element('.fieldPropertiesTitle');
     }
+
     get fieldTokenDragging() {
         // the token which appears when dragging a field to another position
         return browser.element('.fieldTokenDragging');
     }
+
     get fieldTokenTitle() {
         // the label of the first NEW FIELD token
         return browser.element('.fieldTokenTitle');
     }
+
     get firstField() {
         // the first field (wait for it after open)
         return browser.element('.field');
     }
+
     get formBuilderContainer() {
         // the whole form builder page (all 3 panels)
         return browser.element('.formBuilderContainer');
     }
+
     get listOfElementsItemGroup() {
         // The FIRST group in the list of NEW FIELDs (left panel)
         return browser.element('.listOfElementsItemGroup');
     }
+
     get listOfElementsItem() {
         // The FIRST field in the list of NEW FIELDs (left panel)
         return browser.element('.listOfElementsItem');
     }
+
     get requiredCheckboxChecked() {
         // The MUST BE FILLED IN checkbox in its CHECKED state
         return browser.element('.checkboxPropertyContainer .checkbox:checked');
     }
+
     get requiredCheckboxNotChecked() {
         // The MUST BE FILLED IN checkbox in its UNCHECKED state
         return browser.element('.checkboxPropertyContainer .checkbox:not(:checked)');
     }
+
     get saveBtn() {
         // SAVE (form) button in footer bar
         return browser.element('.saveFormButton');
     }
+
     get saveOrCancelFooter() {
         // footer bar (container for SAVE & CANCEL buttons)
         return browser.element('.saveOrCancelFooter');
     }
+
     get searchInput() {
         // SEARCH textbox in the NEW FIELDS panel
         return browser.element('.searchInput');
     }
+
     get selectedField() {
         // The selected field in the form builder
         return browser.element('.formElementContainer .selectedFormElement');
     }
+
     get success() {
         // FORM SUCCESSFULLY SAVED growl msg
         return browser.element('.notification-success');
@@ -86,13 +104,13 @@ class formBuilderPage {
         // Returns a locator string for a specific field in the form builder
         return '.formElementContainer:nth-child(' + index + ')';
     }
+
     cancel() {
         // Clicks on CANCEL in the form builder and waits for the next page to render
         this.cancelBtn.click();
-        // do we have a method to wait for spinner?
-        browser.pause(fiveSeconds);
         return this;
     }
+
     getFieldLabels() {
         // Gets the list of field labels from the form builder
         let fields = browser.elements('.field');
@@ -105,15 +123,7 @@ class formBuilderPage {
             return label;
         });
     }
-    waitForLabels(numLabels) {
-        // get the field list & wait to be sure it's not 'polluted' due to DOM still settling after other activity
-        // (i.e. contains an unexpected array like ['Must be filled in', ...] after moving or adding fields)
-        let newFields = this.getFieldLabels();
-        while (!newFields.length === numLabels) {
-            newFields = this.getFieldLabels();
-        }
-        return newFields;
-    }
+
     getNewFieldLabels() {
         // Gets the list of field labels from the NEW FIELD panel
         let labelEls = browser.elements('.listOfElementsItem');
@@ -121,6 +131,7 @@ class formBuilderPage {
             return labelEl.getText();
         });
     }
+
     moveByName(source, target) {
         // Clicks on the specified source field label and drags it to the specified target field label
         let labels = this.getFieldLabels();
@@ -128,91 +139,104 @@ class formBuilderPage {
         // add 1 to index because indexOf is zero-based whereas getFieldLocator is one-based
         source = this.getFieldLocator(labels.indexOf(source) + 1);
         target = this.getFieldLocator(labels.indexOf(target) + 1);
-        this.slowDragAndDrop(source, target);
-        return this;
+        return this.slowDragAndDrop(source, target);
     }
+
     open() {
         // Invokes the form builder from the VIEW RECORD page
         this.openMenu();
         topNavPO.modifyThisForm.waitForExist();
         topNavPO.modifyThisForm.click();
         this.firstField.waitForVisible();
-        browser.pause(fiveSeconds);
-        browser.pause(fiveSeconds);
-        return this;
+        return this.getFieldLabels(); // better than pause?
     }
+
     openMenu() {
+        // Clicks on the 'gear' button to invoke the SETTINGS menu
+        // todo: move this (and open?) to topNavPO?
         topNavPO.formBuilderBtn.waitForExist();
         try {
             topNavPO.formBuilderBtn.click();
-        }
-        catch (err) {
+        } catch (err) {
             // wait & try again to avoid 'other element would receive the click...."
             // which is presumably due to the SAVE SUCCESSFUL growl msg
-            // which apparently we're not supposed to wait for due to other issues
+            // which I understand we're not supposed to wait for due to sauce issues
             browser.pause(oneSecond);
             this.openMenu();
         }
     }
+
     removeField(index) {
         // Removes the specified field by clicking on its DELETE icon
         let fieldLocator = this.getFieldLocator(index);
         let field = browser.element(fieldLocator);
         let deletedFieldName = field.getText();
         browser.moveToObject(fieldLocator + ' .fieldLabel');
+        browser.pause(oneSecond);
         field.element('.deleteFieldIcon').click();
         browser.pause(oneSecond);
         return deletedFieldName;
     }
+
     save() {
         // Clicks on the SAVE button in the form builder and waits for the next page to appear
         this.saveBtn.click();
-        // wait for spinner instead if we have code for it...?
-        browser.pause(fiveSeconds);
         return this;
     }
+
     search(text) {
         // Types the specified text into the SEARCH textfield (or clicks on CLEAR if text is not specified) and waits for search results
-        let oldResults = this.getNewFieldLabels();
-        let newResults = oldResults;
         if (text) {
             this.searchInput.setValue(text);
         } else {
             this.clearSearch.click();
         }
-        // wait for the results to change
-        while (JSON.stringify(oldResults) === JSON.stringify(newResults)) {
-            newResults = this.getNewFieldLabels();
-            browser.pause(oneSecond);
-        }
-        return newResults;
+        // wait for groups to appear or disappear
+        // depending on whether we searched or cleared
+        this.listOfElementsItemGroup.waitForExist(null, (text !== null));
+        // todo: write waitForNewLabels() (see waitForLabels) to avoid pause
+        browser.pause(fiveSeconds);
+        return this.getNewFieldLabels();
     }
+
     selectFieldByIndex(index) {
         // Selects the field at the specified index and verifies that it is reflected in the properties panel
-        // can't click on fieldLabel due to 'other element would get the click...'
-        browser.moveToObject(this.getFieldLocator(index) + ' .fieldLabel').buttonDown().buttonUp();
+        let field = this.getFieldLocator(index);
+        browser.element(field).click();
+        browser.moveToObject(field, 5, 5);
+        browser.buttonDown();
+        browser.buttonUp();
         this.fieldProperty_Name.waitForExist(); // assume it didn't exist, i.e. nothing was previously selected
         return this.fieldProperty_Name.getText();
     }
+
+    setViewportSize(size, resizeViewport) {
+        try {
+            browser.setViewportSize(size, resizeViewport);
+        } catch (err) {
+            // hoping to avoid "Failed: A window size operation failed because the window is not currently available"
+            browser.pause(oneSecond);
+            setViewPortSize(size);
+        }
+    }
+
     slowDrag(target, sourceLabel) {
         // Moves the cursor to specified target field and waits until target displays the the specified label
         let targetLabel;
         browser.waitUntil(function() {
             // jiggle the cursor around the target field
-            browser.moveToObject(target + ' .fieldLabel', 1, 1);
-            browser.pause(oneSecond);
-            browser.moveToObject(target + ' .fieldLabel', 2, 2);
+            browser.moveToObject(target);// + ' .fieldLabel', 1, 1);
             browser.pause(oneSecond);
             targetLabel = browser.element(target).getText();
             return sourceLabel === targetLabel;
         }, 10000, 'target preview label (' + targetLabel + ") didn't match source label (" + sourceLabel + ') after dragging');
         return this;
     }
+
     slowDragAndDrop(source, target) {
         // Clicks on the specified source field and drags it to the specified target field
         let label = browser.element(source).getText();
-        browser.moveToObject(source);
-        browser.pause(oneSecond);
+        browser.moveToObject(source, 5, 5);
         browser.buttonDown();
         browser.pause(oneSecond);
         // move to target & wait until preview appears
@@ -221,7 +245,17 @@ class formBuilderPage {
         browser.buttonUp();
         // this is necessary for Edge... without it, the dragToken remains displayed
         browser.element(target).click();
-        return this;
+        return this.getFieldLabels();
+    }
+
+    waitForLabels(numLabels) {
+        // get the field list & wait to be sure it's not 'polluted' due to DOM still settling after other activity
+        // (i.e. contains an unexpected array like ['Must be filled in', ...] after moving or adding fields)
+        let newFields = this.getFieldLabels();
+        while (!newFields.length === numLabels) {
+            newFields = this.getFieldLabels();
+        }
+        return newFields;
     }
 
     KB_cancel() {
@@ -234,6 +268,7 @@ class formBuilderPage {
         browser.keys(['Escape']); // close page
         return this;
     }
+
     KB_focusField(index) {
         // focus field via keyboard
         this.KB_focusForm();
@@ -243,12 +278,14 @@ class formBuilderPage {
         }
         return this;
     }
+
     KB_focusForm() {
         // focus form via keyboard
         this.searchInput.click();
         browser.keys(['Tab', 'Enter']);
         return this;
     }
+
     KB_moveField(sourceIndex, targetIndex) {
         // move field via keyboard
         let originalOrder = this.getFieldLabels();
@@ -267,15 +304,16 @@ class formBuilderPage {
         expect(revisedOrder[targetIndex - 1]).toEqual(sourceField);
         return revisedOrder;
     }
+
     KB_removeFieldViaIcon(index) {
         // remove field via icon via keyboard
-        this.KB_selectField(index);
-        let deletedField = this.selectedField.getText();
-        browser.keys(['Tab', 'Enter']); // select & press DELETE icon
-        browser.pause(fiveSeconds);
+        let deletedField = this.KB_selectField(index);
+        // select & press DELETE icon
+        browser.keys(['Tab', 'Enter']);
         expect(this.getFieldLabels()).not.toContain(deletedField);
         return deletedField;
     }
+
     KB_removeFieldViaBackspace(index) {
         // remove field via backspace key via keyboard
         this.KB_selectField(index); // field doesn't need to be selected
@@ -285,6 +323,7 @@ class formBuilderPage {
         expect(this.getFieldLabels()).not.toContain(deletedField);
         return deletedField;
     }
+
     KB_save(index) {
         // save form via keyboard
         //browser.keys(['Command', 's', 'Command']);
@@ -293,9 +332,11 @@ class formBuilderPage {
         browser.pause(fiveSeconds);
         return this;
     }
+
     KB_selectField(index) {
         // select the specified field via keyboard
         this.KB_focusField(index);
+        browser.pause(oneSecond);
         browser.keys(['Enter']); // select field
         this.selectedField.waitForExist();
         return this.selectedField.getText();
