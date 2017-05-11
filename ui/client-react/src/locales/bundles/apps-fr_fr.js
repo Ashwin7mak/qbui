@@ -122,7 +122,10 @@ export default {
             apply: "Appliquer",
             new: "Nouveau",
             backToApp: "Retour à l'application",
-            reset: "Réinitialiser"
+            reset: "Réinitialiser",
+            closeRecord: "Fermer record",
+            expandSection: "Développer section",
+            collapseSection: "Effondrer section"
         },
         field: {
             search: "Chercher",
@@ -527,6 +530,7 @@ export default {
         quickBaseClassic: "QuickBase Classique",
         quickBaseMercury: "QuickBase Mercury",
         missingWalkMe: "Le didacticiel n'est pas disponible",
+        missingHelp: "L'aide n'est pas encore disponible",
         fieldsDefaultLabels: {
             [FieldFormats.TEXT_FORMAT]: "Texte",
             [FieldFormats.MULTI_LINE_TEXT_FORMAT]: "Texte long",

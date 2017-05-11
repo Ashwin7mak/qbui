@@ -125,7 +125,11 @@ export default {
             new: "New",
             apply: "Apply",
             backToApp: "Back to app",
-            reset: "Reset"
+            reset: "Reset",
+            closeRecord: "Close record",
+            expandSection: "Expand section",
+            collapseSection: "Collapse section"
+
         },
         field: {
             search: "Search",
@@ -192,7 +196,7 @@ export default {
                 preferences: "Preferences",
                 sign_out: "Sign out",
                 feedbackMenuButton: "Give feedback",
-                feedbackMenuTitle: "Feed back",
+                feedbackMenuTitle: "Feedback",
                 reportFeedBackButton: "Report an issue",
                 feedbackTooltip: "Share ideas and issues"
             }
@@ -535,6 +539,7 @@ export default {
         quickBaseClassic: "QuickBase Classic",
         quickBaseMercury: "QuickBase Mercury",
         missingWalkMe: "Tutorial is not available",
+        missingHelp: "Help is not available yet",
         fieldsDefaultLabels: {
             [FieldFormats.TEXT_FORMAT]: "Text",
             [FieldFormats.MULTI_LINE_TEXT_FORMAT]: "Long text",

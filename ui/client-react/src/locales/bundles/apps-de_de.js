@@ -122,7 +122,10 @@ export default {
             apply: "Sich bewerben",
             new: "Neu",
             backToApp: "Zurück zur App",
-            reset: "Zurücksetzen"
+            reset: "Zurücksetzen",
+            closeRecord: "Schließen Aufzeichnung",
+            expandSection: "Erweitern Abschnitt",
+            collapseSection: "Zusammenbruch Abschnitt"
         },
         field: {
             search: "Suche",
@@ -528,6 +531,7 @@ export default {
         quickBaseClassic: "QuickBase Klassik",
         quickBaseMercury: "QuickBase Mercury",
         missingWalkMe: "Tutorial ist nicht verfügbar",
+        missingHelp: "Hilfe ist noch nicht verfügbar",
         fieldsDefaultLabels: {
             [FieldFormats.TEXT_FORMAT]: "Text",
             [FieldFormats.MULTI_LINE_TEXT_FORMAT]: "Langtext",

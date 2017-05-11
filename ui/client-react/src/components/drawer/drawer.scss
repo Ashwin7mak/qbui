@@ -2,7 +2,7 @@
 
 .drawer {
     position: absolute;
-    z-index: 10; // TODO: what to do? use qbVariable?
+    z-index: $zindex-drawer;
     height: 100%;
     width: 100%;
     background-color: $color-black-200;
