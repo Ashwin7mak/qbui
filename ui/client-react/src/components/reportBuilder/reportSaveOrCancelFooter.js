@@ -26,8 +26,8 @@ export class ReportSaveOrCancelFooter extends Component {
     getRightAlignedButtons() {
         return (
             <div>
-                <Button bsStyle="primary" onClick={this.onCancel} className="cancelFormButton"><I18nMessage message="nav.cancel"/></Button>
-                <Button bsStyle="primary" onClick={this.onClickSave} className="saveFormButton"><I18nMessage message="nav.save"/></Button>
+                <Button bsStyle="primary" onClick={this.onCancel} className="alternativeTrowserFooterButton"><I18nMessage message="nav.cancel"/></Button>
+                <Button bsStyle="primary" onClick={this.onClickSave} className="mainTrowserFooterButton"><I18nMessage message="nav.save"/></Button>
             </div>
         );
     }

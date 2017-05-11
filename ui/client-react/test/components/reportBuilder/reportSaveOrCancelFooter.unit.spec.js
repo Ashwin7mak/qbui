@@ -1,6 +1,6 @@
 import React from 'react';
 import {ReportSaveOrCancelFooter} from '../../../src/components/reportBuilder/reportSaveOrCancelFooter';
-import {shallow} from 'enzyme';
+import {shallow, mount} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
 import SaveOrCancelFooter from '../../../src/components/saveOrCancelFooter/saveOrCancelFooter';
 
@@ -24,13 +24,16 @@ describe('Report Builder Save and Cancel Footer', () => {
     });
 
     it('exits report builder onCancel', () => {
-        component =  shallow(<ReportSaveOrCancelFooter {...props} />);
-        component.instance().onCancel();
+        component = mount(<ReportSaveOrCancelFooter {...props} />);
+
+        let cancelButton = component.find('.alternativeTrowserFooterButton');
+        cancelButton.simulate('click');
         expect(props.exitBuilderMode).toHaveBeenCalled();
         expect(props.closeFieldSelectMenu).toHaveBeenCalled();
     });
 
     it('save and cancel button are present', () => {
+        component = shallow(<ReportSaveOrCancelFooter {...props} />);
         let saveOrCancelFooter = component.find(SaveOrCancelFooter);
         expect(saveOrCancelFooter).toBePresent();
     });

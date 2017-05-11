@@ -283,7 +283,7 @@ export class ReportColumnHeaderMenu extends Component {
 
         return (
             <Dropdown bsStyle="default" noCaret id="dropdown-no-caret">
-                <Button tabIndex="0" bsRole="toggle" className={"dropdownToggle iconActionButton"}>
+                <Button tabIndex="0" bsRole="toggle" className="dropdownToggle iconActionButton">
                     <QbIcon icon="caret-filled-down"/>
                 </Button>
 
