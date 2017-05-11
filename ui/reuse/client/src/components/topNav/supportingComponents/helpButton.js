@@ -14,14 +14,19 @@ import Device from 'APP/utils/device';
  * in the environment configuration
  */
 function getHelpWalkme() {
-    if (Device.isTouch()) {
-        return;
-    }
-    try {
-        WalkMePlayerAPI.toggleMenu();
-    } catch (err) {
-        NotificationManager.info(Locale.getMessage('missingWalkMe'), '');
-    }
+    return NotificationManager.info(Locale.getMessage('missingHelp'));
+
+    // BELOW IS DISABLED FOR BETA.
+    // To be re-enabled once help system has been developed
+    // if (Device.isTouch()) {
+    //     // Walkme is disabled on touch devices
+    //     return;
+    // }
+    // try {
+    //     WalkMePlayerAPI.toggleMenu();
+    // } catch (err) {
+    //     NotificationManager.info(Locale.getMessage('missingWalkMe'), '');
+    // }
 }
 
 /**

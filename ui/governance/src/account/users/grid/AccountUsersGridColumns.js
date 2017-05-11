@@ -8,7 +8,7 @@ const boolColumnProps = {
     classes: ['BoolColumn'],
 };
 
-GovernanceBundleLoader.changeLocale('en-us');
+// GovernanceBundleLoader.changeLocale('en-us');
 
 // Column Definitions
 const columns = [
