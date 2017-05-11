@@ -25,7 +25,7 @@ describe('ReportRoute functions', () => {
         clearSearchInput: () => {},
         loadFields: (app, tbl) => {},
         loadReport: (context, appId, tblId, rptId, format, offset, rows) => {},
-        loadTableHomePage: (context, appId, tblId, rptId, format, filter, queryParams) => {},
+        loadDynamicReport: (context, appId, tblId, rptId, format, filter, queryParams) => {},
         reportBuilder: {
             inBuilderMode: true,
             isCollapsed: true,
@@ -84,7 +84,7 @@ describe('ReportRoute functions', () => {
         spyOn(props, 'clearSearchInput');
         spyOn(props, 'loadFields');
         spyOn(props, 'loadReport');
-        spyOn(props, 'loadTableHomePage');
+        spyOn(props, 'loadDynamicReport');
         ReportRouteRewireAPI.__Rewire__('Stage', StageMock);
         ReportRouteRewireAPI.__Rewire__('ReportToolsAndContent', ReportToolsAndContentMock);
         ReportRouteRewireAPI.__Rewire__('ReportFieldSelectMenu', mockReportFieldSelectMenu);
@@ -95,7 +95,8 @@ describe('ReportRoute functions', () => {
         flux.actions.selectTableId.calls.reset();
         props.clearSearchInput.calls.reset();
         props.loadFields.calls.reset();
-        props.loadTableHomePage.calls.reset();
+        props.loadReport.calls.reset();
+        props.loadDynamicReport.calls.reset();
         ReportRouteRewireAPI.__ResetDependency__('Stage');
         ReportRouteRewireAPI.__ResetDependency__('ReportToolsAndContent');
         ReportRouteRewireAPI.__ResetDependency__('ReportFieldSelectMenu');
@@ -114,20 +115,10 @@ describe('ReportRoute functions', () => {
     });
 
     describe('loadReport', () => {
-        let loadReport = null;
         let initialState = {};
         let store = null;
         beforeEach(() => {
-            loadReport = jasmine.createSpy('loadReport').and.callFake(() => {
-                return {type: 'fake'};
-            });
-            ReportRouteRewireAPI.__Rewire__('loadReport', loadReport);
-
             store = mockStore(initialState);
-        });
-
-        afterEach(() => {
-            ReportRouteRewireAPI.__ResetDependency__('loadReport');
         });
 
         it('loadReport is called with app data', () => {
@@ -135,8 +126,7 @@ describe('ReportRoute functions', () => {
                 <Provider store={store}>
                     <ReportRoute {...props} match={routeParams} reportData={reportDataParams.reportData} flux={flux} pendEdits={pendEdits}/>
                 </Provider>);
-            // Commented out because it was breaking, will fix in the next story
-            //expect(loadReport).toHaveBeenCalledWith(jasmine.any(String), appId, tblId, rptId, true, offset, numRows);
+            expect(props.loadReport).toHaveBeenCalledWith(jasmine.any(String), appId, tblId, rptId, true, offset, numRows);
 
         });
 
@@ -146,7 +136,7 @@ describe('ReportRoute functions', () => {
                 <Provider store={store}>
                     <ReportRoute {...props} match={missingRouteParams} reportData={reportDataParams.reportData} flux={flux} pendEdits={pendEdits}/>
                 </Provider>);
-            expect(loadReport).not.toHaveBeenCalled();
+            expect(props.loadReport).not.toHaveBeenCalled();
         });
 
         it('loadReport is not called when tblId is missing', () => {
@@ -155,7 +145,7 @@ describe('ReportRoute functions', () => {
                 <Provider store={store}>
                     <ReportRoute {...props} match={missingRouteParams} reportData={reportDataParams.reportData} flux={flux} pendEdits={pendEdits}/>
                 </Provider>);
-            expect(loadReport).not.toHaveBeenCalled();
+            expect(props.loadReport).not.toHaveBeenCalled();
         });
 
         it('loadReport is not called when rptId is missing', () => {
@@ -164,7 +154,7 @@ describe('ReportRoute functions', () => {
                 <Provider store={store}>
                     <ReportRoute {...props} match={missingRouteParams} reportData={reportDataParams.reportData} flux={flux} pendEdits={pendEdits}/>
                 </Provider>);
-            expect(loadReport).not.toHaveBeenCalled();
+            expect(props.loadReport).not.toHaveBeenCalled();
         });
     });
 });
