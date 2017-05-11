@@ -25,8 +25,8 @@ class StandardGridUsersCount extends Component {
 
         let dbl = null;
 
-        if (this.props.isFiltered && this.props.totalRecords !== this.props.filteredRecordCount) {
-            message = (this.props.totalRecords === 1) ? Locale.getMessage("governance.count.filteredSingleRecordCount") : Locale.getMessage("governance.count.filteredRecordCount");
+        if (this.props.totalRecords !== this.props.filteredRecords) {
+            message = (this.props.totalRecords === 1) ? this.props.itemTypeSingular : this.props.itemTypePlural;
         }
 
         loaderOptions.color = !Breakpoints.isSmallBreakpoint() ? largeBreakpointColor : smallBreakpointColor;
@@ -46,6 +46,8 @@ class StandardGridUsersCount extends Component {
 StandardGridUsersCount.propTypes = {
     totalRecords: React.PropTypes.number,
     filteredRecords: React.PropTypes.number,
+    itemTypePlural: PropTypes.string,
+    itemTypeSingular: PropTypes.string
 };
 
 
