@@ -304,7 +304,7 @@ ReportColumnHeaderMenu.propTypes = {
 const mapStateToProps = (state) => {
     return {
         reportBuilder: state.reportBuilder
-    }
+    };
 };
 
 const mapDispatchToProps = (dispatch) => {

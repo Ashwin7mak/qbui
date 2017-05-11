@@ -4,8 +4,9 @@ import {shallow} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
 import SaveOrCancelFooter from '../../../src/components/saveOrCancelFooter/saveOrCancelFooter';
 
+let component;
+
 describe('Report Builder Save and Cancel Footer', () => {
-    let component
     const props = {
         exitBuilderMode: (context) => {},
         closeFieldSelectMenu: (context) => {}
@@ -32,5 +33,5 @@ describe('Report Builder Save and Cancel Footer', () => {
     it('save and cancel button are present', () => {
         let saveOrCancelFooter = component.find(SaveOrCancelFooter);
         expect(saveOrCancelFooter).toBePresent();
-    })
+    });
 });

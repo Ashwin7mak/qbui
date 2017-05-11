@@ -383,7 +383,8 @@ export const enterBuilderMode = (context) => {
  * @returns {{type: *}}
  */
 export const exitBuilderMode = (context) => {
-    return event(context, types.EXIT_BUILDER_MODE, {})};
+    return event(context, types.EXIT_BUILDER_MODE, {});
+};
 
 /** Toggle the field select menu open.
  * @param context

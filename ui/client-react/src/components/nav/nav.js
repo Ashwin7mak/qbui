@@ -422,26 +422,26 @@ export const Nav = React.createClass({
                                 // the Switch wrapper will pick only one of the routes the first
                                 // that matches.
 
-                                let routeProps = {
-                                    key : this.props.match ? this.props.match.url : "",
-                                    apps: this.state.apps.apps,
-                                    selectedAppId: this.state.apps.selectedAppId,
-                                    appsLoading: this.state.apps.loading,
-                                    reportData: reportsData,
-                                    appUsers: this.state.apps.appUsers,
-                                    appUsersUnfiltered: this.state.apps.appUsersUnfiltered,
-                                    appRoles: this.state.apps.appRoles,
-                                    appOwner: this.state.apps.appOwner,
-                                    locale: this.state.nav.locale,
-                                    isRowPopUpMenuOpen: this.props.shell.isRowPopUpMenuOpen,
-                                    selectedApp: this.getSelectedApp(),
-                                    selectedTable: this.getSelectedTable(reportsData.tblId),
-                                    selectedUserRows: this.state.apps.selectedUserRows,
-                                    scrollingReport: this.state.nav.scrollingReport,
-                                    flux: flux
-                                };
-                                return RouteWithSubRoutes(route, i, routeProps);
-                            }
+                            let routeProps = {
+                                key : this.props.match ? this.props.match.url : "",
+                                apps: this.state.apps.apps,
+                                selectedAppId: this.state.apps.selectedAppId,
+                                appsLoading: this.state.apps.loading,
+                                reportData: reportsData,
+                                appUsers: this.state.apps.appUsers,
+                                appUsersUnfiltered: this.state.apps.appUsersUnfiltered,
+                                appRoles: this.state.apps.appRoles,
+                                appOwner: this.state.apps.appOwner,
+                                locale: this.state.nav.locale,
+                                isRowPopUpMenuOpen: this.props.shell.isRowPopUpMenuOpen,
+                                selectedApp: this.getSelectedApp(),
+                                selectedTable: this.getSelectedTable(reportsData.tblId),
+                                selectedUserRows: this.state.apps.selectedUserRows,
+                                scrollingReport: this.state.nav.scrollingReport,
+                                flux: flux
+                            };
+                            return RouteWithSubRoutes(route, i, routeProps);
+                        }
                         )}
                         </Switch>
                 </div>

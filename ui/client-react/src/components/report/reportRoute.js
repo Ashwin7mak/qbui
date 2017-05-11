@@ -196,8 +196,8 @@ export const ReportRoute = React.createClass({
 
                     </ReportFieldSelectMenu>
 
-                    {inBuilderMode ?
-                        <ReportSaveOrCancelFooter /> :null}
+                    {inBuilderMode &&
+                        <ReportSaveOrCancelFooter />}
 
                 </div>
             );

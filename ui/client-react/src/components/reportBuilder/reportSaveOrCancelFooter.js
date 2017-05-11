@@ -16,12 +16,12 @@ export class ReportSaveOrCancelFooter extends Component {
 
     onClickSave() {
         // save report
-    };
+    }
 
     onCancel = () => {
         this.props.exitBuilderMode(CONTEXT.REPORT.NAV);
         this.props.closeFieldSelectMenu(CONTEXT.REPORT.NAV);
-    };
+    }
 
     getRightAlignedButtons() {
         return (
@@ -30,14 +30,14 @@ export class ReportSaveOrCancelFooter extends Component {
                 <Button bsStyle="primary" onClick={this.onClickSave} className="saveFormButton"><I18nMessage message="nav.save"/></Button>
             </div>
         );
-    };
+    }
     /**
      *  get actions element for bottom center of trowser (placeholders for now)
      */
     getTrowserActions() {
         return (
             <div className={"centerActions"} />);
-    };
+    }
 
     render() {
         return <SaveOrCancelFooter
@@ -45,15 +45,15 @@ export class ReportSaveOrCancelFooter extends Component {
             centerAlignedButtons={this.getTrowserActions()}
             leftAlignedButtons={this.getTrowserActions()}
         />;
-    };
+    }
 }
 
-const mapDispatchToProps =(dispatch) => {
+const mapDispatchToProps = (dispatch) => {
     return {
         exitBuilderMode: (context) => dispatch(exitBuilderMode(context)),
 
         closeFieldSelectMenu: (context) => dispatch(closeFieldSelectMenu(context))
-    }
+    };
 };
 
 export default (connect(null, mapDispatchToProps)(ReportSaveOrCancelFooter));
