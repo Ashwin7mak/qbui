@@ -113,7 +113,7 @@ const sortFunctions = [
 export const sortUsers = (users, sortFids) => {
 
     if (sortFids.length === 0) {
-        sortFids = [0];
+        sortFids = [1];
     }
 
     let sortFnArray = _.map(sortFids, (fid) => sortFunctions[Math.abs(fid)]);
