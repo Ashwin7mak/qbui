@@ -1,17 +1,10 @@
-import ReportService from '../services/reportService';
-import ReportModel from '../models/reportModel';
-import ReportsModel from '../models/reportsModel';
 import FieldsService from '../services/fieldsService';
 import Promise from 'bluebird';
-import QueryUtils from '../utils/queryUtils';
-import _ from 'lodash';
 
 import Logger from '../utils/logger';
 import LogLevel from '../utils/logLevels';
 
 import * as types from '../actions/types';
-import {CONTEXT} from '../actions/context';
-import * as query from '../constants/query';
 
 let logger = new Logger();
 
