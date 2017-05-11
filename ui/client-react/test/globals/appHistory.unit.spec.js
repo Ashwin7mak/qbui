@@ -293,17 +293,6 @@ describe('AppHistory', () => {
             expect(AppHistory._saveChangesForRecord).toHaveBeenCalled();
         });
 
-        // fit('halt route change when save new record pending edits error', () => {
-        //     mockState.recordStore.isPendingEdit = true;
-        //     store.record.records[0].pendEdits.currentEditingRecordId = 1;
-        //     AppHistory.setup(mockStoreReject);
-        //
-        //     goToNewPage();
-        //     AppHistory._saveChangesForRecord();
-        //
-        //     expect(mockStoreReject.dispatch).toHaveBeenCalled();
-        // });
-
         it('will save form builder if there is a pending edit in the forms store', () => {
             mockState.formsStore.isPendingEdit = true;
 
@@ -376,6 +365,38 @@ describe('AppHistory', () => {
             expect(mockStoreFunc.saveFormComplete).toHaveBeenCalled();
             expect(mockStoreFunc.hideTrowser).toHaveBeenCalled();
             done();
+        });
+
+        it('halt route change when save new record pending edits error', () => {
+            mockState.recordStore = {
+                currentEditingAppId: 'appId',
+                currentEditingTableId: 'tableId',
+                currentEditingRecordId: 'recId'
+
+            };
+            AppHistory.setup(mockStoreReject, mockStoreFunc);
+
+            goToNewPage();
+            AppHistory._saveChangesForRecord();
+
+            expect(AppHistory._haltRouteChange).toHaveBeenCalled();
+            expect(mockStoreReject.dispatch).toHaveBeenCalled();
+        });
+
+        it('halt route change when editing existing record pending edits error', () => {
+            mockState.recordStore = {
+                currentEditingAppId: 'appId',
+                currentEditingTableId: 'tableId',
+                currentEditingRecordId: null
+
+            };
+            AppHistory.setup(mockStoreReject, mockStoreFunc);
+
+            goToNewPage();
+            AppHistory._saveChangesForRecord();
+
+            expect(AppHistory._haltRouteChange).toHaveBeenCalled();
+            expect(mockStoreReject.dispatch).toHaveBeenCalled();
         });
 
     });

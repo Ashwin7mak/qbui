@@ -292,6 +292,9 @@ class AppHistory {
                         self._continueToDestination();
                         self.store.dispatch(self.saveFormComplete(CONTEXT.FORM.EDIT));
                         self.store.dispatch(self.hideTrowser());
+                    },
+                    () => {
+                        self._haltRouteChange();
                     }
                 );
             } else {
@@ -309,6 +312,9 @@ class AppHistory {
                         self._continueToDestination();
                         self.store.dispatch(self.saveFormComplete(CONTEXT.FORM.EDIT));
                         self.store.dispatch(self.hideTrowser());
+                    },
+                    () => {
+                        self._haltRouteChange();
                     }
                 );
             }
