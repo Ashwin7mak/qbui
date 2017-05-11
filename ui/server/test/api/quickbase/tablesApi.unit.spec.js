@@ -317,7 +317,7 @@ describe('Validate tablesApi', function() {
             createTablePropsStub.restore();
         });
 
-        it('replaceTableProperties returns success response on valid input', function(done) {
+        it('returns success response on valid input', function(done) {
             let executeReqStubResp = {body: '{"tableNoun": "test"}'};
             executeReqStub.returns(Promise.resolve(executeReqStubResp));
             let promise = tablesApi.replaceTableProperties(req, tableId);
@@ -335,7 +335,7 @@ describe('Validate tablesApi', function() {
             });
         });
 
-        it('replaceTableProperties returns no response on error due to invalid input', function(done) {
+        it('returns no response on error due to invalid input', function(done) {
             let executeReqStubResp = 'fail unit test case execution';
             executeReqStub.returns(Promise.reject(new Error(executeReqStubResp)));
             let promise = tablesApi.replaceTableProperties(req, tableId);
@@ -352,7 +352,7 @@ describe('Validate tablesApi', function() {
             });
         });
 
-        it('replaceTableProperties results in failure of table props creation after a non 404 error', function (done) {
+        it('results in failure of table props creation after a non 404 error', function (done) {
             let executeReqStubResp = {statusCode: 400};
             executeReqStub.returns(Promise.reject(executeReqStubResp));
             let promise = tablesApi.replaceTableProperties(req, tableId);
@@ -369,7 +369,7 @@ describe('Validate tablesApi', function() {
             });
         });
 
-        it('replaceTableProperties successfully creates table props after a 404 error', function (done) {
+        it('successfully creates table props after a 404 error', function (done) {
             let executeReqStubResp = {statusCode: 404};
             executeReqStub.returns(Promise.reject(executeReqStubResp));
             let createTablePropsResp = {body: '{"tableNoun": "updated table noun"}'};
@@ -389,7 +389,7 @@ describe('Validate tablesApi', function() {
             });
         });
 
-        it('replaceTableProperties results in failure of table properties creation after a 404 error', function (done) {
+        it('results in failure of table properties creation after a 404 error', function (done) {
             let executeReqStubResp = {statusCode: 404};
             executeReqStub.returns(Promise.reject(executeReqStubResp));
             let createTablePropsResp = {error: 'Some error'};
@@ -409,7 +409,7 @@ describe('Validate tablesApi', function() {
             });
         });
 
-        it('replaceTableProperties results in exception during table properties creation', function (done) {
+        it('results in exception during table properties creation', function (done) {
             let executeReqStubResp = {statusCode: 404};
             executeReqStub.returns(Promise.reject(executeReqStubResp));
             let createTablePropsResp = null;

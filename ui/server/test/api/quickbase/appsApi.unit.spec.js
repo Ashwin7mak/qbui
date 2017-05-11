@@ -234,7 +234,7 @@ describe("Validate appsApi", function() {
             executeReqStub.restore();
         });
 
-        it("getTableProperties returns success response on a valid input", function (done) {
+        it("returns success response on a valid input", function (done) {
             let executeReqStubResp = {'body': '{"tableNoun": "test noun", "description": "desc", "tableIcon": "icon"}'};
             executeReqStub.returns(Promise.resolve(executeReqStubResp));
             let promise = appsApi.getTableProperties(req, testTable);
@@ -252,7 +252,25 @@ describe("Validate appsApi", function() {
             });
         });
 
-        it("getTableProperties fails to create table properties due to exception", function (done) {
+        it("fails to create table properties due to error", function (done) {
+            let executeReqStubResp = 'fail unit test case execution';
+            executeReqStub.returns(Promise.reject(executeReqStubResp));
+            let promise = appsApi.getTableProperties(req, testTable);
+
+            promise.then(
+                function () {
+                    done();
+                },
+                function () {
+                    done("Unexpected failure promise return when testing getTableProperties");
+                }
+            ).catch(function (errorMsg) {
+                done(new Error('getTableProperties: exception processing success test: ' + JSON.stringify(errorMsg)));
+            });
+
+        });
+
+        it("fails to create table properties due to exception", function (done) {
             let executeReqStubResp = null;
             executeReqStub.returns(Promise.resolve(executeReqStubResp));
             let promise = appsApi.getTableProperties(req, testTable);
@@ -270,7 +288,25 @@ describe("Validate appsApi", function() {
 
         });
 
-        it("getTableProperties successfully creates table properties after a 404 error", function (done) {
+        it("fails to create table properties for a non 404 error", function (done) {
+            let executeReqStubResp = {statusCode: 400};
+            executeReqStub.returns(Promise.reject(executeReqStubResp));
+            let promise = appsApi.getTableProperties(req, testTable);
+
+            promise.then(
+                function () {
+                    done();
+                },
+                function () {
+                    done("Unexpected failure promise return when testing getTableProperties");
+                }
+            ).catch(function (errorMsg) {
+                done(new Error('getTableProperties: exception processing success test: ' + JSON.stringify(errorMsg)));
+            });
+        });
+
+
+        it("successfully creates table properties after a 404 error", function (done) {
             let executeReqStubResp = {statusCode: 404};
             executeReqStub.returns(Promise.reject(executeReqStubResp));
             let createTablePropsResp = {body: '{"tableNoun": "test"}'};
@@ -290,7 +326,7 @@ describe("Validate appsApi", function() {
             });
         });
 
-        it("getTableProperties fails to create table properties for a 404 error", function (done) {
+        it("fails to create table properties for a 404 error", function (done) {
             let executeReqStubResp = {statusCode: 404};
             executeReqStub.returns(Promise.reject(executeReqStubResp));
             let createTablePropsResp = {error: 'some error'};
@@ -309,7 +345,7 @@ describe("Validate appsApi", function() {
             });
         });
 
-        it("getTableProperties fails to create table properties for a 404 error due to exception", function (done) {
+        it("fails to create table properties for a 404 error due to exception", function (done) {
             let executeReqStubResp = {statusCode: 404};
             executeReqStub.returns(Promise.reject(executeReqStubResp));
             let createTablePropRespStub = null;
