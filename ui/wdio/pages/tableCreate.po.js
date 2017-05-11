@@ -63,9 +63,8 @@
         deleteTableActionButton: {get: function() {return browser.element('.iconActions .iconActionButton .buttonLabel');}},
         deletePromtTextField: {get: function() {return browser.element('.modal-dialog .deleteTableDialogContent .prompt');}},
         // Delete and Don't Delete button on modal dialog box
-        deleteButtonClassName: {get: function() {return '.modal-dialog .primaryButton';}},
-        deleteButton : {get: function() {return browser.element(this.deleteButtonClassName);}},
-        dontDeleteButton : {get: function() {return browser.element('.modal-dialog .secondaryButton');}},
+        deleteButton : {get: function() {return browser.element('.modal-dialog .modal-footer .primaryButton');}},
+        dontDeleteButton : {get: function() {return browser.element('.modal-dialog .modal-footer .secondaryButton');}},
 
 
 

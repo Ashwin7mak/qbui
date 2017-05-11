@@ -170,7 +170,7 @@
                 tableCreatePO.setDeletePromtTextFieldValue(testCase.fieldValue);
 
                 //Step 7 - make sure delete table button is disabled
-                expect(browser.isEnabled(ReportContentPO.deleteButtonClassName)).toBeFalsy();
+                expect(browser.isEnabled('.modal-dialog .modal-footer .primaryButton')).toBeFalsy();
 
                 //step 8 - go back to the tables page
                 RequestAppsPage.get(e2eBase.getRequestTableEndpoint(realmName, testApp.id, testApp.tables[0].id));
