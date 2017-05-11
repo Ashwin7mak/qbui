@@ -64,7 +64,7 @@ const ReportToolbar = React.createClass({
         return answer;
     },
 
-    handleFacetSelect(e, facet, value) {
+    handleFacetSelect(facet, value) {
         if (this.props.filterOnSelections) {
             let newSelections = this.props.selections.copy();
             newSelections.toggleSelectFacetValue(facet, value);

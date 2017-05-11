@@ -3,7 +3,7 @@ import TestUtils from 'react-addons-test-utils';
 import {__RewireAPI__ as RecordTrowserRewireAPI} from '../../src/components/record/recordTrowser';
 import {RecordTrowser} from '../../src/components/record/recordTrowser';
 import RecordTrowserStore from '../../src/components/record/recordTrowser';
-import {UNSAVED_RECORD_ID} from '../../src/constants/schema';
+import {UNSAVED_RECORD_ID, NEW_FORM_RECORD_ID} from '../../src/constants/schema';
 import {shallow} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
 
@@ -26,6 +26,13 @@ let store = {};
 describe('RecordTrowser functions', () => {
 
 
+    const record = {
+        records: [
+            {
+                id: recId, recId: recId, nextRecordId: nextId, previousRecordId: prevId
+            }
+        ]
+    };
     let obj = {
         recId: recId
     };
@@ -61,7 +68,8 @@ describe('RecordTrowser functions', () => {
                     {recordId: {value: nextId}}
                 ]
             }
-        }
+        },
+        record: record
     };
     var mockWindowUtils = {
         pushWithQuery: function() {},
@@ -75,17 +83,7 @@ describe('RecordTrowser functions', () => {
     });
 
     const storeContent = {
-        record: [{
-            pendEdits: {
-                hasAttemptedSave: true,
-                isPendingEdit: true,
-                recordChanges: {},
-                editErrors: {
-                    errors: [{id: 9, invalidMessage: "error message #1", def: {fieldName: "test field"}}]
-                }
-            },
-            id: recId, recId: recId, nextRecordId: nextId, previousRecordId: prevId
-        }],
+        record: record,
         shell: {
             errorPopupHidden: false
         }
@@ -134,6 +132,10 @@ describe('RecordTrowser functions', () => {
     });
 
     it('test render of loading component via connect', () => {
+        const initialState = {
+            record: record
+        };
+        store = mockStore(initialState);
         let component = TestUtils.renderIntoDocument(<Provider store={store}><RecordTrowserStore {...props}/></Provider>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
     });
@@ -173,24 +175,53 @@ describe('RecordTrowser functions', () => {
     });
 
     const newRecStoreContent = {
-        record: [{
-            pendEdits: {
-                hasAttemptedSave: true,
-                isPendingEdit: true,
-                recordChanges: {},
-                editErrors: {
-                    errors: [{id: 9, invalidMessage: "error message #1", def: {fieldName: "test field"}}]
-                }
-            },
-            id: UNSAVED_RECORD_ID, recId: UNSAVED_RECORD_ID, nextRecordId: nextId, previousRecordId: prevId
-        }],
+        record: {
+            records: [{
+                pendEdits: {
+                    hasAttemptedSave: true,
+                    isPendingEdit: true,
+                    recordChanges: {},
+                    editErrors: {
+                        errors: [{id: 9, invalidMessage: "error message #1", def: {fieldName: "test field"}}]
+                    }
+                },
+                id: NEW_FORM_RECORD_ID, recId: NEW_FORM_RECORD_ID, nextRecordId: nextId, previousRecordId: prevId
+            }]
+        },
+        shell: {
+            errorPopupHidden: false
+        }
+    };
+
+    const updateRecStoreContent = {
+        record: {
+            records: [{
+                pendEdits: {
+                    hasAttemptedSave: true,
+                    isPendingEdit: true,
+                    recordChanges: {},
+                    editErrors: {
+                        errors: [{id: 4, invalidMessage: "error message #1", def: {fieldName: "test field"}}]
+                    }
+                },
+                id: 4, recId: 4, nextRecordId: nextId, previousRecordId: prevId
+            }]
+        },
         shell: {
             errorPopupHidden: false
         }
     };
     let errorValidationTestCases = [
-        {name:'test saving new record that throws a validation error', recId:UNSAVED_RECORD_ID, storeContent:newRecStoreContent},
-        {name:'test updating a record that throws a validation error', recId:recId}
+        {
+            name: 'test saving new record that throws a validation error',
+            recId: NEW_FORM_RECORD_ID,
+            storeContent: newRecStoreContent
+        },
+        {
+            name: 'test updating a record that throws a validation error',
+            recId: recId,
+            storeContent: updateRecStoreContent
+        }
     ];
     errorValidationTestCases.forEach(testCase => {
         it(testCase.name, () => {

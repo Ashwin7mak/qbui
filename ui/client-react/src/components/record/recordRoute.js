@@ -29,7 +29,7 @@ import {clearSearchInput} from '../../actions/searchActions';
 import {APP_ROUTE, BUILDER_ROUTE, EDIT_RECORD_KEY} from '../../constants/urlConstants';
 import {getEmbeddedReportByContext} from '../../reducers/embeddedReports';
 import {CONTEXT} from '../../actions/context';
-
+import {getRecord} from '../../reducers/record';
 import './record.scss';
 import withUniqueId from '../hoc/withUniqueId';
 import DrawerContainer from '../drawer/drawerContainer';
@@ -53,7 +53,10 @@ export const RecordRoute = React.createClass({
     loadRecord(appId, tblId, recordId, rptId, embeddedReport) {
         const flux = this.getFlux();
 
-        flux.actions.selectTableId(tblId);
+        //selected table does not chane when in a drawer
+        if (!this.props.isDrawerContext) {
+            flux.actions.selectTableId(tblId);
+        }
 
         // ensure the search input is empty
         this.props.clearSearchInput();
@@ -71,12 +74,11 @@ export const RecordRoute = React.createClass({
 
         // TODO: currently this.props.match.rptId is the embeddedReport's unique ID, perhaps use a different matcher
         // for rptId and uniqueId. We can then simplify some of the following smelly code.
-        let embeddedReport;
+        let embeddedReport = {};
         if (rptId !== undefined && typeof rptId === 'string' &&
                 (rptId.includes(CONTEXT.REPORT.EMBEDDED) || rptId.includes(CONTEXT.FORM.DRAWER))) {
             const embeddedReportId = rptId;
-            // TODO: move to reducers/embeddedReport
-            embeddedReport = _.find(this.props.embeddedReports, {'id' : embeddedReportId});
+            embeddedReport = getEmbeddedReportByContext(this.props.embeddedReports, embeddedReportId) || {};
             rptId = embeddedReport.rptId;
         }
 
@@ -381,7 +383,7 @@ export const RecordRoute = React.createClass({
     },
 
     getPageActions() {
-        const actions = [
+        let actions = [
             {msg: 'pageActions.addRecord', icon:'add-new-filled', className:'addRecord', onClick: this.editNewRecord},
             {msg: 'pageActions.edit', icon:'edit', onClick: this.openRecordForEdit},
             {msg: 'unimplemented.email', icon:'mail', disabled:true},
@@ -393,7 +395,10 @@ export const RecordRoute = React.createClass({
             actions.splice(2, 0, {msg: 'pageActions.approve', icon: 'thumbs-up', onClick: this.approveRecord});
         }
 
-
+        // Currently page actions are disabled for child records shown in drawers.
+        if (this.props.isDrawerContext) {
+            actions = actions.map(action => Object.assign(action, {disabled:true, onClick: null}));
+        }
         return (<IconActions className="pageActions" actions={actions} {...this.props}/>);
     },
 
@@ -425,13 +430,9 @@ export const RecordRoute = React.createClass({
 
     getRecordFromProps(props = this.props) {
         if (this.props.isDrawerContext) {
-            return  _.find(props.record, rec => rec.id === props.uniqueId) || {};
+            return  getRecord(props.record.records, props.uniqueId.toString());
         } else {
-            return  _.find(props.record, rec => {
-                if (rec.recId) {
-                    return rec.recId.toString() === props.match.params.recordId;
-                }
-            }) || {};
+            return getRecord(props.record.records, props.match.params.recordId);
         }
     },
     /**
@@ -443,10 +444,10 @@ export const RecordRoute = React.createClass({
         if (props.isDrawerContext) {
             let {rptId} = this.props.match.params;
             // TODO: remove the following after we move to reducers/embeddedReport
-            let embeddedReport;
+            let embeddedReport = {};
             if (rptId.includes(CONTEXT.REPORT.EMBEDDED) || rptId.includes(CONTEXT.FORM.DRAWER)) {
                 const embeddedReportId = rptId;
-                embeddedReport = getEmbeddedReportByContext(this.props.embeddedReports, embeddedReportId);
+                embeddedReport = getEmbeddedReportByContext(this.props.embeddedReports, embeddedReportId) || {};
                 rptId = embeddedReport.rptId;
             }
             return  embeddedReport;

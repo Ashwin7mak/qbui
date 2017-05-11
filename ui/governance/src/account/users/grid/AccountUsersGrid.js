@@ -3,7 +3,7 @@ import React, {PropTypes, Component} from 'react';
 import {GetAccountUsersGridColumns} from './AccountUsersGridColumns';
 
 import "./AccountUsersGrid.scss";
-import StandardGrid from '../../../common/grid/standardGrid';
+import StandardGrid from 'GOVERNANCE/common/grid/standardGrid';
 import * as Actions from "../AccountUsersActions";
 
 /**
@@ -17,6 +17,8 @@ class AccountUsersGrid extends Component {
                 columns={GetAccountUsersGridColumns(this.props.showAccountColumns, this.props.showRealmColumns)}
                 doUpdate={Actions.doUpdate}
                 rowKey="uid"
+                itemTypePlural={this.props.itemTypePlural}
+                itemTypeSingular={this.props.itemTypeSingular}
             />
         );
     }
@@ -25,7 +27,9 @@ class AccountUsersGrid extends Component {
 AccountUsersGrid.propTypes = {
     id: PropTypes.string,
     showAccountColumns: PropTypes.bool,
-    showRealmColumns: PropTypes.bool
+    showRealmColumns: PropTypes.bool,
+    itemTypePlural: PropTypes.string,
+    itemTypeSingular: PropTypes.string
 };
 
 export default AccountUsersGrid;

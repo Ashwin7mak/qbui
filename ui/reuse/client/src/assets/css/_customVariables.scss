@@ -157,6 +157,9 @@ $btn-danger-color: #fff !default;
 $btn-danger-bg: $brand-danger !default;
 $btn-danger-border: darken($btn-danger-bg, 5%) !default;
 $btn-link-disabled-color: $gray-light !default;
+$btn-min-width: 100px;
+$btn-height: 38px;
+$btn-footerheight: 100px;
 
 // Allows for customizing button radius independently from global border radius
 $btn-border-radius-base: $border-radius-base !default;
@@ -266,6 +269,7 @@ $zindex-navbar-fixed: 1030 !default;
 $zindex-modal-background: 1040 !default;
 $zindex-modal: 1050 !default;
 $zindex-drag-item: 2000 !default;
+$zindex-drawer: 3000 !default;
 
 //Z-index for qbGrid.scss
 //The below zindex are used to keep row action menus from clipping during inline edit
@@ -280,6 +284,7 @@ $zindex-qbGrid-firstOfType-stickyColumn: 2 !default;
 $zindex-qbGrid-editing-firstOfType: 4 !default;
 $zindex-qbGrid-stickyCell: 3 !default;
 $zindex-qbGrid-header-stickyCell: 4 !default;
+
 
 //== Media queries breakpoints
 //

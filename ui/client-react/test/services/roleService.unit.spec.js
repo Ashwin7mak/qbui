@@ -27,22 +27,23 @@ describe('Role Service functions', () => {
         expect(BaseService.prototype.get).toHaveBeenCalledWith(url);
     });
 
-    it('test removeUsersFromRole function', () => {
+    it('test addUsersToRole function', () => {
         let appId = '123';
         let roleId = 10;
         let url = StringUtils.format(roleService.API.APP_ROLE_USERS, [appId, roleId]);
-
-        roleService.removeUsersFromRole(appId, roleId);
-        expect(BaseService.prototype.delete).toHaveBeenCalledWith(url);
-    });
-
-    it('test removeUsersFromRole function', () => {
-        let appId = '123';
-        let roleId = 10;
-        let url = StringUtils.format(roleService.API.APP_ROLE_USERS, [appId, roleId]);
-
         roleService.assignUsersToRole(appId, roleId);
         expect(BaseService.prototype.post).toHaveBeenCalledWith(url);
+    });
+
+
+    it('test removeUsersFromRole function', () => {
+        let appId = '123';
+        let roleId = 10;
+        let userId = 1;
+        let url = StringUtils.format(roleService.API.APP_ROLE_USERS, [appId, roleId, userId]);
+
+        roleService.unassignUsersFromRole(appId, roleId, userId);
+        expect(BaseService.prototype.delete).toHaveBeenCalledWith(url, Object({data: userId}));
     });
 
 });

@@ -23,7 +23,16 @@ export default {
             },
             account: {
                 users: {
+                    accessStatus: "QuickBase access status",
                     paidSeats: "Paid seats",
+                    paidSeatSingular: "Paid seat",
+                    quickbaseStaff: "QuickBase staff",
+                    inGroup: "In any group",
+                    inactive: "Inactive",
+                    groupManager: "Group manager",
+                    canCreateApps: "Can create apps",
+                    appManager: "App manager",
+                    realmApproved: "Realm approved",
                     deniedUsers: "Denied users",
                     deactivatedUsers: "Deactivated users",
                     realmDirectoryUsers: "In realm directory",

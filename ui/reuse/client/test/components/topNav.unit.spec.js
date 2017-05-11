@@ -2,8 +2,8 @@ import React from 'react';
 import {shallow, mount} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
 
-import TopNav from '../../src/components/topNav/topNav';
-import Icon from '../../src/components/icon/icon';
+import TopNav from 'REUSE/components/topNav/topNav';
+import Icon from 'REUSE/components/icon/icon';
 
 let component;
 

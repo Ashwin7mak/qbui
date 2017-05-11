@@ -23,12 +23,21 @@ export default {
             },
             account: {
                 users: {
-                    paidSeats: "Paid seats DE",
-                    deniedUsers: "Denied users DE",
-                    deactivatedUsers: "Deactivated users DE",
-                    realmDirectoryUsers: "In realm directory DE",
-                    stageTitle: "Manage all Users DE",
-                    stageDescription: "FR Use this page to manage QuickBase users at the account and realm levels. Take a look around and try out the functionality. If you have any feedback, we'd love to hear it:",
+                    accessStatus: "QuickBase access status",
+                    paidSeats: "Paid seats",
+                    paidSeatSingular: "Paid seat",
+                    quickbaseStaff: "QuickBase staff",
+                    inGroup: "In any group",
+                    inactive: "Inactive",
+                    groupManager: "Group manager",
+                    canCreateApps: "Can create apps",
+                    appManager: "App manager",
+                    realmApproved: "Realm approved",
+                    deniedUsers: "Denied users",
+                    deactivatedUsers: "Deactivated users",
+                    realmDirectoryUsers: "In realm directory",
+                    stageTitle: "Manage All Users",
+                    stageDescription: "Use this page to manage QuickBase users at the account and realm levels. Take a look around and try out the functionality. If you have any feedback, we'd love to hear it:",
                     feedbackLinkText: "https://some.quickbase.com/link/to/feedback"
                 }
             },

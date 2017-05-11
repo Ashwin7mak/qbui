@@ -18,11 +18,8 @@
         let userId;
         let numOfRecords = 5;
 
-        let viewerRoleId = 10;
         let viewerReportId = 1;
-        let participantRoleId = 11;
         let participantReportId = 2;
-        let adminRoleId = 12;
         let adminReportId = 3;
 
         let tableToFieldToFieldTypeMap = {};
@@ -119,19 +116,19 @@
             return [
                 {
                     message: 'Viewer Role',
-                    roleId: viewerRoleId,
+                    roleId: e2eConsts.VIEWER_ROLEID,
                     reportId: viewerReportId,
                     reportTitle: 'Viewer Report'
                 },
                 {
                     message: 'Participant Role',
-                    roleId: participantRoleId,
+                    roleId: e2eConsts.PARTICIPANT_ROLEID,
                     reportId: participantReportId,
                     reportTitle: 'Participant Report'
                 },
                 {
                     message: 'Admin Role',
-                    roleId: adminRoleId,
+                    roleId: e2eConsts.ADMIN_ROLEID,
                     reportId: adminReportId,
                     reportTitle: 'Admin Report'
                 },
@@ -170,7 +167,7 @@
                 expect(browser.element('.tableHomepageStageHeadline').getAttribute('textContent')).toBe('table 1 Home');
 
                 //Expand the stage
-                browser.element('.iconUISturdy-caret-down').click();
+                browser.element('button.toggleStage').click();
                 browser.element('.stage-showHide-content').waitForVisible();
 
                 //Assert description of the stage
@@ -193,7 +190,7 @@
                     userId = JSON.parse(userResponse.body).id;
 
                     //Add user to the admin appRole
-                    e2eBase.recordBase.apiBase.assignUsersToAppRole(app.id, adminRoleId, [userId]);
+                    e2eBase.recordBase.apiBase.assignUsersToAppRole(app.id, e2eConsts.ADMIN_ROLEID, [userId]);
 
                     //get the user authentication
                     return RequestSessionTicketPage.get(e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.recordBase.apiBase.resolveUserTicketEndpoint() + '?uid=' + userId + '&realmId='));

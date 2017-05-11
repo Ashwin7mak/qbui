@@ -23,9 +23,24 @@
         tableBody: {get: function() {return browser.element('.qbTbody');}},
         reportsToolBar : {get: function() {return browser.element('.reportToolbar');}},
         addRecordButton : {get: function() {return browser.element('.tableHomePageInitial .addRecordButton');}},
+        settingsIconName : {get: function() {return '.qbIcon.iconUISturdy-settings';}},
+        settingsIcon: {get: function() {return browser.element(this.settingsIconName);}},
+        modifyTableSettings: {get: function() {return browser.element('.modifyTableSettings');}},
+        deleteTableActionButton: {get: function() {return browser.element('.iconActions .iconActionButton .buttonLabel');}},
+        deletePromtTextField: {get: function() {return browser.element('.modal-dialog .deleteTableDialogContent .deletePrompt');}},
         reportFilterSearchBox : {get: function() {
             return this.reportsToolBar.element('.searchInput');
         }},
+        reportSearchEnterValues: {value: function(field) {
+            //Check for the visibility of search box
+            this.reportFilterSearchBox.waitForVisible();
+            //Enter the value in the search box
+            this.reportFilterSearchBox.setValue(field);
+            this.waitForReportContent();
+            //Needs this for the Dom to stabilize after loading the searched data
+            browser.pause(e2eConsts.shortWaitTimeMs);
+        }},
+        clearSearch: {get: function() {return this.reportsToolBar.element('.clearSearch .searchIcon');}},
         clickAndWaitForGrid: {value: function(button) {
             button.click();
             this.qbGridContainer.waitForVisible();
@@ -49,7 +64,8 @@
             return browser.element('.reportContainer');
         }},
         // Delete and Don't Delete button on modal dialog box
-        deleteButton : {get: function() {return browser.element('.modal-dialog .primaryButton');}},
+        deleteButtonClassName: {get: function() {return '.modal-dialog .primaryButton';}},
+        deleteButton : {get: function() {return browser.element(this.deleteButtonClassName);}},
         dontDeleteButton : {get: function() {return browser.element('.modal-dialog .secondaryButton');}},
 
         //Drop down menu actions icon
@@ -236,6 +252,85 @@
             this.qbGridBodyViewportEl.waitForVisible();
             var rows = this.qbGridBodyViewportEl.elements('.qbRow');
             return rows.value.length;
+        }},
+
+        /**
+         * Method to click settings Icon on Report Table
+         */
+        clickSettingsIcon: {value: function() {
+            this.settingsIcon.waitForVisible();
+            //Click on settings icon
+            this.settingsIcon.click();
+            //wait until you see dropdown list
+            return this.modifyTableSettings.waitForVisible();
+        }},
+
+        /**
+         * Method to click 'Table properties & settings' from the dropdown list
+         */
+        clickModifyTableSettings: {value: function() {
+            // wait for 'Table properties & settings' button tobe visible
+            this.modifyTableSettings.waitForVisible();
+            //Click on 'Table properties & settings'
+            this.modifyTableSettings.click();
+            //wait until you see delete table action button
+            return this.deleteTableActionButton.waitForVisible();
+        }},
+
+        /**
+         * Method to click deleteTableActionButton
+         */
+        clickDeleteTableActionButton: {value: function() {
+            //wait until you see delete table action button
+            this.deleteTableActionButton.waitForVisible();
+            //Click on delete table action button
+            this.deleteTableActionButton.click();
+            return browser.waitForExist('.modal-dialog .deleteTableDialogContent');
+        }},
+
+        /**
+         * Method to click deleteTableButton
+         */
+        clickDeleteTableButton: {value: function() {
+            //use the predefined deleteTableButton here
+            expect(browser.isEnabled('.modal-dialog .primaryButton')).toBeTruthy();
+            //wait for deletetable button to be visible
+            this.deleteButton.waitForVisible();
+            //Click on delete table button
+            return this.deleteButton.click();
+        }},
+
+        /**
+         * Set the deletePromtTextField value
+         */
+        setDeletePromtTextFieldValue: {value: function(fieldValue) {
+            //wait for model dialogue
+            browser.waitForExist('.modal-dialog .deleteTableDialogContent');
+            //wait for deletePromtTextField tobe visible
+            this.deletePromtTextField.waitForVisible();
+            //set the deletePromtTextField value to 'YES'
+            return this.setInputValue(this.deletePromtTextField, fieldValue);
+        }},
+
+        /**
+         * Method to click don't delete Table button
+         */
+        clickDontDeleteTableButton: {value: function() {
+            //wait for the button tobe visible
+            this.dontDeleteButton.waitForVisible();
+            //Click on don't delete table button
+            return this.dontDeleteButton.click();
+        }},
+
+        /**
+         * Method to enter input values in a field
+         * @fieldName
+         * @fieldValue ter
+         */
+        setInputValue : {value: function(fieldName, fieldValue) {
+            fieldName.click();
+            //add code for firefox browser
+            return browser.keys([fieldValue, '\uE004']);
         }},
 
         /**

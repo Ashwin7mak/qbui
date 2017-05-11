@@ -24,6 +24,7 @@ module.exports = function(grunt) {
     var clientReportDir = buildDir + '/reports/client';
     var reuseReportDir = buildDir + '/reports/reuse';
     var governanceReportDir = buildDir + '/reports/governance';
+    var automationReportDir = buildDir + '/reports/automation';
 
     var mochaUnitTest = grunt.option('test') || '*.unit.spec.js';
     var mochaIntTest = grunt.option('test') || '*.integration.spec.js';
@@ -240,6 +241,15 @@ module.exports = function(grunt) {
                     ]
                 }]
             },
+            automation: {
+                files: [{
+                    dot: true,
+                    src: [
+                        automationReportDir + '/coverage/*',
+                        automationReportDir + '/unit/*'
+                    ]
+                }]
+            },
             server: {
                 files: [{
                     dot: true,
@@ -420,6 +430,12 @@ module.exports = function(grunt) {
                 // browsers: ["HeadlessChrome"],
                 singleRun : true
             },
+            automation: {
+                configFile: './automation/automation.karma.conf.js',
+                browsers: ["PhantomJS_Desktop"],
+                // browsers: ["HeadlessChrome"],
+                singleRun : true
+            },
             reuse: {
                 configFile: './reuse/reuse.karma.conf.js',
                 browsers: ["PhantomJS_Desktop"],
@@ -579,6 +595,8 @@ module.exports = function(grunt) {
                     // Relationships Tests
                     // Stabilize in CI before enabling
                     './wdio/tests/relationships/relationshipViewChildTable.e2e.spec.js',
+                    // Stabilize in CI before enabling
+                    './wdio/tests/reports/reportSearch.e2e.spec.js',
 
                 ],
                 suites: {
@@ -601,6 +619,7 @@ module.exports = function(grunt) {
                     ],
                     tables: [
                         './wdio/tests/tables/tableCreate.e2e.spec.js',
+                        './wdio/tests/tables/tableDelete.e2e.spec.js',
                         './wdio/tests/tables/tableEdit.e2e.spec.js',
                         './wdio/tests/tables/tableHomePage.e2e.spec.js'
                     ],
@@ -827,6 +846,10 @@ module.exports = function(grunt) {
             return grunt.task.run([
                 'clean:governance']);
         }
+        if (target === 'automation') {
+            return grunt.task.run([
+                'clean:automation']);
+        }
         if (target === 'server') {
             return grunt.task.run([
                 'clean:server']);
@@ -976,6 +999,14 @@ module.exports = function(grunt) {
             ]);
         }
 
+        if (target === 'automation') {
+            return grunt.task.run([
+                'clean:automation',
+                'autoprefixer',
+                'karma:automation'
+            ]);
+        }
+
         // Run your protractor tests locally against your dev env
         if (target === 'e2eLocal') {
             return grunt.task.run([
@@ -1043,6 +1074,7 @@ module.exports = function(grunt) {
             'test:client',
             'test:governance',
             'test:reuse',
+            'test:automation',
             'test:coverage' // server with coverage
         ]);
 

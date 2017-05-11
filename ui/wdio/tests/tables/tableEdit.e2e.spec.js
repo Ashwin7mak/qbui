@@ -278,8 +278,8 @@
         tableFieldValidationTestCases().forEach(function(testCase) {
             it('Verify Edit table Validation ' + testCase.message, function() {
 
-                //Step 1 - Click on existing table 'Table 1'
-                tableCreatePO.selectTable('Table 1');
+                //Step 1 - Click on existing table named 'Child Table A'
+                tableCreatePO.selectTable('Child Table A');
 
                 //Step 2 - Select the table properties of settings of table 1 from global actions gear
                 tableCreatePO.clickOnModifyTableSettingsLink();
@@ -293,13 +293,13 @@
                 testCase.tableFieldError.forEach(function(tableField) {
                     tableCreatePO.verifyTableFieldValidation(tableField.fieldTitle, tableField.fieldError);
                     //Verify Apply button is enabled
-                    expect(browser.isEnabled('.tableInfoButtons.open .primaryButton')).toBeTruthy();
+                    expect(browser.isExisting('.tableInfoButtons.open .primaryButton')).toBeTruthy();
                     //Verify Reset button is enabled
                     expect(browser.isEnabled('.tableInfoButtons.open .secondaryButton')).toBeTruthy();
                 });
 
-                //Step 5 - Verify table link with table name shows on left Nav . Make sure the table name is not updated, it is still 'Table 2'
-                expect(browser.element('.standardLeftNav .contextHeaderTitle').getAttribute('textContent')).toContain('Table 1');
+                //Step 5 - Verify table link with table name shows on left Nav . Make sure the table name is not updated, it is still 'Child Table A'
+                expect(browser.element('.standardLeftNav .contextHeaderTitle').getAttribute('textContent')).toContain('Child Table A');
 
                 //Step 6 - Verify 'Back to app' link shows up in the left Nav
                 expect(browser.element('.standardLeftNav .navItemContent').getAttribute('textContent')).toContain('Back to app');
@@ -321,7 +321,7 @@
 
             //Add user to participant appRole
             browser.call(function() {
-                return e2eBase.recordBase.apiBase.assignUsersToAppRole(testApp.id, "11", [userId]);
+                return e2eBase.recordBase.apiBase.assignUsersToAppRole(testApp.id, e2eConsts.PARTICIPANT_ROLEID, [userId]);
             });
 
             //get the user authentication

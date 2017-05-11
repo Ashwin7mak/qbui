@@ -18,15 +18,11 @@ const ReportContentError = React.createClass({
         /** the QbResponseError */
         errorDetails: PropTypes.object
     },
+
     getDefaultProps() {
         return {errorDetails: {}};
     },
-    getInitialState() {
-        return {
-            playingErrorGraphic: false,
-            showingSupportContent: false
-        };
-    },
+
     getErrorMessages() {
         let errorMessages = this.props.errorDetails.errorMessages;
         if (errorMessages && _.isArray(errorMessages)) {
@@ -41,15 +37,7 @@ const ReportContentError = React.createClass({
             return null;
         }
     },
-    toggleErrorGraphic(evt) {
-        // Toggle the gif if there is a mouse click or the user presses the space key while focused on the image
-        if (!evt.keyCode || evt.keyCode === 32) {
-            this.setState({playingErrorGraphic: !this.state.playingErrorGraphic});
-        }
-    },
-    toggleSupportContent() {
-        this.setState({showingSupportContent: !this.state.showingSupportContent});
-    },
+
     createSupportEmailBody() {
         let {errorDetails} = this.props;
 
@@ -70,35 +58,9 @@ const ReportContentError = React.createClass({
 
         return supportEmailBody;
     },
+
     render() {
         let {errorDetails} = this.props;
-        let errorImageClasses = ['errorImage'];
-        let playingText = <I18nMessage message="errors.errorLoadingReport.playGraphic" />;
-
-        if (this.state.playingErrorGraphic) {
-            playingText = <I18nMessage message="errors.errorLoadingReport.stopGraphic" />;
-            errorImageClasses.push('errorImage--animation');
-        } else {
-            errorImageClasses.push('errorImage--still');
-        }
-
-        let additionalInfo = null;
-        let showAdditionalInfoText = <I18nMessage message="errors.errorLoadingReport.showAdditionalInfo" />;
-
-        if (this.state.showingSupportContent) {
-            additionalInfo = (
-                <div>
-                    <p><I18nMessage message="errors.errorLoadingReport.supportTeamInfo"/></p>
-                    <ul>
-                        <li key="0">TID: {errorDetails.tid}</li>
-                        <li key="1">SID: {errorDetails.sid}</li>
-                        {this.getErrorMessages()}
-                    </ul>
-                </div>
-            );
-
-            showAdditionalInfoText = <I18nMessage message="errors.errorLoadingReport.hideAdditionalInfo" />;
-        }
 
         return (
             <div className="reportContentError">
@@ -119,17 +81,13 @@ const ReportContentError = React.createClass({
 
                 <p><I18nMessage message="errors.errorLoadingReport.helpText" /></p>
 
-                <img
-                    className={errorImageClasses.join(' ')}
-                    alt="Clicking a new report"
-                    onClick={this.toggleErrorGraphic}
-                    onKeyDown={this.toggleErrorGraphic}
-                    tabIndex="1"
-                />
-
-                <button className="btn btn-link toggleSupportInfoBtn" onClick={this.toggleSupportContent}>{showAdditionalInfoText}</button>
                 <div className="additionalInfo">
-                    {additionalInfo}
+                    <p><I18nMessage message="errors.errorLoadingReport.supportTeamInfo"/></p>
+                    <ul>
+                        <li key="0">TID: {errorDetails.tid}</li>
+                        <li key="1">SID: {errorDetails.sid}</li>
+                        {this.getErrorMessages()}
+                    </ul>
                 </div>
             </div>
         );

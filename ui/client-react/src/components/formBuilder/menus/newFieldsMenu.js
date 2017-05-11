@@ -14,6 +14,7 @@ const NewFieldsMenu = ({isCollapsed, isOpen, toggleToolPaletteChildrenTabIndex, 
         isOpen={isOpen}
         elements={supportedNewFieldTypesWithProperties()}
         isFilterable={true}
+        hideTitle={true}
     />
 );
 
