@@ -100,19 +100,20 @@ class formBuilderPage {
         return browser.element('.notification-success');
     }
 
-    getFieldLocator(index) {
-        // Returns a locator string for a specific field in the form builder
-        return '.formElementContainer:nth-child(' + index + ')';
-    }
-
     cancel() {
         // Clicks on CANCEL in the form builder and waits for the next page to render
         this.cancelBtn.click();
         return this;
     }
 
+    getFieldLocator(index) {
+        // Returns a locator string for a specific field in the form builder
+        return '.formElementContainer:nth-child(' + index + ')';
+    }
+
     getFieldLabels() {
-        // Gets the list of field labels from the form builder
+        this.waitForReady();
+         // Gets the list of field labels from the form builder
         let fields = browser.elements('.field');
         return fields.value.map(function(field) {
             let label = field.element('.fieldLabel').getText();
@@ -202,6 +203,7 @@ class formBuilderPage {
     selectFieldByIndex(index) {
         // Selects the field at the specified index and verifies that it is reflected in the properties panel
         let field = this.getFieldLocator(index);
+        // this click shouldn't be necessary, but it helps w/Edge?  todo: Reverify...
         browser.element(field).click();
         browser.moveToObject(field, 5, 5);
         browser.buttonDown();
@@ -220,20 +222,20 @@ class formBuilderPage {
         }
     }
 
-    slowDrag(target, sourceLabel) {
-        // Moves the cursor to specified target field and waits until target displays the the specified label
-        let targetLabel;
-        browser.waitUntil(function() {
-            // jiggle the cursor around the target field
-            browser.moveToObject(target);
-            browser.pause(oneSecond);
-            browser.moveToObject(target + ' .fieldLabel');
-            browser.pause(oneSecond);
-            targetLabel = browser.element(target).getText();
-            return sourceLabel === targetLabel;
-        }, 10000, 'target preview label (' + targetLabel + ") didn't match source label (" + sourceLabel + ') after dragging');
-        return this;
-    }
+    // slowDrag(target, sourceLabel) {
+    //     // Moves the cursor to specified target field and waits until target displays the the specified label
+    //     let targetLabel; // only needed for console output
+    //     browser.waitUntil(function() {
+    //         // jiggle the cursor around the target field
+    //         browser.moveToObject(target);
+    //         browser.pause(oneSecond);
+    //         // browser.moveToObject(target, 1, 1);
+    //         // browser.pause(oneSecond);
+    //         targetLabel = browser.element(target).getText();
+    //         return sourceLabel === targetLabel;
+    //     }, 10000, 'target preview label (' + targetLabel + ") didn't match source label (" + sourceLabel + ') after dragging');
+    //     return this;
+    // }
 
     slowDragAndDrop(source, target) {
         // Clicks on the specified source field and drags it to the specified target field
@@ -242,11 +244,13 @@ class formBuilderPage {
         browser.buttonDown();
         browser.pause(oneSecond);
         // move to target & wait until preview appears
-        this.slowDrag(target, label);
+        //this.slowDrag(target, label);
+        browser.moveToObject(target);
         // release button
         browser.buttonUp();
         // this is necessary for Edge... without it, the dragToken remains displayed
-        browser.element(target).click();
+//        browser.element(target).click();
+        browser.pause(fiveSeconds);
         return this.getFieldLabels();
     }
 
@@ -258,6 +262,12 @@ class formBuilderPage {
             newFields = this.getFieldLabels();
         }
         return newFields;
+    }
+
+    waitForReady() {
+        browser.waitUntil(function() {
+            return browser.execute('return document.readyState').value === 'complete';
+        }, this.fiveSeconds, 'Document not ready');
     }
 
     KB_cancel() {
@@ -307,21 +317,20 @@ class formBuilderPage {
         return revisedOrder;
     }
 
+    KB_removeFieldViaBackspace(index) {
+        // remove field via backspace key via keyboard
+        let deletedField = this.KB_selectField(index);
+        this.selectedField.keys(['Shift', 'Backspace', 'Shift']);
+        browser.pause(fiveSeconds);
+        expect(this.getFieldLabels()).not.toContain(deletedField);
+        return deletedField;
+    }
+
     KB_removeFieldViaIcon(index) {
         // remove field via icon via keyboard
         let deletedField = this.KB_selectField(index);
         // select & press DELETE icon
         browser.keys(['Tab', 'Enter']);
-        expect(this.getFieldLabels()).not.toContain(deletedField);
-        return deletedField;
-    }
-
-    KB_removeFieldViaBackspace(index) {
-        // remove field via backspace key via keyboard
-        this.KB_selectField(index); // field doesn't need to be selected
-        let deletedField = this.selectedField.getText();
-        this.selectedField.keys(['Shift', 'Backspace', 'Shift']);
-        browser.pause(fiveSeconds);
         expect(this.getFieldLabels()).not.toContain(deletedField);
         return deletedField;
     }
