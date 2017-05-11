@@ -326,8 +326,8 @@ export const Nav = React.createClass({
         if (this.props.shell.leftNavVisible) {
             classes += " leftNavOpen";
         }
-        const editQueryParamValue = this.props.location.query[UrlConsts.EDIT_RECORD_KEY];
-        let editRecordId = _.has(this.props, "location.query") ? editQueryParamValue : null;
+        const hasEditQuery = _.has(this.props, `location.query.${UrlConsts.EDIT_RECORD_KEY}`);
+        let editRecordId = _.has(this.props, "location.query") ? this.props.location.query[UrlConsts.EDIT_RECORD_KEY] : null;
         let editRecordIdForPageTitle = editRecordId;
 
         if (editRecordId === UrlConsts.NEW_RECORD_VALUE) {
@@ -355,7 +355,8 @@ export const Nav = React.createClass({
             {/* AppQbModal is an app-wide modal that can be called from non-react classes*/}
             <AppQbModal/>
 
-            {this.props.match.params && this.props.match.params.appId && editQueryParamValue &&
+            {/* show the trowser only when we have a editRec query param*/}
+            {this.props.match.params && this.props.match.params.appId && hasEditQuery &&
             <RecordTrowser visible={this.props.shell.trowserOpen && this.props.shell.trowserContent === TrowserConsts.TROWSER_EDIT_RECORD}
                            history={this.props.history}
                            editForm={this.getEditFormFromProps()}
