@@ -486,7 +486,6 @@
         clickBackToAppsLink : {value: function() {
             browser.element('.standardLeftNav .navItemContent').waitForVisible();
             browser.element('.standardLeftNav .navItemContent').click();
-            reportContentPO.waitForReportContent();
             return this.newTableBtn.waitForVisible();
         }},
 
