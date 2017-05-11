@@ -26,6 +26,15 @@ function event(context, type, content) {
 }
 
 /**
+ * Update the route of the report builder.
+ * @param context
+ * @param route
+ */
+export const updateReportRedirectRoute = (context, route) => {
+    return event(context, types.UPDATE_REPORT_REDIRECT_ROUTE, {route});
+};
+
+/**
  * Refresh the fields for the field select menu.
  * @param context
  * @param appId

@@ -41,6 +41,7 @@ import AppUtils from '../../utils/appUtils';
 
 import {NEW_TABLE_IDS_KEY} from '../../constants/localStorage';
 import {updateFormRedirectRoute} from '../../actions/formActions';
+import {updateReportRedirectRoute} from '../../actions/reportBuilderActions';
 
 import Analytics from '../../../../reuse/client/src/components/analytics/analytics';
 import Config from '../../config/app.config';
@@ -103,6 +104,16 @@ export const Nav = React.createClass({
         }
 
         this.props.updateFormRedirectRoute(_.get(this.props, 'location.pathname'));
+
+        this.props.history.push(link);
+    },
+
+    navigateToReportBuilder() {
+        const {appId, tblId, rptId} = this.props.match.params;
+
+        let link = `${UrlConsts.BUILDER_ROUTE}/app/${appId}/table/${tblId}/report/${rptId}`;
+
+        this.props.updateReportRedirectRoute(_.get(this.props, 'location.pathname'));
 
         this.props.history.push(link);
     },
@@ -530,7 +541,9 @@ const mapDispatchToProps = (dispatch) => {
 
         updateFormRedirectRoute: (route) => dispatch(updateFormRedirectRoute(route)),
         showTableCreationDialog: () => dispatch(TableCreationActions.showTableCreationDialog()),
-        showTableReadyDialog: () => dispatch(TableCreationActions.showTableReadyDialog())
+        showTableReadyDialog: () => dispatch(TableCreationActions.showTableReadyDialog()),
+
+        updateReportRedirectRoute: (context, route) => dispatch(updateReportRedirectRoute(context, route))
     };
 };
 

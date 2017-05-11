@@ -170,7 +170,7 @@ const routes = [
                 component: FormBuilderContainer
             },
             {
-                path: `${BUILDER_ROUTE}/app/:appId/table/:tblId/report/:rptId?`,
+                path: `${BUILDER_ROUTE}/app/:appId/table/:tblId/report/:rptId`,
                 component: ReportBuilderContainer
             }
         ]
