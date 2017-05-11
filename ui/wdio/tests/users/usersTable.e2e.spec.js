@@ -44,6 +44,7 @@
             RequestAppsPage.get(e2eBase.getRequestUsersEndpoint(realmName, testApp.id));
             //wait until user table rows are loaded
             reportContentPO.waitForReportContent();
+            //Wait until you see newUser button
             return UsersTablePage.newUserBtn.waitForVisible();
         });
 
