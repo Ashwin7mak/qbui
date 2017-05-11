@@ -32,7 +32,7 @@ class StandardGridToolBar extends React.Component {
                 <div>
                     {!isLoading && !isError ?
                         <StandardGridUsersCount totalRecords={this.props.totalRecords}
-                                                filteredRecordCount={this.props.filteredRecordCount}
+                                                filteredRecords={this.props.filteredRecords}
                         /> :
                         null
                     }
