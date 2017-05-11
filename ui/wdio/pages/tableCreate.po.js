@@ -186,7 +186,7 @@
          * Method to click on create new table
          */
         clickCreateNewTable : {value: function() {
-            browser.waitForExists('.tablesList');
+            browser.waitForExist('.tablesList .leftNavLabel');
             //Wait until new table button visible
             this.newTableBtn.waitForVisible();
             //Verify the name of the button
@@ -489,7 +489,7 @@
         clickBackToAppsLink : {value: function() {
             browser.element('.standardLeftNav .navItemContent').waitForVisible();
             browser.element('.standardLeftNav .navItemContent').click();
-            browser.waitForExists('.tablesList');
+            browser.waitForExist('.tablesList .leftNavLabel');
             return this.newTableBtn.waitForVisible();
         }},
 
