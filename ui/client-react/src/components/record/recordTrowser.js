@@ -9,7 +9,7 @@ import QBicon from "../qbIcon/qbIcon";
 import Icon, {AVAILABLE_ICON_FONTS} from '../../../../reuse/client/src/components/icon/icon.js';
 import Loader from 'react-loader';
 import QBErrorMessage from "../QBErrorMessage/qbErrorMessage";
-import WindowLocationUtils from '../../utils/windowLocationUtils';
+import {WindowHistory} from '../../utils/windowHistoryUtils';
 import * as SchemaConsts from "../../constants/schema";
 import _ from 'lodash';
 import AppHistory from '../../globals/appHistory';
@@ -351,7 +351,7 @@ export const RecordTrowser = React.createClass({
                 let previousRecordId = index > 0 ? recordsArray[index - 1][key].value : null;
 
                 this.props.openRecord(recId, nextRecordId, previousRecordId);
-                WindowLocationUtils.pushWithQuery(EDIT_RECORD_KEY, recId);
+                WindowHistory.pushWithQuery(EDIT_RECORD_KEY, recId);
             }
         }
     },
@@ -443,7 +443,7 @@ export const RecordTrowser = React.createClass({
     },
 
     hideTrowser() {
-        WindowLocationUtils.pushWithoutQuery();
+        WindowHistory.pushWithoutQuery();
 
         this.props.onHideTrowser();
     },
@@ -456,7 +456,7 @@ export const RecordTrowser = React.createClass({
     clearEditsAndClose() {
         HideAppModal();
         this.props.editRecordCancel(this.props.appId, this.props.tblId, this.props.recId);
-        WindowLocationUtils.pushWithoutQuery();
+        WindowHistory.pushWithoutQuery();
         this.props.onHideTrowser();
     },
 

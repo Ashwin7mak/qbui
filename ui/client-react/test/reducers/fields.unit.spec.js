@@ -122,10 +122,8 @@ describe('Test fields reducer', () => {
         expect(getField({fields: state}, field.id, appId, tblId)).toEqual(field);
     });
 
-    it('sets isPendingEdit to false', () => {
-        const state = reducer([], event(appId, tblId, types.SAVING_FORM));
-        const currentField = tableFieldsObj(state, appId, tblId);
-
-        expect(currentField.isPendingEdit).toEqual(false);
+    fit('sets isPendingEdit to false', () => {
+        const state = reducer([], event(types.SAVING_FORM));
+        expect(state.isPendingEdit).toEqual(false);
     });
 });

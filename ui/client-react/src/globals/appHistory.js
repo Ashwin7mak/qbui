@@ -6,6 +6,7 @@ import {UNSAVED_RECORD_ID} from '../constants/schema';
 import {ShowAppModal, HideAppModal} from '../components/qbModal/appQbModalFunctions';
 import WindowUtils from '../utils/windowLocationUtils';
 import {CONTEXT} from '../actions/context';
+import {NEW_RECORD_VALUE} from "../constants/urlConstants";
 import _ from 'lodash';
 // Uses singleton pattern
 // Only one instance of this class may be instantiated so that the same history can be used
@@ -46,6 +47,7 @@ class AppHistory {
             this.editRecordCancel = null;
             this.createRecord = null;
             this.updateRecord = null;
+            this.showErrorMsgDialog = null;
             this.updateForm = null;
             this.saveFormComplete = null;
             this.hideTrowser = null;
@@ -71,6 +73,7 @@ class AppHistory {
             self.editRecordCancel = storeFunc.editRecordCancel;
             self.createRecord = storeFunc.createRecord;
             self.updateRecord = storeFunc.updateRecord;
+            self.showErrorMsgDialog = storeFunc.showErrorMsgDialog;
             self.updateForm = storeFunc.updateForm;
             self.saveFormComplete = storeFunc.saveFormComplete;
             self.hideTrowser = storeFunc.hideTrowser;
@@ -148,7 +151,12 @@ class AppHistory {
 
     getStores(state) {
         let recordStore = (state.record && state.record.records && state.record.recordIdBeingEdited) ? state.record : undefined;
+        // let recId = recordStore.records[0] && recordStore.records[0].pendEdits ? recordStore.records[0].pendEdits.recId : null;
+        // console.log('RECORDSTORE: ', recordStore);
+
+        // recordStore = recordStore ? getPendEdits(recordStore, recId || NEW_RECORD_VALUE) : {};
         recordStore = recordStore ? getPendEdits(recordStore) : {};
+
         return {
             recordStore: recordStore,
             formsStore: (state.forms && state.forms.view) ? state.forms.view : {},
@@ -277,6 +285,7 @@ class AppHistory {
                     () => {
                         self._continueToDestination();
                         self.store.dispatch(self.saveFormComplete(CONTEXT.FORM.EDIT));
+                        self.store.dispatch(self.showErrorMsgDialog());
                         self.store.dispatch(self.hideTrowser());
                     }
                 );
@@ -294,6 +303,7 @@ class AppHistory {
                     () => {
                         self._continueToDestination();
                         self.store.dispatch(self.saveFormComplete(CONTEXT.FORM.EDIT));
+                        self.store.dispatch(self.showErrorMsgDialog());
                         self.store.dispatch(self.hideTrowser());
                     }
                 );

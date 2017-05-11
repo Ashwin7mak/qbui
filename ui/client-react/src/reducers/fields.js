@@ -145,7 +145,9 @@ const fieldsStore = (state = [], action) => {
         return newState;
     }
     case types.SAVING_FORM: {
+        //This is for formBuilder
         newState[0].isPendingEdit = false;
+        debugger;
         return newState;
     }
     case types.UPDATE_FIELD_ID : {

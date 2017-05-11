@@ -27,7 +27,7 @@ import Logger from "../utils/logger";
 import {APPS_ROUTE, APP_ROUTE, BUILDER_ROUTE, ADMIN_ROUTE, SETTINGS_ROUTE} from '../constants/urlConstants';
 
 import {editRecordCancel, createRecord, updateRecord} from '../actions/recordActions';
-import {hideTrowser} from '../actions/shellActions';
+import {showErrorMsgDialog, hideTrowser} from '../actions/shellActions';
 import {updateForm, saveFormComplete} from '../actions/formActions';
 
 import "react-fastclick";
@@ -50,7 +50,8 @@ let storeFunc = {
     updateRecord: updateRecord,
     hideTrowser: hideTrowser,
     updateForm: updateForm,
-    saveFormComplete: saveFormComplete
+    saveFormComplete: saveFormComplete,
+    showErrorMsgDialog: showErrorMsgDialog
 };
 //  pass references to redux store and methods called within the appHistory component
 let history = AppHistory.setup(store, storeFunc).history;
