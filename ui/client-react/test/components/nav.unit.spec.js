@@ -102,10 +102,7 @@ describe('Nav Unit tests', () => {
             }
         },
         reports: [],
-        history: [],
-        location: {
-            search: 'editRec'
-        }
+        history: []
     };
 
     beforeEach(() => {
