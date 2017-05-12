@@ -84,9 +84,8 @@ Resources:
                 - "https://${SwimlaneID}-ecs.${DomainName}:443/ee/v1"
                 - { SwimlaneID: !Ref SwimlaneID, DomainName: !FindInMap [AccountMap, "DomainName", !Ref "AWS::AccountId"] }
             - Name: legacyBase
-              Value: !Sub
-                - "${LegacyBase}"
-                - { LegacyBase: !Ref LegacyBase}
+              Value:
+                - !Ref LegacyBase
       Volumes:
         - Host:
             SourcePath: !Sub "/var/log/containers/${ServiceName}"
