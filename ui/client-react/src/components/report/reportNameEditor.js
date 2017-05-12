@@ -56,7 +56,7 @@ const mapDispatchToProps = (dispatch) => {
         changeReportName: (context, newName) => {
             dispatch(changeReportName(context, newName));
         }
-    }
+    };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ReportNameEditor);
