@@ -112,8 +112,9 @@ class formBuilderPage {
     }
 
     getFieldLabels() {
-        this.waitForReady();
          // Gets the list of field labels from the form builder
+        this.waitForReady();
+        this.firstField.waitForExist();
         let fields = browser.elements('.field');
         return fields.value.map(function(field) {
             let label = field.element('.fieldLabel').getText();
@@ -148,7 +149,7 @@ class formBuilderPage {
         this.openMenu();
         topNavPO.modifyThisForm.waitForExist();
         topNavPO.modifyThisForm.click();
-        this.firstField.waitForVisible();
+        this.firstField.waitForExist();
         return this.getFieldLabels(); // better than pause?
     }
 
@@ -222,21 +223,6 @@ class formBuilderPage {
         }
     }
 
-    // slowDrag(target, sourceLabel) {
-    //     // Moves the cursor to specified target field and waits until target displays the the specified label
-    //     let targetLabel; // only needed for console output
-    //     browser.waitUntil(function() {
-    //         // jiggle the cursor around the target field
-    //         browser.moveToObject(target);
-    //         browser.pause(oneSecond);
-    //         // browser.moveToObject(target, 1, 1);
-    //         // browser.pause(oneSecond);
-    //         targetLabel = browser.element(target).getText();
-    //         return sourceLabel === targetLabel;
-    //     }, 10000, 'target preview label (' + targetLabel + ") didn't match source label (" + sourceLabel + ') after dragging');
-    //     return this;
-    // }
-
     slowDragAndDrop(source, target) {
         // Clicks on the specified source field and drags it to the specified target field
         let label = browser.element(source).getText();
@@ -248,8 +234,6 @@ class formBuilderPage {
         browser.moveToObject(target);
         // release button
         browser.buttonUp();
-        // this is necessary for Edge... without it, the dragToken remains displayed
-//        browser.element(target).click();
         browser.pause(fiveSeconds);
         return this.getFieldLabels();
     }
@@ -258,7 +242,9 @@ class formBuilderPage {
         // get the field list & wait to be sure it's not 'polluted' due to DOM still settling after other activity
         // (i.e. contains an unexpected array like ['Must be filled in', ...] after moving or adding fields)
         let newFields = this.getFieldLabels();
-        while (!newFields.length === numLabels) {
+        while (newFields.length !== numLabels) {
+            browser.logger.info('waiting for new field count (' + newFields + ') to be ' + numLabels);
+            browser.pause(this.oneSecond);
             newFields = this.getFieldLabels();
         }
         return newFields;
