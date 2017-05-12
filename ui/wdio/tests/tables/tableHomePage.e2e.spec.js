@@ -96,8 +96,10 @@
             // Get a session ticket for that subdomain and realmId (stores it in the browser)
             realmName = e2eBase.recordBase.apiBase.realm.subdomain;
             realmId = e2eBase.recordBase.apiBase.realm.id;
-            // Auth into the new stack
-            return RequestSessionTicketPage.get(e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.ticketEndpoint));
+            browser.call(function() {
+                // Auth into the new stack
+                return RequestSessionTicketPage.get(e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.ticketEndpoint));
+            });
         });
 
 
@@ -141,21 +143,28 @@
          */
         reportHomePageTestCases().forEach(function(testcase) {
             it('Verify default table home page for ' + testcase.message, function() {
+
                 browser.call(function() {
                     //Create a user
-                    return e2eBase.recordBase.apiBase.createUser().then(function(userResponse) {
+                    return e2eBase.recordBase.apiBase.createUser().then(function (userResponse) {
                         //parse user ID
                         userId = JSON.parse(userResponse.body).id;
-
-                        //Add user to an appRole
-                        e2eBase.recordBase.apiBase.assignUsersToAppRole(app.id, testcase.roleId, [userId]);
-
-                        //POST custdefaulthomepage for a table
-                        e2eBase.recordBase.apiBase.setCustDefaultTableHomePageForRole(app.id, app.tables[0].id, createRoleReportMapJSON(testcase.roleId, testcase.reportId));
-
-                        //get the user authentication
-                        return RequestSessionTicketPage.get(e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.recordBase.apiBase.resolveUserTicketEndpoint() + '?uid=' + userId + '&realmId='));
                     });
+                });
+
+                browser.call(function() {
+                    //Add user to an appRole
+                    return e2eBase.recordBase.apiBase.assignUsersToAppRole(app.id, testcase.roleId, [userId]);
+                });
+
+                browser.call(function() {
+                    //POST custdefaulthomepage for a table
+                    return e2eBase.recordBase.apiBase.setCustDefaultTableHomePageForRole(app.id, app.tables[0].id, createRoleReportMapJSON(testcase.roleId, testcase.reportId));
+                });
+
+                browser.call(function() {
+                    //get the user authentication
+                    return RequestSessionTicketPage.get(e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.recordBase.apiBase.resolveUserTicketEndpoint() + '?uid=' + userId + '&realmId='));
                 });
 
                 browser.call(function() {
@@ -190,16 +199,20 @@
 
             browser.call(function() {
                 //Create a user
-                return e2eBase.recordBase.apiBase.createUser().then(function(userResponse) {
+                return e2eBase.recordBase.apiBase.createUser().then(function (userResponse) {
                     //parse user ID
                     userId = JSON.parse(userResponse.body).id;
-
-                    //Add user to the admin appRole
-                    e2eBase.recordBase.apiBase.assignUsersToAppRole(app.id, e2eConsts.ADMIN_ROLEID, [userId]);
-
-                    //get the user authentication
-                    return RequestSessionTicketPage.get(e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.recordBase.apiBase.resolveUserTicketEndpoint() + '?uid=' + userId + '&realmId='));
                 });
+            });
+
+            browser.call(function() {
+                //Add user to the admin appRole
+                return e2eBase.recordBase.apiBase.assignUsersToAppRole(app.id, e2eConsts.ADMIN_ROLEID, [userId]);
+            });
+
+            browser.call(function() {
+                //get the user authentication
+                return RequestSessionTicketPage.get(e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.recordBase.apiBase.resolveUserTicketEndpoint() + '?uid=' + userId + '&realmId='));
             });
 
             //test that admin have access to admin report
