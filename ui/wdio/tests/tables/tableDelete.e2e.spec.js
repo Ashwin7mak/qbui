@@ -47,8 +47,10 @@
          * Before each it block reload the list all report (can be used as a way to reset state between tests)
          */
         beforeEach(function() {
-            //Go to table page
-            return RequestAppsPage.get(e2eBase.getRequestTableEndpoint(realmName, testApp.id, testApp.tables[0].id));
+            browser.call(function() {
+                //Go to table page
+                return RequestAppsPage.get(e2eBase.getRequestTableEndpoint(realmName, testApp.id, testApp.tables[0].id));
+            });
         });
 
 
@@ -58,7 +60,7 @@
             let originalTableLinksCount = tableCreatePO.getAllTableLeftNavLinksList.value.length;
 
             //Step 2 - Select table to delete ('Table 1' here) and make sure it lands in reports page
-            tableCreatePO.selectTable(EXISTING_TABLE_NAME_1);
+            //tableCreatePO.selectTable(EXISTING_TABLE_NAME_1);
             // wait for the report content to be visible
             ReportContentPO.waitForReportContent();
 
