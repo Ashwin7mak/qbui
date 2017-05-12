@@ -58,67 +58,28 @@ const ACCOUNT_USERS_DATA = [
 describe('Faceting Fields Values', () => {
 
     it('gets the facets based on QuickBase access status', () => {
-        expect(GetFacetFields(true, true)(ACCOUNT_USERS_DATA)[0]).toEqual(
+        expect(GetFacetFields(true, true)[0]).toEqual(
             {
                 id:0,
                 name: Locale.getMessage("governance.account.users.accessStatus"),
                 type: 'TEXT',
                 values: [
-                    {id:0, value: 'QuickBase Staff'},
-                    {id:0, value: 'No App Access'},
-                    {id:0, value: 'Paid Seat'}]
+                    {id:0, value: 'Denied'},
+                    {id:0, value: 'Deactivated'},
+                    {id:0, value: 'Paid Seat'},
+                    {id:0, value: 'No App Access'}]
             });
     });
 
     it('gets the right info for user in group', () => {
-        let facetUsers = _.filter(ACCOUNT_USERS_DATA, (user) => user.numGroupsMember > 0);
-
-        expect(GetFacetFields(true, true)(facetUsers)[4]).toEqual(
+        expect(GetFacetFields(true, true)[4]).toEqual(
             {
                 id:4,
                 name: Locale.getMessage("governance.account.users.inGroup"),
                 type: 'CHECKBOX',
                 values: [
-                    {id:4, value: true}]
-            });
-    });
-
-    it('facets users not in group', () => {
-        let facetUsers = _.filter(ACCOUNT_USERS_DATA, (user) => user.numGroupsMember === 0);
-
-        expect(GetFacetFields(true, true)(facetUsers)[4]).toEqual(
-            {
-                id:4,
-                name: Locale.getMessage("governance.account.users.inGroup"),
-                type: 'CHECKBOX',
-                values: [
-                    {id:4, value: false}]
-            });
-    });
-
-    it('gets correct info for the users who dont manage groups', () => {
-        let facetUsers = _.filter(ACCOUNT_USERS_DATA, (user) => user.numGroupsManaged === 0);
-
-        expect(GetFacetFields(true, true)(facetUsers)[5]).toEqual(
-            {
-                id:5,
-                name: Locale.getMessage("governance.account.users.groupManager"),
-                type: 'CHECKBOX',
-                values: [
-                    {id:5, value: false}]
-            });
-    });
-
-    it('gets correct info for the users who manage groups', () => {
-        let facetUsers = _.filter(ACCOUNT_USERS_DATA, (user) => user.numGroupsManaged > 0);
-
-        expect(GetFacetFields(true, true)(facetUsers)[5]).toEqual(
-            {
-                id:5,
-                name: Locale.getMessage("governance.account.users.groupManager"),
-                type: 'CHECKBOX',
-                values: [
-                    {id:5, value: true}]
+                    {id:4, value: 'Yes'},
+                    {id:4, value: 'No'}]
             });
     });
 });
@@ -150,18 +111,18 @@ describe('Facet Fields Permissions', () => {
         Locale.getMessage("governance.account.users.realmApproved")];
 
     it("should get ONLY the Realm fields", ()=> {
-        let realmAdminFacets = GetFacetFields(false, true)(ACCOUNT_USERS_DATA);
+        let realmAdminFacets = GetFacetFields(false, true);
         expect([...PERM_AGNOSTIC_FACETS, ...REALM_ONLY_FACETS]).toEqual(_.map(realmAdminFacets, (facet) => facet.name));
     });
 
     it("should get ONLY the Account fields", ()=> {
-        let accountFacets = GetFacetFields(true, false)(ACCOUNT_USERS_DATA);
+        let accountFacets = GetFacetFields(true, false);
         expect([...PERM_AGNOSTIC_FACETS, ...ACCOUNT_ONLY_FACETS]).toEqual(_.map(accountFacets, (facet) => facet.name));
     });
 
     it("should get ALL the fields", ()=> {
         const ALL_FACETS = [...PERM_AGNOSTIC_FACETS, ...ACCOUNT_ONLY_FACETS, ...REALM_ONLY_FACETS];
-        let allFacets = GetFacetFields(true, true)(ACCOUNT_USERS_DATA);
+        let allFacets = GetFacetFields(true, true);
         expect(ALL_FACETS).toEqual(_.map(allFacets, (facet) => facet.name));
     });
 });

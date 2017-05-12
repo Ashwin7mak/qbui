@@ -19,6 +19,7 @@ Promise.onPossiblyUnhandledRejection(function(err) {
     logger.debug('Bluebird Unhandled rejection', err);
 });
 
+
 let appsActions = {
 
     /**
@@ -147,7 +148,6 @@ let appsActions = {
                 this.dispatch(actions.UNASSIGN_USERS_SUCCESS, {appId: appId, roleId: roleId, userIds:userIds});
                 resolve();
             }, (error) => {
-                logger.parseAndLogError(LogLevel.ERROR, error.response, 'roleService.unassignUsersFromRole:');
                 this.dispatch(actions.UNASSIGN_USERS_FAILED);
                 reject();
             });
