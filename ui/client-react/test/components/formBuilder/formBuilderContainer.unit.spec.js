@@ -26,7 +26,7 @@ const mockActions = {
     removeFieldFromForm(_formId, _location) {},
     deselectField(_formId, _location) {},
     setFormBuilderPendingEditToFalse(_formId, _location) {},
-    setfieldsPendingEditToFalse(_formId, _location) {}
+    setFieldsPropertiesPendingEditToFalse(_formId, _location) {}
 };
 
 const mockAppHistory = {
@@ -72,7 +72,7 @@ describe('FormBuilderContainer', () => {
         spyOn(mockActions, 'removeFieldFromForm');
         spyOn(mockActions, 'deselectField');
         spyOn(mockActions, 'setFormBuilderPendingEditToFalse');
-        spyOn(mockActions, 'setfieldsPendingEditToFalse');
+        spyOn(mockActions, 'setFieldsPropertiesPendingEditToFalse');
         spyOn(mockAppHistory, 'showPendingEditsConfirmationModal');
     });
 
@@ -204,7 +204,7 @@ describe('FormBuilderContainer', () => {
                                                     isFieldPropertiesDirty={true}
                                                     location={testLocationProp}
                                                     redirectRoute={previousLocation}
-                                                    setfieldsPendingEditToFalse={mockActions.setfieldsPendingEditToFalse}
+                                                    setFieldsPropertiesPendingEditToFalse={mockActions.setFieldsPropertiesPendingEditToFalse}
                                                     loadForm={mockActions.loadForm}/>);
 
             instance = component.instance();
@@ -212,7 +212,7 @@ describe('FormBuilderContainer', () => {
 
             //I am not rendering a modal in the DOM for this test. I am just verifying that it exists. Just making sure it does not accidentally get deleted.
             expect(component.find('#appModal').length).toEqual(1);
-            expect(mockActions.setfieldsPendingEditToFalse).toHaveBeenCalled();
+            expect(mockActions.setFieldsPropertiesPendingEditToFalse).toHaveBeenCalled();
         });
 
         it('will invoke setFormBuilderPendingEditToFalse if setFormBuilderPendingEditToFalse is true', () => {

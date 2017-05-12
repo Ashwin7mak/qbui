@@ -39,11 +39,11 @@ export const updateFieldId = (oldFieldId, newFieldId, formId = null, appId, tblI
 };
 
 /**
- * setfieldsPendingEditToFalse sets isPendingEdits to false
+ * setFieldsPropertiesPendingEditToFalse sets isPendingEdits to false
  * @param formId
  * @returns {{id, type, content}|*}
  */
-export const setfieldsPendingEditToFalse = () => {
+export const setFieldsPropertiesPendingEditToFalse = () => {
     return {
         type: types.SET_IS_PENDING_EDIT_TO_FALSE
     };

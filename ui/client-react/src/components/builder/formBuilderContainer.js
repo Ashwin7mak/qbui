@@ -5,7 +5,7 @@ import Locale from '../../locales/locales';
 import {connect} from 'react-redux';
 import {loadForm, updateForm, moveFieldOnForm, toggleFormBuilderChildrenTabIndex, toggleToolPaletteChildrenTabIndex, keyboardMoveFieldUp, keyboardMoveFieldDown, selectFieldOnForm, deselectField, removeFieldFromForm, addNewFieldToForm, setFormBuilderPendingEditToFalse} from '../../actions/formActions';
 import {updateFormAnimationState} from '../../actions/animationActions';
-import {setfieldsPendingEditToFalse} from '../../actions/fieldsActions';
+import {setFieldsPropertiesPendingEditToFalse} from '../../actions/fieldsActions';
 import Loader from 'react-loader';
 import {LARGE_BREAKPOINT} from "../../constants/spinnerConfigurations";
 import {NEW_FORM_RECORD_ID} from '../../constants/schema';
@@ -69,7 +69,7 @@ const mapDispatchToProps = {
     removeFieldFromForm,
     addNewFieldToForm,
     setFormBuilderPendingEditToFalse,
-    setfieldsPendingEditToFalse
+    setFieldsPropertiesPendingEditToFalse
 };
 
 /**
@@ -144,8 +144,8 @@ export const FormBuilderContainer = React.createClass({
         }
 
         if (this.props.isFieldPropertiesDirty) {
-            if (this.props.setfieldsPendingEditToFalse) {
-                this.props.setfieldsPendingEditToFalse();
+            if (this.props.setFieldsPropertiesPendingEditToFalse) {
+                this.props.setFieldsPropertiesPendingEditToFalse();
             }
         }
     },
