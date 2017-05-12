@@ -321,6 +321,7 @@ describe('ReportGrid', () => {
         const rptId = 'rptId';
         const sortFids = [5, 6];
         const testAppUsers = [7, 8];
+        const builderMode = false;
 
         let phase1 = undefined;
         const record = {

@@ -7,6 +7,7 @@ import TopNav from "../header/topNav";
 import TempMainErrorMessages from './tempMainErrorMessages';
 import ReportManagerTrowser from "../report/reportManagerTrowser";
 import RecordTrowser from "../record/recordTrowser";
+import {enterBuilderMode} from '../../../src/actions/reportActions';
 
 import GlobalActions from "../actions/globalActions";
 import BuilderDropDownAction from '../actions/builderDropDownAction';
@@ -14,7 +15,6 @@ import Breakpoints from "../../utils/breakpoints";
 import {NotificationContainer} from "react-notifications";
 import {withRouter, Switch} from 'react-router-dom';
 import _ from 'lodash';
-
 import * as TrowserConsts from "../../constants/trowserConstants";
 import * as UrlConsts from "../../constants/urlConstants";
 import * as SchemaConsts from "../../constants/schema";
@@ -107,6 +107,11 @@ export const Nav = React.createClass({
         this.props.history.push(link);
     },
 
+    navigateToBuilderReport() {
+        this.props.enterBuilderMode(CONTEXT.REPORT.NAV);
+
+    },
+
     getTopGlobalActions() {
         const actions = [];
         let selectedApp = this.getSelectedApp();
@@ -123,6 +128,7 @@ export const Nav = React.createClass({
                                dropdownMsg="globalActions.user"
                                startTabIndex={4}
                                app={selectedApp}>
+
                     {isAdmin ?
                         <BuilderDropDownAction
                             history={this.props.history}
@@ -133,7 +139,9 @@ export const Nav = React.createClass({
                             position={"top"}
                             icon="settings"
                             navigateToBuilder={this.navigateToBuilder}
-                            startTabIndex={4}/> : null}
+                            navigateToBuilderReport={this.navigateToBuilderReport}
+                            startTabIndex={4}
+                            rptId={this.getReportsData().rptId} /> : null}
                 </GlobalActions>
             )} />
         );
@@ -226,7 +234,7 @@ export const Nav = React.createClass({
     },
 
     getEditFormFromProps() {
-        return _.has(this.props, "forms") && _.find(this.props.forms, form => form.id === "edit");
+        return _.get(this.props, "forms.edit");
     },
 
     /**
@@ -276,6 +284,7 @@ export const Nav = React.createClass({
         });
         return report || {};
     },
+
     /**
      *  Fetch the report list content.
      */
@@ -415,6 +424,7 @@ export const Nav = React.createClass({
                                 // with additional props
                                 // the Switch wrapper will pick only one of the routes the first
                                 // that matches.
+
                             let routeProps = {
                                 key : this.props.match ? this.props.match.url : "",
                                 apps: this.state.apps.apps,
@@ -434,10 +444,12 @@ export const Nav = React.createClass({
                                 flux: flux
                             };
                             return RouteWithSubRoutes(route, i, routeProps);
-                        })}
-                    </Switch>
+                        }
+                        )}
+                        </Switch>
+                </div>
+                }
 
-                </div>}
             </div>
 
             {pendEdits &&
@@ -510,7 +522,8 @@ const mapStateToProps = (state) => {
         forms: state.forms,
         shell: state.shell,
         record: state.record,
-        report: state.report
+        report: state.report,
+        reportBuilder: state.reportBuilder
     };
 };
 
@@ -532,8 +545,12 @@ const mapDispatchToProps = (dispatch) => {
         loadReports: (context, appId, tblId) => dispatch(ReportActions.loadReports(context, appId, tblId)),
 
         updateFormRedirectRoute: (route) => dispatch(updateFormRedirectRoute(route)),
+
         showTableCreationDialog: () => dispatch(TableCreationActions.showTableCreationDialog()),
-        showTableReadyDialog: () => dispatch(TableCreationActions.showTableReadyDialog())
+
+        showTableReadyDialog: () => dispatch(TableCreationActions.showTableReadyDialog()),
+
+        enterBuilderMode: (context) => dispatch(enterBuilderMode(context))
     };
 };
 

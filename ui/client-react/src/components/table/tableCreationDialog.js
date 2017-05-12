@@ -1,12 +1,12 @@
 import React from 'react';
 import {PropTypes} from 'react';
 import TableCreationPanel from './tableCreationPanel';
-import TableCreationSummaryPanel from './tableCreationSummaryPanel';
 import MultiStepDialog from '../../../../reuse/client/src/components/multiStepDialog/multiStepDialog';
 import {connect} from 'react-redux';
 import {NotificationManager} from 'react-notifications';
 import {I18nMessage} from "../../utils/i18nMessage";
 import * as TableCreationActions from '../../actions/tableCreationActions';
+import {updateFormRedirectRoute} from '../../actions/formActions';
 import Locale from '../../locales/locales';
 import UrlUtils from '../../utils/urlUtils';
 import _ from 'lodash';
@@ -55,6 +55,7 @@ export class TableCreationDialog extends React.Component {
 
                 // navigate to form builder (no page reload)
 
+                this.props.updateFormRedirectRoute(null);
                 AppHistory.history.push(UrlUtils.getAfterTableCreatedLink(this.props.app.id, tblId));
             },
             (error) => {
@@ -140,7 +141,7 @@ const mapStateToProps = (state) => {
 
 export default connect(
     mapStateToProps,
-    TableCreationActions
+    {...TableCreationActions, updateFormRedirectRoute}
 )(TableCreationDialog);
 
 

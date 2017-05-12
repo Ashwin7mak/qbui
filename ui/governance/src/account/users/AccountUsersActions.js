@@ -91,7 +91,7 @@ const sortFunctions = [
     "firstName",
     "lastName",
     "email",
-    "userName",
+    user => Formatters.FormatUsernameString(user, {rowData: user}),
     "lastAccess",
     user => Formatters.FormatUserStatusText(user.hasAppAccess, {rowData: user}),
     user => Formatters.FormatIsInactive(user.lastAccess, {rowData: user}),

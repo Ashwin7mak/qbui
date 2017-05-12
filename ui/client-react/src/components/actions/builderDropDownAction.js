@@ -22,7 +22,9 @@ let BuilderDropDownAction = React.createClass({
         navigateToBuilder: React.PropTypes.func.isRequired,
         position: React.PropTypes.string.isRequired,
         selectedApp: React.PropTypes.object,
-        selectedTable: React.PropTypes.object
+        selectedTable: React.PropTypes.object,
+        navigateToBuilderReport: React.PropTypes.func,
+        rptId: React.PropTypes.string
     },
 
     getTableSettingsLink() {
@@ -34,6 +36,7 @@ let BuilderDropDownAction = React.createClass({
         let isAppView = !!this.props.selectedApp; // !! converts to boolean
         let isTableView = (isAppView && this.props.selectedTable);
         let isFormView = (isTableView && this.props.recId);
+        let isReportView = (isTableView && !this.props.recId && this.props.rptId);
         let classes = "dropdownToggle globalActionLink";
 
         let dropDown = <Dropdown className={classes} id="nav-right-dropdown" dropup={this.props.position === "left"} >
@@ -52,6 +55,15 @@ let BuilderDropDownAction = React.createClass({
                             <span><I18nMessage message={"settings.tablesHeader"}/></span></a></li>
                         <li><a className="modifyTableSettings" onClick={this.getTableSettingsLink}><I18nMessage message={"settings.tableSettings"}/></a></li>
                     </div> : null}
+
+                    {isReportView &&
+                        <div className="configSet currentContext">
+                            <li className="heading"><a><span><I18nMessage message={"settings.reportsHeader"}/></span></a></li>
+                            <li><a className="modifyForm" onClick={this.props.navigateToBuilderReport}>
+                                <I18nMessage message={"settings.configureReportBuilder"}/></a></li>
+                        </div>
+                    }
+
                     {isFormView ?
                     <div className="configSet currentContext">
                         <li className="heading"><a><span><I18nMessage message={"settings.formsHeader"}/></span></a></li>
