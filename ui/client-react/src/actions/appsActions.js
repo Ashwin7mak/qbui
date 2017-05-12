@@ -19,6 +19,7 @@ Promise.onPossiblyUnhandledRejection(function(err) {
     logger.debug('Bluebird Unhandled rejection', err);
 });
 
+
 let appsActions = {
 
     /**
