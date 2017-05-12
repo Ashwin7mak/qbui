@@ -150,7 +150,7 @@ class formBuilderPage {
         topNavPO.modifyThisForm.waitForExist();
         topNavPO.modifyThisForm.click();
         this.firstField.waitForExist();
-        return this.getFieldLabels(); // better than pause?
+        return this;//.getFieldLabels(); // better than pause?
     }
 
     openMenu() {
@@ -237,18 +237,6 @@ class formBuilderPage {
         // Chrome needs a click to release mouse btn - why?
         this.selectedField.click();
         return this.getFieldLabels();
-    }
-
-    waitForLabels(numLabels) {
-        // get the field list & wait to be sure it's not 'polluted' due to DOM still settling after other activity
-        // (i.e. contains an unexpected array like ['Must be filled in', ...] after moving or adding fields)
-        let newFields = this.getFieldLabels();
-        while (newFields.length !== numLabels) {
-            browser.logger.info('waiting for new field count (' + newFields + ') to be ' + numLabels);
-            browser.pause(this.oneSecond);
-            newFields = this.getFieldLabels();
-        }
-        return newFields;
     }
 
     waitForReady() {

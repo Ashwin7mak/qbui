@@ -5,7 +5,6 @@
     let e2ePageBase = requirePO('e2ePageBase');
     let reportContentPO = requirePO('reportContent');
     let formBuilderPO = requirePO('formBuilder');
-    let topNavPO = requirePO('topNav');
 
     let realmName;
     let realmId;
@@ -322,9 +321,8 @@
             // drag the 1st field below the 2nd one
             let source = formBuilderPO.getFieldLocator(1);
             let target = formBuilderPO.getFieldLocator(2);
-            formBuilderPO.slowDragAndDrop(source, target);
+            let movedFields = formBuilderPO.slowDragAndDrop(source, target);
             // verify that the first 2 items have changed position
-            let movedFields = formBuilderPO.waitForLabels(origFields.length);
             expect(movedFields[0]).toBe(origFields[1]);
             expect(movedFields[1]).toBe(origFields[0]);
             // cancel & reopen
@@ -338,9 +336,8 @@
             // drag the 1st field below the 2nd one
             let source = formBuilderPO.getFieldLocator(1);
             let target = formBuilderPO.getFieldLocator(2);
-            formBuilderPO.slowDragAndDrop(source, target);
+            let movedFields = formBuilderPO.slowDragAndDrop(source, target);
             // verify that the first 2 items have changed position
-            let movedFields = formBuilderPO.waitForLabels(origFields.length);
             expect(movedFields[0]).toBe(origFields[1]);
             expect(movedFields[1]).toBe(origFields[0]);
             // save & reopen
