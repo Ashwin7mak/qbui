@@ -10,8 +10,10 @@ $settings-menu-padding-left: $spacing-xx-small;
             .dropdown-menu {
                 margin: 0;
                 padding: 0;
-                cursor: default;
                 top: 38px;
+            }
+            a {
+                cursor: default;
             }
             padding-right: 10px;
         }
