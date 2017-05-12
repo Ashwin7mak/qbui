@@ -51,10 +51,11 @@ export const SUPPORTED_NEW_FIELD_TYPES = [
         ]
     },
     {
+        fieldGroupId: 'tableDataConnections',
         titleI18nKey: 'builder.fieldGroups.tableDataConnections',
         fieldTypes: [
             fieldFormats.LINK_TO_RECORD,
-            fieldFormats.LIST_OF_RECORDS
+            //fieldFormats.LIST_OF_RECORDS
         ]
     }
 
@@ -63,8 +64,8 @@ export const SUPPORTED_NEW_FIELD_TYPES = [
 /**
  * A helper function that has the supported fields along with the default props for each field type for display in form builder
  */
-export const supportedNewFieldTypesWithProperties = () => {
-    return SUPPORTED_NEW_FIELD_TYPES.map((fieldGroup, index) => {
+export const supportedNewFieldTypesWithProperties = (omittedFieldGroups = []) => {
+    const supportedNewFieldTypesWithProperties = SUPPORTED_NEW_FIELD_TYPES.map((fieldGroup, index) => {
         return {
             ...fieldGroup,
             key: `group_${index}`,
@@ -72,6 +73,7 @@ export const supportedNewFieldTypesWithProperties = () => {
             children: fieldGroup.fieldTypes.map(fieldType => createFieldTypeProps(fieldType))
         };
     });
+    return _.reject(supportedNewFieldTypesWithProperties, (element) => omittedFieldGroups.indexOf(element.fieldGroupId) !== -1);
 };
 
 /**

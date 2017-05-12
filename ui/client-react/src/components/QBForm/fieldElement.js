@@ -115,6 +115,7 @@ export const FieldElement = React.createClass({
                                              isDisabled={this.props.isDisabled}
                                              classes={classes}
                                              appUsers={this.props.appUsers}
+                                             app={this.props.app}
                                              label={FieldUtils.getFieldLabel(this.props.element, this.props.relatedField)}
                                              tabIndex={this.props.tabIndex}
             />;

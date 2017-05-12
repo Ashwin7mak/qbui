@@ -283,8 +283,10 @@ export const FormBuilderContainer = React.createClass({
                              isOpen={this.props.isOpen}
                              toggleToolPaletteChildrenTabIndex={this.toggleToolPaletteChildrenTabIndex}
                              toolPaletteChildrenTabIndex={this.props.toolPaletteChildrenTabIndex}
-                             toolPaletteFocus={this.props.toolPaletteFocus} >
-                <FieldProperties appId={this.props.match.params.appId} tableId={this.props.match.params.tblId} formId={formId}>
+                             toolPaletteFocus={this.props.toolPaletteFocus}
+                             formMeta={formData ? formData.formMeta : null}
+                             app={this.props.app}>
+                <FieldProperties appId={this.props.match.params.appId} app={this.props.app} tableId={this.props.match.params.tblId} formId={formId}>
                         <div tabIndex={tabIndexConstants.FORM_TAB_INDEX}
                              className="formBuilderContainerContent"
                              ref={element => formBuilderContainerContent = element}
@@ -297,6 +299,7 @@ export const FormBuilderContainer = React.createClass({
                                             formBuilderContainerContentElement={formBuilderContainerContent}
                                             selectedField={this.props.selectedField}
                                             formId={formId}
+                                            app={this.props.app}
                                             appId={this.props.match.params.appId}
                                             tblId={this.props.match.params.tblId}
                                             formData={formData}

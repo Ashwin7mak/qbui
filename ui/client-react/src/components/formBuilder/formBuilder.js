@@ -125,6 +125,7 @@ export class FormBuilder extends Component {
                     cancelFormReorder={this.cancelFormReorder}
                     updateAnimationState={this.props.updateAnimationState}
                     hasAnimation={true}
+                    app={this.props.app}
                     appUsers={[]}
                 />
                 <div className="elementCache" ref={elementCache => this.elementCache = elementCache} />

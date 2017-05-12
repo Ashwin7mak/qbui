@@ -45,6 +45,7 @@ export class FieldProperties extends Component {
         this.updateFieldProps = this.updateFieldProps.bind(this);
         this.updateMultiChoiceFieldProps = this.updateMultiChoiceFieldProps.bind(this);
         this.buildMultiChoiceDisplayList = this.buildMultiChoiceDisplayList.bind(this);
+        this.createLinkToRecordPropertyContainer = this.createLinkToRecordPropertyContainer.bind(this);
     }
 
     /**
@@ -120,6 +121,15 @@ export class FieldProperties extends Component {
         );
     }
 
+    createLinkToRecordPropertyContainer(propertyTitle, propertyValue = "Table XXX", key = 4) {
+        return (
+            <div key={key} className="linkToRecordPropertyContainer">
+                <div className="linkToRecordPropertyTitle">{propertyTitle}</div>
+                <div>{propertyValue}</div>
+            </div>
+        );
+    }
+
     /**
      * takes the array of choices objects and creates a string separated by newline characters to display each
      * option on a separate line in the textarea
@@ -174,6 +184,9 @@ export class FieldProperties extends Component {
         if (formatType === FieldFormats.TEXT_FORMAT_MULTICHOICE) {
             let choices = this.buildMultiChoiceDisplayList(this.props.selectedField.multipleChoice.choices);
             fieldPropContainers.push(this.createMultiChoiceTextPropertyContainer(Locale.getMessage('fieldPropertyLabels.multiChoice'), choices));
+        } else if (formatType === FieldFormats.LINK_TO_RECORD) {
+            let json = JSON.stringify(this.props.selectedField);
+            fieldPropContainers.push(this.createLinkToRecordPropertyContainer("Link to a record in the table", json));
         }
 
         return fieldPropContainers;

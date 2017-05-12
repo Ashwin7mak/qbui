@@ -1,0 +1,13 @@
+.multiStepModal.tableDataConnectionDialog {
+    .modal-body > *:first-child {
+        height: 100px;
+    }
+
+    .tableChooserHeader {
+        padding-bottom: 20px;
+    }
+}
+
+.multiStepModal.tableDataConnectionDialog.allowOverflow .loadedContent {
+    overflow: visible;
+}

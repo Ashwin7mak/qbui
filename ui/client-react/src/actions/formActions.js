@@ -371,6 +371,7 @@ export const updateForm = (appId, tblId, formType, form, redirectRoute, shouldRe
 // we're returning a promise to the caller (not a Redux action) since this is an async action
 // (this is permitted when we're using redux-thunk middleware which invokes the store dispatch)
 function saveTheForm(appId, tblId, formType, formMeta, isNew, redirectRoute, shouldRedirectOnSave) {
+    debugger;
     return (dispatch, getState) => {
         dispatch(event(formType, types.SAVING_FORM));
 
