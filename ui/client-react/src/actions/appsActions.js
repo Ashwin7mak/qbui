@@ -40,6 +40,7 @@ let appsActions = {
             appService.getApps(hydrate).then(
                 response => {
                     logger.debug('AppService getApps success');
+                    // TODO: move model reference into store when migrate to redux
                     let model = appsModel.set(response.data);
                     this.dispatch(actions.LOAD_APPS_SUCCESS, model);
                     resolve();
@@ -60,17 +61,19 @@ let appsActions = {
     selectAppId(appId) {
         //  promise is returned in support of unit testing only
         return new Promise((resolve, reject) => {
+            //  display select app event; note appId can be null
             this.dispatch(actions.SELECT_APP, appId);
-            let appService = new AppService();
 
-            // fetch the app users list if we don't have it already
-            if (appId && appId !== this.selectedAppId) {
-                appService.getAppUsers(appId).then(response => {
-                    this.selectedAppId = appId;
-                    this.dispatch(actions.LOAD_APP_USERS_SUCCESS, response.data);
+            if (appId) {
+                let appService = new AppService();
+                appService.getAppComponents(appId).then(response => {
+                    let users = response.data.users;
+                    // TODO: move model reference into store when migrate to redux
+                    let model = appsModel.set([response.data.app]);
+                    this.dispatch(actions.SELECT_APP_SUCCESS, {users: users, app: model[0]});
                     resolve();
                 }, () => {
-                    this.dispatch(actions.LOAD_APP_USERS_FAILED);
+                    this.dispatch(actions.SELECT_APP_FAILED);
                     reject();
                 });
             } else {

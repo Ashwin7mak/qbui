@@ -80,8 +80,11 @@ export class TableCreationDialog extends React.Component {
      * get table names for app
      */
     getExistingTableNames() {
-
-        return this.props.app.tables.map((table) => table.name);
+        let appTablesNames = [];
+        if (_.has(this.props.app, 'tables')) {
+            appTablesNames = this.props.app.tables.map((table) => table.name);
+        }
+        return appTablesNames;
     }
 
     /**
