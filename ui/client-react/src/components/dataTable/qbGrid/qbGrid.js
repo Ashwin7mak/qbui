@@ -399,7 +399,6 @@ export const QbGrid = React.createClass({
      * @param object which has the drag source and drop target
      */
     onMoveColumn(labels) {
-        debugger;
         let params = {
             sourceLabel: labels.sourceLabel,
             targetLabel: labels.targetLabel
