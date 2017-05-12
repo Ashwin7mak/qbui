@@ -24,6 +24,13 @@ const facetMenuReducer = (state = initialState, action) => {
         return newState;
     }
 
+    case types.TOGGLE_FACET_MENU: {
+        return {
+            ...newState,
+            show: !newState.show
+        };
+    }
+
     case types.SET_FACETS_EXPANDED: {
         newState.expandedFacetFields = action.payload.expanded;
         return newState;
@@ -39,7 +46,7 @@ const facetMenuReducer = (state = initialState, action) => {
     }
 };
 
-export const getExpandedFacetFields = state => state.facets.expandedFacetFields;
-export const getMoreRevealedFacetFields = state => state.facets.moreRevealedFacetFields;
+export const getExpandedFacetFields = state => state && state.facets ? state.facets.expandedFacetFields : [];
+export const getMoreRevealedFacetFields = state => state && state.facets ? state.facets.moreRevealedFacetFields : [];
 
 export default facetMenuReducer;
