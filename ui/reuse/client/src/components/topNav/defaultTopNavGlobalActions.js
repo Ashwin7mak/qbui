@@ -1,8 +1,8 @@
 import React, {PropTypes, Component} from 'react';
 import GlobalAction from 'REUSE/components/globalAction/globalAction';
-import HelpButton from 'REUSE/components/helpButton/helpButton';
 import UserDropDown from './supportingComponents/userDropDown';
 import UserFeedBack from './supportingComponents/userFeedBack';
+import HelpButton from './supportingComponents/helpButton';
 
 // IMPORTING FROM CLIENT REACT
 // Needs to be refactored once these components are added to the reuse library
@@ -21,7 +21,7 @@ const signOutHref = '/qbase/signout';
  * Alternatively, pass in additional top bar elements by wrapping them with this component as children: <ReDefaultTopNavGlobalActions> <div>CustomMenuItem</div> </ReDefaultTopNavGlobalActions>
  * Check out the propTypes for other values you can change if you need.
  * If these default actions don't suit your needs, try creating a custom top nav by using the ReTopNav with an array of GlobalAction components */
-class ReDefaultTopNavGlobalActions extends Component {
+class DefaultTopNavGlobalActions extends Component {
     /**
      * A link to sign the user out
      * (MenuItem href is currently incompatible with react-fastclick) */
@@ -61,6 +61,7 @@ class ReDefaultTopNavGlobalActions extends Component {
                             position = {"center"}
                         />
                     </li>
+
                     <li className="link globalAction"><HelpButton/></li>
                 </ul>
             </div>
@@ -74,7 +75,7 @@ const actionPropType = React.PropTypes.shape({
     link: React.PropTypes.string
 });
 
-ReDefaultTopNavGlobalActions.propTypes = {
+DefaultTopNavGlobalActions.propTypes = {
     linkClass: PropTypes.string,
 
     /**
@@ -104,9 +105,9 @@ ReDefaultTopNavGlobalActions.propTypes = {
     shouldOpenMenusUp: React.PropTypes.bool
 };
 
-ReDefaultTopNavGlobalActions.defaultProps = {
+DefaultTopNavGlobalActions.defaultProps = {
     startTabIndex: 0,
     actions: [],
 };
 
-export default ReDefaultTopNavGlobalActions;
+export default DefaultTopNavGlobalActions;

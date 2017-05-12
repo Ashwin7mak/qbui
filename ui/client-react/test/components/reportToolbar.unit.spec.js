@@ -6,7 +6,6 @@ import IconActions from '../../src/components/actions/iconActions';
 import ReportToolbar  from '../../src/components/report/reportToolbar';
 import {__RewireAPI__ as ReportToolbarRewireAPI} from '../../src/components/report/reportToolbar';
 import FacetSelections  from '../../src/components/facet/facetSelections';
-import facetMenuActions from '../../src/actions/facetMenuActions';
 
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
@@ -216,11 +215,17 @@ describe('ReportToolbar functions', () => {
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 
         //add bool facet
-        component.handleFacetSelect(null, {id: 4}, 'Yes');
+        component.handleFacetSelect({id: 4}, 'Yes');
 
         // ensure the boolean facet becomes a member
         selected.addSelection(4, 'Yes');
-        expect(callBacks.filterOnSelections).toHaveBeenCalledWith(selected);
+
+        // For some reason, object comparison here is not working as we expect.
+        //expect(callBacks.filterOnSelections).toHaveBeenCalledWith(selected);
+        // So, instead, get the actual object passed to the callback and compare
+        // the selection hashes using getSelections().
+        let filterOnSelectionsFirstArg = callBacks.filterOnSelections.calls.mostRecent().args[0];
+        expect(selected.getSelections()).toEqual(filterOnSelectionsFirstArg.getSelections());
     });
 
     it('test render reportToolbar with selected values then clear a field selection', () => {
@@ -235,8 +240,8 @@ describe('ReportToolbar functions', () => {
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 
         //select a couple of facets
-        component.handleFacetSelect(null, {id: 1}, 'Development');
-        component.handleFacetSelect(null, {id: 1}, 'Planning');
+        component.handleFacetSelect({id: 1}, 'Development');
+        component.handleFacetSelect({id: 1}, 'Planning');
         expect(callBacks.filterOnSelections).toHaveBeenCalled();
         callBacks.filterOnSelections.calls.reset();
 
@@ -260,7 +265,7 @@ describe('ReportToolbar functions', () => {
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 
         //select a couple of facets
-        component.handleFacetDeselect(null, {id: 1}, 'Development');
+        component.handleFacetDeselect({id: 1}, 'Development');
         expect(callBacks.filterOnSelections).toHaveBeenCalled();
     });
 
@@ -275,8 +280,8 @@ describe('ReportToolbar functions', () => {
         />);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
         //select a couple of facets
-        component.handleFacetSelect(null, {id: 1}, 'Development');
-        component.handleFacetSelect(null, {id: 2}, 'Claire Martinez');
+        component.handleFacetSelect({id: 1}, 'Development');
+        component.handleFacetSelect({id: 2}, 'Claire Martinez');
         callBacks.filterOnSelections.calls.reset();
 
         //clear all selects
@@ -286,4 +291,3 @@ describe('ReportToolbar functions', () => {
     });
 
 });
-

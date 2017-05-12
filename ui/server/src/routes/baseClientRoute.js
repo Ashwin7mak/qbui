@@ -42,7 +42,7 @@ class BaseClientRoute {
     }
 
     /**
-     * Generates the path to the correct bundle file when using cahe-busting or chunkfiles in webpack.
+     * Generates the path to the correct bundle file when using cache-busting or chunkfiles in webpack.
      * It only returns a value when the environment is set to production as other environments do not use cache-busting/chunkfiles.
      * @param bundleFileName
      * @returns {*}

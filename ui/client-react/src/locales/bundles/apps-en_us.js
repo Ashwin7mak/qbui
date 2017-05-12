@@ -540,6 +540,7 @@ export default {
         quickBaseClassic: "QuickBase Classic",
         quickBaseMercury: "QuickBase Mercury",
         missingWalkMe: "Tutorial is not available",
+        missingHelp: "Help is not available yet",
         fieldsDefaultLabels: {
             [FieldFormats.TEXT_FORMAT]: "Text",
             [FieldFormats.MULTI_LINE_TEXT_FORMAT]: "Long text",

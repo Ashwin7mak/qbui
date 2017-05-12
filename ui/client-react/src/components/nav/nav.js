@@ -290,6 +290,10 @@ export const Nav = React.createClass({
         return getPendEdits(this.props.record);
     },
 
+/*
+    // Commenting out this function to render the top nav items in the center.
+    // These items weren't enabled yet and were simply placeholders. We will need
+    // to put some of them back so, leaving the code here for now.
     getCenterGlobalActions() {
         return (
             <ButtonGroup className="navItem">
@@ -305,6 +309,7 @@ export const Nav = React.createClass({
             </ButtonGroup>
         );
     },
+*/
 
     render() {
         if (!this.state.apps || this.state.apps.apps === null) {
@@ -321,6 +326,7 @@ export const Nav = React.createClass({
         if (this.props.shell.leftNavVisible) {
             classes += " leftNavOpen";
         }
+        const hasEditQuery = _.get(this.props, `location.query.${UrlConsts.EDIT_RECORD_KEY}`);
         let editRecordId = _.has(this.props, "location.query") ? this.props.location.query[UrlConsts.EDIT_RECORD_KEY] : null;
         let editRecordIdForPageTitle = editRecordId;
 
@@ -342,15 +348,17 @@ export const Nav = React.createClass({
                 selectedRecordId={viewingRecordId}
             />
 
-            <Analytics dataset={Config.evergageDataset} />
+            <Analytics dataset={Config.evergageDataset} app={this.getSelectedApp()} />
 
             <NotificationContainer/>
 
             {/* AppQbModal is an app-wide modal that can be called from non-react classes*/}
             <AppQbModal/>
 
+            {/* show the trowser only when we have a editRec query param*/}
             {this.props.match.params && this.props.match.params.appId &&
-            <RecordTrowser visible={this.props.shell.trowserOpen && this.props.shell.trowserContent === TrowserConsts.TROWSER_EDIT_RECORD}
+            <RecordTrowser
+                visible={this.props.shell.trowserOpen && this.props.shell.trowserContent === TrowserConsts.TROWSER_EDIT_RECORD && hasEditQuery}
                            history={this.props.history}
                            editForm={this.getEditFormFromProps()}
                            appId={this.props.match.params.appId}
@@ -392,7 +400,7 @@ export const Nav = React.createClass({
 
             <div className="main" >
                 <TopNav title={this.state.nav.topTitle}
-                        centerGlobalActions={this.getCenterGlobalActions()}
+                        // centerGlobalActions={this.getCenterGlobalActions()} // commented out placeholders for now. See comments by getCenterGlobalActions()
                         globalActions={this.getTopGlobalActions()}
                         onNavClick={this.toggleNav}
                         showOnSmall={this.state.nav.showTopNav}
