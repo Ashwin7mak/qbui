@@ -243,7 +243,7 @@
             expect(this.tableReadyDialogue.element('.modal-footer .finishedButton').getAttribute('textContent')).toBe('OK');
             this.tableReadyDialogue.element('.modal-footer .finishedButton').click();
             //Need small wait for the container to dissapear
-            browser.pause(e2eConsts.shortWaitTimeMs);
+            browser.pause(e2eConsts.mediumWaitTimeMs);
             return formsPO.editFormContainerEl.waitForVisible();
         }},
 
