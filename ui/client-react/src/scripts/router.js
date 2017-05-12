@@ -29,6 +29,7 @@ import {APPS_ROUTE, APP_ROUTE, BUILDER_ROUTE, ADMIN_ROUTE, SETTINGS_ROUTE} from 
 import {editRecordCancel, createRecord, updateRecord} from '../actions/recordActions';
 import {showErrorMsgDialog, hideTrowser} from '../actions/shellActions';
 import {updateForm, saveFormComplete} from '../actions/formActions';
+import {getNavReport} from '../reducers/report';
 
 import "react-fastclick";
 
@@ -51,7 +52,8 @@ let storeFunc = {
     hideTrowser: hideTrowser,
     updateForm: updateForm,
     saveFormComplete: saveFormComplete,
-    showErrorMsgDialog: showErrorMsgDialog
+    showErrorMsgDialog: showErrorMsgDialog,
+    getNavReport: getNavReport
 };
 //  pass references to redux store and methods called within the appHistory component
 let history = AppHistory.setup(store, storeFunc).history;

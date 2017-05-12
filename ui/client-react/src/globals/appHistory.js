@@ -50,6 +50,7 @@ class AppHistory {
             this.updateForm = null;
             this.saveFormComplete = null;
             this.hideTrowser = null;
+            this.getNavReport = null;
 
             // Keep track of the event listeners so they can be canceled
             this.cancelListenBefore = null;
@@ -76,6 +77,7 @@ class AppHistory {
             self.updateForm = storeFunc.updateForm;
             self.saveFormComplete = storeFunc.saveFormComplete;
             self.hideTrowser = storeFunc.hideTrowser;
+            self.getNavReport = storeFunc.getNavReport;
         }
 
         self._setupHistoryListeners();
@@ -202,11 +204,11 @@ class AppHistory {
         let fields = [];
         if (self.store) {
             const state = self.store.getState();
+            console.log('state: ', state);
             if (Array.isArray(state.report) && state.report.length > 0) {
-                //  fetch the 1st report in the store
-                //  TODO: revisit to ensure appropriate support for store with multiple reports
                 if (_.isEmpty(state.report[0]) === false) {
-                    const reportStore = state;
+                    const reportState = state.report;
+                    const reportStore = self.getNavReport(reportState);
                     if (_.has(reportStore, 'data.fields')) {
                         fields = reportStore.data.fields;
                     }
@@ -250,15 +252,11 @@ class AppHistory {
             const state = self.store.getState();
             const {recordStore} = self.getStores(state);
 
-            //TODO: Currently isInLineEditOpen is hardcoded to true, this broke the navigation confirmation modal for form view edit and form view add a new record
-            //TODO: inline edit confirmation modal is broken and needs to be fixed
-
-            // if (recordStore.isInlineEditOpen) {
-            //     fields = self.getFieldsFromReportStore();
-            // } else {
-            //     fields = self.getFieldsFromFormStore();
-            // }
-            fields = self.getFieldsFromFormStore();
+            if (recordStore.isInlineEditOpen) {
+                fields = self.getFieldsFromReportStore();
+            } else {
+                fields = self.getFieldsFromFormStore();
+            }
         }
         return fields;
     }
@@ -271,7 +269,6 @@ class AppHistory {
         if (self.store && _.isFunction(self.createRecord) && _.isFunction(self.updateRecord)) {
             const state = self.store.getState();
             const {recordStore} = self.getStores(state);
-
             const appId = recordStore.currentEditingAppId;
             const tableId = recordStore.currentEditingTableId;
             const recordId = recordStore.currentEditingRecordId;

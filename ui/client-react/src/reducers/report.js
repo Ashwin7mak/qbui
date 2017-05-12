@@ -4,6 +4,7 @@ import {NEW_RECORD_VALUE} from '../constants/urlConstants';
 import _ from 'lodash';
 import FacetSelections from '../components/facet/facetSelections';
 import ReportModelHelper from '../models/reportModelHelper';
+import {CONTEXT} from '../actions/context';
 
 /**
  * Manage array of report states
@@ -394,5 +395,8 @@ const report = (state = [], action) => {
         return state;
     }
 };
+
+export const getNavReport  = (state) => _.find(state, (rpt) => rpt.id === CONTEXT.REPORT.NAV);
+export const getListReport  = (state) => _.find(state, (rpt) => rpt.id === CONTEXT.REPORT.NAV_LIST);
 
 export default report;
