@@ -204,7 +204,6 @@ class AppHistory {
         let fields = [];
         if (self.store) {
             const state = self.store.getState();
-            console.log('state: ', state);
             if (Array.isArray(state.report) && state.report.length > 0) {
                 if (_.isEmpty(state.report[0]) === false) {
                     const reportState = state.report;

@@ -99,7 +99,8 @@ describe('AppHistory', () => {
         updateForm: () => {},
         saveFormComplete: () => {},
         hideTrowser: () => {},
-        showErrorMsgDialog: () => {}
+        showErrorMsgDialog: () => {},
+        getNavReport: () => {}
     };
 
     describe('Test new appHistory instances', () => {
@@ -114,6 +115,7 @@ describe('AppHistory', () => {
             expect(appHistory.saveFormComplete).toBeNull();
             expect(appHistory.hideTrowser).toBeNull();
             expect(appHistory.showErrorMsgDialog).toBeNull();
+            expect(appHistory.getNavReport).toBeNull();
         });
 
         it('Is a singleton class; ensure only one instance created', () => {
@@ -136,6 +138,7 @@ describe('AppHistory', () => {
             expect(appHistory.saveFormComplete).toBeDefined();
             expect(appHistory.hideTrowser).toBeDefined();
             expect(appHistory.showErrorMsgDialog).toBeDefined();
+            expect(appHistory.getNavReport).toBeDefined();
         });
 
         it('sets a listener for internal app route changes', () => {
