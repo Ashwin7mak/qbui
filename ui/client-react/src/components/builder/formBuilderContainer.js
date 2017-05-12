@@ -155,7 +155,6 @@ export const FormBuilderContainer = React.createClass({
             AppHistory.showPendingEditsConfirmationModal(this.saveClicked, this.closeFormBuilder, () => HideAppModal());
         } else {
             HideAppModal();
-
             this.closeFormBuilder();
         }
     },
