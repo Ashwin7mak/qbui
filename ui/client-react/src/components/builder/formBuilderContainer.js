@@ -134,6 +134,10 @@ export const FormBuilderContainer = React.createClass({
     },
 
     closeFormBuilder(appId, tblId, redirectRoute) {
+        appId = appId ? appId : this.props.match.params.appId;
+        tblId = tblId ? tblId : this.props.match.params.tblId;
+        redirectRoute = redirectRoute ? redirectRoute : this.props.redirectRoute;
+        
         NavigationUtils.goBackToLocationOrTable(appId, tblId, redirectRoute);
 
         if (this.props.isFormDirty) {
@@ -151,11 +155,10 @@ export const FormBuilderContainer = React.createClass({
 
     onCancel() {
         if (this.props.isFormDirty || this.props.isFieldPropertiesDirty) {
-            const {appId, tblId} = this.props.match.params;
-            AppHistory.showPendingEditsConfirmationModal(this.saveClicked, this.closeFormBuilder(appId, tblId, this.props.redirectRoute), () => HideAppModal());
+            AppHistory.showPendingEditsConfirmationModal(this.saveClicked, this.closeFormBuilder(this.props.match.params.appId, this.props.match.params.tblId, this.props.redirectRoute), () => HideAppModal());
         } else {
             HideAppModal();
-            this.closeFormBuilder(appId, tblId, this.props.redirectRoute);
+            this.closeFormBuilder();
         }
     },
 
