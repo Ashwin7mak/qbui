@@ -24,7 +24,7 @@ let BuilderDropDownAction = React.createClass({
         selectedApp: React.PropTypes.object,
         selectedTable: React.PropTypes.object,
         navigateToBuilderReport: React.PropTypes.func,
-        rptId: React.PropTypes.number
+        rptId: React.PropTypes.string
     },
 
     getTableSettingsLink() {
