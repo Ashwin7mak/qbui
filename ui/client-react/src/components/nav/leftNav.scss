@@ -244,6 +244,7 @@ div.leftNavTooltip {
         flex: 0 0 auto;
         min-height: 40px;
         background-color: $leftnav-app-background-color;
+        @include correctFontWeightForLightTextOnDarkBackground;
 
         .toggleNavButton {
             display: none;

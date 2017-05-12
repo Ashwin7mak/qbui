@@ -1,7 +1,7 @@
 import React from 'react';
 
 import TestUtils from 'react-addons-test-utils';
-import FacetsAspect  from '../../src/components/facet/facetsAspect';
+import FacetsAspect  from '../../../src/components/facets/facetsAspect';
 
 
 describe('FacetsAspect functions', () => {

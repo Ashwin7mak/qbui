@@ -501,7 +501,7 @@ export default {
             emails: "Format all the addresses like name@domain.com",
             maxChars: "Use up to {maxNum} characters",
             choiceMaxLength : "Select a choice with {maxNum} characters or less",
-            phone: "Format the {fieldName} like (xxx) xxx-xxxx",
+            phone: "Enter a genuine number for {fieldName}",
             phoneInvalidCountryCode: "Format the country code like +x for international numbers",
             duration: {
                 timeFormat: "Format the {fieldName} in {value}",
@@ -539,6 +539,7 @@ export default {
         quickBaseClassic: "QuickBase Classic",
         quickBaseMercury: "QuickBase Mercury",
         missingWalkMe: "Tutorial is not available",
+        missingHelp: "Help is not available yet",
         fieldsDefaultLabels: {
             [FieldFormats.TEXT_FORMAT]: "Text",
             [FieldFormats.MULTI_LINE_TEXT_FORMAT]: "Long text",
@@ -715,6 +716,9 @@ export default {
             formsHeader: "Form",
             tableSettings: 'Table properties & settings',
             configureFormBuilder: 'Modify this form',
+            reportsHeader: 'Report',
+            configureReportBuilder: 'Modify this report'
+
         },
         tableEdit: {
             tableUpdateFailed: "Failed to update table",

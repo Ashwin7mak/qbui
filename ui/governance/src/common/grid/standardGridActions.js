@@ -25,6 +25,19 @@ export const setSearch = (gridId, searchTerm) => ({
 });
 
 /**
+ * Clear the search input text box
+ *
+ * @returns {{type, content: string}}
+ */
+export const clearSearchTerm = (gridId) => {
+    return {
+        type: types.SET_SEARCH,
+        gridId,
+        searchTerm: ''
+    };
+};
+
+/**
  * Action to set the desired sort order for a given grid
  *
  * @param gridId - the id of the grid we want to update
@@ -63,6 +76,30 @@ export const setPaginate = (gridId, pagination) => ({
     gridId,
     pagination
 });
+
+/**
+ * Action to set the total records
+ *
+ * @param gridId - the id of the grid we want to update
+ * @param direction - the direction to paginate
+ */
+export const setTotalRecords = (gridId, totalRecords) => ({
+    type: types.SET_TOTALRECORDS,
+    gridId,
+    totalRecords
+});
+
+/**
+ * Set the selected facet for the given grid
+ * @param gridId
+ * @param facetSelections
+ */
+export const setFacetSelections = (gridId, facetSelections) => ({
+    type: types.SET_FACET_SELECTIONS,
+    gridId,
+    facetSelections
+});
+
 
 /**
  * Update function that delegates the work to a passed in update action

@@ -5,7 +5,7 @@ describe('StandardGridReducer', () => {
     const initialState = {
         items: [],
         sortFids: [],
-        pagination: {totalRecords: 0, totalPages: 0, currentPage: 1, itemsPerPage: 10},
+        pagination: {totalRecords:0, filteredRecords: 0, totalPages: 0, currentPage: 1, itemsPerPage: 10},
         searchTerm : ""
     };
 
@@ -61,10 +61,23 @@ describe('StandardGridReducer', () => {
     });
 
     it('should set pagination state', () => {
-        const pagination = {pagination: {totalRecords: 10, totalPages: 10, currentPage: 1, itemsPerPage: 10}};
+        const pagination = {pagination: {filteredRecords: 10, totalPages: 10, currentPage: 1, itemsPerPage: 10}};
         const state = StandardGridReducer.grid(initialState,
             {pagination: pagination, type: StandardGridActionType.SET_PAGINATION});
-        expect(state.pagination).toEqual(pagination);
+        expect(state.pagination).toEqual({...initialState.pagination, ...pagination});
+    });
+
+    it('should set total records state', () => {
+        const state = StandardGridReducer.grid(initialState,
+            {totalRecords: 10, type: StandardGridActionType.SET_TOTALRECORDS});
+        expect(state.pagination).toEqual({...initialState.pagination, totalRecords:10});
+    });
+
+    it('should set facet selection state', () => {
+        const facetSelections = {'0' : 1};
+        const state = StandardGridReducer.grid(initialState,
+            {facetSelections: facetSelections, type: StandardGridActionType.SET_FACET_SELECTIONS});
+        expect(state.facets.facetSelections).toEqual(facetSelections);
     });
 
     it('should set sort asc', () => {

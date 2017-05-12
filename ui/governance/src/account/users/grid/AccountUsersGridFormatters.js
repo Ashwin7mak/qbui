@@ -36,15 +36,19 @@ export const FormatUserStatusHTML = (hasAppAccess, cellInfo) => {
     }
 };
 
-export const FormatIsInactive = (lastAccessString, cellInfo) => {
+
+
+export const FormatIsInactiveBool = (lastAccessString) => {
     if (IsTimeNull(lastAccessString)) {
-        return RenderBoolColumn(false);
+        return false;
     } else {
         const daysSinceLastAccess = moment().diff(lastAccessString, 'days');
-        return RenderBoolColumn(daysSinceLastAccess >= 180);
+        return daysSinceLastAccess >= 180;
     }
 };
 
+export const FormatIsInactive = (lastAccessString, cellInfo) => RenderBoolColumn(FormatIsInactiveBool(lastAccessString));
+export const FormatUsernameString = (usrNameString, cellInfo) => cellInfo.rowData.email === cellInfo.rowData.userName ? "" : cellInfo.rowData.userName;
 export const FormatLastAccessString = (lastAccessString, cellInfo) => IsTimeNull(lastAccessString) ? 'never' : moment(lastAccessString).format("MMMM D YYYY");
 export const FormatIsGroupMember = (numGroupsMember, cellInfo) => RenderBoolColumn(numGroupsMember > 0);
 export const FormatIsGroupManager = (numGroupsManaged, cellInfo) => RenderBoolColumn(numGroupsManaged > 0);

@@ -217,7 +217,7 @@
          * @returns Array of user fields
          */
         getAllUserFields: {value: function() {
-            return this.editFormContainerEl.elements('.cellEdit.userFormat .Select-arrow');
+            return this.editFormContainerEl.elements('.cellEdit.userFormat .Select-multi-value-wrapper');
         }},
 
         /**
@@ -306,7 +306,7 @@
             var fieldTypes = getAllUniqueFieldTypes;
             for (var i = 0; i < fieldTypes.value.length; i++) {
                 //scroll to an element.
-                browser.execute("return arguments[0].scrollIntoView();", fieldTypes.value[i]);
+                browser.execute("return arguments[0].scrollIntoView(true);", fieldTypes.value[i]);
                 //Need this if loop because I just want to enter this textValue into textField only. Some fields className also just says textField.(eg duration)
                 if (fieldValue === 'testTextValue') {
                     return fieldTypes.value[i].setValue([fieldValue]);
@@ -343,7 +343,7 @@
         setDropDownValue: {value: function(getAllUniqueFieldTypes, fieldValue) {
             var fieldTypes = getAllUniqueFieldTypes;
             for (var i = 0; i < fieldTypes.value.length; i++) {
-                browser.execute("return arguments[0].scrollIntoView();", fieldTypes.value[i]);
+                browser.execute("return arguments[0].scrollIntoView(true);", fieldTypes.value[i]);
                 fieldTypes.value[i].waitForVisible();
                 fieldTypes.value[i].click();
                 this.selectFromList(fieldValue);

@@ -1,5 +1,5 @@
 import React from 'react';
-import {facetItemValueShape, facetShape, fieldSelections, facetsProp, validSelectionHashMap} from '../../src/components/facet/facetProps';
+import {facetItemValueShape, facetShape, fieldSelections, facetsProp, validSelectionHashMap} from '../../../src/components/facets/facetProps';
 
 describe('FacetProps', () => {
     'use strict';

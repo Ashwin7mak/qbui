@@ -44,7 +44,7 @@ export const SUPPORTED_NEW_FIELD_TYPES = [
             fieldFormats.URL,
             fieldFormats.EMAIL_ADDRESS,
             fieldFormats.PHONE_FORMAT,
-            fieldFormats.RATING_FORMAT,
+            // fieldFormats.RATING_FORMAT,
             // fieldFormats.TEXT_FORMULA_FORMAT,
             // fieldFormats.NUMERIC_FORMULA_FORMAT,
             // fieldFormats.URL_FORMULA_FORMAT
