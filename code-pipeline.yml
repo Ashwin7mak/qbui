@@ -158,7 +158,8 @@ Resources:
                   {
                     "ContainerImage" : { "Fn::GetParam" : [ "build-artifacts", "build.json", "image" ] },
                     "SwimlaneID": "INT1",
-                    "Environment": "int"
+                    "Environment": "int",
+                    "LegacyBase": ".int1.quickbaserocks.com"
                   }
               InputArtifacts:
                 - Name: build-artifacts
@@ -181,7 +182,8 @@ Resources:
                  {
                     "ContainerImage" : { "Fn::GetParam" : [ "build-artifacts", "build.json", "image" ] },
                     "SwimlaneID": "PROD1",
-                    "Environment": "prod"
+                    "Environment": "prod",
+                    "LegacyBase": ".prod1.quickbaserocks.com"
                  }
               InputArtifacts:
                 - Name: build-artifacts
