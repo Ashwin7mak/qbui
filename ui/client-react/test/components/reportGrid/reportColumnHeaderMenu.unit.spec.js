@@ -17,6 +17,14 @@ const testFieldDef = {
     id: 13,
     datatypeAttributes: {type: FieldConsts.NUMERIC},
 };
+const reportBuilder = {
+    reportBuilder: {
+        inBuilderMode: true,
+        isCollapsed: true,
+        addBeforeColumn: null,
+        availableColumns: []
+    },
+};
 const testProps = {
     appId: 1,
     tblId: 2,
@@ -24,6 +32,12 @@ const testProps = {
     filter: "somefilter",
     fieldDef: testFieldDef,
     sortFids: [],
+    reportBuilder: {
+        inBuilderMode: true,
+        isCollapsed: true,
+        addBeforeColumn: null,
+        availableColumns: []
+    },
     isOnlyOneColumnVisible: false,
     loadDynamicReport: (context, appId, tblId, rptId, queryParams) => {},
     hideColumn: (context, appId, tblId, rptId, params) => {},
@@ -56,7 +70,7 @@ describe('ReportColumnHeaderMenu', () => {
         });
 
         it('returns false if the required props to call sort, group, add, and hide actions are missing', () => {
-            component = shallow(<ReportColumnHeaderMenu fieldDef={testFieldDef}/>);
+            component = shallow(<ReportColumnHeaderMenu fieldDef={testFieldDef} {...reportBuilder}/>);
             instance = component.instance();
 
             expect(instance.hasRequiredIds()).toBeFalsy();
@@ -124,7 +138,7 @@ describe('ReportColumnHeaderMenu', () => {
 
         testCases.forEach(testCase => {
             it(testCase.description, () => {
-                component = shallow(<ReportColumnHeaderMenu fieldDef={{datatypeAttributes: {type: testCase.type}}}/>);
+                component = shallow(<ReportColumnHeaderMenu fieldDef={{datatypeAttributes: {type: testCase.type}}} {...reportBuilder}/>);
                 instance = component.instance();
 
                 expect(instance.getSortAscText(testPrependText)).toEqual(`report.menu.${testPrependText}.${testCase.expectedValue}`);
@@ -132,7 +146,7 @@ describe('ReportColumnHeaderMenu', () => {
         });
 
         it('returns a blank string if no type is provided', () => {
-            component = shallow(<ReportColumnHeaderMenu fieldDef={{datatypeAttributes: null}}/>);
+            component = shallow(<ReportColumnHeaderMenu fieldDef={{datatypeAttributes: null}} {...reportBuilder}/>);
             instance = component.instance();
 
             expect(instance.getSortAscText(testPrependText)).toEqual('');
@@ -200,7 +214,7 @@ describe('ReportColumnHeaderMenu', () => {
 
         testCases.forEach(testCase => {
             it(testCase.description, () => {
-                component = shallow(<ReportColumnHeaderMenu fieldDef={{datatypeAttributes: {type: testCase.type}}}/>);
+                component = shallow(<ReportColumnHeaderMenu fieldDef={{datatypeAttributes: {type: testCase.type}}} {...reportBuilder}/>);
                 instance = component.instance();
 
                 expect(instance.getSortAscText(testPrependText)).toEqual(`report.menu.${testPrependText}.${testCase.expectedValue}`);
@@ -208,7 +222,7 @@ describe('ReportColumnHeaderMenu', () => {
         });
 
         it('returns a blank string if no type is provided', () => {
-            component = shallow(<ReportColumnHeaderMenu fieldDef={{datatypeAttributes: null}}/>);
+            component = shallow(<ReportColumnHeaderMenu fieldDef={{datatypeAttributes: null}} {...reportBuilder}/>);
             instance = component.instance();
 
             expect(instance.getSortAscText(testPrependText)).toEqual('');
@@ -276,7 +290,7 @@ describe('ReportColumnHeaderMenu', () => {
 
         testCases.forEach(testCase => {
             it(testCase.description, () => {
-                component = shallow(<ReportColumnHeaderMenu fieldDef={{datatypeAttributes: {type: testCase.type}}}/>);
+                component = shallow(<ReportColumnHeaderMenu fieldDef={{datatypeAttributes: {type: testCase.type}}} {...reportBuilder}/>);
                 instance = component.instance();
 
                 expect(instance.getSortDescText(testPrependText)).toEqual(`report.menu.${testPrependText}.${testCase.expectedValue}`);
@@ -284,7 +298,7 @@ describe('ReportColumnHeaderMenu', () => {
         });
 
         it('returns a blank string if no type is provided', () => {
-            component = shallow(<ReportColumnHeaderMenu fieldDef={{datatypeAttributes: null}}/>);
+            component = shallow(<ReportColumnHeaderMenu fieldDef={{datatypeAttributes: null}} {...reportBuilder}/>);
             instance = component.instance();
 
             expect(instance.getSortDescText(testPrependText)).toEqual('');
@@ -330,6 +344,7 @@ describe('ReportColumnHeaderMenu', () => {
                 component = shallow(<ReportColumnHeaderMenu
                     sortFids={testCase.sortFids}
                     fieldDef={{id: testCase.fieldId}}
+                    {...reportBuilder}
                 />);
                 instance = component.instance();
 
@@ -382,6 +397,7 @@ describe('ReportColumnHeaderMenu', () => {
                 component = shallow(<ReportColumnHeaderMenu
                     sortFids={testCase.sortFids}
                     fieldDef={{id: testCase.fieldId}}
+                    {...reportBuilder}
                 />);
                 instance = component.instance();
                 expect(instance.isSortedAsc()).toEqual(testCase.expectedValue);
@@ -436,7 +452,7 @@ describe('ReportColumnHeaderMenu', () => {
         });
 
         it('does not call the group action if the required props are not passed in', () => {
-            component = shallow(<ReportColumnHeaderMenu fieldDef={testFieldDef}/>);
+            component = shallow(<ReportColumnHeaderMenu fieldDef={testFieldDef} {...reportBuilder}/>);
             instance = component.instance();
 
             instance.groupReport(true, false);
@@ -489,12 +505,37 @@ describe('ReportColumnHeaderMenu', () => {
         });
 
         it('does not call the group action if the required props are not passed in', () => {
-            component = shallow(<ReportColumnHeaderMenu fieldDef={testFieldDef}/>);
+            component = shallow(<ReportColumnHeaderMenu fieldDef={testFieldDef} {...reportBuilder}/>);
             instance = component.instance();
 
             instance.groupReport(true);
 
             expect(testProps.loadDynamicReport).not.toHaveBeenCalled();
+        });
+    });
+
+    describe('Report Builder Mode', () => {
+        it('when not in builder mode, should not see options to add or hide', () => {
+            let testPropsNotInBuilderMode = {
+                ...testProps,
+                reportBuilder: {
+                    inBuilderMode: false,
+                    isCollapsed: true,
+                    addBeforeColumn: null,
+                    availableColumns: []
+                }
+            };
+            component = shallow(<ReportColumnHeaderMenu {...testPropsNotInBuilderMode}/>);
+            instance = component.instance();
+
+            let hidingMenuItem = component.find(MenuItem).find({onSelect: instance.hideThisColumn});
+            expect(hidingMenuItem).not.toBePresent();
+
+            let addingMenuItemBefore = component.find(MenuItem).find({onSelect: instance.openFieldSelectorBefore});
+            expect(addingMenuItemBefore).not.toBePresent();
+
+            let addingMenuItemAfter = component.find(MenuItem).find({onSelect: instance.openFieldSelectorAfter});
+            expect(addingMenuItemAfter).not.toBePresent();
         });
     });
 
@@ -524,7 +565,7 @@ describe('ReportColumnHeaderMenu', () => {
         });
 
         it('does not call the action to hide a column if the required props are not passed in', () => {
-            component = shallow(<ReportColumnHeaderMenu fieldDef={testFieldDef} isOnlyOneColumnVisible={false}/>);
+            component = shallow(<ReportColumnHeaderMenu fieldDef={testFieldDef} isOnlyOneColumnVisible={false} {...reportBuilder}/>);
             instance = component.instance();
 
             instance.hideThisColumn(testProps.fieldDef.id);
@@ -591,7 +632,7 @@ describe('ReportColumnHeaderMenu', () => {
         });
 
         it('does not call the action to open the menu to add a column if the required props are not passed in', () => {
-            component = shallow(<ReportColumnHeaderMenu fieldDef={testFieldDef} isOnlyOneColumnVisible={false}/>);
+            component = shallow(<ReportColumnHeaderMenu fieldDef={testFieldDef} isOnlyOneColumnVisible={false} {...reportBuilder}/>);
             instance = component.instance();
 
             instance.openFieldSelector(true);

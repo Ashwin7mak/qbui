@@ -702,6 +702,9 @@ export default {
             formsHeader: "Bilden",
             tableSettings: "Tabelleneigenschaften & Einstellungen",
             configureFormBuilder: "Ändern Sie dieses Formular",
+            reportsHeader: 'Bericht',
+            configureReportBuilder: 'Ändern Sie diesen Bericht'
+
         },
         tableEdit: {
             tableUpdateFailed: "Fehler beim Aktualisieren der Tabelle",
