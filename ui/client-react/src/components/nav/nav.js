@@ -226,7 +226,7 @@ export const Nav = React.createClass({
     },
 
     getEditFormFromProps() {
-        return _.has(this.props, "forms") && _.find(this.props.forms, form => form.id === "edit");
+        return _.get(this.props, "forms.edit");
     },
 
     /**
