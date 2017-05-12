@@ -553,7 +553,8 @@ export const RecordRoute = React.createClass({
                                     errorStatus={formLoadingErrorStatus ? viewData.errorStatus : null}
                                     formData={viewData ? viewData.formData : null}
                                     appUsers={this.props.appUsers}
-                                    handleDrillIntoChild={this.handleDrillIntoChild}/>
+                                    handleDrillIntoChild={this.handleDrillIntoChild}
+                                    />
                         </Loader> : null }
                     {formInternalError && <pre><I18nMessage message="form.error.500"/></pre>}
                     {formAccessRightError && <pre><I18nMessage message="form.error.403"/></pre>}

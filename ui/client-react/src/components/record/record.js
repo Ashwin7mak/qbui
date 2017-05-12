@@ -1,4 +1,5 @@
 import React from 'react';
+import {withRouter} from 'react-router-dom';
 
 import QBForm from '../QBForm/qbform';
 import Loader  from 'react-loader';
@@ -141,7 +142,7 @@ const mapDispatchToProps = (dispatch) => {
     };
 };
 
-export default connect(
+export default withRouter(connect(
     mapStateToProps,
     mapDispatchToProps
-)(Record);
+)(Record));

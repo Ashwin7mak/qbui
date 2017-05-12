@@ -4,13 +4,14 @@ import Icon, {AVAILABLE_ICON_FONTS} from '../../../../reuse/client/src/component
 import ReportStage from './reportStage';
 import ReportHeader from './reportHeader';
 import IconActions from '../actions/iconActions';
-import {Link} from 'react-router-dom';
+import {Link, withRouter} from 'react-router-dom';
 import Logger from '../../utils/logger';
 import QueryUtils from '../../utils/queryUtils';
 import NumberUtils from '../../utils/numberUtils';
 import WindowLocationUtils from '../../utils/windowLocationUtils';
 import simpleStringify from '../../../../common/src/simpleStringify';
 import constants from '../../../../common/src/constants';
+import withUniqueId from '../hoc/withUniqueId';
 import Fluxxor from 'fluxxor';
 import _ from 'lodash';
 import './report.scss';
@@ -83,7 +84,9 @@ const ReportRoute = React.createClass({
             let offset = constants.PAGE.DEFAULT_OFFSET;
             let numRows = NumberUtils.getNumericPropertyValue(this.props.reportData, 'numRows') || constants.PAGE.DEFAULT_NUM_ROWS;
 
+            // TODO: remove
             const {detailKeyFid, detailKeyValue} = _.get(this, 'props.location.query', {});
+            //const
             // A link from a parent component (see qbform.createChildReportElementCell) was used
             // to display a filtered child report.
             if (detailKeyFid && detailKeyValue) {
@@ -106,6 +109,17 @@ const ReportRoute = React.createClass({
         if (this.props.match.params) {
             this.loadReportFromParams(this.props.match.params);
         }
+    },
+    componentWillMount() {
+        console.log('reportRoute will mount');
+        console.log(this.props.uniqueId);
+        console.log(this.props.match.url);
+    },
+    componentWillUpdate(nextProps, nextState) {
+        console.log(_.differenceWith(this.props, nextProps, _.isEqual));
+    },
+    componentWillReceiveProps(nextProps) {
+        console.log(_.differenceWith(this.props, nextProps, _.isEqual));
     },
 
     getHeader() {
@@ -159,12 +173,13 @@ const ReportRoute = React.createClass({
             logger.info("the necessary params were not specified to reportRoute render params=" + simpleStringify(this.props.match.params));
             return null;
         } else {
+            const reportData = _.get(this, 'props.reportData', {});
             return (
                 <div className="reportContainer">
                     <ReportFieldSelectMenu
                         appId={this.props.match.params.appId}
                         tblId={this.props.match.params.tblId}
-                        reportData={this.props.reportData}
+                        reportData={reportData}
                         pullRight>
 
                         <Stage stageHeadline={this.getStageHeadline()}
@@ -176,17 +191,17 @@ const ReportRoute = React.createClass({
 
                         <ReportToolsAndContent
                             params={this.props.match.params}
-                            reportData={this.props.reportData}
+                            reportData={reportData}
                             appUsers={this.props.appUsers}
                             pendEdits={this.props.pendEdits}
                             isRowPopUpMenuOpen={this.props.isRowPopUpMenuOpen}
                             routeParams={this.props.match.params}
                             selectedAppId={this.props.selectedAppId}
                             selectedTable={this.props.selectedTable}
-                            searchStringForFiltering={this.props.reportData.searchStringForFiltering}
+                            searchStringForFiltering={reportData.searchStringForFiltering}
                             pageActions={this.getPageActions(0)}
                             nameForRecords={this.nameForRecords}
-                            selectedRows={this.props.reportData.selectedRows}
+                            selectedRows={reportData.selectedRows}
                             scrollingReport={this.props.scrollingReport}
                             loadDynamicReport={this.loadDynamicReport}
                             noRowsUI={true}
@@ -216,4 +231,7 @@ const mapDispatchToProps = (dispatch) => {
     };
 };
 
-export default connect(null, mapDispatchToProps)(ReportRoute);
+const ConnectedReportRoute = withRouter(connect(null, mapDispatchToProps)(ReportRoute));
+export default ConnectedReportRoute;
+
+export const ReportRouteWithUniqueId = withUniqueId(ConnectedReportRoute, CONTEXT.FORM.DRAWER);

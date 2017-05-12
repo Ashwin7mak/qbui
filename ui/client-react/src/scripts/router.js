@@ -124,7 +124,7 @@ const routes = [
             },
             {
                 path: `${APP_ROUTE}/:appId/table/:tblId/report/:rptId/`,
-                exact: true,
+                exact: false,
                 component: ReportRoute
             },
             {

@@ -90,6 +90,17 @@ const UrlUtils = {
      * @return {string} URL of route for displaying a child report
      */
     getRecordDrawerSegment(appId, tableId, reportId, recordId) {
+        return StringUtils.format(URL.DRAWER_RECORD_SEGMENT, [...arguments]);
+    },
+
+    /**
+     * Return URL segment for a report to be displayed in a drawer.
+     *
+     *   `sr_report_app_${appId}_table_${tableId}_report_${reportId}_dtFid_${detailKeyFid}_dtVal_${detailKeyValue}`
+     *
+     * @return {string} URL of route for displaying a report in a drawer
+     */
+    getReportDrawerSegment(appId, tableId, reportId, detailKeyFid, detailKeyValue) {
         return StringUtils.format(URL.DRAWER_REPORT_SEGMENT, [...arguments]);
     },
 

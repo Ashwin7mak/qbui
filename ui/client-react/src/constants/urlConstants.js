@@ -24,7 +24,8 @@ export const TABLE_LINK = `${APP_ROUTE}/{0}/table/{1}`;
 export const SETTINGS_ROUTE = `${BASE_CLIENT_ROUTE}/settings`;
 export const REPORT_LINK = `${APP_ROUTE}/{0}/table/{1}/report/{2}`;
 export const CHILD_REPORT_LINK = `${APP_ROUTE}/{0}/table/{1}/report/{2}?detailKeyFid={3}&detailKeyValue={4}`;
-export const DRAWER_REPORT_SEGMENT = `/sr_app_{0}_table_{1}_report_{2}_record_{3}`;
+export const DRAWER_RECORD_SEGMENT = `/sr_app_{0}_table_{1}_report_{2}_record_{3}`;
+export const DRAWER_REPORT_SEGMENT = `/sr_report_app_{0}_table_{1}_report_{2}_dtFid_{3}_dtVal_{4}`;
 
 export const FORBIDDEN = `${BASE_CLIENT_ROUTE}/forbidden`;
 export const UNAUTHORIZED = `${BASE_CLIENT_ROUTE}/unauthorized`;

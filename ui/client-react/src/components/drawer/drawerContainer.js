@@ -1,5 +1,5 @@
 import React, {PropTypes} from 'react';
-import {Route} from 'react-router-dom';
+import {Route, withRouter} from 'react-router-dom';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
 import Drawer from './drawer';
@@ -71,7 +71,7 @@ class DrawerContainer extends React.Component {
      * Called by the Drawer component when mounting.
      */
     showDrawerContainer = () => {
-        this.setState({visible: true});
+        //this.setState({visible: true});
     };
 
     /**
@@ -92,6 +92,11 @@ class DrawerContainer extends React.Component {
             classNames.push('rootDrawer');
             closeHandleBackdrop = <div className="closeHandleBackdrop" onClick={this.props.closeDrawer} />;
         }
+        const printer = (match) => {
+            console.log('printer');
+            console.log(JSON.stringify(this.props.match, null, 2));
+            console.log(JSON.stringify(match, null, 2));
+        };
 
         // <div className="drawerContainer"> is visible when either `match` is defined or `state.visible` is true
         return (
@@ -99,6 +104,9 @@ class DrawerContainer extends React.Component {
                 path={`${this.props.match.url}${this.props.pathToAdd}`}
                 children={({match, ...rest}) => (
                     <div className={classNames.join(' ')}>
+                        {match && console.log('match' + JSON.stringify(this.props.match, null, 2))}
+                        {match && printer(match)}
+                        {console.log('drawer ' + this.props.pathToAdd)}
                         {match && closeHandleBackdrop}
                         <ReactCSSTransitionGroup
                             className="slidey-righty"
@@ -123,4 +131,4 @@ DrawerContainer.propTypes = {
     closeDrawer: PropTypes.func
 };
 
-export default DrawerContainer;
+export default withRouter(DrawerContainer);
