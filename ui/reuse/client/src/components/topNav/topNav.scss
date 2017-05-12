@@ -171,12 +171,9 @@
                 color: $topnav-header-background-color;
             }
         }
-        .globalAction:hover {
-            //background: $topnav-hover-background-color;
 
-            > a, .dropdownToggle {
-                color: $topnav-hover-color;
-            }
+        a.dropdownToggle:hover {
+            color: $topnav-hover-color;
         }
 
         li.globalAction {
