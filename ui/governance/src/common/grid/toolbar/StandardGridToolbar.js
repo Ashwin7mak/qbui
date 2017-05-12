@@ -36,7 +36,10 @@ class StandardGridToolBar extends React.Component {
                 <div className={"standardGridToolBar " + (hasFacets ? "" : "noFacets")}>
                     <div className="standardLeftToolBar">
                         <IconInputBox placeholder={`Search ${this.props.itemTypePlural}`}
-                                      onChange={this.props.onSearchChange}/>
+                                      onChange={this.props.onSearchChange}
+                                      onClear={this.props.clearSearchTerm}
+                                      value={this.props.searchTerm}
+                        />
                         {this.props.doFacet ?
                             <div className="standardGridFacet">
                                 <StandardGridFacetsMenu
@@ -84,7 +87,8 @@ StandardGridToolBar.propTypes = {
     doUpdate: PropTypes.func.isRequired,
     onSearchChange: PropTypes.func.isRequired,
     itemTypePlural: PropTypes.string,
-    itemTypeSingular: PropTypes.string
+    itemTypeSingular: PropTypes.string,
+    searchTerm: PropTypes.string,
 };
 
 const mapStateToProps = (state, ownProps) => {
@@ -94,6 +98,7 @@ const mapStateToProps = (state, ownProps) => {
         facetSelections:  facetInfo.facetSelections || {},
         filteredRecords: paginationInfo.filteredRecords || 0,
         totalRecords: paginationInfo.totalRecords || 0,
+        searchTerm: (state.Grids[ownProps.id] || {}).searchTerm || '',
     };
 };
 
@@ -112,6 +117,11 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 
         onSearchChange: (searchEvent) => {
             dispatch(StandardGridActions.setSearch(ownProps.id, searchEvent.target.value));
+            dispatch(StandardGridActions.doUpdate(ownProps.id, ownProps.doUpdate));
+        },
+
+        clearSearchTerm: () => {
+            dispatch(StandardGridActions.clearSearchTerm(ownProps.id));
             dispatch(StandardGridActions.doUpdate(ownProps.id, ownProps.doUpdate));
         },
 
