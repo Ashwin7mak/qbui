@@ -137,7 +137,7 @@ export const FormBuilderContainer = React.createClass({
         appId = appId ? appId : this.props.match.params.appId;
         tblId = tblId ? tblId : this.props.match.params.tblId;
         redirectRoute = redirectRoute ? redirectRoute : this.props.redirectRoute;
-        
+
         NavigationUtils.goBackToLocationOrTable(appId, tblId, redirectRoute);
 
         if (this.props.isFormDirty) {
