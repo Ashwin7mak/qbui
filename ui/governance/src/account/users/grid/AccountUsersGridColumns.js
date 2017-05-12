@@ -52,6 +52,9 @@ const columns = [
         header: {
             label: 'USER NAME'
         },
+        cell: {
+            formatters: [Formatters.FormatUsernameString]
+        },
         props: {
             classes: ['ScreennameColumn']
         },
