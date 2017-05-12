@@ -10,9 +10,10 @@ import QBicon from '../../qbIcon/qbIcon';
 
 import UrlUtils from '../../../utils/urlUtils';
 import QueryUtils from '../../../utils/queryUtils';
+import Locale from '../../../../../reuse/client/src/locales/locale';
 import {I18nMessage} from '../../../utils/i18nMessage';
 
-import './embeddedReportLink.scss';
+import './embeddedLink.scss';
 
 /**
  * Renders a clickable Add Child Link as a button in a form.
@@ -22,27 +23,28 @@ export const EmbeddedAddChildLink = React.createClass({
         appId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
         tblId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
         rptId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+        rptId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
         /** The fid of the field containing the foreignkey. */
         detailKeyFid: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-        /** The value entered in the foreignkey field. */
-        detailKeyValue: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+        /** The noun used for records in the child table . */
+        childTableNoun: PropTypes.string
     },
 
-    componentDidMount() {
-    },
-
-    componentWillUnmount() {
-    },
+    // componentDidMount() {
+    // },
+    //
+    // componentWillUnmount() {
+    // },
 
     render() {
-        const {appId, childTableId, childReportId, detailKeyFid, detailKeyValue} = this.props;
+        const {appId, childTableId, childReportId, detailKeyFid, detailKeyValue, childTableNoun} = this.props;
         // render add child link
         const link = UrlUtils.getAddRelatedChildLink(appId, childTableId, childReportId, detailKeyFid, detailKeyValue);
-        const childTableNoun = this.props.childTableNoun ? this.props.childTableNoun.toLowerCase() : Locale.getMessage("records.singular");
-        const childTableMessage = <I18nMessage message="relationship.addChildRecord" tableNoun={childTableNoun}/>;
+        const noun = childTableNoun ? childTableNoun.toLowerCase() : Locale.getMessage("records.singular");
+        const childTableMessage = <I18nMessage message="relationship.addChildRecord" tableNoun={noun}/>;
         return (
-            <div className="addChildLinkContainer">
-                <Link to={link} className="addChildLink btn btn-default">
+            <div className="linkContainer addChild">
+                <Link to={link} className="linkInRecord btn btn-default">
                     <QBicon icon="add-mini" />
                     {childTableMessage}
                 </Link>

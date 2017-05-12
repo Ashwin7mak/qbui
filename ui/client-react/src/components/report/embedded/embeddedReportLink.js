@@ -12,7 +12,7 @@ import UrlUtils from '../../../utils/urlUtils';
 import QueryUtils from '../../../utils/queryUtils';
 import {I18nMessage} from '../../../utils/i18nMessage';
 
-import './embeddedReportLink.scss';
+import './embeddedLink.scss';
 
 /**
  * Renders a clickable Report Link as a button in a form.
@@ -73,9 +73,9 @@ export const EmbeddedReportLink = React.createClass({
             tableName = <I18nMessage message="relationship.childTable" />;
         }
         return (
-            <div className="childReportLinkContainer">
+            <div className="linkContainer">
                 {this.reportDetails(tableName)}
-                <Link to={link} className="childReportLink btn btn-default">
+                <Link to={link} className="linkInRecord btn btn-default">
                     <QBicon icon="eye" />
                     {tableName}
                 </Link>
