@@ -36,8 +36,7 @@ class AccountUsersStage extends React.Component {
     render() {
         let paidUsers = this.getTotalPaidUsers(),
             deniedUsers = this.getTotalDeniedUsers(),
-            deactivatedUsers = this.getTotalDeactivatedUsers(),
-            realmUsers = this.getTotalRealmUsers();
+            deactivatedUsers = this.getTotalDeactivatedUsers();
 
         return (
             <Stage stageHeadline={
@@ -61,7 +60,7 @@ class AccountUsersStage extends React.Component {
                         {count: paidUsers, title: (paidUsers === 1 ? Locale.getMessage("governance.account.users.paidSeatSingular") : Locale.getMessage("governance.account.users.paidSeats"))},
                         {count: deniedUsers, title: (deniedUsers === 1 ? Locale.getMessage("governance.account.users.deniedUserSingular") : Locale.getMessage("governance.account.users.deniedUsers"))},
                         {count: deactivatedUsers, title: (deactivatedUsers === 1 ? Locale.getMessage("governance.account.users.deactivatedUserSingular") : Locale.getMessage("governance.account.users.deactivatedUsers"))},
-                        {count: realmUsers, title: Locale.getMessage("governance.account.users.deniedUsers")},
+                        {count: this.getTotalRealmUsers(), title: Locale.getMessage("governance.account.users.realmDirectoryUsers")},
                     ]}
                 />
             </Stage>
