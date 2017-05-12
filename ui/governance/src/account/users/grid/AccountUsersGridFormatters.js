@@ -48,7 +48,7 @@ export const FormatIsInactiveBool = (lastAccessString) => {
 };
 
 export const FormatIsInactive = (lastAccessString, cellInfo) => RenderBoolColumn(FormatIsInactiveBool(lastAccessString));
-export const FormatUsernameString = (usrNameString, cellInfo) => cellInfo.rowData.email === usrNameString ? "" : cellInfo.rowData.userName;
+export const FormatUsernameString = (usrNameString, cellInfo) => cellInfo.rowData.email === cellInfo.rowData.userName ? "" : cellInfo.rowData.userName;
 export const FormatLastAccessString = (lastAccessString, cellInfo) => IsTimeNull(lastAccessString) ? 'never' : moment(lastAccessString).format("MMMM D YYYY");
 export const FormatIsGroupMember = (numGroupsMember, cellInfo) => RenderBoolColumn(numGroupsMember > 0);
 export const FormatIsGroupManager = (numGroupsManaged, cellInfo) => RenderBoolColumn(numGroupsManaged > 0);
