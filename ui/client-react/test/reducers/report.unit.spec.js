@@ -1359,44 +1359,29 @@ describe('Report reducer functions', () => {
     });
 
     describe('Report reducer CHANGE_REPORT_NAME test correct state', () => {
-        let contextId = "CHANGE_REPORT_NAME";
-        let initialState = [
-            {
-                id: contextId,
-                data: {
-                    name: 'Test Name',
-                    metaData: {
-                        name: 'Test Name'
+        it('changes the report data name', () => {
+            let contextId = "CHANGE_REPORT_NAME";
+            let initialState = [
+                {
+                    id: contextId,
+                    data: {
+                        name: 'Test Name',
+                        metaData: {
+                            name: 'Test Name'
+                        }
                     }
                 }
-            }
-        ];
-        let expectedName = 'New Name';
-        let testCases = [
-            {
-                description: 'data.name and data.metaData.name are updated to the new name',
-                initialState: initialState,
-                content : {newName: expectedName},
-                expects : (testState) => {
-                    expect(Array.isArray(testState)).toEqual(true);
-                    expect(testState[0].data.name).toEqual(expectedName);
-                    expect(testState[0].data.metaData.name).toEqual(expectedName);
-                }
-            }
-        ];
+            ];
+            let expectedName = 'New Name';
 
-        testCases.forEach(testCase => {
-            it(testCase.description, () => {
-                let testState = testCase.initialState;
-                actionObj.type = types.CHANGE_REPORT_NAME;
-                actionObj.id = contextId;
-                if (testCase.content) {
-                    actionObj.content = testCase.content;
-                }
-                testState = reducer(testState, actionObj);
+            actionObj.type = types.CHANGE_REPORT_NAME;
+            actionObj.id = contextId;
+            actionObj.content = {newName: expectedName};
 
-                testCase.expects(testState);
-            });
+            let testState = reducer(initialState, actionObj);
+
+            expect(testState[0].data.name).toEqual(expectedName);
+            expect(testState[0].data.metaData.name).toEqual(expectedName);
         });
     });
 

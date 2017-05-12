@@ -3,7 +3,7 @@ import ReportModelHelper from '../models/reportModelHelper';
 
 const reportBuilder = (
     state = {
-        inBuilderMode: false,
+        isInBuilderMode: false,
         isCollapsed: true,
         addBeforeColumn: null,
         availableColumns: []

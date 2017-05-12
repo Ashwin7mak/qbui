@@ -19,7 +19,7 @@ import ReportFieldSelectMenu from './reportFieldSelectMenu';
 import ReportNameEditor from './reportNameEditor';
 import {connect} from 'react-redux';
 import {clearSearchInput} from '../../actions/searchActions';
-import {loadReport, loadDynamicReport, changeReportName} from '../../actions/reportActions';
+import {loadReport, loadDynamicReport} from '../../actions/reportActions';
 import {loadFields} from '../../actions/fieldsActions';
 import {CONTEXT} from '../../actions/context';
 import {APP_ROUTE, EDIT_RECORD_KEY, NEW_RECORD_VALUE} from '../../constants/urlConstants';
@@ -137,7 +137,6 @@ const ReportRoute = React.createClass({
         const reportName = this.props.reportData && this.props.reportData.data && this.props.reportData.data.name;
         const {appId, tblId} = this.props.match.params;
         const tableLink = `${APP_ROUTE}/${appId}/table/${tblId}`;
-        const updateName = _.debounce((name) => {this.props.changeReportName(CONTEXT.REPORT.NAV, name);}, 300);
         return (
             <div className="reportStageHeadline">
 
@@ -147,7 +146,7 @@ const ReportRoute = React.createClass({
                 </div>
 
                 <div className="stageHeadline">
-                    <ReportNameEditor name={reportName} onChangeUpdateName={updateName}/>
+                    <ReportNameEditor name={reportName}/>
                 </div>
             </div>);
     },
@@ -214,9 +213,6 @@ const mapDispatchToProps = (dispatch) => {
         },
         loadDynamicReport: (context, appId, tblId, rptId, format, filter, queryParams) => {
             dispatch(loadDynamicReport(context, appId, tblId, rptId, format, filter, queryParams));
-        },
-        changeReportName: (context, newName) => {
-            dispatch(changeReportName(context, newName));
         }
     };
 };

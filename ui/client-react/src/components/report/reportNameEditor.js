@@ -1,5 +1,8 @@
 import React, {Component, PropTypes} from 'react';
 import {connect} from 'react-redux';
+
+import {CONTEXT} from '../../actions/context';
+import {changeReportName} from '../../actions/reportActions';
 import TextFieldValueEditor from '../fields/textFieldValueEditor';
 
 /**
@@ -9,43 +12,27 @@ export class ReportNameEditor extends Component {
     constructor(props) {
         super(props);
 
-        this.state = {
-            name: ''
-        };
-    }
-
-    componentWillReceiveProps(nextProps) {
-        if (nextProps.name) {
-            this.setState(() => {
-                return {
-                    name: nextProps.name,
-                };
-            });
-        }
     }
 
     updateName = (name) => {
-        this.setState(() => {
-            return {name};
-        });
-        this.props.onChangeUpdateName(name);
+        this.props.changeReportName(CONTEXT.REPORT.NAV, name);
     };
 
     render() {
-        let inBuilderMode = this.props.reportBuilder.inBuilderMode;
+        let name = this.props.name || '';
         return (
             <div className="reportNameEditor">
-            {inBuilderMode ?
+            {this.props.isInBuilderMode ?
                 <div className="editor">
                     <h3>
                         <TextFieldValueEditor
                             className="editableReportName"
-                            value={this.state.name}
+                            value={name}
                             inputType="text"
                             onChange={this.updateName}
                         />
                     </h3>
-                </div> : <h3 className="nonEditableReportName">{this.state.name}</h3>
+                </div> : <h3 className="nonEditableReportName">{name}</h3>
             }
             </div>
         );
@@ -55,16 +42,21 @@ export class ReportNameEditor extends Component {
 ReportNameEditor.propTypes = {
     /**
      * Name of the report */
-    name: PropTypes.string,
-    /**
-     * Callback function that will update the report state with the name change */
-    onChangeUpdateName: PropTypes.func.isRequired
+    name: PropTypes.string
 };
 
 const mapStateToProps = (state) => {
     return {
-        reportBuilder: state.reportBuilder
+        isInBuilderMode: state.reportBuilder.isInBuilderMode
     };
 };
 
-export default connect(mapStateToProps)(ReportNameEditor);
+const mapDispatchToProps = (dispatch) => {
+    return {
+        changeReportName: (context, newName) => {
+            dispatch(changeReportName(context, newName));
+        }
+    }
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ReportNameEditor);

@@ -5,7 +5,7 @@ let initialState = {};
 
 function initializeState() {
     initialState = {
-        inBuilderMode: false,
+        isInBuilderMode: false,
         isCollapsed: true,
         addBeforeColumn: null,
         availableColumns: []
