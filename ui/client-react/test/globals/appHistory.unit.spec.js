@@ -66,7 +66,7 @@ describe('AppHistory', () => {
         report: [{
             id: CONTEXT.REPORT.NAV,
             data: {
-                fields: { field: 1, field: 2, field: 3}
+                fields: {field: 1, field2: 2, field3: 3}
             }
         }]
     };
@@ -264,6 +264,7 @@ describe('AppHistory', () => {
             spyOn(mockStoreFunc, 'updateRecord');
             spyOn(mockStoreFunc, 'saveFormComplete');
             spyOn(mockStoreFunc, 'hideTrowser');
+            spyOn(mockStoreFunc, 'editRecordCancel');
             spyOn(AppHistory, 'getStores').and.returnValue(mockState);
         });
         afterEach(() => {
@@ -410,6 +411,24 @@ describe('AppHistory', () => {
 
             expect(AppHistory._haltRouteChange).toHaveBeenCalled();
             expect(mockStoreReject.dispatch).toHaveBeenCalled();
+        });
+
+        it('_discardChanges call dispatch if recordStore isPendingEdit is true', () => {
+            mockState.recordStore.isPendingEdit = true;
+            AppHistory.setup(mockStore, mockStoreFunc);
+            AppHistory._discardChanges();
+            expect(mockStore.dispatch).toHaveBeenCalled();
+            expect(mockStoreFunc.editRecordCancel).toHaveBeenCalled();
+            expect(mockStoreFunc.hideTrowser).toHaveBeenCalled();
+        });
+
+        it('_discardChanges  will not call dispatch if recordStore isPendingEdit is false', () => {
+            mockState.recordStore.isPendingEdit = false;
+            AppHistory.setup(mockStore, mockStoreFunc);
+            AppHistory._discardChanges();
+            expect(mockStore.dispatch).not.toHaveBeenCalled();
+            expect(mockStoreFunc.editRecordCancel).not.toHaveBeenCalled();
+            expect(mockStoreFunc.hideTrowser).not.toHaveBeenCalled();
         });
     });
 });

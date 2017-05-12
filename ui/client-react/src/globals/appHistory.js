@@ -357,7 +357,7 @@ class AppHistory {
             const state = self.store.getState();
             let {recordStore} = self.getStores(state);
 
-            if (_.isEmpty(recordStore) === false) {
+            if (recordStore.isPendingEdit) {
                 self.store.dispatch(self.editRecordCancel(recordStore.currentEditingAppId, recordStore.currentEditingTableId, recordStore.currentEditingRecordId));
                 self.store.dispatch(self.hideTrowser());
             }
