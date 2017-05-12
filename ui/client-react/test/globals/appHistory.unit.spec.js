@@ -1,6 +1,8 @@
 import AppHistory, {__RewireAPI__ as AppHistoryRewireAPI} from '../../src/globals/appHistory';
 import {UNSAVED_RECORD_ID} from '../../src/constants/schema';
 import {ShowAppModal, HideAppModal} from '../../src/components/qbModal/appQbModalFunctions';
+import {CONTEXT} from '../../src/actions/context';
+
 
 let currentModalDetails = null;
 let mockActions = {
@@ -62,8 +64,9 @@ describe('AppHistory', () => {
             }
         }],
         report: [{
+            id: CONTEXT.REPORT.NAV,
             data: {
-                fields: {}
+                fields: { field: 1, field: 2, field: 3}
             }
         }]
     };
@@ -166,8 +169,9 @@ describe('AppHistory', () => {
 
     describe('Test getFields function', () => {
         beforeEach(() => {
-            spyOn(AppHistory, 'getFieldsFromReportStore');
+            spyOn(AppHistory, 'getFieldsFromReportStore').and.callThrough();
             spyOn(AppHistory, 'getFieldsFromFormStore');
+            spyOn(mockStoreFunc, 'getNavReport');
         });
         afterEach(() => {
             AppHistory.getFieldsFromReportStore.calls.reset();
@@ -178,7 +182,7 @@ describe('AppHistory', () => {
             {name:'verify get fields from forms store', isInlineEditOpen: false}
         ];
         testCases.forEach(testCase => {
-            fit(testCase.name, () => {
+            it(testCase.name, () => {
                 store.record.records[0].pendEdits.isInlineEditOpen = testCase.isInlineEditOpen;
                 AppHistory.setup(mockStore, mockStoreFunc);
                 AppHistory.getFields();
@@ -190,6 +194,15 @@ describe('AppHistory', () => {
                     expect(AppHistory.getFieldsFromFormStore).toHaveBeenCalled();
                 }
             });
+        });
+
+        it(`gets fields from reports store if the id matches ${CONTEXT.REPORT.NAV}`, () => {
+            AppHistory.setup(mockStore, mockStoreFunc);
+            mockStoreFunc.getNavReport.and.returnValue(store.report[0]);
+
+            let result = AppHistory.getFieldsFromReportStore();
+
+            expect(result).toEqual(store.report[0].data.fields);
         });
     });
 
