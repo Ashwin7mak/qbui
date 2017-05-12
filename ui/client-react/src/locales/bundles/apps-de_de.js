@@ -697,8 +697,9 @@ export default {
         },
         settings: {
             header: "Einstellungen",
+            appHeader: "App",
+            automationSettings: "Automatisierungseinstellungen",
             tablesHeader: "Tabelle",
-            appsHeader: "Table",
             formsHeader: "Bilden",
             tableSettings: "Tabelleneigenschaften & Einstellungen",
             configureFormBuilder: "Ändern Sie dieses Formular",

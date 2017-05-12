@@ -696,8 +696,9 @@ export default {
         },
         settings: {
             header: "Paramètres",
+            appHeader: "App",
+            automationSettings: "Paramètres d'automatisation",
             tablesHeader: "Table",
-            appsHeader: "App",
             formsHeader: "Forme",
             tableSettings: "Propriétés et paramètres de la table",
             configureFormBuilder: 'Modifier ce formulaire',

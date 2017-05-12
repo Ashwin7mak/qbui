@@ -20,6 +20,7 @@ import AppSettingsRoute from "../components/app/settings/appSettingsRoute";
 import AppUsersRoute from "../components/app/settings/categories/appUsersRoute";
 import AppPropertiesRoute from "../components/app/settings/categories/appPropertiesRoute";
 import TablePropertiesRoute from "../components/table/settings/tablePropertiesRoute";
+import AutomationListRoute from "../components/automation/settings/automationListRoute";
 import AppsBundleLoader from '../locales/appsBundleLoader';
 import config from '../config/app.config';
 
@@ -171,17 +172,27 @@ const routes = [
         ]
     },
     {
-        path: `${SETTINGS_ROUTE}/app/:appId/(table)?/:tblId?`,
+        path: `${SETTINGS_ROUTE}/app/:appId/table/:tblId`,
         component: ConnectedSettingsNav,
         routes: [
             {
                 path: `${SETTINGS_ROUTE}/app/:appId/table/:tblId/properties`,
                 exact: true,
                 component: withFlux(TablePropertiesRoute)
-            },
+            }
+        ]
+    },
+    {
+        path: `${SETTINGS_ROUTE}/app/:appId/`,
+        component: ConnectedSettingsNav,
+        routes: [
             {
                 path: `${SETTINGS_ROUTE}/app/:appId/properties`,
                 component: AppPropertiesRoute
+            },
+            {
+                path: `${SETTINGS_ROUTE}/app/:appId/automations`,
+                component: AutomationListRoute
             },
             {
                 path: `${SETTINGS_ROUTE}/app/:appId`,

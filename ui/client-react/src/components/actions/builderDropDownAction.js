@@ -30,6 +30,11 @@ let BuilderDropDownAction = React.createClass({
         this.props.history.push(link);
     },
 
+    getAutomationSettingsLink() {
+        let link = URLUtils.getAutomationSettingsLink(this.props.selectedApp.id);
+        this.props.history.push(link);
+    },
+
     getConfigOptions() {
         let isAppView = !!this.props.selectedApp; // !! converts to boolean
         let isTableView = (isAppView && this.props.selectedTable);
@@ -45,9 +50,15 @@ let BuilderDropDownAction = React.createClass({
 
             <Dropdown.Menu>
                 <div className="configurationMenu">
-                    {isTableView ?
+                    {isAppView ?
                     <div className="configSet withIcon">
                         <li className="menuHeader heading"><I18nMessage message={"settings.header"}/></li>
+                        <li className="heading"><a><Icon className="headingIcon" iconFont={AVAILABLE_ICON_FONTS.UI_STURDY} icon="favicon"/>
+                            <span><I18nMessage message={"settings.appHeader"}/></span></a></li>
+                        <li><a className="modifyAutomationSettings" onClick={this.getAutomationSettingsLink}><I18nMessage message={"settings.automationSettings"}/></a></li>
+                    </div> : null}
+                    {isTableView ?
+                    <div className="configSet withIcon">
                         <li className="heading"><a>{this.props.selectedTable.tableIcon && <Icon className="headingIcon" iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY} icon={this.props.selectedTable.tableIcon}/> }
                             <span><I18nMessage message={"settings.tablesHeader"}/></span></a></li>
                         <li><a className="modifyTableSettings" onClick={this.getTableSettingsLink}><I18nMessage message={"settings.tableSettings"}/></a></li>
@@ -67,9 +78,8 @@ let BuilderDropDownAction = React.createClass({
     },
 
     render() {
-        let isTableView = this.props.selectedApp && this.props.selectedTable ? true : false;
-        //For now this menu only shows for table/form view. Eventually this should show for all views with content dependent on the route.
-        return (isTableView ? <li className="link globalAction withDropdown builder">{this.getConfigOptions()}</li> : null);
+        let isAppView = !!this.props.selectedApp; // !! converts to boolean
+        return (isAppView ? <li className="link globalAction withDropdown builder">{this.getConfigOptions()}</li> : null);
     }
 });
 
