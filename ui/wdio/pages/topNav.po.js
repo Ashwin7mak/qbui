@@ -10,9 +10,10 @@
                 return browser.element('.topNav .center');
             }
         },
-        formBuilderBtn: {
+        //Setting button topNav (Gear icon)
+        settingsButton: {
             get: function() {
-                return browser.element('.topNav .dropdown');
+                return browser.element('.topNav .iconUISturdy-settings');
             }
         },
         modifyThisForm: {
@@ -20,10 +21,51 @@
                 return browser.element('.topNav .modifyForm');
             }
         },
-        // Left Nav menu elements
-        navMenuEl: {
+        // Feedback button topNav
+        feedbackBtn: {
             get: function() {
-                return browser.elements('.leftNav');
+                return browser.element('.topNav .userFeedBack');
+            }
+        },
+        //Give feedback option in Feedback button
+        feedbackMenuButton: {
+            get: function() {
+                return this.feedbackBtn.element('.feedbackMenuButton');
+            }
+        },
+        //Report issue option in Feedback button
+        reportFeedBackButton: {
+            get: function() {
+                return this.feedbackBtn.element('.reportFeedBackButton');
+            }
+        },
+        settingsDropdownHeader: {
+            get: function() {
+                return browser.element('.dropdown-menu .menuHeader');
+            }
+        },
+        //Users button topNav
+        usersButton: {
+            get: function() {
+                return browser.element('.topNav .userDropDown');
+            }
+        },
+        userDropdownAppName: {
+            get: function() {
+                return browser.element('.appMenuHeader');
+
+            }
+        },
+        signOutButton: {
+            get: function() {
+                return browser.element('.signOutButton');
+
+            }
+        },
+        //Help button topNav
+        helpButton: {
+            get: function() {
+                return browser.element('.topNav .reHelpButton');
             }
         },
         // Top Nav elements
@@ -50,21 +92,15 @@
                 return this.topNavCenterDivEl.elements('button');
             }
         },
-        // Top Nav Right elements
-        topNavRightDivEl: {
-            get: function() {
-                return this.topNavDivEl.element('.navGroup.right');
-            }
-        },
         // Top Nav Global Actions
         topNavGlobalActDivEl: {
             get: function() {
-                return this.topNavRightDivEl.element('.globalActions');
+                return browser.element('.navGroup .globalActions');
             }
         },
         topNavGlobalActionsListUlEl: {
             get: function() {
-                return this.topNavRightDivEl.element('.globalActionsList');
+                return browser.element('.navGroup.right .globalActionsList');
             }
         },
         topNavGlobalActionsListEl: {
@@ -72,46 +108,6 @@
                 return this.topNavGlobalActionsListUlEl.elements('.link');
             }
         },
-        // Top Nav User Global element
-        topNavUserGlobActEl: {
-            get: function() {
-                return this.topNavGlobalActionsListEl.get(0);
-            }
-        },
-        // Top Nav Help Global element
-        topNavHelpGlobActEl: {
-            get: function() {
-                return this.topNavGlobalActionsListEl.get(1);
-            }
-        },
-        // Left Nav Global Actions
-        leftNavGlobActsDivEl: {
-            get: function() {
-                this.navMenuEl.element('.globalActions');
-            }
-        },
-        leftNavGlobActsUlEl: {
-            get: function() {
-                return this.leftNavGlobActsDivEl.elements('.globalActionsList');
-            }
-        },
-        // Click on top nav Hamburger menu
-        clickTopNavHamburger: {
-            get: function() {
-                this.topNavDivEl.waitForVisible();
-                this.topNavToggleHamburgerEl.click();
-                this.navMenuEl.waitForVisible();
-            }
-        },
-        // Assert that global actions are present in the Left Nav
-        assertGlobalActsNotDisplayedInLeftNav: {
-            get: function() {
-                expect(this.leftNavGlobActsUlEl.isExisting()).toBeTruthy();
-                expect(this.leftNavGlobActsUlEl.getAttribute('clientWidth')).toBe('0');
-                expect(this.leftNavGlobActsUlEl.getAttribute('offsetWidth')).toBe('0');
-            }
-        },
-
         /**
         Page objects for topNav - small breakpoint
          */

@@ -626,6 +626,9 @@ module.exports = function(grunt) {
                     relationships: [],
                     users: [
                         './wdio/tests/users/usersTable.e2e.spec.js',
+                    ],
+                    global: [
+                        './wdio/tests/global/globalTopNav.e2e.spec.js',
                     ]
                 }
             },
@@ -633,7 +636,7 @@ module.exports = function(grunt) {
                 // Use the wdioSauce.conf.js file setting the options above
                 configFile: './wdio/config/' + wdioSauceConfig,
                 // Make sure there are no spaces between test suites here
-                suite: 'reports,forms,tables,users'
+                suite: 'reports,forms,tables,users,global'
             }
         },
 

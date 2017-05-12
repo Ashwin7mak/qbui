@@ -127,9 +127,9 @@ class formBuilderPage {
     }
     open() {
         // Invokes the form builder from the VIEW RECORD page
-        topNavPO.formBuilderBtn.waitForVisible();
+        topNavPO.settingsButton.waitForVisible();
         browser.pause(fiveSeconds);
-        topNavPO.formBuilderBtn.click();
+        topNavPO.settingsButton.click();
         topNavPO.modifyThisForm.waitForExist(fiveSeconds);
         topNavPO.modifyThisForm.click();
         this.formBuilderContainer.waitForVisible();
