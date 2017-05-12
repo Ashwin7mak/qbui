@@ -398,7 +398,6 @@ describe('AppHistory', () => {
             expect(AppHistory._haltRouteChange).toHaveBeenCalled();
             expect(mockStoreReject.dispatch).toHaveBeenCalled();
         });
-
     });
 });
 
