@@ -738,6 +738,13 @@ describe('Account Users Actions Tests', () => {
 
     describe('Sort Action', () => {
 
+        it('sorts by firstname by default', () => {
+            let sortedUsersAsc = actions.sortUsers(ACCOUNT_USERS_DATA, []);
+            expect(sortedUsersAsc[0].firstName).toEqual('Administrator');
+            expect(sortedUsersAsc[1].firstName).toEqual('FirstNameFilter');
+            expect(sortedUsersAsc[2].firstName).toEqual('Zadministrator');
+        });
+
         it('sorts the text columns by firstname correctly', () => {
             let sortedUsersAsc = actions.sortUsers(ACCOUNT_USERS_DATA, [1]);
             expect(sortedUsersAsc[0].firstName).toEqual('Administrator');
