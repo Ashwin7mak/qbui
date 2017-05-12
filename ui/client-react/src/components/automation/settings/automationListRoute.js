@@ -39,12 +39,11 @@ export const AutomationListRoute = React.createClass({
     componentWillReceiveProps(nextProps) {
     },
     render() {
-        // let isDirty = this.props.isDirty ? true : false;
         return <div>
                 <Stage stageHeadline={this.getStageHeadline()} pageActions={this.getPageActions(5)}></Stage>
 
                 <div>
-                    Automations Here
+                    Welcome to your automations for this App. This page is under construction. More will be available very soon.
                 </div>
             </div>;
     }
