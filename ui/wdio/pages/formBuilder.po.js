@@ -225,7 +225,6 @@ class formBuilderPage {
 
     slowDragAndDrop(source, target) {
         // Clicks on the specified source field and drags it to the specified target field
-        let label = browser.element(source).getText();
         browser.moveToObject(source, 5, 5);
         browser.buttonDown();
         browser.pause(oneSecond);
@@ -233,8 +232,10 @@ class formBuilderPage {
         //this.slowDrag(target, label);
         browser.moveToObject(target);
         // release button
-        browser.buttonUp();
         browser.pause(fiveSeconds);
+        browser.buttonUp();
+        // Chrome needs a click to release mouse btn - why?
+        this.selectedField.click();
         return this.getFieldLabels();
     }
 
