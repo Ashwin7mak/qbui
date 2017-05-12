@@ -246,17 +246,16 @@
                                     (eeResponse) => {
                                         resolve(JSON.parse(eeResponse.body));
                                     },
-                                    (error) => {
+                                    (eeError) => {
                                         // Reject, let the caller know that the properties creation failed
                                         log.error({req: req}, "tablesApi.createTableProperties(): Error replacing table properties on EE");
-                                        reject(error);
+                                        reject(eeError);
                                     }
                                 ).catch((ex) => {
                                     requestHelper.logUnexpectedError('tablesApi.createTableProperties(): unexpected error creating table properties on EE', ex, true);
                                     reject(ex);
                                 });
-                            }
-                            else {
+                            } else {
                                 //resolve - we do not want to block the get Apps call on this failure
                                 resolve({});
                             }

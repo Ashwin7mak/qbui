@@ -78,9 +78,9 @@
                             log.error({req: req}, "tablesApi.createTableProperties(): Error creating table properties on EE");
                             reject(error);
                         }).catch((ex) =>{
-                        requestHelper.logUnexpectedError('tablesApi.createTableProperties(): unexpected error creating table properties', ex, true);
-                        reject(ex);
-                    });
+                            requestHelper.logUnexpectedError('tablesApi.createTableProperties(): unexpected error creating table properties', ex, true);
+                            reject(ex);
+                        });
                 });
             },
 
@@ -90,7 +90,7 @@
              * @param table
              * @returns {Promise}
              */
-            getTableProperties: function (req, table) {
+            getTableProperties: function(req, table) {
                 return new Promise((resolve, reject) => {
                     let opts = requestHelper.setOptions(req);
                     opts.url = requestHelper.getRequestEeHost() + routeHelper.getTablePropertiesRoute(req.url, table.id);
@@ -113,7 +113,7 @@
                                     (eeResponse) => {
                                         resolve(JSON.parse(eeResponse.body));
                                     },
-                                    (error) => {
+                                    (eeError) => {
                                         //resolve - we do not want to block the get Apps call on this failure
                                         log.error({req: req}, "appsApi._createTableProperties(): Error getting table properties from EE");
                                         resolve({});
@@ -123,16 +123,15 @@
                                     //always resolve - we do not want to block the get Apps call on this failure
                                     resolve({});
                                 });
-                            }
-                            else {
+                            }                            else {
                                 //resolve - we do not want to block the get Apps call on this failure
                                 resolve({});
                             }
                         }).catch((ex) => {
-                        requestHelper.logUnexpectedError('appsApi.getTableProperties(): unexpected error getting table properties', ex, true);
+                            requestHelper.logUnexpectedError('appsApi.getTableProperties(): unexpected error getting table properties', ex, true);
                         //always resolve - we do not want to block the get Apps call on this failure
-                        resolve({});
-                    });
+                            resolve({});
+                        });
                 });
             },
 

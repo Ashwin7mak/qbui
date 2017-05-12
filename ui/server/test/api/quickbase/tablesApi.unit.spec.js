@@ -352,24 +352,24 @@ describe('Validate tablesApi', function() {
             });
         });
 
-        it('results in failure of table props creation after a non 404 error', function (done) {
+        it('results in failure of table props creation after a non 404 error', function(done) {
             let executeReqStubResp = {statusCode: 400};
             executeReqStub.returns(Promise.reject(executeReqStubResp));
             let promise = tablesApi.replaceTableProperties(req, tableId);
 
             promise.then(
-                function () {
+                function() {
                     done();
                 },
-                function () {
+                function() {
                     done("Unexpected failure promise return when testing replaceTableProperties");
                 }
-            ).catch(function (errorMsg) {
+            ).catch(function(errorMsg) {
                 done(new Error('replaceTableProperties: exception processing test: ' + JSON.stringify(errorMsg)));
             });
         });
 
-        it('successfully creates table props after a 404 error', function (done) {
+        it('successfully creates table props after a 404 error', function(done) {
             let executeReqStubResp = {statusCode: 404};
             executeReqStub.returns(Promise.reject(executeReqStubResp));
             let createTablePropsResp = {body: '{"tableNoun": "updated table noun"}'};
@@ -377,19 +377,19 @@ describe('Validate tablesApi', function() {
             let promise = tablesApi.replaceTableProperties(req, tableId);
 
             promise.then(
-                function (response) {
+                function(response) {
                     assert.deepEqual(response, {tableNoun: "updated table noun"});
                     done();
                 },
-                function () {
+                function() {
                     done("Unexpected failure promise return when testing replaceTableProperties");
                 }
-            ).catch(function (errorMsg) {
+            ).catch(function(errorMsg) {
                 done(new Error('replaceTableProperties: exception processing test: ' + JSON.stringify(errorMsg)));
             });
         });
 
-        it('results in failure of table properties creation after a 404 error', function (done) {
+        it('results in failure of table properties creation after a 404 error', function(done) {
             let executeReqStubResp = {statusCode: 404};
             executeReqStub.returns(Promise.reject(executeReqStubResp));
             let createTablePropsResp = {error: 'Some error'};
@@ -397,19 +397,19 @@ describe('Validate tablesApi', function() {
             let promise = tablesApi.replaceTableProperties(req, tableId);
 
             promise.then(
-                function () {
+                function() {
                     done("Unexpected success promise return when testing replaceTableProperties");
                 },
-                function (error) {
+                function(error) {
                     assert.deepEqual(error, createTablePropsResp);
                     done();
                 }
-            ).catch(function (errorMsg) {
+            ).catch(function(errorMsg) {
                 done(new Error('replaceTableProperties: exception processing test: ' + JSON.stringify(errorMsg)));
             });
         });
 
-        it('results in exception during table properties creation', function (done) {
+        it('results in exception during table properties creation', function(done) {
             let executeReqStubResp = {statusCode: 404};
             executeReqStub.returns(Promise.reject(executeReqStubResp));
             let createTablePropsResp = null;
@@ -417,13 +417,13 @@ describe('Validate tablesApi', function() {
             let promise = tablesApi.replaceTableProperties(req, tableId);
 
             promise.then(
-                function () {
+                function() {
                     done("Unexpected success promise return when testing replaceTableProperties");
                 },
-                function () {
+                function() {
                     done();
                 }
-            ).catch(function (errorMsg) {
+            ).catch(function(errorMsg) {
                 done(new Error('replaceTableProperties: exception processing test: ' + JSON.stringify(errorMsg)));
             });
         });

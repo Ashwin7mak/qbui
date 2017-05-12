@@ -40,7 +40,7 @@
                 apiBase.setBaseUrl(baseUrlConfig);
             },
             //Helper method to create an app, can be used by multiple test cases
-            createApp         : function(appToCreate, skipProperties) {
+            createApp: function(appToCreate, skipProperties) {
                 var self = this;
                 return init.then(function() {
                     return apiBase.executeRequest(apiBase.resolveAppsEndpoint(), consts.POST, appToCreate).then(function(appResponse) {
