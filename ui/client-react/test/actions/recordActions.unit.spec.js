@@ -36,14 +36,14 @@ describe('Open/edit Record actions', () => {
         expect(recordActions.openRecord(obj.recId, obj.nextRecordId, obj.previousRecordId)).toEqual(event(obj.recId, types.OPEN_RECORD, obj));
     });
 
-    it('When an uniqueID is provided, opening a record creates an action using the uniqueID context instead of recordId', () => {
+    it('When a viewContextId is provided, opening a record creates an action using the viewContextId instead of recordId', () => {
         let obj = {
             recId: 1,
             nextRecordId: 2,
             previousRecordId: 3
         };
-        const uniqueId = 'UNIQUE';
-        expect(recordActions.openRecord(obj.recId, obj.nextRecordId, obj.previousRecordId, uniqueId)).toEqual(event(uniqueId, types.OPEN_RECORD, obj));
+        const viewContextId = 'UNIQUE_VIEW_CONTEXT';
+        expect(recordActions.openRecord(obj.recId, obj.nextRecordId, obj.previousRecordId, viewContextId)).toEqual(event(viewContextId, types.OPEN_RECORD, obj));
     });
 
     let obj1 = {

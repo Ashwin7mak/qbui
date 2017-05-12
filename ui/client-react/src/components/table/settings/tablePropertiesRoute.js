@@ -11,6 +11,8 @@ import Icon, {AVAILABLE_ICON_FONTS} from '../../../../../reuse/client/src/compon
 import TableCreationPanel from '../tableCreationPanel';
 import QBModal from '../../qbModal/qbModal';
 import {updateTable, loadTableProperties, setTableProperty, openIconChooser, closeIconChooser, setEditingProperty, resetEditedTableProperties, deleteTable} from '../../../actions/tablePropertiesActions';
+import _ from 'lodash';
+
 import './tableProperties.scss';
 
 
@@ -26,7 +28,9 @@ export const TablePropertiesRoute = React.createClass({
     },
     getExistingTableNames() {
         if (this.props.app && this.props.app.tables) {
-            return this.props.app.tables.map((table) => table.name);
+            const tableNames = this.props.app.tables.map((table) => table.name);
+
+            return _.without(tableNames, this.props.table.name);
         }
         return [];
     },
@@ -107,6 +111,17 @@ export const TablePropertiesRoute = React.createClass({
         NotificationManager.success(Locale.getMessage('tableEdit.tableReset'), Locale.getMessage('success'));
     },
 
+    /**
+     * check for any validation errors in tableInfo
+     * @returns {boolean}
+     */
+    canApplyChanges() {
+
+        // can apply changes if no fields have a pendingValidationError value
+
+        return this.props.isDirty && !_.findKey(this.props.tableProperties.tableInfo, (field) => field.pendingValidationError);
+    },
+
     render() {
         let loaded = !(_.isUndefined(this.props.app) || _.isUndefined(this.props.table) || _.isUndefined(this.props.tableProperties) || _.isNull(this.props.tableProperties.tableInfo));
         let isDirty = this.props.isDirty ? true : false;
@@ -114,6 +129,7 @@ export const TablePropertiesRoute = React.createClass({
         return <Loader loaded={loaded}>
             <div>
                 <Stage stageHeadline={this.getStageHeadline()} pageActions={this.getPageActions(5)}></Stage>
+
                 <div className="tableInfoPanel">
                     <TableCreationPanel tableInfo={this.props.tableProperties.tableInfo}
                                         iconChooserOpen={this.props.tableProperties.iconChooserOpen}
@@ -128,7 +144,7 @@ export const TablePropertiesRoute = React.createClass({
                     <div className={buttonsClasses}>
                         <a className="secondaryButton" onClick={this.resetTableProperties}><I18nMessage
                             message="nav.reset"/></a>
-                        <Button className="primaryButton" bsStyle="primary" onClick={this.updateTable}><I18nMessage
+                        <Button disabled={!this.canApplyChanges()} className="primaryButton" bsStyle="primary" onClick={this.updateTable}><I18nMessage
                             message="nav.apply"/></Button>
                     </div>
                 </div>

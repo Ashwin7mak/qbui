@@ -1,6 +1,6 @@
 @import '../../../../src/assets/css/qbVariables';
 $margin-spacer: 10px;
-$grid-default-cell-padding: 10px;
+$grid-default-cell-padding: 20px;
 $grid-group-expand-icon-size: 18px;
 $grid-default-group-padding: 0px;
 
@@ -139,7 +139,7 @@ $checkbox-width: $card-view-checkbox-width;
                 border-top: 1px solid $color-black-300;
 
                 .flexRow > .card {
-                    padding-left: $grid-default-cell-padding + 2 + $grid-group-expand-icon-size + $i * ($grid-default-group-padding + $grid-group-expand-icon-size / 2) - 9 !important;
+                    padding-left: $grid-default-cell-padding/2 + 2 + $grid-group-expand-icon-size + $i * ($grid-default-group-padding + $grid-group-expand-icon-size / 2) - 9 !important;
                 }
                 margin-bottom: 0;
 

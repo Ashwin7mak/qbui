@@ -10,7 +10,6 @@ import {APP_ROUTE} from '../../constants/urlConstants';
 import WindowLocationUtils from '../../utils/windowLocationUtils';
 import UrlUtils from '../../utils/urlUtils';
 
-
 let TablesList = React.createClass({
 
     propTypes: {
@@ -91,6 +90,8 @@ let TablesList = React.createClass({
      * @returns {*}
      */
     tablesList() {
+        // sorts tables list in order of id which is approx order of creation
+        // if the tables list gets very large this should happen server side instead
         const tableItems = this.props.getAppTables(this.props.selectedAppId, this.props.apps).map((table) => {
             table.link = this.getTableLink(table);
             return this.searchMatches(table.name) &&
@@ -144,9 +145,12 @@ let TablesList = React.createClass({
 
         return (
             <li className="newTableItem link" key="newTable">
-                <div className="newTable" onClick={this.props.onCreateNewTable}>
-                    <QBicon icon="add-mini"/><I18nMessage message="tableCreation.newTablePageTitle"/>
-                </div>
+                <a className="newTable leftNavLink" onClick={this.props.onCreateNewTable}>
+                    <QBicon icon="add-new-stroke"/><span className="leftNavLabel"><I18nMessage message="tableCreation.newTablePageTitle"/></span>
+                    <div className="hoverComponent">
+                        <I18nMessage message="tableCreation.newTablePageTitle"/>
+                    </div>
+                </a>
             </li>);
     },
 

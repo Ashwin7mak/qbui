@@ -19,7 +19,7 @@ class AccountUsers extends Component {
     constructor(props) {
         super(props);
         this.GRID_ID = "accountUsers";
-        this.ITEMS_PER_PAGE = 500;
+        this.ITEMS_PER_PAGE = 10;
     }
 
     /**
@@ -43,6 +43,8 @@ class AccountUsers extends Component {
                 <div className="accountUsersContainer">
                     <AccountUsersStage users={this.props.users}/>
                     <AccountUsersGrid id={this.GRID_ID}
+                                      itemTypePlural="users"
+                                      itemTypeSingular="user"
                                       showAccountColumns={canSeeAccountColumns}
                                       showRealmColumns={canSeeRealmColumns}/>
                 </div>

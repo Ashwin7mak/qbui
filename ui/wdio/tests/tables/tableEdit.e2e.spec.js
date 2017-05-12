@@ -9,6 +9,9 @@
     var formsPO = requirePO('formsPage');
     var RequestSessionTicketPage = requirePO('requestSessionTicket');
     var rawValueGenerator = require('../../../test_generators/rawValue.generator');
+    const tableNameFieldTitleText = '* Table name';
+    const recordNameFieldTitleText = '* A record in the table is called';
+    const descFieldTitleText = 'Description';
 
     describe('Tables - Edit a table via builder tests: ', function() {
         var realmName;
@@ -56,14 +59,14 @@
                 var tableRecord = rawValueGenerator.generateStringWithFixLength(10);
                 var tableDescription = rawValueGenerator.generateStringWithFixLength(10);
                 var tableFields = [
-                    {fieldTitle: '* Table Name', fieldValue: tableName},
-                    {fieldTitle: '* A record in the table is called', fieldValue: tableRecord},
-                    {fieldTitle: 'Description', fieldValue: tableDescription}
+                    {fieldTitle: tableNameFieldTitleText, fieldValue: tableName},
+                    {fieldTitle: recordNameFieldTitleText, fieldValue: tableRecord},
+                    {fieldTitle: descFieldTitleText, fieldValue: tableDescription}
                 ];
                 var newTableFields = [
-                    {fieldTitle: '* Table Name', fieldValue: 'New ' + tableName},
-                    {fieldTitle: '* A record in the table is called', fieldValue: 'New ' + tableRecord},
-                    {fieldTitle: 'Description', fieldValue: 'New ' + tableDescription}
+                    {fieldTitle: tableNameFieldTitleText, fieldValue: 'New ' + tableName},
+                    {fieldTitle: recordNameFieldTitleText, fieldValue: 'New ' + tableRecord},
+                    {fieldTitle: descFieldTitleText, fieldValue: 'New ' + tableDescription}
                 ];
 
                 //Step 1 - Click on new table button
@@ -143,8 +146,8 @@
                 var tableRecord = rawValueGenerator.generateStringWithFixLength(10) + ' updated record a';
 
                 var tableFields = [
-                    {fieldTitle: '* Table Name', fieldValue: tableName},
-                    {fieldTitle: '* A record in the table is called', fieldValue: tableRecord}
+                    {fieldTitle: tableNameFieldTitleText, fieldValue: tableName},
+                    {fieldTitle: recordNameFieldTitleText, fieldValue: tableRecord}
                 ];
 
                 //Step 1 - Click on existing table 'Table 2'
@@ -188,9 +191,9 @@
             var tableRecord = rawValueGenerator.generateStringWithFixLength(10);
             var tableDescription = rawValueGenerator.generateStringWithFixLength(10);
             var tableFields = [
-                {fieldTitle: '* Table Name', fieldValue: tableName},
-                {fieldTitle: '* A record in the table is called', fieldValue: tableRecord},
-                {fieldTitle: 'Description', fieldValue: tableDescription}
+                {fieldTitle: tableNameFieldTitleText, fieldValue: tableName},
+                {fieldTitle: recordNameFieldTitleText, fieldValue: tableRecord},
+                {fieldTitle: descFieldTitleText, fieldValue: tableDescription}
             ];
             var originalFieldValues;
             var newFieldValues;
@@ -239,34 +242,34 @@
                 {
                     message: 'with empty table name',
                     tableFields: [
-                        {fieldTitle: '* Table Name', fieldValue: ' '},
-                        {fieldTitle: 'Description', fieldValue: 'test Description'}
+                        {fieldTitle: tableNameFieldTitleText, fieldValue: ' '},
+                        {fieldTitle: descFieldTitleText, fieldValue: 'test Description'}
                     ],
                     tableFieldError: [
-                        {fieldTitle: '* Table Name', fieldError: 'Fill in the table name'},
+                        {fieldTitle: tableNameFieldTitleText, fieldError: 'Fill in the table name'},
                     ]
                 },
                 {
                     message: 'with empty required fields',
                     tableFields: [
-                        {fieldTitle: '* Table Name', fieldValue: ' '},
-                        {fieldTitle: '* A record in the table is called', fieldValue: ' '},
-                        {fieldTitle: 'Description', fieldValue: 'test Description'}
+                        {fieldTitle: tableNameFieldTitleText, fieldValue: ' '},
+                        {fieldTitle: recordNameFieldTitleText, fieldValue: ' '},
+                        {fieldTitle: descFieldTitleText, fieldValue: 'test Description'}
                     ],
                     tableFieldError: [
-                        {fieldTitle: '* Table Name', fieldError: 'Fill in the table name'},
-                        {fieldTitle: '* A record in the table is called', fieldError: 'Fill in the record name'}
+                        {fieldTitle: tableNameFieldTitleText, fieldError: 'Fill in the table name'},
+                        {fieldTitle: recordNameFieldTitleText, fieldError: 'Fill in the record name'}
                     ]
                 },
                 {
                     message: 'with duplicate table name',
                     tableFields: [
-                        {fieldTitle: '* Table Name', fieldValue: 'Table 1'},
-                        {fieldTitle: '* A record in the table is called', fieldValue: 'Table 1'},
-                        {fieldTitle: 'Description', fieldValue: 'test Description'}
+                        {fieldTitle: tableNameFieldTitleText, fieldValue: 'Table 1'},
+                        {fieldTitle: recordNameFieldTitleText, fieldValue: 'Table 1'},
+                        {fieldTitle: descFieldTitleText, fieldValue: 'test Description'}
                     ],
                     tableFieldError: [
-                        {fieldTitle: '* Table Name', fieldError: 'Fill in a different value. Another table is already using this name'},
+                        {fieldTitle: tableNameFieldTitleText, fieldError: 'Fill in a different value. Another table is already using this name'},
                     ]
                 },
             ];
@@ -275,8 +278,8 @@
         tableFieldValidationTestCases().forEach(function(testCase) {
             it('Verify Edit table Validation ' + testCase.message, function() {
 
-                //Step 1 - Click on existing table 'Table 1'
-                tableCreatePO.selectTable('Table 1');
+                //Step 1 - Click on existing table named 'Child Table A'
+                tableCreatePO.selectTable('Child Table A');
 
                 //Step 2 - Select the table properties of settings of table 1 from global actions gear
                 tableCreatePO.clickOnModifyTableSettingsLink();
@@ -290,13 +293,13 @@
                 testCase.tableFieldError.forEach(function(tableField) {
                     tableCreatePO.verifyTableFieldValidation(tableField.fieldTitle, tableField.fieldError);
                     //Verify Apply button is enabled
-                    expect(browser.isEnabled('.tableInfoButtons.open .primaryButton')).toBeTruthy();
+                    expect(browser.isExisting('.tableInfoButtons.open .primaryButton')).toBeTruthy();
                     //Verify Reset button is enabled
                     expect(browser.isEnabled('.tableInfoButtons.open .secondaryButton')).toBeTruthy();
                 });
 
-                //Step 5 - Verify table link with table name shows on left Nav . Make sure the table name is not updated, it is still 'Table 2'
-                expect(browser.element('.standardLeftNav .contextHeaderTitle').getAttribute('textContent')).toContain('Table 1');
+                //Step 5 - Verify table link with table name shows on left Nav . Make sure the table name is not updated, it is still 'Child Table A'
+                expect(browser.element('.standardLeftNav .contextHeaderTitle').getAttribute('textContent')).toContain('Child Table A');
 
                 //Step 6 - Verify 'Back to app' link shows up in the left Nav
                 expect(browser.element('.standardLeftNav .navItemContent').getAttribute('textContent')).toContain('Back to app');
@@ -318,7 +321,7 @@
 
             //Add user to participant appRole
             browser.call(function() {
-                return e2eBase.recordBase.apiBase.assignUsersToAppRole(testApp.id, "11", [userId]);
+                return e2eBase.recordBase.apiBase.assignUsersToAppRole(testApp.id, e2eConsts.PARTICIPANT_ROLEID, [userId]);
             });
 
             //get the user authentication

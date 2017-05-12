@@ -9,6 +9,7 @@
     let perfLogger = require('../../perfLogger');
     let url = require('url');
     let consts = require('../../../../common/src/constants');
+    let requestUtils = require('../../utility/requestUtils');
 
     module.exports = function(config) {
         var TICKET_NAME = "TICKET";
@@ -48,7 +49,7 @@
             getRequestEeHostEnable: function() {
                 return config ? config.eeHostEnable : '';
             },
-            getRequestUrl  : function(req) {
+            getRequestCoreUrl  : function(req) {
                 return config ? config.javaHost + req.url : '';
             },
             getRequestEEUrl  : function(req) {
@@ -147,6 +148,7 @@
 
                 //  override the url to use the experience engine
                 opts.url = this.getRequestEEUrl(req);
+
                 return opts;
             },
 
@@ -158,7 +160,7 @@
              */
             setAutomationEngineOptions: function(req) {
                 //  set the default request options
-                let opts = this.setAutomationOptions(req);
+                let opts = this.setOptions(req);
 
                 //  override the url to use automation server
                 opts.url = this.getRequestAutomationUrl(req);
@@ -166,42 +168,6 @@
                 opts.cookies = req.cookies;
                 return opts;
             },
-
-            /**
-             * Set the request attributes for a automation server request
-             *
-             * @param req
-             * @returns request object used when submitting a server request
-             */
-            setAutomationOptions: function(req) {
-
-                this.setTidHeader(req);
-
-                let opts = {
-                    url         : this.getRequestAutomationUrl(req),
-                    method      : (req.method),
-                    agentOptions: this.getAgentOptions(req),
-                    headers     : req.headers
-                };
-
-                if (config) {
-                    if (config.isMockServer) {
-                        opts.gzip = false;
-                        opts.headers["accept-encoding"] = "";
-                    }
-                    if (config.proxyHost) {
-                        opts.host = config.proxyHost;
-                        if (config.proxyPort) {
-                            opts.port = config.proxyPort;
-                        }
-                    }
-                }
-
-                this.setBodyOption(req, opts);
-
-                return opts;
-            },
-
 
             /**
              * Set the request attributes for a core server request
@@ -215,7 +181,7 @@
                 this.setTidHeader(req);
 
                 let opts = {
-                    url         : this.getRequestUrl(req),
+                    url         : this.getRequestCoreUrl(req),
                     method      : (forceGet === true ? 'GET' : req.method),
                     agentOptions: this.getAgentOptions(req),
                     headers     : req.headers
@@ -306,7 +272,7 @@
                         request(opts, function(error, response) {
                             if (error) {
                                 reject(new Error(error));
-                            } else if (response.statusCode !== 200) {
+                            } else if (!requestUtils.wasRequestSuccessful(response.statusCode)) {
                                 reject(response);
                             } else {
                                 resolve(response);

@@ -12,27 +12,27 @@ class StandardGridNavigation extends React.Component {
     }
 
     getStartRecord() {
-        return this.props.paginationInfo.currentPage;
+        return this.props.paginationInfo.firstRecordInCurrentPage;
     }
 
     getEndRecord() {
-        return this.props.paginationInfo.totalPages;
+        return this.props.paginationInfo.lastRecordInCurrentPage;
     }
 
     isPreviousDisabled() {
-        return this.props.paginationInfo.totalRecords === 0 || this.props.paginationInfo.currentPage === 1;
+        return this.props.paginationInfo.filteredRecords === 0 || this.props.paginationInfo.currentPage === 1;
     }
 
     isNextDisabled() {
-        return this.props.paginationInfo.totalRecords === 0 || this.props.paginationInfo.currentPage === this.props.paginationInfo.totalPages;
+        return this.props.paginationInfo.filteredRecords === 0 || this.props.paginationInfo.currentPage === this.props.paginationInfo.totalPages;
     }
 
     render() {
         return (
             <Pagination startRecord={this.getStartRecord()}
                         endRecord={this.getEndRecord()}
-                        onClickPrevious={this.props.getPreviousUsersPage}
-                        onClickNext={this.props.getNextUsersPage}
+                        onClickPrevious={this.props.getPreviousPage}
+                        onClickNext={this.props.getNextPage}
                         isPreviousDisabled={this.isPreviousDisabled()}
                         isNextDisabled={this.isNextDisabled()}
                         isHidden={false} />
@@ -40,8 +40,23 @@ class StandardGridNavigation extends React.Component {
     }
 }
 
+StandardGridNavigation.defaultProps = {
+    firstRecordInCurrentPage: 0,
+    lastRecordInCurrentPage: 0,
+    filteredRecords: 0,
+    totalPages: 0,
+    currentPage: 1,
+};
+
 StandardGridNavigation.propTypes = {
-    id: PropTypes.string
+    id: PropTypes.string.required,
+    firstRecordInCurrentPage: PropTypes.number,
+    lastRecordInCurrentPage: PropTypes.number,
+    filteredRecords: PropTypes.number,
+    totalPages: PropTypes.number,
+    currentPage: PropTypes.number,
+    getPreviousPage :PropTypes.func.required,
+    getNextPage :PropTypes.func.required
 };
 
 export {StandardGridNavigation};

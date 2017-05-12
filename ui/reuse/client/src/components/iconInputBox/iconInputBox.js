@@ -1,6 +1,6 @@
 import React, {PropTypes} from 'react';
 import './iconInputBox.scss';
-import Icon from '../icon/icon';
+import Icon from 'REUSE/components/icon/icon';
 /**
  * Generic component that renders a search box
  */

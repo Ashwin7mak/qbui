@@ -121,7 +121,7 @@
     "paramSslCertificateID": {
       "Description": "ARN of the SSL cert for the ELB",
       "Type": "String",
-      "Default": "arn:aws:acm:us-west-2:723670383381:certificate/9f6356af-20cb-479e-b321-6a60eab593bb"
+      "Default": "arn:aws:acm:us-west-2:723670383381:certificate/5a4c2216-1823-4970-9f9b-890110190ca6"
     },
     "paramLegacyBase": {
       "Description": "Base domain of legacy stack",
@@ -179,7 +179,7 @@
           }
         ],
         "HealthCheck": {
-          "Target": {"Fn::Join" : [ "", [ "HTTPS:", {"Ref": "paramSSLInstancePort"}, "/api/v1/qbuiHealth" ] ]},
+          "Target": {"Fn::Join" : [ "", [ "HTTPS:", {"Ref": "paramSSLInstancePort"}, "/qbui/health" ] ]},
           "HealthyThreshold": "2",
           "UnhealthyThreshold": "5",
           "Interval": "10",

@@ -1,6 +1,10 @@
 const reactViews = require('express-react-views');
 const log = require('../logger').getLogger();
-const path = require('path');
+
+// These two imports are `let` because they are rewired in a unit test. Rewire doesn't currently support rewiring const.
+let path = require('path');
+let fs = require('fs');
+
 let baseRoute = require('../../../common/src/constants').ROUTES.BASE_CLIENT_ROUTE;
 
 const engineOptions = {
@@ -38,12 +42,39 @@ class BaseClientRoute {
     }
 
     /**
-     * Generates the correct bundle file path based on the current environment
+     * Generates the path to the correct bundle file when using cache-busting or chunkfiles in webpack.
+     * It only returns a value when the environment is set to production as other environments do not use cache-busting/chunkfiles.
+     * @param bundleFileName
+     * @returns {*}
+     */
+    generateWebpackBundleFilePath(bundleFileName) {
+        // This filepath only works when running in prod mode which is the only mode that currently has cache-busting.
+        // In that mode, the folder structure is:
+        //   - public/dist - contains all webpack output (there is no client-react folder)
+        //   - server
+        const manifestPath = path.join(__dirname, '../../../public/dist/manifest.json');
+        if (this.appConfig.isProduction && fs.existsSync(manifestPath)) {
+            const webpackManifest = require(manifestPath);
+            return webpackManifest[`${bundleFileName}.js`];
+        }
+
+        return false;
+    }
+
+    /**
+     * Generates the correct bundle file path based on the current environment.
      * @param bundleFileName - bundleFileName without the extension
      * @returns {string}
      */
     generateBundleFilePath(bundleFileName) {
-        return (this.appConfig.isProduction ? `${bundleFileName}.min.js` : `${bundleFileName}.js`);
+        const webpackFilePath = this.generateWebpackBundleFilePath(bundleFileName);
+
+        if (webpackFilePath) {
+            return webpackFilePath;
+        }
+
+        // Use this as a fallback in case webpack manifest has not been generated or operating in a non-prod environment.
+        return `${bundleFileName}.js`;
     }
 
     /**

@@ -17,7 +17,6 @@ const forms = (
         // remove any entries where the entry's formData.recordId matches the passed in id
         return _.omit(newState, ['formData.recordId', _id]);
     }
-
     // reducer - no mutations!
     switch (action.type) {
 
@@ -146,6 +145,7 @@ const forms = (
 
         updatedForm.selectedFields[0] = newLocation;
 
+        updatedForm.isPendingEdit = true;
         newState[action.id] = updatedForm;
         return newState;
     }
@@ -201,6 +201,7 @@ const forms = (
 
         updatedForm.selectedFields[0] = newLocation;
 
+        updatedForm.isPendingEdit = true;
         newState[action.id] = updatedForm;
         return newState;
     }
@@ -217,6 +218,7 @@ const forms = (
             location
         );
 
+        updatedForm.isPendingEdit = true;
         newState[id] = updatedForm;
         return newState;
     }
@@ -290,6 +292,36 @@ const forms = (
         return newState;
     }
 
+    case types.IS_DRAGGING : {
+        if (!currentForm) {
+            return state;
+        }
+
+        if (!updatedForm.isDragging) {
+            updatedForm.isDragging = [];
+        }
+
+        updatedForm.isDragging = true;
+
+        newState[id] = updatedForm;
+        return newState;
+    }
+
+    case types.END_DRAG : {
+        if (!currentForm) {
+            return state;
+        }
+
+        if (!updatedForm.isDragging) {
+            updatedForm.isDragging = [];
+        }
+
+        updatedForm.isDragging = false;
+
+        newState[id] = updatedForm;
+        return newState;
+    }
+
     case types.KEYBOARD_MOVE_FIELD_UP : {
         if (!currentForm) {
             return state;
@@ -311,6 +343,7 @@ const forms = (
             -1
         );
 
+        updatedForm.isPendingEdit = true;
         newState[id] = updatedForm;
         return newState;
     }
@@ -336,6 +369,7 @@ const forms = (
             1
         );
 
+        updatedForm.isPendingEdit = true;
         newState[id] = updatedForm;
         return newState;
     }

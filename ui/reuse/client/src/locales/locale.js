@@ -1,8 +1,8 @@
 import MessageFormat from 'messageformat';
 // IMPORTS FROM CLIENT REACT
-import Logger from '../../../../client-react/src/utils/logger';
-import config from '../../../../client-react/src/config/app.config';
-import StringUtils from '../../../../client-react/src/utils/stringUtils';
+import Logger from 'APP/utils/logger';
+import config from 'APP/config/app.config';
+import StringUtils from 'APP/utils/stringUtils';
 // IMPORTS FROM CLIENT REACT
 
 let logger = new Logger();

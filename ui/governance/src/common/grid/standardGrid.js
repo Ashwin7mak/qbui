@@ -1,6 +1,7 @@
 import React, {Component, PropTypes} from 'react';
 import _ from 'lodash';
 import '../../../../client-react/src/components/dataTable/qbGrid/qbGrid.scss';
+import './standardGrid.scss';
 import * as Table from 'reactabular-table';
 import {connect} from 'react-redux';
 
@@ -49,7 +50,9 @@ class StandardGrid extends Component {
         return (
             <div className="gridWrapper">
                 <StandardGridToolbar id={this.props.id}
-                                     doUpdate={this.props.doUpdate}/>
+                                     doUpdate={this.props.doUpdate}
+                                     itemTypePlural={this.props.itemTypePlural}
+                                     itemTypeSingular={this.props.itemTypeSingular}/>
                 <div className="gridContainer">
                     <Table.Provider
                         className="qbGrid"
@@ -74,11 +77,14 @@ class StandardGrid extends Component {
 
 StandardGrid.propTypes = {
     columns: PropTypes.array.isRequired,
+    items: PropTypes.array.isRequired,
     rowKey: PropTypes.string.isRequired,
     id: PropTypes.string.isRequired,
     columnTransforms: PropTypes.array,
     columnTransformProps: PropTypes.array,
-    doUpdate: PropTypes.func.isRequired
+    doUpdate: PropTypes.func.isRequired,
+    itemTypePlural: PropTypes.string,
+    itemTypeSingular: PropTypes.string
 };
 
 StandardGrid.defaultProps = {

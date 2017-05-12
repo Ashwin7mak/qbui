@@ -2,7 +2,7 @@ import React from 'react';
 import {shallow} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
 
-import StageHeaderCounts from '../../../src/components/stage/stageHeaderCounts';
+import StageHeaderCounts from 'REUSE/components/stage/stageHeaderCounts';
 
 const testItems = [
     {count: '1', title: 'first one'},

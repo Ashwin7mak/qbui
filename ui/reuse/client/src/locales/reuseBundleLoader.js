@@ -1,5 +1,5 @@
 // IMPORTS FROM CLIENT REACT
-import Logger from '../../../../client-react/src/utils/logger';
+import Logger from 'APP/utils/logger';
 // IMPORTS FROM CLIENT REACT
 
 import Locale from './locale';
