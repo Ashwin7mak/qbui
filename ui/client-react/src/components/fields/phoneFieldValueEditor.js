@@ -18,6 +18,10 @@ const PhoneFieldValueEditor = React.createClass({
          * the display to render */
         display: PropTypes.any,
         /**
+         * A boolean to disabled field on form builder
+         */
+        isDisabled: React.PropTypes.bool,
+        /**
          * the class to use */
         classes: PropTypes.string,
         /**
@@ -176,7 +180,7 @@ const PhoneFieldValueEditor = React.createClass({
                                       onBlur={this.onBlur}
                                       value={phoneNumber}
                                       inputType="tel"
-                                      showClearButton={true} />
+                                      showClearButton={!this.props.isDisabled} />
                 {ext}
                 {extInput}
             </div>

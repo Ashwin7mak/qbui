@@ -43,6 +43,9 @@ const mockFormStore = {updateFormRedirectRoute(_route) {}};
 class WindowLocationUtilsMock {
     static update(url) { }
 }
+const query = {
+    'editRec': 9
+};
 
 describe('Nav Unit tests', () => {
     'use strict';
@@ -94,10 +97,18 @@ describe('Nav Unit tests', () => {
         forms: [{id: 'view'}],
         shell: {
             leftNavVisible: true,
-            leftNavExpanded: false
+            leftNavExpanded: false,
+            fieldsSelectMenu: {
+                fieldsListCollapsed: true,
+                addBefore: null,
+                availableColumns: []
+            }
         },
         reports: [],
-        history: []
+        history: [],
+        location: {
+            query: query
+        }
     };
 
     beforeEach(() => {
@@ -113,6 +124,7 @@ describe('Nav Unit tests', () => {
         NavRewireAPI.__Rewire__('TopNav', TopNavMock);
         NavRewireAPI.__Rewire__('TableCreationDialog', TableCreationDialogMock);
         NavRewireAPI.__Rewire__('WindowLocationUtils', WindowLocationUtilsMock);
+        NavRewireAPI.__Rewire__('Analytics', () => null); // Turn off analytics component for unit tests
     });
 
     afterEach(() => {
@@ -128,6 +140,7 @@ describe('Nav Unit tests', () => {
         NavRewireAPI.__ResetDependency__('TopNav');
         NavRewireAPI.__ResetDependency__('TableCreationDialog');
         NavRewireAPI.__ResetDependency__('WindowLocationUtils');
+        NavRewireAPI.__ResetDependency__('Analytics');
     });
 
     it('test render of component', () => {
@@ -250,7 +263,10 @@ describe('Nav Unit tests', () => {
     it('renders form builder and sets the redirect route', () => {
         spyOn(mockFormStore, 'updateFormRedirectRoute');
 
-        const testLocation = {pathname: '/previousLocation'};
+        const testLocation = {
+            pathname: '/previousLocation',
+            query: query
+        };
         props.forms = [];
         props.history = [];
 

@@ -20,6 +20,9 @@ const QbHeaderCell = React.createClass({
         if (this.props.isStickyCell) {
             classes.push(['stickyCell']);
         }
+        if (this.props.isPlaceholderCell) {
+            classes.push('placeholderCell');
+        }
 
         return <th className={classes.join(' ')} {...this.props} />;
     }
@@ -27,7 +30,11 @@ const QbHeaderCell = React.createClass({
 
 QbHeaderCell.propTypes = {
     classes: React.PropTypes.array,
-    isStickyCell: React.PropTypes.bool
+    isStickyCell: React.PropTypes.bool,
+    /**
+     * This prop is for styling of a placeholder cell.
+     * Use it to indicate that a column with actual data can/should be placed there. */
+    isPlaceholderCell: React.PropTypes.bool
 };
 
 // Provide default val

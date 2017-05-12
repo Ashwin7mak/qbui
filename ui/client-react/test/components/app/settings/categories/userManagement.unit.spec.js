@@ -69,7 +69,9 @@ describe('UserManagement functions', () => {
             "email": "imissthe40s@shield.com",
             "userId": "RDUII_UB",
             "roleName": "Viewer",
-            "name": "Steve Rogers"
+            "name": "Steve Rogers",
+            "isSelected": false,
+            "roleId": 10
         },
         {
             "firstName": "Tony",
@@ -78,7 +80,9 @@ describe('UserManagement functions', () => {
             "email": "arcreactor@stark.com",
             "userId": "RDUII_UC",
             "roleName": "Participant",
-            "name": "Tony Stark"
+            "name": "Tony Stark",
+            "isSelected": false,
+            "roleId": 11
         },
         {
             "firstName": "administrator",
@@ -87,16 +91,20 @@ describe('UserManagement functions', () => {
             "email": "administrator@quickbase.com",
             "userId": "10000",
             "roleName": "Administrator",
-            "name": "administrator none"
+            "name": "administrator none",
+            "isSelected": false,
+            "roleId": 12
         }
     ];
     const appUsersEmpty = [];
     const appId = 1;
     const userColumns = ['name', 'roleName', 'email', 'screenName'];
+    const selectedRows = [];
 
     it('test render of component', () => {
         let component = TestUtils.renderIntoDocument(<UserManagement appUsers={appUsers}
                                                                      appRoles={appRoles}
+                                                                     selectedRows={selectedRows}
                                                                     appId={appId}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
     });
@@ -105,6 +113,7 @@ describe('UserManagement functions', () => {
         let cellFormatter = (cellData) => {return <span>{cellData}</span>;};
         let component = TestUtils.renderIntoDocument(<UserManagement appUsers={appUsers}
                                                                      appRoles={appRoles}
+                                                                     selectedRows={selectedRows}
                                                                      appId={appId}/>);
         let columns = component.createUserColumns(cellFormatter);
         for (var i = 0; i < userColumns.length; i++) {
@@ -115,16 +124,20 @@ describe('UserManagement functions', () => {
     it('test createRows method with users and roles data', () => {
         let component = TestUtils.renderIntoDocument(<UserManagement appUsers={appUsers}
                                                                      appRoles={appRoles}
+                                                                     selectedRows={selectedRows}
                                                                      appId={appId}/>);
         let users = component.createUserRows();
         expect(users).toEqual(usersResolved);
     });
 
-    it('test createRows method with NO users and roles data', () => {
+    it('test getActionCellProps method', () => {
         let component = TestUtils.renderIntoDocument(<UserManagement appUsers={appUsersEmpty}
                                                                      appRoles={appRoles}
+                                                                     selectedRows={selectedRows}
                                                                      appId={appId}/>);
-        let users = component.createUserRows();
-        expect(users).toEqual([]);
+        let cellProps = component.getActionCellProps();
+        expect(cellProps).toEqual({isStickyCell: true});
     });
+
+
 });

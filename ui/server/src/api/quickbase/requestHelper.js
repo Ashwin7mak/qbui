@@ -9,6 +9,7 @@
     let perfLogger = require('../../perfLogger');
     let url = require('url');
     let consts = require('../../../../common/src/constants');
+    let requestUtils = require('../../utility/requestUtils');
 
     module.exports = function(config) {
         var TICKET_NAME = "TICKET";
@@ -271,7 +272,7 @@
                         request(opts, function(error, response) {
                             if (error) {
                                 reject(new Error(error));
-                            } else if (response.statusCode !== 200) {
+                            } else if (!requestUtils.wasRequestSuccessful(response.statusCode)) {
                                 reject(response);
                             } else {
                                 resolve(response);

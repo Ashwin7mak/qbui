@@ -1,6 +1,8 @@
 // Global variable that allows you to set wdio to use a realm defined in your node config file
 // (see onPrepare hook below)
 var localConf;
+var randomNum = Math.floor((Math.random() * (100 - 1) + 1));
+var metricsPort = 8800 + randomNum;
 
 exports.config = {
     //
@@ -20,7 +22,10 @@ exports.config = {
         // Uncomment this if you are running Sauce against your local dev
         //dns             : '127.0.0.1',
         // Use a random int to make the port unique between Jenkins jobs
-        port            : 4400 + (Math.floor((Math.random() * (100 - 1) + 1)))
+        port            : 4400 + randomNum,
+        connectRetries : 5,
+        connectRetryTimeout: 5000,
+        metricsAddress : 'localhost:' + metricsPort
     },
     //
     //
@@ -74,6 +79,17 @@ exports.config = {
     // from the same test should run tests.
     //
     maxInstances: 10,
+    // =============================
+    // Appium Server Configuration
+    // =============================
+    // Define all options that are relevant for connecting to appium server
+    appium: {
+        args: {
+            host: '127.0.0.1',
+            port: '4723',
+            commandTimeout: '7200'
+        }
+    },
     //
     // If you have trouble getting all important capabilities together, check out the
     // Sauce Labs platform configurator - a great tool to configure your capabilities:
@@ -303,13 +319,14 @@ exports.config = {
         global.browserName = browser.desiredCapabilities.browserName;
 
         // Grab the browser settings from the capabilities object and set the browser size
-        var browserDimensions = e2eUtils.getBrowserBreakpointDimensions(browser.desiredCapabilities.breakpointSize);
-        global.breakpointSize = browserDimensions.breakpointSize;
-        global.browserWidth = browserDimensions.browserWidth;
-        global.browserHeight = browserDimensions.browserHeight;
-
-        browser.logger.info('Setting browser size to ' + global.breakpointSize + ' breakpoint (' + global.browserWidth + ', ' + global.browserHeight + ')');
-        browser.windowHandleSize({width: global.browserWidth, height: global.browserHeight});
+        if (browser.desiredCapabilities.breakpointSize) {
+            var browserDimensions = e2eUtils.getBrowserBreakpointDimensions(browser.desiredCapabilities.breakpointSize);
+            global.breakpointSize = browserDimensions.breakpointSize;
+            global.browserWidth = browserDimensions.browserWidth;
+            global.browserHeight = browserDimensions.browserHeight;
+            browser.logger.info('Setting browser size to ' + global.breakpointSize + ' breakpoint (' + global.browserWidth + ', ' + global.browserHeight + ')');
+            browser.windowHandleSize({width: global.browserWidth, height: global.browserHeight});
+        }
 
         // recordApi.base (and api.base) will not initialize itself if you don't pass in a config object
         // This call creates a your test realm down in api.base

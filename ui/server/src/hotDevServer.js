@@ -51,6 +51,10 @@
                 // historyApiFallback -  to access dev server from arbitrary url.
                 historyApiFallback: true,
 
+                headers: {
+                    'Access-Control-Allow-Origin': '*'
+                },
+
                 // Config for minimal console.log output.
                 stats: {
                     assets      : true,

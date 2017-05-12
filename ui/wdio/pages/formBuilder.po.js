@@ -7,7 +7,7 @@ class formBuilderPage {
 
     get cancelBtn() {
         // CANCEL (form) button in footer bar
-        return browser.element('.cancelFormButton');
+        return browser.element('.mainTrowserFooterButton');
     }
 
     get clearSearch() {
@@ -77,7 +77,7 @@ class formBuilderPage {
 
     get saveBtn() {
         // SAVE (form) button in footer bar
-        return browser.element('.saveFormButton');
+        return browser.element('.mainTrowserFooterButton');
     }
 
     get saveOrCancelFooter() {

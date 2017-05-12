@@ -2,8 +2,8 @@ import React from 'react';
 import {shallow} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
 
-import SideTrowserBase from '../../src/components/sideTrowserBase/sideTrowserBase';
-import SideMenuBase from '../../src/components/sideMenuBase/sideMenuBase';
+import SideTrowserBase from 'REUSE/components/sideTrowserBase/sideTrowserBase';
+import SideMenuBase from 'REUSE/components/sideMenuBase/sideMenuBase';
 
 let component;
 

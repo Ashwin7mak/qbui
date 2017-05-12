@@ -52,7 +52,7 @@
             var day = date.getDate();
             // date.getHours() returns 1-12;
             // Date time and Time of day fields both allow 0-23
-            var hour = chance.hour({twentyfour: true}) - 1;
+            var hour = chance.hour({twentyfour: true});
             var minute = date.getMinutes();
             var seconds = date.getSeconds();
             var millis = date.getMilliseconds();
@@ -67,7 +67,7 @@
 
             // date.getHours() returns 1-12;
             // Date time and Time of day fields both allow 0-23
-            var hour = chance.hour({twentyfour: true}) - 1;
+            var hour = chance.hour({twentyfour: true});
             var minute = date.getMinutes();
             var seconds = date.getSeconds();
             var millis = date.getMilliseconds();
@@ -193,13 +193,13 @@
         },
 
         //Generates and returns a date
-        generateDate: function() {
-            return chance.apiFormattedDate();
+        generateDate: function(options) {
+            return chance.apiFormattedDate(options);
         },
 
         //Generates and returns a dateTime that can be sent to the api
-        generateDateTime: function() {
-            return chance.apiFormattedDateTime();
+        generateDateTime: function(options) {
+            return chance.apiFormattedDateTime(options);
         },
 
         //Generates and returns a time that can be sent to the api

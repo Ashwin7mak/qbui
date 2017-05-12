@@ -2,8 +2,8 @@ import React from 'react';
 import {shallow} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
 
-import StageHeader from '../../../src/components/stage/stageHeader';
-import Icon from '../../../src/components/icon/icon';
+import StageHeader from 'REUSE/components/stage/stageHeader';
+import Icon from 'REUSE/components/icon/icon';
 
 const testTitle = 'Test Title';
 const testIcon = 'testIcon';

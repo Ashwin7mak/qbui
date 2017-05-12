@@ -229,6 +229,33 @@
         }},
 
         /*
+         * Method to sort fields in sort container
+         * @param fieldToSort
+         */
+        sortFieldsFromSrtGrpDlg : {value: function(fieldToSort, sortOrder) {
+            this.sortBySettings.waitForVisible();
+            //Filter nonEmpty fields to match with fieldToSort
+            var results = this.sortBySettings.elements('.notEmpty').value.filter(function(field) {
+                return field.element('.fieldName').getAttribute('textContent') === fieldToSort;
+            });
+
+            //if filtered elements not empty
+            if (results !== []) {
+                //wait for sort button to be visible
+                results[0].element('.sortOrderIcon').waitForVisible();
+                //click on sort button
+                if (sortOrder === 'desc') {
+                    results[0].element('.sortOrderIcon').click();
+                    //Need this to wait for rendering
+                    return browser.pause(e2eConsts.shortWaitTimeMs);
+                }
+            } else {
+                browser.logger.error('The field with name ' + fieldToSort + ' is not found for container ' + this.sortBySettings);
+                throw new Error('Cannot sort value for field ' + fieldToSort);
+            }
+        }},
+
+        /*
          * Method to verify field Panel
          * @title
          */
@@ -247,10 +274,11 @@
          */
         ClickMoreFieldsLinkInFieldsPanel : {value: function() {
             this.fieldsPanel.waitForVisible();
-            //scroll to more fields
-            this.fieldsPanel.element('.list-group .moreFields').scroll();
-            //click on more fields
+            //Directly clicking on the element rather than scrolling to the element and waiting for it to be visible
+            //Element already loaded in the DOM
             this.fieldsPanel.element('.list-group .moreFields').click();
+            //TODO Scroll function disabled until it is fixed to work in Safari(mobile): MC-2598
+            //this.fieldsPanel.element('.list-group .moreFields').scroll();
             //Need this to wait for more fields to load
             return browser.pause(e2eConsts.shortWaitTimeMs);
         }},
@@ -519,7 +547,7 @@
 
             if (items !== []) {
                 //verify the check mark beside the item selected
-                expect(items[0].element('.iconUISturdy-check').isVisible()).toBeTruthy();
+                expect(items[0].element('.iconUISturdy-checkmarkincircle-outline').isVisible()).toBeTruthy();
             } else {
                 browser.logger.error('Item with name ' + itemToVerify + ' not found under column header menu');
                 throw new Error('Item with name ' + itemToVerify + ' not found under column header menu');

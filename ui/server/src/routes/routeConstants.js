@@ -114,6 +114,7 @@
     let nodeApiEndpoints = {
         //  log routes are defined in routes.js
         LOG_CLIENT_MSG          : context.client.QBUI + '/log',
+        LOG_CLIENT_PERF_MSG     : context.client.QBUI + '/clientPerf',
         FACET_EXPRESSION_PARSE  : context.client.QBUI + '/facets/parse',
         QBUI_HEALTH             : context.client.QBUI + '/health'
     };

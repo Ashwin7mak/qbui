@@ -13,7 +13,7 @@ export const SUPPORTED_NEW_FIELD_TYPES = [
         fieldTypes: [
             fieldFormats.TEXT_FORMAT,
             // fieldFormats.MULTI_LINE_TEXT_FORMAT,
-            // fieldFormats.TEXT_FORMAT_MULTICHOICE,
+            fieldFormats.TEXT_FORMAT_MULTICHOICE,
             // fieldFormats.TEXT_FORMAT_RADIO_BUTTONS
         ]
     },
@@ -44,7 +44,7 @@ export const SUPPORTED_NEW_FIELD_TYPES = [
             fieldFormats.URL,
             fieldFormats.EMAIL_ADDRESS,
             fieldFormats.PHONE_FORMAT,
-            fieldFormats.RATING_FORMAT,
+            // fieldFormats.RATING_FORMAT,
             // fieldFormats.TEXT_FORMULA_FORMAT,
             // fieldFormats.NUMERIC_FORMULA_FORMAT,
             // fieldFormats.URL_FORMULA_FORMAT

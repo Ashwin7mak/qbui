@@ -1,6 +1,6 @@
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
-import Tooltip, {__RewireAPI__ as TooltipRewireAPI}  from '../../src/components/tooltip/tooltip';
+import Tooltip, {__RewireAPI__ as TooltipRewireAPI}  from 'REUSE/components/tooltip/tooltip';
 
 const I18nMessageMock = () => <div>test</div>;
 

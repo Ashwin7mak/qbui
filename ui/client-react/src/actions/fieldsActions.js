@@ -63,7 +63,7 @@ export const saveNewField = (appId, tblId, field, formId = null) => {
                 const oldFieldId = field.id;
                 const fieldCopy = _.cloneDeep(field);
                 delete fieldCopy.id;
-                delete fieldCopy.isPendingEdits;
+                delete fieldCopy.isPendingEdit;
 
                 fieldsService.createField(appId, tblId, fieldCopy).then(
                     (response) => {
@@ -100,7 +100,7 @@ export const updateFieldProperties = (appId, tblId, field) => {
             if (appId && tblId && field) {
                 let fieldsService = new FieldsService();
 
-                delete field.isPendingEdits;
+                delete field.isPendingEdit;
 
                 fieldsService.updateField(appId, tblId, field).then(
                     (response) => {
@@ -132,7 +132,7 @@ export const updateAllFieldsWithEdits = (appId, tableId) => {
     return (dispatch, getState) => {
         let fields = getFields(getState(), appId, tableId);
 
-        const fieldPromises = fields.filter(field => field.isPendingEdits).map(field => dispatch(updateFieldProperties(appId, tableId, field)));
+        const fieldPromises = fields.filter(field => field.isPendingEdit).map(field => dispatch(updateFieldProperties(appId, tableId, field)));
         if (fieldPromises.length === 0) {
             logger.info('No new fields to add when calling updateAllFieldsWithEdit against app: `{appId}`, tbl: `{tableId}`');
             return Promise.resolve();
