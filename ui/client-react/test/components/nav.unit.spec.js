@@ -43,6 +43,9 @@ const mockFormStore = {updateFormRedirectRoute(_route) {}};
 class WindowLocationUtilsMock {
     static update(url) { }
 }
+const query = {
+    'editRec': 9
+};
 
 describe('Nav Unit tests', () => {
     'use strict';
@@ -102,7 +105,10 @@ describe('Nav Unit tests', () => {
             }
         },
         reports: [],
-        history: []
+        history: [],
+        location: {
+            query: query
+        }
     };
 
     beforeEach(() => {
@@ -257,7 +263,10 @@ describe('Nav Unit tests', () => {
     it('renders form builder and sets the redirect route', () => {
         spyOn(mockFormStore, 'updateFormRedirectRoute');
 
-        const testLocation = {pathname: '/previousLocation'};
+        const testLocation = {
+            pathname: '/previousLocation',
+            query: query
+        };
         props.forms = [];
         props.history = [];
 
