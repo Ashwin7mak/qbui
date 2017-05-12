@@ -9,6 +9,10 @@ export const hideFacetMenu = () => {
     return {type: types.HIDE_FACET_MENU};
 };
 
+export const toggleFacetMenu = () => {
+    return {type: types.TOGGLE_FACET_MENU};
+};
+
 /**
  * Object that contains the data that is passed
  * payload.expanded is an array containing different ID's

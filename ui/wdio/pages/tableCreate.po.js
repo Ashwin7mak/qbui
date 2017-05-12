@@ -154,7 +154,7 @@
             browser.waitForExist('.tablesList .leftNavLabel');
             //filter table names from leftNav links
             var results = this.getAllTableLeftNavLinksList.value.filter(function(table) {
-                console.log("the tables are: "+table.getAttribute('textContent'));
+                console.log("the tables are: " + table.getAttribute('textContent'));
                 return table.getAttribute('textContent') === tableName;
             });
 

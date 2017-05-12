@@ -40,4 +40,10 @@ describe('DefaultTopNavGlobalActions', () => {
 
         expect(component.find('.testChildElement')).toBePresent();
     });
+
+    it('has a help button', () => {
+        component = mount(<DefaultTopNavGlobalActions/>);
+
+        expect(component.find('.reHelpButton')).toBePresent();
+    });
 });

@@ -25,9 +25,17 @@ exports.config = {
         // 'path/to/excluded/files'
     ],
 
-    //appium server listens on this server and port when you run tests locally
-    host: 'localhost',
-    port: 4723,
+    // =============================
+    // Appium Server Configuration
+    // =============================
+    // Define all options that are relevant for connecting to appium server
+      appium: {
+       args: {
+          host: '127.0.0.1',
+          port: '4723',
+          commandTimeout: '7200'
+           }
+       },
 
     maxInstances: 10,
 
@@ -35,12 +43,21 @@ exports.config = {
     // Sauce Labs platform configurator - a great tool to configure your capabilities:
     // https://docs.saucelabs.com/reference/platforms-configurator
     //
-    capabilities: [{
+    capabilities: [
+    {
         maxInstances: 1,
         platformName: 'iOS',
         browserName: 'safari',
         deviceName: 'iPhone 5s',
-    }],
+    },
+    //For IPAD capabilities
+    {
+       platformName: 'iOS',
+       browserName: 'safari',
+       deviceName: 'iPad 2',
+       deviceOrientation: 'landscape',
+    }
+    ],
     // ===================
     // Test Configurations
     // ===================
