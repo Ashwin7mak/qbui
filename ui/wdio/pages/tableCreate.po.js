@@ -554,7 +554,9 @@
             //wait for the button tobe visible
             browser.element('.modal-dialog .modal-footer .secondaryButton').waitForVisible();
             //Click on don't delete table button
-            return browser.element('.modal-dialog .modal-footer .secondaryButton').click();
+            browser.element('.modal-dialog .modal-footer .secondaryButton').click();
+            //Need this to wait for model dialogue to slide away
+            return browser.pause(e2eConsts.shortWaitTimeMs);
         }},
 
     });
