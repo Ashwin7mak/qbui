@@ -35,11 +35,17 @@ describe('Apps Actions functions with Tables', () => {
         getAppRoles(id) {
             return Promise.resolve({data: appRoleResponeData});
         }
+        unassignUsersFromRole(appId, roleId, userIds) {
+            return Promise.resolve({data: appRoleResponeData});
+        }
     }
 
     class mockRoleServiceFailure {
         constructor() { }
         getAppRoles(id) {
+            return Promise.reject(null);
+        }
+        unassignUsersFromRole(appId, roleId, userIds) {
             return Promise.reject(null);
         }
     }
@@ -69,6 +75,7 @@ describe('Apps Actions functions with Tables', () => {
         spyOn(mockAppService.prototype, 'getAppComponents').and.callThrough();
         spyOn(mockAppService.prototype, 'getAppUsers').and.callThrough();
         spyOn(mockRoleService.prototype, 'getAppRoles').and.callThrough();
+        spyOn(mockRoleService.prototype, 'unassignUsersFromRole').and.callThrough();
         spyOn(mockUserService.prototype, 'getUser').and.callThrough();
         appsActionsRewireAPI.__Rewire__('AppService', mockAppService);
         appsActionsRewireAPI.__Rewire__('RoleService', mockRoleService);
@@ -156,6 +163,46 @@ describe('Apps Actions functions with Tables', () => {
         });
     });
 
+    var unassignUsersTests = [
+        {name:'unassign users from role', appId: 187, roleId:1, userIds:[1]}
+    ];
+    unassignUsersTests.forEach(function(test) {
+        it(test.name, function(done) {
+            flux.actions.unassignUsers(test.appId, test.roleId, test.userIds).then(
+                () => {
+                    expect(mockRoleService.prototype.unassignUsersFromRole).toHaveBeenCalledWith(test.appId, test.roleId, test.userIds);
+                    expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(1);
+                    expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.UNASSIGN_USERS_SUCCESS, {appId:test.appId, roleId:test.roleId, userIds:test.userIds}]);
+                    done();
+                },
+                () => {
+                    expect(false).toBe(true);
+                    done();
+                }
+            );
+        });
+    });
+
+    var loadFailUnassignUsersTests = [
+        {name:'fail unassign users from role', appId: 187, roleId:1, userIds:[1]}
+    ];
+    loadFailUnassignUsersTests.forEach(function(test) {
+        it(test.name, function(done) {
+            appsActionsRewireAPI.__Rewire__('RoleService', mockRoleServiceFailure);
+            flux.actions.unassignUsers(test.appId, test.roleId, test.userIds).then(
+                () => {
+                    expect(false).toBe(true);
+                    done();
+                },
+                () => {
+                    expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.UNASSIGN_USERS_FAILED]);
+                    expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(1);
+                    done();
+                }
+            );
+        });
+    });
+
     var loadAppRolesNegativeTests = [
         {name:'fail load app roles with app id not cached', appId: 187, cached: false,  appRoles: [1]}
     ];
@@ -219,22 +266,6 @@ describe('Apps Actions functions with Tables', () => {
                 }
             );
         });
-    });
-
-    it("Test unassign Users", function(done) {
-        var test = {appId: 187, userIds: 187, roleId: 1};
-        appsActionsRewireAPI.__Rewire__('RoleService', mockRoleServiceFailure);
-        flux.actions.unassignUsers(test.appId, test.roleId, test.userIds).then(
-            () => {
-                expect(false).toBe(true);
-                done();
-            },
-            () => {
-                expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([]);
-                expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(0);
-                done();
-            }
-        );
     });
 
     it("Test Select Table Id ", function(done) {
