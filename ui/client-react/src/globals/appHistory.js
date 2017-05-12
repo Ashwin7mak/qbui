@@ -128,27 +128,26 @@ class AppHistory {
     }
 
     /**
-     * isPendingEdit checks to see if there are any pending edits
-     * @param recordStore, formsStore, fieldsStore
+     * isPendingEdit checks to see if there are any pending edits in record, fields or forms store
      * @return boolean
      * */
-    isPendingEdit = (recordStore, formsStore, fieldsStore) => {
+    getIsPendingEdit = () => {
         let hasPendingEdit = false;
+        if (self.store) {
+            const state = self.store.getState();
+            //fetch stores that have pendEdits
+            let {recordStore, formsStore, fieldsStore} = self.getStores(state);
 
-        if (recordStore.isPendingEdit) {
+            if (recordStore.isPendingEdit) {
 
-            hasPendingEdit = true;
-        } else if (formsStore.isPendingEdit || fieldsStore.isPendingEdit) {
-            //for form builder
-            hasPendingEdit = true;
+                hasPendingEdit = true;
+            } else if (formsStore.isPendingEdit || fieldsStore.isPendingEdit) {
+                //for form builder
+                hasPendingEdit = true;
+            }
         }
         return hasPendingEdit;
-    }
-
-    getIsPendingEdit() {
-        const pendEdits = self.getPendingEditsFromStore();
-        return pendEdits;
-    }
+    };
 
     getStores(state) {
         let recordStore = (state.record && state.record.records && state.record.recordIdBeingEdited) ? state.record : undefined;
@@ -168,24 +167,6 @@ class AppHistory {
         };
     }
 
-    getIsPendingEdit(store) {
-        const pendEdits = self.getPendingEditsFromStore(store);
-        return pendEdits;
-    }
-
-    getPendingEditsFromStore() {
-        let pendEdits = false;
-        if (self.store) {
-            const state = self.store.getState();
-            //fetch stores that have pendEdits
-            let {recordStore, formsStore, fieldsStore} = self.getStores(state);
-
-            if (recordStore.isPendingEdit || formsStore.isPendingEdit || fieldsStore.isPendingEdit) {
-                pendEdits = self.isPendingEdit(recordStore, formsStore, fieldsStore);
-            }
-            return pendEdits;
-        }
-    }
 
     getFieldsFromFormStore() {
         let fields = [];
