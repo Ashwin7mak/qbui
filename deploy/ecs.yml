@@ -29,7 +29,7 @@ Parameters:
     Default: 2048
   LegacyBase:
     Type: String
-
+    Default: "NO_DEFAULT"
 Mappings:
   # 3381 = pre-prod
   # 1063 = prod
