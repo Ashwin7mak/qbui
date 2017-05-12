@@ -174,12 +174,11 @@ describe('AppHistory', () => {
             AppHistory.getFieldsFromFormStore.calls.reset();
         });
         let testCases = [
-            //Is turned off because inline edit confirmation navigational modal is broken
-            // {name:'verify get fields from report store', isInlineEditOpen: true},
+            {name:'verify get fields from report store', isInlineEditOpen: true},
             {name:'verify get fields from forms store', isInlineEditOpen: false}
         ];
         testCases.forEach(testCase => {
-            it(testCase.name, () => {
+            fit(testCase.name, () => {
                 store.record.records[0].pendEdits.isInlineEditOpen = testCase.isInlineEditOpen;
                 AppHistory.setup(mockStore, mockStoreFunc);
                 AppHistory.getFields();
