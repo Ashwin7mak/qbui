@@ -37,12 +37,9 @@
     }
 
     .saveOrCancelFooter {
-        z-index: $zindex-trowserFooter;
         flex: 0 auto;
         display: flex;
         flex-direction: row;
-        position: absolute;
-        bottom: 0;
         width: 100%;
         margin: 0;
         padding: 0 10px;
