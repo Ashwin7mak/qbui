@@ -23,4 +23,29 @@ describe('AccountUsersGridFormatter', () => {
         expect(Formatters.FormatUserStatusText(true, {rowData:{...basicUserInfo.rowData, realmDirectoryFlags: 8}})).toEqual("Denied");
         expect(Formatters.FormatUserStatusText(true, {rowData:{...basicUserInfo.rowData, userBasicFlags: 68}})).toEqual("Deactivated");
     });
+
+    it("should format the user name when the username is the same as the email correctly", ()=> {
+        let username = "foo@foo.com",
+            email = "foo@foo.com";
+        let user = {
+            rowData: {
+                email: email,
+                userName: username
+            }
+        };
+        expect(Formatters.FormatUsernameString(username, user)).toEqual("");
+    });
+
+    it("should format the user name when the username is NOT the same as the email correctly", ()=> {
+
+        let username = "foo@foo.com",
+            email = "bar@bar.com";
+        let user = {
+            rowData: {
+                email: email,
+                userName: username
+            }
+        };
+        expect(Formatters.FormatUsernameString(username, user)).toEqual(username);
+    });
 });

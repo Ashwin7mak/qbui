@@ -27,17 +27,16 @@ export const SettingsWrapper = React.createClass({
     },
 
     getSelectedApp() {
-        if (this.state.apps.selectedAppId) {
-            return _.find(this.state.apps.apps, (a) => a.id === this.state.apps.selectedAppId);
-        }
-        return null;
+        return this.getAppFromState(this.state.apps.selectedAppId);
     },
-    getSelectedTable() {
+
+    getSelectedTable(tableId) {
         const app = this.getSelectedApp();
         if (app) {
             return _.find(app.tables, (t) => t.id === this.state.apps.selectedTableId);
         }
     },
+
     /**
      * force re-render since breakpoint may have changed
      */
@@ -54,41 +53,53 @@ export const SettingsWrapper = React.createClass({
     componentDidMount() {
         // listen for resizes (nicely) in case we need to re-render for a new breakpoint
         window.addEventListener('resize', this.handleResize);
-        this.props.flux.actions.loadApps(true);
 
-        if (this.props.match.params.appId) {
-            this.props.flux.actions.selectAppId(this.props.match.params.appId);
-
-            this.props.dispatch(FeatureSwitchActions.getStates(this.props.match.params.appId));
-
-            if (this.props.match.params.tblId) {
-                this.props.flux.actions.selectTableId(this.props.match.params.tblId);
-            } else {
-                this.props.flux.actions.selectTableId(null);
+        let paramVals = this.props.match.params;
+        if (paramVals.appId) {
+            // see if the app is already loaded in state
+            let app = this.getAppFromState(paramVals.appId);
+            if (!app) {
+                this.props.flux.actions.loadApps();
             }
+
+            this.props.flux.actions.selectAppId(paramVals.appId);
+            this.props.dispatch(FeatureSwitchActions.getStates(paramVals.appId));
+
+            if (paramVals.tblId) {
+                this.props.flux.actions.selectTableId(paramVals.tblId);
+            } else {
+                /*eslint no-lonely-if:0 */
+                if (this.state.apps.selectedTableId !== null) {
+                    this.props.flux.actions.selectTableId(null);
+                }
+            }
+        } else {
+            this.props.flux.actions.loadApps();
         }
     },
     componentWillReceiveProps(props) {
-        if (props.match.params.appId) {
-            if (this.props.match.params.appId !== props.match.params.appId) {
-                this.props.flux.actions.selectAppId(props.match.params.appId);
+        let paramVals = props.match.params;
 
-                this.props.dispatch(FeatureSwitchActions.getStates(props.match.params.appId));
+        /*eslint no-lonely-if:0 */
+        if (paramVals.appId) {
+            if (this.props.match.params.appId !== paramVals.appId) {
+                this.props.flux.actions.selectAppId(paramVals.appId);
+                this.props.dispatch(FeatureSwitchActions.getStates(paramVals.appId));
             }
         } else {
-            this.props.flux.actions.selectAppId(null);
+            if (this.state.apps.selectedAppId !== null) {
+                this.props.flux.actions.selectAppId(null);
+            }
         }
 
-        if (this.props.match.params.appId !== props.match.params.appId) {
-            this.props.flux.actions.selectAppId(props.match.params.appId);
-            this.props.dispatch(FeatureSwitchActions.getStates(props.match.params.appId));
-        }
-        if (props.match.params.tblId) {
-            if (this.props.match.params.tblId !== props.match.params.tblId) {
-                this.props.flux.actions.selectTableId(props.match.params.tblId);
+        if (paramVals.tblId) {
+            if (this.props.match.params.tblId !== paramVals.tblId) {
+                this.props.flux.actions.selectTableId(paramVals.tblId);
             }
         } else {
-            this.props.flux.actions.selectTableId(null);
+            if (this.state.apps.selectedTableId !== null) {
+                this.props.flux.actions.selectTableId(null);
+            }
         }
     },
     getBackToAppLink() {
@@ -129,6 +140,13 @@ export const SettingsWrapper = React.createClass({
                 }
             </LeftNav>
         </AppShell>;
+    },
+
+    getAppFromState(appId) {
+        if (appId && _.has(this.state.apps, 'apps')) {
+            return _.find(this.state.apps.apps, (a) => a.id === appId);
+        }
+        return null;
     }
 });
 
