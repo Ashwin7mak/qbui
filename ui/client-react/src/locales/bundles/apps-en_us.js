@@ -501,7 +501,7 @@ export default {
             emails: "Format all the addresses like name@domain.com",
             maxChars: "Use up to {maxNum} characters",
             choiceMaxLength : "Select a choice with {maxNum} characters or less",
-            phone: "Format the {fieldName} like (xxx) xxx-xxxx",
+            phone: "Enter a genuine number for {fieldName}",
             phoneInvalidCountryCode: "Format the country code like +x for international numbers",
             duration: {
                 timeFormat: "Format the {fieldName} in {value}",
