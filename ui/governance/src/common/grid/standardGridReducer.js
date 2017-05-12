@@ -75,11 +75,6 @@ export function grid(state = defaultGridState, action) {
             ...state,
             facets: {...state.facets, facetSelections: action.facetSelections}
         };
-    case types.SET_FACET_FIELDS:
-        return {
-            ...state,
-            facets: {...state.facets, facetFields: action.facetFields}
-        };
     default:
         return state;
     }
@@ -114,7 +109,6 @@ export function gridById(state = {}, action) {
     case types.SET_PAGINATION:
     case types.SET_CURRENTPAGE_OFFSET:
     case types.SET_SEARCH:
-    case types.SET_FACET_FIELDS:
     case types.SET_FACET_SELECTIONS:
     case types.SET_TOTALRECORDS:
         return {

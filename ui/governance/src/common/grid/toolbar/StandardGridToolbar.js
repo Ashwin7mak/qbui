@@ -43,7 +43,7 @@ class StandardGridToolBar extends React.Component {
                                     className="facetMenu"
                                     {...this.props}
                                     isLoading={false}
-                                    facetFields={this.props.facetFields}
+                                    facetFields={{facets: this.props.facetFields}}
                                     onFacetSelect={this.handleFacetSelect}
                                     onFacetClearFieldSelects={this.handleFacetClearFieldSelects}
                                     selectedValues={this.props.facetSelections.selectionsHash}
@@ -92,7 +92,6 @@ const mapStateToProps = (state, ownProps) => {
     let paginationInfo = (state.Grids[ownProps.id] || {}).pagination || {};
     return {
         facetSelections:  facetInfo.facetSelections || {},
-        facetFields: facetInfo.facetFields ? {facets: state.Grids[ownProps.id].facets.facetFields} : {facets:[]},
         filteredRecords: paginationInfo.filteredRecords || 0,
         totalRecords: paginationInfo.totalRecords || 0,
     };
