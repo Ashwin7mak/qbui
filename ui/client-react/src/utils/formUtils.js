@@ -22,6 +22,17 @@ export function findFormElementKey(element) {
     });
 }
 
+/**
+ * Given a table and a record this method calculates what should show as the record title
+ * If the table has a recordTitleFieldId set and a value for that field is available on the record then that value is used.
+ * Otherwise if no record is available fallback to table noun + recId
+ * Otherwise if no tableNoun is available fallback to tableName + recId
+ * @param table
+ * @param record
+ * @param recId
+ * @returns {string}
+ */
+
 export function getRecordTitle(table, record, recId) {
     if (!table) {
         return "";
