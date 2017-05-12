@@ -242,40 +242,40 @@ export class ReportColumnHeaderMenu extends Component {
         let builderMenus = [];
         if (inBuilderMode) {
             builderMenus = [
-                <MenuItem divider/>,
+                <MenuItem key="1" divider/>,
 
-                <MenuItem onSelect={this.openFieldSelectorBefore}>
+                <MenuItem key="2" onSelect={this.openFieldSelectorBefore}>
                     <span className="addColumnBeforeText">{Locale.getMessage('report.menu.addColumnBefore')}</span>
                 </MenuItem>,
 
-                <MenuItem onSelect={this.openFieldSelectorAfter}>
+                <MenuItem key="3" onSelect={this.openFieldSelectorAfter}>
                     <span className="addColumnAfterText">{Locale.getMessage('report.menu.addColumnAfter')}</span>
                 </MenuItem>,
 
-                <MenuItem disabled={isHideOptionDisabled} onSelect={this.hideThisColumn}>
+                <MenuItem key="4" disabled={isHideOptionDisabled} onSelect={this.hideThisColumn}>
                     <span className="hideColumnText">{Locale.getMessage('report.menu.hideColumn')}</span>
                 </MenuItem>
             ];
         }
 
         const headerMenus = [
-            <MenuItem onSelect={this.sortReportAscending}>
+            <MenuItem key="5" onSelect={this.sortReportAscending}>
                 {this.isFieldSortedAscending() && <QbIcon icon="checkmarkincircle-outline"/>}
                 <span className="sortAscendMenuText">{this.getSortAscText(SORTING_MESSAGE)}</span>
             </MenuItem>,
 
-            <MenuItem onSelect={this.sortReportDescending}>
+            <MenuItem key="6" onSelect={this.sortReportDescending}>
                 {this.isFieldSortedDescending() && <QbIcon icon="checkmarkincircle-outline"/>}
                 <span className="sortDescendMenuText">{this.getSortDescText(SORTING_MESSAGE)}</span>
             </MenuItem>,
 
-            <MenuItem divider/>,
+            <MenuItem key="7" divider/>,
 
-            <MenuItem onSelect={this.groupReportAscending}>
+            <MenuItem key="8" onSelect={this.groupReportAscending}>
                 <span className="groupAscendMenuText">{this.getSortAscText(GROUPING_MESSAGE)}</span>
             </MenuItem>,
 
-            <MenuItem onSelect={this.groupReportDescending}>
+            <MenuItem key="9" onSelect={this.groupReportDescending}>
                 <span className="groupDescendMenuText">{this.getSortDescText(GROUPING_MESSAGE)}</span>
             </MenuItem>,
             ...builderMenus
