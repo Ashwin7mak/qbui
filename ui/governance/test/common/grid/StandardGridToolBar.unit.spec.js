@@ -20,15 +20,18 @@ describe('StandardGridToolBar', () => {
             <Provider store={mockStore({Grids : 1})}>
                 <StandardGridToolBar
                     doUpdate={Actions.doUpdate}
+                    doFacet={false}
                     id={"accountUsers"}
                     rowKey={"uid"}
+                    itemTypePlural= "users"
+                    itemTypeSingular="user"
                 />
             </Provider>);
 
         expect(component).toBeDefined();
         expect(component.length).toBeTruthy();
 
-        let StandardGridNavigationComponent = component .find(StandardGridNavigation);
+        let StandardGridNavigationComponent = component.find(StandardGridNavigation);
         expect(StandardGridNavigationComponent).toBeDefined();
         expect(StandardGridNavigationComponent.length).toBeTruthy();
         expect(StandardGridNavigationComponent.props().id).toEqual("accountUsers");

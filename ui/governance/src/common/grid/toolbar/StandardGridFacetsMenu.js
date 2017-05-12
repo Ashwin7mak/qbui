@@ -1,36 +1,26 @@
 import React, {Component, PropTypes} from 'react';
-import {Overlay} from 'react-bootstrap';
+import  {facetsProp} from '../../../../../reuse/client/src/components/facets/facetProps';
 import _ from 'lodash';
 import {connect} from "react-redux";
-import LimitConstants from '../../../../common/src/limitConstants';
-import Logger from "../../utils/logger";
-import * as SchemaConsts from '../../constants/schema';
-
-//IMPORT FROM reuse
-import Icon from '../../../../reuse/client/src/components/icon/icon';
-import Tooltip from '../../../../reuse/client/src/components/tooltip/tooltip';
-import  {facetsProp} from '../../../../reuse/client/src/components/facets/facetProps';
-import GenericFacetMenu from '../../../../reuse/client/src/components/facets/genericFacetMenu';
-import {showFacetMenu, hideFacetMenu, setFacetsExpanded, setFacetsMoreRevealed} from '../../../../reuse/client/src/components/facets/facetMenuActions';
-import {getExpandedFacetFields, getMoreRevealedFacetFields} from '../../../../reuse/client/src/components/facets/facetMenuReducer';
-import '../../../../reuse/client/src/components/facets/facet.scss';
-//IMPORT FROM REUSE
+import GenericFacetMenu from '../../../../../reuse/client/src/components/facets/genericFacetMenu';
+import {showFacetMenu, hideFacetMenu, setFacetsExpanded, setFacetsMoreRevealed, toggleFacetMenu} from '../../../../../reuse/client/src/components/facets/facetMenuActions';
+import {getExpandedFacetFields, getMoreRevealedFacetFields} from '../../../../../reuse/client/src/components/facets/facetMenuReducer';
+import '../../../../../reuse/client/src/components/facets/facet.scss';
+import LimitConstants from '../../../../../common/src/limitConstants';
+import Logger from "../../../../../client-react/src/utils/logger";
+import * as SchemaConsts from "../../../../../client-react/src/constants/schema";
+import './StandardGridToolBar.scss';
 
 let logger = new Logger();
 /**
- *  FacetsMenu component presents a trigger button that when clicked shows list of facets available to filter a report on.
+ *  FacetsMenu component presents a trigger button that when clicked shows list of facets available to filter a grid on.
  *  When the list is shown and the trigger button is clicked again it hides the FacetMenu.
  *
  *  For each field with facet values there is collapsible field header and the list of facetItems
  *
  *  The FacetsMenu has a trigger button and the FacetsList
-**/
-export class FacetsMenu extends Component {
-    constructor(props) {
-        super(props);
-        this.displayName = 'FacetsMenu';
-    }
-
+ **/
+export class StandardGridFacetsMenu extends Component {
     /**
      * Changes the props of a facet field group to collapsed if parameter makeCollapsed is true or expanded if not
      * by adding or removing the field id from a hash listing the expanded facet field groups
@@ -70,7 +60,7 @@ export class FacetsMenu extends Component {
         // add it
         moreRevealed.push(facetField.id);
         this.props.setFacetsMoreRevealed({moreRevealed});
-    }
+    };
 
     /**
      * Check if a facet field group section has more revealed or not
@@ -80,7 +70,7 @@ export class FacetsMenu extends Component {
      **/
     isRevealed = (id) => {
         return (_.includes(this.props.moreRevealedFacetFields, id));
-    }
+    };
 
     /**
      * Toggle the props of expand Collapse of a facet field group in the popover
@@ -93,7 +83,7 @@ export class FacetsMenu extends Component {
             e.currentTarget.scrollIntoView(true);
         }
         this.setFacetCollapsed(facetField, isExpanded);
-    }
+    };
 
     /**
      * Handle the ui event that occurred - handled changing the show more props of a
@@ -104,14 +94,7 @@ export class FacetsMenu extends Component {
      **/
     handleRevealMore = (e, facetField) => {
         this.setFacetMoreRevealed(facetField);
-    }
-
-    /**
-     *  Hides the facets menu when clicked
-     */
-    hideMenu = () => {
-        this.showMenu();
-    }
+    };
 
     /**
      *  Get the id from the object which contains the expanded facet fields
@@ -125,29 +108,26 @@ export class FacetsMenu extends Component {
     }
 
     /**
-     *  Shows the menu when clicked
+     *  Function that toggles the show and hide state for the facet menu when clicked
      */
-    showMenu = () => {
-        if (this.props.show) {
-            if (this.props.hideFacetMenu) {
-                this.props.hideFacetMenu();
-            }
-        } else if (this.props.showFacetMenu) {
-            this.props.showFacetMenu();
+    changeMenuVisibility = (isMenuVisible) => {
+        if (this.props.toggleFacetMenu) {
+            return this.props.toggleFacetMenu(isMenuVisible);
         }
     }
 
     /**
-     *  Get the facets object from the reportData that is passed
+     *  Get the facets object from the facetFields that is passed
+     *  NOT NEEDED FOR NOW:
      *  Add a check for "More" if the number of facets item is more than the set value
-     *  Renders only the number of facets items specified, Here set to 5
+     *  Renders only the maximum number of facets items specified at the first instance, Here set to 5
      */
     getFacets = () => {
-        if (!_.has(this.props, 'reportData.data.facets') || !Array.isArray(this.props.reportData.data.facets)) {
+        if (!_.has(this.props, 'facetFields.facets') || !Array.isArray(this.props.facetFields.facets)) {
             return [];
         }
 
-        let facets = this.props.reportData.data.facets;
+        let facets = this.props.facetFields.facets;
 
         // filter out the date and user fields for now
         // TODO: support date ranges in filtering see https://jira.intuit.com/browse/QBSE-20422
@@ -163,6 +143,7 @@ export class FacetsMenu extends Component {
         }
 
         return facets.map((facet) => {
+            // We don't need it for now, but for future cases
             let isRevealed = this.isRevealed(facet.id);
 
             return {
@@ -171,7 +152,6 @@ export class FacetsMenu extends Component {
                 values: isRevealed ? facet.values : _.take(facet.values, LimitConstants.maxFacetValuesInitiallyRevealed),
             };
         });
-
     }
 
     /**
@@ -179,13 +159,10 @@ export class FacetsMenu extends Component {
      *
      **/
     render() {
-        let menuKey =  this.props.rptId;
-        let selectedValues = (this.props.selectedValues ? this.props.selectedValues.getSelections() : {});
+        let selectedValues = (this.props.selectedValues ? this.props.selectedValues : {});
 
-        return <GenericFacetMenu selectedFacetValues={selectedValues}
-                                 isMenuVisible={this.props.show}
-                                 onClickFacetMenu={this.showMenu}
-                                 id={menuKey}
+        return <GenericFacetMenu isMenuVisible={this.props.show}
+                                 onClickFacetMenu={this.changeMenuVisibility}
                                  onClickShowMore={this.handleRevealMore}
                                  expandedFacets={this.getExpandedFacetFieldsArray()}
                                  facets={this.getFacets()}
@@ -193,20 +170,19 @@ export class FacetsMenu extends Component {
                                  onClickFacetValue={this.props.onFacetSelect}
                                  onClickClearFacetValues={this.props.onFacetClearFieldSelects}
                                  showSelectedFacetTokens={!this.context.touch}
-                                 menuVisibilityChanged={this.hideMenu}
-                />;
+                                 menuVisibilityChanged={this.changeMenuVisibility}
+                                 selectedFacetValues={selectedValues}
+        />;
     }
 }
 
-FacetsMenu.propTypes = {
+StandardGridFacetsMenu.propTypes = {
     /**
-     *  Takes in for properties the reportData which includes the list of facets
+     *  Takes in for properties the facetFields which includes the list of facets
      *  and a function to call when a facet value is selected.
      **/
-    reportData: React.PropTypes.shape({
-        data: React.PropTypes.shape({
-            facets:  facetsProp
-        })
+    facetFields: React.PropTypes.shape({
+        facets:  facetsProp
     }),
     /**
      *  Function that handles what happens when a facet value is clicked
@@ -222,7 +198,7 @@ FacetsMenu.propTypes = {
     selectedValues: React.PropTypes.object,
 };
 
-FacetsMenu.contextTypes = {
+StandardGridFacetsMenu.contextTypes = {
     touch: React.PropTypes.bool
 };
 
@@ -241,13 +217,14 @@ const mapStateToProps = (state) => {
         /**
          *  Prop that renders the extra set of facets that goes beyond the initially shown value
          */
-        moreRevealedFacetFields: getMoreRevealedFacetFields(state)
+        moreRevealedFacetFields: getMoreRevealedFacetFields(state),
     };
 };
 
 const mapDispatchToProps = {
     showFacetMenu,
     hideFacetMenu,
+    toggleFacetMenu,
     setFacetsExpanded,
     setFacetsMoreRevealed
 };
@@ -255,4 +232,4 @@ const mapDispatchToProps = {
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(FacetsMenu);
+)(StandardGridFacetsMenu);

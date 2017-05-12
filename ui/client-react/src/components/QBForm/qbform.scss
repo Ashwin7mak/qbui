@@ -40,7 +40,7 @@ $edit-field-padding: 5px;
         display: block;
 
         &.noWrapLabels .formElement.fieldLabel {
-            white-space: nowrap;
+            white-space: normal;
         }
 
         .formTable {
@@ -111,7 +111,6 @@ $edit-field-padding: 5px;
                 word-wrap: break-word;
                 display: flex;
                 flex-direction: column;
-                margin-right: 15px;
             }
 
             /* separate field label td left of field */
@@ -157,6 +156,7 @@ $edit-field-padding: 5px;
     .editForm {
         .fieldLabel {
             margin-top: $edit-field-padding;
+            max-width: $form-edit-input-width;
         }
 
         .field .fieldLabel {

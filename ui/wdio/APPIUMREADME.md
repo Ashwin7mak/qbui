@@ -17,7 +17,15 @@ Setting $Path and Configuring
     export PATH=$ANDROID_HOME/tools:$PATH
     Save the file and finally run source ~/.bash_profile to reload the environment variables
 
+Steps to Create Android virtual devices on Android Studio:
+Can use this link https://developer.android.com/training/basics/firstapp/running-app.html#Emulator and follow 'Run on an emulator' part to setUp the virtual devices.
 
+#Run Tests on android.
+Once you have android emulator running . You can start your test to run.
+If you get an error "Chrome should be > 53.0" then do these steps:
+Download APK from the url http://www.apkmirror.com/apk/google-inc/chrome/chrome-55-0-2883-84-release/chrome-browser-55-0-2883-84-4-android-apk-download/
+Rename the downloaded file to chrome_55.apk
+then from terminal run this command : adb install -r ~/Downloads/chrome_55.apk
 
 ##Overview:
 Appium is an open-source tool for automating mobile web on iOS and Android platforms. Mobile web apps are web apps accessed using a mobile browser (Appium supports Safari on iOS and Chrome or the built-in ‘Browser’ app on Android).
@@ -40,7 +48,7 @@ Edit the **specs** parameter of **wdio.conf.js** (the path is dependent on where
 and './ui/wdio/tests/mobile/reportSortingViaContainer.e2e.spec.js' should work on iPhone(card view)
 
 ##Troubleshooting:
-Please make sure xCode 7.2 is installed
+Please make sure xCode 7.2 is installed if iOS fails.
 
 
 
