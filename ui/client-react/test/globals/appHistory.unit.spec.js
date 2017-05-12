@@ -1,8 +1,6 @@
 import AppHistory, {__RewireAPI__ as AppHistoryRewireAPI} from '../../src/globals/appHistory';
 import {UNSAVED_RECORD_ID} from '../../src/constants/schema';
-import Promise from 'bluebird';
-import {ShowAppModal, HideAppModal, SHOW_APP_MODAL_EVENT, HIDE_APP_MODAL_EVENT} from '../../src/components/qbModal/appQbModalFunctions';
-import _ from 'lodash';
+import {ShowAppModal, HideAppModal} from '../../src/components/qbModal/appQbModalFunctions';
 
 let currentModalDetails = null;
 let mockActions = {
