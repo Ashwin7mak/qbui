@@ -386,6 +386,22 @@ export const RecordTrowser = React.createClass({
         return  getRecord(props.record.records, props.recId);
     },
 
+    getRecordName() {
+        let recordName = "";
+        if (this.props.selectedTable) {
+            if (this.props.selectedTable.recordTitleFieldId && _.has(this.props, 'editForm.formData.record')) {
+                let recordIdField = _.find(this.props.editForm.formData.record, (field) =>{
+                    return field.id === this.props.selectedTable.recordTitleFieldId;
+                });
+                recordName = recordIdField ? recordIdField.display : "";
+            }
+            if (_.isEmpty(recordName)) {
+                recordName = this.props.selectedTable.tableNoun ? this.props.selectedTable.tableNoun : this.props.selectedTable.name;
+            }
+        }
+        return recordName;
+    },
+
     /**
      *  get breadcrumb element for top of trowser
      */
@@ -397,10 +413,7 @@ export const RecordTrowser = React.createClass({
         const showBack = !!(record.previousRecordId);
         const showNext = !!(record.nextRecordId);
 
-        let recordName = "";
-        if (table) {
-            recordName = table.tableNoun ? table.tableNoun : table.name;
-        }
+        let recordName = this.getRecordName();
 
         let title = this.props.recId === SchemaConsts.UNSAVED_RECORD_ID ? <span><I18nMessage message="nav.new"/><span>&nbsp;{recordName}</span></span> :
             <span>{recordName} #{this.props.recId}</span>;

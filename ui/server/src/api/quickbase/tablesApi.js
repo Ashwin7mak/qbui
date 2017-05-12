@@ -272,7 +272,7 @@
 
                                     let tableProperReq = _.clone(req);
                                     let tablePropsPayload = _.pick(reqPayload, ['tableNoun', 'description', 'tableIcon']);
-                                    tableProperReq.rawBody = JSON.stringify(Object.assign(tablePropsPayload, {recordIdentifierFieldId: fieldIds[0]}));
+                                    tableProperReq.rawBody = JSON.stringify(Object.assign(tablePropsPayload, {recordTitleFieldId: fieldIds[0]}));
                                     tableProperReq.headers[constants.CONTENT_LENGTH] = tableProperReq.rawBody.length;
 
                                     this.createTableProperties(tableProperReq, tableId).then(
