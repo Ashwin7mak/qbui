@@ -24,6 +24,7 @@ import {APP_ROUTE, EDIT_RECORD_KEY} from '../../constants/urlConstants';
 import {CONTEXT} from '../../actions/context';
 import SaveOrCancelFooter from '../saveOrCancelFooter/saveOrCancelFooter';
 import {getPendEdits, getRecord} from '../../reducers/record';
+import {getRecordTitle} from '../../utils/formUtils';
 import './recordTrowser.scss';
 import {NEW_RECORD_VALUE} from "../../constants/urlConstants";
 
@@ -386,22 +387,6 @@ export const RecordTrowser = React.createClass({
         return  getRecord(props.record.records, props.recId);
     },
 
-    getRecordName() {
-        let recordName = "";
-        if (this.props.selectedTable) {
-            if (this.props.selectedTable.recordTitleFieldId && _.has(this.props, 'editForm.formData.record')) {
-                let recordIdField = _.find(this.props.editForm.formData.record, (field) =>{
-                    return field.id === this.props.selectedTable.recordTitleFieldId;
-                });
-                recordName = recordIdField ? recordIdField.display : "";
-            }
-            if (_.isEmpty(recordName)) {
-                recordName = this.props.selectedTable.tableNoun ? this.props.selectedTable.tableNoun : this.props.selectedTable.name;
-            }
-        }
-        return recordName;
-    },
-
     /**
      *  get breadcrumb element for top of trowser
      */
@@ -413,10 +398,11 @@ export const RecordTrowser = React.createClass({
         const showBack = !!(record.previousRecordId);
         const showNext = !!(record.nextRecordId);
 
-        let recordName = this.getRecordName();
+        let relatedRecord =  _.has(this.props, 'editForm.formData.record') ? this.props.editForm.formData.record : null;
+        let recordName = getRecordTitle(this.props.selectedTable, relatedRecord, this.props.recId);
 
         let title = this.props.recId === SchemaConsts.UNSAVED_RECORD_ID ? <span><I18nMessage message="nav.new"/><span>&nbsp;{recordName}</span></span> :
-            <span>{recordName} #{this.props.recId}</span>;
+            <span>{recordName}</span>;
 
 
         return (

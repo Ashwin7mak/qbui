@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import * as SchemaConsts from "../constants/schema";
 
 /**
  * The data structure of the formMeta has elements (array) of element. Element has a property, but it changes depending on the type.
@@ -19,4 +20,25 @@ export function findFormElementKey(element) {
             return (element[key].positionSameRow !== undefined);
         }
     });
+}
+
+export function getRecordTitle(table, record, recId) {
+    if (!table) {
+        return "";
+    }
+    let defaultRecordTitle = (table.tableNoun ? table.tableNoun : table.name) + (recId && recId !== SchemaConsts.UNSAVED_RECORD_ID ? " #" + recId : "");
+    if (!record) {
+        return defaultRecordTitle;
+    }
+    let recordName = "";
+    if (table.recordTitleFieldId) {
+        let recordIdField = _.find(record, (field) =>{
+            return field.id === table.recordTitleFieldId;
+        });
+        recordName = recordIdField ? recordIdField.display : "";
+    }
+    if (_.isEmpty(recordName)) {
+        recordName = defaultRecordTitle;
+    }
+    return recordName;
 }
