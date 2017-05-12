@@ -28,6 +28,7 @@ describe('StandardGrid', () => {
         let StandardGridShallow = shallow(
             <StandardGrid
                 columns={columns}
+                getFacetFields={()=>{}}
                 doUpdate={Actions.doUpdate}
                 data={[]}
                 id={"accountUsers"}

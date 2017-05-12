@@ -16,19 +16,19 @@ describe('StandardGridNavigation', () => {
         firstRecordInCurrentPage: 1,
         lastRecordInCurrentPage: 10,
         totalPages: 1,
-        totalRecords: 10,
+        filteredRecords: 10,
         itemsPerPage: 10
     };
 
 
     it('should render', () => {
-        let getPreviousUsersPage = () => {
+        let getPreviousPage = () => {
         };
-        let getNextUsersPage = () => {
+        let getNextPage = () => {
         };
         let StandardGridNavigationComponent = shallow(
-            <StandardGridNavigation getPreviousUsersPage={getPreviousUsersPage}
-                                    getNextUsersPage={getNextUsersPage}
+            <StandardGridNavigation getPreviousPage={getPreviousPage}
+                                    getNextPage={getNextPage}
                                     id={"accountUsers"}
                                     paginationInfo={basePageInfo}/>);
 
@@ -38,8 +38,8 @@ describe('StandardGridNavigation', () => {
         let StandardGridPagination = StandardGridNavigationComponent.find(Pagination);
         expect(StandardGridPagination).toBeDefined();
         expect(StandardGridPagination.length).toBeTruthy();
-        expect(StandardGridPagination.props().onClickPrevious).toEqual(getPreviousUsersPage);
-        expect(StandardGridPagination.props().onClickNext).toEqual(getNextUsersPage);
+        expect(StandardGridPagination.props().onClickPrevious).toEqual(getPreviousPage);
+        expect(StandardGridPagination.props().onClickNext).toEqual(getNextPage);
     });
 
     it('should set the start and end records appropriately', () => {
@@ -51,8 +51,8 @@ describe('StandardGridNavigation', () => {
             };
 
         let StandardGridNavigationComponent = shallow(
-            <StandardGridNavigation getPreviousUsersPage={() => {}}
-                                    getNextUsersPage={() => {}}
+            <StandardGridNavigation getPreviousPage={() => {}}
+                                    getNextPage={() => {}}
                                     id={"accountUsers"}
                                     paginationInfo={paginationInfo}/>);
 
@@ -66,12 +66,12 @@ describe('StandardGridNavigation', () => {
             let paginationInfo =
                 {
                     ...basePageInfo,
-                    totalRecords: 0
+                    filteredRecords: 0
                 };
 
             let StandardGridNavigationComponent = shallow(
-                <StandardGridNavigation getPreviousUsersPage={() => {}}
-                                        getNextUsersPage={() => {}}
+                <StandardGridNavigation getPreviousPage={() => {}}
+                                        getNextPage={() => {}}
                                         id={"accountUsers"}
                                         paginationInfo={paginationInfo}/>);
 
@@ -87,25 +87,25 @@ describe('StandardGridNavigation', () => {
                 };
 
             let StandardGridNavigationComponent = shallow(
-                <StandardGridNavigation getPreviousUsersPage={() => {}}
-                                        getNextUsersPage={() => {}}
+                <StandardGridNavigation getPreviousPage={() => {}}
+                                        getNextPage={() => {}}
                                         id={"accountUsers"}
                                         paginationInfo={paginationInfo}/>);
 
             expect(StandardGridNavigationComponent.props().isPreviousDisabled).toEqual(true);
         });
 
-        it('should not disable when current page is not 1 and has totalRecords > 0', () => {
+        it('should not disable when current page is not 1 and has filteredRecords > 0', () => {
             let paginationInfo =
                 {
                     ...basePageInfo,
                     currentPage: 2,
-                    totalRecords: 10
+                    filteredRecords: 10
                 };
 
             let StandardGridNavigationComponent = shallow(
-                <StandardGridNavigation getPreviousUsersPage={() => {}}
-                                        getNextUsersPage={() => {}}
+                <StandardGridNavigation getPreviousPage={() => {}}
+                                        getNextPage={() => {}}
                                         id={"accountUsers"}
                                         paginationInfo={paginationInfo}/>);
 
@@ -119,12 +119,12 @@ describe('StandardGridNavigation', () => {
             let paginationInfo =
                 {
                     ...basePageInfo,
-                    totalRecords: 0
+                    filteredRecords: 0
                 };
 
             let StandardGridNavigationComponent = shallow(
-                <StandardGridNavigation getPreviousUsersPage={() => {}}
-                                        getNextUsersPage={() => {}}
+                <StandardGridNavigation getPreviousPage={() => {}}
+                                        getNextPage={() => {}}
                                         id={"accountUsers"}
                                         paginationInfo={paginationInfo}/>);
 
@@ -141,15 +141,15 @@ describe('StandardGridNavigation', () => {
                 };
 
             let StandardGridNavigationComponent = shallow(
-                <StandardGridNavigation getPreviousUsersPage={() => {}}
-                                        getNextUsersPage={() => {}}
+                <StandardGridNavigation getPreviousPage={() => {}}
+                                        getNextPage={() => {}}
                                         id={"accountUsers"}
                                         paginationInfo={paginationInfo}/>);
 
             expect(StandardGridNavigationComponent.props().isNextDisabled).toEqual(true);
         });
 
-        it('should not disable when current page is not 1 and has totalRecords > 0', () => {
+        it('should not disable when current page is not 1 and has filteredRecords > 0', () => {
             let paginationInfo =
                 {
                     ...basePageInfo,
@@ -158,8 +158,8 @@ describe('StandardGridNavigation', () => {
                 };
 
             let StandardGridNavigationComponent = shallow(
-                <StandardGridNavigation getPreviousUsersPage={() => {}}
-                                        getNextUsersPage={() => {}}
+                <StandardGridNavigation getPreviousPage={() => {}}
+                                        getNextPage={() => {}}
                                         id={"accountUsers"}
                                         paginationInfo={paginationInfo}/>);
 

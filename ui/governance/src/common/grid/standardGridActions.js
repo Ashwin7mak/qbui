@@ -65,6 +65,30 @@ export const setPaginate = (gridId, pagination) => ({
 });
 
 /**
+ * Action to set the total records
+ *
+ * @param gridId - the id of the grid we want to update
+ * @param direction - the direction to paginate
+ */
+export const setTotalRecords = (gridId, totalRecords) => ({
+    type: types.SET_TOTALRECORDS,
+    gridId,
+    totalRecords
+});
+
+/**
+ * Set the selected facet for the given grid
+ * @param gridId
+ * @param facetSelections
+ */
+export const setFacetSelections = (gridId, facetSelections) => ({
+    type: types.SET_FACET_SELECTIONS,
+    gridId,
+    facetSelections
+});
+
+
+/**
  * Update function that delegates the work to a passed in update action
  * but first calculates the state of the particular grid we are interested in
  *

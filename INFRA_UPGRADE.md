@@ -21,3 +21,5 @@
 11. webpack-dev-server - Version locked to 1.16.3 because subsequent minor versions cause problems with icons in Chrome.
 12. jasmine-core - Verision locked to 2.5.2. Version 2.6.1 cleans up the document which causes our unit tests to fail. The fault is in our unit tests for not properly cleaning up old DOM nodes.
 13. jasmine - Version locked to 2.5.3. Locked along with jasmine-core, see above.
+14. appium - version locked to 1.6.4
+15. wdio appium service - version locked to 0.2.2
