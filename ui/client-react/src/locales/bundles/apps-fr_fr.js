@@ -494,7 +494,7 @@ export default {
             emails: "Formatez toutes les adresses comme prénom@domaine.fr",
             maxChars: "Utilisez jusqu'à caractères {maxNum}",
             choiceMaxLength : "Sélectionnez un choix avec {maxNum} caractères ou moins",
-            phone: "Formater le {fieldName} comme +x x xx xx xx xx",
+            phone: "Entrez un numéro authentique pour {fieldName}",
             phoneInvalidCountryCode: "Formatez le code du pays comme +x pour les numéros internationaux",
             duration: {
                 timeFormat: "Formater le {fieldName} dans {value}",
