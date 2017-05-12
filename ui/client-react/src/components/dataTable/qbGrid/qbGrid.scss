@@ -102,6 +102,8 @@ $edit-icon-font-size: 18px;
 
         &:hover {
             cursor: move;
+            border: double;
+            border-color: white;
         }
 
     }
