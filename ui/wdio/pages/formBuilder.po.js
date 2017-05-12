@@ -150,7 +150,7 @@ class formBuilderPage {
         topNavPO.modifyThisForm.waitForExist();
         topNavPO.modifyThisForm.click();
         this.firstField.waitForExist();
-        return this;//.getFieldLabels(); // better than pause?
+        return this.getFieldLabels(); // better than pause?
     }
 
     openMenu() {

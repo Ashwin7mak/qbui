@@ -86,22 +86,24 @@
 
         xit('check the REQUIRED checkbox, save & verify checked', function() {
             //TODO: MC-2164: REQUIRED checkbox needs a reliable way to automate click & query
-        });       it('select a field, add a new field, verify new field is added directly below selection', function() {
+        });
+
+        // one-offs
+        it('select a field, add a new field, verify new field is added directly below selection', function() {
             // store the list of fields before adding
             let origFields = formBuilderPO.getFieldLabels();
-            let selectedField = formBuilderPO.selectFieldByIndex(1);
             let newField = formBuilderPO.listOfElementsItem;
             let newFieldLabel = newField.getText();
-            expect(formBuilderPO.getFieldLabels()[0]).not.toBe(newFieldLabel);
+            expect(origFields[1]).not.toBe(newFieldLabel);
+            // select a field
+            formBuilderPO.selectFieldByIndex(1);
             // add the first new field item to the form
             newField.click();
             browser.pause(formBuilderPO.oneSecond);
             // verify that the new row has the expected label
-            let newFields = formBuilderPO.waitForLabels(origFields.length + 1);
-            expect(newFields[1]).toBe(newFieldLabel);
+            expect(formBuilderPO.getFieldLabels()[1]).toBe(newFieldLabel);
         });
 
-        // one-offs
         it('drag a field onto another without dropping, then drag back to original field, release & verify no change', function() {
             // store the list of fields before moving
             let origFields = formBuilderPO.getFieldLabels();
