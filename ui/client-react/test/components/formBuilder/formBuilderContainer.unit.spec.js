@@ -91,6 +91,7 @@ describe('FormBuilderContainer', () => {
         mockActions.keyboardMoveFieldDown.calls.reset();
         mockActions.removeFieldFromForm.calls.reset();
         mockActions.deselectField.calls.reset();
+        mockActions.toggleToolPaletteChildrenTabIndex.calls.reset();
     });
 
     describe('load form data', () => {
