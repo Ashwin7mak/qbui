@@ -10,6 +10,8 @@
     let RequestAppsPage = requirePO('requestApps');
     let RequestSessionTicketPage = requirePO('requestSessionTicket');
     let ReportContentPO = requirePO('reportContent');
+    let newStackAuthPO = requirePO('newStackAuth');
+    let tableCreatePO = requirePO('tableCreate');
 
     describe('Tables - Table homepage tests: ', function() {
         let realmName;
@@ -41,6 +43,8 @@
             return e2eBase.createAppWithEmptyRecordsInTable(tableToFieldToFieldTypeMap).then(function(appAndRecords) {
                 // Set your global objects to use in the test functions
                 app = appAndRecords;
+                realmName = e2eBase.recordBase.apiBase.realm.subdomain;
+                realmId = e2eBase.recordBase.apiBase.realm.id;
                 // Get the appropriate fields out of the Create App response (specifically the created field Ids)
                 let table1NonBuiltInFields = e2eBase.tableService.getNonBuiltInFields(app.tables[0]);
                 // Generate the record JSON objects
@@ -91,18 +95,6 @@
             });
         });
 
-        beforeEach(function() {
-            //Set the session back to ADMIN
-            // Get a session ticket for that subdomain and realmId (stores it in the browser)
-            realmName = e2eBase.recordBase.apiBase.realm.subdomain;
-            realmId = e2eBase.recordBase.apiBase.realm.id;
-            browser.call(function() {
-                // Auth into the new stack
-                return RequestSessionTicketPage.get(e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.ticketEndpoint));
-            });
-        });
-
-
         /**
          * Function that creates JSON for roleId reportId map for custdefaulthomepage POST
          */
@@ -110,6 +102,16 @@
             let jsonStr = '{"' + roleId + '":"' + report_Id + '"}';
             return JSON.parse(jsonStr);
         }
+
+        /**
+         * Before each it block reload the list all report (can be used as a way to reset state between tests)
+         */
+        beforeEach(function() {
+            browser.call(function() {
+                // Auth into the new stack as an admin
+                return newStackAuthPO.realmLogin(realmName, realmId);
+            });
+        });
 
         /**
          * Data Provider for table homepage for various user roles
@@ -146,7 +148,7 @@
 
                 browser.call(function() {
                     //Create a user
-                    return e2eBase.recordBase.apiBase.createUser().then(function (userResponse) {
+                    return e2eBase.recordBase.apiBase.createUser().then(function(userResponse) {
                         //parse user ID
                         userId = JSON.parse(userResponse.body).id;
                     });
@@ -168,11 +170,17 @@
                 });
 
                 browser.call(function() {
-                    //Load the table to verify THP
-                    return RequestAppsPage.get(e2eBase.getRequestTableEndpoint(realmName, app.id, app.tables[0].id));
+                    // Load the requestAppsPage (shows a list of all the apps in a realm)
+                    return RequestAppsPage.get(e2eBase.getRequestAppsPageEndpoint(realmName));
                 });
 
-                // wait for the report content to be visible
+                //select the App
+                RequestAppsPage.selectApp(app.name);
+
+                //select the table
+                tableCreatePO.selectTable(app.tables[0].name);
+
+                // wait for the THP report content to be loaded
                 ReportContentPO.waitForReportContent();
 
                 //Assert report title to be expected
@@ -189,6 +197,7 @@
                 //Assert record count displayed is correct
                 browser.element('.recordsCount').waitForVisible();
                 expect(browser.element('.recordsCount').getAttribute('textContent')).toBe(numOfRecords + ' records');
+
             });
         });
 
@@ -199,7 +208,7 @@
 
             browser.call(function() {
                 //Create a user
-                return e2eBase.recordBase.apiBase.createUser().then(function (userResponse) {
+                return e2eBase.recordBase.apiBase.createUser().then(function(userResponse) {
                     //parse user ID
                     userId = JSON.parse(userResponse.body).id;
                 });
