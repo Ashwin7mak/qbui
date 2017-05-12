@@ -1,5 +1,6 @@
 'use strict';
 let topNavPO = requirePO('topNav');
+let reportContentPO = requirePO('reportContent');
 let oneSecond = 1000; // millis
 let fiveSeconds = 5 * oneSecond;
 
@@ -127,9 +128,9 @@ class formBuilderPage {
     }
     open() {
         // Invokes the form builder from the VIEW RECORD page
-        topNavPO.settingsButton.waitForVisible();
+        reportContentPO.settingsIcon.waitForVisible();
         browser.pause(fiveSeconds);
-        topNavPO.settingsButton.click();
+        reportContentPO.settingsIcon.click();
         topNavPO.modifyThisForm.waitForExist(fiveSeconds);
         topNavPO.modifyThisForm.click();
         this.formBuilderContainer.waitForVisible();

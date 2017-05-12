@@ -10,12 +10,6 @@
                 return browser.element('.topNav .center');
             }
         },
-        //Setting button topNav (Gear icon)
-        settingsButton: {
-            get: function() {
-                return browser.element('.topNav .iconUISturdy-settings');
-            }
-        },
         modifyThisForm: {
             get: function() {
                 return browser.element('.topNav .modifyForm');

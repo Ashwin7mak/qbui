@@ -6,6 +6,7 @@
 
     let newStackAuthPO = requirePO('newStackAuth');
     let TopNavPO = requirePO('topNav');
+    let reportContentPO = requirePO('reportContent');
     var RequestAppsPage = requirePO('requestApps');
     var UsersTablePage = requirePO('usersTable');
 
@@ -46,7 +47,7 @@
             expect(TopNavPO.feedbackMenuButton.isExisting()).toBeTruthy();
             expect(TopNavPO.reportFeedBackButton.isExisting()).toBeTruthy();
             //Step4: Verify the Settings option in the gear
-            TopNavPO.settingsButton.click();
+            reportContentPO.clickSettingsIcon();
             expect(TopNavPO.settingsDropdownHeader.getText()).toEqual("Settings");
             //Step5: Verify that Users button displays the correct app name and has sign out button
             TopNavPO.usersButton.click();
