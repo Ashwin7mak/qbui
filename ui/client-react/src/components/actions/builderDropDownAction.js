@@ -49,25 +49,54 @@ let BuilderDropDownAction = React.createClass({
             </a>
 
             <Dropdown.Menu>
-                <div className="configurationMenu">
+                <div className="configMenu">
                     {isAppView ?
-                    <div className="configSet withIcon">
-                        <li className="menuHeader heading"><I18nMessage message={"settings.header"}/></li>
-                        <li className="heading"><a><Icon className="headingIcon" iconFont={AVAILABLE_ICON_FONTS.UI_STURDY} icon="favicon"/>
-                            <span><I18nMessage message={"settings.appHeader"}/></span></a></li>
-                        <li><a className="modifyAutomationSettings" onClick={this.getAutomationSettingsLink}><I18nMessage message={"settings.automationSettings"}/></a></li>
+                    <div className="configMenu--configSet withIcon">
+                        <h3><I18nMessage message={"settings.header"}/></h3>
+                        <ul>
+                            <li className="heading">
+                                <a>
+                                    <Icon className="headingIcon" iconFont={AVAILABLE_ICON_FONTS.UI_STURDY} icon="favicon"/>
+                                    <span><I18nMessage message={"settings.appHeader"}/></span>
+                                </a>
+                            </li>
+                            <li>
+                                <a className="modifyAutomationSettings" onClick={this.getAutomationSettingsLink}>
+                                    <I18nMessage message={"settings.automationSettings"}/>
+                                </a>
+                            </li>
+                        </ul>
                     </div> : null}
                     {isTableView ?
-                    <div className="configSet withIcon">
-                        <li className="heading"><a>{this.props.selectedTable.tableIcon && <Icon className="headingIcon" iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY} icon={this.props.selectedTable.tableIcon}/> }
-                            <span><I18nMessage message={"settings.tablesHeader"}/></span></a></li>
-                        <li><a className="modifyTableSettings" onClick={this.getTableSettingsLink}><I18nMessage message={"settings.tableSettings"}/></a></li>
+                    <div className="configMenu--configSet withIcon">
+                        <ul>
+                            <li className="heading">
+                                <a>
+                                    {this.props.selectedTable.tableIcon && <Icon className="headingIcon" iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY} icon={this.props.selectedTable.tableIcon}/> }
+                                    <span><I18nMessage message={"settings.tablesHeader"}/></span>
+                                </a>
+                            </li>
+                            <li>
+                                <a className="modifyTableSettings" onClick={this.getTableSettingsLink}>
+                                    <I18nMessage message={"settings.tableSettings"}/>
+                                </a>
+                            </li>
+                        </ul>
                     </div> : null}
                     {isFormView ?
-                    <div className="configSet currentContext">
-                        <li className="heading"><a><span><I18nMessage message={"settings.formsHeader"}/></span></a></li>
-                        <li><a className="modifyForm" onClick={this.props.navigateToBuilder}><I18nMessage
-                            message={"settings.configureFormBuilder"}/></a></li>
+                    <div className="configMenu--configSet currentContext">
+                        <ul>
+                            <li className="heading">
+                                <a>
+                                    <span><I18nMessage message={"settings.formsHeader"}/></span>
+                                </a>
+                            </li>
+                            <li>
+                                <a className="modifyForm" onClick={this.props.navigateToBuilder}>
+                                    <I18nMessage message={"settings.configureFormBuilder"}/>
+                                </a>
+                            </li>
+                        </ul>
                     </div> : null}
                 </div>
             </Dropdown.Menu>
