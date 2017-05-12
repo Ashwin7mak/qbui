@@ -47,9 +47,12 @@
          */
         beforeEach(function() {
             browser.call(function() {
-                //Go to table page
-                return RequestAppsPage.get(e2eBase.getRequestTableEndpoint(realmName, testApp.id, testApp.tables[0].id));
+                // Load the requestAppsPage (shows a list of all the apps in a realm)
+                return RequestAppsPage.get(e2eBase.getRequestAppsPageEndpoint(realmName));
             });
+
+            //select the App
+            RequestAppsPage.selectApp(testApp.name);
         });
 
         it('Add a new table and then edit that table', function() {

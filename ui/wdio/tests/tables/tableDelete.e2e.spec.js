@@ -48,9 +48,12 @@
          */
         beforeEach(function() {
             browser.call(function() {
-                //Go to table page
-                return RequestAppsPage.get(e2eBase.getRequestTableEndpoint(realmName, testApp.id, testApp.tables[0].id));
+                // Load the requestAppsPage (shows a list of all the apps in a realm)
+                return RequestAppsPage.get(e2eBase.getRequestAppsPageEndpoint(realmName));
             });
+
+            //select the App
+            RequestAppsPage.selectApp(testApp.name);
         });
 
 
@@ -60,7 +63,7 @@
             let originalTableLinksCount = tableCreatePO.getAllTableLeftNavLinksList.value.length;
 
             //Step 2 - Select table to delete ('Table 1' here) and make sure it lands in reports page
-            //tableCreatePO.selectTable(EXISTING_TABLE_NAME_1);
+            tableCreatePO.selectTable(EXISTING_TABLE_NAME_1);
             // wait for the report content to be visible
             ReportContentPO.waitForReportContent();
 
@@ -116,38 +119,37 @@
 
             it('Delete table negative test case with deletePromt TextField value is- ' + testCase.message, function()   {
 
-                //Step 1 - get the original count of table links in the left nav
-                let originalTableLinksCount = tableCreatePO.getAllTableLeftNavLinksList.value.length;
-
-                //Step 2 - Select table to delete ('Table 1' here) and make sure it lands in reports page
+                //Step 1 - Select table to delete ('Table 1' here) and make sure it lands in reports page
                 tableCreatePO.selectTable(EXISTING_TABLE_NAME_1);
                 // wait for the report content to be visible
                 ReportContentPO.waitForReportContent();
 
-                //Step 3 - Click table settings Icon
+                //Step 2 - Click table settings Icon
                 ReportContentPO.clickSettingsIcon();
 
-                //Step 4 - Go to 'Table properties & settings'
+                //Step 3 - Go to 'Table properties & settings'
                 ReportContentPO.clickModifyTableSettings();
 
-                //Step 5 - Click delete table action button
+                //Step 4 - Click delete table action button
                 tableCreatePO.clickDeleteTableActionButton();
 
-                // Step 6 - Set the deletePromtTextField value
+                // Step 5 - Set the deletePromtTextField value
                 tableCreatePO.setDeletePromtTextFieldValue(testCase.fieldValue);
 
-                //Step 7 - make sure delete table button is disabled
+                //Step 6 - make sure delete table button is disabled
                 expect(browser.isEnabled('.modal-dialog .modal-footer .primaryButton')).toBeFalsy();
 
-                //Step 8 - Go to the tables page
+                //Step 7 - Go to apps page
                 browser.call(function() {
-                    return RequestAppsPage.get(e2eBase.getRequestTableEndpoint(realmName, testApp.id, testApp.tables[0].id));
+                    // Load the requestAppsPage (shows a list of all the apps in a realm)
+                    return RequestAppsPage.get(e2eBase.getRequestAppsPageEndpoint(realmName));
                 });
 
-                //Step 10 - Make sure table is not deleted
-                let newTableLinksCount = tableCreatePO.getAllTableLeftNavLinksList.value.length;
-                //Verify the table links count is same as original
-                expect(newTableLinksCount).toBe(originalTableLinksCount);
+                //Step 8 - Select an App
+                RequestAppsPage.selectApp(testApp.name);
+
+                //Step 9 - Make sure table is not deleted and you can still select it
+                tableCreatePO.selectTable(EXISTING_TABLE_NAME_1);
             });
         });
 
