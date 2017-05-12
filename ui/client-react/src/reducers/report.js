@@ -65,12 +65,26 @@ const report = (state = [], action) => {
         });
     }
 
+    /**
+     * Takes in the data (columns) and returns the new order of the columns after moving them.
+     * Used in drag/drop columns.
+     * @param data (columns)
+     * @param sourceIndex (dragSource)
+     * @param targetIndex (dropTarget)
+     */
     function columnMove(data, sourceIndex, targetIndex) {
         let sourceItem = data[sourceIndex];
         let ret = data.slice(0, sourceIndex).concat(data.slice(sourceIndex + 1));
         return ret.slice(0, targetIndex).concat([sourceItem]).concat(ret.slice(targetIndex));
     }
 
+    /**
+     * Takes in the data (columns) and returns the new order of the fids after moving them.
+     * Used in drag/drop columns.
+     * @param data (columns)
+     * @param sourceItem (dragSource)
+     * @param targetItem (dropTarget)
+     */
     function updateColumnFids(data, sourceItem, targetItem) {
         let sourceIndex;
         let targetIndex;
@@ -413,12 +427,14 @@ const report = (state = [], action) => {
     case types.MOVE_COLUMN: {
         let currentReport = getReportFromState(action.id);
         if (currentReport) {
+            //metadata
             let columns = currentReport.data.columns;
             let fids = currentReport.data.fids;
             let sourceIndex;
             let sourceFid;
             let targetIndex;
             let targetFid;
+            //for calculating the source and target index for the sourceLabel and targetLabel
             for (let i = 0; i < columns.length; i++) {
                 if (columns[i].headerName === action.content.sourceLabel) {
                     sourceIndex = i;
@@ -429,9 +445,12 @@ const report = (state = [], action) => {
                     targetFid = columns[i].id;
                 }
             }
+            //new order of the columns is stored in movedColumns
             let movedColumns = columnMove(columns, sourceIndex, targetIndex);
+            //new order of the fids is stored in updateFids
             let updateFids = updateColumnFids(fids, sourceFid, targetFid);
 
+            // update columns, fids and metafids to reflect the dragged and dropped column
             currentReport.data.columns = movedColumns;
             currentReport.data.fids = updateFids;
             currentReport.data.metaData.fids = updateFids;
