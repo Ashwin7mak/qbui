@@ -62,9 +62,6 @@
         //Delete Table
         deleteTableActionButton: {get: function() {return browser.element('.iconActions .iconActionButton .buttonLabel');}},
         deletePromtTextField: {get: function() {return browser.element('.modal-dialog .deleteTableDialogContent .prompt');}},
-        // Delete and Don't Delete button on modal dialog box
-        deleteButton : {get: function() {return browser.element('.modal-dialog .modal-footer .primaryButton');}},
-        dontDeleteButton : {get: function() {return browser.element('.modal-dialog .modal-footer .secondaryButton');}},
 
 
 
@@ -246,7 +243,7 @@
             expect(this.tableReadyDialogue.element('.modal-footer .finishedButton').getAttribute('textContent')).toBe('OK');
             this.tableReadyDialogue.element('.modal-footer .finishedButton').click();
             //Need small wait for the container to dissapear
-            browser.pause(e2eConsts.shortWaitTimeMs);
+            browser.pause(e2eConsts.mediumWaitTimeMs);
             return formsPO.editFormContainerEl.waitForVisible();
         }},
 
@@ -533,9 +530,9 @@
             //use the predefined deleteTableButton here
             expect(browser.isEnabled('.modal-dialog .primaryButton')).toBeTruthy();
             //wait for deletetable button to be visible
-            this.deleteButton.waitForVisible();
+            browser.element('.modal-dialog .modal-footer .primaryButton').waitForVisible();
             //Click on delete table button
-            return this.deleteButton.click();
+            return browser.element('.modal-dialog .modal-footer .primaryButton').click();
         }},
 
         /**
@@ -555,9 +552,9 @@
          */
         clickDontDeleteTableButton: {value: function() {
             //wait for the button tobe visible
-            this.dontDeleteButton.waitForVisible();
+            browser.element('.modal-dialog .modal-footer .secondaryButton').waitForVisible();
             //Click on don't delete table button
-            return this.dontDeleteButton.click();
+            return browser.element('.modal-dialog .modal-footer .secondaryButton').click();
         }},
 
     });

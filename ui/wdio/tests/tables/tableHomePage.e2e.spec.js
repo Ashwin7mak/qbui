@@ -158,12 +158,16 @@
                     });
                 });
 
-                //Load the table to verify THP
-                RequestAppsPage.get(e2eBase.getRequestTableEndpoint(realmName, app.id, app.tables[0].id));
+                browser.call(function() {
+                    //Load the table to verify THP
+                    return RequestAppsPage.get(e2eBase.getRequestTableEndpoint(realmName, app.id, app.tables[0].id));
+                });
+
                 // wait for the report content to be visible
                 ReportContentPO.waitForReportContent();
 
                 //Assert report title to be expected
+                browser.element('.tableHomepageStageHeadline').waitForVisible();
                 expect(browser.element('.tableHomepageStageHeadline').getAttribute('textContent')).toBe('table 1 Home');
 
                 //Expand the stage
@@ -174,6 +178,7 @@
                 expect(browser.element('.stage-showHide-content').getAttribute('textContent')).toBe(testcase.reportTitle);
 
                 //Assert record count displayed is correct
+                browser.element('.recordsCount').waitForVisible();
                 expect(browser.element('.recordsCount').getAttribute('textContent')).toBe(numOfRecords + ' records');
             });
         });
@@ -199,26 +204,38 @@
 
             //test that admin have access to admin report
             //Load the admin report
-            RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, adminReportId));
+            browser.call(function() {
+                return RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, adminReportId));
+            });
             // wait for the report content to be visible
             ReportContentPO.waitForReportContent();
+
             //Assert report title to be expected
+            browser.element('.stageHeadline').waitForVisible();
             expect(browser.element('.stageHeadline').getAttribute('textContent')).toBe('Admin Report');
 
             //test that admin have access to participant report
             //Load the participant report
-            RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, participantReportId));
+            browser.call(function() {
+                return RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, participantReportId));
+            });
             // wait for the report content to be visible
             ReportContentPO.waitForReportContent();
+
             //Assert report title to be expected
+            browser.element('.stageHeadline').waitForVisible();
             expect(browser.element('.stageHeadline').getAttribute('textContent')).toBe('Participant Report');
 
             //test that admin have access to viewer report
             //Load the viewer report
-            RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, viewerReportId));
+            browser.call(function() {
+                return RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, viewerReportId));
+            });
             // wait for the report content to be visible
             ReportContentPO.waitForReportContent();
+
             //Assert report title to be expected
+            browser.element('.stageHeadline').waitForVisible();
             expect(browser.element('.stageHeadline').getAttribute('textContent')).toBe('Viewer Report');
         });
     });
