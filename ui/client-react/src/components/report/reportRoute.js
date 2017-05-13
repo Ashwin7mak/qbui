@@ -25,6 +25,7 @@ import {CONTEXT} from '../../actions/context';
 import {APP_ROUTE, EDIT_RECORD_KEY, NEW_RECORD_VALUE} from '../../constants/urlConstants';
 
 import * as FieldsReducer from '../../reducers/fields';
+import {getEmbeddedReportByContext} from '../../reducers/embeddedReports';
 
 let logger = new Logger();
 let FluxMixin = Fluxxor.FluxMixin(React);
@@ -56,7 +57,8 @@ const ReportRoute = React.createClass({
      * Load a report with query parameters.
      */
     loadDynamicReport(appId, tblId, rptId, format, filter, queryParams) {
-        this.props.loadDynamicReport(CONTEXT.REPORT.NAV, appId, tblId, rptId, format, filter, queryParams);
+        const context = this.props.uniqueId || CONTEXT.REPORT.NAV;
+        this.props.loadDynamicReport(context, appId, tblId, rptId, format, filter, queryParams);
     },
 
     /**
@@ -76,7 +78,7 @@ const ReportRoute = React.createClass({
     },
 
     loadReportFromParams(params) {
-        let {appId, tblId} = params;
+        let {appId, tblId, detailKeyFid, detailKeyValue} = params;
         let rptId = typeof this.props.rptId !== "undefined" ? this.props.rptId : params.rptId;
 
         if (appId && tblId && rptId) {
@@ -85,7 +87,7 @@ const ReportRoute = React.createClass({
             let numRows = NumberUtils.getNumericPropertyValue(this.props.reportData, 'numRows') || constants.PAGE.DEFAULT_NUM_ROWS;
 
             // TODO: remove
-            const {detailKeyFid, detailKeyValue} = _.get(this, 'props.location.query', {});
+//            const {detailKeyFid, detailKeyValue} = _.get(this, 'props.location.query', {});
             //const
             // A link from a parent component (see qbform.createChildReportElementCell) was used
             // to display a filtered child report.
@@ -214,6 +216,15 @@ const ReportRoute = React.createClass({
     }
 });
 
+// instead of relying on our parent route component to pass our props down,
+// the react-redux container will generate the required props for this route
+// from the Redux state (the presentational component has no code dependency on Redux!)
+const mapStateToProps = (state, ownProps) => {
+    return {
+        reportData: ownProps.reportData || getEmbeddedReportByContext(state.embeddedReports, ownProps.uniqueId)
+    };
+};
+
 const mapDispatchToProps = (dispatch) => {
     return {
         clearSearchInput: () => {
@@ -231,7 +242,9 @@ const mapDispatchToProps = (dispatch) => {
     };
 };
 
-const ConnectedReportRoute = withRouter(connect(null, mapDispatchToProps)(ReportRoute));
+//const ConnectedReportRoute = withRouter(connect(null, mapDispatchToProps)(ReportRoute));
+const ConnectedReportRoute = withRouter(connect(mapStateToProps, mapDispatchToProps)(ReportRoute));
 export default ConnectedReportRoute;
 
-export const ReportRouteWithUniqueId = withUniqueId(ConnectedReportRoute, CONTEXT.FORM.DRAWER);
+// TODO: context is not embedded, use DRAWER
+export const ReportRouteWithUniqueId = withUniqueId(ConnectedReportRoute, CONTEXT.REPORT.EMBEDDED);

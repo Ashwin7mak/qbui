@@ -71,7 +71,7 @@ class DrawerContainer extends React.Component {
      * Called by the Drawer component when mounting.
      */
     showDrawerContainer = () => {
-        //this.setState({visible: true});
+        this.setState({visible: true});
     };
 
     /**
