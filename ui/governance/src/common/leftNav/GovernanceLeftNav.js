@@ -1,10 +1,10 @@
-import React, {PropTypes, Component} from 'react';
-import {connect} from 'react-redux';
-import StandardLeftNav from '../../../../reuse/client/src/components/sideNavs/standardLeftNav';
-import DefaultTopNavGlobalActions from '../../../../reuse/client/src/components/topNav/defaultTopNavGlobalActions';
-import GetLeftNavLinks from './GovernanceLeftNavLinks';
-import * as RequestContextActions from '../requestContext/RequestContextActions';
-import {isFetching} from '../requestContext/RequestContextReducer';
+import React, {PropTypes, Component} from "react";
+import {connect} from "react-redux";
+import StandardLeftNav from "../../../../reuse/client/src/components/sideNavs/standardLeftNav";
+import DefaultTopNavGlobalActions from "../../../../reuse/client/src/components/topNav/defaultTopNavGlobalActions";
+import GetLeftNavLinks from "./GovernanceLeftNavLinks";
+import * as RequestContextActions from "../requestContext/RequestContextActions";
+import {isFetching} from "../requestContext/RequestContextReducer";
 
 class GovernanceLeftNav extends Component {
     componentDidMount() {

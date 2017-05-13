@@ -1,6 +1,6 @@
-import moment from 'moment';
-import React from 'react';
-import Icon from '../../../../../reuse/client/src/components/icon/icon';
+import moment from "moment";
+import React from "react";
+import Icon from "../../../../../reuse/client/src/components/icon/icon";
 import * as RealmUserAccountFlagConstants from "../../../common/constants/RealmUserAccountFlagConstants.js";
 
 // Render Helpers

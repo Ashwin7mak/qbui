@@ -1,4 +1,4 @@
-import * as StandardGridReducer from '../../../src/common/grid/standardGridReducer';
+import * as StandardGridReducer from "../../../src/common/grid/standardGridReducer";
 import * as StandardGridActionType from "../../../src/common/grid/standardGridActionTypes";
 
 describe('StandardGridReducer', () => {

@@ -7,8 +7,7 @@ import configureMockStore from "redux-mock-store";
 import thunk from "redux-thunk";
 import Promise from "bluebird";
 import FacetSelections from "../../../../reuse/client/src/components/facets/facetSelections";
-import Locale from "../../../../reuse/client/src/locales/locale";
-import GovernanceBundleLoader from '../../../src/locales/governanceBundleLoader';
+import GovernanceBundleLoader from "../../../src/locales/governanceBundleLoader";
 
 describe('Account Users Actions Tests', () => {
     // Dummy Data
