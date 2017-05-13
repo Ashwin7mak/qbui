@@ -39,11 +39,13 @@ class ChildReport extends React.Component {
     render() {
         const {appId, childTableId, childReportId, detailKeyFid, detailKeyValue} = this.props;
         const validProps = [appId, childTableId, childReportId, detailKeyFid, detailKeyValue].every(prop => prop || typeof prop === 'number');
+        let rowOfButtons = false;
         if (!validProps) {
             return null;
         } else {
             let item1, item2;
             if (Breakpoints.isSmallBreakpoint() || this.props.type === 'REPORTLINK') {
+                rowOfButtons = true;
                 item1 = this.renderChildReportOrLink(childTableId, childReportId);
                 item2 =  this.renderAddChildLink();
             } else {
@@ -51,7 +53,7 @@ class ChildReport extends React.Component {
                 item2 = this.renderChildReportOrLink(childTableId, childReportId);
             }
             return (
-                <div>
+                <div className={rowOfButtons ? 'linkContainersRowOfButtons' : ''}>
                     {item1}
                     {item2}
                 </div>);

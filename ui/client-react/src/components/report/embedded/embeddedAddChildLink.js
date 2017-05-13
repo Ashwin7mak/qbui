@@ -30,11 +30,6 @@ export const EmbeddedAddChildLink = React.createClass({
         childTableNoun: PropTypes.string
     },
 
-    // componentDidMount() {
-    // },
-    //
-    // componentWillUnmount() {
-    // },
 
     render() {
         const {appId, childTableId, childReportId, detailKeyFid, detailKeyValue, childTableNoun} = this.props;

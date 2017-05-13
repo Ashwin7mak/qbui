@@ -1,8 +1,15 @@
 @import '../../../assets/css/qbVariables';
 
+
+.linkContainersRowOfButtons {
+    display: flex;
+    flex-direction: row;
+}
+
 .linkContainer {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    margin: 10px;
 
     .reportDetail {
         font-size: 14px;
@@ -27,4 +34,21 @@
 
 .addChild {
     padding-left: 10px;
+}
+
+@include small-breakpoint {
+
+    .linkContainersRowOfButtons {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .linkContainer {
+        display: flex;
+        flex-direction: column;
+        margin: 5px;
+    }
+    .addChild {
+        padding-left: 0;
+    }
 }
