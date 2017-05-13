@@ -5,7 +5,7 @@
     var _ = require('lodash');
     let constants = require('../../../../common/src/constants');
 
-    const cannedTitleField = {[constants.REQUEST_PARAMETER.FIELD.NAME]:'Record Title',
+    const cannedTitleField = {[constants.REQUEST_PARAMETER.FIELD.NAME]:'Record title',
         [constants.REQUEST_PARAMETER.FIELD.TYPE]:'SCALAR',
         [constants.REQUEST_PARAMETER.FIELD.DATA_TYPE_ATTRS]: {
             [constants.REQUEST_PARAMETER.FIELD.TYPE]: 'TEXT'
