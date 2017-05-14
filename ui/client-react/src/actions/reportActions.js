@@ -370,9 +370,23 @@ export const refreshFieldSelectMenu = (context, appId, tblId) => {
         });
     };
 };
+/**
+ * Enter Builder Mode
+ * @returns {{type}}
+ */
+export const enterBuilderMode = (context) => {
+    return event(context, types.ENTER_BUILDER_MODE, {});
+};
 
 /**
- * Toggle the field select menu open.
+ * Exit Builder Mode
+ * @returns {{type: *}}
+ */
+export const exitBuilderMode = (context) => {
+    return event(context, types.EXIT_BUILDER_MODE, {});
+};
+
+/** Toggle the field select menu open.
  * @param context
  * @param clickedColumnId
  * @param addBeforeColumn

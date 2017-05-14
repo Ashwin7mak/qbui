@@ -56,6 +56,7 @@ export default {
     BULK                : 'bulk',
     REQUSER             : 'reqUser',
     TABLECOMPONENTS     : 'tableComponents',
+    APPCOMPONENTS       : 'appComponents',
     // Legacy actions
     STACK               : 'stack'
 };

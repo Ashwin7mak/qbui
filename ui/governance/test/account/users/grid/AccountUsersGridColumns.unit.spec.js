@@ -9,6 +9,7 @@ import {Provider} from "react-redux";
 import StandardGrid from "../../../../src/common/grid/standardGrid";
 import * as Actions from "../../../../src/account/users/AccountUsersActions";
 import {GetAccountUsersGridColumns} from "../../../../src/account/users/grid/AccountUsersGridColumns";
+import {GetFacetFields} from "../../../../src/account/users/grid/AccountUsersGridFacet";
 
 const mockStore = configureMockStore();
 
@@ -19,6 +20,7 @@ describe('AccountUsersGridColumns', () => {
     const GRID_ID = 'accountUsers';
     const baseProps = {
         columns : GetAccountUsersGridColumns(true, true),
+        getFacetFields : GetFacetFields(true, true),
         rowKey: 'uid',
         id: GRID_ID,
         columnTransformProps :[],
