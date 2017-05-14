@@ -30,7 +30,7 @@ class TableCreationPanel extends React.Component {
      * @returns {XML}
      */
     getTableIcon(name) {
-        return <Icon iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY} icon={name}/>;
+        return <Icon iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY} icon={name} tooltipTitle={IconUtils.getIconToolTipTitle(tableIconsByTag, name)}/>;
     }
 
     /**
@@ -64,7 +64,7 @@ class TableCreationPanel extends React.Component {
         return (
             <div className="iconList">
                 {suggestedIcons.map((iconName, i) => (
-                    <button key={i} onClick={() => this.selectIcon(iconName)}>
+                    <button key={i} onClick={() => this.selectIcon(iconName)} type="button">
                         {this.getTableIcon(iconName)}
                     </button>))}
             </div>);
@@ -81,14 +81,12 @@ class TableCreationPanel extends React.Component {
     }
 
     /**
-     * updata a table property
-     * @param property 'name' etc
-     * @param value new value for property
-     * @param isUserEdit did user initiate the edit?
+     * get validation error property/value
+     * @returns {*}
      */
-    updateTableProperty(property, value, isUserEdit = true) {
-
+    getValidationError(property, value) {
         let validationError = null;
+
         const trimmed = typeof value === "string" ? value.trim() : value;
 
         switch (property) {
@@ -108,7 +106,42 @@ class TableCreationPanel extends React.Component {
         }
         }
 
-        this.props.setTableProperty(property, value, validationError, isUserEdit);
+        return validationError;
+    }
+
+    /**
+     * update a table property
+     * @param property 'name' etc
+     * @param value new value for property
+     * @param isUserEdit did user initiate the edit?
+     */
+    updateTableProperty(property, value, isUserEdit = true) {
+
+        const pendingValidationError = this.getValidationError(property, value);
+
+        let validationError = this.props.tableInfo[property] ? this.props.tableInfo[property].validationError : null;
+
+        this.props.setTableProperty(property, value, pendingValidationError, validationError, isUserEdit);
+    }
+
+    /**
+     * handle loss of focus
+     */
+    onBlurInput(property, value) {
+
+        // do validation on loss of focus unless it hasn't been edited
+
+        if (this.props.tableInfo[property].edited) {
+
+            // set the validation error and the live validation error for the field (same)
+
+            const validationError = this.getValidationError(property, value);
+
+            this.props.setTableProperty(property, value, validationError, validationError, false);
+        }
+
+        // unset edited property
+        this.props.setEditingProperty(null);
     }
 
     /**
@@ -159,12 +192,6 @@ class TableCreationPanel extends React.Component {
         this.props.setEditingProperty(name);
     }
 
-    /**
-     * unset edited property when focus is lost
-     */
-    onBlurInput() {
-        this.props.setEditingProperty(null);
-    }
 
     /**
      * render the table settings UI

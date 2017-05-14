@@ -284,10 +284,18 @@ describe('ReportGrid', () => {
         ];
 
         testCases.forEach(testCase => {
+            const record = {
+                recordIdBeingEdited: testRecordId,
+                records: [{
+                    id: testRecordId,
+                    recId: testRecordId,
+                    pendEdits: testCase.pendEdits
+                }]
+            };
             it(testCase.description, () => {
                 component = shallow(<UnconnectedReportGrid
                     {...requiredProps}
-                    record={[{pendEdits: testCase.pendEdits}]}
+                    record={record}
                     editingIndex={testCase.editingIndex}
                     editingId={testCase.editingId}
                 />);
@@ -313,9 +321,17 @@ describe('ReportGrid', () => {
         const rptId = 'rptId';
         const sortFids = [5, 6];
         const testAppUsers = [7, 8];
+        const builderMode = false;
 
         let phase1 = undefined;
-
+        const record = {
+            recordIdBeingEdited: testRecordId,
+            records: [{
+                id: testRecordId,
+                recId: testRecordId,
+                pendEdits: pendEdits
+            }]
+        };
         beforeAll(() => {
             ReportGridRewireAPI.__Rewire__('ReportRowTransformer', {
                 transformRecordsForGrid() {
@@ -341,7 +357,7 @@ describe('ReportGrid', () => {
                 columns={testColumns}
                 records={testRecords}
                 isInlineEditOpen={isInlineEditOpen}
-                record={[{pendEdits}]}
+                record={record}
                 loading={false}
                 selectedRows={selectedRows}
                 editErrors={pendEdits}
@@ -405,7 +421,7 @@ describe('ReportGrid', () => {
                 columns={testColumns}
                 records={testRecords}
                 isInlineEditOpen={isInlineEditOpen}
-                record={[{pendEdits}]}
+                record={record}
                 loading={false}
                 selectedRows={selectedRows}
                 editErrors={pendEdits}

@@ -46,7 +46,13 @@
          * Before each it block reload the list all report (can be used as a way to reset state between tests)
          */
         beforeEach(function() {
-            return e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
+            browser.call(function() {
+                // Load the requestAppsPage (shows a list of all the apps in a realm)
+                return RequestAppsPage.get(e2eBase.getRequestAppsPageEndpoint(realmName));
+            });
+
+            //select the App
+            RequestAppsPage.selectApp(testApp.name);
         });
 
         it('Create new table', function() {
@@ -90,6 +96,8 @@
 
             //Step 9 - Click on forms Cancel button
             formsPO.clickFormCancelBtn();
+            //wait until you see tableLists got loaded
+            browser.element('.tablesList').waitForVisible();
             tableCreatePO.newTableBtn.waitForVisible();
 
             //Step 10 - Get the new count of table links in the left nav
@@ -259,7 +267,7 @@
 
             //Add user to participant appRole
             browser.call(function() {
-                return e2eBase.recordBase.apiBase.assignUsersToAppRole(testApp.id, "11", [userId]);
+                return e2eBase.recordBase.apiBase.assignUsersToAppRole(testApp.id, e2eConsts.PARTICIPANT_ROLEID, [userId]);
             });
 
             //get the user authentication
@@ -268,7 +276,11 @@
             });
 
             //Go to Tables Page
-            RequestAppsPage.get(e2eBase.getRequestTableEndpoint(realmName, testApp.id, testApp.tables[0].id));
+            browser.call(function() {
+                return RequestAppsPage.get(e2eBase.getRequestTableEndpoint(realmName, testApp.id, testApp.tables[0].id));
+            });
+            //wait until you see tableLists got loaded
+            browser.element('.tablesList').waitForVisible();
 
             //Verify New Table button not available for user other than ADMIN
             expect(browser.isVisible('.newTable')).toBeFalsy();

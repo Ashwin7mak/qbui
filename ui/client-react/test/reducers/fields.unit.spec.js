@@ -111,7 +111,7 @@ describe('Test fields reducer', () => {
         const field = {builtIn: true, keyField: false, id: 10};
         const updatedState = reducer(state, {type: types.UPDATE_FIELD, field, appId, tblId});
         const updatedField = getField({fields: updatedState}, field.id, appId, tblId);
-        expect(updatedField).toEqual({...field, isPendingEdits: true});
+        expect(updatedField).toEqual({...field, isPendingEdit: true});
     });
 
     it('test get field', () => {

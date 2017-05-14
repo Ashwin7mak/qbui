@@ -1,12 +1,12 @@
 import React, {PropTypes} from 'react';
 
-import Locale from '../../locales/locale';
+import Locale from 'REUSE/locales/locale';
 
 // TEMPORARY IMPORTS FROM CLIENT-REACT
-import HtmlUtils from '../../../../../client-react/src/utils/htmlUtils';
-import {DEFAULT_PAGE_TITLE} from '../../../../../client-react/src/constants/urlConstants';
-import WindowLocationUtils from '../../../../../client-react/src/utils/windowLocationUtils';
-import CommonUrlUtils from '../../../../../common/src/commonUrlUtils';
+import HtmlUtils from 'APP/utils/htmlUtils';
+import {DEFAULT_PAGE_TITLE} from 'APP/constants/urlConstants';
+import WindowLocationUtils from 'APP/utils/windowLocationUtils';
+import CommonUrlUtils from 'COMMON/commonUrlUtils';
 // TEMPORARY IMPORTS FROM CLIENT-REACT
 
 /**

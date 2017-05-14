@@ -10,7 +10,9 @@ import Constants from '../../../../common/src/constants';
 import UserFieldValueRenderer from '../fields/userFieldValueRenderer.js';
 import DragAndDropField from '../formBuilder/dragAndDropField';
 import RelatedChildReport from './relatedChildReport';
+import {CONTEXT} from "../../actions/context";
 import FlipMove from 'react-flip-move';
+import {FORM_ELEMENT_ENTER, FORM_ELEMENT_LEAVE} from '../../constants/animations';
 
 import * as FieldsReducer from '../../reducers/fields';
 
@@ -267,7 +269,9 @@ export const QBForm = React.createClass({
                 <FlipMove
                     duration={200}
                     easing="ease"
-                    appearAnimation="accordionVertical"
+                    appearAnimation="fade"
+                    enterAnimation={FORM_ELEMENT_ENTER}
+                    leaveAnimation={FORM_ELEMENT_LEAVE}
                     staggerDelayBy={0}
                     staggerDurationBy={0}
                     delay={0}
@@ -347,6 +351,9 @@ export const QBForm = React.createClass({
 
         let CurrentFieldElement = (this.props.editingForm ? DragAndDropField(FieldElement) : FieldElement);
 
+        // This isDisable is used to disable the input and controls in form builder.
+        let isDisabled = !(this.props.edit && !this.props.editingForm);
+
         //This tabIndex is for form builder keyboard navigation. It is removing all field value editors from the tabbing flow
         let tabIndex = (this.props.editingForm ? "-1" : 0);
         return (
@@ -369,6 +376,7 @@ export const QBForm = React.createClass({
                   fieldRecord={fieldRecord}
                   includeLabel={true}
                   indicateRequiredOnLabel={this.props.edit}
+                  isDisabled={isDisabled}
                   edit={this.props.edit && !FormFieldElement.readOnly}
                   onChange={this.props.onFieldChange}
                   onBlur={this.props.onFieldChange}
@@ -376,6 +384,7 @@ export const QBForm = React.createClass({
                   invalidMessage={validationStatus.invalidMessage}
                   appUsers={this.props.appUsers}
                   recId={recId}
+                  isTokenInMenuDragging={this.props.isTokenInMenuDragging}
               />
             </div>
         );
@@ -416,6 +425,12 @@ export const QBForm = React.createClass({
         const childTable = _.find(tables, {id: relationship.detailTableId}) || {};
         const childTableName = childTable.name;
 
+        // Handler for clicking on a record in an embedded report. Drilling down to a child should open the clicked
+        // child record in a drawer.
+        // When this.props.edit is true, this form is inside a trowser. Disable drilling down to child records when an
+        // embedded report is in a trowser.
+        const handleDrillIntoChild = this.props.edit ? () => {} : this.props.handleDrillIntoChild;
+
         return (
             <div key={id} className="formElementContainer formElement referenceElement">
                 <RelatedChildReport
@@ -427,7 +442,7 @@ export const QBForm = React.createClass({
                     detailKeyValue={detailKeyValue}
                     type={ReferenceElement.type}
                     appUsers={this.props.appUsers}
-                    handleDrillIntoChild={this.props.handleDrillIntoChild}
+                    handleDrillIntoChild={handleDrillIntoChild}
                 />
             </div>
         );
@@ -574,9 +589,12 @@ function buildUserField(id, fieldValue, name) {
     };
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state, ownProps) => {
+    let formId = (ownProps.formId || CONTEXT.FORM.VIEW);
+    let currentForm = _.get(state, `forms[${formId}]`, {});
     return {
-        fields: state.fields
+        fields: state.fields,
+        isTokenInMenuDragging: (_.has(currentForm, 'isDragging') ? currentForm.isDragging : undefined),
     };
 };
 

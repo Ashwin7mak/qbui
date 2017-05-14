@@ -43,6 +43,9 @@ const mockFormStore = {updateFormRedirectRoute(_route) {}};
 class WindowLocationUtilsMock {
     static update(url) { }
 }
+const query = {
+    'editRec': 9
+};
 
 describe('Nav Unit tests', () => {
     'use strict';
@@ -81,6 +84,7 @@ describe('Nav Unit tests', () => {
         showTrowser: (content) => {},
         loadForm: (app, tbl, rpt, type, edit, show) => {},
         loadReports: (ctx, app, tbl) => {},
+        enterBuilderMode: (context) => {},
         fields: [],
         record: [],
         report: [],
@@ -94,10 +98,19 @@ describe('Nav Unit tests', () => {
         forms: [{id: 'view'}],
         shell: {
             leftNavVisible: true,
-            leftNavExpanded: false
+            leftNavExpanded: false,
+            fieldsSelectMenu: {
+                fieldsListCollapsed: true,
+                addBefore: null,
+                availableColumns: []
+            }
         },
         reports: [],
-        history: []
+        history: [],
+        reportBuilder: true,
+        location: {
+            query: query
+        }
     };
 
     beforeEach(() => {
@@ -107,6 +120,7 @@ describe('Nav Unit tests', () => {
         spyOn(props, 'showTrowser').and.callThrough();
         spyOn(props, 'loadForm').and.callThrough();
         spyOn(props, 'loadReports').and.callThrough();
+        spyOn(props, 'enterBuilderMode').and.callThrough();
         NavRewireAPI.__Rewire__('LeftNav', LeftNavMock);
         NavRewireAPI.__Rewire__('RecordTrowser', TrowserMock);
         NavRewireAPI.__Rewire__('ReportManagerTrowser', TrowserMock);
@@ -123,6 +137,7 @@ describe('Nav Unit tests', () => {
         props.showTrowser.calls.reset();
         props.loadForm.calls.reset();
         props.loadReports.calls.reset();
+        props.enterBuilderMode.calls.reset();
         NavRewireAPI.__ResetDependency__('LeftNav');
         NavRewireAPI.__ResetDependency__('RecordTrowser');
         NavRewireAPI.__ResetDependency__('ReportManagerTrowser');
@@ -252,7 +267,10 @@ describe('Nav Unit tests', () => {
     it('renders form builder and sets the redirect route', () => {
         spyOn(mockFormStore, 'updateFormRedirectRoute');
 
-        const testLocation = {pathname: '/previousLocation'};
+        const testLocation = {
+            pathname: '/previousLocation',
+            query: query
+        };
         props.forms = [];
         props.history = [];
 
@@ -261,4 +279,15 @@ describe('Nav Unit tests', () => {
 
         expect(mockFormStore.updateFormRedirectRoute).toHaveBeenCalledWith(testLocation.pathname);
     });
+
+    it('enters report builder', () => {
+        let component = shallow(<Nav {...props} flux={flux} />);
+
+        let instance = component.instance();
+
+        instance.navigateToBuilderReport();
+
+        expect(props.enterBuilderMode).toHaveBeenCalled();
+    });
+
 });

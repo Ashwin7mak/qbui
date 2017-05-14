@@ -9,6 +9,10 @@ describe('Apps Actions functions with Tables', () => {
 
     let responseData = [{id: 'tableId', link: `${APP_ROUTE}/tableId`}];
     let appRoleResponeData = [4, 5, 6];
+    let responseComponentData = {
+        users: [],
+        app: [{id: 'tableId'}]
+    };
 
     class mockAppService {
         constructor() { }
@@ -21,6 +25,9 @@ describe('Apps Actions functions with Tables', () => {
         getAppUsers(id) {
             return Promise.resolve({data: responseData});
         }
+        getAppComponents(id) {
+            return Promise.resolve({data: responseComponentData});
+        }
     }
 
     class mockRoleService {
@@ -28,11 +35,17 @@ describe('Apps Actions functions with Tables', () => {
         getAppRoles(id) {
             return Promise.resolve({data: appRoleResponeData});
         }
+        unassignUsersFromRole(appId, roleId, userIds) {
+            return Promise.resolve({data: appRoleResponeData});
+        }
     }
 
     class mockRoleServiceFailure {
         constructor() { }
         getAppRoles(id) {
+            return Promise.reject(null);
+        }
+        unassignUsersFromRole(appId, roleId, userIds) {
             return Promise.reject(null);
         }
     }
@@ -59,8 +72,10 @@ describe('Apps Actions functions with Tables', () => {
         spyOn(flux.dispatchBinder, 'dispatch');
         spyOn(mockAppService.prototype, 'getApps').and.callThrough();
         spyOn(mockAppService.prototype, 'getApp').and.callThrough();
+        spyOn(mockAppService.prototype, 'getAppComponents').and.callThrough();
         spyOn(mockAppService.prototype, 'getAppUsers').and.callThrough();
         spyOn(mockRoleService.prototype, 'getAppRoles').and.callThrough();
+        spyOn(mockRoleService.prototype, 'unassignUsersFromRole').and.callThrough();
         spyOn(mockUserService.prototype, 'getUser').and.callThrough();
         appsActionsRewireAPI.__Rewire__('AppService', mockAppService);
         appsActionsRewireAPI.__Rewire__('RoleService', mockRoleService);
@@ -97,21 +112,22 @@ describe('Apps Actions functions with Tables', () => {
     });
 
     var selectAppIdTests = [
-        {name:'select app id', appId: 123, cached: false},
-        {name:'select app id cached', appId: 123, cached: true}
+        {name:'select app id', appId: 123},
+        {name:'select app id of null', appId: null}
     ];
     selectAppIdTests.forEach(function(test) {
         it(test.name, function(done) {
-            flux.actions.selectedAppId = test.cached === true ? test.appId : '';
             flux.actions.selectAppId(test.appId).then(
                 () => {
-                    if (test.cached === true) {
-                        expect(mockAppService.prototype.getAppUsers).not.toHaveBeenCalled();
-                    } else {
-                        expect(mockAppService.prototype.getAppUsers).toHaveBeenCalledWith(test.appId);
-                        expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(2);
+                    if (test.appId) {
+                        expect(mockAppService.prototype.getAppComponents).toHaveBeenCalled();
                         expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.SELECT_APP, test.appId]);
-                        expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.LOAD_APP_USERS_SUCCESS, responseData]);
+                        expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.SELECT_APP_SUCCESS, jasmine.any(Object)]);
+                        expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(2);
+                    } else {
+                        expect(mockAppService.prototype.getAppComponents).not.toHaveBeenCalled();
+                        expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.SELECT_APP, test.appId]);
+                        expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(1);
                     }
                     done();
                 },
@@ -141,6 +157,46 @@ describe('Apps Actions functions with Tables', () => {
                 },
                 () => {
                     expect(false).toBe(true);
+                    done();
+                }
+            );
+        });
+    });
+
+    var unassignUsersTests = [
+        {name:'unassign users from role', appId: 187, roleId:1, userIds:[1]}
+    ];
+    unassignUsersTests.forEach(function(test) {
+        it(test.name, function(done) {
+            flux.actions.unassignUsers(test.appId, test.roleId, test.userIds).then(
+                () => {
+                    expect(mockRoleService.prototype.unassignUsersFromRole).toHaveBeenCalledWith(test.appId, test.roleId, test.userIds);
+                    expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(1);
+                    expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.UNASSIGN_USERS_SUCCESS, {appId:test.appId, roleId:test.roleId, userIds:test.userIds}]);
+                    done();
+                },
+                () => {
+                    expect(false).toBe(true);
+                    done();
+                }
+            );
+        });
+    });
+
+    var loadFailUnassignUsersTests = [
+        {name:'fail unassign users from role', appId: 187, roleId:1, userIds:[1]}
+    ];
+    loadFailUnassignUsersTests.forEach(function(test) {
+        it(test.name, function(done) {
+            appsActionsRewireAPI.__Rewire__('RoleService', mockRoleServiceFailure);
+            flux.actions.unassignUsers(test.appId, test.roleId, test.userIds).then(
+                () => {
+                    expect(false).toBe(true);
+                    done();
+                },
+                () => {
+                    expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.UNASSIGN_USERS_FAILED]);
+                    expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(1);
                     done();
                 }
             );
@@ -210,6 +266,35 @@ describe('Apps Actions functions with Tables', () => {
                 }
             );
         });
+    });
+
+    it("Test Select Table Id ", function(done) {
+        var test = {tableId: 1};
+        appsActionsRewireAPI.__Rewire__('UserService', mockUserServiceFailure);
+        var result = flux.actions.selectTableId(test.tableId);
+        expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.SELECT_TABLE, 1]);
+        expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(1);
+        done();
+    });
+
+
+    it("Test updateTableProps", function(done) {
+        var test = {tableId: 1, tableInfo: ''};
+        appsActionsRewireAPI.__Rewire__('UserService', mockUserServiceFailure);
+        var result = flux.actions.updateTableProps(test.tableId, test.tableInfo);
+        expect(flux.dispatchBinder.dispatch.calls.argsFor(0)[0]).toEqual(actions.UPDATED_TABLE_PROPS);
+        expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(1);
+        done();
+    });
+
+
+    it("Test selectUsersRows", function(done) {
+        var test = {selectedDetails: 1};
+        appsActionsRewireAPI.__Rewire__('UserService', mockUserServiceFailure);
+        var result = flux.actions.selectUsersRows(test.selectedDetails);
+        expect(flux.dispatchBinder.dispatch.calls.argsFor(0)[0]).toEqual(actions.SELECT_USERS_DETAILS);
+        expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(1);
+        done();
     });
 
 });

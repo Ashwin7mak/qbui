@@ -8,6 +8,7 @@
     // Import the base page object
     var e2ePageBase = requirePO('./e2ePageBase');
     var formsPO = requirePO('formsPage');
+    var tablesPO = requirePO('tableCreate');
 
     var ReportContentPage = Object.create(e2ePageBase, {
         // This gives you all the record checkboxes of the report page
@@ -23,9 +24,27 @@
         tableBody: {get: function() {return browser.element('.qbTbody');}},
         reportsToolBar : {get: function() {return browser.element('.reportToolbar');}},
         addRecordButton : {get: function() {return browser.element('.tableHomePageInitial .addRecordButton');}},
+        settingsIconName : {get: function() {return '.qbIcon.iconUISturdy-settings';}},
+        settingsIcon: {get: function() {return browser.element(this.settingsIconName);}},
+        modifyTableSettings: {get: function() {return browser.element('.modifyTableSettings');}},
+
+        // Delete and Don't Delete button on modal dialog box
+        deleteButton : {get: function() {return browser.element('.modal-dialog .modal-footer .primaryButton');}},
+        dontDeleteButton : {get: function() {return browser.element('.modal-dialog .modal-footer .secondaryButton');}},
+
         reportFilterSearchBox : {get: function() {
             return this.reportsToolBar.element('.searchInput');
         }},
+        reportSearchEnterValues: {value: function(field) {
+            //Check for the visibility of search box
+            this.reportFilterSearchBox.waitForVisible();
+            //Enter the value in the search box
+            this.reportFilterSearchBox.setValue(field);
+            this.waitForReportContent();
+            //Needs this for the Dom to stabilize after loading the searched data
+            browser.pause(e2eConsts.shortWaitTimeMs);
+        }},
+        clearSearch: {get: function() {return this.reportsToolBar.element('.clearSearch .searchIcon');}},
         clickAndWaitForGrid: {value: function(button) {
             button.click();
             this.qbGridContainer.waitForVisible();
@@ -48,9 +67,6 @@
             browser.element('.reportContainer').waitForVisible();
             return browser.element('.reportContainer');
         }},
-        // Delete and Don't Delete button on modal dialog box
-        deleteButton : {get: function() {return browser.element('.modal-dialog .primaryButton');}},
-        dontDeleteButton : {get: function() {return browser.element('.modal-dialog .secondaryButton');}},
 
         //Drop down menu actions icon
         dropDownIcon : {get: function() {return browser.element('.actionsCol .iconActionsDropDownMenu');}},
@@ -236,6 +252,29 @@
             this.qbGridBodyViewportEl.waitForVisible();
             var rows = this.qbGridBodyViewportEl.elements('.qbRow');
             return rows.value.length;
+        }},
+
+        /**
+         * Method to click settings Icon on Report Table
+         */
+        clickSettingsIcon: {value: function() {
+            this.settingsIcon.waitForVisible();
+            //Click on settings icon
+            this.settingsIcon.click();
+            //wait until you see dropdown list
+            return this.modifyTableSettings.waitForVisible();
+        }},
+
+        /**
+         * Method to click 'Table properties & settings' from the dropdown list
+         */
+        clickModifyTableSettings: {value: function() {
+            // wait for 'Table properties & settings' button tobe visible
+            this.modifyTableSettings.waitForVisible();
+            //Click on 'Table properties & settings'
+            this.modifyTableSettings.click();
+            //wait until you see delete table action button
+            return tablesPO.deleteTableActionButton.waitForVisible();
         }},
 
         /**

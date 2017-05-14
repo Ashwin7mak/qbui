@@ -12,6 +12,36 @@
         tablesDivEl: {get: function() {return browser.element('.tables');}},
         tableLinksElList: {get: function() {return this.tablesDivEl.elements('a');}},
 
+        /**
+         * Returns all apps links from left Nav apps page
+         * @returns Array of apps links
+         */
+        getAllAppLeftNavLinksList: {get: function() {
+            browser.element('.appsList').waitForVisible();
+            browser.element('.leftNavLabel').waitForVisible();
+            return browser.elements('.leftNavLabel');
+        }},
+
+        /**
+         * Select a app by its name from apps page left nav
+         * @params appName
+         */
+        selectApp: {value: function(appName) {
+            //wait until you see tableLists got loaded
+            browser.waitForExist('.appsList .leftNavLabel');
+            //filter table names from leftNav links
+            var results = this.getAllAppLeftNavLinksList.value.filter(function(app) {
+                return app.getAttribute('textContent') === appName;
+            });
+
+            if (results !== []) {
+                //Click on filtered table name
+                results[0].click();
+                //wait until you see tableLists got loaded
+                return browser.waitForExist('.tablesList .leftNavLabel');
+            }
+        }},
+
         /*
          * Loads the page in the browser containing a list apps and tables in a realm
          * Use the service method in e2eBase to get this URL for the realm/app

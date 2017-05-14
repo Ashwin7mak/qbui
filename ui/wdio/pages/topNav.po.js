@@ -35,7 +35,7 @@
         // Top Nav Hamburger element
         topNavToggleHamburgerEl: {
             get: function() {
-                return browser.element('.topNav .iconLink');
+                return browser.element('.topNav .iconUISturdy-hamburger');
             }
         },
         // Center div (containing harmony icons)
@@ -109,6 +109,41 @@
                 expect(this.leftNavGlobActsUlEl.isExisting()).toBeTruthy();
                 expect(this.leftNavGlobActsUlEl.getAttribute('clientWidth')).toBe('0');
                 expect(this.leftNavGlobActsUlEl.getAttribute('offsetWidth')).toBe('0');
+            }
+        },
+
+        /**
+        Page objects for topNav - small breakpoint
+         */
+        // Top Nav search element
+        topNavSmallSearchEl: {
+            get: function() {
+                // return browser.element('.iconUISturdy-search');
+                return browser.element('.smallHeader .right .iconLink');
+            }
+        },
+        // Top Nav Title element
+        topNavTitleEl: {
+            get: function() {
+                return browser.element('.smallHeader .title');
+            }
+        },
+        // Top Nav search box element
+        topNavSearchBoxEl: {
+            get: function() {
+                return browser.element('.smallHeader .center .searchInput');
+            }
+        },
+        // Top Nav mini clear button
+        topNavClearSearchEl: {
+            get: function() {
+                return browser.element('.smallHeader .searchIcon');
+            }
+        },
+        // Top Nav cancel element
+        topNavCancelEl: {
+            get: function() {
+                return browser.element('.smallHeader .cancelButton');
             }
         },
     });

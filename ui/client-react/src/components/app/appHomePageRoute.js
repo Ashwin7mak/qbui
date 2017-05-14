@@ -7,6 +7,7 @@ import AppHomePage from './appHomePage';
 import PageTitle from '../pageTitle/pageTitle';
 import {connect} from 'react-redux';
 import {NotificationManager} from 'react-notifications';
+import Stage from '../../../../reuse/client/src/components/stage/stage';
 import Locale from '../../locales/locales';
 import {notifyTableDeleted} from '../../actions/tablePropertiesActions';
 import {getNeedToNotifyTableDeletion, getTableJustDeleted} from '../../reducers/tableProperties';
@@ -28,9 +29,8 @@ export const AppHomePageRoute = React.createClass({
     /**
      * Select an app by ID
      */
-    selectAppId(appId) {
+    selectAppRoles(appId) {
         let flux = this.getFlux();
-        flux.actions.selectAppId(appId);
         flux.actions.loadAppRoles(appId);
     },
 
@@ -53,7 +53,7 @@ export const AppHomePageRoute = React.createClass({
 
             if (appId) {
                 logger.debug('Loading app. AppId:' + appId);
-                this.selectAppId(appId);
+                this.selectAppRoles(appId);
             }
         }
     },
@@ -106,17 +106,12 @@ export const AppHomePageRoute = React.createClass({
     },
 
     getStageHeadline() {
-        return (this.props.selectedApp &&
-            <div className="stageHeadline">
-                <h3 className="appName breadCrumbs"><QBicon icon="favicon"/> {this.props.selectedApp.name}</h3>
-            </div>
-        );
-    },
-
-    getSecondaryBar() {
+        const userHeadLine = `${Locale.getMessage('app.homepage.welcomeTitle')} ${this.getSelectedAppName()}`;
         return (
-            <div className="secondaryAppHomePageActions">
-                {/* todo */}
+            <div className="appHomePageStage">
+                <div className="appStageHeadline">
+                    <h3 className="appHeadLine">{userHeadLine}</h3>
+                </div>
             </div>);
     },
 
@@ -128,6 +123,10 @@ export const AppHomePageRoute = React.createClass({
         return (
             <div className="appHomePageContainer">
                 <PageTitle title={this.getSelectedAppName()} />
+                <Stage stageHeadline={this.getStageHeadline()}
+                       pageActions={null}>
+                    <div></div>
+                </Stage>
                 <AppHomePage />
             </div>
         );

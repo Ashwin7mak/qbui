@@ -2,7 +2,7 @@ import React from 'react';
 import {shallow, mount} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
 
-import {Analytics, EVERGAGE_ACCOUNT_NAME, ANALYTICS_SCRIPT_ID} from '../../src/components/analytics/analytics';
+import {Analytics, EVERGAGE_ACCOUNT_NAME, ANALYTICS_SCRIPT_ID} from 'REUSE/components/analytics/analytics';
 
 const mockDataset = 'unitTest'; // Use a non-existing dataset in case test accidentally makes a call to Everage
 
@@ -86,34 +86,86 @@ describe('Analytics', () => {
         expect(component.instance().componentWillUnmount).not.toThrow();
     });
 
-    describe('updating the user', () => {
-        const testFirstUserId = 1;
+    it('updates Evergage when props are changed', () => {
+        spyOn(document, 'getElementById').and.returnValue(true);
 
+        const testFirstUserId = 1;
+        const testSecondUserId = 2;
+
+        component = shallow(<Analytics dataset={mockDataset} userId={testFirstUserId} />, {lifecycleExperimental: true});
+        let instance = component.instance();
+        spyOn(instance, 'updateEvergage').and.callThrough();
+
+        component.setProps({userId: testSecondUserId});
+
+        expect(instance.updateEvergage).toHaveBeenCalled();
+    });
+
+    describe('functions that update evergage', () => {
         beforeEach(() => {
             // Don't add the script to the page during these tests
             spyOn(document, 'getElementById').and.returnValue(true);
+
+            window._aaq = {push() {}};
         });
 
-        it('updates the current user when the prop changes', () => {
-            const testSecondUserId = 2;
-
-            component = shallow(<Analytics dataset={mockDataset} userId={testFirstUserId} />);
-            let instance = component.instance();
-            spyOn(instance, 'updateEvergageUser');
-
-            component.setProps({userId: testSecondUserId});
-
-            expect(instance.updateEvergageUser).toHaveBeenCalledWith(testSecondUserId);
+        afterEach(() => {
+            window._aaq = [];
         });
 
-        it('does not update the current user if the userId prop does not change', () => {
-            component = shallow(<Analytics dataset={mockDataset} userId={testFirstUserId} />);
-            let instance = component.instance();
-            spyOn(instance, 'updateEvergageUser');
+        let testCases = [
+            {
+                testFunction: 'updateEvergageUser',
+                description: 'the evergage user',
+                props: {userId: 1},
+                expectedArguments: ['setUser', 1]
+            },
+            {
+                testFunction: 'updateEvergageAdminStatus',
+                description: 'the evergage admin status',
+                props: {isAdmin: false},
+                expectedArguments: ['setCustomField', 'has_app_admin', false, 'request']
+            },
+            {
+                testFunction: 'updateAppManagerStatus',
+                description: 'the evergage app manager status',
+                props: {userId: 1, app: {ownerId: 1}},
+                expectedArguments: ['setCustomField', 'is_app_mgr', true, 'request']
+            },
+            {
+                testFunction: 'updateEvergageAccountId',
+                description: 'the evergage account id',
+                props: {app: {accountId: 1000}},
+                expectedArguments: ['setCompany', 1000]
+            },
+            {
+                testFunction: 'updateEverageAppId',
+                description: 'the evergage app id',
+                props: {app: {id: 13}},
+                expectedArguments: ['setCustomField', 'appid', 13, 'request']
+            },
+        ];
 
-            component.setProps({userId: testFirstUserId});
+        testCases.forEach(testCase => {
+            describe(testCase.testFunction, () => {
+                it(`updates ${testCase.description}`, () => {
+                    spyOn(window._aaq, 'push');
 
-            expect(instance.updateEvergageUser).not.toHaveBeenCalled();
+                    component = shallow(<Analytics dataset={mockDataset} {...testCase.props} />);
+                    component.instance()[testCase.testFunction]();
+
+                    expect(window._aaq.push).toHaveBeenCalledWith(testCase.expectedArguments);
+                });
+
+                it(`does not update ${testCase.description} if the prop is not provided`, () => {
+                    spyOn(window._aaq, 'push');
+
+                    component = shallow(<Analytics dataset={mockDataset} />);
+                    component.instance()[testCase.testFunction]();
+
+                    expect(window._aaq.push).not.toHaveBeenCalled();
+                });
+            });
         });
     });
 });

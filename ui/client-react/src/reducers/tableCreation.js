@@ -80,6 +80,7 @@ const tableCreation = (
         tableInfo[action.property] = {
             value: action.value,
             validationError: action.validationError,
+            pendingValidationError: action.pendingValidationError,
             edited: fieldInfo.edited || action.isUserEdit
         };
 

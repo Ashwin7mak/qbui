@@ -1,4 +1,4 @@
-import ReNotificationManager, {NOTIFICATION_MESSAGE_DISMISS_TIME, NOTIFICATION_MESSAGE_FAIL_DISMISS_TIME, __RewireAPI__ as NotificationManagerRewireAPI} from '../../src/scripts/notificationManager';
+import ReNotificationManager, {NOTIFICATION_MESSAGE_DISMISS_TIME, NOTIFICATION_MESSAGE_FAIL_DISMISS_TIME, __RewireAPI__ as NotificationManagerRewireAPI} from 'REUSE/scripts/notificationManager';
 import {NotificationManager} from 'react-notifications';
 
 const testMessage = 'test message';

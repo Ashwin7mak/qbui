@@ -160,7 +160,7 @@ describe('CheckBoxFieldValueEditor', () => {
         let domComponent = ReactDOM.findDOMNode(component).querySelector('label');
 
         Simulate.click(domComponent);
-        expect(component.state.value).toBe(false);
+        expect(component.state.value).toBe(true);
     });
 
     it('cannot be edited when the checkbox is read only', () => {

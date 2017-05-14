@@ -1,11 +1,12 @@
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
 import Fluxxor from 'fluxxor';
-import ReportRoute, {__RewireAPI__ as ReportRouteRewireAPI}  from '../../src/components/report/reportRoute';
+import {ReportRoute, __RewireAPI__ as ReportRouteRewireAPI}  from '../../src/components/report/reportRoute';
 import FacetSelections  from '../../src/components/facet/facetSelections';
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import {Provider} from "react-redux";
+import ReportSaveOrCancelFooter from '../../src/components/reportBuilder/reportSaveOrCancelFooter';
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
@@ -19,6 +20,19 @@ describe('ReportRoute functions', () => {
             return {};
         }
     });
+
+    let props = {
+        clearSearchInput: () => {},
+        loadFields: (app, tbl) => {},
+        loadReport: (context, appId, tblId, rptId, format, offset, rows) => {},
+        loadDynamicReport: (context, appId, tblId, rptId, format, filter, queryParams) => {},
+        reportBuilder: {
+            inBuilderMode: true,
+            isCollapsed: true,
+            addBeforeColumn: null,
+            availableColumns: []
+        }
+    };
 
     let appId = 1;
     let tblId = 2;
@@ -53,16 +67,40 @@ describe('ReportRoute functions', () => {
         }
     });
 
+    class mockReportFieldSelectMenu extends React.Component {
+        render() {
+            return <div />;
+        }
+    }
+
+    class mockReportSaveOrCancelFooter extends React.Component {
+        render() {
+            return <div />;
+        }
+    }
+
     beforeEach(() => {
         spyOn(flux.actions, 'selectTableId');
+        spyOn(props, 'clearSearchInput');
+        spyOn(props, 'loadFields');
+        spyOn(props, 'loadReport');
+        spyOn(props, 'loadDynamicReport');
         ReportRouteRewireAPI.__Rewire__('Stage', StageMock);
         ReportRouteRewireAPI.__Rewire__('ReportToolsAndContent', ReportToolsAndContentMock);
+        ReportRouteRewireAPI.__Rewire__('ReportFieldSelectMenu', mockReportFieldSelectMenu);
+        ReportRouteRewireAPI.__Rewire__('ReportSaveOrCancelFooter', mockReportSaveOrCancelFooter);
     });
 
     afterEach(() => {
         flux.actions.selectTableId.calls.reset();
+        props.clearSearchInput.calls.reset();
+        props.loadFields.calls.reset();
+        props.loadReport.calls.reset();
+        props.loadDynamicReport.calls.reset();
         ReportRouteRewireAPI.__ResetDependency__('Stage');
         ReportRouteRewireAPI.__ResetDependency__('ReportToolsAndContent');
+        ReportRouteRewireAPI.__ResetDependency__('ReportFieldSelectMenu');
+        ReportRouteRewireAPI.__ResetDependency__('ReportSaveOrCancelFooter');
     });
 
     it('test render of component with url params', () => {
@@ -71,69 +109,52 @@ describe('ReportRoute functions', () => {
 
         component = TestUtils.renderIntoDocument(
             <Provider store={store}>
-                <ReportRoute match={routeParams} reportData={reportDataParams.reportData} flux={flux} pendEdits={pendEdits}/>
+                <ReportRoute {...props} match={routeParams} reportData={reportDataParams.reportData} flux={flux} pendEdits={pendEdits}/>
             </Provider>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
     });
 
     describe('loadReport', () => {
-        let loadReport = null;
         let initialState = {};
         let store = null;
         beforeEach(() => {
-            loadReport = jasmine.createSpy('loadReport').and.callFake(() => {
-                return {type: 'fake'};
-            });
-            ReportRouteRewireAPI.__Rewire__('loadReport', loadReport);
-
             store = mockStore(initialState);
-        });
-
-        afterEach(() => {
-            ReportRouteRewireAPI.__ResetDependency__('loadReport');
         });
 
         it('loadReport is called with app data', () => {
             component = TestUtils.renderIntoDocument(
                 <Provider store={store}>
-                    <ReportRoute match={routeParams} reportData={reportDataParams.reportData} flux={flux} pendEdits={pendEdits}/>
+                    <ReportRoute {...props} match={routeParams} reportData={reportDataParams.reportData} flux={flux} pendEdits={pendEdits}/>
                 </Provider>);
-            expect(loadReport).toHaveBeenCalledWith(
-                jasmine.any(String),
-                appId,
-                tblId,
-                rptId,
-                true,
-                offset,
-                numRows
-            );
+            expect(props.loadReport).toHaveBeenCalledWith(jasmine.any(String), appId, tblId, rptId, true, offset, numRows);
+
         });
 
         it('loadReport is not called when appId is missing', () => {
             const missingRouteParams = Object.assign({}, routeParams, {params: {appId: null}});
             component = TestUtils.renderIntoDocument(
                 <Provider store={store}>
-                    <ReportRoute match={missingRouteParams} reportData={reportDataParams.reportData} flux={flux} pendEdits={pendEdits}/>
+                    <ReportRoute {...props} match={missingRouteParams} reportData={reportDataParams.reportData} flux={flux} pendEdits={pendEdits}/>
                 </Provider>);
-            expect(loadReport).not.toHaveBeenCalled();
+            expect(props.loadReport).not.toHaveBeenCalled();
         });
 
         it('loadReport is not called when tblId is missing', () => {
             const missingRouteParams = Object.assign({}, routeParams, {params: {tblId: null}});
             component = TestUtils.renderIntoDocument(
                 <Provider store={store}>
-                    <ReportRoute match={missingRouteParams} reportData={reportDataParams.reportData} flux={flux} pendEdits={pendEdits}/>
+                    <ReportRoute {...props} match={missingRouteParams} reportData={reportDataParams.reportData} flux={flux} pendEdits={pendEdits}/>
                 </Provider>);
-            expect(loadReport).not.toHaveBeenCalled();
+            expect(props.loadReport).not.toHaveBeenCalled();
         });
 
         it('loadReport is not called when rptId is missing', () => {
             const missingRouteParams = Object.assign({}, routeParams, {params: {rptId: null}});
             component = TestUtils.renderIntoDocument(
                 <Provider store={store}>
-                    <ReportRoute match={missingRouteParams} reportData={reportDataParams.reportData} flux={flux} pendEdits={pendEdits}/>
+                    <ReportRoute {...props} match={missingRouteParams} reportData={reportDataParams.reportData} flux={flux} pendEdits={pendEdits}/>
                 </Provider>);
-            expect(loadReport).not.toHaveBeenCalled();
+            expect(props.loadReport).not.toHaveBeenCalled();
         });
     });
 });

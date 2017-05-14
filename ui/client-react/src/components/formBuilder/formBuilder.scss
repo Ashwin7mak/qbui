@@ -37,10 +37,6 @@
         z-index: 1;
         transition: opacity 0.5s;
 
-        /* When in builder mode we need to push out the
-        left padding to make room for the editing tools */
-        margin-left: $spacing-tiny;
-
         .draggableFieldWrapper {
             width: 310px;
             height: 100%;
@@ -49,65 +45,20 @@
                 width: 100%;
             }
 
-            &:hover {
-                transition: background-color 0.5s ease;
-                background-color: $color-black-250;
-
-                .fieldEditingTools {
-                    opacity: 1;
-                    .dragHandle {
-                        opacity: 1;
-                    }
-                    .qbIcon {
-                        opacity: 1;
-                    }
-                }
-
-                @include small-breakpoint {
-                    background: none;
-                }
-            }
-
-            &:active {
-                @include dragpreview-active-gradient;
-                .fieldEditingTools {
-                    opacity: 0;
-                }
-            }
-
             .formElement .fieldLabel {
-                padding-top: 12px;
-                padding-left: 15px;
+                padding-top: 7px;
+                padding-left: 12px;
             }
 
             .cellWrapper {
-                padding-left: 15px;
+                padding-left: 12px;
             }
-
-            &.selectedFormElement {
-                transition: background-color 0.5s ease;
-                &:hover {
-                    background: $color-cyan-300;
+            &:active {
+                .formElement .fieldLabel {
+                    opacity: 0;
                 }
-                background-color: $color-cyan-300;
-                z-index: -1 !important;
-
-                .dragHandle {
-                    opacity: 1;
-                }
-
-                .deleteFieldIcon {
-                    .qbIcon {
-                        opacity: 1;
-                        color: $color-red-700;
-                    }
-                }
-
-                .fieldPreferencesIcon {
-                    .qbIcon {
-                        opacity: 1;
-                        color: $color-cyan-700;
-                    }
+                .cellWrapper {
+                    opacity: 0;
                 }
             }
         }
@@ -118,8 +69,15 @@
     }
 
     .dragging {
+        max-height: 170px;
         opacity: 0.9;
         transition: opacity 0.5s;
+        .cellWrapper {
+            opacity: 0;
+        }
+        .field {
+            opacity: 0;
+        }
     }
 
     /**
@@ -129,4 +87,9 @@
     .elementCache {
         display: none;
     }
+
+    .field {
+        padding-bottom: 12px;
+    }
 }
+

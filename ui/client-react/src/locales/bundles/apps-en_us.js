@@ -12,11 +12,12 @@ export default {
             testMsg: "test"
         },
         apps: {
-            header: "Apps"
+            header: "Apps",
+            missing: "Stay tuned, my apps is coming soon"
         },
         app: {
             homepage: {
-                welcomeTitle: "Welcome to Mercury Beta",
+                welcomeTitle: "Welcome to",
                 welcomeText: "While you learn your way around, use this area in place of your app homepage. " +
                 "This is your real app in Mercury. You won’t see your app homepage yet, but all your " +
                 "data is here. Work you do here displays immediately in Classic view, too.",
@@ -35,12 +36,26 @@ export default {
                 helpLinkPreText: "Please ",
                 helpLinkText: "contact our Care team"
             },
+            dashboards: {
+                missing: "Stay tuned, app dashboards are coming soon"
+            },
             settings: "Settings",
             users: {
                 addUser: "Adding a new user is not available yet",
                 users: "Users",
                 content: "This is the list of all the people who have been added to your application. You can get some quick insights about how many people are in each role in your application as well as find a specific person in the list and email them.",
-                manager: "Application Manager"
+                manager: "Application Manager",
+                removeUser: "Remove this user?",
+                unassignUser: "Users will no longer be able to access this application. Any data they have previously entered will remain in the application.",
+                deleteUser: "Remove {value} user",
+                deleteUsers: "Remove {value} users",
+                removeButton: "Remove",
+                cancel: "Cancel",
+                singular: "user",
+                plural: "users",
+                usersRemoved: " users have been removed",
+                userRemoved: " user has been removed"
+
             }
         },
         appMenu: {
@@ -110,7 +125,11 @@ export default {
             new: "New",
             apply: "Apply",
             backToApp: "Back to app",
-            reset: "Reset"
+            reset: "Reset",
+            closeRecord: "Close record",
+            expandSection: "Expand section",
+            collapseSection: "Collapse section"
+
         },
         field: {
             search: "Search",
@@ -175,7 +194,11 @@ export default {
                     "de-de": "German"
                 },
                 preferences: "Preferences",
-                sign_out: "Sign out"
+                sign_out: "Sign out",
+                feedbackMenuButton: "Give feedback",
+                feedbackMenuTitle: "Feedback",
+                reportFeedBackButton: "Report an issue",
+                feedbackTooltip: "Share ideas and issues"
             }
         },
         fields: {
@@ -330,6 +353,10 @@ export default {
                 newTable: "New table based on this column",
                 columnProps: "Column properties",
                 fieldProps: "Field properties"
+            },
+            drawer: {
+                title: "Hidden fields",
+                info: "Add a field to the report",
             }
         },
         errorMessagePopup: {
@@ -474,7 +501,7 @@ export default {
             emails: "Format all the addresses like name@domain.com",
             maxChars: "Use up to {maxNum} characters",
             choiceMaxLength : "Select a choice with {maxNum} characters or less",
-            phone: "Format the {fieldName} like (xxx) xxx-xxxx",
+            phone: "Enter a genuine number for {fieldName}",
             phoneInvalidCountryCode: "Format the country code like +x for international numbers",
             duration: {
                 timeFormat: "Format the {fieldName} in {value}",
@@ -497,7 +524,10 @@ export default {
             print: "Printing is not available yet",
             copy: "Copying is not available yet",
             email: "Emailing is not available yet",
-            delete: "Deleting is not available yet"
+            delete: "Deleting is not available yet",
+            emailUsers: "Exporting CSV is not available yet",
+            settingsRole: "Changing role is not available yet",
+            emailApp: "Sending app invite is not available yet",
         },
         pageTitles: {
             pageTitleSeparator: " - ",
@@ -509,6 +539,7 @@ export default {
         quickBaseClassic: "QuickBase Classic",
         quickBaseMercury: "QuickBase Mercury",
         missingWalkMe: "Tutorial is not available",
+        missingHelp: "Help is not available yet",
         fieldsDefaultLabels: {
             [FieldFormats.TEXT_FORMAT]: "Text",
             [FieldFormats.MULTI_LINE_TEXT_FORMAT]: "Long text",
@@ -583,11 +614,18 @@ export default {
                 }
             },
             fieldGroups: {
-                text: 'Text',
-                numeric: 'Number',
-                date: 'Date',
-                other: 'Other'
-            }
+                text: "Text",
+                numeric: "Number",
+                date: "Date",
+                other: "Other",
+                relationships: "Relationships"
+            },
+            defaultMultichoiceOptions: {
+                first: "Option 1",
+                second: "Option 2",
+                third: "Option 3"
+            },
+            modify: 'Modify form'
         },
         featureSwitchAdmin: {
             defaultFeatureName: "Feature",
@@ -673,6 +711,9 @@ export default {
             formsHeader: "Form",
             tableSettings: 'Table properties & settings',
             configureFormBuilder: 'Modify this form',
+            reportsHeader: 'Report',
+            configureReportBuilder: 'Modify this report'
+
         },
         tableEdit: {
             tableUpdateFailed: "Failed to update table",

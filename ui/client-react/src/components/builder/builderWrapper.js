@@ -1,7 +1,6 @@
 import React, {PropTypes} from 'react';
 import {NotificationContainer} from "react-notifications";
 import {withRouter, Switch} from 'react-router-dom';
-import FormBuilderContainer from './formBuilderContainer';
 import Fluxxor from "fluxxor";
 import {connect} from 'react-redux';
 import commonNavActions from '../../../../reuse/client/src/components/sideNavs/commonNavActions';
@@ -11,6 +10,7 @@ import RouteWithSubRoutes from "../../scripts/RouteWithSubRoutes";
 import TopNav from '../../../../reuse/client/src/components/topNav/topNav';
 import * as tabIndexConstants from '../formBuilder/tabindexConstants';
 import TableReadyDialog from '../table/tableReadyDialog';
+import Locale from '../../locales/locales';
 let FluxMixin = Fluxxor.FluxMixin(React);
 let StoreWatchMixin = Fluxxor.StoreWatchMixin;
 
@@ -47,10 +47,12 @@ export const BuilderWrapper = React.createClass({
     },
 
     render() {
+        let title = `${Locale.getMessage('builder.modify')}`;
         return (
             <div className="builderWrapperContent">
                 <NotificationContainer/>
                 <TopNav
+                    title={title}
                     onNavClick={this.props.toggleNav}
                     globalActions={this.getTopGlobalActions()}
                     tabIndex={tabIndexConstants.FORM_BUILDER_TOGGLE_NAV_BUTTON_TABINDEX}

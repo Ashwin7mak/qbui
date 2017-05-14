@@ -3,10 +3,10 @@ import {PropTypes} from 'react';
 import Modal from 'react-bootstrap/lib/Modal';
 import Button from 'react-bootstrap/lib/Button';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
-import Icon from '../icon/icon';
+import Icon from 'REUSE/components/icon/icon';
 import Loader from 'react-loader';
-import {I18nMessage} from '../../utils/i18nMessage';
-import Locale from '../../locales/locale';
+import {I18nMessage} from 'REUSE/utils/i18nMessage';
+import Locale from 'REUSE/locales/locale';
 
 import './multiStepDialog.scss';
 

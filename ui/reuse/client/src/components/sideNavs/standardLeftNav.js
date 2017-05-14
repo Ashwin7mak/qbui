@@ -2,19 +2,18 @@ import React, {PropTypes, Component} from 'react';
 import Button from 'react-bootstrap/lib/Button';
 import Loader from 'react-loader';
 import FlipMove from 'react-flip-move';
-import SideMenuBase from '../sideMenuBase/sideMenuBase';
-import TableIcon from '../icon/icon';
-import Icon from '../icon/icon';
-import Tooltip from '../tooltip/tooltip';
-import SimpleNavItem from '../simpleNavItem/simpleNavItem';
+import SideMenuBase from 'REUSE/components/sideMenuBase/sideMenuBase';
+import Icon from 'REUSE/components/icon/icon';
+import Tooltip from 'REUSE/components/tooltip/tooltip';
+import SimpleNavItem from 'REUSE/components/simpleNavItem/simpleNavItem';
 
 // CLIENT REACT IMPORTS
-import {LEFT_NAV_BAR} from '../../../../../client-react/src/constants/spinnerConfigurations';
-import Breakpoints from '../../../../../client-react/src/utils/breakpoints';
+import {LEFT_NAV_BAR} from 'APP/constants/spinnerConfigurations';
+import Breakpoints from 'APP/utils/breakpoints';
 // CLIENT REACT IMPORTS
 
-import QbLogoImage from '../../assets/images/QB-logo.svg';
-import LogoImg from '../../assets/images/QB3-logo.svg';
+import QbLogoImage from 'REUSE/assets/images/QB-logo.svg';
+import LogoImg from 'REUSE/assets/images/QB3-logo.svg';
 import './standardLeftNav.scss';
 
 /**

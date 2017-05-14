@@ -2,6 +2,9 @@ import React from 'react';
 import TestUtils from 'react-addons-test-utils';
 import ReactDOM from 'react-dom';
 import {CardViewListHolder, __RewireAPI__ as CardViewListHolderdRewireAPI} from '../../src/components/dataTable/cardView/cardViewListHolder';
+import {EDIT_RECORD_KEY} from '../../src/constants/urlConstants';
+
+let component;
 
 const fakeReportData_loading = {
     loading: true
@@ -79,13 +82,6 @@ const fakeReportData_valid = {
     }
 };
 
-let flux = {
-    actions: {
-        selectedRows: function() {
-            return;
-        }
-    }
-};
 
 const CardViewListMock = React.createClass({
     render: function() {
@@ -109,8 +105,6 @@ const CardViewListMock = React.createClass({
 describe('CardViewListHolder functions', () => {
     'use strict';
 
-    let component;
-
     beforeEach(() => {
         CardViewListHolderdRewireAPI.__Rewire__('CardViewList', CardViewListMock);
     });
@@ -120,7 +114,7 @@ describe('CardViewListHolder functions', () => {
     });
 
     it('test render of loading component', () => {
-        component = TestUtils.renderIntoDocument(<CardViewListHolder flux={flux} selectedRows={[]} primaryKeyName="col_num" reportData={fakeReportData_loading}/>);
+        component = TestUtils.renderIntoDocument(<CardViewListHolder selectedRows={[]} primaryKeyName="col_num" reportData={fakeReportData_loading}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 
         let cards = TestUtils.scryRenderedDOMComponentsWithClass(component, "cardViewList");
@@ -128,7 +122,7 @@ describe('CardViewListHolder functions', () => {
     });
 
     it('test render of empty component', () => {
-        component = TestUtils.renderIntoDocument(<CardViewListHolder flux={flux} selectedRows={[]} primaryKeyName="col_num" reportData={fakeReportData_empty} noRowsUI={true}/>);
+        component = TestUtils.renderIntoDocument(<CardViewListHolder selectedRows={[]} primaryKeyName="col_num" reportData={fakeReportData_empty} noRowsUI={true}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 
         let cards = TestUtils.scryRenderedDOMComponentsWithClass(component, "cardViewList");
@@ -142,7 +136,7 @@ describe('CardViewListHolder functions', () => {
     });
 
     it('test render of empty component with search string', () => {
-        component = TestUtils.renderIntoDocument(<CardViewListHolder flux={flux} selectedRows={[]} primaryKeyName="col_num" reportData={fakeReportData_empty} searchString="xxx" noRowsUI={true}/>);
+        component = TestUtils.renderIntoDocument(<CardViewListHolder selectedRows={[]} primaryKeyName="col_num" reportData={fakeReportData_empty} searchString="xxx" noRowsUI={true}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 
         let cards = TestUtils.scryRenderedDOMComponentsWithClass(component, "cardViewList");
@@ -167,7 +161,7 @@ describe('CardViewListHolder functions', () => {
                 };
             },
             render() {
-                return <CardViewListHolder flux={flux} selectedRows={[]} ref="cardViewListholder" reportData={fakeReportData_valid}
+                return <CardViewListHolder selectedRows={[]} ref="cardViewListholder" reportData={fakeReportData_valid}
                                            primaryKeyName="col_num"/>;
             }
         }));
@@ -185,8 +179,7 @@ describe('CardViewListHolder functions', () => {
     });
 
     it('test render of first paginated page, fetch more button only', () => {
-        component = TestUtils.renderIntoDocument(<CardViewListHolder flux={flux}
-                                                                     selectedRows={[]}
+        component = TestUtils.renderIntoDocument(<CardViewListHolder selectedRows={[]}
                                                                      primaryKeyName="col_num"
                                                                      reportData={fakeReportData_fetchMoreOnly.reportData}
                                                                      pageEnd={fakeReportData_fetchMoreOnly.pageEnd}
@@ -197,8 +190,7 @@ describe('CardViewListHolder functions', () => {
     });
 
     it('test render of last paginated page, fetch previous button only', () => {
-        component = TestUtils.renderIntoDocument(<CardViewListHolder flux={flux}
-                                                                     selectedRows={[]}
+        component = TestUtils.renderIntoDocument(<CardViewListHolder selectedRows={[]}
                                                                      primaryKeyName="col_num"
                                                                      reportData={fakeReportData_fetchPreviousOnly.reportData}
                                                                      pageEnd={fakeReportData_fetchPreviousOnly.pageEnd}
@@ -210,8 +202,7 @@ describe('CardViewListHolder functions', () => {
 
 
     it('test render of second paginated page, next and previous button to be rendered', () => {
-        component = TestUtils.renderIntoDocument(<CardViewListHolder flux={flux}
-                                                                     selectedRows={[]}
+        component = TestUtils.renderIntoDocument(<CardViewListHolder selectedRows={[]}
                                                                      primaryKeyName="col_num"
                                                                      reportData={fakeReportData_fetchMoreAndPrevious.reportData}
                                                                      pageEnd={fakeReportData_fetchMoreAndPrevious.pageEnd}
@@ -228,8 +219,7 @@ describe('CardViewListHolder functions', () => {
 
 
     it('test fetch more and fetch previous buttons are NOT generated', () => {
-        component = TestUtils.renderIntoDocument(<CardViewListHolder flux={flux}
-                                                                     selectedRows={[]}
+        component = TestUtils.renderIntoDocument(<CardViewListHolder selectedRows={[]}
                                                                      primaryKeyName="col_num"
                                                                      reportData={fakeReportData_noNagivationButtons.reportData}
                                                                      pageStart={fakeReportData_noNagivationButtons.pageStart}
@@ -245,11 +235,16 @@ describe('CardViewListHolder functions', () => {
     });
 
     it('test selectrow callback', () => {
-        spyOn(flux.actions, 'selectedRows');
+        const props = {selectedRows: [],
+            ref:"cardViewListholder",
+            reportData:{fakeReportData_valid},
+            primaryKeyName:"col_num",
+            selectRows: () => {}
+        };
+        spyOn(props, "selectRows");
         var TestParent = React.createFactory(React.createClass({
             render() {
-                return <CardViewListHolder flux={flux} selectedRows={[]} ref="cardViewListholder" reportData={fakeReportData_valid}
-                                           primaryKeyName="col_num"/>;
+                return <CardViewListHolder {...props}/>;
             }
         }));
         var parent = TestUtils.renderIntoDocument(TestParent());
@@ -258,16 +253,21 @@ describe('CardViewListHolder functions', () => {
         expect(TestUtils.isCompositeComponent(cardlist)).toBeTruthy();
 
         cardlist.simulateSwipeRightForSelection();
-        expect(flux.actions.selectedRows).toHaveBeenCalled();
-        flux.actions.selectedRows.calls.reset();
+        expect(props.selectRows).toHaveBeenCalled();
+        props.selectRows.calls.reset();
     });
 
     it('test unselectrow callback', () => {
-        spyOn(flux.actions, 'selectedRows');
+        const props = {selectedRows: [],
+            ref:"cardViewListholder",
+            reportData:{fakeReportData_valid},
+            primaryKeyName:"col_num",
+            selectRows: () => {}
+        };
+        spyOn(props, "selectRows");
         var TestParent = React.createFactory(React.createClass({
             render() {
-                return <CardViewListHolder flux={flux} selectedRows={[]} ref="cardViewListholder" reportData={fakeReportData_valid}
-                                           primaryKeyName="col_num"/>;
+                return <CardViewListHolder {...props}/>;
             }
         }));
         var parent = TestUtils.renderIntoDocument(TestParent());
@@ -276,8 +276,8 @@ describe('CardViewListHolder functions', () => {
         expect(TestUtils.isCompositeComponent(cardlist)).toBeTruthy();
 
         cardlist.simulateSwipeLeftInSelection();
-        expect(flux.actions.selectedRows).toHaveBeenCalled();
-        flux.actions.selectedRows.calls.reset();
+        expect(props.selectRows).toHaveBeenCalled();
+        props.selectRows.calls.reset();
     });
 
     it('test rowClick callback', () => {
@@ -305,7 +305,7 @@ describe('CardViewListHolder functions', () => {
                 onRowClicked = true;
             },
             render() {
-                return <CardViewListHolder flux={flux} selectedRows={[]} ref="cardViewListholder" reportData={fakeReportData_valid}
+                return <CardViewListHolder selectedRows={[]} ref="cardViewListholder" reportData={fakeReportData_valid}
                                            primaryKeyName="col_num" onRowClicked={this.onRowClicked}/>;
             }
         }));
@@ -316,5 +316,70 @@ describe('CardViewListHolder functions', () => {
 
         cardlist.simulateClick();
         expect(onRowClicked).toBe(true);
+    });
+
+    // This function is unit tested directly because it is passed down to a child component rather than rendered in this component
+    describe('openRecordForEdit', () => {
+        const mockWindowLocationUtils = {pushWithQuery() {}};
+        const mockParentMethods = {openRecord() {}};
+
+        beforeEach(() => {
+            spyOn(mockWindowLocationUtils, 'pushWithQuery');
+            spyOn(mockParentMethods, 'openRecord');
+
+            CardViewListHolderdRewireAPI.__Rewire__('WindowLocationUtils', mockWindowLocationUtils);
+
+            component = TestUtils.renderIntoDocument(<CardViewListHolder reportData={{}} openRecord={mockParentMethods.openRecord} />);
+        });
+
+        afterEach(() => {
+            CardViewListHolderdRewireAPI.__ResetDependency__('WindowLocationUtils');
+        });
+
+        it('does not navigate if a record id is not provided', () => {
+            component.openRecordForEdit();
+
+            expect(mockWindowLocationUtils.pushWithQuery).not.toHaveBeenCalled();
+            expect(mockParentMethods.openRecord).not.toHaveBeenCalled();
+        });
+
+        it('returns undefined if the record is not in the array of records for the report', () => {
+            component.openRecordForEdit(2);
+
+            expect(mockWindowLocationUtils.pushWithQuery).not.toHaveBeenCalled();
+            expect(mockParentMethods.openRecord).not.toHaveBeenCalled();
+        });
+
+        it('navigates to the record if present in the data and invokes the openRecord callback', () => {
+            spyOn(component, 'getReport').and.returnValue({data: {keyField: {name: 'Record ID#'}}});
+            spyOn(component, 'getRecordsArray').and.returnValue([{'Record ID#': {value: 1}}]);
+
+            component.openRecordForEdit(1);
+
+            expect(mockWindowLocationUtils.pushWithQuery).toHaveBeenCalledWith(EDIT_RECORD_KEY, 1);
+            expect(mockParentMethods.openRecord).toHaveBeenCalledWith(1, null, null);
+        });
+    });
+
+    // This function is unit tested directly because it is passed down to a child component rather than rendered in this component
+    describe('isRowSelected', () => {
+        it('returns true if the row is in the list of selected rows', () => {
+            component = TestUtils.renderIntoDocument(<CardViewListHolder selectedRows={[1, 2]} reportData={{}}/>);
+
+            expect(component.isRowSelected(1)).toEqual(true);
+        });
+
+        it('returns false if the row is in the list of selected rows', () => {
+            component = TestUtils.renderIntoDocument(<CardViewListHolder selectedRows={[1, 2]} reportData={{}}/>);
+
+            expect(component.isRowSelected(3)).toEqual(false);
+        });
+
+        it('returns false if selectedRows is null', () => {
+            component = TestUtils.renderIntoDocument(<CardViewListHolder selectedRows={null} reportData={{}}/>);
+
+            expect(component.isRowSelected(1)).toEqual(false);
+        });
+
     });
 });

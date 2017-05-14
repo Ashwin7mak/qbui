@@ -25,6 +25,12 @@ describe('TableHomePageRoute functions', () => {
         clearSearchInput: () => {},
         loadFields: (app, tbl) => {},
         loadTableHomePage: () => {},
+        reportBuilder: {
+            inBuilderMode: true,
+            isCollapsed: true,
+            addBeforeColumn: null,
+            availableColumns: []
+        },
         match: {
             params: {
                 appId: 1,
@@ -65,7 +71,13 @@ describe('TableHomePageRoute functions', () => {
 
     class mockReportToolsAndContent extends React.Component {
         render() {
-            return <div></div>;
+            return <div />;
+        }
+    }
+
+    class mockReportFieldSelectMenu extends React.Component {
+        render() {
+            return <div />;
         }
     }
 
@@ -76,6 +88,7 @@ describe('TableHomePageRoute functions', () => {
         spyOn(props, 'loadFields');
         spyOn(props, 'loadTableHomePage');
         TableHomePageRewireAPI.__Rewire__('ReportToolsAndContent', mockReportToolsAndContent);
+        TableHomePageRewireAPI.__Rewire__('ReportFieldSelectMenu', mockReportFieldSelectMenu);
     });
 
     afterEach(() => {
@@ -85,6 +98,7 @@ describe('TableHomePageRoute functions', () => {
         props.loadFields.calls.reset();
         props.loadTableHomePage.calls.reset();
         TableHomePageRewireAPI.__ResetDependency__('ReportToolsAndContent');
+        TableHomePageRewireAPI.__ResetDependency__('ReportFieldSelectMenu');
     });
 
     const initialState = {};

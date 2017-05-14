@@ -7,6 +7,7 @@ import TopNav from "../header/topNav";
 import TempMainErrorMessages from './tempMainErrorMessages';
 import ReportManagerTrowser from "../report/reportManagerTrowser";
 import RecordTrowser from "../record/recordTrowser";
+import {enterBuilderMode} from '../../../src/actions/reportActions';
 
 import GlobalActions from "../actions/globalActions";
 import BuilderDropDownAction from '../actions/builderDropDownAction';
@@ -14,7 +15,6 @@ import Breakpoints from "../../utils/breakpoints";
 import {NotificationContainer} from "react-notifications";
 import {withRouter, Switch} from 'react-router-dom';
 import _ from 'lodash';
-
 import * as TrowserConsts from "../../constants/trowserConstants";
 import * as UrlConsts from "../../constants/urlConstants";
 import * as SchemaConsts from "../../constants/schema";
@@ -55,7 +55,7 @@ import "./nav.scss";
 import "react-notifications/lib/notifications.css";
 import "../../assets/css/animate.min.css";
 import RouteWithSubRoutes from "../../scripts/RouteWithSubRoutes";
-
+import {getPendEdits} from '../../reducers/record';
 const OPEN_NAV = true;
 const CLOSE_NAV = false;
 const OPEN_APPS_LIST = true;
@@ -107,6 +107,11 @@ export const Nav = React.createClass({
         this.props.history.push(link);
     },
 
+    navigateToBuilderReport() {
+        this.props.enterBuilderMode(CONTEXT.REPORT.NAV);
+
+    },
+
     getTopGlobalActions() {
         const actions = [];
         let selectedApp = this.getSelectedApp();
@@ -123,6 +128,7 @@ export const Nav = React.createClass({
                                dropdownMsg="globalActions.user"
                                startTabIndex={4}
                                app={selectedApp}>
+
                     {isAdmin ?
                         <BuilderDropDownAction
                             history={this.props.history}
@@ -133,7 +139,9 @@ export const Nav = React.createClass({
                             position={"top"}
                             icon="settings"
                             navigateToBuilder={this.navigateToBuilder}
-                            startTabIndex={4}/> : null}
+                            navigateToBuilderReport={this.navigateToBuilderReport}
+                            startTabIndex={4}
+                            rptId={this.getReportsData().rptId} /> : null}
                 </GlobalActions>
             )} />
         );
@@ -151,7 +159,7 @@ export const Nav = React.createClass({
                                dropdownMsg="globalActions.user"
                                startTabIndex={100}
                                position="left">
-                </GlobalActions>);
+        </GlobalActions>);
     },
 
     onSelectTableReports(tableId) {
@@ -226,7 +234,7 @@ export const Nav = React.createClass({
     },
 
     getEditFormFromProps() {
-        return _.has(this.props, "forms") && _.find(this.props.forms, form => form.id === "edit");
+        return _.get(this.props, "forms.edit");
     },
 
     /**
@@ -276,6 +284,7 @@ export const Nav = React.createClass({
         });
         return report || {};
     },
+
     /**
      *  Fetch the report list content.
      */
@@ -287,11 +296,13 @@ export const Nav = React.createClass({
     },
 
     getPendEdits() {
-        // only one record should have the pendEdits , so return that
-        const recordCurrentlyEdited = _.find(this.props.record, rec=>rec.pendEdits);
-        return recordCurrentlyEdited ? recordCurrentlyEdited.pendEdits : {};
+        return getPendEdits(this.props.record);
     },
 
+/*
+    // Commenting out this function to render the top nav items in the center.
+    // These items weren't enabled yet and were simply placeholders. We will need
+    // to put some of them back so, leaving the code here for now.
     getCenterGlobalActions() {
         return (
             <ButtonGroup className="navItem">
@@ -307,6 +318,7 @@ export const Nav = React.createClass({
             </ButtonGroup>
         );
     },
+*/
 
     render() {
         if (!this.state.apps || this.state.apps.apps === null) {
@@ -323,6 +335,7 @@ export const Nav = React.createClass({
         if (this.props.shell.leftNavVisible) {
             classes += " leftNavOpen";
         }
+        const hasEditQuery = _.get(this.props, `location.query.${UrlConsts.EDIT_RECORD_KEY}`);
         let editRecordId = _.has(this.props, "location.query") ? this.props.location.query[UrlConsts.EDIT_RECORD_KEY] : null;
         let editRecordIdForPageTitle = editRecordId;
 
@@ -344,37 +357,39 @@ export const Nav = React.createClass({
                 selectedRecordId={viewingRecordId}
             />
 
-            <Analytics dataset={Config.evergageDataset} />
+            <Analytics dataset={Config.evergageDataset} app={this.getSelectedApp()} />
 
             <NotificationContainer/>
 
             {/* AppQbModal is an app-wide modal that can be called from non-react classes*/}
             <AppQbModal/>
 
+            {/* show the trowser only when we have a editRec query param*/}
             {this.props.match.params && this.props.match.params.appId &&
-                <RecordTrowser visible={this.props.shell.trowserOpen && this.props.shell.trowserContent === TrowserConsts.TROWSER_EDIT_RECORD}
-                               history={this.props.history}
-                               editForm={this.getEditFormFromProps()}
-                               appId={this.props.match.params.appId}
-                               tblId={this.props.match.params.tblId}
-                               recId={editRecordId}
-                               viewingRecordId={viewingRecordId}
-                               pendEdits={pendEdits}
-                               appUsers={this.state.apps.appUsers}
-                               selectedApp={this.getSelectedApp()}
-                               selectedTable={this.getSelectedTable(reportsData.tblId)}
-                               reportData={reportsData}
-                               errorPopupHidden={this.props.shell.errorPopupHidden}
-                               onHideTrowser={this.hideTrowser}/>
+            <RecordTrowser
+                visible={this.props.shell.trowserOpen && this.props.shell.trowserContent === TrowserConsts.TROWSER_EDIT_RECORD && hasEditQuery}
+                           history={this.props.history}
+                           editForm={this.getEditFormFromProps()}
+                           appId={this.props.match.params.appId}
+                           tblId={this.props.match.params.tblId}
+                           recId={editRecordId}
+                           viewingRecordId={viewingRecordId}
+                           pendEdits={pendEdits}
+                           appUsers={this.state.apps.appUsers}
+                           selectedApp={this.getSelectedApp()}
+                           selectedTable={this.getSelectedTable(reportsData.tblId)}
+                           reportData={reportsData}
+                           errorPopupHidden={this.props.shell.errorPopupHidden}
+                           onHideTrowser={this.hideTrowser}/>
             }
 
             {this.props.match.params && this.props.match.params.appId &&
-                <ReportManagerTrowser visible={this.props.shell.trowserOpen && this.props.shell.trowserContent === TrowserConsts.TROWSER_REPORTS}
-                                      history={this.props.history}
-                                      selectedTable={this.getSelectedTable(reportsList.tblId)}
-                                      filterReportsName={this.state.nav.filterReportsName}
-                                      reportsData={reportsList}
-                                      onHideTrowser={this.hideTrowser}/>
+            <ReportManagerTrowser visible={this.props.shell.trowserOpen && this.props.shell.trowserContent === TrowserConsts.TROWSER_REPORTS}
+                                  history={this.props.history}
+                                  selectedTable={this.getSelectedTable(reportsList.tblId)}
+                                  filterReportsName={this.state.nav.filterReportsName}
+                                  reportsData={reportsList}
+                                  onHideTrowser={this.hideTrowser}/>
             }
 
             <LeftNav
@@ -394,48 +409,51 @@ export const Nav = React.createClass({
 
             <div className="main" >
                 <TopNav title={this.state.nav.topTitle}
-                        centerGlobalActions={this.getCenterGlobalActions()}
+                        // centerGlobalActions={this.getCenterGlobalActions()} // commented out placeholders for now. See comments by getCenterGlobalActions()
                         globalActions={this.getTopGlobalActions()}
                         onNavClick={this.toggleNav}
                         showOnSmall={this.state.nav.showTopNav}
                 />
                 {this.props.routes &&
-                    <div className="mainContent" >
-                        <TempMainErrorMessages apps={this.state.apps.apps} appsLoading={this.state.apps.loading} selectedAppId={this.state.apps.selectedAppId} />
+                <div className="mainContent" >
+                    <TempMainErrorMessages apps={this.state.apps.apps} appsLoading={this.state.apps.loading} selectedAppId={this.state.apps.selectedAppId} />
 
-                        <Switch>
-                            { this.props.routes.map((route, i) => {
+                    <Switch>
+                        { this.props.routes.map((route, i) => {
                                 //insert the child route passed in by the router
                                 // with additional props
                                 // the Switch wrapper will pick only one of the routes the first
                                 // that matches.
-                                let routeProps = {
-                                    key : this.props.match ? this.props.match.url : "",
-                                    apps: this.state.apps.apps,
-                                    selectedAppId: this.state.apps.selectedAppId,
-                                    appsLoading: this.state.apps.loading,
-                                    reportData: reportsData,
-                                    appUsers: this.state.apps.appUsers,
-                                    appUsersUnfiltered: this.state.apps.appUsersUnfiltered,
-                                    appRoles: this.state.apps.appRoles,
-                                    appOwner: this.state.apps.appOwner,
-                                    locale: this.state.nav.locale,
-                                    isRowPopUpMenuOpen: this.props.shell.isRowPopUpMenuOpen,
-                                    selectedApp: this.getSelectedApp(),
-                                    selectedTable: this.getSelectedTable(reportsData.tblId),
-                                    scrollingReport: this.state.nav.scrollingReport,
-                                    flux: flux
-                                };
-                                return RouteWithSubRoutes(route, i, routeProps);
-                            }
-                            )}
-                        </Switch>
 
-                    </div>}
+                            let routeProps = {
+                                key : this.props.match ? this.props.match.url : "",
+                                apps: this.state.apps.apps,
+                                selectedAppId: this.state.apps.selectedAppId,
+                                appsLoading: this.state.apps.loading,
+                                reportData: reportsData,
+                                appUsers: this.state.apps.appUsers,
+                                appUsersUnfiltered: this.state.apps.appUsersUnfiltered,
+                                appRoles: this.state.apps.appRoles,
+                                appOwner: this.state.apps.appOwner,
+                                locale: this.state.nav.locale,
+                                isRowPopUpMenuOpen: this.props.shell.isRowPopUpMenuOpen,
+                                selectedApp: this.getSelectedApp(),
+                                selectedTable: this.getSelectedTable(reportsData.tblId),
+                                selectedUserRows: this.state.apps.selectedUserRows,
+                                scrollingReport: this.state.nav.scrollingReport,
+                                flux: flux
+                            };
+                            return RouteWithSubRoutes(route, i, routeProps);
+                        }
+                        )}
+                        </Switch>
+                </div>
+                }
+
             </div>
 
             {pendEdits &&
-                this.renderSavingModal(pendEdits.saving)
+            this.renderSavingModal(pendEdits.saving)
             }
 
             {this.state.apps.selectedAppId && <TableCreationDialog app={this.getSelectedApp()} onTableCreated={this.tableCreated}/>}
@@ -449,7 +467,7 @@ export const Nav = React.createClass({
     tableCreated(tblId) {
         const flux = this.getFlux();
 
-        flux.actions.loadApps(true);
+        flux.actions.loadApps();
 
         // store any new table IDs for duration of session for table homepage
         if (window.sessionStorage) {
@@ -493,7 +511,9 @@ export const Nav = React.createClass({
      * open the create table wizard
      */
     createNewTable() {
-        this.props.showTableCreationDialog();
+        setTimeout(() => {
+            this.props.showTableCreationDialog();
+        });
     }
 });
 
@@ -502,7 +522,8 @@ const mapStateToProps = (state) => {
         forms: state.forms,
         shell: state.shell,
         record: state.record,
-        report: state.report
+        report: state.report,
+        reportBuilder: state.reportBuilder
     };
 };
 
@@ -515,18 +536,21 @@ const mapDispatchToProps = (dispatch) => {
         showTrowser: (content) => dispatch(ShellActions.showTrowser(content)),
 
         loadForm: (appId, tblId, rptId, formType, editRec, showTrowser) => {
-            dispatch(FormActions.loadForm(appId, tblId, rptId, formType, editRec)).then(() => {
-                if (showTrowser) {
-                    dispatch(ShellActions.showTrowser(TrowserConsts.TROWSER_EDIT_RECORD));
-                }
-            });
+            if (showTrowser) {
+                dispatch(ShellActions.showTrowser(TrowserConsts.TROWSER_EDIT_RECORD));
+            }
+            dispatch(FormActions.loadForm(appId, tblId, rptId, formType, editRec));
         },
 
         loadReports: (context, appId, tblId) => dispatch(ReportActions.loadReports(context, appId, tblId)),
 
         updateFormRedirectRoute: (route) => dispatch(updateFormRedirectRoute(route)),
+
         showTableCreationDialog: () => dispatch(TableCreationActions.showTableCreationDialog()),
-        showTableReadyDialog: () => dispatch(TableCreationActions.showTableReadyDialog())
+
+        showTableReadyDialog: () => dispatch(TableCreationActions.showTableReadyDialog()),
+
+        enterBuilderMode: (context) => dispatch(enterBuilderMode(context))
     };
 };
 
