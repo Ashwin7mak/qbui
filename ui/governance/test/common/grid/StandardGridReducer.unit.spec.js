@@ -73,13 +73,6 @@ describe('StandardGridReducer', () => {
         expect(state.pagination).toEqual({...initialState.pagination, totalRecords:10});
     });
 
-    it('should set facet fields state', () => {
-        const facetFields = [{id:1, label:'foo', values:[{value:'foo'}]}];
-        const state = StandardGridReducer.grid(initialState,
-            {facetFields: facetFields, type: StandardGridActionType.SET_FACET_FIELDS});
-        expect(state.facets.facetFields).toEqual(facetFields);
-    });
-
     it('should set facet selection state', () => {
         const facetSelections = {'0' : 1};
         const state = StandardGridReducer.grid(initialState,

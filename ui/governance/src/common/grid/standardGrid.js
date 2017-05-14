@@ -51,6 +51,7 @@ class StandardGrid extends Component {
             <div className="gridWrapper">
                 <StandardGridToolbar id={this.props.id}
                                      doUpdate={this.props.doUpdate}
+                                     facetFields={this.props.facetFields}
                                      itemTypePlural={this.props.itemTypePlural}
                                      itemTypeSingular={this.props.itemTypeSingular}/>
                 <div className="gridContainer">
@@ -84,7 +85,8 @@ StandardGrid.propTypes = {
     columnTransformProps: PropTypes.array,
     doUpdate: PropTypes.func.isRequired,
     itemTypePlural: PropTypes.string,
-    itemTypeSingular: PropTypes.string
+    itemTypeSingular: PropTypes.string,
+    facetFields: PropTypes.array
 };
 
 StandardGrid.defaultProps = {

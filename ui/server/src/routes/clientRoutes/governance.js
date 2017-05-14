@@ -17,7 +17,7 @@ module.exports = (app, appConfig, baseProps) => {
              * Use the `BaseClientRoute.generateBundleFilePath` function to automatically generate the right bundle file path for the current environment.
              */
             const governanceBundleFileName = baseClientRoute.generateBundleFilePath('governance');
-            const options = {title: 'QuickBase Governance', bundleFileName: governanceBundleFileName};
+            const options = {title: 'Manage Quick Base', bundleFileName: governanceBundleFileName};
 
             baseClientRoute.addRoutesFromArrayOfPaths(routes, options);
         }
