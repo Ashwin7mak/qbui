@@ -175,6 +175,7 @@ describe('Relationships - View child table on form tests: ', () => {
         relationshipsPO.clickOnRecordInChildTable(0);
 
         // Assert that the name of the link is for the Parent table
+        relationshipsPO.tableHomePageLinkEl.waitForVisible();
         let parentLinkText = relationshipsPO.tableHomePageLinkEl.getText();
         expect(parentLinkText).toContain('Child Table A');
 

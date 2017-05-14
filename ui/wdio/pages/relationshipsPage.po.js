@@ -78,7 +78,8 @@
          * @returns An array of record values for all child records
          */
         getChildRecordValuesFromForm : {value: function() {
-            this.viewFormTableEl.waitForExist();
+            this.slideyRightyEl.waitForVisible();
+            this.viewFormTableEl.waitForVisible();
             let fieldElements = this.viewFormTableEl.elements('.viewElement');
             return fieldElements.value.map(function(element) {
                 return element.getAttribute('textContent');
