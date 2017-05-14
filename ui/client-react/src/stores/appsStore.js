@@ -13,6 +13,7 @@ let AppsStore = Fluxxor.createStore({
     initialize() {
         this.apps = null;
         this.appUsers = [];
+        this.allUsers = [];
         this.appUsersUnfiltered = {};
         this.appRoles = [];
         this.appOwner = {};
@@ -48,7 +49,10 @@ let AppsStore = Fluxxor.createStore({
 
             actions.UNASSIGN_USERS, this.onUnasssignUsers,
             actions.UNASSIGN_USERS_FAILED, this.onUnasssignUsersFail,
-            actions.UNASSIGN_USERS_SUCCESS, this.onUnasssignUsersSuccess
+            actions.UNASSIGN_USERS_SUCCESS, this.onUnasssignUsersSuccess,
+
+            actions.LOAD_ALL_USERS, this.onLoadAllUsers,
+            actions.LOAD_ALL_USERS_SUCCESS, this.onLoadAllUsersSuccess,
         );
 
         this.logger = new Logger();
@@ -198,6 +202,14 @@ let AppsStore = Fluxxor.createStore({
     onUnasssignUsersFail() {
         this.emit('change');
     },
+    onLoadAllUsers() {
+        this.emit('change');
+    },
+    onLoadAllUsersSuccess(data) {
+        this.allUsers = data;
+        this.emit('change');
+    },
+
     /**
      * A table's props were updated. Find the table in the selected app and replace its details with those passed in.
      * An example of who updated the table might be user updated table name from settings pages.
@@ -234,7 +246,8 @@ let AppsStore = Fluxxor.createStore({
             selectedTableId: this.selectedTableId,
             loading: this.loading,
             error: this.error,
-            selectedUserRows:this.selectedUserRows
+            selectedUserRows:this.selectedUserRows,
+            allUsers: this.allUsers,
         };
     },
 });

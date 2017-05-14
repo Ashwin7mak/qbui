@@ -111,6 +111,7 @@ let appsActions = {
     loadAppOwner(userId) {
         //  promise is returned in support of unit testing only
         return new Promise((resolve, reject) => {
+            console.log("lll")
             let userService = new UserService();
             userService.getUser(userId).then(response => {
                 this.dispatch(actions.LOAD_APP_OWNER_SUCCESS, response.data);
@@ -153,6 +154,47 @@ let appsActions = {
             });
 
         });
+    },
+
+    getAllUsers(searchTerm) {
+        return new Promise((resolve, reject) => {
+            let userService = new UserService();
+            console.log(userService)
+            userService.getAllUsers(searchTerm).then(response => {
+                console.log(response.data)
+                this.dispatch(actions.LOAD_ALL_USERS_SUCCESS, response.data);
+                resolve();
+            }, () => {
+                console.log("error")
+                this.dispatch(actions.LOAD_APP_OWNER_FAILED);
+                reject();
+            });
+        });
+
+        // return (dispatch) => {
+        //     console.log("sdfdfs")
+        //     return new Promise((resolve, reject) => {
+        //         // dispatch(creatingTable());
+        //         console.log("get")
+        //         const userService = new UserService();
+        //         const promise = userService.getAllUsers();
+        //
+        //         promise.then(response => {
+        //             // dispatch(createdTable());
+        //             resolve(response);
+        //         }).catch(error => {
+        //             // dispatch(creatingTableFailed());
+        //             if (error.response) {
+        //                 if (error.response.status === constants.HttpStatusCode.FORBIDDEN) {
+        //                     // logger.parseAndLogError(LogLevel.WARN, error.response, 'tableService.createTable:');
+        //                 } else {
+        //                     // logger.parseAndLogError(LogLevel.ERROR, error.response, 'tableService.createTable:');
+        //                 }
+        //             }
+        //             reject(error);
+        //         });
+        //     });
+        // };
     }
 };
 

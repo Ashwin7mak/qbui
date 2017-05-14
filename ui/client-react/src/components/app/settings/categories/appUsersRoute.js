@@ -3,12 +3,16 @@
  */
 import React from 'react';
 import UserManagement from './userManagement';
+import AddUserDialog from '../../../user/addUserDialog';
 import Stage from '../../../../../../reuse/client/src/components/stage/stage';
 import IconActions from '../../../actions/iconActions';
 import QBIcon from '../../../../../../reuse/client/src/components/icon/icon';
 import AppSettingsStage from '../appSettingsStage';
 import Locale from '../../../../../../reuse/client/src/locales/locale';
 import UserActions from '../../../actions/userActions';
+import * as addUserActions from '../../../../actions/addUserActions';
+import {connect} from 'react-redux';
+
 import './appUsersRoute.scss';
 
 const AppUsersRoute = React.createClass({
@@ -17,9 +21,12 @@ const AppUsersRoute = React.createClass({
             roleId: ''
         };
     },
+
     componentDidMount() {
         this.props.flux.actions.loadAppRoles(this.props.match.params.appId);
         this.props.flux.actions.loadAppOwner(this.props.selectedApp.ownerId);
+        this.props.flux.actions.getAllUsers();
+        console.log("sss");
     },
 
     componentWillReceiveProps(props) {
@@ -45,7 +52,7 @@ const AppUsersRoute = React.createClass({
 
     getPageActions() {
         const actions = [
-            {msg: 'app.users.addUser', icon: 'add-new-filled', className: 'addRecord', disabled: true},
+            {msg: 'app.users.addUser', icon: 'add-new-filled', className: 'addRecord', onClick: this.addUser},
             {msg: 'unimplemented.makeFavorite', icon: 'star', disabled: true},
             {msg: 'unimplemented.email', icon: 'mail', disabled: true},
             {msg: 'unimplemented.print', icon: 'print', disabled: true}
@@ -53,6 +60,9 @@ const AppUsersRoute = React.createClass({
         return (<IconActions className="pageActions" actions={actions} maxButtonsBeforeMenu={4}/>);
     },
 
+    addUser() {
+        this.props.openAddUserDialog();
+    },
 
     getStageHeadline() {
         const userHeadLine = `${this.props.selectedApp.name} : ${Locale.getMessage('app.users.users')}`;
@@ -156,6 +166,7 @@ const AppUsersRoute = React.createClass({
                                       appOwner={this.props.appOwner}/>
                 </Stage>
                 {this.getTableActions()}
+                <AddUserDialog allUsers={this.props.allUsers} searchUsers={this.props.flux.actions.getAllUsers} />
                 <div className="userManagementContainer">
                     <UserManagement appId={this.props.match.params.appId}
                                     appUsers={this.props.appUsersUnfiltered}
@@ -172,4 +183,15 @@ const AppUsersRoute = React.createClass({
 
 });
 
-export default AppUsersRoute;
+const mapDispatchToProps = (dispatch)=>{
+    return {
+        openAddUserDialog: ()=>{dispatch(addUserActions.showAddUserDialog());}
+    };
+}
+
+const mapStateToProps = (state) => {
+    return {};
+};
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(AppUsersRoute);

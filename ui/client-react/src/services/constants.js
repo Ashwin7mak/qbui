@@ -58,5 +58,8 @@ export default {
     TABLECOMPONENTS     : 'tableComponents',
     APPCOMPONENTS       : 'appComponents',
     // Legacy actions
-    STACK               : 'stack'
+    STACK               : 'stack',
+
+    // Slugs
+    SEARCH              : 'search',
 };

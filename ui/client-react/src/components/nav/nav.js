@@ -440,6 +440,7 @@ export const Nav = React.createClass({
                                 selectedApp: this.getSelectedApp(),
                                 selectedTable: this.getSelectedTable(reportsData.tblId),
                                 selectedUserRows: this.state.apps.selectedUserRows,
+                                allUsers: this.state.apps.allUsers,
                                 scrollingReport: this.state.nav.scrollingReport,
                                 flux: flux
                             };

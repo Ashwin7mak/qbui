@@ -120,6 +120,7 @@ const UserFieldValueEditor = React.createClass({
         }
     },
 
+
     /**
      * render an menu item in the select
      * @param option user object with value & email flag
@@ -130,15 +131,13 @@ const UserFieldValueEditor = React.createClass({
             return <div>&nbsp;</div>; // placeholder for no-user
         }
         const user = this.getAppUser(option.value);
-
         const datatypeAttributes = this.props.fieldDef && this.props.fieldDef.datatypeAttributes ? this.props.fieldDef.datatypeAttributes : {};
         const userLabel = userFormatter.format({value: user}, datatypeAttributes);
-
         return (
             <div className="userOption">
                 {this.state.selectedUserId === user.userId && <QbIcon icon="check-reversed"/>}
                 <div className="userLabel">{userLabel} {user.deactivated && <span className="deactivatedLabel">(deactivated)</span>}</div>
-                {option.showEmail && user.email && <div className="email">{user.email}</div>}
+                { user.email && <div className="email">{user.email}</div>}
             </div>);
     },
 
@@ -166,11 +165,19 @@ const UserFieldValueEditor = React.createClass({
             user.screenName && user.screenName.toLowerCase().indexOf(filter) === 0;
     },
 
+    loadAsyncOptions(input, callback) {
+        callback(null, {
+            options: this.getSelectItems()
+        });
+    },
+
     /**
      * Called when the user types text into the react-select input.
      * @param {String} newInputValue value of the react-select input
      */
     onInputChange(newInputValue) {
+        //make api call
+        this.props.searchUsers(newInputValue)
         this.setState({inputValue: newInputValue});
     },
 
@@ -199,9 +206,11 @@ const UserFieldValueEditor = React.createClass({
                 value={this.state.selectedUserId}
                 optionRenderer={this.renderOption}
                 options={this.getSelectItems()}
+                loadAsyncOptions={this.loadAsyncOptions}
                 onChange={this.selectUser}
                 onInputChange={this.onInputChange}
                 placeholder={Locale.getMessage("field.search")}
+                isAddUser={this.props.isAddUser}
                 noResultsText={noResultsText}
                 autosize={false}
                 clearable={false}
