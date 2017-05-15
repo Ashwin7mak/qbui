@@ -42,7 +42,7 @@ export const AutomationListRoute = React.createClass({
         return <div>
                 <Stage stageHeadline={this.getStageHeadline()} pageActions={this.getPageActions(5)}></Stage>
 
-                <div>
+                <div className="automationListMessage">
                     Welcome to your automations for this App. This page is under construction. More will be available very soon.
                 </div>
             </div>;
