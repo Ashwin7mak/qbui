@@ -1395,4 +1395,79 @@ describe('Report reducer functions', () => {
 
         });
     });
+
+    describe('Report reducer MOVE_COLUMN test correct state', () => {
+        let contextId = "MOVE_COLUMN";
+        let initialState = [
+            {
+                id: contextId,
+                data: {
+                    columns: [
+                        {
+                            fieldDef: {
+                                id: 6
+                            },
+                            isHidden: false,
+                            id: 6,
+                            headerName: 6
+                        },
+                        {
+                            fieldDef: {
+                                id: 7
+                            },
+                            isHidden: false,
+                            id: 7,
+                            headerName: 7
+                        },
+                        {
+                            fieldDef: {
+                                id: 8
+                            },
+                            isHidden: false,
+                            id: 8,
+                            headerName: 8
+                        }
+                    ],
+                    fids: [6, 7, 8],
+                    metaData: {
+                        fids: [6, 7, 8]
+                    }
+                }
+            }
+        ];
+        let testCases = [
+            {
+                description: 'when id of column and fids are rearranged',
+                initialState: initialState,
+                content : {sourceLabel: 6, targetLabel: 7},
+                expects : (testState) => {
+                    expect(Array.isArray(testState)).toEqual(true);
+                    expect(testState[0].data.columns[0].id).toEqual(7);
+                    expect(testState[0].data.columns[1].id).toEqual(6);
+                    expect(testState[0].data.columns[2].id).toEqual(8);
+                    expect(testState[0].data.fids[0]).toEqual(7);
+                    expect(testState[0].data.fids[1]).toEqual(6);
+                    expect(testState[0].data.fids[2]).toEqual(8);
+
+                }
+            }
+        ];
+
+        testCases.forEach(testCase => {
+            it(testCase.description, () => {
+                let testState = testCase.initialState;
+                actionObj.type = types.MOVE_COLUMN;
+                actionObj.id = contextId;
+                if (testCase.content) {
+                    actionObj.content = testCase.content;
+                }
+                testState = reducer(testState, actionObj);
+
+                testCase.expects(testState);
+            });
+        });
+
+    });
+
+
 });

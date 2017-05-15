@@ -1,5 +1,5 @@
-import AccountUsersReducer, {isFetching} from '../../../src/account/users/AccountUsersReducer';
-import * as types from '../../../src/app/actionTypes';
+import AccountUsersReducer, {isFetching} from "../../../src/account/users/AccountUsersReducer";
+import * as types from "../../../src/app/actionTypes";
 
 let initialState = {};
 

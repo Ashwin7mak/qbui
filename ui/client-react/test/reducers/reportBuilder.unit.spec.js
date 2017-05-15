@@ -75,4 +75,15 @@ describe('reportBuilder reducer functions for refreshing fields', () => {
         const state = reducer(initialState, {type: types.OPEN_FIELD_SELECT_MENU, content: content});
         expect(state.addBeforeColumn).toEqual(false);
     });
+
+    it('enter builder mode', () => {
+        const state = reducer(initialState, {type: types.ENTER_BUILDER_MODE});
+        expect(state.isInBuilderMode).toEqual(true);
+    });
+
+    it('exit builder mode', () => {
+        let openState = {isInBuilderMode: true};
+        const state = reducer(openState, {type: types.EXIT_BUILDER_MODE});
+        expect(state.isInBuilderMode).toEqual(false);
+    });
 });

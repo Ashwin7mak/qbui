@@ -35,6 +35,18 @@ const reportBuilder = (
             addBeforeColumn: action.content.addBeforeColumn
         };
     }
+    case types.ENTER_BUILDER_MODE: {
+        return {
+            ...state,
+            isInBuilderMode: true
+        };
+    }
+    case types.EXIT_BUILDER_MODE: {
+        return {
+            ...state,
+            isInBuilderMode: false
+        };
+    }
     default:
         // return existing state by default in redux
         return state;
