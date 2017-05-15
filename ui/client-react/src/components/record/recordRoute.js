@@ -35,6 +35,7 @@ import './record.scss';
 import withUniqueId from '../hoc/withUniqueId';
 //import DrawerContainer from '../drawer/drawerContainer';
 import RecordInDrawer from '../drawer/recordInDrawer';
+import ReportInDrawer from '../drawer/reportInDrawer';
 
 let logger = new Logger();
 let FluxMixin = Fluxxor.FluxMixin(React);
@@ -566,6 +567,11 @@ export const RecordRoute = React.createClass({
                             unloadEntry={this.unloadRecordFromParams}
                             hasEntry={!!this.getFormFromProps()}
                             />}
+                    {Breakpoints.isSmallBreakpoint() &&
+                        <ReportInDrawer
+                            rootDrawer={!this.props.isDrawerContext}
+                            closeDrawer={this.closeDrawer}
+                        />}
 
                     {!formLoadingErrorStatus && this.getDrawerContainer()}
                 </div>);

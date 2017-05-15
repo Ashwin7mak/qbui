@@ -4,7 +4,6 @@ import {Link, withRouter} from 'react-router-dom';
 import _ from 'lodash';
 
 import {loadReportRecordsCount, unloadEmbeddedReport} from '../../../actions/reportActions';
-import ReportInDrawer from '../../drawer/reportInDrawer';
 import withUniqueId from '../../hoc/withUniqueId';
 import {CONTEXT} from '../../../actions/context';
 import QBicon from '../../qbIcon/qbIcon';
@@ -87,11 +86,6 @@ export const EmbeddedReportLink = React.createClass({
                     <QBicon icon="eye" />
                     {tableName}
                 </Link>
-                {Breakpoints.isSmallBreakpoint() &&
-                    <ReportInDrawer
-                        rootDrawer={!this.props.isDrawerContext}
-                        closeDrawer={this.closeDrawer}
-                    />}
             </div>
         );
     }
