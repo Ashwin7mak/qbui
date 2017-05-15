@@ -88,6 +88,9 @@ export class DraggableFieldToken extends Component {
     endDrag = () => {
         this.setState({addedToForm: false});
         this.props.updateFormAnimationState(false);
+        if (this.props.endDrag) {
+            this.props.endDrag();
+        }
     };
 
     render() {

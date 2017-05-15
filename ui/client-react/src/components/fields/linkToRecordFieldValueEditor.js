@@ -3,6 +3,7 @@ import Locale from "../../locales/locales";
 import {I18nMessage} from '../../utils/i18nMessage';
 import Select from '../select/reactSelectWrapper';
 import MultiStepDialog from '../../../../reuse/client/src/components/multiStepDialog/multiStepDialog';
+import {connect} from 'react-redux';
 
 import './linkToRecordFieldValueEditor.scss';
 /**
@@ -42,7 +43,7 @@ const LinkToRecordFieldValueEditor = React.createClass({
         }
         return {
             choice,
-            dialogOpen: true
+            dialogOpen: false
         };
     },
 
@@ -93,7 +94,7 @@ const LinkToRecordFieldValueEditor = React.createClass({
     render() {
         let {value, display, onBlur, placeholder, ...otherProps} = this.props;
 
-        if (this.state.dialogOpen) {
+        if (this.props.dialogOpen) {
             return (
                 <MultiStepDialog show={true}
                                  onCancel={this.cancelTableSelection}
@@ -114,4 +115,4 @@ const LinkToRecordFieldValueEditor = React.createClass({
     }
 });
 
-export default LinkToRecordFieldValueEditor;
+export default connect(state => ({dialogOpen: state.animation.isRelationshipDialogShown}))(LinkToRecordFieldValueEditor)

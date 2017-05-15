@@ -5,9 +5,9 @@ import FieldTokenInMenu from '../fieldToken/fieldTokenInMenu';
 import _ from 'lodash';
 
 const NewFieldsMenu = ({isCollapsed, isOpen, toggleToolPaletteChildrenTabIndex, toolPaletteChildrenTabIndex,
-                        toolPaletteFocus, toolPaletteTabIndex, formMeta}) => {
+                        toolPaletteFocus, toolPaletteTabIndex, formMeta, endDrag}) => {
 
-    let omittedFieldGroups = ['tableDataConnections'];
+    let omittedFieldGroups = [];
     let tableCount = 1;
 
     let parentTables = [];
@@ -31,6 +31,7 @@ const NewFieldsMenu = ({isCollapsed, isOpen, toggleToolPaletteChildrenTabIndex, 
             elements={supportedNewFieldTypesWithProperties(omittedFieldGroups)}
             isFilterable={true}
             hideTitle={true}
+            endDrag={endDrag}
         />);
 }
 

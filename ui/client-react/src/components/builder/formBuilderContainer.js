@@ -4,7 +4,7 @@ import {I18nMessage} from '../../utils/i18nMessage';
 import Locale from '../../locales/locales';
 import {connect} from 'react-redux';
 import {loadForm, updateForm, moveFieldOnForm, toggleFormBuilderChildrenTabIndex, toggleToolPaletteChildrenTabIndex, keyboardMoveFieldUp, keyboardMoveFieldDown, selectFieldOnForm, deselectField, removeFieldFromForm, addNewFieldToForm} from '../../actions/formActions';
-import {updateFormAnimationState} from '../../actions/animationActions';
+import {updateFormAnimationState, updateRelationshipDialog} from '../../actions/animationActions';
 import Loader from 'react-loader';
 import {LARGE_BREAKPOINT} from "../../constants/spinnerConfigurations";
 import {NEW_FORM_RECORD_ID} from '../../constants/schema';
@@ -67,7 +67,8 @@ const mapDispatchToProps = {
     selectFieldOnForm,
     deselectField,
     removeFieldFromForm,
-    addNewFieldToForm
+    addNewFieldToForm,
+    updateRelationshipDialog
 };
 
 /**
@@ -252,6 +253,10 @@ export const FormBuilderContainer = React.createClass({
         }
     },
 
+    endDrag(props) {
+        this.props.updateRelationshipDialog();
+    },
+
     render() {
         let loaded = (_.has(this.props, 'currentForm') && this.props.currentForm !== undefined && !this.props.currentForm.loading && !this.props.currentForm.saving);
         let formData = null;
@@ -281,6 +286,7 @@ export const FormBuilderContainer = React.createClass({
 
                 <ToolPalette isCollapsed={this.props.isCollapsed}
                              isOpen={this.props.isOpen}
+                             endDrag={this.endDrag}
                              toggleToolPaletteChildrenTabIndex={this.toggleToolPaletteChildrenTabIndex}
                              toolPaletteChildrenTabIndex={this.props.toolPaletteChildrenTabIndex}
                              toolPaletteFocus={this.props.toolPaletteFocus}
@@ -308,6 +314,7 @@ export const FormBuilderContainer = React.createClass({
                                             selectedFormElement={this.props.selectedFormElement}
                                             addNewFieldToForm={this.props.addNewFieldToForm}
                                             selectFieldOnForm={this.props.selectFieldOnForm}
+                                            endDrag={this.endDrag}
                                         />
                                     </Loader>
                                 </div>

@@ -6,3 +6,9 @@ export const updateFormAnimationState = (isAnimating) => {
         isAnimating
     };
 };
+
+export const updateRelationshipDialog = () => {
+    return {
+        type: 'UPDATE_RELATIONSHIP_DIALOG'
+    }
+};
