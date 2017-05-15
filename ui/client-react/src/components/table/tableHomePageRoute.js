@@ -134,7 +134,6 @@ export const TableHomePageRoute = React.createClass({
     },
 
     render() {
-        let inBuilderMode = this.props.reportBuilder.inBuilderMode;
         //  ensure there is a rptId property otherwise the report not found page is rendered in ReportToolsAndContent
         let homePageParams = _.assign(this.props.match.params, {rptId: null});
 
@@ -179,8 +178,6 @@ export const TableHomePageRoute = React.createClass({
                     {mainContent}
 
                 </ReportFieldSelectMenu>
-
-                {inBuilderMode && <ReportSaveOrCancelFooter />}
             </div>
         );
     }
@@ -191,7 +188,6 @@ export const TableHomePageRoute = React.createClass({
 const mapStateToProps = (state) => {
     return {
         report: state.report,
-        reportBuilder: state.reportBuilder
     };
 };
 const mapDispatchToProps = (dispatch) => {

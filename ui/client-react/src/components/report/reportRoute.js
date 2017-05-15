@@ -152,7 +152,6 @@ export const ReportRoute = React.createClass({
     },
 
     render() {
-        let inBuilderMode = this.props.reportBuilder.inBuilderMode;
         if (_.isUndefined(this.props.match.params) ||
             _.isUndefined(this.props.match.params.appId) ||
             _.isUndefined(this.props.match.params.tblId) ||
@@ -196,9 +195,6 @@ export const ReportRoute = React.createClass({
 
                     </ReportFieldSelectMenu>
 
-                    {inBuilderMode &&
-                        <ReportSaveOrCancelFooter />}
-
                 </div>
             );
         }
@@ -222,10 +218,4 @@ const mapDispatchToProps = (dispatch) => {
     };
 };
 
-const mapStateToProps = (state) => {
-    return {
-        reportBuilder: state.reportBuilder
-    };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(ReportRoute);
+export default connect(null, mapDispatchToProps)(ReportRoute);

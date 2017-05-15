@@ -3,6 +3,7 @@ import ReportModelHelper from '../models/reportModelHelper';
 
 const reportBuilder = (
     state = {
+        redirectRoute: null,
         inBuilderMode: false,
         isCollapsed: true,
         addBeforeColumn: null,
@@ -10,6 +11,12 @@ const reportBuilder = (
     }, action) => {
 
     switch (action.type) {
+    case types.UPDATE_REPORT_REDIRECT_ROUTE: {
+        return {
+            ...state,
+            redirectRoute: action.content.route
+        };
+    }
     case types.REFRESH_FIELD_SELECT_MENU: {
         let fields = action.content.response.data;
         let fids = fields.map(field => {

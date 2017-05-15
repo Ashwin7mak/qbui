@@ -12,7 +12,7 @@ import {SELECT_ROW_CHECKBOX} from 'REUSE/components/rowActions/rowActions';
 import QbIcon from '../../qbIcon/qbIcon';
 import CollapsedGroupsHelper from './collapsedGroupHelper';
 import TouchBackend from 'react-dnd-touch-backend';
-import {moveColumn} from '../../../actions/reportActions';
+import {moveColumn} from '../../../actions/reportBuilderActions';
 import {CONTEXT} from '../../../actions/context';
 import {connect} from 'react-redux';
 

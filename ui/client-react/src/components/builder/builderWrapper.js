@@ -47,7 +47,12 @@ export const BuilderWrapper = React.createClass({
     },
 
     render() {
-        let title = `${Locale.getMessage('builder.modify')}`;
+        let title = '';
+        if (this.props.location.pathname.includes('form')) {
+            title = `${Locale.getMessage('builder.formBuilder.modify')}`;
+        } else if (this.props.location.pathname.includes('report')) {
+            title = `${Locale.getMessage('builder.reportBuilder.modify')}`;
+        }
         return (
             <div className="builderWrapperContent">
                 <NotificationContainer/>

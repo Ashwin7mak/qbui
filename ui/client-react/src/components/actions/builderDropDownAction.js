@@ -19,11 +19,11 @@ let BuilderDropDownAction = React.createClass({
         icon: React.PropTypes.string,
         startTabIndex: React.PropTypes.number.isRequired,
         recId: React.PropTypes.string,
-        navigateToBuilder: React.PropTypes.func.isRequired,
+        navigateToFormBuilder: React.PropTypes.func.isRequired,
+        navigateToReportBuilder: React.PropTypes.func.isRequired,
         position: React.PropTypes.string.isRequired,
         selectedApp: React.PropTypes.object,
         selectedTable: React.PropTypes.object,
-        navigateToBuilderReport: React.PropTypes.func,
         rptId: React.PropTypes.string
     },
 
@@ -59,7 +59,7 @@ let BuilderDropDownAction = React.createClass({
                     {isReportView &&
                         <div className="configSet currentContext">
                             <li className="heading"><a><span><I18nMessage message={"settings.reportsHeader"}/></span></a></li>
-                            <li><a className="modifyForm" onClick={this.props.navigateToBuilderReport}>
+                            <li><a className="modifyForm" onClick={this.props.navigateToReportBuilder}>
                                 <I18nMessage message={"settings.configureReportBuilder"}/></a></li>
                         </div>
                     }
@@ -67,7 +67,7 @@ let BuilderDropDownAction = React.createClass({
                     {isFormView ?
                     <div className="configSet currentContext">
                         <li className="heading"><a><span><I18nMessage message={"settings.formsHeader"}/></span></a></li>
-                        <li><a className="modifyForm" onClick={this.props.navigateToBuilder}><I18nMessage
+                        <li><a className="modifyForm" onClick={this.props.navigateToFormBuilder}><I18nMessage
                             message={"settings.configureFormBuilder"}/></a></li>
                     </div> : null}
                 </div>
