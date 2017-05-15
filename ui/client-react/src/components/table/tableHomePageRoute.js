@@ -134,7 +134,7 @@ export const TableHomePageRoute = React.createClass({
     },
 
     render() {
-        let inBuilderMode = this.props.reportBuilder.inBuilderMode;
+        let inBuilderMode = this.props.reportBuilder.isInBuilderMode;
         //  ensure there is a rptId property otherwise the report not found page is rendered in ReportToolsAndContent
         let homePageParams = _.assign(this.props.match.params, {rptId: null});
 
