@@ -68,6 +68,9 @@
             return browser.element('.reportContainer');
         }},
 
+        // Title for report (found in the stage)
+        stageTableHomepageTitleEl: {get: function() {return this.reportContainerEl.element('.tableHomepageStageHeadline');}},
+
         //Drop down menu actions icon
         dropDownIcon : {get: function() {return browser.element('.actionsCol .iconActionsDropDownMenu');}},
         dropDownDeleteIcon: {get: function() {return browser.element('.dropdown-menu .delete');}},

@@ -1,10 +1,8 @@
-import React, {PropTypes, Component} from 'react';
-
-import {GetAccountUsersGridColumns} from './AccountUsersGridColumns';
+import React, {PropTypes, Component} from "react";
+import {GetAccountUsersGridColumns} from "./AccountUsersGridColumns";
 import {GetFacetFields} from "./AccountUsersGridFacet";
-
 import "./AccountUsersGrid.scss";
-import StandardGrid from 'GOVERNANCE/common/grid/standardGrid';
+import StandardGrid from "GOVERNANCE/common/grid/standardGrid";
 import * as Actions from "../AccountUsersActions";
 
 /**
@@ -16,7 +14,7 @@ class AccountUsersGrid extends Component {
             <StandardGrid
                 id={this.props.id}
                 columns={GetAccountUsersGridColumns(this.props.showAccountColumns, this.props.showRealmColumns)}
-                getFacetFields={GetFacetFields(this.props.showAccountColumns, this.props.showRealmColumns)}
+                facetFields={GetFacetFields(this.props.showAccountColumns, this.props.showRealmColumns)}
                 doUpdate={Actions.doUpdate}
                 rowKey="uid"
                 itemTypePlural={this.props.itemTypePlural}

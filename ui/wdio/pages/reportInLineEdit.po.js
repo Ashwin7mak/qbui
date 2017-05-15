@@ -60,13 +60,14 @@
             //TODO: qbCell on the DOM. More research is required, in order to get moveToObject to move to the exact qbCell that is specified
             if (browserName !== 'safari') {
                 // Hover over the cell
+                cellData.waitForVisible();
                 cellData.moveToObject();
                 // Then once the pencil is visible hover over the pencil and click
+                cellEditIcon.waitForVisible();
                 cellEditIcon.moveToObject();
                 cellEditIcon.click();
+                this.getInlineEditRecord().waitForVisible();
             }
-
-            this.getInlineEditRecord().waitForVisible();
         }},
 
         //Assert three buttons not to be present
@@ -88,18 +89,15 @@
          */
         clickSaveChangesButton: {value: function() {
             var saveRecordButtonEl = this.getSaveRecordButton();
-
-            //step 1-  Wait for the button to be visible
+            // Wait for the button to be visible
             saveRecordButtonEl.waitForVisible();
             try {
-                //step 2 - Click on save button
+                // Click on save button
                 saveRecordButtonEl.click();
-
-                //step 3 - After save button click wait for inline edit menu to disappear as to confirm that click event worked
+                // Wait for inline edit menu to disappear to confirm that click event worked
                 browser.waitForVisible(cancelRecordInlineEdit, e2eConsts.extraLongWaitTimeMs, true);
             } catch (err) {
-
-                console.log("Checking to see if WebdriverIO command throws an error - Trying again with JS. \n Error = " + err.toString());
+                browser.logger.info("Caught an error clicking in-line edit save button - Trying again with JS. \n Error " + err.toString());
                 // Catch an error from above and then retry
                 // Single click via raw javascript
                 browser.execute(function() {
@@ -111,7 +109,7 @@
                     });
                     document.querySelector('.qbRow.editing .saveRecord').dispatchEvent(event);
                 });
-                browser.waitForVisible(cancelRecordInlineEdit, e2eConsts.mediumWaitTimeMilliseonds, true);
+                browser.waitForVisible(cancelRecordInlineEdit, e2eConsts.mediumWaitTimeMs, true);
             }
         }},
 
@@ -128,15 +126,13 @@
          */
         clickCancelButton: {value: function() {
             var cancelRecordButtonEl = this.getCancelRecordButton();
-
             cancelRecordButtonEl.waitForVisible();
             try {
                 cancelRecordButtonEl.click();
                 // By setting the true flag it will do the inverse of the function (in this case wait for it to be invisible)
-                browser.waitForVisible(cancelRecordInlineEdit, e2eConsts.mediumWaitTimeMilliseonds, true);
+                browser.waitForVisible(cancelRecordInlineEdit, e2eConsts.mediumWaitTimeMs, true);
             } catch (err) {
-
-                console.log("Checking to see if WebdriverIO command throws an error - Trying again with JS. \n Error = " + err.toString());
+                browser.logger.info("Caught an error clicking in-line edit cancel button - Trying again with JS. \n Error " + err.toString());
                 // Catch an error from above and then retry
                 // Single click via raw javascript
                 browser.execute(function() {
@@ -148,7 +144,7 @@
                     });
                     document.querySelector('.qbRow.editing .cancelSelection').dispatchEvent(event);
                 });
-                browser.waitForVisible('.qbRow.editing .saveRecord', e2eConsts.mediumWaitTimeMilliseonds, true);
+                browser.waitForVisible('.qbRow.editing .saveRecord', e2eConsts.mediumWaitTimeMs, true);
             }
         }},
 
@@ -180,6 +176,10 @@
                     // Found our record element
                     recordBeingEdited = recordRowElements.value[i];
                 }
+            }
+            // Didn't find a record so throw an error
+            if (!recordBeingEdited) {
+                throw new Error('No record is being inline edited on the page');
             }
             return recordBeingEdited;
         }},
