@@ -1,5 +1,5 @@
 import React from 'react';
-import {MenuItem, Dropdown} from 'react-bootstrap';
+import {Dropdown} from 'react-bootstrap';
 import Icon, {AVAILABLE_ICON_FONTS} from '../../../../reuse/client/src/components/icon/icon.js';
 import {I18nMessage} from '../../../../reuse/client/src/utils/i18nMessage';
 import * as UrlConsts from "../../constants/urlConstants";
