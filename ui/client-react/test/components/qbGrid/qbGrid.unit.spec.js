@@ -5,12 +5,13 @@ import TestUtils from 'react-addons-test-utils';
 import _ from 'lodash';
 
 
-import QbGrid from '../../../src/components/dataTable/qbGrid/qbGrid';
+import {QbGrid} from '../../../src/components/dataTable/qbGrid/qbGrid';
 import ColumnTransformer from '../../../src/components/dataTable/qbGrid/columnTransformer';
 import RowTransformer from '../../../src/components/dataTable/qbGrid/rowTransformer';
 import QbIconActions, {__RewireAPI__ as QbIconActionsRewireAPI} from '../../../src/components/dataTable/qbGrid/qbIconActions';
 import * as Table from 'reactabular-table';
 import {UNSAVED_RECORD_ID} from '../../../src/constants/schema';
+import {CONTEXT} from '../../../src/actions/context';
 
 const testColumns = [
     new ColumnTransformer('Header 1', 1, 'header1class', false),
@@ -76,7 +77,8 @@ const requiredProps = {
     editingRowErrors: [],
     onCancelEditingRow: actions.onClickCancel,
     onClickSaveRow: actions.onClickSave,
-    cellRenderer: testCellRenderer
+    cellRenderer: testCellRenderer,
+    moveColumn: (context, params) => {}
 };
 
 let component;
@@ -341,5 +343,22 @@ describe('QbGrid', () => {
         // Displays subHeaders if there are any rows where isSubHeader is true
         let subHeader = TestUtils.findRenderedDOMComponentWithClass(component, 'groupHeader');
         expect(subHeader.innerText).toEqual(subHeaderRow.subHeaderLabel);
+    });
+
+    describe('onMoveColumn', () => {
+        it('calls the moveColumn prop', () => {
+            spyOn(requiredProps, 'moveColumn');
+            component = shallow(<QbGrid {...requiredProps}/>);
+            instance = component.instance();
+
+            let column = {
+                sourceLabel: 5,
+                targetLabel: 6
+            };
+
+            instance.onMoveColumn(column);
+
+            expect(requiredProps.moveColumn).toHaveBeenCalledWith(CONTEXT.REPORT.NAV, column);
+        });
     });
 });
