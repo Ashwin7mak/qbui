@@ -29,33 +29,25 @@ export class AddUserDialog extends React.Component {
      * cancel
      */
     onCancel() {
-        this.props.hideTableCreationDialog();
+        this.props.hideAddUserDialog();
     }
 
     /**
      * last page has finished
      */
     onFinished() {
-
-        const tableInfo = {
-            name: this.props.tableInfo.name.value,
-            description: this.props.tableInfo.description.value,
-            tableIcon: this.props.tableInfo.tableIcon.value,
-            tableNoun: this.props.tableInfo.tableNoun.value
-        };
-
-        // create the table
-        this.props.createTable(this.props.app.id, tableInfo).then(
+        const userInfo = {
+            userId: this.userPanel.getSelectedUser(),
+            roleId: this.props.userRoleToAdd,
+        }
+        console.log(userInfo)
+        // Add the user
+        this.props.addNewUser(this.props.appId, userInfo).then(
             (response) => {
-                this.props.hideTableCreationDialog();
-
-                const tblId = response.data;
-
-                this.props.onTableCreated(tblId);
-
-                // navigate to form builder (no page reload)
-
-                AppHistory.history.push(UrlUtils.getAfterTableCreatedLink(this.props.app.id, tblId));
+                console.log(response)
+                this.props.hideAddUserDialog();
+                this.props.onAddedUser(userInfo.userId);
+                // AppHistory.history.push(UrlUtils.getAfterTableCreatedLink(this.props.app.id, tblId));
             },
             (error) => {
                 // leave the dialog open but issue a growl indicating an error
@@ -105,9 +97,14 @@ export class AddUserDialog extends React.Component {
                                  finishedButtonLabel="Add"
         >
             <div className="addUserPanel">
-                <div className="title">test</div>
-                <div className="description"><I18nMessage message="tableCreation.newTableDescription"/></div>
-                <AddUserPanel allUsers={this.props.allUsers} searchUsers={this.props.searchUsers} />
+                <div className="title"><I18nMessage message="addUserToApp.title"/> {this.props.selectedApp.name}</div>
+                <div className="description"><I18nMessage message="addUserToApp.description"/></div>
+                <AddUserPanel appRoles={this.props.appRoles}
+                              allUsers={this.props.allUsers}
+                              searchUsers={this.props.searchUsers}
+                              setUserRoleToAdd={this.props.setUserRoleToAdd}
+                              ref={(userPanel)=>{this.userPanel = userPanel;}}
+                               />
             </div>
         </MultiStepDialog>);
     }

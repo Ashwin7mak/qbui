@@ -24,6 +24,7 @@ let AppsStore = Fluxxor.createStore({
 
         this.selectedAppId = null;
         this.selectedTableId = null;
+        this.userRoleToAdd = null;
 
         this.bindActions(
             actions.LOAD_APPS, this.onLoadApps,
@@ -53,6 +54,10 @@ let AppsStore = Fluxxor.createStore({
 
             actions.LOAD_ALL_USERS, this.onLoadAllUsers,
             actions.LOAD_ALL_USERS_SUCCESS, this.onLoadAllUsersSuccess,
+
+            actions.ADD_USER, this.onAddUser,
+            actions.ADD_USER_SUCCESS, this.onAddUserSuccess,
+            actions.SET_USER_ROLE_TO_ADD, this.onSetUserRoleToAdd,
         );
 
         this.logger = new Logger();
@@ -210,6 +215,20 @@ let AppsStore = Fluxxor.createStore({
         this.emit('change');
     },
 
+    onAddUser() {
+        this.loading = true;
+        this.emit('change');
+    },
+
+    onAddUserSuccess() {
+        this.loading = false;
+        this.emit('change');
+    },
+    onSetUserRoleToAdd(roleId){
+        this.userRoleToAdd = roleId
+        this.emit('change')
+    },
+
     /**
      * A table's props were updated. Find the table in the selected app and replace its details with those passed in.
      * An example of who updated the table might be user updated table name from settings pages.
@@ -248,6 +267,7 @@ let AppsStore = Fluxxor.createStore({
             error: this.error,
             selectedUserRows:this.selectedUserRows,
             allUsers: this.allUsers,
+            userRoleToAdd: this.userRoleToAdd,
         };
     },
 });

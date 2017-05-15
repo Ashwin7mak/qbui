@@ -69,6 +69,7 @@ const reactSelectWrapper = React.createClass({
                         onChange={this.props.onChange}
                         loadOptions={this.props.loadAsyncOptions}
                         optionRenderer={this.props.optionRenderer}
+                        placeholder={this.props.placeholder}
                         onInputChange={this.props.onInputChange}/>);
         }
         return (

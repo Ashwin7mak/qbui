@@ -26,7 +26,6 @@ const AppUsersRoute = React.createClass({
         this.props.flux.actions.loadAppRoles(this.props.match.params.appId);
         this.props.flux.actions.loadAppOwner(this.props.selectedApp.ownerId);
         this.props.flux.actions.getAllUsers();
-        console.log("sss");
     },
 
     componentWillReceiveProps(props) {
@@ -52,7 +51,7 @@ const AppUsersRoute = React.createClass({
 
     getPageActions() {
         const actions = [
-            {msg: 'app.users.addUser', icon: 'add-new-filled', className: 'addRecord', onClick: this.addUser},
+            {msg: 'app.users.addUser', icon: 'add-new-filled', className: 'addRecord', onClick: this.openAddUserDialog},
             {msg: 'unimplemented.makeFavorite', icon: 'star', disabled: true},
             {msg: 'unimplemented.email', icon: 'mail', disabled: true},
             {msg: 'unimplemented.print', icon: 'print', disabled: true}
@@ -60,8 +59,16 @@ const AppUsersRoute = React.createClass({
         return (<IconActions className="pageActions" actions={actions} maxButtonsBeforeMenu={4}/>);
     },
 
-    addUser() {
+    openAddUserDialog() {
         this.props.openAddUserDialog();
+    },
+
+    setUserRoleToAdd(roleId) {
+        this.props.flux.actions.setUserRoleToAdd(roleId);
+    },
+
+    addUser(appId, userInfo) {
+        this.props.flux.actions.addUser(appId, userInfo);
     },
 
     getStageHeadline() {
@@ -155,7 +162,6 @@ const AppUsersRoute = React.createClass({
     },
 
     render() {
-
         return (
             <div>
                 <Stage stageHeadline={this.getStageHeadline()}
@@ -166,7 +172,15 @@ const AppUsersRoute = React.createClass({
                                       appOwner={this.props.appOwner}/>
                 </Stage>
                 {this.getTableActions()}
-                <AddUserDialog allUsers={this.props.allUsers} searchUsers={this.props.flux.actions.getAllUsers} />
+                <AddUserDialog allUsers={this.props.allUsers}
+                               searchUsers={this.props.flux.actions.getAllUsers}
+                               appRoles={this.props.appRoles}
+                               addNewUser={this.addUser}
+                               setUserRoleToAdd={this.setUserRoleToAdd}
+                               userRoleToAdd={this.props.userRoleToAdd}
+                               appId={this.props.match.params.appId}
+                               selectedApp={this.props.selectedApp}
+                               hideAddUserDialog={this.props.hideAddUserDialog}/>
                 <div className="userManagementContainer">
                     <UserManagement appId={this.props.match.params.appId}
                                     appUsers={this.props.appUsersUnfiltered}
@@ -185,9 +199,10 @@ const AppUsersRoute = React.createClass({
 
 const mapDispatchToProps = (dispatch)=>{
     return {
-        openAddUserDialog: ()=>{dispatch(addUserActions.showAddUserDialog());}
+        openAddUserDialog: ()=>{dispatch(addUserActions.showAddUserDialog());},
+        hideAddUserDialog: ()=>{dispatch(addUserActions.hideAddUserDialog());},
     };
-}
+};
 
 const mapStateToProps = (state) => {
     return {};

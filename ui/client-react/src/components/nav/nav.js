@@ -442,7 +442,8 @@ export const Nav = React.createClass({
                                 selectedUserRows: this.state.apps.selectedUserRows,
                                 allUsers: this.state.apps.allUsers,
                                 scrollingReport: this.state.nav.scrollingReport,
-                                flux: flux
+                                flux: flux,
+                                userRoleToAdd: this.state.apps.userRoleToAdd,
                             };
                             return RouteWithSubRoutes(route, i, routeProps);
                         }

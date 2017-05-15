@@ -8,32 +8,33 @@ class addUserPanel extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            selectedRole: 'MT'
+            selectedRole: 'Participant',
         };
         this.updateRole = this.updateRole.bind(this);
     }
 
     getRoles() {
-        return [
-            {value: 'MO', label: 'Missouri'},
-            {value: 'MT', label: 'Montana'},
-            {value: 'NE', label: 'Nebraska'},
-            {value: 'NV', label: 'Nevada'}
-        ];
-    }
-    updateRole(role) {
-        this.setState({
-            selectedRole: role
+        const roles = this.props.appRoles.map((appRole)=>{
+            return {value: appRole.id, label: appRole.name, clearableValue: false};
         });
+        return roles;
+    }
+    updateRole(roleId) {
+        this.setState({
+            selectedRole: roleId
+        });
+        this.props.setUserRoleToAdd(roleId);
+    }
+    getSelectedUser() {
+        return this.testField.state.selectedUserId;
     }
     render() {
 
-        const appUsers = this.props.allUsers.map((element)=>{
-            return {firstName: element.firstName, lastName: element.lastName, email: element.email};
-        })
+        const appUsers = this.props.allUsers.map((user)=>{
+            let {firstName, lastName, email, screenName} = user;
+            return {firstName, lastName, email, screenName, userId: user.id};
+        });
 
-        // const appUsers = this.props.allUsers
-        //
         const fieldDef1 = {
             builtIn: false,
             datatypeAttributes: {
@@ -42,28 +43,23 @@ class addUserPanel extends React.Component {
             },
         };
 
-        const fieldDef2 = {
-            builtIn: false,
-            dataTtypeAttributes: {
-                type: "USER",
-                userDisplayFormat: "LAST_THEN_FIRST",
-            },
-            required:true
-        };
-
-
-
         return (
             <div className = "panelContainer">
                 <div className="selectUser panel-items">
                     <dt>Select Users</dt>
                     <dd>
-                        <UserFieldValueEditor value={this.state.selectedRole} appUsers={appUsers} isAddUser={true} fieldDef={fieldDef1} searchUsers={this.props.searchUsers}/>
+                        <UserFieldValueEditor
+                            appUsers={appUsers}
+                            isAddUser={true}
+                            fieldDef={fieldDef1}
+                            searchUsers={this.props.searchUsers}
+                            ref={(fieldValueEditor) => {this.testField = fieldValueEditor;}}
+                        />
                     </dd>
                 </div>
                 <div className="assignRole panel-items">
                     Assign Roles
-                    <Select autofocus options={this.getRoles()} simpleValue clearable={false} value={this.state.selectedRole} onChange={this.updateRole}/>
+                    <Select autofocus options={this.getRoles()} searchable={false} simpleValue clearable={false} value={this.state.selectedRole} onChange={this.updateRole}/>
 
                 </div>
 

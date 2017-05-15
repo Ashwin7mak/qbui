@@ -70,6 +70,7 @@ const UserFieldValueEditor = React.createClass({
         if (user || !this.props.fieldDef.required) {
             this.setState({selectedUserId: user ? user.value : null});
         }
+        // TODO: send selected user value to flux
     },
 
     /**
@@ -100,7 +101,6 @@ const UserFieldValueEditor = React.createClass({
         appUserItems.forEach(current => {
             current.showEmail = appUserItems.reduce((count, user) => count + (user.label === current.label ? 1 : 0), 0) > 1;
         });
-
         return  [{value:null, label:""}].concat(appUserItems);
     },
 
@@ -122,7 +122,7 @@ const UserFieldValueEditor = React.createClass({
 
 
     /**
-     * render an menu item in the select
+     * render a menu item in the select
      * @param option user object with value & email flag
      */
     renderOption(option) {
@@ -136,7 +136,7 @@ const UserFieldValueEditor = React.createClass({
         return (
             <div className="userOption">
                 {this.state.selectedUserId === user.userId && <QbIcon icon="check-reversed"/>}
-                <div className="userLabel">{userLabel} {user.deactivated && <span className="deactivatedLabel">(deactivated)</span>}</div>
+                <div className="userLabel">{userLabel} {user.screenName && <span>({user.screenName})</span>} {user.deactivated && <span className="deactivatedLabel">(deactivated)</span>}</div>
                 { user.email && <div className="email">{user.email}</div>}
             </div>);
     },
@@ -177,7 +177,7 @@ const UserFieldValueEditor = React.createClass({
      */
     onInputChange(newInputValue) {
         //make api call
-        this.props.searchUsers(newInputValue)
+        this.props.searchUsers(newInputValue);
         this.setState({inputValue: newInputValue});
     },
 

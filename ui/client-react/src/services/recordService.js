@@ -116,6 +116,7 @@ class RecordService extends BaseService {
         const fixedRecord = SaveRecordFormatter.formatRecordForSaving(record);
 
         let url = super.constructUrl(this.API.CREATE_RECORD, [appId, tableId]);
+        console.log(fixedRecord)
         return super.post(url, fixedRecord);
     }
 
@@ -141,6 +142,7 @@ class RecordService extends BaseService {
      * @returns {*}
      */
     deleteRecords(appId, tableId, recordIds) {
+        console.log(recordIds, "recordIds")
         let url = super.constructUrl(this.API.DELETE_RECORD_BULK, [appId, tableId]);
         return super.delete(url, {data: recordIds});
     }

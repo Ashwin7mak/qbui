@@ -734,6 +734,11 @@ export default {
                 prompt: "Type YES to confirm that you want to delete this table"
             },
             YES: "YES"
+        },
+        addUserToApp:{
+            title: "Add users to",
+            description: "Search for users that you'd like to add to your app and decide what level of access you'd like to give them by assigning them to a role.",
+
         }
     }
 };
