@@ -60,27 +60,7 @@ let BuilderDropDownAction = React.createClass({
                             </li>
                             <li>
                                 <a onClick={this.getAutomationSettingsLink}>
-                                    Create or modify roles
-                                </a>
-                            </li>
-                            <li>
-                                <a onClick={this.getAutomationSettingsLink}>
-                                    Bird's-eye view
-                                </a>
-                            </li>
-                            <li>
-                                <a onClick={this.getAutomationSettingsLink}>
-                                    Add a page
-                                </a>
-                            </li>
-                            <li>
-                                <a onClick={this.getAutomationSettingsLink}>
-                                    App properties
-                                </a>
-                            </li>
-                            <li>
-                                <a onClick={this.getAutomationSettingsLink}>
-                                    All app settings
+                                    <I18nMessage message={"settings.automationSettings"}/>
                                 </a>
                             </li>
                         </ul>
@@ -94,27 +74,7 @@ let BuilderDropDownAction = React.createClass({
                             </li>
                             <li>
                                 <a onClick={this.getTableSettingsLink}>
-                                    Import data into this table
-                                </a>
-                            </li>
-                            <li>
-                                <a onClick={this.getTableSettingsLink}>
-                                    Add a report or chart
-                                </a>
-                            </li>
-                            <li>
-                                <a onClick={this.getTableSettingsLink}>
-                                    Table properties & settings
-                                </a>
-                            </li>
-                            <li>
-                                <a onClick={this.getTableSettingsLink}>
-                                    Table properties & settings
-                                </a>
-                            </li>
-                            <li>
-                                <a onClick={this.getTableSettingsLink}>
-                                    All table settings
+                                    <I18nMessage message={"settings.tableSettings"}/>
                                 </a>
                             </li>
                         </ul>
@@ -127,7 +87,7 @@ let BuilderDropDownAction = React.createClass({
                             </li>
                             <li>
                                 <a onClick={this.props.navigateToBuilder}>
-                                    Modify this form
+                                    <I18nMessage message={"settings.configureFormBuilder"}/>
                                 </a>
                             </li>
                         </ul>
