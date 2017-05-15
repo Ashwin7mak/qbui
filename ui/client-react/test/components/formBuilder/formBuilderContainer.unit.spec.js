@@ -133,7 +133,6 @@ describe('FormBuilderContainer', () => {
 
             expect(NavigationUtils.goBackToLocationOrTable).toHaveBeenCalledWith(appId, tblId, previousLocation);
         });
-        
         it('will invoke setFieldsPendingEditToFalse if isFieldPropertiesDirty is true', () => {
             component = mount(<FormBuilderContainer match={testParamsProp}
                                                     isFormDirty={false}
