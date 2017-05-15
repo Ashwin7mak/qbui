@@ -13,7 +13,7 @@ describe('Build drop down action functions', () => {
         push: () =>{}
     };
     const callbacks = {
-        navigateToBuilderReport: () => {},
+        navigateToReportBuilder: () => {},
         navigateToFormBuilder: () =>{}
     };
 
@@ -51,7 +51,7 @@ describe('Build drop down action functions', () => {
 
     it('test form builder link', () => {
         spyOn(callbacks, "navigateToFormBuilder").and.callThrough();
-        component = TestUtils.renderIntoDocument(<BuilderDropDownAction selectedApp={sampleApp} selectedTable={sampleTable} recId="2" navigateToBuilder={callbacks.navigateToFormBuilder}/>);
+        component = TestUtils.renderIntoDocument(<BuilderDropDownAction selectedApp={sampleApp} selectedTable={sampleTable} recId="2" navigateToFormBuilder={callbacks.navigateToFormBuilder}/>);
         let gearIcon = TestUtils.scryRenderedDOMComponentsWithClass(component, "globalActionLink");
         Simulate.click(gearIcon[0]);
         let formBuilderLink = TestUtils.scryRenderedDOMComponentsWithClass(component, "modifyForm");
@@ -60,8 +60,8 @@ describe('Build drop down action functions', () => {
     });
 
     it('test report builder link', () => {
-        spyOn(callbacks, "navigateToBuilderReport").and.callThrough();
-        component = TestUtils.renderIntoDocument(<BuilderDropDownAction selectedApp={sampleApp} selectedTable={sampleTable} rptId="0" navigateToBuilderReport={callbacks.navigateToBuilderReport()}/>);
+        spyOn(callbacks, "navigateToReportBuilder").and.callThrough();
+        component = TestUtils.renderIntoDocument(<BuilderDropDownAction selectedApp={sampleApp} selectedTable={sampleTable} rptId="0" navigateToReportBuilder={callbacks.navigateToReportBuilder}/>);
 
         let gearIcon = TestUtils.scryRenderedDOMComponentsWithClass(component, "globalActionLink");
         Simulate.click(gearIcon[0]);
@@ -69,7 +69,7 @@ describe('Build drop down action functions', () => {
         let reportBuilderLink = TestUtils.scryRenderedDOMComponentsWithClass(component, "modifyForm");
         Simulate.click(reportBuilderLink[0]);
 
-        expect(callbacks.navigateToBuilderReport).toHaveBeenCalled();
+        expect(callbacks.navigateToReportBuilder).toHaveBeenCalled();
     });
 
 });
