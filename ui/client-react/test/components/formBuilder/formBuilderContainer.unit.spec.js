@@ -25,11 +25,9 @@ const mockActions = {
     keyboardMoveFieldUp(_formId, _location) {},
     keyboardMoveFieldDown(_formId, _location) {},
     removeFieldFromForm(_formId, _location) {},
-    deselectField(_formId, _location) {}
-};
-
-const mockAppHistory = {
-    showPendingEditsConfirmationModal() {}
+    deselectField(_formId, _location) {},
+    setFormBuilderPendingEditToFalse(_formId, _location) {},
+    setFieldsPropertiesPendingEditToFalse(_formId, _location) {}
 };
 
 const previousLocation = '/somewhere/over/the/rainbow';
@@ -57,7 +55,6 @@ describe('FormBuilderContainer', () => {
     beforeEach(() => {
         jasmineEnzyme();
         FormBuilderRewireAPI.__Rewire__('FormBuilder', FormBuilderMock);
-        FormBuilderRewireAPI.__Rewire__('AppHistory', mockAppHistory);
         NewfieldsMenuRewireAPI.__Rewire__('FieldTokenInMenu', FieldTokenInMenu);
         FormBuilderRewireAPI.__Rewire__('FieldProperties', FieldPropertiesMock);
         FormBuilderRewireAPI.__Rewire__('FormBuilderCustomDragLayer', () => null); // Returning null so that DragDropContext error is not thrown in unit test
@@ -70,7 +67,8 @@ describe('FormBuilderContainer', () => {
         spyOn(mockActions, 'toggleToolPaletteChildrenTabIndex').and.callThrough();
         spyOn(mockActions, 'removeFieldFromForm');
         spyOn(mockActions, 'deselectField');
-        spyOn(mockAppHistory, 'showPendingEditsConfirmationModal');
+        spyOn(mockActions, 'setFormBuilderPendingEditToFalse');
+        spyOn(mockActions, 'setFieldsPropertiesPendingEditToFalse');
     });
 
     afterEach(() => {
@@ -135,66 +133,40 @@ describe('FormBuilderContainer', () => {
 
             expect(NavigationUtils.goBackToLocationOrTable).toHaveBeenCalledWith(appId, tblId, previousLocation);
         });
-
-        it('will not exit form builder if isFormDirty is true', () => {
-            spyOn(NavigationUtils, 'goBackToLocationOrTable');
-
-            component = shallow(<FormBuilderContainer match={testParamsProp}
-                                                      isFormDirty={true}
-                                                      params={{appId: appId, tblId: tblId}}
-                                                      isFieldPropertiesDirty={false}
-                                                      location={testLocationProp}
-                                                      redirectRoute={previousLocation}/>);
-
-            component.instance().onCancel();
-
-            expect(mockAppHistory.showPendingEditsConfirmationModal).toHaveBeenCalled();
-        });
-
-        it('will not exit form builder if isFieldPropertiesDirty is true', () => {
-            spyOn(NavigationUtils, 'goBackToLocationOrTable');
-
-            component = shallow(<FormBuilderContainer match={testParamsProp}
-                                                      isFormDirty={false}
-                                                      isFieldPropertiesDirty={true}
-                                                      location={testLocationProp}
-                                                      redirectRoute={previousLocation}/>);
-
-            component.instance().onCancel();
-
-            expect(mockAppHistory.showPendingEditsConfirmationModal).toHaveBeenCalled();
-        });
-
-        it('will invoke showPendingEditsConfirmationModal if isFormDirty is true', () => {
-            component = mount(<FormBuilderContainer match={testParamsProp}
-                                                      isFormDirty={true}
-                                                      isFieldPropertiesDirty={false}
-                                                      location={testLocationProp}
-                                                      redirectRoute={previousLocation}
-                                                      loadForm={mockActions.loadForm}/>);
-
-            instance = component.instance();
-            instance.onCancel();
-
-            //I am not rendering a modal in the DOM for this test. I am just verifying that it exists. Just making sure it does not accidentally get deleted.
-            expect(component.find('#appModal').length).toEqual(1);
-            expect(mockAppHistory.showPendingEditsConfirmationModal).toHaveBeenCalled();
-        });
-
-        it('will invoke showPendingEditsConfirmationModal if isFieldPropertiesDirty is true', () => {
+        
+        it('will invoke setFieldsPendingEditToFalse if isFieldPropertiesDirty is true', () => {
             component = mount(<FormBuilderContainer match={testParamsProp}
                                                     isFormDirty={false}
                                                     isFieldPropertiesDirty={true}
                                                     location={testLocationProp}
                                                     redirectRoute={previousLocation}
+                                                    setFieldsPropertiesPendingEditToFalse={mockActions.setFieldsPropertiesPendingEditToFalse}
                                                     loadForm={mockActions.loadForm}/>);
 
             instance = component.instance();
-            instance.onCancel();
+            instance.closeFormBuilder();
 
-            //I am not rendering a modal in the DOM for this test. I am just verifying that it exists. Just making sure it does not accidentally get deleted.
+            //I am not rendering a modal in the DOM for this test. I am just verifying that it exists. Just making sure it does not accidentally get deleted
             expect(component.find('#appModal').length).toEqual(1);
-            expect(mockAppHistory.showPendingEditsConfirmationModal).toHaveBeenCalled();
+            expect(mockActions.setFieldsPropertiesPendingEditToFalse).toHaveBeenCalled();
+        });
+
+        it('will invoke setFormBuilderPendingEditToFalse if setFormBuilderPendingEditToFalse is true', () => {
+            component = mount(<FormBuilderContainer match={testParamsProp}
+                                                   isFormDirty={true}
+                                                   isFieldPropertiesDirty={false}
+                                                   location={testLocationProp}
+                                                   redirectRoute={previousLocation}
+                                                   currentForm={currentForm}
+                                                   setFormBuilderPendingEditToFalse={mockActions.setFormBuilderPendingEditToFalse}
+                                                   loadForm={mockActions.loadForm}/>);
+
+            instance = component.instance();
+            instance.closeFormBuilder();
+
+            //I am not rendering a modal in the DOM for this test. I am just verifying that it exists. Just making sure it does not accidentally get deleted
+            expect(component.find('#appModal').length).toEqual(1);
+            expect(mockActions.setFormBuilderPendingEditToFalse).toHaveBeenCalledWith(currentForm.id);
         });
     });
 

@@ -531,4 +531,13 @@ describe('Form Actions', () => {
                 content: null});
         });
     });
+
+    describe('setFormBuilderPendingEditToFalse', () => {
+        it('creates an action that sets isPendingEdit to false', () => {
+            expect(formActions.setFormBuilderPendingEditToFalse('view')).toEqual({
+                id: 'view',
+                type: types.SET_IS_PENDING_EDIT_TO_FALSE,
+                content: null});
+        });
+    });
 });
