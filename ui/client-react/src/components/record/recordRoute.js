@@ -249,7 +249,7 @@ export const RecordRoute = React.createClass({
         let record = form && form.formData ? form.formData.record : null;
         const recordId = recIdTitle || this.props.match.params.recordId;
         const isSmall = Breakpoints.isSmallBreakpoint();
-        let table = this.props.selectedTable ? this.props.selectedTable : this.getSelectedTable(this.props.match.params.tblId);
+        let table = this.getSelectedTable(this.props.match.params.tblId);
         let recordTitle = getRecordTitle(table, record, recordId);
         return <div className="title">
             {isSmall ? <Icon iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY} classes="primaryIcon" icon={this.props.selectedTable ? this.props.selectedTable.tableIcon : ""}/> : null}
