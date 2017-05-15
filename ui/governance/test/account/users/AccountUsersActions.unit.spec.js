@@ -413,13 +413,13 @@ describe('Account Users Actions Tests', () => {
         });
 
         it('Filter the text columns by hasAppAccess correctly', () => {
-            let filteredUsers = actions.searchUsers(ACCOUNT_USERS_DATA, "QuickBase Staff");
+            let filteredUsers = actions.searchUsers(ACCOUNT_USERS_DATA, "Quick Base Staff");
             expect(filteredUsers.length).toEqual(1);
             expect(filteredUsers[0].userName).toEqual('administrator');
         });
 
         it('Filter case insensitive search', () => {
-            let filteredUsers = actions.searchUsers(ACCOUNT_USERS_DATA, "quickBase staff");
+            let filteredUsers = actions.searchUsers(ACCOUNT_USERS_DATA, "quick Base staff");
             expect(filteredUsers.length).toEqual(1);
             expect(filteredUsers[0].userName).toEqual('administrator');
         });
@@ -483,7 +483,7 @@ describe('Account Users Actions Tests', () => {
 
         it('gets the users based on QuickBase access status', () => {
             let selected = new FacetSelections();
-            selected.addSelection(0, 'QuickBase Staff');
+            selected.addSelection(0, 'Quick Base Staff');
             selected.addSelection(0, 'No App Access');
             selected.addSelection(0, 'Paid Seat');
 
@@ -580,7 +580,7 @@ describe('Account Users Actions Tests', () => {
             expect(sortedUsersDsc[2].firstName).toEqual('Administrator');
         });
 
-        it('sorts the numeric columns by QuickBase Access Status correctly', () => {
+        it('sorts the numeric columns by Quick Base Access Status correctly', () => {
             let sortedUsersAsc = actions.sortUsers(ACCOUNT_USERS_DATA, [8]);
             expect(sortedUsersAsc[0].numGroupsMember).toEqual(0);
             expect(sortedUsersAsc[1].numGroupsMember).toEqual(0);

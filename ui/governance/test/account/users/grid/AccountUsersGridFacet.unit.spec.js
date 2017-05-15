@@ -57,7 +57,7 @@ const ACCOUNT_USERS_DATA = [
 
 describe('Faceting Fields Values', () => {
 
-    it('gets the facets based on QuickBase access status', () => {
+    it('gets the facets based on Quick Base access status', () => {
         expect(GetFacetFields(true, true)[0]).toEqual(
             {
                 id:0,

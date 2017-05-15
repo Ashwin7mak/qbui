@@ -23,10 +23,10 @@ export default {
             },
             account: {
                 users: {
-                    accessStatus: "QuickBase access status",
+                    accessStatus: "Quick Base access status",
                     paidSeats: "Paid seats",
                     paidSeatSingular: "Paid seat",
-                    quickbaseStaff: "QuickBase staff",
+                    quickbaseStaff: "Quick Base staff",
                     inGroup: "In any group",
                     inactive: "Inactive",
                     groupManager: "Group manager",
@@ -37,7 +37,7 @@ export default {
                     deactivatedUsers: "Deactivated users",
                     realmDirectoryUsers: "In realm directory",
                     stageTitle: "Manage All Users",
-                    stageDescription: "Use this page to manage all your QuickBase account and realm users. Take a look around, and ",
+                    stageDescription: "Use this page to manage all your Quick Base account and realm users. Take a look around, and ",
                     feedbackLink: "https://team.quickbase.com/db/bmrrmm53x?a=nwr",
                     feedbackLinkText: "give us feedback"
                 }

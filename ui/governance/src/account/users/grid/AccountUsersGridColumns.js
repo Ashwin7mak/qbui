@@ -86,7 +86,7 @@ const columns = [
     {
         property: 'hasAppAccess',
         header: {
-            label: 'QUICKBASE ACCESS STATUS'
+            label: 'QUICK BASE ACCESS STATUS'
         },
         cell: {
             formatters: [Formatters.FormatUserStatusHTML]
