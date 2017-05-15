@@ -145,8 +145,8 @@ export const Nav = React.createClass({
                             actions={actions}
                             position={"top"}
                             icon="settings"
-                            navigateToBuilder={this.navigateToFormBuilder}
-                            navigateToBuilderReport={this.navigateToReportBuilder}
+                            navigateToFormBuilder={this.navigateToFormBuilder}
+                            navigateToReportBuilder={this.navigateToReportBuilder}
                             startTabIndex={4}
                             rptId={this.getReportsData().rptId} /> : null}
                 </GlobalActions>
