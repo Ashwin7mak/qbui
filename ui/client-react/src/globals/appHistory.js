@@ -350,7 +350,7 @@ class AppHistory {
             }
         }
     }
-    
+
     _discardChangesForFormBuilder(fieldsStoreIsPendingEdit, formsStoreIsPendingEdit) {
         if (fieldsStoreIsPendingEdit) {
             self.setFieldsPropertiesPendingEditToFalse();

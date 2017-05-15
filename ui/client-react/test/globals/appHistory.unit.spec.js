@@ -103,7 +103,9 @@ describe('AppHistory', () => {
         saveFormComplete: () => {},
         hideTrowser: () => {},
         showErrorMsgDialog: () => {},
-        getNavReport: () => {}
+        getNavReport: () => {},
+        setFieldsPropertiesPendingEditToFalse: () => {},
+        setFormBuilderPendingEditToFalse: () => {}
     };
 
     describe('Test new appHistory instances', () => {
@@ -119,6 +121,8 @@ describe('AppHistory', () => {
             expect(appHistory.hideTrowser).toBeNull();
             expect(appHistory.showErrorMsgDialog).toBeNull();
             expect(appHistory.getNavReport).toBeNull();
+            expect(appHistory.setFieldsPropertiesPendingEditToFalse).toBeNull();
+            expect(appHistory.setFormBuilderPendingEditToFalse).toBeNull();
         });
 
         it('Is a singleton class; ensure only one instance created', () => {
@@ -142,6 +146,8 @@ describe('AppHistory', () => {
             expect(appHistory.hideTrowser).toBeDefined();
             expect(appHistory.showErrorMsgDialog).toBeDefined();
             expect(appHistory.getNavReport).toBeDefined();
+            expect(appHistory.setFieldsPropertiesPendingEditToFalse).toBeDefined();
+            expect(appHistory.setFormBuilderPendingEditToFalse).toBeDefined();
         });
 
         it('sets a listener for internal app route changes', () => {
@@ -265,6 +271,8 @@ describe('AppHistory', () => {
             spyOn(mockStoreFunc, 'saveFormComplete');
             spyOn(mockStoreFunc, 'hideTrowser');
             spyOn(mockStoreFunc, 'editRecordCancel');
+            spyOn(mockStoreFunc, 'setFieldsPropertiesPendingEditToFalse');
+            spyOn(mockStoreFunc, 'setFormBuilderPendingEditToFalse');
             spyOn(AppHistory, 'getStores').and.returnValue(mockState);
         });
         afterEach(() => {
@@ -413,10 +421,11 @@ describe('AppHistory', () => {
             expect(mockStoreReject.dispatch).toHaveBeenCalled();
         });
 
-        it('_discardChanges call dispatch if recordStore isPendingEdit is true', () => {
+        it('_discardChanges invoke  _discardChangesForRecord if recordStore isPendingEdit is true', () => {
             mockState.recordStore.isPendingEdit = true;
             AppHistory.setup(mockStore, mockStoreFunc);
             AppHistory._discardChanges();
+            expect(mockStore.dispatch).toHaveBeenCalled();
             expect(mockStore.dispatch).toHaveBeenCalled();
             expect(mockStoreFunc.editRecordCancel).toHaveBeenCalled();
             expect(mockStoreFunc.hideTrowser).toHaveBeenCalled();
