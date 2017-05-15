@@ -495,7 +495,8 @@ export const RecordRoute = React.createClass({
         //todo : handle query params in the url
         const existingPath = this.props.location.pathname;
         const appId = _.get(this, 'props.match.params.appId', this.selectedAppId);
-        //TODO: move to url consts and make a function in urlUtils
+
+        // generate the next drilldown url segment representing the record we want to show in a drawer
         const recordDrawerSegment = urlUtils.getRecordDrawerSegment(appId, tblId, embeddedReport.id, recId);
         const link = existingPath + recordDrawerSegment;
         if (this.props.history) {
