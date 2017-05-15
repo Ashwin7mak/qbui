@@ -378,7 +378,7 @@ $edit-icon-font-size: 18px;
         top: -47px;
         left: -79px;
         padding: 0 24px;
-        border: 1px solid $color-purple-400;
+        border: 1px solid $color-black-400;
 
         .loadedContent {
             padding: 0;
@@ -437,7 +437,10 @@ $edit-icon-font-size: 18px;
                 }
 
                 &.addRecord {
-                    color: $iconfont-on-light-normal-color;
+                    color: $color-cyan-500;
+                    &:hover {
+                        color: $color-cyan-400;
+                    }
 
                     &.disabled {
                         color: $iconfont-on-light-disabled-color;
@@ -630,7 +633,7 @@ $edit-icon-font-size: 18px;
 
         // standard cell
         .qbCell {
-            border-top: 1px solid $color-purple-400;
+            border-top: 1px solid $color-black-400;
             overflow: visible;
             margin: 0;
             border-right: 1px solid $color-black-300;
