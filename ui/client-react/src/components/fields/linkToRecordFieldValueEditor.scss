@@ -1,9 +1,13 @@
 .multiStepModal.tableDataConnectionDialog {
     .modal-body > *:first-child {
-        height: 100px;
+        height: 140px;
     }
 
-    .tableChooserHeader {
+    .tableChooserDescription {
+        padding-bottom: 20px;
+    }
+    .tableChooserHeading {
+        font-weight: bold;
         padding-bottom: 20px;
     }
 }

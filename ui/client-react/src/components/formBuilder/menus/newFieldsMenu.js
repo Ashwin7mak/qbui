@@ -8,13 +8,17 @@ const NewFieldsMenu = ({isCollapsed, isOpen, toggleToolPaletteChildrenTabIndex, 
                         toolPaletteFocus, toolPaletteTabIndex, formMeta}) => {
 
     let omittedFieldGroups = ['tableDataConnections'];
+    let tableCount = 1;
 
+    let parentTables = [];
     if (formMeta && Array.isArray(formMeta.relationships) && formMeta.relationships.length > 0) {
-
-        if (!_.find(formMeta.relationships, (rel) => rel.detailTableId === formMeta.tableId)) {
-            omittedFieldGroups = [];
-        }
+        parentTables =_.filter(formMeta.relationships, (rel) => rel.detailTableId === formMeta.tableId);
     }
+
+    if (parentTables.length < tableCount - 1) {
+        omittedFieldGroups = [];
+    }
+
     return (
         <ListOfElements
             tabIndex={toolPaletteTabIndex}

@@ -24,8 +24,6 @@ const LinkToRecordFieldValueEditor = React.createClass({
          */
         isDisabled: React.PropTypes.bool,
 
-        /** Optional prop to pass in placeholder text. Defaults to: 'name@domain.com' (internationalized). */
-        placeholder: PropTypes.string
     },
     getDefaultProps() {
         return {
@@ -67,7 +65,7 @@ const LinkToRecordFieldValueEditor = React.createClass({
     },
 
     getReactSelect() {
-        const placeHolderMessage = Locale.getMessage("selection.placeholder");
+        const placeHolderMessage = "Select a table";
         const notFoundMessage = <I18nMessage message="selection.notFound"/>;
         const emptyOptionText = '\u00a0'; //Non breaking space
 
@@ -100,12 +98,13 @@ const LinkToRecordFieldValueEditor = React.createClass({
                 <MultiStepDialog show={true}
                                  onCancel={this.cancelTableSelection}
                                  onFinished={this.tableSelected}
-                                 finishedButtonLabel="Create connection"
+                                 finishedButtonLabel="Add to form"
                                  classes={"tableDataConnectionDialog allowOverflow"}
-                                 titles={["Create table data connection"]}>
+                                 titles={["Get another record"]}>
                     <div>
-                        <div className="tableChooserHeader">Link to a single record in:</div>
+                        <div className="tableChooserDescription">When you create or update a record, you can look up and get info from a record in another table</div>
 
+                        <div className="tableChooserHeading">Where is the record you want to get?</div>
                         {this.getReactSelect()}
                     </div>
                 </MultiStepDialog>);
