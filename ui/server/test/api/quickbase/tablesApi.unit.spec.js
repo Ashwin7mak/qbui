@@ -325,6 +325,7 @@ describe('Validate tablesApi', function() {
             promise.then(
                 function(response) {
                     assert.deepEqual(response, {tableNoun: 'test'});
+                    assert.equal(createTablePropertiesStub.callCount, 0);
                     done();
                 },
                 function() {
