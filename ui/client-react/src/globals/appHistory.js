@@ -350,6 +350,23 @@ class AppHistory {
             }
         }
     }
+    
+    _discardChangesForFormBuilder(fieldsStoreIsPendingEdit, formsStoreIsPendingEdit) {
+        if (fieldsStoreIsPendingEdit) {
+            self.setFieldsPropertiesPendingEditToFalse();
+        }
+        if (formsStoreIsPendingEdit) {
+            self.setFormBuilderPendingEditToFalse();
+        }
+        self._continueToDestination();
+    }
+
+    _discardChangesForRecord() {
+        self.store.dispatch(self.editRecordCancel(recordStore.currentEditingAppId, recordStore.currentEditingTableId, recordStore.currentEditingRecordId));
+        self.store.dispatch(self.hideTrowser());
+        self._continueToDestination();
+
+    }
 
     _discardChanges(hideModal = true) {
         if (hideModal) {
@@ -362,18 +379,14 @@ class AppHistory {
             let {recordStore, formsStore, fieldsStore} = self.getStores(state);
 
             if (recordStore.isPendingEdit) {
-                self.store.dispatch(self.editRecordCancel(recordStore.currentEditingAppId, recordStore.currentEditingTableId, recordStore.currentEditingRecordId));
-                self.store.dispatch(self.hideTrowser());
+                self._discardChangesForRecord();
             }
 
-            if (fieldsStore.isPendingEdit) {
-                self.setFieldsPropertiesPendingEditToFalse();
+            if (fieldsStore.isPendingEdit && formsStore.isPendingEdit) {
+                self._discardChangesForFormBuilder(fieldsStore.isPendingEdit, formsStore.isPendingEdit);
             }
-            if (formsStore.isPendingEdit) {
-                self.setFormBuilderPendingEditToFalse();
-            }
+            self._continueToDestination();
         }
-        self._continueToDestination();
     }
 
     _continueToDestination() {
