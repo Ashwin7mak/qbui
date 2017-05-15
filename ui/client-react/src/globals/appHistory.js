@@ -307,7 +307,7 @@ class AppHistory {
             let formType;
             let formMeta;
 
-            if (formsStore && formsStore.formData) {
+            if (formsStore && formsStore.formData && formsStore.formData.formMeta) {
                 appId = formsStore.formData.formMeta.appId;
                 tableId = formsStore.formData.formMeta.tableId;
                 formType = formsStore.formData.formType;
