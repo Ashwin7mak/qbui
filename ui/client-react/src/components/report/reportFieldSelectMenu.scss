@@ -55,6 +55,12 @@
             flex: 1 auto;
             overflow: auto;
             height: 100%;
+
+            .smallBreakPoint & {
+                display: flex;
+                flex-direction: column;
+                height: 100%;
+            }
         }
 
         > .reportFieldSelectMenuContent {

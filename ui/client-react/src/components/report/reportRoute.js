@@ -10,6 +10,7 @@ import QueryUtils from '../../utils/queryUtils';
 import NumberUtils from '../../utils/numberUtils';
 import WindowLocationUtils from '../../utils/windowLocationUtils';
 import UrlUtils from '../../utils/urlUtils';
+import Breakpoints from '../../utils/breakpoints';
 import simpleStringify from '../../../../common/src/simpleStringify';
 import constants from '../../../../common/src/constants';
 import withUniqueId from '../hoc/withUniqueId';
@@ -197,8 +198,10 @@ const ReportRoute = React.createClass({
             return null;
         } else {
             const reportData = _.get(this, 'props.reportData', {});
+            const classNames = ['reportContainer'];
+            classNames.push(Breakpoints.isSmallBreakpoint() ? 'smallBreakPoint' : '');
             return (
-                <div className="reportContainer">
+                <div className={classNames.join(' ')}>
                     <ReportFieldSelectMenu
                         appId={this.props.match.params.appId}
                         tblId={this.props.match.params.tblId}
