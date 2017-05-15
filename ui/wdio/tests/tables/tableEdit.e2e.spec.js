@@ -46,8 +46,13 @@
          * Before each it block reload the list all report (can be used as a way to reset state between tests)
          */
         beforeEach(function() {
-            // Load the List All report on Table 1
-            return e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
+            browser.call(function() {
+                // Load the requestAppsPage (shows a list of all the apps in a realm)
+                return RequestAppsPage.get(e2eBase.getRequestAppsPageEndpoint(realmName));
+            });
+
+            //select the App
+            RequestAppsPage.selectApp(testApp.name);
         });
 
         it('Add a new table and then edit that table', function() {

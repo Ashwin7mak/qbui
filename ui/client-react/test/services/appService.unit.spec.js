@@ -46,4 +46,12 @@ describe('AppService functions', () => {
         expect(BaseService.prototype.get).toHaveBeenCalledWith(appService.API.GET_APPS, {params:params});
     });
 
+    it('test getAppComponent function', () => {
+        let appId = '123';
+        let url = StringUtils.format(appService.API.GET_APP_COMPONENTS, [appId]);
+
+        appService.getAppComponents(appId);
+        expect(BaseService.prototype.get).toHaveBeenCalledWith(url);
+    });
+
 });

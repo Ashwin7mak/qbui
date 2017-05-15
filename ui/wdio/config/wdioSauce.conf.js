@@ -2,6 +2,7 @@
 // (see onPrepare hook below)
 var localConf;
 var randomNum = Math.floor((Math.random() * (100 - 1) + 1));
+var seleniumPort = 4400 + randomNum;
 var metricsPort = 8800 + randomNum;
 
 exports.config = {
@@ -22,9 +23,10 @@ exports.config = {
         // Uncomment this if you are running Sauce against your local dev
         //dns             : '127.0.0.1',
         // Use a random int to make the port unique between Jenkins jobs
-        port            : 4400 + randomNum,
+        port            : seleniumPort,
         connectRetries : 5,
         connectRetryTimeout: 5000,
+        // Custom ip to query for test metrics
         metricsAddress : 'localhost:' + metricsPort
     },
     //
@@ -35,7 +37,7 @@ exports.config = {
     // Define all options that are relevant for connecting WebdriverIO to a Sauce Labs Selenium Server here
     //
     //host: '127.0.0.1',
-    //port: 4400,
+    port: seleniumPort,
     //path: '/wd/hub',
     //
     // ============

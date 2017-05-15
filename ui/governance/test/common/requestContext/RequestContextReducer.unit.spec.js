@@ -1,5 +1,5 @@
-import RequestContextReducer, {isFetching} from '../../../src/common/requestContext/RequestContextReducer';
-import * as types from '../../../src/app/actionTypes';
+import RequestContextReducer, {isFetching} from "../../../src/common/requestContext/RequestContextReducer";
+import * as types from "../../../src/app/actionTypes";
 
 const initialState = {
     realm: {},
