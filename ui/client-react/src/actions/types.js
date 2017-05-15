@@ -90,6 +90,7 @@ export const OPEN_FIELD_SELECT_MENU = 'OPEN_FIELD_SELECT_MENU';
 export const CLOSE_FIELD_SELECT_MENU = 'CLOSE_FIELD_SELECT_MENU';
 export const ADD_COLUMN_FROM_EXISTING_FIELD = 'ADD_COLUMN_FROM_EXISTING_FIELD';
 export const HIDE_COLUMN = 'HIDE_COLUMN';
+export const MOVE_COLUMN = 'MOVE_COLUMN';
 
 //  ******** table report list actions ********
 export const LOAD_REPORTS = 'LOAD_REPORTS';

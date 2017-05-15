@@ -421,3 +421,12 @@ export const addColumnFromExistingField = (context, requestedColumn, addBefore) 
 export const hideColumn = (context, clickedId) => {
     return event(context, types.HIDE_COLUMN, {clickedId});
 };
+
+/**
+ * Move a column based on the source and target ids given.
+ * @param context
+ * @param sourceIndex and targetIndex
+ */
+export const moveColumn = (context, params) => {
+    return event(context, types.MOVE_COLUMN, params);
+};
