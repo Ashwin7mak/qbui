@@ -138,10 +138,7 @@ class AppHistory {
             //fetch stores that have pendEdits
             let {recordStore, formsStore, fieldsStore} = self.getStores(state);
 
-            if (recordStore.isPendingEdit) {
-
-                hasPendingEdit = true;
-            } else if (formsStore.isPendingEdit || fieldsStore.isPendingEdit) {
+            if (formsStore.isPendingEdit || fieldsStore.isPendingEdit || recordStore.isPendingEdit) {
                 //for form builder
                 hasPendingEdit = true;
             }
