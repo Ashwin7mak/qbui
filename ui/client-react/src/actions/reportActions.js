@@ -347,19 +347,3 @@ export const loadReportRecordsCount = (context, appId, tblId, rptId, queryParams
         }
     };
 };
-
-/**
- * Enter Builder Mode
- * @returns {{type}}
- */
-export const enterBuilderMode = (context) => {
-    return event(context, types.ENTER_BUILDER_MODE, {});
-};
-
-/**
- * Exit Builder Mode
- * @returns {{type: *}}
- */
-export const exitBuilderMode = (context) => {
-    return event(context, types.EXIT_BUILDER_MODE, {});
-};

@@ -93,3 +93,19 @@ export const addColumnFromExistingField = (context, requestedColumn, addBefore) 
 export const hideColumn = (context, clickedId) => {
     return event(context, types.HIDE_COLUMN, {clickedId});
 };
+
+/**
+ * Enter report builder mode
+ * @param context
+ */
+export const enterBuilderMode = (context) => {
+    return event(context, types.ENTER_BUILDER_MODE, {});
+};
+
+/**
+ * Exit report builder mode
+ * @param context
+ */
+export const exitBuilderMode = (context) => {
+    return event(context, types.EXIT_BUILDER_MODE, {});
+};
