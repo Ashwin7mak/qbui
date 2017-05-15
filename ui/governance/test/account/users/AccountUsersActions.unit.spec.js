@@ -9,8 +9,11 @@ import Promise from "bluebird";
 import FacetSelections from "../../../../reuse/client/src/components/facets/facetSelections";
 import Locale from "../../../../reuse/client/src/locales/locale";
 import GovernanceBundleLoader from '../../../src/locales/governanceBundleLoader';
+import {FACET_FIELDID} from "./grid/AccountUsersGridFacet.unit.spec";
 
 describe('Account Users Actions Tests', () => {
+
+
     // Dummy Data
     const ACCOUNT_USERS_DATA = [
         {
@@ -483,9 +486,9 @@ describe('Account Users Actions Tests', () => {
 
         it('gets the users based on QuickBase access status', () => {
             let selected = new FacetSelections();
-            selected.addSelection(0, 'QuickBase Staff');
-            selected.addSelection(0, 'No App Access');
-            selected.addSelection(0, 'Paid Seat');
+            selected.addSelection(FACET_FIELDID.QUICKBASE_ACCESS_STATUS, 'QuickBase Staff');
+            selected.addSelection(FACET_FIELDID.QUICKBASE_ACCESS_STATUS, 'No App Access');
+            selected.addSelection(FACET_FIELDID.QUICKBASE_ACCESS_STATUS, 'Paid Seat');
 
             let facetUsers = actions.facetUser(ACCOUNT_USERS_DATA, selected);
 
@@ -494,7 +497,7 @@ describe('Account Users Actions Tests', () => {
 
         it('gets the right info for user in group', () => {
             let selected = new FacetSelections();
-            selected.addSelection(4, true);
+            selected.addSelection(FACET_FIELDID.INGROUP, true);
 
 
             let facetUsers = actions.facetUser(ACCOUNT_USERS_DATA, selected);
@@ -508,7 +511,7 @@ describe('Account Users Actions Tests', () => {
 
         it('facets users not in group', () => {
             let selected = new FacetSelections();
-            selected.addSelection(4, false);
+            selected.addSelection(FACET_FIELDID.INGROUP, false);
 
             let facetUsers = actions.facetUser(ACCOUNT_USERS_DATA, selected);
 
@@ -521,7 +524,7 @@ describe('Account Users Actions Tests', () => {
 
         it('gets correct info for the users who dont manage groups', () => {
             let selected = new FacetSelections();
-            selected.addSelection(5, false);
+            selected.addSelection(FACET_FIELDID.GROUPMANAGER, false);
 
             let facetUsers = actions.facetUser(ACCOUNT_USERS_DATA, selected);
 
@@ -534,7 +537,7 @@ describe('Account Users Actions Tests', () => {
 
         it('gets correct info for the users who manage groups', () => {
             let selected = new FacetSelections();
-            selected.addSelection(5, true);
+            selected.addSelection(FACET_FIELDID.INGROUP, true);
 
             let facetUsers = actions.facetUser(ACCOUNT_USERS_DATA, selected);
 
@@ -547,8 +550,8 @@ describe('Account Users Actions Tests', () => {
 
         it('facets columns combination', () => {
             let selected = new FacetSelections();
-            selected.addSelection(4, true);
-            selected.addSelection(5, true);
+            selected.addSelection(FACET_FIELDID.INGROUP, true);
+            selected.addSelection(FACET_FIELDID.GROUPMANAGER, true);
 
             let facetUsers = actions.facetUser(ACCOUNT_USERS_DATA, selected);
             expect(facetUsers.length).toBeGreaterThan(0);

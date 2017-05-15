@@ -17,11 +17,11 @@ describe('AccountUsersGridFormatter', () => {
     };
 
     it("should format the user status correctly", ()=> {
-        expect(Formatters.FormatUserStatusText(true, basicUserInfo)).toEqual("Paid Seat");
-        expect(Formatters.FormatUserStatusText(false, basicUserInfo)).toEqual("No App Access");
-        expect(Formatters.FormatUserStatusText(true, {rowData:{...basicUserInfo.rowData, systemRights: 1}})).toEqual("QuickBase Staff");
-        expect(Formatters.FormatUserStatusText(true, {rowData:{...basicUserInfo.rowData, realmDirectoryFlags: 8}})).toEqual("Denied");
-        expect(Formatters.FormatUserStatusText(true, {rowData:{...basicUserInfo.rowData, userBasicFlags: 68}})).toEqual("Deactivated");
+        expect(Formatters.FormatAccessStatusText(true, basicUserInfo)).toEqual("Paid Seat");
+        expect(Formatters.FormatAccessStatusText(false, basicUserInfo)).toEqual("No App Access");
+        expect(Formatters.FormatAccessStatusText(true, {rowData:{...basicUserInfo.rowData, systemRights: 1}})).toEqual("QuickBase Staff");
+        expect(Formatters.FormatAccessStatusText(true, {rowData:{...basicUserInfo.rowData, realmDirectoryFlags: 8}})).toEqual("Denied");
+        expect(Formatters.FormatAccessStatusText(true, {rowData:{...basicUserInfo.rowData, userBasicFlags: 68}})).toEqual("Deactivated");
     });
 
     it("should format the user name when the username is the same as the email correctly", ()=> {

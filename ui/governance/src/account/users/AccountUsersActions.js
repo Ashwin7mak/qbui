@@ -51,7 +51,7 @@ export const searchUsers = (users, searchTerm) => {
         _.includes(user.email.toLowerCase(), searchTerm) ||
         _.includes(user.userName.toLowerCase(), searchTerm) ||
         _.includes(Formatters.FormatLastAccessString(user.lastAccess).toLowerCase(), searchTerm) ||
-        _.includes(Formatters.FormatUserStatusText(user.hasAppAccess, {rowData: user}).toLowerCase(), searchTerm);
+        _.includes(Formatters.FormatAccessStatusText(user.hasAppAccess, {rowData: user}).toLowerCase(), searchTerm);
     });
 };
 
@@ -93,7 +93,7 @@ const sortFunctions = [
     "email",
     user => Formatters.FormatUsernameString(user, {rowData: user}),
     "lastAccess",
-    user => Formatters.FormatUserStatusText(user.hasAppAccess, {rowData: user}),
+    user => Formatters.FormatAccessStatusText(user.hasAppAccess, {rowData: user}),
     user => Formatters.FormatIsInactive(user.lastAccess, {rowData: user}),
     user => user.numGroupsMember > 0,
     user => user.numGroupsManaged > 0,

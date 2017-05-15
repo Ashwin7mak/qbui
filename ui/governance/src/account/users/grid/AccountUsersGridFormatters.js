@@ -7,8 +7,14 @@ import * as RealmUserAccountFlagConstants from "../../../common/constants/RealmU
 const IsTimeNull = timeStr => timeStr === '1900-01-01T00:00:00Z';
 const RenderBoolColumn = bool => bool ? 'Y' : '--';
 
+
 // Start of Formatters
 export const FormatUserStatusText = (hasAppAccess, cellInfo) => {
+
+};
+
+// Start of Formatters
+export const FormatAccessStatusText = (hasAppAccess, cellInfo) => {
     if (RealmUserAccountFlagConstants.IsDeactivated(cellInfo.rowData)) {
         return "Deactivated";
     } else if (RealmUserAccountFlagConstants.IsDenied(cellInfo.rowData)) {

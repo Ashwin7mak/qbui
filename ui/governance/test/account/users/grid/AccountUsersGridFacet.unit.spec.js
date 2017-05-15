@@ -5,6 +5,12 @@ import _ from 'lodash';
 import Locale from "../../../../../reuse/client/src/locales/locale";
 import GovernanceBundleLoader from '../../../../src/locales/governanceBundleLoader';
 
+export const FACET_FIELDID = {
+    QUICKBASE_ACCESS_STATUS : 1,
+    INGROUP : 5,
+    GROUPMANAGER:6
+};
+
 const ACCOUNT_USERS_DATA = [
     {
         "uid": 10000,
@@ -58,28 +64,28 @@ const ACCOUNT_USERS_DATA = [
 describe('Faceting Fields Values', () => {
 
     it('gets the facets based on QuickBase access status', () => {
-        expect(GetFacetFields(true, true)[0]).toEqual(
+        expect(GetFacetFields(true, true)[FACET_FIELDID.QUICKBASE_ACCESS_STATUS]).toEqual(
             {
-                id:0,
+                id:1,
                 name: Locale.getMessage("governance.account.users.accessStatus"),
                 type: 'TEXT',
                 values: [
-                    {id:0, value: 'Denied'},
-                    {id:0, value: 'Deactivated'},
-                    {id:0, value: 'Paid Seat'},
-                    {id:0, value: 'No App Access'}]
+                    {id:FACET_FIELDID.QUICKBASE_ACCESS_STATUS, value: 'Denied'},
+                    {id:FACET_FIELDID.QUICKBASE_ACCESS_STATUS, value: 'Deactivated'},
+                    {id:FACET_FIELDID.QUICKBASE_ACCESS_STATUS, value: 'Paid Seat'},
+                    {id:FACET_FIELDID.QUICKBASE_ACCESS_STATUS, value: 'No App Access'}]
             });
     });
 
     it('gets the right info for user in group', () => {
-        expect(GetFacetFields(true, true)[4]).toEqual(
+        expect(GetFacetFields(true, true)[FACET_FIELDID.INGROUP]).toEqual(
             {
-                id:4,
+                id:FACET_FIELDID.INGROUP,
                 name: Locale.getMessage("governance.account.users.inGroup"),
                 type: 'CHECKBOX',
                 values: [
-                    {id:4, value: 'Yes'},
-                    {id:4, value: 'No'}]
+                    {id:FACET_FIELDID.INGROUP, value: 'Yes'},
+                    {id:FACET_FIELDID.INGROUP, value: 'No'}]
             });
     });
 });
@@ -95,6 +101,7 @@ describe('Facet Fields Permissions', () => {
     });
 
     const PERM_AGNOSTIC_FACETS = [
+        Locale.getMessage("governance.account.users.userStatus"),
         Locale.getMessage("governance.account.users.accessStatus"),
         Locale.getMessage("governance.account.users.paidSeatSingular"),
         Locale.getMessage("governance.account.users.quickbaseStaff")];

@@ -9,12 +9,20 @@ GovernanceBundleLoader.changeLocale('en-us');
 
 export const FACET_FIELDS = [
     {
+        label: Locale.getMessage("governance.account.users.userStatus"),
+        type: SCHEMACONSTS.TEXT,
+        needsAccountAdmin:true,
+        needsRealmAdmin:true,
+        options: ['Unregistered', 'Unverified', 'Paid Registered', 'No App Access'],
+        formatter: user => Formatters.FormatUserStatusText(user.hasAppAccess, {rowData: user})
+    },
+    {
         label: Locale.getMessage("governance.account.users.accessStatus"),
         type: SCHEMACONSTS.TEXT,
         needsAccountAdmin:true,
         needsRealmAdmin:true,
         options: ['Denied', 'Deactivated', 'Paid Seat', 'No App Access'],
-        formatter: user => Formatters.FormatUserStatusText(user.hasAppAccess, {rowData: user})
+        formatter: user => Formatters.FormatAccessStatusText(user.hasAppAccess, {rowData: user})
     },
     {
         label: Locale.getMessage("governance.account.users.paidSeatSingular"),
@@ -22,7 +30,7 @@ export const FACET_FIELDS = [
         needsAccountAdmin:true,
         needsRealmAdmin:true,
         options: ['Yes', 'No'],
-        formatter: user => 'Paid Seat' === Formatters.FormatUserStatusText(user.hasAppAccess, {rowData: user})
+        formatter: user => 'Paid Seat' === Formatters.FormatAccessStatusText(user.hasAppAccess, {rowData: user})
     },
     {
         label: Locale.getMessage("governance.account.users.quickbaseStaff"),

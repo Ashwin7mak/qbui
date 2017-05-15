@@ -24,6 +24,7 @@ export default {
             account: {
                 users: {
                     accessStatus: "QuickBase access status",
+                    userStatus: "User status",
                     paidSeats: "Paid seats",
                     paidSeatSingular: "Paid seat",
                     quickbaseStaff: "QuickBase staff",
