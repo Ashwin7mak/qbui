@@ -248,7 +248,7 @@
                                     },
                                     (eeError) => {
                                         // Reject, let the caller know that the properties creation failed
-                                        log.error({req: req}, "tablesApi.createTableProperties(): Error replacing table properties on EE");
+                                        log.error({req: req}, "tablesApi.createTableProperties(): Error creating table properties on EE");
                                         reject(eeError);
                                     }
                                 ).catch((ex) => {

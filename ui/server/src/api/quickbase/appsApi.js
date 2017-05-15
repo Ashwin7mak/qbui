@@ -78,7 +78,7 @@
                             log.error({req: req}, "tablesApi.createTableProperties(): Error creating table properties on EE");
                             reject(error);
                         }).catch((ex) =>{
-                            requestHelper.logUnexpectedError('tablesApi.createTableProperties(): unexpected error creating table properties', ex, true);
+                            requestHelper.logUnexpectedError('appsApi._createTableProperties(): unexpected error creating table properties', ex, true);
                             reject(ex);
                         });
                 });
@@ -115,11 +115,11 @@
                                     },
                                     (eeError) => {
                                         //resolve - we do not want to block the get Apps call on this failure
-                                        log.error({req: req}, "appsApi._createTableProperties(): Error getting table properties from EE");
+                                        log.error({req: req}, "appsApi._createTableProperties(): Error creating table properties on EE");
                                         resolve({});
                                     }
                                 ).catch((ex) => {
-                                    requestHelper.logUnexpectedError('appsApi._createTableProperties(): unexpected error creating table properties', ex, true);
+                                    requestHelper.logUnexpectedError('appsApi._createTableProperties(): unexpected error creating table properties on EE', ex, true);
                                     //always resolve - we do not want to block the get Apps call on this failure
                                     resolve({});
                                 });
@@ -128,7 +128,7 @@
                                 resolve({});
                             }
                         }).catch((ex) => {
-                            requestHelper.logUnexpectedError('appsApi.getTableProperties(): unexpected error getting table properties', ex, true);
+                            requestHelper.logUnexpectedError('appsApi.getTableProperties(): unexpected error getting table properties from EE', ex, true);
                         //always resolve - we do not want to block the get Apps call on this failure
                             resolve({});
                         });

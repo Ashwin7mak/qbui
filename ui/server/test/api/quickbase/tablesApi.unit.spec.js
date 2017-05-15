@@ -296,12 +296,12 @@ describe('Validate tablesApi', function() {
 
     describe('validate replaceTableProperties function', function() {
         let executeReqStub = null;
-        let createTablePropsStub = null;
+        let createTablePropertiesStub = null;
         let tableId = '456';
 
         beforeEach(function() {
             executeReqStub = sinon.stub(requestHelper, 'executeRequest');
-            createTablePropsStub = sinon.stub(tablesApi, 'createTableProperties');
+            createTablePropertiesStub = sinon.stub(tablesApi, 'createTableProperties');
             tablesApi.setRequestHelperObject(requestHelper);
             req.url = 'apps/123/tableproperties/';
             req.method = 'post';
@@ -314,7 +314,7 @@ describe('Validate tablesApi', function() {
             req.rawBody = {};
             req.body = {};
             executeReqStub.restore();
-            createTablePropsStub.restore();
+            createTablePropertiesStub.restore();
         });
 
         it('returns success response on valid input', function(done) {
@@ -328,7 +328,7 @@ describe('Validate tablesApi', function() {
                     done();
                 },
                 function() {
-                    done("Unexpected failure promise return when testing replaceTableProperties");
+                    done(new Error("Unexpected failure promise return when testing replaceTableProperties"));
                 }
             ).catch(function(errorMsg) {
                 done(new Error('replaceTableProperties: exception processing test: ' + JSON.stringify(errorMsg)));
@@ -342,10 +342,11 @@ describe('Validate tablesApi', function() {
 
             promise.then(
                 function() {
+                    assert.equal(createTablePropertiesStub.callCount, 0);
                     done();
                 },
                 function() {
-                    done("Unexpected failure promise return when testing replaceTableProperties");
+                    done(new Error("Unexpected failure promise return when testing replaceTableProperties"));
                 }
             ).catch(function(errorMsg) {
                 done(new Error('replaceTableProperties: exception processing test: ' + JSON.stringify(errorMsg)));
@@ -359,10 +360,11 @@ describe('Validate tablesApi', function() {
 
             promise.then(
                 function() {
+                    assert.equal(createTablePropertiesStub.callCount, 0);
                     done();
                 },
                 function() {
-                    done("Unexpected failure promise return when testing replaceTableProperties");
+                    done(new Error("Unexpected failure promise return when testing replaceTableProperties"));
                 }
             ).catch(function(errorMsg) {
                 done(new Error('replaceTableProperties: exception processing test: ' + JSON.stringify(errorMsg)));
@@ -373,16 +375,17 @@ describe('Validate tablesApi', function() {
             let executeReqStubResp = {statusCode: 404};
             executeReqStub.returns(Promise.reject(executeReqStubResp));
             let createTablePropsResp = {body: '{"tableNoun": "updated table noun"}'};
-            createTablePropsStub.returns(Promise.resolve(createTablePropsResp));
+            createTablePropertiesStub.returns(Promise.resolve(createTablePropsResp));
             let promise = tablesApi.replaceTableProperties(req, tableId);
 
             promise.then(
                 function(response) {
+                    assert.equal(createTablePropertiesStub.callCount, 1);
                     assert.deepEqual(response, {tableNoun: "updated table noun"});
                     done();
                 },
                 function() {
-                    done("Unexpected failure promise return when testing replaceTableProperties");
+                    done(new Error("Unexpected failure promise return when testing replaceTableProperties"));
                 }
             ).catch(function(errorMsg) {
                 done(new Error('replaceTableProperties: exception processing test: ' + JSON.stringify(errorMsg)));
@@ -393,14 +396,15 @@ describe('Validate tablesApi', function() {
             let executeReqStubResp = {statusCode: 404};
             executeReqStub.returns(Promise.reject(executeReqStubResp));
             let createTablePropsResp = {error: 'Some error'};
-            createTablePropsStub.returns(Promise.reject(createTablePropsResp));
+            createTablePropertiesStub.returns(Promise.reject(createTablePropsResp));
             let promise = tablesApi.replaceTableProperties(req, tableId);
 
             promise.then(
                 function() {
-                    done("Unexpected success promise return when testing replaceTableProperties");
+                    done(new Error("Unexpected success promise return when testing replaceTableProperties"));
                 },
                 function(error) {
+                    assert.equal(createTablePropertiesStub.callCount, 1);
                     assert.deepEqual(error, createTablePropsResp);
                     done();
                 }
@@ -413,14 +417,15 @@ describe('Validate tablesApi', function() {
             let executeReqStubResp = {statusCode: 404};
             executeReqStub.returns(Promise.reject(executeReqStubResp));
             let createTablePropsResp = null;
-            createTablePropsStub.returns(Promise.resolve(createTablePropsResp));
+            createTablePropertiesStub.returns(Promise.resolve(createTablePropsResp));
             let promise = tablesApi.replaceTableProperties(req, tableId);
 
             promise.then(
                 function() {
-                    done("Unexpected success promise return when testing replaceTableProperties");
+                    done(new Error("Unexpected success promise return when testing replaceTableProperties"));
                 },
                 function() {
+                    assert.equal(createTablePropertiesStub.callCount, 1);
                     done();
                 }
             ).catch(function(errorMsg) {
@@ -432,7 +437,7 @@ describe('Validate tablesApi', function() {
 
     describe('validate createTableComponents function', function() {
         let createTableStub = null;
-        let createTablePropsStub = null;
+        let createTablePropertiesStub = null;
         let createReportStub = null;
         let createFormStub = null;
         let getFieldsForTableStub = null;
@@ -447,7 +452,7 @@ describe('Validate tablesApi', function() {
 
         beforeEach(function() {
             createTableStub = sinon.stub(tablesApi, 'createTable');
-            createTablePropsStub = sinon.stub(tablesApi, 'createTableProperties');
+            createTablePropertiesStub = sinon.stub(tablesApi, 'createTableProperties');
             createReportStub = sinon.stub(reportsApi, 'createReport');
             createFormStub = sinon.stub(formsApi, 'createForm');
             getFieldsForTableStub = sinon.stub(fieldsApi, 'getFieldsForTable');
@@ -458,7 +463,7 @@ describe('Validate tablesApi', function() {
             req.url = 'apps/123/tables/tableComponents';
             req.method = 'post';
             createTableStub.returns(Promise.resolve(createTableResp));
-            createTablePropsStub.returns(Promise.resolve(createTablePropsResp));
+            createTablePropertiesStub.returns(Promise.resolve(createTablePropsResp));
             getFieldsForTableStub.returns(Promise.resolve(getFieldsForTableResp));
             createFormStub.returns(Promise.resolve(createFormResp));
             deleteTableSpy = sinon.spy(tablesApi, 'deleteTable');
@@ -469,7 +474,7 @@ describe('Validate tablesApi', function() {
             req.url = '';
             req.rawBody = {};
             createTableStub.restore();
-            createTablePropsStub.restore();
+            createTablePropertiesStub.restore();
             createReportStub.restore();
             createFormStub.restore();
             getFieldsForTableStub.restore();
@@ -523,7 +528,7 @@ describe('Validate tablesApi', function() {
             });
         });
         it('deletes table if table props creation fails', function(done) {
-            createTablePropsStub.returns(errorPromise);
+            createTablePropertiesStub.returns(errorPromise);
             let promise = tablesApi.createTableComponents(req);
 
             promise.then(
@@ -608,8 +613,8 @@ describe('Validate tablesApi', function() {
             });
         });
         it('create table props is not called if table creation fails', function(done) {
-            createTablePropsStub.restore();
-            createTablePropsStub = sinon.spy(tablesApi, 'createTableProperties');
+            createTablePropertiesStub.restore();
+            createTablePropertiesStub = sinon.spy(tablesApi, 'createTableProperties');
             createTableStub.returns(errorPromise);
             let promise = tablesApi.createTableComponents(req);
 
@@ -618,7 +623,7 @@ describe('Validate tablesApi', function() {
                     done(new Error('Unexpected success if table creation failed'));
                 },
                 function(error) {
-                    assert.equal(createTablePropsStub.callCount, 0);
+                    assert.equal(createTablePropertiesStub.callCount, 0);
                     done();
                 }
             ).catch(function(errorMsg) {
