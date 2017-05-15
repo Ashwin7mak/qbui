@@ -1,4 +1,4 @@
-import * as StandardGridReducer from '../../../src/common/grid/standardGridReducer';
+import * as StandardGridReducer from "../../../src/common/grid/standardGridReducer";
 import * as StandardGridActionType from "../../../src/common/grid/standardGridActionTypes";
 
 describe('StandardGridReducer', () => {
@@ -71,13 +71,6 @@ describe('StandardGridReducer', () => {
         const state = StandardGridReducer.grid(initialState,
             {totalRecords: 10, type: StandardGridActionType.SET_TOTALRECORDS});
         expect(state.pagination).toEqual({...initialState.pagination, totalRecords:10});
-    });
-
-    it('should set facet fields state', () => {
-        const facetFields = [{id:1, label:'foo', values:[{value:'foo'}]}];
-        const state = StandardGridReducer.grid(initialState,
-            {facetFields: facetFields, type: StandardGridActionType.SET_FACET_FIELDS});
-        expect(state.facets.facetFields).toEqual(facetFields);
     });
 
     it('should set facet selection state', () => {

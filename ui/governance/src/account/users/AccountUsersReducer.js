@@ -1,6 +1,6 @@
-import * as types from '../../app/actionTypes';
-import GetStatus from '../../common/reducer/RequestStatusReducer';
-import {combineReducers} from 'redux';
+import * as types from "../../app/actionTypes";
+import GetStatus from "../../common/reducer/RequestStatusReducer";
+import {combineReducers} from "redux";
 
 const users = (state = [], action) => {
     // reducer - no mutations!

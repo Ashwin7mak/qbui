@@ -8,6 +8,7 @@
     // Import the base page object
     var e2ePageBase = requirePO('./e2ePageBase');
     var formsPO = requirePO('formsPage');
+    var tablesPO = requirePO('tableCreate');
 
     var ReportContentPage = Object.create(e2ePageBase, {
         // This gives you all the record checkboxes of the report page
@@ -26,8 +27,11 @@
         settingsIconName : {get: function() {return '.qbIcon.iconUISturdy-settings';}},
         settingsIcon: {get: function() {return browser.element(this.settingsIconName);}},
         modifyTableSettings: {get: function() {return browser.element('.modifyTableSettings');}},
-        deleteTableActionButton: {get: function() {return browser.element('.iconActions .iconActionButton .buttonLabel');}},
-        deletePromtTextField: {get: function() {return browser.element('.modal-dialog .deleteTableDialogContent .deletePrompt');}},
+
+        // Delete and Don't Delete button on modal dialog box
+        deleteButton : {get: function() {return browser.element('.modal-dialog .modal-footer .primaryButton');}},
+        dontDeleteButton : {get: function() {return browser.element('.modal-dialog .modal-footer .secondaryButton');}},
+
         reportFilterSearchBox : {get: function() {
             return this.reportsToolBar.element('.searchInput');
         }},
@@ -63,10 +67,9 @@
             browser.element('.reportContainer').waitForVisible();
             return browser.element('.reportContainer');
         }},
-        // Delete and Don't Delete button on modal dialog box
-        deleteButtonClassName: {get: function() {return '.modal-dialog .primaryButton';}},
-        deleteButton : {get: function() {return browser.element(this.deleteButtonClassName);}},
-        dontDeleteButton : {get: function() {return browser.element('.modal-dialog .secondaryButton');}},
+
+        // Title for report (found in the stage)
+        stageTableHomepageTitleEl: {get: function() {return this.reportContainerEl.element('.tableHomepageStageHeadline');}},
 
         //Drop down menu actions icon
         dropDownIcon : {get: function() {return browser.element('.actionsCol .iconActionsDropDownMenu');}},
@@ -274,63 +277,7 @@
             //Click on 'Table properties & settings'
             this.modifyTableSettings.click();
             //wait until you see delete table action button
-            return this.deleteTableActionButton.waitForVisible();
-        }},
-
-        /**
-         * Method to click deleteTableActionButton
-         */
-        clickDeleteTableActionButton: {value: function() {
-            //wait until you see delete table action button
-            this.deleteTableActionButton.waitForVisible();
-            //Click on delete table action button
-            this.deleteTableActionButton.click();
-            return browser.waitForExist('.modal-dialog .deleteTableDialogContent');
-        }},
-
-        /**
-         * Method to click deleteTableButton
-         */
-        clickDeleteTableButton: {value: function() {
-            //use the predefined deleteTableButton here
-            expect(browser.isEnabled('.modal-dialog .primaryButton')).toBeTruthy();
-            //wait for deletetable button to be visible
-            this.deleteButton.waitForVisible();
-            //Click on delete table button
-            return this.deleteButton.click();
-        }},
-
-        /**
-         * Set the deletePromtTextField value
-         */
-        setDeletePromtTextFieldValue: {value: function(fieldValue) {
-            //wait for model dialogue
-            browser.waitForExist('.modal-dialog .deleteTableDialogContent');
-            //wait for deletePromtTextField tobe visible
-            this.deletePromtTextField.waitForVisible();
-            //set the deletePromtTextField value to 'YES'
-            return this.setInputValue(this.deletePromtTextField, fieldValue);
-        }},
-
-        /**
-         * Method to click don't delete Table button
-         */
-        clickDontDeleteTableButton: {value: function() {
-            //wait for the button tobe visible
-            this.dontDeleteButton.waitForVisible();
-            //Click on don't delete table button
-            return this.dontDeleteButton.click();
-        }},
-
-        /**
-         * Method to enter input values in a field
-         * @fieldName
-         * @fieldValue ter
-         */
-        setInputValue : {value: function(fieldName, fieldValue) {
-            fieldName.click();
-            //add code for firefox browser
-            return browser.keys([fieldValue, '\uE004']);
+            return tablesPO.deleteTableActionButton.waitForVisible();
         }},
 
         /**

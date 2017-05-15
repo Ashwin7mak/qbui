@@ -77,6 +77,8 @@ Resources:
               - ecr:GetDownloadUrlForLayer
               - ecr:BatchGetImage
               - ecr:BatchCheckLayerAvailability
+              - ecr:ListImages
+              - ecr:DescribeImages
 
   CodePipeline:
     Type: AWS::CodePipeline::Pipeline
