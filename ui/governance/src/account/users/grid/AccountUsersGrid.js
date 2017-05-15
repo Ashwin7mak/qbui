@@ -16,7 +16,7 @@ class AccountUsersGrid extends Component {
             <StandardGrid
                 id={this.props.id}
                 columns={GetAccountUsersGridColumns(this.props.showAccountColumns, this.props.showRealmColumns)}
-                getFacetFields={GetFacetFields(this.props.showAccountColumns, this.props.showRealmColumns)}
+                facetFields={GetFacetFields(this.props.showAccountColumns, this.props.showRealmColumns)}
                 doUpdate={Actions.doUpdate}
                 rowKey="uid"
                 itemTypePlural={this.props.itemTypePlural}

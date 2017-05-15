@@ -25,6 +25,7 @@ $edit-icon-font-size: 18px;
     color: $default-text-onlight-color;
     -webkit-font-smoothing: antialiased;
     table-layout: fixed;
+    padding-bottom: $spacing-medium1;
 
     // The min height allows the menus that can be opened from the header (sort on column) to be seen
     // when there are only 1 or two rows. We may need to re-visit this if we start adding content below the grid.

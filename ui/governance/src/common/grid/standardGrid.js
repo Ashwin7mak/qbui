@@ -51,7 +51,7 @@ class StandardGrid extends Component {
             <div className="gridWrapper">
                 <StandardGridToolbar id={this.props.id}
                                      doUpdate={this.props.doUpdate}
-                                     facetFields={this.props.getFacetFields(this.props.items)}
+                                     facetFields={this.props.facetFields}
                                      itemTypePlural={this.props.itemTypePlural}
                                      itemTypeSingular={this.props.itemTypeSingular}/>
                 <div className="gridContainer">
@@ -86,7 +86,7 @@ StandardGrid.propTypes = {
     doUpdate: PropTypes.func.isRequired,
     itemTypePlural: PropTypes.string,
     itemTypeSingular: PropTypes.string,
-    getFacetFields: PropTypes.func.isRequired
+    facetFields: PropTypes.array
 };
 
 StandardGrid.defaultProps = {

@@ -14,6 +14,7 @@
         let requestHelper = require('./requestHelper')(config);
         let routeHelper = require('../../routes/routeHelper');
         let constants = require('../../../../common/src/constants');
+        let rolesApi = require('./rolesApi')(config);
 
         let request = defaultRequest;
 
@@ -163,8 +164,8 @@
                     requestHelper.executeRequest(req, opts).then(
                         (response) => {
                             let app = JSON.parse(response.body);
-                            let tablePromises = [];
                             if (Array.isArray(app.tables)) {
+                                let tablePromises = [];
                                 app.tables.map((table) => {
                                     let tablesRootUrl = routeHelper.getTablesRoute(routeHelper.getAppsRoute(req.url, appId), table.id);
                                     let tableReq = _.clone(req);
@@ -197,6 +198,13 @@
                 });
             },
 
+            /**
+             * Return a hydrated app; this includes appAccessRights, core table properties and client table properties
+             *
+             * @param req
+             * @param appId
+             * @returns {Promise}
+             */
             getHydratedApp: function(req, appId) {
                 return new Promise((resolve, reject) => {
                     let appRequests = [this.getApp(req, appId), this.getAppAccessRights(req, appId)];
@@ -204,6 +212,12 @@
                         function(response) {
                             let app = response[0];
                             app.accessRights = response[1];
+
+                            //sort tables by id to match create order
+                            if (app.tables) {
+                                app.tables = _.sortBy(app.tables, 'id');
+                            }
+
                             resolve(app);
                         },
                         function(error) {
@@ -230,7 +244,6 @@
                             (response) => {
                                 let apps = JSON.parse(response.body);
 
-                                //  TODO: investigate...concern if the number of apps is large???
                                 let promises = [];
                                 apps.forEach((app) => {
                                     promises.push(this.getHydratedApp(_.clone(req), app.id));
@@ -242,13 +255,6 @@
                                         for (let i = 0; i < resp.length; i++) {
                                             hydratedApps.push(resp[i]);
                                         }
-
-                                        hydratedApps.forEach(app => {
-                                            //sort tables by id to match create order
-                                            if (app.tables) {
-                                                app.tables = _.sortBy(app.tables, 'id');
-                                            }
-                                        });
                                         resolve(hydratedApps);
                                     },
                                     function(err) {
@@ -388,7 +394,36 @@
                         reject(ex);
                     });
                 });
+            },
+
+            /**
+             * Fetch app users and a hydrated app
+             *
+             * @param req
+             * @param appId
+             * @returns {Promise}
+             */
+            getAppComponents: function(req, appId) {
+                return new Promise((resolve, reject) => {
+                    let appComponents = [this.getAppUsers(req), this.getHydratedApp(req, appId)];
+                    Promise.all(appComponents).then(
+                        function(response) {
+                            resolve({
+                                users: response[0],
+                                app: response[1]
+                            });
+                        },
+                        function(error) {
+                            log.error({req: req}, "appsApi.getAppComponents(): Error retrieving app components.");
+                            reject(error);
+                        }
+                    ).catch(function(error) {
+                        requestHelper.logUnexpectedError('reportsAPI..getAppComponents', error, true);
+                        reject(error);
+                    });
+                });
             }
+
         };
         return appsApi;
     };
