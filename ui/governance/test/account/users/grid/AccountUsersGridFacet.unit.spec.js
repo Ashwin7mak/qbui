@@ -1,9 +1,9 @@
 import React from "react";
 import jasmineEnzyme from "jasmine-enzyme";
-import {FACET_FIELDS, GetFacetFields} from "../../../../src/account/users/grid/AccountUsersGridFacet";
-import _ from 'lodash';
+import {GetFacetFields} from "../../../../src/account/users/grid/AccountUsersGridFacet";
+import _ from "lodash";
 import Locale from "../../../../../reuse/client/src/locales/locale";
-import GovernanceBundleLoader from '../../../../src/locales/governanceBundleLoader';
+import GovernanceBundleLoader from "../../../../src/locales/governanceBundleLoader";
 
 const ACCOUNT_USERS_DATA = [
     {
@@ -57,7 +57,7 @@ const ACCOUNT_USERS_DATA = [
 
 describe('Faceting Fields Values', () => {
 
-    it('gets the facets based on QuickBase access status', () => {
+    it('gets the facets based on Quick Base access status', () => {
         expect(GetFacetFields(true, true)[0]).toEqual(
             {
                 id:0,
