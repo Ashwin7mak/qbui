@@ -5,18 +5,21 @@ import FieldTokenInMenu from '../fieldToken/fieldTokenInMenu';
 import _ from 'lodash';
 
 const NewFieldsMenu = ({isCollapsed, isOpen, toggleToolPaletteChildrenTabIndex, toolPaletteChildrenTabIndex,
-                        toolPaletteFocus, toolPaletteTabIndex, formMeta}) => {
+                        toolPaletteFocus, toolPaletteTabIndex, formMeta, tables}) => {
 
     let omittedFieldGroups = ['tableDataConnections'];
-    let tableCount = 1;
+    let tableCount = tables.length;
 
-    let parentTables = [];
-    if (formMeta && Array.isArray(formMeta.relationships) && formMeta.relationships.length > 0) {
-        parentTables =_.filter(formMeta.relationships, (rel) => rel.detailTableId === formMeta.tableId);
-    }
 
-    if (parentTables.length < tableCount - 1) {
-        omittedFieldGroups = [];
+    if (formMeta) {
+        let parentTables = [];
+        if (Array.isArray(formMeta.relationships) && formMeta.relationships.length > 0) {
+            parentTables = _.filter(formMeta.relationships, (rel) => rel.detailTableId === formMeta.tableId);
+        }
+
+        if (tableCount > 1 && (parentTables.length < tableCount - 1)) {
+            omittedFieldGroups = [];
+        }
     }
 
     return (

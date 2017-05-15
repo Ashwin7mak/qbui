@@ -2,6 +2,7 @@ import React, {PropTypes, Component} from 'react';
 import SideTrowser from '../../../../../reuse/client/src/components/sideTrowserBase/sideTrowserBase';
 import NewFieldsMenu from '../../formBuilder/menus/newFieldsMenu';
 import * as tabIndexConstants from '../../formBuilder/tabindexConstants';
+import _ from 'lodash';
 import './toolPalette.scss';
 
 /**
@@ -19,7 +20,9 @@ class ToolPalette extends Component {
                                toggleToolPaletteChildrenTabIndex={this.props.toggleToolPaletteChildrenTabIndex}
                                toolPaletteChildrenTabIndex={this.props.toolPaletteChildrenTabIndex}
                                toolPaletteFocus={this.props.toolPaletteFocus}
-                               formMeta={this.props.formMeta} />
+                               formMeta={this.props.formMeta}
+                               tables={_.get(this.props, "app.tables", [])}
+                />
             </div>
         );
     };

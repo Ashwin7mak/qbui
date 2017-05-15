@@ -2,7 +2,7 @@ import React, {PropTypes} from 'react';
 import Locale from "../../locales/locales";
 import {I18nMessage} from '../../utils/i18nMessage';
 import Select from '../select/reactSelectWrapper';
-import MultiStepDialog from '../../../../reuse/client/src/components/multiStepDialog/multiStepDialog';
+import LinkToRecordTableSelectionDialog from './linkToRecordTableSelectionDialog';
 
 import './linkToRecordFieldValueEditor.scss';
 /**
@@ -42,20 +42,11 @@ const LinkToRecordFieldValueEditor = React.createClass({
         }
         return {
             choice,
-            dialogOpen: true
+            showTableSelectionDialog: true
         };
     },
 
-    onBlur(updatedValues) {
-        // Format the displayed url before passing up to the parent
-        //updatedValues.display = UrlFileAttachmentReportLinkFormatter.format(updatedValues, (this.props.fieldDef ? this.props.fieldDef.datatypeAttributes : null));
-        //if (this.props.onBlur) {
-        //    this.props.onBlur(updatedValues);
-        //}
-    },
-
-
-    tableSelected() {
+    tableSelected(tableId) {
 
         this.setState({dialogOpen: false});
     },
@@ -71,8 +62,8 @@ const LinkToRecordFieldValueEditor = React.createClass({
 
         let selectedValue = _.get(this, 'state.choice.value');
 
-        let choices = this.props.appTables ?
-            this.props.appTables.map(table => {
+        let choices = this.props.tables ?
+            this.props.tables.map(table => {
                 return {
                     value: table.id,
                     label: table.name
@@ -90,24 +81,27 @@ const LinkToRecordFieldValueEditor = React.createClass({
             clearable={false}
             />;
     },
+
+    tableSelected(tableId) {
+        this.setState({showTableSelectionDialog: false});
+        // persist
+    },
+
+    cancelTableSelection() {
+
+        this.setState({showTableSelectionDialog: false});
+        // remove field...
+    },
+
     render() {
         let {value, display, onBlur, placeholder, ...otherProps} = this.props;
 
-        if (this.state.dialogOpen) {
+        if (this.state.showTableSelectionDialog && !this.props.isDragging) {
             return (
-                <MultiStepDialog show={true}
-                                 onCancel={this.cancelTableSelection}
-                                 onFinished={this.tableSelected}
-                                 finishedButtonLabel="Add to form"
-                                 classes={"tableDataConnectionDialog allowOverflow"}
-                                 titles={["Get another record"]}>
-                    <div>
-                        <div className="tableChooserDescription">When you create or update a record, you can look up and get info from a record in another table</div>
-
-                        <div className="tableChooserHeading">Where is the record you want to get?</div>
-                        {this.getReactSelect()}
-                    </div>
-                </MultiStepDialog>);
+                <LinkToRecordTableSelectionDialog show={this.state.showTableSelectionDialog}
+                                                  tables={this.props.tables}
+                                                  tableSelected={this.tableSelected}
+                                                  onCancel={this.cancelTableSelection}/> );
         } else {
             return this.getReactSelect();
         }
