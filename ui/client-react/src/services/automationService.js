@@ -14,8 +14,20 @@ class AutomationService extends BaseService {
 
         //  Record service API endpoints
         this.API = {
-            AUTOMATION_INVOKE  : `${constants.BASE_URL.AUTOMATION}/${constants.APPS}/{0}/api/{1}`
+            GET_AUTOMATIONS  : `${constants.BASE_URL.AUTOMATION}/${constants.AUTOMATION_API}/${constants.APPS}/{0}/${constants.AUTOMATION_FLOWS}/`,
+            AUTOMATION_INVOKE  : `${constants.BASE_URL.AUTOMATION}/${constants.AUTOMATION_INVOKE}/${constants.APPS}/{0}/api/{1}`
         };
+    }
+
+    /**
+     * Call the automation endpoint to get a list of all the automations available for a given app
+     *
+     * @param appId
+     * @returns promise
+     */
+    getAutomations(appId) {
+        let url = super.constructUrl(this.API.GET_AUTOMATIONS, [appId]);
+        return super.get(url);
     }
 
     invokeAutomation(appId, wfId, payload)  {
