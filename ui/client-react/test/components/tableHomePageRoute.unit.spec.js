@@ -25,6 +25,12 @@ describe('TableHomePageRoute functions', () => {
         clearSearchInput: () => {},
         loadFields: (app, tbl) => {},
         loadTableHomePage: () => {},
+        reportBuilder: {
+            inBuilderMode: true,
+            isCollapsed: true,
+            addBeforeColumn: null,
+            availableColumns: []
+        },
         match: {
             params: {
                 appId: 1,

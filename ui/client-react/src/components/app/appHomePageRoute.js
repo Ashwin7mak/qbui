@@ -29,9 +29,8 @@ export const AppHomePageRoute = React.createClass({
     /**
      * Select an app by ID
      */
-    selectAppId(appId) {
+    selectAppRoles(appId) {
         let flux = this.getFlux();
-        flux.actions.selectAppId(appId);
         flux.actions.loadAppRoles(appId);
     },
 
@@ -54,7 +53,7 @@ export const AppHomePageRoute = React.createClass({
 
             if (appId) {
                 logger.debug('Loading app. AppId:' + appId);
-                this.selectAppId(appId);
+                this.selectAppRoles(appId);
             }
         }
     },

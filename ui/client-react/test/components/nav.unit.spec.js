@@ -84,6 +84,7 @@ describe('Nav Unit tests', () => {
         showTrowser: (content) => {},
         loadForm: (app, tbl, rpt, type, edit, show) => {},
         loadReports: (ctx, app, tbl) => {},
+        enterBuilderMode: (context) => {},
         fields: [],
         record: [],
         report: [],
@@ -106,6 +107,7 @@ describe('Nav Unit tests', () => {
         },
         reports: [],
         history: [],
+        reportBuilder: true,
         location: {
             query: query
         }
@@ -118,6 +120,7 @@ describe('Nav Unit tests', () => {
         spyOn(props, 'showTrowser').and.callThrough();
         spyOn(props, 'loadForm').and.callThrough();
         spyOn(props, 'loadReports').and.callThrough();
+        spyOn(props, 'enterBuilderMode').and.callThrough();
         NavRewireAPI.__Rewire__('LeftNav', LeftNavMock);
         NavRewireAPI.__Rewire__('RecordTrowser', TrowserMock);
         NavRewireAPI.__Rewire__('ReportManagerTrowser', TrowserMock);
@@ -134,6 +137,7 @@ describe('Nav Unit tests', () => {
         props.showTrowser.calls.reset();
         props.loadForm.calls.reset();
         props.loadReports.calls.reset();
+        props.enterBuilderMode.calls.reset();
         NavRewireAPI.__ResetDependency__('LeftNav');
         NavRewireAPI.__ResetDependency__('RecordTrowser');
         NavRewireAPI.__ResetDependency__('ReportManagerTrowser');
@@ -275,4 +279,15 @@ describe('Nav Unit tests', () => {
 
         expect(mockFormStore.updateFormRedirectRoute).toHaveBeenCalledWith(testLocation.pathname);
     });
+
+    it('enters report builder', () => {
+        let component = shallow(<Nav {...props} flux={flux} />);
+
+        let instance = component.instance();
+
+        instance.navigateToBuilderReport();
+
+        expect(props.enterBuilderMode).toHaveBeenCalled();
+    });
+
 });

@@ -1,5 +1,5 @@
-import BaseService from '../../../../client-react/src/services/baseService';
-import constants from '../../app/constants';
+import BaseService from "../../../../client-react/src/services/baseService";
+import constants from "../../app/constants";
 
 class AccountUsersService extends BaseService {
 

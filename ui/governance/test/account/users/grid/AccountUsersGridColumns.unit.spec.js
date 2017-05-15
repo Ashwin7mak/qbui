@@ -9,6 +9,7 @@ import {Provider} from "react-redux";
 import StandardGrid from "../../../../src/common/grid/standardGrid";
 import * as Actions from "../../../../src/account/users/AccountUsersActions";
 import {GetAccountUsersGridColumns} from "../../../../src/account/users/grid/AccountUsersGridColumns";
+import {GetFacetFields} from "../../../../src/account/users/grid/AccountUsersGridFacet";
 
 const mockStore = configureMockStore();
 
@@ -19,6 +20,7 @@ describe('AccountUsersGridColumns', () => {
     const GRID_ID = 'accountUsers';
     const baseProps = {
         columns : GetAccountUsersGridColumns(true, true),
+        getFacetFields : GetFacetFields(true, true),
         rowKey: 'uid',
         id: GRID_ID,
         columnTransformProps :[],
@@ -37,7 +39,7 @@ describe('AccountUsersGridColumns', () => {
                     <StandardGrid  {...props}/>
                 </Provider>);
             let headers = component.find(QbHeaderCell).map(node => node.text());
-            expect(headers).toEqual(["FIRST NAME", "LAST NAME", "EMAIL", "USER NAME", "LAST ACCESS", "QUICKBASE ACCESS STATUS", "INACTIVE?", "IN ANY GROUP?", "GROUP MANAGER?", "CAN CREATE APPS?", "APP MANAGER?", "IN REALM DIRECTORY?", "REALM APPROVED?"]);
+            expect(headers).toEqual(["FIRST NAME", "LAST NAME", "EMAIL", "USER NAME", "LAST ACCESS", "QUICK BASE ACCESS STATUS", "INACTIVE?", "IN ANY GROUP?", "GROUP MANAGER?", "CAN CREATE APPS?", "APP MANAGER?", "IN REALM DIRECTORY?", "REALM APPROVED?"]);
         });
 
         it("should show the correct set of headers when not account admin", () => {
@@ -51,7 +53,7 @@ describe('AccountUsersGridColumns', () => {
                 </Provider>);
 
             let headers = component.find(QbHeaderCell).map(node => node.text());
-            expect(headers).toEqual(["FIRST NAME", "LAST NAME", "EMAIL", "USER NAME", "QUICKBASE ACCESS STATUS", "IN REALM DIRECTORY?", "REALM APPROVED?"]);
+            expect(headers).toEqual(["FIRST NAME", "LAST NAME", "EMAIL", "USER NAME", "QUICK BASE ACCESS STATUS", "IN REALM DIRECTORY?", "REALM APPROVED?"]);
         });
 
 
@@ -67,7 +69,7 @@ describe('AccountUsersGridColumns', () => {
                     <StandardGrid {...props} />
                 </Provider>);
             let headers = component.find(QbHeaderCell).map(node => node.text());
-            expect(headers).toEqual(["FIRST NAME", "LAST NAME", "EMAIL", "USER NAME", "LAST ACCESS", "QUICKBASE ACCESS STATUS", "INACTIVE?", "IN ANY GROUP?", "GROUP MANAGER?", "CAN CREATE APPS?", "APP MANAGER?"]);
+            expect(headers).toEqual(["FIRST NAME", "LAST NAME", "EMAIL", "USER NAME", "LAST ACCESS", "QUICK BASE ACCESS STATUS", "INACTIVE?", "IN ANY GROUP?", "GROUP MANAGER?", "CAN CREATE APPS?", "APP MANAGER?"]);
         });
     });
 
@@ -236,7 +238,7 @@ describe('AccountUsersGridColumns', () => {
                     <StandardGrid {...baseProps} />
                 </Provider>);
             let cell = component.find(QbCell).at(5);
-            expect(cell.text().trim()).toEqual("QuickBase Staff");
+            expect(cell.text().trim()).toEqual("Quick Base Staff");
         });
 
         it("should show paid seat if has access", () => {

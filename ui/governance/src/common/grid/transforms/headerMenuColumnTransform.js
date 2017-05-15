@@ -1,9 +1,9 @@
-import React from 'react';
-import _ from 'lodash';
-import ColumnTransform from './columnTransform';
-import Icon from '../../../../../reuse/client/src/components/icon/icon';
-import Button from 'react-bootstrap/lib/Button';
-import Dropdown from 'react-bootstrap/lib/Dropdown';
+import React from "react";
+import _ from "lodash";
+import ColumnTransform from "./columnTransform";
+import Icon from "../../../../../reuse/client/src/components/icon/icon";
+import Button from "react-bootstrap/lib/Button";
+import Dropdown from "react-bootstrap/lib/Dropdown";
 
 /**
  * This transform takes the React tabular column definition
