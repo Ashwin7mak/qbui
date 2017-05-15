@@ -88,9 +88,6 @@ const ReportRoute = React.createClass({
             let offset = constants.PAGE.DEFAULT_OFFSET;
             let numRows = NumberUtils.getNumericPropertyValue(this.props.reportData, 'numRows') || constants.PAGE.DEFAULT_NUM_ROWS;
 
-            // TODO: remove
-//            const {detailKeyFid, detailKeyValue} = _.get(this, 'props.location.query', {});
-            //const
             // A link from a parent component (see qbform.createChildReportElementCell) was used
             // to display a filtered child report.
             if (detailKeyFid && detailKeyValue) {
