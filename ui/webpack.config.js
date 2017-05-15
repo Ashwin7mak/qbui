@@ -113,8 +113,23 @@ const config = {
 
         ],
 
-        // A list of shared node modules across functional areas. These are split out so that the vendor bundle
-        // can be cached by the browser and not downloaded on every request.
+        /**
+         * A list of shared node modules across functional areas. These are split out so that the vendor bundle
+         * can be cached by the browser and not downloaded on every page load.
+         *
+         * This list was derived by using the Webpack Analyzer (see top of file for instructions on using that).
+         * We could determine the best combination of dependencies to include in the vendor bundle by modifying this
+         * list and comparing bundle sizes and load times.
+         *
+         * Developers should consider whether they should add a dependency here when they updated the package.json.
+         * If the dependency will be used across functional areas or is used in the Reuse library, then the answer is likely
+         * "yes, it should be added."
+         *
+         * For example, CodeMirror is not included in this list because it is a very large dependency and is only
+         * used in the component library. However, React is used everywhere so it is included.
+         *
+         * Packages that are only used in the Node/Express layer should not be included here.
+         */
         vendor: [
             'axios',
             'bigdecimal',

@@ -1,6 +1,6 @@
-import moment from 'moment';
-import React from 'react';
-import Icon from '../../../../../reuse/client/src/components/icon/icon';
+import moment from "moment";
+import React from "react";
+import Icon from "../../../../../reuse/client/src/components/icon/icon";
 import * as RealmUserAccountFlagConstants from "../../../common/constants/RealmUserAccountFlagConstants.js";
 
 // Render Helpers
@@ -14,7 +14,7 @@ export const FormatUserStatusText = (hasAppAccess, cellInfo) => {
     } else if (RealmUserAccountFlagConstants.IsDenied(cellInfo.rowData)) {
         return "Denied";
     } else if (RealmUserAccountFlagConstants.HasAnySystemPermissions(cellInfo.rowData)) {
-        return "QuickBase Staff";
+        return "Quick Base Staff";
     } else if (hasAppAccess) {
         return "Paid Seat";
     } else {
@@ -28,7 +28,7 @@ export const FormatUserStatusHTML = (hasAppAccess, cellInfo) => {
     } else if (RealmUserAccountFlagConstants.IsDenied(cellInfo.rowData)) {
         return (<span className="accessStatusLabel denied"><Icon icon="deactivate"/> Denied</span>);
     } else if (RealmUserAccountFlagConstants.HasAnySystemPermissions(cellInfo.rowData)) {
-        return (<span className="accessStatusLabel staff"><Icon icon="user"/> QuickBase Staff</span>);
+        return (<span className="accessStatusLabel staff"><Icon icon="user"/> Quick Base Staff</span>);
     } else if (hasAppAccess) {
         return (<span className="accessStatusLabel paid"><Icon icon="currency-dollar"/> Paid Seat</span>);
     } else {
@@ -36,15 +36,19 @@ export const FormatUserStatusHTML = (hasAppAccess, cellInfo) => {
     }
 };
 
-export const FormatIsInactive = (lastAccessString, cellInfo) => {
+
+
+export const FormatIsInactiveBool = (lastAccessString) => {
     if (IsTimeNull(lastAccessString)) {
-        return RenderBoolColumn(false);
+        return false;
     } else {
         const daysSinceLastAccess = moment().diff(lastAccessString, 'days');
-        return RenderBoolColumn(daysSinceLastAccess >= 180);
+        return daysSinceLastAccess >= 180;
     }
 };
 
+export const FormatIsInactive = (lastAccessString, cellInfo) => RenderBoolColumn(FormatIsInactiveBool(lastAccessString));
+export const FormatUsernameString = (usrNameString, cellInfo) => cellInfo.rowData.email === cellInfo.rowData.userName ? "" : cellInfo.rowData.userName;
 export const FormatLastAccessString = (lastAccessString, cellInfo) => IsTimeNull(lastAccessString) ? 'never' : moment(lastAccessString).format("MMMM D YYYY");
 export const FormatIsGroupMember = (numGroupsMember, cellInfo) => RenderBoolColumn(numGroupsMember > 0);
 export const FormatIsGroupManager = (numGroupsManaged, cellInfo) => RenderBoolColumn(numGroupsManaged > 0);

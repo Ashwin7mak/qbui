@@ -495,7 +495,7 @@ export default {
             emails: "Formatieren Sie alle Adressen wie name@domaine.de",
             maxChars: "Verwenden Sie bis zu {maxNum} Zeichen",
             choiceMaxLength : "Wählen Sie eine Wahl mit {maxNum} Zeichen oder weniger",
-            phone: "Formatieren Sie die {fieldName} +x x xx xx xx xx",
+            phone: "Geben Sie eine echte Nummer für {fieldName}",
             phoneInvalidCountryCode: "Formatieren Sie den Ländercode wie +x für internationale Nummern",
             duration: {
                 timeFormat: "Formatieren Sie die {fieldName} im {value}",
@@ -531,6 +531,7 @@ export default {
         quickBaseClassic: "QuickBase Klassik",
         quickBaseMercury: "QuickBase Mercury",
         missingWalkMe: "Tutorial ist nicht verfügbar",
+        missingHelp: "Hilfe ist noch nicht verfügbar",
         fieldsDefaultLabels: {
             [FieldFormats.TEXT_FORMAT]: "Text",
             [FieldFormats.MULTI_LINE_TEXT_FORMAT]: "Langtext",
@@ -703,6 +704,9 @@ export default {
             formsHeader: "Bilden",
             tableSettings: "Tabelleneigenschaften & Einstellungen",
             configureFormBuilder: "Ändern Sie dieses Formular",
+            reportsHeader: 'Bericht',
+            configureReportBuilder: 'Ändern Sie diesen Bericht'
+
         },
         tableEdit: {
             tableUpdateFailed: "Fehler beim Aktualisieren der Tabelle",

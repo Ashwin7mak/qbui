@@ -14,14 +14,19 @@ import Device from 'APP/utils/device';
  * in the environment configuration
  */
 function getHelpWalkme() {
-    if (Device.isTouch()) {
-        return;
-    }
-    try {
-        WalkMePlayerAPI.toggleMenu();
-    } catch (err) {
-        NotificationManager.info(Locale.getMessage('missingWalkMe'), '');
-    }
+    return NotificationManager.info(Locale.getMessage('missingHelp'));
+
+    // BELOW IS DISABLED FOR BETA.
+    // To be re-enabled once help system has been developed
+    // if (Device.isTouch()) {
+    //     // Walkme is disabled on touch devices
+    //     return;
+    // }
+    // try {
+    //     WalkMePlayerAPI.toggleMenu();
+    // } catch (err) {
+    //     NotificationManager.info(Locale.getMessage('missingWalkMe'), '');
+    // }
 }
 
 /**
@@ -29,7 +34,7 @@ function getHelpWalkme() {
  * Which WalkMe starts is configured within the Walkme system based the current URL.
  */
 const ReHelpButton = () => (
-    <a className="dropdownToggle globalActionLink" onClick={getHelpWalkme}>
+    <a className="dropdownToggle globalActionLink reHelpButton" onClick={getHelpWalkme}>
         <Icon icon="help" />
         <span className="navLabel"><I18nMessage message="globalActions.help" /></span>
     </a>

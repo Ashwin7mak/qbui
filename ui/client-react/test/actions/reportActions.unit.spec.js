@@ -83,11 +83,28 @@ describe('Report actions', () => {
         expect(reportActions.openFieldSelectMenu(context, 6, true)).toEqual(expectedAction);
     });
 
+    it('should create an action to enter builder mode', () => {
+        expect(reportActions.enterBuilderMode(context)).toEqual(event(context, types.ENTER_BUILDER_MODE, {}));
+    });
+
+    it('should create an action to exit builder mode', () => {
+        expect(reportActions.exitBuilderMode(context)).toEqual(event(context, types.EXIT_BUILDER_MODE, {}));
+    });
+
     it('closeFieldSelectMenu action dispatches type.CLOSE_FIELD_SELECT_MENU with closed parameter', () => {
         const expectedAction = event(context, types.CLOSE_FIELD_SELECT_MENU, {});
         expect(reportActions.closeFieldSelectMenu(context)).toEqual(expectedAction);
     });
 
+    it('moveColumn actions dispatches types.MOVE_COLUMN with params', () => {
+        const params = {
+            sourceLabel: 'Column A',
+            targetLabel: 'Column B'
+        };
+        const expectedAction = event(context, types.MOVE_COLUMN, params);
+        expect(reportActions.moveColumn(context, params)).toEqual(expectedAction);
+
+    });
 });
 
 describe('Test ReportsActions function success workflow', () => {
@@ -450,4 +467,5 @@ describe('Test ReportsActions function failure workflow', () => {
                 done();
             });
     });
+
 });

@@ -576,12 +576,6 @@ module.exports = function(grunt) {
         webdriver: {
             options: {
                 exclude: [
-                    // Reports Tests
-                    //TODO: MB-2115 this bug is logged in reactabular backlog under https://quickbase.atlassian.net/browse/MB-2115
-                    // reportAddRecord is currently broken on Reactabular, the save and add a new row button for inline editing has been disabled
-                    // because the save and add button is disabled we turned off the reportAddRecord test
-                    // we will turn it back on once this button has been enabled again
-                    './wdio/tests/reports/reportAddRecord.e2e.spec.js',
                     // Forms Tests
                     // Stabilize in CI before enabling
                     './wdio/tests/forms/formDragDrop.e2e.spec.js',
@@ -590,32 +584,36 @@ module.exports = function(grunt) {
                     // permissions for viewer and participant are not working correctly
                     './wdio/tests/forms/formPermissionsViewerRole.e2e.spec.js',
                     './wdio/tests/forms/formPermissionsParticipantRole.e2e.spec.js',
-                    // Tables Tests
-                    // Users Tests
-                    // Relationships Tests
-                    // Stabilize in CI before enabling
-                    './wdio/tests/relationships/relationshipViewChildTable.e2e.spec.js',
-                    // Stabilize in CI before enabling
-                    './wdio/tests/reports/reportSearch.e2e.spec.js',
 
+                    // Reports Tests
+                    //TODO: MB-2115 this bug is logged in reactabular backlog under https://quickbase.atlassian.net/browse/MB-2115
+                    // reportAddRecord is currently broken on Reactabular, the save and add a new row button for inline editing has been disabled
+                    // because the save and add button is disabled we turned off the reportAddRecord test
+                    // we will turn it back on once this button has been enabled again
+                    './wdio/tests/reports/reportAddRecord.e2e.spec.js',
+                    // Stabilize in CI before enabling
+                    './wdio/tests/reports/reportSearch.e2e.spec.js'
                 ],
                 suites: {
-                    reports: [
-                        './wdio/tests/reports/reportDeleteRecord.e2e.spec.js',
-                        './wdio/tests/reports/grouping/reportGroupingViaContainer.e2e.spec.js',
-                        './wdio/tests/reports/sorting/reportSortingViaContainer.e2e.spec.js',
-                        './wdio/tests/reports/reportTopNav.e2e.spec.js',
-                        './wdio/tests/reports/reportEditRecord.e2e.spec.js',
-                        './wdio/tests/reports/reportNavigation.e2e.spec.js',
-                        './wdio/tests/reports/grouping/reportGroupingViaColumnHeader.e2e.spec.js',
-                        './wdio/tests/reports/sorting/reportSortingViaColumnHeader.e2e.spec.js',
-                        './wdio/tests/reports/reportTable.e2e.spec.js',
-                    ],
+                    // Please alphabetize these by folder level
                     forms: [
                         './wdio/tests/forms/formAdd.e2e.spec.js',
                         './wdio/tests/forms/formAddValidation.e2e.spec.js',
                         './wdio/tests/forms/formEdit.e2e.spec.js',
                         './wdio/tests/forms/formEditValidation.e2e.spec.js'
+                    ],
+                    relationships: [
+                        './wdio/tests/relationships/relationshipViewChildTable.e2e.spec.js'
+                    ],
+                    reports: [
+                        './wdio/tests/reports/reportDeleteRecord.e2e.spec.js',
+                        './wdio/tests/reports/reportEditRecord.e2e.spec.js',
+                        './wdio/tests/reports/reportNavigation.e2e.spec.js',
+                        './wdio/tests/reports/reportTable.e2e.spec.js',
+                        './wdio/tests/reports/grouping/reportGroupingViaColumnHeader.e2e.spec.js',
+                        './wdio/tests/reports/grouping/reportGroupingViaContainer.e2e.spec.js',
+                        './wdio/tests/reports/sorting/reportSortingViaColumnHeader.e2e.spec.js',
+                        './wdio/tests/reports/sorting/reportSortingViaContainer.e2e.spec.js'
                     ],
                     tables: [
                         './wdio/tests/tables/tableCreate.e2e.spec.js',
@@ -623,9 +621,11 @@ module.exports = function(grunt) {
                         './wdio/tests/tables/tableEdit.e2e.spec.js',
                         './wdio/tests/tables/tableHomePage.e2e.spec.js'
                     ],
-                    relationships: [],
                     users: [
-                        './wdio/tests/users/usersTable.e2e.spec.js',
+                        './wdio/tests/users/usersTable.e2e.spec.js'
+                    ],
+                    global: [
+                        './wdio/tests/global/globalTopNav.e2e.spec.js'
                     ]
                 }
             },
@@ -633,7 +633,7 @@ module.exports = function(grunt) {
                 // Use the wdioSauce.conf.js file setting the options above
                 configFile: './wdio/config/' + wdioSauceConfig,
                 // Make sure there are no spaces between test suites here
-                suite: 'reports,forms,tables,users'
+                suite: 'forms,relationships,reports,tables,users,global'
             }
         },
 

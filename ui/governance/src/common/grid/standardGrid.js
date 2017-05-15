@@ -1,17 +1,15 @@
-import React, {Component, PropTypes} from 'react';
-import _ from 'lodash';
-import '../../../../client-react/src/components/dataTable/qbGrid/qbGrid.scss';
-import './standardGrid.scss';
-import * as Table from 'reactabular-table';
-import {connect} from 'react-redux';
-
-import QbHeaderCell from '../../../../client-react/src/components/dataTable/qbGrid/qbHeaderCell';
-import QbRow from '../../../../client-react/src/components/dataTable/qbGrid/qbRow';
-import QbCell from '../../../../client-react/src/components/dataTable/qbGrid/qbCell';
-
-import HeaderMenuColumnTransform from './transforms/headerMenuColumnTransform';
-import SortMenuItems from './headerMenu/sort/sortMenuItems';
-import * as StandardGridActions from './standardGridActions';
+import React, {Component, PropTypes} from "react";
+import _ from "lodash";
+import "../../../../client-react/src/components/dataTable/qbGrid/qbGrid.scss";
+import "./standardGrid.scss";
+import * as Table from "reactabular-table";
+import {connect} from "react-redux";
+import QbHeaderCell from "../../../../client-react/src/components/dataTable/qbGrid/qbHeaderCell";
+import QbRow from "../../../../client-react/src/components/dataTable/qbGrid/qbRow";
+import QbCell from "../../../../client-react/src/components/dataTable/qbGrid/qbCell";
+import HeaderMenuColumnTransform from "./transforms/headerMenuColumnTransform";
+import SortMenuItems from "./headerMenu/sort/sortMenuItems";
+import * as StandardGridActions from "./standardGridActions";
 import StandardGridToolbar from "./toolbar/StandardGridToolbar";
 
 // Sub-component pieces we will be using to override React Tabular's default components
@@ -50,7 +48,10 @@ class StandardGrid extends Component {
         return (
             <div className="gridWrapper">
                 <StandardGridToolbar id={this.props.id}
-                                     doUpdate={this.props.doUpdate}/>
+                                     doUpdate={this.props.doUpdate}
+                                     facetFields={this.props.facetFields}
+                                     itemTypePlural={this.props.itemTypePlural}
+                                     itemTypeSingular={this.props.itemTypeSingular}/>
                 <div className="gridContainer">
                     <Table.Provider
                         className="qbGrid"
@@ -80,7 +81,10 @@ StandardGrid.propTypes = {
     id: PropTypes.string.isRequired,
     columnTransforms: PropTypes.array,
     columnTransformProps: PropTypes.array,
-    doUpdate: PropTypes.func.isRequired
+    doUpdate: PropTypes.func.isRequired,
+    itemTypePlural: PropTypes.string,
+    itemTypeSingular: PropTypes.string,
+    facetFields: PropTypes.array
 };
 
 StandardGrid.defaultProps = {

@@ -180,7 +180,6 @@ export class FacetsMenu extends Component {
      **/
     render() {
         let menuKey =  this.props.rptId;
-
         let selectedValues = (this.props.selectedValues ? this.props.selectedValues.getSelections() : {});
 
         return <GenericFacetMenu selectedFacetValues={selectedValues}
