@@ -343,15 +343,6 @@ export const isInDraggingState = (formId) => {
 };
 
 /**
- * setFormBuilderPendingEditToFalse sets isPendingEdits to false
- * @param formId
- * @returns {{id, type, content}|*}
- */
-export const setFormBuilderPendingEditToFalse = (formId) => {
-    return event(formId, types.SET_IS_PENDING_EDIT_TO_FALSE);
-};
-
-/**
  * Create a new form
  *
  * @param appId

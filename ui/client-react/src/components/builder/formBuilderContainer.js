@@ -3,9 +3,8 @@ import {Button} from 'react-bootstrap';
 import {I18nMessage} from '../../utils/i18nMessage';
 import Locale from '../../locales/locales';
 import {connect} from 'react-redux';
-import {loadForm, updateForm, moveFieldOnForm, toggleFormBuilderChildrenTabIndex, toggleToolPaletteChildrenTabIndex, keyboardMoveFieldUp, keyboardMoveFieldDown, selectFieldOnForm, deselectField, removeFieldFromForm, addNewFieldToForm, setFormBuilderPendingEditToFalse} from '../../actions/formActions';
+import {loadForm, updateForm, moveFieldOnForm, toggleFormBuilderChildrenTabIndex, toggleToolPaletteChildrenTabIndex, keyboardMoveFieldUp, keyboardMoveFieldDown, selectFieldOnForm, deselectField, removeFieldFromForm, addNewFieldToForm} from '../../actions/formActions';
 import {updateFormAnimationState} from '../../actions/animationActions';
-import {setFieldsPropertiesPendingEditToFalse} from '../../actions/fieldsActions';
 import Loader from 'react-loader';
 import {LARGE_BREAKPOINT} from "../../constants/spinnerConfigurations";
 import {NEW_FORM_RECORD_ID} from '../../constants/schema';
@@ -67,9 +66,7 @@ const mapDispatchToProps = {
     selectFieldOnForm,
     deselectField,
     removeFieldFromForm,
-    addNewFieldToForm,
-    setFormBuilderPendingEditToFalse,
-    setFieldsPropertiesPendingEditToFalse
+    addNewFieldToForm
 };
 
 /**
@@ -133,29 +130,15 @@ export const FormBuilderContainer = React.createClass({
         this.props.loadForm(appId, tblId, null, (formType || 'view'), NEW_FORM_RECORD_ID);
     },
 
-    closeFormBuilder(appId, tblId, redirectRoute) {
-        appId = appId ? appId : this.props.match.params.appId;
-        tblId = tblId ? tblId : this.props.match.params.tblId;
-        redirectRoute = redirectRoute ? redirectRoute : this.props.redirectRoute;
+    closeFormBuilder() {
+        const {appId, tblId} = this.props.match.params;
 
-        NavigationUtils.goBackToLocationOrTable(appId, tblId, redirectRoute);
-
-        if (this.props.isFormDirty) {
-            if (this.props.setFormBuilderPendingEditToFalse) {
-                this.props.setFormBuilderPendingEditToFalse(this.props.currentForm.id);
-            }
-        }
-
-        if (this.props.isFieldPropertiesDirty) {
-            if (this.props.setFieldsPropertiesPendingEditToFalse) {
-                this.props.setFieldsPropertiesPendingEditToFalse();
-            }
-        }
+        NavigationUtils.goBackToLocationOrTable(appId, tblId, this.props.redirectRoute);
     },
 
     onCancel() {
-        if (this.props.isFormDirty || this.props.isFieldPropertiesDirty) {
-            AppHistory.showPendingEditsConfirmationModal(this.saveClicked, this.closeFormBuilder(this.props.match.params.appId, this.props.match.params.tblId, this.props.redirectRoute), () => HideAppModal());
+        if (this.props.isPendingEdit) {
+            AppHistory.showPendingEditsConfirmationModal(this.saveClicked, this.closeFormBuilder, () => HideAppModal());
         } else {
             HideAppModal();
             this.closeFormBuilder();
