@@ -45,7 +45,10 @@
          * Returns the table header element for a section
          * @param qbPanelFormSection - form section element
          */
-        recordsCountEl: {value: function(qbPanelFormSection) {return qbPanelFormSection.element('.recordsCount');}},
+        recordsCountEl: {value: function(qbPanelFormSection) {
+            qbPanelFormSection.waitForVisible();
+            return qbPanelFormSection.element('.recordsCount');
+        }},
 
         /**
          * Given a record element in agGrid, click on the record.
