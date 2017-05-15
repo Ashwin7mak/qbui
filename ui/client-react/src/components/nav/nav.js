@@ -116,6 +116,8 @@ export const Nav = React.createClass({
 
         this.props.updateReportRedirectRoute(_.get(this.props, 'location.pathname'));
 
+        this.props.enterBuilderMode(CONTEXT.REPORT.NAV);
+
         this.props.history.push(link);
     },
 
