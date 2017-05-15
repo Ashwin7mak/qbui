@@ -9,6 +9,7 @@
     let reportContentPO = requirePO('reportContent');
     var RequestAppsPage = requirePO('requestApps');
     var UsersTablePage = requirePO('usersTable');
+    var tableCreatePO = requirePO('tableCreate');
 
     describe('Reports Page - TopNav Tests: ', function() {
         var realmName;
@@ -36,7 +37,9 @@
             });
         });
         it('Visibility and usability of topNav on Table homepage', function() {
-            RequestAppsPage.get(e2eBase.getRequestTableEndpoint(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1));
+            RequestAppsPage.selectApp(testApp.name);
+            //Step 0 - Select table
+            tableCreatePO.selectTable(testApp.tables[e2eConsts.TABLE1].name);
             TopNavPO.topNavToggleHamburgerEl.waitForVisible();
             //Step1: Verify if the global icons are displayed
             TopNavPO.topNavGlobalActDivEl.waitForVisible();
