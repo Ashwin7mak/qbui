@@ -1,25 +1,19 @@
 @import '../../../../reuse/client/src/assets/css/qbVariables';
 
-
 .globalAction.builder {
 
     .dropdown-menu {
         padding: 0;
-
-        &:after {
-            border-bottom-color: $color-black-200;
-        }
     }
 
     .hasContextView .dropdown-menu:after {
-        border-bottom-color: white;
+        border-bottom-color: $color-black-200;
     }
 }
 
 .configMenu {
     display: flex;
     align-items: stretch;
-    background-color: $color-black-200;
 
     h3 {
         width: 100%;
@@ -63,6 +57,9 @@
         padding-left: 27px; // used to align with heading li
         white-space: nowrap;
         color: $default-text-onlight-color;
+        &:hover {
+            text-decoration: underline;
+        }
     }
 }
 
@@ -81,7 +78,7 @@
 }
 
 .configMenu__currentContext {
-    background: white;
+    background-color: $color-black-200;
     width: 168px;
     padding-left: $spacing-medium1;
     li {
