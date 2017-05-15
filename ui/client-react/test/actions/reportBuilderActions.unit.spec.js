@@ -74,7 +74,7 @@ describe('Report Builder actions', () => {
 
     it('updateReportRedirectRoute action dispatches type.UPDATE_REPORT_REDIRECT_ROUTE', () => {
         let route = 'localhost';
-        expect(reportBuilderActions.updateReportRedirectRoute(context, route)).toEqual(event(context, types.UPDATE_REPORT_REDIRECT_ROUTE, {route}))
+        expect(reportBuilderActions.updateReportRedirectRoute(context, route)).toEqual(event(context, types.UPDATE_REPORT_REDIRECT_ROUTE, {route}));
     });
 });
 

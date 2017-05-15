@@ -72,7 +72,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         exitBuilderMode: (context) => {
-            dispatch(exitBuilderMode(context))
+            dispatch(exitBuilderMode(context));
         },
         closeFieldSelectMenu: (context) => {
             dispatch(closeFieldSelectMenu(context));

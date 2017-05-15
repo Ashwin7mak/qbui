@@ -50,9 +50,9 @@ export const refreshFieldSelectMenu = (context, appId, tblId) => {
                     dispatch(event(context, types.REFRESH_FIELD_SELECT_MENU, {response}));
                     resolve();
                 }).catch(error => {
-                logger.parseAndLogError(LogLevel.ERROR, error.response, 'fieldsService.getFields:');
-                reject();
-            });
+                    logger.parseAndLogError(LogLevel.ERROR, error.response, 'fieldsService.getFields:');
+                    reject();
+                });
         });
     };
 };
