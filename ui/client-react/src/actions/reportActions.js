@@ -347,12 +347,3 @@ export const loadReportRecordsCount = (context, appId, tblId, rptId, queryParams
         }
     };
 };
-
-/**
- * Move a column based on the source and target ids given.
- * @param context
- * @param sourceIndex and targetIndex
- */
-export const moveColumn = (context, params) => {
-    return event(context, types.MOVE_COLUMN, params);
-};

@@ -76,6 +76,15 @@ describe('Report Builder actions', () => {
         let route = 'localhost';
         expect(reportBuilderActions.updateReportRedirectRoute(context, route)).toEqual(event(context, types.UPDATE_REPORT_REDIRECT_ROUTE, {route}));
     });
+
+    it('moveColumn actions dispatches types.MOVE_COLUMN with params', () => {
+        const params = {
+            sourceLabel: 'Column A',
+            targetLabel: 'Column B'
+        };
+        const expectedAction = event(context, types.MOVE_COLUMN, params);
+        expect(reportBuilderActions.moveColumn(context, params)).toEqual(expectedAction);
+    });
 });
 
 describe('Test ReportBuilderActions function success workflow', () => {

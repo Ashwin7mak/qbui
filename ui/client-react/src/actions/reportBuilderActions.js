@@ -109,3 +109,12 @@ export const enterBuilderMode = (context) => {
 export const exitBuilderMode = (context) => {
     return event(context, types.EXIT_BUILDER_MODE, {});
 };
+
+/**
+ * Move a column based on the source and target ids given.
+ * @param context
+ * @param sourceIndex and targetIndex
+ */
+export const moveColumn = (context, params) => {
+    return event(context, types.MOVE_COLUMN, params);
+};

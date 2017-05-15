@@ -49,16 +49,6 @@ describe('Report actions', () => {
                 done();
             });
     });
-
-    it('moveColumn actions dispatches types.MOVE_COLUMN with params', () => {
-        const params = {
-            sourceLabel: 'Column A',
-            targetLabel: 'Column B'
-        };
-        const expectedAction = event(context, types.MOVE_COLUMN, params);
-        expect(reportActions.moveColumn(context, params)).toEqual(expectedAction);
-
-    });
 });
 
 describe('Test ReportsActions function success workflow', () => {
