@@ -7,7 +7,7 @@ import TopNav from "../header/topNav";
 import TempMainErrorMessages from './tempMainErrorMessages';
 import ReportManagerTrowser from "../report/reportManagerTrowser";
 import RecordTrowser from "../record/recordTrowser";
-import {enterBuilderMode} from '../../../src/actions/reportActions';
+import {enterBuilderMode, updateReportRedirectRoute} from '../../../src/actions/reportBuilderActions';
 
 import GlobalActions from "../actions/globalActions";
 import BuilderDropDownAction from '../actions/builderDropDownAction';
@@ -41,7 +41,6 @@ import AppUtils from '../../utils/appUtils';
 
 import {NEW_TABLE_IDS_KEY} from '../../constants/localStorage';
 import {updateFormRedirectRoute} from '../../actions/formActions';
-import {updateReportRedirectRoute} from '../../actions/reportBuilderActions';
 
 import Analytics from '../../../../reuse/client/src/components/analytics/analytics';
 import Config from '../../config/app.config';
