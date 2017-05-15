@@ -9,6 +9,7 @@
     var e2ePageBase = requirePO('e2ePageBase');
     var RequestAppsPage = requirePO('requestApps');
     var UsersTablePage = requirePO('usersTable');
+    let reportContentPO = requirePO('reportContent');
 
     describe('Users - Application user management table tests: ', function() {
         var realmName;
@@ -41,6 +42,9 @@
         beforeEach(function() {
             //load the users page
             RequestAppsPage.get(e2eBase.getRequestUsersEndpoint(realmName, testApp.id));
+            //wait until user table rows are loaded
+            reportContentPO.waitForReportContent();
+            //Wait until you see newUser button
             return UsersTablePage.newUserBtn.waitForVisible();
         });
 

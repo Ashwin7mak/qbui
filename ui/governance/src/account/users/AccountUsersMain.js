@@ -10,6 +10,7 @@ import * as RequestContextActions from '../../common/requestContext/RequestConte
 import * as SpinnerConfigurations from "../../../../client-react/src/constants/spinnerConfigurations";
 
 import {isFetching} from './AccountUsersReducer';
+import constants from "../../app/constants";
 
 /**
  * Represents the top level page that contains the grid for account users
@@ -19,7 +20,7 @@ class AccountUsers extends Component {
     constructor(props) {
         super(props);
         this.GRID_ID = "accountUsers";
-        this.ITEMS_PER_PAGE = 10;
+        this.ITEMS_PER_PAGE = constants.USERS_GRID_ITEMSPERPAGE;
     }
 
     /**

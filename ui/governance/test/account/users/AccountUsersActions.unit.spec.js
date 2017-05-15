@@ -180,22 +180,6 @@ describe('Account Users Actions Tests', () => {
 
             const expectedAction = [
                 {
-                    type: gridTypes.SET_FACET_FIELDS,
-                    gridId: 1,
-                    facetFields: [
-                        {id: 0, type: 'TEXT', name: Locale.getMessage("governance.account.users.accessStatus"), values: [{id: 0, value: 'QuickBase Staff'}, {id: 0, value: 'No App Access'}, {id: 0, value: 'Paid Seat'}]},
-                        {id: 1, type: 'CHECKBOX', name: Locale.getMessage("governance.account.users.paidSeatSingular"), values: [{id: 1, value: false}, {id: 1, value: true}]},
-                        {id: 2, type: 'CHECKBOX', name: Locale.getMessage("governance.account.users.quickbaseStaff"), values: [{id: 2, value: true}, {id: 2, value: false}]},
-                        {id: 3, type: 'CHECKBOX', name: Locale.getMessage("governance.account.users.inactive"), values: [{id: 3, value: false}]},
-                        {id: 4, type: 'CHECKBOX', name: Locale.getMessage("governance.account.users.inGroup"), values: [{id: 4, value: false}, {id: 4, value: true}]},
-                        {id: 5, type: 'CHECKBOX', name: Locale.getMessage("governance.account.users.groupManager"), values: [{id: 5, value: false}, {id: 5, value: true}]},
-                        {id: 6, type: 'CHECKBOX', name: Locale.getMessage("governance.account.users.canCreateApps"), values: [{id: 6, value: false}]},
-                        {id: 7, type: 'CHECKBOX', name: Locale.getMessage("governance.account.users.appManager"), values: [{id: 7, value: true}, {id: 7, value: false}]},
-                        {id: 8, type: 'CHECKBOX', name: Locale.getMessage("governance.account.users.realmDirectoryUsers"), values: [{id: 8, value: false}, {id: 8, value: true}]},
-                        {id: 9, type: 'CHECKBOX', name: Locale.getMessage("governance.account.users.realmApproved"), values: [{id: 9, value: false}, {id: 9, value: true}]}
-                    ]
-                },
-                {
                     type: gridTypes.SET_SEARCH,
                     gridId: GRID_ID,
                     searchTerm: ""
@@ -292,22 +276,6 @@ describe('Account Users Actions Tests', () => {
 
             const expectedActions = [
                 {
-                    type: gridTypes.SET_FACET_FIELDS,
-                    gridId: 1,
-                    facetFields:[
-                        {id: 0, type: 'TEXT', name: Locale.getMessage("governance.account.users.accessStatus"), values: [{id: 0, value: 'No App Access'}]},
-                        {id: 1, type: 'CHECKBOX', name: Locale.getMessage("governance.account.users.paidSeatSingular"), values: [{id: 1, value: false}]},
-                        {id: 2, type: 'CHECKBOX', name: Locale.getMessage("governance.account.users.quickbaseStaff"), values: [{id: 2, value: false}]},
-                        {id: 3, type: 'CHECKBOX', name: Locale.getMessage("governance.account.users.inactive"), values: [{id: 3, value: false}]},
-                        {id: 4, type: 'CHECKBOX', name: Locale.getMessage("governance.account.users.inGroup"), values: [{id: 4, value: true}]},
-                        {id: 5, type: 'CHECKBOX', name: Locale.getMessage("governance.account.users.groupManager"), values: [{id: 5, value: true}]},
-                        {id: 6, type: 'CHECKBOX', name: Locale.getMessage("governance.account.users.canCreateApps"), values: [{id: 6, value: false}]},
-                        {id: 7, type: 'CHECKBOX', name: Locale.getMessage("governance.account.users.appManager"), values: [{id: 7, value: true}]},
-                        {id: 8, type: 'CHECKBOX', name: Locale.getMessage("governance.account.users.realmDirectoryUsers"), values: [{id: 8, value: false}]},
-                        {id: 9, type: 'CHECKBOX',  name: Locale.getMessage("governance.account.users.realmApproved"), values: [{id: 9, value: false}]}
-                    ]
-                },
-                {
                     type: gridTypes.SET_SEARCH,
                     gridId: GRID_ID,
                     searchTerm: searchTerm
@@ -368,22 +336,6 @@ describe('Account Users Actions Tests', () => {
 
             const expectedActions = [
                 {
-                    type: gridTypes.SET_FACET_FIELDS,
-                    gridId: 1,
-                    facetFields:[
-                        {id: 0, type: 'TEXT', name: Locale.getMessage("governance.account.users.accessStatus"), values: [{id: 0, value: 'QuickBase Staff'}, {id: 0, value: 'No App Access'}, {id: 0, value: 'Paid Seat'}]},
-                        {id: 1, type: 'CHECKBOX', name: Locale.getMessage("governance.account.users.paidSeatSingular"), values: [{id: 1, value: false}, {id: 1, value: true}]},
-                        {id: 2, type: 'CHECKBOX', name: Locale.getMessage("governance.account.users.quickbaseStaff"), values: [{id: 2, value: true}, {id: 2, value: false}]},
-                        {id: 3, type: 'CHECKBOX', name: Locale.getMessage("governance.account.users.inactive"), values: [{id: 3, value: false}]},
-                        {id: 4, type: 'CHECKBOX', name: Locale.getMessage("governance.account.users.inGroup"), values: [{id: 4, value: false}, {id: 4, value: true}]},
-                        {id: 5, type: 'CHECKBOX', name: Locale.getMessage("governance.account.users.groupManager"), values: [{id: 5, value: false}, {id: 5, value: true}]},
-                        {id: 6, type: 'CHECKBOX', name: Locale.getMessage("governance.account.users.canCreateApps"), values: [{id: 6, value: false}]},
-                        {id: 7, type: 'CHECKBOX', name: Locale.getMessage("governance.account.users.appManager"), values: [{id: 7, value: true}, {id: 7, value: false}]},
-                        {id: 8, type: 'CHECKBOX', name: Locale.getMessage("governance.account.users.realmDirectoryUsers"), values: [{id: 8, value: false}, {id: 8, value: true}]},
-                        {id: 9, type: 'CHECKBOX',  name: Locale.getMessage("governance.account.users.realmApproved"), values: [{id: 9, value: false}, {id: 9, value: true}]}
-                    ]
-                },
-                {
                     type: gridTypes.SET_SEARCH,
                     gridId: GRID_ID,
                     searchTerm: ""
@@ -426,88 +378,6 @@ describe('Account Users Actions Tests', () => {
             expect(store.getActions(GRID_ID)).toEqual(expectedActions);
         });
 
-        it('dispatches facet correctly', () => {
-            let selected = new FacetSelections();
-            // users with access all
-            selected.addSelection(0, 'QuickBase Staff');
-            selected.addSelection(0, 'No App Access');
-            selected.addSelection(0, 'Paid Seat');
-            // in any group
-            selected.addSelection(4, true);
-
-            const store = mockStore({AccountUsers: {users: ACCOUNT_USERS_DATA}});
-
-            let gridState = {
-                sortFids: [],                                                // no sort
-                pagination: {currentPage: 1, itemsPerPage: ITERMS_PER_PAGE}, // no pagination
-                searchTerm: "",                                              // no search term
-                facets: {
-                    facetSelections: selected,                            // add facets
-                    facetFields:[{id:0, name:'', values:[]}]}
-
-            };
-
-            store.dispatch(actions.doUpdate(GRID_ID, gridState));
-            const expectedActions = [
-                {
-                    type: gridTypes.SET_FACET_FIELDS,
-                    gridId: 1,
-                    facetFields:[
-                        {id: 0, type: 'TEXT', name: Locale.getMessage("governance.account.users.accessStatus"), values: [{id: 0, value: 'No App Access'}]},
-                        {id: 1, type: 'CHECKBOX', name: Locale.getMessage("governance.account.users.paidSeatSingular"), values: [{id: 1, value: false}]},
-                        {id: 2, type: 'CHECKBOX', name: Locale.getMessage("governance.account.users.quickbaseStaff"), values: [{id: 2, value: false}]},
-                        {id: 3, type: 'CHECKBOX', name: Locale.getMessage("governance.account.users.inactive"), values: [{id: 3, value: false}]},
-                        {id: 4, type: 'CHECKBOX', name: Locale.getMessage("governance.account.users.inGroup"), values: [{id: 4, value: true}]},
-                        {id: 5, type: 'CHECKBOX', name: Locale.getMessage("governance.account.users.groupManager"), values: [{id: 5, value: true}]},
-                        {id: 6, type: 'CHECKBOX', name: Locale.getMessage("governance.account.users.canCreateApps"), values: [{id: 6, value: false}]},
-                        {id: 7, type: 'CHECKBOX', name: Locale.getMessage("governance.account.users.appManager"), values: [{id: 7, value: true}]},
-                        {id: 8, type: 'CHECKBOX', name: Locale.getMessage("governance.account.users.realmDirectoryUsers"), values: [{id: 8, value: false}]},
-                        {id: 9, type: 'CHECKBOX',  name: Locale.getMessage("governance.account.users.realmApproved"), values: [{id: 9, value: false}]}
-                    ]
-                },
-                {
-                    type: gridTypes.SET_SEARCH,
-                    gridId: GRID_ID,
-                    searchTerm: ""
-                },
-                {
-                    type: gridTypes.SET_PAGINATION,
-                    gridId: GRID_ID,
-                    pagination: {
-                        filteredRecords: 1,
-                        totalPages: 1,
-                        currentPage: 1,
-                        itemsPerPage: ITERMS_PER_PAGE,
-                        firstRecordInCurrentPage: 1,
-                        lastRecordInCurrentPage: 1
-                    }
-                },
-                {
-                    type: gridTypes.SET_ITEMS,
-                    gridId: GRID_ID,
-                    items: [
-                        {
-                            "uid": 30000,
-                            "id": 30000,
-                            "firstName": "Zadministrator",
-                            "lastName": "ZUser for default SQL Installation",
-                            "email": "Zkoala_bumbles@quickbase.com",
-                            "userName": "Zadministrator",
-                            "lastAccess": "2019-02-28T19:32:04.223Z",
-                            "numGroupsMember": 100,
-                            "numGroupsManaged": 100,
-                            "hasAppAccess": false,
-                            "numAppsManaged": 200,
-                            "userBasicFlags": 24576,
-                            "accountTrusteeFlags": 0,
-                            "realmDirectoryFlags": 0,
-                            "systemRights": 0
-                        }]
-                }
-            ];
-
-            expect(store.getActions(GRID_ID)).toEqual(expectedActions);
-        });
     });
 
     describe('Filter Action', () => {
@@ -620,17 +490,6 @@ describe('Account Users Actions Tests', () => {
             let facetUsers = actions.facetUser(ACCOUNT_USERS_DATA, selected);
 
             expect(facetUsers).toEqual(ACCOUNT_USERS_DATA);
-
-            expect(actions.getFacetFields(facetUsers)[0]).toEqual(
-                {
-                    id:0,
-                    name: Locale.getMessage("governance.account.users.accessStatus"),
-                    type: 'TEXT',
-                    values: [
-                        {id:0, value: 'QuickBase Staff'},
-                        {id:0, value: 'No App Access'},
-                        {id:0, value: 'Paid Seat'}]
-                });
         });
 
         it('gets the right info for user in group', () => {
@@ -645,15 +504,6 @@ describe('Account Users Actions Tests', () => {
             _.forEach(facetUsers, function(user) {
                 expect(user.numGroupsMember).toBeGreaterThan(0);
             });
-
-            expect(actions.getFacetFields(facetUsers)[4]).toEqual(
-                {
-                    id:4,
-                    name: Locale.getMessage("governance.account.users.inGroup"),
-                    type: 'CHECKBOX',
-                    values: [
-                        {id:4, value: true}]
-                });
         });
 
         it('facets users not in group', () => {
@@ -667,15 +517,6 @@ describe('Account Users Actions Tests', () => {
             _.forEach(facetUsers, function(user) {
                 expect(user.numGroupsMember).toEqual(0);
             });
-
-            expect(actions.getFacetFields(facetUsers)[4]).toEqual(
-                {
-                    id:4,
-                    name: Locale.getMessage("governance.account.users.inGroup"),
-                    type: 'CHECKBOX',
-                    values: [
-                        {id:4, value: false}]
-                });
         });
 
         it('gets correct info for the users who dont manage groups', () => {
@@ -689,15 +530,6 @@ describe('Account Users Actions Tests', () => {
             _.forEach(facetUsers, function(user) {
                 expect(user.numGroupsManaged).toEqual(0);
             });
-
-            expect(actions.getFacetFields(facetUsers)[5]).toEqual(
-                {
-                    id:5,
-                    name: Locale.getMessage("governance.account.users.groupManager"),
-                    type: 'CHECKBOX',
-                    values: [
-                        {id:5, value: false}]
-                });
         });
 
         it('gets correct info for the users who manage groups', () => {
@@ -711,15 +543,6 @@ describe('Account Users Actions Tests', () => {
             _.forEach(facetUsers, function(user) {
                 expect(user.numGroupsManaged).toBeGreaterThan(0);
             });
-
-            expect(actions.getFacetFields(facetUsers)[5]).toEqual(
-                {
-                    id:5,
-                    name: Locale.getMessage("governance.account.users.groupManager"),
-                    type: 'CHECKBOX',
-                    values: [
-                        {id:5, value: true}]
-                });
         });
 
         it('facets columns combination', () => {
@@ -737,6 +560,13 @@ describe('Account Users Actions Tests', () => {
     });
 
     describe('Sort Action', () => {
+
+        it('sorts by firstname by default', () => {
+            let sortedUsersAsc = actions.sortUsers(ACCOUNT_USERS_DATA, []);
+            expect(sortedUsersAsc[0].firstName).toEqual('Administrator');
+            expect(sortedUsersAsc[1].firstName).toEqual('FirstNameFilter');
+            expect(sortedUsersAsc[2].firstName).toEqual('Zadministrator');
+        });
 
         it('sorts the text columns by firstname correctly', () => {
             let sortedUsersAsc = actions.sortUsers(ACCOUNT_USERS_DATA, [1]);

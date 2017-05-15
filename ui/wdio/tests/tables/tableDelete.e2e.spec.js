@@ -47,45 +47,15 @@
          * Before each it block reload the list all report (can be used as a way to reset state between tests)
          */
         beforeEach(function() {
-            return e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
+            browser.call(function() {
+                // Load the requestAppsPage (shows a list of all the apps in a realm)
+                return RequestAppsPage.get(e2eBase.getRequestAppsPageEndpoint(realmName));
+            });
+
+            //select the App
+            RequestAppsPage.selectApp(testApp.name);
         });
 
-        it('Delete table', function()   {
-
-            //Step 1 - get the original count of table links in the left nav
-            let originalTableLinksCount = tableCreatePO.getAllTableLeftNavLinksList.value.length;
-
-            //Step 2 - Select table to delete ('Table 2' here) and make sure it lands in reports page
-            tableCreatePO.selectTable(EXISTING_TABLE_NAME_2);
-            // wait for the report content to be visible
-            ReportContentPO.waitForReportContent();
-
-            //Step 3 - Click table settings Icon
-            ReportContentPO.clickSettingsIcon();
-
-            //Step 4 - Go to 'Table properties & settings'
-            ReportContentPO.clickModifyTableSettings();
-
-            //Step 5 - Click delete table action button
-            ReportContentPO.clickDeleteTableActionButton();
-
-            // Step 6 - Set the deletePromtTextField value to 'YES'
-            ReportContentPO.setDeletePromtTextFieldValue('YES');
-
-            //Step 7 - Delete table
-            ReportContentPO.clickDeleteTableButton();
-
-            //Need small wait here for the success container to slide away
-            browser.pause(e2eConsts.shortWaitTimeMs);
-
-            //Wait until new table button visible
-            tableCreatePO.newTableBtn.waitForVisible();
-
-            //Step 8 - Make sure table is actually deleted
-            let newTableLinksCount = tableCreatePO.getAllTableLeftNavLinksList.value.length;
-            //Verify the table links count decreased by 1
-            expect(newTableLinksCount).toBe(originalTableLinksCount - 1);
-        });
 
         it('Verify that clicking on "dont delete" button closes the delete table dialogue without deleting the table', function() {
 
@@ -104,16 +74,16 @@
             ReportContentPO.clickModifyTableSettings();
 
             //Step 5 - Click delete table action button
-            ReportContentPO.clickDeleteTableActionButton();
+            tableCreatePO.clickDeleteTableActionButton();
 
             // Step 6 - Set the deletePromtTextField value to 'YES'
-            ReportContentPO.setDeletePromtTextFieldValue('YES');
+            tableCreatePO.setDeletePromtTextFieldValue('YES');
 
             //Step 7 - Click don't delete table button
-            ReportContentPO.clickDontDeleteTableButton();
+            tableCreatePO.clickDontDeleteTableButton();
 
-            //step 8 - go back to the tables page
-            RequestAppsPage.get(e2eBase.getRequestTableEndpoint(realmName, testApp.id, testApp.tables[0].id));
+            //step 8 - Click on go back to apps Link
+            tableCreatePO.clickBackToAppsLink();
 
             //Step 9 - Make sure table is not deleted
             let newTableLinksCount = tableCreatePO.getAllTableLeftNavLinksList.value.length;
@@ -149,37 +119,75 @@
 
             it('Delete table negative test case with deletePromt TextField value is- ' + testCase.message, function()   {
 
-                //Step 1 - get the original count of table links in the left nav
-                let originalTableLinksCount = tableCreatePO.getAllTableLeftNavLinksList.value.length;
-
-                //Step 2 - Select table to delete ('Table 1' here) and make sure it lands in reports page
+                //Step 1 - Select table to delete ('Table 1' here) and make sure it lands in reports page
                 tableCreatePO.selectTable(EXISTING_TABLE_NAME_1);
                 // wait for the report content to be visible
                 ReportContentPO.waitForReportContent();
 
-                //Step 3 - Click table settings Icon
+                //Step 2 - Click table settings Icon
                 ReportContentPO.clickSettingsIcon();
 
-                //Step 4 - Go to 'Table properties & settings'
+                //Step 3 - Go to 'Table properties & settings'
                 ReportContentPO.clickModifyTableSettings();
 
-                //Step 5 - Click delete table action button
-                ReportContentPO.clickDeleteTableActionButton();
+                //Step 4 - Click delete table action button
+                tableCreatePO.clickDeleteTableActionButton();
 
-                // Step 6 - Set the deletePromtTextField value
-                ReportContentPO.setDeletePromtTextFieldValue(testCase.fieldValue);
+                // Step 5 - Set the deletePromtTextField value
+                tableCreatePO.setDeletePromtTextFieldValue(testCase.fieldValue);
 
-                //Step 7 - make sure delete table button is disabled
-                expect(browser.isEnabled(ReportContentPO.deleteButtonClassName)).toBeFalsy();
+                //Step 6 - make sure delete table button is disabled
+                expect(browser.isEnabled('.modal-dialog .modal-footer .primaryButton')).toBeFalsy();
 
-                //step 8 - go back to the tables page
-                RequestAppsPage.get(e2eBase.getRequestTableEndpoint(realmName, testApp.id, testApp.tables[0].id));
+                //Step 7 - Go to apps page
+                browser.call(function() {
+                    // Load the requestAppsPage (shows a list of all the apps in a realm)
+                    return RequestAppsPage.get(e2eBase.getRequestAppsPageEndpoint(realmName));
+                });
 
-                //Step 9 - Make sure table is not deleted
-                let newTableLinksCount = tableCreatePO.getAllTableLeftNavLinksList.value.length;
-                //Verify the table links count is same as original
-                expect(newTableLinksCount).toBe(originalTableLinksCount);
+                //Step 8 - Select an App
+                RequestAppsPage.selectApp(testApp.name);
+
+                //Step 9 - Make sure table is not deleted and you can still select it
+                tableCreatePO.selectTable(EXISTING_TABLE_NAME_1);
             });
+        });
+
+        it('Delete table', function()   {
+
+            //Step 1 - get the original count of table links in the left nav
+            let originalTableLinksCount = tableCreatePO.getAllTableLeftNavLinksList.value.length;
+
+            //Step 2 - Select table to delete ('Table 2' here) and make sure it lands in reports page
+            tableCreatePO.selectTable(EXISTING_TABLE_NAME_2);
+            // wait for the report content to be visible
+            ReportContentPO.waitForReportContent();
+
+            //Step 3 - Click table settings Icon
+            ReportContentPO.clickSettingsIcon();
+
+            //Step 4 - Go to 'Table properties & settings'
+            ReportContentPO.clickModifyTableSettings();
+
+            //Step 5 - Click delete table action button
+            tableCreatePO.clickDeleteTableActionButton();
+
+            // Step 6 - Set the deletePromtTextField value to 'YES'
+            tableCreatePO.setDeletePromtTextFieldValue('YES');
+
+            //Step 7 - Delete table
+            tableCreatePO.clickDeleteTableButton();
+
+            //Need small wait here for the success container to slide away
+            browser.pause(e2eConsts.shortWaitTimeMs);
+
+            //Wait until new table button visible
+            tableCreatePO.newTableBtn.waitForVisible();
+
+            //Step 8 - Make sure table is actually deleted
+            let newTableLinksCount = tableCreatePO.getAllTableLeftNavLinksList.value.length;
+            //Verify the table links count decreased by 1
+            expect(newTableLinksCount).toBe(originalTableLinksCount - 1);
         });
 
         it('Verify that only ADMIN can delete a Table', function() {
