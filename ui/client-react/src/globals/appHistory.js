@@ -51,6 +51,8 @@ class AppHistory {
             this.saveFormComplete = null;
             this.hideTrowser = null;
             this.getNavReport = null;
+            this.setFieldsPropertiesPendingEditToFalse = null;
+            this.setFormBuilderPendingEditToFalse = null;
 
             // Keep track of the event listeners so they can be canceled
             this.cancelListenBefore = null;
@@ -78,6 +80,8 @@ class AppHistory {
             self.saveFormComplete = storeFunc.saveFormComplete;
             self.hideTrowser = storeFunc.hideTrowser;
             self.getNavReport = storeFunc.getNavReport;
+            self.setFieldsPropertiesPendingEditToFalse = storeFunc.setFieldsPropertiesPendingEditToFalse;
+            self.setFormBuilderPendingEditToFalse = storeFunc.setFormBuilderPendingEditToFalse;
         }
 
         self._setupHistoryListeners();
@@ -301,7 +305,7 @@ class AppHistory {
         if (self.store && _.isFunction(self.updateForm)) {
             const state = self.store.getState();
             //fetch stores that have pendEdits
-            let {formsStore} = self.getStores(state);
+            let {formsStore, fieldsStore} = self.getStores(state);
             let appId;
             let tableId;
             let formType;
@@ -316,6 +320,12 @@ class AppHistory {
                 self.store.dispatch(self.updateForm(appId, tableId, formType, formMeta)).then(
                     () => {
                         self._continueToDestination();
+                        if (fieldsStore.isPendingEdit) {
+                            self.setFieldsPropertiesPendingEditToFalse();
+                        }
+                        if (formsStore.isPendingEdit) {
+                            self.setFormBuilderPendingEditToFalse();
+                        }
                     }
                 );
             }
@@ -349,11 +359,18 @@ class AppHistory {
         if (self.store) {
             //  clean up pending edits in store
             const state = self.store.getState();
-            let {recordStore} = self.getStores(state);
+            let {recordStore, formsStore, fieldsStore} = self.getStores(state);
 
             if (recordStore.isPendingEdit) {
                 self.store.dispatch(self.editRecordCancel(recordStore.currentEditingAppId, recordStore.currentEditingTableId, recordStore.currentEditingRecordId));
                 self.store.dispatch(self.hideTrowser());
+            }
+
+            if (fieldsStore.isPendingEdit) {
+                self.setFieldsPropertiesPendingEditToFalse();
+            }
+            if (formsStore.isPendingEdit) {
+                self.setFormBuilderPendingEditToFalse();
             }
         }
         self._continueToDestination();

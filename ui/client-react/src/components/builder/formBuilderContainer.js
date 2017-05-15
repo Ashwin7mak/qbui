@@ -3,8 +3,7 @@ import {Button} from 'react-bootstrap';
 import {I18nMessage} from '../../utils/i18nMessage';
 import Locale from '../../locales/locales';
 import {connect} from 'react-redux';
-import {loadForm, updateForm, moveFieldOnForm, toggleFormBuilderChildrenTabIndex, toggleToolPaletteChildrenTabIndex, keyboardMoveFieldUp, keyboardMoveFieldDown, selectFieldOnForm, deselectField, removeFieldFromForm, addNewFieldToForm, setFormBuilderPendingEditToFalse} from '../../actions/formActions';
-import {setFieldsPropertiesPendingEditToFalse} from '../../actions/fieldsActions';
+import {loadForm, updateForm, moveFieldOnForm, toggleFormBuilderChildrenTabIndex, toggleToolPaletteChildrenTabIndex, keyboardMoveFieldUp, keyboardMoveFieldDown, selectFieldOnForm, deselectField, removeFieldFromForm, addNewFieldToForm} from '../../actions/formActions';
 import {updateFormAnimationState} from '../../actions/animationActions';
 import Loader from 'react-loader';
 import {LARGE_BREAKPOINT} from "../../constants/spinnerConfigurations";
@@ -47,8 +46,6 @@ const mapStateToProps = state => {
         toolPaletteChildrenTabIndex: (_.has(currentForm, 'toolPaletteChildrenTabIndex') ? currentForm.toolPaletteChildrenTabIndex[0] : "-1"),
         formFocus: (_.has(currentForm, 'formFocus') ? currentForm.formFocus[0] : undefined),
         toolPaletteFocus: (_.has(currentForm, 'toolPaletteFocus') ? currentForm.toolPaletteFocus[0] : undefined),
-        isFormDirty: (_.has(currentForm, 'isPendingEdit') ? currentForm.isPendingEdit : false),
-        isFieldPropertiesDirty: (_.has(fields, 'isPendingEdit') ? fields.isPendingEdit : false),
         isOpen: state.builderNav.isNavOpen,
         isCollapsed: state.builderNav.isNavCollapsed
     };
@@ -66,9 +63,7 @@ const mapDispatchToProps = {
     selectFieldOnForm,
     deselectField,
     removeFieldFromForm,
-    addNewFieldToForm,
-    setFormBuilderPendingEditToFalse,
-    setFieldsPropertiesPendingEditToFalse
+    addNewFieldToForm
 };
 
 /**
@@ -136,18 +131,6 @@ export const FormBuilderContainer = React.createClass({
         const {appId, tblId} = this.props.match.params;
 
         NavigationUtils.goBackToLocationOrTable(appId, tblId, this.props.redirectRoute);
-
-        if (this.props.isFormDirty) {
-            if (this.props.setFormBuilderPendingEditToFalse) {
-                this.props.setFormBuilderPendingEditToFalse(this.props.currentForm.id);
-            }
-        }
-
-        if (this.props.isFieldPropertiesDirty) {
-            if (this.props.setFieldsPropertiesPendingEditToFalse) {
-                this.props.setFieldsPropertiesPendingEditToFalse();
-            }
-        }
     },
 
     onCancel() {
