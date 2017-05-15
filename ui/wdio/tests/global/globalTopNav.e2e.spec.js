@@ -37,9 +37,8 @@
             });
         });
         it('Visibility and usability of topNav on Table homepage', function() {
-            RequestAppsPage.selectApp(testApp.name);
-            //Step 0 - Select table
-            tableCreatePO.selectTable(testApp.tables[e2eConsts.TABLE1].name);
+            RequestAppsPage.get(e2eBase.getRequestTableEndpoint(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1));
+            reportContentPO.waitForLeftNavLoaded();
             TopNavPO.topNavToggleHamburgerEl.waitForVisible();
             //Step1: Verify if the global icons are displayed
             TopNavPO.topNavGlobalActDivEl.waitForVisible();
@@ -62,6 +61,7 @@
         });
         it('Visibility of topNav on Report homepage', function() {
             RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1));
+            reportContentPO.waitForLeftNavLoaded();
             TopNavPO.topNavToggleHamburgerEl.waitForVisible();
             //Step1: Verify if the global icons are displayed
             TopNavPO.topNavGlobalActDivEl.waitForVisible();

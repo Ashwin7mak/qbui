@@ -123,6 +123,23 @@
         }},
 
         /**
+         * Helper method to ensure the leftNav has been properly loaded with tables Links with text.
+         * @returns A promise that will resolve after waiting for the leftNav to be displayed
+         */
+        waitForLeftNavLoaded : {value: function() {
+            //wait for apps Toggle area
+            browser.element('.appsToggleArea').waitForVisible();
+            //wait for table headings area
+            browser.element('.tablesHeadingAndList .tablesHeading').waitForVisible();
+            //wait until you see tables leftNav links labels
+            browser.element('.tablesHeadingAndList .tablesList .leftNavLink').waitForVisible();
+            //wait until text is shown up on leftNavLinks
+            while (browser.element('.tablesHeadingAndList .tablesList .leftNavLink').getAttribute('textContent').length === 0) {
+                browser.pause(e2eConsts.shortWaitTimeMs);
+            }
+        }},
+
+        /**
          * Helper function that will get all of the field column headers from the report. Returns an array of strings.
          */
         getReportColumnHeaders: {value: function() {
@@ -220,11 +237,9 @@
             var tableRecords = [];
             //get the count of records rows in a table
             var numOfRows = formsPO.getRecordsCountInATable();
-            console.log("the records count is: " + numOfRows);
             //for each record row get the cell values
             for (var i = 0; i < numOfRows; i++) {
                 var cellValues = this.getRecordValues(i);
-                console.log("the cell values are : " + cellValues);
                 //we need to remove record actions like print, email etc
                 cellValues.splice(0, 1);
                 tableRecords.push(cellValues);
@@ -321,6 +336,8 @@
             //navigate to record page directly
             var requestRecordPageEndPoint = e2eBase.recordBase.apiBase.generateFullRequest(realmName, '/qbase/app/' + appId + '/table/' + tableId + '/report/' + reportId + '/record/' + recordId);
             browser.url(requestRecordPageEndPoint);
+            //wait until leftNav is loaded
+            this.waitForLeftNavLoaded();
             //wait until view form is visible
             return formsPO.viewFormContainerEl.waitForVisible();
         }},
@@ -377,9 +394,7 @@
 
         checkForTheAbsenceDeletedRecordOnTheCurrentPage: {
             value: function(deletedRecord) {
-                console.log('Deleted record: ' + deletedRecord);
                 for (var i = 1; i < browser.elements('.qbRow').value.length; i++) {
-                    console.log('Row' + i + ': ' + this.getRecordValues(i));
                     expect(deletedRecord).not.toEqual(this.getRecordValues(i));
                 }
             }},

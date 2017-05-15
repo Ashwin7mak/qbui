@@ -150,11 +150,10 @@
          * @params tableName
          */
         selectTable: {value: function(tableName) {
-            //wait until you see tableLists got loaded
-            browser.waitForExist('.tablesList .leftNavLabel');
+            //wait until leftNav Loaded
+            reportContentPO.waitForLeftNavLoaded();
             //filter table names from leftNav links
             var results = this.getAllTableLeftNavLinksList.value.filter(function(table) {
-                console.log("the tables are: " + table.getAttribute('textContent'));
                 return table.getAttribute('textContent') === tableName;
             });
 

@@ -65,6 +65,8 @@
      */
     PageBase.prototype.loadReportByIdInBrowser = function(realmName, appId, tableId, reportId) {
         browser.url(e2eBase.getRequestReportsPageEndpoint(realmName, appId, tableId, reportId));
+        //wait until leftNav is loaded
+        reportContentPO.waitForLeftNavLoaded();
         //wait until report rows in table are loaded
         return reportContentPO.waitForReportContent();
     };
