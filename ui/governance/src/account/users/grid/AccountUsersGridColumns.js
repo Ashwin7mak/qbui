@@ -1,6 +1,6 @@
-import * as Formatters from './AccountUsersGridFormatters';
-import _ from 'lodash';
-import * as FieldConsts from '../../../../../client-react/src/constants/schema';
+import * as Formatters from "./AccountUsersGridFormatters";
+import _ from "lodash";
+import * as FieldConsts from "../../../../../client-react/src/constants/schema";
 
 const boolColumnProps = {
     classes: ['BoolColumn'],
@@ -86,7 +86,7 @@ const columns = [
     {
         property: 'hasAppAccess',
         header: {
-            label: 'QUICKBASE ACCESS STATUS'
+            label: 'QUICK BASE ACCESS STATUS'
         },
         cell: {
             formatters: [Formatters.FormatUserStatusHTML]

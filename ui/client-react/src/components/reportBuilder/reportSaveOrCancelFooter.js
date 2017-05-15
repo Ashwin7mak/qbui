@@ -6,8 +6,6 @@ import SaveOrCancelFooter from '../saveOrCancelFooter/saveOrCancelFooter';
 import Button from 'react-bootstrap/lib/Button';
 import {I18nMessage} from '../../utils/i18nMessage';
 
-
-
 export class ReportSaveOrCancelFooter extends Component {
     constructor(props) {
         super(props);

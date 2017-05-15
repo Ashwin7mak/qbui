@@ -1,15 +1,12 @@
-import React, {Component, PropTypes} from 'react';
-import Loader  from 'react-loader';
-import {connect} from 'react-redux';
-
-import AccountUsersGrid from './grid/AccountUsersGrid';
-import AccountUsersStage from './AccountUsersStage';
-
-import * as AccountUsersActions from './AccountUsersActions';
-import * as RequestContextActions from '../../common/requestContext/RequestContextActions';
+import React, {Component, PropTypes} from "react";
+import Loader from "react-loader";
+import {connect} from "react-redux";
+import AccountUsersGrid from "./grid/AccountUsersGrid";
+import AccountUsersStage from "./AccountUsersStage";
+import * as AccountUsersActions from "./AccountUsersActions";
+import * as RequestContextActions from "../../common/requestContext/RequestContextActions";
 import * as SpinnerConfigurations from "../../../../client-react/src/constants/spinnerConfigurations";
-
-import {isFetching} from './AccountUsersReducer';
+import {isFetching} from "./AccountUsersReducer";
 import constants from "../../app/constants";
 
 /**
