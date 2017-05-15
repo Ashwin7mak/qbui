@@ -285,7 +285,8 @@ export let CardViewListHolder = React.createClass({
         // columns map for easy/fast lookup by column ID
         const columnsMap = new Map();
         if (_.has(this.props, "reportData.data.columns")) {
-            for (let column of this.props.reportData.data.columns) {
+            for (let i = 0; i < this.props.reportData.data.columns.length; i++) {
+                const column = this.props.reportData.data.columns[i];
                 columnsMap.set(column.id, column);
             }
         }
