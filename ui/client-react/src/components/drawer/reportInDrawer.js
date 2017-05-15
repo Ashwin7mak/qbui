@@ -1,5 +1,4 @@
 import React from 'react';
-import {withRouter} from 'react-router-dom';
 import _ from 'lodash';
 
 import DrawerContainer from './drawerContainer';
@@ -15,6 +14,8 @@ class ReportInDrawer extends React.Component {
     render() {
         return (
             <DrawerContainer
+                direction="bottom"
+                renderBackdrop={false}
                 rootDrawer={!this.props.isDrawerContext}
                 pathToAdd="/sr_report_app_:appId([A-Za-z0-9]+)_table_:tblId([A-Za-z0-9]+)_report_:rptId([A-Za-z0-9]+)_dtFid_:detailKeyFid([A-Za-z0-9]+)_dtVal_:detailKeyValue([A-Z-a-z0-9]+)"
             >
@@ -26,4 +27,4 @@ class ReportInDrawer extends React.Component {
     }
 }
 
-export default withRouter(ReportInDrawer);
+export default ReportInDrawer;

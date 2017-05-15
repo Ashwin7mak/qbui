@@ -85,10 +85,11 @@ class DrawerContainer extends React.Component {
     render() {
         const classNames = ['drawerContainer'];
         classNames.push(this.state.visible ? 'visible' : '');
+        classNames.push(this.props.direction);
 
         let closeHandleBackdrop = null;
         // We only need one backdrop to handle closing the drawer containers. Only render for the root drawer instance.
-        if (this.props.rootDrawer) {
+        if (this.props.renderBackdrop && this.props.rootDrawer) {
             classNames.push('rootDrawer');
             closeHandleBackdrop = <div className="closeHandleBackdrop" onClick={this.props.closeDrawer} />;
         }
@@ -109,12 +110,12 @@ class DrawerContainer extends React.Component {
                         {console.log('drawer ' + this.props.pathToAdd)}
                         {match && closeHandleBackdrop}
                         <ReactCSSTransitionGroup
-                            className="slidey-righty"
-                            transitionName="slidey-righty"
+                            className="slidey-container"
+                            transitionName="slidey"
                             transitionAppear={true}
-                            transitionAppearTimeout={400}
-                            transitionEnterTimeout={400}
-                            transitionLeaveTimeout={400}
+                            transitionAppearTimeout={550}
+                            transitionEnterTimeout={550}
+                            transitionLeaveTimeout={550}
                             >
                             {match && this.getDrawer()}
                         </ReactCSSTransitionGroup>
@@ -124,11 +125,20 @@ class DrawerContainer extends React.Component {
     }
 }
 
+DrawerContainer.defaultProps = {
+    direction: 'right',
+    renderBackdrop: true
+};
+
 DrawerContainer.propTypes = {
     /** whether this is the root drawer instance */
     rootDrawer: PropTypes.bool,
     /** function to call when the user clicks on the backdrop, all drawers should close when called */
-    closeDrawer: PropTypes.func
+    closeDrawer: PropTypes.func,
+    /** TODO: */
+    direction: PropTypes.oneOf(['right', 'bottom']),
+    /** TODO: */
+    renderBackdrop: PropTypes.bool
 };
 
 export default withRouter(DrawerContainer);

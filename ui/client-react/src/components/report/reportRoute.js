@@ -242,7 +242,6 @@ const mapDispatchToProps = (dispatch) => {
     };
 };
 
-//const ConnectedReportRoute = withRouter(connect(null, mapDispatchToProps)(ReportRoute));
 const ConnectedReportRoute = withRouter(connect(mapStateToProps, mapDispatchToProps)(ReportRoute));
 export default ConnectedReportRoute;
 
