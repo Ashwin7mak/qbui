@@ -151,9 +151,6 @@ class AppHistory {
 
         if (!recordStore) {
             recordStore = {};
-        } else if (recordStore.records[0] && recordStore.records[0].pendEdits) {
-            let recId = recordStore.records[0].pendEdits.recId;
-            recordStore = getPendEdits(recordStore);
         } else {
             recordStore = getPendEdits(recordStore);
         }
