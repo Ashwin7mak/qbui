@@ -9,11 +9,11 @@ import IconActions from '../../../../../reuse/client/src/components/iconActions/
 import {I18nMessage} from '../../../utils/i18nMessage';
 import Icon, {AVAILABLE_ICON_FONTS} from '../../../../../reuse/client/src/components/icon/icon.js';
 import QBModal from '../../qbModal/qbModal';
-// import {openIconChooser, closeIconChooser, setEditingProperty} from '../../../actions/tablePropertiesActions';
+import {loadAutomations} from '../../../actions/automationActions';
 import _ from 'lodash';
 
 import './automationList.scss';
-
+import {CONTEXT} from '../../../actions/context';
 
 
 export const AutomationListRoute = React.createClass({
@@ -35,27 +35,47 @@ export const AutomationListRoute = React.createClass({
         return <div className="automationListSettingsStage stageHeadLine"><I18nMessage message={"settings.automationSettings"}/></div>;
     },
     componentDidMount() {
+        if (this.props.app) {
+            this.props.loadAutomations(CONTEXT.AUTOMATION.GRID, this.props.app.id)
+        }
     },
     componentWillReceiveProps(nextProps) {
     },
+    renderAutomations() {
+        if (this.props.automations && this.props.automations.length > 0) {
+            return this.props.automations.map((automation, index) => (
+                <li>{automation.name}</li>
+            ));
+        }
+        return [];
+    },
     render() {
-        return <div>
+        let loaded = !(_.isUndefined(this.props.app) || _.isUndefined(this.props.automations));
+        let names = this.renderAutomations();
+        return <Loader loaded={loaded}>
+            <div>
                 <Stage stageHeadline={this.getStageHeadline()} pageActions={this.getPageActions(5)}></Stage>
 
-                <div>
-                    Welcome to your automations for this App. This page is under construction. More will be available very soon.
-                </div>
-            </div>;
+                <h1 className="automationListMessage">
+                    Here is a list of your automations for this app:
+                </h1>
+                <ul>
+                    {names}
+                </ul>
+            </div>
+        </Loader>;
     }
 });
 
 const mapStateToProps = (state) => {
     return {
-        isDirty: false
+        isDirty: false,
+        automations : state.automation.list
     };
 };
 
 const mapDispatchToProps = {
+    loadAutomations
 };
 
 export default connect(

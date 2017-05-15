@@ -19,9 +19,9 @@ export default {
     //           blank..this is intentional as this constant is to better
     //           self-document the endpoint call within the service.
     BASE_URL: {
-        QBUI          : '/qbui',
-        PROXY         : '',
-        AUTOMATION    : '/we/workflow'
+        QBUI            : '/qbui',
+        PROXY           : '',
+        AUTOMATION      : '/we'
     },
 
     // Entities
@@ -57,5 +57,10 @@ export default {
     REQUSER             : 'reqUser',
     TABLECOMPONENTS     : 'tableComponents',
     // Legacy actions
-    STACK               : 'stack'
+    STACK               : 'stack',
+
+    // Automations
+    AUTOMATION_INVOKE   : 'workflow',
+    AUTOMATION_API      : 'api/v1',
+    AUTOMATION_FLOWS    : 'workflow/flows'
 };
