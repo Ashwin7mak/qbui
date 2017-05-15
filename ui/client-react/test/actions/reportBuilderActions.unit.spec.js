@@ -64,9 +64,21 @@ describe('Report Builder actions', () => {
         expect(reportBuilderActions.closeFieldSelectMenu(context)).toEqual(expectedAction);
     });
 
+    it('should create an action to enter builder mode', () => {
+        expect(reportBuilderActions.enterBuilderMode(context)).toEqual(event(context, types.ENTER_BUILDER_MODE, {}));
+    });
+
+    it('should create an action to exit builder mode', () => {
+        expect(reportBuilderActions.exitBuilderMode(context)).toEqual(event(context, types.EXIT_BUILDER_MODE, {}));
+    });
+
+    it('updateReportRedirectRoute action dispatches type.UPDATE_REPORT_REDIRECT_ROUTE', () => {
+        let route = 'localhost';
+        expect(reportBuilderActions.updateReportRedirectRoute(context, route)).toEqual(event(context, types.UPDATE_REPORT_REDIRECT_ROUTE, {route}))
+    });
 });
 
-describe('Test ReportsActions function success workflow', () => {
+describe('Test ReportBuilderActions function success workflow', () => {
     let mockResponseGetFields = {
         data: [
             {id: 10}
