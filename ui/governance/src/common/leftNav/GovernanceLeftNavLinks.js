@@ -1,5 +1,5 @@
-import {AVAILABLE_ICON_FONTS} from '../../../../reuse/client/src/components/icon/icon';
-import Locale from '../../../../client-react/src/locales/locales';
+import {AVAILABLE_ICON_FONTS} from "../../../../reuse/client/src/components/icon/icon";
+import Locale from "../../../../client-react/src/locales/locales";
 
 const GetLeftNavLinks = (isAccountAdmin, isRealmAdmin, isAccountURL) => {
     const MyAppsLink = {icon: 'home', title: Locale.getMessage('governance.leftNav.myApps'), isPrimaryAction: true, secondaryIcon: 'caret-left', href: '/qbase/apps'};

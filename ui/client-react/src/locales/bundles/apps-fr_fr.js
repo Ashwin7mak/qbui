@@ -494,7 +494,7 @@ export default {
             emails: "Formatez toutes les adresses comme prénom@domaine.fr",
             maxChars: "Utilisez jusqu'à caractères {maxNum}",
             choiceMaxLength : "Sélectionnez un choix avec {maxNum} caractères ou moins",
-            phone: "Formater le {fieldName} comme +x x xx xx xx xx",
+            phone: "Entrez un numéro authentique pour {fieldName}",
             phoneInvalidCountryCode: "Formatez le code du pays comme +x pour les numéros internationaux",
             duration: {
                 timeFormat: "Formater le {fieldName} dans {value}",
@@ -700,7 +700,9 @@ export default {
             appsHeader: "App",
             formsHeader: "Forme",
             tableSettings: "Propriétés et paramètres de la table",
-            configureFormBuilder: 'Modifier ce formulaire',
+            configureFormBuilder: 'Modifiez ce formulaire',
+            reportsHeader: 'Rapport',
+            configureReportBuilder: 'Modifiez ce rapport'
         },
         tableEdit: {
             tableUpdateFailed: "Impossible de mettre à jour le tableau",

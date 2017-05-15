@@ -25,6 +25,19 @@ export const setSearch = (gridId, searchTerm) => ({
 });
 
 /**
+ * Clear the search input text box
+ *
+ * @returns {{type, content: string}}
+ */
+export const clearSearchTerm = (gridId) => {
+    return {
+        type: types.SET_SEARCH,
+        gridId,
+        searchTerm: ''
+    };
+};
+
+/**
  * Action to set the desired sort order for a given grid
  *
  * @param gridId - the id of the grid we want to update
@@ -75,18 +88,6 @@ export const setTotalRecords = (gridId, totalRecords) => ({
     gridId,
     totalRecords
 });
-
-/**
- * Set the facet info for the given grid
- * @param gridId
- * @param facetFields
- */
-export const setFacetFields = (gridId, facetFields) => ({
-    type: types.SET_FACET_FIELDS,
-    gridId,
-    facetFields
-});
-
 
 /**
  * Set the selected facet for the given grid
