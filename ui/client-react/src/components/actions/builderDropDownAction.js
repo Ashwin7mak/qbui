@@ -38,8 +38,8 @@ let BuilderDropDownAction = React.createClass({
     getConfigOptions() {
         let isAppView = !!this.props.selectedApp; // !! converts to boolean
         let isTableView = (isAppView && this.props.selectedTable);
-        let isFormView = (isTableView && this.props.recId);
-        let classes = "dropdownToggle globalActionLink";
+        let hasContextView = (isTableView && this.props.recId);
+        let classes = "dropdownToggle globalActionLink" + (hasContextView ? " hasContextView" : "");
 
         let dropDown = <Dropdown className={classes} id="nav-right-dropdown" dropup={this.props.position === "left"} >
             <a bsRole="toggle"
@@ -51,49 +51,83 @@ let BuilderDropDownAction = React.createClass({
             <Dropdown.Menu>
                 <div className="configMenu">
                     {isAppView ?
-                    <div className="configMenu--configSet withIcon">
+                    <div className="configMenu--configSet configMenu__App">
                         <h3><I18nMessage message={"settings.header"}/></h3>
                         <ul>
-                            <li className="heading">
-                                <a>
-                                    <Icon className="headingIcon" iconFont={AVAILABLE_ICON_FONTS.UI_STURDY} icon="favicon"/>
-                                    <span><I18nMessage message={"settings.appHeader"}/></span>
+                            <li>
+                                <Icon className="headingIcon" iconFont={AVAILABLE_ICON_FONTS.UI_STURDY} icon="favicon"/>
+                                <span><I18nMessage message={"settings.appHeader"}/></span>
+                            </li>
+                            <li>
+                                <a onClick={this.getAutomationSettingsLink}>
+                                    Create or modify roles
                                 </a>
                             </li>
                             <li>
-                                <a className="modifyAutomationSettings" onClick={this.getAutomationSettingsLink}>
-                                    <I18nMessage message={"settings.automationSettings"}/>
+                                <a onClick={this.getAutomationSettingsLink}>
+                                    Bird's-eye view
+                                </a>
+                            </li>
+                            <li>
+                                <a onClick={this.getAutomationSettingsLink}>
+                                    Add a page
+                                </a>
+                            </li>
+                            <li>
+                                <a onClick={this.getAutomationSettingsLink}>
+                                    App properties
+                                </a>
+                            </li>
+                            <li>
+                                <a onClick={this.getAutomationSettingsLink}>
+                                    All app settings
                                 </a>
                             </li>
                         </ul>
                     </div> : null}
                     {isTableView ?
-                    <div className="configMenu--configSet withIcon">
+                    <div className="configMenu--configSet configMenu__Table">
                         <ul>
-                            <li className="heading">
-                                <a>
-                                    {this.props.selectedTable.tableIcon && <Icon className="headingIcon" iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY} icon={this.props.selectedTable.tableIcon}/> }
-                                    <span><I18nMessage message={"settings.tablesHeader"}/></span>
+                            <li>
+                                {this.props.selectedTable.tableIcon && <Icon className="headingIcon" iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY} icon={this.props.selectedTable.tableIcon}/> }
+                                <span><I18nMessage message={"settings.tablesHeader"}/></span>
+                            </li>
+                            <li>
+                                <a onClick={this.getTableSettingsLink}>
+                                    Import data into this table
                                 </a>
                             </li>
                             <li>
-                                <a className="modifyTableSettings" onClick={this.getTableSettingsLink}>
-                                    <I18nMessage message={"settings.tableSettings"}/>
+                                <a onClick={this.getTableSettingsLink}>
+                                    Add a report or chart
+                                </a>
+                            </li>
+                            <li>
+                                <a onClick={this.getTableSettingsLink}>
+                                    Table properties & settings
+                                </a>
+                            </li>
+                            <li>
+                                <a onClick={this.getTableSettingsLink}>
+                                    Table properties & settings
+                                </a>
+                            </li>
+                            <li>
+                                <a onClick={this.getTableSettingsLink}>
+                                    All table settings
                                 </a>
                             </li>
                         </ul>
                     </div> : null}
-                    {isFormView ?
-                    <div className="configMenu--configSet currentContext">
+                    {hasContextView ?
+                    <div className="configMenu--configSet configMenu__currentContext">
                         <ul>
-                            <li className="heading">
-                                <a>
-                                    <span><I18nMessage message={"settings.formsHeader"}/></span>
-                                </a>
+                            <li>
+                                <span><I18nMessage message={"settings.formsHeader"}/></span>
                             </li>
                             <li>
-                                <a className="modifyForm" onClick={this.props.navigateToBuilder}>
-                                    <I18nMessage message={"settings.configureFormBuilder"}/>
+                                <a onClick={this.props.navigateToBuilder}>
+                                    Modify this form
                                 </a>
                             </li>
                         </ul>
