@@ -40,6 +40,7 @@
             TopNavPO.topNavToggleHamburgerEl.waitForVisible();
             //Step1: Verify if the global icons are displayed
             TopNavPO.topNavGlobalActDivEl.waitForVisible();
+            reportContentPO.settingsIcon.waitForVisible();
             //Step2: Verify the no.of global action icons
             expect(TopNavPO.topNavGlobalActionsListEl.value.length).toBe(4);
             //Step3: Verify the presence of Feedback and Report issue buttons
@@ -61,6 +62,7 @@
             TopNavPO.topNavToggleHamburgerEl.waitForVisible();
             //Step1: Verify if the global icons are displayed
             TopNavPO.topNavGlobalActDivEl.waitForVisible();
+            reportContentPO.settingsIcon.waitForVisible();
             //Step2: Verify the no.of global action icons
             expect(TopNavPO.topNavGlobalActionsListEl.value.length).toBe(4);
         });
@@ -70,6 +72,7 @@
             TopNavPO.topNavToggleHamburgerEl.waitForVisible();
             //Step1: Verify if the global icons are displayed
             TopNavPO.topNavGlobalActDivEl.waitForVisible();
+            reportContentPO.settingsIcon.waitForVisible();
             //Step2: Verify the no.of global action icons
             expect(TopNavPO.topNavGlobalActionsListEl.value.length).toBe(4);
         });
@@ -78,6 +81,7 @@
             TopNavPO.topNavToggleHamburgerEl.waitForVisible();
             //Step1: Verify if the global icons are displayed
             TopNavPO.topNavGlobalActDivEl.waitForVisible();
+            reportContentPO.settingsIcon.waitForVisible();
             //Step2: Verify the no.of global action icons
             expect(TopNavPO.topNavGlobalActionsListEl.value.length).toBe(4);
 
