@@ -1,6 +1,6 @@
 import AppHistory from '../globals/appHistory';
 
-export const WindowHistory = {
+export const WindowHistoryUtils = {
     /**
      * push current url with key=value query param
      * @param key

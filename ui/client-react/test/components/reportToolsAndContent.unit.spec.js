@@ -90,7 +90,7 @@ describe('ReportToolsAndContent functions', () => {
     beforeEach(() => {
         jasmineEnzyme();
         ReportToolsAndContentRewireAPI.__Rewire__('ReportContent', ReportContentMock);
-        ReportToolsAndContentRewireAPI.__Rewire__('WindowHistory', WindowHistoryMock);
+        ReportToolsAndContentRewireAPI.__Rewire__('WindowHistoryUtils', WindowHistoryMock);
         spyOn(WindowHistoryMock, 'pushWithQuery').and.callThrough();
         spyOn(flux.actions, 'selectTableId');
         spyOn(flux.actions, 'loadReport');

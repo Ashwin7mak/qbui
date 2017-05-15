@@ -94,7 +94,7 @@ describe('RecordTrowser functions', () => {
         store = mockStore({});
         spyOn(mockWindowUtils, 'pushWithQuery').and.callThrough();
         spyOn(mockWindowUtils, 'pushWithoutQuery').and.callThrough();
-        RecordTrowserRewireAPI.__Rewire__('WindowHistory', mockWindowUtils);
+        RecordTrowserRewireAPI.__Rewire__('WindowHistoryUtils', mockWindowUtils);
         // have to mock Record component as it requires redux store to be injected and don't want to have to
         // always inject a provider when testing certain recordTrowser component functionality
         RecordTrowserRewireAPI.__Rewire__('Record', MockRecordComponent);
@@ -111,7 +111,7 @@ describe('RecordTrowser functions', () => {
     });
 
     afterEach(() => {
-        RecordTrowserRewireAPI.__ResetDependency__('WindowHistory');
+        RecordTrowserRewireAPI.__ResetDependency__('WindowHistoryUtils');
         RecordTrowserRewireAPI.__ResetDependency__('Record');
         mockWindowUtils.pushWithQuery.calls.reset();
         mockWindowUtils.pushWithoutQuery.calls.reset();
