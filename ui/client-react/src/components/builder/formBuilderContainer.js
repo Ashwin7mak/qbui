@@ -137,12 +137,7 @@ export const FormBuilderContainer = React.createClass({
     },
 
     onCancel() {
-        if (this.props.isFormDirty || this.props.isFieldPropertiesDirty) {
-            AppHistory.showPendingEditsConfirmationModal(this.saveClicked, this.closeFormBuilder, () => HideAppModal());
-        } else {
-            HideAppModal();
-            this.closeFormBuilder();
-        }
+        this.closeFormBuilder();
     },
 
     removeField() {
