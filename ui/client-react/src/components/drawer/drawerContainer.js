@@ -3,7 +3,6 @@ import {Route, withRouter} from 'react-router-dom';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
 import Drawer from './drawer';
-import {RecordRouteWithUniqueId} from '../../components/record/recordRoute';
 
 import './drawerContainer.scss';
 
@@ -93,21 +92,15 @@ class DrawerContainer extends React.Component {
             classNames.push('rootDrawer');
             closeHandleBackdrop = <div className="closeHandleBackdrop" onClick={this.props.closeDrawer} />;
         }
-        const printer = (match) => {
-            console.log('printer');
-            console.log(JSON.stringify(this.props.match, null, 2));
-            console.log(JSON.stringify(match, null, 2));
-        };
 
+        // the path to match when rendering a drawer's content
+        const path = `${this.props.match.url}${this.props.pathToAdd}`;
         // <div className="drawerContainer"> is visible when either `match` is defined or `state.visible` is true
         return (
             <Route
-                path={`${this.props.match.url}${this.props.pathToAdd}`}
+                path={path}
                 children={({match, ...rest}) => (
                     <div className={classNames.join(' ')}>
-                        {match && console.log('match' + JSON.stringify(this.props.match, null, 2))}
-                        {match && printer(match)}
-                        {console.log('drawer ' + this.props.pathToAdd)}
                         {match && closeHandleBackdrop}
                         <ReactCSSTransitionGroup
                             className="slidey-container"
@@ -135,9 +128,11 @@ DrawerContainer.propTypes = {
     rootDrawer: PropTypes.bool,
     /** function to call when the user clicks on the backdrop, all drawers should close when called */
     closeDrawer: PropTypes.func,
-    /** TODO: */
+    /** the path-string to add on to the current url */
+    pathToAdd: PropTypes.string.isRequired,
+    /** direction to slide in/out the drawer */
     direction: PropTypes.oneOf(['right', 'bottom']),
-    /** TODO: */
+    /** Whether to render a clickable backdrop. */
     renderBackdrop: PropTypes.bool
 };
 

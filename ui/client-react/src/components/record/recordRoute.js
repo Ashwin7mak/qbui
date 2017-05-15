@@ -33,7 +33,7 @@ import {CONTEXT} from '../../actions/context';
 import {getRecord} from '../../reducers/record';
 import './record.scss';
 import withUniqueId from '../hoc/withUniqueId';
-//import DrawerContainer from '../drawer/drawerContainer';
+
 import RecordInDrawer from '../drawer/recordInDrawer';
 import ReportInDrawer from '../drawer/reportInDrawer';
 

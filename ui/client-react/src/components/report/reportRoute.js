@@ -114,17 +114,6 @@ const ReportRoute = React.createClass({
             this.loadReportFromParams(this.props.match.params);
         }
     },
-    componentWillMount() {
-        console.log('reportRoute will mount');
-        console.log(this.props.uniqueId);
-        console.log(this.props.match.url);
-    },
-    componentWillUpdate(nextProps, nextState) {
-        console.log(_.differenceWith(this.props, nextProps, _.isEqual));
-    },
-    componentWillReceiveProps(nextProps) {
-        console.log(_.differenceWith(this.props, nextProps, _.isEqual));
-    },
 
     /***
      * Push a new url to drill down one more level. Should be called when we want to open a drawer.
