@@ -9,6 +9,7 @@ import Logger from '../../utils/logger';
 import QueryUtils from '../../utils/queryUtils';
 import NumberUtils from '../../utils/numberUtils';
 import WindowLocationUtils from '../../utils/windowLocationUtils';
+import UrlUtils from '../../utils/urlUtils';
 import simpleStringify from '../../../../common/src/simpleStringify';
 import constants from '../../../../common/src/constants';
 import withUniqueId from '../hoc/withUniqueId';
@@ -17,6 +18,7 @@ import _ from 'lodash';
 import './report.scss';
 import ReportToolsAndContent from '../report/reportToolsAndContent';
 import ReportFieldSelectMenu from './reportFieldSelectMenu';
+import RecordInDrawer from '../drawer/recordInDrawer';
 import {connect} from 'react-redux';
 import {clearSearchInput} from '../../actions/searchActions';
 import {loadReport, loadDynamicReport} from '../../actions/reportActions';
@@ -124,6 +126,38 @@ const ReportRoute = React.createClass({
         console.log(_.differenceWith(this.props, nextProps, _.isEqual));
     },
 
+    /***
+     * Push a new url to drill down one more level. Should be called when we want to open a drawer.
+     * @param tblId
+     * @param recId
+     */
+    handleDrillIntoChild(tblId, recId) {
+        let embeddedReport = getEmbeddedReportByContext(this.props.embeddedReports, this.props.uniqueId);
+
+        const existingPath = this.props.match.url;
+        const appId = _.get(this, 'props.match.params.appId', this.selectedAppId);
+        const recordDrawerSegment = UrlUtils.getRecordDrawerSegment(appId, tblId, embeddedReport.id, recId);
+        const link = existingPath + recordDrawerSegment;
+        if (this.props.history) {
+            this.props.history.push(link);
+        }
+    },
+
+    /**
+     * Render drawer container. Always render a DrawerContainer even when no drawers exist.
+     */
+    getDrawerContainer() {
+        return (
+            <RecordInDrawer
+                {...this.props}
+                direction="bottom"
+                renderBackdrop={false}
+                rootDrawer={!this.props.isDrawerContext}
+                closeDrawer={this.closeDrawer}
+                pathToAdd="/sr_app_:appId([A-Za-z0-9]+)_table_:tblId([A-Za-z0-9]+)_report_:rptId([A-Za-z0-9]+)_record_:recordId([A-Za-z0-9]+)"
+            />);
+    },
+
     getHeader() {
         return (
             <ReportHeader nameForRecords={this.nameForRecords}
@@ -207,9 +241,11 @@ const ReportRoute = React.createClass({
                             scrollingReport={this.props.scrollingReport}
                             loadDynamicReport={this.loadDynamicReport}
                             noRowsUI={true}
+                            handleDrillIntoChild={this.handleDrillIntoChild}
                         />
 
                     </ReportFieldSelectMenu>
+                    {this.props.isDrawerContext && this.getDrawerContainer()}
                 </div>
             );
         }
@@ -221,7 +257,8 @@ const ReportRoute = React.createClass({
 // from the Redux state (the presentational component has no code dependency on Redux!)
 const mapStateToProps = (state, ownProps) => {
     return {
-        reportData: ownProps.reportData || getEmbeddedReportByContext(state.embeddedReports, ownProps.uniqueId)
+        reportData: ownProps.reportData || getEmbeddedReportByContext(state.embeddedReports, ownProps.uniqueId),
+        embeddedReports: state.embeddedReports
     };
 };
 
