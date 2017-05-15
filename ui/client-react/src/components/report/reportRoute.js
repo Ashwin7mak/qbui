@@ -133,7 +133,8 @@ const ReportRoute = React.createClass({
     },
 
     /**
-     * Render drawer container. Always render a DrawerContainer even when no drawers exist.
+     * Render drawer container which will contain a record to drill down to.
+     * This should only be rendered when this report is the main report (not an embedded report) shown inside a drawer.
      */
     getDrawerContainer() {
         return (

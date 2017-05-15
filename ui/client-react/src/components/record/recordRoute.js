@@ -414,7 +414,6 @@ export const RecordRoute = React.createClass({
                 {...this.props}
                 rootDrawer={!this.props.isDrawerContext}
                 closeDrawer={this.closeDrawer}
-                pathToAdd="/sr_app_:appId([A-Za-z0-9]+)_table_:tblId([A-Za-z0-9]+)_report_:rptId([A-Za-z0-9]+)_record_:recordId([A-Za-z0-9]+)"
                 />);
     },
 
