@@ -46,14 +46,14 @@ PerfLogUtils.setLogger(logger);
 
 const store = createAppStore();
 let storeFunc = {
-    editRecordCancel: editRecordCancel,
-    createRecord: createRecord,
-    updateRecord: updateRecord,
-    hideTrowser: hideTrowser,
-    updateForm: updateForm,
-    saveFormComplete: saveFormComplete,
-    showErrorMsgDialog: showErrorMsgDialog,
-    getNavReport: getNavReport
+    editRecordCancel,
+    createRecord,
+    updateRecord,
+    hideTrowser,
+    updateForm,
+    saveFormComplete,
+    showErrorMsgDialog,
+    getNavReport
 };
 //  pass references to redux store and methods called within the appHistory component
 let history = AppHistory.setup(store, storeFunc).history;
