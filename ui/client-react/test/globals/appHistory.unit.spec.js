@@ -261,6 +261,8 @@ describe('AppHistory', () => {
             spyOn(AppHistory, '_continueToDestination');
             spyOn(AppHistory, '_haltRouteChange');
             spyOn(AppHistory, 'showPendingEditsConfirmationModal');
+            spyOn(AppHistory, '_discardChangesForRecord').and.callThrough();
+            spyOn(AppHistory, '_discardChangesForFormBuilder').and.callThrough();
             spyOn(mockStore, 'dispatch').and.callThrough();
             spyOn(mockStoreReject, 'dispatch').and.callThrough();
             spyOn(AppHistory, '_saveChangesForRecord').and.callThrough();
@@ -278,6 +280,8 @@ describe('AppHistory', () => {
         afterEach(() => {
             AppHistory.getStores.calls.reset();
             AppHistory._continueToDestination.calls.reset();
+            AppHistory._discardChangesForRecord.calls.reset();
+            AppHistory._discardChangesForFormBuilder.calls.reset();
             AppHistory._haltRouteChange.calls.reset();
             AppHistory.showPendingEditsConfirmationModal.calls.reset();
             mockStore.dispatch.calls.reset();
@@ -423,21 +427,62 @@ describe('AppHistory', () => {
 
         it('_discardChanges invoke  _discardChangesForRecord if recordStore isPendingEdit is true', () => {
             mockState.recordStore.isPendingEdit = true;
+
             AppHistory.setup(mockStore, mockStoreFunc);
             AppHistory._discardChanges();
-            expect(mockStore.dispatch).toHaveBeenCalled();
+
+            expect(AppHistory._discardChangesForRecord).toHaveBeenCalled();
             expect(mockStore.dispatch).toHaveBeenCalled();
             expect(mockStoreFunc.editRecordCancel).toHaveBeenCalled();
             expect(mockStoreFunc.hideTrowser).toHaveBeenCalled();
         });
 
-        it('_discardChanges  will not call dispatch if recordStore isPendingEdit is false', () => {
+        it('_discardChanges  will invoke _discardChangesForRecord if recordStore isPendingEdit is false', () => {
             mockState.recordStore.isPendingEdit = false;
+
             AppHistory.setup(mockStore, mockStoreFunc);
             AppHistory._discardChanges();
+
+            expect(AppHistory._discardChangesForRecord).not.toHaveBeenCalled();
             expect(mockStore.dispatch).not.toHaveBeenCalled();
             expect(mockStoreFunc.editRecordCancel).not.toHaveBeenCalled();
             expect(mockStoreFunc.hideTrowser).not.toHaveBeenCalled();
+        });
+
+        it('_discardChanges invoke  _discardChangesForFormBuilder if formsStore isPendingEdit is true', () => {
+            mockState.formsStore.isPendingEdit = true;
+            mockState.fieldsStore.isPendingEdit = false;
+
+            AppHistory.setup(mockStore, mockStoreFunc);
+            AppHistory._discardChanges();
+
+            expect(AppHistory._discardChangesForFormBuilder).toHaveBeenCalled();
+            expect(mockStoreFunc.setFormBuilderPendingEditToFalse).toHaveBeenCalled();
+            expect(mockStoreFunc.setFieldsPropertiesPendingEditToFalse).not.toHaveBeenCalled();
+        });
+
+        it('_discardChanges  will invoke _discardChangesForFormBuilder if fieldsStore isPendingEdit is true', () => {
+            mockState.formsStore.isPendingEdit = false;
+            mockState.fieldsStore.isPendingEdit = true;
+
+            AppHistory.setup(mockStore, mockStoreFunc);
+            AppHistory._discardChanges();
+
+            expect(AppHistory._discardChangesForFormBuilder).toHaveBeenCalled();
+            expect(mockStoreFunc.setFieldsPropertiesPendingEditToFalse).toHaveBeenCalled();
+            expect(mockStoreFunc.setFormBuilderPendingEditToFalse).not.toHaveBeenCalled();
+        });
+
+        it('_discardChanges  will not invoke if _discardChangesForFormBuilder isPendingEdit is false for formsStore and fieldsStore', () => {
+            mockState.formsStore.isPendingEdit = false;
+            mockState.fieldsStore.isPendingEdit = false;
+
+            AppHistory.setup(mockStore, mockStoreFunc);
+            AppHistory._discardChanges();
+
+            expect(AppHistory._discardChangesForFormBuilder).not.toHaveBeenCalled();
+            expect(mockStoreFunc.setFieldsPropertiesPendingEditToFalse).not.toHaveBeenCalled();
+            expect(mockStoreFunc.setFormBuilderPendingEditToFalse).not.toHaveBeenCalled();
         });
     });
 });

@@ -361,7 +361,7 @@ class AppHistory {
         self._continueToDestination();
     }
 
-    _discardChangesForRecord() {
+    _discardChangesForRecord(recordStore) {
         self.store.dispatch(self.editRecordCancel(recordStore.currentEditingAppId, recordStore.currentEditingTableId, recordStore.currentEditingRecordId));
         self.store.dispatch(self.hideTrowser());
         self._continueToDestination();
@@ -379,10 +379,10 @@ class AppHistory {
             let {recordStore, formsStore, fieldsStore} = self.getStores(state);
 
             if (recordStore.isPendingEdit) {
-                self._discardChangesForRecord();
+                self._discardChangesForRecord(recordStore);
             }
 
-            if (fieldsStore.isPendingEdit && formsStore.isPendingEdit) {
+            if (fieldsStore.isPendingEdit || formsStore.isPendingEdit) {
                 self._discardChangesForFormBuilder(fieldsStore.isPendingEdit, formsStore.isPendingEdit);
             }
             self._continueToDestination();
