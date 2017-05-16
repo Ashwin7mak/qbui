@@ -5,7 +5,8 @@ import FieldsService from '../services/fieldsService';
 import Promise from 'bluebird';
 import QueryUtils from '../utils/queryUtils';
 import _ from 'lodash';
-
+import NotificationManager from '../../../reuse/client/src/scripts/notificationManager';
+import Locale from '../locales/locales';
 import Logger from '../utils/logger';
 import LogLevel from '../utils/logLevels';
 
@@ -420,4 +421,44 @@ export const addColumnFromExistingField = (context, requestedColumn, addBefore) 
  */
 export const hideColumn = (context, clickedId) => {
     return event(context, types.HIDE_COLUMN, {clickedId});
+};
+/**
+ * Save and updates the report with new data
+ * @param appId
+ * @param tableId
+ * @param reportId
+ * @param reportDef
+ * @returns {function(*=)}
+ */
+export const saveReport = (context, appId, tableId, reportId, reportDef) => {
+    return (dispatch, context) => {
+        console.log(context);
+
+        return new Promise((resolve, reject) => {
+        if (appId && tableId && reportId) {
+            let reportService = new ReportService();
+            reportService.updateReport(appId, tableId, reportId, reportDef)
+                .then(() => {
+                    logger.debug('ReportService saveReport success');
+                    resolve();
+                },
+                (error) => {
+                    logger.parseAndLogError(LogLevel.ERROR, error.response, 'reportService.updateReport: ');
+                    //dispatch(event(context, types.SAVING_REPORT_ERROR, error.response ? error.response.status : error.response))
+                    NotificationManager.error(Locale.getMessage('report.notification.save.error'), Locale.getMessage('failed'));
+                    reject(error);
+                }).catch((ex) =>{
+                    logger.logException(ex);
+                    NotificationManager.error(Locale.getMessage('report.notification.save.error'), Locale.getMessage('failed'));
+                    reject(ex);
+                }
+
+            );
+
+        } else {
+            logger.error(`reportActions.updateReport: missing required input parameters. appId: ${appId}, tableId: ${tableId}`);
+            reject();
+          }
+        })
+    }
 };

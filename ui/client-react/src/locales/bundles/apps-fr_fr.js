@@ -283,6 +283,12 @@ export default {
                 clearFacetSelection: "Cliquez pour désactiver ce filtre",
                 filter: "Filtre"
             },
+            notification: {
+                save: {
+                    success: "Rapport enregistré",
+                    error: "Impossible d'enregistrer le rapport"
+                }
+            },
             filteredRecordCount : "{filteredRecordCount} des {recordCount} enregistrements",
             filteredSingleRecordCount : "{filteredRecordCount} de {recordCount} record",
             newReport: "Nouveau",

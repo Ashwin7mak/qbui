@@ -99,7 +99,8 @@ export const saveForm = (id) => {
         type: types.SAVE_FORM
     };
 };
-/*
+
+/**
  * hide the 'modal working' spinner/window when completing a form save request.
  */
 export const saveFormComplete = (id) => {

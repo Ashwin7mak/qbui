@@ -290,6 +290,12 @@ export default {
                 clearFacetSelection: "Click to clear this filter",
                 filter: "Filter"
             },
+            notification: {
+                save: {
+                    success: "Report saved",
+                    error: "Error saving report"
+                }
+            },
             filteredRecordCount : "{filteredRecordCount} of {recordCount} records",
             filteredSingleRecordCount : "{filteredRecordCount} of {recordCount} record",
             newReport: "New",

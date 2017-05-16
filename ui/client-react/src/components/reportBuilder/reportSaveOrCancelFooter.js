@@ -1,10 +1,13 @@
 import React, {Component, PropTypes} from 'react';
 import {connect} from 'react-redux';
-import {exitBuilderMode, closeFieldSelectMenu} from '../../../src/actions/reportActions';
+import {exitBuilderMode, closeFieldSelectMenu, saveReport} from '../../../src/actions/reportActions';
 import {CONTEXT} from '../../actions/context';
 import SaveOrCancelFooter from '../saveOrCancelFooter/saveOrCancelFooter';
 import Button from 'react-bootstrap/lib/Button';
 import {I18nMessage} from '../../utils/i18nMessage';
+import {HideAppModal} from '../qbModal/appQbModalFunctions';
+import AppHistory from '../../globals/appHistory';
+
 
 
 
@@ -14,14 +17,19 @@ export class ReportSaveOrCancelFooter extends Component {
 
     }
 
-    onClickSave() {
-        // save report
-    }
+    onClickSave = () => {
+        //HideAppModal();
+        console.log("clicked save");
+        let reportDef = {
+            fids: this.props.reportData.data.fids
+        };
+        this.props.saveReport(CONTEXT.REPORT.NAV, this.props.appId, this.props.tblId, this.props.rptId, reportDef);
+    };
 
     onCancel = () => {
         this.props.exitBuilderMode(CONTEXT.REPORT.NAV);
         this.props.closeFieldSelectMenu(CONTEXT.REPORT.NAV);
-    }
+    };
 
     getRightAlignedButtons() {
         return (
@@ -48,11 +56,20 @@ export class ReportSaveOrCancelFooter extends Component {
     }
 }
 
+ReportSaveOrCancelFooter.propTypes = {
+    appId: PropTypes.string.isRequired,
+    tblId: PropTypes.string.isRequired,
+    rptId: PropTypes.string.isRequired,
+    reportData: PropTypes.object.isRequired
+};
+
 const mapDispatchToProps = (dispatch) => {
     return {
         exitBuilderMode: (context) => dispatch(exitBuilderMode(context)),
 
-        closeFieldSelectMenu: (context) => dispatch(closeFieldSelectMenu(context))
+        closeFieldSelectMenu: (context) => dispatch(closeFieldSelectMenu(context)),
+
+        saveReport: (context, appId, tblId, rptId, reportDef) => dispatch(saveReport(context, appId, tblId, rptId, reportDef))
     };
 };
 

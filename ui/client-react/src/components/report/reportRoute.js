@@ -161,6 +161,7 @@ export const ReportRoute = React.createClass({
             logger.info("the necessary params were not specified to reportRoute render params=" + simpleStringify(this.props.match.params));
             return null;
         } else {
+            console.log(this.props.reportData);
             return (
                 <div className="reportContainer">
                     <ReportFieldSelectMenu
@@ -197,7 +198,12 @@ export const ReportRoute = React.createClass({
                     </ReportFieldSelectMenu>
 
                     {inBuilderMode &&
-                        <ReportSaveOrCancelFooter />}
+                        <ReportSaveOrCancelFooter
+                            appId={this.props.match.params.appId}
+                            tblId={this.props.match.params.tblId}
+                            rptId={this.props.match.params.rptId}
+                            reportData={this.props.reportData}
+                        />}
 
                 </div>
             );

@@ -284,6 +284,12 @@ export default {
                 clearFacetSelection: "Klicken Sie auf diese Filter zu löschen",
                 filter: "Filter"
             },
+            notification: {
+                save: {
+                    success: "Bericht gespeichert",
+                    error: "Fehler beim Speichern des Berichts"
+                }
+            },
             filteredRecordCount : "{filteredRecordCount} von {recordCount} aufzeichnungen",
             filteredSingleRecordCount : "{filteredRecordCount} von {recordCount} aufzeichnen",
             newReport: "Neu",
