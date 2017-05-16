@@ -151,9 +151,10 @@
          */
         selectTable: {value: function(tableName) {
             //wait until leftNav Loaded.Selected table is not loaded until all table properties are available
-            while (browser.element('.tablesHeadingAndList .tablesList .leftNavLink').getAttribute('textContent').length === 0) {
-                browser.pause(e2eConsts.shortWaitTimeMs);
-            }
+            //while (browser.element('.tablesList .leftNavLink .leftNavLabel').getAttribute('textContent').length === 0) {
+            //    browser.pause(e2eConsts.shortWaitTimeMs);
+            //}
+            browser.waitForText('.tablesList .leftNavLink .leftNavLabel', e2eConsts.longWaitTimeMs);
             //filter table names from leftNav links
             var results = this.getAllTableLeftNavLinksList.value.filter(function(table) {
                 return table.getAttribute('textContent') === tableName;
