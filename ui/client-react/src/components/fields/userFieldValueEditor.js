@@ -69,7 +69,9 @@ const UserFieldValueEditor = React.createClass({
     selectUser(user) {
         if (user || !this.props.fieldDef.required) {
             this.setState({selectedUserId: user ? user.value : null});
+            return this.props.isValid(user);
         }
+        return this.props.isValid(false);
         // TODO: send selected user value to flux
     },
 
@@ -82,32 +84,45 @@ const UserFieldValueEditor = React.createClass({
         return _.find(this.props.appUsers, user => user.userId === id);
     },
 
+    isUserInApp(user) {
+        let userInApp;
+        let roles = this.props.existingUsers;
+
+        return _.find(Object.keys(roles) ,(role)=>{
+            return userInApp = _.find(roles[role], (existingUser)=>{
+                return existingUser.userId === user.userId;
+            });
+        });
+    },
+
     /**
      * get value/label pairs for select menu items
      * @returns array of user objects with value/label/showEmail properties
      */
     getSelectItems() {
         const datatypeAttributes = this.props.fieldDef && this.props.fieldDef.datatypeAttributes ? this.props.fieldDef.datatypeAttributes : {};
-
         const appUserItems = this.props.appUsers ?
             this.props.appUsers.map(user => {
+                let disabled = this.props.isAddUser ? this.isUserInApp(user) : false;
                 const label = userFormatter.format({value: user}, datatypeAttributes);
                 return {
                     value: user.userId,
-                    label};
+                    label, disabled};
             }) : [];
 
         // for each user, if there is another user with the same label, show the email to disambiguate
         appUserItems.forEach(current => {
             current.showEmail = appUserItems.reduce((count, user) => count + (user.label === current.label ? 1 : 0), 0) > 1;
         });
-        return  [{value:null, label:""}].concat(appUserItems);
+        // added the ternary because we dont need the blank entry in the options when "Add User to App" uses this component
+        return this.props.isAddUser ? appUserItems : [{value:null, label:""}].concat(appUserItems);
+
     },
 
     /**
      * handle onBlur (invoke parent prop callback)
      */
-    onBlur() {
+    onBlur(e) {
         if (this.props.onBlur) {
             const datatypeAttributes = this.props.fieldDef && this.props.fieldDef.datatypeAttributes ? this.props.fieldDef.datatypeAttributes : {};
             const user = this.getAppUser(this.state.selectedUserId);
@@ -120,25 +135,31 @@ const UserFieldValueEditor = React.createClass({
         }
     },
 
-
     /**
-     * render a menu item in the select
+     * render an menu item in the select
      * @param option user object with value & email flag
      */
     renderOption(option) {
-
+        console.log(option)
         if (option.value === null) {
             return <div>&nbsp;</div>; // placeholder for no-user
         }
-        const user = this.getAppUser(option.value);
+        let user = this.getAppUser(option.value);
         const datatypeAttributes = this.props.fieldDef && this.props.fieldDef.datatypeAttributes ? this.props.fieldDef.datatypeAttributes : {};
         const userLabel = userFormatter.format({value: user}, datatypeAttributes);
-        return (
-            <div className="userOption">
-                {this.state.selectedUserId === user.userId && <QbIcon icon="check-reversed"/>}
-                <div className="userLabel">{userLabel} {user.screenName && <span>({user.screenName})</span>} {user.deactivated && <span className="deactivatedLabel">(deactivated)</span>}</div>
-                { user.email && <div className="email">{user.email}</div>}
-            </div>);
+
+        if (user) {
+            return (
+                <div className="userOption">
+                    {this.state.selectedUserId === user.userId && !this.props.isAddUser && <QbIcon icon="check-reversed"/>}
+                    <div className="userLabel">{userLabel} {user.screenName &&
+                    <span>({user.screenName})</span>} {user.deactivated &&
+                    <span className="deactivatedLabel">(deactivated)</span>}</div>
+                    { user.email && <div className="email">{user.email}</div>}
+                </div>);
+        } else {
+            return <div className="hidden">&nbsp;</div>;
+        }
     },
 
     /**
@@ -166,8 +187,17 @@ const UserFieldValueEditor = React.createClass({
     },
 
     loadAsyncOptions(input, callback) {
-        callback(null, {
-            options: this.getSelectItems()
+        if (input === '') {
+            return callback(null, {
+                options: this.getSelectItems(),
+                complete: false
+            });
+        }
+        this.props.searchUsers(input).then(()=>{
+            callback(null, {
+                options: this.getSelectItems(),
+                complete: false
+            });
         });
     },
 
@@ -175,11 +205,11 @@ const UserFieldValueEditor = React.createClass({
      * Called when the user types text into the react-select input.
      * @param {String} newInputValue value of the react-select input
      */
-    onInputChange(newInputValue) {
-        //make api call
-        this.props.searchUsers(newInputValue);
-        this.setState({inputValue: newInputValue});
-    },
+    // onInputChange(newInputValue) {
+    //     //make api call
+    //     this.setState({inputValue: newInputValue});
+    //     this.props.searchUsers(newInputValue);
+    // },
 
     /**
      * user picker wrapper on react-select component

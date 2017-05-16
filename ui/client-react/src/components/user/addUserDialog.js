@@ -19,16 +19,21 @@ export class AddUserDialog extends React.Component {
     constructor(props) {
         super(props);
 
+        this.state = {
+            isValid: false
+        }
         // bind to fix context for event handlers
 
         this.onFinished = this.onFinished.bind(this);
         this.onCancel = this.onCancel.bind(this);
+        this.isValid = this.isValid.bind(this);
     }
 
     /**
      * cancel
      */
     onCancel() {
+        this.state.isValid = false;
         this.props.hideAddUserDialog();
     }
 
@@ -39,19 +44,16 @@ export class AddUserDialog extends React.Component {
         const userInfo = {
             userId: this.userPanel.getSelectedUser(),
             roleId: this.props.userRoleToAdd,
-        }
-        console.log(userInfo)
+        };
         // Add the user
-        this.props.addNewUser(this.props.appId, userInfo).then(
+        this.props.assignUserToApp(this.props.appId, userInfo).then(
             (response) => {
-                console.log(response)
                 this.props.hideAddUserDialog();
                 this.props.onAddedUser(userInfo.userId);
-                // AppHistory.history.push(UrlUtils.getAfterTableCreatedLink(this.props.app.id, tblId));
             },
             (error) => {
                 // leave the dialog open but issue a growl indicating an error
-                NotificationManager.error(Locale.getMessage('tableCreation.tableCreationFailed'), Locale.getMessage('failed'));
+                NotificationManager.error(Locale.getMessage('users.addUser'), Locale.getMessage('failed'));
             });
 
     }
@@ -60,8 +62,10 @@ export class AddUserDialog extends React.Component {
      * check for any validation errors in tableInfo
      * @returns {boolean}
      */
-    isValid() {
-
+    isValid(validState) {
+        this.setState({
+            isValid: validState
+        });
         // form can be saved if the state if the fields is valid, regardless of what previous validation error is being shown
 
         // return this.props.tableCreation.edited && !_.findKey(this.props.tableInfo, (field) => field.pendingValidationError);
@@ -93,7 +97,7 @@ export class AddUserDialog extends React.Component {
                                  classes={classes.join(' ')}
                                  onCancel={this.onCancel}
                                  onFinished={this.onFinished}
-                                 canProceed={this.isValid()}
+                                 canProceed={this.state.isValid}
                                  finishedButtonLabel="Add"
         >
             <div className="addUserPanel">
@@ -102,6 +106,8 @@ export class AddUserDialog extends React.Component {
                 <AddUserPanel appRoles={this.props.appRoles}
                               allUsers={this.props.allUsers}
                               searchUsers={this.props.searchUsers}
+                              isValid={this.isValid}
+                              existingUsers={this.props.existingUsers}
                               setUserRoleToAdd={this.props.setUserRoleToAdd}
                               ref={(userPanel)=>{this.userPanel = userPanel;}}
                                />

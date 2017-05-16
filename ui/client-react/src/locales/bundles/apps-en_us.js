@@ -41,7 +41,7 @@ export default {
             },
             settings: "Settings",
             users: {
-                addUser: "Adding a new user is not available yet",
+                addUser: "Add a new user",
                 users: "Users",
                 content: "This is the list of all the people who have been added to your application. You can get some quick insights about how many people are in each role in your application as well as find a specific person in the list and email them.",
                 manager: "Application Manager",
@@ -54,8 +54,8 @@ export default {
                 singular: "user",
                 plural: "users",
                 usersRemoved: " users have been removed",
-                userRemoved: " user has been removed"
-
+                userRemoved: " user has been removed",
+                userAdded: "You added"
             }
         },
         appMenu: {

@@ -51,7 +51,6 @@ class BaseService {
      * @returns {*} - promise
      */
     post(url, data, conf) {
-        console.log(data, url, "axios", conf)
         let config = conf || {};
         return this._axios.post(url, data, config);
     }

@@ -12,6 +12,9 @@
     color: $color-black-500;
     font-size: 14px;
   }
+  .hidden{
+    display: none;
+  }
 }
 
 .panelContainer{
@@ -41,6 +44,26 @@
       height: 300px;
     }
     width: 600px;
+
+    .finishedButton, .cancelButton {
+      padding: 8px 34px;
+    }
+    .cancelButton{
+      border: none;
+      color: $color-cyan-400;
+    }
+    .finishedButton{
+      background-color: $color-cyan-400;
+      border: 1px solid $color-cyan-400;
+    }
+
+    .Select-menu{
+      max-height: 100px;
+    }
+
+    .modal-footer{
+      padding-right: 70px;
+    }
   }
 
   .multiStepModal.addUserDialog.allowOverflow .loadedContent {

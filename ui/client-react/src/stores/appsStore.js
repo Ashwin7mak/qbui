@@ -56,8 +56,10 @@ let AppsStore = Fluxxor.createStore({
             actions.LOAD_ALL_USERS_SUCCESS, this.onLoadAllUsersSuccess,
 
             actions.ADD_USER, this.onAddUser,
-            actions.ADD_USER_SUCCESS, this.onAddUserSuccess,
             actions.SET_USER_ROLE_TO_ADD, this.onSetUserRoleToAdd,
+
+            actions.GET_APP_USERS_SUCCESS, this.onGetAppUsersSuccess,
+            actions.GET_APP_USERS_FAILED, this.onGetAppUserFailed,
         );
 
         this.logger = new Logger();
@@ -118,6 +120,7 @@ let AppsStore = Fluxxor.createStore({
         this.error = false;
 
         //  update app users list
+        console.log(selectedApp, "selectedAPP");
         if (_.has(selectedApp, 'users')) {
             const userArray = selectedApp.users;
             this.appUsers = userArray[0];
@@ -220,13 +223,9 @@ let AppsStore = Fluxxor.createStore({
         this.emit('change');
     },
 
-    onAddUserSuccess() {
-        this.loading = false;
+    onSetUserRoleToAdd(roleId) {
+        this.userRoleToAdd = roleId;
         this.emit('change');
-    },
-    onSetUserRoleToAdd(roleId){
-        this.userRoleToAdd = roleId
-        this.emit('change')
     },
 
     /**
@@ -254,6 +253,23 @@ let AppsStore = Fluxxor.createStore({
         this.apps = newAppsList;
         this.emit('change');
     },
+    /**
+     * Get an array of users of an app
+     * @param userArray
+     */
+    onGetAppUsersSuccess(data) {
+        this.appUsers = data.appUsers[0];
+        this.appUsersUnfiltered = data.appUsers[1];
+        this.emit('change');
+        let msg = `${Locale.getMessage('app.users.userAdded')} 1 ${Locale.getMessage('app.users.singular')}`;
+
+        NotificationManager.success(msg);
+    },
+
+    onGetAppUserFailed() {
+        this.emit('change');
+    },
+
     getState() {
         return {
             apps: this.apps,

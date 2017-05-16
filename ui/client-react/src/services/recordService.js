@@ -116,7 +116,6 @@ class RecordService extends BaseService {
         const fixedRecord = SaveRecordFormatter.formatRecordForSaving(record);
 
         let url = super.constructUrl(this.API.CREATE_RECORD, [appId, tableId]);
-        console.log(fixedRecord)
         return super.post(url, fixedRecord);
     }
 

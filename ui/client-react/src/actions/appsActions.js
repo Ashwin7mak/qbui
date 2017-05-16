@@ -111,7 +111,6 @@ let appsActions = {
     loadAppOwner(userId) {
         //  promise is returned in support of unit testing only
         return new Promise((resolve, reject) => {
-            console.log("lll")
             let userService = new UserService();
             userService.getUser(userId).then(response => {
                 this.dispatch(actions.LOAD_APP_OWNER_SUCCESS, response.data);
@@ -158,8 +157,8 @@ let appsActions = {
 
     getAllUsers(searchTerm) {
         return new Promise((resolve, reject) => {
-            let userService = new UserService();
-            userService.getAllUsers(searchTerm).then(response => {
+            let roleService = new RoleService();
+            roleService.getAllUsers(searchTerm).then(response => {
                 this.dispatch(actions.LOAD_ALL_USERS_SUCCESS, response.data);
                 resolve();
             }, () => {
@@ -169,11 +168,37 @@ let appsActions = {
         });
     },
 
-    addUser(appId, userInfo) {
+    // this function should be utilized to reflect updates to the App users
+    // (such as remove user from app) to ensure integrity of backend and frontend data at eveny instance
+    getAppUsers(appId, roleId) {
         return new Promise((resolve, reject) => {
-            let userService = new UserService();
-            userService.addUser(appId, userInfo).then(response => {
-                this.dispatch(actions.ADD_USER_SUCCESS, response.data);
+            // appsActions.getAppUsers(appId, roleId);
+            let appService = new AppService();
+            appService.getAppUsers(appId).then(response2 => {
+                console.log(response2, "response2")
+                this.dispatch(actions.GET_APP_USERS_SUCCESS, {appUsers: response2.data, roleId});
+                resolve();
+            }, () => {
+                this.dispatch(actions.GET_APP_USERS_FAILED);
+                reject();
+            });
+        });
+    },
+
+    assignUserToApp(appId, userId, roleId) {
+        return new Promise((resolve, reject) => {
+            let roleService = new RoleService();
+            roleService.assignUserToApp(appId, userId, roleId).then(response => {
+                // For some reason calling appsActions.getAppUsers is not feasible, hence the call is made here
+                let appService = new AppService();
+                appService.getAppUsers(appId).then(payload => {
+                    this.dispatch(actions.GET_APP_USERS_SUCCESS, {appUsers: payload.data, userId: userId});
+                    // this.dispatch(actions.ADD_USER_SUCCESS, {appId: appId, roleId: roleId, userIds:[userId]});
+                    resolve();
+                }, () => {
+                    this.dispatch(actions.GET_APP_USERS_FAILED);
+                    reject();
+                });
                 resolve();
             }, () => {
                 this.dispatch(actions.ADD_USER_FAILED);
@@ -181,6 +206,7 @@ let appsActions = {
             });
         });
     },
+
     setUserRoleToAdd(roleId) {
         this.dispatch(actions.SET_USER_ROLE_TO_ADD, roleId);
     }

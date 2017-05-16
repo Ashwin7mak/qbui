@@ -51,15 +51,6 @@ const reactSelectWrapper = React.createClass({
         document.removeEventListener('keydown', this.handleKey);
     },
 
-// className={classes}
-// tabIndex={this.props.tabIndex}
-// isDisabled={this.props.isDisabled}
-// placeholder={Locale.getMessage("field.search")}
-// isAddUser={this.props.isAddUser}
-// noResultsText={noResultsText}
-// autosize={false}
-// clearable={false}
-// onBlur={this.onBlur}/>
 
     render() {
         if (this.props.isAddUser) {
@@ -68,9 +59,14 @@ const reactSelectWrapper = React.createClass({
                         value={this.props.value}
                         onChange={this.props.onChange}
                         loadOptions={this.props.loadAsyncOptions}
+                        ignoreCase={false}
+                        cache={false}
                         optionRenderer={this.props.optionRenderer}
                         placeholder={this.props.placeholder}
-                        onInputChange={this.props.onInputChange}/>);
+                        onBlur={this.props.onBlur}
+                        autoload={false}
+                        filterOption={this.props.filterOption}
+                        />);
         }
         return (
                 <Select

@@ -8,15 +8,23 @@ class addUserPanel extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            selectedRole: 'Participant',
+            selectedRole: '',
         };
         this.updateRole = this.updateRole.bind(this);
     }
 
     getRoles() {
+        let defaultRole = 'Participant';
         const roles = this.props.appRoles.map((appRole)=>{
+            if (appRole.name === defaultRole) {defaultRole = appRole.id;}
             return {value: appRole.id, label: appRole.name, clearableValue: false};
         });
+        // Default state isn't working as expected this is a quick fix
+        // might need to refactor
+        if (this.state.selectedRole === '') {
+            this.state.selectedRole = defaultRole;
+            this.props.setUserRoleToAdd(defaultRole);
+        }
         return roles;
     }
     updateRole(roleId) {
@@ -26,7 +34,7 @@ class addUserPanel extends React.Component {
         this.props.setUserRoleToAdd(roleId);
     }
     getSelectedUser() {
-        return this.testField.state.selectedUserId;
+        return this.fieldValueEditor.state.selectedUserId;
     }
     render() {
 
@@ -53,7 +61,9 @@ class addUserPanel extends React.Component {
                             isAddUser={true}
                             fieldDef={fieldDef1}
                             searchUsers={this.props.searchUsers}
-                            ref={(fieldValueEditor) => {this.testField = fieldValueEditor;}}
+                            isValid={this.props.isValid}
+                            existingUsers={this.props.existingUsers}
+                            ref={(fieldValueEditor) => {this.fieldValueEditor = fieldValueEditor;}}
                         />
                     </dd>
                 </div>

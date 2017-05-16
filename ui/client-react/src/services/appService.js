@@ -16,7 +16,6 @@ class AppService extends BaseService {
             GET_APPS                 : `${constants.BASE_URL.QBUI}/${constants.APPS}`
         };
     }
-
     /**
      * Return a QuickBase App
      *

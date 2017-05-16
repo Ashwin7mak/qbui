@@ -67,8 +67,8 @@ const AppUsersRoute = React.createClass({
         this.props.flux.actions.setUserRoleToAdd(roleId);
     },
 
-    addUser(appId, userInfo) {
-        this.props.flux.actions.addUser(appId, userInfo);
+    assignUserToApp(appId, userInfo) {
+        return this.props.flux.actions.assignUserToApp(appId, userInfo.userId, userInfo.roleId);
     },
 
     getStageHeadline() {
@@ -171,16 +171,17 @@ const AppUsersRoute = React.createClass({
                                       appRoles={this.props.appRoles}
                                       appOwner={this.props.appOwner}/>
                 </Stage>
-                {this.getTableActions()}
                 <AddUserDialog allUsers={this.props.allUsers}
                                searchUsers={this.props.flux.actions.getAllUsers}
                                appRoles={this.props.appRoles}
-                               addNewUser={this.addUser}
+                               assignUserToApp={this.assignUserToApp}
                                setUserRoleToAdd={this.setUserRoleToAdd}
                                userRoleToAdd={this.props.userRoleToAdd}
                                appId={this.props.match.params.appId}
                                selectedApp={this.props.selectedApp}
+                               existingUsers={this.props.appUsersUnfiltered}
                                hideAddUserDialog={this.props.hideAddUserDialog}/>
+                {this.getTableActions()}
                 <div className="userManagementContainer">
                     <UserManagement appId={this.props.match.params.appId}
                                     appUsers={this.props.appUsersUnfiltered}
