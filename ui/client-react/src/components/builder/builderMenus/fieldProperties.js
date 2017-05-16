@@ -9,6 +9,7 @@ import {updateField} from '../../../actions/fieldsActions';
 import {getSelectedFormElement} from '../../../reducers/forms';
 import {getField} from '../../../reducers/fields';
 import SideTrowser from '../../../../../reuse/client/src/components/sideTrowserBase/sideTrowserBase';
+import Icon, {AVAILABLE_ICON_FONTS} from '../../../../../reuse/client/src/components/icon/icon.js';
 import * as tabIndexConstants from '../../formBuilder/tabindexConstants';
 
 import './fieldProperties.scss';
@@ -121,11 +122,13 @@ export class FieldProperties extends Component {
         );
     }
 
-    createLinkToRecordPropertyContainer(propertyTitle, propertyValue = "Table XXX", key = 4) {
+    createLinkToRecordPropertyContainer(propertyTitle, propertyValue, key = 4) {
+
+        const table = _.find(this.props.app.tables, {id: this.props.selectedField.parentTableId});
         return (
             <div key={key} className="linkToRecordPropertyContainer">
                 <div className="linkToRecordPropertyTitle">{propertyTitle}</div>
-                <div>{propertyValue}</div>
+                {table && <div><Icon iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY} icon={table.tableIcon}/> {table.name}</div>}
             </div>
         );
     }
@@ -185,8 +188,7 @@ export class FieldProperties extends Component {
             let choices = this.buildMultiChoiceDisplayList(this.props.selectedField.multipleChoice.choices);
             fieldPropContainers.push(this.createMultiChoiceTextPropertyContainer(Locale.getMessage('fieldPropertyLabels.multiChoice'), choices));
         } else if (formatType === FieldFormats.LINK_TO_RECORD) {
-            let json = JSON.stringify(this.props.selectedField);
-            fieldPropContainers.push(this.createLinkToRecordPropertyContainer("Link to a record in the table", json));
+            fieldPropContainers.push(this.createLinkToRecordPropertyContainer("Link to a record in the table", this.props.selectedField));
         }
 
         return fieldPropContainers;

@@ -1,5 +1,8 @@
 import React, {PropTypes} from 'react';
 import Locale from "../../locales/locales";
+import {CONTEXT} from "../../actions/context";
+import {showRelationshipDialog, removeFieldFromForm} from '../../actions/formActions';
+import {updateField} from '../../actions/fieldsActions';
 import {I18nMessage} from '../../utils/i18nMessage';
 import Select from '../select/reactSelectWrapper';
 import {connect} from 'react-redux';
@@ -32,65 +35,26 @@ const LinkToRecordFieldValueEditor = React.createClass({
         };
     },
 
-    getInitialState() {
-        let choice = {
-            value: '',
-            display: '',
-        };
-        if (this.props.value || this.props.value === 0) {
-            choice.value = this.props.value;
-            choice.display = this.props.display;
-        }
-        return {
-            choice
-        };
-    },
-
-    tableSelected(tableId) {
-
-        this.setState({dialogOpen: false});
-    },
-
-    cancelTableSelection() {
-        this.setState({dialogOpen: false});
-    },
 
     getReactSelect() {
         const placeHolderMessage = "Select a table";
-        const notFoundMessage = <I18nMessage message="selection.notFound"/>;
-        const emptyOptionText = '\u00a0'; //Non breaking space
 
-        let selectedValue = _.get(this, 'state.choice.value');
-
-        let choices = this.props.tables ?
-            this.props.tables.map(table => {
-                return {
-                    value: table.id,
-                    label: table.name
-                };
-            }) : [];
-
-        return <Select
-            value={selectedValue && {label: selectedValue}}
-            /*optionRenderer={this.renderOption}*/
-            options={choices}
-            onChange={this.selectChoice}
-            placeholder={placeHolderMessage}
-            noResultsText={notFoundMessage}
-            autosize={false}
-            clearable={false}
-            />;
+        return <Select placeholder={placeHolderMessage}/>;
     },
 
     tableSelected(tableId) {
-        this.setState({showTableSelectionDialog: false});
-        // persist
+        this.props.showRelationshipDialog(false);
+
+        let field = this.props.fieldDef;
+        field.parentTableId = tableId;
+        this.props.updateField(field, this.props.appId, this.props.tblId);
+
     },
 
     cancelTableSelection() {
 
-        this.setState({showTableSelectionDialog: false});
-        // remove field...
+        this.props.showRelationshipDialog(false);
+        return this.props.removeFieldFromForm(this.props.formId, this.props.location);
     },
 
     render() {
@@ -99,6 +63,7 @@ const LinkToRecordFieldValueEditor = React.createClass({
         if (this.props.dialogOpen) {
             return (
                 <LinkToRecordTableSelectionDialog show={this.props.dialogOpen}
+                                                  childTableId={this.props.tblId}
                                                   tables={this.props.tables}
                                                   tableSelected={this.tableSelected}
                                                   onCancel={this.cancelTableSelection}/> );
@@ -108,4 +73,20 @@ const LinkToRecordFieldValueEditor = React.createClass({
     }
 });
 
-export default connect(state => ({dialogOpen: state.animation.isRelationshipDialogShown}))(LinkToRecordFieldValueEditor)
+LinkToRecordFieldValueEditor.propTypes = {
+    location: PropTypes.object,
+    formId: PropTypes.string
+};
+
+LinkToRecordFieldValueEditor.defaultProps = {
+    formId: CONTEXT.FORM.VIEW,
+};
+
+const mapStateToProps = (state) => {
+    return {
+        dialogOpen: state.forms.showRelationshipDialog
+    };
+};
+
+
+export default connect(mapStateToProps, {showRelationshipDialog, removeFieldFromForm, updateField})(LinkToRecordFieldValueEditor)

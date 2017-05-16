@@ -34,6 +34,13 @@ export const updateFormRedirectRoute = route => {
     };
 };
 
+export const showRelationshipDialog = (show = true) => {
+    return {
+        type: types.SHOW_RELATIONSHIP_DIALOG,
+        show
+    }
+};
+
 /**
  * form load in progress
  * @param container type of form (edit or view)

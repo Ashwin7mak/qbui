@@ -7,8 +7,3 @@ export const updateFormAnimationState = (isAnimating) => {
     };
 };
 
-export const updateRelationshipDialog = () => {
-    return {
-        type: 'UPDATE_RELATIONSHIP_DIALOG'
-    }
-};

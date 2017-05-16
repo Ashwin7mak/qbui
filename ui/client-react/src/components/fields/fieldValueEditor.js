@@ -257,6 +257,7 @@ const FieldValueEditor = React.createClass({
         }
 
         case FieldFormats.MULTI_LINE_TEXT_FORMAT: {
+
             return <MultiLineTextFieldValueEditor {...commonProps}
                                                   isFormView={this.props.isFormView}
                                                   showScrollForMultiLine={this.props.showScrollForMultiLine}/>;
@@ -271,7 +272,7 @@ const FieldValueEditor = React.createClass({
         }
 
         case FieldFormats.LINK_TO_RECORD: {
-            return <LinkToRecordFieldValueEditor{...commonProps} tables={this.props.app ? this.props.app.tables : []} classes="cellEdit" />;
+            return <LinkToRecordFieldValueEditor{...commonProps} appId={this.props.app.id} tblId={this.props.tblId} tables={this.props.app ? this.props.app.tables : []} location={this.props.location} classes="cellEdit" />;
         }
         case FieldFormats.LIST_OF_RECORDS: {
             return <ListOfRecordsFieldValueEditor{...commonProps} tables={this.props.app ? this.props.app.tables : []} classes="cellEdit" />;

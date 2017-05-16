@@ -81,10 +81,10 @@ export const supportedNewFieldTypesWithProperties = (omittedFieldGroups = []) =>
  * @param fieldType
  * @returns {{type: *, title: *, tooltipText: string, isNewField: boolean}}
  */
-export function createFieldTypeProps(fieldType) {
+export function createFieldTypeProps(fieldType, userDefaultProperties = null) {
     let title = Locale.getMessage(`fieldsDefaultLabels.${fieldType}`);
     let id = `fieldType_${fieldType}`;
-    let field = createScalarDefaultFieldsProperties()[fieldType];
+    let field = createScalarDefaultFieldsProperties(userDefaultProperties)[fieldType];
 
     return {
         containingElement: {id, FormFieldElement: {positionSameRow: false, ...field}},

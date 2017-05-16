@@ -126,6 +126,7 @@ export class FormBuilder extends Component {
                     updateAnimationState={this.props.updateAnimationState}
                     hasAnimation={true}
                     app={this.props.app}
+                    tblId={this.props.tblId}
                     appUsers={[]}
                 />
                 <div className="elementCache" ref={elementCache => this.elementCache = elementCache} />

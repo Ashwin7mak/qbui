@@ -3,8 +3,8 @@ import {Button} from 'react-bootstrap';
 import {I18nMessage} from '../../utils/i18nMessage';
 import Locale from '../../locales/locales';
 import {connect} from 'react-redux';
-import {loadForm, updateForm, moveFieldOnForm, toggleFormBuilderChildrenTabIndex, toggleToolPaletteChildrenTabIndex, keyboardMoveFieldUp, keyboardMoveFieldDown, selectFieldOnForm, deselectField, removeFieldFromForm, addNewFieldToForm} from '../../actions/formActions';
-import {updateFormAnimationState, updateRelationshipDialog} from '../../actions/animationActions';
+import {loadForm, updateForm, moveFieldOnForm, toggleFormBuilderChildrenTabIndex, toggleToolPaletteChildrenTabIndex, keyboardMoveFieldUp, keyboardMoveFieldDown, selectFieldOnForm, deselectField, removeFieldFromForm, addNewFieldToForm, showRelationshipDialog} from '../../actions/formActions';
+import {updateFormAnimationState} from '../../actions/animationActions';
 import Loader from 'react-loader';
 import {LARGE_BREAKPOINT} from "../../constants/spinnerConfigurations";
 import {NEW_FORM_RECORD_ID} from '../../constants/schema';
@@ -68,7 +68,7 @@ const mapDispatchToProps = {
     deselectField,
     removeFieldFromForm,
     addNewFieldToForm,
-    updateRelationshipDialog
+    showRelationshipDialog
 };
 
 /**
@@ -254,7 +254,7 @@ export const FormBuilderContainer = React.createClass({
     },
 
     endDrag(props) {
-        this.props.updateRelationshipDialog();
+        this.props.showRelationshipDialog();
     },
 
     render() {

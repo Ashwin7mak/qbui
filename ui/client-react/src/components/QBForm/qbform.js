@@ -383,6 +383,7 @@ export const QBForm = React.createClass({
                   isInvalid={validationStatus.isInvalid}
                   invalidMessage={validationStatus.invalidMessage}
                   app={this.props.app}
+                  tblId={this.props.tblId}
                   appUsers={this.props.appUsers}
                   recId={recId}
                   isTokenInMenuDragging={this.props.isTokenInMenuDragging}

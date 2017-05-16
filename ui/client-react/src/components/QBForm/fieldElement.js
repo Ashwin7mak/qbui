@@ -116,6 +116,8 @@ export const FieldElement = React.createClass({
                                              classes={classes}
                                              appUsers={this.props.appUsers}
                                              app={this.props.app}
+                                             tblId={this.props.tblId}
+                                             location={this.props.location}
                                              label={FieldUtils.getFieldLabel(this.props.element, this.props.relatedField)}
                                              tabIndex={this.props.tabIndex}
             />;

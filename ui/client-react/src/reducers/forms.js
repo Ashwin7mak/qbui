@@ -27,6 +27,13 @@ const forms = (
         };
     }
 
+    case types.SHOW_RELATIONSHIP_DIALOG: {
+        return {
+            ...state,
+            showRelationshipDialog: action.show
+        };
+    }
+
     case types.LOADING_FORM: {
 
         newState[id] = ({

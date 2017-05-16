@@ -18,12 +18,20 @@ const LinkToRecordTableSelectionDialog = React.createClass({
             </div>);
     },
 
+    selectChoice(choice) {
+
+        this.setState({selectedValue: choice});
+
+    },
+
+    getInitialState() {
+        return { selectedValue: null }
+    },
+
     getReactSelect() {
         const placeHolderMessage = "Select a table";
         const notFoundMessage = <I18nMessage message="selection.notFound"/>;
-        const emptyOptionText = '\u00a0'; //Non breaking space
-
-        let selectedValue = _.get(this, 'state.choice.value');
+        let selectedValue = _.get(this, 'state.selectedValue');
 
         let choices = this.props.tables ?
             this.props.tables.map(table => {
@@ -34,8 +42,10 @@ const LinkToRecordTableSelectionDialog = React.createClass({
                 };
             }) : [];
 
+        choices = _.filter(choices, (choice) => choice.value !== this.props.childTableId);
+
         return <Select
-            value={selectedValue && {label: selectedValue}}
+            value={selectedValue}
             optionRenderer={this.renderOption}
             options={choices}
             onChange={this.selectChoice}
@@ -46,12 +56,17 @@ const LinkToRecordTableSelectionDialog = React.createClass({
         />;
     },
 
+    addToForm() {
+        this.props.tableSelected(this.state.selectedValue.value);
+    },
+
     render() {
 
         return (
             <MultiStepDialog show={this.props.show}
+                             canProceed={this.state.selectedValue !== null}
                              onCancel={this.props.onCancel}
-                             onFinished={this.props.tableSelected}
+                             onFinished={this.addToForm}
                              finishedButtonLabel="Add to form"
                              classes={"tableDataConnectionDialog allowOverflow"}
                              titles={["Get another record"]}>

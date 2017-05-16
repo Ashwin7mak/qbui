@@ -15,6 +15,7 @@ let createDefaultFieldsProperties = (type, defaultTypeProperties, userDefaultPro
 };
 
 export const createScalarDefaultFieldsProperties = (userDefaultProperties = null) => {
+
     return {
         [FieldFormats.TEXT_FORMAT_MULTICHOICE]: {
             ...createDefaultFieldsProperties(serverTypeConsts.TEXT, DefaultFieldProperties[FieldFormats.TEXT_FORMAT_MULTICHOICE], userDefaultProperties)

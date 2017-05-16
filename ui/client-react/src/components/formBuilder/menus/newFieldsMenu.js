@@ -7,7 +7,7 @@ import _ from 'lodash';
 const NewFieldsMenu = ({isCollapsed, isOpen, toggleToolPaletteChildrenTabIndex, toolPaletteChildrenTabIndex,
                         toolPaletteFocus, toolPaletteTabIndex, formMeta, tables, endDrag}) => {
 
-    let omittedFieldGroups = [];//['tableDataConnections'];
+    let omittedFieldGroups = ['tableDataConnections'];
     let tableCount = tables.length;
 
     if (formMeta) {
