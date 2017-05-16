@@ -4,7 +4,7 @@ import FormService from '../services/formService';
 import Promise from 'bluebird';
 import Logger from '../utils/logger';
 import LogLevel from '../utils/logLevels';
-import WindowLocationUtils from '../utils/windowLocationUtils';
+import {WindowHistoryUtils} from '../utils/windowHistoryUtils';
 import Locale from '../locales/locales';
 import NotificationManager from '../../../reuse/client/src/scripts/notificationManager';
 import * as types from '../actions/types';
@@ -174,7 +174,7 @@ export const loadForm = (appId, tblId, rptId, formType, recordId, context) => {
                     }
 
                     // remove the editRec query string since we are not successfully editing the form
-                    WindowLocationUtils.pushWithoutQuery();
+                    WindowHistoryUtils.pushWithoutQuery();
                     dispatch(loadFormError(formType, error.response.status));
 
                     reject(error);
@@ -183,7 +183,7 @@ export const loadForm = (appId, tblId, rptId, formType, recordId, context) => {
                 logger.logException(ex);
                 NotificationManager.error(Locale.getMessage('recordNotifications.cannotLoad'), Locale.getMessage('failed'));
                 // remove the editRec query string since we are not successfully editing the form
-                WindowLocationUtils.pushWithoutQuery();
+                WindowHistoryUtils.pushWithoutQuery();
                 reject(ex);
             });
         });
@@ -340,6 +340,15 @@ export const endDraggingState = (formId) => {
  */
 export const isInDraggingState = (formId) => {
     return event(formId, types.IS_DRAGGING);
+};
+
+/**
+ - * setFormBuilderPendingEditToFalse sets isPendingEdits to false
+ - * @param formId
+ - * @returns {{id, type, content}|*}
+ - */
+export const setFormBuilderPendingEditToFalse = (formId) => {
+    return event(formId, types.SET_IS_PENDING_EDIT_TO_FALSE);
 };
 
 /**

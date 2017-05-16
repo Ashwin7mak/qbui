@@ -26,7 +26,7 @@ describe('TableHomePageRoute functions', () => {
         loadFields: (app, tbl) => {},
         loadTableHomePage: () => {},
         reportBuilder: {
-            inBuilderMode: true,
+            isInBuilderMode: true,
             isCollapsed: true,
             addBeforeColumn: null,
             availableColumns: []

@@ -236,7 +236,7 @@ export class ReportColumnHeaderMenu extends Component {
     };
 
     render() {
-        let inBuilderMode = this.props.reportBuilder.inBuilderMode;
+        let inBuilderMode = this.props.reportBuilder.isInBuilderMode;
         let isHideOptionDisabled = this.props.isOnlyOneColumnVisible;
 
         let builderMenus = [];
