@@ -8,6 +8,7 @@ import './drawerContainer.scss';
 
 /**
  * A parent component which orchestrates sliding a drawer in and out of the parent container.
+ * The content of the drawer must be passed in as props.children.
  * We rely on React Router 4's children function, see https://reacttraining.com/react-router/web/api/Route/children-func
  *
  * While the drawerContainer div is visible, the user cannot click on the root record because it's blocked by the
@@ -56,7 +57,8 @@ class DrawerContainer extends React.Component {
     }
 
     /**
-     * The inner Drawer component. The key for the Drawer is used by ReactCSSTransitionGroup
+     * Render the inner Drawer component and its content (passed in to DrawerContainer as props.children).
+     * The key for the Drawer is used by ReactCSSTransitionGroup
      * https://facebook.github.io/react/docs/animation.html
      */
     getDrawer = () => {
