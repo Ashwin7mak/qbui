@@ -12,22 +12,18 @@
 
         .rc-tabs-tab:hover {
             //hover color for text
-           color: greenyellow;
+           color: $input-text-focus-border-color;
         }
 
-        //.rc-tabs-tab:focus {
-        //    outline-color: $input-text-focus-border-color;
-        //}
-
         .rc-tabs-ink-bar {
-            //color for underline for tab
+            //color for underline for selected tab
             background-color: $input-text-focus-border-color;
         }
 
         .rc-tabs-bar {
             border: 1px solid transparent;
             &:focus {
-                //border focus for all tabs
+                //border focus for div that wraps all tabs
                 @include text-input-focus;
             }
             .rc-tabs-tab {
@@ -41,6 +37,4 @@
     .rc-tabs-content {
         overflow: visible; // Second tab would be invisible when this was set to hidden. Fixed with visible.
     }
-
-
 }
