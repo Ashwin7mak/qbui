@@ -1,6 +1,7 @@
 // Realm/User/Account Flag constants
 
 export const UserFlags = {
+    UnverifiedFlag  : 0x00000004,
     DeactivatedFlag : 0x00000040
 };
 
@@ -16,7 +17,9 @@ export const AccountTrusteeFlags = {
 
 // Helper Flag Functions
 export const HasFlag = (bits, flag) => (bits & flag) !== 0;
+export const IsUnverified = userInfo => HasFlag(userInfo.userBasicFlags, UserFlags.UnverifiedFlag);
 export const IsDeactivated = userInfo => HasFlag(userInfo.userBasicFlags, UserFlags.DeactivatedFlag);
+export const IsRegistered = userInfo => HasFlag(userInfo.userBasicFlags, RealmDirFlags.RegisteredFlag);
 export const IsDenied = userInfo => HasFlag(userInfo.realmDirectoryFlags, RealmDirFlags.DeniedFlag);
 export const CanCreateApps = userInfo => HasFlag(userInfo.accountTrusteeFlags, AccountTrusteeFlags.CanCreateAppFlag);
 export const IsApprovedInRealm = userInfo => HasFlag(userInfo.realmDirectoryFlags, RealmDirFlags.RealmApprovedFlag);

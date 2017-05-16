@@ -1,72 +1,23 @@
 import React from "react";
 import jasmineEnzyme from "jasmine-enzyme";
-import {FACET_FIELDS, GetFacetFields} from "../../../../src/account/users/grid/AccountUsersGridFacet";
+import {GetFacetFields} from "../../../../src/account/users/grid/AccountUsersGridFacet";
 import _ from 'lodash';
 import Locale from "../../../../../reuse/client/src/locales/locale";
 import GovernanceBundleLoader from '../../../../src/locales/governanceBundleLoader';
 
 export const FACET_FIELDID = {
+    QUICKBASE_USER_STATUS : 0,
     QUICKBASE_ACCESS_STATUS : 1,
     INGROUP : 5,
     GROUPMANAGER:6
 };
-
-const ACCOUNT_USERS_DATA = [
-    {
-        "uid": 10000,
-        "firstName": "Administrator",
-        "lastName": "User for default SQL Installation",
-        "email": "koala_bumbles@quickbase.com",
-        "userName": "administrator",
-        "lastAccess": "2017-02-28T19:32:04.223Z",
-        "numGroupsMember": 0,
-        "numGroupsManaged": 0,
-        "hasAppAccess": true,
-        "numAppsManaged": 2,
-        "userBasicFlags": 24576,
-        "accountTrusteeFlags": 0,
-        "realmDirectoryFlags": 0,
-        "systemRights": -1
-    },
-    {
-        "uid": 30000,
-        "firstName": "Zadministrator",
-        "lastName": "ZUser for default SQL Installation",
-        "email": "Zkoala_bumbles@quickbase.com",
-        "userName": "Zadministrator",
-        "lastAccess": "2019-02-28T19:32:04.223Z",
-        "numGroupsMember": 100,
-        "numGroupsManaged": 100,
-        "hasAppAccess": false,
-        "numAppsManaged": 200,
-        "userBasicFlags": 24576,
-        "accountTrusteeFlags": 0,
-        "realmDirectoryFlags": 0,
-        "systemRights": 0
-    },
-    {
-        "uid": 20000,
-        "firstName": "FirstNameFilter",
-        "lastName": "lastNameFilter",
-        "email": "emailFilter@g88.net",
-        "userName": "userNameFilter",
-        "lastAccess": "1900-01-01T00:00:00Z",
-        "numGroupsMember": 0,
-        "numGroupsManaged": 1,
-        "hasAppAccess": true,
-        "numAppsManaged": 0,
-        "userBasicFlags": 8192,
-        "accountTrusteeFlags": 0,
-        "realmDirectoryFlags": 4,
-        "systemRights": 0
-    }];
 
 describe('Faceting Fields Values', () => {
 
     it('gets the facets based on QuickBase access status', () => {
         expect(GetFacetFields(true, true)[FACET_FIELDID.QUICKBASE_ACCESS_STATUS]).toEqual(
             {
-                id:1,
+                id:FACET_FIELDID.QUICKBASE_ACCESS_STATUS,
                 name: Locale.getMessage("governance.account.users.accessStatus"),
                 type: 'TEXT',
                 values: [
@@ -74,6 +25,19 @@ describe('Faceting Fields Values', () => {
                     {id:FACET_FIELDID.QUICKBASE_ACCESS_STATUS, value: 'Deactivated'},
                     {id:FACET_FIELDID.QUICKBASE_ACCESS_STATUS, value: 'Paid Seat'},
                     {id:FACET_FIELDID.QUICKBASE_ACCESS_STATUS, value: 'No App Access'}]
+            });
+    });
+
+    it('gets the facets based on QuickBase user status', () => {
+        expect(GetFacetFields(true, true)[FACET_FIELDID.QUICKBASE_USER_STATUS]).toEqual(
+            {
+                id:FACET_FIELDID.QUICKBASE_USER_STATUS,
+                name: Locale.getMessage("governance.account.users.userStatus"),
+                type: 'TEXT',
+                values: [
+                    {id:FACET_FIELDID.QUICKBASE_USER_STATUS, value: 'Unregistered'},
+                    {id:FACET_FIELDID.QUICKBASE_USER_STATUS, value: 'Unverified'},
+                    {id:FACET_FIELDID.QUICKBASE_USER_STATUS, value: 'Registered'}]
             });
     });
 

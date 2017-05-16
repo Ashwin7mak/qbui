@@ -13,7 +13,7 @@ export const FACET_FIELDS = [
         type: SCHEMACONSTS.TEXT,
         needsAccountAdmin:true,
         needsRealmAdmin:true,
-        options: ['Unregistered', 'Unverified', 'Paid Registered', 'No App Access'],
+        options: ['Unregistered', 'Unverified', 'Registered'],
         formatter: user => Formatters.FormatUserStatusText(user.hasAppAccess, {rowData: user})
     },
     {

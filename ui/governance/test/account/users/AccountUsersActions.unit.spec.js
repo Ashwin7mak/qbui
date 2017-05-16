@@ -7,9 +7,6 @@ import configureMockStore from "redux-mock-store";
 import thunk from "redux-thunk";
 import Promise from "bluebird";
 import FacetSelections from "../../../../reuse/client/src/components/facets/facetSelections";
-import GovernanceBundleLoader from "../../../src/locales/governanceBundleLoader";
-import Locale from "../../../../reuse/client/src/locales/locale";
-import GovernanceBundleLoader from '../../../src/locales/governanceBundleLoader';
 import {FACET_FIELDID} from "./grid/AccountUsersGridFacet.unit.spec";
 
 describe('Account Users Actions Tests', () => {
@@ -485,14 +482,11 @@ describe('Account Users Actions Tests', () => {
 
     describe('Faceting Action', () => {
 
-        it('gets the users based on QuickBase access status', () => {
+        it('gets the users based on Quick Base access status', () => {
             let selected = new FacetSelections();
-            selected.addSelection(FACET_FIELDID.QUICKBASE_ACCESS_STATUS, 'QuickBase Staff');
+            selected.addSelection(FACET_FIELDID.QUICKBASE_ACCESS_STATUS, 'Quick Base Staff');
             selected.addSelection(FACET_FIELDID.QUICKBASE_ACCESS_STATUS, 'No App Access');
             selected.addSelection(FACET_FIELDID.QUICKBASE_ACCESS_STATUS, 'Paid Seat');
-            selected.addSelection(0, 'Quick Base Staff');
-            selected.addSelection(0, 'No App Access');
-            selected.addSelection(0, 'Paid Seat');
 
             let facetUsers = actions.facetUser(ACCOUNT_USERS_DATA, selected);
 
@@ -587,7 +581,7 @@ describe('Account Users Actions Tests', () => {
             expect(sortedUsersDsc[2].firstName).toEqual('Administrator');
         });
 
-        it('sorts the numeric columns by QuickBase Access Status correctly', () => {
+        it('sorts the numeric columns by Quick Base Access Status correctly', () => {
             let sortedUsersAsc = actions.sortUsers(ACCOUNT_USERS_DATA, [8]);
             expect(sortedUsersAsc[0].numGroupsMember).toEqual(0);
             expect(sortedUsersAsc[1].numGroupsMember).toEqual(0);
