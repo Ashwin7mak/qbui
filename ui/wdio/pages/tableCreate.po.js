@@ -152,7 +152,7 @@
         selectTable: {value: function(tableName) {
             //wait until leftNav Loaded.Selected table is not loaded until all table properties are available
             while (browser.element('.tablesHeadingAndList .tablesList .leftNavLink').getAttribute('textContent').length === 0) {
-                return browser.pause(e2eConsts.shortWaitTimeMs);
+                browser.pause(e2eConsts.shortWaitTimeMs);
             }
             //filter table names from leftNav links
             var results = this.getAllTableLeftNavLinksList.value.filter(function(table) {
