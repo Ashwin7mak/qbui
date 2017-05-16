@@ -336,8 +336,6 @@
             //navigate to record page directly
             var requestRecordPageEndPoint = e2eBase.recordBase.apiBase.generateFullRequest(realmName, '/qbase/app/' + appId + '/table/' + tableId + '/report/' + reportId + '/record/' + recordId);
             browser.url(requestRecordPageEndPoint);
-            //wait until leftNav is loaded
-            this.waitForLeftNavLoaded();
             //wait until view form is visible
             return formsPO.viewFormContainerEl.waitForVisible();
         }},
