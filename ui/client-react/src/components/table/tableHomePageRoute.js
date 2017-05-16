@@ -17,7 +17,7 @@ import * as FieldsActions from '../../actions/fieldsActions';
 import {showTableCreationDialog} from '../../actions/tableCreationActions';
 import {loadDynamicReport} from '../../actions/reportActions';
 import {CONTEXT} from '../../actions/context';
-import WindowLocationUtils from '../../utils/windowLocationUtils';
+import {WindowHistoryUtils} from '../../utils/windowHistoryUtils';
 import {EDIT_RECORD_KEY, NEW_RECORD_VALUE} from '../../constants/urlConstants';
 import {NEW_TABLE_IDS_KEY} from '../../constants/localStorage';
 import _ from 'lodash';
@@ -88,7 +88,7 @@ export const TableHomePageRoute = React.createClass({
      * Add a new record in trowser
      */
     editNewRecord() {
-        WindowLocationUtils.pushWithQuery(EDIT_RECORD_KEY, NEW_RECORD_VALUE);
+        WindowHistoryUtils.pushWithQuery(EDIT_RECORD_KEY, NEW_RECORD_VALUE);
     },
 
     getPageActions(maxButtonsBeforeMenu) {

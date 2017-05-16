@@ -321,14 +321,14 @@ describe('CardViewListHolder functions', () => {
 
     // This function is unit tested directly because it is passed down to a child component rather than rendered in this component
     describe('openRecordForEdit', () => {
-        const mockWindowLocationUtils = {pushWithQuery() {}};
+        const WindowHistoryUtils = {pushWithQuery() {}};
         const mockParentMethods = {openRecord() {}};
 
         beforeEach(() => {
-            spyOn(mockWindowLocationUtils, 'pushWithQuery');
+            spyOn(WindowHistoryUtils, 'pushWithQuery');
             spyOn(mockParentMethods, 'openRecord');
 
-            CardViewListHolderdRewireAPI.__Rewire__('WindowLocationUtils', mockWindowLocationUtils);
+            CardViewListHolderdRewireAPI.__Rewire__('WindowHistoryUtils', WindowHistoryUtils);
 
             component = TestUtils.renderIntoDocument(<CardViewListHolder reportData={{}} openRecord={mockParentMethods.openRecord} />);
         });
@@ -340,14 +340,14 @@ describe('CardViewListHolder functions', () => {
         it('does not navigate if a record id is not provided', () => {
             component.openRecordForEdit();
 
-            expect(mockWindowLocationUtils.pushWithQuery).not.toHaveBeenCalled();
+            expect(WindowHistoryUtils.pushWithQuery).not.toHaveBeenCalled();
             expect(mockParentMethods.openRecord).not.toHaveBeenCalled();
         });
 
         it('returns undefined if the record is not in the array of records for the report', () => {
             component.openRecordForEdit(2);
 
-            expect(mockWindowLocationUtils.pushWithQuery).not.toHaveBeenCalled();
+            expect(WindowHistoryUtils.pushWithQuery).not.toHaveBeenCalled();
             expect(mockParentMethods.openRecord).not.toHaveBeenCalled();
         });
 
@@ -357,7 +357,7 @@ describe('CardViewListHolder functions', () => {
 
             component.openRecordForEdit(1);
 
-            expect(mockWindowLocationUtils.pushWithQuery).toHaveBeenCalledWith(EDIT_RECORD_KEY, 1);
+            expect(WindowHistoryUtils.pushWithQuery).toHaveBeenCalledWith(EDIT_RECORD_KEY, 1);
             expect(mockParentMethods.openRecord).toHaveBeenCalledWith(1, null, null);
         });
     });
