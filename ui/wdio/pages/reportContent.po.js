@@ -134,9 +134,6 @@
             //wait until you see tables leftNav links labels
             browser.element('.tablesHeadingAndList .tablesList .leftNavLink').waitForVisible();
             //wait until text is shown up on leftNavLinks.Selected table is not loaded until all table properties are available
-            //while (browser.element('.tablesList .leftNavLink .leftNavLabel').getAttribute('textContent').length === 0) {
-            //    browser.pause(e2eConsts.shortWaitTimeMs);
-            //}
             return browser.waitForText('.tablesList .leftNavLink .leftNavLabel', e2eConsts.extraLongWaitTimeMs);
         }},
 

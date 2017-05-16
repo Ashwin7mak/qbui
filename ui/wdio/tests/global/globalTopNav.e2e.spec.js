@@ -37,7 +37,10 @@
             });
         });
         it('Visibility and usability of topNav on Table homepage', function() {
-            RequestAppsPage.get(e2eBase.getRequestTableEndpoint(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1));
+            //select the App
+            RequestAppsPage.selectApp(testApp.name);
+            //select table
+            tableCreatePO.selectTable(testApp.tables[e2eConsts.TABLE1].name);
             reportContentPO.waitForLeftNavLoaded();
             TopNavPO.topNavToggleHamburgerEl.waitForVisible();
             //Step1: Verify if the global icons are displayed
