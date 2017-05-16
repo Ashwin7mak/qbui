@@ -24,6 +24,7 @@ import {APP_ROUTE, EDIT_RECORD_KEY} from '../../constants/urlConstants';
 import {CONTEXT} from '../../actions/context';
 import SaveOrCancelFooter from '../saveOrCancelFooter/saveOrCancelFooter';
 import {getPendEdits, getRecord} from '../../reducers/record';
+import {getRecordTitle} from '../../utils/formUtils';
 import './recordTrowser.scss';
 import {NEW_RECORD_VALUE} from "../../constants/urlConstants";
 
@@ -394,13 +395,14 @@ export const RecordTrowser = React.createClass({
 
         let record = this.getRecordFromProps(this.props);
 
-        const showBack = !!(record.previousRecordId !== null);
-        const showNext = !!(record.nextRecordId !== null);
+        const showBack = !!(record.previousRecordId);
+        const showNext = !!(record.nextRecordId);
 
-        const recordName = this.props.selectedTable && this.props.selectedTable.name;
+        let relatedRecord =  _.has(this.props, 'editForm.formData.record') ? this.props.editForm.formData.record : null;
+        let recordName = getRecordTitle(this.props.selectedTable, relatedRecord, this.props.recId);
 
-        let title = this.props.recId === SchemaConsts.UNSAVED_RECORD_ID ? <span><I18nMessage message="nav.new"/><span>&nbsp;{table ? table.name : ""}</span></span> :
-            <span>{recordName} #{this.props.recId}</span>;
+        let title = this.props.recId === SchemaConsts.UNSAVED_RECORD_ID ? <span><I18nMessage message="nav.new"/><span>&nbsp;{recordName}</span></span> :
+            <span>{recordName}</span>;
 
 
         return (

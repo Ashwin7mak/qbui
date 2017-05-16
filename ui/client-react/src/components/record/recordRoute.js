@@ -33,6 +33,7 @@ import {getRecord} from '../../reducers/record';
 import './record.scss';
 import withUniqueId from '../hoc/withUniqueId';
 import DrawerContainer from '../drawer/drawerContainer';
+import {getRecordTitle} from '../../utils/formUtils';
 
 let logger = new Logger();
 let FluxMixin = Fluxxor.FluxMixin(React);
@@ -243,12 +244,16 @@ export const RecordRoute = React.createClass({
         }
     },
 
-    getTitle(recIdTitle, tableName) {
+    getTitle(recIdTitle) {
+        let form = this.getFormFromProps();
+        let record = form && form.formData ? form.formData.record : null;
         const recordId = recIdTitle || this.props.match.params.recordId;
         const isSmall = Breakpoints.isSmallBreakpoint();
+        let table = this.getSelectedTable(this.props.match.params.tblId);
+        let recordTitle = getRecordTitle(table, record, recordId);
         return <div className="title">
             {isSmall ? <Icon iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY} classes="primaryIcon" icon={this.props.selectedTable ? this.props.selectedTable.tableIcon : ""}/> : null}
-            <span> {tableName} # {recordId}</span></div>;
+            <span> {recordTitle}</span></div>;
     },
 
     /**
@@ -329,7 +334,7 @@ export const RecordRoute = React.createClass({
                             <Button className="iconActionButton nextRecord" disabled={true} onClick={this.nextRecord}><QBicon icon="caret-filled-right"/></Button>}
                     </div> }
 
-                    {this.getTitle(recordIdTitle, tableName)}
+                    {this.getTitle(recordIdTitle, record)}
 
                 </div>
             </div>);
