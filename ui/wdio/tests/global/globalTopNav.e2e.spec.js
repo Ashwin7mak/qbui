@@ -9,6 +9,7 @@
     let reportContentPO = requirePO('reportContent');
     var RequestAppsPage = requirePO('requestApps');
     var UsersTablePage = requirePO('usersTable');
+    var tableCreatePO = requirePO('tableCreate');
 
     describe('Reports Page - TopNav Tests: ', function() {
         var realmName;
@@ -36,10 +37,15 @@
             });
         });
         it('Visibility and usability of topNav on Table homepage', function() {
-            RequestAppsPage.get(e2eBase.getRequestTableEndpoint(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1));
+            //select the App
+            RequestAppsPage.selectApp(testApp.name);
+            //select table
+            tableCreatePO.selectTable(testApp.tables[e2eConsts.TABLE1].name);
+            reportContentPO.waitForLeftNavLoaded();
             TopNavPO.topNavToggleHamburgerEl.waitForVisible();
             //Step1: Verify if the global icons are displayed
             TopNavPO.topNavGlobalActDivEl.waitForVisible();
+            reportContentPO.settingsIcon.waitForVisible();
             //Step2: Verify the no.of global action icons
             expect(TopNavPO.topNavGlobalActionsListEl.value.length).toBe(4);
             //Step3: Verify the presence of Feedback and Report issue buttons
@@ -58,9 +64,11 @@
         });
         it('Visibility of topNav on Report homepage', function() {
             RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1));
+            reportContentPO.waitForLeftNavLoaded();
             TopNavPO.topNavToggleHamburgerEl.waitForVisible();
             //Step1: Verify if the global icons are displayed
             TopNavPO.topNavGlobalActDivEl.waitForVisible();
+            reportContentPO.settingsIcon.waitForVisible();
             //Step2: Verify the no.of global action icons
             expect(TopNavPO.topNavGlobalActionsListEl.value.length).toBe(4);
         });
@@ -70,6 +78,7 @@
             TopNavPO.topNavToggleHamburgerEl.waitForVisible();
             //Step1: Verify if the global icons are displayed
             TopNavPO.topNavGlobalActDivEl.waitForVisible();
+            reportContentPO.settingsIcon.waitForVisible();
             //Step2: Verify the no.of global action icons
             expect(TopNavPO.topNavGlobalActionsListEl.value.length).toBe(4);
         });
@@ -78,6 +87,7 @@
             TopNavPO.topNavToggleHamburgerEl.waitForVisible();
             //Step1: Verify if the global icons are displayed
             TopNavPO.topNavGlobalActDivEl.waitForVisible();
+            reportContentPO.settingsIcon.waitForVisible();
             //Step2: Verify the no.of global action icons
             expect(TopNavPO.topNavGlobalActionsListEl.value.length).toBe(4);
 
