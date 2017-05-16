@@ -128,6 +128,10 @@ DrawerContainer.propTypes = {
     rootDrawer: PropTypes.bool,
     /** function to call when the user clicks on the backdrop, all drawers should close when called */
     closeDrawer: PropTypes.func,
+    /** the router match prop for the parent of drawerContainer, we expand on the parent's route */
+    match: PropTypes.shape({
+        url: PropTypes.string
+    }).isRequired,
     /** the path-string to add on to the current url */
     pathToAdd: PropTypes.string.isRequired,
     /** direction to slide in/out the drawer */
@@ -136,4 +140,4 @@ DrawerContainer.propTypes = {
     renderBackdrop: PropTypes.bool
 };
 
-export default withRouter(DrawerContainer);
+export default DrawerContainer;

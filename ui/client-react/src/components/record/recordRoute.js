@@ -414,6 +414,7 @@ export const RecordRoute = React.createClass({
                 {...this.props}
                 rootDrawer={!this.props.isDrawerContext}
                 closeDrawer={this.closeDrawer}
+                match={this.props.match}
                 />);
     },
 
@@ -571,6 +572,7 @@ export const RecordRoute = React.createClass({
                         <ReportInDrawer
                             rootDrawer={!this.props.isDrawerContext}
                             closeDrawer={this.closeDrawer}
+                            match={this.props.match}
                         />}
 
                     {!formLoadingErrorStatus && this.getDrawerContainer()}

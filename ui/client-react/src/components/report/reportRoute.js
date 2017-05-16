@@ -142,6 +142,7 @@ const ReportRoute = React.createClass({
                 renderBackdrop={false}
                 rootDrawer={!this.props.isDrawerContext}
                 closeDrawer={this.closeDrawer}
+                match={this.props.match}
                 pathToAdd="/sr_app_:appId([A-Za-z0-9]+)_table_:tblId([A-Za-z0-9]+)_report_:rptId([A-Za-z0-9]+)_record_:recordId([A-Za-z0-9]+)"
             />);
     },

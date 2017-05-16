@@ -10,9 +10,10 @@ import UrlUtils from '../../utils/urlUtils';
  */
 const ReportInDrawer = (props) => (
     <DrawerContainer
+        {...props}
         direction="bottom"
         renderBackdrop={false}
-        rootDrawer={!props.isDrawerContext}
+        match={props.match}
         pathToAdd={UrlUtils.getReportDrawerSegment(":appId([A-Za-z0-9]+)", ":tblId([A-Za-z0-9]+)", ":rptId([A-Za-z0-9]+)", ":detailKeyFid([A-Za-z0-9]+)", ":detailKeyValue([A-Z-a-z0-9 ]+)")}
     >
         <ReportRouteWithUniqueId
