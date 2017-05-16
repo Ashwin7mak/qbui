@@ -2,9 +2,9 @@ import * as types from "../actions/types";
 import _ from "lodash";
 
 /**
- * Manage array of automation states
+ * Manage automation states
  *
- * @param state - array of states
+ * @param state - automation state
  * @param action - event type
  * @returns {Array}
  */
