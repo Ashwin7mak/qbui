@@ -63,11 +63,6 @@ export class ReportFieldSelectMenu extends Component {
 
         return (
             <div className="fieldSelect">
-                <QBicon
-                    icon="close"
-                    onClick={() => this.props.closeFieldSelectMenu(CONTEXT.REPORT.NAV)}
-                    className="fieldSelectCloseIcon"
-                />
                 <div className="header">
                     {Locale.getMessage('report.drawer.title')}
                 </div>
@@ -90,8 +85,7 @@ export class ReportFieldSelectMenu extends Component {
             <SideMenuBase {...this.props}
                           baseClass="reportFieldSelectMenu"
                           sideMenuContent={content}
-                          isCollapsed={isCollapsed}
-                          isDocked={false}
+                          isCollapsed={false}
             />
         );
     }

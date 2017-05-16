@@ -3,7 +3,6 @@ import Stage from '../stage/stage';
 import Icon, {AVAILABLE_ICON_FONTS} from '../../../../reuse/client/src/components/icon/icon.js';
 import ReportStage from './reportStage';
 import ReportHeader from './reportHeader';
-import ReportSaveOrCancelFooter from '../reportBuilder/reportSaveOrCancelFooter';
 import IconActions from '../actions/iconActions';
 import {Link} from 'react-router-dom';
 import Logger from '../../utils/logger';
@@ -16,7 +15,6 @@ import Fluxxor from 'fluxxor';
 import _ from 'lodash';
 import './report.scss';
 import ReportToolsAndContent from '../report/reportToolsAndContent';
-import ReportFieldSelectMenu from './reportFieldSelectMenu';
 import {connect} from 'react-redux';
 import {clearSearchInput} from '../../actions/searchActions';
 import {loadReport, loadDynamicReport} from '../../actions/reportActions';
@@ -162,38 +160,30 @@ export const ReportRoute = React.createClass({
         } else {
             return (
                 <div className="reportContainer">
-                    <ReportFieldSelectMenu
-                        appId={this.props.match.params.appId}
-                        tblId={this.props.match.params.tblId}
+                    <Stage stageHeadline={this.getStageHeadline()}
+                           pageActions={this.getPageActions(5)}>
+                        <ReportStage reportData={this.props.reportData}/>
+                    </Stage>
+
+                    {this.getHeader()}
+
+                    <ReportToolsAndContent
+                        params={this.props.match.params}
                         reportData={this.props.reportData}
-                        pullRight>
-
-                        <Stage stageHeadline={this.getStageHeadline()}
-                               pageActions={this.getPageActions(5)}>
-                            <ReportStage reportData={this.props.reportData}/>
-                        </Stage>
-
-                        {this.getHeader()}
-
-                        <ReportToolsAndContent
-                            params={this.props.match.params}
-                            reportData={this.props.reportData}
-                            appUsers={this.props.appUsers}
-                            pendEdits={this.props.pendEdits}
-                            isRowPopUpMenuOpen={this.props.isRowPopUpMenuOpen}
-                            routeParams={this.props.match.params}
-                            selectedAppId={this.props.selectedAppId}
-                            selectedTable={this.props.selectedTable}
-                            searchStringForFiltering={this.props.reportData.searchStringForFiltering}
-                            pageActions={this.getPageActions(0)}
-                            nameForRecords={this.nameForRecords}
-                            selectedRows={this.props.reportData.selectedRows}
-                            scrollingReport={this.props.scrollingReport}
-                            loadDynamicReport={this.loadDynamicReport}
-                            noRowsUI={true}
-                        />
-
-                    </ReportFieldSelectMenu>
+                        appUsers={this.props.appUsers}
+                        pendEdits={this.props.pendEdits}
+                        isRowPopUpMenuOpen={this.props.isRowPopUpMenuOpen}
+                        routeParams={this.props.match.params}
+                        selectedAppId={this.props.selectedAppId}
+                        selectedTable={this.props.selectedTable}
+                        searchStringForFiltering={this.props.reportData.searchStringForFiltering}
+                        pageActions={this.getPageActions(0)}
+                        nameForRecords={this.nameForRecords}
+                        selectedRows={this.props.reportData.selectedRows}
+                        scrollingReport={this.props.scrollingReport}
+                        loadDynamicReport={this.loadDynamicReport}
+                        noRowsUI={true}
+                    />
 
                 </div>
             );
