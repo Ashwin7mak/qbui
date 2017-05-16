@@ -121,4 +121,9 @@ describe('Test fields reducer', () => {
         const state = reducer([], event(appId, tblId, types.LOAD_FIELDS_SUCCESS, {fields}));
         expect(getField({fields: state}, field.id, appId, tblId)).toEqual(field);
     });
+
+    it('sets isPendingEdit to false', () => {
+        const state = reducer([], event(appId, tblId, types.SAVING_FORM));
+        expect(state[0].isPendingEdit).toEqual(false);
+    });
 });

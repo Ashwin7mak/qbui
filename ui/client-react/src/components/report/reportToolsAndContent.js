@@ -17,7 +17,7 @@ import StringUtils from '../../utils/stringUtils';
 import * as query from '../../constants/query';
 import FieldUtils from '../../utils/fieldUtils';
 import ReportUtils from '../../utils/reportUtils';
-import WindowLocationUtils from '../../utils/windowLocationUtils';
+import {WindowHistoryUtils} from '../../utils/windowHistoryUtils';
 import * as Constants from "../../../../common/src/constants";
 import ReportContentError from './dataTable/reportContentError';
 import {connect} from 'react-redux';
@@ -317,7 +317,7 @@ export const UnconnectedReportToolsAndContent = React.createClass({
         //flux.actions.editNewRecord();
 
         //this.props.dispatch(editNewRecord(false));
-        WindowLocationUtils.pushWithQuery(EDIT_RECORD_KEY, NEW_RECORD_VALUE);
+        WindowHistoryUtils.pushWithQuery(EDIT_RECORD_KEY, NEW_RECORD_VALUE);
     },
 
     render() {
