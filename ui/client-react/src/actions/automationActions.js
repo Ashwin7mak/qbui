@@ -38,7 +38,7 @@ export const loadAutomations = (context, appId) => {
     // (this is permitted when we're using redux-thunk middleware which invokes the store dispatch)
     return (dispatch) => {
         return new Promise((resolve, reject) => {
-            if (appId) {
+            if (context && appId) {
                 logger.debug(`AutomationsAction.loadAutomations: loading automation list for appId: ${appId}`);
 
                 dispatch(event(context, types.LOAD_AUTOMATIONS, {appId}));
@@ -51,11 +51,12 @@ export const loadAutomations = (context, appId) => {
                         let model = AutomationsModel.set(appId, response.data);
                         dispatch(event(context, types.LOAD_AUTOMATIONS_SUCCESS, model));
                         resolve();
-                    }).catch((error) => {
-                    logger.parseAndLogError(LogLevel.ERROR, error.response, 'automationService.getAutomations:');
-                    dispatch(event(context, types.LOAD_AUTOMATIONS_FAILED, error));
-                    reject();
-                });
+                    })
+                    .catch((error) => {
+                        logger.parseAndLogError(LogLevel.ERROR, error.response, 'automationService.getAutomations:');
+                        dispatch(event(context, types.LOAD_AUTOMATIONS_FAILED, error));
+                        reject();
+                    });
             } else {
                 logger.error(`automationService.getAutomations: Missing required input parameters.  appId: ${appId}`);
                 dispatch(event(null, types.LOAD_AUTOMATIONS_FAILED, 500));
