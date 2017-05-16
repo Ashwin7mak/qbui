@@ -3,9 +3,13 @@ import {connect} from 'react-redux';
 import _ from 'lodash';
 import {DragDropContext} from 'react-dnd';
 import TouchBackend from 'react-dnd-touch-backend';
-import ToolPalette from './builderMenus/toolPalette';
+import ReportColumnTransformer from '../dataTable/reportGrid/reportColumnTransformer';
+import ReportRowTransformer from '../dataTable/reportGrid/reportRowTransformer';
+import ReportColumnHeaderMenu from '../dataTable/reportGrid/reportColumnHeaderMenu';
 import ReportFieldSelectMenu from '../reportBuilder/reportFieldSelectMenu';
 import ReportSaveOrCancelFooter from '../reportBuilder/reportSaveOrCancelFooter';
+import QbGrid from '../dataTable/qbGrid/qbGrid';
+import ReportCell from '../dataTable/reportGrid/reportCell';
 import {CONTEXT} from '../../actions/context';
 import {exitBuilderMode, closeFieldSelectMenu} from '../../actions/reportBuilderActions';
 
@@ -21,15 +25,39 @@ export class ReportBuilderContainer extends Component {
         return <ReportSaveOrCancelFooter appId={appId} tblId={tblId}/>;
     };
 
+    isOnlyOneColumnVisible(columns) {
+        return columns.filter(column => {
+                return !column.isHidden && !column.isPlaceholder;
+            }).length === 1;
+    };
+
     render() {
-        let {appId, tblId} = this.props.match.params;
+        let {appId, tblId, rptId} = this.props.match.params;
+        let {columns, records, sortFids} = this.props.reportData.data;
+        let transformedColumns = ReportColumnTransformer.transformColumnsForGrid(columns);
+        let transformedRows = ReportRowTransformer.transformRecordsForGrid(records, columns);
         return (
             <div className="reportBuilderContainer">
                 <ReportFieldSelectMenu
                     appId={appId}
                     tblId={tblId}
                     reportData={this.props.reportData}>
-                    <h1>Hello!</h1>
+                    <QbGrid
+                        numberOfColumns={columns.length}
+                        columns={transformedColumns}
+                        rows={transformedRows}
+                        isDraggable={true}
+                        cellRenderer={ReportCell}
+                        menuComponent={ReportColumnHeaderMenu}
+                        showRowActionsColumn={false}
+                        menuProps={{
+                            appId: appId,
+                            tblId: tblId,
+                            rptId: rptId,
+                            sortFids: sortFids,
+                            isOnlyOneColumnVisible: this.isOnlyOneColumnVisible(columns)
+                        }}
+                    />
                 </ReportFieldSelectMenu>
                 {this.getSaveOrCancelFooter()}
             </div>
