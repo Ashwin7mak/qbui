@@ -8,7 +8,7 @@ const boolColumnProps = {
 };
 
 // Column Definitions
-const columns = [
+const columns = () => [
     {
         property: 'firstName',
         header: {
@@ -235,7 +235,7 @@ const columns = [
 ];
 
 export const GetAccountUsersGridColumns = (hasAccountAdmin, hasRealmAdmin) => {
-    return _.filter(columns, (c) => {
+    return _.filter(columns(), (c) => {
         if (c.internalQbProps) {
             if (c.internalQbProps.forAccountAdminOnly && !hasAccountAdmin) {
                 return false;

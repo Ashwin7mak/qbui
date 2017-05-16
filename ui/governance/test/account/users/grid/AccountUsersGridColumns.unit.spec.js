@@ -1,5 +1,5 @@
 import React from "react";
-import {mount, shallow} from "enzyme";
+import {mount} from "enzyme";
 import moment from "moment";
 import jasmineEnzyme from "jasmine-enzyme";
 import QbHeaderCell from "../../../../../client-react/src/components/dataTable/qbGrid/qbHeaderCell";
@@ -10,18 +10,21 @@ import StandardGrid from "../../../../src/common/grid/standardGrid";
 import * as Actions from "../../../../src/account/users/AccountUsersActions";
 import {GetAccountUsersGridColumns} from "../../../../src/account/users/grid/AccountUsersGridColumns";
 import {GetFacetFields} from "../../../../src/account/users/grid/AccountUsersGridFacet";
-
 import GovernanceBundleLoader from '../../../../src/locales/governanceBundleLoader';
 import Locale from '../../../../../reuse/client/src/locales/locale';
 
-GovernanceBundleLoader.changeLocale('en-us');
-
 const mockStore = configureMockStore();
 
-describe('AccountUsersGridColumns', () => {
+fdescribe('AccountUsersGridColumns', () => {
     beforeEach(() => {
         jasmineEnzyme();
+        GovernanceBundleLoader.changeLocale('en-us');
     });
+
+    afterEach(() => {
+        GovernanceBundleLoader.changeLocale('en-us');
+    });
+
     const GRID_ID = 'accountUsers';
     const baseProps = {
         columns : GetAccountUsersGridColumns(true, true),
@@ -36,6 +39,8 @@ describe('AccountUsersGridColumns', () => {
     describe("Permissions", () => {
 
         it("should show all the headers", ()=> {
+            GovernanceBundleLoader.changeLocale('en-us');
+
             let props = {...baseProps,
                 columns: GetAccountUsersGridColumns(true, true)};
 
@@ -48,6 +53,8 @@ describe('AccountUsersGridColumns', () => {
         });
 
         it("should show the correct set of headers when not account admin", () => {
+            GovernanceBundleLoader.changeLocale('en-us');
+
             let props = {
                 ...baseProps,
                 columns: GetAccountUsersGridColumns(false, true),
@@ -62,6 +69,8 @@ describe('AccountUsersGridColumns', () => {
         });
 
         it("should show the correct set of headers when not a realm admin", ()=> {
+            GovernanceBundleLoader.changeLocale('en-us');
+
             let props = {
                 ...baseProps,
                 columns: GetAccountUsersGridColumns(true, false),
