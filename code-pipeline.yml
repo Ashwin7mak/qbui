@@ -77,6 +77,8 @@ Resources:
               - ecr:GetDownloadUrlForLayer
               - ecr:BatchGetImage
               - ecr:BatchCheckLayerAvailability
+              - ecr:ListImages
+              - ecr:DescribeImages
 
   CodePipeline:
     Type: AWS::CodePipeline::Pipeline
@@ -158,7 +160,8 @@ Resources:
                   {
                     "ContainerImage" : { "Fn::GetParam" : [ "build-artifacts", "build.json", "image" ] },
                     "SwimlaneID": "INT1",
-                    "Environment": "int"
+                    "Environment": "int",
+                    "LegacyBase": ".currentstack-int.quickbaserocks.com"
                   }
               InputArtifacts:
                 - Name: build-artifacts
@@ -181,7 +184,8 @@ Resources:
                  {
                     "ContainerImage" : { "Fn::GetParam" : [ "build-artifacts", "build.json", "image" ] },
                     "SwimlaneID": "PROD1",
-                    "Environment": "prod"
+                    "Environment": "prod",
+                    "LegacyBase": ".quickbase.com"
                  }
               InputArtifacts:
                 - Name: build-artifacts

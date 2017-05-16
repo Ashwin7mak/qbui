@@ -3,12 +3,13 @@ import Stage from '../stage/stage';
 import Icon, {AVAILABLE_ICON_FONTS} from '../../../../reuse/client/src/components/icon/icon.js';
 import ReportStage from './reportStage';
 import ReportHeader from './reportHeader';
+import ReportSaveOrCancelFooter from '../reportBuilder/reportSaveOrCancelFooter';
 import IconActions from '../actions/iconActions';
 import {Link, withRouter} from 'react-router-dom';
 import Logger from '../../utils/logger';
 import QueryUtils from '../../utils/queryUtils';
 import NumberUtils from '../../utils/numberUtils';
-import WindowLocationUtils from '../../utils/windowLocationUtils';
+import {WindowHistoryUtils} from '../../utils/windowHistoryUtils';
 import UrlUtils from '../../utils/urlUtils';
 import Breakpoints from '../../utils/breakpoints';
 import simpleStringify from '../../../../common/src/simpleStringify';
@@ -160,7 +161,7 @@ export const ReportRoute = React.createClass({
      * @param data row record data
      */
     editNewRecord() {
-        WindowLocationUtils.pushWithQuery(EDIT_RECORD_KEY, NEW_RECORD_VALUE);
+        WindowHistoryUtils.pushWithQuery(EDIT_RECORD_KEY, NEW_RECORD_VALUE);
     },
 
     getPageActions(maxButtonsBeforeMenu) {
@@ -191,6 +192,7 @@ export const ReportRoute = React.createClass({
     },
 
     render() {
+        let inBuilderMode = this.props.reportBuilder.inBuilderMode;
         if (_.isUndefined(this.props.match.params) ||
             _.isUndefined(this.props.match.params.appId) ||
             _.isUndefined(this.props.match.params.tblId) ||
@@ -237,22 +239,16 @@ export const ReportRoute = React.createClass({
                         />
 
                     </ReportFieldSelectMenu>
+
+                    {inBuilderMode &&
+                        <ReportSaveOrCancelFooter />}
+
                     {this.props.isDrawerContext && this.getDrawerContainer()}
                 </div>
             );
         }
     }
 });
-
-// instead of relying on our parent route component to pass our props down,
-// the react-redux container will generate the required props for this route
-// from the Redux state (the presentational component has no code dependency on Redux!)
-const mapStateToProps = (state, ownProps) => {
-    return {
-        reportData: ownProps.reportData || getEmbeddedReportByContext(state.embeddedReports, ownProps.uniqueId),
-        embeddedReports: state.embeddedReports
-    };
-};
 
 const mapDispatchToProps = (dispatch) => {
     return {
@@ -271,8 +267,15 @@ const mapDispatchToProps = (dispatch) => {
     };
 };
 
+const mapStateToProps = (state) => {
+    return {
+        reportBuilder: state.reportBuilder,
+        reportData: ownProps.reportData || getEmbeddedReportByContext(state.embeddedReports, ownProps.uniqueId),
+        embeddedReports: state.embeddedReports
+    };
+};
+
 const ConnectedReportRoute = withRouter(connect(mapStateToProps, mapDispatchToProps)(ReportRoute));
 export default ConnectedReportRoute;
 
-// TODO: context is not embedded, use DRAWER
 export const ReportRouteWithUniqueId = withUniqueId(ConnectedReportRoute, CONTEXT.REPORT.EMBEDDED);

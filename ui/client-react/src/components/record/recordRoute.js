@@ -17,7 +17,7 @@ import Loader from 'react-loader';
 import RecordHeader from './recordHeader';
 import {UnloadableNode} from '../../components/hoc/unloadable';
 import Breakpoints from '../../utils/breakpoints';
-import WindowLocationUtils from '../../utils/windowLocationUtils';
+import {WindowHistoryUtils} from '../../utils/windowHistoryUtils';
 import AutomationUtils from '../../utils/automationUtils';
 import * as SpinnerConfigurations from '../../constants/spinnerConfigurations';
 import * as UrlConsts from "../../constants/urlConstants";
@@ -36,6 +36,7 @@ import withUniqueId from '../hoc/withUniqueId';
 
 import RecordInDrawer from '../drawer/recordInDrawer';
 import ReportInDrawer from '../drawer/reportInDrawer';
+import {getRecordTitle} from '../../utils/formUtils';
 
 let logger = new Logger();
 let FluxMixin = Fluxxor.FluxMixin(React);
@@ -246,12 +247,16 @@ export const RecordRoute = React.createClass({
         }
     },
 
-    getTitle(recIdTitle, tableName) {
+    getTitle(recIdTitle) {
+        let form = this.getFormFromProps();
+        let record = form && form.formData ? form.formData.record : null;
         const recordId = recIdTitle || this.props.match.params.recordId;
         const isSmall = Breakpoints.isSmallBreakpoint();
+        let table = this.getSelectedTable(this.props.match.params.tblId);
+        let recordTitle = getRecordTitle(table, record, recordId);
         return <div className="title">
             {isSmall ? <Icon iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY} classes="primaryIcon" icon={this.props.selectedTable ? this.props.selectedTable.tableIcon : ""}/> : null}
-            <span> {tableName} # {recordId}</span></div>;
+            <span> {recordTitle}</span></div>;
     },
 
     /**
@@ -332,7 +337,7 @@ export const RecordRoute = React.createClass({
                             <Button className="iconActionButton nextRecord" disabled={true} onClick={this.nextRecord}><QBicon icon="caret-filled-right"/></Button>}
                     </div> }
 
-                    {this.getTitle(recordIdTitle, tableName)}
+                    {this.getTitle(recordIdTitle, record)}
 
                 </div>
             </div>);
@@ -351,7 +356,7 @@ export const RecordRoute = React.createClass({
         const recordId = +this.props.match.params.recordId;
         this.navigateToRecord(recordId);
 
-        WindowLocationUtils.pushWithQuery(EDIT_RECORD_KEY, recordId);
+        WindowHistoryUtils.pushWithQuery(EDIT_RECORD_KEY, recordId);
     },
 
     isAutomationEnabled() {
@@ -382,7 +387,7 @@ export const RecordRoute = React.createClass({
      * @param data row record data
      */
     editNewRecord() {
-        WindowLocationUtils.pushWithQuery(EDIT_RECORD_KEY, UrlConsts.NEW_RECORD_VALUE);
+        WindowHistoryUtils.pushWithQuery(EDIT_RECORD_KEY, UrlConsts.NEW_RECORD_VALUE);
     },
 
     getPageActions() {

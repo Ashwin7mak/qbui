@@ -10,9 +10,11 @@
  */
 
 .reportFieldSelectMenuBase {
-    height: 100%;
     width: 100%;
     position: relative;
+    display: flex;
+    flex: 1 auto;
+    height: 100%;
 
     .fieldSelectCloseIcon {
         margin-left: 90%;
@@ -54,7 +56,8 @@
             position: relative;
             flex: 1 auto;
             overflow: auto;
-            height: 100%;
+            display: flex;
+            flex-direction: column;
 
             .smallBreakPoint & {
                 display: flex;

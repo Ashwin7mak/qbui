@@ -27,6 +27,10 @@ import Logger from "../utils/logger";
 import {APPS_ROUTE, APP_ROUTE, BUILDER_ROUTE, ADMIN_ROUTE, SETTINGS_ROUTE} from '../constants/urlConstants';
 
 import {editRecordCancel, createRecord, updateRecord} from '../actions/recordActions';
+import {showErrorMsgDialog, hideTrowser} from '../actions/shellActions';
+import {updateForm, saveFormComplete, setFormBuilderPendingEditToFalse} from '../actions/formActions';
+import {setFieldsPropertiesPendingEditToFalse} from '../actions/fieldsActions';
+import {getNavReport} from '../reducers/report';
 
 import "react-fastclick";
 
@@ -43,9 +47,16 @@ PerfLogUtils.setLogger(logger);
 
 const store = createAppStore();
 let storeFunc = {
-    editRecordCancel: editRecordCancel,
-    createRecord: createRecord,
-    updateRecord: updateRecord
+    editRecordCancel,
+    createRecord,
+    updateRecord,
+    hideTrowser,
+    updateForm,
+    saveFormComplete,
+    showErrorMsgDialog,
+    getNavReport,
+    setFieldsPropertiesPendingEditToFalse,
+    setFormBuilderPendingEditToFalse
 };
 //  pass references to redux store and methods called within the appHistory component
 let history = AppHistory.setup(store, storeFunc).history;
