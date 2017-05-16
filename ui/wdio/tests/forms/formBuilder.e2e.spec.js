@@ -48,6 +48,10 @@
             return formBuilderPO.open();
         });
 
+        afterEach(function() {
+            formBuilderPO.cancel();
+        });
+
         // disabled
         xit('select a field via KB, add a new field via KB, verify new field is added directly below selection', function() {
             //TODO: disabled pending MC-1424: Keyboard Nav for Adding New Field & ESC key enhancements
@@ -59,7 +63,7 @@
                 'Shift'] // release mod key
             );
             // verify that the field is still selected
-            expect(formBuilderPO.selectedField.getText()).toEqual(selectedField);
+            expect(formBuilderPO.getSelectedFieldLabel()).toEqual(selectedField);
             // TODO: select/add a new field via keyboard & verify that is inserted directly below the selected field
         });
 
@@ -99,6 +103,9 @@
             formBuilderPO.selectFieldByIndex(1);
             // add the first new field item to the form
             newField.click();
+            // browser.waitUntil(function() {
+            //     return formBuilderPO.getFieldLabels().length !== origFields.length;
+            // }, formBuilderPO.fiveSeconds, 'Expected # of fields to change after adding field');
             browser.pause(formBuilderPO.oneSecond);
             // verify that the new row has the expected label
             expect(formBuilderPO.getFieldLabels()[1]).toBe(newFieldLabel);
@@ -120,7 +127,11 @@
             formBuilderPO.fieldTokenDragging.waitForExist();
             expect(formBuilderPO.fieldTokenDragging.getText()).toEqual(label.replace('* ', ''));
             // drag back to source & drop
-            browser.moveToObject(source);
+            browser.pause(formBuilderPO.oneSecond);
+            browser.moveToObject(source + ' .fieldLabel', 5, 5);
+            browser.pause(formBuilderPO.oneSecond);
+            browser.buttonUp();
+            browser.buttonDown();
             browser.buttonUp();
             browser.pause(formBuilderPO.fiveSeconds);
             expect(formBuilderPO.getFieldLabels()).toEqual(origFields);
@@ -360,5 +371,6 @@
             formBuilderPO.save().open();
             expect(formBuilderPO.getFieldLabels()).not.toContain(deletedField);
         });
+
     });
 }());

@@ -7,7 +7,7 @@ class formBuilderPage {
 
     get cancelBtn() {
         // CANCEL (form) button in footer bar
-        return browser.element('.mainTrowserFooterButton');
+        return browser.element('.alternativeTrowserFooterButton');
     }
 
     get clearSearch() {
@@ -65,6 +65,11 @@ class formBuilderPage {
         return browser.element('.listOfElementsItem');
     }
 
+    get modalDismiss() {
+        // DON'T SAVE button in the SAVE CHANGES? dlg
+        return browser.element('.modal-dialog .middleButton');
+    }
+
     get requiredCheckboxChecked() {
         // The MUST BE FILLED IN checkbox in its CHECKED state
         return browser.element('.checkboxPropertyContainer .checkbox:checked');
@@ -103,6 +108,25 @@ class formBuilderPage {
     cancel() {
         // Clicks on CANCEL in the form builder and waits for the next page to render
         this.cancelBtn.click();
+        return this.dirtyForm_Dismiss();
+    }
+
+    dirtyForm_Dismiss() {
+        try { // browser's LEAVE THIS PAGE? dlg
+            browser.alertDismiss();
+        } catch (err) {
+            browser.logger.info('no alert after CANCEL');
+        }
+        try { // modal SAVE CHANGES? dlg
+            this.modalDismiss.click();
+            browser.pause(this.oneSecond);
+            if (this.modalDismiss.isExisting()) {
+                browser.logger.info("first click on DON'T SAVE didn't do the trick; trying again");
+                this.modalDismiss.click();
+            }
+        } catch (err) {
+            browser.logger.info('no modal after CANCEL');
+        }
         return this;
     }
 
@@ -113,17 +137,21 @@ class formBuilderPage {
 
     getFieldLabels() {
          // Gets the list of field labels from the form builder
-        this.waitForReady();
-        this.firstField.waitForExist();
         let fields = browser.elements('.field');
-        return fields.value.map(function(field) {
-            let label = field.element('.fieldLabel').getText();
-            if (label === '') {
-                // checkbox labels are in a different child
-                label = field.element('.label').getText();
-            }
-            return label;
-        });
+        try {
+            return fields.value.map(function(field) {
+                let label = field.element('.fieldLabel').getText();
+                if (label === '') {
+                    // checkbox labels are in a different child
+                    label = field.element('.label').getText();
+                }
+                return label;
+            });
+        } catch (err) {
+            // browser.pause(this.fiveSeconds);
+            browser.pause(this.oneSecond);
+            return this.getFieldLabels();
+        }
     }
 
     getNewFieldLabels() {
@@ -132,6 +160,11 @@ class formBuilderPage {
         return labelEls.value.map(function(labelEl) {
             return labelEl.getText();
         });
+    }
+
+    getSelectedFieldLabel() {
+        // Finds the parent of '.selectedFormElement' & returns its text
+        return this.selectedField.element('./..').getText();
     }
 
     moveByName(source, target) {
@@ -150,6 +183,7 @@ class formBuilderPage {
         topNavPO.modifyThisForm.waitForExist();
         topNavPO.modifyThisForm.click();
         this.firstField.waitForExist();
+        browser.pause(this.fiveSeconds);
         return this.getFieldLabels(); // better than pause?
     }
 
@@ -175,7 +209,7 @@ class formBuilderPage {
         let deletedFieldName = field.getText();
         browser.moveToObject(fieldLocator + ' .fieldLabel');
         browser.pause(oneSecond);
-        field.element('.deleteFieldIcon').click();
+        field.element('.deleteFieldIcon .qbIcon').click();
         browser.pause(oneSecond);
         return deletedFieldName;
     }
@@ -205,7 +239,7 @@ class formBuilderPage {
         // Selects the field at the specified index and verifies that it is reflected in the properties panel
         let field = this.getFieldLocator(index);
         // this click shouldn't be necessary, but it helps w/Edge?  todo: Reverify...
-        browser.element(field).click();
+        // browser.element(field).click();
         browser.moveToObject(field, 5, 5);
         browser.buttonDown();
         browser.buttonUp();
@@ -225,17 +259,21 @@ class formBuilderPage {
 
     slowDragAndDrop(source, target) {
         // Clicks on the specified source field and drags it to the specified target field
-        browser.moveToObject(source, 5, 5);
+        let label = browser.element(source).getText();
+        browser.moveToObject(source);
         browser.buttonDown();
-        browser.pause(oneSecond);
+        browser.pause(this.oneSecond);
         // move to target & wait until preview appears
-        //this.slowDrag(target, label);
         browser.moveToObject(target);
+        browser.pause(this.oneSecond);
         // release button
-        browser.pause(fiveSeconds);
         browser.buttonUp();
+        browser.pause(this.oneSecond);
         // Chrome needs a click to release mouse btn - why?
-        this.selectedField.click();
+        browser.element(target).click();
+        browser.waitUntil(function() {
+            return browser.element(target).getText() === label;
+        }, this.fiveSeconds, 'Expected target label to match source label after swap');
         return this.getFieldLabels();
     }
 
@@ -253,7 +291,7 @@ class formBuilderPage {
         browser.keys(['Escape']); // defocus field
         browser.pause(oneSecond); // without delays, sometimes it gets stuck here (with builder focused)
         browser.keys(['Escape']); // close page
-        return this;
+        return this.dirtyForm_Dismiss();
     }
 
     KB_focusField(index) {
@@ -277,7 +315,7 @@ class formBuilderPage {
         // move field via keyboard
         let originalOrder = this.getFieldLabels();
         this.KB_selectField(sourceIndex);
-        let sourceField = this.selectedField.getText();
+        let sourceField = this.getSelectedFieldLabel();
         browser.keys(['Shift']);
         let arrowKey = sourceIndex < targetIndex ? 'ArrowDown' : 'ArrowUp';
         let distance = Math.abs(sourceIndex - targetIndex);
@@ -327,7 +365,7 @@ class formBuilderPage {
         browser.pause(oneSecond);
         browser.keys(['Enter']); // select field
         this.selectedField.waitForExist();
-        return this.selectedField.getText();
+        return this.getSelectedFieldLabel();
     }
 }
 module.exports = new formBuilderPage();
