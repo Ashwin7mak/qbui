@@ -59,7 +59,7 @@ let BuilderDropDownAction = React.createClass({
                                 <span><I18nMessage message={"settings.appHeader"}/></span>
                             </li>
                             <li>
-                                <a onClick={this.getAutomationSettingsLink}>
+                                <a onClick={this.getAutomationSettingsLink} className="modifyAutomationSettings">
                                     <I18nMessage message={"settings.automationSettings"}/>
                                 </a>
                             </li>
@@ -73,7 +73,7 @@ let BuilderDropDownAction = React.createClass({
                                 <span><I18nMessage message={"settings.tablesHeader"}/></span>
                             </li>
                             <li>
-                                <a onClick={this.getTableSettingsLink}>
+                                <a onClick={this.getTableSettingsLink} className="modifyTableSettings">
                                     <I18nMessage message={"settings.tableSettings"}/>
                                 </a>
                             </li>
@@ -86,7 +86,7 @@ let BuilderDropDownAction = React.createClass({
                                 <span><I18nMessage message={"settings.formsHeader"}/></span>
                             </li>
                             <li>
-                                <a onClick={this.props.navigateToBuilder}>
+                                <a onClick={this.props.navigateToBuilder} className="modifyForm">
                                     <I18nMessage message={"settings.configureFormBuilder"}/>
                                 </a>
                             </li>
