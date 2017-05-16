@@ -63,21 +63,18 @@
                 {fieldTitle: descFieldTitleText, fieldValue: rawValueGenerator.generateStringWithFixLength(50), placeHolder: 'Text to show when hovering over the table name in the left navigation'}
             ];
 
-            //Step 1 - get the original count of table links in the left nav
-            let originalTableLinksCount = tableCreatePO.getAllTableLeftNavLinksList.value.length;
-
-            //Step 2 - Click on new table button
+            //Step 1 - Click on new table button
             tableCreatePO.clickCreateNewTable();
 
-            //Step 3 - Verify table elements
+            //Step 2 - Verify table elements
             tableCreatePO.verifyTable();
 
-            //Step 4 - Choose an Icon from Icon picker
+            //Step 3 - Choose an Icon from Icon picker
             let iconChoosedClassName = tableCreatePO.selectRandomIconFromIconChooser();
             //Verify the choosed icon in closed combo
             tableCreatePO.verifyIconInIconChooserCombo(iconChoosedClassName);
 
-            //Step 5 - Enter table field values
+            //Step 4 - Enter table field values
             tableFields.forEach(function(tableField) {
                 //verify place holders for each table field
                 tableCreatePO.verifyTableFieldPlaceHolders(tableField.fieldTitle, tableField.placeHolder);
@@ -85,34 +82,25 @@
                 tableCreatePO.enterTableFieldValue(tableField.fieldTitle, tableField.fieldValue);
             });
 
-            //Step 6 - Click on finished button and make sure it landed in edit Form container page
+            //Step 5 - Click on finished button and make sure it landed in edit Form container page
             tableCreatePO.clickFinishedBtn();
 
-            //Step 7 - Verify the create table dialogue
+            //Step 6 - Verify the create table dialogue
             tableCreatePO.verifyNewTableCreateDialogue();
 
-            //Step 8 - Click OK button on create table dialogue
+            //Step 7 - Click OK button on create table dialogue
             tableCreatePO.clickOkBtn();
 
-            //Step 9 - Click on forms Cancel button
+            //Step 8 - Click on forms Cancel button
             formsPO.clickFormCancelBtn();
-            //wait until you see tableLists got loaded
-            browser.element('.tablesList').waitForVisible();
-            tableCreatePO.newTableBtn.waitForVisible();
 
-            //Step 10 - Get the new count of table links in the left nav
-            let newTableLinksCount = tableCreatePO.getAllTableLeftNavLinksList.value.length;
-
-            //Step 11 - Verify the table links count got increased by 1
-            expect(newTableLinksCount).toBe(originalTableLinksCount + 1);
-
-            //Step 12 - Select Table and make sure it lands in reports page
+            //Step 9 - Select Table and make sure it lands in reports page
             tableCreatePO.selectTable(tableName);
             //parse table ID from current browser URL; we need this to hit report endpoint for the table
             let currentURL = browser.getUrl();
             let tableId = currentURL.substring(currentURL.lastIndexOf("/") + 1, currentURL.length);
 
-            //Step 13 - make sure tableHomePage is visible
+            //Step 10 - make sure tableHomePage is visible
             ReportContentPO.addRecordButton.waitForVisible();
             //Verify 'Add a Record' button is enabled
             expect(browser.isEnabled('.tableHomePageInitial .addRecordButton')).toBeTruthy();
@@ -124,8 +112,13 @@
             expect(browser.element('.tableHomePageInitial .createTableLink').getAttribute('textContent')).toBe('Create another table');
             expect(browser.isEnabled('.tableHomePageInitial .createTableLink')).toBeTruthy();
 
-            //Step 14 - Load a report for the table and verify report elements
-            RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, testApp.id, tableId, 1));
+            //Step 11 - Load a report for the table and verify report elements
+            if (browserName === 'firefox') {
+                ReportContentPO.selectReport(tableName, 0);
+            }  else {
+                RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, testApp.id, tableId, 1));
+            }
+            ReportContentPO.waitForLeftNavLoaded();
             browser.element('.noRowsIcon').waitForVisible();
             expect(browser.element('.recordsCount').getAttribute('textContent')).toBe('0 records');
             expect(browser.element('.noRowsText').getAttribute('textContent')).toBe('There are no ' + tableName.toLowerCase() + ' to see right now.');

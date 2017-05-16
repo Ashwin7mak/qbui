@@ -79,6 +79,7 @@ describe('Relationships - View child table on form tests: ', () => {
     beforeEach(() => {
         // Navigate to Table 3, Report 1, Record 1
         reportContentPO.openRecordInViewMode(realmName, testApp.id, testApp.tables[e2eConsts.TABLE3].id, 1, 1);
+        reportContentPO.waitForLeftNavLoaded();
     });
 
     /**

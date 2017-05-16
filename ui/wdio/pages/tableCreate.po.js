@@ -150,11 +150,12 @@
          * @params tableName
          */
         selectTable: {value: function(tableName) {
-            //wait until you see tableLists got loaded
-            browser.waitForExist('.tablesList .leftNavLabel');
+            //wait until leftNav Loaded.Selected table is not loaded until all table properties are available
+            while (browser.element('.tablesList .leftNavLink .leftNavLabel').getAttribute('textContent').length === 0) {
+                browser.pause(e2eConsts.shortWaitTimeMs);
+            }
             //filter table names from leftNav links
             var results = this.getAllTableLeftNavLinksList.value.filter(function(table) {
-                console.log("the tables are: " + table.getAttribute('textContent'));
                 return table.getAttribute('textContent') === tableName;
             });
 
@@ -461,6 +462,8 @@
             this.settingsBtn.waitForVisible();
             //Click on settings gear Icon on table global actions
             this.settingsBtn.click();
+            //Need this for container to slide down
+            browser.pause(e2eConsts.shortWaitTimeMs);
             browser.elements('.configSet li').value.map(function(elm) {
                 liElements.push(elm.getAttribute('textContent'));
             });
