@@ -38,7 +38,8 @@ let FluxMixin = Fluxxor.FluxMixin(React);
  *
  * Note: this component has been partially migrated to Redux
  */
-const ReportRoute = React.createClass({
+// export for unit tests
+export const ReportRoute = React.createClass({
     mixins: [FluxMixin],
     nameForRecords: "Records",  // get from table meta data
 

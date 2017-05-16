@@ -1,8 +1,14 @@
 import React from 'react';
-import TestUtils from 'react-addons-test-utils';
+import {shallow, mount} from 'enzyme';
 import Fluxxor from 'fluxxor';
-import ReportRoute, {__RewireAPI__ as ReportRouteRewireAPI}  from '../../src/components/report/reportRoute';
+import {MemoryRouter} from 'react-router-dom';
+
+import ReportRoute, {
+    ReportRoute as UnconnectedReportRoute,
+    __RewireAPI__ as ReportRouteRewireAPI
+}  from '../../src/components/report/reportRoute';
 import FacetSelections  from '../../src/components/facet/facetSelections';
+
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import {Provider} from "react-redux";
@@ -10,7 +16,7 @@ import {Provider} from "react-redux";
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
 
-describe('ReportRoute functions', () => {
+describe('ReportRoute', () => {
     'use strict';
     const pendEdits = {};
     let component;
@@ -87,65 +93,103 @@ describe('ReportRoute functions', () => {
         ReportRouteRewireAPI.__ResetDependency__('ReportFieldSelectMenu');
     });
 
-    it('test render of component with url params', () => {
+    it('renders a component', () => {
         const initialState = {};
         const store = mockStore(initialState);
 
-        component = TestUtils.renderIntoDocument(
+        component = mount(
             <Provider store={store}>
-                <ReportRoute {...props} match={routeParams} reportData={reportDataParams.reportData} flux={flux} pendEdits={pendEdits}/>
+                <MemoryRouter>
+                    <ReportRoute {...props} reportData={reportDataParams.reportData} flux={flux} pendEdits={pendEdits}/>
+                </MemoryRouter>
             </Provider>);
-        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+        expect(component.find(ReportRoute).length).toEqual(1);
+    });
+
+    it('renders a report container with route match', () => {
+        const initialState = {};
+        const store = mockStore(initialState);
+
+        component = mount(
+            <Provider store={store}>
+                <UnconnectedReportRoute
+                    {...props}
+                    match={routeParams}
+                    reportData={reportDataParams.reportData}
+                    flux={flux}
+                    pendEdits={pendEdits}
+                />
+            </Provider>);
+        expect(component.find('.reportContainer').length).toEqual(1);
     });
 
     describe('loadReport', () => {
         let loadReport = null;
         let initialState = {};
         let store = null;
+        let spiedLoadReportProps = null;
         beforeEach(() => {
-            loadReport = jasmine.createSpy('loadReport').and.callFake(() => {
-                return {type: 'fake'};
-            });
-            ReportRouteRewireAPI.__Rewire__('loadReport', loadReport);
+            loadReport = jasmine.createSpy('loadReport');
+            spiedLoadReportProps = Object.assign({}, props, {loadReport});
 
             store = mockStore(initialState);
         });
 
-        afterEach(() => {
-            ReportRouteRewireAPI.__ResetDependency__('loadReport');
-        });
-
         it('loadReport is called with app data', () => {
-            component = TestUtils.renderIntoDocument(
+            component = mount(
                 <Provider store={store}>
-                    <ReportRoute {...props} match={routeParams} reportData={reportDataParams.reportData} flux={flux} pendEdits={pendEdits}/>
+                    <UnconnectedReportRoute
+                        {...spiedLoadReportProps}
+                        match={routeParams}
+                        reportData={reportDataParams.reportData}
+                        flux={flux}
+                        pendEdits={pendEdits}
+                    />
                 </Provider>);
             expect(loadReport).toHaveBeenCalledWith(jasmine.any(String), appId, tblId, rptId, true, offset, numRows);
         });
 
         it('loadReport is not called when appId is missing', () => {
             const missingRouteParams = Object.assign({}, routeParams, {params: {appId: null}});
-            component = TestUtils.renderIntoDocument(
+            component = mount(
                 <Provider store={store}>
-                    <ReportRoute {...props} match={missingRouteParams} reportData={reportDataParams.reportData} flux={flux} pendEdits={pendEdits}/>
+                    <UnconnectedReportRoute
+                        {...spiedLoadReportProps}
+                        match={missingRouteParams}
+                        reportData={reportDataParams.reportData}
+                        flux={flux}
+                        pendEdits={pendEdits}
+                    />
                 </Provider>);
             expect(loadReport).not.toHaveBeenCalled();
         });
 
         it('loadReport is not called when tblId is missing', () => {
             const missingRouteParams = Object.assign({}, routeParams, {params: {tblId: null}});
-            component = TestUtils.renderIntoDocument(
+            component = mount(
                 <Provider store={store}>
-                    <ReportRoute {...props} match={missingRouteParams} reportData={reportDataParams.reportData} flux={flux} pendEdits={pendEdits}/>
+                    <UnconnectedReportRoute
+                        {...spiedLoadReportProps}
+                        match={missingRouteParams}
+                        reportData={reportDataParams.reportData}
+                        flux={flux}
+                        pendEdits={pendEdits}
+                    />
                 </Provider>);
             expect(loadReport).not.toHaveBeenCalled();
         });
 
         it('loadReport is not called when rptId is missing', () => {
             const missingRouteParams = Object.assign({}, routeParams, {params: {rptId: null}});
-            component = TestUtils.renderIntoDocument(
+            component = mount(
                 <Provider store={store}>
-                    <ReportRoute {...props} match={missingRouteParams} reportData={reportDataParams.reportData} flux={flux} pendEdits={pendEdits}/>
+                    <UnconnectedReportRoute
+                        {...spiedLoadReportProps}
+                        match={missingRouteParams}
+                        reportData={reportDataParams.reportData}
+                        flux={flux}
+                        pendEdits={pendEdits}
+                    />
                 </Provider>);
             expect(loadReport).not.toHaveBeenCalled();
         });
