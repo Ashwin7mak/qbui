@@ -81,7 +81,6 @@ export class ReportFieldSelectMenu extends Component {
     };
 
     render() {
-        console.log(this.props.menu.isCollapsed);
         return (
             <SideMenu
                 baseClass='reportFieldSelectMenu'
