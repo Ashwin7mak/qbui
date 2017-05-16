@@ -21,13 +21,13 @@ class TabbedSideNav extends Component {
         if (this.props.onTabChanged) {
             this.props.onTabChanged(tabKey);
         }
-    }
+    };
 
     onTabClicked = (tabKey) => {
         if (this.props.onTabClicked) {
             this.props.onTabClicked(tabKey);
         }
-    }
+    };
 
     getDefaultTab = () => {
         if (this.props.defaultTab) {
@@ -39,7 +39,7 @@ class TabbedSideNav extends Component {
         }
 
         return null;
-    }
+    };
 
     render() {
         return (
