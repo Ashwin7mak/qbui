@@ -265,6 +265,8 @@ class formBuilderPage {
         // move to target & wait until preview appears
         browser.moveToObject(target);
         browser.pause(this.oneSecond);
+        browser.moveToObject(target, 5, 5);
+        browser.pause(this.oneSecond);
         // release button
         browser.buttonUp();
         browser.pause(this.oneSecond);
