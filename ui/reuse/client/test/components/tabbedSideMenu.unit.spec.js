@@ -2,7 +2,7 @@ import React from 'react';
 import {mount} from 'enzyme';
 import Tabs from 'rc-tabs';
 import jasmineEnzyme from 'jasmine-enzyme';
-import TabbedSideNav from 'REUSE/components/sideNavs/tabbedSideMenu';
+import TabbedSideNav, {__RewireAPI__ as TabbedSideNavRewireAPI} from 'REUSE/components/sideNavs/tabbedSideMenu';
 
 let component;
 
@@ -28,28 +28,30 @@ let mockPropsFunc = {
 describe('tabbedSideMenu', () => {
     beforeEach(() => {
         jasmineEnzyme();
+        TabbedSideNavRewireAPI.__Rewire__('rc-tabs/assets/index.css', '');
         spyOn(mockPropsFunc, 'onTabChanged');
         spyOn(mockPropsFunc, 'onTabClicked');
     });
 
     afterEach(() => {
+        TabbedSideNavRewireAPI.__ResetDependency__('rc-tabs/assets/index.css');
     });
 
-    it('will invoke props onTabChanged && onTabClicked when a tab is clicked', () => {
+    fit('will invoke props onTabChanged && onTabClicked when a tab is clicked', () => {
         component = mount(<TabbedSideNav onTabChanged={mockPropsFunc.onTabChanged()}
                                          onTabClicked={mockPropsFunc.onTabClicked()}
                                          tabs={mockTabs} />);
-        let tabs = component.find(TabbedSideNav);
-        tabs.simulate('click');
+        let tabbedSideNav = component.find(TabbedSideNav);
+        tabbedSideNav.simulate('click');
 
         expect(mockPropsFunc.onTabChanged).toHaveBeenCalled();
         expect(mockPropsFunc.onTabClicked).toHaveBeenCalled();
     });
 
     it('will not invoke onTabChanged && onTabClicked if no props are passed in when a tab is clicked ', () => {
-        component = mount(<TabbedSideNav />);
-        let tabs = component.find(TabbedSideNav);
-        tabs.simulate('click');
+        component = mount(<TabbedSideNav tabs={mockTabs}/>);
+        let tabbedSideNav = component.find(TabbedSideNav);
+        tabbedSideNav.simulate('click');
 
         expect(mockPropsFunc.onTabChanged).not.toHaveBeenCalled();
         expect(mockPropsFunc.onTabClicked).not.toHaveBeenCalled();
