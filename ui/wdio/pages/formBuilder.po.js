@@ -272,7 +272,7 @@ class formBuilderPage {
         browser.element(target).click();
         browser.waitUntil(function() {
             return browser.element(target).getText() === label;
-        }, this.fiveSeconds, 'Expected target label to match source label after swap');
+        }, this.fiveSeconds * 2, 'Expected target label to match source label after swap');
         return this.getFieldLabels();
     }
 
