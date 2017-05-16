@@ -59,7 +59,7 @@ export const AutomationListRoute = React.createClass({
                 <h1 className="automationListMessage">
                     Here is a list of your automations for this app:
                 </h1>
-                <ul>
+                <ul className="automationListNames">
                     {names}
                 </ul>
             </div>

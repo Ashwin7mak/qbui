@@ -6,10 +6,18 @@ import Promise from 'bluebird';
 import _ from 'lodash';
 
 const sampleApp = {id: 'app1', tables: []};
-
+const sampleAuto1 = {id: 'auto1', name: 'Auto 1'};
+const sampleAuto2 = {id: 'auto2', name: 'Auto 2'};
 
 const props = {
-    app: sampleApp
+    app: sampleApp,
+    loadAutomations: (context, appId) => {},
+    automations: []
+};
+
+const propsWithAutos = {
+    ...props,
+    automations: [sampleAuto1, sampleAuto2]
 };
 
 describe('AutomationListRoute functions', () => {
@@ -24,17 +32,38 @@ describe('AutomationListRoute functions', () => {
         afterEach(() => {
         });
 
-        it('test render of component with null props', () => {
+        it('test render of component with no automations', () => {
             expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
         });
 
-        it('test render of component with non null props', () => {
-            expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+        it('test message is shown', () => {
+            let messageDiv = TestUtils.findRenderedDOMComponentWithClass(component, "automationListMessage");
+            expect(messageDiv.innerText.length).toBeGreaterThan(0);
         });
 
-        it('test buttons are not rendered if form is not dirty', () => {
-            let messageDiv = TestUtils.scryRenderedDOMComponentsWithClass(component, "automationListMessage");
-            expect(messageDiv).toBeDefined()
+        it('test list of automation names is blank', () => {
+            let namesLI = TestUtils.scryRenderedDOMComponentsWithTag(component, "li");
+            expect(namesLI.length).toEqual(0);
+        });
+
+    });
+
+    describe('AutomationListRoute with automations', () => {
+        beforeEach(() => {
+            component = TestUtils.renderIntoDocument(<AutomationListRoute {...propsWithAutos }/>);
+        });
+
+        afterEach(() => {
+        });
+
+        it('test list of automation names contains automations', () => {
+            let namesLI = TestUtils.scryRenderedDOMComponentsWithTag(component, "li");
+            expect(namesLI.length).toEqual(2);
+        });
+
+        it('test list of automation names has the correct name first', () => {
+            let namesLI = TestUtils.scryRenderedDOMComponentsWithTag(component, "li");
+            expect(namesLI[0].innerText).toEqual("Auto 1");
         });
 
     });
