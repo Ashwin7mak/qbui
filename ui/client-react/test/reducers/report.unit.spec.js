@@ -1358,6 +1358,33 @@ describe('Report reducer functions', () => {
         });
     });
 
+    describe('Report reducer CHANGE_REPORT_NAME test correct state', () => {
+        it('changes the report data name', () => {
+            let contextId = "CHANGE_REPORT_NAME";
+            let initialState = [
+                {
+                    id: contextId,
+                    data: {
+                        name: 'Test Name',
+                        metaData: {
+                            name: 'Test Name'
+                        }
+                    }
+                }
+            ];
+            let expectedName = 'New Name';
+
+            actionObj.type = types.CHANGE_REPORT_NAME;
+            actionObj.id = contextId;
+            actionObj.content = {newName: expectedName};
+
+            let testState = reducer(initialState, actionObj);
+
+            expect(testState[0].data.name).toEqual(expectedName);
+            expect(testState[0].data.metaData.name).toEqual(expectedName);
+        });
+    });
+
     describe('Report reducer INVALID_ACTION test correct state', () => {
         it('handled non matching action', () => {
             let testState = [123, 456, 789];
