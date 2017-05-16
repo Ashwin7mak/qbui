@@ -17,6 +17,7 @@ import _ from 'lodash';
 import './report.scss';
 import ReportToolsAndContent from '../report/reportToolsAndContent';
 import ReportFieldSelectMenu from './reportFieldSelectMenu';
+import ReportNameEditor from './reportNameEditor';
 import {connect} from 'react-redux';
 import {clearSearchInput} from '../../actions/searchActions';
 import {loadReport, loadDynamicReport} from '../../actions/reportActions';
@@ -146,13 +147,13 @@ export const ReportRoute = React.createClass({
                 </div>
 
                 <div className="stageHeadline">
-                    <h3 className="reportName">{reportName}</h3>
+                    <ReportNameEditor name={reportName}/>
                 </div>
             </div>);
     },
 
     render() {
-        let inBuilderMode = this.props.reportBuilder.inBuilderMode;
+        let inBuilderMode = this.props.reportBuilder.isInBuilderMode;
         if (_.isUndefined(this.props.match.params) ||
             _.isUndefined(this.props.match.params.appId) ||
             _.isUndefined(this.props.match.params.tblId) ||

@@ -19,7 +19,7 @@ const testFieldDef = {
 };
 const reportBuilder = {
     reportBuilder: {
-        inBuilderMode: true,
+        isInBuilderMode: true,
         isCollapsed: true,
         addBeforeColumn: null,
         availableColumns: []
@@ -33,7 +33,7 @@ const testProps = {
     fieldDef: testFieldDef,
     sortFids: [],
     reportBuilder: {
-        inBuilderMode: true,
+        isInBuilderMode: true,
         isCollapsed: true,
         addBeforeColumn: null,
         availableColumns: []
@@ -519,7 +519,7 @@ describe('ReportColumnHeaderMenu', () => {
             let testPropsNotInBuilderMode = {
                 ...testProps,
                 reportBuilder: {
-                    inBuilderMode: false,
+                    isInBuilderMode: false,
                     isCollapsed: true,
                     addBeforeColumn: null,
                     availableColumns: []
