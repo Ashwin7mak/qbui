@@ -96,8 +96,8 @@
 
             //Step 9 - Click on forms Cancel button
             formsPO.clickFormCancelBtn();
-            //wait until you see tableLists got loaded
-            browser.element('.tablesList').waitForVisible();
+            //wait until you see leftNav got loaded
+            ReportContentPO.waitForLeftNavLoaded();;
             tableCreatePO.newTableBtn.waitForVisible();
 
             //Step 10 - Get the new count of table links in the left nav
@@ -126,6 +126,7 @@
 
             //Step 14 - Load a report for the table and verify report elements
             RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, testApp.id, tableId, 1));
+            ReportContentPO.waitForLeftNavLoaded();
             browser.element('.noRowsIcon').waitForVisible();
             expect(browser.element('.recordsCount').getAttribute('textContent')).toBe('0 records');
             expect(browser.element('.noRowsText').getAttribute('textContent')).toBe('There are no ' + tableName.toLowerCase() + ' to see right now.');
