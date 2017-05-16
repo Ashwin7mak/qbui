@@ -65,7 +65,7 @@ export const SUPPORTED_NEW_FIELD_TYPES = [
  * A helper function that has the supported fields along with the default props for each field type for display in form builder
  */
 export const supportedNewFieldTypesWithProperties = (omittedFieldGroups = []) => {
-    const supportedNewFieldTypesWithProperties = SUPPORTED_NEW_FIELD_TYPES.map((fieldGroup, index) => {
+    const allSupportedNewFieldTypesWithProperties = SUPPORTED_NEW_FIELD_TYPES.map((fieldGroup, index) => {
         return {
             ...fieldGroup,
             key: `group_${index}`,
@@ -73,7 +73,7 @@ export const supportedNewFieldTypesWithProperties = (omittedFieldGroups = []) =>
             children: fieldGroup.fieldTypes.map(fieldType => createFieldTypeProps(fieldType))
         };
     });
-    return _.reject(supportedNewFieldTypesWithProperties, (element) => omittedFieldGroups.indexOf(element.fieldGroupId) !== -1);
+    return _.reject(allSupportedNewFieldTypesWithProperties, (element) => omittedFieldGroups.indexOf(element.fieldGroupId) !== -1);
 };
 
 /**

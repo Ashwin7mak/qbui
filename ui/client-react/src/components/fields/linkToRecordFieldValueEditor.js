@@ -66,7 +66,7 @@ const LinkToRecordFieldValueEditor = React.createClass({
                                                   childTableId={this.props.tblId}
                                                   tables={this.props.tables}
                                                   tableSelected={this.tableSelected}
-                                                  onCancel={this.cancelTableSelection}/> );
+                                                  onCancel={this.cancelTableSelection}/>);
         } else {
             return this.getReactSelect();
         }
@@ -89,4 +89,4 @@ const mapStateToProps = (state) => {
 };
 
 
-export default connect(mapStateToProps, {showRelationshipDialog, removeFieldFromForm, updateField})(LinkToRecordFieldValueEditor)
+export default connect(mapStateToProps, {showRelationshipDialog, removeFieldFromForm, updateField})(LinkToRecordFieldValueEditor);

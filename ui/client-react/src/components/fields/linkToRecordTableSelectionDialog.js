@@ -25,7 +25,7 @@ const LinkToRecordTableSelectionDialog = React.createClass({
     },
 
     getInitialState() {
-        return { selectedValue: null }
+        return {selectedValue: null};
     },
 
     getReactSelect() {
@@ -42,7 +42,7 @@ const LinkToRecordTableSelectionDialog = React.createClass({
                 };
             }) : [];
 
-        choices = _.filter(choices, (choice) => choice.value !== this.props.childTableId);
+        choices = _.reject(choices, (choice) => choice.value === this.props.childTableId);
 
         return <Select
             value={selectedValue}

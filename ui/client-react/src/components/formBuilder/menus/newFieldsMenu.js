@@ -35,7 +35,7 @@ const NewFieldsMenu = ({isCollapsed, isOpen, toggleToolPaletteChildrenTabIndex, 
             hideTitle={true}
             endDrag={endDrag}
         />);
-}
+};
 
 NewFieldsMenu.propTypes = {
     /**
@@ -60,7 +60,12 @@ NewFieldsMenu.propTypes = {
 
     /**
      * Focus for palette for keybaord nav*/
-    toolPaletteFocus: PropTypes.bool
+    toolPaletteFocus: PropTypes.bool,
+
+    /**
+     * tables in this app
+     */
+    tables: PropTypes.array
 };
 
 

@@ -126,9 +126,9 @@ export class FieldProperties extends Component {
 
         const table = _.find(this.props.app.tables, {id: this.props.selectedField.parentTableId});
         return (
-            <div key={key} className="linkToRecordPropertyContainer">
-                <div className="linkToRecordPropertyTitle">{propertyTitle}</div>
-                {table && <div><Icon iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY} icon={table.tableIcon}/> {table.name}</div>}
+            <div key={key} className="textPropertyContainer">
+                <div className="textPropertyTitle">{propertyTitle}</div>
+                {table && <div className="linkToRecordPropertyValue"><Icon iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY} icon={table.tableIcon}/> {table.name}</div>}
             </div>
         );
     }
