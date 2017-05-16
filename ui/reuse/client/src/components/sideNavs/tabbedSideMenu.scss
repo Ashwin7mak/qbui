@@ -6,11 +6,15 @@
         overflow: hidden;
         height: 100%;
         .rc-tabs-tab-active, .rc-tabs-tab-active:hover {
-            color: $input-text-focus-border-color;
+            color: hotpink;
         }
 
         .rc-tabs-tab:hover {
-           color: $input-text-focus-border-color;
+           color: greenyellow;
+        }
+
+        .rc-tabs-tab:focus {
+            outline-color: $input-text-focus-border-color;
         }
 
         .rc-tabs-ink-bar {
