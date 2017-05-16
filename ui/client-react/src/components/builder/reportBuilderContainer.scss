@@ -25,6 +25,10 @@
             outline: none;
             border: $stroke-width-thin solid $input-text-focus-border-color;
         }
+
+        .loadedContent .qbGrid {
+            padding-bottom: 0;
+        }
     }
 
     .reportBuilderContent {

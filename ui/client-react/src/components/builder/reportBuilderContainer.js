@@ -42,22 +42,24 @@ export class ReportBuilderContainer extends Component {
                     appId={appId}
                     tblId={tblId}
                     reportData={this.props.reportData}>
-                    <QbGrid
-                        numberOfColumns={columns.length}
-                        columns={transformedColumns}
-                        rows={transformedRows}
-                        isDraggable={true}
-                        cellRenderer={ReportCell}
-                        menuComponent={ReportColumnHeaderMenu}
-                        showRowActionsColumn={false}
-                        menuProps={{
-                            appId: appId,
-                            tblId: tblId,
-                            rptId: rptId,
-                            sortFids: sortFids,
-                            isOnlyOneColumnVisible: this.isOnlyOneColumnVisible(columns)
-                        }}
-                    />
+                    <div className="reportBuilderContainerContent">
+                        <QbGrid
+                            numberOfColumns={columns.length}
+                            columns={transformedColumns}
+                            rows={transformedRows}
+                            isDraggable={true}
+                            cellRenderer={ReportCell}
+                            menuComponent={ReportColumnHeaderMenu}
+                            showRowActionsColumn={false}
+                            menuProps={{
+                                appId: appId,
+                                tblId: tblId,
+                                rptId: rptId,
+                                sortFids: sortFids,
+                                isOnlyOneColumnVisible: this.isOnlyOneColumnVisible(columns)
+                            }}
+                        />
+                    </div>
                 </ReportFieldSelectMenu>
                 {this.getSaveOrCancelFooter()}
             </div>
