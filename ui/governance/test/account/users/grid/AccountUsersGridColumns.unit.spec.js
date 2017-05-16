@@ -15,7 +15,7 @@ import Locale from '../../../../../reuse/client/src/locales/locale';
 
 const mockStore = configureMockStore();
 
-fdescribe('AccountUsersGridColumns', () => {
+describe('AccountUsersGridColumns', () => {
     beforeEach(() => {
         jasmineEnzyme();
         GovernanceBundleLoader.changeLocale('en-us');
