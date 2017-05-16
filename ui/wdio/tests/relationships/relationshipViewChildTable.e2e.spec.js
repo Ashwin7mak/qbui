@@ -79,6 +79,7 @@ describe('Relationships - View child table on form tests: ', () => {
     beforeEach(() => {
         // Navigate to Table 3, Report 1, Record 1
         reportContentPO.openRecordInViewMode(realmName, testApp.id, testApp.tables[e2eConsts.TABLE3].id, 1, 1);
+        reportContentPO.waitForLeftNavLoaded();
     });
 
     /**
@@ -175,7 +176,7 @@ describe('Relationships - View child table on form tests: ', () => {
         relationshipsPO.clickOnRecordInChildTable(0);
 
         // Assert that the name of the link is for the Parent table
-        let parentLinkText = relationshipsPO.tableHomePageLinkEl.getAttribute('innerText');
+        let parentLinkText = relationshipsPO.tableHomePageLinkEl.getAttribute('textContent');
         expect(parentLinkText).toContain('Child Table A');
 
         // Click the tablehomepage link (should send you back to the table homepage of the child table)

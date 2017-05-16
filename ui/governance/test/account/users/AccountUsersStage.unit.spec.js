@@ -1,10 +1,9 @@
-import React from 'react';
-import {mount} from 'enzyme';
-import jasmineEnzyme from 'jasmine-enzyme';
-
-import AccountUsersStage from '../../../src/account/users/AccountUsersStage';
+import React from "react";
+import {mount} from "enzyme";
+import jasmineEnzyme from "jasmine-enzyme";
+import AccountUsersStage from "../../../src/account/users/AccountUsersStage";
 import Locale from "../../../../reuse/client/src/locales/locale";
-import GovernanceBundleLoader from '../../../src/locales/governanceBundleLoader';
+import GovernanceBundleLoader from "../../../src/locales/governanceBundleLoader";
 
 let component;
 
