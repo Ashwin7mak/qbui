@@ -98,7 +98,7 @@ const LinkToRecordFieldValueEditor = React.createClass({
 
         if (this.props.dialogOpen) {
             return (
-                <LinkToRecordTableSelectionDialog show={this.state.showTableSelectionDialog}
+                <LinkToRecordTableSelectionDialog show={this.props.dialogOpen}
                                                   tables={this.props.tables}
                                                   tableSelected={this.tableSelected}
                                                   onCancel={this.cancelTableSelection}/> );
