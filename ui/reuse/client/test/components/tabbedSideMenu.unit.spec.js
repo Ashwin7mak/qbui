@@ -37,7 +37,7 @@ describe('tabbedSideMenu', () => {
         TabbedSideNavRewireAPI.__ResetDependency__('rc-tabs/assets/index.css');
     });
 
-    fit('will invoke props onTabChanged && onTabClicked when a tab is clicked', () => {
+    it('will invoke props onTabChanged && onTabClicked when a tab is clicked', () => {
         component = mount(<TabbedSideNav onTabChanged={mockPropsFunc.onTabChanged()}
                                          onTabClicked={mockPropsFunc.onTabClicked()}
                                          tabs={mockTabs} />);
