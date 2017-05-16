@@ -6,28 +6,36 @@
         overflow: hidden;
         height: 100%;
         .rc-tabs-tab-active, .rc-tabs-tab-active:hover {
-            color: hotpink;
+            //text color
+            color: $color-purple-400;
         }
 
         .rc-tabs-tab:hover {
+            //hover color for text
            color: greenyellow;
         }
 
-        .rc-tabs-tab:focus {
-            outline-color: $input-text-focus-border-color;
-        }
+        //.rc-tabs-tab:focus {
+        //    outline-color: $input-text-focus-border-color;
+        //}
 
         .rc-tabs-ink-bar {
+            //color for underline for tab
             background-color: $input-text-focus-border-color;
         }
 
         .rc-tabs-bar {
-            margin-left: 30px;
+            border: 1px solid transparent;
+            &:focus {
+                //border focus for all tabs
+                @include text-input-focus;
+            }
+            .rc-tabs-tab {
+                //margin for tabs
+                margin-left: 20px;
+                margin-right: 0;
+            }
         }
-    }
-
-    .rc-tabs-top .rc-tabs-tab {
-        margin-right: 0;
     }
 
     .rc-tabs-content {

@@ -33,13 +33,20 @@
  *      - fieldProperties.js
  * */
 
-export const FORM_BUILDER_TOGGLE_NAV_BUTTON_TABINDEX = 1;
-export const USER_MENU_TAB_INDEX = 1;
-export const TOOL_PALETTE_TABINDEX = 3;
-export const FORM_TAB_INDEX = 4;
-export const FIELD_PROP_TABINDEX = 5;
-export const CANCEL_BUTTON_TABINDEX = 6;
-export const SAVE_BUTTON_TABINDEX = 7;
+// export const FORM_BUILDER_TOGGLE_NAV_BUTTON_TABINDEX = 1;
+// export const USER_MENU_TAB_INDEX = 1;
+// export const TOOL_PALETTE_TABINDEX = 3;
+// export const FORM_TAB_INDEX = 4;
+// export const FIELD_PROP_TABINDEX = 5;
+// export const CANCEL_BUTTON_TABINDEX = 6;
+// export const SAVE_BUTTON_TABINDEX = 7;
 
 
 
+export const FORM_BUILDER_TOGGLE_NAV_BUTTON_TABINDEX = 0;
+export const USER_MENU_TAB_INDEX = 0;
+export const TOOL_PALETTE_TABINDEX = 0;
+export const FORM_TAB_INDEX = 0;
+export const FIELD_PROP_TABINDEX = 0;
+export const CANCEL_BUTTON_TABINDEX = 0;
+export const SAVE_BUTTON_TABINDEX = 0;
