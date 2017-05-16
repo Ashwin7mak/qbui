@@ -81,14 +81,17 @@
             var dateStr = yyyy + '-' + mm + '-' + dd +  'T' + fieldValue.value.replace(/(\[.*?\])/, '');
             var d = new Date(dateStr);
             //Resolve whether or not to shift based on timezone
+            var m;
             var timeZone = consts.UTC_TIMEZONE;
             if (fieldInfo.useTimezone) {
                 timeZone = fieldInfo.timeZone;
                 if (!timeZone) {
                     timeZone = DEFAULT_TIMEZONE;
                 }
+                m = moment.tz(d, timeZone);
+            } else {
+                m = moment(d);
             }
-            var m = moment.tz(d, timeZone);
 
             //Resolve formatting options
             var formatString = fieldInfo.jsFormat;
