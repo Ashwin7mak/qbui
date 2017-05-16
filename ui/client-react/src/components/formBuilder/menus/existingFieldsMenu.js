@@ -1,11 +1,17 @@
 import React, {PropTypes} from 'react';
 import {supportedNewFieldTypesWithProperties} from '../newFieldTypes';
 import ListOfElements from '../../../../../reuse/client/src/components/sideNavs/listOfElements';
+import FieldTokenInMenu from '../fieldToken/fieldTokenInMenu';
 
-const ExistingFieldsMenu = ({isCollapsed, isOpen}) => (
+const ExistingFieldsMenu = ({isCollapsed, isOpen, toggleToolPaletteChildrenTabIndex, toolPaletteChildrenTabIndex, toolPaletteFocus, toolPaletteTabIndex}) => (
     <ListOfElements
+        tabIndex={toolPaletteTabIndex}
+        childrenTabIndex={toolPaletteChildrenTabIndex}
+        toggleChildrenTabIndex={toggleToolPaletteChildrenTabIndex}
+        hasKeyBoardFocus={toolPaletteFocus}
         isCollapsed={isCollapsed}
         isOpen={isOpen}
+        renderer={FieldTokenInMenu}
         elements={supportedNewFieldTypesWithProperties()}
         isFilterable={true}
     />

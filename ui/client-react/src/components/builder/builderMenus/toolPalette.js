@@ -15,14 +15,20 @@ import './toolPalette.scss';
 class ToolPalette extends Component {
 
     renderNewFieldsMenu = () => (
-        <NewFieldsMenu isCollapsed={this.props.isCollapsed} isOpen={this.props.isOpen}
+        <NewFieldsMenu isCollapsed={this.props.isCollapsed}
+                       isOpen={this.props.isOpen}
                        toolPaletteTabIndex={tabIndexConstants.TOOL_PALETTE_TABINDEX}
                        toggleToolPaletteChildrenTabIndex={this.props.toggleToolPaletteChildrenTabIndex}
                        toolPaletteChildrenTabIndex={this.props.toolPaletteChildrenTabIndex}
                        toolPaletteFocus={this.props.toolPaletteFocus} />
     );
 
-    renderExistingFieldsMenu = () => (<ExistingFieldsMenu isCollapsed={this.props.isCollapsed} isOpen={this.props.isOpen} />);
+    renderExistingFieldsMenu = () => (<ExistingFieldsMenu isCollapsed={this.props.isCollapsed}
+                                                          isOpen={this.props.isOpen}
+                                                          toolPaletteTabIndex={tabIndexConstants.TOOL_PALETTE_TABINDEX}
+                                                          toggleToolPaletteChildrenTabIndex={this.props.toggleToolPaletteChildrenTabIndex}
+                                                          toolPaletteChildrenTabIndex={this.props.toolPaletteChildrenTabIndex}
+                                                          toolPaletteFocus={this.props.toolPaletteFocus} />);
 
     renderToolPalette = () => (
         <div className="toolPaletteContainer">
