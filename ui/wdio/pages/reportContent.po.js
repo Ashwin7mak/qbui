@@ -429,14 +429,21 @@
             this.recordCheckBoxes.value[recordRow].click();
             this.deleteIcon.waitForExist();
         }},
+
         //Select a report from tables page with reportID being the index of the report
         selectReport: {value: function(tableName, reportID) {
+            //wait unti leftNav is loaded
+            this.waitForLeftNavLoaded();
+            //Select the tabe
             tablesPO.selectTable(tableName);
+            //Click on reports menu
             browser.element('.selected .iconUISturdy-report-menu-3').click();
             browser.element('.reportGroups').waitForVisible();
+            //Filter the reports
             var allReports = this.getReportListUlEl.value.filter(function(report) {
                 return report.index === reportID;
             });
+            //Click on the report
             allReports[0].click();
         }},
     });

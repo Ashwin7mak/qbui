@@ -36,6 +36,7 @@
                 return Promise.reject('Error in beforeAll function:' + JSON.stringify(error));
             });
         });
+
         it('Visibility and usability of topNav on Table homepage', function() {
             //select the App
             if (browserName === 'firefox') {
@@ -66,6 +67,7 @@
             //Step6: Verify the help button is clickable
             TopNavPO.helpButton.click();
         });
+
         it('Visibility of topNav on Report homepage', function() {
             if (browserName === 'firefox') {
                 reportContentPO.selectReport(testApp.tables[e2eConsts.TABLE1].name, 0);
@@ -80,6 +82,7 @@
             //Step2: Verify the no.of global action icons
             expect(TopNavPO.topNavGlobalActionsListEl.value.length).toBe(4);
         });
+
         //TODO: To be enabled when topNav is added to User/App homepage MC-2646
         xit('Visibility of topNav on User homepage', function() {
             RequestAppsPage.get(e2eBase.getRequestUsersEndpoint(realmName, testApp.id));
@@ -90,6 +93,7 @@
             //Step2: Verify the no.of global action icons
             expect(TopNavPO.topNavGlobalActionsListEl.value.length).toBe(4);
         });
+
         xit('Visibility of topNav on App homepage', function() {
             RequestAppsPage.get(e2eBase.getRequestAppsPageEndpoint(realmName, testApp.id));
             TopNavPO.topNavToggleHamburgerEl.waitForVisible();
