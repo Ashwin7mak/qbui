@@ -429,7 +429,6 @@
             this.recordCheckBoxes.value[recordRow].click();
             this.deleteIcon.waitForExist();
         }},
-
         //Select a report from tables page with reportID being the index of the report
         selectReport: {value: function(tableName, reportID) {
             //wait unti leftNav is loaded
