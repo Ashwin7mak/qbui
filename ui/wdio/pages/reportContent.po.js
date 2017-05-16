@@ -135,7 +135,7 @@
             browser.element('.tablesHeadingAndList .tablesList .leftNavLink').waitForVisible();
             //wait until text is shown up on leftNavLinks.Selected table is not loaded until all table properties are available
             while (browser.element('.tablesHeadingAndList .tablesList .leftNavLink').getAttribute('textContent').length === 0) {
-                browser.pause(e2eConsts.shortWaitTimeMs);
+                return browser.pause(e2eConsts.shortWaitTimeMs);
             }
         }},
 
@@ -336,6 +336,8 @@
             //navigate to record page directly
             var requestRecordPageEndPoint = e2eBase.recordBase.apiBase.generateFullRequest(realmName, '/qbase/app/' + appId + '/table/' + tableId + '/report/' + reportId + '/record/' + recordId);
             browser.url(requestRecordPageEndPoint);
+            //wait untill leftNav is loaded
+            this.waitForLeftNavLoaded();
             //wait until view form is visible
             return formsPO.viewFormContainerEl.waitForVisible();
         }},
