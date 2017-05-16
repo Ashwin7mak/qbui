@@ -3,7 +3,7 @@ import {shallow, mount} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
 
 import {CONTEXT} from '../../../src/actions/context';
-import {ReportFieldSelectMenu, __RewireAPI__ as RewireAPI} from '../../../src/components/report/reportFieldSelectMenu';
+import {ReportFieldSelectMenu, __RewireAPI__ as RewireAPI} from '../../../src/components/reportBuilder/reportFieldSelectMenu';
 import SideMenuBase from '../../../../reuse/client/src/components/sideMenuBase/sideMenuBase';
 import FieldFormats from '../../../src/utils/fieldFormats';
 import Locale from '../../../../reuse/client/src/locales/locale';

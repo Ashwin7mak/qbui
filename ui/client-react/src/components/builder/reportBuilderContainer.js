@@ -4,7 +4,7 @@ import _ from 'lodash';
 import {DragDropContext} from 'react-dnd';
 import TouchBackend from 'react-dnd-touch-backend';
 import ToolPalette from './builderMenus/toolPalette';
-import ReportFieldSelectMenu from '../report/reportFieldSelectMenu';
+import ReportFieldSelectMenu from '../reportBuilder/reportFieldSelectMenu';
 import ReportSaveOrCancelFooter from '../reportBuilder/reportSaveOrCancelFooter';
 import {CONTEXT} from '../../actions/context';
 import {exitBuilderMode, closeFieldSelectMenu} from '../../actions/reportBuilderActions';
