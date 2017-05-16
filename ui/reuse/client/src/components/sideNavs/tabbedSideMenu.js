@@ -2,7 +2,6 @@ import React, {PropTypes, Component} from 'react';
 import Tabs, {TabPane} from 'rc-tabs';
 import TabContent from 'rc-tabs/lib/TabContent';
 import InkTabBar from 'rc-tabs/lib/InkTabBar';
-// import ScrollableInkTabBar from 'rc-tabs/lib/ScrollableInkTabBar';
 
 import 'rc-tabs/assets/index.css';
 import './tabbedSideMenu.scss';
