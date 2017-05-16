@@ -106,7 +106,9 @@
             FIELD: {
                 NAME: 'name',
                 TYPE: 'type',
-                DATA_TYPE_ATTRS: 'datatypeAttributes'
+                DATA_TYPE_ATTRS: 'datatypeAttributes',
+                REQUIRED: 'required',
+                UNIQUE: 'unique'
             },
             REPORT: {
                 NAME: 'name',
