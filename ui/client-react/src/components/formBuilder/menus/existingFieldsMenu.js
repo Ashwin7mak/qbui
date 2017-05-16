@@ -9,11 +9,12 @@ const ExistingFieldsMenu = ({isCollapsed, isOpen, toggleToolPaletteChildrenTabIn
         childrenTabIndex={toolPaletteChildrenTabIndex}
         toggleChildrenTabIndex={toggleToolPaletteChildrenTabIndex}
         hasKeyBoardFocus={toolPaletteFocus}
+        renderer={FieldTokenInMenu}
         isCollapsed={isCollapsed}
         isOpen={isOpen}
-        renderer={FieldTokenInMenu}
         elements={supportedNewFieldTypesWithProperties()}
         isFilterable={true}
+        hideTitle={true}
     />
 );
 
