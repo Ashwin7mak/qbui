@@ -25,6 +25,19 @@ export const setSearch = (gridId, searchTerm) => ({
 });
 
 /**
+ * Clear the search input text box
+ *
+ * @returns {{type, content: string}}
+ */
+export const clearSearchTerm = (gridId) => {
+    return {
+        type: types.SET_SEARCH,
+        gridId,
+        searchTerm: ''
+    };
+};
+
+/**
  * Action to set the desired sort order for a given grid
  *
  * @param gridId - the id of the grid we want to update

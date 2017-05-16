@@ -1,5 +1,6 @@
 'use strict';
 let topNavPO = requirePO('topNav');
+let reportContentPO = requirePO('reportContent');
 let oneSecond = 1000; // millis
 let fiveSeconds = 5 * oneSecond;
 

@@ -62,10 +62,14 @@
 
                 // Step 1: Select the checkbox and click on delete icon
                 reportContentPO.selectRow(rowToBeDeleted);
+                reportContentPO.deleteIcon.waitForVisible();
                 reportContentPO.deleteIcon.click();
 
                 // Step 2: Click on delete button from the dialogue box
+                reportContentPO.deleteButton.waitForVisible();
                 reportContentPO.deleteButton.click();
+                //Need this to wait for delete success container to slide away
+                browser.pause(e2eConsts.mediumWaitTimeMs);
 
                 // Step 3: Check for the deleted record on the first page
                 reportContentPO.checkForTheAbsenceDeletedRecordOnTheCurrentPage(deletedRecord);
@@ -85,11 +89,16 @@
                 expect(reportNavPO.recordsCount.getText()).toEqual(reportCount - 1 + " records");
 
                 // Step 1: Select the DropDown menu and clicking on delete icon
+                reportContentPO.dropDownIcon.waitForVisible();
                 reportContentPO.dropDownIcon.click();
+                reportContentPO.dropDownDeleteIcon.waitForVisible();
                 reportContentPO.dropDownDeleteIcon.click();
 
                 // Step 2: Click on delete button from the dialogue box
+                reportContentPO.dontDeleteButton.waitForVisible();
                 reportContentPO.dontDeleteButton.click();
+                //Need this to wait for delete success container to slide away
+                browser.pause(e2eConsts.mediumWaitTimeMs);
 
                 // Step 3: Check for the deleted record on the first page
                 reportContentPO.checkForThePresenceDeletedRecordOnTheCurrentPage(deletedRecord);

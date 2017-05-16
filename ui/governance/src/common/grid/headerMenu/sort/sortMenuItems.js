@@ -1,6 +1,6 @@
-import React from 'react';
-import HeaderMenuItem from '../headerMenuItem';
-import SortMenuItem from './sortMenuItem';
+import React from "react";
+import HeaderMenuItem from "../headerMenuItem";
+import SortMenuItem from "./sortMenuItem";
 
 /**
  * Sub-class of HeaderMenuItem that supplies 2 menu items

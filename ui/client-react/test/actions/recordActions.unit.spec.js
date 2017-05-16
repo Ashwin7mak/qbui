@@ -278,7 +278,8 @@ describe('create Record Actions -- success workflow', () => {
 
     let fields = [
         {id: 4, builtIn: false, datatypeAttributes :true},
-        {id: 5, builtIn: true}
+        {id: 5, builtIn: true},
+        {id: 6, builtIn: false, name:'new field'}
     ];
 
     let newVal = {value:"hi", display:"there"};
@@ -593,7 +594,8 @@ describe('update Record Actions -- success workflow', () => {
     });
 
     let fields = [
-        {id:6, name: "test"}
+        {id:6, name: "test"},
+        {id:7, name: "newField", builtIn: false}
     ];
     let pendEdits = {
         recordChanges: {
