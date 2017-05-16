@@ -7,6 +7,7 @@ import configureMockStore from "redux-mock-store";
 import thunk from "redux-thunk";
 import Promise from "bluebird";
 import FacetSelections from "../../../../reuse/client/src/components/facets/facetSelections";
+import GovernanceBundleLoader from '../../../src/locales/governanceBundleLoader';
 import {FACET_FIELDID} from "./grid/AccountUsersGridFacet.unit.spec";
 
 describe('Account Users Actions Tests', () => {

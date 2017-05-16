@@ -89,7 +89,7 @@ const columns = [
             label: 'QUICK BASE ACCESS STATUS'
         },
         cell: {
-            formatters: [Formatters.FormatUserStatusHTML]
+            formatters: [Formatters.FormatAccessStatusHTML]
         },
         fieldDef: {
             id: 6,

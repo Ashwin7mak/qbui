@@ -26,12 +26,14 @@ export const FormatUserStatusText = (hasAppAccess, cellInfo) => {
         return "Unverified";
     } else if (RealmUserAccountFlagConstants.IsRegistered(cellInfo.rowData)) {
         return "Registered";
-    } else if (FormatAccessStatusText(hasAppAccess, cellInfo) !== "No App Access") {
+    } else if (FormatAccessStatusText(hasAppAccess, cellInfo) === "No App Access") {
         return "Unregistered";
+    } else {
+        return "";
     }
 };
 
-export const FormatUserStatusHTML = (hasAppAccess, cellInfo) => {
+export const FormatAccessStatusHTML = (hasAppAccess, cellInfo) => {
     if (RealmUserAccountFlagConstants.IsDeactivated(cellInfo.rowData)) {
         return (<span className="accessStatusLabel deactivated"><Icon icon="errorincircle-outline"/> Deactivated</span>);
     } else if (RealmUserAccountFlagConstants.IsDenied(cellInfo.rowData)) {
