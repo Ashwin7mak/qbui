@@ -443,8 +443,13 @@
             var allReports = this.getReportListUlEl.value.filter(function(report) {
                 return report.index === reportID;
             });
-            //Click on the report
-            allReports[0].click();
+
+            if (allReports !== []) {
+                //Click on the report
+                allReports[0].click();
+                //wait until report loaded
+                return this.waitForReportContent();
+            }
         }},
     });
 
