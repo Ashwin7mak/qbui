@@ -29,7 +29,7 @@ exports.config = {
         // Custom ip to query for test metrics
         metricsAddress : 'localhost:' + metricsPort,
         // Custom id to add to the ready file name to make the file unique
-        readyFileId: randomNumAdd
+        readyFileId: randomNum
     },
     //
     //
