@@ -1,6 +1,6 @@
 /**
- * E2E tests for the topNav of the Reports page
- * cperikal 4/18/2017
+ * E2E tests for the global LeftNav
+ * cperikal 5/16/2017
  */
 (function() {
     'use strict';

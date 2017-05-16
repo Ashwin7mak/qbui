@@ -1,6 +1,6 @@
 /**
- * This file uses the Page Object pattern to define topNav page for test
- * cperikal 4/18/2017
+ * This file uses the Page Object pattern to define leftNav page for test
+ * cperikal 5/16/2017
  */
 (function() {
     'use strict';
