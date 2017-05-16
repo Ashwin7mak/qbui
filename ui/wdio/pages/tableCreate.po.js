@@ -154,7 +154,7 @@
             //while (browser.element('.tablesList .leftNavLink .leftNavLabel').getAttribute('textContent').length === 0) {
             //    browser.pause(e2eConsts.shortWaitTimeMs);
             //}
-            browser.waitForText('.tablesList .leftNavLink .leftNavLabel', e2eConsts.longWaitTimeMs);
+            browser.waitForText('.tablesList .leftNavLink .leftNavLabel', e2eConsts.extraLongWaitTimeMs);
             //filter table names from leftNav links
             var results = this.getAllTableLeftNavLinksList.value.filter(function(table) {
                 return table.getAttribute('textContent') === tableName;

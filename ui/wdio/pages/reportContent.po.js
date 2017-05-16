@@ -137,7 +137,7 @@
             //while (browser.element('.tablesList .leftNavLink .leftNavLabel').getAttribute('textContent').length === 0) {
             //    browser.pause(e2eConsts.shortWaitTimeMs);
             //}
-            return browser.waitForText('.tablesList .leftNavLink .leftNavLabel', e2eConsts.longWaitTimeMs);
+            return browser.waitForText('.tablesList .leftNavLink .leftNavLabel', e2eConsts.extraLongWaitTimeMs);
         }},
 
         /**
