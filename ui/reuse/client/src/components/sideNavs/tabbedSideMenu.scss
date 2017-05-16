@@ -1,8 +1,25 @@
+@import "../../assets/css/qbVariables";
 // TabbedSideNav uses a 3rd party component called rc-tabs. The rc-tab classes below are rendered by that third party component.
 
 .tabbedSideNav {
     &, .rc-tabs, .rc-tabs-content, .rc-tabs-tabpane {
+        overflow: hidden;
         height: 100%;
+        .rc-tabs-tab-active, .rc-tabs-tab-active:hover {
+            color: $input-text-focus-border-color;
+        }
+
+        .rc-tabs-tab:hover {
+           color: $input-text-focus-border-color;
+        }
+
+        .rc-tabs-ink-bar {
+            background-color: $input-text-focus-border-color;
+        }
+
+        .rc-tabs-bar {
+            margin-left: 30px;
+        }
     }
 
     .rc-tabs-top .rc-tabs-tab {
@@ -12,4 +29,6 @@
     .rc-tabs-content {
         overflow: visible; // Second tab would be invisible when this was set to hidden. Fixed with visible.
     }
+
+
 }
