@@ -2,6 +2,9 @@ import React from 'react';
 import TestUtils from 'react-addons-test-utils';
 import ReactDOM from 'react-dom';
 import {CardViewListHolder, __RewireAPI__ as CardViewListHolderdRewireAPI} from '../../src/components/dataTable/cardView/cardViewListHolder';
+import {EDIT_RECORD_KEY} from '../../src/constants/urlConstants';
+
+let component;
 
 const fakeReportData_loading = {
     loading: true
@@ -75,6 +78,7 @@ const fakeReportData_valid = {
     rptId: "3",
     loading:false,
     data: {
+        columns: [{id:6, field:"Text"}],
         filteredRecords: singleNodeTreeData
     }
 };
@@ -101,8 +105,6 @@ const CardViewListMock = React.createClass({
 
 describe('CardViewListHolder functions', () => {
     'use strict';
-
-    let component;
 
     beforeEach(() => {
         CardViewListHolderdRewireAPI.__Rewire__('CardViewList', CardViewListMock);
@@ -315,5 +317,70 @@ describe('CardViewListHolder functions', () => {
 
         cardlist.simulateClick();
         expect(onRowClicked).toBe(true);
+    });
+
+    // This function is unit tested directly because it is passed down to a child component rather than rendered in this component
+    describe('openRecordForEdit', () => {
+        const mockWindowLocationUtils = {pushWithQuery() {}};
+        const mockParentMethods = {openRecord() {}};
+
+        beforeEach(() => {
+            spyOn(mockWindowLocationUtils, 'pushWithQuery');
+            spyOn(mockParentMethods, 'openRecord');
+
+            CardViewListHolderdRewireAPI.__Rewire__('WindowLocationUtils', mockWindowLocationUtils);
+
+            component = TestUtils.renderIntoDocument(<CardViewListHolder reportData={{}} openRecord={mockParentMethods.openRecord} />);
+        });
+
+        afterEach(() => {
+            CardViewListHolderdRewireAPI.__ResetDependency__('WindowLocationUtils');
+        });
+
+        it('does not navigate if a record id is not provided', () => {
+            component.openRecordForEdit();
+
+            expect(mockWindowLocationUtils.pushWithQuery).not.toHaveBeenCalled();
+            expect(mockParentMethods.openRecord).not.toHaveBeenCalled();
+        });
+
+        it('returns undefined if the record is not in the array of records for the report', () => {
+            component.openRecordForEdit(2);
+
+            expect(mockWindowLocationUtils.pushWithQuery).not.toHaveBeenCalled();
+            expect(mockParentMethods.openRecord).not.toHaveBeenCalled();
+        });
+
+        it('navigates to the record if present in the data and invokes the openRecord callback', () => {
+            spyOn(component, 'getReport').and.returnValue({data: {keyField: {name: 'Record ID#'}}});
+            spyOn(component, 'getRecordsArray').and.returnValue([{'Record ID#': {value: 1}}]);
+
+            component.openRecordForEdit(1);
+
+            expect(mockWindowLocationUtils.pushWithQuery).toHaveBeenCalledWith(EDIT_RECORD_KEY, 1);
+            expect(mockParentMethods.openRecord).toHaveBeenCalledWith(1, null, null);
+        });
+    });
+
+    // This function is unit tested directly because it is passed down to a child component rather than rendered in this component
+    describe('isRowSelected', () => {
+        it('returns true if the row is in the list of selected rows', () => {
+            component = TestUtils.renderIntoDocument(<CardViewListHolder selectedRows={[1, 2]} reportData={{}}/>);
+
+            expect(component.isRowSelected(1)).toEqual(true);
+        });
+
+        it('returns false if the row is in the list of selected rows', () => {
+            component = TestUtils.renderIntoDocument(<CardViewListHolder selectedRows={[1, 2]} reportData={{}}/>);
+
+            expect(component.isRowSelected(3)).toEqual(false);
+        });
+
+        it('returns false if selectedRows is null', () => {
+            component = TestUtils.renderIntoDocument(<CardViewListHolder selectedRows={null} reportData={{}}/>);
+
+            expect(component.isRowSelected(1)).toEqual(false);
+        });
+
     });
 });

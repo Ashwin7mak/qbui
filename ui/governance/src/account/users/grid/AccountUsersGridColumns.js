@@ -1,14 +1,11 @@
-import * as Formatters from './AccountUsersGridFormatters';
-import _ from 'lodash';
-import * as FieldConsts from '../../../../../client-react/src/constants/schema';
 import Locale from '../../../../../client-react/src/locales/locales';
-import GovernanceBundleLoader from '../../../locales/governanceBundleLoader';
+import * as Formatters from "./AccountUsersGridFormatters";
+import _ from "lodash";
+import * as FieldConsts from "../../../../../client-react/src/constants/schema";
 
 const boolColumnProps = {
     classes: ['BoolColumn'],
 };
-
-// GovernanceBundleLoader.changeLocale('en-us');
 
 // Column Definitions
 const columns = [
@@ -55,6 +52,9 @@ const columns = [
         property: 'userName',
         header: {
             label: Locale.getMessage('governance.account.users.grid.userName')
+        },
+        cell: {
+            formatters: [Formatters.FormatUsernameString]
         },
         props: {
             classes: ['ScreennameColumn']

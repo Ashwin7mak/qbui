@@ -1,5 +1,5 @@
-import GetLeftNavLinks from '../../../src/common/leftNav/GovernanceLeftNavLinks';
-import GovernanceBundleLoader from '../../../src/locales/governanceBundleLoader';
+import GetLeftNavLinks from "../../../src/common/leftNav/GovernanceLeftNavLinks";
+import GovernanceBundleLoader from "../../../src/locales/governanceBundleLoader";
 
 describe('GetLeftNavLinks', () => {
     const AccountAdminLinkNames = ['MY APPS', 'Account Summary', 'Manage Apps', 'Manage Users', 'Manage Groups',

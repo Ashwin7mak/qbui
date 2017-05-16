@@ -1,13 +1,13 @@
-import React from 'react';
-import {render} from 'react-dom';
-import 'react-fastclick';
-import {GOVERNANCE_ACCOUNT_ROUTE, GOVERNANCE_ACCOUNT_USERS_ROUTE} from './routes';
-import AppShell from './appShell';
-import AccountUsers from '../account/users/AccountUsersMain';
-import {BrowserRouter, Switch} from 'react-router-dom';
+import React from "react";
+import {render} from "react-dom";
+import "react-fastclick";
+import {GOVERNANCE_ACCOUNT_ROUTE, GOVERNANCE_ACCOUNT_USERS_ROUTE} from "./routes";
+import AppShell from "./appShell";
+import AccountUsers from "../account/users/AccountUsersMain";
+import {BrowserRouter, Switch} from "react-router-dom";
 import RouteWithSubRoutes from "../../../client-react/src/scripts/RouteWithSubRoutes";
 import {Provider} from 'react-redux';
-import createGovernanceStore from './store';
+import createGovernanceStore from "./store";
 
 const store = createGovernanceStore();
 

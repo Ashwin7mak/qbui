@@ -9,6 +9,7 @@ import {Provider} from "react-redux";
 import StandardGrid from "../../../../src/common/grid/standardGrid";
 import * as Actions from "../../../../src/account/users/AccountUsersActions";
 import {GetAccountUsersGridColumns} from "../../../../src/account/users/grid/AccountUsersGridColumns";
+import {GetFacetFields} from "../../../../src/account/users/grid/AccountUsersGridFacet";
 
 import GovernanceBundleLoader from '../../../../src/locales/governanceBundleLoader';
 import Locale from '../../../../../reuse/client/src/locales/locale';
@@ -24,6 +25,7 @@ describe('AccountUsersGridColumns', () => {
     const GRID_ID = 'accountUsers';
     const baseProps = {
         columns : GetAccountUsersGridColumns(true, true),
+        getFacetFields : GetFacetFields(true, true),
         rowKey: 'uid',
         id: GRID_ID,
         columnTransformProps :[],
@@ -58,8 +60,6 @@ describe('AccountUsersGridColumns', () => {
             let headers = component.find(QbHeaderCell).map(node => node.text());
             expect(headers).toEqual([Locale.getMessage('governance.account.users.grid.firstName'), Locale.getMessage('governance.account.users.grid.lastName'), Locale.getMessage('governance.account.users.grid.email'), Locale.getMessage('governance.account.users.grid.userName'), Locale.getMessage('governance.account.users.grid.quickbaseAccessStatus'), Locale.getMessage('governance.account.users.grid.inRealmDirectory'), Locale.getMessage('governance.account.users.grid.realmApproved')]);
         });
-
-
 
         it("should show the correct set of headers when not a realm admin", ()=> {
             let props = {
@@ -241,7 +241,7 @@ describe('AccountUsersGridColumns', () => {
                     <StandardGrid {...baseProps} />
                 </Provider>);
             let cell = component.find(QbCell).at(5);
-            expect(cell.text().trim()).toEqual("QuickBase Staff");
+            expect(cell.text().trim()).toEqual("Quick Base Staff");
         });
 
         it("should show paid seat if has access", () => {

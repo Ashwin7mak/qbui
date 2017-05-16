@@ -1,11 +1,11 @@
-import React, {PropTypes, Component} from 'react';
-import {connect} from 'react-redux';
-import {toggleNav} from '../../../reuse/client/src/components/sideNavs/commonNavActions';
-import AppShell from '../../../reuse/client/src/components/appShell/appShell';
-import DefaultTopNavGlobalActions from '../../../reuse/client/src/components/topNav/defaultTopNavGlobalActions';
-import TopNav from '../../../reuse/client/src/components/topNav/topNav';
-import LeftNav from '../common/leftNav/GovernanceLeftNav';
-import {Switch} from 'react-router-dom';
+import React, {PropTypes, Component} from "react";
+import {connect} from "react-redux";
+import {toggleNav} from "../../../reuse/client/src/components/sideNavs/commonNavActions";
+import AppShell from "../../../reuse/client/src/components/appShell/appShell";
+import DefaultTopNavGlobalActions from "../../../reuse/client/src/components/topNav/defaultTopNavGlobalActions";
+import TopNav from "../../../reuse/client/src/components/topNav/topNav";
+import LeftNav from "../common/leftNav/GovernanceLeftNav";
+import {Switch} from "react-router-dom";
 import RouteWithSubRoutes from "../../../client-react/src/scripts/RouteWithSubRoutes";
 export const GovernanceAppShell = (props) => (
     <AppShell functionalAreaName="governance">
