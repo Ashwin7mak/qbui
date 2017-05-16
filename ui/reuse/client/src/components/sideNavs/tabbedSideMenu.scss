@@ -7,23 +7,24 @@
         height: 100%;
         .rc-tabs-tab-active, .rc-tabs-tab-active:hover {
             //text color
-            color: $color-purple-400;
+            color: $tabs-active-color;
         }
 
         .rc-tabs-tab:hover {
             //hover color for text
-           color: $input-text-focus-border-color;
+           color: $tabs-hover-text-color;
         }
 
         .rc-tabs-ink-bar {
             //color for underline for selected tab
-            background-color: $input-text-focus-border-color;
+            background-color: $tabs-underline-background-color;
+            margin-bottom: 2px;
         }
 
         .rc-tabs-bar {
             border: 1px solid transparent;
             &:focus {
-                //border focus for div that wraps all tabs
+                //keyboard border focus for div that wraps all tabs
                 @include text-input-focus;
             }
             .rc-tabs-tab {
