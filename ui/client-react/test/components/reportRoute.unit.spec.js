@@ -146,7 +146,7 @@ describe('ReportRoute', () => {
             store = mockStore(initialState);
         });
 
-        it('loadReport is called with app data', () => {
+        it('loadReport is called with app data on mount', () => {
             component = mount(
                 <Provider store={store}>
                     <UnconnectedReportRoute {...props} match={routeParams} reportData={reportDataParams.reportData} flux={flux} pendEdits={pendEdits}/>
@@ -180,6 +180,54 @@ describe('ReportRoute', () => {
                     <UnconnectedReportRoute {...props} match={missingRouteParams} reportData={reportDataParams.reportData} flux={flux} pendEdits={pendEdits}/>
                 </Provider>);
             expect(props.loadReport).not.toHaveBeenCalled();
+        });
+    });
+
+    describe('loadDynamicReport', () => {
+        const initialState = {};
+        let store = null;
+        const paramsWithChildTable = Object.assign({}, routeParams.params, {detailKeyFid: 4, detailKeyValue: 'value'});
+
+        beforeEach(() => {
+            store = mockStore(initialState);
+        });
+
+        it(`is called with app data on mount if 'detailKeyFid' and 'detailKeyValue' are passed in as part of params`, () => {
+            component = mount(
+                <Provider store={store}>
+                    <UnconnectedReportRoute
+                        {...props}
+                        match={{params: paramsWithChildTable}}
+                        reportData={reportDataParams.reportData}
+                        flux={flux}
+                        pendEdits={pendEdits}/>
+                </Provider>);
+            expect(props.loadDynamicReport).toHaveBeenCalledWith(
+                jasmine.any(String),
+                appId,
+                tblId,
+                rptId,
+                true,
+                jasmine.any(Object),
+                jasmine.objectContaining({
+                    query: jasmine.any(String),
+                    offset,
+                    numRows
+                })
+            );
+        });
+
+        it(`is not called if 'detailKeyFid' and 'detailKeyValue' are not defined`, () => {
+            component = mount(
+                <Provider store={store}>
+                    <UnconnectedReportRoute
+                        {...props}
+                        match={routeParams}
+                        reportData={reportDataParams.reportData}
+                        flux={flux}
+                        pendEdits={pendEdits}/>
+                </Provider>);
+            expect(props.loadDynamicReport).not.toHaveBeenCalled();
         });
     });
 });

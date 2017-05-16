@@ -94,7 +94,8 @@ export const ReportRoute = React.createClass({
 
             // A link from a parent component (see qbform.createChildReportElementCell) was used
             // to display a filtered child report.
-            if (detailKeyFid && detailKeyValue) {
+            const isChildReport = !_.isUndefined(detailKeyFid) && !_.isUndefined(detailKeyValue);
+            if (isChildReport) {
                 const queryParams = {
                     query: QueryUtils.parseStringIntoExactMatchExpression(detailKeyFid, detailKeyValue),
                     offset,
