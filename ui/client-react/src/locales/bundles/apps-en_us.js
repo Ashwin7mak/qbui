@@ -707,7 +707,7 @@ export default {
         settings: {
             header: "Settings",
             appHeader: "App",
-            automationSettings: "Automation settings",
+            automationSettings: "Automations",
             tablesHeader: "Table",
             formsHeader: "Form",
             tableSettings: 'Table properties & settings',

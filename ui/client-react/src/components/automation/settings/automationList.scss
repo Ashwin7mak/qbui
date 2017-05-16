@@ -11,6 +11,7 @@ $table-properties-panel-width: 776px;
     .automationListSettingsStage {
         font-size: 24px;
         color: $stage-headline-color;
+        padding-top: 30px;
         .qbIcon {
             font-size: 28px;
             margin-right: 10px;
@@ -52,6 +53,15 @@ $table-properties-panel-width: 776px;
             }
         }
     }
+}
+
+
+.automationSettings--container {
+    padding: 10px;
+}
+
+.automationSettings--table {
+    background: $color-black-100;
 }
 
 .deleteautomationListDialogContent {

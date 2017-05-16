@@ -36,13 +36,8 @@ describe('AutomationListRoute functions', () => {
             expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
         });
 
-        it('test message is shown', () => {
-            let messageDiv = TestUtils.findRenderedDOMComponentWithClass(component, "automationListMessage");
-            expect(messageDiv.innerText.length).toBeGreaterThan(0);
-        });
-
         it('test list of automation names is blank', () => {
-            let namesLI = TestUtils.scryRenderedDOMComponentsWithTag(component, "li");
+            let namesLI = TestUtils.scryRenderedDOMComponentsWithTag(component, "td");
             expect(namesLI.length).toEqual(0);
         });
 
@@ -57,12 +52,12 @@ describe('AutomationListRoute functions', () => {
         });
 
         it('test list of automation names contains automations', () => {
-            let namesLI = TestUtils.scryRenderedDOMComponentsWithTag(component, "li");
+            let namesLI = TestUtils.scryRenderedDOMComponentsWithTag(component, "td");
             expect(namesLI.length).toEqual(2);
         });
 
         it('test list of automation names has the correct name first', () => {
-            let namesLI = TestUtils.scryRenderedDOMComponentsWithTag(component, "li");
+            let namesLI = TestUtils.scryRenderedDOMComponentsWithTag(component, "td");
             expect(namesLI[0].innerText).toEqual("Auto 1");
         });
 
