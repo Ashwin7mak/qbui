@@ -88,6 +88,10 @@ $custom-row-card-horizontal-padding: $custom-row-card-padding-left + $custom-row
         }
     }
 
+    .top-card-row.field {
+        padding: 0 10px 5px 0;
+    }
+
     .fieldRow {
         display: flex;
         flex-direction: row;
