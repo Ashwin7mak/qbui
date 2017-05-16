@@ -592,7 +592,11 @@ module.exports = function(grunt) {
                     // we will turn it back on once this button has been enabled again
                     './wdio/tests/reports/reportAddRecord.e2e.spec.js',
                     // Stabilize in CI before enabling
-                    './wdio/tests/reports/reportSearch.e2e.spec.js'
+                    './wdio/tests/reports/reportSearch.e2e.spec.js',
+                    //Stabilize in CI before enabling
+                    './wdio/tests/relationships/relationshipViewChildTable.e2e.spec.js',
+                    //stabilie in CI
+                    './wdio/tests/global/globalTopNav.e2e.spec.js'
                 ],
                 suites: {
                     // Please alphabetize these by folder level
@@ -603,7 +607,6 @@ module.exports = function(grunt) {
                         './wdio/tests/forms/formEditValidation.e2e.spec.js'
                     ],
                     relationships: [
-                        './wdio/tests/relationships/relationshipViewChildTable.e2e.spec.js'
                     ],
                     reports: [
                         './wdio/tests/reports/reportDeleteRecord.e2e.spec.js',
@@ -624,7 +627,7 @@ module.exports = function(grunt) {
                         './wdio/tests/users/usersTable.e2e.spec.js'
                     ],
                     global: [
-                        './wdio/tests/global/globalTopNav.e2e.spec.js'
+
                     ]
                 }
             },
