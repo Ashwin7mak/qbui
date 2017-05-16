@@ -103,9 +103,6 @@
             formBuilderPO.selectFieldByIndex(1);
             // add the first new field item to the form
             newField.click();
-            // browser.waitUntil(function() {
-            //     return formBuilderPO.getFieldLabels().length !== origFields.length;
-            // }, formBuilderPO.fiveSeconds, 'Expected # of fields to change after adding field');
             browser.pause(formBuilderPO.oneSecond);
             // verify that the new row has the expected label
             expect(formBuilderPO.getFieldLabels()[1]).toBe(newFieldLabel);

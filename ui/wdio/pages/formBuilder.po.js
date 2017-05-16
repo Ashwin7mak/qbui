@@ -149,7 +149,6 @@ class formBuilderPage {
                 return label;
             });
         } catch (err) {
-            // browser.pause(this.fiveSeconds);
             browser.pause(this.oneSecond);
             return this.getFieldLabels();
         }
@@ -231,7 +230,6 @@ class formBuilderPage {
         // wait for groups to appear or disappear
         // depending on whether we searched or cleared
         this.listOfElementsItemGroup.waitForExist(null, (text !== null));
-        // todo: write waitForNewLabels() (see waitForLabels) to avoid pause
         browser.pause(fiveSeconds);
         return this.getNewFieldLabels();
     }
