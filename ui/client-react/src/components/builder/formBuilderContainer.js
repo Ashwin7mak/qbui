@@ -25,7 +25,6 @@ import _ from 'lodash';
 import {DragDropContext} from 'react-dnd';
 import TouchBackend from 'react-dnd-touch-backend';
 import FormBuilderCustomDragLayer from '../formBuilder/formBuilderCustomDragLayer';
-import AppHistory from '../../globals/appHistory';
 import {HideAppModal} from '../qbModal/appQbModalFunctions';
 import AppQbModal from '../qbModal/appQbModal';
 
@@ -37,8 +36,6 @@ let formBuilderContainerContent = null;
 const mapStateToProps = state => {
     let currentForm = getFormByContext(state, CONTEXT.FORM.VIEW);
     let fields = state.fields[0];
-    let isFormDirty = (_.has(currentForm, 'isPendingEdit') ? currentForm.isPendingEdit : false);
-    let isFieldPropertiesDirty = (_.has(fields, 'isPendingEdit') ? fields.isPendingEdit : false);
 
     return {
         currentForm,
@@ -49,7 +46,6 @@ const mapStateToProps = state => {
         toolPaletteChildrenTabIndex: (_.has(currentForm, 'toolPaletteChildrenTabIndex') ? currentForm.toolPaletteChildrenTabIndex[0] : "-1"),
         formFocus: (_.has(currentForm, 'formFocus') ? currentForm.formFocus[0] : undefined),
         toolPaletteFocus: (_.has(currentForm, 'toolPaletteFocus') ? currentForm.toolPaletteFocus[0] : undefined),
-        isPendingEdit: isFormDirty || isFieldPropertiesDirty,
         isOpen: state.builderNav.isNavOpen,
         isCollapsed: state.builderNav.isNavCollapsed
     };
@@ -139,12 +135,7 @@ export const FormBuilderContainer = React.createClass({
     },
 
     onCancel() {
-        if (this.props.isPendingEdit) {
-            AppHistory.showPendingEditsConfirmationModal(this.saveClicked, this.closeFormBuilder, () => HideAppModal());
-        } else {
-            HideAppModal();
-            this.closeFormBuilder();
-        }
+        this.closeFormBuilder();
     },
 
     removeField() {

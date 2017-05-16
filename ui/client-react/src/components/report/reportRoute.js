@@ -9,7 +9,7 @@ import {Link} from 'react-router-dom';
 import Logger from '../../utils/logger';
 import QueryUtils from '../../utils/queryUtils';
 import NumberUtils from '../../utils/numberUtils';
-import WindowLocationUtils from '../../utils/windowLocationUtils';
+import {WindowHistoryUtils} from '../../utils/windowHistoryUtils';
 import simpleStringify from '../../../../common/src/simpleStringify';
 import constants from '../../../../common/src/constants';
 import Fluxxor from 'fluxxor';
@@ -17,6 +17,7 @@ import _ from 'lodash';
 import './report.scss';
 import ReportToolsAndContent from '../report/reportToolsAndContent';
 import ReportFieldSelectMenu from './reportFieldSelectMenu';
+import ReportNameEditor from './reportNameEditor';
 import {connect} from 'react-redux';
 import {clearSearchInput} from '../../actions/searchActions';
 import {loadReport, loadDynamicReport} from '../../actions/reportActions';
@@ -121,7 +122,7 @@ export const ReportRoute = React.createClass({
      * @param data row record data
      */
     editNewRecord() {
-        WindowLocationUtils.pushWithQuery(EDIT_RECORD_KEY, NEW_RECORD_VALUE);
+        WindowHistoryUtils.pushWithQuery(EDIT_RECORD_KEY, NEW_RECORD_VALUE);
     },
 
     getPageActions(maxButtonsBeforeMenu) {
@@ -146,13 +147,13 @@ export const ReportRoute = React.createClass({
                 </div>
 
                 <div className="stageHeadline">
-                    <h3 className="reportName">{reportName}</h3>
+                    <ReportNameEditor name={reportName}/>
                 </div>
             </div>);
     },
 
     render() {
-        let inBuilderMode = this.props.reportBuilder.inBuilderMode;
+        let inBuilderMode = this.props.reportBuilder.isInBuilderMode;
         if (_.isUndefined(this.props.match.params) ||
             _.isUndefined(this.props.match.params.appId) ||
             _.isUndefined(this.props.match.params.tblId) ||

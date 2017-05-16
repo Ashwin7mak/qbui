@@ -80,7 +80,7 @@
 
                                     let fieldResp = JSON.parse(responses[1].body);
                                     assert.ok(Array.isArray(fieldResp));
-                                    assert.equal(fieldResp.length, Object.keys(consts.BUILTIN_FIELD_ID).length + 2, "Unexpected number of fields returned");
+                                    assert.equal(fieldResp.length, Object.keys(consts.BUILTIN_FIELD_ID).length + 3, "Unexpected number of fields returned");
 
                                     let reportResp = JSON.parse(responses[2].body);
                                     assert.ok(Array.isArray(reportResp));

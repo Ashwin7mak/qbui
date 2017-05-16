@@ -111,7 +111,8 @@ const forms = (
         currentForm = {
             ...currentForm,
             saving: true,
-            selectedFields: []
+            selectedFields: [],
+            isPendingEdit: false
         };
 
         return {...newState, [id || formId]: currentForm};
@@ -309,6 +310,17 @@ const forms = (
         }
 
         updatedForm.isDragging = true;
+
+        newState[id] = updatedForm;
+        return newState;
+    }
+
+    case types.SET_IS_PENDING_EDIT_TO_FALSE : {
+        if (!currentForm) {
+            return state;
+        }
+
+        updatedForm.isPendingEdit = false;
 
         newState[id] = updatedForm;
         return newState;

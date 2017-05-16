@@ -77,15 +77,14 @@ Resources:
               Value: container
             - Name: javaHost
               Value: !Sub
-                - "https://${SwimlaneID}-ecs.${DomainName}:443/api/api/v1"
+                - "https://${SwimlaneID}-ecs.${DomainName}:443"
                 - { SwimlaneID: !Ref SwimlaneID, DomainName: !FindInMap [AccountMap, "DomainName", !Ref "AWS::AccountId"] }
             - Name: eeHost
               Value: !Sub
-                - "https://${SwimlaneID}-ecs.${DomainName}:443/ee/v1"
+                - "https://${SwimlaneID}-ecs.${DomainName}:443"
                 - { SwimlaneID: !Ref SwimlaneID, DomainName: !FindInMap [AccountMap, "DomainName", !Ref "AWS::AccountId"] }
             - Name: legacyBase
-              Value:
-                - !Ref LegacyBase
+              Value: !Ref LegacyBase
       Volumes:
         - Host:
             SourcePath: !Sub "/var/log/containers/${ServiceName}"
