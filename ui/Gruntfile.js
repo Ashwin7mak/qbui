@@ -616,6 +616,7 @@ module.exports = function(grunt) {
                         './wdio/tests/reports/grouping/reportGroupingViaColumnHeader.e2e.spec.js',
                         './wdio/tests/reports/grouping/reportGroupingViaContainer.e2e.spec.js',
                         './wdio/tests/reports/sorting/reportSortingViaColumnHeader.e2e.spec.js',
+                        './wdio/tests/reports/sorting/reportSortingViaContainer.e2e.spec.js',
                     ],
                     tables: [
                         './wdio/tests/tables/tableCreate.e2e.spec.js',
