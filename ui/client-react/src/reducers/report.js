@@ -459,6 +459,17 @@ const report = (state = [], action) => {
         }
         return state;
     }
+    case types.CHANGE_REPORT_NAME: {
+        let currentReport = getReportFromState(action.id);
+        if (currentReport) {
+            // change the report data.name to show changes before save
+            currentReport.data.name = action.content.newName;
+            // change the report metaData.name to patch the changes after save
+            currentReport.data.metaData.name = action.content.newName;
+            return newState(currentReport);
+        }
+        return state;
+    }
     default:
         // by default, return existing state
         return state;
