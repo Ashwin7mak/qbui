@@ -3,7 +3,7 @@ import Tabs, {TabPane} from 'rc-tabs';
 import TabContent from 'rc-tabs/lib/TabContent';
 import InkTabBar from 'rc-tabs/lib/InkTabBar';
 
-import 'rc-tabs/assets/index.css';
+// import 'rc-tabs/assets/index.css';
 import './tabbedSideMenu.scss';
 
 
@@ -15,25 +15,21 @@ import './tabbedSideMenu.scss';
 class TabbedSideNav extends Component {
     constructor(props) {
         super(props);
-
-        this.getDefaultTab = this.getDefaultTab.bind(this);
-        this.onTabChanged = this.onTabChanged.bind(this);
-        this.onTabClicked = this.onTabClicked.bind(this);
     }
 
-    onTabChanged(tabKey) {
+    onTabChanged = (tabKey) => {
         if (this.props.onTabChanged) {
             this.props.onTabChanged(tabKey);
         }
     }
 
-    onTabClicked(tabKey) {
+    onTabClicked = (tabKey) => {
         if (this.props.onTabClicked) {
             this.props.onTabClicked(tabKey);
         }
     }
 
-    getDefaultTab() {
+    getDefaultTab = () => {
         if (this.props.defaultTab) {
             return this.props.defaultTab;
         }
