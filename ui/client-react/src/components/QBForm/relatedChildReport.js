@@ -20,9 +20,6 @@ class ChildReport extends React.Component {
         if (!validProps) {
             return null;
         } else if (Breakpoints.isSmallBreakpoint() || this.props.type === 'REPORTLINK') {
-            // render report link for small-breakpoint or if the element type is defined as a
-            // reportLink
-            // TODO: define REPORTLINK, EMBEDREPORT as consts
             return (
                 <EmbeddedReportLink {...this.props}/>
             );

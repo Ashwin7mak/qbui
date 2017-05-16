@@ -267,9 +267,9 @@ const mapDispatchToProps = (dispatch) => {
     };
 };
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state, ownProps) => {
     return {
-        reportBuilder: state.reportBuilder,
+        reportBuilder: state.reportBuilder || {},
         reportData: ownProps.reportData || getEmbeddedReportByContext(state.embeddedReports, ownProps.uniqueId),
         embeddedReports: state.embeddedReports
     };

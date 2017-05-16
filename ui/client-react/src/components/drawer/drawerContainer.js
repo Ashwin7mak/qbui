@@ -1,5 +1,5 @@
 import React, {PropTypes} from 'react';
-import {Route, withRouter} from 'react-router-dom';
+import {Route} from 'react-router-dom';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
 import Drawer from './drawer';
