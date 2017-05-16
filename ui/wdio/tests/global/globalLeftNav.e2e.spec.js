@@ -130,10 +130,10 @@
             leftNavPO.leftNavNewTableEl.click();
 
             // Step 3 - Verify if the new table fields are visible and equal to 3
-            leftNavPO.leftNavNewTableField.waitForVisible();
+            leftNavPO.leftNavNewTableFields.waitForVisible();
 
             // Step 4 - Verify if the new table fields are equal to 3
-            expect(leftNavPO.leftNavNewTableField.value.length).toEqual(3);
+            expect(leftNavPO.leftNavNewTableFields.value.length).toEqual(3);
 
             // Step 5  - Verify if the icon chooser is visible
             leftNavPO.leftNavNewTableIconSelect.waitForVisible();
@@ -142,23 +142,26 @@
             leftNavPO.leftNavNewTableCancelBu.click();
         });
 
-        it('Verify the no.of tables before and after collapse are same ', function() {
+        it('Verify the no.of tables before and after collapse are same on tables page', function() {
 
-            // Step 1 - Verify the no.of tables before leftNav collapse
+            // Step 1 - Open tables home page
+            RequestAppsPage.get(e2eBase.getRequestTableEndpoint(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1));
+
+            // Step 2 - Verify the no.of tables before leftNav collapse
             let noOfTablesBeforeCollapse = leftNavPO.leftNavTablesList.value.length;
 
-            // Step 2 - Verify if the hamburger menu is clickable and collapses leftNav
+            // Step 3 - Verify if the hamburger menu is clickable and collapses leftNav
             topNavPO.topNavToggleHamburgerEl.click();
 
-            // Step 3 - Verify the no.of tables after leftNav collapse
+            // Step 4 - Verify the no.of tables after leftNav collapse
             let noOfTablesAfterCollapse = leftNavPO.leftNavTablesList.value.length;
 
-            // Step 4 - Verify if the no.of tables before and after leftNav collapse are equal
+            // Step 5 - Verify if the no.of tables before and after leftNav collapse are equal
             expect(noOfTablesBeforeCollapse).toEqual(noOfTablesAfterCollapse);
 
         });
 
-        //TODO: MC - 2799 need to be fixed for the below test to pass, Mouse hover on app icon in apps page is not displaying the app name when we have collapsed leftNav
+        //TODO: MC - 2799 need to be fixed for the below test to pass, Mouse hover on app icon in apps page is not displayin
 
         xit('Verify the mouse hover function on apps page collapsed leftNav', function() {
 

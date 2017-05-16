@@ -5,72 +5,80 @@
 (function() {
     'use strict';
     module.exports = Object.create(e2ePageBase, {
-        // Top Nav search element
+
+        // Left Nav caret element
         leftNavCaretUpEl: {
             get: function() {
                 return browser.element('.appsToggleArea .iconUISturdy-caret-up');
             }
         },
+        // Left nav search element
         leftNavSearchEl: {
             get: function() {
                 return browser.element('.transitionGroup .iconUISturdy-search');
             }
         },
+        // Left nav search input box
         leftNavSearchInputBox: {
             get: function() {
                 return browser.element('.transitionGroup .search .searchInput ');
             }
         },
+        // Left nav mini clear button in search box
         leftNavClearSearchEl: {
             get: function() {
                 return browser.element('.transitionGroup .searchInputBox .searchIcon ');
             }
         },
+        // Left nav new table element
         leftNavNewTableEl:{
             get: function() {
                 return browser.element('.newTableItem .iconUISturdy-add-new-stroke');
             }
         },
+        // Left nav new table cancle button
         leftNavNewTableCancelBu:{
             get: function() {
                 return browser.element('.modal-footer .buttons .cancelButton');
             }
         },
+        // Left nav brand logo
         leftNavBrandLogo:{
             get: function() {
                 return browser.element('.branding');
             }
         },
+        // Left nav tables list
         leftNavTablesList:{
             get: function() {
                 return browser.elements('.transitionGroup .tablesList .link');
             }
         },
-        leftNavNewTableField:{
+        // Left nav new table fields
+        leftNavNewTableFields:{
             get: function() {
                 return browser.elements('.modal-body .tableField .tableFieldInput');
             }
         },
+        // Left nav new table dropdown icon button
         leftNavNewTableIconSelect:{
             get: function() {
                 return browser.element('.modal-body .tableField .iconChooser');
             }
         },
+        // Left nav mini report icon beside table name
         leftNavMiniReportIcon: {
             get: function() {
                 return browser.element('.tablesList .right .iconUISturdy-report-menu-3');
             }
         },
-        // leftNavMiniReportClose:{
-        //     get: function() {
-        //         return browser.element(' .trowser .trowserHeader .rightIcons ');
-        //     }
-        // },
+        // Left nav top links
         leftNavTopLinks:{
             get: function() {
                 return browser.elements('.leftNav .topLinks .link');
             }
         },
+        // Left nav table name
         leftNavTableName:{
             get: function() {
                 return browser.element('.leftNav .tablesList .leftNavLabel');
