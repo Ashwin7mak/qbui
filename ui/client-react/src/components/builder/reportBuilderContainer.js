@@ -29,7 +29,7 @@ export class ReportBuilderContainer extends Component {
                     appId={appId}
                     tblId={tblId}
                     reportData={this.props.reportData}>
-                    <h3>Hello!</h3>
+                    <h1>Hello!</h1>
                 </ReportFieldSelectMenu>
                 {this.getSaveOrCancelFooter()}
             </div>
