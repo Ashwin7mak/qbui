@@ -52,6 +52,7 @@
 
             // Step 2 - Verify if the left nav caret up element is clickable and opens apps list
             leftNavPO.leftNavCaretUpEl.click();
+            expect((browser.element('.appsList').getAttribute('textContent').length) > 0).toBeTruthy();
 
             // Step 3 - Verify if the left nav search element is clickable and opens search box
             leftNavPO.leftNavSearchEl.click();
@@ -67,6 +68,8 @@
 
             // Step 7 - Verify if the left nav caret up element is clickable and closes apps list
             leftNavPO.leftNavCaretUpEl.click();
+            expect((browser.element('.leftNavLabel').getAttribute('textContent').length) > 0).toBeTruthy();
+
         });
 
         it('Verify the topLinks, Brand logo and mouse hover function on collapsed leftNav', function() {
@@ -74,13 +77,19 @@
             // Step 1 - Verify if the no.of topLinks are equal to 2 (Home, Users)
             expect(leftNavPO.leftNavTopLinks.value.length).toEqual(2);
 
-            // Step 2 - Verify if the Brand Logo is visible at the bottom of leftNav
+            // Step 2 - Verify the text of top links to be 'Home' and 'Users'
+            // Used HTML to get text as getText() returns empty string for <span> elements
+            let innerHTML = browser.getHTML('.topLinks .leftNavLabel span', false);
+            expect(innerHTML[0]).toEqual('Home');
+            expect(innerHTML[1]).toEqual('Users');
+
+            // Step 3 - Verify if the Brand Logo is visible at the bottom of leftNav
             leftNavPO.leftNavBrandLogo.waitForVisible();
 
-            // Step 3 - Verify if the hamburger menu is clickable and collapses leftNav
+            // Step 4 - Verify if the hamburger menu is clickable and collapses leftNav
             topNavPO.topNavToggleHamburgerEl.click();
 
-            // Step 4 - Verify if the tables in the collapsed leftNav are mouse-hovered
+            // Step 5 - Verify if the tables in the collapsed leftNav are mouse-hovered
             browser.moveToObject('.transitionGroup .tablesList .link');
         });
 
@@ -89,7 +98,7 @@
             // Step 1 - Verify if the left nav table search is visible
             leftNavPO.leftNavSearchEl.waitForVisible();
 
-            // Step 2 - Verify if the search element is clickable and opens seach box
+            // Step 2 - Verify if the search element is clickable and opens search box
             leftNavPO.leftNavSearchEl.click();
 
             // Step 3 - Verify if the search box is user editable
@@ -98,8 +107,9 @@
             // Step 4 - Verify if the clear button is clickable
             leftNavPO.leftNavClearSearchEl.click();
 
-            // Step 5 - Verify if the search element is clickable and closes the seach box
+            // Step 5 - Verify if the search element is clickable and closes the search box
             leftNavPO.leftNavSearchEl.click();
+            expect((browser.element('.leftNavLabel').getAttribute('textContent').length) > 0).toBeTruthy();
         });
 
         it('Verify if the reports icon is displayed and verify the name of the report loaded', function() {
@@ -123,8 +133,9 @@
 
         it('Verify leftNav New Table element and its functionality ', function() {
 
-            // Step 1 - Verify if the new table element is visible
+            // Step 1 - Verify if the new table element is visible and verify the length
             leftNavPO.leftNavNewTableEl.waitForVisible();
+            let noOfTablesBeforeCancel = leftNavPO.leftNavTablesList.value.length;
 
             // Step 2 - Verify if the new table element is clickable and open new modal page
             leftNavPO.leftNavNewTableEl.click();
@@ -138,8 +149,12 @@
             // Step 5  - Verify if the icon chooser is visible
             leftNavPO.leftNavNewTableIconSelect.waitForVisible();
 
-            // Step 6 - Verify if the cancel button is clickable and closes the modal page
+            // Step 6 - Verify if the cancel button is clickable and verify the no.of tables after clicking cancel
             leftNavPO.leftNavNewTableCancelBu.click();
+            let noOfTablesAfterCancel = leftNavPO.leftNavTablesList.value.length;
+
+            // Step 5 - Verify if the no.of tables before and after clicking cancel are equal
+            expect(noOfTablesBeforeCancel).toEqual(noOfTablesAfterCancel);
         });
 
         it('Verify the no.of tables before and after collapse are same on tables page', function() {
@@ -148,12 +163,14 @@
             RequestAppsPage.get(e2eBase.getRequestTableEndpoint(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1));
 
             // Step 2 - Verify the no.of tables before leftNav collapse
+            expect(browser.isVisible('.expanded')).toBeTruthy();
             let noOfTablesBeforeCollapse = leftNavPO.leftNavTablesList.value.length;
 
             // Step 3 - Verify if the hamburger menu is clickable and collapses leftNav
             topNavPO.topNavToggleHamburgerEl.click();
 
             // Step 4 - Verify the no.of tables after leftNav collapse
+            expect(browser.isVisible('.collapsed')).toBeTruthy();
             let noOfTablesAfterCollapse = leftNavPO.leftNavTablesList.value.length;
 
             // Step 5 - Verify if the no.of tables before and after leftNav collapse are equal
