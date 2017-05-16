@@ -6,7 +6,7 @@ import _ from 'lodash';
 import {QBForm, __RewireAPI__ as QbFormRewireAPI} from '../../src/components/QBForm/qbform';
 import QBPanel from '../../src/components/QBPanel/qbpanel.js';
 import {TabPane} from 'rc-tabs';
-import RelatedChildReport from '../../src/components/QBForm/relatedChildReport';
+import RelatedChildReport from '../../src/components/QBForm/childReport';
 
 import {
     buildTestArrayBasedFormData,

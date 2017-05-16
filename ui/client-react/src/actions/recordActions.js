@@ -609,3 +609,18 @@ export const updateRecord = (appId, tblId, recId, params = {}) => {
         });
     };
 };
+
+
+/**
+ * Add a child record for with a parent record with related value
+ * @param context
+ * @param appId
+ * @param tblId
+ * @param rptId
+ * @param detailFid
+ * @param parentValue to fill in
+ * @returns {{id: *, type: *, content: *}}
+ */
+export const addChildRecord = (context, appId, tblId, rptId, detailFid, parentValue)=> {
+    return event(context, types.ADD_CHILD_RECORD, {appId, tblId, rptId, detailFid, parentValue});
+};

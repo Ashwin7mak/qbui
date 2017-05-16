@@ -5,7 +5,7 @@ import TestUtils, {Simulate} from 'react-addons-test-utils';
 import {shallow, mount} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
 
-import RelatedChildReport, {__RewireAPI__ as RelatedChildReportRewireAPI} from '../../src/components/QBForm/relatedChildReport';
+import RelatedChildReport, {__RewireAPI__ as RelatedChildReportRewireAPI} from '../../src/components/QBForm/childReport';
 
 class BreakpointsAlwaysSmallMock {
     static isSmallBreakpoint() {
@@ -38,7 +38,7 @@ const MockChildReport = (props) => {
 const EmbeddedReportToolsAndContentMock = (props) => <div className="embeddedReportContainer"></div>;
 const EmbeddedReportLinkMock = (props) => <div className="embeddedReportLink"></div>;
 
-describe('RelatedChildReport', () => {
+describe('ChildReport', () => {
     beforeAll(() => {
         jasmineEnzyme();
         RelatedChildReportRewireAPI.__Rewire__('EmbeddedReportToolsAndContent', EmbeddedReportToolsAndContentMock);

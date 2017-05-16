@@ -3,6 +3,7 @@ import React from 'react';
 import QBForm from '../QBForm/qbform';
 import Loader  from 'react-loader';
 import * as SchemaConsts from "../../constants/schema";
+import {withRouter} from 'react-router-dom';
 import {connect} from 'react-redux';
 import {editRecordStart, editRecordChange} from '../../actions/recordActions';
 import {UNSAVED_RECORD_ID} from "../../constants/schema";
@@ -54,6 +55,7 @@ export const Record = React.createClass({
     handleEditRecordStart() {
         let origRec = null;
         let changes = {};
+        let queryParams = this.props.location.query;
         if (this.props.recId) {
             origRec = this.getOrigRec();
         } else if (this.props.formData && !this.props.formData.record) {
@@ -65,7 +67,11 @@ export const Record = React.createClass({
                     (field => fieldId === field.id));
                 if (fieldDef && !fieldDef.builtIn) {
                     let value = null;
-                    if (fieldDef.defaultValue && fieldDef.defaultValue.coercedValue) {
+                    //if there is a parent value for this child auto fill it in
+                    let parentFid = _.get(queryParams, 'detailKeyFid', undefined);
+                    if (parentFid && +parentFid === fieldId) {
+                        value =  (_.get(queryParams, 'detailKeyValue', ''));
+                    } else if (fieldDef.defaultValue && fieldDef.defaultValue.coercedValue) {
                         // if there is a default value use that as new record changes
                         value = fieldDef.defaultValue.coercedValue.value;
                     }
@@ -141,7 +147,7 @@ const mapDispatchToProps = (dispatch) => {
     };
 };
 
-export default connect(
+export default withRouter(connect(
     mapStateToProps,
     mapDispatchToProps
-)(Record);
+)(Record));

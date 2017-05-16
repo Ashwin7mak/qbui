@@ -9,7 +9,7 @@ import Locale from '../../locales/locales';
 import Constants from '../../../../common/src/constants';
 import UserFieldValueRenderer from '../fields/userFieldValueRenderer.js';
 import DragAndDropField from '../formBuilder/dragAndDropField';
-import RelatedChildReport from './relatedChildReport';
+import ChildReport from './childReport';
 import {CONTEXT} from "../../actions/context";
 import FlipMove from 'react-flip-move';
 
@@ -431,14 +431,17 @@ export const QBForm = React.createClass({
 
         return (
             <div key={id} className="formElementContainer formElement referenceElement">
-                <RelatedChildReport
+                <ChildReport
                     appId={_.get(relationship, "appId")}
+                    childAppId={_.get(relationship, "detailAppId")}
                     childTableId={_.get(relationship, "detailTableId")}
                     childReportId={_.get(relationship, 'childDefaultReportId')}
                     childTableName={childTableName}
                     childTableNoun={childTableNoun}
                     detailKeyFid={_.get(relationship, "detailFieldId")}
                     detailKeyValue={detailKeyValue}
+                    relationshipId={ReferenceElement.relationshipId}
+                    relationship={relationship}
                     type={ReferenceElement.type}
                     appUsers={this.props.appUsers}
                     handleDrillIntoChild={handleDrillIntoChild}

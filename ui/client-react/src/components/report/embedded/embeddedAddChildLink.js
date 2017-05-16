@@ -1,15 +1,14 @@
 import React, {PropTypes} from 'react';
 import {connect} from 'react-redux';
 import {Link} from 'react-router-dom';
-import _ from 'lodash';
+import {withRouter} from 'react-router-dom';
 
-import {loadReportRecordsCount, unloadEmbeddedReport} from '../../../actions/reportActions';
+import {addChildRecord} from '../../../actions/recordActions';
 import withUniqueId from '../../hoc/withUniqueId';
 import {CONTEXT} from '../../../actions/context';
 import QBicon from '../../qbIcon/qbIcon';
 
 import UrlUtils from '../../../utils/urlUtils';
-import QueryUtils from '../../../utils/queryUtils';
 import Locale from '../../../../../reuse/client/src/locales/locale';
 import {I18nMessage} from '../../../utils/i18nMessage';
 
@@ -23,8 +22,11 @@ export const EmbeddedAddChildLink = React.createClass({
         appId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
         tblId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
         rptId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-        rptId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-        /** The fid of the field containing the foreignkey. */
+        childAppId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+        childTableId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+        childReportId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+        detailKeyValue: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+        /** The fid of the field containing the foreignKey. */
         detailKeyFid: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
         /** The noun used for records in the child table . */
         childTableNoun: PropTypes.string
@@ -32,9 +34,9 @@ export const EmbeddedAddChildLink = React.createClass({
 
 
     render() {
-        const {appId, childTableId, childReportId, detailKeyFid, detailKeyValue, childTableNoun} = this.props;
+        const {childAppId, childTableId, childReportId, detailKeyFid, detailKeyValue, childTableNoun, location} = this.props;
         // render add child link
-        const link = UrlUtils.getAddRelatedChildLink(appId, childTableId, childReportId, detailKeyFid, detailKeyValue);
+        const link = UrlUtils.getAddRelatedChildLink(location.pathname, childAppId, childTableId, childReportId, detailKeyFid, encodeURI(detailKeyValue));
         const noun = childTableNoun ? childTableNoun.toLowerCase() : Locale.getMessage("records.singular");
         const childTableMessage = <I18nMessage message="relationship.addChildRecord" tableNoun={noun}/>;
         return (
@@ -61,6 +63,10 @@ const mapStateToProps = (state, ownProps) => {
 // (another bit of boilerplate to keep the component free of Redux dependencies)
 const mapDispatchToProps = (dispatch) => {
     return {
+        //http://localhost.localhost:9000/qbase/app/0duiiaaaaab/table/0duiiaaaaad/report/2/record/22?editRec=new
+        addChildRecord: (context, childAppId, childTableId, childReportId, detailFid, parentValue) => {
+            dispatch(addChildRecord(context, childAppId, childTableId, childReportId, detailFid, parentValue));
+        }
     };
 };
 
@@ -69,4 +75,4 @@ const ConnectedEmbeddedAddChildLink = connect(
     mapDispatchToProps
 )(EmbeddedAddChildLink);
 
-export default withUniqueId(ConnectedEmbeddedAddChildLink, CONTEXT.REPORT.EMBEDDED);
+export default withRouter(ConnectedEmbeddedAddChildLink);

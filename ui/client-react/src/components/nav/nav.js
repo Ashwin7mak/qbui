@@ -247,7 +247,21 @@ export const Nav = React.createClass({
             // load the edit form and in a trowser
             const showTrowser = true;
             const formType = "edit";
-            this.props.loadForm(appId, tblId, rptId, formType, editRec, showTrowser);
+            // maybe a child create check
+            if (this.props.location.query[UrlConsts.DETAIL_APPID] && this.props.location.query[UrlConsts.DETAIL_TABLEID] && this.props.location.query[UrlConsts.DETAIL_KEY_FID]) {
+                let childAppId = this.props.location.query[UrlConsts.DETAIL_APPID];
+                let childTableId = this.props.location.query[UrlConsts.DETAIL_TABLEID];
+                let childReportId = this.props.location.query[UrlConsts.DETAIL_REPORTID];
+                //`/qbase/app/${appId}/table/{1}/report/{2}?${EDIT_RECORD_KEY}=new&${DETAIL_APPID}={3}${DETAIL_TABLEID}={4}${DETAIL_KEY_FID}={5}&${DETAIL_KEY_VALUE}={6}`;
+                this.props.loadForm(childAppId, childTableId, childReportId, formType, editRec, showTrowser).then((result) => {
+                    //finished loading form
+                    //populate new child form with detail parent info
+                    console.log("finished loading form addchild for this.props.location.pathname" + this.props.location.pathname);
+
+                });
+            } else {
+                this.props.loadForm(appId, tblId, rptId, formType, editRec, showTrowser);
+            }
         }
     },
 
@@ -526,7 +540,7 @@ const mapDispatchToProps = (dispatch) => {
             if (showTrowser) {
                 dispatch(ShellActions.showTrowser(TrowserConsts.TROWSER_EDIT_RECORD));
             }
-            dispatch(FormActions.loadForm(appId, tblId, rptId, formType, editRec));
+            return dispatch(FormActions.loadForm(appId, tblId, rptId, formType, editRec));
         },
 
         loadReports: (context, appId, tblId) => dispatch(ReportActions.loadReports(context, appId, tblId)),
@@ -537,13 +551,13 @@ const mapDispatchToProps = (dispatch) => {
     };
 };
 
-export const NavWithRouter = withRouter(Nav);
-export const ConnectedNavRoute = withRouter(connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(Nav));
+// export const NavWithRouter = withRouter(Nav);
+// export const ConnectedNavRoute = withRouter(connect(
+//     mapStateToProps,
+//     mapDispatchToProps
+// )(Nav));
 
 export default withRouter(connect(
     mapStateToProps,
     mapDispatchToProps
-)(NavWithRouter));
+)(Nav));

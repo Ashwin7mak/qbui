@@ -37,8 +37,8 @@ class ChildReport extends React.Component {
     }
 
     render() {
-        const {appId, childTableId, childReportId, detailKeyFid, detailKeyValue} = this.props;
-        const validProps = [appId, childTableId, childReportId, detailKeyFid, detailKeyValue].every(prop => prop || typeof prop === 'number');
+        const {appId, childAppId,  childTableId, childReportId, detailKeyFid, detailKeyValue} = this.props;
+        const validProps = [appId, childAppId,  childTableId, childReportId, detailKeyFid, detailKeyValue].every(prop => prop || typeof prop === 'number');
         let rowOfButtons = false;
         if (!validProps) {
             return null;
