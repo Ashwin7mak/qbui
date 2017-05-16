@@ -610,7 +610,6 @@ module.exports = function(grunt) {
                         './wdio/tests/reports/reportEditRecord.e2e.spec.js',
                         './wdio/tests/reports/reportNavigation.e2e.spec.js',
                         './wdio/tests/reports/reportTable.e2e.spec.js',
-                        './wdio/tests/reports/reportTopNav.e2e.spec.js',
                         './wdio/tests/reports/grouping/reportGroupingViaColumnHeader.e2e.spec.js',
                         './wdio/tests/reports/grouping/reportGroupingViaContainer.e2e.spec.js',
                         './wdio/tests/reports/sorting/reportSortingViaColumnHeader.e2e.spec.js',
@@ -624,6 +623,9 @@ module.exports = function(grunt) {
                     ],
                     users: [
                         './wdio/tests/users/usersTable.e2e.spec.js'
+                    ],
+                    global: [
+                        './wdio/tests/global/globalTopNav.e2e.spec.js'
                     ]
                 }
             },
@@ -631,7 +633,7 @@ module.exports = function(grunt) {
                 // Use the wdioSauce.conf.js file setting the options above
                 configFile: './wdio/config/' + wdioSauceConfig,
                 // Make sure there are no spaces between test suites here
-                suite: 'forms,relationships,reports,tables,users'
+                suite: 'forms,relationships,reports,tables,users,global'
             }
         },
 

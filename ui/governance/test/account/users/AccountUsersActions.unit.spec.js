@@ -7,6 +7,7 @@ import configureMockStore from "redux-mock-store";
 import thunk from "redux-thunk";
 import Promise from "bluebird";
 import FacetSelections from "../../../../reuse/client/src/components/facets/facetSelections";
+import GovernanceBundleLoader from "../../../src/locales/governanceBundleLoader";
 import Locale from "../../../../reuse/client/src/locales/locale";
 import GovernanceBundleLoader from '../../../src/locales/governanceBundleLoader';
 import {FACET_FIELDID} from "./grid/AccountUsersGridFacet.unit.spec";
@@ -416,13 +417,13 @@ describe('Account Users Actions Tests', () => {
         });
 
         it('Filter the text columns by hasAppAccess correctly', () => {
-            let filteredUsers = actions.searchUsers(ACCOUNT_USERS_DATA, "QuickBase Staff");
+            let filteredUsers = actions.searchUsers(ACCOUNT_USERS_DATA, "Quick Base Staff");
             expect(filteredUsers.length).toEqual(1);
             expect(filteredUsers[0].userName).toEqual('administrator');
         });
 
         it('Filter case insensitive search', () => {
-            let filteredUsers = actions.searchUsers(ACCOUNT_USERS_DATA, "quickBase staff");
+            let filteredUsers = actions.searchUsers(ACCOUNT_USERS_DATA, "quick Base staff");
             expect(filteredUsers.length).toEqual(1);
             expect(filteredUsers[0].userName).toEqual('administrator');
         });
@@ -489,6 +490,9 @@ describe('Account Users Actions Tests', () => {
             selected.addSelection(FACET_FIELDID.QUICKBASE_ACCESS_STATUS, 'QuickBase Staff');
             selected.addSelection(FACET_FIELDID.QUICKBASE_ACCESS_STATUS, 'No App Access');
             selected.addSelection(FACET_FIELDID.QUICKBASE_ACCESS_STATUS, 'Paid Seat');
+            selected.addSelection(0, 'Quick Base Staff');
+            selected.addSelection(0, 'No App Access');
+            selected.addSelection(0, 'Paid Seat');
 
             let facetUsers = actions.facetUser(ACCOUNT_USERS_DATA, selected);
 
@@ -537,7 +541,7 @@ describe('Account Users Actions Tests', () => {
 
         it('gets correct info for the users who manage groups', () => {
             let selected = new FacetSelections();
-            selected.addSelection(FACET_FIELDID.INGROUP, true);
+            selected.addSelection(5, true);
 
             let facetUsers = actions.facetUser(ACCOUNT_USERS_DATA, selected);
 

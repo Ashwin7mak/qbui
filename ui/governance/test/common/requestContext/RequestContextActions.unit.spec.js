@@ -1,12 +1,12 @@
-import * as RequestContextActions from '../../../src/common/requestContext/RequestContextActions';
-import  {__RewireAPI__ as RequestContextActionsRewireAPI} from '../../../src/common/requestContext/RequestContextActions';
-import RequestContextService from '../../../src/common/requestContext/RequestContextService';
-import * as types from '../../../src/app/actionTypes';
-import WindowLocationUtils from  "../../../../client-react/src/utils/windowLocationUtils";
-import configureMockStore from 'redux-mock-store';
-import thunk from 'redux-thunk';
-import Promise from 'bluebird';
-import {FORBIDDEN, INTERNAL_SERVER_ERROR} from  "../../../../client-react/src/constants/urlConstants";
+import * as RequestContextActions from "../../../src/common/requestContext/RequestContextActions";
+import {__RewireAPI__ as RequestContextActionsRewireAPI} from "../../../src/common/requestContext/RequestContextActions";
+import RequestContextService from "../../../src/common/requestContext/RequestContextService";
+import * as types from "../../../src/app/actionTypes";
+import WindowLocationUtils from "../../../../client-react/src/utils/windowLocationUtils";
+import configureMockStore from "redux-mock-store";
+import thunk from "redux-thunk";
+import Promise from "bluebird";
+import {FORBIDDEN, INTERNAL_SERVER_ERROR} from "../../../../client-react/src/constants/urlConstants";
 
 describe('RequestContextActions', () => {
     const mockWindowUtils = {
