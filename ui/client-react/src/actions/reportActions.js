@@ -422,6 +422,7 @@ export const addColumnFromExistingField = (context, requestedColumn, addBefore) 
 export const hideColumn = (context, clickedId) => {
     return event(context, types.HIDE_COLUMN, {clickedId});
 };
+
 /**
  * Save and updates the report with new data
  * @param appId
@@ -435,30 +436,38 @@ export const saveReport = (context, appId, tableId, reportId, reportDef) => {
         console.log(context);
 
         return new Promise((resolve, reject) => {
-        if (appId && tableId && reportId) {
-            let reportService = new ReportService();
-            reportService.updateReport(appId, tableId, reportId, reportDef)
-                .then(() => {
-                    logger.debug('ReportService saveReport success');
-                    resolve();
-                },
-                (error) => {
-                    logger.parseAndLogError(LogLevel.ERROR, error.response, 'reportService.updateReport: ');
-                    //dispatch(event(context, types.SAVING_REPORT_ERROR, error.response ? error.response.status : error.response))
-                    NotificationManager.error(Locale.getMessage('report.notification.save.error'), Locale.getMessage('failed'));
-                    reject(error);
-                }).catch((ex) =>{
-                    logger.logException(ex);
-                    NotificationManager.error(Locale.getMessage('report.notification.save.error'), Locale.getMessage('failed'));
-                    reject(ex);
-                }
+            if (appId && tableId && reportId) {
+                let reportService = new ReportService();
+                reportService.updateReport(appId, tableId, reportId, reportDef)
+                    .then(() => {
+                            logger.debug('ReportService saveReport success');
+                            resolve();
+                        },
+                        (error) => {
+                            logger.parseAndLogError(LogLevel.ERROR, error.response, 'reportService.updateReport: ');
+                            //dispatch(event(context, types.SAVING_REPORT_ERROR, error.response ? error.response.status : error.response))
+                            NotificationManager.error(Locale.getMessage('report.notification.save.error'), Locale.getMessage('failed'));
+                            reject(error);
+                        }).catch((ex) => {
+                        logger.logException(ex);
+                        NotificationManager.error(Locale.getMessage('report.notification.save.error'), Locale.getMessage('failed'));
+                        reject(ex);
+                    }
+                );
 
-            );
-
-        } else {
-            logger.error(`reportActions.updateReport: missing required input parameters. appId: ${appId}, tableId: ${tableId}`);
-            reject();
-          }
+            } else {
+                logger.error(`reportActions.updateReport: missing required input parameters. appId: ${appId}, tableId: ${tableId}`);
+                reject();
+            }
         })
     }
+};
+
+/**
+ * Move a column based on the source and target ids given.
+ * @param context
+ * @param sourceIndex and targetIndex
+ */
+export const moveColumn = (context, params) => {
+    return event(context, types.MOVE_COLUMN, params);
 };

@@ -1,15 +1,24 @@
-import React, {Component, PropTypes} from 'react';
-import  {facetsProp} from '../../../../../reuse/client/src/components/facets/facetProps';
-import _ from 'lodash';
+import React, {Component, PropTypes} from "react";
+import {facetsProp} from "../../../../../reuse/client/src/components/facets/facetProps";
+import _ from "lodash";
 import {connect} from "react-redux";
-import GenericFacetMenu from '../../../../../reuse/client/src/components/facets/genericFacetMenu';
-import {showFacetMenu, hideFacetMenu, setFacetsExpanded, setFacetsMoreRevealed, toggleFacetMenu} from '../../../../../reuse/client/src/components/facets/facetMenuActions';
-import {getExpandedFacetFields, getMoreRevealedFacetFields} from '../../../../../reuse/client/src/components/facets/facetMenuReducer';
-import '../../../../../reuse/client/src/components/facets/facet.scss';
-import LimitConstants from '../../../../../common/src/limitConstants';
+import GenericFacetMenu from "../../../../../reuse/client/src/components/facets/genericFacetMenu";
+import {
+    showFacetMenu,
+    hideFacetMenu,
+    setFacetsExpanded,
+    setFacetsMoreRevealed,
+    toggleFacetMenu
+} from "../../../../../reuse/client/src/components/facets/facetMenuActions";
+import {
+    getExpandedFacetFields,
+    getMoreRevealedFacetFields
+} from "../../../../../reuse/client/src/components/facets/facetMenuReducer";
+import "../../../../../reuse/client/src/components/facets/facet.scss";
+import LimitConstants from "../../../../../common/src/limitConstants";
 import Logger from "../../../../../client-react/src/utils/logger";
 import * as SchemaConsts from "../../../../../client-react/src/constants/schema";
-import './StandardGridToolBar.scss';
+import "./StandardGridToolBar.scss";
 
 let logger = new Logger();
 /**
@@ -46,7 +55,7 @@ export class StandardGridFacetsMenu extends Component {
         }
 
         this.props.setFacetsExpanded({expanded});
-    }
+    };
 
     /**
      * Invokes the action to change the props of a facet field group to more revealed
@@ -105,7 +114,7 @@ export class StandardGridFacetsMenu extends Component {
         }
 
         return Object.keys(this.props.expandedFacetFields).map(key => this.props.expandedFacetFields[key]);
-    }
+    };
 
     /**
      *  Function that toggles the show and hide state for the facet menu when clicked
@@ -114,7 +123,7 @@ export class StandardGridFacetsMenu extends Component {
         if (this.props.toggleFacetMenu) {
             return this.props.toggleFacetMenu(isMenuVisible);
         }
-    }
+    };
 
     /**
      *  Get the facets object from the facetFields that is passed
@@ -152,7 +161,7 @@ export class StandardGridFacetsMenu extends Component {
                 values: isRevealed ? facet.values : _.take(facet.values, LimitConstants.maxFacetValuesInitiallyRevealed),
             };
         });
-    }
+    };
 
     /**
      * Prepares the facet menu button used to show/hide the popover menu of field facet groups when clicked

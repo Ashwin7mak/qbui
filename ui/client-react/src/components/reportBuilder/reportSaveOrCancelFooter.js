@@ -9,8 +9,6 @@ import {HideAppModal} from '../qbModal/appQbModalFunctions';
 import AppHistory from '../../globals/appHistory';
 
 
-
-
 export class ReportSaveOrCancelFooter extends Component {
     constructor(props) {
         super(props);

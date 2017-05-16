@@ -34,7 +34,7 @@ export function grid(state = defaultGridState, action) {
     case types.SET_SEARCH:
         return {
             ...state,
-            searchTerm: action.searchTerm
+            searchTerm: action.searchTerm || ''
         };
     case types.SET_SORT:
         return {
