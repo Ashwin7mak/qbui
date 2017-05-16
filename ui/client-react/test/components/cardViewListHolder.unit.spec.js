@@ -78,6 +78,7 @@ const fakeReportData_valid = {
     rptId: "3",
     loading:false,
     data: {
+        columns: [{id:6, field:"Text"}],
         filteredRecords: singleNodeTreeData
     }
 };
