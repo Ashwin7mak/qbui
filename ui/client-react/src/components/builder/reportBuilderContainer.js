@@ -6,6 +6,7 @@ import TouchBackend from 'react-dnd-touch-backend';
 import ReportColumnTransformer from '../dataTable/reportGrid/reportColumnTransformer';
 import ReportRowTransformer from '../dataTable/reportGrid/reportRowTransformer';
 import ReportColumnHeaderMenu from '../dataTable/reportGrid/reportColumnHeaderMenu';
+import ReportNameEditor from '../reportBuilder/reportNameEditor';
 import ReportFieldSelectMenu from '../reportBuilder/reportFieldSelectMenu';
 import ReportSaveOrCancelFooter from '../reportBuilder/reportSaveOrCancelFooter';
 import QbGrid from '../dataTable/qbGrid/qbGrid';
@@ -33,7 +34,7 @@ export class ReportBuilderContainer extends Component {
 
     render() {
         let {appId, tblId, rptId} = this.props.match.params;
-        let {columns, records, sortFids} = this.props.reportData.data;
+        let {columns, records, sortFids, name} = this.props.reportData.data;
         let transformedColumns = ReportColumnTransformer.transformColumnsForGrid(columns);
         let transformedRows = ReportRowTransformer.transformRecordsForGrid(records, columns);
         return (
@@ -43,6 +44,7 @@ export class ReportBuilderContainer extends Component {
                     tblId={tblId}
                     reportData={this.props.reportData}>
                     <div className="reportBuilderContainerContent">
+                        {name && <ReportNameEditor name={name}/>}
                         <QbGrid
                             numberOfColumns={columns.length}
                             columns={transformedColumns}
