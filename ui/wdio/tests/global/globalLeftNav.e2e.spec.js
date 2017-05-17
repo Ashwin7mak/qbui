@@ -127,8 +127,8 @@
             let innerHTML = browser.getHTML('.trowserHeader .breadcrumbsContent span', false);
 
             // Step 4 - Verify if the table name is correctly displayed
-            expect(innerHTML[5]).toEqual(tableName);
-            expect(innerHTML[7]).toEqual('Reports');
+            expect(innerHTML[1]).toEqual(tableName);
+            expect(innerHTML[5]).toEqual('Reports');
         });
 
         it('Verify leftNav New Table element and its functionality ', function() {
@@ -178,7 +178,7 @@
 
         });
 
-        //TODO: MC - 2799 need to be fixed for the below test to pass, Mouse hover on app icon in apps page is not displayin
+        //TODO: MC - 2799 need to be fixed for the below test to pass, Mouse hover on app icon in apps page is not displaying the app name when we have collapsed leftNav
 
         xit('Verify the mouse hover function on apps page collapsed leftNav', function() {
 
