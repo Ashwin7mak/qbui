@@ -1,7 +1,5 @@
 @import "../../assets/css/qbVariables";
 // TabbedSideNav uses a 3rd party component called rc-tabs. The rc-tab classes below are rendered by that third party component.
-//The css for rc-tabs has been copied and pasted here straight from the node_module, because importing the css directly into the component
-//caused unit tests to fail because it could not locate the css being imported from the node_module.
 
 .tabbedSideNav {
     .rc-tabs {
