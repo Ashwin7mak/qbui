@@ -85,6 +85,32 @@ function insertTimeIntoList(dropList, time, militaryTime) {
         dropList.splice(idx, 0, obj);
     }
 }
+const TIME_FORMAT = 'HH:mm:ss';
+/**
+ * Given a time value in an app's timezone, convert it to utc timezone
+ * @param value
+ * @param appTimezone
+ * @returns {*}
+ */
+function getTimeInUTC(value, appTimezone) {
+    var currentDate = new Date();
+    var dd = currentDate.getDate().toString();
+    var mm = (currentDate.getMonth() + 1).toString(); //January is 0
+    var yyyy = currentDate.getFullYear();
+
+    if (mm.length < 2) {
+        mm = '0' + mm;
+    }
+
+    if (dd.length < 2) {
+        dd = '0' + dd;
+    }
+
+    var dateStr = yyyy + '-' + mm + '-' + dd + 'T' + value;
+    let m = momentTz.tz(dateStr, appTimezone);
+    let newValue = m.utc().format(TIME_FORMAT);
+    return newValue;
+}
 
 /**
  * # TimeFieldValueEditor
@@ -171,9 +197,15 @@ const TimeFieldValueEditor = React.createClass({
      */
     onChange(newValue) {
         if (newValue && (newValue.value === null || newValue.value)) {
-            const onChange = this.props.onDateTimeChange || this.props.onChange;
+            const onChange = this.props.onDateTimeChange;
             if (onChange) {
                 onChange(newValue.value);
+            } else if (this.props.onChange) {
+                if (this.props.attributes.useTimezone) {
+                    this.props.onChange(getTimeInUTC(newValue.value, this.props.attributes.timeZone));
+                } else {
+                    this.props.onChange(newValue.value);
+                }
             }
             this._focusOnTimeFieldInput();
         }
@@ -229,10 +261,18 @@ const TimeFieldValueEditor = React.createClass({
                     if (this.props.onDateTimeBlur) {
                         this.props.onDateTimeBlur(militaryTime);
                     } else {
-                        let valueObj = {
-                            value: militaryTime,
-                            display: ''
-                        };
+                        let valueObj = {};
+                        if (!this.props.attributes.useTimezone) {
+                            valueObj = {
+                                value: militaryTime,
+                                display: ''
+                            };
+                        } else {
+                            valueObj = {
+                                value: getTimeInUTC(militaryTime, this.props.attributes.timeZone),
+                                display: ''
+                            };
+                        }
                         valueObj.display = timeFormatter.format(valueObj, this.props.attributes);
                         this.props.onBlur(valueObj);
                     }
@@ -255,8 +295,29 @@ const TimeFieldValueEditor = React.createClass({
                 //  use the TimeFormatter to get the time format
                 timeFormat = timeFormatter.generateFormatterString(this.props.attributes);
 
-                //  It's a time only field...just use today's date to format the time
-                momentTime = moment(inputValue, timeFormat);
+                if (!this.props.attributes.useTimezone) {
+                    //  It's a time only field...just use today's date to format the time
+                    momentTime = moment(inputValue, timeFormat);
+                    // momentTime = moment(inputValue).isValid() ? momentTz.tz(inputValue, this.props.attributes.timeZone) : momentTz.tz(inputValue, timeFormat, this.props.attributes.timeZone);
+                } else {
+                    var currentDate = new Date();
+                    var dd = currentDate.getDate().toString();
+                    var mm = (currentDate.getMonth() + 1).toString(); //January is 0
+                    var yyyy = currentDate.getFullYear();
+
+                    if (mm.length < 2) {
+                        mm = '0' + mm;
+                    }
+
+                    if (dd.length < 2) {
+                        dd = '0' + dd;
+                    }
+
+                    var dateStr = yyyy + '-' + mm + '-' + dd + 'T' + inputValue + 'Z';
+                    var d = new Date(dateStr);
+                    //Resolve whether or not to shift based on timezone
+                    momentTime = moment.tz(d, this.props.attributes.timeZone);
+                }
             } else {
                 //  it's a date time object; use the dateTimeFormatter to get the time format
                 timeFormat = dateTimeFormatter.getTimeFormat({showTime:true});
