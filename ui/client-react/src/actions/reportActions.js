@@ -347,3 +347,12 @@ export const loadReportRecordsCount = (context, appId, tblId, rptId, queryParams
         }
     };
 };
+
+/**
+ * Change the reportName of the report
+ * @param context
+ * @param newName - the new report name
+ */
+export const changeReportName = (context, newName) => {
+    return event(context, types.CHANGE_REPORT_NAME, {newName});
+};

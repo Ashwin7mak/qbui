@@ -15,6 +15,7 @@ import Fluxxor from 'fluxxor';
 import _ from 'lodash';
 import './report.scss';
 import ReportToolsAndContent from '../report/reportToolsAndContent';
+import ReportNameEditor from './reportNameEditor';
 import {connect} from 'react-redux';
 import {clearSearchInput} from '../../actions/searchActions';
 import {loadReport, loadDynamicReport} from '../../actions/reportActions';
@@ -144,7 +145,7 @@ export const ReportRoute = React.createClass({
                 </div>
 
                 <div className="stageHeadline">
-                    <h3 className="reportName">{reportName}</h3>
+                    <ReportNameEditor name={reportName}/>
                 </div>
             </div>);
     },
