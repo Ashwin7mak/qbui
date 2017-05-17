@@ -7,7 +7,7 @@ const boolColumnProps = {
     classes: ['BoolColumn'],
 };
 
-let GRID_COLUMN_LOCALE = 'governance.account.users.grid';
+const GRID_COLUMN_LOCALE = 'governance.account.users.grid';
 
 // Column Definitions
 const columns = () => [

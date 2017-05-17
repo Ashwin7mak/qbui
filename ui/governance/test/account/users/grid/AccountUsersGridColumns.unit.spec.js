@@ -15,7 +15,7 @@ import Locale from '../../../../../reuse/client/src/locales/locale';
 
 const mockStore = configureMockStore();
 
-let GRID_COLUMN_LOCALE = 'governance.account.users.grid';
+const GRID_COLUMN_LOCALE = 'governance.account.users.grid';
 
 describe('AccountUsersGridColumns', () => {
     beforeEach(() => {
@@ -41,7 +41,6 @@ describe('AccountUsersGridColumns', () => {
     describe("Permissions", () => {
 
         it("should show all the headers", ()=> {
-            GovernanceBundleLoader.changeLocale('en-us');
 
             let props = {...baseProps,
                 columns: GetAccountUsersGridColumns(true, true)};
@@ -55,7 +54,6 @@ describe('AccountUsersGridColumns', () => {
         });
 
         it("should show the correct set of headers when not account admin", () => {
-            GovernanceBundleLoader.changeLocale('en-us');
 
             let props = {
                 ...baseProps,
@@ -71,7 +69,6 @@ describe('AccountUsersGridColumns', () => {
         });
 
         it("should show the correct set of headers when not a realm admin", ()=> {
-            GovernanceBundleLoader.changeLocale('en-us');
 
             let props = {
                 ...baseProps,
