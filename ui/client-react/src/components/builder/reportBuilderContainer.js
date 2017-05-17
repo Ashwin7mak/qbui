@@ -93,6 +93,10 @@ ReportBuilderContainer.propTypes = {
             /**
              * the table id */
             tblId: PropTypes.string
+
+            /**
+             * the report id */
+            rptId: PropTypes.string
         })
     }),
 
