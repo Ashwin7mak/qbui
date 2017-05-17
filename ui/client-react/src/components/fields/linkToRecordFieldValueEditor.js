@@ -45,7 +45,7 @@ const LinkToRecordFieldValueEditor = React.createClass({
     tableSelected(tableId) {
         this.props.showRelationshipDialog(false);
 
-        let field = this.props.fieldDef;
+        const field = this.props.fieldDef;
         field.parentTableId = tableId;
         this.props.updateField(field, this.props.appId, this.props.tblId);
 
@@ -58,7 +58,6 @@ const LinkToRecordFieldValueEditor = React.createClass({
     },
 
     render() {
-        let {value, display, onBlur, placeholder, ...otherProps} = this.props;
 
         if (this.props.dialogOpen) {
             return (
