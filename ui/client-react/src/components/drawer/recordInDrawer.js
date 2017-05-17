@@ -1,7 +1,7 @@
 import React from 'react';
 
 import DrawerContainer from './drawerContainer';
-import {RecordRouteWithUniqueId} from '../record/recordRoute';
+import {RecordRouteWithViewId} from '../record/recordRoute';
 
 import {DRAWER} from '../../constants/urlConstants';
 
@@ -13,7 +13,7 @@ const RecordInDrawer = (props) => (
         {...props}
         pathToAdd={DRAWER.RECORD_SEGMENT_PATH}
     >
-        <RecordRouteWithUniqueId
+        <RecordRouteWithViewId
             {...props}
             isDrawerContext={true}
             hasDrawer={true}

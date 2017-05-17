@@ -634,4 +634,4 @@ export default ConnectedRecordRouteWithRouter;
 
 // Wrap RecordRoute with `withUniqueId` hoc so that it has a unique ID used to identify its own
 // instance's data in the record store and form store. Used by stacked forms.
-export const RecordRouteWithUniqueId = withUniqueId(ConnectedRecordRouteWithRouter, CONTEXT.FORM.DRAWER);
+export const RecordRouteWithViewId = withUniqueId(ConnectedRecordRouteWithRouter, CONTEXT.FORM.DRAWER);

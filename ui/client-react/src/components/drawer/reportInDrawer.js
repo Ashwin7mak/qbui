@@ -1,7 +1,7 @@
 import React from 'react';
 
 import DrawerContainer from './drawerContainer';
-import {ReportRouteWithUniqueId} from '../report/reportRoute';
+import {ReportRouteWithViewId} from '../report/reportRoute';
 
 import {DRAWER} from '../../constants/urlConstants';
 
@@ -16,7 +16,7 @@ const ReportInDrawer = (props) => (
         match={props.match}
         pathToAdd={DRAWER.REPORT_SEGMENT_PATH}
     >
-        <ReportRouteWithUniqueId
+        <ReportRouteWithViewId
             isDrawerContext={true}
             hasDrawer={true}
         />

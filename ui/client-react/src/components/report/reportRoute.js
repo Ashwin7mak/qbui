@@ -280,4 +280,4 @@ const mapStateToProps = (state, ownProps) => {
 const ConnectedReportRoute = withRouter(connect(mapStateToProps, mapDispatchToProps)(ReportRoute));
 export default ConnectedReportRoute;
 
-export const ReportRouteWithUniqueId = withUniqueId(ConnectedReportRoute, CONTEXT.REPORT.EMBEDDED);
+export const ReportRouteWithViewId = withUniqueId(ConnectedReportRoute, CONTEXT.REPORT.EMBEDDED);
