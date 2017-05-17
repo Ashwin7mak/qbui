@@ -92,7 +92,7 @@ ReportBuilderContainer.propTypes = {
 
             /**
              * the table id */
-            tblId: PropTypes.string
+            tblId: PropTypes.string,
 
             /**
              * the report id */
