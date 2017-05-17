@@ -4,7 +4,7 @@ import ReportModelHelper from '../models/reportModelHelper';
 const reportBuilder = (
     state = {
         redirectRoute: null,
-        inBuilderMode: false,
+        isInBuilderMode: false,
         isCollapsed: true,
         addBeforeColumn: null,
         availableColumns: []
@@ -45,13 +45,13 @@ const reportBuilder = (
     case types.ENTER_BUILDER_MODE: {
         return {
             ...state,
-            inBuilderMode: true
+            isInBuilderMode: true
         };
     }
     case types.EXIT_BUILDER_MODE: {
         return {
             ...state,
-            inBuilderMode: false
+            isInBuilderMode: false
         };
     }
     default:
