@@ -11,6 +11,7 @@ import ReportFieldSelectMenu from '../reportBuilder/reportFieldSelectMenu';
 import ReportSaveOrCancelFooter from '../reportBuilder/reportSaveOrCancelFooter';
 import QbGrid from '../dataTable/qbGrid/qbGrid';
 import ReportCell from '../dataTable/reportGrid/reportCell';
+import Locale from '../../locales/locales';
 import {CONTEXT} from '../../actions/context';
 import {exitBuilderMode, closeFieldSelectMenu} from '../../actions/reportBuilderActions';
 
@@ -35,11 +36,13 @@ export class ReportBuilderContainer extends Component {
     render() {
         let {appId, tblId, rptId} = this.props.match.params;
         let {columns, records, sortFids, name} = this.props.reportData.data;
+        let recordShowLimit = 25;
         let transformedColumns = ReportColumnTransformer.transformColumnsForGrid(columns);
         transformedColumns.forEach(column => {
             column.fieldDef.userEditableValue = false;
         });
-        let transformedRows = ReportRowTransformer.transformRecordsForGrid(records, columns);
+        let transformedRows = ReportRowTransformer.transformRecordsForGrid(_.take(records, recordShowLimit), columns);
+        let numberOfRecords = records.length;
         return (
             <div className="reportBuilderContainer">
                 <ReportFieldSelectMenu
@@ -64,6 +67,14 @@ export class ReportBuilderContainer extends Component {
                                 isOnlyOneColumnVisible: this.isOnlyOneColumnVisible(columns)
                             }}
                         />
+                        <div className="recordCount">
+                            {(numberOfRecords > recordShowLimit)
+                            && Locale.getMessage('builder.reportBuilder.recordLimitFirstHalf')
+                            + recordShowLimit
+                            + Locale.getMessage('builder.reportBuilder.recordLimitMiddle')
+                            + numberOfRecords
+                            + Locale.getMessage('builder.reportBuilder.recordLimitSecondHalf')}
+                        </div>
                     </div>
                 </ReportFieldSelectMenu>
                 {this.getSaveOrCancelFooter()}

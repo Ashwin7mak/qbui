@@ -28,6 +28,10 @@
             border: $stroke-width-thin solid $input-text-focus-border-color;
         }
 
+        .recordCount {
+            padding-top: 5px;
+        }
+
         .loadedContent .qbGrid {
             padding-bottom: 0;
 
