@@ -164,16 +164,17 @@ export const doUpdate = (gridId, gridState, _itemsPerPage) => {
         if (users.length === 0) {
             return;
         }
-        // First Facet
-        let facetSelections = gridState.facets && gridState.facets.facetSelections ? gridState.facets.facetSelections : {};
-        let facetedUsers = facetUser(users, facetSelections);
-
-        // Then Search
+        // First Search
         let searchTerm = gridState.searchTerm || "";
-        let filteredUsers = searchUsers(facetedUsers, searchTerm);
+        let filteredUsers = searchUsers(users, searchTerm);
 
+        // Then Facet
+        let facetSelections = gridState.facets && gridState.facets.facetSelections ? gridState.facets.facetSelections : {};
+        let facetedUsers = facetUser(filteredUsers, facetSelections);
+
+        // Then Sort
         let sortFids = gridState.sortFids || [];
-        let sortedUsers = sortUsers(filteredUsers, sortFids);
+        let sortedUsers = sortUsers(facetedUsers, sortFids);
 
         // Then Paginate
         let itemsPerPage = _itemsPerPage || gridState.pagination.itemsPerPage;

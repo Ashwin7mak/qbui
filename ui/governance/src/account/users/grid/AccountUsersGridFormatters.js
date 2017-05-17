@@ -7,6 +7,12 @@ import * as RealmUserAccountFlagConstants from "../../../common/constants/RealmU
 const IsTimeNull = timeStr => timeStr === '1900-01-01T00:00:00Z';
 const RenderBoolColumn = bool => bool ? 'Y' : '--';
 
+/**
+ * IsProvisional
+ -
+ */
+
+
 export const FormatAccessStatusText = (hasAppAccess, cellInfo) => {
     if (RealmUserAccountFlagConstants.IsDeactivated(cellInfo.rowData)) {
         return "Deactivated";
@@ -22,14 +28,18 @@ export const FormatAccessStatusText = (hasAppAccess, cellInfo) => {
 };
 
 export const FormatUserStatusText = (hasAppAccess, cellInfo) => {
-    if (RealmUserAccountFlagConstants.IsUnverified(cellInfo.rowData)) {
-        return "Unverified";
-    } else if (RealmUserAccountFlagConstants.IsRegistered(cellInfo.rowData)) {
-        return "Registered";
-    } else if (FormatAccessStatusText(hasAppAccess, cellInfo) === "No App Access") {
+    if (RealmUserAccountFlagConstants.IsDeactivated(cellInfo.rowData)) {
+        return "Deactivated";
+    } else if (RealmUserAccountFlagConstants.IsDenied(cellInfo.rowData)) {
+        return "Denied";
+    } else if (RealmUserAccountFlagConstants.HasAnySystemPermissions(cellInfo.rowData)) {
+        return "Quick Base Staff";
+    } else if (RealmUserAccountFlagConstants.IsProvisional(cellInfo.rowData)) {
         return "Unregistered";
+    } else if (RealmUserAccountFlagConstants.IsVerified(cellInfo.rowData)) {
+        return "Registered";
     } else {
-        return "";
+        return "Unverified";
     }
 };
 
