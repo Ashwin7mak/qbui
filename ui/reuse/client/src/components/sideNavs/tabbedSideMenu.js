@@ -34,7 +34,7 @@ class TabbedSideNav extends Component {
                     defaultActiveKey={this.getDefaultTab()}
                     onChange={this.props.onTabChanged}
                     renderTabBar={() => <InkTabBar onTabClick={this.props.onTabClicked} />}
-                    renderTabContent={() => <TabContent />}
+                    renderTabContent={() => <TabContent animated={false}/>}
                 >
                     {this.props.tabs.map(tab => (
                         <TabPane tab={tab.title} key={tab.key} forceRender={true}>{tab.content}</TabPane>
