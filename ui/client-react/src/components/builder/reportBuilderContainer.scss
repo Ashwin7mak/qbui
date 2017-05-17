@@ -10,6 +10,8 @@
         }
     }
     .reportBuilderContainerContent {
+        background-color: $color-purple-100;
+        padding: 10px 10px 0 10px;
         //By giving it a border the same size as the focus border and a transparent background,
         //it keeps the container from 'jumping' on focus
         border: $stroke-width-thin solid transparent;
@@ -28,6 +30,20 @@
 
         .loadedContent .qbGrid {
             padding-bottom: 0;
+
+            .qbRow:not(.editing) .qbCell,
+            .qbCell .tipChildWrapper {
+                cursor: default;
+            }
+
+            // row hover highlighting - only done while not inline editing
+            &:not(.inlineEditing) {
+
+                // highlight the row when mouse is over the row
+                .qbRow:hover .qbCell:not(.placeholderCell) {
+                    background: #fff;
+                }
+            }
         }
     }
 

@@ -36,6 +36,9 @@ export class ReportBuilderContainer extends Component {
         let {appId, tblId, rptId} = this.props.match.params;
         let {columns, records, sortFids, name} = this.props.reportData.data;
         let transformedColumns = ReportColumnTransformer.transformColumnsForGrid(columns);
+        transformedColumns.forEach(column => {
+            column.fieldDef.userEditableValue = false;
+        });
         let transformedRows = ReportRowTransformer.transformRecordsForGrid(records, columns);
         return (
             <div className="reportBuilderContainer">
