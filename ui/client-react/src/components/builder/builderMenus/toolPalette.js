@@ -1,5 +1,6 @@
 import React, {PropTypes, Component} from 'react';
 import Locale from '../../../../../reuse/client/src/locales/locale';
+import Tooltip from '../../../../../reuse/client/src/components/tooltip/tooltip';
 import SideTrowser from '../../../../../reuse/client/src/components/sideTrowserBase/sideTrowserBase';
 import TabMenu from '../../../../../reuse/client/src/components/sideNavs/tabbedSideMenu';
 import NewFieldsMenu from '../../formBuilder/menus/newFieldsMenu';
@@ -36,12 +37,12 @@ class ToolPalette extends Component {
                 tabs={[
                     {
                         key: 'newFields',
-                        title: Locale.getMessage('builder.formBuilder.newFieldsMenuTitle'),
+                        title: <Tooltip i18nMessageKey="builder.tabs"> {Locale.getMessage('builder.formBuilder.newFieldsMenuTitle')} </Tooltip>,
                         content: this.renderNewFieldsMenu()
                     },
                     {
                         key: 'existingFields',
-                        title: Locale.getMessage('builder.formBuilder.existingFieldsMenuTitle'),
+                        title: <Tooltip i18nMessageKey="builder.tabs"> {Locale.getMessage('builder.formBuilder.existingFieldsMenuTitle')} </Tooltip>,
                         content: this.renderExistingFieldsMenu()
                     }
                 ]}

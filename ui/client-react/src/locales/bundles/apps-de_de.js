@@ -573,6 +573,7 @@ export default {
             multiChoice: "Wahlen"
         },
         builder: {
+            tabs: 'Tabs',
             formBuilder: {
                 unimplemented: "Feature ist momentan nicht verfügbar",
                 removeField: "Feld aus Form entfernen",
