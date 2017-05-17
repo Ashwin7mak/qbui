@@ -24,9 +24,25 @@ export const TABLE_LINK = `${APP_ROUTE}/{0}/table/{1}`;
 export const SETTINGS_ROUTE = `${BASE_CLIENT_ROUTE}/settings`;
 export const REPORT_LINK = `${APP_ROUTE}/{0}/table/{1}/report/{2}`;
 export const CHILD_REPORT_LINK = `${APP_ROUTE}/{0}/table/{1}/report/{2}?detailKeyFid={3}&detailKeyValue={4}`;
-export const DRAWER_RECORD_SEGMENT = `/sr_app_{0}_table_{1}_report_{2}_record_{3}`;
-export const DRAWER_REPORT_SEGMENT = `/sr_report_app_{0}_table_{1}_report_{2}_dtFid_{3}_dtVal_{4}`;
 
 export const FORBIDDEN = `${BASE_CLIENT_ROUTE}/forbidden`;
 export const UNAUTHORIZED = `${BASE_CLIENT_ROUTE}/unauthorized`;
 export const INTERNAL_SERVER_ERROR = `${BASE_CLIENT_ROUTE}/internalServerError`;
+
+// url segment related constants used for components rendered in drawers
+let drawer = {
+    RECORD_SEGMENT: `/sr_app_{0}_table_{1}_report_{2}_record_{3}`,
+    REPORT_SEGMENT: `/sr_report_app_{0}_table_{1}_report_{2}_dtFid_{3}_dtVal_{4}`,
+    MATCHER: {
+        APP_ID: ':appId([A-Za-z0-9]+)',
+        TABLE_ID: ':tblId([A-Za-z0-9]+)',
+        REPORT_ID: ':rptId([A-Za-z0-9]+)',
+        RECORD_ID: ':recordId([A-Za-z0-9]+)',
+        DETAIL_KEY_FID: ':detailKeyFid([A-Za-z0-9]+)',
+        DETAIL_KEY_VALUE: ':detailKeyValue([A-Z-a-z0-9 ]+)'
+    }
+};
+export const DRAWER = Object.assign(drawer, {
+    RECORD_SEGMENT_PATH: `/sr_app_${drawer.MATCHER.APP_ID}_table_${drawer.MATCHER.TABLE_ID}_report_${drawer.MATCHER.REPORT_ID}_record_${drawer.MATCHER.RECORD_ID}`,
+    REPORT_SEGMENT_PATH: `/sr_report_app_${drawer.MATCHER.APP_ID}_table_${drawer.MATCHER.TABLE_ID}_report_${drawer.MATCHER.REPORT_ID}_dtFid_${drawer.MATCHER.DETAIL_KEY_FID}_dtVal_${drawer.MATCHER.DETAIL_KEY_VALUE}`
+});

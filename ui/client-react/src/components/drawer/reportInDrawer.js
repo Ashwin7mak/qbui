@@ -3,7 +3,7 @@ import React from 'react';
 import DrawerContainer from './drawerContainer';
 import {ReportRouteWithUniqueId} from '../report/reportRoute';
 
-import UrlUtils from '../../utils/urlUtils';
+import {DRAWER} from '../../constants/urlConstants';
 
 /**
  * Renders a ReportRoute component inside a drawer. See DrawerContainer.
@@ -14,7 +14,7 @@ const ReportInDrawer = (props) => (
         direction="bottom"
         renderBackdrop={false}
         match={props.match}
-        pathToAdd={UrlUtils.getReportDrawerSegment(":appId([A-Za-z0-9]+)", ":tblId([A-Za-z0-9]+)", ":rptId([A-Za-z0-9]+)", ":detailKeyFid([A-Za-z0-9]+)", ":detailKeyValue([A-Z-a-z0-9 ]+)")}
+        pathToAdd={DRAWER.REPORT_SEGMENT_PATH}
     >
         <ReportRouteWithUniqueId
             isDrawerContext={true}
