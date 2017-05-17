@@ -46,6 +46,7 @@
             reportContentPO.clickOnRecordInReportTable(0);
             // invoke form builder
             formBuilderPO.waitForReady();
+            browser.pause(fiveSeconds);
             return formBuilderPO.open();
         });
 
