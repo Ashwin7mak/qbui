@@ -1,7 +1,5 @@
 import React, {Component, PropTypes} from 'react';
 import './StandardGridUsersCount.scss';
-import Locale from "../../../../../reuse/client/src/locales/locale";
-import {I18nMessage} from "../../../../../client-react/src/utils/i18nMessage";
 
 class StandardGridUsersCount extends Component {
     /**

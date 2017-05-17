@@ -43,14 +43,6 @@ export default {
                     feedbackLink: "https://team.quickbase.com/db/bmrrmm53x?a=nwr",
                     feedbackLinkText: "give us feedback"
                 }
-            },
-            count: {
-                totalRecords : "{totalRecords} users",
-                singleRecordCount : "{totalRecords} user",
-                usersCountPlaceHolder : "Counting users...",
-                cardViewCountPlaceHolder : "Counting...",
-                filteredRecordCount : "{filteredRecordCount} of {totalRecords} records",
-                filteredSingleRecordCount : "{filteredRecordCount} of {totalRecords} record",
             }
         }
     }

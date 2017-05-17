@@ -30,13 +30,7 @@ class StandardGridToolBar extends React.Component {
 
 // && (!_.isUndefined(this.props.reportData))
     render() {
-        let isLoading = false;
-        let isError = false;
-        let filteredRecordCount = null;
-        // This is the count of all records that apply to this report
-        let totalRecords = 0;
         let hasFacets = false;
-        // temporary until the RecordCount is set
         return (
             <div>
                 <div className={"standardGridToolBar " + (hasFacets ? "" : "noFacets")}>
