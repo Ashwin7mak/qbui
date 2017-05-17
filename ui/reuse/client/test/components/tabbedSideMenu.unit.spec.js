@@ -71,6 +71,6 @@ describe('tabbedSideMenu', () => {
         component = mount(<TabbedSideNav tabs={mockTabs} />);
         let tabs = component.find(Tabs);
 
-        expect(tabs.props().defaultActiveKey).toEqual('tab one');
+        expect(tabs.props().defaultActiveKey).toEqual(mockTabs[0].key);
     });
 });
