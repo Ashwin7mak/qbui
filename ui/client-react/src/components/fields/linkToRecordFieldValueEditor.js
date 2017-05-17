@@ -16,7 +16,8 @@ import LinkToRecordTableSelectionDialog from './linkToRecordTableSelectionDialog
 const LinkToRecordFieldValueEditor = React.createClass({
     displayName: 'LinkToRecordFieldValueEditor',
     propTypes: {
-        readyToShowRelationshipDialog: PropTypes.func,
+        showRelationshipDialog: PropTypes.func,
+        readyToShowRelationshipDialog: PropTypes.bool,
         updateField: PropTypes.func,
         removeFieldFromForm: PropTypes.func,
         tblId: PropTypes.string,
@@ -42,7 +43,7 @@ const LinkToRecordFieldValueEditor = React.createClass({
      * @returns {XML}
      */
     getReactSelect() {
-        const placeHolderMessage = Locale.getMessage("selection.tablesPlaceholder");
+        const placeHolderMessage = Locale.getMessage("selection.placeholder");
 
         return <Select placeholder={placeHolderMessage}/>;
     },

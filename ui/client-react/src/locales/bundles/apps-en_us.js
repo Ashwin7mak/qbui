@@ -631,6 +631,12 @@ export default {
                 second: "Option 2",
                 third: "Option 3"
             },
+            linkToRecord: {
+                dialogTitle: "Get another record",
+                addToForm: "Add to form",
+                tableChooserDescription: "When you create or update a {tableNoun}, you can look up and get info from a record in another table.",
+                tableChooserHeading: "Where is the record you want to get?"
+            },
             modify: 'Modify form'
         },
         featureSwitchAdmin: {

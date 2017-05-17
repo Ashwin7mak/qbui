@@ -622,6 +622,12 @@ export default {
                 second: "Option 2",
                 third: "Option 3"
             },
+            linkToRecord: {
+                dialogTitle: "Erhalten Sie einen anderen Rekord",
+                addToForm: "Fügen Sie hinzu",
+                tableChooserDescription: "Wenn Sie ein {tableNoun} erstellen oder aktualisieren, können Sie nachschlagen und Informationen aus einem Datensatz in einer anderen Tabelle erhalten.",
+                tableChooserHeading: "Wo ist die Platte, die du bekommen willst?"
+            },
             modify: 'Formular ändern'
         },
         featureSwitchAdmin: {
