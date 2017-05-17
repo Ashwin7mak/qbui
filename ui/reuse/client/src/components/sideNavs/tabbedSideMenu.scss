@@ -8,7 +8,6 @@
     }
     .rc-tabs-bar,
     .rc-tabs-nav-container {
-        height: 60px;
         font-size: 14px;
         line-height: 1.5;
         box-sizing: border-box;
@@ -19,7 +18,9 @@
         zoom: 1;
 
         //formBuilder
+        height: 60px;
         border: 1px solid transparent;
+        background-color: $leftnav-background-color;
         &:focus {
             //keyboard border focus for div that wraps all tabs
             @include text-input-focus;
@@ -441,7 +442,8 @@
         width: 100%;
     }
     .rc-tabs-top .rc-tabs-bar {
-        border-bottom: 1px solid #f3f3f3;
+        //formBuilder
+        border-bottom: $stroke-width-thin  solid $trowser-footer-border-color;
     }
     .rc-tabs-top .rc-tabs-nav-container-scrolling {
         padding-left: 32px;
@@ -503,9 +505,8 @@
         text-align: center;
     }
     .rc-tabs-top .rc-tabs-ink-bar {
-        height: 2px;
+        height: 3px;
         background-color: $tabs-underline-background-color;
-        margin-bottom: 2px;
         bottom: 0;
         left: 0;
     }
