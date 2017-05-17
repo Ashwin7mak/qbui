@@ -3,12 +3,10 @@ import Locale from "../../locales/locales";
 import {CONTEXT} from "../../actions/context";
 import {showRelationshipDialog, removeFieldFromForm} from '../../actions/formActions';
 import {updateField} from '../../actions/fieldsActions';
-import {I18nMessage} from '../../utils/i18nMessage';
 import Select from '../select/reactSelectWrapper';
 import {connect} from 'react-redux';
 import LinkToRecordTableSelectionDialog from './linkToRecordTableSelectionDialog';
 
-import './linkToRecordFieldValueEditor.scss';
 /**
  * # LinkToRecordFieldValueEditor
  *
@@ -18,45 +16,58 @@ import './linkToRecordFieldValueEditor.scss';
 const LinkToRecordFieldValueEditor = React.createClass({
     displayName: 'LinkToRecordFieldValueEditor',
     propTypes: {
-
-        value: PropTypes.string,
-
-        onBlur: PropTypes.func,
-
-        /**
-         * A boolean to disabled field on form builder
-         */
-        isDisabled: React.PropTypes.bool,
-
+        showRelationshipDialog: PropTypes.func,
+        updateField: PropTypes.func,
+        removeFieldFromForm: PropTypes.func,
+        dialogOpen: PropTypes.bool,
+        tblId: PropTypes.string,
+        tables: PropTypes.array,
+        location: PropTypes.object,
+        formId: PropTypes.string,
     },
+
     getDefaultProps() {
         return {
-            value: ''
+            formId: CONTEXT.FORM.VIEW
         };
     },
 
-
+    /**
+     * get simple builder mode react-select component
+     * @returns {XML}
+     */
     getReactSelect() {
-        const placeHolderMessage = "Select a table";
+        const placeHolderMessage = Locale.getMessage("selection.tablesPlaceholder");
 
         return <Select placeholder={placeHolderMessage}/>;
     },
 
+    /**
+     * parent table selected
+     * @param tableId
+     */
     tableSelected(tableId) {
         this.props.showRelationshipDialog(false);
 
         const field = this.props.fieldDef;
         field.parentTableId = tableId;
         this.props.updateField(field, this.props.appId, this.props.tblId);
-
     },
 
+    /**
+     * parent table dialog cancelled, remove the field
+     * @returns {{id, type, content}|*|*}
+     */
     cancelTableSelection() {
 
         this.props.showRelationshipDialog(false);
         return this.props.removeFieldFromForm(this.props.formId, this.props.location);
     },
 
+    /**
+     *
+     * @returns {*}
+     */
     render() {
 
         if (this.props.dialogOpen) {
@@ -71,15 +82,6 @@ const LinkToRecordFieldValueEditor = React.createClass({
         }
     }
 });
-
-LinkToRecordFieldValueEditor.propTypes = {
-    location: PropTypes.object,
-    formId: PropTypes.string
-};
-
-LinkToRecordFieldValueEditor.defaultProps = {
-    formId: CONTEXT.FORM.VIEW,
-};
 
 const mapStateToProps = (state) => {
     return {

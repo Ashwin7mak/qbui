@@ -10,6 +10,7 @@ import {getSelectedFormElement} from '../../../reducers/forms';
 import {getField} from '../../../reducers/fields';
 import SideTrowser from '../../../../../reuse/client/src/components/sideTrowserBase/sideTrowserBase';
 import Icon, {AVAILABLE_ICON_FONTS} from '../../../../../reuse/client/src/components/icon/icon.js';
+import _ from 'lodash';
 import * as tabIndexConstants from '../../formBuilder/tabindexConstants';
 
 import './fieldProperties.scss';
@@ -122,6 +123,13 @@ export class FieldProperties extends Component {
         );
     }
 
+    /**
+     * create properties for link to record field (the parent table name with its icon)
+     * @param propertyTitle
+     * @param propertyValue
+     * @param key
+     * @returns {XML}
+     */
     createLinkToRecordPropertyContainer(propertyTitle, propertyValue, key = 4) {
 
         const table = _.find(this.props.app.tables, {id: this.props.selectedField.parentTableId});
@@ -188,7 +196,7 @@ export class FieldProperties extends Component {
             let choices = this.buildMultiChoiceDisplayList(this.props.selectedField.multipleChoice.choices);
             fieldPropContainers.push(this.createMultiChoiceTextPropertyContainer(Locale.getMessage('fieldPropertyLabels.multiChoice'), choices));
         } else if (formatType === FieldFormats.LINK_TO_RECORD) {
-            fieldPropContainers.push(this.createLinkToRecordPropertyContainer("Link to a record in the table", this.props.selectedField));
+            fieldPropContainers.push(this.createLinkToRecordPropertyContainer(Locale.getMessage('fieldPropertyLabels.linkToRecord'), this.props.selectedField));
         }
 
         return fieldPropContainers;

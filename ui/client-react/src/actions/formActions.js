@@ -34,6 +34,12 @@ export const updateFormRedirectRoute = route => {
     };
 };
 
+/**
+ * show (or hide) the relationship dialog (parent table picker)
+ * this should be set when the drop has occurred or it is simply clicked (no drag)
+ * @param show link to record field should display its initial table picker dialog
+ * @returns {{type, show: boolean}}
+ */
 export const showRelationshipDialog = (show = true) => {
     return {
         type: types.SHOW_RELATIONSHIP_DIALOG,
@@ -41,6 +47,11 @@ export const showRelationshipDialog = (show = true) => {
     };
 };
 
+/**
+ * set dragging state of a link-to-record field
+ * @param dragging
+ * @returns {{type, dragging: boolean}}
+ */
 export const draggingLinkToRecord = (dragging = true) => {
     return {
         type: types.DRAGGING_LINK_TO_RECORD,
@@ -394,7 +405,6 @@ export const updateForm = (appId, tblId, formType, form, redirectRoute, shouldRe
 // we're returning a promise to the caller (not a Redux action) since this is an async action
 // (this is permitted when we're using redux-thunk middleware which invokes the store dispatch)
 function saveTheForm(appId, tblId, formType, formMeta, isNew, redirectRoute, shouldRedirectOnSave) {
-
     return (dispatch, getState) => {
         dispatch(event(formType, types.SAVING_FORM));
 

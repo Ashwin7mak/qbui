@@ -39,8 +39,7 @@ const forms = (
         return {
             ...state,
             draggingLinkToRecord: action.dragging,
-            showRelationshipDialog: state.draggingLinkToRecord && !action.dragging
-
+            showRelationshipDialog: state.draggingLinkToRecord && !action.dragging // show relationship dialogs waiting for drop
         };
     }
 

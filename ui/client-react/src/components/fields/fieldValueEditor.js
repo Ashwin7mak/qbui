@@ -7,8 +7,6 @@ import {NumberFieldValueRenderer} from './fieldValueRenderers';
 
 import FieldFormats from '../../utils/fieldFormats' ;
 
-import {DefaultFieldValueEditor} from './fieldValueEditors';
-
 import CheckBoxFieldValueEditor from './checkBoxFieldValueEditor';
 import DateFieldValueEditor from './dateFieldValueEditor';
 import DateTimeFieldValueEditor from './dateTimeFieldValueEditor';
@@ -24,7 +22,7 @@ import UserFieldValueEditor from './userFieldValueEditor';
 import ErrorWrapper from '../fields/errorWrapper';
 import PhoneFieldValueEditor from './phoneFieldValueEditor';
 import LinkToRecordFieldValueEditor from './linkToRecordFieldValueEditor';
-import ListOfRecordsFieldValueEditor from './listOfRecordsFieldValueEditor';
+
 /**
  * # FieldValueEditor
  *
@@ -274,9 +272,7 @@ const FieldValueEditor = React.createClass({
         case FieldFormats.LINK_TO_RECORD: {
             return <LinkToRecordFieldValueEditor{...commonProps} appId={this.props.app.id} tblId={this.props.tblId} tables={this.props.app ? this.props.app.tables : []} location={this.props.location} classes="cellEdit" />;
         }
-        case FieldFormats.LIST_OF_RECORDS: {
-            return <ListOfRecordsFieldValueEditor{...commonProps} tables={this.props.app ? this.props.app.tables : []} classes="cellEdit" />;
-        }
+
         case FieldFormats.TEXT_FORMAT:
         default: {
             // react throws warning about rendering Input component with null input

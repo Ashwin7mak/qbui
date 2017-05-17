@@ -55,7 +55,6 @@ export const SUPPORTED_NEW_FIELD_TYPES = [
         titleI18nKey: 'builder.fieldGroups.tableDataConnections',
         fieldTypes: [
             fieldFormats.LINK_TO_RECORD,
-            //fieldFormats.LIST_OF_RECORDS
         ]
     }
 

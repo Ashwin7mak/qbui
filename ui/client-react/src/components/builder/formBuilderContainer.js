@@ -245,6 +245,9 @@ export const FormBuilderContainer = React.createClass({
         }
     },
 
+    /**
+     * detect drag of field
+     **/
     beginDrag(props) {
 
         if (props.type === FieldFormats.LINK_TO_RECORD) {
@@ -252,7 +255,10 @@ export const FormBuilderContainer = React.createClass({
         }
     },
 
-    endDrag(props) {
+    /**
+     * drag complete
+     */
+    endDrag() {
         this.props.draggingLinkToRecord(false);
     },
 

@@ -93,6 +93,7 @@ export default {
             deleteTheseOverrides: "Supprimer ces annule?",
             more: "Plus...",
             placeholder: "Sélectionner...",
+            tablesPlaceholder: "Sélectionnez une table...",
             notFound: "Pas trouvé"
         },
         footer: {
@@ -557,6 +558,8 @@ export default {
             [FieldFormats.RATING_FORMAT]: "Évaluation",
             [FieldFormats.RATING_FORMAT_MULTICHOICE]: "Évaluation",
             [FieldFormats.URL_FORMULA_FORMAT]: "URL Formule",
+            [FieldFormats.LINK_TO_RECORD]: "Obtenir un autre disque",
+            LINK_TO_RECORD_FROM: "Obtenez un autre enregistrement de {parentTable}",
             FORMULA: "Formule",
             SCALAR: "Scalaire",
             CONCRETE: "Béton",
@@ -569,7 +572,8 @@ export default {
             title: "Propriétés du champ",
             name: "prénom",
             required: "Doit être rempli",
-            multiChoice: "Les choix"
+            multiChoice: "Les choix",
+            linkToRecord: "Lien vers un enregistrement dans la table"
         },
         builder: {
             formBuilder: {
@@ -601,6 +605,7 @@ export default {
                     [`addNew${FieldFormats.NUMBER_FORMAT_MULTICHOICE}`]: "Créer une liste de choix numérique et l'ajouter au formulaire",
                     [`addNew${FieldFormats.NUMBER_FORMAT_RADIO_BUTTONS}`]: "Créez des boutons radio numériques et ajoutez-les au formulaire",
                     [`addNew${FieldFormats.TEXT_FORMAT_RADIO_BUTTONS}`]: "Créer les boutons radio des champs et les ajouter au formulaire",
+                    [`addNew${FieldFormats.LINK_TO_RECORD}`]: "Créer un lien vers un enregistrement dans un autre tableau",
                 }
             },
             fieldGroups: {
@@ -608,7 +613,8 @@ export default {
                 numeric: "Nombre",
                 date: "Date",
                 other: "Autre",
-                relationships: "Des relations"
+                relationships: "Des relations" ,
+                tableDataConnections: "Connexions de données de table"
             },
             defaultMultichoiceOptions: {
                 first: "Option 1",

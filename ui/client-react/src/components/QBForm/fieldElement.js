@@ -69,6 +69,13 @@ export const FieldElement = React.createClass({
         }
     },
 
+    /**
+     * get the field label for the form element, include parent table description for LINK_TO_RECORD fields
+     * @param element
+     * @param relatedField
+     * @param app
+     * @returns {*}
+     */
     getFieldLabel(element, relatedField, app) {
 
         if (_.get(relatedField, "datatypeAttributes.type", null) === constants.LINK_TO_RECORD && relatedField.parentTableId) {
