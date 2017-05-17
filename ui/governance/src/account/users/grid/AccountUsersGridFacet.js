@@ -4,12 +4,11 @@ import * as SCHEMACONSTS from "../../../../../client-react/src/constants/schema"
 import * as Formatters from "./AccountUsersGridFormatters";
 import * as RealmUserAccountFlagConstants from "../../../common/constants/RealmUserAccountFlagConstants.js";
 
-GovernanceBundleLoader.changeLocale('en-us');
-
+let GRID_FACET_LOCALE = "governance.account.users";
 
 export const FACET_FIELDS = [
     {
-        label: Locale.getMessage("governance.account.users.accessStatus"),
+        label: Locale.getMessage(GRID_FACET_LOCALE + ".accessStatus"),
         type: SCHEMACONSTS.TEXT,
         needsAccountAdmin:true,
         needsRealmAdmin:true,
@@ -17,7 +16,7 @@ export const FACET_FIELDS = [
         formatter: user => Formatters.FormatUserStatusText(user.hasAppAccess, {rowData: user})
     },
     {
-        label: Locale.getMessage("governance.account.users.paidSeatSingular"),
+        label: Locale.getMessage(GRID_FACET_LOCALE + ".paidSeatSingular"),
         type: SCHEMACONSTS.CHECKBOX,
         needsAccountAdmin:true,
         needsRealmAdmin:true,
@@ -25,7 +24,7 @@ export const FACET_FIELDS = [
         formatter: user => 'Paid Seat' === Formatters.FormatUserStatusText(user.hasAppAccess, {rowData: user})
     },
     {
-        label: Locale.getMessage("governance.account.users.quickbaseStaff"),
+        label: Locale.getMessage(GRID_FACET_LOCALE + ".quickbaseStaff"),
         type: SCHEMACONSTS.CHECKBOX,
         needsAccountAdmin:true,
         needsRealmAdmin:true,
@@ -33,7 +32,7 @@ export const FACET_FIELDS = [
         formatter: user => RealmUserAccountFlagConstants.HasAnySystemPermissions(user)
     },
     {
-        label: Locale.getMessage("governance.account.users.inactive"),
+        label: Locale.getMessage(GRID_FACET_LOCALE + ".inactive"),
         type: SCHEMACONSTS.CHECKBOX,
         needsAccountAdmin:true,
         needsRealmAdmin:false,
@@ -41,7 +40,7 @@ export const FACET_FIELDS = [
         formatter: user => Formatters.FormatIsInactiveBool(user.lastAccess, {rowData: user})
     },
     {
-        label: Locale.getMessage("governance.account.users.inGroup"),
+        label: Locale.getMessage(GRID_FACET_LOCALE + ".inGroup"),
         type: SCHEMACONSTS.CHECKBOX,
         needsAccountAdmin:true,
         needsRealmAdmin:false,
@@ -49,7 +48,7 @@ export const FACET_FIELDS = [
         formatter: user => user.numGroupsMember > 0
     },
     {
-        label: Locale.getMessage("governance.account.users.groupManager"),
+        label: Locale.getMessage(GRID_FACET_LOCALE + ".groupManager"),
         type: SCHEMACONSTS.CHECKBOX,
         needsAccountAdmin:true,
         needsRealmAdmin:false,
@@ -57,7 +56,7 @@ export const FACET_FIELDS = [
         formatter: user => user.numGroupsManaged > 0
     },
     {
-        label: Locale.getMessage("governance.account.users.canCreateApps"),
+        label: Locale.getMessage(GRID_FACET_LOCALE + ".canCreateApps"),
         type: SCHEMACONSTS.CHECKBOX,
         needsAccountAdmin:true,
         needsRealmAdmin:false,
@@ -65,7 +64,7 @@ export const FACET_FIELDS = [
         formatter: user => RealmUserAccountFlagConstants.CanCreateApps(user)
     },
     {
-        label: Locale.getMessage("governance.account.users.appManager"),
+        label: Locale.getMessage(GRID_FACET_LOCALE + ".appManager"),
         type: SCHEMACONSTS.CHECKBOX,
         needsAccountAdmin:true,
         needsRealmAdmin:false,
@@ -73,7 +72,7 @@ export const FACET_FIELDS = [
         formatter: user => user.numAppsManaged > 0
     },
     {
-        label: Locale.getMessage("governance.account.users.realmDirectoryUsers"),
+        label: Locale.getMessage(GRID_FACET_LOCALE + ".realmDirectoryUsers"),
         type: SCHEMACONSTS.CHECKBOX,
         needsAccountAdmin:false,
         needsRealmAdmin:true,
@@ -81,7 +80,7 @@ export const FACET_FIELDS = [
         formatter: user => RealmUserAccountFlagConstants.HasAnyRealmPermissions(user)
     },
     {
-        label: Locale.getMessage("governance.account.users.realmApproved"),
+        label: Locale.getMessage(GRID_FACET_LOCALE + ".realmApproved"),
         type: SCHEMACONSTS.CHECKBOX,
         needsAccountAdmin:false,
         needsRealmAdmin:true,

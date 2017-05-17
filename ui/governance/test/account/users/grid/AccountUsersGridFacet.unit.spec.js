@@ -5,6 +5,8 @@ import _ from "lodash";
 import Locale from "../../../../../reuse/client/src/locales/locale";
 import GovernanceBundleLoader from "../../../../src/locales/governanceBundleLoader";
 
+let GRID_FACET_LOCALE = "governance.account.users";
+
 const ACCOUNT_USERS_DATA = [
     {
         "uid": 10000,
@@ -61,7 +63,7 @@ describe('Faceting Fields Values', () => {
         expect(GetFacetFields(true, true)[0]).toEqual(
             {
                 id:0,
-                name: Locale.getMessage("governance.account.users.accessStatus"),
+                name: Locale.getMessage(GRID_FACET_LOCALE + ".accessStatus"),
                 type: 'TEXT',
                 values: [
                     {id:0, value: 'Denied'},
@@ -75,7 +77,7 @@ describe('Faceting Fields Values', () => {
         expect(GetFacetFields(true, true)[4]).toEqual(
             {
                 id:4,
-                name: Locale.getMessage("governance.account.users.inGroup"),
+                name: Locale.getMessage(GRID_FACET_LOCALE + ".inGroup"),
                 type: 'CHECKBOX',
                 values: [
                     {id:4, value: 'Yes'},
@@ -95,20 +97,20 @@ describe('Facet Fields Permissions', () => {
     });
 
     const PERM_AGNOSTIC_FACETS = [
-        Locale.getMessage("governance.account.users.accessStatus"),
-        Locale.getMessage("governance.account.users.paidSeatSingular"),
-        Locale.getMessage("governance.account.users.quickbaseStaff")];
+        Locale.getMessage(GRID_FACET_LOCALE + ".accessStatus"),
+        Locale.getMessage(GRID_FACET_LOCALE + ".paidSeatSingular"),
+        Locale.getMessage(GRID_FACET_LOCALE + ".quickbaseStaff")];
 
     const ACCOUNT_ONLY_FACETS = [
-        Locale.getMessage("governance.account.users.inactive"),
-        Locale.getMessage("governance.account.users.inGroup"),
-        Locale.getMessage("governance.account.users.groupManager"),
-        Locale.getMessage("governance.account.users.canCreateApps"),
-        Locale.getMessage("governance.account.users.appManager")];
+        Locale.getMessage(GRID_FACET_LOCALE + ".inactive"),
+        Locale.getMessage(GRID_FACET_LOCALE + ".inGroup"),
+        Locale.getMessage(GRID_FACET_LOCALE + ".groupManager"),
+        Locale.getMessage(GRID_FACET_LOCALE + ".canCreateApps"),
+        Locale.getMessage(GRID_FACET_LOCALE + ".appManager")];
 
     const REALM_ONLY_FACETS = [
-        Locale.getMessage("governance.account.users.realmDirectoryUsers"),
-        Locale.getMessage("governance.account.users.realmApproved")];
+        Locale.getMessage(GRID_FACET_LOCALE + ".realmDirectoryUsers"),
+        Locale.getMessage(GRID_FACET_LOCALE + ".realmApproved")];
 
     it("should get ONLY the Realm fields", ()=> {
         let realmAdminFacets = GetFacetFields(false, true);
