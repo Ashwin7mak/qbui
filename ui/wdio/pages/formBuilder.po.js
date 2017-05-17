@@ -242,6 +242,10 @@ class formBuilderPage {
         browser.moveToObject(field, 5, 5);
         browser.buttonDown();
         browser.buttonUp();
+        // EDGE needs a 2nd click to render PROPERTIES panel, log an issue for this!
+        browser.pause(oneSecond);
+        browser.buttonDown();
+        browser.buttonUp();
         this.fieldProperty_Name.waitForExist(); // assume it didn't exist, i.e. nothing was previously selected
         return this.fieldProperty_Name.getText();
     }
