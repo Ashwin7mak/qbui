@@ -47,7 +47,7 @@ class TabbedSideNav extends Component {
                     renderTabContent={() => <TabContent />}
                 >
                     {this.props.tabs.map(tab => (
-                        <TabPane tab={tab.title} key={tab.key}>{tab.content}</TabPane>
+                        <TabPane tab={tab.title} key={tab.key} forceRender={true}>{tab.content}</TabPane>
                     ))}
                 </Tabs>
             </div>

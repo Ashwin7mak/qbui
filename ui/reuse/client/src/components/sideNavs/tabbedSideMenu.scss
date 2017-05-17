@@ -27,6 +27,7 @@
         }
     }
     .rc-tabs-ink-bar {
+        //FOR ANIMATION ONLY
         z-index: 1;
         position: absolute;
         box-sizing: border-box;
@@ -36,6 +37,7 @@
         transform-origin: 0 0;
     }
     .rc-tabs-ink-bar-animated {
+        //FOR ANIMATION ONLY
         -webkit-transition: -webkit-transform 0.3s cubic-bezier(0.35, 0, 0.25, 1);
         transition: -webkit-transform 0.3s cubic-bezier(0.35, 0, 0.25, 1);
         transition: transform 0.3s cubic-bezier(0.35, 0, 0.25, 1);
@@ -92,10 +94,10 @@
         transform-origin: 0 0;
     }
     .rc-tabs-nav-animated {
-        -webkit-transition: -webkit-transform 0.5s cubic-bezier(0.35, 0, 0.25, 1);
-        transition: -webkit-transform 0.5s cubic-bezier(0.35, 0, 0.25, 1);
-        transition: transform 0.5s cubic-bezier(0.35, 0, 0.25, 1);
-        transition: transform 0.5s cubic-bezier(0.35, 0, 0.25, 1), -webkit-transform 0.5s cubic-bezier(0.35, 0, 0.25, 1);
+        -webkit-transition: -webkit-transform 0.8s cubic-bezier(0.35, 0, 0.25, 1);
+        transition: -webkit-transform 0.8s cubic-bezier(0.35, 0, 0.25, 1);
+        transition: transform 0.8s cubic-bezier(0.35, 0, 0.25, 1);
+        transition: transform 0.8s cubic-bezier(0.35, 0, 0.25, 1), -webkit-transform 0.8s cubic-bezier(0.35, 0, 0.25, 1);
     }
     .rc-tabs-nav:before,
     .rc-tabs-nav:after {
@@ -143,10 +145,10 @@
         overflow: auto;
     }
     .rc-tabs-content-animated {
-        -webkit-transition: margin-left 0.3s cubic-bezier(0.35, 0, 0.25, 1), margin-top 0.3s cubic-bezier(0.35, 0, 0.25, 1), -webkit-transform 0.3s cubic-bezier(0.35, 0, 0.25, 1);
-        transition: margin-left 0.3s cubic-bezier(0.35, 0, 0.25, 1), margin-top 0.3s cubic-bezier(0.35, 0, 0.25, 1), -webkit-transform 0.3s cubic-bezier(0.35, 0, 0.25, 1);
-        transition: transform 0.3s cubic-bezier(0.35, 0, 0.25, 1), margin-left 0.3s cubic-bezier(0.35, 0, 0.25, 1), margin-top 0.3s cubic-bezier(0.35, 0, 0.25, 1);
-        transition: transform 0.3s cubic-bezier(0.35, 0, 0.25, 1), margin-left 0.3s cubic-bezier(0.35, 0, 0.25, 1), margin-top 0.3s cubic-bezier(0.35, 0, 0.25, 1), -webkit-transform 0.3s cubic-bezier(0.35, 0, 0.25, 1);
+        -webkit-transition: margin-left 0.8s cubic-bezier(0.35, 0, 0.25, 1), margin-top 0.8s cubic-bezier(0.35, 0, 0.25, 1), -webkit-transform 0.8s cubic-bezier(0.35, 0, 0.25, 1);
+        transition: margin-left 0.8s cubic-bezier(0.35, 0, 0.25, 1), margin-top 0.8s cubic-bezier(0.35, 0, 0.25, 1), -webkit-transform 0.8s cubic-bezier(0.35, 0, 0.25, 1);
+        transition: transform 0.8s cubic-bezier(0.35, 0, 0.25, 1), margin-left 0.8s cubic-bezier(0.35, 0, 0.25, 1), margin-top 0.8s cubic-bezier(0.35, 0, 0.25, 1);
+        transition: transform 0.8s cubic-bezier(0.35, 0, 0.25, 1), margin-left 0.8s cubic-bezier(0.35, 0, 0.25, 1), margin-top 0.8s cubic-bezier(0.35, 0, 0.25, 1), -webkit-transform 0.8s cubic-bezier(0.35, 0, 0.25, 1);
         display: -webkit-box;
         display: -ms-flexbox;
         display: flex;
@@ -429,7 +431,7 @@
         margin-right: 30px;
     }
     .rc-tabs-bottom .rc-tabs-tabpane-inactive {
-        height: 0;
+        height: 100%;
         overflow: visible;
     }
     .rc-tabs-top {
@@ -514,7 +516,7 @@
         margin-right: 30px;
     }
     .rc-tabs-top .rc-tabs-tabpane-inactive {
-        height: 0;
+        height: 100%;
         overflow: visible;
     }
     //formBuilder
@@ -527,7 +529,7 @@
             margin-right: 0;
         }
     }
-    //formBuilder
+    ////formBuilder
     .rc-tabs-content {
         overflow: visible; // Second tab would be invisible when this was set to hidden. Fixed with visible.
     }
