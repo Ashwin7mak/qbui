@@ -613,7 +613,7 @@ export default {
                 numeric: "Nombre",
                 date: "Date",
                 other: "Autre",
-                relationships: "Des relations" ,
+                relationships: "Des relations",
                 tableDataConnections: "Connexions de données de table"
             },
             defaultMultichoiceOptions: {
