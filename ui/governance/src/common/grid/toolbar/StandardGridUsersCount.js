@@ -1,5 +1,7 @@
 import React, {Component, PropTypes} from 'react';
 import './StandardGridUsersCount.scss';
+import Locale from "../../../../../reuse/client/src/locales/locale";
+import {I18nMessage} from "../../../../../client-react/src/utils/i18nMessage";
 
 class StandardGridUsersCount extends Component {
     /**
@@ -9,12 +11,20 @@ class StandardGridUsersCount extends Component {
      */
 
      render() {
-         let recordCountMessage = (this.props.filteredRecordCount === 1) ? this.props.itemTypeSingular : this.props.itemTypePlural;
+         let recordCount;
+         let recordCountMessage = (this.props.recordCount === 1) ? this.props.itemTypeSingular : this.props.itemTypePlural;
+
+
+         if(this.props.filteredRecordCount === this.props.recordCount) {
+            recordCount = this.props.recordCount;
+        } else {
+            recordCount = (this.props.filteredRecordCount) +" of " +(this.props.recordCount);
+        }
 
          return (
              <div className="recordsCountLoaderContainer">
                          <div className="recordsCount">
-                             {this.props.filteredRecordCount} {recordCountMessage}
+                             {recordCount} {recordCountMessage}
                          </div>
              </div>
          );
