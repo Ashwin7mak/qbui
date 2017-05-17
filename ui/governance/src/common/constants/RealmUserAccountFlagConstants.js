@@ -22,7 +22,7 @@ export const HasFlag = (bits, flag) => (bits & flag) !== 0;
 export const IsProvisional = userInfo => userInfo.realmDirectoryFlags === 0 ||
 !(HasFlag(userInfo.realmDirectoryFlags, RealmDirFlags.RegisteredFlag) || HasFlag(userInfo.realmDirectoryFlags, RealmDirFlags.VerifiedFlag));
 
-export const IsVerified = userInfo => userInfo.realmDirectoryFlags !== 0 && HasFlag(userInfo.realmDirectoryFlags, RealmDirFlags.VerifiedFlag);
+export const IsVerified = userInfo => HasFlag(userInfo.realmDirectoryFlags, RealmDirFlags.VerifiedFlag);
 
 export const IsDeactivated = userInfo => HasFlag(userInfo.userBasicFlags, UserFlags.DeactivatedFlag);
 export const IsDenied = userInfo => HasFlag(userInfo.realmDirectoryFlags, RealmDirFlags.DeniedFlag);
