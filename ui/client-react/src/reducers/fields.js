@@ -30,7 +30,6 @@ export const getFields = (state, appId, tblId) => {
 };
 
 const fieldsStore = (state = [], action) => {
-
     //  new state list without the appId/tblId entry
     const newState = _.reject(state, field => field.appId === action.appId && field.tblId === action.tblId);
     let getCurrentState = (appId, tblId) =>  _.find(state, field => field.appId === appId && field.tblId === tblId);
@@ -140,7 +139,18 @@ const fieldsStore = (state = [], action) => {
             return state;
         }
     }
-
+    case types.SET_IS_PENDING_EDIT_TO_FALSE: {
+        newState[0].isPendingEdit = false;
+        return newState;
+    }
+    case types.SAVING_FORM: {
+        //This is for formBuilder
+        if (!newState[0]) {
+            newState[0] = {};
+        }
+        newState[0].isPendingEdit = false;
+        return newState;
+    }
     case types.UPDATE_FIELD_ID : {
         let fieldList = _.find(state, fieldlist => fieldlist.appId === action.appId && fieldlist.tblId === action.tblId);
         fieldList = _.cloneDeep(fieldList);
