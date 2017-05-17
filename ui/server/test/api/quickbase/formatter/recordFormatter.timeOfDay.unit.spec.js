@@ -31,7 +31,8 @@ describe('Time of day record formatter unit test', function() {
                 datatypeAttributes: {
                     type          : 'TIME_OF_DAY',
                     scale         : 'HH:MM',
-                    use24HourClock: false
+                    use24HourClock: false,
+                    timeZone          : "America/Los_Angeles"
                 }
             }
         ];

@@ -82,7 +82,7 @@
 
             var dateStr = yyyy + '-' + mm + '-' + dd +  'T' + fieldValue.value.replace(/(\[.*?\])/, '');
             //if the useTimezone is set then assume that the incoming value is in UTC
-            if (fieldInfo.useTimezone) {
+            if (fieldInfo.useTimezone && fieldValue.value.indexOf('Z') === -1) {
                 dateStr += 'Z';
             }
             //Resolve whether or not to shift based on useTimezone and app's timezone
