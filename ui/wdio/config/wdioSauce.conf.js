@@ -132,7 +132,7 @@ exports.config = {
         {
             platform: 'OS X 10.11',
             browserName: 'firefox',
-            version: '46.0',
+            version: '53.0',
             marionette: 'false',
             tunnelIdentifier: process.env.ENV_TUNNEL_NAME,
             build           : 'WebdriverIO Jenkins Master Build #' + process.env.BUILD_NUMBER + ' - OSX Firefox Browser',
