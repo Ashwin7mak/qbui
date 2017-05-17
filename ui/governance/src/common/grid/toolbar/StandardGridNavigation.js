@@ -49,7 +49,7 @@ StandardGridNavigation.defaultProps = {
 };
 
 StandardGridNavigation.propTypes = {
-    id: PropTypes.string.required,
+    id: PropTypes.func.required,
     firstRecordInCurrentPage: PropTypes.number,
     lastRecordInCurrentPage: PropTypes.number,
     filteredRecords: PropTypes.number,

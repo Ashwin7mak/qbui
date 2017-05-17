@@ -6,7 +6,7 @@ import AppShell from "./appShell";
 import AccountUsers from "../account/users/AccountUsersMain";
 import {BrowserRouter, Switch} from "react-router-dom";
 import RouteWithSubRoutes from "../../../client-react/src/scripts/RouteWithSubRoutes";
-import {Provider} from 'react-redux';
+import {Provider} from "react-redux";
 import createGovernanceStore from "./store";
 
 const store = createGovernanceStore();

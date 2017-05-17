@@ -46,7 +46,7 @@ export default {
                         email: "EMAIL",
                         userName: "NOM D'UTILISATEUR",
                         lastAccess: "DERNIER ACCÈS",
-                        quickbaseAccessStatus: "ÉTAT D'ACCÈS QUICKBASE",
+                        quickbaseAccessStatus: "ÉTAT D'ACCÈS QUICK BASE",
                         inactive: "INACTIF?",
                         inAnyGroup: "DANS TOUT GROUPE",
                         groupManager: "CHEF DE GROUPE",

@@ -7,12 +7,14 @@ const boolColumnProps = {
     classes: ['BoolColumn'],
 };
 
+let headerString = 'governance.account.users.grid';
+
 // Column Definitions
 const columns = () => [
     {
         property: 'firstName',
         header: {
-            label: Locale.getMessage('governance.account.users.grid.firstName')
+            label: Locale.getMessage(headerString + '.firstName')
         },
         fieldDef: {
             id: 1,
@@ -24,7 +26,7 @@ const columns = () => [
     {
         property: 'lastName',
         header: {
-            label: Locale.getMessage('governance.account.users.grid.lastName')
+            label: Locale.getMessage(headerString + '.lastName')
         },
         fieldDef: {
             id: 2,
@@ -36,7 +38,7 @@ const columns = () => [
     {
         property: 'email',
         header: {
-            label: Locale.getMessage('governance.account.users.grid.email')
+            label: Locale.getMessage(headerString + '.email')
         },
         props: {
             classes: ['EmailColumn']
@@ -51,7 +53,7 @@ const columns = () => [
     {
         property: 'userName',
         header: {
-            label: Locale.getMessage('governance.account.users.grid.userName')
+            label: Locale.getMessage(headerString + '.userName')
         },
         cell: {
             formatters: [Formatters.FormatUsernameString]
@@ -69,7 +71,7 @@ const columns = () => [
     {
         property: 'lastAccess',
         header: {
-            label: Locale.getMessage('governance.account.users.grid.lastAccess')
+            label: Locale.getMessage(headerString + '.lastAccess')
         },
         cell: {
             formatters: [Formatters.FormatLastAccessString]
@@ -87,7 +89,7 @@ const columns = () => [
     {
         property: 'hasAppAccess',
         header: {
-            label: Locale.getMessage('governance.account.users.grid.quickbaseAccessStatus')
+            label: Locale.getMessage(headerString + '.quickbaseAccessStatus')
         },
         cell: {
             formatters: [Formatters.FormatUserStatusHTML]
@@ -102,7 +104,7 @@ const columns = () => [
     {
         property: 'lastAccess',
         header: {
-            label: Locale.getMessage('governance.account.users.grid.inactive')
+            label: Locale.getMessage(headerString + '.inactive')
         },
         cell: {
             formatters: [Formatters.FormatIsInactive]
@@ -121,7 +123,7 @@ const columns = () => [
     {
         property: 'numGroupsMember',
         header: {
-            label: Locale.getMessage('governance.account.users.grid.inAnyGroup')
+            label: Locale.getMessage(headerString + '.inAnyGroup')
         },
         cell: {
             formatters: [Formatters.FormatIsGroupMember]
@@ -140,7 +142,7 @@ const columns = () => [
     {
         property: 'numGroupsManaged',
         header: {
-            label: Locale.getMessage('governance.account.users.grid.groupManager')
+            label: Locale.getMessage(headerString + '.groupManager')
         },
         cell: {
             formatters: [Formatters.FormatIsGroupManager]
@@ -159,7 +161,7 @@ const columns = () => [
     {
         property: 'accountTrusteeFlags',
         header: {
-            label: Locale.getMessage('governance.account.users.grid.canCreateApps')
+            label: Locale.getMessage(headerString + '.canCreateApps')
         },
         cell: {
             formatters: [Formatters.FormatCanCreateApps]
@@ -178,7 +180,7 @@ const columns = () => [
     {
         property: 'numAppsManaged',
         header: {
-            label: Locale.getMessage('governance.account.users.grid.appManager')
+            label: Locale.getMessage(headerString + '.appManager')
         },
         cell: {
             formatters: [Formatters.FormatIsAppManager]
@@ -197,7 +199,7 @@ const columns = () => [
     {
         property: 'realmDirectoryFlags',
         header: {
-            label: Locale.getMessage('governance.account.users.grid.inRealmDirectory')
+            label: Locale.getMessage(headerString + '.inRealmDirectory')
         },
         cell: {
             formatters: [Formatters.FormatIsInRealmDirectory]
@@ -216,7 +218,7 @@ const columns = () => [
     {
         property: 'realmDirectoryFlags',
         header: {
-            label: Locale.getMessage('governance.account.users.grid.realmApproved')
+            label: Locale.getMessage(headerString + '.realmApproved')
         },
         cell: {
             formatters: [Formatters.FormatIsRealmApproved]
