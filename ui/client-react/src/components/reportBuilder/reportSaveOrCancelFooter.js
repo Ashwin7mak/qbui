@@ -18,10 +18,8 @@ export class ReportSaveOrCancelFooter extends Component {
     onClickSave = () => {
         //HideAppModal();
         console.log("clicked save");
-        let reportDef = {
-            fids: this.props.reportData.data.fids
-        };
-        this.props.saveReport(CONTEXT.REPORT.NAV, this.props.appId, this.props.tblId, this.props.rptId, reportDef);
+        let reportDef = this.props.reportData.data.fids;
+        this.props.saveReport(this.props.appId, this.props.tblId, this.props.rptId, reportDef);
     };
 
     onCancel = () => {

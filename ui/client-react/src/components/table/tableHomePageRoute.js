@@ -180,7 +180,12 @@ export const TableHomePageRoute = React.createClass({
 
                 </ReportFieldSelectMenu>
 
-                {inBuilderMode && <ReportSaveOrCancelFooter />}
+                {inBuilderMode && <ReportSaveOrCancelFooter
+                    appId={this.props.match.params.appId}
+                    tblId={this.props.match.params.tblId}
+                    rptId={this.props.reportData.rptId}
+                    reportData={this.props.reportData}
+                />}
             </div>
         );
     }

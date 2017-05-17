@@ -431,9 +431,8 @@ export const hideColumn = (context, clickedId) => {
  * @param reportDef
  * @returns {function(*=)}
  */
-export const saveReport = (context, appId, tableId, reportId, reportDef) => {
-    return (dispatch, context) => {
-        console.log(context);
+export const saveReport = (appId, tableId, reportId, reportDef) => {
+    return () => {
 
         return new Promise((resolve, reject) => {
             if (appId && tableId && reportId) {
