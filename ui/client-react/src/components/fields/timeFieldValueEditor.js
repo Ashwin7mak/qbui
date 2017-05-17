@@ -87,7 +87,13 @@ function insertTimeIntoList(dropList, time, militaryTime) {
 }
 const TIME_FORMAT = 'HH:mm:ss';
 const Z = 'Z';
-function getMomentTimeInUTC(value, appTimezone) {
+/**
+ * Helper method Given a time and a timezone returns a moment for current date + time in that timezone.
+ * @param value
+ * @param timezone
+ * @returns {*}
+ */
+function getMomentTimeFromAppsTz(value, timezone) {
     var currentDate = new Date();
     var dd = currentDate.getDate().toString();
     var mm = (currentDate.getMonth() + 1).toString(); //January is 0
@@ -102,7 +108,7 @@ function getMomentTimeInUTC(value, appTimezone) {
     }
 
     var dateStr = yyyy + '-' + mm + '-' + dd + 'T' + value;
-    return momentTz.tz(dateStr, appTimezone);
+    return momentTz.tz(dateStr, timezone);
 }
 /**
  * Given a time value in an app's timezone, convert it to utc timezone
@@ -111,7 +117,7 @@ function getMomentTimeInUTC(value, appTimezone) {
  * @returns {*}
  */
 function getTimeInUTC(value, appTimezone) {
-    let m = getMomentTimeInUTC(value, appTimezone);
+    let m = getMomentTimeFromAppsTz(value, appTimezone);
     return m.utc().format(TIME_FORMAT);
 }
 
@@ -300,7 +306,7 @@ const TimeFieldValueEditor = React.createClass({
 
                 if (this.props.attributes.useTimezone) {
                     inputValue += inputValue.indexOf(Z) === -1 ? Z : '';
-                    momentTime = getMomentTimeInUTC(inputValue, this.props.attributes.timeZone);
+                    momentTime = getMomentTimeFromAppsTz(inputValue, this.props.attributes.timeZone);
                 } else {
                     //  It's a time only field...just use today's date to format the time
                     momentTime = moment(inputValue, timeFormat);
