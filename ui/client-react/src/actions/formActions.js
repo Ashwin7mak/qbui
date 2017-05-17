@@ -41,6 +41,13 @@ export const showRelationshipDialog = (show = true) => {
     };
 };
 
+export const draggingLinkToRecord = (dragging = true) => {
+    return {
+        type: types.DRAGGING_LINK_TO_RECORD,
+        dragging
+    };
+};
+
 /**
  * form load in progress
  * @param container type of form (edit or view)

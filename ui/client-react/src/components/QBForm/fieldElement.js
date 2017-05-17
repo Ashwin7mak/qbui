@@ -5,6 +5,7 @@ import FieldValueRenderer from '../fields/fieldValueRenderer';
 import FieldValueEditor from '../fields/fieldValueEditor';
 import FieldFormats from '../../utils/fieldFormats';
 import FieldUtils from '../../utils/fieldUtils';
+import constants from '../../../../common/src/constants';
 import './qbform.scss';
 import _ from 'lodash';
 import {editRecordValidateField} from '../../actions/recordActions';
@@ -65,6 +66,16 @@ export const FieldElement = React.createClass({
         let change = this.getChanges(theVals);
         if (this.props.onBlur) {
             this.props.onBlur(change);
+        }
+    },
+
+    getFieldLabel(element, relatedField, app) {
+
+        if (_.get(relatedField, "datatypeAttributes.type", null) === constants.LINK_TO_RECORD && relatedField.parentTableId) {
+            const parentTable = _.find(app.tables, {id:relatedField.parentTableId});
+            return FieldUtils.getFieldLabel(element, relatedField, parentTable.name);
+        } else {
+            return FieldUtils.getFieldLabel(element, relatedField);
         }
     },
 
@@ -134,6 +145,7 @@ export const FieldElement = React.createClass({
             />;
         }
 
+        const fieldLabel = this.getFieldLabel(this.props.element, this.props.relatedField, this.props.app);
         return (
             <div className="formElement field">
                 {this.props.includeLabel &&
@@ -141,7 +153,7 @@ export const FieldElement = React.createClass({
                     relatedField={this.props.relatedField}
                     indicateRequiredOnLabel={this.props.indicateRequiredOnLabel}
                     isInvalid={this.props.isInvalid}
-                    label={FieldUtils.getFieldLabel(this.props.element, this.props.relatedField)}
+                    label={fieldLabel}
                 /> }
 
                 <span className="cellWrapper">

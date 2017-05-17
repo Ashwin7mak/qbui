@@ -1,5 +1,6 @@
 import * as types from '../actions/types';
 import * as tabIndexConstants from '../../../client-react/src/components/formBuilder/tabindexConstants';
+import * as constants from '../../../common/src/constants';
 import _ from 'lodash';
 import MoveFieldHelper from '../components/formBuilder/moveFieldHelper';
 
@@ -30,7 +31,16 @@ const forms = (
     case types.SHOW_RELATIONSHIP_DIALOG: {
         return {
             ...state,
-            showRelationshipDialog: action.show
+            showRelationshipDialog: state.show
+
+        };
+    }
+    case types.DRAGGING_LINK_TO_RECORD: {
+        return {
+            ...state,
+            draggingLinkToRecord: action.dragging,
+            showRelationshipDialog: state.draggingLinkToRecord && !action.dragging
+
         };
     }
 
@@ -169,6 +179,9 @@ const forms = (
         }
 
         let {newField, newLocation} = _.cloneDeep(action.content);
+
+        const isNewRelationshipField = _.get(newField, "datatypeAttributes.type", null) === constants.LINK_TO_RECORD;
+
         updatedForm = _.cloneDeep(currentForm);
         // Remove all keys that are not necessary for forms
         Object.keys(newField).forEach(key => {
@@ -211,6 +224,8 @@ const forms = (
 
         updatedForm.isPendingEdit = true;
         newState[action.id] = updatedForm;
+
+        newState.showRelationshipDialog = isNewRelationshipField && !newState.draggingLinkToRecord;
         return newState;
     }
 

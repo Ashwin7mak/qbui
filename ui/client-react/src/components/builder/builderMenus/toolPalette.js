@@ -16,6 +16,7 @@ class ToolPalette extends Component {
         return (
             <div className="toolPaletteContainer">
                 <NewFieldsMenu isCollapsed={isCollapsed} isOpen={isOpen}
+                               beginDrag={this.props.beginDrag}
                                endDrag={this.props.endDrag}
                                toolPaletteTabIndex={tabIndexConstants.TOOL_PALETTE_TABINDEX}
                                toggleToolPaletteChildrenTabIndex={this.props.toggleToolPaletteChildrenTabIndex}
