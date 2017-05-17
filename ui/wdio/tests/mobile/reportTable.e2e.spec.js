@@ -54,14 +54,14 @@
          */
         it('Should load the reports page with the appropriate table report and verify add record button is visible', function() {
             // wait for the report content to be visible
-           // reportContentMobilePO.waitForReportContent();
+            reportContentMobilePO.waitForReportContent();
 
             // Assert all the records are displayed in the table
             var recordCount = FormsPO.getRecordsCountInATable();
             expect(recordCount).toBe(RECORD_COUNT);
 
             //Assert 'add new record' button is visible
-          //  expect(reportContentMobilePO.addRecordBtn.isVisible()).toBe(true);
+            expect(reportContentMobilePO.addRecordBtn.isVisible()).toBe(true);
         });
 
         /**
@@ -70,10 +70,10 @@
          */
         it('Should load the table report actions', function() {
             // wait for the report content to be visible
-          //  reportContentMobilePO.waitForReportContent();
+            reportContentMobilePO.waitForReportContent();
 
             // Assert sort by / group by button is visible
-          //  expect(reportContentMobilePO.reportSortGrpBtn.isVisible()).toBe(true);
+            expect(reportContentMobilePO.reportSortGrpBtn.isVisible()).toBe(true);
 
             // Assert records count total
             expect(ReportTableActionsPO.getReportRecordsCount()).toBe(RECORD_COUNT + " records");
