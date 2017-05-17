@@ -190,7 +190,7 @@ export class FieldProperties extends Component {
             fieldPropContainers.push(this.createMultiChoiceTextPropertyContainer(Locale.getMessage('fieldPropertyLabels.multiChoice'), choices, key++));
         }
 
-        let table = this.props.table;
+        const table = _.find(this.props.app.tables, {id: this.props.tableId});
         if (table && table.recordTitleFieldId && this.props.selectedField.id === table.recordTitleFieldId) {
             fieldPropContainers.push(this.createUniqueProperty(true, key++, true));
         }
