@@ -27,7 +27,7 @@ describe('ReportRoute functions', () => {
         loadReport: (context, appId, tblId, rptId, format, offset, rows) => {},
         loadDynamicReport: (context, appId, tblId, rptId, format, filter, queryParams) => {},
         reportBuilder: {
-            inBuilderMode: true,
+            isInBuilderMode: true,
             isCollapsed: true,
             addBeforeColumn: null,
             availableColumns: []
