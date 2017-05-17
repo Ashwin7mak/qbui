@@ -118,9 +118,6 @@
         margin-left: 20px;
         margin-right: 0;
     }
-    .rc-tabs-tab:hover {
-        color: $tabs-hover-text-color;
-    }
     .rc-tabs-tab-active,
     .rc-tabs-tab-active:hover {
         //formBuilder
@@ -128,6 +125,9 @@
         cursor: default;
         -webkit-transform: translateZ(0);
         transform: translateZ(0);
+    }
+    .rc-tabs-tab:hover {
+        color: $tabs-hover-text-color;
     }
     .rc-tabs-tab-disabled {
         cursor: default;
