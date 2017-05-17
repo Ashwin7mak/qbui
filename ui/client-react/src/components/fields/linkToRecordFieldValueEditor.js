@@ -16,10 +16,9 @@ import LinkToRecordTableSelectionDialog from './linkToRecordTableSelectionDialog
 const LinkToRecordFieldValueEditor = React.createClass({
     displayName: 'LinkToRecordFieldValueEditor',
     propTypes: {
-        showRelationshipDialog: PropTypes.func,
+        readyToShowRelationshipDialog: PropTypes.func,
         updateField: PropTypes.func,
         removeFieldFromForm: PropTypes.func,
-        dialogOpen: PropTypes.bool,
         tblId: PropTypes.string,
         tables: PropTypes.array,
         location: PropTypes.object,
@@ -34,7 +33,7 @@ const LinkToRecordFieldValueEditor = React.createClass({
 
     getInitialState() {
         return {
-            dialogClosed: false
+            dialogWasClosed: false // once closed, don't reopen
         };
     },
 
@@ -53,12 +52,17 @@ const LinkToRecordFieldValueEditor = React.createClass({
      * @param tableId
      */
     tableSelected(tableId) {
-        this.setState({dialogClosed: true});
+        this.setState({dialogWasClosed: true});
 
         this.props.showRelationshipDialog(false);
 
+        const parentTable = _.find(this.props.tables, {id: tableId});
+
+        // update the field with the parent table ID and a name incorporating the selected table
         const field = this.props.fieldDef;
         field.parentTableId = tableId;
+        field.name = Locale.getMessage('fieldsDefaultLabels.LINK_TO_RECORD_FROM', {parentTable: parentTable.name});
+
         this.props.updateField(field, this.props.appId, this.props.tblId);
     },
 
@@ -72,15 +76,13 @@ const LinkToRecordFieldValueEditor = React.createClass({
         return this.props.removeFieldFromForm(this.props.formId, this.props.location);
     },
 
-
-
     /**
      *
      * @returns {*}
      */
     render() {
 
-        if (this.props.readyToShowRelationshipDialog && !this.state.dialogClosed) {
+        if (this.props.readyToShowRelationshipDialog && !this.state.dialogWasClosed) {
             return (
                 <LinkToRecordTableSelectionDialog show={true}
                                                   childTableId={this.props.tblId}

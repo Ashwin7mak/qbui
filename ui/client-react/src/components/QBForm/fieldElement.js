@@ -69,23 +69,6 @@ export const FieldElement = React.createClass({
         }
     },
 
-    /**
-     * get the field label for the form element, include parent table description for LINK_TO_RECORD fields
-     * @param element
-     * @param relatedField
-     * @param app
-     * @returns {*}
-     */
-    getFieldLabel(element, relatedField, app) {
-
-        if (_.get(relatedField, "datatypeAttributes.type", null) === constants.LINK_TO_RECORD && relatedField.parentTableId) {
-            const parentTable = _.find(app.tables, {id:relatedField.parentTableId});
-            return FieldUtils.getFieldLabel(element, relatedField, parentTable.name);
-        } else {
-            return FieldUtils.getFieldLabel(element, relatedField);
-        }
-    },
-
     render() {
         let fieldDatatypeAttributes = this.props.relatedField && this.props.relatedField.datatypeAttributes ?
             this.props.relatedField.datatypeAttributes : {};
@@ -152,7 +135,6 @@ export const FieldElement = React.createClass({
             />;
         }
 
-        const fieldLabel = this.getFieldLabel(this.props.element, this.props.relatedField, this.props.app);
         return (
             <div className="formElement field">
                 {this.props.includeLabel &&
@@ -160,7 +142,7 @@ export const FieldElement = React.createClass({
                     relatedField={this.props.relatedField}
                     indicateRequiredOnLabel={this.props.indicateRequiredOnLabel}
                     isInvalid={this.props.isInvalid}
-                    label={fieldLabel}
+                    label={FieldUtils.getFieldLabel(this.props.element, this.props.relatedField)}
                 /> }
 
                 <span className="cellWrapper">

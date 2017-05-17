@@ -89,23 +89,15 @@ class FieldUtils {
      *         name: <string>,
      *     }
      */
-    static getFieldLabel(element, relatedField, parentTable) {
+    static getFieldLabel(element, relatedField) {
         let fieldType = FieldFormats.getFormatType(relatedField);
         if (element && element.useAlternateLabel) {
             return element.displayText || '';
+        } else if (relatedField) {
+            return relatedField.name || Locale.getMessage(`fieldsDefaultLabels.${fieldType}`) || '';
+        } else {
+            return '';
         }
-
-        if (relatedField) {
-
-            if (parentTable) {
-                return Locale.getMessage('fieldsDefaultLabels.LINK_TO_RECORD_FROM', {parentTable});
-            }
-            if (relatedField.name) {
-                return relatedField.name;
-            }
-            return Locale.getMessage(`fieldsDefaultLabels.${fieldType}`) || '';
-        }
-        return '';
     }
 
     /**
