@@ -45,6 +45,7 @@
             // edit first record
             reportContentPO.clickOnRecordInReportTable(0);
             // invoke form builder
+            formBuilderPO.waitForReady();
             return formBuilderPO.open();
         });
 
