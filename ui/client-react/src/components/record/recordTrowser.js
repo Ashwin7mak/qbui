@@ -9,7 +9,7 @@ import QBicon from "../qbIcon/qbIcon";
 import Icon, {AVAILABLE_ICON_FONTS} from '../../../../reuse/client/src/components/icon/icon.js';
 import Loader from 'react-loader';
 import QBErrorMessage from "../QBErrorMessage/qbErrorMessage";
-import WindowLocationUtils from '../../utils/windowLocationUtils';
+import {WindowHistoryUtils} from '../../utils/windowHistoryUtils';
 import * as SchemaConsts from "../../constants/schema";
 import _ from 'lodash';
 import AppHistory from '../../globals/appHistory';
@@ -24,6 +24,7 @@ import {APP_ROUTE, EDIT_RECORD_KEY} from '../../constants/urlConstants';
 import {CONTEXT} from '../../actions/context';
 import SaveOrCancelFooter from '../saveOrCancelFooter/saveOrCancelFooter';
 import {getPendEdits, getRecord} from '../../reducers/record';
+import {getRecordTitle} from '../../utils/formUtils';
 import './recordTrowser.scss';
 import {NEW_RECORD_VALUE} from "../../constants/urlConstants";
 
@@ -351,7 +352,7 @@ export const RecordTrowser = React.createClass({
                 let previousRecordId = index > 0 ? recordsArray[index - 1][key].value : null;
 
                 this.props.openRecord(recId, nextRecordId, previousRecordId);
-                WindowLocationUtils.pushWithQuery(EDIT_RECORD_KEY, recId);
+                WindowHistoryUtils.pushWithQuery(EDIT_RECORD_KEY, recId);
             }
         }
     },
@@ -394,13 +395,14 @@ export const RecordTrowser = React.createClass({
 
         let record = this.getRecordFromProps(this.props);
 
-        const showBack = !!(record.previousRecordId !== null);
-        const showNext = !!(record.nextRecordId !== null);
+        const showBack = !!(record.previousRecordId);
+        const showNext = !!(record.nextRecordId);
 
-        const recordName = this.props.selectedTable && this.props.selectedTable.name;
+        let relatedRecord =  _.has(this.props, 'editForm.formData.record') ? this.props.editForm.formData.record : null;
+        let recordName = getRecordTitle(this.props.selectedTable, relatedRecord, this.props.recId);
 
-        let title = this.props.recId === SchemaConsts.UNSAVED_RECORD_ID ? <span><I18nMessage message="nav.new"/><span>&nbsp;{table ? table.name : ""}</span></span> :
-            <span>{recordName} #{this.props.recId}</span>;
+        let title = this.props.recId === SchemaConsts.UNSAVED_RECORD_ID ? <span><I18nMessage message="nav.new"/><span>&nbsp;{recordName}</span></span> :
+            <span>{recordName}</span>;
 
 
         return (
@@ -443,7 +445,7 @@ export const RecordTrowser = React.createClass({
     },
 
     hideTrowser() {
-        WindowLocationUtils.pushWithoutQuery();
+        WindowHistoryUtils.pushWithoutQuery();
 
         this.props.onHideTrowser();
     },
@@ -456,7 +458,7 @@ export const RecordTrowser = React.createClass({
     clearEditsAndClose() {
         HideAppModal();
         this.props.editRecordCancel(this.props.appId, this.props.tblId, this.props.recId);
-        WindowLocationUtils.pushWithoutQuery();
+        WindowHistoryUtils.pushWithoutQuery();
         this.props.onHideTrowser();
     },
 
