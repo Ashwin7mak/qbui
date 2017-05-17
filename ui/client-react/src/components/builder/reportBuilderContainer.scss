@@ -28,14 +28,14 @@
             border: $stroke-width-thin solid $input-text-focus-border-color;
         }
 
+        .reportNameEditor .editor h3 {
+            margin: 0 0 10px 0;
+        }
+
         .reportBuilderToolbar {
             width: 100%;
             height: 35px;
             margin-bottom: 10px;
-
-            .reportNameEditor .editor h3 {
-                margin: 0;
-            }
         }
 
         .recordCount {

@@ -50,9 +50,7 @@ export class ReportBuilderContainer extends Component {
                     tblId={tblId}
                     reportData={this.props.reportData}>
                     <div className="reportBuilderContainerContent">
-                        <div className="reportBuilderToolbar">
-                            {name && <ReportNameEditor name={name}/>}
-                        </div>
+                        {name && <ReportNameEditor name={name}/>}
                         <QbGrid
                             numberOfColumns={columns.length}
                             columns={transformedColumns}
