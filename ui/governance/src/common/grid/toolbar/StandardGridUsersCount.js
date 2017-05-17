@@ -10,28 +10,28 @@ class StandardGridUsersCount extends Component {
      * otherwise just show the reports total records
      */
 
-     render() {
-         let recordCount;
-         let recordCountMessage = (this.props.recordCount === 1) ? this.props.itemTypeSingular : this.props.itemTypePlural;
+    render() {
+        let recordCount;
+        let recordCountMessage = (this.props.recordCount === 1) ? this.props.itemTypeSingular : this.props.itemTypePlural;
 
 
-         if(this.props.filteredRecordCount === this.props.recordCount) {
+        if (this.props.filteredRecordCount === this.props.recordCount) {
             recordCount = this.props.recordCount;
         } else {
-            recordCount = (this.props.filteredRecordCount) +" of " +(this.props.recordCount);
+            recordCount = (this.props.filteredRecordCount) + " of " + (this.props.recordCount);
         }
 
-         return (
+        return (
              <div className="recordsCountLoaderContainer">
                          <div className="recordsCount">
                              {recordCount} {recordCountMessage}
                          </div>
              </div>
-         );
-     }
+        );
+    }
 }
 
-StandardGridUsersCount.propTypes= {
+StandardGridUsersCount.propTypes = {
     recordCount: React.PropTypes.number,
     filteredRecordCount: React.PropTypes.number,
     itemTypePlural: React.PropTypes.string,
