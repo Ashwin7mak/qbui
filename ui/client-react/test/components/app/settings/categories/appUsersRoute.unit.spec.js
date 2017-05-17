@@ -19,7 +19,6 @@ describe('AppUsersRoute functions', () => {
     const nextMatch = {params: {appId: 2}};
     const flux = {
         actions:{
-            loadAppRoles: function() {return;},
             loadAppOwner: function() {return;},
             selectUsersRows: function() {return;},
             selectedUsersRows: function() {return;}
@@ -35,13 +34,11 @@ describe('AppUsersRoute functions', () => {
     });
 
     beforeEach(() => {
-        spyOn(flux.actions, 'loadAppRoles');
         spyOn(flux.actions, 'loadAppOwner');
         spyOn(flux.actions, 'selectedUsersRows');
     });
 
     afterEach(() => {
-        flux.actions.loadAppRoles.calls.reset();
         flux.actions.loadAppOwner.calls.reset();
     });
 
@@ -70,7 +67,6 @@ describe('AppUsersRoute functions', () => {
         let instance = component.instance();
         instance.componentDidMount();
         instance.selectAllRows();
-        expect(flux.actions.loadAppRoles).toHaveBeenCalled();
         AppUsersRouteAPI.__ResetDependency__('IconActions');
     });
 
@@ -88,7 +84,6 @@ describe('AppUsersRoute functions', () => {
                                            match={match}/>);
         let instance = component.instance();
         instance.componentWillReceiveProps({appUsersUnfiltered, match: nextMatch, appRoles, appOwner, flux, selectedApp, selectedUserRows: [], params:{appId:2}, appUsers:[]});
-        expect(flux.actions.loadAppRoles).toHaveBeenCalled();
         AppUsersRouteAPI.__ResetDependency__('IconActions');
     });
     it('test Selections', () => {
