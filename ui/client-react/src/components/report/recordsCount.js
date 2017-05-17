@@ -27,8 +27,6 @@ var RecordsCount = React.createClass({
      * and it changes the text header from 'Counting {records}' to 'Counting...'
      */
     render() {
-        console.log("this.props", this.props);
-        console.log("this.props.isCounting", this.props.isCounting);
         // No records check
         if ((this.props.isFiltered && (this.props.filteredRecordCount === null) || this.props.recordCount === null)) {
             return null;

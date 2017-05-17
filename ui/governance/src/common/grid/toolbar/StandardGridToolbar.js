@@ -61,13 +61,12 @@ class StandardGridToolBar extends React.Component {
                         }
                     </div>
                     <div className="standardRightToolBar">
-                        {/* Temporary RecordCount until the real component is set*/}
                         <div className="standardGridRecordCount">
                             <div className="recordsCount">
-                                    <StandardGridUsersCount totalRecords={this.props.totalRecords}
-                                                            filteredRecords={this.props.filteredRecords}
+                                    <StandardGridUsersCount recordCount={this.props.totalRecords}
+                                                            filteredRecordCount={this.props.filteredRecords}
                                                             itemTypePlural={this.props.itemTypePlural}
-                                                            itemTypeSingular={this.props.itemTypeSingular}/>
+                                                            itemTypeSingular={this.props.itemTypeSingular}
                                     />
                             </div>
                         </div>
