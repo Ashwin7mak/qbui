@@ -1,4 +1,4 @@
-import {REQUEST_FAILURE, REQUEST_FETCHING, REQUEST_SUCCESS} from '../../app/actionTypes';
+import {REQUEST_FAILURE, REQUEST_FETCHING, REQUEST_SUCCESS} from "../../app/actionTypes";
 
 const defaultStatus = {
     isFetching: false,

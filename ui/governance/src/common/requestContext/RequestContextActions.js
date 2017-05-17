@@ -1,9 +1,9 @@
 import * as types from "../../app/actionTypes";
 import RequestContextService from "./RequestContextService";
-import WindowLocationUtils from  "../../../../client-react/src/utils/windowLocationUtils";
-import {FORBIDDEN, INTERNAL_SERVER_ERROR} from  "../../../../client-react/src/constants/urlConstants";
-import Logger from '../../../../client-react/src/utils/logger';
-import LogLevel from '../../../../client-react/src/utils/logLevels';
+import WindowLocationUtils from "../../../../client-react/src/utils/windowLocationUtils";
+import {FORBIDDEN, INTERNAL_SERVER_ERROR} from "../../../../client-react/src/constants/urlConstants";
+import Logger from "../../../../client-react/src/utils/logger";
+import LogLevel from "../../../../client-react/src/utils/logLevels";
 
 let logger = new Logger();
 

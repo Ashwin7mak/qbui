@@ -3,13 +3,12 @@ import StandardGridNavigation from "./StandardGridNavigation";
 import StandardGridUsersCount from "./StandardGridUsersCount";
 import * as StandardGridActions from "../../../common/grid/standardGridActions";
 import IconInputBox from "../../../../../reuse/client/src/components/iconInputBox/iconInputBox";
-import {I18nMessage} from '../../../../../reuse/client/src/utils/i18nMessage';
+import {I18nMessage} from "../../../../../reuse/client/src/utils/i18nMessage";
 import {connect} from "react-redux";
 import "./StandardGridToolBar.scss";
 import FacetSelections from "../../../../../reuse/client/src/components/facets/facetSelections";
 import StandardGridFacetsMenu from "./StandardGridFacetsMenu";
 import _ from "lodash";
-import * as SCHEMACONSTS from "../../../../../client-react/src/constants/schema";
 
 /**
  * The toolbar for Standard Grid
@@ -43,14 +42,17 @@ class StandardGridToolBar extends React.Component {
                 <div className={"standardGridToolBar " + (hasFacets ? "" : "noFacets")}>
                     <div className="standardLeftToolBar">
                         <IconInputBox placeholder={`Search ${this.props.itemTypePlural}`}
-                                      onChange={this.props.onSearchChange}/>
+                                      onChange={this.props.onSearchChange}
+                                      onClear={this.props.clearSearchTerm}
+                                      value={this.props.searchTerm}
+                        />
                         {this.props.doFacet ?
                             <div className="standardGridFacet">
                                 <StandardGridFacetsMenu
                                     className="facetMenu"
                                     {...this.props}
                                     isLoading={false}
-                                    facetFields={this.props.facetFields}
+                                    facetFields={{facets: this.props.facetFields}}
                                     onFacetSelect={this.handleFacetSelect}
                                     onFacetClearFieldSelects={this.handleFacetClearFieldSelects}
                                     selectedValues={this.props.facetSelections.selectionsHash}
@@ -94,7 +96,8 @@ StandardGridToolBar.propTypes = {
     onSearchChange: PropTypes.func.isRequired,
     totalRecords: PropTypes.number.isRequired,
     itemTypePlural: PropTypes.string,
-    itemTypeSingular: PropTypes.string
+    itemTypeSingular: PropTypes.string,
+    searchTerm: PropTypes.string,
 };
 
 const mapStateToProps = (state, ownProps) => {
@@ -102,9 +105,9 @@ const mapStateToProps = (state, ownProps) => {
     let paginationInfo = (state.Grids[ownProps.id] || {}).pagination || {};
     return {
         facetSelections:  facetInfo.facetSelections || {},
-        facetFields: facetInfo.facetFields ? {facets: state.Grids[ownProps.id].facets.facetFields} : {facets:[]},
         filteredRecords: paginationInfo.filteredRecords || 0,
         totalRecords: paginationInfo.totalRecords || 0,
+        searchTerm: (state.Grids[ownProps.id] || {}).searchTerm || '',
     };
 };
 
@@ -123,6 +126,11 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 
         onSearchChange: (searchEvent) => {
             dispatch(StandardGridActions.setSearch(ownProps.id, searchEvent.target.value));
+            dispatch(StandardGridActions.doUpdate(ownProps.id, ownProps.doUpdate));
+        },
+
+        clearSearchTerm: () => {
+            dispatch(StandardGridActions.clearSearchTerm(ownProps.id));
             dispatch(StandardGridActions.doUpdate(ownProps.id, ownProps.doUpdate));
         },
 

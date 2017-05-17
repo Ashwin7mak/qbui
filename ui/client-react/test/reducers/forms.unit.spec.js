@@ -522,12 +522,37 @@ describe('Forms reducer functions', () => {
             content: null
         };
 
-        it('returns a new state with endDragging set to undefined', () => {
+        it('returns a new state with endDragging set to false', () => {
             expect(reducer(stateWithViewForm, actionPayload)).toEqual({
                 [VIEW]: {
                     ...stateWithViewForm[VIEW],
                     formData: {formMeta: testFormMeta},
                     isDragging: false
+                }
+            });
+        });
+
+        it('returns existing state if there is no current form', () => {
+            expect(reducer(stateWithEditForm, actionPayload)).toEqual(stateWithEditForm);
+        });
+
+    });
+
+    describe('sets isPendingEdits to false', () => {
+        const testFormMeta = 'some meta data';
+
+        const actionPayload = {
+            id: VIEW,
+            type: types.SET_IS_PENDING_EDIT_TO_FALSE,
+            content: null
+        };
+
+        it('returns a new state with isPending edit set to false', () => {
+            expect(reducer(stateWithViewForm, actionPayload)).toEqual({
+                [VIEW]: {
+                    ...stateWithViewForm[VIEW],
+                    formData: {formMeta: testFormMeta},
+                    isPendingEdit: false
                 }
             });
         });

@@ -10,20 +10,56 @@
                 return browser.element('.topNav .center');
             }
         },
-        formBuilderBtn: {
-            get: function() {
-                return browser.element('.topNav .dropdown');
-            }
-        },
         modifyThisForm: {
             get: function() {
                 return browser.element('.topNav .modifyForm');
             }
         },
-        // Left Nav menu elements
-        navMenuEl: {
+        // Feedback button topNav
+        feedbackBtn: {
             get: function() {
-                return browser.elements('.leftNav');
+                return browser.element('.topNav .userFeedBack');
+            }
+        },
+        //Give feedback option in Feedback button
+        feedbackMenuButton: {
+            get: function() {
+                return this.feedbackBtn.element('.feedbackMenuButton');
+            }
+        },
+        //Report issue option in Feedback button
+        reportFeedBackButton: {
+            get: function() {
+                return this.feedbackBtn.element('.reportFeedBackButton');
+            }
+        },
+        settingsDropdownHeader: {
+            get: function() {
+                return browser.element('.dropdown-menu .menuHeader');
+            }
+        },
+        //Users button topNav
+        usersButton: {
+            get: function() {
+                return browser.element('.topNav .userDropDown');
+            }
+        },
+        userDropdownAppName: {
+            get: function() {
+                return browser.element('.appMenuHeader');
+
+            }
+        },
+        signOutButton: {
+            get: function() {
+                return browser.element('.signOutButton');
+
+            }
+        },
+        //Help button topNav
+        helpButton: {
+            get: function() {
+                return browser.element('.topNav .reHelpButton');
             }
         },
         // Top Nav elements
@@ -35,7 +71,7 @@
         // Top Nav Hamburger element
         topNavToggleHamburgerEl: {
             get: function() {
-                return browser.element('.topNav .iconLink');
+                return browser.element('.topNav .iconUISturdy-hamburger');
             }
         },
         // Center div (containing harmony icons)
@@ -50,21 +86,15 @@
                 return this.topNavCenterDivEl.elements('button');
             }
         },
-        // Top Nav Right elements
-        topNavRightDivEl: {
-            get: function() {
-                return this.topNavDivEl.element('.navGroup.right');
-            }
-        },
         // Top Nav Global Actions
         topNavGlobalActDivEl: {
             get: function() {
-                return this.topNavRightDivEl.element('.globalActions');
+                return browser.element('.navGroup .globalActions');
             }
         },
         topNavGlobalActionsListUlEl: {
             get: function() {
-                return this.topNavRightDivEl.element('.globalActionsList');
+                return browser.element('.navGroup.right .globalActionsList');
             }
         },
         topNavGlobalActionsListEl: {
@@ -72,43 +102,38 @@
                 return this.topNavGlobalActionsListUlEl.elements('.link');
             }
         },
-        // Top Nav User Global element
-        topNavUserGlobActEl: {
+        /**
+        Page objects for topNav - small breakpoint
+         */
+        // Top Nav search element
+        topNavSmallSearchEl: {
             get: function() {
-                return this.topNavGlobalActionsListEl.get(0);
+                // return browser.element('.iconUISturdy-search');
+                return browser.element('.smallHeader .right .iconLink');
             }
         },
-        // Top Nav Help Global element
-        topNavHelpGlobActEl: {
+        // Top Nav Title element
+        topNavTitleEl: {
             get: function() {
-                return this.topNavGlobalActionsListEl.get(1);
+                return browser.element('.smallHeader .title');
             }
         },
-        // Left Nav Global Actions
-        leftNavGlobActsDivEl: {
+        // Top Nav search box element
+        topNavSearchBoxEl: {
             get: function() {
-                this.navMenuEl.element('.globalActions');
+                return browser.element('.smallHeader .center .searchInput');
             }
         },
-        leftNavGlobActsUlEl: {
+        // Top Nav mini clear button
+        topNavClearSearchEl: {
             get: function() {
-                return this.leftNavGlobActsDivEl.elements('.globalActionsList');
+                return browser.element('.smallHeader .searchIcon');
             }
         },
-        // Click on top nav Hamburger menu
-        clickTopNavHamburger: {
+        // Top Nav cancel element
+        topNavCancelEl: {
             get: function() {
-                this.topNavDivEl.waitForVisible();
-                this.topNavToggleHamburgerEl.click();
-                this.navMenuEl.waitForVisible();
-            }
-        },
-        // Assert that global actions are present in the Left Nav
-        assertGlobalActsNotDisplayedInLeftNav: {
-            get: function() {
-                expect(this.leftNavGlobActsUlEl.isExisting()).toBeTruthy();
-                expect(this.leftNavGlobActsUlEl.getAttribute('clientWidth')).toBe('0');
-                expect(this.leftNavGlobActsUlEl.getAttribute('offsetWidth')).toBe('0');
+                return browser.element('.smallHeader .cancelButton');
             }
         },
     });
