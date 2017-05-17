@@ -40,6 +40,26 @@ describe('FieldEditingTools', () => {
         expect(mockParentProps.removeFieldFromForm).toHaveBeenCalledWith(formId, location);
     });
 
+    it('has no delete button if the prop isFieldDeletable is set to false', () => {
+        spyOn(mockParentProps, 'removeFieldFromForm');
+
+        component = shallow(<FieldEditingTools
+            formBuilderChildrenTabIndex={formBuilderChildrenTabIndex}
+            selectedFields={[]}
+            location={location}
+            removeFieldFromForm={mockParentProps.removeFieldFromForm}
+            isFieldDeletable="false"
+        />);
+
+        let deleteButton = component.find('.deleteFieldIcon button');
+
+        expect(deleteButton).not.toBePresent();
+
+        deleteButton.simulate('click');
+
+        expect(mockParentProps.removeFieldFromForm).toHaveBeenCalledWith(formId, location);
+    });
+
     it('selects a field when an element is clicked', () => {
         spyOn(mockParentProps, 'selectFieldOnForm');
 
