@@ -70,11 +70,12 @@ export class FieldEditingTools extends Component {
 
         return (
             <div className="actionIcons">
+                {this.props.isFieldDeletable ?
                     <div className="deleteFieldIcon">
                         <QbToolTip i18nMessageKey="builder.formBuilder.removeField">
                            <button type="button" tabIndex={tabIndex} onClick={this.onClickDelete}> <QbIcon icon="clear-mini" /> </button>
                         </QbToolTip>
-                    </div>
+                    </div> : null}
             </div>
         );
     }
@@ -203,11 +204,13 @@ FieldEditingTools.propTypes = {
     location: PropTypes.object,
     onClickDelete: PropTypes.func,
     isDragging: PropTypes.bool,
-    formId: PropTypes.string
+    formId: PropTypes.string,
+    isFieldDeletable: PropTypes.bool
 };
 
 FieldEditingTools.defaultProps = {
     formId: CONTEXT.FORM.VIEW,
+    isDeletable: true
 };
 
 

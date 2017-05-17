@@ -570,7 +570,8 @@ export default {
             title: "Felderigenschaften",
             name: "Name",
             required: "Muss ausgefüllt werden",
-            multiChoice: "Wahlen"
+            multiChoice: "Wahlen",
+            unique: "Muss einmalige Werte haben"
         },
         builder: {
             formBuilder: {

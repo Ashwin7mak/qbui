@@ -569,7 +569,8 @@ export default {
             title: "Propriétés du champ",
             name: "prénom",
             required: "Doit être rempli",
-            multiChoice: "Les choix"
+            multiChoice: "Les choix",
+            unique: "Doit avoir des valeurs uniques"
         },
         builder: {
             formBuilder: {

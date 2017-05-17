@@ -578,7 +578,8 @@ export default {
             title: "Field Properties",
             name: "Name",
             required: "Must be filled in",
-            multiChoice: "Choices"
+            multiChoice: "Choices",
+            unique: "Must have unique values"
         },
         builder: {
             formBuilder: {
