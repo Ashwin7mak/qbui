@@ -136,17 +136,6 @@ let AppsStore = Fluxxor.createStore({
 
         this.emit('change');
     },
-
-    onLoadAppRoles() {
-        //place holder incase we want to in the future (I know we are going to migrate to redux as well)
-    },
-    onLoadAppRolesFailed() {
-        //place holder incase we want to in the future (I know we are going to migrate to redux as well)
-    },
-    onLoadAppRolesSuccess(roles) {
-        this.appRoles = roles;
-        this.emit('change');
-    },
     onLoadAppOwner() {
         //place holder incase we want to in the future (I know we are going to migrate to redux as well)
     },

@@ -24,6 +24,7 @@ export const loadAppRoles = (appId) => {
     return (dispatch) => {
         //  promise is returned in support of unit testing only
         return new Promise((resolve, reject) => {
+            dispatch(event(appId, types.LOAD_APP_ROLES));
             let roleService = new RoleService();
             // fetch the app roles list if we don't have it already
             roleService.getAppRoles(appId).then(
