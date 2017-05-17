@@ -21,7 +21,7 @@ describe('Time of day record formatter unit test', function() {
         var expectedHHMM12HourClock = [[{
             id     : 7,
             value  : inputTod,
-            display: '2:51 pm'
+            display: '6:51 pm'
         }]];
         var fieldWithoutTimezone = [
             {
@@ -54,7 +54,7 @@ describe('Time of day record formatter unit test', function() {
         expectedHHMM12HourClockTz[0][0].display = '11:51 am';
 
         var expectedHHMM24HourClock = JSON.parse(JSON.stringify(expectedHHMM12HourClock));
-        expectedHHMM24HourClock[0][0].display = '14:51';
+        expectedHHMM24HourClock[0][0].display = '18:51';
         var todHHMM24HourField = JSON.parse(JSON.stringify(fieldWithoutTimezone));
         todHHMM24HourField[0].datatypeAttributes.use24HourClock = true;
 
@@ -64,7 +64,7 @@ describe('Time of day record formatter unit test', function() {
         todHHMM24HourTzField[0].datatypeAttributes.use24HourClock = true;
 
         var expectedHHMMSS24HourClock = JSON.parse(JSON.stringify(expectedHHMM12HourClock));
-        expectedHHMMSS24HourClock[0][0].display = '14:51:21';
+        expectedHHMMSS24HourClock[0][0].display = '18:51:21';
         var todHHMMSS24HourField = JSON.parse(JSON.stringify(fieldWithoutTimezone));
         todHHMMSS24HourField[0].datatypeAttributes.use24HourClock = true;
         todHHMMSS24HourField[0].datatypeAttributes.scale = 'HH:MM:SS';
@@ -76,7 +76,7 @@ describe('Time of day record formatter unit test', function() {
         todHHMMSS24HourTzField[0].datatypeAttributes.scale = 'HH:MM:SS';
 
         var expectedHHMMSS12HourClock = JSON.parse(JSON.stringify(expectedHHMM12HourClock));
-        expectedHHMMSS12HourClock[0][0].display = '2:51:21 pm';
+        expectedHHMMSS12HourClock[0][0].display = '6:51:21 pm';
         var todHHMMSS12HourField = JSON.parse(JSON.stringify(fieldWithoutTimezone));
         todHHMMSS12HourField[0].datatypeAttributes.use24HourClock = false;
         todHHMMSS12HourField[0].datatypeAttributes.scale = 'HH:MM:SS';

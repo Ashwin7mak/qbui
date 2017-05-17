@@ -85,10 +85,10 @@
             if (fieldInfo.useTimezone) {
                 dateStr += 'Z';
             }
-            var d = new Date(dateStr);
             //Resolve whether or not to shift based on useTimezone and app's timezone
             var m;
             if (fieldInfo.useTimezone) {
+                var d = new Date(dateStr);
                 var timeZone = consts.UTC_TIMEZONE;
                 timeZone = fieldInfo.timeZone;
                 if (!timeZone) {
@@ -96,7 +96,7 @@
                 }
                 m = moment.tz(d, timeZone);
             } else {
-                m = moment(d);
+                m = moment(dateStr);
             }
 
             //Resolve formatting options

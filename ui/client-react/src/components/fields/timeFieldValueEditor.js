@@ -298,7 +298,6 @@ const TimeFieldValueEditor = React.createClass({
                 if (!this.props.attributes.useTimezone) {
                     //  It's a time only field...just use today's date to format the time
                     momentTime = moment(inputValue, timeFormat);
-                    // momentTime = moment(inputValue).isValid() ? momentTz.tz(inputValue, this.props.attributes.timeZone) : momentTz.tz(inputValue, timeFormat, this.props.attributes.timeZone);
                 } else {
                     var currentDate = new Date();
                     var dd = currentDate.getDate().toString();
