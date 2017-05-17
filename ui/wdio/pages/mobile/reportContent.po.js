@@ -2,7 +2,8 @@
     'use strict';
     // Import the base page object
     var e2ePageBase = requirePO('./e2ePageBase');
-    var formsPO = requirePO('formsPage');
+    let RequestAppsPage = requirePO('requestApps');
+    let tableCreatePO = requirePO('tableCreate');
 
     var ReportContentPage = Object.create(e2ePageBase, {
         addRecordBtn: {get: function() {return browser.element('.reportToolsAndContentContainer .addNewRecord');}},
@@ -28,10 +29,17 @@
          * @param reportId
          * @returns A promise that will resolve after loading the generated URL
          */
-        loadReportByIdInBrowser: {value: function(realmName, appId, tableId, reportId) {
+        loadReportByIdInBrowser: {value: function(realmName, app, table, reportId) {
+
+            // Load the requestAppsPage (shows a list of all the apps in a realm)
+            RequestAppsPage.get(e2eBase.getRequestAppsPageEndpoint(realmName));
+            //select the App
+            RequestAppsPage.selectApp(app.name);
+            //Select table
+            tableCreatePO.selectTable(table.name);
             //navigate to the url
-            browser.url(e2eBase.getRequestReportsPageEndpoint(realmName, appId, tableId, reportId));
-            //wait until addRecord button in table is visible
+          //  browser.url(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, table.id, reportId));
+            //wait for the report content to be visible
             this.waitForReportContent();
         }},
 
