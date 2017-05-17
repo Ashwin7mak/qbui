@@ -298,12 +298,12 @@ const TimeFieldValueEditor = React.createClass({
                 //  use the TimeFormatter to get the time format
                 timeFormat = timeFormatter.generateFormatterString(this.props.attributes);
 
-                if (!this.props.attributes.useTimezone) {
-                    //  It's a time only field...just use today's date to format the time
-                    momentTime = moment(inputValue, timeFormat);
-                } else {
+                if (this.props.attributes.useTimezone) {
                     inputValue += inputValue.indexOf(Z) === -1 ? Z : '';
                     momentTime = getMomentTimeInUTC(inputValue, this.props.attributes.timeZone);
+                } else {
+                    //  It's a time only field...just use today's date to format the time
+                    momentTime = moment(inputValue, timeFormat);
                 }
             } else {
                 //  it's a date time object; use the dateTimeFormatter to get the time format
