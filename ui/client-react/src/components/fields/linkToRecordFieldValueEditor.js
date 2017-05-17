@@ -32,6 +32,12 @@ const LinkToRecordFieldValueEditor = React.createClass({
         };
     },
 
+    getInitialState() {
+        return {
+            dialogClosed: false
+        };
+    },
+
     /**
      * get simple builder mode react-select component
      * @returns {XML}
@@ -47,6 +53,8 @@ const LinkToRecordFieldValueEditor = React.createClass({
      * @param tableId
      */
     tableSelected(tableId) {
+        this.setState({dialogClosed: true});
+
         this.props.showRelationshipDialog(false);
 
         const field = this.props.fieldDef;
@@ -64,15 +72,17 @@ const LinkToRecordFieldValueEditor = React.createClass({
         return this.props.removeFieldFromForm(this.props.formId, this.props.location);
     },
 
+
+
     /**
      *
      * @returns {*}
      */
     render() {
 
-        if (this.props.dialogOpen) {
+        if (this.props.readyToShowRelationshipDialog && !this.state.dialogClosed) {
             return (
-                <LinkToRecordTableSelectionDialog show={this.props.dialogOpen}
+                <LinkToRecordTableSelectionDialog show={true}
                                                   childTableId={this.props.tblId}
                                                   tables={this.props.tables}
                                                   tableSelected={this.tableSelected}
@@ -85,7 +95,7 @@ const LinkToRecordFieldValueEditor = React.createClass({
 
 const mapStateToProps = (state) => {
     return {
-        dialogOpen: state.forms.showRelationshipDialog
+        readyToShowRelationshipDialog: state.forms.readyToShowRelationshipDialog
     };
 };
 

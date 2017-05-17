@@ -290,7 +290,7 @@ describe('Forms reducer functions', () => {
                     isPendingEdit: true
 
                 },
-                showRelationshipDialog: false
+                readyToShowRelationshipDialog: false
             });
             expect(mockMoveFieldHelper.addNewFieldToForm).toHaveBeenCalledWith(
                 stateForAddingField[VIEW].formData.formMeta, 1, {}
