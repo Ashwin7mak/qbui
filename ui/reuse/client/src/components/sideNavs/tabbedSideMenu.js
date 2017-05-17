@@ -13,18 +13,6 @@ class TabbedSideNav extends Component {
         super(props);
     }
 
-    onTabChanged = (tabKey) => {
-        if (this.props.onTabChanged) {
-            this.props.onTabChanged(tabKey);
-        }
-    };
-
-    onTabClicked = (tabKey) => {
-        if (this.props.onTabClicked) {
-            this.props.onTabClicked(tabKey);
-        }
-    };
-
     getDefaultTab = () => {
         if (this.props.defaultTab) {
             return this.props.defaultTab;
@@ -42,8 +30,8 @@ class TabbedSideNav extends Component {
             <div className="tabbedSideNav">
                 <Tabs
                     defaultActiveKey={this.getDefaultTab()}
-                    onChange={this.onTabChanged}
-                    renderTabBar={() => <InkTabBar onTabClick={this.onTabClicked} />}
+                    onChange={this.props.onTabChanged}
+                    renderTabBar={() => <InkTabBar onTabClick={this.props.onTabClicked} />}
                     renderTabContent={() => <TabContent />}
                 >
                     {this.props.tabs.map(tab => (
