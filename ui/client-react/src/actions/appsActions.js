@@ -60,30 +60,30 @@ let appsActions = {
     //    });
     //},
 
-    selectAppId(appId) {
-        //  promise is returned in support of unit testing only
-        return new Promise((resolve, reject) => {
-            //  display select app event; note appId can be null
-            this.dispatch(actions.SELECT_APP, appId);
-
-            if (appId) {
-                let appService = new AppService();
-                appService.getAppComponents(appId).then(response => {
-                    let users = response.data.users;
-                    // TODO: move model reference into store when migrate to redux
-                    //let model = appsModel.set([response.data.app]);
-                    let model = new appsModel([response.data.app]);
-                    this.dispatch(actions.SELECT_APP_SUCCESS, {users: users, app: model.getApps()});
-                    resolve();
-                }, () => {
-                    this.dispatch(actions.SELECT_APP_FAILED);
-                    reject();
-                });
-            } else {
-                resolve();
-            }
-        });
-    },
+    //selectAppId(appId) {
+    //    //  promise is returned in support of unit testing only
+    //    return new Promise((resolve, reject) => {
+    //        //  display select app event; note appId can be null
+    //        this.dispatch(actions.SELECT_APP, appId);
+    //
+    //        if (appId) {
+    //            let appService = new AppService();
+    //            appService.getAppComponents(appId).then(response => {
+    //                let users = response.data.users;
+    //                // TODO: move model reference into store when migrate to redux
+    //                //let model = appsModel.set([response.data.app]);
+    //                let model = new appsModel([response.data.app]);
+    //                this.dispatch(actions.SELECT_APP_SUCCESS, {users: users, app: model.getApps()});
+    //                resolve();
+    //            }, () => {
+    //                this.dispatch(actions.SELECT_APP_FAILED);
+    //                reject();
+    //            });
+    //        } else {
+    //            resolve();
+    //        }
+    //    });
+    //},
 
     /**
      * Retrieve a list of roles for this app.

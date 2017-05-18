@@ -11,29 +11,33 @@ import TopNav from '../../../../reuse/client/src/components/topNav/topNav';
 import * as tabIndexConstants from '../formBuilder/tabindexConstants';
 import TableReadyDialog from '../table/tableReadyDialog';
 import Locale from '../../locales/locales';
-let FluxMixin = Fluxxor.FluxMixin(React);
-let StoreWatchMixin = Fluxxor.StoreWatchMixin;
-
+//let FluxMixin = Fluxxor.FluxMixin(React);
+//let StoreWatchMixin = Fluxxor.StoreWatchMixin;
+import {getApp, getSelectedAppId} from '../../reducers/app';
 
 /**
  * The AppsStore is needed for globalActions (The User and Help Button Located at the top of the screen)
  * The AppsStore selects the appId.
  * */
 export const BuilderWrapper = React.createClass({
-    mixins: [FluxMixin, StoreWatchMixin('AppsStore')],
-
-    getStateFromFlux() {
-        let flux = this.getFlux();
-        return {
-            apps: flux.store('AppsStore').getState()
-        };
-    },
+    //mixins: [FluxMixin, StoreWatchMixin('AppsStore')],
+    //
+    //getStateFromFlux() {
+    //    let flux = this.getFlux();
+    //    return {
+    //        apps: flux.store('AppsStore').getState()
+    //    };
+    //},
 
     getSelectedApp() {
-        if (this.state.apps.selectedAppId) {
-            return _.find(this.state.apps.apps, (a) => a.id === this.state.apps.selectedAppId);
+        const selectedAppId = this.props.getSelectedAppId();
+        if (selectedAppId) {
+            return this.props.getApp(selectedAppId);
         }
-        return null;
+        //if (this.state.apps.selectedAppId) {
+        //    return _.find(this.state.apps.apps, (a) => a.id === this.state.apps.selectedAppId);
+        //}
+        //return null;
     },
 
     getTopGlobalActions() {
@@ -75,4 +79,9 @@ export const BuilderWrapper = React.createClass({
     }
 });
 
-export default withRouter(connect(null, commonNavActions('builder'))(BuilderWrapper));
+const mapStateToProps = (state) => ({
+    getApp: (appId) => getApp(state.app, appId),
+    getSelectedAppId: () => getSelectedAppId(state.app)
+});
+
+export default withRouter(connect(mapStateToProps, commonNavActions('builder'))(BuilderWrapper));

@@ -25,7 +25,7 @@ export const loadApps = () => {
     // (this is permitted when we're using redux-thunk middleware which invokes the store dispatch)
     return (dispatch) => {
         return new Promise((resolve, reject) => {
-            logger.debug('AppActions getApps');
+            logger.debug('AppActions loadApps');
             dispatch(event(types.LOAD_APPS));
 
             let appService = new AppService();
@@ -35,8 +35,32 @@ export const loadApps = () => {
                     resolve();
                 },
                 error => {
-                    logger.parseAndLogError(LogLevel.ERROR, error.response, 'appService.getApps:');
+                    logger.parseAndLogError(LogLevel.ERROR, error.response, 'appActions.loadApps:');
                     dispatch(event(types.LOAD_APPS_ERROR, error));
+                    reject();
+                }
+            );
+        });
+    };
+};
+
+export const loadApp = (appId) => {
+    // we're returning a promise to the caller (not a Redux action) since this is an async action
+    // (this is permitted when we're using redux-thunk middleware which invokes the store dispatch)
+    return (dispatch) => {
+        return new Promise((resolve, reject) => {
+            logger.debug('AppActions loadApp');
+            dispatch(event(types.LOAD_APP, appId));
+
+            let appService = new AppService();
+            appService.getAppComponents(appId).then(
+                response => {
+                    dispatch(event(types.LOAD_APP_SUCCESS, response.data));
+                    resolve();
+                },
+                error => {
+                    logger.parseAndLogError(LogLevel.ERROR, error.response, 'appActions.loadApp:');
+                    dispatch(event(types.LOAD_APP_ERROR, error));
                     reject();
                 }
             ).catch(ex => {
@@ -45,5 +69,11 @@ export const loadApps = () => {
                 reject();
             });
         });
+    };
+};
+
+export const clearSelectedApp = () => {
+    return (dispatch) => {
+        dispatch(event(types.CLEAR_APP));
     };
 };

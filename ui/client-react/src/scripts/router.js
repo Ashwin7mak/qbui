@@ -79,7 +79,7 @@ const withFlux = (ComponentToWrap) => {
 };
 
 const ConnectedNav = withFlux(NavWrapper);
-const ConnectedBuilderNav = connect(mapStateToProps)(withFlux(BuilderWrapper)); // pass Redux state as qbui prop
+const ConnectedBuilderNav = withFlux(BuilderWrapper);
 const ConnectedSettingsNav = connect(mapStateToProps)(withFlux(SettingsWrapper)); // pass Redux state as qbui prop
 
 // init the localization services

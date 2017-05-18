@@ -3,9 +3,14 @@
  */
 
 //  **** App actions ****
+export const CLEAR_APP = 'CLEAR_APP';
+export const LOAD_APP = 'LOAD_APP';
+export const LOAD_APP_SUCCESS = 'LOAD_APP_SUCCESS';
+export const LOAD_APP_ERROR = 'LOAD_APP_ERROR';
 export const LOAD_APPS = 'LOAD_APPS';
 export const LOAD_APPS_SUCCESS = 'LOAD_APPS_SUCCESS';
 export const LOAD_APPS_ERROR = 'LOAD_APPS_ERROR';
+
 
 //  ******** Form actions ********
 export const LOADING_FORM = 'LOADING_FORM';

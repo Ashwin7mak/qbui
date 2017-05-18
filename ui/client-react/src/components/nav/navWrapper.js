@@ -10,6 +10,8 @@ import * as SearchActions from '../../actions/searchActions';
 import {CONTEXT} from '../../actions/context';
 import Configuration from '../../config/app.config';
 
+import {getApp, getSelectedAppId} from '../../reducers/app';
+
 const walkMeScript = document.createElement("script");
 walkMeScript.src = Configuration.walkmeJSSnippet;
 
@@ -43,7 +45,7 @@ let NavWrapper = React.createClass({
     getChildContext() {
         return {
             touch: this.state.touch,
-            locales: this.props.shell.locales
+            locales: this.props.locales
         };
     },
     render() {
@@ -71,13 +73,13 @@ let NavWrapper = React.createClass({
                 this.props.loadApps();
             }
 
-            this.props.flux.actions.selectAppId(paramVals.appId);
+            this.props.loadApp(paramVals.appId);
 
-            this.props.dispatch(FeatureSwitchActions.getStates(paramVals.appId));
+            this.props.getFeatureSwitchStates(paramVals.appId);
 
             if (paramVals.tblId) {
                 this.props.flux.actions.selectTableId(paramVals.tblId);
-                this.props.dispatch(ReportActions.loadReports(CONTEXT.REPORT.NAV_LIST, paramVals.appId, paramVals.tblId));
+                this.props.loadReports(CONTEXT.REPORT.NAV_LIST, paramVals.appId, paramVals.tblId);
             } else {
                 if (this.state.apps.selectedTableId !== null) {
                     this.props.flux.actions.selectTableId(null);
@@ -105,19 +107,19 @@ let NavWrapper = React.createClass({
         /*eslint no-lonely-if:0 */
         if (incomingProps.match.params.appId) {
             if (this.props.match.params.appId !== incomingProps.match.params.appId) {
-                this.props.flux.actions.selectAppId(incomingProps.match.params.appId);
-                this.props.dispatch(FeatureSwitchActions.getStates(incomingProps.match.params.appId));
+                this.props.loadApp(incomingProps.match.params.appId);
+                this.props.getFeatureSwitchStates(incomingProps.match.params.appId);
             }
         } else {
-            if (this.state.apps.selectedAppId !== null) {
-                this.props.flux.actions.selectAppId(null);
+            if (this.props.getSelectedAppId() !== null) {
+                this.props.clearSelectedApp();
             }
         }
 
         if (incomingProps.match.params.tblId) {
             if (this.props.match.params.tblId !== incomingProps.match.params.tblId) {
                 this.props.flux.actions.selectTableId(incomingProps.match.params.tblId);
-                this.props.dispatch(ReportActions.loadReports(CONTEXT.REPORT.NAV_LIST, incomingProps.match.params.appId, incomingProps.match.params.tblId));
+                this.props.loadReports(CONTEXT.REPORT.NAV_LIST, incomingProps.match.params.appId, incomingProps.match.params.tblId);
             }
         } else {
             if (this.state.apps.selectedTableId !== null) {
@@ -136,13 +138,18 @@ let NavWrapper = React.createClass({
 });
 
 const mapStateToProps = (state) => ({
-    shell: state.shell,
-    getApp: (appId) => getApp(state.app, appId)
+    locales: state.shell.locales,
+    getApp: (appId) => getApp(state.app, appId),
+    getSelectedAppId: () => getSelectedAppId(state.app)
 });
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        loadApps: () => dispatch(AppActions.loadApps())
+        clearSelectedApp: () => dispatch(AppActions.clearSelectedApp()),
+        loadApp: (appId) => dispatch(AppActions.loadApp(appId)),
+        loadApps: () => dispatch(AppActions.loadApps()),
+        getFeatureSwitchStates: (appId) => dispatch(FeatureSwitchActions.getStates(appId)),
+        loadReports: (context, appId, tblId) => dispatch(ReportActions.loadReports(context, appId, tblId))
     };
 };
 

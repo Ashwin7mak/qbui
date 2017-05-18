@@ -13,6 +13,7 @@ import * as FeatureSwitchActions from '../../actions/featureSwitchActions';
 import * as AppActions from '../../actions/appActions';
 import {I18nMessage} from '../../utils/i18nMessage';
 import RouteWithSubRoutes from "../../scripts/RouteWithSubRoutes";
+import {getApp, getSelectedAppId} from '../../reducers/app';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
 let StoreWatchMixin = Fluxxor.StoreWatchMixin;
@@ -28,7 +29,9 @@ export const SettingsWrapper = React.createClass({
     },
 
     getSelectedApp() {
-        return this.getAppFromState(this.state.apps.selectedAppId);
+        //return this.getAppFromState(this.state.apps.selectedAppId);
+        const appId = this.props.getSelectedAppId();
+        return this.props.getApp(appId)
     },
 
     getSelectedTable(tableId) {
@@ -60,11 +63,11 @@ export const SettingsWrapper = React.createClass({
             // see if the app is already loaded in state
             let app = this.getAppFromState(paramVals.appId);
             if (!app) {
-                this.props.flux.actions.loadApps();
-                //this.props.loadApps();
+                //this.props.flux.actions.loadApps();
+                this.props.loadApps();
             }
 
-            this.props.flux.actions.selectAppId(paramVals.appId);
+            this.props.loadApp(paramVals.appId);
             this.props.dispatch(FeatureSwitchActions.getStates(paramVals.appId));
 
             if (paramVals.tblId) {
@@ -76,8 +79,8 @@ export const SettingsWrapper = React.createClass({
                 }
             }
         } else {
-            this.props.flux.actions.loadApps();
-            //this.props.loadApps();
+            //this.props.flux.actions.loadApps();
+            this.props.loadApps();
         }
     },
     componentWillReceiveProps(props) {
@@ -86,12 +89,12 @@ export const SettingsWrapper = React.createClass({
         /*eslint no-lonely-if:0 */
         if (paramVals.appId) {
             if (this.props.match.params.appId !== paramVals.appId) {
-                this.props.flux.actions.selectAppId(paramVals.appId);
+                this.props.loadApp(paramVals.appId);
                 this.props.dispatch(FeatureSwitchActions.getStates(paramVals.appId));
             }
         } else {
-            if (this.state.apps.selectedAppId !== null) {
-                this.props.flux.actions.selectAppId(null);
+            if (this.getSelectedAppId() !== null) {
+                this.props.clearSelectedApp();
             }
         }
 
@@ -106,7 +109,8 @@ export const SettingsWrapper = React.createClass({
         }
     },
     getBackToAppLink() {
-        let link = `${UrlConsts.APP_ROUTE}/${this.state.apps.selectedAppId}`;
+        let selectedAppId = this.props.getSelectedAppId();
+        let link = `${UrlConsts.APP_ROUTE}/${selectedAppId}`;
         if (this.state.apps.selectedTableId) {
             link += `/table/${this.state.apps.selectedTableId}`;
         }
@@ -146,10 +150,11 @@ export const SettingsWrapper = React.createClass({
     },
 
     getAppFromState(appId) {
-        if (appId && _.has(this.state.apps, 'apps')) {
-            return _.find(this.state.apps.apps, (a) => a.id === appId);
-        }
-        return null;
+        return this.props.getApp(appid);
+        //if (appId && _.has(this.state.apps, 'apps')) {
+        //    return _.find(this.state.apps.apps, (a) => a.id === appId);
+        //}
+        //return null;
     }
 });
 
@@ -161,12 +166,16 @@ SettingsWrapper.propTypes = {
 
 const mapStateToProps = (state) => ({
     isNavCollapsed: !state.shell.leftNavExpanded,
-    isOpen: state.shell.leftNavVisible
+    isOpen: state.shell.leftNavVisible,
+    getApp: (appId) => getApp(state.app, appId),
+    getSelectedAppId: () => getSelectedAppId(state.app)
 });
 
 const mapDispatchToProps = (dispatch) => {
     return {
         toggleNav: () => dispatch(toggleLeftNav()),
+        clearSelectedApp: () => dispatch(AppActions.clearSelectedApp()),
+        loadApp: (appId) => dispatch(AppActions.loadApp(appId)),
         loadApps: () => dispatch(AppActions.loadApps())
     };
 };
