@@ -98,9 +98,6 @@ class FieldFormats {
             case serverTypeConsts.LINK_TO_RECORD :
                 return FieldFormats.LINK_TO_RECORD;
 
-            case serverTypeConsts.LIST_OF_RECORDS :
-                return FieldFormats.LIST_OF_RECORDS;
-
             default:
                 return FieldFormats.TEXT_FORMAT;
 
@@ -135,8 +132,7 @@ FieldFormats.PERCENT_FORMAT_MULTICHOICE = 22;
 FieldFormats.NUMBER_FORMAT_MULTICHOICE = 23;
 FieldFormats.NUMBER_FORMAT_RADIO_BUTTONS = 24;
 FieldFormats.TEXT_FORMAT_RADIO_BUTTONS = 25;
-
 FieldFormats.LINK_TO_RECORD = 26;
-FieldFormats.LIST_OF_RECORDS = 27;
+
 
 export default FieldFormats;
