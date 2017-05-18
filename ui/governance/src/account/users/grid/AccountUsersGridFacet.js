@@ -22,7 +22,7 @@ export const FACET_FIELDS = [
         needsAccountAdmin:true,
         needsRealmAdmin:true,
         options: ['Deactivated', 'Denied', 'No App Access', 'Paid Seat', 'Quick Base Staff'],
-        formatter: user => Formatters.FormatUserStatusText(user.hasAppAccess, {rowData: user})
+        formatter: user => Formatters.FormatAccessStatusText(user.hasAppAccess, {rowData: user})
     },
     {
         label: Locale.getMessage("governance.account.users.paidSeatSingular"),
