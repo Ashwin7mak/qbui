@@ -1,5 +1,6 @@
 import React, {PropTypes, Component} from "react";
 import StandardGridNavigation from "./StandardGridNavigation";
+import StandardGridItemsCount from "./StandardGridItemsCount";
 import * as StandardGridActions from "../../../common/grid/standardGridActions";
 import IconInputBox from "../../../../../reuse/client/src/components/iconInputBox/iconInputBox";
 import {I18nMessage} from "../../../../../reuse/client/src/utils/i18nMessage";
@@ -27,9 +28,9 @@ class StandardGridToolBar extends React.Component {
     };
 
     render() {
+        // debugger;
+        // console.log('this.props: ', this.props);
         let hasFacets = false;
-        // temporary until the RecordCount is set
-        let recordCountMessage = (this.props.filteredRecords === 1) ? this.props.itemTypeSingular : this.props.itemTypePlural;
         return (
             <div>
                 <div className={"standardGridToolBar " + (hasFacets ? "" : "noFacets")}>
@@ -54,12 +55,16 @@ class StandardGridToolBar extends React.Component {
                         }
                     </div>
                     <div className="standardRightToolBar">
-                        {/* Temporary RecordCount until the real component is set*/}
-                        <div className="standardGridRecordCount">
-                            <div className="recordsCount">
-                                {this.props.filteredRecords === this.props.totalRecords ?
-                                    `${this.props.totalRecords} ${recordCountMessage}` :
-                                    `${this.props.filteredRecords} of ${this.props.totalRecords} ${recordCountMessage}`}
+                        <div className="standardGridItemsCount">
+                            <div className="itemsCount">
+                                {this.props.totalRecords ?
+                                    <StandardGridItemsCount itemCount={this.props.totalRecords}
+                                                            filteredItemCount={this.props.filteredRecords}
+                                                            itemTypePlural={this.props.itemTypePlural}
+                                                            itemTypeSingular={this.props.itemTypeSingular}
+                                    /> :
+                                    null
+                                }
                             </div>
                         </div>
                         <StandardGridNavigation className="standardGridNavigation"
@@ -85,6 +90,7 @@ StandardGridToolBar.propTypes = {
     getNextPage: PropTypes.func.isRequired,
     doUpdate: PropTypes.func.isRequired,
     onSearchChange: PropTypes.func.isRequired,
+    totalRecords: PropTypes.number.isRequired,
     itemTypePlural: PropTypes.string,
     itemTypeSingular: PropTypes.string,
     searchTerm: PropTypes.string,
@@ -97,7 +103,7 @@ const mapStateToProps = (state, ownProps) => {
         facetSelections:  facetInfo.facetSelections || {},
         filteredRecords: paginationInfo.filteredRecords || 0,
         totalRecords: paginationInfo.totalRecords || 0,
-        searchTerm: (state.Grids[ownProps.id] || {}).searchTerm || '',
+        searchTerm: (state.Grids[ownProps.idp] || {}).searchTerm || '',
     };
 };
 
