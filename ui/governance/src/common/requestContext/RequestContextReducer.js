@@ -1,6 +1,6 @@
-import * as types from '../../app/actionTypes';
-import {combineReducers} from 'redux';
-import GetStatus from '../reducer/RequestStatusReducer';
+import * as types from "../../app/actionTypes";
+import {combineReducers} from "redux";
+import GetStatus from "../reducer/RequestStatusReducer";
 
 const realm = (state = {}, action) => {
     switch (action.type) {

@@ -4,7 +4,7 @@ import * as recordActions from '../../src/actions/recordActions';
 import {__RewireAPI__ as RecordActionsRewireAPI} from '../../src/actions/recordActions';
 import * as types from '../../src/actions/types';
 import {UNSAVED_RECORD_ID} from '../../src/constants/schema';
-
+import _ from 'lodash';
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 
@@ -55,15 +55,26 @@ describe('Open/edit Record actions', () => {
         isInlineEdit: true,
         fieldToStartEditing: null
     };
+
     let obj2 = {
+        appId: 1,
+        tblId: 2,
+        recId: 3,
+        origRec: {'origRec':1},
+        changes: {'changes':2},
+        isInlineEdit: false,
+        fieldToStartEditing: null
+    };
+
+    let obj3 = {
         appId: 1,
         tblId: 2,
         recId: 3
     };
     let testCases = [
         {name:'Edit a record:start', func:recordActions.editRecordStart, type:types.EDIT_RECORD_START, obj:obj1, expectation:event(obj1.recId, types.EDIT_RECORD_START, obj1)},
-        {name:'Edit a record:change', func:recordActions.editRecordChange, type:types.EDIT_RECORD_CHANGE, obj:obj1, expectation:event(obj1.recId, types.EDIT_RECORD_CHANGE, obj1)},
-        {name:'Edit a record:cancel', func:recordActions.editRecordCancel, type:types.EDIT_RECORD_CANCEL, obj:obj2, expectation:event(obj2.recId, types.EDIT_RECORD_CANCEL, obj2)}
+        {name:'Edit a record:change', func:recordActions.editRecordChange, type:types.EDIT_RECORD_CHANGE, obj:obj2, expectation:event(obj2.recId, types.EDIT_RECORD_CHANGE, obj2)},
+        {name:'Edit a record:cancel', func:recordActions.editRecordCancel, type:types.EDIT_RECORD_CANCEL, obj:obj3, expectation:event(obj3.recId, types.EDIT_RECORD_CANCEL, obj3)}
     ];
 
     testCases.forEach((testCase) => {
@@ -278,7 +289,8 @@ describe('create Record Actions -- success workflow', () => {
 
     let fields = [
         {id: 4, builtIn: false, datatypeAttributes :true},
-        {id: 5, builtIn: true}
+        {id: 5, builtIn: true},
+        {id: 6, builtIn: false, name:'new field'}
     ];
 
     let newVal = {value:"hi", display:"there"};
@@ -593,7 +605,8 @@ describe('update Record Actions -- success workflow', () => {
     });
 
     let fields = [
-        {id:6, name: "test"}
+        {id:6, name: "test"},
+        {id:7, name: "newField", builtIn: false}
     ];
     let pendEdits = {
         recordChanges: {

@@ -25,6 +25,7 @@ $edit-icon-font-size: 18px;
     color: $default-text-onlight-color;
     -webkit-font-smoothing: antialiased;
     table-layout: fixed;
+    padding-bottom: $spacing-medium1;
 
     // The min height allows the menus that can be opened from the header (sort on column) to be seen
     // when there are only 1 or two rows. We may need to re-visit this if we start adding content below the grid.
@@ -99,6 +100,11 @@ $edit-icon-font-size: 18px;
             border-right: 1px solid $grid-column-header-border-color;
             width: 100%;
         }
+
+        &:hover {
+            cursor: move;
+        }
+
     }
 
     // leftmost cell of the table header that serves as the vertical header for the sticky row actions column
@@ -377,7 +383,7 @@ $edit-icon-font-size: 18px;
         top: -47px;
         left: -79px;
         padding: 0 24px;
-        border: 1px solid $color-purple-400;
+        border: 1px solid $color-black-400;
 
         .loadedContent {
             padding: 0;
@@ -436,7 +442,10 @@ $edit-icon-font-size: 18px;
                 }
 
                 &.addRecord {
-                    color: $iconfont-on-light-normal-color;
+                    color: $color-cyan-500;
+                    &:hover {
+                        color: $color-cyan-400;
+                    }
 
                     &.disabled {
                         color: $iconfont-on-light-disabled-color;
@@ -629,7 +638,7 @@ $edit-icon-font-size: 18px;
 
         // standard cell
         .qbCell {
-            border-top: 1px solid $color-purple-400;
+            border-top: 1px solid $color-black-400;
             overflow: visible;
             margin: 0;
             border-right: 1px solid $color-black-300;

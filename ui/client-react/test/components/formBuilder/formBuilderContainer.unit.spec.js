@@ -6,6 +6,7 @@ import {FormBuilderContainer, __RewireAPI__ as FormBuilderRewireAPI} from '../..
 import * as tabIndexConstants from '../../../../client-react/src/components/formBuilder/tabindexConstants';
 import NavigationUtils from '../../../src/utils/navigationUtils';
 import {__RewireAPI__ as NewfieldsMenuRewireAPI} from '../../../src/components/formBuilder/menus/newFieldsMenu';
+import {ENTER_KEY, SPACE_KEY} from '../.././../../reuse/client/src/components/keyboardShortcuts/keyCodeConstants';
 
 import {FieldTokenInMenu} from '../../../src/components/formBuilder/fieldToken/fieldTokenInMenu';
 import Loader from 'react-loader';
@@ -24,11 +25,9 @@ const mockActions = {
     keyboardMoveFieldUp(_formId, _location) {},
     keyboardMoveFieldDown(_formId, _location) {},
     removeFieldFromForm(_formId, _location) {},
-    deselectField(_formId, _location) {}
-};
-
-const mockAppHistory = {
-    showPendingEditsConfirmationModal() {}
+    deselectField(_formId, _location) {},
+    setFormBuilderPendingEditToFalse(_formId, _location) {},
+    setFieldsPropertiesPendingEditToFalse(_formId, _location) {}
 };
 
 const previousLocation = '/somewhere/over/the/rainbow';
@@ -56,7 +55,6 @@ describe('FormBuilderContainer', () => {
     beforeEach(() => {
         jasmineEnzyme();
         FormBuilderRewireAPI.__Rewire__('FormBuilder', FormBuilderMock);
-        FormBuilderRewireAPI.__Rewire__('AppHistory', mockAppHistory);
         NewfieldsMenuRewireAPI.__Rewire__('FieldTokenInMenu', FieldTokenInMenu);
         FormBuilderRewireAPI.__Rewire__('FieldProperties', FieldPropertiesMock);
         FormBuilderRewireAPI.__Rewire__('FormBuilderCustomDragLayer', () => null); // Returning null so that DragDropContext error is not thrown in unit test
@@ -66,10 +64,11 @@ describe('FormBuilderContainer', () => {
         spyOn(mockActions, 'toggleFormBuilderChildrenTabIndex');
         spyOn(mockActions, 'keyboardMoveFieldUp');
         spyOn(mockActions, 'keyboardMoveFieldDown');
-        spyOn(mockActions, 'toggleToolPaletteChildrenTabIndex');
+        spyOn(mockActions, 'toggleToolPaletteChildrenTabIndex').and.callThrough();
         spyOn(mockActions, 'removeFieldFromForm');
         spyOn(mockActions, 'deselectField');
-        spyOn(mockAppHistory, 'showPendingEditsConfirmationModal');
+        spyOn(mockActions, 'setFormBuilderPendingEditToFalse');
+        spyOn(mockActions, 'setFieldsPropertiesPendingEditToFalse');
     });
 
     afterEach(() => {
@@ -86,6 +85,7 @@ describe('FormBuilderContainer', () => {
         mockActions.keyboardMoveFieldDown.calls.reset();
         mockActions.removeFieldFromForm.calls.reset();
         mockActions.deselectField.calls.reset();
+        mockActions.toggleToolPaletteChildrenTabIndex.calls.reset();
     });
 
     describe('load form data', () => {
@@ -129,39 +129,9 @@ describe('FormBuilderContainer', () => {
                                                       redirectRoute={previousLocation}/>);
 
             instance = component.instance();
-            spyOn(instance, 'closeFormBuilder').and.callThrough();
-            instance.onCancel();
+            instance.closeFormBuilder();
 
             expect(NavigationUtils.goBackToLocationOrTable).toHaveBeenCalledWith(appId, tblId, previousLocation);
-            expect(instance.closeFormBuilder).toHaveBeenCalled();
-        });
-
-        it('will not exit form builder if pendingEdits is true', () => {
-            spyOn(NavigationUtils, 'goBackToLocationOrTable');
-
-            component = shallow(<FormBuilderContainer match={testParamsProp}
-                                                      isPendingEdit={true}
-                                                      location={testLocationProp}
-                                                      redirectRoute={previousLocation}/>);
-
-            component.instance().onCancel();
-
-            expect(NavigationUtils.goBackToLocationOrTable).not.toHaveBeenCalled();
-        });
-
-        it('will invoke showPendingEditsConfirmationModal if pendingEdits is true', () => {
-            component = mount(<FormBuilderContainer match={testParamsProp}
-                                                      isPendingEdit={true}
-                                                      location={testLocationProp}
-                                                      redirectRoute={previousLocation}
-                                                      loadForm={mockActions.loadForm}/>);
-
-            instance = component.instance();
-            instance.onCancel();
-
-            //I am not rendering a modal in the DOM for this test. I am just verifying that it exists. Just making sure it does not accidentally get deleted.
-            expect(component.find('#appModal').length).toEqual(1);
-            expect(mockAppHistory.showPendingEditsConfirmationModal).toHaveBeenCalled();
         });
     });
 
@@ -310,6 +280,72 @@ describe('FormBuilderContainer', () => {
             instance.escapeCurrentContext();
 
             expect(mockActions.toggleToolPaletteChildrenTabIndex).toHaveBeenCalledWith(currentForm.id, tabIndexConstants.TOOL_PALETTE_TABINDEX);
+        });
+
+        it('escapeCurrentContext hotKey will invoke toggleToolPaletteChildrenTabIndex if the enter key is pressed', () => {
+            let e = {
+                which: ENTER_KEY,
+                preventDefault() {}
+            };
+            component = mount(<FormBuilderContainer match={testParamsProp}
+                                                    isPendingEdit={true}
+                                                    currentForm={currentForm}
+                                                    formBuilderChildrenTabIndex={undefined}
+                                                    toolPaletteChildrenTabIndex={tabIndexConstants.TOOL_PALETTE_TABINDEX}
+                                                    selectedField={undefined}
+                                                    toggleToolPaletteChildrenTabIndex={mockActions.toggleToolPaletteChildrenTabIndex}
+                                                    loadForm={mockActions.loadForm}
+                                                    updateForm={mockActions.updateForm} />);
+
+
+            instance = component.instance();
+            instance.toggleToolPaletteChildrenTabIndex(e);
+
+            expect(mockActions.toggleToolPaletteChildrenTabIndex).toHaveBeenCalledWith(currentForm.id, '-1');
+        });
+
+        it('escapeCurrentContext hotKey will invoke toggleToolPaletteChildrenTabIndex if the space key is pressed', () => {
+            let e = {
+                which: SPACE_KEY,
+                preventDefault() {}
+            };
+            component = mount(<FormBuilderContainer match={testParamsProp}
+                                                    isPendingEdit={true}
+                                                    currentForm={currentForm}
+                                                    formBuilderChildrenTabIndex={undefined}
+                                                    toolPaletteChildrenTabIndex={tabIndexConstants.TOOL_PALETTE_TABINDEX}
+                                                    selectedField={undefined}
+                                                    toggleToolPaletteChildrenTabIndex={mockActions.toggleToolPaletteChildrenTabIndex}
+                                                    loadForm={mockActions.loadForm}
+                                                    updateForm={mockActions.updateForm} />);
+
+
+            instance = component.instance();
+            instance.toggleToolPaletteChildrenTabIndex(e);
+
+            expect(mockActions.toggleToolPaletteChildrenTabIndex).toHaveBeenCalledWith(currentForm.id, '-1');
+        });
+
+        it('escapeCurrentContext hotKey will not invoke toggleToolPaletteChildrenTabIndex if an invalid key is pressed', () => {
+            let e = {
+                which: 'INVALID_KEY_BOARD_PRESS',
+                preventDefault() {}
+            };
+            component = mount(<FormBuilderContainer match={testParamsProp}
+                                                    isPendingEdit={true}
+                                                    currentForm={currentForm}
+                                                    formBuilderChildrenTabIndex={undefined}
+                                                    toolPaletteChildrenTabIndex={tabIndexConstants.TOOL_PALETTE_TABINDEX}
+                                                    selectedField={undefined}
+                                                    toggleToolPaletteChildrenTabIndex={mockActions.toggleToolPaletteChildrenTabIndex}
+                                                    loadForm={mockActions.loadForm}
+                                                    updateForm={mockActions.updateForm} />);
+
+
+            instance = component.instance();
+            instance.toggleToolPaletteChildrenTabIndex(e);
+
+            expect(mockActions.toggleToolPaletteChildrenTabIndex).not.toHaveBeenCalled();
         });
 
         it('escapeCurrentContext hotKey will invoke deselectField if a field is selected', () => {

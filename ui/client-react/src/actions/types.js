@@ -29,6 +29,7 @@ export const SELECT_FIELD = 'SELECT_FIELD';
 export const DESELECT_FIELD = 'DESELECT_FIELD';
 export const END_DRAG = 'END_DRAG';
 export const IS_DRAGGING = 'IS_DRAGGING';
+export const SET_IS_PENDING_EDIT_TO_FALSE = 'SET_IS_PENDING_EDIT_TO_FALSE';
 export const UNLOAD_FORM = 'UNLOAD_FORM';
 
 //  ********  Nav shell actions ********
@@ -89,6 +90,10 @@ export const OPEN_FIELD_SELECT_MENU = 'OPEN_FIELD_SELECT_MENU';
 export const CLOSE_FIELD_SELECT_MENU = 'CLOSE_FIELD_SELECT_MENU';
 export const ADD_COLUMN_FROM_EXISTING_FIELD = 'ADD_COLUMN_FROM_EXISTING_FIELD';
 export const HIDE_COLUMN = 'HIDE_COLUMN';
+export const MOVE_COLUMN = 'MOVE_COLUMN';
+export const CHANGE_REPORT_NAME = 'CHANGE_REPORT_NAME';
+export const ENTER_BUILDER_MODE = 'ENTER_BUILDER_MODE';
+export const EXIT_BUILDER_MODE = 'EXIT_BUILDER_MODE';
 
 //  ******** table report list actions ********
 export const LOAD_REPORTS = 'LOAD_REPORTS';
@@ -145,4 +150,3 @@ export const RESET_TABLE_PROPS = 'RESET_TABLE_PROPS';
 export const DELETING_TABLE_FAILED = 'DELETING_TABLE_FAILED';
 export const TABLE_DELETED = 'TABLE_DELETED';
 export const NOTIFY_TABLE_DELETED = 'NOTIFY_TABLE_DELETED';
-

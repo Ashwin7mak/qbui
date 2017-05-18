@@ -370,9 +370,23 @@ export const refreshFieldSelectMenu = (context, appId, tblId) => {
         });
     };
 };
+/**
+ * Enter Builder Mode
+ * @returns {{type}}
+ */
+export const enterBuilderMode = (context) => {
+    return event(context, types.ENTER_BUILDER_MODE, {});
+};
 
 /**
- * Toggle the field select menu open.
+ * Exit Builder Mode
+ * @returns {{type: *}}
+ */
+export const exitBuilderMode = (context) => {
+    return event(context, types.EXIT_BUILDER_MODE, {});
+};
+
+/** Toggle the field select menu open.
  * @param context
  * @param clickedColumnId
  * @param addBeforeColumn
@@ -406,4 +420,22 @@ export const addColumnFromExistingField = (context, requestedColumn, addBefore) 
  */
 export const hideColumn = (context, clickedId) => {
     return event(context, types.HIDE_COLUMN, {clickedId});
+};
+
+/**
+ * Move a column based on the source and target ids given.
+ * @param context
+ * @param sourceIndex and targetIndex
+ */
+export const moveColumn = (context, params) => {
+    return event(context, types.MOVE_COLUMN, params);
+};
+
+/**
+ * Change the reportName of the report
+ * @param context
+ * @param newName - the new report name
+ */
+export const changeReportName = (context, newName) => {
+    return event(context, types.CHANGE_REPORT_NAME, {newName});
 };

@@ -1,6 +1,6 @@
 import React from 'react';
 import Locale from '../../locales/locales';
-import WindowLocationUtils from '../../utils/windowLocationUtils';
+import {WindowHistoryUtils} from '../../utils/windowHistoryUtils';
 import ActionIcon from './actionIcon';
 import QBModal from '../qbModal/qbModal';
 import {connect} from 'react-redux';
@@ -130,7 +130,7 @@ export const ReportActions = React.createClass({
         if (this.props.selection && this.props.selection.length === 1) {
             const recordId = this.getRecordIdFromReport(this.props);
             this.navigateToRecord(recordId);
-            WindowLocationUtils.pushWithQuery(EDIT_RECORD_KEY, recordId);
+            WindowHistoryUtils.pushWithQuery(EDIT_RECORD_KEY, recordId);
         }
     },
 

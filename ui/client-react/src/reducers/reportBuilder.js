@@ -3,6 +3,7 @@ import ReportModelHelper from '../models/reportModelHelper';
 
 const reportBuilder = (
     state = {
+        isInBuilderMode: false,
         isCollapsed: true,
         addBeforeColumn: null,
         availableColumns: []
@@ -32,6 +33,18 @@ const reportBuilder = (
             ...state,
             isCollapsed: true,
             addBeforeColumn: action.content.addBeforeColumn
+        };
+    }
+    case types.ENTER_BUILDER_MODE: {
+        return {
+            ...state,
+            isInBuilderMode: true
+        };
+    }
+    case types.EXIT_BUILDER_MODE: {
+        return {
+            ...state,
+            isInBuilderMode: false
         };
     }
     default:
