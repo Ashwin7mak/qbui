@@ -72,7 +72,7 @@
                         description: 'Referential integrity relationship between Master / Child Tables'
                     };
 
-                    recordBase.createRelationship(relationshipToCreate).then(function (relResponse) {
+                    recordBase.createRelationship(relationshipToCreate).then(function(relResponse) {
                         resolve(JSON.parse(relResponse.body));
                     }).catch(function(error) {
                         log.error('Error creating relationship');
