@@ -36,6 +36,11 @@
         align-items: center;
     }
 
+    &.smallBreakPoint {
+        // needed in small bp to fix scrolling issues in cardviews
+        height: 100vh;
+    }
+
     .saveOrCancelFooter {
         flex: 0 0 auto;
         display: flex;
