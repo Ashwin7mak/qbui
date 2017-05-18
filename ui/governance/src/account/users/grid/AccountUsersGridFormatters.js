@@ -28,12 +28,12 @@ export const FormatUserStatusText = (hasAppAccess, cellInfo) => {
         return "Denied";
     } else if (RealmUserAccountFlagConstants.HasAnySystemPermissions(cellInfo.rowData)) {
         return "Quick Base Staff";
-    } else if (RealmUserAccountFlagConstants.IsProvisional(cellInfo.rowData)) {
-        return "Unregistered";
     } else if (RealmUserAccountFlagConstants.IsVerified(cellInfo.rowData)) {
         return "Registered";
-    } else {
+    } else if (RealmUserAccountFlagConstants.IsRegistered(cellInfo.rowData)) {
         return "Unverified";
+    } else {
+        return "Unregistered";
     }
 };
 

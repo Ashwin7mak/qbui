@@ -25,10 +25,10 @@ describe('AccountUsersGridFormatter', () => {
     });
 
     it("should format the user status correctly", ()=> {
-        expect(Formatters.FormatUserStatusText(true, {rowData:{...basicUserInfo.rowData, userBasicFlags: 0x00000004}})).toEqual("Unverified");
-        expect(Formatters.FormatUserStatusText(true, {rowData:{...basicUserInfo.rowData, realmDirectoryFlags: 0x0010}})).toEqual("Registered");
-        expect(Formatters.FormatUserStatusText(false, {rowData:{...basicUserInfo.rowData, userBasicFlags: 0}})).toEqual("Unregistered");
-        expect(Formatters.FormatUserStatusText(true, {rowData:{...basicUserInfo.rowData, userBasicFlags: 0}})).toEqual("");
+        expect(Formatters.FormatUserStatusText(true, {rowData:{...basicUserInfo.rowData, realmDirectoryFlags: 0}})).toEqual("Unregistered");
+        expect(Formatters.FormatUserStatusText(true, {rowData:{...basicUserInfo.rowData, realmDirectoryFlags: 5170}})).toEqual("Registered");
+        expect(Formatters.FormatUserStatusText(true, {rowData:{...basicUserInfo.rowData, realmDirectoryFlags: 5138}})).toEqual("Unverified");
+        expect(Formatters.FormatUserStatusText(true, {rowData:{...basicUserInfo.rowData, realmDirectoryFlags: 5122}})).toEqual("Unregistered");
     });
 
     it("should format the user name when the username is the same as the email correctly", ()=> {
