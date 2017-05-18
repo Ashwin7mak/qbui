@@ -73,4 +73,18 @@ describe('tabbedSideMenu', () => {
 
         expect(tabs.props().defaultActiveKey).toEqual(mockTabs[0].key);
     });
+
+    it('will hide tabs on menu collapse', () => {
+        component = mount(<TabbedSideNav tabs={mockTabs} isCollapsed={true}/>);
+        let tabs = component.find('.hideTabs');
+
+        expect(tabs).toBePresent();
+    });
+
+    it('will not hide if the menu is not collapsed', () => {
+        component = mount(<TabbedSideNav tabs={mockTabs} isCollapsed={false}/>);
+        let tabs = component.find('.hideTabs');
+
+        expect(tabs).not.toBePresent();
+    });
 });
