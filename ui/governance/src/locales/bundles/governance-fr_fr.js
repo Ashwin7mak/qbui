@@ -24,6 +24,7 @@ export default {
             account: {
                 users: {
                     accessStatus: "État d'accord Quick Base",
+                    userStatus: "User status fr",
                     paidSeats: "Sièges payés",
                     paidSeatSingular: "Siège payé",
                     quickbaseStaff: "Personnel Quick Base",
