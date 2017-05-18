@@ -316,8 +316,8 @@ export const QBForm = React.createClass({
         } else if (element.FormFieldElement) {
             let validationStatus =  this.getFieldValidationStatus(element.FormFieldElement.fieldId);
             formattedElement = this.createFieldElement(element.FormFieldElement, validationStatus, element, newLocation);
-        } else if (element.ReferenceElement) {
-            formattedElement = this.createChildReportElement(element.id, element.ReferenceElement);
+        } else if (element.ChildReportElement) {
+            formattedElement = this.createChildReportElement(element.id, element.ChildReportElement);
         }
 
         return formattedElement;

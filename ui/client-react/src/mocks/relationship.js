@@ -8,7 +8,7 @@ export const referenceElement = (orderIndex = 0, relationshipId = 0) => ({
             "ADD",
             "EDIT"
         ],
-        type: "EMBEDREPORT",
+        type: "CHILD_REPORT",
         orderIndex: orderIndex,
         positionSameRow: false,
         relationshipId: relationshipId
