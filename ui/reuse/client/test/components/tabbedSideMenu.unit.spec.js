@@ -31,7 +31,7 @@ describe('tabbedSideMenu', () => {
         spyOn(mockPropsFunc, 'onTabClicked');
     });
 
-    it('will invoke props onTabChanged && onTabClicked when a tab is clicked', () => {
+    it('will invoke the props onTabChanged && onTabClicked when a tab is clicked', () => {
         component = mount(<TabbedSideNav onTabChanged={mockPropsFunc.onTabChanged}
                                          onTabClicked={mockPropsFunc.onTabClicked}
                                          tabs={mockTabs} />);
@@ -43,7 +43,7 @@ describe('tabbedSideMenu', () => {
         expect(mockPropsFunc.onTabClicked).toHaveBeenCalledWith(mockTabs[1].key);
     });
 
-    it('will not invoke onTabChanged && onTabClicked if no props are passed in when a tab is clicked ', () => {
+    it('will not invoke the props onTabChanged && onTabClicked if they are not passed in when a tab is clicked ', () => {
         component = mount(<TabbedSideNav tabs={mockTabs}/>);
 
         let tabs = component.find('.rc-tabs-tab').at(1);
@@ -74,14 +74,14 @@ describe('tabbedSideMenu', () => {
         expect(tabs.props().defaultActiveKey).toEqual(mockTabs[0].key);
     });
 
-    it('will hide tabs on menu collapse', () => {
+    it('will hide the tabs on menu collapse', () => {
         component = mount(<TabbedSideNav tabs={mockTabs} isCollapsed={true}/>);
         let tabs = component.find('.hideTabs');
 
         expect(tabs).toBePresent();
     });
 
-    it('will not hide if the menu is not collapsed', () => {
+    it('will not hide the tabs if the menu is not collapsed', () => {
         component = mount(<TabbedSideNav tabs={mockTabs} isCollapsed={false}/>);
         let tabs = component.find('.hideTabs');
 
