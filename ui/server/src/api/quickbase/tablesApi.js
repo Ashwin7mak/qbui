@@ -215,25 +215,53 @@
                     });
                 });
             },
+
             /**
-             * Put endpoint for tableproperties object
+             * Put endpoint for tableProperties object.
+             * @param req
+             * @param tableId
+             * @returns {Promise}
              */
             replaceTableProperties: function(req, tableId) {
                 return new Promise((resolve, reject) => {
                     let opts = requestHelper.setOptions(req);
                     opts.url = requestHelper.getRequestEeHost() + routeHelper.getTablePropertiesRoute(req.url, tableId);
-                    opts.method = 'put';
+                    opts.method = 'PUT';
 
                     requestHelper.executeRequest(req, opts).then(
                         (response) => {
                             resolve(JSON.parse(response.body));
                         },
                         (error) => {
-                            log.error({req: req}, "tablesApi.replaceTableProperties(): Error replacing tableprops on EE");
-                            reject(error);
+                            log.error({req: req}, "tablesApi.replaceTableProperties(): Error replacing table properties on EE");
+                            // If the table properties object is not in ee, create one with table noun in it.
+                            if (error.statusCode === 404) {
+                                let tableProperReq = _.clone(req);
+
+                                tableProperReq.method = 'POST';
+                                tableProperReq.rawBody = JSON.stringify({"tableNoun": req.body.tableNoun});
+                                tableProperReq.headers[constants.CONTENT_LENGTH] = tableProperReq.rawBody.length;
+
+                                this.createTableProperties(tableProperReq, tableId).then(
+                                    (eeResponse) => {
+                                        resolve(JSON.parse(eeResponse.body));
+                                    },
+                                    (eeError) => {
+                                        // Reject, let the caller know that the properties creation failed
+                                        log.error({req: req}, "tablesApi.createTableProperties(): Error creating table properties on EE");
+                                        reject(eeError);
+                                    }
+                                ).catch((ex) => {
+                                    requestHelper.logUnexpectedError('tablesApi.createTableProperties(): unexpected error creating table properties on EE', ex, true);
+                                    reject(ex);
+                                });
+                            } else {
+                                //resolve - we do not want to block the get Apps call on this failure
+                                resolve({});
+                            }
                         }
                     ).catch((ex) => {
-                        requestHelper.logUnexpectedError('tablesApi.replaceTableProperties(): unexpected error replacing tableprops on EE', ex, true);
+                        requestHelper.logUnexpectedError('tablesApi.replaceTableProperties(): unexpected error replacing table properties on EE', ex, true);
                         reject(ex);
                     });
                 });
