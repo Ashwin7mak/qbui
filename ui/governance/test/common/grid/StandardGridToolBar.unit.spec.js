@@ -4,6 +4,7 @@ import jasmineEnzyme from "jasmine-enzyme";
 import * as Actions from "../../../src/account/users/AccountUsersActions";
 import StandardGridToolBar from "../../../src/common/grid/toolbar/StandardGridToolbar";
 import StandardGridNavigation from "../../../src/common/grid/toolbar/StandardGridNavigation";
+import StandardGridItemsCount from "../../../src/common/grid/toolbar/StandardGridItemsCount";
 import {Provider} from "react-redux";
 import configureMockStore from "redux-mock-store";
 
@@ -14,7 +15,7 @@ describe('StandardGridToolBar', () => {
         jasmineEnzyme();
     });
 
-    it('should render with navigation component and search component', () => {
+    it('should render with navigation, search and itemsCount component', () => {
 
         let component = mount(
             <Provider store={mockStore({Grids : 1})}>
@@ -41,7 +42,10 @@ describe('StandardGridToolBar', () => {
         expect(StandardGridSearchComponent).toBeDefined();
         expect(StandardGridSearchComponent.length).toBeTruthy();
 
+        let StandardGridItemsCountComponent = component.find(StandardGridItemsCount);
+        expect(StandardGridItemsCountComponent).toBeDefined();
+        expect(StandardGridItemsCountComponent.length).toBeTruthy();
+        expect(StandardGridItemsCountComponent).toHaveProp('itemTypeSingular', 'user');
+        expect(StandardGridItemsCountComponent).toHaveProp('itemTypePlural', 'users');
     });
 });
-
-

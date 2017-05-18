@@ -1,6 +1,6 @@
 import React, {PropTypes, Component} from "react";
 import StandardGridNavigation from "./StandardGridNavigation";
-import StandardGridUsersCount from "./StandardGridUsersCount";
+import StandardGridItemsCount from "./StandardGridItemsCount";
 import * as StandardGridActions from "../../../common/grid/standardGridActions";
 import IconInputBox from "../../../../../reuse/client/src/components/iconInputBox/iconInputBox";
 import {I18nMessage} from "../../../../../reuse/client/src/utils/i18nMessage";
@@ -27,8 +27,6 @@ class StandardGridToolBar extends React.Component {
         this.props.setFacetSelection(newSelections);
     };
 
-
-// && (!_.isUndefined(this.props.reportData))
     render() {
         let hasFacets = false;
         return (
@@ -55,10 +53,10 @@ class StandardGridToolBar extends React.Component {
                         }
                     </div>
                     <div className="standardRightToolBar">
-                        <div className="standardGridRecordCount">
-                            <div className="recordsCount">
-                                    <StandardGridUsersCount recordCount={this.props.totalRecords}
-                                                            filteredRecordCount={this.props.filteredRecords}
+                        <div className="standardGridItemsCount">
+                            <div className="itemsCount">
+                                    <StandardGridItemsCount itemCount={this.props.totalRecords}
+                                                            filteredItemCount={this.props.filteredRecords}
                                                             itemTypePlural={this.props.itemTypePlural}
                                                             itemTypeSingular={this.props.itemTypeSingular}
                                     />
