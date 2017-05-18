@@ -21,7 +21,7 @@
                 return RequestSessionTicketPage.get(e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.ticketEndpoint)).then(function() {
                     // Load the requestAppsPage (shows a list of all the apps in a realm)
                     return RequestAppsPage.get(e2eBase.getRequestAppsPageEndpoint(realmName));
-                 });
+                });
             }
         }
     });

@@ -9,7 +9,7 @@
     //Load the page Objects
     let e2ePageBase = requirePO('e2ePageBase');
     let newStackAuthPO = requirePO('newStackAuth');
-    let reportContentMobilePO = requireMobilePO('reportContent');
+    let reportContentPO = requirePO('reportContent');
     let formsPO = requirePO('formsPage');
     let reportTableActionsPO = requirePO('reportTableActions');
 
@@ -44,7 +44,7 @@
          */
         beforeEach(function() {
             // Load the List All report on Table 1
-            reportContentMobilePO.loadReportByIdInBrowser(realmName, testApp, testApp.tables[e2eConsts.TABLE1], 1);
+            reportContentPO.loadReportByIdInBrowserForSB(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
         });
 
         /**
@@ -52,14 +52,14 @@
          */
         it('Should load the reports page with the appropriate table report and verify add record button is visible', function() {
             // wait for the report content to be visible
-            reportContentMobilePO.waitForReportContent();
+            reportContentPO.waitForReportContentSB();
 
             // Assert records count
             let recordCount = formsPO.getRecordsCountInATable();
             expect(recordCount).toBe(RECORD_COUNT);
 
             //Assert 'add new record' button is visible
-            expect(reportContentMobilePO.addRecordBtn.isVisible()).toBe(true);
+            expect(reportContentPO.addRecordBtn.isVisible()).toBe(true);
         });
 
         /**
@@ -68,10 +68,10 @@
          */
         it('Should load the table report actions', function() {
             // wait for the report content to be visible
-            reportContentMobilePO.waitForReportContent();
+            reportContentPO.waitForReportContentSB();
 
             // Assert sort by / group by button is visible
-            expect(reportContentMobilePO.reportSortGrpBtn.isVisible()).toBe(true);
+            expect(reportContentPO.reportSortGrpBtn.isVisible()).toBe(true);
 
             // Assert records count total
             expect(reportTableActionsPO.getReportRecordsCount()).toBe(RECORD_COUNT + " records");

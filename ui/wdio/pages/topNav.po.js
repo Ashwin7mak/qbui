@@ -140,7 +140,7 @@
          * Function to click on topNavToggleHamburgerEl
          */
         clickTopNavToggleHamburgerEl: {
-            get: function() {
+            value: function() {
                 //wait for hamburger in the topNav
                 this.topNavToggleHamburgerEl.waitForVisible();
 
@@ -148,5 +148,6 @@
                 return this.topNavToggleHamburgerEl.click();
             }
         },
+
     });
 }());
