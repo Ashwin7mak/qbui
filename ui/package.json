@@ -80,9 +80,9 @@
     "uuid": "^2.0.3"
   },
   "devDependencies": {
-    "async": "^0.2.9",
     "appium": "^1.6.4",
-    "authorize-ios":"^1.0.5",
+    "async": "^0.2.9",
+    "authorize-ios": "^1.0.5",
     "babel-core": "~6.20.0",
     "babel-eslint": "^7.2.1",
     "babel-loader": "~6.2.10",
@@ -213,6 +213,7 @@
     "webpack-dev-server": "1.16.3",
     "webpack-manifest-plugin": "^1.1.0",
     "webpack-md5-hash": "0.0.5",
+    "webpack-watch-time-plugin": "^0.1.2",
     "yargs": "^1.3.3"
   },
   "engines": {

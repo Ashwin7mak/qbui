@@ -76,6 +76,9 @@ class MyNotifyPlugin {
     }
 }
 
+// A plugin that prints timestamp to the console when webpack bundles update.
+const WatchTimePlugin = require('webpack-watch-time-plugin');
+
 // ------ START CONFIG ------
 const config = {
     // devtool Makes sure errors in console map to the correct file
@@ -338,7 +341,10 @@ const config = {
         }),
 
         // Optionally run the analyzer.
-        ...(process.env.ANALYZE_WEBPACK ? [new BundleAnalyzerPlugin()] : [])
+        ...(process.env.ANALYZE_WEBPACK ? [new BundleAnalyzerPlugin()] : []),
+
+        // Print timestamp on each webpack build
+        WatchTimePlugin
     ]
 };
 
