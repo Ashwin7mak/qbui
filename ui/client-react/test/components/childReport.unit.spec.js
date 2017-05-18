@@ -1,7 +1,4 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import {Route, Router, createMemoryHistory} from 'react-router-dom';
-import TestUtils, {Simulate} from 'react-addons-test-utils';
 import {shallow, mount} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
 
@@ -14,6 +11,7 @@ class BreakpointsAlwaysSmallMock {
 }
 
 const appId = 1;
+const childAppId = appId;
 const childTableId = 2;
 const childReportId = 3;
 const childTableName = 'child table';
@@ -25,6 +23,7 @@ const childReportUrl = `/qbase/app/${appId}/table/${childTableId}/report/${child
 const MockChildReport = (props) => {
     props = Object.assign({
         appId,
+        childAppId,
         childTableId,
         childReportId,
         childTableName,
@@ -37,24 +36,27 @@ const MockChildReport = (props) => {
 
 const EmbeddedReportToolsAndContentMock = (props) => <div className="embeddedReportContainer"></div>;
 const EmbeddedReportLinkMock = (props) => <div className="embeddedReportLink"></div>;
+const EmbeddedAddChildLinkMock = (props) => <div className="embeddedAddChildLink"></div>;
 
 describe('ChildReport', () => {
     beforeAll(() => {
         jasmineEnzyme();
         ChildReportRewireAPI.__Rewire__('EmbeddedReportToolsAndContent', EmbeddedReportToolsAndContentMock);
         ChildReportRewireAPI.__Rewire__('EmbeddedReportLink', EmbeddedReportLinkMock);
+        ChildReportRewireAPI.__Rewire__('EmbeddedAddChildLink', EmbeddedAddChildLinkMock);
     });
 
     afterAll(() => {
         ChildReportRewireAPI.__ResetDependency__('EmbeddedReportToolsAndContent');
-        ChildReportRewireAPI.__Rewire__('EmbeddedReportLink');
+        ChildReportRewireAPI.__ResetDependency__('EmbeddedReportLink');
+        ChildReportRewireAPI.__ResetDependency__('EmbeddedAddChildLink', EmbeddedAddChildLinkMock);
     });
 
     let component, domComponent;
 
     it(`renders the component`, () => {
         component = shallow(MockChildReport());
-        expect(component).toBePresent();
+        expect(component.find('.childReportContainer')).toBePresent();
     });
 
     [

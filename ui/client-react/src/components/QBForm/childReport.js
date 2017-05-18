@@ -52,8 +52,11 @@ class ChildReport extends React.Component {
                 item1 = this.renderAddChildLink();
                 item2 = this.renderChildReportOrLink(childTableId, childReportId);
             }
+
+            const classNames = ['childReportContainer'];
+            classNames.push(rowOfButtons ? 'linkContainerRowOfButtons' : '');
             return (
-                <div className={rowOfButtons ? 'linkContainersRowOfButtons' : ''}>
+                <div className={classNames.join(' ')}>
                     {item1}
                     {item2}
                 </div>);
