@@ -10,15 +10,20 @@
     }
 
     .tableChooserDescription {
+        color: $color-black-500;
         padding-bottom: $spacing-x-small;
     }
     .tableChooserHeading {
-        font-weight: bold;
+        color: $color-black-700;
         padding-bottom: $spacing-x-small;
     }
 
     .tableSelector {
         max-width: 300px;
+
+        .tableOption > .qbIcon {
+            color: $iconfont-on-light-normal-color;
+        }
     }
     .tableOption {
         .tableLabel {
