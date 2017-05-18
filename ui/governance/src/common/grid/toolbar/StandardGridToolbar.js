@@ -99,7 +99,6 @@ StandardGridToolBar.propTypes = {
 const mapStateToProps = (state, ownProps) => {
     let facetInfo = (state.Grids[ownProps.id] || {}).facets || {};
     let paginationInfo = (state.Grids[ownProps.id] || {}).pagination || {};
-    debugger;
     return {
         facetSelections:  facetInfo.facetSelections || {},
         filteredRecords: paginationInfo.filteredRecords || 0,

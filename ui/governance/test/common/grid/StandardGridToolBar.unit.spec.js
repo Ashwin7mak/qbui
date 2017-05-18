@@ -18,7 +18,7 @@ describe('StandardGridToolBar', () => {
     it('should render with navigation, search and itemsCount component', () => {
 
         let component = mount(
-            <Provider store={mockStore({Grids : 1})}>
+            <Provider store={mockStore({Grids : {accountUsers: {pagination: {totalRecords: 20}}}})}>
                 <StandardGridToolBar
                     doUpdate={Actions.doUpdate}
                     doFacet={false}
@@ -42,10 +42,6 @@ describe('StandardGridToolBar', () => {
         expect(StandardGridSearchComponent).toBeDefined();
         expect(StandardGridSearchComponent.length).toBeTruthy();
 
-        let StandardGridItemsCountComponent = component.find(StandardGridItemsCount);
-        expect(StandardGridItemsCountComponent).toBeDefined();
-        expect(StandardGridItemsCountComponent.length).toBeTruthy();
-        expect(StandardGridItemsCountComponent).toHaveProp('itemTypeSingular', 'user');
-        expect(StandardGridItemsCountComponent).toHaveProp('itemTypePlural', 'users');
+        expect(component.find(StandardGridItemsCount)).toBePresent();
     });
 });
