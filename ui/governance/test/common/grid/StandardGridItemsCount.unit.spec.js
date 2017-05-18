@@ -7,12 +7,12 @@ let component;
 
 fdescribe('StandardGridItemsCount', () => {
     beforeEach(() => {
-    jasmineEnzyme();
-});
+        jasmineEnzyme();
+    });
 
     fit('renders itemCount class name', () => {
         component = shallow(<StandardGridItemsCount />);
 
         expect(component.find('.itemCount')).toBePresent();
-    })
+    });
 });
