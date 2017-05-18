@@ -180,6 +180,31 @@ export const Nav = React.createClass({
         return null;
     },
 
+    getEditingApp() {
+        if (this.props.location.query[UrlConsts.DETAIL_APPID]) {
+            let childAppId = this.props.location.query[UrlConsts.DETAIL_APPID];
+            return _.find(this.state.apps.apps, (a) => a.id === childAppId);
+        } else if (this.state.apps.selectedAppId) {
+            return _.find(this.state.apps.apps, (a) => a.id === this.state.apps.selectedAppId);
+        }
+        return null;
+    },
+
+    /**
+     * get table object for currently editing table (or null if no table being edited)
+     *
+     */
+    getEditingTable(tableId) {
+        if (tableId) {
+            const app = this.getEditingApp();
+            if (app) {
+                return _.find(app.tables, (t) => t.id === tableId);
+            }
+        }
+        return null;
+    },
+
+
     /**
      * get table object for currently selected table (or null if no table selected)
      *
@@ -353,6 +378,19 @@ export const Nav = React.createClass({
         let reportsList = this.getReportsList();
         let pendEdits = this.getPendEdits();
 
+
+        let editingAppId = this.props.match.params.appId;
+        let editingTblId = this.props.match.params.tblId;
+        let editingRecId = editRecordId;
+        if (this.props.location.query[UrlConsts.DETAIL_APPID] &&
+            this.props.location.query[UrlConsts.DETAIL_TABLEID] &&
+            this.props.location.query[UrlConsts.DETAIL_KEY_FID]) {
+            editingAppId  = this.props.location.query[UrlConsts.DETAIL_APPID];
+            editingTblId  = this.props.location.query[UrlConsts.DETAIL_TABLEID];
+        }
+
+
+
         return (<div className={classes}>
             <NavPageTitle
                 app={this.getSelectedApp()}
@@ -377,12 +415,17 @@ export const Nav = React.createClass({
                            editForm={this.getEditFormFromProps()}
                            appId={this.props.match.params.appId}
                            tblId={this.props.match.params.tblId}
+                           editingAppId={editingAppId}
+                           editingTblId={editingTblId}
+                           editingRecId={editingRecId}
                            recId={editRecordId}
                            viewingRecordId={viewingRecordId}
                            pendEdits={pendEdits}
                            appUsers={this.state.apps.appUsers}
                            selectedApp={this.getSelectedApp()}
                            selectedTable={this.getSelectedTable(reportsData.tblId)}
+                           editingApp={this.getEditingApp()}
+                           editingTable={this.getEditingTable(editingTblId)}
                            reportData={reportsData}
                            errorPopupHidden={this.props.shell.errorPopupHidden}
                            onHideTrowser={this.hideTrowser}/>
