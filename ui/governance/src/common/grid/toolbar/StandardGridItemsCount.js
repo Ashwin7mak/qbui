@@ -12,12 +12,12 @@ class StandardGridItemsCount extends Component {
 
         const itemCountMessage = (this.props.itemCount === 1) ? this.props.itemTypeSingular : this.props.itemTypePlural;
 
-        const itemCount = (this.props.filteredItemCount === this.props.itemCount) ? `${this.props.itemCount}` : `${this.props.filteredItemCount} of ${this.props.itemCount}`;
+        const standardGridItemsCount = (this.props.filteredItemCount === this.props.itemCount) ? `${this.props.itemCount}` : `${this.props.filteredItemCount} of ${this.props.itemCount}`;
 
         return (
              <div className="itemsCountLoaderContainer">
                          <div className="itemCount">
-                             {itemCount} {itemCountMessage}
+                             {standardGridItemsCount} {itemCountMessage}
                          </div>
              </div>
         );
