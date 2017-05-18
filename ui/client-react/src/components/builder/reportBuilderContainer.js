@@ -1,6 +1,5 @@
 import React, {Component, PropTypes} from 'react';
 import {connect} from 'react-redux';
-import Logger from '../../utils/logger';
 import _ from 'lodash';
 import {DragDropContext} from 'react-dnd';
 import TouchBackend from 'react-dnd-touch-backend';
@@ -10,30 +9,19 @@ import ReportColumnHeaderMenu from '../dataTable/reportGrid/reportColumnHeaderMe
 import ReportNameEditor from '../reportBuilder/reportNameEditor';
 import ReportFieldSelectMenu from '../reportBuilder/reportFieldSelectMenu';
 import ReportSaveOrCancelFooter from '../reportBuilder/reportSaveOrCancelFooter';
+import ReportToolsAndContent from '../report/reportToolsAndContent';
 import QbGrid from '../dataTable/qbGrid/qbGrid';
 import ReportCell from '../dataTable/reportGrid/reportCell';
-import ReportToolbar from '../report/reportToolbar';
 import Locale from '../../locales/locales';
-import FilterUtils from '../../utils/filterUtils';
-import StringUtils from '../../utils/stringUtils';
-import * as query from '../../constants/query';
-import ReportUtils from '../../utils/reportUtils';
-import * as Constants from "../../../../common/src/constants";
 import {CONTEXT} from '../../actions/context';
 import {exitBuilderMode, closeFieldSelectMenu} from '../../actions/reportBuilderActions';
 import {loadDynamicReport} from '../../actions/reportActions';
 
 import './reportBuilderContainer.scss';
 
-let logger = new Logger();
-
 export class ReportBuilderContainer extends Component {
     constructor(props) {
         super(props);
-    }
-
-    componentWillMount() {
-        this.debouncedFilterReport = _.debounce(this.filterReport, 700);
     }
 
     getSaveOrCancelFooter = () => {
@@ -47,36 +35,41 @@ export class ReportBuilderContainer extends Component {
             }).length === 1;
     };
 
-    filterOnSelections = (newSelections) => {
-        this.debouncedFilterReport(this.props.reportData.searchStringForFiltering, newSelections, true);
-    };
+    /**
+     * Load a report with query parameters.
+     */
+    loadDynamicReport(appId, tblId, rptId, format, filter, queryParams) {
+        this.props.loadDynamicReport(CONTEXT.REPORT.NAV, appId, tblId, rptId, format, filter, queryParams);
+    }
 
-    filterReport = (searchString, selections, alwaysRunReport) => {
-        // leading and trailing spaces are trimmed..
-        const trimmedSearch = StringUtils.trim(searchString);
-
-        //  only generate a report if search value differs from prior search value OR alwaysRunReport is set to true
-        if (trimmedSearch !== this.props.reportData.searchStringForFiltering || alwaysRunReport === true) {
-            logger.debug('Sending filter action with:' + trimmedSearch);
-
-            let facetFields = this.mapFacetFields();
-            const filter = FilterUtils.getFilter(StringUtils.trim(trimmedSearch), selections, facetFields);
-
-            let queryParams = {};
-            queryParams[query.SORT_LIST_PARAM] = ReportUtils.getGListString(this.props.reportData.data.sortFids, this.props.reportData.data.groupEls);
-
-            // new search always resets to 1st page
-            queryParams[query.OFFSET_PARAM] = Constants.PAGE.DEFAULT_OFFSET;
-            queryParams[query.NUMROWS_PARAM] = Constants.PAGE.DEFAULT_NUM_ROWS;
-
-            this.props.loadDynamicReport(CONTEXT.REPORT.NAV, this.props.match.params.appId,
-                this.props.match.params.tblId, this.props.match.params.rptId, true, filter, queryParams);
-        }
-    };
+    getReportBuilderContent(columns, rows) {
+        let {appId, tblId, rptId} = this.props.match.params;
+        let sortFids = this.props.reportData.data ? this.props.reportData.data.sortFids : [];
+        return (
+            <QbGrid
+                numberOfColumns={columns.length}
+                columns={columns}
+                rows={rows}
+                isDraggable={true}
+                cellRenderer={ReportCell}
+                menuComponent={ReportColumnHeaderMenu}
+                showRowActionsColumn={false}
+                menuProps={{
+                    appId: appId,
+                    tblId: tblId,
+                    rptId: rptId,
+                    sortFids: sortFids,
+                    isOnlyOneColumnVisible: this.isOnlyOneColumnVisible(columns)
+                }}
+            />
+        );
+    }
 
     render() {
-        let {appId, tblId, rptId} = this.props.match.params;
-        let {columns, records, sortFids, name} = this.props.reportData.data;
+        let {appId, tblId} = this.props.match.params;
+        let name = this.props.reportData.data ? this.props.reportData.data.name : '';
+        let columns = this.props.reportData.data ? this.props.reportData.data.columns : [];
+        let records = this.props.reportData.data ? this.props.reportData.data.records : [];
         let recordShowLimit = 25;
         let transformedColumns = ReportColumnTransformer.transformColumnsForGrid(columns);
         transformedColumns.forEach(column => {
@@ -84,6 +77,7 @@ export class ReportBuilderContainer extends Component {
         });
         let transformedRows = ReportRowTransformer.transformRecordsForGrid(_.take(records, recordShowLimit), columns);
         let numberOfRecords = records.length;
+        let content = this.getReportBuilderContent(transformedColumns, transformedRows);
         return (
             <div className="reportBuilderContainer">
                 <ReportFieldSelectMenu
@@ -93,39 +87,21 @@ export class ReportBuilderContainer extends Component {
                     <div className="reportBuilderContainerContent">
                         <div className="reportBuilderHeader">
                             {name && <ReportNameEditor name={name}/>}
-                            <ReportToolbar
-                                reportData={this.props.reportData}
-                                searchStringForFiltering={this.props.reportData.searchStringForFiltering}
-                                selections={this.props.reportData.selections}
-                                filterOnSelections={this.filterOnSelections}
-                                isRightToolbarVisible={false}
-                                isSearchBoxVisible={false}
-                            />
                         </div>
-                        <QbGrid
-                            numberOfColumns={columns.length}
-                            columns={transformedColumns}
-                            rows={transformedRows}
-                            isDraggable={true}
-                            cellRenderer={ReportCell}
-                            menuComponent={ReportColumnHeaderMenu}
-                            showRowActionsColumn={false}
-                            menuProps={{
-                                appId: appId,
-                                tblId: tblId,
-                                rptId: rptId,
-                                sortFids: sortFids,
-                                isOnlyOneColumnVisible: this.isOnlyOneColumnVisible(columns)
-                            }}
+                        <ReportToolsAndContent
+                            isRightToolbarVisible={false}
+                            isSearchBoxVisible={false}
+                            params={this.props.match.params}
+                            reportData={this.props.reportData}
+                            routeParams={this.props.match.params}
+                            selectedAppId={this.props.match.params.appId}
+                            selectedTable={this.props.match.params.tblId}
+                            searchStringForFiltering={this.props.reportData.searchStringForFiltering}
+                            selectedRows={this.props.reportData.selectedRows}
+                            loadDynamicReport={this.loadDynamicReport}
+                            noRowsUI={true}
+                            content={content}
                         />
-                        <div className="recordCount">
-                            {(numberOfRecords > recordShowLimit)
-                            && Locale.getMessage('builder.reportBuilder.recordLimitFirstHalf')
-                            + recordShowLimit
-                            + Locale.getMessage('builder.reportBuilder.recordLimitMiddle')
-                            + numberOfRecords
-                            + Locale.getMessage('builder.reportBuilder.recordLimitSecondHalf')}
-                        </div>
                     </div>
                 </ReportFieldSelectMenu>
                 {this.getSaveOrCancelFooter()}

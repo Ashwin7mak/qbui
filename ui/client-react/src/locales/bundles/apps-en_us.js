@@ -582,10 +582,7 @@ export default {
         },
         builder: {
             reportBuilder: {
-                modify: 'Modify report',
-                recordLimitFirstHalf: 'Displaying ',
-                recordLimitMiddle: ' out of ',
-                recordLimitSecondHalf: ' records.'
+                modify: 'Modify report'
             },
             formBuilder: {
                 modify: 'Modify form',

@@ -29,118 +29,14 @@
         }
 
         .reportBuilderHeader {
-            display: flex;
-            flex-direction: row;
-            flex: 1 0 auto;
-            align-items: flex-start;
-
+            position: fixed;
             .reportNameEditor .editor h3 {
                 margin: 0 0 10px 0;
             }
-
-            .reportToolbar {
-                display: flex;
-                flex-direction: row;
-                flex: 1 0 auto;
-                align-items: flex-start;
-                color: $search-input-color;
-
-                &.noFacets {
-                    justify-content: flex-start;
-                }
-
-                > .pageActions {
-                    line-height: 40px;
-                    align-self: stretch;
-                }
-
-                .leftReportToolbar {
-                    display: flex;
-                    flex-direction: row;
-                    flex: 1 1 auto;
-                    align-items: flex-start;
-                }
-
-                .rightReportToolbar {
-                    display: flex;
-                    flex-direction: row;
-                    justify-content: flex-end;
-                    color: $pagination-iconfont-darkblack-color;
-
-                    .recordsCountLoaderContainer {
-                        flex-grow: 1;
-                        display: flex;
-                        justify-content: flex-end;
-                        align-items: center;
-
-                        .loadedContent {
-                            display: block;
-                            width: 100%;
-                        }
-
-                        .loader {
-                            position: relative;
-                            width: 8%;
-                        }
-
-                        .recordsCount {
-                            text-align: right;
-                            font-family: "Lato", Sans-Serif;
-                            font-size: 14px;
-
-                            @include small-breakpoint {
-                                color: $pagination-mobile-topbar-text-color;
-                                white-space: nowrap;
-                                margin-left: 15px;
-                                line-height: 40px;
-                            }
-                        }
-                    }
-
-                    .reportNavigation {
-                        display: flex;
-                        align-items: center;
-                    }
-
-                    .loadedContent {
-                        flex-grow: 1;
-                        flex-shrink: 0;
-                    }
-                }
-
-                .filterSearchBoxContainer {
-                    flex-shrink: 0;
-
-                    .filterSearchBox {
-                        min-width: 60px;
-                        max-width: 190px;
-                    }
-                }
-
-                > .facetsMenuContainer {
-                    flex-shrink: 1;
-
-                    .facetsMenuButton {
-                        .withoutSelections {
-                            margin-top: 0;
-                            margin-bottom: 0;
-                        }
-                    }
-                }
-
-                .clearAllFacets {
-                    display: inline-block;
-                    margin-right: 0.5rem;
-                    margin-left: 0.5rem;
-                    vertical-align: top;
-                    font-size: 16px;
-                    cursor: pointer;
-                }
-            }
         }
 
-        .recordCount {
-            padding-top: 5px;
+        .reportToolsAndContentContainer .tableActionsContainer {
+            margin: 40px 0 -15px -5px;
         }
 
         .loadedContent .qbGrid {
@@ -171,10 +67,6 @@
             -webkit-overflow-scrolling: touch; /* This allows for momentum scrolling on touch devices */
         }
 
-    }
-
-    .formContainer {
-        padding-bottom: 90px;
     }
 
     .qbPanel .qbPanelHeader .qbPanelHeaderTitle .qbPanelHeaderTitleText {
