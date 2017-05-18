@@ -12,7 +12,7 @@ const mockParentFunctions = {
     cancel: () => {}
 };
 
-let tables =[
+let tables = [
     {id: "childTableId", name: "child table", tableIcon: "childIcon"},
     {id: "parentTableId", name: "parent table", tableIcon: "parentIcon"}
 ];
@@ -26,7 +26,7 @@ function buildMockParent() {
                 <LinkToRecordTableSelectionDialog
                      show={true}
                      tables={tables}
-                     childTableId='childTableId'
+                     childTableId="childTableId"
                      onCancel={mockParentFunctions.cancel}
                      tableSelected={mockParentFunctions.tableSelected} />
             );
