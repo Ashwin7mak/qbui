@@ -1,4 +1,3 @@
-
 /**
  * E2E small breakpoint tests for the components on the Table Reports page
  *
@@ -8,17 +7,17 @@
     'use strict';
 
     //Load the page Objects
-    var e2ePageBase = requirePO('e2ePageBase');
+    let e2ePageBase = requirePO('e2ePageBase');
     let newStackAuthPO = requirePO('newStackAuth');
     let reportContentMobilePO = requireMobilePO('reportContent');
-    var FormsPO = requirePO('formsPage');
-    var ReportTableActionsPO = requirePO('reportTableActions');
+    let FormsPO = requirePO('formsPage');
+    let ReportTableActionsPO = requirePO('reportTableActions');
 
     describe('Reports - Table report tests for small breakpoint: ', function() {
-        var realmName;
-        var realmId;
-        var testApp;
-        var RECORD_COUNT = 20;
+        let realmName;
+        let realmId;
+        let testApp;
+        let RECORD_COUNT = 20;
         /**
          * Setup method. Creates test app then authenticates into the new stack
          */
@@ -57,7 +56,7 @@
             reportContentMobilePO.waitForReportContent();
 
             // Assert all the records are displayed in the table
-            var recordCount = FormsPO.getRecordsCountInATable();
+            let recordCount = FormsPO.getRecordsCountInATable();
             expect(recordCount).toBe(RECORD_COUNT);
 
             //Assert 'add new record' button is visible
