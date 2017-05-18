@@ -3,7 +3,7 @@
 .formBuilderContainer {
     height: 100%;
     .listOfElementsContainer {
-        height: calc(100% - #{$trowser-footer-height + 37px});
+        height: calc(100% - #{$trowser-footer-height + 59px});
         @include medium-breakpoint {
             //for tablets and smaller, to keep footer from vanishing
             height: 100%;
