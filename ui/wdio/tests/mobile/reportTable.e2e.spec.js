@@ -48,14 +48,13 @@
         });
 
         /**
-         * Test method. After setup completes, loads the browser, requests a session ticket, requests the list
-         * of reports for that app and table, then displays the report page in the browser
+         * verifies record count and 'add new record' button is visible
          */
         it('Should load the reports page with the appropriate table report and verify add record button is visible', function() {
             // wait for the report content to be visible
             reportContentMobilePO.waitForReportContent();
 
-            // Assert all the records are displayed in the table
+            // Assert records count
             let recordCount = formsPO.getRecordsCountInATable();
             expect(recordCount).toBe(RECORD_COUNT);
 

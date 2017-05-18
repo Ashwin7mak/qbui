@@ -21,12 +21,7 @@
                 return RequestSessionTicketPage.get(e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.ticketEndpoint)).then(function() {
                     // Load the requestAppsPage (shows a list of all the apps in a realm)
                     return RequestAppsPage.get(e2eBase.getRequestAppsPageEndpoint(realmName));
-                    //wait until apps link is associated with app name.
-
-                    //  TODO: this element is not visible for small breakpoint.
-                    //  TODO: after discussion with other QA engineers we decided to comment this out for now but we might need to update this PO to work for both small and large break points.
-                    // return browser.waitForText('.appsList .leftNavLabel', e2eConsts.extraLongWaitTimeMs);
-                });
+                 });
             }
         }
     });

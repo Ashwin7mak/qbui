@@ -14,16 +14,19 @@
     let tableCreatePO = requirePO('tableCreate');
 
     let reportContentPage = Object.create(e2ePageBase, {
+        //add new record button element
         addRecordBtn: {
             get: function() {
                 return browser.element('.reportToolsAndContentContainer .addNewRecord');
             }
         },
+        // sort and group button element on report page
         reportSortGrpBtn: {
             get: function() {
                 return browser.element('.sortButton');
             }
         },
+        //returns cell values for all the rows
         getAllRowsCellValues: {
             get: function() {
                 browser.element('.fieldRow').waitForVisible();
@@ -53,12 +56,7 @@
             value: function(realmName, app, table, reportId) {
                 // Load the requestAppsPage (shows a list of all the apps in a realm)
                 requestAppsPage.get(e2eBase.getRequestAppsPageEndpoint(realmName));
-
-                //wait for hamburger in the topNav
-                topNavPO.topNavToggleHamburgerEl.waitForVisible();
-                //click on the hamburger in the topNav
-                topNavPO.topNavToggleHamburgerEl.click();
-
+                topNavPO.clickTopNavToggleHamburgerEl();
                 //select the App
                 requestAppsPage.selectApp(app.name);
                 //Select table
