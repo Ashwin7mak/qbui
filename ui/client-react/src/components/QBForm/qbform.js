@@ -12,6 +12,7 @@ import DragAndDropField from '../formBuilder/dragAndDropField';
 import ChildReport from './childReport';
 import {CONTEXT} from "../../actions/context";
 import FlipMove from 'react-flip-move';
+import {FORM_ELEMENT_ENTER, FORM_ELEMENT_LEAVE} from '../../constants/animations';
 
 import * as FieldsReducer from '../../reducers/fields';
 
@@ -268,7 +269,9 @@ export const QBForm = React.createClass({
                 <FlipMove
                     duration={200}
                     easing="ease"
-                    appearAnimation="accordionVertical"
+                    appearAnimation="fade"
+                    enterAnimation={FORM_ELEMENT_ENTER}
+                    leaveAnimation={FORM_ELEMENT_LEAVE}
                     staggerDelayBy={0}
                     staggerDurationBy={0}
                     delay={0}

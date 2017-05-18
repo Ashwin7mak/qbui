@@ -1,5 +1,5 @@
-import MenuItem from 'react-bootstrap/lib/MenuItem';
-import React from 'react';
+import MenuItem from "react-bootstrap/lib/MenuItem";
+import React from "react";
 
 /**
  * Interface class defining what it means to provide

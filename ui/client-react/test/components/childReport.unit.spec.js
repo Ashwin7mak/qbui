@@ -5,7 +5,7 @@ import TestUtils, {Simulate} from 'react-addons-test-utils';
 import {shallow, mount} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
 
-import RelatedChildReport, {__RewireAPI__ as RelatedChildReportRewireAPI} from '../../src/components/QBForm/childReport';
+import ChildReport, {__RewireAPI__ as ChildReportRewireAPI} from '../../src/components/QBForm/childReport';
 
 class BreakpointsAlwaysSmallMock {
     static isSmallBreakpoint() {
@@ -20,7 +20,7 @@ const childTableName = 'child table';
 const detailKeyFid = 4;
 const detailKeyValue = 5;
 const type = 'EMBEDREPORT';
-const relatedChildReportUrl = `/qbase/app/${appId}/table/${childTableId}/report/${childReportId}?detailKeyFid=${detailKeyFid}&detailKeyValue=${detailKeyValue}`;
+const childReportUrl = `/qbase/app/${appId}/table/${childTableId}/report/${childReportId}?detailKeyFid=${detailKeyFid}&detailKeyValue=${detailKeyValue}`;
 
 const MockChildReport = (props) => {
     props = Object.assign({
@@ -32,7 +32,7 @@ const MockChildReport = (props) => {
         detailKeyValue,
         type
     }, props);
-    return <RelatedChildReport {...props} />;
+    return <ChildReport {...props} />;
 };
 
 const EmbeddedReportToolsAndContentMock = (props) => <div className="embeddedReportContainer"></div>;
@@ -41,13 +41,13 @@ const EmbeddedReportLinkMock = (props) => <div className="embeddedReportLink"></
 describe('ChildReport', () => {
     beforeAll(() => {
         jasmineEnzyme();
-        RelatedChildReportRewireAPI.__Rewire__('EmbeddedReportToolsAndContent', EmbeddedReportToolsAndContentMock);
-        RelatedChildReportRewireAPI.__Rewire__('EmbeddedReportLink', EmbeddedReportLinkMock);
+        ChildReportRewireAPI.__Rewire__('EmbeddedReportToolsAndContent', EmbeddedReportToolsAndContentMock);
+        ChildReportRewireAPI.__Rewire__('EmbeddedReportLink', EmbeddedReportLinkMock);
     });
 
     afterAll(() => {
-        RelatedChildReportRewireAPI.__ResetDependency__('EmbeddedReportToolsAndContent');
-        RelatedChildReportRewireAPI.__Rewire__('EmbeddedReportLink');
+        ChildReportRewireAPI.__ResetDependency__('EmbeddedReportToolsAndContent');
+        ChildReportRewireAPI.__Rewire__('EmbeddedReportLink');
     });
 
     let component, domComponent;
@@ -68,7 +68,7 @@ describe('ChildReport', () => {
             const props = {};
             props[prop] = undefined;
             component = shallow(MockChildReport(props));
-            expect(component.find(RelatedChildReport)).not.toBePresent();
+            expect(component.find(ChildReport)).not.toBePresent();
 
             const embeddedReportContainer = component.find(EmbeddedReportToolsAndContentMock);
             const embeddedReportLink = component.find(EmbeddedReportLinkMock);
@@ -107,10 +107,10 @@ describe('ChildReport', () => {
 
     describe('in Small Breakpoint', () => {
         beforeAll(() => {
-            RelatedChildReportRewireAPI.__Rewire__('Breakpoints', BreakpointsAlwaysSmallMock);
+            ChildReportRewireAPI.__Rewire__('Breakpoints', BreakpointsAlwaysSmallMock);
         });
         afterAll(() => {
-            RelatedChildReportRewireAPI.__ResetDependency__('Breakpoints');
+            ChildReportRewireAPI.__ResetDependency__('Breakpoints');
         });
 
         it('renders EmbeddedReportLink', () => {

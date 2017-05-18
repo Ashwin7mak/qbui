@@ -3,12 +3,13 @@ import Stage from '../stage/stage';
 import Icon, {AVAILABLE_ICON_FONTS} from '../../../../reuse/client/src/components/icon/icon.js';
 import ReportStage from './reportStage';
 import ReportHeader from './reportHeader';
+import ReportSaveOrCancelFooter from '../reportBuilder/reportSaveOrCancelFooter';
 import IconActions from '../actions/iconActions';
 import {Link} from 'react-router-dom';
 import Logger from '../../utils/logger';
 import QueryUtils from '../../utils/queryUtils';
 import NumberUtils from '../../utils/numberUtils';
-import WindowLocationUtils from '../../utils/windowLocationUtils';
+import {WindowHistoryUtils} from '../../utils/windowHistoryUtils';
 import simpleStringify from '../../../../common/src/simpleStringify';
 import constants from '../../../../common/src/constants';
 import Fluxxor from 'fluxxor';
@@ -16,6 +17,7 @@ import _ from 'lodash';
 import './report.scss';
 import ReportToolsAndContent from '../report/reportToolsAndContent';
 import ReportFieldSelectMenu from './reportFieldSelectMenu';
+import ReportNameEditor from './reportNameEditor';
 import {connect} from 'react-redux';
 import {clearSearchInput} from '../../actions/searchActions';
 import {loadReport, loadDynamicReport} from '../../actions/reportActions';
@@ -33,7 +35,7 @@ let FluxMixin = Fluxxor.FluxMixin(React);
  *
  * Note: this component has been partially migrated to Redux
  */
-const ReportRoute = React.createClass({
+export const ReportRoute = React.createClass({
     mixins: [FluxMixin],
     nameForRecords: "Records",  // get from table meta data
 
@@ -120,7 +122,7 @@ const ReportRoute = React.createClass({
      * @param data row record data
      */
     editNewRecord() {
-        WindowLocationUtils.pushWithQuery(EDIT_RECORD_KEY, NEW_RECORD_VALUE);
+        WindowHistoryUtils.pushWithQuery(EDIT_RECORD_KEY, NEW_RECORD_VALUE);
     },
 
     getPageActions(maxButtonsBeforeMenu) {
@@ -145,12 +147,13 @@ const ReportRoute = React.createClass({
                 </div>
 
                 <div className="stageHeadline">
-                    <h3 className="reportName">{reportName}</h3>
+                    <ReportNameEditor name={reportName}/>
                 </div>
             </div>);
     },
 
     render() {
+        let inBuilderMode = this.props.reportBuilder.isInBuilderMode;
         if (_.isUndefined(this.props.match.params) ||
             _.isUndefined(this.props.match.params.appId) ||
             _.isUndefined(this.props.match.params.tblId) ||
@@ -193,6 +196,10 @@ const ReportRoute = React.createClass({
                         />
 
                     </ReportFieldSelectMenu>
+
+                    {inBuilderMode &&
+                        <ReportSaveOrCancelFooter />}
+
                 </div>
             );
         }
@@ -216,4 +223,10 @@ const mapDispatchToProps = (dispatch) => {
     };
 };
 
-export default connect(null, mapDispatchToProps)(ReportRoute);
+const mapStateToProps = (state) => {
+    return {
+        reportBuilder: state.reportBuilder
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ReportRoute);
