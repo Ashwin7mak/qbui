@@ -9,7 +9,7 @@
 
     //Load the page Objects
     var e2ePageBase = requirePO('e2ePageBase');
-    var NewStackAuthPO = requirePO('newStackAuth');
+    let newStackAuthPO = requirePO('newStackAuth');
     let reportContentMobilePO = requireMobilePO('reportContent');
     var FormsPO = requirePO('formsPage');
     var ReportTableActionsPO = requirePO('reportTableActions');
@@ -31,7 +31,7 @@
                 realmId = e2eBase.recordBase.apiBase.realm.id;
             }).then(function() {
                 // Auth into the new stack
-                return NewStackAuthPO.realmLogin(realmName, realmId);
+                return newStackAuthPO.realmLogin(realmName, realmId);
             }).catch(function(error) {
                 // Global catch that will grab any errors from chain above
                 // Will appropriately fail the beforeAll method so other tests won't run

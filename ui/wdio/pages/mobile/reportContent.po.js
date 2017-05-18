@@ -33,6 +33,12 @@
         loadReportByIdInBrowser: {value: function(realmName, app, table, reportId) {
             // Load the requestAppsPage (shows a list of all the apps in a realm)
             RequestAppsPage.get(e2eBase.getRequestAppsPageEndpoint(realmName));
+
+            //wait for hamburger in the topNav
+            TopNavPO.topNavToggleHamburgerEl.waitForVisible();
+            //click on the hamburger in the topNav
+            TopNavPO.topNavToggleHamburgerEl.click();
+
             //select the App
             RequestAppsPage.selectApp(app.name);
             //Select table
