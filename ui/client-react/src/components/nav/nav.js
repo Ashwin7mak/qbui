@@ -29,6 +29,9 @@ import * as ShellActions from '../../actions/shellActions';
 import * as FormActions from '../../actions/formActions';
 import * as ReportActions from '../../actions/reportActions';
 import * as TableCreationActions from '../../actions/tableCreationActions';
+import * as AppActions from '../../actions/appActions';
+
+import {getApp, getApps, getIsAppsLoading} from '../../reducers/app';
 
 import {CONTEXT} from '../../actions/context';
 import ButtonGroup from 'react-bootstrap/lib/ButtonGroup';
@@ -182,10 +185,11 @@ export const Nav = React.createClass({
     },
 
     getSelectedApp() {
-        if (this.state.apps.selectedAppId) {
-            return _.find(this.state.apps.apps, (a) => a.id === this.state.apps.selectedAppId);
-        }
-        return null;
+        return this.props.getApp(this.state.apps.selectedAppId);
+        //if (this.state.apps.selectedAppId) {
+        //    //return _.find(this.state.apps.apps, (a) => a.id === this.state.apps.selectedAppId);
+        //}
+        //return null;
     },
 
     /**
@@ -321,7 +325,7 @@ export const Nav = React.createClass({
 */
 
     render() {
-        if (!this.state.apps || this.state.apps.apps === null) {
+        if (this.props.getApps.length === 0 && this.props.isAppsLoading) {
             // don't render anything until we've made this first api call without being redirected to V2
             // The common loading screen html is shared across server and client as an HTML file and
             // therefore must be loaded using the dangerouslySetInnerHTML attribute
@@ -396,8 +400,9 @@ export const Nav = React.createClass({
                 visible={this.props.shell.leftNavVisible}
                 expanded={this.props.shell.leftNavExpanded}
                 appsListOpen={this.props.shell.appsListOpen}
-                apps={this.state.apps.apps}
-                appsLoading={this.state.apps.loading}
+                apps={this.props.getApps}
+                //appsLoading={this.state.apps.loading}
+                appsLoading={this.props.isAppsLoading}
                 selectedAppId={this.state.apps.selectedAppId}
                 selectedTableId={this.state.apps.selectedTableId}
                 onSelectReports={this.onSelectTableReports}
@@ -416,7 +421,7 @@ export const Nav = React.createClass({
                 />
                 {this.props.routes &&
                 <div className="mainContent" >
-                    <TempMainErrorMessages apps={this.state.apps.apps} appsLoading={this.state.apps.loading} selectedAppId={this.state.apps.selectedAppId} />
+                    <TempMainErrorMessages apps={this.props.getApps} appsLoading={this.props.isAppsLoading} selectedAppId={this.state.apps.selectedAppId} />
 
                     <Switch>
                         { this.props.routes.map((route, i) => {
@@ -427,9 +432,9 @@ export const Nav = React.createClass({
 
                             let routeProps = {
                                 key : this.props.match ? this.props.match.url : "",
-                                apps: this.state.apps.apps,
+                                apps: this.props.getApps,
                                 selectedAppId: this.state.apps.selectedAppId,
-                                appsLoading: this.state.apps.loading,
+                                appsLoading: this.props.isAppsLoading,
                                 reportData: reportsData,
                                 appUsers: this.state.apps.appUsers,
                                 appUsersUnfiltered: this.state.apps.appUsersUnfiltered,
@@ -465,9 +470,10 @@ export const Nav = React.createClass({
      * new table was created, ensure it is displayed available in the UI
      */
     tableCreated(tblId) {
-        const flux = this.getFlux();
+        //const flux = this.getFlux();
 
         flux.actions.loadApps();
+        //this.props.loadApps();
 
         // store any new table IDs for duration of session for table homepage
         if (window.sessionStorage) {
@@ -519,6 +525,9 @@ export const Nav = React.createClass({
 
 const mapStateToProps = (state) => {
     return {
+        getApp: (appId) => getApp(state.app, appId),
+        getApps: getApps(state.app),
+        isAppsLoading: getIsAppsLoading(state.app),
         forms: state.forms,
         shell: state.shell,
         record: state.record,
@@ -550,17 +559,21 @@ const mapDispatchToProps = (dispatch) => {
 
         showTableReadyDialog: () => dispatch(TableCreationActions.showTableReadyDialog()),
 
-        enterBuilderMode: (context) => dispatch(enterBuilderMode(context))
+        enterBuilderMode: (context) => dispatch(enterBuilderMode(context)),
+
+        loadApps: () => dispatch(AppActions.loadApps())
     };
 };
 
-export const NavWithRouter = withRouter(Nav);
-export const ConnectedNavRoute = withRouter(connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(Nav));
+//export const NavWithRouter = withRouter(Nav);
+//export const ConnectedNavRoute = withRouter(connect(
+//    mapStateToProps,
+//    mapDispatchToProps
+//)(Nav));
 
-export default withRouter(connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(NavWithRouter));
+//export default withRouter(connect(
+//    mapStateToProps,
+//    mapDispatchToProps
+//)(NavWithRouter));
+
+export default connect(mapStateToProps, mapDispatchToProps)(Nav);

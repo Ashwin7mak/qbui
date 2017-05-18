@@ -28,36 +28,37 @@ let appsActions = {
      * @param hydrate
      * @returns Promise
      */
-    loadApps(hydrate) {
-        let logger = new Logger();
-        //  promise is returned in support of unit testing only
-        return new Promise((resolve, reject) => {
-            this.dispatch(actions.LOAD_APPS);
-            let appService = new AppService();
-
-            //  fetch the list of apps that this user can view.  If hydrate == true, then a
-            //  fully initialized table object is returned for each table in the app.  If
-            //  hydrate !== true, then just a list of table ids is returned.
-            appService.getApps(hydrate).then(
-                response => {
-                    logger.debug('AppService getApps success');
-                    // TODO: move model reference into store when migrate to redux
-                    let model = appsModel.set(response.data);
-                    this.dispatch(actions.LOAD_APPS_SUCCESS, model);
-                    resolve();
-                },
-                error => {
-                    logger.parseAndLogError(LogLevel.ERROR, error.response, 'appService.getApps:');
-                    this.dispatch(actions.LOAD_APPS_FAILED, error.response.status);
-                    reject();
-                }
-            ).catch(ex => {
-                // TODO - remove catch block and update onPossiblyUnhandledRejection bluebird handler
-                logger.logException(ex);
-                reject();
-            });
-        });
-    },
+    //loadApps(hydrate) {
+    //    let logger = new Logger();
+    //    //  promise is returned in support of unit testing only
+    //    return new Promise((resolve, reject) => {
+    //        this.dispatch(actions.LOAD_APPS);
+    //        let appService = new AppService();
+    //
+    //        //  fetch the list of apps that this user can view.  If hydrate == true, then a
+    //        //  fully initialized table object is returned for each table in the app.  If
+    //        //  hydrate !== true, then just a list of table ids is returned.
+    //        appService.getApps(hydrate).then(
+    //            response => {
+    //                logger.debug('AppService getApps success');
+    //                // TODO: move model reference into store when migrate to redux
+    //                //let model = appsModel.set(response.data);
+    //                let model = new appsModel(response.data);
+    //                this.dispatch(actions.LOAD_APPS_SUCCESS, model.getApps());
+    //                resolve();
+    //            },
+    //            error => {
+    //                logger.parseAndLogError(LogLevel.ERROR, error.response, 'appService.getApps:');
+    //                this.dispatch(actions.LOAD_APPS_FAILED, error.response.status);
+    //                reject();
+    //            }
+    //        ).catch(ex => {
+    //            // TODO - remove catch block and update onPossiblyUnhandledRejection bluebird handler
+    //            logger.logException(ex);
+    //            reject();
+    //        });
+    //    });
+    //},
 
     selectAppId(appId) {
         //  promise is returned in support of unit testing only
@@ -70,8 +71,9 @@ let appsActions = {
                 appService.getAppComponents(appId).then(response => {
                     let users = response.data.users;
                     // TODO: move model reference into store when migrate to redux
-                    let model = appsModel.set([response.data.app]);
-                    this.dispatch(actions.SELECT_APP_SUCCESS, {users: users, app: model[0]});
+                    //let model = appsModel.set([response.data.app]);
+                    let model = new appsModel([response.data.app]);
+                    this.dispatch(actions.SELECT_APP_SUCCESS, {users: users, app: model.getApps()});
                     resolve();
                 }, () => {
                     this.dispatch(actions.SELECT_APP_FAILED);

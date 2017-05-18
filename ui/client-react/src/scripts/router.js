@@ -78,7 +78,7 @@ const withFlux = (ComponentToWrap) => {
     return WrappedComponent;
 };
 
-const ConnectedNav = connect(mapStateToProps)(withFlux(NavWrapper)); // pass Redux state as qbui prop
+const ConnectedNav = withFlux(NavWrapper);
 const ConnectedBuilderNav = connect(mapStateToProps)(withFlux(BuilderWrapper)); // pass Redux state as qbui prop
 const ConnectedSettingsNav = connect(mapStateToProps)(withFlux(SettingsWrapper)); // pass Redux state as qbui prop
 

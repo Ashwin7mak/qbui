@@ -1,6 +1,7 @@
 import {combineReducers} from 'redux';
 
 import user from '../../../reuse/client/src/reducers/userReducer';
+import app from './app';
 import fields from './fields';
 import forms from './forms';
 import record from './record';
@@ -18,6 +19,7 @@ import facets from '../../../reuse/client/src/components/facets/facetMenuReducer
 
 // combine individual reducers into a single root reducer (qbui)
 export default combineReducers({
+    app,
     user,
     animation,
     featureSwitches,

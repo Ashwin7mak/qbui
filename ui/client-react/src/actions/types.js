@@ -3,7 +3,9 @@
  */
 
 //  **** App actions ****
-//      ...
+export const LOAD_APPS = 'LOAD_APPS';
+export const LOAD_APPS_SUCCESS = 'LOAD_APPS_SUCCESS';
+export const LOAD_APPS_ERROR = 'LOAD_APPS_ERROR';
 
 //  ******** Form actions ********
 export const LOADING_FORM = 'LOADING_FORM';

@@ -10,6 +10,7 @@ import LeftNav from '../../../../reuse/client/src/components/sideNavs/standardLe
 import {AVAILABLE_ICON_FONTS} from '../../../../reuse/client/src/components/icon/icon';
 import {toggleLeftNav} from '../../actions/shellActions';
 import * as FeatureSwitchActions from '../../actions/featureSwitchActions';
+import * as AppActions from '../../actions/appActions';
 import {I18nMessage} from '../../utils/i18nMessage';
 import RouteWithSubRoutes from "../../scripts/RouteWithSubRoutes";
 
@@ -60,6 +61,7 @@ export const SettingsWrapper = React.createClass({
             let app = this.getAppFromState(paramVals.appId);
             if (!app) {
                 this.props.flux.actions.loadApps();
+                //this.props.loadApps();
             }
 
             this.props.flux.actions.selectAppId(paramVals.appId);
@@ -75,6 +77,7 @@ export const SettingsWrapper = React.createClass({
             }
         } else {
             this.props.flux.actions.loadApps();
+            //this.props.loadApps();
         }
     },
     componentWillReceiveProps(props) {
@@ -163,9 +166,8 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        toggleNav: () =>{
-            dispatch(toggleLeftNav());
-        }
+        toggleNav: () => dispatch(toggleLeftNav()),
+        loadApps: () => dispatch(AppActions.loadApps())
     };
 };
 

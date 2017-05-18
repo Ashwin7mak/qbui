@@ -1,7 +1,11 @@
 import React from 'react';
+import {connect} from 'react-redux';
+import {withRouter} from 'react-router-dom';
+
 import Nav from './nav';
 import * as ReportActions from '../../actions/reportActions';
 import * as FeatureSwitchActions from '../../actions/featureSwitchActions';
+import * as AppActions from '../../actions/appActions';
 import * as SearchActions from '../../actions/searchActions';
 import {CONTEXT} from '../../actions/context';
 import Configuration from '../../config/app.config';
@@ -39,7 +43,7 @@ let NavWrapper = React.createClass({
     getChildContext() {
         return {
             touch: this.state.touch,
-            locales: this.props.qbui.shell.locales
+            locales: this.props.shell.locales
         };
     },
     render() {
@@ -63,7 +67,8 @@ let NavWrapper = React.createClass({
             // see if the app is already loaded in state
             let app = this.getAppFromState(paramVals.appId);
             if (!app) {
-                this.props.flux.actions.loadApps();
+                //this.props.flux.actions.loadApps();
+                this.props.loadApps();
             }
 
             this.props.flux.actions.selectAppId(paramVals.appId);
@@ -79,7 +84,8 @@ let NavWrapper = React.createClass({
                 }
             }
         } else {
-            this.props.flux.actions.loadApps();
+            //this.props.flux.actions.loadApps();
+            this.props.loadApps();
         }
     },
     /**
@@ -121,11 +127,26 @@ let NavWrapper = React.createClass({
     },
 
     getAppFromState(appId) {
-        if (appId && _.has(this.state.apps, 'apps')) {
-            return _.find(this.state.apps.apps, (a) => a.id === appId);
-        }
-        return null;
+        return this.props.getApp(appId);
+        //if (appId && _.has(this.state.apps, 'apps')) {
+        //    return _.find(this.state.apps.apps, (a) => a.id === appId);
+        //}
+        //return null;
     }
 });
 
-export default NavWrapper;
+const mapStateToProps = (state) => ({
+    shell: state.shell,
+    getApp: (appId) => getApp(state.app, appId)
+});
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        loadApps: () => dispatch(AppActions.loadApps())
+    };
+};
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(NavWrapper));
+
+
+
