@@ -28,6 +28,12 @@ const reportBuilder = (
             availableColumns: columns
         };
     }
+    case types.TOGGLE_FIELD_SELECT_MENU: {
+        return {
+            ...state,
+            isCollapsed: !state.isCollapsed
+        }
+    }
     case types.OPEN_FIELD_SELECT_MENU: {
         return {
             ...state,

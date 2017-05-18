@@ -57,6 +57,10 @@ export const refreshFieldSelectMenu = (context, appId, tblId) => {
     };
 };
 
+export const toggleFieldSelectMenu = (context) => {
+    return event(context, types.TOGGLE_FIELD_SELECT_MENU, {});
+}
+
 /**
  * Toggle the field select menu open.
  * @param context
