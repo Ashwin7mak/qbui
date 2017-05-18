@@ -600,7 +600,9 @@ module.exports = function(grunt) {
                     forms: [
                         './wdio/tests/forms/formAdd.e2e.spec.js',
                         './wdio/tests/forms/formAddValidation.e2e.spec.js',
-                        './wdio/tests/forms/formBuilder.e2e.spec.js',
+                        './wdio/tests/forms/formBuilder/non-pairs.e2e.spec.js',
+                        './wdio/tests/forms/formBuilder/pairs-keyboard.e2e.spec.js',
+                        './wdio/tests/forms/formBuilder/pairs-non-keyboard.e2e.spec.js',
                         './wdio/tests/forms/formEdit.e2e.spec.js',
                         './wdio/tests/forms/formEditValidation.e2e.spec.js'
                     ],
