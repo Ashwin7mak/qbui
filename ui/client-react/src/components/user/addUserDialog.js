@@ -1,7 +1,4 @@
 import React from 'react';
-import {PropTypes} from 'react';
-//import TableCreationPanel from './tableCreationPanel';
-//import TableCreationSummaryPanel from './tableCreationSummaryPanel';
 import MultiStepDialog from '../../../../reuse/client/src/components/multiStepDialog/multiStepDialog';
 import {connect} from 'react-redux';
 import {NotificationManager} from 'react-notifications';
@@ -9,9 +6,6 @@ import {I18nMessage} from "../../utils/i18nMessage";
 import * as addUserActions from '../../actions/addUserActions';
 import AddUserPanel from './addUserPanel';
 import Locale from '../../locales/locales';
-import UrlUtils from '../../utils/urlUtils';
-import _ from 'lodash';
-import AppHistory from '../../globals/appHistory';
 import './addUserDialog.scss';
 
 export class AddUserDialog extends React.Component {
@@ -23,7 +17,6 @@ export class AddUserDialog extends React.Component {
             isValid: false
         }
         // bind to fix context for event handlers
-
         this.onFinished = this.onFinished.bind(this);
         this.onCancel = this.onCancel.bind(this);
         this.isValid = this.isValid.bind(this);
@@ -38,14 +31,15 @@ export class AddUserDialog extends React.Component {
     }
 
     /**
-     * last page has finished
+     * On click of the Add Button
      */
     onFinished() {
         const userInfo = {
+            // refs is used here to get the instance of
+            // AddUserPanel, as opposed to using redux/flux actions
             userId: this.userPanel.getSelectedUser(),
             roleId: this.props.userRoleToAdd,
         };
-        // Add the user
         this.props.assignUserToApp(this.props.appId, userInfo).then(
             (response) => {
                 this.props.hideAddUserDialog();
@@ -59,39 +53,22 @@ export class AddUserDialog extends React.Component {
     }
 
     /**
-     * check for any validation errors in tableInfo
+     * check for any validation errors
      * @returns {boolean}
      */
     isValid(validState) {
         this.setState({
             isValid: validState
         });
-        // form can be saved if the state if the fields is valid, regardless of what previous validation error is being shown
-
-        // return this.props.tableCreation.edited && !_.findKey(this.props.tableInfo, (field) => field.pendingValidationError);
     }
 
     /**
-     * get table names for app
-     */
-    getExistingTableNames() {
-
-        return this.props.app.tables.map((table) => table.name);
-    }
-
-    /**
-     * render the multi-step modal dialog for creating a table
+     * render the multi-step modal dialog
      * @returns {XML}
      */
     render() {
 
         const classes = ['addUserDialog'];
-        //
-        // // if icon chooser is open, add class to allow it to overflow the bottom buttons (while open)
-        // if (this.props.tableCreation.iconChooserOpen) {
-        //     classes.push('allowOverflow');
-        // }
-
         return (<MultiStepDialog show={this.props.addUser.dialogOpen}
                                  isLoading={this.props.addUser.savingUser}
                                  classes={classes.join(' ')}
@@ -117,19 +94,12 @@ export class AddUserDialog extends React.Component {
 }
 
 AddUserDialog.propTypes = {
-    // app: PropTypes.object.isRequired,
-    // tableCreation: PropTypes.object.isRequired,
-    // tableInfo: PropTypes.object.isRequired,
-    // setEditingProperty: PropTypes.func.isRequired,
-    // hideTableCreationDialog: PropTypes.func.isRequired,
-    // createTable: PropTypes.func.isRequired,
-    // onTableCreated: PropTypes.func.isRequired
+    // TODO: add proptypes
 };
 
 const mapStateToProps = (state) => {
     return {
         addUser: state.addUser,
-        // tableInfo: state.tableCreation.tableInfo // pass the nested info as a prop to be nice
     };
 };
 

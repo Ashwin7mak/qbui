@@ -47,7 +47,7 @@ class MultiStepDialog extends React.Component {
 
     renderIcons() {
         return (
-            <div onClick={this.cancelClicked} className={"multiStepDialogRightIcons"}>
+            <div className={"multiStepDialogRightIcons"}>
                 <button className="closeButton" onClick={this.cancelClicked}><Icon icon={"close"}/></button>
             </div>);
     }

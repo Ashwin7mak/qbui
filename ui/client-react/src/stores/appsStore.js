@@ -53,13 +53,15 @@ let AppsStore = Fluxxor.createStore({
             actions.UNASSIGN_USERS_SUCCESS, this.onUnasssignUsersSuccess,
 
             actions.LOAD_ALL_USERS, this.onLoadAllUsers,
-            actions.LOAD_ALL_USERS_SUCCESS, this.onLoadAllUsersSuccess,
+            actions.SEARCH_ALL_USERS_SUCCESS, this.onLoadAllUsersSuccess,
 
             actions.ADD_USER, this.onAddUser,
-            actions.SET_USER_ROLE_TO_ADD, this.onSetUserRoleToAdd,
+            actions.SET_USER_ROLE_TO_ADD_TO_APP, this.onSetUserRoleToAdd,
 
             actions.GET_APP_USERS_SUCCESS, this.onGetAppUsersSuccess,
             actions.GET_APP_USERS_FAILED, this.onGetAppUserFailed,
+
+            actions.ASSIGN_USERS_TO_APP_SUCCESS, this.assignUsersToAppSuccess,
         );
 
         this.logger = new Logger();
@@ -120,7 +122,6 @@ let AppsStore = Fluxxor.createStore({
         this.error = false;
 
         //  update app users list
-        console.log(selectedApp, "selectedAPP");
         if (_.has(selectedApp, 'users')) {
             const userArray = selectedApp.users;
             this.appUsers = userArray[0];
@@ -267,6 +268,10 @@ let AppsStore = Fluxxor.createStore({
     },
 
     onGetAppUserFailed() {
+        this.emit('change');
+    },
+
+    assignUsersToAppSuccess() {
         this.emit('change');
     },
 

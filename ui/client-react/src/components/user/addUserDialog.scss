@@ -40,13 +40,22 @@
 
   .multiStepModal.addUserDialog .modal-dialog {
 
-    .modal-body > *:first-child {
-      height: 300px;
+    .modal-content {
+      height: 320px;
+      width: 550px;
+      .bodyContainer{
+        height: 0;
+      }
     }
-    width: 600px;
+
+    .modal-body > *:first-child {
+      height: 320px;
+    }
+    width: 550px;
 
     .finishedButton, .cancelButton {
       padding: 8px 34px;
+      z-index: 1000000;
     }
     .cancelButton{
       border: none;
@@ -59,10 +68,16 @@
 
     .Select-menu{
       max-height: 100px;
+
+    }
+
+    .assignRole{
+      z-index: 10000000;
     }
 
     .modal-footer{
       padding-right: 70px;
+      margin-top: 250px;
     }
   }
 
@@ -96,12 +111,6 @@
     width: 420px;
     .iconChooser.open {
       width: 100%;
-    }
-    .tableField {
-      width: 100%;
-    }
-    .tableField:first-of-type {
-      padding-right: 0;
     }
   }
 }

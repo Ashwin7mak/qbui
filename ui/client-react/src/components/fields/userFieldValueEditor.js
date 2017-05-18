@@ -72,7 +72,6 @@ const UserFieldValueEditor = React.createClass({
             return this.props.isValid(user);
         }
         return this.props.isValid(false);
-        // TODO: send selected user value to flux
     },
 
     /**
@@ -85,11 +84,9 @@ const UserFieldValueEditor = React.createClass({
     },
 
     isUserInApp(user) {
-        let userInApp;
         let roles = this.props.existingUsers;
-
-        return _.find(Object.keys(roles) ,(role)=>{
-            return userInApp = _.find(roles[role], (existingUser)=>{
+        return _.find(Object.keys(roles), (role)=>{
+            return _.find(roles[role], (existingUser)=>{
                 return existingUser.userId === user.userId;
             });
         });
@@ -122,7 +119,7 @@ const UserFieldValueEditor = React.createClass({
     /**
      * handle onBlur (invoke parent prop callback)
      */
-    onBlur(e) {
+    onBlur() {
         if (this.props.onBlur) {
             const datatypeAttributes = this.props.fieldDef && this.props.fieldDef.datatypeAttributes ? this.props.fieldDef.datatypeAttributes : {};
             const user = this.getAppUser(this.state.selectedUserId);
@@ -140,7 +137,6 @@ const UserFieldValueEditor = React.createClass({
      * @param option user object with value & email flag
      */
     renderOption(option) {
-        console.log(option)
         if (option.value === null) {
             return <div>&nbsp;</div>; // placeholder for no-user
         }
@@ -155,7 +151,7 @@ const UserFieldValueEditor = React.createClass({
                     <div className="userLabel">{userLabel} {user.screenName &&
                     <span>({user.screenName})</span>} {user.deactivated &&
                     <span className="deactivatedLabel">(deactivated)</span>}</div>
-                    { user.email && <div className="email">{user.email}</div>}
+                    {(option.showEmail || this.props.isAddUser) && user.email && <div className="email">{user.email}</div>}
                 </div>);
         } else {
             return <div className="hidden">&nbsp;</div>;
@@ -187,12 +183,11 @@ const UserFieldValueEditor = React.createClass({
     },
 
     loadAsyncOptions(input, callback) {
-        if (input === '') {
-            return callback(null, {
+        return input === '' ?
+            callback(null, {
                 options: this.getSelectItems(),
                 complete: false
-            });
-        }
+            }) :
         this.props.searchUsers(input).then(()=>{
             callback(null, {
                 options: this.getSelectItems(),
@@ -200,16 +195,6 @@ const UserFieldValueEditor = React.createClass({
             });
         });
     },
-
-    /**
-     * Called when the user types text into the react-select input.
-     * @param {String} newInputValue value of the react-select input
-     */
-    // onInputChange(newInputValue) {
-    //     //make api call
-    //     this.setState({inputValue: newInputValue});
-    //     this.props.searchUsers(newInputValue);
-    // },
 
     /**
      * user picker wrapper on react-select component

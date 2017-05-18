@@ -51,7 +51,6 @@ class TableService extends BaseService {
      * @param table object of structure {name: "name", description: "desc", tableIcon: "icon", tableNoun: "noun"}
      */
     createTableComponents(appId, tableInfo) {
-        console.log(tableInfo)
         let url = super.constructUrl(this.API.CREATE_TABLE_COMPONENTS, [appId]);
         return super.post(url, tableInfo);
     }

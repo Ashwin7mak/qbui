@@ -159,23 +159,22 @@ let appsActions = {
         return new Promise((resolve, reject) => {
             let roleService = new RoleService();
             roleService.getAllUsers(searchTerm).then(response => {
-                this.dispatch(actions.LOAD_ALL_USERS_SUCCESS, response.data);
+                this.dispatch(actions.SEARCH_ALL_USERS_SUCCESS, response.data);
                 resolve();
             }, () => {
-                this.dispatch(actions.LOAD_APP_OWNER_FAILED);
+                this.dispatch(actions.SEARCH_ALL_USERS_FAILED);
                 reject();
             });
         });
     },
 
-    // this function should be utilized to reflect updates to the App users
+    // this function should be utilized to dispatch actions for updates made to App users
     // (such as remove user from app) to ensure integrity of backend and frontend data at eveny instance
+
     getAppUsers(appId, roleId) {
         return new Promise((resolve, reject) => {
-            // appsActions.getAppUsers(appId, roleId);
             let appService = new AppService();
             appService.getAppUsers(appId).then(response2 => {
-                console.log(response2, "response2")
                 this.dispatch(actions.GET_APP_USERS_SUCCESS, {appUsers: response2.data, roleId});
                 resolve();
             }, () => {
@@ -189,7 +188,9 @@ let appsActions = {
         return new Promise((resolve, reject) => {
             let roleService = new RoleService();
             roleService.assignUserToApp(appId, userId, roleId).then(response => {
-                // For some reason calling appsActions.getAppUsers is not feasible, hence the call is made here
+                this.dispatch(actions.ASSIGN_USERS_TO_APP_SUCCESS, {userId, roleId});
+                // would prefer to use the abstracted appsActions.getAppUsers function but calling
+                // it doesnt dispatch the action GET_APP_USERS_SUCCESS
                 let appService = new AppService();
                 appService.getAppUsers(appId).then(payload => {
                     this.dispatch(actions.GET_APP_USERS_SUCCESS, {appUsers: payload.data, userId: userId});
@@ -208,7 +209,7 @@ let appsActions = {
     },
 
     setUserRoleToAdd(roleId) {
-        this.dispatch(actions.SET_USER_ROLE_TO_ADD, roleId);
+        this.dispatch(actions.SET_USER_ROLE_TO_ADD_TO_APP, roleId);
     }
 };
 

@@ -1,4 +1,3 @@
-import {Component, PropTypes} from 'react';
 import React from 'react';
 import UserFieldValueEditor from '../fields/userFieldValueEditor';
 import Select from 'react-select';
@@ -19,8 +18,6 @@ class addUserPanel extends React.Component {
             if (appRole.name === defaultRole) {defaultRole = appRole.id;}
             return {value: appRole.id, label: appRole.name, clearableValue: false};
         });
-        // Default state isn't working as expected this is a quick fix
-        // might need to refactor
         if (this.state.selectedRole === '') {
             this.state.selectedRole = defaultRole;
             this.props.setUserRoleToAdd(defaultRole);
@@ -31,6 +28,7 @@ class addUserPanel extends React.Component {
         this.setState({
             selectedRole: roleId
         });
+        // used to add user during API call
         this.props.setUserRoleToAdd(roleId);
     }
     getSelectedUser() {
@@ -54,7 +52,7 @@ class addUserPanel extends React.Component {
         return (
             <div className = "panelContainer">
                 <div className="selectUser panel-items">
-                    <dt>Select Users</dt>
+                    <dt>Select users</dt>
                     <dd>
                         <UserFieldValueEditor
                             appUsers={appUsers}
@@ -68,16 +66,21 @@ class addUserPanel extends React.Component {
                     </dd>
                 </div>
                 <div className="assignRole panel-items">
-                    Assign Roles
-                    <Select autofocus options={this.getRoles()} searchable={false} simpleValue clearable={false} value={this.state.selectedRole} onChange={this.updateRole}/>
-
+                    Assign role
+                    <Select
+                        autofocus
+                        options={this.getRoles()}
+                        searchable={false}
+                        simpleValue
+                        clearable={false}
+                        value={this.state.selectedRole}
+                        onChange={this.updateRole}
+                    />
                 </div>
 
             </div>
         );
     }
-
 }
-
 
 export default addUserPanel;
