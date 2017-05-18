@@ -70,13 +70,12 @@ export class ReportBuilderContainer extends Component {
         let name = this.props.reportData.data ? this.props.reportData.data.name : '';
         let columns = this.props.reportData.data ? this.props.reportData.data.columns : [];
         let records = this.props.reportData.data ? this.props.reportData.data.records : [];
-        let recordShowLimit = 25;
+        let recordShowLimit = 50;
         let transformedColumns = ReportColumnTransformer.transformColumnsForGrid(columns);
         transformedColumns.forEach(column => {
             column.fieldDef.userEditableValue = false;
         });
         let transformedRows = ReportRowTransformer.transformRecordsForGrid(_.take(records, recordShowLimit), columns);
-        let numberOfRecords = records.length;
         let content = this.getReportBuilderContent(transformedColumns, transformedRows);
         return (
             <div className="reportBuilderContainer">
@@ -129,15 +128,7 @@ ReportBuilderContainer.propTypes = {
 
     /**
      * A route that will be redirected to after a save/cancel action. Currently passed through mapState. */
-    redirectRoute: PropTypes.string,
-
-    /**
-     * Controls the open state of the left tool panel */
-    isOpen: PropTypes.bool,
-
-    /**
-     * Controls the collapsed state of the left tool panel */
-    isCollapsed: PropTypes.bool
+    redirectRoute: PropTypes.string
 };
 
 const mapStateToProps = (state) => {
