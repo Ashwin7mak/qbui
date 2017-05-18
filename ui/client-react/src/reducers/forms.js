@@ -31,7 +31,7 @@ const forms = (
     case types.SHOW_RELATIONSHIP_DIALOG: {
         return {
             ...state,
-            readyToShowRelationshipDialog: state.show
+            readyToShowRelationshipDialog: action.show
 
         };
     }
@@ -39,7 +39,7 @@ const forms = (
         return {
             ...state,
             draggingLinkToRecord: action.dragging,
-            readyToShowRelationshipDialog: state.draggingLinkToRecord && !action.dragging // show relationship dialogs waiting for drop
+            readyToShowRelationshipDialog: (state.draggingLinkToRecord === true) && !action.dragging // show relationship dialogs waiting for drop
         };
     }
 

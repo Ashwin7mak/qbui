@@ -523,12 +523,19 @@ describe('Form Actions', () => {
         });
     });
 
-    describe('isInDraggingState', () => {
-        it('creates an action that updates dragging state to true', () => {
-            expect(formActions.isInDraggingState('view')).toEqual({
-                id: 'view',
-                type: types.IS_DRAGGING,
-                content: null});
+    describe('showRelationshipDialog', () => {
+        it('creates an action that updates showRelationshipDialog state to true', () => {
+            expect(formActions.showRelationshipDialog(true)).toEqual({
+                type: types.SHOW_RELATIONSHIP_DIALOG,
+                show: true});
+        });
+    });
+
+    describe('draggingLinkToRecord', () => {
+        it('creates an action that updates draggingLinkToRecord state to true', () => {
+            expect(formActions.draggingLinkToRecord(true)).toEqual({
+                type: types.DRAGGING_LINK_TO_RECORD,
+                dragging: true});
         });
     });
 
