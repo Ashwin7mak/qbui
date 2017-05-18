@@ -14,7 +14,7 @@ import {loadAppRoles} from '../../../../actions/appRoleActions';
 import {getAppRoles} from '../../../../reducers/appRoles';
 import './appUsersRoute.scss';
 
-const AppUsersRoute = React.createClass({
+export const AppUsersRoute = React.createClass({
     getInitialState() {
         return {
             roleId: ''
