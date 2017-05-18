@@ -2,6 +2,7 @@ import React from 'react';
 import configureMockStore from 'redux-mock-store';
 import {Provider} from "react-redux";
 import {Link} from 'react-router-dom';
+import {MemoryRouter} from 'react-router-dom';
 import {mount, shallow} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
 import serverTypeConsts from '../../../common/src/constants';
@@ -54,9 +55,12 @@ describe('EmbeddedAddChildLink', () => {
         const store = mockStore({embeddedReports: {}});
 
         component = mount(
-            <Provider store={store}>
-                <EmbeddedAddChildLink />
-            </Provider>);
+            <MemoryRouter>
+                <Provider store={store}>
+                    <EmbeddedAddChildLink />
+                </Provider>
+            </MemoryRouter>
+                );
         expect(component).toBePresent();
     });
 

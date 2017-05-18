@@ -4,8 +4,6 @@ import {Link} from 'react-router-dom';
 import {withRouter} from 'react-router-dom';
 
 import {addChildRecord} from '../../../actions/recordActions';
-import withUniqueId from '../../hoc/withUniqueId';
-import {CONTEXT} from '../../../actions/context';
 import QBicon from '../../qbIcon/qbIcon';
 
 import UrlUtils from '../../../utils/urlUtils';
@@ -36,7 +34,8 @@ export const EmbeddedAddChildLink = React.createClass({
     render() {
         const {childAppId, childTableId, childReportId, detailKeyFid, detailKeyValue, childTableNoun, location} = this.props;
         // render add child link
-        const link = UrlUtils.getAddRelatedChildLink(location.pathname, childAppId, childTableId, childReportId, detailKeyFid, encodeURI(detailKeyValue));
+        const urlPath = _.get(location, 'pathname', '');
+        const link = UrlUtils.getAddRelatedChildLink(urlPath, childAppId, childTableId, childReportId, detailKeyFid, encodeURI(detailKeyValue));
         const noun = childTableNoun ? childTableNoun.toLowerCase() : Locale.getMessage("records.singular");
         const childTableMessage = <I18nMessage message="relationship.addChildRecord" tableNoun={noun}/>;
         return (

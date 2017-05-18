@@ -55,7 +55,7 @@ export const Record = React.createClass({
     handleEditRecordStart() {
         let origRec = null;
         let changes = {};
-        let queryParams = this.props.location.query;
+        let queryParams = _.get(this.props, 'location.query', {});
         if (this.props.recId) {
             origRec = this.getOrigRec();
         } else if (this.props.formData && !this.props.formData.record) {

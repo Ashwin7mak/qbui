@@ -40,7 +40,7 @@ export const RecordTrowser = React.createClass({
         recId: React.PropTypes.string,
         editingAppId: React.PropTypes.string,
         editingTblId: React.PropTypes.string,
-        editingRecId: React.PropTypes.string,
+        editingRecId: React.PropTypes.number,
         editingApp: React.PropTypes.object,
         editingTable: React.PropTypes.object,
         viewingRecordId: React.PropTypes.string,
