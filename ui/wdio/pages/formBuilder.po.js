@@ -256,7 +256,7 @@ class formBuilderPage {
         } catch (err) {
             // hoping to avoid "Failed: A window size operation failed because the window is not currently available"
             browser.pause(oneSecond);
-            setViewPortSize(size);
+            setViewPortSize(size, resizeViewport);
         }
     }
 
@@ -312,6 +312,7 @@ class formBuilderPage {
     KB_focusForm() {
         // focus form via keyboard
         this.searchInput.click();
+        browser.pause(this.oneSecond);
         browser.keys(['Tab', 'Enter']);
         return this;
     }

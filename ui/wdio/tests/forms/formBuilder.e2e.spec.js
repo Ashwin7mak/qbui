@@ -38,7 +38,7 @@
                 browser.windowHandleMaximize();
                 browser.buttonUp();
             } catch (err) {
-                browser.pause(1); // catch can't be empty
+                browser.logger.error(err.toString());
             }
             // open first table
             e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
