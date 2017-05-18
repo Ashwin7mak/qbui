@@ -488,6 +488,8 @@ describe('Account Users Actions Tests', () => {
             selected.addSelection(FACET_FIELDID.QUICKBASE_ACCESS_STATUS, 'Quick Base Staff');
             selected.addSelection(FACET_FIELDID.QUICKBASE_ACCESS_STATUS, 'No App Access');
             selected.addSelection(FACET_FIELDID.QUICKBASE_ACCESS_STATUS, 'Paid Seat');
+            selected.addSelection(FACET_FIELDID.QUICKBASE_ACCESS_STATUS, 'Denied');
+            selected.addSelection(FACET_FIELDID.QUICKBASE_ACCESS_STATUS, 'Deactivated');
 
             let facetUsers = actions.facetUser(ACCOUNT_USERS_DATA, selected);
 
