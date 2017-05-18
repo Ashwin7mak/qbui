@@ -25,6 +25,11 @@ describe('AppUsersRoute functions', () => {
         }
     };
 
+    const mockActions = {
+        getAppRoles() {return appRoles;},
+        loadAppRoles() {}
+    };
+
     var IconActionsMock = React.createClass({
         render: function() {
             return (
@@ -36,10 +41,15 @@ describe('AppUsersRoute functions', () => {
     beforeEach(() => {
         spyOn(flux.actions, 'loadAppOwner');
         spyOn(flux.actions, 'selectedUsersRows');
+        spyOn(mockActions, 'getAppRoles');
+        spyOn(mockActions, 'loadAppRoles');
     });
 
     afterEach(() => {
         flux.actions.loadAppOwner.calls.reset();
+        flux.actions.selectedUsersRows.calls.reset();
+        mockActions.getAppRoles.calls.reset();
+        mockActions.loadAppRoles.calls.reset();
     });
 
     it('test render of component', () => {

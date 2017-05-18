@@ -129,7 +129,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        resetTableDeleteNotification: () => { dispatch(notifyTableDeleted(false)) }
+        resetTableDeleteNotification: () => {dispatch(notifyTableDeleted(false));}
     };
 };
 

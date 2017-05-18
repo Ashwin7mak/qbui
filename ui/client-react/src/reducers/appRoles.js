@@ -28,38 +28,38 @@ const appRolesStore = (state = {}, action) => {
     let logger = new Logger();
 
     switch (action.type) {
-        case types.LOAD_APP_ROLES: {
-            // update fields store when loading a form
-            newState[action.appId] = {
-                roles: [],
-                rolesLoading: true,
-                error: false
-            };
-            return newState;
-        }
+    case types.LOAD_APP_ROLES: {
+        // update fields store when loading a form
+        newState[action.appId] = {
+            roles: [],
+            rolesLoading: true,
+            error: false
+        };
+        return newState;
+    }
 
-        case types.LOAD_APP_ROLES_FAILED: {
-            // update fields store when loading a form
-            newState[action.appId] ={
-                roles: [],
-                rolesLoading: false,
-                error: true
-            };
-            return newState;
-        }
+    case types.LOAD_APP_ROLES_FAILED: {
+        // update fields store when loading a form
+        newState[action.appId] = {
+            roles: [],
+            rolesLoading: false,
+            error: true
+        };
+        return newState;
+    }
 
-        case types.LOAD_APP_ROLES_SUCCESS: {
-            // update fields store when loading a form
-            newState[action.appId] ={
-                roles: action.content.roles,
-                rolesLoading: false,
-                error: false
-            };
-            return newState;
-        }
+    case types.LOAD_APP_ROLES_SUCCESS: {
+        // update fields store when loading a form
+        newState[action.appId] = {
+            roles: action.content.roles,
+            rolesLoading: false,
+            error: false
+        };
+        return newState;
+    }
 
-        default:
-            return state;
+    default:
+        return state;
     }
 
 };

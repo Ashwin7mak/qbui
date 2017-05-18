@@ -148,7 +148,7 @@ const AppUsersRoute = React.createClass({
     },
 
     render() {
-        if(this.props.appRoles) {
+        if (this.props.appRoles) {
             return (
                 <div>
                     <Stage stageHeadline={this.getStageHeadline()}
@@ -173,7 +173,7 @@ const AppUsersRoute = React.createClass({
             );
 
         } else {
-            return (<div></div>)
+            return (<div></div>);
         }
     }
 
@@ -187,7 +187,7 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        loadAppRoles: (appId) => { dispatch(loadAppRoles(appId)) }
+        loadAppRoles: (appId) => {dispatch(loadAppRoles(appId));}
     };
 };
 

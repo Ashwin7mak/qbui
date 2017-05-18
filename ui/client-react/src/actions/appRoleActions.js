@@ -29,9 +29,9 @@ export const loadAppRoles = (appId) => {
             // fetch the app roles list if we don't have it already
             roleService.getAppRoles(appId).then(
                 (response) => {
-                dispatch(event(appId, types.LOAD_APP_ROLES_SUCCESS, {roles: response.data}));
-                resolve();
-            }, (errorResponse) => {
+                    dispatch(event(appId, types.LOAD_APP_ROLES_SUCCESS, {roles: response.data}));
+                    resolve();
+                }, (errorResponse) => {
                 let error = errorResponse.response;
                 logger.parseAndLogError(LogLevel.ERROR, error, 'roleService.loadAppRoles:');
                 dispatch(event(appId, types.LOAD_APP_ROLES_FAILED, {error: error}));
