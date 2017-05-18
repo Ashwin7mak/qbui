@@ -45,30 +45,56 @@
         /**
          * Test methods to verify all elements present / hidden in leftNav
          */
-        it('Verify if leftNav apps toggle is displayed and functionality', function() {
+        it('Verify if leftNav collapses of clicking hamburger menu', function() {
+
+            // Step 1 - Verify if the leftNav is expanded
+            expect(browser.isVisible('.expanded')).toBeTruthy();
+
+            // Step 2 - Verify if the hamburger menu is clickable
+            topNavPO.topNavToggleHamburgerEl.click();
+
+            // Step 3 - Verify if the leftNav is collapsed
+            expect(browser.isVisible('.collapsed')).toBeTruthy();
+
+        });
+
+        it('Verify if leftNav caretUp element opens appsList and searches', function() {
 
             // Step 1 - Verify if the left nav caret up element is visible
             leftNavPO.leftNavCaretUpEl.waitForVisible();
 
-            // Step 2 - Verify if the left nav caret up element is clickable and opens apps list
+            // Step 2 - Verify if the left nav caret up element is clickable
             leftNavPO.leftNavCaretUpEl.click();
-            expect((browser.element('.appsList').getAttribute('textContent').length) > 0).toBeTruthy();
 
-            // Step 3 - Verify if the left nav search element is clickable and opens search box
+            // Step 3 - Verify if apps list is open
+            expect((browser.element('.appsList .leftNavLabel').getAttribute('textContent').length) > 0).toBeTruthy();
+
+            // Step 4 - Verify if the left nav search element is clickable
             leftNavPO.leftNavSearchEl.click();
 
-            // Step 4 - Verify if the search box is user editable
+            // Step 5 - Verify if the search box is open
+            expect(browser.isVisible('.open')).toBeTruthy();
+
+            // Step 6 - Verify if the search box is user editable
             leftNavPO.leftNavSearchInputBox.setValue(sampleText1);
 
-            // Step 5 - Verify if the clear search button is clickable
+            // Step 7 - Verify if the clear search button is clickable
             leftNavPO.leftNavClearSearchEl.click();
 
-            // Step 6 - Verify if the left nav search element is clickable and closes search box
+            // Step 8 - Verify if the search box is empty after clearing
+            expect(leftNavPO.leftNavSearchInputBox.getText()).toBeFalsy();
+
+            // Step 9 - Verify if the left nav search element is clickable
             leftNavPO.leftNavSearchEl.click();
 
-            // Step 7 - Verify if the left nav caret up element is clickable and closes apps list
+            // Step 10 - Verify if the search box is closed
+            expect(browser.isVisible('.search')).toBeTruthy();
+
+            // Step 11 - Verify if the left nav caret up element is clickable
             leftNavPO.leftNavCaretUpEl.click();
-            expect((browser.element('.leftNavLabel').getAttribute('textContent').length) > 0).toBeTruthy();
+
+            // Step 12 - Verify if the tables list is open
+            expect((browser.element('.tablesList .leftNavLabel').getAttribute('textContent').length) > 0).toBeTruthy();
 
         });
 
@@ -90,10 +116,10 @@
             topNavPO.topNavToggleHamburgerEl.click();
 
             // Step 5 - Verify if the tables in the collapsed leftNav are mouse-hovered
-            browser.moveToObject('.transitionGroup .tablesList .link');
+            // browser.moveToObject('.transitionGroup .tablesList .link');
         });
 
-        it('Verify if leftNav table search is displayed and functionality', function() {
+        it('Verify if leftNav table search box opens and closes on clicking', function() {
 
             // Step 1 - Verify if the left nav table search is visible
             leftNavPO.leftNavSearchEl.waitForVisible();
@@ -101,15 +127,23 @@
             // Step 2 - Verify if the search element is clickable and opens search box
             leftNavPO.leftNavSearchEl.click();
 
-            // Step 3 - Verify if the search box is user editable
+            // Step 3 - Verify if the search box is open
+            expect(browser.isVisible('.open')).toBeTruthy();
+
+            // Step 4 - Verify if the search box is user editable
             leftNavPO.leftNavSearchInputBox.setValue(sampleText2);
 
-            // Step 4 - Verify if the clear button is clickable
+            // Step 5 - Verify if the clear button is clickable
             leftNavPO.leftNavClearSearchEl.click();
 
-            // Step 5 - Verify if the search element is clickable and closes the search box
+            // Step 6 - Verify if the search box is empty after clearing
+            expect(leftNavPO.leftNavSearchInputBox.getText()).toBeFalsy();
+
+            // Step 7 - Verify if the search element is clickable and closes the search box
             leftNavPO.leftNavSearchEl.click();
-            expect((browser.element('.leftNavLabel').getAttribute('textContent').length) > 0).toBeTruthy();
+
+            // Step 8 - Verify if the search box is closed
+            expect(browser.isVisible('.search')).toBeTruthy();
         });
 
         it('Verify if the reports icon is displayed and verify the name of the report loaded', function() {
@@ -131,51 +165,19 @@
             expect(innerHTML[5]).toEqual('Reports');
         });
 
-        it('Verify leftNav New Table element and its functionality ', function() {
+        it('Verify leftNav New Table button and cancel button', function() {
 
             // Step 1 - Verify if the new table element is visible and verify the length
             leftNavPO.leftNavNewTableEl.waitForVisible();
-            let noOfTablesBeforeCancel = leftNavPO.leftNavTablesList.value.length;
 
             // Step 2 - Verify if the new table element is clickable and open new modal page
             leftNavPO.leftNavNewTableEl.click();
 
-            // Step 3 - Verify if the new table fields are visible and equal to 3
-            leftNavPO.leftNavNewTableFields.waitForVisible();
+            // Step 3 - Verify for the cancel button to be visible
+            leftNavPO.leftNavNewTableCancelBu.waitForVisible();
 
-            // Step 4 - Verify if the new table fields are equal to 3
-            expect(leftNavPO.leftNavNewTableFields.value.length).toEqual(3);
-
-            // Step 5  - Verify if the icon chooser is visible
-            leftNavPO.leftNavNewTableIconSelect.waitForVisible();
-
-            // Step 6 - Verify if the cancel button is clickable and verify the no.of tables after clicking cancel
+            // Step 6 - Verify if the cancel button is clickable
             leftNavPO.leftNavNewTableCancelBu.click();
-            let noOfTablesAfterCancel = leftNavPO.leftNavTablesList.value.length;
-
-            // Step 5 - Verify if the no.of tables before and after clicking cancel are equal
-            expect(noOfTablesBeforeCancel).toEqual(noOfTablesAfterCancel);
-        });
-
-        it('Verify the no.of tables before and after collapse are same on tables page', function() {
-
-            // Step 1 - Open tables home page
-            RequestAppsPage.get(e2eBase.getRequestTableEndpoint(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1));
-
-            // Step 2 - Verify the no.of tables before leftNav collapse
-            expect(browser.isVisible('.expanded')).toBeTruthy();
-            let noOfTablesBeforeCollapse = leftNavPO.leftNavTablesList.value.length;
-
-            // Step 3 - Verify if the hamburger menu is clickable and collapses leftNav
-            topNavPO.topNavToggleHamburgerEl.click();
-
-            // Step 4 - Verify the no.of tables after leftNav collapse
-            expect(browser.isVisible('.collapsed')).toBeTruthy();
-            let noOfTablesAfterCollapse = leftNavPO.leftNavTablesList.value.length;
-
-            // Step 5 - Verify if the no.of tables before and after leftNav collapse are equal
-            expect(noOfTablesBeforeCollapse).toEqual(noOfTablesAfterCollapse);
-
         });
 
         //TODO: MC - 2799 need to be fixed for the below test to pass, Mouse hover on app icon in apps page is not displaying the app name when we have collapsed leftNav
