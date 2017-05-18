@@ -15,17 +15,23 @@ export class ReportSaveOrCancelFooter extends Component {
 
     }
 
-    onClickSave = () => {
-        //HideAppModal();
-        console.log("clicked save");
-        let reportDef = this.props.reportData.data.fids;
-        this.props.saveReport(this.props.appId, this.props.tblId, this.props.rptId, reportDef);
-    };
-
     onCancel = () => {
         this.props.exitBuilderMode(CONTEXT.REPORT.NAV);
         this.props.closeFieldSelectMenu(CONTEXT.REPORT.NAV);
     };
+
+    onClickSave = () => {
+        //HideAppModal();
+        let reportDef = {
+            name: this.props.reportData.data.name,
+            fids: this.props.reportData.data.fids
+        };
+
+        this.props.saveReport(this.props.appId, this.props.tblId, this.props.rptId, reportDef);
+        this.props.exitBuilderMode(CONTEXT.REPORT.NAV);
+        this.props.closeFieldSelectMenu(CONTEXT.REPORT.NAV);
+    };
+
 
     getRightAlignedButtons() {
         return (
