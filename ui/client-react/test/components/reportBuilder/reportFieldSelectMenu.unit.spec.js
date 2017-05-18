@@ -136,12 +136,6 @@ describe('ReportFieldSelectMenu', () => {
         expect(testProps.refreshFieldSelectMenu).toHaveBeenCalledWith(CONTEXT.REPORT.NAV, appId, tblId);
     });
 
-    it('calls close in constructor', () => {
-        component = mount(<ReportFieldSelectMenu {...testProps} appId={appId} tblId={tblId} reportData={reportData}/>);
-
-        expect(testProps.closeFieldSelectMenu).toHaveBeenCalledWith(CONTEXT.REPORT.NAV);
-    });
-
     it('has the correct columns in the list based on the reportData prop', () => {
         component = shallow(<ReportFieldSelectMenu {...testProps} appId={appId} tblId={tblId} reportData={reportData}/>);
 

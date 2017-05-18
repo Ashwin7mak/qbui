@@ -7,7 +7,7 @@ function initializeState() {
     initialState = {
         redirectRoute: null,
         isInBuilderMode: false,
-        isCollapsed: true,
+        isCollapsed: false,
         addBeforeColumn: null,
         availableColumns: []
     };
