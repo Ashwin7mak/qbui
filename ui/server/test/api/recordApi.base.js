@@ -46,7 +46,9 @@
                     return apiBase.executeRequest(apiBase.resolveAppsEndpoint(), consts.POST, appToCreate).then(function(appResponse) {
                         let createdApp = JSON.parse(appResponse.body);
                         log.debug('App create response: ' + JSON.stringify(createdApp));
-                        if (!skipProperties) {
+                        if (skipProperties === true) {
+                            return appResponse;
+                        } else {
                             var initTablePropsPromises = [];
                             createdApp.tables.forEach(function(table, index) {
                                 initTablePropsPromises.push(self.initTableProperties(createdApp.id, table.id, table.name));
@@ -56,8 +58,6 @@
                                 // if all promises successful return the createApp response or code will error to catch block below
                                 return appResponse;
                             });
-                        } else {
-                            return appResponse;
                         }
                     }).catch(function(error) {
                         log.error('Error in createApp');

@@ -154,7 +154,7 @@
 
         it('should update a table with no table properties successfully after first creating table properties', function(done) {
             this.timeout(testConsts.INTEGRATION_TIMEOUT * appWithNoFlags.length);
-            recordBase.createApp(appWithNoFlags, true).then(function(appResponse) {
+            recordBase.createApp(appWithNoFlags, false).then(function(appResponse) {
                 let appWithTablesWithoutProps = JSON.parse(appResponse.body);
                 let tableId = appWithTablesWithoutProps.tables[0].id;
                 let tablesEndpoint = recordBase.apiBase.resolveTablesEndpoint(appWithTablesWithoutProps.id, tableId, true);
