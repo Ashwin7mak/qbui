@@ -21,13 +21,13 @@
     .tableSelector {
         max-width: 300px;
 
-        .tableOption > .qbIcon {
-            color: $iconfont-on-light-normal-color;
-        }
-    }
-    .tableOption {
-        .tableLabel {
-            margin-left: $spacing-x-small;
+        .tableOption {
+            .tableLabel {
+                margin-left: $spacing-x-small;
+            }
+            .qbIcon {
+                color: $iconfont-on-light-normal-color;
+            }
         }
     }
 }
