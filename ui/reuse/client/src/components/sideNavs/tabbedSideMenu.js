@@ -32,6 +32,7 @@ class TabbedSideNav extends Component {
         if (this.props.isCollapsed) {
             classes.push('hideTabs');
         }
+
         return (
             <div className={classes.join(' ')}>
                 <Tabs
