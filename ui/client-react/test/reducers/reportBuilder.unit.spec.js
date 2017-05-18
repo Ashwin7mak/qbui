@@ -5,7 +5,7 @@ let initialState = {};
 
 function initializeState() {
     initialState = {
-        inBuilderMode: false,
+        isInBuilderMode: false,
         isCollapsed: true,
         addBeforeColumn: null,
         availableColumns: []
@@ -16,13 +16,13 @@ beforeEach(() => {
     initializeState();
 });
 
-describe('Test initial state of reportFieldSelectMenu reducer', () => {
+describe('Test initial state of reportBuilder reducer', () => {
     it('return correct initial state', () => {
         expect(reducer(undefined, {})).toEqual(initialState);
     });
 });
 
-describe('ReportFieldSelectMenu reducer functions for refreshing fields', () => {
+describe('reportBuilder reducer functions for refreshing fields', () => {
     it('returns correct state with the correct fields', () => {
         let content = {
             response: {
@@ -78,12 +78,12 @@ describe('ReportFieldSelectMenu reducer functions for refreshing fields', () => 
 
     it('enter builder mode', () => {
         const state = reducer(initialState, {type: types.ENTER_BUILDER_MODE});
-        expect(state.inBuilderMode).toEqual(true);
+        expect(state.isInBuilderMode).toEqual(true);
     });
 
     it('exit builder mode', () => {
-        let openState = {inBuilderMode: true};
+        let openState = {isInBuilderMode: true};
         const state = reducer(openState, {type: types.EXIT_BUILDER_MODE});
-        expect(state.inBuilderMode).toEqual(false);
+        expect(state.isInBuilderMode).toEqual(false);
     });
 });

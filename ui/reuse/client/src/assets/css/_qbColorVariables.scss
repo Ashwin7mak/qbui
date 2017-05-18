@@ -314,7 +314,7 @@ $grid-lefticon-normal-color:                    $color-black-300;
 $grid-lefticon-hover-color:                     $color-cyan-600;
 $grid-line-color:                               $color-black-250;
 $inline-edit-shadow-color:                      $color-black-300;
-$cell-edit-background-edit:                     $color-purple-200;
+$cell-edit-background-edit:                     $color-black-200;
 
 // pagination
 $arrow-normal-color:                        $color-black-700;
@@ -329,12 +329,11 @@ $pagination-mobile-topbar-text-color:       $color-black-100;
 
 // report
 // We need to resolve the pagination color conflicts with the colors in the prior section
-$pagination-iconfont-normal-color:          $color-black-700;
-$pagination-iconfont-disabled-color:        $color-black-400;
-$pagination-iconfont-hover-color:           $color-cyan-400;
+$pagination-iconfont-normal-color:          $iconfont-on-light-normal-color;
+$pagination-iconfont-disabled-color:        $iconfont-on-light-disabled-color;
+$pagination-iconfont-hover-color:           $iconfont-on-light-hover-color;
 $pagination-iconfont-darkblack-color:       $color-black-700;
 $pagination-arrow-hover-color:              $color-black-300;
-$pagination-arrow-dark-hover-color:         $color-black-500;
 
 // Report grouped headers
 $grid-group-row-header-background-color:    $color-black-200;
