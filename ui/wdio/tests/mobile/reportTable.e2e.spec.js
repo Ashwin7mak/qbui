@@ -10,8 +10,8 @@
     let e2ePageBase = requirePO('e2ePageBase');
     let newStackAuthPO = requirePO('newStackAuth');
     let reportContentMobilePO = requireMobilePO('reportContent');
-    let FormsPO = requirePO('formsPage');
-    let ReportTableActionsPO = requirePO('reportTableActions');
+    let formsPO = requirePO('formsPage');
+    let reportTableActionsPO = requirePO('reportTableActions');
 
     describe('Reports - Table report tests for small breakpoint: ', function() {
         let realmName;
@@ -56,7 +56,7 @@
             reportContentMobilePO.waitForReportContent();
 
             // Assert all the records are displayed in the table
-            let recordCount = FormsPO.getRecordsCountInATable();
+            let recordCount = formsPO.getRecordsCountInATable();
             expect(recordCount).toBe(RECORD_COUNT);
 
             //Assert 'add new record' button is visible
@@ -75,7 +75,7 @@
             expect(reportContentMobilePO.reportSortGrpBtn.isVisible()).toBe(true);
 
             // Assert records count total
-            expect(ReportTableActionsPO.getReportRecordsCount()).toBe(RECORD_COUNT + " records");
+            expect(reportTableActionsPO.getReportRecordsCount()).toBe(RECORD_COUNT + " records");
         });
 
     });

@@ -9,11 +9,11 @@
     'use strict';
     // Import the base page object
     let e2ePageBase = requirePO('./e2ePageBase');
-    let TopNavPO = requirePO('topNav');
-    let RequestAppsPage = requirePO('requestApps');
+    let topNavPO = requirePO('topNav');
+    let requestAppsPage = requirePO('requestApps');
     let tableCreatePO = requirePO('tableCreate');
 
-    let ReportContentPage = Object.create(e2ePageBase, {
+    let reportContentPage = Object.create(e2ePageBase, {
         addRecordBtn: {
             get: function() {
                 return browser.element('.reportToolsAndContentContainer .addNewRecord');
@@ -52,15 +52,15 @@
         loadReportByIdInBrowser: {
             value: function(realmName, app, table, reportId) {
                 // Load the requestAppsPage (shows a list of all the apps in a realm)
-                RequestAppsPage.get(e2eBase.getRequestAppsPageEndpoint(realmName));
+                requestAppsPage.get(e2eBase.getRequestAppsPageEndpoint(realmName));
 
                 //wait for hamburger in the topNav
-                TopNavPO.topNavToggleHamburgerEl.waitForVisible();
+                topNavPO.topNavToggleHamburgerEl.waitForVisible();
                 //click on the hamburger in the topNav
-                TopNavPO.topNavToggleHamburgerEl.click();
+                topNavPO.topNavToggleHamburgerEl.click();
 
                 //select the App
-                RequestAppsPage.selectApp(app.name);
+                requestAppsPage.selectApp(app.name);
                 //Select table
                 tableCreatePO.selectTable(table.name);
                 //navigate to the url
@@ -82,5 +82,5 @@
         },
     });
 
-    module.exports = ReportContentPage;
+    module.exports = reportContentPage;
 }());
