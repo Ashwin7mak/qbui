@@ -113,7 +113,11 @@
             expect(browser.isEnabled('.tableHomePageInitial .createTableLink')).toBeTruthy();
 
             //Step 11 - Load a report for the table and verify report elements
-            RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, testApp.id, tableId, 1));
+            if (browserName === 'firefox') {
+                ReportContentPO.selectReport(tableName, 0);
+            }  else {
+                RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, testApp.id, tableId, 1));
+            }
             ReportContentPO.waitForLeftNavLoaded();
             browser.element('.noRowsIcon').waitForVisible();
             expect(browser.element('.recordsCount').getAttribute('textContent')).toBe('0 records');

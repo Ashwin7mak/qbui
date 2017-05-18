@@ -462,6 +462,8 @@
             this.settingsBtn.waitForVisible();
             //Click on settings gear Icon on table global actions
             this.settingsBtn.click();
+            //Need this for container to slide down
+            browser.pause(e2eConsts.shortWaitTimeMs);
             browser.elements('.configSet li').value.map(function(elm) {
                 liElements.push(elm.getAttribute('textContent'));
             });
