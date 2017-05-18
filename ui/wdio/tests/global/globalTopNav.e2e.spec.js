@@ -40,14 +40,8 @@
          * Test Method - checking for usability of topNav on Table homepage
          */
         it('Visibility and usability of topNav on Table homepage', function() {
-            //select the App
-            if (browserName === 'firefox') {
-                RequestAppsPage.selectApp(testApp.name);
-                //select table
-                tableCreatePO.selectTable(testApp.tables[e2eConsts.TABLE1].name);
-            }  else {
-                RequestAppsPage.get(e2eBase.getRequestTableEndpoint(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1));
-            }
+
+            RequestAppsPage.get(e2eBase.getRequestTableEndpoint(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1));
             reportContentPO.waitForLeftNavLoaded();
             TopNavPO.topNavToggleHamburgerEl.waitForVisible();
             //Step1: Verify if the global icons are displayed
@@ -73,11 +67,8 @@
          * Test Method - checking for visibility of topNav on Report homepage
          */
         it('Visibility of topNav on Report homepage', function() {
-            if (browserName === 'firefox') {
-                reportContentPO.selectReport(testApp.tables[e2eConsts.TABLE1].name, 0);
-            } else {
-                RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1));
-            }
+
+            RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1));
             reportContentPO.waitForLeftNavLoaded();
             TopNavPO.topNavToggleHamburgerEl.waitForVisible();
             //Step1: Verify if the global icons are displayed
