@@ -9,6 +9,7 @@
     let reportContentPO = requirePO('reportContent');
     var RequestAppsPage = requirePO('requestApps');
     var UsersTablePage = requirePO('usersTable');
+    var tableCreatePO = requirePO('tableCreate');
 
     describe('Reports Page - TopNav Tests: ', function() {
         var realmName;
@@ -35,11 +36,23 @@
                 return Promise.reject('Error in beforeAll function:' + JSON.stringify(error));
             });
         });
+        /**
+         * Test Method - checking for usability of topNav on Table homepage
+         */
         it('Visibility and usability of topNav on Table homepage', function() {
-            RequestAppsPage.get(e2eBase.getRequestTableEndpoint(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1));
+            //select the App
+            if (browserName === 'firefox') {
+                RequestAppsPage.selectApp(testApp.name);
+                //select table
+                tableCreatePO.selectTable(testApp.tables[e2eConsts.TABLE1].name);
+            }  else {
+                RequestAppsPage.get(e2eBase.getRequestTableEndpoint(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1));
+            }
+            reportContentPO.waitForLeftNavLoaded();
             TopNavPO.topNavToggleHamburgerEl.waitForVisible();
             //Step1: Verify if the global icons are displayed
             TopNavPO.topNavGlobalActDivEl.waitForVisible();
+            reportContentPO.settingsIcon.waitForVisible();
             //Step2: Verify the no.of global action icons
             expect(TopNavPO.topNavGlobalActionsListEl.value.length).toBe(4);
             //Step3: Verify the presence of Feedback and Report issue buttons
@@ -56,28 +69,45 @@
             //Step6: Verify the help button is clickable
             TopNavPO.helpButton.click();
         });
+        /**
+         * Test Method - checking for visibility of topNav on Report homepage
+         */
         it('Visibility of topNav on Report homepage', function() {
-            RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1));
+            if (browserName === 'firefox') {
+                reportContentPO.selectReport(testApp.tables[e2eConsts.TABLE1].name, 0);
+            } else {
+                RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1));
+            }
+            reportContentPO.waitForLeftNavLoaded();
             TopNavPO.topNavToggleHamburgerEl.waitForVisible();
             //Step1: Verify if the global icons are displayed
             TopNavPO.topNavGlobalActDivEl.waitForVisible();
+            reportContentPO.settingsIcon.waitForVisible();
             //Step2: Verify the no.of global action icons
             expect(TopNavPO.topNavGlobalActionsListEl.value.length).toBe(4);
         });
-        //TODO: To be enabled when topNav is added to User/App homepage MC-2646
+        //TODO: To enable these when topNav is added to User/App homepage MC-2646
+        /**
+         * Test Method - checking for visibility of topNav on User homepage
+         */
         xit('Visibility of topNav on User homepage', function() {
             RequestAppsPage.get(e2eBase.getRequestUsersEndpoint(realmName, testApp.id));
             TopNavPO.topNavToggleHamburgerEl.waitForVisible();
             //Step1: Verify if the global icons are displayed
             TopNavPO.topNavGlobalActDivEl.waitForVisible();
+            reportContentPO.settingsIcon.waitForVisible();
             //Step2: Verify the no.of global action icons
             expect(TopNavPO.topNavGlobalActionsListEl.value.length).toBe(4);
         });
+        /**
+         * Test Method - checking for visibility of topNav on App homepage
+         */
         xit('Visibility of topNav on App homepage', function() {
             RequestAppsPage.get(e2eBase.getRequestAppsPageEndpoint(realmName, testApp.id));
             TopNavPO.topNavToggleHamburgerEl.waitForVisible();
             //Step1: Verify if the global icons are displayed
             TopNavPO.topNavGlobalActDivEl.waitForVisible();
+            reportContentPO.settingsIcon.waitForVisible();
             //Step2: Verify the no.of global action icons
             expect(TopNavPO.topNavGlobalActionsListEl.value.length).toBe(4);
 

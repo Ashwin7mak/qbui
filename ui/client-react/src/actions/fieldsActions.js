@@ -39,6 +39,17 @@ export const updateFieldId = (oldFieldId, newFieldId, formId = null, appId, tblI
 };
 
 /**
+ - * setFieldsPropertiesPendingEditToFalse sets isPendingEdits to false
+ - * @param formId
+ - * @returns {{id, type, content}|*}
+ - */
+export const setFieldsPropertiesPendingEditToFalse = () => {
+    return {
+        type: types.SET_IS_PENDING_EDIT_TO_FALSE
+    };
+};
+
+/**
  * Construct fields store update payload
  * @param field
  * @param appId

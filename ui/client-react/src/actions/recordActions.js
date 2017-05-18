@@ -116,7 +116,7 @@ export const editRecordStart = (appId, tblId, recId, origRec, changes, isInlineE
  * @returns {{id, type, content}|{id: *, type: *, content: *}}
  */
 export const editRecordChange = (appId, tblId, recId, origRec, changes) => {
-    let obj = createEditRecordEventObject(appId, tblId, recId, origRec, changes, true, null);
+    let obj = createEditRecordEventObject(appId, tblId, recId, origRec, changes, false, null);
     return event(recId, types.EDIT_RECORD_CHANGE, obj);
 };
 

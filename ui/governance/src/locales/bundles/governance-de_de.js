@@ -10,37 +10,51 @@ export default {
     messages: {
         governance: {
             leftNav: {
-                myApps: "MY APPS DE",
-                manageBilling: "Manage Billing DE",
-                contactSupport: "Contact Support DE",
-                manageUsers: "Manage Users DE",
-                accountSummary: "Account Summary DE",
-                manageApps: "Manage Apps DE",
-                manageGroups: "Manage Groups DE",
-                setAccountProperties: "Set Account Properties DE",
-                setRealmPolicies: "Set Realm Policies DE",
-                editRealmBranding: "Edit Realm Branding DE"
+                myApps: "MEINE APPLIKATIONEN",
+                manageBilling: "Verwaltung",
+                contactSupport: "Kontakt Unterstützung",
+                manageUsers: "Benutzer Verwalten",
+                accountSummary: "Kontoübersicht",
+                manageApps: "Apps Verwalten",
+                manageGroups: "Verwaltungsgruppen",
+                setAccountProperties: "Kontoeigenschaften festlegen",
+                setRealmPolicies: "Set Realm Politiken",
+                editRealmBranding: "Bearbeiten Realm Branding"
             },
             account: {
                 users: {
-                    accessStatus: "Quick Base access status",
-                    userStatus: "User status",
+                    accessStatus: "Quick Base zugriffsstatus",
                     paidSeats: "Paid seats",
-                    paidSeatSingular: "Paid seat",
-                    quickbaseStaff: "Quick Base staff",
-                    inGroup: "In any group",
-                    inactive: "Inactive",
-                    groupManager: "Group manager",
-                    canCreateApps: "Can create apps",
+                    paidSeatSingular: "Bezahlte sitze",
+                    quickbaseStaff: "Quick Base personal",
+                    inGroup: "In jeder gruppe",
+                    inactive: "Inaktiv",
+                    groupManager: "Gruppenleiter",
+                    canCreateApps: "Kann apps erstellen",
                     appManager: "App manager",
-                    realmApproved: "Realm approved",
-                    deniedUsers: "Denied users",
-                    deactivatedUsers: "Deactivated users",
-                    realmDirectoryUsers: "In realm directory",
-                    stageTitle: "Manage All Users",
-                    stageDescription: "Use this page to manage all your Quick Base account and realm users. Take a look around, and ",
+                    realmApproved: "Realm genehmigt",
+                    deniedUsers: "Verweigerte benutzer",
+                    deactivatedUsers: "Deaktivierte benutzer",
+                    realmDirectoryUsers: "Im realm verzeichnis",
+                    stageTitle: "Verwalten sie alle benutzer",
+                    stageDescription: "Verwenden Sie diese Seite, um alle Ihre Quick Base Account- und Realm-Benutzer zu verwalten. Schauen Sie sich um, und ",
                     feedbackLink: "https://team.quickbase.com/db/bmrrmm53x?a=nwr",
-                    feedbackLinkText: "give us feedback"
+                    feedbackLinkText: "Geben sie uns eine rückmeldung",
+                    grid: {
+                        firstName: "VORNAME",
+                        lastName: "NACHNAME",
+                        email: "EMAIL",
+                        userName: "BENUTZERNAME",
+                        lastAccess: "LETZTER ZUGRIFF",
+                        quickbaseAccessStatus: "QUICK BASE ZUGANGSSTATUS",
+                        inactive: "INAKTIV?",
+                        inAnyGroup: "IN EINER GRUPPE?",
+                        groupManager: "GRUPPENLEITER",
+                        canCreateApps: "KANN APPS SCHAFFEN",
+                        appManager: "APP MANAGER",
+                        inRealmDirectory: "IM REALM VERZEICHNIS?",
+                        realmApproved: "REALM GENEHMIGT?"
+                    }
                 }
             }
         }

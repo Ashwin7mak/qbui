@@ -4,6 +4,7 @@ import {NEW_RECORD_VALUE} from '../constants/urlConstants';
 import _ from 'lodash';
 import FacetSelections from '../components/facet/facetSelections';
 import ReportModelHelper from '../models/reportModelHelper';
+import {CONTEXT} from '../actions/context';
 
 /**
  * Manage array of report states
@@ -458,10 +459,24 @@ const report = (state = [], action) => {
         }
         return state;
     }
+    case types.CHANGE_REPORT_NAME: {
+        let currentReport = getReportFromState(action.id);
+        if (currentReport) {
+            // change the report data.name to show changes before save
+            currentReport.data.name = action.content.newName;
+            // change the report metaData.name to patch the changes after save
+            currentReport.data.metaData.name = action.content.newName;
+            return newState(currentReport);
+        }
+        return state;
+    }
     default:
         // by default, return existing state
         return state;
     }
 };
+
+export const getNavReport  = (state) => _.find(state, (rpt) => rpt.id === CONTEXT.REPORT.NAV);
+export const getListReport  = (state) => _.find(state, (rpt) => rpt.id === CONTEXT.REPORT.NAV_LIST);
 
 export default report;
