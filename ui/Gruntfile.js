@@ -594,8 +594,6 @@ module.exports = function(grunt) {
                     './wdio/tests/reports/reportSearch.e2e.spec.js',
                     //Stabilize in CI before enabling
                     './wdio/tests/relationships/relationshipViewChildTable.e2e.spec.js',
-                    //stabilie in CI
-                    './wdio/tests/global/globalTopNav.e2e.spec.js'
                 ],
                 suites: {
                     // Please alphabetize these by folder level
@@ -628,7 +626,7 @@ module.exports = function(grunt) {
                         './wdio/tests/users/usersTable.e2e.spec.js'
                     ],
                     global: [
-
+                        './wdio/tests/global/globalTopNav.e2e.spec.js'
                     ]
                 }
             },
