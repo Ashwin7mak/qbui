@@ -63,6 +63,7 @@ const LinkToRecordTableSelectionDialog = React.createClass({
         choices = _.reject(choices, (choice) => choice.value === this.props.childTableId);
 
         return <Select
+            className="tableSelector"
             value={selectedValue}
             optionRenderer={this.renderOption}
             options={choices}

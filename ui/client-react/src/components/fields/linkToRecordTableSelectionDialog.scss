@@ -1,8 +1,12 @@
 @import '../../assets/css/qbVariables';
 
 .multiStepModal.tableDataConnectionDialog {
+
+    .modal-dialog {
+        width: 550px;
+    }
     .modal-body > *:first-child {
-        height: 140px;
+        height: 153px;
     }
 
     .tableChooserDescription {
@@ -13,6 +17,9 @@
         padding-bottom: $spacing-x-small;
     }
 
+    .tableSelector {
+        max-width: 300px;
+    }
     .tableOption {
         .tableLabel {
             margin-left: $spacing-x-small;
