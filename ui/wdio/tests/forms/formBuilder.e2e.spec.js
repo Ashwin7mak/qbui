@@ -43,7 +43,7 @@
             // open first table
             e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
             // wait for left nav to load completely (else settings button won't be rendered)
-            ReportContentPO.waitForLeftNavLoaded();
+            reportContentPO.waitForLeftNavLoaded();
             // edit first record
             reportContentPO.clickOnRecordInReportTable(0);
             // invoke form builder
