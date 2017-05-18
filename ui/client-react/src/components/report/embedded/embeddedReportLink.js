@@ -1,6 +1,6 @@
 import React, {PropTypes} from 'react';
 import {connect} from 'react-redux';
-import {Link} from 'react-router-dom';
+import {Link, withRouter} from 'react-router-dom';
 import _ from 'lodash';
 
 import {loadReportRecordsCount, unloadEmbeddedReport} from '../../../actions/reportActions';
@@ -8,6 +8,7 @@ import withUniqueId from '../../hoc/withUniqueId';
 import {CONTEXT} from '../../../actions/context';
 import QBicon from '../../qbIcon/qbIcon';
 
+import Breakpoints from '../../../utils/breakpoints';
 import UrlUtils from '../../../utils/urlUtils';
 import QueryUtils from '../../../utils/queryUtils';
 import {I18nMessage} from '../../../utils/i18nMessage';
@@ -63,15 +64,21 @@ export const EmbeddedReportLink = React.createClass({
 
     render() {
         const {appId, childTableId, childReportId, detailKeyFid, detailKeyValue} = this.props;
-        // render report link for small-breakpoint or if the element type is defined as a
-        // reportLink
-        const link = UrlUtils.getRelatedChildReportLink(appId, childTableId, childReportId, detailKeyFid, detailKeyValue);
+
+        let link;
+        if (Breakpoints.isSmallBreakpoint()) {
+            link = this.props.match.url + UrlUtils.getReportDrawerSegment(appId, childTableId, childReportId, detailKeyFid, detailKeyValue);
+        } else {
+            link = UrlUtils.getRelatedChildReportLink(appId, childTableId, childReportId, detailKeyFid, detailKeyValue);
+        }
+
         let tableName;
         if (this.props.childTableName) {
             tableName  = this.props.childTableName;
         } else {
             tableName = <I18nMessage message="relationship.childTable" />;
         }
+
         return (
             <div className="linkContainer">
                 {this.reportDetails(tableName)}
@@ -105,9 +112,9 @@ const mapDispatchToProps = (dispatch) => {
     };
 };
 
-const ConnectedEmbeddedReportLink = connect(
+const ConnectedEmbeddedReportLink = withRouter(connect(
     mapStateToProps,
     mapDispatchToProps
-)(EmbeddedReportLink);
+)(EmbeddedReportLink));
 
 export default withUniqueId(ConnectedEmbeddedReportLink, CONTEXT.REPORT.EMBEDDED);

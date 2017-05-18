@@ -92,7 +92,7 @@ const columns = () => [
             label: Locale.getMessage(GRID_COLUMN_LOCALE + '.quickbaseAccessStatus')
         },
         cell: {
-            formatters: [Formatters.FormatUserStatusHTML]
+            formatters: [Formatters.FormatAccessStatusHTML]
         },
         fieldDef: {
             id: 6,

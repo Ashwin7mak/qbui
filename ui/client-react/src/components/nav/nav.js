@@ -286,12 +286,7 @@ export const Nav = React.createClass({
                 let childTableId = this.props.location.query[UrlConsts.DETAIL_TABLEID];
                 let childReportId = this.props.location.query[UrlConsts.DETAIL_REPORTID];
                 //`/qbase/app/${appId}/table/{1}/report/{2}?${EDIT_RECORD_KEY}=new&${DETAIL_APPID}={3}${DETAIL_TABLEID}={4}${DETAIL_KEY_FID}={5}&${DETAIL_KEY_VALUE}={6}`;
-                this.props.loadForm(childAppId, childTableId, childReportId, formType, editRec, showTrowser).then((result) => {
-                    //finished loading form
-                    //populate new child form with detail parent info
-                    console.log("finished loading form addchild for this.props.location.pathname" + this.props.location.pathname);
-
-                });
+                this.props.loadForm(childAppId, childTableId, childReportId, formType, editRec, showTrowser);
             } else {
                 this.props.loadForm(appId, tblId, rptId, formType, editRec, showTrowser);
             }
