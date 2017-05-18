@@ -28,6 +28,8 @@ class StandardGridToolBar extends React.Component {
     };
 
     render() {
+        // debugger;
+        // console.log('this.props: ', this.props);
         let hasFacets = false;
         return (
             <div>
@@ -55,11 +57,14 @@ class StandardGridToolBar extends React.Component {
                     <div className="standardRightToolBar">
                         <div className="standardGridItemsCount">
                             <div className="itemsCount">
+                                {this.props.totalRecords ?
                                     <StandardGridItemsCount itemCount={this.props.totalRecords}
                                                             filteredItemCount={this.props.filteredRecords}
                                                             itemTypePlural={this.props.itemTypePlural}
                                                             itemTypeSingular={this.props.itemTypeSingular}
-                                    />
+                                    /> :
+                                    null
+                                }
                             </div>
                         </div>
                         <StandardGridNavigation className="standardGridNavigation"
@@ -94,11 +99,12 @@ StandardGridToolBar.propTypes = {
 const mapStateToProps = (state, ownProps) => {
     let facetInfo = (state.Grids[ownProps.id] || {}).facets || {};
     let paginationInfo = (state.Grids[ownProps.id] || {}).pagination || {};
+    debugger;
     return {
         facetSelections:  facetInfo.facetSelections || {},
         filteredRecords: paginationInfo.filteredRecords || 0,
         totalRecords: paginationInfo.totalRecords || 0,
-        searchTerm: (state.Grids[ownProps.id] || {}).searchTerm || '',
+        searchTerm: (state.Grids[ownProps.idp] || {}).searchTerm || '',
     };
 };
 
