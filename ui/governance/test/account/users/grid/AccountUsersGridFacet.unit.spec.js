@@ -64,10 +64,10 @@ describe('Faceting Fields Values', () => {
                 name: Locale.getMessage("governance.account.users.accessStatus"),
                 type: 'TEXT',
                 values: [
-                    {id:0, value: 'Denied'},
                     {id:0, value: 'Deactivated'},
-                    {id:0, value: 'Paid Seat'},
+                    {id:0, value: 'Denied'},
                     {id:0, value: 'No App Access'},
+                    {id:0, value: 'Paid Seat'},
                     {id:0, value: 'Quick Base Staff'}
                 ]
             });
