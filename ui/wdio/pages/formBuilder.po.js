@@ -110,6 +110,9 @@ class formBuilderPage {
         // Clicks on CANCEL in the form builder and waits for the next page to render
         this.cancelBtn.click();
         return this.dirtyForm_Dismiss();
+        reportContentPO.waitForLeftNavLoaded();
+        return this;
+
     }
 
     dirtyForm_Dismiss() {
@@ -217,6 +220,7 @@ class formBuilderPage {
     save() {
         // Clicks on the SAVE button in the form builder and waits for the next page to appear
         this.saveBtn.click();
+        reportContentPO.waitForLeftNavLoaded();
         return this;
     }
 
