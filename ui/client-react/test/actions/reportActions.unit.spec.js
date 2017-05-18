@@ -95,6 +95,20 @@ describe('Report actions', () => {
         const expectedAction = event(context, types.CLOSE_FIELD_SELECT_MENU, {});
         expect(reportActions.closeFieldSelectMenu(context)).toEqual(expectedAction);
     });
+
+    it('moveColumn actions dispatches types.MOVE_COLUMN with params', () => {
+        const params = {
+            sourceLabel: 'Column A',
+            targetLabel: 'Column B'
+        };
+        const expectedAction = event(context, types.MOVE_COLUMN, params);
+        expect(reportActions.moveColumn(context, params)).toEqual(expectedAction);
+
+    });
+    it('changeReportName action dispatches type.CHANGE_REPORT_NAME', () => {
+        const expectedAction = event(context, types.CHANGE_REPORT_NAME, {newName: 'name'});
+        expect(reportActions.changeReportName(context, 'name')).toEqual(expectedAction);
+    });
 });
 
 describe('Test ReportsActions function success workflow', () => {
@@ -457,5 +471,4 @@ describe('Test ReportsActions function failure workflow', () => {
                 done();
             });
     });
-
 });

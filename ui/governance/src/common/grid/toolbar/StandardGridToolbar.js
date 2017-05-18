@@ -2,13 +2,12 @@ import React, {PropTypes, Component} from "react";
 import StandardGridNavigation from "./StandardGridNavigation";
 import * as StandardGridActions from "../../../common/grid/standardGridActions";
 import IconInputBox from "../../../../../reuse/client/src/components/iconInputBox/iconInputBox";
-import {I18nMessage} from '../../../../../reuse/client/src/utils/i18nMessage';
+import {I18nMessage} from "../../../../../reuse/client/src/utils/i18nMessage";
 import {connect} from "react-redux";
 import "./StandardGridToolBar.scss";
 import FacetSelections from "../../../../../reuse/client/src/components/facets/facetSelections";
 import StandardGridFacetsMenu from "./StandardGridFacetsMenu";
 import _ from "lodash";
-import * as SCHEMACONSTS from "../../../../../client-react/src/constants/schema";
 
 /**
  * The toolbar for Standard Grid

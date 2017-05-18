@@ -5,7 +5,7 @@ import StageHeaderCount from "../../../../reuse/client/src/components/stage/stag
 import {I18nMessage} from "../../../../reuse/client/src/utils/i18nMessage";
 import Locale from "../../../../reuse/client/src/locales/locale";
 import * as RealmUserAccountFlagConstants from "../../common/constants/RealmUserAccountFlagConstants.js";
-import lodash from 'lodash';
+import lodash from "lodash";
 
 /**
  * The stage for the AccountUsers page

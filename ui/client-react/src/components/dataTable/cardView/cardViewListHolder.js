@@ -12,7 +12,7 @@ import * as SpinnerConfigurations from "../../../constants/spinnerConfigurations
 import _ from 'lodash';
 import {connect} from 'react-redux';
 import {openRecord} from '../../../actions/recordActions';
-import WindowLocationUtils from '../../../utils/windowLocationUtils';
+import {WindowHistoryUtils} from '../../../utils/windowHistoryUtils';
 import {EDIT_RECORD_KEY} from '../../../constants/urlConstants';
 import {CONTEXT} from '../../../actions/context';
 import EmptyImage from '../../../../../client-react/src/assets/images/empty box graphic.svg';
@@ -282,6 +282,15 @@ export let CardViewListHolder = React.createClass({
             };
         }
 
+        // columns map for easy/fast lookup by column ID
+        const columnsMap = new Map();
+        if (_.has(this.props, "reportData.data.columns")) {
+            for (let i = 0; i < this.props.reportData.data.columns.length; i++) {
+                const column = this.props.reportData.data.columns[i];
+                columnsMap.set(column.id, column);
+            }
+        }
+
         return (<Swipeable className="swipeable"
                            onSwipingUp={(ev, delta) => {
                                this.swiping(ev.target, delta, true);
@@ -303,6 +312,7 @@ export let CardViewListHolder = React.createClass({
                 <CardViewList ref="cardViewList"
                               node={recordNodes}
                               columns={_.has(this.props, "reportData.data.columns") ? this.props.reportData.data.columns : []}
+                              columnsMap={columnsMap}
                               primaryKeyName={this.props.primaryKeyName}
                               groupId=""
                               groupLevel={-1}
@@ -363,7 +373,7 @@ export let CardViewListHolder = React.createClass({
                     let previousRecordId = index > 0 ? recordsArray[index - 1][key].value : null;
 
                     this.props.openRecord(recId, nextRecordId, previousRecordId);
-                    WindowLocationUtils.pushWithQuery(EDIT_RECORD_KEY, recId);
+                    WindowHistoryUtils.pushWithQuery(EDIT_RECORD_KEY, recId);
                 }
             }
         }

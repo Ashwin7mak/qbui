@@ -35,6 +35,11 @@
     * Each image is custom named (```quickbase/ui-core``` and ```quickbase/ui-ee```) for the override sample in this repository in order to avoid conflicts with the
     ```quickbase/core``` and ```quickbase/ee``` imaged that may exist on your machine and to specify that they are 'owned' by the Docker Compose environment defined in this project.
 2) Run ```docker-compose up -d```. It should bring up Core, Oracle, Experience Engine and PostGres in addition to the existing UI service.
+3) Once the full stack of Core, Oracle, Experience Engine and PostGres is running, you can additionally run ```docker-compose -f docker-compose.yml -f docker-compose.override.yml -f docker-compose.datagen.yml up -d``` to populate an app with data. Each additional use of this command will restart the 'datagen' container service and create an additional app.
+    * Running ```tail -f /tmp/log/docker/datagen/service/ui-sys.log``` is the easiest way to view progress of a data import task.
+4) ```docker-compose pause``` is the recommended way to shut down this stack and ```docker-compose unpause``` is the recommended way to start it back up if you want to preserve data for Core and Experience Engine.
+    * You can pause just core-db or ee-db by filtering your command as ```docker-compose pause core-db ee-db```
+    * Otherwise, run ```docker-compose down``` to destroy it
 
 ## Run the Service in Docker Compose from IntelliJ
 ### Prerequisites

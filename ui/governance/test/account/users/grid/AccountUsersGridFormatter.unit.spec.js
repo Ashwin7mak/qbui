@@ -19,7 +19,7 @@ describe('AccountUsersGridFormatter', () => {
     it("should format the user status correctly", ()=> {
         expect(Formatters.FormatUserStatusText(true, basicUserInfo)).toEqual("Paid Seat");
         expect(Formatters.FormatUserStatusText(false, basicUserInfo)).toEqual("No App Access");
-        expect(Formatters.FormatUserStatusText(true, {rowData:{...basicUserInfo.rowData, systemRights: 1}})).toEqual("QuickBase Staff");
+        expect(Formatters.FormatUserStatusText(true, {rowData:{...basicUserInfo.rowData, systemRights: 1}})).toEqual("Quick Base Staff");
         expect(Formatters.FormatUserStatusText(true, {rowData:{...basicUserInfo.rowData, realmDirectoryFlags: 8}})).toEqual("Denied");
         expect(Formatters.FormatUserStatusText(true, {rowData:{...basicUserInfo.rowData, userBasicFlags: 68}})).toEqual("Deactivated");
     });
