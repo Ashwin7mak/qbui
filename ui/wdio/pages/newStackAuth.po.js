@@ -21,7 +21,7 @@
                 // Load the requestAppsPage (shows a list of all the apps in a realm)
                 RequestAppsPage.get(e2eBase.getRequestAppsPageEndpoint(realmName));
                 //wait until apps link is associated with app name.
-                return browser.waitForText('.appsList .leftNavLabel', e2eConsts.extraLongWaitTimeMs);
+               // return browser.waitForText('.appsList .leftNavLabel', e2eConsts.extraLongWaitTimeMs);
             });
         }}
     });
