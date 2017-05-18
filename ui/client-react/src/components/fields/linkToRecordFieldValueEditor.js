@@ -13,7 +13,7 @@ import LinkToRecordTableSelectionDialog from './linkToRecordTableSelectionDialog
  * A placeholder for link to record fields
  *
  */
-const LinkToRecordFieldValueEditor = React.createClass({
+export const LinkToRecordFieldValueEditor = React.createClass({
     displayName: 'LinkToRecordFieldValueEditor',
     propTypes: {
         showRelationshipDialog: PropTypes.func,
