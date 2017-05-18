@@ -53,7 +53,7 @@
             });
 
             //Step 2 - load the above created report in UI.
-            reportContentPO.loadReportByIdInBrowserForSB(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, reportId);
+            reportContentPO.loadReportByIdInBrowserSB(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, reportId);
 
             //Step 3 - Click on sort/Grp Icon
             reportSortingPO.clickSortGroupIconOnReportsPage();
@@ -79,7 +79,7 @@
             reportContentPO.waitForReportContentSB();
 
             //Step 8 - Get all records from the report table
-            reportContentPO.getAllRowsCellValues.value.filter(function(elm) {
+            reportContentPO.getAllRowsCellValuesSB.value.filter(function(elm) {
                 actualTableRecords.push(elm.getText());
             });
 
@@ -92,7 +92,7 @@
 
         it("Verify sort/grp dialogue and the close dialogue functionality", function() {
             //Step 1 - load the defaulr report 'List-All Reposrt'
-            reportContentPO.loadReportByIdInBrowserForSB(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, DEFAULT_REPORT_ID);
+            reportContentPO.loadReportByIdInBrowserSB(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, DEFAULT_REPORT_ID);
 
             //Step 2 - Click on sort/Grp Icon
             reportSortingPO.clickSortGroupIconOnReportsPage();

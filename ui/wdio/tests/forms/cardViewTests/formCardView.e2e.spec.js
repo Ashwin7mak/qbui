@@ -40,7 +40,7 @@
          */
         beforeEach(function() {
             // Load the List All report on Table 1
-            return reportContentPO.loadReportByIdInBrowserForSB(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
+            return reportContentPO.loadReportByIdInBrowserSB(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
         });
 
         it('Add a record from the form', function() {
@@ -50,7 +50,7 @@
             browser.context(['WEBVIEW']);
 
             //Step 2 - Click on Add Record Button on the report Stage
-            reportContentPO.clickAddRecordBtn();
+            reportContentPO.clickAddRecordBtnSB();
 
             //Step 3 - enter form values
             fieldTypes.forEach(function(fieldType) {

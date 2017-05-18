@@ -44,7 +44,7 @@
          */
         beforeEach(function() {
             // Load the List All report on Table 1
-            reportContentPO.loadReportByIdInBrowserForSB(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
+            reportContentPO.loadReportByIdInBrowserSB(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
         });
 
         /**
@@ -59,7 +59,7 @@
             expect(recordCount).toBe(RECORD_COUNT);
 
             //Assert 'add new record' button is visible
-            expect(reportContentPO.addRecordBtn.isVisible()).toBe(true);
+            expect(reportContentPO.addRecordBtnSB.isVisible()).toBe(true);
         });
 
         /**
@@ -71,7 +71,7 @@
             reportContentPO.waitForReportContentSB();
 
             // Assert sort by / group by button is visible
-            expect(reportContentPO.reportSortGrpBtn.isVisible()).toBe(true);
+            expect(reportContentPO.reportSortGrpBtnSB.isVisible()).toBe(true);
 
             // Assert records count total
             expect(reportTableActionsPO.getReportRecordsCount()).toBe(RECORD_COUNT + " records");

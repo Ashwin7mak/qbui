@@ -455,19 +455,19 @@
         // **********************/
         //
         //add new record button element
-        addRecordBtn: {
+        addRecordBtnSB: {
             get: function() {
                 return browser.element('.reportToolsAndContentContainer .addNewRecord');
             }
         },
         // sort and group button element on report page
-        reportSortGrpBtn: {
+        reportSortGrpBtnSB: {
             get: function() {
                 return browser.element('.sortButton');
             }
         },
         //returns cell values for all the rows
-        getAllRowsCellValues: {
+        getAllRowsCellValuesSB: {
             get: function() {
                 browser.element('.fieldRow').waitForVisible();
                 return browser.elements('.fieldValue');
@@ -492,7 +492,7 @@
          * @param reportId
          * @returns A promise that will resolve after loading the generated URL
          */
-        loadReportByIdInBrowserForSB: {
+        loadReportByIdInBrowserSB: {
             value: function(realmName, appId, tableId, reportId) {
             //navigate to the url
                 browser.url(e2eBase.getRequestReportsPageEndpoint(realmName, appId, tableId, reportId));
@@ -504,7 +504,7 @@
         /**
          * Function that will click on the Add record button on report page
          */
-        clickAddRecordBtn: {
+        clickAddRecordBtnSB: {
             value: function() {
                 browser.element('.reportToolsAndContentContainer .addNewRecord').waitForVisible();
                 browser.element('.reportToolsAndContentContainer .addNewRecord').click();
