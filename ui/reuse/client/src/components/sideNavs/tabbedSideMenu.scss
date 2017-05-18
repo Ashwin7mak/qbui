@@ -46,4 +46,8 @@
     .rc-tabs-content {
         overflow: visible; // Second tab would be invisible when this was set to hidden. Fixed with visible.
     }
+
+    .rc-tabs-top .rc-tabs-ink-bar {
+        background-color: $tabs-underline-background-color; //overriding rc-tabs default ink-bar color
+    }
 }
