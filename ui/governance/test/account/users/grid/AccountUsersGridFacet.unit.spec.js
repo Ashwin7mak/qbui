@@ -1,87 +1,58 @@
 import React from "react";
 import jasmineEnzyme from "jasmine-enzyme";
 import {GetFacetFields} from "../../../../src/account/users/grid/AccountUsersGridFacet";
-import _ from "lodash";
+import _ from 'lodash';
 import Locale from "../../../../../reuse/client/src/locales/locale";
-import GovernanceBundleLoader from "../../../../src/locales/governanceBundleLoader";
+import GovernanceBundleLoader from '../../../../src/locales/governanceBundleLoader';
 
-const ACCOUNT_USERS_DATA = [
-    {
-        "uid": 10000,
-        "firstName": "Administrator",
-        "lastName": "User for default SQL Installation",
-        "email": "koala_bumbles@quickbase.com",
-        "userName": "administrator",
-        "lastAccess": "2017-02-28T19:32:04.223Z",
-        "numGroupsMember": 0,
-        "numGroupsManaged": 0,
-        "hasAppAccess": true,
-        "numAppsManaged": 2,
-        "userBasicFlags": 24576,
-        "accountTrusteeFlags": 0,
-        "realmDirectoryFlags": 0,
-        "systemRights": -1
-    },
-    {
-        "uid": 30000,
-        "firstName": "Zadministrator",
-        "lastName": "ZUser for default SQL Installation",
-        "email": "Zkoala_bumbles@quickbase.com",
-        "userName": "Zadministrator",
-        "lastAccess": "2019-02-28T19:32:04.223Z",
-        "numGroupsMember": 100,
-        "numGroupsManaged": 100,
-        "hasAppAccess": false,
-        "numAppsManaged": 200,
-        "userBasicFlags": 24576,
-        "accountTrusteeFlags": 0,
-        "realmDirectoryFlags": 0,
-        "systemRights": 0
-    },
-    {
-        "uid": 20000,
-        "firstName": "FirstNameFilter",
-        "lastName": "lastNameFilter",
-        "email": "emailFilter@g88.net",
-        "userName": "userNameFilter",
-        "lastAccess": "1900-01-01T00:00:00Z",
-        "numGroupsMember": 0,
-        "numGroupsManaged": 1,
-        "hasAppAccess": true,
-        "numAppsManaged": 0,
-        "userBasicFlags": 8192,
-        "accountTrusteeFlags": 0,
-        "realmDirectoryFlags": 4,
-        "systemRights": 0
-    }];
+export const FACET_FIELDID = {
+    QUICKBASE_USER_STATUS : 0,
+    QUICKBASE_ACCESS_STATUS : 1,
+    INGROUP : 5,
+    GROUPMANAGER:6
+};
 
 describe('Faceting Fields Values', () => {
 
-    it('gets the facets based on Quick Base access status', () => {
-        expect(GetFacetFields(true, true)[0]).toEqual(
+    it('gets the facets based on QuickBase access status', () => {
+        expect(GetFacetFields(true, true)[FACET_FIELDID.QUICKBASE_ACCESS_STATUS]).toEqual(
             {
-                id:0,
+                id:FACET_FIELDID.QUICKBASE_ACCESS_STATUS,
                 name: Locale.getMessage("governance.account.users.accessStatus"),
                 type: 'TEXT',
                 values: [
-                    {id:0, value: 'Deactivated'},
-                    {id:0, value: 'Denied'},
-                    {id:0, value: 'No App Access'},
-                    {id:0, value: 'Paid Seat'},
-                    {id:0, value: 'Quick Base Staff'}
+                    {id:FACET_FIELDID.QUICKBASE_ACCESS_STATUS, value: 'Deactivated'},
+                    {id:FACET_FIELDID.QUICKBASE_ACCESS_STATUS, value: 'Denied'},
+                    {id:FACET_FIELDID.QUICKBASE_ACCESS_STATUS, value: 'No App Access'},
+                    {id:FACET_FIELDID.QUICKBASE_ACCESS_STATUS, value: 'Paid Seat'},
+                    {id:FACET_FIELDID.QUICKBASE_ACCESS_STATUS, value: 'Quick Base Staff'}
+                ]
+            });
+    });
+
+    it('gets the facets based on QuickBase user status', () => {
+        expect(GetFacetFields(true, true)[FACET_FIELDID.QUICKBASE_USER_STATUS]).toEqual(
+            {
+                id:FACET_FIELDID.QUICKBASE_USER_STATUS,
+                name: Locale.getMessage("governance.account.users.userStatus"),
+                type: 'TEXT',
+                values: [
+                    {id:FACET_FIELDID.QUICKBASE_USER_STATUS, value: 'Registered'},
+                    {id:FACET_FIELDID.QUICKBASE_USER_STATUS, value: 'Unregistered'},
+                    {id:FACET_FIELDID.QUICKBASE_USER_STATUS, value: 'Unverified'}
                 ]
             });
     });
 
     it('gets the right info for user in group', () => {
-        expect(GetFacetFields(true, true)[4]).toEqual(
+        expect(GetFacetFields(true, true)[FACET_FIELDID.INGROUP]).toEqual(
             {
-                id:4,
+                id:FACET_FIELDID.INGROUP,
                 name: Locale.getMessage("governance.account.users.inGroup"),
                 type: 'CHECKBOX',
                 values: [
-                    {id:4, value: 'Yes'},
-                    {id:4, value: 'No'}]
+                    {id:FACET_FIELDID.INGROUP, value: 'Yes'},
+                    {id:FACET_FIELDID.INGROUP, value: 'No'}]
             });
     });
 });
@@ -97,6 +68,7 @@ describe('Facet Fields Permissions', () => {
     });
 
     const PERM_AGNOSTIC_FACETS = [
+        Locale.getMessage("governance.account.users.userStatus"),
         Locale.getMessage("governance.account.users.accessStatus"),
         Locale.getMessage("governance.account.users.paidSeatSingular"),
         Locale.getMessage("governance.account.users.quickbaseStaff")];
