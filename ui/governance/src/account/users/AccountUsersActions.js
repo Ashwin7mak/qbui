@@ -51,7 +51,7 @@ export const searchUsers = (users, searchTerm) => {
         _.includes(user.email.toLowerCase(), searchTerm) ||
         _.includes(user.userName.toLowerCase(), searchTerm) ||
         _.includes(Formatters.FormatLastAccessString(user.lastAccess).toLowerCase(), searchTerm) ||
-        _.includes(Formatters.FormatUserStatusText(user.hasAppAccess, {rowData: user}).toLowerCase(), searchTerm);
+        _.includes(Formatters.FormatAccessStatusText(user.hasAppAccess, {rowData: user}).toLowerCase(), searchTerm);
     });
 };
 
@@ -93,7 +93,7 @@ const sortFunctions = [
     "email",
     user => Formatters.FormatUsernameString(user, {rowData: user}),
     "lastAccess",
-    user => Formatters.FormatUserStatusText(user.hasAppAccess, {rowData: user}),
+    user => Formatters.FormatAccessStatusText(user.hasAppAccess, {rowData: user}),
     user => Formatters.FormatIsInactive(user.lastAccess, {rowData: user}),
     user => user.numGroupsMember > 0,
     user => user.numGroupsManaged > 0,
@@ -164,16 +164,17 @@ export const doUpdate = (gridId, gridState, _itemsPerPage) => {
         if (users.length === 0) {
             return;
         }
-        // First Facet
-        let facetSelections = gridState.facets && gridState.facets.facetSelections ? gridState.facets.facetSelections : {};
-        let facetedUsers = facetUser(users, facetSelections);
-
-        // Then Search
+        // First Search
         let searchTerm = gridState.searchTerm || "";
-        let filteredUsers = searchUsers(facetedUsers, searchTerm);
+        let filteredUsers = searchUsers(users, searchTerm);
 
+        // Then Facet
+        let facetSelections = gridState.facets && gridState.facets.facetSelections ? gridState.facets.facetSelections : {};
+        let facetedUsers = facetUser(filteredUsers, facetSelections);
+
+        // Then Sort
         let sortFids = gridState.sortFids || [];
-        let sortedUsers = sortUsers(filteredUsers, sortFids);
+        let sortedUsers = sortUsers(facetedUsers, sortFids);
 
         // Then Paginate
         let itemsPerPage = _itemsPerPage || gridState.pagination.itemsPerPage;
