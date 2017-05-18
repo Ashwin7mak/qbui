@@ -34,6 +34,7 @@ class ToolPalette extends Component {
     renderToolPalette = () => (
         <div className="toolPaletteContainer">
             <TabMenu
+                isCollapsed={this.props.isCollapsed}
                 tabs={[
                     {
                         key: 'newFields',

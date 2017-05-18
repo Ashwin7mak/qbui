@@ -28,8 +28,12 @@ class TabbedSideNav extends Component {
     };
 
     render() {
+        let classes = ["tabbedSideNav"];
+        if (this.props.isCollapsed) {
+            classes.push('hideTabs');
+        }
         return (
-            <div className="tabbedSideNav">
+            <div className={classes.join(' ')}>
                 <Tabs
                     defaultActiveKey={this.getDefaultTab()}
                     onChange={this.props.onTabChanged}

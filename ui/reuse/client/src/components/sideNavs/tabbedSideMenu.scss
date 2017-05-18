@@ -2,6 +2,12 @@
 // TabbedSideNav uses a 3rd party component called rc-tabs. The rc-tab classes below are rendered by that third party component.
 
 .tabbedSideNav {
+    //formBuilder
+    &.hideTabs {
+        .rc-tabs-tab {
+            display: none;
+        }
+    }
     .rc-tabs {
         box-sizing: border-box;
         position: relative;
