@@ -4,17 +4,18 @@
  */
 (function() {
     'use strict';
-    var moment = require('moment');
-    var consts = require('../constants');
+    let moment = require('moment');
+    let consts = require('../constants');
     //Module constants:
-    var TWENTY_FOUR_HOUR_CLOCK = 'HH:';
-    var TWELVE_HOUR_CLOCK = 'h:';
-    var MM = 'mm';
-    var SS = ':ss';
-    var AM_PM = ' a';
-    var DEFAULT_TIMEZONE = 'America/Los_Angeles';
+    let TWENTY_FOUR_HOUR_CLOCK = 'HH:';
+    let TWELVE_HOUR_CLOCK = 'h:';
+    let MM = 'mm';
+    let SS = ':ss';
+    let AM_PM = ' a';
+    let DEFAULT_TIMEZONE = 'America/Los_Angeles';
+    let ZONE_DESIGNATOR_CHAR = 'Z';
 
-    var JAVA_FORMAT_TO_JS_FORMAT = {
+    let JAVA_FORMAT_TO_JS_FORMAT = {
         'HH:MM'   : MM,
         'HH:MM:SS': MM + SS
     };
@@ -22,7 +23,7 @@
     module.exports = {
         generateFormatterString: function(fieldInfo) {
             //Resolve formatting options
-            var formatString;
+            let formatString;
             if (fieldInfo) {
                 formatString = JAVA_FORMAT_TO_JS_FORMAT[fieldInfo.scale];
             }
@@ -41,7 +42,7 @@
         // TODO: could be here for future implementation so leaving..but should be reviewed and removed if not needed.
         //generateFormat         : function(fieldInfo) {
         //    //Resolve formatting options
-        //    var formatString;
+        //    let formatString;
         //    if (fieldInfo) {
         //        formatString = JAVA_FORMAT_TO_JS_FORMAT[fieldInfo.scale];
         //    }
@@ -67,10 +68,10 @@
             fieldInfo = fieldInfo || {};
 
             //Declare the date and moment formatter
-            var currentDate = new Date();
-            var dd = currentDate.getDate().toString();
-            var mm = (currentDate.getMonth() + 1).toString(); //January is 0
-            var yyyy = currentDate.getFullYear();
+            let currentDate = new Date();
+            let dd = currentDate.getDate().toString();
+            let mm = (currentDate.getMonth() + 1).toString(); //January is 0
+            let yyyy = currentDate.getFullYear();
 
             if (mm.length  < 2) {
                 mm = '0' + mm;
@@ -80,16 +81,16 @@
                 dd = '0' + dd;
             }
 
-            var dateStr = yyyy + '-' + mm + '-' + dd +  'T' + fieldValue.value.replace(/(\[.*?\])/, '');
+            let dateStr = yyyy + '-' + mm + '-' + dd +  'T' + fieldValue.value.replace(/(\[.*?\])/, '');
             //if the useTimezone is set then assume that the incoming value is in UTC
             if (fieldInfo.useTimezone && fieldValue.value.indexOf('Z') === -1) {
-                dateStr += 'Z';
+                dateStr += ZONE_DESIGNATOR_CHAR;
             }
             //Resolve whether or not to shift based on useTimezone and app's timezone
-            var m;
+            let m;
             if (fieldInfo.useTimezone) {
-                var d = new Date(dateStr);
-                var timeZone = consts.UTC_TIMEZONE;
+                let d = new Date(dateStr);
+                let timeZone = consts.UTC_TIMEZONE;
                 timeZone = fieldInfo.timeZone;
                 if (!timeZone) {
                     timeZone = DEFAULT_TIMEZONE;
@@ -100,7 +101,7 @@
             }
 
             //Resolve formatting options
-            var formatString = fieldInfo.jsFormat;
+            let formatString = fieldInfo.jsFormat;
             if (!formatString) {
                 formatString = this.generateFormatterString(fieldInfo);
             }

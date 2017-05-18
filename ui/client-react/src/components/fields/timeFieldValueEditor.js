@@ -86,7 +86,7 @@ function insertTimeIntoList(dropList, time, militaryTime) {
     }
 }
 const TIME_FORMAT = 'HH:mm:ss';
-const Z = 'Z';
+const ZONE_DESIGNATOR_CHAR = 'Z';
 /**
  * Helper method Given a time and a timezone returns a moment for current date + time in that timezone.
  * @param value
@@ -282,7 +282,6 @@ const TimeFieldValueEditor = React.createClass({
                                 display: ''
                             };
                         }
-                        valueObj.display = timeFormatter.format(valueObj, this.props.attributes);
                         this.props.onBlur(valueObj);
                     }
                 }
@@ -305,7 +304,7 @@ const TimeFieldValueEditor = React.createClass({
                 timeFormat = timeFormatter.generateFormatterString(this.props.attributes);
 
                 if (this.props.attributes.useTimezone) {
-                    inputValue += inputValue.indexOf(Z) === -1 ? Z : '';
+                    inputValue += inputValue.indexOf(ZONE_DESIGNATOR_CHAR) === -1 ? ZONE_DESIGNATOR_CHAR : '';
                     momentTime = getMomentTimeFromAppsTz(inputValue, this.props.attributes.timeZone);
                 } else {
                     //  It's a time only field...just use today's date to format the time
