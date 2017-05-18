@@ -581,7 +581,10 @@ export default {
             multiChoice: "Choices"
         },
         builder: {
-            tabs: "Tabs",
+            tabs: {
+                existingFields: 'Add an existing field',
+                newFields:  'Create a new field',
+            },
             formBuilder: {
                 unimplemented: "Feature is not available right now",
                 removeField: "Remove field from form",

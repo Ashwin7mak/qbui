@@ -573,7 +573,10 @@ export default {
             multiChoice: "Wahlen"
         },
         builder: {
-            tabs: 'Tabs',
+            tabs: {
+                existingFields: 'Fügen Sie ein vorhandenes Feld hinzu',
+                newFields: 'Erstellen Sie ein neues Feld',
+            },
             formBuilder: {
                 unimplemented: "Feature ist momentan nicht verfügbar",
                 removeField: "Feld aus Form entfernen",

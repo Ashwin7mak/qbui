@@ -572,7 +572,10 @@ export default {
             multiChoice: "Les choix"
         },
         builder: {
-            tabs: 'Tabs',
+            tabs: {
+                existingFields: 'Ajouter un champ existant',
+                newFields:  'Créer un nouveau champ',
+            },
             formBuilder: {
                 unimplemented: "La fonctionnalité n'est pas disponible en ce moment",
                 removeField: "Supprimer le champ du formulaire",

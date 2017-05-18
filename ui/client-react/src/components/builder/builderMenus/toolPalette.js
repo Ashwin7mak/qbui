@@ -38,12 +38,12 @@ class ToolPalette extends Component {
                 tabs={[
                     {
                         key: 'newFields',
-                        title: <Tooltip i18nMessageKey="builder.tabs"> {Locale.getMessage('builder.formBuilder.newFieldsMenuTitle')} </Tooltip>,
+                        title: <Tooltip i18nMessageKey="builder.tabs.newFields"> {Locale.getMessage('builder.formBuilder.newFieldsMenuTitle')} </Tooltip>,
                         content: this.renderNewFieldsMenu()
                     },
                     {
                         key: 'existingFields',
-                        title: <Tooltip i18nMessageKey="builder.tabs"> {Locale.getMessage('builder.formBuilder.existingFieldsMenuTitle')} </Tooltip>,
+                        title: <Tooltip i18nMessageKey="builder.tabs.existingFields"> {Locale.getMessage('builder.formBuilder.existingFieldsMenuTitle')} </Tooltip>,
                         content: this.renderExistingFieldsMenu()
                     }
                 ]}
