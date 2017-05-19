@@ -27,7 +27,9 @@ exports.config = {
         connectRetries : 5,
         connectRetryTimeout: 5000,
         // Custom ip to query for test metrics
-        metricsAddress : 'localhost:' + metricsPort
+        metricsAddress : 'localhost:' + metricsPort,
+        // Custom id to add to the ready file name to make the file unique
+        readyFileId: randomNum
     },
     //
     //

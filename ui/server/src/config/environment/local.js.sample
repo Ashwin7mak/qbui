@@ -66,6 +66,10 @@
         //DOMAIN: 'https://localhost:9443',
         DOMAIN: 'http://localhost:9000',
 
+        //Automation Server settings
+        automationHost: 'http://localhost:8089',
+
+
         //  legacy quickbase host
         legacyBase: '.quickbase-dev.com',
 
