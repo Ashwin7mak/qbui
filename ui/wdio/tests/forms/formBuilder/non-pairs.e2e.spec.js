@@ -192,6 +192,7 @@
             browser.logger.info('Autoscrolling DOWN');
             while (!firstFieldXLoc === firstField.getLocation('x')) {
                 firstFieldXLoc = firstField.getLocation('x');
+                browser.logger.info('first field position: ' + firstFieldXLoc);
                 browser.pause(formBuilderPO.oneSecond);
             }
             // drag UP until autoscroll begins
