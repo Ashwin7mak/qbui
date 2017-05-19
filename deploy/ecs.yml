@@ -17,7 +17,7 @@ Parameters:
     Default: coreui
   DesiredCount:
     Type: String
-    Default: 3
+    Default: 2
   ContainerPort:
     Type: String
     Default: 9443
@@ -54,8 +54,6 @@ Resources:
       Role: !Ref ServiceRole
       DesiredCount: !Ref DesiredCount
       TaskDefinition: !Ref TaskDefinition
-      PlacementConstraints:
-        - Type: distinctInstance
       LoadBalancers:
         - ContainerName: !Ref ServiceName
           ContainerPort: !Ref ContainerPort
