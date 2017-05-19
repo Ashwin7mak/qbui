@@ -13,7 +13,7 @@
 
 
     describe('Reports - In-line edit record tests: ', function() {
-        if (browserName === 'chrome') {
+        if (browserName === 'chrome' || browserName === 'MicrosoftEdge') {
             var realmName;
             var realmId;
             var testApp;
