@@ -67,7 +67,7 @@ export class ReportBuilderContainer extends Component {
 
     render() {
         let {appId, tblId} = this.props.match.params;
-        let name = this.props.reportData.data ? this.props.reportData.data.name : '';
+        let name = this.props.reportData.data ? this.props.reportData.data.name : undefined;
         let columns = this.props.reportData.data ? this.props.reportData.data.columns : [];
         let records = this.props.reportData.data ? this.props.reportData.data.records : [];
         let recordShowLimit = 50;
