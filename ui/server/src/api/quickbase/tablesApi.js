@@ -244,7 +244,7 @@
 
                                 this.createTableProperties(tableProperReq, tableId).then(
                                     (eeResponse) => {
-                                        resolve(JSON.parse(eeResponse.body));
+                                        resolve(eeResponse);
                                     },
                                     (eeError) => {
                                         // Reject, let the caller know that the properties creation failed

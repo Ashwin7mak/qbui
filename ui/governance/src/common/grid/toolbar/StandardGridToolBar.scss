@@ -24,14 +24,14 @@
         justify-content: flex-end;
         color: $pagination-iconfont-darkblack-color;
 
-        .standardGridRecordCount {
+        .standardGridItemsCount {
             flex-grow: 1;
             display: flex;
             justify-content: flex-end;
             align-items: center;
             padding-bottom: 16px;
 
-            .recordsCount {
+            .itemsCount {
               text-align: right;
               font-family: "Lato", Sans-Serif;
               font-size: 14px;
