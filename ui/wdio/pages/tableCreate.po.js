@@ -32,7 +32,7 @@
         tableFooterButtons: {get: function() {return browser.elements('.modal-footer .buttons button');}},
 
         //Icon chooser
-        tableFieldIconChooser: {get: function() {return browser.element('.modal-dialog .iconChooser.closed');}},
+        tableFieldIconChooser: {get: function() {return browser.element('.iconChooser.closed');}},
         //Icon chooser down arrow
         iconChooserSelect: {get: function() {return this.tableFieldIconChooser.element('.showAllToggle .showAllSelectedIcon');}},
         //Icon chooser search
