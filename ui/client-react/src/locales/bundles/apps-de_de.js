@@ -38,7 +38,7 @@ export default {
             },
             settings: "Einstellungen",
             users: {
-                addUser: "Das Hinzufügen eines neuen Benutzers ist noch nicht verfügbar",
+                addUser: "Hinzufügen ein neu Benutzer",
                 users: "Benutzer",
                 content: "Dies ist die Liste aller Personen, die zu Ihrer Bewerbung hinzugefügt wurden. Sie können einige kurze Einblicke darüber, wie viele Menschen sind in jeder Rolle in Ihrer Anwendung sowie finden Sie eine bestimmte Person in der Liste und E-Mail sie.",
                 manager: "Anwendungsmanager",
@@ -51,7 +51,8 @@ export default {
                 singular: "Benutzer",
                 plural: "Benutzer",
                 usersRemoved: " Benutzer wurden entfernt",
-                userRemoved: " Benutzer wurde entfernt"
+                userRemoved: " Benutzer wurde entfernt",
+                userAdded: "Sie hinzugefügt"
 
             }
         },
@@ -725,6 +726,10 @@ export default {
                 prompt: "Geben Sie JA ein, um zu bestätigen, dass Sie diese Tabelle löschen möchten"
             },
             YES: "JA"
+        },
+        addUserToApp: {
+            title: "Benutzer hinzufügen",
+            description: "Suchen Sie nach Benutzern, die Sie Ihrer App hinzufügen möchten, und entscheiden Sie, welche Zugriffsebene Sie ihnen geben möchten, indem Sie sie einer Rolle zuordnen"
         }
     }
 };

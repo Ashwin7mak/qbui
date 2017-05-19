@@ -38,7 +38,7 @@ export default {
             },
             settings: "Paramètres",
             users: {
-                addUser: "L'ajout d'un nouvel utilisateur n'est pas encore disponible",
+                addUser: "Ajouter un nouvel utilisateur",
                 users: "Utilisateurs",
                 content: "C'est la liste de toutes les personnes qui ont été ajoutées à votre application. Vous pouvez obtenir quelques idées rapides sur le nombre de personnes dans chaque rôle dans votre application ainsi que de trouver une personne spécifique dans la liste et de les envoyer par courrier électronique.",
                 manager: "Gestionnaire d'applications",
@@ -51,7 +51,8 @@ export default {
                 singular: "utilisateur",
                 plural: "utilisateurs",
                 usersRemoved: " Les utilisateurs ont été enlevés",
-                userRemoved: " L'utilisateur a été supprimé"
+                userRemoved: " L'utilisateur a été supprimé",
+                userAdded: "Vous avez ajouté"
 
             }
         },
@@ -723,6 +724,10 @@ export default {
                 prompt: "Tapez OUI pour confirmer que vous souhaitez supprimer ce tableau."
             },
             YES: "OUI"
+        },
+        addUserToApp:{
+            title: "Ajouter des utilisateurs à",
+            description: "Recherchez les utilisateurs que vous souhaitez ajouter à votre application et décidez le niveau d'accès que vous souhaitez leur attribuer en leur attribuant un rôle"
         }
     }
 };
