@@ -4,7 +4,6 @@ import {withRouter, Switch} from 'react-router-dom';
 import Fluxxor from "fluxxor";
 import {connect} from 'react-redux';
 import commonNavActions from '../../../../reuse/client/src/components/sideNavs/commonNavActions';
-import {toggleFieldSelectMenu} from '../../actions/reportBuilderActions';
 import './builderWrapper.scss';
 import GlobalActions from '../actions/globalActions';
 import RouteWithSubRoutes from "../../scripts/RouteWithSubRoutes";
@@ -50,20 +49,17 @@ export const BuilderWrapper = React.createClass({
 
     render() {
         let title = '';
-        let onNavClick;
         if (this.props.location.pathname.includes('form')) {
             title = `${Locale.getMessage('builder.formBuilder.modify')}`;
-            onNavClick = () => {this.props.toggleNav('builder');};
         } else if (this.props.location.pathname.includes('report')) {
             title = `${Locale.getMessage('builder.reportBuilder.modify')}`;
-            onNavClick = () => {this.props.toggleFieldSelectMenu(CONTEXT.REPORT.NAV);};
         }
         return (
             <div className="builderWrapperContent">
                 <NotificationContainer/>
                 <TopNav
                     title={title}
-                    onNavClick={onNavClick}
+                    onNavClick={() => {this.props.toggleNav('builder');}}
                     globalActions={this.getTopGlobalActions()}
                     tabIndex={tabIndexConstants.FORM_BUILDER_TOGGLE_NAV_BUTTON_TABINDEX}
                 />
@@ -87,9 +83,6 @@ export const BuilderWrapper = React.createClass({
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        toggleFieldSelectMenu: (context) => {
-            dispatch(toggleFieldSelectMenu(context));
-        },
         toggleNav() {
             dispatch(commonNavActions('builder').toggleNav());
         }

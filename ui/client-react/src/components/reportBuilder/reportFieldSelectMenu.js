@@ -58,7 +58,7 @@ export class ReportFieldSelectMenu extends Component {
         if (!this.props.menu) {return <div />;}
 
         let elements = this.getElements();
-        let isCollapsed = this.props.menu.isCollapsed;
+        let isCollapsed = this.props.isCollapsed;
 
         return (
             <div className="fieldSelect">
@@ -85,7 +85,7 @@ export class ReportFieldSelectMenu extends Component {
             <SideMenu
                 baseClass="reportFieldSelectMenu"
                 sideMenuContent={this.getMenuContent()}
-                isCollapsed={this.props.menu.isCollapsed}
+                isCollapsed={this.props.isCollapsed}
             >
                 {this.props.children}
             </SideMenu>
@@ -109,7 +109,8 @@ ReportFieldSelectMenu.propTypes = {
 
 const mapStateToProps = (state) => {
     return {
-        menu: state.reportBuilder
+        menu: state.reportBuilder,
+        isCollapsed: state.builderNav.isNavCollapsed
     };
 };
 
