@@ -96,7 +96,7 @@
             leftNavPO.leftNavSearchEl.click();
 
             // Step 11 - Verify if the search input box is closed
-            expect(browser.isVisible('.search .searchInput')).toBeTruthy();
+            expect(browser.isVisible('.search')).toBeTruthy();
 
             // Step 12 - Verify if the left nav caret up element is clickable
             leftNavPO.leftNavCaretUpEl.click();
@@ -150,7 +150,7 @@
             leftNavPO.leftNavSearchEl.click();
 
             // Step 8 - Verify if the search box is closed
-            expect(browser.isVisible('.search .searchInput')).toBeTruthy();
+            expect(browser.isVisible('.search')).toBeTruthy();
         });
 
         it('Verify if the reports icon is displayed and verify the name of the report loaded', function() {
