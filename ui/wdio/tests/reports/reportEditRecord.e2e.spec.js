@@ -17,19 +17,19 @@
             var realmName;
             var realmId;
             var testApp;
-            beforeAll(function () {
+            beforeAll(function() {
                 browser.logger.info('beforeAll spec function - Generating test data and logging in');
                 // // Need to return here. beforeAll is completely async, need to return the Promise chain in any before or after functions!
                 // // No need to call done() anymore
-                return e2eBase.basicAppSetup().then(function (createdApp) {
+                return e2eBase.basicAppSetup().then(function(createdApp) {
                     // Set your global objects to use in the test functions
                     testApp = createdApp;
                     realmName = e2eBase.recordBase.apiBase.realm.subdomain;
                     realmId = e2eBase.recordBase.apiBase.realm.id;
-                }).then(function () {
+                }).then(function() {
                     // Auth into the new stack
                     return NewStackAuthPO.realmLogin(realmName, realmId);
-                }).catch(function (error) {
+                }).catch(function(error) {
                     // Global catch that will grab any errors from chain above
                     // Will appropriately fail the beforeAll method so other tests won't run
                     browser.logger.error('Error in beforeAll function:' + JSON.stringify(error));
@@ -41,7 +41,7 @@
             /**
              * Before each test starts just make sure the report has loaded with records visible
              */
-            beforeEach(function () {
+            beforeEach(function() {
                 e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
                 return ReportContentPO.waitForReportContent();
             });
@@ -50,7 +50,7 @@
              * Test Method - In-line edit menu should have three actions
              */
 
-            it('In-line edit menu should have three actions (save, save and add new, cancel)', function () {
+            it('In-line edit menu should have three actions (save, save and add new, cancel)', function() {
 
                 browser.logger.info('it spec function - Running the test');
 
@@ -68,7 +68,7 @@
              * Test Method. Record in-line editing test on a report.
              */
                 //TODO: MC-2309: Enable this when the phone number field validation is fixed.
-            xit('Should allow you to in-line edit multiple fields in a report record', function () {
+            xit('Should allow you to in-line edit multiple fields in a report record', function() {
 
                 //Variable declarations
                 var textToEnter = 'My new text';
@@ -118,7 +118,7 @@
             /**
              * Test Method. Cancel button test for in-line editing.
              */
-            it('Cancel button should not save edit updates to a record', function () {
+            it('Cancel button should not save edit updates to a record', function() {
                 //Note this is not working on safari
                 if (browserName !== 'safari') {
                     var textToEnter = 'My new text 2';
@@ -150,7 +150,7 @@
             /**
              * Negative Test. Reload page test for in-line editing.
              */
-            it('Reloading the page while editing should not save updates to a record', function () {
+            it('Reloading the page while editing should not save updates to a record', function() {
                 if (browserName === 'chrome' || browserName === 'firefox') {
                     var textToEnter = 'My new text 3';
 
