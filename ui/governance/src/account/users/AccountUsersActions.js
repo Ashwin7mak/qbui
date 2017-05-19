@@ -76,13 +76,13 @@ export const paginateUsers = (users, _page, _itemsPerPage) => {
 
     let slicedUsers = users.slice(offset, offset + itemsPerPage);
     return {
-        currentPageRecords: slicedUsers,
+        currentPageItems: slicedUsers,
         currentPage: currentPage,
-        filteredRecords:users.length,
+        totalFilteredItems:users.length,
         itemsPerPage: itemsPerPage,
         totalPages: Math.ceil(users.length / itemsPerPage),
-        firstRecordInCurrentPage: slicedUsers.length === 0 ? 0 : offset + 1,
-        lastRecordInCurrentPage: offset + slicedUsers.length
+        firstItemIndexInCurrentPage: slicedUsers.length === 0 ? 0 : offset + 1,
+        lastItemIndexInCurrentPage: offset + slicedUsers.length
     };
 };
 
@@ -178,16 +178,13 @@ export const doUpdate = (gridId, gridState, _itemsPerPage) => {
 
         // Then Paginate
         let itemsPerPage = _itemsPerPage || gridState.pagination.itemsPerPage;
-        let {currentPageRecords, ...pagination} = paginateUsers(sortedUsers, gridState.pagination.currentPage, itemsPerPage);
-
-        // Set the grid's search term
-        dispatch(StandardGridActions.setSearch(gridId, searchTerm));
+        let {currentPageItems, ...pagination} = paginateUsers(sortedUsers, gridState.pagination.currentPage, itemsPerPage);
 
         // Set the grid's pagination info
         dispatch(StandardGridActions.setPaginate(gridId, pagination));
 
         // Inform the grid of the new users
-        dispatch(StandardGridActions.setItems(gridId, currentPageRecords));
+        dispatch(StandardGridActions.setItems(gridId, currentPageItems));
 
     };
 };
@@ -215,8 +212,8 @@ export const fetchAccountUsers = (accountId, gridID, itemsPerPage) => {
             // inform the redux store of all the users
             dispatch(receiveAccountUsers(response.data));
 
-            // set the total records for the grid
-            dispatch(StandardGridActions.setTotalRecords(gridID, response.data.length));
+            // set the total items for the grid
+            dispatch(StandardGridActions.setTotalItems(gridID, response.data.length));
 
             // run through the pipeline and update the grid
             dispatch(doUpdate(gridID, StandardGridState.defaultGridState, itemsPerPage));
