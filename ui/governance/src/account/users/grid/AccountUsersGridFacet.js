@@ -13,7 +13,7 @@ export const FACET_FIELDS = [
         type: SCHEMACONSTS.TEXT,
         needsAccountAdmin:true,
         needsRealmAdmin:true,
-        options: ['Unregistered', 'Unverified', 'Registered'],
+        options: ['Registered', 'Unregistered', 'Unverified'],
         formatter: user => Formatters.FormatUserStatusText(user.hasAppAccess, {rowData: user})
     },
     {
@@ -21,7 +21,7 @@ export const FACET_FIELDS = [
         type: SCHEMACONSTS.TEXT,
         needsAccountAdmin:true,
         needsRealmAdmin:true,
-        options: ['Denied', 'Deactivated', 'Paid Seat', 'No App Access'],
+        options: ['Deactivated', 'Denied', 'No App Access', 'Paid Seat', 'Quick Base Staff'],
         formatter: user => Formatters.FormatAccessStatusText(user.hasAppAccess, {rowData: user})
     },
     {
