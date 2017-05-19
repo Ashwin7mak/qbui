@@ -10,9 +10,9 @@ class StandardGridItemsCount extends Component {
 
     render() {
 
-        const itemCountMessage = (this.props.itemCount === 1) ? this.props.itemTypeSingular : this.props.itemTypePlural;
+        const itemCountMessage = (this.props.totalItems === 1) ? this.props.itemTypeSingular : this.props.itemTypePlural;
 
-        const standardGridItemsCount = (this.props.filteredItemCount === this.props.itemCount) ? `${this.props.itemCount}` : `${this.props.filteredItemCount} of ${this.props.itemCount}`;
+        const standardGridItemsCount = (this.props.totalFilteredItems === this.props.totalItems) ? `${this.props.totalItems}` : `${this.props.totalFilteredItems} of ${this.props.totalItems}`;
 
         return (
              <div className="itemsCountLoaderContainer">
@@ -25,8 +25,20 @@ class StandardGridItemsCount extends Component {
 }
 
 StandardGridItemsCount.propTypes = {
-    itemCount: PropTypes.number.isRequired,
-    filteredItemCount: PropTypes.number.isRequired,
+
+    /**
+     * Total Items before filtering
+     */
+    totalItems: PropTypes.number.isRequired,
+
+    /**
+     * Total Items after filtering
+     */
+    totalFilteredItems: PropTypes.number.isRequired,
+
+    /**
+     * The type of item we are displaying. For example "Users"/"User"
+     */
     itemTypePlural: PropTypes.string,
     itemTypeSingular: PropTypes.string,
 };
