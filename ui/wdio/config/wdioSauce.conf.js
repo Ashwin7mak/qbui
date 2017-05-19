@@ -328,7 +328,10 @@ exports.config = {
             global.browserWidth = browserDimensions.browserWidth;
             global.browserHeight = browserDimensions.browserHeight;
             browser.logger.info('Setting browser size to ' + global.breakpointSize + ' breakpoint (' + global.browserWidth + ', ' + global.browserHeight + ')');
-            //browser.windowHandleSize({width: global.browserWidth, height: global.browserHeight});
+            //TODO on firefox53 this is not working
+            if (browserName === 'chrome') {
+                browser.windowHandleSize({width: global.browserWidth, height: global.browserHeight});
+            }
         }
 
         // recordApi.base (and api.base) will not initialize itself if you don't pass in a config object
