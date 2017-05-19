@@ -24,7 +24,7 @@
         tableTitle : {get: function() {return this.tableContainer.element('.pageContainer .title');}},
 
         //table close
-        tableCloseBtn : {get: function() {return browser.element('.closeButton');}},
+        tableCloseBtn : {get: function() {return browser.element('.modal-dialog .iconUISturdy-close');}},
         //table help
         tableHelpBtn : {get: function() {return browser.element('.iconUISturdy-help');}},
 
@@ -32,7 +32,7 @@
         tableFooterButtons: {get: function() {return browser.elements('.modal-footer .buttons button');}},
 
         //Icon chooser
-        tableFieldIconChooser: {get: function() {return browser.element('.iconChooser.closed');}},
+        tableFieldIconChooser: {get: function() {return browser.element('.modal-dialog .iconChooser.closed');}},
         //Icon chooser down arrow
         iconChooserSelect: {get: function() {return this.tableFieldIconChooser.element('.showAllToggle .showAllSelectedIcon');}},
         //Icon chooser search
