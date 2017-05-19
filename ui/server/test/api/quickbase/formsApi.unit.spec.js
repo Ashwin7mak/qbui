@@ -45,13 +45,11 @@ describe('Validate FormsApi unit tests', function() {
     describe('validate fetchFormMetaData api', function() {
 
         let executeReqStub;
-        // let getHydratedAppStub;
         let getRelationshipForAppStub;
         let getTablesForAppStub;
         beforeEach(function() {
             executeReqStub = sinon.stub(requestHelper, "executeRequest");
             formsApi.setRequestHelperObject(requestHelper);
-            // getHydratedAppStub = sinon.stub(appsApi, "getHydratedApp");
             getRelationshipForAppStub = sinon.stub(appsApi, "getRelationshipsForApp");
             getTablesForAppStub = sinon.stub(appsApi, "getTablesForApp");
             formsApi.setAppsApiObject(appsApi);
@@ -59,7 +57,6 @@ describe('Validate FormsApi unit tests', function() {
 
         afterEach(function() {
             executeReqStub.restore();
-            // getHydratedAppStub.restore();
             getRelationshipForAppStub.restore();
             getTablesForAppStub.restore();
         });
@@ -69,7 +66,6 @@ describe('Validate FormsApi unit tests', function() {
 
             let targetObject = {formMeta:{id:1}};
             executeReqStub.returns(Promise.resolve({body: JSON.stringify(targetObject)}));
-            // getHydratedAppStub.returns(Promise.resolve({body: '[{"appId":1}]'}));
 
             let promise = formsApi.fetchFormMetaData(req);
 
