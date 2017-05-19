@@ -344,7 +344,7 @@ const config = {
         ...(process.env.ANALYZE_WEBPACK ? [new BundleAnalyzerPlugin()] : []),
 
         // Print timestamp on each webpack build
-        WatchTimePlugin
+        ...(LOCAL ? [WatchTimePlugin] : [])
     ]
 };
 
