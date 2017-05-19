@@ -56,7 +56,7 @@ export const BuilderWrapper = React.createClass({
             onNavClick = () => {this.props.toggleNav('builder');};
         } else if (this.props.location.pathname.includes('report')) {
             title = `${Locale.getMessage('builder.reportBuilder.modify')}`;
-            onNavClick = () => {this.props.toggleFieldSelectMenu(CONTEXT.REPORT.NAV)};
+            onNavClick = () => {this.props.toggleFieldSelectMenu(CONTEXT.REPORT.NAV);};
         }
         return (
             <div className="builderWrapperContent">
@@ -91,7 +91,7 @@ const mapDispatchToProps = (dispatch) => {
             dispatch(toggleFieldSelectMenu(context));
         },
         toggleNav() {
-            dispatch(commonNavActions('builder').toggleNav())
+            dispatch(commonNavActions('builder').toggleNav());
         }
     };
 };

@@ -55,7 +55,7 @@
 
                 // highlight the row when mouse is over the row
                 .qbRow:hover .qbCell:not(.placeholderCell) {
-                    background: #fff;
+                    background-color: $color-black-100;
                 }
             }
         }

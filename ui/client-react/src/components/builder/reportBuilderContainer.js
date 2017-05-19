@@ -36,9 +36,9 @@ export class ReportBuilderContainer extends Component {
 
     isOnlyOneColumnVisible(columns) {
         return columns.filter(column => {
-                return !column.isHidden && !column.isPlaceholder;
-            }).length === 1;
-    };
+            return !column.isHidden && !column.isPlaceholder;
+        }).length === 1;
+    }
 
     /**
      * Load a report with query parameters.
@@ -155,7 +155,7 @@ const mapDispatchToProps = (dispatch) => {
         closeFieldSelectMenu: (context) => dispatch(closeFieldSelectMenu(context)),
 
         loadDynamicReport: (context, appId, tblId, rptId, format, filter, queryParams) => {
-            dispatch(loadDynamicReport(context, appId, tblId, rptId, format, filter, queryParams))
+            dispatch(loadDynamicReport(context, appId, tblId, rptId, format, filter, queryParams));
         }
     };
 };

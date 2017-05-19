@@ -83,7 +83,7 @@ export class ReportFieldSelectMenu extends Component {
     render() {
         return (
             <SideMenu
-                baseClass='reportFieldSelectMenu'
+                baseClass="reportFieldSelectMenu"
                 sideMenuContent={this.getMenuContent()}
                 isCollapsed={this.props.menu.isCollapsed}
             >

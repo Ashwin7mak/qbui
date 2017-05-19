@@ -32,7 +32,7 @@ const reportBuilder = (
         return {
             ...state,
             isCollapsed: !state.isCollapsed
-        }
+        };
     }
     case types.OPEN_FIELD_SELECT_MENU: {
         return {
