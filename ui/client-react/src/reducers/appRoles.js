@@ -5,10 +5,15 @@ import * as types from '../actions/types';
 import Logger from '../utils/logger';
 
 
-// Return a specific set of appRoles from app roles object for a given appId, else returns null
+// Return only the appRoles from app roles object for a given appId, else returns null
 export const getAppRoles = (state, appId) => {
     const appRoleList = state[appId];
     return appRoleList ? appRoleList.roles : null;
+};
+
+// Return a object from the appRoles store for a given appId, else returns null
+export const getAppRolesObject = (state, appId) => {
+    return state[appId] ? state[appId] : null;
 };
 
 /**
@@ -20,16 +25,15 @@ export const getAppRoles = (state, appId) => {
  * @returns {*}
  */
 const appRolesStore = (state = {}, action) => {
-
-    //const newState = _.reject(state, app => app.id === action.appId);
-    const newState = {};
-    //let getCurrentState = (appId, tblId) =>  _.find(state, field => field.appId === appId && field.tblId === tblId);
+    let newState = state;
+    if (newState[action.appId]) {
+        delete newState[action.appId];
+    }
 
     let logger = new Logger();
 
     switch (action.type) {
     case types.LOAD_APP_ROLES: {
-        // update fields store when loading a form
         newState[action.appId] = {
             roles: [],
             rolesLoading: true,
@@ -39,7 +43,6 @@ const appRolesStore = (state = {}, action) => {
     }
 
     case types.LOAD_APP_ROLES_FAILED: {
-        // update fields store when loading a form
         newState[action.appId] = {
             roles: [],
             rolesLoading: false,
@@ -49,7 +52,6 @@ const appRolesStore = (state = {}, action) => {
     }
 
     case types.LOAD_APP_ROLES_SUCCESS: {
-        // update fields store when loading a form
         newState[action.appId] = {
             roles: action.content.roles,
             rolesLoading: false,

@@ -4,10 +4,9 @@ import Promise from 'bluebird';
 import LogLevel from '../utils/logLevels';
 
 /**
- * Construct fields store payload
+ * Construct appRole store payload
  *
  * @param appId - appId for fields
- * @param tblId - tblId for fields
  * @param type - event type
  * @param content - optional content related to event type
  * @returns {{id: *, type: *, content: *}}
