@@ -204,7 +204,6 @@ class FieldUtils {
         case FieldFormats.URL_FORMULA_FORMAT:     return "formulaUrlFormat";
         case FieldFormats.CHECKBOX_FORMAT:        return 'checkboxFormat';
         case FieldFormats.LINK_TO_RECORD:         return 'linkToRecordFormat';
-        case FieldFormats.LIST_OF_RECORDS:        return 'listOfRecordsFormat';
         default:                                  return "textFormat";
         }
     }
