@@ -603,6 +603,7 @@ module.exports = function(grunt) {
                         './wdio/tests/forms/formEditValidation.e2e.spec.js'
                     ],
                     relationships: [
+                        './wdio/tests/relationships/relationshipViewChildTable.e2e.spec.js'
                     ],
                     reports: [
                         './wdio/tests/reports/reportDeleteRecord.e2e.spec.js',
@@ -612,8 +613,7 @@ module.exports = function(grunt) {
                         './wdio/tests/reports/grouping/reportGroupingViaColumnHeader.e2e.spec.js',
                         './wdio/tests/reports/grouping/reportGroupingViaContainer.e2e.spec.js',
                         './wdio/tests/reports/sorting/reportSortingViaColumnHeader.e2e.spec.js',
-                        './wdio/tests/reports/sorting/reportSortingViaContainer.e2e.spec.js',
-                        './wdio/tests/relationships/relationshipViewChildTable.e2e.spec.js',
+                        './wdio/tests/reports/sorting/reportSortingViaContainer.e2e.spec.js'
                     ],
                     tables: [
                         './wdio/tests/tables/tableCreate.e2e.spec.js',
