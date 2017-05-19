@@ -20,6 +20,7 @@ import {showTableCreationDialog} from '../../actions/tableCreationActions';
 import {loadDynamicReport} from '../../actions/reportActions';
 import {CONTEXT} from '../../actions/context';
 import {WindowHistoryUtils} from '../../utils/windowHistoryUtils';
+import Breakpoints from '../../utils/breakpoints';
 import {EDIT_RECORD_KEY, NEW_RECORD_VALUE} from '../../constants/urlConstants';
 import {NEW_TABLE_IDS_KEY} from '../../constants/localStorage';
 import _ from 'lodash';
@@ -138,6 +139,9 @@ export const TableHomePageRoute = React.createClass({
         //  ensure there is a rptId property otherwise the report not found page is rendered in ReportToolsAndContent
         let homePageParams = _.assign(this.props.match.params, {rptId: null});
 
+        const classNames = ['reportContainer'];
+        classNames.push(Breakpoints.isSmallBreakpoint() ? 'smallBreakPoint' : '');
+
         let mainContent;
 
         if (this.showInitialTableHomePage()) {
@@ -163,7 +167,7 @@ export const TableHomePageRoute = React.createClass({
         }
 
         return (
-            <div className="reportContainer">
+            <div className={classNames.join(' ')}>
                 <ReportFieldSelectMenu
                     appId={this.props.match.params.appId}
                     tblId={this.props.match.params.tblId}

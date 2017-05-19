@@ -3,12 +3,12 @@ import {Route} from 'react-router-dom';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
 import Drawer from './drawer';
-import {RecordRouteWithUniqueId} from '../../components/record/recordRoute';
 
 import './drawerContainer.scss';
 
 /**
  * A parent component which orchestrates sliding a drawer in and out of the parent container.
+ * The content of the drawer must be passed in as props.children.
  * We rely on React Router 4's children function, see https://reacttraining.com/react-router/web/api/Route/children-func
  *
  * While the drawerContainer div is visible, the user cannot click on the root record because it's blocked by the
@@ -57,17 +57,14 @@ class DrawerContainer extends React.Component {
     }
 
     /**
-     * The inner Drawer component. The key for the Drawer is used by ReactCSSTransitionGroup
+     * Render the inner Drawer component and its content (passed in to DrawerContainer as props.children).
+     * The key for the Drawer is used by ReactCSSTransitionGroup
      * https://facebook.github.io/react/docs/animation.html
      */
     getDrawer = () => {
         return (
             <Drawer key={1} onMount={this.showDrawerContainer} onUnmount={this.hideDrawerContainer}>
-                <RecordRouteWithUniqueId
-                    {...this.props}
-                    isDrawerContext={true}
-                    hasDrawer={true}
-                    />
+                {this.props.children}
             </Drawer>);
     };
 
@@ -89,28 +86,31 @@ class DrawerContainer extends React.Component {
     render() {
         const classNames = ['drawerContainer'];
         classNames.push(this.state.visible ? 'visible' : '');
+        classNames.push(this.props.direction);
 
         let closeHandleBackdrop = null;
         // We only need one backdrop to handle closing the drawer containers. Only render for the root drawer instance.
-        if (this.props.rootDrawer) {
+        if (this.props.renderBackdrop && this.props.rootDrawer) {
             classNames.push('rootDrawer');
             closeHandleBackdrop = <div className="closeHandleBackdrop" onClick={this.props.closeDrawer} />;
         }
 
+        // the path to match when rendering a drawer's content
+        const path = `${this.props.match.url}${this.props.pathToAdd}`;
         // <div className="drawerContainer"> is visible when either `match` is defined or `state.visible` is true
         return (
             <Route
-                path={`${this.props.match.url}/sr_app_:appId([A-Za-z0-9]+)_table_:tblId([A-Za-z0-9]+)_report_:rptId([A-Za-z0-9]+)_record_:recordId([A-Za-z0-9]+)`}
+                path={path}
                 children={({match, ...rest}) => (
                     <div className={classNames.join(' ')}>
                         {match && closeHandleBackdrop}
                         <ReactCSSTransitionGroup
-                            className="slidey-righty"
-                            transitionName="slidey-righty"
+                            className="slidey-container"
+                            transitionName="slidey"
                             transitionAppear={true}
-                            transitionAppearTimeout={400}
-                            transitionEnterTimeout={400}
-                            transitionLeaveTimeout={400}
+                            transitionAppearTimeout={550}
+                            transitionEnterTimeout={550}
+                            transitionLeaveTimeout={550}
                             >
                             {match && this.getDrawer()}
                         </ReactCSSTransitionGroup>
@@ -120,11 +120,26 @@ class DrawerContainer extends React.Component {
     }
 }
 
+DrawerContainer.defaultProps = {
+    direction: 'right',
+    renderBackdrop: true
+};
+
 DrawerContainer.propTypes = {
     /** whether this is the root drawer instance */
     rootDrawer: PropTypes.bool,
     /** function to call when the user clicks on the backdrop, all drawers should close when called */
-    closeDrawer: PropTypes.func
+    closeDrawer: PropTypes.func,
+    /** the router match prop for the parent of drawerContainer, we expand on the parent's route */
+    match: PropTypes.shape({
+        url: PropTypes.string
+    }).isRequired,
+    /** the path-string to add on to the current url */
+    pathToAdd: PropTypes.string.isRequired,
+    /** direction to slide in/out the drawer */
+    direction: PropTypes.oneOf(['right', 'bottom']),
+    /** Whether to render a clickable backdrop. */
+    renderBackdrop: PropTypes.bool
 };
 
 export default DrawerContainer;

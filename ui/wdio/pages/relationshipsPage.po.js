@@ -17,7 +17,7 @@
         // Element locators
 
         // Slidey-righty which is a drawer component for showing child records of a parent record
-        slideyRightyEl: {get: function() {return browser.element('.slidey-righty');}},
+        slideyRightyEl: {get: function() {return browser.element('.slidey-container');}},
         viewFormTableEl: {get: function() {return this.slideyRightyEl.element('.viewForm .formTable');}},
         tableHomePageLinkEl: {get: function() {return this.slideyRightyEl.element('.navLinks .tableHomepageLink');}},
         iconActionsEl: {get: function() {return this.slideyRightyEl.element('.stageHeadline .iconActions');}},
@@ -115,7 +115,7 @@
             this.iconActionsCloseDrawerButtonEl.waitForVisible();
             this.viewFormTableEl.waitForExist();
             this.iconActionsCloseDrawerButtonEl.click();
-            browser.waitForVisible('.slidey-righty .iconActionButton.closeDrawer', e2eConsts.shortWaitTimeMs, true);
+            browser.waitForVisible('.slidey-container .iconActionButton.closeDrawer', e2eConsts.shortWaitTimeMs, true);
         }},
 
         /**

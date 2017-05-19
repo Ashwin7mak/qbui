@@ -28,6 +28,7 @@ function event(ctx, type, content) {
 }
 
 describe('Report actions', () => {
+
     it('select report records', () => {
         let selections = [1, 2, 3];
         expect(reportActions.selectReportRecords(context, selections)).toEqual(event(context, types.SELECT_REPORT_RECORDS, {selections}));
@@ -155,6 +156,9 @@ describe('Test ReportsActions function success workflow', () => {
         getReportRecordsCount() {
             return Promise.resolve(mockCountResult);
         }
+        updateReport() {
+            return Promise.reject(mockErrorResponse);
+        }
     }
 
     class mockFieldService {
@@ -278,6 +282,30 @@ describe('Test ReportsActions function success workflow', () => {
                 done();
             });
     });
+
+    it('save report', (done) => {
+        const store = mockReportsStore({});
+
+        let rptDef = {
+            data : {
+                name: 'Sample Report',
+                fids: [2, 3]
+            }
+        };
+
+        return store.dispatch(reportActions.saveReport(appId, tblId, rptId, rptDef)).then(
+            () => {
+                expect(mockReportService.updateReport).toHaveBeenCalledWith(appId, tblId, rptDef, rptDef);
+                done();
+            },
+            () => {
+                expect(false).toBe(true);
+                done();
+            }
+        );
+
+    });
+
 });
 
 describe('Test ReportsActions function failure workflow', () => {
