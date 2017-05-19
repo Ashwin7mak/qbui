@@ -168,7 +168,6 @@
              */
             fetchRelationshipsForForm: (req, opts) => {
                 const promises = [requestHelper.executeRequest(req, opts), appsApi.getRelationshipsForApp(req)];
-                /* istanbul ignore next  */
                 return Promise.all(promises).then(response => {
                     const formMeta = JSON.parse(response[0].body);
                     const relationships = response[1] || [];

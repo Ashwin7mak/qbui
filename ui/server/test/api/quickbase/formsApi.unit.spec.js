@@ -45,13 +45,13 @@ describe('Validate FormsApi unit tests', function() {
     describe('validate fetchFormMetaData api', function() {
 
         let executeReqStub;
-        let getHydratedAppStub;
+        // let getHydratedAppStub;
         let getRelationshipForAppStub;
         let getTablesForAppStub;
         beforeEach(function() {
             executeReqStub = sinon.stub(requestHelper, "executeRequest");
             formsApi.setRequestHelperObject(requestHelper);
-            getHydratedAppStub = sinon.stub(appsApi, "getHydratedApp");
+            // getHydratedAppStub = sinon.stub(appsApi, "getHydratedApp");
             getRelationshipForAppStub = sinon.stub(appsApi, "getRelationshipsForApp");
             getTablesForAppStub = sinon.stub(appsApi, "getTablesForApp");
             formsApi.setAppsApiObject(appsApi);
@@ -59,7 +59,7 @@ describe('Validate FormsApi unit tests', function() {
 
         afterEach(function() {
             executeReqStub.restore();
-            getHydratedAppStub.restore();
+            // getHydratedAppStub.restore();
             getRelationshipForAppStub.restore();
             getTablesForAppStub.restore();
         });
@@ -69,7 +69,7 @@ describe('Validate FormsApi unit tests', function() {
 
             let targetObject = {formMeta:{id:1}};
             executeReqStub.returns(Promise.resolve({body: JSON.stringify(targetObject)}));
-            getHydratedAppStub.returns(Promise.resolve({body: '[{"appId":1}]'}));
+            // getHydratedAppStub.returns(Promise.resolve({body: '[{"appId":1}]'}));
 
             let promise = formsApi.fetchFormMetaData(req);
 
@@ -99,7 +99,7 @@ describe('Validate FormsApi unit tests', function() {
 
             let targetObject = '"[formMeta: {id:1}]"';
             executeReqStub.returns(Promise.resolve({body: targetObject}));
-            getHydratedAppStub.returns(Promise.resolve({body: '[{"appId":1}]'}));
+            // getHydratedAppStub.returns(Promise.resolve({body: '[{"appId":1}]'}));
 
 
             [true, false].forEach(eeEnableFlag => {
@@ -150,6 +150,75 @@ describe('Validate FormsApi unit tests', function() {
 
         });
 
+    });
+
+    /**
+     * Unit test for fetchRelationshipsForForm API
+     */
+    describe('validate fetchRelationshipsForForm api', function() {
+        let executeReqStub;
+        let getRelationshipForAppStub;
+
+        beforeEach(function() {
+            executeReqStub = sinon.stub(requestHelper, "executeRequest");
+            formsApi.setRequestHelperObject(requestHelper);
+            getRelationshipForAppStub = sinon.stub(appsApi, "getRelationshipsForApp");
+        });
+
+        afterEach(function() {
+            executeReqStub.restore();
+            getRelationshipForAppStub.restore();
+        });
+
+        it('success return results', function(done) {
+            req.url = '/apps/123/tables/456?format=display';
+            formsApi.setRequestHelperObject(requestHelper);
+
+            let formMetaTarget = {id:1};
+            let relationshipsTarget = [{id:1}, {id:2}];
+            let responseObject = {id:1, relationships:[{id:1}, {id:2}]};
+
+            executeReqStub.returns(Promise.resolve({body: JSON.stringify(formMetaTarget)}));
+            getRelationshipForAppStub.returns(Promise.resolve(relationshipsTarget));
+
+            let promise = formsApi.fetchRelationshipsForForm(req);
+
+            promise.then(
+                function(response) {
+                    assert.deepEqual(response, responseObject);
+                    done();
+                },
+                function(error) {
+                    assert.fail('fail', 'success', 'fail response returned when success expected');
+                    done();
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('unable to resolve fetchRelationshipsForForm success test: ' + JSON.stringify(errorMsg)));
+            });
+        });
+
+        it('fail return results', function(done) {
+            req.url = '/apps/123/tables/456?format=display';
+            let error_message = "fail unit test case execution";
+
+            executeReqStub.returns(Promise.reject(new Error(error_message)));
+            getRelationshipForAppStub.returns(Promise.reject(new Error(error_message)));
+            let promise = formsApi.fetchRelationshipsForForm(req);
+
+            promise.then(
+                function(error) {
+                    assert.fail('success', 'fail', 'success response returned when failure expected');
+                    done();
+                },
+                function(error) {
+                    //  just verify that the promise rejected; which error message is returned is insignificant
+                    assert.ok(error);
+                    done();
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('unable to resolve fetchRelationshipsForForm failure test: ' + JSON.stringify(errorMsg)));
+            });
+        });
     });
 
     /**
