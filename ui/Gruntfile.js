@@ -595,6 +595,8 @@ module.exports = function(grunt) {
                     './wdio/tests/reports/reportSearch.e2e.spec.js',
                     //Stabilize in CI before enabling
                     './wdio/tests/relationships/relationshipViewChildTable.e2e.spec.js',
+                    //Disabling inLne edit tests due to mouseMove issue in firefox53
+                    './wdio/tests/reports/reportEditRecord.e2e.spec.js',
                 ],
                 suites: {
                     // Please alphabetize these by folder level
@@ -608,7 +610,6 @@ module.exports = function(grunt) {
                     ],
                     reports: [
                         './wdio/tests/reports/reportDeleteRecord.e2e.spec.js',
-                        './wdio/tests/reports/reportEditRecord.e2e.spec.js',
                         './wdio/tests/reports/reportNavigation.e2e.spec.js',
                         './wdio/tests/reports/reportTable.e2e.spec.js',
                         './wdio/tests/reports/grouping/reportGroupingViaColumnHeader.e2e.spec.js',
