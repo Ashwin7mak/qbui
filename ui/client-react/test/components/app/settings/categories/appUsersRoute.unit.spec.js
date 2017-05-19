@@ -22,7 +22,8 @@ describe('AppUsersRoute functions', () => {
             loadAppRoles: function() {return;},
             loadAppOwner: function() {return;},
             selectUsersRows: function() {return;},
-            selectedUsersRows: function() {return;}
+            selectedUsersRows: function() {return;},
+            getAllUsers: function() {return;}
         }
     };
 

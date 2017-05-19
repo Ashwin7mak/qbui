@@ -194,7 +194,6 @@ let appsActions = {
                 let appService = new AppService();
                 appService.getAppUsers(appId).then(payload => {
                     this.dispatch(actions.GET_APP_USERS_SUCCESS, {appUsers: payload.data, userId: userId});
-                    // this.dispatch(actions.ADD_USER_SUCCESS, {appId: appId, roleId: roleId, userIds:[userId]});
                     resolve();
                 }, () => {
                     this.dispatch(actions.GET_APP_USERS_FAILED);
@@ -210,7 +209,11 @@ let appsActions = {
 
     setUserRoleToAdd(roleId) {
         this.dispatch(actions.SET_USER_ROLE_TO_ADD_TO_APP, roleId);
-    }
+    },
+
+    openAddUserDialog(status) {
+        this.dispatch(actions.TOGGLE_ADD_USER_TO_APP_DIALOG, status);
+    },
 };
 
 export default appsActions;

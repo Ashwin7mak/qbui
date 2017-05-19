@@ -10,8 +10,6 @@ import QBIcon from '../../../../../../reuse/client/src/components/icon/icon';
 import AppSettingsStage from '../appSettingsStage';
 import Locale from '../../../../../../reuse/client/src/locales/locale';
 import UserActions from '../../../actions/userActions';
-import * as addUserActions from '../../../../actions/addUserActions';
-import {connect} from 'react-redux';
 
 import './appUsersRoute.scss';
 
@@ -51,7 +49,7 @@ const AppUsersRoute = React.createClass({
 
     getPageActions() {
         const actions = [
-            {msg: 'app.users.addUser', icon: 'add-new-filled', className: 'addRecord', onClick: this.openAddUserDialog},
+            {msg: 'app.users.addUser', icon: 'add-new-filled', className: 'addRecord', onClick: this.toggleAddUserDialog},
             {msg: 'unimplemented.makeFavorite', icon: 'star', disabled: true},
             {msg: 'unimplemented.email', icon: 'mail', disabled: true},
             {msg: 'unimplemented.print', icon: 'print', disabled: true}
@@ -59,8 +57,8 @@ const AppUsersRoute = React.createClass({
         return (<IconActions className="pageActions" actions={actions} maxButtonsBeforeMenu={4}/>);
     },
 
-    openAddUserDialog() {
-        this.props.openAddUserDialog();
+    toggleAddUserDialog(state = true) {
+        this.props.flux.actions.openAddUserDialog(state);
     },
 
     setUserRoleToAdd(roleId) {
@@ -180,7 +178,8 @@ const AppUsersRoute = React.createClass({
                                appId={this.props.match.params.appId}
                                selectedApp={this.props.selectedApp}
                                existingUsers={this.props.appUsersUnfiltered}
-                               hideAddUserDialog={this.props.hideAddUserDialog}/>
+                               addUserToAppDialogOpen={this.props.addUserToAppDialogOpen}
+                               hideDialog={this.toggleAddUserDialog}/>
                 {this.getTableActions()}
                 <div className="userManagementContainer">
                     <UserManagement appId={this.props.match.params.appId}
@@ -198,16 +197,4 @@ const AppUsersRoute = React.createClass({
 
 });
 
-const mapDispatchToProps = (dispatch)=>{
-    return {
-        openAddUserDialog: ()=>{dispatch(addUserActions.showAddUserDialog());},
-        hideAddUserDialog: ()=>{dispatch(addUserActions.hideAddUserDialog());},
-    };
-};
-
-const mapStateToProps = (state) => {
-    return {};
-};
-
-
-export default connect(mapStateToProps, mapDispatchToProps)(AppUsersRoute);
+export default AppUsersRoute;

@@ -25,6 +25,7 @@ let AppsStore = Fluxxor.createStore({
         this.selectedAppId = null;
         this.selectedTableId = null;
         this.userRoleToAdd = null;
+        this.addUserToAppDialogOpen = false;
 
         this.bindActions(
             actions.LOAD_APPS, this.onLoadApps,
@@ -62,6 +63,7 @@ let AppsStore = Fluxxor.createStore({
             actions.GET_APP_USERS_FAILED, this.onGetAppUserFailed,
 
             actions.ASSIGN_USERS_TO_APP_SUCCESS, this.assignUsersToAppSuccess,
+            actions.TOGGLE_ADD_USER_TO_APP_DIALOG, this.addUserToAppDialog,
         );
 
         this.logger = new Logger();
@@ -275,6 +277,11 @@ let AppsStore = Fluxxor.createStore({
         this.emit('change');
     },
 
+    addUserToAppDialog(status) {
+        this.addUserToAppDialogOpen = status;
+        this.emit('change');
+    },
+
     getState() {
         return {
             apps: this.apps,
@@ -288,6 +295,7 @@ let AppsStore = Fluxxor.createStore({
             error: this.error,
             selectedUserRows:this.selectedUserRows,
             allUsers: this.allUsers,
+            addUserToAppDialogOpen: this.addUserToAppDialogOpen,
             userRoleToAdd: this.userRoleToAdd,
         };
     },

@@ -1,9 +1,7 @@
 import React from 'react';
 import MultiStepDialog from '../../../../reuse/client/src/components/multiStepDialog/multiStepDialog';
-import {connect} from 'react-redux';
 import {NotificationManager} from 'react-notifications';
 import {I18nMessage} from "../../utils/i18nMessage";
-import * as addUserActions from '../../actions/addUserActions';
 import AddUserPanel from './addUserPanel';
 import Locale from '../../locales/locales';
 import './addUserDialog.scss';
@@ -27,7 +25,7 @@ export class AddUserDialog extends React.Component {
      */
     onCancel() {
         this.state.isValid = false;
-        this.props.hideAddUserDialog();
+        this.props.hideDialog(false);
     }
 
     /**
@@ -42,7 +40,7 @@ export class AddUserDialog extends React.Component {
         };
         this.props.assignUserToApp(this.props.appId, userInfo).then(
             (response) => {
-                this.props.hideAddUserDialog();
+                this.props.hideDialog(false);
                 this.props.onAddedUser(userInfo.userId);
             },
             (error) => {
@@ -69,8 +67,7 @@ export class AddUserDialog extends React.Component {
     render() {
 
         const classes = ['addUserDialog'];
-        return (<MultiStepDialog show={this.props.addUser.dialogOpen}
-                                 isLoading={this.props.addUser.savingUser}
+        return (<MultiStepDialog show={this.props.addUserToAppDialogOpen}
                                  classes={classes.join(' ')}
                                  onCancel={this.onCancel}
                                  onFinished={this.onFinished}
@@ -97,13 +94,4 @@ AddUserDialog.propTypes = {
     // TODO: add proptypes
 };
 
-const mapStateToProps = (state) => {
-    return {
-        addUser: state.addUser,
-    };
-};
-
-export default connect(
-    mapStateToProps,
-    addUserActions
-)(AddUserDialog);
+export default AddUserDialog;

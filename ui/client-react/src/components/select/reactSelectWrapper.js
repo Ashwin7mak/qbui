@@ -65,6 +65,7 @@ const reactSelectWrapper = React.createClass({
                 onBlur={this.props.onBlur}
                 autoload={false}
                 filterOption={this.props.filterOption}
+                noResultsText={this.props.noResultsText}
              />) :
          (
              <Select

@@ -137,6 +137,7 @@ const UserFieldValueEditor = React.createClass({
      * @param option user object with value & email flag
      */
     renderOption(option) {
+
         if (option.value === null) {
             return <div>&nbsp;</div>; // placeholder for no-user
         }
@@ -182,18 +183,26 @@ const UserFieldValueEditor = React.createClass({
             user.screenName && user.screenName.toLowerCase().indexOf(filter) === 0;
     },
 
+    /**
+     * Called when the user types text into the react-select input.
+     * @param {String} newInputValue value of the react-select input
+     */
+    onInputChange(newInputValue) {
+        if(!this.props.isAddUser) {this.setState({inputValue: newInputValue});}
+    },
+
     loadAsyncOptions(input, callback) {
         return input === '' ?
             callback(null, {
                 options: this.getSelectItems(),
                 complete: false
             }) :
-        this.props.searchUsers(input).then(()=>{
-            callback(null, {
-                options: this.getSelectItems(),
-                complete: false
+            this.props.searchUsers(input).then(()=>{
+                callback(null, {
+                    options: this.getSelectItems(),
+                    complete: false
+                });
             });
-        });
     },
 
     /**

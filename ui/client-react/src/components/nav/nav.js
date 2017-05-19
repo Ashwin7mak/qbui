@@ -441,6 +441,7 @@ export const Nav = React.createClass({
                                 selectedTable: this.getSelectedTable(reportsData.tblId),
                                 selectedUserRows: this.state.apps.selectedUserRows,
                                 allUsers: this.state.apps.allUsers,
+                                addUserToAppDialogOpen: this.state.apps.addUserToAppDialogOpen,
                                 scrollingReport: this.state.nav.scrollingReport,
                                 flux: flux,
                                 userRoleToAdd: this.state.apps.userRoleToAdd,

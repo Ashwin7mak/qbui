@@ -10,7 +10,6 @@ import search from './search';
 import shell from './shell';
 import featureSwitches from './featureSwitches';
 import tableCreation from './tableCreation';
-import addUser from './addUser';
 import tableProperties from './tableProperties';
 import animation from './animation';
 import embeddedReports from './embeddedReports';
@@ -30,7 +29,6 @@ export default combineReducers({
     search,
     shell,
     tableCreation,
-    addUser,
     embeddedReports,
     tableProperties,
     builderNav: commonNavReducer('builder'),
