@@ -626,7 +626,8 @@ module.exports = function(grunt) {
                         './wdio/tests/users/usersTable.e2e.spec.js'
                     ],
                     global: [
-                        './wdio/tests/global/globalTopNav.e2e.spec.js'
+                        './wdio/tests/global/globalTopNav.e2e.spec.js',
+                        './wdio/tests/global/globalLeftNav.e2e.spec.js'
                     ]
                 }
             },
