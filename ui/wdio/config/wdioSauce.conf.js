@@ -101,7 +101,7 @@ exports.config = {
     //
     capabilities: [
         {
-            platform : 'OS X 10.11',
+            platform : 'OS X 10.12',
             browserName     : 'chrome',
             tunnelIdentifier: process.env.ENV_TUNNEL_NAME,
             build           : 'WebdriverIO Jenkins Master Build #' + process.env.BUILD_NUMBER + ' - OSX Chrome Browser',
@@ -131,7 +131,7 @@ exports.config = {
         //     maxInstances: 5
         // },
         {
-            platform: 'OS X 10.11',
+            platform: 'OS X 10.12',
             browserName: 'firefox',
             marionette: 'false',
             tunnelIdentifier: process.env.ENV_TUNNEL_NAME,

@@ -2,7 +2,7 @@ var baseConf = require('./wdioSauce.conf');
 var config = {
     capabilities: [
         {
-            platform: 'OS X 10.11',
+            platform: 'OS X 10.12',
             browserName: 'firefox',
             marionette: 'false',
             tunnelIdentifier: process.env.ENV_TUNNEL_NAME,
