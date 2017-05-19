@@ -96,8 +96,7 @@
             leftNavPO.leftNavSearchEl.click();
 
             // Step 11 - Verify if the search input box is closed
-            browser.waitForVisible('.appsList .search ');
-            expect(browser.isVisible('.appsList .search ')).toBeTruthy();
+            expect(browser.isVisible('.appsList .search.open')).toBeFalsy();
 
             // Step 12 - Verify if the left nav caret up element is clickable
             leftNavPO.leftNavCaretUpEl.click();
@@ -151,8 +150,7 @@
             leftNavPO.leftNavSearchEl.click();
 
             // Step 8 - Verify if the search input box is closed
-            browser.waitForVisible('.tablesHeading .search ');
-            expect(browser.isVisible('.tablesHeading .search ')).toBeTruthy();
+            expect(browser.isVisible('.tablesHeading .search.open ')).toBeFalsy();
         });
 
         it('Verify if the reports icon is displayed and verify the name of the report loaded', function() {
