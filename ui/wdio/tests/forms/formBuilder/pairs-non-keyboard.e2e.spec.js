@@ -5,7 +5,6 @@
     let e2ePageBase = requirePO('e2ePageBase');
     let reportContentPO = requirePO('reportContent');
     let formBuilderPO = requirePO('formBuilder');
-    let topNavPO = requirePO('topNav');
 
     let realmName;
     let realmId;
@@ -50,7 +49,6 @@
             // edit first record
             reportContentPO.clickOnRecordInReportTable(0);
             // invoke form builder
-            topNavPO.modifyThisForm.waitForExist();
             return formBuilderPO.open();
         });
 

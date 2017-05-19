@@ -20,7 +20,7 @@
                 return checkBoxes;
             }},
         deleteIcon: {get: function() {return browser.element('.icon-delete span');}},
-
+        backToReport: {get: function() {return browser.element('.backToReport');}},
         tableBody: {get: function() {return browser.element('.qbTbody');}},
         reportsToolBar : {get: function() {return browser.element('.reportToolbar');}},
         addRecordButton : {get: function() {return browser.element('.tableHomePageInitial .addRecordButton');}},
@@ -327,7 +327,8 @@
                 }, recordCellEl);
             }
             //Click on the third cell of recordRowIndex row
-            return recordCellEl.click();
+            recordCellEl.click();
+            return this.backToReport.waitForVisible();
         }},
 
         /**
