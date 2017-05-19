@@ -23,8 +23,8 @@ export class ReportSaveOrCancelFooter extends Component {
     onClickSave = () => {
         //HideAppModal();
         let reportDef = {
-            name: this.props.reportData.data.name,
-            fids: this.props.reportData.data.fids
+            name: this.props.rptData.data.name,
+            fids: this.props.rptData.data.fids
         };
 
         this.props.saveReport(this.props.appId, this.props.tblId, this.props.rptId, reportDef);
@@ -62,7 +62,7 @@ ReportSaveOrCancelFooter.propTypes = {
     appId: PropTypes.string.isRequired,
     tblId: PropTypes.string.isRequired,
     rptId: PropTypes.string.isRequired,
-    reportData: PropTypes.object.isRequired
+    rptData: PropTypes.object.isRequired
 };
 
 const mapDispatchToProps = (dispatch) => {

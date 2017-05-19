@@ -3,6 +3,7 @@ import {ReportSaveOrCancelFooter} from '../../../src/components/reportBuilder/re
 import {shallow, mount} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
 import SaveOrCancelFooter from '../../../src/components/saveOrCancelFooter/saveOrCancelFooter';
+import {}
 
 let component;
 
@@ -10,12 +11,14 @@ describe('Report Builder Save and Cancel Footer', () => {
     const props = {
         exitBuilderMode: (context) => {},
         closeFieldSelectMenu: (context) => {}
+        saveReport: (appId, tblId, rptId, rptDef) => {}
     };
 
     beforeEach(() => {
         jasmineEnzyme();
         spyOn(props, 'exitBuilderMode').and.callThrough();
         spyOn(props, 'closeFieldSelectMenu').and.callThrough();
+        spyOn(props, 'saveReport');
     });
 
     afterEach(() => {
@@ -36,5 +39,15 @@ describe('Report Builder Save and Cancel Footer', () => {
         component = shallow(<ReportSaveOrCancelFooter {...props} />);
         let saveOrCancelFooter = component.find(SaveOrCancelFooter);
         expect(saveOrCancelFooter).toBePresent();
+    });
+
+    it('save button functionality', () => {
+        component = mount(<ReportSaveOrCancelFooter {...props} />);
+
+        let saveButton = component.find('.mainTrowserFooterButton');
+        saveButton.simulate('click');
+        expect(props.saveReport).toHaveBeenCalled();
+        expect(props.exitBuilderMode).toHaveBeenCalled();
+        expect(props.closeFieldSelectMenu).toHaveBeenCalled();
     });
 });
