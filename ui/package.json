@@ -186,7 +186,7 @@
     "rewire": "^2.5.1",
     "sass-loader": "^2.0.1",
     "sauce-connect-launcher": "^0.14.0",
-    "selenium-webdriver": "^3.4.0",
+    "selenium-webdriver": "2.40.0",
     "should": "~3.3.2",
     "sinon": "~1.17.7",
     "style-loader": "^0.13.1",
