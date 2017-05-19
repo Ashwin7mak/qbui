@@ -36,7 +36,7 @@ export const BuilderWrapper = React.createClass({
 
         if (!this.state.apps.apps) {
             const appId = _.get(this.props, "match.params.appId");
-            flux.actions.selectAppId(appId)
+            flux.actions.selectAppId(appId);
         }
     },
 
