@@ -11,7 +11,6 @@ import TopNav from '../../../../reuse/client/src/components/topNav/topNav';
 import * as tabIndexConstants from '../formBuilder/tabindexConstants';
 import TableReadyDialog from '../table/tableReadyDialog';
 import Locale from '../../locales/locales';
-import {CONTEXT} from '../../actions/context';
 let FluxMixin = Fluxxor.FluxMixin(React);
 let StoreWatchMixin = Fluxxor.StoreWatchMixin;
 
@@ -59,7 +58,7 @@ export const BuilderWrapper = React.createClass({
                 <NotificationContainer/>
                 <TopNav
                     title={title}
-                    onNavClick={() => {this.props.toggleNav('builder');}}
+                    onNavClick={this.props.toggleNav}
                     globalActions={this.getTopGlobalActions()}
                     tabIndex={tabIndexConstants.FORM_BUILDER_TOGGLE_NAV_BUTTON_TABINDEX}
                 />
@@ -81,12 +80,4 @@ export const BuilderWrapper = React.createClass({
     }
 });
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        toggleNav() {
-            dispatch(commonNavActions('builder').toggleNav());
-        }
-    };
-};
-
-export default withRouter(connect(null, mapDispatchToProps)(BuilderWrapper));
+export default withRouter(connect(null, commonNavActions('builder'))(BuilderWrapper));
