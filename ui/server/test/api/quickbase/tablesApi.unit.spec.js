@@ -382,7 +382,7 @@ describe('Validate tablesApi', function() {
             promise.then(
                 function(response) {
                     assert.equal(createTablePropertiesStub.callCount, 1);
-                    assert.deepEqual(response, {tableNoun: "updated table noun"});
+                    assert.deepEqual(response, createTablePropsResp);
                     done();
                 },
                 function() {
@@ -414,25 +414,6 @@ describe('Validate tablesApi', function() {
             });
         });
 
-        it('results in exception during table properties creation', function(done) {
-            let executeReqStubResp = {statusCode: 404};
-            executeReqStub.onCall(0).returns(Promise.reject(executeReqStubResp));
-            let createTablePropsResp = null;
-            createTablePropertiesStub.returns(Promise.resolve(createTablePropsResp));
-            let promise = tablesApi.replaceTableProperties(req, tableId);
-
-            promise.then(
-                function() {
-                    done(new Error("Unexpected success promise return when testing replaceTableProperties"));
-                },
-                function() {
-                    assert.equal(createTablePropertiesStub.callCount, 1);
-                    done();
-                }
-            ).catch(function(errorMsg) {
-                done(new Error('replaceTableProperties: exception processing test: ' + JSON.stringify(errorMsg)));
-            });
-        });
     });
 
 
