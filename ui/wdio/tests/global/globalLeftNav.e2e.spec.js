@@ -77,7 +77,7 @@
             leftNavPO.leftNavSearchEl.click();
 
             // Step 5 - Verify if the search box is open
-            expect(browser.isVisible('.open')).toBeTruthy();
+            expect(browser.isVisible('.appsList .open')).toBeTruthy();
 
             // Step 6 - Verify if the search box is user editable
             leftNavPO.leftNavSearchInputBox.setValue(sampleText1);
@@ -95,10 +95,13 @@
             leftNavPO.leftNavSearchEl.waitForVisible();
             leftNavPO.leftNavSearchEl.click();
 
-            // Step 11 - Verify if the left nav caret up element is clickable
+            // Step 11 - Verify if the search input box is closed
+            expect(browser.isVisible('.appsList .search ')).toBeTruthy();
+
+            // Step 12 - Verify if the left nav caret up element is clickable
             leftNavPO.leftNavCaretUpEl.click();
 
-            // Step 12 - Verify if the tables list is open
+            // Step 13 - Verify if the tables list is open
             expect((browser.element('.leftNav .tablesList .leftNavLabel').getAttribute('textContent').length) > 0).toBeTruthy();
 
         });
@@ -132,7 +135,7 @@
             leftNavPO.leftNavSearchEl.click();
 
             // Step 3 - Verify if the search box is open
-            expect(browser.isVisible('.open')).toBeTruthy();
+            expect(browser.isVisible('.tablesHeading .open')).toBeTruthy();
 
             // Step 4 - Verify if the search box is user editable
             leftNavPO.leftNavSearchInputBox.setValue(sampleText2);
@@ -145,6 +148,9 @@
 
             // Step 7 - Verify if the search element is clickable and closes the search box
             leftNavPO.leftNavSearchEl.click();
+
+            // Step 8 - Verify if the search input box is closed
+            expect(browser.isVisible('.tablesHeading .search ')).toBeTruthy();
         });
 
         it('Verify if the reports icon is displayed and verify the name of the report loaded', function() {
