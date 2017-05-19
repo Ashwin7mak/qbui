@@ -38,7 +38,7 @@ function buildMockParentComponent(options) {
     return TestUtils.renderIntoDocument(React.createElement(buildMockParent(options)));
 }
 
-describe('TableCreationDialog', () => {
+describe('LinkToRecordTableSelectionDialog', () => {
     beforeEach(() => {
         jasmineEnzyme();
     });
@@ -51,7 +51,7 @@ describe('TableCreationDialog', () => {
         }
     });
 
-    it('renders a TableCreationDialog', () => {
+    it('renders a LinkToRecordTableSelectionDialog', () => {
         component = buildMockParentComponent();
 
         domComponent = document.querySelector('.tableDataConnectionDialog');
@@ -62,7 +62,7 @@ describe('TableCreationDialog', () => {
         expect(domComponent).not.toBeNull();
     });
 
-    it('cancels the TableCreationDialog', () => {
+    it('cancels the LinkToRecordTableSelectionDialog', () => {
         component = buildMockParentComponent();
 
         domComponent = document.querySelector('.tableDataConnectionDialog');

@@ -11,6 +11,11 @@ describe('LinkToRecordValueEditor functions', () => {
     });
 
     afterEach(() => {
+        // Remove modal from the dom after every test to reset
+        let modalInDom = document.querySelector('.tableDataConnectionDialog');
+        if (modalInDom) {
+            modalInDom.parentNode.removeChild(modalInDom);
+        }
     });
 
     let component;
