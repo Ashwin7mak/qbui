@@ -82,7 +82,7 @@ describe('TableCreationDialog', () => {
         let tableOption = document.querySelector('.tableDataConnectionDialog .tableSelector .tableOption');
         expect(tableOption).not.toBeNull();
 
-        TestUtils.SimulateNative.mouseDown(select, {button: 0});
+        TestUtils.SimulateNative.mouseDown(tableOption, {button: 0});
 
         let finishedButton = document.querySelector('.tableDataConnectionDialog .finishedButton');
         expect(finishedButton).not.toBeNull();
