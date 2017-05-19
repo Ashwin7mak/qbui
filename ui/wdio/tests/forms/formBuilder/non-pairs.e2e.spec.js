@@ -49,6 +49,7 @@
             // edit first record
             reportContentPO.clickOnRecordInReportTable(0);
             // invoke form builder
+            topNavPO.modifyThisForm.waitForExist();
             return formBuilderPO.open();
         });
 

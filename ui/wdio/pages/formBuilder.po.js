@@ -179,7 +179,6 @@ class formBuilderPage {
     open() {
         // Invokes the form builder from the VIEW RECORD page
         this.openMenu();
-        topNavPO.modifyThisForm.waitForExist();
         topNavPO.modifyThisForm.click();
         this.firstField.waitForExist();
         return this.getFieldLabels();
