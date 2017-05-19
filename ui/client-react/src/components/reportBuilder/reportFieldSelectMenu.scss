@@ -1,4 +1,4 @@
-@import "../../assets/css/qbVariables";
+@import "../../assets/css/_qbVariables";
 @import "../../../../reuse/client/src/components/sideMenuBase/sideMenuMixins";
 
 /*
@@ -41,12 +41,24 @@
             flex: 1 auto;
             height: 100%;
             overflow: auto;
+            display: flex;
+            flex-direction: column;
+
+            .smallBreakPoint & {
+                display: flex;
+                flex-direction: column;
+                height: 100%;
+            }
         }
 
         > .reportFieldSelectMenuContent {
             position: relative;
             flex: 0;
         }
+    }
+
+    .reportFieldSelectMenuMain {
+        width: 100%;
     }
 
     > .reportFieldSelectMenuContent {
