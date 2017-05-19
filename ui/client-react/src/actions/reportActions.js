@@ -441,16 +441,10 @@ export const saveReport = (appId, tableId, reportId, reportDef) => {
                     .then(() => {
                             logger.debug('ReportService saveReport success');
                             resolve();
-                        },
-                        (error) => {
-                            logger.parseAndLogError(LogLevel.ERROR, error.response, 'reportService.updateReport: ');
-                            //dispatch(event(context, types.SAVING_REPORT_ERROR, error.response ? error.response.status : error.response))
-                            NotificationManager.error(Locale.getMessage('report.notification.save.error'), Locale.getMessage('failed'));
-                            reject(error);
                         }).catch((ex) => {
                         logger.logException(ex);
                         NotificationManager.error(Locale.getMessage('report.notification.save.error'), Locale.getMessage('failed'));
-                        reject(ex);
+                        reject();
                     }
                 );
 
