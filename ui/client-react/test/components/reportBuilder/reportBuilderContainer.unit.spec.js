@@ -1,12 +1,7 @@
 import React from 'react';
-import {shallow, mount} from 'enzyme';
+import {shallow} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
-import {NEW_FORM_RECORD_ID} from '../../../src/constants/schema';
 import {ReportBuilderContainer, __RewireAPI__ as ReportBuilderRewireAPI} from '../../../src/components/builder/reportBuilderContainer';
-import NavigationUtils from '../../../src/utils/navigationUtils';
-import {ENTER_KEY, SPACE_KEY} from '../.././../../reuse/client/src/components/keyboardShortcuts/keyCodeConstants';
-
-import Loader from 'react-loader';
 
 const appId = "1";
 const tblId = "2";
@@ -51,7 +46,6 @@ let testProps = {
 };
 
 let component;
-let instance;
 
 class mockReportToolsAndContent extends React.Component {
     render() {
@@ -99,5 +93,49 @@ describe('ReportBuilderContainer', () => {
         mockActions.exitBuilderMode.calls.reset();
         mockActions.closeFieldSelectMenu.calls.reset();
         mockActions.loadDynamicReport.calls.reset();
+    });
+
+    it('renders the ReportFieldSelectMenu', () => {
+        component = shallow(<ReportBuilderContainer {...testProps} />);
+
+        let reportFieldSelectMenu = component.find('.reportBuilderFieldSelectMenu');
+        expect(reportFieldSelectMenu).toBePresent();
+        expect(reportFieldSelectMenu).toHaveProp('appId', appId);
+        expect(reportFieldSelectMenu).toHaveProp('tblId', tblId);
+        expect(reportFieldSelectMenu).toHaveProp('reportData', testProps.reportData);
+    });
+
+    it('renders ReportNameEditor when name is a prop', () => {
+        component = shallow(<ReportBuilderContainer {...testProps} />);
+
+        let reportNameEditor = component.find('.reportBuilderNameEditor');
+
+        expect(reportNameEditor).toBePresent();
+        expect(reportNameEditor).toHaveProp('name', reportName);
+    });
+
+    it('does not render ReportNameEditor when name is not a prop', () => {
+        testProps.reportData.data.name = undefined;
+        component = shallow(<ReportBuilderContainer {...testProps} />);
+
+        let reportNameEditor = component.find('.reportBuilderNameEditor');
+
+        expect(reportNameEditor).not.toBePresent();
+    });
+
+    it('renders ReportToolsAndContent', () => {
+        component = shallow(<ReportBuilderContainer {...testProps} />);
+
+        let reportNameEditor = component.find('.reportBuilderToolsAndContent');
+
+        expect(reportNameEditor).toBePresent();
+    });
+
+    it('renders ReportSaveOrCancelFooter', () => {
+        component = shallow(<ReportBuilderContainer {...testProps} />);
+
+        let reportNameEditor = component.find('.reportBuilderSaveOrCancelFooter');
+
+        expect(reportNameEditor).toBePresent();
     });
 });

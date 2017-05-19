@@ -12,7 +12,6 @@ import ReportSaveOrCancelFooter from '../reportBuilder/reportSaveOrCancelFooter'
 import ReportToolsAndContent from '../report/reportToolsAndContent';
 import QbGrid from '../dataTable/qbGrid/qbGrid';
 import ReportCell from '../dataTable/reportGrid/reportCell';
-import Locale from '../../locales/locales';
 import {CONTEXT} from '../../actions/context';
 import {exitBuilderMode, closeFieldSelectMenu} from '../../actions/reportBuilderActions';
 import {loadDynamicReport} from '../../actions/reportActions';
@@ -26,7 +25,13 @@ export class ReportBuilderContainer extends Component {
 
     getSaveOrCancelFooter = () => {
         let {appId, tblId} = this.props.match.params;
-        return <ReportSaveOrCancelFooter appId={appId} tblId={tblId}/>;
+        return (
+            <ReportSaveOrCancelFooter
+                className="reportBuilderSaveOrCancelFooter"
+                appId={appId}
+                tblId={tblId}
+            />
+        );
     };
 
     isOnlyOneColumnVisible(columns) {
@@ -80,14 +85,19 @@ export class ReportBuilderContainer extends Component {
         return (
             <div className="reportBuilderContainer">
                 <ReportFieldSelectMenu
+                    className="reportBuilderFieldSelectMenu"
                     appId={appId}
                     tblId={tblId}
                     reportData={this.props.reportData}>
                     <div className="reportBuilderContainerContent">
                         <div className="reportBuilderHeader">
-                            {name && <ReportNameEditor name={name}/>}
+                            {name &&
+                            <ReportNameEditor
+                                className="reportBuilderNameEditor"
+                                name={name}/>}
                         </div>
                         <ReportToolsAndContent
+                            className="reportBuilderToolsAndContent"
                             isRightToolbarVisible={false}
                             isSearchBoxVisible={false}
                             params={this.props.match.params}
