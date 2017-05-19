@@ -328,7 +328,7 @@
             }
             //Click on the third cell of recordRowIndex row
             recordCellEl.click();
-            return this.reportTitle.waitForText();
+            return this.reportTitle.waitForExist();
         }},
 
         /**
