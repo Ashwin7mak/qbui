@@ -1,6 +1,8 @@
-@import '../../../../../reuse/client/src/assets/css/qbVariables';
+@import "../../../../../reuse/client/src/assets/css/qbVariables";
 
 .accountUsersContainer {
+  width: 100%;
+
   .qbCell {
     vertical-align: middle;
     word-wrap: break-word;
