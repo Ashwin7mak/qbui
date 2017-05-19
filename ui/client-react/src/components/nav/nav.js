@@ -530,8 +530,7 @@ const mapStateToProps = (state) => {
         forms: state.forms,
         shell: state.shell,
         record: state.record,
-        report: state.report,
-        reportBuilder: state.reportBuilder
+        report: state.report
     };
 };
 

@@ -7,7 +7,6 @@ function initializeState() {
     initialState = {
         redirectRoute: null,
         isInBuilderMode: false,
-        isCollapsed: false,
         addBeforeColumn: null,
         availableColumns: []
     };
@@ -49,16 +48,6 @@ describe('reportBuilder reducer functions for refreshing fields', () => {
         };
         const state = reducer(initialState, {type: types.REFRESH_FIELD_SELECT_MENU, content: content});
         expect(state.availableColumns.length).toEqual(1);
-    });
-
-    it('returns correct state with the menu open', () => {
-        const state = reducer(initialState, {type: types.OPEN_FIELD_SELECT_MENU, content: {}});
-        expect(state.isCollapsed).toEqual(false);
-    });
-
-    it('returns correct state with the menu closed', () => {
-        const state = reducer(initialState, {type: types.CLOSE_FIELD_SELECT_MENU, content: {}});
-        expect(state.isCollapsed).toEqual(true);
     });
 
     it('returns correct state with addBeforeColumn set to true', () => {
