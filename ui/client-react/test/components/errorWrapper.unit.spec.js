@@ -9,6 +9,12 @@ class BreakpointsAlwaysSmallMock {
         return true;
     }
 }
+class DeviceIsTouch {
+    static isTouch() {
+        return true;
+    }
+}
+
 describe('ErrorWrapper functions', () => {
     'use strict';
 
@@ -44,6 +50,7 @@ describe('ErrorWrapper functions', () => {
 
     it('test render of component on small breakpoint', () => {
         ErrorWrapperRewireAPI.__Rewire__('Breakpoints', BreakpointsAlwaysSmallMock);
+        ErrorWrapperRewireAPI.__Rewire__('Device', DeviceIsTouch);
         component = TestUtils.renderIntoDocument(
             <ErrorWrapper isInvalid={true}
                           invalidMessage={"somethings wrong"}>
