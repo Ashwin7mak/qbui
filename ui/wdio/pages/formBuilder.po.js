@@ -274,12 +274,12 @@ class formBuilderPage {
         return this.getFieldLabels();
     }
 
-   KB_cancel() {
+    KB_cancel() {
         // Types ESC multiple times to return to the VIEW RECORD form.  Assumes that a field is selected & has focus.
         // This s/b smarter/able to handle other initial states (e.g. when no field has focus)
         browser.keys([
-            'Escape',// deselect field
-            'Escape',// defocus field
+            'Escape', // deselect field
+            'Escape', // defocus field
             'Escape' // close page
         ]);
         return this.dirtyForm_Dismiss();
