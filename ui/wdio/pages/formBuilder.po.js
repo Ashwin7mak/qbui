@@ -221,6 +221,7 @@ class formBuilderPage {
     save() {
         // Clicks on the SAVE button in the form builder and waits for the next page to appear
         this.saveBtn.click();
+        browser.pause(this.fiveSeconds);
         reportContentPO.waitForLeftNavLoaded();
         return this;
     }
