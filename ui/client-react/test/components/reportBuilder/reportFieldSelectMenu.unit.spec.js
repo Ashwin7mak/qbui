@@ -64,7 +64,6 @@ let testProps = {
             },
         ]
     },
-    closeFieldSelectMenu: (context) => {},
     refreshFieldSelectMenu: (context, applicationId, tableId) => {},
     addColumnFromExistingField: (context, requestedColumn, addBefore) => {}
 };
@@ -109,7 +108,6 @@ describe('ReportFieldSelectMenu', () => {
         jasmineEnzyme();
         RewireAPI.__Rewire__('Locale', MockLocale);
         RewireAPI.__Rewire__('ReportUtils', MockReportUtils);
-        spyOn(testProps, 'closeFieldSelectMenu').and.callThrough();
         spyOn(testProps, 'refreshFieldSelectMenu').and.callThrough();
         spyOn(testProps, 'addColumnFromExistingField').and.callThrough();
     });
@@ -117,7 +115,6 @@ describe('ReportFieldSelectMenu', () => {
     afterEach(() => {
         RewireAPI.__ResetDependency__('Locale');
         RewireAPI.__ResetDependency__('ReportUtils');
-        testProps.closeFieldSelectMenu.calls.reset();
         testProps.refreshFieldSelectMenu.calls.reset();
         testProps.addColumnFromExistingField.calls.reset();
     });

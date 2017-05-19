@@ -13,7 +13,7 @@ import ReportToolsAndContent from '../report/reportToolsAndContent';
 import QbGrid from '../dataTable/qbGrid/qbGrid';
 import ReportCell from '../dataTable/reportGrid/reportCell';
 import {CONTEXT} from '../../actions/context';
-import {exitBuilderMode, closeFieldSelectMenu} from '../../actions/reportBuilderActions';
+import {exitBuilderMode} from '../../actions/reportBuilderActions';
 import {loadDynamicReport} from '../../actions/reportActions';
 
 import './reportBuilderContainer.scss';
@@ -151,8 +151,6 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         exitBuilderMode: (context) => dispatch(exitBuilderMode(context)),
-
-        closeFieldSelectMenu: (context) => dispatch(closeFieldSelectMenu(context)),
 
         loadDynamicReport: (context, appId, tblId, rptId, format, filter, queryParams) => {
             dispatch(loadDynamicReport(context, appId, tblId, rptId, format, filter, queryParams));

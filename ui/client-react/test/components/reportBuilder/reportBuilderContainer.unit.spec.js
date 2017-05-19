@@ -9,7 +9,6 @@ const rptId = '3';
 
 const mockActions = {
     exitBuilderMode() {},
-    closeFieldSelectMenu() {},
     loadDynamicReport() {}
 };
 
@@ -80,7 +79,6 @@ describe('ReportBuilderContainer', () => {
         ReportBuilderRewireAPI.__Rewire__('ReportSaveOrCancelFooter', mockReportSaveOrCancelFooter);
 
         spyOn(mockActions, 'exitBuilderMode');
-        spyOn(mockActions, 'closeFieldSelectMenu');
         spyOn(mockActions, 'loadDynamicReport');
     });
 
@@ -91,7 +89,6 @@ describe('ReportBuilderContainer', () => {
         ReportBuilderRewireAPI.__ResetDependency__('ReportSaveOrCancelFooter');
 
         mockActions.exitBuilderMode.calls.reset();
-        mockActions.closeFieldSelectMenu.calls.reset();
         mockActions.loadDynamicReport.calls.reset();
     });
 

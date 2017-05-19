@@ -2,7 +2,7 @@ import React, {Component, PropTypes} from 'react';
 import {connect} from 'react-redux';
 
 import {CONTEXT} from '../../actions/context';
-import {refreshFieldSelectMenu, closeFieldSelectMenu, addColumnFromExistingField} from '../../actions/reportBuilderActions';
+import {refreshFieldSelectMenu, addColumnFromExistingField} from '../../actions/reportBuilderActions';
 
 import ReportUtils from '../../utils/reportUtils';
 import FieldFormats from '../../utils/fieldFormats';
@@ -116,9 +116,6 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        closeFieldSelectMenu: (context) => {
-            dispatch(closeFieldSelectMenu(context));
-        },
         refreshFieldSelectMenu: (context, appId, tblId) => {
             dispatch(refreshFieldSelectMenu(context, appId, tblId));
         },
