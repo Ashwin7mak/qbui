@@ -49,11 +49,6 @@ describe('Report actions', () => {
                 done();
             });
     });
-
-    it('changeReportName action dispatches type.CHANGE_REPORT_NAME', () => {
-        const expectedAction = event(context, types.CHANGE_REPORT_NAME, {newName: 'name'});
-        expect(reportActions.changeReportName(context, 'name')).toEqual(expectedAction);
-    });
 });
 
 describe('Test ReportsActions function success workflow', () => {

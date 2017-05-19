@@ -113,7 +113,7 @@ export const Nav = React.createClass({
 
         let link = `${UrlConsts.BUILDER_ROUTE}/app/${appId}/table/${tblId}/report/${rptId}`;
 
-        this.props.updateReportRedirectRoute(_.get(this.props, 'location.pathname'));
+        this.props.updateReportRedirectRoute(CONTEXT.REPORT.NAV, _.get(this.props, 'location.pathname'));
 
         this.props.enterBuilderMode(CONTEXT.REPORT.NAV);
 
@@ -530,8 +530,7 @@ const mapStateToProps = (state) => {
         forms: state.forms,
         shell: state.shell,
         record: state.record,
-        report: state.report,
-        reportBuilder: state.reportBuilder
+        report: state.report
     };
 };
 

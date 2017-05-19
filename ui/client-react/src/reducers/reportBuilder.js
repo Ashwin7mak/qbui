@@ -5,7 +5,6 @@ const reportBuilder = (
     state = {
         redirectRoute: null,
         isInBuilderMode: false,
-        isCollapsed: true,
         addBeforeColumn: null,
         availableColumns: []
     }, action) => {
