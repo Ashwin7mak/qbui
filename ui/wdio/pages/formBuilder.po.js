@@ -110,6 +110,7 @@ class formBuilderPage {
         // Clicks on CANCEL in the form builder and waits for the next page to render
         this.cancelBtn.click();
         this.dirtyForm_Dismiss();
+        browser.pause(this.fiveSeconds);
         reportContentPO.waitForLeftNavLoaded();
         return this;
 
