@@ -10,7 +10,8 @@ export const LOAD_APP_ERROR = 'LOAD_APP_ERROR';
 export const LOAD_APPS = 'LOAD_APPS';
 export const LOAD_APPS_SUCCESS = 'LOAD_APPS_SUCCESS';
 export const LOAD_APPS_ERROR = 'LOAD_APPS_ERROR';
-
+export const SELECT_APP_TABLE = 'SELECT_APP_TABLE';
+export const CLEAR_APP_TABLE = 'CLEAR_APP_TABLE';
 
 //  ******** Form actions ********
 export const LOADING_FORM = 'LOADING_FORM';

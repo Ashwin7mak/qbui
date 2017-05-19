@@ -47,9 +47,18 @@ const app = (
             ...state,
             loading: false,
             error: false,
-            selectedApp: {
-                id: null
+            selected: {
+                appId: null
             }
+        };
+    case types.CLEAR_APP_TABLE:
+        // make a copy of what is selected
+        const selected = _.cloneDeep(state.selected);
+        selected.tableId = null;
+
+        return {
+            ...state,
+            selected: selected
         };
     case types.LOAD_APP:
         let appId = action.context;
@@ -57,8 +66,8 @@ const app = (
             ...state,
             loading: true,
             error: false,
-            selectedApp: {
-                id: appId
+            selected: {
+                appId: appId
             }
         };
     case types.LOAD_APP_SUCCESS:
@@ -67,10 +76,11 @@ const app = (
             ...state,
             loading: false,
             error: false,
-            selectedApp: {
-                id: appModel.getApp().id,
-                users: appModel.getUsers(),
-                usersUnfiltered: appModel.getUnfilteredUsers()
+            selected: {
+                appId: appModel.getApp().id,
+                tableId: null,
+                appUsers: appModel.getUsers(),
+                appUsersUnfiltered: appModel.getUnfilteredUsers()
             },
             apps: getAppsFromState(appModel.getApp())
         };
@@ -79,6 +89,16 @@ const app = (
             ...state,
             loading: false,
             error: true
+        };
+    case types.SELECT_APP_TABLE:
+        const tableId = action.content.tableId;
+        // make a copy of what is selected
+        const selected = _.cloneDeep(state.selected);
+        selected.tableId = tableId;
+
+        return {
+            ...state,
+            selected: selected
         };
     case types.LOAD_APPS:
         return {
@@ -118,15 +138,15 @@ export const getIsAppsLoading = (state) => {
 };
 
 export const getSelectedAppId = (state) => {
-    return state.selectedApp ? state.selectedApp.id : null;
+    return state.selected ? state.selected.appId : null;
 };
 
 export const getSelectedAppUsers = (state) => {
-    return state.selectedApp ? state.selectedApp.users : null;
+    return state.selected ? state.selected.appUsers : null;
 };
 
 export const getSelectedAppUnfilteredUsers = (state) => {
-    return state.selectedApp ? state.selectedApp.usersUnfiltered : null;
+    return state.selected ? state.selected.appUsersUnfiltered : null;
 };
 
 

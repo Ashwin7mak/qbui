@@ -77,3 +77,16 @@ export const clearSelectedApp = () => {
         dispatch(event(types.CLEAR_APP));
     };
 };
+
+export const selectAppTable = (appId, tableId) => {
+    return (dispatch) => {
+        dispatch(event(types.SELECT_APP_TABLE, {appId, tableId}));
+    };
+};
+
+export const clearSelectedAppTable = () => {
+    return (dispatch) => {
+        dispatch(event(types.CLEAR_APP_TABLE));
+    };
+};
+
