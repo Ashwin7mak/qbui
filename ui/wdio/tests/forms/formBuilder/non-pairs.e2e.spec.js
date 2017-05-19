@@ -49,8 +49,6 @@
             // edit first record
             reportContentPO.clickOnRecordInReportTable(0);
             // invoke form builder
-            formBuilderPO.waitForReady();
-            browser.pause(formBuilderPO.fiveSeconds);
             return formBuilderPO.open();
         });
 
@@ -109,7 +107,6 @@
             formBuilderPO.selectFieldByIndex(1);
             // add the first new field item to the form
             newField.click();
-            browser.pause(formBuilderPO.oneSecond);
             // verify that the new row has the expected label
             expect(formBuilderPO.getFieldLabels()[1]).toBe(newFieldLabel);
         });
@@ -124,19 +121,14 @@
             // drag source to target without dropping
             browser.moveToObject(source);
             browser.buttonDown();
-            browser.pause(formBuilderPO.oneSecond);
             browser.moveToObject(target);
             // verify drag token label (which won't ever feature a 'required' asterisk)
             formBuilderPO.fieldTokenDragging.waitForExist();
             expect(formBuilderPO.fieldTokenDragging.getText()).toEqual(label.replace('* ', ''));
             // drag back to source & drop
-            browser.pause(formBuilderPO.oneSecond);
-            browser.moveToObject(source + ' .fieldLabel', 5, 5);
-            browser.pause(formBuilderPO.oneSecond);
+            browser.pause(e2eConsts.shortWaitTimeMs);
+            browser.moveToObject(source);
             browser.buttonUp();
-            browser.buttonDown();
-            browser.buttonUp();
-            browser.pause(formBuilderPO.fiveSeconds);
             expect(formBuilderPO.getFieldLabels()).toEqual(origFields);
         });
 
@@ -195,7 +187,6 @@
             while (!firstFieldXLoc === firstField.getLocation('x')) {
                 firstFieldXLoc = firstField.getLocation('x');
                 browser.logger.info('first field position: ' + firstFieldXLoc);
-                browser.pause(formBuilderPO.oneSecond);
             }
             // drag UP until autoscroll begins
             browser.logger.info('Initiating autoscroll UP');
@@ -207,11 +198,9 @@
             browser.logger.info('Autoscrolling UP');
             while (!firstFieldXLoc === firstField.getLocation('x')) {
                 firstFieldXLoc = firstField.getLocation('x');
-                browser.pause(formBuilderPO.oneSecond);
             }
             // release button
             browser.buttonUp();
         });
-
     });
 }());

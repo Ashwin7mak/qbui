@@ -1,8 +1,6 @@
 'use strict';
 let topNavPO = requirePO('topNav');
 let reportContentPO = requirePO('reportContent');
-let oneSecond = 1000; // millis
-let fiveSeconds = 5 * oneSecond;
 
 class formBuilderPage {
 
@@ -110,10 +108,9 @@ class formBuilderPage {
         // Clicks on CANCEL in the form builder and waits for the next page to render
         this.cancelBtn.click();
         this.dirtyForm_Dismiss();
-        browser.pause(this.fiveSeconds);
-        reportContentPO.waitForLeftNavLoaded();
+        browser.waitForText('.leftNavLabel', true);
+        browser.waitForText('.leftNavLabel');
         return this;
-
     }
 
     dirtyForm_Dismiss() {
@@ -124,7 +121,6 @@ class formBuilderPage {
         }
         try { // modal SAVE CHANGES? dlg
             this.modalDismiss.click();
-            browser.pause(this.oneSecond);
             if (this.modalDismiss.isExisting()) {
                 browser.logger.info("first click on DON'T SAVE didn't do the trick; trying again");
                 this.modalDismiss.click();
@@ -153,7 +149,6 @@ class formBuilderPage {
                 return label;
             });
         } catch (err) {
-            browser.pause(this.oneSecond);
             return this.getFieldLabels();
         }
     }
@@ -187,8 +182,7 @@ class formBuilderPage {
         topNavPO.modifyThisForm.waitForExist();
         topNavPO.modifyThisForm.click();
         this.firstField.waitForExist();
-        browser.pause(this.fiveSeconds);
-        return this.getFieldLabels(); // better than pause?
+        return this.getFieldLabels();
     }
 
     openMenu() {
@@ -201,7 +195,7 @@ class formBuilderPage {
             // wait & try again to avoid 'other element would receive the click...."
             // which is presumably due to the SAVE SUCCESSFUL growl msg
             // which I understand we're not supposed to wait for due to sauce issues
-            browser.pause(oneSecond);
+            browser.pause(e2eConsts.shortWaitTimeMs);
             this.openMenu();
         }
     }
@@ -212,17 +206,15 @@ class formBuilderPage {
         let field = browser.element(fieldLocator);
         let deletedFieldName = field.getText();
         browser.moveToObject(fieldLocator + ' .fieldLabel');
-        browser.pause(oneSecond);
         field.element('.deleteFieldIcon .qbIcon').click();
-        browser.pause(oneSecond);
         return deletedFieldName;
     }
 
     save() {
         // Clicks on the SAVE button in the form builder and waits for the next page to appear
         this.saveBtn.click();
-        browser.pause(this.fiveSeconds);
-        reportContentPO.waitForLeftNavLoaded();
+        browser.waitForText('.leftNavLabel', true);
+        browser.waitForText('.leftNavLabel');
         return this;
     }
 
@@ -236,20 +228,18 @@ class formBuilderPage {
         // wait for groups to appear or disappear
         // depending on whether we searched or cleared
         this.listOfElementsItemGroup.waitForExist(null, (text !== null));
-        browser.pause(fiveSeconds);
+        browser.pause(e2eConsts.shortWaitTimeMs);
         return this.getNewFieldLabels();
     }
 
     selectFieldByIndex(index) {
         // Selects the field at the specified index and verifies that it is reflected in the properties panel
         let field = this.getFieldLocator(index);
-        // this click shouldn't be necessary, but it helps w/Edge?  todo: Reverify...
-        // browser.element(field).click();
+        // can't click on label because another element would receive the click
         browser.moveToObject(field, 5, 5);
         browser.buttonDown();
         browser.buttonUp();
-        // EDGE needs a 2nd click to render PROPERTIES panel, log an issue for this!
-        browser.pause(oneSecond);
+        // MC-2858: Edge: FIELD PROPERTIES doesn't render until second click to select field
         browser.buttonDown();
         browser.buttonUp();
         this.fieldProperty_Name.waitForExist(); // assume it didn't exist, i.e. nothing was previously selected
@@ -261,7 +251,6 @@ class formBuilderPage {
             browser.setViewportSize(size, resizeViewport);
         } catch (err) {
             // hoping to avoid "Failed: A window size operation failed because the window is not currently available"
-            browser.pause(oneSecond);
             setViewPortSize(size, resizeViewport);
         }
     }
@@ -271,15 +260,12 @@ class formBuilderPage {
         let label = browser.element(source).getText();
         browser.moveToObject(source);
         browser.buttonDown();
-        browser.pause(this.oneSecond);
         // move to target & wait until preview appears
         browser.moveToObject(target);
-        browser.pause(this.oneSecond);
         browser.moveToObject(target, 5, 5);
-        browser.pause(this.oneSecond);
         // release button
         browser.buttonUp();
-        browser.pause(this.oneSecond);
+        browser.pause(e2eConsts.shortWaitTimeMs);
         // Chrome needs a click to release mouse btn - why?
         browser.element(target).click();
         browser.waitUntil(function() {
@@ -288,20 +274,14 @@ class formBuilderPage {
         return this.getFieldLabels();
     }
 
-    waitForReady() {
-        browser.waitUntil(function() {
-            return browser.execute('return document.readyState').value === 'complete';
-        }, this.fiveSeconds, 'Document not ready');
-    }
-
-    KB_cancel() {
+   KB_cancel() {
         // Types ESC multiple times to return to the VIEW RECORD form.  Assumes that a field is selected & has focus.
         // This s/b smarter/able to handle other initial states (e.g. when no field has focus)
-        browser.keys(['Escape']); // deselect field
-        browser.pause(oneSecond);
-        browser.keys(['Escape']); // defocus field
-        browser.pause(oneSecond); // without delays, sometimes it gets stuck here (with builder focused)
-        browser.keys(['Escape']); // close page
+        browser.keys([
+            'Escape',// deselect field
+            'Escape',// defocus field
+            'Escape' // close page
+        ]);
         return this.dirtyForm_Dismiss();
     }
 
@@ -318,7 +298,6 @@ class formBuilderPage {
     KB_focusForm() {
         // focus form via keyboard
         this.searchInput.click();
-        browser.pause(this.oneSecond);
         browser.keys(['Tab', 'Enter']);
         return this;
     }
@@ -335,7 +314,6 @@ class formBuilderPage {
             browser.keys([arrowKey]); // up or down
         }
         browser.keys(['Shift']); // release modifier key
-        browser.pause(fiveSeconds);
         let revisedOrder = this.getFieldLabels();
         expect(originalOrder).not.toEqual(revisedOrder);
         expect(revisedOrder[targetIndex - 1]).toEqual(sourceField);
@@ -346,7 +324,6 @@ class formBuilderPage {
         // remove field via backspace key via keyboard
         let deletedField = this.KB_selectField(index);
         this.selectedField.keys(['Shift', 'Backspace', 'Shift']);
-        browser.pause(fiveSeconds);
         expect(this.getFieldLabels()).not.toContain(deletedField);
         return deletedField;
     }
@@ -366,15 +343,12 @@ class formBuilderPage {
         // cmd above doesn't work on EDGE...
         // todo: figure out this problem; not reproducible manually
         this.save();
-        // wait for view record form
-        browser.pause(fiveSeconds);
         return this;
     }
 
     KB_selectField(index) {
         // select the specified field via keyboard
         this.KB_focusField(index);
-        browser.pause(oneSecond);
         browser.keys(['Enter']); // select field
         this.selectedField.waitForExist();
         return this.getSelectedFieldLabel();

@@ -49,8 +49,6 @@
             // edit first record
             reportContentPO.clickOnRecordInReportTable(0);
             // invoke form builder
-            formBuilderPO.waitForReady();
-            browser.pause(formBuilderPO.fiveSeconds);
             return formBuilderPO.open();
         });
 
@@ -65,7 +63,6 @@
             // revise the field name
             let testString = 'testString';
             formBuilderPO.fieldProperty_Name.setValue(testString);
-            browser.pause(5000);
             //  verify that the field label was revised
             let existingFields = formBuilderPO.getFieldLabels();
             expect(existingFields[0]).toEqual(testString);
@@ -79,7 +76,6 @@
             // revise the field name
             let testString = 'testString';
             formBuilderPO.fieldProperty_Name.setValue(testString);
-            browser.pause(5000);
             //  verify that the field label was revised
             let existingFields = formBuilderPO.getFieldLabels();
             expect(existingFields[0]).toEqual(testString);
@@ -122,7 +118,6 @@
             expect(existingFields[existingFields.length - 1]).not.toBe(newField.getText());
             // add the first new field item to the form
             newField.click();
-            browser.pause(5000);
             // verify that the new field appears at the end of the revised fields list
             let originalFields = existingFields.slice();
             existingFields.push(newField.getText());
@@ -140,7 +135,6 @@
             expect(existingFields[existingFields.length - 1]).not.toBe(newField);
             // add the first new field item to the form
             newField.click();
-            browser.pause(5000);
             // verify that the new field appears at the end of the revised fields list
             existingFields.push(newField.getText());
             expect(formBuilderPO.getFieldLabels()).toEqual(existingFields);

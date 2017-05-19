@@ -40,6 +40,8 @@
             } catch (err) {
                 browser.logger.info(err.toString());
             }
+            // wait for left nav to load completely (else settings button won't be rendered)
+            browser.waitForText('.leftNavLabel');
             // open first table
             e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
             // wait for left nav to load completely (else settings button won't be rendered)
@@ -47,8 +49,6 @@
             // edit first record
             reportContentPO.clickOnRecordInReportTable(0);
             // invoke form builder
-            formBuilderPO.waitForReady();
-            browser.pause(formBuilderPO.fiveSeconds);
             return formBuilderPO.open();
         });
 
@@ -107,7 +107,6 @@
             formBuilderPO.selectFieldByIndex(1);
             // add the first new field item to the form
             newField.click();
-            browser.pause(formBuilderPO.oneSecond);
             // verify that the new row has the expected label
             expect(formBuilderPO.getFieldLabels()[1]).toBe(newFieldLabel);
         });
@@ -122,19 +121,14 @@
             // drag source to target without dropping
             browser.moveToObject(source);
             browser.buttonDown();
-            browser.pause(formBuilderPO.oneSecond);
             browser.moveToObject(target);
             // verify drag token label (which won't ever feature a 'required' asterisk)
             formBuilderPO.fieldTokenDragging.waitForExist();
             expect(formBuilderPO.fieldTokenDragging.getText()).toEqual(label.replace('* ', ''));
             // drag back to source & drop
-            browser.pause(formBuilderPO.oneSecond);
-            browser.moveToObject(source + ' .fieldLabel', 5, 5);
-            browser.pause(formBuilderPO.oneSecond);
+            browser.pause(e2eConsts.shortWaitTimeMs);
+            browser.moveToObject(source);
             browser.buttonUp();
-            browser.buttonDown();
-            browser.buttonUp();
-            browser.pause(formBuilderPO.fiveSeconds);
             expect(formBuilderPO.getFieldLabels()).toEqual(origFields);
         });
 
@@ -192,7 +186,6 @@
             browser.logger.info('Autoscrolling DOWN');
             while (!firstFieldXLoc === firstField.getLocation('x')) {
                 firstFieldXLoc = firstField.getLocation('x');
-                browser.pause(formBuilderPO.oneSecond);
             }
             // drag UP until autoscroll begins
             browser.logger.info('Initiating autoscroll UP');
@@ -204,7 +197,6 @@
             browser.logger.info('Autoscrolling UP');
             while (!firstFieldXLoc === firstField.getLocation('x')) {
                 firstFieldXLoc = firstField.getLocation('x');
-                browser.pause(formBuilderPO.oneSecond);
             }
             // release button
             browser.buttonUp();
@@ -217,7 +209,6 @@
             // revise the field name
             let testString = 'testString';
             formBuilderPO.fieldProperty_Name.setValue(testString);
-            browser.pause(5000);
             //  verify that the field label was revised
             let existingFields = formBuilderPO.getFieldLabels();
             expect(existingFields[0]).toEqual(testString);
@@ -231,7 +222,6 @@
             // revise the field name
             let testString = 'testString';
             formBuilderPO.fieldProperty_Name.setValue(testString);
-            browser.pause(5000);
             //  verify that the field label was revised
             let existingFields = formBuilderPO.getFieldLabels();
             expect(existingFields[0]).toEqual(testString);
@@ -301,7 +291,6 @@
             expect(existingFields[existingFields.length - 1]).not.toBe(newField.getText());
             // add the first new field item to the form
             newField.click();
-            browser.pause(5000);
             // verify that the new field appears at the end of the revised fields list
             let originalFields = existingFields.slice();
             existingFields.push(newField.getText());
@@ -319,7 +308,6 @@
             expect(existingFields[existingFields.length - 1]).not.toBe(newField);
             // add the first new field item to the form
             newField.click();
-            browser.pause(5000);
             // verify that the new field appears at the end of the revised fields list
             existingFields.push(newField.getText());
             expect(formBuilderPO.getFieldLabels()).toEqual(existingFields);
