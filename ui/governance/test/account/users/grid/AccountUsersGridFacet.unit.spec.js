@@ -21,10 +21,12 @@ describe('Faceting Fields Values', () => {
                 name: Locale.getMessage("governance.account.users.accessStatus"),
                 type: 'TEXT',
                 values: [
-                    {id:FACET_FIELDID.QUICKBASE_ACCESS_STATUS, value: 'Denied'},
                     {id:FACET_FIELDID.QUICKBASE_ACCESS_STATUS, value: 'Deactivated'},
+                    {id:FACET_FIELDID.QUICKBASE_ACCESS_STATUS, value: 'Denied'},
+                    {id:FACET_FIELDID.QUICKBASE_ACCESS_STATUS, value: 'No App Access'},
                     {id:FACET_FIELDID.QUICKBASE_ACCESS_STATUS, value: 'Paid Seat'},
-                    {id:FACET_FIELDID.QUICKBASE_ACCESS_STATUS, value: 'No App Access'}]
+                    {id:FACET_FIELDID.QUICKBASE_ACCESS_STATUS, value: 'Quick Base Staff'}
+                ]
             });
     });
 
@@ -35,9 +37,10 @@ describe('Faceting Fields Values', () => {
                 name: Locale.getMessage("governance.account.users.userStatus"),
                 type: 'TEXT',
                 values: [
+                    {id:FACET_FIELDID.QUICKBASE_USER_STATUS, value: 'Registered'},
                     {id:FACET_FIELDID.QUICKBASE_USER_STATUS, value: 'Unregistered'},
-                    {id:FACET_FIELDID.QUICKBASE_USER_STATUS, value: 'Unverified'},
-                    {id:FACET_FIELDID.QUICKBASE_USER_STATUS, value: 'Registered'}]
+                    {id:FACET_FIELDID.QUICKBASE_USER_STATUS, value: 'Unverified'}
+                ]
             });
     });
 
