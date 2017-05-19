@@ -45,7 +45,7 @@
         /**
          * Test methods to verify all elements present / hidden in leftNav
          */
-        xit('Verify if leftNav collapses of clicking hamburger menu on tables page', function() {
+        it('Verify if leftNav collapses of clicking hamburger menu on tables page', function() {
 
             RequestAppsPage.get(e2eBase.getRequestTableEndpoint(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1));
 
@@ -107,7 +107,7 @@
 
         });
 
-        xit('Verify the topLinks, Brand logo and mouse hover function on collapsed leftNav on reports page', function() {
+        it('Verify the topLinks, Brand logo and mouse hover function on collapsed leftNav on reports page', function() {
 
             // Step 1 - Verify if the no.of topLinks are equal to 2 (Home, Users)
             expect(leftNavPO.leftNavTopLinks.value.length).toEqual(2);
@@ -155,7 +155,7 @@
             expect(browser.isVisible('.tablesHeading .search ')).toBeTruthy();
         });
 
-        xit('Verify if the reports icon is displayed and verify the name of the report loaded', function() {
+        it('Verify if the reports icon is displayed and verify the name of the report loaded', function() {
 
             // Step 1 - Verify the name of the first table in the leftNav
             let tableName = leftNavPO.leftNavTableName.getText();
@@ -174,7 +174,7 @@
             expect(innerHTML[5]).toEqual('Reports');
         });
 
-        xit('Verify leftNav New Table button and cancel button', function() {
+        it('Verify leftNav New Table button and cancel button', function() {
 
             // Step 1 - Verify if the new table element is visible and verify the length
             leftNavPO.leftNavNewTableEl.waitForVisible();
