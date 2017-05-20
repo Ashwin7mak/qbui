@@ -18,7 +18,7 @@ describe('StandardGridToolBar', () => {
     it('should render with navigation, search and itemsCount component', () => {
 
         let component = mount(
-            <Provider store={mockStore({Grids : {accountUsers: {pagination: {totalRecords: 20}}}})}>
+            <Provider store={mockStore({Grids : {accountUsers: {pagination: {totalItems: 20}}}})}>
                 <StandardGridToolBar
                     doUpdate={Actions.doUpdate}
                     doFacet={false}
