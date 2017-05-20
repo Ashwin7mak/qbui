@@ -314,7 +314,7 @@
         setInputValue : {value: function(filteredElement, filteredElementInputClassName, fieldValue) {
             filteredElement.element(filteredElementInputClassName).click();
             filteredElement.element(filteredElementInputClassName).clearElement();
-            if (browserName === 'firefox') {
+            if (browserName === 'firefox' || browserName === 'safari') {
                 return filteredElement.setValue(filteredElementInputClassName, [fieldValue, '\uE004']);
             } else {
                 return browser.keys([fieldValue, '\uE004']);
