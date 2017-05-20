@@ -49,7 +49,7 @@
             // edit first record
             reportContentPO.clickOnRecordInReportTable(0);
             // invoke form builder
-            return formBuilderPO.open();
+            formBuilderPO.open();
         });
 
         afterEach(function() {
