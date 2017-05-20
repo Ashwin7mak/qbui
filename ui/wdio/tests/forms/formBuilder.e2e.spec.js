@@ -48,8 +48,11 @@
             reportContentPO.waitForLeftNavLoaded();
             // edit first record
             reportContentPO.clickOnRecordInReportTable(0);
+        });
+
+        beforeEach(function() {
             // invoke form builder
-            return formBuilderPO.open();
+            formBuilderPO.open();
         });
 
         afterEach(function() {
