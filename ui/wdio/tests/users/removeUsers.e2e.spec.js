@@ -44,10 +44,6 @@
             return UsersTablePage.newUserBtn.waitForVisible();
         });
 
-        var removeUser;
-        var rowToBeDeleted = 2;
-        var successMessage = "1 user has been deleted";
-
         /**
          * Selects a single user, clicks remove and checks the user count.
          */
@@ -89,4 +85,3 @@
         });
     });
 }());
-
