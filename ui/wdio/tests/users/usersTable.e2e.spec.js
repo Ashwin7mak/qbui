@@ -9,7 +9,6 @@
     var e2ePageBase = requirePO('e2ePageBase');
     var RequestAppsPage = requirePO('requestApps');
     var UsersTablePage = requirePO('usersTable');
-    let reportContentPO = requirePO('reportContent');
 
     describe('Users - Application user management table tests: ', function() {
         var realmName;
@@ -42,9 +41,9 @@
         beforeEach(function() {
             //load the users page
             RequestAppsPage.get(e2eBase.getRequestUsersEndpoint(realmName, testApp.id));
-            //wait until user table rows are loaded
-            reportContentPO.waitForReportContent();
-            //Wait until you see newUser button
+            //Wait until user table rows are loaded
+            UsersTablePage.waitForUserReportContent();
+            //Wait until you see new User button
             return UsersTablePage.newUserBtn.waitForVisible();
         });
 
@@ -57,19 +56,58 @@
         });
 
         /**
-         * Test methods. Test that the user Stage expands/collapses.
+         * Test method. Test that the user Stage expands/collapses.
          */
-        it('Should expand the reports stage', function() {
+        it('Should expand and collapse the user page stage', function() {
             // Click on user Stage button to expand the stage
             UsersTablePage.userStageBtn.click();
             // Wait for the Stage area content to display
             UsersTablePage.userStageContent.waitForVisible();
             browser.pause(e2eConsts.shortWaitTimeMs);
+            // Verify the app owner name is linked
+            expect(browser.isEnabled('.appOwnerName')).toBeTruthy();
             // Click on the user Stage button to collapse the stage
             UsersTablePage.userStageBtn.click();
             browser.pause(e2eConsts.shortWaitTimeMs);
             expect(UsersTablePage.userStageArea.getAttribute('clientHeight')).toMatch('0');
             expect(UsersTablePage.userStageArea.getAttribute('clientWidth')).toMatch('0');
+        });
+
+        /**
+         * Test method. Checks to make sure the first user row is selected, user count is correct
+         */
+        it('Should select first row of users and display total with action icons', function() {
+            // Select first row of records checkbox
+            UsersTablePage.selectUserRowCheckbox(1);
+            // Assert user selected count
+            expect(UsersTablePage.getUsersSelectedCount()).toBe("1");
+            // Verify the number of user action icons
+            expect(UsersTablePage.userActionsListEl.value.length).toBe(4);
+        });
+
+        /**
+         * Test method. Checks to make sure the check all users is selected and unselected
+         */
+        it('Should select all users, unselect one user, verify unchecked', function() {
+            // Select all records checkbox
+            UsersTablePage.selectAllUsersCheckbox();
+            expect(browser.isSelected('.selectAllCheckbox')).toBe(true);
+            // Assert user selected count
+            expect(UsersTablePage.getUsersSelectedCount()).toBe("6");
+            // Select first user row
+            UsersTablePage.selectUserRowCheckbox(1);
+            // Assert select all users is unchecked
+            expect(browser.isSelected('.selectAllCheckbox')).toBe(false);
+            // Assert user selected count
+            expect(UsersTablePage.getUsersSelectedCount()).toBe("5");
+        });
+
+        /**
+         * Test method. Checks to make sure user emails are linked
+         */
+        it('Should verify all the users emails are linked', function() {
+            // Verify the user emails are linked
+            expect(browser.isEnabled('.qbCell .urlField')).toBeTruthy();
         });
     });
 }());

@@ -11,7 +11,7 @@
     var UsersTablePage = requirePO('usersTable');
     var tableCreatePO = requirePO('tableCreate');
 
-    describe('Reports Page - TopNav Tests: ', function() {
+    describe('Global - TopNav Tests: ', function() {
         var realmName;
         var realmId;
         var testApp;
