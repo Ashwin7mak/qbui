@@ -115,21 +115,20 @@ exports.config = {
             shardTestFiles: true,
             maxInstances: 5
         },
-        // {
-        //     platform: 'OS X 10.11',
-        //     browserName: 'safari',
-        //     version: '10.0',
-        //     tunnelIdentifier: process.env.ENV_TUNNEL_NAME,
-        //     build           : 'WebdriverIO Jenkins Master Build #' + process.env.BUILD_NUMBER + ' - OSX Safari Browser',
-        //     tags            : [process.env.SAUCE_JOB_NAME + '_OSX_Safari', 'master', 'OSX', 'Safari', process.env.BUILD_NUMBER],
-        //     screenResolution : '2048x1536',
-        //     // Timeout in seconds for Sauce Labs to wait for another command (bumped this for sleeps in tests)
-        //     idleTimeout: '180',
-        //     maxDuration: 10800,
-        //     breakpointSize: 'xlarge',
-        //     shardTestFiles: true,
-        //     maxInstances: 5
-        // },
+         {
+             platform: 'OS X 10.12',
+             browserName: 'safari',
+             tunnelIdentifier: process.env.ENV_TUNNEL_NAME,
+             build           : 'WebdriverIO Jenkins Master Build #' + process.env.BUILD_NUMBER + ' - OSX Safari Browser',
+             tags            : [process.env.SAUCE_JOB_NAME + '_OSX_Safari', 'master', 'OSX', 'Safari', process.env.BUILD_NUMBER],
+             screenResolution : '2048x1536',
+             // Timeout in seconds for Sauce Labs to wait for another command (bumped this for sleeps in tests)
+             idleTimeout: '180',
+             maxDuration: 10800,
+             breakpointSize: 'xlarge',
+             shardTestFiles: true,
+             maxInstances: 5
+         },
         {
             platform: 'OS X 10.12',
             browserName: 'firefox',
