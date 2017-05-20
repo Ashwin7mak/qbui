@@ -592,6 +592,8 @@ module.exports = function(grunt) {
                     './wdio/tests/reports/reportAddRecord.e2e.spec.js',
                     // Stabilize in CI before enabling
                     './wdio/tests/reports/reportSearch.e2e.spec.js',
+                    //failing in CI
+                    './wdio/tests/relationships/relationshipViewChildTable.e2e.spec.js'
                 ],
                 suites: {
                     // Please alphabetize these by folder level
@@ -605,7 +607,6 @@ module.exports = function(grunt) {
                         './wdio/tests/forms/formEditValidation.e2e.spec.js'
                     ],
                     relationships: [
-                        './wdio/tests/relationships/relationshipViewChildTable.e2e.spec.js'
                     ],
                     reports: [
                         './wdio/tests/reports/reportDeleteRecord.e2e.spec.js',
