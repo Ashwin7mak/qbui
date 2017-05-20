@@ -10,18 +10,20 @@ import {isFetching} from "./AccountUsersReducer";
 import constants from "../../app/constants";
 
 /**
- * Represents the top level page that contains the grid for account users
+ * Represents the top level page that contains top level components
  */
 class AccountUsers extends Component {
 
     constructor(props) {
         super(props);
+        // Currently we have 1 Grid that shows the Users in an Account
         this.GRID_ID = "accountUsers";
+        // Get the number of users to show in a single page
         this.ITEMS_PER_PAGE = constants.USERS_GRID_ITEMSPERPAGE;
     }
 
     /**
-     * When the component mounts, get the users
+     * When the component mounts, get the users and dispatch actions after success
      */
     componentDidMount() {
         this.props.fetchData(this.props.match.params.accountId, this.GRID_ID, this.ITEMS_PER_PAGE);
@@ -40,9 +42,8 @@ class AccountUsers extends Component {
             <Loader loaded={!this.props.loading} options={SpinnerConfigurations.LARGE_BREAKPOINT}>
                 <div className="accountUsersContainer">
                     <AccountUsersStage users={this.props.users}/>
+                    {/* This is the main grid that shows the users */}
                     <AccountUsersGrid id={this.GRID_ID}
-                                      itemTypePlural="users"
-                                      itemTypeSingular="user"
                                       showAccountColumns={canSeeAccountColumns}
                                       showRealmColumns={canSeeRealmColumns}/>
                 </div>

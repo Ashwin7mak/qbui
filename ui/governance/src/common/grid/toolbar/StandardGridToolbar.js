@@ -36,6 +36,7 @@ class StandardGridToolBar extends React.Component {
                 <div className={"standardGridToolBar " + (hasFacets ? "" : "noFacets")}>
                     <div className="standardLeftToolBar">
                         {this.props.shouldSearch ?
+                        // TODO: MC-2733 : REPLACE THIS WITH FilterSearchBox component from reuse
                         <IconInputBox placeholder={`Search ${this.props.itemTypePlural}`}
                                       onChange={this.props.onSearchChange}
                                       onClear={this.props.clearSearchTerm}
@@ -142,9 +143,17 @@ const mapStateToProps = (state, ownProps) => {
 };
 
 
+/**
+ * Every one of these actions have the pattern of Setting the State and Informing an Update
+ * All of them trigger through the same update pipeline in the doUpdate (which needs to be provided)
+ * @param dispatch
+ * @param ownProps
+ * @returns {{getPreviousPage: (function()), getNextPage: (function()), onSearchChange: (function(*)), clearSearchTerm: (function()), setFacetSelection: (function(*=))}}
+ */
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
         getPreviousPage: () => {
+            // Go back means a negative offset
             dispatch(StandardGridActions.setCurrentPageOffset(ownProps.id, -1));
             dispatch(StandardGridActions.doUpdate(ownProps.id, ownProps.doUpdate));
         },

@@ -112,6 +112,7 @@ StandardGrid.propTypes = {
 
     /**
      * Following two properties lets you transform the columns
+     * This can be used to add the sort menu item for example
      */
     columnTransforms: PropTypes.array,
     columnTransformProps: PropTypes.array,
