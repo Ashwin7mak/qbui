@@ -45,6 +45,7 @@
             // open first table
             e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
             // edit first record
+            browser.pause(e2eConsts.shortWaitTimeMs);
             reportContentPO.clickOnRecordInReportTable(0);
         });
 
