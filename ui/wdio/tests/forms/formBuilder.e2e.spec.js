@@ -47,7 +47,7 @@
             // wait for left nav to load completely (else settings button won't be rendered)
             reportContentPO.waitForLeftNavLoaded();
             // edit first record
-            reportContentPO.clickOnRecordInReportTable(0);
+            reportContentPO.clickOnRecordInReportTable(0)
             // invoke form builder
             return formBuilderPO.open();
         });
