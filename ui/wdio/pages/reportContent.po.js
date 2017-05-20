@@ -72,7 +72,7 @@
         stageTableHomepageTitleEl: {get: function() {return this.reportContainerEl.element('.tableHomepageStageHeadline');}},
 
         //Drop down menu actions icon
-        dropDownIcon : {get: function() {return browser.element('.actionsCol .iconActionsDropDownMenu');}},
+        dropDownIcon : {get: function() {return browser.element('.actionsCol .iconUISturdy-fries');}},
         dropDownDeleteIcon: {get: function() {return browser.element('.dropdown-menu .delete');}},
 
         reportToolsAndContentEl: {get: function() {return this.reportContainerEl.element('.reportToolsAndContentContainer');}},
@@ -425,9 +425,17 @@
             }},
 
         // Record Row to be selected:
-        selectRow: {value: function(recordRow) {
-            this.recordCheckBoxes.value[recordRow].click();
-            this.deleteIcon.waitForExist();
+        selectRow: {value: function(recordRowIndex) {
+            //get all checkboxes in the report table first column
+            browser.element('input.selectRowCheckbox').waitForVisible();
+            var getAllCheckBoxs = browser.elements('input.selectRowCheckbox').value.filter(function(checkbox) {
+                return checkbox.index === recordRowIndex;
+            });
+
+            if (getAllCheckBoxs !== []) {
+                //Click on filtered save button
+                return getAllCheckBoxs[0].click();
+            }
         }},
 
         //Select a report from tables page with reportID being the index of the report
