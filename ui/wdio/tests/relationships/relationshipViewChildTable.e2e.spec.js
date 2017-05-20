@@ -35,9 +35,6 @@ describe('Relationships - View child table on form tests: ', () => {
             }).then(() => {
                 // Auth into the new stack
                 return newStackAuthPO.realmLogin(realmName, realmId);
-            }).then(() => {
-                // Go to List All report
-                return e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE4].id, 1);
             }).catch((error) => {
                 // Global catch that will grab any errors from chain above
                 // Will appropriately fail the beforeAll method so other tests won't run
@@ -52,6 +49,8 @@ describe('Relationships - View child table on form tests: ', () => {
         beforeAll(() => {
             // Add child records to one of the parent records
             // More efficient to do this via API but I wanted to exercise the UI in these tests
+            // Go to List All report
+            e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE4].id, 1);
 
             // Edit the Numeric Field of the first record
             reportInLineEditPO.openRecordEditMenu(0);
@@ -80,7 +79,7 @@ describe('Relationships - View child table on form tests: ', () => {
         beforeEach(() => {
             // Navigate to Table 3, Report 1, Record 1
             reportContentPO.openRecordInViewMode(realmName, testApp.id, testApp.tables[e2eConsts.TABLE3].id, 1, 1);
-            reportContentPO.waitForLeftNavLoaded();
+            return reportContentPO.waitForLeftNavLoaded();
         });
 
         /**
