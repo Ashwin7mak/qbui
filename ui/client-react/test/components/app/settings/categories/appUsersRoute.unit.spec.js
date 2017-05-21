@@ -23,7 +23,10 @@ describe('AppUsersRoute functions', () => {
             loadAppOwner: function() {return;},
             selectUsersRows: function() {return;},
             selectedUsersRows: function() {return;},
-            getAllUsers: function() {return;}
+            getAllUsers: function() {return;},
+            openAddUserDialog: function() {return;},
+            setUserRoleToAdd: function() {return;},
+            assignUserToApp: function(){return;},
         }
     };
 
@@ -39,11 +42,14 @@ describe('AppUsersRoute functions', () => {
         spyOn(flux.actions, 'loadAppRoles');
         spyOn(flux.actions, 'loadAppOwner');
         spyOn(flux.actions, 'selectedUsersRows');
+        spyOn(flux.actions, 'openAddUserDialog');
     });
 
     afterEach(() => {
         flux.actions.loadAppRoles.calls.reset();
         flux.actions.loadAppOwner.calls.reset();
+        flux.actions.openAddUserDialog.calls.reset();
+
     });
 
     it('test render of component', () => {
@@ -107,6 +113,23 @@ describe('AppUsersRoute functions', () => {
         instance.toggleSelectedRow(1, 1);
         instance.toggleSelectAllRows();
         instance.deselectAllRows();
+        AppUsersRouteAPI.__ResetDependency__('IconActions');
+    });
+    it('test AddUserDialog functions', () => {
+        AppUsersRouteAPI.__Rewire__('IconActions', IconActionsMock);
+        let component = shallow(<AppUsersRoute appUsersUnfiltered={appUsersUnfiltered}
+                                               appRoles={appRoles}
+                                               appOwner={appOwner}
+                                               flux={flux}
+                                               selectedApp={selectedApp}
+                                               selectedUserRows={[]}
+                                               params={{appId: 1}}
+                                               appUsers={[]}
+                                               match={match}/>);
+        let instance = component.instance();
+        instance.toggleAddUserDialog(false)
+        instance.setUserRoleToAdd();
+        instance.assignUserToApp(1, {userId: 1}, {roleId: 2});
         AppUsersRouteAPI.__ResetDependency__('IconActions');
     });
 });

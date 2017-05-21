@@ -38,7 +38,10 @@ export class AddUserDialog extends React.Component {
             userId: this.userPanel.getSelectedUser(),
             roleId: this.props.userRoleToAdd,
         };
-        this.props.assignUserToApp(this.props.appId, userInfo).then(
+        const responsePromise = this.props.assignUserToApp(this.props.appId, userInfo);
+
+        if (responsePromise) {
+            responsePromise.then(
             (response) => {
                 this.props.hideDialog(false);
                 this.props.onAddedUser(userInfo.userId);
@@ -46,7 +49,9 @@ export class AddUserDialog extends React.Component {
             (error) => {
                 // leave the dialog open but issue a growl indicating an error
                 NotificationManager.error(Locale.getMessage('users.addUser'), Locale.getMessage('failed'));
-            });
+            }
+        );
+        }
 
     }
 

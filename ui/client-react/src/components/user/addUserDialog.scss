@@ -56,19 +56,54 @@
     .finishedButton, .cancelButton {
       padding: 8px 34px;
       z-index: 1000000;
+      border: 1px solid $color-purple-600;
+
+      &:focus{
+        outline: none;
+        border: solid 1px #74489d;
+        box-shadow: 0 0 2px 1.5px rgba(116, 72, 157, 0.25);
+
+      }
     }
-    .cancelButton{
+    .cancelButton {
+      color: $color-cyan-500;
+      border: 1px solid #fff;
+
+      &:focus {
+        background-color: #fff;
+      }
+      &:hover {
+        background-color: #fff;
+        color: $color-cyan-300;
+
+      }
+    }
+    .finishedButton:disabled, .finishedButton:disabled:hover {
+      background-color: $color-black-400!important;
+      color: #fff!important;
       border: none;
-      color: $color-cyan-400;
     }
-    .finishedButton{
+
+    .finishedButton {
       background-color: $color-cyan-400;
       border: 1px solid $color-cyan-400;
+      color: #fff;
+
+      &:hover {
+      color: #fff;
+      background-color: $color-cyan-300;
+    }
+      &:focus {
+        background-color: $color-cyan-600;
+      }
     }
 
-    .Select-menu{
+    .Select-menu {
       max-height: 100px;
+    }
 
+    .Select-menu-outer {
+      width: 97%;
     }
 
     .assignRole{
