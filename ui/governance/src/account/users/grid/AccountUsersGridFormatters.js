@@ -7,8 +7,7 @@ import * as RealmUserAccountFlagConstants from "../../../common/constants/RealmU
 const IsTimeNull = timeStr => timeStr === '1900-01-01T00:00:00Z';
 const RenderBoolColumn = bool => bool ? 'Y' : '--';
 
-// Start of Formatters
-export const FormatUserStatusText = (hasAppAccess, cellInfo) => {
+export const FormatAccessStatusText = (hasAppAccess, cellInfo) => {
     if (RealmUserAccountFlagConstants.IsDeactivated(cellInfo.rowData)) {
         return "Deactivated";
     } else if (RealmUserAccountFlagConstants.IsDenied(cellInfo.rowData)) {
@@ -22,7 +21,23 @@ export const FormatUserStatusText = (hasAppAccess, cellInfo) => {
     }
 };
 
-export const FormatUserStatusHTML = (hasAppAccess, cellInfo) => {
+export const FormatUserStatusText = (hasAppAccess, cellInfo) => {
+    if (RealmUserAccountFlagConstants.IsDeactivated(cellInfo.rowData)) {
+        return "Deactivated";
+    } else if (RealmUserAccountFlagConstants.IsDenied(cellInfo.rowData)) {
+        return "Denied";
+    } else if (RealmUserAccountFlagConstants.HasAnySystemPermissions(cellInfo.rowData)) {
+        return "Quick Base Staff";
+    } else if (RealmUserAccountFlagConstants.IsVerified(cellInfo.rowData)) {
+        return "Registered";
+    } else if (RealmUserAccountFlagConstants.IsRegistered(cellInfo.rowData)) {
+        return "Unverified";
+    } else {
+        return "Unregistered";
+    }
+};
+
+export const FormatAccessStatusHTML = (hasAppAccess, cellInfo) => {
     if (RealmUserAccountFlagConstants.IsDeactivated(cellInfo.rowData)) {
         return (<span className="accessStatusLabel deactivated"><Icon icon="errorincircle-outline"/> Deactivated</span>);
     } else if (RealmUserAccountFlagConstants.IsDenied(cellInfo.rowData)) {

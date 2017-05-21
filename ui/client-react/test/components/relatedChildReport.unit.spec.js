@@ -19,7 +19,7 @@ const childReportId = 3;
 const childTableName = 'child table';
 const detailKeyFid = 4;
 const detailKeyValue = 5;
-const type = 'EMBEDREPORT';
+const type = 'CHILD_REPORT';
 const relatedChildReportUrl = `/qbase/app/${appId}/table/${childTableId}/report/${childReportId}?detailKeyFid=${detailKeyFid}&detailKeyValue=${detailKeyValue}`;
 
 const MockChildReport = (props) => {

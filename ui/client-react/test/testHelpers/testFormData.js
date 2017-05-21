@@ -1,4 +1,4 @@
-import {referenceElement, relationships} from '../../src/mocks/relationship';
+import {childReportElement, relationships} from '../../src/mocks/relationship';
 
 export const textElementText = 'Text element text';
 
@@ -612,7 +612,7 @@ export function buildTestFormDataWithRelationship() {
                                     id: 'column-0',
                                     orderIndex: 0,
                                     elements: [
-                                        referenceElement()
+                                        childReportElement()
                                     ]
                                 },
                             ]
