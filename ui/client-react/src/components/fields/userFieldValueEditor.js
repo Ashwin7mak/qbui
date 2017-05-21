@@ -188,7 +188,7 @@ const UserFieldValueEditor = React.createClass({
      * @param {String} newInputValue value of the react-select input
      */
     onInputChange(newInputValue) {
-        if(!this.props.isAddUser) {this.setState({inputValue: newInputValue});}
+        if (!this.props.isAddUser) {this.setState({inputValue: newInputValue});}
     },
 
     loadAsyncOptions(input, callback) {

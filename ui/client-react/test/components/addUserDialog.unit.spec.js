@@ -1,12 +1,8 @@
 import React from 'react';
-import {mount} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
 import AddUserDialog from '../../src/components/user/addUserDialog';
-import {Simulate} from 'react-addons-test-utils';
-import TestUtils from 'react-addons-test-utils';
 import {shallow} from 'enzyme';
 import MultiStepDialog from '../../../reuse/client/src/components/multiStepDialog/multiStepDialog';
-import {I18nMessage} from "../../src/utils/i18nMessage";
 
 let component;
 let domComponent;
@@ -150,44 +146,12 @@ const mockParentFunctions = {
     toggleAddUserDialog() {},
     assignUserToApp() {
         return new Promise((resolve)=>{
-            resolve('response')
+            resolve('response');
         });
     },
 
 
 };
-//
-// function buildMockParent() {
-//     return React.createClass({
-//         getInitialState() {
-//             return {
-//                 pageIndex: 0
-//             };
-//         },
-//         render() {
-//
-//             return (
-//                 <AddUserDialog allUsers={allUsers}
-//                                searchUsers={mockParentFunctions.searchUsers}
-//                                appRoles={appRoles}
-//                                assignUserToApp={mockParentFunctions.assignUserToApp}
-//                                setUserRoleToAdd={mockParentFunctions.setUserRoleToAdd}
-//                                userRoleToAdd={userRoleToAdd}
-//                                appId={appId}
-//                                selectedApp={selectedApp}
-//                                existingUsers={appUsers}
-//                                addUserToAppDialogOpen={true}
-//                                hideDialog={mockParentFunctions.toggleAddUserDialog}
-//                 />
-//             );
-//         }
-//     });
-// }
-
-
-// function buildMockParentComponent(options) {
-//     return shallow(React.createElement(buildMockParent()));
-// }
 
 describe('AddUserDialog', () => {
     beforeEach(() => {
@@ -202,11 +166,6 @@ describe('AddUserDialog', () => {
         }
     });
 
-    // it('renders a AddUserDialog component', () => {
-    //     component = buildMockParentComponent();
-    //     domComponent = document.querySelector('.addUserDialog');
-    //     expect(domComponent).not.toBeNull();
-    // });
     it('should call hideModal on cancel', ()=>{
         spyOn(mockParentFunctions, 'toggleAddUserDialog');
         component = shallow(<AddUserDialog allUsers={allUsers}
@@ -263,28 +222,8 @@ describe('AddUserDialog', () => {
         />);
         let content = component.find('MultiStepDialog');
         expect(component.length).toEqual(1);
-        component.instance().userPanel = userPanel
-        component.instance().onFinished()
+        component.instance().userPanel = userPanel;
+        component.instance().onFinished();
         expect(mockParentFunctions.assignUserToApp).toHaveBeenCalled();
     });
-
-    //
-    // it('calls the onFinished function', () => {
-    //     component = buildMockParentComponent();
-    //     domComponent = document.querySelector('.addUserDialog');
-    //     let addButton = domComponent.querySelector('.finishedButton');
-    //     Simulate.click(addButton);
-    //     // component.removeChild(domComponent);
-    // });
-    //
-    // it('cancels the AddUserDialog', () => {
-    //     component = buildMockParentComponent();
-    //     domComponent = document.querySelector('.addUserDialog');
-    //     let cancelButton = domComponent.querySelector('.cancelButton');
-    //     Simulate.click(cancelButton);
-    //     let modalInDom = document.querySelector('.AddUserDialog');
-    //     if (modalInDom) {
-    //         modalInDom.parentNode.removeChild(modalInDom);
-    //     }
-    // });
 });

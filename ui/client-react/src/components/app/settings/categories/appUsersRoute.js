@@ -10,7 +10,6 @@ import QBIcon from '../../../../../../reuse/client/src/components/icon/icon';
 import AppSettingsStage from '../appSettingsStage';
 import Locale from '../../../../../../reuse/client/src/locales/locale';
 import UserActions from '../../../actions/userActions';
-
 import './appUsersRoute.scss';
 
 const AppUsersRoute = React.createClass({
@@ -19,7 +18,6 @@ const AppUsersRoute = React.createClass({
             roleId: ''
         };
     },
-
     componentDidMount() {
         this.props.flux.actions.loadAppRoles(this.props.match.params.appId);
         this.props.flux.actions.loadAppOwner(this.props.selectedApp.ownerId);

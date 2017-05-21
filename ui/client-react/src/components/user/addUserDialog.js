@@ -13,7 +13,7 @@ export class AddUserDialog extends React.Component {
 
         this.state = {
             isValid: false
-        }
+        };
         // bind to fix context for event handlers
         this.onFinished = this.onFinished.bind(this);
         this.onCancel = this.onCancel.bind(this);

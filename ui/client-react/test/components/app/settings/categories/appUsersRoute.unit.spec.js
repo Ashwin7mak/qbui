@@ -26,7 +26,7 @@ describe('AppUsersRoute functions', () => {
             getAllUsers: function() {return;},
             openAddUserDialog: function() {return;},
             setUserRoleToAdd: function() {return;},
-            assignUserToApp: function(){return;},
+            assignUserToApp: function() {return;},
         }
     };
 
@@ -127,7 +127,7 @@ describe('AppUsersRoute functions', () => {
                                                appUsers={[]}
                                                match={match}/>);
         let instance = component.instance();
-        instance.toggleAddUserDialog(false)
+        instance.toggleAddUserDialog(false);
         instance.setUserRoleToAdd();
         instance.assignUserToApp(1, {userId: 1}, {roleId: 2});
         AppUsersRouteAPI.__ResetDependency__('IconActions');
