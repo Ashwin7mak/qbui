@@ -476,13 +476,11 @@ export const getSelectedFormElement = (state, id) => {
 export const getParentRelationshipsForSelectedFormElement = (state, id) => {
     const currentForm = state.forms[id];
     const formMeta = _.get(currentForm, 'formData.formMeta', {});
-    const relationships = formMeta.relationships;
-    if (!formMeta || !relationships || relationships.length === 0) {
-        return [];
-    }
+    const relationships = !_.isEmpty(formMeta) && _.get(formMeta, 'relationships') ? formMeta.relationships : [];
+
     const tableId = formMeta.tableId;
-    return _.filter(relationships, (realationship) => {
-        return (realationship.detailTableId === tableId);
+    return _.filter(relationships, (relationship) => {
+        return (relationship.detailTableId === tableId);
     });
 }
 
