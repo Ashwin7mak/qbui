@@ -1,8 +1,10 @@
 import React, {PropTypes, Component} from 'react';
 import {connect} from "react-redux";
 import FieldToken from './fieldToken';
+import FieldFormats from '../../../utils/fieldFormats';
 import Tooltip from '../../../../../reuse/client/src/components/tooltip/tooltip';
 import {addNewFieldToForm, endDraggingState, isInDraggingState} from "../../../actions/formActions";
+import {showRelationshipDialog} from "../../../actions/relationshipBuilderActions";
 import {getFormByContext, getSelectedFormElement} from '../../../reducers/forms';
 import {updateFormAnimationState} from '../../../actions/animationActions';
 import {CONTEXT} from '../../../actions/context';
@@ -57,6 +59,10 @@ export class DraggableFieldToken extends Component {
     clickToAddToForm = () => {
         const {selectedField, formId, appId, tblId, relatedField} = this.props;
         this.props.addNewFieldToForm(formId, appId, tblId, selectedField, relatedField);
+
+        if (this.props.type === FieldFormats.LINK_TO_RECORD) {
+            this.props.showRelationshipDialog(true);
+        }
     };
 
     onEnterClickToAdd = (e) => {
@@ -147,6 +153,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = {
     addNewFieldToForm,
+    showRelationshipDialog,
     updateFormAnimationState,
     endDraggingState,
     isInDraggingState
