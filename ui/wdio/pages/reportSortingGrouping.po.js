@@ -270,18 +270,11 @@
             //expect(this.fieldsPanelTitle.getAttribute('textContent')).toBe(title);
         }},
 
-        scrollAndClick : {value: function(element) {
-            browser.execute('arguments[0].scrollIntoView()', element);
-            return element.click();
-        }},
-
         /*
          * Method to click on more Fields link in the fields panel
          */
         ClickMoreFieldsLinkInFieldsPanel : {value: function() {
             this.fieldsPanel.waitForVisible();
-            //JS scroll into view
-            browser.execute("return arguments[0].scrollIntoView;", browser.element('.list-group .moreFields'));
             //Click on more fields
             this.fieldsPanel.element('.list-group .moreFields').click();
             //TODO Scroll function disabled until it is fixed to work in Safari(mobile): MC-2598
