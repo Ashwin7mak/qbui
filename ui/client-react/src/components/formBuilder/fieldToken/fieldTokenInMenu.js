@@ -82,7 +82,6 @@ export class DraggableFieldToken extends Component {
 
     clickToAddToForm = () => {
         const {selectedField, formId, appId, tblId, relatedField, datatypeAttributes, id} = this.props;
-        console.log('this.props: ', this.props);
         this.props.addNewFieldToForm(formId, appId, tblId, selectedField, relatedField, datatypeAttributes, id);
     };
 
