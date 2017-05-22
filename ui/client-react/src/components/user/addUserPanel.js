@@ -18,6 +18,9 @@ class addUserPanel extends React.Component {
             if (appRole.name === defaultRole) {defaultRole = appRole.id;}
             return {value: appRole.id, label: appRole.name, clearableValue: false};
         });
+        roles.sort((a, b)=>{
+            return b.value - a.value;
+        });
         if (this.state.selectedRole === '') {
             this.state.selectedRole = defaultRole;
             this.props.setUserRoleToAdd(defaultRole);

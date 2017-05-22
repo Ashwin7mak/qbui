@@ -2,146 +2,116 @@
 
 .addUserPanel {
 
-  .title {
-    color: $color-black-700;
-    font-size: 25px;
-    padding-top: 25px;
-    padding-bottom: $spacing-x-small;
-  }
-  .description {
-    color: $color-black-500;
-    font-size: 14px;
-  }
-  .hidden {
-    display: none;
-  }
+    .title {
+        color: $color-black-700;
+        font-size: 25px;
+        padding-top: 25px;
+        padding-bottom: $spacing-x-small;
+    }
+    .description {
+        color: $color-black-500;
+        font-size: 14px;
+    }
+    .hidden {
+        display: none;
+    }
 }
 
 .panelContainer {
-  margin-top: 5%;
-  display: flex;
-  flex-direction: row;
+    margin-top: 5%;
+    display: flex;
+    flex-direction: row;
 
-  .panel-items {
-    width: 100%;
-    padding: 5px;
-  }
+    .panel-items {
+        width: 100%;
+        padding: 5px;
+    }
 }
 
 
-.multiStepModal {
-  .bodyContainer {
-    margin-right: 35px;
-  }
+.multiStepModal.addUserDialog {
+    .bodyContainer {
+        margin-right: 35px;
+    }
 }
 
 
 @include not-small-breakpoint {
 
-  .multiStepModal.addUserDialog .modal-dialog {
+    .multiStepModal.addUserDialog .modal-dialog {
 
-    .modal-content {
-      height: 320px;
-      width: 550px;
-      .bodyContainer{
-        height: 0;
-      }
+        .modal-content {
+            height: 320px;
+            width: 550px;
+            .bodyContainer {
+                height: 0;
+            }
+        }
+
+        .modal-body > *:first-child {
+            height: 405px;
+        }
+        width: 550px;
+
+        .finishedButton, .cancelButton {
+            padding: 8px 34px;
+            z-index: 1000000;
+            border: 1px solid $color-purple-600;
+
+            &:focus {
+                outline: none;
+                border: 1px solid $color-purple-600;
+                box-shadow: 0 0 2px 1.5px rgba($inline-edit-shadow-color, 0.25);
+
+            }
+        }
+        .cancelButton {
+            color: $color-cyan-500;
+            border: 1px solid $color-black-100;
+
+            &:focus {
+                background-color: $color-black-100;
+            }
+            &:hover {
+                background-color: $color-black-100;
+                color: $color-cyan-300;
+            }
+        }
+        .finishedButton:disabled, .finishedButton:disabled:hover {
+            background-color: $color-black-400 !important;
+            color: $color-black-100 !important;
+            border: none;
+        }
+
+        .finishedButton {
+            background-color: $color-cyan-400;
+            border: 1px solid $color-cyan-400;
+            color: $color-black-100;
+
+            &:hover {
+                color: $color-black-100;
+                background-color: $color-cyan-300;
+            }
+            &:focus {
+                background-color: $color-cyan-600;
+            }
+        }
+
+        .Select-menu-outer {
+            width: 97%;
+        }
+
+        .assignRole {
+            z-index: 10000000;
+        }
+
+        .modal-footer {
+            padding-right: 70px;
+            margin-top: 250px;
+        }
     }
 
-    .modal-body > *:first-child {
-      height: 405px;
+    .multiStepModal.addUserDialog.allowOverflow .loadedContent {
+        overflow: visible;
     }
-    width: 550px;
-
-    .finishedButton, .cancelButton {
-      padding: 8px 34px;
-      z-index: 1000000;
-      border: 1px solid $color-purple-600;
-
-      &:focus{
-        outline: none;
-        border: solid 1px #74489d;
-        box-shadow: 0 0 2px 1.5px rgba(116, 72, 157, 0.25);
-
-      }
-    }
-    .cancelButton {
-      color: $color-cyan-500;
-      border: 1px solid #fff;
-
-      &:focus {
-        background-color: #fff;
-      }
-      &:hover {
-        background-color: #fff;
-        color: $color-cyan-300;
-
-      }
-    }
-    .finishedButton:disabled, .finishedButton:disabled:hover {
-      background-color: $color-black-400!important;
-      color: #fff!important;
-      border: none;
-    }
-
-    .finishedButton {
-      background-color: $color-cyan-400;
-      border: 1px solid $color-cyan-400;
-      color: #fff;
-
-      &:hover {
-      color: #fff;
-      background-color: $color-cyan-300;
-    }
-      &:focus {
-        background-color: $color-cyan-600;
-      }
-    }
-
-    .Select-menu-outer {
-      width: 97%;
-    }
-
-    .assignRole{
-      z-index: 10000000;
-    }
-
-    .modal-footer{
-      padding-right: 70px;
-      margin-top: 250px;
-    }
-  }
-
-  .multiStepModal.addUserDialog.allowOverflow .loadedContent {
-    overflow: visible;
-  }
-}
-
-@include medium-breakpoint {
-
-  .multiStepModal.addUserDialog .modal-dialog {
-
-    .modal-body > *:first-child {
-      height: 200px;
-    }
-    .modal-footer {
-      padding-right: 35px;
-    }
-    width: 400px;
-  }
-}
-
-/* some initial small styles in case we support small */
-@include small-breakpoint {
-
-  .multiStepModal.addUserDialog .modal-dialog {
-
-    .modal-body > *:first-child {
-      height: 550px;
-    }
-    width: 420px;
-    .iconChooser.open {
-      width: 100%;
-    }
-  }
 }

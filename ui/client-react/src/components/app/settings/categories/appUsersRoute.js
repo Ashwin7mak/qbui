@@ -162,7 +162,7 @@ export const AppUsersRoute = React.createClass({
 
     render() {
         if (this.props.appRoles) {
-        return (
+            return (
             <div>
                 <Stage stageHeadline={this.getStageHeadline()}
                        pageActions={this.getPageActions()}>

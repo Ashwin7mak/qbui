@@ -77,6 +77,7 @@ export class AddUserDialog extends React.Component {
                                  onCancel={this.onCancel}
                                  onFinished={this.onFinished}
                                  canProceed={this.state.isValid}
+                                 finishedTooltip={"Select a user"}
                                  finishedButtonLabel="Add"
         >
             <div className="addUserPanel">

@@ -8,8 +8,10 @@ import Loader from 'react-loader';
 import KeyboardShortcuts from '../../../../../reuse/client/src/components/keyboardShortcuts/keyboardShortcuts';
 import {I18nMessage} from 'REUSE/utils/i18nMessage';
 import Locale from 'REUSE/locales/locale';
+import Tooltip from 'REUSE/components/tooltip/tooltip';
 
 import './multiStepDialog.scss';
+import '../../../../../reuse/client/src/components/iconActions/iconActions.scss';
 
 /**
  * # Multi-step Dialog
@@ -90,7 +92,12 @@ class MultiStepDialog extends React.Component {
                     {showNext &&
                         <Button className="nextButton" bsStyle="primary" disabled={!this.props.canProceed} onClick={this.nextClicked}><I18nMessage message="nav.next"/></Button>}
                     {showFinished &&
-                        <Button className="finishedButton" bsStyle="primary" disabled={!this.props.canProceed} onClick={this.finishClicked}>{this.props.finishedButtonLabel}</Button>}
+                        <Button className="finishedButton" bsStyle="primary" disabled={!this.props.canProceed} onClick={this.finishClicked}>
+                            {(this.props.finishedTooltip && !this.props.canProceed) ?
+                            <Tooltip plainMessage={this.props.finishedTooltip} placement="top">
+                                {this.props.finishedButtonLabel}
+                            </Tooltip> : this.props.finishedButtonLabel}
+                        </Button>}
                 </div>
             </Modal.Footer>
         );
