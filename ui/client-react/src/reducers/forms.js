@@ -479,6 +479,19 @@ export const getExistingFields = (state, id) => {
     return currentForm.formData.formMeta.tabs[tabIndex].sections[sectionIndex].columns[columnIndex].elements[elementIndex];
 };
 
+// export const getExistingFields = (state, id) => {
+//     Use lodash _.differenceBy pass in all fields, formFields and call back
+//     allFields are currentForm.formData.fields
+//     all formfields are curentForm.formData.formmeta.fields
+//      callBack will return an ID if it is an object and just return a number if it is a number
+//     let existingFields = _.differenceBy(currentForm.formData.fields, curentForm.formData.formmeta.fields, CALLBACK)
+//
+//     const currentForm = state.forms[id];
+//     if (!currentForm) {
+//         return null;
+//     }
+//      return EXISTINGFIELDS which should be an array of objects
+// };
 
 export default forms;
 

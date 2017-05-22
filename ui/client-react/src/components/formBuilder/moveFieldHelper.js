@@ -20,6 +20,7 @@ const MoveFieldHelper = {
 
         removeElementFromCurrentLocationById(formMetaCopy, draggedItemProps);
         addElementToNewLocation(formMetaCopy, newLocation, draggedItemProps);
+        updateFormMetaFields(formMetaCopy, newLocation);
 
         return formMetaCopy;
     },
@@ -27,13 +28,14 @@ const MoveFieldHelper = {
     removeField(formMeta, location) {
         let formMetaCopy = _.cloneDeep(formMeta);
         removeElementFromCurrentLocation(formMetaCopy, location);
-
+        updateFormMetaFields(formMetaCopy, location);
         return formMetaCopy;
     },
 
     keyBoardMoveFieldUp(formMeta, currentLocation) {
         let formMetaCopy = _.cloneDeep(formMeta);
         swapFieldLocation(formMetaCopy, currentLocation, -1);
+        updateFormMetaFields(formMetaCopy, currentLocation);
 
         return formMetaCopy;
     },
@@ -41,6 +43,7 @@ const MoveFieldHelper = {
     keyBoardMoveFieldDown(formMeta, currentLocation) {
         let formMetaCopy = _.cloneDeep(formMeta);
         swapFieldLocation(formMetaCopy, currentLocation, 1);
+        updateFormMetaFields(formMetaCopy, currentLocation);
 
         return formMetaCopy;
     },
@@ -49,6 +52,8 @@ const MoveFieldHelper = {
         let formMetaCopy = _.cloneDeep(formMeta);
         newField = {containingElement: newField};
         addElementToNewLocation(formMetaCopy, newLocation, newField);
+        updateFormMetaFields(formMetaCopy, newLocation);
+
         return formMetaCopy;
     },
 
@@ -100,6 +105,13 @@ function hasRequiredArguments(formMeta, newLocation, draggedItemProps) {
 
     return (errors.length === 0);
 }
+
+function updateFormMetaFields(formMetaData, location) {
+    let {tabIndex, sectionIndex, columnIndex} = location;
+    let elements = formMetaData.tabs[tabIndex].sections[sectionIndex].columns[columnIndex].elements;
+    formMetaData.fields = _.map(elements, (field) => field.FormFieldElement.fieldId);
+}
+
 
 function removeElementFromCurrentLocationById(formMetaData, draggedItemProps) {
     let updatedElementLocation = findCurrentElementLocation(formMetaData, draggedItemProps.containingElement);
