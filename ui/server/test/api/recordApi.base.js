@@ -30,13 +30,13 @@
         }
 
         var recordBase = {
-            apiBase           : apiBase,
+            apiBase: apiBase,
             //delegate to apiBase to initialize
-            initialize        : function() {
+            initialize: function() {
                 init = apiBase.initialize();
             },
             //set the baseUrl we want to use to reach out for testing
-            setBaseUrl        : function(baseUrlConfig) {
+            setBaseUrl: function(baseUrlConfig) {
                 apiBase.setBaseUrl(baseUrlConfig);
             },
             //Helper method to create an app, can be used by multiple test cases
@@ -46,18 +46,18 @@
                     return apiBase.executeRequest(apiBase.resolveAppsEndpoint(), consts.POST, appToCreate).then(function(appResponse) {
                         let createdApp = JSON.parse(appResponse.body);
                         log.debug('App create response: ' + JSON.stringify(createdApp));
-                        var initTablePropsPromises = [];
-                        createdApp.tables.forEach(function(table, index) {
-                            initTablePropsPromises.push(self.initTableProperties(createdApp.id, table.id, table.name));
-                        });
-                        if (skipProperties !== undefined && skipProperties === "true") {
+                        if (skipProperties === true) {
+                            return appResponse;
+                        } else {
+                            var initTablePropsPromises = [];
+                            createdApp.tables.forEach(function(table, index) {
+                                initTablePropsPromises.push(self.initTableProperties(createdApp.id, table.id, table.name));
+                            });
                             // Set the tableProperties for each table
                             return promise.all(initTablePropsPromises).then(function(results) {
                                 // if all promises successful return the createApp response or code will error to catch block below
                                 return appResponse;
                             });
-                        } else {
-                            return appResponse;
                         }
                     }).catch(function(error) {
                         log.error('Error in createApp');

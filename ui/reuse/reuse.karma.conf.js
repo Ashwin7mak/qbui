@@ -57,7 +57,8 @@ module.exports = function(config) {
                             path.resolve(__dirname, "../client-react/src"),
                             path.resolve(__dirname, "./client/src"),
                             path.resolve(__dirname, "../node_modules/react-notifications"),
-                            path.resolve(__dirname, '../node_modules/react-select')
+                            path.resolve(__dirname, '../node_modules/react-select'),
+                            path.resolve(__dirname, '../node_modules/rc-tabs')
                         ],
                         loader: "style!css"
                     },
