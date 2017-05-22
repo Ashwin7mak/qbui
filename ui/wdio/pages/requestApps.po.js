@@ -28,7 +28,7 @@
          */
         selectApp: {value: function(appName) {
             //wait until you see tableLists got loaded
-            browser.waitForExist('.appsList .leftNavLabel');
+            browser.waitForText('.appsList .leftNavLabel', e2eConsts.extraLongWaitTimeMs);
             //filter table names from leftNav links
             var results = this.getAllAppLeftNavLinksList.value.filter(function(app) {
                 return app.getAttribute('textContent') === appName;
@@ -38,7 +38,7 @@
                 //Click on filtered table name
                 results[0].click();
                 //wait until you see tableLists got loaded
-                return browser.waitForExist('.tablesList .leftNavLabel');
+                return browser.waitForText('.tablesList .leftNavLabel', e2eConsts.extraLongWaitTimeMs);
             }
         }},
 
