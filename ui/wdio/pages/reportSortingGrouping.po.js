@@ -46,7 +46,25 @@
             this.clickInEmptyFieldInSortGrpDlg(this.sortBySettings, 'Choose a field to sort by');
             this.ClickMoreFieldsLinkInFieldsPanel();
             this.recordID.waitForExist();
-            this.recordID.click();
+            //this.recordID.click();
+            //Click on more fields using JS click since scroll is not working on safari and moveToobject not working on firefox
+            browser.execute(function() {
+                var event = new MouseEvent('click', {
+                    'view': window,
+                    'bubbles': true,
+                    'cancelable': true,
+                    'detail': 2
+                });
+                //filter field Items from fields Panel
+                var results = browser.elements('.list-group .fieldName').value.filter(function(field) {
+                    return field.getAttribute('textContent') === 'Record ID#';
+                });
+
+                if (results !== []) {
+                    //Click on filtered field name
+                    results[0].dispatchEvent(event);
+                }
+            });
             return reportContentPO.clickAndWaitForGrid(this.sortGroupDlgApplyBtn);
         }},
 
