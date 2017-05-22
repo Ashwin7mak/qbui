@@ -473,6 +473,12 @@
                 return browser.elements('.fieldValue');
             }
         },
+        //Element for dropdownToggle ActionButton
+        dropdownToggleActionButton: {
+            get: function() {
+                return browser.elements('.qbIcon.iconUISturdy-fries');
+            }
+        },
         /**
          * Helper method to ensure the report has been properly loaded with records. Will throw an error if no records are in the report.
          * @returns A promise that will resolve after waiting for the report records to be displayed
@@ -509,6 +515,17 @@
                 browser.element('.reportToolsAndContentContainer .addNewRecord').waitForVisible();
                 browser.element('.reportToolsAndContentContainer .addNewRecord').click();
                 browser.element('.editForm').waitForVisible();
+            }
+        },
+
+        /**
+         * Function that will click on the DropdownToggleActionButton
+         */
+        clickDropdownToggleActionButton: {
+            value: function() {
+                expect(this.dropdownToggleActionButton.isVisible()).toBe(true);
+                expect(this.dropdownToggleActionButton.isEnabled()).toBe(true);
+                browser.element('.qbIcon.iconUISturdy-fries').click();
             }
         },
 

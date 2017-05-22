@@ -48,33 +48,49 @@
         });
 
         /**
-         * verifies record count and 'add new record' button is visible
-         */
-        it('Should load the reports page with the appropriate table report and verify add record button is visible', function() {
-            // wait for the report content to be visible
-            reportContentPO.waitForReportContentSB();
-
-            // Assert records count
-            let recordCount = formsPO.getRecordsCountInATable();
-            expect(recordCount).toBe(RECORD_COUNT);
-
-            //Assert 'add new record' button is visible
-            expect(reportContentPO.addRecordBtnSB.isVisible()).toBe(true);
-        });
-
-        /**
-         * Test method. Checks to make sure the Table Actions ( Sort By and Records Count) are visible.
+         * Test method. Checks to make sure the Table Actions ( Sort By, Records Count and dropdownToggle button) are visible/enabled/clickable.
          *
          */
         it('Should load the table report actions', function() {
-            // wait for the report content to be visible
+
+            // Step 1 - wait for the report content to be visible
             reportContentPO.waitForReportContentSB();
 
-            // Assert sort by / group by button is visible
+            // Step 2 - Assert sort by / group by button is visible and enabled
             expect(reportContentPO.reportSortGrpBtnSB.isVisible()).toBe(true);
+            expect(reportContentPO.reportSortGrpBtnSB.isEnabled()).toBe(true);
 
-            // Assert records count total
+            // Step 3 - Assert records count total
             expect(reportTableActionsPO.getReportRecordsCount()).toBe(RECORD_COUNT + " records");
+
+            // Step 4 - Assert dropdownToggle actionButton is visible and clickable
+            expect(reportContentPO.dropdownToggleActionButton.isVisible()).toBe(true);
+            // click in dropdownToggle actionButton
+            reportContentPO.clickDropdownToggleActionButton();
+        });
+
+        /**
+         * verifies record count
+         */
+        it('Should load the reports page with the appropriate table report and verify add record button is visible', function() {
+            // Step 1 - wait for the report content to be visible
+            reportContentPO.waitForReportContentSB();
+
+            // Step 2 - Assert records count
+            let recordCount = formsPO.getRecordsCountInATable();
+            expect(recordCount).toBe(RECORD_COUNT);
+        });
+
+        /**
+         * Verifies add new record button is visible and enabled
+         */
+        it('', function() {
+            // Step 1 - wait for the report content to be visible
+            reportContentPO.waitForReportContentSB();
+
+            // Step 2 - Assert 'add new record' button is visible and clickable
+            expect(reportContentPO.addRecordBtnSB.isVisible()).toBe(true);
+            expect(reportContentPO.addRecordBtnSB.isEnabled()).toBe(true);
         });
 
     });
