@@ -23,7 +23,7 @@ class ChildReport extends React.Component {
             return (
                 <EmbeddedReportLink {...this.props}/>
             );
-        } else if (this.props.type === 'EMBEDREPORT') {
+        } else if (this.props.type === 'CHILD_REPORT') {
             return (
                 <EmbeddedReportToolsAndContent
                     tblId={childTableId}
@@ -46,7 +46,7 @@ ChildReport.propTypes = {
     detailKeyFid: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     /** The value entered in the foreignkey field. */
     detailKeyValue: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-    type: PropTypes.oneOf(['EMBEDREPORT', 'REPORTLINK'])
+    type: PropTypes.oneOf(['CHILD_REPORT', 'REPORTLINK'])
 };
 
 export default ChildReport;

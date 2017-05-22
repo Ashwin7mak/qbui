@@ -17,7 +17,7 @@ Parameters:
     Default: coreui
   DesiredCount:
     Type: String
-    Default: 2
+    Default: 3
   ContainerPort:
     Type: String
     Default: 9443
@@ -54,6 +54,11 @@ Resources:
       Role: !Ref ServiceRole
       DesiredCount: !Ref DesiredCount
       TaskDefinition: !Ref TaskDefinition
+      PlacementStrategies:
+        - Field: attribute:ecs.availability-zone
+          Type: spread
+        - Field: instanceId
+          Type: spread
       LoadBalancers:
         - ContainerName: !Ref ServiceName
           ContainerPort: !Ref ContainerPort

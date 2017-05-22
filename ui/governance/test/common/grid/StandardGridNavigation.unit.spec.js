@@ -13,10 +13,10 @@ describe('StandardGridNavigation', () => {
 
     const basePageInfo = {
         currentPage: 1,
-        firstRecordInCurrentPage: 1,
-        lastRecordInCurrentPage: 10,
+        firstItemIndexInCurrentPage: 1,
+        lastItemIndexInCurrentPage: 10,
         totalPages: 1,
-        filteredRecords: 10,
+        totalFilteredItems: 10,
         itemsPerPage: 10
     };
 
@@ -46,8 +46,8 @@ describe('StandardGridNavigation', () => {
         let paginationInfo =
             {
                 ...basePageInfo,
-                firstRecordInCurrentPage: 10,
-                lastRecordInCurrentPage: 20
+                firstItemIndexInCurrentPage: 10,
+                lastItemIndexInCurrentPage: 20
             };
 
         let StandardGridNavigationComponent = shallow(
@@ -56,8 +56,8 @@ describe('StandardGridNavigation', () => {
                                     id={"accountUsers"}
                                     paginationInfo={paginationInfo}/>);
 
-        expect(StandardGridNavigationComponent.props().startRecord).toEqual(paginationInfo.firstRecordInCurrentPage);
-        expect(StandardGridNavigationComponent.props().endRecord).toEqual(paginationInfo.lastRecordInCurrentPage);
+        expect(StandardGridNavigationComponent.props().startRecord).toEqual(paginationInfo.firstItemIndexInCurrentPage);
+        expect(StandardGridNavigationComponent.props().endRecord).toEqual(paginationInfo.lastItemIndexInCurrentPage);
     });
 
     describe('Previous Disabled', () => {
@@ -66,7 +66,7 @@ describe('StandardGridNavigation', () => {
             let paginationInfo =
                 {
                     ...basePageInfo,
-                    filteredRecords: 0
+                    totalFilteredItems: 0
                 };
 
             let StandardGridNavigationComponent = shallow(
@@ -95,12 +95,12 @@ describe('StandardGridNavigation', () => {
             expect(StandardGridNavigationComponent.props().isPreviousDisabled).toEqual(true);
         });
 
-        it('should not disable when current page is not 1 and has filteredRecords > 0', () => {
+        it('should not disable when current page is not 1 and has totalFilteredItems > 0', () => {
             let paginationInfo =
                 {
                     ...basePageInfo,
                     currentPage: 2,
-                    filteredRecords: 10
+                    totalFilteredItems: 10
                 };
 
             let StandardGridNavigationComponent = shallow(
@@ -119,7 +119,7 @@ describe('StandardGridNavigation', () => {
             let paginationInfo =
                 {
                     ...basePageInfo,
-                    filteredRecords: 0
+                    totalFilteredItems: 0
                 };
 
             let StandardGridNavigationComponent = shallow(
@@ -149,7 +149,7 @@ describe('StandardGridNavigation', () => {
             expect(StandardGridNavigationComponent.props().isNextDisabled).toEqual(true);
         });
 
-        it('should not disable when current page is not 1 and has filteredRecords > 0', () => {
+        it('should not disable when current page is not 1 and has totalFilteredItems > 0', () => {
             let paginationInfo =
                 {
                     ...basePageInfo,

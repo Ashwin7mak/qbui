@@ -22,11 +22,18 @@ export const receiveAccountUsers = (users) => ({
     type: types.GET_USERS_SUCCESS,
     users
 });
+/**
+ * Action when there is there was an error retrieving user from the backend
+ * @param users
+ */
 export const failedAccountUsers = (error) => ({
     error: error,
     type: types.GET_USERS_FAILURE
 });
-
+/**
+ * Action when we are in the process of fetching the user from the backend
+ * @param users
+ */
 export const fetchingAccountUsers = () => ({
     type: types.GET_USERS_FETCHING
 });
@@ -43,15 +50,17 @@ export const searchUsers = (users, searchTerm) => {
         return users;
     }
 
+    // normalize the search
     searchTerm = searchTerm.toLowerCase();
 
+    // go through the users list and see if any of the 'searchable' columns match
     return _.filter(users, function(user) {
         return _.includes(user.firstName.toLowerCase(), searchTerm) ||
         _.includes(user.lastName.toLowerCase(), searchTerm) ||
         _.includes(user.email.toLowerCase(), searchTerm) ||
         _.includes(user.userName.toLowerCase(), searchTerm) ||
         _.includes(Formatters.FormatLastAccessString(user.lastAccess).toLowerCase(), searchTerm) ||
-        _.includes(Formatters.FormatUserStatusText(user.hasAppAccess, {rowData: user}).toLowerCase(), searchTerm);
+        _.includes(Formatters.FormatAccessStatusText(user.hasAppAccess, {rowData: user}).toLowerCase(), searchTerm);
     });
 };
 
@@ -64,28 +73,40 @@ export const searchUsers = (users, searchTerm) => {
  */
 export const paginateUsers = (users, _page, _itemsPerPage) => {
 
+    // lets normalize the inputs if they are not passed
     let currentPage = _page || 1,
         itemsPerPage = _itemsPerPage || 10;
 
+    // offset in the array. currentPage is really where we want to move the window
     let offset = (currentPage - 1) * itemsPerPage;
 
+    // in edge cases, assume we are retrieving the first page
+    // if the users array is empty or the offset window overshoots or we have less than a page worth of users
     if (users.length === 0 || offset >= users.length || itemsPerPage >= users.length) {
         offset = 0;
         currentPage = 1;
     }
 
+    // other wise slice the users for that window which is really offset to items we want in that window
     let slicedUsers = users.slice(offset, offset + itemsPerPage);
     return {
-        currentPageRecords: slicedUsers,
+        // the items are the window of the users
+        currentPageItems: slicedUsers,
         currentPage: currentPage,
-        filteredRecords:users.length,
+        totalFilteredItems:users.length,
         itemsPerPage: itemsPerPage,
         totalPages: Math.ceil(users.length / itemsPerPage),
-        firstRecordInCurrentPage: slicedUsers.length === 0 ? 0 : offset + 1,
-        lastRecordInCurrentPage: offset + slicedUsers.length
+
+        // first and last index are used for pagination, we need to respect the window boundaries
+        firstItemIndexInCurrentPage: slicedUsers.length === 0 ? 0 : offset + 1,
+        lastItemIndexInCurrentPage: offset + slicedUsers.length
     };
 };
 
+/**
+ * Different ways the columns can be sorted
+ * @type {[*]}
+ */
 const sortFunctions = [
     "uid",
     "firstName",
@@ -93,7 +114,7 @@ const sortFunctions = [
     "email",
     user => Formatters.FormatUsernameString(user, {rowData: user}),
     "lastAccess",
-    user => Formatters.FormatUserStatusText(user.hasAppAccess, {rowData: user}),
+    user => Formatters.FormatAccessStatusText(user.hasAppAccess, {rowData: user}),
     user => Formatters.FormatIsInactive(user.lastAccess, {rowData: user}),
     user => user.numGroupsMember > 0,
     user => user.numGroupsManaged > 0,
@@ -115,6 +136,7 @@ export const sortUsers = (users, sortFids) => {
         sortFids = [1];
     }
 
+    // each column has different sort criteria and order criteria
     let sortFnArray = _.map(sortFids, (fid) => sortFunctions[Math.abs(fid)]);
     let orderArray = _.map(sortFids, (fid) => fid >= 0 ? "asc" : "desc");
     return _.orderBy(users, sortFnArray, orderArray);
@@ -140,9 +162,11 @@ export const facetUser = (users, facetSelections) => {
             // See if ALL of the facets match
             return _.every(facetsApplied, (facetValues, fieldID) => {
 
+                // CHECKBOXES can have different values "Y/N", "T/F". Normalize it
                 if (FACET_FIELDS[fieldID].type.toUpperCase() === SCHEMACONSTS.CHECKBOX) {
                     facetValues = facetValues.map((facet) => (facet.toString().toUpperCase() === 'NO' || facet.toString().toUpperCase() === 'FALSE') ?  false : true);
                 }
+                // if the facet fields have values then see if the values exist for the fields
                 return _.isEmpty(facetValues) || _.includes(facetValues, (FACET_FIELDS[fieldID].formatter(user)));
             });
         });
@@ -164,29 +188,27 @@ export const doUpdate = (gridId, gridState, _itemsPerPage) => {
         if (users.length === 0) {
             return;
         }
-        // First Facet
-        let facetSelections = gridState.facets && gridState.facets.facetSelections ? gridState.facets.facetSelections : {};
-        let facetedUsers = facetUser(users, facetSelections);
-
-        // Then Search
+        // First Search
         let searchTerm = gridState.searchTerm || "";
-        let filteredUsers = searchUsers(facetedUsers, searchTerm);
+        let filteredUsers = searchUsers(users, searchTerm);
 
+        // Then Facet
+        let facetSelections = gridState.facets && gridState.facets.facetSelections ? gridState.facets.facetSelections : {};
+        let facetedUsers = facetUser(filteredUsers, facetSelections);
+
+        // Then Sort
         let sortFids = gridState.sortFids || [];
-        let sortedUsers = sortUsers(filteredUsers, sortFids);
+        let sortedUsers = sortUsers(facetedUsers, sortFids);
 
         // Then Paginate
         let itemsPerPage = _itemsPerPage || gridState.pagination.itemsPerPage;
-        let {currentPageRecords, ...pagination} = paginateUsers(sortedUsers, gridState.pagination.currentPage, itemsPerPage);
-
-        // Set the grid's search term
-        dispatch(StandardGridActions.setSearch(gridId, searchTerm));
+        let {currentPageItems, ...pagination} = paginateUsers(sortedUsers, gridState.pagination.currentPage, itemsPerPage);
 
         // Set the grid's pagination info
         dispatch(StandardGridActions.setPaginate(gridId, pagination));
 
         // Inform the grid of the new users
-        dispatch(StandardGridActions.setItems(gridId, currentPageRecords));
+        dispatch(StandardGridActions.setItems(gridId, currentPageItems));
 
     };
 };
@@ -214,8 +236,8 @@ export const fetchAccountUsers = (accountId, gridID, itemsPerPage) => {
             // inform the redux store of all the users
             dispatch(receiveAccountUsers(response.data));
 
-            // set the total records for the grid
-            dispatch(StandardGridActions.setTotalRecords(gridID, response.data.length));
+            // set the total items for the grid. keep track of the original list of users before filters
+            dispatch(StandardGridActions.setTotalItems(gridID, response.data.length));
 
             // run through the pipeline and update the grid
             dispatch(doUpdate(gridID, StandardGridState.defaultGridState, itemsPerPage));

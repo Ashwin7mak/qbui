@@ -574,9 +574,15 @@ export default {
             unique: "Muss einmalige Werte haben"
         },
         builder: {
+            tabs: {
+                existingFields: 'Fügen Sie ein vorhandenes Feld hinzu',
+                newFields: 'Erstellen Sie ein neues Feld',
+            },
             formBuilder: {
                 unimplemented: "Feature ist momentan nicht verfügbar",
                 removeField: "Feld aus Form entfernen",
+                newFieldsMenuTitle: 'Neu',
+                existingFieldsMenuTitle: 'Bestehende',
                 tooltips: {
                     [`addNew${FieldFormats.TEXT_FORMAT}`]: "Erstellen Sie ein Textfeld und fügen Sie es dem Formular hinzu",
                     [`addNew${FieldFormats.NUMBER_FORMAT}`]: "Erstellen Sie ein Zahlenfeld und fügen Sie es dem Formular hinzu",

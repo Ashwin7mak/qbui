@@ -1,9 +1,10 @@
 import React from 'react';
 import configureMockStore from 'redux-mock-store';
 import {Provider} from "react-redux";
-import {Link} from 'react-router-dom';
+import {MemoryRouter, Link} from 'react-router-dom';
 import {mount, shallow} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
+
 import serverTypeConsts from '../../../common/src/constants';
 
 import EmbeddedReportLink, {
@@ -61,7 +62,9 @@ describe('EmbeddedReportLink', () => {
 
         component = mount(
             <Provider store={store}>
-                <EmbeddedReportLink />
+                <MemoryRouter>
+                    <EmbeddedReportLink />
+                </MemoryRouter>
             </Provider>);
         expect(component).toBePresent();
     });
@@ -73,7 +76,9 @@ describe('EmbeddedReportLink', () => {
 
         component = mount(
             <Provider store={store}>
-                <EmbeddedReportLink />
+                <MemoryRouter>
+                    <EmbeddedReportLink />
+                </MemoryRouter>
             </Provider>);
         component.unmount();
         expect(mockUnloadEmbeddedReport).toHaveBeenCalled();
