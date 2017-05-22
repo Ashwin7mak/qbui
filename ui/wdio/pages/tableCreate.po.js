@@ -14,6 +14,8 @@
     var tablesPage = Object.create(e2ePageBase, {
         //new table button
         newTableBtn : {get: function() {return browser.element('.newTableItem .newTable');}},
+        //New table Icon
+        newTableIconBtn : {get: function() {return browser.element('.newTableItem .newTable .iconUISturdy-add-new-stroke');}},
         //new table container
         tableContainer : {get: function() {return browser.element('.modal-dialog .bodyContainer');}},
         //new table header
@@ -184,7 +186,7 @@
          * Method to click on create new table
          */
         clickCreateNewTable : {value: function() {
-            browser.waitForExist('.tablesList .leftNavLabel');
+            browser.waitForText('.tablesList .leftNavLabel', e2eConsts.extraLongWaitTimeMs);
             //Wait until new table button visible
             this.newTableBtn.waitForVisible();
             //Verify the name of the button
@@ -192,7 +194,7 @@
             //Verify there is also + Icon associated with it
             this.newTableBtn.element('.iconUISturdy-add-new-stroke').waitForVisible();
             //Click on the new Table Btn
-            this.newTableBtn.click();
+            this.newTableIconBtn.click();
             return browser.element('.tableFieldInput').waitForVisible();
         }},
 

@@ -179,7 +179,7 @@
             it('Create new table ' + testCase.message, function() {
 
                 //Step 1 - get the original count of table links in the left nav
-                tableCreatePO.newTableBtn.waitForVisible();
+                tableCreatePO.newTableIconBtn.waitForVisible();
                 let originalTableLinksCount = tableCreatePO.getAllTableLeftNavLinksList.value.length;
 
                 //Step 2 - Click on new table button
