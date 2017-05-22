@@ -85,31 +85,6 @@ let appsActions = {
     //    });
     //},
 
-    /**
-     * Retrieve a list of roles for this app.
-     *
-     * @param appId
-     * @returns Promise
-     */
-    loadAppRoles(appId) {
-        //  promise is returned in support of unit testing only
-        return new Promise((resolve, reject) => {
-            let roleService = new RoleService();
-            // fetch the app roles list if we don't have it already
-            if (!this.appRoles || this.appRoles.length === 0) {
-                roleService.getAppRoles(appId).then(response => {
-                    this.dispatch(actions.LOAD_APP_ROLES_SUCCESS, response.data);
-                    resolve();
-                }, () => {
-                    this.dispatch(actions.LOAD_APP_ROLES_FAILED);
-                    reject();
-                });
-            } else {
-                resolve();
-            }
-        });
-    },
-
     loadAppOwner(userId) {
         //  promise is returned in support of unit testing only
         return new Promise((resolve, reject) => {

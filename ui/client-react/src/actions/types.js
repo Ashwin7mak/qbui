@@ -15,6 +15,11 @@ export const CLEAR_SELECTED_APP_TABLE = 'CLEAR_SELECTED_APP_TABLE';
 export const SELECT_APP_TABLE = 'SELECT_APP_TABLE';
 export const UPDATE_APP_TABLE_PROPS = 'UPDATE_APP_TABLE_PROPS';
 
+//  ******** App Role actions ********
+export const LOAD_APP_ROLES = 'LOAD_APP_ROLES';
+export const LOAD_APP_ROLES_SUCCESS = 'LOAD_APP_ROLES_SUCCESS';
+export const LOAD_APP_ROLES_FAILED = 'LOAD_APP_ROLES_FAILED';
+
 //  ******** Form actions ********
 export const LOADING_FORM = 'LOADING_FORM';
 export const LOAD_FORM_ERROR = 'LOAD_FORM_ERROR';
