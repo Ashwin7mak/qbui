@@ -1,6 +1,8 @@
 import React, {PropTypes} from 'react';
 import ListOfElements from '../../../../../reuse/client/src/components/sideNavs/listOfElements';
 import FieldTokenInMenu from '../fieldToken/fieldTokenInMenu';
+// import {getExistingFields} '..FROM FORMS.JS
+// {/*elements={existiingFields()}*/}
 
 const ExistingFieldsMenu = ({isCollapsed, isOpen, toggleToolPaletteChildrenTabIndex, toolPaletteChildrenTabIndex, toolPaletteFocus, toolPaletteTabIndex}) => (
     <ListOfElements
