@@ -10,6 +10,7 @@
     let topNavPO = requirePO('topNav');
     let RequestAppsPage = requirePO('requestApps');
     var tableCreatePO = requirePO('tableCreate');
+    let reportContentPO = requirePO('reportContent');
 
     describe('Reports Page - LeftNav Tests: ', function() {
         let realmName;
