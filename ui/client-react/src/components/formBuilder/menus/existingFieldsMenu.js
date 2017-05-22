@@ -1,11 +1,9 @@
 import React, {PropTypes} from 'react';
 import ListOfElements from '../../../../../reuse/client/src/components/sideNavs/listOfElements';
 import FieldTokenInMenu from '../fieldToken/fieldTokenInMenu';
+import {getExistingFields} from '../../../reducers/forms';
 
-// import {getExistingFields} '..FROM FORMS.JS
-// {/*elements={existiingFields()}*/}
-
-const ExistingFieldsMenu = ({isCollapsed, isOpen, toggleToolPaletteChildrenTabIndex, toolPaletteChildrenTabIndex, toolPaletteFocus, toolPaletteTabIndex}) => (
+const ExistingFieldsMenu = ({isCollapsed, isOpen, toggleToolPaletteChildrenTabIndex, toolPaletteChildrenTabIndex, toolPaletteFocus, toolPaletteTabIndex, existingFields}) => (
     <ListOfElements
         tabIndex={toolPaletteTabIndex}
         childrenTabIndex={toolPaletteChildrenTabIndex}
@@ -14,8 +12,7 @@ const ExistingFieldsMenu = ({isCollapsed, isOpen, toggleToolPaletteChildrenTabIn
         renderer={FieldTokenInMenu}
         isCollapsed={isCollapsed}
         isOpen={isOpen}
-        //elements={existingFields}
-        elements={[<div></div>]}
+        elements={existingFields}
         isFilterable={true}
         hideTitle={true}
     />
