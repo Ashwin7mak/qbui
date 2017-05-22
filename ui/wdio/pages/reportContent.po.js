@@ -128,6 +128,7 @@
          */
         waitForLeftNavLoaded : {value: function() {
             //wait for apps Toggle area
+            browser.element('.appsToggleArea').waitForExist();
             browser.element('.appsToggleArea').waitForVisible();
             //wait for table headings area
             browser.element('.tablesHeadingAndList .tablesHeading').waitForVisible();
