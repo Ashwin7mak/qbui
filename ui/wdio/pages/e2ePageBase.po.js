@@ -69,7 +69,7 @@
         return reportContentPO.waitForReportContent();
     };
 
-    PageBase.prototype.navigateTo = function(url){
+    PageBase.prototype.navigateTo = function(url) {
         browser.url(url);
     };
 

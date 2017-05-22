@@ -8,7 +8,7 @@ class automationsSettings {
         return browser.element('//*[@class="automationListSettingsStage stageHeadLine"]');
     }
 
-    get automationsTable(){
+    get automationsTable() {
         return browser.element('.automationSettings--table table table-hover');
     }
 }
