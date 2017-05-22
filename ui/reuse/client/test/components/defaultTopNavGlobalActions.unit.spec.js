@@ -10,7 +10,7 @@ import ReGlobalAction from 'REUSE/components/globalAction/globalAction';
 
 let component;
 
-fdescribe('DefaultTopNavGlobalActions', () => {
+describe('DefaultTopNavGlobalActions', () => {
     beforeEach(() => {
         jasmineEnzyme();
     });
