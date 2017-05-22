@@ -55,7 +55,7 @@
                     'cancelable': true,
                     'detail': 2
                 });
-                document.getElementsByClassName('list-group')[0].getElementsByTagName('button')[0].getElementById('3').dispatchEvent(event);
+                document.evaluate("//span[@class='fieldName' and text()='Record ID#']", document, null, XPathResult.ANY_TYPE, null).dispatchEvent(event);
             });
             return reportContentPO.clickAndWaitForGrid(this.sortGroupDlgApplyBtn);
         }},
