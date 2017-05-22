@@ -111,7 +111,7 @@ DefaultTopNavGlobalActions.propTypes = {
 };
 
 DefaultTopNavGlobalActions.defaultProps = {
-    hasFeedBack: true,
+    hasFeedback: true,
     startTabIndex: 0,
     actions: [],
 };
