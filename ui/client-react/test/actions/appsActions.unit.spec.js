@@ -139,30 +139,6 @@ describe('Apps Actions functions with Tables', () => {
         });
     });
 
-    var loadAppRolesTests = [
-        {name:'load app roles with app roles not cached', appId: 187, cached: false, appRoles: [1]},
-    ];
-    loadAppRolesTests.forEach(function(test) {
-        it(test.name, function(done) {
-            flux.actions.loadAppRoles(test.appId).then(
-                () => {
-                    if (test.cached === true) {
-                        expect(mockRoleService.prototype.getAppRoles).not.toHaveBeenCalled();
-                    } else {
-                        expect(mockRoleService.prototype.getAppRoles).toHaveBeenCalledWith(test.appId);
-                        expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(1);
-                        expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_APP_ROLES_SUCCESS, appRoleResponeData]);
-                    }
-                    done();
-                },
-                () => {
-                    expect(false).toBe(true);
-                    done();
-                }
-            );
-        });
-    });
-
     var unassignUsersTests = [
         {name:'unassign users from role', appId: 187, roleId:1, userIds:[1]}
     ];
@@ -196,27 +172,6 @@ describe('Apps Actions functions with Tables', () => {
                 },
                 () => {
                     expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.UNASSIGN_USERS_FAILED]);
-                    expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(1);
-                    done();
-                }
-            );
-        });
-    });
-
-    var loadAppRolesNegativeTests = [
-        {name:'fail load app roles with app id not cached', appId: 187, cached: false,  appRoles: [1]}
-    ];
-    loadAppRolesNegativeTests.forEach(function(test) {
-        it(test.name, function(done) {
-            appsActionsRewireAPI.__Rewire__('RoleService', mockRoleServiceFailure);
-            flux.actions.appRoles = test.cached === true ? test.appRoles : [];
-            flux.actions.loadAppRoles(test.appId).then(
-                () => {
-                    expect(false).toBe(true);
-                    done();
-                },
-                () => {
-                    expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_APP_ROLES_FAILED]);
                     expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(1);
                     done();
                 }
