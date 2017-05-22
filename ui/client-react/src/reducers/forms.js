@@ -446,6 +446,22 @@ const forms = (
         return newState;
     }
 
+    case types.MARK_FIELD_FOR_DELETION: {
+        if (!currentForm) {
+            return state;
+        }
+
+
+        let newMeta = _.cloneDeep(updatedForm.formData.formMeta);
+        if (newMeta.fieldsToDelete) {
+            newMeta.fieldsToDelete.push(action.content.fieldId);
+        } else {
+            newMeta.fieldsToDelete = [action.content.fieldId];
+        }
+        updatedForm.formData.formMeta = newMeta;
+        newState[id] = updatedForm;
+        return newState;
+    }
     case types.UNLOAD_FORM : {
         return removeCopies(currentForm.formData.recordId);
     }

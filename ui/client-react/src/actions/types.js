@@ -31,6 +31,7 @@ export const END_DRAG = 'END_DRAG';
 export const IS_DRAGGING = 'IS_DRAGGING';
 export const SET_IS_PENDING_EDIT_TO_FALSE = 'SET_IS_PENDING_EDIT_TO_FALSE';
 export const UNLOAD_FORM = 'UNLOAD_FORM';
+export const MARK_FIELD_FOR_DELETION = 'MARK_FIELD_FOR_DELETION';
 
 //  ********  Nav shell actions ********
 export const UPDATE_FORM_ANIMATION_STATE = 'UPDATE_FORM_ANIMATION_STATE';

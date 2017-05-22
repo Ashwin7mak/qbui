@@ -19,12 +19,17 @@ const mockTransformHelper = {
 const mockFieldsActions = {
     saveAllNewFields(_appId, _tableId, formType) {
         return (dispatch) => {
-            return Promise.resolve().then(() => (dispatch({type: 'AllFieldsSaved'})));
+            return Promise.resolve().then(() => (dispatch({type: 'AllFieldsAdded'})));
         };
     },
     updateAllFieldsWithEdits(_appId, _tableId) {
         return (dispatch) => {
-            return Promise.resolve().then(() => (dispatch({type: 'AllFieldsSaved'})));
+            return Promise.resolve().then(() => (dispatch({type: 'AllFieldsUpdated'})));
+        };
+    },
+    deleteFields(_appId, _formMeta) {
+        return (dispatch) => {
+            return Promise.resolve().then(() => (dispatch({type: 'AllFieldsDeleted'})));
         };
     }
 };
@@ -219,15 +224,10 @@ describe('Form Actions', () => {
 
         const expectedSaveActions = [
             {id:'view', type:types.SAVING_FORM, content: null},
-            {type: 'AllFieldsSaved'},
-            {type: 'AllFieldsSaved'},
+            {type: 'AllFieldsAdded'},
+            {type: 'AllFieldsUpdated'},
+            {type: 'AllFieldsDeleted'},
             {id: 'view', type: types.SAVING_FORM_SUCCESS, content: formData.formMeta}
-        ];
-        const expectedActions = [
-            {type: 'AllFieldsSaved'},
-            {type: 'AllFieldsSaved'},
-            {id:'view', type:types.SAVING_FORM, content: null},
-            {id: 'view', type: types.SAVING_FORM_SUCCESS, content: formData}
         ];
         class mockFormService {
             constructor() {}
@@ -249,8 +249,10 @@ describe('Form Actions', () => {
 
             spyOn(mockFieldsActions, 'saveAllNewFields').and.callThrough();
             spyOn(mockFieldsActions, 'updateAllFieldsWithEdits').and.callThrough();
+            spyOn(mockFieldsActions, 'deleteFields').and.callThrough();
             FormActionsRewireAPI.__Rewire__('saveAllNewFields', mockFieldsActions.saveAllNewFields);
             FormActionsRewireAPI.__Rewire__('updateAllFieldsWithEdits', mockFieldsActions.updateAllFieldsWithEdits);
+            FormActionsRewireAPI.__Rewire__('deleteFields', mockFieldsActions.deleteFields);
         });
 
         afterEach(() => {
@@ -326,6 +328,25 @@ describe('Form Actions', () => {
             return store.dispatch(updateForm(appId, tableId, formType, formData)).then(
                 () => {
                     expect(mockFieldsActions.updateAllFieldsWithEdits).toHaveBeenCalledWith(appId, tableId);
+                    done();
+                },
+                () => {
+                    expect(false).toBe(true);
+                    done();
+                }
+            );
+        });
+
+        it('deletes fields marked for deletion on the form', (done) => {
+            const appId = 'appId';
+            const tableId = 'tableId';
+            const formType = 'view';
+
+            const store = mockStore({});
+
+            return store.dispatch(updateForm(appId, tableId, formType, formData)).then(
+                () => {
+                    expect(mockFieldsActions.deleteFields).toHaveBeenCalledWith(appId, tableId, formData);
                     done();
                 },
                 () => {
@@ -457,6 +478,17 @@ describe('Form Actions', () => {
                 type: types.REMOVE_FIELD,
                 content: {
                     location: 1
+                }});
+        });
+    });
+
+    describe('markFieldForDeletion', () => {
+        it('creates an action that will mark a relationship for deletion on form save', () => {
+            expect(formActions.markFieldForDeletion('view', {id: 1})).toEqual({
+                id: 'view',
+                type: types.MARK_FIELD_FOR_DELETION,
+                content: {
+                    fieldId: {id: 1}
                 }});
         });
     });

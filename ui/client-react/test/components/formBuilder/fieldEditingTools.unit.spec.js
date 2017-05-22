@@ -7,7 +7,8 @@ import {FieldEditingTools} from '../../../src/components/formBuilder/fieldEditin
 const mockParentProps = {
     removeFieldFromForm(_location) {},
     selectFieldOnForm(_formId, _location) {},
-    deselectField(_formId, _location) {}
+    deselectField(_formId, _location) {},
+    markFieldForDeletion(_formId, relationshipId) {}
 };
 
 const formBuilderChildrenTabIndex = ["0"];
@@ -247,6 +248,26 @@ describe('FieldEditingTools', () => {
         instance.selectedCurrentField(e);
 
         expect(instance.onClickField).not.toHaveBeenCalled();
+    });
+
+    it('deletes fields when detail key field is deleted', () => {
+        spyOn(mockParentProps, 'markFieldForDeletion');
+
+        let relationships = [{detailTableId: 'tableId', id: 'id', detailFieldId: 'fieldId'}];
+        component = shallow(<FieldEditingTools
+            formBuilderChildrenTabIndex={formBuilderChildrenTabIndex}
+            selectedFields={[]}
+            location={location}
+            markFieldForDeletion={mockParentProps.markFieldForDeletion}
+            removeFieldFromForm={mockParentProps.removeFieldFromForm}
+            relationships={relationships}
+            relatedField={{id: 'fieldId', tableId: 'tableId'}}
+        />);
+
+        let deleteButton = component.find('.deleteFieldIcon button');
+        deleteButton.simulate('click');
+
+        expect(mockParentProps.markFieldForDeletion).toHaveBeenCalledWith(formId, 'fieldId');
     });
 });
 

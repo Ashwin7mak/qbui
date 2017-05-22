@@ -121,7 +121,7 @@ const DraggableFieldHoc = (FieldComponent, showFieldEditingTools = true) => {
             return connectDragSource(
                 <div className={classNames.join(' ')}>
                     <div className={draggableFieldWrapper.join(' ')}>
-                        {showFieldEditingTools && <FieldEditingTools location={location} isDragging={isDragging} formBuilderContainerContentElement={formBuilderContainerContentElement}/>}
+                        {showFieldEditingTools && <FieldEditingTools location={location} isDragging={isDragging} formBuilderContainerContentElement={formBuilderContainerContentElement} relatedField={this.props.relatedField} relationships={this.props.relationships}/>}
                         <FieldComponent {...this.props} />
                     </div>
                 </div>

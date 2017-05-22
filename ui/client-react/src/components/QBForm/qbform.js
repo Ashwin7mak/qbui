@@ -340,6 +340,7 @@ export const QBForm = React.createClass({
         let relatedField = this.getRelatedField(FormFieldElement.fieldId);
         let fieldRecord = this.getFieldRecord(relatedField);
         let recId = _.has(this.props.formData, 'recordId') ? this.props.formData.recordId : null;
+        let relationships = _.has(this.props.formData, 'formMeta.relationships') ? this.props.formData.formMeta.relationships : [];
 
         /* if the form prop calls for element to be required update fieldDef accordingly
          * This isn't functionality that currently exists in newstack. Its causing issues with updating field properties
@@ -385,6 +386,7 @@ export const QBForm = React.createClass({
                   appUsers={this.props.appUsers}
                   recId={recId}
                   isTokenInMenuDragging={this.props.isTokenInMenuDragging}
+                  relationships={relationships}
               />
             </div>
         );

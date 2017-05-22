@@ -12,7 +12,7 @@ import NavigationUtils from '../utils/navigationUtils';
 import {NEW_FORM_RECORD_ID} from '../constants/schema';
 import _ from 'lodash';
 import {convertFormToArrayForClient, convertFormToObjectForServer} from './actionHelpers/transformFormData';
-import {saveAllNewFields, updateAllFieldsWithEdits} from './fieldsActions';
+import {saveAllNewFields, updateAllFieldsWithEdits, deleteField} from './fieldsActions';
 
 let logger = new Logger();
 
@@ -278,6 +278,12 @@ export const removeFieldFromForm = (formId, location) => {
     });
 };
 
+export const markFieldForDeletion = (formId, fieldId) => {
+    return event(formId, types.MARK_FIELD_FOR_DELETION, {
+        fieldId
+    });
+};
+
 /**
  * Move a field up one position on a form
  * @param formId
@@ -363,6 +369,24 @@ export const createForm = (appId, tblId, formType, form) => {
     return saveTheForm(appId, tblId, formType, form, true);
 };
 
+export const deleteFields = (appId, tblId, formMeta) => {
+    return (dispatch, getState) => {
+        let fields = formMeta.fieldsToDelete;
+
+        const fieldPromises = formMeta.fieldsToDelete ? fields.map(field => dispatch(deleteField(appId, tblId, field))) : [];
+        if (fieldPromises.length === 0) {
+            logger.info('No fields deleted with deleteFields for : `{appId}`, tbl: `{tblId}`');
+            return Promise.resolve();
+        }
+
+        return Promise.all(fieldPromises).then(() => {
+            logger.debug('All promises processed in deleteFields against app: `{appId}`, tbl: `{tblId}`');
+        }).catch(error => {
+            logger.error(error);
+        });
+    };
+};
+
 /**
  * Update an existing form layout
  *
@@ -385,6 +409,7 @@ function saveTheForm(appId, tblId, formType, formMeta, isNew, redirectRoute, sho
 
         return dispatch(saveAllNewFields(appId, tblId, formType))
             .then(() => dispatch(updateAllFieldsWithEdits(appId, tblId)))
+            .then(() => dispatch(deleteFields(appId, tblId, formMeta)))
             .then(() => {
                 return new Promise((resolve, reject) => {
                     if (appId && tblId) {
