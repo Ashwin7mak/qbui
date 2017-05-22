@@ -93,13 +93,13 @@
         it('Should select all users, unselect one user, verify unchecked', function() {
             // Select all records checkbox
             ReportTableActionsPO.selectAllRecordsCheckbox();
-            expect(browser.isSelected('.selectAllCheckbox')).toBe(true);
+            expect(ReportTableActionsPO.reportSelectAllCheckbox.isSelected()).toBe(true);
             // Assert user selected count
             expect(ReportTableActionsPO.getReportRecordsSelectedCount()).toBe("6");
             // Select first user row
             ReportTableActionsPO.selectRecordRowCheckbox(1);
             // Assert select all users is unchecked
-            expect(browser.isSelected('.selectAllCheckbox')).toBe(false);
+            expect(ReportTableActionsPO.reportSelectAllCheckbox.isSelected()).toBe(false);
             // Assert user selected count
             expect(ReportTableActionsPO.getReportRecordsSelectedCount()).toBe("5");
         });
