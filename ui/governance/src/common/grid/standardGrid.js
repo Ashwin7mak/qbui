@@ -76,12 +76,6 @@ class StandardGrid extends Component {
     }
 }
 
-StandardGrid.defaultProps = {
-    shouldFacet: true,
-    facetFields:[],
-    shouldSearch: true
-};
-
 StandardGrid.propTypes = {
 
     /**
@@ -124,23 +118,34 @@ StandardGrid.propTypes = {
     doUpdate: PropTypes.func.isRequired,
 
     /**
-     * Whether to provide a search box
+     * Whether to provide a search box to filter the grid
      */
     shouldSearch: PropTypes.bool,
 
     /**
-     * Whether to Facet in this grid or no
+     * Whether to Facet in this grid or not
      */
     shouldFacet: PropTypes.bool,
 
     /**
-     * The Facet Fields to display
+     * if should facet then the Facet Fields to display needs to be passed
      */
     facetFields: PropTypes.array
 };
 
+
+StandardGrid.defaultProps = {
+    shouldFacet: true,
+    facetFields:[],
+    shouldSearch: true
+};
+
 StandardGrid.defaultProps = {
     items: [],
+    /**
+     * Provide the Header Menu Transformations.
+     * You can append more menu like the "Sort" to the column
+     */
     columnTransformsClasses: [HeaderMenuColumnTransform],
     columnTransformProps: [
         {
