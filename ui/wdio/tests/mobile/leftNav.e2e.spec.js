@@ -68,7 +68,7 @@
             expect(browser.isVisible('.open')).toBeTruthy();
 
             // Step 9 - Verify if the search box is user editable
-            leftNavPO.leftNavSearchInputBox.setValue(sampleText1);
+            leftNavPO.leftNavSearchInputBox.setValue(sampleText);
 
             // Step 10 - Verify text got entered
             expect(leftNavPO.leftNavSearchInputBox.getAttribute('value')).toBe(sampleText);
