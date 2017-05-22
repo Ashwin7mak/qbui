@@ -2,6 +2,7 @@
 // (see onPrepare hook below)
 var localConf;
 var randomNum = Math.floor((Math.random() * (100 - 1) + 1));
+var seleniumPort = 4400 + randomNum;
 var metricsPort = 8800 + randomNum;
 
 exports.config = {
@@ -22,10 +23,13 @@ exports.config = {
         // Uncomment this if you are running Sauce against your local dev
         //dns             : '127.0.0.1',
         // Use a random int to make the port unique between Jenkins jobs
-        port            : 4400 + randomNum,
+        port            : seleniumPort,
         connectRetries : 5,
         connectRetryTimeout: 5000,
-        metricsAddress : 'localhost:' + metricsPort
+        // Custom ip to query for test metrics
+        metricsAddress : 'localhost:' + metricsPort,
+        // Custom id to add to the ready file name to make the file unique
+        readyFileId: randomNum
     },
     //
     //
@@ -35,7 +39,7 @@ exports.config = {
     // Define all options that are relevant for connecting WebdriverIO to a Sauce Labs Selenium Server here
     //
     //host: '127.0.0.1',
-    //port: 4400,
+    port: seleniumPort,
     //path: '/wd/hub',
     //
     // ============
@@ -130,7 +134,8 @@ exports.config = {
         {
             platform: 'OS X 10.11',
             browserName: 'firefox',
-            version: '46.0',
+            version: '53.0',
+            marionette: 'false',
             tunnelIdentifier: process.env.ENV_TUNNEL_NAME,
             build           : 'WebdriverIO Jenkins Master Build #' + process.env.BUILD_NUMBER + ' - OSX Firefox Browser',
             tags            : [process.env.SAUCE_JOB_NAME + '_OSX_Firefox', 'master', 'OSX', 'Firefox', process.env.BUILD_NUMBER],
@@ -138,7 +143,7 @@ exports.config = {
             // Timeout in seconds for Sauce Labs to wait for another command (bumped this for sleeps in tests)
             idleTimeout: '180',
             maxDuration: 10800,
-            breakpointSize: 'xlarge',
+            breakpointSize: 'large',
             // These two values enable parallel testing which will run a spec file per instance
             shardTestFiles: true,
             maxInstances: 5
@@ -325,7 +330,10 @@ exports.config = {
             global.browserWidth = browserDimensions.browserWidth;
             global.browserHeight = browserDimensions.browserHeight;
             browser.logger.info('Setting browser size to ' + global.breakpointSize + ' breakpoint (' + global.browserWidth + ', ' + global.browserHeight + ')');
-            browser.windowHandleSize({width: global.browserWidth, height: global.browserHeight});
+            //TODO on firefox53 this is not working
+            if (browserName === 'chrome') {
+                browser.windowHandleSize({width: global.browserWidth, height: global.browserHeight});
+            }
         }
 
         // recordApi.base (and api.base) will not initialize itself if you don't pass in a config object

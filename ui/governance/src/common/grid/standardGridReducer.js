@@ -4,16 +4,32 @@ import FacetSelections from "../../../../reuse/client/src/components/facets/face
 export const defaultGridState = {
     // the items currently displayed on the grid
     items: [],
-    // the fields to sort the grid
+    // the sort field IDs that is currently applied to the grid
     sortFids: [],
     // the pagination to apply to the grid
-    pagination: {filteredRecords: 0, totalRecords: 0, totalPages: 0, currentPage: 1, itemsPerPage: 10, firstRecordInCurrentPage: 0, lastRecordInCurrentPage: 0},
-    // the filter search term to apply to the grid
+    pagination: {
+        // the total items after filtering
+        totalFilteredItems: 0,
+        // the total items before filtering
+        totalItems: 0,
+        // the total pages we have
+        totalPages: 0,
+        // the current page user is viewing
+        currentPage: 1,
+        // the total items that need to be displayed
+        itemsPerPage: 10,
+        // the first and last item index of the page
+        firstItemIndexInCurrentPage: 0,
+        lastItemIndexInCurrentPage: 0},
+    // the filter search term that is currently applied to the grid
     searchTerm : "",
     // the facets applied to this grid
     facets: {
-        facetSelections: new FacetSelections(),     // current selected facets in this grid of the format
-        facetFields:[]                             // current facet columns and values
+        // current selected facets in this grid of the format
+        facetSelections: new FacetSelections(),
+        // The facet columns and its values in the format in the grid
+        // [{id: id, name: *, type: FACET_FIELDS[fieldID].type, values: [{id: id, value: aFacet}
+        facetFields:[]
     }
 };
 
@@ -34,7 +50,7 @@ export function grid(state = defaultGridState, action) {
     case types.SET_SEARCH:
         return {
             ...state,
-            searchTerm: action.searchTerm
+            searchTerm: action.searchTerm || ''
         };
     case types.SET_SORT:
         return {
@@ -62,23 +78,18 @@ export function grid(state = defaultGridState, action) {
                 ...state.pagination, ...action.pagination
             }
         };
-    case types.SET_TOTALRECORDS:
+    case types.SET_TOTAL_ITEMS:
         return {
             ...state,
             pagination: {
                 ...state.pagination,
-                totalRecords: action.totalRecords
+                totalItems: action.totalItems
             }
         };
     case types.SET_FACET_SELECTIONS:
         return {
             ...state,
             facets: {...state.facets, facetSelections: action.facetSelections}
-        };
-    case types.SET_FACET_FIELDS:
-        return {
-            ...state,
-            facets: {...state.facets, facetFields: action.facetFields}
         };
     default:
         return state;
@@ -114,9 +125,8 @@ export function gridById(state = {}, action) {
     case types.SET_PAGINATION:
     case types.SET_CURRENTPAGE_OFFSET:
     case types.SET_SEARCH:
-    case types.SET_FACET_FIELDS:
     case types.SET_FACET_SELECTIONS:
-    case types.SET_TOTALRECORDS:
+    case types.SET_TOTAL_ITEMS:
         return {
             ...state,
             [action.gridId]: grid(state[action.gridId], action)

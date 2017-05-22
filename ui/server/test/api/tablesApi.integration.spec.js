@@ -80,7 +80,7 @@
 
                                     let fieldResp = JSON.parse(responses[1].body);
                                     assert.ok(Array.isArray(fieldResp));
-                                    assert.equal(fieldResp.length, Object.keys(consts.BUILTIN_FIELD_ID).length + 2, "Unexpected number of fields returned");
+                                    assert.equal(fieldResp.length, Object.keys(consts.BUILTIN_FIELD_ID).length + 3, "Unexpected number of fields returned");
 
                                     let reportResp = JSON.parse(responses[2].body);
                                     assert.ok(Array.isArray(reportResp));
@@ -148,6 +148,43 @@
                 }
             ).catch((error) => {
                 done(new Error("Unexpected exception calling update Table " + JSON.stringify(error)));
+            });
+        });
+
+
+        it('should update a table with no table properties successfully after first creating table properties', function(done) {
+            this.timeout(testConsts.INTEGRATION_TIMEOUT * appWithNoFlags.length);
+            recordBase.createApp(appWithNoFlags, false).then(function(appResponse) {
+                let appWithTablesWithoutProps = JSON.parse(appResponse.body);
+                let tableId = appWithTablesWithoutProps.tables[0].id;
+                let tablesEndpoint = recordBase.apiBase.resolveTablesEndpoint(appWithTablesWithoutProps.id, tableId, true);
+                const payload = {tableNoun: "update test table noun"};
+                recordBase.apiBase.executeRequest(tablesEndpoint, consts.PATCH, payload).then(
+                    (response) => {
+                        assert.equal(response.statusCode, 200, "Unexpected HTTP response code received during update table call to EE");
+                        let tablePropsEndpoint = recordBase.apiBase.resolveTablePropertiesEndpoint(appWithTablesWithoutProps.id, tableId);
+                        recordBase.apiBase.executeRequest(tablePropsEndpoint, consts.GET).then(
+                            (eeResponse) => {
+                                let tableProps = JSON.parse(eeResponse.body);
+                                assert.equal(tableProps.tableNoun, payload.tableNoun, "Unexpected table noun returned");
+                                done();
+                            },
+                            (eeError) => {
+                                done(new Error("Unexpected error validating get table properties response" + JSON.stringify(eeError)));
+                            }
+                        ).catch((eeException) => {
+                            done(new Error("Unexpected exception validating get table properties response" + JSON.stringify(eeException)));
+                        });
+                    },
+                    (error) => {
+                        done(new Error("Unexpected error on update table call to EE" + JSON.stringify(error)));
+                    }
+                ).catch((exception) => {
+                    done(new Error("Unexpected exception on update table call to EE" + JSON.stringify(exception)));
+                });
+            }).catch(function(exception) {
+                log.error(JSON.stringify(exception));
+                done();
             });
         });
 

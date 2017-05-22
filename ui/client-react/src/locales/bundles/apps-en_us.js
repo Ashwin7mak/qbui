@@ -501,7 +501,7 @@ export default {
             emails: "Format all the addresses like name@domain.com",
             maxChars: "Use up to {maxNum} characters",
             choiceMaxLength : "Select a choice with {maxNum} characters or less",
-            phone: "Format the {fieldName} like (xxx) xxx-xxxx",
+            phone: "Enter a genuine number for {fieldName}",
             phoneInvalidCountryCode: "Format the country code like +x for international numbers",
             duration: {
                 timeFormat: "Format the {fieldName} in {value}",
@@ -581,9 +581,15 @@ export default {
             multiChoice: "Choices"
         },
         builder: {
+            tabs: {
+                existingFields: 'Add an existing field',
+                newFields:  'Create a new field',
+            },
             formBuilder: {
                 unimplemented: "Feature is not available right now",
                 removeField: "Remove field from form",
+                newFieldsMenuTitle: 'New',
+                existingFieldsMenuTitle: 'Existing',
                 tooltips: {
                     // Tooltip for every single field type because of requirements for a/an and pronouns different for each language
                     [`addNew${FieldFormats.TEXT_FORMAT}`]: "Create a text field and add it to the form",
@@ -712,6 +718,9 @@ export default {
             formsHeader: "Form",
             tableSettings: 'Table properties & settings',
             configureFormBuilder: 'Modify this form',
+            reportsHeader: 'Report',
+            configureReportBuilder: 'Modify this report'
+
         },
         tableEdit: {
             tableUpdateFailed: "Failed to update table",

@@ -3,7 +3,7 @@ import {shallow} from "enzyme";
 import jasmineEnzyme from "jasmine-enzyme";
 import {StandardGrid} from "../../../src/common/grid/standardGrid";
 import * as Actions from "../../../src/account/users/AccountUsersActions";
-import * as FieldConsts from '../../../../client-react/src/constants/schema';
+import * as FieldConsts from "../../../../client-react/src/constants/schema";
 import StandardGridToolBar from "../../../src/common/grid/toolbar/StandardGridToolbar";
 
 describe('StandardGrid', () => {
@@ -28,6 +28,7 @@ describe('StandardGrid', () => {
         let StandardGridShallow = shallow(
             <StandardGrid
                 columns={columns}
+                getFacetFields={()=>{}}
                 doUpdate={Actions.doUpdate}
                 data={[]}
                 id={"accountUsers"}

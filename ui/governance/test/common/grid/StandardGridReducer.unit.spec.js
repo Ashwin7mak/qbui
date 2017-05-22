@@ -1,11 +1,11 @@
-import * as StandardGridReducer from '../../../src/common/grid/standardGridReducer';
+import * as StandardGridReducer from "../../../src/common/grid/standardGridReducer";
 import * as StandardGridActionType from "../../../src/common/grid/standardGridActionTypes";
 
 describe('StandardGridReducer', () => {
     const initialState = {
         items: [],
         sortFids: [],
-        pagination: {totalRecords:0, filteredRecords: 0, totalPages: 0, currentPage: 1, itemsPerPage: 10},
+        pagination: {totalItems:0, totalFilteredItems: 0, totalPages: 0, currentPage: 1, itemsPerPage: 10},
         searchTerm : ""
     };
 
@@ -61,7 +61,7 @@ describe('StandardGridReducer', () => {
     });
 
     it('should set pagination state', () => {
-        const pagination = {pagination: {filteredRecords: 10, totalPages: 10, currentPage: 1, itemsPerPage: 10}};
+        const pagination = {pagination: {totalFilteredItems: 10, totalPages: 10, currentPage: 1, itemsPerPage: 10}};
         const state = StandardGridReducer.grid(initialState,
             {pagination: pagination, type: StandardGridActionType.SET_PAGINATION});
         expect(state.pagination).toEqual({...initialState.pagination, ...pagination});
@@ -69,15 +69,8 @@ describe('StandardGridReducer', () => {
 
     it('should set total records state', () => {
         const state = StandardGridReducer.grid(initialState,
-            {totalRecords: 10, type: StandardGridActionType.SET_TOTALRECORDS});
-        expect(state.pagination).toEqual({...initialState.pagination, totalRecords:10});
-    });
-
-    it('should set facet fields state', () => {
-        const facetFields = [{id:1, label:'foo', values:[{value:'foo'}]}];
-        const state = StandardGridReducer.grid(initialState,
-            {facetFields: facetFields, type: StandardGridActionType.SET_FACET_FIELDS});
-        expect(state.facets.facetFields).toEqual(facetFields);
+            {totalItems: 10, type: StandardGridActionType.SET_TOTAL_ITEMS});
+        expect(state.pagination).toEqual({...initialState.pagination, totalItems:10});
     });
 
     it('should set facet selection state', () => {

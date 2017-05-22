@@ -22,7 +22,9 @@ let BuilderDropDownAction = React.createClass({
         navigateToBuilder: React.PropTypes.func.isRequired,
         position: React.PropTypes.string.isRequired,
         selectedApp: React.PropTypes.object,
-        selectedTable: React.PropTypes.object
+        selectedTable: React.PropTypes.object,
+        navigateToBuilderReport: React.PropTypes.func,
+        rptId: React.PropTypes.string
     },
 
     getTableSettingsLink() {
@@ -38,6 +40,7 @@ let BuilderDropDownAction = React.createClass({
     getConfigOptions() {
         let isAppView = !!this.props.selectedApp; // !! converts to boolean
         let isTableView = (isAppView && this.props.selectedTable);
+        let isReportView = (isTableView && !this.props.recId && this.props.rptId);
         let hasContextView = (isTableView && this.props.recId);
         let classes = "dropdownToggle globalActionLink" + (hasContextView ? " hasContextView" : "");
 
@@ -79,6 +82,15 @@ let BuilderDropDownAction = React.createClass({
                             </li>
                         </ul>
                     </div> : null}
+
+                    {isReportView &&
+                        <div className="configSet currentContext">
+                            <li className="heading"><a><span><I18nMessage message={"settings.reportsHeader"}/></span></a></li>
+                            <li><a className="modifyForm" onClick={this.props.navigateToBuilderReport}>
+                                <I18nMessage message={"settings.configureReportBuilder"}/></a></li>
+                        </div>
+                    }
+
                     {hasContextView ?
                     <div className="configMenu--configSet configMenu__currentContext">
                         <ul>

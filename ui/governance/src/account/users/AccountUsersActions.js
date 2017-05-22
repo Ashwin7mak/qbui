@@ -10,8 +10,7 @@ import _ from "lodash";
 import * as Formatters from "./grid/AccountUsersGridFormatters";
 import * as RealmUserAccountFlagConstants from "../../common/constants/RealmUserAccountFlagConstants.js";
 import * as SCHEMACONSTS from "../../../../client-react/src/constants/schema";
-import Locale from "../../../../reuse/client/src/locales/locale";
-import GovernanceBundleLoader from '../../locales/governanceBundleLoader';
+import {FACET_FIELDS} from "../users/grid/AccountUsersGridFacet";
 
 let logger = new Logger();
 
@@ -52,7 +51,7 @@ export const searchUsers = (users, searchTerm) => {
         _.includes(user.email.toLowerCase(), searchTerm) ||
         _.includes(user.userName.toLowerCase(), searchTerm) ||
         _.includes(Formatters.FormatLastAccessString(user.lastAccess).toLowerCase(), searchTerm) ||
-        _.includes(Formatters.FormatUserStatusText(user.hasAppAccess, {rowData: user}).toLowerCase(), searchTerm);
+        _.includes(Formatters.FormatAccessStatusText(user.hasAppAccess, {rowData: user}).toLowerCase(), searchTerm);
     });
 };
 
@@ -77,13 +76,13 @@ export const paginateUsers = (users, _page, _itemsPerPage) => {
 
     let slicedUsers = users.slice(offset, offset + itemsPerPage);
     return {
-        currentPageRecords: slicedUsers,
+        currentPageItems: slicedUsers,
         currentPage: currentPage,
-        filteredRecords:users.length,
+        totalFilteredItems:users.length,
         itemsPerPage: itemsPerPage,
         totalPages: Math.ceil(users.length / itemsPerPage),
-        firstRecordInCurrentPage: slicedUsers.length === 0 ? 0 : offset + 1,
-        lastRecordInCurrentPage: offset + slicedUsers.length
+        firstItemIndexInCurrentPage: slicedUsers.length === 0 ? 0 : offset + 1,
+        lastItemIndexInCurrentPage: offset + slicedUsers.length
     };
 };
 
@@ -92,9 +91,9 @@ const sortFunctions = [
     "firstName",
     "lastName",
     "email",
-    "userName",
+    user => Formatters.FormatUsernameString(user, {rowData: user}),
     "lastAccess",
-    user => Formatters.FormatUserStatusText(user.hasAppAccess, {rowData: user}),
+    user => Formatters.FormatAccessStatusText(user.hasAppAccess, {rowData: user}),
     user => Formatters.FormatIsInactive(user.lastAccess, {rowData: user}),
     user => user.numGroupsMember > 0,
     user => user.numGroupsManaged > 0,
@@ -120,24 +119,6 @@ export const sortUsers = (users, sortFids) => {
     let orderArray = _.map(sortFids, (fid) => fid >= 0 ? "asc" : "desc");
     return _.orderBy(users, sortFnArray, orderArray);
 };
-
-/**
- * Columns for the Filter. TBD
- * @type {[*]}
- */
-GovernanceBundleLoader.changeLocale('en-us');
-const FACET_FIELDS = [
-    {label: Locale.getMessage("governance.account.users.accessStatus"), type:SCHEMACONSTS.TEXT, formatter: user => Formatters.FormatUserStatusText(user.hasAppAccess, {rowData: user})},
-    {label: Locale.getMessage("governance.account.users.paidSeatSingular"), type:SCHEMACONSTS.CHECKBOX, formatter: user => 'Paid Seat' === Formatters.FormatUserStatusText(user.hasAppAccess, {rowData: user})},
-    {label: Locale.getMessage("governance.account.users.quickbaseStaff"), type:SCHEMACONSTS.CHECKBOX, formatter: user => RealmUserAccountFlagConstants.HasAnySystemPermissions(user)},
-    {label: Locale.getMessage("governance.account.users.inactive"), type:SCHEMACONSTS.CHECKBOX, formatter: user => Formatters.FormatIsInactiveBool(user.lastAccess, {rowData: user})},
-    {label: Locale.getMessage("governance.account.users.inGroup"), type:SCHEMACONSTS.CHECKBOX, formatter: user => user.numGroupsMember > 0},
-    {label: Locale.getMessage("governance.account.users.groupManager"), type:SCHEMACONSTS.CHECKBOX, formatter: user => user.numGroupsManaged > 0},
-    {label: Locale.getMessage("governance.account.users.canCreateApps"), type:SCHEMACONSTS.CHECKBOX, formatter:user => RealmUserAccountFlagConstants.CanCreateApps(user)},
-    {label: Locale.getMessage("governance.account.users.appManager"), type:SCHEMACONSTS.CHECKBOX, formatter:user => user.numAppsManaged > 0},
-    {label: Locale.getMessage("governance.account.users.realmDirectoryUsers"), type:SCHEMACONSTS.CHECKBOX, formatter:user => RealmUserAccountFlagConstants.HasAnyRealmPermissions(user)},
-    {label: Locale.getMessage("governance.account.users.realmApproved"), type:SCHEMACONSTS.CHECKBOX, formatter:user => RealmUserAccountFlagConstants.IsApprovedInRealm(user)}
-];
 
 /**
  * Filter the users based on the selected facets
@@ -170,50 +151,6 @@ export const facetUser = (users, facetSelections) => {
     return facetUsers;
 };
 
-/**
- * Collect the Facet information for the fields
- * returns the columns in the format {id:, labels:, values:[]}
- * @param users
- * @returns Array
- */
-export const getFacetFields = (users) => {
-
-    // Go through the users passed and start building the facet values
-    let facetFields = {};
-    _.forEach(users, (user) => {
-
-        // For each facet columns that we have
-        _.forEach(FACET_FIELDS, (field, fieldID) => {
-            if (field) {
-                // if this is the first time we are seeing the fieldID, create a holder
-                if (_.isUndefined(facetFields[fieldID])) {
-                    facetFields[fieldID] = new Set();
-                }
-                // add the facet value
-                facetFields[fieldID].add(field.formatter(user));
-            }
-        });
-    });
-
-
-    // Build the full facet information compliant with FacetInterface
-    let facetInfo = [];
-    _.forEach(facetFields, function(facets, fieldID) {
-        let id = parseInt(fieldID);
-        let facetArray = Array.from(facets);
-        if (!_.isEmpty(facetArray)) {
-            facetInfo.push({
-                id: id,
-                name: FACET_FIELDS[fieldID].label,
-                type: FACET_FIELDS[fieldID].type,
-                values: _.map(facetArray, (aFacet)=>{return {id: id, value: aFacet};})});
-        }
-    });
-
-    return facetInfo;
-};
-
-
 
 /**
  * Perform the Update on the Grid through transformations
@@ -227,32 +164,27 @@ export const doUpdate = (gridId, gridState, _itemsPerPage) => {
         if (users.length === 0) {
             return;
         }
-        // First Facet
-        let facetSelections = gridState.facets && gridState.facets.facetSelections ? gridState.facets.facetSelections : {};
-        let facetedUsers = facetUser(users, facetSelections);
-
-        // Then Search
+        // First Search
         let searchTerm = gridState.searchTerm || "";
-        let filteredUsers = searchUsers(facetedUsers, searchTerm);
+        let filteredUsers = searchUsers(users, searchTerm);
 
+        // Then Facet
+        let facetSelections = gridState.facets && gridState.facets.facetSelections ? gridState.facets.facetSelections : {};
+        let facetedUsers = facetUser(filteredUsers, facetSelections);
+
+        // Then Sort
         let sortFids = gridState.sortFids || [];
-        let sortedUsers = sortUsers(filteredUsers, sortFids);
+        let sortedUsers = sortUsers(facetedUsers, sortFids);
 
         // Then Paginate
         let itemsPerPage = _itemsPerPage || gridState.pagination.itemsPerPage;
-        let {currentPageRecords, ...pagination} = paginateUsers(sortedUsers, gridState.pagination.currentPage, itemsPerPage);
-
-        // Inform the grid of the new facet information for the filtered users
-        dispatch(StandardGridActions.setFacetFields(gridId, getFacetFields(filteredUsers)));
-
-        // Set the grid's search term
-        dispatch(StandardGridActions.setSearch(gridId, searchTerm));
+        let {currentPageItems, ...pagination} = paginateUsers(sortedUsers, gridState.pagination.currentPage, itemsPerPage);
 
         // Set the grid's pagination info
         dispatch(StandardGridActions.setPaginate(gridId, pagination));
 
         // Inform the grid of the new users
-        dispatch(StandardGridActions.setItems(gridId, currentPageRecords));
+        dispatch(StandardGridActions.setItems(gridId, currentPageItems));
 
     };
 };
@@ -280,8 +212,8 @@ export const fetchAccountUsers = (accountId, gridID, itemsPerPage) => {
             // inform the redux store of all the users
             dispatch(receiveAccountUsers(response.data));
 
-            // set the total records for the grid
-            dispatch(StandardGridActions.setTotalRecords(gridID, response.data.length));
+            // set the total items for the grid
+            dispatch(StandardGridActions.setTotalItems(gridID, response.data.length));
 
             // run through the pipeline and update the grid
             dispatch(doUpdate(gridID, StandardGridState.defaultGridState, itemsPerPage));

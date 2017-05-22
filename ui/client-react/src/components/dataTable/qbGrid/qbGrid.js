@@ -1,5 +1,6 @@
 import React, {PropTypes} from 'react';
 import * as Table from 'reactabular-table';
+import {DragDropContext} from 'react-dnd';
 import Loader  from 'react-loader';
 import * as SpinnerConfigurations from 'APP/constants/spinnerConfigurations';
 import QbHeaderCell from './qbHeaderCell';
@@ -10,6 +11,10 @@ import RowActions from './rowActions';
 import {SELECT_ROW_CHECKBOX} from 'REUSE/components/rowActions/rowActions';
 import QbIcon from '../../qbIcon/qbIcon';
 import CollapsedGroupsHelper from './collapsedGroupHelper';
+import TouchBackend from 'react-dnd-touch-backend';
+import {moveColumn} from '../../../actions/reportActions';
+import {CONTEXT} from '../../../actions/context';
+import {connect} from 'react-redux';
 
 import Logger from 'APP/utils/logger';
 const logger = new Logger();
@@ -18,7 +23,7 @@ import './qbGrid.scss';
 
 const ICON_ACTIONS_COLUMN_ID = 'ICON_ACTIONS';
 
-const QbGrid = React.createClass({
+export const QbGrid = React.createClass({
     propTypes: {
         /**
          * The total number of columns displayed on the grid. Passed in as a prop to prevent recalculating this value
@@ -45,6 +50,10 @@ const QbGrid = React.createClass({
         /**
          * A boolean value indicating if inline editing is currently open*/
         isInlineEditOpen: PropTypes.bool,
+
+        /**
+         * Should this grid be draggable? */
+        isDraggable: PropTypes.bool,
 
         /**
          * The currently selected rows (e.g., by clicking the checkboxes in the first column) */
@@ -138,7 +147,8 @@ const QbGrid = React.createClass({
             isInlineEditOpen: false,
             isEditingRowValid: true,
             isEditingRowSaving: false,
-            showRowActionsColumn: true
+            showRowActionsColumn: true,
+            isDraggable: false
         };
     },
 
@@ -201,6 +211,12 @@ const QbGrid = React.createClass({
         };
     },
 
+    getDraggableCellProps() {
+        return {
+            isDraggable: true
+        };
+    },
+
     /**
      * Render a single cell
      * @param cellData
@@ -232,10 +248,17 @@ const QbGrid = React.createClass({
             if (!this.props.phase1 && !column.isPlaceholder) {
                 column.addHeaderMenu(this.props.menuComponent, this.props.menuProps);
             }
-            let c = column.getGridHeader();
+            let c = column.getGridHeader(this.onMoveColumn);
             if (column.isPlaceholder) {
                 c.cell.transforms = [this.getPlaceholderCellProps];
                 c.header.transforms = [this.getPlaceholderCellProps];
+            }
+            if (this.props.isDraggable) {
+                if (c.header.transforms) {
+                    c.header.transforms.push(this.getDraggableCellProps);
+                } else {
+                    c.header.transforms = [this.getDraggableCellProps];
+                }
             }
             return c;
         } catch (err) {
@@ -371,6 +394,18 @@ const QbGrid = React.createClass({
         }
     },
 
+    /**
+     * Called when a column is dragged onto a target
+     * @param object which has the drag source and drop target
+     */
+    onMoveColumn(labels) {
+        let params = {
+            sourceLabel: labels.sourceLabel,
+            targetLabel: labels.targetLabel
+        };
+        this.props.moveColumn(CONTEXT.REPORT.NAV, params);
+    },
+
     render() {
         let columns;
         if (this.props.showRowActionsColumn) {
@@ -380,7 +415,8 @@ const QbGrid = React.createClass({
                     headerClass: "gridHeaderCell",
                     header: {
                         props: {
-                            scope: 'col'
+                            scope: 'col',
+                            onMove: this.onMoveColumn
                         },
                         label: this.getCheckboxHeader(),
                         transforms: [this.getActionCellProps],
@@ -430,4 +466,8 @@ const QbGrid = React.createClass({
     }
 });
 
-export default QbGrid;
+const mapDispatchToProps = {
+    moveColumn
+};
+
+export default connect(null, mapDispatchToProps)(DragDropContext(TouchBackend({enableMouseEvents: true, delay: 30}))(QbGrid));

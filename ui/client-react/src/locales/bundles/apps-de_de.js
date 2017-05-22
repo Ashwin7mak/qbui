@@ -495,7 +495,7 @@ export default {
             emails: "Formatieren Sie alle Adressen wie name@domaine.de",
             maxChars: "Verwenden Sie bis zu {maxNum} Zeichen",
             choiceMaxLength : "Wählen Sie eine Wahl mit {maxNum} Zeichen oder weniger",
-            phone: "Formatieren Sie die {fieldName} +x x xx xx xx xx",
+            phone: "Geben Sie eine echte Nummer für {fieldName}",
             phoneInvalidCountryCode: "Formatieren Sie den Ländercode wie +x für internationale Nummern",
             duration: {
                 timeFormat: "Formatieren Sie die {fieldName} im {value}",
@@ -573,9 +573,15 @@ export default {
             multiChoice: "Wahlen"
         },
         builder: {
+            tabs: {
+                existingFields: 'Fügen Sie ein vorhandenes Feld hinzu',
+                newFields: 'Erstellen Sie ein neues Feld',
+            },
             formBuilder: {
                 unimplemented: "Feature ist momentan nicht verfügbar",
                 removeField: "Feld aus Form entfernen",
+                newFieldsMenuTitle: 'Neu',
+                existingFieldsMenuTitle: 'Bestehende',
                 tooltips: {
                     [`addNew${FieldFormats.TEXT_FORMAT}`]: "Erstellen Sie ein Textfeld und fügen Sie es dem Formular hinzu",
                     [`addNew${FieldFormats.NUMBER_FORMAT}`]: "Erstellen Sie ein Zahlenfeld und fügen Sie es dem Formular hinzu",
@@ -703,6 +709,9 @@ export default {
             formsHeader: "Bilden",
             tableSettings: "Tabelleneigenschaften & Einstellungen",
             configureFormBuilder: "Ändern Sie dieses Formular",
+            reportsHeader: 'Bericht',
+            configureReportBuilder: 'Ändern Sie diesen Bericht'
+
         },
         tableEdit: {
             tableUpdateFailed: "Fehler beim Aktualisieren der Tabelle",

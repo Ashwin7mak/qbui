@@ -290,6 +290,165 @@ describe("Validate appsApi", function() {
         });
     });
 
+    describe("validate getTableProperties function", function() {
+        let executeReqStub = null;
+        let createTablePropertiesStub = null;
+        let testTable = {name: 'test', id: '456'};
+
+        beforeEach(function() {
+            executeReqStub = sinon.stub(requestHelper, "executeRequest");
+            createTablePropertiesStub = sinon.stub(appsApi, "_createTableProperties");
+            appsApi.setRequestHelperObject(requestHelper);
+            req.url = 'apps/123/tables/456/tableproperties/';
+            req.method = 'get';
+        });
+
+        afterEach(function() {
+            req.method = 'get';
+            req.url = '';
+            createTablePropertiesStub.restore();
+            executeReqStub.restore();
+        });
+
+        it("returns success response on a valid input", function(done) {
+            let executeReqStubResp = {'body': '{"tableNoun": "test noun", "description": "desc", "tableIcon": "icon"}'};
+            executeReqStub.returns(Promise.resolve(executeReqStubResp));
+            let promise = appsApi.getTableProperties(req, testTable);
+
+            promise.then(
+                function(response) {
+                    assert.deepEqual(response, {tableNoun: 'test noun', description: 'desc', tableIcon: 'icon'});
+                    assert.equal(createTablePropertiesStub.callCount, 0);
+                    done();
+                },
+                function() {
+                    done(new Error("Unexpected failure promise return when testing getTableProperties"));
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('getTableProperties: exception processing success test: ' + JSON.stringify(errorMsg)));
+            });
+        });
+
+        it("fails to get table properties due to error", function(done) {
+            let executeReqStubResp = 'fail unit test case execution';
+            executeReqStub.returns(Promise.reject(executeReqStubResp));
+            let promise = appsApi.getTableProperties(req, testTable);
+
+            promise.then(
+                function() {
+                    assert.equal(createTablePropertiesStub.callCount, 0);
+                    done();
+                },
+                function() {
+                    done(new Error("Unexpected failure promise return when testing getTableProperties"));
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('getTableProperties: exception processing success test: ' + JSON.stringify(errorMsg)));
+            });
+
+        });
+
+        it("fails to get table properties due to exception", function(done) {
+            let executeReqStubResp = null;
+            executeReqStub.returns(Promise.resolve(executeReqStubResp));
+            let promise = appsApi.getTableProperties(req, testTable);
+
+            promise.then(
+                function() {
+                    assert.equal(createTablePropertiesStub.callCount, 0);
+                    done();
+                },
+                function() {
+                    done(new Error("Unexpected failure promise return when testing getTableProperties"));
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('getTableProperties: exception processing success test: ' + JSON.stringify(errorMsg)));
+            });
+
+        });
+
+        it("fails to get table properties for a non 404 error", function(done) {
+            let executeReqStubResp = {statusCode: 400};
+            executeReqStub.returns(Promise.reject(executeReqStubResp));
+            let promise = appsApi.getTableProperties(req, testTable);
+
+            promise.then(
+                function() {
+                    assert.equal(createTablePropertiesStub.callCount, 0);
+                    done();
+                },
+                function() {
+                    done(new Error("Unexpected failure promise return when testing getTableProperties"));
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('getTableProperties: exception processing success test: ' + JSON.stringify(errorMsg)));
+            });
+        });
+
+
+        it("successfully get table properties after a 404 error", function(done) {
+            let executeReqStubResp = {statusCode: 404};
+            executeReqStub.returns(Promise.reject(executeReqStubResp));
+            let createTablePropsResp = {body: '{"tableNoun": "test"}'};
+            createTablePropertiesStub.returns(Promise.resolve(createTablePropsResp));
+            let promise = appsApi.getTableProperties(req, testTable);
+
+            promise.then(
+                function(response) {
+                    assert.equal(createTablePropertiesStub.callCount, 1);
+                    assert.deepEqual(response, {tableNoun: 'test'});
+                    done();
+                },
+                function() {
+                    done(new Error("Unexpected failure promise return when testing getTableProperties"));
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('getTableProperties: exception processing success test: ' + JSON.stringify(errorMsg)));
+            });
+        });
+
+        it("fails to get table properties for a 404 error", function(done) {
+            let executeReqStubResp = {statusCode: 404};
+            executeReqStub.returns(Promise.reject(executeReqStubResp));
+            let createTablePropsResp = {error: 'some error'};
+            createTablePropertiesStub.returns(Promise.reject(createTablePropsResp));
+            let promise = appsApi.getTableProperties(req, testTable);
+
+            promise.then(
+                function() {
+                    assert.equal(createTablePropertiesStub.callCount, 1);
+                    done();
+                },
+                function() {
+                    done(new Error("Unexpected failure promise return when testing getTableProperties"));
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('getTableProperties: exception processing success test: ' + JSON.stringify(errorMsg)));
+            });
+        });
+
+        it("fails to get table properties for a 404 error due to exception", function(done) {
+            let executeReqStubResp = {statusCode: 404};
+            executeReqStub.returns(Promise.reject(executeReqStubResp));
+            let createTablePropRespStub = null;
+            createTablePropertiesStub.returns(Promise.resolve(createTablePropRespStub));
+
+            let promise = appsApi.getTableProperties(req, testTable);
+
+            promise.then(
+                function() {
+                    assert.equal(createTablePropertiesStub.callCount, 1);
+                    done();
+                },
+                function() {
+                    done(new Error("Unexpected failure promise return when testing getTableProperties"));
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('getTableProperties: exception processing success test: ' + JSON.stringify(errorMsg)));
+            });
+        });
+    });
+
     describe("validate getApp function", function() {
         let executeReqStub = null;
         let getTablePropertiesStub = null;
@@ -701,6 +860,97 @@ describe("Validate appsApi", function() {
                 }
             ).catch(function(errorMsg) {
                 done(new Error('getApps: exception processing exception test(hydrate=true): ' + JSON.stringify(errorMsg)));
+            });
+        });
+    });
+
+    describe("validate getAppComponent function", function() {
+        let getAppUsersStub = null;
+        let getHydratedAppStub = null;
+
+        beforeEach(function() {
+            getAppUsersStub = sinon.stub(appsApi, "getAppUsers");
+            getHydratedAppStub = sinon.stub(appsApi, "getHydratedApp");
+
+            req.url = '/app/123/appComponents';
+            req.method = 'get';
+        });
+
+        afterEach(function() {
+            req.method = 'get';
+            req.url = '';
+            getAppUsersStub.restore();
+            getHydratedAppStub.restore();
+        });
+
+        it('success return results with getAppComponents', function(done) {
+            let appUserResults = {"id":1};
+            let getHydratedAppResults = {"id":1};
+
+            getAppUsersStub.returns(Promise.resolve(appUserResults));
+            getHydratedAppStub.returns(Promise.resolve(getHydratedAppResults));
+
+            //  build the expected response object
+            let responseObj = {
+                users: appUserResults,
+                app: getHydratedAppResults
+            };
+
+            let promise = appsApi.getAppComponents(req, req.params.appId);
+            promise.then(
+                function(response) {
+                    assert.deepEqual(response, responseObj);
+                    done();
+                },
+                function(error) {
+                    done(new Error("Unexpected failure promise return when testing getAppComponents success"));
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('getAppComponents: exception processing success test: ' + JSON.stringify(errorMsg)));
+            });
+        });
+
+        it('fail return results with getAppComponents error -- test getAppUsers reject', function(done) {
+            let appUserResults = {"id":1};
+            let getHydratedAppResults = {"id":1};
+
+            let errMsg = new Error('errorMsg');
+            getAppUsersStub.returns(Promise.resolve(appUserResults));
+            getHydratedAppStub.returns(Promise.reject(errMsg));
+
+            let promise = appsApi.getAppComponents(req, req.params.appId);
+            promise.then(
+                function(response) {
+                    done(new Error("Unexpected success promise return when testing getAppComponents failure with getAppUsers"));
+                },
+                function(error) {
+                    assert.deepEqual(error, errMsg);
+                    done();
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('getAppComponents: exception processing failure test with getAppUsers: ' + JSON.stringify(errorMsg)));
+            });
+        });
+
+        it('fail return results with getAppComponents error -- test getHydratedApp reject', function(done) {
+            let appUserResults = {"id":1};
+            let getHydratedAppResults = {"id":1};
+
+            let errMsg = new Error('errorMsg');
+            getAppUsersStub.returns(Promise.reject(errMsg));
+            getHydratedAppStub.returns(Promise.resolve(getHydratedAppResults));
+
+            let promise = appsApi.getAppComponents(req, req.params.appId);
+            promise.then(
+                function(response) {
+                    done(new Error("Unexpected success promise return when testing getAppComponents failure with getHydratedApp"));
+                },
+                function(error) {
+                    assert.deepEqual(error, errMsg);
+                    done();
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('getAppComponents: exception processing failure test with getHydratedApp: ' + JSON.stringify(errorMsg)));
             });
         });
 

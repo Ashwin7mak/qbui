@@ -3,19 +3,25 @@ import Stage from '../stage/stage';
 import Icon, {AVAILABLE_ICON_FONTS} from '../../../../reuse/client/src/components/icon/icon.js';
 import ReportStage from './reportStage';
 import ReportHeader from './reportHeader';
+import ReportSaveOrCancelFooter from '../reportBuilder/reportSaveOrCancelFooter';
 import IconActions from '../actions/iconActions';
-import {Link} from 'react-router-dom';
+import {Link, withRouter} from 'react-router-dom';
 import Logger from '../../utils/logger';
 import QueryUtils from '../../utils/queryUtils';
 import NumberUtils from '../../utils/numberUtils';
-import WindowLocationUtils from '../../utils/windowLocationUtils';
+import {WindowHistoryUtils} from '../../utils/windowHistoryUtils';
+import UrlUtils from '../../utils/urlUtils';
+import Breakpoints from '../../utils/breakpoints';
 import simpleStringify from '../../../../common/src/simpleStringify';
 import constants from '../../../../common/src/constants';
+import withUniqueId from '../hoc/withUniqueId';
 import Fluxxor from 'fluxxor';
 import _ from 'lodash';
 import './report.scss';
 import ReportToolsAndContent from '../report/reportToolsAndContent';
 import ReportFieldSelectMenu from './reportFieldSelectMenu';
+import ReportNameEditor from './reportNameEditor';
+import RecordInDrawer from '../drawer/recordInDrawer';
 import {connect} from 'react-redux';
 import {clearSearchInput} from '../../actions/searchActions';
 import {loadReport, loadDynamicReport} from '../../actions/reportActions';
@@ -24,6 +30,7 @@ import {CONTEXT} from '../../actions/context';
 import {APP_ROUTE, EDIT_RECORD_KEY, NEW_RECORD_VALUE} from '../../constants/urlConstants';
 
 import * as FieldsReducer from '../../reducers/fields';
+import {getEmbeddedReportByContext} from '../../reducers/embeddedReports';
 
 let logger = new Logger();
 let FluxMixin = Fluxxor.FluxMixin(React);
@@ -33,7 +40,8 @@ let FluxMixin = Fluxxor.FluxMixin(React);
  *
  * Note: this component has been partially migrated to Redux
  */
-const ReportRoute = React.createClass({
+// export for unit tests
+export const ReportRoute = React.createClass({
     mixins: [FluxMixin],
     nameForRecords: "Records",  // get from table meta data
 
@@ -55,7 +63,8 @@ const ReportRoute = React.createClass({
      * Load a report with query parameters.
      */
     loadDynamicReport(appId, tblId, rptId, format, filter, queryParams) {
-        this.props.loadDynamicReport(CONTEXT.REPORT.NAV, appId, tblId, rptId, format, filter, queryParams);
+        const context = this.props.uniqueId || CONTEXT.REPORT.NAV;
+        this.props.loadDynamicReport(context, appId, tblId, rptId, format, filter, queryParams);
     },
 
     /**
@@ -75,7 +84,7 @@ const ReportRoute = React.createClass({
     },
 
     loadReportFromParams(params) {
-        let {appId, tblId} = params;
+        let {appId, tblId, detailKeyFid, detailKeyValue} = params;
         let rptId = typeof this.props.rptId !== "undefined" ? this.props.rptId : params.rptId;
 
         if (appId && tblId && rptId) {
@@ -83,10 +92,10 @@ const ReportRoute = React.createClass({
             let offset = constants.PAGE.DEFAULT_OFFSET;
             let numRows = NumberUtils.getNumericPropertyValue(this.props.reportData, 'numRows') || constants.PAGE.DEFAULT_NUM_ROWS;
 
-            const {detailKeyFid, detailKeyValue} = _.get(this, 'props.location.query', {});
             // A link from a parent component (see qbform.createChildReportElementCell) was used
             // to display a filtered child report.
-            if (detailKeyFid && detailKeyValue) {
+            const isChildReport = !_.isUndefined(detailKeyFid) && !_.isUndefined(detailKeyValue);
+            if (isChildReport) {
                 const queryParams = {
                     query: QueryUtils.parseStringIntoExactMatchExpression(detailKeyFid, detailKeyValue),
                     offset,
@@ -108,6 +117,40 @@ const ReportRoute = React.createClass({
         }
     },
 
+    /***
+     * Push a new url to drill down one more level. Should be called when we want to open a drawer.
+     * @param tblId
+     * @param recId
+     */
+    handleDrillIntoChild(tblId, recId) {
+        let embeddedReport = getEmbeddedReportByContext(this.props.embeddedReports, this.props.uniqueId);
+
+        const existingPath = this.props.match.url;
+        const appId = _.get(this, 'props.match.params.appId', this.selectedAppId);
+        const recordDrawerSegment = UrlUtils.getRecordDrawerSegment(appId, tblId, embeddedReport.id, recId);
+        const link = existingPath + recordDrawerSegment;
+        if (this.props.history) {
+            this.props.history.push(link);
+        }
+    },
+
+    /**
+     * Render drawer container which will contain a record to drill down to.
+     * This should only be rendered when this report is the main report (not an embedded report) shown inside a drawer.
+     */
+    getDrawerContainer() {
+        return (
+            <RecordInDrawer
+                {...this.props}
+                direction="bottom"
+                renderBackdrop={false}
+                rootDrawer={!this.props.isDrawerContext}
+                closeDrawer={this.closeDrawer}
+                match={this.props.match}
+                pathToAdd="/sr_app_:appId([A-Za-z0-9]+)_table_:tblId([A-Za-z0-9]+)_report_:rptId([A-Za-z0-9]+)_record_:recordId([A-Za-z0-9]+)"
+            />);
+    },
+
     getHeader() {
         return (
             <ReportHeader nameForRecords={this.nameForRecords}
@@ -120,7 +163,7 @@ const ReportRoute = React.createClass({
      * @param data row record data
      */
     editNewRecord() {
-        WindowLocationUtils.pushWithQuery(EDIT_RECORD_KEY, NEW_RECORD_VALUE);
+        WindowHistoryUtils.pushWithQuery(EDIT_RECORD_KEY, NEW_RECORD_VALUE);
     },
 
     getPageActions(maxButtonsBeforeMenu) {
@@ -145,12 +188,13 @@ const ReportRoute = React.createClass({
                 </div>
 
                 <div className="stageHeadline">
-                    <h3 className="reportName">{reportName}</h3>
+                    <ReportNameEditor name={reportName}/>
                 </div>
             </div>);
     },
 
     render() {
+        let inBuilderMode = this.props.reportBuilder.isInBuilderMode;
         if (_.isUndefined(this.props.match.params) ||
             _.isUndefined(this.props.match.params.appId) ||
             _.isUndefined(this.props.match.params.tblId) ||
@@ -159,12 +203,15 @@ const ReportRoute = React.createClass({
             logger.info("the necessary params were not specified to reportRoute render params=" + simpleStringify(this.props.match.params));
             return null;
         } else {
+            const reportData = _.get(this, 'props.reportData', {});
+            const classNames = ['reportContainer'];
+            classNames.push(Breakpoints.isSmallBreakpoint() ? 'smallBreakPoint' : '');
             return (
-                <div className="reportContainer">
+                <div className={classNames.join(' ')}>
                     <ReportFieldSelectMenu
                         appId={this.props.match.params.appId}
                         tblId={this.props.match.params.tblId}
-                        reportData={this.props.reportData}
+                        reportData={reportData}
                         pullRight>
 
                         <Stage stageHeadline={this.getStageHeadline()}
@@ -176,23 +223,29 @@ const ReportRoute = React.createClass({
 
                         <ReportToolsAndContent
                             params={this.props.match.params}
-                            reportData={this.props.reportData}
+                            reportData={reportData}
                             appUsers={this.props.appUsers}
                             pendEdits={this.props.pendEdits}
                             isRowPopUpMenuOpen={this.props.isRowPopUpMenuOpen}
                             routeParams={this.props.match.params}
                             selectedAppId={this.props.selectedAppId}
                             selectedTable={this.props.selectedTable}
-                            searchStringForFiltering={this.props.reportData.searchStringForFiltering}
+                            searchStringForFiltering={reportData.searchStringForFiltering}
                             pageActions={this.getPageActions(0)}
                             nameForRecords={this.nameForRecords}
-                            selectedRows={this.props.reportData.selectedRows}
+                            selectedRows={reportData.selectedRows}
                             scrollingReport={this.props.scrollingReport}
                             loadDynamicReport={this.loadDynamicReport}
                             noRowsUI={true}
+                            handleDrillIntoChild={this.handleDrillIntoChild}
                         />
 
                     </ReportFieldSelectMenu>
+
+                    {inBuilderMode &&
+                        <ReportSaveOrCancelFooter />}
+
+                    {this.props.isDrawerContext && this.getDrawerContainer()}
                 </div>
             );
         }
@@ -216,4 +269,15 @@ const mapDispatchToProps = (dispatch) => {
     };
 };
 
-export default connect(null, mapDispatchToProps)(ReportRoute);
+const mapStateToProps = (state, ownProps) => {
+    return {
+        reportBuilder: state.reportBuilder || {},
+        reportData: ownProps.reportData || getEmbeddedReportByContext(state.embeddedReports, ownProps.uniqueId),
+        embeddedReports: state.embeddedReports
+    };
+};
+
+const ConnectedReportRoute = withRouter(connect(mapStateToProps, mapDispatchToProps)(ReportRoute));
+export default ConnectedReportRoute;
+
+export const ReportRouteWithViewId = withUniqueId(ConnectedReportRoute, CONTEXT.REPORT.EMBEDDED);

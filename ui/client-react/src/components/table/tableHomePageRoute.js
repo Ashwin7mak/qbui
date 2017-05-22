@@ -2,7 +2,7 @@ import React from 'react';
 import Stage from '../stage/stage';
 import ReportStage from '../report/reportStage';
 import ReportHeader from '../report/reportHeader';
-
+import ReportSaveOrCancelFooter from '../reportBuilder/reportSaveOrCancelFooter';
 import TableHomePageInitial from './tableHomePageInitial';
 import Icon, {AVAILABLE_ICON_FONTS} from '../../../../reuse/client/src/components/icon/icon.js';
 import IconActions from '../actions/iconActions';
@@ -19,7 +19,8 @@ import * as FieldsActions from '../../actions/fieldsActions';
 import {showTableCreationDialog} from '../../actions/tableCreationActions';
 import {loadDynamicReport} from '../../actions/reportActions';
 import {CONTEXT} from '../../actions/context';
-import WindowLocationUtils from '../../utils/windowLocationUtils';
+import {WindowHistoryUtils} from '../../utils/windowHistoryUtils';
+import Breakpoints from '../../utils/breakpoints';
 import {EDIT_RECORD_KEY, NEW_RECORD_VALUE} from '../../constants/urlConstants';
 import {NEW_TABLE_IDS_KEY} from '../../constants/localStorage';
 import _ from 'lodash';
@@ -89,7 +90,7 @@ export const TableHomePageRoute = React.createClass({
      * Add a new record in trowser
      */
     editNewRecord() {
-        WindowLocationUtils.pushWithQuery(EDIT_RECORD_KEY, NEW_RECORD_VALUE);
+        WindowHistoryUtils.pushWithQuery(EDIT_RECORD_KEY, NEW_RECORD_VALUE);
     },
 
     getPageActions(maxButtonsBeforeMenu) {
@@ -134,8 +135,12 @@ export const TableHomePageRoute = React.createClass({
     },
 
     render() {
+        let inBuilderMode = this.props.reportBuilder.isInBuilderMode;
         //  ensure there is a rptId property otherwise the report not found page is rendered in ReportToolsAndContent
         let homePageParams = _.assign(this.props.match.params, {rptId: null});
+
+        const classNames = ['reportContainer'];
+        classNames.push(Breakpoints.isSmallBreakpoint() ? 'smallBreakPoint' : '');
 
         let mainContent;
 
@@ -162,7 +167,7 @@ export const TableHomePageRoute = React.createClass({
         }
 
         return (
-            <div className="reportContainer">
+            <div className={classNames.join(' ')}>
                 <ReportFieldSelectMenu
                     appId={this.props.match.params.appId}
                     tblId={this.props.match.params.tblId}
@@ -178,6 +183,8 @@ export const TableHomePageRoute = React.createClass({
                     {mainContent}
 
                 </ReportFieldSelectMenu>
+
+                {inBuilderMode && <ReportSaveOrCancelFooter />}
             </div>
         );
     }
@@ -187,7 +194,8 @@ export const TableHomePageRoute = React.createClass({
 // (another bit of boilerplate to keep the component free of Redux dependencies)
 const mapStateToProps = (state) => {
     return {
-        report: state.report
+        report: state.report,
+        reportBuilder: state.reportBuilder
     };
 };
 const mapDispatchToProps = (dispatch) => {

@@ -17,10 +17,11 @@ import Loader from 'react-loader';
 import RecordHeader from './recordHeader';
 import {UnloadableNode} from '../../components/hoc/unloadable';
 import Breakpoints from '../../utils/breakpoints';
-import WindowLocationUtils from '../../utils/windowLocationUtils';
+import {WindowHistoryUtils} from '../../utils/windowHistoryUtils';
 import AutomationUtils from '../../utils/automationUtils';
 import * as SpinnerConfigurations from '../../constants/spinnerConfigurations';
 import * as UrlConsts from "../../constants/urlConstants";
+import urlUtils from '../../utils/urlUtils';
 import _ from 'lodash';
 import {connect} from 'react-redux';
 import {loadForm, editNewRecord} from '../../actions/formActions';
@@ -32,7 +33,10 @@ import {CONTEXT} from '../../actions/context';
 import {getRecord} from '../../reducers/record';
 import './record.scss';
 import withUniqueId from '../hoc/withUniqueId';
-import DrawerContainer from '../drawer/drawerContainer';
+
+import RecordInDrawer from '../drawer/recordInDrawer';
+import ReportInDrawer from '../drawer/reportInDrawer';
+import {getRecordTitle} from '../../utils/formUtils';
 
 let logger = new Logger();
 let FluxMixin = Fluxxor.FluxMixin(React);
@@ -243,12 +247,16 @@ export const RecordRoute = React.createClass({
         }
     },
 
-    getTitle(recIdTitle, tableName) {
+    getTitle(recIdTitle) {
+        let form = this.getFormFromProps();
+        let record = form && form.formData ? form.formData.record : null;
         const recordId = recIdTitle || this.props.match.params.recordId;
         const isSmall = Breakpoints.isSmallBreakpoint();
+        let table = this.getSelectedTable(this.props.match.params.tblId);
+        let recordTitle = getRecordTitle(table, record, recordId);
         return <div className="title">
             {isSmall ? <Icon iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY} classes="primaryIcon" icon={this.props.selectedTable ? this.props.selectedTable.tableIcon : ""}/> : null}
-            <span> {tableName} # {recordId}</span></div>;
+            <span> {recordTitle}</span></div>;
     },
 
     /**
@@ -329,7 +337,7 @@ export const RecordRoute = React.createClass({
                             <Button className="iconActionButton nextRecord" disabled={true} onClick={this.nextRecord}><QBicon icon="caret-filled-right"/></Button>}
                     </div> }
 
-                    {this.getTitle(recordIdTitle, tableName)}
+                    {this.getTitle(recordIdTitle, record)}
 
                 </div>
             </div>);
@@ -348,7 +356,7 @@ export const RecordRoute = React.createClass({
         const recordId = +this.props.match.params.recordId;
         this.navigateToRecord(recordId);
 
-        WindowLocationUtils.pushWithQuery(EDIT_RECORD_KEY, recordId);
+        WindowHistoryUtils.pushWithQuery(EDIT_RECORD_KEY, recordId);
     },
 
     isAutomationEnabled() {
@@ -379,7 +387,7 @@ export const RecordRoute = React.createClass({
      * @param data row record data
      */
     editNewRecord() {
-        WindowLocationUtils.pushWithQuery(EDIT_RECORD_KEY, UrlConsts.NEW_RECORD_VALUE);
+        WindowHistoryUtils.pushWithQuery(EDIT_RECORD_KEY, UrlConsts.NEW_RECORD_VALUE);
     },
 
     getPageActions() {
@@ -407,12 +415,12 @@ export const RecordRoute = React.createClass({
      */
     getDrawerContainer() {
         return (
-            <DrawerContainer
+            <RecordInDrawer
                 {...this.props}
                 rootDrawer={!this.props.isDrawerContext}
                 closeDrawer={this.closeDrawer}
-                >
-            </DrawerContainer>);
+                match={this.props.match}
+                />);
     },
 
     /**
@@ -492,8 +500,10 @@ export const RecordRoute = React.createClass({
         //todo : handle query params in the url
         const existingPath = this.props.location.pathname;
         const appId = _.get(this, 'props.match.params.appId', this.selectedAppId);
-        //TODO: move to url consts and make a function in urlUtils
-        const link = `${existingPath}/sr_app_${appId}_table_${tblId}_report_${embeddedReport.id}_record_${recId}`;
+
+        // generate the next drilldown url segment representing the record we want to show in a drawer
+        const recordDrawerSegment = urlUtils.getRecordDrawerSegment(appId, tblId, embeddedReport.id, recId);
+        const link = existingPath + recordDrawerSegment;
         if (this.props.history) {
             this.props.history.push(link);
         }
@@ -550,7 +560,8 @@ export const RecordRoute = React.createClass({
                                     errorStatus={formLoadingErrorStatus ? viewData.errorStatus : null}
                                     formData={viewData ? viewData.formData : null}
                                     appUsers={this.props.appUsers}
-                                    handleDrillIntoChild={this.handleDrillIntoChild}/>
+                                    handleDrillIntoChild={this.handleDrillIntoChild}
+                                    />
                         </Loader> : null }
                     {formInternalError && <pre><I18nMessage message="form.error.500"/></pre>}
                     {formAccessRightError && <pre><I18nMessage message="form.error.403"/></pre>}
@@ -562,6 +573,12 @@ export const RecordRoute = React.createClass({
                             unloadEntry={this.unloadRecordFromParams}
                             hasEntry={!!this.getFormFromProps()}
                             />}
+                    {Breakpoints.isSmallBreakpoint() &&
+                        <ReportInDrawer
+                            rootDrawer={!this.props.isDrawerContext}
+                            closeDrawer={this.closeDrawer}
+                            match={this.props.match}
+                        />}
 
                     {!formLoadingErrorStatus && this.getDrawerContainer()}
                 </div>);
@@ -617,4 +634,4 @@ export default ConnectedRecordRouteWithRouter;
 
 // Wrap RecordRoute with `withUniqueId` hoc so that it has a unique ID used to identify its own
 // instance's data in the record store and form store. Used by stacked forms.
-export const RecordRouteWithUniqueId = withUniqueId(ConnectedRecordRouteWithRouter, CONTEXT.FORM.DRAWER);
+export const RecordRouteWithViewId = withUniqueId(ConnectedRecordRouteWithRouter, CONTEXT.FORM.DRAWER);
