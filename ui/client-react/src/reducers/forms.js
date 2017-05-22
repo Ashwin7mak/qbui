@@ -451,7 +451,6 @@ const forms = (
             return state;
         }
 
-
         let newMeta = _.cloneDeep(updatedForm.formData.formMeta);
         if (newMeta.fieldsToDelete) {
             newMeta.fieldsToDelete.push(action.content.fieldId);
