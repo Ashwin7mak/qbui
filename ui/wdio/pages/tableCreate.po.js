@@ -465,7 +465,7 @@
             //Need this for container to slide down
             browser.pause(e2eConsts.shortWaitTimeMs);
 
-            expect(browser.element('.menuHeader').value.getAttribute('textContent')).toContain('Settings');
+            expect(browser.element('.menuHeader').getAttribute('textContent')).toContain('Settings');
 
             browser.elements('.configMenu li').value.map(function(elm) {
                 liElements.push(elm.getAttribute('textContent'));
