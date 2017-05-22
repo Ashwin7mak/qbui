@@ -40,8 +40,10 @@
          * Test Method - checking for usability of topNav on Table homepage
          */
         it('Visibility and usability of topNav on Table homepage', function() {
-
-            RequestAppsPage.get(e2eBase.getRequestTableEndpoint(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id));
+            //select the App
+            RequestAppsPage.selectApp(testApp.name);
+            //select table
+            tableCreatePO.selectTable(testApp.tables[e2eConsts.TABLE1].name);
             reportContentPO.waitForLeftNavLoaded();
             TopNavPO.topNavToggleHamburgerEl.waitForVisible();
             //Step1: Verify if the global icons are displayed
@@ -67,8 +69,8 @@
          * Test Method - checking for visibility of topNav on Report homepage
          */
         it('Visibility of topNav on Report homepage', function() {
-
-            RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1));
+            //select report
+            reportContentPO.selectReport(testApp.tables[e2eConsts.TABLE1].name, 0);
             reportContentPO.waitForLeftNavLoaded();
             TopNavPO.topNavToggleHamburgerEl.waitForVisible();
             //Step1: Verify if the global icons are displayed
@@ -90,6 +92,7 @@
             //Step2: Verify the no.of global action icons
             expect(TopNavPO.topNavGlobalActionsListEl.value.length).toBe(4);
         });
+        //TODO: To enable these when topNav is added to User/App homepage MC-2646
         /**
          * Test Method - checking for visibility of topNav on App homepage
          */
