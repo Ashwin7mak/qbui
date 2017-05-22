@@ -187,6 +187,8 @@ class formBuilderPage {
     openMenu() {
         // Clicks on the 'gear' button to invoke the SETTINGS menu
         // todo: move this (and open?) to topNavPO?
+        this.reportTitle.waitForExist();
+        return this.reportTitle.waitForVisible();
         topNavPO.formBuilderBtn.waitForExist();
         try {
             topNavPO.formBuilderBtn.click();
@@ -263,7 +265,8 @@ class formBuilderPage {
         let label = browser.element(source).getText();
         browser.moveToObject(source);
         browser.buttonDown();
-        // move to target & wait until preview appears
+        browser.pause(e2eConsts.shortWaitTimeMs);
+        // move to target & jiggle
         browser.moveToObject(target);
         browser.moveToObject(target, 5, 5);
         // release button

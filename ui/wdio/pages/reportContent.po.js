@@ -327,9 +327,9 @@
                 }, recordCellEl);
             }
             //Click on the third cell of recordRowIndex row
-            recordCellEl.click();
-            this.reportTitle.waitForExist();
-            return this.reportTitle.waitForVisible();
+            return recordCellEl.click();
+            // this.reportTitle.waitForExist();
+            // return this.reportTitle.waitForVisible();
         }},
 
         /**
