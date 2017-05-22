@@ -4,9 +4,27 @@ import Icon from "../../../../../reuse/client/src/components/icon/icon";
 import * as RealmUserAccountFlagConstants from "../../../common/constants/RealmUserAccountFlagConstants.js";
 
 // Render Helpers
+/**
+ * SQL in current stack stores the Null time as 1900s
+ * @param timeStr
+ * @constructor
+ */
 const IsTimeNull = timeStr => timeStr === '1900-01-01T00:00:00Z';
+
+/**
+ * Currently we transform the true/false in UI columns to Y/---
+ * @param bool
+ * @constructor
+ */
 const RenderBoolColumn = bool => bool ? 'Y' : '--';
 
+/**
+ * Format the Access Status for the User into a readable format
+ * @param hasAppAccess
+ * @param cellInfo
+ * @returns {*}
+ * @constructor
+ */
 export const FormatAccessStatusText = (hasAppAccess, cellInfo) => {
     if (RealmUserAccountFlagConstants.IsDeactivated(cellInfo.rowData)) {
         return "Deactivated";
@@ -21,6 +39,13 @@ export const FormatAccessStatusText = (hasAppAccess, cellInfo) => {
     }
 };
 
+/**
+ * Format the User Status for the User into a readable format
+ * @param hasAppAccess
+ * @param cellInfo
+ * @returns {*}
+ * @constructor
+ */
 export const FormatUserStatusText = (hasAppAccess, cellInfo) => {
     if (RealmUserAccountFlagConstants.IsDeactivated(cellInfo.rowData)) {
         return "Deactivated";

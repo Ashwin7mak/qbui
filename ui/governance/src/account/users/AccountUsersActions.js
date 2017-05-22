@@ -50,6 +50,7 @@ export const searchUsers = (users, searchTerm) => {
         return users;
     }
 
+    // normalize the search
     searchTerm = searchTerm.toLowerCase();
 
     // go through the users list and see if any of the 'searchable' columns match
@@ -89,16 +90,23 @@ export const paginateUsers = (users, _page, _itemsPerPage) => {
     // other wise slice the users for that window which is really offset to items we want in that window
     let slicedUsers = users.slice(offset, offset + itemsPerPage);
     return {
+        // the items are the window of the users
         currentPageItems: slicedUsers,
         currentPage: currentPage,
         totalFilteredItems:users.length,
         itemsPerPage: itemsPerPage,
         totalPages: Math.ceil(users.length / itemsPerPage),
+
+        // first and last index are used for pagination, we need to respect the window boundaries
         firstItemIndexInCurrentPage: slicedUsers.length === 0 ? 0 : offset + 1,
         lastItemIndexInCurrentPage: offset + slicedUsers.length
     };
 };
 
+/**
+ * Different ways the columns can be sorted
+ * @type {[*]}
+ */
 const sortFunctions = [
     "uid",
     "firstName",
