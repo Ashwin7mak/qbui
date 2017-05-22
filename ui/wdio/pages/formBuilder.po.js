@@ -155,7 +155,7 @@ class formBuilderPage {
 
     getNewFieldLabels() {
         // Gets the list of field labels from the NEW FIELD panel
-        let labelEls = browser.elements('.listOfElementsItem');
+        let labelEls = browser.elements('.rc-tabs-tabpane-active .listOfElementsItem');
         return labelEls.value.map(function(labelEl) {
             return labelEl.getText();
         });
