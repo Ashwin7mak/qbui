@@ -34,10 +34,13 @@ class DefaultTopNavGlobalActions extends Component {
             <div className="globalActions defaultTopNavGlobalActions">
                 <ul className="globalActionsList">
                     <li className="link globalAction withDropdown">
-                        <UserFeedBack
-                            startTabIndex={this.props.startTabIndex}
-                            shouldOpenMenusUp={this.props.shouldOpenMenusUp}
-                        />
+                        {!window.location.href.includes("governance") ?
+                            <UserFeedBack
+                                startTabIndex={this.props.startTabIndex}
+                                shouldOpenMenusUp={this.props.shouldOpenMenusUp}
+                            /> :
+                            null
+                        }
                     </li>
                     {this.props.children}
                     {this.props.actions && this.props.actions.map((action, index) => (
