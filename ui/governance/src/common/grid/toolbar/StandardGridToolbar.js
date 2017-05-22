@@ -28,8 +28,6 @@ class StandardGridToolBar extends React.Component {
     };
 
     render() {
-        // debugger;
-        // console.log('this.props: ', this.props);
         let hasFacets = false;
         return (
             <div>
