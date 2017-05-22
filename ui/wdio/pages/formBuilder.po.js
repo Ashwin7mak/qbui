@@ -188,7 +188,7 @@ class formBuilderPage {
         // Clicks on the 'gear' button to invoke the SETTINGS menu
         // todo: move this (and open?) to topNavPO?
         this.reportTitle.waitForExist();
-        return this.reportTitle.waitForVisible();
+        this.reportTitle.waitForVisible();
         topNavPO.formBuilderBtn.waitForExist();
         try {
             topNavPO.formBuilderBtn.click();
