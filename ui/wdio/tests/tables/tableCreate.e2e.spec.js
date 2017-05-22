@@ -113,11 +113,7 @@
             expect(browser.isEnabled('.tableHomePageInitial .createTableLink')).toBeTruthy();
 
             //Step 11 - Load a report for the table and verify report elements
-            if (browserName === 'firefox') {
-                ReportContentPO.selectReport(tableName, 0);
-            }  else {
-                RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, testApp.id, tableId, 1));
-            }
+            RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, testApp.id, tableId, 1));
             ReportContentPO.waitForLeftNavLoaded();
             browser.element('.noRowsIcon').waitForVisible();
             expect(browser.element('.recordsCount').getAttribute('textContent')).toBe('0 records');
@@ -269,9 +265,8 @@
             });
 
             //Go to Tables Page
-            browser.call(function() {
-                return RequestAppsPage.get(e2eBase.getRequestTableEndpoint(realmName, testApp.id, testApp.tables[0].id));
-            });
+            RequestAppsPage.get(e2eBase.getRequestTableEndpoint(realmName, testApp.id, testApp.tables[0].id));
+
             //wait until you see tableLists got loaded
             browser.element('.tablesList').waitForVisible();
 
