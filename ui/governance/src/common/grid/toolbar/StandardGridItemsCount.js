@@ -10,7 +10,7 @@ class StandardGridItemsCount extends Component {
 
     render() {
 
-        const itemCountMessage = (this.props.totalItems === 1) ? this.props.itemTypeSingular : this.props.itemTypePlural;
+        const itemCountMessage = (this.props.totalFilteredItems === 1) ? this.props.itemTypeSingular : this.props.itemTypePlural;
 
         const standardGridItemsCount = (this.props.totalFilteredItems === this.props.totalItems) ? `${this.props.totalItems}` : `${this.props.totalFilteredItems} of ${this.props.totalItems}`;
 
