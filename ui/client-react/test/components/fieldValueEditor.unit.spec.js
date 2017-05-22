@@ -56,7 +56,7 @@ describe('FieldValueEditor functions', () => {
 
     let component;
 
-    const store = mockStore({forms: {}});
+    const store = mockStore({forms: {}, relationshipBuilder: {}});
 
     describe('test render of component', () => {
         let dataProvider = [

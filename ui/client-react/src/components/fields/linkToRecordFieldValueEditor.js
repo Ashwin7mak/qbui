@@ -1,7 +1,8 @@
 import React, {PropTypes} from 'react';
 import Locale from "../../locales/locales";
 import {CONTEXT} from "../../actions/context";
-import {showRelationshipDialog, removeFieldFromForm} from '../../actions/formActions';
+import {removeFieldFromForm} from '../../actions/formActions';
+import {showRelationshipDialog} from '../../actions/relationshipBuilderActions';
 import {updateField} from '../../actions/fieldsActions';
 import Select from '../select/reactSelectWrapper';
 import {connect} from 'react-redux';
@@ -98,7 +99,7 @@ export const LinkToRecordFieldValueEditor = React.createClass({
 
 const mapStateToProps = (state) => {
     return {
-        readyToShowRelationshipDialog: state.forms.readyToShowRelationshipDialog
+        readyToShowRelationshipDialog: state.relationshipBuilder.readyToShowRelationshipDialog
     };
 };
 

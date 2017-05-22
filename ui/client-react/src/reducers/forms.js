@@ -28,20 +28,6 @@ const forms = (
         };
     }
 
-    case types.SHOW_RELATIONSHIP_DIALOG: {
-        return {
-            ...state,
-            readyToShowRelationshipDialog: action.show
-
-        };
-    }
-    case types.DRAGGING_LINK_TO_RECORD: {
-        return {
-            ...state,
-            draggingLinkToRecord: action.dragging,
-            readyToShowRelationshipDialog: (state.draggingLinkToRecord === true) && !action.dragging // show relationship dialogs waiting for drop
-        };
-    }
 
     case types.LOADING_FORM: {
 
@@ -224,7 +210,6 @@ const forms = (
         updatedForm.isPendingEdit = true;
         newState[action.id] = updatedForm;
 
-        newState.readyToShowRelationshipDialog = isNewRelationshipField && !newState.draggingLinkToRecord;
         return newState;
     }
 
