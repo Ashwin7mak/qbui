@@ -33,15 +33,15 @@ class StandardGridToolBar extends React.Component {
             <div>
                 <div className={"standardGridToolBar " + (hasFacets ? "" : "noFacets")}>
                     <div className="standardLeftToolBar">
-                        {this.props.shouldSearch ?
+                        {this.props.shouldSearch &&
                         // TODO: MC-2733 : REPLACE THIS WITH FilterSearchBox component from reuse
                         <IconInputBox placeholder={`Search ${this.props.itemTypePlural}`}
                                       onChange={this.props.onSearchChange}
                                       onClear={this.props.clearSearchTerm}
                                       value={this.props.searchTerm}
-                        /> : null
+                        />
                         }
-                        {hasFacets ?
+                        {hasFacets &&
                             <div className="standardGridFacet">
                                 <StandardGridFacetsMenu
                                     className="facetMenu"
@@ -52,19 +52,18 @@ class StandardGridToolBar extends React.Component {
                                     onFacetClearFieldSelects={this.handleFacetClearFieldSelects}
                                     selectedValues={this.props.facetSelections.selectionsHash}
                                 />
-                            </div> : null
+                            </div>
                         }
                     </div>
                     <div className="standardRightToolBar">
                         <div className="standardGridItemsCount">
                             <div className="itemsCount">
-                                {this.props.totalItems ?
+                                {this.props.totalItems &&
                                     <StandardGridItemsCount totalItems={this.props.totalItems}
                                                             totalFilteredItems={this.props.totalFilteredItems}
                                                             itemTypePlural={this.props.itemTypePlural}
                                                             itemTypeSingular={this.props.itemTypeSingular}
-                                    /> :
-                                    null
+                                    />
                                 }
                             </div>
                         </div>
