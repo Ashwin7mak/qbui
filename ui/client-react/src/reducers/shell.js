@@ -12,6 +12,8 @@ const shell = (
         leftNavVisible: false,
         trowserOpen: false,
         trowserContent: null,
+        topNavVisible: true,
+        navTopTitle: null,
         openCount: 0,
         locale: Locale.getLocale(),
         i18n: Locale.getI18nBundle()
@@ -77,6 +79,21 @@ const shell = (
             ...state,
             locale: Locale.getLocale(),
             i18n: Locale.getI18nBundle()
+        };
+    case types.SHOW_TOP_NAV:
+        return {
+            ...state,
+            topNavVisible: true
+        };
+    case types.HIDE_TOP_NAV:
+        return {
+            ... state,
+            topNavVisible: false
+        };
+    case types.SET_TOP_TITLE:
+        return {
+            ...state,
+            navTopTitle: action.navTopTitle
         };
     default:
         // return existing state by default in redux

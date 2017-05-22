@@ -7,6 +7,8 @@ import MyAppsPage from './myAppsPage';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
 
+import {setTopTitle, showTopNav} from '../../actions/shellActions';
+
 /**
  * placeholder for my apps route
  */
@@ -15,9 +17,8 @@ let AppsRoute = React.createClass({
 
     componentDidMount() {
         // no title for now...
-        let flux = this.getFlux();
-        flux.actions.showTopNav();
-        flux.actions.setTopTitle();
+        this.props.showTopNav();
+        this.props.setTopTitle();
 
     },
 

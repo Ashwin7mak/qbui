@@ -11,6 +11,7 @@ import Stage from '../../../../reuse/client/src/components/stage/stage';
 import Locale from '../../locales/locales';
 import {notifyTableDeleted} from '../../actions/tablePropertiesActions';
 import {getNeedToNotifyTableDeletion, getTableJustDeleted} from '../../reducers/tableProperties';
+import {setTopTitle, showTopNav} from '../../actions/shellActions';
 import './appHomePage.scss';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
@@ -82,9 +83,8 @@ export const AppHomePageRoute = React.createClass({
 
     componentDidMount() {
         // no title for now...
-        let flux = this.getFlux();
-        flux.actions.showTopNav();
-        flux.actions.setTopTitle();
+        this.props.showTopNav();
+        this.props.setTopTitle();
         this.selectAppFromParams(_.get(this.props, 'match.params'));
         flux.actions.doneRoute();
         if (this.props.notifyTableDeleted) {
@@ -142,7 +142,9 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        resetTableDeleteNotification: () => dispatch(notifyTableDeleted(false))
+        resetTableDeleteNotification: () => dispatch(notifyTableDeleted(false)),
+        setTopTitle: (title) => dispatch(setTopTitle(title)),
+        showTopNav: () => dispatch(showTopNav())
     };
 };
 

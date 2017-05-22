@@ -3,8 +3,6 @@ import ReactDOM from "react-dom";
 import Fluxxor from "fluxxor";
 import AppsStore from "../stores/appsStore";
 import appsActions from "../actions/appsActions";
-import NavStore from "../stores/navStore";
-import navActions from "../actions/navActions";
 import PerfStore from "../stores/perfStore";
 import perfActions from "../actions/perfActions";
 

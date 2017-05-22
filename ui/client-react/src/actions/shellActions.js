@@ -98,3 +98,34 @@ export const changeLocale = (locale) => {
         locale
     };
 };
+
+/**
+ * Show top nav (Today, top nav is not shown only for small breakpoint)
+ * @returns {{type: *}}
+ */
+export const showTopNav = () => {
+    return {
+        type: types.SHOW_TOP_NAV
+    };
+};
+
+/**
+ * Hide top nav (Hidden for small breakpoint)
+ * @returns {{type}}
+ */
+export const hideTopNav = () => {
+    return {
+        type: types.HIDE_TOP_NAV
+    };
+};
+
+/**
+ * Set a top nav title
+ * @param title a react node (or null to omit one)
+ */
+export const setTopTitle = (title = null) => {
+    return {
+        type: types.SET_TOP_TITLE,
+        title
+    };
+};

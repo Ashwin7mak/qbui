@@ -72,7 +72,6 @@ describe('Nav Unit tests', () => {
     });
 
     let stores = {
-        NavStore: new navStore(),
         AppsStore: new appsStore()
     };
     let flux = new Fluxxor.Flux(stores);
@@ -162,7 +161,6 @@ describe('Nav Unit tests', () => {
 
     it('renders the loading screen while no apps are loaded', () => {
         let storesWithoutApps = {
-            NavStore: new navStore(),
             AppsStore: new appsStoreWithNoApps()
         };
 
@@ -179,7 +177,6 @@ describe('Nav Unit tests', () => {
 
     it('does not render the loading screen if apps are loaded', () => {
         let storesWithApps = {
-            NavStore: new navStore(),
             AppsStore: new appsStoreWithV3App()
         };
 
