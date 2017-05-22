@@ -1,7 +1,12 @@
 import React, {PropTypes, Component} from 'react';
+import Locale from '../../../../../reuse/client/src/locales/locale';
+import Tooltip from '../../../../../reuse/client/src/components/tooltip/tooltip';
 import SideTrowser from '../../../../../reuse/client/src/components/sideTrowserBase/sideTrowserBase';
+import TabMenu from '../../../../../reuse/client/src/components/sideNavs/tabbedSideMenu';
 import NewFieldsMenu from '../../formBuilder/menus/newFieldsMenu';
+import ExistingFieldsMenu from '../../formBuilder/menus/existingFieldsMenu';
 import * as tabIndexConstants from '../../formBuilder/tabindexConstants';
+
 import './toolPalette.scss';
 
 /**
@@ -9,19 +14,42 @@ import './toolPalette.scss';
  * TODO: Extend to allow existing fields to be shown as well.
  */
 class ToolPalette extends Component {
-    renderToolPalette = () => {
-        const {isCollapsed, isOpen} = this.props;
 
-        return (
-            <div className="toolPaletteContainer">
-                <NewFieldsMenu isCollapsed={isCollapsed} isOpen={isOpen}
-                               toolPaletteTabIndex={tabIndexConstants.TOOL_PALETTE_TABINDEX}
-                               toggleToolPaletteChildrenTabIndex={this.props.toggleToolPaletteChildrenTabIndex}
-                               toolPaletteChildrenTabIndex={this.props.toolPaletteChildrenTabIndex}
-                               toolPaletteFocus={this.props.toolPaletteFocus} />
-            </div>
-        );
-    };
+    renderNewFieldsMenu = () => (
+        <NewFieldsMenu isCollapsed={this.props.isCollapsed}
+                       isOpen={this.props.isOpen}
+                       toolPaletteTabIndex={tabIndexConstants.TOOL_PALETTE_TABINDEX}
+                       toggleToolPaletteChildrenTabIndex={this.props.toggleToolPaletteChildrenTabIndex}
+                       toolPaletteChildrenTabIndex={this.props.toolPaletteChildrenTabIndex}
+                       toolPaletteFocus={this.props.toolPaletteFocus} />
+    );
+
+    renderExistingFieldsMenu = () => (<ExistingFieldsMenu isCollapsed={this.props.isCollapsed}
+                                                          isOpen={this.props.isOpen}
+                                                          toolPaletteTabIndex={tabIndexConstants.TOOL_PALETTE_TABINDEX}
+                                                          toggleToolPaletteChildrenTabIndex={this.props.toggleToolPaletteChildrenTabIndex}
+                                                          toolPaletteChildrenTabIndex={this.props.toolPaletteChildrenTabIndex}
+                                                          toolPaletteFocus={this.props.toolPaletteFocus} />);
+
+    renderToolPalette = () => (
+        <div className="toolPaletteContainer">
+            <TabMenu
+                isCollapsed={this.props.isCollapsed}
+                tabs={[
+                    {
+                        key: 'newFields',
+                        title: <Tooltip i18nMessageKey="builder.tabs.newFields"> {Locale.getMessage('builder.formBuilder.newFieldsMenuTitle')} </Tooltip>,
+                        content: this.renderNewFieldsMenu()
+                    },
+                    {
+                        key: 'existingFields',
+                        title: <Tooltip i18nMessageKey="builder.tabs.existingFields"> {Locale.getMessage('builder.formBuilder.existingFieldsMenuTitle')} </Tooltip>,
+                        content: this.renderExistingFieldsMenu()
+                    }
+                ]}
+            />
+        </div>
+    );
 
     render() {
         return (

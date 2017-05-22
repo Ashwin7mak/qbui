@@ -58,11 +58,21 @@
             overflow: auto;
             display: flex;
             flex-direction: column;
+
+            .smallBreakPoint & {
+                display: flex;
+                flex-direction: column;
+                height: 100%;
+            }
         }
 
         > .reportFieldSelectMenuContent {
             flex: 0;
         }
+    }
+
+    .reportFieldSelectMenuMain {
+        width: 100%;
     }
 
     > .reportFieldSelectMenuContent {

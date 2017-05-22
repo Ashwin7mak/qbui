@@ -51,7 +51,7 @@ export const searchUsers = (users, searchTerm) => {
         _.includes(user.email.toLowerCase(), searchTerm) ||
         _.includes(user.userName.toLowerCase(), searchTerm) ||
         _.includes(Formatters.FormatLastAccessString(user.lastAccess).toLowerCase(), searchTerm) ||
-        _.includes(Formatters.FormatUserStatusText(user.hasAppAccess, {rowData: user}).toLowerCase(), searchTerm);
+        _.includes(Formatters.FormatAccessStatusText(user.hasAppAccess, {rowData: user}).toLowerCase(), searchTerm);
     });
 };
 
@@ -76,13 +76,13 @@ export const paginateUsers = (users, _page, _itemsPerPage) => {
 
     let slicedUsers = users.slice(offset, offset + itemsPerPage);
     return {
-        currentPageRecords: slicedUsers,
+        currentPageItems: slicedUsers,
         currentPage: currentPage,
-        filteredRecords:users.length,
+        totalFilteredItems:users.length,
         itemsPerPage: itemsPerPage,
         totalPages: Math.ceil(users.length / itemsPerPage),
-        firstRecordInCurrentPage: slicedUsers.length === 0 ? 0 : offset + 1,
-        lastRecordInCurrentPage: offset + slicedUsers.length
+        firstItemIndexInCurrentPage: slicedUsers.length === 0 ? 0 : offset + 1,
+        lastItemIndexInCurrentPage: offset + slicedUsers.length
     };
 };
 
@@ -93,7 +93,7 @@ const sortFunctions = [
     "email",
     user => Formatters.FormatUsernameString(user, {rowData: user}),
     "lastAccess",
-    user => Formatters.FormatUserStatusText(user.hasAppAccess, {rowData: user}),
+    user => Formatters.FormatAccessStatusText(user.hasAppAccess, {rowData: user}),
     user => Formatters.FormatIsInactive(user.lastAccess, {rowData: user}),
     user => user.numGroupsMember > 0,
     user => user.numGroupsManaged > 0,
@@ -164,29 +164,27 @@ export const doUpdate = (gridId, gridState, _itemsPerPage) => {
         if (users.length === 0) {
             return;
         }
-        // First Facet
-        let facetSelections = gridState.facets && gridState.facets.facetSelections ? gridState.facets.facetSelections : {};
-        let facetedUsers = facetUser(users, facetSelections);
-
-        // Then Search
+        // First Search
         let searchTerm = gridState.searchTerm || "";
-        let filteredUsers = searchUsers(facetedUsers, searchTerm);
+        let filteredUsers = searchUsers(users, searchTerm);
 
+        // Then Facet
+        let facetSelections = gridState.facets && gridState.facets.facetSelections ? gridState.facets.facetSelections : {};
+        let facetedUsers = facetUser(filteredUsers, facetSelections);
+
+        // Then Sort
         let sortFids = gridState.sortFids || [];
-        let sortedUsers = sortUsers(filteredUsers, sortFids);
+        let sortedUsers = sortUsers(facetedUsers, sortFids);
 
         // Then Paginate
         let itemsPerPage = _itemsPerPage || gridState.pagination.itemsPerPage;
-        let {currentPageRecords, ...pagination} = paginateUsers(sortedUsers, gridState.pagination.currentPage, itemsPerPage);
-
-        // Set the grid's search term
-        dispatch(StandardGridActions.setSearch(gridId, searchTerm));
+        let {currentPageItems, ...pagination} = paginateUsers(sortedUsers, gridState.pagination.currentPage, itemsPerPage);
 
         // Set the grid's pagination info
         dispatch(StandardGridActions.setPaginate(gridId, pagination));
 
         // Inform the grid of the new users
-        dispatch(StandardGridActions.setItems(gridId, currentPageRecords));
+        dispatch(StandardGridActions.setItems(gridId, currentPageItems));
 
     };
 };
@@ -214,8 +212,8 @@ export const fetchAccountUsers = (accountId, gridID, itemsPerPage) => {
             // inform the redux store of all the users
             dispatch(receiveAccountUsers(response.data));
 
-            // set the total records for the grid
-            dispatch(StandardGridActions.setTotalRecords(gridID, response.data.length));
+            // set the total items for the grid
+            dispatch(StandardGridActions.setTotalItems(gridID, response.data.length));
 
             // run through the pipeline and update the grid
             dispatch(doUpdate(gridID, StandardGridState.defaultGridState, itemsPerPage));
