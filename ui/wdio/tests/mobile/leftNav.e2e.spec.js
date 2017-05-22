@@ -170,8 +170,6 @@
             // Step 9 - Verify if the tables list is open
             expect((browser.element('.leftNav .tablesList .leftNavLabel').getAttribute('textContent').length) > 0).toBeTruthy();
 
-            // browser.click('.smallHeader .left .iconUISturdy-hamburger');
-
         });
     });
 }());
