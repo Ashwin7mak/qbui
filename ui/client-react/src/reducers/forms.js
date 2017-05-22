@@ -154,19 +154,19 @@ const forms = (
     /**
      * If a location is not passed in, a location will be hardcoded, since there is no current implementation
      * that sets the current tabIndex, sectionIndex, and columnIndex for a new field.
-     * Default location for a newField is always set to the bottom of the form.
+     * Default location for a field is always set to the bottom of the form.
      */
     case types.ADD_FIELD : {
         if (!currentForm) {
             return state;
         }
 
-        let {newField, newLocation} = _.cloneDeep(action.content);
+        let {field, newLocation} = _.cloneDeep(action.content);
         updatedForm = _.cloneDeep(currentForm);
         // Remove all keys that are not necessary for forms
-        Object.keys(newField).forEach(key => {
+        Object.keys(field).forEach(key => {
             if (key !== 'FormFieldElement' && key !== 'id') {
-                delete newField[key];
+                delete field[key];
             }
         });
 
@@ -192,7 +192,7 @@ const forms = (
         updatedForm.formData.formMeta = MoveFieldHelper.addNewFieldToForm(
             updatedForm.formData.formMeta,
             newLocation,
-            {...newField}
+            {...field}
         );
 
         if (!updatedForm.selectedFields) {

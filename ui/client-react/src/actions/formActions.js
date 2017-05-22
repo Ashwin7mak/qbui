@@ -193,32 +193,43 @@ export const loadForm = (appId, tblId, rptId, formType, recordId, context) => {
 /**
  * Private function for addNewFieldToForm, not exported
  * */
-const buildNewField = (newField) => {
-    let newId = _.uniqueId('newField_');
+const buildField = (field, id) => {
+    id = id || _.uniqueId('newField_');
     let displayText = 'New Text Field';
 
     return _.merge({}, {
-        id: newId,
+        id: id,
         edit: true,
         FormFieldElement: {
             positionSameRow: false,
-            fieldId: newId,
+            fieldId: id,
             displayText
         }
-    }, newField);
+    }, field);
 };
 
 /**
- * Move a field from one position on a form to a different position
+ * Adds a field to the form
  * @param formId
  * @param appId
  * @param tblId
  * @param newLocation
  * @param newField
+ * @param existingField
+ * @param id
  * @returns {{id, type, content}|*}
  */
-export const addNewFieldToForm = (formId, appId, tblId, newLocation, newField) => {
-    newField = buildNewField(newField);
+export const addNewFieldToForm = (formId, appId, tblId, newLocation, newField, existingField, id) => {
+    console.log('newField: ', newField);
+    console.log('existingField: ', existingField);
+    let field;
+    if (newField) {
+        field = buildField(newField);
+    } else {
+        field = buildField(existingField, id);
+    }
+
+    console.log('field: ', field);
 
     return {
         type: types.ADD_FIELD,
@@ -227,7 +238,7 @@ export const addNewFieldToForm = (formId, appId, tblId, newLocation, newField) =
         tblId,
         content: {
             newLocation,
-            newField,
+            field,
         }
     };
 };

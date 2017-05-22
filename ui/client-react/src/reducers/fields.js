@@ -63,9 +63,9 @@ const fieldsStore = (state = [], action) => {
     }
 
     case types.ADD_FIELD: {
-        let newField = _.cloneDeep(action.content.newField);
+        let field = _.cloneDeep(action.content.field);
         // Removes the FormFieldElement key which is not applicable to fields store, only matters on forms.
-        delete newField.FormFieldElement;
+        delete field.FormFieldElement;
 
         let {appId, tblId} = action;
 
@@ -75,10 +75,10 @@ const fieldsStore = (state = [], action) => {
             currentState = {
                 appId: appId,
                 tblId: tblId,
-                fields: [newField]
+                fields: [field]
             };
         } else {
-            currentState.fields.push(newField);
+            currentState.fields.push(field);
         }
 
         newState.push(currentState);
