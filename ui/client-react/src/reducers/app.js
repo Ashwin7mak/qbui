@@ -95,11 +95,12 @@ const app = (
         };
     case types.UPDATE_APP_TABLE_PROPS:
         let appsClone = _.cloneDeep(state.apps);
-        let appToUpdate = _.find(appsClone, (a) => a.id === action.content.appId);
-        if (appToUpdate) {
-            let tableToUpdate = _.find(appToUpdate, (t) => t.id === action.content.tblId);
-            if (tableToUpdate) {
-                tableToUpdate = action.content.tableData;
+        let appToUpdateIdx = _.findIndex(appsClone, (a) => a.id === action.content.appId);
+        if (appToUpdateIdx !== -1) {
+            let appToUpdate = appsClone[appToUpdateIdx];
+            let tableToUpdateIdx = _.findIndex(appToUpdate.tables, (t) => t.id === action.content.tblId);
+            if (tableToUpdateIdx !== -1) {
+                appToUpdate.tables[tableToUpdateIdx] = action.content.tableData;
             }
         }
         return {
