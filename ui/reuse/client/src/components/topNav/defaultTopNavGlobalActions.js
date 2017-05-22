@@ -34,7 +34,7 @@ class DefaultTopNavGlobalActions extends Component {
             <div className="globalActions defaultTopNavGlobalActions">
                 <ul className="globalActionsList">
                     <li className="link globalAction withDropdown">
-                        {this.props.hasFeedBack &&
+                        {this.props.hasFeedback &&
                             <UserFeedBack
                                 startTabIndex={this.props.startTabIndex}
                                 shouldOpenMenusUp={this.props.shouldOpenMenusUp}
@@ -80,7 +80,7 @@ const actionPropType = React.PropTypes.shape({
 DefaultTopNavGlobalActions.propTypes = {
     /**
      * Determines whether the feedback button should be shown or not */
-    hasFeedBack: PropTypes.bool,
+    hasFeedback: PropTypes.bool,
     linkClass: PropTypes.string,
 
     /**

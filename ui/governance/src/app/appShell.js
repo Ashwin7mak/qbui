@@ -19,7 +19,7 @@ export const GovernanceAppShell = (props) => (
                     startTabIndex={4}
                     dropdownIcon="user"
                     dropdownMsg="globalActions.user"
-                    hasFeedBack={false}
+                    hasFeedback={false}
                 />
             }/>
             <Switch>
