@@ -84,10 +84,15 @@ let BuilderDropDownAction = React.createClass({
                     </div> : null}
 
                     {isReportView &&
-                        <div className="configSet currentContext">
-                            <li className="heading"><a><span><I18nMessage message={"settings.reportsHeader"}/></span></a></li>
-                            <li><a className="modifyForm" onClick={this.props.navigateToBuilderReport}>
-                                <I18nMessage message={"settings.configureReportBuilder"}/></a></li>
+                        <div className="configMenu--configSet configMenu__currentContext">
+                            <li className="heading">
+                                <span><I18nMessage message={"settings.reportsHeader"}/></span>
+                            </li>
+                            <li>
+                                <a className="modifyForm" onClick={this.props.navigateToBuilderReport}>
+                                    <I18nMessage message={"settings.configureReportBuilder"}/>
+                                </a>
+                            </li>
                         </div>
                     }
 
