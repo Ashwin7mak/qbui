@@ -482,7 +482,7 @@ export const getParentRelationshipsForSelectedFormElement = (state, id) => {
     return _.filter(relationships, (relationship) => {
         return (relationship.detailTableId === tableId);
     });
-}
+};
 
 export default forms;
 
