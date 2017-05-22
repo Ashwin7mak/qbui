@@ -6,6 +6,7 @@ import AppsModel from '../models/appsModel';
 const app = (
     // default state
     state = {
+        app: null,
         apps: [],
         loading: false,
         error: false
@@ -20,7 +21,7 @@ const app = (
      * @param newApp
      * @returns {*}
      */
-    function getAppsFromState(newApp = null) {
+    function setAppInApps(newApp = null) {
         // reducer - no mutations against current state!
         const apps = _.cloneDeep(state.apps);
 
@@ -40,25 +41,70 @@ const app = (
         return apps;
     }
 
+    function clearTableSelected() {
+        let selected = _.cloneDeep(state.selected);
+        if (!selected) {
+            selected = clearSelected();
+        } else {
+            selected.tblId = null;
+        }
+        return selected;
+    }
+
+    function clearSelected() {
+        return {
+            appId: null,
+            tblId: null
+        };
+    }
+
+    function setSelected(appId = null, tblId = null) {
+        // reducer - no mutations against current state!
+        let selected = _.cloneDeep(state.selected);
+        if (!selected) {
+            selected = {};
+        }
+
+        selected.appId = appId;
+        selected.tblId = tblId;
+
+        return selected;
+    }
+
     // reducer - no mutations!
     switch (action.type) {
-    case types.CLEAR_APP:
+    case types.CLEAR_SELECTED_APP:
         return {
             ...state,
             loading: false,
             error: false,
-            selected: {
-                appId: null
-            }
+            app: null,
+            selected: clearSelected()
         };
-    case types.CLEAR_APP_TABLE:
-        // make a copy of what is selected
-        const selected = _.cloneDeep(state.selected);
-        selected.tableId = null;
-
+    case types.CLEAR_SELECTED_APP_TABLE:
         return {
             ...state,
-            selected: selected
+            loading: false,
+            error: false,
+            selected: clearTableSelected()
+        };
+    case types.SELECT_APP_TABLE:
+        return {
+            ...state,
+            selected: setSelected(action.content.appId, action.content.tblId)
+        };
+    case types.UPDATE_APP_TABLE_PROPS:
+        let appsClone = _.cloneDeep(state.apps);
+        let appToUpdate = _.find(appsClone, (a) => a.id === action.content.appId);
+        if (appToUpdate) {
+            let tableToUpdate = _.find(appToUpdate, (t) => t.id === action.content.tblId);
+            if (tableToUpdate) {
+                tableToUpdate = action.content.tableData;
+            }
+        }
+        return {
+            ...state,
+            apps: appsClone
         };
     case types.LOAD_APP:
         let appId = action.context;
@@ -66,9 +112,8 @@ const app = (
             ...state,
             loading: true,
             error: false,
-            selected: {
-                appId: appId
-            }
+            app: null,
+            selected: setSelected(appId)
         };
     case types.LOAD_APP_SUCCESS:
         let appModel = new AppModel(action.content);
@@ -76,48 +121,43 @@ const app = (
             ...state,
             loading: false,
             error: false,
-            selected: {
-                appId: appModel.getApp().id,
-                tableId: null,
-                appUsers: appModel.getUsers(),
-                appUsersUnfiltered: appModel.getUnfilteredUsers()
-            },
-            apps: getAppsFromState(appModel.getApp())
+            app: appModel.get(),
+            //  update app in apps list
+            apps: setAppInApps(appModel.getApp()),
+            selected: setSelected(appModel.getApp().id)
         };
     case types.LOAD_APP_ERROR:
         return {
             ...state,
             loading: false,
-            error: true
-        };
-    case types.SELECT_APP_TABLE:
-        const tableId = action.content.tableId;
-        // make a copy of what is selected
-        const selected = _.cloneDeep(state.selected);
-        selected.tableId = tableId;
-
-        return {
-            ...state,
-            selected: selected
+            error: true,
+            app: null,
+            selected: setSelected()
         };
     case types.LOAD_APPS:
         return {
             loading: true,
             error: false,
-            apps: []
+            app: null,
+            apps: [],
+            selected: clearSelected()
         };
     case types.LOAD_APPS_SUCCESS:
         let appsModel = new AppsModel(action.content);
         return {
             loading: false,
             error: false,
-            apps: appsModel.getApps()
+            app: null,
+            apps: appsModel.getApps(),
+            selected: clearSelected()
         };
     case types.LOAD_APPS_ERROR:
         return {
             loading: false,
             error: true,
-            apps: []
+            app: null,
+            apps: [],
+            selected: clearSelected()
         };
     default:
         return state;
@@ -141,12 +181,16 @@ export const getSelectedAppId = (state) => {
     return state.selected ? state.selected.appId : null;
 };
 
+export const getSelectedTableId = (state) => {
+    return state.selected ? state.selected.tblId : null;
+};
+
 export const getSelectedAppUsers = (state) => {
-    return state.selected ? state.selected.appUsers : null;
+    return state.app && state.app.getUsers === 'function' ? state.app.getUsers() : [];
 };
 
 export const getSelectedAppUnfilteredUsers = (state) => {
-    return state.selected ? state.selected.appUsersUnfiltered : null;
+    return state.app && state.app.getUnfilteredUsers === 'function' ? state.app.getUnfilteredUsers() : {};
 };
 
 

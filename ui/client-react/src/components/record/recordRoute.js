@@ -27,6 +27,7 @@ import {connect} from 'react-redux';
 import {loadForm, editNewRecord} from '../../actions/formActions';
 import {openRecord} from '../../actions/recordActions';
 import {clearSearchInput} from '../../actions/searchActions';
+import {selectAppTable} from '../../actions/appActions';
 import {APP_ROUTE, BUILDER_ROUTE, EDIT_RECORD_KEY} from '../../constants/urlConstants';
 import {getEmbeddedReportByContext} from '../../reducers/embeddedReports';
 import {CONTEXT} from '../../actions/context';
@@ -57,9 +58,10 @@ export const RecordRoute = React.createClass({
     loadRecord(appId, tblId, recordId, rptId, embeddedReport) {
         const flux = this.getFlux();
 
-        //selected table does not chane when in a drawer
+        //selected table does not change when in a drawer
         if (!this.props.isDrawerContext) {
-            flux.actions.selectTableId(tblId);
+            this.props.selectTable(appId, tblId);
+            //flux.actions.selectTableId(tblId);
         }
 
         // ensure the search input is empty
@@ -613,7 +615,8 @@ const mapDispatchToProps = (dispatch) => {
         },
         clearSearchInput: () => {
             dispatch(clearSearchInput());
-        }
+        },
+        selectTable: (appId, tableId) => dispatch(selectAppTable(appId, tableId))
     };
 };
 

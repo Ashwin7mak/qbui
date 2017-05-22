@@ -18,6 +18,7 @@ import * as TableActions from '../../actions/tableActions';
 import * as FieldsActions from '../../actions/fieldsActions';
 import {showTableCreationDialog} from '../../actions/tableCreationActions';
 import {loadDynamicReport} from '../../actions/reportActions';
+import {selectAppTable} from '../../actions/appActions';
 import {CONTEXT} from '../../actions/context';
 import {WindowHistoryUtils} from '../../utils/windowHistoryUtils';
 import Breakpoints from '../../utils/breakpoints';
@@ -53,8 +54,9 @@ export const TableHomePageRoute = React.createClass({
     },
 
     loadTableHomePageReportFromParams(appId, tblId, offset, numRows) {
-        const flux = this.getFlux();
-        flux.actions.selectTableId(tblId);
+        //const flux = this.getFlux();
+        //flux.actions.selectTableId(tblId);
+        this.props.selectTable(appId, tblId);
 
         //  redux actions..
         this.props.clearSearchInput();
@@ -214,7 +216,8 @@ const mapDispatchToProps = (dispatch) => {
         },
         showTableCreationDialog: () => {
             dispatch(showTableCreationDialog());
-        }
+        },
+        selectTable: (appId, tableId) => dispatch(selectAppTable(appId, tableId))
     };
 };
 

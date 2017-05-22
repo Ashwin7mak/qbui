@@ -10,7 +10,7 @@ import * as SearchActions from '../../actions/searchActions';
 import {CONTEXT} from '../../actions/context';
 import Configuration from '../../config/app.config';
 
-import {getApp, getSelectedAppId} from '../../reducers/app';
+import {getApp, getSelectedAppId, getSelectedTableId} from '../../reducers/app';
 
 const walkMeScript = document.createElement("script");
 walkMeScript.src = Configuration.walkmeJSSnippet;
@@ -78,11 +78,11 @@ let NavWrapper = React.createClass({
             this.props.getFeatureSwitchStates(paramVals.appId);
 
             if (paramVals.tblId) {
-                this.props.flux.actions.selectTableId(paramVals.tblId);
+                this.props.selectTable(paramVals.appId, paramVals.tblId);
                 this.props.loadReports(CONTEXT.REPORT.NAV_LIST, paramVals.appId, paramVals.tblId);
             } else {
-                if (this.state.apps.selectedTableId !== null) {
-                    this.props.flux.actions.selectTableId(null);
+                if (this.props.getSelectedTableId() !== null) {
+                    this.props.clearSelectedTable();
                 }
             }
         } else {
@@ -118,12 +118,12 @@ let NavWrapper = React.createClass({
 
         if (incomingProps.match.params.tblId) {
             if (this.props.match.params.tblId !== incomingProps.match.params.tblId) {
-                this.props.flux.actions.selectTableId(incomingProps.match.params.tblId);
+                this.props.selectTable(incomingProps.match.params.appId, incomingProps.match.params.tblId);
                 this.props.loadReports(CONTEXT.REPORT.NAV_LIST, incomingProps.match.params.appId, incomingProps.match.params.tblId);
             }
         } else {
-            if (this.state.apps.selectedTableId !== null) {
-                this.props.flux.actions.selectTableId(null);
+            if (this.props.getSelectedTableId() !== null) {
+                this.props.clearSelectedTable();
             }
         }
     },
@@ -140,7 +140,8 @@ let NavWrapper = React.createClass({
 const mapStateToProps = (state) => ({
     locales: state.shell.locales,
     getApp: (appId) => getApp(state.app, appId),
-    getSelectedAppId: () => getSelectedAppId(state.app)
+    getSelectedAppId: () => getSelectedAppId(state.app),
+    getSelectedTableId: () => getSelectedTableId(state.app)
 });
 
 const mapDispatchToProps = (dispatch) => {
@@ -148,6 +149,8 @@ const mapDispatchToProps = (dispatch) => {
         clearSelectedApp: () => dispatch(AppActions.clearSelectedApp()),
         loadApp: (appId) => dispatch(AppActions.loadApp(appId)),
         loadApps: () => dispatch(AppActions.loadApps()),
+        clearSelectedTable: () => dispatch(AppActions.clearSelectedAppTable()),
+        selectTable: (appId, tableId) => dispatch(AppActions.selectAppTable(appId, tableId)),
         getFeatureSwitchStates: (appId) => dispatch(FeatureSwitchActions.getStates(appId)),
         loadReports: (context, appId, tblId) => dispatch(ReportActions.loadReports(context, appId, tblId))
     };

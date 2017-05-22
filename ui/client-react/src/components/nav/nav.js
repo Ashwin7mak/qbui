@@ -31,7 +31,7 @@ import * as ReportActions from '../../actions/reportActions';
 import * as TableCreationActions from '../../actions/tableCreationActions';
 import * as AppActions from '../../actions/appActions';
 
-import {getApp, getApps, getIsAppsLoading, getSelectedAppId, getSelectedAppUsers, getSelectedAppUnfilteredUsers} from '../../reducers/app';
+import {getApp, getApps, getIsAppsLoading, getSelectedAppId, getSelectedTableId, getSelectedAppUsers, getSelectedAppUnfilteredUsers} from '../../reducers/app';
 
 import {CONTEXT} from '../../actions/context';
 import ButtonGroup from 'react-bootstrap/lib/ButtonGroup';
@@ -118,6 +118,8 @@ export const Nav = React.createClass({
     getTopGlobalActions() {
         const actions = [];
         let selectedApp = this.getSelectedApp();
+        let selectedTableId = this.props.getSelectedTableId();
+
         let isAdmin = selectedApp ? AppUtils.hasAdminAccess(selectedApp.accessRights) : false;
 
         return (
@@ -133,7 +135,7 @@ export const Nav = React.createClass({
                         <BuilderDropDownAction
                             history={this.props.history}
                             selectedApp={selectedApp}
-                            selectedTable={this.getSelectedTable(this.state.apps.selectedTableId)}
+                            selectedTable={this.getSelectedTable(selectedTableId)}
                             recId={props.match.params.recordId}
                             actions={actions}
                             position={"top"}
@@ -356,6 +358,7 @@ export const Nav = React.createClass({
 
         const selectedAppId = this.props.getSelectedAppId();
         const selectedApp = this.getSelectedApp();
+        const selectedTableId = this.props.getSelectedTableId();
 
         return (<div className={classes}>
             <NavPageTitle
@@ -409,7 +412,8 @@ export const Nav = React.createClass({
                 //appsLoading={this.state.apps.loading}
                 appsLoading={this.props.isAppsLoading}
                 selectedAppId={selectedAppId}
-                selectedTableId={this.state.apps.selectedTableId}
+                //selectedTableId={this.state.apps.selectedTableId}
+                selectedTableId={selectedTableId}
                 onSelectReports={this.onSelectTableReports}
                 onToggleAppsList={this.toggleAppsList}
                 globalActions={this.getLeftGlobalActions()}
@@ -477,8 +481,10 @@ export const Nav = React.createClass({
     tableCreated(tblId) {
         //const flux = this.getFlux();
 
-        flux.actions.loadApps();
-        //this.props.loadApps();
+        //flux.actions.loadApps();
+
+        // TODO: ideally, we're  just adding the new table to the app
+        this.props.loadApps();
 
         // store any new table IDs for duration of session for table homepage
         if (window.sessionStorage) {
@@ -532,6 +538,7 @@ const mapStateToProps = (state) => {
         getSelectedAppId: () => getSelectedAppId(state.app),
         getSelectedAppUnfilteredUsers: () => getSelectedAppUnfilteredUsers(state.app),
         getSelectedAppUsers: () => getSelectedAppUsers(state.app),
+        getSelectedTableId: () => getSelectedTableId(state.app),
         getApp: (appId) => getApp(state.app, appId),
         getApps: () => getApps(state.app),
         isAppsLoading: getIsAppsLoading(state.app),

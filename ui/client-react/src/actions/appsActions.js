@@ -124,13 +124,13 @@ let appsActions = {
         });
     },
 
-    selectTableId(tblId) {
-        this.dispatch(actions.SELECT_TABLE, tblId);
-    },
-
-    updateTableProps(tableId, tableInfo) {
-        this.dispatch(actions.UPDATED_TABLE_PROPS, {tableId: tableId, tableInfo: tableInfo});
-    },
+    //selectTableId(tblId) {
+    //    this.dispatch(actions.SELECT_TABLE, tblId);
+    //},
+    //
+    //updateTableProps(tableId, tableInfo) {
+    //    this.dispatch(actions.UPDATED_TABLE_PROPS, {tableId: tableId, tableInfo: tableInfo});
+    //},
 
     selectUsersRows(selectedRows) {
         this.dispatch(actions.SELECT_USERS_DETAILS, selectedRows);

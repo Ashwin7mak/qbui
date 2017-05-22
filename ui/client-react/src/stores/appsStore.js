@@ -11,18 +11,18 @@ import _ from 'lodash';
 let AppsStore = Fluxxor.createStore({
 
     initialize() {
-        this.apps = null;
+        //this.apps = null;
         this.appUsers = [];
         this.appUsersUnfiltered = {};
         this.appRoles = [];
         this.appOwner = {};
         // Default is true because the apps must load before the website is usable
-        this.loading = true;
-        this.error = false;
+        //this.loading = true;
+        //this.error = false;
         this.selectedUserRows = [];
 
-        this.selectedAppId = null;
-        this.selectedTableId = null;
+        //this.selectedAppId = null;
+        //this.selectedTableId = null;
 
         this.bindActions(
             //actions.LOAD_APPS, this.onLoadApps,
@@ -33,8 +33,8 @@ let AppsStore = Fluxxor.createStore({
             //actions.SELECT_APP_SUCCESS, this.onSelectAppSuccess,
             //actions.SELECT_APP_FAILED, this.onSelectAppFailed,
 
-            actions.SELECT_TABLE, this.onSelectTable,
-            actions.UPDATED_TABLE_PROPS, this.onUpdateTableProps,
+            //actions.SELECT_TABLE, this.onSelectTable,
+            //actions.UPDATED_TABLE_PROPS, this.onUpdateTableProps,
 
             actions.LOAD_APP_ROLES, this.onLoadAppRoles,
             actions.LOAD_APP_ROLES_FAILED, this.onLoadAppRolesFailed,
@@ -158,11 +158,11 @@ let AppsStore = Fluxxor.createStore({
         this.emit('change');
     },
 
-    onSelectTable(tblId) {
-        this.selectedTableId = tblId;
-
-        this.emit('change');
-    },
+    //onSelectTable(tblId) {
+    //    this.selectedTableId = tblId;
+    //
+    //    this.emit('change');
+    //},
     onSelectedRows(selectedRows) {
         this.selectedUserRows = selectedRows;
 
@@ -204,36 +204,36 @@ let AppsStore = Fluxxor.createStore({
      * @param tblId
      * @param tableInfo
      */
-    onUpdateTableProps(payload) {
-        let tblId = payload.tableId;
-        let tableInfo = payload.tableInfo;
-        let newAppsList = this.apps.map((app) => {
-            if (app.id === this.selectedAppId) {
-                let newAppTables = app.tables.map((table) => {
-                    if (table.id === tblId) {
-                        return tableInfo;
-                    } else {
-                        return table;
-                    }
-                });
-                app.tables = newAppTables;
-            }
-            return app;
-        });
-        this.apps = newAppsList;
-        this.emit('change');
-    },
+    //onUpdateTableProps(payload) {
+    //    let tblId = payload.tableId;
+    //    let tableInfo = payload.tableInfo;
+    //    let newAppsList = this.apps.map((app) => {
+    //        if (app.id === this.selectedAppId) {
+    //            let newAppTables = app.tables.map((table) => {
+    //                if (table.id === tblId) {
+    //                    return tableInfo;
+    //                } else {
+    //                    return table;
+    //                }
+    //            });
+    //            app.tables = newAppTables;
+    //        }
+    //        return app;
+    //    });
+    //    this.apps = newAppsList;
+    //    this.emit('change');
+    //},
     getState() {
         return {
-            apps: this.apps,
-            selectedAppId: this.selectedAppId,
+            //apps: this.apps,
+            //selectedAppId: this.selectedAppId,
             appUsers: this.appUsers,
             appUsersUnfiltered: this.appUsersUnfiltered,
             appRoles: this.appRoles,
             appOwner: this.appOwner,
-            selectedTableId: this.selectedTableId,
-            loading: this.loading,
-            error: this.error,
+            //selectedTableId: this.selectedTableId,
+            //loading: this.loading,
+            //error: this.error,
             selectedUserRows:this.selectedUserRows
         };
     },

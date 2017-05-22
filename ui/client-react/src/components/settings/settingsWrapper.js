@@ -13,7 +13,7 @@ import * as FeatureSwitchActions from '../../actions/featureSwitchActions';
 import * as AppActions from '../../actions/appActions';
 import {I18nMessage} from '../../utils/i18nMessage';
 import RouteWithSubRoutes from "../../scripts/RouteWithSubRoutes";
-import {getApp, getSelectedAppId} from '../../reducers/app';
+import {getApp, getSelectedAppId, getSelectedTableId} from '../../reducers/app';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
 let StoreWatchMixin = Fluxxor.StoreWatchMixin;
@@ -31,13 +31,14 @@ export const SettingsWrapper = React.createClass({
     getSelectedApp() {
         //return this.getAppFromState(this.state.apps.selectedAppId);
         const appId = this.props.getSelectedAppId();
-        return this.props.getApp(appId)
+        return this.props.getApp(appId);
     },
 
     getSelectedTable(tableId) {
         const app = this.getSelectedApp();
         if (app) {
-            return _.find(app.tables, (t) => t.id === this.state.apps.selectedTableId);
+            const selectedTableId = this.props.getSelectedTableId();
+            return _.find(app.tables, (t) => t.id === selectedTableId);
         }
     },
 
@@ -65,17 +66,21 @@ export const SettingsWrapper = React.createClass({
             if (!app) {
                 //this.props.flux.actions.loadApps();
                 this.props.loadApps();
+                this.props.loadApp(paramVals.appId);
             }
 
-            this.props.loadApp(paramVals.appId);
+            //  TODO - not sure about removing this...will work in 'normal' workflow, but what about a bookmarked flow
+            //this.props.loadApp(paramVals.appId);
             this.props.dispatch(FeatureSwitchActions.getStates(paramVals.appId));
 
             if (paramVals.tblId) {
-                this.props.flux.actions.selectTableId(paramVals.tblId);
+                //this.props.flux.actions.selectTableId(paramVals.tblId);
+                this.props.selectTable(paramVals.appId, paramVals.tblId);
             } else {
                 /*eslint no-lonely-if:0 */
-                if (this.state.apps.selectedTableId !== null) {
-                    this.props.flux.actions.selectTableId(null);
+                if (this.props.getSelectedTableId() !== null) {
+                    //this.props.flux.actions.selectTableId(null);
+                    this.props.clearSelectedTable();
                 }
             }
         } else {
@@ -89,7 +94,8 @@ export const SettingsWrapper = React.createClass({
         /*eslint no-lonely-if:0 */
         if (paramVals.appId) {
             if (this.props.match.params.appId !== paramVals.appId) {
-                this.props.loadApp(paramVals.appId);
+                //  TODO - not sure about removing this...will work in 'normal' workflow, but what about a bookmarked flow
+                //this.props.loadApp(paramVals.appId);
                 this.props.dispatch(FeatureSwitchActions.getStates(paramVals.appId));
             }
         } else {
@@ -100,25 +106,30 @@ export const SettingsWrapper = React.createClass({
 
         if (paramVals.tblId) {
             if (this.props.match.params.tblId !== paramVals.tblId) {
-                this.props.flux.actions.selectTableId(paramVals.tblId);
+                //this.props.flux.actions.selectTableId(paramVals.tblId);
+                this.props.selectTable(paramVals.appId, paramVals.tblId);
             }
         } else {
-            if (this.state.apps.selectedTableId !== null) {
-                this.props.flux.actions.selectTableId(null);
+            if (this.props.getSelectedTableId() !== null) {
+                //this.props.flux.actions.selectTableId(null);
+                this.props.clearSelectedApp();
             }
         }
     },
     getBackToAppLink() {
         let selectedAppId = this.props.getSelectedAppId();
         let link = `${UrlConsts.APP_ROUTE}/${selectedAppId}`;
-        if (this.state.apps.selectedTableId) {
-            link += `/table/${this.state.apps.selectedTableId}`;
+        let tableId = this.props.getSelectedTableId();
+        if (tableId) {
+            link += `/table/${tableId}`;
         }
         return link;
     },
 
     render() {
+        let selectedApp = this.getSelectedApp();
         let selectedTable = this.getSelectedTable();
+
         return <AppShell functionalAreaName="settings">
             <LeftNav
                 isCollapsed={this.props.isNavCollapsed}
@@ -137,8 +148,8 @@ export const SettingsWrapper = React.createClass({
                         {
                             this.props.routes.map((route, i) => {
                                 let routeProps = {
-                                    app: this.getSelectedApp(),
-                                    table: this.getSelectedTable()
+                                    app: selectedApp,
+                                    table: selectedTable
                                 };
                                 return RouteWithSubRoutes(route, i, routeProps);
                             })
@@ -150,7 +161,7 @@ export const SettingsWrapper = React.createClass({
     },
 
     getAppFromState(appId) {
-        return this.props.getApp(appid);
+        return this.props.getApp(appId);
         //if (appId && _.has(this.state.apps, 'apps')) {
         //    return _.find(this.state.apps.apps, (a) => a.id === appId);
         //}
@@ -168,13 +179,16 @@ const mapStateToProps = (state) => ({
     isNavCollapsed: !state.shell.leftNavExpanded,
     isOpen: state.shell.leftNavVisible,
     getApp: (appId) => getApp(state.app, appId),
-    getSelectedAppId: () => getSelectedAppId(state.app)
+    getSelectedAppId: () => getSelectedAppId(state.app),
+    getSelectedTableId: () => getSelectedTableId(state.app)
 });
 
 const mapDispatchToProps = (dispatch) => {
     return {
         toggleNav: () => dispatch(toggleLeftNav()),
         clearSelectedApp: () => dispatch(AppActions.clearSelectedApp()),
+        selectTable: (appId, tableId) => dispatch(AppActions.selectAppTable(appId, tableId)),
+        clearSelectedTable: () => dispatch(AppActions.clearSelectedAppTable()),
         loadApp: (appId) => dispatch(AppActions.loadApp(appId)),
         loadApps: () => dispatch(AppActions.loadApps())
     };

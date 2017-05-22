@@ -3,15 +3,17 @@
  */
 
 //  **** App actions ****
-export const CLEAR_APP = 'CLEAR_APP';
 export const LOAD_APP = 'LOAD_APP';
 export const LOAD_APP_SUCCESS = 'LOAD_APP_SUCCESS';
 export const LOAD_APP_ERROR = 'LOAD_APP_ERROR';
 export const LOAD_APPS = 'LOAD_APPS';
 export const LOAD_APPS_SUCCESS = 'LOAD_APPS_SUCCESS';
 export const LOAD_APPS_ERROR = 'LOAD_APPS_ERROR';
+
+export const CLEAR_SELECTED_APP = 'CLEAR_SELECTED_APP';
+export const CLEAR_SELECTED_APP_TABLE = 'CLEAR_SELECTED_APP_TABLE';
 export const SELECT_APP_TABLE = 'SELECT_APP_TABLE';
-export const CLEAR_APP_TABLE = 'CLEAR_APP_TABLE';
+export const UPDATE_APP_TABLE_PROPS = 'UPDATE_APP_TABLE_PROPS';
 
 //  ******** Form actions ********
 export const LOADING_FORM = 'LOADING_FORM';

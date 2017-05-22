@@ -8,6 +8,8 @@ class AppModel {
 
     init(appData) {
         this.model = {};
+        this.model.users = [];
+        this.model.unfilteredUsers = {};
 
         if (appData) {
             this.model.users = appData.users[0];
