@@ -112,8 +112,6 @@ function updateFormMetaFields(formMetaData, location) {
         let elements = formMetaData.tabs[tabIndex].sections[sectionIndex].columns[columnIndex].elements;
         formMetaData.fields = _.map(elements, (field) => field.FormFieldElement.fieldId);
     }
-    // let elements = formMetaData.tabs[tabIndex].sections[sectionIndex].columns[columnIndex].elements;
-    // formMetaData.fields = _.map(elements, (field) => field.FormFieldElement.fieldId);
 }
 
 function removeElementFromCurrentLocationById(formMetaData, draggedItemProps) {
