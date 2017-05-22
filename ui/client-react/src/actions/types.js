@@ -11,7 +11,7 @@ export const LOAD_FORM_ERROR = 'LOAD_FORM_ERROR';
 export const LOAD_FORM_SUCCESS = 'LOAD_FORM_SUCCESS';
 export const UPDATE_FORM_REDIRECT_ROUTE = 'UPDATE_FORM_REDIRECT_ROUTE';
 export const DRAGGING_LINK_TO_RECORD = 'DRAGGING_LINK_TO_RECORD';
-export const SHOW_RELATIONSHIP_DIALOG = 'SHOW_RELATIONSHIP_DIALOG';
+export const HIDE_RELATIONSHIP_DIALOG = 'HIDE_RELATIONSHIP_DIALOG';
 
 //  Used when saving a form or a record to show/hide the spinner
 export const SAVE_FORM = 'SAVE_FORM';

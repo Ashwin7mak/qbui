@@ -21,8 +21,8 @@ describe('LinkToRecordValueEditor functions', () => {
     let component;
 
     const props = {
-        showRelationshipDialog: () => {},
-        readyToShowRelationshipDialog: true,
+        hideRelationshipDialog: () => {},
+        newFormFieldId: 'newFieldId',
         updateField: () => {},
         removeFieldFromForm: () => {},
         tblId: "childTableId",
@@ -33,7 +33,7 @@ describe('LinkToRecordValueEditor functions', () => {
         childTableId: "childTableId",
         location: {},
         formId: 1,
-        fieldDef: {}
+        fieldDef: {id: 'newFieldId'}
     };
 
     it('renders LinkToRecordValueEditor component', () => {
@@ -43,12 +43,12 @@ describe('LinkToRecordValueEditor functions', () => {
     });
 
     it('simulates selecting a table', () => {
-        spyOn(props, "showRelationshipDialog");
+        spyOn(props, "hideRelationshipDialog");
         spyOn(props, "updateField");
         component = shallow(<LinkToRecordFieldValueEditor {...props}/>);
 
         component.instance().tableSelected("parentTableId");
-        expect(props.showRelationshipDialog).toHaveBeenCalled();
+        expect(props.hideRelationshipDialog).toHaveBeenCalled();
         expect(props.updateField).toHaveBeenCalled();
     });
 

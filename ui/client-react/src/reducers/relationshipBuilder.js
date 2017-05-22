@@ -2,13 +2,22 @@ import * as types from '../actions/types';
 
 const relationshipBuilder = (state = [], action) => {
     // reducer - no mutations!
+
     switch (action.type) {
 
-    case types.SHOW_RELATIONSHIP_DIALOG: {
+
+    case types.ADD_FIELD: {
+        return {
+            ...state,
+            newFormFieldId: action.content.newField.FormFieldElement.fieldId
+        };
+    }
+
+    case types.HIDE_RELATIONSHIP_DIALOG: {
 
         return {
             ...state,
-            readyToShowRelationshipDialog: action.show
+            newFormFieldId: null
         };
     }
 
@@ -17,7 +26,6 @@ const relationshipBuilder = (state = [], action) => {
         return {
             ...state,
             draggingLinkToRecord: action.dragging,
-            readyToShowRelationshipDialog: (state.draggingLinkToRecord === true) && !action.dragging // show relationship dialogs waiting for drop
         };
     }
 

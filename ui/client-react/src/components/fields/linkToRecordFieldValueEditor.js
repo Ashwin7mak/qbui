@@ -2,7 +2,7 @@ import React, {PropTypes} from 'react';
 import Locale from "../../locales/locales";
 import {CONTEXT} from "../../actions/context";
 import {removeFieldFromForm} from '../../actions/formActions';
-import {showRelationshipDialog} from '../../actions/relationshipBuilderActions';
+import {hideRelationshipDialog} from '../../actions/relationshipBuilderActions';
 import {updateField} from '../../actions/fieldsActions';
 import Select from '../select/reactSelectWrapper';
 import {connect} from 'react-redux';
@@ -17,8 +17,8 @@ import LinkToRecordTableSelectionDialog from './linkToRecordTableSelectionDialog
 export const LinkToRecordFieldValueEditor = React.createClass({
     displayName: 'LinkToRecordFieldValueEditor',
     propTypes: {
-        showRelationshipDialog: PropTypes.func,
-        readyToShowRelationshipDialog: PropTypes.bool,
+        hideRelationshipDialog: PropTypes.func,
+        newFormFieldId: PropTypes.bool,
         updateField: PropTypes.func,
         removeFieldFromForm: PropTypes.func,
         tblId: PropTypes.string,
@@ -30,12 +30,6 @@ export const LinkToRecordFieldValueEditor = React.createClass({
     getDefaultProps() {
         return {
             formId: CONTEXT.FORM.VIEW
-        };
-    },
-
-    getInitialState() {
-        return {
-            dialogWasClosed: false // once closed, don't reopen
         };
     },
 
@@ -54,9 +48,8 @@ export const LinkToRecordFieldValueEditor = React.createClass({
      * @param tableId
      */
     tableSelected(tableId) {
-        this.setState({dialogWasClosed: true});
 
-        this.props.showRelationshipDialog(false);
+        this.props.hideRelationshipDialog();
 
         const parentTable = _.find(this.props.tables, {id: tableId});
 
@@ -74,7 +67,7 @@ export const LinkToRecordFieldValueEditor = React.createClass({
      */
     cancelTableSelection() {
 
-        this.props.showRelationshipDialog(false);
+        this.props.hideRelationshipDialog();
         return this.props.removeFieldFromForm(this.props.formId, this.props.location);
     },
 
@@ -84,7 +77,7 @@ export const LinkToRecordFieldValueEditor = React.createClass({
      */
     render() {
 
-        if (this.props.readyToShowRelationshipDialog && !this.state.dialogWasClosed) {
+        if (this.props.newFormFieldId && this.props.newFormFieldId === this.props.fieldDef.id) {
             return (
                 <LinkToRecordTableSelectionDialog show={true}
                                                   childTableId={this.props.tblId}
@@ -99,9 +92,9 @@ export const LinkToRecordFieldValueEditor = React.createClass({
 
 const mapStateToProps = (state) => {
     return {
-        readyToShowRelationshipDialog: state.relationshipBuilder.readyToShowRelationshipDialog
+        newFormFieldId: !state.relationshipBuilder.draggingLinkToRecord && state.relationshipBuilder.newFormFieldId,
     };
 };
 
 
-export default connect(mapStateToProps, {showRelationshipDialog, removeFieldFromForm, updateField})(LinkToRecordFieldValueEditor);
+export default connect(mapStateToProps, {hideRelationshipDialog, removeFieldFromForm, updateField})(LinkToRecordFieldValueEditor);

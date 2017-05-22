@@ -5,16 +5,15 @@ import * as types from '../../src/actions/types';
 describe('RelationshipBuilder reducer functions', () => {
 
 
-    describe('readyToShowRelationshipDialog state', () => {
+    describe('newFormFieldId state', () => {
 
         const actionPayload = {
-            type: types.SHOW_RELATIONSHIP_DIALOG,
-            show: true
+            type: types.HIDE_RELATIONSHIP_DIALOG
         };
 
-        it('returns a new state with readyToShowRelationshipDialog set to true', () => {
+        it('returns a new state with newFormFieldId set to true', () => {
             expect(reducer({}, actionPayload)).toEqual({
-                readyToShowRelationshipDialog: true
+                newFormFieldId: null
             });
         });
     });
@@ -29,7 +28,6 @@ describe('RelationshipBuilder reducer functions', () => {
         it('returns a new state with draggingLinkToRecord set to true', () => {
             expect(reducer({}, startDraggingActionPayload)).toEqual({
                 draggingLinkToRecord: true,
-                readyToShowRelationshipDialog: false
             });
         });
 
@@ -39,8 +37,7 @@ describe('RelationshipBuilder reducer functions', () => {
         };
         it('returns a new state with draggingLinkToRecord set to false', () => {
             expect(reducer({draggingLinkToRecord: true}, endDraggingActionPayload)).toEqual({
-                draggingLinkToRecord: false,
-                readyToShowRelationshipDialog: true
+                draggingLinkToRecord: false
             });
         });
     });

@@ -6,10 +6,9 @@ import * as types from '../actions/types';
  * @param show link to record field should display its initial table picker dialog
  * @returns {{type, show: boolean}}
  */
-export const showRelationshipDialog = (show = true) => {
+export const hideRelationshipDialog = () => {
     return {
-        type: types.SHOW_RELATIONSHIP_DIALOG,
-        show
+        type: types.HIDE_RELATIONSHIP_DIALOG
     };
 };
 
