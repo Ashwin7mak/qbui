@@ -5,15 +5,17 @@
     'use strict';
 
     //Load the page Objects
-    var NewStackAuthPO = requirePO('newStackAuth');
-    var e2ePageBase = requirePO('e2ePageBase');
-    var RequestAppsPage = requirePO('requestApps');
-    var UsersTablePage = requirePO('usersTable');
+    let NewStackAuthPO = requirePO('newStackAuth');
+    let e2ePageBase = requirePO('e2ePageBase');
+    let RequestAppsPage = requirePO('requestApps');
+    let UsersTablePage = requirePO('usersTable');
+    let ReportContentPO = requirePO('reportContent');
+    let ReportTableActionsPO = requirePO('reportTableActions');
 
     describe('Users - Application user management table tests: ', function() {
-        var realmName;
-        var realmId;
-        var testApp;
+        let realmName;
+        let realmId;
+        let testApp;
         /**
          * Setup method. Creates test app then authenticates into the new stack
          */
@@ -42,7 +44,7 @@
             //load the users page
             RequestAppsPage.get(e2eBase.getRequestUsersEndpoint(realmName, testApp.id));
             //Wait until user table rows are loaded
-            UsersTablePage.waitForUserReportContent();
+            ReportContentPO.waitForReportContent();
             //Wait until you see new User button
             return UsersTablePage.newUserBtn.waitForVisible();
         });
@@ -78,9 +80,9 @@
          */
         it('Should select first row of users and display total with action icons', function() {
             // Select first row of records checkbox
-            UsersTablePage.selectUserRowCheckbox(1);
+            ReportTableActionsPO.selectRecordRowCheckbox(1);
             // Assert user selected count
-            expect(UsersTablePage.getUsersSelectedCount()).toBe("1");
+            expect(ReportTableActionsPO.getReportRecordsSelectedCount()).toBe("1");
             // Verify the number of user action icons
             expect(UsersTablePage.userActionsListEl.value.length).toBe(4);
         });
@@ -90,16 +92,16 @@
          */
         it('Should select all users, unselect one user, verify unchecked', function() {
             // Select all records checkbox
-            UsersTablePage.selectAllUsersCheckbox();
+            ReportTableActionsPO.selectAllRecordsCheckbox();
             expect(browser.isSelected('.selectAllCheckbox')).toBe(true);
             // Assert user selected count
-            expect(UsersTablePage.getUsersSelectedCount()).toBe("6");
+            expect(ReportTableActionsPO.getReportRecordsSelectedCount()).toBe("6");
             // Select first user row
-            UsersTablePage.selectUserRowCheckbox(1);
+            ReportTableActionsPO.selectRecordRowCheckbox(1);
             // Assert select all users is unchecked
             expect(browser.isSelected('.selectAllCheckbox')).toBe(false);
             // Assert user selected count
-            expect(UsersTablePage.getUsersSelectedCount()).toBe("5");
+            expect(ReportTableActionsPO.getReportRecordsSelectedCount()).toBe("5");
         });
 
         /**

@@ -40,15 +40,6 @@
             return colHeaders;
         }},
 
-        // All users checkbox on user table
-        userSelectAllCheckbox: {get: function() {return browser.element('.selectAllCheckbox');}},
-
-        // Records row checkbox on user table
-        userSelectRowCheckbox: {get: function() {return browser.elements('.selectRowCheckbox');}},
-
-        // Users selected count label on user table
-        userSelectedRowLabel: {get: function() {return browser.element('.selectedRowsLabel');}},
-
         // Send invite email button
         userSendInviteEmail: {get: function() {return browser.element('.disabled.qbIcon.iconUISturdy-mail');}},
 
@@ -78,88 +69,6 @@
 
         // User email field in user table
         userEmailLink: {get: function() {return browser.element('.qbCell.urlField .link');}},
-
-        /**
-         * Returns total users selected count
-         */
-        getUserSelectedCount: {value: function() {
-            return (this.userSelectedRowLabel.getText());
-        }},
-
-        /**
-         * Helper method to ensure the user report has been properly loaded with records. Will throw an error if no users are in the report.
-         * @returns A promise that will resolve after waiting for the report records to be displayed
-         */
-        waitForUserReportContent: {value: function() {
-            // wait until you see .qbTbody
-            browser.element('.qbTbody').waitForVisible();
-            return browser.element('.qbRow').waitForVisible();
-        }},
-
-        getUserRowElement: {value: function(recordIndex) {
-            return this.getAllRows.value[recordIndex];
-        }},
-
-        /**
-         * Returns users selected count
-         */
-        getUsersSelectedCount: {value: function() {
-            return (this.userSelectedRowLabel.getText());
-        }},
-
-        /**
-         * Select a user row checkbox
-         */
-        selectUserRowCheckbox : {value: function(recordRowIndex) {
-            //get all checkboxes in the report table first column
-            var getAllCheckBoxs = this.userSelectRowCheckbox.value.filter(function(checkbox) {
-                return checkbox.index === recordRowIndex;
-            });
-
-            if (getAllCheckBoxs !== []) {
-                getAllCheckBoxs[0].click();
-            } else {
-                throw new Error('Checkbox not found at row ' + recordRowIndex);
-            }
-        }},
-
-        /**
-         * Select all users checkbox
-         */
-        selectAllUsersCheckbox : {value: function() {
-            return (this.userSelectAllCheckbox.click());
-        }},
-
-        /**
-         * Get a record row element that is being viewed in qbGrid (based on recordIndex), return the value of the specified cell index
-         * If no cell index defined, function will return all values from all the cells
-         * @param recordIndex
-         * @param recordCellIndex
-         * @returns either an array of cell values (as strings) or one value of a cell
-         */
-        getUserValues: {value: function(recordIndex, recordCellIndex) {
-            this.waitForUserReportContent();
-            var recordRowElement = this.getRecordRowElement(recordIndex);
-            var recordRowCells = this.getRecordRowCells(recordRowElement);
-            // Return all record values if no cell number supplied
-            if (typeof recordCellIndex === 'undefined') {
-                var cellValues = [];
-                for (var i = 0; i < recordRowCells.value.length; i++) {
-                    var cellValue = this.getRecordCellValue(recordRowCells.value[i]);
-                    cellValues.push(cellValue);
-                }
-                // Do post processing
-                for (var j = 0; j < cellValues.length; j++) {
-                    cellValues[j] = this.formatRecordValue(cellValues[j]);
-                }
-                return cellValues;
-            } else {
-                // Get the value for a specific cell number
-                var cellValue2 = this.getRecordCellValue(recordRowCells.value[recordCellIndex]);
-                // Do post processing
-                return this.formatRecordValue(cellValue2);
-            }
-        }},
     });
 
     module.exports = UsersTablePage;

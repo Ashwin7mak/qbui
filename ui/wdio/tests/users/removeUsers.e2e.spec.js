@@ -1,16 +1,21 @@
+/**
+ * E2E tests for remove users from application
+ */
 (function() {
     'use strict';
 
     //Load the page Objects
-    var e2ePageBase = requirePO('e2ePageBase');
-    var NewStackAuthPO = requirePO('newStackAuth');
-    var RequestAppsPage = requirePO('requestApps');
-    var UsersTablePage = requirePO('usersTable');
+    let e2ePageBase = requirePO('e2ePageBase');
+    let NewStackAuthPO = requirePO('newStackAuth');
+    let RequestAppsPage = requirePO('requestApps');
+    let UsersTablePage = requirePO('usersTable');
+    let ReportContentPO = requirePO('reportContent');
+    let ReportTableActionsPO = requirePO('reportTableActions');
 
     describe('Users - Remove user(s) tests: ', function() {
-        var realmName;
-        var realmId;
-        var testApp;
+        let realmName;
+        let realmId;
+        let testApp;
         /**
          * Setup method. Creates test app then authenticates into the new stack
          */
@@ -39,7 +44,7 @@
             //load the users page
             RequestAppsPage.get(e2eBase.getRequestUsersEndpoint(realmName, testApp.id));
             //wait until user table rows are loaded
-            UsersTablePage.waitForUserReportContent();
+            ReportContentPO.waitForReportContent();
             //Wait until you see newUser button
             return UsersTablePage.newUserBtn.waitForVisible();
         });
@@ -50,7 +55,7 @@
         it('Should select remove a single user and check for the success message', function() {
 
             // Step 1: Select the checkbox and click on delete icon
-            UsersTablePage.selectUserRowCheckbox(1);
+            ReportTableActionsPO.selectRecordRowCheckbox(1);
             UsersTablePage.userRemoveIcon.click();
 
             // Step 2: Click on delete button from the dialogue box
@@ -60,8 +65,8 @@
             browser.pause(e2eConsts.shortWaitTimeMs);
 
             // Step 3: Check for the deleted record
-            UsersTablePage.selectAllUsersCheckbox();
-            expect(UsersTablePage.getUsersSelectedCount()).toBe("5");
+            ReportTableActionsPO.selectAllRecordsCheckbox();
+            expect(ReportTableActionsPO.getReportRecordsSelectedCount()).toBe("5");
         });
 
         /**
@@ -70,7 +75,7 @@
         it('Should select remove a single user and cancel ', function() {
 
             // Step 1: Select the checkbox and click on delete icon
-            UsersTablePage.selectUserRowCheckbox(1);
+            ReportTableActionsPO.selectRecordRowCheckbox(1);
             UsersTablePage.userRemoveIcon.click();
 
             // Step 2: Click on cancel button from the dialogue box
@@ -80,8 +85,8 @@
             browser.pause(e2eConsts.shortWaitTimeMs);
 
             // Step 3: Check for the deleted record
-            UsersTablePage.selectAllUsersCheckbox();
-            expect(UsersTablePage.getUsersSelectedCount()).toBe("5");
+            ReportTableActionsPO.selectAllRecordsCheckbox();
+            expect(ReportTableActionsPO.getReportRecordsSelectedCount()).toBe("5");
         });
     });
 }());
