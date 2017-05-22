@@ -11,6 +11,7 @@
     let RequestAppsPage = requirePO('requestApps');
     var tableCreatePO = requirePO('tableCreate');
     let reportContentPO = requirePO('reportContent');
+    var e2ePageBase = requirePO('e2ePageBase');
 
     describe('Reports Page - LeftNav Tests: ', function() {
         let realmName;
