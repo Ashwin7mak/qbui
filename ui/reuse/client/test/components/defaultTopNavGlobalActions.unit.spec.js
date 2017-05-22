@@ -3,6 +3,8 @@ import {shallow, mount} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
 
 import DefaultTopNavGlobalActions from 'REUSE/components/topNav/defaultTopNavGlobalActions';
+import UserFeedBack from 'REUSE/components/topNav/supportingComponents/userFeedBack';
+import HelpButton from 'REUSE/components/topNav/supportingComponents/helpButton';
 import UserDropDown from 'REUSE/components/topNav/supportingComponents/userDropDown';
 import ReGlobalAction from 'REUSE/components/globalAction/globalAction';
 
@@ -17,6 +19,22 @@ describe('DefaultTopNavGlobalActions', () => {
         component = mount(<DefaultTopNavGlobalActions/>);
 
         expect(component.find(UserDropDown)).toBePresent();
+    });
+
+    it('renders the feedback button if hasFeedback is true', () => {
+        component = shallow(<DefaultTopNavGlobalActions hasFeedback={true} />);
+
+        expect(component.find(UserFeedBack)).toBePresent();
+        expect(component.find(UserFeedBack)).toHaveProp('startTabIndex');
+        expect(component.find(UserFeedBack)).toHaveProp('shouldOpenMenusUp');
+    });
+
+    it('does not render the feedback button if hasFeedback is false', () => {
+        component = shallow(<DefaultTopNavGlobalActions hasFeedback={false} />);
+
+        expect(component.find(UserFeedBack)).not.toBePresent();
+        expect(component.find(UserDropDown)).toBePresent();
+        expect(component.find(HelpButton)).toBePresent();
     });
 
     it('can optionally display an array of global actions', () => {

@@ -10,16 +10,19 @@ import QBIcon from '../../../../../../reuse/client/src/components/icon/icon';
 import AppSettingsStage from '../appSettingsStage';
 import Locale from '../../../../../../reuse/client/src/locales/locale';
 import UserActions from '../../../actions/userActions';
+import {connect} from 'react-redux';
+import {loadAppRoles} from '../../../../actions/appRoleActions';
+import {getAppRoles} from '../../../../reducers/appRoles';
 import './appUsersRoute.scss';
 
-const AppUsersRoute = React.createClass({
+export const AppUsersRoute = React.createClass({
     getInitialState() {
         return {
             roleId: ''
         };
     },
     componentDidMount() {
-        this.props.flux.actions.loadAppRoles(this.props.match.params.appId);
+        this.props.loadAppRoles(this.props.match.params.appId);
         this.props.flux.actions.loadAppOwner(this.props.selectedApp.ownerId);
         this.props.flux.actions.getAllUsers();
     },
@@ -27,16 +30,16 @@ const AppUsersRoute = React.createClass({
     componentWillReceiveProps(props) {
         if (props.match.params.appId && props.selectedApp.ownerId) {
             if (this.props.match.params.appId !== props.match.params.appId) {
-                this.props.flux.actions.loadAppRoles(this.props.match.params.appId);
+                this.props.loadAppRoles(this.props.match.params.appId);
                 this.props.flux.actions.loadAppOwner(this.props.selectedApp.ownerId);
             }
         } else {
-            this.props.flux.actions.loadAppRoles(null);
+            this.props.loadAppRoles(null);
             this.props.flux.actions.loadAppOwner(null);
         }
 
         if (this.props.match.params.appId !== props.match.params.appId && this.props.selectedApp.ownerId !== props.selectedApp.ownerId) {
-            this.props.flux.actions.loadAppRoles(this.props.match.params.appId);
+            this.props.loadAppRoles(this.props.match.params.appId);
             this.props.flux.actions.loadAppOwner(this.props.selectedApp.ownerId);
         }
     },
@@ -158,15 +161,16 @@ const AppUsersRoute = React.createClass({
     },
 
     render() {
+        if (this.props.appRoles) {
         return (
             <div>
                 <Stage stageHeadline={this.getStageHeadline()}
                        pageActions={this.getPageActions()}>
 
-                    <AppSettingsStage appUsers={this.props.appUsersUnfiltered}
-                                      appRoles={this.props.appRoles}
-                                      appOwner={this.props.appOwner}/>
-                </Stage>
+                        <AppSettingsStage appUsers={this.props.appUsersUnfiltered}
+                                          appRoles={this.props.appRoles}
+                                          appOwner={this.props.appOwner}/>
+                    </Stage>
                 <AddUserDialog allUsers={this.props.allUsers}
                                searchUsers={this.props.flux.actions.getAllUsers}
                                appRoles={this.props.appRoles}
@@ -178,21 +182,40 @@ const AppUsersRoute = React.createClass({
                                existingUsers={this.props.appUsersUnfiltered}
                                addUserToAppDialogOpen={this.props.addUserToAppDialogOpen}
                                hideDialog={this.toggleAddUserDialog}/>
-                {this.getTableActions()}
-                <div className="userManagementContainer">
-                    <UserManagement appId={this.props.match.params.appId}
-                                    appUsers={this.props.appUsersUnfiltered}
-                                    appRoles={this.props.appRoles}
-                                    onClickToggleSelectedRow={this.toggleSelectedRow}
-                                    onClickToggleSelectAllRows={this.toggleSelectAllRows}
-                                    selectedRows={this.props.selectedUserRows}
-                                    areAllRowsSelected={this.areAllRowsSelected()}
-                    />
+                    {this.getTableActions()}
+                    <div className="userManagementContainer">
+                        <UserManagement appId={this.props.match.params.appId}
+                                        appUsers={this.props.appUsersUnfiltered}
+                                        appRoles={this.props.appRoles}
+                                        onClickToggleSelectedRow={this.toggleSelectedRow}
+                                        onClickToggleSelectAllRows={this.toggleSelectAllRows}
+                                        selectedRows={this.props.selectedUserRows}
+                                        areAllRowsSelected={this.areAllRowsSelected()}
+                        />
+                    </div>
                 </div>
-            </div>
-        );
+            );
+
+        } else {
+            return (<div></div>);
+        }
     }
 
 });
 
-export default AppUsersRoute;
+const mapStateToProps = (state, ownProps) => {
+    return {
+        appRoles: getAppRoles(state.appRoles, ownProps.match.params.appId)
+    };
+};
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        loadAppRoles: (appId) => {dispatch(loadAppRoles(appId));}
+    };
+};
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(AppUsersRoute);
