@@ -47,8 +47,6 @@
          * Test methods to verify all elements present / hidden in leftNav
          */
         it('Verify if leftNav collapses of clicking hamburger menu on tables page', function() {
-            //select the App
-            RequestAppsPage.selectApp(testApp.name);
             //select table
             tableCreatePO.selectTable(testApp.tables[e2eConsts.TABLE1].name);
             reportContentPO.waitForLeftNavLoaded();
