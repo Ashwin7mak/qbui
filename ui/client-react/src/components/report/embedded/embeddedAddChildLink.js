@@ -2,6 +2,7 @@ import React, {PropTypes} from 'react';
 import {connect} from 'react-redux';
 import {Link} from 'react-router-dom';
 import {withRouter} from 'react-router-dom';
+import Icon from '../../../../../reuse/client/src/components/icon/icon';
 
 import {addChildRecord} from '../../../actions/recordActions';
 import QBicon from '../../qbIcon/qbIcon';
@@ -40,9 +41,9 @@ export const EmbeddedAddChildLink = React.createClass({
         const childTableMessage = <I18nMessage message="relationship.addChildRecord" tableNoun={noun}/>;
         return (
             <div className="linkContainer addChild">
-                <Link to={link} className="linkInRecord btn btn-default">
-                    <QBicon icon="add-mini" />
-                    {childTableMessage}
+                <Link to={link} className="linkInRecord btn btn-default addChildBtn">
+                    <Icon icon="add-new-stroke" />
+                    <span className="tableName">{childTableMessage}</span>
                 </Link>
             </div>
         );

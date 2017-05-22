@@ -404,7 +404,7 @@ export const RecordTrowser = React.createClass({
         const showNext = !!(record.nextRecordId);
 
         let relatedRecord =  _.has(this.props, 'editForm.formData.record') ? this.props.editForm.formData.record : null;
-        let recordName = getRecordTitle(this.props.selectedTable, relatedRecord, this.props.recId);
+        let recordName = getRecordTitle(this.props.editingTable, relatedRecord, this.props.recId);
         //const recordName = this.props.editingTable && this.props.editingTable.name;
 
         let title = this.props.recId === SchemaConsts.UNSAVED_RECORD_ID ? <span><I18nMessage message="nav.new"/><span>&nbsp;{recordName}</span></span> :

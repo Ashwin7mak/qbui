@@ -33,9 +33,6 @@ describe('EmbeddedReportLink', () => {
         uniqueId
     };
 
-    const report = {
-        recordsCount: 42
-    };
 
     const LinkMock = React.createClass({
         render() {
@@ -106,30 +103,9 @@ describe('EmbeddedReportLink', () => {
     it('renders a Link', () => {
         component = mount(
             <UnconnectedEmbeddedReportLink
-                loadReportRecordsCount={() => null}
-                report={report}
                 {...props} />
         );
         expect(component.find(LinkMock).length).toEqual(1);
     });
 
-    it(`displays child table's name`, () => {
-        component = mount(
-            <UnconnectedEmbeddedReportLink
-                loadReportRecordsCount={() => null}
-                report={report}
-                {...props} />
-        );
-        expect(component.text()).toContain(childTableName);
-    });
-
-    it('displays records count', () => {
-        component = mount(
-            <UnconnectedEmbeddedReportLink
-                loadReportRecordsCount={() => null}
-                report={report}
-                {...props} />
-        );
-        expect(component.text()).toContain(report.recordsCount);
-    });
 });

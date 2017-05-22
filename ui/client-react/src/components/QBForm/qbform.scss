@@ -91,6 +91,12 @@ $edit-field-padding: 5px;
                 //padding-top: 5px;
             }
 
+            .formElementContainer .reportDetail {
+                color: $field-label-normal-color;
+                font-weight: bold;
+                padding-bottom: 10px;
+            }
+
             @include small-breakpoint {
                 flex-wrap: wrap;
 

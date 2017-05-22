@@ -1,5 +1,5 @@
 import React from 'react';
-import {shallow, mount} from 'enzyme';
+import {shallow} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
 
 import ChildReport, {__RewireAPI__ as ChildReportRewireAPI} from '../../src/components/QBForm/childReport';
@@ -34,6 +34,23 @@ const MockChildReport = (props) => {
     return <ChildReport {...props} />;
 };
 
+const MockNonEmbeddedChildReport = (props) => {
+    props = Object.assign({
+        appId,
+        childAppId,
+        childTableId,
+        childReportId,
+        childTableName,
+        detailKeyFid,
+        detailKeyValue,
+        type: 'NOTEMBEDREPORT'
+    }, props);
+    return <ChildReport {...props} />;
+};
+
+const I18nMessageMock = (input) => <div>{input}</div>;
+
+
 const EmbeddedReportToolsAndContentMock = (props) => <div className="embeddedReportContainer"></div>;
 const EmbeddedReportLinkMock = (props) => <div className="embeddedReportLink"></div>;
 const EmbeddedAddChildLinkMock = (props) => <div className="embeddedAddChildLink"></div>;
@@ -44,12 +61,14 @@ describe('ChildReport', () => {
         ChildReportRewireAPI.__Rewire__('EmbeddedReportToolsAndContent', EmbeddedReportToolsAndContentMock);
         ChildReportRewireAPI.__Rewire__('EmbeddedReportLink', EmbeddedReportLinkMock);
         ChildReportRewireAPI.__Rewire__('EmbeddedAddChildLink', EmbeddedAddChildLinkMock);
+        ChildReportRewireAPI.__Rewire__('I18nMessage', I18nMessageMock);
     });
 
     afterAll(() => {
         ChildReportRewireAPI.__ResetDependency__('EmbeddedReportToolsAndContent');
         ChildReportRewireAPI.__ResetDependency__('EmbeddedReportLink');
-        ChildReportRewireAPI.__ResetDependency__('EmbeddedAddChildLink', EmbeddedAddChildLinkMock);
+        ChildReportRewireAPI.__ResetDependency__('EmbeddedAddChildLink');
+        ChildReportRewireAPI.__ResetDependency__('I18nMessage');
     });
 
     let component, domComponent;
@@ -74,8 +93,10 @@ describe('ChildReport', () => {
 
             const embeddedReportContainer = component.find(EmbeddedReportToolsAndContentMock);
             const embeddedReportLink = component.find(EmbeddedReportLinkMock);
+            const embeddedAddChildLinkMock = component.find(EmbeddedAddChildLinkMock);
             expect(embeddedReportContainer).not.toBePresent();
             expect(embeddedReportLink).not.toBePresent();
+            expect(embeddedAddChildLinkMock).not.toBePresent();
         });
     });
 
@@ -84,6 +105,34 @@ describe('ChildReport', () => {
             component = shallow(MockChildReport());
             const embeddedReportContainer = component.find(EmbeddedReportToolsAndContentMock);
             expect(embeddedReportContainer).toBePresent();
+        });
+
+        it('renders EmbeddedAddChildLink', () => {
+            component = shallow(MockChildReport());
+            const embeddedAddChildLink = component.find(EmbeddedAddChildLinkMock);
+            expect(embeddedAddChildLink).toBePresent();
+        });
+
+
+        it('renders EmbeddedAddChildLink before EmbeddedReportToolsAndContent', () => {
+            component = shallow(MockChildReport());
+            const embeddedAddChildLink = component.find(EmbeddedAddChildLinkMock);
+            expect(embeddedAddChildLink).toBePresent();
+            const embeddedReportContainer = component.find(EmbeddedReportToolsAndContentMock);
+            expect(embeddedReportContainer).toBePresent();
+            const firstChild = component.find('.childReportContainer').childAt(0);
+            const secondChild = component.find('.childReportContainer').childAt(1);
+            expect(firstChild.type()).toEqual(EmbeddedAddChildLinkMock);
+            expect(secondChild.type()).toEqual(EmbeddedReportToolsAndContentMock);
+        });
+
+
+        it('doesn\'t render if not EMBEDDEDREPORT type', () => {
+            component = shallow(MockNonEmbeddedChildReport());
+            const embeddedReportContainer = component.find(EmbeddedReportToolsAndContentMock);
+            const embeddedReportLink = component.find(EmbeddedReportLinkMock);
+            expect(embeddedReportContainer).not.toBePresent();
+            expect(embeddedReportLink).not.toBePresent();
         });
 
         it('passes the needed props to EmbeddedReportToolsAndContent', () => {
@@ -105,7 +154,42 @@ describe('ChildReport', () => {
             expect(passedProps.detailKeyFid).toEqual(expectedProps.detailKeyFid);
             expect(passedProps.detailKeyValue).toEqual(expectedProps.detailKeyValue);
         });
+
+        describe('report details', () => {
+            const childTableName = `Yogi's Awesome Bespoke Table`;
+            const report = {
+                recordsCount: 42
+            };
+            const testProps = {
+                report,
+                childTableName,
+                loadReportRecordsCount: () => null,
+            };
+            const testPropsReportLink = Object.assign({}, {type:'REPORTLINK'}, testProps)
+
+            it(`displays child table's name when showing report link buttons'`, () => {
+                component = shallow(MockChildReport(testPropsReportLink));
+                expect(component.text()).toContain(childTableName);
+            });
+
+            it('displays records count when showing report link buttons', () => {
+                component = shallow(MockChildReport(testPropsReportLink));
+                expect(component.text()).toContain(report.recordsCount);
+            });
+
+            it(`doesn't display child table's name when NOT showing report link buttons'`, () => {
+                component = shallow(MockChildReport(testProps));
+                expect(component.text()).not.toContain(childTableName);
+            });
+
+            it(`doesn't display records count when NOT showing report link buttons'`, () => {
+                component = shallow(MockChildReport(testProps));
+                expect(component.text()).not.toContain(report.recordsCount);
+            });
+        });
+
     });
+
 
     describe('in Small Breakpoint', () => {
         beforeAll(() => {
@@ -119,6 +203,25 @@ describe('ChildReport', () => {
             component = shallow(MockChildReport());
             const embeddedReportLink = component.find(EmbeddedReportLinkMock);
             expect(embeddedReportLink).toBePresent();
+        });
+
+        it('renders EmbeddedAddChildLink', () => {
+            component = shallow(MockChildReport());
+            const embeddedAddChildLink = component.find(EmbeddedAddChildLinkMock);
+            expect(embeddedAddChildLink).toBePresent();
+        });
+
+
+        it('renders EmbeddedReportToolsAndContent before EmbeddedAddChildLink  ', () => {
+            component = shallow(MockChildReport());
+            const embeddedAddChildLink = component.find(EmbeddedAddChildLinkMock);
+            expect(embeddedAddChildLink).toBePresent();
+            const embeddedReportContainer = component.find(EmbeddedReportLinkMock);
+            expect(embeddedReportContainer).toBePresent();
+            const firstChild = component.find('.childReportContainer').childAt(0);
+            const secondChild = component.find('.childReportContainer').childAt(1);
+            expect(firstChild.type()).toEqual(EmbeddedReportLinkMock);
+            expect(secondChild.type()).toEqual(EmbeddedAddChildLinkMock);
         });
     });
 });
