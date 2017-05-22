@@ -133,6 +133,8 @@ const forms = (
 
         let {newLocation, draggedItemProps} = action.content;
 
+        console.log('draggedItemProps: ', draggedItemProps);
+
         updatedForm.formData.formMeta = MoveFieldHelper.moveField(
             updatedForm.formData.formMeta,
             newLocation,
@@ -190,7 +192,7 @@ const forms = (
             }
         }
 
-        updatedForm.formData.formMeta = MoveFieldHelper.addNewFieldToForm(
+        updatedForm.formData.formMeta = MoveFieldHelper.addFieldToForm(
             updatedForm.formData.formMeta,
             newLocation,
             {...field}

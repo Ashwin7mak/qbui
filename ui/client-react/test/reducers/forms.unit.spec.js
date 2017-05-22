@@ -259,7 +259,7 @@ describe('Forms reducer functions', () => {
             }
         };
         const mockMoveFieldHelper = {
-            addNewFieldToForm(_formMeta, _location, _field) {return updatedFormMeta;}
+            addFieldToForm(_formMeta, _location, _field) {return updatedFormMeta;}
         };
 
         const actionPayload = {
@@ -272,7 +272,7 @@ describe('Forms reducer functions', () => {
         };
 
         beforeEach(() => {
-            spyOn(mockMoveFieldHelper, 'addNewFieldToForm').and.callThrough();
+            spyOn(mockMoveFieldHelper, 'addFieldToForm').and.callThrough();
             ReducerRewireAPI.__Rewire__('MoveFieldHelper', mockMoveFieldHelper);
         });
 
@@ -290,7 +290,7 @@ describe('Forms reducer functions', () => {
                     isPendingEdit: true,
                 }
             });
-            expect(mockMoveFieldHelper.addNewFieldToForm).toHaveBeenCalledWith(
+            expect(mockMoveFieldHelper.addFieldToForm).toHaveBeenCalledWith(
                 stateForAddingField[VIEW].formData.formMeta, 1, {}
             );
         });
@@ -298,7 +298,7 @@ describe('Forms reducer functions', () => {
         it('returns existing state if there is no current form', () => {
             expect(reducer(stateWithEditForm, actionPayload)).toEqual(stateWithEditForm);
 
-            expect(mockMoveFieldHelper.addNewFieldToForm).not.toHaveBeenCalled();
+            expect(mockMoveFieldHelper.addFieldToForm).not.toHaveBeenCalled();
         });
     });
 

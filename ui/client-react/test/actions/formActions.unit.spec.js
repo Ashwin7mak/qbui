@@ -411,10 +411,10 @@ describe('Form Actions', () => {
             });
         });
     });
-    describe('addNewFieldToForm', () => {
+    describe('addFieldToForm', () => {
         it('creates an action that will add a field', () => {
             const testNewField = {id: 'newField_1', edit: true, FormFieldElement: {positionSameRow: false, fieldId: 'newField_1', displayText: 'New Text Field'}};
-            expect(formActions.addNewFieldToForm('view', 1, 2, 3, testNewField)).toEqual({
+            expect(formActions.addFieldToForm('view', 1, 2, 3, testNewField)).toEqual({
                 id: 'view',
                 type: types.ADD_FIELD,
                 appId: 1,

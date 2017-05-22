@@ -191,7 +191,7 @@ export const loadForm = (appId, tblId, rptId, formType, recordId, context) => {
 };
 
 /**
- * Private function for addNewFieldToForm, not exported
+ * Private function for addFieldToForm, not exported
  * */
 const buildField = (field, id) => {
     id = id || _.uniqueId('newField_');
