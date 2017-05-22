@@ -246,6 +246,14 @@ export const QBForm = React.createClass({
         );
     },
 
+    setAnimationRunning() {
+        return this.props.updateAnimationState(true);
+    },
+
+    setAnimationStopped() {
+        return this.props.updateAnimationState(false);
+    },
+
     /**
      * Creates a column of rows on the form
      * @param column
@@ -277,8 +285,8 @@ export const QBForm = React.createClass({
                     staggerDelayBy={0}
                     staggerDurationBy={0}
                     delay={0}
-                    onStartAll={() => this.props.updateAnimationState(true)}
-                    onFinishAll={() => this.props.updateAnimationState(false)}
+                    onStartAll={this.setAnimationRunning}
+                    onFinishAll={this.setAnimationStopped}
                 >
                     {elements}
                 </FlipMove>
@@ -368,8 +376,6 @@ export const QBForm = React.createClass({
                   formBuilderContainerContentElement={this.props.formBuilderContainerContentElement}
                   beginDrag={this.props.beginDrag}
                   handleFormReorder={this.props.handleFormReorder}
-                  cacheDragElement={this.props.cacheDragElement}
-                  clearDragElementCache={this.props.clearDragElementCache}
                   containingElement={containingElement}
                   element={FormFieldElement}
                   key={`fieldElement-${containingElement.id}`}

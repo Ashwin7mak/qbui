@@ -13,10 +13,6 @@ import _ from "lodash";
  */
 const fieldDragSource = {
     beginDrag(props, monitor, component) {
-        if (props.cacheDragElement) {
-            props.cacheDragElement(component);
-        }
-
         if (props.beginDrag) {
             props.beginDrag(props);
         }
@@ -67,9 +63,6 @@ const fieldDragSource = {
             props.endDrag();
         }
 
-        if (props.clearDragElementCache) {
-            props.clearDragElementCache();
-        }
         if (props.endDraggingState) {
             props.endDraggingState(props.formId);
         }
