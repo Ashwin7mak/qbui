@@ -25,7 +25,7 @@ export const getAppRolesObject = (state, appId) => {
  * @returns {*}
  */
 const appRolesStore = (state = {}, action) => {
-    let newState = state;
+    let newState = _.cloneDeep(state);
     if (newState[action.appId]) {
         delete newState[action.appId];
     }
