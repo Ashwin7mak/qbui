@@ -29,7 +29,7 @@ var config = {
             maxInstances: 5,
             //For iOS
             appiumVersion: '1.6.4',
-            deviceName: 'iPad SimulatoriPad Simulator',
+            deviceName: 'iPad Simulator',
             deviceOrientation: 'landscape',
             platformVersion: '10.2',
             platformName: 'iOS',
