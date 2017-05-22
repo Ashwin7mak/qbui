@@ -79,8 +79,7 @@ const actionPropType = React.PropTypes.shape({
 
 DefaultTopNavGlobalActions.propTypes = {
     /**
-     * Determines whether the feedback button should be shown or not
-     */
+     * Determines whether the feedback button should be shown or not */
     hasFeedBack: PropTypes.bool,
     linkClass: PropTypes.string,
 
