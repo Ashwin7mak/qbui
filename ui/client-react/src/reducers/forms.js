@@ -464,7 +464,9 @@ export const getSelectedFormElement = (state, id) => {
     }
 
     const {tabIndex, sectionIndex, columnIndex, elementIndex} = currentForm.selectedFields[0];
-    return currentForm.formData.formMeta.tabs[tabIndex].sections[sectionIndex].columns[columnIndex].elements[elementIndex];
+    if (_.has(currentForm, `formData.formMeta.tabs[${tabIndex}].sections[${sectionIndex}].columns[${columnIndex}].elements`)) {
+        return currentForm.formData.formMeta.tabs[tabIndex].sections[sectionIndex].columns[columnIndex].elements[elementIndex];
+    }
 };
 
 export const getExistingFields = (state, id) => {

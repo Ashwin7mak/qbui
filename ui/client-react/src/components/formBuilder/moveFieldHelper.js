@@ -108,10 +108,11 @@ function hasRequiredArguments(formMeta, newLocation, draggedItemProps) {
 
 function updateFormMetaFields(formMetaData, location) {
     let {tabIndex, sectionIndex, columnIndex} = location;
-    let elements = formMetaData.tabs[tabIndex].sections[sectionIndex].columns[columnIndex].elements;
-    formMetaData.fields = _.map(elements, (field) => field.FormFieldElement.fieldId);
+    if (_.has(formMetaData, `formMetaData.tabs[${tabIndex}].sections[${sectionIndex}].columns[${columnIndex}].elements`)) {
+        let elements = formMetaData.tabs[tabIndex].sections[sectionIndex].columns[columnIndex].elements;
+        formMetaData.fields = _.map(elements, (field) => field.FormFieldElement.fieldId);
+    }
 }
-
 
 function removeElementFromCurrentLocationById(formMetaData, draggedItemProps) {
     let updatedElementLocation = findCurrentElementLocation(formMetaData, draggedItemProps.containingElement);
