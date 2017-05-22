@@ -9,6 +9,8 @@ import {CONTEXT} from '../../../actions/context';
 import {ENTER_KEY, SPACE_KEY} from '../../../../../reuse/client/src/components/keyboardShortcuts/keyCodeConstants';
 import _ from 'lodash';
 import DraggableField from '../draggableField';
+import fieldFormats from '../../../utils/fieldFormats';
+import Locale from '../../../../../reuse/client/src/locales/locale';
 
 /**
  * A FieldToken that is extended to be displayed in a menu (i.e., Tool Palette) when building a form.
@@ -16,6 +18,30 @@ import DraggableField from '../draggableField';
 export class FieldTokenInMenu extends Component {
     render() {
         const fieldToken = <FieldToken isDragging={false} {...this.props} />;
+
+        if (this.props.tooltipText) {
+            return (
+                <div >
+                    <Tooltip location="right" plainMessage={this.props.tooltipText}>
+                        {fieldToken}
+                    </Tooltip>
+                </div>
+            );
+        }
+
+        return fieldToken;
+    }
+}
+
+/**
+ * A FieldToken that is extended to be displayed in the existing field menu (i.e., Tool Palette) when building a form.
+ */
+export class FieldTokenInExistingMenu extends Component {
+    render = () => {
+        let type = fieldFormats.getFormatType({datatypeAttributes: this.props.datatypeAttributes});
+        let title = Locale.getMessage(`fieldsDefaultLabels.${type}`);
+
+        const fieldToken = <FieldToken isDragging={false} type={type} title={title} name={this.props.name} />;
 
         if (this.props.tooltipText) {
             return (
@@ -91,7 +117,7 @@ export class DraggableFieldToken extends Component {
     };
 
     render() {
-        const Element = DraggableField(FieldTokenInMenu, false);
+        const Element = DraggableField(FieldTokenInExistingMenu, false);
 
         return (
             <div className="fieldTokenInMenuWrapper"
@@ -109,6 +135,28 @@ export class DraggableFieldToken extends Component {
 }
 
 FieldTokenInMenu.propTypes = {
+    /**
+     * What field type does this token represent? */
+    type: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+
+    /**
+     * What title should be used on the field token? */
+    title: PropTypes.string.isRequired,
+
+    /**
+     * Text to display in a tooltip. It should be localized. */
+    tooltipText: PropTypes.string,
+
+    /**
+     * Can optionally show the token in a collapsed state (icon only) */
+    isCollapsed: PropTypes.bool,
+
+    /**
+     * Tabindex */
+    toolPaletteChildrenTabIndex: PropTypes.number
+};
+
+FieldTokenInExistingMenu.propTypes = {
     /**
      * What field type does this token represent? */
     type: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),

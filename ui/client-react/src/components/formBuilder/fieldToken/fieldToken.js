@@ -35,7 +35,7 @@ const FieldToken = (props) => {
                 </div>
             </div>
             <div className="fieldTokenTitle">
-                {props.title}
+                {props.name || props.title}
             </div>
         </div>
     );
