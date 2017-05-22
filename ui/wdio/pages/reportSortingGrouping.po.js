@@ -46,17 +46,11 @@
             this.clickInEmptyFieldInSortGrpDlg(this.sortBySettings, 'Choose a field to sort by');
             this.ClickMoreFieldsLinkInFieldsPanel();
             this.recordID.waitForExist();
-            //this.recordID.click();
-            //Click on more fields using JS click since scroll is not working on safari and moveToobject not working on firefox
-            browser.execute(function() {
-                var event = new MouseEvent('click', {
-                    'view': window,
-                    'bubbles': true,
-                    'cancelable': true,
-                    'detail': 2
-                });
-                document.getElementsByClassName('list-group')[0].getElementById(3).dispatchEvent(event);
-            });
+            if (browserName === 'safari') {
+                //TODO need to figure out how to click on recordId using JS Click since scroll not working
+            } else {
+                this.recordID.click();
+            }
             return reportContentPO.clickAndWaitForGrid(this.sortGroupDlgApplyBtn);
         }},
 
@@ -285,20 +279,25 @@
          */
         ClickMoreFieldsLinkInFieldsPanel : {value: function() {
             this.fieldsPanel.waitForVisible();
-            //Click on more fields using JS click since scroll is not working on safari and moveToobject not working on firefox
-            browser.execute(function() {
-                var event = new MouseEvent('click', {
-                    'view': window,
-                    'bubbles': true,
-                    'cancelable': true,
-                    'detail': 2
-                });
-                document.getElementsByClassName('list-group')[0].getElementsByClassName('moreFields')[0].dispatchEvent(event);
-            });
             //TODO Scroll function disabled until it is fixed to work in Safari(mobile): MC-2598
             //this.fieldsPanel.element('.list-group .moreFields').scroll();
-            //Click on more fields
-            //this.fieldsPanel.element('.list-group .moreFields').click();
+            //Click on more fields using JS click since scroll is not working on safari
+            if (browserName === 'safari') {
+                browser.execute(function() {
+                    var event = new MouseEvent('click', {
+                        'view': window,
+                        'bubbles': true,
+                        'cancelable': true,
+                        'detail': 2
+                    });
+                    document.getElementsByClassName('list-group')[0].getElementsByClassName('moreFields')[0].dispatchEvent(event);
+                });
+            } else {
+                //scroll to an element
+                this.fieldsPanel.element('.list-group .moreFields').scroll();
+                //Click on more fields
+                this.fieldsPanel.element('.list-group .moreFields').click();
+            }
             ////Need this to wait for more fields to load
             return browser.pause(e2eConsts.shortWaitTimeMs);
         }},
