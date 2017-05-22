@@ -275,8 +275,17 @@
          */
         ClickMoreFieldsLinkInFieldsPanel : {value: function() {
             this.fieldsPanel.waitForVisible();
+            browser.execute(function() {
+                var event = new MouseEvent('click', {
+                    'view': window,
+                    'bubbles': true,
+                    'cancelable': true,
+                    'detail': 2
+                });
+                document.getElementsByClassName('list-group')[0].getElementsByClassName('moreFields')[0].dispatchEvent(event);
+            });
             //Click on more fields
-            this.fieldsPanel.element('.list-group .moreFields').click();
+            //this.fieldsPanel.element('.list-group .moreFields').click();
             //TODO Scroll function disabled until it is fixed to work in Safari(mobile): MC-2598
             //this.fieldsPanel.element('.list-group .moreFields').scroll();
             ////Need this to wait for more fields to load
