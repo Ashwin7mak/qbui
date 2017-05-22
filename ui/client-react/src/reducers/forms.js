@@ -163,6 +163,7 @@ const forms = (
 
         let {field, newLocation} = _.cloneDeep(action.content);
         updatedForm = _.cloneDeep(currentForm);
+        let columnElementLength = updatedForm.formData.formMeta.tabs[0].sections[0].columns[0] ? updatedForm.formData.formMeta.tabs[0].sections[0].columns[0].elements.length : 0;
         // Remove all keys that are not necessary for forms
         Object.keys(field).forEach(key => {
             if (key !== 'FormFieldElement' && key !== 'id') {
@@ -182,7 +183,7 @@ const forms = (
                 columnIndex: 0,
                 elementIndex: elementIndex
             };
-        } else if (newLocation.elementIndex !== updatedForm.formData.formMeta.tabs[0].sections[0].columns[0].elements.length) {
+        } else if (newLocation.elementIndex !== columnElementLength) {
             //If a field is selected on the form and the selectedField is not located at the end of the form, then the new field will be added below the selected field
             if (newLocation && !_.isNil(newLocation.elementIndex)) {
                 newLocation.elementIndex = newLocation.elementIndex + 1;
@@ -475,13 +476,16 @@ export const getExistingFields = (state, id) => {
     if (!currentForm) {
         return null;
     }
-    return _.differenceBy(currentForm.formData.fields, currentForm.formData.formMeta.fields, (field) => {
-        if (typeof field === 'number') {
-            return field;
-        } else {
-            return field.id;
-        }
-    });
+    if (_.has(currentForm, 'formData.fields') &&
+        _.has(currentForm, 'formData.formMeta.fields')) {
+        return _.differenceBy(currentForm.formData.fields, currentForm.formData.formMeta.fields, (field) => {
+            if (typeof field === 'number') {
+                return field;
+            } else {
+                return field.id;
+            }
+        });
+    }
 };
 
 export default forms;
