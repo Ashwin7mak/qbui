@@ -5,6 +5,12 @@ import * as RealmUserAccountFlagConstants from "../../../common/constants/RealmU
 import GovernanceBundleLoader from "../../../locales/governanceBundleLoader";
 
 GovernanceBundleLoader.changeLocale('en-us');
+
+/**
+ * These are all the fields that the Users Grid Supports
+ * Different User Permissions shows and hides the different facet fields
+ * @type {[*]}
+ */
 export const FACET_FIELDS = [
     {
         name: Locale.getMessage("governance.account.users.userStatus"),
