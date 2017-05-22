@@ -1,5 +1,5 @@
-import React, {Component, PropTypes} from 'react';
-import './StandardGridItemsCount.scss';
+import React, {Component, PropTypes} from "react";
+import "./StandardGridItemsCount.scss";
 
 class StandardGridItemsCount extends Component {
     /**
