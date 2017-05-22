@@ -58,6 +58,7 @@ class addUserPanel extends React.Component {
                             appUsers={appUsers}
                             isAddUser={true}
                             fieldDef={fieldDef1}
+                            loadingPlaceholder="Searching..."
                             searchUsers={this.props.searchUsers}
                             isValid={this.props.isValid}
                             existingUsers={this.props.existingUsers}

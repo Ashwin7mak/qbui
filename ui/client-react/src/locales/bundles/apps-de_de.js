@@ -130,7 +130,8 @@ export default {
         },
         field: {
             search: "Suche",
-            searchNoMatch: "Keiner stimmt mit"
+            searchNoMatch: "Keiner stimmt mit",
+            searchNoMatchAddUser: "Keine Benutzer passen zu dem, was du suchst"
         },
         grid: {
             no_data: "Es liegen keine Daten zum Anzeigen.",

@@ -51,6 +51,10 @@ const UserFieldValueEditor = React.createClass({
         onBlur: React.PropTypes.func
     },
 
+    defaultProps: {
+        loadingPlaceholder: 'Loading'
+    },
+
     /**
      * select userId from value prop
      * @returns {{selectedUserId: null}}
@@ -219,8 +223,16 @@ const UserFieldValueEditor = React.createClass({
         if (this.props.classes) {
             classes += ' ' + this.props.classes;
         }
+
+        let noResultsText;
+
         // this text is displayed in the dropdown when there are no users that matches a search
-        const noResultsText = `${Locale.getMessage("field.searchNoMatch")} "${this.state.inputValue}"`;
+        if (this.props.isAddUser) {
+            noResultsText = `${Locale.getMessage("field.searchNoMatchAddUser")}`;
+        }        else {
+            noResultsText = `${Locale.getMessage("field.searchNoMatch")} "${this.state.inputValue}"`;
+        }
+
         return (
             <Select
                 className={classes}
@@ -236,6 +248,7 @@ const UserFieldValueEditor = React.createClass({
                 placeholder={Locale.getMessage("field.search")}
                 isAddUser={this.props.isAddUser}
                 noResultsText={noResultsText}
+                loadingPlaceholder={this.props.loadingPlaceholder}
                 autosize={false}
                 clearable={false}
                 onBlur={this.onBlur}/>

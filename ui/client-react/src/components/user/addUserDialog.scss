@@ -49,7 +49,7 @@
     }
 
     .modal-body > *:first-child {
-      height: 320px;
+      height: 405px;
     }
     width: 550px;
 
@@ -96,10 +96,6 @@
       &:focus {
         background-color: $color-cyan-600;
       }
-    }
-
-    .Select-menu {
-      max-height: 100px;
     }
 
     .Select-menu-outer {

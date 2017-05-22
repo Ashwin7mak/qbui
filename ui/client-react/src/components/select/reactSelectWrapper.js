@@ -64,6 +64,7 @@ const reactSelectWrapper = React.createClass({
                 placeholder={this.props.placeholder}
                 onBlur={this.props.onBlur}
                 autoload={false}
+                loadingPlaceholder="Searching..."
                 filterOption={this.props.filterOption}
                 noResultsText={this.props.noResultsText}
              />) :

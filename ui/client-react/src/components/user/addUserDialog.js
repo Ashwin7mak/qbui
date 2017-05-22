@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {PropTypes} from 'react';
 import MultiStepDialog from '../../../../reuse/client/src/components/multiStepDialog/multiStepDialog';
 import {NotificationManager} from 'react-notifications';
 import {I18nMessage} from "../../utils/i18nMessage";
@@ -43,6 +43,7 @@ export class AddUserDialog extends React.Component {
         if (responsePromise) {
             responsePromise.then(
             (response) => {
+                this.state.isValid = false;
                 this.props.hideDialog(false);
                 this.props.onAddedUser(userInfo.userId);
             },
@@ -70,9 +71,8 @@ export class AddUserDialog extends React.Component {
      * @returns {XML}
      */
     render() {
-
         const classes = ['addUserDialog'];
-        return (<MultiStepDialog show={this.props.addUserToAppDialogOpen}
+        return (<MultiStepDialog show={Boolean(this.props.addUserToAppDialogOpen)}
                                  classes={classes.join(' ')}
                                  onCancel={this.onCancel}
                                  onFinished={this.onFinished}
@@ -96,7 +96,16 @@ export class AddUserDialog extends React.Component {
 }
 
 AddUserDialog.propTypes = {
-    // TODO: add proptypes
+    allUsers: PropTypes.arrayOf(PropTypes.object),
+    searchUsers: PropTypes.func,
+    appRoles: PropTypes.arrayOf(PropTypes.object),
+    assignUserToApp: PropTypes.func,
+    setUserRoleToAdd: PropTypes.func,
+    userRoleToAdd: PropTypes.number,
+    appId: PropTypes.string,
+    selectedApp: PropTypes.any,
+    existingUsers: PropTypes.object,
+    hideDialog: PropTypes.func
 };
 
 export default AddUserDialog;
