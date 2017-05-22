@@ -48,7 +48,7 @@ const MoveFieldHelper = {
         return formMetaCopy;
     },
 
-    addNewFieldToForm(formMeta, newLocation, newField) {
+    addFieldToForm(formMeta, newLocation, newField) {
         let formMetaCopy = _.cloneDeep(formMeta);
         newField = {containingElement: newField};
         addElementToNewLocation(formMetaCopy, newLocation, newField);
