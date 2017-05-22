@@ -14,6 +14,6 @@ describe('Automation model', () => {
         expect(model).toEqual({appId: 'test_app', automationsList: [
                 {id: 'auto1', name: 'Auto 1'},
                 {id: 'auto2', name: 'Auto 2'}
-            ]});
+        ]});
     });
 });
