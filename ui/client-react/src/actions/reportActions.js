@@ -433,24 +433,23 @@ export const hideColumn = (context, clickedId) => {
  */
 export const saveReport = (appId, tableId, reportId, reportDef) => {
     return () => {
-
         return new Promise((resolve, reject) => {
             if (appId && tableId && reportId) {
                 let reportService = new ReportService();
                 reportService.updateReport(appId, tableId, reportId, reportDef)
                     .then(() => {
-                        logger.debug('ReportService saveReport success');
-                        resolve();
-                    }
-                    ).catch((ex) => {
-                        logger.logException(ex);
-                        NotificationManager.error(Locale.getMessage('report.notification.save.error'), Locale.getMessage('failed'));
-                        reject();
-                    });
+                    logger.debug('ReportService saveReport success');
+                    resolve();
+                })
+                    .catch((ex) => {
+                    logger.logException(ex);
+                    NotificationManager.error(Locale.getMessage('report.notification.save.error'), Locale.getMessage('failed'));
+                    reject();
+                });
             } else {
                 logger.error(`reportActions.updateReport: missing required input parameters. appId: ${appId}, tableId: ${tableId}`);
                 reject();
-            }
+            };
         });
     };
 };

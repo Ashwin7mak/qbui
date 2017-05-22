@@ -20,7 +20,8 @@ describe('Report Builder Save and Cancel Footer', () => {
             data: {
                 name: 'test report',
                 fids: [1, 2, 3]
-        }}
+            }
+        }
     };
 
     // we mock the Redux store when testing async action creators
