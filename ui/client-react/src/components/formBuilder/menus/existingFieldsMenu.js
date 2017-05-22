@@ -1,6 +1,7 @@
 import React, {PropTypes} from 'react';
 import ListOfElements from '../../../../../reuse/client/src/components/sideNavs/listOfElements';
 import FieldTokenInMenu from '../fieldToken/fieldTokenInMenu';
+//import {existingFields} from '../client-react/src/reducers/form.js';
 
 const ExistingFieldsMenu = ({isCollapsed, isOpen, toggleToolPaletteChildrenTabIndex, toolPaletteChildrenTabIndex, toolPaletteFocus, toolPaletteTabIndex}) => (
     <ListOfElements
@@ -11,6 +12,7 @@ const ExistingFieldsMenu = ({isCollapsed, isOpen, toggleToolPaletteChildrenTabIn
         renderer={FieldTokenInMenu}
         isCollapsed={isCollapsed}
         isOpen={isOpen}
+        //elements={existingFields}
         elements={[<div></div>]}
         isFilterable={true}
         hideTitle={true}

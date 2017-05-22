@@ -467,6 +467,19 @@ export const getSelectedFormElement = (state, id) => {
     return currentForm.formData.formMeta.tabs[tabIndex].sections[sectionIndex].columns[columnIndex].elements[elementIndex];
 };
 
+export const getExistingFields = (state, id) => {
+    _.differenceBy([allFields], [formFields], [callBack])
+    const currentForm = state.forms[id];
+
+    if (!currentForm || !currentForm.selectedFields || !currentForm.selectedFields[0]) {
+        return null;
+    }
+
+    const {tabIndex, sectionIndex, columnIndex, elementIndex} = currentForm.selectedFields[0];
+    return currentForm.formData.formMeta.tabs[tabIndex].sections[sectionIndex].columns[columnIndex].elements[elementIndex];
+};
+
+
 export default forms;
 
 // Utility function which returns a component's state given it's context. The context is the 'key' in the state map.
