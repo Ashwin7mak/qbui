@@ -28,7 +28,7 @@ class StandardGridToolBar extends React.Component {
     };
 
     render() {
-        let hasFacets = false;
+        let hasFacets = this.props.shouldFacet;
         return (
             <div>
                 <div className={"standardGridToolBar " + (hasFacets ? "" : "noFacets")}>
@@ -41,7 +41,7 @@ class StandardGridToolBar extends React.Component {
                                       value={this.props.searchTerm}
                         /> : null
                         }
-                        {this.props.shouldFacet ?
+                        {hasFacets ?
                             <div className="standardGridFacet">
                                 <StandardGridFacetsMenu
                                     className="facetMenu"
