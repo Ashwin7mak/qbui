@@ -275,6 +275,7 @@
          */
         ClickMoreFieldsLinkInFieldsPanel : {value: function() {
             this.fieldsPanel.waitForVisible();
+            //Click on more fields using JS click since scroll is not working on safari and moveToobject not working on firefox
             browser.execute(function() {
                 var event = new MouseEvent('click', {
                     'view': window,
@@ -284,10 +285,10 @@
                 });
                 document.getElementsByClassName('list-group')[0].getElementsByClassName('moreFields')[0].dispatchEvent(event);
             });
-            //Click on more fields
-            //this.fieldsPanel.element('.list-group .moreFields').click();
             //TODO Scroll function disabled until it is fixed to work in Safari(mobile): MC-2598
             //this.fieldsPanel.element('.list-group .moreFields').scroll();
+            //Click on more fields
+            //this.fieldsPanel.element('.list-group .moreFields').click();
             ////Need this to wait for more fields to load
             return browser.pause(e2eConsts.shortWaitTimeMs);
         }},
