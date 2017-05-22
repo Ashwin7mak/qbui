@@ -219,17 +219,13 @@ const buildField = (field, id) => {
  * @param id
  * @returns {{id, type, content}|*}
  */
-export const addNewFieldToForm = (formId, appId, tblId, newLocation, newField, existingField, id) => {
-    console.log('newField: ', newField);
-    console.log('existingField: ', existingField);
+export const addFieldToForm = (formId, appId, tblId, newLocation, newField, existingField, id) => {
     let field;
     if (newField) {
         field = buildField(newField);
     } else {
         field = buildField(existingField, id);
     }
-
-    console.log('field: ', field);
 
     return {
         type: types.ADD_FIELD,

@@ -2,7 +2,7 @@ import React, {PropTypes, Component} from 'react';
 import {connect} from "react-redux";
 import FieldToken from './fieldToken';
 import Tooltip from '../../../../../reuse/client/src/components/tooltip/tooltip';
-import {addNewFieldToForm, endDraggingState, isInDraggingState} from "../../../actions/formActions";
+import {addFieldToForm, endDraggingState, isInDraggingState} from "../../../actions/formActions";
 import {getFormByContext, getSelectedFormElement} from '../../../reducers/forms';
 import {updateFormAnimationState} from '../../../actions/animationActions';
 import {CONTEXT} from '../../../actions/context';
@@ -82,7 +82,7 @@ export class DraggableFieldToken extends Component {
 
     clickToAddToForm = () => {
         const {selectedField, formId, appId, tblId, relatedField, datatypeAttributes, id} = this.props;
-        this.props.addNewFieldToForm(formId, appId, tblId, selectedField, relatedField, datatypeAttributes, id);
+        this.props.addFieldToForm(formId, appId, tblId, selectedField, relatedField, datatypeAttributes, id);
     };
 
     onEnterClickToAdd = (e) => {
@@ -116,8 +116,9 @@ export class DraggableFieldToken extends Component {
         this.props.updateFormAnimationState(false);
     };
 
-    render() {
-        const Element = DraggableField(FieldTokenInExistingMenu, false);
+    render = () => {
+        let fieldToken = this.props.isNewField ? FieldTokenInMenu : FieldTokenInExistingMenu;
+        const Element = DraggableField(fieldToken, false);
 
         return (
             <div className="fieldTokenInMenuWrapper"
@@ -191,7 +192,7 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = {
-    addNewFieldToForm,
+    addFieldToForm,
     updateFormAnimationState,
     endDraggingState,
     isInDraggingState
