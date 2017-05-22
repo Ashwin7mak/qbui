@@ -204,8 +204,12 @@ class formBuilderPage {
         let fieldLocator = this.getFieldLocator(index);
         let field = browser.element(fieldLocator);
         let deletedFieldName = field.getText();
+        let deleteIcon = field.element('.deleteFieldIcon .qbIcon');
+        // hover over the field & wait for delete icon visibility
         browser.moveToObject(fieldLocator + ' .fieldLabel');
-        field.element('.deleteFieldIcon .qbIcon').click();
+        deleteIcon.waitForVisible();
+        // click to remove the field from the form
+        deleteIcon.click();
         return deletedFieldName;
     }
 
@@ -264,9 +268,9 @@ class formBuilderPage {
         browser.moveToObject(target, 5, 5);
         // release button
         browser.buttonUp();
-        browser.pause(e2eConsts.shortWaitTimeMs);
         // Chrome needs a click to release mouse btn - why?
         browser.element(target).click();
+        // wait for the target label to reflect the swap
         browser.waitUntil(function() {
             return browser.element(target).getText() === label;
         }, e2eConsts.mediumWaitTimeMs, 'Expected target label to match source label after swap');
@@ -323,6 +327,8 @@ class formBuilderPage {
         // remove field via backspace key via keyboard
         let deletedField = this.KB_selectField(index);
         this.selectedField.keys(['Shift', 'Backspace', 'Shift']);
+        // wait for field to disappear (tricky since other field may replace it)
+        browser.pause(e2eConsts.shortWaitTimeMs);
         expect(this.getFieldLabels()).not.toContain(deletedField);
         return deletedField;
     }
@@ -332,6 +338,8 @@ class formBuilderPage {
         let deletedField = this.KB_selectField(index);
         // select & press DELETE icon
         browser.keys(['Tab', 'Enter']);
+        // wait for field to disappear (tricky since other field may replace it)
+        browser.pause(e2eConsts.shortWaitTimeMs);
         expect(this.getFieldLabels()).not.toContain(deletedField);
         return deletedField;
     }
