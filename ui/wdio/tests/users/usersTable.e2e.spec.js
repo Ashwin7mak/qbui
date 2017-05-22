@@ -109,7 +109,7 @@
          */
         it('Should verify all the users emails are linked', function() {
             // Verify the user emails are linked
-            expect(browser.isEnabled('.qbCell .urlField')).toBeTruthy();
+            expect(UsersTablePage.userEmailUlEl.isExisting()).toBeTruthy();
         });
     });
 }());
