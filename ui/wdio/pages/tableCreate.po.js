@@ -464,12 +464,18 @@
             this.settingsBtn.click();
             //Need this for container to slide down
             browser.pause(e2eConsts.shortWaitTimeMs);
-            browser.elements('.configSet li').value.map(function(elm) {
+
+            expect(browser.element('.menuHeader').value.getAttribute('textContent')).toContain('Settings');
+
+            browser.elements('.configMenu li').value.map(function(elm) {
                 liElements.push(elm.getAttribute('textContent'));
             });
-            expect(liElements[0]).toContain('Settings');
-            expect(liElements[1]).toContain('Table');
-            return expect(liElements[2]).toContain('Table properties & settings');
+
+            var i = 0;
+            expect(liElements[i++]).toContain('App');
+            expect(liElements[i++]).toContain('Automation');
+            expect(liElements[i++]).toContain('Table');
+            return expect(liElements[i++]).toContain('Table properties & settings');
         }},
 
         /**

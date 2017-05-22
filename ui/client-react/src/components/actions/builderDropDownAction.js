@@ -55,7 +55,7 @@ let BuilderDropDownAction = React.createClass({
                 <div className="configMenu">
                     {isAppView ?
                     <div className="configMenu--configSet configMenu__App">
-                        <h3><I18nMessage message={"settings.header"}/></h3>
+                        <h3 className="menuHeader"><I18nMessage message={"settings.header"}/></h3>
                         <ul>
                             <li>
                                 <Icon className="headingIcon" iconFont={AVAILABLE_ICON_FONTS.UI_STURDY} icon="favicon"/>
