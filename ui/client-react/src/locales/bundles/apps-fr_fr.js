@@ -572,6 +572,10 @@ export default {
             multiChoice: "Les choix"
         },
         builder: {
+            tabs: {
+                existingFields: 'Ajouter un champ existant',
+                newFields:  'Créer un nouveau champ',
+            },
             reportBuilder: {
                 modify: 'Modifiez rapport'
             },
@@ -579,6 +583,8 @@ export default {
                 modify: 'Modifier formulaire',
                 unimplemented: "La fonctionnalité n'est pas disponible en ce moment",
                 removeField: "Supprimer le champ du formulaire",
+                newFieldsMenuTitle: 'Nouveau',
+                existingFieldsMenuTitle: 'Existant',
                 tooltips: {
                     [`addNew${FieldFormats.TEXT_FORMAT}`]: "Créer un champ de texte et l'ajouter au formulaire",
                     [`addNew${FieldFormats.NUMBER_FORMAT}`]: "Créer un champ de numéro et l'ajouter au formulaire",

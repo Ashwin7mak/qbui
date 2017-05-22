@@ -1,31 +1,29 @@
 import Locale from "../../../../../reuse/client/src/locales/locale";
-import GovernanceBundleLoader from "../../../locales/governanceBundleLoader";
 import * as SCHEMACONSTS from "../../../../../client-react/src/constants/schema";
 import * as Formatters from "./AccountUsersGridFormatters";
 import * as RealmUserAccountFlagConstants from "../../../common/constants/RealmUserAccountFlagConstants.js";
+import GovernanceBundleLoader from "../../../locales/governanceBundleLoader";
 
 GovernanceBundleLoader.changeLocale('en-us');
-
-
 export const FACET_FIELDS = [
     {
-        label: Locale.getMessage("governance.account.users.userStatus"),
+        name: Locale.getMessage("governance.account.users.userStatus"),
         type: SCHEMACONSTS.TEXT,
         needsAccountAdmin:true,
         needsRealmAdmin:true,
-        options: ['Unregistered', 'Unverified', 'Registered'],
+        options: ['Registered', 'Unregistered', 'Unverified'],
         formatter: user => Formatters.FormatUserStatusText(user.hasAppAccess, {rowData: user})
     },
     {
-        label: Locale.getMessage("governance.account.users.accessStatus"),
+        name: Locale.getMessage("governance.account.users.accessStatus"),
         type: SCHEMACONSTS.TEXT,
         needsAccountAdmin:true,
         needsRealmAdmin:true,
-        options: ['Denied', 'Deactivated', 'Paid Seat', 'No App Access'],
+        options: ['Deactivated', 'Denied', 'No App Access', 'Paid Seat', 'Quick Base Staff'],
         formatter: user => Formatters.FormatAccessStatusText(user.hasAppAccess, {rowData: user})
     },
     {
-        label: Locale.getMessage("governance.account.users.paidSeatSingular"),
+        name: Locale.getMessage("governance.account.users.paidSeatSingular"),
         type: SCHEMACONSTS.CHECKBOX,
         needsAccountAdmin:true,
         needsRealmAdmin:true,
@@ -33,7 +31,7 @@ export const FACET_FIELDS = [
         formatter: user => 'Paid Seat' === Formatters.FormatAccessStatusText(user.hasAppAccess, {rowData: user})
     },
     {
-        label: Locale.getMessage("governance.account.users.quickbaseStaff"),
+        name: Locale.getMessage("governance.account.users.quickbaseStaff"),
         type: SCHEMACONSTS.CHECKBOX,
         needsAccountAdmin:true,
         needsRealmAdmin:true,
@@ -41,7 +39,7 @@ export const FACET_FIELDS = [
         formatter: user => RealmUserAccountFlagConstants.HasAnySystemPermissions(user)
     },
     {
-        label: Locale.getMessage("governance.account.users.inactive"),
+        name: Locale.getMessage("governance.account.users.inactive"),
         type: SCHEMACONSTS.CHECKBOX,
         needsAccountAdmin:true,
         needsRealmAdmin:false,
@@ -49,7 +47,7 @@ export const FACET_FIELDS = [
         formatter: user => Formatters.FormatIsInactiveBool(user.lastAccess, {rowData: user})
     },
     {
-        label: Locale.getMessage("governance.account.users.inGroup"),
+        name: Locale.getMessage("governance.account.users.inGroup"),
         type: SCHEMACONSTS.CHECKBOX,
         needsAccountAdmin:true,
         needsRealmAdmin:false,
@@ -57,7 +55,7 @@ export const FACET_FIELDS = [
         formatter: user => user.numGroupsMember > 0
     },
     {
-        label: Locale.getMessage("governance.account.users.groupManager"),
+        name: Locale.getMessage("governance.account.users.groupManager"),
         type: SCHEMACONSTS.CHECKBOX,
         needsAccountAdmin:true,
         needsRealmAdmin:false,
@@ -65,7 +63,7 @@ export const FACET_FIELDS = [
         formatter: user => user.numGroupsManaged > 0
     },
     {
-        label: Locale.getMessage("governance.account.users.canCreateApps"),
+        name: Locale.getMessage("governance.account.users.canCreateApps"),
         type: SCHEMACONSTS.CHECKBOX,
         needsAccountAdmin:true,
         needsRealmAdmin:false,
@@ -73,7 +71,7 @@ export const FACET_FIELDS = [
         formatter: user => RealmUserAccountFlagConstants.CanCreateApps(user)
     },
     {
-        label: Locale.getMessage("governance.account.users.appManager"),
+        name: Locale.getMessage("governance.account.users.appManager"),
         type: SCHEMACONSTS.CHECKBOX,
         needsAccountAdmin:true,
         needsRealmAdmin:false,
@@ -81,7 +79,7 @@ export const FACET_FIELDS = [
         formatter: user => user.numAppsManaged > 0
     },
     {
-        label: Locale.getMessage("governance.account.users.realmDirectoryUsers"),
+        name: Locale.getMessage("governance.account.users.realmDirectoryUsers"),
         type: SCHEMACONSTS.CHECKBOX,
         needsAccountAdmin:false,
         needsRealmAdmin:true,
@@ -89,7 +87,7 @@ export const FACET_FIELDS = [
         formatter: user => RealmUserAccountFlagConstants.HasAnyRealmPermissions(user)
     },
     {
-        label: Locale.getMessage("governance.account.users.realmApproved"),
+        name: Locale.getMessage("governance.account.users.realmApproved"),
         type: SCHEMACONSTS.CHECKBOX,
         needsAccountAdmin:false,
         needsRealmAdmin:true,
@@ -108,7 +106,7 @@ export const GetFacetFields = (hasAccountAdmin, hasRealmAdmin) => {
             let id = parseInt(fieldID);
             facetInfo.push({
                 id: id,
-                name: FACET_FIELDS[fieldID].label,
+                name: FACET_FIELDS[fieldID].name,
                 type: FACET_FIELDS[fieldID].type,
                 values: _.map(FACET_FIELDS[fieldID].options, (aFacet) => {
                     return {id: id, value: aFacet};

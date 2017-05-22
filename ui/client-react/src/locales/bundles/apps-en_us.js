@@ -581,6 +581,10 @@ export default {
             multiChoice: "Choices"
         },
         builder: {
+            tabs: {
+                existingFields: 'Add an existing field',
+                newFields:  'Create a new field',
+            },
             reportBuilder: {
                 modify: 'Modify report'
             },
@@ -588,6 +592,8 @@ export default {
                 modify: 'Modify form',
                 unimplemented: "Feature is not available right now",
                 removeField: "Remove field from form",
+                newFieldsMenuTitle: 'New',
+                existingFieldsMenuTitle: 'Existing',
                 tooltips: {
                     // Tooltip for every single field type because of requirements for a/an and pronouns different for each language
                     [`addNew${FieldFormats.TEXT_FORMAT}`]: "Create a text field and add it to the form",
