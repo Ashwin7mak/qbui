@@ -95,9 +95,11 @@ const app = (
         };
     case types.UPDATE_APP_TABLE_PROPS:
         let appsClone = _.cloneDeep(state.apps);
+        //  find the app
         let appToUpdateIdx = _.findIndex(appsClone, (a) => a.id === action.content.appId);
         if (appToUpdateIdx !== -1) {
             let appToUpdate = appsClone[appToUpdateIdx];
+            // find the table and replace
             let tableToUpdateIdx = _.findIndex(appToUpdate.tables, (t) => t.id === action.content.tblId);
             if (tableToUpdateIdx !== -1) {
                 appToUpdate.tables[tableToUpdateIdx] = action.content.tableData;
@@ -108,7 +110,7 @@ const app = (
             apps: appsClone
         };
     case types.LOAD_APP:
-        let appId = action.context;
+        let appId = action.content.appId;
         return {
             ...state,
             loading: true,
@@ -187,11 +189,11 @@ export const getSelectedTableId = (state) => {
 };
 
 export const getSelectedAppUsers = (state) => {
-    return state.app && state.app.getUsers === 'function' ? state.app.getUsers() : [];
+    return state.app ? state.app.users : [];
 };
 
 export const getSelectedAppUnfilteredUsers = (state) => {
-    return state.app && state.app.getUnfilteredUsers === 'function' ? state.app.getUnfilteredUsers() : {};
+    return state.app ? state.app.unfilteredUsers : {};
 };
 
 

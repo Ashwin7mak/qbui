@@ -8,14 +8,12 @@ class AppModel {
 
     init(appData) {
         this.model = {};
-        this.model.users = [];
-        this.model.unfilteredUsers = {};
 
         if (appData) {
-            this.model.users = appData.users[0];
-            this.model.unfilteredUsers = appData.users[1];
             this.model.app = appData.app;
             if (this.model.app) {
+                this.model.app.users = appData.users[0];
+                this.model.app.unfilteredUsers = appData.users[1];
                 this.model.app.link = `${APP_ROUTE}/${this.model.app.id}`;
 
                 //  set the table icons
@@ -35,14 +33,6 @@ class AppModel {
 
     getApp() {
         return this.model.app;
-    }
-
-    getUsers() {
-        return this.model.users;
-    }
-
-    getUnfilteredUsers() {
-        return this.model.unfilteredUsers;
     }
 
 }
