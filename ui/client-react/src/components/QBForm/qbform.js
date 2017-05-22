@@ -21,6 +21,8 @@ import {connect} from 'react-redux';
 import './qbform.scss';
 import './tabs.scss';
 
+const DragDropFieldElement = DragAndDropField(FieldElement);
+
 /*
  Custom QuickBase Form component that has 1 property.
  activeTab: the tab we want to display first when viewing the form, defaults to the first tab
@@ -349,7 +351,7 @@ export const QBForm = React.createClass({
         }
         */
 
-        let CurrentFieldElement = (this.props.editingForm ? DragAndDropField(FieldElement) : FieldElement);
+        let CurrentFieldElement = (this.props.editingForm ? DragDropFieldElement : FieldElement);
 
         // This isDisable is used to disable the input and controls in form builder.
         let isDisabled = !(this.props.edit && !this.props.editingForm);

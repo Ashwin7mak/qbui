@@ -13,9 +13,8 @@ export default (FieldComponent) => {
     // It cannot be a stateless component built with a function.
     class DragDropFieldComponent extends Component {
         render() {
-            let key = (_.has(this.props, 'element.id') ? this.props.element.id : _.uniqueId());
             return (
-                <div key={`dragDropField-${key}`} className="dragAndDropField">
+                <div className="dragAndDropField">
                     <FieldComponent {...this.props} />
                 </div>
             );
