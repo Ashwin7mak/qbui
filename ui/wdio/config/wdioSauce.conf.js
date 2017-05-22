@@ -134,7 +134,8 @@ exports.config = {
         {
             platform: 'OS X 10.11',
             browserName: 'firefox',
-            version: '46.0',
+            version: '53.0',
+            marionette: 'false',
             tunnelIdentifier: process.env.ENV_TUNNEL_NAME,
             build           : 'WebdriverIO Jenkins Master Build #' + process.env.BUILD_NUMBER + ' - OSX Firefox Browser',
             tags            : [process.env.SAUCE_JOB_NAME + '_OSX_Firefox', 'master', 'OSX', 'Firefox', process.env.BUILD_NUMBER],
@@ -142,7 +143,7 @@ exports.config = {
             // Timeout in seconds for Sauce Labs to wait for another command (bumped this for sleeps in tests)
             idleTimeout: '180',
             maxDuration: 10800,
-            breakpointSize: 'xlarge',
+            breakpointSize: 'large',
             // These two values enable parallel testing which will run a spec file per instance
             shardTestFiles: true,
             maxInstances: 5
@@ -329,7 +330,10 @@ exports.config = {
             global.browserWidth = browserDimensions.browserWidth;
             global.browserHeight = browserDimensions.browserHeight;
             browser.logger.info('Setting browser size to ' + global.breakpointSize + ' breakpoint (' + global.browserWidth + ', ' + global.browserHeight + ')');
-            browser.windowHandleSize({width: global.browserWidth, height: global.browserHeight});
+            //TODO on firefox53 this is not working
+            if (browserName === 'chrome') {
+                browser.windowHandleSize({width: global.browserWidth, height: global.browserHeight});
+            }
         }
 
         // recordApi.base (and api.base) will not initialize itself if you don't pass in a config object

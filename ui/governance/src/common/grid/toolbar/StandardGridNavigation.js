@@ -11,26 +11,26 @@ class StandardGridNavigation extends React.Component {
         super(...args);
     }
 
-    getStartRecord() {
-        return this.props.paginationInfo.firstRecordInCurrentPage;
+    getStartItem() {
+        return this.props.paginationInfo.firstItemIndexInCurrentPage;
     }
 
-    getEndRecord() {
-        return this.props.paginationInfo.lastRecordInCurrentPage;
+    getEndItem() {
+        return this.props.paginationInfo.lastItemIndexInCurrentPage;
     }
 
     isPreviousDisabled() {
-        return this.props.paginationInfo.filteredRecords === 0 || this.props.paginationInfo.currentPage === 1;
+        return this.props.paginationInfo.totalFilteredItems === 0 || this.props.paginationInfo.currentPage === 1;
     }
 
     isNextDisabled() {
-        return this.props.paginationInfo.filteredRecords === 0 || this.props.paginationInfo.currentPage === this.props.paginationInfo.totalPages;
+        return this.props.paginationInfo.totalFilteredItems === 0 || this.props.paginationInfo.currentPage === this.props.paginationInfo.totalPages;
     }
 
     render() {
         return (
-            <Pagination startRecord={this.getStartRecord()}
-                        endRecord={this.getEndRecord()}
+            <Pagination startRecord={this.getStartItem()}
+                        endRecord={this.getEndItem()}
                         onClickPrevious={this.props.getPreviousPage}
                         onClickNext={this.props.getNextPage}
                         isPreviousDisabled={this.isPreviousDisabled()}
@@ -41,20 +41,36 @@ class StandardGridNavigation extends React.Component {
 }
 
 StandardGridNavigation.defaultProps = {
-    firstRecordInCurrentPage: 0,
-    lastRecordInCurrentPage: 0,
-    filteredRecords: 0,
+    firstItemIndexInCurrentPage: 0,
+    lastItemIndexInCurrentPage: 0,
+    totalFilteredItems: 0,
     totalPages: 0,
     currentPage: 1,
 };
 
 StandardGridNavigation.propTypes = {
+    /**
+     * ID of the Grid
+     */
     id: PropTypes.string.required,
-    firstRecordInCurrentPage: PropTypes.number,
-    lastRecordInCurrentPage: PropTypes.number,
-    filteredRecords: PropTypes.number,
+
+    firstItemIndexInCurrentPage: PropTypes.number,
+    lastItemIndexInCurrentPage: PropTypes.number,
+
+    /**
+     * The total items that we are displaying
+     */
+    totalFilteredItems: PropTypes.number,
+
+    /**
+     * Keep track of the total as well as current page
+     */
     totalPages: PropTypes.number,
     currentPage: PropTypes.number,
+
+    /**
+     * Navigation to previous or next pages
+     */
     getPreviousPage :PropTypes.func.required,
     getNextPage :PropTypes.func.required
 };
