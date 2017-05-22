@@ -78,6 +78,7 @@ exports.config = {
         ],
         global: [
             './ui/wdio/tests/global/globalTopNav.e2e.spec.js',
+            './ui/wdio/tests/global/globalLeftNav.e2e.spec.js',
         ]
     },
     //
