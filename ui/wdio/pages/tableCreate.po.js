@@ -186,7 +186,7 @@
          * Method to click on create new table
          */
         clickCreateNewTable : {value: function() {
-            browser.waitForText('.tablesList .leftNavLabel', e2eConsts.extraLongWaitTimeMs);
+            browser.waitForExist('.tablesList .leftNavLabel');
             //Wait until new table button visible
             this.newTableBtn.waitForVisible();
             //Verify the name of the button
