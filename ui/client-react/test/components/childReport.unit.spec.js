@@ -156,20 +156,20 @@ describe('ChildReport', () => {
         });
 
         describe('report details', () => {
-            const childTableName = `Yogi's Awesome Bespoke Table`;
+            const testChildTableName = `Yogi's Awesome Bespoke Table`;
             const report = {
                 recordsCount: 42
             };
             const testProps = {
                 report,
-                childTableName,
+                testChildTableName,
                 loadReportRecordsCount: () => null,
             };
-            const testPropsReportLink = Object.assign({}, {type:'REPORTLINK'}, testProps)
+            const testPropsReportLink = Object.assign({}, {type:'REPORTLINK'}, testProps);
 
             it(`displays child table's name when showing report link buttons'`, () => {
                 component = shallow(MockChildReport(testPropsReportLink));
-                expect(component.text()).toContain(childTableName);
+                expect(component.text()).toContain(testChildTableName);
             });
 
             it('displays records count when showing report link buttons', () => {
@@ -179,7 +179,7 @@ describe('ChildReport', () => {
 
             it(`doesn't display child table's name when NOT showing report link buttons'`, () => {
                 component = shallow(MockChildReport(testProps));
-                expect(component.text()).not.toContain(childTableName);
+                expect(component.text()).not.toContain(testChildTableName);
             });
 
             it(`doesn't display records count when NOT showing report link buttons'`, () => {
