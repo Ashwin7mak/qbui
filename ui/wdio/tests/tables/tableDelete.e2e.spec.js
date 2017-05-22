@@ -210,8 +210,17 @@
                 return RequestSessionTicketPage.get(e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.recordBase.apiBase.resolveUserTicketEndpoint() + '?uid=' + userId + '&realmId='));
             });
 
-            //Step 4 - Go to Tables Page
-            RequestAppsPage.get(e2eBase.getRequestTableEndpoint(realmName, testApp.id, testApp.tables[0].id));
+            //go to apps page
+            browser.call(function() {
+                // Load the requestAppsPage (shows a list of all the apps in a realm)
+                return RequestAppsPage.get(e2eBase.getRequestAppsPageEndpoint(realmName));
+            });
+
+            //select the App
+            RequestAppsPage.selectApp(testApp.name);
+
+            //select the table
+            tableCreatePO.selectTable(testApp.tables[e2eConsts.TABLE1].name);
 
             //Step 5 - Verify settings icon not available for user other than ADMIN
             expect(browser.isVisible(ReportContentPO.settingsIconName)).toBeFalsy();

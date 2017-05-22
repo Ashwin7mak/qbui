@@ -9,6 +9,7 @@
     let leftNavPO = requirePO('leftNav');
     let topNavPO = requirePO('topNav');
     let RequestAppsPage = requirePO('requestApps');
+    var tableCreatePO = requirePO('tableCreate');
 
     describe('Reports Page - LeftNav Tests: ', function() {
         let realmName;
@@ -46,8 +47,11 @@
          * Test methods to verify all elements present / hidden in leftNav
          */
         it('Verify if leftNav collapses of clicking hamburger menu on tables page', function() {
-
-            RequestAppsPage.get(e2eBase.getRequestTableEndpoint(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1));
+            //select the App
+            RequestAppsPage.selectApp(testApp.name);
+            //select table
+            tableCreatePO.selectTable(testApp.tables[e2eConsts.TABLE1].name);
+            reportContentPO.waitForLeftNavLoaded();
 
             // Step 1 - Verify if the leftNav is expanded
             expect(browser.isVisible('.expanded')).toBeTruthy();
