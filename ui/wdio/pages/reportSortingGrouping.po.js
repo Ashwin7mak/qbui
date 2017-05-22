@@ -55,15 +55,7 @@
                     'cancelable': true,
                     'detail': 2
                 });
-                //filter field Items from fields Panel
-                var results = browser.elements('.list-group .fieldName').value.filter(function(field) {
-                    return field.getAttribute('textContent') === 'Record ID#';
-                });
-
-                if (results !== []) {
-                    //Click on filtered field name
-                    results[0].dispatchEvent(event);
-                }
+                document.getElementsByClassName('list-group')[0].getElementById('3')[0].dispatchEvent(event);
             });
             return reportContentPO.clickAndWaitForGrid(this.sortGroupDlgApplyBtn);
         }},
