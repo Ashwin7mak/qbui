@@ -71,6 +71,12 @@
         return reportContentPO.waitForReportContent();
     };
 
+    PageBase.prototype.viewFirstRecordInBrowser = function(realmName, appId, tableId, reportId) {
+        browser.url(e2eBase.getRequestViewFirstRecordEndpoint(realmName, appId, tableId, reportId));
+        // wait for left nav to be completely loaded
+        return reportContentPO.waitForLeftNavLoaded();
+    };
+
     //TODO: Refactor these if needed
     //// Verify the element is located on top of the other
     //this.isElementOnTop = function(element1, element2) {

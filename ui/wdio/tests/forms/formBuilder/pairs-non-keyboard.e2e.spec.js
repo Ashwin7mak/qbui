@@ -42,10 +42,8 @@
             }
             // wait for left nav to load completely (else settings button won't be rendered)
             browser.waitForText('.leftNavLabel');
-            // open first table
-            e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
-            // edit first record
-            reportContentPO.clickOnRecordInReportTable(0);
+            // view first record of first report
+            e2ePageBase.viewFirstRecordInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
         });
 
         beforeEach(function() {
