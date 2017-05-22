@@ -10,8 +10,8 @@ import StandardGrid from "../../../../src/common/grid/standardGrid";
 import * as Actions from "../../../../src/account/users/AccountUsersActions";
 import {GetAccountUsersGridColumns} from "../../../../src/account/users/grid/AccountUsersGridColumns";
 import {GetFacetFields} from "../../../../src/account/users/grid/AccountUsersGridFacet";
-import GovernanceBundleLoader from '../../../../src/locales/governanceBundleLoader';
-import Locale from '../../../../../reuse/client/src/locales/locale';
+import GovernanceBundleLoader from "../../../../src/locales/governanceBundleLoader";
+import Locale from "../../../../../reuse/client/src/locales/locale";
 
 const mockStore = configureMockStore();
 
