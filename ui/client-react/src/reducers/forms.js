@@ -499,13 +499,17 @@ export const getExistingFields = (state, id) => {
 
     if (_.has(currentForm, 'formData.fields') &&
         _.has(currentForm, 'formData.formMeta.fields')) {
-        return _.differenceBy(currentForm.formData.fields, currentForm.formData.formMeta.fields, (field) => {
+        let result = _.differenceBy(currentForm.formData.fields, currentForm.formData.formMeta.fields, (field) => {
             if (typeof field === 'number') {
                 return field;
             } else {
                 return field.id;
             }
         });
+        result = _.sortBy(result, "name");
+        result = _.map(result, (field) => _.merge(field, {key: field.id}));
+
+        return result;
     }
 };
 
