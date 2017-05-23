@@ -18,6 +18,7 @@
         let realmName;
         let realmId;
         let testApp;
+        let userId;
 
         /**
          * Setup method. Creates test app then authenticates into the new stack
@@ -34,6 +35,14 @@
             }).then(function() {
                 // Auth into the new stack
                 return newStackAuthPO.realmLogin(realmName, realmId);
+            }).then(function() {
+                // Create a user
+                return e2eBase.recordBase.apiBase.createUser().then(function(userResponse) {
+                    userId = JSON.parse(userResponse.body).id;
+                });
+            }).then(function() {
+                // Add user to participant appRole
+                return e2eBase.recordBase.apiBase.assignUsersToAppRole(testApp.id, e2eConsts.PARTICIPANT_ROLEID, [userId]);
             }).catch(function(error) {
                 // Global catch that will grab any errors from chain above
                 // Will appropriately fail the beforeAll method so other tests won't run
@@ -46,10 +55,8 @@
          * Before each it block reload the list all report (can be used as a way to reset state between tests)
          */
         beforeEach(function() {
-            browser.call(function() {
-                // Load the requestAppsPage (shows a list of all the apps in a realm)
-                return RequestAppsPage.get(e2eBase.getRequestAppsPageEndpoint(realmName));
-            });
+            // Load the requestAppsPage (shows a list of all the apps in a realm)
+            RequestAppsPage.get(e2eBase.getRequestAppsPageEndpoint(realmName));
 
             //select the App
             RequestAppsPage.selectApp(testApp.name);
@@ -63,18 +70,18 @@
                 {fieldTitle: descFieldTitleText, fieldValue: rawValueGenerator.generateStringWithFixLength(50), placeHolder: 'Text to show when hovering over the table name in the left navigation'}
             ];
 
-            //Step 1 - Click on new table button
+            //Click on new table button
             tableCreatePO.clickCreateNewTable();
 
-            //Step 2 - Verify table elements
+            //Verify table elements
             tableCreatePO.verifyTable();
 
-            //Step 3 - Choose an Icon from Icon picker
+            //Choose an Icon from Icon picker
             let iconChoosedClassName = tableCreatePO.selectRandomIconFromIconChooser();
             //Verify the choosed icon in closed combo
             tableCreatePO.verifyIconInIconChooserCombo(iconChoosedClassName);
 
-            //Step 4 - Enter table field values
+            //Enter table field values
             tableFields.forEach(function(tableField) {
                 //verify place holders for each table field
                 tableCreatePO.verifyTableFieldPlaceHolders(tableField.fieldTitle, tableField.placeHolder);
@@ -82,25 +89,25 @@
                 tableCreatePO.enterTableFieldValue(tableField.fieldTitle, tableField.fieldValue);
             });
 
-            //Step 5 - Click on finished button and make sure it landed in edit Form container page
+            //Click on finished button and make sure it landed in edit Form container page
             tableCreatePO.clickFinishedBtn();
 
-            //Step 6 - Verify the create table dialogue
+            //Verify the create table dialogue
             tableCreatePO.verifyNewTableCreateDialogue();
 
-            //Step 7 - Click OK button on create table dialogue
+            //Click OK button on create table dialogue
             tableCreatePO.clickOkBtn();
 
-            //Step 8 - Click on forms Cancel button
+            //Click on forms Cancel button
             formsPO.clickFormCancelBtn();
 
-            //Step 9 - Select Table and make sure it lands in reports page
+            //Select Table and make sure it lands in reports page
             tableCreatePO.selectTable(tableName);
             //parse table ID from current browser URL; we need this to hit report endpoint for the table
             let currentURL = browser.getUrl();
             let tableId = currentURL.substring(currentURL.lastIndexOf("/") + 1, currentURL.length);
 
-            //Step 10 - make sure tableHomePage is visible
+            //Make sure tableHomePage is visible
             ReportContentPO.addRecordButton.waitForVisible();
             //Verify 'Add a Record' button is enabled
             expect(browser.isEnabled('.tableHomePageInitial .addRecordButton')).toBeTruthy();
@@ -112,7 +119,7 @@
             expect(browser.element('.tableHomePageInitial .createTableLink').getAttribute('textContent')).toBe('Create another table');
             expect(browser.isEnabled('.tableHomePageInitial .createTableLink')).toBeTruthy();
 
-            //Step 11 - Load a report for the table and verify report elements
+            //Load a report for the table and verify report elements
             RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, testApp.id, tableId, 1));
             ReportContentPO.waitForLeftNavLoaded();
             browser.element('.noRowsIcon').waitForVisible();
@@ -122,10 +129,10 @@
 
         it('Verify ICON chooser search', function() {
 
-            //Step 1 - Click on new table button
+            //Click on new table button
             tableCreatePO.clickCreateNewTable();
 
-            //Step 2 - Verify iconChooser search functionality
+            //Verify iconChooser search functionality
             tableCreatePO.searchIconFromChooser('bicycle');
             let searchReturnedIcons = tableCreatePO.getAllIconsFromIconChooser;
             //Verify it returns just one
@@ -178,32 +185,32 @@
         tableFieldValidationTestCases().forEach(function(testCase) {
             it('Create new table ' + testCase.message, function() {
 
-                //Step 1 - get the original count of table links in the left nav
+                //Get the original count of table links in the left nav
                 tableCreatePO.newTableIconBtn.waitForVisible();
                 let originalTableLinksCount = tableCreatePO.getAllTableLeftNavLinksList.value.length;
 
-                //Step 2 - Click on new table button
+                //Click on new table button
                 tableCreatePO.clickCreateNewTable();
 
-                //Step 3 - Enter table field values
+                //Enter table field values
                 testCase.tableFields.forEach(function(tableField) {
                     tableCreatePO.enterTableFieldValue(tableField.fieldTitle, tableField.fieldValue);
                 });
 
-                //Step 4 - Verify validation
+                //Verify validation
                 testCase.tableFieldError.forEach(function(tableField) {
                     tableCreatePO.verifyTableFieldValidation(tableField.fieldTitle, tableField.fieldError);
                     //Verify create table button is not enabled since there is error in field values
                     expect(browser.isEnabled('.modal-footer .finishedButton')).toBeFalsy();
                 });
 
-                //Step 5 - Cancel table dialogue
+                //Cancel table dialogue
                 tableCreatePO.clickCancelBtn();
 
-                //Step 6 - Get the new count of table links in the left nav
+                //Get the new count of table links in the left nav
                 let newTableLinksCount = tableCreatePO.getAllTableLeftNavLinksList.value.length;
 
-                //Step 7 - Verify the table links NOT increased(ie table not saved)
+                //Verify the table links NOT increased(ie table not saved)
                 expect(newTableLinksCount).toBe(originalTableLinksCount);
 
             });
@@ -217,58 +224,41 @@
                 {fieldTitle: descFieldTitleText, fieldValue: rawValueGenerator.generateStringWithFixLength(50)}
             ];
 
-            //Step 1 - get the original count of table links in the left nav
+            //Get the original count of table links in the left nav
             tableCreatePO.newTableBtn.waitForVisible();
             let originalTableLinksCount = tableCreatePO.getAllTableLeftNavLinksList.value.length;
 
-            //Step 2 - Click on new table button
+            //Click on new table button
             tableCreatePO.clickCreateNewTable();
 
-            //Step 3 - Enter table field values
+            //Enter table field values
             tableFields.forEach(function(tableField) {
                 tableCreatePO.enterTableFieldValue(tableField.fieldTitle, tableField.fieldValue);
             });
 
-            //Step 5 - Click on close button on the dialogue
+            //Click on close button on the dialogue
             tableCreatePO.clickCloseBtn();
 
-            //Step 6 - Get the new count of table links in the left nav
+            //Get the new count of table links in the left nav
             let newTableLinksCount = tableCreatePO.getAllTableLeftNavLinksList.value.length;
 
-            //Step 7 - Verify the table links NOT increased(ie table not saved)
+            //Verify the table links NOT increased(ie table not saved)
             expect(newTableLinksCount).toBe(originalTableLinksCount);
 
-            //Step 8 - Verify the new table name is not in the list of the leftNav tables
+            //Verify the new table name is not in the list of the leftNav tables
             let tableList = tableCreatePO.getAllTablesFromLeftNav();
             expect(tableList.indexOf(tableName)).toBe(-1);
 
         });
 
         it('Verify that only ADMIN can add a new table', function() {
-            let userId;
-
-            //Create a user
-            browser.call(function() {
-                return e2eBase.recordBase.apiBase.createUser().then(function(userResponse) {
-                    userId = JSON.parse(userResponse.body).id;
-                });
-            });
-
-            //Add user to participant appRole
-            browser.call(function() {
-                return e2eBase.recordBase.apiBase.assignUsersToAppRole(testApp.id, e2eConsts.PARTICIPANT_ROLEID, [userId]);
-            });
 
             //get the user authentication
-            browser.call(function() {
-                return RequestSessionTicketPage.get(e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.recordBase.apiBase.resolveUserTicketEndpoint() + '?uid=' + userId + '&realmId='));
-            });
+            RequestSessionTicketPage.get(e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.recordBase.apiBase.resolveUserTicketEndpoint() + '?uid=' + userId + '&realmId='));
 
             //go to apps page
-            browser.call(function() {
-                // Load the requestAppsPage (shows a list of all the apps in a realm)
-                return RequestAppsPage.get(e2eBase.getRequestAppsPageEndpoint(realmName));
-            });
+            // Load the requestAppsPage (shows a list of all the apps in a realm)
+            RequestAppsPage.get(e2eBase.getRequestAppsPageEndpoint(realmName));
 
             //select the App
             RequestAppsPage.selectApp(testApp.name);

@@ -41,7 +41,7 @@
             //TODO need to figure out how to click on recordId which is under moreFields since scroll is not supported in safari.
             if (browserName !== 'safari') {
                 // open a multi-page report
-                e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE2].id, 1);
+                e2ePageBasePO.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE2].id, 1);
 
                 // verify nav details on FIRST page
 
@@ -104,7 +104,7 @@
 
         it('Verify lack of navigation in single-page report', function() {
             // open a single-page report
-            e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 0);
+            e2ePageBasePO.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 0);
             // verify navigation components
             let expectedRecordCount = (e2eConsts.MAX_PAGING_SIZE - recOffset).toString() + ' records';
             expect(reportNavPO.recordsCount.getText()).toBe(expectedRecordCount);
@@ -116,7 +116,7 @@
         // TODO: Disabled Due to timeout on SauceLab, left in here in case records reqiured to trigger pagination is reduced (MC-2327)
         xit('Verify change of navigability after search', function() {
             // open a multi-page report
-            e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE2].id, 1);
+            e2ePageBasePO.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE2].id, 1);
             // get the value from the first cell in the first row
             let row = reportContentPO.getRecordRowElement(0);
             let cell = reportContentPO.getRecordRowCells(row).value[1]; // 0 is the 'More...' menu
