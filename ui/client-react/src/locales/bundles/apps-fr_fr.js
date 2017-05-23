@@ -724,6 +724,12 @@ export default {
                 prompt: "Tapez OUI pour confirmer que vous souhaitez supprimer ce tableau."
             },
             YES: "OUI"
+        },
+        automationList: {
+            nameHeader: "Prénom",
+            activeHeader: "Actif",
+            activeYes: "Oui",
+            activeNo: "Non"
         }
     }
 };

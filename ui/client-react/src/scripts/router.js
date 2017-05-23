@@ -183,17 +183,6 @@ const routes = [
         ]
     },
     {
-        path: `${SETTINGS_ROUTE}/app/:appId/table/:tblId`,
-        component: ConnectedSettingsNav,
-        routes: [
-            {
-                path: `${SETTINGS_ROUTE}/app/:appId/table/:tblId/properties`,
-                exact: true,
-                component: withFlux(TablePropertiesRoute)
-            }
-        ]
-    },
-    {
         path: `${SETTINGS_ROUTE}/app/:appId/`,
         component: ConnectedSettingsNav,
         routes: [
@@ -204,6 +193,17 @@ const routes = [
             {
                 path: `${SETTINGS_ROUTE}/app/:appId/automations`,
                 component: AutomationListRoute
+            },
+            {
+                path: `${SETTINGS_ROUTE}/app/:appId/table/:tblId`,
+                component: ConnectedSettingsNav,
+                routes: [
+                    {
+                        path: `${SETTINGS_ROUTE}/app/:appId/table/:tblId/properties`,
+                        exact: true,
+                        component: withFlux(TablePropertiesRoute)
+                    }
+                ]
             },
             {
                 path: `${SETTINGS_ROUTE}/app/:appId`,

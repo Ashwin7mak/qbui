@@ -726,6 +726,12 @@ export default {
                 prompt: "Geben Sie JA ein, um zu bestätigen, dass Sie diese Tabelle löschen möchten"
             },
             YES: "JA"
+        },
+        automationList: {
+            nameHeader: "Name",
+            activeHeader: "Aktiv",
+            activeYes: "Ja",
+            activeNo: "Nein"
         }
     }
 };

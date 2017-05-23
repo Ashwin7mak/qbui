@@ -61,7 +61,9 @@ export default {
     STACK               : 'stack',
 
     // Automations
-    AUTOMATION_INVOKE   : 'workflow',
-    AUTOMATION_API      : 'api/v1',
-    AUTOMATION_FLOWS    : 'workflow/flows'
+    AUTOMATION : {
+        INVOKE   : 'workflow',
+        API      : 'api/v1',
+        FLOWS    : 'workflow/flows'
+    }
 };

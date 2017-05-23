@@ -1,83 +1,93 @@
-import React from 'react';
-import {Button, Table} from 'react-bootstrap';
-import {connect} from 'react-redux';
-import Loader from 'react-loader';
-import {NotificationManager} from 'react-notifications';
-import Locale from '../../../locales/locales';
-import Stage from '../../../../../reuse/client/src/components/stage/stage';
-import IconActions from '../../../../../reuse/client/src/components/iconActions/iconActions';
-import {I18nMessage} from '../../../utils/i18nMessage';
-import Icon, {AVAILABLE_ICON_FONTS} from '../../../../../reuse/client/src/components/icon/icon.js';
-import QBModal from '../../qbModal/qbModal';
-import QBPanel from '../../QBPanel/qbpanel.js';
-import {loadAutomations} from '../../../actions/automationActions';
-import _ from 'lodash';
+import React, {Component} from "react";
+import {Table} from "react-bootstrap";
+import {connect} from "react-redux";
+import Loader from "react-loader";
+import Stage from "../../../../../reuse/client/src/components/stage/stage";
+import IconActions from "../../../../../reuse/client/src/components/iconActions/iconActions";
+import {I18nMessage} from "../../../utils/i18nMessage";
+import {loadAutomations} from "../../../actions/automationActions";
+import getAutomationList from "../../../reducers/automation";
+import * as SpinnerConfigurations from "../../../constants/spinnerConfigurations";
+import _ from "lodash";
 
-import './automationList.scss';
-import {CONTEXT} from '../../../actions/context';
+import "./automationList.scss";
+import {CONTEXT} from "../../../actions/context";
 
 
-export const AutomationListRoute = React.createClass({
+export class AutomationListRoute extends Component {
 
     getInitialState() {
         return {
             confirmInputValue: ""
         };
-    },
+    }
+
     getExistingAutomationNames() {
         return [];
-    },
-    getPageActions(maxButtonsBeforeMenu) {
-        const actions = [
-        ];
-        return (<IconActions className="pageActions" actions={actions} maxButtonsBeforeMenu={maxButtonsBeforeMenu}/>);
-    },
+    }
+
+    getPageActions() {
+        const actions = [];
+        return (<IconActions className="pageActions" actions={actions} maxButtonsBeforeMenu="5"/>);
+    }
+
     getStageHeadline() {
-        return <div className="automationListSettingsStage stageHeadLine"><I18nMessage message={"settings.automationSettings"}/></div>;
-    },
+        return <div className="automationListSettingsStage stageHeadLine"><I18nMessage message="settings.automationSettings"/></div>;
+    }
+
     componentDidMount() {
         if (this.props.app) {
             this.props.loadAutomations(CONTEXT.AUTOMATION.GRID, this.props.app.id);
         }
-    },
-    componentWillReceiveProps(nextProps) {
-    },
+    }
+
     renderAutomations() {
         if (this.props.automations && this.props.automations.length > 0) {
             return this.props.automations.map((automation, index) => (
-                <tr><td>{automation.name}</td></tr>
+                <tr><td>{automation.name}</td><td>{automation.active ? <I18nMessage message="automationList.activeYes"/> : <I18nMessage message="automationList.activeNo"/>}</td></tr>
             ));
         }
         return [];
-    },
+    }
+
     render() {
         let loaded = !(_.isUndefined(this.props.app) || _.isUndefined(this.props.automations));
-        let names = this.renderAutomations();
-        return <Loader loaded={loaded}>
-            <div className="automationSettings">
-                <Stage stageHeadline={this.getStageHeadline()} pageActions={this.getPageActions(5)}></Stage>
-
-                <div className="automationSettings--container">
-                    <Table hover className="automationSettings--table">
-                      <thead>
-                        <tr>
-                          <th>Name</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {names}
-                      </tbody>
-                    </Table>
+        let automationRows = this.renderAutomations();
+        return (
+            <Loader loaded={loaded} options={SpinnerConfigurations.AUTOMATION_LIST_LOADING}>
+                <div className="automationSettings">
+                    <Stage stageHeadline={this.getStageHeadline()} pageActions={this.getPageActions()}/>
+                    <div className="automationSettings--container">
+                        <Table hover className="automationSettings--table">
+                          <thead>
+                            <tr>
+                              <th><I18nMessage message="automationList.nameHeader"/></th>
+                            </tr>
+                            <tr>
+                                <th><I18nMessage message="automationList.activeHeader"/></th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {automationRows}
+                          </tbody>
+                        </Table>
+                    </div>
                 </div>
-            </div>
-        </Loader>;
+            </Loader>
+        );
     }
-});
+}
+
+AutomationListRoute.protoTypes = {
+    /** The list of automations to display. */
+    automations: React.PropTypes.array,
+    /** Get the list of automations for the app. */
+    loadAutomations: React.PropTypes.func
+};
 
 const mapStateToProps = (state) => {
     return {
-        isDirty: false,
-        automations : state.automation.list
+        automations : getAutomationList(state)
     };
 };
 

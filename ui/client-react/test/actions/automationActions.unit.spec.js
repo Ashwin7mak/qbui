@@ -3,7 +3,6 @@ import {__RewireAPI__ as AutomationActionsRewireAPI} from "../../src/actions/aut
 
 import * as types from "../../src/actions/types";
 import {CONTEXT} from "../../src/actions/context";
-import automationsModel from "../../src/models/automationsModel";
 import mockStore from "redux-mock-store";
 import thunk from "redux-thunk";
 import Promise from "bluebird";
@@ -17,9 +16,8 @@ const middlewares = [thunk];
 const mockAutomationStore = mockStore(middlewares);
 
 function event(ctx, type, content) {
-    let id = ctx;
     return {
-        id: id,
+        context: ctx,
         type: type,
         content: content || null
     };
@@ -51,12 +49,9 @@ describe('Test AutomationActions function success workflow', () => {
 
     it('verify loadAutomations action', (done) => {
 
-        // the mock store makes the actions dispatched available via getActions()
-        // so we don't need to spy on the dispatcher etc.
-        let model = automationsModel.set(appId, mockAutomationsResponse.data);
         const expectedActions = [
-            event(context, types.LOAD_AUTOMATIONS, {appId}),
-            event(context, types.LOAD_AUTOMATIONS_SUCCESS, model)
+            event(context, types.LOAD_AUTOMATIONS, appId),
+            event(context, types.LOAD_AUTOMATIONS_SUCCESS, mockAutomationsResponse.data)
         ];
         const store = mockAutomationStore({});
 
@@ -95,9 +90,8 @@ describe('Test AutomationActions function failure workflow', () => {
     });
 
     it('verify loadAutomations action with no context', (done) => {
-        let model = automationsModel.set(appId, mockAutomationsResponse.data);
         const expectedActions = [
-            {id: null, type: types.LOAD_AUTOMATIONS_FAILED, content: 500}
+            event(null, types.LOAD_AUTOMATIONS_FAILED, 500)
         ];
         const store = mockAutomationStore({});
 
@@ -113,9 +107,8 @@ describe('Test AutomationActions function failure workflow', () => {
     });
 
     it('verify loadAutomations action with no app', (done) => {
-        let model = automationsModel.set(appId, mockAutomationsResponse.data);
         const expectedActions = [
-            {id: null, type: types.LOAD_AUTOMATIONS_FAILED, content: 500}
+            event(null, types.LOAD_AUTOMATIONS_FAILED, 500)
         ];
         const store = mockAutomationStore({});
 
@@ -131,9 +124,8 @@ describe('Test AutomationActions function failure workflow', () => {
     });
 
     it('verify loadAutomations action with error response', (done) => {
-        let model = automationsModel.set(appId, mockAutomationsResponse.data);
         const expectedActions = [
-            event(context, types.LOAD_AUTOMATIONS, {appId}),
+            event(context, types.LOAD_AUTOMATIONS, appId),
             event(context, types.LOAD_AUTOMATIONS_FAILED, mockAutomationsResponse)
         ];
         const store = mockAutomationStore({});

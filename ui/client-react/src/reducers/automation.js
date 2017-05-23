@@ -11,7 +11,9 @@ import _ from "lodash";
 const automation = (
     state = {
         // default
-        appId: ''
+        appId: null,
+        list: null,
+        error: undefined
     }, action) => {
 
     //  what report action is being requested
@@ -20,23 +22,21 @@ const automation = (
         //  load a list of automations
         return {
             ...state,
-            appId: action.content ? action.content.appId : '',
+            appId: action.content,
         };
     }
     case types.LOAD_AUTOMATIONS_FAILED: {
         return {
             ...state,
             list: null,
-            error: true,
-            errorDetails: action.content
+            error: action.content
         };
     }
     case types.LOAD_AUTOMATIONS_SUCCESS: {
         return {
             ...state,
-            list: action.content.automationsList,
-            error: false,
-            errorDetails: null
+            list: action.content,
+            error: undefined
         };
     }
     default:
@@ -46,3 +46,5 @@ const automation = (
 };
 
 export default automation;
+
+export const getAutomationList = state => state.automation.list;

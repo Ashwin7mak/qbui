@@ -735,6 +735,12 @@ export default {
                 prompt: "Type YES to confirm that you want to delete this table"
             },
             YES: "YES"
+        },
+        automationList: {
+            nameHeader: "Name",
+            activeHeader: "Active",
+            activeYes: "Yes",
+            activeNo: "No"
         }
     }
 };

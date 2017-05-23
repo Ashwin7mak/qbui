@@ -2,7 +2,6 @@ import React from 'react';
 import {Dropdown} from 'react-bootstrap';
 import Icon, {AVAILABLE_ICON_FONTS} from '../../../../reuse/client/src/components/icon/icon.js';
 import {I18nMessage} from '../../../../reuse/client/src/utils/i18nMessage';
-import * as UrlConsts from "../../constants/urlConstants";
 import URLUtils from '../../utils/urlUtils';
 import './builderDropDown.scss';
 
@@ -40,8 +39,9 @@ let BuilderDropDownAction = React.createClass({
     getConfigOptions() {
         let isAppView = !!this.props.selectedApp; // !! converts to boolean
         let isTableView = (isAppView && this.props.selectedTable);
+        let isFormView = (isTableView && this.props.recId);
         let isReportView = (isTableView && !this.props.recId && this.props.rptId);
-        let hasContextView = (isTableView && this.props.recId);
+        let hasContextView = isFormView || isReportView;
         let classes = "dropdownToggle globalActionLink" + (hasContextView ? " hasContextView" : "");
 
         let dropDown = <Dropdown className={classes} id="nav-right-dropdown" dropup={this.props.position === "left"} >
@@ -55,15 +55,15 @@ let BuilderDropDownAction = React.createClass({
                 <div className="configMenu">
                     {isAppView ?
                     <div className="configMenu--configSet configMenu__App">
-                        <h3 className="menuHeader"><I18nMessage message={"settings.header"}/></h3>
+                        <h3 className="menuHeader"><I18nMessage message="settings.header"/></h3>
                         <ul>
                             <li>
                                 <Icon className="headingIcon" iconFont={AVAILABLE_ICON_FONTS.UI_STURDY} icon="favicon"/>
-                                <span><I18nMessage message={"settings.appHeader"}/></span>
+                                <span><I18nMessage message="settings.appHeader"/></span>
                             </li>
                             <li>
                                 <a onClick={this.getAutomationSettingsLink} className="modifyAutomationSettings">
-                                    <I18nMessage message={"settings.automationSettings"}/>
+                                    <I18nMessage message="settings.automationSettings"/>
                                 </a>
                             </li>
                         </ul>
@@ -73,11 +73,11 @@ let BuilderDropDownAction = React.createClass({
                         <ul>
                             <li>
                                 {this.props.selectedTable.tableIcon && <Icon className="headingIcon" iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY} icon={this.props.selectedTable.tableIcon}/> }
-                                <span><I18nMessage message={"settings.tablesHeader"}/></span>
+                                <span><I18nMessage message="settings.tablesHeader"/></span>
                             </li>
                             <li>
                                 <a onClick={this.getTableSettingsLink} className="modifyTableSettings">
-                                    <I18nMessage message={"settings.tableSettings"}/>
+                                    <I18nMessage message="settings.tableSettings"/>
                                 </a>
                             </li>
                         </ul>
@@ -86,25 +86,25 @@ let BuilderDropDownAction = React.createClass({
                     {isReportView &&
                         <div className="configMenu--configSet configMenu__currentContext">
                             <li className="heading">
-                                <span><I18nMessage message={"settings.reportsHeader"}/></span>
+                                <span><I18nMessage message="settings.reportsHeader"/></span>
                             </li>
                             <li>
                                 <a className="modifyForm" onClick={this.props.navigateToBuilderReport}>
-                                    <I18nMessage message={"settings.configureReportBuilder"}/>
+                                    <I18nMessage message="settings.configureReportBuilder"/>
                                 </a>
                             </li>
                         </div>
                     }
 
-                    {hasContextView ?
+                    {isFormView ?
                     <div className="configMenu--configSet configMenu__currentContext">
                         <ul>
                             <li>
-                                <span><I18nMessage message={"settings.formsHeader"}/></span>
+                                <span><I18nMessage message="settings.formsHeader"/></span>
                             </li>
                             <li>
                                 <a onClick={this.props.navigateToBuilder} className="modifyForm">
-                                    <I18nMessage message={"settings.configureFormBuilder"}/>
+                                    <I18nMessage message="settings.configureFormBuilder"/>
                                 </a>
                             </li>
                         </ul>

@@ -17,17 +17,17 @@ describe('Automation reducer functions', () => {
     describe('Automation reducer initialize', () => {
         it('returns correct initial state empty action', () => {
             let resultState = reducer(undefined, {});
-            expect(resultState).toEqual({appId: ''});
+            expect(resultState).toEqual({appId: null, list: null, error: undefined});
         });
 
         it('returns correct initial state on non-automation action', () => {
             let resultState = reducer(undefined, {type: types.CHANGE_LOCALE, id: 10});
-            expect(resultState).toEqual({appId: ''});
+            expect(resultState).toEqual({appId: null, list: null, error: undefined});
         });
 
         it('returns correct initial state on automation action', () => {
-            let resultState = reducer(undefined, {type: types.LOAD_AUTOMATIONS, id: 10, content: {appId: 'TEST'}});
-            expect(resultState).toEqual({appId: 'TEST'});
+            let resultState = reducer(undefined, {type: types.LOAD_AUTOMATIONS, id: 10, content: 'TEST'});
+            expect(resultState).toEqual({appId: 'TEST', list: null, error: undefined});
         });
     });
 
@@ -40,13 +40,13 @@ describe('Automation reducer functions', () => {
         });
 
         it('returns correct initial state on automation action', () => {
-            let resultState = reducer(state, {type: types.LOAD_AUTOMATIONS_SUCCESS, id: 10, content: {appId: 'TEST', automationsList: [{name: 'Auto 1'}]}});
-            expect(resultState).toEqual({appId: 'TEST', list: [{name: 'Auto 1'}], error: false, errorDetails: null});
+            let resultState = reducer(state, {type: types.LOAD_AUTOMATIONS_SUCCESS, id: 10, content: [{name: 'Auto 1'}]});
+            expect(resultState).toEqual({appId: 'TEST', list: [{name: 'Auto 1'}], error: undefined});
         });
 
         it('returns correct initial state on automation action', () => {
             let resultState = reducer(state, {type: types.LOAD_AUTOMATIONS_FAILED, id: 10, content: {message: 'error'}});
-            expect(resultState).toEqual({appId: 'TEST', list: null, error: true, errorDetails: {message: 'error'}});
+            expect(resultState).toEqual({appId: 'TEST', list: null, error: {message: 'error'}});
         });
     });
 

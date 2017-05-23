@@ -1,5 +1,4 @@
 import AutomationService from '../services/automationService';
-import AutomationsModel from '../models/automationsModel';
 import Promise from 'bluebird';
 import _ from 'lodash';
 
@@ -20,9 +19,8 @@ let logger = new Logger();
  * @returns {{id: *, type: *, content: *}}
  */
 function event(context, type, content) {
-    let id = context;
     return {
-        id: id,
+        context: context,
         type: type,
         content: content || null
     };
@@ -41,15 +39,13 @@ export const loadAutomations = (context, appId) => {
             if (context && appId) {
                 logger.debug(`AutomationsAction.loadAutomations: loading automation list for appId: ${appId}`);
 
-                dispatch(event(context, types.LOAD_AUTOMATIONS, {appId}));
+                dispatch(event(context, types.LOAD_AUTOMATIONS, appId));
 
                 let automationService = new AutomationService();
                 automationService.getAutomations(appId)
                     .then((response) => {
                         logger.debug('AutomationService getAutomations success');
-                        //  TODO change to a class like reportModel
-                        let model = AutomationsModel.set(appId, response.data);
-                        dispatch(event(context, types.LOAD_AUTOMATIONS_SUCCESS, model));
+                        dispatch(event(context, types.LOAD_AUTOMATIONS_SUCCESS, response.data));
                         resolve();
                     })
                     .catch((error) => {

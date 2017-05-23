@@ -64,18 +64,3 @@ $table-properties-panel-width: 776px;
     background: $color-black-100;
 }
 
-.deleteautomationListDialogContent {
-    > * {
-        margin-bottom: $modal-vertical-spacer;
-    }
-    .note {
-        color: $alert-color;
-    }
-    .prompt {
-        .deletePrompt {
-            margin-left: 8px;
-            text-align: center;
-        }
-    }
-}
-
