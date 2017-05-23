@@ -98,12 +98,6 @@ class StandardGrid extends Component {
     }
 }
 
-StandardGrid.defaultProps = {
-    shouldFacet: true,
-    facetFields:[],
-    shouldSearch: true
-};
-
 StandardGrid.propTypes = {
 
     /**
@@ -134,6 +128,7 @@ StandardGrid.propTypes = {
 
     /**
      * Following two properties lets you transform the columns
+     * This can be used to add the sort menu item for example
      */
     columnTransforms: PropTypes.array,
     columnTransformProps: PropTypes.array,
@@ -145,23 +140,34 @@ StandardGrid.propTypes = {
     doUpdate: PropTypes.func.isRequired,
 
     /**
-     * Whether to provide a search box
+     * Whether to provide a search box to filter the grid
      */
     shouldSearch: PropTypes.bool,
 
     /**
-     * Whether to Facet in this grid or no
+     * Whether to Facet in this grid or not
      */
     shouldFacet: PropTypes.bool,
 
     /**
-     * The Facet Fields to display
+     * if should facet then the Facet Fields to display needs to be passed
      */
     facetFields: PropTypes.array
 };
 
+
+StandardGrid.defaultProps = {
+    shouldFacet: true,
+    facetFields:[],
+    shouldSearch: true
+};
+
 StandardGrid.defaultProps = {
     items: [],
+    /**
+     * Provide the Header Menu Transformations.
+     * You can append more menu like the "Sort" to the column
+     */
     columnTransformsClasses: [HeaderMenuColumnTransform],
     columnTransformProps: [
         {

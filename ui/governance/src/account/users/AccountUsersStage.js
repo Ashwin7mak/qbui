@@ -16,6 +16,10 @@ class AccountUsersStage extends React.Component {
         super(...args);
     }
 
+    /**
+     * Paid users are any users that have access to the app and are not internal Quick Base users
+     * @returns {*}
+     */
     getTotalPaidUsers() {
         return lodash.sumBy(this.props.users, user =>  (
             user.hasAppAccess && !RealmUserAccountFlagConstants.HasAnySystemPermissions(user) && !RealmUserAccountFlagConstants.IsDenied(user) && !RealmUserAccountFlagConstants.IsDeactivated(user) ? 1 : 0));

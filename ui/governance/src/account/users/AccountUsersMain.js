@@ -12,21 +12,23 @@ import constants from "../../app/constants";
 import './accountUsersMain.scss';
 
 /**
- * Represents the top level page that contains the grid for account users
+ * Represents the top level page that contains top level components
  */
 class AccountUsers extends Component {
 
     constructor(props) {
         super(props);
-        this.GRID_ID = "accountUsers";
-        this.ITEMS_PER_PAGE = constants.USERS_GRID_ITEMSPERPAGE;
+        // Currently we have 1 Grid that shows the Users in an Account
+        this.USERS_GRID_ID = "accountUsers";
+        // Get the number of users to show in a single page
+        this.USERS_PER_PAGE = constants.USERS_GRID_ITEMSPERPAGE;
     }
 
     /**
-     * When the component mounts, get the users
+     * When the component mounts, get the users and dispatch actions after success
      */
     componentDidMount() {
-        this.props.fetchData(this.props.match.params.accountId, this.GRID_ID, this.ITEMS_PER_PAGE);
+        this.props.fetchData(this.props.match.params.accountId, this.USERS_GRID_ID, this.USERS_PER_PAGE);
     }
 
     render() {

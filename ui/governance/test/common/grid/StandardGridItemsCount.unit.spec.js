@@ -26,8 +26,8 @@ describe('StandardGridItemsCount', () => {
     it('renders the filtered items count when the filteredItemCount not equals itemCount', () => {
         component = shallow(<StandardGridItemsCount totalItems={5} totalFilteredItems={1} itemTypePlural={"mockPlural"} itemTypeSingular={"mockSingular"} />);
 
-        expect(component.find('.itemCount')).toHaveText('1 of 5 mockPlural');
-        expect(component.find('.itemCount')).not.toHaveText('1 of 5 mockSingular');
+        expect(component.find('.itemCount')).toHaveText('1 of 5 mockSingular');
+        expect(component.find('.itemCount')).not.toHaveText('1 of 5 mockPlural');
     });
 
     it('renders single item type value when item count is 1', () => {
