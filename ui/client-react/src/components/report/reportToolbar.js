@@ -206,9 +206,10 @@ const ReportToolbar = React.createClass({
         }
         // Conditional marking display of filter box. Show when records have been loaded. This box does not depend on the record counting call
         const isAvailable = !isLoading && !isError ;
-        const showFilterSearchBox = isAvailable && isPageLoaded && !this.props.phase1;
-        const showSortAndGroup = isAvailable && !this.props.phase1;
-        const showFacetsMenu = isAvailable && hasFacets && !this.props.phase1;
+        const showFilterSearchBox = isAvailable && isPageLoaded && !this.props.phase1 && this.props.isSearchBoxVisible;
+        const showSortAndGroup = isAvailable && !this.props.phase1 && this.props.isSortAndGroupVisible;
+        const showFacetsMenu = isAvailable && hasFacets && !this.props.phase1 && this.props.isFacetMenuVisible;
+        const showRightToolbar = this.props.isRightToolbarVisible;
         let reportToolbar = (
             <div className={"reportToolbar " + (hasFacets ? "" : "noFacets")}>
                 <div className="leftReportToolbar">
@@ -216,15 +217,17 @@ const ReportToolbar = React.createClass({
 
                     {/*TODO : check if searchBox is enabled for this report,
                      if has facets has search too, eg no facets without searchBox */}
-                    {showFilterSearchBox && this.props.isSearchBoxVisible ?
-                        <FilterSearchBox onChange={this.handleSearchChange}
+                    {showFilterSearchBox ?
+                        <FilterSearchBox className="reportToolbarSearchBox"
+                                         onChange={this.handleSearchChange}
                                          nameForRecords={this.props.nameForRecords}
                                          searchBoxKey="reportToolBar"
                                          {...this.props} /> :
                         null
                     }
-                    {showSortAndGroup && this.props.isSortAndGroupVisible ?
-                        <SortAndGroup  {...this.props}
+                    {showSortAndGroup ?
+                        <SortAndGroup className="reportToolbarSortAndGroup"
+                            {...this.props}
                                        filter={{selections: this.props.selections,
                                            facet: this.props.reportData.facetExpression,
                                            search: this.props.searchStringForFiltering}}/> :
@@ -232,7 +235,7 @@ const ReportToolbar = React.createClass({
                     }
                     {/* check if facets is enabled for this report,
                      also hide Facets Menu Button if facets disabled  */}
-                    {showFacetsMenu && this.props.isFacetMenuVisible ?
+                    {showFacetsMenu ?
                         (<FacetsMenu className="facetMenu"
                                      {...this.props}
                                      isLoading={isLoading}
@@ -244,7 +247,7 @@ const ReportToolbar = React.createClass({
                         null
                     }
                 </div>
-                {this.props.isRightToolbarVisible &&
+                {showRightToolbar &&
                 <div className="rightReportToolbar">
                     {!isLoading && !isError ?
                         <RecordsCount recordCount={recordCount}
