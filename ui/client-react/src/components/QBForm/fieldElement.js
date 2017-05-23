@@ -163,10 +163,8 @@ const mapStateToProps = (state) => {
 
 // similarly, abstract out the Redux dispatcher from the presentational component
 // (another bit of boilerplate to keep the component free of Redux dependencies)
-const mapDispatchToProps = (dispatch) => {
-    return {
-        editRecordValidateField
-    };
+const mapDispatchToProps = {
+    editRecordValidateField
 };
 
 export default connect(

@@ -3,6 +3,7 @@ import Locale from "../../locales/locales";
 import {CONTEXT} from "../../actions/context";
 import {hideRelationshipDialog} from '../../actions/relationshipBuilderActions';
 import {updateField} from '../../actions/fieldsActions';
+import {getDroppedNewFormFieldId} from '../../reducers/relationshipBuilder';
 import Select from '../select/reactSelectWrapper';
 import {connect} from 'react-redux';
 import LinkToRecordTableSelectionDialog from './linkToRecordTableSelectionDialog';
@@ -22,7 +23,6 @@ export const LinkToRecordFieldValueEditor = React.createClass({
         removeFieldFromForm: PropTypes.func,
         tblId: PropTypes.string,
         tables: PropTypes.array,
-        location: PropTypes.object,
         formId: PropTypes.string,
     },
 
@@ -91,7 +91,7 @@ export const LinkToRecordFieldValueEditor = React.createClass({
 
 const mapStateToProps = (state) => {
     return {
-        newFormFieldId: !state.relationshipBuilder.draggingLinkToRecord ? state.relationshipBuilder.newFormFieldId : null,
+        newFormFieldId: getDroppedNewFormFieldId(state),
     };
 };
 

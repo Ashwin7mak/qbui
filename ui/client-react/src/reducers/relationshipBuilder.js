@@ -37,3 +37,7 @@ const relationshipBuilder = (state = [], action) => {
 
 export default relationshipBuilder;
 
+export const getDroppedNewFormFieldId = (state) => {
+    return state.relationshipBuilder.draggingLinkToRecord ? null : state.relationshipBuilder.newFormFieldId ;
+};
+
