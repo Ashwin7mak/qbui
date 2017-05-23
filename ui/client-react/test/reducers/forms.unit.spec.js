@@ -24,7 +24,7 @@ describe('Forms reducer functions', () => {
     let stateWithViewForm = {
         'view': {
             id: 'view',
-            formData: {formMeta: {fields: [1, 2, 3, 4, 5]}}
+            formData: {formMeta: 'some meta data'}
         }
     };
 
@@ -233,6 +233,7 @@ describe('Forms reducer functions', () => {
         });
 
         it('returns a new state with a single field removed', () => {
+            stateWithViewForm.view.formData.formMeta = {fields: [1, 2, 3, 4, 5]};
             expect(reducer(stateWithViewForm, actionPayload)).toEqual({
                 [VIEW]: {
                     ...stateWithViewForm[VIEW],
