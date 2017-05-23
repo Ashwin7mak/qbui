@@ -318,7 +318,7 @@ export const QBForm = React.createClass({
      * Creates an element on the form
      * @param element
      * @param location
-     * @param index - We ignore the order index because we can use the ordered array to help with performance.
+     * @param index - NOTE: We ignore the order index because the array is already ordered correctly. This improves performance on Form Builder.
      * @returns {*}
      */
     createElement(element, location, index) {
