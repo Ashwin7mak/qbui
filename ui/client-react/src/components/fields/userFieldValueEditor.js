@@ -66,16 +66,24 @@ const UserFieldValueEditor = React.createClass({
         };
     },
 
+    updateValidState(isValid, selectedUser) {
+        if (this.props.isValid) {
+            this.props.isValid(isValid ? selectedUser : false)
+        }
+    },
+
     /**
      * user selection callback
      * @param user
      */
     selectUser(user) {
-        if (user || !this.props.fieldDef.required) {
+        let selectedUserIsValid = user || !this.props.fieldDef.required;
+
+        if (selectedUserIsValid) {
             this.setState({selectedUserId: user ? user.value : null});
-            return this.props.isValid(user);
         }
-        return this.props.isValid(false);
+
+        this.updateValidState(selectedUserIsValid, user);
     },
 
     /**
