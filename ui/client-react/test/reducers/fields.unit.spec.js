@@ -84,7 +84,7 @@ describe('Test fields reducer', () => {
             appId: appId,
             tblId: tblId,
             content: {
-                newField: {}
+                field: {}
             }
         };
         const fieldsWithNewFieldAddedOn = [{builtIn: true, id: 3}, {builtIn: false, id: 8}, {
