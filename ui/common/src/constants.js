@@ -233,6 +233,8 @@
             RECORD_OWNER: "Record Owner"
         },
         BUILTIN_FIELD_ID: {
+            //used to remove builtin fields from existing menu
+            ARRAY: [1, 2, 3, 4, 5],
             DATE_CREATED: 1,
             DATE_MODIFIED: 2,
             RECORD_ID: 3,

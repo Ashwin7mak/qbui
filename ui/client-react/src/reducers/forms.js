@@ -2,8 +2,7 @@ import * as types from '../actions/types';
 import * as tabIndexConstants from '../../../client-react/src/components/formBuilder/tabindexConstants';
 import _ from 'lodash';
 import MoveFieldHelper from '../components/formBuilder/moveFieldHelper';
-import FieldFormats from '../utils/fieldFormats';
-import Locale from '../../../reuse/client/src/locales/locale';
+import constants from '../../../common/src/constants';
 
 const forms = (
 
@@ -49,8 +48,8 @@ const forms = (
         action.formData.formMeta.appId = action.formData.formMeta.appId || action.appId;
         action.formData.formMeta.tableId = action.formData.formMeta.tableId || action.tblId;
 
-        let BuiltinFields = [1, 2, 3, 4, 5];
-        let existingFieldIds = _.differenceBy(action.formData.fields, BuiltinFields, (field) => {
+       // let BUILT_IN_FIELDS = [1, 2, 3, 4, 5];
+        let existingFieldIds = _.differenceBy(action.formData.fields, constants.BUILTIN_FIELD_ID.ARRAY, (field) => {
             if (typeof field === 'number') {
                 return field;
             } else {
@@ -491,6 +490,7 @@ export const getExistingFields = (state, id) => {
     if (!currentForm) {
         return null;
     }
+
     if (_.has(currentForm, 'formData.fields') &&
         _.has(currentForm, 'formData.formMeta.fields')) {
         return _.differenceBy(currentForm.formData.fields, currentForm.formData.formMeta.fields, (field) => {
@@ -526,3 +526,4 @@ export default forms;
 export const getFormByContext = (state, context) => _.get(state, `forms.${context}`);
 
 export const getFormRedirectRoute = (state) => _.get(state, 'forms.redirectRoute');
+
