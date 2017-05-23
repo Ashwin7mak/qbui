@@ -20,7 +20,6 @@ const MoveFieldHelper = {
 
         removeElementFromCurrentLocationById(formMetaCopy, draggedItemProps);
         addElementToNewLocation(formMetaCopy, newLocation, draggedItemProps);
-        updateFormMetaFields(formMetaCopy, newLocation);
 
         return formMetaCopy;
     },
@@ -35,7 +34,6 @@ const MoveFieldHelper = {
     keyBoardMoveFieldUp(formMeta, currentLocation) {
         let formMetaCopy = _.cloneDeep(formMeta);
         swapFieldLocation(formMetaCopy, currentLocation, -1);
-        updateFormMetaFields(formMetaCopy, currentLocation);
 
         return formMetaCopy;
     },
@@ -43,16 +41,15 @@ const MoveFieldHelper = {
     keyBoardMoveFieldDown(formMeta, currentLocation) {
         let formMetaCopy = _.cloneDeep(formMeta);
         swapFieldLocation(formMetaCopy, currentLocation, 1);
-        updateFormMetaFields(formMetaCopy, currentLocation);
 
         return formMetaCopy;
     },
 
-    addFieldToForm(formMeta, newLocation, newField) {
+    addFieldToForm(formMeta, newLocation, field) {
         let formMetaCopy = _.cloneDeep(formMeta);
-        newField = {containingElement: newField};
-        addElementToNewLocation(formMetaCopy, newLocation, newField);
-        updateFormMetaFields(formMetaCopy, newLocation);
+        field = {containingElement: field};
+        addElementToNewLocation(formMetaCopy, newLocation, field);
+        formMetaCopy.fields.push(field.containingElement.id);
 
         return formMetaCopy;
     },
