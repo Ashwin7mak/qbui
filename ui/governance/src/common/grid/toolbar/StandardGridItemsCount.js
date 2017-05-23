@@ -1,11 +1,17 @@
-import React, {Component, PropTypes} from 'react';
-import './StandardGridItemsCount.scss';
+import React, {Component, PropTypes} from "react";
+import "./StandardGridItemsCount.scss";
 
 class StandardGridItemsCount extends Component {
     /**
-     * renders the item count
+     * Renders the item count
      * if we have some dynamic filtering in effect include the number of filtered items out of the total
      * otherwise just show the grid total items
+     *
+     * Single Item = 1 Item
+     * 0/Multiple Items = 0/1 Items
+     *
+     * Filtered Item = M of N Items
+     * Not Filtered = M Items
      */
 
     render() {
