@@ -35,6 +35,14 @@ export const updateReportRedirectRoute = (context, route) => {
 };
 
 /**
+ * Sets isPendingEdit to false.
+ * @param context
+ */
+export const setReportBuilderPendingEditToFalse = (context) => {
+    return event(context, types.SET_IS_PENDING_EDIT_TO_FALSE, {});
+};
+
+/**
  * Refresh the fields for the field select menu.
  * @param context
  * @param appId
