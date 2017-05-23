@@ -67,7 +67,7 @@
             let tableFields = [
                 {fieldTitle: tableNameFieldTitleText, fieldValue: tableName, placeHolder: 'For example, Customers'},
                 {fieldTitle: recordNameFieldTitleText, fieldValue: rawValueGenerator.generateStringWithFixLength(10), placeHolder: 'For example, customer'},
-                {fieldTitle: descFieldTitleText, fieldValue: rawValueGenerator.generateStringWithFixLength(50), placeHolder: 'Text to show when hovering over the table name in the left navigation'}
+                {fieldTitle: descFieldTitleText, fieldValue: rawValueGenerator.generateStringWithFixLength(10), placeHolder: 'Text to show when hovering over the table name in the left navigation'}
             ];
 
             //Click on new table button
@@ -221,7 +221,7 @@
             let tableFields = [
                 {fieldTitle: tableNameFieldTitleText, fieldValue: tableName},
                 {fieldTitle: recordNameFieldTitleText, fieldValue: rawValueGenerator.generateStringWithFixLength(10)},
-                {fieldTitle: descFieldTitleText, fieldValue: rawValueGenerator.generateStringWithFixLength(50)}
+                {fieldTitle: descFieldTitleText, fieldValue: rawValueGenerator.generateStringWithFixLength(10)}
             ];
 
             //Get the original count of table links in the left nav
