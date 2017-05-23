@@ -473,23 +473,12 @@ describe('Form Actions', () => {
 
     describe('removeFieldFromForm', () => {
         it('creates an action that will remove a field', () => {
-            expect(formActions.removeFieldFromForm('view', 1)).toEqual({
+            expect(formActions.removeFieldFromForm('view', {id: 6}, 1)).toEqual({
                 id: 'view',
                 type: types.REMOVE_FIELD,
-                content: {
-                    location: 1
-                }});
-        });
-    });
-
-    describe('markFieldForDeletion', () => {
-        it('creates an action that will mark a relationship for deletion on form save', () => {
-            expect(formActions.markFieldForDeletion('view', {id: 1})).toEqual({
-                id: 'view',
-                type: types.MARK_FIELD_FOR_DELETION,
-                content: {
-                    fieldId: {id: 1}
-                }});
+                field: {id: 6},
+                location: 1
+            });
         });
     });
 

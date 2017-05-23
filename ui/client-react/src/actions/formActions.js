@@ -269,19 +269,12 @@ export const deselectField = (formId, location) => {
 /**
  * Removes a field from the form
  * @param formId
+ * @param field
  * @param location
  * @returns {{id, type, content}|*}
  */
-export const removeFieldFromForm = (formId, location) => {
-    return event(formId, types.REMOVE_FIELD, {
-        location
-    });
-};
-
-export const markFieldForDeletion = (formId, fieldId) => {
-    return event(formId, types.MARK_FIELD_FOR_DELETION, {
-        fieldId
-    });
+export const removeFieldFromForm = (formId, field, location) => {
+    return {id: formId, type: types.REMOVE_FIELD, field, location};
 };
 
 /**

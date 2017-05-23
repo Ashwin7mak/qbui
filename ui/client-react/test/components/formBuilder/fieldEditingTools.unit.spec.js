@@ -13,6 +13,7 @@ const mockParentProps = {
 
 const formBuilderChildrenTabIndex = ["0"];
 const formId = 'view';
+const relatedField = {id: 6, tableId: 'tableId'};
 const location = {tabIndex: 0, sectionIndex: 1, columnIndex: 2, rowIndex: 3, elementIndex: 4};
 const diffSelectedLocation = {tabIndex: 0, sectionIndex: 1, columnIndex: 2, rowIndex: 3, elementIndex: 3};
 let component;
@@ -29,6 +30,7 @@ describe('FieldEditingTools', () => {
             formBuilderChildrenTabIndex={formBuilderChildrenTabIndex}
             selectedFields={[]}
             location={location}
+            relatedField={relatedField}
             removeFieldFromForm={mockParentProps.removeFieldFromForm}
         />);
 
@@ -38,7 +40,7 @@ describe('FieldEditingTools', () => {
 
         deleteButton.simulate('click');
 
-        expect(mockParentProps.removeFieldFromForm).toHaveBeenCalledWith(formId, location);
+        expect(mockParentProps.removeFieldFromForm).toHaveBeenCalledWith(formId, relatedField, location);
     });
 
     it('selects a field when an element is clicked', () => {
@@ -248,26 +250,6 @@ describe('FieldEditingTools', () => {
         instance.selectedCurrentField(e);
 
         expect(instance.onClickField).not.toHaveBeenCalled();
-    });
-
-    it('deletes fields when detail key field is deleted', () => {
-        spyOn(mockParentProps, 'markFieldForDeletion');
-
-        let relationships = [{detailTableId: 'tableId', id: 'id', detailFieldId: 'fieldId'}];
-        component = shallow(<FieldEditingTools
-            formBuilderChildrenTabIndex={formBuilderChildrenTabIndex}
-            selectedFields={[]}
-            location={location}
-            markFieldForDeletion={mockParentProps.markFieldForDeletion}
-            removeFieldFromForm={mockParentProps.removeFieldFromForm}
-            relationships={relationships}
-            relatedField={{id: 'fieldId', tableId: 'tableId'}}
-        />);
-
-        let deleteButton = component.find('.deleteFieldIcon button');
-        deleteButton.simulate('click');
-
-        expect(mockParentProps.markFieldForDeletion).toHaveBeenCalledWith(formId, 'fieldId');
     });
 });
 

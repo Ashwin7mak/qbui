@@ -6,7 +6,7 @@ import Breakpoints from "../../../utils/breakpoints";
 import {connect} from "react-redux";
 import {ENTER_KEY, SPACE_KEY} from "../../../../../reuse/client/src/components/keyboardShortcuts/keyCodeConstants";
 import _ from "lodash";
-import {selectFieldOnForm, removeFieldFromForm, deselectField, markFieldForDeletion} from "../../../actions/formActions";
+import {selectFieldOnForm, removeFieldFromForm, deselectField} from "../../../actions/formActions";
 import {CONTEXT} from "../../../actions/context";
 import * as tabIndexConstants from '../tabindexConstants';
 import "./fieldEditingTools.scss";
@@ -29,15 +29,8 @@ export class FieldEditingTools extends Component {
     }
 
     onClickDelete(e) {
-        let relatedRelationship = false;
-        if (this.props.relationships && Array.isArray(this.props.relationships) && this.props.relationships.length > 0) {
-            relatedRelationship = _.find(this.props.relationships, (rel) => rel.detailTableId === this.props.relatedField.tableId  && rel.detailFieldId === this.props.relatedField.id);
-        }
-        if (relatedRelationship) {
-            this.props.markFieldForDeletion(this.props.formId, this.props.relatedField.id);
-        }
         if (this.props.removeFieldFromForm) {
-            return this.props.removeFieldFromForm(this.props.formId, this.props.location);
+            return this.props.removeFieldFromForm(this.props.formId, this.props.relatedField, this.props.location);
         }
         e.preventDefault();
     }
@@ -242,7 +235,6 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = {
     selectFieldOnForm,
     removeFieldFromForm,
-    markFieldForDeletion,
     deselectField
 };
 

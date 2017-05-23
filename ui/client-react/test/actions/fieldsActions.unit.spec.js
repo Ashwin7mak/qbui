@@ -364,5 +364,4 @@ describe('Field Actions failure workflow', () => {
                 type: types.SET_IS_PENDING_EDIT_TO_FALSE});
         });
     });
-
 });

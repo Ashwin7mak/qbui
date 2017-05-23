@@ -212,13 +212,25 @@ const forms = (
             return state;
         }
 
-        let {location} = action.content;
+        let {location, field} = action;
+        let formMetaCopy = _.cloneDeep(updatedForm.formData.formMeta);
 
-        updatedForm.formData.formMeta = MoveFieldHelper.removeField(
-            updatedForm.formData.formMeta,
+        let relatedRelationship = false;
+        if (Array.isArray(formMetaCopy.relationships) && formMetaCopy.relationships.length > 0) {
+            relatedRelationship = _.find(formMetaCopy.relationships, (rel) => rel.detailTableId === field.tableId  && rel.detailFieldId === field.id);
+        }
+        MoveFieldHelper.removeField(
+            formMetaCopy,
             location
         );
-
+        if (relatedRelationship) {
+            if (formMetaCopy.fieldsToDelete) {
+                formMetaCopy.fieldsToDelete.push(fieldId);
+            } else {
+                formMetaCopy.fieldsToDelete = [fieldId];
+            }
+        }
+        updatedForm.formData.formMeta = formMetaCopy;
         updatedForm.isPendingEdit = true;
         newState[id] = updatedForm;
         return newState;
