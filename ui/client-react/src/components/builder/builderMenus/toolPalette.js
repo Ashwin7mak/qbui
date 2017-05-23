@@ -30,7 +30,8 @@ class ToolPalette extends Component {
                                                           toggleToolPaletteChildrenTabIndex={this.props.toggleToolPaletteChildrenTabIndex}
                                                           toolPaletteChildrenTabIndex={this.props.toolPaletteChildrenTabIndex}
                                                           toolPaletteFocus={this.props.toolPaletteFocus}
-                                                          existingFields={this.props.existingFields}/>);
+    />
+        );
 
     renderToolPalette = () => (
         <div className="toolPaletteContainer">
