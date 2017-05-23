@@ -39,6 +39,36 @@
             for (var i = 1; i < this.userHeaderElList.value.length; i++) {colHeaders.push(this.userHeaderElList.value[i].getAttribute('innerText'));}
             return colHeaders;
         }},
+
+        // Send invite email button
+        userSendInviteEmail: {get: function() {return browser.element('.disabled.qbIcon.iconUISturdy-mail');}},
+
+        // Export users button
+        userExportCSV: {get: function() {return browser.element('.disabled.qbIcon.iconUISturdy-download-cloud');}},
+
+        // Change user role settings
+        userChangeRole : {get: function() {return browser.element('.disabled.qbIcon.iconUISturdy-settings');}},
+
+        // Remove user button on user report
+        userRemoveIcon: {get: function() {return browser.element('.qbIcon.iconUISturdy-errorincircle-fill');}},
+
+        // Remove user button in modal
+        userRemoveButton: {get: function() {return browser.element('.modal-dialog .primaryButton');}},
+
+        // Cancel remove user button in modal
+        userCancelButton: {get: function() {return browser.element('.modal-dialog .secondaryButton');}},
+
+        // User action icon elements
+        userActionsListUlEl: {get: function() {return browser.element('.reportActionsBlock .actionIcons');}},
+
+        // User action icons element link
+        userActionsListEl: {get: function() {return this.userActionsListUlEl.elements('.iconLink');}},
+
+        // User email elements
+        userEmailUlEl: {get: function() {return browser.element('.qbCell .urlField');}},
+
+        // User email field in user table
+        userEmailLink: {get: function() {return browser.element('.qbCell.urlField .link');}},
     });
 
     module.exports = UsersTablePage;
