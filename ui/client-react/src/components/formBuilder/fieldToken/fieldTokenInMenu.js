@@ -105,9 +105,9 @@ export class DraggableFieldToken extends Component {
      */
     onHover = (dropTargetProps, _dragItemProps) => {
         if (!this.state.addedToForm) {
-            const {formId, appId, tblId, relatedField} = this.props;
+            const {formId, appId, tblId, relatedField, datatypeAttributes, id} = this.props;
 
-            this.props.addFieldToForm(formId, appId, tblId, dropTargetProps.location, relatedField);
+            this.props.addFieldToForm(formId, appId, tblId, dropTargetProps.location, relatedField, datatypeAttributes, id);
             this.setState({addedToForm: true});
         }
     };
