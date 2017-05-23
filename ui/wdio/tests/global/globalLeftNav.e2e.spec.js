@@ -49,145 +49,149 @@
          * Test methods to verify all elements present / hidden in leftNav
          */
         it('Verify if leftNav collapses of clicking hamburger menu on tables page', function() {
+
+            //Go to app page
+            RequestAppsPage.get(e2eBase.getRequestAppPageEndpoint(realmName, testApp.id));
+
             //select table
             tableCreatePO.selectTable(testApp.tables[e2eConsts.TABLE1].name);
             reportContentPO.waitForLeftNavLoaded();
 
-            // Step 1 - Verify if the leftNav is expanded
+            //Verify if the leftNav is expanded
             expect(browser.isVisible('.expanded')).toBeTruthy();
 
-            // Step 2 - Verify if the hamburger menu is clickable
+            //Verify if the hamburger menu is clickable
             topNavPO.topNavToggleHamburgerEl.waitForVisible();
             topNavPO.topNavToggleHamburgerEl.click();
 
-            // Step 3 - Verify if the leftNav is collapsed
+            //Verify if the leftNav is collapsed
             expect(browser.isVisible('.collapsed')).toBeTruthy();
 
         });
 
         it('Verify if leftNav caretUp element opens appsList and searches on reports page', function() {
 
-            // Step 1 - Verify if the left nav caret up element is visible
+            //Verify if the left nav caret up element is visible
             leftNavPO.leftNavCaretUpEl.waitForVisible();
 
-            // Step 2 - Verify if the left nav caret up element is clickable
+            //Verify if the left nav caret up element is clickable
             leftNavPO.leftNavCaretUpEl.click();
 
-            // Step 3 - Verify if apps list is open
+            //Verify if apps list is open
             expect((browser.element('.leftNav .appsList .leftNavLabel').getAttribute('textContent').length) > 0).toBeTruthy();
 
-            // Step 4 - Verify if the left nav search element is visible and clickable
+            //Verify if the left nav search element is visible and clickable
             leftNavPO.leftNavSearchEl.waitForVisible();
             leftNavPO.leftNavSearchEl.click();
 
-            // Step 5 - Verify if the search box is open
+            //Verify if the search box is open
             expect(browser.isVisible('.open')).toBeTruthy();
 
-            // Step 6 - Verify if the search box is user editable
+            //Verify if the search box is user editable
             leftNavPO.leftNavSearchInputBox.setValue(sampleText1);
 
-            // Step 7 - Verify text got entered
+            //Verify text got entered
             expect(leftNavPO.leftNavSearchInputBox.getAttribute('value')).toBe(sampleText1);
 
-            // Step 8 - Verify if the clear search button is clickable
+            //Verify if the clear search button is clickable
             leftNavPO.leftNavClearSearchEl.click();
 
-            // Step 9 - Verify if the search box is empty after clearing
+            //Verify if the search box is empty after clearing
             expect(leftNavPO.leftNavSearchInputBox.getText()).toBe('');
 
-            // Step 10 - Verify if the left nav search element is clickable
+            //Verify if the left nav search element is clickable
             leftNavPO.leftNavSearchEl.waitForVisible();
             leftNavPO.leftNavSearchEl.click();
 
-            // Step 11 - Verify if the search input box is closed
+            //Verify if the search input box is closed
             expect(browser.isVisible('.appsList .search.open')).toBeFalsy();
 
-            // Step 12 - Verify if the left nav caret up element is clickable
+            //Verify if the left nav caret up element is clickable
             leftNavPO.leftNavCaretUpEl.click();
 
-            // Step 13 - Verify if the tables list is open
+            //Verify if the tables list is open
             expect((browser.element('.leftNav .tablesList .leftNavLabel').getAttribute('textContent').length) > 0).toBeTruthy();
 
         });
 
         it('Verify the topLinks, Brand logo and mouse hover function on collapsed leftNav on reports page', function() {
 
-            // Step 1 - Verify if the no.of topLinks are equal to 2 (Home, Users)
+            //Verify if the no.of topLinks are equal to 2 (Home, Users)
             expect(leftNavPO.leftNavTopLinks.value.length).toEqual(2);
 
-            // Step 2 - Verify the text of top links to be 'Home' and 'Users' - Used HTML to get text as getText() returns empty string for <span> elements
+            //Verify the text of top links to be 'Home' and 'Users' - Used HTML to get text as getText() returns empty string for <span> elements
             let innerHTML = browser.getHTML('.topLinks .leftNavLabel span', false);
             expect(innerHTML[0]).toEqual('Home');
             expect(innerHTML[1]).toEqual('Users');
 
-            // Step 3 - Verify if the Brand Logo is visible at the bottom of leftNav
+            //Verify if the Brand Logo is visible at the bottom of leftNav
             leftNavPO.leftNavBrandLogo.waitForVisible();
 
-            // Step 4 - Verify if the hamburger menu is clickable and collapses leftNav
+            //Verify if the hamburger menu is clickable and collapses leftNav
             topNavPO.topNavToggleHamburgerEl.click();
 
-            // Step 5 - Verify if the tables in the collapsed leftNav are mouse-hovered
+            //Verify if the tables in the collapsed leftNav are mouse-hovered
             // browser.moveToObject('.transitionGroup .tablesList .link');
         });
 
         it('Verify if leftNav table search box opens and closes in tableLists', function() {
 
-            // Step 1 - Verify if the left nav table search is visible
+            //Verify if the left nav table search is visible
             leftNavPO.leftNavSearchEl.waitForVisible();
 
-            // Step 2 - Verify if the search element is clickable and opens search box
+            //Verify if the search element is clickable and opens search box
             leftNavPO.leftNavSearchEl.click();
 
-            // Step 3 - Verify if the search box is open
+            //Verify if the search box is open
             expect(browser.isVisible('.open')).toBeTruthy();
 
-            // Step 4 - Verify if the search box is user editable
+            //Verify if the search box is user editable
             leftNavPO.leftNavSearchInputBox.setValue(sampleText2);
 
-            // Step 5 - Verify if the clear button is clickable
+            //Verify if the clear button is clickable
             leftNavPO.leftNavClearSearchEl.click();
 
-            // Step 6 - Verify if the search box is empty after clearing
+            //Verify if the search box is empty after clearing
             expect(leftNavPO.leftNavSearchInputBox.getText()).toBe('');
 
-            // Step 7 - Verify if the search element is clickable and closes the search box
+            //Verify if the search element is clickable and closes the search box
             leftNavPO.leftNavSearchEl.click();
 
-            // Step 8 - Verify if the search input box is closed
+            //Verify if the search input box is closed
             expect(browser.isVisible('.tablesHeading .search.open ')).toBeFalsy();
         });
 
         it('Verify if the reports icon is displayed and verify the name of the report loaded', function() {
 
-            // Step 1 - Verify the name of the first table in the leftNav
+            //Verify the name of the first table in the leftNav
             let tableName = leftNavPO.leftNavTableName.getText();
 
-            // Step 2 - Verify if the leftNav mini report icon is visible
+            //Verify if the leftNav mini report icon is visible
             leftNavPO.leftNavMiniReportIcon.waitForVisible();
 
-            // Step 3 - Verify if the leftNav mini report icon is clickable and opens new page
+            //Verify if the leftNav mini report icon is clickable and opens new page
             leftNavPO.leftNavMiniReportIcon.click();
 
             // Used HTML to get text as getText() returns empty string for <span> elements
             let innerHTML = browser.getHTML('.trowserHeader .breadcrumbsContent span', false);
 
-            // Step 4 - Verify if the table name is correctly displayed
+            //Verify if the table name is correctly displayed
             expect(innerHTML[1]).toEqual(tableName);
             expect(innerHTML[5]).toEqual('Reports');
         });
 
         it('Verify leftNav New Table button and cancel button', function() {
 
-            // Step 1 - Verify if the new table element is visible and verify the length
+            //Verify if the new table element is visible and verify the length
             leftNavPO.leftNavNewTableEl.waitForVisible();
 
-            // Step 2 - Verify if the new table element is clickable and open new modal page
+            //Verify if the new table element is clickable and open new modal page
             leftNavPO.leftNavNewTableEl.click();
 
-            // Step 3 - Verify for the cancel button to be visible
+            //Verify for the cancel button to be visible
             leftNavPO.leftNavNewTableCancelBu.waitForVisible();
 
-            // Step 6 - Verify if the cancel button is clickable
+            //Verify if the cancel button is clickable
             leftNavPO.leftNavNewTableCancelBu.click();
         });
 
@@ -195,16 +199,16 @@
 
         xit('Verify the mouse hover function on apps page collapsed leftNav', function() {
 
-            // Step 1 - Open apps home page
+            //Open apps home page
             RequestAppsPage.get(e2eBase.getRequestAppsPageEndpoint(realmName));
 
-            // Step 2 - Verify if the topNav hamburger menu is visible
+            //Verify if the topNav hamburger menu is visible
             topNavPO.topNavToggleHamburgerEl.waitForVisible();
 
-            // Step 3 - Verify if the hamburger menu is clickable and collapses leftNav
+            //Verify if the hamburger menu is clickable and collapses leftNav
             topNavPO.topNavToggleHamburgerEl.click();
 
-            // Step 4 - Verify if the tables in the collapsed leftNav are mouse-hovered
+            //Verify if the tables in the collapsed leftNav are mouse-hovered
             browser.moveToObject('.transitionGroup .appsList .link');
         });
 
