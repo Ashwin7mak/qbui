@@ -1,9 +1,9 @@
 import React from 'react';
-import UserFieldValueEditor from '../fields/userFieldValueEditor';
+import UserFieldValueEditor from '../../../fields/userFieldValueEditor';
 import Select from 'react-select';
 import './addUserDialog.scss';
-import constants from '../../../../common/src/constants';
-import Locale from '../../../../reuse/client/src/locales/locale';
+import constants from '../../../../../../common/src/constants';
+import Locale from '../../../../../../reuse/client/src/locales/locale';
 
 class addUserPanel extends React.Component {
     constructor(props) {
@@ -72,7 +72,7 @@ class addUserPanel extends React.Component {
                     </dd>
                 </div>
                 <div className="assignRole panel-items">
-                    Assign role
+                    <dt>Assign role</dt>
                     <Select
                         autofocus
                         options={this.getRoles()}

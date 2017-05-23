@@ -1,6 +1,6 @@
 import React from 'react';
 import jasmineEnzyme from 'jasmine-enzyme';
-import AddUserDialog from '../../src/components/user/addUserDialog';
+import AddUserDialog from '../../src/components/app/settings/categories/addUserDialog';
 import {shallow} from 'enzyme';
 import MultiStepDialog from '../../../reuse/client/src/components/multiStepDialog/multiStepDialog';
 

@@ -3,7 +3,7 @@
  */
 import React from 'react';
 import UserManagement from './userManagement';
-import AddUserDialog from '../../../user/addUserDialog';
+import AddUserDialog from './addUserDialog';
 import Stage from '../../../../../../reuse/client/src/components/stage/stage';
 import IconActions from '../../../actions/iconActions';
 import QBIcon from '../../../../../../reuse/client/src/components/icon/icon';

@@ -1,9 +1,9 @@
 import React, {PropTypes} from 'react';
-import MultiStepDialog from '../../../../reuse/client/src/components/multiStepDialog/multiStepDialog';
+import MultiStepDialog from '../../../../../../reuse/client/src/components/multiStepDialog/multiStepDialog';
 import {NotificationManager} from 'react-notifications';
-import {I18nMessage} from "../../utils/i18nMessage";
+import {I18nMessage} from "../../../../utils/i18nMessage";
 import AddUserPanel from './addUserPanel';
-import Locale from '../../locales/locales';
+import Locale from '../../../../locales/locales';
 import './addUserDialog.scss';
 
 export class AddUserDialog extends React.Component {

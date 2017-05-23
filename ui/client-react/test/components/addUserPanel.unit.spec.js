@@ -1,7 +1,7 @@
 import React from 'react';
 import {mount} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
-import AddUserPanel from '../../src/components/user/addUserPanel';
+import AddUserPanel from '../../src/components/app/settings/categories/addUserPanel';
 import TestUtils from 'react-addons-test-utils';
 import {shallow} from 'enzyme';
 
