@@ -104,6 +104,8 @@
                 return RequestAppsPage.get(e2eBase.getRequestTableEndpoint(realmName, testApp.id, testApp.tables[0].id));
             });
 
+            browser.waitForVisible('.closed.expanded');
+
             // Step 2 - Verify if the leftNav is closed
             expect(browser.isVisible('.closed.expanded')).toBeTruthy();
 
@@ -144,6 +146,8 @@
             browser.call(function() {
                 return RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, testApp.id, testApp.tables[0].id, 1));
             });
+
+            browser.waitForVisible('.closed.expanded');
 
             // Step 2 - Verify if the leftNav is closed
             expect(browser.isVisible('.closed.expanded')).toBeTruthy();
