@@ -14,7 +14,7 @@ let tableInfo = {
     tableIcon: {value: 'projects'}
 };
 
-const allUsers = [
+const realmUsers = [
     {
         "id": "RDUII_UF2",
         "firstName": "Clara",
@@ -154,7 +154,7 @@ describe('AddUserPanel', () => {
 
     it('renders a AddUserPanel', () => {
         component = mount(<AddUserPanel appRoles={appRoles}
-                                allUsers={allUsers}
+                                realmUsers={realmUsers}
                                 searchUsers={mockParentFunctions.searchUsers}
                                 isValid={true}
                                 existingUsers={appUsers}
@@ -166,7 +166,7 @@ describe('AddUserPanel', () => {
     it('changes the role on change of the Role Select component', () => {
         spyOn(mockParentFunctions, 'updateRole');
         component = shallow(<AddUserPanel appRoles={appRoles}
-                                        allUsers={allUsers}
+                                        realmUsers={realmUsers}
                                         searchUsers={mockParentFunctions.searchUsers}
                                         isValid={true}
                                         existingUsers={appUsers}
@@ -181,7 +181,7 @@ describe('AddUserPanel', () => {
     it('test getRoles method', () => {
         spyOn(mockParentFunctions, 'getRoles');
         component = TestUtils.renderIntoDocument(<AddUserPanel appRoles={appRoles}
-                                        allUsers={allUsers}
+                                        realmUsers={realmUsers}
                                         searchUsers={mockParentFunctions.searchUsers}
                                         isValid={true}
                                         existingUsers={appUsers}
@@ -194,7 +194,7 @@ describe('AddUserPanel', () => {
     it('test updateRoles method', () => {
         spyOn(mockParentFunctions, 'getRoles');
         component = TestUtils.renderIntoDocument(<AddUserPanel appRoles={appRoles}
-                                                               allUsers={allUsers}
+                                                               realmUsers={realmUsers}
                                                                searchUsers={mockParentFunctions.searchUsers}
                                                                isValid={true}
                                                                existingUsers={appUsers}

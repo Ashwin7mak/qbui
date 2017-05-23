@@ -13,7 +13,7 @@ let AppsStore = Fluxxor.createStore({
     initialize() {
         this.apps = null;
         this.appUsers = [];
-        this.allUsers = [];
+        this.realmUsers = [];
         this.appUsersUnfiltered = {};
         this.appOwner = {};
         // Default is true because the apps must load before the website is usable
@@ -23,7 +23,7 @@ let AppsStore = Fluxxor.createStore({
 
         this.selectedAppId = null;
         this.selectedTableId = null;
-        this.userRoleToAdd = null;
+        this.userRoleIdToAdd = null;
         this.addUserToAppDialogOpen = false;
 
         this.bindActions(
@@ -201,7 +201,7 @@ let AppsStore = Fluxxor.createStore({
         this.emit('change');
     },
     onLoadAllUsersSuccess(data) {
-        this.allUsers = data;
+        this.realmUsers = data;
         this.emit('change');
     },
 
@@ -211,7 +211,7 @@ let AppsStore = Fluxxor.createStore({
     },
 
     onSetUserRoleToAdd(roleId) {
-        this.userRoleToAdd = roleId;
+        this.userRoleIdToAdd = roleId;
         this.emit('change');
     },
 
@@ -248,9 +248,8 @@ let AppsStore = Fluxxor.createStore({
         this.appUsers = data.appUsers[0];
         this.appUsersUnfiltered = data.appUsers[1];
         this.emit('change');
-        let msg = `${Locale.getMessage('app.users.userAdded')} 1 ${Locale.getMessage('app.users.singular')}`;
 
-        NotificationManager.success(msg);
+        NotificationManager.success(data.msg);
     },
 
     onGetAppUserFailed() {
@@ -277,9 +276,9 @@ let AppsStore = Fluxxor.createStore({
             loading: this.loading,
             error: this.error,
             selectedUserRows:this.selectedUserRows,
-            allUsers: this.allUsers,
+            realmUsers: this.realmUsers,
             addUserToAppDialogOpen: this.addUserToAppDialogOpen,
-            userRoleToAdd: this.userRoleToAdd,
+            userRoleIdToAdd: this.userRoleIdToAdd,
         };
     },
 });

@@ -36,7 +36,7 @@ export class AddUserDialog extends React.Component {
             // refs is used here to get the instance of
             // AddUserPanel, as opposed to using redux/flux actions
             userId: this.userPanel.getSelectedUser(),
-            roleId: this.props.userRoleToAdd,
+            roleId: this.props.userRoleIdToAdd,
         };
         const responsePromise = this.props.assignUserToApp(this.props.appId, userInfo);
 
@@ -84,7 +84,7 @@ export class AddUserDialog extends React.Component {
                 <div className="title"><I18nMessage message="addUserToApp.title"/> {this.props.selectedApp.name}</div>
                 <div className="description"><I18nMessage message="addUserToApp.description"/></div>
                 <AddUserPanel appRoles={this.props.appRoles}
-                              allUsers={this.props.allUsers}
+                              realmUsers={this.props.realmUsers}
                               searchUsers={this.props.searchUsers}
                               isValid={this.isValid}
                               existingUsers={this.props.existingUsers}
@@ -97,12 +97,12 @@ export class AddUserDialog extends React.Component {
 }
 
 AddUserDialog.propTypes = {
-    allUsers: PropTypes.arrayOf(PropTypes.object),
+    realmUsers: PropTypes.arrayOf(PropTypes.object),
     searchUsers: PropTypes.func,
     appRoles: PropTypes.arrayOf(PropTypes.object),
     assignUserToApp: PropTypes.func,
     setUserRoleToAdd: PropTypes.func,
-    userRoleToAdd: PropTypes.number,
+    userRoleIdToAdd: PropTypes.number,
     appId: PropTypes.string,
     selectedApp: PropTypes.any,
     existingUsers: PropTypes.object,

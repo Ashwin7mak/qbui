@@ -13,7 +13,7 @@ class RoleService extends BaseService {
         this.API = {
             GET_APP_ROLES       : `${constants.BASE_URL.QBUI}/${constants.APPS}/{0}/${constants.ROLES}`,
             APP_ROLE_USERS      : `${constants.BASE_URL.PROXY}/${constants.APPS}/{0}/${constants.ROLES}/{1}/${constants.USERS}`,
-            GET_ALL_USERS       : `${constants.BASE_URL.PROXY}/${constants.USERS}/${constants.SEARCH}/?value={0}`,
+            GET_REALM_USERS       : `${constants.BASE_URL.PROXY}/${constants.USERS}/${constants.SEARCH}/?value={0}`,
         };
     }
 
@@ -50,12 +50,12 @@ class RoleService extends BaseService {
     }
 
     /**
-     * gets all users based on the search term
+     * gets all Realm users based on the search term
      * @param searchTerm
      * @returns {*}
      */
-    getAllUsers(searchTerm) {
-        let url = super.constructUrl(this.API.GET_ALL_USERS, [searchTerm]);
+    searchRealmUsers(searchTerm) {
+        let url = super.constructUrl(this.API.GET_REALM_USERS, [searchTerm]);
         return super.get(url);
     }
 

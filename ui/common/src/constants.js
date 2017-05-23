@@ -49,6 +49,8 @@
         TEXT_FORMULA    : 'TEXT_FORMULA',
         URL_FORMULA     : 'URL_FORMULA',
         NUMERIC_FORMULA : 'NUMERIC_FORMULA',
+		//default app roles
+        DEFAULT_ROLE    : 'Participant',
 
         SYNTHETIC_TABLE_REPORT: {
             ID: '0',

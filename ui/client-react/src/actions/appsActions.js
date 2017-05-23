@@ -7,6 +7,7 @@ import Promise from 'bluebird';
 import Logger from '../utils/logger';
 import LogLevel from '../utils/logLevels';
 import appsModel from '../models/appsModel';
+import Locale from '../../../reuse/client/src/locales/locale';
 
 //  Custom handling of 'possible unhandled rejection' error,  because we don't want
 //  to see an exception in the console output.  The exception is thrown by bluebird
@@ -130,10 +131,15 @@ let appsActions = {
         });
     },
 
-    getAllUsers(searchTerm) {
+	/**
+     * Gets a list of Realm users based on search query
+	 * @param searchTerm
+     * @returns [] an array of users
+	 */
+    searchRealmUsers(searchTerm) {
         return new Promise((resolve, reject) => {
             let roleService = new RoleService();
-            roleService.getAllUsers(searchTerm).then(response => {
+            roleService.searchRealmUsers(searchTerm).then(response => {
                 this.dispatch(actions.SEARCH_ALL_USERS_SUCCESS, response.data);
                 resolve();
             }, () => {
@@ -168,7 +174,8 @@ let appsActions = {
                 // it doesnt dispatch the action GET_APP_USERS_SUCCESS
                 let appService = new AppService();
                 appService.getAppUsers(appId).then(payload => {
-                    this.dispatch(actions.GET_APP_USERS_SUCCESS, {appUsers: payload.data, userId: userId});
+                    const msg = `${Locale.getMessage('app.users.userAdded')} 1 ${Locale.getMessage('app.users.singular')}`;
+                    this.dispatch(actions.GET_APP_USERS_SUCCESS, {appUsers: payload.data, userId: userId, msg});
                     resolve();
                 }, () => {
                     this.dispatch(actions.GET_APP_USERS_FAILED);

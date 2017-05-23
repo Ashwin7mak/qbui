@@ -259,7 +259,7 @@ describe('Test Apps Store', () => {
             payload: users
         };
         flux.dispatcher.dispatch(loadUserSuccessAction);
-        expect(flux.store(STORE_NAME).allUsers).toEqual(users);
+        expect(flux.store(STORE_NAME).realmUsers).toEqual(users);
         expect(flux.store(STORE_NAME).emit).toHaveBeenCalledWith('change');
     });
     it('test add user', ()=>{

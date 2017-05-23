@@ -61,7 +61,7 @@ export default {
     STACK               : 'stack',
 
 	// Slugs
-	SEARCH              : 'search',
+    SEARCH              : 'search',
 
     // Automations
     AUTOMATION : {

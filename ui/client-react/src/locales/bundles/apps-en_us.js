@@ -743,9 +743,10 @@ export default {
             activeYes: "Yes",
             activeNo: "No"
         },
-		addUserToApp:{
-			title: "Add users to",
-			description: "Search for users that you'd like to add to your app and decide what level of access you'd like to give them by assigning them to a role"
-		}
+        addUserToApp: {
+            title: "Add users to",
+            description: "Search for users that you'd like to add to your app and decide what level of access you'd like to give them by assigning them to a role",
+            searching: "Searching..."
+        }
     }
 };

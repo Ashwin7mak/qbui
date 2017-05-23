@@ -87,10 +87,15 @@ const UserFieldValueEditor = React.createClass({
         return _.find(this.props.appUsers, user => user.userId === id);
     },
 
+	/**
+     * checks if a user is already added to an app
+	 * @param user a list of users
+     * @returns [] an array of existing app users objects
+	 */
     isUserInApp(user) {
         let roles = this.props.existingUsers;
-        return _.find(Object.keys(roles), (role)=>{
-            return _.find(roles[role], (existingUser)=>{
+        return _.find(Object.keys(roles), (roleId)=>{
+            return _.find(roles[roleId], (existingUser)=>{
                 return existingUser.userId === user.userId;
             });
         });

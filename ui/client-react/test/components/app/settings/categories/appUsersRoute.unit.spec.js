@@ -22,7 +22,7 @@ describe('AppUsersRoute functions', () => {
             loadAppOwner: function() {return;},
             selectUsersRows: function() {return;},
             selectedUsersRows: function() {return;},
-            getAllUsers: function() {return;},
+            searchRealmUsers: function() {return;},
             openAddUserDialog: function() {return;},
             setUserRoleToAdd: function() {return;},
             assignUserToApp: function() {return;},

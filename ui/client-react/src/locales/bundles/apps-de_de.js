@@ -735,9 +735,10 @@ export default {
             activeYes: "Ja",
             activeNo: "Nein"
         },
-		addUserToApp: {
-			title: "Benutzer hinzufügen",
-			description: "Suchen Sie nach Benutzern, die Sie Ihrer App hinzufügen möchten, und entscheiden Sie, welche Zugriffsebene Sie ihnen geben möchten, indem Sie sie einer Rolle zuordnen"
-		}
+        addUserToApp: {
+            title: "Benutzer hinzufügen",
+            description: "Suchen Sie nach Benutzern, die Sie Ihrer App hinzufügen möchten, und entscheiden Sie, welche Zugriffsebene Sie ihnen geben möchten, indem Sie sie einer Rolle zuordnen",
+            searching: "Suchen..."
+        }
     }
 };

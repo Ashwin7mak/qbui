@@ -7,7 +7,7 @@ import MultiStepDialog from '../../../reuse/client/src/components/multiStepDialo
 let component;
 let domComponent;
 
-const allUsers = [
+const realmUsers = [
     {
         "id": "RDUII_UF2",
         "firstName": "Clara",
@@ -128,7 +128,7 @@ const usersResolved = [
     }
 ];
 const appId = '0duiiaaaazd';
-const userRoleToAdd = 11;
+const userRoleIdToAdd = 11;
 const selectedApp = {
     name: 'Moz'
 };
@@ -168,12 +168,12 @@ describe('AddUserDialog', () => {
 
     it('should call hideModal on cancel', ()=>{
         spyOn(mockParentFunctions, 'toggleAddUserDialog');
-        component = shallow(<AddUserDialog allUsers={allUsers}
+        component = shallow(<AddUserDialog realmUsers={realmUsers}
                        searchUsers={mockParentFunctions.searchUsers}
                        appRoles={appRoles}
                                            assignUserToApp={mockParentFunctions.assignUserToApp}
                        setUserRoleToAdd={mockParentFunctions.setUserRoleToAdd}
-                       userRoleToAdd={userRoleToAdd}
+                       userRoleIdToAdd={userRoleIdToAdd}
                        appId={appId}
                        selectedApp={selectedApp}
                        existingUsers={appUsers}
@@ -188,12 +188,12 @@ describe('AddUserDialog', () => {
 
     it('test isValid function', ()=>{
         spyOn(mockParentFunctions, 'toggleAddUserDialog');
-        component = shallow(<AddUserDialog allUsers={allUsers}
+        component = shallow(<AddUserDialog realmUsers={realmUsers}
                                            searchUsers={mockParentFunctions.searchUsers}
                                            appRoles={appRoles}
                                            assignUserToApp={mockParentFunctions.assignUserToApp}
                                            setUserRoleToAdd={mockParentFunctions.setUserRoleToAdd}
-                                           userRoleToAdd={userRoleToAdd}
+                                           userRoleIdToAdd={userRoleIdToAdd}
                                            appId={appId}
                                            selectedApp={selectedApp}
                                            existingUsers={appUsers}
@@ -208,12 +208,12 @@ describe('AddUserDialog', () => {
 
     it('test onFinished function', ()=>{
         spyOn(mockParentFunctions, 'assignUserToApp');
-        component = shallow(<AddUserDialog allUsers={allUsers}
+        component = shallow(<AddUserDialog realmUsers={realmUsers}
                                            searchUsers={mockParentFunctions.searchUsers}
                                            appRoles={appRoles}
                                            assignUserToApp={mockParentFunctions.assignUserToApp}
                                            setUserRoleToAdd={mockParentFunctions.setUserRoleToAdd}
-                                           userRoleToAdd={userRoleToAdd}
+                                           userRoleIdToAdd={userRoleIdToAdd}
                                            appId={appId}
                                            selectedApp={selectedApp}
                                            existingUsers={appUsers}

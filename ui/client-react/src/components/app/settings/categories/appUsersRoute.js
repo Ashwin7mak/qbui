@@ -24,7 +24,7 @@ export const AppUsersRoute = React.createClass({
     componentDidMount() {
         this.props.loadAppRoles(this.props.match.params.appId);
         this.props.flux.actions.loadAppOwner(this.props.selectedApp.ownerId);
-        this.props.flux.actions.getAllUsers();
+        this.props.flux.actions.searchRealmUsers();
     },
 
     componentWillReceiveProps(props) {
@@ -171,12 +171,12 @@ export const AppUsersRoute = React.createClass({
                                           appRoles={this.props.appRoles}
                                           appOwner={this.props.appOwner}/>
                     </Stage>
-                <AddUserDialog allUsers={this.props.allUsers}
-                               searchUsers={this.props.flux.actions.getAllUsers}
+                <AddUserDialog realmUsers={this.props.realmUsers}
+                               searchUsers={this.props.flux.actions.searchRealmUsers}
                                appRoles={this.props.appRoles}
                                assignUserToApp={this.assignUserToApp}
                                setUserRoleToAdd={this.setUserRoleToAdd}
-                               userRoleToAdd={this.props.userRoleToAdd}
+                               userRoleIdToAdd={this.props.userRoleIdToAdd}
                                appId={this.props.match.params.appId}
                                selectedApp={this.props.selectedApp}
                                existingUsers={this.props.appUsersUnfiltered}

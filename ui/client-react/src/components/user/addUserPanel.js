@@ -2,6 +2,8 @@ import React from 'react';
 import UserFieldValueEditor from '../fields/userFieldValueEditor';
 import Select from 'react-select';
 import './addUserDialog.scss';
+import constants from '../../../../common/src/constants';
+import Locale from '../../../../reuse/client/src/locales/locale';
 
 class addUserPanel extends React.Component {
     constructor(props) {
@@ -13,7 +15,7 @@ class addUserPanel extends React.Component {
     }
 
     getRoles() {
-        let defaultRole = 'Participant';
+        let defaultRole = constants.DEFAULT_ROLE;
         const roles = this.props.appRoles.map((appRole)=>{
             if (appRole.name === defaultRole) {defaultRole = appRole.id;}
             return {value: appRole.id, label: appRole.name, clearableValue: false};
@@ -39,7 +41,7 @@ class addUserPanel extends React.Component {
     }
     render() {
 
-        const appUsers = this.props.allUsers.map((user)=>{
+        const appUsers = this.props.realmUsers.map((user)=>{
             let {firstName, lastName, email, screenName} = user;
             return {firstName, lastName, email, screenName, userId: user.id};
         });
@@ -61,7 +63,7 @@ class addUserPanel extends React.Component {
                             appUsers={appUsers}
                             isAddUser={true}
                             fieldDef={fieldDef1}
-                            loadingPlaceholder="Searching..."
+                            loadingPlaceholder={Locale.getMessage('addUserToApp.searching')}
                             searchUsers={this.props.searchUsers}
                             isValid={this.props.isValid}
                             existingUsers={this.props.existingUsers}
