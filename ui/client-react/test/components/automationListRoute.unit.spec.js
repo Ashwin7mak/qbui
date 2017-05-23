@@ -36,8 +36,8 @@ describe('AutomationListRoute', () => {
         });
 
         it('test list of automation names is blank', () => {
-            let namesLI = TestUtils.scryRenderedDOMComponentsWithTag(component, "td");
-            expect(namesLI.length).toEqual(0);
+            let autoTDs = TestUtils.scryRenderedDOMComponentsWithTag(component, "td");
+            expect(autoTDs.length).toEqual(0);
         });
 
     });
