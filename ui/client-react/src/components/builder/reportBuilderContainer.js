@@ -1,5 +1,7 @@
 import React, {Component, PropTypes} from 'react';
 import {connect} from 'react-redux';
+import Loader from 'react-loader';
+import {LARGE_BREAKPOINT} from "../../constants/spinnerConfigurations";
 import _ from 'lodash';
 import {DragDropContext} from 'react-dnd';
 import TouchBackend from 'react-dnd-touch-backend';
@@ -18,10 +20,9 @@ import {loadDynamicReport} from '../../actions/reportActions';
 
 import './reportBuilderContainer.scss';
 
+const RECORD_SHOW_LIMIT = 50;
+
 export class ReportBuilderContainer extends Component {
-    constructor(props) {
-        super(props);
-    }
 
     getSaveOrCancelFooter = () => {
         let {appId, tblId} = this.props.match.params;
@@ -71,16 +72,14 @@ export class ReportBuilderContainer extends Component {
     }
 
     render() {
-        let {appId, tblId} = this.props.match.params;
-        let name = this.props.reportData.data ? this.props.reportData.data.name : undefined;
-        let columns = this.props.reportData.data ? this.props.reportData.data.columns : [];
-        let records = this.props.reportData.data ? this.props.reportData.data.records : [];
-        let recordShowLimit = 50;
+        let {appId, tblId, rptId} = this.props.match.params;
+        let {name, columns, records} = _.get(this.props, 'reportData.data', {});
+        let loaded = columns.length !== 0;
         let transformedColumns = ReportColumnTransformer.transformColumnsForGrid(columns);
         transformedColumns.forEach(column => {
             column.fieldDef.userEditableValue = false;
         });
-        let transformedRows = ReportRowTransformer.transformRecordsForGrid(_.take(records, recordShowLimit), columns);
+        let transformedRows = ReportRowTransformer.transformRecordsForGrid(_.take(records, RECORD_SHOW_LIMIT), columns);
         let content = this.getReportBuilderContent(transformedColumns, transformedRows);
         return (
             <div className="reportBuilderContainer">
@@ -91,26 +90,25 @@ export class ReportBuilderContainer extends Component {
                     reportData={this.props.reportData}>
                     <div className="reportBuilderContainerContent">
                         <div className="reportBuilderHeader">
-                            {name &&
-                            <ReportNameEditor
-                                className="reportBuilderNameEditor"
-                                name={name}/>}
+                            {rptId !== 0 && <ReportNameEditor className="reportBuilderNameEditor" name={name}/>}
                         </div>
-                        <ReportToolsAndContent
-                            className="reportBuilderToolsAndContent"
-                            isRightToolbarVisible={false}
-                            isSearchBoxVisible={false}
-                            params={this.props.match.params}
-                            reportData={this.props.reportData}
-                            routeParams={this.props.match.params}
-                            selectedAppId={this.props.match.params.appId}
-                            selectedTable={this.props.match.params.tblId}
-                            searchStringForFiltering={this.props.reportData.searchStringForFiltering}
-                            selectedRows={this.props.reportData.selectedRows}
-                            loadDynamicReport={this.loadDynamicReport}
-                            noRowsUI={true}
-                            content={content}
-                        />
+                        <Loader loaded={loaded} options={LARGE_BREAKPOINT}>
+                            <ReportToolsAndContent
+                                className="reportBuilderToolsAndContent"
+                                isRightToolbarVisible={false}
+                                isSearchBoxVisible={false}
+                                params={this.props.match.params}
+                                reportData={this.props.reportData}
+                                routeParams={this.props.match.params}
+                                selectedAppId={this.props.match.params.appId}
+                                selectedTable={this.props.match.params.tblId}
+                                searchStringForFiltering={this.props.reportData.searchStringForFiltering}
+                                selectedRows={this.props.reportData.selectedRows}
+                                loadDynamicReport={this.loadDynamicReport}
+                                noRowsUI={true}
+                                content={content}
+                            />
+                        </Loader>
                     </div>
                 </ReportFieldSelectMenu>
                 {this.getSaveOrCancelFooter()}
@@ -137,6 +135,10 @@ ReportBuilderContainer.propTypes = {
     }),
 
     /**
+     * Report data */
+    reportData: PropTypes.object,
+
+    /**
      * A route that will be redirected to after a save/cancel action. Currently passed through mapState. */
     redirectRoute: PropTypes.string
 };
@@ -148,14 +150,9 @@ const mapStateToProps = (state) => {
     };
 };
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        exitBuilderMode: (context) => dispatch(exitBuilderMode(context)),
-
-        loadDynamicReport: (context, appId, tblId, rptId, format, filter, queryParams) => {
-            dispatch(loadDynamicReport(context, appId, tblId, rptId, format, filter, queryParams));
-        }
-    };
+const mapDispatchToProps = {
+    exitBuilderMode,
+    loadDynamicReport
 };
 
 export default DragDropContext(TouchBackend({enableMouseEvents: true, delay: 30}))(
