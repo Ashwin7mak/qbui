@@ -233,8 +233,8 @@ describe('Forms reducer functions', () => {
         });
 
         it('returns a new state with a single field removed', () => {
-            stateWithViewForm.view.formData.formMeta = {fields: [1, 2, 3, 4, 5]};
-            expect(reducer(stateWithViewForm, actionPayload)).toEqual({
+            let removeStateWithViewForm = {'view': {id: 'view', formData: {formMeta: {fields: [1, 2, 3, 4, 5]}}}};
+            expect(reducer(removeStateWithViewForm, actionPayload)).toEqual({
                 [VIEW]: {
                     ...stateWithViewForm[VIEW],
                     formData: {formMeta: updatedFormMeta},
@@ -242,7 +242,7 @@ describe('Forms reducer functions', () => {
                 }
             });
             expect(mockMoveFieldHelper.removeField).toHaveBeenCalledWith(
-                stateWithViewForm[VIEW].formData.formMeta, 1
+                removeStateWithViewForm[VIEW].formData.formMeta, 1
             );
         });
 

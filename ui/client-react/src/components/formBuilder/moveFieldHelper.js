@@ -27,7 +27,6 @@ const MoveFieldHelper = {
     removeField(formMeta, location) {
         let formMetaCopy = _.cloneDeep(formMeta);
         removeElementFromCurrentLocation(formMetaCopy, location);
-        
         return formMetaCopy;
     },
 
