@@ -484,6 +484,12 @@ export const getSelectedFormElement = (state, id) => {
     }
 };
 
+/***
+ * retrieve all existing fields that are not on a form
+ * @param state
+ * @param id
+ * @returns {Array}
+ */
 export const getExistingFields = (state, id) => {
     const currentForm = state.forms[id];
 
@@ -491,7 +497,8 @@ export const getExistingFields = (state, id) => {
         return null;
     }
 
-    if (_.has(currentForm, 'formData.formMeta.fields')) {
+    if (_.has(currentForm, 'formData.fields') &&
+        _.has(currentForm, 'formData.formMeta.fields')) {
         return _.differenceBy(currentForm.formData.fields, currentForm.formData.formMeta.fields, (field) => {
             if (typeof field === 'number') {
                 return field;
