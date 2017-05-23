@@ -57,5 +57,9 @@ NewFieldsMenu.propTypes = {
     tables: PropTypes.array
 };
 
+NewFieldsMenu.defaultProps = {
+    tables: []
+};
+
 
 export default NewFieldsMenu;

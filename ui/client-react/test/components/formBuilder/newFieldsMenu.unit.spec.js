@@ -20,7 +20,7 @@ describe('NewFieldsMenu', () => {
     });
 
     it('displays a list of new field elements', () => {
-        component = shallow(<NewFieldsMenu tables={[]}/>);
+        component = shallow(<NewFieldsMenu/>);
 
         let listOfElements = component.find(ListOfElements);
         expect(listOfElements).toBePresent();
