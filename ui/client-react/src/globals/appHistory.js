@@ -82,6 +82,7 @@ class AppHistory {
             self.getNavReport = storeFunc.getNavReport;
             self.setFieldsPropertiesPendingEditToFalse = storeFunc.setFieldsPropertiesPendingEditToFalse;
             self.setFormBuilderPendingEditToFalse = storeFunc.setFormBuilderPendingEditToFalse;
+            self.setReportBuilderPendingEditToFalse = storeFunc.setReportBuilderPendingEditToFalse;
         }
 
         self._setupHistoryListeners();
@@ -140,9 +141,9 @@ class AppHistory {
         if (self.store) {
             const state = self.store.getState();
             //fetch stores that have pendEdits
-            let {recordStore, formsStore, fieldsStore} = self.getStores(state);
+            let {recordStore, formsStore, fieldsStore, reportBuilderStore} = self.getStores(state);
 
-            if (formsStore.isPendingEdit || fieldsStore.isPendingEdit || recordStore.isPendingEdit) {
+            if (formsStore.isPendingEdit || fieldsStore.isPendingEdit || recordStore.isPendingEdit || reportBuilderStore.isPendingEdit) {
                 //for form builder
                 hasPendingEdit = true;
             }
@@ -161,7 +162,8 @@ class AppHistory {
         return {
             recordStore: recordStore,
             formsStore: (state.forms && state.forms.view) ? state.forms.view : {},
-            fieldsStore: (state.fields && state.fields[0]) ? state.fields[0] : {}
+            fieldsStore: (state.fields && state.fields[0]) ? state.fields[0] : {},
+            reportBuilderStore: state.reportBuilder  || {}
         };
     }
 
@@ -332,6 +334,19 @@ class AppHistory {
         }
     }
 
+    /**
+     * Default save changes for report builder
+     */
+    _saveChangesForReportBuilder() {
+        if (self.store && _.isFunction(self.updateForm)) {
+            const state = self.store.getState();
+            //fetch stores that have pendEdits
+            let {reportBuilderStore} = self.getStores(state);
+
+            // save is not currently implemented
+        }
+    }
+
     /*
      * All functions below reference 'self' instead of 'this' because of a context change
      * after being called from the modal
@@ -340,15 +355,23 @@ class AppHistory {
         self._hideModal();
         if (self.store) {
             const state = self.store.getState();
-            let {recordStore, formsStore, fieldsStore} = self.getStores(state);
+            let {recordStore, formsStore, fieldsStore, reportBuilderStore} = self.getStores(state);
 
             if (formsStore.isPendingEdit || fieldsStore.isPendingEdit) {
                 self._saveChangesForFormBuilder();
             } else if (recordStore.isPendingEdit) {
-
                 self._saveChangesForRecord();
+            } else if (reportBuilderStore.isPendingEdit) {
+                self._saveChangesForReportBuilder();
             }
         }
+    }
+
+    _discardChangesForReportBuilder(reportBuilderStoreIsPendingEdit) {
+        if (reportBuilderStoreIsPendingEdit) {
+            self.setReportBuilderPendingEditToFalse();
+        }
+        self._continueToDestination();
     }
 
     _discardChangesForFormBuilder(fieldsStoreIsPendingEdit, formsStoreIsPendingEdit) {
@@ -376,7 +399,7 @@ class AppHistory {
         if (self.store) {
             //  clean up pending edits in store
             const state = self.store.getState();
-            let {recordStore, formsStore, fieldsStore} = self.getStores(state);
+            let {recordStore, formsStore, fieldsStore, reportBuilderStore} = self.getStores(state);
 
             if (recordStore.isPendingEdit) {
                 self._discardChangesForRecord(recordStore);
@@ -384,6 +407,10 @@ class AppHistory {
 
             if (fieldsStore.isPendingEdit || formsStore.isPendingEdit) {
                 self._discardChangesForFormBuilder(fieldsStore.isPendingEdit, formsStore.isPendingEdit);
+            }
+
+            if (reportBuilderStore.isPendingEdit) {
+                self._discardChangesForReportBuilder(reportBuilderStore.isPendingEdit);
             }
             self._continueToDestination();
         }
