@@ -134,7 +134,7 @@ describe('Forms reducer functions', () => {
                 'view': {
                     id: 'view',
                     loading: false,
-                    formData: {formMeta: {appId: backUpAppId, tableId: backUpTblId}},
+                    formData: {fields: [], formMeta: {appId: backUpAppId, tableId: backUpTblId}},
                     errorStatus: null
                 }
             });
