@@ -38,68 +38,65 @@
         });
 
         it('Verify navigation in multi-page report', function() {
-            //TODO need to figure out how to click on recordId which is under moreFields since scroll is not supported in safari.
-            if (browserName !== 'safari') {
                 // open a multi-page report
-                e2ePageBasePO.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE2].id, 1);
+            e2ePageBasePO.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE2].id, 1);
 
                 // verify nav details on FIRST page
 
-                reportSortPO.sortByRecordID();
-                let rows = reportContentPO.getAllRows.value;
+            reportSortPO.sortByRecordID();
+            let rows = reportContentPO.getAllRows.value;
                 // verify max # records are displayed
-                expect(rows.length).toBe(e2eConsts.MAX_PAGING_SIZE);
+            expect(rows.length).toBe(e2eConsts.MAX_PAGING_SIZE);
                 // verify ID of first record
-                let expectedID = 1;
-                expect(parseInt(rows[0].getAttribute('id'))).toBe(expectedID);
+            let expectedID = 1;
+            expect(parseInt(rows[0].getAttribute('id'))).toBe(expectedID);
                 // verify ID of all records on first page
-                for (let i = 0; i < e2eConsts.MAX_PAGING_SIZE; i++) {
-                    expect(parseInt(rows[i].getAttribute('id'))).toBe(i + 1);
-                }
+            for (let i = 0; i < e2eConsts.MAX_PAGING_SIZE; i++) {
+                expect(parseInt(rows[i].getAttribute('id'))).toBe(i + 1);
+            }
                 // verify navigation components
-                let expectedRowRange = '1 - ' + e2eConsts.MAX_PAGING_SIZE.toString();
-                expect(reportNavPO.rowNumbers.getText()).toBe('1 - ' + e2eConsts.MAX_PAGING_SIZE.toString());
-                expect(e2ePageBasePO.isDisabled(reportNavPO.nextPageButton)).toBe(false);
-                expect(e2ePageBasePO.isDisabled(reportNavPO.prevPageButton)).toBe(true);
+            let expectedRowRange = '1 - ' + e2eConsts.MAX_PAGING_SIZE.toString();
+            expect(reportNavPO.rowNumbers.getText()).toBe('1 - ' + e2eConsts.MAX_PAGING_SIZE.toString());
+            expect(e2ePageBasePO.isDisabled(reportNavPO.nextPageButton)).toBe(false);
+            expect(e2ePageBasePO.isDisabled(reportNavPO.prevPageButton)).toBe(true);
 
                 // Verify nav details on NEXT page
 
-                reportContentPO.clickAndWaitForGrid(reportNavPO.nextPageButton);
-                rows = reportContentPO.getAllRows.value;
+            reportContentPO.clickAndWaitForGrid(reportNavPO.nextPageButton);
+            rows = reportContentPO.getAllRows.value;
                 // verify expected # of records is displayed
-                expect(rows.length).toBe(recOffset - 1); // not sure why there's 1 less record than expected
+            expect(rows.length).toBe(recOffset - 1); // not sure why there's 1 less record than expected
                 // verify ID of first record
-                expectedID = e2eConsts.MAX_PAGING_SIZE;
-                expect(parseInt(rows[0].getAttribute('id'))).toBe(expectedID + 1);
+            expectedID = e2eConsts.MAX_PAGING_SIZE;
+            expect(parseInt(rows[0].getAttribute('id'))).toBe(expectedID + 1);
                 // verify ID of last record
-                expectedID += recOffset;
-                expect(parseInt(rows[rows.length - 1].getAttribute('id'))).toBe(expectedID - 1);
+            expectedID += recOffset;
+            expect(parseInt(rows[rows.length - 1].getAttribute('id'))).toBe(expectedID - 1);
                 // verify navigation components
-                expectedRowRange =
+            expectedRowRange =
                     (e2eConsts.MAX_PAGING_SIZE + 1).toString() + ' - ' +
                     (e2eConsts.MAX_PAGING_SIZE + recOffset - 1).toString();
-                expect(reportNavPO.rowNumbers.getText()).toBe(expectedRowRange);
-                expect(e2ePageBasePO.isDisabled(reportNavPO.nextPageButton)).toBe(true);
-                expect(e2ePageBasePO.isDisabled(reportNavPO.prevPageButton)).toBe(false);
+            expect(reportNavPO.rowNumbers.getText()).toBe(expectedRowRange);
+            expect(e2ePageBasePO.isDisabled(reportNavPO.nextPageButton)).toBe(true);
+            expect(e2ePageBasePO.isDisabled(reportNavPO.prevPageButton)).toBe(false);
 
                 // Verify nav details on PREVIOUS (original) page
 
-                reportContentPO.clickAndWaitForGrid(reportNavPO.prevPageButton);
-                rows = reportContentPO.getAllRows.value;
+            reportContentPO.clickAndWaitForGrid(reportNavPO.prevPageButton);
+            rows = reportContentPO.getAllRows.value;
                 // verify expected # of records is displayed
-                expect(rows.length).toBe(e2eConsts.MAX_PAGING_SIZE);
+            expect(rows.length).toBe(e2eConsts.MAX_PAGING_SIZE);
                 // verify ID of first record
-                expectedID = 1;
-                expect(parseInt(rows[0].getAttribute('id'))).toBe(expectedID);
+            expectedID = 1;
+            expect(parseInt(rows[0].getAttribute('id'))).toBe(expectedID);
                 // verify ID of last record
-                expectedID = e2eConsts.MAX_PAGING_SIZE;
-                expect(parseInt(rows[rows.length - 1].getAttribute('id'))).toBe(expectedID);
+            expectedID = e2eConsts.MAX_PAGING_SIZE;
+            expect(parseInt(rows[rows.length - 1].getAttribute('id'))).toBe(expectedID);
                 // verify navigation components
-                expectedRowRange = '1 - ' + e2eConsts.MAX_PAGING_SIZE.toString();
-                expect(reportNavPO.rowNumbers.getText()).toBe(expectedRowRange);
-                expect(e2ePageBasePO.isDisabled(reportNavPO.nextPageButton)).toBe(false);
-                expect(e2ePageBasePO.isDisabled(reportNavPO.prevPageButton)).toBe(true);
-            }
+            expectedRowRange = '1 - ' + e2eConsts.MAX_PAGING_SIZE.toString();
+            expect(reportNavPO.rowNumbers.getText()).toBe(expectedRowRange);
+            expect(e2ePageBasePO.isDisabled(reportNavPO.nextPageButton)).toBe(false);
+            expect(e2ePageBasePO.isDisabled(reportNavPO.prevPageButton)).toBe(true);
         });
 
         it('Verify lack of navigation in single-page report', function() {

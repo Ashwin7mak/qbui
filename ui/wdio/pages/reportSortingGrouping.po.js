@@ -45,9 +45,17 @@
             this.sortBySettings.waitForVisible();
             this.clickInEmptyFieldInSortGrpDlg(this.sortBySettings, 'Choose a field to sort by');
             this.ClickMoreFieldsLinkInFieldsPanel();
-            this.recordID.waitForExist();
+            // this.recordID.waitForExist();
             if (browserName === 'safari') {
-                //TODO need to figure out how to click on recordId using JS Click since scroll not working
+                browser.execute(function() {
+                    var event = new MouseEvent('click', {
+                        'view': window,
+                        'bubbles': true,
+                        'cancelable': true,
+                        'detail': 2
+                    });
+                    document.getElementsByClassName('list-group')[0].getElementsByClassName('notInReport')[1].dispatchEvent(event);
+                });
             } else {
                 this.recordID.click();
             }
