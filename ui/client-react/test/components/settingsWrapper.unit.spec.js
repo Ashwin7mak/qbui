@@ -1,5 +1,4 @@
 import React from 'react';
-import TestUtils, {Simulate} from 'react-addons-test-utils';
 import ReactDOM from 'react-dom';
 import {MemoryRouter} from 'react-router-dom';
 import {SettingsWrapper, __RewireAPI__ as SettingsWrapperRewireAPI}  from '../../src/components/settings/settingsWrapper';

@@ -17,11 +17,6 @@ const sampleTableProperties = {iconChooserOpen: false,
     },
     editing: null
 };
-const flux = {
-    actions:{
-        updateTableProps: () => {return;}
-    }
-};
 
 const props = {
     app: sampleApp,
@@ -36,7 +31,7 @@ const props = {
     resetEditedTableProperties: () => {},
     deleteTable: () => {return Promise.resolve({});},
     notifyTableDeleted: () => {},
-    flux: flux
+    updateAppTableProperties: () => {}
 };
 
 describe('TablePropertiesRoute functions', () => {
@@ -114,6 +109,7 @@ describe('TablePropertiesRoute functions', () => {
             spyOn(props, 'loadTableProperties').and.callThrough();
             spyOn(props, 'resetEditedTableProperties').and.callThrough();
             spyOn(props, 'deleteTable').and.callThrough();
+            spyOn(props, 'updateAppTableProperties').and.callThrough();
             component = TestUtils.renderIntoDocument(<TablePropertiesRoute {...props}/>);
         });
 
@@ -123,6 +119,7 @@ describe('TablePropertiesRoute functions', () => {
             props.loadTableProperties.calls.reset();
             props.resetEditedTableProperties.calls.reset();
             props.deleteTable.calls.reset();
+            props.updateAppTableProperties.calls.reset();
         });
 
         it('test loadTableProperties is called', () => {

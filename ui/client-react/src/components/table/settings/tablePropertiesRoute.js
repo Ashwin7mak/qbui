@@ -16,8 +16,6 @@ import _ from 'lodash';
 
 import './tableProperties.scss';
 
-
-
 export const TablePropertiesRoute = React.createClass({
 
     getInitialState() {
@@ -103,7 +101,6 @@ export const TablePropertiesRoute = React.createClass({
                     tableInfoObj[key] = updatedTableInfo[key].value;
                 });
 
-                //this.props.flux.actions.updateTableProps(this.props.table.id, tableInfoObj);
                 this.props.updateAppTableProperties(appId, tableId, tableInfoObj);
             },
             (error) => {
