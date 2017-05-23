@@ -1,4 +1,4 @@
-import Locale from '../../../../../client-react/src/locales/locales';
+import Locale from "../../../../../client-react/src/locales/locales";
 import * as Formatters from "./AccountUsersGridFormatters";
 import _ from "lodash";
 import * as FieldConsts from "../../../../../client-react/src/constants/schema";
@@ -9,7 +9,9 @@ const boolColumnProps = {
 
 const GRID_COLUMN_LOCALE = 'governance.account.users.grid';
 
-// Column Definitions
+/**
+ * Column Definitions for the Account Users Grid
+ */
 const columns = () => [
     {
         property: 'firstName',
@@ -236,6 +238,13 @@ const columns = () => [
     }
 ];
 
+/**
+ * Filter the Columns based on the User Permissions
+ * @param hasAccountAdmin
+ * @param hasRealmAdmin
+ * @returns {Array.<T>|*|{}}
+ * @constructor
+ */
 export const GetAccountUsersGridColumns = (hasAccountAdmin, hasRealmAdmin) => {
     return _.filter(columns(), (c) => {
         if (c.internalQbProps) {

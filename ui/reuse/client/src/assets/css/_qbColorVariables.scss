@@ -410,9 +410,10 @@ $panel-header-icon-hover-color: $icon-color-hover;
 $panel-border-color:            $color-black-300;
 
 // tabs on QBForms
-$tabs-underline-background-color:   $color-indigo-800;
+$tabs-underline-background-color:   $color-black-700;
 $tabs-disabled-color:               $badcolor5-color18;
-$tabs-active-color:                 $color-black-600;
+$tabs-active-color:                 $color-black-700;
+$tabs-hover-text-color:             $color-indigo-800;
 
 // FormBuilder - Drag & Drop
 $fieldtoken-background-color1: $color-orange-500;
