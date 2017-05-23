@@ -1,7 +1,6 @@
 import React, {PropTypes} from 'react';
 import Locale from "../../locales/locales";
 import {CONTEXT} from "../../actions/context";
-import {removeFieldFromForm} from '../../actions/formActions';
 import {hideRelationshipDialog} from '../../actions/relationshipBuilderActions';
 import {updateField} from '../../actions/fieldsActions';
 import Select from '../select/reactSelectWrapper';
@@ -68,7 +67,7 @@ export const LinkToRecordFieldValueEditor = React.createClass({
     cancelTableSelection() {
 
         this.props.hideRelationshipDialog();
-        return this.props.removeFieldFromForm(this.props.formId, this.props.location);
+        this.props.removeFieldFromForm();
     },
 
     /**
@@ -97,4 +96,4 @@ const mapStateToProps = (state) => {
 };
 
 
-export default connect(mapStateToProps, {hideRelationshipDialog, removeFieldFromForm, updateField})(LinkToRecordFieldValueEditor);
+export default connect(mapStateToProps, {hideRelationshipDialog, updateField})(LinkToRecordFieldValueEditor);

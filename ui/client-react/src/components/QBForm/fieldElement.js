@@ -23,7 +23,8 @@ export const FieldElement = React.createClass({
         relatedField: React.PropTypes.object, // field from Form data
         fieldRecord: React.PropTypes.object, // the record data
         includeLabel: React.PropTypes.bool, // render label above field (otherwise ignore it)
-        appUsers: React.PropTypes.array.isRequired // app users
+        appUsers: React.PropTypes.array.isRequired, // app users,
+        removeFieldFromForm: React.PropTypes.func
     },
 
     getChanges(theVals) {
@@ -96,6 +97,7 @@ export const FieldElement = React.createClass({
         let isEditable = this.props.edit && FieldUtils.isFieldEditable(this.props.relatedField);
 
         let fieldElement = null;
+
         if (isEditable) {
             fieldElement = <FieldValueEditor type={fieldType}
                                              value={fieldRawValue}
@@ -121,6 +123,7 @@ export const FieldElement = React.createClass({
                                              location={this.props.location}
                                              label={FieldUtils.getFieldLabel(this.props.element, this.props.relatedField)}
                                              tabIndex={this.props.tabIndex}
+                                             removeFieldFromForm={this.props.removeFieldFromForm}
             />;
         } else if (fieldDisplayValue !== null || fieldRawValue !== null) { //if there is no value do not render the field
             fieldElement = <FieldValueRenderer type={fieldType}
@@ -162,9 +165,7 @@ const mapStateToProps = (state) => {
 // (another bit of boilerplate to keep the component free of Redux dependencies)
 const mapDispatchToProps = (dispatch) => {
     return {
-        editRecordValidateField: (fieldDef, fieldName, value, checkRequired) => {
-            dispatch(editRecordValidateField(fieldDef, fieldName, value, checkRequired));
-        }
+        editRecordValidateField
     };
 };
 
