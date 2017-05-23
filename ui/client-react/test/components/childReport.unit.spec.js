@@ -2,14 +2,8 @@ import React from 'react';
 import {shallow} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
 
-import ChildReport, {__RewireAPI__ as ChildReportRewireAPI} from '../../src/components/QBForm/childReport';
+import {ChildReport, __RewireAPI__ as ChildReportRewireAPI} from '../../src/components/QBForm/childReport';
 
-import configureMockStore from 'redux-mock-store';
-import thunk from 'redux-thunk';
-import {Provider} from "react-redux";
-
-const middlewares = [thunk];
-const mockStore = configureMockStore(middlewares);
 
 class BreakpointsAlwaysSmallMock {
     static isSmallBreakpoint() {
@@ -28,8 +22,6 @@ const type = 'CHILD_REPORT';
 const childReportUrl = `/qbase/app/${appId}/table/${childTableId}/report/${childReportId}?detailKeyFid=${detailKeyFid}&detailKeyValue=${detailKeyValue}`;
 
 const MockChildReport = (props) => {
-    const initialState = {};
-    const store = mockStore(initialState);
 
     props = Object.assign({
         appId,
@@ -41,7 +33,8 @@ const MockChildReport = (props) => {
         detailKeyValue,
         type
     }, props);
-    return <Provider store={store}><ChildReport {...props} /></Provider>;
+
+    return <ChildReport {...props} />;
 };
 
 const MockNonEmbeddedChildReport = (props) => {
@@ -53,7 +46,7 @@ const MockNonEmbeddedChildReport = (props) => {
         childTableName,
         detailKeyFid,
         detailKeyValue,
-        type: 'NOTEMBEDREPORT'
+        type: 'NOT_CHILD_REPORT'
     }, props);
     return <ChildReport {...props} />;
 };
@@ -62,7 +55,7 @@ const I18nMessageMock = (input) => <div>{input}</div>;
 
 
 const EmbeddedReportToolsAndContentMock = (props) => <div className="embeddedReportContainer"></div>;
-const EmbeddedReportLinkMock = (props) => <div className="embeddedReportLink"></div>;
+const EmbeddedReportLinkMock = (props) => <div className="embeddedReportLink">{props.childTableName}</div>;
 const EmbeddedAddChildLinkMock = (props) => <div className="embeddedAddChildLink"></div>;
 
 describe('ChildReport', () => {
@@ -137,7 +130,7 @@ describe('ChildReport', () => {
         });
 
 
-        it('doesn\'t render if not EMBEDDEDREPORT type', () => {
+        it('doesn\'t render if not CHILD_REPORT type', () => {
             component = shallow(MockNonEmbeddedChildReport());
             const embeddedReportContainer = component.find(EmbeddedReportToolsAndContentMock);
             const embeddedReportLink = component.find(EmbeddedReportLinkMock);
@@ -172,7 +165,7 @@ describe('ChildReport', () => {
             };
             const testProps = {
                 report,
-                testChildTableName,
+                childTableName:testChildTableName,
                 loadReportRecordsCount: () => null,
             };
             const testPropsReportLink = Object.assign({}, {type:'REPORTLINK'}, testProps);
