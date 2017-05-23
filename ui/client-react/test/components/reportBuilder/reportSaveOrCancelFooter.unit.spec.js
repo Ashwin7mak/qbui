@@ -62,11 +62,6 @@ describe('Report Builder Save and Cancel Footer', () => {
         let saveButton = component.find('.mainTrowserFooterButton');
         saveButton.simulate('click');
 
-        // TypeError: 'undefined' is not an object (evaluating '_this.props.rptData.data')
-        // How to evaluate an object in my test
-        // Not passing in object, just confirming that action has been called
-        // Do I need to create example object
-
         expect(props.saveReport).toHaveBeenCalled();
         expect(props.exitBuilderMode).toHaveBeenCalled();
         expect(props.closeFieldSelectMenu).toHaveBeenCalled();

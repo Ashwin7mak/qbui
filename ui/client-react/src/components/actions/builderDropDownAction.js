@@ -36,6 +36,7 @@ let BuilderDropDownAction = React.createClass({
         let isAppView = !!this.props.selectedApp; // !! converts to boolean
         let isTableView = (isAppView && this.props.selectedTable);
         let isFormView = (isTableView && this.props.recId);
+        // rptId = 0 is the table home page report view. All Id's greater than 0 are named reports
         let isReportView = (isTableView && !this.props.recId && this.props.rptId > 0);
         let classes = "dropdownToggle globalActionLink";
 

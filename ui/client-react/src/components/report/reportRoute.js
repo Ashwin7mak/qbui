@@ -247,7 +247,7 @@ export const ReportRoute = React.createClass({
                             appId={this.props.match.params.appId}
                             tblId={this.props.match.params.tblId}
                             rptId={this.props.reportData.rptId}
-                            rptData={this.props.reportData}
+                            reportData={reportData}
                         />}
 
                     {this.props.isDrawerContext && this.getDrawerContainer()}
