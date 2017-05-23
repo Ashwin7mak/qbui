@@ -49,7 +49,7 @@ export class ReportBuilderContainer extends Component {
     getReportBuilderContent(columns, rows) {
         let {appId, tblId, rptId} = this.props.match.params;
         let sortFids = this.props.reportData.data ? this.props.reportData.data.sortFids : [];
-        let loading = columns.length == 0;
+        let loading = columns.length === 0;
         return (
             <QbGrid
                 loading={loading}
