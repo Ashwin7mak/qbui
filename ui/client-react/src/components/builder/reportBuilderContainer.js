@@ -89,7 +89,7 @@ export class ReportBuilderContainer extends Component {
                     reportData={this.props.reportData}>
                     <div className="reportBuilderContainerContent">
                         <div className="reportBuilderHeader">
-                            {rptId !== 0 && <ReportNameEditor className="reportBuilderNameEditor" name={name}/>}
+                            {rptId !== '0' && <ReportNameEditor className="reportBuilderNameEditor" name={name}/>}
                         </div>
                         <ReportToolsAndContent
                             className="reportBuilderToolsAndContent"
