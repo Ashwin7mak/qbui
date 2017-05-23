@@ -18,6 +18,10 @@ const MoveFieldHelper = {
 
         let formMetaCopy = _.cloneDeep(formMeta);
 
+        if (!_.includes(draggedItemProps.containingElement.id, 'new') && _.indexOf(formMetaCopy.fields, draggedItemProps.containingElement.id) === -1) {
+            formMetaCopy.fields.push(draggedItemProps.containingElement.id);
+        }
+
         removeElementFromCurrentLocationById(formMetaCopy, draggedItemProps);
         addElementToNewLocation(formMetaCopy, newLocation, draggedItemProps);
 
@@ -26,6 +30,8 @@ const MoveFieldHelper = {
 
     removeField(formMeta, location) {
         let formMetaCopy = _.cloneDeep(formMeta);
+
+        removeFieldIdFromFormMetaData(formMetaCopy, location);
         removeElementFromCurrentLocation(formMetaCopy, location);
         return formMetaCopy;
     },
@@ -114,6 +120,17 @@ function removeElementFromCurrentLocationById(formMetaData, draggedItemProps) {
     removeElementFromCurrentLocation(formMetaData, updatedElementLocation);
 }
 
+function removeFieldIdFromFormMetaData(formMetaData, location) {
+    let {tabIndex, sectionIndex, columnIndex, elementIndex} = location;
+    let column = formMetaData.tabs[tabIndex].sections[sectionIndex].columns[columnIndex];
+
+    if (!_.includes(column.elements[elementIndex].FormFieldElement.fieldId, 'new')) {
+        let formMetaFieldIndex = _.indexOf(formMetaData.fields, column.elements[elementIndex].FormFieldElement.fieldId);
+
+        formMetaData.fields.splice(formMetaFieldIndex, 1);
+    }
+}
+
 /**
  * Removes the element from where it currently exists in preparation for the move
  * WARNING: This function has side effects on the formMetaData passed in.
@@ -125,9 +142,7 @@ function removeElementFromCurrentLocation(formMetaData, location) {
     let {tabIndex, sectionIndex, columnIndex, elementIndex} = location;
 
     let column = formMetaData.tabs[tabIndex].sections[sectionIndex].columns[columnIndex];
-    let formMetaFieldIndex = _.indexOf(formMetaData.fields, column.elements[elementIndex].id);
 
-    formMetaData.fields.splice(formMetaFieldIndex, 1);
     column.elements = column.elements.filter(element => {
         return element.orderIndex !== elementIndex;
     });
