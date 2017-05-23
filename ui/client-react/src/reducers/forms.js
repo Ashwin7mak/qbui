@@ -50,7 +50,7 @@ const forms = (
         action.formData.formMeta.tableId = action.formData.formMeta.tableId || action.tblId;
 
         let BuiltinFields = [1, 2, 3, 4, 5];
-        let existingFields = _.differenceBy(action.formData.fields, BuiltinFields, (field) => {
+        let existingFieldIds = _.differenceBy(action.formData.fields, BuiltinFields, (field) => {
             if (typeof field === 'number') {
                 return field;
             } else {
@@ -58,7 +58,7 @@ const forms = (
             }
         });
 
-        action.formData.fields = existingFields;
+        action.formData.fields = existingFieldIds;
 
         newState[id] = ({
             id,
