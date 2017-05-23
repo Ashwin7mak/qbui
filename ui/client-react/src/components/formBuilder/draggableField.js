@@ -31,13 +31,13 @@ const fieldDragSource = {
             containingElement = {
                 FormFieldElement: _.merge(props.datatypeAttributes, {positionSameRow: false})
             };
-            relatedField = props.datatypeAttributes;
+            relatedField = {datatypeAttributes: props.datatypeAttributes};
         }
         
         return {
             containingElement: containingElement,
             location: props.location || {tabIndex: 0, sectionIndex: 0, columnIndex: 0, elementIndex: 0},
-            relatedField: props.relatedField,
+            relatedField: relatedField,
 
             // If there is an onHover callback, we need to pass it through here so it is available
             // when the dropTarget initiates this event
