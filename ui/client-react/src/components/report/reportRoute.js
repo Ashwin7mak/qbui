@@ -47,8 +47,6 @@ export const ReportRoute = React.createClass({
     nameForRecords: "Records",  // get from table meta data
 
     loadReport(appId, tblId, rptId, offset, numRows) {
-        //const flux = this.getFlux();
-        //flux.actions.selectTableId(tblId);
         this.props.selectTable(appId, tblId);
 
         // ensure the search box is cleared for the new report
@@ -73,8 +71,6 @@ export const ReportRoute = React.createClass({
      * Load a report with query parameters.
      */
     loadDynamicReportFromParams(appId, tblId, rptId, queryParams) {
-        //const flux = this.getFlux();
-        //flux.actions.selectTableId(tblId);
         this.props.selectTable(appId, tblId);
 
         // ensure the search box is cleared for the new report

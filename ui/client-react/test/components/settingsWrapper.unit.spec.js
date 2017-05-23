@@ -2,79 +2,130 @@ import React from 'react';
 import TestUtils, {Simulate} from 'react-addons-test-utils';
 import ReactDOM from 'react-dom';
 import {MemoryRouter} from 'react-router-dom';
-import Fluxxor from 'fluxxor';
 import {SettingsWrapper, __RewireAPI__ as SettingsWrapperRewireAPI}  from '../../src/components/settings/settingsWrapper';
 import DefaultTopNavGlobalActions from '../../../reuse/client/src/components/topNav/defaultTopNavGlobalActions';
+
 import TopNav from '../../../reuse/client/src/components/topNav/topNav';
 import LeftNav from '../../../reuse/client/src/components/sideNavs/standardLeftNav';
 import SimpleNavItem from '../../../reuse/client/src/components/simpleNavItem/simpleNavItem';
+import {mount} from 'enzyme';
 
 import Promise from 'bluebird';
 import _ from 'lodash';
 
-const apps = [{id: 'app1', tables: [{id: 'table1'}, {id: 'table2'}]}];
-
-const appsStore = Fluxxor.createStore({
-    getState: function() {
-        return {
-            apps: apps,
-            selectedAppId: 'app1',
-            selectedTableId: 'table2'
-        };
-    }
-});
-let stores = {
-    AppsStore: new appsStore()
+const apps = [{id: 'app1', tables: [{id: 'table1'}, {id: 'tbl2'}]}];
+const params = {
+    appId: 'app1',
+    tblId: 'tbl1'
 };
-let flux = new Fluxxor.Flux(stores);
-flux.actions = {
-    selectTableId: () => {return;},
-    selectAppId: () => {return;},
-    loadApps: () => {return;}
-};
-
-const props = {
+const initialProps = {
     match: {
-        params: {
-            appId: 'app1',
-            tblId: 'table1'
-        }
+        params: params
     },
+    isNavCollapsed: false,
+    isOpen: true,
+    getApp: (appId) => {return _.find(apps, function(a) {return a.id === appId;});},
+    getSelectedAppId: () => {},
+    getSelectedTableId: () => {},
     toggleNav: () => {},
-    dispatch: () => {},
-    flux: flux
+    clearSelectedApp: () => {},
+    selectTable: (appId, tblId) => {},
+    clearSelectedTable: () => {},
+    loadApp: (appId) => {},
+    loadApps: () => {},
+    getFeatureSwitchStates: () => {}
 };
+
+let props = {};
 
 describe('SettingsWrapper tests', () => {
     'use strict';
     let component;
 
     beforeEach(() => {
-        spyOn(flux.actions, 'loadApps').and.callThrough();
-        spyOn(flux.actions, 'selectAppId').and.callThrough();
-        spyOn(flux.actions, 'selectTableId').and.callThrough();
-        component = TestUtils.renderIntoDocument(<MemoryRouter><SettingsWrapper {...props}/></MemoryRouter>);
+        props = _.clone(initialProps);
+        spyOn(props, 'toggleNav').and.callThrough();
+        spyOn(props, 'clearSelectedApp').and.callThrough();
+        spyOn(props, 'selectTable').and.callThrough();
+        spyOn(props, 'clearSelectedTable').and.callThrough();
+        spyOn(props, 'getApp').and.callThrough();
+        spyOn(props, 'loadApp').and.callThrough();
+        spyOn(props, 'loadApps').and.callThrough();
+        spyOn(props, 'getFeatureSwitchStates').and.callThrough();
     });
 
     afterEach(() => {
-        flux.actions.loadApps.calls.reset();
-        flux.actions.selectAppId.calls.reset();
-        flux.actions.selectTableId.calls.reset();
+        props.toggleNav.calls.reset();
+        props.clearSelectedApp.calls.reset();
+        props.selectTable.calls.reset();
+        props.clearSelectedTable.calls.reset();
+        props.getApp.calls.reset();
+        props.loadApp.calls.reset();
+        props.loadApps.calls.reset();
+        props.getFeatureSwitchStates.calls.reset();
     });
 
     it('test render of component', () => {
-        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+        component = mount(<MemoryRouter><SettingsWrapper {...props}/></MemoryRouter>);
+        expect(component).toBeDefined();
+    });
+
+    it('test default action on mount with app not in store', () => {
+        props.match.params.appId = 'appNotInStore';
+        component = mount(<MemoryRouter><SettingsWrapper {...props}/></MemoryRouter>);
+
+        expect(props.loadApps).toHaveBeenCalled();
+        expect(props.loadApp).toHaveBeenCalledWith(props.match.params.appId);
+        expect(props.selectTable).toHaveBeenCalledWith(props.match.params.appId, props.match.params.tblId);
+    });
+
+    it('test default action on mount with no app id', () => {
+        props.match.params.appId = null;
+        component = mount(<MemoryRouter><SettingsWrapper {...props}/></MemoryRouter>);
+
+        expect(props.loadApps).toHaveBeenCalled();
+        expect(props.loadApp).not.toHaveBeenCalled();
+        expect(props.selectTable).not.toHaveBeenCalled();
     });
 
     it('test default action on mount with app already in store', () => {
-        expect(flux.actions.loadApps).not.toHaveBeenCalled();
-        expect(flux.actions.selectAppId).toHaveBeenCalledWith(props.match.params.appId);
-        expect(flux.actions.selectTableId).toHaveBeenCalledWith(props.match.params.tblId);
+        props.match.params.appId = 'app1';
+        component = mount(<MemoryRouter><SettingsWrapper {...props}/></MemoryRouter>);
+
+        expect(props.loadApps).not.toHaveBeenCalled();
+        expect(props.loadApp).not.toHaveBeenCalledWith(props.match.params.appId);
+        expect(props.selectTable).toHaveBeenCalledWith(props.match.params.appId, props.match.params.tblId);
+    });
+
+    it('test default action on mount with app already in store and no table and no selected table', () => {
+        props.match.params.appId = 'app1';
+        props.match.params.tblId = null;
+        props.getSelectedTableId = () => {return null;};
+        component = mount(<MemoryRouter><SettingsWrapper {...props}/></MemoryRouter>);
+
+        expect(props.loadApps).not.toHaveBeenCalled();
+        expect(props.loadApp).not.toHaveBeenCalledWith(props.match.params.appId);
+        expect(props.selectTable).not.toHaveBeenCalled();
+        expect(props.clearSelectedTable).not.toHaveBeenCalled();
+    });
+
+    it('test default action on mount with app already in store and no table and a selected table', () => {
+        props.match.params.appId = 'app1';
+        props.match.params.tblId = null;
+        props.getSelectedTableId = () => {return true;};
+        component = mount(<MemoryRouter><SettingsWrapper {...props}/></MemoryRouter>);
+        expect(props.loadApps).not.toHaveBeenCalled();
+        expect(props.loadApp).not.toHaveBeenCalledWith(props.match.params.appId);
+        expect(props.selectTable).not.toHaveBeenCalledWith(props.match.params.appId, props.match.params.tblId);
+        expect(props.clearSelectedTable).toHaveBeenCalled();
     });
 
     it('test render of nav components', () => {
-        expect(TestUtils.scryRenderedComponentsWithType(component, LeftNav).length).toEqual(1);
-        expect(TestUtils.scryRenderedComponentsWithType(component, TopNav).length).toEqual(1);
+        component = mount(<MemoryRouter><SettingsWrapper {...props}/></MemoryRouter>);
+        const leftNav = component.find(LeftNav);
+        const topNav = component.find(TopNav);
+        expect(leftNav.length).toBe(1);
+        expect(topNav.length).toBe(1);
     });
 
     it('test render of child routes', () => {
@@ -89,16 +140,16 @@ describe('SettingsWrapper tests', () => {
             component: ChildComponent
         }];
         let initialEntries = ['/one', '/aRoute'];
-        component = TestUtils.renderIntoDocument(
+        component = mount(
             <MemoryRouter initialEntries={initialEntries} initialIndex={1}>
                 <SettingsWrapper {...props} routes={childRoute}/>
             </MemoryRouter>);
-        let child = TestUtils.scryRenderedComponentsWithType(component, ChildComponent);
+
+        let child = component.find(ChildComponent);
         expect(child.length).toEqual(1);
-        expect(child[0].props).toEqual(jasmine.objectContaining({app: apps[0], table: apps[0].tables[1]}));
-        expect(Object.keys(child[0].props)).toContain('match');
-        expect(Object.keys(child[0].props)).toContain('location');
-        expect(Object.keys(child[0].props)).toContain('history');
+        expect(Object.keys(child.nodes[0].props)).toContain('match');
+        expect(Object.keys(child.nodes[0].props)).toContain('location');
+        expect(Object.keys(child.nodes[0].props)).toContain('history');
 
     });
 });
