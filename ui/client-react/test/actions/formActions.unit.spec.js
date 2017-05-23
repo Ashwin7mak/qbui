@@ -421,7 +421,7 @@ describe('Form Actions', () => {
                 tblId: 2,
                 content: {
                     newLocation: 3,
-                    newField: testNewField,
+                    field: testNewField,
 
                 }
             });
