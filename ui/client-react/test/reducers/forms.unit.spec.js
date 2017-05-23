@@ -24,7 +24,7 @@ describe('Forms reducer functions', () => {
     let stateWithViewForm = {
         'view': {
             id: 'view',
-            formData: {formMeta: 'some meta data'}
+            formData: {formMeta: {fields: [1, 2, 3, 4, 5]}}
         }
     };
 
@@ -219,6 +219,7 @@ describe('Forms reducer functions', () => {
             type: types.REMOVE_FIELD,
             content: {
                 location: 1,
+
             }
         };
 
@@ -231,7 +232,7 @@ describe('Forms reducer functions', () => {
             ReducerRewireAPI.__ResetDependency__('MoveFieldHelper');
         });
 
-        it('returns a new state with a single field removed', () => {
+        fit('returns a new state with a single field removed', () => {
             expect(reducer(stateWithViewForm, actionPayload)).toEqual({
                 [VIEW]: {
                     ...stateWithViewForm[VIEW],
