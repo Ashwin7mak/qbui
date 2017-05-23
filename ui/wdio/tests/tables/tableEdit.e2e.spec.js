@@ -60,6 +60,9 @@
 
             //select the App
             RequestAppsPage.selectApp(testApp.name);
+
+            //Wait until new table button visible
+            return tableCreatePO.newTableBtn.waitForVisible();
         });
 
         it('Add a new table and then edit that table', function() {
