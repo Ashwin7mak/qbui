@@ -26,7 +26,6 @@ describe('Test Apps Store', () => {
     });
 
     it('test default apps store state', () => {
-        ;
         //  expect 14 bindActions
         expect(flux.store(STORE_NAME).__actions__.LOAD_APP_OWNER).toBeDefined();
         expect(flux.store(STORE_NAME).__actions__.LOAD_APP_OWNER_SUCCESS).toBeDefined();
