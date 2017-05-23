@@ -28,21 +28,20 @@ class StandardGridToolBar extends React.Component {
     };
 
     render() {
-        // debugger;
-        // console.log('this.props: ', this.props);
-        let hasFacets = false;
+        let hasFacets = this.props.shouldFacet;
         return (
             <div>
                 <div className={"standardGridToolBar " + (hasFacets ? "" : "noFacets")}>
                     <div className="standardLeftToolBar">
-                        {this.props.shouldSearch ?
+                        {this.props.shouldSearch &&
+                        // TODO: MC-2733 : REPLACE THIS WITH FilterSearchBox component from reuse
                         <IconInputBox placeholder={`Search ${this.props.itemTypePlural}`}
                                       onChange={this.props.onSearchChange}
                                       onClear={this.props.clearSearchTerm}
                                       value={this.props.searchTerm}
-                        /> : null
+                        />
                         }
-                        {this.props.shouldFacet ?
+                        {hasFacets &&
                             <div className="standardGridFacet">
                                 <StandardGridFacetsMenu
                                     className="facetMenu"
@@ -53,19 +52,18 @@ class StandardGridToolBar extends React.Component {
                                     onFacetClearFieldSelects={this.handleFacetClearFieldSelects}
                                     selectedValues={this.props.facetSelections.selectionsHash}
                                 />
-                            </div> : null
+                            </div>
                         }
                     </div>
                     <div className="standardRightToolBar">
                         <div className="standardGridItemsCount">
                             <div className="itemsCount">
-                                {this.props.totalItems ?
+                                {this.props.totalItems &&
                                     <StandardGridItemsCount totalItems={this.props.totalItems}
                                                             totalFilteredItems={this.props.totalFilteredItems}
                                                             itemTypePlural={this.props.itemTypePlural}
                                                             itemTypeSingular={this.props.itemTypeSingular}
-                                    /> :
-                                    null
+                                    />
                                 }
                             </div>
                         </div>
@@ -142,9 +140,17 @@ const mapStateToProps = (state, ownProps) => {
 };
 
 
+/**
+ * Every one of these actions have the pattern of Setting the State and Informing an Update
+ * All of them trigger through the same update pipeline in the doUpdate (which needs to be provided)
+ * @param dispatch
+ * @param ownProps
+ * @returns {{getPreviousPage: (function()), getNextPage: (function()), onSearchChange: (function(*)), clearSearchTerm: (function()), setFacetSelection: (function(*=))}}
+ */
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
         getPreviousPage: () => {
+            // Go back means a negative offset
             dispatch(StandardGridActions.setCurrentPageOffset(ownProps.id, -1));
             dispatch(StandardGridActions.doUpdate(ownProps.id, ownProps.doUpdate));
         },
