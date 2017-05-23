@@ -6,6 +6,7 @@ import {ReportBuilderContainer, __RewireAPI__ as ReportBuilderRewireAPI} from '.
 const appId = "1";
 const tblId = "2";
 const rptId = '3';
+const tableHomePageRptId = '0';
 
 const mockActions = {
     exitBuilderMode() {},
@@ -14,6 +15,21 @@ const mockActions = {
 
 const previousLocation = '/somewhere/over/the/rainbow';
 const reportName = 'name';
+
+let reportData = {
+    data: {
+        sortFids: [],
+        name: reportName,
+        columns: {
+
+        },
+        records: {
+
+        },
+        searchStringForFiltering: '',
+        selectedRows: []
+    }
+};
 
 let testProps = {
     match: {
@@ -27,20 +43,23 @@ let testProps = {
     reportBuilder: {
 
     },
-    reportData: {
-        data: {
-            sortFids: [],
-            name: reportName,
-            columns: {
+    reportData: reportData,
+    ...mockActions
+};
 
-            },
-            records: {
-
-            },
-            searchStringForFiltering: '',
-            selectedRows: []
+let testPropsTableHomePage = {
+    match: {
+        params: {
+            appId: appId,
+            tblId: tblId,
+            rptId: tableHomePageRptId
         }
     },
+    redirectRoute: previousLocation,
+    reportBuilder: {
+
+    },
+    reportData: reportData,
     ...mockActions
 };
 
@@ -112,8 +131,7 @@ describe('ReportBuilderContainer', () => {
     });
 
     it('does not render ReportNameEditor when rptId is 0', () => {
-        testProps.match.params.rptId = '0';
-        component = shallow(<ReportBuilderContainer {...testProps} />);
+        component = shallow(<ReportBuilderContainer {...testPropsTableHomePage} />);
 
         let reportNameEditor = component.find('.reportBuilderNameEditor');
 

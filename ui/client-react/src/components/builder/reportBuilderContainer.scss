@@ -59,7 +59,7 @@
             // row hover highlighting - only done while not inline editing
             &:not(.inlineEditing) {
 
-                // don't the row when mouse is over the row
+                // don't highlight the row when mouse is over the row
                 .qbRow:hover .qbCell:not(.placeholderCell) {
                     background-color: $stage-background-color;
                 }

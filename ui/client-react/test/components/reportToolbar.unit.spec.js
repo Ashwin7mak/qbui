@@ -295,12 +295,11 @@ describe('ReportToolbar functions', () => {
     });
 
     it('does not render FilterSearchBox if isSearchBoxVisible is false', () => {
-        let fakeReportWithFacets = _.cloneDeep(fakeReportData_simple);
         let component = shallow(
             <ReportToolbar
                 {...props}
                 isSearchBoxVisible={false}
-                reportData={fakeReportWithFacets}
+                reportData={fakeReportData_simple}
                 filterOnSelections={callBacks.filterOnSelections}
                 searchTheString={callBacks.searchTheString}
                 pageActions={pageActions}
@@ -312,12 +311,11 @@ describe('ReportToolbar functions', () => {
     });
 
     it('does not render SortAndGroup if isSortAndGroupVisible is false', () => {
-        let fakeReportWithFacets = _.cloneDeep(fakeReportData_simple);
         let component = shallow(
             <ReportToolbar
                 {...props}
                 isSortAndGroupVisible={false}
-                reportData={fakeReportWithFacets}
+                reportData={fakeReportData_simple}
                 filterOnSelections={callBacks.filterOnSelections}
                 searchTheString={callBacks.searchTheString}
                 pageActions={pageActions}
@@ -329,12 +327,11 @@ describe('ReportToolbar functions', () => {
     });
 
     it('does not render FacetsMenu if isFacetMenuVisible is false', () => {
-        let fakeReportWithFacets = _.cloneDeep(fakeReportData_simple);
         let component = shallow(
             <ReportToolbar
                 {...props}
                 isFacetMenuVisible={false}
-                reportData={fakeReportWithFacets}
+                reportData={fakeReportData_simple}
                 filterOnSelections={callBacks.filterOnSelections}
                 searchTheString={callBacks.searchTheString}
                 pageActions={pageActions}
@@ -346,12 +343,11 @@ describe('ReportToolbar functions', () => {
     });
 
     it('does not render rightReportToolbar if isRightToolbarVisible is false', () => {
-        let fakeReportWithFacets = _.cloneDeep(fakeReportData_simple);
         let component = shallow(
             <ReportToolbar
                 {...props}
                 isRightToolbarVisible={false}
-                reportData={fakeReportWithFacets}
+                reportData={fakeReportData_simple}
                 filterOnSelections={callBacks.filterOnSelections}
                 searchTheString={callBacks.searchTheString}
                 pageActions={pageActions}
