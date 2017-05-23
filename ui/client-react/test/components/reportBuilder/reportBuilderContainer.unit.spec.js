@@ -111,8 +111,8 @@ describe('ReportBuilderContainer', () => {
         expect(reportNameEditor).toHaveProp('name', reportName);
     });
 
-    it('does not render ReportNameEditor when name is not a prop', () => {
-        testProps.reportData.data.name = undefined;
+    it('does not render ReportNameEditor when rptId is 0', () => {
+        testProps.match.params.rptId = '0';
         component = shallow(<ReportBuilderContainer {...testProps} />);
 
         let reportNameEditor = component.find('.reportBuilderNameEditor');
