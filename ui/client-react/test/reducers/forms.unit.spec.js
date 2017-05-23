@@ -232,7 +232,7 @@ describe('Forms reducer functions', () => {
             ReducerRewireAPI.__ResetDependency__('MoveFieldHelper');
         });
 
-        fit('returns a new state with a single field removed', () => {
+        it('returns a new state with a single field removed', () => {
             expect(reducer(stateWithViewForm, actionPayload)).toEqual({
                 [VIEW]: {
                     ...stateWithViewForm[VIEW],
@@ -268,7 +268,7 @@ describe('Forms reducer functions', () => {
             type: types.ADD_FIELD,
             content: {
                 newLocation: 1,
-                newField: {}
+                field: {}
             }
         };
 
