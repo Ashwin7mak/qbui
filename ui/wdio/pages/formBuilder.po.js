@@ -108,7 +108,7 @@ class formBuilderPage {
         // Clicks on CANCEL in the form builder and waits for the next page to render
         this.cancelBtn.click();
         this.dirtyForm_Dismiss();
-        browser.waitForText('.leftNavLabel', true);
+        browser.waitForExist('.leftNavLabel');
         browser.waitForText('.leftNavLabel');
         return this;
     }
