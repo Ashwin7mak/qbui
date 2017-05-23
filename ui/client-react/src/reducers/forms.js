@@ -227,12 +227,14 @@ const forms = (
             return state;
         }
 
-        let {location} = action.content;
+        if (updatedForm.formData.formMeta.fields.length > 1) {
+            let {location} = action.content;
 
-        updatedForm.formData.formMeta = MoveFieldHelper.removeField(
-            updatedForm.formData.formMeta,
-            location
-        );
+            updatedForm.formData.formMeta = MoveFieldHelper.removeField(
+                updatedForm.formData.formMeta,
+                location
+            );
+        }
 
         updatedForm.isPendingEdit = true;
         newState[id] = updatedForm;
