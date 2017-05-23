@@ -70,7 +70,7 @@ export const Record = React.createClass({
                     //if there is a parent value for this child auto fill it in
                     let parentFid = _.get(queryParams, 'detailKeyFid', undefined);
                     if (parentFid && +parentFid === fieldId) {
-                        value =  (_.get(queryParams, 'detailKeyValue', ''));
+                        value =  _.get(queryParams, 'detailKeyValue', '');
                     } else if (fieldDef.defaultValue && fieldDef.defaultValue.coercedValue) {
                         // if there is a default value use that as new record changes
                         value = fieldDef.defaultValue.coercedValue.value;

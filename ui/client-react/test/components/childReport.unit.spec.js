@@ -4,6 +4,13 @@ import jasmineEnzyme from 'jasmine-enzyme';
 
 import ChildReport, {__RewireAPI__ as ChildReportRewireAPI} from '../../src/components/QBForm/childReport';
 
+import configureMockStore from 'redux-mock-store';
+import thunk from 'redux-thunk';
+import {Provider} from "react-redux";
+
+const middlewares = [thunk];
+const mockStore = configureMockStore(middlewares);
+
 class BreakpointsAlwaysSmallMock {
     static isSmallBreakpoint() {
         return true;
@@ -21,6 +28,9 @@ const type = 'EMBEDREPORT';
 const childReportUrl = `/qbase/app/${appId}/table/${childTableId}/report/${childReportId}?detailKeyFid=${detailKeyFid}&detailKeyValue=${detailKeyValue}`;
 
 const MockChildReport = (props) => {
+    const initialState = {};
+    const store = mockStore(initialState);
+
     props = Object.assign({
         appId,
         childAppId,
@@ -31,7 +41,7 @@ const MockChildReport = (props) => {
         detailKeyValue,
         type
     }, props);
-    return <ChildReport {...props} />;
+    return <Provider store={store}><ChildReport {...props} /></Provider>;
 };
 
 const MockNonEmbeddedChildReport = (props) => {

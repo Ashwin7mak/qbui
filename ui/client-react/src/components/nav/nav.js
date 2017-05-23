@@ -606,12 +606,6 @@ const mapDispatchToProps = (dispatch) => {
     };
 };
 
-// export const NavWithRouter = withRouter(Nav);
-// export const ConnectedNavRoute = withRouter(connect(
-//     mapStateToProps,
-//     mapDispatchToProps
-// )(Nav));
-
 export default withRouter(connect(
     mapStateToProps,
     mapDispatchToProps

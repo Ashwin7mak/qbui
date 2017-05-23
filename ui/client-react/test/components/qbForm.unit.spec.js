@@ -103,7 +103,7 @@ const UserFieldValueRendererMock = React.createClass({
     }
 });
 
-fdescribe('QBForm', () => {
+describe('QBForm', () => {
     beforeEach(() => {
         jasmineEnzyme();
         QbFormRewireAPI.__Rewire__('DragAndDropField', DragAndDropMock);

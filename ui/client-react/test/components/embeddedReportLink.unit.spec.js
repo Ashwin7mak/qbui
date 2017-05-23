@@ -83,23 +83,6 @@ describe('EmbeddedReportLink', () => {
         EmbeddedReportLinkRewireAPI.__ResetDependency__('unloadEmbeddedReport');
     });
 
-    it('calls loadReportRecordsCount with proper arguments', () => {
-        const loadReportRecordsCountSpy = jasmine.createSpy('loadReportRecordsCountSpy');
-
-        component = mount(
-            <UnconnectedEmbeddedReportLink loadReportRecordsCount={loadReportRecordsCountSpy} {...props} />
-        );
-        expect(loadReportRecordsCountSpy).toHaveBeenCalledWith(
-            uniqueId,
-            appId,
-            childTableId,
-            childReportId,
-            jasmine.objectContaining({
-                query: `{${detailKeyFid}.EX.'${detailKeyValue}'}`
-            })
-        );
-    });
-
     it('renders a Link', () => {
         component = mount(
             <UnconnectedEmbeddedReportLink

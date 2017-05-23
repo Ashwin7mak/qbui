@@ -50,14 +50,14 @@ export const EmbeddedAddChildLink = React.createClass({
     }
 });
 
-// instead of relying on our parent route component to pass our props down,
-// the react-redux container will generate the required props for this route
-// from the Redux state (the presentational component has no code dependency on Redux!)
-const mapStateToProps = (state, ownProps) => {
-    return {
-        reports: state.embeddedReports[ownProps.uniqueId]
-    };
-};
+// // instead of relying on our parent route component to pass our props down,
+// // the react-redux container will generate the required props for this route
+// // from the Redux state (the presentational component has no code dependency on Redux!)
+// const mapStateToProps = (state, ownProps) => {
+//     return {
+//         //reports: state.embeddedReports[ownProps.uniqueId]
+//     };
+// };
 
 // similarly, abstract out the Redux dispatcher from the presentational component
 // (another bit of boilerplate to keep the component free of Redux dependencies)
@@ -71,7 +71,8 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 const ConnectedEmbeddedAddChildLink = connect(
-    mapStateToProps,
+    //mapStateToProps,
+    null,
     mapDispatchToProps
 )(EmbeddedAddChildLink);
 
