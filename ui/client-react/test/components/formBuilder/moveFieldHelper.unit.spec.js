@@ -33,11 +33,11 @@ function buildNewLocation(tabIndex, sectionIndex, columnIndex, elementIndex) {
  * @param columnIndex
  * @returns {Array}
  */
-function getFieldsAndTheirIndex(formMeta, tabIndex, sectionIndex, columnIndex) {
+function getFieldIdsAsIndexedArray(formMeta, tabIndex, sectionIndex, columnIndex) {
     let elements = formMeta.tabs[tabIndex].sections[sectionIndex].columns[columnIndex].elements;
 
     return elements.map(element => {
-        return {orderIndex: element.orderIndex, fieldId: element.FormFieldElement.fieldId};
+        return element.FormFieldElement.fieldId;
     });
 }
 
@@ -58,10 +58,10 @@ describe('MoveFieldHelper', () => {
                 expectedRemoveFieldResult: 3,
                 newElementIndex: 1,
                 expectedResult: [
-                    {orderIndex: 0, fieldId: 7},
-                    {orderIndex: 1, fieldId: 6},
-                    {orderIndex: 2, fieldId: 8},
-                    {orderIndex: 3, fieldId: 9},
+                    7,
+                    6,
+                    8,
+                    9
                 ],
                 expectFieldToBeRemoved: false
             },
@@ -79,10 +79,10 @@ describe('MoveFieldHelper', () => {
                 expectedRemoveFieldResult: 3,
                 newElementIndex: 1,
                 expectedResult: [
-                    {orderIndex: 0, fieldId: 6},
-                    {orderIndex: 1, fieldId: 9},
-                    {orderIndex: 2, fieldId: 7},
-                    {orderIndex: 3, fieldId: 8}
+                    6,
+                    9,
+                    7,
+                    8
                 ],
                 expectFieldToBeRemoved: false
             },
@@ -100,15 +100,15 @@ describe('MoveFieldHelper', () => {
                 expectedRemoveFieldResult: 4,
                 newElementIndex: 1,
                 expectedResult: [
-                    {orderIndex: 0, fieldId: 6},
-                    {orderIndex: 1, fieldId: 11},
-                    {orderIndex: 2, fieldId: 7},
-                    {orderIndex: 3, fieldId: 8},
-                    {orderIndex: 4, fieldId: 9}
+                    6,
+                    11,
+                    7,
+                    8,
+                    9
                 ],
                 expectedOriginalLocationSimplifiedResult: [
-                    {orderIndex: 0, fieldId: 12},
-                    {orderIndex: 1, fieldId: 13}
+                    12,
+                    13
                 ]
             },
             {
@@ -125,14 +125,14 @@ describe('MoveFieldHelper', () => {
                 expectedRemoveFieldResult: 4,
                 newElementIndex: 1,
                 expectedResult: [
-                    {orderIndex: 0, fieldId: 6},
-                    {orderIndex: 1, fieldId: 21},
-                    {orderIndex: 2, fieldId: 7},
-                    {orderIndex: 3, fieldId: 8},
-                    {orderIndex: 4, fieldId: 9}
+                    6,
+                    21,
+                    7,
+                    8,
+                    9
                 ],
                 expectedOriginalLocationSimplifiedResult: [
-                    {orderIndex: 0, fieldId: 22},
+                    22
                 ]
             }
         ];
@@ -170,7 +170,7 @@ describe('MoveFieldHelper', () => {
                 let elementProps = buildDraggedItemProps(testCase.originalTab, testCase.originalSection, testCase.originalColumn, testCase.originalElementIndex, originalElement, originalElement.FormFieldElement);
 
                 let result = MoveFieldHelper.removeField(testFormData.formMeta, elementProps.location);
-                let simplifiedResult = getFieldsAndTheirIndex(result, testCase.originalTab, testCase.originalSection, testCase.originalColumn);
+                let simplifiedResult = getFieldIdsAsIndexedArray(result, testCase.originalTab, testCase.originalSection, testCase.originalColumn);
 
                 expect(simplifiedResult.length).toEqual(testCase.expectedRemoveFieldResult);
             });
@@ -183,13 +183,13 @@ describe('MoveFieldHelper', () => {
                 let newLocation = buildNewLocation(testCase.newTab, testCase.newSection, testCase.newColumn, testCase.newElementIndex);
 
                 let result = MoveFieldHelper.moveField(testFormData.formMeta, newLocation, elementProps);
-                let simplifiedResult = getFieldsAndTheirIndex(result, testCase.newTab, testCase.newSection, testCase.newColumn);
+                let simplifiedResult = getFieldIdsAsIndexedArray(result, testCase.newTab, testCase.newSection, testCase.newColumn);
 
                 expect(simplifiedResult).toEqual(testCase.expectedResult);
 
                 if (testCase.expectedOriginalLocationSimplifiedResult) {
                     // Expect the item to be removed from its original tab/section
-                    let simplifiedResultForSecondTab = getFieldsAndTheirIndex(result, testCase.originalTab, testCase.originalSection, testCase.originalColumn);
+                    let simplifiedResultForSecondTab = getFieldIdsAsIndexedArray(result, testCase.originalTab, testCase.originalSection, testCase.originalColumn);
 
                     expect(simplifiedResultForSecondTab).toEqual(testCase.expectedOriginalLocationSimplifiedResult);
                 }
