@@ -56,12 +56,9 @@ export const RecordRoute = React.createClass({
     },
 
     loadRecord(appId, tblId, recordId, rptId, embeddedReport) {
-        const flux = this.getFlux();
-
         //selected table does not change when in a drawer
         if (!this.props.isDrawerContext) {
             this.props.selectTable(appId, tblId);
-            //flux.actions.selectTableId(tblId);
         }
 
         // ensure the search input is empty
@@ -616,7 +613,9 @@ const mapDispatchToProps = (dispatch) => {
         clearSearchInput: () => {
             dispatch(clearSearchInput());
         },
-        selectTable: (appId, tableId) => dispatch(selectAppTable(appId, tableId))
+        selectTable: (appId, tableId) => {
+            dispatch(selectAppTable(appId, tableId));
+        }
     };
 };
 

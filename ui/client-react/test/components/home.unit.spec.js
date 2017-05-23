@@ -1,6 +1,7 @@
 import React from 'react';
 import {App, __RewireAPI__ as HomeRewireAPI}  from '../../src/components/apps/home';
-import {mount, shallow} from 'enzyme';
+import {mount} from 'enzyme';
+import jasmineEnzyme from 'jasmine-enzyme';
 
 let props = {
     getApps: () => {}
@@ -18,6 +19,7 @@ describe('Home page functions', () => {
     'use strict';
 
     beforeEach(() => {
+        jasmineEnzyme();
         spyOn(props, 'getApps').and.callThrough();
         HomeRewireAPI.__Rewire__('AppsList', AppsListMock);
     });

@@ -15,19 +15,7 @@ import {getApp, getSelectedAppId, getSelectedTableId} from '../../reducers/app';
 const walkMeScript = document.createElement("script");
 walkMeScript.src = Configuration.walkmeJSSnippet;
 
-import Fluxxor from "fluxxor";
-let FluxMixin = Fluxxor.FluxMixin(React);
-let StoreWatchMixin = Fluxxor.StoreWatchMixin;
-
 let NavWrapper = React.createClass({
-    mixins: [FluxMixin, StoreWatchMixin('AppsStore')],
-
-    getStateFromFlux() {
-        let flux = this.getFlux();
-        return {
-            apps: flux.store('AppsStore').getState()
-        };
-    },
 
     /* touch detection */
     isTouchDevice() {
@@ -49,7 +37,7 @@ let NavWrapper = React.createClass({
         };
     },
     render() {
-        return <Nav {...this.props} />;
+        return <Nav {...this.props}/>;
     },
 
     componentDidMount() {
@@ -130,10 +118,6 @@ let NavWrapper = React.createClass({
 
     getAppFromState(appId) {
         return this.props.getApp(appId);
-        //if (appId && _.has(this.state.apps, 'apps')) {
-        //    return _.find(this.state.apps.apps, (a) => a.id === appId);
-        //}
-        //return null;
     }
 });
 
