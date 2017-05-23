@@ -2,6 +2,8 @@ import * as types from '../actions/types';
 import * as tabIndexConstants from '../../../client-react/src/components/formBuilder/tabindexConstants';
 import _ from 'lodash';
 import MoveFieldHelper from '../components/formBuilder/moveFieldHelper';
+import FieldFormats from '../utils/fieldFormats';
+import Locale from '../../../reuse/client/src/locales/locale';
 
 const forms = (
 
@@ -46,6 +48,17 @@ const forms = (
          * */
         action.formData.formMeta.appId = action.formData.formMeta.appId || action.appId;
         action.formData.formMeta.tableId = action.formData.formMeta.tableId || action.tblId;
+
+        let BuiltinFields = [1, 2, 3, 4, 5];
+        let existingFields = _.differenceBy(action.formData.fields, BuiltinFields, (field) => {
+            if (typeof field === 'number') {
+                return field;
+            } else {
+                return field.id;
+            }
+        });
+
+        action.formData.fields = existingFields;
 
         newState[id] = ({
             id,
