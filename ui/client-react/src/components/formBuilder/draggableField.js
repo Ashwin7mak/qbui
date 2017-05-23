@@ -15,6 +15,7 @@ const fieldDragSource = {
     beginDrag(props, monitor, component) {
         let containingElement = props.containingElement;
         let relatedField = props.relatedField;
+
         if (props.cacheDragElement) {
             props.cacheDragElement(component);
         }
@@ -33,7 +34,7 @@ const fieldDragSource = {
             };
             relatedField = {datatypeAttributes: props.datatypeAttributes};
         }
-        
+
         return {
             containingElement: containingElement,
             location: props.location || {tabIndex: 0, sectionIndex: 0, columnIndex: 0, elementIndex: 0},
