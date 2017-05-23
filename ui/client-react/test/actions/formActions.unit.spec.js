@@ -27,7 +27,7 @@ const mockFieldsActions = {
             return Promise.resolve().then(() => (dispatch({type: 'AllFieldsUpdated'})));
         };
     },
-    deleteFields(_appId, _formMeta) {
+    deleteMarkedFields(_appId, _formMeta) {
         return (dispatch) => {
             return Promise.resolve().then(() => (dispatch({type: 'AllFieldsDeleted'})));
         };
@@ -249,10 +249,10 @@ describe('Form Actions', () => {
 
             spyOn(mockFieldsActions, 'saveAllNewFields').and.callThrough();
             spyOn(mockFieldsActions, 'updateAllFieldsWithEdits').and.callThrough();
-            spyOn(mockFieldsActions, 'deleteFields').and.callThrough();
+            spyOn(mockFieldsActions, 'deleteMarkedFields').and.callThrough();
             FormActionsRewireAPI.__Rewire__('saveAllNewFields', mockFieldsActions.saveAllNewFields);
             FormActionsRewireAPI.__Rewire__('updateAllFieldsWithEdits', mockFieldsActions.updateAllFieldsWithEdits);
-            FormActionsRewireAPI.__Rewire__('deleteFields', mockFieldsActions.deleteFields);
+            FormActionsRewireAPI.__Rewire__('deleteMarkedFields', mockFieldsActions.deleteMarkedFields);
         });
 
         afterEach(() => {
@@ -346,7 +346,7 @@ describe('Form Actions', () => {
 
             return store.dispatch(updateForm(appId, tableId, formType, formData)).then(
                 () => {
-                    expect(mockFieldsActions.deleteFields).toHaveBeenCalledWith(appId, tableId, formData);
+                    expect(mockFieldsActions.deleteMarkedFields).toHaveBeenCalledWith(appId, tableId, formData);
                     done();
                 },
                 () => {
