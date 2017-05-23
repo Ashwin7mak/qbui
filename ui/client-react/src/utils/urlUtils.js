@@ -139,7 +139,7 @@ const UrlUtils = {
      * Get the link for Automation Settings page
      */
     getAutomationSettingsLink(appId) {
-        return `${URL.SETTINGS_ROUTE}/app/${appId}/automations`;
+        return `${URL.SETTINGS_ROUTE}/app/${appId}/${URL.AUTOMATION_PATH}`;
     }
 };
 
