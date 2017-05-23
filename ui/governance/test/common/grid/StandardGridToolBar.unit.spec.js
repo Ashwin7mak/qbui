@@ -21,7 +21,6 @@ describe('StandardGridToolBar', () => {
             <Provider store={mockStore({Grids : {accountUsers: {pagination: {totalItems: 20}}}})}>
                 <StandardGridToolBar
                     doUpdate={Actions.doUpdate}
-                    doFacet={false}
                     id={"accountUsers"}
                     rowKey={"uid"}
                     itemTypePlural= "users"

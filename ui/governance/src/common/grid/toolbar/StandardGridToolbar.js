@@ -109,11 +109,6 @@ StandardGridToolBar.propTypes = {
     shouldFacet: PropTypes.bool,
 
     /**
-     * Whether to Facet in this grid or no
-     */
-    doFacet: PropTypes.bool,
-
-    /**
      * Navigation controls. What to do when a user presses next or previous
      */
     getPreviousPage: PropTypes.func.isRequired,
