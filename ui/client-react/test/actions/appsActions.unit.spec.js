@@ -9,32 +9,9 @@ describe('Apps Actions functions with Tables', () => {
 
     let responseData = [{id: 'tableId', link: `${APP_ROUTE}/tableId`}];
     let appRoleResponeData = [4, 5, 6];
-    let responseComponentData = {
-        users: [],
-        app: [{id: 'tableId'}]
-    };
-
-    class mockAppService {
-        constructor() { }
-        getApps() {
-            return Promise.resolve({data: responseData});
-        }
-        getApp(id) {
-            return Promise.resolve({data: {id:'tableId'}});
-        }
-        getAppUsers(id) {
-            return Promise.resolve({data: responseData});
-        }
-        getAppComponents(id) {
-            return Promise.resolve({data: responseComponentData});
-        }
-    }
 
     class mockRoleService {
         constructor() { }
-        getAppRoles(id) {
-            return Promise.resolve({data: appRoleResponeData});
-        }
         unassignUsersFromRole(appId, roleId, userIds) {
             return Promise.resolve({data: appRoleResponeData});
         }
@@ -42,9 +19,6 @@ describe('Apps Actions functions with Tables', () => {
 
     class mockRoleServiceFailure {
         constructor() { }
-        getAppRoles(id) {
-            return Promise.reject(null);
-        }
         unassignUsersFromRole(appId, roleId, userIds) {
             return Promise.reject(null);
         }
@@ -70,73 +44,15 @@ describe('Apps Actions functions with Tables', () => {
 
     beforeEach(() => {
         spyOn(flux.dispatchBinder, 'dispatch');
-        spyOn(mockAppService.prototype, 'getApps').and.callThrough();
-        spyOn(mockAppService.prototype, 'getApp').and.callThrough();
-        spyOn(mockAppService.prototype, 'getAppComponents').and.callThrough();
-        spyOn(mockAppService.prototype, 'getAppUsers').and.callThrough();
-        spyOn(mockRoleService.prototype, 'getAppRoles').and.callThrough();
         spyOn(mockRoleService.prototype, 'unassignUsersFromRole').and.callThrough();
         spyOn(mockUserService.prototype, 'getUser').and.callThrough();
-        appsActionsRewireAPI.__Rewire__('AppService', mockAppService);
         appsActionsRewireAPI.__Rewire__('RoleService', mockRoleService);
         appsActionsRewireAPI.__Rewire__('UserService', mockUserService);
     });
 
     afterEach(() => {
-        appsActionsRewireAPI.__Rewire__('AppService', mockAppService);
         appsActionsRewireAPI.__Rewire__('RoleService', mockRoleService);
         appsActionsRewireAPI.__Rewire__('UserService', mockUserService);
-    });
-
-    var appsActionTests = [
-        {name:'test load apps action', hydrate: true},
-        {name:'test load apps action without tables', hydrate: false}
-    ];
-
-    appsActionTests.forEach(function(test) {
-        it(test.name, function(done) {
-            flux.actions.loadApps(test.withTables).then(
-                () => {
-                    expect(mockAppService.prototype.getApps).toHaveBeenCalled();
-                    expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(2);
-                    expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_APPS]);
-                    expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.LOAD_APPS_SUCCESS, responseData]);
-                    done();
-                },
-                () => {
-                    expect(false).toBe(true);
-                    done();
-                }
-            );
-        });
-    });
-
-    var selectAppIdTests = [
-        {name:'select app id', appId: 123},
-        {name:'select app id of null', appId: null}
-    ];
-    selectAppIdTests.forEach(function(test) {
-        it(test.name, function(done) {
-            flux.actions.selectAppId(test.appId).then(
-                () => {
-                    if (test.appId) {
-                        expect(mockAppService.prototype.getAppComponents).toHaveBeenCalled();
-                        expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.SELECT_APP, test.appId]);
-                        expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.SELECT_APP_SUCCESS, jasmine.any(Object)]);
-                        expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(2);
-                    } else {
-                        expect(mockAppService.prototype.getAppComponents).not.toHaveBeenCalled();
-                        expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.SELECT_APP, test.appId]);
-                        expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(1);
-                    }
-                    done();
-                },
-                () => {
-                    expect(false).toBe(true);
-                    done();
-                }
-            );
-        });
     });
 
     var unassignUsersTests = [
@@ -222,26 +138,6 @@ describe('Apps Actions functions with Tables', () => {
             );
         });
     });
-
-    it("Test Select Table Id ", function(done) {
-        var test = {tableId: 1};
-        appsActionsRewireAPI.__Rewire__('UserService', mockUserServiceFailure);
-        var result = flux.actions.selectTableId(test.tableId);
-        expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.SELECT_TABLE, 1]);
-        expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(1);
-        done();
-    });
-
-
-    it("Test updateTableProps", function(done) {
-        var test = {tableId: 1, tableInfo: ''};
-        appsActionsRewireAPI.__Rewire__('UserService', mockUserServiceFailure);
-        var result = flux.actions.updateTableProps(test.tableId, test.tableInfo);
-        expect(flux.dispatchBinder.dispatch.calls.argsFor(0)[0]).toEqual(actions.UPDATED_TABLE_PROPS);
-        expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(1);
-        done();
-    });
-
 
     it("Test selectUsersRows", function(done) {
         var test = {selectedDetails: 1};
