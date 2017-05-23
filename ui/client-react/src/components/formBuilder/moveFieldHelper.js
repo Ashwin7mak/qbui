@@ -18,10 +18,6 @@ const MoveFieldHelper = {
 
         let formMetaCopy = _.cloneDeep(formMeta);
 
-        if (!_.includes(draggedItemProps.containingElement.id, 'new') && _.indexOf(formMetaCopy.fields, draggedItemProps.containingElement.id) === -1) {
-            formMetaCopy.fields.push(draggedItemProps.containingElement.id);
-        }
-
         removeElementFromCurrentLocationById(formMetaCopy, draggedItemProps);
         addElementToNewLocation(formMetaCopy, newLocation, draggedItemProps);
 
