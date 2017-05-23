@@ -313,11 +313,11 @@
          * @fieldValue
          */
         setInputValue : {value: function(filteredElement, filteredElementInputClassName, fieldValue) {
-            filteredElement.element(filteredElementInputClassName).click();
-            filteredElement.element(filteredElementInputClassName).clearElement();
             if (browserName === 'firefox' || browserName === 'safari') {
                 return filteredElement.setValue(filteredElementInputClassName, [fieldValue, '\uE004']);
             } else {
+                filteredElement.element(filteredElementInputClassName).click();
+                filteredElement.element(filteredElementInputClassName).clearElement();
                 return browser.keys([fieldValue, '\uE004']);
             }
         }},
