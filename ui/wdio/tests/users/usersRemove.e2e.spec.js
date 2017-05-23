@@ -59,10 +59,7 @@
             UsersTablePage.userRemoveIcon.click();
 
             // Step 2: Click on delete button from the dialogue box
-            UsersTablePage.userRemoveButton.waitForVisible();
-            UsersTablePage.userRemoveButton.click();
-            //Need small wait here for the success container to slide away
-            browser.pause(e2eConsts.shortWaitTimeMs);
+            UsersTablePage.clickUserRemoveButton();
 
             // Step 3: Check for the deleted record
             ReportTableActionsPO.selectAllRecordsCheckbox();
@@ -79,10 +76,7 @@
             UsersTablePage.userRemoveIcon.click();
 
             // Step 2: Click on cancel button from the dialogue box
-            UsersTablePage.userCancelButton.waitForVisible();
-            UsersTablePage.userCancelButton.click();
-            //Need small wait here for the success container to slide away
-            browser.pause(e2eConsts.shortWaitTimeMs);
+            UsersTablePage.clickUserCancelRemoveButton();
 
             // Step 3: Check for the deleted record
             ReportTableActionsPO.selectAllRecordsCheckbox();

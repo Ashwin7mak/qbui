@@ -6,17 +6,17 @@
     'use strict';
 
     //Load the page Objects
-    var e2ePageBase = requirePO('e2ePageBase');
-    var NewStackAuthPO = requirePO('newStackAuth');
-    var ReportContentPO = requirePO('reportContent');
-    var FormsPO = requirePO('formsPage');
-    var ReportTableActionsPO = requirePO('reportTableActions');
+    let e2ePageBase = requirePO('e2ePageBase');
+    let NewStackAuthPO = requirePO('newStackAuth');
+    let ReportContentPO = requirePO('reportContent');
+    let FormsPO = requirePO('formsPage');
+    let ReportTableActionsPO = requirePO('reportTableActions');
 
     describe('Reports - Table report tests: ', function() {
-        var realmName;
-        var realmId;
-        var testApp;
-        var RECORD_COUNT = 20;
+        let realmName;
+        let realmId;
+        let testApp;
+        let RECORD_COUNT = 20;
         /**
          * Setup method. Creates test app then authenticates into the new stack
          */
