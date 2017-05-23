@@ -1,5 +1,6 @@
 import React from 'react';
 import jasmineEnzyme from 'jasmine-enzyme';
+import {mount} from 'enzyme';
 import TestUtils, {Simulate} from 'react-addons-test-utils';
 
 import LinkToRecordTableSelectionDialog from '../../src/components/fields/linkToRecordTableSelectionDialog';
@@ -17,26 +18,13 @@ let tables = [
     {id: "parentTableId", name: "parent table", tableIcon: "parentIcon"}
 ];
 
-
-function buildMockParent() {
-    return React.createClass({
-        render() {
-
-            return (
-                <LinkToRecordTableSelectionDialog
-                     show={true}
-                     tables={tables}
-                     childTableId="childTableId"
-                     onCancel={mockParentFunctions.cancel}
-                     tableSelected={mockParentFunctions.tableSelected} />
-            );
-        }
-    });
-}
-
-function buildMockParentComponent(options) {
-    return TestUtils.renderIntoDocument(React.createElement(buildMockParent(options)));
-}
+let props = {
+    show: true,
+    tables,
+    childTableId: "childTableId",
+    onCancel: mockParentFunctions.cancel,
+    tableSelected: mockParentFunctions.tableSelected
+};
 
 describe('LinkToRecordTableSelectionDialog', () => {
     beforeEach(() => {
@@ -52,7 +40,7 @@ describe('LinkToRecordTableSelectionDialog', () => {
     });
 
     it('renders a LinkToRecordTableSelectionDialog', () => {
-        component = buildMockParentComponent();
+        component = mount(<LinkToRecordTableSelectionDialog {...props} />);
 
         domComponent = document.querySelector('.tableDataConnectionDialog');
 
@@ -63,7 +51,7 @@ describe('LinkToRecordTableSelectionDialog', () => {
     });
 
     it('cancels the LinkToRecordTableSelectionDialog', () => {
-        component = buildMockParentComponent();
+        component = mount(<LinkToRecordTableSelectionDialog {...props} />);
 
         domComponent = document.querySelector('.tableDataConnectionDialog');
 
@@ -72,7 +60,7 @@ describe('LinkToRecordTableSelectionDialog', () => {
     });
 
     it('selects a table and closes the dialog', () => {
-        component = buildMockParentComponent();
+        component = mount(<LinkToRecordTableSelectionDialog {...props} />);
 
         let select = document.querySelector('.tableDataConnectionDialog .tableSelector .Select-control');
         expect(select).not.toBeNull();
