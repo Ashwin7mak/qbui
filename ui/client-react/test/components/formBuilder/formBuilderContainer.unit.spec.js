@@ -6,7 +6,8 @@ import {FormBuilderContainer, __RewireAPI__ as FormBuilderRewireAPI} from '../..
 import * as tabIndexConstants from '../../../../client-react/src/components/formBuilder/tabindexConstants';
 import NavigationUtils from '../../../src/utils/navigationUtils';
 import {__RewireAPI__ as NewfieldsMenuRewireAPI} from '../../../src/components/formBuilder/menus/newFieldsMenu';
-import {__RewireAPI__ as ExistingFieldsRewireAPI} from '../../../src/components/formBuilder/menus/existingFieldsMenu';
+import {ExistingFieldsMenu, __RewireAPI__ as ExistingFieldsRewireAPI} from '../../../src/components/formBuilder/menus/existingFieldsMenu';
+import {__RewireAPI__ as ToolPaletteRewireAPI} from '../../../src/components/builder/builderMenus/toolPalette';
 import {ENTER_KEY, SPACE_KEY} from '../.././../../reuse/client/src/components/keyboardShortcuts/keyCodeConstants';
 
 import {FieldTokenInMenu} from '../../../src/components/formBuilder/fieldToken/fieldTokenInMenu';
@@ -56,6 +57,7 @@ describe('FormBuilderContainer', () => {
     beforeEach(() => {
         jasmineEnzyme();
         FormBuilderRewireAPI.__Rewire__('FormBuilder', FormBuilderMock);
+        ToolPaletteRewireAPI.__Rewire__('ExistingFieldsMenu', ExistingFieldsMenu);
         NewfieldsMenuRewireAPI.__Rewire__('FieldTokenInMenu', FieldTokenInMenu);
         ExistingFieldsRewireAPI.__Rewire__('FieldTokenInMenu', FieldTokenInMenu);
         FormBuilderRewireAPI.__Rewire__('FieldProperties', FieldPropertiesMock);
@@ -75,6 +77,7 @@ describe('FormBuilderContainer', () => {
 
     afterEach(() => {
         FormBuilderRewireAPI.__ResetDependency__('FormBuilder');
+        ToolPaletteRewireAPI.__ResetDependency__('ExistingFieldsMenu');
         NewfieldsMenuRewireAPI.__ResetDependency__('FieldTokenInMenu');
         FormBuilderRewireAPI.__ResetDependency__('FieldProperties');
         FormBuilderRewireAPI.__ResetDependency__('FormBuilderCustomDragLayer');

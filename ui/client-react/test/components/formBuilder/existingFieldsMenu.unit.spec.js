@@ -18,7 +18,7 @@ describe('ExistingFieldsMenu', () => {
         ExistingFieldsMenuRewireApi.__ResetDependency__('FieldTokenInExistingMenu');
     });
 
-    fit('displays a list of new field elements', () => {
+    it('displays a list of new field elements', () => {
         component = shallow(<ExistingFieldsMenu existingFields={[<div></div>]}/>);
 
         let listOfElements = component.find(ListOfElements);
