@@ -6,8 +6,6 @@ import SaveOrCancelFooter from '../saveOrCancelFooter/saveOrCancelFooter';
 import Button from 'react-bootstrap/lib/Button';
 import {I18nMessage} from '../../utils/i18nMessage';
 import NavigationUtils from '../../utils/navigationUtils';
-import AppHistory from '../../globals/appHistory';
-import {HideAppModal} from '../qbModal/appQbModalFunctions';
 
 export class ReportSaveOrCancelFooter extends Component {
     constructor(props) {
@@ -24,12 +22,7 @@ export class ReportSaveOrCancelFooter extends Component {
     };
 
     onCancel = () => {
-        if (this.props.isPendingEdit) {
-            AppHistory.showPendingEditsConfirmationModal(this.onSave, this.closeReportBuilder, () => HideAppModal());
-        } else {
-            HideAppModal();
-            this.closeReportBuilder();
-        }
+        this.closeReportBuilder();
         this.props.exitBuilderMode(CONTEXT.REPORT.NAV);
     };
 
