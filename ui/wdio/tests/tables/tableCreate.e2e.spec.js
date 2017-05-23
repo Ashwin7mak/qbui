@@ -55,9 +55,6 @@
          * Before each it block reload the list all report (can be used as a way to reset state between tests)
          */
         beforeEach(function() {
-            // Load the requestAppsPage (shows a list of all the apps in a realm)
-            RequestAppsPage.get(e2eBase.getRequestAppsPageEndpoint(realmName));
-
             //select the App
             RequestAppsPage.selectApp(testApp.name);
 
