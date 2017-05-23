@@ -9,6 +9,7 @@ import {QBForm, __RewireAPI__ as QbFormRewireAPI} from '../../src/components/QBF
 import QBPanel from '../../src/components/QBPanel/qbpanel.js';
 
 import {ChildReport} from '../../src/components/QBForm/childReport';
+import thunk from 'redux-thunk';
 
 import {
     buildTestArrayBasedFormData,
@@ -208,16 +209,14 @@ fdescribe('QBForm', () => {
         expect(childReport).not.toBePresent();
     });
 
-    //TODO before merge fix this test currently, fails to use recordcount mock
-    xit('renders relationship elements if relationships exist', () => {
+    it('renders relationship elements if relationships exist', () => {
         const actualRelationship = testFormDataWithRelationship.formMeta.relationships[0];
-        const mockS = configureMockStore();
-        const mockLoadReportRecordsCount = () => ({type:'mock'});
+        const middlewares = [thunk];
 
+        const mockS = configureMockStore(middlewares);
         const store = mockS({
             fields: {},
             isTokenInMenuDragging: false,
-            loadReportRecordsCount:mockLoadReportRecordsCount
         });
 
         const component = mount(
