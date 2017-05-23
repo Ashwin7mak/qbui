@@ -5,6 +5,11 @@
 //  **** App actions ****
 //      ...
 
+//  ******** App Role actions ********
+export const LOAD_APP_ROLES = 'LOAD_APP_ROLES';
+export const LOAD_APP_ROLES_SUCCESS = 'LOAD_APP_ROLES_SUCCESS';
+export const LOAD_APP_ROLES_FAILED = 'LOAD_APP_ROLES_FAILED';
+
 //  ******** Form actions ********
 export const LOADING_FORM = 'LOADING_FORM';
 export const LOAD_FORM_ERROR = 'LOAD_FORM_ERROR';
@@ -151,3 +156,8 @@ export const RESET_TABLE_PROPS = 'RESET_TABLE_PROPS';
 export const DELETING_TABLE_FAILED = 'DELETING_TABLE_FAILED';
 export const TABLE_DELETED = 'TABLE_DELETED';
 export const NOTIFY_TABLE_DELETED = 'NOTIFY_TABLE_DELETED';
+
+//  ******** automation actions ********
+export const LOAD_AUTOMATIONS = 'LOAD_AUTOMATIONS';
+export const LOAD_AUTOMATIONS_SUCCESS = 'LOAD_AUTOMATIONS_SUCCESS';
+export const LOAD_AUTOMATIONS_FAILED = 'LOAD_AUTOMATIONS_FAILED';

@@ -494,6 +494,23 @@ export const getSelectedFormElement = (state, id) => {
     return currentForm.formData.formMeta.tabs[tabIndex].sections[sectionIndex].columns[columnIndex].elements[elementIndex];
 };
 
+/***
+ * retrieve all parent-child relationships where child is the current form's table
+ * @param state
+ * @param id
+ * @returns {Array}
+ */
+export const getParentRelationshipsForSelectedFormElement = (state, id) => {
+    const currentForm = state.forms[id];
+    const formMeta = _.get(currentForm, 'formData.formMeta', {});
+    const relationships = !_.isEmpty(formMeta) && _.get(formMeta, 'relationships') ? formMeta.relationships : [];
+
+    const tableId = formMeta.tableId;
+    return _.filter(relationships, (relationship) => {
+        return (relationship.detailTableId === tableId);
+    });
+};
+
 export default forms;
 
 // Utility function which returns a component's state given it's context. The context is the 'key' in the state map.

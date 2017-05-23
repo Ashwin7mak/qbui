@@ -6,7 +6,8 @@ import StandardGrid from "GOVERNANCE/common/grid/standardGrid";
 import * as Actions from "../AccountUsersActions";
 
 /**
- * Renders the grid portion of the AccountUsers view
+ * Renders the Grid portion of the AccountUsers view
+ * It has all the standard components : Grid, ToolBar (Search, Filter, Pagination)
  */
 class AccountUsersGrid extends Component {
     render() {
@@ -17,17 +18,31 @@ class AccountUsersGrid extends Component {
                 facetFields={GetFacetFields(this.props.showAccountColumns, this.props.showRealmColumns)}
                 doUpdate={Actions.doUpdate}
                 rowKey="uid"
-                itemTypePlural={this.props.itemTypePlural}
-                itemTypeSingular={this.props.itemTypeSingular}
+                itemTypePlural="users"
+                itemTypeSingular="user"
             />
         );
     }
 }
 
 AccountUsersGrid.propTypes = {
+    /**
+     * ID of the Grid
+     */
     id: PropTypes.string,
+
+    /**
+     * We show different columns based on permissions.
+     * Account Columns for example are only shown for Account Admins
+     * Realm Columns are only shown for Realm Admins
+     * See GetAccountUsersGridColumns for more details
+     */
     showAccountColumns: PropTypes.bool,
     showRealmColumns: PropTypes.bool,
+
+    /**
+     * We need to tell the grid what kind of item we are displaying
+     */
     itemTypePlural: PropTypes.string,
     itemTypeSingular: PropTypes.string
 };
