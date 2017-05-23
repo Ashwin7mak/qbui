@@ -41,7 +41,11 @@ export class FieldTokenInExistingMenu extends Component {
         let type = fieldFormats.getFormatType({datatypeAttributes: this.props.datatypeAttributes});
         let title = Locale.getMessage(`fieldsDefaultLabels.${type}`);
 
-        const fieldToken = <FieldToken isDragging={false} type={type} title={title} name={this.props.name} />;
+        const fieldToken = <FieldToken {...this.props}
+                                       isDragging={false}
+                                       type={type}
+                                       title={title}
+                                       name={this.props.name} />;
 
         if (this.props.tooltipText) {
             return (
