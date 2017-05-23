@@ -1,73 +1,89 @@
 @import '../../../../reuse/client/src/assets/css/qbVariables';
 
-$settings-menu-header-height: $spacing-medium2;
-$settings-menu-padding-top: $spacing-xxx-small;
-$settings-menu-padding-left: $spacing-xx-small;
+.globalAction.builder {
 
-.topNav {
-    .globalActions {
-        .globalAction.builder {
-            .dropdown-menu {
-                margin: 0;
-                padding: 0;
-                cursor: default;
-                top: 38px;
-            }
-            padding-right: 10px;
-            .configurationMenu {
-                display: flex;
-                .configSet {
-                    padding: $settings-menu-padding-top * 2 0 $settings-menu-padding-top * 2 0;
-                    .menuHeader {
-                        font-size: $font-size-h3;
-                        color: $color-black-700;
-                        height: $settings-menu-header-height;
-                    }
-                    .heading > a {
-                        cursor: default !important;
-                    }
-                    li {
-                        padding: 0 $settings-menu-padding-left;
-                        &:not(.heading):hover {
-                            background-color: $color-black-200;
-                        }
-                        a {
-                            display: block;
-                            clear: both;
-                            font-weight: normal;
-                            line-height: 25px;
-                            color: $default-text-onlight-color;
-                            white-space: nowrap;
-                            &:not(.heading) {
-                                cursor: pointer;
-                                &:hover {
-                                    text-decoration: none;
-                                }
-                            }
-                            &.heading {
-                                font-weight: bold;
-                                .headingIcon {
-                                    font-size: $size-iconfont-medium;
-                                }
-                            }
-                            > * {
-                                vertical-align: middle;
-                            }
-                        }
-                    }
-                    &.withIcon {
-                        li:not(.heading) {
-                            padding-left: 41px;
-                        }
-                    }
-                    &:not(:first-of-type) {
-                        padding: $settings-menu-header-height + $settings-menu-padding-top * 2 $settings-menu-padding-left $settings-menu-padding-top * 2 $settings-menu-padding-left;
-                    }
-                    &.currentContext {
-                        background-color: $color-black-200;
-                    }
-                }
-            }
+    .dropdown-menu {
+        padding: 0;
+    }
+
+    .hasContextView .dropdown-menu:after {
+        border-bottom-color: $color-black-200;
+    }
+}
+
+.configMenu {
+    display: flex;
+    align-items: stretch;
+
+    h3 {
+        width: 100%;
+        // The header adds up to 55px height so that
+        // .configMenu__currentContext, .configMenu__Table can align properly
+        margin: 17px 0 14px;
+    }
+}
+
+.configMenu--configSet {
+    padding: $spacing-xxx-small;
+
+    ul {
+        padding: 0;
+    }
+
+    li {
+        line-height: $spacing-small;
+        list-style: none;
+        margin-bottom: 7px;
+    }
+
+    // Heading item with icon
+    li:first-child {
+        display: flex;
+        margin-bottom: $spacing-xx-small;
+        padding-left: 0;
+        font-weight: bold;
+
+        // hack to get icons to align –– if icons + labels ever get fixed, this can go
+        .headingIcon {
+            align-self: flex-end;
+            margin-right: 4px;
+            padding-bottom: 3px;
+            font-size: $size-iconfont-medium;
+        }
+    }
+
+    a {
+        display: block;
+        padding-left: 27px; // used to align with heading li
+        white-space: nowrap;
+        color: $default-text-onlight-color;
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+}
+
+// Aligns these sets with the Settings header
+.configMenu__currentContext, .configMenu__Table {
+    padding-top: 55px;
+}
+
+.configMenu__App, .configMenu__Table {
+    width: 236px;
+}
+
+.configMenu__App {
+    padding-top: 0;
+    margin-left: $spacing-xxx-small;
+}
+
+.configMenu__currentContext {
+    background-color: $color-black-200;
+    width: 168px;
+    padding-left: $spacing-medium1;
+    li {
+        a {
+            padding-left: 0;
         }
     }
 }

@@ -712,8 +712,9 @@ export default {
         },
         settings: {
             header: "Settings",
+            appHeader: "App",
+            automationSettings: "Automations",
             tablesHeader: "Table",
-            appsHeader: "Table",
             formsHeader: "Form",
             tableSettings: 'Table properties & settings',
             configureFormBuilder: 'Modify this form',
@@ -734,6 +735,12 @@ export default {
                 prompt: "Type YES to confirm that you want to delete this table"
             },
             YES: "YES"
+        },
+        automationList: {
+            nameHeader: "Name",
+            activeHeader: "Active",
+            activeYes: "Yes",
+            activeNo: "No"
         }
     }
 };
