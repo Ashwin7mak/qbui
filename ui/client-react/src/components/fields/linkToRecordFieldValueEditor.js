@@ -17,7 +17,7 @@ export const LinkToRecordFieldValueEditor = React.createClass({
     displayName: 'LinkToRecordFieldValueEditor',
     propTypes: {
         hideRelationshipDialog: PropTypes.func,
-        newFormFieldId: PropTypes.bool,
+        newFormFieldId: PropTypes.string,
         updateField: PropTypes.func,
         removeFieldFromForm: PropTypes.func,
         tblId: PropTypes.string,
@@ -91,7 +91,7 @@ export const LinkToRecordFieldValueEditor = React.createClass({
 
 const mapStateToProps = (state) => {
     return {
-        newFormFieldId: !state.relationshipBuilder.draggingLinkToRecord && state.relationshipBuilder.newFormFieldId,
+        newFormFieldId: !state.relationshipBuilder.draggingLinkToRecord ? state.relationshipBuilder.newFormFieldId : null,
     };
 };
 

@@ -528,8 +528,6 @@ projRecs.init(projGen);
         }
     }
 
-
-
     function createReportFacets(app, tableName, fids, title) {
         // Create a report with facets
         let table = getTable(app, tableName);
@@ -921,12 +919,12 @@ projRecs.init(projGen);
 
             // Create table relationship, Company(Parent) has many People(child)
             setupRelationship(addRelationshipPromises, createdApp, projGen.tableCompaniesName, projGen.tablePeopleName,
-                projGen.getPeopleFid('companyName'),  projGen.getCompanyFid('name'));
+                projGen.getPeopleFid('companyName'), projGen.getCompanyFid('name'));
 
 
             // Create table relationship, Projects(Parent) have many Tasks(child)
             setupRelationship(addRelationshipPromises, createdApp, projGen.tableProjectsName, projGen.tableTasksName,
-                projGen.getTaskFid('projectName'),  projGen.getProjectFid('name'));
+                projGen.getTaskFid('projectName'), projGen.getProjectFid('name'));
 
             // Create table relationship, Tasks(Parent) have many Assignments(child)
             setupRelationship(addRelationshipPromises, createdApp, projGen.tableTasksName, projGen.tableAssignmentsName,
@@ -942,7 +940,7 @@ projRecs.init(projGen);
                 projGen.getAssigneeFid('assigneeName'), projGen.getPeopleFid('fullName'));
 
             // Create table relationship, People Managers(Parent) lead many People(child)
-            setupRelationship(addRelationshipPromises, createdApp, projGen.tablePeopleName,  projGen.tablePeopleName,
+            setupRelationship(addRelationshipPromises, createdApp, projGen.tablePeopleName, projGen.tablePeopleName,
                 projGen.getPeopleFid('manager'), projGen.getPeopleFid('fullName'));
 
             // Bluebird's promise.each function (executes each promise sequentially)
@@ -951,7 +949,10 @@ projRecs.init(projGen);
                 return queueItem();
             });
         }).then(function() {
-            // Print the generated test data and endpoints
+            return retrieveSavedRelationships();
+        }).then(function(savedRelationships) {
+            return addChildReportsToTableForms(savedRelationships);
+        }).then(function() {
             _createdRecs();
         }).catch(function(error) {
             // Global catch that will grab any errors from chain above
@@ -964,6 +965,74 @@ projRecs.init(projGen);
         });
     }
 
+    /**
+     * Retrieves the relationships created for the sample app.
+     */
+    function retrieveSavedRelationships() {
+        let appId = createdApp.id;
+        let relationshipEndpoint = e2eBase.recordBase.apiBase.resolveRelationshipsEndpoint(appId);
+        return new Promise((resolve, reject) => {
+            e2eBase.recordBase.apiBase.executeRequest(relationshipEndpoint, consts.GET).then(function(result) {
+                resolve(JSON.parse(result.body));
+            }).catch(function(error) {
+                log.debug(JSON.stringify(error));
+                reject(error);
+            });
+        });
+    }
+
+    /**
+     * Adds sections containing child report elements to a tab in the form associated with all tables
+     * in the app
+     * @param savedRelationships
+     */
+    function addChildReportsToTableForms(savedRelationships) {
+        let appId = createdApp.id;
+        let addChildReportElements = [];
+
+        createdApp.tables.forEach((table) => {
+            addChildReportElements.push(function() {
+                return new Promise((resolve, reject) => {
+                    const tableId = table.id;
+                    let formsEndpoint = e2eBase.recordBase.apiBase.resolveFormsEndpoint(appId, tableId, 1);
+                    let putFormsEndpoint = e2eBase.recordBase.apiBase.resolveFormsEndpoint(appId, tableId);
+
+                    e2eBase.recordBase.apiBase.executeRequest(formsEndpoint, consts.GET).then(function(formsResult) {
+                        var form = JSON.parse(formsResult.body);
+                        if (savedRelationships) {
+                            savedRelationships.forEach((relationship, index) => {
+                                if (relationship.masterTableId === tableId) {
+                                    const sections = form.tabs[0].sections;
+                                    const length = Object.keys(sections).length;
+                                    const childReportElement = {"ChildReportElement" : {relationshipId: index}};
+                                    sections[length] = Object.assign(_.cloneDeep(sections[0]), {
+                                        elements: {0: childReportElement},
+                                        fields: [],
+                                        orderIndex: length
+                                    });
+                                    const childTableName = _.find(createdApp.tables, {id:relationship.detailTableId}).name;
+                                    sections[length].headerElement.FormHeaderElement.displayText = childTableName;
+                                }
+                            });
+                        }
+                        return form;
+                    }).then(function(updatedForm) {
+                        return e2eBase.recordBase.apiBase.executeRequest(putFormsEndpoint, consts.PUT, updatedForm);
+                    }).then(function(response) {
+                        resolve(response);
+                    }).catch(function(error) {
+                        reject(error);
+                    });
+                });
+            });
+        });
+        // Bluebird's promise.each function (executes each promise sequentially)
+        return promise.each(addChildReportElements, function(queueItem) {
+            // This is an iterator that executes each Promise function in the array here
+            return queueItem();
+        });
+
+    }
     /**
      *  Prints out the generated test data and endpoints to the console.
      */

@@ -585,9 +585,15 @@ export default {
             linkToRecord: "Link to a record in the table"
         },
         builder: {
+            tabs: {
+                existingFields: 'Add an existing field',
+                newFields:  'Create a new field',
+            },
             formBuilder: {
                 unimplemented: "Feature is not available right now",
                 removeField: "Remove field from form",
+                newFieldsMenuTitle: 'New',
+                existingFieldsMenuTitle: 'Existing',
                 tooltips: {
                     // Tooltip for every single field type because of requirements for a/an and pronouns different for each language
                     [`addNew${FieldFormats.TEXT_FORMAT}`]: "Create a text field and add it to the form",

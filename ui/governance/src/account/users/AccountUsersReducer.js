@@ -3,7 +3,6 @@ import GetStatus from "../../common/reducer/RequestStatusReducer";
 import {combineReducers} from "redux";
 
 const users = (state = [], action) => {
-    // reducer - no mutations!
     switch (action.type) {
     case types.GET_USERS_SUCCESS:
         // update the state with the new users sent through action
