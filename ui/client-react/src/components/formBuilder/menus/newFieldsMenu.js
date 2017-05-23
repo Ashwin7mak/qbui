@@ -2,27 +2,12 @@ import React, {PropTypes} from 'react';
 import {supportedNewFieldTypesWithProperties} from '../newFieldTypes';
 import ListOfElements from '../../../../../reuse/client/src/components/sideNavs/listOfElements';
 import FieldTokenInMenu from '../fieldToken/fieldTokenInMenu';
-import _ from 'lodash';
 
 const NewFieldsMenu = ({isCollapsed, isOpen, toggleToolPaletteChildrenTabIndex, toolPaletteChildrenTabIndex,
-                        toolPaletteFocus, toolPaletteTabIndex, formMeta, tables, beginDrag, endDrag}) => {
+                        toolPaletteFocus, toolPaletteTabIndex, includeNewRelationship, beginDrag, endDrag}) => {
 
     // don't include table data connections section until we know it's allowed
-    let omittedFieldGroups = ['tableDataConnections'];
-    let tableCount = tables.length;
-
-    if (formMeta) {
-        let parentTables = [];
-        if (Array.isArray(formMeta.relationships) && formMeta.relationships.length > 0) {
-            parentTables = _.filter(formMeta.relationships, (rel) => rel.detailTableId === formMeta.tableId);
-        }
-
-        // enable new relationships to be created if we have multiple tables and at least
-        // one of the remaining tables is not already a parent table
-        if (tableCount > 1 && (parentTables.length < tableCount - 1)) {
-            omittedFieldGroups = [];
-        }
-    }
+    let omittedFieldGroups = includeNewRelationship ? [] : ['tableDataConnections'];
 
     return (
         <ListOfElements
