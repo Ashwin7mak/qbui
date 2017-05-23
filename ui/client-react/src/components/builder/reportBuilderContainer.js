@@ -48,7 +48,7 @@ export class ReportBuilderContainer extends Component {
 
     getReportBuilderContent(columns, rows) {
         let {appId, tblId, rptId} = this.props.match.params;
-        let sortFids = this.props.reportData.data ? this.props.reportData.data.sortFids : [];
+        let sortFids = (this.props.reportData && this.props.reportData.data) ? this.props.reportData.data.sortFids : [];
         let loading = columns.length === 0;
         return (
             <QbGrid
@@ -100,8 +100,8 @@ export class ReportBuilderContainer extends Component {
                             routeParams={this.props.match.params}
                             selectedAppId={this.props.match.params.appId}
                             selectedTable={this.props.match.params.tblId}
-                            searchStringForFiltering={this.props.reportData.searchStringForFiltering}
-                            selectedRows={this.props.reportData.selectedRows}
+                            searchStringForFiltering={this.props.reportData ? this.props.reportData.searchStringForFiltering : ''}
+                            selectedRows={this.props.reportData ? this.props.reportData.selectedRows : []}
                             loadDynamicReport={this.loadDynamicReport}
                             noRowsUI={true}
                             content={content}
