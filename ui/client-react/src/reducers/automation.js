@@ -47,4 +47,6 @@ const automation = (
 
 export default automation;
 
-export const getAutomationList = state => state.automation.list;
+export const getAutomationList = (state) => {
+    return state.automation.list;
+};

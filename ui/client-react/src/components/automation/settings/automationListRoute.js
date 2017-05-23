@@ -6,7 +6,7 @@ import Stage from "../../../../../reuse/client/src/components/stage/stage";
 import IconActions from "../../../../../reuse/client/src/components/iconActions/iconActions";
 import {I18nMessage} from "../../../utils/i18nMessage";
 import {loadAutomations} from "../../../actions/automationActions";
-import getAutomationList from "../../../reducers/automation";
+import {getAutomationList} from "../../../reducers/automation";
 import * as SpinnerConfigurations from "../../../constants/spinnerConfigurations";
 import _ from "lodash";
 
@@ -61,9 +61,7 @@ export class AutomationListRoute extends Component {
                         <Table hover className="automationSettings--table">
                           <thead>
                             <tr>
-                              <th><I18nMessage message="automationList.nameHeader"/></th>
-                            </tr>
-                            <tr>
+                                <th><I18nMessage message="automationList.nameHeader"/></th>
                                 <th><I18nMessage message="automationList.activeHeader"/></th>
                             </tr>
                           </thead>
