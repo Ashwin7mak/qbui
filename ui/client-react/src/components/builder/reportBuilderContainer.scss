@@ -1,4 +1,5 @@
 @import "../../../../reuse/client/src/assets/css/qbVariables";
+@import "../../../../reuse/client/src/assets/css/qbColorVariables";
 
 .reportBuilderContainer {
     height: 100%;
@@ -14,7 +15,7 @@
         flex: 1 1 auto;
         flex-direction: column;
         position: relative;
-        background-color: $color-black-100;
+        background-color: $stage-background-color;
         padding: 10px 10px 0 10px;
         //By giving it a border the same size as the focus border and a transparent background,
         //it keeps the container from 'jumping' on focus
@@ -43,7 +44,8 @@
         }
 
         .loadedContent {
-            max-height: calc(100% - 102px);
+            max-height: calc(100% - #{$trowser-footer-height});
+            padding-bottom: 36px;
         }
 
         .loadedContent .qbGrid {
@@ -57,9 +59,9 @@
             // row hover highlighting - only done while not inline editing
             &:not(.inlineEditing) {
 
-                // highlight the row when mouse is over the row
+                // don't the row when mouse is over the row
                 .qbRow:hover .qbCell:not(.placeholderCell) {
-                    background-color: $color-black-100;
+                    background-color: $stage-background-color;
                 }
             }
         }
