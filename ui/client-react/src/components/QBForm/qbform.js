@@ -267,7 +267,7 @@ export const QBForm = React.createClass({
         let newLocation = Object.assign({}, location, {columnIndex: column.orderIndex});
 
         if (column.elements && Array.isArray(column.elements)) {
-            elements = column.elements.map(element => this.createElement(element, newLocation));
+            elements = column.elements.map((element, index) => this.createElement(element, newLocation, index));
         }
 
         let arrangedElements = elements;
@@ -318,11 +318,12 @@ export const QBForm = React.createClass({
      * Creates an element on the form
      * @param element
      * @param location
+     * @param index - We ignore the order index because we can use the ordered array to help with performance.
      * @returns {*}
      */
-    createElement(element, location) {
+    createElement(element, location, index) {
         let formattedElement;
-        let newLocation = Object.assign({}, location, {elementIndex: element.orderIndex});
+        let newLocation = Object.assign({}, location, {elementIndex: index});
 
         if (element.FormTextElement) {
             formattedElement = this.createTextElement(element.id, element.FormTextElement);

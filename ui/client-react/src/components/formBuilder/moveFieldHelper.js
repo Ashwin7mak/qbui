@@ -11,14 +11,11 @@ const MoveFieldHelper = {
             return formMeta;
         }
 
-        if (newLocation ===  findCurrentElementLocation(formMeta, draggedItemProps.containingElement)) {
-            // Location hasn't changed so return existing form structure
-            return formMeta;
-        }
+        let currentLocation = findCurrentElementLocation(formMeta, draggedItemProps.containingElement);
 
         let formMetaCopy = _.cloneDeep(formMeta);
 
-        removeElementFromCurrentLocationById(formMetaCopy, draggedItemProps);
+        removeElementFromCurrentLocation(formMetaCopy, currentLocation);
         addElementToNewLocation(formMetaCopy, newLocation, draggedItemProps);
 
         return formMetaCopy;
@@ -101,21 +98,11 @@ function hasRequiredArguments(formMeta, newLocation, draggedItemProps) {
     return (errors.length === 0);
 }
 
-function removeElementFromCurrentLocationById(formMetaData, draggedItemProps) {
-    let updatedElementLocation = findCurrentElementLocation(formMetaData, draggedItemProps.containingElement);
-
-    if (!updatedElementLocation) {
-        // Element doesn't yet appear on the form so we can safely return the existing formMetaData without removing anything
-        return formMetaData;
-    }
-    removeElementFromCurrentLocation(formMetaData, updatedElementLocation);
-}
-
 /**
  * Removes the element from where it currently exists in preparation for the move
  * WARNING: This function has side effects on the formMetaData passed in.
  * @param formMetaData
- * @param draggedItemProps
+ * @param location
  * @returns {*}
  */
 function removeElementFromCurrentLocation(formMetaData, location) {
@@ -123,11 +110,8 @@ function removeElementFromCurrentLocation(formMetaData, location) {
 
     let column = formMetaData.tabs[tabIndex].sections[sectionIndex].columns[columnIndex];
 
-    column.elements = column.elements.filter(element => {
-        return element.orderIndex !== elementIndex;
-    });
+    column.elements.splice(elementIndex, 1);
 
-    updateOrderIndices(column, 'elements');
     clearEmptyElementsFromSection(formMetaData, tabIndex, sectionIndex, columnIndex);
 
     return formMetaData;
@@ -143,8 +127,6 @@ function swapFieldLocation(formMetaData, currentLocation, newLocation) {
     let swappedElement = column.elements[newElementIndex];
     column.elements[newElementIndex] = column.elements[elementIndex];
     column.elements[elementIndex] = swappedElement;
-
-    updateOrderIndices(column, 'elements');
 
     return formMetaData;
 }
@@ -168,7 +150,6 @@ function addElementToNewLocation(formMetaData, newLocation, draggedItemProps) {
     }
 
     column.elements.splice(elementIndex, 0, draggedItemProps.containingElement);
-    updateOrderIndices(column, 'elements');
 
     return formMetaData;
 }
@@ -242,8 +223,8 @@ function findCurrentElementLocation(formMeta, element) {
             sectionIndex = section.orderIndex;
             return section.columns.some(column => {
                 columnIndex = column.orderIndex;
-                return column.elements.some(currentElement => {
-                    elementIndex = currentElement.orderIndex;
+                return column.elements.some((currentElement, index) => {
+                    elementIndex = index;
                     foundElement = currentElement;
                     return currentElement.id === element.id;
                 });

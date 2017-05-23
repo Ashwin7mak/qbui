@@ -5,7 +5,7 @@ import {findDOMNode} from 'react-dom';
 
 import './formBuilder.scss';
 
-const DRAG_PREVIEW_TIMEOUT = 25;
+const DRAG_PREVIEW_TIMEOUT = 10;
 
 /**
  * A container that holds the DragDropContext. Drag and Drop can only occur with elements inside this container.
@@ -93,7 +93,7 @@ export class FormBuilder extends Component {
                     handleFormReorder={this.handleFormReorder}
                     cancelFormReorder={this.cancelFormReorder}
                     updateAnimationState={this.props.updateAnimationState}
-                    hasAnimation={true}
+                    hasAnimation={false}
                     appUsers={[]}
                 />
             </div>
