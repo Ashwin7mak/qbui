@@ -134,7 +134,7 @@
             //wait until you see tables leftNav links labels
             browser.element('.tablesHeadingAndList .tablesList .leftNavLink').waitForVisible();
             //wait until text is shown up on leftNavLinks.Selected table is not loaded until all table properties are available
-            return browser.waitForText('.tablesList .leftNavLink .leftNavLabel', e2eConsts.extraLongWaitTimeMs);
+            return browser.waitForText('.tablesList .leftNavLink .leftNavLabel', e2eConsts.mediumWaitTimeMs);
         }},
         getReportListUlEl: {
             get: function() {
