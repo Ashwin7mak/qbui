@@ -55,7 +55,7 @@ export const setSort = (gridId, sortFid, asc, remove) => ({
 
 /**
  * Action to set the pagination order for a given grid
- *
+ * The window of the page that we are viewing
  * @param gridId - the id of the grid we want to update
  * @param offset - ho
  */
@@ -78,7 +78,8 @@ export const setPaginate = (gridId, pagination) => ({
 });
 
 /**
- * Action to set the total items
+ * Action to set the total items. This can be used to store the
+ * items before filtering was applied
  *
  * @param gridId - the id of the grid we want to update
  * @param direction - the direction to paginate
