@@ -16,7 +16,7 @@ describe('Report Builder Save and Cancel Footer', () => {
         appId: '1',
         tblId: '2',
         rptId: '3',
-        rptData: {
+        reportData: {
             data: {
                 name: 'test report',
                 fids: [1, 2, 3]
