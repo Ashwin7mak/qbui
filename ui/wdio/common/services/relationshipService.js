@@ -34,48 +34,48 @@
              */
             createOneToOneRelationship: function(app, parentTable, childTable, detailFieldId, lookUpFieldId,
                                                  description = 'Referential integrity relationship between Master / Child Tables') {
-                    const RECORD_ID_NAME = 'Record ID#';
-                    let masterTableId = parentTable.id;
-                    let detailTableId = childTable.id;
-                    let masterTablePkFieldId = lookUpFieldId;
-                    let detailTableFkFieldId = detailFieldId;
-                    let masterTableName = parentTable.name;
-                    let detailTableName = childTable.name;
-                    let masterFieldName = getFieldName(parentTable, masterTablePkFieldId);
-                    let detailFieldName = getFieldName(childTable, detailTableFkFieldId);
+                const RECORD_ID_NAME = 'Record ID#';
+                let masterTableId = parentTable.id;
+                let detailTableId = childTable.id;
+                let masterTablePkFieldId = lookUpFieldId;
+                let detailTableFkFieldId = detailFieldId;
+                let masterTableName = parentTable.name;
+                let detailTableName = childTable.name;
+                let masterFieldName = getFieldName(parentTable, masterTablePkFieldId);
+                let detailFieldName = getFieldName(childTable, detailTableFkFieldId);
 
-                    parentTable.fields.forEach(field => {
-                        if (masterTablePkFieldId === undefined && field.name === RECORD_ID_NAME) {
-                            masterTablePkFieldId = field.id;
-                        }
-                    });
+                parentTable.fields.forEach(field => {
+                    if (masterTablePkFieldId === undefined && field.name === RECORD_ID_NAME) {
+                        masterTablePkFieldId = field.id;
+                    }
+                });
 
-                    childTable.fields.forEach(field => {
-                        if (detailTableFkFieldId === undefined && field.name === RECORD_ID_NAME) {
-                            detailTableFkFieldId = field.id;
-                        }
-                    });
-                    const relationshipToCreate = {
-                        appId: app.id,
-                        masterAppId: app.id,
-                        masterTableName,
-                        masterTableId,
-                        masterFieldId: masterTablePkFieldId,
-                        masterFieldName,
-                        detailAppId: app.id,
-                        detailTableName,
-                        detailTableId,
-                        detailFieldName,
-                        detailFieldId: detailTableFkFieldId,
-                        referentialIntegrity: false,
-                        cascadeDelete: false,
-                        description  : description
-                    };
+                childTable.fields.forEach(field => {
+                    if (detailTableFkFieldId === undefined && field.name === RECORD_ID_NAME) {
+                        detailTableFkFieldId = field.id;
+                    }
+                });
+                const relationshipToCreate = {
+                    appId: app.id,
+                    masterAppId: app.id,
+                    masterTableName,
+                    masterTableId,
+                    masterFieldId: masterTablePkFieldId,
+                    masterFieldName,
+                    detailAppId: app.id,
+                    detailTableName,
+                    detailTableId,
+                    detailFieldName,
+                    detailFieldId: detailTableFkFieldId,
+                    referentialIntegrity: false,
+                    cascadeDelete: false,
+                    description  : description
+                };
 
                 return recordBase.createRelationship(relationshipToCreate).then(function(relResponse) {
                     return JSON.parse(relResponse.body);
-                    }).catch(function(error) {
-                        log.error('Error creating relationship');
+                }).catch(function(error) {
+                    log.error('Error creating relationship');
                     return promise.reject(error);
                 });
             }
