@@ -94,7 +94,7 @@ describe('Forms reducer functions', () => {
         it('returns correct state when load succeeds', () => {
             let currentAppId = 'appId';
             let currentblId = 'tblId';
-            let formData = {formMeta: {appId: currentAppId, tableId: currentblId}};
+            let formData = {fields: [], formMeta: {appId: currentAppId, tableId: currentblId}};
             /**
              * This test checks to be sure the actual appId and tblId from the response are
              * the ones being used. So here I made the backup id's different for testing purposes.
@@ -112,7 +112,7 @@ describe('Forms reducer functions', () => {
                 'view': {
                     id: 'view',
                     loading: false,
-                    formData: {formMeta: {appId: currentAppId, tableId: currentblId}},
+                    formData: {fields: [], formMeta: {appId: currentAppId, tableId: currentblId}},
                     errorStatus: null
                 }
             });
