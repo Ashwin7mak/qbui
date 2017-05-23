@@ -27,7 +27,6 @@ const MoveFieldHelper = {
     removeField(formMeta, location) {
         let formMetaCopy = _.cloneDeep(formMeta);
         removeElementFromCurrentLocation(formMetaCopy, location);
-        updateFormMetaFields(formMetaCopy, location);
         return formMetaCopy;
     },
 
@@ -103,14 +102,6 @@ function hasRequiredArguments(formMeta, newLocation, draggedItemProps) {
     return (errors.length === 0);
 }
 
-function updateFormMetaFields(formMetaData, location) {
-    let {tabIndex, sectionIndex, columnIndex} = location;
-    if (_.has(formMetaData, `tabs[${tabIndex}].sections[${sectionIndex}].columns[${columnIndex}].elements`)) {
-        let elements = formMetaData.tabs[tabIndex].sections[sectionIndex].columns[columnIndex].elements;
-        formMetaData.fields = _.map(elements, (field) => field.FormFieldElement.fieldId);
-    }
-}
-
 function removeElementFromCurrentLocationById(formMetaData, draggedItemProps) {
     let updatedElementLocation = findCurrentElementLocation(formMetaData, draggedItemProps.containingElement);
 
@@ -132,7 +123,9 @@ function removeElementFromCurrentLocation(formMetaData, location) {
     let {tabIndex, sectionIndex, columnIndex, elementIndex} = location;
 
     let column = formMetaData.tabs[tabIndex].sections[sectionIndex].columns[columnIndex];
+    let formMetaFieldIndex = _.indexOf(formMetaData.fields, column.elements[elementIndex].id);
 
+    formMetaData.fields.splice(formMetaFieldIndex, 1);
     column.elements = column.elements.filter(element => {
         return element.orderIndex !== elementIndex;
     });

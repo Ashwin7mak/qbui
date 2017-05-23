@@ -94,7 +94,7 @@ describe('Forms reducer functions', () => {
         it('returns correct state when load succeeds', () => {
             let currentAppId = 'appId';
             let currentblId = 'tblId';
-            let formData = {formMeta: {appId: currentAppId, tableId: currentblId}};
+            let formData = {fields: [], formMeta: {appId: currentAppId, tableId: currentblId}};
             /**
              * This test checks to be sure the actual appId and tblId from the response are
              * the ones being used. So here I made the backup id's different for testing purposes.
@@ -112,7 +112,7 @@ describe('Forms reducer functions', () => {
                 'view': {
                     id: 'view',
                     loading: false,
-                    formData: {formMeta: {appId: currentAppId, tableId: currentblId}},
+                    formData: {fields: [], formMeta: {appId: currentAppId, tableId: currentblId}},
                     errorStatus: null
                 }
             });
@@ -134,7 +134,7 @@ describe('Forms reducer functions', () => {
                 'view': {
                     id: 'view',
                     loading: false,
-                    formData: {formMeta: {appId: backUpAppId, tableId: backUpTblId}},
+                    formData: {fields: [], formMeta: {appId: backUpAppId, tableId: backUpTblId}},
                     errorStatus: null
                 }
             });
@@ -219,6 +219,7 @@ describe('Forms reducer functions', () => {
             type: types.REMOVE_FIELD,
             content: {
                 location: 1,
+
             }
         };
 
@@ -232,7 +233,8 @@ describe('Forms reducer functions', () => {
         });
 
         it('returns a new state with a single field removed', () => {
-            expect(reducer(stateWithViewForm, actionPayload)).toEqual({
+            let removeStateWithViewForm = {'view': {id: 'view', formData: {formMeta: {fields: [1, 2, 3, 4, 5]}}}};
+            expect(reducer(removeStateWithViewForm, actionPayload)).toEqual({
                 [VIEW]: {
                     ...stateWithViewForm[VIEW],
                     formData: {formMeta: updatedFormMeta},
@@ -240,7 +242,7 @@ describe('Forms reducer functions', () => {
                 }
             });
             expect(mockMoveFieldHelper.removeField).toHaveBeenCalledWith(
-                stateWithViewForm[VIEW].formData.formMeta, 1
+                removeStateWithViewForm[VIEW].formData.formMeta, 1
             );
         });
 
@@ -267,7 +269,7 @@ describe('Forms reducer functions', () => {
             type: types.ADD_FIELD,
             content: {
                 newLocation: 1,
-                newField: {}
+                field: {}
             }
         };
 

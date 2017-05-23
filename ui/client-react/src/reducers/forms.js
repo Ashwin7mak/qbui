@@ -48,8 +48,8 @@ const forms = (
         action.formData.formMeta.appId = action.formData.formMeta.appId || action.appId;
         action.formData.formMeta.tableId = action.formData.formMeta.tableId || action.tblId;
 
-       // let BUILT_IN_FIELDS = [1, 2, 3, 4, 5];
-        let existingFieldIds = _.differenceBy(action.formData.fields, constants.BUILTIN_FIELD_ID.ARRAY, (field) => {
+        //Removes all built in fields for formBuilder
+        let allFields = _.differenceBy(action.formData.fields, constants.BUILTIN_FIELD_ID.ARRAY, (field) => {
             if (typeof field === 'number') {
                 return field;
             } else {
@@ -57,7 +57,7 @@ const forms = (
             }
         });
 
-        action.formData.fields = existingFieldIds;
+        action.formData.fields = allFields;
 
         newState[id] = ({
             id,
@@ -144,8 +144,6 @@ const forms = (
         }
 
         let {newLocation, draggedItemProps} = action.content;
-
-        console.log('draggedItemProps: ', draggedItemProps);
 
         updatedForm.formData.formMeta = MoveFieldHelper.moveField(
             updatedForm.formData.formMeta,
