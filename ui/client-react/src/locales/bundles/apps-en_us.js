@@ -713,8 +713,9 @@ export default {
         },
         settings: {
             header: "Settings",
+            appHeader: "App",
+            automationSettings: "Automations",
             tablesHeader: "Table",
-            appsHeader: "Table",
             formsHeader: "Form",
             tableSettings: 'Table properties & settings',
             configureFormBuilder: 'Modify this form',
@@ -736,9 +737,15 @@ export default {
             },
             YES: "YES"
         },
-        addUserToApp:{
-            title: "Add users to",
-            description: "Search for users that you'd like to add to your app and decide what level of access you'd like to give them by assigning them to a role"
-        }
+        automationList: {
+            nameHeader: "Name",
+            activeHeader: "Active",
+            activeYes: "Yes",
+            activeNo: "No"
+        },
+		addUserToApp:{
+			title: "Add users to",
+			description: "Search for users that you'd like to add to your app and decide what level of access you'd like to give them by assigning them to a role"
+		}
     }
 };

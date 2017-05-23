@@ -705,8 +705,9 @@ export default {
         },
         settings: {
             header: "Einstellungen",
+            appHeader: "App",
+            automationSettings: "Automatisierungseinstellungen",
             tablesHeader: "Tabelle",
-            appsHeader: "Table",
             formsHeader: "Bilden",
             tableSettings: "Tabelleneigenschaften & Einstellungen",
             configureFormBuilder: "Ändern Sie dieses Formular",
@@ -728,9 +729,15 @@ export default {
             },
             YES: "JA"
         },
-        addUserToApp: {
-            title: "Benutzer hinzufügen",
-            description: "Suchen Sie nach Benutzern, die Sie Ihrer App hinzufügen möchten, und entscheiden Sie, welche Zugriffsebene Sie ihnen geben möchten, indem Sie sie einer Rolle zuordnen"
-        }
+        automationList: {
+            nameHeader: "Name",
+            activeHeader: "Aktiv",
+            activeYes: "Ja",
+            activeNo: "Nein"
+        },
+		addUserToApp: {
+			title: "Benutzer hinzufügen",
+			description: "Suchen Sie nach Benutzern, die Sie Ihrer App hinzufügen möchten, und entscheiden Sie, welche Zugriffsebene Sie ihnen geben möchten, indem Sie sie einer Rolle zuordnen"
+		}
     }
 };

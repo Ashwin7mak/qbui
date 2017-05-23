@@ -704,8 +704,9 @@ export default {
         },
         settings: {
             header: "Paramètres",
+            appHeader: "App",
+            automationSettings: "Paramètres d'automatisation",
             tablesHeader: "Table",
-            appsHeader: "App",
             formsHeader: "Forme",
             tableSettings: "Propriétés et paramètres de la table",
             configureFormBuilder: 'Modifiez ce formulaire',
@@ -726,9 +727,15 @@ export default {
             },
             YES: "OUI"
         },
-        addUserToApp:{
-            title: "Ajouter des utilisateurs à",
-            description: "Recherchez les utilisateurs que vous souhaitez ajouter à votre application et décidez le niveau d'accès que vous souhaitez leur attribuer en leur attribuant un rôle"
-        }
+        automationList: {
+            nameHeader: "Prénom",
+            activeHeader: "Actif",
+            activeYes: "Oui",
+            activeNo: "Non"
+        },
+		addUserToApp:{
+			title: "Ajouter des utilisateurs à",
+			description: "Recherchez les utilisateurs que vous souhaitez ajouter à votre application et décidez le niveau d'accès que vous souhaitez leur attribuer en leur attribuant un rôle"
+		}
     }
 };
