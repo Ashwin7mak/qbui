@@ -132,8 +132,10 @@
          * @returns Array of table links
          */
         getAllTableLeftNavLinksList: {get: function() {
-            browser.element('.tablesList').waitForVisible();
-            browser.element('.leftNavLabel').waitForVisible();
+            //wait until leftNav Loaded.Selected table is not loaded until all table properties are available
+            while (browser.element('.tablesList .leftNavLink .leftNavLabel').getAttribute('textContent').length === 0) {
+                browser.pause(e2eConsts.shortWaitTimeMs);
+            }
             return browser.elements('.leftNavLabel');
         }},
 
@@ -152,10 +154,6 @@
          * @params tableName
          */
         selectTable: {value: function(tableName) {
-            //wait until leftNav Loaded.Selected table is not loaded until all table properties are available
-            while (browser.element('.tablesList .leftNavLink .leftNavLabel').getAttribute('textContent').length === 0) {
-                browser.pause(e2eConsts.shortWaitTimeMs);
-            }
             //filter table names from leftNav links
             var results = this.getAllTableLeftNavLinksList.value.filter(function(table) {
                 return table.getAttribute('textContent') === tableName;
