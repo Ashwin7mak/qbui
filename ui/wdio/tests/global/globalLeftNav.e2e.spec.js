@@ -196,9 +196,7 @@
         xit('Verify the mouse hover function on apps page collapsed leftNav', function() {
 
             // Step 1 - Open apps home page
-            browser.call(function() {
-                return RequestAppsPage.get(e2eBase.getRequestAppsPageEndpoint(realmName));
-            });
+            RequestAppsPage.get(e2eBase.getRequestAppsPageEndpoint(realmName));
 
             // Step 2 - Verify if the topNav hamburger menu is visible
             topNavPO.topNavToggleHamburgerEl.waitForVisible();
