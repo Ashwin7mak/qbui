@@ -45,9 +45,8 @@ class AccountUsers extends Component {
                 <Loader loaded={!this.props.loading} options={SpinnerConfigurations.LARGE_BREAKPOINT}>
                     <div className="accountUsersContainer">
                         <AccountUsersStage users={this.props.users}/>
-                        <AccountUsersGrid id={this.GRID_ID}
-                                          itemTypePlural="users"
-                                          itemTypeSingular="user"
+                        {/* This is the main grid that shows the users */}
+                        <AccountUsersGrid id={this.USERS_GRID_ID}
                                           showAccountColumns={canSeeAccountColumns}
                                           showRealmColumns={canSeeRealmColumns}/>
                     </div>
