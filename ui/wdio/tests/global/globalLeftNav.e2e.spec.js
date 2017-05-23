@@ -13,7 +13,7 @@
     let reportContentPO = requirePO('reportContent');
     var e2ePageBase = requirePO('e2ePageBase');
 
-    describe('Reports Page - LeftNav Tests: ', function() {
+    describe('Global - LeftNav Tests: ', function() {
         let realmName;
         let realmId;
         let testApp;
