@@ -84,6 +84,11 @@
                 return browser.element('.leftNav .tablesList .leftNavLabel');
             }
         },
+        leftNavAppsList:{
+            get: function() {
+                return browser.elements('.leftNav .appsList .leftNavLabel');
+            }
+        },
 
     });
 }());

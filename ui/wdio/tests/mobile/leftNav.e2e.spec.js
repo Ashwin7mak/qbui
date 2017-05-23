@@ -58,14 +58,14 @@
             expect(browser.isVisible('.open.expanded')).toBeTruthy();
 
             // Step 6 - Verify if apps list is open
-            expect((browser.element('.leftNav .appsList .leftNavLabel').getAttribute('textContent').length) > 0).toBeTruthy();
+            expect((leftNavPO.leftNavAppsList.getAttribute('textContent').length) > 0).toBeTruthy();
 
             // Step 7 - Verify if the left nav search element is visible and clickable
             leftNavPO.leftNavSearchEl.waitForVisible();
             leftNavPO.leftNavSearchEl.click();
 
             // Step 8 - Verify if the search box is open
-            expect(browser.isVisible('.open')).toBeTruthy();
+            expect(leftNavPO.leftNavSearchInputBox.isVisible).toBeTruthy();
 
             // Step 9 - Verify if the search box is user editable
             leftNavPO.leftNavSearchInputBox.setValue(sampleText);
@@ -84,9 +84,10 @@
             leftNavPO.leftNavSearchEl.click();
 
             // Step 14 - Verify if the search input box is closed
-            expect(browser.isVisible('.appsList .search.open')).toBeFalsy();
+            expect(leftNavPO.leftNavSearchInputBox.isVisible).toBeTruthy(true);
 
             // Step 15 - Verify the names of global actions links
+            // Used HTML to get text as getText() returns empty string for <span> elements
             let innerHTML = browser.getHTML('.globalActionsList .navLabel span', false);
             expect(innerHTML[0]).toEqual('Feedback');
             expect(innerHTML[1]).toEqual('User');
@@ -113,9 +114,10 @@
             expect(browser.isVisible('.open.expanded')).toBeTruthy();
 
             // Step 4 - Verify if the tables list is open
-            expect((browser.element('.leftNav .tablesList .leftNavLabel').getAttribute('textContent').length) > 0).toBeTruthy();
+            expect((leftNavPO.leftNavTableName.getAttribute('textContent').length) > 0).toBeTruthy();
 
             // Step 5 - Verify the names of topLink elements
+            // Used HTML to get text as getText() returns empty string for <span> elements
             let innerHTML = browser.getHTML('.topLinks .leftNavLabel span', false);
             expect(innerHTML[0]).toEqual('Home');
             expect(innerHTML[1]).toEqual('Users');
@@ -125,14 +127,14 @@
             leftNavPO.leftNavSearchEl.click();
 
             // Step 7 - Verify if the search box is open
-            expect(browser.isVisible('.open')).toBeTruthy();
+            expect(leftNavPO.leftNavSearchInputBox.isVisible).toBeTruthy();
 
             // Step 8 - Verify if the left nav search element is clickable
             leftNavPO.leftNavSearchEl.waitForVisible();
             leftNavPO.leftNavSearchEl.click();
 
             // Step 9 - Verify if the search input box is closed
-            expect(browser.isVisible('.appsList .search.open')).toBeFalsy();
+            expect(leftNavPO.leftNavSearchInputBox.isVisible).toBeTruthy(true);
 
         });
 
@@ -159,7 +161,7 @@
             leftNavPO.leftNavCaretUpEl.click();
 
             // Step 6 - Verify if apps list is open
-            expect((browser.element('.leftNav .appsList .leftNavLabel').getAttribute('textContent').length) > 0).toBeTruthy();
+            expect((leftNavPO.leftNavAppsList.getAttribute('textContent').length) > 0).toBeTruthy();
 
             // Step 7 - Verify if the left nav caret up element is visible
             leftNavPO.leftNavCaretUpEl.waitForVisible();
@@ -168,7 +170,7 @@
             leftNavPO.leftNavCaretUpEl.click();
 
             // Step 9 - Verify if the tables list is open
-            expect((browser.element('.leftNav .tablesList .leftNavLabel').getAttribute('textContent').length) > 0).toBeTruthy();
+            expect((leftNavPO.leftNavTableName.getAttribute('textContent').length) > 0).toBeTruthy();
 
         });
     });
