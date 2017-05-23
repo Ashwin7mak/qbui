@@ -10,7 +10,7 @@
                 return browser.element('.topNav .center');
             }
         },
-        formBuilderBtn: {
+        settingsBtn: {
             get: function() {
                 return browser.element('.topNav .builder');
             }

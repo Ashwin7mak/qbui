@@ -65,35 +65,35 @@
             it('remove the selected field with BACKSPACE & verify absence after SAVE', function() {
                 let removedField = formBuilderPO.KB_removeFieldViaBackspace(1);
                 // save & reopen
-                formBuilderPO.save().open();
-                expect(formBuilderPO.getFieldLabels()).not.toContain(removedField);
+                let newFields = formBuilderPO.save().open();
+                expect(newFields).not.toContain(removedField);
             });
 
             it('move a field via keyboard & verify original order after CANCEL', function() {
                 let originalOrder = formBuilderPO.getFieldLabels();
                 formBuilderPO.KB_moveField(1, 2);
                 formBuilderPO.KB_cancel();
-                formBuilderPO.open();
-                expect(formBuilderPO.getFieldLabels()).toEqual(originalOrder);
+                let newFields = formBuilderPO.open();
+                expect(newFields).toEqual(originalOrder);
             });
             it('move a field via keyboard & verify revised order after SAVE', function() {
                 let revisedOrder = formBuilderPO.KB_moveField(1, 2);
                 formBuilderPO.KB_save();
-                formBuilderPO.open();
-                expect(formBuilderPO.getFieldLabels()).toEqual(revisedOrder);
+                let newFields = formBuilderPO.open();
+                expect(newFields).toEqual(revisedOrder);
             });
 
             it('remove a field via keyboard & verify presence after CANCEL', function() {
                 let deletedField = formBuilderPO.KB_removeFieldViaIcon(1);
                 // cancel & reopen
-                formBuilderPO.cancel().open();
-                expect(formBuilderPO.getFieldLabels()).toContain(deletedField);
+                let newFields = formBuilderPO.cancel().open();
+                expect(newFields).toContain(deletedField);
             });
             it('remove a field via keyboard & verify absence after SAVE', function() {
                 let deletedField = formBuilderPO.KB_removeFieldViaIcon(1);
                 // save & reopen
-                formBuilderPO.save().open();
-                expect(formBuilderPO.getFieldLabels()).not.toContain(deletedField);
+                let newFields = formBuilderPO.save().open();
+                expect(newFields).not.toContain(deletedField);
             });
         }
     });

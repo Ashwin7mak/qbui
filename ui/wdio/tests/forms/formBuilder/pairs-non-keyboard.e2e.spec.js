@@ -41,8 +41,6 @@
                 } catch (err) {
                     browser.logger.info(err.toString());
                 }
-                // wait for left nav to load completely (else settings button won't be rendered)
-                browser.waitForText('.leftNavLabel');
                 // view first record of first report
                 e2ePageBase.viewFirstRecordInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
             });
@@ -67,9 +65,9 @@
                 let existingFields = formBuilderPO.getFieldLabels();
                 expect(existingFields[0]).toEqual(testString);
                 // cancel & reopen
-                formBuilderPO.cancel().open();
+                let newFields = formBuilderPO.cancel().open();
                 // verify field name is not revised
-                expect(formBuilderPO.getFieldLabels()).toEqual(originalFields);
+                expect(newFields).toEqual(originalFields);
             });
             it('rename a field, verify revision after SAVE', function() {
                 formBuilderPO.selectFieldByIndex(1);
@@ -80,9 +78,9 @@
                 let existingFields = formBuilderPO.getFieldLabels();
                 expect(existingFields[0]).toEqual(testString);
                 // save & reopen
-                formBuilderPO.save().open();
+                let newFields = formBuilderPO.save().open();
                 // verify field name is revised
-                expect(formBuilderPO.getFieldLabels()).toEqual(existingFields);
+                expect(newFields).toEqual(existingFields);
             });
 
             it('remove a field with mouse & verify presence after CANCEL', function() {
@@ -93,9 +91,9 @@
                 // verify that the first item is removed
                 expect(formBuilderPO.getFieldLabels().indexOf(firstField)).toEqual(-1);
                 // cancel & reopen
-                formBuilderPO.cancel().open();
+                let newFields = formBuilderPO.cancel().open();
                 // verify that the first item has been restored
-                expect(formBuilderPO.getFieldLabels().indexOf(firstField)).toEqual(0);
+                expect(newFields.indexOf(firstField)).toEqual(0);
             });
             it('remove a field with mouse & verify absence after SAVE', function() {
                 // store the list of fields before deletion
@@ -105,9 +103,9 @@
                 // verify that the first item is removed
                 expect(formBuilderPO.getFieldLabels()).not.toContain(firstField);
                 // save & reopen
-                formBuilderPO.save().open();
+                let newFields = formBuilderPO.save().open();
                 // verify that the first item is still gone
-                expect(formBuilderPO.getFieldLabels()).not.toContain(firstField);
+                expect(newFields).not.toContain(firstField);
             });
 
             it('add a new field to bottom of form & verify absence after CANCEL', function() {
@@ -123,9 +121,9 @@
                 existingFields.push(newField.getText());
                 expect(formBuilderPO.getFieldLabels()).toEqual(existingFields);
                 // cancel & reopen
-                formBuilderPO.cancel().open();
+                let newFields = formBuilderPO.cancel().open();
                 // verify new field is not present
-                expect(formBuilderPO.getFieldLabels()).toEqual(originalFields);
+                expect(newFields).toEqual(originalFields);
             });
             it('add a new field to bottom of form & verify presence after SAVE', function() {
                 let existingFields = formBuilderPO.getFieldLabels();
@@ -139,9 +137,9 @@
                 existingFields.push(newField.getText());
                 expect(formBuilderPO.getFieldLabels()).toEqual(existingFields);
                 // save & reopen
-                formBuilderPO.save().open();
+                let newFeilds = formBuilderPO.save().open();
                 // verify new field is present
-                expect(formBuilderPO.getFieldLabels()).toEqual(existingFields);
+                expect(newFeilds).toEqual(existingFields);
             });
 
             it('move a field via drag/drop & verify original order after CANCEL', function() {
@@ -155,9 +153,9 @@
                 expect(movedFields[0]).toBe(origFields[1]);
                 expect(movedFields[1]).toBe(origFields[0]);
                 // cancel & reopen
-                formBuilderPO.cancel().open();
+                let newFields = formBuilderPO.cancel().open();
                 // verify lack of persistence
-                expect(formBuilderPO.getFieldLabels()).toEqual(origFields);
+                expect(newFields).toEqual(origFields);
             });
             it('move a field via drag/drop & verify revised order after SAVE', function() {
                 // store the list of fields before moving
@@ -170,9 +168,9 @@
                 expect(movedFields[0]).toBe(origFields[1]);
                 expect(movedFields[1]).toBe(origFields[0]);
                 // save & reopen
-                formBuilderPO.save().open();
+                let newFields = formBuilderPO.save().open();
                 // verify persistence
-                expect(formBuilderPO.getFieldLabels()).toEqual(movedFields);
+                expect(newFields).toEqual(movedFields);
             });
         }
     });

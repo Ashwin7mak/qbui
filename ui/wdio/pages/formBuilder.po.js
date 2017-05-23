@@ -189,9 +189,10 @@ class formBuilderPage {
         // todo: move this (and open?) to topNavPO?
         reportContentPO.reportTitle.waitForExist();
         reportContentPO.reportTitle.waitForVisible();
-        topNavPO.formBuilderBtn.waitForExist();
+        topNavPO.settingsBtn.waitForExist();
         try {
-            topNavPO.formBuilderBtn.click();
+            topNavPO.settingsBtn.click();
+            this.firstField.waitForExist();
         } catch (err) {
             // wait & try again to avoid 'other element would receive the click...."
             // which is presumably due to the SAVE SUCCESSFUL growl msg
