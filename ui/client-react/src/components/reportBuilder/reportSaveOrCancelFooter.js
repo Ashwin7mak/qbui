@@ -16,7 +16,6 @@ export class ReportSaveOrCancelFooter extends Component {
     }
 
     onSave = () => {
-
         //HideAppModal();
         let reportDef = {
             name: this.props.reportData.data.name,
@@ -25,7 +24,7 @@ export class ReportSaveOrCancelFooter extends Component {
 
         this.props.saveReport(this.props.appId, this.props.tblId, this.props.rptId, reportDef);
         this.props.exitBuilderMode(CONTEXT.REPORT.NAV);
-        this.props.closeFieldSelectMenu(CONTEXT.REPORT.NAV);
+        this.closeReportBuilder();
     };
 
     closeReportBuilder = () => {
@@ -84,7 +83,7 @@ const mapDispatchToProps = (dispatch) => {
     return {
         exitBuilderMode: (context) => dispatch(exitBuilderMode(context)),
 
-        saveReport: (context, appId, tblId, rptId, reportDef) => dispatch(saveReport(context, appId, tblId, rptId, reportDef))
+        saveReport: (appId, tblId, rptId, reportDef) => dispatch(saveReport(appId, tblId, rptId, reportDef))
     };
 };
 
