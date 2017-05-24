@@ -66,21 +66,14 @@ export const refreshFieldSelectMenu = (context, appId, tblId) => {
 };
 
 /**
- * Toggle the field select menu open.
+ * Inserts a placeholder columns in the grid before/after the specified id.
+ * Will remove any other placeholder columns in the grid.
  * @param context
  * @param clickedColumnId
  * @param addBeforeColumn
  */
-export const openFieldSelectMenu = (context, clickedColumnId, addBeforeColumn) => {
-    return event(context, types.OPEN_FIELD_SELECT_MENU, {clickedColumnId, addBeforeColumn});
-};
-
-/**
- * Toggle the field select menu closed.
- * @param context
- */
-export const closeFieldSelectMenu = (context) => {
-    return event(context, types.CLOSE_FIELD_SELECT_MENU, {});
+export const insertPlaceholderColumn = (context, clickedColumnId, addBeforeColumn) => {
+    return event(context, types.INSERT_PLACEHOLDER_COLUMN, {clickedColumnId, addBeforeColumn});
 };
 
 /**
