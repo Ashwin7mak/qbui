@@ -30,7 +30,7 @@ export class FieldEditingTools extends Component {
 
     onClickDelete(e) {
         if (this.props.removeFieldFromForm) {
-            return this.props.removeFieldFromForm(this.props.formId, this.props.location);
+            return this.props.removeFieldFromForm(this.props.formId, this.props.relatedField, this.props.location);
         }
         e.preventDefault();
     }
