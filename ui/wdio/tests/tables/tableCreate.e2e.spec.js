@@ -56,7 +56,8 @@
          */
         beforeEach(function() {
             // Load the requestAppPage (shows a list of all the tables associated with an app in a realm)
-            return RequestAppsPage.get(e2eBase.getRequestAppPageEndpoint(realmName, testApp.id));
+            RequestAppsPage.get(e2eBase.getRequestAppPageEndpoint(realmName, testApp.id));
+            return browser.element('.tablesList .leftNavLink .leftNavLabel').waitForVisible();
         });
 
         it('Create new table', function() {
