@@ -39,6 +39,11 @@ export const RecordTrowser = React.createClass({
         appId: React.PropTypes.string,
         tblId: React.PropTypes.string,
         recId: React.PropTypes.string,
+        editingAppId: React.PropTypes.string,
+        editingTblId: React.PropTypes.string,
+        editingRecId: React.PropTypes.number,
+        editingApp: React.PropTypes.object,
+        editingTable: React.PropTypes.object,
         viewingRecordId: React.PropTypes.string,
         visible: React.PropTypes.bool,
         editForm: React.PropTypes.object,
@@ -73,10 +78,10 @@ export const RecordTrowser = React.createClass({
             <Loader loaded={!this.props.editForm || (!this.props.editForm.loading && !this.props.editForm.saving)}
                     options={SpinnerConfigurations.TROWSER_CONTENT}>
                 <Record
-                    selectedApp={this.props.selectedApp}
-                    appId={this.props.appId}
-                    tblId={this.props.tblId}
-                    recId={this.props.recId}
+                    selectedApp={this.props.editingApp}
+                    appId={this.props.editingAppId}
+                    tblId={this.props.editingTblId}
+                    recId={this.props.editingRecId}
                     appUsers={this.props.appUsers}
                     errorStatus={this.editForm ? this.props.editForm.errorStatus : null}
                     pendEdits={pendEdits}
@@ -100,8 +105,8 @@ export const RecordTrowser = React.createClass({
 
         const record = this.getRecordFromProps(this.props);
         if (record.navigateAfterSave === true) {
-            let {appId, tblId} = this.props;
-            this.props.history.push(`${APP_ROUTE}/${appId}/table/${tblId}/record/${recId}`);
+            let {editingAppId, editingTblId} = this.props;
+            this.props.history.push(`${APP_ROUTE}/${editingAppId}/table/${editingTblId}/record/${recId}`);
         }
     },
 
@@ -242,7 +247,7 @@ export const RecordTrowser = React.createClass({
             showNotificationOnSuccess: true,
             addNewRow: false
         };
-        this.props.dispatch(updateRecord(this.props.appId, this.props.tblId, this.props.recId, params)).then(
+        this.props.dispatch(updateRecord(this.props.editingAppId, this.props.editingTblId, this.props.editingRecId, params)).then(
             (obj) => {
                 //  need to call as the form.saving attribute is used to determine when to
                 //  open/close the 'modal working' spinner/window..
@@ -294,7 +299,7 @@ export const RecordTrowser = React.createClass({
             showNotificationOnSuccess: true,
             addNewRow: false
         };
-        this.props.dispatch(createRecord(this.props.appId, this.props.tblId, params)).then(
+        this.props.dispatch(createRecord(this.props.editingAppId, this.props.editingTblId, params)).then(
             (obj) => {
                 this.props.saveFormComplete(formType);
                 if (this.props.viewingRecordId === obj.recId) {
@@ -391,7 +396,7 @@ export const RecordTrowser = React.createClass({
      *  get breadcrumb element for top of trowser
      */
     getTrowserBreadcrumbs() {
-        const table = this.props.selectedTable;
+        const table = this.props.editingTable;
 
         let record = this.getRecordFromProps(this.props);
 
@@ -399,7 +404,8 @@ export const RecordTrowser = React.createClass({
         const showNext = !!(record.nextRecordId);
 
         let relatedRecord =  _.has(this.props, 'editForm.formData.record') ? this.props.editForm.formData.record : null;
-        let recordName = getRecordTitle(this.props.selectedTable, relatedRecord, this.props.recId);
+        let recordName = getRecordTitle(this.props.editingTable, relatedRecord, this.props.recId);
+        //const recordName = this.props.editingTable && this.props.editingTable.name;
 
         let title = this.props.recId === SchemaConsts.UNSAVED_RECORD_ID ? <span><I18nMessage message="nav.new"/><span>&nbsp;{recordName}</span></span> :
             <span>{recordName}</span>;

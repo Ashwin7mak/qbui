@@ -1,8 +1,10 @@
 import React, {PropTypes, Component} from 'react';
 import {connect} from "react-redux";
 import FieldToken from './fieldToken';
+import FieldFormats from '../../../utils/fieldFormats';
 import Tooltip from '../../../../../reuse/client/src/components/tooltip/tooltip';
 import {addFieldToForm, endDraggingState, isInDraggingState} from "../../../actions/formActions";
+import {hideRelationshipDialog} from "../../../actions/relationshipBuilderActions";
 import {getFormByContext, getSelectedFormElement} from '../../../reducers/forms';
 import {updateFormAnimationState} from '../../../actions/animationActions';
 import {CONTEXT} from '../../../actions/context';
@@ -118,6 +120,9 @@ export class DraggableFieldToken extends Component {
     endDrag = () => {
         this.setState({addedToForm: false});
         this.props.updateFormAnimationState(false);
+        if (this.props.endDrag) {
+            this.props.endDrag();
+        }
     };
 
     render = () => {
@@ -197,6 +202,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = {
     addFieldToForm,
+    hideRelationshipDialog,
     updateFormAnimationState,
     endDraggingState,
     isInDraggingState

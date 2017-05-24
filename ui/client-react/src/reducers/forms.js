@@ -1,8 +1,8 @@
 import * as types from '../actions/types';
 import * as tabIndexConstants from '../../../client-react/src/components/formBuilder/tabindexConstants';
+import * as constants from '../../../common/src/constants';
 import _ from 'lodash';
 import MoveFieldHelper from '../components/formBuilder/moveFieldHelper';
-import constants from '../../../common/src/constants';
 
 const forms = (
 
@@ -27,6 +27,7 @@ const forms = (
             redirectRoute: action.redirectRoute
         };
     }
+
 
     case types.LOADING_FORM: {
 
@@ -174,6 +175,8 @@ const forms = (
         }
 
         let {field, newLocation} = _.cloneDeep(action.content);
+        const isNewRelationshipField = _.get(newField, "datatypeAttributes.type", null) === constants.LINK_TO_RECORD;
+
         updatedForm = _.cloneDeep(currentForm);
         let columnElementLength = updatedForm.formData.formMeta.tabs[0].sections[0].columns[0] ? updatedForm.formData.formMeta.tabs[0].sections[0].columns[0].elements.length : 0;
         // Remove all keys that are not necessary for forms
@@ -217,6 +220,7 @@ const forms = (
 
         updatedForm.isPendingEdit = true;
         newState[action.id] = updatedForm;
+
         return newState;
     }
 
@@ -226,14 +230,26 @@ const forms = (
         }
 
         if (updatedForm.formData.formMeta.fields.length > 1) {
-            let {location} = action.content;
+            let {location, field} = action;
+            let formMetaCopy = _.cloneDeep(updatedForm.formData.formMeta);
+            let relatedRelationship = false;
 
+            if (Array.isArray(formMetaCopy.relationships) && formMetaCopy.relationships.length > 0) {
+                relatedRelationship = _.find(formMetaCopy.relationships, (rel) => rel.detailTableId === field.tableId  && rel.detailFieldId === field.id);
+            }
+            if (relatedRelationship) {
+                if (formMetaCopy.fieldsToDelete) {
+                    formMetaCopy.fieldsToDelete.push(field.id);
+                } else {
+                    formMetaCopy.fieldsToDelete = [field.id];
+                }
+            }
             updatedForm.formData.formMeta = MoveFieldHelper.removeField(
-                updatedForm.formData.formMeta,
+                formMetaCopy,
                 location
             );
-        }
 
+        }
         updatedForm.isPendingEdit = true;
         newState[id] = updatedForm;
         return newState;

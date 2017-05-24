@@ -4,12 +4,14 @@ import {I18nMessage} from '../../utils/i18nMessage';
 import Locale from '../../locales/locales';
 import {connect} from 'react-redux';
 import {loadForm, updateForm, moveFieldOnForm, toggleFormBuilderChildrenTabIndex, toggleToolPaletteChildrenTabIndex, keyboardMoveFieldUp, keyboardMoveFieldDown, selectFieldOnForm, deselectField, removeFieldFromForm, addFieldToForm} from '../../actions/formActions';
+import {draggingLinkToRecord} from '../../actions/relationshipBuilderActions';
 import {updateFormAnimationState} from '../../actions/animationActions';
 import Loader from 'react-loader';
 import {LARGE_BREAKPOINT} from "../../constants/spinnerConfigurations";
 import {NEW_FORM_RECORD_ID} from '../../constants/schema';
 import ToolPalette from './builderMenus/toolPalette';
 import FieldProperties from './builderMenus/fieldProperties';
+import FieldFormats from '../../utils/fieldFormats';
 import FormBuilder from '../formBuilder/formBuilder';
 import SaveOrCancelFooter from '../saveOrCancelFooter/saveOrCancelFooter';
 import NavigationUtils from '../../utils/navigationUtils';
@@ -62,7 +64,8 @@ const mapDispatchToProps = {
     selectFieldOnForm,
     deselectField,
     removeFieldFromForm,
-    addFieldToForm
+    addFieldToForm,
+    draggingLinkToRecord
 };
 
 /**
@@ -242,6 +245,23 @@ export const FormBuilderContainer = React.createClass({
         }
     },
 
+    /**
+     * detect drag of field
+     **/
+    beginDrag(props) {
+
+        if (props.type === FieldFormats.LINK_TO_RECORD) {
+            this.props.draggingLinkToRecord(true);
+        }
+    },
+
+    /**
+     * drag complete
+     */
+    endDrag() {
+        this.props.draggingLinkToRecord(false);
+    },
+
     render() {
         let loaded = (_.has(this.props, 'currentForm') && this.props.currentForm !== undefined && !this.props.currentForm.loading && !this.props.currentForm.saving);
         let formData = null;
@@ -271,11 +291,14 @@ export const FormBuilderContainer = React.createClass({
 
                 <ToolPalette isCollapsed={this.props.isCollapsed}
                              isOpen={this.props.isOpen}
+                             beginDrag={this.beginDrag}
+                             endDrag={this.endDrag}
                              toggleToolPaletteChildrenTabIndex={this.toggleToolPaletteChildrenTabIndex}
                              toolPaletteChildrenTabIndex={this.props.toolPaletteChildrenTabIndex}
                              toolPaletteFocus={this.props.toolPaletteFocus}
-                     >
-                <FieldProperties appId={this.props.match.params.appId} tableId={this.props.match.params.tblId} formId={formId}>
+                             formMeta={formData ? formData.formMeta : null}
+                             app={this.props.app}>
+                <FieldProperties appId={this.props.match.params.appId} app={this.props.app} tableId={this.props.match.params.tblId} formId={formId}>
                         <div tabIndex={tabIndexConstants.FORM_TAB_INDEX}
                              className="formBuilderContainerContent"
                              ref={element => formBuilderContainerContent = element}
@@ -288,6 +311,7 @@ export const FormBuilderContainer = React.createClass({
                                             formBuilderContainerContentElement={formBuilderContainerContent}
                                             selectedField={this.props.selectedField}
                                             formId={formId}
+                                            app={this.props.app}
                                             appId={this.props.match.params.appId}
                                             tblId={this.props.match.params.tblId}
                                             formData={formData}

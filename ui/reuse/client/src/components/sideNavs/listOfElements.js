@@ -97,6 +97,8 @@ class ListOfElements extends Component {
             return fieldTypes.map((fieldType, index) => (
                 <li key={fieldType.key || index} className="listOfElementsItem">
                     <TokenInMenu {...fieldType}
+                                 beginDrag={this.props.beginDrag}
+                                 endDrag={this.props.endDrag}
                                  isCollapsed={this.props.isCollapsed}
                                  tabIndex={this.props.childrenTabIndex}/>
                 </li>

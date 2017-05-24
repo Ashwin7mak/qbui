@@ -6,7 +6,6 @@
     let e2ePageBase = requirePO('e2ePageBase');
     let reportSortingPO = requirePO('reportSortingGrouping');
     let reportContentPO = requirePO('reportContent');
-    var reportContentMobilePO = requireMobilePO('reportContent');
     let _ = require('lodash');
     var assert = require('assert');
 
@@ -54,7 +53,7 @@
             });
 
             //Step 2 - load the above created report in UI.
-            reportContentMobilePO.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, reportId);
+            reportContentPO.loadReportByIdInBrowserSB(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, reportId);
 
             //Step 3 - Click on sort/Grp Icon
             reportSortingPO.clickSortGroupIconOnReportsPage();
@@ -77,10 +76,10 @@
             browser.element('.settingsDialog .applyButton').waitForVisible();
             browser.element('.settingsDialog .applyButton').click();
             //wait until report rows in table are loaded
-            reportContentMobilePO.waitForReportContent();
+            reportContentPO.waitForReportContentSB();
 
             //Step 8 - Get all records from the report table
-            reportContentMobilePO.getAllRowsCellValues.value.filter(function(elm) {
+            reportContentPO.getAllRowsCellValuesSB.value.filter(function(elm) {
                 actualTableRecords.push(elm.getText());
             });
 
@@ -93,7 +92,7 @@
 
         it("Verify sort/grp dialogue and the close dialogue functionality", function() {
             //Step 1 - load the defaulr report 'List-All Reposrt'
-            reportContentMobilePO.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, DEFAULT_REPORT_ID);
+            reportContentPO.loadReportByIdInBrowserSB(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, DEFAULT_REPORT_ID);
 
             //Step 2 - Click on sort/Grp Icon
             reportSortingPO.clickSortGroupIconOnReportsPage();
