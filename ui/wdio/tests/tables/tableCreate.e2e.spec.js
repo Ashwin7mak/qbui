@@ -55,11 +55,9 @@
          * Before each it block reload the list all report (can be used as a way to reset state between tests)
          */
         beforeEach(function() {
-            //select the App
-            RequestAppsPage.selectApp(testApp.name);
-
-            //select the table
-            return tableCreatePO.selectTable(testApp.tables[e2eConsts.TABLE1].name);
+            // Load the requestAppPage (shows a list of all the tables associated with an app in a realm)
+            RequestAppsPage.get(e2eBase.getRequestAppPageEndpoint(realmName, testApp.id));
+            return browser.element('.tablesList .leftNavLink .leftNavLabel').waitForVisible();
         });
 
         it('Create new table', function() {

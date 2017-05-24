@@ -133,8 +133,10 @@
          */
         getAllTableLeftNavLinksList: {get: function() {
             browser.waitForExist('.tablesList .leftNavLabel');
-            //Wait until new table button visible
-            this.newTableBtn.waitForVisible();
+            //wait until leftNav Loaded.Selected table is not loaded until all table properties are available
+            while (browser.element('.tablesList .leftNavLink .leftNavLabel').getAttribute('textContent').length === 0) {
+                browser.pause(e2eConsts.shortWaitTimeMs);
+            }
             return browser.elements('.tablesList .leftNavLabel');
         }},
 
