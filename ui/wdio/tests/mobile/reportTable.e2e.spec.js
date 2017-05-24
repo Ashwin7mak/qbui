@@ -64,27 +64,30 @@
             expect(reportTableActionsPO.getReportRecordsCount()).toBe(RECORD_COUNT + " records");
 
             // Step 4 - Assert dropdownToggle actionButton is visible and clickable
-            expect(reportContentPO.dropdownToggleActionButton.isVisible()).toBe(true);
-            // click in dropdownToggle actionButton
-            reportContentPO.clickDropdownToggleActionButton();
+            expect(reportContentPO.dropdownToggleActionButtonSB.isVisible()).toBe(true);
+            // click on dropdownToggle actionButton
+            reportContentPO.clickDropdownToggleActionButtonSB();
         });
 
         /**
          * verifies record count
          */
-        it('Should load the reports page with the appropriate table report and verify add record button is visible', function() {
+        it('Should load the reports page with the appropriate table report', function() {
             // Step 1 - wait for the report content to be visible
             reportContentPO.waitForReportContentSB();
 
             // Step 2 - Assert records count
             let recordCount = formsPO.getRecordsCountInATable();
             expect(recordCount).toBe(RECORD_COUNT);
+
+            // Step 3 - click on card expander
+            reportContentPO.clickCardExpanderButtonSB();
         });
 
         /**
          * Verifies add new record button is visible and enabled
          */
-        it('', function() {
+        it('verify add record button is visible and enabled', function() {
             // Step 1 - wait for the report content to be visible
             reportContentPO.waitForReportContentSB();
 

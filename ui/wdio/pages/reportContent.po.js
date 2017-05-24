@@ -474,9 +474,15 @@
             }
         },
         //Element for dropdownToggle ActionButton
-        dropdownToggleActionButton: {
+        dropdownToggleActionButtonSB: {
             get: function() {
-                return browser.elements('.qbIcon.iconUISturdy-fries');
+                return browser.element('.qbIcon.iconUISturdy-fries');
+            }
+        },
+        //Element for card-expander
+        cardExpanderButtonSB: {
+            get: function() {
+                return browser.element('.qbPanelHeaderIcon.rotateUp.qbIcon.iconUISturdy-caret-up');
             }
         },
         /**
@@ -521,11 +527,22 @@
         /**
          * Function that will click on the DropdownToggleActionButton
          */
-        clickDropdownToggleActionButton: {
+        clickDropdownToggleActionButtonSB: {
             value: function() {
-                expect(this.dropdownToggleActionButton.isVisible()).toBe(true);
-                expect(this.dropdownToggleActionButton.isEnabled()).toBe(true);
+                expect(this.dropdownToggleActionButtonSB.isVisible()).toBe(true);
+                expect(this.dropdownToggleActionButtonSB.isEnabled()).toBe(true);
                 browser.element('.qbIcon.iconUISturdy-fries').click();
+            }
+        },
+
+        /**
+         * Function that will click on the card expander button
+         */
+        clickCardExpanderButtonSB: {
+            value: function() {
+                expect(this.cardExpanderButtonSB.isVisible()).toBe(true);
+                expect(this.cardExpanderButtonSB.isEnabled()).toBe(true);
+                browser.element('.qbPanelHeaderIcon.rotateUp.qbIcon.iconUISturdy-caret-up').click();
             }
         },
 
