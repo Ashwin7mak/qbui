@@ -62,13 +62,37 @@ export const UnconnectedReportToolsAndContent = React.createClass({
         pageStart: React.PropTypes.number,
         pageEnd: React.PropTypes.number,
         loadDynamicReport: React.PropTypes.func,
+        /**
+         * Provide your own content to be displayed instead of the default report.
+         */
+        content: React.PropTypes.object,
+        /**
+         * Should the sort and group menu be visible?
+         */
+        isSortAndGroupVisible: React.PropTypes.bool,
+        /**
+         * Should the facet menu be visible?
+         */
+        isFacetMenuVisible: React.PropTypes.bool,
+        /**
+         * Should right toolbar be visible?
+         */
+        isRightToolbarVisible: React.PropTypes.bool,
+        /**
+         * Should the search box be visible?
+         */
+        isSearchBoxVisible: React.PropTypes.bool,
 
         // used for relationships phase-1
         phase1: React.PropTypes.bool
     },
     getDefaultProps() {
         return {
-            selections:null
+            selections:null,
+            isSortAndGroupVisible: true,
+            isFacetMenuVisible: true,
+            isRightToolbarVisible: true,
+            isSearchBoxVisible: true,
         };
     },
     getInitialState: function() {
@@ -223,7 +247,10 @@ export const UnconnectedReportToolsAndContent = React.createClass({
                               pageEnd={this.pageEnd}
                               recordsCount={this.recordsCount}
                               width={this.state.gridWidth}
-
+                              isFacetMenuVisible={this.props.isFacetMenuVisible}
+                              isSearchBoxVisible={this.props.isSearchBoxVisible}
+                              isSortAndGroupVisible={this.props.isSortAndGroupVisible}
+                              isRightToolbarVisible={this.props.isRightToolbarVisible}
                               // used for relationships phase-1
                               phase1={this.props.phase1}
                />;
@@ -379,6 +406,7 @@ export const UnconnectedReportToolsAndContent = React.createClass({
 
                 <div className={classes.join(' ')}>
                     {this.getTableActions()}
+                    {this.props.content ||
                     <ReportContent appId={this.props.reportData.appId}
                                    tblId={this.props.reportData.tblId}
                                    selectedTable={this.props.selectedTable}
@@ -394,7 +422,7 @@ export const UnconnectedReportToolsAndContent = React.createClass({
                                    onAddNewRecord={this.editNewRecord}
                                    {...this.props}
                         // until all sub-components reference store directly, need to explicitly override this.props.fields
-                                   fields={fields}/>
+                                   fields={fields}/>}
 
                     {!this.props.scrollingReport && <AddRecordButton onClick={this.editNewRecord}/>}
                 </div>

@@ -1,13 +1,13 @@
 import React, {Component, PropTypes} from 'react';
 import {connect} from 'react-redux';
-import {exitBuilderMode, closeFieldSelectMenu, saveReport} from '../../../src/actions/reportActions';
+import {exitBuilderMode, saveReport} from '../../../src/actions/reportBuilderActions';
 import {CONTEXT} from '../../actions/context';
 import SaveOrCancelFooter from '../saveOrCancelFooter/saveOrCancelFooter';
 import Button from 'react-bootstrap/lib/Button';
 import {I18nMessage} from '../../utils/i18nMessage';
-import {HideAppModal} from '../qbModal/appQbModalFunctions';
+import NavigationUtils from '../../utils/navigationUtils';
 import AppHistory from '../../globals/appHistory';
-
+import {HideAppModal} from '../qbModal/appQbModalFunctions';
 
 export class ReportSaveOrCancelFooter extends Component {
     constructor(props) {
@@ -15,16 +15,8 @@ export class ReportSaveOrCancelFooter extends Component {
 
     }
 
-    onCancel = () => {
-        let reportDef = {
-            name: this.props.reportData.data.name,
-            fids: this.props.reportData.data.fids
-        };
-        this.props.exitBuilderMode(CONTEXT.REPORT.NAV);
-        this.props.closeFieldSelectMenu(CONTEXT.REPORT.NAV);
-    };
+    onSave = () => {
 
-    onClickSave = () => {
         //HideAppModal();
         let reportDef = {
             name: this.props.reportData.data.name,
@@ -36,12 +28,25 @@ export class ReportSaveOrCancelFooter extends Component {
         this.props.closeFieldSelectMenu(CONTEXT.REPORT.NAV);
     };
 
+    closeReportBuilder = () => {
+        NavigationUtils.goBackToLocationOrTable(this.props.appId, this.props.tblId, this.props.redirectRoute);
+    };
+
+    onCancel = () => {
+        if (this.props.isPendingEdit) {
+            AppHistory.showPendingEditsConfirmationModal(this.onSave, this.closeReportBuilder, () => HideAppModal());
+        } else {
+            HideAppModal();
+            this.closeReportBuilder();
+        }
+        this.props.exitBuilderMode(CONTEXT.REPORT.NAV);
+    };
 
     getRightAlignedButtons() {
         return (
             <div>
                 <Button bsStyle="primary" onClick={this.onCancel} className="alternativeTrowserFooterButton"><I18nMessage message="nav.cancel"/></Button>
-                <Button bsStyle="primary" onClick={this.onClickSave} className="mainTrowserFooterButton"><I18nMessage message="nav.save"/></Button>
+                <Button bsStyle="primary" onClick={this.onSave} className="mainTrowserFooterButton"><I18nMessage message="nav.save"/></Button>
             </div>
         );
     }
@@ -69,14 +74,18 @@ ReportSaveOrCancelFooter.propTypes = {
     reportData: PropTypes.object.isRequired
 };
 
+const mapStateToProps = (state) => {
+    return {
+        redirectRoute: state.reportBuilder.redirectRoute
+    };
+};
+
 const mapDispatchToProps = (dispatch) => {
     return {
         exitBuilderMode: (context) => dispatch(exitBuilderMode(context)),
-
-        closeFieldSelectMenu: (context) => dispatch(closeFieldSelectMenu(context)),
 
         saveReport: (context, appId, tblId, rptId, reportDef) => dispatch(saveReport(context, appId, tblId, rptId, reportDef))
     };
 };
 
-export default (connect(null, mapDispatchToProps)(ReportSaveOrCancelFooter));
+export default connect(mapStateToProps, mapDispatchToProps)(ReportSaveOrCancelFooter);
