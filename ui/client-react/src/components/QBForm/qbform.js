@@ -13,6 +13,7 @@ import RelatedChildReport from './relatedChildReport';
 import {CONTEXT} from "../../actions/context";
 import FlipMove from 'react-flip-move';
 import {FORM_ELEMENT_ENTER, FORM_ELEMENT_LEAVE} from '../../constants/animations';
+import {removeFieldFromForm} from '../../actions/formActions';
 
 import * as FieldsReducer from '../../reducers/fields';
 
@@ -336,7 +337,7 @@ export const QBForm = React.createClass({
      * @returns {XML}
      */
     createFieldElement(FormFieldElement, validationStatus, containingElement, location) {
-
+        let formId = this.props.formId || CONTEXT.FORM.VIEW;
         let relatedField = this.getRelatedField(FormFieldElement.fieldId);
         let fieldRecord = this.getFieldRecord(relatedField);
         let recId = _.has(this.props.formData, 'recordId') ? this.props.formData.recordId : null;
@@ -382,9 +383,12 @@ export const QBForm = React.createClass({
                   onBlur={this.props.onFieldChange}
                   isInvalid={validationStatus.isInvalid}
                   invalidMessage={validationStatus.invalidMessage}
+                  app={this.props.app}
+                  tblId={this.props.tblId}
                   appUsers={this.props.appUsers}
                   recId={recId}
                   isTokenInMenuDragging={this.props.isTokenInMenuDragging}
+                  removeFieldFromForm={() => {this.props.removeFieldFromForm(formId, location);}}
               />
             </div>
         );
@@ -599,5 +603,5 @@ const mapStateToProps = (state, ownProps) => {
 };
 
 export default connect(
-    mapStateToProps
+    mapStateToProps, {removeFieldFromForm}
 )(QBForm);

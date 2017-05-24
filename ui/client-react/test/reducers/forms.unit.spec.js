@@ -287,8 +287,9 @@ describe('Forms reducer functions', () => {
                     selectedFields: [1],
                     previouslySelectedField: [],
                     formData: {formMeta: updatedFormMeta},
-                    isPendingEdit: true,
-                }
+                    isPendingEdit: true
+
+                },
             });
             expect(mockMoveFieldHelper.addNewFieldToForm).toHaveBeenCalledWith(
                 stateForAddingField[VIEW].formData.formMeta, 1, {}

@@ -1,5 +1,6 @@
 import * as types from '../actions/types';
 import * as tabIndexConstants from '../../../client-react/src/components/formBuilder/tabindexConstants';
+import * as constants from '../../../common/src/constants';
 import _ from 'lodash';
 import MoveFieldHelper from '../components/formBuilder/moveFieldHelper';
 
@@ -26,6 +27,7 @@ const forms = (
             redirectRoute: action.redirectRoute
         };
     }
+
 
     case types.LOADING_FORM: {
 
@@ -162,6 +164,9 @@ const forms = (
         }
 
         let {newField, newLocation} = _.cloneDeep(action.content);
+
+        const isNewRelationshipField = _.get(newField, "datatypeAttributes.type", null) === constants.LINK_TO_RECORD;
+
         updatedForm = _.cloneDeep(currentForm);
         // Remove all keys that are not necessary for forms
         Object.keys(newField).forEach(key => {
@@ -204,6 +209,7 @@ const forms = (
 
         updatedForm.isPendingEdit = true;
         newState[action.id] = updatedForm;
+
         return newState;
     }
 

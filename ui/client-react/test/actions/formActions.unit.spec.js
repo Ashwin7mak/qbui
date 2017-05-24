@@ -523,15 +523,6 @@ describe('Form Actions', () => {
         });
     });
 
-    describe('isInDraggingState', () => {
-        it('creates an action that updates dragging state to true', () => {
-            expect(formActions.isInDraggingState('view')).toEqual({
-                id: 'view',
-                type: types.IS_DRAGGING,
-                content: null});
-        });
-    });
-
     describe('setFormBuilderPendingEditToFalse', () => {
         it('creates an action that sets isPendingEdit to false', () => {
             expect(formActions.setFormBuilderPendingEditToFalse('view')).toEqual({

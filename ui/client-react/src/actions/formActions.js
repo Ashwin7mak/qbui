@@ -34,6 +34,7 @@ export const updateFormRedirectRoute = route => {
     };
 };
 
+
 /**
  * form load in progress
  * @param container type of form (edit or view)
