@@ -5,6 +5,7 @@ import Fluxxor from 'fluxxor';
 import * as ShellActions from '../../src/actions/shellActions';
 import {Nav,  __RewireAPI__ as NavRewireAPI} from '../../src/components/nav/nav';
 import {mount, shallow} from 'enzyme';
+import {CONTEXT} from '../../src/actions/context';
 
 let smallBreakpoint = false;
 class BreakpointsMock {
@@ -39,6 +40,8 @@ const TableCreationDialogMock = React.createClass({
 });
 
 const mockFormStore = {updateFormRedirectRoute(_route) {}};
+
+const mockReportStore = {updateReportRedirectRoute(_route) {}};
 
 class WindowLocationUtilsMock {
     static update(url) { }
@@ -86,7 +89,10 @@ describe('Nav Unit tests', () => {
         enterBuilderMode: (context) => {},
         fields: [],
         record: [],
-        report: [],
+        report: [{
+            id: CONTEXT.REPORT.NAV,
+            rptId: '3'
+        }],
         match:{
             params: {
                 appId: '1',
@@ -245,7 +251,7 @@ describe('Nav Unit tests', () => {
         props.history = [];
 
         let component = TestUtils.renderIntoDocument(<Nav {...props} flux={flux} updateFormRedirectRoute={mockFormStore.updateFormRedirectRoute} />);
-        component.navigateToBuilder();
+        component.navigateToFormBuilder();
 
         expect(props.history).toEqual(expectedRouter);
     });
@@ -256,7 +262,7 @@ describe('Nav Unit tests', () => {
         props.history = [];
 
         let component = TestUtils.renderIntoDocument(<Nav {...props} flux={flux} updateFormRedirectRoute={mockFormStore.updateFormRedirectRoute} />);
-        component.navigateToBuilder();
+        component.navigateToFormBuilder();
 
         expect(props.history).toEqual(expectedRouter);
     });
@@ -272,19 +278,43 @@ describe('Nav Unit tests', () => {
         props.history = [];
 
         let component = TestUtils.renderIntoDocument(<Nav {...props} flux={flux} location={testLocation} updateFormRedirectRoute={mockFormStore.updateFormRedirectRoute} />);
-        component.navigateToBuilder();
+        component.navigateToFormBuilder();
 
         expect(mockFormStore.updateFormRedirectRoute).toHaveBeenCalledWith(testLocation.pathname);
     });
 
     it('enters report builder', () => {
-        let component = shallow(<Nav {...props} flux={flux} />);
+        let component = shallow(<Nav {...props} flux={flux} updateReportRedirectRoute={mockReportStore.updateReportRedirectRoute} />);
 
         let instance = component.instance();
 
-        instance.navigateToBuilderReport();
+        instance.navigateToReportBuilder();
 
         expect(props.enterBuilderMode).toHaveBeenCalled();
     });
 
+    it('renders report builder component without form type or form id', () => {
+        let expectedRouter = ['/qbase/builder/app/1/table/2/report/3'];
+        props.history = [];
+
+        let component = TestUtils.renderIntoDocument(<Nav {...props} flux={flux} updateReportRedirectRoute={mockReportStore.updateReportRedirectRoute} />);
+        component.navigateToReportBuilder();
+
+        expect(props.history).toEqual(expectedRouter);
+    });
+
+    it('renders report builder and sets the redirect route', () => {
+        spyOn(mockReportStore, 'updateReportRedirectRoute');
+
+        const testLocation = {
+            pathname: '/previousLocation',
+            query: query
+        };
+        props.history = [];
+
+        let component = TestUtils.renderIntoDocument(<Nav {...props} flux={flux} location={testLocation} updateReportRedirectRoute={mockReportStore.updateReportRedirectRoute} />);
+        component.navigateToReportBuilder();
+
+        expect(mockReportStore.updateReportRedirectRoute).toHaveBeenCalledWith(CONTEXT.REPORT.NAV, testLocation.pathname);
+    });
 });

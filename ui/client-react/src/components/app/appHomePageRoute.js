@@ -28,14 +28,6 @@ export const AppHomePageRoute = React.createClass({
     },
 
     /**
-     * Select an app by ID
-     */
-    selectAppRoles(appId) {
-        let flux = this.getFlux();
-        flux.actions.loadAppRoles(appId);
-    },
-
-    /**
      * Select an app from the route params
      */
     selectAppFromParams(params, checkParams) {
@@ -50,11 +42,6 @@ export const AppHomePageRoute = React.createClass({
                 if (_.get(this.props, 'match.params.appId') === appId) {
                     return;
                 }
-            }
-
-            if (appId) {
-                logger.debug('Loading app. AppId:' + appId);
-                this.selectAppRoles(appId);
             }
         }
     },
@@ -142,7 +129,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        resetTableDeleteNotification: () => dispatch(notifyTableDeleted(false)),
+        resetTableDeleteNotification: () => {dispatch(notifyTableDeleted(false));}
         setTopTitle: (title) => dispatch(setTopTitle(title)),
         showTopNav: () => dispatch(showTopNav())
     };

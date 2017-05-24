@@ -1,0 +1,37 @@
+@import '../../assets/css/qbVariables';
+
+.multiStepModal.tableDataConnectionDialog {
+
+    .modal-dialog {
+        width: 550px;
+    }
+    .modal-body > *:first-child {
+        height: 153px;
+    }
+
+    .tableChooserDescription {
+        color: $color-black-500;
+        padding-bottom: $spacing-x-small;
+    }
+    .tableChooserHeading {
+        color: $color-black-700;
+        padding-bottom: $spacing-x-small;
+    }
+
+    .tableSelector {
+        max-width: 300px;
+
+        .tableOption {
+            .tableLabel {
+                margin-left: $spacing-x-small;
+            }
+            .qbIcon {
+                color: $iconfont-on-light-normal-color;
+            }
+        }
+    }
+}
+
+.multiStepModal.tableDataConnectionDialog.allowOverflow .loadedContent {
+    overflow: visible;
+}
