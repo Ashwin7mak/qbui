@@ -5,6 +5,7 @@
     let appSettingsList = requirePO('/app/appSettings');
     let automationSettings = requirePO('/automations/automationsSettings');
     let newStackAuthPO = requirePO('newStackAuth');
+    let appBuilder = require('../../../test_generators/app.builder.js');
 
     describe('Automations - application settings ', function() {
         let realmName;
@@ -16,21 +17,17 @@
          */
         beforeAll(function() {
             browser.logger.info('beforeAll spec function - Generating test data and logging in');
-            // Need to return here. beforeAll is completely async, need to return the Promise chain in any before or after functions!
-            // No need to call done() anymore
-            return e2eBase.basicAppSetup(null, 0).then(function(createdApp) {
-                // Set your global objects to use in the test functions
+            let builderInstance = appBuilder.builder();
+            builderInstance.withName('myName');
+            let appToCreate = builderInstance.build();
+
+            return e2eBase.createApp(appToCreate).then(function(createdApp) {
                 app = createdApp;
                 realmName = e2eBase.recordBase.apiBase.realm.subdomain;
                 realmId = e2eBase.recordBase.apiBase.realm.id;
             }).then(function() {
-                // Auth into the new stack
                 return newStackAuthPO.realmLogin(realmName, realmId);
             }).catch(function(error) {
-                // Global catch that will grab any errors from chain above
-                // Will appropriately fail the beforeAll method so other tests won't run
-                browser.logger.error('Error in beforeAll function, code:' + error.code);
-
                 browser.logger.error('Error in beforeAll function:' + JSON.stringify(error));
                 return Promise.reject('Error in beforeAll function:' + JSON.stringify(error));
             });

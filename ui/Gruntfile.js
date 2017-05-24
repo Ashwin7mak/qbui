@@ -629,8 +629,9 @@ module.exports = function(grunt) {
                         './wdio/tests/global/globalTopNav.e2e.spec.js',
                         './wdio/tests/global/globalLeftNav.e2e.spec.js'
                     ],
-                    automations:[
-                        './wdio/tests/automations/settingsMenu.e2e.spec.js'
+                    automations: [
+                        './wdio/tests/automations/settingsMenu.e2e.spec.js',
+                        './wdio/tests/automations/automationsList.e2e.spec.js'
                     ]
                 }
             },
