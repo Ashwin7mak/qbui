@@ -318,7 +318,7 @@ const report = (state = [], action) => {
         });
         return reports;
     }
-    case types.OPEN_FIELD_SELECT_MENU: {
+    case types.INSERT_PLACEHOLDER_COLUMN: {
         let currentReport = getReportFromState(action.id);
         if (currentReport) {
             let params = action.content;
@@ -350,15 +350,6 @@ const report = (state = [], action) => {
                 reorderColumns(currentReport.data.columns);
                 return newState(currentReport);
             }
-        }
-        return state;
-    }
-    case types.CLOSE_FIELD_SELECT_MENU: {
-        let currentReport = getReportFromState(action.id);
-        if (currentReport && currentReport.data) {
-            // remove the placeholder column (if it exists) when the drawer is closed
-            _.remove(currentReport.data.columns, (col) => {return col.isPlaceholder;});
-            return newState(currentReport);
         }
         return state;
     }
