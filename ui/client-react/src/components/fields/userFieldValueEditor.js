@@ -68,7 +68,7 @@ const UserFieldValueEditor = React.createClass({
 
     updateValidState(isValid, selectedUser) {
         if (this.props.isValid) {
-            this.props.isValid(isValid ? selectedUser : false)
+            this.props.isValid(isValid ? selectedUser : false);
         }
     },
 
