@@ -36,7 +36,7 @@
         //Icon chooser
         tableFieldIconChooser: {get: function() {return browser.element('.iconChooser.closed');}},
         //Icon chooser down arrow
-        iconChooserSelect: {get: function() {return this.tableFieldIconChooser.element('.showAllToggle .showAllSelectedIcon');}},
+        iconChooserSelect: {get: function() {return this.tableFieldIconChooser.element('.showAllToggle .iconUISturdy-caret-down');}},
         //Icon chooser search
         iconChooserSearch: {get: function() {return browser.element('.iconChooser.open .iconSearch input');}},
 
@@ -111,14 +111,21 @@
         }},
 
         /**
+         * Method to select Icon Chooser
+         */
+        selectIconChooser: {value: function() {
+            //Wait untill you see closed Icon chooser
+            this.tableFieldIconChooser.waitForVisible();
+            //Click on Icon chooser select dropdown to open
+            return this.iconChooserSelect.click();
+        }},
+
+        /**
          * Method to search for an Icon from the Icon Chooser
          *@param searchIcon item name
          */
         searchIconFromChooser: {value: function(searchIconName) {
-            //Wait untill you see closed Icon chooser
-            this.tableFieldIconChooser.waitForVisible();
-            //Click on Icon chooser select dropdown to open
-            this.iconChooserSelect.click();
+            this.selectIconChooser();
             //Wait until you see open icon chooser
             this.iconChooserSearch.waitForVisible();
             //Click in search
@@ -313,7 +320,8 @@
          * @fieldValue
          */
         setInputValue : {value: function(filteredElement, filteredElementInputClassName, fieldValue) {
-            return filteredElement.setValue(filteredElementInputClassName, [fieldValue, '\uE004']);
+            //return filteredElement.setValue(filteredElementInputClassName, [fieldValue, '\uE004']);
+            return filteredElement.element(filteredElementInputClassName).setValue([fieldValue]);
         }},
 
         /**
