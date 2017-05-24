@@ -449,6 +449,100 @@
                 return allReports[0].click();
             }
         }},
+
+        // /***********************
+        //  * Small Breakpoint elements and helper methods
+        // **********************/
+        //
+        //add new record button element
+        addRecordBtnSB: {
+            get: function() {
+                return browser.element('.reportToolsAndContentContainer .addNewRecord');
+            }
+        },
+        // sort and group button element on report page
+        reportSortGrpBtnSB: {
+            get: function() {
+                return browser.element('.sortButton');
+            }
+        },
+        //returns cell values for all the rows
+        getAllRowsCellValuesSB: {
+            get: function() {
+                browser.element('.fieldRow').waitForVisible();
+                return browser.elements('.fieldValue');
+            }
+        },
+        //Element for dropdownToggle ActionButton
+        dropdownToggleActionButtonSB: {
+            get: function() {
+                return browser.element('.qbIcon.iconUISturdy-fries');
+            }
+        },
+        //Element for card-expander
+        cardExpanderButtonSB: {
+            get: function() {
+                return browser.element('.qbPanelHeaderIcon.rotateUp.qbIcon.iconUISturdy-caret-up');
+            }
+        },
+        /**
+         * Helper method to ensure the report has been properly loaded with records. Will throw an error if no records are in the report.
+         * @returns A promise that will resolve after waiting for the report records to be displayed
+         */
+        waitForReportContentSB: {
+            value: function() {
+                // wait until you see .records count
+                return browser.element('.recordsCount').waitForVisible();
+            }
+        },
+
+        /**
+         * Helper method that will load a report for you in your browser by directly hitting a generated URL
+         * @param realmName
+         * @param appId
+         * @param tableId
+         * @param reportId
+         * @returns A promise that will resolve after loading the generated URL
+         */
+        loadReportByIdInBrowserSB: {
+            value: function(realmName, appId, tableId, reportId) {
+            //navigate to the url
+                browser.url(e2eBase.getRequestReportsPageEndpoint(realmName, appId, tableId, reportId));
+            //wait for the report content to be visible
+                return this.waitForReportContentSB();
+            }
+        },
+        /**
+         * Function that will click on the Add record button on report page
+         */
+        clickAddRecordBtnSB: {
+            value: function() {
+                browser.element('.reportToolsAndContentContainer .addNewRecord').waitForVisible();
+                browser.element('.reportToolsAndContentContainer .addNewRecord').click();
+                return  browser.element('.editForm').waitForVisible();
+            }
+        },
+        /**
+         * Function that will click on the DropdownToggleActionButton
+         */
+        clickDropdownToggleActionButtonSB: {
+            value: function() {
+                expect(this.dropdownToggleActionButtonSB.isVisible()).toBeTruthy();
+                expect(this.dropdownToggleActionButtonSB.isEnabled()).toBeTruthy();
+                return browser.element('.qbIcon.iconUISturdy-fries').click();
+            }
+        },
+        /**
+         * Function that will click on the card expander button
+         */
+        clickCardExpanderButtonSB: {
+            value: function() {
+                expect(this.cardExpanderButtonSB.isVisible()).toBeTruthy();
+                expect(this.cardExpanderButtonSB.isEnabled()).toBeTruthy();
+                return browser.element('.qbPanelHeaderIcon.rotateUp.qbIcon.iconUISturdy-caret-up').click();
+            }
+        },
+
     });
 
     module.exports = ReportContentPage;
