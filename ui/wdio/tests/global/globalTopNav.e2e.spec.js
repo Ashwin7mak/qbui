@@ -3,12 +3,11 @@
  */
 (function() {
     'use strict';
-
+    var e2ePageBase = requirePO('e2ePageBase');
     let newStackAuthPO = requirePO('newStackAuth');
     let TopNavPO = requirePO('topNav');
     let reportContentPO = requirePO('reportContent');
     var RequestAppsPage = requirePO('requestApps');
-    var UsersTablePage = requirePO('usersTable');
     var tableCreatePO = requirePO('tableCreate');
 
     describe('Global - TopNav Tests: ', function() {
@@ -36,12 +35,20 @@
                 return Promise.reject('Error in beforeAll function:' + JSON.stringify(error));
             });
         });
+
+        /**
+         * Before each it block reload the list all report (can be used as a way to reset state between tests)
+         */
+        beforeEach(function() {
+            // Load the requestAppPage (shows a list of all the tables associated with an app in a realm)
+            RequestAppsPage.get(e2eBase.getRequestAppPageEndpoint(realmName, testApp.id));
+            return browser.element('.tablesList .leftNavLink .leftNavLabel').waitForVisible();
+        });
+
         /**
          * Test Method - checking for usability of topNav on Table homepage
          */
         it('Visibility and usability of topNav on Table homepage', function() {
-            //select the App
-            RequestAppsPage.selectApp(testApp.name);
             //select table
             tableCreatePO.selectTable(testApp.tables[e2eConsts.TABLE1].name);
             reportContentPO.waitForLeftNavLoaded();
@@ -70,8 +77,8 @@
          */
         it('Visibility of topNav on Report homepage', function() {
             //select report
-            reportContentPO.selectReport(testApp.tables[e2eConsts.TABLE1].name, 0);
-            reportContentPO.waitForLeftNavLoaded();
+            e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
+
             TopNavPO.topNavToggleHamburgerEl.waitForVisible();
             //Step1: Verify if the global icons are displayed
             TopNavPO.topNavGlobalActDivEl.waitForVisible();

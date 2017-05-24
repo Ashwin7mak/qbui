@@ -320,7 +320,6 @@
          * @fieldValue
          */
         setInputValue : {value: function(filteredElement, filteredElementInputClassName, fieldValue) {
-            //return filteredElement.setValue(filteredElementInputClassName, [fieldValue, '\uE004']);
             return filteredElement.element(filteredElementInputClassName).setValue([fieldValue]);
         }},
 
