@@ -46,7 +46,7 @@
             });
 
             // Step 2 - Verify if the leftNav is closed
-            expect(browser.isVisible('.closed.expanded')).toBeTruthy();
+            expect(browser.isVisible('.leftNav.closed.expanded')).toBeTruthy();
 
             // Step 3 - Verify if the topNav hamburger menu is visible
             topNavPO.topNavToggleHamburgerEl.waitForVisible();
@@ -54,8 +54,8 @@
             // Step 4 - Verify if the hamburger menu is clickable
             topNavPO.topNavToggleHamburgerEl.click();
 
-            // Step 5 - Verify if the leftNav is collapsed
-            expect(browser.isVisible('.open.expanded')).toBeTruthy();
+            // Step 5 - Verify if the leftNav is opened
+            expect(browser.isVisible('.leftNav.open.expanded')).toBeTruthy();
 
             // Step 6 - Verify if apps list is open
             expect((leftNavPO.leftNavAppsList.getAttribute('textContent').length) > 0).toBeTruthy();
@@ -104,16 +104,16 @@
                 return RequestAppsPage.get(e2eBase.getRequestTableEndpoint(realmName, testApp.id, testApp.tables[0].id));
             });
 
-            browser.waitForVisible('.closed.expanded');
+            browser.waitForVisible('.leftNav.closed.expanded');
 
             // Step 2 - Verify if the leftNav is closed
-            expect(browser.isVisible('.closed.expanded')).toBeTruthy();
+            expect(browser.isVisible('.leftNav.closed.expanded')).toBeTruthy();
 
             // Step 2 - Verify if the topNav hamburger menu is clickable
             browser.click('.smallHeader .left .iconUISturdy-hamburger');
 
             // Step 3 - Verify if the leftNav is opened
-            expect(browser.isVisible('.open.expanded')).toBeTruthy();
+            expect(browser.isVisible('.leftNav.open.expanded')).toBeTruthy();
 
             // Step 4 - Verify if the tables list is open
             expect((leftNavPO.leftNavTableName.getAttribute('textContent').length) > 0).toBeTruthy();
@@ -147,16 +147,16 @@
                 return RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, testApp.id, testApp.tables[0].id, 1));
             });
 
-            browser.waitForVisible('.closed.expanded');
+            browser.waitForVisible('.leftNav.closed.expanded');
 
             // Step 2 - Verify if the leftNav is closed
-            expect(browser.isVisible('.closed.expanded')).toBeTruthy();
+            expect(browser.isVisible('.leftNav.closed.expanded')).toBeTruthy();
 
             // Step 3 - Verify if the topNav hamburger menu is clickable
             browser.click('.smallHeader .left .iconUISturdy-hamburger');
 
             // Step 3 - Verify if the leftNav is opened
-            expect(browser.isVisible('.open.expanded')).toBeTruthy();
+            expect(browser.isVisible('.leftNav.open.expanded')).toBeTruthy();
 
             // Step 4 - Verify if the left nav caret up element is visible
             leftNavPO.leftNavCaretUpEl.waitForVisible();
