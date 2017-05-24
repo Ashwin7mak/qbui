@@ -3,14 +3,14 @@
 .addUserPanel {
 
     .title {
-        color: $color-black-700;
-        font-size: 25px;
-        padding-top: 25px;
+        color: $add-user-dialog-modal;
+        font-size: $font-size-h3;
+        padding-top: $spacing-small;
         padding-bottom: $spacing-x-small;
     }
     .description {
-        color: $color-black-500;
-        font-size: 14px;
+        color: $ghost-text-color;
+        font-size: $font-size-p;
     }
     .hidden {
         display: none;
@@ -31,7 +31,7 @@
 
 .multiStepModal.addUserDialog {
     .bodyContainer {
-        margin-right: 35px;
+        margin-right: $spacing-medium1;
     }
 }
 
@@ -56,41 +56,41 @@
         .finishedButton, .cancelButton {
             padding: 8px 34px;
             z-index: 1000000;
-            border: 1px solid $color-purple-600;
+            border: 1px solid $add-user-dialog-focus-border-color;
 
             &:focus {
                 outline: none;
-                border: 1px solid $color-purple-600;
+                border: 1px solid $add-user-dialog-focus-border-color;
                 box-shadow: 0 0 2px 1.5px rgba($inline-edit-shadow-color, 0.25);
 
             }
         }
         .cancelButton {
-            color: $color-cyan-500;
-            border: 1px solid $color-black-100;
+            color: $add-user-button;
+            border: 1px solid $add-user-dialog-border-button-color;
 
             &:focus {
-                background-color: $color-black-100;
+                background-color: $add-user-dialog-border-button-color;
             }
             &:hover {
-                background-color: $color-black-100;
-                color: $color-cyan-300;
+                background-color: $add-user-dialog-border-button-color;
+                color: $add-user-button-hover-color;
             }
         }
         .finishedButton:disabled, .finishedButton:disabled:hover {
-            background-color: $color-black-400 !important;
-            color: $color-black-100 !important;
+            background-color: $input-text-normal-border-color !important;
+            color: $add-user-dialog-border-button-color !important;
             border: none;
         }
 
         .finishedButton {
-            background-color: $color-cyan-400;
-            border: 1px solid $color-cyan-400;
-            color: $color-black-100;
+            background-color: $add-user-button-color;
+            border: 1px solid $add-user-button-color;
+            color: $add-user-dialog-border-button-color;
 
             &:hover {
-                color: $color-black-100;
-                background-color: $color-cyan-300;
+                color: $add-user-dialog-border-button-color;
+                background-color: $add-user-button-hover-color;
             }
             &:focus {
                 background-color: $color-cyan-600;

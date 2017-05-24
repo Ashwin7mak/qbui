@@ -51,6 +51,7 @@
         NUMERIC_FORMULA : 'NUMERIC_FORMULA',
 		//default app roles
         DEFAULT_ROLE    : 'Participant',
+        FIRST_THEN_LAST : 'FIRST_THEN_LAST',
 
         SYNTHETIC_TABLE_REPORT: {
             ID: '0',

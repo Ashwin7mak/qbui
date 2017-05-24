@@ -1,19 +1,11 @@
 import React from 'react';
 import {mount} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
-import AddUserPanel from '../../src/components/app/settings/categories/addUserPanel';
+import AddUserPanel from '../../../../../src/components/app/settings/categories/addUserPanel';
 import TestUtils from 'react-addons-test-utils';
 import {shallow} from 'enzyme';
 
 let component;
-
-let tableInfo = {
-    name: {value: 'Customers'},
-    tableNoun: {value: 'customer'},
-    description: {value: ''},
-    tableIcon: {value: 'projects'}
-};
-
 const realmUsers = [
     {
         "id": "RDUII_UF2",
@@ -97,41 +89,6 @@ const appRoles = [
         "id": 12,
         "name": "Administrator",
         "description": ""
-    }
-];
-const usersResolved = [
-    {
-        "firstName": "Steve",
-        "lastName": "Rogers",
-        "screenName": "Cap",
-        "email": "imissthe40s@shield.com",
-        "userId": "RDUII_UB",
-        "roleName": "Viewer",
-        "name": "Steve Rogers",
-        "isSelected": false,
-        "roleId": 10
-    },
-    {
-        "firstName": "Tony",
-        "lastName": "Stark",
-        "screenName": "ironman",
-        "email": "arcreactor@stark.com",
-        "userId": "RDUII_UC",
-        "roleName": "Participant",
-        "name": "Tony Stark",
-        "isSelected": false,
-        "roleId": 11
-    },
-    {
-        "firstName": "administrator",
-        "lastName": "none",
-        "screenName": "administrator",
-        "email": "administrator@quickbase.com",
-        "userId": "10000",
-        "roleName": "Administrator",
-        "name": "administrator none",
-        "isSelected": false,
-        "roleId": 12
     }
 ];
 const appUsersEmpty = [];

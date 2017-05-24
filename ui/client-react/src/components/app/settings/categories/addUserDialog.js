@@ -21,7 +21,8 @@ export class AddUserDialog extends React.Component {
     }
 
     /**
-     * cancel
+     * Handles multi-step modal dialog cancel event
+     * @returns void
      */
     onCancel() {
         this.state.isValid = false;
@@ -29,7 +30,8 @@ export class AddUserDialog extends React.Component {
     }
 
     /**
-     * On click of the Add Button
+     * Handles On click of the Add Button
+     * @returns void
      */
     onFinished() {
         const userInfo = {
@@ -57,8 +59,8 @@ export class AddUserDialog extends React.Component {
     }
 
     /**
-     * check for any validation errors
-     * @returns {boolean}
+     * sets Modal input valid state
+     * @returns void
      */
     isValid(validState) {
         this.setState({

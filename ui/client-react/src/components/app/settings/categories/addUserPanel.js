@@ -14,6 +14,10 @@ class addUserPanel extends React.Component {
         this.updateRole = this.updateRole.bind(this);
     }
 
+	/**
+     * get user roles in a react-select key-value pair structure
+     * @returns [] User Roles
+	 */
     getRoles() {
         let defaultRole = constants.DEFAULT_ROLE;
         const roles = this.props.appRoles.map((appRole)=>{
@@ -29,6 +33,11 @@ class addUserPanel extends React.Component {
         }
         return roles;
     }
+
+	/**
+     * update selected role in state
+	 * @param roleId
+	 */
     updateRole(roleId) {
         this.setState({
             selectedRole: roleId
@@ -36,11 +45,17 @@ class addUserPanel extends React.Component {
         // used to add user during API call
         this.props.setUserRoleToAdd(roleId);
     }
+
+	/**
+     * gets the selected user Id from fieldValueEditor component
+	 * @returns string
+	 */
     getSelectedUser() {
         return this.fieldValueEditor.state.selectedUserId;
     }
     render() {
-
+        // set userId key with user.id as a value based on
+        // the structure needed by UserFieldValueEditor component
         const appUsers = this.props.realmUsers.map((user)=>{
             let {firstName, lastName, email, screenName} = user;
             return {firstName, lastName, email, screenName, userId: user.id};
@@ -49,8 +64,8 @@ class addUserPanel extends React.Component {
         const fieldDef1 = {
             builtIn: false,
             datatypeAttributes: {
-                type: "USER",
-                userDisplayFormat: "FIRST_THEN_LAST"
+                type: constants.USER,
+                userDisplayFormat: constants.FIRST_THEN_LAST
             },
         };
 

@@ -1,11 +1,10 @@
 import React from 'react';
 import jasmineEnzyme from 'jasmine-enzyme';
-import AddUserDialog from '../../src/components/app/settings/categories/addUserDialog';
+import AddUserDialog from '../../../../../src/components/app/settings/categories/addUserDialog';
 import {shallow} from 'enzyme';
-import MultiStepDialog from '../../../reuse/client/src/components/multiStepDialog/multiStepDialog';
+import MultiStepDialog from '../../../../../../reuse/client/src/components/multiStepDialog/multiStepDialog';
 
 let component;
-let domComponent;
 
 const realmUsers = [
     {
@@ -92,41 +91,6 @@ const appRoles = [
         "description": ""
     }
 ];
-const usersResolved = [
-    {
-        "firstName": "Steve",
-        "lastName": "Rogers",
-        "screenName": "Cap",
-        "email": "imissthe40s@shield.com",
-        "userId": "RDUII_UB",
-        "roleName": "Viewer",
-        "name": "Steve Rogers",
-        "isSelected": false,
-        "roleId": 10
-    },
-    {
-        "firstName": "Tony",
-        "lastName": "Stark",
-        "screenName": "ironman",
-        "email": "arcreactor@stark.com",
-        "userId": "RDUII_UC",
-        "roleName": "Participant",
-        "name": "Tony Stark",
-        "isSelected": false,
-        "roleId": 11
-    },
-    {
-        "firstName": "administrator",
-        "lastName": "none",
-        "screenName": "administrator",
-        "email": "administrator@quickbase.com",
-        "userId": "10000",
-        "roleName": "Administrator",
-        "name": "administrator none",
-        "isSelected": false,
-        "roleId": 12
-    }
-];
 const appId = '0duiiaaaazd';
 const userRoleIdToAdd = 11;
 const selectedApp = {
@@ -135,7 +99,6 @@ const selectedApp = {
 const userPanel =  {
     getSelectedUser: ()=>{}
 };
-
 
 const mockParentFunctions = {
     onCancel() {},
@@ -220,7 +183,6 @@ describe('AddUserDialog', () => {
                                            addUserToAppDialogOpen={true}
                                            hideDialog={mockParentFunctions.toggleAddUserDialog}
         />);
-        let content = component.find('MultiStepDialog');
         expect(component.length).toEqual(1);
         component.instance().userPanel = userPanel;
         component.instance().onFinished();

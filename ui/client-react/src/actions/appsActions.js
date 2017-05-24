@@ -149,14 +149,17 @@ let appsActions = {
         });
     },
 
-    // this function should be utilized to dispatch actions for updates made to App users
-    // (such as remove user from app) to ensure integrity of backend and frontend data at eveny instance
-
-    getAppUsers(appId, roleId) {
+	/**
+     * this function should be utilized to dispatch actions for updates made to App users
+	 * (such as remove user from app) to ensure integrity of backend and frontend data at eveny instance
+	 * @param appId
+     * @returns []
+	 */
+    getAppUsers(appId) {
         return new Promise((resolve, reject) => {
             let appService = new AppService();
             appService.getAppUsers(appId).then(response2 => {
-                this.dispatch(actions.GET_APP_USERS_SUCCESS, {appUsers: response2.data, roleId});
+                this.dispatch(actions.GET_APP_USERS_SUCCESS, {appUsers: response2.data});
                 resolve();
             }, () => {
                 this.dispatch(actions.GET_APP_USERS_FAILED);
@@ -165,6 +168,13 @@ let appsActions = {
         });
     },
 
+	/**
+     * Assigns a user with a role to an app
+	 * @param appId
+	 * @param userId
+	 * @param roleId
+     * @returns []
+	 */
     assignUserToApp(appId, userId, roleId) {
         return new Promise((resolve, reject) => {
             let roleService = new RoleService();
