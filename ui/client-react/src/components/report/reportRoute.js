@@ -3,7 +3,6 @@ import Stage from '../stage/stage';
 import Icon, {AVAILABLE_ICON_FONTS} from '../../../../reuse/client/src/components/icon/icon.js';
 import ReportStage from './reportStage';
 import ReportHeader from './reportHeader';
-import ReportSaveOrCancelFooter from '../reportBuilder/reportSaveOrCancelFooter';
 import IconActions from '../actions/iconActions';
 import {Link, withRouter} from 'react-router-dom';
 import Logger from '../../utils/logger';
@@ -19,8 +18,6 @@ import Fluxxor from 'fluxxor';
 import _ from 'lodash';
 import './report.scss';
 import ReportToolsAndContent from '../report/reportToolsAndContent';
-import ReportFieldSelectMenu from './reportFieldSelectMenu';
-import ReportNameEditor from './reportNameEditor';
 import RecordInDrawer from '../drawer/recordInDrawer';
 import {connect} from 'react-redux';
 import {clearSearchInput} from '../../actions/searchActions';
@@ -190,13 +187,12 @@ export const ReportRoute = React.createClass({
                 </div>
 
                 <div className="stageHeadline">
-                    <ReportNameEditor name={reportName}/>
+                    <h3 className="reportName">{reportName}</h3>
                 </div>
             </div>);
     },
 
     render() {
-        let inBuilderMode = this.props.reportBuilder.isInBuilderMode;
         if (_.isUndefined(this.props.match.params) ||
             _.isUndefined(this.props.match.params.appId) ||
             _.isUndefined(this.props.match.params.tblId) ||
@@ -210,42 +206,31 @@ export const ReportRoute = React.createClass({
             classNames.push(Breakpoints.isSmallBreakpoint() ? 'smallBreakPoint' : '');
             return (
                 <div className={classNames.join(' ')}>
-                    <ReportFieldSelectMenu
-                        appId={this.props.match.params.appId}
-                        tblId={this.props.match.params.tblId}
+                    <Stage stageHeadline={this.getStageHeadline()}
+                           pageActions={this.getPageActions(5)}>
+                        <ReportStage reportData={this.props.reportData}/>
+                    </Stage>
+
+                    {this.getHeader()}
+
+                    <ReportToolsAndContent
+                        params={this.props.match.params}
                         reportData={reportData}
-                        pullRight>
-
-                        <Stage stageHeadline={this.getStageHeadline()}
-                               pageActions={this.getPageActions(5)}>
-                            <ReportStage reportData={this.props.reportData}/>
-                        </Stage>
-
-                        {this.getHeader()}
-
-                        <ReportToolsAndContent
-                            params={this.props.match.params}
-                            reportData={reportData}
-                            appUsers={this.props.appUsers}
-                            pendEdits={this.props.pendEdits}
-                            isRowPopUpMenuOpen={this.props.isRowPopUpMenuOpen}
-                            routeParams={this.props.match.params}
-                            selectedAppId={this.props.selectedAppId}
-                            selectedTable={this.props.selectedTable}
-                            searchStringForFiltering={reportData.searchStringForFiltering}
-                            pageActions={this.getPageActions(0)}
-                            nameForRecords={this.nameForRecords}
-                            selectedRows={reportData.selectedRows}
-                            scrollingReport={this.props.scrollingReport}
-                            loadDynamicReport={this.loadDynamicReport}
-                            noRowsUI={true}
-                            handleDrillIntoChild={this.handleDrillIntoChild}
-                        />
-
-                    </ReportFieldSelectMenu>
-
-                    {inBuilderMode &&
-                        <ReportSaveOrCancelFooter />}
+                        appUsers={this.props.appUsers}
+                        pendEdits={this.props.pendEdits}
+                        isRowPopUpMenuOpen={this.props.isRowPopUpMenuOpen}
+                        routeParams={this.props.match.params}
+                        selectedAppId={this.props.selectedAppId}
+                        selectedTable={this.props.selectedTable}
+                        searchStringForFiltering={reportData.searchStringForFiltering}
+                        pageActions={this.getPageActions(0)}
+                        nameForRecords={this.nameForRecords}
+                        selectedRows={reportData.selectedRows}
+                        scrollingReport={this.props.scrollingReport}
+                        loadDynamicReport={this.loadDynamicReport}
+                        noRowsUI={true}
+                        handleDrillIntoChild={this.handleDrillIntoChild}
+                    />
 
                     {this.props.isDrawerContext && this.getDrawerContainer()}
                 </div>
@@ -273,7 +258,6 @@ const mapDispatchToProps = (dispatch) => {
 
 const mapStateToProps = (state, ownProps) => {
     return {
-        reportBuilder: state.reportBuilder || {},
         reportData: ownProps.reportData || getEmbeddedReportByContext(state.embeddedReports, ownProps.uniqueId),
         embeddedReports: state.embeddedReports
     };

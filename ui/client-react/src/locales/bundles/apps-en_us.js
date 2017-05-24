@@ -590,7 +590,11 @@ export default {
                 existingFields: 'Add an existing field',
                 newFields:  'Create a new field',
             },
+            reportBuilder: {
+                modify: 'Modify report'
+            },
             formBuilder: {
+                modify: 'Modify form',
                 unimplemented: "Feature is not available right now",
                 removeField: "Remove field from form",
                 newFieldsMenuTitle: 'New',
@@ -643,8 +647,7 @@ export default {
                 addToForm: "Add to form",
                 tableChooserDescription: "When you create or update a {tableNoun}, you can look up and get info from a record in another table.",
                 tableChooserHeading: "Where is the record you want to get?"
-            },
-            modify: 'Modify form'
+            }
         },
         featureSwitchAdmin: {
             defaultFeatureName: "Feature",
