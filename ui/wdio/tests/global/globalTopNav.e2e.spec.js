@@ -11,7 +11,7 @@
     var UsersTablePage = requirePO('usersTable');
     var tableCreatePO = requirePO('tableCreate');
 
-    describe('Reports Page - TopNav Tests: ', function() {
+    describe('Global - TopNav Tests: ', function() {
         var realmName;
         var realmId;
         var testApp;
@@ -60,7 +60,7 @@
             expect(TopNavPO.settingsDropdownHeader.getText()).toEqual("Settings");
             //Step5: Verify that Users button displays the correct app name and has sign out button
             TopNavPO.usersButton.click();
-            expect(TopNavPO.userDropdownAppName.getText()).toEqual(testApp.name);
+            expect(TopNavPO.userDropdownAppName.getAttribute('textContent')).toEqual(testApp.name);
             expect(TopNavPO.signOutButton.isExisting()).toBeTruthy();
             //Step6: Verify the help button is clickable
             TopNavPO.helpButton.click();

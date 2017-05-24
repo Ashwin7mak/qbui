@@ -331,6 +331,9 @@ const report = (state = [], action) => {
             if (clickedColumnIndex !== -1) {
                 // since not all columns are visible, add the placeholder column to columns so it gets rendered on screen
                 let placeholder = {
+                    fieldDef: {
+                        userEditableValue: false
+                    },
                     isPlaceholder: true,
                     isHidden: false,
                     id: -1

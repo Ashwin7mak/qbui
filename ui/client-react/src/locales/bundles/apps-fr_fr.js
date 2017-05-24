@@ -93,6 +93,7 @@ export default {
             deleteTheseOverrides: "Supprimer ces annule?",
             more: "Plus...",
             placeholder: "Sélectionner...",
+            tablesPlaceholder: "Sélectionnez une table...",
             notFound: "Pas trouvé"
         },
         footer: {
@@ -231,7 +232,8 @@ export default {
             }
         },
         relationship: {
-            childTable: "Table Enfant"
+            childTable: "Table Enfant",
+            addChildRecord: "Ajouter {tableNoun}"
         },
         durationWithUnits: {
             Weeks:"{value, plural, \n =0 {0 semaines}\n =1 {1 semaine}\n other {{value}  semaines}\n} ",
@@ -557,6 +559,8 @@ export default {
             [FieldFormats.RATING_FORMAT]: "Évaluation",
             [FieldFormats.RATING_FORMAT_MULTICHOICE]: "Évaluation",
             [FieldFormats.URL_FORMULA_FORMAT]: "URL Formule",
+            [FieldFormats.LINK_TO_RECORD]: "Obtenir un autre disque",
+            LINK_TO_RECORD_FROM: "Obtenez un autre enregistrement de {parentTable}",
             FORMULA: "Formule",
             SCALAR: "Scalaire",
             CONCRETE: "Béton",
@@ -571,13 +575,18 @@ export default {
             required: "Doit être rempli",
             multiChoice: "Les choix",
             unique: "Doit avoir des valeurs uniques"
+            linkToRecord: "Lien vers un enregistrement dans la table"
         },
         builder: {
             tabs: {
                 existingFields: 'Ajouter un champ existant',
                 newFields:  'Créer un nouveau champ',
             },
+            reportBuilder: {
+                modify: 'Modifiez rapport'
+            },
             formBuilder: {
+                modify: 'Modifier formulaire',
                 unimplemented: "La fonctionnalité n'est pas disponible en ce moment",
                 removeField: "Supprimer le champ du formulaire",
                 newFieldsMenuTitle: 'Nouveau',
@@ -608,6 +617,7 @@ export default {
                     [`addNew${FieldFormats.NUMBER_FORMAT_MULTICHOICE}`]: "Créer une liste de choix numérique et l'ajouter au formulaire",
                     [`addNew${FieldFormats.NUMBER_FORMAT_RADIO_BUTTONS}`]: "Créez des boutons radio numériques et ajoutez-les au formulaire",
                     [`addNew${FieldFormats.TEXT_FORMAT_RADIO_BUTTONS}`]: "Créer les boutons radio des champs et les ajouter au formulaire",
+                    [`addNew${FieldFormats.LINK_TO_RECORD}`]: "Créer un lien vers un enregistrement dans un autre tableau",
                 }
             },
             fieldGroups: {
@@ -615,14 +625,20 @@ export default {
                 numeric: "Nombre",
                 date: "Date",
                 other: "Autre",
-                relationships: "Des relations"
+                relationships: "Des relations",
+                tableDataConnections: "Connexions de données de table"
             },
             defaultMultichoiceOptions: {
                 first: "Option 1",
                 second: "Option 2",
                 third: "Option 3"
             },
-            modify: 'Modifier formulaire'
+            linkToRecord: {
+                dialogTitle: "Obtenir un autre disque",
+                addToForm: "Ajouter au formulaire",
+                tableChooserDescription: "Lorsque vous créez ou mettez à jour un {tableNoun}, vous pouvez rechercher et obtenir des informations à partir d'un enregistrement dans un autre tableau",
+                tableChooserHeading: "Où est l'enregistrement que vous voulez obtenir?"
+            }
         },
         featureSwitchAdmin: {
             defaultFeatureName: "Fonctionnalité",
@@ -703,8 +719,9 @@ export default {
         },
         settings: {
             header: "Paramètres",
+            appHeader: "App",
+            automationSettings: "Paramètres d'automatisation",
             tablesHeader: "Table",
-            appsHeader: "App",
             formsHeader: "Forme",
             tableSettings: "Propriétés et paramètres de la table",
             configureFormBuilder: 'Modifiez ce formulaire',
@@ -724,6 +741,12 @@ export default {
                 prompt: "Tapez OUI pour confirmer que vous souhaitez supprimer ce tableau."
             },
             YES: "OUI"
+        },
+        automationList: {
+            nameHeader: "Prénom",
+            activeHeader: "Actif",
+            activeYes: "Oui",
+            activeNo: "Non"
         }
     }
 };

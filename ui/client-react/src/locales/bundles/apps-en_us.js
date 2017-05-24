@@ -96,6 +96,7 @@ export default {
             deleteTheseOverrides: "Delete these overrides?",
             more: "More...",
             placeholder: "Select...",
+            tablesPlaceholder: "Select a table...",
             notFound: "Not Found"
         },
         footer: {
@@ -236,7 +237,8 @@ export default {
             }
         },
         relationship: {
-            childTable: "Child Table"
+            childTable: "Child Table",
+            addChildRecord: "Add {tableNoun}"
         },
         durationWithUnits: {
             // these keys can't change they correspond to the
@@ -566,6 +568,8 @@ export default {
             [FieldFormats.RATING_FORMAT]: "Rating",
             [FieldFormats.RATING_FORMAT_MULTICHOICE]: "Rating",
             [FieldFormats.URL_FORMULA_FORMAT]: "URL Formula",
+            [FieldFormats.LINK_TO_RECORD]: "Get another record",
+            LINK_TO_RECORD_FROM: "Get another record from {parentTable}",
             FORMULA: "Formula",
             SCALAR: "Scalar",
             CONCRETE: "Concrete",
@@ -580,13 +584,18 @@ export default {
             required: "Must be filled in",
             multiChoice: "Choices",
             unique: "Must have unique values"
+            linkToRecord: "Link to a record in the table"
         },
         builder: {
             tabs: {
                 existingFields: 'Add an existing field',
                 newFields:  'Create a new field',
             },
+            reportBuilder: {
+                modify: 'Modify report'
+            },
             formBuilder: {
+                modify: 'Modify form',
                 unimplemented: "Feature is not available right now",
                 removeField: "Remove field from form",
                 newFieldsMenuTitle: 'New',
@@ -618,6 +627,7 @@ export default {
                     [`addNew${FieldFormats.NUMBER_FORMAT_MULTICHOICE}`]: "Create a numeric choice list and add it to the form",
                     [`addNew${FieldFormats.NUMBER_FORMAT_RADIO_BUTTONS}`]: "Create numeric radio buttons and add them to the form",
                     [`addNew${FieldFormats.TEXT_FORMAT_RADIO_BUTTONS}`]: "Create radio buttons field and add them to the form",
+                    [`addNew${FieldFormats.LINK_TO_RECORD}`]: "Create link to a record in another table",
                 }
             },
             fieldGroups: {
@@ -625,14 +635,20 @@ export default {
                 numeric: "Number",
                 date: "Date",
                 other: "Other",
-                relationships: "Relationships"
+                relationships: "Relationships",
+                tableDataConnections: "Table data connections"
             },
             defaultMultichoiceOptions: {
                 first: "Option 1",
                 second: "Option 2",
                 third: "Option 3"
             },
-            modify: 'Modify form'
+            linkToRecord: {
+                dialogTitle: "Get another record",
+                addToForm: "Add to form",
+                tableChooserDescription: "When you create or update a {tableNoun}, you can look up and get info from a record in another table.",
+                tableChooserHeading: "Where is the record you want to get?"
+            }
         },
         featureSwitchAdmin: {
             defaultFeatureName: "Feature",
@@ -713,8 +729,9 @@ export default {
         },
         settings: {
             header: "Settings",
+            appHeader: "App",
+            automationSettings: "Automations",
             tablesHeader: "Table",
-            appsHeader: "Table",
             formsHeader: "Form",
             tableSettings: 'Table properties & settings',
             configureFormBuilder: 'Modify this form',
@@ -735,6 +752,12 @@ export default {
                 prompt: "Type YES to confirm that you want to delete this table"
             },
             YES: "YES"
+        },
+        automationList: {
+            nameHeader: "Name",
+            activeHeader: "Active",
+            activeYes: "Yes",
+            activeNo: "No"
         }
     }
 };

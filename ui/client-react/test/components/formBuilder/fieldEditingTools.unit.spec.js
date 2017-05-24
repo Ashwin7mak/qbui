@@ -7,11 +7,13 @@ import {FieldEditingTools} from '../../../src/components/formBuilder/fieldEditin
 const mockParentProps = {
     removeFieldFromForm(_location) {},
     selectFieldOnForm(_formId, _location) {},
-    deselectField(_formId, _location) {}
+    deselectField(_formId, _location) {},
+    markFieldForDeletion(_formId, relationshipId) {}
 };
 
 const formBuilderChildrenTabIndex = ["0"];
 const formId = 'view';
+const relatedField = {id: 6, tableId: 'tableId'};
 const location = {tabIndex: 0, sectionIndex: 1, columnIndex: 2, rowIndex: 3, elementIndex: 4};
 const diffSelectedLocation = {tabIndex: 0, sectionIndex: 1, columnIndex: 2, rowIndex: 3, elementIndex: 3};
 let component;
@@ -28,6 +30,7 @@ describe('FieldEditingTools', () => {
             formBuilderChildrenTabIndex={formBuilderChildrenTabIndex}
             selectedFields={[]}
             location={location}
+            relatedField={relatedField}
             removeFieldFromForm={mockParentProps.removeFieldFromForm}
         />);
 
@@ -37,7 +40,7 @@ describe('FieldEditingTools', () => {
 
         deleteButton.simulate('click');
 
-        expect(mockParentProps.removeFieldFromForm).toHaveBeenCalledWith(formId, location);
+        expect(mockParentProps.removeFieldFromForm).toHaveBeenCalledWith(formId, relatedField, location);
     });
 
     it('has no delete button if the prop isFieldDeletable is set to false', () => {
