@@ -105,7 +105,8 @@ describe('AppHistory', () => {
         showErrorMsgDialog: () => {},
         getNavReport: () => {},
         setFieldsPropertiesPendingEditToFalse: () => {},
-        setFormBuilderPendingEditToFalse: () => {}
+        setFormBuilderPendingEditToFalse: () => {},
+        setReportBuilderPendingEditToFalse: () => {}
     };
 
     describe('Test new appHistory instances', () => {
@@ -123,6 +124,7 @@ describe('AppHistory', () => {
             expect(appHistory.getNavReport).toBeNull();
             expect(appHistory.setFieldsPropertiesPendingEditToFalse).toBeNull();
             expect(appHistory.setFormBuilderPendingEditToFalse).toBeNull();
+            expect(appHistory.setReportBuilderPendingEditToFalse).toBeNull();
         });
 
         it('Is a singleton class; ensure only one instance created', () => {
@@ -148,6 +150,7 @@ describe('AppHistory', () => {
             expect(appHistory.getNavReport).toBeDefined();
             expect(appHistory.setFieldsPropertiesPendingEditToFalse).toBeDefined();
             expect(appHistory.setFormBuilderPendingEditToFalse).toBeDefined();
+            expect(appHistory.setReportBuilderPendingEditToFalse).toBeDefined();
         });
 
         it('sets a listener for internal app route changes', () => {
@@ -254,6 +257,9 @@ describe('AppHistory', () => {
             },
             recordStore: {
                 isPendingEdit: false
+            },
+            reportBuilderStore: {
+                isPendingEdit: false
             }
         };
 
@@ -263,10 +269,12 @@ describe('AppHistory', () => {
             spyOn(AppHistory, 'showPendingEditsConfirmationModal');
             spyOn(AppHistory, '_discardChangesForRecord').and.callThrough();
             spyOn(AppHistory, '_discardChangesForFormBuilder').and.callThrough();
+            spyOn(AppHistory, '_discardChangesForReportBuilder').and.callThrough();
             spyOn(mockStore, 'dispatch').and.callThrough();
             spyOn(mockStoreReject, 'dispatch').and.callThrough();
             spyOn(AppHistory, '_saveChangesForRecord').and.callThrough();
             spyOn(AppHistory, '_saveChangesForFormBuilder').and.callThrough();
+            spyOn(AppHistory, '_saveChangesForReportBuilder').and.callThrough();
             spyOn(mockStoreFunc, 'updateForm');
             spyOn(mockStoreFunc, 'createRecord');
             spyOn(mockStoreFunc, 'updateRecord');
@@ -275,6 +283,7 @@ describe('AppHistory', () => {
             spyOn(mockStoreFunc, 'editRecordCancel');
             spyOn(mockStoreFunc, 'setFieldsPropertiesPendingEditToFalse');
             spyOn(mockStoreFunc, 'setFormBuilderPendingEditToFalse');
+            spyOn(mockStoreFunc, 'setReportBuilderPendingEditToFalse');
             spyOn(AppHistory, 'getStores').and.returnValue(mockState);
         });
         afterEach(() => {
@@ -282,6 +291,7 @@ describe('AppHistory', () => {
             AppHistory._continueToDestination.calls.reset();
             AppHistory._discardChangesForRecord.calls.reset();
             AppHistory._discardChangesForFormBuilder.calls.reset();
+            AppHistory._discardChangesForReportBuilder.calls.reset();
             AppHistory._haltRouteChange.calls.reset();
             AppHistory.showPendingEditsConfirmationModal.calls.reset();
             mockStore.dispatch.calls.reset();
@@ -335,6 +345,23 @@ describe('AppHistory', () => {
             AppHistory._saveChanges();
 
             expect(AppHistory._saveChangesForFormBuilder).toHaveBeenCalled();
+        });
+
+        it('will save report builder if there is a pending edit in the reportBuilder store', () => {
+            mockState.reportBuilderStore.isPendingEdit = true;
+
+            goToNewPage();
+            AppHistory._saveChanges();
+
+            expect(AppHistory._saveChangesForReportBuilder).toHaveBeenCalled();
+        });
+
+        xit('will save invoke save', (done) => {
+            AppHistory.setup(mockStore, mockStoreFunc);
+
+            AppHistory._saveChangesForReportBuilder();
+
+            done();
         });
 
         it('will save invoke updateForm if there is a formStore', (done) => {
@@ -425,7 +452,7 @@ describe('AppHistory', () => {
             expect(mockStoreReject.dispatch).toHaveBeenCalled();
         });
 
-        it('_discardChanges invoke  _discardChangesForRecord if recordStore isPendingEdit is true', () => {
+        it('_discardChanges will invoke _discardChangesForRecord if recordStore isPendingEdit is true', () => {
             mockState.recordStore.isPendingEdit = true;
 
             AppHistory.setup(mockStore, mockStoreFunc);
@@ -437,7 +464,7 @@ describe('AppHistory', () => {
             expect(mockStoreFunc.hideTrowser).toHaveBeenCalled();
         });
 
-        it('_discardChanges  will invoke _discardChangesForRecord if recordStore isPendingEdit is false', () => {
+        it('_discardChanges will not invoke _discardChangesForRecord if recordStore isPendingEdit is false', () => {
             mockState.recordStore.isPendingEdit = false;
 
             AppHistory.setup(mockStore, mockStoreFunc);
@@ -449,7 +476,7 @@ describe('AppHistory', () => {
             expect(mockStoreFunc.hideTrowser).not.toHaveBeenCalled();
         });
 
-        it('_discardChanges invoke  _discardChangesForFormBuilder if formsStore isPendingEdit is true', () => {
+        it('_discardChanges will invoke _discardChangesForFormBuilder if formsStore isPendingEdit is true', () => {
             mockState.formsStore.isPendingEdit = true;
             mockState.fieldsStore.isPendingEdit = false;
 
@@ -461,7 +488,7 @@ describe('AppHistory', () => {
             expect(mockStoreFunc.setFieldsPropertiesPendingEditToFalse).not.toHaveBeenCalled();
         });
 
-        it('_discardChanges  will invoke _discardChangesForFormBuilder if fieldsStore isPendingEdit is true', () => {
+        it('_discardChanges will invoke _discardChangesForFormBuilder if fieldsStore isPendingEdit is true', () => {
             mockState.formsStore.isPendingEdit = false;
             mockState.fieldsStore.isPendingEdit = true;
 
@@ -473,7 +500,7 @@ describe('AppHistory', () => {
             expect(mockStoreFunc.setFormBuilderPendingEditToFalse).not.toHaveBeenCalled();
         });
 
-        it('_discardChanges  will not invoke if _discardChangesForFormBuilder isPendingEdit is false for formsStore and fieldsStore', () => {
+        it('_discardChanges will not invoke if _discardChangesForFormBuilder isPendingEdit is false for formsStore and fieldsStore', () => {
             mockState.formsStore.isPendingEdit = false;
             mockState.fieldsStore.isPendingEdit = false;
 
@@ -483,6 +510,25 @@ describe('AppHistory', () => {
             expect(AppHistory._discardChangesForFormBuilder).not.toHaveBeenCalled();
             expect(mockStoreFunc.setFieldsPropertiesPendingEditToFalse).not.toHaveBeenCalled();
             expect(mockStoreFunc.setFormBuilderPendingEditToFalse).not.toHaveBeenCalled();
+        });
+
+        it('_discardChanges will invoke _discardChangesForReportBuilder if reportBuilderStore isPendingEdit is true', () => {
+            mockState.reportBuilderStore.isPendingEdit = true;
+
+            AppHistory.setup(mockStore, mockStoreFunc);
+            AppHistory._discardChanges();
+
+            expect(AppHistory._discardChangesForReportBuilder).toHaveBeenCalled();
+            expect(mockStoreFunc.setReportBuilderPendingEditToFalse).toHaveBeenCalled();
+        });
+
+        it('_discardChanges will not invoke _discardChangesForReportBuilder if reportBuilderStore isPendingEdit is false', () => {
+            mockState.reportBuilderStore.isPendingEdit = false;
+            AppHistory.setup(mockStore, mockStoreFunc);
+            AppHistory._discardChanges();
+
+            expect(AppHistory._discardChangesForReportBuilder).not.toHaveBeenCalled();
+            expect(mockStoreFunc.setReportBuilderPendingEditToFalse).not.toHaveBeenCalled();
         });
     });
 });
