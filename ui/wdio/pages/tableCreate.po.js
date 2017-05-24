@@ -555,7 +555,7 @@
             //wait for deletePromtTextField tobe visible
             this.deletePromtTextField.waitForVisible();
             //set the deletePromtTextField value to 'YES'
-            return this.setInputValue(this.deletePromtTextField, 'input', fieldValue);
+            return this.deletePromtTextField.element('.deletePrompt').setValue([fieldValue]);
         }},
 
         /**
