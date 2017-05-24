@@ -181,7 +181,7 @@ class formBuilderPage {
         this.openMenu();
         topNavPO.modifyThisForm.click();
         this.firstField.waitForExist();
-        return this.getFieldLabels();
+        return this;
     }
 
     openMenu() {

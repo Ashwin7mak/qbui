@@ -60,14 +60,14 @@
                 // MC-3053: regression: keyboard shortcut for delete field (shift-backspace) has no effect
                 let removedField = formBuilderPO.KB_removeFieldViaBackspace(1);
                 // cancel & reopen
-                formBuilderPO.cancel().open();
-                expect(formBuilderPO.getFieldLabels()).toContain(removedField);
+                let newFields = formBuilderPO.cancel().open().getFieldLabels();
+                expect(newFields).toContain(removedField);
             });
             xit('remove the selected field with BACKSPACE & verify absence after SAVE', function() {
                 // MC-3053: regression: keyboard shortcut for delete field (shift-backspace) has no effect
                 let removedField = formBuilderPO.KB_removeFieldViaBackspace(1);
                 // save & reopen
-                let newFields = formBuilderPO.save().open();
+                let newFields = formBuilderPO.save().open().getFieldLabels();
                 expect(newFields).not.toContain(removedField);
             });
 
@@ -75,26 +75,26 @@
                 let originalOrder = formBuilderPO.getFieldLabels();
                 formBuilderPO.KB_moveField(1, 2);
                 formBuilderPO.KB_cancel();
-                let newFields = formBuilderPO.open();
+                let newFields = formBuilderPO.open().getFieldLabels();
                 expect(newFields).toEqual(originalOrder);
             });
             it('move a field via keyboard & verify revised order after SAVE', function() {
                 let revisedOrder = formBuilderPO.KB_moveField(1, 2);
                 formBuilderPO.KB_save();
-                let newFields = formBuilderPO.open();
+                let newFields = formBuilderPO.open().getFieldLabels();
                 expect(newFields).toEqual(revisedOrder);
             });
 
             it('remove a field via keyboard & verify presence after CANCEL', function() {
                 let deletedField = formBuilderPO.KB_removeFieldViaIcon(1);
                 // cancel & reopen
-                let newFields = formBuilderPO.cancel().open();
+                let newFields = formBuilderPO.cancel().open().getFieldLabels();
                 expect(newFields).toContain(deletedField);
             });
             it('remove a field via keyboard & verify absence after SAVE', function() {
                 let deletedField = formBuilderPO.KB_removeFieldViaIcon(1);
                 // save & reopen
-                let newFields = formBuilderPO.save().open();
+                let newFields = formBuilderPO.save().open().getFieldLabels();
                 expect(newFields).not.toContain(deletedField);
             });
         }

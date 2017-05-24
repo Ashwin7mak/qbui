@@ -65,7 +65,7 @@
                 let existingFields = formBuilderPO.getFieldLabels();
                 expect(existingFields[0]).toEqual(testString);
                 // cancel & reopen
-                let newFields = formBuilderPO.cancel().open();
+                let newFields = formBuilderPO.cancel().open().getFieldLabels();
                 // verify field name is not revised
                 expect(newFields).toEqual(originalFields);
             });
@@ -78,7 +78,7 @@
                 let existingFields = formBuilderPO.getFieldLabels();
                 expect(existingFields[0]).toEqual(testString);
                 // save & reopen
-                let newFields = formBuilderPO.save().open();
+                let newFields = formBuilderPO.save().open().getFieldLabels();
                 // verify field name is revised
                 expect(newFields).toEqual(existingFields);
             });
@@ -91,7 +91,7 @@
                 // verify that the first item is removed
                 expect(formBuilderPO.getFieldLabels().indexOf(firstField)).toEqual(-1);
                 // cancel & reopen
-                let newFields = formBuilderPO.cancel().open();
+                let newFields = formBuilderPO.cancel().open().getFieldLabels();
                 // verify that the first item has been restored
                 expect(newFields.indexOf(firstField)).toEqual(0);
             });
@@ -103,7 +103,7 @@
                 // verify that the first item is removed
                 expect(formBuilderPO.getFieldLabels()).not.toContain(firstField);
                 // save & reopen
-                let newFields = formBuilderPO.save().open();
+                let newFields = formBuilderPO.save().open().getFieldLabels();
                 // verify that the first item is still gone
                 expect(newFields).not.toContain(firstField);
             });
@@ -121,7 +121,7 @@
                 existingFields.push(newField.getText());
                 expect(formBuilderPO.getFieldLabels()).toEqual(existingFields);
                 // cancel & reopen
-                let newFields = formBuilderPO.cancel().open();
+                let newFields = formBuilderPO.cancel().open().getFieldLabels();
                 // verify new field is not present
                 expect(newFields).toEqual(originalFields);
             });
@@ -137,9 +137,9 @@
                 existingFields.push(newField.getText());
                 expect(formBuilderPO.getFieldLabels()).toEqual(existingFields);
                 // save & reopen
-                let newFeilds = formBuilderPO.save().open();
+                let newFields = formBuilderPO.save().open().getFieldLabels();
                 // verify new field is present
-                expect(newFeilds).toEqual(existingFields);
+                expect(newFields).toEqual(existingFields);
             });
 
             it('move a field via drag/drop & verify original order after CANCEL', function() {
@@ -153,7 +153,7 @@
                 expect(movedFields[0]).toBe(origFields[1]);
                 expect(movedFields[1]).toBe(origFields[0]);
                 // cancel & reopen
-                let newFields = formBuilderPO.cancel().open();
+                let newFields = formBuilderPO.cancel().open().getFieldLabels();
                 // verify lack of persistence
                 expect(newFields).toEqual(origFields);
             });
@@ -168,7 +168,7 @@
                 expect(movedFields[0]).toBe(origFields[1]);
                 expect(movedFields[1]).toBe(origFields[0]);
                 // save & reopen
-                let newFields = formBuilderPO.save().open();
+                let newFields = formBuilderPO.save().open().getFieldLabels();
                 // verify persistence
                 expect(newFields).toEqual(movedFields);
             });
