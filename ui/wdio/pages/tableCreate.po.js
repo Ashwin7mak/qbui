@@ -201,7 +201,7 @@
             this.newTableBtn.element('.iconUISturdy-add-new-stroke').waitForVisible();
             //Click on the new Table Btn
             this.newTableIconBtn.click();
-            return browser.element('.tableFieldInput').waitForVisible();
+            return browser.element('.tableField .tableFieldInput').waitForVisible();
         }},
 
         /**

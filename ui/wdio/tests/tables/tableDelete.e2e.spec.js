@@ -143,6 +143,16 @@
 
                 //Make sure delete table button is disabled
                 expect(browser.isEnabled('.modal-dialog .modal-footer .primaryButton')).toBeFalsy();
+
+                //Go to apps page
+                // Load the requestAppsPage (shows a list of all the apps in a realm)
+                RequestAppsPage.get(e2eBase.getRequestAppsPageEndpoint(realmName));
+
+                //Select an App
+                RequestAppsPage.selectApp(testApp.name);
+
+                //Make sure table is not deleted and you can still select it
+                tableCreatePO.selectTable(EXISTING_TABLE_NAME_1);
             });
         });
 
