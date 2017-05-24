@@ -34,7 +34,7 @@
         });
 
         it('should contains menu item that leads to automations settings', function() {
-            e2ePageBase.navigateTo(e2eBase.getAppPageEndpoint(realmName, app.id));
+            e2ePageBase.navigateTo(e2eBase.getRequestAppPageEndpoint(realmName, app.id));
 
             expect(appToolbar.appSettingsBtn).toBeTruthy();
 

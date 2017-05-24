@@ -52,7 +52,7 @@
         });
 
         it('should contain a list of automations for application', function() {
-            e2ePageBase.navigateTo(e2eBase.getAppPageEndpoint(realmName, app.id));
+            e2ePageBase.navigateTo(e2eBase.getRequestAppPageEndpoint(realmName, app.id));
             appToolbar.appSettingsBtn.click();
             appSettingsList.automationSettingsBtn.click();
 
