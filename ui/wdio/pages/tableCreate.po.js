@@ -132,12 +132,12 @@
          * @returns Array of table links
          */
         getAllTableLeftNavLinksList: {get: function() {
-            browser.element('.tablesList .leftNavLink .leftNavLabel').waitForVisible();
+            browser.waitForExist('.tablesList .leftNavLabel');
             //wait until leftNav Loaded.Selected table is not loaded until all table properties are available
             while (browser.element('.tablesList .leftNavLink .leftNavLabel').getAttribute('textContent').length === 0) {
                 browser.pause(e2eConsts.shortWaitTimeMs);
             }
-            return browser.elements('.leftNavLabel');
+            return browser.elements('.tablesList .leftNavLabel');
         }},
 
 
@@ -185,7 +185,7 @@
          * Method to click on create new table
          */
         clickCreateNewTable : {value: function() {
-            browser.element('.tablesList .leftNavLink .leftNavLabel').waitForVisible();
+            browser.waitForExist('.tablesList .leftNavLabel');
             //Wait until new table button visible
             this.newTableBtn.waitForVisible();
             //Verify the name of the button

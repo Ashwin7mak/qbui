@@ -1,6 +1,8 @@
 // An element used when there are tables with a parent/child relationship. Eventually this element
 // or something similar should be generated in the node layer and returned in a form JSON object.
 // Similar to FormTextElement or FormFieldElement, see forms.js in the same mocks folder
+import Consts from '../../../common/src/constants';
+
 export const childReportElement = (orderIndex = 0, relationshipId = 0) => ({
     ChildReportElement: {
         displayOptions: [
@@ -8,7 +10,7 @@ export const childReportElement = (orderIndex = 0, relationshipId = 0) => ({
             "ADD",
             "EDIT"
         ],
-        type: "CHILD_REPORT",
+        type: Consts.REPORT_FORM_TYPE.CHILD_REPORT,
         orderIndex: orderIndex,
         positionSameRow: false,
         relationshipId: relationshipId

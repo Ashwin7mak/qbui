@@ -36,6 +36,7 @@ export default {
     FORMS_TYPE          : 'formsType',
     LOG                 : 'log',
     USERS               : 'users',
+    RELATIONSHIPS       : 'relationships',
     RIGHTS              : 'accessRights',
 
     FEATURE_SWITCHES    : 'featureSwitches',
