@@ -5,7 +5,6 @@ const reportBuilder = (
     state = {
         redirectRoute: null,
         isInBuilderMode: false,
-        addBeforeColumn: null,
         availableColumns: []
     }, action) => {
 
@@ -25,20 +24,6 @@ const reportBuilder = (
         return {
             ...state,
             availableColumns: columns
-        };
-    }
-    case types.OPEN_FIELD_SELECT_MENU: {
-        return {
-            ...state,
-            isCollapsed: false,
-            addBeforeColumn: action.content.addBeforeColumn
-        };
-    }
-    case types.CLOSE_FIELD_SELECT_MENU: {
-        return {
-            ...state,
-            isCollapsed: true,
-            addBeforeColumn: action.content.addBeforeColumn
         };
     }
     case types.ENTER_BUILDER_MODE: {
