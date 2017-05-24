@@ -538,10 +538,10 @@
          * Method to click deleteTableButton
          */
         clickDeleteTableButton: {value: function() {
-            //use the predefined deleteTableButton here
-            expect(browser.isEnabled('.modal-dialog .primaryButton')).toBeTruthy();
             //wait for deletetable button to be visible
             browser.element('.modal-dialog .modal-footer .primaryButton').waitForVisible();
+            //use the predefined deleteTableButton here
+            expect(browser.isEnabled('.modal-dialog .modal-footer .primaryButton')).toBeTruthy();
             //Click on delete table button
             return browser.element('.modal-dialog .modal-footer .primaryButton').click();
         }},
