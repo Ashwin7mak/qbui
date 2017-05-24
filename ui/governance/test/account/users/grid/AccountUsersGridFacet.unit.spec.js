@@ -1,9 +1,9 @@
 import React from "react";
 import jasmineEnzyme from "jasmine-enzyme";
 import {GetFacetFields} from "../../../../src/account/users/grid/AccountUsersGridFacet";
-import _ from 'lodash';
+import _ from "lodash";
 import Locale from "../../../../../reuse/client/src/locales/locale";
-import GovernanceBundleLoader from '../../../../src/locales/governanceBundleLoader';
+import GovernanceBundleLoader from "../../../../src/locales/governanceBundleLoader";
 
 export const FACET_FIELDID = {
     QUICKBASE_USER_STATUS : 0,

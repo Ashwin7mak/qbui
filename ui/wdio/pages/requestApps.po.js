@@ -38,7 +38,7 @@
                 //Click on filtered table name
                 results[0].click();
                 //wait until you see tableLists got loaded
-                return browser.waitForExist('.tablesList .leftNavLabel');
+                return browser.waitForText('.tablesList .leftNavLabel', e2eConsts.mediumWaitTimeMs);
             }
         }},
 

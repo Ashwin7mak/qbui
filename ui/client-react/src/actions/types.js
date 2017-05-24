@@ -5,11 +5,18 @@
 //  **** App actions ****
 //      ...
 
+//  ******** App Role actions ********
+export const LOAD_APP_ROLES = 'LOAD_APP_ROLES';
+export const LOAD_APP_ROLES_SUCCESS = 'LOAD_APP_ROLES_SUCCESS';
+export const LOAD_APP_ROLES_FAILED = 'LOAD_APP_ROLES_FAILED';
+
 //  ******** Form actions ********
 export const LOADING_FORM = 'LOADING_FORM';
 export const LOAD_FORM_ERROR = 'LOAD_FORM_ERROR';
 export const LOAD_FORM_SUCCESS = 'LOAD_FORM_SUCCESS';
 export const UPDATE_FORM_REDIRECT_ROUTE = 'UPDATE_FORM_REDIRECT_ROUTE';
+export const DRAGGING_LINK_TO_RECORD = 'DRAGGING_LINK_TO_RECORD';
+export const HIDE_RELATIONSHIP_DIALOG = 'HIDE_RELATIONSHIP_DIALOG';
 
 //  Used when saving a form or a record to show/hide the spinner
 export const SAVE_FORM = 'SAVE_FORM';
@@ -58,6 +65,7 @@ export const SAVE_RECORD = 'SAVE_RECORD';
 export const SAVE_RECORD_SUCCESS = 'SAVE_RECORD_SUCCESS';
 export const SAVE_RECORD_ERROR = 'SAVE_RECORD_ERROR';
 export const SAVE_RECORD_COMPLETE = 'SAVE_RECORD_COMPLETE';
+export const ADD_CHILD_RECORD = 'ADD_CHILD_RECORD';
 
 //  Record actions for inline edit
 export const EDIT_RECORD_START = 'EDIT_RECORD_START';
@@ -152,3 +160,8 @@ export const RESET_TABLE_PROPS = 'RESET_TABLE_PROPS';
 export const DELETING_TABLE_FAILED = 'DELETING_TABLE_FAILED';
 export const TABLE_DELETED = 'TABLE_DELETED';
 export const NOTIFY_TABLE_DELETED = 'NOTIFY_TABLE_DELETED';
+
+//  ******** automation actions ********
+export const LOAD_AUTOMATIONS = 'LOAD_AUTOMATIONS';
+export const LOAD_AUTOMATIONS_SUCCESS = 'LOAD_AUTOMATIONS_SUCCESS';
+export const LOAD_AUTOMATIONS_FAILED = 'LOAD_AUTOMATIONS_FAILED';

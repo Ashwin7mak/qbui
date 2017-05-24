@@ -17,7 +17,7 @@ console.time('dataGen');
 
 // if you set realmToUse null it will randomly generated a new realm name
 // change this to a string i.e. "myRealm" of an existing realm to use
-var realmToUse = 'localhost';
+var realmToUse = 'realm1';
 
 // Get the node config set by your NODE_ENV var
 var config = require('../../server/src/config/environment');
@@ -589,13 +589,13 @@ projRecs.init(projGen);
         }
     }
 
-    function setupRelationship(promises, app, parentTableName, childTableName, childFieldId, masterFieldId) {
+    function setupRelationship(promises, app, parentTableName, childTableName, childFieldId, masterFieldId, description) {
         let parentTable = getTable(app, parentTableName);
         let childTable = getTable(app, childTableName);
         if (parentTable && childTable) {
             promises.push(function() {
                 return e2eBase.relationshipService.createOneToOneRelationship(
-                    app, parentTable, childTable, childFieldId, masterFieldId);
+                    app, parentTable, childTable, childFieldId, masterFieldId, description);
             });
         }
     }
@@ -908,40 +908,40 @@ projRecs.init(projGen);
             setupRelationship(addRelationshipPromises, createdApp, table10Par1Name, table11Ch2Name, 8);
 
             // Create table relationship, Table 14(City) is a child of Table 13(State)
-            setupRelationship(addRelationshipPromises, createdApp, table13StateName, table14CityName, 7, 6);
+            setupRelationship(addRelationshipPromises, createdApp, table13StateName, table14CityName, 7, 6, "State parent to City");
 
             // Create table relationship, Table 13(State) is a child of Table 12(Country)
-            setupRelationship(addRelationshipPromises, createdApp, table12CntryName, table13StateName, 7, 6);
+            setupRelationship(addRelationshipPromises, createdApp, table12CntryName, table13StateName, 7, 6, "Country parent to State");
 
             // Create table relationship, Companies(parent) have many Projects(child)
             setupRelationship(addRelationshipPromises, createdApp, projGen.tableCompaniesName, projGen.tableProjectsName,
-                projGen.getProjectFid('companyName'), projGen.getCompanyFid('name'));
+        projGen.getProjectFid('companyName'), projGen.getCompanyFid('name'), "Company parent to Project");
 
             // Create table relationship, Company(Parent) has many People(child)
             setupRelationship(addRelationshipPromises, createdApp, projGen.tableCompaniesName, projGen.tablePeopleName,
-                projGen.getPeopleFid('companyName'), projGen.getCompanyFid('name'));
+        projGen.getPeopleFid('companyName'),  projGen.getCompanyFid('name'), "Company parent to Project");
 
 
             // Create table relationship, Projects(Parent) have many Tasks(child)
             setupRelationship(addRelationshipPromises, createdApp, projGen.tableProjectsName, projGen.tableTasksName,
-                projGen.getTaskFid('projectName'), projGen.getProjectFid('name'));
+        projGen.getTaskFid('projectName'),  projGen.getProjectFid('name'), "Project parent to Task");
 
             // Create table relationship, Tasks(Parent) have many Assignments(child)
             setupRelationship(addRelationshipPromises, createdApp, projGen.tableTasksName, projGen.tableAssignmentsName,
-                projGen.getAssigneeFid('taskId'), projGen.getTaskFid('taskId'));
+        projGen.getAssigneeFid('taskId'), projGen.getTaskFid('taskId'), "Task parent to Assignment");
 
             // Create table relationship, Assignments(Parent) have many Comments(child)
             setupRelationship(addRelationshipPromises, createdApp, projGen.tableAssignmentsName, projGen.tableCommentsName,
-                projGen.getCommentFid('topicId'), projGen.getAssigneeFid('assignmentId'));
+        projGen.getCommentFid('topicId'), projGen.getAssigneeFid('assignmentId'), "Assignment parent to Comment");
 
 
             // Create table relationship, People(Parent) have many Assignments(child)
             setupRelationship(addRelationshipPromises, createdApp, projGen.tablePeopleName, projGen.tableAssignmentsName,
-                projGen.getAssigneeFid('assigneeName'), projGen.getPeopleFid('fullName'));
+        projGen.getAssigneeFid('assigneeName'), projGen.getPeopleFid('fullName'), "Project Mgr parent to Assignment");
 
             // Create table relationship, People Managers(Parent) lead many People(child)
             setupRelationship(addRelationshipPromises, createdApp, projGen.tablePeopleName, projGen.tablePeopleName,
-                projGen.getPeopleFid('manager'), projGen.getPeopleFid('fullName'));
+        projGen.getPeopleFid('manager'), projGen.getPeopleFid('fullName'), "Employee (Managers) parent to Employee(subordinates)");
 
             // Bluebird's promise.each function (executes each promise sequentially)
             return promise.each(addRelationshipPromises, function(queueItem) {
