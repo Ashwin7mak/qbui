@@ -12,6 +12,7 @@ import AppHomePageRoute from "../components/app/appHomePageRoute";
 import ReportRoute from "../components/report/reportRoute";
 import RecordRoute from "../components/record/recordRoute";
 import FormBuilderContainer from '../components/builder/formBuilderContainer';
+import ReportBuilderContainer from '../components/builder/reportBuilderContainer';
 import TableHomePageRoute from "../components/table/tableHomePageRoute";
 import FeatureSwitchesRoute from "../components/featureSwitches/featureSwitchesRoute";
 import FeatureSwitchOverridesRoute from "../components/featureSwitches/featureSwitchOverridesRoute";
@@ -179,6 +180,10 @@ const routes = [
             {
                 path: `${BUILDER_ROUTE}/app/:appId/table/:tblId/form/:formId?`,
                 component: FormBuilderContainer
+            },
+            {
+                path: `${BUILDER_ROUTE}/app/:appId/table/:tblId/report/:rptId`,
+                component: ReportBuilderContainer
             }
         ]
     },

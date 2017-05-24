@@ -3,6 +3,7 @@ const BaseClientRoute = require('../baseClientRoute');
 const routes = [
     '/builder/app/:appId/table/:tblId/form',
     '/builder/app/:appId/table/:tblId/form/:formId',
+    '/builder/app/:appId/table/:tblId/report/:rptId'
 ];
 
 // Routes related to app building functionality (e.g., app, table, forms building)
