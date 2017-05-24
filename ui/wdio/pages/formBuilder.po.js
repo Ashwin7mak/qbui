@@ -110,6 +110,7 @@ class formBuilderPage {
         this.dirtyForm_Dismiss();
         browser.waitForExist('.leftNavLabel');
         browser.waitForText('.leftNavLabel');
+        browser.pause(e2eConsts.shortWaitTimeMs);
         return this;
     }
 
