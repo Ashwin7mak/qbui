@@ -6,19 +6,19 @@ let fiveSeconds = 5 * oneSecond;
 
 class reportBuilderPage {
 
-    // get cancelBtn() {
-    //     // CANCEL (form) button in footer bar
-    //     return browser.element('.mainTrowserFooterButton');
-    // }
-    //
-    // get saveBtn() {
-    //     // SAVE (form) button in footer bar
-    //     return browser.element('.mainTrowserFooterButton');
-    // }
-    // get saveOrCancelFooter() {
-    //     // footer bar (container for SAVE & CANCEL buttons)
-    //     return browser.element('.saveOrCancelFooter');
-    // }
+    get cancelBtn() {
+        // CANCEL (form) button in footer bar
+        return browser.element('.alternativeTrowserFooterButton');
+    }
+
+    get saveBtn() {
+        // SAVE (form) button in footer bar
+        return browser.element('.mainTrowserFooterButton');
+    }
+    get saveOrCancelFooter() {
+        // footer bar (container for SAVE & CANCEL buttons)
+        return browser.element('.saveOrCancelFooter');
+    }
     //
     cancel() {
         // Clicks on CANCEL in the form builder and waits for the next page to render
@@ -43,13 +43,13 @@ class reportBuilderPage {
         browser.pause(fiveSeconds);
         return this;
     }
-    // save() {
-    //     // Clicks on the SAVE button in the form builder and waits for the next page to appear
-    //     this.saveBtn.click();
-    //     // wait for spinner?
-    //     browser.pause(fiveSeconds);
-    //     return this;
-    // }
+    save() {
+        // Clicks on the SAVE button in the form builder and waits for the next page to appear
+        this.saveBtn.click();
+        // wait for spinner?
+        browser.pause(fiveSeconds);
+        return this;
+    }
 
 }
 module.exports = new reportBuilderPage();

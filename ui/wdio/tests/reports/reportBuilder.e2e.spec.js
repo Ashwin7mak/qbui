@@ -38,13 +38,17 @@
         beforeEach(function() {
             // open first table
             e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
+            browser.logger.info('opening report builder page');
             // invoke form builder
             return reportBuilderPO.open();
         });
 
-
         it('verify CANCEL', function() {
-            reportBuilderPO.cancel().open();
+            reportBuilderPO.cancel();
+        });
+
+        it('verify SAVE', function() {
+            reportBuilderPO.save();
         });
     });
 
