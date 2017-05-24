@@ -509,7 +509,7 @@
             //navigate to the url
                 browser.url(e2eBase.getRequestReportsPageEndpoint(realmName, appId, tableId, reportId));
             //wait for the report content to be visible
-                this.waitForReportContentSB();
+                return this.waitForReportContentSB();
             }
         },
         /**
@@ -519,7 +519,7 @@
             value: function() {
                 browser.element('.reportToolsAndContentContainer .addNewRecord').waitForVisible();
                 browser.element('.reportToolsAndContentContainer .addNewRecord').click();
-                browser.element('.editForm').waitForVisible();
+                return  browser.element('.editForm').waitForVisible();
             }
         },
         /**
@@ -527,9 +527,9 @@
          */
         clickDropdownToggleActionButtonSB: {
             value: function() {
-                expect(this.dropdownToggleActionButtonSB.isVisible()).toBe(true);
-                expect(this.dropdownToggleActionButtonSB.isEnabled()).toBe(true);
-                browser.element('.qbIcon.iconUISturdy-fries').click();
+                expect(this.dropdownToggleActionButtonSB.isVisible()).toBeTruthy();
+                expect(this.dropdownToggleActionButtonSB.isEnabled()).toBeTruthy();
+                return browser.element('.qbIcon.iconUISturdy-fries').click();
             }
         },
         /**
@@ -537,9 +537,9 @@
          */
         clickCardExpanderButtonSB: {
             value: function() {
-                expect(this.cardExpanderButtonSB.isVisible()).toBe(true);
-                expect(this.cardExpanderButtonSB.isEnabled()).toBe(true);
-                browser.element('.qbPanelHeaderIcon.rotateUp.qbIcon.iconUISturdy-caret-up').click();
+                expect(this.cardExpanderButtonSB.isVisible()).toBeTruthy();
+                expect(this.cardExpanderButtonSB.isEnabled()).toBeTruthy();
+                return browser.element('.qbPanelHeaderIcon.rotateUp.qbIcon.iconUISturdy-caret-up').click();
             }
         },
 

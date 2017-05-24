@@ -52,18 +52,18 @@
          */
         it('Should load the table report actions', function() {
 
-            // Step 1 - wait for the report content to be visible
+            // Wait for the report content to be visible
             reportContentPO.waitForReportContentSB();
 
-            // Step 2 - Assert sort by / group by button is visible and enabled
-            expect(reportContentPO.reportSortGrpBtnSB.isVisible()).toBe(true);
-            expect(reportContentPO.reportSortGrpBtnSB.isEnabled()).toBe(true);
+            // Assert sort by / group by button is visible and enabled
+            expect(reportContentPO.reportSortGrpBtnSB.isVisible()).toBeTruthy();
+            expect(reportContentPO.reportSortGrpBtnSB.isEnabled()).toBeTruthy();
 
-            // Step 3 - Assert records count total
+            // Assert records count total
             expect(reportTableActionsPO.getReportRecordsCount()).toBe(RECORD_COUNT + " records");
 
-            // Step 4 - Assert dropdownToggle actionButton is visible and clickable
-            expect(reportContentPO.dropdownToggleActionButtonSB.isVisible()).toBe(true);
+            // Assert dropdownToggle actionButton is visible and clickable
+            expect(reportContentPO.dropdownToggleActionButtonSB.isVisible()).toBeTruthy();
             // click on dropdownToggle actionButton
             reportContentPO.clickDropdownToggleActionButtonSB();
         });
@@ -71,15 +71,15 @@
         /**
          * verify record count and card expander button is visible/clickable
          */
-        it('Should load the reports page with the appropriate table report and verify functionality of card expander button', function() {
-            // Step 1 - wait for the report content to be visible
+        it('Should load the reports page with the appropriate table report and verify  card expander button is clickable', function() {
+            // wait for the report content to be visible
             reportContentPO.waitForReportContentSB();
 
-            // Step 2 - Assert records count
+            // Assert records count
             let recordCount = formsPO.getRecordsCountInATable();
             expect(recordCount).toBe(RECORD_COUNT);
 
-            // Step 3 - click on card expander
+            // verify card expander button is clickable
             reportContentPO.clickCardExpanderButtonSB();
         });
 
@@ -87,12 +87,12 @@
          * Verifies add new record button is visible and enabled
          */
         it('verify add record button is visible and enabled', function() {
-            // Step 1 - wait for the report content to be visible
+            // wait for the report content to be visible
             reportContentPO.waitForReportContentSB();
 
-            // Step 2 - Assert 'add new record' button is visible and clickable
-            expect(reportContentPO.addRecordBtnSB.isVisible()).toBe(true);
-            expect(reportContentPO.addRecordBtnSB.isEnabled()).toBe(true);
+            // Assert 'add new record' button is visible and clickable
+            expect(reportContentPO.addRecordBtnSB.isVisible()).toBeTruthy();
+            expect(reportContentPO.addRecordBtnSB.isEnabled()).toBeTruthy();
         });
 
     });
