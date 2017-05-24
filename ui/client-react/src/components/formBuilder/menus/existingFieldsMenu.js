@@ -28,7 +28,7 @@ export class ExistingFieldsMenu extends Component {
 
 const mapStateToProps = state => {
     let currentForm = getFormByContext(state, CONTEXT.FORM.VIEW);
-    let currentFormId = _.has(currentForm, 'id') ? currentForm.id : [<div></div>];
+    let currentFormId = _.has(currentForm, 'id') ? currentForm.id : [];
     return {
         existingFields: getExistingFields(state, currentFormId)
     };
