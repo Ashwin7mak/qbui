@@ -581,7 +581,11 @@ export default {
                 existingFields: 'Ajouter un champ existant',
                 newFields:  'Créer un nouveau champ',
             },
+            reportBuilder: {
+                modify: 'Modifiez rapport'
+            },
             formBuilder: {
+                modify: 'Modifier formulaire',
                 unimplemented: "La fonctionnalité n'est pas disponible en ce moment",
                 removeField: "Supprimer le champ du formulaire",
                 newFieldsMenuTitle: 'Nouveau',
@@ -633,8 +637,7 @@ export default {
                 addToForm: "Ajouter au formulaire",
                 tableChooserDescription: "Lorsque vous créez ou mettez à jour un {tableNoun}, vous pouvez rechercher et obtenir des informations à partir d'un enregistrement dans un autre tableau",
                 tableChooserHeading: "Où est l'enregistrement que vous voulez obtenir?"
-            },
-            modify: 'Modifier formulaire'
+            }
         },
         featureSwitchAdmin: {
             defaultFeatureName: "Fonctionnalité",

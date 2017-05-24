@@ -18,11 +18,11 @@ let BuilderDropDownAction = React.createClass({
         icon: React.PropTypes.string,
         startTabIndex: React.PropTypes.number.isRequired,
         recId: React.PropTypes.string,
-        navigateToBuilder: React.PropTypes.func.isRequired,
+        navigateToFormBuilder: React.PropTypes.func.isRequired,
+        navigateToReportBuilder: React.PropTypes.func.isRequired,
         position: React.PropTypes.string.isRequired,
         selectedApp: React.PropTypes.object,
         selectedTable: React.PropTypes.object,
-        navigateToBuilderReport: React.PropTypes.func,
         rptId: React.PropTypes.string
     },
 
@@ -89,7 +89,7 @@ let BuilderDropDownAction = React.createClass({
                                 <span><I18nMessage message="settings.reportsHeader"/></span>
                             </li>
                             <li>
-                                <a className="modifyForm" onClick={this.props.navigateToBuilderReport}>
+                                <a className="modifyForm" onClick={this.props.navigateToReportBuilder}>
                                     <I18nMessage message="settings.configureReportBuilder"/>
                                 </a>
                             </li>
@@ -103,7 +103,7 @@ let BuilderDropDownAction = React.createClass({
                                 <span><I18nMessage message="settings.formsHeader"/></span>
                             </li>
                             <li>
-                                <a onClick={this.props.navigateToBuilder} className="modifyForm">
+                                <a onClick={this.props.navigateToFormBuilder} className="modifyForm">
                                     <I18nMessage message="settings.configureFormBuilder"/>
                                 </a>
                             </li>
