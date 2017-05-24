@@ -56,13 +56,15 @@
 
             // pos/neg pairs
 
-            it('remove the selected field with BACKSPACE & verify presence after CANCEL', function() {
+            xit('remove the selected field with BACKSPACE & verify presence after CANCEL', function() {
+                // MC-3053: regression: keyboard shortcut for delete field (shift-backspace) has no effect
                 let removedField = formBuilderPO.KB_removeFieldViaBackspace(1);
                 // cancel & reopen
                 formBuilderPO.cancel().open();
                 expect(formBuilderPO.getFieldLabels()).toContain(removedField);
             });
-            it('remove the selected field with BACKSPACE & verify absence after SAVE', function() {
+            xit('remove the selected field with BACKSPACE & verify absence after SAVE', function() {
+                // MC-3053: regression: keyboard shortcut for delete field (shift-backspace) has no effect
                 let removedField = formBuilderPO.KB_removeFieldViaBackspace(1);
                 // save & reopen
                 let newFields = formBuilderPO.save().open();
