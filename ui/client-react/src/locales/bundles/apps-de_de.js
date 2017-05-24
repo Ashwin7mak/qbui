@@ -582,7 +582,11 @@ export default {
                 existingFields: 'Fügen Sie ein vorhandenes Feld hinzu',
                 newFields: 'Erstellen Sie ein neues Feld',
             },
+            reportBuilder: {
+                modify: 'Bericht ändern'
+            },
             formBuilder: {
+                modify: 'Formular ändern',
                 unimplemented: "Feature ist momentan nicht verfügbar",
                 removeField: "Feld aus Form entfernen",
                 newFieldsMenuTitle: 'Neu',
@@ -634,8 +638,7 @@ export default {
                 addToForm: "Fügen Sie hinzu",
                 tableChooserDescription: "Wenn Sie ein {tableNoun} erstellen oder aktualisieren, können Sie nachschlagen und Informationen aus einem Datensatz in einer anderen Tabelle erhalten.",
                 tableChooserHeading: "Wo ist die Platte, die du bekommen willst?"
-            },
-            modify: 'Formular ändern'
+            }
         },
         featureSwitchAdmin: {
             defaultFeatureName: "Feature",
