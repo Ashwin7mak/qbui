@@ -348,6 +348,9 @@ describe('AppHistory', () => {
         });
 
         it('will save report builder if there is a pending edit in the reportBuilder store', () => {
+            mockState.fieldsStore.isPendingEdit = false;
+            mockState.formsStore.isPendingEdit = false;
+            mockState.recordStore.isPendingEdit = false;
             mockState.reportBuilderStore.isPendingEdit = true;
 
             goToNewPage();
@@ -465,6 +468,9 @@ describe('AppHistory', () => {
         });
 
         it('_discardChanges will not invoke _discardChangesForRecord if recordStore isPendingEdit is false', () => {
+            mockState.fieldsStore.isPendingEdit = false;
+            mockState.reportBuilderStore.isPendingEdit = false;
+            mockState.formsStore.isPendingEdit = false;
             mockState.recordStore.isPendingEdit = false;
 
             AppHistory.setup(mockStore, mockStoreFunc);
