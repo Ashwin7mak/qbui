@@ -234,6 +234,7 @@ describe('Forms reducer functions', () => {
             expect(reducer(stateWithViewForm, actionPayload)).toEqual({
                 [VIEW]: {
                     ...stateWithViewForm[VIEW],
+                    formData: {formMeta: updatedFormMeta},
                     isPendingEdit: true,
                 }
             });

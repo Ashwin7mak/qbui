@@ -219,18 +219,17 @@ const forms = (
         if (Array.isArray(formMetaCopy.relationships) && formMetaCopy.relationships.length > 0) {
             relatedRelationship = _.find(formMetaCopy.relationships, (rel) => rel.detailTableId === field.tableId  && rel.detailFieldId === field.id);
         }
-        MoveFieldHelper.removeField(
+        if (relatedRelationship) {
+            if (formMetaCopy.fieldsToDelete) {
+                formMetaCopy.fieldsToDelete.push(field.id);
+            } else {
+                formMetaCopy.fieldsToDelete = [field.id];
+            }
+        }
+        updatedForm.formData.formMeta = MoveFieldHelper.removeField(
             formMetaCopy,
             location
         );
-        if (relatedRelationship) {
-            if (formMetaCopy.fieldsToDelete) {
-                formMetaCopy.fieldsToDelete.push(fieldId);
-            } else {
-                formMetaCopy.fieldsToDelete = [fieldId];
-            }
-        }
-        updatedForm.formData.formMeta = formMetaCopy;
         updatedForm.isPendingEdit = true;
         newState[id] = updatedForm;
         return newState;
