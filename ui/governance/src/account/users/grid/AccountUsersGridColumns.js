@@ -1,3 +1,4 @@
+import Locale from "../../../../../client-react/src/locales/locales";
 import * as Formatters from "./AccountUsersGridFormatters";
 import _ from "lodash";
 import * as FieldConsts from "../../../../../client-react/src/constants/schema";
@@ -6,12 +7,16 @@ const boolColumnProps = {
     classes: ['BoolColumn'],
 };
 
-// Column Definitions
-const columns = [
+const GRID_COLUMN_LOCALE = 'governance.account.users.grid';
+
+/**
+ * Column Definitions for the Account Users Grid
+ */
+const columns = () => [
     {
         property: 'firstName',
         header: {
-            label: 'FIRST NAME'
+            label: Locale.getMessage(GRID_COLUMN_LOCALE + '.firstName')
         },
         fieldDef: {
             id: 1,
@@ -23,7 +28,7 @@ const columns = [
     {
         property: 'lastName',
         header: {
-            label: 'LAST NAME'
+            label: Locale.getMessage(GRID_COLUMN_LOCALE + '.lastName')
         },
         fieldDef: {
             id: 2,
@@ -35,7 +40,7 @@ const columns = [
     {
         property: 'email',
         header: {
-            label: 'EMAIL'
+            label: Locale.getMessage(GRID_COLUMN_LOCALE + '.email')
         },
         props: {
             classes: ['EmailColumn']
@@ -50,7 +55,7 @@ const columns = [
     {
         property: 'userName',
         header: {
-            label: 'USER NAME'
+            label: Locale.getMessage(GRID_COLUMN_LOCALE + '.userName')
         },
         cell: {
             formatters: [Formatters.FormatUsernameString]
@@ -68,7 +73,7 @@ const columns = [
     {
         property: 'lastAccess',
         header: {
-            label: 'LAST ACCESS'
+            label: Locale.getMessage(GRID_COLUMN_LOCALE + '.lastAccess')
         },
         cell: {
             formatters: [Formatters.FormatLastAccessString]
@@ -86,10 +91,10 @@ const columns = [
     {
         property: 'hasAppAccess',
         header: {
-            label: 'QUICK BASE ACCESS STATUS'
+            label: Locale.getMessage(GRID_COLUMN_LOCALE + '.quickbaseAccessStatus')
         },
         cell: {
-            formatters: [Formatters.FormatUserStatusHTML]
+            formatters: [Formatters.FormatAccessStatusHTML]
         },
         fieldDef: {
             id: 6,
@@ -101,7 +106,7 @@ const columns = [
     {
         property: 'lastAccess',
         header: {
-            label: 'INACTIVE?'
+            label: Locale.getMessage(GRID_COLUMN_LOCALE + '.inactive')
         },
         cell: {
             formatters: [Formatters.FormatIsInactive]
@@ -120,7 +125,7 @@ const columns = [
     {
         property: 'numGroupsMember',
         header: {
-            label: 'IN ANY GROUP?'
+            label: Locale.getMessage(GRID_COLUMN_LOCALE + '.inAnyGroup')
         },
         cell: {
             formatters: [Formatters.FormatIsGroupMember]
@@ -139,7 +144,7 @@ const columns = [
     {
         property: 'numGroupsManaged',
         header: {
-            label: 'GROUP MANAGER?'
+            label: Locale.getMessage(GRID_COLUMN_LOCALE + '.groupManager')
         },
         cell: {
             formatters: [Formatters.FormatIsGroupManager]
@@ -158,7 +163,7 @@ const columns = [
     {
         property: 'accountTrusteeFlags',
         header: {
-            label: 'CAN CREATE APPS?'
+            label: Locale.getMessage(GRID_COLUMN_LOCALE + '.canCreateApps')
         },
         cell: {
             formatters: [Formatters.FormatCanCreateApps]
@@ -177,7 +182,7 @@ const columns = [
     {
         property: 'numAppsManaged',
         header: {
-            label: 'APP MANAGER?'
+            label: Locale.getMessage(GRID_COLUMN_LOCALE + '.appManager')
         },
         cell: {
             formatters: [Formatters.FormatIsAppManager]
@@ -196,7 +201,7 @@ const columns = [
     {
         property: 'realmDirectoryFlags',
         header: {
-            label: 'IN REALM DIRECTORY?'
+            label: Locale.getMessage(GRID_COLUMN_LOCALE + '.inRealmDirectory')
         },
         cell: {
             formatters: [Formatters.FormatIsInRealmDirectory]
@@ -215,7 +220,7 @@ const columns = [
     {
         property: 'realmDirectoryFlags',
         header: {
-            label: 'REALM APPROVED?'
+            label: Locale.getMessage(GRID_COLUMN_LOCALE + '.realmApproved')
         },
         cell: {
             formatters: [Formatters.FormatIsRealmApproved]
@@ -233,8 +238,15 @@ const columns = [
     }
 ];
 
+/**
+ * Filter the Columns based on the User Permissions
+ * @param hasAccountAdmin
+ * @param hasRealmAdmin
+ * @returns {Array.<T>|*|{}}
+ * @constructor
+ */
 export const GetAccountUsersGridColumns = (hasAccountAdmin, hasRealmAdmin) => {
-    return _.filter(columns, (c) => {
+    return _.filter(columns(), (c) => {
         if (c.internalQbProps) {
             if (c.internalQbProps.forAccountAdminOnly && !hasAccountAdmin) {
                 return false;

@@ -32,7 +32,8 @@
              * @param lookUpFieldId - FieldId in master table used to relate master and child table
              * @returns Promise function that resolves to the returned JSON obj of the create relationship API call
              */
-            createOneToOneRelationship: function(app, parentTable, childTable, detailFieldId, lookUpFieldId) {
+            createOneToOneRelationship: function(app, parentTable, childTable, detailFieldId, lookUpFieldId,
+                                                 description = 'Referential integrity relationship between Master / Child Tables') {
                 const RECORD_ID_NAME = 'Record ID#';
                 let masterTableId = parentTable.id;
                 let detailTableId = childTable.id;
@@ -55,23 +56,23 @@
                     }
                 });
                 const relationshipToCreate = {
-                    appId        : app.id,
-                    masterAppId  : app.id,
+                    appId: app.id,
+                    masterAppId: app.id,
                     masterTableName,
                     masterTableId,
                     masterFieldId: masterTablePkFieldId,
                     masterFieldName,
-                    detailAppId  : app.id,
+                    detailAppId: app.id,
                     detailTableName,
                     detailTableId,
                     detailFieldName,
                     detailFieldId: detailTableFkFieldId,
                     referentialIntegrity: false,
                     cascadeDelete: false,
-                    description  : 'Referential integrity relationship between Master / Child Tables'
+                    description  : description
                 };
 
-                recordBase.createRelationship(relationshipToCreate).then(function(relResponse) {
+                return recordBase.createRelationship(relationshipToCreate).then(function(relResponse) {
                     return JSON.parse(relResponse.body);
                 }).catch(function(error) {
                     log.error('Error creating relationship');

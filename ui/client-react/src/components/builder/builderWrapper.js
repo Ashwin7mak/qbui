@@ -11,6 +11,8 @@ import TopNav from '../../../../reuse/client/src/components/topNav/topNav';
 import * as tabIndexConstants from '../formBuilder/tabindexConstants';
 import TableReadyDialog from '../table/tableReadyDialog';
 import Locale from '../../locales/locales';
+import _ from 'lodash';
+
 let FluxMixin = Fluxxor.FluxMixin(React);
 let StoreWatchMixin = Fluxxor.StoreWatchMixin;
 
@@ -29,9 +31,19 @@ export const BuilderWrapper = React.createClass({
         };
     },
 
-    getSelectedApp() {
-        if (this.state.apps.selectedAppId) {
-            return _.find(this.state.apps.apps, (a) => a.id === this.state.apps.selectedAppId);
+    componentDidMount() {
+        let flux = this.getFlux();
+
+        if (!this.state.apps.apps) {
+            const appId = _.get(this.props, "match.params.appId");
+            flux.actions.selectAppId(appId);
+        }
+    },
+
+    getCurrentApp() {
+        const appId = _.get(this.props, "match.params.appId");
+        if (appId) {
+            return _.find(this.state.apps.apps, (a) => a.id === appId);
         }
         return null;
     },
@@ -43,7 +55,7 @@ export const BuilderWrapper = React.createClass({
                                dropdownIcon="user"
                                dropdownMsg="globalActions.user"
                                startTabIndex={tabIndexConstants.USER_MENU_TAB_INDEX}
-                               app={this.getSelectedApp()}/>);
+                               app={this.getCurrentApp()}/>);
     },
 
     render() {
@@ -53,6 +65,8 @@ export const BuilderWrapper = React.createClass({
         } else if (this.props.location.pathname.includes('report')) {
             title = `${Locale.getMessage('builder.reportBuilder.modify')}`;
         }
+
+        const app = this.getCurrentApp();
         return (
             <div className="builderWrapperContent">
                 <NotificationContainer/>
@@ -68,7 +82,7 @@ export const BuilderWrapper = React.createClass({
                         <Switch>
                             {
                                 this.props.routes.map((route, i) => {
-                                    return RouteWithSubRoutes(route, i);
+                                    return RouteWithSubRoutes(route, i, {app});
                                 })
                             }
                         </Switch>

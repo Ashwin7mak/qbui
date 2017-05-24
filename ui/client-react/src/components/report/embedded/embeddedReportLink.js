@@ -1,18 +1,17 @@
 import React, {PropTypes} from 'react';
 import {connect} from 'react-redux';
-import {Link} from 'react-router-dom';
-import _ from 'lodash';
+import {Link, withRouter} from 'react-router-dom';
 
-import {loadReportRecordsCount, unloadEmbeddedReport} from '../../../actions/reportActions';
+import {unloadEmbeddedReport} from '../../../actions/reportActions';
 import withUniqueId from '../../hoc/withUniqueId';
 import {CONTEXT} from '../../../actions/context';
 import QBicon from '../../qbIcon/qbIcon';
 
+import Breakpoints from '../../../utils/breakpoints';
 import UrlUtils from '../../../utils/urlUtils';
-import QueryUtils from '../../../utils/queryUtils';
 import {I18nMessage} from '../../../utils/i18nMessage';
 
-import './embeddedReportLink.scss';
+import './embeddedLink.scss';
 
 /**
  * Renders a clickable Report Link as a button in a form.
@@ -28,58 +27,36 @@ export const EmbeddedReportLink = React.createClass({
         detailKeyValue: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
     },
 
-    /**
-     * Load a report with query parameters.
-     */
-    loadReportRecordsCount() {
-
-        const {appId, childTableId, childReportId, detailKeyFid, detailKeyValue} = this.props;
-        // Display a filtered child report, the child report should only contain children that
-        // belong to a parent. A child has a parent if its detailKey field contains the
-        // detailKeyValue that contains a parent record's masterKeyValue.
-        const queryParams = {
-            query: QueryUtils.parseStringIntoExactMatchExpression(detailKeyFid, detailKeyValue)
-        };
-
-        this.props.loadReportRecordsCount(this.props.uniqueId, appId, childTableId, childReportId, queryParams);
-    },
-
-    componentDidMount() {
-        this.loadReportRecordsCount();
-    },
 
     componentWillUnmount() {
         this.props.unloadEmbeddedReport(this.props.uniqueId);
     },
 
-    reportDetails(tableName) {
-        const count = _.get(this, `props.report.recordsCount`);
-        let recordsCount = '';
-        if (typeof count === 'number') {
-            recordsCount = ` (${count})`;
-        }
-        return <span className="reportDetail">{tableName}{recordsCount}</span>;
-    },
 
     render() {
         const {appId, childTableId, childReportId, detailKeyFid, detailKeyValue} = this.props;
-        // render report link for small-breakpoint or if the element type is defined as a
-        // reportLink
-        const link = UrlUtils.getRelatedChildReportLink(appId, childTableId, childReportId, detailKeyFid, detailKeyValue);
+
+        let link;
+        if (Breakpoints.isSmallBreakpoint()) {
+            link = this.props.match.url + UrlUtils.getReportDrawerSegment(appId, childTableId, childReportId, detailKeyFid, detailKeyValue);
+        } else {
+            link = UrlUtils.getRelatedChildReportLink(appId, childTableId, childReportId, detailKeyFid, detailKeyValue);
+        }
+
         let tableName;
         if (this.props.childTableName) {
             tableName  = this.props.childTableName;
         } else {
             tableName = <I18nMessage message="relationship.childTable" />;
         }
+
         return (
-            <div className="childReportLinkContainer">
-                {this.reportDetails(tableName)}
-                <Link to={link} className="childReportLink btn btn-default">
-                    <QBicon icon="eye" />
-                    {tableName}
-                </Link>
-            </div>
+                <div className="linkContainer">
+                    <Link to={link} className="linkInRecord btn btn-default">
+                        <QBicon icon="eye" />
+                        <span className="tableName">{tableName}</span>
+                    </Link>
+                </div>
         );
     }
 });
@@ -97,17 +74,14 @@ const mapStateToProps = (state, ownProps) => {
 // (another bit of boilerplate to keep the component free of Redux dependencies)
 const mapDispatchToProps = (dispatch) => {
     return {
-        loadReportRecordsCount: (context, appId, tblId, rptId, queryParams) => {
-            dispatch(loadReportRecordsCount(context, appId, tblId, rptId, queryParams));
-        },
         unloadEmbeddedReport: (context) =>
             dispatch(unloadEmbeddedReport(context))
     };
 };
 
-const ConnectedEmbeddedReportLink = connect(
+const ConnectedEmbeddedReportLink = withRouter(connect(
     mapStateToProps,
     mapDispatchToProps
-)(EmbeddedReportLink);
+)(EmbeddedReportLink));
 
 export default withUniqueId(ConnectedEmbeddedReportLink, CONTEXT.REPORT.EMBEDDED);

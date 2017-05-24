@@ -85,6 +85,11 @@ describe('Report Builder actions', () => {
         const expectedAction = event(context, types.MOVE_COLUMN, params);
         expect(reportBuilderActions.moveColumn(context, params)).toEqual(expectedAction);
     });
+
+    it('changeReportName action dispatches type.CHANGE_REPORT_NAME', () => {
+        const expectedAction = event(context, types.CHANGE_REPORT_NAME, {newName: 'name'});
+        expect(reportBuilderActions.changeReportName(context, 'name')).toEqual(expectedAction);
+    });
 });
 
 describe('Test ReportBuilderActions function success workflow', () => {

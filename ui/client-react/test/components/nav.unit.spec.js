@@ -318,6 +318,6 @@ describe('Nav Unit tests', () => {
         let component = TestUtils.renderIntoDocument(<Nav {...props} flux={flux} location={testLocation} updateReportRedirectRoute={mockReportStore.updateReportRedirectRoute} />);
         component.navigateToReportBuilder();
 
-        expect(mockReportStore.updateReportRedirectRoute).toHaveBeenCalledWith(testLocation.pathname);
+        expect(mockReportStore.updateReportRedirectRoute).toHaveBeenCalledWith(CONTEXT.REPORT.NAV, testLocation.pathname);
     });
 });

@@ -72,7 +72,7 @@
         stageTableHomepageTitleEl: {get: function() {return this.reportContainerEl.element('.tableHomepageStageHeadline');}},
 
         //Drop down menu actions icon
-        dropDownIcon : {get: function() {return browser.element('.actionsCol .iconActionsDropDownMenu');}},
+        dropDownIcon : {get: function() {return browser.element('.actionsCol .iconUISturdy-fries');}},
         dropDownDeleteIcon: {get: function() {return browser.element('.dropdown-menu .delete');}},
 
         reportToolsAndContentEl: {get: function() {return this.reportContainerEl.element('.reportToolsAndContentContainer');}},
@@ -134,9 +134,13 @@
             //wait until you see tables leftNav links labels
             browser.element('.tablesHeadingAndList .tablesList .leftNavLink').waitForVisible();
             //wait until text is shown up on leftNavLinks.Selected table is not loaded until all table properties are available
-            return browser.waitForText('.tablesList .leftNavLink .leftNavLabel', e2eConsts.extraLongWaitTimeMs);
+            return browser.waitForText('.tablesList .leftNavLink .leftNavLabel', e2eConsts.mediumWaitTimeMs);
         }},
-
+        getReportListUlEl: {
+            get: function() {
+                return browser.elements('.reportLink');
+            }
+        },
         /**
          * Helper function that will get all of the field column headers from the report. Returns an array of strings.
          */
@@ -424,6 +428,26 @@
         selectRow: {value: function(recordRow) {
             this.recordCheckBoxes.value[recordRow].click();
             this.deleteIcon.waitForExist();
+        }},
+
+        //Select a report from tables page with reportID being the index of the report
+        selectReport: {value: function(tableName, reportID) {
+            //wait unti leftNav is loaded
+            this.waitForLeftNavLoaded();
+            //Select the tabe
+            tablesPO.selectTable(tableName);
+            //Click on reports menu
+            browser.element('.selected .iconUISturdy-report-menu-3').click();
+            browser.element('.reportGroups').waitForVisible();
+            //Filter the reports
+            var allReports = this.getReportListUlEl.value.filter(function(report) {
+                return report.index === reportID;
+            });
+
+            if (allReports !== []) {
+                //Click on the report
+                return allReports[0].click();
+            }
         }},
     });
 

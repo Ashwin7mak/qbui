@@ -383,13 +383,15 @@ export const QbGrid = React.createClass({
             // move the sticky cells (1st col) right to their original positions
             let stickyCells = scrolled.getElementsByClassName('stickyCell');
 
-            stickyCells[0].style.left = currentLeftScroll + 'px';
-            stickyCells[0].style.right = 0;
-            stickyCells[0].style.bottom = 0;
+            if (stickyCells.length !== 0) {
+                stickyCells[0].style.left = currentLeftScroll + 'px';
+                stickyCells[0].style.right = 0;
+                stickyCells[0].style.bottom = 0;
 
-            for (let i = 1; i < stickyCells.length; i++) {
-                let translate = "translate(" + currentLeftScroll + "px,0)";
-                stickyCells[i].style.transform = translate;
+                for (let i = 1; i < stickyCells.length; i++) {
+                    let translate = "translate(" + currentLeftScroll + "px,0)";
+                    stickyCells[i].style.transform = translate;
+                }
             }
         }
     },

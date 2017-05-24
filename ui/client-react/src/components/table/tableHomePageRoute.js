@@ -2,12 +2,10 @@ import React from 'react';
 import Stage from '../stage/stage';
 import ReportStage from '../report/reportStage';
 import ReportHeader from '../report/reportHeader';
-import ReportSaveOrCancelFooter from '../reportBuilder/reportSaveOrCancelFooter';
 import TableHomePageInitial from './tableHomePageInitial';
 import Icon, {AVAILABLE_ICON_FONTS} from '../../../../reuse/client/src/components/icon/icon.js';
 import IconActions from '../actions/iconActions';
 import ReportToolsAndContent from '../report/reportToolsAndContent';
-import ReportFieldSelectMenu from '../report/reportFieldSelectMenu';
 
 import Fluxxor from 'fluxxor';
 import {I18nMessage} from "../../utils/i18nMessage";
@@ -20,11 +18,13 @@ import {showTableCreationDialog} from '../../actions/tableCreationActions';
 import {loadDynamicReport} from '../../actions/reportActions';
 import {CONTEXT} from '../../actions/context';
 import {WindowHistoryUtils} from '../../utils/windowHistoryUtils';
+import Breakpoints from '../../utils/breakpoints';
 import {EDIT_RECORD_KEY, NEW_RECORD_VALUE} from '../../constants/urlConstants';
 import {NEW_TABLE_IDS_KEY} from '../../constants/localStorage';
 import _ from 'lodash';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
+
 import './tableHomePage.scss';
 import '../report/report.scss';
 
@@ -137,6 +137,9 @@ export const TableHomePageRoute = React.createClass({
         //  ensure there is a rptId property otherwise the report not found page is rendered in ReportToolsAndContent
         let homePageParams = _.assign(this.props.match.params, {rptId: null});
 
+        const classNames = ['reportContainer'];
+        classNames.push(Breakpoints.isSmallBreakpoint() ? 'smallBreakPoint' : '');
+
         let mainContent;
 
         if (this.showInitialTableHomePage()) {
@@ -162,22 +165,14 @@ export const TableHomePageRoute = React.createClass({
         }
 
         return (
-            <div className="reportContainer">
-                <ReportFieldSelectMenu
-                    appId={this.props.match.params.appId}
-                    tblId={this.props.match.params.tblId}
-                    reportData={this.props.reportData}
-                    pullRight>
+            <div className={classNames.join(' ')}>
+                <Stage stageHeadline={this.getStageHeadline()} pageActions={this.getPageActions(5)}>
+                    <ReportStage reportData={this.props.reportData}/>
+                </Stage>
 
-                    <Stage stageHeadline={this.getStageHeadline()} pageActions={this.getPageActions(5)}>
-                        <ReportStage reportData={this.props.reportData}/>
-                    </Stage>
+                {this.getHeader()}
 
-                    {this.getHeader()}
-
-                    {mainContent}
-
-                </ReportFieldSelectMenu>
+                {mainContent}
             </div>
         );
     }

@@ -14,6 +14,8 @@
     var tablesPage = Object.create(e2ePageBase, {
         //new table button
         newTableBtn : {get: function() {return browser.element('.newTableItem .newTable');}},
+        //New table Icon
+        newTableIconBtn : {get: function() {return browser.element('.newTableItem .newTable .iconUISturdy-add-new-stroke');}},
         //new table container
         tableContainer : {get: function() {return browser.element('.modal-dialog .bodyContainer');}},
         //new table header
@@ -24,7 +26,7 @@
         tableTitle : {get: function() {return this.tableContainer.element('.pageContainer .title');}},
 
         //table close
-        tableCloseBtn : {get: function() {return browser.element('.closeButton');}},
+        tableCloseBtn : {get: function() {return browser.element('.modal-dialog .iconUISturdy-close');}},
         //table help
         tableHelpBtn : {get: function() {return browser.element('.iconUISturdy-help');}},
 
@@ -130,9 +132,12 @@
          * @returns Array of table links
          */
         getAllTableLeftNavLinksList: {get: function() {
-            browser.element('.tablesList').waitForVisible();
-            browser.element('.leftNavLabel').waitForVisible();
-            return browser.elements('.leftNavLabel');
+            browser.waitForExist('.tablesList .leftNavLabel');
+            //wait until leftNav Loaded.Selected table is not loaded until all table properties are available
+            while (browser.element('.tablesList .leftNavLink .leftNavLabel').getAttribute('textContent').length === 0) {
+                browser.pause(e2eConsts.shortWaitTimeMs);
+            }
+            return browser.elements('.tablesList .leftNavLabel');
         }},
 
 
@@ -150,10 +155,6 @@
          * @params tableName
          */
         selectTable: {value: function(tableName) {
-            //wait until leftNav Loaded.Selected table is not loaded until all table properties are available
-            while (browser.element('.tablesList .leftNavLink .leftNavLabel').getAttribute('textContent').length === 0) {
-                browser.pause(e2eConsts.shortWaitTimeMs);
-            }
             //filter table names from leftNav links
             var results = this.getAllTableLeftNavLinksList.value.filter(function(table) {
                 return table.getAttribute('textContent') === tableName;
@@ -192,7 +193,7 @@
             //Verify there is also + Icon associated with it
             this.newTableBtn.element('.iconUISturdy-add-new-stroke').waitForVisible();
             //Click on the new Table Btn
-            this.newTableBtn.click();
+            this.newTableIconBtn.click();
             return browser.element('.tableFieldInput').waitForVisible();
         }},
 
@@ -312,13 +313,7 @@
          * @fieldValue
          */
         setInputValue : {value: function(filteredElement, filteredElementInputClassName, fieldValue) {
-            filteredElement.element(filteredElementInputClassName).click();
-            filteredElement.element(filteredElementInputClassName).clearElement();
-            if (browserName === 'firefox') {
-                return filteredElement.setValue(filteredElementInputClassName, [fieldValue, '\uE004']);
-            } else {
-                return browser.keys([fieldValue, '\uE004']);
-            }
+            return filteredElement.setValue(filteredElementInputClassName, [fieldValue, '\uE004']);
         }},
 
         /**
@@ -462,12 +457,20 @@
             this.settingsBtn.waitForVisible();
             //Click on settings gear Icon on table global actions
             this.settingsBtn.click();
-            browser.elements('.configSet li').value.map(function(elm) {
+            //Need this for container to slide down
+            browser.pause(e2eConsts.shortWaitTimeMs);
+
+            expect(browser.element('.menuHeader').getAttribute('textContent')).toContain('Settings');
+
+            browser.elements('.configMenu li').value.map(function(elm) {
                 liElements.push(elm.getAttribute('textContent'));
             });
-            expect(liElements[0]).toContain('Settings');
-            expect(liElements[1]).toContain('Table');
-            return expect(liElements[2]).toContain('Table properties & settings');
+
+            var i = 0;
+            expect(liElements[i++]).toContain('App');
+            expect(liElements[i++]).toContain('Automation');
+            expect(liElements[i++]).toContain('Table');
+            return expect(liElements[i++]).toContain('Table properties & settings');
         }},
 
         /**

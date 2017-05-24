@@ -23,10 +23,28 @@ describe('Build drop down action functions', () => {
         expect(TestUtils.scryRenderedDOMComponentsWithClass(component, "globalActionLink").length).toEqual(0);
     });
 
+    it('test render of component in context of a app', () => {
+        component = TestUtils.renderIntoDocument(<BuilderDropDownAction selectedApp={sampleApp} />);
+        let gearIcon = TestUtils.scryRenderedDOMComponentsWithClass(component, "globalActionLink");
+        Simulate.click(gearIcon[0]);
+        let automationSettingsLink = TestUtils.scryRenderedDOMComponentsWithClass(component, "modifyAutomationSettings");
+        expect(automationSettingsLink.length).toEqual(1);
+    });
+
+    it('test automation settings link', () => {
+        component = TestUtils.renderIntoDocument(<BuilderDropDownAction selectedApp={sampleApp} history={history}/>);
+        let gearIcon = TestUtils.scryRenderedDOMComponentsWithClass(component, "globalActionLink");
+        Simulate.click(gearIcon[0]);
+        let automationSettingsLink = TestUtils.scryRenderedDOMComponentsWithClass(component, "modifyAutomationSettings");
+        Simulate.click(automationSettingsLink[0]);
+    });
+
     it('test render of component in context of a table', () => {
         component = TestUtils.renderIntoDocument(<BuilderDropDownAction selectedApp={sampleApp} selectedTable={sampleTable}/>);
         let gearIcon = TestUtils.scryRenderedDOMComponentsWithClass(component, "globalActionLink");
         Simulate.click(gearIcon[0]);
+        let automationSettingsLink = TestUtils.scryRenderedDOMComponentsWithClass(component, "modifyAutomationSettings");
+        expect(automationSettingsLink.length).toEqual(1);
         let tableSettingsLink = TestUtils.scryRenderedDOMComponentsWithClass(component, "modifyTableSettings");
         expect(tableSettingsLink.length).toEqual(1);
     });
@@ -35,6 +53,8 @@ describe('Build drop down action functions', () => {
         component = TestUtils.renderIntoDocument(<BuilderDropDownAction selectedApp={sampleApp} selectedTable={sampleTable} recId="2"/>);
         let gearIcon = TestUtils.scryRenderedDOMComponentsWithClass(component, "globalActionLink");
         Simulate.click(gearIcon[0]);
+        let automationSettingsLink = TestUtils.scryRenderedDOMComponentsWithClass(component, "modifyAutomationSettings");
+        expect(automationSettingsLink.length).toEqual(1);
         let tableSettingsLink = TestUtils.scryRenderedDOMComponentsWithClass(component, "modifyTableSettings");
         expect(tableSettingsLink.length).toEqual(1);
         let formBuilderLink = TestUtils.scryRenderedDOMComponentsWithClass(component, "modifyForm");

@@ -3,7 +3,10 @@ import ReactDOM from 'react-dom';
 import TestUtils from 'react-addons-test-utils';
 import FieldValueEditor  from '../../src/components/fields/fieldValueEditor';
 import FieldFormats from '../../src/utils/fieldFormats';
-var simpleStringify = require('../../../common/src/simpleStringify.js');
+import configureMockStore from 'redux-mock-store';
+import {Provider} from "react-redux";
+
+let simpleStringify = require('../../../common/src/simpleStringify.js');
 
 import {__RewireAPI__ as NumberFieldValueRendererRewireAPI}  from '../../src/components/fields/fieldValueRenderers';
 
@@ -24,6 +27,11 @@ function tearDownI18nNumberMock() {
     NumberFieldValueRendererRewireAPI.__ResetDependency__('I18nNumber');
 }
 
+const app = {
+    id: 'appId',
+    tables: []
+};
+
 const users = [
     {
         "userId": "58440038",
@@ -41,10 +49,14 @@ const users = [
     }
 ];
 
+const mockStore = configureMockStore();
+
 describe('FieldValueEditor functions', () => {
     'use strict';
 
     let component;
+
+    const store = mockStore({forms: {}, relationshipBuilder: {}});
 
     describe('test render of component', () => {
         let dataProvider = [
@@ -60,13 +72,15 @@ describe('FieldValueEditor functions', () => {
             {test: "RATING_FORMAT", type: FieldFormats.RATING_FORMAT},
             {test: "DURATION_FORMAT", type: FieldFormats.DURATION_FORMAT},
             {test: "PHONE_FORMAT", type: FieldFormats.PHONE_FORMAT},
-            {test: "MULTI_LINE_TEXT_FORMAT", type: FieldFormats.MULTI_LINE_TEXT_FORMAT}
+            {test: "MULTI_LINE_TEXT_FORMAT", type: FieldFormats.MULTI_LINE_TEXT_FORMAT},
+            {test: "LINK_TO_RECORD_FORMAT", type: FieldFormats.LINK_TO_RECORD}
         ];
         dataProvider.forEach((data) => {
             it(data.test, () => {
-                component = TestUtils.renderIntoDocument(<FieldValueEditor fieldDef={{required: true}}
-                                                                           type={data.type}
-                                                                           appUsers={users} />);
+                component = TestUtils.renderIntoDocument(
+                    <Provider store={store}>
+                        <FieldValueEditor fieldDef={{required: true}} type={data.type} app={app} appUsers={users} />
+                    </Provider>);
                 expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
             });
         });

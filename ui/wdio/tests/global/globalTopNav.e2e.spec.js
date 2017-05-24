@@ -11,7 +11,7 @@
     var UsersTablePage = requirePO('usersTable');
     var tableCreatePO = requirePO('tableCreate');
 
-    describe('Reports Page - TopNav Tests: ', function() {
+    describe('Global - TopNav Tests: ', function() {
         var realmName;
         var realmId;
         var testApp;
@@ -36,6 +36,9 @@
                 return Promise.reject('Error in beforeAll function:' + JSON.stringify(error));
             });
         });
+        /**
+         * Test Method - checking for usability of topNav on Table homepage
+         */
         it('Visibility and usability of topNav on Table homepage', function() {
             //select the App
             RequestAppsPage.selectApp(testApp.name);
@@ -57,13 +60,17 @@
             expect(TopNavPO.settingsDropdownHeader.getText()).toEqual("Settings");
             //Step5: Verify that Users button displays the correct app name and has sign out button
             TopNavPO.usersButton.click();
-            expect(TopNavPO.userDropdownAppName.getText()).toEqual(testApp.name);
+            expect(TopNavPO.userDropdownAppName.getAttribute('textContent')).toEqual(testApp.name);
             expect(TopNavPO.signOutButton.isExisting()).toBeTruthy();
             //Step6: Verify the help button is clickable
             TopNavPO.helpButton.click();
         });
+        /**
+         * Test Method - checking for visibility of topNav on Report homepage
+         */
         it('Visibility of topNav on Report homepage', function() {
-            RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1));
+            //select report
+            reportContentPO.selectReport(testApp.tables[e2eConsts.TABLE1].name, 0);
             reportContentPO.waitForLeftNavLoaded();
             TopNavPO.topNavToggleHamburgerEl.waitForVisible();
             //Step1: Verify if the global icons are displayed
@@ -72,7 +79,10 @@
             //Step2: Verify the no.of global action icons
             expect(TopNavPO.topNavGlobalActionsListEl.value.length).toBe(4);
         });
-        //TODO: To be enabled when topNav is added to User/App homepage MC-2646
+        //TODO: To enable these when topNav is added to User/App homepage MC-2646
+        /**
+         * Test Method - checking for visibility of topNav on User homepage
+         */
         xit('Visibility of topNav on User homepage', function() {
             RequestAppsPage.get(e2eBase.getRequestUsersEndpoint(realmName, testApp.id));
             TopNavPO.topNavToggleHamburgerEl.waitForVisible();
@@ -82,6 +92,10 @@
             //Step2: Verify the no.of global action icons
             expect(TopNavPO.topNavGlobalActionsListEl.value.length).toBe(4);
         });
+        //TODO: To enable these when topNav is added to User/App homepage MC-2646
+        /**
+         * Test Method - checking for visibility of topNav on App homepage
+         */
         xit('Visibility of topNav on App homepage', function() {
             RequestAppsPage.get(e2eBase.getRequestAppsPageEndpoint(realmName, testApp.id));
             TopNavPO.topNavToggleHamburgerEl.waitForVisible();

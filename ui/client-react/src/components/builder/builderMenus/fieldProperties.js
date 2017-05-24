@@ -9,6 +9,8 @@ import {updateField} from '../../../actions/fieldsActions';
 import {getSelectedFormElement} from '../../../reducers/forms';
 import {getField} from '../../../reducers/fields';
 import SideTrowser from '../../../../../reuse/client/src/components/sideTrowserBase/sideTrowserBase';
+import Icon, {AVAILABLE_ICON_FONTS} from '../../../../../reuse/client/src/components/icon/icon.js';
+import _ from 'lodash';
 import * as tabIndexConstants from '../../formBuilder/tabindexConstants';
 
 import './fieldProperties.scss';
@@ -45,6 +47,7 @@ export class FieldProperties extends Component {
         this.updateFieldProps = this.updateFieldProps.bind(this);
         this.updateMultiChoiceFieldProps = this.updateMultiChoiceFieldProps.bind(this);
         this.buildMultiChoiceDisplayList = this.buildMultiChoiceDisplayList.bind(this);
+        this.createLinkToRecordPropertyContainer = this.createLinkToRecordPropertyContainer.bind(this);
     }
 
     /**
@@ -121,6 +124,24 @@ export class FieldProperties extends Component {
     }
 
     /**
+     * create properties for link to record field (the parent table name with its icon)
+     * @param propertyTitle
+     * @param propertyValue
+     * @param key
+     * @returns {XML}
+     */
+    createLinkToRecordPropertyContainer(propertyTitle, propertyValue, key = 4) {
+
+        const table = _.find(this.props.app.tables, {id: this.props.selectedField.parentTableId});
+        return (
+            <div key={key} className="textPropertyContainer">
+                <div className="textPropertyTitle">{propertyTitle}</div>
+                {table && <div className="linkToRecordPropertyValue"><Icon iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY} icon={table.tableIcon}/> {table.name}</div>}
+            </div>
+        );
+    }
+
+    /**
      * takes the array of choices objects and creates a string separated by newline characters to display each
      * option on a separate line in the textarea
      * @param choices
@@ -174,6 +195,8 @@ export class FieldProperties extends Component {
         if (formatType === FieldFormats.TEXT_FORMAT_MULTICHOICE) {
             let choices = this.buildMultiChoiceDisplayList(this.props.selectedField.multipleChoice.choices);
             fieldPropContainers.push(this.createMultiChoiceTextPropertyContainer(Locale.getMessage('fieldPropertyLabels.multiChoice'), choices));
+        } else if (formatType === FieldFormats.LINK_TO_RECORD) {
+            fieldPropContainers.push(this.createLinkToRecordPropertyContainer(Locale.getMessage('fieldPropertyLabels.linkToRecord'), this.props.selectedField));
         }
 
         return fieldPropContainers;

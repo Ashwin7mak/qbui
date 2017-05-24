@@ -1,6 +1,6 @@
 import React, {Component, PropTypes} from 'react';
 import {connect} from 'react-redux';
-import {exitBuilderMode, closeFieldSelectMenu} from '../../../src/actions/reportBuilderActions';
+import {exitBuilderMode} from '../../../src/actions/reportBuilderActions';
 import {CONTEXT} from '../../actions/context';
 import SaveOrCancelFooter from '../saveOrCancelFooter/saveOrCancelFooter';
 import Button from 'react-bootstrap/lib/Button';
@@ -69,15 +69,8 @@ const mapStateToProps = (state) => {
     };
 };
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        exitBuilderMode: (context) => {
-            dispatch(exitBuilderMode(context));
-        },
-        closeFieldSelectMenu: (context) => {
-            dispatch(closeFieldSelectMenu(context));
-        }
-    };
+const mapDispatchToProps = {
+    exitBuilderMode
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ReportSaveOrCancelFooter);

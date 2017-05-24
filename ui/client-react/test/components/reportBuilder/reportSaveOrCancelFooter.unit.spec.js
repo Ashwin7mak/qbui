@@ -15,19 +15,16 @@ describe('Report Builder Save and Cancel Footer', () => {
         appId: appId,
         tblId: tblId,
         redirectRoute: previousLocation,
-        exitBuilderMode: (context) => {},
-        closeFieldSelectMenu: (context) => {}
+        exitBuilderMode: (context) => {}
     };
 
     beforeEach(() => {
         jasmineEnzyme();
         spyOn(props, 'exitBuilderMode').and.callThrough();
-        spyOn(props, 'closeFieldSelectMenu').and.callThrough();
     });
 
     afterEach(() => {
         props.exitBuilderMode.calls.reset();
-        props.closeFieldSelectMenu.calls.reset();
     });
 
     it('exits report builder onCancel', () => {

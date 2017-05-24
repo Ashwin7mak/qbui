@@ -42,9 +42,6 @@ describe('Test Apps Store', () => {
         expect(flux.store(STORE_NAME).__actions__.SELECT_APP_FAILED).toBeDefined();
         expect(flux.store(STORE_NAME).__actions__.SELECT_TABLE).toBeDefined();
         expect(flux.store(STORE_NAME).__actions__.UPDATED_TABLE_PROPS).toBeDefined();
-        expect(flux.store(STORE_NAME).__actions__.LOAD_APP_ROLES).toBeDefined();
-        expect(flux.store(STORE_NAME).__actions__.LOAD_APP_ROLES_SUCCESS).toBeDefined();
-        expect(flux.store(STORE_NAME).__actions__.LOAD_APP_ROLES_FAILED).toBeDefined();
         expect(flux.store(STORE_NAME).__actions__.LOAD_APP_OWNER).toBeDefined();
         expect(flux.store(STORE_NAME).__actions__.LOAD_APP_OWNER_SUCCESS).toBeDefined();
         expect(flux.store(STORE_NAME).__actions__.LOAD_APP_OWNER_FAILED).toBeDefined();
@@ -177,43 +174,6 @@ describe('Test Apps Store', () => {
 
         expect(flux.store(STORE_NAME).appUsers).toEqual(users);
         expect(flux.store(STORE_NAME).appUsersUnfiltered).toEqual(unfilteredUsers);
-
-        expect(flux.store(STORE_NAME).emit).toHaveBeenCalledWith('change');
-        expect(flux.store(STORE_NAME).emit.calls.count()).toBe(1);
-    });
-
-    it('test load app roles action', () => {
-
-        let loadAppsAction = {
-            type: actions.LOAD_APP_ROLES
-        };
-
-        flux.dispatcher.dispatch(loadAppsAction);
-
-        expect(flux.store(STORE_NAME).emit.calls.count()).toBe(0);
-    });
-
-    it('test load app roles failed action', () => {
-
-        let loadAppsAction = {
-            type: actions.LOAD_APP_ROLES_FAILED
-        };
-
-        flux.dispatcher.dispatch(loadAppsAction);
-
-        expect(flux.store(STORE_NAME).emit.calls.count()).toBe(0);
-    });
-
-    it('test load app roles success action', () => {
-        let roles = {"1": {"name": "duder", "id": 1337, "description": "the duderest duder to ever duder"}};
-        let loadAppsAction = {
-            type: actions.LOAD_APP_ROLES_SUCCESS,
-            payload: roles
-        };
-
-        flux.dispatcher.dispatch(loadAppsAction);
-
-        expect(flux.store(STORE_NAME).appRoles).toEqual(roles);
 
         expect(flux.store(STORE_NAME).emit).toHaveBeenCalledWith('change');
         expect(flux.store(STORE_NAME).emit.calls.count()).toBe(1);
