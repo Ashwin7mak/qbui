@@ -175,7 +175,7 @@ const forms = (
         }
 
         let {field, newLocation} = _.cloneDeep(action.content);
-        const isNewRelationshipField = _.get(newField, "datatypeAttributes.type", null) === constants.LINK_TO_RECORD;
+        const isNewRelationshipField = _.get(field, "datatypeAttributes.type", null) === constants.LINK_TO_RECORD;
 
         updatedForm = _.cloneDeep(currentForm);
         let columnElementLength = updatedForm.formData.formMeta.tabs[0].sections[0].columns[0] ? updatedForm.formData.formMeta.tabs[0].sections[0].columns[0].elements.length : 0;
