@@ -219,7 +219,7 @@ class formBuilderPage {
     save() {
         // Clicks on the SAVE button in the form builder and waits for the next page to appear
         this.saveBtn.click();
-        browser.waitForText('.leftNavLabel', true);
+        browser.waitForExist('.leftNavLabel');
         browser.waitForText('.leftNavLabel');
         return this;
     }

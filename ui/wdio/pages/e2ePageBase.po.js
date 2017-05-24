@@ -70,9 +70,7 @@
     };
 
     PageBase.prototype.viewFirstRecordInBrowser = function(realmName, appId, tableId, reportId) {
-        browser.url(e2eBase.getRequestViewFirstRecordEndpoint(realmName, appId, tableId, reportId));
-        // wait for left nav to be completely loaded
-        return reportContentPO.waitForLeftNavLoaded();
+        return browser.url(e2eBase.getRequestViewFirstRecordEndpoint(realmName, appId, tableId, reportId));
     };
 
     //TODO: Refactor these if needed
