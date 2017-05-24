@@ -194,15 +194,17 @@
         });
 
         it('Verify that only ADMIN can delete a Table', function() {
-            //get the user authentication
-            RequestSessionTicketPage.get(e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.recordBase.apiBase.resolveUserTicketEndpoint() + '?uid=' + userId + '&realmId='));
+            browser.call(function() {
+                //get the user authentication
+                return RequestSessionTicketPage.get(e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.recordBase.apiBase.resolveUserTicketEndpoint() + '?uid=' + userId + '&realmId='));
+            });
 
-            // Load the app in the realm
-            RequestAppsPage.get(e2eBase.getRequestAppPageEndpoint(realmName, testApp.id));
+            browser.call(function() {
+                // Load the app in the realm
+                return RequestAppsPage.get(e2eBase.getRequestAppPageEndpoint(realmName, testApp.id));
+            });
 
-            //wait until you see tableLists got loaded
-            browser.element('.tablesList').waitForVisible();
-
+            ReportContentPO.waitForLeftNavLoaded();
 
             //Step 5 - Verify settings icon not available for user other than ADMIN
             expect(browser.isVisible(ReportContentPO.settingsIconName)).toBeFalsy();
