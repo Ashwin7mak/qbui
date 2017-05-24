@@ -72,6 +72,7 @@
             //Step6: Verify the help button is clickable
             TopNavPO.helpButton.click();
         });
+
         /**
          * Test Method - checking for visibility of topNav on Report homepage
          */
@@ -86,6 +87,7 @@
             //Step2: Verify the no.of global action icons
             expect(TopNavPO.topNavGlobalActionsListEl.value.length).toBe(4);
         });
+
         //TODO: To enable these when topNav is added to User/App homepage MC-2646
         /**
          * Test Method - checking for visibility of topNav on User homepage
@@ -99,6 +101,7 @@
             //Step2: Verify the no.of global action icons
             expect(TopNavPO.topNavGlobalActionsListEl.value.length).toBe(4);
         });
+
         //TODO: To enable these when topNav is added to User/App homepage MC-2646
         /**
          * Test Method - checking for visibility of topNav on App homepage
