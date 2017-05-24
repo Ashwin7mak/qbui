@@ -15,6 +15,8 @@ export const LOADING_FORM = 'LOADING_FORM';
 export const LOAD_FORM_ERROR = 'LOAD_FORM_ERROR';
 export const LOAD_FORM_SUCCESS = 'LOAD_FORM_SUCCESS';
 export const UPDATE_FORM_REDIRECT_ROUTE = 'UPDATE_FORM_REDIRECT_ROUTE';
+export const DRAGGING_LINK_TO_RECORD = 'DRAGGING_LINK_TO_RECORD';
+export const HIDE_RELATIONSHIP_DIALOG = 'HIDE_RELATIONSHIP_DIALOG';
 
 //  Used when saving a form or a record to show/hide the spinner
 export const SAVE_FORM = 'SAVE_FORM';
@@ -63,6 +65,7 @@ export const SAVE_RECORD = 'SAVE_RECORD';
 export const SAVE_RECORD_SUCCESS = 'SAVE_RECORD_SUCCESS';
 export const SAVE_RECORD_ERROR = 'SAVE_RECORD_ERROR';
 export const SAVE_RECORD_COMPLETE = 'SAVE_RECORD_COMPLETE';
+export const ADD_CHILD_RECORD = 'ADD_CHILD_RECORD';
 
 //  Record actions for inline edit
 export const EDIT_RECORD_START = 'EDIT_RECORD_START';

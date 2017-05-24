@@ -122,12 +122,14 @@ export const ReportRoute = React.createClass({
     handleDrillIntoChild(tblId, recId) {
         let embeddedReport = getEmbeddedReportByContext(this.props.embeddedReports, this.props.uniqueId);
 
-        const existingPath = this.props.match.url;
-        const appId = _.get(this, 'props.match.params.appId', this.selectedAppId);
-        const recordDrawerSegment = UrlUtils.getRecordDrawerSegment(appId, tblId, embeddedReport.id, recId);
-        const link = existingPath + recordDrawerSegment;
-        if (this.props.history) {
-            this.props.history.push(link);
+        if (embeddedReport) {
+            const existingPath = this.props.match.url;
+            const appId = _.get(this, 'props.match.params.appId', this.selectedAppId);
+            const recordDrawerSegment = UrlUtils.getRecordDrawerSegment(appId, tblId, embeddedReport.id, recId);
+            const link = existingPath + recordDrawerSegment;
+            if (this.props.history) {
+                this.props.history.push(link);
+            }
         }
     },
 
