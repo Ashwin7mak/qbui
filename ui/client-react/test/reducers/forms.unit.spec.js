@@ -561,38 +561,4 @@ describe('Forms reducer functions', () => {
         });
 
     });
-    describe('FieldsToDelete state changes', () => {
-        let stateWithViewFormForRelations = {
-            'view': {
-                id: 'view',
-                formData: {formMeta: {}}
-            }
-        };
-        let stateWithNoCurrentForm = {
-            'edit': {
-                id: 'view',
-                formData: {formMeta: {}}
-            }
-        };
-
-        const actionPayload = {
-            id: VIEW,
-            type: types.MARK_FIELD_FOR_DELETION,
-            content: {fieldId: '23'}
-        };
-
-        it('returns a new state with the fieldsToDelete array updated', () => {
-            expect(reducer(stateWithViewFormForRelations, actionPayload)).toEqual({
-                [VIEW]: {
-                    id:'view',
-                    formData:{formMeta: {fieldsToDelete: [actionPayload.content.fieldId]}}
-                }
-            });
-        });
-
-        it('returns existing state if there is no current form', () => {
-            expect(reducer(stateWithNoCurrentForm, actionPayload)).toEqual(stateWithNoCurrentForm);
-        });
-    });
-
 });
