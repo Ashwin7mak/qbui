@@ -218,13 +218,24 @@ const forms = (
             return state;
         }
 
-        let {location} = action.content;
+        let {location, field} = action;
+        let formMetaCopy = _.cloneDeep(updatedForm.formData.formMeta);
 
+        let relatedRelationship = false;
+        if (Array.isArray(formMetaCopy.relationships) && formMetaCopy.relationships.length > 0) {
+            relatedRelationship = _.find(formMetaCopy.relationships, (rel) => rel.detailTableId === field.tableId  && rel.detailFieldId === field.id);
+        }
+        if (relatedRelationship) {
+            if (formMetaCopy.fieldsToDelete) {
+                formMetaCopy.fieldsToDelete.push(field.id);
+            } else {
+                formMetaCopy.fieldsToDelete = [field.id];
+            }
+        }
         updatedForm.formData.formMeta = MoveFieldHelper.removeField(
-            updatedForm.formData.formMeta,
+            formMetaCopy,
             location
         );
-
         updatedForm.isPendingEdit = true;
         newState[id] = updatedForm;
         return newState;
