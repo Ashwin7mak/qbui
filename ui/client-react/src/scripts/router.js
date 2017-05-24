@@ -12,6 +12,7 @@ import AppHomePageRoute from "../components/app/appHomePageRoute";
 import ReportRoute from "../components/report/reportRoute";
 import RecordRoute from "../components/record/recordRoute";
 import FormBuilderContainer from '../components/builder/formBuilderContainer';
+import ReportBuilderContainer from '../components/builder/reportBuilderContainer';
 import TableHomePageRoute from "../components/table/tableHomePageRoute";
 import FeatureSwitchesRoute from "../components/featureSwitches/featureSwitchesRoute";
 import FeatureSwitchOverridesRoute from "../components/featureSwitches/featureSwitchOverridesRoute";
@@ -25,7 +26,7 @@ import AppsBundleLoader from '../locales/appsBundleLoader';
 import config from '../config/app.config';
 
 import Logger from "../utils/logger";
-import {APPS_ROUTE, APP_ROUTE, BUILDER_ROUTE, ADMIN_ROUTE, SETTINGS_ROUTE} from '../constants/urlConstants';
+import {APPS_ROUTE, APP_ROUTE, AUTOMATION_PATH, BUILDER_ROUTE, ADMIN_ROUTE, SETTINGS_ROUTE} from '../constants/urlConstants';
 
 import {editRecordCancel, createRecord, updateRecord} from '../actions/recordActions';
 import {showErrorMsgDialog, hideTrowser} from '../actions/shellActions';
@@ -179,6 +180,10 @@ const routes = [
             {
                 path: `${BUILDER_ROUTE}/app/:appId/table/:tblId/form/:formId?`,
                 component: FormBuilderContainer
+            },
+            {
+                path: `${BUILDER_ROUTE}/app/:appId/table/:tblId/report/:rptId`,
+                component: ReportBuilderContainer
             }
         ]
     },
@@ -202,7 +207,7 @@ const routes = [
                 component: AppPropertiesRoute
             },
             {
-                path: `${SETTINGS_ROUTE}/app/:appId/automations`,
+                path: `${SETTINGS_ROUTE}/app/:appId/${AUTOMATION_PATH}`,
                 component: AutomationListRoute
             },
             {

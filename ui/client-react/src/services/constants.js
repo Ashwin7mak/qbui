@@ -36,6 +36,7 @@ export default {
     FORMS_TYPE          : 'formsType',
     LOG                 : 'log',
     USERS               : 'users',
+    RELATIONSHIPS       : 'relationships',
     RIGHTS              : 'accessRights',
 
     FEATURE_SWITCHES    : 'featureSwitches',
@@ -61,7 +62,9 @@ export default {
     STACK               : 'stack',
 
     // Automations
-    AUTOMATION_INVOKE   : 'workflow',
-    AUTOMATION_API      : 'api/v1',
-    AUTOMATION_FLOWS    : 'workflow/flows'
+    AUTOMATION : {
+        INVOKE   : 'workflow',
+        API      : 'api/v1',
+        FLOWS    : 'workflow/flows'
+    }
 };

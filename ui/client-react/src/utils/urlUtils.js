@@ -105,6 +105,17 @@ const UrlUtils = {
     },
 
     /**
+     * Return URL of route for adding a related child in the following form:
+     *
+     *    `location?${EDIT_RECORD_KEY}=new&${DETAIL_APPID}={detailAppId}${DETAIL_TABLEID}={detailTableId}
+     *       ${DETAIL_REPORTID}={detailReportId}${DETAIL_KEY_FID}={detailKeyFid}&${DETAIL_KEY_VALUE}={detailKeyValue}`;
+     * @return {string} URL of route for showing new child record
+     */
+    getAddRelatedChildLink(location, detailAppId, detailTableId, detailReportId, detailKeyFid, detailKeyValue) {
+        return StringUtils.format(URL.ADD_RELATED_CHILD_LINK, [...arguments]);
+    },
+
+    /**
      * Build client url link to app users management page
      *
      * @param appId
@@ -139,7 +150,7 @@ const UrlUtils = {
      * Get the link for Automation Settings page
      */
     getAutomationSettingsLink(appId) {
-        return `${URL.SETTINGS_ROUTE}/app/${appId}/automations`;
+        return `${URL.SETTINGS_ROUTE}/app/${appId}/${URL.AUTOMATION_PATH}`;
     }
 };
 

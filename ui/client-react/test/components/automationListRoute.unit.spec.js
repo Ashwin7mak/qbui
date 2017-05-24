@@ -6,8 +6,8 @@ import Promise from 'bluebird';
 import _ from 'lodash';
 
 const sampleApp = {id: 'app1', tables: []};
-const sampleAuto1 = {id: 'auto1', name: 'Auto 1'};
-const sampleAuto2 = {id: 'auto2', name: 'Auto 2'};
+const sampleAuto1 = {id: 'auto1', name: 'Auto 1', active: true};
+const sampleAuto2 = {id: 'auto2', name: 'Auto 2', active: false};
 
 const props = {
     app: sampleApp,
@@ -20,11 +20,10 @@ const propsWithAutos = {
     automations: [sampleAuto1, sampleAuto2]
 };
 
-describe('AutomationListRoute functions', () => {
-    'use strict';
+describe('AutomationListRoute', () => {
     let component;
 
-    describe('AutomationListRoute', () => {
+    describe('AutomationListRoute without automations', () => {
         beforeEach(() => {
             component = TestUtils.renderIntoDocument(<AutomationListRoute {...props}/>);
         });
@@ -37,8 +36,8 @@ describe('AutomationListRoute functions', () => {
         });
 
         it('test list of automation names is blank', () => {
-            let namesLI = TestUtils.scryRenderedDOMComponentsWithTag(component, "td");
-            expect(namesLI.length).toEqual(0);
+            let autoTDs = TestUtils.scryRenderedDOMComponentsWithTag(component, "td");
+            expect(autoTDs.length).toEqual(0);
         });
 
     });
@@ -52,13 +51,18 @@ describe('AutomationListRoute functions', () => {
         });
 
         it('test list of automation names contains automations', () => {
-            let namesLI = TestUtils.scryRenderedDOMComponentsWithTag(component, "td");
-            expect(namesLI.length).toEqual(2);
+            let autoTDs = TestUtils.scryRenderedDOMComponentsWithTag(component, "td");
+            expect(autoTDs.length).toEqual(4);
         });
 
         it('test list of automation names has the correct name first', () => {
-            let namesLI = TestUtils.scryRenderedDOMComponentsWithTag(component, "td");
-            expect(namesLI[0].innerText).toEqual("Auto 1");
+            let autoTDs = TestUtils.scryRenderedDOMComponentsWithTag(component, "td");
+
+            let i = 0;
+            expect(autoTDs[i++].innerText).toEqual("Auto 1");
+            expect(autoTDs[i++].innerText).toEqual("Yes");
+            expect(autoTDs[i++].innerText).toEqual("Auto 2");
+            expect(autoTDs[i++].innerText).toEqual("No");
         });
 
     });
