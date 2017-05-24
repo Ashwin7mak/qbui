@@ -319,15 +319,11 @@
             //get the user authentication
             RequestSessionTicketPage.get(e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.recordBase.apiBase.resolveUserTicketEndpoint() + '?uid=' + userId + '&realmId='));
 
-            //go to apps page
-            // Load the requestAppsPage (shows a list of all the apps in a realm)
-            RequestAppsPage.get(e2eBase.getRequestAppsPageEndpoint(realmName));
+            // Load the app in the realm
+            RequestAppsPage.get(e2eBase.getRequestAppPageEndpoint(realmName, testApp.id));
 
-            //select the App
-            RequestAppsPage.selectApp(testApp.name);
-
-            //select the table
-            tableCreatePO.selectTable(testApp.tables[e2eConsts.TABLE1].name);
+            //wait until you see tableLists got loaded
+            browser.element('.tablesList').waitForVisible();
 
             //Verify edit settings button not available for user other than ADMIN
             expect(browser.isVisible('.iconUISturdy-settings')).toBeFalsy();
