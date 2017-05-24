@@ -39,7 +39,7 @@ export const updateReportRedirectRoute = (context, route) => {
  * @param context
  */
 export const setReportBuilderPendingEditToFalse = (context) => {
-    return event(context, types.SET_IS_PENDING_EDIT_TO_FALSE, {});
+    return event(context, types.SET_IS_PENDING_EDIT_TO_FALSE);
 };
 
 /**

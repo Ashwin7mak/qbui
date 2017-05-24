@@ -53,6 +53,7 @@ class AppHistory {
             this.getNavReport = null;
             this.setFieldsPropertiesPendingEditToFalse = null;
             this.setFormBuilderPendingEditToFalse = null;
+            this.setReportBuilderPendingEditToFalse = null;
 
             // Keep track of the event listeners so they can be canceled
             this.cancelListenBefore = null;
@@ -342,6 +343,9 @@ class AppHistory {
             const state = self.store.getState();
             //fetch stores that have pendEdits
             let {reportBuilderStore} = self.getStores(state);
+            if (reportBuilderStore.isPendingEdit) {
+                self.setReportBuilderPendingEditToFalse(CONTEXT.REPORT.NAV);
+            }
 
             // save is not currently implemented
         }
@@ -369,7 +373,7 @@ class AppHistory {
 
     _discardChangesForReportBuilder(reportBuilderStoreIsPendingEdit) {
         if (reportBuilderStoreIsPendingEdit) {
-            self.setReportBuilderPendingEditToFalse();
+            self.setReportBuilderPendingEditToFalse(CONTEXT.REPORT.NAV);
         }
         self._continueToDestination();
     }
