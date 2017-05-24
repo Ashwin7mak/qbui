@@ -225,6 +225,10 @@
             ASC: 'asc',
             DESC: 'desc'
         },
+        REPORT_FORM_TYPE:{
+            CHILD_REPORT : 'CHILD_REPORT',
+            REPORT_LINK : 'REPORTLINK'
+        },
         RECORD_TYPE: {
             GROUP: 'GROUP',
             TABLE: 'TABLE'

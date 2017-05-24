@@ -65,6 +65,7 @@ export const SAVE_RECORD = 'SAVE_RECORD';
 export const SAVE_RECORD_SUCCESS = 'SAVE_RECORD_SUCCESS';
 export const SAVE_RECORD_ERROR = 'SAVE_RECORD_ERROR';
 export const SAVE_RECORD_COMPLETE = 'SAVE_RECORD_COMPLETE';
+export const ADD_CHILD_RECORD = 'ADD_CHILD_RECORD';
 
 //  Record actions for inline edit
 export const EDIT_RECORD_START = 'EDIT_RECORD_START';

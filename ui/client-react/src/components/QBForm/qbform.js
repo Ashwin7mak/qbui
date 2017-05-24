@@ -9,7 +9,7 @@ import Locale from '../../locales/locales';
 import Constants from '../../../../common/src/constants';
 import UserFieldValueRenderer from '../fields/userFieldValueRenderer.js';
 import DragAndDropField from '../formBuilder/dragAndDropField';
-import RelatedChildReport from './relatedChildReport';
+import ChildReport from './childReport';
 import {CONTEXT} from "../../actions/context";
 import FlipMove from 'react-flip-move';
 import {FORM_ELEMENT_ENTER, FORM_ELEMENT_LEAVE} from '../../constants/animations';
@@ -428,6 +428,7 @@ export const QBForm = React.createClass({
         const tables = _.get(this, 'props.selectedApp.tables');
         const childTable = _.find(tables, {id: relationship.detailTableId}) || {};
         const childTableName = childTable.name;
+        const childTableNoun = childTable.tableNoun;
 
         // Handler for clicking on a record in an embedded report. Drilling down to a child should open the clicked
         // child record in a drawer.
@@ -437,13 +438,17 @@ export const QBForm = React.createClass({
 
         return (
             <div key={id} className="formElementContainer formElement referenceElement">
-                <RelatedChildReport
+                <ChildReport
                     appId={_.get(relationship, "appId")}
+                    childAppId={_.get(relationship, "detailAppId")}
                     childTableId={_.get(relationship, "detailTableId")}
                     childReportId={_.get(relationship, 'childDefaultReportId')}
                     childTableName={childTableName}
+                    childTableNoun={childTableNoun}
                     detailKeyFid={_.get(relationship, "detailFieldId")}
                     detailKeyValue={detailKeyValue}
+                    relationshipId={ReferenceElement.relationshipId}
+                    relationship={relationship}
                     type={ReferenceElement.type}
                     appUsers={this.props.appUsers}
                     handleDrillIntoChild={handleDrillIntoChild}
