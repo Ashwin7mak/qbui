@@ -49,7 +49,6 @@
 
         /**
          * Test method. Checks to make sure the Table Actions ( Sort By, Records Count and dropdownToggle button) are visible/enabled/clickable.
-         *
          */
         it('Should load the table report actions', function() {
 
@@ -70,9 +69,9 @@
         });
 
         /**
-         * verifies record count
+         * verify record count and card expander button is visible/clickable
          */
-        it('Should load the reports page with the appropriate table report', function() {
+        it('Should load the reports page with the appropriate table report and verify functionality of card expander button', function() {
             // Step 1 - wait for the report content to be visible
             reportContentPO.waitForReportContentSB();
 

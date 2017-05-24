@@ -512,7 +512,6 @@
                 this.waitForReportContentSB();
             }
         },
-
         /**
          * Function that will click on the Add record button on report page
          */
@@ -523,7 +522,6 @@
                 browser.element('.editForm').waitForVisible();
             }
         },
-
         /**
          * Function that will click on the DropdownToggleActionButton
          */
@@ -534,7 +532,6 @@
                 browser.element('.qbIcon.iconUISturdy-fries').click();
             }
         },
-
         /**
          * Function that will click on the card expander button
          */
