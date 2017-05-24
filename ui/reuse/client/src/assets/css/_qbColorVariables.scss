@@ -410,9 +410,10 @@ $panel-header-icon-hover-color: $icon-color-hover;
 $panel-border-color:            $color-black-300;
 
 // tabs on QBForms
-$tabs-underline-background-color:   $color-indigo-800;
+$tabs-underline-background-color:   $color-black-700;
 $tabs-disabled-color:               $badcolor5-color18;
-$tabs-active-color:                 $color-black-600;
+$tabs-active-color:                 $color-black-700;
+$tabs-hover-text-color:             $color-indigo-800;
 
 // FormBuilder - Drag & Drop
 $fieldtoken-background-color1: $color-orange-500;
@@ -440,6 +441,9 @@ $propertyvalue-border-color: $color-black-400;
 // App Users Management
 $add-user-button: $color-cyan-500;
 $app-role-divider: $color-yellow-500;
+
+//this is used on all "Add a record" in both reference field and report link
+$button-lightbg-text-color: $color-indigo-800;
 
 //-------------------------------------------------------------------
 // END NEW SEMANTIC NAMES

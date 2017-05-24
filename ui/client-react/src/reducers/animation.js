@@ -7,6 +7,7 @@ const Animation = (state = {isFormAnimating: false}, action) => {
         // Updates the animation state of a form so multiple drop events are not called while building
         return Object.assign({}, state, {isFormAnimating: action.isAnimating});
 
+
     default :
         return state;
     }

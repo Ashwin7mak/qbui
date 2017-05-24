@@ -5,6 +5,7 @@ import FieldValueRenderer from '../fields/fieldValueRenderer';
 import FieldValueEditor from '../fields/fieldValueEditor';
 import FieldFormats from '../../utils/fieldFormats';
 import FieldUtils from '../../utils/fieldUtils';
+import constants from '../../../../common/src/constants';
 import './qbform.scss';
 import _ from 'lodash';
 import {editRecordValidateField} from '../../actions/recordActions';
@@ -22,7 +23,8 @@ export const FieldElement = React.createClass({
         relatedField: React.PropTypes.object, // field from Form data
         fieldRecord: React.PropTypes.object, // the record data
         includeLabel: React.PropTypes.bool, // render label above field (otherwise ignore it)
-        appUsers: React.PropTypes.array.isRequired // app users
+        appUsers: React.PropTypes.array.isRequired, // app users,
+        removeFieldFromForm: React.PropTypes.func
     },
 
     getChanges(theVals) {
@@ -95,6 +97,7 @@ export const FieldElement = React.createClass({
         let isEditable = this.props.edit && FieldUtils.isFieldEditable(this.props.relatedField);
 
         let fieldElement = null;
+
         if (isEditable) {
             fieldElement = <FieldValueEditor type={fieldType}
                                              value={fieldRawValue}
@@ -115,8 +118,12 @@ export const FieldElement = React.createClass({
                                              isDisabled={this.props.isDisabled}
                                              classes={classes}
                                              appUsers={this.props.appUsers}
+                                             app={this.props.app}
+                                             tblId={this.props.tblId}
+                                             location={this.props.location}
                                              label={FieldUtils.getFieldLabel(this.props.element, this.props.relatedField)}
                                              tabIndex={this.props.tabIndex}
+                                             removeFieldFromForm={this.props.removeFieldFromForm}
             />;
         } else if (fieldDisplayValue !== null || fieldRawValue !== null) { //if there is no value do not render the field
             fieldElement = <FieldValueRenderer type={fieldType}
@@ -156,12 +163,8 @@ const mapStateToProps = (state) => {
 
 // similarly, abstract out the Redux dispatcher from the presentational component
 // (another bit of boilerplate to keep the component free of Redux dependencies)
-const mapDispatchToProps = (dispatch) => {
-    return {
-        editRecordValidateField: (fieldDef, fieldName, value, checkRequired) => {
-            dispatch(editRecordValidateField(fieldDef, fieldName, value, checkRequired));
-        }
-    };
+const mapDispatchToProps = {
+    editRecordValidateField
 };
 
 export default connect(

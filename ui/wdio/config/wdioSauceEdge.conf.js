@@ -4,7 +4,6 @@ var config = {
         {
             platform: 'Windows 10',
             browserName: 'MicrosoftEdge',
-            version: '14.14393',
             tunnelIdentifier: process.env.ENV_TUNNEL_NAME,
             build           : 'WebdriverIO Jenkins Try Build #' + process.env.BUILD_NUMBER + ' - Git branch: ' + process.env.GIT_UIBRANCH + ' - Windows 10 Edge Browser',
             tags            : [process.env.SAUCE_JOB_NAME + '_Win10_Edge', 'try', 'Win10', 'Edge', process.env.BUILD_NUMBER, process.env.GIT_UIBRANCH],

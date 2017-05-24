@@ -38,7 +38,11 @@ export function getRecordTitle(table, record, recId) {
         return "";
     }
 
-    let defaultRecordTitle = (table.tableNoun ? table.tableNoun : table.name) + (recId && recId !== SchemaConsts.UNSAVED_RECORD_ID ? " #" + recId : "");
+    let tname = table.tableNoun ? table.tableNoun : "";
+    if (!tname) {
+        tname = table.name ? table.name : "";
+    }
+    let defaultRecordTitle = tname + (recId && recId !== SchemaConsts.UNSAVED_RECORD_ID ? " #" + recId : "");
     if (!record) {
         return defaultRecordTitle;
     }

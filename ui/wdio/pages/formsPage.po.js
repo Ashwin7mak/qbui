@@ -217,7 +217,7 @@
          * @returns Array of user fields
          */
         getAllUserFields: {value: function() {
-            return this.editFormContainerEl.elements('.cellEdit.userFormat .Select-multi-value-wrapper');
+            return this.editFormContainerEl.elements('.cellEdit.userFormat .Select-arrow');
         }},
 
         /**
@@ -321,7 +321,7 @@
          *
          */
         selectFromList : {value: function(listOption) {
-            browser.element('.Select-menu-outer').waitForVisible();
+            browser.waitForVisible('.Select-menu-outer');
             //get all options from the list
             var option = browser.elements('.Select-option').value.filter(function(optionText) {
                 return optionText.element('div div').getText() === listOption;
@@ -344,6 +344,8 @@
             var fieldTypes = getAllUniqueFieldTypes;
             for (var i = 0; i < fieldTypes.value.length; i++) {
                 browser.execute("return arguments[0].scrollIntoView(true);", fieldTypes.value[i]);
+                //Need this to stabilize after scrolling to the element
+                browser.pause(e2eConsts.shortWaitTimeMs);
                 fieldTypes.value[i].waitForVisible();
                 fieldTypes.value[i].click();
                 this.selectFromList(fieldValue);

@@ -28,19 +28,20 @@ class StandardGridToolBar extends React.Component {
     };
 
     render() {
-        // debugger;
-        // console.log('this.props: ', this.props);
-        let hasFacets = false;
+        let hasFacets = this.props.shouldFacet;
         return (
             <div>
                 <div className={"standardGridToolBar " + (hasFacets ? "" : "noFacets")}>
                     <div className="standardLeftToolBar">
+                        {this.props.shouldSearch &&
+                        // TODO: MC-2733 : REPLACE THIS WITH FilterSearchBox component from reuse
                         <IconInputBox placeholder={`Search ${this.props.itemTypePlural}`}
                                       onChange={this.props.onSearchChange}
                                       onClear={this.props.clearSearchTerm}
                                       value={this.props.searchTerm}
                         />
-                        {this.props.doFacet ?
+                        }
+                        {hasFacets &&
                             <div className="standardGridFacet">
                                 <StandardGridFacetsMenu
                                     className="facetMenu"
@@ -51,19 +52,18 @@ class StandardGridToolBar extends React.Component {
                                     onFacetClearFieldSelects={this.handleFacetClearFieldSelects}
                                     selectedValues={this.props.facetSelections.selectionsHash}
                                 />
-                            </div> : null
+                            </div>
                         }
                     </div>
                     <div className="standardRightToolBar">
                         <div className="standardGridItemsCount">
                             <div className="itemsCount">
-                                {this.props.totalRecords ?
-                                    <StandardGridItemsCount itemCount={this.props.totalRecords}
-                                                            filteredItemCount={this.props.filteredRecords}
+                                {this.props.totalItems &&
+                                    <StandardGridItemsCount totalItems={this.props.totalItems}
+                                                            totalFilteredItems={this.props.totalFilteredItems}
                                                             itemTypePlural={this.props.itemTypePlural}
                                                             itemTypeSingular={this.props.itemTypeSingular}
-                                    /> :
-                                    null
+                                    />
                                 }
                             </div>
                         </div>
@@ -80,19 +80,51 @@ class StandardGridToolBar extends React.Component {
 }
 
 StandardGridToolBar.defaultProps = {
-    doFacet: true,
+    shouldFacet: true,
+    shouldSearch: true
 };
 
 StandardGridToolBar.propTypes = {
+    /**
+     * ID of the Grid
+     */
     id: PropTypes.string.isRequired,
-    doFacet: PropTypes.bool,
-    getPreviousPage: PropTypes.func.isRequired,
-    getNextPage: PropTypes.func.isRequired,
-    doUpdate: PropTypes.func.isRequired,
-    onSearchChange: PropTypes.func.isRequired,
-    totalRecords: PropTypes.number.isRequired,
+
+
+    /**
+     * The type of item we are displaying. For example "Users"/"User"
+     */
+    totalItems: PropTypes.number.isRequired,
     itemTypePlural: PropTypes.string,
     itemTypeSingular: PropTypes.string,
+
+    /**
+     * Call back that updates the toolbar
+     */
+    doUpdate: PropTypes.func.isRequired,
+
+    /**
+     * Whether to Facet in this grid or no
+     */
+    shouldFacet: PropTypes.bool,
+
+    /**
+     * Whether to Facet in this grid or no
+     */
+    doFacet: PropTypes.bool,
+
+    /**
+     * Navigation controls. What to do when a user presses next or previous
+     */
+    getPreviousPage: PropTypes.func.isRequired,
+    getNextPage: PropTypes.func.isRequired,
+
+    /**
+     * Search Functionality Properties
+     * Should we search, what is the current search term, callback for search
+     */
+    shouldSearch: PropTypes.bool,
+    onSearchChange: PropTypes.func.isRequired,
     searchTerm: PropTypes.string,
 };
 
@@ -101,16 +133,24 @@ const mapStateToProps = (state, ownProps) => {
     let paginationInfo = (state.Grids[ownProps.id] || {}).pagination || {};
     return {
         facetSelections:  facetInfo.facetSelections || {},
-        filteredRecords: paginationInfo.filteredRecords || 0,
-        totalRecords: paginationInfo.totalRecords || 0,
-        searchTerm: (state.Grids[ownProps.idp] || {}).searchTerm || '',
+        totalFilteredItems: paginationInfo.totalFilteredItems || 0,
+        totalItems: paginationInfo.totalItems || 0,
+        searchTerm: (state.Grids[ownProps.id] || {}).searchTerm || '',
     };
 };
 
 
+/**
+ * Every one of these actions have the pattern of Setting the State and Informing an Update
+ * All of them trigger through the same update pipeline in the doUpdate (which needs to be provided)
+ * @param dispatch
+ * @param ownProps
+ * @returns {{getPreviousPage: (function()), getNextPage: (function()), onSearchChange: (function(*)), clearSearchTerm: (function()), setFacetSelection: (function(*=))}}
+ */
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
         getPreviousPage: () => {
+            // Go back means a negative offset
             dispatch(StandardGridActions.setCurrentPageOffset(ownProps.id, -1));
             dispatch(StandardGridActions.doUpdate(ownProps.id, ownProps.doUpdate));
         },

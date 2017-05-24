@@ -67,7 +67,7 @@ class MyNotifyPlugin {
                 //notify watched update is done
                 process.stdout.write('\x07');
                 if (stats.hasErrors()) {
-                    exec('growlnotify -n "Build" -m "Failed"');
+                    exec('growlnotify -n "BuildFailed" -m "Failed"');
                 } else {
                     exec('growlnotify -n "Build" -m "Built"');
                 }
