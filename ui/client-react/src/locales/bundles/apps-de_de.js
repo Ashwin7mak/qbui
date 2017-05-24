@@ -93,6 +93,7 @@ export default {
             deleteTheseOverrides: "Löschen sie diesen Überschreibt?",
             more: "Mehr...",
             placeholder: 'Wählen...',
+            tablesPlaceholder: "Wählen Sie eine Tabelle aus...",
             notFound: "Nicht gefunden"
         },
         footer: {
@@ -232,7 +233,8 @@ export default {
             }
         },
         relationship: {
-            childTable: "Kind Tisch"
+            childTable: "Kind Tisch",
+            addChildRecord: "{tableNoun} hinzufügen"
         },
         durationWithUnits: {
             Weeks:"{value, plural, \n =0 {0 Wochen}\n =1 {1 Woche}\n other {{value} Wochen}\n} ",
@@ -558,6 +560,8 @@ export default {
             [FieldFormats.RATING_FORMAT]: "Bewertung",
             [FieldFormats.RATING_FORMAT_MULTICHOICE]: "Bewertung",
             [FieldFormats.URL_FORMULA_FORMAT]: "URL Formel",
+            [FieldFormats.LINK_TO_RECORD]: "Erhalten Sie einen anderen Rekord",
+            LINK_TO_RECORD_FROM: "Erhalten Sie einen anderen Rekord von {parentTable}",
             FORMULA: "Formel",
             SCALAR: "Skalar",
             CONCRETE: "Beton",
@@ -570,7 +574,8 @@ export default {
             title: "Felderigenschaften",
             name: "Name",
             required: "Muss ausgefüllt werden",
-            multiChoice: "Wahlen"
+            multiChoice: "Wahlen",
+            linkToRecord: "Link zu einem Datensatz in der Tabelle"
         },
         builder: {
             tabs: {
@@ -608,6 +613,7 @@ export default {
                     [`addNew${FieldFormats.NUMBER_FORMAT_MULTICHOICE}`]: "Erstellen Sie eine numerische Auswahlliste und fügen Sie sie dem Formular hinzu",
                     [`addNew${FieldFormats.NUMBER_FORMAT_RADIO_BUTTONS}`]: "Erstellen Sie numerische Optionsfelder und fügen Sie sie dem Formular hinzu",
                     [`addNew${FieldFormats.TEXT_FORMAT_RADIO_BUTTONS}`]: "Radio-Optionsfeld erstellen und sie dem Formular hinzufügen",
+                    [`addNew${FieldFormats.LINK_TO_RECORD}`]: "Link zu einem Datensatz in einer anderen Tabelle erstellen",
                 }
             },
             fieldGroups: {
@@ -615,12 +621,19 @@ export default {
                 numeric: "Nummer",
                 date: "Datum",
                 other: "Andere",
-                relationships: "Beziehungen"
+                relationships: "Beziehungen",
+                tableDataConnections: "Tabellendatenverbindungen"
             },
             defaultMultichoiceOptions: {
                 first: "Option 1",
                 second: "Option 2",
                 third: "Option 3"
+            },
+            linkToRecord: {
+                dialogTitle: "Erhalten Sie einen anderen Rekord",
+                addToForm: "Fügen Sie hinzu",
+                tableChooserDescription: "Wenn Sie ein {tableNoun} erstellen oder aktualisieren, können Sie nachschlagen und Informationen aus einem Datensatz in einer anderen Tabelle erhalten.",
+                tableChooserHeading: "Wo ist die Platte, die du bekommen willst?"
             },
             modify: 'Formular ändern'
         },
@@ -703,8 +716,9 @@ export default {
         },
         settings: {
             header: "Einstellungen",
+            appHeader: "App",
+            automationSettings: "Automatisierungseinstellungen",
             tablesHeader: "Tabelle",
-            appsHeader: "Table",
             formsHeader: "Bilden",
             tableSettings: "Tabelleneigenschaften & Einstellungen",
             configureFormBuilder: "Ändern Sie dieses Formular",
@@ -725,6 +739,12 @@ export default {
                 prompt: "Geben Sie JA ein, um zu bestätigen, dass Sie diese Tabelle löschen möchten"
             },
             YES: "JA"
+        },
+        automationList: {
+            nameHeader: "Name",
+            activeHeader: "Aktiv",
+            activeYes: "Ja",
+            activeNo: "Nein"
         }
     }
 };

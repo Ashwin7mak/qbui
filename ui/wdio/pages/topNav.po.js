@@ -18,7 +18,7 @@
         // Feedback button topNav
         feedbackBtn: {
             get: function() {
-                return browser.element('.topNav .userFeedBack');
+                return browser.element('.topNav .userFeedBack .dropdownToggle .iconTableSturdy-Advertising');
             }
         },
         //Give feedback option in Feedback button
@@ -46,7 +46,7 @@
         //Users button topNav
         usersButton: {
             get: function() {
-                return browser.element('.topNav .userDropDown');
+                return browser.element('.topNav .userDropDown .dropdownToggle .iconUISturdy-user');
             }
         },
         userDropdownAppName: {

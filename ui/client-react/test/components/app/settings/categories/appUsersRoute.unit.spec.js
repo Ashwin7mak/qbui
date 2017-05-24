@@ -4,7 +4,7 @@
 import React from 'react';
 import {shallow} from 'enzyme';
 import TestUtils from 'react-addons-test-utils';
-import AppUsersRoute, {__RewireAPI__ as AppUsersRouteAPI} from '../../../../../src/components/app/settings/categories/appUsersRoute';
+import {AppUsersRoute, __RewireAPI__ as AppUsersRouteAPI} from '../../../../../src/components/app/settings/categories/appUsersRoute';
 
 describe('AppUsersRoute functions', () => {
     'use strict';
@@ -19,11 +19,15 @@ describe('AppUsersRoute functions', () => {
     const nextMatch = {params: {appId: 2}};
     const flux = {
         actions:{
-            loadAppRoles: function() {return;},
             loadAppOwner: function() {return;},
             selectUsersRows: function() {return;},
             selectedUsersRows: function() {return;}
         }
+    };
+
+    const mockActions = {
+        getAppRoles() {return appRoles;},
+        loadAppRoles() {return appRoles;}
     };
 
     var IconActionsMock = React.createClass({
@@ -35,20 +39,24 @@ describe('AppUsersRoute functions', () => {
     });
 
     beforeEach(() => {
-        spyOn(flux.actions, 'loadAppRoles');
         spyOn(flux.actions, 'loadAppOwner');
         spyOn(flux.actions, 'selectedUsersRows');
+        spyOn(mockActions, 'getAppRoles');
+        spyOn(mockActions, 'loadAppRoles');
     });
 
     afterEach(() => {
-        flux.actions.loadAppRoles.calls.reset();
         flux.actions.loadAppOwner.calls.reset();
+        flux.actions.selectedUsersRows.calls.reset();
+        mockActions.getAppRoles.calls.reset();
+        mockActions.loadAppRoles.calls.reset();
     });
 
     it('test render of component', () => {
         AppUsersRouteAPI.__Rewire__('IconActions', IconActionsMock);
 
         let component = TestUtils.renderIntoDocument(<AppUsersRoute appUsersUnfiltered={appUsersUnfiltered}
+                                                                    loadAppRoles={mockActions.loadAppRoles}
                                                                     appRoles={appRoles}
                                                                     appOwner={appOwner}
                                                                     flux={flux}
@@ -59,18 +67,18 @@ describe('AppUsersRoute functions', () => {
                                                                     match={match}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
         component = shallow(<AppUsersRoute appUsersUnfiltered={appUsersUnfiltered}
-                                                         appRoles={appRoles}
-                                                         appOwner={appOwner}
-                                                         flux={flux}
-                                                         selectedApp={selectedApp}
-                                                         selectedUserRows={[]}
-                                                         params={{appId: 1}}
-                                                         appUsers={[]}
-                                                         match={match}/>);
+                                         loadAppRoles={mockActions.loadAppRoles}
+                                         appRoles={appRoles}
+                                         appOwner={appOwner}
+                                         flux={flux}
+                                         selectedApp={selectedApp}
+                                         selectedUserRows={[]}
+                                         params={{appId: 1}}
+                                         appUsers={[]}
+                                         match={match}/>);
         let instance = component.instance();
         instance.componentDidMount();
         instance.selectAllRows();
-        expect(flux.actions.loadAppRoles).toHaveBeenCalled();
         AppUsersRouteAPI.__ResetDependency__('IconActions');
     });
 
@@ -78,17 +86,17 @@ describe('AppUsersRoute functions', () => {
         AppUsersRouteAPI.__Rewire__('IconActions', IconActionsMock);
 
         let component = shallow(<AppUsersRoute appUsersUnfiltered={appUsersUnfiltered}
-                                           appRoles={appRoles}
-                                           appOwner={appOwner}
-                                           flux={flux}
-                                           selectedApp={selectedApp}
-                                           selectedUserRows={[]}
-                                           params={{appId: 1}}
-                                           appUsers={[]}
-                                           match={match}/>);
+                                               loadAppRoles={mockActions.loadAppRoles}
+                                               appOwner={appOwner}
+                                               appRoles={appRoles}
+                                               flux={flux}
+                                               selectedApp={selectedApp}
+                                               selectedUserRows={[]}
+                                               params={{appId: 1}}
+                                               appUsers={[]}
+                                               match={match}/>);
         let instance = component.instance();
         instance.componentWillReceiveProps({appUsersUnfiltered, match: nextMatch, appRoles, appOwner, flux, selectedApp, selectedUserRows: [], params:{appId:2}, appUsers:[]});
-        expect(flux.actions.loadAppRoles).toHaveBeenCalled();
         AppUsersRouteAPI.__ResetDependency__('IconActions');
     });
     it('test Selections', () => {

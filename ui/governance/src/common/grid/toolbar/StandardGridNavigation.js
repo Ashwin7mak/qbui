@@ -19,10 +19,18 @@ class StandardGridNavigation extends React.Component {
         return this.props.paginationInfo.lastItemIndexInCurrentPage;
     }
 
+    /**
+     * Previous is disabled if we are at the first page or there are no items
+     * @returns {boolean}
+     */
     isPreviousDisabled() {
         return this.props.paginationInfo.totalFilteredItems === 0 || this.props.paginationInfo.currentPage === 1;
     }
 
+    /**
+     * Previous is disabled if we are at the last page or there are no items
+     * @returns {boolean}
+     */
     isNextDisabled() {
         return this.props.paginationInfo.totalFilteredItems === 0 || this.props.paginationInfo.currentPage === this.props.paginationInfo.totalPages;
     }
