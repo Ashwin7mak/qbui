@@ -110,6 +110,7 @@
             expect(browser.isVisible('.leftNav.closed.expanded')).toBeTruthy();
 
             // Step 2 - Verify if the topNav hamburger menu is clickable
+            // Did not use page object here as it returns an error saying "Element is not currently visible and may not be manipulated"
             browser.click('.smallHeader .left .iconUISturdy-hamburger');
 
             // Step 3 - Verify if the leftNav is opened
@@ -153,6 +154,7 @@
             expect(browser.isVisible('.leftNav.closed.expanded')).toBeTruthy();
 
             // Step 3 - Verify if the topNav hamburger menu is clickable
+            // Did not use page object here as it returns an error saying "Element is not currently visible and may not be manipulated"
             browser.click('.smallHeader .left .iconUISturdy-hamburger');
 
             // Step 3 - Verify if the leftNav is opened
