@@ -339,7 +339,7 @@ class AppHistory {
      * Default save changes for report builder
      */
     _saveChangesForReportBuilder() {
-        if (self.store && _.isFunction(self.updateForm)) {
+        if (self.store) {
             const state = self.store.getState();
             //fetch stores that have pendEdits
             let {reportBuilderStore} = self.getStores(state);
