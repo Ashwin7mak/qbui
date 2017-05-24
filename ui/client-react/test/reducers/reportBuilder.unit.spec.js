@@ -6,6 +6,7 @@ let initialState = {};
 function initializeState() {
     initialState = {
         redirectRoute: null,
+        isPendingEdit: false,
         isInBuilderMode: false,
         addBeforeColumn: null,
         availableColumns: []
@@ -22,7 +23,7 @@ describe('Test initial state of reportBuilder reducer', () => {
     });
 });
 
-describe('reportBuilder reducer functions for refreshing fields', () => {
+describe('reportBuilder reducer functions', () => {
     it('returns correct state with the correct fields', () => {
         let content = {
             response: {
@@ -58,7 +59,7 @@ describe('reportBuilder reducer functions for refreshing fields', () => {
         expect(state.addBeforeColumn).toEqual(true);
     });
 
-    it('returns correct state with addBeforeColumn set to true', () => {
+    it('returns correct state with addBeforeColumn set to false', () => {
         let content = {
             addBeforeColumn: false
         };
